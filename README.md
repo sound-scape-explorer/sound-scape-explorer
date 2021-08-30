@@ -62,5 +62,19 @@ cp -f media/sse-icon.png sse-v1/src/assets/logo.png
 convert sse-v1/src/assets/logo.png sse-v1/public/favicon.ico
 ~~~
 
+### Making some test data
+
+~~~
+cp -t log1/ '........./Logger1/20210429_180000.WAV' 
+cp -t log2/ '........./Logger2/20210429_180000.WAV' 
+
+# for each folder
+ffmpeg  -i 20210429_180000.WAV -ss 0 -t 60 -c copy chunk-20210429_180000.WAV
+ffmpeg  -i 20210429_180000.WAV -ss 60 -t 60 -c copy chunk-20210429_180100.WAV
+ffmpeg  -i 20210429_180000.WAV -ss 120 -t 60 -c copy chunk-20210429_180200.WAV
+ffmpeg  -i 20210429_180000.WAV -ss 180 -t 60 -c copy chunk-20210429_180300.WAV
+ffmpeg  -i 20210429_180000.WAV -ss 600 -t 60 -c copy chunk-20210429_181000.WAV
+
+~~~
 
 
