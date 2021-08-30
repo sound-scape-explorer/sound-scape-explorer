@@ -4,6 +4,7 @@ from click import echo
 from click import secho
 import utils
 import pprint
+from json import dumps as json_dumps
 
 ##############
 @click.group()
@@ -18,11 +19,13 @@ def test():
     print('test (toplevel)')
 
 @cli.command()
-def show_config():
+@click.option('--json/--dict', default=False)
+def show_config(json):
     cfg = get_config()
-    pprint.pprint(cfg._asdict())
-
-
+    if json:
+        print(json_dumps(cfg))
+    else:
+        pprint.pprint(cfg._asdict())
 
 ###### COMMAND extract
 @cli.group()
