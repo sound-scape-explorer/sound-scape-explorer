@@ -1,5 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
+  <img class="logo" alt="SoundScapeExplorer logo" src="./assets/logo.png" />
 </template>
 
 <script>
@@ -17,5 +17,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.logo {
+  position: fixed;
+  width: 100px;
+  top: 0;
+  left: 0;
 }
 </style>
