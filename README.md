@@ -1,7 +1,41 @@
 # Soundscape explorer
 
+## Description
 
 
+## How to use it
+
+### Installation
+
+Some python libraries
+
+~~~
+pip install numpy
+pip install matoplotlib
+pip install torchaudio
+pip install librosa
+pip install xlrd
+pip install pandas
+~~~
+
+The helper script
+
+~~~
+pip install ./scripts
+~~~
+
+To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
+
+~~~
+eval "$(_SSE_COMPLETE=bash_source sse)"
+~~~
+
+
+
+
+
+
+## Development notes
 
 ### Created with...
 
