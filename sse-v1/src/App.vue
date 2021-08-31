@@ -43,7 +43,7 @@ export default {
   margin-top: 60px;
 }
 .logo {
-  position: fixed;
+  position: absolute;
   width: 100px;
   top: 0;
   left: 0;
