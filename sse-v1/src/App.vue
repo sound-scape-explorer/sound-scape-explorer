@@ -1,11 +1,35 @@
 <template>
-  <img class="logo" alt="SoundScapeExplorer logo" src="./assets/logo.png" />
+  <div>
+    <img class="logo" alt="SoundScapeExplorer logo" src="./assets/logo.png" />
+    <Preview></Preview>
+    <pre>{{ JSON.stringify(cfg, null, 2) }}</pre>
+  </div>
 </template>
 
 <script>
+import Preview from "./components/Preview.vue";
+
 export default {
   name: "App",
-  components: {},
+  components: { Preview },
+  data: () => ({
+    BASE: "http://localhost:9876/",
+    cfg: {},
+  }),
+  provide() {
+    return {
+      root: this,
+    };
+  },
+  mounted() {
+    this.asyncLoadConfig();
+  },
+  methods: {
+    async asyncLoadConfig() {
+      const req = await fetch(this.BASE + "generated/ghost-config.json");
+      this.cfg = await req.json();
+    },
+  },
 };
 </script>
 
@@ -14,7 +38,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /*text-align: center;*/
   color: #2c3e50;
   margin-top: 60px;
 }

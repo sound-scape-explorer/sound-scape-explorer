@@ -74,11 +74,43 @@ ffmpeg  -i 20210429_180000.WAV -ss 60 -t 60 -c copy chunk-20210429_180100.WAV
 ffmpeg  -i 20210429_180000.WAV -ss 120 -t 60 -c copy chunk-20210429_180200.WAV
 ffmpeg  -i 20210429_180000.WAV -ss 180 -t 60 -c copy chunk-20210429_180300.WAV
 ffmpeg  -i 20210429_180000.WAV -ss 600 -t 60 -c copy chunk-20210429_181000.WAV
-
 ~~~
 
+### Extracting features and previews
 
+~~~
+sse extract all
+sse extract preview
+#sse extract band-freqs
+~~~
 
+For now, we use python to save a json of the config, to avoid implementing the parser (although this is easy-ish):
+
+~~~
+sse show-config --json > generated/ghost-config.json
+~~~
+
+### Some npm installs
+
+~~~
+# for naive
+npm i -D naive-ui
+npm i -D vfonts
+~~~
+
+### dev on the js side
+
+~~~
+cd sse-v1/
+npm run serve 
+~~~
+
+and the data server
+
+~~~
+cd sample/
+python3 ../scripts/cors-http-server.py
+~~~
 
 ### wip
 

@@ -25,7 +25,7 @@ def test():
 def show_config(json):
     cfg = get_config()
     if json:
-        print(json_dumps(cfg))
+        print(json_dumps(cfg._asdict()))
     else:
         pprint.pprint(cfg._asdict())
 
@@ -36,20 +36,16 @@ def extract():
 
 @extract.command()
 @click.option('--file', '-f', default=None)
-@click.option('--start', '-s', '-ss', default='0')
-@click.option('--duration', '-dur', '-t', default='10')
+@click.option('--start', '-s', '-ss', default=None)
+@click.option('--duration', '-dur', '-t', default=None)
 def preview(file, start, duration):
     cfg = get_config()
     suffix = cfg.variables['audio_suffix']
     expected_sr = cfg.variables['audio_expected_sample_rate']
-    start_sec = cfg.variables.get('preview_file_start', start)
-    dur_sec = cfg.variables.get('preview_file_dur', duration)
+    start_sec = cfg.variables.get('preview_file_start', '0') if start is None else start
+    dur_sec = cfg.variables.get('preview_file_dur', '10') if duration is None else duration
+    fname = cfg.variables.get('preview_file', list(cfg.files.keys())[0]) if file is None else file
     for band,spec in cfg.bands.items():
-        fname = list(cfg.files.keys())[0]
-        if 'preview_file' in cfg.variables:
-            fname = cfg.variables['preview_file']
-        if file is not None:
-            fname = file
         input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
         output_path = pathlib.Path(cfg.variables['generated_base']).joinpath('preview-spectrogram', band+'.png')
         own_call(['preview-features', input_path, output_path, spec, expected_sr, start_sec, dur_sec])
