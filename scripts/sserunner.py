@@ -3,8 +3,10 @@ import click
 from click import echo
 from click import secho
 import utils
+from utils import own_call
 import pprint
 from json import dumps as json_dumps
+import pathlib
 
 ##############
 @click.group()
@@ -33,9 +35,43 @@ def extract():
     pass
 
 @extract.command()
-def preview():
-    print('hello')
+@click.option('--file', '-f', default=None)
+@click.option('--start', '-s', '-ss', default='0')
+@click.option('--duration', '-dur', '-t', default='10')
+def preview(file, start, duration):
+    cfg = get_config()
+    suffix = cfg.variables['audio_suffix']
+    expected_sr = cfg.variables['audio_expected_sample_rate']
+    start_sec = cfg.variables.get('preview_file_start', start)
+    dur_sec = cfg.variables.get('preview_file_dur', duration)
+    for band,spec in cfg.bands.items():
+        fname = list(cfg.files.keys())[0]
+        if 'preview_file' in cfg.variables:
+            fname = cfg.variables['preview_file']
+        if file is not None:
+            fname = file
+        input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
+        output_path = pathlib.Path(cfg.variables['generated_base']).joinpath('preview-spectrogram', band+'.png')
+        own_call(['preview-features', input_path, output_path, spec, expected_sr, start_sec, dur_sec])
 
+@extract.command()
+@click.option('--force/--no-force', '-f', default=False)
+@click.option('--skip-existing/--no-skip-existing', '-s', default=False)
+def all(force, skip_existing):
+    cfg = get_config()
+    suffix = cfg.variables['audio_suffix']
+    expected_sr = cfg.variables['audio_expected_sample_rate']
+    for band,spec in cfg.bands.items():
+        for fname,info in cfg.files.items():
+            input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
+            output_path = pathlib.Path(cfg.variables['feature_base']).joinpath(band, fname+suffix).with_suffix('.pklz')
+            #print(fname, input_path, output_path, spec, expected_sr)
+            if output_path.exists() and not force:
+                if skip_existing:
+                    print(f'... skipping {output_path}')
+                    continue
+                raise Exception(f'"{output_path}" exists (-s to skip existing, or -f to overwrite).')
+            own_call(['extract-features', input_path, output_path, spec, expected_sr])
 
 ######################################################################
 # config handling etc
@@ -50,13 +86,13 @@ def get_config():
 
 
 ######################################################################
-# msg = can also be used as 'sse' after pip install
+# msg = for most of the thing it must be installed with pip and used with sse
 if __name__ == '__main__':
     from pathlib import Path
     import sys
     print('######################################################################')
     print('                                                                     #')
-    print('It is recommend to pip install this script, maybe run:               #')
+    print('For most features, it is supposed that this is "pip installed, run:  #')
     path = Path(sys.argv[0]).parent.absolute().relative_to(Path.cwd())
     print(('    pip install -U ' + str(path) + '/' + ' '*99)             [:69]+'#')
     print('                                                                     #')

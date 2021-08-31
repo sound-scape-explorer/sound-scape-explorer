@@ -78,3 +78,11 @@ ffmpeg  -i 20210429_180000.WAV -ss 600 -t 60 -c copy chunk-20210429_181000.WAV
 ~~~
 
 
+
+
+### wip
+
+playbackRate
+mozPreservesPitch = webkitPreservesPitch = false
+
+passband biquad filter.type = 'lowpass';

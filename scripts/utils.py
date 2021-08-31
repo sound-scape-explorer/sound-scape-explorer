@@ -2,7 +2,10 @@
 import collections
 import pathlib
 import pandas as pd
+import subprocess
 
+def own_call(cmd, **kwargs):
+    return subprocess.call(['_sse-'+cmd[0]] + cmd[1:], **kwargs)
 
 def namedtuple_dic(d, typename='new'):
     top = collections.namedtuple(typename, [i for i,j in d.items() if not i.startswith('_')])(*[j for i,j in d.items() if not i.startswith('_')])
@@ -43,11 +46,9 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
 
 def parse_config(xlsx='config.xlsx', sheet=0):
     _xfile = pd.ExcelFile(xlsx)
-    _xtable = _xfile.parse(sheet, converters={'picture': str})
+    _xtable = _xfile.parse(sheet, converters={'variables_': str})
     _renaming = {i: i.split(' (')[0] for i in _xtable.columns if ' (' in i}
-    print(_renaming)
     _xtable.rename(_renaming, inplace=True, axis='columns', errors="raise")
-    print(_xtable.columns)
     
     variables = dict(digest_xtable_columns(xlsx, _xtable, 'variables'))
     bands = dict(digest_xtable_columns(xlsx, _xtable, 'bands'))
