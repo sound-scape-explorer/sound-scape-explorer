@@ -1,15 +1,11 @@
 <template>
   <div class="view-preview">
-    <audio
-      ref="audio"
-      controls
-      :src="root.BASE + 'audio/log2/chunk-20210429_180100.WAV'"
-    ></audio>
+    <audio ref="audio" controls :src="previewURL"></audio>
     <div
       class="band-spectro"
       v-for="(b, k) in root.cfg.bands"
       :key="k"
-      @keypress.space="$refs.audio.pause()"
+      @keypress.space.stop="$refs.audio.pause()"
     >
       <div class="band-name">{{ k }}</div>
       <img :src="bandPreviewImageURL(k)" @click="clickSpectro($event)" />
@@ -20,6 +16,12 @@
 <script>
 export default {
   inject: ["root"],
+  computed: {
+    previewURL() {
+      const V = this.root.cfg.variables;
+      return this.root.BASE + V.audio_base + V.preview_file + V.audio_suffix;
+    },
+  },
   methods: {
     bandPreviewImageURL(band) {
       const cfg = this.root.cfg;
@@ -30,9 +32,8 @@ export default {
     clickSpectro(ev) {
       const e = ev.target;
       const dim = e.getBoundingClientRect();
-      const posx = (ev.clientX - dim.left) / dim.width; // * e.width;
-      const posy = (ev.clientY - dim.top) / dim.height; // * e.height;
-      console.log(posx, posy);
+      const posx = (ev.clientX - dim.left) / dim.width;
+      //const posy = (ev.clientY - dim.top) / dim.height;
       const audio = this.$refs.audio;
       audio.currentTime =
         parseFloat(this.root.cfg.variables.preview_file_start) +
