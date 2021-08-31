@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="cfg.variables">
     <img class="logo" alt="SoundScapeExplorer logo" src="./assets/logo.png" />
     <Preview></Preview>
     <pre>{{ JSON.stringify(cfg, null, 2) }}</pre>
