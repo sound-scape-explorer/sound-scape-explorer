@@ -1,12 +1,7 @@
 <template>
   <div class="view-preview">
     <audio ref="audio" controls :src="previewURL"></audio>
-    <div
-      class="band-spectro"
-      v-for="(b, k) in root.cfg.bands"
-      :key="k"
-      @keypress.space.stop="$refs.audio.pause()"
-    >
+    <div class="band-spectro" v-for="(b, k) in root.cfg.bands" :key="k">
       <div class="band-name">{{ k }}</div>
       <img :src="bandPreviewImageURL(k)" @click="clickSpectro($event)" />
     </div>
@@ -41,6 +36,7 @@ export default {
       //audio.playbackRate = 0.5;
       //audio.mozPreservesPitch = audio.webkitPreservesPitch = false;
       audio.play();
+      audio.focus();
     },
   },
 };
