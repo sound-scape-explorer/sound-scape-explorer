@@ -1,17 +1,32 @@
 <template>
   <div v-if="cfg.variables">
-    <img class="logo" alt="SoundScapeExplorer logo" src="./assets/logo.png" />
-    <Preview></Preview>
-    <pre>{{ JSON.stringify(cfg, null, 2) }}</pre>
+    <n-tabs type="card" default-value="preview">
+      <template #prefix>
+        <img
+          class="logo"
+          alt="SoundScapeExplorer logo"
+          src="./assets/logo.png"
+        />
+      </template>
+      <n-tab-pane name="preview" tab="Preview">
+        <Preview></Preview>
+      </n-tab-pane>
+      <n-tab-pane name="cfg" tab="Raw Config">
+        <pre>{{ JSON.stringify(cfg, null, 2) }}</pre>
+      </n-tab-pane>
+    </n-tabs>
   </div>
 </template>
 
 <script>
 import Preview from "./components/Preview.vue";
 
+import { NTabs, NCard, NTabPane } from "naive-ui";
+const NComponents = { NTabs, NCard, NTabPane };
+
 export default {
   name: "App",
-  components: { Preview },
+  components: { Preview, ...NComponents },
   data: () => ({
     BASE: "http://localhost:9876/",
     cfg: {},
@@ -40,12 +55,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   /*text-align: center;*/
   color: #2c3e50;
-  margin-top: 60px;
+  --logooff: 65;
+  margin-top: calc(var(--logooff) * 1px);
 }
 .logo {
+  /*
   position: absolute;
+  */
+  text-align: top;
   width: 100px;
-  top: 0;
-  left: 0;
+  margin-top: calc(var(--logooff) * -1px);
 }
 </style>
