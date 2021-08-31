@@ -44,7 +44,7 @@ def preview(file, start, duration):
     expected_sr = cfg.variables['audio_expected_sample_rate']
     start_sec = cfg.variables.get('preview_file_start', '0') if start is None else start
     dur_sec = cfg.variables.get('preview_file_dur', '10') if duration is None else duration
-    fname = cfg.variables.get('preview_file', list(cfg.files.keys())[0]) if file is None else file
+    fname = cfg.variables['preview_file'] if file is None else file
     for band,spec in cfg.bands.items():
         input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
         output_path = pathlib.Path(cfg.variables['generated_base']).joinpath('preview-spectrogram', band+'.png')
