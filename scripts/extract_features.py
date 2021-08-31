@@ -98,10 +98,13 @@ class VGGish(VGG):
         x = x.to(self.device)
         return VGG.forward(self, x)
 
+def parse_band(p):
+    return [int(v) for v in p.split('-')]
+    
 def load_data():
     input_path = sys.argv[1]
     output_path = sys.argv[2]
-    band_params = [int(v) for v in sys.argv[3].split('-')] # e.g. 256-64
+    band_params = parse_band(sys.argv[3]) # e.g. 256-64
     expected_sample_rate = int(sys.argv[4])
     next_param = 5
     log = print
@@ -118,7 +121,21 @@ def load_data():
         raise Exception(f'Expected sample rate of {expected_sample_rate} but got {sr}')
 
     return input_path, output_path, band_params, log, t_start, wav_data, sr, next_param
-    
+
+def get_band_freq_bounds(sr, band_params):
+    spectro_freq = sr//2
+    mel_max = 2595*np.log10(1+spectro_freq/700)
+    hz = lambda m: 700*(10**(m/2595) - 1)
+    mel_start = band_params[1]/band_params[0] * mel_max
+    mel_end = (band_params[1]+64)/band_params[0] * mel_max
+    return hz(mel_start), hz(mel_end)
+
+def print_band_freq_bounds(params=sys.argv):
+    sr = int(sys.argv[1])
+    band_params = parse_band(sys.argv[2])
+    hz_range = get_band_freq_bounds(sr, band_params)
+    print(hz_range, band_params, *sys.argv[3:])
+
 def preview():
     input_path, output_path, band_params, log, t_start, wav_data, sr, next_param = load_data()
     sub_start = float(sys.argv[next_param])
@@ -127,12 +144,8 @@ def preview():
         raise Exception(f'Not enough audio data ({wav_data.shape[1]} samples) to extract {sr*sub_dur} values for preview)')
     wav_data = wav_data[:,int(sr*sub_start):int(sr*(sub_start+sub_dur))]
     if True:
-        spectro_freq = sr//2
-        mel_max = 2595*np.log10(1+spectro_freq/700)
-        hz = lambda m: 700*(10**(m/2595) - 1)
-        mel_start = band_params[1]/band_params[0] * mel_max
-        mel_end = (band_params[1]+64)/band_params[0] * mel_max
-        log(f'           ... from {hz(mel_start):.1f}Hz to {hz(mel_end):.1f}Hz')
+        min_freq, max_freq = get_band_freq_bounds(sr, band_params)
+        log(f'           ... from {min_freq:.1f}Hz to {max_freq:.1f}Hz')
     x = waveform_to_examples(wav_data, sr, band_params)
     log(f'({time.time() - t_start:.3f} sec)... features extracted {x.shape} (from input {wav_data.shape})')
     x = x.detach().numpy()

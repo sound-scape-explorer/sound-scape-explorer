@@ -12,6 +12,7 @@ setup(
             'sse = sserunner:cli',
             '_sse-extract-features = extract_features:go',
             '_sse-preview-features = extract_features:preview',
+            '_sse-band-freqs = extract_features:print_band_freq_bounds',
         ],
     },
 )

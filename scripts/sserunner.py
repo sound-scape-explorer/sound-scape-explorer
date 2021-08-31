@@ -55,6 +55,13 @@ def preview(file, start, duration):
         own_call(['preview-features', input_path, output_path, spec, expected_sr, start_sec, dur_sec])
 
 @extract.command()
+def band_freqs():
+    cfg = get_config()
+    expected_sr = cfg.variables['audio_expected_sample_rate']
+    for band,spec in cfg.bands.items():
+        own_call(['band-freqs', expected_sr, spec, band])
+
+@extract.command()
 @click.option('--force/--no-force', '-f', default=False)
 @click.option('--skip-existing/--no-skip-existing', '-s', default=False)
 def all(force, skip_existing):
