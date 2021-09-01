@@ -11,6 +11,12 @@
       <n-tab-pane name="preview" tab="Preview">
         <Preview></Preview>
       </n-tab-pane>
+      <n-tab-pane name="volume" tab="Volumes">
+        <MockVolume></MockVolume>
+      </n-tab-pane>
+      <n-tab-pane name="covering" tab="Covering">
+        <MockCovering></MockCovering>
+      </n-tab-pane>
       <n-tab-pane name="cfg" tab="Raw Config">
         <pre>{{ JSON.stringify(cfg, null, 2) }}</pre>
       </n-tab-pane>
@@ -20,13 +26,16 @@
 
 <script>
 import Preview from "./components/Preview.vue";
+import MockVolume from "./components/MockVolume.vue";
+import MockCovering from "./components/MockCovering.vue";
+const OComponents = { Preview, MockVolume, MockCovering };
 
 import { NTabs, NCard, NTabPane } from "naive-ui";
 const NComponents = { NTabs, NCard, NTabPane };
 
 export default {
   name: "App",
-  components: { Preview, ...NComponents },
+  components: { ...OComponents, ...NComponents },
   data: () => ({
     BASE: "http://localhost:9876/",
     cfg: {},
