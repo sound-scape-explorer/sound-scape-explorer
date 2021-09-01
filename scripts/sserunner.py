@@ -4,6 +4,7 @@ from click import echo
 from click import secho
 import utils
 from utils import own_call
+import subprocess
 import pprint
 from json import dumps as json_dumps
 import pathlib
@@ -38,7 +39,8 @@ def extract():
 @click.option('--file', '-f', default=None)
 @click.option('--start', '-s', '-ss', default=None)
 @click.option('--duration', '-dur', '-t', default=None)
-def preview(file, start, duration):
+@click.option('--no-ffmpeg', '--ffmpeg', default=False)
+def preview(file, start, duration, no_ffmpeg):
     cfg = get_config()
     suffix = cfg.variables['audio_suffix']
     expected_sr = cfg.variables['audio_expected_sample_rate']
@@ -49,6 +51,13 @@ def preview(file, start, duration):
         input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
         output_path = pathlib.Path(cfg.variables['generated_base']).joinpath('preview-spectrogram', band+'.png')
         own_call(['preview-features', input_path, output_path, spec, expected_sr, start_sec, dur_sec])
+    if not no_ffmpeg:
+        print('... generating wav extracts, use --no-ffmpeg to skip in case of error')
+        output_path = pathlib.Path(cfg.variables['generated_base']).joinpath('preview-audio', 'normal.wav')
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.call(['ffmpeg', '-loglevel', 'error', '-ss', start_sec, '-t', dur_sec, '-i', input_path, output_path])
+        output_path = pathlib.Path(cfg.variables['generated_base']).joinpath('preview-audio', 'hzdiv10.wav')
+        subprocess.call(['ffmpeg', '-loglevel', 'error', '-ss', start_sec, '-t', dur_sec, '-i', input_path, '-af', f'asetrate={expected_sr}*.1,aresample={expected_sr},atempo=1/.1', output_path])
 
 @extract.command()
 def band_freqs():
