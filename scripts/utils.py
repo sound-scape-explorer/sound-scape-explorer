@@ -3,6 +3,7 @@ import collections
 import pathlib
 import pandas as pd
 import subprocess
+from datetime import datetime
 
 def own_call(cmd, **kwargs):
     return subprocess.call(['_sse-'+cmd[0]] + cmd[1:], **kwargs)
@@ -28,8 +29,10 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
             t = c_val.split(':')[1]
             types.append({
                 'I': int,
+                'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
                 'L': lambda v: v.split(','),
                 'L-': lambda v: v.split('-'),
+                'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M') for vv in v.split('-')],
                 }[t])
         else:
             types.append(str)
@@ -68,9 +71,9 @@ def parse_config(xlsx='config.xlsx', sheet=0):
     variables = dict(digest_xtable_columns(xlsx, _xtable, 'variables'))
     bands = dict(digest_xtable_columns(xlsx, _xtable, 'bands'))
     umaps = dict(digest_xtable_columns(xlsx, _xtable, 'umaps', ['integration:I', 'bands:L', 'sites:L', 'ranges:L'], 'UMAP'))
-    ranges = dict(digest_xtable_columns(xlsx, _xtable, 'ranges', ':L-'))
+    ranges = dict(digest_xtable_columns(xlsx, _xtable, 'ranges', ':L-D'))
     stringmap = dict(digest_xtable_columns(xlsx, _xtable, 'stringmap', ['to', 'color'], 'STRINGMAP'))
-    files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'location datetime tags:L'.split(' '), 'FILE'))
+    files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'location datetime:D tags:L'.split(' '), 'FILE'))
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
 

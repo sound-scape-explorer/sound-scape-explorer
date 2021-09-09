@@ -30,7 +30,7 @@ def test():
 def show_config(json):
     cfg = get_config()
     if json:
-        print(json_dumps(cfg._asdict()))
+        print(json_dumps(cfg._asdict(), default=lambda o: o.isoformat())) # might need a more complex method if we push the idea of parsing the config even further
     else:
         pprint.pprint(cfg._asdict())
 
