@@ -52,6 +52,7 @@ def parse_config(xlsx='config.xlsx', sheet=0):
     
     variables = dict(digest_xtable_columns(xlsx, _xtable, 'variables'))
     bands = dict(digest_xtable_columns(xlsx, _xtable, 'bands'))
+    timeranges = dict(digest_xtable_columns(xlsx, _xtable, 'timeranges'))
     stringmap = dict(digest_xtable_columns(xlsx, _xtable, 'stringmap', 'to'))
     files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'location datetime tags'.split(' '), 'FILE'))
     xlsx = str(pathlib.Path(xlsx).absolute())

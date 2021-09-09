@@ -88,6 +88,7 @@ For now, we use python to save a json of the config, to avoid implementing the p
 
 ~~~
 sse show-config --json > generated/ghost-config.json
+(printf '%s' 'JSONJS = ' ; sse show-config --json) > generated/ghost-config-json.js
 ~~~
 
 ### Some npm installs
