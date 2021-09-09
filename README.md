@@ -12,10 +12,12 @@ Some python libraries
 ~~~
 pip install numpy
 pip install matoplotlib
+pip install seaborn
 pip install torchaudio
 pip install librosa
 pip install xlrd
 pip install pandas
+pip install umap-learn
 ~~~
 
 The helper script
