@@ -71,19 +71,13 @@ def band_freqs():
 @click.option('--skip-existing/--no-skip-existing', '-s', default=False)
 def all(force, skip_existing):
     cfg = get_config()
-    suffix = cfg.variables['audio_suffix']
-    expected_sr = cfg.variables['audio_expected_sample_rate']
-    for band,spec in cfg.bands.items():
-        for fname,info in cfg.files.items():
-            input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
-            output_path = pathlib.Path(cfg.variables['feature_base']).joinpath(band, fname+suffix).with_suffix('.pklz')
-            #print(fname, input_path, output_path, spec, expected_sr)
-            if output_path.exists() and not force:
-                if skip_existing:
-                    print(f'... skipping {output_path}')
-                    continue
-                raise Exception(f'"{output_path}" exists (-s to skip existing, or -f to overwrite).')
-            own_call(['extract-features', input_path, output_path, spec, expected_sr])
+    for esr,band,spec,fname,info,input_path,output_path in utils.iterate_audio_files(cfg, ['@feature_base', '.pklz']):
+        if output_path.exists() and not force:
+            if skip_existing:
+                print(f'... skipping {output_path}')
+                continue
+            raise Exception(f'"{output_path}" exists (-s to skip existing, or -f to overwrite).')
+        own_call(['extract-features', input_path, output_path, spec, esr])
 
 ######################################################################
 # config handling etc

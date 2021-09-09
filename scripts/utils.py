@@ -57,3 +57,16 @@ def parse_config(xlsx='config.xlsx', sheet=0):
     files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'location datetime tags'.split(' '), 'FILE'))
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
+
+
+def iterate_audio_files(cfg, *more):
+    suffix = cfg.variables['audio_suffix']
+    esr = cfg.variables['audio_expected_sample_rate']
+    for band,spec in cfg.bands.items():
+        for fname,info in cfg.files.items():
+            input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
+            res = [esr,band,spec,fname,info,input_path]
+            for path, ext in more:
+                p = pathlib.Path(cfg.variables[path[1:]] if path.startswith('@') else path)
+                res.append(p.joinpath(band, fname+suffix).with_suffix(ext))
+            yield res
