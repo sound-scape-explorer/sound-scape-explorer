@@ -9,6 +9,10 @@ import pprint
 from json import dumps as json_dumps
 import pathlib
 
+import gzip
+import pickle
+import numpy as np
+
 ##############
 @click.group()
 def cli():
@@ -71,13 +75,38 @@ def band_freqs():
 @click.option('--skip-existing/--no-skip-existing', '-s', default=False)
 def all(force, skip_existing):
     cfg = get_config()
-    for esr,band,spec,fname,info,input_path,output_path in utils.iterate_audio_files(cfg, ['@feature_base', '.pklz']):
+    for esr,band,spec,fname,info,input_path,output_path in utils.iterate_audio_files_with_bands(cfg, ['@feature_base', '.pklz']):
         if output_path.exists() and not force:
             if skip_existing:
                 print(f'... skipping {output_path}')
                 continue
             raise Exception(f'"{output_path}" exists (-s to skip existing, or -f to overwrite).')
         own_call(['extract-features', input_path, output_path, spec, esr])
+
+@extract.command()
+def show_features_size():
+    cfg = get_config()
+    for esr,band,spec,fname,info,input_path,feat_path in utils.iterate_audio_files_with_bands(cfg, ['@feature_base', '.pklz']):
+        if feat_path.exists():
+            with gzip.open(feat_path, "rb") as f:
+                r = pickle.loads(f.read())
+                print(f'... {feat_path} {np.shape(r)}') # e.g. (65, 128) where 65 ~ 60sec/0.92(s/window)
+
+
+
+
+###### COMMAND compute
+@cli.group()
+def compute():
+    pass
+
+@compute.command()
+def umap():
+    cfg = get_config()
+    for umap_name,umap in cfg.umaps.items():
+        print(umap_name, umap)
+        for r in umap.ranges:
+            print(f'... {r}: {cfg.ranges[r]}')
 
 ######################################################################
 # config handling etc

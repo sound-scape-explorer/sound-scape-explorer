@@ -21,7 +21,21 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
 
     if not disable_prefix:
         c_values = [c_key+'_'+c for c in c_values]
-    
+
+    types = []
+    for c_val in c_values:
+        if ':' in c_val:
+            t = c_val.split(':')[1]
+            types.append({
+                'I': int,
+                'L': lambda v: v.split(','),
+                'L-': lambda v: v.split('-'),
+                }[t])
+        else:
+            types.append(str)
+
+    c_values = [c_val.split(':')[0] for c_val in c_values]
+
     for c in [c_key] + c_values:
         if c not in xt:
             print(xt.columns)
@@ -32,13 +46,14 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
         if type(xt[c_key][i]) == str:
             k = xt[c_key][i]
             if k in res and not allow_duplicate:
-                raise Exception(f'In {xpath}: column "variables" contains "{k}" twice.')
+                raise Exception(f'In {xpath}: column "{c_key}" contains "{k}" twice.')
             if simple:
-                v = [xt[c][i] for c in c_values]
+                v = [types[ic](xt[c][i]) for ic,c in enumerate(c_values)]
                 res[k] = v
                 yield k,v[0]
             else:
-                v = namedtuple_dic({c[len(c_key)+1:]: xt[c][i] for c in c_values}, yield_type)
+                start = 0 if disable_prefix else len(c_key)+1
+                v = namedtuple_dic({c[start:]: types[ic](xt[c][i]) for ic,c in enumerate(c_values)}, yield_type)
                 res[k] = v
                 yield k,v
 
@@ -52,21 +67,25 @@ def parse_config(xlsx='config.xlsx', sheet=0):
     
     variables = dict(digest_xtable_columns(xlsx, _xtable, 'variables'))
     bands = dict(digest_xtable_columns(xlsx, _xtable, 'bands'))
-    timeranges = dict(digest_xtable_columns(xlsx, _xtable, 'timeranges'))
-    stringmap = dict(digest_xtable_columns(xlsx, _xtable, 'stringmap', 'to'))
-    files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'location datetime tags'.split(' '), 'FILE'))
+    umaps = dict(digest_xtable_columns(xlsx, _xtable, 'umaps', ['integration:I', 'bands:L', 'sites:L', 'ranges:L'], 'UMAP'))
+    ranges = dict(digest_xtable_columns(xlsx, _xtable, 'ranges', ':L-'))
+    stringmap = dict(digest_xtable_columns(xlsx, _xtable, 'stringmap', ['to', 'color'], 'STRINGMAP'))
+    files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'location datetime tags:L'.split(' '), 'FILE'))
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
 
-
-def iterate_audio_files(cfg, *more):
-    suffix = cfg.variables['audio_suffix']
+def iterate_audio_files_with_bands(cfg, *more):
     esr = cfg.variables['audio_expected_sample_rate']
     for band,spec in cfg.bands.items():
-        for fname,info in cfg.files.items():
-            input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
-            res = [esr,band,spec,fname,info,input_path]
-            for path, ext in more:
-                p = pathlib.Path(cfg.variables[path[1:]] if path.startswith('@') else path)
-                res.append(p.joinpath(band, fname+suffix).with_suffix(ext))
-            yield res
+        for r in iterate_audio_files(cfg, band, *more):
+            yield [esr, band, spec] + r
+
+def iterate_audio_files(cfg, prefix, *more):
+    suffix = cfg.variables['audio_suffix']
+    for fname,info in cfg.files.items():
+        input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
+        res = [fname,info,input_path]
+        for path, ext in more:
+            p = pathlib.Path(cfg.variables[path[1:]] if path.startswith('@') else path)
+            res.append(p.joinpath(prefix, fname+suffix).with_suffix(ext))
+        yield res
