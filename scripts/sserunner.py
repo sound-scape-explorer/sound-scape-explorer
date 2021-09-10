@@ -56,7 +56,12 @@ def preview(file, start, duration, no_ffmpeg):
     for band,spec in cfg.bands.items():
         input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
         output_path = pathlib.Path(cfg.variables['generated_base']).joinpath('preview-spectrogram', band+'.png')
-        own_call(['preview-features', input_path, output_path, spec, expected_sr, start_sec, dur_sec])
+        #own_call(['preview-features', input_path, output_path, spec, expected_sr, start_sec, dur_sec])
+        import sys
+        sys.argv = ['extract_features.py', input_path, output_path, spec, expected_sr, start_sec, dur_sec]
+        import extract_features
+        extract_features.preview()
+
     if not no_ffmpeg:
         print('... generating wav extracts, use --no-ffmpeg to skip in case of error')
         output_path = pathlib.Path(cfg.variables['generated_base']).joinpath('preview-audio', 'normal.wav')
@@ -70,7 +75,12 @@ def band_freqs():
     cfg = get_config()
     expected_sr = cfg.variables['audio_expected_sample_rate']
     for band,spec in cfg.bands.items():
-        own_call(['band-freqs', expected_sr, spec, band])
+        #own_call(['band-freqs', expected_sr, spec, band]) # too slow...
+        import sys
+        sys.argv = ['extract_features.py', expected_sr, spec, band]
+        import extract_features
+        extract_features.print_band_freq_bounds()
+
 
 @extract.command()
 @click.option('--force/--no-force', '-f', default=False)
@@ -83,7 +93,11 @@ def all(force, skip_existing):
                 print(f'... skipping {output_path}')
                 continue
             raise Exception(f'"{output_path}" exists (-s to skip existing, or -f to overwrite).')
-        own_call(['extract-features', input_path, output_path, spec, esr])
+        #own_call(['extract-features', input_path, output_path, spec, esr])
+        import sys
+        sys.argv = ['extract_features.py', input_path, output_path, spec, esr]
+        import extract_features
+        extract_features.go()
 
 @extract.command()
 def show_features_size():
