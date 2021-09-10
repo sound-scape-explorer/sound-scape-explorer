@@ -10,3 +10,5 @@ CFG
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',timeZone: 'Pacific/Tahiti'}).format(d)
+
+- [ ] rename file.location as file.site (in the cfg and in the code that use it)

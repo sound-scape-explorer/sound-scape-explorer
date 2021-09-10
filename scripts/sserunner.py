@@ -117,7 +117,7 @@ def compute():
     pass
 
 @compute.command()
-@click.option('--plot/--no-plot', '-p', default=False)
+@click.option('--plot/--no-plot', '-p', default=True)
 @click.option('--show/--no-show', '-s', default=False)
 def umap(plot, show):
     cfg = get_config()
@@ -137,6 +137,7 @@ def umap(plot, show):
                     range_times = []
                     range_features = []
                     for fname,info,audio,pklz in utils.iterate_audio_files(cfg, band, ['@feature_base', '.pklz']):
+                        if info.location != s: continue
                         with gzip.open(pklz, "rb") as f:
                             data = pickle.loads(f.read())
                         dur = dt.timedelta(seconds=0.92 * len(r))
@@ -177,7 +178,7 @@ def umap(plot, show):
                 #for gi,g in enumerate(np.unique(dataset_labels)):
                 #    sub = np.where(dataset_labels == g)
                 #    sns.scatterplot(X[sub,0], X[sub,1], c=X[sub,0]*)
-                sns.scatterplot(X[:,0], X[:,1], hue=dataset_labels, style=dataset_labels)
+                sns.scatterplot(X[:,0], X[:,1], hue=dataset_labels, style=dataset_labels, alpha=0.35)
                 plt.title(f'UMAP[{umap_name}] {band}, {umap.integration}sec win.')
                 plt.savefig(out_path.with_suffix('.png'))
                 if show:
