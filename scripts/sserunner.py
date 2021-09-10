@@ -168,6 +168,7 @@ def umap(plot, show):
                 plt.savefig(out_path.with_suffix('.png'))
                 if show:
                     plt.show()
+                plt.close()
 
 
 
