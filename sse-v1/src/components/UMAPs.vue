@@ -10,15 +10,12 @@
         currentBand =
           bands[Math.min(bands.length - 1, bands.indexOf(currentBand) + 1)]
       "
-      @keydown.up=" currentUmap = umaps[ Math.max(0, umaps.indexOf(currentUmap) - 1)]"
+      @keydown.up="
+        currentUmap = umaps[Math.max(0, umaps.indexOf(currentUmap) - 1)]
+      "
       @keydown.down="
         currentUmap =
-          umaps[
-            Math.min(
-              umaps.length - 1,
-              umaps.indexOf(currentUmap) + 1
-            )
-          ]
+          umaps[Math.min(umaps.length - 1, umaps.indexOf(currentUmap) + 1)]
       "
     />
     <n-table size="small">
@@ -75,10 +72,7 @@ export default {
     currentGraphURL() {
       if (this.currentBand === "") return "";
       const B = this.root.BASE + this.root.cfg.variables.generated_base;
-      return (
-        B +
-        `umap/${this.currentUmap}/${this.currentBand}.png`
-      );
+      return B + `umap/${this.currentUmap}/${this.currentBand}.png`;
     },
   },
   methods: {
