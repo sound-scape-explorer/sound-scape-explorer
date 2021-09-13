@@ -42,6 +42,7 @@ export default {
   components: { ...OComponents, ...NComponents },
   data: () => ({
     BASE: "http://localhost:9876/",
+    LOCAL: false,
     cfg: {},
   }),
   provide() {
@@ -54,8 +55,13 @@ export default {
   },
   methods: {
     async asyncLoadConfig() {
-      const req = await fetch(this.BASE + "generated/ghost-config.json");
-      this.cfg = await req.json();
+      if (window.JSONJS !== undefined) {
+        this.cfg = window.JSONJS;
+        console.log(this.cfg);
+      } else {
+        const req = await fetch(this.BASE + "generated/ghost-config.json");
+        this.cfg = await req.json();
+      }
     },
   },
 };

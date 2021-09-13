@@ -108,9 +108,8 @@ export default {
       canvasCtx.fillStyle = `black`;
       canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
       let j = 0;
-      // draw an oscilloscope of the current audio source
+      // draw a spectrogram (relying on the relative regularity of raf (req. anim. frame))
       let a = this.$refs.audio;
-
       function draw() {
         if (a.paused) {
           setTimeout(() => {

@@ -85,6 +85,7 @@ ffmpeg  -i ../log2/20210429_180000.WAV -ss 1120 -t 60 -c copy chunk-20210429_180
 ffmpeg  -i ../log2/20210429_180000.WAV -ss 1180 -t 60 -c copy chunk-20210429_180300.WAV
 ffmpeg  -i ../log2/20210429_180000.WAV -ss 1600 -t 60 -c copy chunk-20210429_181000.WAV
 
+
 ~~~
 
 ### Extracting features and previews
@@ -108,6 +109,7 @@ sse show-config --json > generated/ghost-config.json
 # for naive
 npm i -D naive-ui
 npm i -D vfonts
+npm i -D worklet-loader
 ~~~
 
 ### dev on the js side
@@ -126,7 +128,12 @@ python3 ../scripts/cors-http-server.py
 
 ### wip
 
-playbackRate
-mozPreservesPitch = webkitPreservesPitch = false
+##### file:// release
 
-passband biquad filter.type = 'lowpass';
+~~~
+
+npm run build
+where=../sample
+sed -i -e 's@="/@="@g' -e 's@data-src=""@src="../'"$where"/'generated/ghost-config-json.js"@g' dist/index.html
+sed -i -e 's@http://localhost:9876/@../'"$where"'/@g' -e 's@LOCAL:!@LOCAL:@g' dist/js/*.js
+~~~
