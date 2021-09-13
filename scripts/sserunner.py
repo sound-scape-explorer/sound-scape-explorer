@@ -28,6 +28,11 @@ def test():
     print('test (toplevel)')
 
 @cli.command()
+def cors_http_server():
+    import cors_http_server
+    cors_http_server.main(['cors-http-server'])
+
+@cli.command()
 @click.option('--json/--dict', default=False)
 def show_config(json):
     cfg = get_config()
