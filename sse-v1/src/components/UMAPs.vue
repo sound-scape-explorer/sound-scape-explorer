@@ -47,44 +47,49 @@
 </template>
 
 <script>
+import { onMounted, inject, computed, ref } from 'vue'
+
 import { NTable } from "naive-ui";
 const NComponents = { NTable };
 
 export default {
-  inject: ["root"],
   components: { ...NComponents },
-  data: () => ({
-    currentBand: "",
-    currentUmap: "",
-  }),
-  mounted() {
-    this.currentBand = this.bands[parseInt(this.bands.length / 2)];
-    this.currentUmap = this.umaps[parseInt(this.umaps.length / 2)];
-    this.$refs.focus.focus();
-  },
-  computed: {
-    bands() {
-      return Object.keys(this.root.cfg.bands);
-    },
-    umaps() {
-      return Object.keys(this.root.cfg.umaps);
-    },
-    currentGraphURL() {
-      if (this.currentBand === "") return "";
-      const B = this.root.BASE + this.root.cfg.variables.generated_base;
-      return B + `umap/${this.currentUmap}/${this.currentBand}.png`;
-    },
-  },
-  methods: {
-    select(ku, k) {
-      if (k !== undefined) {
-        this.currentBand = k;
-      }
-      if (ku !== undefined) {
-        this.currentUmap = ku;
-      }
-      this.$refs.focus.focus();
-    },
+  setup() {
+    const root = inject("root");
+    const currentBand = ref("");
+    const currentUmap = ref("");
+
+    const bands = computed(() => Object.keys(root.cfg.bands));
+    const umaps = computed(() => Object.keys(root.cfg.umaps));
+    const currentGraphURL = computed(() => {
+      if (currentBand.value === "") return "";
+      const B = root.BASE + root.cfg.variables.generated_base;
+      return B + `umap/${currentUmap.value}/${currentBand.value}.png`;
+    });
+    const focus = ref(null);
+    onMounted(() => {
+      currentBand.value = bands.value[parseInt(bands.value.length / 2)];
+      currentUmap.value = umaps.value[parseInt(umaps.value.length / 2)];
+      focus.value.focus();
+    });
+
+    return {
+      currentBand,
+      currentUmap,
+      bands,
+      umaps,
+      focus,
+      currentGraphURL,
+      select(ku, k) {
+        if (k !== undefined) {
+          this.currentBand = k;
+        }
+        if (ku !== undefined) {
+          this.currentUmap = ku;
+        }
+        focus.value.focus();
+      },
+    };
   },
 };
 </script>
