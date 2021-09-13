@@ -28,6 +28,16 @@ def test():
     print('test (toplevel)')
 
 @cli.command()
+def help():
+    print('eval "$(_SSE_COMPLETE=bash_source sse)')
+    print('sse cors-http-server')
+    print('sse show-config --json > generated/ghost-config.json')
+    print("(printf '%s' 'JSONJS = ' ; sse show-config --json) > generated/ghost-config-json.js")
+    print('')
+    print('For a real help, pass the --help option')
+    
+
+@cli.command()
 def cors_http_server():
     import cors_http_server
     cors_http_server.main(['cors-http-server'])

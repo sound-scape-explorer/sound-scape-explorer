@@ -30,6 +30,9 @@ To activate autocompletion (either in your `.bashrc`, or once in each terminal t
 
 ~~~
 eval "$(_SSE_COMPLETE=bash_source sse)"
+
+# or get it with
+sse help
 ~~~
 
 
@@ -101,6 +104,9 @@ For now, we use python to save a json of the config, to avoid implementing the p
 ~~~
 sse show-config --json > generated/ghost-config.json
 (printf '%s' 'JSONJS = ' ; sse show-config --json) > generated/ghost-config-json.js
+
+# or, get it with
+sse help
 ~~~
 
 ### Some npm installs
@@ -123,7 +129,7 @@ and the data server
 
 ~~~
 cd sample/
-python3 ../scripts/cors-http-server.py
+sse cors-http-server
 ~~~
 
 ### wip
