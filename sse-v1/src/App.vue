@@ -1,6 +1,6 @@
 <template>
   <div v-if="cfg.variables">
-    <n-tabs type="card" default-value="preview">
+    <n-tabs type="card" default-value="umaps">
       <template #prefix>
         <img
           class="logo"
@@ -11,14 +11,14 @@
       <n-tab-pane name="preview" tab="Preview">
         <Preview></Preview>
       </n-tab-pane>
+      <n-tab-pane name="umaps" tab="UMAP">
+        <UMAPs></UMAPs>
+      </n-tab-pane>
       <n-tab-pane name="volume" tab="Volumes">
         <MockVolume></MockVolume>
       </n-tab-pane>
       <n-tab-pane name="covering" tab="Covering">
         <MockCovering></MockCovering>
-      </n-tab-pane>
-      <n-tab-pane name="umaps" tab="UMAP">
-        <UMAPs></UMAPs>
       </n-tab-pane>
       <n-tab-pane name="cfg" tab="Raw Config">
         <pre>{{ JSON.stringify(cfg, null, 2) }}</pre>

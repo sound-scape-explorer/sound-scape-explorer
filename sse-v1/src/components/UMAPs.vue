@@ -33,6 +33,42 @@
       </tr>
     </n-table>
     <ScatterChart v-bind="scatterChartProps" />
+    <n-input-group>
+      <div style="width: 10%; margin: 0 2%">
+        <n-input-number
+          v-model:value="duration"
+          title="Display ... seconds"
+        ></n-input-number>
+        <n-button-group size="small">
+          <n-button @click="duration = 600">10min</n-button>
+          <n-button @click="duration = 3600">1 hour</n-button>
+          <n-button
+            @click="
+              start = minStart;
+              duration = (maxStart - minStart) * 10;
+            "
+            type="primary"
+            >All</n-button
+          >
+        </n-button-group>
+      </div>
+      <div style="width: 84%">
+        <n-slider
+          v-model:value="start"
+          title="Display starting at..."
+          :format-tooltip="(v) => `${dateThere(new Date(1000 * v))}`"
+          :min="minStart"
+          :max="maxStart"
+          :step="duration / 2"
+        ></n-slider>
+        <n-button-group>
+          <label
+            >Showing {{ duration }} seconds, starting at
+            {{ dateThere(new Date(1000 * start)) }}</label
+          >
+        </n-button-group>
+      </div>
+    </n-input-group>
     <img class="umap-graph" :src="currentGraphURL" />
   </div>
 </template>
@@ -40,8 +76,22 @@
 <script>
 import { onMounted, inject, computed, ref } from "vue";
 
-import { NTable } from "naive-ui";
-const NComponents = { NTable };
+import {
+  NTable,
+  NSlider,
+  NInputNumber,
+  NInputGroup,
+  NButton,
+  NButtonGroup,
+} from "naive-ui";
+const NComponents = {
+  NTable,
+  NSlider,
+  NInputNumber,
+  NInputGroup,
+  NButton,
+  NButtonGroup,
+};
 
 import { ScatterChart, useScatterChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
@@ -100,6 +150,11 @@ export default {
       );
     });
 
+    const addAllGrey = ref(true);
+    const showAll = ref(false);
+    const duration = ref(3600); // sec
+    const start = ref(0);
+
     const fetcherCache = {};
     const fetcher = useTask(function* (signal, umap, band) {
       const k = umap + "/" + band;
@@ -114,25 +169,82 @@ export default {
       return json;
     });
 
+    const minStart = computed(() =>
+      fetcher.lastSuccessful ? Math.min(...fetcher.lastSuccessful.value.t) : 0
+    );
+    const maxStart = computed(() =>
+      fetcher.lastSuccessful ? Math.max(...fetcher.lastSuccessful.value.t) : 0
+    );
+    function dateThere(d) {
+      return new Intl.DateTimeFormat("fr", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        timeZone: root.cfg.variables.display_locale,
+      }).format(d);
+    }
+
     const chartData = computed(() => {
       if (fetcher.lastSuccessful === undefined) return { datasets: [] };
-      let v = fetcher.lastSuccessful.value;
-      let labels = [...new Set(v.l)];
-      let datasets = labels.map((l, il) => ({
+      const v = fetcher.lastSuccessful.value;
+      const tStart = start.value;
+      const tEnd = tStart + duration.value;
+      const labels = [...new Set(v.l)];
+      const datasets = labels.map((l, il) => ({
         label: l,
-        data: v.X.map(([x, y]) => ({ x, y })).filter((o, i) => v.l[i] === l),
-        backgroundColor: `hsl(${il / labels.length}turn, 100%, 50%, 0.33)`,
+        data: v.X.map(([x, y]) => ({ x, y })).filter(
+          (o, i) => v.l[i] === l && v.t[i] >= tStart && v.t[i] < tEnd
+        ),
+        backgroundColor: `hsl(${il / labels.length}turn, 100%, 50%, 1)`,
       }));
-      return { datasets };
+      const allGreyDataset =
+        addAllGrey.value && !showAll.value
+          ? [
+              {
+                label: "*",
+                data: v.X.map(([x, y]) => ({ x, y })),
+                pointBackgroundColor: "hsl(0, 0%, 90%)",
+                pointBorderWidth: 0,
+                pointRadius: 2,
+              },
+            ]
+          : [];
+
+      return {
+        datasets: [...datasets, ...allGreyDataset],
+      };
     });
     const chartOptions = computed(() => {
       if (fetcher.lastSuccessful === undefined) return {};
-      let v = fetcher.lastSuccessful.value;
+      const v = fetcher.lastSuccessful.value;
+      const xs = v.X.map((pair) => pair[0]);
+      const ys = v.X.map((pair) => pair[1]);
+      const scales = {
+        x: {
+          min: Math.min(...xs),
+          max: Math.max(...xs),
+        },
+        y: {
+          min: Math.min(...ys),
+          max: Math.max(...ys),
+        },
+      };
+      const addx = (scales.x.max - scales.x.min) / 20;
+      const addy = (scales.y.max - scales.y.min) / 20;
+      scales.x.min -= addx;
+      scales.x.max += addx;
+      scales.y.min -= addy;
+      scales.y.max += addy;
+
       return {
         title: `UMAP [${currentUmap.value}] ${currentBand.value}, ${v.binSize}sec window`,
         animation: {
           duration: 0,
         },
+        scales,
       };
     });
 
@@ -142,6 +254,10 @@ export default {
     });
 
     return {
+      minStart,
+      maxStart,
+      start,
+      duration,
       scatterChartProps,
       currentBand,
       currentUmap,
@@ -150,6 +266,7 @@ export default {
       focus,
       currentGraphURL,
       select,
+      dateThere,
     };
   },
 };

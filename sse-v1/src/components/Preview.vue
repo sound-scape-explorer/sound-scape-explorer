@@ -203,8 +203,10 @@ export default {
   position: relative;
 }
 .view-preview audio:not(:hover) {
+  /*
   width: 200px;
   transition: transform 300ms ease-out;
+  */
 }
 .view-preview .spectro-canvas {
   width: 900px;

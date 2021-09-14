@@ -29,7 +29,7 @@ def test():
 
 @cli.command()
 def help():
-    print('eval "$(_SSE_COMPLETE=bash_source sse)')
+    print('eval "$(_SSE_COMPLETE=bash_source sse)"')
     print('sse cors-http-server')
     print('sse show-config --json > generated/ghost-config.json')
     print("(printf '%s' 'JSONJS = ' ; sse show-config --json) > generated/ghost-config-json.js")
