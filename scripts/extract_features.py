@@ -28,7 +28,7 @@ def waveform_to_examples(data, sample_rate, band_params):
         raise Exception(f'The band size parameter should be a multiple of 64')
     n_fft = 4096//2 * (ntot//64)   # (4096*3 * 64) //ntot
     log_mel = np.log(torchaudio.transforms.MelSpectrogram(
-       sample_rate=sample_rate, n_fft=n_fft, hop_length=1842, n_mels=ntot,
+       sample_rate=sample_rate, n_fft=n_fft, hop_length=int(1842/192000*sample_rate), n_mels=ntot,
         win_length=n_fft, power=1)(data).detach().numpy() + .1).T
     log_mel = log_mel[:, startwin:startwin+64]
     # Frame features into examples.
