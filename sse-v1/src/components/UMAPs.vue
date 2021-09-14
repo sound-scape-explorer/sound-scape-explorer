@@ -53,14 +53,20 @@
         </n-button-group>
       </div>
       <div style="width: 84%">
-        <n-slider
-          v-model:value="start"
-          title="Display starting at..."
-          :format-tooltip="(v) => `${dateThere(new Date(1000 * v))}`"
-          :min="minStart"
-          :max="maxStart"
-          :step="duration / 2"
-        ></n-slider>
+        <n-input-group>
+          <n-slider
+            :style="{ width: 80 / sliders.length + '%' }"
+            v-for="s in sliders"
+            :key="s.key"
+            v-model:value="start"
+            title="Display starting at..."
+            :format-tooltip="(v) => `${dateThere(new Date(1000 * v))}`"
+            :min="s.startStop[0]"
+            :max="s.startStop[1]"
+            :step="startStep"
+            :marks="s.marks"
+          ></n-slider>
+        </n-input-group>
         <n-button-group>
           <label
             >Showing {{ duration }} seconds, starting at
@@ -74,6 +80,7 @@
 </template>
 
 <script>
+import { UMAP_RANGES } from "@/mappings.js";
 import { onMounted, inject, computed, ref } from "vue";
 
 import {
@@ -145,8 +152,8 @@ export default {
 
     onMounted(() => {
       select(
-        umaps.value[parseInt(umaps.value.length / 2)],
-        bands.value[parseInt(bands.value.length / 2)]
+        umaps.value[0], //parseInt(umaps.value.length / 2)],
+        bands.value[0] //parseInt(bands.value.length / 2)]
       );
     });
 
@@ -169,12 +176,33 @@ export default {
       return json;
     });
 
+    const startStep = computed(() => parseInt(duration.value / 2));
     const minStart = computed(() =>
       fetcher.lastSuccessful ? Math.min(...fetcher.lastSuccessful.value.t) : 0
     );
     const maxStart = computed(() =>
-      fetcher.lastSuccessful ? Math.max(...fetcher.lastSuccessful.value.t) : 0
+      fetcher.lastSuccessful
+        ? minStart.value +
+          startStep.value *
+            parseInt(
+              (Math.max(...fetcher.lastSuccessful.value.t) - minStart.value) /
+                startStep.value
+            )
+        : 0
     );
+    const sliders = computed(() => {
+      if (root.cfg.umaps[currentUmap.value] === undefined) return [];
+      return root.cfg.umaps[currentUmap.value][UMAP_RANGES].map((kr) => ({
+        key: kr,
+        startStop: root.cfg.ranges[kr].map((d) =>
+          parseInt(new Date(d).getTime() / 1000)
+        ),
+        marks: {
+          [parseInt(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦",
+          [parseInt(new Date(root.cfg.ranges[kr][1]).getTime() / 1000)]: "⟧",
+        },
+      }));
+    });
     function dateThere(d) {
       return new Intl.DateTimeFormat("fr", {
         year: "numeric",
@@ -256,6 +284,8 @@ export default {
     return {
       minStart,
       maxStart,
+      startStep,
+      sliders,
       start,
       duration,
       scatterChartProps,
