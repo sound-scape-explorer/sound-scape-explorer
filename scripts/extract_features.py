@@ -113,9 +113,9 @@ def load_data():
         raise Exception(f'Band parameters do not allow to extract 64 bins, i.e. {band_params[0]}-{band_params[1]}={band_params[0]-band_params[1]} < 64')
     
     t_start = time.time()
-    log('Starting...')
+    #log('Starting...')
     wav_data, sr = torchaudio.load(input_path)
-    log(f'({time.time() - t_start:.3f} sec)... audio file loaded (shape is {wav_data.shape}, rate is {sr}, ~{wav_data.shape[1]/sr}sec)')
+    log(f'({time.time() - t_start:.3f} sec)... audio file loaded ({wav_data.shape}, rate {sr}, ~{wav_data.shape[1]/sr}sec)')
     
     if sr != expected_sample_rate:
         raise Exception(f'Expected sample rate of {expected_sample_rate} but got {sr}')

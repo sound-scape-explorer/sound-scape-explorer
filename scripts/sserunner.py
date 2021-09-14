@@ -102,17 +102,25 @@ def band_freqs():
 @click.option('--skip-existing/--no-skip-existing', '-s', default=False)
 def all(force, skip_existing):
     cfg = get_config()
-    for esr,band,spec,fname,info,input_path,output_path in utils.iterate_audio_files_with_bands(cfg, ['@feature_base', '.pklz']):
-        if output_path.exists() and not force:
-            if skip_existing:
-                print(f'... skipping {output_path}')
-                continue
-            raise Exception(f'"{output_path}" exists (-s to skip existing, or -f to overwrite).')
-        #own_call(['extract-features', input_path, output_path, spec, esr])
-        import sys
-        sys.argv = ['extract_features.py', input_path, output_path, spec, esr]
-        import extract_features
-        extract_features.go()
+    todo = 0
+    done = 0
+    for act in ["count", "do"]:
+        for esr,band,spec,fname,info,input_path,output_path in utils.iterate_audio_files_with_bands(cfg, ['@feature_base', '.pklz']):
+            if output_path.exists() and not force:
+                if skip_existing:
+                    print(f'... skipping {output_path}')
+                    continue
+                raise Exception(f'"{output_path}" exists (-s to skip existing, or -f to overwrite).')
+            if act == "count":
+                todo += 1
+            else:
+                done += 1
+                #own_call(['extract-features', input_path, output_path, spec, esr])
+                import sys
+                sys.argv = ['extract_features.py', input_path, output_path, spec, esr]
+                import extract_features
+                print(f'Processing {input_path} ({done+1}/{todo})')
+                extract_features.go()
 
 @extract.command()
 def show_features_size():
