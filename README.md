@@ -140,6 +140,8 @@ sse cors-http-server
 
 npm run build
 where=../sample
-sed -i -e 's@="/@="@g' -e 's@data-src=""@src="../'"$where"/'generated/ghost-config-json.js"@g' dist/index.html
-sed -i -e 's@http://localhost:9876/@../'"$where"'/@g' -e 's@LOCAL:!@LOCAL:@g' dist/js/*.js
+#-e 's@data-src=""@src="../'"$where"/'generated/ghost-config-json.js"@g'
+sed -i -e 's@="/@="@g'  dist/index.html
+sed -i -e 's@http://localhost:9876/@'"$where"'/@g' dist/js/*.js
+#sed -i -e 's@LOCAL:!@LOCAL:@g' dist/js/*.js
 ~~~

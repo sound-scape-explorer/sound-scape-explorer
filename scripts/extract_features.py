@@ -122,6 +122,10 @@ def load_data():
 
     return input_path, output_path, band_params, log, t_start, wav_data, sr, next_param
 
+def get_audio_duration(audio_path): # in sec
+    wav_data, sr = torchaudio.load(audio_path)
+    return wav_data.shape[1] / sr
+
 def get_band_freq_bounds(sr, band_params):
     spectro_freq = sr//2
     mel_max = 2595*np.log10(1+spectro_freq/700)

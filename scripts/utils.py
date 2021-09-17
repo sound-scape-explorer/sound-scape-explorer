@@ -73,7 +73,7 @@ def parse_config(xlsx='config.xlsx', sheet=0):
     umaps = dict(digest_xtable_columns(xlsx, _xtable, 'umaps', ['integration:I', 'bands:L', 'sites:L', 'ranges:L'], 'UMAP'))
     ranges = dict(digest_xtable_columns(xlsx, _xtable, 'ranges', ':L-D'))
     stringmap = dict(digest_xtable_columns(xlsx, _xtable, 'stringmap', ['to', 'color'], 'STRINGMAP'))
-    files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'location start:D tags:L'.split(' '), 'FILE'))
+    files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'site start:D tags:L'.split(' '), 'FILE'))
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
 

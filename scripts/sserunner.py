@@ -41,6 +41,10 @@ def help():
 def cors_http_server():
     import cors_http_server
     cors_http_server.main(['cors-http-server'])
+@cli.command()
+def chs():
+    import cors_http_server
+    cors_http_server.main(['cors-http-server'])
 
 @cli.command()
 @click.option('--json/--dict', default=False)
@@ -86,7 +90,7 @@ def preview(file, start, duration, no_ffmpeg):
         subprocess.call(['ffmpeg', '-loglevel', 'error', '-ss', start_sec, '-t', dur_sec, '-i', input_path, '-af', f'asetrate={expected_sr}*.1,aresample={expected_sr},atempo=1/.1', output_path])
 
 @extract.command()
-def band_freqs():
+def show_band_freqs():
     cfg = get_config()
     expected_sr = cfg.variables['audio_expected_sample_rate']
     for band,spec in cfg.bands.items():
@@ -95,6 +99,50 @@ def band_freqs():
         sys.argv = ['extract_features.py', expected_sr, spec, band]
         import extract_features
         extract_features.print_band_freq_bounds()
+
+@extract.command()
+@click.option('--duration', '--dur', '-d', default=-1)
+@click.option('--no-print/--print', default=False)
+@click.option('--aggregate/--per-site', default=False)
+def show_audio_span_plot(duration, no_print, aggregate):
+    per_site = not aggregate
+    cfg = get_config()
+    import extract_features
+    from matplotlib import pyplot as plt
+    ntot = sum(1 for _ in utils.iterate_audio_files_with_bands(cfg))
+    events = []
+    if per_site:
+        sites = sorted(list(set(o[4].site for o in utils.iterate_audio_files_with_bands(cfg))))
+        print(sites)
+        events = {s: [] for s in sites}
+    i = 0
+    for esr,band,spec,fname,info,input_path in utils.iterate_audio_files_with_bands(cfg):
+        dur = duration if duration > 0 else extract_features.get_audio_duration(input_path)
+        start = info.start
+        end = info.start + dt.timedelta(seconds=dur)
+        if not no_print:
+            print(f'... {fname} from {start} {dur}')
+        into = events
+        if per_site:
+            into = events[info.site]
+        into.append([start, 0])
+        into.append([start, +1])
+        into.append([end, -1])
+        plt.plot([start, end], [-i/ntot, -i/ntot])
+        i += 1
+    if per_site:
+        base = 0
+        for s in sites:
+            data = np.array(sorted(events[s], key=lambda p:p[0]))
+            if data.size == 0: continue
+            csum = np.cumsum(data[:,1])
+            plt.plot(data[:,0], base + csum)
+            base += np.max(csum) + 0.05
+    else:
+        events = sorted(events, key=lambda p:p[0])
+        data = np.array(events)
+        plt.plot(data[:,0], np.cumsum(data[:,1]))
+    plt.show()
 
 
 @extract.command()
@@ -140,9 +188,10 @@ def compute():
     pass
 
 @compute.command()
-@click.option('--plot/--no-plot', '-p', default=True)
+@click.option('--no-plot/--plot', '-np', default=False)
 @click.option('--show/--no-show', '-s', default=False)
-def umap(plot, show):
+def umap(no_plot, show):
+    plot = not no_plot
     cfg = get_config()
     # we do it here as it is very very slow
     import umap.umap_ as umap # Why!!!!
@@ -160,7 +209,7 @@ def umap(plot, show):
                     range_times = []
                     range_features = []
                     for fname,info,audio,pklz in utils.iterate_audio_files(cfg, band, ['@feature_base', '.pklz']):
-                        if info.location != s: continue
+                        if info.site != s: continue
                         with gzip.open(pklz, "rb") as f:
                             data = pickle.loads(f.read())
                         dur = dt.timedelta(seconds=0.92 * len(r))
