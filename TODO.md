@@ -1,3 +1,15 @@
+
+
+PROCESS
+
+- [ ] consider changing the ugly ~65 measure per second... that seem to come from nowhere (i.e. .92 vs .96)
+
+- [ ] allow non power of two in the definition of bands
+- [ ] (tool) suggest the config values when we give the band bounds in Hz
+
+TOOL
+
+
 UI
 
 - [ ] do volumes etc

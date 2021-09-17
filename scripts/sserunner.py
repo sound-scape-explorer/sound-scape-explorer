@@ -151,9 +151,12 @@ def show_audio_span_plot(duration, no_print, aggregate):
 def all(force, skip_existing):
     cfg = get_config()
     todo = 0
+    total = 0
     done = 0
     for act in ["count", "do"]:
         for esr,band,spec,fname,info,input_path,output_path in utils.iterate_audio_files_with_bands(cfg, ['@feature_base', '.pklz']):
+            if act == "count":
+                total += 1
             if output_path.exists() and not force:
                 if skip_existing:
                     print(f'... skipping {output_path}')
@@ -167,7 +170,7 @@ def all(force, skip_existing):
                 import sys
                 sys.argv = ['extract_features.py', input_path, output_path, spec, esr]
                 import extract_features
-                print(f'Processing {input_path} ({done+1}/{todo})')
+                print(f'Processing {input_path} ({done+1}/{todo}/{total})')
                 extract_features.go()
 
 @extract.command()
