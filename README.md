@@ -96,16 +96,20 @@ ffmpeg  -i ../log2/20210429_180000.WAV -ss 1600 -t 60 -c copy chunk-20210429_181
 ~~~
 sse extract all
 sse extract preview
-#sse extract band-freqs
+
+sse show band-freqs
+sse show list-sites
+
+# if a lot of files and you know they have each a 60s duration
+sse show audio-span-splot -s 60
+# else (few files or patient)
+sse show audio-span-splot
 ~~~
 
 For now, we use python to save a json of the config, to avoid implementing the parser (although this is easy-ish):
 
 ~~~
-sse show-config --json > generated/ghost-config.json
-(printf '%s' 'JSONJS = ' ; sse show-config --json) > generated/ghost-config-json.js
-
-# or, get it with
+# get the command with (use the ones that redirect to .js and .json files
 sse help
 ~~~
 
