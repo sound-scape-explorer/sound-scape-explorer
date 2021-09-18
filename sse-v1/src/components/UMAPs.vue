@@ -198,7 +198,18 @@ export default {
           parseInt(new Date(d).getTime() / 1000)
         ),
         marks: {
-          [parseInt(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦",
+          [parseInt(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦ ",
+          [parseInt(
+            new Date(root.cfg.ranges[kr][0]).getTime() / 1000 +
+              startStep.value *
+                parseInt(
+                  (new Date(root.cfg.ranges[kr][1]).getTime() -
+                    new Date(root.cfg.ranges[kr][0]).getTime()) /
+                    1000 /
+                    startStep.value /
+                    2
+                )
+          )]: kr,
           [parseInt(new Date(root.cfg.ranges[kr][1]).getTime() / 1000)]: "⟧",
         },
       }));
