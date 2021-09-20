@@ -9,14 +9,24 @@ PROCESS
 
 TOOL
 
+- [ ] helper to generate, from the sse show audio-span-plot
 
 UI
 
+- [ ] layered config? allow client side enrichment/overriding of the config (e.g. default ui / default xlsx-defined ui / client side defined ui
+  - especially for layout or deciding what to group, etc
 - [ ] do volumes etc
+- [ ] aggregate on different scales (day, week, year?)
+- [ ] allow a form a grouping too (post mean of the plot? or rather aggregate of the points)
+  - give each group a color and a name
+  - select the sites to use (and an advanced mode to select site×slot)
+  - pure client side? allow saving somewhere for between-run thing?
 
 - [ ] include global player
   - tricky with 1min every 10min recording schemes
   - tricky as only some sites exist at a given instant
+  - ... but (mostly) ok if the ui uses a point from the umap
+  - but a point on the umap contains several minutes potentially...
 
 - [ ] allow for several previews
 - [ ] allow scrolling spectro for long-ish preview(s)

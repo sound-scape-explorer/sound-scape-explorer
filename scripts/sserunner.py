@@ -93,12 +93,13 @@ def audio_span_plot(duration, no_print, aggregate):
         start = info.start
         end = info.start + dt.timedelta(seconds=dur)
         if not no_print:
-            print(f'... {fname} from {start} {dur}')
+            print(f'... {fname} from {start} {dur:.3f}')
         into = events
         if per_site:
             into = events[info.site]
         into.append([start, 0])
         into.append([start, +1])
+        into.append([end, 0])
         into.append([end, -1])
         plt.plot([start, end], [-i/ntot, -i/ntot])
         i += 1
@@ -189,7 +190,7 @@ def all(force, skip_existing):
                 import sys
                 sys.argv = ['extract_features.py', input_path, output_path, spec, esr]
                 import extract_features
-                print(f'Processing {input_path} ({done+1}/{todo}/{total})')
+                print(f'Processing {input_path} ({done}/{todo}/{total})')
                 extract_features.go()
 
 @extract.command()
