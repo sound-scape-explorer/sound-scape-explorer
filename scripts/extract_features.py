@@ -11,6 +11,7 @@ import time
 import sys
 import pathlib
 import matplotlib.pyplot as plt
+import preventinterrupt
 
 def frame(data, window_length, hop_length):
     num_samples = data.shape[0]
@@ -180,8 +181,9 @@ def go():
     
     pathlib.Path(output_path).absolute().parent.mkdir(parents=True, exist_ok=True)
     
-    with gzip.open(output_path, "wb") as f:
-        pickle.dump(resultsFile, f)
+    with preventinterrupt.DelayedKeyboardInterrupt():
+        with gzip.open(output_path, "wb") as f:
+            pickle.dump(resultsFile, f)
     
     #with open(output_path, "wb") as f:
     #    pickle.dump(resultsFile, f)
