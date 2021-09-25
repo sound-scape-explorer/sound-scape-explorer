@@ -33,6 +33,8 @@ import GainWorklet from "../worklet/GainWorklet";
       }
       */
 
+import { getBandBoundsFromSpec, mel2hz } from "@/utils.js";
+
 export default {
   inject: ["root"],
   data: () => ({
@@ -150,13 +152,8 @@ export default {
       const b = this.parseBand(bstr);
       const cfg = this.root.cfg;
       const sr = parseInt(cfg.variables.audio_expected_sample_rate);
-      const spectroFreq = sr / 2;
-      const hz = (m) => 700 * (Math.pow(10, m / 2595) - 1);
-      const mel = (hz) => 2595 * Math.log10(1 + hz / 700);
-      const melMax = mel(spectroFreq);
-      const melStart = (b[1] / b[0]) * melMax;
-      const melEnd = ((b[1] + 64) / b[0]) * melMax;
-      return `${hz(melStart).toFixed(0)}Hz-${hz(melEnd).toFixed(0)}Hz`;
+      const [hzStart, hzEnd] = getBandBoundsFromSpec(b, sr, true);
+      return `${hzStart.toFixed(0)}Hz-${hzEnd.toFixed(0)}Hz`;
     },
     //////////
     parseBand(bstr) {
@@ -165,14 +162,9 @@ export default {
     hzFromBandProp(b, prop) {
       const cfg = this.root.cfg;
       const sr = parseInt(cfg.variables.audio_expected_sample_rate);
-      const spectroFreq = sr / 2;
-      const hz = (m) => 700 * (Math.pow(10, m / 2595) - 1);
-      const mel = (hz) => 2595 * Math.log10(1 + hz / 700);
-      const melMax = mel(spectroFreq);
-      const melStart = (b[1] / b[0]) * melMax;
-      const melEnd = ((b[1] + 64) / b[0]) * melMax;
+      const [melStart, melEnd] = getBandBoundsFromSpec(b, sr, false);
       const m = melStart + (melEnd - melStart) * prop;
-      return hz(m);
+      return mel2hz(m);
     },
     clickSpectro(ev, bstr) {
       const e = ev.target;

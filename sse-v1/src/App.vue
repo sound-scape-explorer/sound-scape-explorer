@@ -20,6 +20,9 @@
       <n-tab-pane name="covering" tab="Covering">
         <MockCovering></MockCovering>
       </n-tab-pane>
+      <n-tab-pane name="minitools" tab="MiniTools">
+        <MiniTools></MiniTools>
+      </n-tab-pane>
       <n-tab-pane name="cfg" tab="Raw Config">
         <pre>{{ JSON.stringify(cfg, null, 2) }}</pre>
       </n-tab-pane>
@@ -32,7 +35,8 @@ import Preview from "./components/Preview.vue";
 import MockVolume from "./components/MockVolume.vue";
 import MockCovering from "./components/MockCovering.vue";
 import UMAPs from "./components/UMAPs.vue";
-const OComponents = { Preview, MockVolume, MockCovering, UMAPs };
+import MiniTools from "./components/MiniTools.vue";
+const OComponents = { Preview, MockVolume, MockCovering, UMAPs, MiniTools };
 
 import { NTabs, NCard, NTabPane } from "naive-ui";
 const NComponents = { NTabs, NCard, NTabPane };

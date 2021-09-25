@@ -3,13 +3,22 @@
 PROCESS
 
 - [ ] consider changing the ugly ~65 measure per second... that seem to come from nowhere (i.e. .92 vs .96)
+  - hop_length_samples = int(round(SAMPLE_RATE*STFT_HOP_LENGTH_SECONDS))
+  - ^ so no overlap
+  - goal is 0.96 seconds like vggish
+  - no good choice...
+    - having almost 1sec (as it is) will make some second get two samples
+    - taking 0.5s can be a good choice (but redundancy but it might be ok
+    - taking 1s (and loosing .04s/s) could be considered too
 
 - [ ] allow non power of two in the definition of bands
 - [ ] (tool) suggest the config values when we give the band bounds in Hz
 
 TOOL
 
-- [ ] helper to generate, from the sse show audio-span-plot
+- [ ] helper to generate ranges, from the sse show audio-span-plot (could click on it?)
+
+- [ ] use gzip when saving json in python (big json not the config), and unzip in JS with e.g. Wasm-Gzip
 
 UI
 
@@ -36,8 +45,6 @@ UI
 CFG
 
 - [ ] config umaps allow \* for all sites or all ranges (and bands, or maybe do all bands all the time)
-
-- [ ] use gzip when saving json in python, and unzip in JS with e.g. Wasm-Gzip
 
 - [ ] proper display and time offset with new Intl.DateTimeFormat("fr", { year: 'numeric',
       month: 'numeric',
