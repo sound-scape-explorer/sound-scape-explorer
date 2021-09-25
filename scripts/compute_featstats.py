@@ -14,11 +14,41 @@ def volumes(cfg):
         print('... INTEGRATION', inte)
         for band in cfg.bands.keys():
             print('... ... BAND', band)
+            infos = {
+                'integration': inte,
+                'band': band,
+                'data': {}
+            }
             for r_name in cfg.ranges.keys():
                 print('... ... ... RANGE', r_name)
                 r = cfg.ranges[r_name]
                 for s in sites:
                     print('... ... ... ... SITE', s)
+                    range_times, range_features = load_features_for(cfg, band, r, s)
+                    range_bins, group_starts = timegroup_loaded_features(range_times, r, inte)
+                    d_times = []
+                    d_sumvar = []
+                    d_sumstd = []
+                    d_logprodspan = []
+                    for g_start,g_end,t_start,g_start_i in iterate_timegroups(r, inte, range_bins, group_starts):
+                        d_times.append(t_start)
+                        d_sumvar.append(float(np.sum(np.var(range_features[g_start:g_end,:], axis=0))))
+                        d_sumstd.append(float(np.sum(np.std(range_features[g_start:g_end,:], axis=0))))
+                        d_logprodspan.append(float(np.sum(np.log(np.finfo(float).eps + np.max(range_features[g_start:g_end,:], axis=0)-np.min(range_features[g_start:g_end,:], axis=0)))))
+                    info_key = r_name + ' ' + s
+                    info = {
+                        'sumvar': d_sumvar,
+                        'sumstd': d_sumstd,
+                        'logprodspan': d_logprodspan,
+                        't': [d.timestamp() for d in d_times],
+                    }
+                    infos['data'][info_key] = info
+            out_path = pathlib.Path(cfg.variables['generated_base']).joinpath('single', 'volume', str(inte), band+'.json')
+            # todo: refactor as save json (and gzip it at some point)
+            out_path.absolute().parent.mkdir(parents=True, exist_ok=True)
+            with open(out_path, "w") as jsonfile:
+                json.dump(infos, jsonfile)
+
 
 def load_features_for(cfg, band, r, s):
     range_times = []
@@ -68,7 +98,7 @@ def umaps(cfg, plot, show):
                     range_times, range_features = load_features_for(cfg, band, r, s)
                     range_bins, group_starts = timegroup_loaded_features(range_times, r, umap.integration)
                     for g_start,g_end,t_start,g_start_i in iterate_timegroups(r, umap.integration, range_bins, group_starts):
-                        dataset_times.append(r[0] + range_bins[g_start] * dt.timedelta(seconds=umap.integration))
+                        dataset_times.append(t_start)
                         dataset_features.append(np.mean(range_features[g_start:g_end,:], axis=0))
                         dataset_labels.append(f'{r_name}/{s}')
    
