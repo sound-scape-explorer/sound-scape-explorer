@@ -81,12 +81,16 @@ export default {
     currentGraphURL() {
       if (this.currentBand === "") return "";
       const B = this.root.BASE + this.root.cfg.variables.generated_base;
+      const inte = parseInt(this.currentIntegration);
+      return `${B}single/volume/${inte}/${this.currentBand}.png`;
+      /*
       return (
         B +
-        `single/volume/${this.currentBand}_eachLogger${
-          this.currentIntegration
-        }_${(parseInt(this.currentIntegration) / 2).toFixed(0)}.png`
+        `single/volume/${this.currentBand}_eachLogger${inte}_${(
+          inte / 2
+        ).toFixed(0)}.png`
       );
+      */
     },
   },
   methods: {

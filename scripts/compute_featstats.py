@@ -7,7 +7,7 @@ import pickle
 import numpy as np
 import datetime as dt
 
-def volumes(cfg):
+def volumes(cfg, plot, show):
     integrations = [int(v) for v in cfg.variables['integration_seconds'].split('-')]
     sites = list(set([f.site for f in cfg.files.values()]))
     for inte in integrations:
@@ -48,7 +48,18 @@ def volumes(cfg):
             out_path.absolute().parent.mkdir(parents=True, exist_ok=True)
             with open(out_path, "w") as jsonfile:
                 json.dump(infos, jsonfile)
-
+            if plot:
+                import matplotlib.pyplot as plt # import here to have matplotlib optional
+                kplot = 'sumvar'
+                #import seaborn as sns
+                for k,data in infos['data'].items():
+                    plt.plot_date([t/3600/24 for t in data['t']], data[kplot], label=k, linestyle='-', markersize=2, alpha=.9)
+                plt.legend()
+                plt.title(f'Volume [{kplot}] b={band}, {inte}sec integration')
+                plt.savefig(out_path.with_suffix('.png'))
+                if show:
+                    plt.show()
+                plt.close()
 
 def load_features_for(cfg, band, r, s):
     range_times = []
@@ -120,7 +131,7 @@ def umaps(cfg, plot, show):
                 #    sub = np.where(dataset_labels == g)
                 #    sns.scatterplot(X[sub,0], X[sub,1], c=X[sub,0]*)
                 sns.scatterplot(x=X[:,0], y=X[:,1], hue=dataset_labels, style=dataset_labels, alpha=0.35)
-                plt.title(f'UMAP[{umap_name}] {band}, {umap.integration}sec win.')
+                plt.title(f'UMAP[{umap_name}] b={band}, {umap.integration}sec win.')
                 plt.savefig(out_path.with_suffix('.png'))
                 if show:
                     plt.show()

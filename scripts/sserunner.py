@@ -219,9 +219,12 @@ def umap(no_plot, show):
     compute_featstats.umaps(cfg, plot, show)
 
 @compute.command()
-def volume():
+@click.option('--no-plot/--plot', '-np', default=False)
+@click.option('--show/--no-show', '-s', default=False)
+def volume(no_plot, show):
+    plot = not no_plot
     cfg = get_config()
-    compute_featstats.volumes(cfg)
+    compute_featstats.volumes(cfg, plot, show)
 
 
 ######################################################################
