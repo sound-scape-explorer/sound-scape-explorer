@@ -65,7 +65,7 @@ def umaps(cfg, plot, show):
                 #for gi,g in enumerate(np.unique(dataset_labels)):
                 #    sub = np.where(dataset_labels == g)
                 #    sns.scatterplot(X[sub,0], X[sub,1], c=X[sub,0]*)
-                sns.scatterplot(X[:,0], X[:,1], hue=dataset_labels, style=dataset_labels, alpha=0.35)
+                sns.scatterplot(x=X[:,0], y=X[:,1], hue=dataset_labels, style=dataset_labels, alpha=0.35)
                 plt.title(f'UMAP[{umap_name}] {band}, {umap.integration}sec win.')
                 plt.savefig(out_path.with_suffix('.png'))
                 if show:
