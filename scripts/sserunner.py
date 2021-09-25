@@ -7,13 +7,16 @@ from utils import own_call
 import subprocess
 import pprint
 from json import dumps as json_dumps
-import pathlib
 
+import pathlib
 import json
 import gzip
 import pickle
 import numpy as np
 import datetime as dt
+
+import extract_features
+import compute_featstats
 
 ##############
 @click.group()
@@ -69,7 +72,6 @@ def band_freqs():
         #own_call(['band-freqs', expected_sr, spec, band]) # too slow...
         import sys
         sys.argv = ['extract_features.py', expected_sr, spec, band]
-        import extract_features
         extract_features.print_band_freq_bounds()
 
 @show.command()
@@ -79,8 +81,7 @@ def band_freqs():
 def audio_span_plot(duration, no_print, aggregate):
     per_site = not aggregate
     cfg = get_config()
-    import extract_features
-    from matplotlib import pyplot as plt
+    from matplotlib import pyplot as plt # import here to have matplotlib optional
     ntot = sum(1 for _ in utils.iterate_audio_files_with_bands(cfg))
     events = []
     if per_site:
@@ -189,7 +190,6 @@ def all(force, skip_existing):
                 #own_call(['extract-features', input_path, output_path, spec, esr])
                 import sys
                 sys.argv = ['extract_features.py', input_path, output_path, spec, esr]
-                import extract_features
                 print(f'Processing {input_path} ({done}/{todo}/{total})')
                 extract_features.go()
 
@@ -216,70 +216,7 @@ def compute():
 def umap(no_plot, show):
     plot = not no_plot
     cfg = get_config()
-    # we do it here as it is very very slow
-    import umap.umap_ as umap # Why!!!!
-    UMAP = umap.UMAP # as we use "umap" a lot below
-    for umap_name,umap in cfg.umaps.items():
-        print(umap_name, umap)
-        for band in umap.bands:
-            print(band)
-            dataset_times = []
-            dataset_features = []
-            dataset_labels = []
-            for r_name in umap.ranges:
-                r = cfg.ranges[r_name]
-                for s in umap.sites:
-                    range_times = []
-                    range_features = []
-                    for fname,info,audio,pklz in utils.iterate_audio_files(cfg, band, ['@feature_base', '.pklz']):
-                        if info.site != s: continue
-                        with gzip.open(pklz, "rb") as f:
-                            data = pickle.loads(f.read())
-                        dur = dt.timedelta(seconds=0.92 * len(r))
-                        if r[0] > info.start + dur: continue
-                        if r[1] < info.start: continue
-                        for i in range(len(data)):
-                            start = info.start + dt.timedelta(seconds=0.92 * i)
-                            if start < r[0] or start > r[1]: continue
-                            range_times.append(start)
-                            range_features.append(data[i])
-                    ind = np.argsort(range_times)
-                    range_times = np.array(range_times)[ind]
-                    range_features = np.array(range_features)[ind]
-                    range_bins = (range_times - r[0]) // dt.timedelta(seconds=umap.integration)
-                    group_starts = np.unique(range_bins, return_index=True)[1]
-                    #range_groups = np.split(range_features, group_starts[1:])
-                    for g_start_i,g_start in enumerate(group_starts):
-                        dataset_times.append(r[0] + range_bins[g_start] * dt.timedelta(seconds=umap.integration))
-                        g_end = None if g_start_i == len(group_starts)-1 else group_starts[g_start_i+1]
-                        dataset_features.append(np.mean(range_features[g_start:g_end,:], axis=0))
-                        dataset_labels.append(f'{r_name}/{s}')
-                    #print(r_name, s, len(dataset_features))
-   
-            #print(np.shape(dataset_times), np.shape(dataset_features))
-            X = UMAP(random_state=42000).fit_transform(dataset_features)
-            out_path = pathlib.Path(cfg.variables['generated_base']).joinpath('umap', umap_name, band+'.json')
-            out_path.absolute().parent.mkdir(parents=True, exist_ok=True)
-            with open(out_path, "w") as jsonfile:
-                json.dump({
-                    'X': X.tolist(),
-                    't': [d.timestamp() for d in dataset_times],
-                    'l': dataset_labels,
-                    'binSize': umap.integration,
-                }, jsonfile)
-            if plot:
-                import matplotlib.pyplot as plt
-                import seaborn as sns
-                #for gi,g in enumerate(np.unique(dataset_labels)):
-                #    sub = np.where(dataset_labels == g)
-                #    sns.scatterplot(X[sub,0], X[sub,1], c=X[sub,0]*)
-                sns.scatterplot(X[:,0], X[:,1], hue=dataset_labels, style=dataset_labels, alpha=0.35)
-                plt.title(f'UMAP[{umap_name}] {band}, {umap.integration}sec win.')
-                plt.savefig(out_path.with_suffix('.png'))
-                if show:
-                    plt.show()
-                plt.close()
-
+    compute_featstats.umaps(cfg, plot, show)
 
 
 ######################################################################
