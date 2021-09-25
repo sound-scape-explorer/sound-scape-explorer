@@ -26,6 +26,7 @@
           ]
       "
     />
+    <input v-model="what" />
     <n-table size="small">
       <tr>
         <th></th>
@@ -64,6 +65,7 @@ export default {
   data: () => ({
     currentBand: "",
     currentIntegration: "",
+    what: "sumvar",
   }),
   mounted() {
     this.currentBand = this.bands[parseInt(this.bands.length / 2)];
@@ -82,7 +84,7 @@ export default {
       if (this.currentBand === "") return "";
       const B = this.root.BASE + this.root.cfg.variables.generated_base;
       const inte = parseInt(this.currentIntegration);
-      return `${B}single/volume/${inte}/${this.currentBand}.png`;
+      return `${B}single/volume/${inte}/${this.currentBand}.${this.what}.png`;
       /*
       return (
         B +
