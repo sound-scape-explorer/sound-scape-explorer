@@ -218,6 +218,11 @@ def umap(no_plot, show):
     cfg = get_config()
     compute_featstats.umaps(cfg, plot, show)
 
+@compute.command()
+def volume():
+    cfg = get_config()
+    compute_featstats.volumes(cfg)
+
 
 ######################################################################
 # config handling etc

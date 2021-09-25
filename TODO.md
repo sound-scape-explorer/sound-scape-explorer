@@ -10,6 +10,7 @@ PROCESS
     - having almost 1sec (as it is) will make some second get two samples
     - taking 0.5s can be a good choice (but redundancy but it might be ok
     - taking 1s (and loosing .04s/s) could be considered too
+    - warning a lot of 0.92 everywhere... to be replaced/fixed
 
 - [ ] allow non power of two in the definition of bands
 - [ ] (tool) suggest the config values when we give the band bounds in Hz

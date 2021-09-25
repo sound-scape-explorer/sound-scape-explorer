@@ -7,6 +7,50 @@ import pickle
 import numpy as np
 import datetime as dt
 
+def volumes(cfg):
+    integrations = [int(v) for v in cfg.variables['integration_seconds'].split('-')]
+    sites = list(set([f.site for f in cfg.files.values()]))
+    for inte in integrations:
+        print('... INTEGRATION', inte)
+        for band in cfg.bands.keys():
+            print('... ... BAND', band)
+            for r_name in cfg.ranges.keys():
+                print('... ... ... RANGE', r_name)
+                r = cfg.ranges[r_name]
+                for s in sites:
+                    print('... ... ... ... SITE', s)
+
+def load_features_for(cfg, band, r, s):
+    range_times = []
+    range_features = []
+    for fname,info,audio,pklz in utils.iterate_audio_files(cfg, band, ['@feature_base', '.pklz']):
+        if info.site != s: continue
+        with gzip.open(pklz, "rb") as f:
+            data = pickle.loads(f.read())
+        dur = dt.timedelta(seconds=0.92 * len(data))
+        if r[0] > info.start + dur: continue
+        if r[1] < info.start: continue
+        for i in range(len(data)):
+            start = info.start + dt.timedelta(seconds=0.92 * i)
+            if start < r[0] or start > r[1]: continue
+            range_times.append(start)
+            range_features.append(data[i])
+    ind = np.argsort(range_times)
+    range_times = np.array(range_times)[ind]
+    range_features = np.array(range_features)[ind]
+    return range_times, range_features
+
+def timegroup_loaded_features(range_times, r, integration):
+    range_bins = (range_times - r[0]) // dt.timedelta(seconds=integration)
+    group_starts = np.unique(range_bins, return_index=True)[1]
+    return range_bins, group_starts
+
+def iterate_timegroups(r, integration, range_bins, group_starts):
+    for g_start_i,g_start in enumerate(group_starts):
+        t_start = r[0] + range_bins[g_start] * dt.timedelta(seconds=integration)
+        g_end = None if g_start_i == len(group_starts)-1 else group_starts[g_start_i+1]
+        yield g_start,g_end,t_start,g_start_i
+
 def umaps(cfg, plot, show):
     # we do the import here as it is very very slow
     import umap.umap_ as umap # Why!!!!
@@ -14,39 +58,19 @@ def umaps(cfg, plot, show):
     for umap_name,umap in cfg.umaps.items():
         print('... UMAP', umap_name, umap)
         for band in umap.bands:
-            print('... BAND', band)
+            print('... ... BAND', band)
             dataset_times = []
             dataset_features = []
             dataset_labels = []
             for r_name in umap.ranges:
                 r = cfg.ranges[r_name]
                 for s in umap.sites:
-                    range_times = []
-                    range_features = []
-                    for fname,info,audio,pklz in utils.iterate_audio_files(cfg, band, ['@feature_base', '.pklz']):
-                        if info.site != s: continue
-                        with gzip.open(pklz, "rb") as f:
-                            data = pickle.loads(f.read())
-                        dur = dt.timedelta(seconds=0.92 * len(r))
-                        if r[0] > info.start + dur: continue
-                        if r[1] < info.start: continue
-                        for i in range(len(data)):
-                            start = info.start + dt.timedelta(seconds=0.92 * i)
-                            if start < r[0] or start > r[1]: continue
-                            range_times.append(start)
-                            range_features.append(data[i])
-                    ind = np.argsort(range_times)
-                    range_times = np.array(range_times)[ind]
-                    range_features = np.array(range_features)[ind]
-                    range_bins = (range_times - r[0]) // dt.timedelta(seconds=umap.integration)
-                    group_starts = np.unique(range_bins, return_index=True)[1]
-                    #range_groups = np.split(range_features, group_starts[1:])
-                    for g_start_i,g_start in enumerate(group_starts):
+                    range_times, range_features = load_features_for(cfg, band, r, s)
+                    range_bins, group_starts = timegroup_loaded_features(range_times, r, umap.integration)
+                    for g_start,g_end,t_start,g_start_i in iterate_timegroups(r, umap.integration, range_bins, group_starts):
                         dataset_times.append(r[0] + range_bins[g_start] * dt.timedelta(seconds=umap.integration))
-                        g_end = None if g_start_i == len(group_starts)-1 else group_starts[g_start_i+1]
                         dataset_features.append(np.mean(range_features[g_start:g_end,:], axis=0))
                         dataset_labels.append(f'{r_name}/{s}')
-                    #print(r_name, s, len(dataset_features))
    
             #print(np.shape(dataset_times), np.shape(dataset_features))
             X = UMAP(random_state=42000).fit_transform(dataset_features)
