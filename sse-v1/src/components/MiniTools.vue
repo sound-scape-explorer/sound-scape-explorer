@@ -76,8 +76,11 @@ export default {
     font-weight: bold;
     text-align: center;
   }
+  th:nth-of-type(2n) {
+    text-align: right;
+  }
   td:nth-of-type(2n) {
-    margin-left: 2em;
+    padding-left: 2em;
     text-align: right;
     &::after {
       content: " -";
