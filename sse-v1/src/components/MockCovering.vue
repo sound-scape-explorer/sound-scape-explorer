@@ -72,15 +72,18 @@ export default {
       return Object.keys(this.root.cfg.bands);
     },
     radiuses() {
-      return this.root.cfg.variables.nearest_radiuses.split("-");
+      return this.root.cfg.variables.integration_seconds.split("-"); //this.root.cfg.variables.nearest_radiuses.split("-");
     },
     currentGraphURL() {
       if (this.currentBand === "") return "";
       const B = this.root.BASE + this.root.cfg.variables.generated_base;
-      return (
+      const inte = this.currentRadius;
+      const band = this.currentBand;
+      return `${B}pairwise/covering/${inte}/${band}.meandist.png`;
+      /*return (
         B +
         `pairs/covering/${this.currentBand}_graph_r${this.currentRadius}.png`
-      );
+      );*/
     },
   },
   methods: {
