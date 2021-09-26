@@ -16,21 +16,25 @@
       :chartData="boxPlotData"
       :options="{
         responsive: true,
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: 'Volume Box Plot',
-        },
         scales: {
-          xAxes: [
-            {
-              // Specific to Bar Controller
-              categoryPercentage: 0.9,
-              barPercentage: 0.8,
-            },
-          ],
+          x: {
+            // Specific to Bar Controller, not taken into account?
+            categoryPercentage: 0.9,
+            barPercentage: 0.8,
+          },
+          y: {
+            suggestedMin: 0,
+            suggestedMax: 1,
+          },
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Volume Box Plot',
+          },
         },
       }"
     ></BoxPlotChart>
@@ -168,6 +172,7 @@ export default {
         ],
       };
       const k = o.currentRangeName.value + " " + site;
+      console.log(k);
       const times = v.data[k].t;
       const series = v.data[k][o.what.value];
       let currentTime = -Infinity;
