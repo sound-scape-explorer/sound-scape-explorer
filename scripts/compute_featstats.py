@@ -91,11 +91,13 @@ def volumes(cfg, plot, show):
                     range_times, range_features = load_features_for(cfg, band, r, s)
                     range_bins, group_starts = timegroup_loaded_features(range_times, r, inte)
                     d_times = []
+                    d_bins = []
                     d_sumvar = []
                     d_sumstd = []
                     d_logprodspan = []
                     for g_start,g_end,t_start,g_start_i in iterate_timegroups(r, inte, range_bins, group_starts):
                         d_times.append(t_start)
+                        d_bins.append(range_bins[g_start])
                         feats = range_features[g_start:g_end,:]
                         d_sumvar.append(float(np.sum(np.var(feats, axis=0))))
                         d_sumstd.append(float(np.sum(np.std(feats, axis=0))))
@@ -106,6 +108,7 @@ def volumes(cfg, plot, show):
                         'sumstd': d_sumstd,
                         'logprodspan': d_logprodspan,
                         't': [d.timestamp() for d in d_times],
+                        'i': d_bins,
                     }
                     infos['data'][info_key] = info
             out_path = pathlib.Path(cfg.variables['generated_base']).joinpath('single', 'volume', str(inte), band+'.json')
