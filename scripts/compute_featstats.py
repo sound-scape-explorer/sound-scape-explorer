@@ -118,7 +118,7 @@ def volumes(cfg, plot, show):
                 json.dump(infos, jsonfile)
             if plot:
                 import matplotlib.pyplot as plt # import here to have matplotlib optional
-                for kplot in [k for k in list(infos['data'].values())[0] if k != 't']:
+                for kplot in [k for k in list(infos['data'].values())[0] if k != 't' and k != 'i']:
                     #import seaborn as sns
                     for k,data in infos['data'].items():
                         plt.plot_date([t/3600/24 for t in data['t']], data[kplot], label=k, linestyle='-', markersize=2, alpha=.9)
