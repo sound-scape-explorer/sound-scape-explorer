@@ -15,7 +15,7 @@
         <UMAPs></UMAPs>
       </n-tab-pane>
       <n-tab-pane name="volume" tab="Volumes">
-        <MockVolume></MockVolume>
+        <Volume></Volume>
       </n-tab-pane>
       <n-tab-pane name="covering" tab="Covering">
         <MockCovering></MockCovering>
@@ -32,11 +32,11 @@
 
 <script>
 import Preview from "./components/Preview.vue";
-import MockVolume from "./components/MockVolume.vue";
+import Volume from "./components/Volume.vue";
 import MockCovering from "./components/MockCovering.vue";
 import UMAPs from "./components/UMAPs.vue";
 import MiniTools from "./components/MiniTools.vue";
-const OComponents = { Preview, MockVolume, MockCovering, UMAPs, MiniTools };
+const OComponents = { Preview, Volume, MockCovering, UMAPs, MiniTools };
 
 import { NTabs, NCard, NTabPane } from "naive-ui";
 const NComponents = { NTabs, NCard, NTabPane };
