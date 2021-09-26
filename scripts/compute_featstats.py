@@ -101,7 +101,7 @@ def volumes(cfg, plot, show):
                         feats = range_features[g_start:g_end,:]
                         d_sumvar.append(float(np.sum(np.var(feats, axis=0))))
                         d_sumstd.append(float(np.sum(np.std(feats, axis=0))))
-                        d_logprodspan.append(float(np.sum(np.log(np.finfo(float).eps + np.max(feats, axis=0)-np.min(range_features[g_start:g_end,:], axis=0)))))
+                        d_logprodspan.append(float(np.sum(np.log(np.finfo(np.float32).eps + np.max(feats, axis=0)-np.min(range_features[g_start:g_end,:], axis=0)))))
                     info_key = r_name + ' ' + s
                     info = {
                         'sumvar': d_sumvar,
