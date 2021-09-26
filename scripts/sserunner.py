@@ -221,6 +221,14 @@ def umap(no_plot, show):
 @compute.command()
 @click.option('--no-plot/--plot', '-np', default=False)
 @click.option('--show/--no-show', '-s', default=False)
+def covering(no_plot, show):
+    plot = not no_plot
+    cfg = get_config()
+    compute_featstats.coverings(cfg, plot, show)
+
+@compute.command()
+@click.option('--no-plot/--plot', '-np', default=False)
+@click.option('--show/--no-show', '-s', default=False)
 def volume(no_plot, show):
     plot = not no_plot
     cfg = get_config()

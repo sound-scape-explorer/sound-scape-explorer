@@ -1,4 +1,3 @@
-
 const hz2mel = (hz) => 2595 * Math.log10(1 + hz / 700);
 const mel2hz = (m) => 700 * (Math.pow(10, m / 2595) - 1);
 

@@ -14,6 +14,8 @@ PROCESS
 
 - [ ] allow non power of two in the definition of bands
 - [ ] (tool) suggest the config values when we give the band bounds in Hz
+- [ ] config checker for common mistakes
+  - spaces in band names, range names, site names, ...
 
 TOOL
 
