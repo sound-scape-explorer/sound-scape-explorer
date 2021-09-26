@@ -105,8 +105,6 @@ const NComponents = {
 };
 
 import { ScatterChart, useScatterChart } from "vue-chart-3";
-import { Chart, registerables } from "chart.js";
-Chart.register(...registerables);
 
 import { useTask } from "vue-concurrency";
 

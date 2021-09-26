@@ -27,6 +27,36 @@
       "
     />
     <input v-model="what" />
+    <BoxPlotChart
+      :chartData="{
+        labels: ['A'],
+        datasets: [
+          {
+            borderColor: 'black',
+            data: [[18882.492, 7712.077, 5830.748, 7206.05]],
+          },
+        ],
+      }"
+      :options="{
+        responsive: true,
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Chart.js Box Plot Chart',
+        },
+        scales: {
+          xAxes: [
+            {
+              // Specific to Bar Controller
+              categoryPercentage: 0.9,
+              barPercentage: 0.8,
+            },
+          ],
+        },
+      }"
+    ></BoxPlotChart>
     <n-table size="small">
       <tr>
         <th></th>
@@ -59,9 +89,12 @@
 import { NTable } from "naive-ui";
 const NComponents = { NTable };
 
+import { defineChartComponent } from "vue-chart-3";
+const BoxPlotChart = defineChartComponent("BoxPlotChart", "boxplot");
+
 export default {
   inject: ["root"],
-  components: { ...NComponents },
+  components: { ...NComponents, BoxPlotChart },
   data: () => ({
     currentBand: "",
     currentIntegration: "",
