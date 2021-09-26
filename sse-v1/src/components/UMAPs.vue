@@ -252,7 +252,8 @@ export default {
       const datasets = labels.map((l, il) => ({
         label: l,
         data: data(l),
-        backgroundColor: `hsl(${il / labels.length}turn, 100%, 50%, 1)`,
+        backgroundColor: `hsl(${il / labels.length}turn, 75%, 50%, .5)`,
+        // TODO: have a common hsl h-bending function that better distributes in terms of Δe00 for instance
       }));
       const allGreyDataset =
         addAllGrey.value && !showAll.value

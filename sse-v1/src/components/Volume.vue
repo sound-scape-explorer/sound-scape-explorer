@@ -28,15 +28,7 @@
     />
     <input v-model="what" />
     <BoxPlotChart
-      :chartData="{
-        labels: ['A'],
-        datasets: [
-          {
-            borderColor: 'black',
-            data: [[18882.492, 7712.077, 5830.748, 7206.05]],
-          },
-        ],
-      }"
+      :chartData="boxPlotData"
       :options="{
         responsive: true,
         legend: {
@@ -118,14 +110,36 @@ export default {
       const B = this.root.BASE + this.root.cfg.variables.generated_base;
       const inte = parseInt(this.currentIntegration);
       return `${B}single/volume/${inte}/${this.currentBand}.${this.what}.png`;
-      /*
-      return (
-        B +
-        `single/volume/${this.currentBand}_eachLogger${inte}_${(
-          inte / 2
-        ).toFixed(0)}.png`
-      );
-      */
+    },
+    boxPlotData() {
+      const res = {
+        labels:
+          "1 2 3 4 5 6 very-long-stuff-of-the-dead-too-long-for-sure".split(
+            " "
+          ),
+        datasets: [],
+      };
+      const datasets = "ds1 ds2 ds3 ds4".split(" ");
+      for (const li in datasets) {
+        res.datasets.push({
+          label: datasets[li],
+          backgroundColor: `hsla(${(li * 360) / datasets.length},50%,50%,0.5)`,
+          borderColor: "black",
+          borderWidth: 1,
+          outlierBackgroundColor: "red",
+          data: [
+            Array.from(Array(1000), Math.random),
+            Array.from(Array(100), Math.random),
+            Array.from(Array(10), Math.random),
+            Array.from(Array(50), Math.random),
+            Array.from(Array(10), Math.random),
+            Array.from(Array(100), Math.random),
+            Array.from(Array(1000), Math.random),
+          ],
+        });
+      }
+      // TODO: consider generating index in addition d_times
+      return res;
     },
   },
   methods: {
