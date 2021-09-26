@@ -1,6 +1,6 @@
 <template>
   <div v-if="cfg.variables">
-    <n-tabs type="card" default-value="umaps">
+    <n-tabs type="card" default-value="volume">
       <template #prefix>
         <img
           class="logo"
@@ -11,7 +11,7 @@
       <n-tab-pane name="preview" tab="Preview">
         <Preview></Preview>
       </n-tab-pane>
-      <n-tab-pane name="umaps" tab="UMAP">
+      <n-tab-pane name="umap" tab="UMAP">
         <UMAPs></UMAPs>
       </n-tab-pane>
       <n-tab-pane name="volume" tab="Volumes">

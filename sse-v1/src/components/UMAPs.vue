@@ -82,9 +82,6 @@
 </template>
 
 <script>
-import { UMAP_RANGES } from "@/mappings.js";
-import { onMounted, inject, computed, ref } from "vue";
-
 import {
   NTable,
   NSlider,
@@ -104,8 +101,9 @@ const NComponents = {
   NSwitch,
 };
 
+import { UMAP_RANGES } from "@/mappings.js";
+import { onMounted, inject, computed, ref } from "vue";
 import { ScatterChart, useScatterChart } from "vue-chart-3";
-
 import { useTask } from "vue-concurrency";
 
 export default {
@@ -169,6 +167,7 @@ export default {
       duration.value = sec;
     };
 
+    // TODO: perf: should probably avoid reactivity on the data? is it fetcher or vuechart?
     const fetcherCache = {};
     const fetcher = useTask(function* (signal, umap, band) {
       const k = umap + "/" + band;
