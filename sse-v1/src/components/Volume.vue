@@ -21,7 +21,7 @@
         },
         title: {
           display: true,
-          text: 'Chart.js Box Plot Chart',
+          text: 'Volume Box Plot',
         },
         scales: {
           xAxes: [
@@ -95,7 +95,7 @@ export default {
       currentRangeName: ref(""),
       currentSite: ref(""),
       what: ref("sumvar"),
-      aggregate: ref(30),
+      aggregate: ref(3600),
       focus: ref(null),
     };
     o.bands = computed(() => Object.keys(root.cfg.bands));
