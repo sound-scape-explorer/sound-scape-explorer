@@ -36,6 +36,27 @@ sse help
 ~~~
 
 
+typical commands
+
+~~~
+sse extract all
+
+# if a lot of files and you know they have each a 60s duration
+sse show audio-span-splot -s 60
+# else (few files or patient)
+sse show audio-span-splot
+
+sse extract preview
+sse compute volume
+sse compute covering
+sse compute umap
+
+sse help
+# copy the config generators
+sse chs
+
+(cd ...../sse-v1 ; npm run dev)
+~~~
 
 
 
