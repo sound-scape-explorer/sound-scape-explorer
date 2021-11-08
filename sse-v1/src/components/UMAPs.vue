@@ -8,30 +8,6 @@
       @keydown.up="select(-1, undefined)"
       @keydown.down="select(1, undefined)"
     />
-    <n-table size="small">
-      <tr>
-        <th></th>
-        <th v-for="k in bands" :key="k" @click="select(undefined, k)">
-          {{ k }}
-        </th>
-      </tr>
-      <tr v-for="ku in umaps" :key="ku">
-        <th
-          :title="'Duration to estimate the variance: ' + ku + ' sec'"
-          @click="select(ku, undefined)"
-        >
-          {{ ku }}
-        </th>
-        <td
-          v-for="k in bands"
-          :key="k"
-          @click="select(ku, k)"
-          :class="{ current: currentBand === k && currentUmap === ku }"
-        >
-          o
-        </td>
-      </tr>
-    </n-table>
     <ScatterChart v-bind="scatterChartProps" />
     <n-input-group>
       <div style="width: 10%; margin: 0 2%">
@@ -77,6 +53,30 @@
         </n-button-group>
       </div>
     </n-input-group>
+    <n-table size="small">
+      <tr>
+        <th></th>
+        <th v-for="k in bands" :key="k" @click="select(undefined, k)">
+          {{ k }}
+        </th>
+      </tr>
+      <tr v-for="ku in umaps" :key="ku">
+        <th
+          :title="'Duration to estimate the variance: ' + ku + ' sec'"
+          @click="select(ku, undefined)"
+        >
+          {{ ku }}
+        </th>
+        <td
+          v-for="k in bands"
+          :key="k"
+          @click="select(ku, k)"
+          :class="{ current: currentBand === k && currentUmap === ku }"
+        >
+          o
+        </td>
+      </tr>
+    </n-table>
     <img class="umap-graph" :src="currentGraphURL" />
   </div>
 </template>
