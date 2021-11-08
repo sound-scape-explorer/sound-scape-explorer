@@ -8,10 +8,13 @@
       @keydown.up="select(-1, undefined)"
       @keydown.down="select(1, undefined)"
     />
-    <input v-model="currentRangeName" />
-    <input v-model="currentSite" />
-    <input v-model="what" />
-    <input v-model.number="aggregate" />
+    <n-form inline>
+      <n-select v-model:value="currentRangeName" :options="rangeOptions" />
+      <n-select v-model:value="currentSite" :options="siteOptions" />
+      <n-select v-model:value="what" :options="whatOptions" />
+      <n-select v-model:value="aggregate" :options="aggregateOptions" />
+      <input v-model.number="aggregate" />
+    </n-form>
     <BoxPlotChart
       :chartData="boxPlotData"
       :options="{
@@ -24,7 +27,7 @@
           },
           y: {
             suggestedMin: 0,
-            suggestedMax: 1,
+            suggestedMax: 1.0,
           },
         },
         plugins: {
@@ -67,15 +70,15 @@
 </template>
 
 <script>
-import { NTable } from "naive-ui";
-const NComponents = { NTable };
+import { NTable, NForm, NSelect } from "naive-ui";
+const NComponents = { NTable, NForm, NSelect };
 
 import { defineChartComponent } from "vue-chart-3";
 const BoxPlotChart = defineChartComponent("BoxPlotChart", "boxplot");
 
 import { FILE_SITE } from "@/mappings.js";
 import { useTask } from "vue-concurrency";
-import { inject, computed, ref } from "vue";
+import { inject, computed, ref, unref } from "vue";
 
 export default {
   inject: ["root"],
@@ -84,11 +87,10 @@ export default {
     this.currentBand = this.bands[parseInt(this.bands.length / 2)];
     this.currentIntegration =
       this.integrations[parseInt(this.integrations.length / 2)];
-    this.currentRangeName = Object.keys(this.root.cfg.ranges)[0];
-    this.currentSite = [
-      ...new Set(Object.values(this.root.cfg.files).map((f) => f[FILE_SITE])),
-    ][0];
+    this.currentRangeName = this.ranges[0];
+    this.currentSite = this.sites[0];
     this.$refs.focus.focus();
+    this.select();
   },
   setup() {
     const root = inject("root");
@@ -102,6 +104,23 @@ export default {
       aggregate: ref(3600),
       focus: ref(null),
     };
+    const toOptions = (r) =>
+      computed(() => unref(r).map((s) => ({ label: s, value: s })));
+    o.toOptions = toOptions;
+    o.ranges = computed(() => Object.keys(root.cfg.ranges));
+    o.rangeOptions = toOptions(o.ranges);
+    o.sites = computed(() => [
+      ...new Set(Object.values(root.cfg.files).map((f) => f[FILE_SITE])),
+    ]);
+    o.siteOptions = toOptions(o.sites);
+    o.whatOptions = toOptions("sumvar sumstd logprodspan".split(" "));
+    o.aggregateOptions = "1h:3600 30min:1800 15min:900 2h:7200"
+      .split(" ")
+      .map((kv) => kv.split(":"))
+      .map(([k, v]) => ({
+        label: k,
+        value: parseInt(v),
+      }));
     o.bands = computed(() => Object.keys(root.cfg.bands));
     o.integrations = computed(() =>
       root.cfg.variables.integration_seconds.split("-")
