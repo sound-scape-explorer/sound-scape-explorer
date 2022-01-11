@@ -11,7 +11,7 @@ Some python libraries
 
 ~~~
 pip install numpy
-pip install matoplotlib
+pip install matplotlib
 pip install seaborn
 pip install torchaudio
 pip install librosa

@@ -5,7 +5,7 @@ PROCESS
 - [ ] consider changing the ugly ~65 measure per second... that seem to come from nowhere (i.e. .92 vs .96)
   - hop_length_samples = int(round(SAMPLE_RATE*STFT_HOP_LENGTH_SECONDS))
   - ^ so no overlap
-  - goal is 0.96 seconds like vggish
+  - goal is 0.96 seconds like vggish (but strategy has change to 1 second 11 january 2022)
   - no good choice...
     - having almost 1sec (as it is) will make some second get two samples
     - taking 0.5s can be a good choice (but redundancy but it might be ok
