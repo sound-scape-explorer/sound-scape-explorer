@@ -6,7 +6,7 @@ import gzip
 import pickle
 import numpy as np
 import datetime as dt
-
+from deployInit import DeployInit
 def coverings(cfg, plot, show):
     integrations = [int(v) for v in cfg.variables['integration_seconds'].split('-')]
     sites = list(set([f.site for f in cfg.files.values()]))

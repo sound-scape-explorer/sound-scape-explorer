@@ -19,6 +19,12 @@ import extract_features
 import compute_featstats
 
 ##############
+#Global Var imported from here
+from deployInit import DeployInit
+##############
+
+
+##############
 @click.group()
 def cli():
     pass
@@ -241,7 +247,7 @@ _cache_config = None
 def get_config():
     global _cache_config
     if _cache_config is None:
-        _cache_config = utils.parse_config()
+        _cache_config = utils.parse_config(DeployInit.pathToXlsx)
     return _cache_config
 
 

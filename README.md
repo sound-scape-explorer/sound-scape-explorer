@@ -18,12 +18,17 @@ pip install librosa
 pip install xlrd
 pip install pandas
 pip install umap-learn
+pip install openpyxl
+pip install numpy==1.20
 ~~~
 
 The helper script
 
+from root project
+
 ~~~
-pip install ./scripts
+pip install -e ./scripts
+mkdir ./sse-v1/generated ./sse-v1/features mkdir ./sample/generated ./sample/features
 ~~~
 
 To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
