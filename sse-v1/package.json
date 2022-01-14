@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@sgratzl/chartjs-chart-boxplot": "^3.5.1",
+    "chart.js": "^3.7.0",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
     "vue-chart-3": "^0.5.8",
@@ -24,9 +25,11 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
-    "naive-ui": "^2.16.7",
+    "naive-ui": "^2.24.1",
     "prettier": "^2.2.1",
     "sass": "^1.26.5",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "vfonts": "0.0.3",
+    "worklet-loader": "^2.0.0"
   }
 }

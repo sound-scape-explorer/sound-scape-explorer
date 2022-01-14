@@ -44,6 +44,11 @@ sse help
 typical commands
 
 ~~~
+
+#run the server
+sse cors-http-server
+
+#
 sse extract all
 
 # if a lot of files and you know they have each a 60s duration
