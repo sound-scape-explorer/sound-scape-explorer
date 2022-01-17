@@ -28,7 +28,14 @@ from root project
 
 ~~~
 pip install -e ./scripts
-mkdir ./sse-v1/generated ./sse-v1/features mkdir ./sample/generated ./sample/features
+mkdir ./sample/generated ./sample/features
+~~~
+
+from [rootProject]/sse-v1/
+
+~~~
+ln -s ../sample/features/
+ln -s ../sample/generated/
 ~~~
 
 To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
@@ -66,6 +73,8 @@ sse help
 sse chs
 
 (cd ...../sse-v1 ; npm run dev)
+(cd .../sample sse show config --json > generated/ghost-config.json)
+
 ~~~
 
 
