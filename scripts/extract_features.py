@@ -34,8 +34,8 @@ def waveform_to_examples(data, sample_rate, band_params):
     log_mel = log_mel[:, startwin:startwin+64]
     # Frame features into examples.
     features_sample_rate = 1.0 / 0.010
-    example_window_length = int(round(0.96 * features_sample_rate))
-    example_hop_length = int(round(0.96 * features_sample_rate))
+    example_window_length = int(round(1 * features_sample_rate))
+    example_hop_length = int(round(1 * features_sample_rate))
     log_mel_examples = frame(log_mel, window_length=example_window_length,
                              hop_length=example_hop_length)
     #l = example_window_length
@@ -167,10 +167,10 @@ def go():
     
     resultsFile = []
     i = 0
-    batch = int(sr*0.96*100)
-    if wav_data.shape[1] % (sr*0.96) != 0:
+    batch = int(sr*100)
+    if wav_data.shape[1] % (sr) != 0:
         wav_data = torch.cat((wav_data, torch.zeros(
-                         (1, int(sr*0.96)-int(wav_data.shape[1] % (sr*0.96))))), 1)
+                         (1, int(sr)-int(wav_data.shape[1] % (sr))))), 1)
     while i < wav_data.shape[1]:
         samples = wav_data[:, i:i+batch]
         fts = model.forward(samples, fs=sr).numpy()
