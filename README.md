@@ -18,12 +18,24 @@ pip install librosa
 pip install xlrd
 pip install pandas
 pip install umap-learn
+pip install openpyxl
+pip install numpy==1.20
 ~~~
 
 The helper script
 
+from root project
+
 ~~~
-pip install ./scripts
+pip install -e ./scripts
+mkdir ./sample/generated ./sample/features
+~~~
+
+from [rootProject]/sse-v1/
+
+~~~
+ln -s ../sample/features/
+ln -s ../sample/generated/
 ~~~
 
 To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
@@ -39,6 +51,11 @@ sse help
 typical commands
 
 ~~~
+
+#run the server to avoid cors request
+sse cors-http-server
+
+#
 sse extract all
 
 # if a lot of files and you know they have each a 60s duration
@@ -56,6 +73,8 @@ sse help
 sse chs
 
 (cd ...../sse-v1 ; npm run dev)
+(cd .../sample sse show config --json > generated/ghost-config.json)
+
 ~~~
 
 

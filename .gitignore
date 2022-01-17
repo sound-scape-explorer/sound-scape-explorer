@@ -1,1 +1,10 @@
 __pycache__/
+/.project
+/.settings/
+/.pydevproject
+sample/audio
+sample/generated
+sample/features
+sse-v1/generated
+sse-v1/features
+sse-v1/node_modules
