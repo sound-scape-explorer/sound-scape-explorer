@@ -38,7 +38,7 @@ import { getBandBoundsFromSpec, mel2hz } from "@/utils.js";
 export default {
   inject: ["root"],
   data: () => ({
-    changePitch: false,
+    changePitch: false, /*permit to listen to ultrasound*/
     showHz: -1,
   }),
   computed: {

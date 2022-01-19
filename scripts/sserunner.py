@@ -18,11 +18,6 @@ import datetime as dt
 import extract_features
 import compute_featstats
 
-##############
-#Global Var imported from here
-from deployInit import DeployInit
-##############
-
 
 ##############
 @click.group()

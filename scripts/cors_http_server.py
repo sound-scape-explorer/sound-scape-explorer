@@ -16,6 +16,22 @@ def main(argv=sys.argv):
         def end_headers (self):
             self.send_header('Access-Control-Allow-Origin', '*')
             SimpleHTTPRequestHandler.end_headers(self)
+        def validResponse(self):
+            SimpleHTTPRequestHandler.end_headers(self)
+            SimpleHTTPRequestHandler.send_response(self,200)
+        """def do_GET(self):
+            #SimpleHTTPRequestHandler.do_GET(self)
+            print("")
+            if self.path.endswith("/compute"):
+                SimpleHTTPRequestHandler.send_header(self,"content-type","application/json")
+                self.wfile.write("".encode())
+                self.validResponse()
+                print("ok")
+            else:
+                self.send_header('Access-Control-Allow-Origin', '*')
+                SimpleHTTPRequestHandler.end_headers(self)
+                print("pasok")"""
+        
 
     test(CORSRequestHandler, HTTPServer)
 

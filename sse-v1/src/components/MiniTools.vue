@@ -1,11 +1,13 @@
 <template>
   <div>
     <input v-model.number="sampleRate" />
-    <input v-model.number="bandSize" />
-    <input v-model.number="bandOffset" />
+    <input type="number" step="64" v-model.number="bandSize" />
+    <input type="number" step="64" v-model.number="bandOffset" />
     <label><input type="checkbox" v-model="inHz" /> hz</label>
     <input disabled :value="Math.round(bandInfo[0])" />
     <input disabled :value="Math.round(bandInfo[1])" />
+    <br />
+    <input type="button" @click="computeBands" value="compute">
     <br />
     <label><input type="checkbox" v-model="showTable" /> table</label>
     <table v-if="showTable" class="band-table">
@@ -38,6 +40,9 @@ export default {
     showTable: true,
   }),
   computed: {
+    /**
+     * Calculate the bands frequencies on this template view
+     */
     bandTableRows() {
       const res = [];
       for (const size of [this.bandSize]) {
@@ -66,6 +71,15 @@ export default {
     this.sampleRate = parseInt(
       this.root.cfg.variables.audio_expected_sample_rate
     );
+  },
+  methods:{
+    computeBands(){
+      console.log("calcul pour le sse compute");
+      //afficher le chargement
+      
+      console.log("calcul terminer")
+
+    }
   },
 };
 </script>
