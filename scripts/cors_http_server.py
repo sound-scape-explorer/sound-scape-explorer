@@ -2,6 +2,8 @@
 
 # Usage: python cors_http_server.py <port>
 import sys
+import os
+
 def main(argv=sys.argv):
     try:
         # try to use Python 3
@@ -17,20 +19,18 @@ def main(argv=sys.argv):
             self.send_header('Access-Control-Allow-Origin', '*')
             SimpleHTTPRequestHandler.end_headers(self)
         def validResponse(self):
-            SimpleHTTPRequestHandler.end_headers(self)
             SimpleHTTPRequestHandler.send_response(self,200)
-        """def do_GET(self):
-            #SimpleHTTPRequestHandler.do_GET(self)
-            print("")
+            self.end_headers()
+        def do_GET(self):
             if self.path.endswith("/compute"):
-                SimpleHTTPRequestHandler.send_header(self,"content-type","application/json")
-                self.wfile.write("".encode())
+                #SimpleHTTPRequestHandler.send_header(self,"content-type","application/json")
+                self.wfile.write("ok".encode())
                 self.validResponse()
-                print("ok")
-            else:
-                self.send_header('Access-Control-Allow-Origin', '*')
-                SimpleHTTPRequestHandler.end_headers(self)
-                print("pasok")"""
+            elif os.path.isfile("."+self.path):
+                self.validResponse()
+                f=open("."+self.path,'rb')
+                self.wfile.write(f.read())
+                f.close()
         
 
     test(CORSRequestHandler, HTTPServer)
