@@ -73,12 +73,12 @@ export default {
     );
   },
   methods:{
-    computeBands(){
-      console.log("calcul pour le sse compute");
-      //afficher le chargement
-      
-      console.log("calcul terminer")
-
+    async computeBands(){
+      console.log("calcul pour le sse extract");
+      console.log(this.root.BASE+ "compute/" +this.root.curentPreviewFile+"/"+this.root.audioDuration)
+      let req = await fetch(this.root.BASE+ "compute/" +this.root.curentPreviewFile+"/"+this.root.audioDuration)
+      let res = req.json();
+      console.log("calcul terminer ? "+ res)
     }
   },
 };

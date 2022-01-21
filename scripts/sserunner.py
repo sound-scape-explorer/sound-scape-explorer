@@ -242,7 +242,7 @@ _cache_config = None
 def get_config():
     global _cache_config
     if _cache_config is None:
-        _cache_config = utils.parse_config(DeployInit.pathToXlsx)
+        _cache_config = utils.parse_config()
     return _cache_config
 
 

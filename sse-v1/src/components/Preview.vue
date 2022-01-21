@@ -6,7 +6,7 @@
       ref="spectroCanvas"
       class="spectro-canvas"
     ></canvas>
-    <audio ref="audio" controls crossorigin :src="previewURL"></audio>
+    <audio ref="audio" controls crossorigin :src="previewURL" preload="none"></audio>
     <div class="audio-tools">
       {{ showHz.toFixed(0) }}Hz <br />
       <label>
@@ -17,6 +17,7 @@
       <div class="band-name">
         <span>{{ k }}</span> ({{ bandInfo(b) }})
       </div>
+      <div class="audio-timer"><div class="audio-timer-currsor"></div></div>
       <img :src="bandPreviewImageURL(k)" @click="clickSpectro($event, b)" />
     </div>
   </div>
@@ -45,9 +46,9 @@ export default {
     previewURL() {
       const B = this.root.BASE + this.root.cfg.variables.generated_base;
       if (this.changePitch) {
-        return B + "preview-audio/hzdiv10.wav";
+        return B + "preview-audio/hzdiv10.wav#"+ new Date().getTime();
       } else {
-        return B + "preview-audio/normal.wav";
+        return B + "preview-audio/normal.wav#"+ new Date().getTime();
         //this.root.BASE + V.audio_base + V.preview_file + V.audio_suffix;
       }
     },
@@ -146,7 +147,7 @@ export default {
     bandPreviewImageURL(band) {
       const cfg = this.root.cfg;
       const BASE = this.root.BASE;
-      return `${BASE}${cfg.variables.generated_base}preview-spectrogram/${band}.png`;
+      return `${BASE}${cfg.variables.generated_base}preview-spectrogram/${band}.png#`+ new Date().getTime();
     },
     bandInfo(bstr) {
       const b = this.parseBand(bstr);
@@ -185,6 +186,18 @@ export default {
       //audio.mozPreservesPitch = audio.webkitPreservesPitch = false;
       audio.play();
       audio.focus();
+      this.cursorPosition(ev.clientX)
+    },
+    cursorPosition(clientX){
+      const audio = this.$refs.audio;
+      console.log(audio.currentTime,audio.duration)
+      let audioCursor = document.getElementsByClassName('audio-timer-currsor')
+      clientX = clientX-2
+      for (let i = 0; i < audioCursor.length; i++) {
+        const element = audioCursor[i];
+        element.style.marginLeft=clientX+"px";
+        console.log(element)
+      }
     },
   },
 };
@@ -237,5 +250,17 @@ export default {
 }
 .band-name span {
   font-weight: bold;
+}
+
+.audio-timer{
+  background-color: rgb(0, 0, 0);
+  height: 4px;
+  margin: 0px;
+}
+
+.audio-timer-currsor{
+  background-color: red;
+  width: 4px;
+  height: 100%;
 }
 </style>

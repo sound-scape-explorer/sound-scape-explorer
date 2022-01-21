@@ -3,6 +3,7 @@
 # Usage: python cors_http_server.py <port>
 import sys
 import os
+import re
 
 def main(argv=sys.argv):
     try:
@@ -17,15 +18,25 @@ def main(argv=sys.argv):
     class CORSRequestHandler (SimpleHTTPRequestHandler):
         def end_headers (self):
             self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header("Cache-control","no-store")
             SimpleHTTPRequestHandler.end_headers(self)
         def validResponse(self):
             SimpleHTTPRequestHandler.send_response(self,200)
             self.end_headers()
         def do_GET(self):
-            if self.path.endswith("/compute"):
-                #SimpleHTTPRequestHandler.send_header(self,"content-type","application/json")
-                self.wfile.write("ok".encode())
+            if re.match("/compute",self.path):
                 self.validResponse()
+                #SimpleHTTPRequestHandler.send_header(self,"content-type","application/json")
+                print(self.path)
+                res = re.match("/compute/([a-zA-Z0-9_./]+)/([0-9]+)",self.path)
+                file,duration = res.group(1),res.group(2)
+                print(file,duration)
+                print("rm -r generated/preview-*")
+                os.system("rm -r generated/preview-*")
+                print("sse extract preview -f "+file+" -t "+duration)
+                os.system("sse extract preview -f "+file+" -t "+duration)
+                self.wfile.write("ok".encode())
+                
             elif os.path.isfile("."+self.path):
                 self.validResponse()
                 f=open("."+self.path,'rb')

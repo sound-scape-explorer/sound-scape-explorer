@@ -48,6 +48,8 @@ export default {
     BASE: "http://localhost:9876/",
     LOCAL: false,
     cfg: {},
+    curentPreviewFile: "",
+    audioDuration: 60,
   }),
   provide() {
     return {
@@ -65,6 +67,7 @@ export default {
       } else {
         const req = await fetch(this.BASE + "generated/ghost-config.json");
         this.cfg = await req.json();
+        this.curentPreviewFile = this.cfg.variables.preview_file;
       }
     },
   },

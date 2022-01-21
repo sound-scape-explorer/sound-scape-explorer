@@ -62,7 +62,7 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
 
     
 
-def parse_config(xlsx='config.xlsx', sheet=0):
+def parse_config(xlsx='../sample/config.xlsx', sheet=0):
     _xfile = pd.ExcelFile(xlsx)
     _xtable = _xfile.parse(sheet, converters={'variables_': str})
     _renaming = {i: i.split(' (')[0] for i in _xtable.columns if ' (' in i}
