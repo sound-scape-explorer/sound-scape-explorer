@@ -6,7 +6,7 @@
       ref="spectroCanvas"
       class="spectro-canvas"
     ></canvas>
-    <audio ref="audio" controls crossorigin :src="previewURL" preload="none"></audio>
+    <audio @playing="moveCursorPosition()" ref="audio" controls crossorigin :src="previewURL" preload="none"></audio>
     <div class="audio-tools">
       {{ showHz.toFixed(0) }}Hz <br />
       <label>
@@ -41,6 +41,7 @@ export default {
   data: () => ({
     changePitch: false, /*permit to listen to ultrasound*/
     showHz: -1,
+    cursorPos : 0,
   }),
   computed: {
     previewURL() {
@@ -189,16 +190,37 @@ export default {
       this.cursorPosition(ev.clientX)
     },
     cursorPosition(clientX){
-      const audio = this.$refs.audio;
-      console.log(audio.currentTime,audio.duration)
+      //const audio = this.$refs.audio;
+      //console.log(audio.currentTime,audio.duration)
       let audioCursor = document.getElementsByClassName('audio-timer-currsor')
       clientX = clientX-2
+      this.cursorPos = clientX;
       for (let i = 0; i < audioCursor.length; i++) {
         const element = audioCursor[i];
         element.style.marginLeft=clientX+"px";
-        console.log(element)
+        //console.log(element)
       }
     },
+    moveCursorPosition(){
+      let refreshInMs = 100
+      let moveCursorpointer = setInterval(()=>{
+        if(document.getElementsByTagName('audio')[0].paused){
+          clearInterval(moveCursorpointer);
+        }
+        let ecranSegmentation = document.children[0].clientWidth/this.root.audioDuration;
+        console.log(ecranSegmentation*(refreshInMs/1000))
+        this.cursorPos+=ecranSegmentation*(refreshInMs/1000);
+        if(this.cursorPos > document.children[0].clientWidth){
+          this.cursorPos = document.children[0].clientWidth - 4
+        }
+        let audioCursor = document.getElementsByClassName('audio-timer-currsor')
+        for (let i = 0; i < audioCursor.length; i++) {
+          const element = audioCursor[i];
+          element.style.marginLeft= this.cursorPos+"px";
+          //console.log(element)
+        }
+      }, refreshInMs);
+    }
   },
 };
 </script>

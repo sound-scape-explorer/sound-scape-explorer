@@ -1,15 +1,20 @@
 <template>
   <div>
-    <input v-model.number="sampleRate" />
-    <input type="number" step="64" v-model.number="bandSize" />
-    <input type="number" step="64" v-model.number="bandOffset" />
+    <label for="sampleRate">Sample rate</label>
+    <input name="sampleRate" v-model.number="sampleRate" /><br>
+    <label for="maxSampleRate">Max of sample rate (traduce in Hz below)</label>
+    <input type="number" step="64" v-model.number="bandSize" /><br>
+    <label for="minSampleRate">Min of sample rate (traduce in Hz below)</label>
+    <input type="number" step="64" v-model.number="bandOffset" /><br>
+    <label for="minSampleRate">Duration of preview</label>
+    <input type="number" max="60" min="0" step="1" v-model.number="root.audioDuration" /><br>
     <label><input type="checkbox" v-model="inHz" /> hz</label>
     <input disabled :value="Math.round(bandInfo[0])" />
     <input disabled :value="Math.round(bandInfo[1])" />
     <br />
     <input type="button" @click="computeBands" value="compute">
     <br />
-    <label><input type="checkbox" v-model="showTable" /> table</label>
+    <label><input type="checkbox" v-model="showTable" />show table of band.s</label>
     <table v-if="showTable" class="band-table">
       <tr>
         <th>band spec</th>

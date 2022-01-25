@@ -35,7 +35,8 @@ def main(argv=sys.argv):
                 os.system("rm -r generated/preview-*")
                 print("sse extract preview -f "+file+" -t "+duration)
                 os.system("sse extract preview -f "+file+" -t "+duration)
-                self.wfile.write("ok".encode())
+                print("All done")
+                self.wfile.write("{\"status\":\"ok\"}".encode())
                 
             elif os.path.isfile("."+self.path):
                 self.validResponse()
