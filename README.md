@@ -7,7 +7,19 @@
 
 ### Installation
 
-Some python libraries
+#### Windows
+
+#### Unix
+
+Step 0 : Open an terminal and install python, pip and nodeJS pakager
+
+~~~
+apt install python 3.8
+apt install pip
+apt install npm
+~~~
+
+Step 1 : Install required python libraries
 
 ~~~
 pip install numpy
@@ -24,21 +36,23 @@ pip install numpy==1.20
 
 The helper script
 
-from root project
+Step 2 : go to your downloaded root project
+
+Setp 3 : run this command
 
 ~~~
 pip install -e ./scripts
 mkdir ./sample/generated ./sample/features
 ~~~
 
-from [rootProject]/sse-v1/
+Step 4 : Go to [rootProject]/sse-v1/
 
 ~~~
 ln -s ../sample/features/
 ln -s ../sample/generated/
 ~~~
 
-To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
+[Not Mandatory] To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
 
 ~~~
 eval "$(_SSE_COMPLETE=bash_source sse)"
@@ -47,6 +61,51 @@ eval "$(_SSE_COMPLETE=bash_source sse)"
 sse help
 ~~~
 
+Step 5 : Extract 
+
+~~~
+sse extract all
+#this operation will take a while depending of your dataset.
+#[Optionaly] 
+sse extract preview
+~~~
+
+Step 6 : Generate config for webClient
+
+~~~
+cd [rootProject]/sse-v1/
+sse show config --json > generated/ghost-config.json
+~~~
+
+Step 7 : install nodeJS dependencies
+
+~~~
+cd [rootProject]/sse-v1/
+#DO NOT RUN THIS command => npm audit fix
+#run this below
+npm i -D naive-ui
+npm i -D vfonts
+npm i -D worklet-loader
+npm install --save chart.js chart.js/helpers
+~~~
+
+
+Step 8 : run the pyhon server and the nodeJS server 
+
+~~~
+cd [rootProject]/sse-v1/
+# run the python server (default port is 9876)
+sse cors-http-server 
+# it's also called in shortname
+sse chs
+
+# run the nodeJS server at same path
+npm run serve (default port is 8080)
+
+~~~
+
+All done
+
 
 typical commands
 
@@ -54,6 +113,8 @@ typical commands
 
 #run the server
 sse cors-http-server
+#it's also called in shortname
+sse chs
 
 #
 sse extract all
@@ -72,8 +133,8 @@ sse help
 # copy the config generators
 sse chs
 
-(cd ...../sse-v1 ; npm run dev)
-(cd .../sample sse show config --json > generated/ghost-config.json)
+(cd [rootProject]/sse-v1 ; npm run dev)
+(cd [rootProject]/sample sse show config --json > generated/ghost-config.json)
 
 ~~~
 
