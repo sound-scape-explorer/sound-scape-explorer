@@ -45,11 +45,19 @@ pip install -e ./scripts
 mkdir ./sample/generated ./sample/features
 ~~~
 
-Step 4 : Go to [rootProject]/sse-v1/
+Step 4 : Go to [rootProject]/sse-v1/ and run this command
 
 ~~~
 ln -s ../sample/features/
 ln -s ../sample/generated/
+~~~
+
+[Hightly recommended] To activate sse command (either in your `.bashrc`, or once in each terminal that needs it)
+
+~~~
+
+export PATH=\$PATH:~/.local/ >> ~/.bashrc
+
 ~~~
 
 [Not Mandatory] To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
