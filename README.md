@@ -14,9 +14,10 @@
 Step 0 : Open an terminal and install python, pip and nodeJS pakager
 
 ~~~
-apt install python 3.8
-apt install pip
-apt install npm
+sudo apt install python 3.8
+sudo apt install pip
+sudo apt install npm
+sudo apt install curl
 ~~~
 
 Step 1 : Install required python libraries
@@ -69,7 +70,18 @@ eval "$(_SSE_COMPLETE=bash_source sse)"
 sse help
 ~~~
 
-Step 5 : Extract 
+Setp 5 : Download an example of this app
+
+~~~
+curl http://149.91.90.152:8000/examples.tar > ../sample/audio/examples.tar
+cd ../sample/audio/
+tar -xvf examples.tar
+rm examples.tar
+cd ../../sse-v1/
+~~~
+
+
+Step 6 : Extract 
 
 ~~~
 sse extract all
@@ -78,14 +90,14 @@ sse extract all
 sse extract preview
 ~~~
 
-Step 6 : Generate config for webClient
+Step 7 : Generate config for webClient
 
 ~~~
 cd [rootProject]/sse-v1/
 sse show config --json > generated/ghost-config.json
 ~~~
 
-Step 7 : install nodeJS dependencies
+Step 8 : install nodeJS dependencies
 
 ~~~
 cd [rootProject]/sse-v1/
@@ -94,11 +106,10 @@ cd [rootProject]/sse-v1/
 npm i -D naive-ui
 npm i -D vfonts
 npm i -D worklet-loader
-npm install --save chart.js chart.js/helpers
 ~~~
 
 
-Step 8 : run the pyhon server and the nodeJS server 
+Step 9 : run the pyhon server and the nodeJS server 
 
 ~~~
 cd [rootProject]/sse-v1/
@@ -107,10 +118,27 @@ sse cors-http-server
 # it's also called in shortname
 sse chs
 
-# run the nodeJS server at same path
-npm run serve (default port is 8080)
+
+#in case of error during launch of the nodeJS server
+npm remove chart.js
+npm install chart.js
+
+# run the nodeJS server at same path (default port is 8080)
+npm run serve 
 
 ~~~
+
+Setp 10 : Run computation to see data on app
+
+From [rootProject]/sse-v1/ path
+
+~~~
+sse compute umap 
+sse compute covering
+sse compute volume
+~~~
+
+
 
 All done
 
