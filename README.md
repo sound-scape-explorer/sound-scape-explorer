@@ -7,7 +7,11 @@
 
 ### Installation 
 
-Avaiable in UNIX and Windows platform
+Avaiable in UNIX and Windows platform and ready-made in Virtual-Box 
+
+#### VirtualBox
+
+
 
 #### Windows
 
@@ -69,16 +73,11 @@ From your
 Step 0 : Open an terminal and install python, pip and nodeJS pakager
 
 ~~~
-<<<<<<< HEAD
 sudo apt install python 3.8
 sudo apt install pip
 sudo apt install npm
 sudo apt install curl
-=======
-apt install python
-apt install pip
-apt install npm
->>>>>>> branch 'Emilien_dev' of git@github.com:twitwi/sound-scape-explorer.git
+sudo apt install ffmpeg
 ~~~
 
 Step 1 : Install required python libraries
@@ -148,8 +147,21 @@ Step 6 : Extract
 sse extract all
 #this operation will take a while depending of your dataset.
 #[Optionaly] 
+~~~
+
+Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
+
+~~~
 sse extract preview
 ~~~
+
+If you have an error in red like this
+
+~~~
+Assertion atempo->position[0] <= stop_here failed at src/libavfilter/af_atempo.c:501
+~~~
+
+don't stay on it, you can just close the terminal to avoird write problem go to thee next step.
 
 Step 7 : Generate config for webClient
 
@@ -175,11 +187,14 @@ Step 9 : run the pyhon server and the nodeJS server
 ~~~
 cd [rootProject]/sse-v1/
 # run the python server (default port is 9876)
-sse cors-http-server 
+# sse cors-http-server 
 # it's also called in shortname
 sse chs
+~~~
 
+Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
 
+~~~
 #in case of error during launch of the nodeJS server
 npm remove chart.js
 npm install chart.js
@@ -190,6 +205,8 @@ npm run serve
 ~~~
 
 Setp 10 : Run computation to see data on app
+
+Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
 
 From [rootProject]/sse-v1/ path
 
