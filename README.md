@@ -5,19 +5,80 @@
 
 ## How to use it
 
-### Installation
+### Installation 
+
+Avaiable in UNIX and Windows platform
 
 #### Windows
+
+Step 0 : Donwload project 
+
+Step 1 : Download and install required
+https://www.python.org/downloads/
+
+https://pip.pypa.io/en/stable/installation/
+Download the get-pip.py file
+go to your directory Download
+
+~~~
+cd Download
+python3 get-pip.py
+~~~
+
+
+https://nodejs.org/en/download/
+You can avoid to install chocolatery extension. not mandatory
+
+Step 2 : Install required python libraries
+
+~~~
+pip install numpy
+~~~
+~~~
+pip install matplotlib
+~~~
+~~~
+pip install seaborn
+~~~
+~~~
+pip install torchaudio
+~~~
+~~~
+pip install librosa
+~~~
+~~~
+pip install xlrd
+~~~
+~~~
+pip install pandas
+~~~
+~~~
+pip install umap-learn
+~~~
+~~~
+pip install openpyxl
+~~~
+~~~
+pip install numpy==1.20
+~~~
+
+From your 
 
 #### Unix
 
 Step 0 : Open an terminal and install python, pip and nodeJS pakager
 
 ~~~
+<<<<<<< HEAD
 sudo apt install python 3.8
 sudo apt install pip
 sudo apt install npm
 sudo apt install curl
+=======
+apt install python
+apt install pip
+apt install npm
+>>>>>>> branch 'Emilien_dev' of git@github.com:twitwi/sound-scape-explorer.git
 ~~~
 
 Step 1 : Install required python libraries
