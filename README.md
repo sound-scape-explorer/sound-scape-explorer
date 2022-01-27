@@ -73,7 +73,7 @@ From your
 Step 0 : Open an terminal and install python, pip and nodeJS pakager
 
 ~~~
-sudo apt install python 3.8
+sudo apt install python3.8
 sudo apt install pip
 sudo apt install npm
 sudo apt install curl
