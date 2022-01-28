@@ -138,6 +138,7 @@ cd ../sample/audio/
 tar -xvf examples.tar
 rm examples.tar
 cd ../../sse-v1/
+curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx 
 ~~~
 
 
