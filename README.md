@@ -118,7 +118,7 @@ ln -s ../sample/generated/
 ~~~
 
 export PATH=\$PATH:~/.local/ >> ~/.bashrc
-
+#logout/login of your computer session after this command to activate sse command
 ~~~
 
 [Not Mandatory] To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
