@@ -4,6 +4,8 @@
 import sys
 import os
 import re
+import json
+from LoggersDictionary import LoggersDictionary 
 
 def main(argv=sys.argv):
     try:
@@ -24,10 +26,10 @@ def main(argv=sys.argv):
             SimpleHTTPRequestHandler.send_response(self,200)
             self.end_headers()
         def do_GET(self):
+            print(self.path)
             if re.match("/compute",self.path):
                 self.validResponse()
                 #SimpleHTTPRequestHandler.send_header(self,"content-type","application/json")
-                print(self.path)
                 res = re.match("/compute/([a-zA-Z0-9_./]+)/([0-9]+)",self.path)
                 file,duration = res.group(1),res.group(2)
                 print(file,duration)
@@ -37,7 +39,21 @@ def main(argv=sys.argv):
                 os.system("sse extract preview -f "+file+" -t "+duration)
                 print("All done")
                 self.wfile.write("{\"status\":\"ok\"}".encode())
-                
+            if re.match("/avaiableLogger",self.path):
+                self.validResponse()
+                map = LoggersDictionary()
+                for root, directories, files in os.walk("./audio"):  
+                    for file in files:      
+                        parts = os.path.relpath(os.path.join(root, file)).split('/')
+                        if len(parts) > 3 :
+                            site = parts[1]
+                            logger = parts[2]
+                            audio = parts[3]
+                            print(site,logger,audio)
+                            map.setNewLogger(site,logger)
+                print(map) #contient le site et le logger
+                self.wfile.write("{\"status\":\"bien\"}".encode())
+
             elif os.path.isfile("."+self.path):
                 self.validResponse()
                 f=open("."+self.path,'rb')

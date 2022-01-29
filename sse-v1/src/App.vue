@@ -11,6 +11,9 @@
       <n-tab-pane name="preview" tab="Preview">
         <Preview></Preview>
       </n-tab-pane>
+      <n-tab-pane name="player" tab="Player">
+        <Player></Player>
+      </n-tab-pane>
       <n-tab-pane name="umap" tab="UMAP">
         <UMAPs></UMAPs>
       </n-tab-pane>
@@ -32,11 +35,12 @@
 
 <script>
 import Preview from "./components/Preview.vue";
+import Player from "./components/Player.vue";
 import Volume from "./components/Volume.vue";
 import MockCovering from "./components/MockCovering.vue";
 import UMAPs from "./components/UMAPs.vue";
 import MiniTools from "./components/MiniTools.vue";
-const OComponents = { Preview, Volume, MockCovering, UMAPs, MiniTools };
+const OComponents = { Preview, Player, Volume, MockCovering, UMAPs, MiniTools };
 
 import { NTabs, NCard, NTabPane } from "naive-ui";
 const NComponents = { NTabs, NCard, NTabPane };
