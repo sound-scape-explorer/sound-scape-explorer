@@ -118,7 +118,7 @@ ln -s ../sample/generated/
 ~~~
 
 export PATH=\$PATH:~/.local/ >> ~/.bashrc
-
+#logout/login of your computer session after this command to activate sse command
 ~~~
 
 [Not Mandatory] To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
@@ -138,6 +138,7 @@ cd ../sample/audio/
 tar -xvf examples.tar
 rm examples.tar
 cd ../../sse-v1/
+curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx 
 ~~~
 
 
