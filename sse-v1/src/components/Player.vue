@@ -3,7 +3,7 @@
     <div id="headPlayer">
       <span class="iconify" data-icon="carbon:play-filled-alt" style="color: #599;"></span>
       <select>
-        <option v-for="(logger, k) in loggerList" :key="k" value=""><!--todo un v-for-->{{logger.loggerName}}</option>
+        <option v-for="(logger, k) in loggerList" :key="k" value=""><!--todo un v-for-->{{logger.name}}</option>
       </select>
       <span class="iconify" data-icon="carbon:settings"></span>
     </div>
@@ -30,7 +30,7 @@ export default {
     changePitch: false, /*permit to listen to ultrasound*/
     showHz: -1,
     cursorPos : 0,
-    loggerList: [{"loggerName" : "Logger L42"},{"loggerName" : "Logger L01"}],
+    loggerList: [{"name" : "Logger L42"},{"name" : "Logger L01"}],
   }),
   computed: {
     logger() {
@@ -50,13 +50,15 @@ export default {
     externalScript.setAttribute('src', 'https://code.iconify.design/2/2.1.2/iconify.min.js')
     document.head.appendChild(externalScript)
 
-    this.loggerAvaiable()//[{"loggerName" : "Logger L42"},{"loggerName" : "Logger L05"}];
+    this.loggerAvaiable()//[{"name" : "Logger L42"},{"name" : "Logger L05"}];
 
   },
   methods: {
     async loggerAvaiable() {
-      this.loggerList = [{"loggerName" : "Logger L42"},{"loggerName" : "Logger L05"}];
-      //this.loggerList = this.request("/avaiableLogger");
+      this.loggerList = [{"name" : "Logger L42"},{"name" : "Logger L05"}];
+      this.loggerList = await this.request(this.root.BASE + "avaiableLogger");
+      console.log(this.loggerList)
+      this.loggerList = this.loggerList['BORA_ANR_sons']
 
     },
     request: async function (path) {

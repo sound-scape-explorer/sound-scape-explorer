@@ -321,12 +321,10 @@ sse compute covering
 ~~~
 
 
-Action 6 : Show this on browser
+Action 6 : Show app on browser
 
 Required actions : Action 3,4,5
 
-Reason : Show this on browser by action 6 and find biologistic clues during a time period like a day
-
 Open your favorite browser and go to 
 
 ~~~
@@ -335,19 +333,6 @@ http://localhost:8080/
 
 ~~~
 
-Action 7 : Show this on browser
-
-Required actions : Action 6
-
-Reason : Show this on browser by action 6 and find biologistic clues during a time period like a day
-
-Open your favorite browser and go to 
-
-~~~
-
-http://localhost:8080/
-
-~~~
 
 #### Step 3 : Explanation of tabs 
 

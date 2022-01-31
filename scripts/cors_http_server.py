@@ -50,9 +50,9 @@ def main(argv=sys.argv):
                             logger = parts[2]
                             audio = parts[3]
                             print(site,logger,audio)
-                            map.setNewLogger(site,logger)
+                            map.setNewLogger(site,logger,audio)
                 print(map) #contient le site et le logger
-                self.wfile.write("{\"status\":\"bien\"}".encode())
+                self.wfile.write(str(map).encode())
 
             elif os.path.isfile("."+self.path):
                 self.validResponse()
