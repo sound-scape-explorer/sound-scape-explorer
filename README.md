@@ -7,11 +7,11 @@
 
 ### Installation 
 
-Avaiable in UNIX and Windows platform and ready-made in Virtual-Box 
+Available in UNIX and Windows platform and ready-made in Virtual-Box 
 
 #### VirtualBox
 
-
+(in write)
 
 #### Windows
 
@@ -70,7 +70,7 @@ From your
 
 #### Unix
 
-Step 0 : Open an terminal and install python, pip and nodeJS pakager
+Step 0 : Open a terminal and install python, pip and nodeJS pakager
 
 ~~~
 sudo apt install python3.8
@@ -162,7 +162,7 @@ If you have an error in red like this
 Assertion atempo->position[0] <= stop_here failed at src/libavfilter/af_atempo.c:501
 ~~~
 
-don't stay on it, you can just close the terminal to avoird write problem go to thee next step.
+don't stay on it, you can just close the terminal to avoid write problem go to the next step.
 
 Step 7 : Generate config for webClient
 
@@ -183,7 +183,7 @@ npm i -D worklet-loader
 ~~~
 
 
-Step 9 : run the pyhon server and the nodeJS server 
+Step 9 : run the python server and the nodeJS server 
 
 ~~~
 cd [rootProject]/sse-v1/
@@ -217,9 +217,178 @@ sse compute covering
 sse compute volume
 ~~~
 
-
-
 All done
+
+### For use (All Operating System : Unix + Windows)
+
+#### Step 1 : run daemons
+
+Run a terminal with 3 tabs or 3 terminal and __**for each**__ of them go to
+
+~~~
+
+cd [rootProject]/sse-v1/
+
+~~~
+
+In first tab/terminal, run 
+
+~~~
+
+sse chs
+#it's also called in long name 
+#sse cors-http-server
+
+~~~
+
+In second tab/terminal, run 
+
+~~~
+
+npm run serve
+
+~~~
+
+#### Step 2 : if necessary or not done already, use a run in third tab/terminal the following commands depend of what you expect
+
+Action 1 : split an audio file corresponding to the terms "Logger" in N files of 60s duration called *Sample*
+Required action : None
+Reason : Parse data into torch audio, a Neuronal network and permit to execute action 3 : 
+Command : 
+
+~~~
+
+sse extract all
+
+~~~
+
+Action 2 : extract a preview of Sample to see mel-spectograme
+
+Required action : None
+
+Reason : Show this on browser
+
+Command : 
+ 
+~~~
+
+sse extract preview
+
+~~~
+
+Action 3 : Project the 128 dimensions into 2 dimensions with UMAP
+
+(Uniform Manifold Approximation and Projection for Dimension Reduction)
+
+Required action : Action 1
+
+Reason : Show this on browser by action 6 and find biologistic clues
+
+Command : 
+
+~~~
+
+sse compute umap 
+
+~~~
+
+Action 4 : Compute the volume of samples
+
+Required action : Action 1
+
+Reason : Show this on browser by action 6 and find biologistic clues
+
+Command : 
+
+~~~
+
+sse compute volume 
+
+~~~
+
+Action 5 : Compute covering
+
+Required action : Action 1
+
+Reason : Show this on browser by action 6 and find biologistic clues during a time period like a day
+
+Command : 
+
+~~~
+
+sse compute covering 
+
+~~~
+
+
+Action 6 : Show this on browser
+
+Required actions : Action 3,4,5
+
+Reason : Show this on browser by action 6 and find biologistic clues during a time period like a day
+
+Open your favorite browser and go to 
+
+~~~
+
+http://localhost:8080/
+
+~~~
+
+Action 7 : Show this on browser
+
+Required actions : Action 6
+
+Reason : Show this on browser by action 6 and find biologistic clues during a time period like a day
+
+Open your favorite browser and go to 
+
+~~~
+
+http://localhost:8080/
+
+~~~
+
+#### Step 3 : Explanation of tabs 
+
+##### Raw Config 
+
+Show the configuration done in [rootProject]/sample/config.xlsx in case of step 7 for unix install have been done.
+
+Il you want to refres the newest configuration after edit config.xlsx, you need to run this command in third tab
+
+From [rootProject]/sse-v1/ path
+
+~~~
+
+sse show config --json > generated/ghost-config.json
+
+~~~
+
+##### Mini Tools
+
+Permit to split the original audio sound into N Bands of frequencies (Hz)
+Due to the softwar configuration, we can choose only by step of 64 
+
+##### Covering (Not avaiable yet)
+
+##### Volumes
+
+Permit to see during time the volume of sounds
+
+##### UMAP
+
+Show in 2D an projection of the matricies of 128d for each second
+
+You can move to see during time each point corresponding to the time 
+
+##### Player (Not avaiable yet)
+
+Permit to see an logger and see the specificities of an logger. For example to see the period of recording, see an zoom of the logger 
+
+##### Preview (in rebulding)
+
+Permit to see an preview of an logger. You can config this into minitool.
 
 
 typical commands
