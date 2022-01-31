@@ -8,8 +8,12 @@
       <span class="iconify" data-icon="carbon:settings"></span>
     </div>
     <div id="infoLogger"></div>
-    <div id="globalPist"></div>
-    <div id="zoomedPist"></div>
+    <div id="globalPist">
+      <canvas id="all"></canvas>
+    </div>
+    <div id="zoomedPist">
+      <canvas id="zoomed"></canvas>      
+    </div>
   </div>
 </template>
 
@@ -51,7 +55,7 @@ export default {
     document.head.appendChild(externalScript)
 
     this.loggerAvaiable()//[{"name" : "Logger L42"},{"name" : "Logger L05"}];
-
+    this.filledCanvasLogger()
   },
   methods: {
     async loggerAvaiable() {
@@ -66,6 +70,16 @@ export default {
       let body = await res.json();
       return body;
     },
+    filledCanvasLogger(){
+      let canvas = document.getElementById('all');
+      let ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0,ctx.canvas.width, ctx.canvas.height);
+      canvas = document.getElementById('zoomed');
+      ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0,ctx.canvas.width, ctx.canvas.height);
+    }
   },
 };
 </script>
@@ -75,18 +89,26 @@ export default {
   background-color: green;
 }
 #headPlayer{
-  width: 200px;
+  width: 250px;
   margin: auto;
   border-radius: 10px 10px 0px 0px;
 }
 #infoLogger{
-  height: 170px;
+  height: 60px;
   border-radius: 10px 10px 0px 0px;
 }
+canvas{
+  border: 1px solid black;
+  width: 98%;
+  height: 75px;
+  margin: auto;
+  display: block;
+}
+
 #globalPist{
-  height: 170px;
+  padding-bottom: 30px;
 }
 #zoomedPist{
-  height: 170px;
+  padding-bottom :30px; 
 }
 </style>

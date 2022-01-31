@@ -5,6 +5,8 @@ import sys
 import os
 import re
 import json
+import wave
+
 from LoggersDictionary import LoggersDictionary 
 
 def main(argv=sys.argv):
@@ -42,6 +44,9 @@ def main(argv=sys.argv):
             if re.match("/avaiableLogger",self.path):
                 self.validResponse()
                 map = LoggersDictionary()
+                #TODO avoid calculation endif we need to recompute audio duration
+                # option : sha1 of the json file 
+                # option 2 : store and compare added or removed files
                 for root, directories, files in os.walk("./audio"):  
                     for file in files:      
                         parts = os.path.relpath(os.path.join(root, file)).split('/')
@@ -49,9 +54,13 @@ def main(argv=sys.argv):
                             site = parts[1]
                             logger = parts[2]
                             audio = parts[3]
-                            print(site,logger,audio)
+                            #print(site+"/"+logger+"/"+audio)
+                            audioFile = wave.open("./audio/"+site+"/"+logger+"/"+audio,"rb")
+                            waveParam = audioFile.getparams()
+                            print(waveParam.nframes/waveParam.framerate)
                             map.setNewLogger(site,logger,audio)
                 print(map) #contient le site et le logger
+                #write in file
                 self.wfile.write(str(map).encode())
 
             elif os.path.isfile("."+self.path):
