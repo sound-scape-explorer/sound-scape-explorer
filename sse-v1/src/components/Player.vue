@@ -2,17 +2,17 @@
   <div id="player">
     <div id="headPlayer">
       <span class="iconify" data-icon="carbon:play-filled-alt" style="color: #599;"></span>
-      <select>
-        <option v-for="(logger, k) in loggerList" :key="k" value=""><!--todo un v-for-->{{logger.name}}</option>
+      <select id="selectedLogger">
+        <option v-for="(logger, k) in loggerList" :key="k" @click="filledCanvasLogger">{{logger.name}}</option>
       </select>
       <span class="iconify" data-icon="carbon:settings"></span>
     </div>
     <div id="infoLogger"></div>
     <div id="globalPist">
-      <canvas id="all"></canvas>
+      <canvas id="allCanvas"></canvas>
     </div>
     <div id="zoomedPist">
-      <canvas id="zoomed"></canvas>      
+      <canvas id="zoomedCanvas"></canvas>      
     </div>
   </div>
 </template>
@@ -35,6 +35,9 @@ export default {
     showHz: -1,
     cursorPos : 0,
     loggerList: [{"name" : "Logger L42"},{"name" : "Logger L01"}],
+    loggerStartTime: "20210428T060900",
+    loggerEndTime : "20210428T060900",
+    selectedLogger : null
   }),
   computed: {
     logger() {
@@ -62,8 +65,8 @@ export default {
       this.loggerList = [{"name" : "Logger L42"},{"name" : "Logger L05"}];
       this.loggerList = await this.request(this.root.BASE + "avaiableLogger");
       console.log(this.loggerList)
-      this.loggerList = this.loggerList['BORA_ANR_sons']
-
+      this.loggerList = this.loggerList['BORA_ANR_sons'] //TODO Edit this to see other location more than the studed site
+      this.filledCanvasLogger()
     },
     request: async function (path) {
       let res = await fetch(path);
@@ -71,15 +74,49 @@ export default {
       return body;
     },
     filledCanvasLogger(){
-      let canvas = document.getElementById('all');
+      let canvas = document.getElementById('allCanvas');
       let ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0,ctx.canvas.width, ctx.canvas.height)
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0,ctx.canvas.width, ctx.canvas.height);
-      canvas = document.getElementById('zoomed');
+      // we need to know who is the selected logger
+      // find in loggerList the seleected element
+      let loggerSelected = this.loggerList.find(this.selectedLoggerInput)
+      if(loggerSelected==undefined){ // to avoid time to load
+        console.log("valeur de ",this.selectedLoggerInput())
+        setTimeout(this.filledCanvasLogger,500)
+        return
+      }
+      this.selectedLogger= loggerSelected
+      let first = true
+      let val =null
+      try{ val = loggerSelected.audios.length}catch(e){return}
+      for (let i = 0; i < val; i++) {
+        const audio = loggerSelected.audios[i];
+        if(first){
+          this.loggerStartTime = audio.startTime
+          console.log(this.loggerStartTime,typeof(this.loggerStartTime))
+          let year=audio.startTime.substring(0, 4)
+          let month=audio.startTime.substring(4, 6)
+          let day=audio.startTime.substring(6, 8)
+          let hours=audio.startTime.substring(9, 11)
+          let minutes=audio.startTime.substring(11, 13)
+          let seconds=audio.startTime.substring(13, 15)
+          this.loggerStartTime = new Date(year, month, day, hours, minutes, seconds)
+          console.log(this.loggerStartTime)
+          first=false
+        }
+        
+      }
+      canvas = document.getElementById('zoomedCanvas');
       ctx = canvas.getContext('2d');
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0,ctx.canvas.width, ctx.canvas.height);
-    }
+    },
+    selectedLoggerInput() {
+      let selectedLoggerInput = document.getElementById('selectedLogger')
+      return selectedLoggerInput.options[selectedLoggerInput.options.selectedIndex].text
+    },
   },
 };
 </script>
@@ -97,12 +134,16 @@ export default {
   height: 60px;
   border-radius: 10px 10px 0px 0px;
 }
-canvas{
+#zoomedCanvas,#allCanvas{
   border: 1px solid black;
   width: 98%;
   height: 75px;
   margin: auto;
   display: block;
+}
+
+#zoomedCanvas{
+  height: 150px;
 }
 
 #globalPist{

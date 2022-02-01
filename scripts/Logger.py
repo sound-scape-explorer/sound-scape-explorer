@@ -20,6 +20,7 @@ class Logger:
             for el in site:
                 if el.name == logger:
                     el.audios.append(Audio(audio,startTime,timeDuration))
+                    el.audios.sort(key=lambda audio: audio.startTime)
                     return
             site.append(Logger(logger,audio,startTime,timeDuration))
         else:

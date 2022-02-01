@@ -8,6 +8,7 @@ import json
 import wave
 
 from LoggersDictionary import LoggersDictionary 
+from sserunner import get_config
 
 def main(argv=sys.argv):
     try:
@@ -59,10 +60,15 @@ def main(argv=sys.argv):
                             waveParam = audioFile.getparams()
                             timeDuration = waveParam.nframes/waveParam.framerate
                             startTime = audio.split('_')[0]
+                            audioFile.close()
                             #print(startTime,timeDuration)
                             map.setNewAudio(site,logger,audio,startTime,timeDuration)
                 #print(map) #contient le site et le logger
                 #write in file
+                #TRIGGER WARNING : the audio can be corrupt by the date value
+                # so we scann the generate 
+                cfg = get_config()
+                print(cfg.variables['files'])
                 self.wfile.write(str(map).encode())
 
             elif os.path.isfile("."+self.path):
