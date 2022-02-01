@@ -57,9 +57,11 @@ def main(argv=sys.argv):
                             #print(site+"/"+logger+"/"+audio)
                             audioFile = wave.open("./audio/"+site+"/"+logger+"/"+audio,"rb")
                             waveParam = audioFile.getparams()
-                            print(waveParam.nframes/waveParam.framerate)
-                            map.setNewLogger(site,logger,audio)
-                print(map) #contient le site et le logger
+                            timeDuration = waveParam.nframes/waveParam.framerate
+                            startTime = audio.split('_')[0]
+                            #print(startTime,timeDuration)
+                            map.setNewAudio(site,logger,audio,startTime,timeDuration)
+                #print(map) #contient le site et le logger
                 #write in file
                 self.wfile.write(str(map).encode())
 

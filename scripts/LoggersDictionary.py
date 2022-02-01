@@ -25,8 +25,8 @@ class LoggersDictionary:
     def __getSite(self,siteName:str) -> List:
         return self.map.get(siteName)
 
-    def setNewLogger(self,siteName:str,logger:str,audio:str):
+    def setNewAudio(self,siteName:str,logger:str,audio:str,startTime:str,timeDuration:float):
         #to Change tomorow
         site = self.__getSite(siteName) if self.__getSite(siteName) != None else self.__setNewSite(siteName)
-        Logger.addAudio(site,logger,audio)
+        Logger.addAudio(site,logger,audio,startTime,timeDuration)
         pass
