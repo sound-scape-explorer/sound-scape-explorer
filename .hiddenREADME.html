@@ -1,0 +1,612 @@
+<h1>Soundscape explorer</h1>
+
+<h2>Description</h2>
+
+<h2>How to use it</h2>
+
+<h2>Installation</h2>
+
+<p>Available in UNIX and Windows platform and ready-made in Virtual-Box </p>
+
+<h3>VirtualBox (in writing)</h3>
+
+<h3>Windows (in writing)</h3>
+
+<p>Step 0 : Donwload project </p>
+
+<p>Step 1 : Download and install required
+<a href="https://www.python.org/downloads/">Python</a></p>
+
+<p><a href="https://pip.pypa.io/en/stable/installation/">Pip</a>
+Download the get-pip.py file
+go to your directory Download</p>
+
+<p><code>
+cd Download
+python3 get-pip.py
+</code></p>
+
+<p><a href="https://nodejs.org/en/download/">NodeJS</a>
+You can avoid to install chocolatery extension. not mandatory</p>
+
+<p>Step 2 : Install required python libraries</p>
+
+<p><code>
+pip install numpy
+</code>
+<code>
+pip install matplotlib
+</code>
+<code>
+pip install seaborn
+</code>
+<code>
+pip install torchaudio
+</code>
+<code>
+pip install librosa
+</code>
+<code>
+pip install xlrd
+</code>
+<code>
+pip install pandas
+</code>
+<code>
+pip install umap-learn
+</code>
+<code>
+pip install openpyxl
+</code>
+<code>
+pip install numpy==1.20
+</code></p>
+
+<p>From your </p>
+
+<h3>Unix</h3>
+
+<h4>Step 0 : Open a terminal update your pakages and install python, pip and nodeJS pakager</h4>
+
+<p>``</p>
+
+<p>sudo apt update </p>
+
+<h5>Used to re-synchronize the package index files from their sources. The indexes of available packages are fetched from the location(s) specified in /etc/apt/sources.list(5). An update should always be performed before an upgrade or dist-upgrade.</h5>
+
+<p>sudo apt upgrade </p>
+
+<h5>Used to install the newest versions of all packages currently installed on the system from the sources enumerated in /etc/apt/sources.list(5). Packages currently installed with new versions available are retrieved and upgraded; under no circumstances are currently installed packages removed, nor are packages that are not already installed retrieved and installed. New versions of currently installed packages that cannot be upgraded without changing the install status of another package will be left at their current version. An update must be performed first so that apt-get knows that new versions of packages are available.</h5>
+
+<p>``</p>
+
+<p>NOTE : if you not find 
+``
+sudo apt install python3.8</p>
+
+<h5>try</h5>
+
+<p>sudo apt install pip #version 20.0.2</p>
+
+<h5>if not work use</h5>
+
+<h5>sudo apt install python3-pip</h5>
+
+<p>sudo apt install npm # </p>
+
+<p>sudo apt install curl </p>
+
+<h5>curl  is  a tool to transfer data from or to a server</h5>
+
+<p>sudo apt install ffmpeg</p>
+
+<h5>is a very fast video and audio converter that can also grab from a live audio/video source</h5>
+
+<p>``</p>
+
+<h4>Step 1 : Install required python libraries</h4>
+
+<p><code>
+pip install numpy==1.20
+pip install matplotlib
+pip install seaborn
+pip install torchaudio
+pip install librosa
+pip install xlrd
+pip install pandas
+pip install umap-learn
+pip install openpyxl
+</code></p>
+
+<p>The helper script</p>
+
+<h4>Step 2 : go to your downloaded root project</h4>
+
+<h4>Setp 3 : run this command</h4>
+
+<p>``</p>
+
+<h5>install scripts project with these modules</h5>
+
+<p>pip install -e ./scripts</p>
+
+<h5>create specific directory</h5>
+
+<p>mkdir ./sample/generated ./sample/features
+``</p>
+
+<h4>Step 4 : Go to [rootProject]/sse-v1/ and run this command</h4>
+
+<p>``</p>
+
+<h5>create shortcut (do not duplicate content or the sources)</h5>
+
+<p>ln -s ../sample/features/
+ln -s ../sample/generated/
+``</p>
+
+<p>[Hightly recommended] To activate sse command (either in your <code>.bashrc</code>, or once in each terminal that needs it)</p>
+
+<p>``</p>
+
+<h5>this command bellow permit to add in you shell sse command</h5>
+
+<p>export PATH=\$PATH:~/.local/ >> ~/.bashrc</p>
+
+<h3>logout/login of your computer session after this command to activate sse command</h3>
+
+<p>``</p>
+
+<p>[Not Mandatory] To activate autocompletion (either in your <code>.bashrc</code>, or once in each terminal that needs it)</p>
+
+<p>``
+eval "$(<em>SSE</em>COMPLETE=bash_source sse)"</p>
+
+<h5>or get it with</h5>
+
+<p>sse help
+``</p>
+
+<p>Setp 5 : Use your audio sources <strong>OR</strong> Download an example of this app</p>
+
+<p>Example of this app</p>
+
+<p><code>
+curl http://149.91.90.152:8000/examples.tar &gt; ../sample/audio/examples.tar
+cd ../sample/audio/
+tar -xvf examples.tar
+rm examples.tar
+cd ../../sse-v1/
+curl http://149.91.90.152:8000/config.xlsx &gt; ../sample/config.xlsx
+</code></p>
+
+<p>To import your audio sources, you must to drop it into [rootProject]/sample/audio/ and respect some rules : 
+* Folder Hierarchy in order must be this : 
+    * Site Name (in eexample BoraBora)
+        * Logger1 (In example Logger in touristical aera)
+            * Audio File name 1
+            * Audio File name 2
+        * Logger2
+            * Audio File name 1
+            * Audio File name 2
+* Audio File must be folow the name rules (repalce '[' and ']' by the required information ):
+    * [Time in UTC format]_[Logger ID].wav</p>
+
+<pre><code>in example : 20210629T050900_2614231121130510
+</code></pre>
+
+<h4>Step 6 : Extract</h4>
+
+<p>``</p>
+
+<h5>Do the Neuronal Network extraction from original input with all files says in config.xlsx</h5>
+
+<p>sse extract all</p>
+
+<h5>this operation will take a while depending of your dataset.</h5>
+
+<p>``</p>
+
+<p>Open a new tab terminal or new window terminal let's open the oldest tab/window terminal</p>
+
+<p><code>
+sse extract preview
+</code></p>
+
+<p>If you have an error in red like this</p>
+
+<p><code>
+Assertion atempo-&gt;position[0] &lt;= stop_here failed at src/libavfilter/af_atempo.c:501
+</code></p>
+
+<p>don't stay on it, you can just close the terminal to avoid write problem go to the next step.</p>
+
+<h4>Step 7 : Generate config for webClient</h4>
+
+<p><code>
+cd [rootProject]/sse-v1/
+sse show config --json &gt; generated/ghost-config.json
+</code></p>
+
+<h4>Step 8 : install nodeJS dependencies</h4>
+
+<p>``
+cd [rootProject]/sse-v1/</p>
+
+<h1>DO NOT RUN THIS command => npm audit fix</h1>
+
+<h1>run this below</h1>
+
+<p>npm i -D naive-ui
+npm i -D vfonts
+npm i -D worklet-loader
+``</p>
+
+<h4>Step 9 : run the python server and the nodeJS server</h4>
+
+<p>``
+cd [rootProject]/sse-v1/</p>
+
+<h1>run the python server (default port is 9876)</h1>
+
+<h1>sse cors-http-server</h1>
+
+<h1>it's also called in shortname</h1>
+
+<p>sse chs
+``</p>
+
+<p>Open a new tab terminal or new window terminal let's open the oldest tab/window terminal</p>
+
+<p>``</p>
+
+<h1>in case of error during launch of the nodeJS server</h1>
+
+<p>npm remove chart.js
+npm install chart.js</p>
+
+<h1>run the nodeJS server at same path (default port is 8080)</h1>
+
+<p>npm run serve </p>
+
+<p>``</p>
+
+<h4>Setp 10 : Run computation to see data on app</h4>
+
+<p>Open a new tab terminal or new window terminal let's open the oldest tab/window terminal</p>
+
+<p>From [rootProject]/sse-v1/ path</p>
+
+<p><code>
+sse compute umap 
+sse compute covering
+sse compute volume
+</code></p>
+
+<p>All done</p>
+
+<h2>For use</h2>
+
+<h3>In UNIX</h3>
+
+<p>WARNING : Each time you change audio file (remove, add, edit in folder /audio) you should to change your config.xlsx + run this command</p>
+
+<p><code>
+cd [rootProject]/sse-v1/
+sse show config --json &gt; generated/ghost-config.json
+</code></p>
+
+<h4>Step 1 : run daemons</h4>
+
+<p>Run a terminal with 3 tabs or 3 terminal and <strong><em>*for each</em>*</strong> of them go to</p>
+
+<p>``</p>
+
+<p>cd [rootProject]/sse-v1/</p>
+
+<p>``</p>
+
+<p>In first tab/terminal, run </p>
+
+<p>``</p>
+
+<p>sse chs</p>
+
+<h1>it's also called in long name</h1>
+
+<h1>sse cors-http-server</h1>
+
+<p>``</p>
+
+<p>In second tab/terminal, run </p>
+
+<p>``</p>
+
+<p>npm run serve</p>
+
+<p>``</p>
+
+<h4>Step 2 : if necessary or not done already, use a run in third tab/terminal the following commands depend of what you expect</h4>
+
+<h5>Action 1 : split an audio file corresponding to the terms "Logger" in N files of 60s duration called <em>Sample</em></h5>
+
+<p>Required action : None
+Reason : Parse data into torch audio, a Neuronal network and permit to execute action 3 : 
+Command : </p>
+
+<p>``</p>
+
+<p>sse extract all</p>
+
+<p>``</p>
+
+<h5>Action 2 : extract a preview of Sample to see mel-spectograme</h5>
+
+<p>Required action : None</p>
+
+<p>Reason : Show this on browser</p>
+
+<p>Command : </p>
+
+<p>``</p>
+
+<p>sse extract preview</p>
+
+<p>``</p>
+
+<h5>Action 3 : Project the 128 dimensions into 2 dimensions with UMAP</h5>
+
+<p>(Uniform Manifold Approximation and Projection for Dimension Reduction)</p>
+
+<p>Required action : Action 1</p>
+
+<p>Reason : Show this on browser by action 6 and find biologistic clues</p>
+
+<p>Command : </p>
+
+<p>``</p>
+
+<p>sse compute umap </p>
+
+<p>``</p>
+
+<h5>Action 4 : Compute the volume of samples</h5>
+
+<p>Required action : Action 1</p>
+
+<p>Reason : Show this on browser by action 6 and find biologistic clues</p>
+
+<p>Command : </p>
+
+<p>``</p>
+
+<p>sse compute volume </p>
+
+<p>``</p>
+
+<h5>Action 5 : Compute covering</h5>
+
+<p>Required action : Action 1</p>
+
+<p>Reason : Show this on browser by action 6 and find biologistic clues during a time period like a day</p>
+
+<p>Command : </p>
+
+<p>``</p>
+
+<p>sse compute covering </p>
+
+<p>``</p>
+
+<h5>Action 6 : Show app on browser</h5>
+
+<p>Required actions : Action 3,4,5</p>
+
+<p>Open your favorite browser and go to </p>
+
+<p>``</p>
+
+<p>http://localhost:8080/</p>
+
+<p>``</p>
+
+<h4>Step 3 : Explanation of tabs</h4>
+
+<h5>Raw Config</h5>
+
+<p>Show the configuration done in [rootProject]/sample/config.xlsx in case of step 7 for unix install have been done.</p>
+
+<p>Il you want to refres the newest configuration after edit config.xlsx, you need to run this command in third tab</p>
+
+<p>From [rootProject]/sse-v1/ path</p>
+
+<p>``</p>
+
+<p>sse show config --json > generated/ghost-config.json</p>
+
+<p>``</p>
+
+<h5>Mini Tools</h5>
+
+<p>Permit to split the original audio sound into N Bands of frequencies (Hz)
+Due to the softwar configuration, we can choose only by step of 64 </p>
+
+<h5>Covering (Not avaiable yet)</h5>
+
+<h5>Volumes</h5>
+
+<p>Permit to see during time the volume of sounds</p>
+
+<h5>UMAP</h5>
+
+<p>Show in 2D an projection of the matricies of 128d for each second</p>
+
+<p>You can move to see during time each point corresponding to the time </p>
+
+<h5>Player (Not avaiable yet)</h5>
+
+<p>Permit to see an logger and see the specificities of an logger. For example to see the period of recording, see an zoom of the logger </p>
+
+<h5>Preview (in rebulding)</h5>
+
+<p>Permit to see an preview of an logger. You can config this into minitool.</p>
+
+<h4>typical commands</h4>
+
+<p>``</p>
+
+<h5>run the server</h5>
+
+<p>sse cors-http-server</p>
+
+<h5>it's also called in shortname</h5>
+
+<p>sse chs</p>
+
+<p>#
+sse extract all</p>
+
+<h6>if a lot of files and you know they have each a 60s duration</h6>
+
+<p>sse show audio-span-splot -s 60</p>
+
+<h6>else (few files or patient)</h6>
+
+<p>sse show audio-span-splot</p>
+
+<p>sse extract preview
+sse compute volume
+sse compute covering
+sse compute umap</p>
+
+<p>sse help</p>
+
+<h6>copy the config generators</h6>
+
+<p>sse chs</p>
+
+<p>(cd [rootProject]/sse-v1 ; npm run dev)
+(cd [rootProject]/sample sse show config --json > generated/ghost-config.json)</p>
+
+<p>``</p>
+
+<h2>Development notes</h2>
+
+<h3>Created with...</h3>
+
+<p>made a vue project</p>
+
+<p><code>output
+Vue CLI v4.5.13
+? Please pick a preset: Manually select features
+? Check the features needed for your project: Choose Vue version, Babel, CSS Pre-processors, Linter
+? Choose a version of Vue.js that you want to start the project with 3.x
+? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default): Sass/SCSS (with dart-sass)
+? Pick a linter / formatter config: Prettier
+? Pick additional lint features: Lint on save
+? Where do you prefer placing config for Babel, ESLint, etc.? In dedicated config files
+</code></p>
+
+<p>mashed-up an icon (in media/, exported to 256px)</p>
+
+<p>using the icon in the vue project</p>
+
+<p><code>
+inkscape media/icons.svg -o media/sse-icon.png
+cp -f media/sse-icon.png sse-v1/src/assets/logo.png
+convert sse-v1/src/assets/logo.png sse-v1/public/favicon.ico
+</code></p>
+
+<h3>Making some test data</h3>
+
+<p>``
+cp -t log1/ '........./Logger1/20210429<em>180000.WAV'  ###### strange... 
+cp -t log2/ '........./Logger2/20210429</em>180000.WAV'</p>
+
+<h6>for each folder</h6>
+
+<p>ffmpeg  -i 20210429<em>180000.WAV -ss 0 -t 60 -c copy chunk-20210429</em>180000.WAV
+ffmpeg  -i 20210429<em>180000.WAV -ss 60 -t 60 -c copy chunk-20210429</em>180100.WAV
+ffmpeg  -i 20210429<em>180000.WAV -ss 120 -t 60 -c copy chunk-20210429</em>180200.WAV
+ffmpeg  -i 20210429<em>180000.WAV -ss 180 -t 60 -c copy chunk-20210429</em>180300.WAV
+ffmpeg  -i 20210429<em>180000.WAV -ss 600 -t 60 -c copy chunk-20210429</em>181000.WAV</p>
+
+<h6>alternative to fake a first one using the second</h6>
+
+<p>ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1000 -t 60 -c copy chunk-20210429</em>180000.WAV
+ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1060 -t 60 -c copy chunk-20210429</em>180100.WAV
+ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1120 -t 60 -c copy chunk-20210429</em>180200.WAV
+ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1180 -t 60 -c copy chunk-20210429</em>180300.WAV
+ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1600 -t 60 -c copy chunk-20210429</em>181000.WAV</p>
+
+<p>``</p>
+
+<h3>Extracting features and previews</h3>
+
+<p>``
+sse extract all
+sse extract preview</p>
+
+<p>sse show band-freqs
+sse show list-sites</p>
+
+<h6>if a lot of files and you know they have each a 60s duration</h6>
+
+<p>sse show audio-span-splot -s 60</p>
+
+<h6>else (few files or patient)</h6>
+
+<p>sse show audio-span-splot
+``</p>
+
+<p>For now, we use python to save a json of the config, to avoid implementing the parser (although this is easy-ish):</p>
+
+<p>``</p>
+
+<h6>get the command with (use the ones that redirect to .js and .json files</h6>
+
+<p>sse help
+``</p>
+
+<h3>Some npm installs</h3>
+
+<p>``</p>
+
+<h1>for naive</h1>
+
+<p>npm i -D naive-ui
+npm i -D vfonts
+npm i -D worklet-loader
+``</p>
+
+<h3>dev on the js side</h3>
+
+<p><code>
+cd sse-v1/
+npm run serve
+</code></p>
+
+<p>and the data server</p>
+
+<p><code>
+cd sample/
+sse cors-http-server
+</code></p>
+
+<h3>wip</h3>
+
+<h5>file:// release</h5>
+
+<p>``</p>
+
+<p>npm run build
+where=../sample</p>
+
+<h1>-e 's@data-src=""@src="../'"$where"/'generated/ghost-config-json.js"@g'</h1>
+
+<p>sed -i -e 's@="/@="@g'  dist/index.html
+sed -i -e 's@http://localhost:9876/@'"$where"'/@g' dist/js/*.js</p>
+
+<h1>sed -i -e 's@LOCAL:!@LOCAL:@g' dist/js/*.js</h1>
+
+<p>``</p>
