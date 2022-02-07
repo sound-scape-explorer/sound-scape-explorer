@@ -68,7 +68,7 @@ pip install numpy==1.20
 
 <h4>Step 0 : Open a terminal update your pakages and install python, pip and nodeJS pakager</h4>
 
-<p>``</p>
+<p>```</p>
 
 <p>sudo apt update </p>
 
@@ -78,10 +78,10 @@ pip install numpy==1.20
 
 <h5>Used to install the newest versions of all packages currently installed on the system from the sources enumerated in /etc/apt/sources.list(5). Packages currently installed with new versions available are retrieved and upgraded; under no circumstances are currently installed packages removed, nor are packages that are not already installed retrieved and installed. New versions of currently installed packages that cannot be upgraded without changing the install status of another package will be left at their current version. An update must be performed first so that apt-get knows that new versions of packages are available.</h5>
 
-<p>``</p>
+<p>```</p>
 
 <p>NOTE : if you not find 
-``
+```
 sudo apt install python3.8</p>
 
 <h5>try</h5>
@@ -102,7 +102,7 @@ sudo apt install python3.8</p>
 
 <h5>is a very fast video and audio converter that can also grab from a live audio/video source</h5>
 
-<p>``</p>
+<p>```</p>
 
 <h4>Step 1 : Install required python libraries</h4>
 
@@ -124,7 +124,7 @@ pip install openpyxl
 
 <h4>Setp 3 : run this command</h4>
 
-<p>``</p>
+<p>```</p>
 
 <h5>install scripts project with these modules</h5>
 
@@ -133,21 +133,21 @@ pip install openpyxl
 <h5>create specific directory</h5>
 
 <p>mkdir ./sample/generated ./sample/features
-``</p>
+```</p>
 
 <h4>Step 4 : Go to [rootProject]/sse-v1/ and run this command</h4>
 
-<p>``</p>
+<p>```</p>
 
 <h5>create shortcut (do not duplicate content or the sources)</h5>
 
 <p>ln -s ../sample/features/
 ln -s ../sample/generated/
-``</p>
+```</p>
 
 <p>[Hightly recommended] To activate sse command (either in your <code>.bashrc</code>, or once in each terminal that needs it)</p>
 
-<p>``</p>
+<p>```</p>
 
 <h5>this command bellow permit to add in you shell sse command</h5>
 
@@ -155,19 +155,19 @@ ln -s ../sample/generated/
 
 <h3>logout/login of your computer session after this command to activate sse command</h3>
 
-<p>``</p>
+<p>```</p>
 
 <p>[Not Mandatory] To activate autocompletion (either in your <code>.bashrc</code>, or once in each terminal that needs it)</p>
 
-<p>``
+<p>```
 eval "$(<em>SSE</em>COMPLETE=bash_source sse)"</p>
 
 <h5>or get it with</h5>
 
 <p>sse help
-``</p>
+```</p>
 
-<p>Setp 5 : Use your audio sources <strong>OR</strong> Download an example of this app</p>
+<h4>Setp 5 : Use your audio sources <strong>OR</strong> Download an example of this app</h4>
 
 <p>Example of this app</p>
 
@@ -180,24 +180,37 @@ cd ../../sse-v1/
 curl http://149.91.90.152:8000/config.xlsx &gt; ../sample/config.xlsx
 </code></p>
 
-<p>To import your audio sources, you must to drop it into [rootProject]/sample/audio/ and respect some rules : 
-* Folder Hierarchy in order must be this : 
-    * Site Name (in eexample BoraBora)
-        * Logger1 (In example Logger in touristical aera)
-            * Audio File name 1
-            * Audio File name 2
-        * Logger2
-            * Audio File name 1
-            * Audio File name 2
-* Audio File must be folow the name rules (repalce '[' and ']' by the required information ):
-    * [Time in UTC format]_[Logger ID].wav</p>
+<p>To import your audio sources, you must to drop it into [rootProject]/sample/audio/ and respect some rules : </p>
 
-<pre><code>in example : 20210629T050900_2614231121130510
-</code></pre>
+<ul>
+<li>Folder Hierarchy in order must be this : 
+<ul>
+<li>Site Name (in eexample BoraBora)
+<ul>
+<li>Logger1 (In example Logger in touristical aera)
+<ul>
+<li>Audio File name 1</li>
+<li>Audio File name 2</li>
+</ul></li>
+<li>Logger2
+<ul>
+<li>Audio File name 1</li>
+<li>Audio File name 2</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>Audio File must be folow the name rules (repalce '[' and ']' by the required information ):</p>
+
+<ul>
+<li>[Time in UTC format]_[Logger ID].wav</li>
+</ul>
+
+<p><p>in example : 20210629T050900_2614231121130510</p></li>
+</ul></p>
 
 <h4>Step 6 : Extract</h4>
 
-<p>``</p>
+<p>```</p>
 
 <h5>Do the Neuronal Network extraction from original input with all files says in config.xlsx</h5>
 
@@ -205,7 +218,7 @@ curl http://149.91.90.152:8000/config.xlsx &gt; ../sample/config.xlsx
 
 <h5>this operation will take a while depending of your dataset.</h5>
 
-<p>``</p>
+<p>```</p>
 
 <p>Open a new tab terminal or new window terminal let's open the oldest tab/window terminal</p>
 
@@ -230,7 +243,7 @@ sse show config --json &gt; generated/ghost-config.json
 
 <h4>Step 8 : install nodeJS dependencies</h4>
 
-<p>``
+<p>```
 cd [rootProject]/sse-v1/</p>
 
 <h1>DO NOT RUN THIS command => npm audit fix</h1>
@@ -240,11 +253,11 @@ cd [rootProject]/sse-v1/</p>
 <p>npm i -D naive-ui
 npm i -D vfonts
 npm i -D worklet-loader
-``</p>
+```</p>
 
 <h4>Step 9 : run the python server and the nodeJS server</h4>
 
-<p>``
+<p>```
 cd [rootProject]/sse-v1/</p>
 
 <h1>run the python server (default port is 9876)</h1>
@@ -254,11 +267,11 @@ cd [rootProject]/sse-v1/</p>
 <h1>it's also called in shortname</h1>
 
 <p>sse chs
-``</p>
+```</p>
 
 <p>Open a new tab terminal or new window terminal let's open the oldest tab/window terminal</p>
 
-<p>``</p>
+<p>```</p>
 
 <h1>in case of error during launch of the nodeJS server</h1>
 
@@ -269,7 +282,7 @@ npm install chart.js</p>
 
 <p>npm run serve </p>
 
-<p>``</p>
+<p>```</p>
 
 <h4>Setp 10 : Run computation to see data on app</h4>
 
@@ -300,15 +313,15 @@ sse show config --json &gt; generated/ghost-config.json
 
 <p>Run a terminal with 3 tabs or 3 terminal and <strong><em>*for each</em>*</strong> of them go to</p>
 
-<p>``</p>
+<p>```</p>
 
 <p>cd [rootProject]/sse-v1/</p>
 
-<p>``</p>
+<p>```</p>
 
 <p>In first tab/terminal, run </p>
 
-<p>``</p>
+<p>```</p>
 
 <p>sse chs</p>
 
@@ -316,15 +329,15 @@ sse show config --json &gt; generated/ghost-config.json
 
 <h1>sse cors-http-server</h1>
 
-<p>``</p>
+<p>```</p>
 
 <p>In second tab/terminal, run </p>
 
-<p>``</p>
+<p>```</p>
 
 <p>npm run serve</p>
 
-<p>``</p>
+<p>```</p>
 
 <h4>Step 2 : if necessary or not done already, use a run in third tab/terminal the following commands depend of what you expect</h4>
 
@@ -334,11 +347,11 @@ sse show config --json &gt; generated/ghost-config.json
 Reason : Parse data into torch audio, a Neuronal network and permit to execute action 3 : 
 Command : </p>
 
-<p>``</p>
+<p>```</p>
 
 <p>sse extract all</p>
 
-<p>``</p>
+<p>```</p>
 
 <h5>Action 2 : extract a preview of Sample to see mel-spectograme</h5>
 
@@ -348,11 +361,11 @@ Command : </p>
 
 <p>Command : </p>
 
-<p>``</p>
+<p>```</p>
 
 <p>sse extract preview</p>
 
-<p>``</p>
+<p>```</p>
 
 <h5>Action 3 : Project the 128 dimensions into 2 dimensions with UMAP</h5>
 
@@ -364,11 +377,11 @@ Command : </p>
 
 <p>Command : </p>
 
-<p>``</p>
+<p>```</p>
 
 <p>sse compute umap </p>
 
-<p>``</p>
+<p>```</p>
 
 <h5>Action 4 : Compute the volume of samples</h5>
 
@@ -378,11 +391,11 @@ Command : </p>
 
 <p>Command : </p>
 
-<p>``</p>
+<p>```</p>
 
 <p>sse compute volume </p>
 
-<p>``</p>
+<p>```</p>
 
 <h5>Action 5 : Compute covering</h5>
 
@@ -392,11 +405,11 @@ Command : </p>
 
 <p>Command : </p>
 
-<p>``</p>
+<p>```</p>
 
 <p>sse compute covering </p>
 
-<p>``</p>
+<p>```</p>
 
 <h5>Action 6 : Show app on browser</h5>
 
@@ -404,11 +417,11 @@ Command : </p>
 
 <p>Open your favorite browser and go to </p>
 
-<p>``</p>
+<p>```</p>
 
 <p>http://localhost:8080/</p>
 
-<p>``</p>
+<p>```</p>
 
 <h4>Step 3 : Explanation of tabs</h4>
 
@@ -420,11 +433,11 @@ Command : </p>
 
 <p>From [rootProject]/sse-v1/ path</p>
 
-<p>``</p>
+<p>```</p>
 
 <p>sse show config --json > generated/ghost-config.json</p>
 
-<p>``</p>
+<p>```</p>
 
 <h5>Mini Tools</h5>
 
@@ -453,7 +466,7 @@ Due to the softwar configuration, we can choose only by step of 64 </p>
 
 <h4>typical commands</h4>
 
-<p>``</p>
+<p>```</p>
 
 <h5>run the server</h5>
 
@@ -488,7 +501,7 @@ sse compute umap</p>
 <p>(cd [rootProject]/sse-v1 ; npm run dev)
 (cd [rootProject]/sample sse show config --json > generated/ghost-config.json)</p>
 
-<p>``</p>
+<p>```</p>
 
 <h2>Development notes</h2>
 
@@ -519,7 +532,7 @@ convert sse-v1/src/assets/logo.png sse-v1/public/favicon.ico
 
 <h3>Making some test data</h3>
 
-<p>``
+<p>```
 cp -t log1/ '........./Logger1/20210429<em>180000.WAV'  ###### strange... 
 cp -t log2/ '........./Logger2/20210429</em>180000.WAV'</p>
 
@@ -539,11 +552,11 @@ ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1120 -t 60 -c copy chunk-20210429<
 ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1180 -t 60 -c copy chunk-20210429</em>180300.WAV
 ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1600 -t 60 -c copy chunk-20210429</em>181000.WAV</p>
 
-<p>``</p>
+<p>```</p>
 
 <h3>Extracting features and previews</h3>
 
-<p>``
+<p>```
 sse extract all
 sse extract preview</p>
 
@@ -557,27 +570,27 @@ sse show list-sites</p>
 <h6>else (few files or patient)</h6>
 
 <p>sse show audio-span-splot
-``</p>
+```</p>
 
 <p>For now, we use python to save a json of the config, to avoid implementing the parser (although this is easy-ish):</p>
 
-<p>``</p>
+<p>```</p>
 
 <h6>get the command with (use the ones that redirect to .js and .json files</h6>
 
 <p>sse help
-``</p>
+```</p>
 
 <h3>Some npm installs</h3>
 
-<p>``</p>
+<p>```</p>
 
 <h1>for naive</h1>
 
 <p>npm i -D naive-ui
 npm i -D vfonts
 npm i -D worklet-loader
-``</p>
+```</p>
 
 <h3>dev on the js side</h3>
 
@@ -597,7 +610,7 @@ sse cors-http-server
 
 <h5>file:// release</h5>
 
-<p>``</p>
+<p>```</p>
 
 <p>npm run build
 where=../sample</p>
@@ -609,4 +622,12 @@ sed -i -e 's@http://localhost:9876/@'"$where"'/@g' dist/js/*.js</p>
 
 <h1>sed -i -e 's@LOCAL:!@LOCAL:@g' dist/js/*.js</h1>
 
-<p>``</p>
+<p>```</p>
+
+<h4>markdown</h4>
+
+<p>```</p>
+
+<p>markdown README.md > .hiddenREADME.html</p>
+
+<p>```</p>

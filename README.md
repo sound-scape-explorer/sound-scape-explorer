@@ -157,7 +157,7 @@ eval "$(_SSE_COMPLETE=bash_source sse)"
 sse help
 ```
 
-Setp 5 : Use your audio sources **OR** Download an example of this app
+#### Setp 5 : Use your audio sources **OR** Download an example of this app
 
 Example of this app
 
@@ -171,6 +171,8 @@ curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx
 ```
 
 To import your audio sources, you must to drop it into [rootProject]/sample/audio/ and respect some rules : 
+
+
 * Folder Hierarchy in order must be this : 
     * Site Name (in eexample BoraBora)
         * Logger1 (In example Logger in touristical aera)
