@@ -17,10 +17,15 @@ export default {
   },
   mounted() {
     // TODO on first click because of permissions (autoplay)
-    //this.configureAudioChain();
+    this.scanData(this.root.BASE + "scanData");
+    
   },
   methods: {
-    
+    async scanData(path){
+      let res = await fetch(path);
+      let body = await res.json();
+      return body
+    }
   },
 };
 </script>

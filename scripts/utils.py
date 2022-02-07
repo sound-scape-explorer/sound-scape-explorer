@@ -77,6 +77,17 @@ def parse_config(xlsx='../sample/config.xlsx', sheet=0):
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
 
+def edit_config(xlsxPath):
+    sheet=0
+    _xfile = pd.ExcelFile(xlsxPath)
+    _xtable = _xfile.parse(sheet, converters={'variables_': str})
+    _renaming = {i: i.split(' (')[0] for i in _xtable.columns if ' (' in i}
+    _xtable.rename(_renaming, inplace=True, axis='columns', errors="raise")
+    files = dict(digest_xtable_columns(xlsxPath, _xtable, 'files', 'site start:D tags:L'.split(' '), 'FILE'))
+    _xfile = pd.ExcelWriter(xlsxPath,mode='a')
+    
+    print(files)
+
 def iterate_audio_files_with_bands(cfg, *more):
     esr = cfg.variables['audio_expected_sample_rate']
     for band,spec in cfg.bands.items():

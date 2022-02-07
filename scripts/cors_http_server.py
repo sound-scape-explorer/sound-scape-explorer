@@ -6,6 +6,7 @@ import os
 import re
 import json
 import wave
+import utils
 
 from LoggersDictionary import LoggersDictionary 
 from sserunner import get_config
@@ -28,6 +29,8 @@ def main(argv=sys.argv):
         def validResponse(self):
             SimpleHTTPRequestHandler.send_response(self,200)
             self.end_headers()
+        
+        #Route for python server
         def do_GET(self):
             print(self.path)
             if re.match("/compute",self.path):
@@ -42,34 +45,23 @@ def main(argv=sys.argv):
                 os.system("sse extract preview -f "+file+" -t "+duration)
                 print("All done")
                 self.wfile.write("{\"status\":\"ok\"}".encode())
-            if re.match("/avaiableLogger",self.path):
+            elif re.match("/avaiableLogger",self.path):
                 self.validResponse()
                 map = LoggersDictionary()
-                #TODO avoid calculation endif we need to recompute audio duration
-                # option : sha1 of the json file 
-                # option 2 : store and compare added or removed files
-                for root, directories, files in os.walk("./audio"):  
-                    for file in files:      
-                        parts = os.path.relpath(os.path.join(root, file)).split('/')
-                        if len(parts) > 3 :
-                            site = parts[1]
-                            logger = parts[2]
-                            audio = parts[3]
-                            #print(site+"/"+logger+"/"+audio)
-                            audioFile = wave.open("./audio/"+site+"/"+logger+"/"+audio,"rb")
-                            waveParam = audioFile.getparams()
-                            timeDuration = waveParam.nframes/waveParam.framerate
-                            startTime = audio.split('_')[0]
-                            audioFile.close()
-                            #print(startTime,timeDuration)
-                            map.setNewAudio(site,logger,audio,startTime,timeDuration)
-                #print(map) #contient le site et le logger
-                #write in file
-                #TRIGGER WARNING : the audio can be corrupt by the date value
                 # so we scann the generate 
-                cfg = get_config()
-                print(cfg.variables['files'])
+                #cfg = get_config()
+                #print(cfg.variables['files'])
                 self.wfile.write(str(map).encode())
+
+            elif re.match("/scanData",self.path):
+                self.validResponse()
+                map = LoggersDictionary()
+                # so we scann the generate 
+                # cfg = get_config()
+                # print(cfg.variables['files'])
+                utils.edit_config('../sample/config.xlsx')
+                self.wfile.write(str(map).encode())
+
 
             elif os.path.isfile("."+self.path):
                 self.validResponse()

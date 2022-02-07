@@ -175,7 +175,15 @@ def all(force, skip_existing):
     todo = 0
     total = 0
     done = 0
+    a_esr =0
+    a_band=0
+    a_spec=0
     for act in ["count", "do"]:
+        for esr,band,spec,fname,info,input_path,output_path in utils.iterate_audio_files_with_bands(cfg, ['@feature_base', '.pklz']):
+            print(esr,band,spec)
+            a_esr,a_band,a_spec =esr,band,spec
+            break
+        #return
         for esr,band,spec,fname,info,input_path,output_path in utils.iterate_audio_files_with_bands(cfg, ['@feature_base', '.pklz']):
             if act == "count":
                 total += 1
