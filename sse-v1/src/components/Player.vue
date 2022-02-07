@@ -53,9 +53,6 @@ export default {
   mounted() {
     // TODO on first click because of permissions (autoplay)
     //this.configureAudioChain();
-    let externalScript = document.createElement('script')
-    externalScript.setAttribute('src', 'https://code.iconify.design/2/2.1.2/iconify.min.js')
-    document.head.appendChild(externalScript)
 
     this.loggerAvaiable()//[{"name" : "Logger L42"},{"name" : "Logger L05"}];
     this.filledCanvasLogger()
