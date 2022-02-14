@@ -37,6 +37,14 @@ class LoggersDictionary:
     def __str__(self) -> str:
         return json.dumps(self.map,indent=2, default=lambda o: o.__dict__)
 
+    def getAllAudiosOfSiteWithPath(self,siteName:str,suffix:str) -> List :
+        array = []
+        for aLogger in self.__getSite(siteName):
+            print(aLogger.name)
+            for audio in aLogger.audios:
+                array.append(aLogger.name+"/"+audio.fileName.split(suffix)[0])#audio.fileName.removesuffix(suffix)) avaiable in 3.9 #TODO configure for Windows path too
+        return array
+
     def getAllLoggersOfSite(self,siteName:str) -> List:
         return self.__getSite().values()
 

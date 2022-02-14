@@ -137,6 +137,7 @@ mkdir ./sample/generated ./sample/features
 #####create shortcut (do not duplicate content or the sources)
 ln -s ../sample/features/
 ln -s ../sample/generated/
+ln -s ../sample/audio/
 ```
 
 [Hightly recommended] To activate sse command (either in your `.bashrc`, or once in each terminal that needs it)

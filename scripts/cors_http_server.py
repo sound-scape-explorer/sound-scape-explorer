@@ -54,13 +54,15 @@ def main(argv=sys.argv):
                 self.wfile.write(str(map).encode())
 
             elif re.match("/scanData",self.path):
+                site="M"
                 self.validResponse()
                 map = LoggersDictionary()
                 # so we scann the generate 
-                # cfg = get_config()
-                # print(cfg.variables['files'])
-                utils.edit_config('../sample/config.xlsx')
-                self.wfile.write(str(map).encode())
+                cfg = get_config()
+                suffix = cfg.variables['audio_suffix']
+                listFiles = map.getAllAudiosOfSiteWithPath("M",suffix)
+                utils.edit_config('../sample/config.xlsx',listFiles)
+                self.wfile.write("Scanned".encode())
 
 
             elif os.path.isfile("."+self.path):

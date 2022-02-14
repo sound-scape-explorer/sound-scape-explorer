@@ -1,6 +1,7 @@
-
 import collections
+from email import header
 import pathlib
+from typing import List
 import pandas as pd
 import subprocess
 from datetime import datetime
@@ -86,16 +87,19 @@ def parse_config(xlsx='../sample/config.xlsx', sheet=0):
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
 
-def edit_config(xlsxPath):
-    sheet=0
-    _xfile = pd.ExcelFile(xlsxPath)
-    _xtable = _xfile.parse(sheet, converters={'variables_': str})
-    _renaming = {i: i.split(' (')[0] for i in _xtable.columns if ' (' in i}
-    _xtable.rename(_renaming, inplace=True, axis='columns', errors="raise")
-    files = dict(digest_xtable_columns(xlsxPath, _xtable, 'files', 'site start:D tags:L'.split(' '), 'FILE'))
-    _xfile = pd.ExcelWriter(xlsxPath,mode='a')
+def edit_config(xlsxPath,listFiles:List[str]):
+    df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
+    _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
+    specific_edit_config(listFiles)
+    df2 = pd.DataFrame({'Data': listFiles})
+    df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=19, header=None, index=False)#change to 19
+    _xfile.save()
+    _xfile.close()
     
-    print(files)
+def specific_edit_config(listFiles:list[str]):
+    #specific edit for column U,V,W
+    
+    pass
 
 def iterate_audio_files_with_bands(cfg, *more):
     esr = cfg.variables['audio_expected_sample_rate']
