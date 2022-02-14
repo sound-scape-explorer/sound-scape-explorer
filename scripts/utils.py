@@ -27,13 +27,22 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
     for c_val in c_values:
         if ':' in c_val:
             t = c_val.split(':')[1]
-            types.append({
-                'I': int,
-                'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
-                'L': lambda v: v.split(','),
-                'L-': lambda v: v.split('-'),
-                'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M') for vv in v.split('-')],
-                }[t])
+            try:
+                types.append({
+                    'I': int,
+                    'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M%S'),
+                    'L': lambda v: v.split(','),
+                    'L-': lambda v: v.split('-'),
+                    'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M%S') for vv in v.split('-')],
+                    }[t])
+            except:
+                types.append({
+                    'I': int,
+                    'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
+                    'L': lambda v: v.split(','),
+                    'L-': lambda v: v.split('-'),
+                    'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M') for vv in v.split('-')],
+                    }[t])
         else:
             types.append(str)
 

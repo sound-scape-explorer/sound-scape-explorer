@@ -160,7 +160,7 @@ export default {
     const addAllGrey = ref(true);
     const showAll = ref(true);
     const duration = ref(3600); // sec
-    const start = ref(0);
+    const start = ref(parseInt(Date.now()/1000));// patch for incorect date, todo put the first date 
 
     const setDuration = (sec) => {
       showAll.value = false;
@@ -200,13 +200,14 @@ export default {
       if (root.cfg.umaps[currentUmap.value] === undefined) return [];
       return root.cfg.umaps[currentUmap.value][UMAP_RANGES].map((kr) => ({
         key: kr,
-        startStop: root.cfg.ranges[kr].map((d) =>
-          parseInt(new Date(d).getTime() / 1000)
-        ),
+        startStop: root.cfg.ranges[kr].map((d) =>{
+          console.log(parseInt(new Date(d).getTime() / 1000 /*+ 43200*/), d)
+          return parseInt(new Date(d).getTime() / 1000 /*Fix problem with PM/AM*//*+43200*/) 
+        }),
         marks: {
-          [parseInt(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦ ",
+          [parseInt(new Date(root.cfg.ranges[kr][0]).getTime() / 1000 /*+43200*/)]: "⟦ ",
           [parseInt(
-            new Date(root.cfg.ranges[kr][0]).getTime() / 1000 +
+            new Date(root.cfg.ranges[kr][0]).getTime() / 1000 /*+43200*/+
               startStep.value *
                 parseInt(
                   (new Date(root.cfg.ranges[kr][1]).getTime() -
@@ -216,7 +217,7 @@ export default {
                     2
                 )
           )]: kr,
-          [parseInt(new Date(root.cfg.ranges[kr][1]).getTime() / 1000)]: "⟧",
+          [parseInt(new Date(root.cfg.ranges[kr][1]).getTime() / 1000/*+43200*/)]: "⟧",
         },
       }));
     });
@@ -260,7 +261,7 @@ export default {
               {
                 label: "*",
                 data: v.X.map(([x, y]) => ({ x, y })),
-                pointBackgroundColor: "hsl(0, 0%, 90%)",
+                pointBackgroundColor: "hsl(0, 0%, 50%)",
                 pointBorderWidth: 0,
                 pointRadius: 2,
               },

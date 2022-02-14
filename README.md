@@ -121,7 +121,7 @@ The helper script
 
 #### Step 2 : go to your downloaded root project
 
-#### Setp 3 : run this command
+#### Setp 3 :  Go to [rootProject]/ and run this command
 
 ```
 #####install scripts project with these modules
@@ -162,11 +162,15 @@ sse help
 Example of this app
 
 ```
+###### This command will downlad an tar archive from my personal example 
 curl http://149.91.90.152:8000/examples.tar > ../sample/audio/examples.tar
 cd ../sample/audio/
+###### This command will extract the tar file
 tar -xvf examples.tar
+###### and this remove the archive that have been untar
 rm examples.tar
 cd ../../sse-v1/
+###### This command will download my personal configuration about this example
 curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx 
 ```
 
@@ -186,7 +190,59 @@ To import your audio sources, you must to drop it into [rootProject]/sample/audi
     
     in example : 20210629T050900_2614231121130510
 
+**YOU MUST TO CHANGE YOUR CONFIG.XLSX** 
 
+#### Setp 5(part2) : Change config.xlsx(if you choose "Use your audio sources") 
+
+##### Column A & B
+
+* variable:do not touch
+* audio base : locate the audio folder specific to the site studied
+* audio base cluster : path to the calculation daemon
+* audio_expected_sample_rate : add in hertz the max frequencies
+* feature base, generated base, other base : do not touch 
+* preview file : give the path from audio base path to the given file
+* preview file start : start for the preview
+* preview file dur : duration of the preview
+* integration seconds : corresponds to the available integration for the umap computation. Values, in second, are separated by a short hyphen '-'
+* display locate : defines the time zone for the audio base site
+* nearest radiuses : define the covering of umap points in percent.
+
+##### Column D & E
+
+From D3 this column is free name. Column E defines verticise.The first number defines segmentation of frequencies by step of 64. The second number defines the lowest frequencies start. These numbers are separated by a short hyphen '-'.
+
+For example if you want all frequencies you segmentate the frequencies by 64 that corresponds for all frequencies and you take the lowest frequency : 0.
+
+Another example if you want segmentate frequencies by 3 you multiply 64 by 3 that corresponds to 192 and you want the two first parts (0 to 64 and 64 to 128) you need to put in cells : 
+
+* 192-0
+* 192-64
+
+
+##### Column G to K
+
+* Column G at line 3 is free name
+* Column H corresponds to second integration. You must already have this value on integration second cell in column B
+* Column I defines for the umap view needed bands. You must define these bands from D column
+* Column J defines the needed umap range. You must define this range on Q column 
+* Column K defines the needed site to compare
+
+##### Column M,N & O (not Used yet)
+
+
+
+##### Column Q & R
+
+* Column Q is free name
+* Column R defines range to analyze by the umap computation. They contain two date and time values. Time values need to respect a specific format : YYYYmmDD_HHMMSS in UTC time. These time values need to be separated by a short hyphen '-'
+
+##### Column T to W
+
+* Column T audio file path without suffix from the audio base cells defined in B3. For example it can be "PM10_P1_2021/20210722_094000" for the logger PM10_P1_2021 and audio name 20210722_094000
+* Column U corresponds to the site studied, by default it will be the logger name
+* Column V defines the time of file starts. Time values need to respect a specific format : YYYYmmDD_HHMMSS in UTC time.
+* Column W defines tags for the files 
 #### Step 6 : Extract 
 
 ```
@@ -245,11 +301,14 @@ sse chs
 Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
 
 ```
-#in case of error during launch of the nodeJS server
+###### in case of error during launch of the nodeJS server
+###### Control + Delete
 npm remove chart.js
 npm install chart.js
+###### and do not forget to relaunch the nodeJS server by the command below 
 
-# run the nodeJS server at same path (default port is 8080)
+
+####### run the nodeJS server at same path (default port is 8080)
 npm run serve 
 
 ```
@@ -258,7 +317,7 @@ npm run serve
 
 Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
 
-From [rootProject]/sse-v1/ path
+From `[rootProject]/sse-v1/` path
 
 ```
 sse compute umap 
@@ -522,7 +581,7 @@ ffmpeg  -i ../log2/20210429_180000.WAV -ss 1600 -t 60 -c copy chunk-20210429_181
 ### Extracting features and previews
 
 ```
-sse extract all
+sse extract all -f
 sse extract preview
 
 sse show band-freqs
