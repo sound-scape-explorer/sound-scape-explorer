@@ -14,6 +14,11 @@
     <br />
     <input type="button" @click="computeBands" value="compute">
     <br />
+    <input type="button" @click="scan" value="Scan Files?">
+    <input type="button" @click="importing" value="Import new Logger/Audio files?">
+    <ScanData v-if="ScanDataView"></ScanData>
+    <ImportData v-if="ImportDataView"></ImportData>
+    <br />
     <label><input type="checkbox" v-model="showTable" />show table of band.s</label>
     <table v-if="showTable" class="band-table">
       <tr>
@@ -33,16 +38,21 @@
 
 <script>
 import { getBandBoundsFromSpec } from "@/utils.js";
+import ScanData from "./ScanData.vue";
+import ImportData from "./ImportData.vue";
+const OComponents = {ScanData,ImportData };
 
 export default {
   inject: ["root"],
-
+  components: { ...OComponents },
   data: () => ({
     sampleRate: 44100,
     bandSize: 64,
     bandOffset: 0,
     inHz: true,
     showTable: true,
+    ScanDataView:false,
+    ImportDataView:false,
   }),
   computed: {
     /**
@@ -84,7 +94,13 @@ export default {
       let req = await fetch(this.root.BASE+ "compute/" +this.root.curentPreviewFile+"/"+this.root.audioDuration)
       let res = req.json();
       console.log("calcul terminer ? "+ res)
-    }
+    },
+    scan(){
+      this.ScanDataView=true;
+    },
+    importing(){
+      this.ImportDataView=true;
+    },
   },
 };
 </script>

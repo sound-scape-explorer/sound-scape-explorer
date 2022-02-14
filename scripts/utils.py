@@ -90,16 +90,19 @@ def parse_config(xlsx='../sample/config.xlsx', sheet=0):
 def edit_config(xlsxPath,listFiles:List[str]):
     df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
     _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
-    specific_edit_config(listFiles)
-    df2 = pd.DataFrame({'Data': listFiles})
+    listFiles=specific_edit_config(listFiles)
+    df2 = pd.DataFrame(data=listFiles[:])
     df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=19, header=None, index=False)#change to 19
     _xfile.save()
     _xfile.close()
     
-def specific_edit_config(listFiles:list[str]):
+def specific_edit_config(listFiles:List[str]):
     #specific edit for column U,V,W
-    
-    pass
+    newlist=[]
+    for el in listFiles:
+        array=el.split('/')
+        newlist.append([el,array[0],array[1]])
+    return newlist
 
 def iterate_audio_files_with_bands(cfg, *more):
     esr = cfg.variables['audio_expected_sample_rate']

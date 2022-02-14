@@ -62,7 +62,9 @@ export default {
       this.loggerList = [{"name" : "Logger L42"},{"name" : "Logger L05"}];
       this.loggerList = await this.request(this.root.BASE + "avaiableLogger");
       console.log(this.loggerList)
-      this.loggerList = this.loggerList['BORA_ANR_sons'] //TODO Edit this to see other location more than the studed site
+      let site = await this.root.cfg.variables['audio_base'].split('/')
+      site = site[site.length-1]
+      this.loggerList = this.loggerList[site] //TODO Edit this to see other location more than the studed site
       this.filledCanvasLogger()
     },
     request: async function (path) {
