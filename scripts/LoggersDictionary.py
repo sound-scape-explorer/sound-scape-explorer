@@ -42,7 +42,7 @@ class LoggersDictionary:
         for aLogger in self.__getSite(siteName):
             print(aLogger.name)
             for audio in aLogger.audios:
-                array.append(aLogger.name+"/"+audio.fileName.split(suffix)[0])#audio.fileName.removesuffix(suffix)) avaiable in 3.9 #TODO configure for Windows path too
+                array.append(aLogger.name+"/"+audio.fileName.split(suffix)[0])#audio.fileName.removesuffix(suffix)) available in 3.9 #TODO configure for Windows path too
         return array
 
     def getAllLoggersOfSite(self,siteName:str) -> List:

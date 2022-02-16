@@ -54,11 +54,11 @@ export default {
     // TODO on first click because of permissions (autoplay)
     //this.configureAudioChain();
 
-    this.loggerAvaiable()//[{"name" : "Logger L42"},{"name" : "Logger L05"}];
+    this.loggerAvailable()//[{"name" : "Logger L42"},{"name" : "Logger L05"}];
     this.filledCanvasLogger()
   },
   methods: {
-    async loggerAvaiable() {
+    async loggerAvailable() {
       this.loggerList = [{"name" : "Logger L42"},{"name" : "Logger L05"}];
       this.loggerList = await this.request(this.root.BASE + "avaiableLogger");
       console.log(this.loggerList)

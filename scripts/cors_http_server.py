@@ -45,7 +45,7 @@ def main(argv=sys.argv):
                 os.system("sse extract preview -f "+file+" -t "+duration)
                 print("All done")
                 self.wfile.write("{\"status\":\"ok\"}".encode())
-            elif re.match("/avaiableLogger",self.path):
+            elif re.match("/availableLogger",self.path):
                 self.validResponse()
                 map = LoggersDictionary()
                 # so we scann the generate 

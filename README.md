@@ -475,7 +475,7 @@ sse show config --json > generated/ghost-config.json
 Permit to split the original audio sound into N Bands of frequencies (Hz)
 Due to the softwar configuration, we can choose only by step of 64 
 
-##### Covering (Not avaiable yet)
+##### Covering (Not available yet)
 
 ##### Volumes
 
@@ -487,7 +487,7 @@ Show in 2D an projection of the matricies of 128d for each second
 
 You can move to see during time each point corresponding to the time 
 
-##### Player (Not avaiable yet)
+##### Player (Not available yet)
 
 Permit to see an logger and see the specificities of an logger. For example to see the period of recording, see an zoom of the logger 
 
