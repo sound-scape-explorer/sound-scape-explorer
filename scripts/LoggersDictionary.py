@@ -29,7 +29,7 @@ class LoggersDictionary:
                     timeDuration = waveParam.nframes/waveParam.framerate
                     audio = audio.replace(suffix,'')#May be consider to replace this by suffix function in 3.9 python interpretor
                     m = re.match(regexSpliter,audio)
-                    startTime = m.group(0) #audio.split('_')[0]
+                    startTime = m.group(groupe) #audio.split('_')[0]
                     audioFile.close()
                     #print(startTime,timeDuration)
                     self.setNewAudio(site,logger,audio,startTime,timeDuration)
@@ -43,7 +43,7 @@ class LoggersDictionary:
     def getAllAudiosOfSiteWithPath(self,siteName:str,suffix:str) -> List :
         array = []
         for aLogger in self.__getSite(siteName):
-            print(aLogger.name)
+            #print(aLogger.name)
             for audio in aLogger.audios:
                 array.append(aLogger.name+"/"+audio.fileName.split(suffix)[0])#audio.fileName.removesuffix(suffix)) available in 3.9 #TODO configure for Windows path too
         return array

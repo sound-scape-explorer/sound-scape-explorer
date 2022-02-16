@@ -55,6 +55,7 @@ def main(argv=sys.argv):
                 # so we scann the generate 
                 self.wfile.write(str(map).encode())
 
+            #"""Deprecated"""
             elif re.match("/scanData",self.path):
                 site="M"
                 regexSpliter = '([a-zA-Z0-9_]+)'
@@ -74,6 +75,26 @@ def main(argv=sys.argv):
                 f=open("."+self.path,'rb')
                 self.wfile.write(f.read())
                 f.close()
+        def do_POST(self):
+            if re.match("/scanData",self.path):
+                self.data_string = self.rfile.read(int(self.headers['Content-Length']))
+                data = json.loads(json.loads(self.data_string))# needed to dict(..)
+                site="M"
+                regexSpliter = data['regex']
+                groupRegexRequired = data['groupe']
+                cfg = get_config()
+                suffix = cfg.variables['audio_suffix']
+                self.validResponse()
+                map=None
+                try:
+                    map = LoggersDictionary(regexSpliter,groupRegexRequired,suffix)
+                except:
+                    self.wfile.write("{\"result\" : \"Error\"}".encode())
+                    return    
+                # so we scann the generate 
+                listFiles = map.getAllAudiosOfSiteWithPath("M",suffix)
+                utils.edit_config('../sample/config.xlsx',listFiles)
+                self.wfile.write("{\"result\" : \"Scanned\"}".encode())
         
 
     test(CORSRequestHandler, HTTPServer)

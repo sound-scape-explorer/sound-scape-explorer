@@ -128,11 +128,9 @@ export default {
       return body;
     },
     requestPost: async function(path, jsonObject){
-      let res = fetch(path, {
+      console.log(JSON.stringify(jsonObject))
+      let res = await fetch(path, {
                   method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
                   body: JSON.stringify(jsonObject),
                 })
       let body = await res.json();

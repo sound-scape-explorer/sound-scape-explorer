@@ -7,10 +7,10 @@
     <br />
     <label for="sampleRate">Sample rate</label>
     <input name="sampleRate" v-model.number="sampleRate" /><br>
-    <label for="maxSampleRate">Max of sample rate (traduce in Hz below)</label>
-    <input type="number" step="64" v-model.number="bandSize" /><br>
-    <label for="minSampleRate">Min of sample rate (traduce in Hz below)</label>
-    <input type="number" step="64" v-model.number="bandOffset" /><br>
+    <label for="maxSampleRate">Max of sample split (traduce in Hz below)</label>
+    <input type="number" min="64" step="64" v-model.number="bandSize" /><br>
+    <label for="minSampleRate">Lowest sample split to use (traduce in Hz below)</label>
+    <input type="number" min="0" step="64" v-model.number="bandOffset" /><br>
     <label for="minSampleRate">Duration of preview</label>
     <input type="number" max="60" min="0" step="1" v-model.number="root.audioDuration" /><br>
     <label><input type="checkbox" v-model="inHz" /> hz</label>
@@ -96,10 +96,10 @@ export default {
       console.log("calcul terminer ? "+ res)
     },
     scan(){
-      this.ScanDataView=true;
+      this.ScanDataView=!this.ScanDataView;
     },
     importing(){
-      this.ImportDataView=true;
+      this.ImportDataView=!this.ImportDataView;
     },
   },
 };
