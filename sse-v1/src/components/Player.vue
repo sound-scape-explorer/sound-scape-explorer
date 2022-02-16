@@ -7,7 +7,10 @@
       </select>
       <span class="iconify" data-icon="carbon:settings"></span>
     </div>
-    <div id="infoLogger"></div>
+    <div id="infoLogger">
+      <div>{{loggerStartTime.getUTCDate()}} {{loggerStartTime.getUTCMonth()}} {{loggerStartTime.getUTCFullYear()}} {{loggerStartTime.getUTCHours()}} {{loggerStartTime.getUTCMinutes()}}</div>
+      <div>{{loggerEndTime}}</div>
+    </div>
     <div id="globalPist">
       <canvas id="allCanvas"></canvas>
     </div>
@@ -35,8 +38,8 @@ export default {
     showHz: -1,
     cursorPos : 0,
     loggerList: [{"name" : "Logger L42"},{"name" : "Logger L01"}],
-    loggerStartTime: "20210428T060900",
-    loggerEndTime : "20210428T060900",
+    loggerStartTime: new Date(),
+    loggerEndTime : new Date(),
     selectedLogger : null
   }),
   computed: {
@@ -60,17 +63,14 @@ export default {
   methods: {
     async loggerAvailable() {
       this.loggerList = [{"name" : "Logger L42"},{"name" : "Logger L05"}];
-      this.loggerList = await this.request(this.root.BASE + "avaiableLogger");
+      this.loggerList = await this.root.request(this.root.BASE + "availableLogger");
+      //this.loggerList = await this.requestPost(this.root.BASE + "availableLogger","{'regex': '"+this.root.regex+"','groupe':'"+this.root.groupe+"'}");
       console.log(this.loggerList)
       let site = await this.root.cfg.variables['audio_base'].split('/')
       site = site[site.length-1]
       this.loggerList = this.loggerList[site] //TODO Edit this to see other location more than the studed site
+      console.log(this.loggerList)
       this.filledCanvasLogger()
-    },
-    request: async function (path) {
-      let res = await fetch(path);
-      let body = await res.json();
-      return body;
     },
     filledCanvasLogger(){
       let canvas = document.getElementById('allCanvas');
@@ -87,21 +87,24 @@ export default {
         return
       }
       this.selectedLogger= loggerSelected
+      console.log(this.selectedLogger)
       let first = true
       let val =null
       try{ val = loggerSelected.audios.length}catch(e){return}
+      console.log(val)
       for (let i = 0; i < val; i++) {
         const audio = loggerSelected.audios[i];
+        /* we take te start time for the fisrt audio recorded */
         if(first){
           this.loggerStartTime = audio.startTime
-          console.log(this.loggerStartTime,typeof(this.loggerStartTime))
+          console.log("**",this.loggerStartTime,typeof(this.loggerStartTime))
           let year=audio.startTime.substring(0, 4)
           let month=audio.startTime.substring(4, 6)
           let day=audio.startTime.substring(6, 8)
           let hours=audio.startTime.substring(9, 11)
           let minutes=audio.startTime.substring(11, 13)
           let seconds=audio.startTime.substring(13, 15)
-          this.loggerStartTime = new Date(year, month, day, hours, minutes, seconds)
+          this.loggerStartTime = new Date(Date.UTC(year, month, day, hours, minutes, seconds))
           console.log(this.loggerStartTime)
           first=false
         }
@@ -130,7 +133,7 @@ export default {
   border-radius: 10px 10px 0px 0px;
 }
 #infoLogger{
-  height: 60px;
+  /*height: 60px;*/
   border-radius: 10px 10px 0px 0px;
 }
 #zoomedCanvas,#allCanvas{

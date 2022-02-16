@@ -82,6 +82,8 @@ export default {
     atBegin:true,
     ImportDataView:false,
     ScanDataView:false,
+    regex:"",
+    groupe:0,
   }),
   provide() {
     return {
@@ -119,6 +121,22 @@ export default {
     async scanDataAndExtract(){
       this.ImportDataView=false
       this.ScanDataView=true
+    },
+    request: async function (path) {
+      let res = await fetch(path);
+      let body = await res.json();
+      return body;
+    },
+    requestPost: async function(path, jsonObject){
+      let res = fetch(path, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(jsonObject),
+                })
+      let body = await res.json();
+      return body;
     },
   },
 };

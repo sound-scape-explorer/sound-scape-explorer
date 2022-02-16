@@ -47,22 +47,26 @@ def main(argv=sys.argv):
                 self.wfile.write("{\"status\":\"ok\"}".encode())
             elif re.match("/availableLogger",self.path):
                 self.validResponse()
-                map = LoggersDictionary()
+                cfg = get_config()
+                suffix = cfg.variables['audio_suffix']
+                regexSpliter = '([a-zA-Z0-9_]+)' #Todo, pass this on path 
+                groupRegexRequired=0
+                map = LoggersDictionary(regexSpliter,groupRegexRequired,suffix)
                 # so we scann the generate 
-                #cfg = get_config()
-                #print(cfg.variables['files'])
                 self.wfile.write(str(map).encode())
 
             elif re.match("/scanData",self.path):
                 site="M"
-                self.validResponse()
-                map = LoggersDictionary()
-                # so we scann the generate 
+                regexSpliter = '([a-zA-Z0-9_]+)'
+                groupRegexRequired=0
                 cfg = get_config()
                 suffix = cfg.variables['audio_suffix']
+                self.validResponse()
+                map = LoggersDictionary(regexSpliter,groupRegexRequired,suffix)
+                # so we scann the generate 
                 listFiles = map.getAllAudiosOfSiteWithPath("M",suffix)
                 utils.edit_config('../sample/config.xlsx',listFiles)
-                self.wfile.write("Scanned".encode())
+                self.wfile.write("{\"result\" : \"Scanned\"}".encode())
 
 
             elif os.path.isfile("."+self.path):

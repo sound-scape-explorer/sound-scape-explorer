@@ -1,5 +1,10 @@
 <template>
   <div>
+    <input type="button" @click="scan" value="Scan Files?">
+    <input type="button" @click="importing" value="Import new Logger/Audio files?">
+    <ScanData v-if="ScanDataView"></ScanData>
+    <ImportData v-if="ImportDataView"></ImportData>
+    <br />
     <label for="sampleRate">Sample rate</label>
     <input name="sampleRate" v-model.number="sampleRate" /><br>
     <label for="maxSampleRate">Max of sample rate (traduce in Hz below)</label>
@@ -13,11 +18,6 @@
     <input disabled :value="Math.round(bandInfo[1])" />
     <br />
     <input type="button" @click="computeBands" value="compute">
-    <br />
-    <input type="button" @click="scan" value="Scan Files?">
-    <input type="button" @click="importing" value="Import new Logger/Audio files?">
-    <ScanData v-if="ScanDataView"></ScanData>
-    <ImportData v-if="ImportDataView"></ImportData>
     <br />
     <label><input type="checkbox" v-model="showTable" />show table of band.s</label>
     <table v-if="showTable" class="band-table">

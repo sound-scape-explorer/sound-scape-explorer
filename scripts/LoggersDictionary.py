@@ -6,11 +6,12 @@ from Logger import Logger
 import json
 import os
 import wave
+import re
 
 from pandas import DataFrame
 
 class LoggersDictionary:
-    def __init__(self):
+    def __init__(self,regexSpliter,groupe,suffix):
         self.map = {}
         #TODO avoid calculation endif we need to recompute audio duration
                 # option : sha1 of the json file 
@@ -26,7 +27,9 @@ class LoggersDictionary:
                     audioFile = wave.open("./audio/"+site+"/"+logger+"/"+audio,"rb")
                     waveParam = audioFile.getparams()
                     timeDuration = waveParam.nframes/waveParam.framerate
-                    startTime = audio.split('_')[0]
+                    audio = audio.replace(suffix,'')#May be consider to replace this by suffix function in 3.9 python interpretor
+                    m = re.match(regexSpliter,audio)
+                    startTime = m.group(0) #audio.split('_')[0]
                     audioFile.close()
                     #print(startTime,timeDuration)
                     self.setNewAudio(site,logger,audio,startTime,timeDuration)
