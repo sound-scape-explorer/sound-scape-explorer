@@ -8,7 +8,13 @@
 
 <body>
 	<!-- from href="https://gist.github.com/andyferra/2554919#file-github-css" -->
-	<iframe src="./.hiddenREADME.html" frameborder="0" width="100%" height="100%"></iframe>
+	<iframe src="./.hiddenREADME.html" frameborder="0" ></iframe>
+	<script>
+		let sizeheight = document.getElementsByTagName('html')[0].clientHeight - 50
+		sizeheight += "px" 
+		console.log(sizeheight)
+		document.getElementsByTagName('iframe')[0].style.height=sizeheight.toString()
+	</script>
 	<!--TODO more later is to include directly from js content by an fetch-->
 </body>
 

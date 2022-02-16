@@ -106,7 +106,7 @@ sudo apt install ffmpeg
 #### Step 1 : Install required python libraries
 
 ```
-pip install numpy==1.20
+pip install numpy
 pip install matplotlib
 pip install seaborn
 pip install torchaudio
@@ -187,9 +187,11 @@ To import your audio sources, you must to drop it into [rootProject]/sample/audi
             * Audio File name 1
             * Audio File name 2
 * Audio File must be folow the name rules (repalce '[' and ']' by the required information ):
-    * [Time in UTC format]_[Logger ID].wav
+    * [Time in UTC format]_[Other info].wav
     
     in example : 20210629T050900_2614231121130510
+    
+    other example : `20210423_105000` this should be rename by `20210423T105000`. To do thay use ScanData
 
 **YOU MUST TO CHANGE YOUR CONFIG.XLSX** 
 

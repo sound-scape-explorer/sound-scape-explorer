@@ -122,7 +122,7 @@ pip install openpyxl
 
 <h4>Step 2 : go to your downloaded root project</h4>
 
-<h4>Setp 3 : run this command</h4>
+<h4>Setp 3 :  Go to [rootProject]/ and run this command</h4>
 
 <p>```</p>
 
@@ -143,6 +143,7 @@ pip install openpyxl
 
 <p>ln -s ../sample/features/
 ln -s ../sample/generated/
+ln -s ../sample/audio/
 ```</p>
 
 <p>[Hightly recommended] To activate sse command (either in your <code>.bashrc</code>, or once in each terminal that needs it)</p>
@@ -171,14 +172,26 @@ eval "$(<em>SSE</em>COMPLETE=bash_source sse)"</p>
 
 <p>Example of this app</p>
 
-<p><code>
-curl http://149.91.90.152:8000/examples.tar &gt; ../sample/audio/examples.tar
-cd ../sample/audio/
-tar -xvf examples.tar
-rm examples.tar
-cd ../../sse-v1/
-curl http://149.91.90.152:8000/config.xlsx &gt; ../sample/config.xlsx
-</code></p>
+<p>```</p>
+
+<h6>This command will downlad an tar archive from my personal example</h6>
+
+<p>curl http://149.91.90.152:8000/examples.tar > ../sample/audio/examples.tar
+cd ../sample/audio/</p>
+
+<h6>This command will extract the tar file</h6>
+
+<p>tar -xvf examples.tar</p>
+
+<h6>and this remove the archive that have been untar</h6>
+
+<p>rm examples.tar
+cd ../../sse-v1/</p>
+
+<h6>This command will download my personal configuration about this example</h6>
+
+<p>curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx 
+```</p>
 
 <p>To import your audio sources, you must to drop it into [rootProject]/sample/audio/ and respect some rules : </p>
 
@@ -206,9 +219,68 @@ curl http://149.91.90.152:8000/config.xlsx &gt; ../sample/config.xlsx
 </ul>
 
 <p><p>in example : 20210629T050900_2614231121130510</p></li>
-</ul></p>
+</ul>
+<strong>YOU MUST TO CHANGE YOUR CONFIG.XLSX</strong> </p>
 
-<h4>Step 6 : Extract</h4>
+<h4>Setp 5(part2) : Change config.xlsx(if you choose "Use your audio sources")</h4>
+
+<h5>Column A &amp; B</h5>
+
+<ul>
+<li>variable:do not touch</li>
+<li>audio base : locate the audio folder specific to the site studied</li>
+<li>audio base cluster : path to the calculation daemon</li>
+<li>audio<em>expected</em>sample_rate : add in hertz the max frequencies</li>
+<li>feature base, generated base, other base : do not touch </li>
+<li>preview file : give the path from audio base path to the given file</li>
+<li>preview file start : start for the preview</li>
+<li>preview file dur : duration of the preview</li>
+<li>integration seconds : corresponds to the available integration for the umap computation. Values, in second, are separated by a short hyphen '-'</li>
+<li>display locate : defines the time zone for the audio base site</li>
+<li>nearest radiuses : define the covering of umap points in percent.</li>
+</ul>
+
+<h5>Column D &amp; E</h5>
+
+<p>From D3 this column is free name. Column E defines verticise.The first number defines segmentation of frequencies by step of 64. The second number defines the lowest frequencies start. These numbers are separated by a short hyphen '-'.</p>
+
+<p>For example if you want all frequencies you segmentate the frequencies by 64 that corresponds for all frequencies and you take the lowest frequency : 0.</p>
+
+<p>Another example if you want segmentate frequencies by 3 you multiply 64 by 3 that corresponds to 192 and you want the two first parts (0 to 64 and 64 to 128) you need to put in cells : </p>
+
+<ul>
+<li>192-0</li>
+<li>192-64</li>
+</ul>
+
+<h5>Column G to K</h5>
+
+<ul>
+<li>Column G at line 3 is free name</li>
+<li>Column H corresponds to second integration. You must already have this value on integration second cell in column B</li>
+<li>Column I defines for the umap view needed bands. You must define these bands from D column</li>
+<li>Column J defines the needed umap range. You must define this range on Q column </li>
+<li>Column K defines the needed site to compare</li>
+</ul>
+
+<h5>Column M,N &amp; O (not Used yet)</h5>
+
+<h5>Column Q &amp; R</h5>
+
+<ul>
+<li>Column Q is free name</li>
+<li>Column R defines range to analyze by the umap computation. They contain two date and time values. Time values need to respect a specific format : YYYYmmDD_HHMMSS in UTC time. These time values need to be separated by a short hyphen '-'</li>
+</ul>
+
+<h5>Column T to W</h5>
+
+<ul>
+<li>Column T audio file path without suffix from the audio base cells defined in B3. For example it can be "PM10<em>P1</em>2021/20210722<em>094000" for the logger PM10</em>P1<em>2021 and audio name 20210722</em>094000</li>
+<li>Column U corresponds to the site studied, by default it will be the logger name</li>
+<li>Column V defines the time of file starts. Time values need to respect a specific format : YYYYmmDD_HHMMSS in UTC time.</li>
+<li>Column W defines tags for the files 
+<h4>Step 6 : Extract</h4></li>
+</ul>
 
 <p>```</p>
 
@@ -273,12 +345,16 @@ cd [rootProject]/sse-v1/</p>
 
 <p>```</p>
 
-<h1>in case of error during launch of the nodeJS server</h1>
+<h6>in case of error during launch of the nodeJS server</h6>
+
+<h6>Control + Delete</h6>
 
 <p>npm remove chart.js
 npm install chart.js</p>
 
-<h1>run the nodeJS server at same path (default port is 8080)</h1>
+<h6>and do not forget to relaunch the nodeJS server by the command below</h6>
+
+<h6># run the nodeJS server at same path (default port is 8080)</h6>
 
 <p>npm run serve </p>
 
@@ -288,7 +364,7 @@ npm install chart.js</p>
 
 <p>Open a new tab terminal or new window terminal let's open the oldest tab/window terminal</p>
 
-<p>From [rootProject]/sse-v1/ path</p>
+<p>From <code>[rootProject]/sse-v1/</code> path</p>
 
 <p><code>
 sse compute umap 
@@ -557,7 +633,7 @@ ffmpeg  -i ../log2/20210429<em>180000.WAV -ss 1600 -t 60 -c copy chunk-20210429<
 <h3>Extracting features and previews</h3>
 
 <p>```
-sse extract all
+sse extract all -f
 sse extract preview</p>
 
 <p>sse show band-freqs

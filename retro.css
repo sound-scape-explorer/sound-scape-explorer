@@ -10,6 +10,17 @@ iframe pre {
 	overflow-x: scroll;
 }
 
+iframe{
+	width: 100%;
+	height: 100%;
+}
+
+body{
+	width: 100%;
+	height: 80%;
+}
+
+
 @media print {
 	*, *:before, *:after {
 		background: transparent !important;
