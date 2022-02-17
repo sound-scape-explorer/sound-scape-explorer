@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # Usage: python cors_http_server.py <port>
+from distutils.log import error
 import sys
 import os
 import re
@@ -55,19 +56,11 @@ def main(argv=sys.argv):
                 # so we scann the generate 
                 self.wfile.write(str(map).encode())
 
-            #"""Deprecated"""
-            elif re.match("/scanData",self.path):
-                site="M"
-                regexSpliter = '([a-zA-Z0-9_]+)'
-                groupRegexRequired=0
-                cfg = get_config()
-                suffix = cfg.variables['audio_suffix']
+            elif re.match("/availableSite",self.path):
                 self.validResponse()
-                map = LoggersDictionary(regexSpliter,groupRegexRequired,suffix)
+                map = LoggersDictionary.getAllSite()
                 # so we scann the generate 
-                listFiles = map.getAllAudiosOfSiteWithPath("M",suffix)
-                utils.edit_config('../sample/config.xlsx',listFiles)
-                self.wfile.write("{\"result\" : \"Scanned\"}".encode())
+                self.wfile.write(str(map).encode())
 
 
             elif os.path.isfile("."+self.path):
@@ -77,23 +70,29 @@ def main(argv=sys.argv):
                 f.close()
         def do_POST(self):
             if re.match("/scanData",self.path):
+                cfg = get_config()#TODO REMOVE THISThat here we have an problem
                 self.data_string = self.rfile.read(int(self.headers['Content-Length']))
                 data = json.loads(json.loads(self.data_string))# needed to dict(..)
-                site="M"
+                siteName:list = cfg.variables['audio_base'].split('/')
+                siteName:str = siteName[len(siteName)-1]
                 regexSpliter = data['regex']
                 groupRegexRequired = data['groupe']
-                cfg = get_config()
-                suffix = cfg.variables['audio_suffix']
+                suffix = cfg.variables['audio_suffix']#TODO EDIT THIS WITHOUT THIS CONFIG FILE
                 self.validResponse()
                 map=None
                 try:
-                    map = LoggersDictionary(regexSpliter,groupRegexRequired,suffix)
-                except:
-                    self.wfile.write("{\"result\" : \"Error\"}".encode())
+                    map = LoggersDictionary(siteName,regexSpliter,groupRegexRequired,suffix)
+                except  Exception as error:
+                    print(error)
+                    self.wfile.write(("{\"result\" : \"Error\",'error': "+str(error)+"}").encode())
                     return    
+
+                print(len(map))
                 # so we scann the generate 
-                listFiles = map.getAllAudiosOfSiteWithPath("M",suffix)
-                utils.edit_config('../sample/config.xlsx',listFiles)
+                listFiles = map.getAllAudiosOfSiteWithPath(siteName,suffix)
+                utils.edit_file_config('../sample/config.xlsx',listFiles)
+                print("sse show config --json > generated/ghost-config.json")
+                os.system("sse show config --json > generated/ghost-config.json")
                 self.wfile.write("{\"result\" : \"Scanned\"}".encode())
         
 

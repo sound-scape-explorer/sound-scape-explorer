@@ -1,5 +1,5 @@
 from mimetypes import init
-from typing import List
+from typing import Dict, List
 
 from Logger import Logger
 
@@ -11,15 +11,16 @@ import re
 from pandas import DataFrame
 
 class LoggersDictionary:
-    def __init__(self,regexSpliter,groupe,suffix):
+    def __init__(self,selectedSite,regexSpliter,groupe,suffix):
         self.map = {}
         #TODO avoid calculation endif we need to recompute audio duration
                 # option : sha1 of the json file 
                 # option 2 : store and compare added or removed files
-        for root, directories, files in os.walk("./audio"):  
+        for root, directories, files in os.walk("./audio/"+selectedSite+"/"): 
             for file in files:      
                 parts = os.path.relpath(os.path.join(root, file)).split('/')
-                if len(parts) > 3 :
+                if len(parts) > 3:
+                    print(parts[1],selectedSite)
                     site = parts[1]
                     logger = parts[2]
                     audio = parts[3]
@@ -65,6 +66,9 @@ class LoggersDictionary:
         #to Change tomorow
         site = self.__getSite(siteName) if self.__getSite(siteName) != None else self.__setNewSite(siteName)
         Logger.addAudio(site,logger,audio,startTime,timeDuration)
+        pass
+
+    def getAllSite() -> Dict:
         pass
 
     def toDataFrameforConfig()->DataFrame:

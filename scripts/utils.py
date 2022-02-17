@@ -36,7 +36,7 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
                     'L-': lambda v: v.split('-'),
                     'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M%S') for vv in v.split('-')],
                     }[t])
-            except:
+            except Exception as e:
                 types.append({
                     'I': int,
                     'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
@@ -87,7 +87,7 @@ def parse_config(xlsx='../sample/config.xlsx', sheet=0):
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
 
-def edit_config(xlsxPath,listFiles:List[str]):
+def edit_file_config(xlsxPath,listFiles:List[str]):
     df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
     _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
     listFiles=specific_edit_config(listFiles)

@@ -48,7 +48,7 @@
         <n-button-group>
           <label
             >Showing {{ duration }} seconds, starting at
-            {{ dateThere(new Date(1000 * start)) }}</label
+            {{ dateThere(new Date(1000 * start + timezone)) }} {{dateThere(new Date())}}</label
           >
         </n-button-group>
       </div>
@@ -160,7 +160,7 @@ export default {
     const addAllGrey = ref(true);
     const showAll = ref(true);
     const duration = ref(3600); // sec
-    const start = ref(parseInt(Date.now()/1000));// patch for incorect date, todo put the first date 
+    const start = ref(parseInt(Date.now()/1000));// do not patch here the date by timezone, directly on display 
 
     const setDuration = (sec) => {
       showAll.value = false;
@@ -201,13 +201,13 @@ export default {
       return root.cfg.umaps[currentUmap.value][UMAP_RANGES].map((kr) => ({
         key: kr,
         startStop: root.cfg.ranges[kr].map((d) =>{
-          console.log(parseInt(new Date(d).getTime() / 1000 /*+ 43200*/), d)
-          return parseInt(new Date(d).getTime() / 1000 /*Fix problem with PM/AM*//*+43200*/) 
+          console.log(parseInt(new Date(d).getTime() / 1000 ), d)
+          return parseInt(new Date(d).getTime() / 1000 ) 
         }),
         marks: {
-          [parseInt(new Date(root.cfg.ranges[kr][0]).getTime() / 1000 /*+43200*/)]: "⟦ ",
+          [parseInt(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦ ",
           [parseInt(
-            new Date(root.cfg.ranges[kr][0]).getTime() / 1000 /*+43200*/+
+            new Date(root.cfg.ranges[kr][0]).getTime() / 1000 +
               startStep.value *
                 parseInt(
                   (new Date(root.cfg.ranges[kr][1]).getTime() -
@@ -217,7 +217,7 @@ export default {
                     2
                 )
           )]: kr,
-          [parseInt(new Date(root.cfg.ranges[kr][1]).getTime() / 1000/*+43200*/)]: "⟧",
+          [parseInt(new Date(root.cfg.ranges[kr][1]).getTime() / 1000)]: "⟧",
         },
       }));
     });

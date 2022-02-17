@@ -62,7 +62,6 @@ export default {
   },
   methods: {
     async loggerAvailable() {
-      this.loggerList = [{"name" : "Logger L42"},{"name" : "Logger L05"}];
       this.loggerList = await this.root.request(this.root.BASE + "availableLogger");
       //this.loggerList = await this.requestPost(this.root.BASE + "availableLogger","{'regex': '"+this.root.regex+"','groupe':'"+this.root.groupe+"'}");
       console.log(this.loggerList)
