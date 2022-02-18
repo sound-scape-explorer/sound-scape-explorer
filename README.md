@@ -189,9 +189,9 @@ To import your audio sources, you must to drop it into [rootProject]/sample/audi
 * Audio File must be folow the name rules (repalce '[' and ']' by the required information ):
     * [Time in UTC format]_[Other info].wav
     
-    in example : 20210629T050900_2614231121130510
+    in example : 20210629T050900_2614231121130510 . To do that use miniTool -> click "Scan Files ?" button
     
-    other example : `20210423_105000` this should be rename by `20210423T105000`. To do thay use ScanData
+    other example : `20210423_105000` this is correct and equivalent to `20210423T105000`. 
 
 **YOU MUST TO CHANGE YOUR CONFIG.XLSX** 
 
