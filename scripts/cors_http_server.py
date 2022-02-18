@@ -52,7 +52,9 @@ def main(argv=sys.argv):
                 suffix = cfg.variables['audio_suffix']
                 regexSpliter = '([a-zA-Z0-9_]+)' #Todo, pass this on path 
                 groupRegexRequired=0
-                map = LoggersDictionary(regexSpliter,groupRegexRequired,suffix)
+                siteName =cfg.variables['audio_base'].split('/')
+                siteName = siteName[len(siteName)-1]
+                map = map = LoggersDictionary(siteName,regexSpliter,groupRegexRequired,suffix)
                 # so we scann the generate 
                 self.wfile.write(str(map).encode())
 

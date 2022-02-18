@@ -48,7 +48,7 @@
         <n-button-group>
           <label
             >Showing {{ duration }} seconds, starting at
-            {{ dateThere(new Date(1000 * start + timezone)) }} {{dateThere(new Date())}}</label
+            {{ dateThere(new Date(1000 * start )) }} {{dateThere(new Date())}}</label
           >
         </n-button-group>
       </div>
