@@ -10,10 +10,14 @@
 	<!-- from href="https://gist.github.com/andyferra/2554919#file-github-css" -->
 	<iframe src="./.hiddenREADME.html" frameborder="0" ></iframe>
 	<script>
-		let sizeheight = document.getElementsByTagName('html')[0].clientHeight - 50
-		sizeheight += "px" 
-		console.log(sizeheight)
-		document.getElementsByTagName('iframe')[0].style.height=sizeheight.toString()
+		let size = document.getElementsByTagName('html')[0].clientHeight - 50
+		size += "px" 
+		console.log(size)
+		document.getElementsByTagName('iframe')[0].style.height=size.toString()
+		size = document.getElementsByTagName('html')[0].clientWidth - 50
+		size += "px" 
+		console.log(size)
+		document.getElementsByTagName('iframe')[0].style.width=size.toString()
 	</script>
 	<!--TODO more later is to include directly from js content by an fetch-->
 </body>

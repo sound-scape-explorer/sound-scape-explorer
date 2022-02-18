@@ -139,7 +139,7 @@ iframe img,iframe  canvas,iframe  iframe,iframe  video,iframe  svg,iframe  selec
 	max-width: 100%;
 }
 
-html, body {
+html, body > iframe {
 	background-color: rgb(121, 121, 121);
 	min-height: 100%;
 }
