@@ -10,6 +10,7 @@ class Logger:
         self.name=string
         self.audios=[]
         self.audios.append(Audio(audio,startTime,timeDuration))
+        self.files_site="" #TODO an other constructor for this to replace the default aLogger.name in Column U (config.xlsx)
 
     def __str__(self) -> str:
         return json.dumps(self,indent=2)

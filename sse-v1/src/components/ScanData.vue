@@ -7,10 +7,15 @@
         <div v-if="beforeScan">
           <div id="part1">
             <h3>Part 1 : tell us the audio base (site to study)</h3>
-            <input type="button" value="refresh"> 
-            <select id="selectedLogger">
-              <option v-for="(site, k) in siteList" :key="k" @click="filledCanvasLogger">{{site.name}}</option>
+            <input type="button" value="refresh" @click="this.siteAvailable"> 
+            <br />
+            <label for="selectedSite">Site to choose : </label>
+            <select id="selectedSite" name="selectedSite">
+              <option v-for="(site, k) in siteList" :key="k" @click="step2">{{site}}</option>
             </select>
+            <br/>
+            <label for="audio_suffix">Audio file suffix : </label>
+            <input type="text" name="audio_suffix" placeholder="i.e _2.0.wav" v-model="audio_suffix">
           </div>
           <div>
             <h3>Part 2 : tell us the format of start file</h3>
@@ -36,33 +41,37 @@ export default {
   data: () => ({
     beforeScan : true,
     audio_base : "",
-    siteList: [{"name" : "BoraBora"},{"name" : "Coridor"}],
+    audio_suffix : "",
+    siteList: ["BoraBora","Coridor"],
   }),
   computed: {
     
   },
   mounted() {
-    // this.siteAvailable();
+    this.siteAvailable();
   },
   methods: {
     async siteAvailable() {
       this.siteList = await this.root.request(this.root.BASE + "availableSite");
-      //this.siteList = await this.requestPost(this.root.BASE + "availableLogger","{'regex': '"+this.root.regex+"','groupe':'"+this.root.groupe+"'}");
       console.log(this.siteList)
-      let site = await this.root.cfg.variables['audio_base'].split('/')
-      site = site[site.length-1]
-      this.siteList = this.siteList[site] //TODO Edit this to see other location more than the studed site
-      console.log(this.siteList)
-      this.filledCanvasLogger()
     },
     async scanData(){
+      let el = document.getElementById('selectedSite')
+      this.audio_base = this.siteList[el.selectedIndex]
       let path = this.root.BASE + "scanData"
-      let str = {'regex' : this.root.regex,'groupe': this.root.groupe}
+      let str = {'regex' : this.root.regex,
+                'groupe': this.root.groupe,
+                'audio_suffix': this.audio_suffix,
+                'audio_base': this.audio_base,
+                }
       let jsoned = JSON.stringify(str)
       let body = await this.root.requestPost(path,jsoned)
       console.log(body)
       return body
-    }
+    },
+    step2(){
+
+    },
   },
 };
 </script>

@@ -20,7 +20,6 @@ class LoggersDictionary:
             for file in files:      
                 parts = os.path.relpath(os.path.join(root, file)).split('/')
                 if len(parts) > 3:
-                    print(parts[1],selectedSite)
                     site = parts[1]
                     logger = parts[2]
                     audio = parts[3]
@@ -31,6 +30,7 @@ class LoggersDictionary:
                     audio = audio.replace(suffix,'')#May be consider to replace this by suffix function in 3.9 python interpretor
                     m = re.match(regexSpliter,audio)
                     startTime = m.group(groupe) #audio.split('_')[0]
+                    startTime = startTime.replace('T','_')# a "little bit" hard coded
                     audioFile.close()
                     #print(startTime,timeDuration)
                     self.setNewAudio(site,logger,audio,startTime,timeDuration)
@@ -44,9 +44,12 @@ class LoggersDictionary:
     def getAllAudiosOfSiteWithPath(self,siteName:str,suffix:str) -> List :
         array = []
         for aLogger in self.__getSite(siteName):
-            #print(aLogger.name)
+            print(aLogger.name)
             for audio in aLogger.audios:
-                array.append(aLogger.name+"/"+audio.fileName.split(suffix)[0])#audio.fileName.removesuffix(suffix)) available in 3.9 #TODO configure for Windows path too
+                array.append(
+                    [aLogger.name+"/"+audio.fileName.split(suffix)[0],
+                    aLogger.name,
+                    audio.startTime])#audio.fileName.removesuffix(suffix)) available in 3.9 #TODO configure for Windows path too
         return array
 
     def getAllLoggersOfSite(self,siteName:str) -> List:
@@ -68,8 +71,11 @@ class LoggersDictionary:
         Logger.addAudio(site,logger,audio,startTime,timeDuration)
         pass
 
-    def getAllSite() -> Dict:
-        pass
+    def getAllSite() -> List:
+        for root, directories, files in os.walk("./audio/"):
+            return directories
+        
+        
 
     def toDataFrameforConfig()->DataFrame:
         pass

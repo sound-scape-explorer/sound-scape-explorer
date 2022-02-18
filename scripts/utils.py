@@ -87,16 +87,61 @@ def parse_config(xlsx='../sample/config.xlsx', sheet=0):
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
 
-def edit_file_config(xlsxPath,listFiles:List[str]):
+def edit_file_config(xlsxPath,listFiles:List):
     df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
     _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
-    listFiles=specific_edit_config(listFiles)
+    #listFiles=specific_edit_config_file(listFiles)
     df2 = pd.DataFrame(data=listFiles[:])
-    df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=19, header=None, index=False)#change to 19
+    df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=19, header=None, index=False)
     _xfile.save()
     _xfile.close()
     
-def specific_edit_config(listFiles:List[str]):
+
+def edit_variable_config(xlsxPath,data:dict):
+    df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
+    _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
+    audio_base:str = "../sample/audio/" + data['audio_base']
+    audio_base_cluster = "/NOT-IMPLEMENT-yet"
+    audio_expected_sample_rate = 44100
+    audio_suffix = data['audio_suffix']
+    feature_base = "./features"
+    generated_base = "./generated/"
+    other_base = "./other/"
+    preview_file = "28AVRIL_site_touristique/20210428T080900_2614231121130510"
+    preview_file_start = 0
+    preview_file_dur = 20
+    integration_seconds = "60-10"
+    display_locale = "Pacific/Tahiti"
+    nearest_radiuses = "025-050-075-100-125-150"
+
+    listVars = [audio_base,
+                audio_base_cluster,
+                audio_expected_sample_rate,
+                audio_suffix,
+                None,
+                None,
+                feature_base,
+                generated_base,
+                other_base,
+                None,
+                preview_file,
+                preview_file_start,
+                preview_file_dur,
+                None,
+                None,            
+                integration_seconds,
+                display_locale,
+                None,
+                nearest_radiuses
+                ]
+    df2 = pd.DataFrame(data=listVars[:])
+    df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=1, header=None, index=False)
+    _xfile.save()
+    _xfile.close()  
+
+
+#"""Deprecated"""
+def specific_edit_config_file(listFiles:List[str]):
     #specific edit for column U,V,W
     newlist=[]
     for el in listFiles:

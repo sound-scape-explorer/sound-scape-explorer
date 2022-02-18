@@ -58,9 +58,9 @@ def main(argv=sys.argv):
 
             elif re.match("/availableSite",self.path):
                 self.validResponse()
-                map = LoggersDictionary.getAllSite()
+                siteList = LoggersDictionary.getAllSite()
                 # so we scann the generate 
-                self.wfile.write(str(map).encode())
+                self.wfile.write(json.dumps(siteList).encode())
 
 
             elif os.path.isfile("."+self.path):
@@ -70,27 +70,24 @@ def main(argv=sys.argv):
                 f.close()
         def do_POST(self):
             if re.match("/scanData",self.path):
-                cfg = get_config()#TODO REMOVE THISThat here we have an problem
                 self.data_string = self.rfile.read(int(self.headers['Content-Length']))
                 data = json.loads(json.loads(self.data_string))# needed to dict(..)
-                siteName:list = cfg.variables['audio_base'].split('/')
-                siteName:str = siteName[len(siteName)-1]
-                regexSpliter = data['regex']
-                groupRegexRequired = data['groupe']
-                suffix = cfg.variables['audio_suffix']#TODO EDIT THIS WITHOUT THIS CONFIG FILE
+                siteName:str = data['audio_base']
+                regexSpliter:str = data['regex']
+                groupRegexRequired:str = data['groupe']
+                suffix = data['audio_suffix']
                 self.validResponse()
                 map=None
                 try:
                     map = LoggersDictionary(siteName,regexSpliter,groupRegexRequired,suffix)
                 except  Exception as error:
-                    print(error)
                     self.wfile.write(("{\"result\" : \"Error\",'error': "+str(error)+"}").encode())
-                    return    
-
-                print(len(map))
+                    return
                 # so we scann the generate 
                 listFiles = map.getAllAudiosOfSiteWithPath(siteName,suffix)
+                utils.edit_variable_config('../sample/config.xlsx',data)
                 utils.edit_file_config('../sample/config.xlsx',listFiles)
+                #TODO Apply variable_ modification
                 print("sse show config --json > generated/ghost-config.json")
                 os.system("sse show config --json > generated/ghost-config.json")
                 self.wfile.write("{\"result\" : \"Scanned\"}".encode())
