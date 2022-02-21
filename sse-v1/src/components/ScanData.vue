@@ -16,6 +16,11 @@
             <br/>
             <label for="audio_suffix">Audio file suffix : </label>
             <input type="text" name="audio_suffix" placeholder="i.e _2.0.wav" v-model="audio_suffix">
+            <br/>
+            <label for="selectedTimeZone">TimeZone : </label>
+            <select id="selectedSite" name="selectedTimeZone">
+              <option v-for="(site, k) in timeZoneAvailable" :key="k" @click="step2">{{site}}</option>
+            </select>
           </div>
           <div>
             <h3>Part 2 : tell us the format of start file</h3>
@@ -34,7 +39,7 @@
 <script>
 import { NTable, NForm, NSelect } from "naive-ui";
 const NComponents = { NTable, NForm, NSelect };
-
+import { getTimeZoneList } from "../timezone.js"
 export default {
   inject: ["root"],
   components: { ...NComponents },
@@ -43,6 +48,7 @@ export default {
     audio_base : "",
     audio_suffix : "",
     siteList: ["BoraBora","Coridor"],
+    timeZoneAvailable : getTimeZoneList()
   }),
   computed: {
     

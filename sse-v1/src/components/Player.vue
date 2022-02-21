@@ -3,19 +3,19 @@
     <div id="headPlayer">
       <span class="iconify" data-icon="carbon:play-filled-alt" style="color: #599;"></span>
       <select id="selectedLogger">
-        <option v-for="(logger, k) in loggerList" :key="k" @click="filledCanvasLogger">{{logger.name}}</option>
+        <option v-for="(logger, k) in loggerList" :key="k" @click="filledPlayerPist">{{logger.name}}</option>
       </select>
       <span class="iconify" data-icon="carbon:settings"></span>
     </div>
     <div id="infoLogger">
-      <div>{{loggerStartTime.getUTCDate()}} {{loggerStartTime.getUTCMonth()}} {{loggerStartTime.getUTCFullYear()}} {{loggerStartTime.getUTCHours()}} {{loggerStartTime.getUTCMinutes()}}</div>
-      <div>{{loggerEndTime}}</div>
+      <div>{{('0'+loggerStartTime.getUTCDate()).slice(-2)}}/{{('0'+loggerStartTime.getUTCMonth()).slice(-2)}}/{{loggerStartTime.getUTCFullYear()}} {{('0'+loggerStartTime.getUTCHours()).slice(-2)}}:{{('0'+loggerStartTime.getUTCMinutes()).slice(-2)}}</div>
+      <div>{{('0'+loggerEndTime.getUTCDate()).slice(-2)}}/{{('0'+loggerEndTime.getUTCMonth()).slice(-2)}}/{{loggerEndTime.getUTCFullYear()}} {{('0'+loggerEndTime.getUTCHours()).slice(-2)}}:{{('0'+loggerEndTime.getUTCMinutes()).slice(-2)}}</div>
     </div>
     <div id="globalPist">
-      <canvas id="allCanvas"></canvas>
+      <div id="allCanvas"></div>
     </div>
     <div id="zoomedPist">
-      <canvas id="zoomedCanvas"></canvas>      
+      <div id="zoomedCanvas"></div>      
     </div>
   </div>
 </template>
@@ -58,7 +58,7 @@ export default {
     //this.configureAudioChain();
 
     this.loggerAvailable()//[{"name" : "Logger L42"},{"name" : "Logger L05"}];
-    this.filledCanvasLogger()
+    //this.filledPlayerPist()
   },
   methods: {
     async loggerAvailable() {
@@ -69,61 +69,66 @@ export default {
       site = site[site.length-1]
       this.loggerList = this.loggerList[site] //TODO Edit this to see other location more than the studed site
       console.log(this.loggerList)
-      this.filledCanvasLogger()
+      this.filledPlayerPist()
     },
-    filledCanvasLogger(){
-      let canvas = document.getElementById('allCanvas');
-      let ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0,ctx.canvas.width, ctx.canvas.height)
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0,ctx.canvas.width, ctx.canvas.height);
+    filledPlayerPist(){
       // we need to know who is the selected logger
       // find in loggerList the seleected element
-      let loggerSelected = this.loggerList.find(this.selectedLoggerInput)
+      let loggerSelected = this.loggerList.find(aLogger => aLogger.name===this.selectedLoggerInput())
+      console.log("Selected logger : ")
+      console.log(loggerSelected,this.loggerList)
       if(loggerSelected==undefined){ // to avoid time to load
         console.log("valeur de ",this.selectedLoggerInput())
-        setTimeout(this.filledCanvasLogger,500)
+        setTimeout(this.filledPlayerPist,500)
         return
-      }
-      this.selectedLogger= loggerSelected
-      console.log(this.selectedLogger)
-      let first = true
-      let val =null
-      try{ val = loggerSelected.audios.length}catch(e){return}
-      console.log(val)
-      for (let i = 0; i < val; i++) {
-        const audio = loggerSelected.audios[i];
-        /* we take te start time for the fisrt audio recorded */
-        if(first){
-          this.loggerStartTime = audio.startTime
-          console.log("**",this.loggerStartTime,typeof(this.loggerStartTime))
-          let year=audio.startTime.substring(0, 4)
-          let month=audio.startTime.substring(4, 6)
-          let day=audio.startTime.substring(6, 8)
-          let hours=audio.startTime.substring(9, 11)
-          let minutes=audio.startTime.substring(11, 13)
-          let seconds=audio.startTime.substring(13, 15)
-          this.loggerStartTime = new Date(Date.UTC(year, month, day, hours, minutes, seconds))
-          console.log(this.loggerStartTime)
-          first=false
+      }else{
+        this.selectedLogger= loggerSelected
+        let first = true
+        let val =null
+        try{ val = loggerSelected.audios.length}catch(e){return}
+        console.log(val)
+        /*We assume that list is ordonated */
+        for (let i = 0; i < val; i++) {
+          const audio = loggerSelected.audios[i];
+          /* we take te start time for the fisrt audio recorded */
+          if(first){
+            this.loggerStartTime = audio.startTime
+            let year=audio.startTime.substring(0, 4)
+            let month=audio.startTime.substring(4, 6)
+            let day=audio.startTime.substring(6, 8)
+            let hours=audio.startTime.substring(9, 11)
+            let minutes=audio.startTime.substring(11, 13)
+            let seconds=audio.startTime.substring(13, 15)
+            this.loggerStartTime = new Date(Date.UTC(year, month, day, hours, minutes, seconds))
+            first=false
+          }
+          if (!(i+1 < val)){
+            /*last time */
+            /*TODO Add duration */
+            this.loggerEndTime = audio.startTime
+            let year=audio.startTime.substring(0, 4)
+            let month=audio.startTime.substring(4, 6)
+            let day=audio.startTime.substring(6, 8)
+            let hours=audio.startTime.substring(9, 11)
+            let minutes=audio.startTime.substring(11, 13)
+            let seconds=audio.startTime.substring(13, 15)
+            this.loggerEndTime = new Date(Date.UTC(year, month, day, hours, minutes, seconds))
+          }
         }
-        
       }
-      canvas = document.getElementById('zoomedCanvas');
-      ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0,ctx.canvas.width, ctx.canvas.height);
     },
     selectedLoggerInput() {
       let selectedLoggerInput = document.getElementById('selectedLogger')
-      return selectedLoggerInput.options[selectedLoggerInput.options.selectedIndex].text
+      let str = selectedLoggerInput.options[selectedLoggerInput.options.selectedIndex].text
+      console.log("Selected Logger by function : ",str,selectedLoggerInput.selectedIndex)
+      return str
     },
   },
 };
 </script>
 
-<style>
-#player div{
+<style scoped>
+#player>div{
   background-color: green;
 }
 #headPlayer{
@@ -141,6 +146,7 @@ export default {
   height: 75px;
   margin: auto;
   display: block;
+  background-color: white;
 }
 
 #zoomedCanvas{
