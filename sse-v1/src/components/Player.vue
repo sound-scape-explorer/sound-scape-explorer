@@ -12,12 +12,18 @@
       <div>{{('0'+loggerEndTime.getUTCDate()).slice(-2)}}/{{('0'+loggerEndTime.getUTCMonth()).slice(-2)}}/{{loggerEndTime.getUTCFullYear()}} {{('0'+loggerEndTime.getUTCHours()).slice(-2)}}:{{('0'+loggerEndTime.getUTCMinutes()).slice(-2)}}</div>
     </div>
     <div id="globalPist">
-      <div id="allCanvas"></div>
+      <div id="allCanvas">
+        <div v-if="selectedLogger">
+          <div v-for="audio in selectedLogger.audios" :key="audio">
+            <LoggerPlayer :audio="{audio}" :loggerSizeInScreen="{loggerSizeInScreen}" :loggerSizeInTime="{loggerSizeInTime}"></LoggerPlayer>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="zoomedPist">
       <div id="zoomedCanvas"></div>
     </div>
-    <div>{{loggerSizeinScreen+" "+loggerSizeinTime}}</div>
+    <div>{{loggerSizeInScreen+" "+loggerSizeInTime}}</div>
   </div>
 </template>
 
@@ -31,9 +37,12 @@ import GainWorklet from "../worklet/GainWorklet";
         console.log('Worklet Message:', event.data.msg)
       }
       */
+import LoggerPlayer from "./LoggerPlayer.vue";
+const OComponents = { LoggerPlayer };
 
 export default {
   inject: ["root"],
+  components: { ...OComponents },
   data: () => ({
     changePitch: false, /*permit to listen to ultrasound*/
     showHz: -1,
@@ -42,8 +51,8 @@ export default {
     loggerStartTime: new Date(),
     loggerEndTime : new Date(),
     selectedLogger : null,
-    loggerSizeinScreen : "0px",
-    loggerSizeinTime : 0 ,/*in seconds */
+    loggerSizeInScreen : "0px",
+    loggerSizeInTime : 0 ,/*in seconds */
   }),
   computed: {
     
@@ -117,14 +126,14 @@ export default {
         /* we want to know the equivalence to size-screen and Time of all audios logger */
         this.clientWithPlayer()
         /*now we want to know duration time bewteen start and end time in seconds */
-        this.loggerSizeinTime = Math.round((this.loggerEndTime-this.loggerStartTime)/1000)
+        this.loggerSizeInTime = Math.round((this.loggerEndTime-this.loggerStartTime)/1000)
         
       }
     },
     clientWithPlayer(){
       try{
-        this.loggerSizeinScreen = document.getElementById("allCanvas").clientWidth
-        return this.loggerSizeinScreen
+        this.loggerSizeInScreen = document.getElementById("allCanvas").clientWidth
+        return this.loggerSizeInScreen
       }catch(e){
         setTimeout(this.clientWithPlayer,500)
         return "0px"

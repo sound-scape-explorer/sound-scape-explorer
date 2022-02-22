@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <div>{{loggerSizeinScreen+" "+loggerSizeinTime}}</div>
+  <div :style="css">
+    {{audio}}
+    {{loggerSizeInScreen}}
+    {{loggerSizeInTime}}
   </div>
 </template>
 
@@ -18,12 +20,22 @@ import GainWorklet from "../worklet/GainWorklet";
 export default {
   inject: ["root"],
   data: () => ({
-    audio: null,
-    loggerSizeinScreen : "0px",
-    loggerSizeinTime : 0 ,/*in seconds */
+    truc:60
   }),
-  computed: {
+  props:{
+    audio : Object,
+    loggerSizeInScreen : Object,
+    loggerSizeInTime : Object
+  },
+  created() {
     
+  },
+  computed: {
+    css(){
+      return{
+        "--width":this.truc+"px"
+      }
+    }
   },
   mounted() {
     // TODO on first click because of permissions (autoplay)
@@ -37,5 +49,9 @@ export default {
 </script>
 
 <style scoped>
-
+div{
+  background-color: green;
+  display: inline-block;
+  width: var(--width);
+}
 </style>
