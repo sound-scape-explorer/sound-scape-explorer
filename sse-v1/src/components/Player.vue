@@ -12,12 +12,10 @@
       <div>{{('0'+loggerEndTime.getUTCDate()).slice(-2)}}/{{('0'+loggerEndTime.getUTCMonth()).slice(-2)}}/{{loggerEndTime.getUTCFullYear()}} {{('0'+loggerEndTime.getUTCHours()).slice(-2)}}:{{('0'+loggerEndTime.getUTCMinutes()).slice(-2)}}</div>
     </div>
     <div id="globalPist">
-      <div id="allCanvas">
-        <div v-if="selectedLogger">
-          <div v-for="audio in selectedLogger.audios" :key="audio">
-            <LoggerPlayer :audio="{audio}" :loggerSizeInScreen="{loggerSizeInScreen}" :loggerSizeInTime="{loggerSizeInTime}"></LoggerPlayer>
+      <div v-if="selectedLogger" id="allCanvas">
+          <div :id="'audioLoggerPist'+audio.fileName" class="audioLoggerPist" v-for="audio in selectedLogger.audios" :key="audio">
+            <AudioLoggerPlayer :audio="{audio}" :loggerSizeInScreen="{loggerSizeInScreen}" :loggerSizeInTime="{loggerSizeInTime}"></AudioLoggerPlayer>
           </div>
-        </div>
       </div>
     </div>
     <div id="zoomedPist">
@@ -37,8 +35,8 @@ import GainWorklet from "../worklet/GainWorklet";
         console.log('Worklet Message:', event.data.msg)
       }
       */
-import LoggerPlayer from "./LoggerPlayer.vue";
-const OComponents = { LoggerPlayer };
+import AudioLoggerPlayer from "./AudioLoggerPlayer.vue";
+const OComponents = { AudioLoggerPlayer };
 
 export default {
   inject: ["root"],
@@ -180,5 +178,20 @@ export default {
 }
 #zoomedPist{
   padding-bottom :30px; 
+}
+.audioLoggerPist{
+  padding: 0px;
+  width: 1px;
+  height: 100%;
+  display: inline-block;
+}
+table{
+  border-collapse: collapse;
+  width: 100%;
+  height: 100%;
+}
+table tr{
+  width: 100%;
+  overflow: hidden;
 }
 </style>

@@ -1,8 +1,6 @@
 <template>
-  <div :style="css">
-    {{audio}}
-    {{loggerSizeInScreen}}
-    {{loggerSizeInTime}}
+  <div>
+    
   </div>
 </template>
 
@@ -31,11 +29,7 @@ export default {
     
   },
   computed: {
-    css(){
-      return{
-        "--width":this.truc+"px"
-      }
-    }
+    
   },
   mounted() {
     // TODO on first click because of permissions (autoplay)
@@ -43,7 +37,7 @@ export default {
     //this.filledPlayerPist()
   },
   methods: {
-    
+    /* TODO modifier la longueur de l'audio */
   },
 };
 </script>
@@ -51,7 +45,7 @@ export default {
 <style scoped>
 div{
   background-color: green;
-  display: inline-block;
-  width: var(--width);
+  height: 100%;
+  width: 100%;
 }
 </style>
