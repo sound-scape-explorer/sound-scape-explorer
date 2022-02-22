@@ -15,8 +15,9 @@
       <div id="allCanvas"></div>
     </div>
     <div id="zoomedPist">
-      <div id="zoomedCanvas"></div>      
+      <div id="zoomedCanvas"></div>
     </div>
+    <div>{{loggerSizeinScreen+" "+loggerSizeinTime}}</div>
   </div>
 </template>
 
@@ -40,18 +41,12 @@ export default {
     loggerList: [{"name" : "Logger L42"},{"name" : "Logger L01"}],
     loggerStartTime: new Date(),
     loggerEndTime : new Date(),
-    selectedLogger : null
+    selectedLogger : null,
+    loggerSizeinScreen : "0px",
+    loggerSizeinTime : 0 ,/*in seconds */
   }),
   computed: {
-    logger() {
-      const B = this.root.BASE + this.root.cfg.variables.generated_base;
-      if (this.changePitch) {
-        return B + "preview-audio/hzdiv10.wav#"+ new Date().getTime();
-      } else {
-        return B + "preview-audio/normal.wav#"+ new Date().getTime();
-        //this.root.BASE + V.audio_base + V.preview_file + V.audio_suffix;
-      }
-    },
+    
   },
   mounted() {
     // TODO on first click because of permissions (autoplay)
@@ -90,6 +85,7 @@ export default {
         /*We assume that list is ordonated */
         for (let i = 0; i < val; i++) {
           const audio = loggerSelected.audios[i];
+          let audioDuration = audio.timeDuration
           /* we take te start time for the fisrt audio recorded */
           if(first){
             this.loggerStartTime = audio.startTime
@@ -99,12 +95,13 @@ export default {
             let hours=audio.startTime.substring(9, 11)
             let minutes=audio.startTime.substring(11, 13)
             let seconds=audio.startTime.substring(13, 15)
-            this.loggerStartTime = new Date(Date.UTC(year, month, day, hours, minutes, seconds))
+            let d = new Date(Date.UTC(year, month, day, hours, minutes, seconds))
+            this.loggerStartTime = new Date(d.toLocaleString("en-US", {timeZone: this.root.cfg.variables.display_locale,}))
             first=false
           }
           if (!(i+1 < val)){
             /*last time */
-            /*TODO Add duration */
+            /*TODO Add audioDuration */
             this.loggerEndTime = audio.startTime
             let year=audio.startTime.substring(0, 4)
             let month=audio.startTime.substring(4, 6)
@@ -112,9 +109,25 @@ export default {
             let hours=audio.startTime.substring(9, 11)
             let minutes=audio.startTime.substring(11, 13)
             let seconds=audio.startTime.substring(13, 15)
-            this.loggerEndTime = new Date(Date.UTC(year, month, day, hours, minutes, seconds))
+            let d = new Date(Date.UTC(year, month, day, hours, minutes, seconds))
+            d.setSeconds(d.getSeconds() + audioDuration);
+            this.loggerEndTime = new Date(d.toLocaleString("en-US", {timeZone: this.root.cfg.variables.display_locale,}))
           }
         }
+        /* we want to know the equivalence to size-screen and Time of all audios logger */
+        this.clientWithPlayer()
+        /*now we want to know duration time bewteen start and end time in seconds */
+        this.loggerSizeinTime = Math.round((this.loggerEndTime-this.loggerStartTime)/1000)
+        
+      }
+    },
+    clientWithPlayer(){
+      try{
+        this.loggerSizeinScreen = document.getElementById("allCanvas").clientWidth
+        return this.loggerSizeinScreen
+      }catch(e){
+        setTimeout(this.clientWithPlayer,500)
+        return "0px"
       }
     },
     selectedLoggerInput() {
