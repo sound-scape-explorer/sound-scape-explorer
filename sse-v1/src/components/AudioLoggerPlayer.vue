@@ -9,21 +9,20 @@
 
 
 export default {
-  inject: ["root"],
+  inject: ["root","player"],
   data: () => ({
     audioSizeInScreen : 0,
-    audioSizeInTime : 0
+    audioSizeInTime : 0,
+    defaultSize : 10
   }),
   props:{
     audio : Object,
-    loggerSizeInScreen : Number,
-    loggerSizeInTime : Number /* in seconds */
-  },
-  created() {
-    
   },
   updated() {
     this.setSizeAudio()
+  },
+  created() {
+    
   },
   computed: {
     cssRender(){
@@ -34,13 +33,18 @@ export default {
     // TODO on first click because of permissions (autoplay)
     //this.configureAudioChain();
     //this.filledPlayerPist()
+    
     this.setSizeAudio()
   },
   methods: {
     /* TODO modifier la longueur de l'audio */
     setSizeAudio(){
-      this.audioSizeInScreen = (this.loggerSizeInScreen * this.audio.timeDuration) / this.loggerSizeInTime
-      console.log(this.audioSizeInScreen , this.loggerSizeInScreen , this.audio.timeDuration , this.loggerSizeInTime)
+      this.audioSizeInScreen = Math.ceil((this.player.loggerSizeInScreen * this.audio.timeDuration) / this.player.loggerSizeInTime)
+      console.log(this.audioSizeInScreen , this.player.loggerSizeInScreen , this.audio.timeDuration , this.player.loggerSizeInTime)
+      /* we chek if  */
+      if(this.audioSizeInScreen < this.defaultSize){
+        console.log("TODO")
+      }
     },
   },
 };

@@ -56,6 +56,11 @@ export default {
   computed: {
     
   },
+  provide() {
+    return {
+      player: this,
+    };
+  },
   mounted() {
     // TODO on first click because of permissions (autoplay)
     //this.configureAudioChain();
