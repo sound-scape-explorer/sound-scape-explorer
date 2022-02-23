@@ -14,7 +14,7 @@
     <div id="globalPist">
       <div v-if="selectedLogger" id="allCanvas">
           <div :id="'audioLoggerPist'+audio.fileName" class="audioLoggerPist" v-for="audio in selectedLogger.audios" :key="audio">
-            <AudioLoggerPlayer :audio="{audio}" :loggerSizeInScreen="{loggerSizeInScreen}" :loggerSizeInTime="{loggerSizeInTime}"></AudioLoggerPlayer>
+            <AudioLoggerPlayer :audio="audio" :loggerSizeInScreen="loggerSizeInScreen" :loggerSizeInTime="loggerSizeInTime"></AudioLoggerPlayer>
           </div>
       </div>
     </div>
@@ -49,8 +49,9 @@ export default {
     loggerStartTime: new Date(),
     loggerEndTime : new Date(),
     selectedLogger : null,
-    loggerSizeInScreen : "0px",
+    loggerSizeInScreen : 0,
     loggerSizeInTime : 0 ,/*in seconds */
+    truncate : 5 /*in pixel*/
   }),
   computed: {
     
@@ -58,7 +59,7 @@ export default {
   mounted() {
     // TODO on first click because of permissions (autoplay)
     //this.configureAudioChain();
-
+    this.clientWithPlayer()
     this.loggerAvailable()//[{"name" : "Logger L42"},{"name" : "Logger L05"}];
     //this.filledPlayerPist()
   },
@@ -121,8 +122,7 @@ export default {
             this.loggerEndTime = new Date(d.toLocaleString("en-US", {timeZone: this.root.cfg.variables.display_locale,}))
           }
         }
-        /* we want to know the equivalence to size-screen and Time of all audios logger */
-        this.clientWithPlayer()
+        /* we know the equivalence to size-screen and Time of all audios logger */
         /*now we want to know duration time bewteen start and end time in seconds */
         this.loggerSizeInTime = Math.round((this.loggerEndTime-this.loggerStartTime)/1000)
         
