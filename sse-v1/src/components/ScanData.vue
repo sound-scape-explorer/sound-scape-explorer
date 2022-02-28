@@ -31,7 +31,12 @@
             <input type="number" name="groupe" v-model="root.groupe" min="0">
             <div>{{this.root.groupe}} {{this.root.regex}}</div>
             <input type="submit" @click="scanData" value="Scan and Write it!">
-        </div>
+          </div>
+          <div>
+            <h3>Part 3 : tell us ranges to scan</h3>
+            <input type="datetime-local" name="startRange" :min="limRange[0]" :max="limRange[1]" :value="range[0]"><!--TODO To set this value by the minimum of time-->
+            <input type="datetime-local" name="EndRange" :min="limRange[0]" :max="limRange[1]" :value="range[1]"><!--TODO To set this value by the maximum of time-->
+          </div>
       </div>
   </div> 
 </template>
@@ -40,6 +45,7 @@
 import { NTable, NForm, NSelect } from "naive-ui";
 const NComponents = { NTable, NForm, NSelect };
 import { getTimeZoneList } from "../timezone.js"
+
 export default {
   inject: ["root"],
   components: { ...NComponents },
@@ -48,12 +54,18 @@ export default {
     audio_base : "",
     audio_suffix : "",
     siteList: ["BoraBora","Coridor"],
-    timeZoneAvailable : getTimeZoneList()
+    timeZoneAvailable : getTimeZoneList(),
+    range:[],
+    limRange:[]
   }),
   computed: {
     
   },
   mounted() {
+    this.range[0] = this.minStartRange()
+    this.range[1] = this.maxEndRange()
+    this.limRange[0] = this.range[0]
+    this.limRange[1] = this.range[1]
     this.siteAvailable();
   },
   methods: {
@@ -73,7 +85,46 @@ export default {
       let jsoned = JSON.stringify(str)
       let body = await this.root.requestPost(path,jsoned)
       console.log(body)
+      console.log(body['maxrange'])
+      this.range[0] = body['minrange']
+      this.limRange[0] = body['minrange']
+      this.range[1] = body['maxrange']
+      this.limRange[1] = body['maxrange']
       return body
+    },
+    /* inspired by this https://stackoverflow.com/questions/2573521/how-do-i-output-an-iso-8601-formatted-string-in-javascript */
+    minStartRange(){
+
+      let pad = function (number) {
+        var r = String(number);
+        if (r.length === 1) {
+          r = '0' + r;
+        }
+        return r;
+      };
+      let k = new Date() /* TODO get min date-time */
+      return k.getUTCFullYear() +
+        '-' + pad(k.getUTCMonth() + 1) +
+        '-' + pad(k.getUTCDate()) +
+        'T' + pad(k.getUTCHours()) +
+        ':' + pad(k.getUTCMinutes()) +
+        ':' + pad(k.getUTCSeconds()); 
+    },
+    maxEndRange(){
+      let pad = function (number) {
+        var r = String(number);
+        if (r.length === 1) {
+          r = '0' + r;
+        }
+        return r;
+      };
+      let k = new Date() /* TODO get max date-time */
+      return k.getUTCFullYear() +
+        '-' + pad(k.getUTCMonth() + 1) +
+        '-' + pad(k.getUTCDate()) +
+        'T' + pad(k.getUTCHours()) +
+        ':' + pad(k.getUTCMinutes()) +
+        ':' + pad(k.getUTCSeconds()); 
     },
     step2(){
 

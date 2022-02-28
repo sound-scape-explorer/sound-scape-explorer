@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # Usage: python cors_http_server.py <port>
+from datetime import datetime
 from distutils.log import error
 import sys
 import os
@@ -86,13 +87,14 @@ def main(argv=sys.argv):
                     self.wfile.write(("{\"result\" : \"Error\",'error': "+str(error)+"}").encode())
                     return
                 # so we scann the generate 
-                listFiles = map.getAllAudiosOfSiteWithPath(siteName,suffix)
+                listFiles,minRange,maxRange = map.getAllAudiosOfSiteWithPath(siteName,suffix)
                 utils.edit_variable_config('../sample/config.xlsx',data)
                 utils.edit_file_config('../sample/config.xlsx',listFiles)
+                utils.edit_range_config('../sample/config.xlsx',minRange,maxRange)
                 #TODO Apply variable_ modification
                 print("sse show config --json > generated/ghost-config.json")
                 os.system("sse show config --json > generated/ghost-config.json")
-                self.wfile.write("{\"result\" : \"Scanned\"}".encode())
+                self.wfile.write(("{\"result\" : \"Scanned\",\"minrange\": \""+ minRange.isoformat() +"\",\"maxrange\": \""+ maxRange.isoformat() +"\" }").encode())
         
 
     test(CORSRequestHandler, HTTPServer)

@@ -348,5 +348,5 @@ export function getTimeZoneList(){
     'Pacific/Wallis',
     'Pacific/Apia',
     'Africa/Johannesburg'
-  ]
+  ].sort()
 }

@@ -1,5 +1,5 @@
 from mimetypes import init
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from Logger import Logger
 
@@ -7,6 +7,7 @@ import json
 import os
 import wave
 import re
+import datetime
 
 from pandas import DataFrame
 
@@ -41,16 +42,35 @@ class LoggersDictionary:
     def __str__(self) -> str:
         return json.dumps(self.map,indent=2, default=lambda o: o.__dict__)
 
-    def getAllAudiosOfSiteWithPath(self,siteName:str,suffix:str) -> List :
+    def getAllAudiosOfSiteWithPath(self,siteName:str,suffix:str) -> Tuple[List,datetime.datetime,datetime.datetime] :
         array = []
+        #datetime.strptime(v, '%Y%m%d_%H%M%S')
+        minrange = datetime.datetime.now()
+        maxrange = datetime.datetime(year=1970,month=1,day=1)
         for aLogger in self.__getSite(siteName):
             print(aLogger.name)
             for audio in aLogger.audios:
+                try:
+                    strdate=datetime.datetime.strptime(audio.startTime, '%Y%m%d_%H%M%S')
+                    if strdate < minrange :
+                        minrange = strdate
+                    time = datetime.timedelta(seconds=audio.timeDuration)
+                    if (strdate+time)  > maxrange :
+                        maxrange = (strdate+time)
+                except:
+                    strdate=datetime.datetime.strptime(audio.startTime, '%Y%m%d_%H%M')
+                    if strdate < minrange :
+                        minrange = strdate
+                    time = datetime.timedelta(seconds=audio.timeDuration)
+                    if (strdate+time)  > maxrange :
+                        maxrange = (strdate+time)
                 array.append(
                     [aLogger.name+"/"+audio.fileName.split(suffix)[0],
                     aLogger.name,
                     audio.startTime])#audio.fileName.removesuffix(suffix)) available in 3.9 #TODO configure for Windows path too
-        return array
+        minrange = minrange.replace(microsecond=0)
+        maxrange = maxrange.replace(microsecond=0)
+        return array , minrange,maxrange
 
     def getAllLoggersOfSite(self,siteName:str) -> List:
         return self.__getSite().values()

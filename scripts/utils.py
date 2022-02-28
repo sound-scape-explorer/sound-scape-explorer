@@ -96,6 +96,18 @@ def edit_file_config(xlsxPath,listFiles:List):
     _xfile.save()
     _xfile.close()
     
+def edit_range_config(xlsxPath:str,minrange:datetime,maxrange:datetime):
+    df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
+    _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
+    r1 = minrange.strftime('%Y%m%d_%H%M%S')+'-'+maxrange.strftime('%Y%m%d_%H%M%S')
+    r2 = minrange.strftime('%Y%m%d_%H%M%S')+'-'+maxrange.strftime('%Y%m%d_%H%M%S')
+    liste=[
+        ["one",r1],
+        ["two",r2]]
+    df2 = pd.DataFrame(data=liste[:])
+    df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=16, header=None, index=False)#name | range to apply
+    _xfile.save()
+    _xfile.close()
 
 def edit_variable_config(xlsxPath,data:dict):
     df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
