@@ -50,6 +50,9 @@
         <n-tab-pane name="cfg" tab="Raw Config">
           <pre>{{ JSON.stringify(cfg, null, 2) }}</pre>
         </n-tab-pane>
+        <n-tab-pane name="docs" tab="Docs for help">
+          <Docs></Docs>
+        </n-tab-pane>
       </n-tabs>
     </div>
   </div>
@@ -64,7 +67,8 @@ import Volume from "./components/Volume.vue";
 import MockCovering from "./components/MockCovering.vue";
 import UMAPs from "./components/UMAPs.vue";
 import MiniTools from "./components/MiniTools.vue";
-const OComponents = { Preview, Player,ScanData,ImportData, Volume, MockCovering, UMAPs, MiniTools };
+import Docs from "./components/Docs.vue";
+const OComponents = { Preview, Player,Docs,ScanData,ImportData, Volume, MockCovering, UMAPs, MiniTools };
 
 import { NTabs, NCard, NTabPane } from "naive-ui";
 const NComponents = { NTabs, NCard, NTabPane };

@@ -24,18 +24,18 @@
           </div>
           <div>
             <h3>Part 2 : tell us the format of start file</h3>
-            <iframe src="https://pythex.org/?regex=%5E(%5Ba-zA-Z0-9%5D%2B)(%3F%3A)&test_string=20210428T081000_2614231112834446&ignorecase=0&multiline=0&dotall=0&verbose=0"></iframe>
+            <iframe src="https://pythex.org/?regex=%5E(%5Ba-zA-Z0-9%5D%2B)(%3F%3A)&test_string=20210428T081000_2614231112834446&ignorecase=0&multiline=0&dotall=0&verbose=0" scrolling="no"></iframe>
+            <div id="exampleFile">{{exampleFileForm}}</div>
             <label for="regex">Regex</label>
-            <input :type="text" name="regex" v-model="root.regex" placeholder="regex i.e: ([a-zA-Z0-9_]+)">
+            <input :type="text" name="regex" v-model="root.regex" placeholder="regex i.e: ([a-zA-Z0-9_]+)"> <br />
             <label for="groupe">Regex groupe to catch the start time of record in file name</label>
             <input type="number" name="groupe" v-model="root.groupe" min="0">
-            <div>{{this.root.groupe}} {{this.root.regex}}</div>
             <input type="submit" @click="scanData" value="Scan and Write it!">
           </div>
           <div>
             <h3>Part 3 : tell us ranges to scan</h3>
-            <input type="datetime-local" name="startRange" :min="limRange[0]" :max="limRange[1]" :value="range[0]"><!--TODO To set this value by the minimum of time-->
-            <input type="datetime-local" name="EndRange" :min="limRange[0]" :max="limRange[1]" :value="range[1]"><!--TODO To set this value by the maximum of time-->
+            <input type="datetime-local" name="startRange" :min="limRange[0]" :max="limRange[1]" :value="range[0]"><span id='startRangeWithTimeZone' class="rangeTimeZone"></span><!--TODO To display the datetime-zone--><br />
+            <input type="datetime-local" name="endRange" :min="limRange[0]" :max="limRange[1]" :value="range[1]"><span id='endRangeWithTimeZone' class="rangeTimeZone"></span><!--TODO To display the datetime-zone--><br />
           </div>
       </div>
   </div> 
@@ -56,7 +56,8 @@ export default {
     siteList: ["BoraBora","Coridor"],
     timeZoneAvailable : getTimeZoneList(),
     range:[],
-    limRange:[]
+    limRange:[],
+    exampleFileForm:""
   }),
   computed: {
     
@@ -72,6 +73,11 @@ export default {
     async siteAvailable() {
       this.siteList = await this.root.request(this.root.BASE + "availableSite");
       console.log(this.siteList)
+      this.exampleFile()
+    },
+    async exampleFile(){
+      let el = document.getElementById('selectedSite')
+      this.exampleFileForm = await this.root.request(this.root.BASE + 'exampleFile/'+this.siteList[el.selectedIndex])
     },
     async scanData(){
       let el = document.getElementById('selectedSite')
@@ -127,7 +133,7 @@ export default {
         ':' + pad(k.getUTCSeconds()); 
     },
     step2(){
-
+      this.exampleFile()
     },
   },
 };
@@ -141,5 +147,10 @@ iframe{
   border: 0px solid;
   width: 100%;
   height: 500px;
+  overflow: hidden;
+}
+
+#exampleFile{
+  color: darkred;
 }
 </style>

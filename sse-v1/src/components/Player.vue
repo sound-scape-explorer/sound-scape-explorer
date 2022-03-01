@@ -114,7 +114,6 @@ export default {
           }
           if (!(i+1 < val)){
             /*last time */
-            /*TODO Add audioDuration */
             this.loggerEndTime = audio.startTime
             let year=audio.startTime.substring(0, 4)
             let month=audio.startTime.substring(4, 6)

@@ -1,7 +1,6 @@
 <template>
-  <div :style="cssRender">
-    {{this.audio.timeDuration}}
-    {{audioSizeInScreen}}
+  <div :id="this.audio.fileName" :style="cssRender">
+    {{this.audio}}
   </div>
 </template>
 
@@ -43,7 +42,8 @@ export default {
       console.log(this.audioSizeInScreen , this.player.loggerSizeInScreen , this.audio.timeDuration , this.player.loggerSizeInTime)
       /* we chek if  */
       if(this.audioSizeInScreen < this.defaultSize){
-        console.log("TODO")
+        console.log(this.defaultSize)
+        document.getElementById(this.audio.fileName).style.width = this.defaultSize +'px'
       }
     },
   },

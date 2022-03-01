@@ -6,12 +6,16 @@ import pandas as pd
 import subprocess
 from datetime import datetime
 
+
 def own_call(cmd, **kwargs):
     return subprocess.call(['_sse-'+cmd[0]] + cmd[1:], **kwargs)
 
+
 def namedtuple_dic(d, typename='new'):
-    top = collections.namedtuple(typename, [i for i,j in d.items() if not i.startswith('_')])(*[j for i,j in d.items() if not i.startswith('_')])
+    top = collections.namedtuple(typename, [i for i, j in d.items() if not i.startswith(
+        '_')])(*[j for i, j in d.items() if not i.startswith('_')])
     return top
+
 
 def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disable_prefix=False, allow_duplicate=False):
     if c_values is None:
@@ -35,7 +39,7 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
                     'L': lambda v: v.split(','),
                     'L-': lambda v: v.split('-'),
                     'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M%S') for vv in v.split('-')],
-                    }[t])
+                }[t])
             except Exception as e:
                 types.append({
                     'I': int,
@@ -43,7 +47,7 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
                     'L': lambda v: v.split(','),
                     'L-': lambda v: v.split('-'),
                     'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M') for vv in v.split('-')],
-                    }[t])
+                }[t])
         else:
             types.append(str)
 
@@ -54,65 +58,79 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
             print(xt.columns)
             raise Exception(f'In {xpath}, need a column named "{c}"')
 
-    res = {} # actually not as we yield
+    res = {}  # actually not as we yield
     for i in range(len(xt[c_key])):
         if type(xt[c_key][i]) == str:
             k = xt[c_key][i]
             if k in res and not allow_duplicate:
-                raise Exception(f'In {xpath}: column "{c_key}" contains "{k}" twice.')
+                raise Exception(
+                    f'In {xpath}: column "{c_key}" contains "{k}" twice.')
             if simple:
-                v = [types[ic](xt[c][i]) for ic,c in enumerate(c_values)]
+                v = [types[ic](xt[c][i]) for ic, c in enumerate(c_values)]
                 res[k] = v
-                yield k,v[0]
+                yield k, v[0]
             else:
                 start = 0 if disable_prefix else len(c_key)+1
-                v = namedtuple_dic({c[start:]: types[ic](xt[c][i]) for ic,c in enumerate(c_values)}, yield_type)
+                v = namedtuple_dic({c[start:]: types[ic](xt[c][i])
+                                   for ic, c in enumerate(c_values)}, yield_type)
                 res[k] = v
-                yield k,v
+                yield k, v
 
-    
 
 def parse_config(xlsx='../sample/config.xlsx', sheet=0):
     _xfile = pd.ExcelFile(xlsx)
     _xtable = _xfile.parse(sheet, converters={'variables_': str})
     _renaming = {i: i.split(' (')[0] for i in _xtable.columns if ' (' in i}
     _xtable.rename(_renaming, inplace=True, axis='columns', errors="raise")
-    
+
     variables = dict(digest_xtable_columns(xlsx, _xtable, 'variables'))
     bands = dict(digest_xtable_columns(xlsx, _xtable, 'bands'))
-    umaps = dict(digest_xtable_columns(xlsx, _xtable, 'umaps', ['integration:I', 'bands:L', 'sites:L', 'ranges:L'], 'UMAP'))
+    umaps = dict(digest_xtable_columns(xlsx, _xtable, 'umaps', [
+                 'integration:I', 'bands:L', 'sites:L', 'ranges:L'], 'UMAP'))
     ranges = dict(digest_xtable_columns(xlsx, _xtable, 'ranges', ':L-D'))
-    stringmap = dict(digest_xtable_columns(xlsx, _xtable, 'stringmap', ['to', 'color'], 'STRINGMAP'))
-    files = dict(digest_xtable_columns(xlsx, _xtable, 'files', 'site start:D tags:L'.split(' '), 'FILE'))
+    stringmap = dict(digest_xtable_columns(
+        xlsx, _xtable, 'stringmap', ['to', 'color'], 'STRINGMAP'))
+    files = dict(digest_xtable_columns(xlsx, _xtable, 'files',
+                 'site start:D tags:L'.split(' '), 'FILE'))
     xlsx = str(pathlib.Path(xlsx).absolute())
     return namedtuple_dic(locals(), 'CFG')
 
-def edit_file_config(xlsxPath,listFiles:List):
-    df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
-    _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
-    #listFiles=specific_edit_config_file(listFiles)
+
+def edit_file_config(xlsxPath, listFiles: List):
+    df = pd.read_excel(xlsxPath, engine='openpyxl', header=None)
+    _xfile = pd.ExcelWriter(xlsxPath, engine='openpyxl',
+                            mode='a', if_sheet_exists='overlay')
+    # listFiles=specific_edit_config_file(listFiles)
     df2 = pd.DataFrame(data=listFiles[:])
-    df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=19, header=None, index=False)
-    _xfile.save()
-    _xfile.close()
-    
-def edit_range_config(xlsxPath:str,minrange:datetime,maxrange:datetime):
-    df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
-    _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
-    r1 = minrange.strftime('%Y%m%d_%H%M%S')+'-'+maxrange.strftime('%Y%m%d_%H%M%S')
-    r2 = minrange.strftime('%Y%m%d_%H%M%S')+'-'+maxrange.strftime('%Y%m%d_%H%M%S')
-    liste=[
-        ["one",r1],
-        ["two",r2]]
-    df2 = pd.DataFrame(data=liste[:])
-    df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=16, header=None, index=False)#name | range to apply
+    df2.to_excel(_xfile, sheet_name='Sheet1', startrow=2,
+                 startcol=19, header=None, index=False)
     _xfile.save()
     _xfile.close()
 
-def edit_variable_config(xlsxPath,data:dict):
-    df = pd.read_excel(xlsxPath,engine='openpyxl', header=None)
-    _xfile = pd.ExcelWriter(xlsxPath,engine='openpyxl',mode='a',if_sheet_exists='overlay')
-    audio_base:str = "../sample/audio/" + data['audio_base']
+
+def edit_range_config(xlsxPath: str, minrange: datetime, maxrange: datetime):
+    df = pd.read_excel(xlsxPath, engine='openpyxl', header=None)
+    _xfile = pd.ExcelWriter(xlsxPath, engine='openpyxl',
+                            mode='a', if_sheet_exists='overlay')
+    r1 = minrange.strftime('%Y%m%d_%H%M%S')+'-' + \
+        maxrange.strftime('%Y%m%d_%H%M%S')
+    r2 = minrange.strftime('%Y%m%d_%H%M%S')+'-' + \
+        maxrange.strftime('%Y%m%d_%H%M%S')
+    liste = [
+        ["one", r1],
+        ["two", r2]]
+    df2 = pd.DataFrame(data=liste[:])
+    df2.to_excel(_xfile, sheet_name='Sheet1', startrow=2, startcol=16,
+                 header=None, index=False)  # name | range to apply
+    _xfile.save()
+    _xfile.close()
+
+
+def edit_variable_config(xlsxPath, data: dict):
+    df = pd.read_excel(xlsxPath, engine='openpyxl', header=None)
+    _xfile = pd.ExcelWriter(xlsxPath, engine='openpyxl',
+                            mode='a', if_sheet_exists='overlay')
+    audio_base: str = "../sample/audio/" + data['audio_base']
     audio_base_cluster = "/NOT-IMPLEMENT-yet"
     audio_expected_sample_rate = 44100
     audio_suffix = data['audio_suffix']
@@ -140,39 +158,44 @@ def edit_variable_config(xlsxPath,data:dict):
                 preview_file_start,
                 preview_file_dur,
                 None,
-                None,            
+                None,
                 integration_seconds,
                 display_locale,
                 None,
                 nearest_radiuses
                 ]
     df2 = pd.DataFrame(data=listVars[:])
-    df2.to_excel(_xfile, sheet_name='Sheet1',startrow=2,startcol=1, header=None, index=False)
+    df2.to_excel(_xfile, sheet_name='Sheet1', startrow=2,
+                 startcol=1, header=None, index=False)
     _xfile.save()
-    _xfile.close()  
+    _xfile.close()
 
 
-#"""Deprecated"""
-def specific_edit_config_file(listFiles:List[str]):
-    #specific edit for column U,V,W
-    newlist=[]
+# """Deprecated"""
+def specific_edit_config_file(listFiles: List[str]):
+    # specific edit for column U,V,W
+    newlist = []
     for el in listFiles:
-        array=el.split('/')
-        newlist.append([el,array[0],array[1]])
+        array = el.split('/')
+        newlist.append([el, array[0], array[1]])
     return newlist
+
 
 def iterate_audio_files_with_bands(cfg, *more):
     esr = cfg.variables['audio_expected_sample_rate']
-    for band,spec in cfg.bands.items():
+    for band, spec in cfg.bands.items():
         for r in iterate_audio_files(cfg, band, *more):
             yield [esr, band, spec] + r
 
+
 def iterate_audio_files(cfg, prefix, *more):
     suffix = cfg.variables['audio_suffix']
-    for fname,info in cfg.files.items():
-        input_path = pathlib.Path(cfg.variables['audio_base']).joinpath(fname+suffix)
-        res = [fname,info,input_path]
+    for fname, info in cfg.files.items():
+        input_path = pathlib.Path(
+            cfg.variables['audio_base']).joinpath(fname+suffix)
+        res = [fname, info, input_path]
         for path, ext in more:
-            p = pathlib.Path(cfg.variables[path[1:]] if path.startswith('@') else path)
+            p = pathlib.Path(
+                cfg.variables[path[1:]] if path.startswith('@') else path)
             res.append(p.joinpath(prefix, fname+suffix).with_suffix(ext))
         yield res

@@ -107,7 +107,7 @@ sudo apt install python3.8</p>
 <h4>Step 1 : Install required python libraries</h4>
 
 <p><code>
-pip install numpy==1.20
+pip install numpy
 pip install matplotlib
 pip install seaborn
 pip install torchaudio
@@ -215,10 +215,12 @@ cd ../../sse-v1/</p>
 <li><p>Audio File must be folow the name rules (repalce '[' and ']' by the required information ):</p>
 
 <ul>
-<li>[Time in UTC format]_[Logger ID].wav</li>
+<li>[Time in UTC format]_[Other info].wav</li>
 </ul>
 
-<p><p>in example : 20210629T050900_2614231121130510</p></li>
+<p>in example : 20210629T050900_2614231121130510 . To do that use miniTool -> click "Scan Files ?" button</p>
+
+<p><p>other example : <code>20210423_105000</code> this is correct and equivalent to <code>20210423T105000</code>. </p></li>
 </ul>
 <strong>YOU MUST TO CHANGE YOUR CONFIG.XLSX</strong> </p>
 
