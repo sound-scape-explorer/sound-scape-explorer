@@ -25,6 +25,9 @@ go to your directory Download
 
 ```
 cd Download
+```
+
+```
 python3 get-pip.py
 ```
 
@@ -213,8 +216,10 @@ or get it with
 sse help
 ```
 
-#### Setp 5 : Use your audio sources **OR** Download an example of this app
+#### Setp 5 : Use your audio sources <!--**OR** Download an example of this app-->
 
+<!-- choice -->
+<!--
 Example of this app
 
 This command will downlad an tar archive from my personal example
@@ -250,8 +255,9 @@ This command will download my personal configuration about this example
 ```
 curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx
 ```
+-->
 
-To import your audio sources, you **must** to drop it into [rootProject]/sample/audio/ and respect some rules :
+To import your audio sources, you **must** <!--before it will be not needed --> to drop it into [rootProject]/sample/audio/ and respect some rules :
 
 - Folder Hierarchy in order must be this :
   - Site Name (in eexample BoraBora)
@@ -268,7 +274,13 @@ To import your audio sources, you **must** to drop it into [rootProject]/sample/
 
 **_YOU MUST TO CHANGE YOUR CONFIG.XLSX_**
 
-#### Setp 5(part2) : Change config.xlsx(if you choose "Use your audio sources")
+#### Step 5 (part2) : Change config.xlsx or use the scan Tool (if you choose "Use your audio sources")
+
+Here you have **two choices**, the first one is to use the _mini tool_ to help you to fill the config.xlsx file.
+
+Or the seconde choice is to _write directly_ the config.xlsx file.
+
+I advise you to use first option. In fact if you have multiple audio files, it will be tiring to tap every file without error that will be a lake of time.
 
 ##### Column A & B
 
@@ -343,8 +355,13 @@ don't stay on it, you can just close the terminal to avoid write problem go to t
 
 #### Step 7 : Generate config for webClient
 
+Move to this directory if it not the case already in your terminal
+
 ```
 cd [rootProject]/sse-v1/
+```
+
+```
 sse show config --json > generated/ghost-config.json
 ```
 
@@ -352,47 +369,86 @@ sse show config --json > generated/ghost-config.json
 
 ```
 cd [rootProject]/sse-v1/
-#DO NOT RUN THIS command => npm audit fix
-#run this below
+```
+
+**DO NOT RUN THIS command except expert** => `npm audit fix`
+run this below
+
+```
 npm i -D naive-ui
+```
+
+```
 npm i -D vfonts
+```
+
+```
 npm i -D worklet-loader
 ```
 
 #### Step 9 : run the python server and the nodeJS server
 
+Change of directory if not teh same already
+
 ```
 cd [rootProject]/sse-v1/
-# run the python server (default port is 9876)
-# sse cors-http-server
-# it's also called in shortname
+```
+
+run the python server (default port is 9876)
+
+```
+sse cors-http-server
+```
+
+Next time you can use shortname command
+
+```
 sse chs
 ```
 
-Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
+##### Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
+
+**in case of error during launch of the nodeJS server**
+
+`Control + Delete`
 
 ```
-###### in case of error during launch of the nodeJS server
-###### Control + Delete
 npm remove chart.js
+```
+
+```
 npm install chart.js
+```
+
 ###### and do not forget to relaunch the nodeJS server by the command below
 
+run the nodeJS server at same path (default port is 8080)
 
-####### run the nodeJS server at same path (default port is 8080)
+```
 npm run serve
-
 ```
 
 #### Setp 10 : Run computation to see data on app
 
-Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
+Open a new tab terminal or new window terminal and go to it, **let's open the oldest tab/window terminal**
 
 From `[rootProject]/sse-v1/` path
 
+You will compute the umap.
+
 ```
 sse compute umap
+```
+
+Or compute the covering
+
+```
 sse compute covering
+```
+
+Or compute the volume
+
+```
 sse compute volume
 ```
 
@@ -405,8 +461,10 @@ All done
 WARNING : Each time you change audio file (remove, add, edit in folder /audio) you should to change your config.xlsx + run this command
 
 ```
+
 cd [rootProject]/sse-v1/
 sse show config --json > generated/ghost-config.json
+
 ```
 
 #### Step 1 : run daemons
@@ -572,11 +630,15 @@ sse cors-http-server
 sse chs
 
 #
+
 sse extract all
 
 ###### if a lot of files and you know they have each a 60s duration
+
 sse show audio-span-splot -s 60
+
 ###### else (few files or patient)
+
 sse show audio-span-splot
 
 sse extract preview
@@ -585,7 +647,9 @@ sse compute covering
 sse compute umap
 
 sse help
+
 ###### copy the config generators
+
 sse chs
 
 (cd [rootProject]/sse-v1 ; npm run dev)
