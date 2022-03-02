@@ -2,18 +2,19 @@
 
 ## Description
 
-
 ## How to use it
 
-## Installation 
+## Installation
 
-Available in UNIX and Windows platform and ready-made in Virtual-Box 
+Available in UNIX and Windows platform and ready-made in Virtual-Box
 
 ### VirtualBox (in writing)
 
+<!--test-->
+
 ### Windows (in writing)
 
-Step 0 : Donwload project 
+Step 0 : Donwload project
 
 Step 1 : Download and install required
 [Python](https://www.python.org/downloads/)
@@ -27,7 +28,6 @@ cd Download
 python3 get-pip.py
 ```
 
-
 [NodeJS](https://nodejs.org/en/download/)
 You can avoid to install chocolatery extension. not mandatory
 
@@ -36,84 +36,130 @@ Step 2 : Install required python libraries
 ```
 pip install numpy
 ```
+
 ```
 pip install matplotlib
 ```
+
 ```
 pip install seaborn
 ```
+
 ```
 pip install torchaudio
 ```
+
 ```
 pip install librosa
 ```
+
 ```
 pip install xlrd
 ```
+
 ```
 pip install pandas
 ```
+
 ```
 pip install umap-learn
 ```
+
 ```
 pip install openpyxl
 ```
+
 ```
 pip install numpy==1.20
 ```
 
-From your 
+From your
 
 ### Unix
 
 #### Step 0 : Open a terminal update your pakages and install python, pip and nodeJS pakager
 
 ```
-
-sudo apt update 
-
-#####Used to re-synchronize the package index files from their sources. The indexes of available packages are fetched from the location(s) specified in /etc/apt/sources.list(5). An update should always be performed before an upgrade or dist-upgrade.
-
-
-sudo apt upgrade 
-
-#####Used to install the newest versions of all packages currently installed on the system from the sources enumerated in /etc/apt/sources.list(5). Packages currently installed with new versions available are retrieved and upgraded; under no circumstances are currently installed packages removed, nor are packages that are not already installed retrieved and installed. New versions of currently installed packages that cannot be upgraded without changing the install status of another package will be left at their current version. An update must be performed first so that apt-get knows that new versions of packages are available. 
-
+sudo apt update
 ```
 
+Used to re-synchronize the package index files from their sources. The indexes of available packages are fetched from the location(s) specified in /etc/apt/sources.list(5). An update should always be performed before an upgrade or dist-upgrade.
 
-NOTE : if you not find 
+```
+sudo apt upgrade
+```
+
+Used to install the newest versions of all packages currently installed on the system from the sources enumerated in /etc/apt/sources.list(5). Packages currently installed with new versions available are retrieved and upgraded; under no circumstances are currently installed packages removed, nor are packages that are not already installed retrieved and installed. New versions of currently installed packages that cannot be upgraded without changing the install status of another package will be left at their current version. An update must be performed first so that apt-get knows that new versions of packages are available.
+
+NOTE : if you not find
+
 ```
 sudo apt install python3.8
-#####try
-sudo apt install pip #version 20.0.2
-#####if not work use 
-#####sudo apt install python3-pip
-
-
-sudo apt install npm # 
-
-
-sudo apt install curl 
-#####curl  is  a tool to transfer data from or to a server
-
-sudo apt install ffmpeg
-#####is a very fast video and audio converter that can also grab from a live audio/video source
 ```
+
+try
+
+```
+sudo apt install pip #version 20.0.2
+```
+
+if not work use
+
+```
+sudo apt install python3-pip
+```
+
+```
+sudo apt install npm
+```
+
+```
+sudo apt install curl
+```
+
+curl is a tool to transfer data from or to a server
+
+```
+sudo apt install ffmpeg
+```
+
+is a very fast video and audio converter that can also grab from a live audio/video source
 
 #### Step 1 : Install required python libraries
 
 ```
 pip install numpy
+```
+
+```
 pip install matplotlib
+```
+
+```
 pip install seaborn
+```
+
+```
 pip install torchaudio
+```
+
+```
 pip install librosa
+```
+
+```
 pip install xlrd
+```
+
+```
 pip install pandas
+```
+
+```
 pip install umap-learn
+```
+
+```
 pip install openpyxl
 ```
 
@@ -121,20 +167,25 @@ The helper script
 
 #### Step 2 : go to your downloaded root project
 
-#### Setp 3 :  Go to [rootProject]/ and run this command
+#### Setp 3 : Go to [rootProject]/ and run this command
+
+install scripts project with these modules
 
 ```
-#####install scripts project with these modules
 pip install -e ./scripts
+```
 
-#####create specific directory 
+create specific directory
+
+```
 mkdir ./sample/generated ./sample/features
 ```
 
 #### Step 4 : Go to [rootProject]/sse-v1/ and run this command
 
+create shortcut (do not duplicate content or the sources)
+
 ```
-#####create shortcut (do not duplicate content or the sources)
 ln -s ../sample/features/
 ln -s ../sample/generated/
 ln -s ../sample/audio/
@@ -142,19 +193,23 @@ ln -s ../sample/audio/
 
 [Hightly recommended] To activate sse command (either in your `.bashrc`, or once in each terminal that needs it)
 
-```
-#####this command bellow permit to add in you shell sse command
+this command bellow permit to add in you shell sse command
 
-export PATH=\$PATH:~/.local/ >> ~/.bashrc
-###logout/login of your computer session after this command to activate sse command
 ```
+export PATH=\$PATH:~/.local/ >> ~/.bashrc
+```
+
+logout/login of your computer session after this command to activate sse command
 
 [Not Mandatory] To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
 
 ```
 eval "$(_SSE_COMPLETE=bash_source sse)"
+```
 
-#####or get it with
+or get it with
+
+```
 sse help
 ```
 
@@ -162,54 +217,72 @@ sse help
 
 Example of this app
 
+This command will downlad an tar archive from my personal example
+
 ```
-###### This command will downlad an tar archive from my personal example 
 curl http://149.91.90.152:8000/examples.tar > ../sample/audio/examples.tar
-cd ../sample/audio/
-###### This command will extract the tar file
-tar -xvf examples.tar
-###### and this remove the archive that have been untar
-rm examples.tar
-cd ../../sse-v1/
-###### This command will download my personal configuration about this example
-curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx 
 ```
 
-To import your audio sources, you must to drop it into [rootProject]/sample/audio/ and respect some rules : 
+```
+cd ../sample/audio/
+```
 
+This command will extract the tar file
 
-* Folder Hierarchy in order must be this : 
-    * Site Name (in eexample BoraBora)
-        * Logger1 (In example Logger in touristical aera)
-            * Audio File name 1
-            * Audio File name 2
-        * Logger2
-            * Audio File name 1
-            * Audio File name 2
-* Audio File must be folow the name rules (repalce '[' and ']' by the required information ):
-    * [Time in UTC format]_[Other info].wav
-    
+```
+tar -xvf examples.tar
+```
+
+and this remove the archive that have been untar
+
+```
+rm examples.tar
+```
+
+you change directory
+
+```
+cd ../../sse-v1/
+```
+
+This command will download my personal configuration about this example
+
+```
+curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx
+```
+
+To import your audio sources, you **must** to drop it into [rootProject]/sample/audio/ and respect some rules :
+
+- Folder Hierarchy in order must be this :
+  - Site Name (in eexample BoraBora)
+    - Logger1 (In example Logger in touristical aera)
+      - Audio File name 1
+      - Audio File name 2
+    - Logger2
+      - Audio File name 1
+      - Audio File name 2
+- Audio File must be folow the name rules (repalce '[' and ']' by the required information ):
+  - [Time in UTC format]\_[Other info].wav
     in example : 20210629T050900_2614231121130510 . To do that use miniTool -> click "Scan Files ?" button
-    
-    other example : `20210423_105000` this is correct and equivalent to `20210423T105000`. 
+    other example : `20210423_105000` this is correct and equivalent to `20210423T105000`.
 
-**YOU MUST TO CHANGE YOUR CONFIG.XLSX** 
+**_YOU MUST TO CHANGE YOUR CONFIG.XLSX_**
 
-#### Setp 5(part2) : Change config.xlsx(if you choose "Use your audio sources") 
+#### Setp 5(part2) : Change config.xlsx(if you choose "Use your audio sources")
 
 ##### Column A & B
 
-* variable:do not touch
-* audio base : locate the audio folder specific to the site studied
-* audio base cluster : path to the calculation daemon
-* audio_expected_sample_rate : add in hertz the max frequencies
-* feature base, generated base, other base : do not touch 
-* preview file : give the path from audio base path to the given file
-* preview file start : start for the preview
-* preview file dur : duration of the preview
-* integration seconds : corresponds to the available integration for the umap computation. Values, in second, are separated by a short hyphen '-'
-* display locate : defines the time zone for the audio base site
-* nearest radiuses : define the covering of umap points in percent.
+- variable:do not touch
+- audio base : locate the audio folder specific to the site studied
+- audio base cluster : path to the calculation daemon
+- audio_expected_sample_rate : add in hertz the max frequencies
+- feature base, generated base, other base : do not touch
+- preview file : give the path from audio base path to the given file
+- preview file start : start for the preview
+- preview file dur : duration of the preview
+- integration seconds : corresponds to the available integration for the umap computation. Values, in second, are separated by a short hyphen '-'
+- display locate : defines the time zone for the audio base site
+- nearest radiuses : define the covering of umap points in percent.
 
 ##### Column D & E
 
@@ -217,46 +290,42 @@ From D3 this column is free name. Column E defines verticise.The first number de
 
 For example if you want all frequencies you segmentate the frequencies by 64 that corresponds for all frequencies and you take the lowest frequency : 0.
 
-Another example if you want segmentate frequencies by 3 you multiply 64 by 3 that corresponds to 192 and you want the two first parts (0 to 64 and 64 to 128) you need to put in cells : 
+Another example if you want segmentate frequencies by 3 you multiply 64 by 3 that corresponds to 192 and you want the two first parts (0 to 64 and 64 to 128) you need to put in cells :
 
-* 192-0
-* 192-64
-
+- 192-0
+- 192-64
 
 ##### Column G to K
 
-* Column G at line 3 is free name
-* Column H corresponds to second integration. You must already have this value on integration second cell in column B
-* Column I defines for the umap view needed bands. You must define these bands from D column
-* Column J defines the needed umap range. You must define this range on Q column 
-* Column K defines the needed site to compare
+- Column G at line 3 is free name
+- Column H corresponds to second integration. You must already have this value on integration second cell in column B
+- Column I defines for the umap view needed bands. You must define these bands from D column
+- Column J defines the needed umap range. You must define this range on Q column
+- Column K defines the needed site to compare
 
 ##### Column M,N & O (not Used yet)
 
-
-
 ##### Column Q & R
 
-* Column Q is free name
-* Column R defines range to analyze by the umap computation. They contain two date and time values. Time values need to respect a specific format : YYYYmmDD_HHMMSS in UTC time. These time values need to be separated by a short hyphen '-'
+- Column Q is free name
+- Column R defines range to analyze by the umap computation. They contain two date and time values. Time values need to respect a specific format : YYYYmmDD_HHMMSS in UTC time. These time values need to be separated by a short hyphen '-'
 
 ##### Column T to W
 
-* Column T audio file path without suffix from the audio base cells defined in B3. For example it can be "PM10_P1_2021/20210722_094000" for the logger PM10_P1_2021 and audio name 20210722_094000
-* Column U corresponds to the site studied, by default it will be the logger name
-* Column V defines the time of file starts. Time values need to respect a specific format : YYYYmmDD_HHMMSS in UTC time.
-* Column W defines tags for the files 
-#### Step 6 : Extract 
+- Column T audio file path without suffix from the audio base cells defined in B3. For example it can be "PM10_P1_2021/20210722_094000" for the logger PM10_P1_2021 and audio name 20210722_094000
+- Column U corresponds to the site studied, by default it will be the logger name
+- Column V defines the time of file starts. Time values need to respect a specific format : YYYYmmDD_HHMMSS in UTC time.
+- Column W defines tags for the files
+
+#### Step 6 : Extract
+
+Do the Neuronal Network extraction from original input with all files says in config.xlsx
 
 ```
-
-#####Do the Neuronal Network extraction from original input with all files says in config.xlsx
-
 sse extract all
-
-#####this operation will take a while depending of your dataset.
-
 ```
+
+this operation will take a while depending of your dataset.
 
 Open a new tab terminal or new window terminal let's open the oldest tab/window terminal
 
@@ -290,13 +359,12 @@ npm i -D vfonts
 npm i -D worklet-loader
 ```
 
-
-#### Step 9 : run the python server and the nodeJS server 
+#### Step 9 : run the python server and the nodeJS server
 
 ```
 cd [rootProject]/sse-v1/
 # run the python server (default port is 9876)
-# sse cors-http-server 
+# sse cors-http-server
 # it's also called in shortname
 sse chs
 ```
@@ -308,11 +376,11 @@ Open a new tab terminal or new window terminal let's open the oldest tab/window 
 ###### Control + Delete
 npm remove chart.js
 npm install chart.js
-###### and do not forget to relaunch the nodeJS server by the command below 
+###### and do not forget to relaunch the nodeJS server by the command below
 
 
 ####### run the nodeJS server at same path (default port is 8080)
-npm run serve 
+npm run serve
 
 ```
 
@@ -323,14 +391,14 @@ Open a new tab terminal or new window terminal let's open the oldest tab/window 
 From `[rootProject]/sse-v1/` path
 
 ```
-sse compute umap 
+sse compute umap
 sse compute covering
 sse compute volume
 ```
 
 All done
 
-## For use 
+## For use
 
 ### In UNIX
 
@@ -343,7 +411,7 @@ sse show config --json > generated/ghost-config.json
 
 #### Step 1 : run daemons
 
-Run a terminal with 3 tabs or 3 terminal and __**for each**__ of them go to
+Run a terminal with 3 tabs or 3 terminal and \***\*for each\*\*** of them go to
 
 ```
 
@@ -351,17 +419,17 @@ cd [rootProject]/sse-v1/
 
 ```
 
-In first tab/terminal, run 
+In first tab/terminal, run
 
 ```
 
 sse chs
-#it's also called in long name 
+#it's also called in long name
 #sse cors-http-server
 
 ```
 
-In second tab/terminal, run 
+In second tab/terminal, run
 
 ```
 
@@ -371,10 +439,11 @@ npm run serve
 
 #### Step 2 : if necessary or not done already, use a run in third tab/terminal the following commands depend of what you expect
 
-##### Action 1 : split an audio file corresponding to the terms "Logger" in N files of 60s duration called *Sample*
+##### Action 1 : split an audio file corresponding to the terms "Logger" in N files of 60s duration called _Sample_
+
 Required action : None
-Reason : Parse data into torch audio, a Neuronal network and permit to execute action 3 : 
-Command : 
+Reason : Parse data into torch audio, a Neuronal network and permit to execute action 3 :
+Command :
 
 ```
 
@@ -388,8 +457,8 @@ Required action : None
 
 Reason : Show this on browser
 
-Command : 
- 
+Command :
+
 ```
 
 sse extract preview
@@ -404,11 +473,11 @@ Required action : Action 1
 
 Reason : Show this on browser by action 6 and find biologistic clues
 
-Command : 
+Command :
 
 ```
 
-sse compute umap 
+sse compute umap
 
 ```
 
@@ -418,11 +487,11 @@ Required action : Action 1
 
 Reason : Show this on browser by action 6 and find biologistic clues
 
-Command : 
+Command :
 
 ```
 
-sse compute volume 
+sse compute volume
 
 ```
 
@@ -432,20 +501,19 @@ Required action : Action 1
 
 Reason : Show this on browser by action 6 and find biologistic clues during a time period like a day
 
-Command : 
+Command :
 
 ```
 
-sse compute covering 
+sse compute covering
 
 ```
-
 
 ##### Action 6 : Show app on browser
 
 Required actions : Action 3,4,5
 
-Open your favorite browser and go to 
+Open your favorite browser and go to
 
 ```
 
@@ -453,10 +521,9 @@ http://localhost:8080/
 
 ```
 
+#### Step 3 : Explanation of tabs
 
-#### Step 3 : Explanation of tabs 
-
-##### Raw Config 
+##### Raw Config
 
 Show the configuration done in [rootProject]/sample/config.xlsx in case of step 7 for unix install have been done.
 
@@ -473,7 +540,7 @@ sse show config --json > generated/ghost-config.json
 ##### Mini Tools
 
 Permit to split the original audio sound into N Bands of frequencies (Hz)
-Due to the softwar configuration, we can choose only by step of 64 
+Due to the softwar configuration, we can choose only by step of 64
 
 ##### Covering (Not available yet)
 
@@ -485,16 +552,15 @@ Permit to see during time the volume of sounds
 
 Show in 2D an projection of the matricies of 128d for each second
 
-You can move to see during time each point corresponding to the time 
+You can move to see during time each point corresponding to the time
 
 ##### Player (Not available yet)
 
-Permit to see an logger and see the specificities of an logger. For example to see the period of recording, see an zoom of the logger 
+Permit to see an logger and see the specificities of an logger. For example to see the period of recording, see an zoom of the logger
 
 ##### Preview (in rebulding)
 
 Permit to see an preview of an logger. You can config this into minitool.
-
 
 #### typical commands
 
@@ -527,9 +593,6 @@ sse chs
 
 ```
 
-
-
-
 ## Development notes
 
 ### Created with...
@@ -560,7 +623,7 @@ convert sse-v1/src/assets/logo.png sse-v1/public/favicon.ico
 ### Making some test data
 
 ```
-cp -t log1/ '........./Logger1/20210429_180000.WAV'  ###### strange... 
+cp -t log1/ '........./Logger1/20210429_180000.WAV'  ###### strange...
 cp -t log2/ '........./Logger2/20210429_180000.WAV'
 
 
@@ -616,7 +679,7 @@ npm i -D worklet-loader
 
 ```
 cd sse-v1/
-npm run serve 
+npm run serve
 ```
 
 and the data server
@@ -641,8 +704,7 @@ sed -i -e 's@http://localhost:9876/@'"$where"'/@g' dist/js/*.js
 ```
 
 #### markdown
+
 ```
-
 markdown README.md > .hiddenREADME.html
-
 ```
