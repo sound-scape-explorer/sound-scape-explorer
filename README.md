@@ -1,3 +1,5 @@
+<!--style-->
+
 # Soundscape explorer
 
 ## Description
@@ -78,7 +80,9 @@ pip install numpy==1.20
 
 From your
 
-### Unix
+### Mac (in wriiting)
+
+### Linux
 
 #### Step 0 : Open a terminal update your pakages and install python, pip and nodeJS pakager
 
@@ -184,13 +188,19 @@ create specific directory
 mkdir ./sample/generated ./sample/features
 ```
 
-#### Step 4 : Go to [rootProject]/sse-v1/ and run this command
+#### Step 4 : Go to [rootProject]/sse-v1/ and run these command
 
-create shortcut (do not duplicate content or the sources)
+these 3 commande will create shortcut (do not duplicate content or the sources)
 
 ```
 ln -s ../sample/features/
+```
+
+```
 ln -s ../sample/generated/
+```
+
+```
 ln -s ../sample/audio/
 ```
 
@@ -199,15 +209,25 @@ ln -s ../sample/audio/
 this command bellow permit to add in you shell sse command
 
 ```
-export PATH=\$PATH:~/.local/ >> ~/.bashrc
+echo "PATH=\"$PATH:~/.local/\" >> ~/.profile"
 ```
 
-logout/login of your computer session after this command to activate sse command
+check if it is well install by open (temporarly) a new tab/window terminal and tap `sse`. If somethis it diplay like
+
+```
+Usage: sse [OPTIONS] COMMAND [ARGS]...
+```
+
+It's okay and you can close this temporarly tab/window terminal
+
+<!-- logout/login of your computer session after this command to activate sse command -->
 
 [Not Mandatory] To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
 
+<!-- This command below dosen't work well at this moment-->
+
 ```
-eval "$(_SSE_COMPLETE=bash_source sse)"
+eval "$(\_SSE_COMPLETE=bash_source sse)"
 ```
 
 or get it with
@@ -218,49 +238,60 @@ sse help
 
 #### Setp 5 : Use your audio sources <!--**OR** Download an example of this app-->
 
-<!-- choice -->
 <!--
 Example of this app
 
 This command will downlad an tar archive from my personal example
 
 ```
+
 curl http://149.91.90.152:8000/examples.tar > ../sample/audio/examples.tar
+
 ```
 
 ```
+
 cd ../sample/audio/
+
 ```
 
 This command will extract the tar file
 
 ```
+
 tar -xvf examples.tar
+
 ```
 
 and this remove the archive that have been untar
 
 ```
+
 rm examples.tar
+
 ```
 
 you change directory
 
 ```
+
 cd ../../sse-v1/
+
 ```
 
 This command will download my personal configuration about this example
 
 ```
+
 curl http://149.91.90.152:8000/config.xlsx > ../sample/config.xlsx
+
 ```
 -->
 
 To import your audio sources, you **must** <!--before it will be not needed --> to drop it into [rootProject]/sample/audio/ and respect some rules :
 
 - Folder Hierarchy in order must be this :
-  - Site Name (in eexample BoraBora)
+  - Site Name (in example BoraBora)
     - Logger1 (In example Logger in touristical aera)
       - Audio File name 1
       - Audio File name 2
@@ -281,13 +312,14 @@ Here you have **two choices**, the first one is to use the _mini tool_ to help y
 Or the seconde choice is to _write directly_ the config.xlsx file.
 
 I advise you to use first option. In fact if you have multiple audio files, it will be tiring to tap every file without error that will be a lake of time.
+**IF YOU CHOSE THE FIST OPTION YOU MUST DO STEP 8 and 9 NOW AND FALL BACK HERE**
 
 ##### Column A & B
 
 - variable:do not touch
 - audio base : locate the audio folder specific to the site studied
 - audio base cluster : path to the calculation daemon
-- audio_expected_sample_rate : add in hertz the max frequencies
+- audio expected sample rate : add in hertz the max frequencies
 - feature base, generated base, other base : do not touch
 - preview file : give the path from audio base path to the given file
 - preview file start : start for the preview
@@ -367,12 +399,18 @@ sse show config --json > generated/ghost-config.json
 
 #### Step 8 : install nodeJS dependencies
 
+**IF YOU HAVE DONE ALREADY THIS PART DON'T DO IT AGAIN**
+
+if not the case , go to this path
+
 ```
 cd [rootProject]/sse-v1/
 ```
 
 **DO NOT RUN THIS command except expert** => `npm audit fix`
 run this below
+
+These 3 command will install modules from the Node Package
 
 ```
 npm i -D naive-ui
@@ -428,6 +466,24 @@ run the nodeJS server at same path (default port is 8080)
 npm run serve
 ```
 
+on your favorite web browser, go to [http://localhost:8080](http://localhost:8080).
+
+<!--imageSeeNormal-->
+
+![](./sse-v1/public/normal.png "Normal case")
+![](normal.png "Normal case")
+
+if you see something like this, continue to step 10
+
+Otherwise, if you see something like this
+
+<!--imageSeeNoConfig-->
+
+![](./sse-v1/public/normal.png "No config case")<!--TODO : EDIT-->
+![](normal.png "No config case")<!--TODO : EDIT-->
+
+**And** you have done the first choice in Step 5 part 2, it's time to fall back to step 5 part 2.
+
 #### Setp 10 : Run computation to see data on app
 
 Open a new tab terminal or new window terminal and go to it, **let's open the oldest tab/window terminal**
@@ -461,10 +517,11 @@ All done
 WARNING : Each time you change audio file (remove, add, edit in folder /audio) you should to change your config.xlsx + run this command
 
 ```
-
 cd [rootProject]/sse-v1/
-sse show config --json > generated/ghost-config.json
+```
 
+```
+sse show config --json > generated/ghost-config.json
 ```
 
 #### Step 1 : run daemons
@@ -472,27 +529,25 @@ sse show config --json > generated/ghost-config.json
 Run a terminal with 3 tabs or 3 terminal and \***\*for each\*\*** of them go to
 
 ```
-
 cd [rootProject]/sse-v1/
-
 ```
 
 In first tab/terminal, run
 
 ```
-
 sse chs
-#it's also called in long name
-#sse cors-http-server
+```
 
+it's also called in long name
+
+```
+sse cors-http-server
 ```
 
 In second tab/terminal, run
 
 ```
-
 npm run serve
-
 ```
 
 #### Step 2 : if necessary or not done already, use a run in third tab/terminal the following commands depend of what you expect
@@ -504,9 +559,7 @@ Reason : Parse data into torch audio, a Neuronal network and permit to execute a
 Command :
 
 ```
-
 sse extract all
-
 ```
 
 ##### Action 2 : extract a preview of Sample to see mel-spectograme
@@ -518,9 +571,7 @@ Reason : Show this on browser
 Command :
 
 ```
-
 sse extract preview
-
 ```
 
 ##### Action 3 : Project the 128 dimensions into 2 dimensions with UMAP
@@ -534,9 +585,7 @@ Reason : Show this on browser by action 6 and find biologistic clues
 Command :
 
 ```
-
 sse compute umap
-
 ```
 
 ##### Action 4 : Compute the volume of samples
@@ -548,9 +597,7 @@ Reason : Show this on browser by action 6 and find biologistic clues
 Command :
 
 ```
-
 sse compute volume
-
 ```
 
 ##### Action 5 : Compute covering
@@ -562,9 +609,7 @@ Reason : Show this on browser by action 6 and find biologistic clues during a ti
 Command :
 
 ```
-
 sse compute covering
-
 ```
 
 ##### Action 6 : Show app on browser
@@ -574,9 +619,7 @@ Required actions : Action 3,4,5
 Open your favorite browser and go to
 
 ```
-
 http://localhost:8080/
-
 ```
 
 #### Step 3 : Explanation of tabs
@@ -590,9 +633,7 @@ Il you want to refres the newest configuration after edit config.xlsx, you need 
 From [rootProject]/sse-v1/ path
 
 ```
-
 sse show config --json > generated/ghost-config.json
-
 ```
 
 ##### Mini Tools
@@ -622,39 +663,66 @@ Permit to see an preview of an logger. You can config this into minitool.
 
 #### typical commands
 
+run the server
+
+```
+sse cors-http-server
 ```
 
-#####run the server
-sse cors-http-server
-#####it's also called in shortname
+it's also called in shortname
+
+```
 sse chs
+```
 
-#
-
+```
 sse extract all
+```
 
-###### if a lot of files and you know they have each a 60s duration
+if a lot of files and you know they have each a 60s duration
 
+```
 sse show audio-span-splot -s 60
+```
 
-###### else (few files or patient)
+else (few files or patient)
 
+```
 sse show audio-span-splot
+```
 
+```
 sse extract preview
+```
+
+```
 sse compute volume
+```
+
+```
 sse compute covering
+```
+
+```
 sse compute umap
+```
 
+```
 sse help
+```
 
-###### copy the config generators
+copy the config generators
 
+```
 sse chs
+```
 
+```
 (cd [rootProject]/sse-v1 ; npm run dev)
-(cd [rootProject]/sample sse show config --json > generated/ghost-config.json)
+```
 
+```
+(cd [rootProject]/sample sse show config --json > generated/ghost-config.json)
 ```
 
 ## Development notes
@@ -663,14 +731,39 @@ sse chs
 
 made a vue project
 
-```output
+```
+output
+```
+
+```
 Vue CLI v4.5.13
+```
+
+```
 ? Please pick a preset: Manually select features
+```
+
+```
 ? Check the features needed for your project: Choose Vue version, Babel, CSS Pre-processors, Linter
+```
+
+```
 ? Choose a version of Vue.js that you want to start the project with 3.x
+```
+
+```
 ? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default): Sass/SCSS (with dart-sass)
+```
+
+```
 ? Pick a linter / formatter config: Prettier
+```
+
+```
 ? Pick additional lint features: Lint on save
+```
+
+```
 ? Where do you prefer placing config for Babel, ESLint, etc.? In dedicated config files
 ```
 
@@ -680,7 +773,13 @@ using the icon in the vue project
 
 ```
 inkscape media/icons.svg -o media/sse-icon.png
+```
+
+```
 cp -f media/sse-icon.png sse-v1/src/assets/logo.png
+```
+
+```
 convert sse-v1/src/assets/logo.png sse-v1/public/favicon.ico
 ```
 
@@ -688,54 +787,107 @@ convert sse-v1/src/assets/logo.png sse-v1/public/favicon.ico
 
 ```
 cp -t log1/ '........./Logger1/20210429_180000.WAV'  ###### strange...
-cp -t log2/ '........./Logger2/20210429_180000.WAV'
+```
 
+```
+cp -t log2/ '........./Logger2/20210429_180000.WAV'
+```
 
 ###### for each folder
+
+```
 ffmpeg  -i 20210429_180000.WAV -ss 0 -t 60 -c copy chunk-20210429_180000.WAV
+```
+
+```
 ffmpeg  -i 20210429_180000.WAV -ss 60 -t 60 -c copy chunk-20210429_180100.WAV
+```
+
+```
 ffmpeg  -i 20210429_180000.WAV -ss 120 -t 60 -c copy chunk-20210429_180200.WAV
+```
+
+```
 ffmpeg  -i 20210429_180000.WAV -ss 180 -t 60 -c copy chunk-20210429_180300.WAV
+```
+
+```
 ffmpeg  -i 20210429_180000.WAV -ss 600 -t 60 -c copy chunk-20210429_181000.WAV
+```
 
 ###### alternative to fake a first one using the second
+
+```
 ffmpeg  -i ../log2/20210429_180000.WAV -ss 1000 -t 60 -c copy chunk-20210429_180000.WAV
+```
+
+```
 ffmpeg  -i ../log2/20210429_180000.WAV -ss 1060 -t 60 -c copy chunk-20210429_180100.WAV
+```
+
+```
 ffmpeg  -i ../log2/20210429_180000.WAV -ss 1120 -t 60 -c copy chunk-20210429_180200.WAV
+```
+
+```
 ffmpeg  -i ../log2/20210429_180000.WAV -ss 1180 -t 60 -c copy chunk-20210429_180300.WAV
+```
+
+```
 ffmpeg  -i ../log2/20210429_180000.WAV -ss 1600 -t 60 -c copy chunk-20210429_181000.WAV
-
-
 ```
 
 ### Extracting features and previews
 
 ```
 sse extract all -f
-sse extract preview
+```
 
+```
+sse extract preview
+```
+
+```
 sse show band-freqs
+```
+
+```
 sse show list-sites
+```
 
 ###### if a lot of files and you know they have each a 60s duration
+
+```
 sse show audio-span-splot -s 60
+```
+
 ###### else (few files or patient)
+
+```
 sse show audio-span-splot
 ```
 
 For now, we use python to save a json of the config, to avoid implementing the parser (although this is easy-ish):
 
-```
 ###### get the command with (use the ones that redirect to .js and .json files
+
+```
 sse help
 ```
 
 ### Some npm installs
 
+for naive
+
 ```
-# for naive
 npm i -D naive-ui
+```
+
+```
 npm i -D vfonts
+```
+
+```
 npm i -D worklet-loader
 ```
 
@@ -743,6 +895,9 @@ npm i -D worklet-loader
 
 ```
 cd sse-v1/
+```
+
+```
 npm run serve
 ```
 
@@ -750,6 +905,9 @@ and the data server
 
 ```
 cd sample/
+```
+
+```
 sse cors-http-server
 ```
 
@@ -763,12 +921,13 @@ npm run build
 where=../sample
 #-e 's@data-src=""@src="../'"$where"/'generated/ghost-config-json.js"@g'
 sed -i -e 's@="/@="@g'  dist/index.html
-sed -i -e 's@http://localhost:9876/@'"$where"'/@g' dist/js/*.js
-#sed -i -e 's@LOCAL:!@LOCAL:@g' dist/js/*.js
-```
-
-#### markdown
+sed -i -e 's@http://localhost:9876/@'"$where"'/@g' dist/js/_.js
+#sed -i -e 's@LOCAL:!@LOCAL:@g' dist/js/_.js
 
 ```
-markdown README.md > .hiddenREADME.html
+
+#### create documentation base on markdown to html friendly
+
+```
+python3 .creatdoc.py
 ```

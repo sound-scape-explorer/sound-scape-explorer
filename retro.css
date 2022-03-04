@@ -1,167 +1,205 @@
 @charset "UTF-8";
+
+code {
+  background-color: gray;
+}
+
 /*from https://github.com/markdowncss/retro/blob/master/css/retro.css*/
-iframe pre,iframe  code {
-	font-family: Menlo, Monaco, "Courier New", monospace;
+pre,
+code {
+  font-family: Menlo, Monaco, "Courier New", monospace;
 }
 
-iframe pre {
-	padding: .5rem;
-	line-height: 1.25;
-	overflow-x: scroll;
+pre {
+  padding: 0.5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
 }
 
-iframe{
-	width: 100%;
-	height: 100%;
+body {
+  width: 100%;
+  height: 80%;
 }
-
-body{
-	width: 100%;
-	height: 80%;
-}
-
 
 @media print {
-	*, *:before, *:after {
-		background: transparent !important;
-		color: #000 !important;
-		box-shadow: none !important;
-		text-shadow: none !important;
-	}
-	iframe a,iframe  a:visited {
-		text-decoration: underline;
-	}
-	iframe a[href]:after {
-		content: " (" attr(href) ")";
-	}
-	iframe abbr[title]:after {
-		content: " (" attr(title) ")";
-	}
-	iframe a[href^="#"]:after, a[href^="javascript:"]:after {
-		content: "";
-	}
-	iframe pre,iframe  blockquote {
-		border: 1px solid rgb(190, 175, 175);
-		page-break-inside: avoid;
-	}
-	iframe thead {
-		display: table-header-group;
-	}
-	iframe tr,iframe  img {
-		page-break-inside: avoid;
-	}
-	iframe img {
-		max-width: 100% !important;
-	}
-	iframe p,iframe  h2,iframe  h3 {
-		orphans: 3;
-		widows: 3;
-	}
-	iframe h2,iframe  h3 {
-		page-break-after: avoid;
-	}
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+  pre,
+  blockquote {
+    border: 1px solid rgb(190, 175, 175);
+    page-break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+  img {
+    max-width: 100% !important;
+  }
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
 }
 
-iframe a, a:visited {
-	color: #01ff70;
+a,
+a:visited {
+  color: #01ff70;
 }
 
-iframe a:hover,iframe  a:focus,iframe  a:active {
-	color: #2ecc40;
+a:hover,
+a:focus,
+a:active {
+  color: #2ecc40;
 }
 
-iframe .retro-no-decoration {
-	text-decoration: none;
+.retro-no-decoration {
+  text-decoration: none;
 }
 
 html {
-	font-size: 12px;
+  font-size: 12px;
 }
 
 @media screen and (min-width: 32rem) and (max-width: 48rem) {
-	html {
-		font-size: 15px;
-	}
+  html {
+    font-size: 15px;
+  }
 }
 
 @media screen and (min-width: 48rem) {
-	html {
-		font-size: 16px;
-	}
+  html {
+    font-size: 16px;
+  }
 }
 
 body {
-	line-height: 1.85;
+  line-height: 1.85;
 }
 
-iframe p,iframe  .retro-p {
-	font-size: 1rem;
-	margin-bottom: 1.3rem;
+p,
+.retro-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
 }
 
-iframe h1,iframe  .retro-h1,iframe  h2,iframe  .retro-h2, h3,iframe  .retro-h3,iframe  h4,iframe  .retro-h4 {
-	margin: 1.414rem 0 .5rem;
-	font-weight: inherit;
-	line-height: 1.42;
+h1,
+.retro-h1,
+h2,
+.retro-h2,
+h3,
+.retro-h3,
+h4,
+.retro-h4 {
+  margin: 1.414rem 0 0.5rem;
+  font-weight: inherit;
+  line-height: 1.42;
 }
 
-iframe h1, .retro-h1 {
-	margin-top: 0;
-	font-size: 3.998rem;
+h1,
+.retro-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
 }
 
-iframe h2, .retro-h2 {
-	font-size: 2.827rem;
+h2,
+.retro-h2 {
+  font-size: 2.827rem;
 }
 
-iframe h3, .retro-h3 {
-	font-size: 1.999rem;
+h3,
+.retro-h3 {
+  font-size: 1.999rem;
 }
 
-iframe h4, .retro-h4 {
-	font-size: 1.414rem;
+h4,
+.retro-h4 {
+  font-size: 1.414rem;
 }
 
-iframe h5, .retro-h5 {
-	font-size: 1.121rem;
+h5,
+.retro-h5 {
+  font-size: 1.121rem;
 }
 
-iframe h6, .retro-h6 {
-	font-size: .88rem;
+h6,
+.retro-h6 {
+  font-size: 0.88rem;
 }
 
-iframe small, .retro-small {
-	font-size: .707em;
+small,
+.retro-small {
+  font-size: 0.707em;
 }
 
 /* https://github.com/mrmrs/fluidity */
-iframe img,iframe  canvas,iframe  iframe,iframe  video,iframe  svg,iframe  select,iframe  textarea {
-	max-width: 100%;
+img,
+canvas,
+,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
 }
 
-html, body > iframe {
-	background-color: rgb(121, 121, 121);
-	min-height: 100%;
+html,
+body > {
+  background-color: rgb(121, 121, 121);
+  min-height: 100%;
 }
 
 html {
-	font-size: 18px;
+  font-size: 18px;
 }
 
 body {
-	color: #fafafa;
-	font-family: "Courier New";
-	line-height: 1.45;
-	/*margin: 6rem auto 1rem;*/
-	max-width: 48rem;
-	padding: .25rem;
+  color: #000000;
+  font-family: "Courier New";
+  line-height: 1.45;
+  /*margin: 6rem auto 1rem;*/
+  max-width: 48rem;
+  padding: 0.25rem;
 }
 
-iframe pre {
-	background-color: rgb(180, 177, 177);
+pre {
+  background-color: rgb(180, 177, 177);
 }
 
-iframe blockquote {
-	border-left: 3px solid #01ff70;
-	padding-left: 1rem;
+blockquote {
+  border-left: 3px solid #01ff70;
+  padding-left: 1rem;
+}
+
+img {
+  width: 100%;
 }
