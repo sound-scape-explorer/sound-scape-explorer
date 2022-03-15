@@ -81,7 +81,7 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import {
   NTable,
   NSlider,
@@ -92,25 +92,12 @@ import {
   NSwitch,
   NSpace,
 } from "naive-ui";
-const NComponents = {
-  NTable,
-  NSlider,
-  NInputNumber,
-  NInputGroup,
-  NButton,
-  NButtonGroup,
-  NSwitch,
-  NSpace,
-};
+import { ScatterChart, useScatterChart } from "vue-chart-3";
 
 import { UMAP_RANGES } from "@/mappings.js";
 import { onMounted, inject, computed, ref } from "vue";
-import { ScatterChart, useScatterChart } from "vue-chart-3";
 import { useTask } from "vue-concurrency";
 
-export default {
-  components: { ...NComponents, ScatterChart },
-  setup() {
     const root = inject("root");
     const focus = ref(null);
     const currentBand = ref("");
@@ -316,28 +303,6 @@ export default {
       options: chartOptions,
     });
 
-    return {
-      minStart,
-      maxStart,
-      startStep,
-      sliders,
-      start,
-      duration,
-      setDuration,
-      showAll,
-      scatterChartProps,
-      currentBand,
-      currentUmap,
-      bands,
-      umaps,
-      focus,
-      currentGraphURL,
-      select,
-      dateThere,
-      clearScatter,
-    };
-  },
-};
 </script>
 
 <style>
