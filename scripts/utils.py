@@ -28,6 +28,14 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
     if not disable_prefix:
         c_values = [c_key+'_'+c for c in c_values]
 
+    def parseTags(sep): # tags or alike
+        def doParse(v):
+            if type(v) is not str:
+                return []
+            v = v.strip()
+            return [p.strip() for p in v.split(sep) if len(p.strip()) > 0]
+        return doParse
+    
     types = []
     for c_val in c_values:
         if ':' in c_val:
@@ -36,17 +44,17 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
                 types.append({
                     'I': int,
                     'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M%S'),
-                    'L': lambda v: v.split(','),
-                    'L-': lambda v: v.split('-'),
-                    'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M%S') for vv in v.split('-')],
+                    'L': parseTags(','),
+                    'L-': parseTags('-'),
+                    'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M%S') for vv in parseTags('-')(v)],
                 }[t])
             except Exception as e:
                 types.append({
                     'I': int,
                     'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
-                    'L': lambda v: v.split(','),
-                    'L-': lambda v: v.split('-'),
-                    'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M') for vv in v.split('-')],
+                    'L': parseTags(','),
+                    'L-': parseTags('-'),
+                    'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M') for vv in parseTags('-')(v)],
                 }[t])
         else:
             types.append(str)
