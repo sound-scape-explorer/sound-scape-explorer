@@ -143,15 +143,15 @@ import { useTask } from "vue-concurrency";
 
     onMounted(() => {
       select(
-        umaps.value[parseInt(umaps.value.length / 2)],
-        bands.value[parseInt(bands.value.length / 2)]
+        umaps.value[Math.floor(umaps.value.length / 2)],
+        bands.value[Math.floor(bands.value.length / 2)]
       );
     });
 
     const addAllGrey = ref(true);
     const showAll = ref(true);
     const duration = ref(3600); // sec
-    const start = ref(parseInt(Date.now()/1000));// do not patch here the date by timezone, directly on display 
+    const start = ref(Math.floor(Date.now()/1000));// do not patch here the date by timezone, directly on display 
 
     const setDuration = (sec) => {
       showAll.value = false;
@@ -177,7 +177,7 @@ import { useTask } from "vue-concurrency";
       return json;
     });
 
-    const startStep = computed(() => parseInt(duration.value / 2));
+    const startStep = computed(() => Math.floor(duration.value / 2));
     const minStart = computed(() =>
       fetcher.lastSuccessful ? Math.min(...fetcher.lastSuccessful.value.t) : 0
     );
@@ -185,7 +185,7 @@ import { useTask } from "vue-concurrency";
       fetcher.lastSuccessful
         ? minStart.value +
           startStep.value *
-            parseInt(
+            Math.floor(
               (Math.max(...fetcher.lastSuccessful.value.t) - minStart.value) /
                 startStep.value
             )
@@ -196,15 +196,15 @@ import { useTask } from "vue-concurrency";
       return root.cfg.umaps[currentUmap.value][UMAP_RANGES].map((kr) => ({
         key: kr,
         startStop: root.cfg.ranges[kr].map((d) =>{
-          console.log(parseInt(new Date(d).getTime() / 1000 ), d)
+          console.log(Math.floor(new Date(d).getTime() / 1000 ), d)
           return parseInt(new Date(d).getTime() / 1000 ) 
         }),
         marks: {
-          [parseInt(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦ ",
-          [parseInt(
+          [Math.floor(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦ ",
+          [Math.floor(
             new Date(root.cfg.ranges[kr][0]).getTime() / 1000 +
               startStep.value *
-                parseInt(
+                Math.floor(
                   (new Date(root.cfg.ranges[kr][1]).getTime() -
                     new Date(root.cfg.ranges[kr][0]).getTime()) /
                     1000 /
@@ -212,7 +212,7 @@ import { useTask } from "vue-concurrency";
                     2
                 )
           )]: kr,
-          [parseInt(new Date(root.cfg.ranges[kr][1]).getTime() / 1000)]: "⟧",
+          [Math.floor(new Date(root.cfg.ranges[kr][1]).getTime() / 1000)]: "⟧",
         },
       }));
     });
