@@ -4,7 +4,7 @@ import App from './App.vue'
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
-import { BoxPlotController } from '@sgratzl/chartjs-chart-boxplot';
-Chart.register(BoxPlotController);
+import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
+Chart.register(BoxPlotController, BoxAndWiskers);
 
 createApp(App).mount("#app");

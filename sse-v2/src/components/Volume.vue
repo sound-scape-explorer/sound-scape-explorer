@@ -127,7 +127,7 @@ export default {
     );
 
     const fetcherCache = {};
-    o._fetcher = useTask(function* (signal, inte, band) {
+    o.nr_fetcher = useTask(function* (signal, inte, band) {
       const k = inte + "/" + band;
       if (k in fetcherCache) return fetcherCache[k];
       const req = yield fetch(
@@ -166,13 +166,13 @@ export default {
           o.currentIntegration.value = ki;
         }
       }
-      o._fetcher.perform(o.currentIntegration.value, o.currentBand.value);
-      o.focus.value.focus();
+      o.nr_fetcher.perform(o.currentIntegration.value, o.currentBand.value);
+      o.focus.value?.focus();
     };
 
     o.boxPlotData = computed(() => {
-      if (o._fetcher.lastSuccessful === undefined) return { datasets: [] };
-      const v = o._fetcher.lastSuccessful.value;
+      if (o.nr_fetcher.lastSuccessful === undefined) return null;
+      const v = o.nr_fetcher.lastSuccessful.value;
       /*const sites = [
         ...new Set(Object.values(root.cfg.files).map((f) => f[FILE_SITE])),
       ];*/

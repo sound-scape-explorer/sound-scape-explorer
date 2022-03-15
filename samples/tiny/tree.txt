@@ -1,0 +1,135 @@
+.
+├── audio
+│   ├── log1
+│   │   ├── 20210429_180000.WAV
+│   │   ├── chunk-20210429_180000.WAV
+│   │   ├── chunk-20210429_180100.WAV
+│   │   ├── chunk-20210429_180200.WAV
+│   │   ├── chunk-20210429_180300.WAV
+│   │   └── chunk-20210429_181000.WAV
+│   └── log2
+│       ├── 20210429_180000.WAV
+│       ├── chunk-20210429_180000.WAV
+│       ├── chunk-20210429_180100.WAV
+│       ├── chunk-20210429_180200.WAV
+│       ├── chunk-20210429_180300.WAV
+│       └── chunk-20210429_181000.WAV
+├── config.xlsx
+├── features
+│   ├── all
+│   │   ├── log1
+│   │   │   ├── chunk-20210429_180000.pklz
+│   │   │   ├── chunk-20210429_180100.pklz
+│   │   │   ├── chunk-20210429_180200.pklz
+│   │   │   ├── chunk-20210429_180300.pklz
+│   │   │   └── chunk-20210429_181000.pklz
+│   │   └── log2
+│   │       ├── chunk-20210429_180000.pklz
+│   │       ├── chunk-20210429_180100.pklz
+│   │       ├── chunk-20210429_180200.pklz
+│   │       ├── chunk-20210429_180300.pklz
+│   │       └── chunk-20210429_181000.pklz
+│   ├── band1
+│   │   ├── log1
+│   │   │   ├── chunk-20210429_180000.pklz
+│   │   │   ├── chunk-20210429_180100.pklz
+│   │   │   ├── chunk-20210429_180200.pklz
+│   │   │   ├── chunk-20210429_180300.pklz
+│   │   │   └── chunk-20210429_181000.pklz
+│   │   └── log2
+│   │       ├── chunk-20210429_180000.pklz
+│   │       ├── chunk-20210429_180100.pklz
+│   │       ├── chunk-20210429_180200.pklz
+│   │       ├── chunk-20210429_180300.pklz
+│   │       └── chunk-20210429_181000.pklz
+│   ├── band2
+│   │   ├── log1
+│   │   │   ├── chunk-20210429_180000.pklz
+│   │   │   ├── chunk-20210429_180100.pklz
+│   │   │   ├── chunk-20210429_180200.pklz
+│   │   │   ├── chunk-20210429_180300.pklz
+│   │   │   └── chunk-20210429_181000.pklz
+│   │   └── log2
+│   │       ├── chunk-20210429_180000.pklz
+│   │       ├── chunk-20210429_180100.pklz
+│   │       ├── chunk-20210429_180200.pklz
+│   │       ├── chunk-20210429_180300.pklz
+│   │       └── chunk-20210429_181000.pklz
+│   ├── band3
+│   │   ├── log1
+│   │   │   ├── chunk-20210429_180000.pklz
+│   │   │   ├── chunk-20210429_180100.pklz
+│   │   │   ├── chunk-20210429_180200.pklz
+│   │   │   ├── chunk-20210429_180300.pklz
+│   │   │   └── chunk-20210429_181000.pklz
+│   │   └── log2
+│   │       ├── chunk-20210429_180000.pklz
+│   │       ├── chunk-20210429_180100.pklz
+│   │       ├── chunk-20210429_180200.pklz
+│   │       ├── chunk-20210429_180300.pklz
+│   │       └── chunk-20210429_181000.pklz
+│   └── band4
+│       ├── log1
+│       │   ├── chunk-20210429_180000.pklz
+│       │   ├── chunk-20210429_180100.pklz
+│       │   ├── chunk-20210429_180200.pklz
+│       │   ├── chunk-20210429_180300.pklz
+│       │   └── chunk-20210429_181000.pklz
+│       └── log2
+│           ├── chunk-20210429_180000.pklz
+│           ├── chunk-20210429_180100.pklz
+│           ├── chunk-20210429_180200.pklz
+│           ├── chunk-20210429_180300.pklz
+│           └── chunk-20210429_181000.pklz
+├── generated
+│   ├── ghost-config.json
+│   ├── ghost-config-json.js
+│   ├── preview-audio
+│   │   ├── hzdiv10.wav
+│   │   └── normal.wav
+│   ├── preview-spectrogram
+│   │   ├── all.png
+│   │   ├── band1.png
+│   │   └── band2.png
+│   ├── single
+│   │   └── volume
+│   │       ├── 10
+│   │       │   ├── all.json
+│   │       │   ├── all.logprodspan.png
+│   │       │   ├── all.sumstd.png
+│   │       │   ├── all.sumvar.png
+│   │       │   ├── band1.json
+│   │       │   ├── band1.logprodspan.png
+│   │       │   ├── band1.sumstd.png
+│   │       │   ├── band1.sumvar.png
+│   │       │   ├── band2.json
+│   │       │   ├── band2.logprodspan.png
+│   │       │   ├── band2.sumstd.png
+│   │       │   └── band2.sumvar.png
+│   │       └── 60
+│   │           ├── all.json
+│   │           ├── all.logprodspan.png
+│   │           ├── all.sumstd.png
+│   │           ├── all.sumvar.png
+│   │           ├── band1.json
+│   │           ├── band1.logprodspan.png
+│   │           ├── band1.sumstd.png
+│   │           ├── band1.sumvar.png
+│   │           ├── band2.json
+│   │           ├── band2.logprodspan.png
+│   │           ├── band2.sumstd.png
+│   │           └── band2.sumvar.png
+│   └── umap
+│       ├── u_1min
+│       │   ├── all.json
+│       │   ├── all.png
+│       │   ├── band1.json
+│       │   └── band1.png
+│       └── u_2sec
+│           ├── all.json
+│           ├── all.png
+│           ├── band1.json
+│           └── band1.png
+└── tree.txt
+
+29 directories, 103 files

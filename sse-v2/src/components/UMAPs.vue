@@ -8,7 +8,7 @@
       @keydown.up="select(-1, undefined)"
       @keydown.down="select(1, undefined)"
     />
-    <ScatterChart v-bind="scatterChartProps" />
+    <ScatterChart v-if="!clearScatter" v-bind="scatterChartProps" />
     <n-input-group>
       <div style="width: 10%; margin: 0 2%">
         <n-space>
@@ -90,6 +90,7 @@ import {
   NButton,
   NButtonGroup,
   NSwitch,
+  NSpace,
 } from "naive-ui";
 const NComponents = {
   NTable,
@@ -99,6 +100,7 @@ const NComponents = {
   NButton,
   NButtonGroup,
   NSwitch,
+  NSpace,
 };
 
 import { UMAP_RANGES } from "@/mappings.js";
@@ -113,6 +115,7 @@ export default {
     const focus = ref(null);
     const currentBand = ref("");
     const currentUmap = ref("");
+    const clearScatter = ref(true);
 
     const bands = computed(() => Object.keys(root.cfg.bands));
     const umaps = computed(() => Object.keys(root.cfg.umaps));
@@ -124,6 +127,7 @@ export default {
     });
 
     function select(ku, k) {
+      clearScatter.value = true
       if (k !== undefined) {
         if (typeof k === "number") {
           let ik = Math.min(
@@ -147,7 +151,7 @@ export default {
         }
       }
       fetcher.perform(currentUmap.value, currentBand.value);
-      focus.value.focus();
+      focus.value?.focus();
     }
 
     onMounted(() => {
@@ -172,13 +176,17 @@ export default {
     const fetcher = useTask(function* (signal, umap, band) {
       const k = umap + "/" + band;
       console.log(k, fetcherCache);
-      if (k in fetcherCache) return fetcherCache[k];
+      if (k in fetcherCache) {
+        setTimeout(() => { clearScatter.value = false; }, 200);
+        return fetcherCache[k];
+      }
       const req = yield fetch(
         `${root.BASE}generated/umap/${umap}/${band}.json`,
         { signal }
       );
       const json = yield req.json();
       fetcherCache[k] = json;
+      setTimeout(() => { clearScatter.value = false; }, 200);
       return json;
     });
 
@@ -234,7 +242,7 @@ export default {
     }
 
     const chartData = computed(() => {
-      if (fetcher.lastSuccessful === undefined) return { datasets: [] };
+      if (fetcher.lastSuccessful === undefined) return null; // TODO null is ok but when nb of datasets changes there is a crash
       const v = fetcher.lastSuccessful.value;
       const labels = [...new Set(v.l)];
       const rawData = () => v.X.map(([x, y]) => ({ x, y }));
@@ -256,12 +264,12 @@ export default {
         // TODO: have a common hsl h-bending function that better distributes in terms of Δe00 for instance
       }));
       const allGreyDataset =
-        addAllGrey.value && !showAll.value
+        true || addAllGrey.value && !showAll.value // TODO: when nb of datasets changes, there is a crash
           ? [
               {
                 label: "*",
                 data: v.X.map(([x, y]) => ({ x, y })),
-                pointBackgroundColor: "hsl(0, 0%, 50%)",
+                pointBackgroundColor: "hsl(0, 0%, 90%)",
                 pointBorderWidth: 0,
                 pointRadius: 2,
               },
@@ -326,6 +334,7 @@ export default {
       currentGraphURL,
       select,
       dateThere,
+      clearScatter,
     };
   },
 };
