@@ -232,6 +232,8 @@ function dateThere(d) {
   }).format(d);
 }
 
+const testCol = ref(6);
+
 const chartData = computed(() => {
   if (fetcher.lastSuccessful === undefined) return null; // TODO null is ok but when nb of datasets changes there is a crash
   const v = fetcher.lastSuccessful.value;
@@ -248,12 +250,16 @@ const chartData = computed(() => {
   } else {
     data = (l) => rawData().filter((o, i) => v.l[i] === l);
   }
-  const datasets = labels.map((l, il) => ({
-    label: l,
-    data: data(l),
-    backgroundColor: `hsl(${il / labels.length}turn, 75%, 50%, .5)`,
-    // TODO: have a common hsl h-bending function that better distributes in terms of Δe00 for instance
-  }));
+  const datasets = labels.map(function (l, il) {
+    const d = data(l);
+    return {
+      label: l,
+      data: d,
+      //backgroundColor: `hsl(${il / labels.length}turn, 75%, 50%, .5)`,
+      backgroundColor: (ctx) => (ctx.dataIndex === undefined ? 'blue' : `hsl(${d[ctx.dataIndex].x / testCol.value}turn, 75%, 50%, .5)`), // ok, undefined is when we render the legend
+      // TODO: have a common hsl h-bending function that better distributes in terms of Δe00 for instance
+    }
+  });
   const allGreyDataset =
     true || (addAllGrey.value && !showAll.value) // TODO: when nb of datasets changes, there is a crash
       ? [
@@ -295,6 +301,7 @@ const chartOptions = computed(() => {
 
   return {
     title: `UMAP [${currentUmap.value}] ${currentBand.value}, ${v.binSize}sec window`,
+    customHackyForceTrigger: [testCol.value],
     animation: {
       duration: 0,
     },
