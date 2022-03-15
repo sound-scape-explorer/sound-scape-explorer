@@ -58,10 +58,11 @@ def show():
 
 @show.command()
 @click.option('--json/--dict', default=False)
-def config(json):
+@click.option('--indent', default=None)
+def config(json, indent):
     cfg = get_config()
     if json:
-        print(json_dumps(cfg._asdict(), default=lambda o: o.isoformat())) # might need a more complex method if we push the idea of parsing the config even further
+        print(json_dumps(cfg._asdict(), indent=None if indent is None else int(indent), default=lambda o: o.isoformat())) # might need a more complex method if we push the idea of parsing the config even further
     else:
         pprint.pprint(cfg._asdict())
 
