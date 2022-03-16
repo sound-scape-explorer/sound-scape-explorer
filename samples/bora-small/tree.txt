@@ -1,0 +1,60 @@
+.
+├── BORA_ANR_sons -> /run/media/twilight/My Passport/ENES/BORA_ANR_sons
+├── config.xlsx
+├── features
+│   ├── all
+│   │   ├── 28AVRIL_site_naturel
+│   │   ├── 28AVRIL_site_touristique
+│   │   ├── 28JUIN_site_naturel
+│   │   └── 28JUIN_site_touristique
+│   └── band1
+│       ├── 28AVRIL_site_naturel
+│       ├── 28AVRIL_site_touristique
+│       ├── 28JUIN_site_naturel
+│       └── 28JUIN_site_touristique
+├── generated
+│   ├── ghost-config.json
+│   ├── single
+│   │   └── volume
+│   │       ├── 10
+│   │       │   ├── all.json
+│   │       │   ├── all.logprodspan.png
+│   │       │   ├── all.sumstd.png
+│   │       │   ├── all.sumvar.png
+│   │       │   ├── band1.json
+│   │       │   ├── band1.logprodspan.png
+│   │       │   ├── band1.sumstd.png
+│   │       │   └── band1.sumvar.png
+│   │       └── 60
+│   │           ├── all.json
+│   │           ├── all.logprodspan.png
+│   │           ├── all.sumstd.png
+│   │           ├── all.sumvar.png
+│   │           ├── band1.json
+│   │           ├── band1.logprodspan.png
+│   │           ├── band1.sumstd.png
+│   │           └── band1.sumvar.png
+│   └── umap
+│       ├── u_10sec
+│       │   ├── all.json
+│       │   ├── all.png
+│       │   ├── band1.json
+│       │   └── band1.png
+│       ├── u_1min
+│       │   ├── all.json
+│       │   ├── all.png
+│       │   ├── band1.json
+│       │   └── band1.png
+│       ├── u_1minshort
+│       │   ├── all.json
+│       │   ├── all.png
+│       │   ├── band1.json
+│       │   └── band1.png
+│       └── u_2minavril
+│           ├── all.json
+│           ├── all.png
+│           ├── band1.json
+│           └── band1.png
+└── tree.txt
+
+22 directories, 1091 files
