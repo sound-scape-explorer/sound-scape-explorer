@@ -8,7 +8,14 @@
       @keydown.up="select(-1, undefined)"
       @keydown.down="select(1, undefined)"
     />
-    <ScatterChart v-if="!clearScatter" v-bind="scatterChartProps" />
+    <input type="checkbox" v-model="showOld"/>
+    <div ref="scatterglDiv" class="scattergl-container">
+    </div>
+    <div class="scattergl-controls">
+      <input v-model="query"/>
+      <input v-model="colorBy"/>
+    </div>
+    <ScatterChart v-if="showOld && !clearScatter" v-bind="scatterChartProps" />
     <n-input-group>
       <div style="width: 10%; margin: 0 2%">
         <n-space>
@@ -95,9 +102,12 @@ import {
 } from "naive-ui";
 import { ScatterChart, useScatterChart } from "vue-chart-3";
 
+
 import { UMAP_RANGES } from "@/mappings.js";
-import { onMounted, inject, computed, ref } from "vue";
+import { onMounted, inject, computed, ref, watchEffect, watch } from "vue";
 import { useTask } from "vue-concurrency";
+
+const showOld = ref(false); // also show slow umap that uses chartjs?
 
 const root = inject("root");
 const focus = ref(null);
@@ -313,19 +323,143 @@ const { scatterChartProps } = useScatterChart({
   chartData,
   options: chartOptions,
 });
+
+import { Dataset, ScatterGL } from '@/scatter-gl-src';
+import * as THREE from 'three';
+
+console.log(THREE.CustomBlending)
+
+const scatterglDiv = ref(null);
+const query = ref("");
+const colorBy = ref("labelIndex");
+
+let scatterGL: ScatterGL | null = null;
+let renderPass = 'normal';
+let dataset: Dataset | null = null;
+let lastSelectedPoints: number[] = [];
+function rerender() {
+  if (scatterGL === null) return;
+  scatterGL.render(dataset);
+}
+
+watch([fetcher], () => {
+  if (fetcher.lastSuccessful === undefined) return null; // TODO null is ok but when nb of datasets changes there is a crash
+  const v = fetcher.lastSuccessful.value;
+  const labels = [...new Set(v.l)];
+  //const rawData = () => v.X.map(([x, y]) => ({ x, y }));
+  dataset = new Dataset(
+    [...v.X, ...v.X],
+    [...v.l.map((label: string) => ({label, labelIndex: labels.indexOf(label)})), ...v.l.map((label: string) => ({label, labelIndex: labels.indexOf(label)}))],
+    );
+  console.log("WATCH SCATTER", v.l.length);
+
+  const darkMode = false;
+
+  const first = scatterGL === null;
+  if (first) {
+    scatterGL = new ScatterGL(scatterglDiv.value, {
+      onClick: (point: number | null) => {
+        //setMessage(`click ${point}`);
+      },
+      onHover: (point: number | null) => {
+        //setMessage(`hover ${point}`);
+      },
+      onSelect: (points: number[]) => {
+        let message = '';
+        if (points.length === 0 && lastSelectedPoints.length === 0) {
+          message = 'no selection';
+        } else if (points.length === 0 && lastSelectedPoints.length > 0) {
+          message = 'deselected';
+        } else if (points.length === 1) {
+          message = `selected ${points}`;
+        } else {
+          message = `selected ${points.length} points`;
+        }
+        //setMessage(message);
+      },
+      renderMode: 'POINT',
+      orbitControls: {
+        zoomSpeed: 1.33,
+      },
+      styles: {
+          backgroundColor: darkMode ? 0 : undefined,
+          moreShaderOptions: {
+              depthTest: false,
+              depthWrite: false,
+              /*blending: THREE.CustomBlending,
+              blendEquation: darkMode ? THREE.AddEquation : THREE.AddEquation,
+              blendDst: darkMode ? THREE.OneMinusSrcAlphaFactor : THREE.OneMinusSrcAlphaFactor,
+              blendSrc: darkMode ? THREE.SrcAlphaFactor : THREE.SrcAlphaFactor,
+              //*/
+          },
+      },
+    });
+  }
+  rerender();
+  if (first) {
+    scatterGL.setPointColorer((ii, selectedIndices, hoverIndex) => {
+      if (dataset === null) {
+        return "red";
+      }
+      const i = ii % Math.floor(dataset.metadata.length / 2);
+      const isBg = ii < dataset.metadata.length / 2;
+
+      if (isBg) return `hsla(0, 0%, ${darkMode ? 20 : 90}%, 1)`;
+
+      const hue255 = ((dataset.metadata[ii].labelIndex / testCol.value) % 1)* 255
+      //const alpha = selectedIndices.size === 0 ? .1 : selectedIndices.has(i) ? 0.5 : 0.05
+      const highAlpha = 0.75;
+      const lowAlpha = 0.0;
+      let alpha = 0.4;
+      let sat = 100;
+
+      if (showAll.value && query.value === "") {
+        // show all
+      } else {
+        if (! showAll.value) { // time filter
+          const tStart = start.value;
+          const tEnd = tStart + duration.value;
+          if (v.t[i] >= tStart && v.t[i] < tEnd) {
+            alpha = highAlpha;
+          } else {
+            alpha = lowAlpha;
+            sat = 0;
+          }
+        }
+        if (query.value !== "") {
+          alpha = queryPointIsIn.value(ii, selectedIndices, hoverIndex) ? Math.min(alpha, highAlpha) : lowAlpha;
+        }
+      }
+      //alpha = i > dataset.metadata.length/3 ? highAlpha : lowAlpha;
+      //return alpha === lowAlpha ? 'rgba(0,0,0,0)' : 'red'
+      return `hsla(${Math.round(hue255)}, ${sat}%, 50%, ${alpha})`;
+    }) // TODO: have a common hsl h-bending function that better distributes in terms of Δe00 for instance
+  }
+});
+watch([query, showAll, start, duration, testCol], () => {
+  rerender();
+})
+const queryPointIsIn = computed(() => {
+  if (query.value === "") {
+    return () => false;
+  }
+  return (ii) => dataset.metadata[ii].label?.indexOf(query.value) !== -1;
+})
 </script>
 
 <style>
 .current {
   filter: invert(100%);
 }
-.volume-graph {
-  width: 100%;
-  pointer-events: none;
-}
 .focus {
   width: 0;
   height: 0;
   opacity: 0;
+}
+
+.scattergl-container {
+  position: relative;
+  border: 1px solid blue;
+  height: 50vh;
 }
 </style>
