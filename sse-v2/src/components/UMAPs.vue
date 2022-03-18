@@ -9,7 +9,8 @@
       @keydown.down="select(1, undefined)"
     />
     <input type="checkbox" v-model="showOld"/>
-    <div ref="scatterglDiv" class="scattergl-container">
+    <span @click="$event.target.nextElementSibling.requestFullscreen().then(()=> scatterGL?.resize())">FS</span>
+    <div ref="scatterglDiv" class="scattergl-container" v-resize="onDivResize">
     </div>
     <div class="scattergl-controls">
       <input v-model="query"/>
@@ -342,6 +343,10 @@ function rerender() {
   scatterGL.render(dataset);
 }
 
+function onDivResize() {
+  scatterGL?.resize();
+}
+
 watch([fetcher], () => {
   if (fetcher.lastSuccessful === undefined) return null; // TODO null is ok but when nb of datasets changes there is a crash
   const v = fetcher.lastSuccessful.value;
@@ -459,7 +464,15 @@ const queryPointIsIn = computed(() => {
 
 .scattergl-container {
   position: relative;
-  border: 1px solid blue;
+  overflow: hidden;
+  resize: vertical;
   height: 50vh;
+  /*
+  border: 5px solid blue;
+  box-sizing: border-box;
+  background: red;
+  padding: 10px;
+  margin: 20px;
+  */
 }
 </style>

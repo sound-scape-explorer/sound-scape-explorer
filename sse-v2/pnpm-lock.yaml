@@ -16,6 +16,7 @@ specifiers:
   vue: ^3.2.31
   vue-chart-3: ^3.1.4
   vue-concurrency: ^2.3.0
+  vue-resize-observer: ^2.0.15
   vue-tsc: ^0.31.4
 
 dependencies:
@@ -25,6 +26,7 @@ dependencies:
   vue: 3.2.31
   vue-chart-3: 3.1.4_chart.js@3.7.1+vue@3.2.31
   vue-concurrency: 2.3.0
+  vue-resize-observer: 2.0.15
 
 devDependencies:
   '@types/node': 16.11.26
@@ -1370,6 +1372,10 @@ packages:
     requiresBuild: true
     dependencies:
       caf: 13.1.1
+    dev: false
+
+  /vue-resize-observer/2.0.15:
+    resolution: {integrity: sha512-RoPxFTjKheVV/K+bc1Atp4Y7+CNXMovaYfWEa6LrZ80y3XNUjdP0r7s4p5EtwZ6S2rgQ90gUVz5AJIjnFnLoUg==}
     dev: false
 
   /vue-tsc/0.31.4_typescript@4.5.5:
