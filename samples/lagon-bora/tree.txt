@@ -1,0 +1,8 @@
+.
+├── audio -> /run/media/twilight/My Passport/ENES/Lana-Minier-Lagon-Bora/ENES-test_software
+├── config.xlsx
+├── features -> /run/media/twilight/My Passport/ENES/Lana-Minier-Lagon-Bora/features
+├── generated -> /run/media/twilight/My Passport/ENES/Lana-Minier-Lagon-Bora/generated
+└── tree.txt
+
+3 directories, 2 files

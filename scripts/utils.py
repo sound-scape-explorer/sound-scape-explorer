@@ -83,11 +83,16 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
                                    for ic, c in enumerate(c_values)}, yield_type)
                 res[k] = v
                 yield k, v
-
-
+                
 def parse_config(xlsx='config.xlsx', sheet=0):
     _xfile = pd.ExcelFile(xlsx)
+    
+    # force string reading of the variables_ column...
     _xtable = _xfile.parse(sheet, converters={'variables_': str})
+    # ... but parse will replace empty string by nan... so we undo it
+    _xtable['variables_'].fillna("", inplace=True)
+
+    # any other column can have a comment (to its name), with a space and parenthesis
     _renaming = {i: i.split(' (')[0] for i in _xtable.columns if ' (' in i}
     _xtable.rename(_renaming, inplace=True, axis='columns', errors="raise")
 
