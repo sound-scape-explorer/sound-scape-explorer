@@ -9,14 +9,14 @@
       @keydown.down="select(1, undefined)"
     />
     <input type="checkbox" v-model="showOld"/>
-    <span @click="$event.target.nextElementSibling.requestFullscreen().then(()=> scatterGL?.resize())">FS</span>
+    <span @click="goFS($event.target)">FS</span>
     <div ref="scatterglDiv" class="scattergl-container" v-resize="onDivResize">
     </div>
     <div class="scattergl-controls">
       <input v-model="query"/>
       <input v-model="colorBy"/>
     </div>
-    <ScatterChart v-if="showOld && !clearScatter" v-bind="scatterChartProps" />
+    <!--ScatterChart v-if="showOld && !clearScatter" v-bind="scatterChartProps" /-->
     <n-input-group>
       <div style="width: 10%; margin: 0 2%">
         <n-space>
@@ -101,17 +101,22 @@ import {
   NSwitch,
   NSpace,
 } from "naive-ui";
+/*
 import { ScatterChart, useScatterChart } from "vue-chart-3";
+*/
 
+import { Dataset, RenderMode, ScatterGL } from '@/scatter-gl-src';
+//import * as THREE from 'three';
 
-import { UMAP_RANGES } from "@/mappings.js";
+import { UMAP_RANGES } from "@/mappings";
 import { onMounted, inject, computed, ref, watchEffect, watch } from "vue";
+import type { Ref } from "vue";
 import { useTask } from "vue-concurrency";
 
 const showOld = ref(false); // also show slow umap that uses chartjs?
 
-const root = inject("root");
-const focus = ref(null);
+const root : any = inject("root");
+const focus : Ref<any> = ref(null);
 const currentBand = ref("");
 const currentUmap = ref("");
 const clearScatter = ref(true);
@@ -125,7 +130,7 @@ const currentGraphURL = computed(() => {
   return B + `umap/${currentUmap.value}/${currentBand.value}.png`;
 });
 
-function select(ku, k) {
+function select(ku: any, k: any) {
   clearScatter.value = true;
   if (k !== undefined) {
     if (typeof k === "number") {
@@ -155,8 +160,8 @@ function select(ku, k) {
 
 onMounted(() => {
   select(
-    umaps.value[Math.floor(umaps.value.length / 2)],
-    bands.value[Math.floor(bands.value.length / 2)]
+    umaps.value[Math.floor(umaps.value.length-1)],
+    bands.value[Math.floor(bands.value.length-1)]
   );
 });
 
@@ -165,13 +170,13 @@ const showAll = ref(true);
 const duration = ref(3600); // sec
 const start = ref(Math.floor(Date.now() / 1000)); // do not patch here the date by timezone, directly on display
 
-const setDuration = (sec) => {
+const setDuration = (sec: number) => {
   showAll.value = false;
   duration.value = sec;
 };
 
 // TODO: perf: should probably avoid reactivity on the data? is it fetcher or vuechart?
-const fetcherCache = {};
+const fetcherCache : {[k:string]: any} = {};
 const fetcher = useTask(function* (signal, umap, band) {
   const k = umap + "/" + band;
   console.log(k, fetcherCache);
@@ -208,11 +213,11 @@ const maxStart = computed(() =>
 );
 const sliders = computed(() => {
   if (root.cfg.umaps[currentUmap.value] === undefined) return [];
-  return root.cfg.umaps[currentUmap.value][UMAP_RANGES].map((kr) => ({
+  return root.cfg.umaps[currentUmap.value][UMAP_RANGES].map((kr:string) => ({
     key: kr,
-    startStop: root.cfg.ranges[kr].map((d) => {
+    startStop: root.cfg.ranges[kr].map((d:number) => {
       console.log(Math.floor(new Date(d).getTime() / 1000), d);
-      return parseInt(new Date(d).getTime() / 1000);
+      return Math.floor(new Date(d).getTime() / 1000);
     }),
     marks: {
       [Math.floor(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦ ",
@@ -231,7 +236,7 @@ const sliders = computed(() => {
     },
   }));
 });
-function dateThere(d) {
+function dateThere(d: Date) {
   return new Intl.DateTimeFormat("fr", {
     year: "numeric",
     month: "numeric",
@@ -244,22 +249,22 @@ function dateThere(d) {
 }
 
 const testCol = ref(6);
-
+/*
 const chartData = computed(() => {
   if (fetcher.lastSuccessful === undefined) return null; // TODO null is ok but when nb of datasets changes there is a crash
   const v = fetcher.lastSuccessful.value;
   const labels = [...new Set(v.l)];
-  const rawData = () => v.X.map(([x, y]) => ({ x, y }));
-  let data;
+  const rawData = () => v.X.map(([x, y]: number[]) => ({ x, y }));
+  let data: any;
   if (!showAll.value) {
     const tStart = start.value;
     const tEnd = tStart + duration.value;
-    data = (l) =>
+    data = (l:string) =>
       rawData().filter(
-        (o, i) => v.l[i] === l && v.t[i] >= tStart && v.t[i] < tEnd
+        (o:any, i:number) => v.l[i] === l && v.t[i] >= tStart && v.t[i] < tEnd
       );
   } else {
-    data = (l) => rawData().filter((o, i) => v.l[i] === l);
+    data = (l:string) => rawData().filter((o:any, i:number) => v.l[i] === l);
   }
   const datasets = labels.map(function (l, il) {
     const d = data(l);
@@ -267,7 +272,7 @@ const chartData = computed(() => {
       label: l,
       data: d,
       //backgroundColor: `hsl(${il / labels.length}turn, 75%, 50%, .5)`,
-      backgroundColor: (ctx) => (ctx.dataIndex === undefined ? 'blue' : `hsl(${d[ctx.dataIndex].x / testCol.value}turn, 75%, 50%, .5)`), // ok, undefined is when we render the legend
+      backgroundColor: (ctx:any) => (ctx.dataIndex === undefined ? 'blue' : `hsl(${d[ctx.dataIndex].x / testCol.value}turn, 75%, 50%, .5)`), // ok, undefined is when we render the legend
       // TODO: have a common hsl h-bending function that better distributes in terms of Δe00 for instance
     }
   });
@@ -276,7 +281,7 @@ const chartData = computed(() => {
       ? [
           {
             label: "*",
-            data: v.X.map(([x, y]) => ({ x, y })),
+            data: v.X.map(([x, y]: number[]) => ({ x, y })),
             pointBackgroundColor: "hsl(0, 0%, 90%)",
             pointBorderWidth: 0,
             pointRadius: 2,
@@ -291,8 +296,8 @@ const chartData = computed(() => {
 const chartOptions = computed(() => {
   if (fetcher.lastSuccessful === undefined) return {};
   const v = fetcher.lastSuccessful.value;
-  const xs = v.X.map((pair) => pair[0]);
-  const ys = v.X.map((pair) => pair[1]);
+  const xs = v.X.map((pair:number[]) => pair[0]);
+  const ys = v.X.map((pair:number[]) => pair[1]);
   const scales = {
     x: {
       min: Math.min(...xs),
@@ -324,11 +329,9 @@ const { scatterChartProps } = useScatterChart({
   chartData,
   options: chartOptions,
 });
+*/
 
-import { Dataset, ScatterGL } from '@/scatter-gl-src';
-import * as THREE from 'three';
 
-console.log(THREE.CustomBlending)
 
 const scatterglDiv = ref(null);
 const query = ref("");
@@ -340,11 +343,17 @@ let dataset: Dataset | null = null;
 let lastSelectedPoints: number[] = [];
 function rerender() {
   if (scatterGL === null) return;
+  if (dataset === null) return;
   scatterGL.render(dataset);
 }
 
 function onDivResize() {
   scatterGL?.resize();
+}
+function goFS(button: any) {
+  if (button && button.nextElementSibling) {
+    button.nextElementSibling.requestFullscreen().then(()=> scatterGL?.resize())
+  }
 }
 
 watch([fetcher], () => {
@@ -361,7 +370,7 @@ watch([fetcher], () => {
   const darkMode = false;
 
   const first = scatterGL === null;
-  if (first) {
+  if (first && scatterglDiv.value) {
     scatterGL = new ScatterGL(scatterglDiv.value, {
       onClick: (point: number | null) => {
         //setMessage(`click ${point}`);
@@ -382,7 +391,7 @@ watch([fetcher], () => {
         }
         //setMessage(message);
       },
-      renderMode: 'POINT',
+      renderMode: RenderMode.POINT,
       orbitControls: {
         zoomSpeed: 1.33,
       },
@@ -401,8 +410,8 @@ watch([fetcher], () => {
     });
   }
   rerender();
-  if (first) {
-    scatterGL.setPointColorer((ii, selectedIndices, hoverIndex) => {
+  if (first && scatterGL) {
+    scatterGL.setPointColorer((ii/*, selectedIndices, hoverIndex*/) => {
       if (dataset === null) {
         return "red";
       }
@@ -411,7 +420,8 @@ watch([fetcher], () => {
 
       if (isBg) return `hsla(0, 0%, ${darkMode ? 20 : 90}%, 1)`;
 
-      const hue255 = ((dataset.metadata[ii].labelIndex / testCol.value) % 1)* 255
+      const colorV: number = dataset ? dataset.metadata[ii].labelIndex as number : 0
+      const hue255 = ((colorV / testCol.value) % 1)* 255
       //const alpha = selectedIndices.size === 0 ? .1 : selectedIndices.has(i) ? 0.5 : 0.05
       const highAlpha = 0.75;
       const lowAlpha = 0.0;
@@ -432,7 +442,7 @@ watch([fetcher], () => {
           }
         }
         if (query.value !== "") {
-          alpha = queryPointIsIn.value(ii, selectedIndices, hoverIndex) ? Math.min(alpha, highAlpha) : lowAlpha;
+          alpha = queryPointIsIn.value(ii/*, selectedIndices, hoverIndex*/) ? Math.min(alpha, highAlpha) : lowAlpha;
         }
       }
       //alpha = i > dataset.metadata.length/3 ? highAlpha : lowAlpha;
@@ -448,7 +458,7 @@ const queryPointIsIn = computed(() => {
   if (query.value === "") {
     return () => false;
   }
-  return (ii) => dataset.metadata[ii].label?.indexOf(query.value) !== -1;
+  return (ii:number) => dataset && dataset.metadata[ii].label?.indexOf(query.value) !== -1;
 })
 </script>
 

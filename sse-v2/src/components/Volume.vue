@@ -69,14 +69,14 @@
   </div>
 </template>
 
-<script>
+<script lang="js">
 import { NTable, NForm, NSelect } from "naive-ui";
 const NComponents = { NTable, NForm, NSelect };
 
 import { defineChartComponent } from "vue-chart-3";
 const BoxPlotChart = defineChartComponent("BoxPlotChart", "boxplot");
 
-import { FILE_SITE } from "@/mappings.js";
+import { FILE_SITE } from "@/mappings";
 import { useTask } from "vue-concurrency";
 import { inject, computed, ref, unref } from "vue";
 

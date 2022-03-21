@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
 /**
  * LabelRenderParams describes the set of points that should have labels

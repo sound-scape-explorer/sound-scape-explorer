@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-import * as THREE from 'three';
-import {RenderContext} from './render';
+import type * as THREE from 'three';
+import type {RenderContext} from './render';
 
 /**
  * ScatterPlotVisualizer is an interface used by ScatterPlotContainer
