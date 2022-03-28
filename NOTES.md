@@ -131,3 +131,34 @@ sse chs
   - https://github.com/ColinEberhardt/d3fc-webgl-hathi-explorer
   - and this example using it https://colineberhardt.github.io/d3fc-webgl-hathi-explorer/
   - renders in a canvas
+
+
+## On the filtering
+
+see
+https://github.com/twitwi/sound-scape-explorer/issues/2
+
+mainly use a simple string parser + custom expression evaluator
+
+todo from the xlsx,
+- in the client side if possible
+- extract the tags (per file, at instant, ...) and aggregate into the presence for umap points
+- put properties and pseudo properties for the points, allow coloring by these and filtering by these
+
+Probably show more info in the hover of points, if not too costly.
+
+Have variables, e.g. for dates, than can be used in formulas. That can be defined in the xlsx? or in the interface?
+
+Ideas
+- color by...
+  - date, day (discrete sequential), time in day, hour (in day)
+  - tag presence, boolean value
+  - tag/annotation value
+  - any "sum" of criteria (or below)
+  - any combination of boolean criteria (make a binary encoding and map to colors? combine with a kind of cube?)
+- color by multiple criteria, using a color cube (need a nice rgb cube with δ00 optimal spacing? with pseudo derivative at δ=5 spacing... warning, each color depends on the others, multipath integrals...)
+
+Later: allow to save some formulas.
+
+Later: allow to use formulas to configure subsets of dataset (e.g. for umap) and maybe pseudo sites/labels/tags.
+

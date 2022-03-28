@@ -174,10 +174,9 @@ const setDuration = (sec: number) => {
   duration.value = sec;
 };
 
-// TODO: perf: should probably avoid reactivity on the data? is it fetcher or vuechart?
 const fetcherCache : {[k:string]: any} = {};
 const fetcher = useTask(function* (signal, umap, band) {
-  const k = umap + "/" + band;
+  const k = yield umap + "/" + band;
   console.log(k, fetcherCache);
   if (k in fetcherCache) {
     return fetcherCache[k];
@@ -206,28 +205,20 @@ const maxStart = computed(() =>
 );
 const sliders = computed(() => {
   if (root.cfg.umaps[currentUmap.value] === undefined) return [];
-  return root.cfg.umaps[currentUmap.value][UMAP_RANGES].map((kr:string) => ({
-    key: kr,
-    startStop: root.cfg.ranges[kr].map((d:number) => {
-      console.log(Math.floor(new Date(d).getTime() / 1000), d);
-      return Math.floor(new Date(d).getTime() / 1000);
-    }),
-    marks: {
-      [Math.floor(new Date(root.cfg.ranges[kr][0]).getTime() / 1000)]: "⟦ ",
-      [Math.floor(
-        new Date(root.cfg.ranges[kr][0]).getTime() / 1000 +
-          startStep.value *
-            Math.floor(
-              (new Date(root.cfg.ranges[kr][1]).getTime() -
-                new Date(root.cfg.ranges[kr][0]).getTime()) /
-                1000 /
-                startStep.value /
-                2
-            )
-      )]: kr,
-      [Math.floor(new Date(root.cfg.ranges[kr][1]).getTime() / 1000)]: "⟧",
+  return root.cfg.umaps[currentUmap.value][UMAP_RANGES].map((kr:string) => {
+    const asLong = d => Math.floor(new Date(d).getTime() / 1000);
+    const d0 = asLong(root.cfg.ranges[kr][0]);
+    const d1 = asLong(root.cfg.ranges[kr][1]);
+    return {
+      key: kr,
+      startStop: root.cfg.ranges[kr].map((d:number) => {
+        console.log(asLong(d), d, new Date(asLong(d)*1000));
+        return asLong(d);
+      }),
+      marks: {
+        [d0]: "⟦ ", [Math.floor(d0 + (d1-d0) / 2)]: kr, [d1]: "⟧",
     },
-  }));
+  }});
 });
 function dateThere(d: Date) {
   return new Intl.DateTimeFormat("fr", {
@@ -365,9 +356,9 @@ watch([fetcher], () => {
           alpha = queryPointIsIn.value(ii/*, selectedIndices, hoverIndex*/) ? Math.min(alpha, highAlpha) : lowAlpha;
         }
       }
-      //return `hsla(${Math.round(hue255)}, ${sat}%, 50%, ${alpha})`;
       const hue255 = paletteH1000[Math.floor(1000*((colorV / maxColorV)%1))]
       return `hsla(${Math.round(hue255)}, ${sat}%, ${paletteL}%, ${alpha})`;
+      // TODO have the kind of same thing but on a 3d cube, so that we can color by several criteria
     })
   }
 });
