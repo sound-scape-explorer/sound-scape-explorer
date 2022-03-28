@@ -112,6 +112,7 @@ import { UMAP_RANGES } from "@/mappings";
 import { onMounted, inject, computed, ref, watchEffect, watch } from "vue";
 import type { Ref } from "vue";
 import { useTask } from "vue-concurrency";
+import { paletteH1000, paletteL, paletteS } from "@/palette";
 
 const showOld = ref(false); // also show slow umap that uses chartjs?
 
@@ -332,17 +333,20 @@ watch([fetcher], () => {
         return "red";
       }
       const i = ii % Math.floor(dataset.metadata.length / 2);
-      const isBg = ii < dataset.metadata.length / 2;
 
+      const isBg = ii < dataset.metadata.length / 2;
       if (isBg) return `hsla(0, 0%, ${darkMode ? 20 : 90}%, 1)`;
 
-      const colorV: number = dataset ? dataset.metadata[ii].labelIndex as number : 0
-      const hue255 = ((colorV / testCol.value) % 1)* 255
+      let isCategorical = true;
+
+      const colorV = dataset.metadata[ii].labelIndex as number;
+      let maxColorV = testCol.value;
+      //const hue255 = ((colorV / testCol.value) % 1)* 255;
       //const alpha = selectedIndices.size === 0 ? .1 : selectedIndices.has(i) ? 0.5 : 0.05
       const highAlpha = 0.75;
       const lowAlpha = 0.0;
       let alpha = 0.4;
-      let sat = 100;
+      let sat = paletteS;
 
       if (showAll.value && query.value === "") {
         // show all
@@ -361,10 +365,10 @@ watch([fetcher], () => {
           alpha = queryPointIsIn.value(ii/*, selectedIndices, hoverIndex*/) ? Math.min(alpha, highAlpha) : lowAlpha;
         }
       }
-      //alpha = i > dataset.metadata.length/3 ? highAlpha : lowAlpha;
-      //return alpha === lowAlpha ? 'rgba(0,0,0,0)' : 'red'
-      return `hsla(${Math.round(hue255)}, ${sat}%, 50%, ${alpha})`;
-    }) // TODO: have a common hsl h-bending function that better distributes in terms of Δe00 for instance
+      //return `hsla(${Math.round(hue255)}, ${sat}%, 50%, ${alpha})`;
+      const hue255 = paletteH1000[Math.floor(1000*((colorV / maxColorV)%1))]
+      return `hsla(${Math.round(hue255)}, ${sat}%, ${paletteL}%, ${alpha})`;
+    })
   }
 });
 watch([query, showAll, start, duration, testCol], () => {
