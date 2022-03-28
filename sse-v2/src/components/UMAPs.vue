@@ -8,58 +8,60 @@
       @keydown.up="select(-1, undefined)"
       @keydown.down="select(1, undefined)"
     />
-    <span @click="goFS($event.target)">FS</span>
-    <div ref="scatterglDiv" class="scattergl-container" v-resize="onDivResize">
-    </div>
-    <div class="scattergl-controls">
-      <input v-model="query"/>
-      <input v-model="colorBy"/>
-    </div>
-    <n-input-group>
-      <div style="width: 10%; margin: 0 2%">
-        <n-space>
-          <n-switch
-            v-model:value="showAll"
-            title="Show all (or select aggregation window size)"
-          >
-            <template #checked>all</template>
-          </n-switch>
-          <n-button-group size="small">
-            <n-button @click="setDuration(600)">10min</n-button>
-            <n-button @click="setDuration(3600)">1h</n-button>
-          </n-button-group>
-        </n-space>
-        <n-input-number
-          v-model:value="duration"
-          title="Display ... seconds"
-          :disabled="showAll"
-        ></n-input-number>
+    <span @click="goFS($event.target, true)">FS</span>
+    <div class="scatter-fscontainer">
+      <div ref="scatterglDiv" class="scattergl-container" v-resize="onDivResize">
       </div>
-      <div style="width: 84%">
+      <div class="scatter-controls">
+        <input v-model="query"/>
+        <input v-model="colorBy"/>
         <n-input-group>
-          <n-slider
-            :style="{ width: 80 / sliders.length + '%' }"
-            v-for="s in sliders"
-            :key="s.key"
-            :disabled="showAll"
-            v-model:value="start"
-            title="Display starting at..."
-            :format-tooltip="(v) => `${dateThere(new Date(1000 * v))}`"
-            :min="s.startStop[0]"
-            :max="s.startStop[1]"
-            :step="startStep"
-            :marks="s.marks"
-          ></n-slider>
+          <div style="width: 10%; margin: 0 2%">
+            <n-space>
+              <n-switch
+                v-model:value="showAll"
+                title="Show all (or select aggregation window size)"
+              >
+                <template #checked>all</template>
+              </n-switch>
+              <n-button-group size="small">
+                <n-button @click="setDuration(600)">10min</n-button>
+                <n-button @click="setDuration(3600)">1h</n-button>
+              </n-button-group>
+            </n-space>
+            <n-input-number
+              v-model:value="duration"
+              title="Display ... seconds"
+              :disabled="showAll"
+            ></n-input-number>
+          </div>
+          <div style="width: 84%">
+            <n-input-group>
+              <n-slider
+                :style="{ width: 80 / sliders.length + '%' }"
+                v-for="s in sliders"
+                :key="s.key"
+                :disabled="showAll"
+                v-model:value="start"
+                title="Display starting at..."
+                :format-tooltip="(v) => `${dateThere(new Date(1000 * v))}`"
+                :min="s.startStop[0]"
+                :max="s.startStop[1]"
+                :step="startStep"
+                :marks="s.marks"
+              ></n-slider>
+            </n-input-group>
+            <n-button-group>
+              <label
+                >Showing {{ duration }} seconds, starting at
+                {{ dateThere(new Date(1000 * start)) }}
+                {{ dateThere(new Date()) }}</label
+              >
+            </n-button-group>
+          </div>
         </n-input-group>
-        <n-button-group>
-          <label
-            >Showing {{ duration }} seconds, starting at
-            {{ dateThere(new Date(1000 * start)) }}
-            {{ dateThere(new Date()) }}</label
-          >
-        </n-button-group>
       </div>
-    </n-input-group>
+    </div>
     <n-table size="small">
       <tr>
         <th></th>
@@ -258,9 +260,15 @@ function rerender() {
 function onDivResize() {
   scatterGL?.resize();
 }
-function goFS(button: any) {
-  if (button && button.nextElementSibling) {
-    button.nextElementSibling.requestFullscreen().then(()=> scatterGL?.resize())
+function goFS(target: any, nextSibling = false) {
+  if (nextSibling) {
+    if (target && target.nextElementSibling) {
+      target.nextElementSibling.requestFullscreen().then(()=> scatterGL?.resize())
+    }
+  } else {
+    if (target) {
+      target.requestFullscreen().then(()=> scatterGL?.resize())
+    }
   }
 }
 
@@ -380,7 +388,7 @@ const queryPointIsIn = computed(() => {
   opacity: 0;
 }
 
-.scattergl-container {
+.scatter-fscontainer {
   position: relative;
   overflow: hidden;
   resize: vertical;
@@ -392,5 +400,24 @@ const queryPointIsIn = computed(() => {
   padding: 10px;
   margin: 20px;
   */
+}
+.scatter-fscontainer:fullscreen {
+  resize: none;
+}
+
+.scatter-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.scattergl-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>
