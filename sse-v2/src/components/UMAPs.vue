@@ -8,7 +8,6 @@
       @keydown.up="select(-1, undefined)"
       @keydown.down="select(1, undefined)"
     />
-    <input type="checkbox" v-model="showOld"/>
     <span @click="goFS($event.target)">FS</span>
     <div ref="scatterglDiv" class="scattergl-container" v-resize="onDivResize">
     </div>
@@ -16,7 +15,6 @@
       <input v-model="query"/>
       <input v-model="colorBy"/>
     </div>
-    <!--ScatterChart v-if="showOld && !clearScatter" v-bind="scatterChartProps" /-->
     <n-input-group>
       <div style="width: 10%; margin: 0 2%">
         <n-space>
@@ -119,7 +117,6 @@ const root : any = inject("root");
 const focus : Ref<any> = ref(null);
 const currentBand = ref("");
 const currentUmap = ref("");
-const clearScatter = ref(true);
 
 const bands = computed(() => Object.keys(root.cfg.bands));
 const umaps = computed(() => Object.keys(root.cfg.umaps));
@@ -131,7 +128,6 @@ const currentGraphURL = computed(() => {
 });
 
 function select(ku: any, k: any) {
-  clearScatter.value = true;
   if (k !== undefined) {
     if (typeof k === "number") {
       let ik = Math.min(
@@ -181,9 +177,6 @@ const fetcher = useTask(function* (signal, umap, band) {
   const k = umap + "/" + band;
   console.log(k, fetcherCache);
   if (k in fetcherCache) {
-    setTimeout(() => {
-      clearScatter.value = false;
-    }, 200);
     return fetcherCache[k];
   }
   const req = yield fetch(`${root.BASE}generated/umap/${umap}/${band}.json`, {
@@ -191,9 +184,6 @@ const fetcher = useTask(function* (signal, umap, band) {
   });
   const json = yield req.json();
   fetcherCache[k] = json;
-  setTimeout(() => {
-    clearScatter.value = false;
-  }, 200);
   return json;
 });
 
@@ -249,88 +239,6 @@ function dateThere(d: Date) {
 }
 
 const testCol = ref(6);
-/*
-const chartData = computed(() => {
-  if (fetcher.lastSuccessful === undefined) return null; // TODO null is ok but when nb of datasets changes there is a crash
-  const v = fetcher.lastSuccessful.value;
-  const labels = [...new Set(v.l)];
-  const rawData = () => v.X.map(([x, y]: number[]) => ({ x, y }));
-  let data: any;
-  if (!showAll.value) {
-    const tStart = start.value;
-    const tEnd = tStart + duration.value;
-    data = (l:string) =>
-      rawData().filter(
-        (o:any, i:number) => v.l[i] === l && v.t[i] >= tStart && v.t[i] < tEnd
-      );
-  } else {
-    data = (l:string) => rawData().filter((o:any, i:number) => v.l[i] === l);
-  }
-  const datasets = labels.map(function (l, il) {
-    const d = data(l);
-    return {
-      label: l,
-      data: d,
-      //backgroundColor: `hsl(${il / labels.length}turn, 75%, 50%, .5)`,
-      backgroundColor: (ctx:any) => (ctx.dataIndex === undefined ? 'blue' : `hsl(${d[ctx.dataIndex].x / testCol.value}turn, 75%, 50%, .5)`), // ok, undefined is when we render the legend
-      // TODO: have a common hsl h-bending function that better distributes in terms of Δe00 for instance
-    }
-  });
-  const allGreyDataset =
-    true || (addAllGrey.value && !showAll.value) // TODO: when nb of datasets changes, there is a crash
-      ? [
-          {
-            label: "*",
-            data: v.X.map(([x, y]: number[]) => ({ x, y })),
-            pointBackgroundColor: "hsl(0, 0%, 90%)",
-            pointBorderWidth: 0,
-            pointRadius: 2,
-          },
-        ]
-      : [];
-
-  return {
-    datasets: [...datasets, ...allGreyDataset],
-  };
-});
-const chartOptions = computed(() => {
-  if (fetcher.lastSuccessful === undefined) return {};
-  const v = fetcher.lastSuccessful.value;
-  const xs = v.X.map((pair:number[]) => pair[0]);
-  const ys = v.X.map((pair:number[]) => pair[1]);
-  const scales = {
-    x: {
-      min: Math.min(...xs),
-      max: Math.max(...xs),
-    },
-    y: {
-      min: Math.min(...ys),
-      max: Math.max(...ys),
-    },
-  };
-  const addx = (scales.x.max - scales.x.min) / 20;
-  const addy = (scales.y.max - scales.y.min) / 20;
-  scales.x.min -= addx;
-  scales.x.max += addx;
-  scales.y.min -= addy;
-  scales.y.max += addy;
-
-  return {
-    title: `UMAP [${currentUmap.value}] ${currentBand.value}, ${v.binSize}sec window`,
-    customHackyForceTrigger: [testCol.value],
-    animation: {
-      duration: 0,
-    },
-    scales,
-  };
-});
-
-const { scatterChartProps } = useScatterChart({
-  chartData,
-  options: chartOptions,
-});
-*/
-
 
 
 const scatterglDiv = ref(null);
