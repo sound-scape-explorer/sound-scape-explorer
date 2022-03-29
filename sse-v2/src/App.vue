@@ -21,7 +21,7 @@
     <ScanData v-if="ScanDataView"></ScanData>
     <ImportData v-if="ImportDataView"></ImportData>
     <div v-if="cfg.variables && !startPannel">
-      <n-tabs type="card" default-value="umap">
+      <n-tabs type="card" default-value="volume">
         <template #prefix>
           <img
             class="logo"

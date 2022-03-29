@@ -101,18 +101,15 @@ import {
   NSwitch,
   NSpace,
 } from "naive-ui";
-/*
-import { ScatterChart, useScatterChart } from "vue-chart-3";
-*/
 
 import { Dataset, RenderMode, ScatterGL } from '@/scatter-gl-src';
-//import * as THREE from 'three';
 
 import { UMAP_RANGES } from "@/mappings";
+import { dateFormatInTz } from "@/utils";
+import { paletteH1000, paletteL, paletteS } from "@/palette";
 import { onMounted, inject, computed, ref, watchEffect, watch } from "vue";
 import type { Ref } from "vue";
 import { useTask } from "vue-concurrency";
-import { paletteH1000, paletteL, paletteS } from "@/palette";
 
 const showOld = ref(false); // also show slow umap that uses chartjs?
 
@@ -164,7 +161,6 @@ onMounted(() => {
   );
 });
 
-const addAllGrey = ref(true);
 const showAll = ref(true);
 const duration = ref(3600); // sec
 const start = ref(Math.floor(Date.now() / 1000)); // do not patch here the date by timezone, directly on display
@@ -220,18 +216,8 @@ const sliders = computed(() => {
     },
   }});
 });
-function dateThere(d: Date) {
-  return new Intl.DateTimeFormat("fr", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    timeZone: root.cfg.variables.display_locale,
-  }).format(d);
-}
 
+const dateThere = d => dateFormatInTz(d, root.cfg.variables.display_locale);
 const testCol = ref(6);
 
 
@@ -272,8 +258,29 @@ watch([fetcher], () => {
   dataset = new Dataset(
     [...v.X, ...v.X],
     [...v.l.map((label: string) => ({label, labelIndex: labels.indexOf(label)})), ...v.l.map((label: string) => ({label, labelIndex: labels.indexOf(label)}))],
-    );
+  );
   console.log("WATCH SCATTER", v.l.length);
+
+  // TODO this is so slow... (web worker it?)
+  // ... or a thing that computes an offset and yields a start-of-day=0%24 value and checks it can interpolate by checking the intervals of some random or gridded values
+  const dsDates = v.t.map(t => new Date(new Date(1000 * t).toLocaleString('en-US', {timeZone: root.cfg.display_locale})));
+
+  const dsAccess = {
+    labelIndex: (i) => dataset?.metadata[i].labelIndex as number,
+    pointIndex: (i) => i,
+    hour: (i) => dsDates[i].getHours() + dsDates[i].getMinutes() / 60 + dsDates[i].getSeconds() / 3600,
+    ihour: (i) => dsDates[i].getHours(),
+  };
+  const dsRange = {
+    labelIndex: [0, labels.length-1],
+    pointIndex: [0, v.l.length-1],
+    hour: [0, 24],
+    ihour: [0, 24],
+    // TODO rather have a non repeating palette as we adapt to labels length and hours is better non repeated
+  };
+
+
+
 
   const darkMode = false;
 
@@ -320,6 +327,8 @@ watch([fetcher], () => {
   rerender();
   if (first && scatterGL) {
     scatterGL.setPointColorer((ii/*, selectedIndices, hoverIndex*/) => {
+      // TODO: optimize to use less .value, this is probably helpful
+
       if (dataset === null) {
         return "red";
       }
@@ -330,8 +339,10 @@ watch([fetcher], () => {
 
       let isCategorical = true;
 
-      const colorV = dataset.metadata[ii].labelIndex as number;
-      let maxColorV = testCol.value;
+      let colorKey = colorBy.value;
+      colorKey = colorKey in dsAccess ? colorKey : 'labelIndex';
+      let colorV = dsAccess[colorKey](i);
+      let colorRange = dsRange[colorKey];
       //const hue255 = ((colorV / testCol.value) % 1)* 255;
       //const alpha = selectedIndices.size === 0 ? .1 : selectedIndices.has(i) ? 0.5 : 0.05
       const highAlpha = 0.75;
@@ -356,13 +367,14 @@ watch([fetcher], () => {
           alpha = queryPointIsIn.value(ii/*, selectedIndices, hoverIndex*/) ? Math.min(alpha, highAlpha) : lowAlpha;
         }
       }
-      const hue255 = paletteH1000[Math.floor(1000*((colorV / maxColorV)%1))]
+      const cV = (colorV - colorRange[0]) / (colorRange[1] - colorRange[0])
+      const hue255 = paletteH1000[Math.floor(1000*(cV - Math.floor(cV)))] // floor modulus
       return `hsla(${Math.round(hue255)}, ${sat}%, ${paletteL}%, ${alpha})`;
       // TODO have the kind of same thing but on a 3d cube, so that we can color by several criteria
     })
   }
 });
-watch([query, showAll, start, duration, testCol], () => {
+watch([query, colorBy, showAll, start, duration, testCol], () => {
   rerender();
 })
 const queryPointIsIn = computed(() => {

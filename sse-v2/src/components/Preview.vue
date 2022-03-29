@@ -34,7 +34,7 @@ import GainWorklet from "../worklet/GainWorklet";
       }
       */
 
-import { getBandBoundsFromSpec, mel2hz } from "@/utils.js";
+import { getBandBoundsFromSpec, mel2hz } from "@/utils";
 
 export default {
   inject: ["root"],

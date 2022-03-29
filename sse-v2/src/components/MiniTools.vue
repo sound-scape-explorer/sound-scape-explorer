@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { getBandBoundsFromSpec } from "@/utils.js";
+import { getBandBoundsFromSpec } from "@/utils";
 import ScanData from "./ScanData.vue";
 import ImportData from "./ImportData.vue";
 const OComponents = {ScanData,ImportData };

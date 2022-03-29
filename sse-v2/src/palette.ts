@@ -1,7 +1,8 @@
 
 import { piecewise } from 'd3-interpolate'
 
-export let paletteH = [0, 29, 49, 81, 158, 184, 202, 222, 274, 320, 18, 39, 61, 132, 173, 193, 212, 236, 294, 337];
+//export let paletteH = [0, 29, 49, 81, 158, 184, 202, 222, 274, 320, 18, 39, 61, 132, 173, 193, 212, 236, 294, 337];
+export let paletteH = [0, 29, 49, 81, 158, 184, 202, 222, 274, 320];
 export let paletteS = 75;
 export let paletteL = 50;
 

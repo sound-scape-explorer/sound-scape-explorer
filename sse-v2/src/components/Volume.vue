@@ -69,7 +69,7 @@
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import { NTable, NForm, NSelect } from "naive-ui";
 const NComponents = { NTable, NForm, NSelect };
 
@@ -77,6 +77,7 @@ import { defineChartComponent } from "vue-chart-3";
 const BoxPlotChart = defineChartComponent("BoxPlotChart", "boxplot");
 
 import { FILE_SITE } from "@/mappings";
+import { dateFormatInTz } from "@/utils";
 import { useTask } from "vue-concurrency";
 import { inject, computed, ref, unref } from "vue";
 
@@ -94,6 +95,7 @@ export default {
   },
   setup() {
     const root = inject("root");
+    const dateThere = d => dateFormatInTz(d, root.cfg.variables.display_locale);
     // data-like
     const o = {
       currentIntegration: ref(""),
@@ -198,9 +200,9 @@ export default {
       let currentData = [];
       const commit = (nextT) => {
         if (currentData.length > 0) {
-          res.labels.push(
-            new Date(currentTime * 1000).toISOString().replace(".000Z", "")
-          );
+          res.labels.push(dateThere(new Date(1000 * currentTime)))
+//            new Date(currentTime * 1000).toISOString().replace(".000Z", "")
+//          );
           res.datasets[0].data.push(currentData);
         }
         currentTime = nextT;
