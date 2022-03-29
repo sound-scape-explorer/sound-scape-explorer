@@ -136,11 +136,11 @@ def load_features_for(cfg, band, r, s):
         if info.site != s: continue
         with gzip.open(pklz, "rb") as f:
             data = pickle.loads(f.read())
-        dur = dt.timedelta(seconds=0.92 * len(data))
+        dur = dt.timedelta(seconds=1 * len(data))
         if r[0] > info.start + dur: continue
         if r[1] < info.start: continue
         for i in range(len(data)):
-            start = info.start + dt.timedelta(seconds=0.92 * i)
+            start = info.start + dt.timedelta(seconds=1 * i)
             if start < r[0] or start > r[1]: continue
             range_times.append(start)
             range_features.append(data[i])
@@ -188,7 +188,7 @@ def umaps(cfg, plot, show):
             with open(out_path, "w") as jsonfile:
                 json.dump({
                     'X': X.tolist(),
-                    't': [d.timestamp() for d in dataset_times],
+                    't': [int(d.timestamp()) for d in dataset_times],
                     'l': dataset_labels,
                     'binSize': umap.integration,
                 }, jsonfile)
