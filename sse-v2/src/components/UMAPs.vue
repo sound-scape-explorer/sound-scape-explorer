@@ -13,8 +13,8 @@
       <div ref="scatterglDiv" class="scattergl-container" v-resize="onDivResize">
       </div>
       <div class="scatter-controls">
-        <input v-model="query"/>
-        <input v-model="colorBy"/>
+        <input v-model="query" placeholder="filter..."/>
+        <input v-model="colorBy" placeholder="color by..." :title="Object.keys(colorerInfo.dsAccess).join(' | ')"/>
         <n-input-group>
           <div style="width: 10%; margin: 0 2%">
             <n-space>
@@ -54,8 +54,7 @@
             <n-button-group>
               <label
                 >Showing {{ duration }} seconds, starting at
-                {{ dateThere(new Date(1000 * start)) }}
-                {{ dateThere(new Date()) }}</label
+                {{ dateThere(new Date(1000 * start)) }}</label
               >
             </n-button-group>
           </div>
@@ -105,7 +104,7 @@ import {
 import { Dataset, RenderMode, ScatterGL } from '@/scatter-gl-src';
 
 import { UMAP_RANGES } from "@/mappings";
-import { dateFormatInTz } from "@/utils";
+import { dateFormatInTz, floorMod } from "@/utils";
 import { paletteH1000, paletteL, paletteS } from "@/palette";
 import { onMounted, inject, computed, ref, watchEffect, watch } from "vue";
 import type { Ref } from "vue";
@@ -223,7 +222,7 @@ const testCol = ref(6);
 
 const scatterglDiv = ref(null);
 const query = ref("");
-const colorBy = ref("labelIndex");
+const colorBy = ref("");
 
 let scatterGL: ScatterGL | null = null;
 let renderPass = 'normal';
@@ -250,39 +249,118 @@ function goFS(target: any, nextSibling = false) {
   }
 }
 
+const colorerInfo = {
+  l:[], X:[], t:[], labels:[] as string[],
+  darkMode: true,
+  timeInDay:[], dates:[],
+  dsAccess: {
+    labelIndex: (i) => dataset?.metadata[i].labelIndex as number,
+    pointIndex: (i) => i,
+    hour: (i) => colorerInfo.timeInDay[i],
+    //ihour: (i) => Math.floor(colorerInfo.timeInDay[i]),
+    isday: (i) => Math.abs(12 - colorerInfo.timeInDay[i]) < 6,
+    /*
+    hour: (i) => dsDates[i].getHours() + dsDates[i].getMinutes() / 60 + dsDates[i].getSeconds() / 3600,
+    ihour: (i) => dsDates[i].getHours(),
+    */
+  },
+  dsRange: {
+    labelIndex: () => [0, colorerInfo.labels.length-1],
+    pointIndex: () => [0, colorerInfo.l.length-1],
+    hour: () => [-2, 22],
+    //ihour: () => [-2, 22],
+    isday: () => [0, 1.25],
+    // TODO rather have a non repeating palette as we adapt to labels length and hours is better non repeated
+  }
+};
+const pointColorer = (ii/*, selectedIndices, hoverIndex*/) => {
+
+  // TODO: faster with less .value?
+
+  const I = colorerInfo;
+  if (dataset === null) {
+    return "red";
+  }
+  const i = ii % Math.floor(dataset.metadata.length / 2);
+
+  const isBg = ii < dataset.metadata.length / 2;
+  if (isBg) return `hsla(0, 0%, ${I.darkMode ? 20 : 90}%, 1)`;
+
+  let isCategorical = true;
+
+  let colorKey = colorBy.value;
+  colorKey = colorKey in I.dsAccess ? colorKey : 'labelIndex';
+  let colorV = I.dsAccess[colorKey](i);
+  let colorRange = I.dsRange[colorKey]();
+  //const hue255 = ((colorV / testCol.value) % 1)* 255;
+  //const alpha = selectedIndices.size === 0 ? .1 : selectedIndices.has(i) ? 0.5 : 0.05
+  const highAlpha = 0.75;
+  const lowAlpha = 0.0;
+  let alpha = 0.4;
+  let sat = paletteS;
+
+  if (showAll.value && query.value === "") {
+    // show all
+  } else {
+    if (! showAll.value) { // time filter
+      const tStart = start.value;
+      const tEnd = tStart + duration.value;
+      if (I.t[i] >= tStart && I.t[i] < tEnd) {
+        alpha = highAlpha;
+      } else {
+        alpha = lowAlpha;
+        sat = 0;
+      }
+    }
+    if (query.value !== "") {
+      alpha = queryPointIsIn.value(ii/*, selectedIndices, hoverIndex*/) ? Math.min(alpha, highAlpha) : lowAlpha;
+    }
+  }
+  const cV = (colorV - colorRange[0]) / (colorRange[1] - colorRange[0])
+  const hue255 = paletteH1000[Math.floor(1000*floorMod(cV, 1))]
+  return `hsla(${Math.round(hue255)}, ${sat}%, ${paletteL}%, ${alpha})`;
+  // TODO have the kind of same thing but on a 3d cube, so that we can color by several criteria
+};
+
+function fastTimeInDay(tz) {
+  const cache = new Map();
+  const bin = 24*3600; // one day
+  return (t) => {
+    const k = Math.floor(t / bin);
+    if (cache.has(k)) {
+      const [t0, tInDay0] = cache.get(k);
+      const delta = (t-t0)/3600
+      return floorMod(tInDay0 + delta, 24)
+    } else {
+      const d = new Date(new Date(1000 * t).toLocaleString('en-US', {timeZone: tz}))
+      const tInDay = d.getHours() + d.getMinutes() / 60 + d.getSeconds() / 3600;
+      cache.set(k, [t, tInDay]);
+      return tInDay;
+    }
+  }
+}
+
 watch([fetcher], () => {
+  let I = colorerInfo
   if (fetcher.lastSuccessful === undefined) return null; // TODO null is ok but when nb of datasets changes there is a crash
-  const v = fetcher.lastSuccessful.value;
-  const labels = [...new Set(v.l)];
+  let v = fetcher.lastSuccessful.value;
+  I.l = v.l;
+  I.X = v.X;
+  I.t = v.t;
+  I.labels = [...new Set(v.l)] as string[];
   //const rawData = () => v.X.map(([x, y]) => ({ x, y }));
   dataset = new Dataset(
     [...v.X, ...v.X],
-    [...v.l.map((label: string) => ({label, labelIndex: labels.indexOf(label)})), ...v.l.map((label: string) => ({label, labelIndex: labels.indexOf(label)}))],
+    [...v.l.map((label: string) => ({label, labelIndex: I.labels.indexOf(label)})), ...v.l.map((label: string) => ({label, labelIndex: I.labels.indexOf(label)}))],
   );
   console.log("WATCH SCATTER", v.l.length);
 
   // TODO this is so slow... (web worker it?)
   // ... or a thing that computes an offset and yields a start-of-day=0%24 value and checks it can interpolate by checking the intervals of some random or gridded values
-  const dsDates = v.t.map(t => new Date(new Date(1000 * t).toLocaleString('en-US', {timeZone: root.cfg.display_locale})));
+  //colorerInfo.dates = v.t.map(t => new Date(new Date(1000 * t).toLocaleString('en-US', {timeZone: root.cfg.display_locale})));
+  colorerInfo.timeInDay = v.t.map(fastTimeInDay(root.cfg.display_locale));
 
-  const dsAccess = {
-    labelIndex: (i) => dataset?.metadata[i].labelIndex as number,
-    pointIndex: (i) => i,
-    hour: (i) => dsDates[i].getHours() + dsDates[i].getMinutes() / 60 + dsDates[i].getSeconds() / 3600,
-    ihour: (i) => dsDates[i].getHours(),
-  };
-  const dsRange = {
-    labelIndex: [0, labels.length-1],
-    pointIndex: [0, v.l.length-1],
-    hour: [0, 24],
-    ihour: [0, 24],
-    // TODO rather have a non repeating palette as we adapt to labels length and hours is better non repeated
-  };
-
-
-
-
-  const darkMode = false;
+  I.darkMode = false;
 
   const first = scatterGL === null;
   if (first && scatterglDiv.value) {
@@ -311,7 +389,7 @@ watch([fetcher], () => {
         zoomSpeed: 1.33,
       },
       styles: {
-          backgroundColor: darkMode ? 0 : undefined,
+          backgroundColor: I.darkMode ? 0 : undefined,
           moreShaderOptions: {
               depthTest: false,
               depthWrite: false,
@@ -326,52 +404,7 @@ watch([fetcher], () => {
   }
   rerender();
   if (first && scatterGL) {
-    scatterGL.setPointColorer((ii/*, selectedIndices, hoverIndex*/) => {
-      // TODO: optimize to use less .value, this is probably helpful
-
-      if (dataset === null) {
-        return "red";
-      }
-      const i = ii % Math.floor(dataset.metadata.length / 2);
-
-      const isBg = ii < dataset.metadata.length / 2;
-      if (isBg) return `hsla(0, 0%, ${darkMode ? 20 : 90}%, 1)`;
-
-      let isCategorical = true;
-
-      let colorKey = colorBy.value;
-      colorKey = colorKey in dsAccess ? colorKey : 'labelIndex';
-      let colorV = dsAccess[colorKey](i);
-      let colorRange = dsRange[colorKey];
-      //const hue255 = ((colorV / testCol.value) % 1)* 255;
-      //const alpha = selectedIndices.size === 0 ? .1 : selectedIndices.has(i) ? 0.5 : 0.05
-      const highAlpha = 0.75;
-      const lowAlpha = 0.0;
-      let alpha = 0.4;
-      let sat = paletteS;
-
-      if (showAll.value && query.value === "") {
-        // show all
-      } else {
-        if (! showAll.value) { // time filter
-          const tStart = start.value;
-          const tEnd = tStart + duration.value;
-          if (v.t[i] >= tStart && v.t[i] < tEnd) {
-            alpha = highAlpha;
-          } else {
-            alpha = lowAlpha;
-            sat = 0;
-          }
-        }
-        if (query.value !== "") {
-          alpha = queryPointIsIn.value(ii/*, selectedIndices, hoverIndex*/) ? Math.min(alpha, highAlpha) : lowAlpha;
-        }
-      }
-      const cV = (colorV - colorRange[0]) / (colorRange[1] - colorRange[0])
-      const hue255 = paletteH1000[Math.floor(1000*(cV - Math.floor(cV)))] // floor modulus
-      return `hsla(${Math.round(hue255)}, ${sat}%, ${paletteL}%, ${alpha})`;
-      // TODO have the kind of same thing but on a 3d cube, so that we can color by several criteria
-    })
+    scatterGL.setPointColorer(pointColorer);
   }
 });
 watch([query, colorBy, showAll, start, duration, testCol], () => {

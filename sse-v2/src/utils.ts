@@ -26,3 +26,7 @@ export function dateFormatInTz(d: Date, timeZone: string) {
     timeZone,
   }).format(d);
 }
+
+export function floorMod(v, m) {
+  return v - m * Math.floor(v/m);
+}
