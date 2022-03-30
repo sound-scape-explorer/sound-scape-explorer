@@ -265,7 +265,7 @@ const colorerInfo = {
     */
   },
   dsRange: {
-    labelIndex: () => [0, colorerInfo.labels.length-1],
+    labelIndex: () => [0, colorerInfo.labels.length],
     pointIndex: () => [0, colorerInfo.l.length-1],
     hour: () => [-2, 22],
     //ihour: () => [-2, 22],
