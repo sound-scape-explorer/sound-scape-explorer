@@ -9,7 +9,14 @@
       @keydown.down="select(1, undefined)"
     />
     <n-form inline>
-      <n-select v-model:value="currentRangeName" :options="rangeOptions" />
+      <div>
+        <n-select v-model:value="currentRangeName" :options="rangeOptions" />
+        <n-switch v-model:value="hourly"
+                  title="Aggregate days">
+          <template #checked>aggregate</template>
+          <template #unchecked>date-based</template>
+        </n-switch>
+      </div>
       <n-select v-model:value="selectedSites" :options="siteOptions" multiple />
       <n-select v-model:value="what" :options="whatOptions" />
       <div>
@@ -17,7 +24,7 @@
         <n-select v-model:value="aggregate" :options="aggregateOptions" />
       </div>
     </n-form>
-    <BoxPlotChart
+    <BoxPlotChart class="boxplot-container"
       v-if="boxPlotData"
       :chartData="boxPlotData"
       :options="{
@@ -73,14 +80,14 @@
 </template>
 
 <script lang="ts">
-import { NTable, NForm, NSelect } from "naive-ui";
-const NComponents = { NTable, NForm, NSelect };
+import { NTable, NForm, NSelect, NSwitch } from "naive-ui";
+const NComponents = { NTable, NForm, NSelect, NSwitch };
 
 import { defineChartComponent } from "vue-chart-3";
 const BoxPlotChart = defineChartComponent("BoxPlotChart", "boxplot");
 
 import { FILE_SITE } from "@/mappings";
-import { dateFormatInTz, floorMod } from "@/utils";
+import { argsort, dateFormatInTz, floorMod } from "@/utils";
 import { useTask } from "vue-concurrency";
 import { inject, computed, ref, unref, watch, nextTick } from "vue";
 
@@ -91,7 +98,7 @@ export default {
     this.currentBand = this.bands[0];
     this.currentIntegration = this.integrations[0];
     this.currentRangeName = this.ranges[0];
-    this.selectedSites = [];
+    this.selectedSites = this.sites[0] ? [this.sites[0]] : [];
     this.$refs.focus.focus();
     this.select();
   },
@@ -103,6 +110,7 @@ export default {
       currentIntegration: ref(""),
       currentBand: ref(""),
       currentRangeName: ref(""),
+      hourly: ref(false),
       selectedSites: ref([""]),
       what: ref("sumvar"),
       aggregate: ref(3600),
@@ -205,6 +213,11 @@ export default {
       let minTime = Math.min(...selectedSites.map(s => o.currentRangeName.value + " " + s).map(k => Math.min(...v.data[k].t)));
 
       const agg = o.aggregate.value;
+      let projectTime = t => minTime + agg * Math.floor((t - minTime) / agg);
+      if (o.hourly.value) {
+        projectTime = t => minTime + floorMod(agg * Math.floor((t - minTime) / agg), 3600*24);
+      }
+
       let allTimes = [];
       for (let i in selectedSites) {
         const site = selectedSites[i];
@@ -218,18 +231,18 @@ export default {
         })
 
         const k = o.currentRangeName.value + " " + site;
-        const times = v.data[k].t;
+        const times = v.data[k].t.map(projectTime);
+        const inds = argsort(times, (a, b) => a - b);
         let currentTime = -Infinity;
         let currentData = [];
         const commit = (nextT) => {
-          nextT = minTime + agg * Math.floor((nextT - minTime) / agg)
           if (currentData.length > 0) {
             allTimes.push(currentTime);
           }
           currentTime = nextT;
           currentData = [];
         };
-        for (const i in times) {
+        for (const i of inds) {
           const t = times[i];
           if (t >= currentTime + agg) {
             commit(t);
@@ -248,19 +261,19 @@ export default {
       }
       for (let site of selectedSites) {
         const k = o.currentRangeName.value + " " + site;
-        const times = v.data[k].t;
+        const times = v.data[k].t.map(projectTime);
         const series = v.data[k][o.what.value];
+        const inds = argsort(times, (a, b) => a - b);
         let currentTime = -Infinity;
         let currentData = [];
         const commit = (nextT) => {
-          nextT = minTime + agg * Math.floor((nextT - minTime) / agg)
           if (currentData.length > 0) {
             res.datasets[selectedSites.indexOf(site)].data[allTimes.indexOf(currentTime)] = currentData;
           }
           currentTime = nextT;
           currentData = [];
         };
-        for (const i in times) {
+        for (const i of inds) {
           const t = times[i];
           if (t >= currentTime + agg) {
             commit(t);
@@ -328,5 +341,11 @@ export default {
   width: 0;
   height: 0;
   opacity: 0;
+}
+.boxplot-container {
+  position: relative;
+  overflow: hidden;
+  resize: vertical;
+  height: 50vh;
 }
 </style>

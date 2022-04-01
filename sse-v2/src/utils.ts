@@ -30,3 +30,7 @@ export function dateFormatInTz(d: Date, timeZone: string) {
 export function floorMod(v, m) {
   return v - m * Math.floor(v/m);
 }
+
+export function argsort(a, cmp) {
+  return a.map((v,i)=>[v,i]).sort((a,b) => cmp(a[0], b[0])).map(vi => vi[1]);
+}
