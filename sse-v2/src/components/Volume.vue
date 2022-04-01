@@ -10,7 +10,7 @@
     />
     <n-form inline>
       <n-select v-model:value="currentRangeName" :options="rangeOptions" />
-      <n-select v-model:value="currentSite" :options="siteOptions" />
+      <n-select v-model:value="currentSite" :options="siteOptions" multiple />
       <n-select v-model:value="what" :options="whatOptions" />
       <div>
         <input v-model.number="aggregate" />
@@ -20,7 +20,7 @@
     <BoxPlotChart
       :chartData="boxPlotData"
       :options="{
-        responsive: true,
+        animation: false,
         scales: {
           x: {
             // Specific to Bar Controller, not taken into account?
@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import { NTable, NForm, NSelect } from "naive-ui";
 const NComponents = { NTable, NForm, NSelect };
 
@@ -79,7 +79,7 @@ import { defineChartComponent } from "vue-chart-3";
 const BoxPlotChart = defineChartComponent("BoxPlotChart", "boxplot");
 
 import { FILE_SITE } from "@/mappings";
-import { dateFormatInTz } from "@/utils";
+import { dateFormatInTz, floorMod } from "@/utils";
 import { useTask } from "vue-concurrency";
 import { inject, computed, ref, unref } from "vue";
 
@@ -91,7 +91,7 @@ export default {
     this.currentIntegration =
       this.integrations[0];
     this.currentRangeName = this.ranges[0];
-    this.currentSite = this.sites[0];
+    this.currentSite = [this.sites[3], this.sites[7]];
     this.$refs.focus.focus();
     this.select();
   },
@@ -103,7 +103,7 @@ export default {
       currentIntegration: ref(""),
       currentBand: ref(""),
       currentRangeName: ref(""),
-      currentSite: ref(""),
+      currentSite: ref([""]),
       what: ref("sumvar"),
       aggregate: ref(3600),
       focus: ref(null),
@@ -180,44 +180,83 @@ export default {
       /*const sites = [
         ...new Set(Object.values(root.cfg.files).map((f) => f[FILE_SITE])),
       ];*/
-      const site = o.currentSite.value;
+      const selectedSites = Array.isArray(o.currentSite.value) ? o.currentSite.value : [o.currentSite.value];
+      if (selectedSites.length === 0) return null;
+      ////// TODO vue chart need recreate if dataset count changes.......
+
       const res = {
         labels: [],
-        datasets: [
-          {
-            label: site,
-            backgroundColor: `hsla(${(0 * 360) / 1},50%,50%,0.5)`,
-            borderColor: "black",
-            borderWidth: 1,
-            outlierBackgroundColor: "red",
-            data: [],
-          },
-        ],
+        datasets: [],
       };
-      const k = o.currentRangeName.value + " " + site;
-      console.log(k);
-      const times = v.data[k].t;
-      const series = v.data[k][o.what.value];
-      let currentTime = -Infinity;
-      let currentData = [];
-      const commit = (nextT) => {
-        if (currentData.length > 0) {
-          res.labels.push(dateThere(new Date(1000 * currentTime)))
-//            new Date(currentTime * 1000).toISOString().replace(".000Z", "")
-//          );
-          res.datasets[0].data.push(currentData);
+      let minTime = Math.min(...selectedSites.map(s => o.currentRangeName.value + " " + s).map(k => Math.min(...v.data[k].t)));
+      console.log(minTime)
+
+      const agg = o.aggregate.value;
+      let allTimes = [];
+      for (let i in selectedSites) {
+        const site = selectedSites[i];
+        res.datasets.push({
+          label: site,
+          backgroundColor: `hsla(${(i * 360) / selectedSites.length},50%,50%,0.5)`, // TODO palette it
+          borderColor: "black",
+          borderWidth: 1,
+          outlierBackgroundColor: "red",
+          data: [],
+        })
+
+        const k = o.currentRangeName.value + " " + site;
+        const times = v.data[k].t;
+        let currentTime = -Infinity;
+        let currentData = [];
+        const commit = (nextT) => {
+          nextT = minTime + agg * Math.floor((nextT - minTime) / agg)
+          if (currentData.length > 0) {
+            allTimes.push(currentTime);
+          }
+          currentTime = nextT;
+          currentData = [];
+        };
+        for (const i in times) {
+          const t = times[i];
+          if (t >= currentTime + agg) {
+            commit(t);
+          }
+          currentData.push(1);
         }
-        currentTime = nextT;
-        currentData = [];
-      };
-      for (const i in times) {
-        const t = times[i];
-        if (t >= currentTime + o.aggregate.value) {
-          commit(t);
-        }
-        currentData.push(series[i]);
+        commit(+Infinity);
       }
-      commit(+Infinity);
+      allTimes = [...new Set(allTimes)];
+      allTimes.sort((a, b) => a - b); // default for sort would be ascii string order
+      for (let t of allTimes) {
+        res.labels.push(dateThere(new Date(1000 * t)));
+        for (let site of selectedSites) {
+          res.datasets[selectedSites.indexOf(site)].data.push([])
+        }
+      }
+      for (let site of selectedSites) {
+        const k = o.currentRangeName.value + " " + site;
+        const times = v.data[k].t;
+        const series = v.data[k][o.what.value];
+        let currentTime = -Infinity;
+        let currentData = [];
+        const commit = (nextT) => {
+          nextT = minTime + agg * Math.floor((nextT - minTime) / agg)
+          if (currentData.length > 0) {
+            res.datasets[selectedSites.indexOf(site)].data[allTimes.indexOf(currentTime)] = currentData;
+          }
+          currentTime = nextT;
+          currentData = [];
+        };
+        for (const i in times) {
+          const t = times[i];
+          if (t >= currentTime + agg) {
+            console.log(i)
+            commit(t);
+          }
+          currentData.push(series[i]);
+        }
+        commit(+Infinity);
+      }
       return res;
     });
 
