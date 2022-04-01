@@ -10,7 +10,7 @@
     />
     <n-form inline>
       <n-select v-model:value="currentRangeName" :options="rangeOptions" />
-      <n-select v-model:value="currentSite" :options="siteOptions" multiple />
+      <n-select v-model:value="selectedSites" :options="siteOptions" multiple />
       <n-select v-model:value="what" :options="whatOptions" />
       <div>
         <input v-model.number="aggregate" />
@@ -18,6 +18,7 @@
       </div>
     </n-form>
     <BoxPlotChart
+      v-if="boxPlotData"
       :chartData="boxPlotData"
       :options="{
         animation: false,
@@ -81,17 +82,16 @@ const BoxPlotChart = defineChartComponent("BoxPlotChart", "boxplot");
 import { FILE_SITE } from "@/mappings";
 import { dateFormatInTz, floorMod } from "@/utils";
 import { useTask } from "vue-concurrency";
-import { inject, computed, ref, unref } from "vue";
+import { inject, computed, ref, unref, watch, nextTick } from "vue";
 
 export default {
   inject: ["root"],
   components: { ...NComponents, BoxPlotChart },
   mounted() {
     this.currentBand = this.bands[0];
-    this.currentIntegration =
-      this.integrations[0];
+    this.currentIntegration = this.integrations[0];
     this.currentRangeName = this.ranges[0];
-    this.currentSite = [this.sites[3], this.sites[7]];
+    this.selectedSites = [];
     this.$refs.focus.focus();
     this.select();
   },
@@ -103,10 +103,11 @@ export default {
       currentIntegration: ref(""),
       currentBand: ref(""),
       currentRangeName: ref(""),
-      currentSite: ref([""]),
+      selectedSites: ref([""]),
       what: ref("sumvar"),
       aggregate: ref(3600),
       focus: ref(null),
+      forceUpdateBoxPlotData: ref(false), // used to force new chart creation as updating with a different number of dataset crashes
     };
     const toOptions = (r) =>
       computed(() => unref(r).map((s) => ({ label: s, value: s })));
@@ -174,13 +175,26 @@ export default {
       o.focus.value?.focus();
     };
 
+    let lastCountSelectedSites = o.selectedSites.value.length;
+    watch(o.selectedSites, () => {
+      const l = o.selectedSites.value.length;
+      if (l !== lastCountSelectedSites) {
+        o.forceUpdateBoxPlotData.value = true;
+        lastCountSelectedSites = l;
+        nextTick(() => { o.forceUpdateBoxPlotData.value = false; });
+      }
+    });
+
     o.boxPlotData = computed(() => {
+      if (o.forceUpdateBoxPlotData.value) {
+        return null;
+      }
       if (o.nr_fetcher.lastSuccessful === undefined) return null;
       const v = o.nr_fetcher.lastSuccessful.value;
       /*const sites = [
         ...new Set(Object.values(root.cfg.files).map((f) => f[FILE_SITE])),
       ];*/
-      const selectedSites = Array.isArray(o.currentSite.value) ? o.currentSite.value : [o.currentSite.value];
+      let selectedSites = o.selectedSites.value;
       if (selectedSites.length === 0) return null;
       ////// TODO vue chart need recreate if dataset count changes.......
 
@@ -189,7 +203,6 @@ export default {
         datasets: [],
       };
       let minTime = Math.min(...selectedSites.map(s => o.currentRangeName.value + " " + s).map(k => Math.min(...v.data[k].t)));
-      console.log(minTime)
 
       const agg = o.aggregate.value;
       let allTimes = [];
@@ -250,7 +263,6 @@ export default {
         for (const i in times) {
           const t = times[i];
           if (t >= currentTime + agg) {
-            console.log(i)
             commit(t);
           }
           currentData.push(series[i]);
