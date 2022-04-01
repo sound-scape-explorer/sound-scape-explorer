@@ -13,10 +13,14 @@
       <div ref="scatterglDiv" class="scattergl-container" v-resize="onDivResize">
       </div>
       <div class="scatter-controls">
-        <input v-model="query" placeholder="filter..."/>
-        <input v-model="colorBy" placeholder="color by..." :title="Object.keys(colorerInfo.dsAccess).join(' | ')"/>
         <n-input-group>
-          <div style="width: 10%; margin: 0 2%">
+          <div>
+            <input v-model="query" placeholder="filter..."/>
+            <n-select v-model:value="colorBy" :clearable="true" :tag="true" :filterable="true" :options="Object.keys(colorerInfo.dsAccess).map(k => ({label:k, value:k}))" />
+          </div>
+        </n-input-group>
+        <n-input-group>
+          <div style="width: 10vw; margin: 0 2%">
             <n-space>
               <n-switch
                 v-model:value="showAll"
@@ -35,10 +39,10 @@
               :disabled="showAll"
             ></n-input-number>
           </div>
-          <div style="width: 84%">
+          <div style="width: 90vw">
             <n-input-group>
               <n-slider
-                :style="{ width: 80 / sliders.length + '%' }"
+                :style="{ width: 100 / sliders.length + '%' }"
                 v-for="s in sliders"
                 :key="s.key"
                 :disabled="showAll"
@@ -51,6 +55,7 @@
                 :marks="s.marks"
               ></n-slider>
             </n-input-group>
+            <br/>
             <n-button-group>
               <label
                 >Showing {{ duration }} seconds, starting at
@@ -99,6 +104,7 @@ import {
   NButtonGroup,
   NSwitch,
   NSpace,
+  NSelect,
 } from "naive-ui";
 
 import { Dataset, RenderMode, ScatterGL } from '@/scatter-gl-src';
@@ -155,8 +161,8 @@ function select(ku: any, k: any) {
 
 onMounted(() => {
   select(
-    umaps.value[Math.floor(umaps.value.length-1)],
-    bands.value[Math.floor(bands.value.length-1)]
+    umaps.value[0],
+    bands.value[0] // select "all" that is supposed to be first
   );
 });
 

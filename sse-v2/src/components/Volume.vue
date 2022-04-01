@@ -12,8 +12,10 @@
       <n-select v-model:value="currentRangeName" :options="rangeOptions" />
       <n-select v-model:value="currentSite" :options="siteOptions" />
       <n-select v-model:value="what" :options="whatOptions" />
-      <n-select v-model:value="aggregate" :options="aggregateOptions" />
-      <input v-model.number="aggregate" />
+      <div>
+        <input v-model.number="aggregate" />
+        <n-select v-model:value="aggregate" :options="aggregateOptions" />
+      </div>
     </n-form>
     <BoxPlotChart
       :chartData="boxPlotData"
@@ -85,9 +87,9 @@ export default {
   inject: ["root"],
   components: { ...NComponents, BoxPlotChart },
   mounted() {
-    this.currentBand = this.bands[parseInt(this.bands.length / 2)];
+    this.currentBand = this.bands[0];
     this.currentIntegration =
-      this.integrations[parseInt(this.integrations.length / 2)];
+      this.integrations[0];
     this.currentRangeName = this.ranges[0];
     this.currentSite = this.sites[0];
     this.$refs.focus.focus();
@@ -116,7 +118,7 @@ export default {
     ]);
     o.siteOptions = toOptions(o.sites);
     o.whatOptions = toOptions("sumvar sumstd logprodspan".split(" "));
-    o.aggregateOptions = "1h:3600 30min:1800 15min:900 2h:7200"
+    o.aggregateOptions = "1h:3600 30min:1800 15min:900 5min:300 as points:1 2h:7200"
       .split(" ")
       .map((kv) => kv.split(":"))
       .map(([k, v]) => ({
