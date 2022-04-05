@@ -79,7 +79,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import { NTable, NForm, NSelect, NSwitch } from "naive-ui";
 const NComponents = { NTable, NForm, NSelect, NSwitch };
 
