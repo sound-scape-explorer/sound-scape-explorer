@@ -57,7 +57,7 @@ class LoggersDictionary:
             for audio in aLogger.audios:
                 try:
                     strdate = datetime.datetime.strptime(
-                        audio.startTime, '%Y%m%d_%H%M%S')
+                        audio.startTime, '%Y%m%d_%H%M%S') # need UTC Z %z?
                     if strdate < minrange:
                         minrange = strdate
                     time = datetime.timedelta(seconds=audio.timeDuration)
@@ -65,7 +65,7 @@ class LoggersDictionary:
                         maxrange = (strdate+time)
                 except:
                     strdate = datetime.datetime.strptime(
-                        audio.startTime, '%Y%m%d_%H%M')
+                        audio.startTime, '%Y%m%d_%H%M') # need UTC Z %z?
                     if strdate < minrange:
                         minrange = strdate
                     time = datetime.timedelta(seconds=audio.timeDuration)

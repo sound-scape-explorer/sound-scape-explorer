@@ -43,18 +43,18 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None, disa
             try:
                 types.append({
                     'I': int,
-                    'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M%S'),
+                    'D': lambda v: datetime.strptime(v+'Z', '%Y%m%d_%H%M%S%z'),
                     'L': parseTags(','),
                     'L-': parseTags('-'),
-                    'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M%S') for vv in parseTags('-')(v)],
+                    'L-D': lambda v: [datetime.strptime(vv+'Z', '%Y%m%d_%H%M%S%z') for vv in parseTags('-')(v)],
                 }[t])
             except Exception as e:
                 types.append({
                     'I': int,
-                    'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
+                    'D': lambda v: datetime.strptime(v+'Z', '%Y%m%d_%H%M%z'),
                     'L': parseTags(','),
                     'L-': parseTags('-'),
-                    'L-D': lambda v: [datetime.strptime(vv, '%Y%m%d_%H%M') for vv in parseTags('-')(v)],
+                    'L-D': lambda v: [datetime.strptime(vv+'Z', '%Y%m%d_%H%M%z') for vv in parseTags('-')(v)],
                 }[t])
         else:
             types.append(str)
