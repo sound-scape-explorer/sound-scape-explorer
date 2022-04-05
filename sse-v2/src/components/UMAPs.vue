@@ -15,7 +15,8 @@
       <div class="scatter-controls">
         <n-input-group>
           <div>
-            <input v-model="query" placeholder="filter..."/>
+            <n-select v-model:value="query" :options="querySuggestions.map(k => ({label:k, value:k}))" />
+            ^ <input v-model="query" placeholder="filter..."/>
             <n-select v-model:value="colorBy" :clearable="true" :tag="true" :filterable="true" :options="Object.keys(colorerInfo.dsAccess).map(k => ({label:k, value:k}))" />
           </div>
         </n-input-group>
@@ -109,7 +110,7 @@ import {
 
 import { Dataset, RenderMode, ScatterGL } from '@/scatter-gl-src';
 
-import { UMAP_RANGES } from "@/mappings";
+import { FILE_SITE, FILE_START, FILE_TAGS, UMAP_RANGES } from "@/mappings";
 import { dateFormatInTz, floorMod } from "@/utils";
 import { paletteH1000, paletteL, paletteS } from "@/palette";
 import { onMounted, inject, computed, ref, watchEffect, watch } from "vue";
@@ -213,7 +214,6 @@ const sliders = computed(() => {
     return {
       key: kr,
       startStop: root.cfg.ranges[kr].map((d:number) => {
-        console.log(asLong(d), d, new Date(asLong(d)*1000));
         return asLong(d);
       }),
       marks: {
@@ -231,7 +231,6 @@ const query = ref("");
 const colorBy = ref("");
 
 let scatterGL: ScatterGL | null = null;
-let renderPass = 'normal';
 let dataset: Dataset | null = null;
 let lastSelectedPoints: number[] = [];
 function rerender() {
@@ -257,6 +256,7 @@ function goFS(target: any, nextSibling = false) {
 
 const colorerInfo = {
   l:[], X:[], t:[], labels:[] as string[],
+  tags: [] as Set<string>[],
   darkMode: true,
   timeInDay:[], dates:[],
   dsAccess: {
@@ -319,7 +319,7 @@ const pointColorer = (ii/*, selectedIndices, hoverIndex*/) => {
       }
     }
     if (query.value !== "") {
-      alpha = queryPointIsIn.value(ii/*, selectedIndices, hoverIndex*/) ? Math.min(alpha, highAlpha) : lowAlpha;
+      alpha = queryPointIsIn.value(i/*, selectedIndices, hoverIndex*/) ? Math.min(alpha, highAlpha) : lowAlpha;
     }
   }
   const cV = (colorV - colorRange[0]) / (colorRange[1] - colorRange[0])
@@ -345,6 +345,67 @@ function fastTimeInDay(tz) {
     }
   }
 }
+const foundTags = ref([] as string[])
+const foundLabels = ref([] as string[])
+const querySuggestions = computed(() => {
+  return ["", ...foundTags.value.map(t => '@'+t), ...foundLabels.value]
+})
+
+type Interval = [number, number, string[]]
+function makeTagsIndex(files, labels, l, t, binSize) {
+  const logger = (label:string) => label.replace(/^.*\//, '')
+  const loggerIntervals: {[key: string]: Interval[]} = {}
+  for (const label of labels) {
+    loggerIntervals[logger(label)] = []
+  }
+  for (const fname in files) {
+    const f = files[fname]
+    if (f[FILE_TAGS].length === 0) continue
+    console.log(f[FILE_START])
+    // TODO true duration from the cfg file probably, eventually
+    loggerIntervals[f[FILE_SITE]].push([new Date(f[FILE_START]).getTime()/1000, 60, f[FILE_TAGS]]) // we parse a date that is already timezone explicit (and UTC)
+  }
+  for (const k in loggerIntervals) {
+    loggerIntervals[k].sort((a, b) => a[0] - b[0])
+  }
+  // TODO: opt, could use a max-size of the interval to dichotomize the search
+  let res: Set<string>[] = []
+  for (let i = 0; i < l.length; i++) {
+    const intervals = loggerIntervals[logger(l[i])]
+    const tags = aggregateTags(new Set(), intervals, t[i], binSize)
+    res.push(tags)
+  }
+  return res
+}
+function aggregateTags(res: Set<string>, sortedIntervals: Interval[], t: number, dt: number) {
+  for (const interval of sortedIntervals) {
+    /*
+  for (let ii = 0; ii < sortedIntervals.length; ii++) {
+    const interval = sortedIntervals[ii]
+    */
+    if (interval[0] >= t+dt) {
+      break
+    }
+    if (interval[0]+interval[1] >= t) {
+      //addAllValues(res, interval[2])
+      interval[2].forEach(t => res.add(t))
+    }
+  }
+  return res
+}
+function addAllValues(into, toAdd) {
+  for (const k in toAdd) {
+    into.add(toAdd[k])
+  }
+}
+function uniqueSortedTags(all: Set<string>[]) {
+  const agg = new Set<string>()
+  console.log(all)
+  all.forEach(tags => tags.forEach(t => agg.add(t)))
+  let res = [...agg]
+  res.sort()
+  return res
+}
 
 watch([fetcher], () => {
   let I = colorerInfo
@@ -361,10 +422,10 @@ watch([fetcher], () => {
   );
   console.log("WATCH SCATTER", v.l.length);
 
-  // TODO this is so slow... (web worker it?)
-  // ... or a thing that computes an offset and yields a start-of-day=0%24 value and checks it can interpolate by checking the intervals of some random or gridded values
-  //colorerInfo.dates = v.t.map(t => new Date(new Date(1000 * t).toLocaleString('en-US', {timeZone: root.cfg.display_locale})));
-  colorerInfo.timeInDay = v.t.map(fastTimeInDay(root.cfg.display_locale));
+  I.timeInDay = v.t.map(fastTimeInDay(root.cfg.display_locale));
+  I.tags = makeTagsIndex(root.cfg.files, I.labels, v.l, v.t, v.binSize);
+  foundTags.value = uniqueSortedTags(I.tags)
+  foundLabels.value = I.labels
 
   I.darkMode = false;
 
@@ -418,7 +479,11 @@ watch([query, colorBy, showAll, start, duration, testCol], () => {
 })
 const queryPointIsIn = computed(() => {
   if (query.value === "") {
-    return () => false;
+    return () => false; // this value is not actually used
+  }
+  if (query.value.startsWith('@')) {
+    let tag = query.value.substring(1)
+    return (ii: number) => colorerInfo.tags[ii]?.has(tag)
   }
   return (ii:number) => dataset && dataset.metadata[ii].label?.indexOf(query.value) !== -1;
 })
