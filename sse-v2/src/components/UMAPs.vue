@@ -481,6 +481,30 @@ const queryPointIsIn = computed(() => {
   if (query.value === "") {
     return () => false; // this value is not actually used
   }
+  const parts = query.value.trim().split(/\s+/)
+  return (ii: number) => {
+    for (const p of parts) {
+      if (p.startsWith('@')) {
+        if (! colorerInfo.tags[ii]?.has(p.substring(1))) {
+          return false
+        }
+      } else if (!(dataset && dataset.metadata[ii].label?.indexOf(p) !== -1)) {
+        return false
+      }
+    }
+    return true
+  }
+  /*
+  return new Function('dataset', 'colorerInfo', `
+  return (ii) => ${
+    parts.map(q => {
+      if (q.startsWith('@')) {
+        return `colorerInfo.tags[ii]?.has(q.substring(1))`
+      }
+    }).map(s => `(${s})`).join(' && ')
+  }
+  `)(dataset, colorerInfo)
+  */
   if (query.value.startsWith('@')) {
     let tag = query.value.substring(1)
     return (ii: number) => colorerInfo.tags[ii]?.has(tag)
