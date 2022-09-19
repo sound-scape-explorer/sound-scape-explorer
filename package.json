@@ -1,4 +1,5 @@
 {
+  "name": "sound-scape-explorer",
   "scripts": {
     "install": "bin/install.sh",
     "dev": "concurrently 'bin/run-client.sh' 'bin/run-server.sh'"
