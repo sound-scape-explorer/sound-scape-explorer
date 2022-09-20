@@ -30,4 +30,4 @@ cd ..
 
 cd sse-v1 || exit
 
-npm i
+yarn
