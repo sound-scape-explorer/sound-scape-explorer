@@ -1,11 +1,11 @@
 <template>
   <div v-if="cfg.variables">
-    <n-tabs type="card" default-value="volume">
+    <n-tabs default-value="volume" type="card">
       <template #prefix>
         <img
-          class="logo"
-          alt="SoundScapeExplorer logo"
-          src="./assets/logo.png"
+            alt="SoundScapeExplorer logo"
+            class="logo"
+            src="./assets/logo.png"
         />
       </template>
       <n-tab-pane name="preview" tab="Preview">
@@ -31,21 +31,22 @@
 </template>
 
 <script>
-import Preview from "./components/Preview.vue";
-import Volume from "./components/Volume.vue";
-import MockCovering from "./components/MockCovering.vue";
-import UMAPs from "./components/UMAPs.vue";
-import MiniTools from "./components/MiniTools.vue";
-const OComponents = { Preview, Volume, MockCovering, UMAPs, MiniTools };
+import Preview from './components/Preview.vue';
+import Volume from './components/Volume.vue';
+import MockCovering from './components/MockCovering.vue';
+import UMAPs from './components/UMAPs.vue';
+import MiniTools from './components/MiniTools.vue';
+import {NCard, NTabPane, NTabs} from 'naive-ui';
 
-import { NTabs, NCard, NTabPane } from "naive-ui";
-const NComponents = { NTabs, NCard, NTabPane };
+const OComponents = {Preview, Volume, MockCovering, UMAPs, MiniTools};
+
+const NComponents = {NTabs, NCard, NTabPane};
 
 export default {
-  name: "App",
-  components: { ...OComponents, ...NComponents },
+  name: 'App',
+  components: {...OComponents, ...NComponents},
   data: () => ({
-    BASE: "http://localhost:9876/",
+    BASE: 'http://localhost:9876/',
     LOCAL: false,
     cfg: {},
   }),
@@ -63,7 +64,7 @@ export default {
         this.cfg = window.JSONJS;
         console.log(this.cfg);
       } else {
-        const req = await fetch(this.BASE + "generated/ghost-config.json");
+        const req = await fetch(this.BASE + 'generated/ghost-config.json');
         this.cfg = await req.json();
       }
     },
@@ -76,16 +77,13 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*text-align: center;*/
+  //text-align: center;
   color: #2c3e50;
   --logooff: 65;
   margin-top: calc(var(--logooff) * 1px);
 }
+
 .logo {
-  /*
-  position: absolute;
-  */
-  text-align: top;
   width: 100px;
   margin-top: calc(var(--logooff) * -1px);
 }

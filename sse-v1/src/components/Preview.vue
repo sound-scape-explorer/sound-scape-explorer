@@ -1,42 +1,45 @@
 <template>
   <div class="view-preview">
     <canvas
-      width="800"
-      height="512"
-      ref="spectroCanvas"
-      class="spectro-canvas"
+        ref="spectroCanvas"
+        class="spectro-canvas"
+        height="512"
+        width="800"
     ></canvas>
-    <audio ref="audio" controls crossorigin :src="previewURL"></audio>
+    <audio ref="audio" :src="previewURL" controls crossorigin></audio>
     <div class="audio-tools">
-      {{ showHz.toFixed(0) }}Hz <br />
+      {{ showHz.toFixed(0) }}Hz
+      <br />
       <label>
-        <input type="checkbox" v-model="changePitch" /> listen to ultrasound
+        <input v-model="changePitch" type="checkbox" />
+        listen to ultrasound
       </label>
     </div>
-    <div class="band-spectro" v-for="(b, k) in root.cfg.bands" :key="k">
+    <div v-for="(b, k) in root.cfg.bands" :key="k" class="band-spectro">
       <div class="band-name">
-        <span>{{ k }}</span> ({{ bandInfo(b) }})
+        <span>{{ k }}</span>
+        ({{ bandInfo(b) }})
       </div>
-      <img :src="bandPreviewImageURL(k)" @click="clickSpectro($event, b)" />
+      <img :src="bandPreviewImageURL(k)" alt="" @click="clickSpectro($event, b)" />
     </div>
   </div>
 </template>
 
 <script>
-/*
-import GainWorklet from "../worklet/GainWorklet";
-      let gainWorkletNode = null
-      await context.audioWorklet.addModule(GainWorklet)
-      gainWorkletNode = new AudioWorkletNode(context, 'gain-worklet')
-      gainWorkletNode.port.onmessage = event => {
-        console.log('Worklet Message:', event.data.msg)
-      }
-      */
+// 
+// import GainWorklet from "../worklet/GainWorklet";
+//       let gainWorkletNode = null
+//       await context.audioWorklet.addModule(GainWorklet)
+//       gainWorkletNode = new AudioWorkletNode(context, 'gain-worklet')
+//       gainWorkletNode.port.onmessage = event => {
+//         console.log('Worklet Message:', event.data.msg)
+//       }
+//
 
-import { getBandBoundsFromSpec, mel2hz } from "@/utils.js";
+import {getBandBoundsFromSpec, mel2hz} from '@/utils.js';
 
 export default {
-  inject: ["root"],
+  inject: ['root'],
   data: () => ({
     changePitch: false,
     showHz: -1,
@@ -45,9 +48,9 @@ export default {
     previewURL() {
       const B = this.root.BASE + this.root.cfg.variables.generated_base;
       if (this.changePitch) {
-        return B + "preview-audio/hzdiv10.wav";
+        return B + 'preview-audio/hzdiv10.wav';
       } else {
-        return B + "preview-audio/normal.wav";
+        return B + 'preview-audio/normal.wav';
         //this.root.BASE + V.audio_base + V.preview_file + V.audio_suffix;
       }
     },
@@ -61,7 +64,7 @@ export default {
       if (this.audioContext) {
         this.audioContext.close();
       }
-      const audioContext = new AudioContext({ sampleRate: 192000 });
+      const audioContext = new AudioContext({sampleRate: 192000});
       const track = audioContext.createMediaElementSource(this.$refs.audio); // it must be tagged as crossorigin or it will output silence...
       //const gainNode = audioContext.createGain();
       //gainNode.gain.value = 2;
@@ -74,28 +77,28 @@ export default {
       };
       console.log(freqFilter); //
 
-      /*
-      const distortion = (amount) => {
-        ////k=400 ; plt.plot(( 3 + k ) * x * 20 * np.pi/180 / ( np.pi + k * np.abs(x) ));plt.show()
-        const res = audioContext.createWaveShaper();
-        const k = typeof amount === "number" ? amount : 50;
-        const n_samples = 1000;
-        const curve = new Float32Array(n_samples);
-        let i = 0,
-          x = 0;
-        for (; i < n_samples; ++i) {
-          //x = (i * 2) / n_samples - 1;
-          //curve[i] = ((3 + k) * x * 20 * Math.PI / 180) / (Math.PI + k * Math.abs(x));
-          curve[i] = Math.max(
-            0,
-            -1 + (2 * i) / (n_samples - 1) + amount * k * x * 0
-          );
-        }
-        res.curve = curve;
-        return res;
-      };
-      console.log(distortion);
-      */
+      // 
+      // const distortion = (amount) => {
+      // ////k=400 ; plt.plot(( 3 + k ) * x * 20 * np.pi/180 / ( np.pi + k * np.abs(x) ));plt.show()
+      // const res = audioContext.createWaveShaper();
+      // const k = typeof amount === "number" ? amount : 50;
+      // const n_samples = 1000;
+      // const curve = new Float32Array(n_samples);
+      // let i = 0,
+      //     x = 0;
+      // for (; i < n_samples; ++i) {
+      //     //x = (i * 2) / n_samples - 1;
+      //     //curve[i] = ((3 + k) * x * 20 * Math.PI / 180) / (Math.PI + k * Math.abs(x));
+      //     curve[i] = Math.max(
+      //       0,
+      //       -1 + (2 * i) / (n_samples - 1) + amount * k * x * 0
+      //     );
+      // }
+      // res.curve = curve;
+      // return res;
+      // };
+      // console.log(distortion);
+      // 
 
       const analyser = audioContext.createAnalyser();
       analyser.smoothingTimeConstant = 0;
@@ -106,12 +109,13 @@ export default {
       analyser.getByteTimeDomainData(dataArray);
 
       const canvas = this.$refs.spectroCanvas;
-      const canvasCtx = canvas.getContext("2d");
-      canvasCtx.fillStyle = `black`;
+      const canvasCtx = canvas.getContext('2d');
+      canvasCtx.fillStyle = 'black';
       canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
       let j = 0;
       // draw a spectrogram (relying on the relative regularity of raf (req. anim. frame))
-      let a = this.$refs.audio;
+      const a = this.$refs.audio;
+
       function draw() {
         if (a.paused) {
           setTimeout(() => {
@@ -121,22 +125,23 @@ export default {
         }
 
         analyser.getByteFrequencyData(dataArray);
-        for (var i = 0; i < dataArray.length; i++) {
+        for (let i = 0; i < dataArray.length; i++) {
           // draw each pixel with the specific color
-          var v = dataArray[i];
+          const v = dataArray[i];
           canvasCtx.fillStyle = `rgb(${v},${v},${v})`; //hot.getColor(value).hex();
           canvasCtx.fillRect(j, 512 - i, 1, 1);
         }
         j = (j + 1) % canvas.width;
-        canvasCtx.fillStyle = `red`;
+        canvasCtx.fillStyle = 'red';
         canvasCtx.fillRect(j, 0, 7, canvas.height);
         requestAnimationFrame(draw);
       }
+
       draw();
       track
-        //.connect(freqFilter("bandpass", 6800, 25))
-        //.connect(freqFilter("lowpass", 6000, 10))
-        //.connect(distortion(400))
+      //.connect(freqFilter("bandpass", 6800, 25))
+      //.connect(freqFilter("lowpass", 6000, 10))
+      //.connect(distortion(400))
         .connect(analyser)
         .connect(audioContext.destination);
       this.track = track;
@@ -157,7 +162,7 @@ export default {
     },
     //////////
     parseBand(bstr) {
-      return bstr.split("-").map((s) => parseInt(s));
+      return bstr.split('-').map((s) => parseInt(s));
     },
     hzFromBandProp(b, prop) {
       const cfg = this.root.cfg;
@@ -172,15 +177,14 @@ export default {
       const posx = (ev.clientX - dim.left) / dim.width;
       const posy = (ev.clientY - dim.top) / dim.height;
       const b = this.parseBand(bstr);
-      const hz = this.hzFromBandProp(b, 1 - posy);
-      this.showHz = hz;
+      this.showHz = this.hzFromBandProp(b, 1 - posy);
       if (ev.shiftKey) {
         return;
       }
       const audio = this.$refs.audio;
       audio.currentTime =
-        //parseFloat(this.root.cfg.variables.preview_file_start) + // we now use precut audio
-        posx * parseFloat(this.root.cfg.variables.preview_file_dur);
+          //parseFloat(this.root.cfg.variables.preview_file_start) + // we now use precut audio
+          posx * parseFloat(this.root.cfg.variables.preview_file_dur);
       //audio.playbackRate = 0.5;
       //audio.mozPreservesPitch = audio.webkitPreservesPitch = false;
       audio.play();
@@ -194,12 +198,14 @@ export default {
 .view-preview {
   position: relative;
 }
+
 .view-preview audio:not(:hover) {
   /*
   width: 200px;
   transition: transform 300ms ease-out;
   */
 }
+
 .view-preview .spectro-canvas {
   width: 900px;
   height: 500px;
@@ -207,18 +213,22 @@ export default {
   transform-origin: top left;
   transform: scale(calc(1 / 6), calc(1 / 6));
 }
+
 .view-preview .spectro-canvas:hover {
   transform: scale(1, 1);
 }
+
 .view-preview audio {
   transition: width 300ms ease-in-out;
   width: calc(100% - 300px);
   margin: 0;
 }
+
 .view-preview .audio-tools {
   width: 150px;
   display: inline-block;
 }
+
 .band-spectro img {
   width: 100%;
   cursor: crosshair;
@@ -226,6 +236,7 @@ export default {
   box-sizing: border-box;
   border-top-width: 0;
 }
+
 .band-name {
   font-size: 75%;
   color: yellowgreen;
@@ -235,6 +246,7 @@ export default {
   padding: 0.2em 0 0 0;
   text-align: center;
 }
+
 .band-name span {
   font-weight: bold;
 }

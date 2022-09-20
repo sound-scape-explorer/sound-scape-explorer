@@ -12,9 +12,9 @@ echo "Creating sample folders..."
 
 mkdir ./sample/generated ./sample/features
 
-ln -s ./sample/generated ./sse-v1
+ln -s ../sample/generated ./sse-v1
 
-ln -s ./sample/features ./sse-v1
+ln -s ../sample/features ./sse-v1
 
 echo "Computing and extracting data"
 
@@ -30,4 +30,4 @@ cd ..
 
 cd sse-v1 || exit
 
-npm i
+yarn

@@ -1,22 +1,22 @@
 <template>
   <div>
     <input
-      class="focus"
-      ref="focus"
-      @keydown.left="
+        ref="focus"
+        class="focus"
+        @keydown.left="
         currentBand = bands[Math.max(0, bands.indexOf(currentBand) - 1)]
       "
-      @keydown.right="
+        @keydown.right="
         currentBand =
           bands[Math.min(bands.length - 1, bands.indexOf(currentBand) + 1)]
       "
-      @keydown.up="
+        @keydown.up="
         currentIntegration =
           integrations[
             Math.max(0, integrations.indexOf(currentIntegration) - 1)
           ]
       "
-      @keydown.down="
+        @keydown.down="
         currentIntegration =
           integrations[
             Math.min(
@@ -36,41 +36,42 @@
       </tr>
       <tr v-for="ki in integrations" :key="ki">
         <th
-          :title="'Duration to estimate the variance: ' + ki + ' sec'"
-          @click="select(ki, undefined)"
+            :title="'Duration to estimate the variance: ' + ki + ' sec'"
+            @click="select(ki, undefined)"
         >
           {{ ki }}
         </th>
         <td
-          v-for="k in bands"
-          :key="k"
-          @click="select(ki, k)"
-          :class="{ current: currentBand === k && currentIntegration === ki }"
+            v-for="k in bands"
+            :key="k"
+            :class="{ current: currentBand === k && currentIntegration === ki }"
+            @click="select(ki, k)"
         >
           o
         </td>
       </tr>
     </n-table>
-    <img class="volume-graph" :src="currentGraphURL" />
+    <img :src="currentGraphURL" alt="" class="volume-graph" />
   </div>
 </template>
 
 <script>
-import { NTable } from "naive-ui";
-const NComponents = { NTable };
+import {NTable} from 'naive-ui';
+
+const NComponents = {NTable};
 
 export default {
-  inject: ["root"],
-  components: { ...NComponents },
+  inject: ['root'],
+  components: {...NComponents},
   data: () => ({
-    currentBand: "",
-    currentIntegration: "",
-    what: "sumvar",
+    currentBand: '',
+    currentIntegration: '',
+    what: 'sumvar',
   }),
   mounted() {
     this.currentBand = this.bands[parseInt(this.bands.length / 2)];
     this.currentIntegration =
-      this.integrations[parseInt(this.integrations.length / 2)];
+        this.integrations[parseInt(this.integrations.length / 2)];
     this.$refs.focus.focus();
   },
   computed: {
@@ -78,21 +79,23 @@ export default {
       return Object.keys(this.root.cfg.bands);
     },
     integrations() {
-      return this.root.cfg.variables.integration_seconds.split("-");
+      return this.root.cfg.variables.integration_seconds.split('-');
     },
     currentGraphURL() {
-      if (this.currentBand === "") return "";
+      if (this.currentBand === '') {
+        return '';
+      }
       const B = this.root.BASE + this.root.cfg.variables.generated_base;
       const inte = parseInt(this.currentIntegration);
       return `${B}single/volume/${inte}/${this.currentBand}.${this.what}.png`;
-      /*
-      return (
-        B +
-        `single/volume/${this.currentBand}_eachLogger${inte}_${(
-          inte / 2
-        ).toFixed(0)}.png`
-      );
-      */
+      // 
+      // return (
+      // B +
+      // `single/volume/${this.currentBand}_eachLogger${inte}_${(
+      //     inte / 2
+      // ).toFixed(0)}.png`
+      // );
+      // 
     },
   },
   methods: {
@@ -113,10 +116,12 @@ export default {
 .current {
   filter: invert(100%);
 }
+
 .volume-graph {
   width: 100%;
   pointer-events: none;
 }
+
 .focus {
   width: 0;
   height: 0;
