@@ -1,10 +1,11 @@
-import { createApp } from "vue";
-import App from "./App.vue";
+import {createApp} from 'vue';
+import App from './App.vue';
 
-import { Chart, registerables } from "chart.js";
+import {Chart, registerables} from 'chart.js';
+import {BoxPlotController} from '@sgratzl/chartjs-chart-boxplot';
+
 Chart.register(...registerables);
 
-import { BoxPlotController } from '@sgratzl/chartjs-chart-boxplot';
 Chart.register(BoxPlotController);
 
-createApp(App).mount("#app");
+createApp(App).mount('#app');

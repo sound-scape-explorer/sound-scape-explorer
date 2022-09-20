@@ -3,11 +3,17 @@
     <input v-model.number="sampleRate" />
     <input v-model.number="bandSize" />
     <input v-model.number="bandOffset" />
-    <label><input type="checkbox" v-model="inHz" /> hz</label>
-    <input disabled :value="Math.round(bandInfo[0])" />
-    <input disabled :value="Math.round(bandInfo[1])" />
+    <label>
+      <input v-model="inHz" type="checkbox" />
+      hz
+    </label>
+    <input :value="Math.round(bandInfo[0])" disabled />
+    <input :value="Math.round(bandInfo[1])" disabled />
     <br />
-    <label><input type="checkbox" v-model="showTable" /> table</label>
+    <label>
+      <input v-model="showTable" type="checkbox" />
+      table
+    </label>
     <table v-if="showTable" class="band-table">
       <tr>
         <th>band spec</th>
@@ -17,7 +23,7 @@
         <th>end (mel)</th>
       </tr>
       <tr v-for="d in bandTableRows" :key="d[0]">
-        <td v-for="(v, i) in d" :key="i">{{ i == 0 ? v : Math.round(v) }}</td>
+        <td v-for="(v, i) in d" :key="i">{{ i === 0 ? v : Math.round(v) }}</td>
       </tr>
     </table>
     <hr />
@@ -25,10 +31,10 @@
 </template>
 
 <script>
-import { getBandBoundsFromSpec } from "@/utils.js";
+import {getBandBoundsFromSpec} from '@/utils.js';
 
 export default {
-  inject: ["root"],
+  inject: ['root'],
 
   data: () => ({
     sampleRate: 44100,
@@ -58,13 +64,13 @@ export default {
       return getBandBoundsFromSpec(
         [this.bandSize, this.bandOffset],
         this.sampleRate,
-        this.inHz
+        this.inHz,
       );
     },
   },
   mounted() {
     this.sampleRate = parseInt(
-      this.root.cfg.variables.audio_expected_sample_rate
+      this.root.cfg.variables.audio_expected_sample_rate,
     );
   },
 };
@@ -76,12 +82,15 @@ export default {
     font-weight: bold;
     text-align: center;
   }
+
   th:nth-of-type(2n) {
     text-align: right;
   }
+
   td:nth-of-type(2n) {
     padding-left: 2em;
     text-align: right;
+
     &::after {
       content: " -";
     }
