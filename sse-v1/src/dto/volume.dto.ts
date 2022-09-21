@@ -1,19 +1,16 @@
-import {BandName, SiteName, StringMapName, UmapIntegration} from './config.dto';
-
-interface VolumeData {
-  sumvar: number[];
-  sumstd: number[];
-  logprodspan: number[];
-  t: number[];
-  i: number[];
-}
-
-type VolumeName = StringMapName & SiteName
+import {BandIntegration, BandName} from './config.dto';
 
 export interface VolumeDto {
   band: BandName;
-  integration: UmapIntegration;
+  integration: BandIntegration;
   data: {
-    [key: VolumeName]: VolumeData;
+    // key: ${StringMapName} ${SiteName}
+    [key: string]: {
+      sumvar: number[];
+      sumstd: number[];
+      logprodspan: number[];
+      t: number[];
+      i: number[];
+    };
   };
 }

@@ -1,11 +1,11 @@
+export type BandIntegration = number;
 export type BandName = string;
+export type ConfigDate = string;
 export type FileTags = string[];
 export type SiteColor = string;
 export type SiteDetails = string;
 export type SiteName = string;
 export type StringMapName = string;
-export type Timestamp = string;
-export type UmapIntegration = number;
 
 export interface ConfigDto {
   xlsx: string;
@@ -31,14 +31,14 @@ export interface ConfigDto {
   };
   umaps: {
     [umap: string]: [
-      UmapIntegration,
+      BandIntegration,
       BandName[],
       StringMapName[],
       SiteName[],
     ];
   };
   ranges: {
-    [range: string]: Timestamp[];
+    [range: string]: ConfigDate[];
   };
   stringmap: {
     [key: StringMapName]: [
@@ -49,7 +49,7 @@ export interface ConfigDto {
   files: {
     [file: string]: [
       SiteName,
-      Timestamp,
+      ConfigDate,
       FileTags,
     ];
   };
