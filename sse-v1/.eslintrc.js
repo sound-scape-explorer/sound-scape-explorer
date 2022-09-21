@@ -2,21 +2,31 @@ module.exports = {
   root: true,
   env: {
     node: true,
+    browser: true,
   },
   extends: [
-    'plugin:vue/vue3-essential',
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: '@babel/eslint-parser',
+    'parser': '@typescript-eslint/parser',
+    'sourceType': 'module',
   },
-  'settings': {
+  settings: {
     'import/resolver': {
       'node': {
-        'extensions': ['.js', '.vue'],
+        'extensions': ['.vue'],
       },
     },
   },
+  overrides: [{
+    files: [
+      '*.ts',
+      '*.js',
+    ],
+    parser: '@typescript-eslint/parser',
+  }],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -107,5 +117,27 @@ module.exports = {
       {'before': false, 'after': true},
     ],
     'import/prefer-default-export': 'off',
+    // typescript
+    '@typescript-eslint/type-annotation-spacing': ['error', {
+      'before': false,
+      'after': true,
+      'overrides': {
+        'arrow': {
+          'before': true,
+        },
+      },
+    }],
+    '@typescript-eslint/member-delimiter-style': ['error', {
+      'multiline': {
+        'delimiter': 'semi',
+        'requireLast': true,
+      },
+      'singleline': {
+        'delimiter': 'semi',
+        'requireLast': true,
+      },
+      'multilineDetection': 'brackets',
+    }],
+    '@typescript-eslint/object-curly-spacing': ['error', 'never'],
   },
 };
