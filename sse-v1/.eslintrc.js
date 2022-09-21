@@ -1,25 +1,33 @@
 module.exports = {
-  'root': true,
-  'env': {
+  root: true,
+  env: {
     node: true,
+    browser: true,
   },
-  'extends': [
-    'plugin:vue/vue3-essential',
+  extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  'parserOptions': {
-    // parser: '@babel/eslint-parser',
-    parser: '@typescript-eslint/parser',
+  parser: 'vue-eslint-parser',
+  parserOptions: {
+    'parser': '@typescript-eslint/parser',
+    'sourceType': 'module',
   },
-  'settings': {
+  settings: {
     'import/resolver': {
       'node': {
-        'extensions': ['.js', '.vue', '.ts'],
+        'extensions': ['.vue'],
       },
     },
   },
-  'rules': {
+  overrides: [{
+    files: [
+      '*.ts',
+      '*.js',
+    ],
+    parser: '@typescript-eslint/parser',
+  }],
+  rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     // Rules from @bamdadsabbagh/eslint-config
