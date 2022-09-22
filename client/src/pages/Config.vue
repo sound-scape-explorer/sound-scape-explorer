@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-const request = await fetch('http://localhost:9876/generated/ghost-config.json');
-const config = await request.json();
+import {fetchConfig} from '../utils/fetch-config';
+
+const config = await fetchConfig();
 const string = JSON.stringify(config, null, 2);
 </script>
 
