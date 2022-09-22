@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {MenuOption, NLayoutSider, NMenu} from 'naive-ui';
-import {h, ref} from 'vue';
+import {h, onMounted, ref} from 'vue';
 import {renderIcon} from '../utils/render-icon';
 import {
   AlbumsOutline,
@@ -13,9 +13,28 @@ import {
   PlayOutline,
   StatsChartOutline,
 } from '@vicons/ionicons5';
-import {RouterLink} from 'vue-router';
+import {RouterLink, useRouter} from 'vue-router';
 
 const collapsed = ref(true);
+
+onMounted(async () => {
+  const router = useRouter();
+  await router.isReady();
+
+  const activeAnchorClasses = 'router-link-active router-link-exact-active';
+  const menu = document.querySelector('.menu') as HTMLDivElement;
+
+  Array.from(menu.children).forEach((child) => {
+    const anchor = child.querySelector('a') as HTMLAnchorElement;
+
+    if (anchor.className !== activeAnchorClasses) {
+      return;
+    }
+
+    const button = child.children[0] as HTMLDivElement;
+    button.click();
+  });
+});
 
 /**
  * @see https://ionic.io/ionicons
@@ -25,6 +44,7 @@ const menuOptions: MenuOption[] = [
     label: () => h(RouterLink, {to: {name: 'home'}}, {default: () => 'Sound Scape Explorer'}),
     key: 'home',
     icon: renderIcon(HomeOutline),
+    default: true,
   },
   {
     label: () => h(RouterLink, {to: {name: 'preview'}}, {default: () => 'Preview'}),
@@ -89,7 +109,3 @@ const menuOptions: MenuOption[] = [
     />
   </n-layout-sider>
 </template>
-
-<style lang="scss">
-
-</style>
