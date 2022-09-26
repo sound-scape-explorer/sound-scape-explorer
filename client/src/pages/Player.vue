@@ -32,14 +32,14 @@ const options = loggers.map((logger) => {
     <n-icon class="icon">
       <play-circle-outline />
     </n-icon>
-    <NDropdown
+    <n-dropdown
         :options="options"
         placement="bottom-start"
         trigger="hover"
         @select="handleSelect"
     >
       <n-button>{{ activeLogger }}</n-button>
-    </NDropdown>
+    </n-dropdown>
     <n-icon class="icon">
       <settings-outline />
     </n-icon>
