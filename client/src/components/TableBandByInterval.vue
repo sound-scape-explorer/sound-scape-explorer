@@ -54,7 +54,7 @@ const selectCell = (band: string, interval: number) => {
 </script>
 
 <template>
-  <n-table :single-line="false" size="small">
+  <n-table :single-line="false" class="table" size="small">
     <thead>
     <tr>
       <th />
@@ -70,10 +70,7 @@ const selectCell = (band: string, interval: number) => {
           class="cell"
           @click="selectCell(band, interval)"
       >
-        <!--
-        TODO: link to http://localhost:9876/generated/pairwise/covering/
-        -->
-        0
+        x
       </td>
     </tr>
     </tbody>
@@ -85,6 +82,10 @@ const selectCell = (band: string, interval: number) => {
 </template>
 
 <style lang="scss" scoped>
+.table {
+  text-align: center;
+}
+
 .cell {
   cursor: pointer;
 }
