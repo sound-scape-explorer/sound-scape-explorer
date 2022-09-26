@@ -8,7 +8,7 @@ import {SERVER_HOSTNAME} from '../constants';
  */
 
 interface Props {
-  imageType: 'covering' | 'volume';
+  imageType: 'covering' | 'volume' | 'umap';
   bands: string[];
   intervals: number[];
 }
@@ -49,6 +49,8 @@ const selectCell = (band: string, interval: number) => {
     imageURL.value = `${SERVER_HOSTNAME}/generated/pairwise/covering/${interval}/${band}.meandist.png`;
   } else if (props.imageType === 'volume') {
     imageURL.value = `${SERVER_HOSTNAME}/generated/single/volume/${interval}/${band}.sumvar.png`;
+  } else if (props.imageType === 'umap') {
+    imageURL.value = `${SERVER_HOSTNAME}/generated/umap/${interval}/${band}.png`;
   }
 };
 </script>
