@@ -1,14 +1,23 @@
 <script lang="ts" setup>
 import {defineProps, ref} from 'vue';
 import {NImage, NP, NTable} from 'naive-ui';
-import {fetchConfig} from '../utils/fetch-config';
 import {SERVER_HOSTNAME} from '../constants';
 
-const config = await fetchConfig();
-const bands = Object.keys(config.bands);
-const intervals = Object.keys(config.umaps).map((umap) => {
-  return config.umaps[umap][0];
-});
+/**
+ * Props
+ */
+
+interface Props {
+  imageType: 'covering' | 'volume';
+  bands: string[];
+  intervals: number[];
+}
+
+const props = defineProps<Props>();
+
+/**
+ * State
+ */
 
 interface ActiveCell {
   band: null | string;
@@ -22,11 +31,9 @@ const activeCell = ref<ActiveCell>({
 
 const imageURL = ref<string | null>(null);
 
-interface Props {
-  imageType: 'covering' | 'volume';
-}
-
-const props = defineProps<Props>();
+/**
+ * Handlers
+ */
 
 const selectCell = (band: string, interval: number) => {
   if (!band || !interval) {
@@ -51,14 +58,14 @@ const selectCell = (band: string, interval: number) => {
     <thead>
     <tr>
       <th />
-      <th v-for="band in bands">{{ band }}</th>
+      <th v-for="band in props.bands">{{ band }}</th>
     </tr>
     </thead>
     <tbody>
-    <tr v-for="interval in intervals">
+    <tr v-for="interval in props.intervals">
       <th>{{ interval }}</th>
       <td
-          v-for="band in bands"
+          v-for="band in props.bands"
           :class="{active: activeCell.band === band && activeCell.interval === interval}"
           class="cell"
           @click="selectCell(band, interval)"

@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import {NP} from 'naive-ui';
 import TableBandByInterval from '../components/TableBandByInterval.vue';
+import {fetchConfig} from '../utils/fetch-config';
+import {parseBands} from '../utils/parse-bands';
+import {parseIntervals} from '../utils/parse-intervals';
 
-//
+const config = await fetchConfig();
+const bands = parseBands(config);
+const intervals = parseIntervals(config);
 </script>
 
 <template>
@@ -10,5 +15,9 @@ import TableBandByInterval from '../components/TableBandByInterval.vue';
     Volumes
   </n-p>
 
-  <TableBandByInterval image-type="volume" />
+  <n-p>
+    Placeholder
+  </n-p>
+
+  <TableBandByInterval :bands="bands" :intervals="intervals" image-type="volume" />
 </template>
