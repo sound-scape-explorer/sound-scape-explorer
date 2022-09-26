@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd sse-v1 || exit
+cd client || exit
 
 yarn dev
