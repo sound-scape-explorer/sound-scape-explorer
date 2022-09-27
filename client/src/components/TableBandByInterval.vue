@@ -35,8 +35,34 @@ const imageURL = ref<string | null>(null);
  * Handlers
  */
 
-const selectCell = (band: string, interval: number) => {
+function resetImageURL(): void {
+  if (imageURL.value === null) {
+    return;
+  }
+
+  imageURL.value = null;
+}
+
+async function setImageURL(url: string): Promise<void> {
+  if (!url) {
+    return resetImageURL();
+  }
+
+  const {status} = await fetch(url, {method: 'HEAD'});
+
+  if (status !== 200) {
+    return resetImageURL();
+  }
+
+  imageURL.value = url;
+}
+
+function selectCell(band: string, interval: number) {
   if (!band || !interval) {
+    return;
+  }
+
+  if (band === activeCell.value.band && interval === activeCell.value.interval) {
     return;
   }
 
@@ -46,13 +72,14 @@ const selectCell = (band: string, interval: number) => {
   };
 
   if (props.imageType === 'covering') {
-    imageURL.value = `${SERVER_HOSTNAME}/generated/pairwise/covering/${interval}/${band}.meandist.png`;
+    setImageURL(`${SERVER_HOSTNAME}/generated/pairwise/covering/${interval}/${band}.meandist.png`);
   } else if (props.imageType === 'volume') {
-    imageURL.value = `${SERVER_HOSTNAME}/generated/single/volume/${interval}/${band}.sumvar.png`;
+    setImageURL(`${SERVER_HOSTNAME}/generated/single/volume/${interval}/${band}.sumvar.png`);
   } else if (props.imageType === 'umap') {
-    imageURL.value = `${SERVER_HOSTNAME}/generated/umap/${interval}/${band}.png`;
+    setImageURL(`${SERVER_HOSTNAME}/generated/umap/${interval}/${band}.png`);
   }
-};
+}
+
 </script>
 
 <template>
