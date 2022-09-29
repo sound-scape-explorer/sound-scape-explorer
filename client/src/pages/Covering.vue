@@ -1,19 +1,27 @@
 <script lang="ts" setup>
-import {NP} from 'naive-ui';
-import TableBandByInterval from '../components/TableBandByInterval.vue';
-import {fetchConfig} from '../utils/fetch-config';
-import {parseBands} from '../utils/parse-bands';
-import {parseIntervals} from '../utils/parse-intervals';
+import {ref} from 'vue';
+import {useConfig} from '../composables/useConfig';
+import SelectionTable2d from '../components/SelectionTable.vue';
+import SelectionImage from '../components/SelectionImage.vue';
+import {SERVER_HOSTNAME} from '../constants';
+import Title from '../components/Title.vue';
 
-const config = await fetchConfig();
-const bands = parseBands(config);
-const intervals = parseIntervals(config);
+const {bands, intervals} = await useConfig();
+
+const image = ref<string | null>();
+
+function setImage(x: string, y: string) {
+  if (!x || !y) {
+    image.value = null;
+    return;
+  }
+
+  image.value = `${SERVER_HOSTNAME}/generated/pairwise/covering/${y}/${x}.meandist.png`;
+}
 </script>
 
 <template>
-  <n-p>
-    Covering
-  </n-p>
-
-  <TableBandByInterval :bands="bands" :intervals="intervals" image-type="covering" />
+  <Title text="Covering" />
+  <SelectionTable2d :callback="setImage" :xs="bands" :ys="intervals.map(i => i.toString())" />
+  <SelectionImage v-if="image" :source="image" />
 </template>

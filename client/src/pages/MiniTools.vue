@@ -1,3 +1,8 @@
+<script lang="ts" setup>
+import Title from '../components/Title.vue';
+//
+</script>
+
 <template>
-  MiniTools
+  <Title text="MiniTools" />
 </template>

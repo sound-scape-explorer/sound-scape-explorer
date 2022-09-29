@@ -1,3 +1,8 @@
+<script lang="ts" setup>
+import Title from '../components/Title.vue';
+//
+</script>
+
 <template>
-  Docs
+  <Title text="Docs" />
 </template>

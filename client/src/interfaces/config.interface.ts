@@ -7,7 +7,7 @@ type SiteDetails = string;
 type SiteName = string;
 type StringMapName = string;
 
-export interface Config {
+export interface ConfigInterface {
   xlsx: string;
   sheet: number;
   variables: {
@@ -53,9 +53,4 @@ export interface Config {
       FileTags,
     ];
   };
-}
-
-export async function fetchConfig(): Promise<Config> {
-  const request = await fetch('http://localhost:9876/generated/ghost-config.json');
-  return request.json();
 }

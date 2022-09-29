@@ -68,6 +68,7 @@ export const routes: RouteRecordRaw[] = [
     component: Docs,
   },
 ];
+
 export const router = createRouter({
   history: createWebHistory(),
   routes,

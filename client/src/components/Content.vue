@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .content {
   height: 100%;
   padding: 1rem 1rem;

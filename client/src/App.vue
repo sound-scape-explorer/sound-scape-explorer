@@ -18,7 +18,7 @@ import Menu from './components/Menu.vue';
   </n-space>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
   height: 100vh;
 }

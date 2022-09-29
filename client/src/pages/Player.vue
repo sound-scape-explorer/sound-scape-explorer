@@ -1,32 +1,21 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
 import {NButton, NDropdown, NIcon, NP} from 'naive-ui';
 import {PlayCircleOutline, SettingsOutline} from '@vicons/ionicons5';
+import {convertToNaiveDropdownOptions} from '../utils/convert-to-naive-dropdown-options';
+import {useLoggers} from '../composables/useLoggers';
+import Title from '../components/Title.vue';
 
-const loggers = ['Logger L42', 'Logger L01'];
+const {
+  loggers,
+  activeLogger,
+  selectLogger,
+} = useLoggers();
 
-const activeLogger = ref<string | null>(loggers[0]);
-
-const handleSelect = (logger: string) => {
-  if (logger === activeLogger.value) {
-    return;
-  }
-
-  activeLogger.value = logger;
-};
-
-const options = loggers.map((logger) => {
-  return {
-    label: logger,
-    key: logger,
-  };
-});
+const options = convertToNaiveDropdownOptions(loggers.value);
 </script>
 
 <template>
-  <n-p>
-    Player
-  </n-p>
+  <Title text="Player" />
 
   <n-p class="p">
     <n-icon class="icon">
@@ -36,7 +25,7 @@ const options = loggers.map((logger) => {
         :options="options"
         placement="bottom-start"
         trigger="hover"
-        @select="handleSelect"
+        @select="selectLogger"
     >
       <n-button>{{ activeLogger }}</n-button>
     </n-dropdown>
@@ -47,35 +36,35 @@ const options = loggers.map((logger) => {
 
   <n-p class="p spread">
     <span>
-      Timestamp start (full)
+      Timestamp start (zoomed)
     </span>
     <span>
       File details
     </span>
     <span>
-      Timestamp end (full)
+      Timestamp end (zoomed)
     </span>
-  </n-p>
-
-  <n-p class="p timeline">
-    Full timeline
   </n-p>
 
   <n-p class="p timeline timeline--big">
     Zoomed timeline
   </n-p>
 
+  <n-p class="p timeline">
+    Full timeline
+  </n-p>
+
   <n-p class="p spread">
     <span>
-      Timestamp start (zoomed)
+      Timestamp start (full)
     </span>
     <span>
-      Timestamp end (zoomed)
+      Timestamp end (full)
     </span>
   </n-p>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .p {
   display: flex;
   justify-content: center;

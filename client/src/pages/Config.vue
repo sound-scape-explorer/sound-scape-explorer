@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {fetchConfig} from '../utils/fetch-config';
+import {useConfig} from '../composables/useConfig';
 
-const config = await fetchConfig();
+const {config} = await useConfig();
 const string = JSON.stringify(config, null, 2);
 </script>
 
@@ -11,7 +11,7 @@ const string = JSON.stringify(config, null, 2);
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .config {
   margin: 0;
   font-family: 'Courier New', monospace;

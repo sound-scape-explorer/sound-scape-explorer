@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import type {Ref} from 'vue';
+import {computed, h, ref} from 'vue';
 import {MenuOption, NLayoutSider, NMenu} from 'naive-ui';
-import {h, onMounted, ref} from 'vue';
-import {renderIcon} from '../utils/render-icon';
+import {renderNaiveIcon} from '../utils/render-naive-icon';
 import {
   AlbumsOutline,
   CogOutline,
@@ -15,78 +16,76 @@ import {
 } from '@vicons/ionicons5';
 import {RouterLink, useRouter} from 'vue-router';
 
+/**
+ * State
+ */
+
 const collapsed = ref(true);
-
-onMounted(async () => {
-  const router = useRouter();
-  await router.isReady();
-
-  const activeAnchorClasses = 'router-link-active router-link-exact-active';
-  const menu = document.querySelector('.menu') as HTMLDivElement;
-
-  Array.from(menu.children).forEach((child) => {
-    const anchor = child.querySelector('a') as HTMLAnchorElement;
-
-    if (anchor.className !== activeAnchorClasses) {
-      return;
-    }
-
-    const button = child.children[0] as HTMLDivElement;
-    button.click();
-  });
+const router = useRouter();
+const currentRoute = computed(() => {
+  return router.currentRoute.value.name;
 });
 
-/**
- * @see https://ionic.io/ionicons
- */
-const menuOptions: MenuOption[] = [
+const options: Ref<MenuOption[]> = ref([
   {
     label: () => h(RouterLink, {to: {name: 'home'}}, {default: () => 'Sound Scape Explorer'}),
     key: 'home',
-    icon: renderIcon(HomeOutline),
+    icon: renderNaiveIcon(HomeOutline),
     default: true,
   },
   {
     label: () => h(RouterLink, {to: {name: 'preview'}}, {default: () => 'Preview'}),
     key: 'preview',
-    icon: renderIcon(EyeOutline),
+    icon: renderNaiveIcon(EyeOutline),
   },
   {
     label: () => h(RouterLink, {to: {name: 'player'}}, {default: () => 'Player'}),
     key: 'player',
-    icon: renderIcon(PlayOutline),
+    icon: renderNaiveIcon(PlayOutline),
   },
   {
     label: () => h(RouterLink, {to: {name: 'umap'}}, {default: () => 'UMAP'}),
     key: 'umap',
-    icon: renderIcon(StatsChartOutline),
+    icon: renderNaiveIcon(StatsChartOutline),
   },
   {
     label: () => h(RouterLink, {to: {name: 'volumes'}}, {default: () => 'Volumes'}),
     key: 'volumes',
-    icon: renderIcon(EarthOutline),
+    icon: renderNaiveIcon(EarthOutline),
   },
   {
     label: () => h(RouterLink, {to: {name: 'covering'}}, {default: () => 'Covering'}),
     key: 'covering',
-    icon: renderIcon(AlbumsOutline),
+    icon: renderNaiveIcon(AlbumsOutline),
   },
   {
     label: () => h(RouterLink, {to: {name: 'minitools'}}, {default: () => 'MiniTools'}),
     key: 'minitools',
-    icon: renderIcon(ConstructOutline),
+    icon: renderNaiveIcon(ConstructOutline),
   },
   {
     label: () => h(RouterLink, {to: {name: 'config'}}, {default: () => 'Config'}),
     key: 'config',
-    icon: renderIcon(CogOutline),
+    icon: renderNaiveIcon(CogOutline),
   },
   {
     label: () => h(RouterLink, {to: {name: 'docs'}}, {default: () => 'Docs'}),
     key: 'docs',
-    icon: renderIcon(DocumentTextOutline),
+    icon: renderNaiveIcon(DocumentTextOutline),
   },
-];
+]);
+
+/**
+ * Handlers
+ */
+
+function openMenu() {
+  collapsed.value = false;
+}
+
+function closeMenu() {
+  collapsed.value = true;
+}
 </script>
 
 <template>
@@ -98,14 +97,14 @@ const menuOptions: MenuOption[] = [
       bordered
       collapse-mode="width"
       show-trigger
-      @collapse="collapsed = true"
-      @expand="collapsed = false"
+      @collapse="closeMenu"
+      @expand="openMenu"
   >
     <n-menu
         :collapsed-icon-size="22"
         :collapsed-width="64"
-        :options="menuOptions"
-        class="menu"
+        :options="options"
+        :value="currentRoute"
     />
   </n-layout-sider>
 </template>
