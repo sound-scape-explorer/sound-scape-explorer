@@ -3,6 +3,7 @@ import {computed, ref} from 'vue';
 import {NButton, NCheckbox, NDropdown, NP} from 'naive-ui';
 import {convertToNaiveDropdownOptions} from '../utils/convert-to-naive-dropdown-options';
 import type {AggregatesInterface} from '../interfaces/aggregates.interface';
+import {volumesStore} from '../store/volumes.store';
 
 /**
  * State
@@ -17,10 +18,11 @@ const aggregates: AggregatesInterface = {
   '2 h': 7200,
 };
 
-const isEnabled = ref<boolean>(false);
+const isEnabled = ref<boolean>(true);
 const options = computed(() => convertToNaiveDropdownOptions(Object.keys(aggregates)));
 const activeAggregate = ref<string>(Object.keys(aggregates)[0]);
-const activeAggregateSeconds = ref<number>(aggregates[activeAggregate.value]);
+
+// const activeAggregateSeconds = ref<number>(aggregates[activeAggregate.value]);
 
 /**
  * Handlers
@@ -32,7 +34,8 @@ function updateStatus(nextEnable: boolean) {
 
 function selectAggregate(nextKey: string) {
   activeAggregate.value = nextKey;
-  activeAggregateSeconds.value = aggregates[nextKey];
+  // activeAggregateSeconds.value = aggregates[nextKey];
+  volumesStore.activeAggregate = aggregates[nextKey];
 }
 
 </script>
@@ -58,7 +61,7 @@ function selectAggregate(nextKey: string) {
       v-if="isEnabled"
       class="tooltip"
   >
-    {{ activeAggregateSeconds }} s
+    {{ volumesStore.activeAggregate }} s
   </n-p>
 </template>
 

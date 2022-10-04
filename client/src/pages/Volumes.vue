@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import Title from '../components/Title.vue';
 import VolumesOptions from '../components/VolumesOptions.vue';
 import SelectionTable from '../components/SelectionTable.vue';
@@ -35,8 +35,16 @@ function handleSelection(band: string, interval: string) {
 
   volumesStore.activeBand = band;
   volumesStore.activeInterval = interval;
-  imageSource.value = `${SERVER_HOSTNAME}/generated/single/volume/${interval}/${band}.sumvar.png`;
+  imageSource.value = `${SERVER_HOSTNAME}/generated/single/volume/${interval}/${band}.${volumesStore.activeVariable}.png`;
 }
+
+watch(volumesStore, () => {
+  if (volumesStore.activeBand === null || volumesStore.activeInterval === null) {
+    return;
+  }
+
+  handleSelection(volumesStore.activeBand, volumesStore.activeInterval);
+});
 </script>
 
 <template>

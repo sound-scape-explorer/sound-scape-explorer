@@ -7,6 +7,7 @@ export interface VolumesStore {
   activeRange: string | null;
   activeBand: string | null;
   activeInterval: string | null;
+  activeAggregate: number;
 }
 
 export const volumesStore = reactive<VolumesStore>({
@@ -15,4 +16,5 @@ export const volumesStore = reactive<VolumesStore>({
   activeRange: null,
   activeBand: null,
   activeInterval: null,
+  activeAggregate: 3600, // seconds
 });

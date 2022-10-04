@@ -8,6 +8,7 @@ import accessibility from 'highcharts/modules/accessibility';
 import {SERVER_HOSTNAME} from '../constants';
 import type {ApiVolumeInterface} from '../interfaces/api-volume.interface';
 import {volumesStore} from '../store/volumes.store';
+import {getQuartiles} from '../utils/get-quartiles';
 
 accessibility(Highcharts);
 highchartsMore(Highcharts);
@@ -18,14 +19,35 @@ highchartsMore(Highcharts);
 
 const fetchedData = ref<ApiVolumeInterface>();
 
-const options = ref({
+interface Options {
+  chart: {
+    type: string;
+  };
+  credits: {
+    enabled: boolean;
+  };
+  title: {
+    text: string;
+  };
+  yAxis: {
+    title: {
+      text: string;
+    };
+  };
+  series: Array<{
+    name: string;
+    data: (string | number)[][];
+    tooltip: {
+      headerFormat: string;
+    };
+  }>;
+}
+
+const options = ref<Options>({
   chart: {
     type: 'boxplot',
   },
   credits: {
-    enabled: false,
-  },
-  legend: {
     enabled: false,
   },
   title: {
@@ -36,21 +58,7 @@ const options = ref({
       text: '',
     },
   },
-  series: [{
-    name: 'Observations',
-    data: [
-      [760, 801, 848, 895, 965],
-      [760, 801, 848, 895, 965],
-      [760, 801, 848, 895, 965],
-      [760, 801, 848, 895, 965],
-      [760, 801, 848, 895, 965],
-      [760, 801, 848, 895, 965],
-      [760, 801, 848, 895, 965],
-    ],
-    tooltip: {
-      headerFormat: '<em>Experiment No {point.key}</em><br/>',
-    },
-  }],
+  series: [],
 });
 
 /**
@@ -82,37 +90,46 @@ function parseData() {
     return;
   }
 
+  options.value.series = [];
+
   activeSites.forEach((activeSite) => {
     const key = `${activeRange} ${activeSite}`;
-    console.log(key);
+    const source = fetchedData.value?.data[key];
 
-    const data = fetchedData.value?.data[key][volumesStore.activeVariable];
-
-    if (!data) {
+    if (!source) {
       return;
     }
 
-    const values = data.flat().sort();
+    const timestamps = source.t; // seconds
+    const values = source[volumesStore.activeVariable];
+    const delta = volumesStore.activeAggregate;
 
-    let groupedValues: number[][] = [];
+    const data: (string | number)[][] = [[]];
 
-    for (let i = 0; i < values.length; ++i) {
-      const isNewGroup = i % 4 === 0;
+    let startTime = timestamps[0];
 
-      if (!isNewGroup) {
-        groupedValues[groupedValues.length - 1].push(values[i]);
-        continue;
+    timestamps.forEach((timestamp, i) => {
+      const isOver = timestamp > startTime + delta;
+
+      if (isOver) {
+        data.push([]);
+        startTime = timestamp;
       }
 
-      groupedValues = [
-        ...groupedValues,
-        [values[i]],
-      ];
-    }
+      data[data.length - 1].push(values[i]);
+    });
 
-    options.value.series[0].data = groupedValues;
+    data.forEach((box, k) => {
+      data[k] = [new Date(startTime).toString(), ...getQuartiles(box.map((b) => typeof b === 'string' ? Number(b) : b))];
+    });
 
-    // console.log(options.value.series[0].data);
+    options.value.series.push({
+      name: activeSite,
+      data,
+      tooltip: {
+        headerFormat: '<em>{point.key}</em><br/>',
+      },
+    });
   });
 }
 
