@@ -120,7 +120,7 @@ function parseData() {
     });
 
     data.forEach((box, k) => {
-      data[k] = [new Date(startTime).toString(), ...getQuartiles(box.map((b) => typeof b === 'string' ? Number(b) : b))];
+      data[k] = [new Date(startTime * 1000).toString(), ...getQuartiles(box.map((b) => typeof b === 'string' ? Number(b) : b))];
     });
 
     options.value.series.push({
