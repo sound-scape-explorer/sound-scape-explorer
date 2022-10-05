@@ -7,6 +7,7 @@ import {SERVER_HOSTNAME} from '../constants';
 import SelectionImage from '../components/SelectionImage.vue';
 import UMAPScatterPlot from '../components/UMAPScatterPlot.vue';
 import {volumesStore} from '../store/volumes.store';
+import UMAPTimeline from '../components/UMAPTimeline.vue';
 
 const {bands, intervalLabels} = await useConfig();
 
@@ -29,6 +30,7 @@ function setImage(band: string, intervalLabel: string) {
 <template>
   <Title text="UMAP" />
   <UMAPScatterPlot />
+  <UMAPTimeline />
   <SelectionTable2d :callback="setImage" :xs="bands" :ys="intervalLabels" />
   <SelectionImage v-if="image" :source="image" />
 </template>
