@@ -72,9 +72,18 @@ async function updateData() {
     return;
   }
 
-  const request = await fetch(`${SERVER_HOSTNAME}/generated/single/volume/${activeInterval}/${activeBand}.json`);
-  fetchedData.value = await request.json();
-  // console.log(fetchedData.value?.data['first4min site1'][volumesStore.activeVariable]);
+  try {
+    const request = await fetch(`${SERVER_HOSTNAME}/generated/single/volume/${activeInterval}/${activeBand}.json`);
+    fetchedData.value = await request.json();
+    // console.log(fetchedData.value?.data['first4min site1'][volumesStore.activeVariable]);
+  } catch {
+    options.value.series = [];
+    fetchedData.value = undefined;
+  }
+}
+
+function resetPlot() {
+  options.value.series = [];
 }
 
 function parseData() {
@@ -139,6 +148,7 @@ function parseData() {
 
 watch(volumesStore, async () => {
   await updateData();
+  resetPlot();
   parseData();
 });
 </script>
