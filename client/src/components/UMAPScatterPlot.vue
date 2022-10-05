@@ -6,15 +6,9 @@ import {SERVER_HOSTNAME} from '../constants';
 import {volumesStore} from '../store/volumes.store';
 import accessibility from 'highcharts/modules/accessibility';
 import Highcharts from 'highcharts';
-import type {ApiUMAPInterface} from '../interfaces/api-UMAP.interface';
+import {UMAPStore} from '../store/UMAP.store';
 
 accessibility(Highcharts);
-
-/**
- * State
- */
-
-const json = ref<ApiUMAPInterface>();
 
 /**
  * @see https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/demo/scatter
@@ -93,26 +87,27 @@ async function fetchData() {
 
   try {
     const request = await fetch(`${SERVER_HOSTNAME}/generated/umap/${activeIntervalLabel}/${activeBand}.json`);
-    json.value = await request.json();
+    UMAPStore.data = await request.json();
   } catch {
     options.value.series = [];
-    json.value = undefined;
+    UMAPStore.data = null;
   }
 }
 
 function processData() {
-  if (!json.value) {
+  if (!UMAPStore.data) {
     return;
   }
 
   interface Series {
     name: string;
     data: number[][];
+    timestamps: number[];
   }
 
   const series: Series[] = [];
 
-  json.value.l.forEach((label, labelIndex) => {
+  UMAPStore.data.l.forEach((label, labelIndex) => {
     const labelDoesExist = series.find((item) => item.name === label);
     let target = labelDoesExist;
 
@@ -120,17 +115,19 @@ function processData() {
       series.push({
         name: label,
         data: [],
+        timestamps: [],
       });
 
       target = series[series.length - 1];
     }
 
     // this makes absolutely NO SENSE
-    if (!json.value || !target) {
+    if (!UMAPStore.data || !target) {
       return;
     }
 
-    target.data.push(json.value.X[labelIndex]);
+    target.data.push(UMAPStore.data.X[labelIndex]);
+    target.timestamps.push(UMAPStore.data.t[labelIndex]);
   });
 
   // @ts-expect-error: TS2322

@@ -1,43 +1,74 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import {NCheckbox, NSlider} from 'naive-ui';
-
-/**
- * Props
- */
-
-const min = 0;
-const max = 100;
+import {UMAPStore} from '../store/UMAP.store';
 
 /**
  * State
  */
 
+const min = ref();
+const max = ref();
 const isAll = ref(true);
-
-const range = ref([min, max]);
-
-const steps = ref({
-  [min]: 'Start',
-  34: 'Amazing',
-  75: 'Good',
-  [max]: 'End',
-});
+const range = ref([min.value, max.value]);
+const steps = ref({});
 
 /**
  * Handlers
  */
 
-function update(nextValue: boolean) {
+function updateAll(nextValue: boolean) {
   isAll.value = nextValue;
 }
+
+function updateSteps() {
+  if (!UMAPStore.data) {
+    return;
+  }
+
+  const timestamps = UMAPStore.data.t;
+
+  interface Steps {
+    [date: string]: number;
+  }
+
+  const object: Steps = {};
+
+  timestamps.forEach((timestamp) => {
+    if (typeof object[timestamp] !== 'undefined') {
+      return;
+    }
+
+    object[timestamp] = timestamp;
+  });
+
+  steps.value = object;
+  min.value = object[Object.keys(object)[0]];
+  max.value = object[Object.keys(object)[Object.keys(object).length - 1]];
+  range.value = [min.value, max.value];
+
+  console.log({
+    steps,
+    min,
+    max,
+    range,
+  });
+}
+
+/**
+ * Lifecycles
+ */
+
+watch(UMAPStore, () => {
+  updateSteps();
+});
 </script>
 
 <template>
   <n-checkbox
       v-model:checked="isAll"
       label="All"
-      @update:checked="update"
+      @update:checked="updateAll"
   />
   <n-slider
       v-model:value="range"
