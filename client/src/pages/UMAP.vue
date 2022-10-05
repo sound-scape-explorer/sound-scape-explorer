@@ -5,23 +5,30 @@ import Title from '../components/Title.vue';
 import SelectionTable2d from '../components/SelectionTable.vue';
 import {SERVER_HOSTNAME} from '../constants';
 import SelectionImage from '../components/SelectionImage.vue';
+import UMAPScatterPlot from '../components/UMAPScatterPlot.vue';
+import {volumesStore} from '../store/volumes.store';
 
 const {bands, intervalLabels} = await useConfig();
 
 const image = ref<string | null>();
 
-function setImage(x: string, y: string) {
-  if (!x || !y) {
+function setImage(band: string, intervalLabel: string) {
+  if (!band || !intervalLabel) {
+    volumesStore.activeBand = null;
+    volumesStore.activeIntervalLabel = null;
     image.value = null;
     return;
   }
 
-  image.value = `${SERVER_HOSTNAME}/generated/umap/${y}/${x}.png`;
+  volumesStore.activeBand = band;
+  volumesStore.activeIntervalLabel = intervalLabel;
+  image.value = `${SERVER_HOSTNAME}/generated/umap/${intervalLabel}/${band}.png`;
 }
 </script>
 
 <template>
   <Title text="UMAP" />
+  <UMAPScatterPlot />
   <SelectionTable2d :callback="setImage" :xs="bands" :ys="intervalLabels" />
   <SelectionImage v-if="image" :source="image" />
 </template>
