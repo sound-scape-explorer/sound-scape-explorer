@@ -9,6 +9,7 @@ import {SERVER_HOSTNAME} from '../constants';
 import type {ApiVolumeInterface} from '../interfaces/api-volume.interface';
 import {volumesStore} from '../store/volumes.store';
 import {getQuartiles} from '../utils/get-quartiles';
+import {convertTimestampToDate} from '../utils/convert-timestamp-to-date';
 
 accessibility(Highcharts);
 highchartsMore(Highcharts);
@@ -129,7 +130,7 @@ function parseData() {
     });
 
     data.forEach((box, k) => {
-      data[k] = [new Date(startTime * 1000).toString(), ...getQuartiles(box.map((b) => typeof b === 'string' ? Number(b) : b))];
+      data[k] = [convertTimestampToDate(startTime * 1000), ...getQuartiles(box.map((b) => typeof b === 'string' ? Number(b) : b))];
     });
 
     options.value.series.push({
