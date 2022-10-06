@@ -196,13 +196,19 @@ watch(UMAPStore, () => {
   updateRangeSteps();
 });
 
-watch(range, () => {
-  generatePlotOptions();
-});
-
 watch(rangeIsAllSelected, () => {
   generatePlotOptions();
 });
+
+function updateRange(nextRange: number[]) {
+  const [min, max] = nextRange;
+  if (min >= max) {
+    return;
+  }
+
+  range.value = [min, max];
+  generatePlotOptions();
+}
 </script>
 
 <template>
@@ -222,6 +228,7 @@ watch(rangeIsAllSelected, () => {
         :marks="steps"
         :max="rangeMax"
         :min="rangeMin"
+        :on-update:value="updateRange"
         :tooltip="false"
         class="test"
         range
@@ -232,7 +239,7 @@ watch(rangeIsAllSelected, () => {
 
 <style lang="scss">
 .range-container {
-  height: 150px;
+  height: 120px;
 }
 
 .n-slider-mark {
