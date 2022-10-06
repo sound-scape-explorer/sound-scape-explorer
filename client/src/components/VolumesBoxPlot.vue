@@ -51,7 +51,7 @@ const options = ref<Options>({
     enabled: false,
   },
   title: {
-    text: 'Volume Box Plot',
+    text: '',
   },
   yAxis: {
     title: {
