@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 import {NCheckbox, NP, NSlider} from 'naive-ui';
 import {Chart} from 'highcharts-vue';
 import {SERVER_HOSTNAME} from '../constants';
@@ -7,6 +7,7 @@ import {volumesStore} from '../store/volumes.store';
 import accessibility from 'highcharts/modules/accessibility';
 import Highcharts from 'highcharts';
 import {UMAPStore} from '../store/UMAP.store';
+import {convertTimestampToDate} from '../utils/convert-timestamp-to-date';
 
 accessibility(Highcharts);
 
@@ -80,8 +81,22 @@ const options = ref({
 const rangeMin = ref();
 const rangeMax = ref();
 const rangeIsAllSelected = ref(true);
-const range = ref([rangeMin.value, rangeMax.value]);
+const range = ref<number[]>([rangeMin.value, rangeMax.value]);
 const steps = ref({});
+const rangeDisplay = computed<string>(() => {
+  const timestampStart = range.value[0] * 1000;
+  const timestampEnd = range.value[1] * 1000;
+
+  if (!timestampStart || !timestampEnd) {
+    return '';
+  }
+
+  if (rangeIsAllSelected.value) {
+    return `${convertTimestampToDate(rangeMin.value * 1000)} - ${convertTimestampToDate(rangeMax.value * 1000)}`;
+  }
+
+  return `${convertTimestampToDate(timestampStart)} - ${convertTimestampToDate(timestampEnd)}`;
+});
 
 /**
  * Handlers
@@ -217,11 +232,16 @@ function updateRange(nextRange: number[]) {
   </n-p>
 
   <n-p class="range-container">
-    <n-checkbox
-        v-model:checked="rangeIsAllSelected"
-        label="All"
-        @update:checked="updateRangeSelectAll"
-    />
+    <div>
+      <n-checkbox
+          v-model:checked="rangeIsAllSelected"
+          label="All"
+          @update:checked="updateRangeSelectAll"
+      />
+      <span class="range-display">
+        {{ rangeDisplay }}
+      </span>
+    </div>
     <n-slider
         v-model:value="range"
         :disabled="rangeIsAllSelected"
@@ -237,11 +257,18 @@ function updateRange(nextRange: number[]) {
   </n-p>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .range-container {
   height: 120px;
 }
 
+.range-display {
+  font-size: 0.8rem;
+  font-style: italic;
+}
+</style>
+
+<style lang="scss">
 .n-slider-mark {
   position: absolute;
   transform: translate3d(-55%, 20px, 0) rotate(-80deg) !important;
