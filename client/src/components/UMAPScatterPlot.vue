@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ref, watch} from 'vue';
-import {NP} from 'naive-ui';
+import {NCheckbox, NP, NSlider} from 'naive-ui';
 import {Chart} from 'highcharts-vue';
 import {SERVER_HOSTNAME} from '../constants';
 import {volumesStore} from '../store/volumes.store';
@@ -9,6 +9,10 @@ import Highcharts from 'highcharts';
 import {UMAPStore} from '../store/UMAP.store';
 
 accessibility(Highcharts);
+
+/**
+ * State
+ */
 
 /**
  * @see https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/demo/scatter
@@ -73,6 +77,11 @@ const options = ref({
   },
   series: [],
 });
+const rangeMin = ref();
+const rangeMax = ref();
+const rangeIsAllSelected = ref(true);
+const range = ref([rangeMin.value, rangeMax.value]);
+const steps = ref({});
 
 /**
  * Handlers
@@ -94,7 +103,7 @@ async function fetchData() {
   }
 }
 
-function processData() {
+function generatePlotOptions() {
   if (!UMAPStore.data) {
     return;
   }
@@ -126,12 +135,52 @@ function processData() {
       return;
     }
 
-    target.data.push(UMAPStore.data.X[labelIndex]);
-    target.timestamps.push(UMAPStore.data.t[labelIndex]);
+    const timestamp = UMAPStore.data.t[labelIndex];
+    const coordinates = UMAPStore.data.X[labelIndex];
+
+    const isWithinRange = timestamp >= range.value[0] && timestamp <= range.value[1];
+
+    if (!isWithinRange && !rangeIsAllSelected.value) {
+      return;
+    }
+
+    target.data.push(coordinates);
+    target.timestamps.push(timestamp);
   });
 
   // @ts-expect-error: TS2322
   options.value.series = series;
+}
+
+function updateRangeSelectAll(nextValue: boolean) {
+  rangeIsAllSelected.value = nextValue;
+}
+
+function updateRangeSteps() {
+  if (!UMAPStore.data) {
+    return;
+  }
+
+  const timestamps = UMAPStore.data.t;
+
+  interface Steps {
+    [date: string]: number;
+  }
+
+  const object: Steps = {};
+
+  timestamps.forEach((timestamp) => {
+    if (typeof object[timestamp] !== 'undefined') {
+      return;
+    }
+
+    object[timestamp] = timestamp;
+  });
+
+  steps.value = object;
+  rangeMin.value = object[Object.keys(object)[0]];
+  rangeMax.value = object[Object.keys(object)[Object.keys(object).length - 1]];
+  range.value = [rangeMin.value, rangeMax.value];
 }
 
 /**
@@ -140,7 +189,19 @@ function processData() {
 
 watch(volumesStore, async () => {
   await fetchData();
-  processData();
+  generatePlotOptions();
+});
+
+watch(UMAPStore, () => {
+  updateRangeSteps();
+});
+
+watch(range, () => {
+  generatePlotOptions();
+});
+
+watch(rangeIsAllSelected, () => {
+  generatePlotOptions();
 });
 </script>
 
@@ -148,4 +209,35 @@ watch(volumesStore, async () => {
   <n-p>
     <chart :options="options"></chart>
   </n-p>
+
+  <n-p class="range-container">
+    <n-checkbox
+        v-model:checked="rangeIsAllSelected"
+        label="All"
+        @update:checked="updateRangeSelectAll"
+    />
+    <n-slider
+        v-model:value="range"
+        :disabled="rangeIsAllSelected"
+        :marks="steps"
+        :max="rangeMax"
+        :min="rangeMin"
+        :tooltip="false"
+        class="test"
+        range
+        step="mark"
+    />
+  </n-p>
 </template>
+
+<style lang="scss">
+.range-container {
+  height: 150px;
+}
+
+.n-slider-mark {
+  position: absolute;
+  transform: translate3d(-55%, 20px, 0) rotate(-80deg) !important;
+  font-size: 0.7rem;
+}
+</style>
