@@ -1,7 +1,7 @@
 import {reactive} from 'vue';
 import type {ConfigInterface} from '../interfaces/config.interface';
 
-export interface ConfigStore {
+export interface ConfigStoreInterface {
   isLoaded: boolean;
   config?: ConfigInterface;
   bands?: string[];
@@ -11,6 +11,6 @@ export interface ConfigStore {
   sites?: string[];
 }
 
-export const configStore = reactive<ConfigStore>({
+export const configStore = reactive<ConfigStoreInterface>({
   isLoaded: false,
 });

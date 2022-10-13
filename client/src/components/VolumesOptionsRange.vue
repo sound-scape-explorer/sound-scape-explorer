@@ -2,7 +2,7 @@
 import {computed, defineProps} from 'vue';
 import {NButton, NDropdown} from 'naive-ui';
 import {convertToNaiveDropdownOptions} from '../utils/convert-to-naive-dropdown-options';
-import {volumesStore} from '../store/volumes.store';
+import {selectionStore} from '../store/selection.store';
 
 /**
  * Props
@@ -19,14 +19,14 @@ const {ranges} = defineProps<Props>();
  */
 
 const options = computed(() => convertToNaiveDropdownOptions(ranges));
-volumesStore.activeRange = ranges[0];
+selectionStore.activeRange = ranges[0];
 
 /**
  * Handlers
  */
 
 function selectRange(nextRange: string) {
-  volumesStore.activeRange = nextRange;
+  selectionStore.activeRange = nextRange;
 }
 </script>
 
@@ -37,6 +37,6 @@ function selectRange(nextRange: string) {
       trigger="hover"
       @select="selectRange"
   >
-    <n-button>{{ volumesStore.activeRange }}</n-button>
+    <n-button>{{ selectionStore.activeRange }}</n-button>
   </n-dropdown>
 </template>

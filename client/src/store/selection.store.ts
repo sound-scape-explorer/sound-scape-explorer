@@ -1,7 +1,7 @@
 import {reactive} from 'vue';
 import type {VariableType} from '../types/variable.type';
 
-export interface VolumesStore {
+export interface SelectionStoreInterface {
   activeSites: string[];
   activeVariable: VariableType;
   activeRange: string | null;
@@ -11,7 +11,7 @@ export interface VolumesStore {
   activeAggregate: number;
 }
 
-export const volumesStore = reactive<VolumesStore>({
+export const selectionStore = reactive<SelectionStoreInterface>({
   activeSites: [],
   activeVariable: 'sumvar',
   activeRange: null,

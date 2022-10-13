@@ -3,7 +3,7 @@ import {computed} from 'vue';
 import {NSelect} from 'naive-ui';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 import {VariableType} from '../types/variable.type';
-import {volumesStore} from '../store/volumes.store';
+import {selectionStore} from '../store/selection.store';
 
 const variables: VariableType[] = ['sumvar', 'sumstd', 'logprodspan'];
 
@@ -12,20 +12,20 @@ const variables: VariableType[] = ['sumvar', 'sumstd', 'logprodspan'];
  */
 
 const options = computed(() => convertToNaiveSelectOptions(variables));
-volumesStore.activeVariable = variables[0];
+selectionStore.activeVariable = variables[0];
 
 /**
  * Handlers
  */
 
 function selectVariable(nextVariable: VariableType) {
-  volumesStore.activeVariable = nextVariable;
+  selectionStore.activeVariable = nextVariable;
 }
 </script>
 
 <template>
   <n-select
-      v-model:value="volumesStore.activeVariable"
+      v-model:value="selectionStore.activeVariable"
       :options="options"
       filterable
       @update:value="selectVariable"

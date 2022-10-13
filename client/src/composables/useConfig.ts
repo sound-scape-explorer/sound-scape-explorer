@@ -1,9 +1,9 @@
 import {SERVER_HOSTNAME} from '../constants';
 import type {ConfigInterface} from '../interfaces/config.interface';
-import type {ConfigStore} from '../store/config.store';
+import type {ConfigStoreInterface} from '../store/config.store';
 import {configStore} from '../store/config.store';
 
-export async function useConfig(): Promise<ConfigStore> {
+export async function useConfig(): Promise<ConfigStoreInterface> {
   if (configStore.isLoaded) {
     return configStore;
   }

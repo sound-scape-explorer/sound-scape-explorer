@@ -6,7 +6,7 @@ import SelectionTable from '../components/SelectionTable.vue';
 import SelectionImage from '../components/SelectionImage.vue';
 import {SERVER_HOSTNAME} from '../constants';
 import VolumesBoxPlot from '../components/VolumesBoxPlot.vue';
-import {volumesStore} from '../store/volumes.store';
+import {selectionStore} from '../store/selection.store';
 import {useConfig} from '../composables/useConfig';
 
 /**
@@ -27,23 +27,23 @@ const imageSource = ref<string | null>();
 
 function handleSelection(band: string, interval: string) {
   if (!band || !interval) {
-    volumesStore.activeBand = null;
-    volumesStore.activeInterval = null;
+    selectionStore.activeBand = null;
+    selectionStore.activeInterval = null;
     imageSource.value = null;
     return;
   }
 
-  volumesStore.activeBand = band;
-  volumesStore.activeInterval = interval;
-  imageSource.value = `${SERVER_HOSTNAME}/generated/single/volume/${interval}/${band}.${volumesStore.activeVariable}.png`;
+  selectionStore.activeBand = band;
+  selectionStore.activeInterval = interval;
+  imageSource.value = `${SERVER_HOSTNAME}/generated/single/volume/${interval}/${band}.${selectionStore.activeVariable}.png`;
 }
 
-watch(volumesStore, () => {
-  if (volumesStore.activeBand === null || volumesStore.activeInterval === null) {
+watch(selectionStore, () => {
+  if (selectionStore.activeBand === null || selectionStore.activeInterval === null) {
     return;
   }
 
-  handleSelection(volumesStore.activeBand, volumesStore.activeInterval);
+  handleSelection(selectionStore.activeBand, selectionStore.activeInterval);
 });
 </script>
 
