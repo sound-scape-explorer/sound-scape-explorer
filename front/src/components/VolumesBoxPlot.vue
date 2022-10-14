@@ -107,6 +107,7 @@ function parseData() {
 
   options.value.series = [];
 
+  // TODO: Move this to backend
   activeSites.forEach((activeSite) => {
     const key = `${activeRange} ${activeSite}`;
     const source = fetchedData.value?.data[key];
@@ -134,6 +135,7 @@ function parseData() {
       data[data.length - 1].push(values[i]);
     });
 
+    // TODO: Move this!!
     data.forEach((box, k) => {
       data[k] = [convertTimestampToDate(startTime * 1000), ...getQuartiles(box.map((b) => typeof b === 'string' ? Number(b) : b))];
     });
