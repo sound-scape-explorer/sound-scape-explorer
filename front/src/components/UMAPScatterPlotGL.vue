@@ -14,6 +14,10 @@ const containerRef = ref<HTMLDivElement | null>(null);
 let scatterGL: ScatterGL | null = null;
 let isFirstRender = true;
 
+const hues = [...new Array(1000)].map((_, i) => Math.floor((255 / 10) * i));
+const lightTransparentColorsByLabel = hues.map((hue) => `hsla(${hue}, 100%, 50%, 0.2)`);
+const heavyTransparentColorsByLabel = hues.map((hue) => `hsla(${hue}, 100%, 50%, 0.75)`);
+
 /**
  * Handlers
  */
@@ -64,16 +68,6 @@ function removeListeners() {
   window.removeEventListener('resize', handleResize);
 }
 
-const hues = [...new Array(1000)].map((_, i) => Math.floor((255 / 10) * i));
-
-const lightTransparentColorsByLabel = hues.map(
-  (hue) => `hsla(${hue}, 100%, 50%, 0.2)`,
-);
-
-const heavyTransparentColorsByLabel = hues.map(
-  (hue) => `hsla(${hue}, 100%, 50%, 0.75)`,
-);
-
 function getColor(index: number): string {
   if (UMAPDatasetStore.dataset === null) {
     return SCATTER_PLOT_DEFAULT_COLOR;
@@ -98,10 +92,6 @@ function getColor(index: number): string {
 onMounted(() => {
   addListeners();
   initializeScatterGL();
-
-  setInterval(() => {
-    render();
-  }, 2000);
 });
 
 onUnmounted(() => {
