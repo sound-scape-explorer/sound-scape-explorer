@@ -1,4 +1,4 @@
-import {SERVER_HOSTNAME} from '../constants';
+import {API_ROUTES} from '../constants';
 import type {ConfigInterface} from '../interfaces/config.interface';
 import type {ConfigStoreInterface} from '../store/config.store';
 import {configStore} from '../store/config.store';
@@ -14,7 +14,7 @@ export async function useConfig(): Promise<ConfigStoreInterface> {
     )];
   }
 
-  const request = await fetch(`${SERVER_HOSTNAME}/generated/ghost-config.json`);
+  const request = await fetch(API_ROUTES.config);
   const data = await request.json();
 
   if (!data) {

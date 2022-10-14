@@ -2,7 +2,7 @@
   "name": "sound-scape-explorer",
   "scripts": {
     "install": "bin/install.sh",
-    "dev": "concurrently 'bin/run-front.sh' 'bin/run-server.sh'"
+    "dev": "concurrently 'bin/front-dev.sh' 'bin/back-dev.sh' 'bin/server-dev.sh'"
   },
   "devDependencies": {
     "concurrently": "^7.4.0"

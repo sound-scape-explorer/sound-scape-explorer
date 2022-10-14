@@ -5,7 +5,7 @@ import {Chart} from 'highcharts-vue';
 import Highcharts from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import accessibility from 'highcharts/modules/accessibility';
-import {SERVER_HOSTNAME} from '../constants';
+import {API_ROUTES} from '../constants';
 import type {ApiVolumeInterface} from '../interfaces/api-volume.interface';
 import {selectionStore} from '../store/selection.store';
 import {getQuartiles} from '../utils/get-quartiles';
@@ -74,7 +74,12 @@ async function updateData() {
   }
 
   try {
-    const request = await fetch(`${SERVER_HOSTNAME}/generated/single/volume/${activeInterval}/${activeBand}.json`);
+    const endpoint = API_ROUTES.volumes({
+      interval: activeInterval,
+      band: activeBand,
+    });
+
+    const request = await fetch(endpoint);
     fetchedData.value = await request.json();
     // console.log(fetchedData.value?.data['first4min site1'][volumesStore.activeVariable]);
   } catch {

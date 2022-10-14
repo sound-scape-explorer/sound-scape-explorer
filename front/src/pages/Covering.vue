@@ -3,7 +3,7 @@ import {ref} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import SelectionTable2d from '../components/SelectionTable.vue';
 import SelectionImage from '../components/SelectionImage.vue';
-import {SERVER_HOSTNAME} from '../constants';
+import {API_ROUTES} from '../constants';
 import Title from '../components/Title.vue';
 
 const {bands, intervals} = await useConfig();
@@ -16,7 +16,10 @@ function setImage(x: string, y: string) {
     return;
   }
 
-  image.value = `${SERVER_HOSTNAME}/generated/pairwise/covering/${y}/${x}.meandist.png`;
+  image.value = API_ROUTES.covering({
+    interval: y,
+    band: x,
+  });
 }
 </script>
 

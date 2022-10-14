@@ -19,6 +19,14 @@ Audio data visualization and analysis tool for the web.
 
 WIP
 
+### Development instructions
+
+#### Ports
+
+- [Front](http://localhost:8080) `8080`
+- [Back](http://localhost:8081) `8081`
+- [Legacy](http://localhost:9876) `9876`
+
 ## 🧑‍🤝‍🧑 Contributors
 
 WIP

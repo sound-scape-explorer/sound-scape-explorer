@@ -4,7 +4,7 @@ import Title from '../components/Title.vue';
 import VolumesOptions from '../components/VolumesOptions.vue';
 import SelectionTable from '../components/SelectionTable.vue';
 import SelectionImage from '../components/SelectionImage.vue';
-import {SERVER_HOSTNAME} from '../constants';
+import {API_ROUTES} from '../constants';
 import VolumesBoxPlot from '../components/VolumesBoxPlot.vue';
 import {selectionStore} from '../store/selection.store';
 import {useConfig} from '../composables/useConfig';
@@ -35,7 +35,11 @@ function handleSelection(band: string, interval: string) {
 
   selectionStore.activeBand = band;
   selectionStore.activeInterval = interval;
-  imageSource.value = `${SERVER_HOSTNAME}/generated/single/volume/${interval}/${band}.${selectionStore.activeVariable}.png`;
+  imageSource.value = API_ROUTES.volumesImage({
+    interval,
+    band,
+    variable: selectionStore.activeVariable,
+  });
 }
 
 watch(selectionStore, () => {

@@ -3,7 +3,7 @@ import {ref} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import Title from '../components/Title.vue';
 import SelectionTable2d from '../components/SelectionTable.vue';
-import {SERVER_HOSTNAME} from '../constants';
+import {API_ROUTES} from '../constants';
 import SelectionImage from '../components/SelectionImage.vue';
 import {selectionStore} from '../store/selection.store';
 import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
@@ -28,7 +28,11 @@ function resetImage() {
 }
 
 function setImage(band: string, intervalLabel: string) {
-  image.value = `${SERVER_HOSTNAME}/generated/umap/${intervalLabel}/${band}.png`;
+  image.value = API_ROUTES.umap({
+    interval: intervalLabel,
+    band,
+    isImage: true,
+  });
 }
 
 function resetSelection() {
@@ -43,7 +47,13 @@ function setSelection(band: string, intervalLabel: string) {
 
 async function fetchData(band: string, intervalLabel: string) {
   try {
-    const request = await fetch(`${SERVER_HOSTNAME}/generated/umap/${intervalLabel}/${band}.json`);
+    const endpoint = API_ROUTES.umap({
+      interval: intervalLabel,
+      band,
+    });
+
+    // const request = await fetch(`${SERVER_HOSTNAME}/generated/umap/${intervalLabel}/${band}.json`);
+    const request = await fetch(endpoint);
     const data = await request.json();
 
     if (data === null) {
