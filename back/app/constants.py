@@ -1,7 +1,8 @@
 import os
 
-os.chdir('..')
+cwd = os.getcwd()
+path = os.path.split(cwd)[0]
 
-BASEPATH = f'{os.getcwd()}/sample'
+BASEPATH = f'{path}/sample'
 
 ERROR_NOT_FOUND = 'File not found'
