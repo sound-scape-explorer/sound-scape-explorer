@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd client || exit
+cd front || exit
 
 yarn dev

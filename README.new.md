@@ -17,8 +17,10 @@ Audio data visualization and analysis tool for the web.
 
 ## 📖 Installation + Usage
 
-### Local + Cloud
+WIP
 
 ## 🧑‍🤝‍🧑 Contributors
+
+WIP
 
 Feel free to open an issue or PR if you have any questions or suggestions.

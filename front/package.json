@@ -3,7 +3,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 8080 --host 0.0.0.0"
   },
   "dependencies": {
     "highcharts": "^10.2.1",
