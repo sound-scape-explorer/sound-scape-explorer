@@ -39,3 +39,19 @@ echo "Frontend: Installing dependencies..."
 cd front || exit
 
 yarn
+
+cd ..
+
+echo "Backend: Installing venv and dependencies..."
+
+cd back || exit
+
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+deactivate
+
+cd ..
