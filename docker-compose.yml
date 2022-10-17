@@ -5,3 +5,11 @@ services:
     build: front
     ports:
       - "8080:8080"
+
+  # docker run -d --restart=always --name back -p 8081:8081 -v "$(pwd)"/../sample:/sample back
+  back:
+    build: back
+    ports:
+      - "8081:8081"
+    depends_on:
+      - front
