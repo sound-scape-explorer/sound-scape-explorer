@@ -1,6 +1,6 @@
 import json
 from app.constants import ERROR_NOT_FOUND
-from flask import send_file
+from flask import send_file, jsonify
 
 
 def get_error_response():
@@ -9,7 +9,8 @@ def get_error_response():
 
 def read_json_file(path):
     with open(path, "r") as f:
-        return json.dumps(json.load(f))
+        content = json.load(f)
+        return jsonify(content)
 
 
 def read_png_file(path):
