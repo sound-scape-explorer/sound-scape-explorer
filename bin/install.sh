@@ -31,3 +31,11 @@ cd ..
 cd sse-v1 || exit
 
 yarn
+
+cd ..
+
+echo "Frontend: Installing dependencies..."
+
+cd front || exit
+
+yarn
