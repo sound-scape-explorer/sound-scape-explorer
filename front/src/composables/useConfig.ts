@@ -15,7 +15,7 @@ export async function useConfig(): Promise<ConfigStoreInterface> {
   }
 
   const request = await fetch(API_ROUTES.config);
-  const data = await request.json();
+  const data: ConfigInterface = await request.json();
 
   if (!data) {
     throw new Error('Data is not defined');
@@ -24,7 +24,7 @@ export async function useConfig(): Promise<ConfigStoreInterface> {
   configStore.isLoaded = true;
   configStore.config = data;
   configStore.bands = Object.keys(data.bands);
-  configStore.intervals = Object.keys(data.umaps).map((umap) => data.umaps[umap][0]);
+  configStore.intervals = data.variables.integration_seconds.split('-').map((i) => Number(i));
   configStore.intervalLabels = Object.keys(data.umaps);
   configStore.ranges = Object.keys(data.ranges);
   configStore.sites = parseSites(data);
