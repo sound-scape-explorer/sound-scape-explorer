@@ -6,15 +6,16 @@ pip install numpy matplotlib seaborn torchaudio librosa xlrd pandas umap-learn o
 
 echo "Running python scripts..."
 
-pip install -e ./scripts
+pip install -e ./processing
 
 echo "Creating sample folders..."
 
 mkdir ./sample/generated ./sample/features
 
-ln -s ../sample/generated ./sse-v1
+# We don't need this anymore with the new back end
+#ln -s ../sample/generated ./sse-v1
 
-ln -s ../sample/features ./sse-v1
+#ln -s ../sample/features ./sse-v1
 
 echo "Computing and extracting data"
 

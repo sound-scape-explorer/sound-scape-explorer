@@ -1,12 +1,10 @@
 version: "3.7"
 
 services:
-  front:
-    build: front
-    ports:
-      - "8080:8080"
-    depends_on:
-      - back
+  processing:
+    build: processing
+    volumes:
+      - ./sample:/sample
 
   back:
     build: back
@@ -14,3 +12,12 @@ services:
       - "8081:8081"
     volumes:
       - ./sample:/sample
+    depends_on:
+      - processing
+
+  front:
+    build: front
+    ports:
+      - "8080:8080"
+    depends_on:
+      - back

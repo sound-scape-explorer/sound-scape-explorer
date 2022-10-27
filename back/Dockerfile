@@ -1,4 +1,4 @@
-FROM python:alpine
+FROM python:3.8-slim
 LABEL maintainer="Bamdad Sabbagh <hi@bamdad.fr>"
 
 WORKDIR /app
@@ -7,7 +7,7 @@ COPY . .
 
 RUN python -m venv venv
 
-RUN source venv/bin/activate
+RUN . venv/bin/activate
 
 RUN pip install -r requirements.txt
 
