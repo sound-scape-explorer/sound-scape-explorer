@@ -36,7 +36,7 @@ jobs:
           context: "{{defaultContext}}:processing"
           push: true
           tags: |
-            ghcr.io/sound-scape-explorer/processing:${{ github.ref }}
+            ghcr.io/sound-scape-explorer/processing:next
 
       - name: Build and push (back)
         uses: docker/build-push-action@v3
@@ -44,7 +44,7 @@ jobs:
           context: "{{defaultContext}}:back"
           push: true
           tags: |
-            ghcr.io/sound-scape-explorer/back:${{ github.ref }}
+            ghcr.io/sound-scape-explorer/back:next
 
       - name: Build and push (front)
         uses: docker/build-push-action@v3
@@ -52,4 +52,4 @@ jobs:
           context: "{{defaultContext}}:front"
           push: true
           tags: |
-            gchr.io/sound-scape-explorer/front:${{ github.ref }}
+            gchr.io/sound-scape-explorer/front:next
