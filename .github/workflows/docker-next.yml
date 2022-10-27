@@ -1,10 +1,7 @@
 name: docker-next
 
 on:
-  release:
-    types:
-      - published
-  pull_request_review:
+  push:
     branches:
       - 'next/**'
 
