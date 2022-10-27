@@ -1,0 +1,28 @@
+name: docker-next
+
+on:
+  release:
+    types:
+      - published
+  pull_request_review:
+    branches:
+      - 'next/**'
+
+jobs:
+  docker-next:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith( github.ref, 'next' )}}
+    steps:
+
+      - run: echo "IMAGE=$(echo "${{ github.repository }}" | awk -F / '{print $2}' | sed -e "s/:refs//")" >> $GITHUB_ENV
+
+      - uses: actions/checkout@master
+
+      - uses: docker/build-push-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ github.token }}
+          repository: ${{ github.repository }}/${{ env.IMAGE }}
+          tag_with_ref: true
+          tags: next-latest
