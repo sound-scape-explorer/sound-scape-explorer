@@ -1,6 +1,6 @@
 <img alt="logo" width="80px" src="https://i.imgur.com/ZFnumtY.png">
 
-Sound Scape Explorer
+**Sound Scape Explorer**
 
 Audio data visualization and analysis tool for the web.
 
@@ -15,34 +15,63 @@ Audio data visualization and analysis tool for the web.
 - Run the app locally or in the cloud
 - FOSS
 
-## 📖 Instructions
+## 📖 How To
 
-### 📦 Installation
+### Requirements
 
-- Clone the repository
-- Paste your data in the `sample` folder
-  - _TODO: Rename to `data` ?_
-- Run `yarn install`
-- Run `yarn dev`
+You will need Docker to be running on your machine.
 
-### 🐋 Docker
+Then, create a folder where you want to store your project.
 
-If you have Docker installed and do not want to install manually the project dependencies, you can use the following
-command to run the app:
+This folder should container an `audio` folder with your audio files.
 
-```bash
-docker-compose up -d
+Place your `Excel` configuration file in the folder root.
+
+```
+YOUR_FOLDER
+├── audio/
+├── docker-compose.yml
+└── config.xlsx
 ```
 
-### 📝 Usage
+#### Windows with WSL2
 
-- Browse the frontend at [localhost:8080](http://localhost:8080)
-- Access the backend at [localhost:8081](http://localhost:8081)
-- Legacy backend is available at [localhost:9876](http://localhost:9876)
+Microsoft's systems will need an extra step in order to get Docker running.
 
-### Development instructions
+If the installer does not propose you to install WSL2, please follow
+the Microsoft
+documentation [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package)
+.
 
-#### Ports
+### Instructions
+
+[Download](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/next/rewrite/docker-compose.next.yml)
+the docker compose configuration file to the root of your folder.
+
+Open a terminal on Linux or a PowerShell on Windows, navigate to your folder and run the following command:
+
+```bash
+# Linux
+docker-compose -f docker-compose.next.yml up
+```
+
+```powershell
+# Windows
+docker compose '.\docker-compose.next.yml` up
+```
+
+Wait for the docker images to be downloaded and started.
+
+Please note that the first time you run the app, it will take a while to download the docker images.
+
+Depending on the power of your machine, the processing container will appear to hang while its actually extracting and
+generating the features.
+
+_You will notice that frontend and backend are available but not populated by data._
+
+### Optional: Run the project locally
+
+### 📝 URLs
 
 - [Front](http://localhost:8080) `8080`
 - [Back](http://localhost:8081) `8081`
@@ -51,9 +80,3 @@ docker-compose up -d
 ## 🧑‍🤝‍🧑 Contributions
 
 Feel free to open an issue or PR if you have any questions or suggestions.
-
-## ☑️ TODO
-
-- [ ] Rename `sample` to `data` folder
-- [ ] Rename `scripts` to third source folder for processing audio files
-- [ ] Make the repository public
