@@ -19,7 +19,8 @@ Audio data visualization and analysis tool for the web.
 
 ### Requirements
 
-You will need Docker to be running on your machine.
+You will need Docker to be running on your machine. Install Docker Desktop for your
+OS [here](https://www.docker.com/products/docker-desktop).
 
 Then, create a folder where you want to store your project.
 
