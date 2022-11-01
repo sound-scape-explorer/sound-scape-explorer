@@ -58,7 +58,7 @@ docker-compose -f docker-compose.next.yml up
 
 ```powershell
 # Windows
-docker compose '.\docker-compose.next.yml` up
+docker compose '.\docker-compose.next.yml' up
 ```
 
 Wait for the docker images to be downloaded and started.
