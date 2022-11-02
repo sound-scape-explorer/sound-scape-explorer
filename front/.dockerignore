@@ -1,0 +1,17 @@
+*
+
+!package.json
+!yarn.lock
+
+!tsconfig.json
+!tsconfig.app.json
+!tsconfig.config.json
+
+!vite.config.js
+
+!env.d.ts
+!index.html
+!.eslintrc.js
+
+!src/
+!public/

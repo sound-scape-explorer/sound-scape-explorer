@@ -1,0 +1,36 @@
+{
+  "name": "sound-scape-explorer--client",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vite --port 8080",
+    "build": "vite build",
+    "preview": "vite preview --port 8080 --host 0.0.0.0"
+  },
+  "dependencies": {
+    "highcharts": "^10.2.1",
+    "highcharts-vue": "^1.4.0",
+    "scatter-gl": "^0.0.13",
+    "simple-statistics": "^7.7.6",
+    "vue": "^3.2.39",
+    "vue-router": "^4.1.5"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.19.1",
+    "@types/highcharts": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "@vicons/ionicons5": "^0.12.0",
+    "@vitejs/plugin-vue": "^3.1.0",
+    "@vue/tsconfig": "^0.1.3",
+    "eslint": "^8.23.1",
+    "naive-ui": "^2.33.3",
+    "rollup-plugin-analyzer": "^4.0.0",
+    "sass": "^1.55.0",
+    "sass-reset": "^1.0.4",
+    "typescript": "^4.8.3",
+    "vfonts": "^0.0.3",
+    "vite": "^3.1.3",
+    "vue-eslint-parser": "^9.1.0"
+  }
+}
