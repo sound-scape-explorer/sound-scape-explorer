@@ -41,15 +41,6 @@ def help():
     print('For a real help, pass the --help option')
     
 
-@cli.command()
-def cors_http_server():
-    import cors_http_server
-    cors_http_server.main(['cors-http-server'])
-@cli.command()
-def chs():
-    import cors_http_server
-    cors_http_server.main(['cors-http-server'])
-
 ###### COMMAND show (just consulting information)
 @cli.group()
 def show():
