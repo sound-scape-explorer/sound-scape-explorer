@@ -37,7 +37,7 @@ It should contain the following items:
 
 ```
 MY_PROJECT
-├── audio/ <- contains all the audio files to analyze
+├── sample/ <- contains all the audio files to analyze
 ├── config.xlsx <- configuration file for the app
 └── docker-compose.yml <- configuration file for Docker
 ```
