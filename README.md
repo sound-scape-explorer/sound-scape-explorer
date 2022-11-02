@@ -1,191 +1,127 @@
-# Soundscape explorer
+<img alt="logo" width="80px" src="https://i.imgur.com/ZFnumtY.png">
 
-## Description
+**Sound Scape Explorer**
 
+Audio data visualization and analysis tool for the web.
 
-## How to use it
+## 🔨 Features
 
-### Installation
+- Use Machine Learning to extract audio features from audio files
+- Visualize audio features as UMAP projections
+- Visualize statistical distributions of audio features
+- Listen to audio files in the browser
+- Tag audio files with labels
+- Share configurations and audio files with others with .xlsx files
+- Run the app locally or in the cloud
+- FOSS
 
-Some python libraries
+## 📖 How To
 
-~~~
-pip install numpy
-pip install matplotlib
-pip install seaborn
-pip install torchaudio
-pip install librosa
-pip install xlrd
-pip install pandas
-pip install umap-learn
-pip install openpyxl
-pip install numpy==1.20
-~~~
+### Setup
 
-The helper script
+#### Installing Docker
 
-from root project
+You will need **Docker** to be running on your machine. Install **Docker Desktop** for your
+OS [here](https://www.docker.com/products/docker-desktop).
 
-~~~
-pip install -e ./scripts
-mkdir ./sample/generated ./sample/features
-~~~
+> Microsoft's systems will need **WSL2** in order to get Docker running.
+>
+> If the installer does not propose you to install it, please follow the Microsoft documentation
+> [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package)
 
-from [rootProject]/sse-v1/
+#### Creating project folder
 
-~~~
-ln -s ../sample/features/
-ln -s ../sample/generated/
-~~~
+Create a local folder wherever you want to store your project.
 
-To activate autocompletion (either in your `.bashrc`, or once in each terminal that needs it)
+It should contain the following items:
 
-~~~
-eval "$(_SSE_COMPLETE=bash_source sse)"
+```
+MY_PROJECT
+├── sample/
+│   ├── audio/ <- contains all the audio files to analyze
+│   └── config.xlsx <- configuration file for the app
+└── docker-compose.yml <- configuration file for Docker
+```
 
-# or get it with
-sse help
-~~~
+#### Downloading Docker configuration
 
+##### Master / Main branch
 
-typical commands
+> TODO
 
-~~~
+##### Development branches
 
-#run the server to avoid cors request
-sse cors-http-server
+`next/**` branches are used for development.
 
-#
-sse extract all
+If you want to use them, download the
+configuration [here](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/next/rewrite/docker-compose.next.yml)
+.
 
-# if a lot of files and you know they have each a 60s duration
-sse show audio-span-splot -s 60
-# else (few files or patient)
-sse show audio-span-splot
+Please note that the `next` branches are not stable and may contain bugs.
 
-sse extract preview
-sse compute volume
-sse compute covering
-sse compute umap
+### Running the app
 
-sse help
-# copy the config generators
-sse chs
+Open a terminal on Linux/macOS (or PowerShell on Windows).
 
-(cd ...../sse-v1 ; npm run dev)
-(cd .../sample sse show config --json > generated/ghost-config.json)
+Navigate to your folder.
 
-~~~
+Run the following command according to the Docker Composer configuration you downloaded:
 
+```bash
+# Linux/macOS
+docker-compose -f docker-compose._FLAVOUR_.yml up
+```
 
+```powershell
+# Windows
+docker compose -f '.\docker-compose._FLAVOUR_.yml' up
+```
 
+#### First run
 
-## Development notes
+The first time you run the app, it will take a while to download the Docker images.
 
-### Created with...
+Depending on the power of your machine, the processing container will appear to hang while its actually extracting and
+generating the features.
 
-made a vue project
+#### Accessing the app
 
-~~~output
-Vue CLI v4.5.13
-? Please pick a preset: Manually select features
-? Check the features needed for your project: Choose Vue version, Babel, CSS Pre-processors, Linter
-? Choose a version of Vue.js that you want to start the project with 3.x
-? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default): Sass/SCSS (with dart-sass)
-? Pick a linter / formatter config: Prettier
-? Pick additional lint features: Lint on save
-? Where do you prefer placing config for Babel, ESLint, etc.? In dedicated config files
-~~~
+Once the app is running and data analyzed, you can access the following services:
 
-mashed-up an icon (in media/, exported to 256px)
+- [Front End](http://localhost:8080) `8080`
+- [Back End](http://localhost:8081) `8081`
+- [Legacy back end](http://localhost:9876) `9876`
 
-using the icon in the vue project
+### Optional: Run the project locally
 
-~~~
-inkscape media/icons.svg -o media/sse-icon.png
-cp -f media/sse-icon.png sse-v1/src/assets/logo.png
-convert sse-v1/src/assets/logo.png sse-v1/public/favicon.ico
-~~~
+#### Requirements
 
-### Making some test data
+- Node.js
+- Yarn
+- Python 3.8
 
-~~~
-cp -t log1/ '........./Logger1/20210429_180000.WAV'  # strange... 
-cp -t log2/ '........./Logger2/20210429_180000.WAV'
+#### Installing dependencies
 
+```bash
+git clone git@github.com:sound-scape-explorer/sound-scape-explorer.git
+cd sound-scape-explorer
+yarn install
+```
 
-# for each folder
-ffmpeg  -i 20210429_180000.WAV -ss 0 -t 60 -c copy chunk-20210429_180000.WAV
-ffmpeg  -i 20210429_180000.WAV -ss 60 -t 60 -c copy chunk-20210429_180100.WAV
-ffmpeg  -i 20210429_180000.WAV -ss 120 -t 60 -c copy chunk-20210429_180200.WAV
-ffmpeg  -i 20210429_180000.WAV -ss 180 -t 60 -c copy chunk-20210429_180300.WAV
-ffmpeg  -i 20210429_180000.WAV -ss 600 -t 60 -c copy chunk-20210429_181000.WAV
+> TODO
+>
+> At the moment, `yarn install` also handles the data extraction and generation.
+>
+> This will be changed in the future.
 
-# alternative to fake a first one using the second
-ffmpeg  -i ../log2/20210429_180000.WAV -ss 1000 -t 60 -c copy chunk-20210429_180000.WAV
-ffmpeg  -i ../log2/20210429_180000.WAV -ss 1060 -t 60 -c copy chunk-20210429_180100.WAV
-ffmpeg  -i ../log2/20210429_180000.WAV -ss 1120 -t 60 -c copy chunk-20210429_180200.WAV
-ffmpeg  -i ../log2/20210429_180000.WAV -ss 1180 -t 60 -c copy chunk-20210429_180300.WAV
-ffmpeg  -i ../log2/20210429_180000.WAV -ss 1600 -t 60 -c copy chunk-20210429_181000.WAV
+#### Running the app
 
+```bash
+yarn dev
+```
 
-~~~
+The same ports will be opened as with the Docker configuration.
 
-### Extracting features and previews
+## 🧑‍🤝‍🧑 Contributions
 
-~~~
-sse extract all
-sse extract preview
-
-sse show band-freqs
-sse show list-sites
-
-# if a lot of files and you know they have each a 60s duration
-sse show audio-span-splot -s 60
-# else (few files or patient)
-sse show audio-span-splot
-~~~
-
-For now, we use python to save a json of the config, to avoid implementing the parser (although this is easy-ish):
-
-~~~
-# get the command with (use the ones that redirect to .js and .json files
-sse help
-~~~
-
-### Some npm installs
-
-~~~
-# for naive
-npm i -D naive-ui
-npm i -D vfonts
-npm i -D worklet-loader
-~~~
-
-### dev on the js side
-
-~~~
-cd sse-v1/
-npm run serve 
-~~~
-
-and the data server
-
-~~~
-cd sample/
-sse cors-http-server
-~~~
-
-### wip
-
-##### file:// release
-
-~~~
-
-npm run build
-where=../sample
-#-e 's@data-src=""@src="../'"$where"/'generated/ghost-config-json.js"@g'
-sed -i -e 's@="/@="@g'  dist/index.html
-sed -i -e 's@http://localhost:9876/@'"$where"'/@g' dist/js/*.js
-#sed -i -e 's@LOCAL:!@LOCAL:@g' dist/js/*.js
-~~~
+Feel free to open an issue or PR if you have any questions or suggestions.
