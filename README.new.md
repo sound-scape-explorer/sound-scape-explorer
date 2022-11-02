@@ -52,8 +52,8 @@ MY_PROJECT
 
 `next/**` branches are used for development.
 
-If you want to use them, you can download the related configuration
-file [here](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/next/rewrite/docker-compose.next.yml)
+If you want to use them, download the
+configuration [here](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/next/rewrite/docker-compose.next.yml)
 .
 
 Please note that the `next` branches are not stable and may contain bugs.
@@ -73,7 +73,7 @@ docker-compose -f docker-compose._FLAVOUR_.yml up
 
 ```powershell
 # Windows
-docker compose '.\docker-compose._FLAVOUR_.yml' up
+docker compose -f '.\docker-compose._FLAVOUR_.yml' up
 ```
 
 #### First run
