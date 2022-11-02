@@ -60,14 +60,14 @@ Please note that the `next` branches are not stable and may contain bugs.
 
 ### Running the app
 
-Open a terminal on Linux (or PowerShell on Windows).
+Open a terminal on Linux/macOS (or PowerShell on Windows).
 
 Navigate to your folder.
 
 Run the following command according to the Docker Composer configuration you downloaded:
 
 ```bash
-# Linux
+# Linux/macOS
 docker-compose -f docker-compose._FLAVOUR_.yml up
 ```
 
