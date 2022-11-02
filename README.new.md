@@ -17,66 +17,109 @@ Audio data visualization and analysis tool for the web.
 
 ## 📖 How To
 
-### Requirements
+### Setup
 
-You will need Docker to be running on your machine. Install Docker Desktop for your
+#### Installing Docker
+
+You will need **Docker** to be running on your machine. Install **Docker Desktop** for your
 OS [here](https://www.docker.com/products/docker-desktop).
 
-Then, create a folder where you want to store your project.
+> Microsoft's systems will need **WSL2** in order to get Docker running.
+>
+> If the installer does not propose you to install it, please follow the Microsoft documentation
+> [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package)
 
-This folder should container an `audio` folder with your audio files.
+#### Creating project folder
 
-Place your `Excel` configuration file in the folder root.
+Create a local folder wherever you want to store your project.
+
+It should contain the following items:
 
 ```
-YOUR_FOLDER
-├── audio/
-├── docker-compose.yml
-└── config.xlsx
+MY_PROJECT
+├── audio/ <- contains all the audio files to analyze
+├── config.xlsx <- configuration file for the app
+└── docker-compose.yml <- configuration file for Docker
 ```
 
-#### Windows with WSL2
+#### Downloading Docker configuration
 
-Microsoft's systems will need an extra step in order to get Docker running.
+##### Master / Main branch
 
-If the installer does not propose you to install WSL2, please follow
-the Microsoft
-documentation [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package)
+> TODO
+
+##### Development branches
+
+`next/**` branches are used for development.
+
+If you want to use them, you can download the related configuration
+file [here](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/next/rewrite/docker-compose.next.yml)
 .
 
-### Instructions
+Please note that the `next` branches are not stable and may contain bugs.
 
-[Download](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/next/rewrite/docker-compose.next.yml)
-the docker compose configuration file to the root of your folder.
+### Running the app
 
-Open a terminal on Linux or a PowerShell on Windows, navigate to your folder and run the following command:
+Open a terminal on Linux (or PowerShell on Windows).
+
+Navigate to your folder.
+
+Run the following command according to the Docker Composer configuration you downloaded:
 
 ```bash
 # Linux
-docker-compose -f docker-compose.next.yml up
+docker-compose -f docker-compose._FLAVOUR_.yml up
 ```
 
 ```powershell
 # Windows
-docker compose '.\docker-compose.next.yml' up
+docker compose '.\docker-compose._FLAVOUR_.yml' up
 ```
 
-Wait for the docker images to be downloaded and started.
+#### First run
 
-Please note that the first time you run the app, it will take a while to download the docker images.
+The first time you run the app, it will take a while to download the Docker images.
 
 Depending on the power of your machine, the processing container will appear to hang while its actually extracting and
 generating the features.
 
-_You will notice that frontend and backend are available but not populated by data._
+#### Accessing the app
+
+Once the app is running and data analyzed, you can access the following services:
+
+- [Front End](http://localhost:8080) `8080`
+- [Back End](http://localhost:8081) `8081`
+- [Legacy back end](http://localhost:9876) `9876`
 
 ### Optional: Run the project locally
 
-### 📝 URLs
+#### Requirements
 
-- [Front](http://localhost:8080) `8080`
-- [Back](http://localhost:8081) `8081`
-- [Legacy](http://localhost:9876) `9876`
+- Node.js
+- Yarn
+- Python 3.8
+
+#### Installing dependencies
+
+```bash
+git clone git@github.com:sound-scape-explorer/sound-scape-explorer.git
+cd sound-scape-explorer
+yarn install
+```
+
+> TODO
+>
+> At the moment, `yarn install` also handles the data extraction and generation.
+>
+> This will be changed in the future.
+
+#### Running the app
+
+```bash
+yarn dev
+```
+
+The same ports will be opened as with the Docker configuration.
 
 ## 🧑‍🤝‍🧑 Contributions
 
