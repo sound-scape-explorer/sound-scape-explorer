@@ -27,7 +27,7 @@ OS [here](https://www.docker.com/products/docker-desktop).
 > Microsoft's systems will need **WSL2** in order to get Docker running.
 >
 > If the installer does not propose you to install it, please follow the Microsoft documentation
-> [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package)
+> [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package).
 
 #### Creating project folder
 
@@ -47,17 +47,11 @@ MY_PROJECT
 
 ##### Master / Main branch
 
-> TODO
+[Download `docker-compose.main.yml`](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/main/docker-compose.main.yml)
 
 ##### Development branches
 
-`next/**` branches are used for development.
-
-If you want to use them, download the
-configuration [here](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/next/rewrite/docker-compose.next.yml)
-.
-
-Please note that the `next` branches are not stable and may contain bugs.
+[Download `docker-compose.next.yml`](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/main/docker-compose.next.yml)
 
 ### Running the app
 

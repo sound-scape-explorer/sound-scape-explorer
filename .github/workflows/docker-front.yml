@@ -1,9 +1,11 @@
 name: docker-front
 
 on:
+  release:
+    types:
+      - published
   push:
     branches:
-      - 'main'
       - 'next/**'
 
 jobs:
