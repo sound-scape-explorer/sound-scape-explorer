@@ -27,7 +27,7 @@ OS [here](https://www.docker.com/products/docker-desktop).
 > Microsoft's systems will need **WSL2** in order to get Docker running.
 >
 > If the installer does not propose you to install it, please follow the Microsoft documentation
-> [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package).
+> [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package)
 
 #### Creating project folder
 
@@ -90,9 +90,9 @@ Once the app is running and data analyzed, you can access the following services
 
 #### Requirements
 
-- Node.js
-- Yarn
-- Python 3.8
+- [Node.js](https://nodejs.org/en/)
+- [Yarn](https://yarnpkg.com/getting-started/install)
+- [Python 3.8+](https://www.python.org/downloads/)
 
 #### Installing dependencies
 
