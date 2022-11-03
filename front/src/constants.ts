@@ -2,6 +2,8 @@ const BACK_HOSTNAME = 'http://localhost:8081';
 
 export const SCATTER_PLOT_DEFAULT_COLOR = 'red';
 
+export const ALERT_TIMER = 5000;
+
 interface APIRoutesDefaultParameters {
   interval: string;
   band: string;
