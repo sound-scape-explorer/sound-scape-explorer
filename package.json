@@ -1,8 +1,9 @@
 {
   "name": "sound-scape-explorer",
   "scripts": {
-    "install": "bin/install.sh",
+    "install": "bin/install.sh && yarn process",
     "dev": "concurrently 'bin/front-dev.sh' 'bin/back-dev.sh' 'bin/server-dev.sh'",
+    "process": "bin/process.sh",
     "start": "yarn dev"
   },
   "devDependencies": {
