@@ -75,7 +75,7 @@ docker compose -f '.\docker-compose._FLAVOUR_.yml' up
 
 The first time you run the app, it will take a while to download the Docker images.
 
-Depending on the power of your machine, the processing container will appear to hang while its actually extracting and
+Depending on the power of your machine, the processing container will appear to hang while it is actually extracting and
 generating the features.
 
 #### Accessing the app
