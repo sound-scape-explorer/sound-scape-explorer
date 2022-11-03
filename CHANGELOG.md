@@ -1,3 +1,22 @@
+# [2.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.0.0...v2.1.0) (2022-11-03)
+
+
+### Bug Fixes
+
+* **Front:** Make `useConfig` trigger its own error modal + Make `Loader` pure ([4494af8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4494af8119dc41100091de86b5dbe9372838a218))
+* **Processing:** Add state feedback to console ([9fb4397](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9fb4397371f0e288eba03a03dc0b0efe4dff3d74))
+
+
+### Features
+
+* **Front:** Add `Loader` component to block interaction if needed + Add `Notification` component for feedbacks ([cb70a84](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb70a846d443951176c22ed68e43ad469a66a273))
+
+
+### Performance Improvements
+
+* **App:** Extract process commands from installation into its own script ([992e90e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/992e90e9e56af9b0f1ef43d25fa2a84e10dabdfc))
+* **Processing:** Remove web server related code ([d07f98c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d07f98c1655015951a82bcd2ba27ce0706978253))
+
 # [2.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v1.1.0...v2.0.0) (2022-11-02)
 
 
