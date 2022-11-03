@@ -3,6 +3,7 @@ import type {ConfigInterface} from '../interfaces/config.interface';
 
 export interface ConfigStoreInterface {
   isLoaded: boolean;
+  isError: boolean;
   config?: ConfigInterface;
   bands?: string[];
   intervals?: number[];
@@ -13,4 +14,5 @@ export interface ConfigStoreInterface {
 
 export const configStore = reactive<ConfigStoreInterface>({
   isLoaded: false,
+  isError: false,
 });

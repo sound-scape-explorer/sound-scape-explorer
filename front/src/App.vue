@@ -4,7 +4,7 @@ import {NLayout, NNotificationProvider, NSpace} from 'naive-ui';
 import Content from './components/Content.vue';
 import Menu from './components/Menu.vue';
 import Notification from './components/Notification.vue';
-import Loader from './components/Loader.vue';
+import Loader from './components/ConfigurationErrorModal.vue';
 //
 </script>
 

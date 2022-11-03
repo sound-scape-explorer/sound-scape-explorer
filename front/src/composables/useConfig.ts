@@ -14,20 +14,22 @@ export async function useConfig(): Promise<ConfigStoreInterface> {
     )];
   }
 
-  const request = await fetch(API_ROUTES.config);
-  const data: ConfigInterface = await request.json();
+  try {
+    const request = await fetch(API_ROUTES.config);
+    const data: ConfigInterface = await request.json();
 
-  if (!data) {
-    throw new Error('Data is not defined');
+    configStore.isLoaded = true;
+    configStore.isError = false;
+    configStore.config = data;
+    configStore.bands = Object.keys(data.bands);
+    configStore.intervals = data.variables.integration_seconds.split('-').map((i) => Number(i));
+    configStore.intervalLabels = Object.keys(data.umaps);
+    configStore.ranges = Object.keys(data.ranges);
+    configStore.sites = parseSites(data);
+
+    return configStore;
+  } catch {
+    configStore.isError = true;
+    return configStore;
   }
-
-  configStore.isLoaded = true;
-  configStore.config = data;
-  configStore.bands = Object.keys(data.bands);
-  configStore.intervals = data.variables.integration_seconds.split('-').map((i) => Number(i));
-  configStore.intervalLabels = Object.keys(data.umaps);
-  configStore.ranges = Object.keys(data.ranges);
-  configStore.sites = parseSites(data);
-
-  return configStore;
 }

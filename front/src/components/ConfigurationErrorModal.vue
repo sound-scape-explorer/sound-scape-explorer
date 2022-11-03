@@ -1,37 +1,11 @@
 <script lang="ts" setup>
-import {onBeforeMount, ref, watch} from 'vue';
 import {NAlert} from 'naive-ui';
 import {configStore} from '../store/config.store';
-
-/**
- * State
- */
-
-const isLoading = ref<boolean>(true);
-
-/**
- * Handlers
- */
-
-function updateReadiness() {
-  isLoading.value = !configStore.isLoaded;
-}
-
-/**
- * Lifecycles
- */
-
-onBeforeMount(() => {
-  updateReadiness();
-});
-
-watch(configStore, () => {
-  updateReadiness();
-});
+//
 </script>
 
 <template>
-  <div v-if="isLoading" class="container">
+  <div v-if="configStore.isError" class="container">
     <n-alert
         title="Warning"
         type="warning"
@@ -43,10 +17,10 @@ watch(configStore, () => {
         Please wait a few seconds and refresh the page.
       </div>
       <div>
-        If the problem persists, submit an issue
+        If the problem persists, submit your errors
         <a
             class="link"
-            href="https://github.com/sound-scape-explorer/sound-scape-explorer/issues/new"
+            href="https://github.com/sound-scape-explorer/sound-scape-explorer/issues"
             target="_blank"
         >
           here
