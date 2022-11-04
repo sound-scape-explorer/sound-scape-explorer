@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.1...v2.1.2) (2022-11-04)
+
+
+### Bug Fixes
+
+* **CI:** Attempting to understand why these jobs did not trigger... ([03939a6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/03939a693f23af5d67224118a9c4bebfdf3e373c))
+
 ## [2.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.0...v2.1.1) (2022-11-04)
 
 
