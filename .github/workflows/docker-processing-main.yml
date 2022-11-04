@@ -1,11 +1,6 @@
 name: docker-processing-main
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - v*
   release:
     types:
       - published

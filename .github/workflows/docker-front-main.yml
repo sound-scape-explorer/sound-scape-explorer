@@ -1,11 +1,6 @@
 name: docker-front-main
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - v*
   release:
     types:
       - published
