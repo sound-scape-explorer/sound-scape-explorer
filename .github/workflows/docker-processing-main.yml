@@ -24,7 +24,6 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            sound-scape-explorer/processing
             ghcr.io/sound-scape-explorer/processing
           # generate Docker tags based on the following events/attributes
           tags: |
