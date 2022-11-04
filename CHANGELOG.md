@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.3...v2.1.4) (2022-11-04)
+
+
+### Bug Fixes
+
+* **CI:** Trying new syntax ([88c7242](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/88c7242d9ea649eddf9aaf12cc37f41743b4a5de))
+
 ## [2.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.2...v2.1.3) (2022-11-04)
 
 
