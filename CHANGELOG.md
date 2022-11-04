@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.0...v2.1.1) (2022-11-04)
+
+
+### Bug Fixes
+
+* **CI:** Split pipelines and improve configuration for tagging resulting docker images ([9cdf93b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9cdf93b3fd84060dab52e2de15f105fdb00b1d75))
+
 # [2.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.0.0...v2.1.0) (2022-11-03)
 
 
