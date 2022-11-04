@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.2...v2.1.3) (2022-11-04)
+
+
+### Bug Fixes
+
+* **CI:** Getting there... ([8087688](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/808768854095ae43b5a833d3bca5a4f8f7925f7c))
+
 ## [2.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.1...v2.1.2) (2022-11-04)
 
 
