@@ -2,12 +2,12 @@ version: "3.7"
 
 services:
   processing:
-    image: ghcr.io/sound-scape-explorer/processing:main
+    image: ghcr.io/sound-scape-explorer/processing:latest
     volumes:
       - ./sample:/sample
 
   back:
-    image: ghcr.io/sound-scape-explorer/back:main
+    image: ghcr.io/sound-scape-explorer/back:latest
     ports:
       - "8081:8081"
     volumes:
@@ -16,7 +16,7 @@ services:
       - processing
 
   front:
-    image: ghcr.io/sound-scape-explorer/front:main
+    image: ghcr.io/sound-scape-explorer/front:latest
     ports:
       - "8080:8080"
     depends_on:
