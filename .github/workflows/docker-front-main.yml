@@ -3,12 +3,15 @@ name: docker-front-main
 on:
   push:
     branches:
-      - 'main'
+      - main
     tags:
-      - 'v*.*.*'
+      - v*
+  release:
+    types:
+      - published
   pull_request:
     branches:
-      - 'main'
+      - main
 
 jobs:
   docker-front-main:
@@ -34,6 +37,8 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
+            # set latest tag for main branch
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
