@@ -26,7 +26,7 @@ function print_abort {
   exit 0
 }
 
-cd /sample || print_abort
+cd "$1" || print_abort
 
 mkdir generated || print_abort
 

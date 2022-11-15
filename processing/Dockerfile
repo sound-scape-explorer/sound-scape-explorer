@@ -11,4 +11,4 @@ RUN pip install -e .
 
 RUN python prepare.py
 
-CMD ["./run.sh"]
+CMD ["./run.sh", "/sample"]
