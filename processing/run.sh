@@ -40,22 +40,86 @@ function print_abort {
   exit 0
 }
 
+# File system helpers
+# Returns 0 (True) if folder exists
+# Returns 1 (False) otherwise
+
+function check_extract_folder {
+  if [ -d "features" ]; then
+    return 0
+  else
+    mkdir features
+    return 1
+  fi
+}
+
+function check_compute_folder {
+  if [ -d "generated" ]; then
+    return 0
+  else
+    mkdir generated
+    return 1
+  fi
+}
+
+function check_compute_volume_folder {
+  if [ -d "generated/single" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function check_compute_covering_folder {
+  if [ -d "generated/pairwise" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function check_compute_umap_folder {
+  if [ -d "generated/umap" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 # Processing helpers
-# TODO: All computes need extracted data first, add file checks
 
 function run_extract_all {
+  check_extract_folder
+  local res=$?
+  [ "$res" -eq 0 ] && return
+
   sse extract all
 }
 
 function run_compute_volume {
+  check_compute_folder
+  check_compute_volume_folder
+  local res=$?
+  [ "$res" -eq 0 ] && return
+
   sse compute volume
 }
 
 function run_compute_covering {
+  check_compute_folder
+  check_compute_covering_folder
+  local res=$?
+  [ "$res" -eq 0 ] && return
+
   sse compute covering
 }
 
 function run_compute_umap {
+  check_compute_folder
+  check_compute_umap_folder
+  local res=$?
+  [ "$res" -eq 0 ] && return
+
   sse compute umap
 }
 
@@ -91,11 +155,6 @@ then
 else
   cd "$1" || print_abort
 fi
-
-# Create target folders
-
-#mkdir features || print_abort
-#mkdir generated || print_abort
 
 # Process
 
