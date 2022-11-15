@@ -3,7 +3,16 @@
   "scripts": {
     "install": "./install.sh && yarn process",
     "dev": "concurrently './run-back.sh' './run-front.sh'",
-    "process": "processing/run.sh sample",
+    "process": "yarn process:all",
+    "process:all": "processing/run.sh sample all",
+    "process:all-but-volume": "processing/run.sh sample all-but-volume",
+    "process:extract": "processing/run.sh sample extract",
+    "process:compute": "processing/run.sh sample compute",
+    "process:compute-volume": "processing/run.sh sample compute-volume",
+    "process:compute-covering": "processing/run.sh sample compute-covering",
+    "process:compute-umap": "processing/run.sh sample compute-umap",
+    "process:config": "processing/run.sh sample config",
+    "process:clean": "processing/clean.sh sample",
     "start": "yarn dev"
   },
   "devDependencies": {
