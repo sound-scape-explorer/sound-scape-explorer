@@ -1,0 +1,5 @@
+AUDIO_SUFFIX = '.WAV'
+FEATURE_BASE = './features/'
+GENERATED_BASE = './generated/'
+OTHER_BASE = './other/'
+AUDIO_BASE = './audio/'

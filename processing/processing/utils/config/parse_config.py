@@ -4,6 +4,9 @@ from datetime import datetime
 
 from pandas import pandas
 
+from processing.constants import AUDIO_SUFFIX, FEATURE_BASE, GENERATED_BASE, \
+    OTHER_BASE, AUDIO_BASE
+
 
 def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None,
                           disable_prefix=False, allow_duplicate=False):
@@ -73,6 +76,22 @@ def parse_config(path='config.xlsx', sheet=0):
     _xtable.rename(_renaming, inplace=True, axis='columns', errors="raise")
 
     variables = dict(digest_xtable_columns(path, _xtable, 'variables'))
+
+    if variables['audio_base'] == 'nan':
+        variables['audio_base'] = AUDIO_BASE
+
+    if variables['audio_suffix'] == 'nan':
+        variables['audio_suffix'] = AUDIO_SUFFIX
+
+    if variables['feature_base'] == 'nan':
+        variables['feature_base'] = FEATURE_BASE
+
+    if variables['generated_base'] == 'nan':
+        variables['generated_base'] = GENERATED_BASE
+
+    if variables['other_base'] == 'nan':
+        variables['other_base'] = OTHER_BASE
+
     bands = dict(digest_xtable_columns(path, _xtable, 'bands'))
     umaps = dict(digest_xtable_columns(path, _xtable, 'umaps',
                                        ['integration:I', 'bands:L', 'sites:L',
