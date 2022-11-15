@@ -2,7 +2,6 @@
 
 ## Description
 
-
 ## How to use it
 
 ### Installation
@@ -47,7 +46,6 @@ eval "$(_SSE_COMPLETE=bash_source sse)"
 sse help
 ~~~
 
-
 typical commands
 
 ~~~
@@ -77,9 +75,6 @@ sse chs
 
 ~~~
 
-
-
-
 ## Development notes
 
 ### Created with...
@@ -97,13 +92,13 @@ Vue CLI v4.5.13
 ? Where do you prefer placing config for Babel, ESLint, etc.? In dedicated config files
 ~~~
 
-mashed-up an icon (in media/, exported to 256px)
+mashed-up an icon (in assets/, exported to 256px)
 
 using the icon in the vue project
 
 ~~~
-inkscape media/icons.svg -o media/sse-icon.png
-cp -f media/sse-icon.png sse-v1/src/assets/logo.png
+inkscape assets/icons.svg -o assets/sse-icon.png
+cp -f assets/sse-icon.png sse-v1/src/assets/logo.png
 convert sse-v1/src/assets/logo.png sse-v1/public/favicon.ico
 ~~~
 
