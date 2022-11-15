@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.4...v3.0.0) (2022-11-15)
+
+
+### Bug Fixes
+
+* **Scripts:** Fix path for `yarn install` ([5072bc1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5072bc186fb5fc93866acfbeeabb32ae14df0f6d))
+
+
+### Performance Improvements
+
+* **Processing/Docker:** Improve docker layering for future builds ([51845d3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/51845d365fb2e160678141e54f4b6cb0755d1c35))
+
 ## [2.1.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.3...v2.1.4) (2022-11-04)
 
 
