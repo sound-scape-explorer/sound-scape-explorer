@@ -1,3 +1,16 @@
+# [3.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.0.0...v3.1.0) (2022-11-15)
+
+
+### Bug Fixes
+
+* **Processing/Scripts:** Add constants to fall back to when configuration is incomplete ([5e84f15](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5e84f1569f1c7e93cc1e98e85d7736170ba63f25))
+
+
+### Features
+
+* **Processing/Scripts:** Add folder checks in run script ([4372f5f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4372f5f6ead5a61f6ac1749f9d55cb0d87b6396f))
+* **Scripts:** Add new processing scripts for separate actions ([8a0df44](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8a0df44141a9014beaba8fcc4b3fc2a4af658123))
+
 # [3.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v2.1.4...v3.0.0) (2022-11-15)
 
 
