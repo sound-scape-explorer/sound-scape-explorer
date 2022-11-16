@@ -1,4 +1,3 @@
-import torch
 from torch import hub
 
 from processing.models.VGG import VGG
@@ -8,15 +7,21 @@ from processing.utils.waveform_to_examples import waveform_to_examples
 
 class VGGish(VGG):
     def __init__(self, band_params, device=None):
+        # TODO: does not work
+        # if torch.cuda.is_available():
+        # device = 'cuda'
+
+        print(f"Instantiating VGGish model with {device}")
+
         super().__init__(make_layers())
+
         state_dict = hub.load_state_dict_from_url(
             'https://github.com/harritaylor/torchvggish/'
             'releases/download/v0.1/vggish-10086976.pth',
             progress=True)
+
         super().load_state_dict(state_dict)
-        if device is None:
-            device = torch.device('cuda' if torch.cuda.is_available()
-                                  else 'cpu')
+
         self.device = device
         self.to(self.device)
         self.band_params = band_params
