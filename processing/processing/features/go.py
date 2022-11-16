@@ -1,8 +1,8 @@
 import gzip
 import pathlib
 import pickle
-import time
 
+import time
 import torch
 
 from processing.models.VGGish import VGGish
