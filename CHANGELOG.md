@@ -1,3 +1,18 @@
+# [3.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.1.0...v3.2.0) (2022-11-16)
+
+
+### Bug Fixes
+
+* **Processing/Models:** Make `VGGish` singleton ([d70d5ed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d70d5ed080e4360c9a1e1e927c3d12b8a4793cc5))
+* **Processing/Models:** Sort imports ([5899439](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/58994393d5e1129b527ad08ae16a4f3dd8841ae7))
+* **Processing/Scripts:** Exit with silent status code for cleaning script ([371c8d2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/371c8d2eab959a83b13d9f84d9ef840347cbe294))
+
+
+### Features
+
+* **Processing/Models:** Make VGG base class a singleton to improve performance + Improve CUDA detection code ([9955ca3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9955ca36c35fbce28d4b3bfa6c4d17dbd20d8db3))
+* **Processing/UMAP:** Fetch UMAP `random_state` from configuration file ([b24f0e7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b24f0e70ac9c9f0738587b1d3f4cdc23aab88c96))
+
 # [3.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.0.0...v3.1.0) (2022-11-15)
 
 
