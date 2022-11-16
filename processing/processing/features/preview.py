@@ -1,8 +1,8 @@
 import pathlib
-import sys
-import time
 
 import matplotlib.pyplot as pyplot
+import sys
+import time
 
 from processing.utils.get_band_freq_bounds import get_band_freq_bounds
 from processing.utils.load_data import load_data

@@ -3,9 +3,9 @@
 if [ -z "$1" ]
 then
   # empty variable
-  cd sample || print_abort
+  cd sample || exit 0
 else
-  cd "$1" || print_abort
+  cd "$1" || exit 0
 fi
 
 

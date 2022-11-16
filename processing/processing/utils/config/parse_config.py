@@ -92,6 +92,9 @@ def parse_config(path='config.xlsx', sheet=0):
     if variables['other_base'] == 'nan':
         variables['other_base'] = OTHER_BASE
 
+    if variables['umap_random'] == 'nan':
+        variables['umap_random'] = None
+
     bands = dict(digest_xtable_columns(path, _xtable, 'bands'))
     umaps = dict(digest_xtable_columns(path, _xtable, 'umaps',
                                        ['integration:I', 'bands:L', 'sites:L',

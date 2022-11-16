@@ -1,8 +1,10 @@
 import torch
 from torch import nn
 
+from processing.utils.singleton_meta import SingletonMeta
 
-class VGG(nn.Module):
+
+class VGG(nn.Module, metaclass=SingletonMeta):
     def __init__(self, features):
         super(VGG, self).__init__()
         self.features = features
