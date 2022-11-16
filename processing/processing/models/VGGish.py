@@ -2,10 +2,11 @@ from torch import hub
 
 from processing.models.VGG import VGG
 from processing.utils.make_layers import make_layers
+from processing.utils.singleton_meta import SingletonMeta
 from processing.utils.waveform_to_examples import waveform_to_examples
 
 
-class VGGish(VGG):
+class VGGish(VGG, metaclass=SingletonMeta):
     def __init__(self, band_params, device=None):
         # TODO: does not work
         # if torch.cuda.is_available():
