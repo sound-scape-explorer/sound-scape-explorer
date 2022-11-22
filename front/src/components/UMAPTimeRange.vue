@@ -9,6 +9,9 @@ import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
  * State
  */
 
+const min = ref<number>();
+const max = ref<number>();
+
 const timestamps = computed(() => {
   const payload: number[] = [];
 
@@ -35,9 +38,6 @@ const options = computed(() => {
     value: timestamp,
   }));
 });
-
-const min = ref(timestamps.value[0]);
-const max = ref(timestamps.value[timestamps.value.length - 1]);
 
 /**
  * Handlers
