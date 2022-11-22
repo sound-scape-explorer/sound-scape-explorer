@@ -1,3 +1,16 @@
+# [3.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.2.0...v3.3.0) (2022-11-22)
+
+
+### Bug Fixes
+
+* **Front/UMAP:** Make sure base refs are instantiated before use ([24a313f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/24a313faa8f43185a136eceb039d649858486b27))
+
+
+### Features
+
+* **Front/UMAP:** Add filters ([543636f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/543636feb320fdc1086ec52f0b6ed134f4fafeea))
+* **Front/UMAP:** Switch time range from sliders to dropdown selects for better UX ([9cad5b3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9cad5b308ff37cd1f9e2210d462fb8afb1cb1152))
+
 # [3.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.1.0...v3.2.0) (2022-11-16)
 
 
