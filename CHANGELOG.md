@@ -1,3 +1,15 @@
+# [3.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.3.0...v3.4.0) (2022-11-22)
+
+
+### Bug Fixes
+
+* **Front/UMAP:** Fix typo ([15528c6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/15528c6287af309792ba35d909980ac0cf26b501))
+
+
+### Features
+
+* **Processing/CUDA:** Add CUDA support for extractions ([a7f3523](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a7f35236c4fc32e5bd03500fac4859d9abc4367f))
+
 # [3.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.2.0...v3.3.0) (2022-11-22)
 
 
