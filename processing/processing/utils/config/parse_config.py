@@ -7,6 +7,29 @@ from pandas import pandas
 from processing.constants import AUDIO_SUFFIX, FEATURE_BASE, GENERATED_BASE, \
     OTHER_BASE, AUDIO_BASE
 
+all_sites = []
+
+
+def list_all_sites(files):
+    global all_sites
+
+    for f in files:
+        file = files[f]
+        site = file[0]
+
+        if site not in all_sites:
+            all_sites.append(site)
+
+
+def parse_sites(sites):
+    global all_sites
+    string = str(sites)
+
+    if string == 'nan':
+        return all_sites
+
+    return string.split(',')
+
 
 def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None,
                           disable_prefix=False, allow_duplicate=False):
@@ -28,6 +51,7 @@ def digest_xtable_columns(xpath, xt, c_key, c_values=None, yield_type=None,
                              'I': int,
                              'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
                              'L': lambda v: v.split(','),
+                             'SITES': parse_sites,
                              'L-': lambda v: v.split('-'),
                              'L-D': lambda v: [
                                  datetime.strptime(vv, '%Y%m%d_%H%M') for vv in
@@ -75,6 +99,16 @@ def parse_config(path='config.xlsx', sheet=0):
     _renaming = {i: i.split(' (')[0] for i in _xtable.columns if ' (' in i}
     _xtable.rename(_renaming, inplace=True, axis='columns', errors="raise")
 
+    files = dict(digest_xtable_columns(
+        path,
+        _xtable,
+        'files',
+        'site start:D tags:L'.split(' '),
+        'FILE'
+    ))
+
+    list_all_sites(files)
+
     variables = dict(digest_xtable_columns(path, _xtable, 'variables'))
 
     if variables['audio_base'] == 'nan':
@@ -96,15 +130,25 @@ def parse_config(path='config.xlsx', sheet=0):
         variables['umap_random'] = None
 
     bands = dict(digest_xtable_columns(path, _xtable, 'bands'))
-    umaps = dict(digest_xtable_columns(path, _xtable, 'umaps',
-                                       ['integration:I', 'bands:L', 'sites:L',
-                                        'ranges:L'], 'UMAP'))
+
+    umaps = dict(digest_xtable_columns(
+        path,
+        _xtable,
+        'umaps',
+        ['integration:I', 'bands:L', 'sites:SITES', 'ranges:L'],
+        'UMAP'
+    ))
+
     ranges = dict(digest_xtable_columns(path, _xtable, 'ranges', ':L-D'))
-    stringmap = dict(
-        digest_xtable_columns(path, _xtable, 'stringmap', ['to', 'color'],
-                              'STRINGMAP'))
-    files = dict(digest_xtable_columns(path, _xtable, 'files',
-                                       'site start:D tags:L'.split(' '),
-                                       'FILE'))
+
+    stringmap = dict(digest_xtable_columns(
+        path,
+        _xtable,
+        'stringmap',
+        ['to', 'color'],
+        'STRINGMAP'
+    ))
+
     path = str(pathlib.Path(path).absolute())
+
     return namedtuple_dic(locals(), 'CFG')
