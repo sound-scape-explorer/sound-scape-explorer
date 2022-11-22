@@ -84,7 +84,6 @@ Once the app is running and data analyzed, you can access the following services
 
 - [Front End](http://localhost:8080) `8080`
 - [Back End](http://localhost:8081) `8081`
-- [Legacy back end](http://localhost:9876) `9876`
 
 ### Optional: Run the project locally
 
