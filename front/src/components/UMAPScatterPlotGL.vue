@@ -3,8 +3,10 @@ import {onMounted, onUnmounted, ref, watch} from 'vue';
 import {ScatterGL} from 'scatter-gl';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {replaceSaturationInHslaString} from '../utils/replace-saturation-in-hsla-string';
-import {SCATTER_PLOT_DEFAULT_COLOR} from '../constants';
+import {PREGENERATED_HUES_LENGTH, SCATTER_PLOT_DEFAULT_COLOR} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
+import {UMAPFiltersStore} from '../store/UMAP-filters.store';
+import {mapColorRange} from '../utils/map-color-range';
 
 /**
  * State
@@ -14,7 +16,7 @@ const containerRef = ref<HTMLDivElement | null>(null);
 let scatterGL: ScatterGL | null = null;
 let isFirstRender = true;
 
-const hues = [...new Array(1000)].map((_, i) => Math.floor((255 / 10) * i));
+const hues = [...new Array(PREGENERATED_HUES_LENGTH)].map((_, i) => Math.floor((255 / 10) * i));
 const lightTransparentColorsByLabel = hues.map((hue) => `hsla(${hue}, 100%, 50%, 0.2)`);
 const heavyTransparentColorsByLabel = hues.map((hue) => `hsla(${hue}, 100%, 50%, 0.75)`);
 
@@ -68,21 +70,66 @@ function removeListeners() {
   window.removeEventListener('resize', handleResize);
 }
 
+function getInactiveColorFromIndex(index: number) {
+  const color = lightTransparentColorsByLabel[index];
+  return replaceSaturationInHslaString(color, 0);
+}
+
+function getActiveColorFromIndex(index: number) {
+  return heavyTransparentColorsByLabel[index];
+}
+
 function getColor(index: number): string {
   if (UMAPDatasetStore.dataset === null) {
     return SCATTER_PLOT_DEFAULT_COLOR;
   }
 
-  const labelIndex = UMAPDatasetStore.dataset.metadata[index]['labelIndex'] as number;
-  const timestamp = UMAPDatasetStore.dataset.metadata[index]['timestamp'] as number;
+  const labelIndex = Number(UMAPDatasetStore.dataset.metadata[index]['labelIndex']);
+  const label = UMAPDatasetStore.dataset.metadata[index]['label'] as string;
+  const tags = UMAPDatasetStore.dataset.metadata[index]['tags'] as string;
+  const timestamp = Number(UMAPDatasetStore.dataset.metadata[index]['timestamp']);
+
+  let colorIndex;
+
+  if (UMAPFiltersStore.colorType === 'labelIndex') {
+    colorIndex = labelIndex;
+  } else if (UMAPFiltersStore.colorType === 'pointIndex') {
+    colorIndex = mapColorRange(index, UMAPDatasetStore.dataset.metadata.length);
+  } else if (UMAPFiltersStore.colorType === 'hour') {
+    colorIndex = 0;
+  } else if (UMAPFiltersStore.colorType === 'isDay') {
+    colorIndex = 1000;
+  }
+
+  if (typeof colorIndex === 'undefined') {
+    colorIndex = 0;
+  }
 
   const isWithinRange = timestamp >= UMAPTimeRangeStore.range[0] && timestamp <= UMAPTimeRangeStore.range[1];
 
-  if (!isWithinRange && UMAPTimeRangeStore.isAllSelected === false) {
-    return replaceSaturationInHslaString(lightTransparentColorsByLabel[labelIndex], 0);
+  if (!isWithinRange && !UMAPTimeRangeStore.isAllSelected) {
+    return getInactiveColorFromIndex(colorIndex);
   }
 
-  return heavyTransparentColorsByLabel[labelIndex];
+  if (UMAPFiltersStore.tags !== null) {
+    // filter by tags
+    if (
+      UMAPFiltersStore.tags.startsWith('@')
+        && tags.indexOf(UMAPFiltersStore.tags) === -1
+    ) {
+      return getInactiveColorFromIndex(colorIndex);
+    }
+
+    // filter by sites
+    if (
+      !UMAPFiltersStore.tags.startsWith('@')
+        && UMAPFiltersStore.tags !== label
+    ) {
+      return getInactiveColorFromIndex(colorIndex);
+    }
+  }
+
+  return getActiveColorFromIndex(colorIndex);
 }
 
 /**
@@ -98,7 +145,7 @@ onUnmounted(() => {
   removeListeners();
 });
 
-watch(UMAPTimeRangeStore, () => {
+watch([UMAPTimeRangeStore, UMAPFiltersStore], () => {
   render();
 });
 </script>
