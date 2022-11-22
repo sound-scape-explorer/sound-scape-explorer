@@ -6,14 +6,14 @@ import UMAPFiltersColors from '../components/UMAPFiltersColors.vue';
 </script>
 
 <template>
-  <div class="container">
+  <div class="flex">
     <UMAPFiltersTags />
     <UMAPFiltersColors />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.container {
+.flex {
   display: flex;
   gap: 1rem;
 }

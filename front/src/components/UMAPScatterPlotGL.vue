@@ -98,16 +98,23 @@ function getColor(index: number): string {
   } else if (UMAPFiltersStore.colorType === 'hour') {
     colorIndex = 0;
   } else if (UMAPFiltersStore.colorType === 'isDay') {
-    colorIndex = 1000;
+    colorIndex = 5;
   }
 
   if (typeof colorIndex === 'undefined') {
     colorIndex = 0;
   }
 
-  const isWithinRange = timestamp >= UMAPTimeRangeStore.range[0] && timestamp <= UMAPTimeRangeStore.range[1];
+  const start = UMAPTimeRangeStore.range[0];
+  const end = UMAPTimeRangeStore.range[1];
 
-  if (!isWithinRange && !UMAPTimeRangeStore.isAllSelected) {
+  let isWithinRange = true;
+
+  if (start && end && (timestamp < start || timestamp > end)) {
+    isWithinRange = false;
+  }
+
+  if (!isWithinRange) {
     return getInactiveColorFromIndex(colorIndex);
   }
 
