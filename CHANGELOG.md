@@ -1,3 +1,11 @@
+# [3.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.4.0...v3.5.0) (2022-11-22)
+
+
+### Features
+
+* **Processing:** Add command for `all-but-covering` ([36bc2fe](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/36bc2fedb2f16a41935d6686488b3833d2b974cc))
+* **Processing:** Select all sites if `umap_sites` is empty in configuration file ([ded2b84](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ded2b848b6fc148b22f2b98f112164adb23d694f))
+
 # [3.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.3.0...v3.4.0) (2022-11-22)
 
 
