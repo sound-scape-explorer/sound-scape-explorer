@@ -146,6 +146,13 @@ function run_all_but_volume {
   run_config
 }
 
+function run_all_but_covering {
+  run_extract_all
+  run_compute_volume
+  run_compute_umap
+  run_config
+}
+
 # Change to target directory
 
 if [ -z "$1" ]
@@ -171,6 +178,7 @@ else
   [ "$2" == "compute-umap" ] && run_compute_umap
   [ "$2" == "config" ] && run_config
   [ "$2" == "all-but-volume" ] && run_all_but_volume
+  [ "$2" == "all-but-covering" ] && run_all_but_covering
 fi
 
 print_end

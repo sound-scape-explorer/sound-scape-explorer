@@ -5,6 +5,7 @@
     "dev": "concurrently './run-back.sh' './run-front.sh'",
     "process": "yarn process:all",
     "process:all": "processing/run.sh sample all",
+    "process:all-but-covering": "processing/run.sh sample all-but-covering",
     "process:all-but-volume": "processing/run.sh sample all-but-volume",
     "process:extract": "processing/run.sh sample extract",
     "process:compute": "processing/run.sh sample compute",

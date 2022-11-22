@@ -40,7 +40,7 @@ MY_PROJECT
 ├── sample/
 │   ├── audio/ <- contains all the audio files to analyze
 │   └── config.xlsx <- configuration file for the app
-└── docker-compose.yml <- configuration file for Docker
+└── docker-compose.main.yml <- configuration file for Docker
 ```
 
 #### Downloading Docker configuration
@@ -48,10 +48,6 @@ MY_PROJECT
 ##### Master / Main branch
 
 [Download `docker-compose.main.yml`](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/main/docker-compose.main.yml)
-
-##### Development branches
-
-[Download `docker-compose.next.yml`](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/main/docker-compose.next.yml)
 
 ### Running the app
 
@@ -63,12 +59,12 @@ Run the following command according to the Docker Composer configuration you dow
 
 ```bash
 # Linux/macOS
-docker-compose -f docker-compose._FLAVOUR_.yml up
+docker-compose -f docker-compose.main.yml up
 ```
 
 ```powershell
 # Windows
-docker compose -f '.\docker-compose._FLAVOUR_.yml' up
+docker compose -f '.\docker-compose.main.yml' up
 ```
 
 #### First run
