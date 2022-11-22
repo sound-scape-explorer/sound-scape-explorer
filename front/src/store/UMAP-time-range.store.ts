@@ -1,11 +1,9 @@
 import {reactive} from 'vue';
 
 export interface UMAPTimeRangeStoreInterface {
-  isAllSelected: boolean;
-  range: number[];
+  range: (number | undefined | null)[];
 }
 
 export const UMAPTimeRangeStore = reactive<UMAPTimeRangeStoreInterface>({
-  isAllSelected: true,
-  range: [-1, -1],
+  range: [undefined, undefined],
 });

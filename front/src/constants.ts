@@ -4,6 +4,10 @@ export const SCATTER_PLOT_DEFAULT_COLOR = 'red';
 
 export const ALERT_TIMER = 5000;
 
+export const TAG_PREFIX = '@';
+
+export const PREGENERATED_HUES_LENGTH = 1000;
+
 interface APIRoutesDefaultParameters {
   interval: string;
   band: string;

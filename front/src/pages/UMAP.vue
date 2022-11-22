@@ -8,8 +8,9 @@ import SelectionImage from '../components/SelectionImage.vue';
 import {selectionStore} from '../store/selection.store';
 import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
-import {getScatterGlDataset} from '../utils/get-scatter-gl-dataset';
-import UMAPScatterPlotTimeRange from '../components/UMAPScatterPlotTimeRange.vue';
+import {convertToScatterGlDataset} from '../utils/convert-to-scatter-gl-dataset';
+import UMAPTimeRange from '../components/UMAPTimeRange.vue';
+import UMAPFilters from '../components/UMAPFilters.vue';
 
 const {bands, intervalLabels} = await useConfig();
 
@@ -52,7 +53,6 @@ async function fetchData(band: string, intervalLabel: string) {
       band,
     });
 
-    // const request = await fetch(`${SERVER_HOSTNAME}/generated/umap/${intervalLabel}/${band}.json`);
     const request = await fetch(endpoint);
     const data = await request.json();
 
@@ -60,7 +60,7 @@ async function fetchData(band: string, intervalLabel: string) {
       return;
     }
 
-    UMAPDatasetStore.dataset = getScatterGlDataset(data);
+    UMAPDatasetStore.dataset = convertToScatterGlDataset(data);
   } catch {
     // options.value.series = [];
     UMAPDatasetStore.dataset = null;
@@ -83,7 +83,8 @@ async function handleUpdate(band: string, intervalLabel: string) {
 <template>
   <Title text="UMAP" />
   <UMAPScatterPlotGL />
-  <UMAPScatterPlotTimeRange />
+  <UMAPFilters />
+  <UMAPTimeRange />
   <SelectionTable2d :callback="handleUpdate" :xs="bands" :ys="intervalLabels" />
   <SelectionImage v-if="image" :source="image" />
 </template>
