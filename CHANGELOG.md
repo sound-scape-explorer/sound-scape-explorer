@@ -1,3 +1,13 @@
+# [3.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.5.0...v3.6.0) (2022-11-23)
+
+
+### Features
+
+* **Front/UMAP:** Add time range slider back + Add sliding window feature + Use `moment` library (WIP) ([5fa478b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5fa478b40c0f371c8c299589b898069af9b6d7e6))
+* **Front:** Add `ModalLoading` component ([e937bd4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e937bd460b9ac72fb92aa900754ab002335edd47))
+* **Front:** Make `Modal` component slottable ([745de54](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/745de54571f5b37ced7d22be402fc882e6aff553))
+* **Processing:** Add `app_version` in generated `ghost-config.json` ([4029dc0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4029dc0ff835eb7b71f812146d07a57f52a4bc32))
+
 # [3.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.4.0...v3.5.0) (2022-11-22)
 
 
