@@ -1,102 +1,201 @@
 <script lang="ts" setup>
-import {NP, NSelect} from 'naive-ui';
-import {computed, ref, watch} from 'vue';
-import {convertTimestampToDate} from '../utils/convert-timestamp-to-date';
-import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
+import {NButton, NButtonGroup, NInputNumber, NSlider, NSwitch} from 'naive-ui';
+import {computed, ComputedRef, ref} from 'vue';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
+import moment from 'moment';
+import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
+import {UMAP_WINDOW_TIME} from '../constants';
 
 /**
  * State
  */
 
-const min = ref<number>();
-const max = ref<number>();
+interface Timestamps {
+  [date: number]: number;
+}
 
-const timestamps = computed(() => {
-  const payload: number[] = [];
-
+const timestamps: ComputedRef<Timestamps> = computed(() => {
   if (!UMAPDatasetStore.dataset) {
-    return payload;
+    return [];
   }
 
-  UMAPDatasetStore.dataset.metadata.forEach(({timestamp}) => {
-    const timestampAsNumber = Number(timestamp);
-    if (payload.indexOf(timestampAsNumber) === -1) {
-      payload.push(timestampAsNumber);
-    }
-  });
+  const allTimestamps = UMAPDatasetStore.dataset.metadata.map((metadata) => Number(metadata.timestamp));
 
-  min.value = payload[0];
-  max.value = payload[payload.length - 1];
+  const payload: Timestamps = {};
+
+  allTimestamps.forEach((timestamp) => {
+    const doesExist = Object.keys(payload).includes(timestamp.toString());
+
+    if (doesExist) {
+      return;
+    }
+
+    payload[timestamp] = timestamp;
+  });
 
   return payload;
 });
 
-const options = computed(() => {
-  return timestamps.value.map((timestamp) => ({
-    label: convertTimestampToDate(Number(timestamp) * 1000),
-    value: timestamp,
-  }));
+const range = computed(() => {
+  const min = Object.values(timestamps.value)[0];
+  const max = Object.values(timestamps.value)[Object.keys(timestamps.value).length - 1];
+
+  UMAPTimeRangeStore.start = [min];
+  UMAPTimeRangeStore.range = [min, max];
+  return [min, max];
+});
+
+const duration = computed(() => {
+  if (range.value[0] === null || range.value[1] === null) {
+    return;
+  }
+
+  const start = moment(range.value[0] * 1000);
+  const end = moment(range.value[1] * 1000);
+  return end.from(start, true);
+});
+
+const durationValue = computed(() => {
+  if (!duration.value) {
+    return;
+  }
+
+  return Number(duration.value.split(' ')[0]);
+});
+
+const durationUnit = computed(() => {
+  if (!duration.value) {
+    return;
+  }
+
+  const durationString = duration.value.toString();
+
+  if (durationString.includes('seconds')) {
+    return 's';
+  }
+
+  if (durationString.includes('minutes')) {
+    return 'm';
+  }
+
+  if (durationString.includes('hours')) {
+    return 'h';
+  }
+
+  if (durationString.includes('days')) {
+    return 'd';
+  }
+
+  if (durationString.includes('months')) {
+    return 'M';
+  }
+
+  if (durationString.includes('years')) {
+    return 'y';
+  }
+});
+
+const marks = computed(() => {
+  if (!durationValue.value) {
+    return;
+  }
+
+  const payload: {[t: number]: string;} = {};
+
+  // populate with origin
+  const origin = moment(Object.values(timestamps.value)[0] * 1000);
+  payload[origin.unix()] = `${durationUnit.value}0`;
+
+  // populate with limits
+  for (let i = 0; i < durationValue.value; ++i) {
+    const next = origin.clone().add(i + 1, durationUnit.value);
+    payload[next.unix()] = `${durationUnit.value}${i + 1}`;
+  }
+
+  return payload;
+});
+
+const tooltip = computed(() => {
+  if (UMAPTimeRangeStore.isAllSelected) {
+    return `${moment(range.value[0] * 1000).toISOString()} — ${moment(range.value[1] * 1000).toISOString()}`;
+  }
+
+  if (typeof windowTime.value === 'undefined' || UMAPTimeRangeStore.start[0] === null) {
+    return;
+  }
+
+  return `${moment(UMAPTimeRangeStore.start[0] * 1000).toISOString()} — ${windowTime.value.toISOString()}`;
+});
+
+const windowDuration = ref(UMAP_WINDOW_TIME);
+
+const windowTime = computed(() => {
+  if (UMAPTimeRangeStore.start[0] === null) {
+    return;
+  }
+
+  const time = moment(UMAPTimeRangeStore.start[0] * 1000).clone().add(windowDuration.value, 's');
+  UMAPTimeRangeStore.end = time.unix();
+  return time;
 });
 
 /**
  * Handlers
  */
 
-function updateStore() {
-  UMAPTimeRangeStore.range = [min.value, max.value];
+function setWindowDuration(time: number) {
+  UMAPTimeRangeStore.isAllSelected = false;
+  windowDuration.value = time;
 }
-
-function handleMinUpdate(nextMin: number) {
-  min.value = nextMin;
-  updateStore();
-}
-
-function handleMaxUpdate(nextMax: number) {
-  max.value = nextMax;
-  updateStore();
-}
-
-/**
- * Lifecycles
- */
-
-watch(UMAPDatasetStore, () => {
-  updateStore();
-});
 </script>
 
 <template>
-  <n-p class="range-container">
+  <div>
     <div class="container">
-      <n-select
-          v-model:value="min"
-          :default-value="min"
-          :filterable="true"
-          :on-update:value="handleMinUpdate"
-          :options="options"
-          placeholder="Start date..."
-      />
-      <n-select
-          v-model:value="max"
-          :default-value="max"
-          :filterable="true"
-          :on-update:value="handleMaxUpdate"
-          :options="options"
-          placeholder="End date..."
-      />
+      <n-switch v-model:value="UMAPTimeRangeStore.isAllSelected">
+        <template #checked>
+          all
+        </template>
+      </n-switch>
+      <n-button-group size="small">
+        <n-button @click="setWindowDuration(600)">10min</n-button>
+        <n-button @click="setWindowDuration(3600)">1h</n-button>
+      </n-button-group>
+      <div class="input">
+        <n-input-number
+            v-model:value="windowDuration"
+            :disabled="UMAPTimeRangeStore.isAllSelected"
+            class="input"
+        />
+      </div>
+      {{ tooltip }}
     </div>
-  </n-p>
+
+    <n-slider
+        v-model:value="UMAPTimeRangeStore.start"
+        :disabled="UMAPTimeRangeStore.isAllSelected"
+        :marks="marks"
+        :max="range[1]"
+        :min="range[0]"
+        :step="1"
+        :tooltip="false"
+        range
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.range-container {
-  display: grid;
-  gap: 1rem;
-}
-
 .container {
   display: flex;
+  align-items: center;
+
+  transform: translate3d(calc(-1rem - 1px), 0, 0);
+
   gap: 1rem;
+  margin: 1rem;
+}
+
+.input {
+  width: 8rem;
 }
 </style>

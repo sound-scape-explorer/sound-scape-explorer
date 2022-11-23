@@ -8,6 +8,8 @@ export const TAG_PREFIX = '@';
 
 export const PREGENERATED_HUES_LENGTH = 1000;
 
+export const UMAP_WINDOW_TIME = 3600; // seconds
+
 interface APIRoutesDefaultParameters {
   interval: string;
   band: string;

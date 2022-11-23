@@ -105,17 +105,15 @@ function getColor(index: number): string {
     colorIndex = 0;
   }
 
-  const start = UMAPTimeRangeStore.range[0];
-  const end = UMAPTimeRangeStore.range[1];
+  if (UMAPTimeRangeStore.isAllSelected === false) {
+    const start = UMAPTimeRangeStore.start[0];
+    const end = UMAPTimeRangeStore.end;
 
-  let isWithinRange = true;
-
-  if (start && end && (timestamp < start || timestamp > end)) {
-    isWithinRange = false;
-  }
-
-  if (!isWithinRange) {
-    return getInactiveColorFromIndex(colorIndex);
+    if (start !== null && end !== null) {
+      if (!(timestamp >= start && timestamp <= end)) {
+        return getInactiveColorFromIndex(colorIndex);
+      }
+    }
   }
 
   if (UMAPFiltersStore.tags !== null) {
