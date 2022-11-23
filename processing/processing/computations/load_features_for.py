@@ -10,13 +10,18 @@ from processing.utils.iterate_audio_files import iterate_audio_files
 def load_features_for(cfg, band, r, s):
     range_times = []
     range_features = []
-    for fname, info, audio, pklz in iterate_audio_files(cfg, band,
+    for fname, info, audio, npz in iterate_audio_files(cfg, band,
                                                         ['@feature_base',
-                                                         '.pklz']):
+                                                         '.npz']):
         if info.site != s:
             continue
-        with gzip.open(pklz, "rb") as f:
-            data = pickle.loads(f.read())
+        if npz.exists():
+            data = np.load(npz)['x']
+        else: # backward compatibility, try pklz
+            with gzip.open(npz.with_suffix(".pklz"), "rb") as f:
+                data = pickle.loads(f.read())
+            # TODO: proper error message (saying that npz also not found)
+
         dur = dt.timedelta(seconds=0.92 * len(data))
         if r[0] > info.start + dur:
             continue
