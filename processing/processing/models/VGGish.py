@@ -27,6 +27,5 @@ class VGGish(VGG, metaclass=SingletonMeta):
         self.band_params = band_params
 
     def forward(self, x, fs):
-        x = waveform_to_examples(x, fs, self.band_params)
-        x = x.to(self.device)
+        x = waveform_to_examples(x.to(device=self.device), fs, self.band_params)
         return VGG.forward(self, x)

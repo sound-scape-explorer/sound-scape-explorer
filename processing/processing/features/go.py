@@ -22,7 +22,7 @@ def go():
 
     resultsFile = []
     i = 0
-    batch = int(sr * 100)
+    batch = int(sr * 60 * 5)
 
     if wav_data.shape[1] % (sr) != 0:
         wav_data = torch.cat((wav_data, torch.zeros(
