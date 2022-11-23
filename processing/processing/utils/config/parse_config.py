@@ -6,6 +6,7 @@ from pandas import pandas
 
 from processing.constants import AUDIO_SUFFIX, FEATURE_BASE, GENERATED_BASE, \
     OTHER_BASE, AUDIO_BASE
+from processing.utils.get_app_version import get_app_version
 
 all_sites = []
 
@@ -150,5 +151,7 @@ def parse_config(path='config.xlsx', sheet=0):
     ))
 
     path = str(pathlib.Path(path).absolute())
+
+    app_version = get_app_version()
 
     return namedtuple_dic(locals(), 'CFG')
