@@ -1,3 +1,11 @@
+# [3.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.6.0...v3.7.0) (2022-11-23)
+
+
+### Features
+
+* **Processing:** increase GPU parallelism (add as config?) ([dd7a40c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dd7a40cc1e8ed36f31460fca40a6c207afef6f83))
+* **Processing:** stay in torch space, and on same device ([90cbb8b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/90cbb8b32a437819447edcc21b2fbdf61726b3ff))
+
 # [3.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.5.0...v3.6.0) (2022-11-23)
 
 
