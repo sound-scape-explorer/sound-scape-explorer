@@ -4,7 +4,8 @@ import {NLayout, NNotificationProvider, NSpace} from 'naive-ui';
 import Content from './components/Content.vue';
 import Menu from './components/Menu.vue';
 import Notification from './components/Notification.vue';
-import Loader from './components/ConfigurationErrorModal.vue';
+import ModalConfigurationError from './components/ModalConfigurationError.vue';
+import ModalLoading from './components/ModalLoading.vue';
 //
 </script>
 
@@ -12,7 +13,8 @@ import Loader from './components/ConfigurationErrorModal.vue';
   <n-space size="large" vertical>
     <n-layout class="container" has-sider sider-placement="left">
       <Menu />
-      <Loader />
+      <ModalConfigurationError />
+      <ModalLoading />
 
       <n-layout>
         <n-notification-provider>
