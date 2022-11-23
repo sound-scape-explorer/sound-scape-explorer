@@ -4,6 +4,7 @@ import pickle
 
 import time
 import torch
+import numpy as np
 
 from processing.models.VGGish import VGGish
 from processing.utils.get_device import get_device
@@ -32,21 +33,22 @@ def go():
         samples = wav_data[:, i:i + batch]
 
         if device == 'cuda':
-            fts = model.forward(samples, fs=sr).cpu().numpy()
+            fts = model.forward(samples, fs=sr).cpu()
         else:
-            fts = model.forward(samples, fs=sr).numpy()
+            fts = model.forward(samples, fs=sr)
 
         i += batch
-        resultsFile.extend([list(f) for f in fts])
+        resultsFile.append(fts)
 
     log(f'({time.time() - t_start:.3f} sec)... model applied to all')
 
     pathlib.Path(output_path).absolute().parent.mkdir(parents=True,
                                                       exist_ok=True)
 
+    resultsFile = torch.concat(resultsFile).numpy()
+
     with PreventKeyboardInterrupt():
-        with gzip.open(output_path, "wb") as f:
-            pickle.dump(resultsFile, f)
+        np.savez_compressed(output_path.with_suffix('.npz'), x=resultsFile)
 
     # with open(output_path, "wb") as f:
     #    pickle.dump(resultsFile, f)
