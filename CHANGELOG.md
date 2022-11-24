@@ -1,3 +1,15 @@
+# [3.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.7.0...v3.8.0) (2022-11-24)
+
+
+### Bug Fixes
+
+* **Front/UMAP:** Feed correct ancestor with `position: relative` to ScatterGL layered canvas ([7af02a1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7af02a1591328551b493a3ef3d38d1801d07d617))
+
+
+### Features
+
+* **Front/UMAP:** Rewrite `getColor` (pointColorer for ScatterGL) + Use `chroma-js` color palette ([a021a3b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a021a3b9276d794d6acad1da232d7ee8cf4ade23))
+
 # [3.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.6.0...v3.7.0) (2022-11-23)
 
 
