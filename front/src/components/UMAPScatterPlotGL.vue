@@ -162,5 +162,6 @@ watch([UMAPTimeRangeStore, UMAPFiltersStore], () => {
 <style lang="scss" scoped>
 .container {
   height: 400px;
+  position: relative;
 }
 </style>
