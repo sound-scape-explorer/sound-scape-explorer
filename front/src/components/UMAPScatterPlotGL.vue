@@ -2,11 +2,10 @@
 import {onMounted, onUnmounted, ref, watch} from 'vue';
 import {ScatterGL} from 'scatter-gl';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
-import {replaceSaturationInHslaString} from '../utils/replace-saturation-in-hsla-string';
-import {PREGENERATED_HUES_LENGTH, SCATTER_PLOT_DEFAULT_COLOR} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
-import {mapColorRange} from '../utils/map-color-range';
+import chroma from 'chroma-js';
+import {mapRange} from '../utils/map-range';
 
 /**
  * State
@@ -16,9 +15,7 @@ const containerRef = ref<HTMLDivElement | null>(null);
 let scatterGL: ScatterGL | null = null;
 let isFirstRender = true;
 
-const hues = [...new Array(PREGENERATED_HUES_LENGTH)].map((_, i) => Math.floor((255 / 10) * i));
-const lightTransparentColorsByLabel = hues.map((hue) => `hsla(${hue}, 100%, 50%, 0.2)`);
-const heavyTransparentColorsByLabel = hues.map((hue) => `hsla(${hue}, 100%, 50%, 0.75)`);
+const colors = chroma.scale('Spectral').mode('hsl');
 
 /**
  * Handlers
@@ -34,6 +31,97 @@ function initializeScatterGL() {
       zoomSpeed: 1.33,
     },
   });
+}
+
+function getHSLString(values: number[], isLightOpacity = false) {
+  let opacityValue = 1; // previously 0.75
+
+  if (isLightOpacity) {
+    opacityValue = 0.25;
+  }
+
+  const hue = Math.floor(values[0]);
+  const saturation = Math.round(values[1] * 100);
+  const lightness = Math.round(values[2] * 100);
+
+  return `hsla(${hue}, ${saturation}%, ${lightness}%, ${opacityValue})`;
+}
+
+function getColor(index: number, selectedIndices: Set<number>, hoverIndex: number | null): string {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const dataset = UMAPDatasetStore.dataset!;
+  const {tags: storeTags, colorType} = UMAPFiltersStore;
+  const {start: rangeStartEncapsulated, end: rangeEnd, isAllSelected: rangeAll} = UMAPTimeRangeStore;
+  const rangeStart = rangeStartEncapsulated[0];
+
+  const tags = dataset.metadata[index]['tags'] as string;
+  const label = dataset.metadata[index]['label'] as string;
+  const timestamp = Number(dataset.metadata[index]['timestamp']);
+
+  const rangedIndex = mapRange(index, 0, dataset.metadata.length, 0, 1);
+
+  const labelIndex = dataset.metadata[index]['labelIndex'] as number;
+  const rangedLabelIndex = mapRange(labelIndex, 0, dataset.metadata.length, 0, 1);
+
+  const hoverColor = 'red';
+  const filteredColor = 'hsla(0, 0%, 0%, 0.25)';
+  const indexColor = colors(rangedIndex).hsl(); // pointIndex
+  const labelIndexColor = colors(rangedLabelIndex).hsl(); // labelIndex
+
+  let shouldBeFilteredOut = false;
+
+  // Filter
+  if (storeTags !== null) {
+    // filter by storeTags
+    if (storeTags.startsWith('@') && tags.includes(storeTags)) {
+      // filter by storeTags
+      shouldBeFilteredOut = true;
+    } else if (!storeTags.startsWith('@') && label.includes(tags)) {
+      // filter by sites
+      shouldBeFilteredOut = true;
+    }
+  }
+
+  // Time Range
+  if (!rangeAll && rangeStart !== null && rangeEnd !== null) {
+    if (!(timestamp >= rangeStart && timestamp <= rangeEnd)) {
+      shouldBeFilteredOut = true;
+    }
+  }
+
+  if (shouldBeFilteredOut) {
+    return filteredColor;
+  }
+
+  let color;
+
+  if (colorType === 'labelIndex') {
+    color = labelIndexColor;
+  } else if (colorType === 'pointIndex') {
+    color = indexColor;
+  } else if (colorType === 'hour') {
+    color = indexColor; // todo
+  } else if (colorType === 'isDay') {
+    color = indexColor; // todo
+  } else {
+    color = indexColor;
+  }
+
+  if (hoverIndex === index) {
+    return hoverColor;
+  }
+
+  if (selectedIndices.size === 0) {
+    return getHSLString(color);
+  }
+
+  const isSelected = selectedIndices.has(index);
+
+  if (isSelected) {
+    return getHSLString(color);
+  }
+
+  return getHSLString(color, true);
 }
 
 function render() {
@@ -68,73 +156,6 @@ function addListeners() {
 
 function removeListeners() {
   window.removeEventListener('resize', handleResize);
-}
-
-function getInactiveColorFromIndex(index: number) {
-  const color = lightTransparentColorsByLabel[index];
-  return replaceSaturationInHslaString(color, 0);
-}
-
-function getActiveColorFromIndex(index: number) {
-  return heavyTransparentColorsByLabel[index];
-}
-
-function getColor(index: number): string {
-  if (UMAPDatasetStore.dataset === null) {
-    return SCATTER_PLOT_DEFAULT_COLOR;
-  }
-
-  const labelIndex = Number(UMAPDatasetStore.dataset.metadata[index]['labelIndex']);
-  const label = UMAPDatasetStore.dataset.metadata[index]['label'] as string;
-  const tags = UMAPDatasetStore.dataset.metadata[index]['tags'] as string;
-  const timestamp = Number(UMAPDatasetStore.dataset.metadata[index]['timestamp']);
-
-  let colorIndex;
-
-  if (UMAPFiltersStore.colorType === 'labelIndex') {
-    colorIndex = labelIndex;
-  } else if (UMAPFiltersStore.colorType === 'pointIndex') {
-    colorIndex = mapColorRange(index, UMAPDatasetStore.dataset.metadata.length);
-  } else if (UMAPFiltersStore.colorType === 'hour') {
-    colorIndex = 0;
-  } else if (UMAPFiltersStore.colorType === 'isDay') {
-    colorIndex = 5;
-  }
-
-  if (typeof colorIndex === 'undefined') {
-    colorIndex = 0;
-  }
-
-  if (UMAPTimeRangeStore.isAllSelected === false) {
-    const start = UMAPTimeRangeStore.start[0];
-    const end = UMAPTimeRangeStore.end;
-
-    if (start !== null && end !== null) {
-      if (!(timestamp >= start && timestamp <= end)) {
-        return getInactiveColorFromIndex(colorIndex);
-      }
-    }
-  }
-
-  if (UMAPFiltersStore.tags !== null) {
-    // filter by tags
-    if (
-      UMAPFiltersStore.tags.startsWith('@')
-        && tags.indexOf(UMAPFiltersStore.tags) === -1
-    ) {
-      return getInactiveColorFromIndex(colorIndex);
-    }
-
-    // filter by sites
-    if (
-      !UMAPFiltersStore.tags.startsWith('@')
-        && UMAPFiltersStore.tags !== label
-    ) {
-      return getInactiveColorFromIndex(colorIndex);
-    }
-  }
-
-  return getActiveColorFromIndex(colorIndex);
 }
 
 /**
