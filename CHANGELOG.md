@@ -1,3 +1,11 @@
+# [3.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.8.0...v3.9.0) (2022-11-25)
+
+
+### Features
+
+* **Processing:** allow loading from both pickle pklz and numpy npz ([47bcdc1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/47bcdc18f130d0404cbaedf838eb4fde2af27c71))
+* **Processing:** save features as npz (much faster and more portable) ([57fce44](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/57fce44a96e2e5a6e74c0402ad2b1c702cc46800))
+
 # [3.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.7.0...v3.8.0) (2022-11-24)
 
 
