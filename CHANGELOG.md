@@ -1,3 +1,10 @@
+# [3.10.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.9.0...v3.10.0) (2022-11-28)
+
+
+### Features
+
+* **Front/UMAP:** Add very simple query filter + Various improvements ([90e5d90](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/90e5d90b934a5fbde8eb2b11e3000f9c7bb56e0c))
+
 # [3.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.8.0...v3.9.0) (2022-11-25)
 
 
