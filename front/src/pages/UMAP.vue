@@ -11,6 +11,7 @@ import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {convertToScatterGlDataset} from '../utils/convert-to-scatter-gl-dataset';
 import UMAPTimeRange from '../components/UMAPTimeRange.vue';
 import UMAPFilters from '../components/UMAPFilters.vue';
+import UMAPQuery from '../components/UMAPQuery.vue';
 
 const {bands, intervalLabels} = await useConfig();
 
@@ -83,8 +84,18 @@ async function handleUpdate(band: string, intervalLabel: string) {
 <template>
   <Title text="UMAP" />
   <UMAPScatterPlotGL />
-  <UMAPFilters />
-  <UMAPTimeRange />
+  <div class="tools-container">
+    <UMAPFilters />
+    <UMAPQuery />
+    <UMAPTimeRange />
+  </div>
   <SelectionTable2d :callback="handleUpdate" :xs="bands" :ys="intervalLabels" />
   <SelectionImage v-if="image" :source="image" />
 </template>
+
+<style lang="scss" scoped>
+.tools-container {
+  display: grid;
+  gap: 1rem;
+}
+</style>

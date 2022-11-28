@@ -192,7 +192,7 @@ function setWindowDuration(time: number) {
   transform: translate3d(calc(-1rem - 1px), 0, 0);
 
   gap: 1rem;
-  margin: 1rem;
+  margin: 0 0 1rem 1rem;
 }
 
 .input {

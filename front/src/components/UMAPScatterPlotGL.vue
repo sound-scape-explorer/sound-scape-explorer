@@ -6,6 +6,7 @@ import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import chroma from 'chroma-js';
 import {mapRange} from '../utils/map-range';
+import {UMAPQueryStore} from '../store/UMAP-query.store';
 
 /**
  * State
@@ -52,6 +53,7 @@ function getColor(index: number, selectedIndices: Set<number>, hoverIndex: numbe
   const dataset = UMAPDatasetStore.dataset!;
   const {tags: storeTags, colorType} = UMAPFiltersStore;
   const {start: rangeStartEncapsulated, end: rangeEnd, isAllSelected: rangeAll} = UMAPTimeRangeStore;
+  const {matches} = UMAPQueryStore;
   const rangeStart = rangeStartEncapsulated[0];
 
   const tags = dataset.metadata[index]['tags'] as string;
@@ -72,7 +74,6 @@ function getColor(index: number, selectedIndices: Set<number>, hoverIndex: numbe
 
   // Filter
   if (storeTags !== null) {
-    // filter by storeTags
     if (storeTags.startsWith('@') && tags.includes(storeTags)) {
       // filter by storeTags
       shouldBeFilteredOut = true;
@@ -85,6 +86,13 @@ function getColor(index: number, selectedIndices: Set<number>, hoverIndex: numbe
   // Time Range
   if (!rangeAll && rangeStart !== null && rangeEnd !== null) {
     if (!(timestamp >= rangeStart && timestamp <= rangeEnd)) {
+      shouldBeFilteredOut = true;
+    }
+  }
+
+  // Query
+  if (matches.length !== 0) {
+    if (!matches.includes(label)) {
       shouldBeFilteredOut = true;
     }
   }
@@ -171,7 +179,7 @@ onUnmounted(() => {
   removeListeners();
 });
 
-watch([UMAPTimeRangeStore, UMAPFiltersStore], () => {
+watch([UMAPTimeRangeStore, UMAPFiltersStore, UMAPQueryStore], () => {
   render();
 });
 </script>

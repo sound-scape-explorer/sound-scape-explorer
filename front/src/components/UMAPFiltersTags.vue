@@ -85,6 +85,14 @@ watch(UMAPDatasetStore, () => {
       v-model:value="UMAPFiltersStore.tags"
       :clearable="true"
       :options="naiveOptions"
+      class="filter"
+      filterable
       placeholder="Filter by..."
   />
 </template>
+
+<style lang="scss" scoped>
+.filter {
+  user-select: none;
+}
+</style>
