@@ -46,6 +46,7 @@ function filterByString(string: string): string[] {
 }
 
 function processQuery() {
+  UMAPQueryStore.query = input.value;
   const queries = input.value.split(' ');
   const results: string[][] = [];
   UMAPQueryStore.matches = [];

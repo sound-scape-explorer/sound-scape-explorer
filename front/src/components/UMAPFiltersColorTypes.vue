@@ -27,6 +27,6 @@ const naiveOptions = computed(() => {
       v-model:value="UMAPFiltersStore.colorType"
       :options="naiveOptions"
       default-value="labelIndex"
-      placeholder="Color by..."
-  ></n-select>
+      placeholder="Color type..."
+  />
 </template>

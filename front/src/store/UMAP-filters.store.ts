@@ -1,11 +1,13 @@
 import {reactive} from 'vue';
 
 export interface UMAPFiltersStoreInterface {
-  tags: string | null;
+  tags: string[];
   colorType: 'labelIndex' | 'pointIndex' | 'hour' | 'isDay';
+  colorScale: string;
 }
 
 export const UMAPFiltersStore = reactive<UMAPFiltersStoreInterface>({
-  tags: null,
+  tags: [],
   colorType: 'labelIndex',
+  colorScale: 'Dark2',
 });
