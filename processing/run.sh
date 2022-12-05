@@ -133,6 +133,10 @@ function run_config {
   sse show config --json > generated/ghost-config.json
 }
 
+function run_config_populate_columns {
+  sse config populate-columns
+}
+
 function run_all {
   run_extract_all
   run_computes
@@ -140,16 +144,24 @@ function run_all {
 }
 
 function run_all_but_volume {
+  run_config_populate_columns
+
   run_extract_all
+
   run_compute_covering
   run_compute_umap
+
   run_config
 }
 
 function run_all_but_covering {
+  run_config_populate_columns
+
   run_extract_all
+
   run_compute_volume
   run_compute_umap
+
   run_config
 }
 
@@ -172,13 +184,17 @@ then
   run_all
 else
   [ "$2" == "extract" ] && run_extract_all
+
   [ "$2" == "compute" ] && run_computes
   [ "$2" == "compute-volume" ] && run_compute_volume
   [ "$2" == "compute-covering" ] && run_compute_covering
   [ "$2" == "compute-umap" ] && run_compute_umap
-  [ "$2" == "config" ] && run_config
+
   [ "$2" == "all-but-volume" ] && run_all_but_volume
   [ "$2" == "all-but-covering" ] && run_all_but_covering
+
+  [ "$2" == "config" ] && run_config
+  [ "$2" == "config-populate-columns" ] && run_config_populate_columns
 fi
 
 print_end

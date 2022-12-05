@@ -3,6 +3,7 @@
   "scripts": {
     "install": "./install.sh && yarn process",
     "dev": "concurrently './run-back.sh' './run-front.sh'",
+    "config:populate-columns": "processing/run.sh sample config-populate-columns",
     "process": "yarn process:all",
     "process:all": "processing/run.sh sample all",
     "process:all-but-covering": "processing/run.sh sample all-but-covering",
