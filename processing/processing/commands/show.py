@@ -20,14 +20,19 @@ def show():
 @show.command()
 @click.option('--json/--dict', default=False)
 def config(json):
-    cfg = get_config()
+    my_config = get_config()
+    dict = my_config._asdict()
+    files = dict['files']
+
+    for key, value in files.items():
+        files[key] = [value[0], value[1], value[2], [*value[3:]]]
 
     if not json:
-        pprint.pprint(cfg._asdict())
+        pprint.pprint(dict)
         return
 
-    print(dumps(cfg._asdict(), default=lambda
-        o: o.isoformat()))  #  might need a more complex method if we push the idea of parsing the config even further
+    # TODO: might need a more complex method if we push the idea of parsing the config even further
+    print(dumps(dict, default=lambda o: o.isoformat()))
 
 
 @show.command()

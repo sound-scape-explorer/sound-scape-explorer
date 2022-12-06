@@ -10,10 +10,10 @@ llvmlite==0.39.1
 matplotlib==3.6.2
 numba==0.56.4
 numpy==1.23.5
-nvidia-cublas-cu11==11.10.3.66
-nvidia-cuda-nvrtc-cu11==11.7.99
-nvidia-cuda-runtime-cu11==11.7.99
-nvidia-cudnn-cu11==8.5.0.96
+nvidia-cublas-cu11==11.11.3.6
+nvidia-cuda-nvrtc-cu11==11.8.89
+nvidia-cuda-runtime-cu11==11.8.89
+nvidia-cudnn-cu11==8.7.0.84
 openpyxl==3.0.10
 packaging==21.3
 pandas==1.5.2

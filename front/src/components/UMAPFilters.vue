@@ -8,9 +8,9 @@ import UMAPFiltersColorScales from './UMAPFiltersColorScales.vue';
 
 <template>
   <div class="container">
-    <UMAPFiltersTags/>
-    <UMAPFiltersColorTypes/>
-    <UMAPFiltersColorScales/>
+    <UMAPFiltersTags />
+    <UMAPFiltersColorTypes />
+    <UMAPFiltersColorScales />
   </div>
 </template>
 

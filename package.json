@@ -15,6 +15,7 @@
     "process:compute-umap": "processing/run.sh sample compute-umap",
     "process:config": "processing/run.sh sample config",
     "process:clean": "processing/clean.sh sample",
+    "process:populate-config": "yarn config:populate-columns",
     "start": "yarn dev"
   },
   "devDependencies": {

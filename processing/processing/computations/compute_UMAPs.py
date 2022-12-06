@@ -35,8 +35,13 @@ def compute_UMAPs(cfg, plot, show):
                         dataset_labels.append(f'{r_name}/{s}')
 
             # print(np.shape(dataset_times), np.shape(dataset_features))
+            umap_random = cfg.variables['umap_random']
+
+            if type(umap_random) is str:
+                umap_random = int(umap_random)
+
             X = UMAP(
-                random_state=int(cfg.variables['umap_random'])).fit_transform(
+                random_state=umap_random).fit_transform(
                 dataset_features)
             out_path = pathlib.Path(cfg.variables['generated_base']).joinpath(
                 'umap', umap_name, band + '.json')

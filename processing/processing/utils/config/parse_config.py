@@ -4,9 +4,11 @@ from datetime import datetime
 
 from pandas import pandas
 
-from processing.constants import AUDIO_SUFFIX, FEATURE_BASE, GENERATED_BASE, \
-    OTHER_BASE, AUDIO_BASE
+from processing.constants import EXCEL_COLUMNS
 from processing.utils.get_app_version import get_app_version
+from processing.utils.get_config_columns import get_config_columns
+from processing.utils.populate_empty_config_variables import \
+    populate_empty_config_variables
 
 all_sites = []
 
@@ -100,35 +102,27 @@ def parse_config(path='config.xlsx', sheet=0):
     _renaming = {i: i.split(' (')[0] for i in _xtable.columns if ' (' in i}
     _xtable.rename(_renaming, inplace=True, axis='columns', errors="raise")
 
+    variables = dict(digest_xtable_columns(path, _xtable, 'variables'))
+
+    variables = populate_empty_config_variables(variables)
+
+    [unique_columns, _all_columns, _columns_length] = get_config_columns(
+        variables['audio_base'])
+
+    _files_selectors = ['site', 'start:D', 'tags:L']
+
+    for _i in range(_columns_length):
+        _files_selectors.append(EXCEL_COLUMNS[_i])
+
     files = dict(digest_xtable_columns(
         path,
         _xtable,
         'files',
-        'site start:D tags:L'.split(' '),
+        _files_selectors,
         'FILE'
     ))
 
     list_all_sites(files)
-
-    variables = dict(digest_xtable_columns(path, _xtable, 'variables'))
-
-    if variables['audio_base'] == 'nan':
-        variables['audio_base'] = AUDIO_BASE
-
-    if variables['audio_suffix'] == 'nan':
-        variables['audio_suffix'] = AUDIO_SUFFIX
-
-    if variables['feature_base'] == 'nan':
-        variables['feature_base'] = FEATURE_BASE
-
-    if variables['generated_base'] == 'nan':
-        variables['generated_base'] = GENERATED_BASE
-
-    if variables['other_base'] == 'nan':
-        variables['other_base'] = OTHER_BASE
-
-    if variables['umap_random'] == 'nan':
-        variables['umap_random'] = None
 
     bands = dict(digest_xtable_columns(path, _xtable, 'bands'))
 
