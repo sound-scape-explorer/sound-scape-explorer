@@ -16,6 +16,11 @@ export function useUMAPColumns() {
     const columnsKeys = Object.keys(columns);
 
     for (let i = 0; i < columnsSelectionKeys.length; ++i) {
+      // item is already not visible
+      if (!isVisible) {
+        break;
+      }
+
       const columnSelection = columnsSelection[columnsSelectionKeys[i]];
       const column = columns[columnsKeys[i]];
 
