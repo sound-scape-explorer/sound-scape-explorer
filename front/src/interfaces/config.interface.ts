@@ -11,7 +11,7 @@ type StringMapName = string;
 export interface ConfigInterface {
   xlsx: string;
   sheet: number;
-  unique_columns: string[][];
+  columns: string[][];
   variables: {
     audio_base: string;
     audio_base_cluster: string;

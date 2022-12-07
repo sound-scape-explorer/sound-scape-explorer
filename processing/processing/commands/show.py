@@ -6,8 +6,9 @@ import click
 import numpy
 
 from processing.cli import cli
-from processing.utils.config.get_config import get_config
+from processing.utils.format_files_columns import format_files_columns
 from processing.utils.get_audio_duration import get_audio_duration
+from processing.utils.get_config import get_config
 from processing.utils.iterate_audio_files_with_bands import \
     iterate_audio_files_with_bands
 
@@ -24,8 +25,7 @@ def config(json):
     dict = my_config._asdict()
     files = dict['files']
 
-    for key, value in files.items():
-        files[key] = [value[0], value[1], value[2], [*value[3:]]]
+    format_files_columns(files)
 
     if not json:
         pprint.pprint(dict)
@@ -62,11 +62,15 @@ def audio_span_plot(duration, no_print, aggregate):
             input_path)
         start = info.start
         end = info.start + datetime.timedelta(seconds=dur)
+
         if not no_print:
             print(f'... {fname} from {start} {dur:.3f}')
+
         into = events
+
         if per_site:
             into = events[info.site]
+
         into.append([start, 0])
         into.append([start, +1])
         into.append([end, 0])
@@ -76,10 +80,13 @@ def audio_span_plot(duration, no_print, aggregate):
 
     if per_site:
         base = 0
+
         for s in sites:
             data = numpy.array(sorted(events[s], key=lambda p: p[0]))
+
             if data.size == 0:
                 continue
+
             csum = numpy.cumsum(data[:, 1])
             plt.plot(data[:, 0], base + csum)
             base += numpy.max(csum) + 0.05

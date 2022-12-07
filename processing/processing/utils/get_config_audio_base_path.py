@@ -1,6 +1,6 @@
 import os
 
-from processing.utils.config.get_config import get_config
+from processing.utils.get_config import get_config
 
 
 def get_config_audio_base_path():

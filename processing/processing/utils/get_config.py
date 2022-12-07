@@ -1,4 +1,4 @@
-from processing.utils.config.parse_config import parse_config
+from processing.utils.parse_config import parse_config
 
 _cached_config = None
 

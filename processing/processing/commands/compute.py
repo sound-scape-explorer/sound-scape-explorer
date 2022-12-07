@@ -4,7 +4,7 @@ from processing.cli import cli
 from processing.computations.compute_UMAPs import compute_UMAPs
 from processing.computations.compute_coverings import compute_coverings
 from processing.computations.compute_volumes import compute_volumes
-from processing.utils.config.get_config import get_config
+from processing.utils.get_config import get_config
 
 
 @cli.group()

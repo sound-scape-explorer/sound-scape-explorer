@@ -26,7 +26,7 @@ export async function useConfig(): Promise<ConfigStoreInterface> {
     configStore.intervalLabels = Object.keys(data.umaps);
     configStore.ranges = Object.keys(data.ranges);
     configStore.sites = parseSites(data);
-    configStore.columns = data.unique_columns;
+    configStore.columns = data.columns;
 
     return configStore;
   } catch {
