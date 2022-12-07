@@ -1,3 +1,25 @@
+# [3.11.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.10.0...v3.11.0) (2022-12-07)
+
+
+### Bug Fixes
+
+* **Front/UMAP:** Make column filtering absolute (filter could overwrite itself iterating over columns) ([cdeaa77](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cdeaa77932b35693d3ab01487da0514c160f5ccb))
+* **Processing:** Rollback nvidia dependencies ([f4a4e5a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f4a4e5a68e132396164cec4c8921ed104a14eba5))
+
+
+### Features
+
+* Add `files_columns` to output config from backend + Add UI + Various improvements ([711127b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/711127ba464b99ba177b846ccde4ee503c95b2f9))
+* **Front/UMAP:** Add filtering with columns + Various improvements and fixes ([a0b4f76](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a0b4f76058959670190b0390dc1e476c2c926f0b))
+* **Front/UMAP:** Work on all filters + Various improvements ([dcbc124](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dcbc12417bb9cba79b0a80a71dd7c7face391ecf))
+* **Processing:** Add `sse config populate-columns` command (only compatible with Federica's campaign for now) + Upgrade and freeze dependencies + Misc ([096b6dd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/096b6dd7043f9efec0748f3453a8d4401009515c))
+* **Processing:** Add columns to UMAP computations output + Various improvements ([af817b7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/af817b767c2cbeb7955d00393be276b2defc2509))
+
+
+### Performance Improvements
+
+* **Front/UMAP:** Move UMAP Component logic to composables ([efbd6df](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/efbd6df8ba19b764be2d2afe40d6aa133210cdb4))
+
 # [3.10.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.9.0...v3.10.0) (2022-11-28)
 
 
