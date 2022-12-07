@@ -10,6 +10,7 @@ import UMAPColumns from '../components/UMAPColumns.vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPPage} from '../composables/useUMAPPage';
 import UMAPExport from '../components/UMAPExport.vue';
+import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
 
 const {bands, intervalLabels} = await useConfig();
 const {image, handleUpdate} = useUMAPPage();
@@ -24,6 +25,7 @@ const {image, handleUpdate} = useUMAPPage();
       <UMAPQuery />
       <UMAPExport />
     </div>
+    <UMAPQueryComplex />
     <UMAPTimeRange />
     <UMAPColumns />
   </div>

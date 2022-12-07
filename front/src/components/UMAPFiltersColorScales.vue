@@ -2,6 +2,9 @@
 import {computed, ref} from 'vue';
 import {NSelect} from 'naive-ui';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
+
+const {isDisabled} = useUMAPStatus();
 
 const options = ref<string[]>([
   'Accent',
@@ -19,6 +22,7 @@ const naiveOptions = computed(() => {
 <template>
   <n-select
       v-model:value="UMAPFiltersStore.colorScale"
+      :disabled="isDisabled"
       :options="naiveOptions"
       default-value="Dark2"
       placeholder="Color scale..."

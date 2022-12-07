@@ -2,6 +2,7 @@
 import {defineProps, ref, watch} from 'vue';
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
 import {UMAPColumnsStore} from '../store/UMAP-columns.store';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 
 /**
  * Props
@@ -20,6 +21,7 @@ const {title, items} = defineProps<Props>();
 
 const selection = ref(null);
 const {columns} = UMAPColumnsStore;
+const {isDisabled} = useUMAPStatus();
 
 /**
  * Handlers
@@ -31,6 +33,7 @@ function updateSelection() {
   }
 
   if (typeof columns[title] === 'undefined') {
+    // @ts-expect-error TS2740
     columns[title] = {};
   }
 
@@ -47,7 +50,7 @@ watch(selection, () => {
 </script>
 
 <template>
-  <n-checkbox-group v-model:value="selection" class="checkboxes">
+  <n-checkbox-group v-model:value="selection" :disabled="isDisabled" class="checkboxes">
     <n-checkbox v-for="item in items" :value="item">
       {{ item }}
     </n-checkbox>
