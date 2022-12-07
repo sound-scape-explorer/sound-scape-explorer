@@ -12,4 +12,8 @@ export interface ApiUMAPInterface {
    * Timestamps in seconds
    */
   t: number[];
+  /**
+   * Columns
+   */
+  c: string[][];
 }

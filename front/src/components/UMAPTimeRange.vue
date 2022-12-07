@@ -2,9 +2,13 @@
 import {NButton, NButtonGroup, NInputNumber, NSlider, NSwitch} from 'naive-ui';
 import {computed, ComputedRef, ref} from 'vue';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
-import moment from 'moment';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAP_WINDOW_TIME} from '../constants';
+import dayjs from 'dayjs';
+import {configStore} from '../store/config.store';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 /**
  * State
@@ -42,16 +46,18 @@ const range = computed(() => {
 
   UMAPTimeRangeStore.start = [min];
   UMAPTimeRangeStore.range = [min, max];
+
   return [min, max];
 });
 
 const duration = computed(() => {
-  if (range.value[0] === null || range.value[1] === null) {
+  if (!range.value[0] || !range.value[1]) {
     return;
   }
 
-  const start = moment(range.value[0] * 1000);
-  const end = moment(range.value[1] * 1000);
+  const start = dayjs(range.value[0] * 1000);
+  const end = dayjs(range.value[1] * 1000);
+
   return end.from(start, true);
 });
 
@@ -103,7 +109,7 @@ const marks = computed(() => {
   const payload: {[t: number]: string;} = {};
 
   // populate with origin
-  const origin = moment(Object.values(timestamps.value)[0] * 1000);
+  const origin = dayjs(Object.values(timestamps.value)[0] * 1000);
   payload[origin.unix()] = `${durationUnit.value}0`;
 
   // populate with limits
@@ -116,15 +122,25 @@ const marks = computed(() => {
 });
 
 const tooltip = computed(() => {
-  if (UMAPTimeRangeStore.isAllSelected) {
-    return `${moment(range.value[0] * 1000).toISOString()} — ${moment(range.value[1] * 1000).toISOString()}`;
-  }
-
-  if (typeof windowTime.value === 'undefined' || UMAPTimeRangeStore.start[0] === null) {
+  if (!range.value[0] || !range.value[1]) {
     return;
   }
 
-  return `${moment(UMAPTimeRangeStore.start[0] * 1000).toISOString()} — ${windowTime.value.toISOString()}`;
+  if (UMAPTimeRangeStore.isAllSelected) {
+    return `${dayjs(range.value[0] * 1000).toISOString()} — ${dayjs(range.value[1] * 1000).toISOString()}`;
+  }
+
+  if (typeof windowTime.value === 'undefined' || !UMAPTimeRangeStore.start[0]) {
+    return;
+  }
+
+  return `${dayjs(UMAPTimeRangeStore.start[0] * 1000).toISOString()} — ${windowTime.value?.toISOString()}`;
+});
+
+const locale = computed(() => {
+  const {config} = configStore;
+
+  return config?.variables.display_locale || '';
 });
 
 const windowDuration = ref(UMAP_WINDOW_TIME);
@@ -134,7 +150,7 @@ const windowTime = computed(() => {
     return;
   }
 
-  const time = moment(UMAPTimeRangeStore.start[0] * 1000).clone().add(windowDuration.value, 's');
+  const time = dayjs(UMAPTimeRangeStore.start[0] * 1000).clone().add(windowDuration.value, 's');
   UMAPTimeRangeStore.end = time.unix();
   return time;
 });
@@ -152,7 +168,7 @@ function setWindowDuration(time: number) {
 <template>
   <div>
     <div class="container">
-      <n-switch v-model:value="UMAPTimeRangeStore.isAllSelected">
+      <n-switch v-model:value="UMAPTimeRangeStore.isAllSelected" class="button">
         <template #checked>
           all
         </template>
@@ -168,7 +184,14 @@ function setWindowDuration(time: number) {
             class="input"
         />
       </div>
-      {{ tooltip }}
+      <div class="tooltips">
+        <span>
+          {{ tooltip }}
+        </span>
+        <span class="locale">
+          {{ locale }}
+        </span>
+      </div>
     </div>
 
     <n-slider
@@ -188,11 +211,22 @@ function setWindowDuration(time: number) {
 .container {
   display: flex;
   align-items: center;
-
-  transform: translate3d(calc(-1rem - 1px), 0, 0);
-
   gap: 1rem;
-  margin: 0 0 1rem 1rem;
+}
+
+.button {
+  width: 5rem;
+}
+
+.tooltips {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.locale {
+  font-style: italic;
 }
 
 .input {

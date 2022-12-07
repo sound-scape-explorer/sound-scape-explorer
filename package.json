@@ -3,6 +3,7 @@
   "scripts": {
     "install": "./install.sh && yarn process",
     "dev": "concurrently './run-back.sh' './run-front.sh'",
+    "config:populate-columns": "processing/run.sh sample config-populate-columns",
     "process": "yarn process:all",
     "process:all": "processing/run.sh sample all",
     "process:all-but-covering": "processing/run.sh sample all-but-covering",
@@ -14,6 +15,7 @@
     "process:compute-umap": "processing/run.sh sample compute-umap",
     "process:config": "processing/run.sh sample config",
     "process:clean": "processing/clean.sh sample",
+    "process:populate-config": "yarn config:populate-columns",
     "start": "yarn dev"
   },
   "devDependencies": {

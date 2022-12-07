@@ -55,6 +55,10 @@ function addLabels(metadata: Dataset['metadata']) {
   });
 }
 
+function updateTags(nextTags: string[]) {
+  UMAPFiltersStore.tags = nextTags;
+}
+
 /**
  * Lifecycles
  */
@@ -84,9 +88,11 @@ watch(UMAPDatasetStore, () => {
   <n-select
       v-model:value="UMAPFiltersStore.tags"
       :clearable="true"
+      :on-update:value="updateTags"
       :options="naiveOptions"
       class="filter"
       filterable
+      multiple
       placeholder="Filter by..."
   />
 </template>

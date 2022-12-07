@@ -13,7 +13,7 @@ const {ranges, sites} = await useConfig();
   <n-p class="first-row">
     <VolumesOptionsRange :ranges="ranges" />
     <VolumesOptionsSites :sites="sites" />
-    <VolumesOptionsVariable />
+    <VolumesOptionsVariable class="variable" />
   </n-p>
 
   <n-p class="second-row">
@@ -37,5 +37,9 @@ const {ranges, sites} = await useConfig();
 
   gap: 0.5rem;
   height: 2rem;
+}
+
+.variable {
+  width: 20rem;
 }
 </style>

@@ -2,6 +2,7 @@ type BandIntegration = number;
 type BandName = string;
 type ConfigDate = string;
 type FileTags = string[];
+type FileColumns = string[];
 type SiteColor = string;
 type SiteDetails = string;
 type SiteName = string;
@@ -10,6 +11,7 @@ type StringMapName = string;
 export interface ConfigInterface {
   xlsx: string;
   sheet: number;
+  columns: string[][];
   variables: {
     audio_base: string;
     audio_base_cluster: string;
@@ -25,6 +27,7 @@ export interface ConfigInterface {
     display_locale: string;
     integration_seconds: string;
     nearest_radiuses: string;
+    umap_random: string;
   };
   bands: {
     [band: BandName]: string;
@@ -51,6 +54,7 @@ export interface ConfigInterface {
       SiteName,
       ConfigDate,
       FileTags,
+      FileColumns,
     ];
   };
 }

@@ -1,5 +1,6 @@
 from processing.cli import cli
-from processing.commands import hello, test, help, extract, show, compute
+from processing.commands import hello, test, help, extract, show, compute, \
+    config
 from processing.utils.print_splash import print_splash
 
 if __name__ == 'processing':
@@ -10,3 +11,4 @@ if __name__ == 'processing':
     cli.add_command(extract)
     cli.add_command(show)
     cli.add_command(compute)
+    cli.add_command(config)

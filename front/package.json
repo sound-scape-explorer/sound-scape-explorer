@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "chroma-js": "^2.4.2",
+    "dayjs": "^1.11.6",
     "highcharts": "^10.2.1",
     "highcharts-vue": "^1.4.0",
-    "moment": "^2.29.4",
     "scatter-gl": "^0.0.13",
     "simple-statistics": "^7.7.6",
     "vue": "^3.2.39",

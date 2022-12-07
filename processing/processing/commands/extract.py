@@ -7,7 +7,7 @@ import click
 import numpy
 
 from processing.cli import cli
-from processing.utils.config.get_config import get_config
+from processing.utils.get_config import get_config
 from processing.utils.iterate_audio_files_with_bands import \
     iterate_audio_files_with_bands
 
