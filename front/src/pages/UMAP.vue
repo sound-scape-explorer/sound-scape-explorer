@@ -9,6 +9,7 @@ import UMAPQuery from '../components/UMAPQuery.vue';
 import UMAPColumns from '../components/UMAPColumns.vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPPage} from '../composables/useUMAPPage';
+import UMAPExport from '../components/UMAPExport.vue';
 
 const {bands, intervalLabels} = await useConfig();
 const {image, handleUpdate} = useUMAPPage();
@@ -19,7 +20,10 @@ const {image, handleUpdate} = useUMAPPage();
   <UMAPScatterPlotGL />
   <div class="tools-container">
     <UMAPFilters />
-    <UMAPQuery />
+    <div class="query-export">
+      <UMAPQuery />
+      <UMAPExport />
+    </div>
     <UMAPTimeRange />
     <UMAPColumns />
   </div>
@@ -30,6 +34,12 @@ const {image, handleUpdate} = useUMAPPage();
 <style lang="scss" scoped>
 .tools-container {
   display: grid;
+  gap: 1rem;
+}
+
+.query-export {
+  display: grid;
+  grid-template-columns: 1fr 8rem;
   gap: 1rem;
 }
 </style>

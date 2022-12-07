@@ -17,7 +17,7 @@ import UMAPFiltersColorScales from './UMAPFiltersColorScales.vue';
 <style lang="scss" scoped>
 .container {
   display: grid;
-  grid-template-columns: 1fr repeat(2, 10rem);
+  grid-template-columns: 1fr 10rem 8rem;
   gap: 1rem;
 }
 </style>
