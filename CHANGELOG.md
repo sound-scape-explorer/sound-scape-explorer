@@ -1,3 +1,10 @@
+# [3.12.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.11.0...v3.12.0) (2022-12-07)
+
+
+### Features
+
+* **Front/UMAP:** Add export to JSON ([0bab898](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0bab89856afc80d9ce2a512ba8989084740118f1))
+
 # [3.11.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.10.0...v3.11.0) (2022-12-07)
 
 
