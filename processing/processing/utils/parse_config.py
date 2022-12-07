@@ -4,6 +4,7 @@ from pandas import pandas
 
 from processing.utils.digest_xtable_columns import digest_xtable_columns
 from processing.utils.get_app_version import get_app_version
+from processing.utils.get_columns_from_config import get_columns_from_config
 from processing.utils.make_files_from_config import make_files_from_config
 from processing.utils.namedtuple_dic import namedtuple_dic
 from processing.utils.populate_empty_config_variables import \
@@ -24,6 +25,8 @@ def parse_config(path='config.xlsx', sheet=0):
                                               variables['audio_base'])
 
     bands = dict(digest_xtable_columns(path, _xtable, 'bands'))
+
+    columns_names = get_columns_from_config()
 
     umaps = dict(digest_xtable_columns(
         path,

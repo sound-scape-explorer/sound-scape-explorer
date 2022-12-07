@@ -6,7 +6,7 @@ from processing.utils.get_columns import get_columns
 from processing.utils.get_directories_and_files import get_directories_and_files
 
 
-def get_config_columns(audio_base_path):
+def get_columns_from_disk(audio_base_path):
     [_directories, files] = get_directories_and_files(audio_base_path)
 
     unique_columns = []

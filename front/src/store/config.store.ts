@@ -10,8 +10,8 @@ export interface ConfigStoreInterface {
   intervalLabels?: string[];
   ranges?: string[];
   sites?: string[];
-
   columns?: string[][];
+  columnsNames?: string[];
 }
 
 export const configStore = reactive<ConfigStoreInterface>({

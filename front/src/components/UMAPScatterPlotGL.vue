@@ -5,12 +5,12 @@ const {containerRef} = useUMAPComponent();
 </script>
 
 <template>
-  <div ref="containerRef" class="container"/>
+  <div ref="containerRef" class="container" />
 </template>
 
 <style lang="scss" scoped>
 .container {
-  height: 400px;
+  height: 600px;
   position: relative;
 }
 </style>

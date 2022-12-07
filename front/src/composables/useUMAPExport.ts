@@ -12,7 +12,7 @@ export function useUMAPExport() {
   const {isVisibleByColumns} = useUMAPColumns();
   const loadingRef = ref(false);
 
-  function parse(dataset: UMAPDatasetStoreInterface['dataset']) {
+  function parse(dataset: UMAPDatasetStoreInterface['dataset'], name: string) {
     loadingRef.value = true;
 
     if (!dataset) {
@@ -37,15 +37,15 @@ export function useUMAPExport() {
       payload.push({point, data});
     }
 
-    download(payload);
+    download(payload, name);
   }
 
-  function download(obj: unknown) {
+  function download(obj: unknown, name = 'SSE_UMAP') {
     const data = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj, undefined, 2));
 
     const anchor = document.createElement('a');
     anchor.href = data;
-    anchor.download = 'scene.json';
+    anchor.download = `${name}.json`;
     anchor.click();
     anchor.remove();
 

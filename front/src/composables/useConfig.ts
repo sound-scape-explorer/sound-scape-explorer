@@ -27,6 +27,7 @@ export async function useConfig(): Promise<ConfigStoreInterface> {
     configStore.ranges = Object.keys(data.ranges);
     configStore.sites = parseSites(data);
     configStore.columns = data.columns;
+    configStore.columnsNames = data.columns_names;
 
     return configStore;
   } catch {
