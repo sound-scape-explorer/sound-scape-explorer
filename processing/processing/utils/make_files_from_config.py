@@ -10,7 +10,7 @@ def make_files_from_config(path, table, audio_base):
 
     files_selectors = ['site', 'start:D', 'tags:L']
 
-    for i in range(columns_length):
+    for i in range(columns_length + 1):
         files_selectors.append(f'{EXCEL_COLUMNS[i]}:COLUMN')
 
     files = dict(digest_xtable_columns(

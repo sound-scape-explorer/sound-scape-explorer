@@ -17,8 +17,6 @@ function render(type: NotificationType, title: string, description: string): voi
 }
 
 watch(notificationStore, () => {
-  console.log(notificationStore.notifications.length);
-
   notificationStore.notifications.forEach((n, i) => {
     render(n.type, n.title, n.description);
     notificationStore.notifications.splice(i, 1);

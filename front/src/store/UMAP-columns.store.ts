@@ -2,9 +2,7 @@ import {reactive} from 'vue';
 
 export interface UMAPColumnsStoreInterface {
   columns: {
-    [column: string]: {
-      [item: string]: string;
-    };
+    [column: string]: (string | number)[];
   };
 }
 

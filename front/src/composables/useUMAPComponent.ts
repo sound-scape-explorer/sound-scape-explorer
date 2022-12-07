@@ -9,11 +9,18 @@ import {mapRange} from '../utils/map-range';
 import {isHourDuringDay} from '../utils/is-hour-during-day';
 import {useColors} from './useColors';
 import {useUMAPFilters} from './useUMAPFilters';
+import {useUMAPColumns} from './useUMAPColumns';
+import {UMAPColumnsStore} from '../store/UMAP-columns.store';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
-  const {isVisibleByQuery, isVisibleByTags, isVisibleByTimeRange} = useUMAPFilters();
+  const {
+    isVisibleByQuery,
+    isVisibleByTags,
+    isVisibleByTimeRange,
+  } = useUMAPFilters();
   const {timestampsInDay, updateTimestampsInDay} = useUMAPTimestampsInDay();
+  const {isVisibleByColumns} = useUMAPColumns();
 
   let isFirstRender = true;
   const containerRef = ref<HTMLDivElement | null>(null);
@@ -34,7 +41,7 @@ export function useUMAPComponent() {
   async function render() {
     if (
       scatterGL === null
-            || UMAPDatasetStore.dataset === null
+      || UMAPDatasetStore.dataset === null
     ) {
       return;
     }
@@ -86,7 +93,7 @@ export function useUMAPComponent() {
     const labelIndexColor = colors.value(rangedLabelIndex); // labelIndex
     const hourColor = colors.value(rangedHourIndex); // hour
 
-    const shouldBeFilteredOut = !isVisibleByTags(index) || !isVisibleByTimeRange(index) || !isVisibleByQuery(index);
+    const shouldBeFilteredOut = !isVisibleByTags(index) || !isVisibleByTimeRange(index) || !isVisibleByQuery(index) || !isVisibleByColumns(index);
 
     if (shouldBeFilteredOut) {
       return filteredColor;
@@ -104,7 +111,6 @@ export function useUMAPComponent() {
       const isDay = isHourDuringDay(hourIndex);
       color = isDay ? dayColor : nightColor;
     }
-    6;
 
     if (hoverIndex === index) {
       return hoverColor;
@@ -132,7 +138,7 @@ export function useUMAPComponent() {
     removeListeners();
   });
 
-  watch([UMAPTimeRangeStore, UMAPFiltersStore, UMAPQueryStore], async () => {
+  watch([UMAPTimeRangeStore, UMAPFiltersStore, UMAPQueryStore, UMAPColumnsStore], async () => {
     await render();
   });
 

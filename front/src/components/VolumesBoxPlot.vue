@@ -81,7 +81,6 @@ async function updateData() {
 
     const request = await fetch(endpoint);
     fetchedData.value = await request.json();
-    // console.log(fetchedData.value?.data['first4min site1'][volumesStore.activeVariable]);
   } catch {
     options.value.series = [];
     fetchedData.value = undefined;

@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {onMounted, ref, watch} from 'vue';
+import {onMounted, ref} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import UMAPColumnsCheckboxes from './UMAPColumnsCheckboxes.vue';
 import {UMAPColumnsStore} from '../store/UMAP-columns.store';
@@ -12,9 +12,14 @@ interface Data {
 
 const {columns} = await useConfig();
 const data = ref<Data>({});
+const {columns: columnsSelection} = UMAPColumnsStore;
 
 onMounted(() => {
-  columns?.forEach((column, i) => {
+  if (!columns) {
+    return;
+  }
+
+  columns.forEach((column, i) => {
     if (typeof data.value[i] === 'undefined') {
       data.value[i] = {};
     }
@@ -23,14 +28,12 @@ onMounted(() => {
       data.value[i][item] = false;
     });
   });
-});
 
-console.log(data.value);
+  const columnsKeys = Object.keys(columns);
 
-const {columns: store} = UMAPColumnsStore;
-
-watch(store, () => {
-  console.log(store);
+  for (let i = 0; i < columnsKeys.length; ++i) {
+    columnsSelection[columnsKeys[i]] = [];
+  }
 });
 </script>
 
