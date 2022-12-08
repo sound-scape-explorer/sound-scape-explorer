@@ -3,6 +3,9 @@ import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {getArraysIntersection} from '../utils/get-arrays-intersection';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPQueryStore} from '../store/UMAP-query.store';
+import type {
+  UMAPQueryComplexStoreInterface,
+} from '../store/UMAP-query-complex.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {UMAPColumnsStore} from '../store/UMAP-columns.store';
 import type {ConfigStoreInterface} from '../store/config.store';
@@ -116,30 +119,20 @@ export function useUMAPFilters() {
     return isVisible;
   }
 
-  function isVisibleByQueryComplex(index: number, columnsNames: ConfigStoreInterface['columnsNames']): boolean {
-    // @SPECIES=CERBRA+CYACAE @SEASON=SPRING
-    // @TIME=POST
-    // @SPECIES=CerBra @TIME=PRE
-    // (@SPECIES=CERBRA @QUAND=PRE)+(@SPECIES=CERBRA @QUAND=POST)
-
-    const {queryComplex} = UMAPQueryComplexStore;
-
-    const queryKeys = Object.keys(queryComplex);
-
-    if (queryKeys.length === 0) {
-      return true;
-    }
-
-    const {dataset} = UMAPDatasetStore;
-    const columns = dataset?.metadata[index]['columns'] as string;
-
+  function digestQueryComplexItem(
+    queryComplex: UMAPQueryComplexStoreInterface['queryComplex'],
+    keys: string[],
+    columns: string,
+    columnsNames: ConfigStoreInterface['columnsNames'],
+  ) {
     let result = true;
 
-    for (let i = 0; i < queryKeys.length; ++i) {
-      const key = queryKeys[i];
-      const keyIndex = columnsNames?.indexOf(key);
+    for (let i = 0; i < keys.length; ++i) {
+      const key = keys[i];
 
-      if (typeof keyIndex === 'undefined' || keyIndex === -1) {
+      const keyIndex = columnsNames?.indexOf(key) || -1;
+
+      if (keyIndex === -1) {
         continue;
       }
 
@@ -155,6 +148,7 @@ export function useUMAPFilters() {
         result = column.includes(query);
       } else {
         // array
+        // @ts-expect-error TS2349
         result = query.reduce((acc, q) => {
           if (acc) {
             return acc;
@@ -163,6 +157,42 @@ export function useUMAPFilters() {
           return column.includes(q);
         }, false);
       }
+    }
+
+    return result;
+  }
+
+  function isVisibleByQueryComplex(index: number, columnsNames: ConfigStoreInterface['columnsNames']): boolean {
+    // @SPECIES=CERBRA+CYACAE @SEASON=SPRING
+    // @TIME=POST
+    // @SPECIES=CerBra @TIME=PRE
+    // (@SPECIES=CerBra @TIME=PRE)+(@SPECIES=LopCri @TIME=POST)
+
+    const {queryComplex} = UMAPQueryComplexStore;
+
+    const queryKeys = Object.keys(queryComplex);
+
+    if (queryKeys.length === 0) {
+      return true;
+    }
+
+    const {dataset} = UMAPDatasetStore;
+    const columns = dataset?.metadata[index]['columns'] as string;
+
+    let result: boolean;
+
+    if (queryKeys[0].includes('GROUP_')) {
+      result = false;
+
+      queryKeys.forEach((groupName) => {
+        const singleQueryComplex = queryComplex[groupName];
+        const singleQueryComplexKeys = Object.keys(singleQueryComplex);
+
+        // @ts-expect-error TS2345
+        result = digestQueryComplexItem(singleQueryComplex, singleQueryComplexKeys, columns, columnsNames);
+      });
+    } else {
+      result = digestQueryComplexItem(queryComplex, queryKeys, columns, columnsNames);
     }
 
     return result;

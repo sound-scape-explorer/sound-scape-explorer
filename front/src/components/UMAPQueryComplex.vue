@@ -40,9 +40,14 @@ function digestQuery() {
 
   if (groupMatches.length > 0) {
     // groups detected
-    groupMatches.forEach((group) => {
+    groupMatches.forEach((group, i) => {
+      payload[`GROUP_${i}`] = {};
+
       const groupMatches = [...group.matchAll(itemRegex)];
-      groupMatches.forEach((item) => digestQueryItem(item, payload));
+
+      groupMatches.forEach((item) => {
+        digestQueryItem(item, payload[`GROUP_${i}`]);
+      });
     });
   } else {
     // no group detected
