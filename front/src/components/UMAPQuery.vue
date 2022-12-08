@@ -83,7 +83,7 @@ watch(input, () => {
 </script>
 
 <template>
-  <n-input v-model:value="input" :disabled="isDisabled" placeholder="QUERY" type="text">
+  <n-input v-model:value="input" :disabled="isDisabled" placeholder="Query..." type="text">
     <template #suffix>
       <n-icon class="icon">
         <color-wand-outline />

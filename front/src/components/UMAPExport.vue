@@ -7,7 +7,8 @@ import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPColumnsStore} from '../store/UMAP-columns.store';
 import {UMAPQueryStore} from '../store/UMAP-query.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
-import {UMAPComplexQueryStore} from '../store/UMAP-complex-query.store';
+import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
+import {useConfig} from '../composables/useConfig';
 
 const {loadingRef, parse} = useUMAPExport();
 const {isDisabled} = useUMAPStatus();
@@ -31,10 +32,10 @@ function handleClick() {
    * Complex Query
    */
 
-  const {complexQuery} = UMAPComplexQueryStore;
+  const {queryComplex} = UMAPQueryComplexStore;
 
-  if (complexQuery) {
-    name += `_CQ_${complexQuery}`;
+  if (queryComplex) {
+    name += `_CQ_${Object.values(queryComplex).flat()}`;
   }
 
   /**
@@ -70,7 +71,12 @@ function handleClick() {
   });
 
   console.log(name);
-  parse(dataset, name);
+
+  const configPromise = useConfig();
+
+  configPromise.then(({columnsNames}) => {
+    parse(dataset, name, columnsNames);
+  });
 }
 </script>
 

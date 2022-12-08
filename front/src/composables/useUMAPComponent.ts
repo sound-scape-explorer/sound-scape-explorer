@@ -9,18 +9,17 @@ import {mapRange} from '../utils/map-range';
 import {isHourDuringDay} from '../utils/is-hour-during-day';
 import {useColors} from './useColors';
 import {useUMAPFilters} from './useUMAPFilters';
-import {useUMAPColumns} from './useUMAPColumns';
 import {UMAPColumnsStore} from '../store/UMAP-columns.store';
+import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
+import {useConfig} from './useConfig';
+import type {ConfigStoreInterface} from '../store/config.store';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
   const {
-    isVisibleByQuery,
-    isVisibleByTags,
-    isVisibleByTimeRange,
+    shouldBeFiltered,
   } = useUMAPFilters();
   const {timestampsInDay, updateTimestampsInDay} = useUMAPTimestampsInDay();
-  const {isVisibleByColumns} = useUMAPColumns();
 
   let isFirstRender = true;
   const containerRef = ref<HTMLDivElement | null>(null);
@@ -53,7 +52,8 @@ export function useUMAPComponent() {
 
     if (isFirstRender) {
       scatterGL.render(UMAPDatasetStore.dataset);
-      scatterGL.setPointColorer(getColor);
+      const {columnsNames} = await useConfig();
+      scatterGL.setPointColorer((i, s, h) => getColor(i, s, h, columnsNames));
       isFirstRender = false;
     }
   }
@@ -74,7 +74,7 @@ export function useUMAPComponent() {
     window.removeEventListener('resize', handleResize);
   }
 
-  function getColor(index: number, selectedIndices: Set<number>, hoverIndex: number | null): string {
+  function getColor(index: number, selectedIndices: Set<number>, hoverIndex: number | null, columnsNames: ConfigStoreInterface['columnsNames']): string {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const dataset = UMAPDatasetStore.dataset!;
     const {colorType} = UMAPFiltersStore;
@@ -93,7 +93,7 @@ export function useUMAPComponent() {
     const labelIndexColor = colors.value(rangedLabelIndex); // labelIndex
     const hourColor = colors.value(rangedHourIndex); // hour
 
-    const shouldBeFilteredOut = !isVisibleByTags(index) || !isVisibleByTimeRange(index) || !isVisibleByQuery(index) || !isVisibleByColumns(index);
+    const shouldBeFilteredOut = shouldBeFiltered(index, columnsNames);
 
     if (shouldBeFilteredOut) {
       return filteredColor;
@@ -138,7 +138,7 @@ export function useUMAPComponent() {
     removeListeners();
   });
 
-  watch([UMAPTimeRangeStore, UMAPFiltersStore, UMAPQueryStore, UMAPColumnsStore], async () => {
+  watch([UMAPTimeRangeStore, UMAPFiltersStore, UMAPQueryStore, UMAPColumnsStore, UMAPQueryComplexStore], async () => {
     await render();
   });
 

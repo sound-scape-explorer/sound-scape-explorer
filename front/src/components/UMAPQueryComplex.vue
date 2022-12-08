@@ -4,12 +4,59 @@ import {NIcon, NInput} from 'naive-ui';
 import {FlaskOutline} from '@vicons/ionicons5';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {useTimeout} from '../composables/useTimeout';
+import type {UMAPQueryComplexStoreInterface} from '../store/UMAP-query-complex.store';
+import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 
 const input = ref<string>('');
 const {isDisabled} = useUMAPStatus();
 
+function digestQueryItem(item: RegExpMatchArray, payload: UMAPQueryComplexStoreInterface['queryComplex']): void {
+  const columnName = item[1];
+  let value: string | string[] = item[2];
+
+  if (value.includes('+')) {
+    value = value.split('+');
+  }
+
+  if (typeof payload[columnName] === 'string' && typeof value === 'string') {
+    payload[columnName] = [payload[columnName] as string, value];
+    return;
+  }
+
+  payload[columnName] = value;
+}
+
+function digestQuery() {
+  const payload: UMAPQueryComplexStoreInterface['queryComplex'] = {};
+
+  if (input.value === '') {
+    return payload;
+  }
+
+  const groupRegex = /\(([^+.]*)\)/g; // ()+()
+  const groupMatches = [...input.value.matchAll(groupRegex)].map((element) => element[1]);
+
+  const itemRegex = /@(\w*)=([\w+]*)/g; // @COL=VALUE1+VALUE2
+
+  if (groupMatches.length > 0) {
+    // groups detected
+    groupMatches.forEach((group) => {
+      const groupMatches = [...group.matchAll(itemRegex)];
+      groupMatches.forEach((item) => digestQueryItem(item, payload));
+    });
+  } else {
+    // no group detected
+    const itemMatches = [...input.value.matchAll(itemRegex)];
+    itemMatches.forEach((item) => digestQueryItem(item, payload));
+  }
+
+  console.log(payload);
+
+  return payload;
+}
+
 function processQuery() {
-  console.log(input.value);
+  UMAPQueryComplexStore.queryComplex = digestQuery();
 }
 
 watch(input, () => {
@@ -18,7 +65,7 @@ watch(input, () => {
 </script>
 
 <template>
-  <n-input v-model:value="input" :disabled="isDisabled" placeholder="COMPLEX QUERY" type="text">
+  <n-input v-model:value="input" :disabled="isDisabled" placeholder="Query Complex..." type="text">
     <template #suffix>
       <n-icon class="icon">
         <flask-outline />
