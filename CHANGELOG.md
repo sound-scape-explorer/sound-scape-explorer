@@ -1,3 +1,12 @@
+# [3.13.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.12.0...v3.13.0) (2022-12-08)
+
+
+### Features
+
+* Add dynamic r/w of `files_columns` from configuration file + Expose those columns + Misc ([cc90fc0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cc90fc0a66592783a57d3a8d9b89726ac00219ab))
+* **Front/UMAP:** Add logic to complex query filter + Improve filters + Misc ([a362c44](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a362c449e4e30eedaa18ea157d65d79546cdb4ef))
+* **Front/UMAP:** Lock filters if no dataset loaded + Add UI for complex query ([c52d772](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c52d7723448d9e9b944281cc519feca34e0b0bba))
+
 # [3.12.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.11.0...v3.12.0) (2022-12-07)
 
 
