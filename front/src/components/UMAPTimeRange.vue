@@ -7,12 +7,15 @@ import {UMAP_WINDOW_TIME} from '../constants';
 import dayjs from 'dayjs';
 import {configStore} from '../store/config.store';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 
 dayjs.extend(relativeTime);
 
 /**
  * State
  */
+
+const {isDisabled} = useUMAPStatus();
 
 interface Timestamps {
   [date: number]: number;
@@ -168,14 +171,14 @@ function setWindowDuration(time: number) {
 <template>
   <div>
     <div class="container">
-      <n-switch v-model:value="UMAPTimeRangeStore.isAllSelected" class="button">
+      <n-switch v-model:value="UMAPTimeRangeStore.isAllSelected" :disabled="isDisabled" class="button">
         <template #checked>
           all
         </template>
       </n-switch>
       <n-button-group size="small">
-        <n-button @click="setWindowDuration(600)">10min</n-button>
-        <n-button @click="setWindowDuration(3600)">1h</n-button>
+        <n-button :disabled="isDisabled" @click="setWindowDuration(600)">10min</n-button>
+        <n-button :disabled="isDisabled" @click="setWindowDuration(3600)">1h</n-button>
       </n-button-group>
       <div class="input">
         <n-input-number

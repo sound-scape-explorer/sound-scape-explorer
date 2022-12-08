@@ -7,12 +7,14 @@ import {TAG_PREFIX} from '../constants';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import {Dataset} from 'scatter-gl';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 
 /**
  * State
  */
 
 const options = ref<string[]>([]);
+const {isDisabled} = useUMAPStatus();
 
 const naiveOptions = computed(() => {
   return options.value.map((option) => ({
@@ -88,6 +90,7 @@ watch(UMAPDatasetStore, () => {
   <n-select
       v-model:value="UMAPFiltersStore.tags"
       :clearable="true"
+      :disabled="isDisabled"
       :on-update:value="updateTags"
       :options="naiveOptions"
       class="filter"

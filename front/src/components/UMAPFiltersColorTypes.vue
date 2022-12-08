@@ -2,10 +2,13 @@
 import {computed, ref} from 'vue';
 import {NSelect} from 'naive-ui';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 
 /**
  * State
  */
+
+const {isDisabled} = useUMAPStatus();
 
 const options = ref<string[]>([
   'labelIndex',
@@ -25,6 +28,7 @@ const naiveOptions = computed(() => {
 <template>
   <n-select
       v-model:value="UMAPFiltersStore.colorType"
+      :disabled="isDisabled"
       :options="naiveOptions"
       default-value="labelIndex"
       placeholder="Color type..."

@@ -12,6 +12,7 @@ export interface ConfigInterface {
   xlsx: string;
   sheet: number;
   columns: string[][];
+  columns_names: string[];
   variables: {
     audio_base: string;
     audio_base_cluster: string;

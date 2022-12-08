@@ -1,18 +1,16 @@
 import type {UMAPDatasetStoreInterface} from '../store/UMAP-dataset.store';
 import {useUMAPFilters} from './useUMAPFilters';
-import {useUMAPColumns} from './useUMAPColumns';
 import {ref} from 'vue';
+import {downloadObjectAsJson} from '../utils/download-object-as-json';
+import type {ConfigStoreInterface} from '../store/config.store';
 
 export function useUMAPExport() {
   const {
-    isVisibleByQuery,
-    isVisibleByTags,
-    isVisibleByTimeRange,
+    shouldBeFiltered,
   } = useUMAPFilters();
-  const {isVisibleByColumns} = useUMAPColumns();
   const loadingRef = ref(false);
 
-  function parse(dataset: UMAPDatasetStoreInterface['dataset']) {
+  function parse(dataset: UMAPDatasetStoreInterface['dataset'], name: string, columnsNames: ConfigStoreInterface['columnsNames']) {
     loadingRef.value = true;
 
     if (!dataset) {
@@ -25,7 +23,7 @@ export function useUMAPExport() {
     const {points, metadata} = dataset;
 
     for (let i = 0; i < points.length; ++i) {
-      const shouldBeFilteredOut = !isVisibleByTags(i) || !isVisibleByTimeRange(i) || !isVisibleByQuery(i) || !isVisibleByColumns(i);
+      const shouldBeFilteredOut = shouldBeFiltered(i, columnsNames);
 
       if (shouldBeFilteredOut) {
         continue;
@@ -37,19 +35,11 @@ export function useUMAPExport() {
       payload.push({point, data});
     }
 
-    download(payload);
-  }
-
-  function download(obj: unknown) {
-    const data = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj, undefined, 2));
-
-    const anchor = document.createElement('a');
-    anchor.href = data;
-    anchor.download = 'scene.json';
-    anchor.click();
-    anchor.remove();
-
-    loadingRef.value = false;
+    downloadObjectAsJson({
+      obj: payload,
+      fileName: name,
+      callback: () => loadingRef.value = false,
+    });
   }
 
   return {

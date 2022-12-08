@@ -133,6 +133,10 @@ function run_config {
   sse show config --json > generated/ghost-config.json
 }
 
+function run_config_test {
+  sse show config --json
+}
+
 function run_config_populate_columns {
   sse config populate-columns
 }
@@ -194,6 +198,7 @@ else
   [ "$2" == "all-but-covering" ] && run_all_but_covering
 
   [ "$2" == "config" ] && run_config
+  [ "$2" == "config-test" ] && run_config_test
   [ "$2" == "config-populate-columns" ] && run_config_populate_columns
 fi
 

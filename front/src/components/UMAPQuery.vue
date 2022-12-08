@@ -6,8 +6,10 @@ import {useTimeout} from '../composables/useTimeout';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPQueryStore} from '../store/UMAP-query.store';
 import {getArraysIntersection} from '../utils/get-arrays-intersection';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 
 const input = ref<string>('');
+const {isDisabled} = useUMAPStatus();
 
 function splitLabelByPath(label: string) {
   return label.split('/');
@@ -81,7 +83,7 @@ watch(input, () => {
 </script>
 
 <template>
-  <n-input v-model:value="input" placeholder="QUERY" type="text">
+  <n-input v-model:value="input" :disabled="isDisabled" placeholder="Query..." type="text">
     <template #suffix>
       <n-icon class="icon">
         <color-wand-outline />
