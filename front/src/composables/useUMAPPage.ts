@@ -1,20 +1,18 @@
-import {ref} from 'vue';
 import {API_ROUTES} from '../constants';
 import {selectionStore} from '../store/selection.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {
   convertToScatterGlDataset,
 } from '../utils/convert-to-scatter-gl-dataset';
+import {selectionImageStore} from '../store/selection-image.store';
 
 export function useUMAPPage() {
-  const image = ref<string | null>();
-
   function resetImage() {
-    image.value = null;
+    selectionImageStore.image = null;
   }
 
   function setImage(band: string, intervalLabel: string) {
-    image.value = API_ROUTES.umap({
+    selectionImageStore.image = API_ROUTES.umap({
       interval: intervalLabel,
       band,
       isImage: true,
@@ -52,20 +50,27 @@ export function useUMAPPage() {
     }
   }
 
-  async function handleUpdate(band: string, intervalLabel: string) {
-    if (!band || !intervalLabel) {
+  interface HandleUpdateProps {
+    band: string;
+    interval: string;
+    callback: () => void;
+  }
+
+  async function handleUpdate({band, interval, callback}: HandleUpdateProps) {
+    if (!band || !interval) {
       resetSelection();
       resetImage();
       return;
     }
 
-    setSelection(band, intervalLabel);
-    setImage(band, intervalLabel);
-    await fetchData(band, intervalLabel);
+    setSelection(band, interval);
+    setImage(band, interval);
+    await fetchData(band, interval);
+
+    callback();
   }
 
   return {
-    image,
     handleUpdate,
   };
 }

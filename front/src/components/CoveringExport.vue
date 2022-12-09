@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
-import {NButton, NIcon} from 'naive-ui';
 import {DownloadOutline} from '@vicons/ionicons5';
 import {useCoveringExportComponent} from '../composables/useCoveringExportComponent';
+import Button from './Button.vue';
 
 const {loadingRef} = useCoveringExportComponent();
 
@@ -11,14 +11,9 @@ async function handleClick() {
 </script>
 
 <template>
-  <n-button :loading="loadingRef" @click="handleClick">
-    <template #icon>
-      <n-icon>
-        <download-outline />
-      </n-icon>
-    </template>
-    .JSON
-  </n-button>
+  <Button :disabled="true" :handle-click="handleClick" :loading-ref="loadingRef" text=".JSON">
+    <download-outline />
+  </Button>
 </template>
 
 <style lang="scss" scoped>

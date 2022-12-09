@@ -1,9 +1,25 @@
 <script lang="ts" setup>
-//
+import {computed, defineProps} from 'vue';
+
+interface Props {
+  isWait?: boolean;
+}
+
+const {isWait} = defineProps<Props>();
+
+const containerClasses = computed<string>(() => {
+  let payload = 'container';
+
+  if (isWait) {
+    payload += ' wait';
+  }
+
+  return payload;
+});
 </script>
 
 <template>
-  <div class="container">
+  <div :class="containerClasses">
     <slot />
   </div>
 </template>
@@ -28,7 +44,11 @@
 
   user-select: none;
 
-  animation: FadeIn 1s ease-in-out;
+  animation: FadeIn 0.6s ease-in-out;
+}
+
+.wait {
+  cursor: wait;
 }
 
 @keyframes FadeIn {

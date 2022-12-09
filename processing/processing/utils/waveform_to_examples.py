@@ -3,6 +3,7 @@ import torchaudio
 
 from processing.utils.frame import frame
 
+
 def waveform_to_examples(data, sample_rate, band_params):
     data = data.reshape(-1)
     # Compute log mel spectrogram features.
@@ -12,6 +13,7 @@ def waveform_to_examples(data, sample_rate, band_params):
     n_fft = 4096 // 2 * (ntot // 64)  # (4096*3 * 64) //ntot
     mel_extractor = torchaudio.transforms.MelSpectrogram(
         sample_rate=sample_rate, n_fft=n_fft,
+        # TODO: Make sure we work with 1sec lengths
         hop_length=int(1842 / 192000 * sample_rate), n_mels=ntot,
         win_length=n_fft, power=1)
     mel_extractor = mel_extractor.to(data.device)

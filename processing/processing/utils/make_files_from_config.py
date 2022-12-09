@@ -12,6 +12,8 @@ def make_files_from_config(path, table, audio_base):
 
     columns = get_columns_from_config()
 
+    # TODO: Dynamic fields broke the first write of the file
+
     for i in range(columns_length + 1):
         files_selectors.append(f'{columns[i]}:COLUMN')
 

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import {NButton, NIcon} from 'naive-ui';
 import {DownloadOutline} from '@vicons/ionicons5';
 import {useUMAPExport} from '../composables/useUMAPExport';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
@@ -9,6 +8,7 @@ import {UMAPQueryStore} from '../store/UMAP-query.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {useConfig} from '../composables/useConfig';
+import Button from './Button.vue';
 
 const {loadingRef, parse} = useUMAPExport();
 const {isDisabled} = useUMAPStatus();
@@ -81,14 +81,9 @@ function handleClick() {
 </script>
 
 <template>
-  <n-button :disabled="isDisabled" :loading="loadingRef" @click="handleClick">
-    <template #icon>
-      <n-icon>
-        <download-outline />
-      </n-icon>
-    </template>
-    .JSON
-  </n-button>
+  <Button :disabled="isDisabled" :handle-click="handleClick" :loading-ref="loadingRef" text=".JSON">
+    <download-outline />
+  </Button>
 </template>
 
 <style lang="scss" scoped>

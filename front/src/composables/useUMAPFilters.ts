@@ -188,6 +188,8 @@ export function useUMAPFilters() {
         const singleQueryComplex = queryComplex[groupName];
         const singleQueryComplexKeys = Object.keys(singleQueryComplex);
 
+        // TODO: Finish this
+
         // @ts-expect-error TS2345
         result = digestQueryComplexItem(singleQueryComplex, singleQueryComplexKeys, columns, columnsNames);
       });

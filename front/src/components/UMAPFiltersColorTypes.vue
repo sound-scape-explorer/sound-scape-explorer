@@ -3,6 +3,7 @@ import {computed, ref} from 'vue';
 import {NSelect} from 'naive-ui';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
+import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 
 /**
  * State
@@ -17,12 +18,7 @@ const options = ref<string[]>([
   'isDay',
 ]);
 
-const naiveOptions = computed(() => {
-  return options.value.map((option) => ({
-    label: option,
-    value: option,
-  }));
-});
+const naiveOptions = computed(() => convertToNaiveSelectOptions(options.value));
 </script>
 
 <template>
