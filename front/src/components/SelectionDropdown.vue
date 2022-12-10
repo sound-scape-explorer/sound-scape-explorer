@@ -1,7 +1,8 @@
 <script lang="ts" setup="">
-import {computed, defineProps, ref, watch} from 'vue';
+import {computed, defineProps, watch} from 'vue';
 import {NSelect} from 'naive-ui';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
+import {selectionStore} from 'src/store/selection.store';
 
 interface Props {
   bands: string[];
@@ -12,31 +13,31 @@ interface Props {
 
 const {bands, intervals, handleUpdate} = defineProps<Props>();
 
-const bandsValue = ref();
-const intervalsValue = ref();
-
 const bandsOptions = computed(() => convertToNaiveSelectOptions(bands));
 const intervalsOptions = computed(() => convertToNaiveSelectOptions(intervals));
 
 function processSelection() {
-  if (typeof bandsValue.value === 'undefined' || typeof intervalsValue.value === 'undefined') {
+  if (
+    selectionStore.band === null
+      || selectionStore.interval === null
+  ) {
     return;
   }
 
-  handleUpdate(bandsValue.value, intervalsValue.value);
+  handleUpdate(selectionStore.band, selectionStore.interval);
 }
 
-watch([bandsValue, intervalsValue], processSelection);
+watch(selectionStore, processSelection);
 </script>
 
 <template>
   <n-select
-      v-model:value="bandsValue"
+      v-model:value="selectionStore.band"
       :options="bandsOptions"
       placeholder="Bands..."
   />
   <n-select
-      v-model:value="intervalsValue"
+      v-model:value="selectionStore.interval"
       :options="intervalsOptions"
       placeholder="Intervals..."
   />

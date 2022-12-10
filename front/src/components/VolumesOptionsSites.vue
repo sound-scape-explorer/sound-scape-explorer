@@ -2,7 +2,7 @@
 import {computed, defineProps} from 'vue';
 import {NSelect} from 'naive-ui';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
-import {selectionStore} from '../store/selection.store';
+import {volumesOptionsStore} from '../store/volumes-options.store';
 
 /**
  * Props
@@ -19,20 +19,20 @@ const {sites} = defineProps<Props>();
  */
 
 const options = computed(() => convertToNaiveSelectOptions(sites));
-selectionStore.activeSites = [sites[0]];
+volumesOptionsStore.activeSites = [sites[0]];
 
 /**
  * Handlers
  */
 
 function selectSite(nextSites: string[]) {
-  selectionStore.activeSites = nextSites;
+  volumesOptionsStore.activeSites = nextSites;
 }
 </script>
 
 <template>
   <n-select
-      v-model:value="selectionStore.activeSites"
+      v-model:value="volumesOptionsStore.activeSites"
       :options="options"
       filterable
       multiple

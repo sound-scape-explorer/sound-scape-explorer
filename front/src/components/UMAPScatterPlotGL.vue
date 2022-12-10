@@ -10,7 +10,19 @@ const {containerRef} = useUMAPComponent();
 
 <style lang="scss" scoped>
 .container {
-  height: 400px;
+  height: 500px;
   position: relative;
+}
+
+@media screen and (max-width: 1200px) {
+  .container {
+    height: 400px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .container {
+    height: 300px;
+  }
 }
 </style>

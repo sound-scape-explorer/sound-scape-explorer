@@ -7,7 +7,7 @@ import highchartsMore from 'highcharts/highcharts-more';
 import accessibility from 'highcharts/modules/accessibility';
 import {API_ROUTES} from '../constants';
 import type {ApiVolumeInterface} from '../interfaces/api-volume.interface';
-import {selectionStore} from '../store/selection.store';
+import {volumesOptionsStore} from '../store/volumes-options.store';
 import {getQuartiles} from '../utils/get-quartiles';
 import {convertTimestampToDate} from '../utils/convert-timestamp-to-date';
 
@@ -67,7 +67,7 @@ const options = ref<Options>({
  */
 
 async function updateData() {
-  const {activeBand, activeInterval} = selectionStore;
+  const {activeBand, activeInterval} = volumesOptionsStore;
 
   if (activeBand === null || activeInterval === null) {
     return;
@@ -92,7 +92,7 @@ function resetPlot() {
 }
 
 function parseData() {
-  const {activeSites, activeRange, activeBand, activeInterval} = selectionStore;
+  const {activeSites, activeRange, activeBand, activeInterval} = volumesOptionsStore;
 
   if (
     activeSites.length === 0
@@ -116,8 +116,8 @@ function parseData() {
     }
 
     const timestamps = source.t; // seconds
-    const values = source[selectionStore.activeVariable];
-    const delta = selectionStore.activeAggregate;
+    const values = source[volumesOptionsStore.activeVariable];
+    const delta = volumesOptionsStore.activeAggregate;
 
     const data: (string | number)[][] = [[]];
 
@@ -153,7 +153,7 @@ function parseData() {
  * Lifecycles
  */
 
-watch(selectionStore, async () => {
+watch(volumesOptionsStore, async () => {
   await updateData();
   resetPlot();
   parseData();

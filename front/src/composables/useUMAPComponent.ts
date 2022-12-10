@@ -79,19 +79,22 @@ export function useUMAPComponent() {
     const dataset = UMAPDatasetStore.dataset!;
     const {colorType} = UMAPFiltersStore;
 
-    const rangedIndex = mapRange(index, 0, dataset.metadata.length, 0, 1);
+    const rangedPointIndex = mapRange(index, 0, dataset.metadata.length, 0, 1);
 
     const labelIndex = dataset.metadata[index]['labelIndex'] as number;
     const rangedLabelIndex = mapRange(labelIndex, 0, dataset.metadata.length, 0, 1);
 
-    const hourIndex = timestampsInDay.value[index];
-    const rangedHourIndex = mapRange(hourIndex, 0, 24, 0, 1);
+    const timeIndex = timestampsInDay.value[index];
+    const rangedBy1hIndex = mapRange(timeIndex, 0, 24, 0, 1);
+    const rangedBy10minIndex = mapRange(timeIndex, 0, 24 * 60 * 10, 0, 1); // TODO: fix
 
     const hoverColor = 'red';
     const filteredColor = 'hsla(0, 0%, 0%, 0.25)';
-    const indexColor = colors.value(rangedIndex); // pointIndex
-    const labelIndexColor = colors.value(rangedLabelIndex); // labelIndex
-    const hourColor = colors.value(rangedHourIndex); // hour
+
+    const indexColor = colors.value(rangedPointIndex);
+    const labelIndexColor = colors.value(rangedLabelIndex);
+    const by1hColor = colors.value(rangedBy1hIndex);
+    const by10minColor = colors.value(rangedBy10minIndex);
 
     const shouldBeFilteredOut = shouldBeFiltered(index, columnsNames);
 
@@ -105,10 +108,12 @@ export function useUMAPComponent() {
       color = labelIndexColor;
     } else if (colorType === 'pointIndex') {
       color = indexColor;
-    } else if (colorType === 'hour') {
-      color = hourColor;
+    } else if (colorType === 'by1h') {
+      color = by1hColor;
+    } else if (colorType === 'by10min') {
+      color = by10minColor;
     } else if (colorType === 'isDay') {
-      const isDay = isHourDuringDay(hourIndex);
+      const isDay = isHourDuringDay(timeIndex);
       color = isDay ? dayColor : nightColor;
     }
 

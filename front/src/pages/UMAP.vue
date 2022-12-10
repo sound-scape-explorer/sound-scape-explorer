@@ -18,13 +18,14 @@ const {handleUpdate} = useUMAPPage();
 
 function delayUpdate(band: string, interval: string) {
   modalLoadingStore.isLoading = true;
+
   setTimeout(() => {
     handleUpdate({
       band,
       interval,
       callback: () => modalLoadingStore.isLoading = false,
     });
-  }, 500);
+  }, 200);
 }
 </script>
 
@@ -36,7 +37,9 @@ function delayUpdate(band: string, interval: string) {
       <SelectionDropdown :bands="bands" :handle-update="delayUpdate" :intervals="intervalLabels" />
       <SelectionImage />
     </div>
-    <UMAPFilters />
+    <div class="filters">
+      <UMAPFilters />
+    </div>
     <div class="query-export">
       <UMAPQuery />
       <UMAPExport />
@@ -54,15 +57,21 @@ function delayUpdate(band: string, interval: string) {
   padding-bottom: 1rem;
 }
 
+.filters {
+  display: grid;
+  grid-template-columns: 1fr 12rem 11rem;
+  gap: 1rem;
+}
+
 .query-export {
   display: grid;
-  grid-template-columns: 1fr 8rem;
+  grid-template-columns: 1fr repeat(2, 5rem);
   gap: 1rem;
 }
 
 .selection-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr) 8rem;
+  grid-template-columns: repeat(2, 1fr) 11rem;
   gap: 1rem;
 }
 </style>

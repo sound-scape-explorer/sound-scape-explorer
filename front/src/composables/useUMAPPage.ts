@@ -1,5 +1,5 @@
 import {API_ROUTES} from '../constants';
-import {selectionStore} from '../store/selection.store';
+import {volumesOptionsStore} from '../store/volumes-options.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {
   convertToScatterGlDataset,
@@ -20,13 +20,13 @@ export function useUMAPPage() {
   }
 
   function resetSelection() {
-    selectionStore.activeBand = null;
-    selectionStore.activeIntervalLabel = null;
+    volumesOptionsStore.activeBand = null;
+    volumesOptionsStore.activeIntervalLabel = null;
   }
 
   function setSelection(band: string, intervalLabel: string) {
-    selectionStore.activeBand = band;
-    selectionStore.activeIntervalLabel = intervalLabel;
+    volumesOptionsStore.activeBand = band;
+    volumesOptionsStore.activeIntervalLabel = intervalLabel;
   }
 
   async function fetchData(band: string, intervalLabel: string) {

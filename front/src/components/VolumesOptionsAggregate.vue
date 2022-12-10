@@ -3,7 +3,7 @@ import {computed, ref} from 'vue';
 import {NButton, NCheckbox, NDropdown, NP} from 'naive-ui';
 import {convertToNaiveDropdownOptions} from '../utils/convert-to-naive-dropdown-options';
 import type {AggregatesInterface} from '../interfaces/aggregates.interface';
-import {selectionStore} from '../store/selection.store';
+import {volumesOptionsStore} from '../store/volumes-options.store';
 
 /**
  * State
@@ -35,7 +35,7 @@ function updateStatus(nextEnable: boolean) {
 function selectAggregate(nextKey: string) {
   activeAggregate.value = nextKey;
   // activeAggregateSeconds.value = aggregates[nextKey];
-  selectionStore.activeAggregate = aggregates[nextKey];
+  volumesOptionsStore.activeAggregate = aggregates[nextKey];
 }
 
 </script>
@@ -61,7 +61,7 @@ function selectAggregate(nextKey: string) {
       v-if="isEnabled"
       class="tooltip"
   >
-    {{ selectionStore.activeAggregate }} s
+    {{ volumesOptionsStore.activeAggregate }} s
   </n-p>
 </template>
 
