@@ -1,3 +1,17 @@
+# [3.14.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.13.0...v3.14.0) (2022-12-10)
+
+
+### Bug Fixes
+
+* **Processing/Config:** Preserve existing `files_COL` names + Fix `run_all` command ([079175a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/079175ae5eaa030f094d3e76669ea7825c77c29c))
+
+
+### Features
+
+* **Front/UMAP:** Improve filtering for query complex ([805593d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/805593d3a3bce23434e49f1637b9eb5ca06144f3))
+* **Front:** Add wait modal when UMAP dataset is loading + Rewrite selection table component for dropdowns + image button + Various improvements and TODOs ([f497a17](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f497a17c5dd8e27f681fd3e6edd94e3a47ff3314))
+* **Front:** Improve Button component + Improve UMAP page (Export, Filters, Color types, Styling) + Add CSV Export for UMAP ([426bc07](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/426bc07ab0c59d8eea30e9afbbd0f33fb9899c46))
+
 # [3.13.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.12.0...v3.13.0) (2022-12-08)
 
 
