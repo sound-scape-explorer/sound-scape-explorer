@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import {NAlert} from 'naive-ui';
 import Modal from './Modal.vue';
-import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
+import {modalLoadingStore} from 'src/store/modal-loading.store';
 //
 </script>
 
 <template>
-  <Modal v-if="UMAPDatasetStore.isLoading">
+  <Modal v-if="modalLoadingStore.isLoading" :is-wait="true">
     <n-alert
         type="info"
     >

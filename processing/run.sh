@@ -142,6 +142,8 @@ function run_config_populate_columns {
 }
 
 function run_all {
+  run_config_populate_columns
+
   run_extract_all
   run_computes
   run_config

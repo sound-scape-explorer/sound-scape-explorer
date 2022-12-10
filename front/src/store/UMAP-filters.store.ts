@@ -1,8 +1,16 @@
 import {reactive} from 'vue';
 
+export type UMAPFiltersColorType =
+  'labelIndex'
+  | 'pointIndex'
+  | 'by1h'
+  | 'by10min'
+  | 'isDay'
+  | string
+
 export interface UMAPFiltersStoreInterface {
   tags: string[];
-  colorType: 'labelIndex' | 'pointIndex' | 'hour' | 'isDay';
+  colorType: UMAPFiltersColorType;
   colorScale: string;
 }
 

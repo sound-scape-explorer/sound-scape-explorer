@@ -1,22 +1,28 @@
 <script lang="ts" setup>
-import {defineProps} from 'vue';
-import {NImage, NP} from 'naive-ui';
+import {computed} from 'vue';
+import Button from './Button.vue';
+import {ImageOutline} from '@vicons/ionicons5';
+import {selectionImageStore} from '../store/selection-image.store';
 
 /**
  * Props
  */
 
-interface Props {
-  source?: string;
+function handleClick() {
+  if (!selectionImageStore.image) {
+    return;
+  }
+
+  window.open(selectionImageStore.image);
 }
 
-const {source} = defineProps<Props>();
+const isDisabled = computed<boolean>(() => selectionImageStore.image === null);
 </script>
 
 <template>
-  <n-p class="image-container">
-    <n-image :src="source" />
-  </n-p>
+  <Button :disabled="isDisabled" :handle-click="handleClick" text="Image">
+    <image-outline />
+  </Button>
 </template>
 
 <style lang="scss" scoped>
