@@ -3,6 +3,7 @@ import {computed, defineProps} from 'vue';
 import {NSelect} from 'naive-ui';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 import {volumesOptionsStore} from '../store/volumes-options.store';
+import {useSelection} from '../composables/useSelection';
 
 /**
  * Props
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const {sites} = defineProps<Props>();
+const {isActive} = useSelection();
 
 /**
  * State
@@ -33,6 +35,7 @@ function selectSite(nextSites: string[]) {
 <template>
   <n-select
       v-model:value="volumesOptionsStore.activeSites"
+      :disabled="!isActive"
       :options="options"
       filterable
       multiple

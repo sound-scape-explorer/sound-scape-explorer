@@ -91,27 +91,23 @@ export function useUMAPComponent() {
     const hoverColor = 'red';
     const filteredColor = 'hsla(0, 0%, 0%, 0.25)';
 
-    const indexColor = colors.value(rangedPointIndex);
-    const labelIndexColor = colors.value(rangedLabelIndex);
-    const by1hColor = colors.value(rangedBy1hIndex);
-    const by10minColor = colors.value(rangedBy10minIndex);
-
     const shouldBeFilteredOut = shouldBeFiltered(index, columnsNames);
 
     if (shouldBeFilteredOut) {
       return filteredColor;
     }
 
+    const indexColor = colors.value(rangedPointIndex);
     let color = indexColor;
 
     if (colorType === 'labelIndex') {
-      color = labelIndexColor;
+      color = colors.value(rangedLabelIndex);
     } else if (colorType === 'pointIndex') {
       color = indexColor;
     } else if (colorType === 'by1h') {
-      color = by1hColor;
+      color = colors.value(rangedBy1hIndex);
     } else if (colorType === 'by10min') {
-      color = by10minColor;
+      color = colors.value(rangedBy10minIndex);
     } else if (colorType === 'isDay') {
       const isDay = isHourDuringDay(timeIndex);
       color = isDay ? dayColor : nightColor;

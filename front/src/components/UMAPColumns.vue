@@ -15,8 +15,8 @@ function initializeColumnsSelection() {
     return;
   }
 
-  for (let i = 0; i < columnsKeys.value.length; ++i) {
-    selection[columnsKeys.value[i]] = [];
+  for (const element of columnsKeys.value) {
+    selection[element] = [];
   }
 }
 

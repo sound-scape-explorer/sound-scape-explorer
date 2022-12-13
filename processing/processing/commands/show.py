@@ -22,17 +22,17 @@ def show():
 @click.option('--json/--dict', default=False)
 def config(json):
     my_config = get_config()
-    dict = my_config._asdict()
-    files = dict['files']
+    my_dict = my_config._asdict()
+    files = my_dict['files']
 
     format_files_columns(files)
 
     if not json:
-        pprint.pprint(dict)
+        pprint.pprint(my_dict)
         return
 
     # TODO: might need a more complex method if we push the idea of parsing the config even further
-    print(dumps(dict, default=lambda o: o.isoformat()))
+    print(dumps(my_dict, default=lambda o: o.isoformat()))
 
 
 @show.command()

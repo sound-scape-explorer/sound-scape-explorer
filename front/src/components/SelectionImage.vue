@@ -26,8 +26,4 @@ const isDisabled = computed<boolean>(() => selectionImageStore.image === null);
 </template>
 
 <style lang="scss" scoped>
-.image-container {
-  display: flex;
-  justify-content: center;
-}
 </style>

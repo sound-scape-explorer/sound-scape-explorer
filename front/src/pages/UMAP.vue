@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Title from '../components/Title.vue';
-import SelectionImage from '../components/SelectionImage.vue';
 import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
 import UMAPTimeRange from '../components/UMAPTimeRange.vue';
 import UMAPFilters from '../components/UMAPFilters.vue';
@@ -10,11 +9,14 @@ import {useConfig} from '../composables/useConfig';
 import {useUMAPPage} from '../composables/useUMAPPage';
 import UMAPExport from '../components/UMAPExport.vue';
 import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
-import SelectionDropdown from '../components/SelectionDropdown.vue';
 import {modalLoadingStore} from '../store/modal-loading.store';
+import {useSelection} from '../composables/useSelection';
+import {onUnmounted} from 'vue';
+import Selection from '../components/Selection.vue';
 
 const {bands, intervalLabels} = await useConfig();
 const {handleUpdate} = useUMAPPage();
+const {clearSelection} = useSelection();
 
 function delayUpdate(band: string, interval: string) {
   modalLoadingStore.isLoading = true;
@@ -27,16 +29,15 @@ function delayUpdate(band: string, interval: string) {
     });
   }, 200);
 }
+
+onUnmounted(clearSelection);
 </script>
 
 <template>
   <Title text="UMAP" />
   <UMAPScatterPlotGL />
   <div class="tools-container">
-    <div class="selection-container">
-      <SelectionDropdown :bands="bands" :handle-update="delayUpdate" :intervals="intervalLabels" />
-      <SelectionImage />
-    </div>
+    <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
     <div class="filters">
       <UMAPFilters />
     </div>
@@ -66,12 +67,6 @@ function delayUpdate(band: string, interval: string) {
 .query-export {
   display: grid;
   grid-template-columns: 1fr repeat(2, 5rem);
-  gap: 1rem;
-}
-
-.selection-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr) 11rem;
   gap: 1rem;
 }
 </style>

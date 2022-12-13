@@ -1,60 +1,54 @@
 <script lang="ts" setup>
-import {ref, watch} from 'vue';
+import {onUnmounted, watch} from 'vue';
 import Title from '../components/Title.vue';
 import VolumesOptions from '../components/VolumesOptions.vue';
-import SelectionTable from '../components/SelectionTable.vue';
-import SelectionImage from '../components/SelectionImage.vue';
 import {API_ROUTES} from '../constants';
 import VolumesBoxPlot from '../components/VolumesBoxPlot.vue';
 import {volumesOptionsStore} from '../store/volumes-options.store';
 import {useConfig} from '../composables/useConfig';
+import {useSelection} from '../composables/useSelection';
+import {selectionImageStore} from '../store/selection-image.store';
+import {selectionStore} from '../store/selection.store';
+import Selection from '../components/Selection.vue';
 
-/**
- * Props
- */
-
+const {clearSelection} = useSelection();
 const {bands, intervals} = await useConfig();
-
-/**
- * State
- */
-
-const imageSource = ref<string | null>();
-
-/**
- * Handlers
- */
 
 function handleSelection(band: string, interval: string) {
   if (!band || !interval) {
-    volumesOptionsStore.activeBand = null;
-    volumesOptionsStore.activeInterval = null;
-    imageSource.value = null;
+    selectionStore.band = null;
+    selectionStore.interval = null;
+    selectionImageStore.image = null;
     return;
   }
 
-  volumesOptionsStore.activeBand = band;
-  volumesOptionsStore.activeInterval = interval;
-  imageSource.value = API_ROUTES.volumesImage({
+  selectionStore.band = band;
+  selectionStore.interval = interval;
+
+  selectionImageStore.image = API_ROUTES.volumesImage({
     interval,
     band,
     variable: volumesOptionsStore.activeVariable,
   });
 }
 
-watch(volumesOptionsStore, () => {
-  if (volumesOptionsStore.activeBand === null || volumesOptionsStore.activeInterval === null) {
+watch(selectionStore, () => {
+  if (selectionStore.band === null || selectionStore.interval === null) {
     return;
   }
 
-  handleSelection(volumesOptionsStore.activeBand, volumesOptionsStore.activeInterval);
+  handleSelection(selectionStore.band, selectionStore.interval);
 });
+
+onUnmounted(clearSelection);
 </script>
 
 <template>
   <Title text="Volumes" />
+  <Selection :bands="bands" :callback="handleSelection" :intervals="intervals || []" />
   <VolumesOptions />
   <VolumesBoxPlot />
-  <SelectionTable :callback="handleSelection" :xs="bands" :ys="intervals" />
-  <SelectionImage v-if="imageSource" :source="imageSource" />
 </template>
+
+<style lang="scss" scoped>
+</style>

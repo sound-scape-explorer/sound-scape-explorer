@@ -1,32 +1,47 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
 import {useConfig} from '../composables/useConfig';
-import SelectionTable2d from '../components/SelectionTable.vue';
-import SelectionImage from '../components/SelectionImage.vue';
 import {API_ROUTES} from '../constants';
 import Title from '../components/Title.vue';
 import CoveringExport from '../components/CoveringExport.vue';
+import {selectionImageStore} from '../store/selection-image.store';
+import {onUnmounted} from 'vue';
+import {useSelection} from '../composables/useSelection';
+import Selection from '../components/Selection.vue';
 
 const {bands, intervals} = await useConfig();
-
-const image = ref<string | null>();
+const {clearSelection} = useSelection();
 
 function setImage(x: string, y: string) {
   if (!x || !y) {
-    image.value = null;
     return;
   }
 
-  image.value = API_ROUTES.covering({
+  selectionImageStore.image = API_ROUTES.covering({
     interval: y,
     band: x,
   });
 }
+
+onUnmounted(clearSelection);
 </script>
 
 <template>
   <Title text="Covering" />
-  <CoveringExport />
-  <SelectionTable2d :callback="setImage" :xs="bands" :ys="intervals.map(i => i.toString())" />
-  <SelectionImage v-if="image" :source="image" />
+  <div class="container">
+    <CoveringExport />
+    <Selection :bands="bands" :callback="setImage" :intervals="intervals?.map(i => i.toString())" class="selection" />
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.selection {
+  flex-direction: row;
+  flex: 1;
+}
+</style>

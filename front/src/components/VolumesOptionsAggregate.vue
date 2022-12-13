@@ -4,6 +4,9 @@ import {NButton, NCheckbox, NDropdown, NP} from 'naive-ui';
 import {convertToNaiveDropdownOptions} from '../utils/convert-to-naive-dropdown-options';
 import type {AggregatesInterface} from '../interfaces/aggregates.interface';
 import {volumesOptionsStore} from '../store/volumes-options.store';
+import {useSelection} from '../composables/useSelection';
+
+const {isActive} = useSelection();
 
 /**
  * State
@@ -22,8 +25,6 @@ const isEnabled = ref<boolean>(true);
 const options = computed(() => convertToNaiveDropdownOptions(Object.keys(aggregates)));
 const activeAggregate = ref<string>(Object.keys(aggregates)[0]);
 
-// const activeAggregateSeconds = ref<number>(aggregates[activeAggregate.value]);
-
 /**
  * Handlers
  */
@@ -34,7 +35,6 @@ function updateStatus(nextEnable: boolean) {
 
 function selectAggregate(nextKey: string) {
   activeAggregate.value = nextKey;
-  // activeAggregateSeconds.value = aggregates[nextKey];
   volumesOptionsStore.activeAggregate = aggregates[nextKey];
 }
 
@@ -43,18 +43,24 @@ function selectAggregate(nextKey: string) {
 <template>
   <n-checkbox
       v-model:checked="isEnabled"
+      :disabled="!isActive"
       label="Aggregate"
       @update:checked="updateStatus"
   />
 
   <n-dropdown
       v-if="isEnabled"
+      :disabled="!isActive"
       :options="options"
       placement="bottom-start"
       trigger="hover"
       @select="selectAggregate"
   >
-    <n-button>{{ activeAggregate }}</n-button>
+    <n-button
+        :disabled="!isActive"
+    >
+      {{ activeAggregate }}
+    </n-button>
   </n-dropdown>
 
   <n-p

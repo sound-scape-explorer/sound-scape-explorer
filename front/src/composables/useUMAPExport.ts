@@ -71,7 +71,9 @@ export function useUMAPExport() {
     const {columns} = UMAPColumnsStore;
     const columnsValues = Object.values(columns);
 
-    columnsValues.map((value, i) => {
+    for (let i = 0; i < columnsValues.length; ++i) {
+      const value = columnsValues[i];
+
       const string = value.join('+');
 
       if (string === '') {
@@ -83,7 +85,7 @@ export function useUMAPExport() {
       }
 
       name += `_${string}`;
-    });
+    }
 
     return name;
   }
@@ -136,9 +138,14 @@ export function useUMAPExport() {
   function handleClick(type: 'json' | 'csv' = 'json') {
     useConfig().then(({columnsNames}) => {
       const filename = getFilename();
+
+      if (!filename || !columnsNames) {
+        return;
+      }
+
       const results = parse(UMAPDatasetStore.dataset, filename, columnsNames, type);
 
-      if (!results || !columnsNames) {
+      if (!results) {
         return;
       }
 
@@ -176,8 +183,6 @@ export function useUMAPExport() {
 
   return {
     loadingRef,
-    parse,
-    getFilename,
     handleClick,
   };
 }

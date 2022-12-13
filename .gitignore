@@ -1,3 +1,5 @@
+.idea/sonarlint
+
 __pycache__/
 /.project
 /.settings/

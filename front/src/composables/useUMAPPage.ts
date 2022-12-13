@@ -1,10 +1,10 @@
 import {API_ROUTES} from '../constants';
-import {volumesOptionsStore} from '../store/volumes-options.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {
   convertToScatterGlDataset,
 } from '../utils/convert-to-scatter-gl-dataset';
 import {selectionImageStore} from '../store/selection-image.store';
+import {selectionStore} from '../store/selection.store';
 
 export function useUMAPPage() {
   function resetImage() {
@@ -20,13 +20,13 @@ export function useUMAPPage() {
   }
 
   function resetSelection() {
-    volumesOptionsStore.activeBand = null;
-    volumesOptionsStore.activeIntervalLabel = null;
+    selectionStore.band = null;
+    selectionStore.interval = null;
   }
 
   function setSelection(band: string, intervalLabel: string) {
-    volumesOptionsStore.activeBand = band;
-    volumesOptionsStore.activeIntervalLabel = intervalLabel;
+    selectionStore.band = band;
+    selectionStore.interval = intervalLabel;
   }
 
   async function fetchData(band: string, intervalLabel: string) {
@@ -45,7 +45,6 @@ export function useUMAPPage() {
 
       UMAPDatasetStore.dataset = convertToScatterGlDataset(data);
     } catch {
-      // options.value.series = [];
       UMAPDatasetStore.dataset = null;
     }
   }
