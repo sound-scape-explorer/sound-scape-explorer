@@ -11,6 +11,7 @@ import UMAPExport from '../components/UMAPExport.vue';
 import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
 import Selection from '../components/Selection.vue';
 import UMAPAlphas from '../components/UMAPAlphas.vue';
+import UMAPLegend from '../components/UMAPLegend.vue';
 
 const {bands, intervalLabels} = await useConfig();
 const {delayUpdate} = useUMAPPage();
@@ -19,6 +20,7 @@ const {delayUpdate} = useUMAPPage();
 <template>
   <Title text="UMAP" />
   <UMAPScatterPlotGL />
+  <UMAPLegend />
   <div class="tools-container">
     <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
     <div class="filters">
