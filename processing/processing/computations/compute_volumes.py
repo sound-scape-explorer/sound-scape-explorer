@@ -3,9 +3,9 @@ import pathlib
 
 import numpy as np
 
-from processing.computations.iterate_timegroups import iterate_timegroups
-from processing.computations.load_features_for import load_features_for
-from processing.computations.timegroup_loaded_features import \
+from processing.utils.iterate_timegroups import iterate_timegroups
+from processing.utils.load_features_for import load_features_for
+from processing.utils.timegroup_loaded_features import \
     timegroup_loaded_features
 
 

@@ -3,11 +3,11 @@ import pathlib
 
 import numpy as np
 
-from processing.computations.iterate_timegroups import iterate_timegroups
-from processing.computations.load_features_for import load_features_for
-from processing.computations.timegroup_loaded_features import \
-    timegroup_loaded_features
 from processing.utils.get_config import get_config
+from processing.utils.iterate_timegroups import iterate_timegroups
+from processing.utils.load_features_for import load_features_for
+from processing.utils.timegroup_loaded_features import \
+    timegroup_loaded_features
 
 
 def compute_UMAPs(cfg, plot, show):
