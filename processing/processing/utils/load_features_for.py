@@ -4,6 +4,7 @@ import pickle
 
 import numpy as np
 
+from processing.constants import TIME_DELTA
 from processing.utils.iterate_audio_files import iterate_audio_files
 
 
@@ -22,13 +23,13 @@ def load_features_for(cfg, band, r, s):
                 data = pickle.loads(f.read())
             # TODO: proper error message (saying that npz also not found)
 
-        dur = dt.timedelta(seconds=1 * len(data))
+        dur = dt.timedelta(seconds=TIME_DELTA * len(data))
         if r[0] > info.start + dur:
             continue
         if r[1] < info.start:
             continue
         for i in range(len(data)):
-            start = info.start + dt.timedelta(seconds=1 * i)
+            start = info.start + dt.timedelta(seconds=TIME_DELTA * i)
             if start < r[0] or start > r[1]:
                 continue
             range_times.append(start)
