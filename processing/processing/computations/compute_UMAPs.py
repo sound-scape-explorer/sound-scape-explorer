@@ -32,7 +32,6 @@ def compute_UMAPs(cfg, plot, show):
 
                 for s in umap.sites:
                     range_times, range_features = load_features_for(
-                        cfg,
                         band,
                         r,
                         s

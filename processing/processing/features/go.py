@@ -16,7 +16,7 @@ def go():
     model.eval()
     log(f'({time.time() - t_start:.3f} sec)... model file loaded')
 
-    resultsFile = []
+    payload = []  # results file
     i = 0
     batch = int(sr * 60 * 5)
 
@@ -33,17 +33,17 @@ def go():
             fts = model.forward(samples, fs=sr)
 
         i += batch
-        resultsFile.append(fts)
+        payload.append(fts)
 
     log(f'({time.time() - t_start:.3f} sec)... model applied to all')
 
     pathlib.Path(output_path).absolute().parent.mkdir(parents=True,
                                                       exist_ok=True)
 
-    resultsFile = torch.concat(resultsFile).numpy()
+    payload = torch.concat(payload).numpy()
 
     with PreventKeyboardInterrupt():
-        np.savez_compressed(output_path.with_suffix('.npz'), x=resultsFile)
+        np.savez_compressed(output_path.with_suffix('.npz'), x=payload)
 
     # with open(output_path, "wb") as f:
     #    pickle.dump(resultsFile, f)

@@ -11,6 +11,7 @@ from processing.utils.get_audio_duration import get_audio_duration
 from processing.utils.get_config import get_config
 from processing.utils.iterate_audio_files_with_bands import \
     iterate_audio_files_with_bands
+from processing.utils.load_features_for import load_features_for
 
 
 @cli.group()
@@ -101,9 +102,21 @@ def audio_span_plot(duration, no_print, aggregate):
 def list_sites():
     cfg = get_config()
     sites = set()
+
     for o in iterate_audio_files_with_bands(cfg):
         sites.add(o[4].site)
+
     for i in sorted(list(sites)):
         print(i)
+
     print(sorted(list(sites)))
     print(",".join(sorted(list(sites))))
+
+
+@show.command()
+def features():
+    features = load_features_for(
+        'all',
+        config.ranges['whole'],
+        'POST_CerBra_alarm_1_a_SPRING',
+    )[1]

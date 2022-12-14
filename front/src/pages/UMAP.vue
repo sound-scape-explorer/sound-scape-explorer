@@ -9,28 +9,11 @@ import {useConfig} from '../composables/useConfig';
 import {useUMAPPage} from '../composables/useUMAPPage';
 import UMAPExport from '../components/UMAPExport.vue';
 import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
-import {modalLoadingStore} from '../store/modal-loading.store';
-import {useSelection} from '../composables/useSelection';
-import {onUnmounted} from 'vue';
 import Selection from '../components/Selection.vue';
+import UMAPAlphas from '../components/UMAPAlphas.vue';
 
 const {bands, intervalLabels} = await useConfig();
-const {handleUpdate} = useUMAPPage();
-const {clearSelection} = useSelection();
-
-function delayUpdate(band: string, interval: string) {
-  modalLoadingStore.isLoading = true;
-
-  setTimeout(() => {
-    handleUpdate({
-      band,
-      interval,
-      callback: () => modalLoadingStore.isLoading = false,
-    });
-  }, 200);
-}
-
-onUnmounted(clearSelection);
+const {delayUpdate} = useUMAPPage();
 </script>
 
 <template>
@@ -41,11 +24,14 @@ onUnmounted(clearSelection);
     <div class="filters">
       <UMAPFilters />
     </div>
-    <div class="query-export">
+    <div class="two-columns">
       <UMAPQuery />
+      <UMAPAlphas />
+    </div>
+    <div class="two-columns">
+      <UMAPQueryComplex />
       <UMAPExport />
     </div>
-    <UMAPQueryComplex />
     <UMAPTimeRange />
     <UMAPColumns />
   </div>
@@ -64,9 +50,10 @@ onUnmounted(clearSelection);
   gap: 1rem;
 }
 
-.query-export {
+.two-columns {
   display: grid;
   grid-template-columns: 1fr repeat(2, 5rem);
   gap: 1rem;
+  align-items: center;
 }
 </style>

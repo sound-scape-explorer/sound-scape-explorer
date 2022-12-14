@@ -6,7 +6,7 @@ import type {ConfigInterface} from '../interfaces/config.interface';
 import {TAG_PREFIX} from '../constants';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
-import {Dataset} from 'scatter-gl';
+import {Dataset} from '../lib/scatter-gl-0.0.13';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 

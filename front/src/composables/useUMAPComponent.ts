@@ -1,9 +1,10 @@
-import {ScatterGL} from 'scatter-gl';
+import {ScatterGL} from '../lib/scatter-gl-0.0.13';
 import {onMounted, onUnmounted, ref, watch} from 'vue';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import {UMAPQueryStore} from '../store/UMAP-query.store';
+import {UMAPStore} from '../store/UMAP.store';
 import {useUMAPTimestampsInDay} from './useUMAPTimestampsInDay';
 import {mapRange} from '../utils/map-range';
 import {isHourDuringDay} from '../utils/is-hour-during-day';
@@ -13,13 +14,13 @@ import {UMAPColumnsStore} from '../store/UMAP-columns.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {useConfig} from './useConfig';
 import type {ConfigStoreInterface} from '../store/config.store';
+import {useUMAPColumns} from './useUMAPColumns';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
-  const {
-    shouldBeFiltered,
-  } = useUMAPFilters();
+  const {shouldBeFiltered} = useUMAPFilters();
   const {timestampsInDay, updateTimestampsInDay} = useUMAPTimestampsInDay();
+  const {getColumnsNamesAsColorTypes, getColumnColor} = useUMAPColumns();
 
   let isFirstRender = true;
   const containerRef = ref<HTMLDivElement | null>(null);
@@ -38,10 +39,7 @@ export function useUMAPComponent() {
   }
 
   async function render() {
-    if (
-      scatterGL === null
-      || UMAPDatasetStore.dataset === null
-    ) {
+    if (scatterGL === null || UMAPDatasetStore.dataset === null) {
       return;
     }
 
@@ -74,10 +72,14 @@ export function useUMAPComponent() {
     window.removeEventListener('resize', handleResize);
   }
 
+  /**
+   * @see https://github.com/PAIR-code/scatter-gl/issues/99
+   */
   function getColor(index: number, selectedIndices: Set<number>, hoverIndex: number | null, columnsNames: ConfigStoreInterface['columnsNames']): string {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const dataset = UMAPDatasetStore.dataset!;
     const {colorType} = UMAPFiltersStore;
+    const columnsNamesAsColorTypes = getColumnsNamesAsColorTypes();
 
     const rangedPointIndex = mapRange(index, 0, dataset.metadata.length, 0, 1);
 
@@ -89,7 +91,7 @@ export function useUMAPComponent() {
     const rangedBy10minIndex = mapRange(timeIndex, 0, 24 * 60 * 10, 0, 1); // TODO: fix
 
     const hoverColor = 'red';
-    const filteredColor = 'hsla(0, 0%, 0%, 0.25)';
+    const filteredColor = `hsla(0, 0%, 0%, ${UMAPStore.alpha.low})`;
 
     const shouldBeFilteredOut = shouldBeFiltered(index, columnsNames);
 
@@ -97,20 +99,24 @@ export function useUMAPComponent() {
       return filteredColor;
     }
 
-    const indexColor = colors.value(rangedPointIndex);
+    const indexColor = colors.value(rangedPointIndex).alpha(UMAPStore.alpha.high).css();
     let color = indexColor;
 
     if (colorType === 'labelIndex') {
-      color = colors.value(rangedLabelIndex);
+      color = colors.value(rangedLabelIndex).alpha(UMAPStore.alpha.high).css();
     } else if (colorType === 'pointIndex') {
       color = indexColor;
     } else if (colorType === 'by1h') {
-      color = colors.value(rangedBy1hIndex);
+      color = colors.value(rangedBy1hIndex).alpha(UMAPStore.alpha.high).css();
     } else if (colorType === 'by10min') {
-      color = colors.value(rangedBy10minIndex);
+      color = colors.value(rangedBy10minIndex).alpha(UMAPStore.alpha.high).css();
     } else if (colorType === 'isDay') {
       const isDay = isHourDuringDay(timeIndex);
-      color = isDay ? dayColor : nightColor;
+      color = isDay
+        ? dayColor.alpha(UMAPStore.alpha.high).css()
+        : nightColor.alpha(UMAPStore.alpha.high).css();
+    } else if (columnsNamesAsColorTypes.includes(colorType)) {
+      color = getColumnColor(colorType, index);
     }
 
     if (hoverIndex === index) {
@@ -118,13 +124,14 @@ export function useUMAPComponent() {
     }
 
     if (selectedIndices.size === 0) {
-      return color.css();
+      // return color.alpha(UMAPStore.alpha.high).css();
+      return color;
     }
 
     const isSelected = selectedIndices.has(index);
 
     if (isSelected) {
-      return color.css();
+      return color;
     }
 
     return filteredColor;
@@ -139,7 +146,14 @@ export function useUMAPComponent() {
     removeListeners();
   });
 
-  watch([UMAPTimeRangeStore, UMAPFiltersStore, UMAPQueryStore, UMAPColumnsStore, UMAPQueryComplexStore], async () => {
+  watch([
+    UMAPTimeRangeStore,
+    UMAPFiltersStore,
+    UMAPQueryStore,
+    UMAPColumnsStore,
+    UMAPQueryComplexStore,
+    UMAPStore,
+  ], async () => {
     await render();
   });
 

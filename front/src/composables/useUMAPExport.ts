@@ -14,6 +14,7 @@ import {
 import {triggerBrowserDownload} from '../utils/trigger-browser-download';
 import {convertArrayToCsv} from '../utils/convert-array-to-csv';
 import {selectionStore} from '../store/selection.store';
+import {UMAP_EXPORT_FILENAME} from '../constants';
 
 export function useUMAPExport() {
   const {
@@ -22,7 +23,7 @@ export function useUMAPExport() {
   const loadingRef = ref(false);
 
   function getFilename() {
-    let name = 'SSE_UMAP';
+    let name = UMAP_EXPORT_FILENAME;
 
     /**
      * Selection settings
@@ -74,10 +75,14 @@ export function useUMAPExport() {
     for (let i = 0; i < columnsValues.length; ++i) {
       const value = columnsValues[i];
 
+      if (value.length === 0) {
+        continue;
+      }
+
       const string = value.join('+');
 
       if (string === '') {
-        return;
+        continue;
       }
 
       if (i === 0) {
@@ -137,7 +142,7 @@ export function useUMAPExport() {
 
   function handleClick(type: 'json' | 'csv' = 'json') {
     useConfig().then(({columnsNames}) => {
-      const filename = getFilename();
+      const filename = getFilename() || UMAP_EXPORT_FILENAME;
 
       if (!filename || !columnsNames) {
         return;
