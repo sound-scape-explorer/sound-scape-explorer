@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {defineProps} from 'vue';
+import {computed, defineProps, ref} from 'vue';
 
 interface Props {
   array: string[];
@@ -14,18 +14,57 @@ const {
   med,
   max,
 } = defineProps<Props>();
+
+const tooltipTextDefaultValue = '';
+const tooltipText = ref<string>(tooltipTextDefaultValue);
+
+const tooltipPositionDefaultValue = -1;
+const tooltipPosition = ref<number>(tooltipPositionDefaultValue);
+const tooltipPositionString = computed<string>(() => {
+  const left = 0.1 * tooltipPosition.value;
+  return `${left}rem`;
+});
+
+function updateTooltipText(text: string) {
+  if (text === tooltipText.value) {
+    return;
+  }
+
+  tooltipText.value = text;
+}
+
+function updateTooltipPosition(position: number) {
+  if (position === tooltipPosition.value) {
+    return;
+  }
+
+  tooltipPosition.value = position;
+}
+
+function enterStep(text: string, position: number) {
+  updateTooltipText(text);
+  updateTooltipPosition(position);
+}
+
+function leaveStep() {
+  tooltipPosition.value = tooltipPositionDefaultValue;
+  tooltipText.value = tooltipTextDefaultValue;
+}
 </script>
 
 <template>
   <div class="gradient">
     <span
-        v-for="element in array"
+        v-for="(element, index) in array"
         :style="{backgroundColor: element}"
         class="step"
+        @mouseleave="leaveStep"
+        @mouseover="() => enterStep(element, index)"
     />
     <span class="domain-min">{{ min }}</span>
     <span class="domain-med">{{ med }}</span>
     <span class="domain-max">{{ max }}</span>
+    <span v-if="tooltipText !== ''" :style="{left: tooltipPositionString}" class="tooltip">{{ tooltipText }}</span>
   </div>
 </template>
 
@@ -43,6 +82,10 @@ const {
   display: inline-block;
   height: 20px;
   width: 1%;
+
+  &:hover {
+    background-color: white !important;
+  }
 }
 
 .domain-min {
@@ -66,5 +109,23 @@ const {
   right: 0;
   font-size: 11px;
   bottom: 3px;
+}
+
+.tooltip {
+  position: absolute;
+
+  width: 3rem;
+  height: 2rem;
+
+  background-color: white;
+  border: 1px solid black;
+
+  top: calc(-2rem - 3px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: x-small;
 }
 </style>

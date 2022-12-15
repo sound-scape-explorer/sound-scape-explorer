@@ -15,6 +15,7 @@ import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {useConfig} from './useConfig';
 import type {ConfigStoreInterface} from '../store/config.store';
 import {useUMAPColumns} from './useUMAPColumns';
+import {UMAPSelectionStore} from '../store/UMAP-selection.store';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
@@ -35,7 +36,19 @@ export function useUMAPComponent() {
       orbitControls: {
         zoomSpeed: 1.33,
       },
+      onSelect: selectPoints,
     });
+  }
+
+  function selectPoints(indexes: number[]) {
+    const payload = [];
+
+    for (const index of indexes) {
+      const metaElement = UMAPDatasetStore?.dataset?.metadata[index];
+      payload.push(metaElement);
+    }
+
+    UMAPSelectionStore.selection = payload;
   }
 
   async function render() {

@@ -2,6 +2,7 @@
 import {computed, ref} from 'vue';
 import UMAPLegendGradient from './UMAPLegendGradient.vue';
 import {useColors} from '../composables/useColors';
+import UMAPLegendSelection from './UMAPLegendSelection.vue';
 
 const isHover = ref<boolean>(false);
 const {colors} = useColors();
@@ -18,9 +19,7 @@ function disableHover() {
 
 const containerClasses = computed<string>(() => {
   let classes = 'container';
-
   isHover.value ? classes += ' open' : classes += ' close';
-
   return classes;
 });
 </script>
@@ -31,13 +30,18 @@ const containerClasses = computed<string>(() => {
       @mouseenter="enableHover"
       @mouseleave="disableHover"
   >
-    <div class="title">Legend</div>
+    <div>
+      Legend
+    </div>
+
     <UMAPLegendGradient
         :array="gradientColors"
         max="max"
         med="med"
         min="min"
     />
+
+    <UMAPLegendSelection />
   </div>
 </template>
 
@@ -53,25 +57,30 @@ const containerClasses = computed<string>(() => {
 
   background-color: ghostwhite;
 
-  transition: width 120ms ease-in-out, height 120ms ease-in-out, border 120ms ease-in-out, background-color 120ms ease-in-out;
+  transition: width 120ms ease-in-out,
+  height 120ms ease-in-out,
+  border 120ms ease-in-out,
+  background-color 120ms ease-in-out;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  overflow: hidden;
 }
 
 .close {
-  height: 15%;
-  width: 15%;
+  width: 13%;
+  height: 13%;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .open {
-  height: 25%;
   width: 25%;
+  height: auto;
 
   border: 1px solid rgba(0, 0, 0, 0.8);
   cursor: crosshair;
-}
-
-.title {
-  margin-bottom: 0.6rem;
 }
 </style>
