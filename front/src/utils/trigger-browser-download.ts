@@ -1,7 +1,7 @@
 interface DownloadObjectAsJson {
   data: string;
   filename: string;
-  callback: () => void;
+  callback?: () => void;
 }
 
 export function triggerBrowserDownload({
@@ -15,5 +15,7 @@ export function triggerBrowserDownload({
   anchor.click();
   anchor.remove();
 
-  callback();
+  if (callback) {
+    callback();
+  }
 }

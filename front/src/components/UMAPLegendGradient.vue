@@ -20,10 +20,7 @@ const tooltipText = ref<string>(tooltipTextDefaultValue);
 
 const tooltipPositionDefaultValue = -1;
 const tooltipPosition = ref<number>(tooltipPositionDefaultValue);
-const tooltipPositionString = computed<string>(() => {
-  const left = 0.1 * tooltipPosition.value;
-  return `${left}rem`;
-});
+const tooltipPositionString = computed<string>(() => `${tooltipPosition.value}%`);
 
 function updateTooltipText(text: string) {
   if (text === tooltipText.value) {
@@ -82,6 +79,8 @@ function leaveStep() {
   display: inline-block;
   height: 20px;
   width: 1%;
+
+  cursor: crosshair;
 
   &:hover {
     background-color: white !important;

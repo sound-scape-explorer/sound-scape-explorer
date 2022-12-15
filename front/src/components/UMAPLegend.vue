@@ -41,7 +41,7 @@ const containerClasses = computed<string>(() => {
         min="min"
     />
 
-    <UMAPLegendSelection />
+    <UMAPLegendSelection v-if="isHover" />
   </div>
 </template>
 
@@ -58,29 +58,57 @@ const containerClasses = computed<string>(() => {
   background-color: ghostwhite;
 
   transition: width 120ms ease-in-out,
-  height 120ms ease-in-out,
   border 120ms ease-in-out,
   background-color 120ms ease-in-out;
 
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-
-  overflow: hidden;
 }
 
 .close {
   width: 13%;
   height: 13%;
+  //max-height: 13%;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: max-height 240ms ease-out,
+  height 120ms ease-out,
+  width 120ms ease-out;
+
+  @media screen and (max-width: 800px) {
+    & {
+      width: 30%;
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    & {
+      width: 30%;
+    }
+  }
 }
 
 .open {
-  width: 25%;
-  height: auto;
+  width: 20%;
+  height: 25%;
+  //max-height: 50%;
 
   border: 1px solid rgba(0, 0, 0, 0.8);
-  cursor: crosshair;
+  transition: max-height 240ms ease-in,
+  height 120ms ease-in,
+  width 120ms ease-in;
+
+  @media screen and (max-width: 800px) {
+    & {
+      width: 60%;
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    & {
+      width: 40%;
+    }
+  }
 }
 </style>
