@@ -18,8 +18,26 @@ function disableHover() {
 }
 
 const containerClasses = computed<string>(() => {
-  let classes = 'container';
-  isHover.value ? classes += ' open' : classes += ' close';
+  let classes = 'container ';
+
+  if (isHover.value) {
+    classes += 'container-open';
+  } else {
+    classes += 'container-close';
+  }
+
+  return classes;
+});
+
+const moreClasses = computed<string>(() => {
+  let classes = 'more ';
+
+  if (isHover.value) {
+    classes += 'more-open';
+  } else {
+    classes += 'more-close';
+  }
+
   return classes;
 });
 </script>
@@ -30,7 +48,7 @@ const containerClasses = computed<string>(() => {
       @mouseenter="enableHover"
       @mouseleave="disableHover"
   >
-    <div>
+    <div class="title">
       Legend
     </div>
 
@@ -41,7 +59,9 @@ const containerClasses = computed<string>(() => {
         min="min"
     />
 
-    <UMAPLegendSelection v-if="isHover" />
+    <div :class="moreClasses">
+      <UMAPLegendSelection v-if="isHover" />
+    </div>
   </div>
 </template>
 
@@ -66,15 +86,42 @@ const containerClasses = computed<string>(() => {
   gap: 0.6rem;
 }
 
-.close {
+.container-open {
+  width: 20%;
+  //height: 25%;
+  max-height: 50%;
+
+  border: 1px solid rgba(0, 0, 0, 0.8);
+
+  transition: width 120ms ease-in,
+  max-height 120ms ease-in,
+    //height 120ms ease-in,
+  border 120ms ease-in;
+
+  @media screen and (max-width: 800px) {
+    & {
+      width: 60%;
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    & {
+      width: 40%;
+    }
+  }
+}
+
+.container-close {
   width: 13%;
-  height: 13%;
+  //height: 13%;
   //max-height: 13%;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: max-height 240ms ease-out,
-  height 120ms ease-out,
-  width 120ms ease-out;
+
+  transition: width 120ms ease-out,
+  max-height 120ms ease-out,
+    //height 120ms ease-out,
+  border 120ms ease-in;
 
   @media screen and (max-width: 800px) {
     & {
@@ -89,26 +136,29 @@ const containerClasses = computed<string>(() => {
   }
 }
 
-.open {
-  width: 20%;
-  height: 25%;
-  //max-height: 50%;
+.more {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
 
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  transition: max-height 240ms ease-in,
-  height 120ms ease-in,
-  width 120ms ease-in;
+.more-open {
+  opacity: 1;
+  transition: opacity 240ms ease-in;
+}
 
-  @media screen and (max-width: 800px) {
-    & {
-      width: 60%;
-    }
-  }
+.more-close {
+  opacity: 0;
+  transition: opacity 240ms ease-out;
+}
 
-  @media screen and (max-width: 1200px) {
-    & {
-      width: 40%;
-    }
-  }
+.title {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  font-size: x-small;
+  font-weight: bold;
+  font-style: italic;
 }
 </style>
