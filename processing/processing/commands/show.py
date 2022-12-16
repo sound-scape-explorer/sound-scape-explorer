@@ -115,8 +115,13 @@ def list_sites():
 
 @show.command()
 def features():
-    features = load_features_for(
-        'all',
-        config.ranges['whole'],
-        'POST_CerBra_alarm_1_a_SPRING',
-    )[1]
+    my_config = get_config()
+
+    for range_name in my_config.ranges:
+        my_features = load_features_for(
+            'all',
+            my_config.ranges[range_name],
+            'POST_CerBra_alarm_1_a_SPRING',
+        )[1]
+
+        return my_features[1]

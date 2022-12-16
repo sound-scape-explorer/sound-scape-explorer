@@ -28,6 +28,13 @@ interface APIRoutesUMAPParameters extends APIRoutesDefaultParameters {
   isImage?: boolean;
 }
 
+interface APIRoutesFeaturesParameters {
+  band: string;
+  range: string;
+  site: string;
+  time: number;
+}
+
 export const API_ROUTES = {
   config: `${BACK_HOSTNAME}/config`,
   covering: (
@@ -55,4 +62,12 @@ export const API_ROUTES = {
       isImage = false,
     }: APIRoutesUMAPParameters,
   ) => `${BACK_HOSTNAME}/umap/${interval}/${band}${isImage ? '/image' : ''}`,
+  features: (
+    {
+      band,
+      range,
+      site,
+      time,
+    }: APIRoutesFeaturesParameters,
+  ) => `${BACK_HOSTNAME}/features/${band}/${range}/${site}/${time}`,
 };

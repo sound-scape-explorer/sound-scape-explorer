@@ -1,20 +1,29 @@
-from os.path import exists
+from flask import jsonify
 
 from back import app
-from back.constants import BASEPATH
-from back.utils import get_error_response, read_png_file
+from back.constants import PAYLOAD_ERROR
+from back.utils.read_config import read_config
+from back.utils.read_features import read_features
 
 
-@app.route("/features/<string:band>/<string:range>/<string:site>")
-def get_umap(band, range, site):
-    return '...'
+@app.route(
+    "/features/<string:band>/<string:range>/<string:site>/<int:time>"
+)
+def get_features(band, range, site, time):
+    config = read_config()
 
+    try:
+        my_band = config['bands'][band]
+        my_range = config['ranges'][range]
+        my_site = config['files'][site]
+    except KeyError:
+        return jsonify(PAYLOAD_ERROR)
 
-@app.route("/umap/<string:interval>/<string:band>/image")
-def get_umap_image(interval, band):
-    path = f'{BASEPATH}/generated/umap/{interval}/{band}.png'
+    features = read_features(
+        band,
+        my_range,
+        site,
+        time,
+    )
 
-    if not exists(path):
-        return get_error_response()
-
-    return read_png_file(path)
+    return jsonify(features)

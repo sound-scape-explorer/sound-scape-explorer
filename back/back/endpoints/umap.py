@@ -1,8 +1,12 @@
 from os.path import exists
 
+from flask import jsonify
+
 from back import app
 from back.constants import BASEPATH
-from back.utils import get_error_response, read_json_file, read_png_file
+from back.utils.get_error_response import get_error_response
+from back.utils.read_json_file import read_json_file
+from back.utils.read_png_file import read_png_file
 
 
 @app.route("/umap/<string:interval>/<string:band>")
@@ -12,7 +16,9 @@ def get_umap(interval, band):
     if not exists(path):
         return get_error_response()
 
-    return read_json_file(path)
+    json = read_json_file(path)
+
+    return jsonify(json)
 
 
 @app.route("/umap/<string:interval>/<string:band>/image")

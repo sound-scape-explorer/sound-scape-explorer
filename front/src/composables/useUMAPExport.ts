@@ -15,6 +15,7 @@ import {triggerBrowserDownload} from '../utils/trigger-browser-download';
 import {convertArrayToCsv} from '../utils/convert-array-to-csv';
 import {selectionStore} from '../store/selection.store';
 import {UMAP_EXPORT_FILENAME} from '../constants';
+import {fetchFeatures} from '../utils/fetch-features';
 
 export function useUMAPExport() {
   const {
@@ -95,7 +96,7 @@ export function useUMAPExport() {
     return name;
   }
 
-  function parse(
+  async function parse(
     dataset: UMAPDatasetStoreInterface['dataset'],
     name: string,
     columnsNames: ConfigStoreInterface['columnsNames'],
@@ -122,17 +123,38 @@ export function useUMAPExport() {
       const point = points[i];
       const data = metadata[i];
 
+      const band = selectionStore.band;
+
+      if (!band) {
+        continue;
+      }
+
+      const label = data.label;
+
+      if (!label) {
+        continue;
+      }
+
+      const [range, site] = label.split('/');
+      const time = data.timestamp as number;
+
+      const features = await fetchFeatures({band, range, site, time});
+
       if (type === 'json') {
-        payload.push({point, data});
+        payload.push({
+          point,
+          data,
+          features,
+        });
       } else if (type === 'csv') {
         payload.push([
           metadata[i]['label'],
           metadata[i]['timestamp'],
           points[i],
-          // TODO: Add coordinates in 128 dimensions (ASAP)
-          // TODO: Add volumes (later)
           metadata[i]['tags'],
           metadata[i]['columns'],
+          features,
+          // TODO: Add volumes (later)
         ]);
       }
     }
@@ -140,50 +162,51 @@ export function useUMAPExport() {
     return payload;
   }
 
-  function handleClick(type: 'json' | 'csv' = 'json') {
-    useConfig().then(({columnsNames}) => {
-      const filename = getFilename() || UMAP_EXPORT_FILENAME;
+  async function handleClick(type: 'json' | 'csv' = 'json') {
+    const {columnsNames} = await useConfig();
 
-      if (!filename || !columnsNames) {
-        return;
-      }
+    const filename = getFilename() || UMAP_EXPORT_FILENAME;
 
-      const results = parse(UMAPDatasetStore.dataset, filename, columnsNames, type);
+    if (!filename || !columnsNames) {
+      return;
+    }
 
-      if (!results) {
-        return;
-      }
+    const results = await parse(UMAPDatasetStore.dataset, filename, columnsNames, type);
 
-      if (type === 'json') {
-        const json = convertObjectToJsonString(results);
+    if (!results) {
+      return;
+    }
 
-        triggerBrowserDownload({
-          data: json,
-          filename: `${filename}.json`,
-          callback: () => loadingRef.value = false,
-        });
-      } else if (type === 'csv') {
-        const firstRow = [
-          'label',
-          'timestamp',
-          '2D_X',
-          '2D_Y',
-          'tags',
-          ...columnsNames.map((c) => `col_${c}`),
-        ];
+    if (type === 'json') {
+      const json = convertObjectToJsonString(results);
 
-        const csv = convertArrayToCsv(
-          results as string[][],
-          firstRow,
-        );
+      triggerBrowserDownload({
+        data: json,
+        filename: `${filename}.json`,
+        callback: () => loadingRef.value = false,
+      });
+    } else if (type === 'csv') {
+      const firstRow = [
+        'label',
+        'timestamp',
+        '2D_X',
+        '2D_Y',
+        'tags',
+        ...columnsNames.map((c) => `col_${c}`),
+        'features',
+      ];
 
-        triggerBrowserDownload({
-          data: csv,
-          filename: `${filename}.csv`,
-          callback: () => loadingRef.value = false,
-        });
-      }
-    });
+      const csv = convertArrayToCsv(
+        results as string[][],
+        firstRow,
+      );
+
+      triggerBrowserDownload({
+        data: csv,
+        filename: `${filename}.csv`,
+        callback: () => loadingRef.value = false,
+      });
+    }
   }
 
   return {
