@@ -1,3 +1,28 @@
+# [3.15.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.14.0...v3.15.0) (2022-12-16)
+
+
+### Bug Fixes
+
+* **Processing/Features:** Add `TIME_DELAY` constant (set back to `0.92` for now) ([8b10af5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8b10af50dff0a234d8cf79257c4e626323708ff7))
+
+
+### Features
+
+* Add alpha control UIs to Front + Work on feature extraction + Import static version of `scatter-gl` and alter its source to allow transparency + Add new color types based on configuration columns + Misc ([191163d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/191163db922115281af59452dd8eb3a7e00b7f90))
+* Extract features from back end + Build downloadable objects with those new data in Front end ([664cee9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/664cee93e8075778a1f66d0a5d1bd5499e903287))
+* **Front/UMAP/Alphas:** Improve text readability + Reword ([6f372d8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6f372d89de0e8e52f85b71c84e504c81f7149808))
+* **Front/UMAP/Legend:** Add media queries to container + Add export for selection + Show only label strings for selection + Misc ([91a358d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/91a358d0d76b209a90a4f2c0efc0e06cb1c68040))
+* **Front/UMAP/Legend:** Add tooltip to Gradient + Add selection list ([049a722](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/049a722eae056c17b077cb106a18b3c2e2b67017))
+* **Front/UMAP/Legend:** Improve styling ([a58c9e9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a58c9e930979d122bc4b62ea6b1945913d7c919c))
+* **Front/UMAP:** Add new Legend component UI skeleton ([08cd836](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/08cd8361d0dd721c7ddcb75fd21bdbbdd9381f32))
+* Improve code quality + Remove code smells ([4ac04e6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4ac04e6549c1b53fb09b13372c96f3c8cc29e311))
+
+
+### Performance Improvements
+
+* **Processing/Computations:** Move computations utility functions under `utils` ([16681eb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/16681ebe28a6fbba1b00889bf23e1c5c76161568))
+* **Processing/Features:** Remove redundant arguments + Dead imports ([e9478f6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e9478f6bfb44b240d9fe753d42903d8cbd8d64cf))
+
 # [3.14.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.13.0...v3.14.0) (2022-12-10)
 
 
