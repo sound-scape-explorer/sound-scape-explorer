@@ -40,7 +40,6 @@ function filterByString(string: string): string[] {
   const labels = getDatasetLabels();
   return labels.filter((label) => {
     const splitPathAndFilename = splitLabelByPath(label);
-    // const path = splitPathAndFilename[0];
     const columns = splitLabelByColumns(splitPathAndFilename[1]);
 
     return columns.some((column) => column.toUpperCase() === string.toUpperCase());

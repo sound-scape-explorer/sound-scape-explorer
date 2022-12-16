@@ -10,6 +10,8 @@ export const PREGENERATED_HUES_LENGTH = 1000;
 
 export const UMAP_WINDOW_TIME = 3600; // seconds
 
+export const UMAP_EXPORT_FILENAME = 'SSE_UMAP';
+
 interface APIRoutesDefaultParameters {
   interval: string;
   band: string;
@@ -24,6 +26,13 @@ interface APIRoutesVolumesImageParameters extends APIRoutesDefaultParameters {
 
 interface APIRoutesUMAPParameters extends APIRoutesDefaultParameters {
   isImage?: boolean;
+}
+
+interface APIRoutesFeaturesParameters {
+  band: string;
+  range: string;
+  site: string;
+  time: number;
 }
 
 export const API_ROUTES = {
@@ -53,4 +62,12 @@ export const API_ROUTES = {
       isImage = false,
     }: APIRoutesUMAPParameters,
   ) => `${BACK_HOSTNAME}/umap/${interval}/${band}${isImage ? '/image' : ''}`,
+  features: (
+    {
+      band,
+      range,
+      site,
+      time,
+    }: APIRoutesFeaturesParameters,
+  ) => `${BACK_HOSTNAME}/features/${band}/${range}/${site}/${time}`,
 };

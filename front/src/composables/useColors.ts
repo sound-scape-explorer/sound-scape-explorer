@@ -5,9 +5,9 @@ import type {ComputedRef} from 'vue';
 import {computed} from 'vue';
 
 interface UseColors {
-    colors: ComputedRef<Scale>;
-    nightColor: Color;
-    dayColor: Color;
+  colors: ComputedRef<Scale>;
+  nightColor: Color;
+  dayColor: Color;
 }
 
 export function useColors(): UseColors {

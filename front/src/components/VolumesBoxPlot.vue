@@ -10,6 +10,7 @@ import type {ApiVolumeInterface} from '../interfaces/api-volume.interface';
 import {volumesOptionsStore} from '../store/volumes-options.store';
 import {getQuartiles} from '../utils/get-quartiles';
 import {convertTimestampToDate} from '../utils/convert-timestamp-to-date';
+import {selectionStore} from '../store/selection.store';
 
 accessibility(Highcharts);
 highchartsMore(Highcharts);
@@ -67,17 +68,14 @@ const options = ref<Options>({
  */
 
 async function updateData() {
-  const {activeBand, activeInterval} = volumesOptionsStore;
+  const {band, interval} = selectionStore;
 
-  if (activeBand === null || activeInterval === null) {
+  if (band === null || interval === null) {
     return;
   }
 
   try {
-    const endpoint = API_ROUTES.volumes({
-      interval: activeInterval,
-      band: activeBand,
-    });
+    const endpoint = API_ROUTES.volumes({interval, band});
 
     const request = await fetch(endpoint);
     fetchedData.value = await request.json();
@@ -92,14 +90,12 @@ function resetPlot() {
 }
 
 function parseData() {
-  const {activeSites, activeRange, activeBand, activeInterval} = volumesOptionsStore;
+  const {activeSites, activeRange} = volumesOptionsStore;
 
   if (
     activeSites.length === 0
       || activeRange === null
       || !fetchedData.value
-      || activeBand === null
-      || activeInterval === null
   ) {
     return;
   }
@@ -153,7 +149,11 @@ function parseData() {
  * Lifecycles
  */
 
-watch(volumesOptionsStore, async () => {
+watch(selectionStore, async () => {
+  if (selectionStore.band === null || selectionStore.interval === null) {
+    return;
+  }
+
   await updateData();
   resetPlot();
   parseData();

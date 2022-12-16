@@ -8,10 +8,10 @@ from processing.utils.waveform_to_examples import waveform_to_examples
 
 
 class VGGish(VGG, metaclass=SingletonMeta):
-    def __init__(self, band_params, device=None):
-        device = get_device()
+    def __init__(self, band_params):
+        self.device = get_device()
 
-        print(f"Instantiating VGGish model with {device}")
+        print(f"Instantiating VGGish model with {self.device}")
 
         super().__init__(make_layers())
 
@@ -22,7 +22,6 @@ class VGGish(VGG, metaclass=SingletonMeta):
 
         super().load_state_dict(state_dict)
 
-        self.device = device
         self.to(self.device)
         self.band_params = band_params
 

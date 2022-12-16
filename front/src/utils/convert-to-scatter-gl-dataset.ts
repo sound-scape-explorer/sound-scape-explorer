@@ -1,6 +1,6 @@
 import type {ApiUMAPInterface} from '../interfaces/api-UMAP.interface';
-import type {Point2D, PointMetadata} from 'scatter-gl';
-import {ScatterGL} from 'scatter-gl';
+import type {Point2D, PointMetadata} from '../lib/scatter-gl-0.0.13';
+import {ScatterGL} from '../lib/scatter-gl-0.0.13';
 import {findTags} from './find-tags';
 
 interface MyMetadata {

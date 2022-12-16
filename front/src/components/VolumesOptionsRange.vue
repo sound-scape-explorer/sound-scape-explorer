@@ -3,6 +3,7 @@ import {computed, defineProps} from 'vue';
 import {NButton, NDropdown} from 'naive-ui';
 import {convertToNaiveDropdownOptions} from '../utils/convert-to-naive-dropdown-options';
 import {volumesOptionsStore} from '../store/volumes-options.store';
+import {useSelection} from '../composables/useSelection';
 
 /**
  * Props
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const {ranges} = defineProps<Props>();
+const {isActive} = useSelection();
 
 /**
  * State
@@ -32,6 +34,7 @@ function selectRange(nextRange: string) {
 
 <template>
   <n-dropdown
+      :disabled="!isActive"
       :options="options"
       placement="bottom-start"
       trigger="hover"

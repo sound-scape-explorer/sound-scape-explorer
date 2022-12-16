@@ -1,12 +1,17 @@
 import {API_ROUTES} from '../constants';
-import {volumesOptionsStore} from '../store/volumes-options.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {
   convertToScatterGlDataset,
 } from '../utils/convert-to-scatter-gl-dataset';
 import {selectionImageStore} from '../store/selection-image.store';
+import {selectionStore} from '../store/selection.store';
+import {modalLoadingStore} from '../store/modal-loading.store';
+import {onUnmounted} from 'vue';
+import {useSelection} from './useSelection';
 
 export function useUMAPPage() {
+  const {clearSelection} = useSelection();
+
   function resetImage() {
     selectionImageStore.image = null;
   }
@@ -20,13 +25,13 @@ export function useUMAPPage() {
   }
 
   function resetSelection() {
-    volumesOptionsStore.activeBand = null;
-    volumesOptionsStore.activeIntervalLabel = null;
+    selectionStore.band = null;
+    selectionStore.interval = null;
   }
 
   function setSelection(band: string, intervalLabel: string) {
-    volumesOptionsStore.activeBand = band;
-    volumesOptionsStore.activeIntervalLabel = intervalLabel;
+    selectionStore.band = band;
+    selectionStore.interval = intervalLabel;
   }
 
   async function fetchData(band: string, intervalLabel: string) {
@@ -45,7 +50,6 @@ export function useUMAPPage() {
 
       UMAPDatasetStore.dataset = convertToScatterGlDataset(data);
     } catch {
-      // options.value.series = [];
       UMAPDatasetStore.dataset = null;
     }
   }
@@ -70,7 +74,21 @@ export function useUMAPPage() {
     callback();
   }
 
+  function delayUpdate(band: string, interval: string) {
+    modalLoadingStore.isLoading = true;
+
+    setTimeout(() => {
+      handleUpdate({
+        band,
+        interval,
+        callback: () => modalLoadingStore.isLoading = false,
+      });
+    }, 250);
+  }
+
+  onUnmounted(clearSelection);
+
   return {
-    handleUpdate,
+    delayUpdate,
   };
 }

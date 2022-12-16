@@ -4,8 +4,10 @@ import {NSelect} from 'naive-ui';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 import {VariableType} from '../types/variable.type';
 import {volumesOptionsStore} from '../store/volumes-options.store';
+import {useSelection} from '../composables/useSelection';
 
 const variables: VariableType[] = ['sumvar', 'sumstd', 'logprodspan'];
+const {isActive} = useSelection();
 
 /**
  * State
@@ -26,6 +28,7 @@ function selectVariable(nextVariable: VariableType) {
 <template>
   <n-select
       v-model:value="volumesOptionsStore.activeVariable"
+      :disabled="!isActive"
       :options="options"
       filterable
       @update:value="selectVariable"

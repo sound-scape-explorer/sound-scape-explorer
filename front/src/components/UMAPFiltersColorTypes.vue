@@ -6,7 +6,7 @@ import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 import {useConfig} from '../composables/useConfig';
-import {convertColumnsToColorTypes} from '../utils/convert-columns-to-color-types';
+import {useUMAPColumns} from '../composables/useUMAPColumns';
 
 /**
  * State
@@ -14,6 +14,7 @@ import {convertColumnsToColorTypes} from '../utils/convert-columns-to-color-type
 
 const {isDisabled} = useUMAPStatus();
 const {columnsNames} = await useConfig();
+const {getColumnsNamesAsColorTypes} = useUMAPColumns();
 
 const options = computed<UMAPFiltersColorType[]>(() => {
   if (!columnsNames) {
@@ -26,7 +27,7 @@ const options = computed<UMAPFiltersColorType[]>(() => {
     'by1h',
     'by10min',
     'isDay',
-    ...convertColumnsToColorTypes(columnsNames),
+    ...getColumnsNamesAsColorTypes(),
   ];
 });
 

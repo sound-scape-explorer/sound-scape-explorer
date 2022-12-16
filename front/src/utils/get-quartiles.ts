@@ -4,7 +4,7 @@ import {quantile} from 'simple-statistics';
  * @todo Will be migrated to the backend
  */
 export function getQuartiles(rawData: number[]): number[] {
-  const data = rawData.sort((a, b) => a - b);
+  const data = [...rawData].sort((a, b) => a - b);
   const n = data.length;
 
   const min = data[0];

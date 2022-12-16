@@ -15,8 +15,8 @@ function initializeColumnsSelection() {
     return;
   }
 
-  for (let i = 0; i < columnsKeys.value.length; ++i) {
-    selection[columnsKeys.value[i]] = [];
+  for (const element of columnsKeys.value) {
+    selection[element] = [];
   }
 }
 
@@ -26,8 +26,19 @@ onMounted(initializeColumnsSelection);
 <template>
   <n-grid :cols="2" class="grid" x-gap="12">
     <n-gi v-for="(_column, index) in columnsNames">
-      <n-tag :bordered="false" class="tag" size="small">{{ columnsNames[index] }}</n-tag>
-      <UMAPColumnsCheckboxes :items="columns[columnsKeys[index]]" :title="index.toString()" />
+      <n-tag
+          :bordered="false"
+          class="tag"
+          size="small"
+      >
+        {{ columnsNames[index] }}
+      </n-tag>
+
+      <UMAPColumnsCheckboxes
+          :index="index"
+          :items="columns[columnsKeys[index]]"
+          :title="columnsNames[index]"
+      />
     </n-gi>
   </n-grid>
 </template>

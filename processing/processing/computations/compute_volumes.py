@@ -3,9 +3,9 @@ import pathlib
 
 import numpy as np
 
-from processing.computations.iterate_timegroups import iterate_timegroups
-from processing.computations.load_features_for import load_features_for
-from processing.computations.timegroup_loaded_features import \
+from processing.utils.iterate_timegroups import iterate_timegroups
+from processing.utils.load_features_for import load_features_for
+from processing.utils.timegroup_loaded_features import \
     timegroup_loaded_features
 
 
@@ -13,8 +13,10 @@ def compute_volumes(cfg, plot, show):
     integrations = [int(v) for v in
                     cfg.variables['integration_seconds'].split('-')]
     sites = list(set([f.site for f in cfg.files.values()]))
+
     for inte in integrations:
         print('... INTEGRATION', inte)
+
         for band in cfg.bands.keys():
             print('... ... BAND', band)
             infos = {
@@ -22,13 +24,14 @@ def compute_volumes(cfg, plot, show):
                 'band': band,
                 'data': {}
             }
+
             for r_name in cfg.ranges.keys():
                 print('... ... ... RANGE', r_name)
                 r = cfg.ranges[r_name]
+
                 for s in sites:
                     print('... ... ... ... SITE', s)
-                    range_times, range_features = load_features_for(cfg, band,
-                                                                    r, s)
+                    range_times, range_features = load_features_for(band, r, s)
                     range_bins, group_starts = timegroup_loaded_features(
                         range_times, r, inte)
                     d_times = []
@@ -36,6 +39,7 @@ def compute_volumes(cfg, plot, show):
                     d_sumvar = []
                     d_sumstd = []
                     d_logprodspan = []
+
                     for g_start, g_end, t_start, g_start_i in iterate_timegroups(
                             r, inte, range_bins, group_starts):
                         d_times.append(t_start)
@@ -60,14 +64,18 @@ def compute_volumes(cfg, plot, show):
                 'single', 'volume', str(inte), band + '.json')
             # todo: refactor as save json (and gzip it at some point)
             out_path.absolute().parent.mkdir(parents=True, exist_ok=True)
+
             with open(out_path, "w") as jsonfile:
                 json.dump(infos, jsonfile)
+
             if plot:
-                import \
-                    matplotlib.pyplot as plt  # import here to have matplotlib optional
+                # import here to have matplotlib optional
+                import matplotlib.pyplot as plt
+
                 for kplot in [k for k in list(infos['data'].values())[0] if
                               k != 't' and k != 'i']:
                     # import seaborn as sns
+
                     for k, data in infos['data'].items():
                         plt.plot_date([t / 3600 / 24 for t in data['t']],
                                       data[kplot], label=k, linestyle='-',

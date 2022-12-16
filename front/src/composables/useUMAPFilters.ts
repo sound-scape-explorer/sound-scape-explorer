@@ -109,8 +109,7 @@ export function useUMAPFilters() {
       const columnValue = columnValues[0];
 
       if (typeof columnValue === 'number') {
-        const n = columnValue as number;
-        isVisible = columnSelectionValues.includes(n.toString());
+        isVisible = columnSelectionValues.includes(columnValue.toString());
       } else {
         isVisible = columnSelectionValues.includes(columnValue as number);
       }
@@ -127,9 +126,7 @@ export function useUMAPFilters() {
   ) {
     let result = true;
 
-    for (let i = 0; i < keys.length; ++i) {
-      const key = keys[i];
-
+    for (const key of keys) {
       const keyIndex = columnsNames?.indexOf(key) || -1;
 
       if (keyIndex === -1) {

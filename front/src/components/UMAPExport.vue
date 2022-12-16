@@ -11,16 +11,16 @@ const {isDisabled} = useUMAPStatus();
 <template>
   <Button
       :disabled="isDisabled"
-      :handle-click="() => handleClick('json')"
-      :loading-ref="loadingRef"
+      :handle-click="async () => await handleClick('json')"
+      :loading="loadingRef"
       text="json"
   >
     <code-download-outline />
   </Button>
   <Button
       :disabled="isDisabled"
-      :handle-click="() => handleClick('csv')"
-      :loading-ref="loadingRef"
+      :handle-click="async () => await handleClick('csv')"
+      :loading="loadingRef"
       text="csv"
   >
     <download-outline />

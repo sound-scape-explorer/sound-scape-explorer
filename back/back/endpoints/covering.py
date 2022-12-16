@@ -2,7 +2,8 @@ from os.path import exists
 
 from back import app
 from back.constants import BASEPATH
-from back.utils import get_error_response, read_png_file
+from back.utils.get_error_response import get_error_response
+from back.utils.read_png_file import read_png_file
 
 
 @app.route("/covering/<string:interval>/<string:band>")

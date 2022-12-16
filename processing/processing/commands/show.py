@@ -11,6 +11,7 @@ from processing.utils.get_audio_duration import get_audio_duration
 from processing.utils.get_config import get_config
 from processing.utils.iterate_audio_files_with_bands import \
     iterate_audio_files_with_bands
+from processing.utils.load_features_for import load_features_for
 
 
 @cli.group()
@@ -22,17 +23,17 @@ def show():
 @click.option('--json/--dict', default=False)
 def config(json):
     my_config = get_config()
-    dict = my_config._asdict()
-    files = dict['files']
+    my_dict = my_config._asdict()
+    files = my_dict['files']
 
     format_files_columns(files)
 
     if not json:
-        pprint.pprint(dict)
+        pprint.pprint(my_dict)
         return
 
     # TODO: might need a more complex method if we push the idea of parsing the config even further
-    print(dumps(dict, default=lambda o: o.isoformat()))
+    print(dumps(my_dict, default=lambda o: o.isoformat()))
 
 
 @show.command()
@@ -101,9 +102,26 @@ def audio_span_plot(duration, no_print, aggregate):
 def list_sites():
     cfg = get_config()
     sites = set()
+
     for o in iterate_audio_files_with_bands(cfg):
         sites.add(o[4].site)
+
     for i in sorted(list(sites)):
         print(i)
+
     print(sorted(list(sites)))
     print(",".join(sorted(list(sites))))
+
+
+@show.command()
+def features():
+    my_config = get_config()
+
+    for range_name in my_config.ranges:
+        my_features = load_features_for(
+            'all',
+            my_config.ranges[range_name],
+            'POST_CerBra_alarm_1_a_SPRING',
+        )[1]
+
+        return my_features[1]
