@@ -3,6 +3,7 @@ import click
 from processing.cli import cli
 from processing.computations.compute_UMAPs import compute_UMAPs
 from processing.computations.compute_coverings import compute_coverings
+from processing.computations.compute_features import compute_features
 from processing.computations.compute_volumes import compute_volumes
 from processing.utils.get_config import get_config
 
@@ -37,3 +38,9 @@ def volume(no_plot, show):
     plot = not no_plot
     cfg = get_config()
     compute_volumes(cfg, plot, show)
+
+
+@compute.command()
+def features():
+    config = get_config()
+    compute_features(config)

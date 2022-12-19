@@ -70,6 +70,14 @@ function check_compute_volume_folder {
   fi
 }
 
+function check_compute_features_folder {
+  if [ -d "generated/features" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 function check_compute_covering_folder {
   if [ -d "generated/pairwise" ]; then
     return 0
@@ -102,7 +110,16 @@ function run_compute_volume {
   local res=$?
   [ "$res" -eq 0 ] && return
 
-  sse compute volume
+  sse compute volume --no-plot
+}
+
+function run_compute_features {
+  check_compute_folder
+  check_compute_features_folder
+  local res=$?
+  [ "$res" -eq 0 ] && return
+
+  sse compute features
 }
 
 function run_compute_covering {
@@ -127,6 +144,7 @@ function run_computes {
   run_compute_volume
   run_compute_covering
   run_compute_umap
+  run_compute_features
 }
 
 function run_config {
@@ -199,6 +217,7 @@ else
   [ "$2" == "compute-volume" ] && run_compute_volume
   [ "$2" == "compute-covering" ] && run_compute_covering
   [ "$2" == "compute-umap" ] && run_compute_umap
+  [ "$2" == "compute-features" ] && run_compute_features
 
   [ "$2" == "all-but-volume" ] && run_all_but_volume
   [ "$2" == "all-but-covering" ] && run_all_but_covering
