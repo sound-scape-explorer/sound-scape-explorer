@@ -29,10 +29,11 @@ interface APIRoutesUMAPParameters extends APIRoutesDefaultParameters {
 }
 
 interface APIRoutesFeaturesParameters {
+  interval: string;
   band: string;
   range: string;
   site: string;
-  time: number;
+  timestamp: number;
 }
 
 export const API_ROUTES = {
@@ -64,10 +65,11 @@ export const API_ROUTES = {
   ) => `${BACK_HOSTNAME}/umap/${interval}/${band}${isImage ? '/image' : ''}`,
   features: (
     {
+      interval,
       band,
       range,
       site,
-      time,
+      timestamp,
     }: APIRoutesFeaturesParameters,
-  ) => `${BACK_HOSTNAME}/features/${band}/${range}/${site}/${time}`,
+  ) => `${BACK_HOSTNAME}/features/${interval}/${band}/${range}/${site}/${timestamp}`,
 };

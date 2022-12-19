@@ -2,6 +2,10 @@
   "name": "sound-scape-explorer",
   "scripts": {
     "install": "./install.sh && yarn process",
+    "clean:features": "rimraf -r sample/generated/features",
+    "clean:volumes": "rimraf -r sample/generated/single",
+    "compute:features": "processing/run.sh sample compute-features",
+    "compute:volumes": "yarn process:compute:volumes",
     "dev": "concurrently './run-back.sh' './run-front.sh'",
     "config:populate-columns": "processing/run.sh sample config-populate-columns",
     "process": "yarn process:all",
@@ -10,9 +14,10 @@
     "process:all-but-volume": "processing/run.sh sample all-but-volume",
     "process:extract": "processing/run.sh sample extract",
     "process:compute": "processing/run.sh sample compute",
-    "process:compute-volume": "processing/run.sh sample compute-volume",
-    "process:compute-covering": "processing/run.sh sample compute-covering",
-    "process:compute-umap": "processing/run.sh sample compute-umap",
+    "process:compute:volume": "yarn process:compute:volumes",
+    "process:compute:volumes": "processing/run.sh sample compute-volume",
+    "process:compute:covering": "processing/run.sh sample compute-covering",
+    "process:compute:umap": "processing/run.sh sample compute-umap",
     "process:config": "processing/run.sh sample config",
     "process:config:test": "processing/run.sh sample config-test",
     "process:clean": "processing/clean.sh sample",
@@ -21,7 +26,8 @@
     "start": "yarn dev"
   },
   "devDependencies": {
-    "concurrently": "^7.4.0"
+    "concurrently": "^7.4.0",
+    "rimraf": "^3.0.2"
   },
   "version": "3.15.0"
 }

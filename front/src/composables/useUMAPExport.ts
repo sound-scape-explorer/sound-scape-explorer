@@ -109,9 +109,25 @@ export function useUMAPExport() {
       return;
     }
 
-    const payload = [];
+    // TODO type me
+    const payload: unknown[] = [];
 
     const {points, metadata} = dataset;
+
+    const band = selectionStore.band;
+    const intervalLabel = selectionStore.interval;
+    const {intervals, intervalLabels} = await useConfig();
+
+    if (!intervalLabel || !intervalLabels || !intervals) {
+      return payload;
+    }
+
+    const intervalIndex = intervalLabels.indexOf(intervalLabel);
+    const interval = intervals[intervalIndex].toString();
+
+    if (!band || !interval) {
+      return payload;
+    }
 
     for (let i = 0; i < points.length; ++i) {
       const shouldBeFilteredOut = shouldBeFiltered(i, columnsNames);
@@ -123,12 +139,6 @@ export function useUMAPExport() {
       const point = points[i];
       const data = metadata[i];
 
-      const band = selectionStore.band;
-
-      if (!band) {
-        continue;
-      }
-
       const label = data.label;
 
       if (!label) {
@@ -136,9 +146,15 @@ export function useUMAPExport() {
       }
 
       const [range, site] = label.split('/');
-      const time = data.timestamp as number;
+      const timestamp = data.timestamp as number;
 
-      const features = await fetchFeatures({band, range, site, time});
+      const features = await fetchFeatures({
+        band,
+        range,
+        site,
+        interval,
+        timestamp,
+      });
 
       if (type === 'json') {
         payload.push({
@@ -158,6 +174,8 @@ export function useUMAPExport() {
         ]);
       }
     }
+
+    console.log(payload);
 
     return payload;
   }
