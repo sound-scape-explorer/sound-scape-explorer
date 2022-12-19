@@ -1,3 +1,10 @@
+## [3.15.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.15.0...v3.15.1) (2022-12-19)
+
+
+### Bug Fixes
+
+* Save grouped features at Processing level + Build correct data for exports from Front ([b10974c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b10974c7d95f5e0bc17e327e3d31a97b3db0effe))
+
 # [3.15.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.14.0...v3.15.0) (2022-12-16)
 
 
