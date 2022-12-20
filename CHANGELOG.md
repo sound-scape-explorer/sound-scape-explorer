@@ -1,3 +1,10 @@
+## [3.15.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.15.1...v3.15.2) (2022-12-20)
+
+
+### Bug Fixes
+
+* **Processing:** Remove singleton for model classes ([50e8825](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/50e882564fdf532754d96399f55d054da248f2f8))
+
 ## [3.15.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.15.0...v3.15.1) (2022-12-19)
 
 
