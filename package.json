@@ -4,6 +4,7 @@
     "install": "./install.sh && yarn process",
     "clean:features": "rimraf -r sample/generated/features",
     "clean:volumes": "rimraf -r sample/generated/single",
+    "compute:all": "yarn process:compute",
     "compute:features": "processing/run.sh sample compute-features",
     "compute:volumes": "yarn process:compute:volumes",
     "dev": "concurrently './run-back.sh' './run-front.sh'",

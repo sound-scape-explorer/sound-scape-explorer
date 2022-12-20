@@ -1,17 +1,17 @@
 import torch
 from torch import nn
 
-from processing.utils.singleton_meta import SingletonMeta
 
-
-class VGG(nn.Module, metaclass=SingletonMeta):
+# class VGG(nn.Module, metaclass=SingletonMeta):
+class VGG(nn.Module):
     def __init__(self, features):
         super(VGG, self).__init__()
         self.features = features
         self.embeddings = nn.Sequential(
             nn.Linear(512 * 4 * 6, 4096), nn.ReLU(True),
             nn.Linear(4096, 4096), nn.ReLU(True),
-            nn.Linear(4096, 128), nn.ReLU(True))
+            nn.Linear(4096, 128), nn.ReLU(True)
+        )
 
     def forward(self, x):
         with torch.no_grad():

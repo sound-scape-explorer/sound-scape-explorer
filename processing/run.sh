@@ -128,7 +128,7 @@ function run_compute_covering {
   local res=$?
   [ "$res" -eq 0 ] && return
 
-  sse compute covering
+  sse compute covering --no-plot
 }
 
 function run_compute_umap {
@@ -137,7 +137,7 @@ function run_compute_umap {
   local res=$?
   [ "$res" -eq 0 ] && return
 
-  sse compute umap
+  sse compute umap --no-plot
 }
 
 function run_computes {

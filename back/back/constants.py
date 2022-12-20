@@ -1,10 +1,11 @@
 import os
+from typing import Dict
 
-cwd = os.getcwd()
-path = os.path.split(cwd)[0]
+cwd: str = os.getcwd()
+path: str = os.path.split(cwd)[0]
 
-BASEPATH = f'{path}/sample'
+BASE_PATH: str = f'{path}/sample'
 
-ERROR_NOT_FOUND = 'File not found'
+ERROR_NOT_FOUND: str = 'File not found'
 
-PAYLOAD_ERROR = {'success': False}
+PAYLOAD_ERROR: Dict[str, bool] = {'success': False}
