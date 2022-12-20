@@ -3,11 +3,11 @@ from torch import hub
 from processing.models.VGG import VGG
 from processing.utils.get_device import get_device
 from processing.utils.make_layers import make_layers
-from processing.utils.singleton_meta import SingletonMeta
 from processing.utils.waveform_to_examples import waveform_to_examples
 
 
-class VGGish(VGG, metaclass=SingletonMeta):
+# class VGGish(VGG, metaclass=SingletonMeta):
+class VGGish(VGG):
     def __init__(self, band_params):
         self.device = get_device()
 
@@ -18,7 +18,8 @@ class VGGish(VGG, metaclass=SingletonMeta):
         state_dict = hub.load_state_dict_from_url(
             'https://github.com/harritaylor/torchvggish/'
             'releases/download/v0.1/vggish-10086976.pth',
-            progress=True)
+            progress=True
+        )
 
         super().load_state_dict(state_dict)
 
