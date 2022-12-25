@@ -1,8 +1,8 @@
-import openpyxl
+from openpyxl.reader.excel import load_workbook
 
 
 def open_excel_file(path: str):
-    workbook = openpyxl.load_workbook(path)
+    workbook = load_workbook(path)
     worksheet = workbook["Sheet1"]
 
-    return [workbook, worksheet]
+    return workbook, worksheet

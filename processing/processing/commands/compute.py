@@ -1,11 +1,11 @@
 import click
 
+from processing.classes.Config import Config
 from processing.cli import cli
 from processing.computations.compute_UMAPs import compute_UMAPs
 from processing.computations.compute_coverings import compute_coverings
 from processing.computations.compute_features import compute_features
 from processing.computations.compute_volumes import compute_volumes
-from processing.utils.get_config import get_config
 
 
 @cli.group()
@@ -16,31 +16,31 @@ def compute():
 @compute.command()
 @click.option('--no-plot/--plot', '-np', default=False)
 @click.option('--show/--no-show', '-s', default=False)
-def umap(no_plot, show):
+def umap(no_plot: bool, show: bool) -> None:
     plot = not no_plot
-    cfg = get_config()
+    cfg = Config().get()
     compute_UMAPs(cfg, plot, show)
 
 
 @compute.command()
 @click.option('--no-plot/--plot', '-np', default=False)
 @click.option('--show/--no-show', '-s', default=False)
-def covering(no_plot, show):
+def covering(no_plot: bool, show: bool) -> None:
     plot = not no_plot
-    cfg = get_config()
+    cfg = Config().get()
     compute_coverings(cfg, plot, show)
 
 
 @compute.command()
 @click.option('--no-plot/--plot', '-np', default=False)
 @click.option('--show/--no-show', '-s', default=False)
-def volume(no_plot, show):
+def volume(no_plot: bool, show: bool) -> None:
     plot = not no_plot
-    cfg = get_config()
+    cfg = Config().get()
     compute_volumes(cfg, plot, show)
 
 
 @compute.command()
-def features():
-    config = get_config()
+def features() -> None:
+    config = Config().get()
     compute_features(config)

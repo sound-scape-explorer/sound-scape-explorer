@@ -1,4 +1,4 @@
-from flask import jsonify, Response
+from flask import Response, jsonify
 
 from back import app
 from back.utils.read_config import read_config

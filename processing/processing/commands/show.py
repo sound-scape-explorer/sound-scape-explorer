@@ -1,66 +1,60 @@
 import datetime
-import pprint
-from json import dumps
 
 import click
 import numpy
 
+from processing.classes.Config import Config
 from processing.cli import cli
-from processing.utils.format_files_columns import format_files_columns
 from processing.utils.get_audio_duration import get_audio_duration
-from processing.utils.get_config import get_config
 from processing.utils.iterate_audio_files_with_bands import \
     iterate_audio_files_with_bands
 from processing.utils.load_features_for import load_features_for
 
 
 @cli.group()
-def show():
+def show() -> None:
     pass
 
 
 @show.command()
-@click.option('--json/--dict', default=False)
-def config(json):
-    my_config = get_config()
-    my_dict = my_config._asdict()
-    files = my_dict['files']
-
-    format_files_columns(files)
-
-    if not json:
-        pprint.pprint(my_dict)
-        return
-
-    # TODO: might need a more complex method if we push the idea of parsing the config even further
-    print(dumps(my_dict, default=lambda o: o.isoformat()))
+def config() -> None:
+    my_config = Config()
+    my_config.print_json()
 
 
 @show.command()
 @click.option('--duration', '--dur', '-d', default=-1)
 @click.option('--no-print/--print', default=False)
 @click.option('--aggregate/--per-site', default=False)
-def audio_span_plot(duration, no_print, aggregate):
+def audio_span_plot(duration: int, no_print: bool, aggregate: bool) -> None:
     from matplotlib import pyplot as plt
 
     per_site = not aggregate
-    config = get_config()
+    config = Config().get()
     ntot = sum(1 for _ in iterate_audio_files_with_bands(config))
     events = []
 
     if per_site:
-        sites = sorted(list(
-            set(o[4].site for o in
-                iterate_audio_files_with_bands(config))))
+        sites = sorted(
+            list(
+                set(
+                    o[4].site for o in
+                    iterate_audio_files_with_bands(config)
+                )
+            )
+        )
         print(sites)
         events = {s: [] for s in sites}
 
     i = 0
 
-    for esr, band, spec, fname, info, input_path in iterate_audio_files_with_bands(
-            config):
+    for esr, band, spec, fname, info, input_path in \
+            iterate_audio_files_with_bands(
+                config
+            ):
         dur = duration if duration > 0 else get_audio_duration(
-            input_path)
+            input_path
+        )
         start = info.start
         end = info.start + datetime.timedelta(seconds=dur)
 
@@ -82,8 +76,8 @@ def audio_span_plot(duration, no_print, aggregate):
     if per_site:
         base = 0
 
-        for s in sites:
-            data = numpy.array(sorted(events[s], key=lambda p: p[0]))
+        for site in sites:
+            data = numpy.array(sorted(events[site], key=lambda p: p[0]))
 
             if data.size == 0:
                 continue
@@ -99,8 +93,8 @@ def audio_span_plot(duration, no_print, aggregate):
 
 
 @show.command()
-def list_sites():
-    cfg = get_config()
+def list_sites() -> None:
+    cfg = Config().get()
     sites = set()
 
     for o in iterate_audio_files_with_bands(cfg):
@@ -115,7 +109,7 @@ def list_sites():
 
 @show.command()
 def features():
-    my_config = get_config()
+    my_config = Config().get()
 
     for range_name in my_config.ranges:
         my_features = load_features_for(

@@ -1,6 +1,6 @@
 from os.path import exists
 
-from flask import jsonify, Response
+from flask import Response, jsonify
 
 from back import app
 from back.constants import BASE_PATH

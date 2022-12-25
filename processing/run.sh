@@ -148,11 +148,11 @@ function run_computes {
 }
 
 function run_config {
-  sse show config --json > generated/ghost-config.json
+  sse show config > generated/ghost-config.json
 }
 
 function run_config_test {
-  sse show config --json
+  sse show config
 }
 
 function run_config_populate_columns {

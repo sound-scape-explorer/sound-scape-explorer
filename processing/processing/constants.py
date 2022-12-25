@@ -1,10 +1,12 @@
-AUDIO_SUFFIX = '.WAV'
-FEATURE_BASE = './features/'
-GENERATED_BASE = './generated/'
-OTHER_BASE = './other/'
-AUDIO_BASE = './audio/'
-TIME_DELTA = 0.92
-EXCEL_COLUMNS = [
+from typing import List
+
+AUDIO_SUFFIX: str = '.WAV'
+FEATURE_BASE: str = './features/'
+GENERATED_BASE: str = './generated/'
+OTHER_BASE: str = './other/'
+AUDIO_BASE: str = './audio/'
+TIME_DELTA: float = 0.92
+EXCEL_COLUMNS: List[str] = [
     "X",
     "Y",
     "Z",

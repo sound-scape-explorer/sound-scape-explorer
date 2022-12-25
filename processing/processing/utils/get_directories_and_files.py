@@ -11,4 +11,4 @@ def get_directories_and_files(path: str) -> [str, str]:
         for d in sorted(dirs):
             my_directories.append(os.path.join(root, d))
 
-    return [my_directories, my_files]
+    return my_directories, my_files

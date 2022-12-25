@@ -7,7 +7,7 @@ from processing.utils.get_directories_and_files import get_directories_and_files
 
 
 def get_columns_from_disk(audio_base_path):
-    [_directories, files] = get_directories_and_files(audio_base_path)
+    _directories, files = get_directories_and_files(audio_base_path)
 
     unique_columns = []
     all_columns = []
@@ -23,4 +23,4 @@ def get_columns_from_disk(audio_base_path):
             if c > columns_length:
                 columns_length = c
 
-    return [unique_columns, all_columns, columns_length]
+    return unique_columns, all_columns, columns_length

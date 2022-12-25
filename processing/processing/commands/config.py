@@ -17,10 +17,12 @@ def config():
 @config.command()
 def populate_columns():
     audio_base_path = get_config_audio_base_path()
-    [_unique_columns, all_columns, columns_length] = get_columns_from_disk(
+
+    _unique_columns, all_columns, columns_length = get_columns_from_disk(
         audio_base_path
     )
-    [workbook, worksheet] = open_excel_file("config.xlsx")
+
+    workbook, worksheet = open_excel_file("config.xlsx")
 
     for i in range(columns_length + 1):
         excel_column = EXCEL_COLUMNS[i]

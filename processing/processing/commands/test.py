@@ -4,5 +4,5 @@ from processing.cli import cli
 
 
 @cli.command()
-def test():
+def test() -> None:
     click.echo('test (toplevel)')

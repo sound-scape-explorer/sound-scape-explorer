@@ -4,15 +4,15 @@ import pickle
 
 import numpy as np
 
+from processing.classes.Config import Config
 from processing.constants import TIME_DELTA
-from processing.utils.get_config import get_config
 from processing.utils.iterate_audio_files import iterate_audio_files
 
 
 def load_features_for(band, r, s):
     range_times = []
     range_features = []
-    cfg = get_config()
+    cfg = Config().get()
 
     for fname, info, audio, npz in iterate_audio_files(
             cfg,

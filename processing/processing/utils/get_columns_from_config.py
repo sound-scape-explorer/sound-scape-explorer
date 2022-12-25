@@ -6,7 +6,7 @@ from processing.utils.open_excel_file import open_excel_file
 def get_columns_from_config():
     path = 'config.xlsx'
 
-    [workbook, _worksheet] = open_excel_file(path)
+    workbook, _worksheet = open_excel_file(path)
     sheet_ranges = workbook['Sheet1']
     close_excel_file(workbook, path)
 
