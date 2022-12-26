@@ -5,6 +5,7 @@ import numpy
 import time
 import torch
 
+from processing.classes.AudioFiles import AudioFiles
 from processing.classes.Config import Config
 from processing.classes.DataLoader import DataLoader
 from processing.errors.ExtractorPathDuplicateError import \
@@ -12,8 +13,6 @@ from processing.errors.ExtractorPathDuplicateError import \
 from processing.models.VGGish import VGGish
 from processing.utils.convert_band_parameters_string_to_array import \
     convert_band_parameters_string_to_array
-from processing.utils.iterate_audio_files_with_bands import \
-    iterate_audio_files_with_bands
 from processing.utils.prevent_keyboard_interrupt import PreventKeyboardInterrupt
 
 
@@ -34,6 +33,8 @@ class Extractor:
         self.__skip_existing = skip_existing
 
         self.__config = Config().get()
+        self.__audio_files = AudioFiles('@feature_base', '.pklz')
+
         self.__todo = 0
         self.__total = 0
         self.__done = 0
@@ -91,10 +92,7 @@ class Extractor:
 
     def __run(self):
         for esr, band, spec, fname, info, input_path, output_path in \
-                iterate_audio_files_with_bands(
-                    self.__config,
-                    ['@feature_base', '.pklz'],
-                ):
+                self.__audio_files.iterate_with_bands():
             self.__increment_total()
 
             does_exist = self.__verify_path_existence(output_path)
