@@ -1,7 +1,7 @@
 import collections
 
 
-def namedtuple_dic(d, typename='new'):
+def convert_dict_to_named_tuple(d, typename='new'):
     top = collections.namedtuple(
         typename,
         [i for i, j in d.items() if not i.startswith('_')],

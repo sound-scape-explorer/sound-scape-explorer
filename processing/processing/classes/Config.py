@@ -4,10 +4,11 @@ from json import dumps
 from processing.classes.Excel import Excel
 from processing.classes.ExcelColumn import ExcelColumn
 from processing.classes.ExcelOpen import ExcelOpen
+from processing.utils.convert_dict_to_named_tuple import \
+    convert_dict_to_named_tuple
 from processing.utils.get_app_version import get_app_version
 from processing.utils.get_columns_from_disk import get_columns_from_disk
 from processing.utils.list_all_sites import list_all_sites
-from processing.utils.namedtuple_dic import namedtuple_dic
 from processing.utils.singleton_meta import SingletonMeta
 
 
@@ -101,7 +102,7 @@ class Config(metaclass=SingletonMeta):
         }
 
     def get(self):
-        return namedtuple_dic(self.__payload, 'CFG')
+        return convert_dict_to_named_tuple(self.__payload, 'CFG')
 
     def print_json(self):
         print(

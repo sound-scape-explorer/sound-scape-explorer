@@ -5,11 +5,8 @@ from processing.classes.Excel import Excel
 from processing.errors.ExcelColumnDuplicateColumnError import \
     ExcelColumnDuplicateColumnError
 from processing.errors.ExcelColumnNotFoundError import ExcelColumnNotFoundError
-from processing.utils.digest_config_columns import digest_config_columns
-from processing.utils.digest_config_sites import digest_config_sites
-from processing.utils.extract_name_from_digest_action import \
-    extract_name_from_digest_action
-from processing.utils.namedtuple_dic import namedtuple_dic
+from processing.utils.convert_dict_to_named_tuple import \
+    convert_dict_to_named_tuple
 
 
 class ExcelColumn:
@@ -40,6 +37,7 @@ class ExcelColumn:
 
         self.__types = []
         self.__payload = {}
+        self.__all_sites = []
 
         self.__prepare_values()
         self.__prepare_types()
@@ -63,6 +61,23 @@ class ExcelColumn:
         if not self.__has_no_prefix:
             self.values = [f'{self.__key}_{value}' for value in self.values]
 
+    def __digest_config_columns(self, _name, item):
+        return [item]
+
+    def __digest_config_sites(self, sites):
+        string = str(sites)
+
+        if string == 'nan':
+            return self.__all_sites
+
+        return string.split(',')
+
+    def __digest_config_columns_name(self, action_string):
+        if '_' in action_string:
+            return action_string.split(':')[0].split('_')[1]
+
+        return action_string
+
     def __prepare_types(self):
         for value in self.values:
             if ':' not in value:
@@ -76,14 +91,14 @@ class ExcelColumn:
                     'I': int,
                     'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
                     'L': lambda v: v.split(','),
-                    'SITES': digest_config_sites,
+                    'SITES': self.__digest_config_sites,
                     'L-': lambda v: v.split('-'),
                     'L-D': lambda v: [
                         datetime.strptime(vv, '%Y%m%d_%H%M') for vv in
                         v.split('-')
                     ],
-                    'COLUMN': lambda el: digest_config_columns(
-                        extract_name_from_digest_action(value),
+                    'COLUMN': lambda el: self.__digest_config_columns(
+                        self.__digest_config_columns_name(value),
                         el,
                     )
                 }[t]
@@ -130,7 +145,7 @@ class ExcelColumn:
 
             start = 0 if self.__has_no_prefix else len(self.__key) + 1
 
-            value = namedtuple_dic(
+            value = convert_dict_to_named_tuple(
                 {
                     c[start:]: self.__types[ic](self.__excel.table[c][i])
                     for ic, c in enumerate(self.values)
