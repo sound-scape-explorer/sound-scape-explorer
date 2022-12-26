@@ -9,16 +9,15 @@ class Excel:
         self.file, self.table = self.__load(self.path, self.sheet)
         self.__rename()
 
-    @staticmethod
-    def __load(path, sheet):
-        file = pandas.ExcelFile(path)
-        table = file.parse(
+    def __load(self, path, sheet):
+        my_file = pandas.ExcelFile(path)
+        table = my_file.parse(
             sheet, converters={
                 'variables_': str
             }
         )
 
-        return file, table
+        return my_file, table
 
     def __rename(self):
         renaming = {

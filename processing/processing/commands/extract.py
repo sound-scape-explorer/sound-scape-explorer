@@ -7,6 +7,7 @@ import click
 import numpy
 
 from processing.classes.Config import Config
+from processing.classes.Extractor import Extractor
 from processing.cli import cli
 from processing.utils.iterate_audio_files_with_bands import \
     iterate_audio_files_with_bands
@@ -93,46 +94,12 @@ def preview(file: str, start: int, duration: int, no_ffmpeg: bool) -> None:
         )
 
 
+# noinspection PyShadowingBuiltins
 @extract.command()
 @click.option('--force/--no-force', '-f', default=False)
 @click.option('--skip-existing/--no-skip-existing', '-s', default=False)
 def all(force: bool, skip_existing: bool) -> None:
-    config = Config().get()
-
-    todo = 0
-    total = 0
-    done = 0
-
-    for act in ["count", "do"]:
-        for esr, band, spec, fname, info, input_path, output_path in \
-                iterate_audio_files_with_bands(
-                    config,
-                    ['@feature_base', '.pklz'],
-                ):
-            if act == "count":
-                total += 1
-            if output_path.exists() and not force:
-                if skip_existing:
-                    print(f'... skipping {output_path}')
-                    continue
-                raise Exception(
-                    f'"{output_path}" exists (-s to skip existing, or -f to '
-                    f'overwrite).'
-                )
-            if act == "count":
-                todo += 1
-            else:
-                done += 1
-                # own_call(['extract-features', input_path, output_path,
-                # spec, esr])
-                import sys
-                sys.argv = ['extract_features.py', input_path, output_path,
-                            spec, esr]
-                print(f'Processing {input_path} ({done}/{todo}/{total})')
-
-                from processing.features.go import go
-
-                go()
+    Extractor(force, skip_existing)
 
 
 @extract.command()

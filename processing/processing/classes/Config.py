@@ -1,9 +1,9 @@
 import pathlib
 from json import dumps
 
-from processing.classes.App import App
 from processing.classes.Excel import Excel
 from processing.classes.ExcelColumn import ExcelColumn
+from processing.utils.get_app_version import get_app_version
 from processing.utils.get_columns_from_config import get_columns_from_config
 from processing.utils.get_columns_from_disk import get_columns_from_disk
 from processing.utils.list_all_sites import list_all_sites
@@ -82,7 +82,7 @@ class Config(metaclass=SingletonMeta):
         self.path = str(pathlib.Path(self.__excel.path).absolute())
 
     def __set_app_version(self):
-        self.app_version = App.get_version()
+        self.app_version = get_app_version()
 
     @property
     def __payload(self):
