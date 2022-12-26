@@ -9,7 +9,7 @@ from processing.errors.DataLoaderSampleRateError import \
 from processing.errors.DataLoaderSizeError import DataLoaderSizeError
 
 
-class DataLoader:
+class ExtractorDataLoader:
     __input_path: str
     __output_path: str
     __band_parameters: List[int]

@@ -1,13 +1,12 @@
 import pathlib
-from typing import Any, List, Union
+from typing import List
 
 import numpy
 import time
 import torch
 
 from processing.classes.AudioFiles import AudioFiles
-from processing.classes.Config import Config
-from processing.classes.DataLoader import DataLoader
+from processing.classes.ExtractorDataLoader import ExtractorDataLoader
 from processing.errors.ExtractorPathDuplicateError import \
     ExtractorPathDuplicateError
 from processing.models.VGGish import VGGish
@@ -19,7 +18,6 @@ from processing.utils.prevent_keyboard_interrupt import PreventKeyboardInterrupt
 class Extractor:
     __force: bool
     __skip_existing: bool
-    __config: Union[tuple, Any]
     __todo: int
     __total: int
     __done: int
@@ -32,7 +30,6 @@ class Extractor:
         self.__force = force
         self.__skip_existing = skip_existing
 
-        self.__config = Config().get()
         self.__audio_files = AudioFiles('@feature_base', '.pklz')
 
         self.__todo = 0
@@ -97,9 +94,9 @@ class Extractor:
                 self.__audio_files.iterate_with_bands():
             self.__increment_total()
 
-            does_exist = self.__verify_path_existence(output_path)
+            already_exists = self.__verify_path_existence(output_path)
 
-            if does_exist:
+            if already_exists:
                 continue
 
             self.__increment_todo()
@@ -107,7 +104,7 @@ class Extractor:
             self.__extract()
 
     def __extract(self):
-        data_loader = DataLoader(
+        data_loader = ExtractorDataLoader(
             self.__input_path,
             self.__output_path,
             self.__band_parameters,

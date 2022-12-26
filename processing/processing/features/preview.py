@@ -4,7 +4,7 @@ import matplotlib.pyplot as pyplot
 import sys
 import time
 
-from processing.classes.DataLoader import DataLoader
+from processing.classes.ExtractorDataLoader import ExtractorDataLoader
 from processing.utils.get_band_freq_bounds import get_band_freq_bounds
 from processing.utils.waveform_to_examples import waveform_to_examples
 
@@ -13,7 +13,7 @@ def preview():
     # input_path, output_path, band_params, log, t_start, wav_data, sr, \
     #     next_param = load_data()
 
-    data_loader = DataLoader()
+    data_loader = ExtractorDataLoader()
     input_path, output_path, band_params, t_start, wav_data, sr, next_param = \
         data_loader.get()
 
