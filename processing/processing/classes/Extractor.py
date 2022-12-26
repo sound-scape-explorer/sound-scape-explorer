@@ -70,7 +70,9 @@ class Extractor:
 
         self.__band_parameters = band_parameters_array
 
-        print(f'==> Changing band: {self.__band_parameters}')
+        print('')
+        print(f'==> New band: {self.__band_parameters}')
+        print('')
 
         self.__load_model()
 
