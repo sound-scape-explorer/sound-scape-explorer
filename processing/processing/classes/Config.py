@@ -3,8 +3,8 @@ from json import dumps
 
 from processing.classes.Excel import Excel
 from processing.classes.ExcelColumn import ExcelColumn
+from processing.classes.ExcelOpen import ExcelOpen
 from processing.utils.get_app_version import get_app_version
-from processing.utils.get_columns_from_config import get_columns_from_config
 from processing.utils.get_columns_from_disk import get_columns_from_disk
 from processing.utils.list_all_sites import list_all_sites
 from processing.utils.namedtuple_dic import namedtuple_dic
@@ -14,6 +14,7 @@ from processing.utils.singleton_meta import SingletonMeta
 class Config(metaclass=SingletonMeta):
     def __init__(self, path: str = 'config.xlsx', sheet: int = 0):
         self.__excel = Excel(path, sheet)
+        self.__excel_open = ExcelOpen(path)
 
         self.__set_variables()
         self.__set_columns_names()
@@ -29,7 +30,7 @@ class Config(metaclass=SingletonMeta):
         self.variables = ExcelColumn(self.__excel, 'variables').get_dict()
 
     def __set_columns_names(self):
-        self.columns_names = get_columns_from_config()
+        self.columns_names = self.__excel_open.columns
 
     def __set_files_and_columns(self):
         unique_columns, _all_columns, columns_length = get_columns_from_disk(
