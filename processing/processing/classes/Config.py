@@ -8,7 +8,6 @@ from processing.utils.convert_dict_to_named_tuple import \
     convert_dict_to_named_tuple
 from processing.utils.get_app_version import get_app_version
 from processing.utils.get_columns_from_disk import get_columns_from_disk
-from processing.utils.list_all_sites import list_all_sites
 from processing.utils.singleton_meta import SingletonMeta
 
 
@@ -19,7 +18,7 @@ class Config(metaclass=SingletonMeta):
 
         self.__set_variables()
         self.__set_columns_names()
-        self.__set_files_and_columns()
+        self.__set_files_and_columns_and_all_sites()
         self.__set_bands()
         self.__set_umaps()
         self.__set_ranges()
@@ -33,7 +32,7 @@ class Config(metaclass=SingletonMeta):
     def __set_columns_names(self):
         self.columns_names = self.__excel_open.columns
 
-    def __set_files_and_columns(self):
+    def __set_files_and_columns_and_all_sites(self):
         unique_columns, _all_columns, columns_length = get_columns_from_disk(
             self.variables['audio_base']
         )
@@ -50,7 +49,7 @@ class Config(metaclass=SingletonMeta):
             'FILE',
         ).get_dict()
 
-        list_all_sites(self.files)
+        self.__set_all_sites()
 
         self.columns = unique_columns
 
@@ -86,8 +85,20 @@ class Config(metaclass=SingletonMeta):
     def __set_app_version(self):
         self.app_version = get_app_version()
 
-    @property
-    def __payload(self):
+    def __set_all_sites(self):
+        self.__all_sites = []
+
+        for f in self.files:
+            my_file = self.files[f]
+            site = my_file[0]
+
+            if site not in self.__all_sites:
+                self.__all_sites.append(site)
+
+    def get_all_sites(self):
+        return self.__all_sites
+
+    def __get_payload(self):
         return {
             'variables': self.variables,
             'bands': self.bands,
@@ -102,11 +113,14 @@ class Config(metaclass=SingletonMeta):
         }
 
     def get(self):
-        return convert_dict_to_named_tuple(self.__payload, 'CFG')
+        return convert_dict_to_named_tuple(
+            self.__get_payload(),
+            'CFG',
+        )
 
     def print_json(self):
         print(
             dumps(
-                self.__payload, default=lambda o: o.isoformat()
+                self.__get_payload(), default=lambda o: o.isoformat(),
             )
         )
