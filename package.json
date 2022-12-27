@@ -15,6 +15,7 @@
     "dev": "concurrently './run-back.sh' './run-front.sh'",
     "config:columns": "processing/run.sh sample config-populate-columns",
     "config:files": "processing/run.sh sample config-populate-files",
+    "config:meta": "yarn config:columns",
     "process": "yarn process:all",
     "process:all": "processing/run.sh sample all",
     "process:all-but-covering": "processing/run.sh sample all-but-covering",

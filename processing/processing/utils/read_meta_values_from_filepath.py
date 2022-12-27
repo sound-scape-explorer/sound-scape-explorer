@@ -1,4 +1,4 @@
-def get_columns(path: str) -> [str]:
+def read_meta_values_from_filepath(path: str) -> [str]:
     path_parts = path.split('/')
 
     filename_with_extension = path_parts[len(path_parts) - 1]

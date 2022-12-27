@@ -45,7 +45,7 @@ class ExcelColumn:
 
         self.__verify_column()
 
-        self.__process()
+        self.__iterate()
 
     @property
     def __is_simple_process(self) -> bool:
@@ -78,6 +78,12 @@ class ExcelColumn:
 
         return action_string
 
+    def __digest_config_list(self, my_list):
+        if str(my_list) == 'nan':
+            return ''
+
+        return my_list.split(',')
+
     def __prepare_types(self):
         for value in self.values:
             if ':' not in value:
@@ -90,7 +96,7 @@ class ExcelColumn:
                 {
                     'I': int,
                     'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
-                    'L': lambda v: v.split(','),
+                    'L': self.__digest_config_list,
                     'SITES': self.__digest_config_sites,
                     'L-': lambda v: v.split('-'),
                     'L-D': lambda v: [
@@ -122,7 +128,7 @@ class ExcelColumn:
                 f'"{name}" twice.'
             )
 
-    def __process(self):
+    def __iterate(self):
         for i in range(len(self.__excel.table[self.__key])):
             if type(self.__excel.table[self.__key][i]) != str:
                 continue
@@ -158,4 +164,4 @@ class ExcelColumn:
             yield name, value
 
     def get_dict(self):
-        return dict(self.__process())
+        return dict(self.__iterate())
