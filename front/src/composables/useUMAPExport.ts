@@ -16,11 +16,11 @@ import {convertArrayToCsv} from '../utils/convert-array-to-csv';
 import {selectionStore} from '../store/selection.store';
 import {UMAP_EXPORT_FILENAME} from '../constants';
 import {fetchFeatures} from '../utils/fetch-features';
+import {useNotification} from './useNotification';
 
 export function useUMAPExport() {
-  const {
-    shouldBeFiltered,
-  } = useUMAPFilters();
+  const {notify} = useNotification();
+  const {shouldBeFiltered} = useUMAPFilters();
   const loadingRef = ref(false);
 
   function getFilename() {
@@ -188,6 +188,12 @@ export function useUMAPExport() {
     if (!filename || !columnsNames) {
       return;
     }
+
+    notify(
+      'info',
+      'UMAP',
+      'Exporting collected points. Selected points are not handled.',
+    );
 
     const results = await parse(UMAPDatasetStore.dataset, filename, columnsNames, type);
 
