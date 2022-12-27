@@ -13,7 +13,8 @@
     "compute:umaps": "yarn process:compute:umap",
     "compute:volumes": "yarn process:compute:volumes",
     "dev": "concurrently './run-back.sh' './run-front.sh'",
-    "config:populate-columns": "processing/run.sh sample config-populate-columns",
+    "config:columns": "processing/run.sh sample config-populate-columns",
+    "config:files": "processing/run.sh sample config-populate-files",
     "process": "yarn process:all",
     "process:all": "processing/run.sh sample all",
     "process:all-but-covering": "processing/run.sh sample all-but-covering",
@@ -27,7 +28,7 @@
     "process:config": "processing/run.sh sample config",
     "process:config:test": "processing/run.sh sample config-test",
     "process:clean": "processing/clean.sh sample",
-    "process:populate-config": "yarn config:populate-columns",
+    "process:populate-config": "yarn config:columns",
     "process:show:features": "processing/run.sh sample show-features",
     "start": "yarn dev"
   },

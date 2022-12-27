@@ -159,6 +159,10 @@ function run_config_populate_columns {
   sse config populate-columns
 }
 
+function run_config_populate_files {
+  sse config populate-files
+}
+
 function run_show_features {
   sse show features
 }
@@ -225,6 +229,7 @@ else
   [ "$2" == "config" ] && run_config
   [ "$2" == "config-test" ] && run_config_test
   [ "$2" == "config-populate-columns" ] && run_config_populate_columns
+  [ "$2" == "config-populate-files" ] && run_config_populate_files
 
   [ "$2" == "show-features" ] && run_show_features
 fi

@@ -1,3 +1,4 @@
+from processing.classes.Filepaths import Filepaths
 from processing.cli import cli
 from processing.constants import EXCEL_COLUMNS
 from processing.utils.close_excel_file import close_excel_file
@@ -11,7 +12,13 @@ from processing.utils.write_column_to_excel import write_column_to_excel
 
 @cli.group()
 def config():
+    # cli group
     pass
+
+
+@config.command()
+def populate_files():
+    filepaths = Filepaths()
 
 
 @config.command()
