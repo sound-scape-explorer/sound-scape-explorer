@@ -4,14 +4,19 @@ from json import dumps
 from processing.classes.Excel import Excel
 from processing.classes.ExcelColumn import ExcelColumn
 from processing.classes.ExcelOpen import ExcelOpen
+from processing.constants import (
+    AUDIO_BASE,
+    AUDIO_SUFFIX,
+    FEATURE_BASE,
+    GENERATED_BASE,
+    OTHER_BASE,
+)
 from processing.errors.ConfigInvalidMetaTitlesError import \
     ConfigInvalidMetaTitlesError
 from processing.utils.convert_dict_to_named_tuple import \
     convert_dict_to_named_tuple
 from processing.utils.get_app_version import get_app_version
 from processing.utils.get_columns_from_disk import get_meta_values_from_disk
-from processing.utils.populate_empty_config_variables import \
-    populate_empty_config_variables
 from processing.utils.singleton_meta import SingletonMeta
 
 
@@ -31,7 +36,26 @@ class Config(metaclass=SingletonMeta):
 
     def __fetch_variables(self):
         self.variables = ExcelColumn(self.__excel, 'variables').get_dict()
-        self.variables = populate_empty_config_variables(self.variables)
+        self.__populate_empty_variables()
+
+    def __populate_empty_variables(self):
+        if self.variables['audio_base'] == 'nan':
+            self.variables['audio_base'] = AUDIO_BASE
+
+        if self.variables['audio_suffix'] == 'nan':
+            self.variables['audio_suffix'] = AUDIO_SUFFIX
+
+        if self.variables['feature_base'] == 'nan':
+            self.variables['feature_base'] = FEATURE_BASE
+
+        if self.variables['generated_base'] == 'nan':
+            self.variables['generated_base'] = GENERATED_BASE
+
+        if self.variables['other_base'] == 'nan':
+            self.variables['other_base'] = OTHER_BASE
+
+        if self.variables['umap_random'] == 'nan':
+            self.variables['umap_random'] = None
 
     def __fetch_files_and_columns_and_all_sites(self):
         _all_meta_values, unique_meta_values, meta_values_length = \
