@@ -32,22 +32,21 @@ class Config(metaclass=SingletonMeta):
     def __fetch_variables(self):
         self.variables = ExcelColumn(self.__excel, 'variables').get_dict()
         self.variables = populate_empty_config_variables(self.variables)
-        print(self.variables)
 
     def __fetch_files_and_columns_and_all_sites(self):
-        _all_columns, unique_columns, columns_length = \
+        _all_meta_values, unique_meta_values, meta_values_length = \
             get_meta_values_from_disk(
                 self.variables['audio_base']
             )
 
         selectors = ['site', 'start:D', 'tags:L']
 
-        if len(self.__excel_open.meta_titles) != columns_length:
+        if len(self.__excel_open.meta_titles) != meta_values_length:
             raise ConfigInvalidMetaTitlesError(
                 "Invalid meta titles. Please fill the configuration file"
             )
 
-        for i in range(columns_length):
+        for i in range(meta_values_length):
             selectors.append(f'{self.__excel_open.meta_titles[i]}:COLUMN')
 
         self.files = ExcelColumn(
@@ -59,7 +58,7 @@ class Config(metaclass=SingletonMeta):
 
         self.__set_all_sites()
 
-        self.columns = unique_columns
+        self.unique_meta_values = unique_meta_values
 
     def __fetch_bands(self):
         self.bands = ExcelColumn(self.__excel, 'bands').get_dict()
@@ -111,7 +110,7 @@ class Config(metaclass=SingletonMeta):
             'variables': self.variables,
             'bands': self.bands,
             'files': self.files,
-            'columns': self.columns,
+            'columns': self.unique_meta_values,
             'columns_names': self.__excel_open.meta_titles,
             'umaps': self.UMAPs,
             'ranges': self.ranges,
