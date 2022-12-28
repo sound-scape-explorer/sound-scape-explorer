@@ -1,14 +1,18 @@
-from openpyxl.reader.excel import load_workbook
+from typing import List
 
-from processing.constants import EXCEL_COLUMNS
+from openpyxl.reader.excel import load_workbook
+from openpyxl.utils import get_column_letter
 
 
 class ExcelOpen:
+    meta_titles: List[str]
+
     def __init__(self, path: str):
         self.__path = path
 
         self.__open()
-        self.__read_columns()
+        self.__get_columns()
+        self.__get_meta_titles()
         self.__close()
 
     def __open(self):
@@ -18,18 +22,29 @@ class ExcelOpen:
     def __close(self):
         self.__workbook.save(self.__path)
 
-    def __read_columns(self):
-        payload = []
+    def __get_columns(self):
+        self.columns = {
+            cell.value: {
+                'letter': get_column_letter(cell.column),
+                'number': cell.column - 1
+            } for cell in self.__worksheet[1] if cell.value
+        }
 
-        for i in range(len(EXCEL_COLUMNS)):
-            value = self.__worksheet[f'{EXCEL_COLUMNS[i]}1'].value
+    def __get_meta_titles(self):
+        self.meta_titles = []
 
-            if value is None:
-                break
+        for column_key in self.columns.keys():
+            if 'files' not in column_key:
+                continue
+            if 'files_start' in column_key:
+                continue
+            if 'files_tags' in column_key:
+                continue
+            if 'files_site' in column_key:
+                continue
+            if column_key == 'files':
+                continue
 
             # trim `files_`
-            value = value.split('_')[1:][0]
-
-            payload.append(value)
-
-        self.columns = payload
+            meta_title = column_key.split('_')[1:][0]
+            self.meta_titles.append(meta_title)

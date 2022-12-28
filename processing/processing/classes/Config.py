@@ -9,7 +9,9 @@ from processing.errors.ConfigInvalidMetaTitlesError import \
 from processing.utils.convert_dict_to_named_tuple import \
     convert_dict_to_named_tuple
 from processing.utils.get_app_version import get_app_version
-from processing.utils.get_columns_from_disk import get_columns_from_disk
+from processing.utils.get_columns_from_disk import get_meta_values_from_disk
+from processing.utils.populate_empty_config_variables import \
+    populate_empty_config_variables
 from processing.utils.singleton_meta import SingletonMeta
 
 
@@ -19,7 +21,6 @@ class Config(metaclass=SingletonMeta):
         self.__excel_open = ExcelOpen(path)
 
         self.__fetch_variables()
-        self.__fetch_meta_titles()
         self.__fetch_files_and_columns_and_all_sites()
         self.__fetch_bands()
         self.__fetch_umaps()
@@ -30,24 +31,24 @@ class Config(metaclass=SingletonMeta):
 
     def __fetch_variables(self):
         self.variables = ExcelColumn(self.__excel, 'variables').get_dict()
-
-    def __fetch_meta_titles(self):
-        self.meta_titles = self.__excel_open.columns
+        self.variables = populate_empty_config_variables(self.variables)
+        print(self.variables)
 
     def __fetch_files_and_columns_and_all_sites(self):
-        _all_columns, unique_columns, columns_length = get_columns_from_disk(
-            self.variables['audio_base']
-        )
+        _all_columns, unique_columns, columns_length = \
+            get_meta_values_from_disk(
+                self.variables['audio_base']
+            )
 
         selectors = ['site', 'start:D', 'tags:L']
 
-        if len(self.meta_titles) != columns_length:
+        if len(self.__excel_open.meta_titles) != columns_length:
             raise ConfigInvalidMetaTitlesError(
                 "Invalid meta titles. Please fill the configuration file"
-                )
+            )
 
         for i in range(columns_length):
-            selectors.append(f'{self.meta_titles[i]}:COLUMN')
+            selectors.append(f'{self.__excel_open.meta_titles[i]}:COLUMN')
 
         self.files = ExcelColumn(
             self.__excel,
@@ -111,7 +112,7 @@ class Config(metaclass=SingletonMeta):
             'bands': self.bands,
             'files': self.files,
             'columns': self.columns,
-            'columns_names': self.meta_titles,
+            'columns_names': self.__excel_open.meta_titles,
             'umaps': self.UMAPs,
             'ranges': self.ranges,
             'stringmap': self.string_map,
@@ -124,6 +125,12 @@ class Config(metaclass=SingletonMeta):
             self.__get_payload(),
             'CFG',
         )
+
+    def get_columns(self):
+        return self.__excel_open.columns
+
+    def get_meta_titles(self):
+        return self.__excel_open.meta_titles
 
     def print_json(self):
         print(
