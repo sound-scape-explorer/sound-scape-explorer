@@ -14,12 +14,11 @@ def load_features_for(band, r, s):
     range_features = []
     cfg = Config().get()
 
-    for fname, info, audio, npz in iterate_audio_files(
+    for filename, info, audio, npz in iterate_audio_files(
             cfg,
             band,
             ['@feature_base', '.npz'],
     ):
-
         if info.site != s:
             continue
 

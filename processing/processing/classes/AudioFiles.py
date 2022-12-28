@@ -2,6 +2,7 @@ import pathlib
 from typing import Any, Optional, Union
 
 from processing.classes.Config import Config
+from processing.utils.get_name_from_filename import get_name_from_filename
 
 
 class AudioFiles:
@@ -25,7 +26,8 @@ class AudioFiles:
         )
 
     def __get_filename_path(self, filename):
-        return pathlib.Path(self.__base_path).joinpath(filename + self.__suffix)
+        name = get_name_from_filename(filename)
+        return pathlib.Path(self.__base_path).joinpath(name + self.__suffix)
 
     def __get_something(self, path):
         return pathlib.Path(
@@ -40,15 +42,16 @@ class AudioFiles:
 
             if self.__path is not None and self.__extension is not None:
                 p = self.__get_something(self.__path)
+                name = get_name_from_filename(filename)
 
-                response.append(
-                    p.joinpath(
-                        band,
-                        filename + self.__suffix
-                    ).with_suffix(
-                        self.__extension
-                    )
+                path = p.joinpath(
+                    band,
+                    name + self.__suffix
+                ).with_suffix(
+                    self.__extension
                 )
+
+                response.append(path)
 
             yield response
 

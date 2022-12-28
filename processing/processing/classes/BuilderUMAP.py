@@ -9,7 +9,7 @@ from processing.utils.load_features_for import load_features_for
 from processing.utils.timegroup_loaded_features import timegroup_loaded_features
 
 
-class UMAPBuilder:
+class BuilderUMAP:
     def __init__(self, plot, show):
         self.__plot = plot
         self.__show = show
