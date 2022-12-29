@@ -26,8 +26,8 @@ class ExcelColumn:
         key: str,
         values: Optional[List[str]] = None,
         yield_type: Optional[str] = None,
-        has_no_prefix: bool = False,
-        allow_duplicate: bool = False,
+        has_no_prefix: Optional[bool] = False,
+        allow_duplicate: Optional[bool] = False,
         all_sites: Optional[List[str]] = None
     ):
         self.__excel = excel
