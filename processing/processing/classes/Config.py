@@ -88,11 +88,14 @@ class Config(metaclass=SingletonMeta):
         self.bands = ExcelColumn(self.__excel, 'bands').get_dict()
 
     def __fetch_umaps(self):
-        self.UMAPs = ExcelColumn(
+        self.umaps = ExcelColumn(
             self.__excel,
             'umaps',
             ['integration:I', 'bands:L', 'sites:SITES', 'ranges:L'],
             'UMAP',
+            None,
+            None,
+            self.__all_sites,
         ).get_dict()
 
     def __fetch_ranges(self):
@@ -136,7 +139,7 @@ class Config(metaclass=SingletonMeta):
             'files': self.files,
             'columns': self.unique_meta_values,
             'columns_names': self.__excel_open.meta_titles,
-            'umaps': self.UMAPs,
+            'umaps': self.umaps,
             'ranges': self.ranges,
             'stringmap': self.string_map,
             'path': self.path,

@@ -18,15 +18,17 @@ class ExcelColumn:
     __types: List[Any]
     values: Optional[List[str]]
     __yield_type: Optional[str]
+    __all_sites: Optional[List[str]]
 
     def __init__(
-            self,
-            excel: Excel,
-            key: str,
-            values: Optional[List[str]] = None,
-            yield_type: Optional[str] = None,
-            has_no_prefix: bool = False,
-            allow_duplicate: bool = False,
+        self,
+        excel: Excel,
+        key: str,
+        values: Optional[List[str]] = None,
+        yield_type: Optional[str] = None,
+        has_no_prefix: bool = False,
+        allow_duplicate: bool = False,
+        all_sites: Optional[List[str]] = None
     ):
         self.__excel = excel
         self.__key = key
@@ -34,10 +36,10 @@ class ExcelColumn:
         self.__yield_type = yield_type
         self.__has_no_prefix = has_no_prefix
         self.__allow_duplicate = allow_duplicate
+        self.__all_sites = all_sites if all_sites is not None else []
 
         self.__types = []
         self.__payload = {}
-        self.__all_sites = []
 
         self.__prepare_values()
         self.__prepare_types()

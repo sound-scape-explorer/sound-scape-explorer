@@ -21,9 +21,6 @@ class BuilderCovering:
 
         self.__process_integrations()
 
-        print(self.__integrations)
-        print(self.__sites)
-
     def __get_integrations(self):
         self.__integrations = [
             int(v) for v in
@@ -31,9 +28,15 @@ class BuilderCovering:
         ]
 
     def __get_sites(self):
+        # self.__sites = list(
+        #     set(
+        #         [f.site for f in self.__config.sites.values()]
+        #     )
+        # )
+
         self.__sites = list(
             set(
-                [f.site for f in self.__config.sites.values()]
+                [site for site in Config().get_all_sites()]
             )
         )
 

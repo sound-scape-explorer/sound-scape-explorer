@@ -44,6 +44,8 @@ class ExcelOpen:
                 continue
             if column_key == 'files':
                 continue
+            if column_key == 'files (no suffix)':
+                continue
 
             # trim `files_`
             meta_title = column_key.split('_')[1:][0]

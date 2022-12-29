@@ -24,16 +24,16 @@ class BuilderUMAP:
         self.__umap = umap.UMAP
 
     def __build_something(
-            self,
-            band,
-            range_value,
-            range_name,
-            site,
-            umap,
-            dataset_times,
-            dataset_columns,
-            dataset_features,
-            dataset_labels,
+        self,
+        band,
+        range_value,
+        range_name,
+        site,
+        umap,
+        dataset_times,
+        dataset_columns,
+        dataset_features,
+        dataset_labels,
     ):
         range_times, range_features = load_features_for(
             band,
@@ -69,10 +69,6 @@ class BuilderUMAP:
 
     def __build(self):
         for umap_name, umap in self.__config.umaps.items():
-            sites = umap.sites if len(
-                umap.sites
-            ) != 0 else Config().get_all_sites()
-
             print('... UMAP', umap_name, umap)
 
             for band in umap.bands:
@@ -85,7 +81,7 @@ class BuilderUMAP:
                 for range_name in umap.ranges:
                     range_value = self.__config.ranges[range_name]
 
-                    for site in sites:
+                    for site in umap.sites:
                         self.__build_something(
                             band,
                             range_value,

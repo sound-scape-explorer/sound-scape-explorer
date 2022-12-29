@@ -7,9 +7,8 @@ def iterate_audio_files(cfg, prefix, *more):
     suffix = cfg.variables['audio_suffix']
 
     for filename, info in cfg.files.items():
-        name = get_name_from_filename(filename)
-
-        print(name)
+        name = get_name_from_filename(filename) \
+            if suffix in filename else filename
 
         input_path = pathlib \
             .Path(cfg.variables['audio_base']) \
