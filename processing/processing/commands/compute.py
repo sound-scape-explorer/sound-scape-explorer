@@ -1,10 +1,10 @@
 import click
 
 from processing.classes.BuilderCovering import BuilderCovering
+from processing.classes.BuilderFeature import BuilderFeature
 from processing.classes.BuilderUMAP import BuilderUMAP
 from processing.classes.Config import Config
 from processing.cli import cli
-from processing.computations.compute_features import compute_features
 from processing.computations.compute_volumes import compute_volumes
 
 
@@ -38,5 +38,4 @@ def volume(no_plot: bool, show: bool) -> None:
 
 @compute.command()
 def features() -> None:
-    config = Config().get()
-    compute_features(config)
+    BuilderFeature()
