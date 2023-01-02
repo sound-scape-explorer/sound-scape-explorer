@@ -25,6 +25,11 @@ export function findTags(timestamp: number, site: string): string {
     }
 
     const loggerTags = loggerOptions[2];
+
+    if (typeof loggerTags === 'string' && loggerTags === '') {
+      return payload;
+    }
+
     payload = convertTagsToFilterString(loggerTags);
   });
 

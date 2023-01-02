@@ -155,10 +155,6 @@ function run_config_test {
   sse show config
 }
 
-function run_config_populate_columns {
-  sse config populate-columns
-}
-
 function run_config_populate_files {
   sse config populate-files
 }
@@ -168,7 +164,7 @@ function run_show_features {
 }
 
 function run_all {
-  run_config_populate_columns
+  run_config_populate_files
 
   run_extract_all
   run_computes

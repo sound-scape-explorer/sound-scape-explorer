@@ -3,9 +3,8 @@ import click
 from processing.classes.BuilderCovering import BuilderCovering
 from processing.classes.BuilderFeature import BuilderFeature
 from processing.classes.BuilderUMAP import BuilderUMAP
-from processing.classes.Config import Config
+from processing.classes.BuilderVolume import BuilderVolume
 from processing.cli import cli
-from processing.computations.compute_volumes import compute_volumes
 
 
 @cli.group()
@@ -31,9 +30,7 @@ def covering(no_plot: bool, show: bool) -> None:
 @click.option('--no-plot/--plot', '-np', default=False)
 @click.option('--show/--no-show', '-s', default=False)
 def volume(no_plot: bool, show: bool) -> None:
-    plot = not no_plot
-    cfg = Config().get()
-    compute_volumes(cfg, plot, show)
+    BuilderVolume(not no_plot, show)
 
 
 @compute.command()

@@ -2,6 +2,7 @@
   "name": "sound-scape-explorer",
   "scripts": {
     "install": "./install.sh && yarn process",
+    "clean:all": "rimraf -r sample/features sample/generated",
     "clean:config": "rimraf -r sample/generated/ghost-config.json",
     "clean:coverings": "rimraf -r sample/generated/pairwise",
     "clean:extract": "rimraf -r sample/features",

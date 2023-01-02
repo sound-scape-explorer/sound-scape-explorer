@@ -17,6 +17,9 @@ import {selectionStore} from '../store/selection.store';
 import {UMAP_EXPORT_FILENAME} from '../constants';
 import {fetchFeatures} from '../utils/fetch-features';
 import {useNotification} from './useNotification';
+import {
+  getRangeAndSiteFromDatasetLabel,
+} from '../utils/get-range-and-site-from-dataset-label';
 
 export function useUMAPExport() {
   const {notify} = useNotification();
@@ -145,7 +148,7 @@ export function useUMAPExport() {
         continue;
       }
 
-      const [range, site] = label.split('/');
+      const {range, site} = getRangeAndSiteFromDatasetLabel(label);
       const timestamp = data.timestamp as number;
 
       const features = await fetchFeatures({
