@@ -40,6 +40,12 @@ export function useUMAPComponent() {
     });
   }
 
+  function destroy() {
+    scatterGL = null;
+    containerRef.value = null;
+    UMAPDatasetStore.dataset = null;
+  }
+
   function selectPoints(indexes: number[]) {
     const payload = [];
 
@@ -157,6 +163,7 @@ export function useUMAPComponent() {
 
   onUnmounted(() => {
     removeListeners();
+    destroy();
   });
 
   watch([
