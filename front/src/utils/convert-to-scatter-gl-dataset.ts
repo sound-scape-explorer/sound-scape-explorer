@@ -2,6 +2,9 @@ import type {ApiUMAPInterface} from '../interfaces/api-UMAP.interface';
 import type {Point2D, PointMetadata} from '../lib/scatter-gl-0.0.13';
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
 import {findTags} from './find-tags';
+import {
+  getRangeAndSiteFromDatasetLabel,
+} from './get-range-and-site-from-dataset-label';
 
 interface MyMetadata {
   labelIndex: number;
@@ -22,7 +25,8 @@ export function convertToScatterGlDataset(data: ApiUMAPInterface) {
     const labelIndex = label && data?.l.indexOf(label);
     const timestamp = data.t[index];
 
-    const tags = findTags(timestamp, label);
+    const {site} = getRangeAndSiteFromDatasetLabel(label);
+    const tags = findTags(timestamp, `/${site}`);
     const columns = data.c[index];
 
     if (labelIndex === '') {

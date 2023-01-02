@@ -167,18 +167,16 @@ export function useUMAPExport() {
         });
       } else if (type === 'csv') {
         payload.push([
-          metadata[i]['label'],
-          metadata[i]['timestamp'],
+          data['label'],
+          data['timestamp'],
           points[i],
-          metadata[i]['tags'],
-          metadata[i]['columns'],
+          data['tags'],
+          data['columns'],
           features,
           // TODO: Add volumes (later)
         ]);
       }
     }
-
-    console.log(payload);
 
     return payload;
   }
