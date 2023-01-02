@@ -65,7 +65,8 @@ class BuilderUMAP:
                 )
             )
 
-            dataset_labels.append(f'{range_name}/{site}')
+            # dataset_labels.append(f'{range_name}/{site}')
+            dataset_labels.append(f'{range_name}{site}')
 
     def __build(self):
         for umap_name, umap in self.__config.umaps.items():
