@@ -11,7 +11,7 @@ interface MyMetadata {
   label: string;
   timestamp: number;
   tags: string;
-  columns: string[];
+  metaContent: string[];
 }
 
 export function convertToScatterGlDataset(data: ApiUMAPInterface) {
@@ -27,7 +27,7 @@ export function convertToScatterGlDataset(data: ApiUMAPInterface) {
 
     const {site} = getRangeAndSiteFromDatasetLabel(label);
     const tags = findTags(timestamp, `/${site}`);
-    const columns = data.c[index];
+    const metaContent = data.c[index];
 
     if (labelIndex === '') {
       return;
@@ -38,10 +38,9 @@ export function convertToScatterGlDataset(data: ApiUMAPInterface) {
       label,
       timestamp,
       tags,
-      columns,
+      metaContent,
     });
   });
 
-  // TODO: ugly
   return new ScatterGL.Dataset(dataPoints, metadata as unknown as PointMetadata[]);
 }

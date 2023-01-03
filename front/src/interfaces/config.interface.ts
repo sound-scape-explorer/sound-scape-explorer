@@ -2,7 +2,7 @@ type BandIntegration = number;
 type BandName = string;
 type ConfigDate = string;
 type FileTags = string[];
-type FileColumns = string[];
+type FileMeta = string[];
 type SiteColor = string;
 type SiteDetails = string;
 type SiteName = string;
@@ -11,8 +11,8 @@ type StringMapName = string;
 export interface ConfigInterface {
   xlsx: string;
   sheet: number;
-  columns: string[][];
-  columns_names: string[];
+  meta_properties: string[];
+  meta_contents: string[][];
   variables: {
     audio_base: string;
     audio_base_cluster: string;
@@ -55,7 +55,7 @@ export interface ConfigInterface {
       SiteName,
       ConfigDate,
       FileTags,
-      FileColumns,
+      FileMeta,
     ];
   };
 }

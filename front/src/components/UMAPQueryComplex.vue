@@ -11,19 +11,19 @@ const input = ref<string>('');
 const {isDisabled} = useUMAPStatus();
 
 function digestQueryItem(item: RegExpMatchArray, payload: UMAPQueryComplexStoreInterface['queryComplex']): void {
-  const columnName = item[1];
+  const metaProperty = item[1];
   let value: string | string[] = item[2];
 
   if (value.includes('+')) {
     value = value.split('+');
   }
 
-  if (typeof payload[columnName] === 'string' && typeof value === 'string') {
-    payload[columnName] = [payload[columnName] as string, value];
+  if (typeof payload[metaProperty] === 'string' && typeof value === 'string') {
+    payload[metaProperty] = [payload[metaProperty] as string, value];
     return;
   }
 
-  payload[columnName] = value;
+  payload[metaProperty] = value;
 }
 
 function digestQuery() {
@@ -78,7 +78,3 @@ watch(input, () => {
     </template>
   </n-input>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

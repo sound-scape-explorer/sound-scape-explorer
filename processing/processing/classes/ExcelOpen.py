@@ -5,7 +5,7 @@ from openpyxl.utils import get_column_letter
 
 
 class ExcelOpen:
-    meta_titles: List[str]
+    meta_properties: List[str]
 
     def __init__(self, path: str):
         self.__path = path
@@ -31,7 +31,7 @@ class ExcelOpen:
         }
 
     def __get_meta_titles(self):
-        self.meta_titles = []
+        self.meta_properties = []
 
         for column_key in self.columns.keys():
             if 'files' not in column_key:
@@ -49,4 +49,4 @@ class ExcelOpen:
 
             # trim `files_`
             meta_title = column_key.split('_')[1:][0]
-            self.meta_titles.append(meta_title)
+            self.meta_properties.append(meta_title)

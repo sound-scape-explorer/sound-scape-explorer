@@ -6,7 +6,7 @@ import type {ConfigStoreInterface} from '../store/config.store';
 import {UMAPQueryStore} from '../store/UMAP-query.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
-import {UMAPColumnsStore} from '../store/UMAP-columns.store';
+import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import {useConfig} from './useConfig';
 import {
   convertObjectToJsonString,
@@ -73,8 +73,8 @@ export function useUMAPExport() {
      * Columns
      */
 
-    const {columns} = UMAPColumnsStore;
-    const columnsValues = Object.values(columns);
+    const {metaSelection} = UMAPMetaStore;
+    const columnsValues = Object.values(metaSelection);
 
     for (let i = 0; i < columnsValues.length; ++i) {
       const value = columnsValues[i];
@@ -102,7 +102,7 @@ export function useUMAPExport() {
   async function parse(
     dataset: UMAPDatasetStoreInterface['dataset'],
     name: string,
-    columnsNames: ConfigStoreInterface['columnsNames'],
+    metaProperties: ConfigStoreInterface['metaProperties'],
     type: 'json' | 'csv' = 'json',
   ) {
     loadingRef.value = true;
@@ -112,7 +112,6 @@ export function useUMAPExport() {
       return;
     }
 
-    // TODO type me
     const payload: unknown[] = [];
 
     const {points, metadata} = dataset;
@@ -121,7 +120,7 @@ export function useUMAPExport() {
     const intervalLabel = selectionStore.interval;
     const {intervals, intervalLabels} = await useConfig();
 
-    if (!intervalLabel || !intervalLabels || !intervals) {
+    if (!intervalLabel) {
       return payload;
     }
 
@@ -133,7 +132,7 @@ export function useUMAPExport() {
     }
 
     for (let i = 0; i < points.length; ++i) {
-      const shouldBeFilteredOut = shouldBeFiltered(i, columnsNames);
+      const shouldBeFilteredOut = shouldBeFiltered(i, metaProperties);
 
       if (shouldBeFilteredOut) {
         continue;
@@ -171,9 +170,8 @@ export function useUMAPExport() {
           data['timestamp'],
           points[i],
           data['tags'],
-          data['columns'],
+          data['metaContent'],
           features,
-          // TODO: Add volumes (later)
         ]);
       }
     }
@@ -182,11 +180,11 @@ export function useUMAPExport() {
   }
 
   async function handleClick(type: 'json' | 'csv' = 'json') {
-    const {columnsNames} = await useConfig();
+    const {metaProperties} = await useConfig();
 
     const filename = getFilename() || UMAP_EXPORT_FILENAME;
 
-    if (!filename || !columnsNames) {
+    if (!filename) {
       return;
     }
 
@@ -196,7 +194,7 @@ export function useUMAPExport() {
       'Exporting collected points. Selected points are not handled.',
     );
 
-    const results = await parse(UMAPDatasetStore.dataset, filename, columnsNames, type);
+    const results = await parse(UMAPDatasetStore.dataset, filename, metaProperties, type);
 
     if (!results) {
       return;
@@ -217,7 +215,7 @@ export function useUMAPExport() {
         '2D_X',
         '2D_Y',
         'tags',
-        ...columnsNames.map((c) => `col_${c}`),
+        ...metaProperties.map((c) => `meta_${c}`),
         'features',
       ];
 

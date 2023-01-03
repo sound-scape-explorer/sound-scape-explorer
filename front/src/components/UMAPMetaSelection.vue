@@ -1,9 +1,9 @@
 <script lang="ts" setup="">
 import {defineProps, ref, watch} from 'vue';
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
-import {UMAPColumnsStore} from '../store/UMAP-columns.store';
+import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
-import {useUMAPColumns} from '../composables/useUMAPColumns';
+import {useUMAPMeta} from '../composables/useUMAPMeta';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 
 /**
@@ -23,18 +23,18 @@ const {title, items, index} = defineProps<Props>();
  */
 
 const selection = ref(null);
-const {columns} = UMAPColumnsStore;
+const {metaSelection} = UMAPMetaStore;
 const {isDisabled} = useUMAPStatus();
 
 function getColorByItem(itemIndex: number): string | undefined {
-  const {getColumnColor} = useUMAPColumns();
+  const {getMetaColor} = useUMAPMeta();
   const colorType = `by${title}`;
 
   if (colorType !== UMAPFiltersStore.colorType) {
     return undefined;
   }
 
-  return getColumnColor(colorType, itemIndex, items.length);
+  return getMetaColor(colorType, itemIndex, items.length);
 }
 
 /**
@@ -46,12 +46,12 @@ function updateSelection() {
     return;
   }
 
-  if (typeof columns[index] === 'undefined') {
+  if (typeof metaSelection[index] === 'undefined') {
     // @ts-expect-error TS2740
-    columns[index] = {};
+    metaSelection[index] = {};
   }
 
-  columns[index] = selection.value;
+  metaSelection[index] = selection.value;
 }
 
 /**

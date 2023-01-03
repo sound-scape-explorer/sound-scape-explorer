@@ -50,7 +50,7 @@ class ConfigGenerator:
         )
 
     def __write_meta_values(self):
-        meta_titles = self.__config.get_meta_titles()
+        meta_titles = self.__config.get_meta_properties()
         meta_values = self.__filepaths.get_meta_values()
 
         for meta_title_index, meta_title in enumerate(meta_titles):

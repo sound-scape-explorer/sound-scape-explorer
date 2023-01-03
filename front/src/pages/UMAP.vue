@@ -4,7 +4,7 @@ import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
 import UMAPTimeRange from '../components/UMAPTimeRange.vue';
 import UMAPFilters from '../components/UMAPFilters.vue';
 import UMAPQuery from '../components/UMAPQuery.vue';
-import UMAPColumns from '../components/UMAPColumns.vue';
+import UMAPMeta from '../components/UMAPMeta.vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPPage} from '../composables/useUMAPPage';
 import UMAPExport from '../components/UMAPExport.vue';
@@ -35,7 +35,7 @@ const {delayUpdate} = useUMAPPage();
       <UMAPExport />
     </div>
     <UMAPTimeRange />
-    <UMAPColumns />
+    <UMAPMeta />
   </div>
 </template>
 

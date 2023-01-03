@@ -7,7 +7,8 @@ import type {
   UMAPQueryComplexStoreInterface,
 } from '../store/UMAP-query-complex.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
-import {UMAPColumnsStore} from '../store/UMAP-columns.store';
+import type {UMAPMetaStoreInterface} from '../store/UMAP-meta.store';
+import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import type {ConfigStoreInterface} from '../store/config.store';
 
 export function useUMAPFilters() {
@@ -77,17 +78,17 @@ export function useUMAPFilters() {
     return false;
   }
 
-  function isVisibleByColumns(index: number): boolean {
-    const {columns: columnsSelection} = UMAPColumnsStore;
+  function isVisibleByMeta(index: number): boolean {
+    const {metaSelection} = UMAPMetaStore;
     let isVisible = true;
 
     const {dataset} = UMAPDatasetStore;
 
     // @ts-expect-error TS2322
-    const columns: UMAPColumnsStoreInterface['columns'] = dataset?.metadata[index]['columns'];
+    const metaContent: UMAPMetaStoreInterface['metaSelection'] = dataset?.metadata[index]['metaContent'];
 
-    const columnsSelectionKeys = Object.keys(columnsSelection);
-    const columnsKeys = Object.keys(columns);
+    const columnsSelectionKeys = Object.keys(metaSelection);
+    const columnsKeys = Object.keys(metaContent);
 
     for (let i = 0; i < columnsSelectionKeys.length; ++i) {
       // item is already not visible
@@ -95,8 +96,8 @@ export function useUMAPFilters() {
         break;
       }
 
-      const columnSelection = columnsSelection[columnsSelectionKeys[i]];
-      const column = columns[columnsKeys[i]];
+      const columnSelection = metaSelection[columnsSelectionKeys[i]];
+      const column = metaContent[columnsKeys[i]];
 
       const columnSelectionValues = Object.values(columnSelection);
 
@@ -111,7 +112,7 @@ export function useUMAPFilters() {
       if (typeof columnValue === 'number') {
         isVisible = columnSelectionValues.includes(columnValue.toString());
       } else {
-        isVisible = columnSelectionValues.includes(columnValue as number);
+        isVisible = columnSelectionValues.includes(columnValue);
       }
     }
 
@@ -121,20 +122,20 @@ export function useUMAPFilters() {
   function digestQueryComplexItem(
     queryComplex: UMAPQueryComplexStoreInterface['queryComplex'],
     keys: string[],
-    columns: string,
-    columnsNames: ConfigStoreInterface['columnsNames'],
+    metaContents: string,
+    metaProperties: ConfigStoreInterface['metaProperties'],
   ) {
     let result = true;
 
     for (const key of keys) {
-      const keyIndex = columnsNames?.indexOf(key) || -1;
+      const metaPropertyIndex = metaProperties.indexOf(key);
 
-      if (keyIndex === -1) {
+      if (metaPropertyIndex === -1) {
         continue;
       }
 
       const query = queryComplex[key];
-      const column = columns[keyIndex];
+      const metaContent = metaContents[metaPropertyIndex];
 
       if (!result) {
         break;
@@ -142,7 +143,7 @@ export function useUMAPFilters() {
 
       if (typeof query === 'string') {
         // string
-        result = column.includes(query);
+        result = metaContent.includes(query);
       } else {
         // array
         // @ts-expect-error TS2349
@@ -151,7 +152,7 @@ export function useUMAPFilters() {
             return acc;
           }
 
-          return column.includes(q);
+          return metaContent.includes(q);
         }, false);
       }
     }
@@ -159,7 +160,10 @@ export function useUMAPFilters() {
     return result;
   }
 
-  function isVisibleByQueryComplex(index: number, columnsNames: ConfigStoreInterface['columnsNames']): boolean {
+  function isVisibleByQueryComplex(
+    index: number,
+    metaProperties: ConfigStoreInterface['metaProperties'],
+  ): boolean {
     // @SPECIES=CERBRA+CYACAE @SEASON=SPRING
     // @TIME=POST
     // @SPECIES=CerBra @TIME=PRE
@@ -185,20 +189,25 @@ export function useUMAPFilters() {
         const singleQueryComplex = queryComplex[groupName];
         const singleQueryComplexKeys = Object.keys(singleQueryComplex);
 
-        // TODO: Finish this
-
         // @ts-expect-error TS2345
-        result = digestQueryComplexItem(singleQueryComplex, singleQueryComplexKeys, columns, columnsNames);
+        result = digestQueryComplexItem(singleQueryComplex, singleQueryComplexKeys, columns, metaProperties);
       });
     } else {
-      result = digestQueryComplexItem(queryComplex, queryKeys, columns, columnsNames);
+      result = digestQueryComplexItem(queryComplex, queryKeys, columns, metaProperties);
     }
 
     return result;
   }
 
-  function shouldBeFiltered(index: number, columnNames: ConfigStoreInterface['columnsNames']): boolean {
-    return !isVisibleByTags(index) || !isVisibleByTimeRange(index) || !isVisibleByQuery(index) || !isVisibleByColumns(index) || !isVisibleByQueryComplex(index, columnNames);
+  function shouldBeFiltered(
+    index: number,
+    metaProperties: ConfigStoreInterface['metaProperties'],
+  ): boolean {
+    return !isVisibleByTags(index)
+      || !isVisibleByTimeRange(index)
+      || !isVisibleByQuery(index)
+      || !isVisibleByMeta(index)
+      || !isVisibleByQueryComplex(index, metaProperties);
   }
 
   return {

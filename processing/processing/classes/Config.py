@@ -65,13 +65,13 @@ class Config(metaclass=SingletonMeta):
 
         selectors = ['site', 'start:D', 'tags:L']
 
-        if len(self.__excel_open.meta_titles) != meta_values_length:
+        if len(self.__excel_open.meta_properties) != meta_values_length:
             raise ConfigInvalidMetaTitlesError(
                 "Invalid meta titles. Please fill the configuration file"
             )
 
         for i in range(meta_values_length):
-            selectors.append(f'{self.__excel_open.meta_titles[i]}:COLUMN')
+            selectors.append(f'{self.__excel_open.meta_properties[i]}:COLUMN')
 
         self.files = ExcelColumn(
             self.__excel,
@@ -137,8 +137,8 @@ class Config(metaclass=SingletonMeta):
             'variables': self.variables,
             'bands': self.bands,
             'files': self.files,
-            'columns': self.unique_meta_values,
-            'columns_names': self.__excel_open.meta_titles,
+            'meta_contents': self.unique_meta_values,
+            'meta_properties': self.__excel_open.meta_properties,
             'umaps': self.umaps,
             'ranges': self.ranges,
             'stringmap': self.string_map,
@@ -155,8 +155,8 @@ class Config(metaclass=SingletonMeta):
     def get_columns(self):
         return self.__excel_open.columns
 
-    def get_meta_titles(self):
-        return self.__excel_open.meta_titles
+    def get_meta_properties(self):
+        return self.__excel_open.meta_properties
 
     def print_json(self):
         print(
