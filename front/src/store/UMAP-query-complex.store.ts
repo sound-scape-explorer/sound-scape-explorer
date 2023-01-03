@@ -1,19 +1,22 @@
 import {reactive} from 'vue';
 
-interface QueryComplexItem {
+export interface QueryComplexItem {
   [itemName: string]: string | string[];
 }
 
-interface QueryComplexGroup {
+export interface QueryComplexGroup {
   [groupName: string]: QueryComplexItem[];
 }
 
 export interface UMAPQueryComplexStoreInterface {
-  matches: string[];
+  isActive: boolean;
   queryComplex: QueryComplexItem | QueryComplexGroup;
+  hasGroups: boolean;
+
 }
 
 export const UMAPQueryComplexStore = reactive<UMAPQueryComplexStoreInterface>({
-  matches: [],
+  isActive: false,
   queryComplex: {},
+  hasGroups: false,
 });

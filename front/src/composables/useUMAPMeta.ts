@@ -3,10 +3,11 @@ import {
 } from '../utils/convert-columns-to-color-types';
 import {configStore} from '../store/config.store';
 import {useColors} from './useColors';
-import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
+import {useUMAPDataset} from './useUMAPDataset';
 
 export function useUMAPMeta() {
   const {colors} = useColors();
+  const {getMetaContent} = useUMAPDataset();
 
   function getMetaPropertiesAsColorTypes() {
     return convertColumnsToColorTypes(configStore.metaProperties);
@@ -21,16 +22,12 @@ export function useUMAPMeta() {
     return colors.value.colors(length);
   }
 
-  function getMetaContentFromIndex(index: number): string[][] {
-    return UMAPDatasetStore?.dataset?.metadata[index].metaContent as unknown as string[][];
-  }
-
   function getMetaColor(
     colorType: string,
     index: number,
   ) {
     const metaPropertyIndex = getMetaPropertyIndexFromColorType(colorType);
-    const metaContent = getMetaContentFromIndex(index);
+    const metaContent = getMetaContent(index);
     const metaValue = metaContent[metaPropertyIndex][0];
     const metaPossibleValues = configStore.metaContents[metaPropertyIndex];
 

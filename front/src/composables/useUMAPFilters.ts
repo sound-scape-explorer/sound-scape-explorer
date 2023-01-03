@@ -9,9 +9,12 @@ import type {
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import type {UMAPMetaStoreInterface} from '../store/UMAP-meta.store';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
-import type {ConfigStoreInterface} from '../store/config.store';
+import {configStore} from '../store/config.store';
+import {useUMAPDataset} from './useUMAPDataset';
 
 export function useUMAPFilters() {
+  const {getMetaContent} = useUMAPDataset();
+
   function isVisibleByQuery(index: number): boolean {
     const {matches, query} = UMAPQueryStore;
 
@@ -119,95 +122,99 @@ export function useUMAPFilters() {
     return isVisible;
   }
 
-  function digestQueryComplexItem(
-    queryComplex: UMAPQueryComplexStoreInterface['queryComplex'],
-    keys: string[],
-    metaContents: string,
-    metaProperties: ConfigStoreInterface['metaProperties'],
-  ) {
-    let result = true;
+  function digestQueryComplexSingleString(metaValues: string[], queryValue: string): boolean {
+    return metaValues.includes(queryValue);
+  }
 
-    for (const key of keys) {
-      const metaPropertyIndex = metaProperties.indexOf(key);
-
-      if (metaPropertyIndex === -1) {
-        continue;
+  function digestQueryComplexSingleArray(metaValues: string[], queryValues: string[]): boolean {
+    return queryValues.reduce((acc, queryValue) => {
+      if (acc) {
+        return acc;
       }
 
-      const query = queryComplex[key];
-      const metaContent = metaContents[metaPropertyIndex];
+      return digestQueryComplexSingleString(metaValues, queryValue);
+    }, false);
+  }
 
-      if (!result) {
+  function digestQueryComplexItem(
+    index: number,
+    query: UMAPQueryComplexStoreInterface['queryComplex'],
+  ): boolean {
+    const metaContent = getMetaContent(index);
+    const metaProperties = configStore.metaProperties;
+    const queryKeys = Object.keys(query);
+    const metaKeys = queryKeys.map((queryKey) => metaProperties.indexOf(queryKey));
+
+    let isVisible = true;
+
+    for (const metaKey of metaKeys) {
+      if (!isVisible) {
         break;
       }
 
-      if (typeof query === 'string') {
-        // string
-        result = metaContent.includes(query);
-      } else {
-        // array
-        // @ts-expect-error TS2349
-        result = query.reduce((acc, q) => {
-          if (acc) {
-            return acc;
-          }
+      const metaValues = metaContent[metaKey];
+      const queryValue = query[metaProperties[metaKey]];
 
-          return metaContent.includes(q);
-        }, false);
+      if (typeof queryValue === 'string') {
+        isVisible = digestQueryComplexSingleString(metaValues, queryValue);
+      } else {
+        isVisible = digestQueryComplexSingleArray(metaValues, queryValue as unknown as string[]);
       }
     }
 
-    return result;
+    return isVisible;
   }
 
-  function isVisibleByQueryComplex(
-    index: number,
-    metaProperties: ConfigStoreInterface['metaProperties'],
-  ): boolean {
-    // @SPECIES=CERBRA+CYACAE @SEASON=SPRING
+  function digestQueryComplexGroups(index: number): boolean {
+    const queryGroups = UMAPQueryComplexStore.queryComplex;
+    const queryGroupsValues = Object.values(queryGroups);
+
+    let isVisible = true;
+    const results: boolean[] = [];
+
+    for (const query of queryGroupsValues) {
+      isVisible = digestQueryComplexItem(index, query);
+      results.push(isVisible);
+    }
+
+    return results.reduce((acc, r) => acc || r, false);
+  }
+
+  function isVisibleByQueryComplex(index: number): boolean {
+    // @SPECIES=CerBra+LopCri @SEASON=SPRING
     // @TIME=POST
+    // (@TIME=POST)
     // @SPECIES=CerBra @TIME=PRE
+    // @SPECIES=CerBra @TIME=PRE+POST
+    // (@SPECIES=CerBra @TIME=POST)+(@SPECIES=CerBra @TIME=PRE)
     // (@SPECIES=CerBra @TIME=PRE)+(@SPECIES=LopCri @TIME=POST)
+    // @SPECIES=CerBra+LopCri @SEASON=SPRING @TIME=PRE @VER=a
+    // @SPECIES=CerBra+LopCri @SEASON=SPRING @TIME=PRE @VER=a @NUM=1
 
-    const {queryComplex} = UMAPQueryComplexStore;
-
-    const queryKeys = Object.keys(queryComplex);
-
-    if (queryKeys.length === 0) {
+    if (!UMAPQueryComplexStore.isActive) {
       return true;
     }
 
-    const {dataset} = UMAPDatasetStore;
-    const columns = dataset?.metadata[index]['columns'] as string;
+    let isVisible: boolean;
 
-    let result: boolean;
-
-    if (queryKeys[0].includes('GROUP_')) {
-      result = false;
-
-      queryKeys.forEach((groupName) => {
-        const singleQueryComplex = queryComplex[groupName];
-        const singleQueryComplexKeys = Object.keys(singleQueryComplex);
-
-        // @ts-expect-error TS2345
-        result = digestQueryComplexItem(singleQueryComplex, singleQueryComplexKeys, columns, metaProperties);
-      });
+    if (!UMAPQueryComplexStore.hasGroups) {
+      isVisible = digestQueryComplexItem(
+        index,
+        UMAPQueryComplexStore.queryComplex,
+      );
     } else {
-      result = digestQueryComplexItem(queryComplex, queryKeys, columns, metaProperties);
+      isVisible = digestQueryComplexGroups(index);
     }
 
-    return result;
+    return isVisible;
   }
 
-  function shouldBeFiltered(
-    index: number,
-    metaProperties: ConfigStoreInterface['metaProperties'],
-  ): boolean {
+  function shouldBeFiltered(index: number): boolean {
     return !isVisibleByTags(index)
       || !isVisibleByTimeRange(index)
       || !isVisibleByQuery(index)
       || !isVisibleByMeta(index)
-      || !isVisibleByQueryComplex(index, metaProperties);
+      || !isVisibleByQueryComplex(index);
   }
 
   return {

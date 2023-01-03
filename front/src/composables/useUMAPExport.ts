@@ -132,7 +132,7 @@ export function useUMAPExport() {
     }
 
     for (let i = 0; i < points.length; ++i) {
-      const shouldBeFilteredOut = shouldBeFiltered(i, metaProperties);
+      const shouldBeFilteredOut = shouldBeFiltered(i);
 
       if (shouldBeFilteredOut) {
         continue;

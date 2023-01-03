@@ -26,20 +26,21 @@ function digestQueryItem(item: RegExpMatchArray, payload: UMAPQueryComplexStoreI
   payload[metaProperty] = value;
 }
 
-function digestQuery() {
-  const payload: UMAPQueryComplexStoreInterface['queryComplex'] = {};
-
+function processQuery() {
   if (input.value === '') {
-    return payload;
+    UMAPQueryComplexStore.isActive = false;
+    return;
   }
 
+  const payload: UMAPQueryComplexStoreInterface['queryComplex'] = {};
   const groupRegex = /\(([^+.]*)\)/g; // ()+()
   const groupMatches = [...input.value.matchAll(groupRegex)].map((element) => element[1]);
 
   const itemRegex = /@(\w*)=([\w+]*)/g; // @COL=VALUE1+VALUE2
 
   if (groupMatches.length > 0) {
-    // groups detected
+    UMAPQueryComplexStore.hasGroups = true;
+
     groupMatches.forEach((group, i) => {
       payload[`GROUP_${i}`] = {};
 
@@ -50,18 +51,14 @@ function digestQuery() {
       });
     });
   } else {
-    // no group detected
+    UMAPQueryComplexStore.hasGroups = false;
+
     const itemMatches = [...input.value.matchAll(itemRegex)];
     itemMatches.forEach((item) => digestQueryItem(item, payload));
   }
 
-  console.log(payload);
-
-  return payload;
-}
-
-function processQuery() {
-  UMAPQueryComplexStore.queryComplex = digestQuery();
+  UMAPQueryComplexStore.isActive = true;
+  UMAPQueryComplexStore.queryComplex = payload;
 }
 
 watch(input, () => {
