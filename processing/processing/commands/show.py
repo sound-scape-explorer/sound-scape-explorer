@@ -8,7 +8,6 @@ from processing.cli import cli
 from processing.utils.get_audio_duration import get_audio_duration
 from processing.utils.iterate_audio_files_with_bands import \
     iterate_audio_files_with_bands
-from processing.utils.load_features_for import load_features_for
 
 
 @cli.group()
@@ -105,17 +104,3 @@ def list_sites() -> None:
 
     print(sorted(list(sites)))
     print(",".join(sorted(list(sites))))
-
-
-@show.command()
-def features():
-    my_config = Config().get()
-
-    for range_name in my_config.ranges:
-        my_features = load_features_for(
-            'all',
-            my_config.ranges[range_name],
-            'POST_CerBra_alarm_1_a_SPRING',
-        )[1]
-
-        return my_features[1]
