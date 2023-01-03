@@ -63,7 +63,10 @@ class ExcelColumn:
         if not self.__has_no_prefix:
             self.values = [f'{self.__key}_{value}' for value in self.values]
 
-    def __digest_config_columns(self, _name, item):
+    def __digest_config_meta(self, _name, item):
+        if type(item) is not str:
+            item = str(int(float(item)))
+
         return [item]
 
     def __digest_config_sites(self, sites):
@@ -74,7 +77,7 @@ class ExcelColumn:
 
         return string.split(',')
 
-    def __digest_config_columns_name(self, action_string):
+    def __digest_config_meta_property(self, action_string):
         if '_' in action_string:
             return action_string.split(':')[0].split('_')[1]
 
@@ -105,8 +108,8 @@ class ExcelColumn:
                         datetime.strptime(vv, '%Y%m%d_%H%M') for vv in
                         v.split('-')
                     ],
-                    'COLUMN': lambda el: self.__digest_config_columns(
-                        self.__digest_config_columns_name(value),
+                    'COLUMN': lambda el: self.__digest_config_meta(
+                        self.__digest_config_meta_property(value),
                         el,
                     )
                 }[t]
