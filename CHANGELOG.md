@@ -1,3 +1,48 @@
+# [4.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.15.2...v4.0.0) (2023-01-03)
+
+
+### Bug Fixes
+
+* **Front/UMAP/Export:** Add utility function to retrieve file tags (lighter and more exhaustive) ([5f79c5e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5f79c5e39be1deb01150857b17b4801a2622ad32))
+* **Front/UMAP:** Destroy scatter plot and dataset on component unmount ([d085b96](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d085b962b6b3869fb5da89cd44fe0cc8be1e7f65))
+* **Front/UMAP:** Rewrite Complex Query filter + Improve code quality ([26cd048](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/26cd048aae3f5a95b6bb80cd60efc8f5e8814103))
+* **Front/UMAP:** Use correct indexes for `getMetaColor` ([baee572](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/baee5723e7f21b308f0484f68643672eaf71d8c2))
+* **Front:** Rename files attributes `columns` into `meta` + Remove legacy TODOs ([af14366](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/af1436688a2699c296003f03c3103cfad7344b34))
+* **Processing/Config:** Force meta values to be string ([e641360](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e641360cd82291f85f5fd8b1a8cce3f932c8f22d))
+
+
+### Features
+
+* **Front/MiniTools:** Add link to legacy app ([bdef193](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bdef193fb93dff722b4486d47f5d2cb04046eef2))
+* **Front/UMAP:** Add notification on export ([4ff0ac7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4ff0ac785701526096ed7f39906262cbfb980022))
+* **Front:** Add new `/settings` page + Add UMAP CSV export settings ([8664511](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/86645111b13b291e4dc3b6ad664d3594440a3b55))
+* **Processing:** Refactoring, Add `AudioFiles` class (implements files iterators) ([e9b0bfb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e9b0bfb37e1d41e490f61b16c68d28e0585dfc8b))
+* **Processing:** Refactoring, Add `Builder` classes replacing legacy code for computations ([bbd9946](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bbd99466afc4f6278c2c41ea863513f2c8b06ede))
+* **Processing:** Refactoring, Add `BuilderFeature` class replacing legacy `compute_features` ([efad335](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/efad335fb4fe5acc1a268952ca6bef8ef2ccdd65))
+* **Processing:** Refactoring, Add `BuilderVolume` + Adapt back-end endpoint and front code to handle new `site` wording ([b074343](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b074343e4a29db89c22e7ec5790ad17529c9d684))
+* **Processing:** Refactoring, Add `ConfigGenerator` class for dynamic excel population + Remove old hard coded instructions ([9810c51](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9810c518abbc293f48a9d5bb7abad06e664dbbee))
+* **Processing:** Refactoring, Add `ExcelOpen` class (separation of concerns with `Excel` class, will be merged eventually) ([b5e93f5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b5e93f5f90490ddf558033f50ab5ca0e7272d6e7))
+* **Processing:** Refactoring, Add `Extractor` class (features extraction) + Misc ([d53e4d1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d53e4d1b3f8a5a8ba264a0b3b6fa263575071094))
+* **Processing:** Refactoring, Add `Filepaths` class to handle files and folders discovery from disk ([279021f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/279021f8a07c5462fef101a9a43f3df49844e851))
+* **Processing:** Refactoring, Add `UMAPBuilder` class replacing `compute_UMAPs` legacy function ([0fc6917](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0fc691747ae7a75cc8068260e97043e1ba417f43))
+* **Processing:** Refactoring, Improve `Builder` and `Excel` classes ([0988559](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/098855951e2dd7de4da8ca2c4bc867ee569f6fb3))
+* **Processing:** Refactoring, Improve `BuilderUMAP` class + Remove dead code ([f83f591](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f83f5912a5c16d0460b84cf46071ba62f390f6d2))
+* **Processing:** Refactoring, Improve `ExcelColumn` class + Rename legacy utility function + Remove dead code ([3b71a94](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3b71a9494e11313cd59dc7dd81ada4cc9174f497))
+* **Processing:** Refactoring, Improve `ExcelColumn` typings ([13e4df6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/13e4df67598d7e621d027f0c92d41c52823b07ca))
+* **Processing:** Refactoring, Improve console output for `Extractor` class ([bdde6e2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bdde6e2461ad29c9caf481d3c862906158339fb4))
+* **Processing:** Refactoring, Merge legacy code into `Config` class ([caf9666](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/caf9666097deb9bea06c2aead9c61175f8d94914))
+* **Processing:** Refactoring, Remove dead instructions ([213f217](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/213f2175b5ef404e3c02269d37bb0b9e21beab15))
+* **Processing:** Refactoring, Remove unused commands and associated code ([a9e3eae](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a9e3eaeeeb5c1cd4d81544f413d57d2f2ee50357))
+* **Processing:** Refactoring, Rename `DataLoader` into `ExtractorDataLoader` ([5eb4f4d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5eb4f4da2cd01eee3ed588a560fbd9fcb6dc2340))
+* **Processing:** Refactoring, Rename old wording files' columns into meta ([289b7c0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/289b7c00e3e849666367de9def39b1199a33215c))
+* **Processing:** Refactoring, Rewrite in OOP style for better readability and maintainability ([ea02c5e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ea02c5e22c1aa70cef7a38306791d6ab41104c19))
+* **Processing:** Refactoring, Use better wording for actions + Rename old files' columns into meta ([c4591b8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c4591b850ee30c5b46d334b3b7993207463b7982))
+
+
+### BREAKING CHANGES
+
+* **Processing:** Refactoring Processing module
+
 ## [3.15.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.15.1...v3.15.2) (2022-12-20)
 
 
