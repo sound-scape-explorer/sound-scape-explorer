@@ -11,35 +11,36 @@ const input = ref<string>('');
 const {isDisabled} = useUMAPStatus();
 
 function digestQueryItem(item: RegExpMatchArray, payload: UMAPQueryComplexStoreInterface['queryComplex']): void {
-  const columnName = item[1];
+  const metaProperty = item[1];
   let value: string | string[] = item[2];
 
   if (value.includes('+')) {
     value = value.split('+');
   }
 
-  if (typeof payload[columnName] === 'string' && typeof value === 'string') {
-    payload[columnName] = [payload[columnName] as string, value];
+  if (typeof payload[metaProperty] === 'string' && typeof value === 'string') {
+    payload[metaProperty] = [payload[metaProperty] as string, value];
     return;
   }
 
-  payload[columnName] = value;
+  payload[metaProperty] = value;
 }
 
-function digestQuery() {
-  const payload: UMAPQueryComplexStoreInterface['queryComplex'] = {};
-
+function processQuery() {
   if (input.value === '') {
-    return payload;
+    UMAPQueryComplexStore.isActive = false;
+    return;
   }
 
+  const payload: UMAPQueryComplexStoreInterface['queryComplex'] = {};
   const groupRegex = /\(([^+.]*)\)/g; // ()+()
   const groupMatches = [...input.value.matchAll(groupRegex)].map((element) => element[1]);
 
   const itemRegex = /@(\w*)=([\w+]*)/g; // @COL=VALUE1+VALUE2
 
   if (groupMatches.length > 0) {
-    // groups detected
+    UMAPQueryComplexStore.hasGroups = true;
+
     groupMatches.forEach((group, i) => {
       payload[`GROUP_${i}`] = {};
 
@@ -50,18 +51,14 @@ function digestQuery() {
       });
     });
   } else {
-    // no group detected
+    UMAPQueryComplexStore.hasGroups = false;
+
     const itemMatches = [...input.value.matchAll(itemRegex)];
     itemMatches.forEach((item) => digestQueryItem(item, payload));
   }
 
-  console.log(payload);
-
-  return payload;
-}
-
-function processQuery() {
-  UMAPQueryComplexStore.queryComplex = digestQuery();
+  UMAPQueryComplexStore.isActive = true;
+  UMAPQueryComplexStore.queryComplex = payload;
 }
 
 watch(input, () => {
@@ -78,7 +75,3 @@ watch(input, () => {
     </template>
   </n-input>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

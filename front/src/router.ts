@@ -9,6 +9,7 @@ import Covering from './pages/Covering.vue';
 import MiniTools from './pages/MiniTools.vue';
 import Config from './pages/Config.vue';
 import Docs from './pages/Docs.vue';
+import Settings from './pages/Settings.vue';
 
 export type AppRouteNames =
   | 'home'
@@ -20,6 +21,7 @@ export type AppRouteNames =
   | 'minitools'
   | 'config'
   | 'docs'
+  | 'settings'
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -56,6 +58,11 @@ export const routes: RouteRecordRaw[] = [
     name: 'minitools',
     path: '/minitools',
     component: MiniTools,
+  },
+  {
+    name: 'settings',
+    path: '/settings',
+    component: Settings,
   },
   {
     name: 'config',

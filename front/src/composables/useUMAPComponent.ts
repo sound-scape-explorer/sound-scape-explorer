@@ -10,18 +10,18 @@ import {mapRange} from '../utils/map-range';
 import {isHourDuringDay} from '../utils/is-hour-during-day';
 import {useColors} from './useColors';
 import {useUMAPFilters} from './useUMAPFilters';
-import {UMAPColumnsStore} from '../store/UMAP-columns.store';
+import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {useConfig} from './useConfig';
 import type {ConfigStoreInterface} from '../store/config.store';
-import {useUMAPColumns} from './useUMAPColumns';
+import {useUMAPMeta} from './useUMAPMeta';
 import {UMAPSelectionStore} from '../store/UMAP-selection.store';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
   const {shouldBeFiltered} = useUMAPFilters();
   const {timestampsInDay, updateTimestampsInDay} = useUMAPTimestampsInDay();
-  const {getColumnsNamesAsColorTypes, getColumnColor} = useUMAPColumns();
+  const {getMetaPropertiesAsColorTypes, getMetaColor} = useUMAPMeta();
 
   let isFirstRender = true;
   const containerRef = ref<HTMLDivElement | null>(null);
@@ -38,6 +38,12 @@ export function useUMAPComponent() {
       },
       onSelect: selectPoints,
     });
+  }
+
+  function destroy() {
+    scatterGL = null;
+    containerRef.value = null;
+    UMAPDatasetStore.dataset = null;
   }
 
   function selectPoints(indexes: number[]) {
@@ -63,8 +69,8 @@ export function useUMAPComponent() {
 
     if (isFirstRender) {
       scatterGL.render(UMAPDatasetStore.dataset);
-      const {columnsNames} = await useConfig();
-      scatterGL.setPointColorer((i, s, h) => getColor(i, s, h, columnsNames));
+      const {metaProperties} = await useConfig();
+      scatterGL.setPointColorer((i, s, h) => getColor(i, s, h, metaProperties));
       isFirstRender = false;
     }
   }
@@ -88,11 +94,16 @@ export function useUMAPComponent() {
   /**
    * @see https://github.com/PAIR-code/scatter-gl/issues/99
    */
-  function getColor(index: number, selectedIndices: Set<number>, hoverIndex: number | null, columnsNames: ConfigStoreInterface['columnsNames']): string {
+  function getColor(
+    index: number,
+    selectedIndices: Set<number>,
+    hoverIndex: number | null,
+    metaProperties: ConfigStoreInterface['metaProperties'],
+  ): string {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const dataset = UMAPDatasetStore.dataset!;
     const {colorType} = UMAPFiltersStore;
-    const columnsNamesAsColorTypes = getColumnsNamesAsColorTypes();
+    const metaPropertiesAsColorTypes = getMetaPropertiesAsColorTypes();
 
     const rangedPointIndex = mapRange(index, 0, dataset.metadata.length, 0, 1);
 
@@ -101,12 +112,12 @@ export function useUMAPComponent() {
 
     const timeIndex = timestampsInDay.value[index];
     const rangedBy1hIndex = mapRange(timeIndex, 0, 24, 0, 1);
-    const rangedBy10minIndex = mapRange(timeIndex, 0, 24 * 60 * 10, 0, 1); // TODO: fix
+    const rangedBy10minIndex = mapRange(timeIndex, 0, 24 * 60 * 10, 0, 1);
 
     const hoverColor = 'red';
     const filteredColor = `hsla(0, 0%, 0%, ${UMAPStore.alpha.low})`;
 
-    const shouldBeFilteredOut = shouldBeFiltered(index, columnsNames);
+    const shouldBeFilteredOut = shouldBeFiltered(index, metaProperties);
 
     if (shouldBeFilteredOut) {
       return filteredColor;
@@ -128,8 +139,8 @@ export function useUMAPComponent() {
       color = isDay
         ? dayColor.alpha(UMAPStore.alpha.high).css()
         : nightColor.alpha(UMAPStore.alpha.high).css();
-    } else if (columnsNamesAsColorTypes.includes(colorType)) {
-      color = getColumnColor(colorType, index);
+    } else if (metaPropertiesAsColorTypes.includes(colorType)) {
+      color = getMetaColor(colorType, index);
     }
 
     if (hoverIndex === index) {
@@ -137,7 +148,6 @@ export function useUMAPComponent() {
     }
 
     if (selectedIndices.size === 0) {
-      // return color.alpha(UMAPStore.alpha.high).css();
       return color;
     }
 
@@ -157,13 +167,14 @@ export function useUMAPComponent() {
 
   onUnmounted(() => {
     removeListeners();
+    destroy();
   });
 
   watch([
     UMAPTimeRangeStore,
     UMAPFiltersStore,
     UMAPQueryStore,
-    UMAPColumnsStore,
+    UMAPMetaStore,
     UMAPQueryComplexStore,
     UMAPStore,
   ], async () => {

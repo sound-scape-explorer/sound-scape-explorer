@@ -21,13 +21,17 @@ export async function useConfig(): Promise<ConfigStoreInterface> {
     configStore.isLoaded = true;
     configStore.isError = false;
     configStore.config = data;
+
     configStore.bands = Object.keys(data.bands);
-    configStore.intervals = data.variables.integration_seconds.split('-').map((i) => Number(i));
+    configStore.intervals = data.variables['integration_seconds']
+      .split('-')
+      .map((i) => Number(i));
     configStore.intervalLabels = Object.keys(data.umaps);
     configStore.ranges = Object.keys(data.ranges);
     configStore.sites = parseSites(data);
-    configStore.columns = data.columns;
-    configStore.columnsNames = data.columns_names;
+
+    configStore.metaProperties = data.meta_properties;
+    configStore.metaContents = data.meta_contents; // unique values
 
     return configStore;
   } catch {

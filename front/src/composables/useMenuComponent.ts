@@ -10,6 +10,7 @@ import {
   EarthOutline,
   EyeOutline,
   HomeOutline,
+  InformationOutline,
   PlayOutline,
   StatsChartOutline,
 } from '@vicons/ionicons5';
@@ -61,14 +62,19 @@ export function useMenuComponent() {
       icon: renderNaiveIcon(ConstructOutline),
     },
     {
+      label: () => h(RouterLink, {to: {name: 'settings'}}, {default: () => 'Settings'}),
+      key: 'settings',
+      icon: renderNaiveIcon(CogOutline),
+    },
+    {
       label: () => h(RouterLink, {to: {name: 'config'}}, {default: () => 'Config'}),
       key: 'config',
-      icon: renderNaiveIcon(CogOutline),
+      icon: renderNaiveIcon(DocumentTextOutline),
     },
     {
       label: () => h(RouterLink, {to: {name: 'docs'}}, {default: () => 'Docs'}),
       key: 'docs',
-      icon: renderNaiveIcon(DocumentTextOutline),
+      icon: renderNaiveIcon(InformationOutline),
     },
   ]);
 

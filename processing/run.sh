@@ -148,23 +148,19 @@ function run_computes {
 }
 
 function run_config {
-  sse show config --json > generated/ghost-config.json
+  sse show config > generated/ghost-config.json
 }
 
 function run_config_test {
-  sse show config --json
+  sse show config
 }
 
-function run_config_populate_columns {
-  sse config populate-columns
-}
-
-function run_show_features {
-  sse show features
+function run_config_populate_files {
+  sse config populate-files
 }
 
 function run_all {
-  run_config_populate_columns
+  run_config_populate_files
 
   run_extract_all
   run_computes
@@ -225,8 +221,7 @@ else
   [ "$2" == "config" ] && run_config
   [ "$2" == "config-test" ] && run_config_test
   [ "$2" == "config-populate-columns" ] && run_config_populate_columns
-
-  [ "$2" == "show-features" ] && run_show_features
+  [ "$2" == "config-populate-files" ] && run_config_populate_files
 fi
 
 print_end

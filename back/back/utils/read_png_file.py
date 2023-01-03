@@ -1,4 +1,4 @@
-from flask import send_file, Response
+from flask import Response, send_file
 
 
 def read_png_file(path: str) -> Response:

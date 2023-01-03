@@ -71,7 +71,7 @@ sse help
 sse chs
 
 (cd ...../sse-v1 ; npm run dev)
-(cd .../sample sse show config --json > generated/ghost-config.json)
+(cd .../sample sse show config > generated/ghost-config.json)
 
 ~~~
 

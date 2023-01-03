@@ -6,7 +6,7 @@ import type {ConfigStoreInterface} from '../store/config.store';
 import {UMAPQueryStore} from '../store/UMAP-query.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
-import {UMAPColumnsStore} from '../store/UMAP-columns.store';
+import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import {useConfig} from './useConfig';
 import {
   convertObjectToJsonString,
@@ -16,11 +16,14 @@ import {convertArrayToCsv} from '../utils/convert-array-to-csv';
 import {selectionStore} from '../store/selection.store';
 import {UMAP_EXPORT_FILENAME} from '../constants';
 import {fetchFeatures} from '../utils/fetch-features';
+import {useNotification} from './useNotification';
+import {
+  getRangeAndSiteFromDatasetLabel,
+} from '../utils/get-range-and-site-from-dataset-label';
 
 export function useUMAPExport() {
-  const {
-    shouldBeFiltered,
-  } = useUMAPFilters();
+  const {notify} = useNotification();
+  const {shouldBeFiltered} = useUMAPFilters();
   const loadingRef = ref(false);
 
   function getFilename() {
@@ -70,8 +73,8 @@ export function useUMAPExport() {
      * Columns
      */
 
-    const {columns} = UMAPColumnsStore;
-    const columnsValues = Object.values(columns);
+    const {metaSelection} = UMAPMetaStore;
+    const columnsValues = Object.values(metaSelection);
 
     for (let i = 0; i < columnsValues.length; ++i) {
       const value = columnsValues[i];
@@ -99,7 +102,7 @@ export function useUMAPExport() {
   async function parse(
     dataset: UMAPDatasetStoreInterface['dataset'],
     name: string,
-    columnsNames: ConfigStoreInterface['columnsNames'],
+    metaProperties: ConfigStoreInterface['metaProperties'],
     type: 'json' | 'csv' = 'json',
   ) {
     loadingRef.value = true;
@@ -109,7 +112,6 @@ export function useUMAPExport() {
       return;
     }
 
-    // TODO type me
     const payload: unknown[] = [];
 
     const {points, metadata} = dataset;
@@ -118,7 +120,7 @@ export function useUMAPExport() {
     const intervalLabel = selectionStore.interval;
     const {intervals, intervalLabels} = await useConfig();
 
-    if (!intervalLabel || !intervalLabels || !intervals) {
+    if (!intervalLabel) {
       return payload;
     }
 
@@ -130,7 +132,7 @@ export function useUMAPExport() {
     }
 
     for (let i = 0; i < points.length; ++i) {
-      const shouldBeFilteredOut = shouldBeFiltered(i, columnsNames);
+      const shouldBeFilteredOut = shouldBeFiltered(i);
 
       if (shouldBeFilteredOut) {
         continue;
@@ -145,7 +147,7 @@ export function useUMAPExport() {
         continue;
       }
 
-      const [range, site] = label.split('/');
+      const {range, site} = getRangeAndSiteFromDatasetLabel(label);
       const timestamp = data.timestamp as number;
 
       const features = await fetchFeatures({
@@ -164,32 +166,35 @@ export function useUMAPExport() {
         });
       } else if (type === 'csv') {
         payload.push([
-          metadata[i]['label'],
-          metadata[i]['timestamp'],
+          data['label'],
+          data['timestamp'],
           points[i],
-          metadata[i]['tags'],
-          metadata[i]['columns'],
+          data['tags'],
+          data['metaContent'],
           features,
-          // TODO: Add volumes (later)
         ]);
       }
     }
-
-    console.log(payload);
 
     return payload;
   }
 
   async function handleClick(type: 'json' | 'csv' = 'json') {
-    const {columnsNames} = await useConfig();
+    const {metaProperties} = await useConfig();
 
     const filename = getFilename() || UMAP_EXPORT_FILENAME;
 
-    if (!filename || !columnsNames) {
+    if (!filename) {
       return;
     }
 
-    const results = await parse(UMAPDatasetStore.dataset, filename, columnsNames, type);
+    notify(
+      'info',
+      'UMAP',
+      'Exporting collected points. Selected points are not handled.',
+    );
+
+    const results = await parse(UMAPDatasetStore.dataset, filename, metaProperties, type);
 
     if (!results) {
       return;
@@ -210,7 +215,7 @@ export function useUMAPExport() {
         '2D_X',
         '2D_Y',
         'tags',
-        ...columnsNames.map((c) => `col_${c}`),
+        ...metaProperties.map((c) => `meta_${c}`),
         'features',
       ];
 

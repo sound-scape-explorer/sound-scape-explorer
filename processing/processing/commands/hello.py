@@ -4,5 +4,5 @@ from processing.cli import cli
 
 
 @cli.command()
-def hello():
+def hello() -> None:
     click.echo('Hello !')
