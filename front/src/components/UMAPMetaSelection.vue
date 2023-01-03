@@ -26,15 +26,15 @@ const selection = ref(null);
 const {metaSelection} = UMAPMetaStore;
 const {isDisabled} = useUMAPStatus();
 
-function getColorByItem(itemIndex: number): string | undefined {
-  const {getMetaColor} = useUMAPMeta();
+function getColorByItem(index: number): string | undefined {
+  const {getMetaColorFromMetaIndex} = useUMAPMeta();
   const colorType = `by${title}`;
 
   if (colorType !== UMAPFiltersStore.colorType) {
     return undefined;
   }
 
-  return getMetaColor(colorType, itemIndex, items.length);
+  return getMetaColorFromMetaIndex(index, items.length);
 }
 
 /**
@@ -64,8 +64,8 @@ watch(selection, updateSelection);
 <template>
   <n-checkbox-group v-model:value="selection" :disabled="isDisabled" class="checkboxes">
     <n-checkbox
-        v-for="(item, itemIndex) in items"
-        :style="{background: getColorByItem(itemIndex)}"
+        v-for="(item, index) in items"
+        :style="{background: getColorByItem(index)}"
         :value="item"
         class="checkbox"
     >

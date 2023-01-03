@@ -2,7 +2,6 @@ import {
   convertColumnsToColorTypes,
 } from '../utils/convert-columns-to-color-types';
 import {configStore} from '../store/config.store';
-import {mapRange} from '../utils/map-range';
 import {useColors} from './useColors';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 
@@ -13,25 +12,42 @@ export function useUMAPMeta() {
     return convertColumnsToColorTypes(configStore.metaProperties);
   }
 
-  function getMetaColor(colorType: string, index: number, length = UMAPDatasetStore.dataset?.metadata.length || 0) {
+  function getMetaPropertyIndexFromColorType(colorType: string): number {
     const metaPropertiesAsColorTypes = getMetaPropertiesAsColorTypes();
-    const metaPropertyIndex = metaPropertiesAsColorTypes.indexOf(colorType);
-    const metaValues = configStore.metaContents[metaPropertyIndex];
-    const metaValuesLength = metaValues.length;
+    return metaPropertiesAsColorTypes.indexOf(colorType);
+  }
 
-    if (metaValuesLength > 0) {
-      const limitedColorScale = colors.value.colors(metaValuesLength);
-      const newIndex = mapRange(index, 0, length, 1, metaValuesLength) - 1;
-      const roundedNewIndex = Math.round(newIndex);
+  function createLimitedColorScale(length: number): string[] {
+    return colors.value.colors(length);
+  }
 
-      return limitedColorScale[roundedNewIndex];
-    }
+  function getMetaContentFromIndex(index: number): string[][] {
+    return UMAPDatasetStore?.dataset?.metadata[index].metaContent as unknown as string[][];
+  }
 
-    return 'red';
+  function getMetaColor(
+    colorType: string,
+    index: number,
+  ) {
+    const metaPropertyIndex = getMetaPropertyIndexFromColorType(colorType);
+    const metaContent = getMetaContentFromIndex(index);
+    const metaValue = metaContent[metaPropertyIndex][0];
+    const metaPossibleValues = configStore.metaContents[metaPropertyIndex];
+
+    const colors = createLimitedColorScale(metaPossibleValues.length);
+    const metaIndex = metaPossibleValues.indexOf(metaValue);
+
+    return colors[metaIndex];
+  }
+
+  function getMetaColorFromMetaIndex(index: number, length: number): string {
+    const colors = createLimitedColorScale(length);
+    return colors[index];
   }
 
   return {
     getMetaPropertiesAsColorTypes,
     getMetaColor,
+    getMetaColorFromMetaIndex,
   };
 }
