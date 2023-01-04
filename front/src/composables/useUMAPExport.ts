@@ -20,6 +20,8 @@ import {useNotification} from './useNotification';
 import {
   getRangeAndSiteFromDatasetLabel,
 } from '../utils/get-range-and-site-from-dataset-label';
+import {settingsStore} from '../store/settings.store';
+import type {Point2D, Point3D, PointMetadata} from '../lib/scatter-gl-0.0.13';
 
 export function useUMAPExport() {
   const {notify} = useNotification();
@@ -165,18 +167,43 @@ export function useUMAPExport() {
           features,
         });
       } else if (type === 'csv') {
-        payload.push([
-          data['label'],
-          data['timestamp'],
-          points[i],
-          data['tags'],
-          data['metaContent'],
-          features,
-        ]);
+        const content = createCSVContent(data, points[i], features);
+        payload.push(content);
       }
     }
 
     return payload;
+  }
+
+  function createCSVContent(data: PointMetadata, points: Point2D | Point3D, features: number[]) {
+    const content = [];
+
+    settingsStore.umap.export.labels && content.push(data['label']);
+    settingsStore.umap.export.timestamps && content.push(data['timestamp']);
+    settingsStore.umap.export.points && content.push(points);
+    settingsStore.umap.export.tags && content.push(data['tags']);
+    settingsStore.umap.export.meta && content.push(data['metaContent']);
+    settingsStore.umap.export.features && content.push(features);
+
+    return content;
+  }
+
+  function convertMetaPropertiesForExport(metaProperties: string[]): string[] {
+    return metaProperties.map((c) => `meta_${c}`);
+  }
+
+  function createCSVFirstRow(metaProperties: string[]): string[] {
+    const firstRow = [];
+
+    settingsStore.umap.export.labels && firstRow.push('label');
+    settingsStore.umap.export.timestamps && firstRow.push('timestamp');
+    settingsStore.umap.export.points && firstRow.push('2D_X');
+    settingsStore.umap.export.points && firstRow.push('2D_Y');
+    settingsStore.umap.export.tags && firstRow.push('tags');
+    settingsStore.umap.export.meta && firstRow.push(...convertMetaPropertiesForExport(metaProperties));
+    settingsStore.umap.export.features && firstRow.push('features');
+
+    return firstRow;
   }
 
   async function handleClick(type: 'json' | 'csv' = 'json') {
@@ -209,15 +236,7 @@ export function useUMAPExport() {
         callback: () => loadingRef.value = false,
       });
     } else if (type === 'csv') {
-      const firstRow = [
-        'label',
-        'timestamp',
-        '2D_X',
-        '2D_Y',
-        'tags',
-        ...metaProperties.map((c) => `meta_${c}`),
-        'features',
-      ];
+      const firstRow = createCSVFirstRow(metaProperties);
 
       const csv = convertArrayToCsv(
         results as string[][],
