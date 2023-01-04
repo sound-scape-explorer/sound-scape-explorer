@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.0.0...v4.1.0) (2023-01-04)
+
+
+### Features
+
+* **Front/UMAP:** Link CSV export settings to export action ([fb7ad48](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fb7ad484b9602d58612309b8a86e3afb679dbf34))
+
 # [4.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v3.15.2...v4.0.0) (2023-01-03)
 
 
