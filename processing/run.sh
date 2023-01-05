@@ -159,33 +159,27 @@ function run_config_populate_files {
   sse config populate-files
 }
 
-function run_all {
-  run_config_populate_files
+function run_test {
+  sse test
+}
 
+function run_all {
   run_extract_all
   run_computes
   run_config
 }
 
 function run_all_but_volume {
-  run_config_populate_columns
-
   run_extract_all
-
   run_compute_covering
   run_compute_umap
-
   run_config
 }
 
 function run_all_but_covering {
-  run_config_populate_columns
-
   run_extract_all
-
   run_compute_volume
   run_compute_umap
-
   run_config
 }
 
@@ -220,8 +214,9 @@ else
 
   [ "$2" == "config" ] && run_config
   [ "$2" == "config-test" ] && run_config_test
-  [ "$2" == "config-populate-columns" ] && run_config_populate_columns
   [ "$2" == "config-populate-files" ] && run_config_populate_files
+
+  [ "$2" == "test" ] && run_test
 fi
 
 print_end
