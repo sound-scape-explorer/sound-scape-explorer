@@ -1,16 +1,14 @@
-import datetime as dt
-import gzip
-import pickle
+import datetime
 
-import numpy as np
+import numpy
 
 from processing.classes.Config import Config
 from processing.constants import TIME_DELTA
 from processing.utils.iterate_audio_files import iterate_audio_files
+from processing.utils.load_feature_file import load_feature_file
 
 
-# TODO: Reduce complexity
-def load_features_for(band, r, s):
+def load_features_for(band, range_values, site):
     range_times = []
     range_features = []
     meta_values = None
@@ -21,28 +19,24 @@ def load_features_for(band, r, s):
             band,
             ['@feature_base', '.npz'],
     ):
-        if info.site != s:
+        if info.site != site:
             continue
 
-        if npz.exists():
-            data = np.load(npz)['x']
-        else:  # backward compatibility, try pklz
-            with gzip.open(npz.with_suffix(".pklz"), "rb") as f:
-                data = pickle.loads(f.read())
-            # TODO: proper error message (saying that npz also not found)
+        data = load_feature_file(npz)
+        duration = datetime.timedelta(seconds=TIME_DELTA * len(data))
 
-        dur = dt.timedelta(seconds=TIME_DELTA * len(data))
-
-        if r[0] > info.start + dur:
+        # Todo: This should be the other way around? Current logic assumes we
+        #  get [end, start]
+        if range_values[0] > info.start + duration:
             continue
 
-        if r[1] < info.start:
+        if range_values[1] < info.start:
             continue
 
         for i in range(len(data)):
-            start = info.start + dt.timedelta(seconds=TIME_DELTA * i)
+            start = info.start + datetime.timedelta(seconds=TIME_DELTA * i)
 
-            if start < r[0] or start > r[1]:
+            if start < range_values[0] or start > range_values[1]:
                 continue
 
             range_times.append(start)
@@ -51,7 +45,8 @@ def load_features_for(band, r, s):
             if meta_values is None:
                 meta_values = info[3:]
 
-    ind = np.argsort(range_times)
-    range_times = np.array(range_times)[ind]
-    range_features = np.array(range_features)[ind]
+    ind = numpy.argsort(range_times)
+    range_times = numpy.array(range_times)[ind]
+    range_features = numpy.array(range_features)[ind]
+
     return range_times, range_features, meta_values
