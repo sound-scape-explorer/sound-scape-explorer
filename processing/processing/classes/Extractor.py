@@ -29,8 +29,12 @@ class Extractor:
     def __init__(self, force: bool, skip_existing: bool):
         self.__force = force
         self.__skip_existing = skip_existing
+        self.__features_extension = '.npz'
 
-        self.__audio_files = AudioFiles('@feature_base', '.pklz')
+        self.__audio_files = AudioFiles(
+            '@feature_base',
+            self.__features_extension
+        )
 
         self.__todo = 0
         self.__total = 0
@@ -150,6 +154,6 @@ class Extractor:
         payload = torch.concat(payload).numpy()
 
         with PreventKeyboardInterrupt():
-            numpy.savez_compressed(output_path.with_suffix('.npz'), x=payload)
+            numpy.savez_compressed(output_path, x=payload)
 
         print(f'({time.time() - t_start:.3f} sec)... saved to disk')

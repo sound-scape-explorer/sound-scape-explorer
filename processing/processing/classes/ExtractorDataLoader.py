@@ -20,11 +20,11 @@ class ExtractorDataLoader:
     __sample_rate: int
 
     def __init__(
-            self,
-            input_path: str,
-            output_path: str,
-            band_parameters: List[int],
-            expected_sample_rate: int,
+        self,
+        input_path: str,
+        output_path: str,
+        band_parameters: List[int],
+        expected_sample_rate: int,
     ):
         self.__input_path = input_path
         self.__output_path = output_path

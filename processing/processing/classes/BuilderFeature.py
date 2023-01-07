@@ -50,7 +50,7 @@ class BuilderFeature:
                     for site in self.__sites:
                         print('... ... ... ... SITE', site)
 
-                        range_times, range_features = load_features_for(
+                        range_times, range_features, _meta_values = load_features_for(
                             band,
                             range_value,
                             site

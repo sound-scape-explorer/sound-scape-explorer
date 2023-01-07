@@ -2,53 +2,51 @@ import pathlib
 from typing import Any, Optional, Union
 
 from processing.classes.Config import Config
-from processing.utils.get_name_from_filename import get_name_from_filename
+from processing.constants import FEATURE_BASE
+from processing.utils.get_name_and_extension_from_filepath import \
+    get_name_and_extension_from_filepath
 
 
 class AudioFiles:
     __path: Optional[str]
-    __extension: Optional[str]
+    __features_extension: Optional[str]
     __config: Union[tuple, Any]
 
-    def __init__(self, path: Optional[str], extension: Optional[str]):
+    def __init__(
+        self,
+        path: Optional[str],
+        features_extension: Optional[str],
+    ):
         self.__path = path
-        self.__extension = extension
+        self.__features_extension = features_extension
 
         self.__config = Config().get()
         self.__pick_parameters_from_config()
 
     def __pick_parameters_from_config(self):
         self.files = self.__config.files
-        self.__suffix = self.__config.variables['audio_suffix']
         self.__base_path = self.__config.variables['audio_base']
         self.__expected_sample_rate = int(
             self.__config.variables['audio_expected_sample_rate']
         )
 
     def __get_filename_path(self, filename):
-        name = get_name_from_filename(filename)
-        return pathlib.Path(self.__base_path).joinpath(name + self.__suffix)
-
-    def __get_something(self, path):
-        return pathlib.Path(
-            self.__config.variables[path[1:]] if path.startswith('@') else path
-        )
+        return pathlib.Path(self.__base_path + filename)
 
     def __iterate(self, band):
-        for filename, info in self.files.items():
-            input_path = self.__get_filename_path(filename)
+        for filepath, info in self.files.items():
+            input_path = self.__get_filename_path(filepath)
 
-            response = [filename, info, input_path]
+            response = [filepath, info, input_path]
 
-            if self.__path is not None and self.__extension is not None:
-                p = self.__get_something(self.__path)
-                name = get_name_from_filename(filename)
+            if self.__path is not None and self.__features_extension is not \
+                    None:
+                name, extension = get_name_and_extension_from_filepath(filepath)
 
-                path = p.joinpath(
+                base_path = pathlib.Path(FEATURE_BASE)
+                path = base_path.joinpath(
                     band,
-                    name + self.__suffix
-                ).with_suffix(
-                    self.__extension
+                    name + extension + self.__features_extension
                 )
 
                 response.append(path)

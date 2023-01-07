@@ -28,12 +28,6 @@ class BuilderCovering:
         ]
 
     def __get_sites(self):
-        # self.__sites = list(
-        #     set(
-        #         [f.site for f in self.__config.sites.values()]
-        #     )
-        # )
-
         self.__sites = list(
             set(
                 [site for site in Config().get_all_sites()]
@@ -81,7 +75,7 @@ class BuilderCovering:
         for site in self.__sites:
             print('... ... ... ... SITE', site)
 
-            range_times, range_features = load_features_for(
+            range_times, range_features, _meta_values = load_features_for(
                 band,
                 range_value,
                 site
@@ -120,7 +114,7 @@ class BuilderCovering:
         for s2 in [s2 for s2 in self.__sites if s2 != site]:
             print('... ... ... ... ... SITE2', s2)
 
-            range_times2, range_features2 = load_features_for(
+            range_times2, range_features2, _meta_values2 = load_features_for(
                 band,
                 range_value,
                 s2

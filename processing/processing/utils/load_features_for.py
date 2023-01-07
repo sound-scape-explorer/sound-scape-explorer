@@ -9,9 +9,11 @@ from processing.constants import TIME_DELTA
 from processing.utils.iterate_audio_files import iterate_audio_files
 
 
+# TODO: Reduce complexity
 def load_features_for(band, r, s):
     range_times = []
     range_features = []
+    meta_values = None
     cfg = Config().get()
 
     for filename, info, audio, npz in iterate_audio_files(
@@ -46,7 +48,10 @@ def load_features_for(band, r, s):
             range_times.append(start)
             range_features.append(data[i])
 
+            if meta_values is None:
+                meta_values = info[3:]
+
     ind = np.argsort(range_times)
     range_times = np.array(range_times)[ind]
     range_features = np.array(range_features)[ind]
-    return range_times, range_features
+    return range_times, range_features, meta_values
