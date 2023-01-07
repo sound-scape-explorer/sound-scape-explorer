@@ -12,8 +12,6 @@ import {useColors} from './useColors';
 import {useUMAPFilters} from './useUMAPFilters';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
-import {useConfig} from './useConfig';
-import type {ConfigStoreInterface} from '../store/config.store';
 import {useUMAPMeta} from './useUMAPMeta';
 import {UMAPSelectionStore} from '../store/UMAP-selection.store';
 
@@ -69,8 +67,7 @@ export function useUMAPComponent() {
 
     if (isFirstRender) {
       scatterGL.render(UMAPDatasetStore.dataset);
-      const {metaProperties} = await useConfig();
-      scatterGL.setPointColorer((i, s, h) => getColor(i, s, h, metaProperties));
+      scatterGL.setPointColorer(getColor);
       isFirstRender = false;
     }
   }
@@ -98,7 +95,6 @@ export function useUMAPComponent() {
     index: number,
     selectedIndices: Set<number>,
     hoverIndex: number | null,
-    metaProperties: ConfigStoreInterface['metaProperties'],
   ): string {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const dataset = UMAPDatasetStore.dataset!;
@@ -117,7 +113,7 @@ export function useUMAPComponent() {
     const hoverColor = 'red';
     const filteredColor = `hsla(0, 0%, 0%, ${UMAPStore.alpha.low})`;
 
-    const shouldBeFilteredOut = shouldBeFiltered(index, metaProperties);
+    const shouldBeFilteredOut = shouldBeFiltered(index);
 
     if (shouldBeFilteredOut) {
       return filteredColor;
