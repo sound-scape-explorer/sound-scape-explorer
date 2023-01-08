@@ -8,6 +8,7 @@ import torch
 
 from processing.classes.AudioFiles import AudioFiles
 from processing.classes.ExtractorDataLoader import ExtractorDataLoader
+from processing.classes.Timer import Timer
 from processing.errors.ExtractorPathDuplicateError import \
     ExtractorPathDuplicateError
 from processing.models.VGGish import VGGish
@@ -38,6 +39,8 @@ class Extractor:
 
         self.__done = 0
         self.__total = len(self.__audio_files.files)
+
+        self.__timer = Timer(self.__total)
 
         self.__run()
 
@@ -90,6 +93,7 @@ class Extractor:
 
         print('---')
         print(f'Extraction: {self.__done}/{self.__total}')
+        self.__print_estimate()
         print(f'Path: {input_path}')
 
     def __run(self):
@@ -105,6 +109,11 @@ class Extractor:
             self.__extract()
             self.__increment_done()
 
+    def __print_estimate(self):
+        estimate = self.__timer.get_estimate()
+        print(f'Timeleft: ~{estimate}')
+        self.__timer.reset()
+
     def __extract(self):
         data_loader = ExtractorDataLoader(
             self.__input_path,
@@ -118,7 +127,9 @@ class Extractor:
 
         self.__model.eval()
 
-        print(f'({time.time() - t_start:.3f} sec)... model file loaded')
+        model_load_duration = time.time() - t_start
+        self.__timer.add_seconds(model_load_duration)
+        print(f'({model_load_duration:.3f} sec)... model file loaded')
 
         payload = []  # results file
         i = 0
@@ -142,7 +153,9 @@ class Extractor:
             i += batch
             payload.append(fts)
 
-        print(f'({time.time() - t_start:.3f} sec)... model applied to all')
+        model_apply_duration = time.time() - t_start
+        self.__timer.add_seconds(model_apply_duration)
+        print(f'({model_apply_duration:.3f} sec)... model applied to all')
 
         pathlib.Path(output_path).absolute().parent.mkdir(
             parents=True,
@@ -154,4 +167,6 @@ class Extractor:
         with PreventKeyboardInterrupt():
             numpy.savez_compressed(output_path, x=payload)
 
-        print(f'({time.time() - t_start:.3f} sec)... saved to disk')
+        disk_write_duration = time.time() - t_start
+        self.__timer.add_seconds(disk_write_duration)
+        print(f'({disk_write_duration:.3f} sec)... saved to disk')
