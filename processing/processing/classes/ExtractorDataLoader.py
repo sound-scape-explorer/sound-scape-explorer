@@ -1,3 +1,4 @@
+from pathlib import PosixPath
 from typing import List
 
 import time
@@ -7,11 +8,13 @@ from torchaudio.backend.soundfile_backend import load as torchaudio_load
 from processing.errors.DataLoaderSampleRateError import \
     DataLoaderSampleRateError
 from processing.errors.DataLoaderSizeError import DataLoaderSizeError
+from processing.errors.ExtractorDataLoaderAudioFileNotFoundError import \
+    ExtractorDataLoaderAudioFileNotFoundError
 
 
 class ExtractorDataLoader:
-    __input_path: str
-    __output_path: str
+    __input_path: PosixPath
+    __output_path: PosixPath
     __band_parameters: List[int]
     __expected_sample_rate: int
     __next_parameter_index: int
@@ -21,8 +24,8 @@ class ExtractorDataLoader:
 
     def __init__(
         self,
-        input_path: str,
-        output_path: str,
+        input_path: PosixPath,
+        output_path: PosixPath,
         band_parameters: List[int],
         expected_sample_rate: int,
     ):
@@ -66,8 +69,14 @@ class ExtractorDataLoader:
         self.__verify_size()
 
         self.__timestamp_start = time.time()
+
+        if not self.__input_path.exists():
+            raise ExtractorDataLoaderAudioFileNotFoundError(
+                f'Audio file not found: {self.__input_path}'
+            )
+
         self.__wav_data, self.__sample_rate = torchaudio_load(
-            self.__input_path
+            str(self.__input_path)
         )
 
         self.__print_success_log()
