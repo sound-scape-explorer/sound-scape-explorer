@@ -3,6 +3,10 @@ from typing import Any, Optional, Union
 
 from processing.classes.Config import Config
 from processing.constants import FEATURE_BASE
+from processing.errors.AudioFilesPathNotFoundError import \
+    (
+    AudioFilesPathNotFoundError,
+)
 from processing.utils.get_name_and_extension_from_filepath import \
     get_name_and_extension_from_filepath
 
@@ -22,6 +26,15 @@ class AudioFiles:
 
         self.__config = Config().get()
         self.__pick_parameters_from_config()
+        self.__verify_paths()
+
+    def __verify_paths(self):
+        files = self.files.keys()
+        for file in files:
+            path = self.__get_filename_path(file)
+
+            if not path.exists():
+                raise AudioFilesPathNotFoundError(f'{path}')
 
     def __pick_parameters_from_config(self):
         self.files = self.__config.files
