@@ -1,4 +1,5 @@
 import pathlib
+from pathlib import PosixPath
 from typing import List
 
 import numpy
@@ -18,11 +19,10 @@ from processing.utils.prevent_keyboard_interrupt import PreventKeyboardInterrupt
 class Extractor:
     __force: bool
     __skip_existing: bool
-    __todo: int
-    __total: int
     __done: int
-    __input_path: str
-    __output_path: str
+    __total: int
+    __input_path: PosixPath
+    __output_path: PosixPath
     __band_parameters: List[int] = []
     __expected_sample_rate: int
 
@@ -36,17 +36,13 @@ class Extractor:
             self.__features_extension
         )
 
-        self.__todo = 0
-        self.__total = 0
         self.__done = 0
+        self.__total = len(self.__audio_files.files)
 
         self.__run()
 
-    def __increment_todo(self):
-        self.__todo += 1
-
-    def __increment_total(self):
-        self.__total += 1
+    def __increment_done(self):
+        self.__done += 1
 
     def __verify_path_existence(self, output_path) -> bool:
         if output_path.exists() and not self.__force:
@@ -80,32 +76,34 @@ class Extractor:
     def __load_model(self):
         self.__model = VGGish(self.__band_parameters)
 
-    def __prepare_extraction(self, input_path, output_path, spec, esr):
-        self.__done += 1
-
+    def __prepare_extraction(
+        self,
+        input_path: PosixPath,
+        output_path: PosixPath,
+        spec,
+        esr,
+    ):
         self.__input_path = input_path
         self.__output_path = output_path
         self.__prepare_band_parameters(spec)
         self.__expected_sample_rate = esr
 
-        print(
-            f'Processing {input_path} ({self.__done}/'
-            f'{self.__todo}/{self.__total})'
-        )
+        print('---')
+        print(f'Extraction: {self.__done}/{self.__total}')
+        print(f'Path: {input_path}')
 
     def __run(self):
         for esr, band, spec, fname, info, input_path, output_path in \
                 self.__audio_files.iterate_with_bands():
-            self.__increment_total()
 
             already_exists = self.__verify_path_existence(output_path)
 
             if already_exists:
                 continue
 
-            self.__increment_todo()
             self.__prepare_extraction(input_path, output_path, spec, esr)
             self.__extract()
+            self.__increment_done()
 
     def __extract(self):
         data_loader = ExtractorDataLoader(
