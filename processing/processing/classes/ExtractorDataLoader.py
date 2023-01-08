@@ -35,6 +35,7 @@ class ExtractorDataLoader:
         self.__expected_sample_rate = expected_sample_rate
 
         self.__set_next_parameters()
+        self.__verify_size()
         self.__do()
 
     def __set_next_parameters(self):
@@ -66,8 +67,6 @@ class ExtractorDataLoader:
             )
 
     def __do(self):
-        self.__verify_size()
-
         self.__timestamp_start = time.time()
 
         if not self.__input_path.exists():
