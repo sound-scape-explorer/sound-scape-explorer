@@ -1,3 +1,20 @@
+# [5.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.2.3...v5.0.0) (2023-01-09)
+
+
+### Bug Fixes
+
+* **Processing:** Remove dead code related to command `sse extract preview` ([00090de](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/00090dea9af7756d39510d56f93561664e73f799))
+
+
+### Features
+
+* **Processing/Extractor:** Feed frequency range in Hz instead of mel parameters (size and start) ([1e11b88](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1e11b880e653894b92f708924f7fcff3f5dc67ce))
+
+
+### BREAKING CHANGES
+
+* **Processing/Extractor:** `bands` fields in Excel configuration now specifies frequency ranges expressed as `min-max` in Hz
+
 ## [4.2.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.2.2...v4.2.3) (2023-01-09)
 
 
