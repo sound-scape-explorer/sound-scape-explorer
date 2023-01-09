@@ -1,3 +1,13 @@
+## [4.2.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.2.0...v4.2.1) (2023-01-09)
+
+
+### Bug Fixes
+
+* **Front/UMAP/Filters:** Use better variable names ([977c8e1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/977c8e1ae03cd6bbeb8a5a24c9423ff4656bf4cd))
+* **Processing/ExcelOpen:** Make sure read values are strings ([32825a2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/32825a28b2429c2e1908defbb8a41522cbd52883))
+* **Processing/Load:** Affect `meta_values` outside for loop ([0bafad4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0bafad4749b2fb468aaae14e6d05cdceae4bef32))
+* **Processing/Run:** Use better function names + Compute config when computing all ([0dc698b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0dc698bac35e61b128091e0cee016d223c694925))
+
 # [4.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.1.0...v4.2.0) (2023-01-09)
 
 
