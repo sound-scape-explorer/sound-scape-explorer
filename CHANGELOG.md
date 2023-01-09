@@ -1,3 +1,10 @@
+## [4.2.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.2.1...v4.2.2) (2023-01-09)
+
+
+### Bug Fixes
+
+* **Processing/BuilderUMAP:** Select correct `meta_values` ([36f9ff9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/36f9ff9afc95e9d638e59716c42e4d94c47175ff))
+
 ## [4.2.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.2.0...v4.2.1) (2023-01-09)
 
 
