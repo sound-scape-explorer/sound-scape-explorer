@@ -1,7 +1,5 @@
 import gzip
-import pathlib
 import pickle
-import subprocess
 
 import click
 import numpy
@@ -16,82 +14,6 @@ from processing.utils.iterate_audio_files_with_bands import \
 @cli.group()
 def extract():
     pass
-
-
-@extract.command()
-@click.option('--file', '-f', default=None)
-@click.option('--start', '-s', '-ss', default=None)
-@click.option('--duration', '-dur', '-t', default=None)
-@click.option('--no-ffmpeg', '--ffmpeg', default=False)
-def preview(file: str, start: int, duration: int, no_ffmpeg: bool) -> None:
-    cfg = Config().get()
-    suffix = cfg.variables['audio_suffix']
-    expected_sr = cfg.variables['audio_expected_sample_rate']
-    start_sec = cfg.variables.get(
-        'preview_file_start',
-        '0'
-    ) if start is None else start
-    dur_sec = cfg.variables.get(
-        'preview_file_dur',
-        '10'
-    ) if duration is None else duration
-    fname = cfg.variables['preview_file'] if file is None else file
-
-    for band, spec in cfg.bands.items():
-
-        input_path = pathlib.Path(
-            cfg.variables['audio_base']
-        ).joinpath(
-            fname + suffix
-        )
-
-        output_path = pathlib.Path(
-            cfg.variables['generated_base']
-        ).joinpath(
-            'preview-spectrogram', band + '.png'
-        )
-
-        # own_call(['preview-features', input_path, output_path, spec,
-        # expected_sr, start_sec, dur_sec])
-
-        import sys
-
-        sys.argv = [
-            'extract_features.py',
-            input_path,
-            output_path,
-            spec,
-            expected_sr,
-            start_sec,
-            dur_sec
-        ]
-
-        from processing.features.preview import preview
-
-        preview()
-
-    if not no_ffmpeg:
-        print(
-            '... generating wav extracts, use --no-ffmpeg to skip in case of '
-            'error'
-        )
-        output_path = pathlib.Path(cfg.variables['generated_base']).joinpath(
-            'preview-audio', 'normal.wav'
-        )
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.call(
-            ['ffmpeg', '-loglevel', 'error', '-ss', start_sec, '-t', dur_sec,
-             '-i', input_path, output_path]
-        )
-        output_path = pathlib.Path(cfg.variables['generated_base']).joinpath(
-            'preview-audio', 'hzdiv10.wav'
-        )
-        subprocess.call(
-            ['ffmpeg', '-loglevel', 'error', '-ss', start_sec, '-t', dur_sec,
-             '-i', input_path, '-af',
-             f'asetrate={expected_sr}*.1,aresample={expected_sr},atempo=1/.1',
-             output_path]
-        )
 
 
 # noinspection PyShadowingBuiltins
