@@ -34,6 +34,7 @@ class BuilderVolume:
     def __prepare_sites(self):
         self.__sites = list(set([f.site for f in self.__config.files.values()]))
 
+    # TODO: Reduce complexity
     def __process(self):
         for integration in self.__integrations:
             print('... INTEGRATION', integration)
@@ -53,11 +54,12 @@ class BuilderVolume:
                     for site in self.__sites:
                         print('... ... ... ... SITE', site)
 
-                        range_times, range_features = load_features_for(
-                            band,
-                            r,
-                            site
-                        )
+                        range_times, range_features, _meta_values = \
+                            load_features_for(
+                                band,
+                                r,
+                                site
+                            )
 
                         range_bins, group_starts = timegroup_loaded_features(
                             range_times, r, integration
@@ -98,7 +100,6 @@ class BuilderVolume:
 
                             d_logprodspan.append(float(my_sum))
 
-                        # info_key = range_name + ' ' + site
                         info_key = range_name + site
 
                         info = {

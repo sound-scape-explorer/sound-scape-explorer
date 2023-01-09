@@ -1,6 +1,7 @@
 import {reactive} from 'vue';
 
 interface SettingsStoreInterface {
+  debug: boolean;
   umap: {
     export: {
       labels: boolean;
@@ -14,6 +15,7 @@ interface SettingsStoreInterface {
 }
 
 export const settingsStore = reactive<SettingsStoreInterface>({
+  debug: false,
   umap: {
     export: {
       labels: true,

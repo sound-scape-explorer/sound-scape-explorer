@@ -89,6 +89,12 @@ class ExcelColumn:
 
         return my_list.split(',')
 
+    def __digest_config_dates(self, date):
+        try:
+            return datetime.strptime(date, '%Y%m%d_%H%M')
+        except ValueError:
+            return datetime.strptime(date, '%Y%m%d_%H%M%S')
+
     def __prepare_types(self):
         for value in self.values:
             if ':' not in value:
@@ -100,7 +106,7 @@ class ExcelColumn:
             self.__types.append(
                 {
                     'I': int,
-                    'D': lambda v: datetime.strptime(v, '%Y%m%d_%H%M'),
+                    'D': self.__digest_config_dates,
                     'L': self.__digest_config_list,
                     'SITES': self.__digest_config_sites,
                     'L-': lambda v: v.split('-'),

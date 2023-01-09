@@ -31,17 +31,15 @@ class BuilderUMAP:
         site,
         umap,
         dataset_times,
-        dataset_columns,
+        dataset_meta_values,
         dataset_features,
         dataset_labels,
     ):
-        range_times, range_features = load_features_for(
+        range_times, range_features, meta_values = load_features_for(
             band,
             range_value,
             site
         )
-
-        columns = [*self.__config.files[site][3:]]
 
         range_bins, group_starts = timegroup_loaded_features(
             range_times,
@@ -57,7 +55,7 @@ class BuilderUMAP:
                     group_starts,
                 ):
             dataset_times.append(t_start)
-            dataset_columns.append(columns)
+            dataset_meta_values.append(meta_values)
 
             dataset_features.append(
                 numpy.mean(
@@ -76,7 +74,7 @@ class BuilderUMAP:
                 dataset_times = []
                 dataset_features = []
                 dataset_labels = []
-                dataset_columns = []
+                dataset_meta_values = []
 
                 for range_name in umap.ranges:
                     range_value = self.__config.ranges[range_name]
@@ -89,7 +87,7 @@ class BuilderUMAP:
                             site,
                             umap,
                             dataset_times,
-                            dataset_columns,
+                            dataset_meta_values,
                             dataset_features,
                             dataset_labels,
                         )
@@ -111,7 +109,7 @@ class BuilderUMAP:
                             't': [d.timestamp() for d in dataset_times],
                             'l': dataset_labels,
                             'binSize': umap.integration,
-                            'c': dataset_columns,
+                            'c': dataset_meta_values,
                         }, jsonfile
                     )
 

@@ -11,12 +11,9 @@ from processing.constants import (
     GENERATED_BASE,
     OTHER_BASE,
 )
-from processing.errors.ConfigInvalidMetaTitlesError import \
-    ConfigInvalidMetaTitlesError
 from processing.utils.convert_dict_to_named_tuple import \
     convert_dict_to_named_tuple
 from processing.utils.get_app_version import get_app_version
-from processing.utils.get_columns_from_disk import get_meta_values_from_disk
 from processing.utils.singleton_meta import SingletonMeta
 
 
@@ -58,21 +55,13 @@ class Config(metaclass=SingletonMeta):
             self.variables['umap_random'] = None
 
     def __fetch_files_and_columns_and_all_sites(self):
-        _all_meta_values, unique_meta_values, meta_values_length = \
-            get_meta_values_from_disk(
-                self.variables['audio_base']
-            )
-
+        # generate selectors
         selectors = ['site', 'start:D', 'tags:L']
 
-        if len(self.__excel_open.meta_properties) != meta_values_length:
-            raise ConfigInvalidMetaTitlesError(
-                "Invalid meta titles. Please fill the configuration file"
-            )
-
-        for i in range(meta_values_length):
+        for i in range(len(self.__excel_open.meta_properties)):
             selectors.append(f'{self.__excel_open.meta_properties[i]}:COLUMN')
 
+        # read files column
         self.files = ExcelColumn(
             self.__excel,
             'files',
@@ -81,8 +70,6 @@ class Config(metaclass=SingletonMeta):
         ).get_dict()
 
         self.__set_all_sites()
-
-        self.unique_meta_values = unique_meta_values
 
     def __fetch_bands(self):
         self.bands = ExcelColumn(self.__excel, 'bands').get_dict()
@@ -137,8 +124,8 @@ class Config(metaclass=SingletonMeta):
             'variables': self.variables,
             'bands': self.bands,
             'files': self.files,
-            'meta_contents': self.unique_meta_values,
             'meta_properties': self.__excel_open.meta_properties,
+            'meta_contents': self.__excel_open.meta_values_uniques,
             'umaps': self.umaps,
             'ranges': self.ranges,
             'stringmap': self.string_map,
@@ -157,6 +144,12 @@ class Config(metaclass=SingletonMeta):
 
     def get_meta_properties(self):
         return self.__excel_open.meta_properties
+
+    def get_meta_values(self):
+        return self.__excel_open.meta_values
+
+    def get_meta_values_uniques(self):
+        return self.__excel_open.meta_values_uniques
 
     def print_json(self):
         print(

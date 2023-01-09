@@ -12,6 +12,20 @@ import {settingsStore} from '../store/settings.store';
   <div class="settings">
     <div>
       <h2>
+        App settings
+      </h2>
+
+      <hr />
+
+      <div class="checkboxes">
+        <n-checkbox v-model:checked="settingsStore.debug" class="checkbox">Debug</n-checkbox>
+      </div>
+
+      <hr>
+    </div>
+
+    <div>
+      <h2>
         UMAP CSV export settings
       </h2>
 

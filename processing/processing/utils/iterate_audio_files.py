@@ -1,18 +1,18 @@
 import pathlib
 
-from processing.utils.get_name_from_filename import get_name_from_filename
+from processing.utils.get_name_and_extension_from_filepath import \
+    get_name_and_extension_from_filepath
 
 
 def iterate_audio_files(cfg, prefix, *more):
     suffix = cfg.variables['audio_suffix']
 
-    for filename, info in cfg.files.items():
-        name = get_name_from_filename(filename) \
-            if suffix in filename else filename
+    for filepath, info in cfg.files.items():
+        name, extension = get_name_and_extension_from_filepath(filepath)
 
         input_path = pathlib \
             .Path(cfg.variables['audio_base']) \
-            .joinpath(name + suffix)
+            .joinpath(name + extension)
 
         res = [name, info, input_path]
 
@@ -21,6 +21,10 @@ def iterate_audio_files(cfg, prefix, *more):
                 cfg.variables[path[1:]] if path.startswith('@') else path
             )
 
-            res.append(p.joinpath(prefix, name + suffix).with_suffix(ext))
+            path = p.joinpath(prefix, name + extension + suffix).with_suffix(
+                ext
+            )
+
+            res.append(path)
 
         yield res
