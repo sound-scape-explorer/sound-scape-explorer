@@ -67,6 +67,6 @@ class AudioFiles:
             yield response
 
     def iterate_with_bands(self):
-        for band, spec in self.__config.bands.items():
+        for band, frequency_range in self.__config.bands.items():
             for r in self.__iterate(band):
-                yield [self.__expected_sample_rate, band, spec] + r
+                yield [self.__expected_sample_rate, band, frequency_range] + r

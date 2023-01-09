@@ -1,3 +1,5 @@
+from typing import List
+
 from torch import hub
 
 from processing.models.VGG import VGG
@@ -8,7 +10,14 @@ from processing.utils.waveform_to_examples import waveform_to_examples
 
 # class VGGish(VGG, metaclass=SingletonMeta):
 class VGGish(VGG):
-    def __init__(self, band_params):
+    frequency_range: List[int]
+
+    def __init__(
+        self,
+        frequency_range: List[int] = (0, 20000),
+    ):
+        self.frequency_range = frequency_range
+
         self.device = get_device()
 
         print(f"Instantiating VGGish model with {self.device}")
@@ -24,8 +33,13 @@ class VGGish(VGG):
         super().load_state_dict(state_dict)
 
         self.to(self.device)
-        self.band_params = band_params
 
+    # TODO: Type me!
     def forward(self, x, fs):
-        x = waveform_to_examples(x.to(device=self.device), fs, self.band_params)
+        x = waveform_to_examples(
+            x.to(device=self.device),
+            fs,
+            self.frequency_range
+        )
+
         return VGG.forward(self, x)

@@ -26,6 +26,8 @@ class BuilderVolume:
         self.__config = Config().get()
 
     def __prepare_integrations(self):
+        # TODO: take BuilderUMAP integration values when excel field is
+        #  'umap' or empty
         self.__integrations = [
             int(variable) for variable in
             self.__config.variables['integration_seconds'].split('-')
