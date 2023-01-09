@@ -174,6 +174,7 @@ function run_all_but_volume {
   run_extract_all
   run_compute_covering
   run_compute_umap
+  run_compute_features
   run_compute_config
 }
 
@@ -181,6 +182,7 @@ function run_all_but_covering {
   run_extract_all
   run_compute_volume
   run_compute_umap
+  run_compute_features
   run_compute_config
 }
 
