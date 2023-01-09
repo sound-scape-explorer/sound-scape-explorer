@@ -1,3 +1,28 @@
+# [4.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.1.0...v4.2.0) (2023-01-09)
+
+
+### Bug Fixes
+
+* **Front/UMAP:** Remove dead code ([5e0cc35](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5e0cc355df52ad7a5ae233d398a0396fc5454c8a))
+* **Processing/ExtractorDataLoader:** Verify path existence before file loading ([96c9650](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/96c96508e41a74711a57f76d3fed19ccdf5493f3))
+* **Processing/Extractor:** Set correct path types + Set correct logging + Improve logging ([7ad56aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7ad56aa141c42f396b4af5b39a17d5e12ad9a1d6))
+* **Processing/Timer:** Duration was the total, now it is the correct remaining time in minutes ([e0a9397](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e0a9397ebf6f3095fa490cbd030b9c5c0410e28d))
+* **Processing:** Handle already completed configuration file with non-compliant filenames + Clean processing commands + Misc ([c0c1c95](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c0c1c953b67141d68efdf6e41349b7b6fd56cb1f))
+
+
+### Features
+
+* **Front/Settings:** Add `debug` settings to control WIP features display ([cc966fd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cc966fd0cff0c0998c7704cd03dd7ceaefbd097e))
+* **Processing/AudioFiles:** Add paths verification on object creation ([e2d49e6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e2d49e69dd9a776af1c9bf31c6fb1f181e6c2dab))
+* **Processing/Extract:** Reduce complexity of features loader function ([98f28e0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/98f28e05537f7d6b566ecaa54110677b5dc07ed1))
+* **Processing/Timer:** Add basic Timer to estimate Extractor process timeleft ([d636dac](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d636dacbc79d793c2e8ac25099330d6f2c365cb0))
+* **Processing:** Use unique features filenames generated from audio filepath + Read `meta_values` when loading features (to improve later) ([72b4a36](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/72b4a365e5397068035847f64daaa1563bce06cb))
+
+
+### Performance Improvements
+
+* **Processing/ExtractorDataLoader:** Call for verification before main function ([6ec09be](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6ec09be993ba2c8eed212adf174da447bfaf2c4c))
+
 # [4.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.0.0...v4.1.0) (2023-01-04)
 
 
