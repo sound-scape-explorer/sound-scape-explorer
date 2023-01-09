@@ -7,7 +7,6 @@ from torchaudio.backend.soundfile_backend import load as torchaudio_load
 
 from processing.errors.DataLoaderSampleRateError import \
     DataLoaderSampleRateError
-from processing.errors.DataLoaderSizeError import DataLoaderSizeError
 from processing.errors.ExtractorDataLoaderAudioFileNotFoundError import \
     ExtractorDataLoaderAudioFileNotFoundError
 
@@ -15,7 +14,7 @@ from processing.errors.ExtractorDataLoaderAudioFileNotFoundError import \
 class ExtractorDataLoader:
     __input_path: PosixPath
     __output_path: PosixPath
-    __band_parameters: List[int]
+    __frequency_range: List[int]
     __expected_sample_rate: int
     __next_parameter_index: int
     __timestamp_start: float
@@ -26,16 +25,15 @@ class ExtractorDataLoader:
         self,
         input_path: PosixPath,
         output_path: PosixPath,
-        band_parameters: List[int],
+        frequency_range: List[int],
         expected_sample_rate: int,
     ):
         self.__input_path = input_path
         self.__output_path = output_path
-        self.__band_parameters = band_parameters
+        self.__frequency_range = frequency_range
         self.__expected_sample_rate = expected_sample_rate
 
         self.__set_next_parameters()
-        self.__verify_size()
         self.__do()
 
     def __set_next_parameters(self):
@@ -48,14 +46,6 @@ class ExtractorDataLoader:
             f'{self.__wav_data.shape}, rate {self.__sample_rate}, ~'
             f'{self.__wav_data.shape[1] / self.__sample_rate}sec)'
         )
-
-    def __verify_size(self):
-        if self.__band_parameters[0] - self.__band_parameters[1] < 64:
-            raise DataLoaderSizeError(
-                f'Band parameters do not allow to extract 64 bins, '
-                f'i.e. {self.__band_parameters[0]}-{self.__band_parameters[1]}='
-                f'{self.__band_parameters[0] - self.__band_parameters[1]} < 64'
-            )
 
     def __verify_sample_rate(self):
         if self.__sample_rate != self.__expected_sample_rate:
@@ -79,13 +69,12 @@ class ExtractorDataLoader:
         )
 
         self.__print_success_log()
-
         self.__verify_sample_rate()
 
     def get(self):
         return self.__input_path, \
             self.__output_path, \
-            self.__band_parameters, \
+            self.__frequency_range, \
             self.__timestamp_start, \
             self.__wav_data, \
             self.__sample_rate, \

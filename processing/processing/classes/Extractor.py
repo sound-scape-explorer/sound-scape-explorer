@@ -24,7 +24,7 @@ class Extractor:
     __total: int
     __input_path: PosixPath
     __output_path: PosixPath
-    __band_parameters: List[int] = []
+    __frequency_range: List[int] = []
     __expected_sample_rate: int
 
     def __init__(self, force: bool, skip_existing: bool):
@@ -60,35 +60,35 @@ class Extractor:
 
         return False
 
-    def __prepare_band_parameters(self, band_parameters: str):
-        band_parameters_array = convert_band_parameters_string_to_array(
-            band_parameters
+    def __prepare_frequency_range(self, frequency_range_string: str):
+        frequency_range_array = convert_band_parameters_string_to_array(
+            frequency_range_string
         )
 
-        if numpy.array_equal(band_parameters_array, self.__band_parameters):
+        if numpy.array_equal(frequency_range_array, self.__frequency_range):
             return
 
-        self.__band_parameters = band_parameters_array
+        self.__frequency_range = frequency_range_array
 
         print('')
-        print(f'==> New band: {self.__band_parameters}')
+        print(f'==> New band: {self.__frequency_range} Hz')
         print('')
 
         self.__load_model()
 
     def __load_model(self):
-        self.__model = VGGish(self.__band_parameters)
+        self.__model = VGGish(self.__frequency_range)
 
     def __prepare_extraction(
         self,
         input_path: PosixPath,
         output_path: PosixPath,
-        spec,
+        frequency_range_string,
         esr,
     ):
         self.__input_path = input_path
         self.__output_path = output_path
-        self.__prepare_band_parameters(spec)
+        self.__prepare_frequency_range(frequency_range_string)
         self.__expected_sample_rate = esr
 
         print('---')
@@ -97,7 +97,8 @@ class Extractor:
         print(f'Path: {input_path}')
 
     def __run(self):
-        for esr, band, spec, fname, info, input_path, output_path in \
+        for expected_sample_rate, band, frequency_range_string, fname, info, \
+                input_path, output_path in \
                 self.__audio_files.iterate_with_bands():
 
             already_exists = self.__verify_path_existence(output_path)
@@ -105,7 +106,13 @@ class Extractor:
             if already_exists:
                 continue
 
-            self.__prepare_extraction(input_path, output_path, spec, esr)
+            self.__prepare_extraction(
+                input_path,
+                output_path,
+                frequency_range_string,
+                expected_sample_rate
+            )
+
             self.__extract()
             self.__increment_done()
 
@@ -118,7 +125,7 @@ class Extractor:
         data_loader = ExtractorDataLoader(
             self.__input_path,
             self.__output_path,
-            self.__band_parameters,
+            self.__frequency_range,
             self.__expected_sample_rate,
         )
 
