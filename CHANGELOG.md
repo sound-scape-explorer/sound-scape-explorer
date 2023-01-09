@@ -1,3 +1,10 @@
+## [4.2.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.2.2...v4.2.3) (2023-01-09)
+
+
+### Bug Fixes
+
+* **Processing:** Using audio chunks of 1 sec ([e8b8147](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e8b8147944d755e7bd5cd93a25a98fcc33062aaf))
+
 ## [4.2.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.2.1...v4.2.2) (2023-01-09)
 
 
