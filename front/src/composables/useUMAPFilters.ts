@@ -82,40 +82,37 @@ export function useUMAPFilters() {
   }
 
   function isVisibleByMeta(index: number): boolean {
-    const {metaSelection} = UMAPMetaStore;
     let isVisible = true;
 
     const {dataset} = UMAPDatasetStore;
 
     // @ts-expect-error TS2322
     const metaContent: UMAPMetaStoreInterface['metaSelection'] = dataset?.metadata[index]['metaContent'];
+    const metaSelectionKeys = Object.keys(UMAPMetaStore.metaSelection);
+    const metaKeys = Object.keys(metaContent);
 
-    const columnsSelectionKeys = Object.keys(metaSelection);
-    const columnsKeys = Object.keys(metaContent);
-
-    for (let i = 0; i < columnsSelectionKeys.length; ++i) {
+    for (let i = 0; i < metaSelectionKeys.length; ++i) {
       // item is already not visible
       if (!isVisible) {
         break;
       }
 
-      const columnSelection = metaSelection[columnsSelectionKeys[i]];
-      const column = metaContent[columnsKeys[i]];
-
-      const columnSelectionValues = Object.values(columnSelection);
+      const metaSelection = UMAPMetaStore.metaSelection[metaSelectionKeys[i]];
+      const metaSelectionValues = Object.values(metaSelection);
 
       // no user selection
-      if (columnSelectionValues.length === 0) {
+      if (metaSelectionValues.length === 0) {
         continue;
       }
 
-      const columnValues = Object.values(column);
-      const columnValue = columnValues[0];
+      const meta = metaContent[metaKeys[i]];
+      const metaValues = Object.values(meta);
+      const metaValue = metaValues[0];
 
-      if (typeof columnValue === 'number') {
-        isVisible = columnSelectionValues.includes(columnValue.toString());
+      if (typeof metaValue === 'number') {
+        isVisible = metaSelectionValues.includes(metaValue.toString());
       } else {
-        isVisible = columnSelectionValues.includes(columnValue);
+        isVisible = metaSelectionValues.includes(metaValue);
       }
     }
 
