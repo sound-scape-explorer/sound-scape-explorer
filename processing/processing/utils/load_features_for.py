@@ -33,6 +33,8 @@ def load_features_for(band, range_values, site):
         if range_values[1] < info.start:
             continue
 
+        meta_values = info[3:]
+
         for i in range(len(data)):
             start = info.start + datetime.timedelta(seconds=TIME_DELTA * i)
 
@@ -41,9 +43,6 @@ def load_features_for(band, range_values, site):
 
             range_times.append(start)
             range_features.append(data[i])
-
-            if meta_values is None:
-                meta_values = info[3:]
 
     ind = numpy.argsort(range_times)
     range_times = numpy.array(range_times)[ind]
