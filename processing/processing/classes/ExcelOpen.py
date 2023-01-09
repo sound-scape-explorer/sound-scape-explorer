@@ -73,6 +73,10 @@ class ExcelOpen:
         for row in range(3, self.__max_row - 1):
             cell_name = "{}{}".format(column, row)
             value = self.__worksheet[cell_name].value
+
+            if isinstance(value, int):
+                value = str(value)
+
             results.append(value)
             add_unique_value_only_to_array(uniques, value)
 
