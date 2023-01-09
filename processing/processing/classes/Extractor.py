@@ -110,7 +110,7 @@ class Extractor:
             self.__increment_done()
 
     def __print_estimate(self):
-        estimate = self.__timer.get_estimate()
+        estimate = self.__timer.get_estimate(self.__done)
         print(f'Timeleft: ~{estimate}')
         self.__timer.reset()
 

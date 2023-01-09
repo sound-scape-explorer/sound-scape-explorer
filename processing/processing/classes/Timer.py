@@ -15,8 +15,10 @@ class Timer:
     def add_seconds(self, seconds: float):
         self.__timer += seconds
 
-    def get_estimate(self):
-        duration = self.__timer * self.__total_iterations
-        units = 'seconds'
+    def get_estimate(self, iteration_number: int):
+        remaining_iterations = self.__total_iterations - iteration_number
+        duration = self.__timer * remaining_iterations
+        duration = duration / 60
+        units = 'minutes'
 
-        return f'{duration} {units}'
+        return f'{duration:.3} {units}'
