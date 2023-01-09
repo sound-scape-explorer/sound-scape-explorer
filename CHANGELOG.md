@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.0.0...v5.0.1) (2023-01-09)
+
+
+### Bug Fixes
+
+* **Processing/Command:** Add `run_compute_features` to run alls but volume/covering ([2bb9fdb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2bb9fdb8bd5c538a63e7a96b719ca72ebaf423c9))
+
 # [5.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v4.2.3...v5.0.0) (2023-01-09)
 
 

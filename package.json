@@ -31,5 +31,5 @@
     "concurrently": "^7.4.0",
     "rimraf": "^3.0.2"
   },
-  "version": "5.0.0"
+  "version": "5.0.1"
 }
