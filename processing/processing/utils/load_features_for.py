@@ -11,7 +11,7 @@ from processing.utils.load_feature_file import load_feature_file
 def load_features_for(band, range_values, site):
     range_times = []
     range_features = []
-    meta_values = None
+    meta_values = []
     cfg = Config().get()
 
     for filename, info, audio, npz in iterate_audio_files(
@@ -33,8 +33,6 @@ def load_features_for(band, range_values, site):
         if range_values[1] < info.start:
             continue
 
-        meta_values = info[3:]
-
         for i in range(len(data)):
             start = info.start + datetime.timedelta(seconds=TIME_DELTA * i)
 
@@ -43,6 +41,7 @@ def load_features_for(band, range_values, site):
 
             range_times.append(start)
             range_features.append(data[i])
+            meta_values.append(info[3:])
 
     ind = numpy.argsort(range_times)
     range_times = numpy.array(range_times)[ind]

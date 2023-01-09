@@ -55,7 +55,7 @@ class BuilderUMAP:
                     group_starts,
                 ):
             dataset_times.append(t_start)
-            dataset_meta_values.append(meta_values)
+            dataset_meta_values.append(meta_values[g_start_i])
 
             dataset_features.append(
                 numpy.mean(
