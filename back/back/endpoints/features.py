@@ -48,6 +48,11 @@ def get_features_by_timestamp(
     json = read_json_file(path)
 
     try:
+        payload = json['data'][f'{my_range} {site}']
+        index = payload['t'].index(int(timestamp))
+        return jsonify(payload['features'][index])
+    except KeyError:
+        # TODO: Remove this dirty fix. Adding `/` to site
         payload = json['data'][f'{my_range} /{site}']
         index = payload['t'].index(int(timestamp))
         return jsonify(payload['features'][index])

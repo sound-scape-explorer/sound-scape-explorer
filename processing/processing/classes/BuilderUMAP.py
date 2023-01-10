@@ -4,6 +4,7 @@ import pathlib
 import numpy
 
 from processing.classes.Config import Config
+from processing.utils.generate_dataset_label import generate_dataset_label
 from processing.utils.iterate_timegroups import iterate_timegroups
 from processing.utils.load_features_for import load_features_for
 from processing.utils.timegroup_loaded_features import timegroup_loaded_features
@@ -63,7 +64,7 @@ class BuilderUMAP:
                 )
             )
 
-            dataset_labels.append(f'{range_name}{site}')
+            dataset_labels.append(generate_dataset_label(range_name, site))
 
     def __build(self):
         for umap_name, umap in self.__config.umaps.items():

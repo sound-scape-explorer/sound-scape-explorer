@@ -2,6 +2,7 @@ import json
 import pathlib
 
 from processing.classes.Config import Config
+from processing.utils.generate_dataset_label import generate_dataset_label
 from processing.utils.iterate_timegroups import iterate_timegroups
 from processing.utils.load_features_for import load_features_for
 from processing.utils.timegroup_loaded_features import timegroup_loaded_features
@@ -50,7 +51,8 @@ class BuilderFeature:
                     for site in self.__sites:
                         print('... ... ... ... SITE', site)
 
-                        range_times, range_features, _meta_values = load_features_for(
+                        range_times, range_features, _meta_values = \
+                            load_features_for(
                             band,
                             range_value,
                             site
@@ -78,7 +80,7 @@ class BuilderFeature:
 
                             d_features.append(features.tolist())
 
-                        info_key = range_name + ' ' + site
+                        info_key = generate_dataset_label(range_name, site)
 
                         info = {
                             't': [d.timestamp() for d in d_times],
