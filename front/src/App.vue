@@ -12,7 +12,9 @@ import ModalLoading from './components/ModalLoading.vue';
 <template>
   <n-space size="large" vertical>
     <n-layout class="container" has-sider sider-placement="left">
-      <Menu />
+      <Suspense>
+        <Menu />
+      </Suspense>
       <ModalConfigurationError />
       <ModalLoading />
 
