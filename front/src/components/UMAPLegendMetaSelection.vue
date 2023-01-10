@@ -1,10 +1,11 @@
 <script lang="ts" setup="">
-import {defineProps, ref, watch} from 'vue';
+import {computed, defineProps, ref, watch} from 'vue';
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {useUMAPMeta} from '../composables/useUMAPMeta';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
+import {UMAPLegendStore} from '../store/UMAP-legend.store';
 
 /**
  * Props
@@ -25,6 +26,19 @@ const {title, items, index} = defineProps<Props>();
 const selection = ref(null);
 const {metaSelection} = UMAPMetaStore;
 const {isDisabled} = useUMAPStatus();
+const containerClasses = computed<string>(() => {
+  let payload = 'checkboxes';
+
+  if (UMAPLegendStore.isOpen) {
+    payload += ' columns';
+  }
+
+  return payload;
+});
+
+/**
+ * Handlers
+ */
 
 function getColorByItem(index: number): string | undefined {
   const {getMetaColorFromMetaIndex} = useUMAPMeta();
@@ -36,10 +50,6 @@ function getColorByItem(index: number): string | undefined {
 
   return getMetaColorFromMetaIndex(index, items.length);
 }
-
-/**
- * Handlers
- */
 
 function updateSelection() {
   if (selection.value === null) {
@@ -62,7 +72,7 @@ watch(selection, updateSelection);
 </script>
 
 <template>
-  <n-checkbox-group v-model:value="selection" :disabled="isDisabled" class="checkboxes">
+  <n-checkbox-group v-model:value="selection" :class="containerClasses" :disabled="isDisabled">
     <n-checkbox
         v-for="(item, index) in items"
         :style="{background: getColorByItem(index)}"
@@ -77,9 +87,12 @@ watch(selection, updateSelection);
 <style lang="scss" scoped>
 .checkboxes {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   padding-left: 0.8rem;
   gap: 0.2rem 1rem;
+}
+
+.columns {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .checkbox {
