@@ -1,3 +1,17 @@
+# [5.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.0.1...v5.1.0) (2023-01-10)
+
+
+### Bug Fixes
+
+* **Front/UMAP/Export:** Apply dirty fix for UMAP exports ([a6362bd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a6362bd4d113f3a8e2d757848c7b19c46eaf92e4))
+
+
+### Features
+
+* **Front/Menu:** Display app and config versions ([0edd61e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0edd61ebd78493d7cb2586b0aa0696aacf12277d))
+* **Front/MenuVersion:** Improve styling + Display background color for versions match ([1ef93a0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1ef93a015405f961fdc42a5588cdb73ed4a6e60c))
+* **Front/UMAP:** Move `Meta*` UIs into floating modal `Legend` component ([653f3b3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/653f3b3e09ab096ccc9a6d6493b4e761168e2dee))
+
 ## [5.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.0.0...v5.0.1) (2023-01-09)
 
 
