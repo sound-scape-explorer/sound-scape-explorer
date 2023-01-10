@@ -1,3 +1,16 @@
+# [5.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.1.0...v5.2.0) (2023-01-10)
+
+
+### Bug Fixes
+
+* **Processing/Extractor:** Set total extractions (times number of bands) ([59f5b4c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/59f5b4cc1f2c198e47ca45973b37dd92362ffac9))
+* **Processing/Timer:** Add hours printing ([bcc4b11](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bcc4b111799e066114c902d533f35a14adbf1ebf))
+
+
+### Features
+
+* **Front/UMAPLegend:** Improve styling ([30aa64a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/30aa64ab9b56135947b7f64c26ed24eaf40767f0))
+
 # [5.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.0.1...v5.1.0) (2023-01-10)
 
 
