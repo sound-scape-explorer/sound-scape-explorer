@@ -21,4 +21,8 @@ class Timer:
         duration = duration / 60
         units = 'minutes'
 
+        if duration >= 60:
+            duration = duration / 60
+            units = 'hours'
+
         return f'{duration:.3} {units}'
