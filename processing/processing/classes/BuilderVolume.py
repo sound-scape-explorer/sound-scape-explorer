@@ -102,6 +102,7 @@ class BuilderVolume:
 
                             d_logprodspan.append(float(my_sum))
 
+                        # TODO: Inspect
                         info_key = range_name + site
 
                         info = {
