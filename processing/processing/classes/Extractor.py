@@ -7,6 +7,7 @@ import time
 import torch
 
 from processing.classes.AudioFiles import AudioFiles
+from processing.classes.Config import Config
 from processing.classes.ExtractorDataLoader import ExtractorDataLoader
 from processing.classes.Timer import Timer
 from processing.errors.ExtractorPathDuplicateError import \
@@ -30,7 +31,9 @@ class Extractor:
     def __init__(self, force: bool, skip_existing: bool):
         self.__force = force
         self.__skip_existing = skip_existing
+
         self.__features_extension = '.npz'
+        self.__config = Config()
 
         self.__audio_files = AudioFiles(
             '@feature_base',
@@ -38,7 +41,7 @@ class Extractor:
         )
 
         self.__done = 0
-        self.__total = len(self.__audio_files.files)
+        self.__total = len(self.__audio_files.files) * len(self.__config.bands)
 
         self.__timer = Timer(self.__total)
 
