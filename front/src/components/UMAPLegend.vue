@@ -83,12 +83,14 @@ const moreClasses = computed<string>(() => {
   top: 1rem;
   right: 2rem;
 
+  width: 20rem;
+
   z-index: 90;
 
   padding: 0.6rem 0.9rem;
   overflow-y: auto;
 
-  background-color: rgba(248, 248, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.8);
 
   transition: width 120ms ease-in-out,
   border 120ms ease-in-out,
@@ -96,52 +98,23 @@ const moreClasses = computed<string>(() => {
 }
 
 .container-open {
-  width: 60%;
-  //height: 25%;
-  max-height: 70%;
+  max-height: 60%;
 
   border: 1px solid rgba(0, 0, 0, 0.8);
 
   transition: width 120ms ease-in,
   max-height 120ms ease-in,
-    //height 120ms ease-in,
   border 120ms ease-in;
-
-  @media screen and (max-width: 800px) {
-    & {
-      width: 60%;
-    }
-  }
-
-  @media screen and (max-width: 1200px) {
-    & {
-      width: 80%;
-    }
-  }
 }
 
 .container-close {
-  width: 20%;
   max-height: 20%;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
 
   transition: width 120ms ease-out,
   max-height 120ms ease-out,
-    //height 120ms ease-out,
   border 120ms ease-in;
-
-  @media screen and (max-width: 800px) {
-    & {
-      width: 30%;
-    }
-  }
-
-  @media screen and (max-width: 1200px) {
-    & {
-      width: 30%;
-    }
-  }
 }
 
 .more {

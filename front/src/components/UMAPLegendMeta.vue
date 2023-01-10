@@ -4,17 +4,9 @@ import {NGi, NGrid, NTag} from 'naive-ui';
 import {useConfig} from '../composables/useConfig';
 import UMAPMetaSelection from './UMAPLegendMetaSelection.vue';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
-import {UMAPLegendStore} from '../store/UMAP-legend.store';
 
 const {metaContents, metaProperties} = await useConfig();
 const metaContentsIndexes = computed(() => Object.keys(metaContents));
-const gridColumnsNumber = computed(() => {
-  if (UMAPLegendStore.isOpen) {
-    return 2;
-  }
-
-  return 1;
-});
 
 function initializeMetaSelection() {
   if (!metaContentsIndexes.value) {
@@ -30,7 +22,7 @@ onMounted(initializeMetaSelection);
 </script>
 
 <template>
-  <n-grid :cols="gridColumnsNumber" class="grid" x-gap="12">
+  <n-grid :cols="2" class="grid" x-gap="12">
     <!--suppress JSUnusedLocalSymbols -->
     <n-gi v-for="(_meta, index) in metaProperties">
       <n-tag

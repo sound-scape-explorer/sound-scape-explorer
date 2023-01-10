@@ -4,6 +4,7 @@ import {
 import {configStore} from '../store/config.store';
 import {useColors} from './useColors';
 import {useUMAPDataset} from './useUMAPDataset';
+import {convertHexToRgba} from '../utils/convert-hex-to-rgba';
 
 export function useUMAPMeta() {
   const {colors} = useColors();
@@ -39,7 +40,12 @@ export function useUMAPMeta() {
 
   function getMetaColorFromMetaIndex(index: number, length: number): string {
     const colors = createLimitedColorScale(length);
-    return colors[index];
+    const hex = colors[index];
+
+    const {r, g, b} = convertHexToRgba(hex.substring(1));
+    const a = 0.8;
+
+    return `rgba(${r},${g},${b},${a})`;
   }
 
   return {
