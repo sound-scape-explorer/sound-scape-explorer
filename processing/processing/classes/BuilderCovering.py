@@ -164,6 +164,7 @@ class BuilderCovering:
                     )
                 )
 
+            # TODO: Inspect
             info_key = range_name + ' ' + site + ' ' + s2
 
             info = {

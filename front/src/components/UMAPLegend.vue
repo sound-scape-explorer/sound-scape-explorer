@@ -1,26 +1,28 @@
 <script lang="ts" setup="">
-import {computed, ref} from 'vue';
+import {computed} from 'vue';
 import UMAPLegendGradient from './UMAPLegendGradient.vue';
 import {useColors} from '../composables/useColors';
 import UMAPLegendSelection from './UMAPLegendSelection.vue';
+import UMAPMeta from './UMAPLegendMeta.vue';
+import {settingsStore} from '../store/settings.store';
+import {UMAPLegendStore} from '../store/UMAP-legend.store';
 
-const isHover = ref<boolean>(false);
 const {colors} = useColors();
 
 const gradientColors = computed<string[]>(() => colors.value.colors(100));
 
 function enableHover() {
-  isHover.value = true;
+  UMAPLegendStore.isOpen = true;
 }
 
 function disableHover() {
-  isHover.value = false;
+  UMAPLegendStore.isOpen = false;
 }
 
 const containerClasses = computed<string>(() => {
   let classes = 'container ';
 
-  if (isHover.value) {
+  if (UMAPLegendStore.isOpen) {
     classes += 'container-open';
   } else {
     classes += 'container-close';
@@ -32,7 +34,7 @@ const containerClasses = computed<string>(() => {
 const moreClasses = computed<string>(() => {
   let classes = 'more ';
 
-  if (isHover.value) {
+  if (UMAPLegendStore.isOpen) {
     classes += 'more-open';
   } else {
     classes += 'more-close';
@@ -48,25 +50,35 @@ const moreClasses = computed<string>(() => {
       @mouseenter="enableHover"
       @mouseleave="disableHover"
   >
-    <div class="title">
-      Legend
+    <div v-if="settingsStore.debug" class="title">
+      Color scale
     </div>
 
     <UMAPLegendGradient
+        v-if="settingsStore.debug"
         :array="gradientColors"
-        max="max"
-        med="med"
-        min="min"
+        max=""
+        med=""
+        min=""
     />
 
+    <div class="title">
+      Meta selection
+    </div>
+
+    <UMAPMeta />
+
     <div :class="moreClasses">
-      <UMAPLegendSelection v-if="isHover" />
+      <UMAPLegendSelection v-if="UMAPLegendStore.isOpen" />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .container {
+  display: flex;
+  flex-direction: column;
+
   position: absolute;
   top: 1rem;
   right: 2rem;
@@ -74,22 +86,19 @@ const moreClasses = computed<string>(() => {
   z-index: 90;
 
   padding: 0.6rem 0.9rem;
+  overflow-y: auto;
 
-  background-color: ghostwhite;
+  background-color: rgba(248, 248, 255, 0.4);
 
   transition: width 120ms ease-in-out,
   border 120ms ease-in-out,
   background-color 120ms ease-in-out;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
 }
 
 .container-open {
-  width: 20%;
+  width: 60%;
   //height: 25%;
-  max-height: 50%;
+  max-height: 70%;
 
   border: 1px solid rgba(0, 0, 0, 0.8);
 
@@ -106,15 +115,14 @@ const moreClasses = computed<string>(() => {
 
   @media screen and (max-width: 1200px) {
     & {
-      width: 40%;
+      width: 80%;
     }
   }
 }
 
 .container-close {
-  width: 13%;
-  //height: 13%;
-  //max-height: 13%;
+  width: 20%;
+  max-height: 20%;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
 
@@ -154,10 +162,10 @@ const moreClasses = computed<string>(() => {
 
 .title {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
 
-  font-size: x-small;
+  font-size: small;
   font-weight: bold;
   font-style: italic;
 }

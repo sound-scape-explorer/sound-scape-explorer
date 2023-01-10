@@ -4,13 +4,7 @@ interface GetRangeAndSiteFromDatasetLabel {
 }
 
 export function getRangeAndSiteFromDatasetLabel(label: string): GetRangeAndSiteFromDatasetLabel {
-  let separator = '/';
-
-  if (label.includes('//')) {
-    separator = '//';
-  }
-
-  const [range, site] = label.split(separator);
+  const [range, site] = label.split(' ');
 
   return {
     range,

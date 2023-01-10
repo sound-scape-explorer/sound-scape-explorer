@@ -9,6 +9,7 @@ type SiteName = string;
 type StringMapName = string;
 
 export interface ConfigInterface {
+  app_version: string;
   xlsx: string;
   sheet: number;
   meta_properties: string[];
