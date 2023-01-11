@@ -1,4 +1,4 @@
-import pathlib
+import json
 from json import dumps
 
 from processing.classes.Excel import Excel
@@ -13,12 +13,15 @@ from processing.constants import (
 )
 from processing.utils.convert_dict_to_named_tuple import \
     convert_dict_to_named_tuple
-from processing.utils.get_app_version import get_app_version
 from processing.utils.singleton_meta import SingletonMeta
 
 
 class Config(metaclass=SingletonMeta):
-    def __init__(self, path: str = 'config.xlsx', sheet: int = 0):
+    def __init__(
+        self,
+        path: str = 'config.xlsx',
+        sheet: int = 0,
+    ):
         self.__excel = Excel(path, sheet)
         self.__excel_open = ExcelOpen(path)
 
@@ -28,7 +31,6 @@ class Config(metaclass=SingletonMeta):
         self.__fetch_umaps()
         self.__fetch_ranges()
         self.__fetch_string_map()
-        self.__fetch_path()
         self.__fetch_app_version()
 
     def __fetch_variables(self):
@@ -100,11 +102,13 @@ class Config(metaclass=SingletonMeta):
             'STRINGMAP',
         ).get_dict()
 
-    def __fetch_path(self):
-        self.path = str(pathlib.Path(self.__excel.path).absolute())
-
     def __fetch_app_version(self):
-        self.app_version = get_app_version()
+        try:
+            with open('../package.json', "r") as f:
+                my_file = json.load(f)
+                self.app_version = my_file['version']
+        except FileNotFoundError:
+            self.app_version = '0.0.0'
 
     def __set_all_sites(self):
         self.__all_sites = []
@@ -129,7 +133,7 @@ class Config(metaclass=SingletonMeta):
             'umaps': self.umaps,
             'ranges': self.ranges,
             'stringmap': self.string_map,
-            'path': self.path,
+            'path': str(self.__excel.get_path_absolute()),
             'app_version': self.app_version,
         }
 
@@ -151,9 +155,11 @@ class Config(metaclass=SingletonMeta):
     def get_meta_values_uniques(self):
         return self.__excel_open.meta_values_uniques
 
-    def print_json(self):
-        print(
-            dumps(
-                self.__get_payload(), default=lambda o: o.isoformat(),
-            )
-        )
+    def __get_json_string(self):
+        return dumps(self.__get_payload(), default=lambda o: o.isoformat())
+
+    def export(self):
+        json = self.__get_json_string()
+        path = GENERATED_BASE + 'ghost-config.json'
+        f = open(path, "w")
+        f.write(json)

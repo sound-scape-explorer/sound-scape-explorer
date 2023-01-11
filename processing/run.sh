@@ -145,14 +145,13 @@ function run_compute_all {
   run_compute_covering
   run_compute_umap
   run_compute_features
-  run_compute_config
 }
 
-function run_compute_config {
-  sse show config > generated/ghost-config.json
+function export_config {
+  sse config export
 }
 
-function run_compute_config_test {
+function export_config_test {
   sse show config
 }
 
@@ -166,24 +165,30 @@ function run_test {
 
 function run_all {
   run_extract_all
+
   run_compute_all
-  run_compute_config
+
+  export_config
 }
 
 function run_all_but_volume {
   run_extract_all
+
   run_compute_covering
   run_compute_umap
   run_compute_features
-  run_compute_config
+
+  export_config
 }
 
 function run_all_but_covering {
   run_extract_all
+
   run_compute_volume
   run_compute_umap
   run_compute_features
-  run_compute_config
+
+  export_config
 }
 
 # Change to target directory
@@ -215,8 +220,8 @@ else
   [ "$2" == "all-but-volume" ] && run_all_but_volume
   [ "$2" == "all-but-covering" ] && run_all_but_covering
 
-  [ "$2" == "config" ] && run_compute_config
-  [ "$2" == "config-test" ] && run_compute_config_test
+  [ "$2" == "config" ] && export_config
+  [ "$2" == "config-test" ] && export_config_test
   [ "$2" == "config-populate-files" ] && run_config_populate_files
 
   [ "$2" == "test" ] && run_test

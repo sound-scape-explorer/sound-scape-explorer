@@ -30,9 +30,9 @@ class AudioFiles:
 
     def __verify_paths(self):
         files = self.files.keys()
+
         for file in files:
             path = self.__get_filename_path(file)
-
             if not path.exists():
                 raise AudioFilesPathNotFoundError(f'{path}')
 
