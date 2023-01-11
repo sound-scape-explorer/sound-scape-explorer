@@ -10,7 +10,10 @@ from processing.utils.add_unique_value_only_to_array import \
 class ExcelOpen:
     meta_properties: List[str]
 
-    def __init__(self, path: str):
+    def __init__(
+        self,
+        path: str,
+    ):
         self.__path = path
 
         self.__open()

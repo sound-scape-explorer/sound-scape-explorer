@@ -16,12 +16,6 @@ def show() -> None:
 
 
 @show.command()
-def config() -> None:
-    my_config = Config()
-    my_config.print_json()
-
-
-@show.command()
 @click.option('--duration', '--dur', '-d', default=-1)
 @click.option('--no-print/--print', default=False)
 @click.option('--aggregate/--per-site', default=False)
@@ -75,6 +69,7 @@ def audio_span_plot(duration: int, no_print: bool, aggregate: bool) -> None:
     if per_site:
         base = 0
 
+        # TODO: Fix `sites` that might be referenced before assignment
         for site in sites:
             data = numpy.array(sorted(events[site], key=lambda p: p[0]))
 
