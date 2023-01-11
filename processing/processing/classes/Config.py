@@ -1,3 +1,4 @@
+import json
 from json import dumps
 
 from processing.classes.Excel import Excel
@@ -12,7 +13,6 @@ from processing.constants import (
 )
 from processing.utils.convert_dict_to_named_tuple import \
     convert_dict_to_named_tuple
-from processing.utils.get_app_version import get_app_version
 from processing.utils.singleton_meta import SingletonMeta
 
 
@@ -103,7 +103,12 @@ class Config(metaclass=SingletonMeta):
         ).get_dict()
 
     def __fetch_app_version(self):
-        self.app_version = get_app_version()
+        try:
+            with open('../package.json', "r") as f:
+                my_file = json.load(f)
+                self.app_version = my_file['version']
+        except FileNotFoundError:
+            self.app_version = '0.0.0'
 
     def __set_all_sites(self):
         self.__all_sites = []
