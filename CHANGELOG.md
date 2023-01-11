@@ -1,3 +1,15 @@
+# [5.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.2.0...v5.3.0) (2023-01-11)
+
+
+### Bug Fixes
+
+* **Processing/Config:** Apply dirty fix if `package.json` is not found ([e211721](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e211721243b32afcfef2893984607f550a240f05))
+
+
+### Features
+
+* **Processing/Config:** Replace `sse show config > output.json` with `sse config export` + Verify config path ([a0e31d9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a0e31d97ef3122f5e07a9336f42f90e93038a307))
+
 # [5.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.1.0...v5.2.0) (2023-01-10)
 
 
