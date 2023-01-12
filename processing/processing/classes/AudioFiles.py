@@ -12,14 +12,14 @@ from processing.utils.get_name_and_extension_from_filepath import \
 
 
 class AudioFiles:
-    __path: Optional[str]
-    __features_extension: Optional[str]
+    __path: Optional[str] = '@feature_base'
+    __features_extension: Optional[str] = '.npz'
     __config: Union[tuple, Any]
 
     def __init__(
         self,
-        path: Optional[str],
-        features_extension: Optional[str],
+        path: Optional[str] = '@feature_base',
+        features_extension: Optional[str] = '.npz',
     ):
         self.__path = path
         self.__features_extension = features_extension
@@ -32,7 +32,7 @@ class AudioFiles:
         files = self.files.keys()
 
         for file in files:
-            path = self.__get_filename_path(file)
+            path = self.get_filename_path(file)
             if not path.exists():
                 raise AudioFilesPathNotFoundError(f'{path}')
 
@@ -43,12 +43,12 @@ class AudioFiles:
             self.__config.variables['audio_expected_sample_rate']
         )
 
-    def __get_filename_path(self, filename):
+    def get_filename_path(self, filename):
         return pathlib.Path(self.__base_path + filename)
 
     def __iterate(self, band):
         for filepath, info in self.files.items():
-            input_path = self.__get_filename_path(filepath)
+            input_path = self.get_filename_path(filepath)
 
             response = [filepath, info, input_path]
 
