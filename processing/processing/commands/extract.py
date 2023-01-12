@@ -13,6 +13,7 @@ from processing.utils.iterate_audio_files_with_bands import \
 
 @cli.group()
 def extract():
+    # cli group
     pass
 
 
