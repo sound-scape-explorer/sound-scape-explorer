@@ -5,10 +5,17 @@ module.exports = {
     ['@semantic-release/changelog', {
       changelogFile: 'CHANGELOG.md',
     }],
+    ['@semantic-release/exec', {
+      prepareCmd: 'yarn release:prepare',
+    }],
     ['@semantic-release/npm', {
       npmPublish: false,
     }],
-    '@semantic-release/github',
+    ['@semantic-release/github', {
+      assets: [
+        'examples/sse-web-docker-windows.zip',
+      ],
+    }],
     ['@semantic-release/git', {
       assets: [
         'CHANGELOG.md',
