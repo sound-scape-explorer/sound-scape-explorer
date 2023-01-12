@@ -1,3 +1,21 @@
+# [5.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.4.0...v5.5.0) (2023-01-12)
+
+
+### Bug Fixes
+
+* **Bin/ArchiveExamples:** Move back to parent directory after archiving a folder ([cf5a4f3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cf5a4f3ad633d942a46256d92ddff7d372c3615d))
+* **Examples/SSEWebDockerLinux:** Use latest `docker compose` commands + Update README.md ([93aa202](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/93aa20239c78f6c84f04be84343da6097e3c64dd))
+* **Processing/Config:** Create utility function to read version from package.json ([4fdae9a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4fdae9a125c22e0ea25aa85e5a05e62b4be9937a))
+* **Processing/Run:** Intercept SIGINT at top scope level ([8bdec58](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8bdec580ec9755e06f7808e4b17f2aa75b1ab8e1))
+* **Release:** Add `sse-web-docker-linux` to GitHub releases ([008c1a1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/008c1a1b27c8f0b31182dc4cb588604aa4cc2da4))
+
+
+### Features
+
+* **Examples:** Add `sse-web-docker-linux` example + Improve existing examples ([f8212dc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f8212dcd75bfc837f0d3a46cba40acf1c7c7b491))
+* **Examples:** Add raw `sample` project folder with default configuration file ([95252c1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/95252c11a4bda682ae8aae39d2a33c898dec56e0))
+* **Front/UMAP:** Click on a point to copy its local path ([d7f4596](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d7f4596ea15e2443ae1a2304ccbd646167714ca4))
+
 # [5.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.3.0...v5.4.0) (2023-01-12)
 
 
