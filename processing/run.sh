@@ -40,6 +40,10 @@ function print_abort {
   exit 0
 }
 
+function intercept_sigint {
+  trap "exit" INT
+}
+
 # File system helpers
 # Returns 0 (True) if folder exists
 # Returns 1 (False) otherwise
@@ -165,9 +169,7 @@ function run_test {
 
 function run_all {
   run_extract_all
-
   run_compute_all
-
   export_config
 }
 
@@ -203,6 +205,7 @@ fi
 
 # Process
 
+intercept_sigint
 print_start
 
 if [ -z "$2" ] || [ "$2" == "all" ]
