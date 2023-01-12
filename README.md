@@ -1,12 +1,12 @@
 <p align="center">
-  <img alt="logo" width="200" width="80px" src="https://i.imgur.com/ZFnumtY.png">
+  <img alt="logo" width="200px" src="https://i.imgur.com/ZFnumtY.png">
 </p>
 
-<p align="center" style="font-size: 2rem; font-weight: bold">
-  Soundscape Explorer
+<p align="center">
+  <strong>Soundscape Explorer</strong>
 </p>
 
-<p align="center" style="font-weight: bold">
+<p align="center">
   Process. Explore. Analyze.
 </p>
 
