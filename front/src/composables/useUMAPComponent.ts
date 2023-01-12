@@ -13,13 +13,19 @@ import {useUMAPFilters} from './useUMAPFilters';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {useUMAPMeta} from './useUMAPMeta';
-import {UMAPSelectionStore} from '../store/UMAP-selection.store';
+import {
+  getRangeAndSiteFromDatasetLabel,
+} from '../utils/get-range-and-site-from-dataset-label';
+import {useConfig} from './useConfig';
+import {copyToClipboard} from '../utils/copy-to-clipboard';
+import {useNotification} from './useNotification';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
   const {shouldBeFiltered} = useUMAPFilters();
   const {timestampsInDay, updateTimestampsInDay} = useUMAPTimestampsInDay();
   const {getMetaPropertiesAsColorTypes, getMetaColor} = useUMAPMeta();
+  const {notify} = useNotification();
 
   let isFirstRender = true;
   const containerRef = ref<HTMLDivElement | null>(null);
@@ -34,7 +40,8 @@ export function useUMAPComponent() {
       orbitControls: {
         zoomSpeed: 1.33,
       },
-      onSelect: selectPoints,
+      selectEnabled: false,
+      onClick: handleClick,
     });
   }
 
@@ -44,15 +51,25 @@ export function useUMAPComponent() {
     UMAPDatasetStore.dataset = null;
   }
 
-  function selectPoints(indexes: number[]) {
-    const payload = [];
-
-    for (const index of indexes) {
-      const metaElement = UMAPDatasetStore?.dataset?.metadata[index];
-      payload.push(metaElement);
+  function handleClick(index: number | null): void {
+    if (!index) {
+      return;
     }
 
-    UMAPSelectionStore.selection = payload;
+    const point = UMAPDatasetStore?.dataset?.metadata[index];
+    const label = point?.label;
+
+    if (!label) {
+      return;
+    }
+
+    useConfig().then(async ({config}) => {
+      const {site} = getRangeAndSiteFromDatasetLabel(label);
+      const audioBase = config?.variables.audio_base;
+      const path = `${audioBase}${site}`;
+      await copyToClipboard(path);
+      notify('success', 'Audio file path copied to clipboard', path);
+    });
   }
 
   async function render() {
