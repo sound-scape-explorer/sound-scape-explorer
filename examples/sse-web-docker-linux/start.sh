@@ -30,8 +30,8 @@ print_welcome
 
 print_update
 
-docker-compose pull
+docker compose pull
 
 print_start
 
-docker-compose up
+docker compose up

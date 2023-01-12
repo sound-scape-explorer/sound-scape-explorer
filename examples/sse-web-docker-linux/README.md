@@ -4,7 +4,9 @@ This version only allows web visualization, it will not process your audio files
 
 ## Steps
 
-- Install and run [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- Install and run Docker
+  - [Debian](https://docs.docker.com/engine/install/debian/)
+  - [Others](https://docs.docker.com/engine/install/)
 - Paste your `features` and `generated` folders inside the main directory
 - Open a terminal and `cd` to your project
 - Run `./start.sh`
