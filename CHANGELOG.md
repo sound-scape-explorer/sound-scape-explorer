@@ -1,3 +1,10 @@
+# [5.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.5.0...v5.6.0) (2023-01-12)
+
+
+### Features
+
+* **Processing/BuilderIndicators:** Add base and parent classes + Example for `equivalent_level` + Add related dependencies and commands + Various improvements ([66d6926](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/66d69261a97bd4297f98c5b25de4ca3a642c45f5))
+
 # [5.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.4.0...v5.5.0) (2023-01-12)
 
 
