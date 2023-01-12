@@ -1,3 +1,10 @@
+# [5.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.3.0...v5.4.0) (2023-01-12)
+
+
+### Features
+
+* **Examples:** Replace archive with source files for `sse-web-docker-windows` ([6e6316c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6e6316cf62fbbc162dd9fb0853473d4cbc3fed3b))
+
 # [5.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.2.0...v5.3.0) (2023-01-11)
 
 
