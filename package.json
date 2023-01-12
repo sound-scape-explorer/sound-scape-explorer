@@ -25,6 +25,8 @@
     "process": "yarn process:all",
     "process:all": "processing/run.sh sample all",
     "process:clean": "processing/clean.sh sample",
+    "release:prepare": "yarn release:prepare:archive-examples",
+    "release:prepare:archive-examples": "bin/archive-examples.sh",
     "start": "yarn dev"
   },
   "devDependencies": {
