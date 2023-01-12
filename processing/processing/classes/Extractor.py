@@ -32,13 +32,8 @@ class Extractor:
         self.__force = force
         self.__skip_existing = skip_existing
 
-        self.__features_extension = '.npz'
         self.__config = Config()
-
-        self.__audio_files = AudioFiles(
-            '@feature_base',
-            self.__features_extension
-        )
+        self.__audio_files = AudioFiles()
 
         self.__done = 0
         self.__total = len(self.__audio_files.files) * len(self.__config.bands)

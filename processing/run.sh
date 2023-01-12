@@ -144,13 +144,6 @@ function run_compute_umap {
   sse compute umap --no-plot
 }
 
-function run_compute_all {
-  run_compute_volume
-  run_compute_covering
-  run_compute_umap
-  run_compute_features
-}
-
 function export_config {
   sse config export
 }
@@ -167,6 +160,14 @@ function run_test {
   sse test
 }
 
+function run_compute_all {
+  run_compute_volume
+  run_compute_covering
+  run_compute_umap
+  run_compute_features
+  run_compute_indicators
+}
+
 function run_all {
   run_extract_all
   run_compute_all
@@ -179,6 +180,7 @@ function run_all_but_volume {
   run_compute_covering
   run_compute_umap
   run_compute_features
+  run_compute_indicators
 
   export_config
 }
@@ -189,8 +191,13 @@ function run_all_but_covering {
   run_compute_volume
   run_compute_umap
   run_compute_features
+  run_compute_indicators
 
   export_config
+}
+
+function run_compute_indicators {
+  sse compute indicators
 }
 
 # Change to target directory
@@ -219,6 +226,7 @@ else
   [ "$2" == "compute-covering" ] && run_compute_covering
   [ "$2" == "compute-umap" ] && run_compute_umap
   [ "$2" == "compute-features" ] && run_compute_features
+  [ "$2" == "compute-indicators" ] && run_compute_indicators
 
   [ "$2" == "all-but-volume" ] && run_all_but_volume
   [ "$2" == "all-but-covering" ] && run_all_but_covering
