@@ -5,7 +5,7 @@ class Indicator(Enum):
     AcousticComplexityIndex = 'ACI'
     AcousticDiversityIndex = 'ADI'
     BioacousticsIndex = 'BI'
-    EnvelopeMedian = 'MED'
+    TemporalMedian = 'MED'
     EquivalentLevel = 'Leq_T'
     FrequencyEntropy = 'Hf'
     NormalizedDifferenceSoundscapeIndex = 'NDSI'
