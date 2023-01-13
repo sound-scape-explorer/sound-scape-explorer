@@ -26,4 +26,6 @@ class BuilderIndicatorAcousticComplexityIndex(BaseBuilderIndicator):
         # noinspection PyPep8Naming
         _, _, ACI = maad.features.acoustic_complexity_index(spectrogram)
 
+        print('ACI : %2.0f ' % ACI)
+
         return ACI
