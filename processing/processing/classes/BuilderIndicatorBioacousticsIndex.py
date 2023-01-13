@@ -1,3 +1,4 @@
+import maad
 import numpy
 
 from processing.base.BaseBuilderIndicator import BaseBuilderIndicator
@@ -16,4 +17,14 @@ class BuilderIndicatorBioacousticsIndex(BaseBuilderIndicator):
         sound: numpy.ndarray,
         sample_rate: int,
     ) -> float:
-        return sound[0]
+        spectrogram, tn, fn, ext = maad.sound.spectrogram(
+            sound,
+            sample_rate,
+            mode='amplitude'
+        )
+
+        BI = maad.features.bioacoustics_index(spectrogram, fn)
+
+        print('BI Soundecology : %2.2f ' % BI)
+
+        return BI
