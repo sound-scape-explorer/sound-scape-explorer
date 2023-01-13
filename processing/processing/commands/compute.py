@@ -2,7 +2,7 @@ import click
 
 from processing.classes.BuilderCovering import BuilderCovering
 from processing.classes.BuilderFeature import BuilderFeature
-from processing.classes.BuilderIndicators import BuilderIndicators
+from processing.classes.BuilderIndicator import BuilderIndicator
 from processing.classes.BuilderUMAP import BuilderUMAP
 from processing.classes.BuilderVolume import BuilderVolume
 from processing.cli import cli
@@ -42,4 +42,4 @@ def features() -> None:
 
 @compute.command()
 def indicators() -> None:
-    BuilderIndicators()
+    BuilderIndicator()
