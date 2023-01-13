@@ -1,11 +1,12 @@
+import json
 import os
-from json import dumps
 from pathlib import Path
-from typing import Any, Callable, List
+from typing import Any, List
 
-from maad.sound import load
-from numpy import ndarray
+import maad
+import numpy
 
+from processing.base.BaseBuilderProcessor import BaseBuilderProcessorInterface
 from processing.classes.AudioFiles import AudioFiles
 from processing.constants import GENERATED_BASE
 from processing.enum.Indicator import Indicator
@@ -13,7 +14,7 @@ from processing.enum.Indicator import Indicator
 
 class BaseBuilderIndicator:
     __name: Indicator
-    __processor: Callable[[ndarray], float]
+    __processor: BaseBuilderProcessorInterface
     __audio_files: AudioFiles
     __values: List[Any]
 
@@ -29,7 +30,7 @@ class BaseBuilderIndicator:
     def __init__(
         self,
         name: Indicator,
-        processor: Callable[[ndarray], float]
+        processor: BaseBuilderProcessorInterface
     ):
         self.__name = name
         self.__processor = processor
@@ -61,13 +62,17 @@ class BaseBuilderIndicator:
 
     def __process(self):
         for path in self.__iterate_paths():
-            sound, _sample_rate = load(path)
-            value = self.__processor(sound)
+            sound, sample_rate = maad.sound.load(path)
+            value = self.__processor(sound, sample_rate)
             self.__values.append(value)
 
     def export(self):
-        json = {"data": self.__values}
-        string = dumps(json)
+        payload = {"data": self.__values}
+        string = json.dumps(payload)
         path = self.__get_target_path()
         f = open(path, "w")
         f.write(string)
+
+    def __processor(self, sound: numpy.ndarray, sample_rate: int) -> float:
+        # Implement this method in children
+        pass
