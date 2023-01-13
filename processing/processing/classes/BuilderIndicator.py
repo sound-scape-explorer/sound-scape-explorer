@@ -4,8 +4,6 @@ from processing.classes.BuilderIndicatorAcousticDiversityIndex import \
     BuilderIndicatorAcousticDiversityIndex
 from processing.classes.BuilderIndicatorBioacousticsIndex import \
     BuilderIndicatorBioacousticsIndex
-from processing.classes.BuilderIndicatorEquivalentLevel import \
-    BuilderIndicatorEquivalentLevel
 from processing.classes.BuilderIndicatorFrequencyEntropy import \
     BuilderIndicatorFrequencyEntropy
 from processing.classes.BuilderIndicatorNormalizedDifferenceSoundscapeIndex \
@@ -13,6 +11,8 @@ from processing.classes.BuilderIndicatorNormalizedDifferenceSoundscapeIndex \
     BuilderIndicatorNormalizedDifferenceSoundscapeIndex
 from processing.classes.BuilderIndicatorTemporalEntropy import \
     BuilderIndicatorTemporalEntropy
+from processing.classes.BuilderIndicatorTemporalLeq import \
+    BuilderIndicatorTemporalLeq
 from processing.classes.BuilderIndicatorTemporalMedian import \
     BuilderIndicatorTemporalMedian
 
@@ -33,12 +33,12 @@ class BuilderIndicator:
         self.__indicators.append(BuilderIndicatorAcousticComplexityIndex)
         self.__indicators.append(BuilderIndicatorAcousticDiversityIndex)
         self.__indicators.append(BuilderIndicatorBioacousticsIndex)
-        self.__indicators.append(BuilderIndicatorEquivalentLevel)
         self.__indicators.append(BuilderIndicatorFrequencyEntropy)
         self.__indicators.append(
             BuilderIndicatorNormalizedDifferenceSoundscapeIndex
         )
         self.__indicators.append(BuilderIndicatorTemporalEntropy)
+        self.__indicators.append(BuilderIndicatorTemporalLeq)
         self.__indicators.append(BuilderIndicatorTemporalMedian)
 
     def __run(self):
