@@ -42,6 +42,10 @@ class BaseBuilderIndicator:
         self.__process()
         # self.export()
 
+    def __print_path(self, p):
+        print(f'---')
+        print(f'Path: {p}')
+
     def __get_target_directory(self) -> Path:
         return Path(f'{GENERATED_BASE}indicators')
 
@@ -62,8 +66,11 @@ class BaseBuilderIndicator:
 
     def __process(self):
         for path in self.__iterate_paths():
+            self.__print_path(path)
+
             sound, sample_rate = maad.sound.load(path)
             value = self.__processor(sound, sample_rate)
+
             self.__values.append(value)
 
     def export(self):
