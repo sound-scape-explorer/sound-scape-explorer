@@ -4,7 +4,7 @@ from enum import Enum
 class Indicator(Enum):
     AcousticComplexityIndex = 'ACI'
     AcousticDiversityIndex = 'ADI'
-    BioAcousticIndex = 'BI'
+    BioacousticsIndex = 'BI'
     EnvelopeMedian = 'MED'
     EquivalentLevel = 'Leq_T'
     FrequencyEntropy = 'Hf'

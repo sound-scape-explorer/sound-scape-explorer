@@ -1,15 +1,19 @@
-from numpy import ndarray
+import numpy
 
 from processing.base.BaseBuilderIndicator import BaseBuilderIndicator
 from processing.enum.Indicator import Indicator
 
 
-class BuilderIndicatorBioAcousticIndex(BaseBuilderIndicator):
+class BuilderIndicatorBioacousticsIndex(BaseBuilderIndicator):
     def __init__(self):
         super().__init__(
-            Indicator.BioAcousticIndex,
+            Indicator.BioacousticsIndex,
             self.__processor,
         )
 
-    def __processor(self, sound: ndarray) -> float:
+    def __processor(
+        self,
+        sound: numpy.ndarray,
+        sample_rate: int,
+    ) -> float:
         return sound[0]

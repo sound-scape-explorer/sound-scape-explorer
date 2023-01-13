@@ -2,8 +2,8 @@ from processing.classes.BuilderIndicatorAcousticComplexityIndex import \
     BuilderIndicatorAcousticComplexityIndex
 from processing.classes.BuilderIndicatorAcousticDiversityIndex import \
     BuilderIndicatorAcousticDiversityIndex
-from processing.classes.BuilderIndicatorBioAcousticIndex import \
-    BuilderIndicatorBioAcousticIndex
+from processing.classes.BuilderIndicatorBioacousticsIndex import \
+    BuilderIndicatorBioacousticsIndex
 from processing.classes.BuilderIndicatorEnvelopeMedian import \
     BuilderIndicatorEnvelopeMedian
 from processing.classes.BuilderIndicatorEquivalentLevel import \
@@ -32,7 +32,7 @@ class BuilderIndicator:
 
         self.__indicators.append(BuilderIndicatorAcousticComplexityIndex)
         self.__indicators.append(BuilderIndicatorAcousticDiversityIndex)
-        self.__indicators.append(BuilderIndicatorBioAcousticIndex)
+        self.__indicators.append(BuilderIndicatorBioacousticsIndex)
         self.__indicators.append(BuilderIndicatorEnvelopeMedian)
         self.__indicators.append(BuilderIndicatorEquivalentLevel)
         self.__indicators.append(BuilderIndicatorFrequencyEntropy)
