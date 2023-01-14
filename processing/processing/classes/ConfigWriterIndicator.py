@@ -26,7 +26,7 @@ class ConfigWriterIndicator(BaseConfigWriter):
             with open(source, "r") as f:
                 indicator: IndicatorJSONType = json.load(f)
 
-                meta_property = f'files_{indicator["name"]}'
+                meta_property = f"files_{indicator['name']}"
                 values = indicator['data']
 
                 self.write_column(meta_property, values)
