@@ -48,6 +48,8 @@ class BaseConfigWriter:
                 }
             )
 
+            print(f"Config: Writing column {column_name} ({column_letter})")
+
             for i, row in dataframe.iterrows():
                 cell = f'{column_letter}%d' % (i + 1)
                 self.__worksheet[cell] = row[0]
