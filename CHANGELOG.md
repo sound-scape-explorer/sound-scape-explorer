@@ -1,3 +1,33 @@
+# [5.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.6.0...v5.7.0) (2023-01-14)
+
+
+### Bug Fixes
+
+* **Processing/BaseConfigWriter:** Add direct instantiation lock ([8f017d3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8f017d31d7753c47c0507fac7a4783e736613ec8))
+* **Processing/BaseConfigWriter:** Ensure index is using `int` ([4a52fbc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4a52fbcdf3f1156e755995eac56aace5350027bd))
+* **Processing/ExcelColumn:** Ensure passing fixed variable to lambda digest function ([22df19d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/22df19da29fb3f1c717bc84e2b9fb063cf35d159))
+* **Processing/Indicators:** Rename `BioAcousticIndex` to `BioacousticsIndex` ([3aa7c64](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3aa7c64e1bb4cfe16dd450d34cee90f4e08a26c4))
+* **Processing/Types:** List `BuilderProcessorInterface` under types and rename it from `BaseBuilderProcessorInterface` ([9ac8b50](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9ac8b502644a7472e05cb7942ce39ffe1c2fea1b))
+
+
+### Features
+
+* **Processing/BaseConfigWriter:** Add console output with column information upon configuration writing ([c261b11](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c261b1161f0e8f43d831654858df980882e8d30d))
+* **Processing/BuilderIndicator:** Add other indicators with empty processors (to complete by business) ([ace7770](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ace77708c54af687e80cf771750a7a69effe4c83))
+* **Processing/Config:** Add conversion from indicators results to config file as meta values ([6ec916e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6ec916e31b16903635bed1844ce00bee43ee23dc))
+* **Processing/Indicators:** Add computation for `ACI` ([5bafea9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5bafea90247d61d690b3adde21852be9b65a8e43))
+* **Processing/Indicators:** Add computation for `ADI` ([766a829](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/766a829a1795797bab3ad757a3e686053e7e344e))
+* **Processing/Indicators:** Add computation for `BI` ([7f7c8c2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7f7c8c25eb20e28b7f2d938ac01e1e3227afa8a8))
+* **Processing/Indicators:** Add computation for `Hf` ([6075f40](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6075f4057e63d33a33ad7c353a4da4f7c48a6ea6))
+* **Processing/Indicators:** Add computation for `Ht` ([8fc21a1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8fc21a1d373fa24a9579703d965c061402e2106f))
+* **Processing/Indicators:** Add computation for `Leq_T` + Rename `EquivalentLevel` to `TemporalLeq` ([5bdb1db](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5bdb1dbfa7f4d462e246905c91140f6fbd560be2))
+* **Processing/Indicators:** Add computation for `MED` + Rename `EnvelopeMedian` to `TemporalMedian` ([89f166b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/89f166bc0560932258ebb69c63bd83cc82704ff4))
+* **Processing/Indicators:** Add computation for `NDSI` ([e6c8e7f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e6c8e7f78c8b074a4aae701fa883c0b782f48428))
+* **Processing/Indicators:** Add individual `sse` commands ([ece4c05](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ece4c05079e835d92741827f1f137456def5141f))
+* **Processing/Indicators:** Pass `sample_rate` from base class to child processor method + Add method signature + Add better typing and imports ([1715e72](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1715e72cc871d4ef1adfd3ff6281b0e150c6d3cf))
+* **Processing/Indicators:** Print `ACI` value to console ([661dd46](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/661dd462154ca2d92ecee47b9cd76dd715c60446))
+* **Processing/Indicators:** Print current path to console ([251a417](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/251a417738b123c3eeb13de47b4bca63da46695e))
+
 # [5.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.5.0...v5.6.0) (2023-01-12)
 
 
