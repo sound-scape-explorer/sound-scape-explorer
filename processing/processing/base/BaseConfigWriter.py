@@ -65,7 +65,8 @@ class BaseConfigWriter:
             print(f"Config: Writing column {column_name} ({column_letter})")
 
             for i, row in dataframe.iterrows():
-                cell = f'{column_letter}%d' % (i + 1)
+                index = int(str(i)) + 1
+                cell = f'{column_letter}%d' % index
                 self.__worksheet[cell] = row[0]
         except KeyError:
             # Excel column not found
