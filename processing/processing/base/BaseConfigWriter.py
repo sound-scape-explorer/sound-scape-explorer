@@ -9,6 +9,20 @@ from processing.classes.Config import Config
 
 
 class BaseConfigWriter:
+    def __new__(
+        cls,
+        filename: str,
+        *args,
+        **kwargs,
+    ):
+        if cls is BaseConfigWriter:
+            raise TypeError(
+                f"only children of '{cls.__name__}' may be instantiated"
+            )
+
+        # noinspection PyArgumentList
+        return object.__new__(cls, *args, **kwargs)
+
     def __init__(
         self,
         filename: str,
