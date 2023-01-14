@@ -117,8 +117,8 @@ class ExcelColumn:
                         datetime.strptime(vv, '%Y%m%d_%H%M') for vv in
                         v.split('-')
                     ],
-                    'COLUMN': lambda el: self.__digest_config_meta(
-                        self.__digest_config_meta_property(value),
+                    'COLUMN': lambda el, v=value: self.__digest_config_meta(
+                        self.__digest_config_meta_property(v),
                         el,
                     )
                 }[t]
