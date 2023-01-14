@@ -6,16 +6,16 @@ from typing import Any, List
 import maad
 import numpy
 
-from processing.base.BaseBuilderProcessor import BaseBuilderProcessorInterface
 from processing.classes.AudioFiles import AudioFiles
 from processing.constants import GENERATED_BASE
 from processing.enum.Indicator import Indicator
+from processing.types.BuilderProcessorInterface import BuilderProcessorInterface
 from processing.types.IndicatorJSONType import IndicatorJSONType
 
 
 class BaseBuilderIndicator:
     __name: Indicator
-    __processor: BaseBuilderProcessorInterface
+    __processor: BuilderProcessorInterface
     __audio_files: AudioFiles
     __values: List[Any]
 
@@ -31,7 +31,7 @@ class BaseBuilderIndicator:
     def __init__(
         self,
         name: Indicator,
-        processor: BaseBuilderProcessorInterface
+        processor: BuilderProcessorInterface
     ):
         self.__name = name
         self.__processor = processor
