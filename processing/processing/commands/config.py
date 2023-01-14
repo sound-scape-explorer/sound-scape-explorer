@@ -1,5 +1,6 @@
 from processing.classes.Config import Config
 from processing.classes.ConfigGenerator import ConfigGenerator
+from processing.classes.ConfigWriterIndicator import ConfigWriterIndicator
 from processing.cli import cli
 
 
@@ -18,3 +19,8 @@ def populate_files():
 def export():
     my_config = Config()
     my_config.export()
+
+
+@config.command()
+def write_indicators():
+    ConfigWriterIndicator('config.xlsx')

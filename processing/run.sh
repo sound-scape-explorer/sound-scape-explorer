@@ -156,6 +156,10 @@ function run_config_populate_files {
   sse config populate-files
 }
 
+function run_config_write_indicators {
+  sse config write-indicators
+}
+
 function run_test {
   sse test
 }
@@ -234,6 +238,7 @@ else
   [ "$2" == "config" ] && export_config
   [ "$2" == "config-test" ] && export_config_test
   [ "$2" == "config-populate-files" ] && run_config_populate_files
+  [ "$2" == "config-write-indicators" ] && run_config_write_indicators
 
   [ "$2" == "test" ] && run_test
 fi

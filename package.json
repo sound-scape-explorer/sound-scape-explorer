@@ -24,6 +24,7 @@
     "dev": "concurrently './run-back.sh' './run-front.sh'",
     "extract": "processing/run.sh sample extract",
     "populate:config": "processing/run.sh sample config-populate-files",
+    "config:write:indicators": "processing/run.sh sample config-write-indicators",
     "process": "yarn process:all",
     "process:all": "processing/run.sh sample all",
     "process:clean": "processing/clean.sh sample",

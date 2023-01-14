@@ -10,6 +10,7 @@ from processing.base.BaseBuilderProcessor import BaseBuilderProcessorInterface
 from processing.classes.AudioFiles import AudioFiles
 from processing.constants import GENERATED_BASE
 from processing.enum.Indicator import Indicator
+from processing.types.IndicatorJSONType import IndicatorJSONType
 
 
 class BaseBuilderIndicator:
@@ -74,12 +75,20 @@ class BaseBuilderIndicator:
             self.__values.append(value)
 
     def export(self):
-        payload = {"data": self.__values}
-        string = json.dumps(payload)
+        indicator: IndicatorJSONType = {
+            "name": self.__name.value,
+            "description": self.__name.name,
+            "data": self.__values,
+        }
+
+        string = json.dumps(indicator)
         path = self.__get_target_path()
+
         f = open(path, "w")
         f.write(string)
 
     def __processor(self, sound: numpy.ndarray, sample_rate: int) -> float:
-        # Implement this method in children
+        """
+        Implement in children.
+        """
         pass

@@ -64,10 +64,13 @@ class ExcelColumn:
             self.values = [f'{self.__key}_{value}' for value in self.values]
 
     def __digest_config_meta(self, _name, item):
-        if type(item) is not str:
-            item = str(int(float(item)))
+        try:
+            if type(item) is not str:
+                item = str(int(float(item)))
 
-        return [item]
+            return [item]
+        except ValueError:
+            return [None]
 
     def __digest_config_sites(self, sites):
         string = str(sites)

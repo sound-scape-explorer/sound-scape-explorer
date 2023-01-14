@@ -57,7 +57,7 @@ class ExcelOpen:
                 continue
 
             # trim `files_`
-            meta_property = column_key.split('_')[1:][0]
+            meta_property = "_".join(column_key.split('_')[1:])
             self.meta_properties.append(meta_property)
 
             meta_property_column = self.columns[column_key]['letter']
