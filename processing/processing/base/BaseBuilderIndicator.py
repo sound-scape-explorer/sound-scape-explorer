@@ -1,18 +1,23 @@
+import json
 import os
-from json import dumps
 from pathlib import Path
 from typing import Any, List
 
-from maad.sound import load
+import maad
+import numpy
 
 from processing.classes.AudioFiles import AudioFiles
 from processing.constants import GENERATED_BASE
+from processing.enum.Indicator import Indicator
+from processing.types.BuilderProcessorInterface import BuilderProcessorInterface
+from processing.types.IndicatorJSONType import IndicatorJSONType
 
 
 class BaseBuilderIndicator:
-    __name: str
+    __name: Indicator
+    __processor: BuilderProcessorInterface
     __audio_files: AudioFiles
-    __indicators: List[Any]
+    __values: List[Any]
 
     def __new__(cls, *args, **kwargs):
         if cls is BaseBuilderIndicator:
@@ -25,25 +30,29 @@ class BaseBuilderIndicator:
 
     def __init__(
         self,
-        name: str,
-        processor
+        name: Indicator,
+        processor: BuilderProcessorInterface
     ):
         self.__name = name
         self.__processor = processor
 
         self.__audio_files = AudioFiles()
-        self.__indicators = []
+        self.__values = []
 
         self.__prepare()
-        self.__build()
-        self.__export()
+        self.__process()
+        # self.export()
+
+    def __print_path(self, p):
+        print(f'---')
+        print(f'Path: {p}')
 
     def __get_target_directory(self) -> Path:
         return Path(f'{GENERATED_BASE}indicators')
 
     def __get_target_path(self) -> Path:
         directory_path = self.__get_target_directory()
-        return directory_path.joinpath(f'{self.__name}.json')
+        return directory_path.joinpath(f'{self.__name.value}.json')
 
     def __prepare(self):
         directory_path = self.__get_target_directory()
@@ -56,15 +65,30 @@ class BaseBuilderIndicator:
             path = self.__audio_files.get_filename_path(file)
             yield path
 
-    def __build(self):
+    def __process(self):
         for path in self.__iterate_paths():
-            sound, _sample_rate = load(path)
-            indicator = self.__processor(sound)
-            self.__indicators.append(indicator)
+            self.__print_path(path)
 
-    def __export(self):
-        json = {"data": self.__indicators}
-        string = dumps(json)
+            sound, sample_rate = maad.sound.load(path)
+            value = self.__processor(sound, sample_rate)
+
+            self.__values.append(value)
+
+    def export(self):
+        indicator: IndicatorJSONType = {
+            "name": self.__name.value,
+            "description": self.__name.name,
+            "data": self.__values,
+        }
+
+        string = json.dumps(indicator)
         path = self.__get_target_path()
+
         f = open(path, "w")
         f.write(string)
+
+    def __processor(self, sound: numpy.ndarray, sample_rate: int) -> float:
+        """
+        Implement in children.
+        """
+        pass

@@ -156,6 +156,10 @@ function run_config_populate_files {
   sse config populate-files
 }
 
+function run_config_write_indicators {
+  sse config write-indicators
+}
+
 function run_test {
   sse test
 }
@@ -200,6 +204,38 @@ function run_compute_indicators {
   sse compute indicators
 }
 
+function run_compute_indicators_aci {
+  sse compute indicators-aci
+}
+
+function run_compute_indicators_adi {
+  sse compute indicators-adi
+}
+
+function run_compute_indicators_bi {
+  sse compute indicators-bi
+}
+
+function run_compute_indicators_hf {
+  sse compute indicators-hf
+}
+
+function run_compute_indicators_ndsi {
+  sse compute indicators-ndsi
+}
+
+function run_compute_indicators_ht {
+  sse compute indicators-ht
+}
+
+function run_compute_indicators_leq_t {
+  sse compute indicators-leq-t
+}
+
+function run_compute_indicators_med {
+  sse compute indicators-med
+}
+
 # Change to target directory
 
 if [ -z "$1" ]
@@ -226,7 +262,16 @@ else
   [ "$2" == "compute-covering" ] && run_compute_covering
   [ "$2" == "compute-umap" ] && run_compute_umap
   [ "$2" == "compute-features" ] && run_compute_features
+
   [ "$2" == "compute-indicators" ] && run_compute_indicators
+  [ "$2" == "compute-indicators-aci" ] && run_compute_indicators_aci
+  [ "$2" == "compute-indicators-adi" ] && run_compute_indicators_adi
+  [ "$2" == "compute-indicators-bi" ] && run_compute_indicators_bi
+  [ "$2" == "compute-indicators-hf" ] && run_compute_indicators_hf
+  [ "$2" == "compute-indicators-ndsi" ] && run_compute_indicators_ndsi
+  [ "$2" == "compute-indicators-ht" ] && run_compute_indicators_ht
+  [ "$2" == "compute-indicators-leq-t" ] && run_compute_indicators_leq_t
+  [ "$2" == "compute-indicators-med" ] && run_compute_indicators_med
 
   [ "$2" == "all-but-volume" ] && run_all_but_volume
   [ "$2" == "all-but-covering" ] && run_all_but_covering
@@ -234,6 +279,7 @@ else
   [ "$2" == "config" ] && export_config
   [ "$2" == "config-test" ] && export_config_test
   [ "$2" == "config-populate-files" ] && run_config_populate_files
+  [ "$2" == "config-write-indicators" ] && run_config_write_indicators
 
   [ "$2" == "test" ] && run_test
 fi
