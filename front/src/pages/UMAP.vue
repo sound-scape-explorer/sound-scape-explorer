@@ -11,6 +11,7 @@ import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
 import Selection from '../components/Selection.vue';
 import UMAPAlphas from '../components/UMAPAlphas.vue';
 import UMAPLegend from '../components/UMAPLegend.vue';
+import UMAPScreenshot from '../components/UMAPScreenshot.vue';
 
 const {bands, intervalLabels} = await useConfig();
 const {delayUpdate} = useUMAPPage();
@@ -24,7 +25,10 @@ const {delayUpdate} = useUMAPPage();
   <UMAPLegend />
 
   <div class="tools-container">
-    <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
+    <div class="first-row">
+      <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
+      <UMAPScreenshot class="first-row__image" />
+    </div>
     <div class="filters">
       <UMAPFilters />
     </div>
@@ -42,6 +46,16 @@ const {delayUpdate} = useUMAPPage();
 </template>
 
 <style lang="scss" scoped>
+.first-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) 11rem;
+  gap: 1rem;
+}
+
+.first-row__image {
+  display: flex;
+}
+
 .tools-container {
   display: grid;
   gap: 1rem;

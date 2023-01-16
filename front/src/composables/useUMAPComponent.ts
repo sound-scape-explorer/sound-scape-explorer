@@ -1,5 +1,5 @@
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
-import {onMounted, onUnmounted, ref, watch} from 'vue';
+import {onMounted, onUnmounted, watch} from 'vue';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
@@ -19,6 +19,8 @@ import {
 import {useConfig} from './useConfig';
 import {copyToClipboard} from '../utils/copy-to-clipboard';
 import {useNotification} from './useNotification';
+import html2canvas from 'html2canvas';
+import {UMAPScatterStore} from '../store/UMAP-scatter.store';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
@@ -28,15 +30,14 @@ export function useUMAPComponent() {
   const {notify} = useNotification();
 
   let isFirstRender = true;
-  const containerRef = ref<HTMLDivElement | null>(null);
   let scatterGL: ScatterGL | null = null;
 
   function initializeScatterGL() {
-    if (containerRef.value === null) {
-      throw new Error('containerRef is null');
+    if (UMAPScatterStore.ref === null) {
+      return;
     }
 
-    scatterGL = new ScatterGL(containerRef.value, {
+    scatterGL = new ScatterGL(UMAPScatterStore.ref, {
       orbitControls: {
         zoomSpeed: 1.33,
       },
@@ -47,7 +48,7 @@ export function useUMAPComponent() {
 
   function destroy() {
     scatterGL = null;
-    containerRef.value = null;
+    UMAPScatterStore.ref = null;
     UMAPDatasetStore.dataset = null;
   }
 
@@ -95,6 +96,23 @@ export function useUMAPComponent() {
     }
 
     scatterGL.resize();
+  }
+
+  async function screenshot() {
+    const canvas = await html2canvas(document.body);
+
+    canvas.style.display = 'none';
+    document.body.appendChild(canvas);
+
+    const image = canvas.toDataURL('image/png')
+      .replace('image/png', 'image/octet-stream');
+
+    const anchor = document.createElement('a');
+    anchor.download = 'SSE_UMAP.png';
+    anchor.href = image;
+
+    anchor.click();
+    canvas.remove();
   }
 
   function addListeners() {
@@ -175,7 +193,6 @@ export function useUMAPComponent() {
 
   onMounted(() => {
     addListeners();
-    initializeScatterGL();
   });
 
   onUnmounted(() => {
@@ -194,7 +211,11 @@ export function useUMAPComponent() {
     await render();
   });
 
+  watch(UMAPScatterStore, () => {
+    initializeScatterGL();
+  });
+
   return {
-    containerRef,
+    screenshot,
   };
 }

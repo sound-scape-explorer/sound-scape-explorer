@@ -12,6 +12,7 @@
     "dayjs": "^1.11.6",
     "highcharts": "^10.2.1",
     "highcharts-vue": "^1.4.0",
+    "html2canvas": "^1.4.1",
     "simple-statistics": "^7.7.6",
     "three": "^0.147.0",
     "vue": "^3.2.39",
