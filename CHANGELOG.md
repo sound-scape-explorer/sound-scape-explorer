@@ -1,3 +1,10 @@
+# [5.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.8.1...v5.9.0) (2023-01-17)
+
+
+### Features
+
+* **Examples:** Add `sse-docker-windows` project template ([3498167](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3498167df3701a8d9cf1d4b2f6430529b252927d))
+
 ## [5.8.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.8.0...v5.8.1) (2023-01-17)
 
 
