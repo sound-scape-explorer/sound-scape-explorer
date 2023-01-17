@@ -25,6 +25,7 @@
 
 Choose your project starter kit, unzip then follow instructions in `README.md`
 
+- [SSE Docker for Linux](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-docker-linux.zip)
 - [SSE Web Docker for Linux](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-web-docker-linux.zip)
 - [SSE Web Docker for Windows](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-web-docker-windows.zip)
 

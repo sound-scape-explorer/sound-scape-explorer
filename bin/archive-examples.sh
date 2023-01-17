@@ -26,5 +26,6 @@ function archive_sse_web_docker_windows(){
 }
 
 browse_to_examples
+archive_sse_docker_windows
 archive_sse_web_docker_linux
 archive_sse_web_docker_windows
