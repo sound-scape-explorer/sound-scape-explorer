@@ -16,16 +16,9 @@ class BuilderCovering:
 
         self.__config = Config().get()
 
-        self.__get_integrations()
         self.__get_sites()
 
         self.__process_integrations()
-
-    def __get_integrations(self):
-        self.__integrations = [
-            int(v) for v in
-            self.__config.variables['integration_seconds'].split('-')
-        ]
 
     def __get_sites(self):
         self.__sites = list(
@@ -35,7 +28,7 @@ class BuilderCovering:
         )
 
     def __process_integrations(self):
-        for integration in self.__integrations:
+        for integration in Config().integrations:
             print('... INTEGRATION', integration)
             self.__process_bands(integration)
 

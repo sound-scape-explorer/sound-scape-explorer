@@ -1,4 +1,5 @@
 from json import dumps
+from typing import List
 
 from processing.classes.Excel import Excel
 from processing.classes.ExcelColumn import ExcelColumn
@@ -17,6 +18,8 @@ from processing.utils.singleton_meta import SingletonMeta
 
 
 class Config(metaclass=SingletonMeta):
+    integrations: List[int] = []
+
     def __init__(
         self,
         path: str = 'config.xlsx',
@@ -32,6 +35,7 @@ class Config(metaclass=SingletonMeta):
         self.__fetch_ranges()
         self.__fetch_string_map()
         self.__fetch_app_version()
+        self.__prepare_integrations()
 
     def __fetch_variables(self):
         self.variables = ExcelColumn(self.__excel, 'variables').get_dict()
@@ -161,3 +165,19 @@ class Config(metaclass=SingletonMeta):
         path = GENERATED_BASE + 'ghost-config.json'
         f = open(path, "w")
         f.write(json)
+
+    def __prepare_integrations(self):
+        if self.variables['integration_seconds'] == 'nan':
+            for umap in self.umaps.values():
+                integration = umap[0]
+                self.integrations.append(integration)
+        else:
+            self.integrations = [
+                int(v) for v in
+                self.variables['integration_seconds'].split('-')
+            ]
+
+        # TODO: Ugly, remove on config rewrite
+        self.variables['integration_seconds'] = "-".join(
+            str(v) for v in iter(self.integrations)
+        )
