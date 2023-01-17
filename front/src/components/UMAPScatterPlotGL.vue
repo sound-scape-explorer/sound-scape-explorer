@@ -1,7 +1,13 @@
 <script lang="ts" setup>
-import {useUMAPComponent} from '../composables/useUMAPComponent';
+import {ref, watch} from 'vue';
+import {UMAPScatterStore} from '../store/UMAP-scatter.store';
 
-const {containerRef} = useUMAPComponent();
+const containerRef = ref<null | HTMLDivElement>(null);
+
+watch(containerRef, () => {
+  UMAPScatterStore.ref = containerRef.value;
+});
+//
 </script>
 
 <template>

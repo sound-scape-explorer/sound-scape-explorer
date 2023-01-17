@@ -172,6 +172,7 @@ export class ScatterPlot {
       alpha: true,
       premultipliedAlpha: false,
       antialias: false,
+      preserveDrawingBuffer: true,
     });
     this.renderer.setClearColor(this.styles.backgroundColor, 1);
     this.container.appendChild(this.renderer.domElement);
@@ -538,7 +539,6 @@ export class ScatterPlot {
     occ.zoomSpeed = this.orbitControlParams.zoomSpeed;
     occ.enableRotate = cameraIs3D;
     occ.autoRotate = false;
-    occ.enableKeys = false;
     occ.rotateSpeed = this.orbitControlParams.mouseRotateSpeed;
     if (cameraIs3D) {
       occ.mouseButtons.LEFT = THREE.MOUSE.LEFT; // Orbit

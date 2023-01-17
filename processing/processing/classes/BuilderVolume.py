@@ -19,26 +19,17 @@ class BuilderVolume:
 
     def __prepare(self):
         self.__prepare_config()
-        self.__prepare_integrations()
         self.__prepare_sites()
 
     def __prepare_config(self):
         self.__config = Config().get()
-
-    def __prepare_integrations(self):
-        # TODO: take BuilderUMAP integration values when excel field is
-        #  'umap' or empty
-        self.__integrations = [
-            int(variable) for variable in
-            self.__config.variables['integration_seconds'].split('-')
-        ]
 
     def __prepare_sites(self):
         self.__sites = list(set([f.site for f in self.__config.files.values()]))
 
     # TODO: Reduce complexity
     def __process(self):
-        for integration in self.__integrations:
+        for integration in Config().integrations:
             print('... INTEGRATION', integration)
 
             for band in self.__config.bands.keys():
