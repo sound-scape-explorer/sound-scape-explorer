@@ -1,3 +1,10 @@
+## [5.9.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.9.0...v5.9.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* **Releases:** Generate and document `sse-docker-windows` project template ([ae2761c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ae2761cd7119734c4f3e2c1dfde8b01e8404b67a))
+
 # [5.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.8.1...v5.9.0) (2023-01-17)
 
 
