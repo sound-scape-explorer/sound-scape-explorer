@@ -140,6 +140,7 @@ class Extractor:
         i = 0
         batch = int(sample_rate * 60 * 5)
 
+        # completion to a integer number of seconds
         if wav_data.shape[1] % sample_rate != 0:
             wav_data = torch.cat(
                 (wav_data, torch.zeros(
@@ -147,6 +148,7 @@ class Extractor:
                 )), 1
             )
 
+        # cut the signal into batch samples (batch = 5 min of signal)
         while i < wav_data.shape[1]:
             samples = wav_data[:, i:i + batch]
 
