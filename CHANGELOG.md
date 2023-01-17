@@ -1,3 +1,10 @@
+## [5.8.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.8.0...v5.8.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* **Processing/Utils:** Replace static division with result ([3908af6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3908af6f9ef2650efddd04366fe82c6fa762be75))
+
 # [5.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.7.0...v5.8.0) (2023-01-17)
 
 
