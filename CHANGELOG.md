@@ -1,3 +1,10 @@
+## [5.9.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.9.1...v5.9.2) (2023-01-17)
+
+
+### Bug Fixes
+
+* **Releases/SseDockerWindows:** Fix paths in docker-compose file + Fix console output ([a57b9ea](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a57b9eae99d613fabc5a4b54ad782a35e9b30e9a))
+
 ## [5.9.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.9.0...v5.9.1) (2023-01-17)
 
 
