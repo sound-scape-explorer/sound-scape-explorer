@@ -1,3 +1,11 @@
+# [5.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.7.0...v5.8.0) (2023-01-17)
+
+
+### Features
+
+* **Front/UMAP:** Add screenshot button ([a618116](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a6181161cc3b368e3b7c54dce51f76f11de72fb1))
+* **Processing/Builders:** Add configuration option to use UMAP integration values ([6d31764](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6d31764a4217f95e740b1236f26e35d3906b985e))
+
 # [5.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.6.0...v5.7.0) (2023-01-14)
 
 
