@@ -39,7 +39,7 @@ def waveform_to_examples(
     log_mel = log_mel[:, mel_start:mel_start + 64]
 
     # Frame features into examples.
-    features_sample_rate = 1.0 / 0.010
+    features_sample_rate = 100
     example_window_length = int(round(1 * features_sample_rate))
     example_hop_length = int(round(1 * features_sample_rate))
 
