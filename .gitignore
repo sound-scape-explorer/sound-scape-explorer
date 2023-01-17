@@ -1,11 +1,11 @@
-.idea/sonarlint
+/.idea/sonarlint
 
 __pycache__/
 /.project
 /.settings/
 /.pydevproject
 
-node_modules
-front/node_modules
+/node_modules
+/front/node_modules
 
-sample**
+/sample**
