@@ -6,8 +6,7 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - ./features:/sample/features
-      - ./generated:/sample/generated
+      - ./sample:/sample
 
   front:
     image: ghcr.io/sound-scape-explorer/front:latest

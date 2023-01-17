@@ -6,8 +6,7 @@ function PrintSeparator()
 function PrintWelcome()
 {
     PrintSeparator
-    echo "Welcome to SSE Web Docker for Windows."
-    echo "This version only allows web visualization, it will not process your audio files!"
+    echo "Welcome to SSE Docker for Windows."
     echo "Press CTRL+C to stop the app and exit."
     PrintSeparator
 }
