@@ -1,13 +1,4 @@
-version: "3.7"
-
 services:
-  back:
-    image: ghcr.io/sound-scape-explorer/back:latest
-    ports:
-      - "8081:8081"
-    volumes:
-      - ./sample:/sample
-
   front:
     image: ghcr.io/sound-scape-explorer/front:latest
     ports:
@@ -15,7 +6,23 @@ services:
     depends_on:
       - back
 
+  back:
+    image: ghcr.io/sound-scape-explorer/back:latest
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./sample:/sample
+    depends_on:
+      - processing
+
   processing:
     image: ghcr.io/sound-scape-explorer/processing:latest
     volumes:
       - ./sample:/sample
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]

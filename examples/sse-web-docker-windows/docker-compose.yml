@@ -1,6 +1,11 @@
-version: "3.7"
-
 services:
+  front:
+    image: ghcr.io/sound-scape-explorer/front:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - back
+
   back:
     image: ghcr.io/sound-scape-explorer/back:latest
     ports:
@@ -8,10 +13,3 @@ services:
     volumes:
       - ./features:/sample/features
       - ./generated:/sample/generated
-
-  front:
-    image: ghcr.io/sound-scape-explorer/front:latest
-    ports:
-      - "8080:8080"
-    depends_on:
-      - back
