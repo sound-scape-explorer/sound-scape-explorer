@@ -1,3 +1,10 @@
+# [5.11.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.10.0...v5.11.0) (2023-01-18)
+
+
+### Features
+
+* **Examples:** Split SSE for windows versions in `CUDA` and `CPU` flavors ([1b73189](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1b73189f162bad3d368b2f9e04fab747eec0eb51))
+
 # [5.10.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.9.2...v5.10.0) (2023-01-18)
 
 
