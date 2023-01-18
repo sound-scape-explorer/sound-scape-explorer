@@ -1,3 +1,20 @@
+# [5.10.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.9.2...v5.10.0) (2023-01-18)
+
+
+### Bug Fixes
+
+* **Processing/ExtractorDataLoader:** Call `torchaudio.load` instead of directly calling inside `torchaudio.backend` ([1a6abe6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1a6abe655e23bf5834387b6e5e197b8c46f76ba1))
+
+
+### Features
+
+* **Examples:** Add `SSE Next Docker for Windows` version ([9376fdb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9376fdb426818e27f1e8637c768ec156ec9808a9))
+
+
+### Performance Improvements
+
+* **Docker:** Improve docker compose files (Remove `version` and deploy with `cuda` enabled) ([b6882ed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b6882ed2b7d0b2cb896f1ee7eba39bd2fbf31654))
+
 ## [5.9.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.9.1...v5.9.2) (2023-01-17)
 
 
