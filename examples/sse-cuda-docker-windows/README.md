@@ -1,8 +1,8 @@
-# SSE Docker for Windows
+# SSE CUDA Docker for Windows
 
-This is the full version of Sound Scape Explorer.
+Welcome to the full version of [Sound Scape Explorer](https://github.com/sound-scape-explorer/sound-scape-explorer).
 
-It will process your audio data through `.xlsx` configuration.
+It will process your data with **CUDA** (Nvidia GPUs).
 
 ## Steps
 
@@ -18,7 +18,7 @@ It will process your audio data through `.xlsx` configuration.
 Your project folder should look like this:
 
 ```
-sse-docker-windows
+sse-cuda-docker-windows
 ├── sample/
 │   ├── audio/ <- Import files in me
 │   └── config.xlsx <- Edit me
