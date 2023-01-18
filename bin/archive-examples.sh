@@ -4,10 +4,17 @@ function browse_to_examples(){
   cd examples || exit 1
 }
 
-function archive_sse_docker_windows(){
-  cd sse-docker-windows || exit 1
-  zip sse-docker-windows.zip ./* -x "*.gitignore"
-  mv sse-docker-windows.zip ..
+function archive_sse_cpu_docker_windows(){
+  cd sse-cpu-docker-windows || exit 1
+  zip sse-cpu-docker-windows.zip ./* -x "*.gitignore"
+  mv sse-cpu-docker-windows.zip ..
+  cd ..
+}
+
+function archive_sse_cuda_docker_windows(){
+  cd sse-cuda-docker-windows || exit 1
+  zip sse-cuda-docker-windows.zip ./* -x "*.gitignore"
+  mv sse-cuda-docker-windows.zip ..
   cd ..
 }
 
@@ -33,7 +40,8 @@ function archive_sse_web_docker_windows(){
 }
 
 browse_to_examples
-archive_sse_docker_windows
+archive_sse_cpu_docker_windows
+archive_sse_cuda_docker_windows
 archive_sse_next_docker_windows
 archive_sse_web_docker_linux
 archive_sse_web_docker_windows

@@ -6,7 +6,7 @@ function PrintSeparator()
 function PrintWelcome()
 {
     PrintSeparator
-    echo "Welcome to SSE Docker for Windows."
+    echo "Welcome to SSE CPU Docker for Windows."
     echo "Press CTRL+C to stop the app and exit."
     PrintSeparator
 }
