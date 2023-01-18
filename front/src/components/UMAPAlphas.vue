@@ -1,9 +1,20 @@
 <script lang="ts" setup="">
+import type {InputNumberProps} from 'naive-ui';
 import {NInputNumber} from 'naive-ui';
 import {UMAPStore} from '../store/UMAP.store';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 
 const {isDisabled} = useUMAPStatus();
+
+type InputNumberThemeOverrides = NonNullable<InputNumberProps['themeOverrides']>
+
+const inputNumberThemeOverrides: InputNumberThemeOverrides = {
+  peers: {
+    Input: {
+      fontSizeTiny: '0.6rem',
+    },
+  },
+};
 
 //
 </script>
@@ -14,10 +25,11 @@ const {isDisabled} = useUMAPStatus();
     <n-input-number
         v-model:value="UMAPStore.alpha.low"
         :disabled="isDisabled"
+        :theme-overrides="inputNumberThemeOverrides"
         max="1"
         min="0"
         size="tiny"
-        step="0.01"
+        step="0.001"
     />
   </div>
   <div class="input">
@@ -25,10 +37,11 @@ const {isDisabled} = useUMAPStatus();
     <n-input-number
         v-model:value="UMAPStore.alpha.high"
         :disabled="isDisabled"
+        :theme-overrides="inputNumberThemeOverrides"
         max="1"
         min="0"
         size="tiny"
-        step="0.01"
+        step="0.05"
     />
   </div>
 </template>

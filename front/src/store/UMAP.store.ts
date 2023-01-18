@@ -9,7 +9,7 @@ export interface UMAPStoreInterface {
 
 export const UMAPStore = reactive<UMAPStoreInterface>({
   alpha: {
-    low: 0.01,
-    high: 0.7,
+    low: 0.005,
+    high: 0.3,
   },
 });
