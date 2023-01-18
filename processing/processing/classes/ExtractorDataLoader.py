@@ -2,8 +2,8 @@ from pathlib import PosixPath
 from typing import List
 
 import time
+import torchaudio
 from torch import Tensor
-from torchaudio.backend.soundfile_backend import load as torchaudio_load
 
 from processing.errors.DataLoaderSampleRateError import \
     DataLoaderSampleRateError
@@ -64,7 +64,8 @@ class ExtractorDataLoader:
                 f'Audio file not found: {self.__input_path}'
             )
 
-        self.__wav_data, self.__sample_rate = torchaudio_load(
+        # noinspection PyUnresolvedReferences
+        self.__wav_data, self.__sample_rate = torchaudio.load(
             str(self.__input_path)
         )
 
