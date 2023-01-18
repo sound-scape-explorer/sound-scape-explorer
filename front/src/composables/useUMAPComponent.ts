@@ -21,6 +21,7 @@ import {copyToClipboard} from '../utils/copy-to-clipboard';
 import {useNotification} from './useNotification';
 import html2canvas from 'html2canvas';
 import {UMAPScatterStore} from '../store/UMAP-scatter.store';
+import {settingsStore} from '../store/settings.store';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
@@ -99,7 +100,17 @@ export function useUMAPComponent() {
   }
 
   async function screenshot() {
-    const canvas = await html2canvas(document.body);
+    if (!UMAPScatterStore.ref) {
+      return;
+    }
+
+    let targetElement: HTMLElement = UMAPScatterStore.ref;
+
+    if (settingsStore.umap.screenshot.isFull) {
+      targetElement = document.body;
+    }
+
+    const canvas = await html2canvas(targetElement);
 
     canvas.style.display = 'none';
     document.body.appendChild(canvas);
