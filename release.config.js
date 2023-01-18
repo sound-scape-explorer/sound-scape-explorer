@@ -14,6 +14,7 @@ module.exports = {
     ['@semantic-release/github', {
       assets: [
         'examples/sse-docker-windows.zip',
+        'examples/sse-next-docker-windows.zip',
         'examples/sse-web-docker-linux.zip',
         'examples/sse-web-docker-windows.zip',
       ],

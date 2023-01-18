@@ -1,10 +1,10 @@
-version: "3.7"
-
 services:
-  processing:
-    build: processing
-    volumes:
-      - ./sample:/sample
+  front:
+    build: front
+    ports:
+      - "8080:8080"
+    depends_on:
+      - back
 
   back:
     build: back
@@ -15,9 +15,14 @@ services:
     depends_on:
       - processing
 
-  front:
-    build: front
-    ports:
-      - "8080:8080"
-    depends_on:
-      - back
+  processing:
+    build: processing
+    volumes:
+      - ./sample:/sample
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
