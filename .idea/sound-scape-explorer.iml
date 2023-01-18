@@ -9,6 +9,11 @@
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/back/venv" />
       <excludeFolder url="file://$MODULE_DIR$/processing/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/sample" />
+      <excludeFolder url="file://$MODULE_DIR$/sample-federica" />
+      <excludeFolder url="file://$MODULE_DIR$/sample-federica-old" />
+      <excludeFolder url="file://$MODULE_DIR$/sample-lana" />
+      <excludeFolder url="file://$MODULE_DIR$/sample-tiny" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
