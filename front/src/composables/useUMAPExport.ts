@@ -1,27 +1,26 @@
+import {ref} from 'vue';
+import {UMAP_EXPORT_FILENAME} from '../constants';
+import type {Point2D, Point3D, PointMetadata} from '../lib/scatter-gl-0.0.13';
+import type {ConfigStoreInterface} from '../store/config.store';
+import {selectionStore} from '../store/selection.store';
+import {settingsStore} from '../store/settings.store';
 import type {UMAPDatasetStoreInterface} from '../store/UMAP-dataset.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
-import {useUMAPFilters} from './useUMAPFilters';
-import {ref} from 'vue';
-import type {ConfigStoreInterface} from '../store/config.store';
-import {UMAPQueryStore} from '../store/UMAP-query.store';
-import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
-import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
-import {useConfig} from './useConfig';
+import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
+import {UMAPQueryStore} from '../store/UMAP-query.store';
+import {convertArrayToCsv} from '../utils/convert-array-to-csv';
 import {
   convertObjectToJsonString,
 } from '../utils/convert-object-to-json-string';
-import {triggerBrowserDownload} from '../utils/trigger-browser-download';
-import {convertArrayToCsv} from '../utils/convert-array-to-csv';
-import {selectionStore} from '../store/selection.store';
-import {UMAP_EXPORT_FILENAME} from '../constants';
 import {fetchFeatures} from '../utils/fetch-features';
-import {useNotification} from './useNotification';
 import {
   getRangeAndSiteFromDatasetLabel,
 } from '../utils/get-range-and-site-from-dataset-label';
-import {settingsStore} from '../store/settings.store';
-import type {Point2D, Point3D, PointMetadata} from '../lib/scatter-gl-0.0.13';
+import {triggerBrowserDownload} from '../utils/trigger-browser-download';
+import {useConfig} from './useConfig';
+import {useNotification} from './useNotification';
+import {useUMAPFilters} from './useUMAPFilters';
 
 export function useUMAPExport() {
   const {notify} = useNotification();
@@ -64,12 +63,7 @@ export function useUMAPExport() {
      * Time Range
      */
 
-    const {isAllSelected, start: s, end} = UMAPTimeRangeStore;
-    const start = s[0];
-
-    if (!isAllSelected) {
-      name += `_${start}-${end}`;
-    }
+    // TODO: Time Range name
 
     /**
      * Columns

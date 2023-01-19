@@ -1,12 +1,12 @@
-import {API_ROUTES} from '../constants';
+import {onUnmounted} from 'vue';
+import {API_ROUTES, RENDERING_DELAY_SLOW} from '../constants';
+import {modalLoadingStore} from '../store/modal-loading.store';
+import {selectionImageStore} from '../store/selection-image.store';
+import {selectionStore} from '../store/selection.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {
   convertToScatterGlDataset,
 } from '../utils/convert-to-scatter-gl-dataset';
-import {selectionImageStore} from '../store/selection-image.store';
-import {selectionStore} from '../store/selection.store';
-import {modalLoadingStore} from '../store/modal-loading.store';
-import {onUnmounted} from 'vue';
 import {useSelection} from './useSelection';
 
 export function useUMAPPage() {
@@ -77,13 +77,13 @@ export function useUMAPPage() {
   function delayUpdate(band: string, interval: string) {
     modalLoadingStore.isLoading = true;
 
-    setTimeout(() => {
-      handleUpdate({
+    setTimeout(async () => {
+      await handleUpdate({
         band,
         interval,
         callback: () => modalLoadingStore.isLoading = false,
       });
-    }, 250);
+    }, RENDERING_DELAY_SLOW);
   }
 
   onUnmounted(clearSelection);
