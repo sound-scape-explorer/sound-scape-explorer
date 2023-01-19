@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
-import {defineProps, useSlots} from 'vue';
 import {NButton, NIcon} from 'naive-ui';
+import {defineProps, useSlots} from 'vue';
 
 interface Props {
   handleClick: () => void;
@@ -38,9 +38,10 @@ const hasText = typeof text !== 'undefined';
 
 <style lang="scss" scoped>
 .container {
-  width: 100%;
   display: flex;
   justify-content: center;
+
+  width: 100%;
 }
 
 .button {
