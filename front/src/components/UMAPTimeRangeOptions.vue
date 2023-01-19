@@ -2,9 +2,10 @@
 import {PauseOutline, PlayOutline, PlaySkipForwardOutline} from '@vicons/ionicons5';
 import dayjs, {Dayjs} from 'dayjs';
 import {NButton, NButtonGroup, NInputNumber, NSwitch} from 'naive-ui';
-import {computed, ComputedRef, ref, watch} from 'vue';
+import {computed, ComputedRef, onMounted, onUnmounted, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
+import {UMAP_TIME_RANGE_INCREMENT_SHORTCUT} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import Button from './Button.vue';
 
@@ -98,6 +99,26 @@ watch(isPlaying, () => {
   }
 
   stop();
+});
+
+function handleKeyboard(e: KeyboardEvent) {
+  if (UMAPTimeRangeStore.isAllSelected) {
+    return;
+  }
+
+  if (e.key !== UMAP_TIME_RANGE_INCREMENT_SHORTCUT) {
+    return;
+  }
+
+  incrementTime();
+}
+
+onMounted(() => {
+  document.addEventListener('keypress', handleKeyboard);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('keypress', handleKeyboard);
 });
 </script>
 
