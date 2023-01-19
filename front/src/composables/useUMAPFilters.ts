@@ -71,7 +71,7 @@ export function useUMAPFilters() {
 
     const timestamp = Number(dataset.metadata[index]['timestamp']);
 
-    const start = UMAPTimeRangeStore.value;
+    const start = UMAPTimeRangeStore.value ?? 1;
     const duration = UMAPTimeRangeStore.duration;
     const end = start + duration;
 

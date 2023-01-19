@@ -1,26 +1,45 @@
 <script lang="ts" setup>
 import {PauseOutline, PlayOutline, PlaySkipForwardOutline} from '@vicons/ionicons5';
 import dayjs, {Dayjs} from 'dayjs';
-import {NButton, NButtonGroup, NIcon, NInputNumber, NSwitch} from 'naive-ui';
+import {NButton, NButtonGroup, NInputNumber, NSwitch} from 'naive-ui';
 import {computed, ComputedRef, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
+import Button from './Button.vue';
 
 const {isDisabled} = useUMAPStatus();
 const {config} = await useConfig();
 
-const dateStart: ComputedRef<Dayjs> = computed(() => dayjs(UMAPTimeRangeStore.value * 1000));
-const dateEnd: ComputedRef<Dayjs> = computed(() => {
-  return dayjs(UMAPTimeRangeStore.value * 1000 + UMAPTimeRangeStore.duration * 1000);
+const uiDisabled: ComputedRef<boolean> = computed(() => isDisabled.value || UMAPTimeRangeStore.isAllSelected);
+
+const dateStart: ComputedRef<Dayjs> = computed(() => {
+  if (UMAPTimeRangeStore.isAllSelected) {
+    return dayjs((UMAPTimeRangeStore.min ?? 1) * 1000);
+  }
+
+  const start = (UMAPTimeRangeStore.value ?? 1) * 1000;
+
+  return dayjs(start);
 });
 
-interface Button {
+const dateEnd: ComputedRef<Dayjs> = computed(() => {
+  if (UMAPTimeRangeStore.isAllSelected) {
+    return dayjs((UMAPTimeRangeStore.max ?? 1) * 1000);
+  }
+
+  const start = (UMAPTimeRangeStore.value ?? 1) * 1000;
+  const duration = UMAPTimeRangeStore.duration * 1000;
+
+  return dayjs(start + duration);
+});
+
+interface Duration {
   name: string;
   duration: number;
 }
 
-const buttons: Button[] = [
+const durations: Duration[] = [
   {name: '10min', duration: 600},
   {name: '1h', duration: 3600},
   {name: '24h', duration: 3600 * 24},
@@ -48,7 +67,10 @@ function stepPlaying() {
 let interval: null | number = null;
 
 function incrementTime() {
-  console.log('tick');
+  if (!UMAPTimeRangeStore.value) {
+    return;
+  }
+
   UMAPTimeRangeStore.value += UMAPTimeRangeStore.duration;
 }
 
@@ -85,21 +107,23 @@ watch(isPlaying, () => {
       <n-switch
           v-model:value="UMAPTimeRangeStore.isAllSelected"
           :disabled="isDisabled"
-          class="button"
+          class="toggle"
       >
         <template #checked>
           all
         </template>
       </n-switch>
+
       <n-button-group size="small">
         <n-button
-            v-for="button in buttons"
-            :disabled="isDisabled || UMAPTimeRangeStore.isAllSelected"
+            v-for="button in durations"
+            :disabled="uiDisabled"
             @click="setWindowDuration(button.duration)"
         >
           {{ button.name }}
         </n-button>
       </n-button-group>
+
       <div class="input">
         <n-input-number
             v-model:value="UMAPTimeRangeStore.duration"
@@ -108,21 +132,39 @@ watch(isPlaying, () => {
             size="small"
         />
       </div>
-      <div class="play">
-        <n-icon v-if="!isDisabled && !isPlaying" class="icon" @click="togglePlaying">
+
+      <div class="button">
+        <Button
+            v-if="!isPlaying"
+            :disabled="uiDisabled"
+            :handle-click="togglePlaying"
+            class="flex"
+        >
           <play-outline />
-        </n-icon>
-        <n-icon v-if="!isDisabled && isPlaying" class="icon" @click="togglePlaying">
+        </Button>
+        <Button
+            v-if="isPlaying"
+            :disabled="uiDisabled"
+            :handle-click="togglePlaying"
+            class="flex"
+        >
           <pause-outline />
-        </n-icon>
+        </Button>
       </div>
-      <div class="play">
-        <n-icon v-if="!isDisabled" class="icon" @click="stepPlaying">
+
+      <div class="button">
+        <Button
+            :disabled="uiDisabled"
+            :handle-click="stepPlaying"
+            class="flex"
+        >
           <play-skip-forward-outline />
-        </n-icon>
+        </Button>
       </div>
+
       <div class="dates">
-        {{ dateStart }} — {{ dateEnd }}
+        <span>{{ dateStart }}</span>
+        <span>{{ dateEnd }}</span>
       </div>
       <div class="timezone">
         {{ timezone }}
@@ -143,7 +185,7 @@ watch(isPlaying, () => {
   user-select: none;
 }
 
-.button {
+.toggle {
   justify-content: flex-start;
 }
 
@@ -156,26 +198,19 @@ watch(isPlaying, () => {
 }
 
 .dates {
+  display: flex;
+  flex-direction: column;
+
   font-size: 0.8rem;
 }
 
-.play {
+.button {
+  width: 3rem;
+}
+
+.flex {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 1.6rem;
-  height: 1.6rem;
-
-  border: 1px solid rgba(0, 0, 0, 0.6);
-  border-radius: 3px;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  > i {
-    color: rgba(0, 0, 0, 0.6);
-  }
 }
 </style>

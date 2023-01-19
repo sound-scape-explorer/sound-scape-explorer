@@ -46,6 +46,14 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     const timeEnd = dayjs(rangeEnd).unix();
     const timeBetween = Math.floor(timeStart + 0.5 * (timeEnd - timeStart));
 
+    if (UMAPTimeRangeStore.min === null || timeStart < UMAPTimeRangeStore.min) {
+      UMAPTimeRangeStore.min = timeStart;
+    }
+
+    if (UMAPTimeRangeStore.max === null || timeEnd > UMAPTimeRangeStore.max) {
+      UMAPTimeRangeStore.max = timeEnd;
+    }
+
     const slider = {
       key: rangeName,
       min: timeStart,
@@ -61,6 +69,8 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
   }
 
   payload.sort((a, b) => a.min - b.max);
+
+  UMAPTimeRangeStore.value = UMAPTimeRangeStore.min;
 
   return payload;
 });
