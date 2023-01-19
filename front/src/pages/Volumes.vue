@@ -1,20 +1,22 @@
 <script lang="ts" setup>
 import {onUnmounted, watch} from 'vue';
+import Selection from '../components/Selection.vue';
 import Title from '../components/Title.vue';
-import VolumesOptions from '../components/VolumesOptions.vue';
-import {API_ROUTES} from '../constants';
 import VolumesBoxPlot from '../components/VolumesBoxPlot.vue';
-import {volumesOptionsStore} from '../store/volumes-options.store';
+import VolumesOptions from '../components/VolumesOptions.vue';
 import {useConfig} from '../composables/useConfig';
 import {useSelection} from '../composables/useSelection';
+import {API_ROUTES} from '../constants';
 import {selectionImageStore} from '../store/selection-image.store';
 import {selectionStore} from '../store/selection.store';
-import Selection from '../components/Selection.vue';
+import {volumesOptionsStore} from '../store/volumes-options.store';
 
 const {clearSelection} = useSelection();
 const {bands, intervals} = await useConfig();
 
-function handleSelection(band: string, interval: string) {
+const intervalsAsStrings = intervals.map((i) => i.toString());
+
+function handleSelectionUpdate(band: string, interval: string) {
   if (!band || !interval) {
     selectionStore.band = null;
     selectionStore.interval = null;
@@ -37,7 +39,7 @@ watch(selectionStore, () => {
     return;
   }
 
-  handleSelection(selectionStore.band, selectionStore.interval);
+  handleSelectionUpdate(selectionStore.band, selectionStore.interval);
 });
 
 onUnmounted(clearSelection);
@@ -45,10 +47,7 @@ onUnmounted(clearSelection);
 
 <template>
   <Title text="Volumes" />
-  <Selection :bands="bands" :callback="handleSelection" :intervals="intervals || []" />
+  <Selection :bands="bands" :callback="handleSelectionUpdate" :intervals="intervalsAsStrings" />
   <VolumesOptions />
   <VolumesBoxPlot />
 </template>
-
-<style lang="scss" scoped>
-</style>
