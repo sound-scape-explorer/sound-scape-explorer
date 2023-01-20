@@ -109,6 +109,8 @@ const interests: ComputedRef<Interest[]> = computed(() => {
   }
 
   const interests: Interest[] = [];
+  const ignoreDecimalsFactor = 1 / (UMAPTimeRangeStore.duration);
+  const ignoreDecimals = (value: number) => Math.floor(ignoreDecimalsFactor * value);
 
   for (const slider of sliders.value) {
     const {min, max, key} = slider;
@@ -118,8 +120,6 @@ const interests: ComputedRef<Interest[]> = computed(() => {
 
     for (let i = 0; i < 100; i += 1) {
       const index = mapRange(i, 0, 100, min, max);
-      const ignoreDecimalsFactor = 1 / (UMAPTimeRangeStore.duration);
-      const ignoreDecimals = (value: number) => Math.floor(ignoreDecimalsFactor * value);
 
       const trimmedTimestamps = timestamps.map((t) => ignoreDecimals(t));
       const isInterest = trimmedTimestamps.includes(ignoreDecimals(index));
