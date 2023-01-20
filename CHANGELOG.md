@@ -1,3 +1,10 @@
+# [5.13.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.12.0...v5.13.0) (2023-01-20)
+
+
+### Features
+
+* **Front/UMAP/TimeRange:** Add zone of interests depending on selected duration ([a34f3f3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a34f3f3856fe089d025160567883df0d6c31b440))
+
 # [5.12.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.11.0...v5.12.0) (2023-01-20)
 
 
