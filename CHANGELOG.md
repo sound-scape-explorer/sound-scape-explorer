@@ -1,3 +1,23 @@
+# [5.12.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.11.0...v5.12.0) (2023-01-20)
+
+
+### Bug Fixes
+
+* **Front/UMAP:** Apply new opacity default settings + Improve UI clarity ([3de0f42](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3de0f424237404744086e2243adfe0dd60a56452))
+* **Front/UMAP:** Coloring by meta properties now correctly apply opacity ([ff3ad06](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ff3ad062ebd4f9055523155f0f066a970e427693))
+* **Front/UMAP:** Screenshot component now correctly disables on UMAP status ([acb3407](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/acb34070d160cd0b84323a2d7b14810d286329c1))
+* **Front/Utils:** Get correct audio file path for nested path ([88517f6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/88517f6d3a437b41de234fbf2682dfa94552b1fc))
+
+
+### Features
+
+* **Front/UMAP/TimeRange:** Improve event listener handling + Add tooltips to explicit shortcuts ([3357d7b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3357d7b9b33b6eed19889e45537d57b1f43a3b2d))
+* **Front/UMAP:** Add final logic for `TimeRange` ([2254096](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/22540969ae52ac78e0e798ac4dbad9a1168ba078))
+* **Front/UMAP:** Add keyboard shortcut `n` to increment current value in time range ([c1d9976](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c1d9976d866909d4cdaaf91f93a8c84a3a7fb325))
+* **Front/UMAP:** Add screenshot options (full page or plot) ([05c5222](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/05c52220504f8666262b91e33e14e145cf34bd4a))
+* **Front/UMAP:** Add skip backward feature to `TimeRange` sub-component ([9f4b3ef](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9f4b3efe5546bcbde8fb8d41fa76f20bd32bc72e))
+* **Front/UMAP:** Rewrite `TimeRange` component ([675f50e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/675f50e577012e79ab23561132ec41c3fbe9c4bf))
+
 # [5.11.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.10.0...v5.11.0) (2023-01-18)
 
 
