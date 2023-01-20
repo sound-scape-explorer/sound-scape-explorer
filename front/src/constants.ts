@@ -12,8 +12,6 @@ export const UMAP_EXPORT_FILENAME = 'SSE_UMAP';
 
 export const RENDERING_DELAY_SLOW = 250;
 
-export const UMAP_TIME_RANGE_INCREMENT_SHORTCUT = 'n';
-
 export const SLIDER_LIMITS = {
   start: '⟦',
   end: '⟧',

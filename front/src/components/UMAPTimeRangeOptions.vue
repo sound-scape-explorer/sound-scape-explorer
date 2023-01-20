@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import {PauseOutline, PlayOutline, PlaySkipBackOutline, PlaySkipForwardOutline} from '@vicons/ionicons5';
 import dayjs, {Dayjs} from 'dayjs';
-import {NButton, NButtonGroup, NInputNumber, NSwitch} from 'naive-ui';
-import {computed, ComputedRef, onMounted, onUnmounted, ref, watch} from 'vue';
+import {NButton, NButtonGroup, NInputNumber, NSwitch, NTooltip} from 'naive-ui';
+import {computed, ComputedRef, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
+import {useEventListener} from '../composables/useEventListener';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
-import {UMAP_TIME_RANGE_INCREMENT_SHORTCUT} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import Button from './Button.vue';
 
@@ -110,20 +110,24 @@ function handleKeyboard(e: KeyboardEvent) {
     return;
   }
 
-  if (e.key !== UMAP_TIME_RANGE_INCREMENT_SHORTCUT) {
-    return;
-  }
+  switch (e.key) {
+    case 'n':
+      skipTimeForward();
+      break;
 
-  skipTimeForward();
+    case 'p':
+      skipTimeBackward();
+      break;
+
+    case ' ':
+      togglePlaying();
+      break;
+
+    default:
+  }
 }
 
-onMounted(() => {
-  document.addEventListener('keypress', handleKeyboard);
-});
-
-onUnmounted(() => {
-  document.removeEventListener('keypress', handleKeyboard);
-});
+useEventListener(document, 'keypress', handleKeyboard);
 </script>
 
 <template>
@@ -159,42 +163,65 @@ onUnmounted(() => {
       </div>
 
       <div class="button">
-        <Button
-            :disabled="uiDisabled"
-            :handle-click="skipTimeBackward"
-            class="flex"
-        >
-          <play-skip-back-outline />
-        </Button>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <Button
+                :disabled="uiDisabled"
+                :handle-click="skipTimeBackward"
+                class="flex"
+            >
+              <play-skip-back-outline />
+            </Button>
+          </template>
+          <span class="button-tooltip">
+            <span class="bold">P</span> – Skip backward
+          </span>
+        </n-tooltip>
       </div>
 
       <div class="button">
-        <Button
-            v-show="!isPlaying"
-            :disabled="uiDisabled"
-            :handle-click="togglePlaying"
-            class="flex"
-        >
-          <play-outline />
-        </Button>
-        <Button
-            v-show="isPlaying"
-            :disabled="uiDisabled"
-            :handle-click="togglePlaying"
-            class="flex"
-        >
-          <pause-outline />
-        </Button>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <div>
+              <Button
+                  v-show="!isPlaying"
+                  :disabled="uiDisabled"
+                  :handle-click="togglePlaying"
+                  class="flex"
+              >
+                <play-outline />
+              </Button>
+              <Button
+                  v-show="isPlaying"
+                  :disabled="uiDisabled"
+                  :handle-click="togglePlaying"
+                  class="flex"
+              >
+                <pause-outline />
+              </Button>
+            </div>
+          </template>
+          <span class="button-tooltip">
+            <span class="bold">Space</span> – Play / Pause
+          </span>
+        </n-tooltip>
       </div>
 
       <div class="button">
-        <Button
-            :disabled="uiDisabled"
-            :handle-click="skipTimeForward"
-            class="flex"
-        >
-          <play-skip-forward-outline />
-        </Button>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <Button
+                :disabled="uiDisabled"
+                :handle-click="skipTimeForward"
+                class="flex"
+            >
+              <play-skip-forward-outline />
+            </Button>
+          </template>
+          <span class="button-tooltip">
+            <span class="bold">N</span> – Skip forward
+          </span>
+        </n-tooltip>
       </div>
 
       <div class="dates">
@@ -222,6 +249,14 @@ onUnmounted(() => {
 
 .toggle {
   justify-content: flex-start;
+}
+
+.button-tooltip {
+  font-size: 0.8rem;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 .timezone {
