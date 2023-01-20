@@ -1,3 +1,11 @@
+## [5.13.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.13.0...v5.13.1) (2023-01-20)
+
+
+### Performance Improvements
+
+* **Docs:** Ignore png files when zipping examples + Update documentation ([9a87b7c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9a87b7c6db529dfdca8e00ccc92568bcd5abc30d))
+* **Front/UMAP/TimeRangeSlider:** Move `interests` static elements out of loop ([5989230](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/59892304bbfb50bd20518658ff90451ef73e4b20))
+
 # [5.13.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.12.0...v5.13.0) (2023-01-20)
 
 
