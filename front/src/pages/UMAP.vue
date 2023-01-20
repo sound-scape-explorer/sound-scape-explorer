@@ -1,17 +1,18 @@
 <script lang="ts" setup>
+import Selection from '../components/Selection.vue';
 import Title from '../components/Title.vue';
-import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
-import UMAPTimeRange from '../components/UMAPTimeRange.vue';
+import UMAPAlphas from '../components/UMAPAlphas.vue';
+import UMAPExport from '../components/UMAPExport.vue';
 import UMAPFilters from '../components/UMAPFilters.vue';
+import UMAPLegend from '../components/UMAPLegend.vue';
 import UMAPQuery from '../components/UMAPQuery.vue';
+import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
+import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
+import UMAPScreenshot from '../components/UMAPScreenshot.vue';
+import UMAPTimeRangeOptions from '../components/UMAPTimeRangeOptions.vue';
+import UMAPTimeRangeSlider from '../components/UMAPTimeRangeSlider.vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPPage} from '../composables/useUMAPPage';
-import UMAPExport from '../components/UMAPExport.vue';
-import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
-import Selection from '../components/Selection.vue';
-import UMAPAlphas from '../components/UMAPAlphas.vue';
-import UMAPLegend from '../components/UMAPLegend.vue';
-import UMAPScreenshot from '../components/UMAPScreenshot.vue';
 
 const {bands, intervalLabels} = await useConfig();
 const {delayUpdate} = useUMAPPage();
@@ -41,7 +42,8 @@ const {delayUpdate} = useUMAPPage();
       <UMAPExport />
     </div>
 
-    <UMAPTimeRange />
+    <UMAPTimeRangeOptions />
+    <UMAPTimeRangeSlider />
   </div>
 </template>
 

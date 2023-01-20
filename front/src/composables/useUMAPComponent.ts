@@ -1,26 +1,28 @@
+import html2canvas from 'html2canvas';
+import {onUnmounted, watch} from 'vue';
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
-import {onMounted, onUnmounted, watch} from 'vue';
+import {settingsStore} from '../store/settings.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
-import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
-import {UMAPQueryStore} from '../store/UMAP-query.store';
-import {UMAPStore} from '../store/UMAP.store';
-import {useUMAPTimestampsInDay} from './useUMAPTimestampsInDay';
-import {mapRange} from '../utils/map-range';
-import {isHourDuringDay} from '../utils/is-hour-during-day';
-import {useColors} from './useColors';
-import {useUMAPFilters} from './useUMAPFilters';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
-import {useUMAPMeta} from './useUMAPMeta';
+import {UMAPQueryStore} from '../store/UMAP-query.store';
+import {UMAPScatterStore} from '../store/UMAP-scatter.store';
+import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
+import {UMAPStore} from '../store/UMAP.store';
+import {copyToClipboard} from '../utils/copy-to-clipboard';
 import {
   getRangeAndSiteFromDatasetLabel,
 } from '../utils/get-range-and-site-from-dataset-label';
+import {isHourDuringDay} from '../utils/is-hour-during-day';
+import {mapRange} from '../utils/map-range';
+import {useColors} from './useColors';
 import {useConfig} from './useConfig';
-import {copyToClipboard} from '../utils/copy-to-clipboard';
+import {useEventListener} from './useEventListener';
 import {useNotification} from './useNotification';
-import html2canvas from 'html2canvas';
-import {UMAPScatterStore} from '../store/UMAP-scatter.store';
+import {useUMAPFilters} from './useUMAPFilters';
+import {useUMAPMeta} from './useUMAPMeta';
+import {useUMAPTimestampsInDay} from './useUMAPTimestampsInDay';
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
@@ -99,7 +101,17 @@ export function useUMAPComponent() {
   }
 
   async function screenshot() {
-    const canvas = await html2canvas(document.body);
+    if (!UMAPScatterStore.ref) {
+      return;
+    }
+
+    let targetElement: HTMLElement = UMAPScatterStore.ref;
+
+    if (settingsStore.umap.screenshot.isFull) {
+      targetElement = document.body;
+    }
+
+    const canvas = await html2canvas(targetElement);
 
     canvas.style.display = 'none';
     document.body.appendChild(canvas);
@@ -115,13 +127,7 @@ export function useUMAPComponent() {
     canvas.remove();
   }
 
-  function addListeners() {
-    window.addEventListener('resize', handleResize);
-  }
-
-  function removeListeners() {
-    window.removeEventListener('resize', handleResize);
-  }
+  useEventListener(window, 'resize', handleResize);
 
   /**
    * @see https://github.com/PAIR-code/scatter-gl/issues/99
@@ -191,12 +197,7 @@ export function useUMAPComponent() {
     return filteredColor;
   }
 
-  onMounted(() => {
-    addListeners();
-  });
-
   onUnmounted(() => {
-    removeListeners();
     destroy();
   });
 

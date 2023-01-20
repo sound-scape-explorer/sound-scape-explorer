@@ -26,6 +26,24 @@ import {settingsStore} from '../store/settings.store';
 
     <div>
       <h2>
+        UMAP Settings
+      </h2>
+
+      <hr />
+
+      <div class="checkboxes">
+        <n-checkbox
+            v-model:checked="settingsStore.umap.screenshot.isFull"
+            class="checkbox"
+        >
+          Full page screenshot
+        </n-checkbox>
+      </div>
+
+      <hr>
+    </div>
+    <div>
+      <h2>
         UMAP CSV export settings
       </h2>
 

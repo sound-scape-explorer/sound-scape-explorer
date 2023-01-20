@@ -8,9 +8,14 @@ export const TAG_PREFIX = '@';
 
 export const PREGENERATED_HUES_LENGTH = 1000;
 
-export const UMAP_WINDOW_TIME = 3600; // seconds
-
 export const UMAP_EXPORT_FILENAME = 'SSE_UMAP';
+
+export const RENDERING_DELAY_SLOW = 250;
+
+export const SLIDER_LIMITS = {
+  start: '⟦',
+  end: '⟧',
+};
 
 interface APIRoutesDefaultParameters {
   interval: string;

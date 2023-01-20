@@ -1,15 +1,15 @@
-import {UMAPFiltersStore} from '../store/UMAP-filters.store';
+import {configStore} from '../store/config.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
-import {getArraysIntersection} from '../utils/get-arrays-intersection';
-import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
-import {UMAPQueryStore} from '../store/UMAP-query.store';
+import {UMAPFiltersStore} from '../store/UMAP-filters.store';
+import type {UMAPMetaStoreInterface} from '../store/UMAP-meta.store';
+import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import type {
   UMAPQueryComplexStoreInterface,
 } from '../store/UMAP-query-complex.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
-import type {UMAPMetaStoreInterface} from '../store/UMAP-meta.store';
-import {UMAPMetaStore} from '../store/UMAP-meta.store';
-import {configStore} from '../store/config.store';
+import {UMAPQueryStore} from '../store/UMAP-query.store';
+import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
+import {getArraysIntersection} from '../utils/get-arrays-intersection';
 import {useUMAPDataset} from './useUMAPDataset';
 
 export function useUMAPFilters() {
@@ -59,26 +59,23 @@ export function useUMAPFilters() {
   }
 
   function isVisibleByTimeRange(index: number): boolean {
-    const {end, isAllSelected} = UMAPTimeRangeStore;
-    const start = UMAPTimeRangeStore.start[0];
-
-    if (isAllSelected) {
-      return true;
-    }
-
-    if (start === null || end === null) {
+    if (UMAPTimeRangeStore.isAllSelected) {
       return true;
     }
 
     const {dataset} = UMAPDatasetStore;
-    const timestamp = Number(dataset?.metadata[index]['timestamp']);
 
-    // noinspection RedundantIfStatementJS
-    if (timestamp >= start && timestamp <= end) {
-      return true;
+    if (!dataset) {
+      return false;
     }
 
-    return false;
+    const timestamp = Number(dataset.metadata[index]['timestamp']);
+
+    const start = UMAPTimeRangeStore.value ?? 1;
+    const duration = UMAPTimeRangeStore.duration;
+    const end = start + duration;
+
+    return timestamp >= start && timestamp <= end;
   }
 
   function isVisibleByMeta(index: number): boolean {
