@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {PauseOutline, PlayOutline, PlaySkipForwardOutline} from '@vicons/ionicons5';
+import {PauseOutline, PlayOutline, PlaySkipBackOutline, PlaySkipForwardOutline} from '@vicons/ionicons5';
 import dayjs, {Dayjs} from 'dayjs';
 import {NButton, NButtonGroup, NInputNumber, NSwitch} from 'naive-ui';
 import {computed, ComputedRef, onMounted, onUnmounted, ref, watch} from 'vue';
@@ -61,13 +61,9 @@ function togglePlaying() {
   isPlaying.value = !isPlaying.value;
 }
 
-function stepPlaying() {
-  incrementTime();
-}
-
 let interval: null | number = null;
 
-function incrementTime() {
+function skipTimeForward() {
   if (!UMAPTimeRangeStore.value) {
     return;
   }
@@ -75,12 +71,20 @@ function incrementTime() {
   UMAPTimeRangeStore.value += UMAPTimeRangeStore.duration;
 }
 
+function skipTimeBackward() {
+  if (!UMAPTimeRangeStore.value) {
+    return;
+  }
+
+  UMAPTimeRangeStore.value -= UMAPTimeRangeStore.duration;
+}
+
 function start() {
   if (interval) {
     return;
   }
 
-  interval = setInterval(incrementTime, 500);
+  interval = setInterval(skipTimeForward, 500);
 }
 
 function stop() {
@@ -110,7 +114,7 @@ function handleKeyboard(e: KeyboardEvent) {
     return;
   }
 
-  incrementTime();
+  skipTimeForward();
 }
 
 onMounted(() => {
@@ -156,7 +160,17 @@ onUnmounted(() => {
 
       <div class="button">
         <Button
-            v-if="!isPlaying"
+            :disabled="uiDisabled"
+            :handle-click="skipTimeBackward"
+            class="flex"
+        >
+          <play-skip-back-outline />
+        </Button>
+      </div>
+
+      <div class="button">
+        <Button
+            v-show="!isPlaying"
             :disabled="uiDisabled"
             :handle-click="togglePlaying"
             class="flex"
@@ -164,7 +178,7 @@ onUnmounted(() => {
           <play-outline />
         </Button>
         <Button
-            v-if="isPlaying"
+            v-show="isPlaying"
             :disabled="uiDisabled"
             :handle-click="togglePlaying"
             class="flex"
@@ -176,7 +190,7 @@ onUnmounted(() => {
       <div class="button">
         <Button
             :disabled="uiDisabled"
-            :handle-click="stepPlaying"
+            :handle-click="skipTimeForward"
             class="flex"
         >
           <play-skip-forward-outline />
@@ -197,11 +211,11 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .container {
   display: grid;
-  grid-template-columns: auto auto auto auto auto 1fr auto;
+  grid-template-columns: auto auto auto auto auto auto 1fr auto;
   justify-content: center;
   align-items: center;
 
-  gap: 1rem;
+  gap: 0.8rem;
 
   user-select: none;
 }
@@ -226,7 +240,7 @@ onUnmounted(() => {
 }
 
 .button {
-  width: 3rem;
+  width: 2.3rem;
 }
 
 .flex {
