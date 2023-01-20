@@ -3,12 +3,13 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import {NSlider} from 'naive-ui';
-import {computed, ComputedRef} from 'vue';
+import {computed, ComputedRef, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
-import {SLIDER_LIMITS} from '../constants';
+import {API_ROUTES, SLIDER_LIMITS} from '../constants';
 import {selectionStore} from '../store/selection.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
+import {mapRange} from '../utils/map-range';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -36,7 +37,7 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
 
   const umap = config.umaps[selectionStore.interval];
   const rangeNames = Object.values(umap[3]);
-  const payload = [];
+  const sliders = [];
 
   for (const rangeName of rangeNames) {
     const rangeValues = config.ranges[rangeName];
@@ -65,14 +66,76 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
       },
     };
 
-    payload.push(slider);
+    sliders.push(slider);
   }
 
-  payload.sort((a, b) => a.min - b.max);
+  sliders.sort((a, b) => a.min - b.max);
 
   UMAPTimeRangeStore.value = UMAPTimeRangeStore.min;
 
-  return payload;
+  return sliders;
+});
+
+interface Interest {
+  key: string;
+  values: boolean[];
+}
+
+const umapEndpoint: ComputedRef<string | null> = computed(() => {
+  const {band, interval} = selectionStore;
+
+  if (!band || !interval) {
+    return null;
+  }
+
+  return API_ROUTES.umap({band, interval});
+});
+
+const allTimestamps = ref<number[]>([]);
+
+watch(umapEndpoint, async () => {
+  if (!umapEndpoint.value) {
+    return;
+  }
+
+  const response = await fetch(umapEndpoint.value);
+  const json = await response.json();
+  allTimestamps.value = json.t;
+});
+
+const interests: ComputedRef<Interest[]> = computed(() => {
+  if (!allTimestamps.value) {
+    return [];
+  }
+
+  const interests: Interest[] = [];
+
+  for (const slider of sliders.value) {
+    const {min, max, key} = slider;
+    const timestamps = allTimestamps.value.filter((timestamp) => timestamp >= min && timestamp <= max);
+
+    const values = [];
+
+    for (let i = 0; i < 100; i += 1) {
+      const index = mapRange(i, 0, 100, min, max);
+      const ignoreDecimalsFactor = 1 / (UMAPTimeRangeStore.duration);
+      const ignoreDecimals = (value: number) => Math.floor(ignoreDecimalsFactor * value);
+
+      const trimmedTimestamps = timestamps.map((t) => ignoreDecimals(t));
+      const isInterest = trimmedTimestamps.includes(ignoreDecimals(index));
+
+      values.push(isInterest);
+    }
+
+    const interest: Interest = {
+      key,
+      values,
+    };
+
+    interests.push(interest);
+  }
+
+  return interests;
 });
 
 function formatTooltip(time: number): string {
@@ -99,12 +162,46 @@ function formatTooltip(time: number): string {
         :max="slider.max"
         :min="slider.min"
         :style="{ width: 100 / sliders.length + '%' }"
+        class="slider"
     />
+  </div>
+  <div v-if="!isDisabled" class="container">
+    <div v-for="interest in interests" v-show="!UMAPTimeRangeStore.isAllSelected" class="interest">
+      <span
+          v-for="value of interest.values"
+          :style="{background: value ? 'red' : 'gainsboro'}"
+          class="interest__pixel"
+      />
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .container {
   display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  width: 100%;
+}
+
+.slider {
+  z-index: 1;
+}
+
+.interest {
+  display: flex;
+
+  width: 100%;
+  height: 0.8rem;
+  padding: 0 8px;
+
+  z-index: 0;
+  user-select: none;
+  transform: translate3d(0, -2.2rem, 0);
+}
+
+.interest__pixel {
+  width: 1%;
 }
 </style>
