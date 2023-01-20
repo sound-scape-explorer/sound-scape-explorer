@@ -22,3 +22,8 @@ sse-web-docker-windows
 ├── start.ps1 <- Run me to start the app
 └── start-example.png <- Screenshot of what you should get after running `start.ps1`
 ```
+
+## Screenshot
+
+After running `start.ps1`, you should
+get [this](https://raw.githubusercontent.com/sound-scape-explorer/sound-scape-explorer/main/examples/sse-web-docker-windows/example.png).
