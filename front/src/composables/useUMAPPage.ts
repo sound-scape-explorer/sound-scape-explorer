@@ -7,10 +7,12 @@ import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {
   convertToScatterGlDataset,
 } from '../utils/convert-to-scatter-gl-dataset';
+import {useAPI} from './useAPI';
 import {useSelection} from './useSelection';
 
 export function useUMAPPage() {
   const {clearSelection} = useSelection();
+  const {fetchUMAP} = useAPI();
 
   function resetImage() {
     selectionImageStore.image = null;
@@ -36,15 +38,9 @@ export function useUMAPPage() {
 
   async function fetchData(band: string, intervalLabel: string) {
     try {
-      const endpoint = API_ROUTES.umap({
-        interval: intervalLabel,
-        band,
-      });
+      const data = await fetchUMAP(intervalLabel, band);
 
-      const request = await fetch(endpoint);
-      const data = await request.json();
-
-      if (data === null) {
+      if (!data) {
         return;
       }
 
