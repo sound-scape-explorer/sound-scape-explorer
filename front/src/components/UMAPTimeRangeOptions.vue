@@ -6,6 +6,7 @@ import {computed, ComputedRef, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import {useEventListener} from '../composables/useEventListener';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
+import {DATE_FORMAT} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import Button from './Button.vue';
 
@@ -15,24 +16,24 @@ const {config} = await useConfig();
 const uiDisabled: ComputedRef<boolean> = computed(() => isDisabled.value || UMAPTimeRangeStore.isAllSelected);
 
 const dateStart: ComputedRef<Dayjs> = computed(() => {
+  let start = UMAPTimeRangeStore.value ?? 0;
+
   if (UMAPTimeRangeStore.isAllSelected) {
-    return dayjs((UMAPTimeRangeStore.min ?? 1) * 1000);
+    start = UMAPTimeRangeStore.min ?? 0;
   }
 
-  const start = (UMAPTimeRangeStore.value ?? 1) * 1000;
-
-  return dayjs(start);
+  return dayjs(start * 1000);
 });
 
 const dateEnd: ComputedRef<Dayjs> = computed(() => {
+  let time = UMAPTimeRangeStore.value ?? 0;
+  time += UMAPTimeRangeStore.duration;
+
   if (UMAPTimeRangeStore.isAllSelected) {
-    return dayjs((UMAPTimeRangeStore.max ?? 1) * 1000);
+    time = UMAPTimeRangeStore.max ?? 0;
   }
 
-  const start = (UMAPTimeRangeStore.value ?? 1) * 1000;
-  const duration = UMAPTimeRangeStore.duration * 1000;
-
-  return dayjs(start + duration);
+  return dayjs(time * 1000);
 });
 
 interface Duration {
@@ -47,7 +48,7 @@ const durations: Duration[] = [
   {name: '1w', duration: 3600 * 24 * 7},
 ];
 
-const timezone: ComputedRef<string> = computed(() => {
+const timezoneName: ComputedRef<string> = computed(() => {
   return config?.variables.display_locale ?? '';
 });
 
@@ -225,11 +226,11 @@ useEventListener(document, 'keypress', handleKeyboard);
       </div>
 
       <div class="dates">
-        <span>{{ dateStart }}</span>
-        <span>{{ dateEnd }}</span>
+        <span>{{ dateStart.format(DATE_FORMAT) }}</span>
+        <span>{{ dateEnd.format(DATE_FORMAT) }}</span>
       </div>
       <div class="timezone">
-        {{ timezone }}
+        {{ timezoneName }}
       </div>
     </div>
   </div>

@@ -17,6 +17,8 @@ export const SLIDER_LIMITS = {
   end: '⟧',
 };
 
+export const DATE_FORMAT = 'DD MMM YYYY HH:mm:ss';
+
 interface APIRoutesDefaultParameters {
   interval: string;
   band: string;

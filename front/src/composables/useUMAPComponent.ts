@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import html2canvas from 'html2canvas';
 import {onUnmounted, watch} from 'vue';
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
@@ -22,12 +24,12 @@ import {useEventListener} from './useEventListener';
 import {useNotification} from './useNotification';
 import {useUMAPFilters} from './useUMAPFilters';
 import {useUMAPMeta} from './useUMAPMeta';
-import {useUMAPTimestampsInDay} from './useUMAPTimestampsInDay';
+
+dayjs.extend(relativeTime);
 
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor} = useColors();
   const {shouldBeFiltered} = useUMAPFilters();
-  const {timestampsInDay, updateTimestampsInDay} = useUMAPTimestampsInDay();
   const {getMetaPropertiesAsColorTypes, getMetaColor} = useUMAPMeta();
   const {notify} = useNotification();
 
@@ -79,8 +81,6 @@ export function useUMAPComponent() {
     if (scatterGL === null || UMAPDatasetStore.dataset === null) {
       return;
     }
-
-    await updateTimestampsInDay();
 
     scatterGL.updateDataset(UMAPDatasetStore.dataset);
     scatterGL.resize();
@@ -137,29 +137,31 @@ export function useUMAPComponent() {
     selectedIndices: Set<number>,
     hoverIndex: number | null,
   ): string {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const dataset = UMAPDatasetStore.dataset!;
-    const {colorType} = UMAPFiltersStore;
-    const metaPropertiesAsColorTypes = getMetaPropertiesAsColorTypes();
-
-    const rangedPointIndex = mapRange(index, 0, dataset.metadata.length, 0, 1);
-
-    const labelIndex = dataset.metadata[index]['labelIndex'] as number;
-    const rangedLabelIndex = mapRange(labelIndex, 0, dataset.metadata.length, 0, 1);
-
-    const timeIndex = timestampsInDay.value[index];
-    const rangedBy1hIndex = mapRange(timeIndex, 0, 24, 0, 1);
-    const rangedBy10minIndex = mapRange(timeIndex, 0, 24 * 60 * 10, 0, 1);
-
-    const hoverColor = 'red';
     const filteredColor = `hsla(0, 0%, 0%, ${UMAPStore.alpha.low})`;
-
     const shouldBeFilteredOut = shouldBeFiltered(index);
 
     if (shouldBeFilteredOut) {
       return filteredColor;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const dataset = UMAPDatasetStore.dataset!;
+    const {colorType} = UMAPFiltersStore;
+    const metaPropertiesAsColorTypes = getMetaPropertiesAsColorTypes();
+
+    const timestamp = dataset.metadata[index]['timestamp'] as number;
+    const date = dayjs(timestamp * 1000);
+    const range = {
+      min: dayjs((UMAPTimeRangeStore?.min ?? 0) * 1000),
+      max: dayjs((UMAPTimeRangeStore?.max ?? 0) * 1000),
+    };
+
+    const hoverColor = 'red';
+
+    const labelIndex = dataset.metadata[index]['labelIndex'] as number;
+    const rangedLabelIndex = mapRange(labelIndex, 0, dataset.metadata.length, 0, 1);
+
+    const rangedPointIndex = mapRange(index, 0, dataset.metadata.length, 0, 1);
     const indexColor = colors.value(rangedPointIndex).alpha(UMAPStore.alpha.high).css();
     let color = indexColor;
 
@@ -168,11 +170,21 @@ export function useUMAPComponent() {
     } else if (colorType === 'pointIndex') {
       color = indexColor;
     } else if (colorType === 'by1h') {
-      color = colors.value(rangedBy1hIndex).alpha(UMAPStore.alpha.high).css();
+      const rangeInHours = range.max.diff(range.min, 'hours');
+      const currentHourFromStart = date.diff(range.min, 'hours');
+      const rangedIndex = mapRange(currentHourFromStart, 0, rangeInHours, 0, 1);
+
+      color = colors.value(rangedIndex).alpha(UMAPStore.alpha.high).css();
     } else if (colorType === 'by10min') {
-      color = colors.value(rangedBy10minIndex).alpha(UMAPStore.alpha.high).css();
+      const rangeInMinutes = range.max.diff(range.min, 'minutes');
+      const currentMinuteFromStart = date.diff(range.min, 'minutes');
+      const rangedIndex = mapRange(currentMinuteFromStart, 0, rangeInMinutes, 0, 1);
+
+      color = colors.value(rangedIndex).alpha(UMAPStore.alpha.high).css();
     } else if (colorType === 'isDay') {
-      const isDay = isHourDuringDay(timeIndex);
+      const hour = date.get('hours');
+      const isDay = isHourDuringDay(hour);
+
       color = isDay
         ? dayColor.alpha(UMAPStore.alpha.high).css()
         : nightColor.alpha(UMAPStore.alpha.high).css();
