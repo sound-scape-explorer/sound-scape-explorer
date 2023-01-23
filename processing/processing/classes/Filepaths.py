@@ -1,13 +1,28 @@
 import os
 from datetime import datetime
+from typing import Any, List
 
 from processing.classes.Config import Config
-from processing.utils.read_meta_values_from_filepath import \
-    read_meta_values_from_filepath
 
 
 class Filepaths:
-    def __init__(self):
+    """The list of paths for all files and directories.
+
+    Attributes:
+        __config: The configuration object.
+        __directories: The list of detected directories.
+        __filepaths: The list of detected filepaths.
+        __times: The list of file timestamps relative to `__filepaths`.
+        __meta_values: The list of meta values
+    """
+    __config: Config
+    __directories: List[Any]
+    __filepaths: List[Any]
+    __times = List[Any]
+    __meta_values = List[Any]
+
+    def __init__(self) -> None:
+        """Initializes `Filepaths`"""
         self.__config = Config()
         self.__directories = []
         self.__filepaths = []
@@ -42,7 +57,9 @@ class Filepaths:
                 path = os.path.join(root, f)
                 self.__filepaths.append(path)
                 self.__times.append(os.path.getmtime(path))
-                self.__meta_values.append(read_meta_values_from_filepath(path))
+                self.__meta_values.append(
+                    self.__read_meta_values_from_filepath(path)
+                )
             for d in sorted(dirs):
                 self.__directories.append(os.path.join(root, d))
 
