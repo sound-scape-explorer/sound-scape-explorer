@@ -1,3 +1,11 @@
+# [5.14.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.13.2...v5.14.0) (2023-01-23)
+
+
+### Features
+
+* **Front/UMAP:** Notify user when data can not be fetched ([c5174ef](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c5174ef39c5ea5fd2e8b1258d617301be4a5e3b0))
+* **Front/UMAP:** Notify user when features can not be fetched ([12fd86a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/12fd86a209de216e75c676581a142a3b13622bd4))
+
 ## [5.13.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.13.1...v5.13.2) (2023-01-23)
 
 
