@@ -1,18 +1,13 @@
 <script lang="ts" setup="">
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import {NSlider} from 'naive-ui';
 import {computed, ComputedRef, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
-import {API_ROUTES, SLIDER_LIMITS} from '../constants';
+import {API_ROUTES, DATE_FORMAT, SLIDER_LIMITS} from '../constants';
 import {selectionStore} from '../store/selection.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {mapRange} from '../utils/map-range';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const {isDisabled} = useUMAPStatus();
 const {config} = await useConfig();
@@ -144,9 +139,8 @@ function formatTooltip(time: number): string {
   }
 
   const date = dayjs(time * 1000);
-  const timezone = config.variables.display_locale;
 
-  return date.tz(timezone).format();
+  return date.format(DATE_FORMAT);
 }
 </script>
 
