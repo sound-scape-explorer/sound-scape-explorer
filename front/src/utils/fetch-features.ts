@@ -1,3 +1,4 @@
+import {useNotification} from '../composables/useNotification';
 import {API_ROUTES} from '../constants';
 
 interface FetchFeaturesBySiteProps {
@@ -10,6 +11,13 @@ interface FetchFeaturesBySiteProps {
 
 export async function fetchFeatures(props: FetchFeaturesBySiteProps): Promise<number[]> {
   const response = await fetch(API_ROUTES.features(props));
+
+  if (!response.ok) {
+    const {notify} = useNotification();
+    notify('error', 'Features could not be fetched!', JSON.stringify(props));
+    return [];
+  }
+
   const json = await response.json();
 
   try {
