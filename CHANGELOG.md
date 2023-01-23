@@ -1,3 +1,10 @@
+## [5.13.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.13.1...v5.13.2) (2023-01-23)
+
+
+### Bug Fixes
+
+* **Front/UMAP:** Display dates in local format + Improve coloring by fixed time window ([738439e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/738439e3a7da3415aee2d41dd288c3e85d4acc0f))
+
 ## [5.13.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.13.0...v5.13.1) (2023-01-20)
 
 
