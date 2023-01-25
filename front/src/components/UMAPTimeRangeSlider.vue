@@ -64,6 +64,7 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     sliders.push(slider);
   }
 
+  // TODO: Can be improved to avoid collisions
   sliders.sort((a, b) => a.min - b.max);
 
   UMAPTimeRangeStore.value = UMAPTimeRangeStore.min;
