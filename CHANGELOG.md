@@ -1,3 +1,15 @@
+# [5.15.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.14.0...v5.15.0) (2023-01-26)
+
+
+### Bug Fixes
+
+* **Processing/BuilderUMAP:** Raise exception when `umaps_ranges` is not valid ([df6f1b4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/df6f1b4fa27ff4a96d86282564430ad2660e05cc))
+
+
+### Features
+
+* **Examples:** Add SSE CPU and CUDA versions for Linux ([c141510](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c1415103ff7630493bc479f393e8154921135e5f))
+
 # [5.14.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.13.2...v5.14.0) (2023-01-23)
 
 
