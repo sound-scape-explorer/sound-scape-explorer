@@ -23,7 +23,7 @@ const hasText = typeof text !== 'undefined';
 
 <template>
   <div class="container">
-    <n-button :disabled="disabled" :loading="loading" class="button" @click="handleClick">
+    <n-button :disabled="disabled" :loading="loading" class="zoom" @click="handleClick">
       <template v-if="hasChildren" #icon>
         <n-icon>
           <slot />
@@ -44,7 +44,7 @@ const hasText = typeof text !== 'undefined';
   width: 100%;
 }
 
-.button {
+.zoom {
   width: 100%;
 }
 </style>

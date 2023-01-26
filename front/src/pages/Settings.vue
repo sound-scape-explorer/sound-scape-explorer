@@ -74,7 +74,7 @@ import {settingsStore} from '../store/settings.store';
   }
 }
 
-.button {
+.zoom {
   width: 10rem;
 }
 
