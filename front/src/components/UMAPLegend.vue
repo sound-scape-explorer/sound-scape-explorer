@@ -1,22 +1,20 @@
 <script lang="ts" setup="">
+import {SearchOutline} from '@vicons/ionicons5';
 import {computed} from 'vue';
-import UMAPLegendGradient from './UMAPLegendGradient.vue';
 import {useColors} from '../composables/useColors';
-import UMAPLegendSelection from './UMAPLegendSelection.vue';
-import UMAPMeta from './UMAPLegendMeta.vue';
 import {settingsStore} from '../store/settings.store';
 import {UMAPLegendStore} from '../store/UMAP-legend.store';
+import Button from './Button.vue';
+import UMAPLegendGradient from './UMAPLegendGradient.vue';
+import UMAPMeta from './UMAPLegendMeta.vue';
+import UMAPLegendSelection from './UMAPLegendSelection.vue';
 
 const {colors} = useColors();
 
 const gradientColors = computed<string[]>(() => colors.value.colors(100));
 
-function enableHover() {
-  UMAPLegendStore.isOpen = true;
-}
-
-function disableHover() {
-  UMAPLegendStore.isOpen = false;
+function toggle() {
+  UMAPLegendStore.isOpen = !UMAPLegendStore.isOpen;
 }
 
 const containerClasses = computed<string>(() => {
@@ -45,11 +43,11 @@ const moreClasses = computed<string>(() => {
 </script>
 
 <template>
-  <div
-      :class="containerClasses"
-      @mouseenter="enableHover"
-      @mouseleave="disableHover"
-  >
+  <div :class="containerClasses">
+    <Button :handle-click="toggle" class="toggle">
+      <search-outline />
+    </Button>
+
     <div v-if="settingsStore.debug" class="title">
       Color scale
     </div>
@@ -141,5 +139,12 @@ const moreClasses = computed<string>(() => {
   font-size: small;
   font-weight: bold;
   font-style: italic;
+}
+
+.toggle {
+  position: fixed;
+  background: transparent;
+  padding-right: 26px;
+  width: auto;
 }
 </style>
