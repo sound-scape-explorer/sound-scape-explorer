@@ -154,16 +154,16 @@ useEventListener(document, 'keypress', handleKeyboard);
         </n-button>
       </n-button-group>
 
-      <div class="input">
+      <div>
         <n-input-number
             v-model:value="UMAPTimeRangeStore.duration"
             :disabled="UMAPTimeRangeStore.isAllSelected"
             class="input"
-            size="small"
+            size="tiny"
         />
       </div>
 
-      <div class="button">
+      <div class="zoom">
         <n-tooltip trigger="hover">
           <template #trigger>
             <Button
@@ -180,7 +180,7 @@ useEventListener(document, 'keypress', handleKeyboard);
         </n-tooltip>
       </div>
 
-      <div class="button">
+      <div class="zoom">
         <n-tooltip trigger="hover">
           <template #trigger>
             <div>
@@ -208,7 +208,7 @@ useEventListener(document, 'keypress', handleKeyboard);
         </n-tooltip>
       </div>
 
-      <div class="button">
+      <div class="zoom">
         <n-tooltip trigger="hover">
           <template #trigger>
             <Button
@@ -240,7 +240,6 @@ useEventListener(document, 'keypress', handleKeyboard);
 .container {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto 1fr auto;
-  justify-content: center;
   align-items: center;
 
   gap: 0.8rem;
@@ -264,10 +263,6 @@ useEventListener(document, 'keypress', handleKeyboard);
   font-style: italic;
 }
 
-.input {
-  width: 8rem;
-}
-
 .dates {
   display: flex;
   flex-direction: column;
@@ -275,7 +270,7 @@ useEventListener(document, 'keypress', handleKeyboard);
   font-size: 0.8rem;
 }
 
-.button {
+.zoom {
   width: 2.3rem;
 }
 

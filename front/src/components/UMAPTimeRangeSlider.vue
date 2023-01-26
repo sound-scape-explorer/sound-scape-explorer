@@ -1,4 +1,5 @@
 <script lang="ts" setup="">
+import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
 import {computed, ComputedRef, ref, watch} from 'vue';
@@ -8,6 +9,7 @@ import {API_ROUTES, DATE_FORMAT, SLIDER_LIMITS} from '../constants';
 import {selectionStore} from '../store/selection.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {mapRange} from '../utils/map-range';
+import Button from './Button.vue';
 
 const {isDisabled} = useUMAPStatus();
 const {config} = await useConfig();
@@ -21,6 +23,8 @@ interface Slider {
   };
 }
 
+const cachedSliders = ref<null | Slider[]>(null);
+
 const sliders: ComputedRef<Slider[]> = computed(() => {
   if (!config) {
     return [];
@@ -28,6 +32,14 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
 
   if (!selectionStore.interval) {
     return [];
+  }
+
+  if (zoomedSlider.value) {
+    return [zoomedSlider.value];
+  }
+
+  if (cachedSliders.value) {
+    return cachedSliders.value;
   }
 
   const umap = config.umaps[selectionStore.interval];
@@ -68,6 +80,8 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
   sliders.sort((a, b) => a.min - b.max);
 
   UMAPTimeRangeStore.value = UMAPTimeRangeStore.min;
+
+  cachedSliders.value = sliders;
 
   return sliders;
 });
@@ -143,6 +157,21 @@ function formatTooltip(time: number): string {
 
   return date.format(DATE_FORMAT);
 }
+
+const zoomedSlider = ref<null | Slider>(null);
+
+function resetZoom() {
+  zoomedSlider.value = null;
+}
+
+function toggleZoom(slider: Slider): void {
+  if (zoomedSlider.value !== null) {
+    resetZoom();
+    return;
+  }
+
+  zoomedSlider.value = slider;
+}
 </script>
 
 <template>
@@ -160,14 +189,28 @@ function formatTooltip(time: number): string {
         class="slider"
     />
   </div>
+
   <div v-if="!isDisabled" class="container">
-    <div v-for="interest in interests" v-show="!UMAPTimeRangeStore.isAllSelected" class="interest">
+    <div
+        v-for="interest in interests"
+        class="interest"
+    >
       <span
           v-for="value of interest.values"
           :style="{background: value ? 'red' : 'gainsboro'}"
           class="interest__pixel"
       />
     </div>
+  </div>
+
+  <div v-if="!isDisabled" class="container">
+    <Button
+        v-for="slider in sliders"
+        :handle-click="() => toggleZoom(slider)"
+        class="zoom"
+    >
+      <search-outline />
+    </Button>
   </div>
 </template>
 
@@ -193,10 +236,14 @@ function formatTooltip(time: number): string {
 
   z-index: 0;
   user-select: none;
-  transform: translate3d(0, -2.2rem, 0);
+  transform: translateY(-21px);
 }
 
 .interest__pixel {
   width: 1%;
+}
+
+.zoom {
+  margin-bottom: 1rem;
 }
 </style>

@@ -21,53 +21,43 @@ const {delayUpdate} = useUMAPPage();
 <template>
   <Title text="UMAP" />
 
-  <UMAPScatterPlotGL />
-
   <UMAPLegend />
 
-  <div class="tools-container">
-    <div class="first-row">
-      <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
-      <UMAPScreenshot class="first-row__image" />
-    </div>
-    <div class="filters">
-      <UMAPFilters />
-    </div>
-    <div class="two-columns">
-      <UMAPQuery />
-      <UMAPAlphas />
-    </div>
-    <div class="two-columns">
-      <UMAPQueryComplex />
-      <UMAPExport />
-    </div>
+  <UMAPScatterPlotGL />
 
-    <UMAPTimeRangeOptions />
-    <UMAPTimeRangeSlider />
+  <div class="row">
+    <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
+    <UMAPScreenshot class="zoom" />
   </div>
+
+  <div class="row">
+    <UMAPFilters />
+  </div>
+
+  <div class="row two-columns">
+    <UMAPQuery />
+    <UMAPAlphas />
+  </div>
+
+  <div class="row two-columns">
+    <UMAPQueryComplex />
+    <UMAPExport />
+  </div>
+
+  <UMAPTimeRangeOptions />
+  <UMAPTimeRangeSlider />
 </template>
 
 <style lang="scss" scoped>
-.first-row {
+.row {
   display: grid;
   grid-template-columns: repeat(2, 1fr) 11rem;
-  gap: 1rem;
-}
-
-.first-row__image {
-  display: flex;
-}
-
-.tools-container {
-  display: grid;
   gap: 1rem;
   padding-bottom: 1rem;
 }
 
-.filters {
-  display: grid;
-  grid-template-columns: 1fr 12rem 11rem;
-  gap: 1rem;
+.zoom {
+  display: flex;
 }
 
 .two-columns {
