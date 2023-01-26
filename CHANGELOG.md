@@ -1,3 +1,11 @@
+# [5.16.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.15.0...v5.16.0) (2023-01-26)
+
+
+### Features
+
+* **Front/UMAP:** Interact with Legend size with toggle and not hover ([a3e1748](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a3e1748e42d4c914a0c1c560cb08773d50b7384b))
+* **Front/UMAP:** User can zoom on a range for full accuracy + Misc styling ([c8c42e3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c8c42e3c61e2eaeecd4fec245c6d4dd3d6c69145))
+
 # [5.15.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.14.0...v5.15.0) (2023-01-26)
 
 
