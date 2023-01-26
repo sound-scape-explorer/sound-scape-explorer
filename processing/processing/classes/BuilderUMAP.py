@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import List
 
 import numpy
 
@@ -66,9 +67,15 @@ class BuilderUMAP:
 
             dataset_labels.append(generate_dataset_label(range_name, site))
 
+    def __validate_ranges(self, ranges: List[str]) -> None:
+        if len(ranges) == 0:
+            raise ValueError('Excel field `umaps_ranges` is not valid.')
+
     def __build(self):
         for umap_name, umap in self.__config.umaps.items():
             print('... UMAP', umap_name, umap)
+
+            self.__validate_ranges(umap[3])
 
             for band in umap.bands:
                 print('... ... BAND', band)

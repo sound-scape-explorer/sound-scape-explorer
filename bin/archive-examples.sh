@@ -4,10 +4,24 @@ function browse_to_examples(){
   cd examples || exit 1
 }
 
+function archive_sse_cpu_docker_linux(){
+  cd sse-cpu-docker-linux || exit 1
+  zip sse-cpu-docker-linux.zip ./* -x "*.gitignore" "*.png"
+  mv sse-cpu-docker-linux.zip ..
+  cd ..
+}
+
 function archive_sse_cpu_docker_windows(){
   cd sse-cpu-docker-windows || exit 1
   zip sse-cpu-docker-windows.zip ./* -x "*.gitignore" "*.png"
   mv sse-cpu-docker-windows.zip ..
+  cd ..
+}
+
+function archive_sse_cuda_docker_linux(){
+  cd sse-cuda-docker-linux || exit 1
+  zip sse-cuda-docker-linux.zip ./* -x "*.gitignore" "*.png"
+  mv sse-cuda-docker-linux.zip ..
   cd ..
 }
 
@@ -40,7 +54,9 @@ function archive_sse_web_docker_windows(){
 }
 
 browse_to_examples
+archive_sse_cpu_docker_linux
 archive_sse_cpu_docker_windows
+archive_sse_cuda_docker_linux
 archive_sse_cuda_docker_windows
 archive_sse_next_docker_windows
 archive_sse_web_docker_linux
