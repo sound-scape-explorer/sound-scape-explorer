@@ -21,6 +21,7 @@ const options = computed<UMAPFiltersColorType[]>(() => {
     'by1h',
     'by10min',
     'isDay',
+    'cycleDay',
     ...getMetaPropertiesAsColorTypes(),
   ];
 });
