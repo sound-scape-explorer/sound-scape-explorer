@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref, watch} from 'vue';
 import {NSelect} from 'naive-ui';
-import {configStore} from '../store/config.store';
-import type {ConfigInterface} from '../interfaces/config.interface';
+import {computed, onMounted, ref, watch} from 'vue';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {TAG_PREFIX} from '../constants';
+import type {ConfigInterface} from '../interfaces/config.interface';
+import {Dataset} from '../lib/scatter-gl-0.0.13';
+import {configStore} from '../store/config.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
-import {Dataset} from '../lib/scatter-gl-0.0.13';
-import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 
 /**
@@ -93,6 +93,7 @@ watch(UMAPDatasetStore, () => {
       filterable
       multiple
       placeholder="Filter by..."
+      size="tiny"
   />
 </template>
 

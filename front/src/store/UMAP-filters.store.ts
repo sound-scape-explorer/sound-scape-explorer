@@ -6,6 +6,7 @@ export type UMAPFiltersColorType =
   | 'by1h'
   | 'by10min'
   | 'isDay'
+  | 'cycleDay'
   | string
 
 export interface UMAPFiltersStoreInterface {

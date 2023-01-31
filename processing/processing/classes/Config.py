@@ -60,6 +60,9 @@ class Config(metaclass=SingletonMeta):
         if self.variables['umap_random'] == 'nan':
             self.variables['umap_random'] = None
 
+        if self.variables['display_locale'] == 'nan':
+            self.variables['display_locale'] = ''
+
     def __fetch_files_and_columns_and_all_sites(self):
         # generate selectors
         selectors = ['site', 'start:D', 'tags:L']

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {ref, watch} from 'vue';
-import {NIcon, NInput} from 'naive-ui';
 import {FlaskOutline} from '@vicons/ionicons5';
-import {useUMAPStatus} from '../composables/useUMAPStatus';
+import {NIcon, NInput} from 'naive-ui';
+import {ref, watch} from 'vue';
 import {useTimeout} from '../composables/useTimeout';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 import type {UMAPQueryComplexStoreInterface} from '../store/UMAP-query-complex.store';
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 
@@ -67,7 +67,13 @@ watch(input, () => {
 </script>
 
 <template>
-  <n-input v-model:value="input" :disabled="isDisabled" placeholder="Query Complex..." type="text">
+  <n-input
+      v-model:value="input"
+      :disabled="isDisabled"
+      placeholder="Query Complex..."
+      size="tiny"
+      type="text"
+  >
     <template #suffix>
       <n-icon class="icon">
         <flask-outline />

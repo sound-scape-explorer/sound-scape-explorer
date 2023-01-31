@@ -28,7 +28,7 @@ import {useUMAPMeta} from './useUMAPMeta';
 dayjs.extend(relativeTime);
 
 export function useUMAPComponent() {
-  const {colors, nightColor, dayColor} = useColors();
+  const {colors, nightColor, dayColor, cyclingColors} = useColors();
   const {shouldBeFiltered} = useUMAPFilters();
   const {getMetaPropertiesAsColorTypes, getMetaColor} = useUMAPMeta();
   const {notify} = useNotification();
@@ -188,6 +188,11 @@ export function useUMAPComponent() {
       color = isDay
         ? dayColor.alpha(UMAPStore.alpha.high).css()
         : nightColor.alpha(UMAPStore.alpha.high).css();
+    } else if (colorType === 'cycleDay') {
+      const hour = date.get('hours');
+      const rangedIndex = mapRange(hour, 0, 24, 0, 1);
+
+      color = cyclingColors.value(rangedIndex).alpha(UMAPStore.alpha.high).css();
     } else if (metaPropertiesAsColorTypes.includes(colorType)) {
       color = getMetaColor(colorType, index);
     }

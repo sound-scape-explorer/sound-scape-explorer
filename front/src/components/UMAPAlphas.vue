@@ -1,8 +1,8 @@
 <script lang="ts" setup="">
 import type {InputNumberProps} from 'naive-ui';
-import {NInputNumber} from 'naive-ui';
-import {UMAPStore} from '../store/UMAP.store';
+import {NInputNumber, NTooltip} from 'naive-ui';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
+import {UMAPStore} from '../store/UMAP.store';
 
 const {isDisabled} = useUMAPStatus();
 
@@ -20,47 +20,42 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
 </script>
 
 <template>
-  <div class="input">
-    <span><strong>α</strong> filtered</span>
-    <n-input-number
-        v-model:value="UMAPStore.alpha.low"
-        :disabled="isDisabled"
-        :theme-overrides="inputNumberThemeOverrides"
-        max="1"
-        min="0"
-        size="tiny"
-        step="0.001"
-    />
-  </div>
-  <div class="input">
-    <span><strong>α</strong> collected</span>
-    <n-input-number
-        v-model:value="UMAPStore.alpha.high"
-        :disabled="isDisabled"
-        :theme-overrides="inputNumberThemeOverrides"
-        max="1"
-        min="0"
-        size="tiny"
-        step="0.05"
-    />
-  </div>
+  <n-tooltip placement="bottom" trigger="hover">
+    <template #trigger>
+      <n-input-number
+          v-model:value="UMAPStore.alpha.low"
+          :disabled="isDisabled"
+          :theme-overrides="inputNumberThemeOverrides"
+          class="input"
+          max="1"
+          min="0"
+          size="tiny"
+          step="0.001"
+      />
+    </template>
+    <span>Filtered dots opacity</span>
+  </n-tooltip>
+
+  <n-tooltip placement="bottom" trigger="hover">
+    <template #trigger>
+      <n-input-number
+          v-model:value="UMAPStore.alpha.high"
+          :disabled="isDisabled"
+          :theme-overrides="inputNumberThemeOverrides"
+          class="input"
+          max="1"
+          min="0"
+          size="tiny"
+          step="0.05"
+      />
+    </template>
+    <span>Collected dots opacity</span>
+  </n-tooltip>
+
 </template>
 
 <style lang="scss" scoped>
 .input {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  > span {
-    font-size: 0.6rem;
-    font-style: italic;
-    transform: scale3d(1.2, 1.2, 1.2) translate3d(7px, -1px, 0);
-    user-select: none;
-
-    > strong {
-      font-weight: bold;
-    }
-  }
 }
 </style>

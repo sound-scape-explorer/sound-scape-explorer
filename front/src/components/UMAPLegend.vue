@@ -2,16 +2,16 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import {computed} from 'vue';
 import {useColors} from '../composables/useColors';
-import {settingsStore} from '../store/settings.store';
+import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import {UMAPLegendStore} from '../store/UMAP-legend.store';
 import Button from './Button.vue';
 import UMAPLegendGradient from './UMAPLegendGradient.vue';
 import UMAPMeta from './UMAPLegendMeta.vue';
 import UMAPLegendSelection from './UMAPLegendSelection.vue';
 
-const {colors} = useColors();
+const {cyclingColors} = useColors();
 
-const gradientColors = computed<string[]>(() => colors.value.colors(100));
+const gradientColors = computed<string[]>(() => cyclingColors.value.colors(100));
 
 function toggle() {
   UMAPLegendStore.isOpen = !UMAPLegendStore.isOpen;
@@ -40,6 +40,8 @@ const moreClasses = computed<string>(() => {
 
   return classes;
 });
+
+const showScale = computed(() => UMAPFiltersStore.colorType === 'cycleDay');
 </script>
 
 <template>
@@ -48,12 +50,12 @@ const moreClasses = computed<string>(() => {
       <search-outline />
     </Button>
 
-    <div v-if="settingsStore.debug" class="title">
+    <div v-if="showScale" class="title">
       Color scale
     </div>
 
     <UMAPLegendGradient
-        v-if="settingsStore.debug"
+        v-if="showScale"
         :array="gradientColors"
         max=""
         med=""
@@ -78,8 +80,8 @@ const moreClasses = computed<string>(() => {
   flex-direction: column;
 
   position: absolute;
-  top: 1rem;
-  right: 2rem;
+  bottom: 1rem;
+  right: 1rem;
 
   width: 20rem;
 

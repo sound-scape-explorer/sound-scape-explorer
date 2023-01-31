@@ -3,7 +3,9 @@ import Selection from '../components/Selection.vue';
 import Title from '../components/Title.vue';
 import UMAPAlphas from '../components/UMAPAlphas.vue';
 import UMAPExport from '../components/UMAPExport.vue';
-import UMAPFilters from '../components/UMAPFilters.vue';
+import UMAPFiltersColorScales from '../components/UMAPFiltersColorScales.vue';
+import UMAPFiltersColorTypes from '../components/UMAPFiltersColorTypes.vue';
+import UMAPFiltersTags from '../components/UMAPFiltersTags.vue';
 import UMAPLegend from '../components/UMAPLegend.vue';
 import UMAPQuery from '../components/UMAPQuery.vue';
 import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
@@ -19,51 +21,83 @@ const {delayUpdate} = useUMAPPage();
 </script>
 
 <template>
-  <Title text="UMAP" />
+  <div class="container">
+    <div class="options">
+      <Title text="UMAP" />
+
+      <div class="row">
+        <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
+        <UMAPFiltersColorTypes />
+        <UMAPFiltersColorScales />
+        <UMAPScreenshot class="flex" />
+      </div>
+
+      <div class="row">
+        <UMAPFiltersTags />
+        <UMAPQuery />
+        <UMAPQueryComplex />
+
+        <div class="flex">
+          <UMAPAlphas />
+        </div>
+
+        <div class="flex">
+          <UMAPExport />
+        </div>
+      </div>
+
+      <UMAPTimeRangeOptions />
+      <UMAPTimeRangeSlider />
+    </div>
+
+    <div class="scatter">
+      <UMAPScatterPlotGL />
+    </div>
+  </div>
 
   <UMAPLegend />
-
-  <UMAPScatterPlotGL />
-
-  <div class="row">
-    <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
-    <UMAPScreenshot class="zoom" />
-  </div>
-
-  <div class="row">
-    <UMAPFilters />
-  </div>
-
-  <div class="row two-columns">
-    <UMAPQuery />
-    <UMAPAlphas />
-  </div>
-
-  <div class="row two-columns">
-    <UMAPQueryComplex />
-    <UMAPExport />
-  </div>
-
-  <UMAPTimeRangeOptions />
-  <UMAPTimeRangeSlider />
 </template>
 
 <style lang="scss" scoped>
+.container {
+  height: 100%;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
 .row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr) 11rem;
-  gap: 1rem;
-  padding-bottom: 1rem;
-}
-
-.zoom {
-  display: flex;
-}
-
-.two-columns {
-  display: grid;
-  grid-template-columns: 1fr repeat(2, 5rem);
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr) 11rem;
+  gap: 0.8rem;
+  justify-items: center;
   align-items: center;
+}
+
+.query-complex {
+  grid-column: 3 / span 2;
+}
+
+.flex {
+  display: flex;
+  width: 100%;
+  gap: 0.8rem;
+}
+
+.scatter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.float {
 }
 </style>

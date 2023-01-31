@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import {PauseOutline, PlayOutline, PlaySkipBackOutline, PlaySkipForwardOutline} from '@vicons/ionicons5';
 import dayjs, {Dayjs} from 'dayjs';
-import {NButton, NButtonGroup, NInputNumber, NSwitch, NTooltip} from 'naive-ui';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import {NButton, NButtonGroup, NDatePicker, NInputNumber, NSwitch, NTooltip} from 'naive-ui';
 import {computed, ComputedRef, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import {useEventListener} from '../composables/useEventListener';
@@ -9,6 +11,9 @@ import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {DATE_FORMAT} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import Button from './Button.vue';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const {isDisabled} = useUMAPStatus();
 const {config} = await useConfig();
@@ -20,6 +25,10 @@ const dateStart: ComputedRef<Dayjs> = computed(() => {
 
   if (UMAPTimeRangeStore.isAllSelected) {
     start = UMAPTimeRangeStore.min ?? 0;
+  }
+
+  if (timezoneName.value !== '') {
+    return dayjs(start * 1000).tz(timezoneName.value);
   }
 
   return dayjs(start * 1000);
@@ -129,11 +138,43 @@ function handleKeyboard(e: KeyboardEvent) {
 }
 
 useEventListener(document, 'keypress', handleKeyboard);
+
+function handleDateStartUpdate(t: number) {
+  UMAPTimeRangeStore.value = t / 1000;
+}
+
+const timeOffset: ComputedRef<number> = computed(() => {
+  if (timezoneName.value === '') {
+    return 0;
+  }
+
+  const getZoneValue = (zone: string) => Number(zone.replace('GMT', ''));
+
+  dayjs.tz.setDefault('Pacific/Tahiti');
+  const guessOffset = dayjs(0).tz(dayjs.tz.guess()).offsetName('short');
+  const targetOffset = dateStart.value.offsetName('short');
+
+  if (!guessOffset || !targetOffset) {
+    return 0;
+  }
+
+  const offset = getZoneValue(targetOffset) - getZoneValue(guessOffset);
+
+  return offset * 60 * 60 * 1000;
+});
+
+function transposeDateToZone(date: Dayjs): number {
+  return date.unix() * 1000 + timeOffset.value;
+}
+
+function printLocalizedDate(date: Dayjs): string {
+  return dayjs(transposeDateToZone(date)).format(DATE_FORMAT);
+}
 </script>
 
 <template>
-  <div>
-    <div class="container">
+  <div class="container">
+    <div class="grid">
       <n-switch
           v-model:value="UMAPTimeRangeStore.isAllSelected"
           :disabled="isDisabled"
@@ -144,26 +185,25 @@ useEventListener(document, 'keypress', handleKeyboard);
         </template>
       </n-switch>
 
-      <n-button-group size="small">
+      <n-button-group>
         <n-button
             v-for="button in durations"
             :disabled="uiDisabled"
+            size="tiny"
             @click="setWindowDuration(button.duration)"
         >
           {{ button.name }}
         </n-button>
       </n-button-group>
 
-      <div>
-        <n-input-number
-            v-model:value="UMAPTimeRangeStore.duration"
-            :disabled="UMAPTimeRangeStore.isAllSelected"
-            class="input"
-            size="tiny"
-        />
-      </div>
+      <n-input-number
+          v-model:value="UMAPTimeRangeStore.duration"
+          :disabled="UMAPTimeRangeStore.isAllSelected"
+          class="input"
+          size="tiny"
+      />
 
-      <div class="zoom">
+      <div class="transport-button">
         <n-tooltip trigger="hover">
           <template #trigger>
             <Button
@@ -175,12 +215,12 @@ useEventListener(document, 'keypress', handleKeyboard);
             </Button>
           </template>
           <span class="button-tooltip">
-            <span class="bold">P</span> – Skip backward
+            <span class="bold">P</span> – Backward
           </span>
         </n-tooltip>
       </div>
 
-      <div class="zoom">
+      <div class="transport-button">
         <n-tooltip trigger="hover">
           <template #trigger>
             <div>
@@ -208,7 +248,7 @@ useEventListener(document, 'keypress', handleKeyboard);
         </n-tooltip>
       </div>
 
-      <div class="zoom">
+      <div class="transport-button">
         <n-tooltip trigger="hover">
           <template #trigger>
             <Button
@@ -220,15 +260,32 @@ useEventListener(document, 'keypress', handleKeyboard);
             </Button>
           </template>
           <span class="button-tooltip">
-            <span class="bold">N</span> – Skip forward
+            <span class="bold">N</span> – Forward
           </span>
         </n-tooltip>
       </div>
 
-      <div class="dates">
-        <span>{{ dateStart.format(DATE_FORMAT) }}</span>
-        <span>{{ dateEnd.format(DATE_FORMAT) }}</span>
+      <div class="date-picker">
+        <n-tooltip placement="bottom" trigger="hover">
+          <template #trigger>
+            <n-date-picker
+                :disabled="uiDisabled"
+                :on-update:value="handleDateStartUpdate"
+                :value="transposeDateToZone(dateStart)"
+                size="tiny"
+                type="datetime"
+            />
+          </template>
+          <span class="button-tooltip">
+            <span class="bold">Date</span> start
+          </span>
+        </n-tooltip>
       </div>
+
+      <span class="date">
+        to {{ printLocalizedDate(dateEnd) }}
+      </span>
+
       <div class="timezone">
         {{ timezoneName }}
       </div>
@@ -238,9 +295,17 @@ useEventListener(document, 'keypress', handleKeyboard);
 
 <style lang="scss" scoped>
 .container {
-  display: grid;
-  grid-template-columns: auto auto auto auto auto auto 1fr auto;
+  display: flex;
   align-items: center;
+
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: auto auto auto repeat(3, 1rem) auto repeat(3, 1fr) auto;
+  align-items: center;
+  justify-items: center;
 
   gap: 0.8rem;
 
@@ -260,18 +325,44 @@ useEventListener(document, 'keypress', handleKeyboard);
 }
 
 .timezone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   font-style: italic;
+  font-size: 0.8rem;
+
+  transform: translateY(1px);
 }
 
-.dates {
+.date {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
 
   font-size: 0.8rem;
+
+  transform: translateY(1px);
+
+  @media screen and (min-width: 1000px) and (max-width: 1100px) {
+    font-size: 0.6rem;
+    white-space: nowrap;
+  }
+
+  @media screen and (min-width: 800px) and (max-width: 1000px) {
+    font-size: 0.5rem;
+    white-space: nowrap;
+
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 0.4rem;
+    white-space: nowrap;
+  }
 }
 
-.zoom {
-  width: 2.3rem;
+.transport-button {
+  width: 1.5rem;
 }
 
 .flex {
