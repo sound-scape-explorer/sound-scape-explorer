@@ -1,3 +1,12 @@
+# [5.17.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.16.0...v5.17.0) (2023-01-31)
+
+
+### Features
+
+* **Front/UMAP:** Add cycling scale for daily coloring ([208948f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/208948f27c631233bfb5788b44ac248a89677c16))
+* **Front/UMAP:** Displayed dates are unchanged unless `display_locale` is defined in Configuration ([80a5280](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/80a52807609cff18fcccf753b4328752e942a941))
+* **Front/UMAP:** Improve layout to maximize plot size + Add date picking to date start (time range) ([067c458](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/067c458d8ae84d73575b1578ce37bf2b3a844b30))
+
 # [5.16.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.15.0...v5.16.0) (2023-01-26)
 
 
