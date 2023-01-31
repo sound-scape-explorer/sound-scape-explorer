@@ -5,7 +5,7 @@ import {NSlider} from 'naive-ui';
 import {computed, ComputedRef, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
-import {API_ROUTES, DATE_FORMAT, SLIDER_LIMITS} from '../constants';
+import {API_ROUTES, SLIDER_LIMITS} from '../constants';
 import {selectionStore} from '../store/selection.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {mapRange} from '../utils/map-range';
@@ -148,16 +148,6 @@ const interests: ComputedRef<Interest[]> = computed(() => {
   return interests;
 });
 
-function formatTooltip(time: number): string {
-  if (!config) {
-    return time.toString();
-  }
-
-  const date = dayjs(time * 1000);
-
-  return date.format(DATE_FORMAT);
-}
-
 const zoomedSlider = ref<null | Slider>(null);
 
 function resetZoom() {
@@ -182,11 +172,11 @@ function toggleZoom(slider: Slider): void {
           :key="slider.key"
           v-model:value="UMAPTimeRangeStore.value"
           :disabled="UMAPTimeRangeStore.isAllSelected"
-          :format-tooltip="formatTooltip"
           :marks="slider.marks"
           :max="slider.max"
           :min="slider.min"
           :style="{ width: 100 / sliders.length + '%' }"
+          :tooltip="false"
           class="slider"
       />
     </div>

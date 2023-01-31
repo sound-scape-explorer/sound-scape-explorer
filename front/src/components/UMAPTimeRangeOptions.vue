@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import {PauseOutline, PlayOutline, PlaySkipBackOutline, PlaySkipForwardOutline} from '@vicons/ionicons5';
 import dayjs, {Dayjs} from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import {NButton, NButtonGroup, NDatePicker, NInputNumber, NSwitch, NTooltip} from 'naive-ui';
 import {computed, ComputedRef, ref, watch} from 'vue';
 import {useConfig} from '../composables/useConfig';
@@ -9,6 +11,9 @@ import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {DATE_FORMAT} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import Button from './Button.vue';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const {isDisabled} = useUMAPStatus();
 const {config} = await useConfig();
@@ -20,6 +25,10 @@ const dateStart: ComputedRef<Dayjs> = computed(() => {
 
   if (UMAPTimeRangeStore.isAllSelected) {
     start = UMAPTimeRangeStore.min ?? 0;
+  }
+
+  if (timezoneName.value !== '') {
+    return dayjs(start * 1000).tz(timezoneName.value);
   }
 
   return dayjs(start * 1000);
@@ -133,6 +142,34 @@ useEventListener(document, 'keypress', handleKeyboard);
 function handleDateStartUpdate(t: number) {
   UMAPTimeRangeStore.value = t / 1000;
 }
+
+const timeOffset: ComputedRef<number> = computed(() => {
+  if (timezoneName.value === '') {
+    return 0;
+  }
+
+  const getZoneValue = (zone: string) => Number(zone.replace('GMT', ''));
+
+  dayjs.tz.setDefault('Pacific/Tahiti');
+  const guessOffset = dayjs(0).tz(dayjs.tz.guess()).offsetName('short');
+  const targetOffset = dateStart.value.offsetName('short');
+
+  if (!guessOffset || !targetOffset) {
+    return 0;
+  }
+
+  const offset = getZoneValue(targetOffset) - getZoneValue(guessOffset);
+
+  return offset * 60 * 60 * 1000;
+});
+
+function transposeDateToZone(date: Dayjs): number {
+  return date.unix() * 1000 + timeOffset.value;
+}
+
+function printLocalizedDate(date: Dayjs): string {
+  return dayjs(transposeDateToZone(date)).format(DATE_FORMAT);
+}
 </script>
 
 <template>
@@ -234,7 +271,7 @@ function handleDateStartUpdate(t: number) {
             <n-date-picker
                 :disabled="uiDisabled"
                 :on-update:value="handleDateStartUpdate"
-                :value="dateStart.unix() * 1000"
+                :value="transposeDateToZone(dateStart)"
                 size="tiny"
                 type="datetime"
             />
@@ -246,7 +283,7 @@ function handleDateStartUpdate(t: number) {
       </div>
 
       <span class="date">
-        to {{ dateEnd.format(DATE_FORMAT) }}
+        to {{ printLocalizedDate(dateEnd) }}
       </span>
 
       <div class="timezone">
