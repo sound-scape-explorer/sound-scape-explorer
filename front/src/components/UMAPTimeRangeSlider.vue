@@ -175,47 +175,53 @@ function toggleZoom(slider: Slider): void {
 </script>
 
 <template>
-  <div v-if="!isDisabled" class="container">
-    <n-slider
-        v-for="slider in sliders"
-        :key="slider.key"
-        v-model:value="UMAPTimeRangeStore.value"
-        :disabled="UMAPTimeRangeStore.isAllSelected"
-        :format-tooltip="formatTooltip"
-        :marks="slider.marks"
-        :max="slider.max"
-        :min="slider.min"
-        :style="{ width: 100 / sliders.length + '%' }"
-        class="slider"
-    />
-  </div>
+  <div class="container">
+    <div v-if="!isDisabled" class="layer">
+      <n-slider
+          v-for="slider in sliders"
+          :key="slider.key"
+          v-model:value="UMAPTimeRangeStore.value"
+          :disabled="UMAPTimeRangeStore.isAllSelected"
+          :format-tooltip="formatTooltip"
+          :marks="slider.marks"
+          :max="slider.max"
+          :min="slider.min"
+          :style="{ width: 100 / sliders.length + '%' }"
+          class="slider"
+      />
+    </div>
 
-  <div v-if="!isDisabled" class="container">
-    <div
-        v-for="interest in interests"
-        class="interest"
-    >
+    <div v-if="!isDisabled" class="layer">
+      <div
+          v-for="interest in interests"
+          class="interest"
+      >
       <span
           v-for="value of interest.values"
           :style="{background: value ? 'red' : 'gainsboro'}"
           class="interest__pixel"
       />
+      </div>
     </div>
-  </div>
 
-  <div v-if="!isDisabled" class="container">
-    <Button
-        v-for="slider in sliders"
-        :handle-click="() => toggleZoom(slider)"
-        class="zoom"
-    >
-      <search-outline />
-    </Button>
+    <div v-if="!isDisabled" class="layer zoom">
+      <Button
+          v-for="slider in sliders"
+          :handle-click="() => toggleZoom(slider)"
+      >
+        <search-outline />
+      </Button>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .container {
+  display: flex;
+  width: 100%;
+}
+
+.layer {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -244,6 +250,13 @@ function toggleZoom(slider: Slider): void {
 }
 
 .zoom {
-  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  padding: 0 0.5rem;
+
+  transform: translateY(-19px);
 }
 </style>

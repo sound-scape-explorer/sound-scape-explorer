@@ -78,8 +78,8 @@ const moreClasses = computed<string>(() => {
   flex-direction: column;
 
   position: absolute;
-  top: 1rem;
-  right: 2rem;
+  bottom: 1rem;
+  right: 1rem;
 
   width: 20rem;
 

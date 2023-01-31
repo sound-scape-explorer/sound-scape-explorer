@@ -23,7 +23,13 @@ const hasText = typeof text !== 'undefined';
 
 <template>
   <div class="container">
-    <n-button :disabled="disabled" :loading="loading" class="zoom" @click="handleClick">
+    <n-button
+        :disabled="disabled"
+        :loading="loading"
+        class="zoom"
+        size="tiny"
+        @click="handleClick"
+    >
       <template v-if="hasChildren" #icon>
         <n-icon>
           <slot />

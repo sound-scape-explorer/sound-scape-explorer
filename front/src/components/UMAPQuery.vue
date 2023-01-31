@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import {ref, watch} from 'vue';
-import {NIcon, NInput} from 'naive-ui';
 import {ColorWandOutline} from '@vicons/ionicons5';
+import {NIcon, NInput} from 'naive-ui';
+import {ref, watch} from 'vue';
 import {useTimeout} from '../composables/useTimeout';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPQueryStore} from '../store/UMAP-query.store';
 import {getArraysIntersection} from '../utils/get-arrays-intersection';
-import {useUMAPStatus} from '../composables/useUMAPStatus';
 
 const input = ref<string>('');
 const {isDisabled} = useUMAPStatus();
@@ -82,7 +82,13 @@ watch(input, () => {
 </script>
 
 <template>
-  <n-input v-model:value="input" :disabled="isDisabled" placeholder="Query..." type="text">
+  <n-input
+      v-model:value="input"
+      :disabled="isDisabled"
+      placeholder="Query..."
+      size="tiny"
+      type="text"
+  >
     <template #suffix>
       <n-icon class="icon">
         <color-wand-outline />
