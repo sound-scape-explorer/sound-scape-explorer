@@ -12,6 +12,26 @@ from processing.errors.ExtractorDataLoaderAudioFileNotFoundError import \
 
 
 class ExtractorDataLoader:
+    """The Data Loader responsible for handling a single file features
+    extraction.
+
+    Attributes:
+        __input_path: The path to source file.
+        __output_path: The path to target file.
+        __frequency_range: The frequency range in Hz. Example `[1000, 2000]`
+        __expected_sample_rate: The sample rate in Hz.
+        __next_parameter_index: I don't know what this is for. Heritage from
+            legacy code. TODO: Clean.
+        __timestamp_start: The internal track of time for console outputs.
+            TODO: Replace with `Timer` class.
+        __wav_data: The data retrieved from loading the audio file with
+            torchaudio.
+        __sample_rate: The current sample rate in Hz.
+
+    TODO:
+        Merge `ExtractorDataLoader` and `Extractor` for better humanly
+        separation of concerns.
+    """
     __input_path: PosixPath
     __output_path: PosixPath
     __frequency_range: List[int]

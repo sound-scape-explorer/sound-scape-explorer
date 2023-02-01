@@ -177,5 +177,5 @@ class ExcelColumn:
 
             yield name, value
 
-    def get_dict(self):
+    def get_dict(self) -> Dict:
         return dict(self.__iterate())

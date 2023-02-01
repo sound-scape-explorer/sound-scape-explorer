@@ -4,6 +4,7 @@ from processing.types.ConfigVariablesInterface import ConfigVariablesInterface
 
 
 class ConfigInterface(TypedDict):
+    """The shape of exported configuration file."""
     variables: ConfigVariablesInterface
     bands: Dict[str, str]
     files: Dict[str, Tuple[str, str, str, List[str]]]
