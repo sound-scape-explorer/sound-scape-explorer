@@ -1,19 +1,48 @@
-from typing import List
+from typing import Dict, List, Union
 
 from openpyxl.reader.excel import load_workbook
 from openpyxl.utils import get_column_letter
+from openpyxl.workbook import Workbook
+from openpyxl.worksheet.worksheet import Worksheet
 
 from processing.utils.add_unique_value_only_to_array import \
     add_unique_value_only_to_array
 
 
 class ExcelOpen:
+    """The ExcelOpen configuration file using `openpyxl`.
+
+    Cherry-pick cells, append and write to current file.
+
+    Attributes:
+        __path: The path to configuration file.
+        __workbook: The loaded workbook.
+        __worksheet: The current worksheet.
+        __max_row: The current sheet's max row count.
+
+        columns: The dictionary of all Excel columns.
+            Keys are column cell content.
+            Values are dictionaries made of:
+                - The `letter` key with its corresponding value.
+                - The `number` key with its corresponding value.
+
+        meta_properties: The list of meta properties.
+        meta_values: The list of meta values.
+        meta_values_uniques: The list of meta values with no duplicates.
+    """
+    __path: str
+    __workbook: Workbook
+    __worksheet: Worksheet
+    __max_row: int
+    columns: Dict[str, Dict[str, Union[str, int]]]
     meta_properties: List[str]
+    meta_values: List[List[str]]
+    meta_values_uniques: List[List[str]]
 
     def __init__(
         self,
         path: str,
-    ):
+    ) -> None:
         self.__path = path
 
         self.__open()
