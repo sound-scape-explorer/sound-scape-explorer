@@ -14,6 +14,20 @@ from processing.types.IndicatorJSONType import IndicatorJSONType
 
 
 class BaseBuilderIndicator:
+    """The builder for indicator base to inherit from.
+
+    Children must implement `__processor` method.
+
+    Attributes:
+        __name: The indicator name.
+        __processor: The indicator processor method, responsible for
+            generating the indicator values.
+        __audio_files: The list of source audio files to iterate over and
+            generate indicator from.
+            TODO: Feed time grouped audio features instead of source audio
+                files.
+        __values: The list of generated values to export later.
+    """
     __name: Indicator
     __processor: BuilderProcessorInterface
     __audio_files: AudioFiles
@@ -41,7 +55,6 @@ class BaseBuilderIndicator:
 
         self.__prepare()
         self.__process()
-        # self.export()
 
     def __print_path(self, p):
         print(f'---')
@@ -88,7 +101,5 @@ class BaseBuilderIndicator:
         f.write(string)
 
     def __processor(self, sound: numpy.ndarray, sample_rate: int) -> float:
-        """
-        Implement in children.
-        """
+        """Implement in children."""
         pass

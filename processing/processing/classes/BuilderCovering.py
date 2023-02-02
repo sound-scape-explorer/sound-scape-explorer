@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import Any, List, Union
 
 import numpy
 
@@ -10,7 +11,33 @@ from processing.utils.timegroup_loaded_features import timegroup_loaded_features
 
 
 class BuilderCovering:
-    def __init__(self, plot, show):
+    """The builder for coverings.
+
+    Will load two groups of audio features and compare them together using
+    distance of means.
+
+    TODO: Reduce global complexity.
+    TODO: Merge redundant code with other `Builders`.
+
+    Attributes:
+         __plot: The user wants to use `matplotlib` to generate a png image.
+            TODO: Obsolete?
+        __show: The user wants to open the generated image.
+        __config: The configuration payload as named tuple.
+            TODO: Improve interfacing.
+        __sites: The list of all sites.
+            TODO: Why transform value coming from Config?
+    """
+    __plot: bool
+    __show: bool
+    __config: Union[tuple, Any]
+    __sites: List[str]
+
+    def __init__(
+        self,
+        plot: bool,
+        show: bool,
+    ) -> None:
         self.__plot = plot
         self.__show = show
 

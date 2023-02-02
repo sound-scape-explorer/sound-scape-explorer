@@ -6,6 +6,12 @@ from processing.enum.Indicator import Indicator
 
 
 class BuilderIndicatorFrequencyEntropy(BaseBuilderIndicator):
+    """The builder for indicator: Frequency Entropy.
+
+    See Also:
+        https://scikit-maad.github.io/generated/maad.features.frequency_entropy.html
+    """
+
     def __init__(self):
         super().__init__(
             Indicator.FrequencyEntropy,

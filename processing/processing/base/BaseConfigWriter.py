@@ -1,14 +1,34 @@
 import pathlib
-from typing import Any, List
+from pathlib import Path
+from typing import Any, Dict, List, Union
 
 import openpyxl.reader.excel
 import openpyxl.utils
 import pandas
+from openpyxl.workbook import Workbook
+from openpyxl.worksheet.worksheet import Worksheet
 
 from processing.classes.Config import Config
 
 
 class BaseConfigWriter:
+    """The configuration writer base to inherit from.
+
+    Children must implement `.write()` method.
+
+    Attributes:
+        __config: The user configuration.
+        __columns: The Excel columns.
+        __path: The path to Excel configuration file.
+        __workbook: The Workbook object loaded with `openpyxl`.
+        __worksheet: The currently selected worksheet.
+    """
+    __config: Config
+    __columns: Dict[str, Dict[str, Union[str, int]]]
+    __path: Path
+    __workbook: Workbook
+    __worksheet: Worksheet
+
     def __new__(
         cls,
         filename: str,
@@ -74,8 +94,7 @@ class BaseConfigWriter:
             pass
 
     def write(self):
-        """
-        Implement in children.
+        """Implement in children.
 
         Call `.save()` method at the end.
         """

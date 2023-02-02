@@ -6,6 +6,12 @@ from processing.enum.Indicator import Indicator
 
 
 class BuilderIndicatorAcousticDiversityIndex(BaseBuilderIndicator):
+    """The builder for indicator: Acoustic Diversity Index.
+
+    See Also:
+        https://scikit-maad.github.io/generated/maad.features.acoustic_diversity_index.html
+    """
+
     def __init__(self):
         super().__init__(
             Indicator.AcousticDiversityIndex,

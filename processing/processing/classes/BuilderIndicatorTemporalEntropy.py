@@ -6,6 +6,12 @@ from processing.enum.Indicator import Indicator
 
 
 class BuilderIndicatorTemporalEntropy(BaseBuilderIndicator):
+    """The builder for indicator: Temporal Entropy.
+
+    See Also:
+        https://scikit-maad.github.io/generated/maad.features.temporal_entropy.html
+    """
+
     def __init__(self):
         super().__init__(
             Indicator.TemporalEntropy,

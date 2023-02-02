@@ -1,26 +1,44 @@
 import pathlib
-from typing import Any, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from processing.classes.Config import Config
 from processing.constants import FEATURE_BASE
 from processing.errors.AudioFilesPathNotFoundError import \
-    (
-    AudioFilesPathNotFoundError,
-)
+    AudioFilesPathNotFoundError
 from processing.utils.get_name_and_extension_from_filepath import \
     get_name_and_extension_from_filepath
 
 
 class AudioFiles:
+    """The audio files retrieved from user configuration file.
+
+    Will verify path existence and allow to iterate over the audio files.
+
+    TODO: Remove overlap of concerns with `Filepaths`
+
+    Attributes:
+        __path: The path inherited from legacy code.
+            TODO: Seems unused. Remove.
+        __features_extension: The request file extension when generating
+            output paths.
+            TODO: Seems unused. Remove.
+        __config: The user configuration.
+        __base_path: The base path where source audio files are located.
+        __expected_sample_rate: The expected sample rate from user settings.
+            TODO: Seems not necessary to handle this. Remove.
+    """
     __path: Optional[str] = '@feature_base'
     __features_extension: Optional[str] = '.npz'
     __config: Union[tuple, Any]
+    __base_path: str
+    __expected_sample_rate: int
+    files: Dict[str, Any]
 
     def __init__(
         self,
         path: Optional[str] = '@feature_base',
         features_extension: Optional[str] = '.npz',
-    ):
+    ) -> None:
         self.__path = path
         self.__features_extension = features_extension
 
@@ -57,6 +75,7 @@ class AudioFiles:
                 name, extension = get_name_and_extension_from_filepath(filepath)
 
                 base_path = pathlib.Path(FEATURE_BASE)
+
                 path = base_path.joinpath(
                     band,
                     name + extension + self.__features_extension

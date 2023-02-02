@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Indicator(Enum):
+    """The enumeration of all available indicators."""
     AcousticComplexityIndex = 'ACI'
     AcousticDiversityIndex = 'ADI'
     BioacousticsIndex = 'BI'

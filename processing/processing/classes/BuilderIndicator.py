@@ -1,3 +1,5 @@
+from typing import List, Type, Union
+
 from processing.classes.BuilderIndicatorAcousticComplexityIndex import \
     BuilderIndicatorAcousticComplexityIndex
 from processing.classes.BuilderIndicatorAcousticDiversityIndex import \
@@ -18,12 +20,35 @@ from processing.classes.BuilderIndicatorTemporalMedian import \
 
 
 class BuilderIndicator:
-    """
-    List all indicators builders
-    """
+    """The parent for all builders dedicated to "indicators".
 
-    def __init__(self):
-        # TODO: Add builder selection from configuration
+    Registers all available indicator builders. Then, instance and call
+    `.export()` on each.
+
+    TODO: These indicators will be computed on grouped audio features and not
+        source audio files' features.
+
+    TODO: Add builder selection from user configuration.
+
+    Attributes:
+        __indicators: The list of all available indicator builders.
+    """
+    __indicators: List[
+        Type[
+            Union[
+                BuilderIndicatorAcousticComplexityIndex,
+                BuilderIndicatorAcousticDiversityIndex,
+                BuilderIndicatorBioacousticsIndex,
+                BuilderIndicatorFrequencyEntropy,
+                BuilderIndicatorNormalizedDifferenceSoundscapeIndex,
+                BuilderIndicatorTemporalEntropy,
+                BuilderIndicatorTemporalLeq,
+                BuilderIndicatorTemporalMedian,
+            ]
+        ]
+    ]
+
+    def __init__(self) -> None:
         self.__register()
         self.__run()
 

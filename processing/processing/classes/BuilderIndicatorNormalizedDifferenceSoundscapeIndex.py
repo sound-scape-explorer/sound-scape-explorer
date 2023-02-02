@@ -6,6 +6,12 @@ from processing.enum.Indicator import Indicator
 
 
 class BuilderIndicatorNormalizedDifferenceSoundscapeIndex(BaseBuilderIndicator):
+    """The builder for indicator: Normalized Difference Soundscape Index.
+
+    See Also:
+        https://scikit-maad.github.io/generated/maad.features.soundscape_index.html#maad.features.soundscape_index
+    """
+
     def __init__(self):
         super().__init__(
             Indicator.NormalizedDifferenceSoundscapeIndex,
