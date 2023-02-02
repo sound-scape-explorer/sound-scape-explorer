@@ -19,6 +19,22 @@ from processing.utils.prevent_keyboard_interrupt import PreventKeyboardInterrupt
 
 
 class Extractor:
+    """The extractor to get audio features from.
+
+    Forward every audio file in configuration to VGGish NN model then saves
+    the results to numpy compressed archives.
+
+    Attributes:
+        __force: The caller wants to force overwrites.
+        __skip_existing: The caller wants to skip existing files.
+        __done: The count of extracted files.
+        __total: The total number of files to extract.
+        __input_path: The current path to the source file to extract from.
+        __output_path: The current target path to write the output file.
+        __frequency_range: The current frequency range in Hz.
+            Example `[1000, 5000]`
+        __expected_sample_rate: The current expected sample rate in Hz.
+    """
     __force: bool
     __skip_existing: bool
     __done: int
@@ -28,7 +44,18 @@ class Extractor:
     __frequency_range: List[int] = []
     __expected_sample_rate: int
 
-    def __init__(self, force: bool, skip_existing: bool):
+    def __init__(
+        self,
+        force: bool,
+        skip_existing: bool,
+    ) -> None:
+        """Initialized `Extractor` with choices from the user whether to
+        force overwrites and/or skip existing files.
+
+        Args:
+            force: The caller wants to force overwrites.
+            skip_existing: The caller wants to skip existing files.
+        """
         self.__force = force
         self.__skip_existing = skip_existing
 

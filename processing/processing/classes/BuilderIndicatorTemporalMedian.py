@@ -6,6 +6,12 @@ from processing.enum.Indicator import Indicator
 
 
 class BuilderIndicatorTemporalMedian(BaseBuilderIndicator):
+    """The builder for indicator: Temporal Median.
+
+    See Also:
+        https://scikit-maad.github.io/generated/maad.features.temporal_median.html
+    """
+
     def __init__(self):
         super().__init__(
             Indicator.TemporalMedian,

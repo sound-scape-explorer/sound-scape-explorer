@@ -10,15 +10,43 @@ from processing.utils.convert_dict_to_named_tuple import \
 
 
 class ExcelColumn:
-    __allow_duplicate: bool
+    """The ExcelColumn responsible for digesting `pandas` Excel object and
+    extracting cell content.
+
+    Attributes:
+        __excel: The `pandas` Excel object.
+
+        __key: The actual content cell referenced as `key`.
+            Also used as "prefix".
+
+        values: The list of combined strings with shape of `yield_type:type`.
+            Example: `bands:L` for `umaps` `__key`
+
+        __yield_type: The yield type. Acting as key for `__types`.
+            TODO: Can be reduced in complexity with `__types`.
+
+        __has_no_prefix: Whether `values` have prefixes or not.
+
+        __allow_duplicate: The caller wants to allow duplicate columns.
+
+        __all_sites: The generated list of all sites if user leaves cell empty.
+
+        __types: The list containing strings or objects used to convert raw
+            data by "digest" methods.
+            TODO: Can be reduced in complexity with `__yield_type`.
+
+        __payload: The object containing already yielded content.
+            TODO: Can be reduced in size.
+    """
     __excel: Excel
-    __has_no_prefix: bool
     __key: str
-    __payload: Dict[Any, Any]
-    __types: List[Any]
     values: Optional[List[str]]
     __yield_type: Optional[str]
+    __has_no_prefix: bool
+    __allow_duplicate: bool
     __all_sites: Optional[List[str]]
+    __types: List[Any]
+    __payload: Dict[Any, Any]
 
     def __init__(
         self,
@@ -28,8 +56,8 @@ class ExcelColumn:
         yield_type: Optional[str] = None,
         has_no_prefix: Optional[bool] = False,
         allow_duplicate: Optional[bool] = False,
-        all_sites: Optional[List[str]] = None
-    ):
+        all_sites: Optional[List[str]] = None,
+    ) -> None:
         self.__excel = excel
         self.__key = key
         self.values = values
@@ -177,5 +205,5 @@ class ExcelColumn:
 
             yield name, value
 
-    def get_dict(self):
+    def get_dict(self) -> Dict:
         return dict(self.__iterate())

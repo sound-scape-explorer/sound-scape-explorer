@@ -1,5 +1,5 @@
 from json import dumps
-from typing import List
+from typing import Dict, List, Tuple
 
 from processing.classes.Excel import Excel
 from processing.classes.ExcelColumn import ExcelColumn
@@ -11,6 +11,7 @@ from processing.constants import (
     GENERATED_BASE,
     OTHER_BASE,
 )
+from processing.types.ConfigVariablesInterface import ConfigVariablesInterface
 from processing.utils.convert_dict_to_named_tuple import \
     convert_dict_to_named_tuple
 from processing.utils.read_version_from_package import read_version_from_package
@@ -18,13 +19,73 @@ from processing.utils.singleton_meta import SingletonMeta
 
 
 class Config(metaclass=SingletonMeta):
+    """The user configuration file.
+
+    Attributes:
+        __excel: The Excel configuration file inherited from legacy code.
+            Used to read only with `pandas` library.
+
+        __excel_open: The Excel configuration file using `openpyxl`.
+            Used to cherry-pick cells, append and write to current file.
+
+        variables: The user global settings.
+
+        files: The dictionary of all files referenced in the Excel file.
+            Keys are audio files' paths.
+            Values are tuples made of:
+                - The audio file path.
+                - The date and time.
+                - The tags.
+                - N lists of meta values. TODO: Type this correctly.
+
+        __all_sites: The list of all sites (all files).
+            Used if user ignores site configuration.
+            TODO: Perfectible. Separate from `Config` concern.
+
+        bands: The dictionary containing frequency ranges in Hz.
+            Keys are band names.
+            Values are strings separated by `-` describing frequency ranges.
+
+        umaps: The dictionary containing UMAPs.
+            Keys are integration names.
+            Values are tuples made of:
+                - The integration value in seconds.
+                - The list of selected frequency range keys.
+                - The list of files to process.
+                - The list of date and time ranges.
+
+        ranges: The dictionary of date and time ranges.
+            Keys are date and time range names.
+            Values are lists of 2 strings: beginning and ending dates.
+
+        string_map: The dictionary of string maps.
+            TODO: Is this still used?
+
+        app_version: The current application version.
+
+        integrations: The list of integration values.
+
+    TODO:
+        Unnecessary data is passed to exported files.
+        Do not refactor but rewrite from scratch.
+    """
+    __excel: Excel
+    __excel_open: ExcelOpen
+    variables: ConfigVariablesInterface
+    files: Dict[str, Tuple[str, str, str, List[str]]]
+    __all_sites: List[str]
+    bands: Dict[str, str]
+    umaps: Dict[str, Tuple[int, List[str], List[str], List[str]]]
+    ranges: Dict[str, List[str]]
+    string_map: Dict[str, List[str]]
+    app_version: str
     integrations: List[int] = []
 
     def __init__(
         self,
         path: str = 'config.xlsx',
         sheet: int = 0,
-    ):
+    ) -> None:
         self.__excel = Excel(path, sheet)
         self.__excel_open = ExcelOpen(path)
 

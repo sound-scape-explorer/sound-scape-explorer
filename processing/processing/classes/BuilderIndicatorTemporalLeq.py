@@ -6,6 +6,12 @@ from processing.enum.Indicator import Indicator
 
 
 class BuilderIndicatorTemporalLeq(BaseBuilderIndicator):
+    """The builder for indicator: Temporal Leq.
+
+    See Also:
+        https://scikit-maad.github.io/generated/maad.features.temporal_entropy.html
+    """
+
     def __init__(self):
         super().__init__(
             Indicator.TemporalLeq,

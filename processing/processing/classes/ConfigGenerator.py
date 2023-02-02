@@ -6,7 +6,30 @@ from processing.utils.write_column_to_excel import write_column_to_excel
 
 
 class ConfigGenerator:
-    def __init__(self, path: str = 'config.xlsx'):
+    """The configuration generator.
+
+    Use this to populate the Excel configuration file with data retrieved from
+    filenames.
+
+    Attributes:
+        __path: The relative path to existing Excel configuration file on disk.
+
+    Examples:
+        With an example filename of `POST_CerBra_alarm_1_a_SPRING.wav`,
+        we can get the following data:
+
+            - The path: `./audio/POST_CerBra_alarm_1_a_SPRING.wav`
+                ==> Will write to column `files`
+            - The file timestamp: `20210101_0100`
+                ==> Will write to column `files_start`
+            - The meta data: ['POST', 'CerBra', 'alarm', 1, 'a', 'SPRING']
+                ==> Will write to columns `files_META_PROPERTY`
+    """
+
+    def __init__(
+        self,
+        path: str = 'config.xlsx',
+    ) -> None:
         self.__path = path
 
         self.__open()

@@ -6,6 +6,12 @@ from processing.enum.Indicator import Indicator
 
 
 class BuilderIndicatorBioacousticsIndex(BaseBuilderIndicator):
+    """The builder for indicator: Bioacoustics Index.
+
+    See Also:
+        https://scikit-maad.github.io/generated/maad.features.bioacoustics_index.html
+    """
+
     def __init__(self):
         super().__init__(
             Indicator.BioacousticsIndex,

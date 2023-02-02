@@ -1,8 +1,9 @@
 import json
 import pathlib
-from typing import List
+from typing import Any, List, Type, Union
 
 import numpy
+from umap import UMAP
 
 from processing.classes.Config import Config
 from processing.utils.generate_dataset_label import generate_dataset_label
@@ -12,7 +13,36 @@ from processing.utils.timegroup_loaded_features import timegroup_loaded_features
 
 
 class BuilderUMAP:
-    def __init__(self, plot, show):
+    """The builder for UMAPs.
+
+    Will load grouped audio features depending on user settings in order to
+    reduce the input of 128 dimensions with the Uniform Manifold
+    Approximation and Projection.
+
+    The requested number of dimensions to approximate to is currently 2.
+
+    TODO: Reduce global complexity.
+    TODO: Add approximation to 3 dimensions (for future 3D plotting).
+
+    Attributes:
+        __plot: The user wants to use `matplotlib` to generate a png image.
+            TODO: Obsolete?
+        __show: The user wants to open the generated image.
+        __config: The configuration payload as named tuple.
+            TODO: Improve interfacing.
+        __umap: The UMAP class from `umap` external library.
+            TODO: List as project dependencies.
+    """
+    __plot: bool
+    __show: bool
+    __config: Union[tuple, Any]
+    __umap: Type[UMAP]
+
+    def __init__(
+        self,
+        plot: bool,
+        show: bool,
+    ) -> None:
         self.__plot = plot
         self.__show = show
 

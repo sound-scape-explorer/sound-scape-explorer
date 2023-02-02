@@ -1,7 +1,8 @@
-from typing import TypedDict
+from typing import TypedDict, Union
 
 
 class ConfigVariablesInterface(TypedDict):
+    """The shape of `variables` object inside exported configuration file."""
     audio_base: str
     audio_base_cluster: str
     audio_expected_sample_rate: str
@@ -16,4 +17,4 @@ class ConfigVariablesInterface(TypedDict):
     display_locale: str
     integration_seconds: str
     nearest_radiuses: str
-    umap_random: str
+    umap_random: Union[str, None]

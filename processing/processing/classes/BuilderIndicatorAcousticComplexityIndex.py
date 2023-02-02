@@ -6,6 +6,12 @@ from processing.enum.Indicator import Indicator
 
 
 class BuilderIndicatorAcousticComplexityIndex(BaseBuilderIndicator):
+    """The builder for indicator: Acoustic Complexity Index.
+
+    See Also:
+        https://scikit-maad.github.io/generated/maad.features.acoustic_complexity_index.html#maad.features.acoustic_complexity_index
+    """
+
     def __init__(self):
         super().__init__(
             Indicator.AcousticComplexityIndex,

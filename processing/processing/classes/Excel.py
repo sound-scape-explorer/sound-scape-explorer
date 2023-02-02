@@ -1,20 +1,32 @@
 import pathlib
 from pathlib import Path
 
-from pandas import pandas
+from pandas import DataFrame, ExcelFile, pandas
 
 from processing.errors.ExcelPathNotFoundError import ExcelPathNotFoundError
 
 
 class Excel:
+    """The Excel configuration file.
+
+    Read only with `pandas`.
+
+    Attributes:
+        path: The path to configuration file.
+        __sheet: The name of sheet to parse from.
+        __file: The ExcelFile object from `pandas`.
+        table: The DataFrame after parsing with `pandas`.
+    """
     path: str
     __sheet: int
+    __file: ExcelFile
+    table: DataFrame
 
     def __init__(
         self,
         path: str,
         sheet: int,
-    ):
+    ) -> None:
         self.path = path
         self.__sheet = sheet
 
