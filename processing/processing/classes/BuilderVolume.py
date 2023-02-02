@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import Any, List, Union
 
 import numpy
 
@@ -10,7 +11,37 @@ from processing.utils.timegroup_loaded_features import timegroup_loaded_features
 
 
 class BuilderVolume:
-    def __init__(self, plot, show):
+    """The builder for volumes.
+
+    Depending on time range, integration value, frequency band and sites,
+    the builder will load audio features (grouped by integration value) in order
+    to compute statistics and metrics.
+
+    The current computed metrics are:
+        - `sumvar`
+        - `sumstd`
+        - `logprodspan`
+
+    TODO: Reduce global complexity.
+    TODO: Add indicators to computed metrics.
+
+    Attributes:
+        __plot: The user wants to use `matplotlib` to generate a png image.
+        __show: The user wants to open the generated image.
+        __config: The configuration payload as named tuple.
+            TODO: Improve interfacing.
+        __sites: The list of sites (aggregation of multiple files).
+    """
+    __plot: bool
+    __show: bool
+    __config: Union[tuple, Any]
+    __sites: List[str]
+
+    def __init__(
+        self,
+        plot: bool,
+        show: bool,
+    ) -> None:
         self.__plot = plot
         self.__show = show
 
@@ -34,6 +65,7 @@ class BuilderVolume:
 
             for band in self.__config.bands.keys():
                 print('... ... BAND', band)
+
                 infos = {
                     'integration': integration,
                     'band': band,
@@ -42,6 +74,7 @@ class BuilderVolume:
 
                 for range_name in self.__config.ranges.keys():
                     print('... ... ... RANGE', range_name)
+
                     r = self.__config.ranges[range_name]
 
                     for site in self.__sites:

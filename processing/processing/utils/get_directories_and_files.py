@@ -1,7 +1,8 @@
 import os
+from typing import List, Tuple
 
 
-def get_directories_and_files(path: str) -> [str, str]:
+def get_directories_and_files(path: str) -> Tuple[List[str], List[str]]:
     my_directories = []
     my_files = []
 

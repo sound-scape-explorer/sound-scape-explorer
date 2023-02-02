@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import Any, List, Union
 
 from processing.classes.Config import Config
 from processing.utils.generate_dataset_label import generate_dataset_label
@@ -9,7 +10,23 @@ from processing.utils.timegroup_loaded_features import timegroup_loaded_features
 
 
 class BuilderFeature:
-    def __init__(self):
+    """The builder for features.
+
+    This will load and group 1 second based audio features, then write them
+    to disk as JSON files.
+
+    TODO: Code for loading, grouping following user settings can be merged
+        between all `Builders`.
+
+    Attributes:
+        __config: The configuration payload as named tuple.
+            TODO: Improve interfacing.
+        __sites: The list of sites (aggregation of multiple files).
+    """
+    __config: Union[tuple, Any]
+    __sites: List[str]
+
+    def __init__(self) -> None:
         self.__prepare()
         self.__process()
 
