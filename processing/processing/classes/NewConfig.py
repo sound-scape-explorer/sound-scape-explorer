@@ -359,45 +359,60 @@ class NewConfig(metaclass=SingletonMeta):
 
         self.__storage.create_bands(bands, bands_frequencies)
 
-    def __read_umaps(self) -> None:
-        umaps = self.__excel_table[ExcelColumn.umaps.value]
+    def __read_umaps_integration(self, umap_index: int) -> int:
         umaps_integration = self.__excel_table[
             ExcelColumn.umaps_integration.value
         ]
-        umaps_bands = self.__excel_table[ExcelColumn.umaps_bands.value]
-        umaps_ranges = self.__excel_table[ExcelColumn.umaps_ranges.value]
-        umaps_sites = self.__excel_table[ExcelColumn.umaps_sites.value]
 
+        integration = umaps_integration[umap_index]
+
+        if self.__is_nan(integration):
+            raise ValueError(f'`umaps_integration` is not defined.')
+
+        return int(integration)
+
+    def __read_umaps_bands(self, umap_index: int) -> List[str]:
+        umaps_bands = self.__excel_table[ExcelColumn.umaps_bands.value]
+        bands = umaps_bands[umap_index]
+
+        if self.__is_nan(bands):
+            raise ValueError(f'`umaps_bands` is not defined.')
+
+        bands = [band for band in bands.split(',')]
+
+        return bands
+
+    def __read_umaps_ranges(self, umap_index: int) -> List[str]:
+        umaps_ranges = self.__excel_table[ExcelColumn.umaps_ranges.value]
+        ranges = umaps_ranges[umap_index]
+
+        if self.__is_nan(ranges):
+            raise ValueError(f'`umaps_ranges` is not defined.')
+
+        ranges = [r for r in ranges.split(',')]
+
+        return ranges
+
+    def __read_umaps_sites(self, umap_index: int) -> List[str]:
+        umaps_sites = self.__excel_table[ExcelColumn.umaps_sites.value]
+        sites = umaps_sites[umap_index]
+
+        if self.__is_nan(sites):
+            sites = self.__all_sites
+        else:
+            sites = [s for s in sites.split(',')]
+
+        return sites
+
+    def __read_umaps(self) -> None:
+        umaps = self.__excel_table[ExcelColumn.umaps.value]
         index_by_umaps = self.__get_index_map(umaps)
 
         for umap, index in index_by_umaps.items():
-            integration = umaps_integration[index]
-
-            if self.__is_nan(integration):
-                raise ValueError(f'`umaps_integration` is not defined.')
-            else:
-                integration = int(integration)
-
-            bands = umaps_bands[index]
-
-            if self.__is_nan(bands):
-                raise ValueError(f'`umaps_bands` is not defined.')
-            else:
-                bands = [b for b in bands.split(',')]
-
-            ranges = umaps_ranges[index]
-
-            if self.__is_nan(ranges):
-                raise ValueError(f'`umaps_ranges` is not defined.')
-            else:
-                ranges = [r for r in ranges.split(',')]
-
-            sites = umaps_sites[index]
-
-            if self.__is_nan(sites):
-                sites = self.__all_sites
-            else:
-                sites = [s for s in sites.split(',')]
+            integration = self.__read_umaps_integration(index)
+            bands = self.__read_umaps_bands(index)
+            ranges = self.__read_umaps_ranges(index)
+            sites = self.__read_umaps_sites(index)
 
             self.__umaps[umap] = {
                 'integration': integration,

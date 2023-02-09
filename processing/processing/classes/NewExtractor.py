@@ -29,7 +29,6 @@ class NewExtractor:
     __expected_sample_rate: int = __config.get_expected_sample_rate()
     __bands: ConfigBands = __config.get_bands()
     __features_by_band: Features = {}
-    __current_band: str
     __model: VGGish
 
     def __init__(self) -> None:
@@ -76,8 +75,6 @@ class NewExtractor:
 
     def __iterate_files_over_bands(self) -> None:
         for band, frequencies in self.__bands.items():
-            self.__current_band = band
-
             print(f'==> New band: {band} {frequencies} Hz')
 
             self.__load_model(frequencies)

@@ -30,8 +30,9 @@ class NewFeatureGrouper:
         return TIME_DELTA_MS * len(features)
 
     def __get_range_timestamps(self, range_index: int) -> Tuple[int, int]:
-        range_timestamps: Tuple[int, int] = self.__ranges_timestamps[
-            range_index]
+        range_timestamps: Tuple[int, int] = \
+            self.__ranges_timestamps[range_index]
+
         start, end = range_timestamps
 
         return start, end
@@ -96,21 +97,20 @@ class NewFeatureGrouper:
             grouped_bin = (chunk_timestamp - range_start) // integration
             group_bins.append(grouped_bin)
 
-        selected_chunks_indexes = numpy.unique(group_bins, return_index=True)[
-            1]
+        chunks_slice_positions = numpy.unique(group_bins, return_index=True)[1]
 
         groups_timestamps = []
         groups_starts = []
         groups_ends = []
 
-        for group_index, chunk_index in enumerate(selected_chunks_indexes):
+        for group_index, chunk_index in enumerate(chunks_slice_positions):
             group_timestamp = range_start + \
                               group_bins[chunk_index] * integration
 
-            if group_index == len(selected_chunks_indexes) - 1:
+            if group_index == len(chunks_slice_positions) - 1:
                 group_end = None
             else:
-                group_end = selected_chunks_indexes[group_index + 1]
+                group_end = chunks_slice_positions[group_index + 1]
 
             groups_timestamps.append(group_timestamp)
             groups_starts.append(chunk_index)
