@@ -1,6 +1,6 @@
 from typing import List
 
-from torch import hub
+from torch import Tensor, hub
 
 from processing.models.VGG import VGG
 from processing.utils.get_device import get_device
@@ -35,7 +35,7 @@ class VGGish(VGG):
         self.to(self.device)
 
     # TODO: Type me!
-    def forward(self, x, fs):
+    def forward(self, x, fs) -> Tensor:
         x = waveform_to_examples(
             x.to(device=self.device),
             fs,
