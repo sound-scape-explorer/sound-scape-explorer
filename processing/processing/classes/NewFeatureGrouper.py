@@ -181,5 +181,5 @@ class NewFeatureGrouper:
                             groups,
                             band,
                             integration,
-                            file_index
+                            file_index,
                         )

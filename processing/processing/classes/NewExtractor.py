@@ -45,7 +45,10 @@ class NewExtractor:
         self,
         frequencies: ConfigBand,
     ) -> None:
-        self.__model = VGGish([frequencies['low'], frequencies['high']])
+        self.__model = VGGish(
+            frequencies['low'],
+            frequencies['high'],
+        )
         self.__model.eval()
         self.__timer.reset()
 
@@ -90,6 +93,8 @@ class NewExtractor:
 
                 wav, sample_rate = self.__load_audio(path_string)
 
+                self.__model.set_sample_rate(sample_rate)
+
                 self.__verify_sample_rates(sample_rate)
 
                 wav = self.__fill_wav_to_round_duration(wav, sample_rate)
@@ -111,12 +116,13 @@ class NewExtractor:
     def __forward_model(
         self,
         samples: Tensor,
-        sample_rate: int,
     ) -> Tensor:
-        if self.__model.device == 'cuda':
-            return self.__model.forward(samples, fs=sample_rate).cpu()
+        tensor = self.__model.forward(samples)
 
-        return self.__model.forward(samples, fs=sample_rate)
+        if self.__model.device == 'cuda':
+            return tensor.cpu()
+
+        return tensor
 
     @staticmethod
     def __flatten_features(
@@ -135,7 +141,7 @@ class NewExtractor:
 
         while i < wav.shape[1]:
             samples: Tensor = wav[:, i:i + batch]
-            samples_features = self.__forward_model(samples, sample_rate)
+            samples_features = self.__forward_model(samples)
 
             i += batch
             features.append(samples_features)

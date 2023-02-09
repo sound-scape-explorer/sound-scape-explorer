@@ -176,7 +176,7 @@ class NewStorage(metaclass=SingletonMeta):
         return self.get(StoragePath.umaps_integrations)
 
     def get_sites(self) -> Dataset:
-        return self.get(StoragePath.umaps_sites)
+        return self.get(StoragePath.umaps_sites, True)
 
     def get_umaps(self) -> Dataset:
         return self.get(StoragePath.umaps, True)

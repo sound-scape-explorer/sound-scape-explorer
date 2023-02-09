@@ -1,8 +1,7 @@
 import torch
-from torch import nn
+from torch import Tensor, nn
 
 
-# class VGG(nn.Module, metaclass=SingletonMeta):
 class VGG(nn.Module):
     def __init__(self, features):
         super(VGG, self).__init__()
@@ -13,11 +12,11 @@ class VGG(nn.Module):
             nn.Linear(4096, 128), nn.ReLU(True)
         )
 
-    def forward(self, x):
+    def forward(self, x: Tensor):
         with torch.no_grad():
             x = self.features(x)
             # Transpose the output from features to
-            # remain compatible with vggish embeddings
+            # remain compatible with VGGish embeddings
             x = torch.transpose(x, 1, 3)
             x = torch.transpose(x, 1, 2)
             x = x.contiguous()

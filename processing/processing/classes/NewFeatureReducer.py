@@ -17,10 +17,10 @@ class NewFeatureReducer:
         self.__test()
 
     def __test(self):
-        for site in self.__sites:
+        for sites in self.__sites:
             for band in self.__bands:
                 for integration in self.__integrations:
-                    print(site, band, integration)
+                    print(sites, band, integration)
 
     def __collect_features(self):
         pass
