@@ -11,9 +11,7 @@ from processing.classes.NewConfig import (
     ConfigFiles,
     NewConfig,
 )
-from processing.classes.NewStorage import (
-    NewStorage,
-)
+from processing.classes.NewStorage import NewStorage
 from processing.classes.NewTimer import NewTimer
 from processing.models.VGGish import VGGish
 
@@ -28,7 +26,6 @@ class NewExtractor:
     __timer: NewTimer = NewTimer(__files_length)
     __expected_sample_rate: int = __config.get_expected_sample_rate()
     __bands: ConfigBands = __config.get_bands()
-    __features_by_band: Features = {}
     __model: VGGish
 
     def __init__(self) -> None:
@@ -55,7 +52,7 @@ class NewExtractor:
     def __verify_sample_rates(self, sample_rate: int) -> None:
         if sample_rate != self.__expected_sample_rate:
             raise ValueError(
-                f'Sample rate differs from expected sample rate.'
+                'Sample rate differs from expected sample rate.'
             )
 
     @staticmethod
@@ -83,7 +80,7 @@ class NewExtractor:
             self.__load_model(frequencies)
 
             for file_index, item in enumerate(self.__files.items()):
-                file, content = item
+                file, _ = item
                 path_string = f'./audio{file}'
 
                 self.__verify_path_existence(path_string)
@@ -146,8 +143,8 @@ class NewExtractor:
             i += batch
             features.append(samples_features)
 
-        features: Tensor = self.__flatten_features(
+        flattened_features: Tensor = self.__flatten_features(
             features
         )
 
-        return features
+        return flattened_features

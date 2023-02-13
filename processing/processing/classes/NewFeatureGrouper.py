@@ -3,9 +3,7 @@ from typing import List, Tuple
 import numpy
 from h5py import Dataset
 
-from processing.classes.NewStorage import (
-    NewStorage,
-)
+from processing.classes.NewStorage import NewStorage
 from processing.constants import TIME_DELTA_MS
 
 ChunkFeatures = List[float]

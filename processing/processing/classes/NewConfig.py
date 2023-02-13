@@ -7,10 +7,7 @@ import numpy
 import pandas
 from pandas import DataFrame, ExcelFile, Series
 
-from processing.classes.NewStorage import (
-    NewStorage,
-    StoragePath,
-)
+from processing.classes.NewStorage import NewStorage, StoragePath
 from processing.utils.singleton_meta import SingletonMeta
 
 

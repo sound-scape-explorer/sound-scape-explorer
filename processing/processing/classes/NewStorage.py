@@ -1,9 +1,10 @@
 from enum import Enum
-from typing import Any, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import h5py
 from h5py import Dataset
 
+from processing.classes.NewConfigSettingsEnum import NewConfigSettingsEnum
 from processing.utils.singleton_meta import SingletonMeta
 
 
@@ -11,7 +12,8 @@ class StoragePath(Enum):
     configuration = '/configuration'
 
     files = '/files'
-    files_features = '/files_features'  # Example: /files_features/{band}/{file_index}
+    # Example: /files_features/{band}/{file_index}
+    files_features = '/files_features'
     files_timestamps = '/files_timestamps'
     files_sites = '/files_sites'
     files_tags = '/files_tags'
@@ -29,8 +31,10 @@ class StoragePath(Enum):
     umaps_ranges = '/umaps_ranges'
     umaps_sites = '/umaps_sites'
 
-    groups_features = '/groups_features'  # Example: /groups_features/{band}/{integration}/{file_index}
+    # Example: /groups_features/{band}/{integration}/{file_index}
+    groups_features = '/groups_features'
     groups_timestamps = '/groups_timestamps'
+    groups_features_reduced = '/groups_features_reduced'
 
 
 class StorageMode(Enum):
@@ -65,13 +69,15 @@ class NewStorage(metaclass=SingletonMeta):
     def __get_groups_paths(
         band_name: str,
         integration: int,
-        file_index: int,
-    ) -> Tuple[str, str]:
-        suffix = f'/{band_name}/{integration}/{file_index}'
+        index: int,
+    ) -> Tuple[str, str, str]:
+        suffix = f'/{band_name}/{integration}/{index}'
         features = f'{StoragePath.groups_features.value}{suffix}'
         timestamps = f'{StoragePath.groups_timestamps.value}{suffix}'
+        features_reduced = f'{StoragePath.groups_features_reduced.value}' \
+                           f'{suffix}'
 
-        return features, timestamps
+        return features, timestamps, features_reduced
 
     def close(self) -> None:
         self.__file.close()
@@ -191,7 +197,7 @@ class NewStorage(metaclass=SingletonMeta):
 
     def get_umap_seed(self):
         settings = self.get(StoragePath.configuration).attrs
-        return settings['umap_seed']
+        return settings[NewConfigSettingsEnum.umap_seed.value]
 
     def create_configuration(self) -> None:
         self.__create_dataset(StoragePath.configuration, '')
@@ -316,6 +322,7 @@ class NewStorage(metaclass=SingletonMeta):
         file_index: int
     ) -> None:
         path = self.__get_file_features_path(band, file_index)
+
         self.__create_dataset(
             path,
             features,
@@ -331,7 +338,7 @@ class NewStorage(metaclass=SingletonMeta):
         file_index: int,
     ) -> None:
         paths = self.__get_groups_paths(band, integration, file_index)
-        features_path, timestamps_path = paths
+        features_path, timestamps_path, _ = paths
 
         self.__create_dataset(
             path=features_path,
@@ -342,5 +349,34 @@ class NewStorage(metaclass=SingletonMeta):
         self.__create_dataset(
             path=timestamps_path,
             data=timestamps,
+            compression=StorageCompression.gzip,
+        )
+
+    def get_groups_features(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+    ) -> Dataset:
+        paths = self.__get_groups_paths(band, integration, file_index)
+        features_path, _, _ = paths
+
+        features = self.get(features_path)
+
+        return features
+
+    def create_groups_reduced(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        features: List[List[float]]
+    ):
+        paths = self.__get_groups_paths(band, integration, file_index)
+        _, _, features_reduced_path = paths
+
+        self.__create_dataset(
+            path=features_reduced_path,
+            data=features,
             compression=StorageCompression.gzip,
         )
