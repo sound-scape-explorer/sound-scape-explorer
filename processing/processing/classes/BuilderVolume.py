@@ -116,9 +116,7 @@ class BuilderVolume:
 
                             eps = numpy.finfo(numpy.float32).eps
                             my_max = numpy.max(features, axis=0)
-                            my_min = numpy.min(
-                                range_features[g_start:g_end, :],
-                                axis=0,
+                            my_min = numpy.min(features, axis=0,
                             )
 
                             log = numpy.log(eps + my_max - my_min)

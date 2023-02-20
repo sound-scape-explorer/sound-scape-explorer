@@ -196,7 +196,7 @@ class Extractor:
             exist_ok=True
         )
 
-        payload = torch.concat(payload).numpy()
+        payload = torch.cat(payload).numpy()
 
         with PreventKeyboardInterrupt():
             numpy.savez_compressed(output_path, x=payload)

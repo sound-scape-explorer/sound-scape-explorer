@@ -2,7 +2,7 @@ from typing import List
 
 import torch
 import torchaudio
-
+# from nnAudio import features
 from processing.utils.frame import frame
 
 
@@ -32,10 +32,21 @@ def waveform_to_examples(
         win_length=n_fft,
         power=1,
     )
+    # mel_extractor = features.mel.MelSpectrogram(
+    #     sr=sample_rate, 
+    #     n_fft=n_fft, 
+    #     win_length=n_fft, 
+    #     n_mels=mel_total, 
+    #     hop_length=int(sample_rate / 100), 
+    #     power=1, 
+    #     fmin=f_min, 
+    #     fmax=f_max,
+    #     verbose=False,
+    #     htk=True)
 
     mel_extractor = mel_extractor.to(data.device)
-
     log_mel = torch.log(mel_extractor(data) + .1).T
+    # log_mel = log_mel.squeeze()
     log_mel = log_mel[:, mel_start:mel_start + 64]
 
     # Frame features into examples.
