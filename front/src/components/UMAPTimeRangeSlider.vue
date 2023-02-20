@@ -30,7 +30,7 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     return [];
   }
 
-  if (!selectionStore.interval) {
+  if (!selectionStore.integration) {
     return [];
   }
 
@@ -42,7 +42,7 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     return cachedSliders.value;
   }
 
-  const umap = config.umaps[selectionStore.interval];
+  const umap = config.umaps[selectionStore.integration];
   const rangeNames = Object.values(umap[3]);
   const sliders = [];
 
@@ -92,13 +92,13 @@ interface Interest {
 }
 
 const umapEndpoint: ComputedRef<string | null> = computed(() => {
-  const {band, interval} = selectionStore;
+  const {band, integration} = selectionStore;
 
-  if (!band || !interval) {
+  if (!band || !integration) {
     return null;
   }
 
-  return API_ROUTES.umap({band, interval});
+  return API_ROUTES.umap({band, integration});
 });
 
 const allTimestamps = ref<number[]>([]);

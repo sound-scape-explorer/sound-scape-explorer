@@ -34,9 +34,9 @@ export function useUMAPExport() {
      * Selection settings
      */
 
-    const {band, interval} = selectionStore;
+    const {band, integration} = selectionStore;
 
-    name += `_${band}_${interval}`;
+    name += `_${band}_${integration}`;
 
     /**
      * Query
@@ -113,7 +113,7 @@ export function useUMAPExport() {
     const {points, metadata} = dataset;
 
     const band = selectionStore.band;
-    const intervalLabel = selectionStore.interval;
+    const intervalLabel = selectionStore.integration;
     const {intervals, intervalLabels} = await useConfig();
 
     if (!intervalLabel) {

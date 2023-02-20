@@ -20,7 +20,7 @@ export const SLIDER_LIMITS = {
 export const DATE_FORMAT = 'DD MMM YYYY HH:mm:ss';
 
 interface APIRoutesDefaultParameters {
-  interval: string;
+  integration: string;
   band: string;
 }
 
@@ -47,29 +47,29 @@ export const API_ROUTES = {
   config: `${BACK_HOSTNAME}/config`,
   covering: (
     {
-      interval,
+      integration,
       band,
-    }: APIRoutesCoveringParameters) => `${BACK_HOSTNAME}/covering/${interval}/${band}`,
+    }: APIRoutesCoveringParameters) => `${BACK_HOSTNAME}/covering/${integration}/${band}`,
   volumes: (
     {
-      interval,
+      integration,
       band,
     }: APIRoutesVolumesParameters,
-  ) => `${BACK_HOSTNAME}/volumes/${interval}/${band}`,
+  ) => `${BACK_HOSTNAME}/volumes/${integration}/${band}`,
   volumesImage: (
     {
-      interval,
+      integration,
       band,
       variable,
     }: APIRoutesVolumesImageParameters,
-  ) => `${BACK_HOSTNAME}/volumes/${interval}/${band}/${variable}`,
+  ) => `${BACK_HOSTNAME}/volumes/${integration}/${band}/${variable}`,
   umap: (
     {
-      interval,
+      integration,
       band,
       isImage = false,
     }: APIRoutesUMAPParameters,
-  ) => `${BACK_HOSTNAME}/umap/${interval}/${band}${isImage ? '/image' : ''}`,
+  ) => `${BACK_HOSTNAME}/umap/${integration}/${band}${isImage ? '/image' : ''}`,
   features: (
     {
       interval,

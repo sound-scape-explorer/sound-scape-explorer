@@ -6,25 +6,25 @@ import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-opti
 
 interface Props {
   bands: string[];
-  intervals: string[];
+  integrations: string[];
   // eslint-disable-next-line no-unused-vars
-  handleUpdate: (band: string, interval: string) => void;
+  handleUpdate: (band: string, integration: string) => void;
 }
 
-const {bands, intervals, handleUpdate} = defineProps<Props>();
+const {bands, integrations, handleUpdate} = defineProps<Props>();
 
 const bandsOptions = computed(() => convertToNaiveSelectOptions(bands));
-const intervalsOptions = computed(() => convertToNaiveSelectOptions(intervals));
+const integrationsOptions = computed(() => convertToNaiveSelectOptions(integrations));
 
 function processSelection() {
   if (
     selectionStore.band === null
-      || selectionStore.interval === null
+      || selectionStore.integration === null
   ) {
     return;
   }
 
-  handleUpdate(selectionStore.band, selectionStore.interval);
+  handleUpdate(selectionStore.band, selectionStore.integration);
 }
 
 watch(selectionStore, processSelection);
@@ -38,12 +38,9 @@ watch(selectionStore, processSelection);
       size="tiny"
   />
   <n-select
-      v-model:value="selectionStore.interval"
-      :options="intervalsOptions"
+      v-model:value="selectionStore.integration"
+      :options="integrationsOptions"
       placeholder="Intervals..."
       size="tiny"
   />
 </template>
-
-<style lang="scss" scoped>
-</style>

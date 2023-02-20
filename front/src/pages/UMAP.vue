@@ -13,11 +13,19 @@ import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
 import UMAPScreenshot from '../components/UMAPScreenshot.vue';
 import UMAPTimeRangeOptions from '../components/UMAPTimeRangeOptions.vue';
 import UMAPTimeRangeSlider from '../components/UMAPTimeRangeSlider.vue';
-import {useConfig} from '../composables/useConfig';
+import {useStorage} from '../composables/useStorage';
 import {useUMAPPage} from '../composables/useUMAPPage';
 
-const {bands, intervalLabels} = await useConfig();
+const {
+  getStorageBands,
+  getStorageIntegrations,
+} = await useStorage();
+
 const {delayUpdate} = useUMAPPage();
+
+const bands = await getStorageBands();
+const bandsNames = Object.keys(bands);
+const integrations = await getStorageIntegrations();
 </script>
 
 <template>
@@ -26,7 +34,11 @@ const {delayUpdate} = useUMAPPage();
       <Title text="UMAP" />
 
       <div class="row">
-        <Selection :bands="bands" :callback="delayUpdate" :intervals="intervalLabels" />
+        <Selection
+            :bands="bandsNames"
+            :callback="delayUpdate"
+            :integrations="integrations"
+        />
         <UMAPFiltersColorTypes />
         <UMAPFiltersColorScales />
         <UMAPScreenshot class="flex" />

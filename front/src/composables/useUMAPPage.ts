@@ -9,6 +9,7 @@ import {
 } from '../utils/convert-to-scatter-gl-dataset';
 import {useAPI} from './useAPI';
 import {useSelection} from './useSelection';
+import {useStorage} from './useStorage';
 
 export function useUMAPPage() {
   const {clearSelection} = useSelection();
@@ -20,7 +21,7 @@ export function useUMAPPage() {
 
   function setImage(band: string, intervalLabel: string) {
     selectionImageStore.image = API_ROUTES.umap({
-      interval: intervalLabel,
+      integration: intervalLabel,
       band,
       isImage: true,
     });
@@ -28,23 +29,33 @@ export function useUMAPPage() {
 
   function resetSelection() {
     selectionStore.band = null;
-    selectionStore.interval = null;
+    selectionStore.integration = null;
   }
 
   function setSelection(band: string, intervalLabel: string) {
     selectionStore.band = band;
-    selectionStore.interval = intervalLabel;
+    selectionStore.integration = intervalLabel;
   }
 
-  async function fetchData(band: string, intervalLabel: string) {
+  async function fetchData(band: string, integration: string) {
+    const {
+      getStorageUmapsFeatures,
+      getStorageUmapsTimestamps,
+    } = await useStorage();
+
     try {
-      const data = await fetchUMAP(intervalLabel, band);
+      const data = await fetchUMAP(integration, band);
+      const features = await getStorageUmapsFeatures(band, integration);
+      const timestamps = await getStorageUmapsTimestamps(band, integration);
 
       if (!data) {
         return;
       }
 
-      UMAPDatasetStore.dataset = convertToScatterGlDataset(data);
+      UMAPDatasetStore.dataset = convertToScatterGlDataset(
+        features,
+        timestamps.flat(),
+      );
     } catch {
       UMAPDatasetStore.dataset = null;
     }

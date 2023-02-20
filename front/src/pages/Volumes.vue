@@ -19,27 +19,27 @@ const intervalsAsStrings = intervals.map((i) => i.toString());
 function handleSelectionUpdate(band: string, interval: string) {
   if (!band || !interval) {
     selectionStore.band = null;
-    selectionStore.interval = null;
+    selectionStore.integration = null;
     selectionImageStore.image = null;
     return;
   }
 
   selectionStore.band = band;
-  selectionStore.interval = interval;
+  selectionStore.integration = interval;
 
   selectionImageStore.image = API_ROUTES.volumesImage({
-    interval,
+    integration: interval,
     band,
     variable: volumesOptionsStore.activeVariable,
   });
 }
 
 watch(selectionStore, () => {
-  if (selectionStore.band === null || selectionStore.interval === null) {
+  if (selectionStore.band === null || selectionStore.integration === null) {
     return;
   }
 
-  handleSelectionUpdate(selectionStore.band, selectionStore.interval);
+  handleSelectionUpdate(selectionStore.band, selectionStore.integration);
 });
 
 onUnmounted(clearSelection);
@@ -47,7 +47,7 @@ onUnmounted(clearSelection);
 
 <template>
   <Title text="Volumes" />
-  <Selection :bands="bands" :callback="handleSelectionUpdate" :intervals="intervalsAsStrings" />
+  <Selection :bands="bands" :callback="handleSelectionUpdate" :integrations="intervalsAsStrings" />
   <VolumesOptions />
   <VolumesBoxPlot />
 </template>

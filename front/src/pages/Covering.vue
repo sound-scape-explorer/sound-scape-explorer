@@ -19,7 +19,7 @@ function handleSelectionUpdate(band: string, interval: string) {
   }
 
   selectionImageStore.image = API_ROUTES.covering({
-    interval,
+    integration: interval,
     band,
   });
 }
@@ -31,7 +31,7 @@ onUnmounted(clearSelection);
   <Title text="Covering" />
   <div class="container">
     <CoveringExport />
-    <Selection :bands="bands" :callback="handleSelectionUpdate" :intervals="intervalsAsStrings" />
+    <Selection :bands="bands" :callback="handleSelectionUpdate" :integrations="intervalsAsStrings" />
   </div>
 </template>
 

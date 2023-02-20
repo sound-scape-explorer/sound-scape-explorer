@@ -19,6 +19,9 @@ class StoragePath(Enum):
     files_tags = '/files_tags'
     files_metas = '/files_metas'
 
+    meta_properties = '/meta_properties'
+    meta_sets = '/meta_sets'
+
     ranges = '/ranges'
     ranges_timestamps = '/ranges_timestamps'
 
@@ -371,7 +374,7 @@ class NewStorage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
         features: List[List[float]]
-    ):
+    ) -> None:
         paths = self.__get_groups_paths(band, integration, file_index)
         _, _, features_reduced_path = paths
 
@@ -380,3 +383,21 @@ class NewStorage(metaclass=SingletonMeta):
             data=features,
             compression=StorageCompression.gzip,
         )
+
+    def create_metas(
+        self,
+        meta_properties: List[str],
+        meta_sets: List[List[str]],
+    ) -> None:
+        self.__create_dataset(
+            path=StoragePath.meta_properties.value,
+            data=meta_properties,
+        )
+
+        for (index, meta_property) in enumerate(meta_properties):
+            path = f'{StoragePath.meta_sets.value}/{meta_property}'
+
+            self.__create_dataset(
+                path=path,
+                data=meta_sets[index],
+            )

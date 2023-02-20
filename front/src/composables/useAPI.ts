@@ -6,7 +6,7 @@ export function useAPI() {
   const {notify} = useNotification();
 
   async function fetchUMAP(interval: string, band: string): Promise<ApiUMAPInterface | void> {
-    const endpoint = API_ROUTES.umap({interval, band});
+    const endpoint = API_ROUTES.umap({integration: interval, band});
     const request = await fetch(endpoint);
 
     if (!request.ok) {

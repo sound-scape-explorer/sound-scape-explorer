@@ -127,6 +127,7 @@ class NewConfig(metaclass=SingletonMeta):
     def __store(self) -> None:
         self.__store_settings()
         self.__store_files()
+        self.__store_metas()
         self.__store_ranges()
         self.__store_bands()
         self.__store_umaps()
@@ -276,6 +277,31 @@ class NewConfig(metaclass=SingletonMeta):
             sites=sites,
             tags=tags,
             metas=metas,
+        )
+
+    def __store_metas(self):
+        files_length = len(self.__files)
+
+        meta_properties = self.__files_meta_properties
+        meta_values = self.__read_files_meta_values()
+        meta_sets: List[List[str]] = []
+
+        for _ in range(files_length):
+            meta_sets.append([])
+
+        for (meta_index, meta_value) in enumerate(meta_values):
+            shift = 1
+            meta_slice = meta_value[0 + shift:files_length + shift]
+
+            for value in meta_slice:
+                if value in meta_sets[meta_index]:
+                    continue
+
+                meta_sets[meta_index].append(value)
+
+        self.__storage.create_metas(
+            meta_properties,
+            meta_sets,
         )
 
     def __read_ranges(self) -> None:
