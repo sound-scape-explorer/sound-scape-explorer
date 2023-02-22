@@ -1,7 +1,7 @@
 import time
 
 
-class NewTimer:
+class Timer:
     __start: float
     __value: float = 0
     __total_iterations: int

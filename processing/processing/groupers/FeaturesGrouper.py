@@ -2,26 +2,39 @@ from typing import List, Tuple
 
 import numpy
 from h5py import Dataset
+# noinspection PyProtectedMember
+from h5py._hl.dataset import AsStrWrapper
 
-from processing.classes.NewStorage import NewStorage
 from processing.constants import TIME_DELTA_MS
+from processing.storage.Storage import Storage
 
 ChunkFeatures = List[float]
 Features = List[ChunkFeatures]
 Groups = Tuple[Features, List[int]]
 
 
-class NewFeatureGrouper:
-    __storage: NewStorage = NewStorage()
-    __bands: Dataset = __storage.get_bands()
-    __ranges: Dataset = __storage.get_ranges()
-    __ranges_timestamps: Dataset = __storage.get_ranges_timestamps()
-    __files: Dataset = __storage.get_files()
-    __files_timestamps: Dataset = __storage.get_files_timestamps()
-    __integrations: Dataset = __storage.get_integrations()
+class FeaturesGrouper:
+    __storage: Storage
+    __bands: AsStrWrapper
+    __ranges: AsStrWrapper
+    __ranges_timestamps: Dataset
+    __files: AsStrWrapper
+    __files_timestamps: Dataset
+    __integration: int
 
-    def __init__(self):
-        self.__run()
+    def __init__(
+        self,
+        storage: Storage,
+        integration: int,
+    ):
+        self.__storage = storage
+        self.__integration = integration
+
+        self.__bands = self.__storage.get_bands()
+        self.__ranges = self.__storage.get_ranges()
+        self.__ranges_timestamps = self.__storage.get_ranges_timestamps()
+        self.__files = self.__storage.get_files()
+        self.__files_timestamps = self.__storage.get_files_timestamps()
 
     @staticmethod
     def __get_duration(features: Dataset) -> float:
@@ -41,10 +54,16 @@ class NewFeatureGrouper:
     def __get_involved_ranges(
         self,
         file_index: int,
-        duration: float,
+        band: str,
     ) -> List[str]:
-        ranges = []
+        features = self.__storage.get_file_features(
+            band_name=band,
+            file_index=file_index,
+        )
+
         timestamp = self.__get_file_timestamp(file_index)
+        duration = self.__get_duration(features)
+        ranges = []
 
         for index, range_ in enumerate(self.__ranges):
             start, end = self.__get_range_timestamps(index)
@@ -82,10 +101,9 @@ class NewFeatureGrouper:
     def __group_chunks(
         self,
         chunks: Tuple[List[Dataset], List[int]],
-        integration: int,
         range_index: int,
     ) -> Groups:
-        integration = integration * 1000  # milliseconds
+        integration = self.__integration * 1000  # milliseconds
         chunks_features, chunks_timestamps = chunks
         range_start, _ = self.__get_range_timestamps(range_index)
 
@@ -127,57 +145,33 @@ class NewFeatureGrouper:
 
             groups_features.append(group_features)
 
+        # TODO: add groups_volumes, volume algorithm can be specified at
+        #  runtime.
         return groups_features, groups_timestamps
 
-    def __store_groups(
+    def get_group(
         self,
-        groups: Groups,
         band: str,
-        integration: int,
         file_index: int,
-    ) -> None:
-        groups_features, groups_timestamps = groups
+    ) -> Tuple[List[List[float]], List[int]]:
+        ranges = self.__get_involved_ranges(file_index=file_index, band=band)
 
-        self.__storage.create_groups(
-            features=groups_features,
-            timestamps=groups_timestamps,
-            band=band,
-            integration=integration,
-            file_index=file_index,
-        )
+        if len(ranges) == 0:
+            raise RuntimeError(
+                f'Involved range(s) for file_index {file_index} could not be '
+                f'found.'
+            )
 
-    def __run(self) -> None:
-        for band in self.__bands:
-            for file_index, _ in enumerate(self.__files):
-                file_features = self.__storage.get_file_features(
-                    band,
-                    file_index
-                )
+        for range_index, _ in enumerate(ranges):
+            chunks = self.__get_involved_chunks(
+                band_name=band,
+                range_index=range_index,
+                file_index=file_index,
+            )
 
-                file_duration = self.__get_duration(file_features)
+            group = self.__group_chunks(
+                chunks=chunks,
+                range_index=range_index,
+            )
 
-                ranges = self.__get_involved_ranges(file_index, file_duration)
-
-                if len(ranges) == 0:
-                    continue
-
-                for range_index, _ in enumerate(ranges):
-                    chunks = self.__get_involved_chunks(
-                        band,
-                        range_index,
-                        file_index
-                    )
-
-                    for integration in self.__integrations:
-                        groups = self.__group_chunks(
-                            chunks,
-                            integration,
-                            range_index,
-                        )
-
-                        self.__store_groups(
-                            groups,
-                            band,
-                            integration,
-                            file_index,
-                        )
+            return group

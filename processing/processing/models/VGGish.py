@@ -1,13 +1,16 @@
+from typing import Optional
+
 import numpy as np
 import torch
 import torchaudio
 from torch import Tensor, cuda, hub, nn
 from torch.nn import Sequential
 
+from processing.models.AbstractModel import AbstractModel
 from processing.models.VGG import VGG
 
 
-class VGGish(VGG):
+class VGGish(AbstractModel, VGG):
     __sample_rate: int = None
     __mels_count: int = 64
     __fft_size: int = 2048
@@ -16,9 +19,9 @@ class VGGish(VGG):
 
     def __init__(
         self,
-        f_min: int = 0,
-        f_max: int = 20000,
-    ):
+        f_min: Optional[int] = 0,
+        f_max: Optional[int] = 20000,
+    ) -> None:
         self.__f_min = f_min
         self.__f_max = f_max
 
@@ -38,6 +41,8 @@ class VGGish(VGG):
         super().load_state_dict(state_dict)
 
         self.to(self.device)
+
+        self.eval()
 
     @staticmethod
     def __get_device() -> str:
