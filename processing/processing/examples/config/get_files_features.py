@@ -1,6 +1,6 @@
 from processing.config.Config import Config
-from processing.extractors.Extractor import FileExtractor
-from processing.models.VGGish import VGGish
+from processing.extractors.FileExtractor import FileExtractor
+from processing.models.VGGishModel import VGGishModel
 from processing.storage.Storage import Storage
 
 storage = Storage(path='./sample/sse.h5')
@@ -10,7 +10,7 @@ bands = config.get_bands()
 expected_sample_rate = config.get_expected_sample_rate()
 
 for band, frequencies in bands.items():
-    model = VGGish(
+    VGGish = VGGishModel(
         f_min=frequencies['low'],
         f_max=frequencies['high'],
     )
@@ -18,7 +18,7 @@ for band, frequencies in bands.items():
     extractor = FileExtractor(
         storage=storage,
         config=config,
-        model=model,
+        model=VGGish,
         expected_sample_rate=expected_sample_rate,
         base_path='./sample/audio',
     )

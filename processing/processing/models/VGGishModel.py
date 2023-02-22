@@ -7,10 +7,10 @@ from torch import Tensor, cuda, hub, nn
 from torch.nn import Sequential
 
 from processing.models.AbstractModel import AbstractModel
-from processing.models.VGG import VGG
+from processing.shared.VGG import VGG
 
 
-class VGGish(AbstractModel, VGG):
+class VGGishModel(AbstractModel, VGG):
     __sample_rate: int = None
     __mels_count: int = 64
     __fft_size: int = 2048

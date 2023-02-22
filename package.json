@@ -8,7 +8,9 @@
     "process:config": "python3 processing/processing/actions/config.py",
     "process:extract": "python3 processing/processing/actions/extract_features.py",
     "process:group": "python3 processing/processing/actions/group_features.py",
+    "process:indicators": "python3 processing/processing/actions/indicators.py",
     "process:reduce": "python3 processing/processing/actions/reduce_groups.py",
+    "process:volumes": "python3 processing/processing/actions/volumes.py",
     "release:prepare": "yarn release:prepare:archive-examples",
     "release:prepare:archive-examples": "bin/archive-examples.sh",
     "start": "yarn dev"

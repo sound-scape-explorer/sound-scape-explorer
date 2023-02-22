@@ -23,10 +23,13 @@ class Storage(metaclass=SingletonMeta):
     ) -> None:
         self.__path = path
 
-        self.__file = File(
-            self.__path,
-            StorageMode.rw_or_create.value,
-        )
+        try:
+            self.__file = File(
+                self.__path,
+                StorageMode.rw_or_create.value,
+            )
+        except BlockingIOError:
+            raise RuntimeError(f'Could not load file {self.__path}')
 
     @staticmethod
     def __get_file_features_path(
@@ -42,7 +45,7 @@ class Storage(metaclass=SingletonMeta):
         band: str,
         integration: int,
         file_index: int,
-    ):
+    ) -> str:
         return f'/{band}/{integration}/{file_index}'
 
     def close(self) -> None:
@@ -195,7 +198,7 @@ class Storage(metaclass=SingletonMeta):
     def delete_files_features(self) -> None:
         self.__delete_silently(StoragePath.files_features)
 
-    def get_umap_seed(self):
+    def get_umap_seed(self) -> int:
         settings = self.__get(StoragePath.configuration).attrs
         return settings[ConfigSettingsFields.umap_seed.value]
 
@@ -538,7 +541,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
         values: List[float],
-    ):
+    ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_indicator_enes_leq.value}{suffix}'
 
@@ -556,7 +559,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
         values: List[float],
-    ):
+    ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_indicator_maad_leq.value}{suffix}'
 
@@ -574,7 +577,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
         values: List[float],
-    ):
+    ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_indicator_temporal_entropy.value}{suffix}'
 
@@ -585,6 +588,46 @@ class Storage(metaclass=SingletonMeta):
             data=values,
             compression=StorageCompression.gzip,
         )
+
+    def delete_groups_volumes(self) -> None:
+        self.__delete_silently(StoragePath.groups_volume_sumvar)
+        self.__delete_silently(StoragePath.groups_volume_sumstd)
+        self.__delete_silently(StoragePath.groups_volume_logprodspan)
+
+    def create_group_volume_sumvar(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        values: List[float],
+    ) -> None:
+        suffix = self.__get_group_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_volume_sumvar.value}{suffix}'
+
+        self.__create_dataset(
+            path=path,
+            data=values,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_group_volume_sumstd(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        values: List[float],
+    ) -> None:
+        suffix = self.__get_group_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_volume_sumstd.value}{suffix}'
+
+        self.__create_dataset(
+            path=path,
+            data=values,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_group_volume_logprodspan(self) -> None:
+        pass
 
     def create_metas(
         self,

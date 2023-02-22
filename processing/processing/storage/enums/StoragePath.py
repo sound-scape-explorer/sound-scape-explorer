@@ -48,3 +48,7 @@ class StoragePath(Enum):
     groups_indicator_enes_leq = '/groups_indicator_enes_leq'
     groups_indicator_maad_leq = '/groups_indicator_maad_leq'
     groups_indicator_temporal_entropy = '/groups_indicator_temporal_entropy'
+
+    groups_volume_sumvar = '/groups_volume_sumvar'
+    groups_volume_sumstd = '/groups_volume_sumstd'
+    groups_volume_logprodspan = '/groups_volume_logprodspan'

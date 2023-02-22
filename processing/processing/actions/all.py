@@ -8,3 +8,5 @@ import processing.actions.group_features
 import processing.actions.indicators
 # noinspection PyUnresolvedReferences
 import processing.actions.reduce_groups
+# noinspection PyUnresolvedReferences
+import processing.actions.volumes
