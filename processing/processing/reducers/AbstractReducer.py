@@ -10,6 +10,10 @@ class AbstractReducer(ABC):
     ) -> List[List[float]]:
         pass
 
+    @abstractmethod
+    def get_instance(self):
+        pass
+
     def reduce_and_split(
         self,
         features: List[List[float]],

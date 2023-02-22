@@ -37,7 +37,7 @@ class Storage(metaclass=SingletonMeta):
                f'/{file_index}'
 
     @staticmethod
-    def __get_suffix(
+    def __get_group_reduced_suffix(
         band: str,
         integration: int,
         file_index: int,
@@ -332,7 +332,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> None:
-        suffix = self.__get_suffix(band, integration, file_index)
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features.value}{suffix}'
 
         self.__create_dataset(
@@ -348,7 +348,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> None:
-        suffix = self.__get_suffix(band, integration, file_index)
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_timestamps.value}{suffix}'
 
         self.__create_dataset(
@@ -363,7 +363,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> Dataset:
-        suffix = self.__get_suffix(band, integration, file_index)
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features.value}{suffix}'
 
         features = self.__get(path)
@@ -381,7 +381,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_suffix(band, integration, file_index)
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_umap_2d.value}{suffix}'
 
         self.__create_dataset(
@@ -397,8 +397,40 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_suffix(band, integration, file_index)
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_umap_3d.value}{suffix}'
+
+        self.__create_dataset(
+            path=path,
+            data=features,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_group_reduced_pca_2d(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        features: List[List[float]]
+    ) -> None:
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_features_reduced_pca_2d.value}{suffix}'
+
+        self.__create_dataset(
+            path=path,
+            data=features,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_group_reduced_pca_3d(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        features: List[List[float]]
+    ) -> None:
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_features_reduced_pca_3d.value}{suffix}'
 
         self.__create_dataset(
             path=path,

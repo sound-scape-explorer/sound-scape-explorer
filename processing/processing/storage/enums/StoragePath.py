@@ -32,3 +32,5 @@ class StoragePath(Enum):
     groups_timestamps = '/groups_timestamps'
     groups_features_reduced_umap_2d = '/groups_features_reduced_umap_2d'
     groups_features_reduced_umap_3d = '/groups_features_reduced_umap_3d'
+    groups_features_reduced_pca_2d = '/groups_features_reduced_pca_2d'
+    groups_features_reduced_pca_3d = '/groups_features_reduced_pca_3d'
