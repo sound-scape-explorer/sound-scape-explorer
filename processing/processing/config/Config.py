@@ -13,8 +13,8 @@ from processing.config.types.ConfigFiles import ConfigFiles
 from processing.config.types.ConfigRanges import ConfigRanges
 from processing.config.types.ConfigSettings import ConfigSettings
 from processing.config.types.ConfigUMAPs import ConfigUMAPs
+from processing.shared.SingletonMeta import SingletonMeta
 from processing.storage.Storage import Storage
-from processing.utils.singleton_meta import SingletonMeta
 
 
 class Config(metaclass=SingletonMeta):

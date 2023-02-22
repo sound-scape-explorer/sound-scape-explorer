@@ -1,14 +1,15 @@
 from typing import Any, List, Optional, Union
 
+import numpy
 from h5py import Dataset, File
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
 
 from processing.config.enums.ConfigSettingsFields import ConfigSettingsFields
+from processing.shared.SingletonMeta import SingletonMeta
 from processing.storage.enums.StorageCompression import StorageCompression
 from processing.storage.enums.StorageMode import StorageMode
 from processing.storage.enums.StoragePath import StoragePath
-from processing.utils.singleton_meta import SingletonMeta
 
 
 class Storage(metaclass=SingletonMeta):
@@ -37,7 +38,7 @@ class Storage(metaclass=SingletonMeta):
                f'/{file_index}'
 
     @staticmethod
-    def __get_group_reduced_suffix(
+    def __get_group_suffix(
         band: str,
         integration: int,
         file_index: int,
@@ -132,6 +133,9 @@ class Storage(metaclass=SingletonMeta):
     def get_bands(self) -> AsStrWrapper:
         dataset = self.__get(StoragePath.bands)
         return dataset.asstr()
+
+    def get_bands_frequencies(self) -> Dataset:
+        return self.__get(StoragePath.bands_frequencies)
 
     def get_files(self) -> AsStrWrapper:
         dataset = self.__get(StoragePath.files)
@@ -332,7 +336,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features.value}{suffix}'
 
         self.__create_dataset(
@@ -348,7 +352,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_timestamps.value}{suffix}'
 
         self.__create_dataset(
@@ -363,8 +367,21 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> Dataset:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features.value}{suffix}'
+
+        features = self.__get(path)
+
+        return features
+
+    def get_group_timestamps(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+    ) -> Dataset:
+        suffix = self.__get_group_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_timestamps.value}{suffix}'
 
         features = self.__get(path)
 
@@ -381,7 +398,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_umap_2d.value}{suffix}'
 
         self.__create_dataset(
@@ -397,7 +414,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_umap_3d.value}{suffix}'
 
         self.__create_dataset(
@@ -413,7 +430,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_pca_2d.value}{suffix}'
 
         self.__create_dataset(
@@ -429,7 +446,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_pca_3d.value}{suffix}'
 
         self.__create_dataset(
@@ -445,7 +462,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_sparse_pca_2d.value}' \
                f'{suffix}'
 
@@ -462,7 +479,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_sparse_pca_3d.value}' \
                f'{suffix}'
 
@@ -479,7 +496,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_vae_2d.value}' \
                f'{suffix}'
 
@@ -496,13 +513,80 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_vae_3d.value}' \
                f'{suffix}'
 
         self.__create_dataset(
             path=path,
             data=features,
+            compression=StorageCompression.gzip,
+        )
+
+    @staticmethod
+    def sanitize_list_with_nones(list: List[float]) -> List[float]:
+        for index, _ in enumerate(list):
+            if list[index] is None:
+                list[index] = numpy.nan
+
+        return list
+
+    def delete_group_indicators(self) -> None:
+        self.__delete_silently(StoragePath.groups_indicator_enes_leq)
+        self.__delete_silently(StoragePath.groups_indicator_maad_leq)
+        self.__delete_silently(StoragePath.groups_indicator_temporal_entropy)
+
+    def create_group_indicator_enes_leq(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        values: List[float],
+    ):
+        suffix = self.__get_group_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_indicator_enes_leq.value}{suffix}'
+
+        values = self.sanitize_list_with_nones(values)
+
+        self.__create_dataset(
+            path=path,
+            data=values,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_group_indicator_maad_leq(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        values: List[float],
+    ):
+        suffix = self.__get_group_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_indicator_maad_leq.value}{suffix}'
+
+        values = self.sanitize_list_with_nones(values)
+
+        self.__create_dataset(
+            path=path,
+            data=values,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_group_indicator_temporal_entropy(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        values: List[float],
+    ):
+        suffix = self.__get_group_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_indicator_temporal_entropy.value}{suffix}'
+
+        values = self.sanitize_list_with_nones(values)
+
+        self.__create_dataset(
+            path=path,
+            data=values,
             compression=StorageCompression.gzip,
         )
 

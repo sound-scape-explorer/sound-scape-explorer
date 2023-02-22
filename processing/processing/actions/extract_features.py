@@ -22,7 +22,7 @@ for band, frequencies in bands.items():
         config=config,
         model=model,
         expected_sample_rate=expected_sample_rate,
-        base_path='./sample/audio',
+        base_path='./sample/audio',  # TODO get from configuration
     )
 
     extractor.yield_and_store_features(
