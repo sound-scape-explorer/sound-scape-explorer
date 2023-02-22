@@ -311,10 +311,6 @@ class Storage(metaclass=SingletonMeta):
             umaps_sites,
         )
 
-    def exists_file_features(self, band: str, file_index: int) -> bool:
-        path = self.__get_file_features_path(band, file_index)
-        return self.exists_dataset(path)
-
     def create_file_features(
         self,
         features: Any,

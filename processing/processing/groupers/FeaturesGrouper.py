@@ -15,10 +15,8 @@ Groups = Tuple[Features, List[int]]
 
 class FeaturesGrouper:
     __storage: Storage
-    __bands: AsStrWrapper
     __ranges: AsStrWrapper
     __ranges_timestamps: Dataset
-    __files: AsStrWrapper
     __files_timestamps: Dataset
     __integration: int
 
@@ -30,10 +28,8 @@ class FeaturesGrouper:
         self.__storage = storage
         self.__integration = integration
 
-        self.__bands = self.__storage.get_bands()
         self.__ranges = self.__storage.get_ranges()
         self.__ranges_timestamps = self.__storage.get_ranges_timestamps()
-        self.__files = self.__storage.get_files()
         self.__files_timestamps = self.__storage.get_files_timestamps()
 
     @staticmethod

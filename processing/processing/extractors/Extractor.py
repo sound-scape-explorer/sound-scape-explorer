@@ -6,10 +6,8 @@ import torchaudio
 from torch import Tensor
 
 from processing.config.Config import Config
-from processing.config.types.ConfigBand import ConfigBand
 from processing.config.types.ConfigFiles import ConfigFiles
 from processing.models.AbstractModel import AbstractModel
-from processing.models.VGGish import VGGish
 from processing.storage.Storage import Storage
 from processing.timers.Timer import Timer
 
@@ -47,7 +45,7 @@ class FileExtractor:
         self.__base_path = base_path
 
         print(f'Extractor loaded with model {model.__class__.__name__}')
-        
+
         self.__model = model
 
     @staticmethod
@@ -56,17 +54,6 @@ class FileExtractor:
 
         if not path.exists():
             raise FileNotFoundError(f'Audio file not found: {path}')
-
-    def __load_model(
-        self,
-        frequencies: ConfigBand,
-    ) -> None:
-        self.__model = VGGish(
-            frequencies['low'],
-            frequencies['high'],
-        )
-
-        self.__model.eval()
 
     def __verify_sample_rates(self, sample_rate: int) -> None:
         if sample_rate != self.__expected_sample_rate:
