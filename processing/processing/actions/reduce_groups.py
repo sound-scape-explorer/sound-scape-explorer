@@ -1,6 +1,7 @@
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.SparsePcaReducer import SparsePcaReducer
 from processing.reducers.UmapReducer import UmapReducer
+from processing.reducers.VaeReducer import VaeReducer
 from processing.storage.Storage import Storage
 
 storage = Storage(path='./sample/sse.h5')
@@ -145,4 +146,38 @@ for band in bands:
                 integration=integration,
                 file_index=file_index,
                 features=features_sparse_pca_3d_split[file_index],
+            )
+
+        # VAE 2d
+
+        vae_2d = VaeReducer(target_dimensions=2)
+
+        features_vae_2d_split = vae_2d.reduce_and_split(
+            features=all_features,
+            files_length=files_length,
+        )
+
+        for file_index, _ in enumerate(files):
+            storage.create_group_reduced_vae_2d(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+                features=features_vae_2d_split[file_index],
+            )
+
+        # VAE 3d
+
+        vae_3d = VaeReducer(target_dimensions=3)
+
+        features_vae_3d_split = vae_3d.reduce_and_split(
+            features=all_features,
+            files_length=files_length,
+        )
+
+        for file_index, _ in enumerate(files):
+            storage.create_group_reduced_vae_3d(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+                features=features_vae_3d_split[file_index],
             )

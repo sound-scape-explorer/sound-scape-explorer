@@ -41,3 +41,6 @@ class StoragePath(Enum):
         '/groups_features_reduced_sparse_pca_2d'
     groups_features_reduced_sparse_pca_3d = \
         '/groups_features_reduced_sparse_pca_3d'
+
+    groups_features_reduced_vae_2d = '/groups_features_reduced_vae_2d'
+    groups_features_reduced_vae_3d = '/groups_features_reduced_vae_3d'
