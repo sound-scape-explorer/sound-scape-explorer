@@ -438,6 +438,40 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
+    def create_group_reduced_sparse_pca_2d(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        features: List[List[float]]
+    ) -> None:
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_features_reduced_sparse_pca_2d.value}' \
+               f'{suffix}'
+
+        self.__create_dataset(
+            path=path,
+            data=features,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_group_reduced_sparse_pca_3d(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        features: List[List[float]]
+    ) -> None:
+        suffix = self.__get_group_reduced_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_features_reduced_sparse_pca_3d.value}' \
+               f'{suffix}'
+
+        self.__create_dataset(
+            path=path,
+            data=features,
+            compression=StorageCompression.gzip,
+        )
+
     def create_metas(
         self,
         meta_properties: List[str],

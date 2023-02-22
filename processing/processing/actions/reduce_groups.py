@@ -1,4 +1,5 @@
 from processing.reducers.PcaReducer import PcaReducer
+from processing.reducers.SparsePcaReducer import SparsePcaReducer
 from processing.reducers.UmapReducer import UmapReducer
 from processing.storage.Storage import Storage
 
@@ -104,4 +105,44 @@ for band in bands:
                 integration=integration,
                 file_index=file_index,
                 features=features_pca_3d_split[file_index],
+            )
+
+        # SparsePCA 2d
+
+        sparse_pca_2d = SparsePcaReducer(
+            target_dimensions=2,
+            seed=seed,
+        )
+
+        features_sparse_pca_2d_split = sparse_pca_2d.reduce_and_split(
+            features=all_features,
+            files_length=files_length,
+        )
+
+        for file_index, _ in enumerate(files):
+            storage.create_group_reduced_sparse_pca_2d(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+                features=features_sparse_pca_2d_split[file_index],
+            )
+
+        # SparsePCA 3d
+
+        sparse_pca_3d = SparsePcaReducer(
+            target_dimensions=3,
+            seed=seed,
+        )
+
+        features_sparse_pca_3d_split = sparse_pca_3d.reduce_and_split(
+            features=all_features,
+            files_length=files_length,
+        )
+
+        for file_index, _ in enumerate(files):
+            storage.create_group_reduced_sparse_pca_3d(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+                features=features_sparse_pca_3d_split[file_index],
             )
