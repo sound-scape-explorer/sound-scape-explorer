@@ -58,6 +58,7 @@ class ConfigFilesExtractor:
             )
 
     # TODO: Prefer drop incomplete last second instead of filling it with zeros.
+    # TODO: Add console outputs on drop
     @staticmethod
     def __fill_wav_to_round_duration(
         wav: Tensor,
@@ -150,10 +151,11 @@ class ConfigFilesExtractor:
         wav: Tensor,
         sample_rate: int,
     ) -> Tensor:
-        i = 0
-        batch = sample_rate * 60 * 5  # TODO: Why 5 minutes?
+        # `batch` acts as the maximum audio duration of 5 minutes.
+        batch = sample_rate * 60 * 5
         features: List[Tensor] = []
 
+        i = 0
         while i < wav.shape[1]:
             samples: Tensor = wav[:, i:i + batch]
             samples_features = self.__forward_model(samples)
