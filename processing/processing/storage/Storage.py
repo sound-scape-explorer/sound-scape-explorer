@@ -592,7 +592,7 @@ class Storage(metaclass=SingletonMeta):
     def delete_groups_volumes(self) -> None:
         self.__delete_silently(StoragePath.groups_volume_sumvar)
         self.__delete_silently(StoragePath.groups_volume_sumstd)
-        self.__delete_silently(StoragePath.groups_volume_logprodspan)
+        self.__delete_silently(StoragePath.groups_volume_mean_std)
 
     def create_group_volume_sumvar(
         self,
@@ -626,8 +626,21 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def create_group_volume_logprodspan(self) -> None:
-        pass
+    def create_group_volume_mean_std(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        values: List[float],
+    ) -> None:
+        suffix = self.__get_group_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_volume_mean_std.value}{suffix}'
+
+        self.__create_dataset(
+            path=path,
+            data=values,
+            compression=StorageCompression.gzip,
+        )
 
     def create_metas(
         self,

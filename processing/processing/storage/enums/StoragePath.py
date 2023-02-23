@@ -51,4 +51,4 @@ class StoragePath(Enum):
 
     groups_volume_sumvar = '/groups_volume_sumvar'
     groups_volume_sumstd = '/groups_volume_sumstd'
-    groups_volume_logprodspan = '/groups_volume_logprodspan'
+    groups_volume_mean_std = '/groups_volume_mean_std'

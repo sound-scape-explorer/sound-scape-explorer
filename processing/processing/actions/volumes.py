@@ -1,4 +1,6 @@
 from processing.storage.Storage import Storage
+from processing.volumes.MeanStandardDeviationVolume import \
+    MeanStandardDeviationVolume
 from processing.volumes.SumStandardDeviationVolume import \
     SumStandardDeviationVolume
 from processing.volumes.SumVarianceVolume import SumVarianceVolume
@@ -28,9 +30,17 @@ for band in bands:
                 file_index=file_index,
             )
 
+            mean_std = MeanStandardDeviationVolume(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
             for group_index, features in enumerate(group):
                 sumvar.calculate(features)
                 sumstd.calculate(features)
+                mean_std.calculate(features)
 
             sumvar.store(storage)
             sumstd.store(storage)
+            mean_std.store(storage)
