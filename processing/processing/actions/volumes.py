@@ -17,14 +17,12 @@ for band in bands:
             group = storage.get_group_features(band, integration, file_index)
 
             sumvar = SumVarianceVolume(
-                storage=storage,
                 band=band,
                 integration=integration,
                 file_index=file_index,
             )
 
             sumstd = SumStandardDeviationVolume(
-                storage=storage,
                 band=band,
                 integration=integration,
                 file_index=file_index,
@@ -34,5 +32,5 @@ for band in bands:
                 sumvar.calculate(features)
                 sumstd.calculate(features)
 
-            sumvar.store()
-            sumstd.store()
+            sumvar.store(storage)
+            sumstd.store(storage)

@@ -5,7 +5,6 @@ from processing.storage.Storage import Storage
 
 
 class AbstractVolume(ABC):
-    _storage: Storage
     _band: str
     _integration: int
     _file_index: int
@@ -13,12 +12,10 @@ class AbstractVolume(ABC):
 
     def __init__(
         self,
-        storage: Storage,
         band: str,
         integration: int,
         file_index: int,
     ) -> None:
-        self._storage = storage
         self._band = band
         self._integration = integration
         self._file_index = file_index
@@ -26,7 +23,10 @@ class AbstractVolume(ABC):
         self._values = []
 
     @abstractmethod
-    def store(self) -> None:
+    def store(
+        self,
+        storage: Storage,
+    ) -> None:
         pass
 
     @abstractmethod
@@ -35,3 +35,6 @@ class AbstractVolume(ABC):
         features: List[float]
     ) -> None:
         pass
+
+    def get_values(self) -> List[float]:
+        return self._values
