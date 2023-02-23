@@ -1,13 +1,13 @@
-from typing import List, Union
+from typing import List
 
-import maad
-import math
+import maad.features
+import numpy
 
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.storage.Storage import Storage
 
 
-class MaadLeqIndicator(AbstractIndicator):
+class AcousticComplexityIndexIndicator(AbstractIndicator):
     def __init__(
         self,
         band: str,
@@ -20,30 +20,21 @@ class MaadLeqIndicator(AbstractIndicator):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_group_indicator_maad_leq(
+        storage.create_group_indicator_aci(
             band=self._band,
             integration=self._integration,
             file_index=self._file_index,
             values=self._values,
         )
 
-    def __sanitize(self, value: float) -> Union[float, None]:
-        if math.isnan(value):
-            value = None
-
-        return value
-
     def calculate(
         self,
-        sound: List[float],
-        sample_rate: int,
+        spectrogram: List[List[float]],
     ) -> None:
-        value = maad.features.temporal_leq(
-            sound,
-            sample_rate,
-            gain=42,
-        )
+        if spectrogram is None:
+            self._values.append(numpy.nan)
+            return
 
-        value = self.__sanitize(value)
+        _, _, aci = maad.features.acoustic_complexity_index(spectrogram)
 
-        self._values.append(value)
+        self._values.append(aci)

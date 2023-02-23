@@ -1,8 +1,14 @@
 import maad
 import soundfile
 
-from processing.indicators.EnesLeqIndicator import EnesLeqIndicator
-from processing.indicators.MaadLeqIndicator import MaadLeqIndicator
+from processing.indicators.AcousticComplexityIndexIndicator import \
+    AcousticComplexityIndexIndicator
+from processing.indicators.AcousticDiversityIndexIndicator import \
+    AcousticDiversityIndexIndicator
+from processing.indicators.FrequencyEntropyIndicator import \
+    FrequencyEntropyIndicator
+from processing.indicators.LeqEnesIndicator import LeqEnesIndicator
+from processing.indicators.LeqMaadIndicator import LeqMaadIndicator
 from processing.indicators.TemporalEntropyIndicator import \
     TemporalEntropyIndicator
 from processing.storage.Storage import Storage
@@ -23,19 +29,37 @@ for band_index, band in enumerate(bands):
         for file_index, file_name in enumerate(files):
             group = storage.get_group_features(band, integration, file_index)
 
-            enes_leq_indicator = EnesLeqIndicator(
+            leq_enes = LeqEnesIndicator(
                 band=band,
                 integration=integration,
                 file_index=file_index,
             )
 
-            maad_leq_indicator = MaadLeqIndicator(
+            leq_maad = LeqMaadIndicator(
                 band=band,
                 integration=integration,
                 file_index=file_index,
             )
 
-            temporal_entropy_indicator = TemporalEntropyIndicator(
+            temporal_entropy = TemporalEntropyIndicator(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
+            frequency_entropy = FrequencyEntropyIndicator(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
+            aci = AcousticComplexityIndexIndicator(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
+            adi = AcousticDiversityIndexIndicator(
                 band=band,
                 integration=integration,
                 file_index=file_index,
@@ -76,21 +100,61 @@ for band_index, band in enumerate(bands):
                     ftype='bandpass',
                 )
 
+                try:
+                    spectrogram, \
+                        spectrogram_tn, \
+                        spectrogram_fn, \
+                        spectrogram_ext = \
+                        maad.sound.spectrogram(
+                            x=sound,
+                            fs=sample_rate,
+                        )
+                except ValueError:
+                    spectrogram = None
+                    spectrogram_tn = None
+                    spectrogram_fn = None
+                    spectrogram_ext = None
+
+                # TODO: Rename in spectro_xx ?
+                try:
+                    spectrogram_amplitude, \
+                        spectrogram_amplitude_tn, \
+                        spectrogram_amplitude_fn, \
+                        spectrogram_amplitude_ext = \
+                        maad.sound.spectrogram(
+                            x=sound,
+                            fs=sample_rate,
+                            mode='amplitude',
+                        )
+                except ValueError:
+                    spectrogram_amplitude = None
+                    spectrogram_amplitude_tn = None
+                    spectrogram_amplitude_fn = None
+                    spectrogram_amplitude_ext = None
+
                 # Calculating indicators
 
-                enes_leq_indicator.calculate(
+                leq_enes.calculate(
                     sound=sound,
                     sample_rate=sample_rate,
                     integration=integration,
                 )
 
-                maad_leq_indicator.calculate(
+                leq_maad.calculate(
                     sound=sound,
                     sample_rate=sample_rate,
                 )
 
-                temporal_entropy_indicator.calculate(sound=sound)
+                temporal_entropy.calculate(sound)
+                frequency_entropy.calculate(spectrogram)
+                aci.calculate(spectrogram)
+                adi.calculate(
+                    spectrogram_amplitude=spectrogram_amplitude,
+                    spectrogram_amplitude_fn=spectrogram_amplitude_fn,
+                )
 
-            enes_leq_indicator.store(storage)
-            maad_leq_indicator.store(storage)
-            temporal_entropy_indicator.store(storage)
+            leq_enes.store(storage)
+            leq_maad.store(storage)
+            temporal_entropy.store(storage)
+            frequency_entropy.store(storage)
+            aci.store(storage)

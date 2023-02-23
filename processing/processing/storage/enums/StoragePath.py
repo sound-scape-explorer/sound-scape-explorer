@@ -45,9 +45,15 @@ class StoragePath(Enum):
     groups_features_reduced_vae_2d = '/groups_features_reduced_vae_2d'
     groups_features_reduced_vae_3d = '/groups_features_reduced_vae_3d'
 
-    groups_indicator_enes_leq = '/groups_indicator_enes_leq'
-    groups_indicator_maad_leq = '/groups_indicator_maad_leq'
+    groups_indicator_leq_enes = '/groups_indicator_leq_enes'
+    groups_indicator_leq_maad = '/groups_indicator_leq_maad'
     groups_indicator_temporal_entropy = '/groups_indicator_temporal_entropy'
+    groups_indicator_frequency_entropy = '/groups_indicator_frequency_entropy'
+    groups_indicator_aci = '/groups_indicator_aci'
+    groups_indicator_adi = '/groups_indicator_adi'
+    groups_indicator_bi = '/groups_indicator_bi'
+    groups_indicator_ndsi = '/groups_indicator_ndsi'
+    groups_indicator_ht = '/groups_indicator_ht'
 
     groups_volume_sum_var = '/groups_volume_sum_var'
     groups_volume_sum_std = '/groups_volume_sum_std'
