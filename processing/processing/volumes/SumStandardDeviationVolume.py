@@ -19,7 +19,7 @@ class SumStandardDeviationVolume(AbstractVolume):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_group_volume_sumstd(
+        storage.create_group_volume_sum_std(
             band=self._band,
             integration=self._integration,
             file_index=self._file_index,

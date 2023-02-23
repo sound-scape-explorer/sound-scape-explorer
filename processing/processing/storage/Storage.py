@@ -590,11 +590,12 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_groups_volumes(self) -> None:
-        self.__delete_silently(StoragePath.groups_volume_sumvar)
-        self.__delete_silently(StoragePath.groups_volume_sumstd)
+        self.__delete_silently(StoragePath.groups_volume_sum_var)
+        self.__delete_silently(StoragePath.groups_volume_sum_std)
         self.__delete_silently(StoragePath.groups_volume_mean_std)
+        self.__delete_silently(StoragePath.groups_volume_mean_spreading)
 
-    def create_group_volume_sumvar(
+    def create_group_volume_sum_var(
         self,
         band: str,
         integration: int,
@@ -602,7 +603,7 @@ class Storage(metaclass=SingletonMeta):
         values: List[float],
     ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_volume_sumvar.value}{suffix}'
+        path = f'{StoragePath.groups_volume_sum_var.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -610,7 +611,7 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def create_group_volume_sumstd(
+    def create_group_volume_sum_std(
         self,
         band: str,
         integration: int,
@@ -618,7 +619,7 @@ class Storage(metaclass=SingletonMeta):
         values: List[float],
     ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_volume_sumstd.value}{suffix}'
+        path = f'{StoragePath.groups_volume_sum_std.value}{suffix}'
 
         self.__create_dataset(
             path=path,

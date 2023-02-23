@@ -19,13 +19,13 @@ for band in bands:
         for file_index, _ in enumerate(files):
             group = storage.get_group_features(band, integration, file_index)
 
-            sumvar = SumVarianceVolume(
+            sum_var = SumVarianceVolume(
                 band=band,
                 integration=integration,
                 file_index=file_index,
             )
 
-            sumstd = SumStandardDeviationVolume(
+            sum_std = SumStandardDeviationVolume(
                 band=band,
                 integration=integration,
                 file_index=file_index,
@@ -44,12 +44,12 @@ for band in bands:
             )
 
             for group_index, features in enumerate(group):
-                sumvar.calculate(features)
-                sumstd.calculate(features)
+                sum_var.calculate(features)
+                sum_std.calculate(features)
                 mean_std.calculate(features)
                 mean_spreading.calculate(features)
 
-            sumvar.store(storage)
-            sumstd.store(storage)
+            sum_var.store(storage)
+            sum_std.store(storage)
             mean_std.store(storage)
             mean_spreading.store(storage)

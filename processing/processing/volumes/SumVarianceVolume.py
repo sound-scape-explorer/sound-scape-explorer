@@ -19,7 +19,7 @@ class SumVarianceVolume(AbstractVolume):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_group_volume_sumvar(
+        storage.create_group_volume_sum_var(
             band=self._band,
             integration=self._integration,
             file_index=self._file_index,
