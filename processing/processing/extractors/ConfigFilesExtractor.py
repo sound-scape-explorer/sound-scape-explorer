@@ -14,8 +14,7 @@ from processing.timers.Timer import Timer
 Features = Dict[str, List[float]]
 
 
-class FileExtractor:
-    __storage: Storage
+class ConfigFilesExtractor:
     __files: ConfigFiles
     __files_length: int
     __timer: Timer
@@ -25,7 +24,6 @@ class FileExtractor:
 
     def __init__(
         self,
-        storage: Storage,
         config: Config,
         model: AbstractModel,
         expected_sample_rate: int,
@@ -37,8 +35,6 @@ class FileExtractor:
 
         if self.__files_length == 0:
             raise ValueError('No files to extract.')
-
-        self.__storage = storage
 
         self.__timer = Timer(self.__files_length)
         self.__expected_sample_rate = expected_sample_rate
@@ -114,9 +110,10 @@ class FileExtractor:
     def yield_and_store_features(
         self,
         band: str,
+        storage: Storage,
     ) -> None:
         for features, file_index in self.yield_features():
-            self.__storage.create_file_features(
+            storage.create_file_features(
                 features=features,
                 band=band,
                 file_index=file_index,

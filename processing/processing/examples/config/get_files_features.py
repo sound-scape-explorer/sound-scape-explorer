@@ -1,9 +1,7 @@
 from processing.config.Config import Config
-from processing.extractors.FileExtractor import FileExtractor
+from processing.extractors.ConfigFilesExtractor import ConfigFilesExtractor
 from processing.models.VGGishModel import VGGishModel
-from processing.storage.Storage import Storage
 
-storage = Storage(path='./sample/sse.h5')
 config = Config(path='./sample/config.xlsx')
 
 bands = config.get_bands()
@@ -15,8 +13,7 @@ for band, frequencies in bands.items():
         f_max=frequencies['high'],
     )
 
-    extractor = FileExtractor(
-        storage=storage,
+    extractor = ConfigFilesExtractor(
         config=config,
         model=VGGish,
         expected_sample_rate=expected_sample_rate,
