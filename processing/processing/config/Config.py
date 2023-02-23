@@ -111,6 +111,9 @@ class Config(metaclass=SingletonMeta):
     def get_bands(self) -> ConfigBands:
         return self.__bands
 
+    def get_meta_properties(self) -> List[str]:
+        return self.__files_meta_properties
+
     def __read_settings(self) -> None:
         settings = self.__excel_table[ConfigExcelColumn.settings.value]
         values = self.__excel_table[ConfigExcelColumn.settings_values.value]
