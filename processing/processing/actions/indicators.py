@@ -24,27 +24,25 @@ for band_index, band in enumerate(bands):
             group = storage.get_group_features(band, integration, file_index)
 
             enes_leq_indicator = EnesLeqIndicator(
-                storage=storage,
                 band=band,
                 integration=integration,
                 file_index=file_index,
             )
 
             maad_leq_indicator = MaadLeqIndicator(
-                storage=storage,
                 band=band,
                 integration=integration,
                 file_index=file_index,
             )
 
             temporal_entropy_indicator = TemporalEntropyIndicator(
-                storage=storage,
                 band=band,
                 integration=integration,
                 file_index=file_index,
             )
 
             for group_index, _ in enumerate(group):
+                # TODO: Retrieve this from configuration
                 path = f'./sample/audio{file_name}'
 
                 wav_info = soundfile.info(path)
@@ -78,6 +76,8 @@ for band_index, band in enumerate(bands):
                     ftype='bandpass',
                 )
 
+                # Calculating indicators
+
                 enes_leq_indicator.calculate(
                     sound=sound,
                     sample_rate=sample_rate,
@@ -91,6 +91,6 @@ for band_index, band in enumerate(bands):
 
                 temporal_entropy_indicator.calculate(sound=sound)
 
-            enes_leq_indicator.store()
-            maad_leq_indicator.store()
-            temporal_entropy_indicator.store()
+            enes_leq_indicator.store(storage)
+            maad_leq_indicator.store(storage)
+            temporal_entropy_indicator.store(storage)

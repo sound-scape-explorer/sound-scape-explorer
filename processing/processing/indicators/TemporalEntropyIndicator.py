@@ -9,15 +9,17 @@ from processing.storage.Storage import Storage
 class TemporalEntropyIndicator(AbstractIndicator):
     def __init__(
         self,
-        storage: Storage,
         band: str,
         integration: int,
         file_index: int,
     ) -> None:
-        super().__init__(storage, band, integration, file_index)
+        super().__init__(band, integration, file_index)
 
-    def store(self) -> None:
-        self._storage.create_group_indicator_temporal_entropy(
+    def store(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.create_group_indicator_temporal_entropy(
             band=self._band,
             integration=self._integration,
             file_index=self._file_index,
