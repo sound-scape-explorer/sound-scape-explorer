@@ -29,7 +29,7 @@ class Storage(metaclass=SingletonMeta):
                 StorageMode.rw_or_create.value,
             )
         except BlockingIOError:
-            raise RuntimeError(f'Could not load file {self.__path}')
+            raise RuntimeError(f'Could not open file {self.__path}')
 
     @staticmethod
     def __get_file_features_path(
