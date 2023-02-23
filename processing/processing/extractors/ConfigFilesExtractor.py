@@ -40,7 +40,7 @@ class ConfigFilesExtractor:
         self.__expected_sample_rate = expected_sample_rate
         self.__base_path = base_path
 
-        print(f'Extractor loaded with model {model.__class__.__name__}')
+        print(f'ConfigFilesExtractor loaded with {model.__class__.__name__}')
 
         self.__model = model
 
