@@ -4,6 +4,7 @@ import maad
 import soundfile
 
 from processing.audio.Spectrogram import Spectrogram
+from processing.audio.enums.SpectrogramMode import SpectrogramMode
 
 
 class Audio:
@@ -16,8 +17,8 @@ class Audio:
     sound: List[float]
     __spectrogram: Union[Spectrogram, None]
     __spectrogram_loaded: bool
-    __spectrogram__amplitude: Union[Spectrogram, None]
-    __spectrogram__amplitude_loaded: bool
+    __spectrogram_amplitude: Union[Spectrogram, None]
+    __spectrogram_amplitude_loaded: bool
 
     def __init__(
         self,
@@ -34,8 +35,8 @@ class Audio:
         self.__spectrogram = None
         self.__spectrogram_loaded = False
 
-        self.__spectrogram__amplitude = None
-        self.__spectrogram__amplitude_loaded = False
+        self.__spectrogram_amplitude = None
+        self.__spectrogram_amplitude_loaded = False
 
         self.__frequencies = [f_min, f_max]
         self.__sanitize_frequencies()
@@ -43,10 +44,12 @@ class Audio:
         self.__read()
 
     def __sanitize_frequencies(self) -> None:
-        if 0 in self.__frequencies:
-            for i, _ in enumerate(self.__frequencies):
-                if self.__frequencies[i] == 0:
-                    self.__frequencies[i] = 1
+        if 0 not in self.__frequencies:
+            return
+
+        for i, _ in enumerate(self.__frequencies):
+            if self.__frequencies[i] == 0:
+                self.__frequencies[i] = 1
 
     def __read(self) -> None:
         wav_info = soundfile.info(self.__path)
@@ -75,45 +78,42 @@ class Audio:
     def is_sound_too_short(self) -> bool:
         return len(self.sound) <= 1024
 
+    def __get_spectrogram(
+        self,
+        mode: SpectrogramMode = SpectrogramMode.psd,
+    ) -> Spectrogram:
+        try:
+            self.validate_sound_length()
+
+            s, tn, fn, ext = maad.sound.spectrogram(
+                x=self.sound,
+                fs=self.sample_rate,
+                mode=mode.value,
+            )
+
+            spectrogram = Spectrogram(s, tn, fn, ext)
+        except ValueError:
+            spectrogram = None
+
+        return spectrogram
+
     @property
     def spectrogram(self) -> Spectrogram:
         if self.__spectrogram_loaded is True:
             return self.__spectrogram
 
+        self.__spectrogram = self.__get_spectrogram()
         self.__spectrogram_loaded = True
-
-        try:
-            self.validate_sound_length()
-
-            s, tn, fn, ext = maad.sound.spectrogram(
-                x=self.sound,
-                fs=self.sample_rate,
-            )
-
-            self.__spectrogram = Spectrogram(s, tn, fn, ext)
-        except ValueError:
-            self.__spectrogram = None
-
         return self.__spectrogram
 
     @property
     def spectrogram_amplitude(self) -> Any:
-        if self.__spectrogram__amplitude_loaded is True:
-            return self.__spectrogram__amplitude
+        if self.__spectrogram_amplitude_loaded is True:
+            return self.__spectrogram_amplitude
 
-        self.__spectrogram__amplitude_loaded = True
+        self.__spectrogram_amplitude = self.__get_spectrogram(
+            mode=SpectrogramMode.amplitude
+        )
 
-        try:
-            self.validate_sound_length()
-
-            s, tn, fn, ext = maad.sound.spectrogram(
-                x=self.sound,
-                fs=self.sample_rate,
-                mode='amplitude',
-            )
-
-            self.__spectrogram__amplitude = Spectrogram(s, tn, fn, ext)
-        except ValueError:
-            self.__spectrogram__amplitude = None
-
-        return self.__spectrogram__amplitude
+        self.__spectrogram_amplitude_loaded = True
+        return self.__spectrogram_amplitude
