@@ -50,8 +50,8 @@ class StoragePath(Enum):
     groups_indicator_temporal_median = '/groups_indicator_MED'
     groups_indicator_temporal_entropy = '/groups_indicator_Ht'
     groups_indicator_frequency_entropy = '/groups_indicator_Hf'
-    groups_indicator_acoustic_complexity_index = '/groups_indicator_aci'
-    groups_indicator_acoustic_diversity_index = '/groups_indicator_adi'
+    groups_indicator_acoustic_complexity_index = '/groups_indicator_ACI'
+    groups_indicator_acoustic_diversity_index = '/groups_indicator_ADI'
     groups_indicator_bioacoustics_index = '/groups_indicator_BI'
     groups_indicator_soundscape_index = '/groups_indicator_NDSI'
 
