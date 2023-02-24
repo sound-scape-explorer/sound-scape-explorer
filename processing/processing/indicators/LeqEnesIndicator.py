@@ -1,5 +1,3 @@
-from typing import List, Union
-
 from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.shared import ENES_index
@@ -26,17 +24,6 @@ class LeqEnesIndicator(AbstractIndicator):
             values=self._values,
         )
 
-    @staticmethod
-    def __sanitize(value: List[List[float]]) -> Union[float, None]:
-        if len(value) > 1:
-            raise RuntimeError(f'Calculation produced more than one value.')
-        elif len(value) == 0:
-            value = None
-        else:
-            value = value[0][0]
-
-        return value
-
     def calculate(
         self,
         audio: Audio,
@@ -50,5 +37,5 @@ class LeqEnesIndicator(AbstractIndicator):
             dt=audio.integration,
         )
 
-        value = self.__sanitize(value)
+        value = value[0][0]
         self.add_value(value)

@@ -1,7 +1,4 @@
-from typing import Union
-
 import maad
-import math
 
 from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
@@ -28,12 +25,6 @@ class LeqMaadIndicator(AbstractIndicator):
             values=self._values,
         )
 
-    def __sanitize(self, value: float) -> Union[float, None]:
-        if math.isnan(value):
-            value = None
-
-        return value
-
     def calculate(
         self,
         audio: Audio,
@@ -46,7 +37,5 @@ class LeqMaadIndicator(AbstractIndicator):
             fs=audio.sample_rate,
             gain=42,
         )
-
-        value = self.__sanitize(value)
 
         self.add_value(value)

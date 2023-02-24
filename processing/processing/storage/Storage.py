@@ -1,6 +1,5 @@
 from typing import Any, List, Optional, Union
 
-import numpy
 from h5py import Dataset, File
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
@@ -522,14 +521,6 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    @staticmethod
-    def sanitize_list_with_nones(list: List[float]) -> List[float]:
-        for index, _ in enumerate(list):
-            if list[index] is None:
-                list[index] = numpy.nan
-
-        return list
-
     def delete_group_indicators(self) -> None:
         self.__delete_silently(StoragePath.groups_indicator_leq_enes)
         self.__delete_silently(StoragePath.groups_indicator_leq_maad)
@@ -555,8 +546,6 @@ class Storage(metaclass=SingletonMeta):
         suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_indicator_leq_enes.value}{suffix}'
 
-        values = self.sanitize_list_with_nones(values)
-
         self.__create_dataset(
             path=path,
             data=values,
@@ -572,8 +561,6 @@ class Storage(metaclass=SingletonMeta):
     ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_indicator_leq_maad.value}{suffix}'
-
-        values = self.sanitize_list_with_nones(values)
 
         self.__create_dataset(
             path=path,
@@ -607,8 +594,6 @@ class Storage(metaclass=SingletonMeta):
         suffix = self.__get_group_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_indicator_temporal_entropy.value}{suffix}'
 
-        values = self.sanitize_list_with_nones(values)
-
         self.__create_dataset(
             path=path,
             data=values,
@@ -639,7 +624,8 @@ class Storage(metaclass=SingletonMeta):
         values: List[float],
     ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_acoustic_complexity_index.value}{suffix}'
+        path = StoragePath.groups_indicator_acoustic_complexity_index.value
+        path += suffix
 
         self.__create_dataset(
             path=path,
