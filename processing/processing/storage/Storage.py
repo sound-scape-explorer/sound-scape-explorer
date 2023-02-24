@@ -171,7 +171,7 @@ class Storage(metaclass=SingletonMeta):
 
     def __delete_silently(
         self,
-        path: StoragePath,
+        path: Union[StoragePath, List[StoragePath]],
     ) -> None:
         try:
             del self.__file[path.value]
@@ -196,6 +196,23 @@ class Storage(metaclass=SingletonMeta):
 
     def delete_files_features(self) -> None:
         self.__delete_silently(StoragePath.files_features)
+
+    def delete_configuration(self) -> None:
+        self.__delete_silently(StoragePath.configuration)
+        self.__delete_silently(StoragePath.files)
+        self.__delete_silently(StoragePath.files_timestamps)
+        self.__delete_silently(StoragePath.files_sites)
+        self.__delete_silently(StoragePath.files_tags)
+        self.__delete_silently(StoragePath.files_metas)
+        self.__delete_silently(StoragePath.meta_properties)
+        self.__delete_silently(StoragePath.meta_sets)
+        self.__delete_silently(StoragePath.bands)
+        self.__delete_silently(StoragePath.bands_frequencies)
+        self.__delete_silently(StoragePath.umaps)
+        self.__delete_silently(StoragePath.umaps_integrations)
+        self.__delete_silently(StoragePath.umaps_bands)
+        self.__delete_silently(StoragePath.umaps_ranges)
+        self.__delete_silently(StoragePath.umaps_sites)
 
     def get_umap_seed(self) -> int:
         settings = self.__get(StoragePath.configuration).attrs

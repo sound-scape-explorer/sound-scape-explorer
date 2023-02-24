@@ -8,6 +8,7 @@ config = Config(path='./sample/config.xlsx')
 
 bands = config.get_bands()
 expected_sample_rate = config.get_expected_sample_rate()
+audio_path = config.get_audio_path()
 
 storage.delete_files_features()
 
@@ -21,7 +22,7 @@ for band, frequencies in bands.items():
         config=config,
         model=VGGish,
         expected_sample_rate=expected_sample_rate,
-        base_path='./sample/audio',  # TODO get from configuration
+        base_path=audio_path,
     )
 
     extractor.yield_and_store_features(

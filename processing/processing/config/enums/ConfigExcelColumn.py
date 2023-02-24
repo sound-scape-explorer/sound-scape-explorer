@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class ConfigExcelColumn(Enum):
-    settings = 'variables'
-    settings_values = 'variables_'
+    settings = 'settings'
+    settings_values = 'settings_'
     bands = 'bands'
     bands_values = 'bands_'
     ranges = 'ranges'

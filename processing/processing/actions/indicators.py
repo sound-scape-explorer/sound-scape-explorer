@@ -1,4 +1,5 @@
 from processing.audio.Audio import Audio
+from processing.config.Config import Config
 from processing.indicators.AcousticComplexityIndexIndicator import \
     AcousticComplexityIndexIndicator
 from processing.indicators.AcousticDiversityIndexIndicator import \
@@ -17,6 +18,7 @@ from processing.indicators.TemporalMedianIndicator import \
     TemporalMedianIndicator
 from processing.storage.Storage import Storage
 
+config = Config(path='./sample/config.xlsx')
 storage = Storage(path='./sample/sse.h5')
 
 files = storage.get_files()
@@ -25,6 +27,8 @@ bands = storage.get_bands()
 bands_frequencies = storage.get_bands_frequencies()
 
 integrations = storage.get_integrations()
+
+audio_path = config.get_audio_path()
 
 storage.delete_group_indicators()
 
@@ -88,8 +92,7 @@ for band_index, band in enumerate(bands):
             )
 
             for group_index, _ in enumerate(group):
-                # TODO: Retrieve this from configuration
-                path = f'./sample/audio{file_name}'
+                path = f'{audio_path}{file_name}'
 
                 audio = Audio(
                     path=path,

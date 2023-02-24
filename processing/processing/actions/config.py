@@ -8,4 +8,6 @@ config = Config(
     storage=storage,
 )
 
+storage.delete_configuration()
+
 config.store()
