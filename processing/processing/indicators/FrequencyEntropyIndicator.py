@@ -1,8 +1,6 @@
-from typing import List
-
 import maad.features
-import numpy
 
+from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.storage.Storage import Storage
 
@@ -29,12 +27,13 @@ class FrequencyEntropyIndicator(AbstractIndicator):
 
     def calculate(
         self,
-        spectrogram: List[List[float]],
+        audio: Audio,
     ) -> None:
-        if spectrogram is None:
-            self._values.append(numpy.nan)
-            return
+        if audio.spectrogram is None:
+            return self.add_nan()
 
-        frequency_entropy, _ = maad.features.frequency_entropy(spectrogram)
+        frequency_entropy, _ = maad.features.frequency_entropy(
+            audio.spectrogram.s
+        )
 
-        self._values.append(frequency_entropy)
+        self.add_value(frequency_entropy)

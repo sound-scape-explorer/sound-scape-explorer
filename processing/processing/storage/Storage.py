@@ -533,13 +533,17 @@ class Storage(metaclass=SingletonMeta):
     def delete_group_indicators(self) -> None:
         self.__delete_silently(StoragePath.groups_indicator_leq_enes)
         self.__delete_silently(StoragePath.groups_indicator_leq_maad)
+        self.__delete_silently(StoragePath.groups_indicator_temporal_median)
         self.__delete_silently(StoragePath.groups_indicator_temporal_entropy)
         self.__delete_silently(StoragePath.groups_indicator_frequency_entropy)
-        self.__delete_silently(StoragePath.groups_indicator_aci)
-        self.__delete_silently(StoragePath.groups_indicator_adi)
-        self.__delete_silently(StoragePath.groups_indicator_bi)
-        self.__delete_silently(StoragePath.groups_indicator_ndsi)
-        self.__delete_silently(StoragePath.groups_indicator_ht)
+        self.__delete_silently(
+            StoragePath.groups_indicator_acoustic_complexity_index,
+        )
+        self.__delete_silently(
+            StoragePath.groups_indicator_acoustic_diversity_index,
+        )
+        self.__delete_silently(StoragePath.groups_indicator_bioacoustics_index)
+        self.__delete_silently(StoragePath.groups_indicator_soundscape_index)
 
     def create_group_indicator_leq_enes(
         self,
@@ -570,6 +574,22 @@ class Storage(metaclass=SingletonMeta):
         path = f'{StoragePath.groups_indicator_leq_maad.value}{suffix}'
 
         values = self.sanitize_list_with_nones(values)
+
+        self.__create_dataset(
+            path=path,
+            data=values,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_group_indicator_temporal_median(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        values: List[float],
+    ) -> None:
+        suffix = self.__get_group_suffix(band, integration, file_index)
+        path = f'{StoragePath.groups_indicator_temporal_median.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -611,7 +631,7 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def create_group_indicator_aci(
+    def create_group_indicator_acoustic_complexity_index(
         self,
         band: str,
         integration: int,
@@ -619,7 +639,7 @@ class Storage(metaclass=SingletonMeta):
         values: List[float],
     ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_aci.value}{suffix}'
+        path = f'{StoragePath.groups_indicator_acoustic_complexity_index.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -627,7 +647,7 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def create_group_indicator_adi(
+    def create_group_indicator_acoustic_diversity_index(
         self,
         band: str,
         integration: int,
@@ -635,7 +655,8 @@ class Storage(metaclass=SingletonMeta):
         values: List[float],
     ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_adi.value}{suffix}'
+        path = StoragePath.groups_indicator_acoustic_diversity_index.value
+        path += suffix
 
         self.__create_dataset(
             path=path,
@@ -643,7 +664,7 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def create_group_indicator_bi(
+    def create_group_indicator_bioacoustics_index(
         self,
         band: str,
         integration: int,
@@ -651,7 +672,8 @@ class Storage(metaclass=SingletonMeta):
         values: List[float],
     ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_bi.value}{suffix}'
+        path = f'{StoragePath.groups_indicator_bioacoustics_index.value}' \
+               f'{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -659,7 +681,7 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def create_group_indicator_ndsi(
+    def create_group_indicator_soundscape_index(
         self,
         band: str,
         integration: int,
@@ -667,23 +689,7 @@ class Storage(metaclass=SingletonMeta):
         values: List[float],
     ) -> None:
         suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_ndsi.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_ht(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_ht.value}{suffix}'
+        path = f'{StoragePath.groups_indicator_soundscape_index.value}{suffix}'
 
         self.__create_dataset(
             path=path,

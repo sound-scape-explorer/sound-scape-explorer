@@ -1,7 +1,6 @@
-from typing import List
-
 import maad
 
+from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.storage.Storage import Storage
 
@@ -28,7 +27,11 @@ class TemporalEntropyIndicator(AbstractIndicator):
 
     def calculate(
         self,
-        sound: List[float],
+        audio: Audio,
     ) -> None:
-        value = maad.features.temporal_entropy(sound)
-        self._values.append(value)
+        if audio.is_sound_too_short():
+            return self.add_nan()
+
+        temporal_entropy = maad.features.temporal_entropy(audio.sound)
+
+        self.add_value(temporal_entropy)

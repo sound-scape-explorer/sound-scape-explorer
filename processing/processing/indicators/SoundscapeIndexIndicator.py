@@ -5,7 +5,7 @@ from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.storage.Storage import Storage
 
 
-class AcousticComplexityIndexIndicator(AbstractIndicator):
+class SoundscapeIndexIndicator(AbstractIndicator):
     def __init__(
         self,
         band: str,
@@ -18,7 +18,7 @@ class AcousticComplexityIndexIndicator(AbstractIndicator):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_group_indicator_acoustic_complexity_index(
+        storage.create_group_indicator_soundscape_index(
             band=self._band,
             integration=self._integration,
             file_index=self._file_index,
@@ -29,11 +29,12 @@ class AcousticComplexityIndexIndicator(AbstractIndicator):
         self,
         audio: Audio,
     ) -> None:
-        if audio.spectrogram_amplitude is None:
+        if audio.spectrogram is None:
             return self.add_nan()
 
-        _, _, aci = maad.features.acoustic_complexity_index(
-            audio.spectrogram_amplitude.s,
+        ndsi, _, _, _ = maad.features.soundscape_index(
+            Sxx_power=audio.spectrogram.s,
+            fn=audio.spectrogram.fn,
         )
 
-        self.add_value(aci)
+        self.add_value(ndsi)

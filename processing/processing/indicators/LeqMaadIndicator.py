@@ -1,8 +1,9 @@
-from typing import List, Union
+from typing import Union
 
 import maad
 import math
 
+from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.storage.Storage import Storage
 
@@ -35,15 +36,17 @@ class LeqMaadIndicator(AbstractIndicator):
 
     def calculate(
         self,
-        sound: List[float],
-        sample_rate: int,
+        audio: Audio,
     ) -> None:
+        if audio.is_sound_too_short():
+            return self.add_nan()
+
         value = maad.features.temporal_leq(
-            sound,
-            sample_rate,
+            s=audio.sound,
+            fs=audio.sample_rate,
             gain=42,
         )
 
         value = self.__sanitize(value)
 
-        self._values.append(value)
+        self.add_value(value)

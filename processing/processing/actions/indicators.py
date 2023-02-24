@@ -1,16 +1,20 @@
-import maad
-import soundfile
-
+from processing.audio.Audio import Audio
 from processing.indicators.AcousticComplexityIndexIndicator import \
     AcousticComplexityIndexIndicator
 from processing.indicators.AcousticDiversityIndexIndicator import \
     AcousticDiversityIndexIndicator
+from processing.indicators.BioacousticsIndexIndicator import \
+    BioacousticsIndexIndicator
 from processing.indicators.FrequencyEntropyIndicator import \
     FrequencyEntropyIndicator
 from processing.indicators.LeqEnesIndicator import LeqEnesIndicator
 from processing.indicators.LeqMaadIndicator import LeqMaadIndicator
+from processing.indicators.SoundscapeIndexIndicator import \
+    SoundscapeIndexIndicator
 from processing.indicators.TemporalEntropyIndicator import \
     TemporalEntropyIndicator
+from processing.indicators.TemporalMedianIndicator import \
+    TemporalMedianIndicator
 from processing.storage.Storage import Storage
 
 storage = Storage(path='./sample/sse.h5')
@@ -41,13 +45,19 @@ for band_index, band in enumerate(bands):
                 file_index=file_index,
             )
 
-            temporal_entropy = TemporalEntropyIndicator(
+            med = TemporalMedianIndicator(
                 band=band,
                 integration=integration,
                 file_index=file_index,
             )
 
-            frequency_entropy = FrequencyEntropyIndicator(
+            ht = TemporalEntropyIndicator(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
+            hf = FrequencyEntropyIndicator(
                 band=band,
                 integration=integration,
                 file_index=file_index,
@@ -65,96 +75,48 @@ for band_index, band in enumerate(bands):
                 file_index=file_index,
             )
 
+            bi = BioacousticsIndexIndicator(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
+            ndsi = SoundscapeIndexIndicator(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
             for group_index, _ in enumerate(group):
                 # TODO: Retrieve this from configuration
                 path = f'./sample/audio{file_name}'
 
-                wav_info = soundfile.info(path)
-                frames = integration * wav_info.samplerate
-                start = group_index * frames
-
-                wav, sample_rate = soundfile.read(
-                    file=path,
-                    frames=frames,
-                    start=start,
+                audio = Audio(
+                    path=path,
+                    f_min=bands_frequencies[band_index][0],
+                    f_max=bands_frequencies[band_index][1],
+                    integration=integration,
+                    group_index=group_index,
                 )
-
-                f_min = bands_frequencies[band_index][0]
-                f_max = bands_frequencies[band_index][1]
-
-                frequencies = [f_min, f_max]
-
-                # TODO: Talk about this... `maad.select_bandwidth()` does not
-                #  allow `0` as frequency value
-                if 0 in frequencies:
-                    for i, _ in enumerate(frequencies):
-                        if frequencies[i] == 0:
-                            frequencies[i] = 1
-
-                sound = maad.sound.select_bandwidth(
-                    x=wav,
-                    fs=sample_rate,
-                    fcut=frequencies,
-                    forder=6,
-                    fname='butter',
-                    ftype='bandpass',
-                )
-
-                try:
-                    spectrogram, \
-                        spectrogram_tn, \
-                        spectrogram_fn, \
-                        spectrogram_ext = \
-                        maad.sound.spectrogram(
-                            x=sound,
-                            fs=sample_rate,
-                        )
-                except ValueError:
-                    spectrogram = None
-                    spectrogram_tn = None
-                    spectrogram_fn = None
-                    spectrogram_ext = None
-
-                # TODO: Rename in spectro_xx ?
-                try:
-                    spectrogram_amplitude, \
-                        spectrogram_amplitude_tn, \
-                        spectrogram_amplitude_fn, \
-                        spectrogram_amplitude_ext = \
-                        maad.sound.spectrogram(
-                            x=sound,
-                            fs=sample_rate,
-                            mode='amplitude',
-                        )
-                except ValueError:
-                    spectrogram_amplitude = None
-                    spectrogram_amplitude_tn = None
-                    spectrogram_amplitude_fn = None
-                    spectrogram_amplitude_ext = None
 
                 # Calculating indicators
 
-                leq_enes.calculate(
-                    sound=sound,
-                    sample_rate=sample_rate,
-                    integration=integration,
-                )
-
-                leq_maad.calculate(
-                    sound=sound,
-                    sample_rate=sample_rate,
-                )
-
-                temporal_entropy.calculate(sound)
-                frequency_entropy.calculate(spectrogram)
-                aci.calculate(spectrogram)
-                adi.calculate(
-                    spectrogram_amplitude=spectrogram_amplitude,
-                    spectrogram_amplitude_fn=spectrogram_amplitude_fn,
-                )
+                leq_enes.calculate(audio)
+                leq_maad.calculate(audio)
+                med.calculate(audio)
+                ht.calculate(audio)
+                hf.calculate(audio)
+                aci.calculate(audio)
+                adi.calculate(audio)
+                bi.calculate(audio)
+                ndsi.calculate(audio)
 
             leq_enes.store(storage)
             leq_maad.store(storage)
-            temporal_entropy.store(storage)
-            frequency_entropy.store(storage)
+            med.store(storage)
+            ht.store(storage)
+            hf.store(storage)
             aci.store(storage)
+            adi.store(storage)
+            bi.store(storage)
+            ndsi.store(storage)

@@ -1,8 +1,6 @@
-from typing import List
-
 import maad.features
-import numpy
 
+from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.storage.Storage import Storage
 
@@ -20,7 +18,7 @@ class AcousticDiversityIndexIndicator(AbstractIndicator):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_group_indicator_adi(
+        storage.create_group_indicator_acoustic_diversity_index(
             band=self._band,
             integration=self._integration,
             file_index=self._file_index,
@@ -29,19 +27,16 @@ class AcousticDiversityIndexIndicator(AbstractIndicator):
 
     def calculate(
         self,
-        spectrogram_amplitude: List[List[float]],
-        spectrogram_amplitude_fn: List[float],
+        audio: Audio,
     ) -> None:
-        if spectrogram_amplitude is None \
-                or spectrogram_amplitude_fn is None:
-            self._values.append(numpy.nan)
-            return
+        if audio.spectrogram_amplitude is None:
+            return self.add_nan()
 
         adi = maad.features.acoustic_diversity_index(
-            Sxx=spectrogram_amplitude,
-            fn=spectrogram_amplitude_fn,
+            Sxx=audio.spectrogram_amplitude.s,
+            fn=audio.spectrogram_amplitude.fn,
             fmax=10000,
             dB_threshold=-30,
         )
 
-        self._values.append(adi)
+        self.add_value(adi)

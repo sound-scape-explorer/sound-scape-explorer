@@ -5,7 +5,7 @@ from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.storage.Storage import Storage
 
 
-class AcousticComplexityIndexIndicator(AbstractIndicator):
+class BioacousticsIndexIndicator(AbstractIndicator):
     def __init__(
         self,
         band: str,
@@ -18,7 +18,7 @@ class AcousticComplexityIndexIndicator(AbstractIndicator):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_group_indicator_acoustic_complexity_index(
+        storage.create_group_indicator_bioacoustics_index(
             band=self._band,
             integration=self._integration,
             file_index=self._file_index,
@@ -32,8 +32,9 @@ class AcousticComplexityIndexIndicator(AbstractIndicator):
         if audio.spectrogram_amplitude is None:
             return self.add_nan()
 
-        _, _, aci = maad.features.acoustic_complexity_index(
-            audio.spectrogram_amplitude.s,
+        bi = maad.features.bioacoustics_index(
+            Sxx=audio.spectrogram_amplitude.s,
+            fn=audio.spectrogram_amplitude.fn,
         )
 
-        self.add_value(aci)
+        self.add_value(bi)

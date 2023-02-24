@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+import numpy
+
+from processing.audio.Audio import Audio
 from processing.storage.Storage import Storage
 
 
@@ -28,6 +31,22 @@ class AbstractIndicator(ABC):
         storage: Storage,
     ) -> None:
         pass
+
+    @abstractmethod
+    def calculate(
+        self,
+        audio: Audio,
+    ) -> None:
+        pass
+
+    def add_value(
+        self,
+        value: float,
+    ) -> None:
+        self._values.append(value)
+
+    def add_nan(self) -> None:
+        self._values.append(numpy.nan)
 
     def get_values(self) -> List[float]:
         return self._values
