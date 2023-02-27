@@ -62,14 +62,17 @@ class Audio:
             start=start,
         )
 
-        self.sound = maad.sound.select_bandwidth(
-            x=self.__wav,
-            fs=self.sample_rate,
-            fcut=self.__frequencies,
-            forder=6,
-            fname='butter',
-            ftype='bandpass',
-        )
+        try:
+            self.sound = maad.sound.select_bandwidth(
+                x=self.__wav,
+                fs=self.sample_rate,
+                fcut=self.__frequencies,
+                forder=6,
+                fname='butter',
+                ftype='bandpass',
+            )
+        except ValueError:
+            self.sound = []
 
     def validate_sound_length(self) -> None:
         if self.is_sound_too_short():
