@@ -6,7 +6,7 @@ import torchaudio
 from torch import Tensor
 
 from processing.config.Config import Config
-from processing.config.types.ConfigFiles import ConfigFiles
+from processing.config.File import Files
 from processing.models.AbstractModel import AbstractModel
 from processing.storage.Storage import Storage
 from processing.timers.Timer import Timer
@@ -15,7 +15,7 @@ Features = Dict[str, List[float]]
 
 
 class ConfigFilesExtractor:
-    __files: ConfigFiles
+    __files: Files
     __files_length: int
     __timer: Timer
     __expected_sample_rate: int

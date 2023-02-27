@@ -7,12 +7,12 @@ import numpy
 import pandas
 from pandas import DataFrame, ExcelFile, Series
 
-from processing.config.enums.ConfigExcelColumn import ConfigExcelColumn
-from processing.config.types.ConfigBands import ConfigBands
-from processing.config.types.ConfigFiles import ConfigFiles
-from processing.config.types.ConfigRanges import ConfigRanges
-from processing.config.types.ConfigSettings import ConfigSettings
-from processing.config.types.ConfigUMAPs import ConfigUMAPs
+from processing.config.Band import Band, Bands
+from processing.config.File import File, Files
+from processing.config.Range import Range, Ranges
+from processing.config.Umap import Umap, Umaps
+from processing.config.enums.ExcelColumn import ExcelColumn
+from processing.config.types.Settings import Settings
 from processing.shared.SingletonMeta import SingletonMeta
 from processing.storage.Storage import Storage
 
@@ -22,12 +22,12 @@ class Config(metaclass=SingletonMeta):
     __sheet: str = 'Sheet1'
     __excel: ExcelFile
     __excel_table: DataFrame
-    __settings: ConfigSettings = {}
-    __files: ConfigFiles = {}
+    __settings: Settings = {}
+    __files: Files = {}
     __files_meta_properties: List[str]
-    __ranges: ConfigRanges = {}
-    __bands: ConfigBands = {}
-    __umaps: ConfigUMAPs = {}
+    __ranges: Ranges = {}
+    __bands: Bands = {}
+    __umaps: Umaps = {}
     __all_sites: List[str] = []
     __storage: Storage
 
@@ -87,7 +87,7 @@ class Config(metaclass=SingletonMeta):
 
     def __set_all_sites(self) -> None:
         for file in self.__files.values():
-            site = file['site']
+            site = file.site
 
             if site in self.__all_sites:
                 continue
@@ -116,18 +116,18 @@ class Config(metaclass=SingletonMeta):
         audio_folder = self.get_audio_folder()
         return f'{base_path}/{audio_folder}'
 
-    def get_files(self) -> ConfigFiles:
+    def get_files(self) -> Files:
         return self.__files
 
-    def get_bands(self) -> ConfigBands:
+    def get_bands(self) -> Bands:
         return self.__bands
 
     def get_meta_properties(self) -> List[str]:
         return self.__files_meta_properties
 
     def __read_settings(self) -> None:
-        settings = self.__excel_table[ConfigExcelColumn.settings.value]
-        values = self.__excel_table[ConfigExcelColumn.settings_values.value]
+        settings = self.__excel_table[ExcelColumn.settings.value]
+        values = self.__excel_table[ExcelColumn.settings_values.value]
 
         index_by_setting = self.__get_index_map(settings)
 
@@ -164,10 +164,10 @@ class Config(metaclass=SingletonMeta):
 
         for column in self.__excel_table:
             if 'files' not in column \
-                    or ConfigExcelColumn.files.value == column \
-                    or ConfigExcelColumn.files_dates.value == column \
-                    or ConfigExcelColumn.files_tags.value == column \
-                    or ConfigExcelColumn.files_sites.value == column:
+                    or ExcelColumn.files.value == column \
+                    or ExcelColumn.files_dates.value == column \
+                    or ExcelColumn.files_tags.value == column \
+                    or ExcelColumn.files_sites.value == column:
                 continue
 
             meta_property = column.replace('files_', '')
@@ -185,21 +185,21 @@ class Config(metaclass=SingletonMeta):
     def __read_files(self) -> None:
         self.__read_files_meta_properties()
 
-        files = self.__excel_table[ConfigExcelColumn.files.value]
-        dates = self.__excel_table[ConfigExcelColumn.files_dates.value]
-        sites = self.__excel_table[ConfigExcelColumn.files_sites.value]
-        tags = self.__excel_table[ConfigExcelColumn.files_tags.value]
+        files = self.__excel_table[ExcelColumn.files.value]
+        dates = self.__excel_table[ExcelColumn.files_dates.value]
+        sites = self.__excel_table[ExcelColumn.files_sites.value]
+        tags = self.__excel_table[ExcelColumn.files_tags.value]
         metas = self.__read_files_meta_values()
 
         index_by_file = self.__get_index_map(files)
 
         for file, index in index_by_file.items():
-            self.__files[file] = {
-                'timestamp': self.__convert_date_to_timestamp(dates[index]),
-                'site': sites[index],
-                'tag': tags[index],
-                'meta': [str(m[index]) for m in metas],
-            }
+            timestamp = self.__convert_date_to_timestamp(dates[index])
+            site = sites[index]
+            tag = tags[index]
+            meta = [str(m[index]) for m in metas]
+
+            self.__files[file] = File(timestamp, site, tag, meta)
 
     def __store_settings(self) -> None:
         self.__storage.create_configuration()
@@ -220,12 +220,12 @@ class Config(metaclass=SingletonMeta):
         tags = []
         metas = []
 
-        for file, values in self.__files.items():
-            files.append(file)
-            timestamps.append(values['timestamp'])
-            sites.append(values['site'])
-            tags.append(values['tag'])
-            metas.append(values['meta'])
+        for file_name, file in self.__files.items():
+            files.append(file_name)
+            timestamps.append(file.timestamp)
+            sites.append(file.site)
+            tags.append(file.tag)
+            metas.append(file.meta)
 
         self.__storage.create_files(
             files=files,
@@ -261,8 +261,8 @@ class Config(metaclass=SingletonMeta):
         )
 
     def __read_ranges(self) -> None:
-        ranges = self.__excel_table[ConfigExcelColumn.ranges.value]
-        values = self.__excel_table[ConfigExcelColumn.ranges_values.value]
+        ranges = self.__excel_table[ExcelColumn.ranges.value]
+        values = self.__excel_table[ExcelColumn.ranges_values.value]
 
         index_by_range = self.__get_index_map(ranges)
 
@@ -273,10 +273,7 @@ class Config(metaclass=SingletonMeta):
             timestamp_start = self.__convert_date_to_timestamp(date_start)
             timestamp_end = self.__convert_date_to_timestamp(date_end)
 
-            self.__ranges[range_] = {
-                'start': timestamp_start,
-                'end': timestamp_end,
-            }
+            self.__ranges[range_] = Range(timestamp_start, timestamp_end)
 
     def __store_ranges(self) -> None:
         if self.__storage.is_defined_ranges():
@@ -285,17 +282,17 @@ class Config(metaclass=SingletonMeta):
         ranges = []
         ranges_timestamps = []
 
-        for range_, timestamps in self.__ranges.items():
-            timestamps = [t for t in timestamps.values()]
+        for range_name, range_ in self.__ranges.items():
+            timestamps = [range_.start, range_.end]
 
-            ranges.append(range_)
+            ranges.append(range_name)
             ranges_timestamps.append(timestamps)
 
         self.__storage.create_ranges(ranges, ranges_timestamps)
 
     def __read_bands(self) -> None:
-        bands = self.__excel_table[ConfigExcelColumn.bands.value]
-        values = self.__excel_table[ConfigExcelColumn.bands_values.value]
+        bands = self.__excel_table[ExcelColumn.bands.value]
+        values = self.__excel_table[ExcelColumn.bands_values.value]
 
         index_by_band = self.__get_index_map(bands)
 
@@ -306,10 +303,7 @@ class Config(metaclass=SingletonMeta):
             low = int(low)
             high = int(high)
 
-            self.__bands[band] = {
-                'low': low,
-                'high': high,
-            }
+            self.__bands[band] = Band(low, high)
 
     def __store_bands(self) -> None:
         if self.__storage.is_defined_bands():
@@ -318,17 +312,17 @@ class Config(metaclass=SingletonMeta):
         bands = []
         bands_frequencies = []
 
-        for band, frequencies in self.__bands.items():
-            frequencies = [f for f in frequencies.values()]
+        for band_name, band in self.__bands.items():
+            frequencies = [band.low, band.high]
 
-            bands.append(band)
+            bands.append(band_name)
             bands_frequencies.append(frequencies)
 
         self.__storage.create_bands(bands, bands_frequencies)
 
     def __read_umaps_integration(self, umap_index: int) -> int:
         umaps_integration = self.__excel_table[
-            ConfigExcelColumn.umaps_integration.value
+            ExcelColumn.umaps_integration.value
         ]
 
         integration = umaps_integration[umap_index]
@@ -339,7 +333,7 @@ class Config(metaclass=SingletonMeta):
         return int(integration)
 
     def __read_umaps_bands(self, umap_index: int) -> List[str]:
-        umaps_bands = self.__excel_table[ConfigExcelColumn.umaps_bands.value]
+        umaps_bands = self.__excel_table[ExcelColumn.umaps_bands.value]
         bands = umaps_bands[umap_index]
 
         if self.__is_nan(bands):
@@ -350,7 +344,7 @@ class Config(metaclass=SingletonMeta):
         return bands
 
     def __read_umaps_ranges(self, umap_index: int) -> List[str]:
-        umaps_ranges = self.__excel_table[ConfigExcelColumn.umaps_ranges.value]
+        umaps_ranges = self.__excel_table[ExcelColumn.umaps_ranges.value]
         ranges = umaps_ranges[umap_index]
 
         if self.__is_nan(ranges):
@@ -361,7 +355,7 @@ class Config(metaclass=SingletonMeta):
         return ranges
 
     def __read_umaps_sites(self, umap_index: int) -> List[str]:
-        umaps_sites = self.__excel_table[ConfigExcelColumn.umaps_sites.value]
+        umaps_sites = self.__excel_table[ExcelColumn.umaps_sites.value]
         sites = umaps_sites[umap_index]
 
         if self.__is_nan(sites):
@@ -372,7 +366,7 @@ class Config(metaclass=SingletonMeta):
         return sites
 
     def __read_umaps(self) -> None:
-        umaps = self.__excel_table[ConfigExcelColumn.umaps.value]
+        umaps = self.__excel_table[ExcelColumn.umaps.value]
         index_by_umaps = self.__get_index_map(umaps)
 
         for umap, index in index_by_umaps.items():
@@ -381,12 +375,12 @@ class Config(metaclass=SingletonMeta):
             ranges = self.__read_umaps_ranges(index)
             sites = self.__read_umaps_sites(index)
 
-            self.__umaps[umap] = {
-                'integration': integration,
-                'bands': bands,
-                'ranges': ranges,
-                'sites': sites,
-            }
+            self.__umaps[umap] = Umap(
+                integration=integration,
+                bands=bands,
+                ranges=ranges,
+                sites=sites,
+            )
 
     def __store_umaps(self) -> None:
         if self.__storage.is_defined_umaps():
@@ -398,12 +392,12 @@ class Config(metaclass=SingletonMeta):
         umaps_ranges = []
         umaps_sites = []
 
-        for umap, content in self.__umaps.items():
-            umaps.append(umap)
-            umaps_integrations.append(content['integration'])
-            umaps_bands.append(content['bands'])
-            umaps_ranges.append(content['ranges'])
-            umaps_sites.append(content['sites'])
+        for umap_name, umap in self.__umaps.items():
+            umaps.append(umap_name)
+            umaps_integrations.append(umap.integration)
+            umaps_bands.append(umap.bands)
+            umaps_ranges.append(umap.ranges)
+            umaps_sites.append(umap.sites)
 
         self.__storage.create_umaps(
             umaps,

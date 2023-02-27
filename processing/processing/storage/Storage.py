@@ -21,7 +21,9 @@ class Storage(metaclass=SingletonMeta):
         path: Optional[str] = 'sse.h5'
     ) -> None:
         self.__path = path
+        self.__set_file_or_fail()
 
+    def __set_file_or_fail(self) -> None:
         try:
             self.__file = File(
                 self.__path,

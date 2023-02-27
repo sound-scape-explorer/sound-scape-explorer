@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ConfigExcelColumn(Enum):
+class ExcelColumn(Enum):
     settings = 'settings'
     settings_values = 'settings_'
     bands = 'bands'

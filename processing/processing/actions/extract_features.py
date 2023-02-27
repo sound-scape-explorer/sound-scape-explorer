@@ -12,10 +12,10 @@ audio_path = config.get_audio_path()
 
 storage.delete_files_features()
 
-for band, frequencies in bands.items():
+for band_name, band in bands.items():
     VGGish = VGGishModel(
-        f_min=frequencies['low'],
-        f_max=frequencies['high'],
+        f_min=band.low,
+        f_max=band.high,
     )
 
     extractor = ConfigFilesExtractor(
@@ -26,6 +26,6 @@ for band, frequencies in bands.items():
     )
 
     extractor.yield_and_store_features(
-        band=band,
+        band=band_name,
         storage=storage,
     )
