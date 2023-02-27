@@ -242,14 +242,15 @@ class Config(metaclass=SingletonMeta):
         meta_values = self.__read_files_meta_values()
         meta_sets: List[List[str]] = []
 
-        for _ in range(files_length):
+        for _ in enumerate(meta_values):
             meta_sets.append([])
 
-        for (meta_index, meta_value) in enumerate(meta_values):
+        for meta_index, meta_value in enumerate(meta_values):
             shift = 1
             meta_slice = meta_value[0 + shift:files_length + shift]
 
             for value in meta_slice:
+                print(value, meta_sets, meta_index)
                 if value in meta_sets[meta_index]:
                     continue
 
