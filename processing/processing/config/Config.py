@@ -250,7 +250,6 @@ class Config(metaclass=SingletonMeta):
             meta_slice = meta_value[0 + shift:files_length + shift]
 
             for value in meta_slice:
-                print(value, meta_sets, meta_index)
                 if value in meta_sets[meta_index]:
                     continue
 
