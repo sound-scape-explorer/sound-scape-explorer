@@ -4,11 +4,11 @@ from h5py import Dataset, File
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
 
-from processing.config.enums.ConfigSettingsFields import ConfigSettingsFields
 from processing.shared.SingletonMeta import SingletonMeta
 from processing.storage.enums.StorageCompression import StorageCompression
 from processing.storage.enums.StorageMode import StorageMode
 from processing.storage.enums.StoragePath import StoragePath
+from processing.storage.enums.StorageSettings import StorageSettings
 
 
 class Storage(metaclass=SingletonMeta):
@@ -218,7 +218,7 @@ class Storage(metaclass=SingletonMeta):
 
     def get_umap_seed(self) -> int:
         settings = self.__get(StoragePath.configuration).attrs
-        return settings[ConfigSettingsFields.umap_seed.value]
+        return settings[StorageSettings.umap_seed.value]
 
     def create_configuration(self) -> None:
         self.__create_dataset(StoragePath.configuration, '')
