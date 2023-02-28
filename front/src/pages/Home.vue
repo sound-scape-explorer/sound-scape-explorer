@@ -7,7 +7,7 @@ import {useStorage} from '../composables/useStorage';
 const inputRef = ref<HTMLInputElement>();
 const {
   importUploadedFile,
-  getStorageFiles,
+  getFiles,
 } = await useStorage();
 
 async function handleChange() {
@@ -21,7 +21,7 @@ async function handleChange() {
 }
 
 async function handleRead() {
-  const files = await getStorageFiles();
+  const files = await getFiles();
   console.log(files);
 }
 </script>

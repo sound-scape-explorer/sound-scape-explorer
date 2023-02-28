@@ -19,13 +19,13 @@ const intervalsAsStrings = intervals.map((i) => i.toString());
 function handleSelectionUpdate(band: string, interval: string) {
   if (!band || !interval) {
     selectionStore.band = null;
-    selectionStore.integration = null;
+    selectionStore.umapName = null;
     selectionImageStore.image = null;
     return;
   }
 
   selectionStore.band = band;
-  selectionStore.integration = interval;
+  selectionStore.umapName = interval;
 
   selectionImageStore.image = API_ROUTES.volumesImage({
     integration: interval,
@@ -35,11 +35,11 @@ function handleSelectionUpdate(band: string, interval: string) {
 }
 
 watch(selectionStore, () => {
-  if (selectionStore.band === null || selectionStore.integration === null) {
+  if (selectionStore.band === null || selectionStore.umapName === null) {
     return;
   }
 
-  handleSelectionUpdate(selectionStore.band, selectionStore.integration);
+  handleSelectionUpdate(selectionStore.band, selectionStore.umapName);
 });
 
 onUnmounted(clearSelection);

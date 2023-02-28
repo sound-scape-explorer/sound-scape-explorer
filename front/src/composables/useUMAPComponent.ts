@@ -12,16 +12,16 @@ import {UMAPQueryStore} from '../store/UMAP-query.store';
 import {UMAPScatterStore} from '../store/UMAP-scatter.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {UMAPStore} from '../store/UMAP.store';
-import {copyToClipboard} from '../utils/copy-to-clipboard';
 import {
-  getRangeAndSiteFromDatasetLabel,
-} from '../utils/get-range-and-site-from-dataset-label';
+  convertColumnsToColorTypes,
+} from '../utils/convert-columns-to-color-types';
+import {copyToClipboard} from '../utils/copy-to-clipboard';
 import {isHourDuringDay} from '../utils/is-hour-during-day';
 import {mapRange} from '../utils/map-range';
 import {useColors} from './useColors';
-import {useConfig} from './useConfig';
 import {useEventListener} from './useEventListener';
 import {useNotification} from './useNotification';
+import {useStorage} from './useStorage';
 import {useUMAPFilters} from './useUMAPFilters';
 import {useUMAPMeta} from './useUMAPMeta';
 
@@ -30,7 +30,7 @@ dayjs.extend(relativeTime);
 export function useUMAPComponent() {
   const {colors, nightColor, dayColor, cyclingColors} = useColors();
   const {shouldBeFiltered} = useUMAPFilters();
-  const {getMetaPropertiesAsColorTypes, getMetaColor} = useUMAPMeta();
+  const {getMetaColor} = useUMAPMeta();
   const {notify} = useNotification();
 
   let isFirstRender = true;
@@ -56,7 +56,7 @@ export function useUMAPComponent() {
     UMAPDatasetStore.dataset = null;
   }
 
-  function handleClick(index: number | null): void {
+  async function handleClick(index: number | null): Promise<void> {
     if (!index) {
       return;
     }
@@ -68,13 +68,12 @@ export function useUMAPComponent() {
       return;
     }
 
-    useConfig().then(async ({config}) => {
-      const {site} = getRangeAndSiteFromDatasetLabel(label);
-      const audioBase = config?.variables.audio_base;
-      const path = `${audioBase}${site}`;
-      await copyToClipboard(path);
-      notify('success', 'Audio file path copied to clipboard', path);
-    });
+    const {getStorageSettings} = await useStorage();
+    const settings = await getStorageSettings();
+
+    const path = `${settings.base_path}/${settings.audio_folder}${label}`;
+    await copyToClipboard(path);
+    notify('success', 'Audio file path copied to clipboard', path);
   }
 
   async function render() {
@@ -86,8 +85,21 @@ export function useUMAPComponent() {
     scatterGL.resize();
 
     if (isFirstRender) {
+      const {getStorageMetas} = await useStorage();
+      const metas = await getStorageMetas();
+      const metaProperties = Object.keys(metas);
+      const metaSets = Object.values(metas);
+
       scatterGL.render(UMAPDatasetStore.dataset);
-      scatterGL.setPointColorer(getColor);
+      scatterGL.setPointColorer(
+        (i, s, h) => getColor(
+          i,
+          s,
+          h,
+          metaProperties,
+          metaSets,
+        ),
+      );
       isFirstRender = false;
     }
   }
@@ -136,9 +148,11 @@ export function useUMAPComponent() {
     index: number,
     selectedIndices: Set<number>,
     hoverIndex: number | null,
+    metaProperties: string[],
+    metaSets: string[][],
   ): string {
     const filteredColor = `hsla(0, 0%, 0%, ${UMAPStore.alpha.low})`;
-    const shouldBeFilteredOut = shouldBeFiltered(index);
+    const shouldBeFilteredOut = shouldBeFiltered(index, metaProperties);
 
     if (shouldBeFilteredOut) {
       return filteredColor;
@@ -147,7 +161,7 @@ export function useUMAPComponent() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const dataset = UMAPDatasetStore.dataset!;
     const {colorType} = UMAPFiltersStore;
-    const metaPropertiesAsColorTypes = getMetaPropertiesAsColorTypes();
+    const metaPropertiesAsColorTypes = convertColumnsToColorTypes(metaProperties);
 
     const timestamp = dataset.metadata[index]['timestamp'] as number;
     const date = dayjs(timestamp * 1000);
@@ -194,7 +208,7 @@ export function useUMAPComponent() {
 
       color = cyclingColors.value(rangedIndex).alpha(UMAPStore.alpha.high).css();
     } else if (metaPropertiesAsColorTypes.includes(colorType)) {
-      color = getMetaColor(colorType, index);
+      color = getMetaColor(colorType, index, metaPropertiesAsColorTypes, metaSets);
     }
 
     if (hoverIndex === index) {
@@ -225,6 +239,7 @@ export function useUMAPComponent() {
     UMAPMetaStore,
     UMAPQueryComplexStore,
     UMAPStore,
+    UMAPDatasetStore,
   ], async () => {
     await render();
   });

@@ -1,14 +1,11 @@
 <script lang="ts" setup="">
 import {computed} from 'vue';
-import {useConfig} from '../composables/useConfig';
-
-const config = await useConfig();
 
 const appTitle = 'SSE';
 const appVersion = import.meta.env.VITE_SSE_VERSION || '';
 
 const dataTitle = 'Data';
-const dataVersion = computed(() => config.version);
+const dataVersion = computed(() => '');
 
 const isSameVersion = appVersion === dataVersion.value;
 

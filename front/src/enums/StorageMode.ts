@@ -1,4 +1,4 @@
-export enum StorageModeEnum {
+export enum StorageMode {
   readonly = 'r',
   readWrite = 'a',
   SWMRWrite = 'Sw',

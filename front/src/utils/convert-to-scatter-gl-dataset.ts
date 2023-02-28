@@ -9,50 +9,36 @@ interface MyMetadata {
   metaValues: string[];
 }
 
-export function convertToScatterGlDataset(
-  features: number[][][],
+interface Props {
+  features: number[][][];
+  integration: number,
+  files: string[],
   timestamps: number[],
-) {
-  const dataPoints: Point2D[] = features.flat() as unknown as Point2D[];
+  tags: string[],
+  metas: string[][],
+}
+
+export function convertToScatterGlDataset(props: Props) {
+  const dataPoints: Point2D[] = props.features.flat() as unknown as Point2D[];
   const metadata: MyMetadata[] = [];
 
   for (let i = 0; i < dataPoints.length; i += 1) {
-    const label = i.toString();
+    const integratedIndex = Math.floor(i / props.files.length) % props.files.length;
+
+    const label = props.files[integratedIndex];
     const labelIndex = i;
-    const timestamp = timestamps[i];
+    const timestamp = props.timestamps[i];
+    const tags = props.tags[integratedIndex];
+    const metaValues = props.metas[integratedIndex];
 
     metadata.push({
       label,
       labelIndex,
       timestamp,
-      tags: '',
-      metaValues: [''],
+      tags,
+      metaValues,
     });
   }
-
-  // data.X.forEach((coordinates, index) => {
-  //   dataPoints.push(coordinates as Point2D);
-  //
-  //   const label = data?.l[index];
-  //   const labelIndex = label && data?.l.indexOf(label);
-  //   const timestamp = data.t[index];
-  //
-  //   const {site} = getRangeAndSiteFromDatasetLabel(label);
-  //   const tags = findTags(timestamp, `/${site}`);
-  //   const metaValues = data.c[index];
-  //
-  //   if (labelIndex === '') {
-  //     return;
-  //   }
-
-  // metadata.push({
-  //   labelIndex,
-  //   label,
-  //   timestamp,
-  //   tags,
-  //   metaValues,
-  // });
-  // });
 
   return new ScatterGL.Dataset(dataPoints, metadata as unknown as PointMetadata[]);
 }

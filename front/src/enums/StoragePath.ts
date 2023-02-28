@@ -1,4 +1,4 @@
-export enum StoragePathEnum {
+export enum StoragePath {
   configuration = '/configuration',
 
   files = '/files',
@@ -25,5 +25,5 @@ export enum StoragePathEnum {
 
   groups_features = '/groups_features',
   groups_timestamps = '/groups_timestamps',
-  groups_features_reduced = '/groups_features_reduced',
+  groups_features_reduced_umap_2d = '/groups_features_reduced_umap_2d',
 }

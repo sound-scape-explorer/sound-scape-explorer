@@ -2,7 +2,7 @@ import {reactive} from 'vue';
 
 export interface UMAPMetaStoreInterface {
   metaSelection: {
-    [metaProperty: string]: (string | number)[];
+    [metaProperty: string]: string;
   };
 }
 

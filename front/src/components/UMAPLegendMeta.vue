@@ -21,6 +21,7 @@ function initializeMetaSelection() {
   }
 
   for (const index of metaSetsIndexes.value) {
+    // @ts-expect-error TS2322
     UMAPMetaStore.metaSelection[index] = [];
   }
 }

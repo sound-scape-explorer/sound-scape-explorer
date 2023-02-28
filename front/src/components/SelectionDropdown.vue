@@ -18,13 +18,13 @@ const integrationsOptions = computed(() => convertToNaiveSelectOptions(integrati
 
 function processSelection() {
   if (
-    selectionStore.band === null
-      || selectionStore.integration === null
+      selectionStore.band === null
+      || selectionStore.umapName === null
   ) {
     return;
   }
 
-  handleUpdate(selectionStore.band, selectionStore.integration);
+  handleUpdate(selectionStore.band, selectionStore.umapName);
 }
 
 watch(selectionStore, processSelection);
@@ -38,7 +38,7 @@ watch(selectionStore, processSelection);
       size="tiny"
   />
   <n-select
-      v-model:value="selectionStore.integration"
+      v-model:value="selectionStore.umapName"
       :options="integrationsOptions"
       placeholder="Intervals..."
       size="tiny"

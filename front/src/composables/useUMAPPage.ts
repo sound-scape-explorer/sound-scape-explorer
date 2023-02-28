@@ -7,13 +7,11 @@ import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {
   convertToScatterGlDataset,
 } from '../utils/convert-to-scatter-gl-dataset';
-import {useAPI} from './useAPI';
 import {useSelection} from './useSelection';
 import {useStorage} from './useStorage';
 
 export function useUMAPPage() {
   const {clearSelection} = useSelection();
-  const {fetchUMAP} = useAPI();
 
   function resetImage() {
     selectionImageStore.image = null;
@@ -29,34 +27,40 @@ export function useUMAPPage() {
 
   function resetSelection() {
     selectionStore.band = null;
-    selectionStore.integration = null;
+    selectionStore.umapName = null;
   }
 
   function setSelection(band: string, intervalLabel: string) {
     selectionStore.band = band;
-    selectionStore.integration = intervalLabel;
+    selectionStore.umapName = intervalLabel;
   }
 
-  async function fetchData(band: string, integration: string) {
+  async function fetchData(band: string, umapName: string) {
     const {
       getStorageUmapsFeatures,
-      getStorageUmapsTimestamps,
+      getFiles,
+      getGroupTimestamps,
+      getStorageFilesTags,
+      getStorageFilesMetas,
     } = await useStorage();
 
     try {
-      const data = await fetchUMAP(integration, band);
-      const features = await getStorageUmapsFeatures(band, integration);
-      const timestamps = await getStorageUmapsTimestamps(band, integration);
+      const features = await getStorageUmapsFeatures(band, umapName);
+      const files = await getFiles();
+      const timestamps = await getGroupTimestamps(band, umapName);
+      const tags = await getStorageFilesTags();
+      const metas = await getStorageFilesMetas();
 
-      if (!data) {
-        return;
-      }
-
-      UMAPDatasetStore.dataset = convertToScatterGlDataset(
+      UMAPDatasetStore.dataset = convertToScatterGlDataset({
         features,
-        timestamps.flat(),
-      );
-    } catch {
+        integration: 15,
+        files,
+        timestamps: timestamps.flat(),
+        tags,
+        metas,
+      });
+    }
+    catch {
       UMAPDatasetStore.dataset = null;
     }
   }

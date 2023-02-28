@@ -1,7 +1,6 @@
 import {ref} from 'vue';
 import {UMAP_EXPORT_FILENAME} from '../constants';
 import type {Point2D, Point3D, PointMetadata} from '../lib/scatter-gl-0.0.13';
-import type {ConfigStoreInterface} from '../store/config.store';
 import {selectionStore} from '../store/selection.store';
 import {settingsStore} from '../store/settings.store';
 import type {UMAPDatasetStoreInterface} from '../store/UMAP-dataset.store';
@@ -18,8 +17,8 @@ import {
   getRangeAndSiteFromDatasetLabel,
 } from '../utils/get-range-and-site-from-dataset-label';
 import {triggerBrowserDownload} from '../utils/trigger-browser-download';
-import {useConfig} from './useConfig';
 import {useNotification} from './useNotification';
+import {useStorage} from './useStorage';
 import {useUMAPFilters} from './useUMAPFilters';
 
 export function useUMAPExport() {
@@ -34,9 +33,9 @@ export function useUMAPExport() {
      * Selection settings
      */
 
-    const {band, integration} = selectionStore;
+    const {band, umapName} = selectionStore;
 
-    name += `_${band}_${integration}`;
+    name += `_${band}_${umapName}`;
 
     /**
      * Query
@@ -74,12 +73,14 @@ export function useUMAPExport() {
 
     for (let i = 0; i < columnsValues.length; ++i) {
       const value = columnsValues[i];
+      console.log(value);
 
       if (value.length === 0) {
         continue;
       }
 
-      const string = value.join('+');
+      // const string = value.join('+');
+      const string = value;
 
       if (string === '') {
         continue;
@@ -98,7 +99,7 @@ export function useUMAPExport() {
   async function parse(
     dataset: UMAPDatasetStoreInterface['dataset'],
     name: string,
-    metaProperties: ConfigStoreInterface['metaProperties'],
+    metaProperties: string[],
     type: 'json' | 'csv' = 'json',
   ) {
     loadingRef.value = true;
@@ -112,23 +113,12 @@ export function useUMAPExport() {
 
     const {points, metadata} = dataset;
 
-    const band = selectionStore.band;
-    const intervalLabel = selectionStore.integration;
-    const {intervals, intervalLabels} = await useConfig();
-
-    if (!intervalLabel) {
-      return payload;
-    }
-
-    const intervalIndex = intervalLabels.indexOf(intervalLabel);
-    const interval = intervals[intervalIndex].toString();
-
-    if (!band || !interval) {
+    if (!selectionStore.band || !selectionStore.umapName) {
       return payload;
     }
 
     for (let i = 0; i < points.length; ++i) {
-      const shouldBeFilteredOut = shouldBeFiltered(i);
+      const shouldBeFilteredOut = shouldBeFiltered(i, metaProperties);
 
       if (shouldBeFilteredOut) {
         continue;
@@ -201,7 +191,9 @@ export function useUMAPExport() {
   }
 
   async function handleClick(type: 'json' | 'csv' = 'json') {
-    const {metaProperties} = await useConfig();
+    const {getStorageMetas} = await useStorage();
+    const metas = await getStorageMetas();
+    const metaProperties = Object.keys(metas);
 
     const filename = getFilename() || UMAP_EXPORT_FILENAME;
 

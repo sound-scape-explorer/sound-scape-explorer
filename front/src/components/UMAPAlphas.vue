@@ -28,9 +28,9 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
           :theme-overrides="inputNumberThemeOverrides"
           class="input"
           max="1"
-          min="0"
+          min="0.005"
           size="tiny"
-          step="0.001"
+          step="0.005"
       />
     </template>
     <span>Filtered dots opacity</span>

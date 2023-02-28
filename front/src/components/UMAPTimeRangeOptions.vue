@@ -5,8 +5,8 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import {NButton, NButtonGroup, NDatePicker, NInputNumber, NSwitch, NTooltip} from 'naive-ui';
 import {computed, ComputedRef, ref, watch} from 'vue';
-import {useConfig} from '../composables/useConfig';
 import {useEventListener} from '../composables/useEventListener';
+import {useStorage} from '../composables/useStorage';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {DATE_FORMAT} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
@@ -16,7 +16,9 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const {isDisabled} = useUMAPStatus();
-const {config} = await useConfig();
+const {getStorageSettings} = await useStorage();
+
+const settings = await getStorageSettings();
 
 const uiDisabled: ComputedRef<boolean> = computed(() => isDisabled.value || UMAPTimeRangeStore.isAllSelected);
 
@@ -58,7 +60,7 @@ const durations: Duration[] = [
 ];
 
 const timezoneName: ComputedRef<string> = computed(() => {
-  return config?.variables.display_locale ?? '';
+  return settings.display_locale;
 });
 
 const isPlaying = ref<boolean>(false);
@@ -272,7 +274,7 @@ function printLocalizedDate(date: Dayjs): string {
                 :disabled="uiDisabled"
                 :on-update:value="handleDateStartUpdate"
                 :value="transposeDateToZone(dateStart)"
-                size="tiny"
+                size="small"
                 type="datetime"
             />
           </template>

@@ -61,7 +61,7 @@ const integrations = await getStorageIntegrations();
       <UMAPTimeRangeOptions />
       <UMAPTimeRangeSlider />
     </div>
-
+    
     <div class="scatter">
       <UMAPScatterPlotGL />
     </div>

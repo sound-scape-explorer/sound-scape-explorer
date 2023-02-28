@@ -68,18 +68,19 @@ const options = ref<Options>({
  */
 
 async function updateData() {
-  const {band, integration} = selectionStore;
+  const {band, umapName} = selectionStore;
 
-  if (band === null || integration === null) {
+  if (band === null || umapName === null) {
     return;
   }
 
   try {
-    const endpoint = API_ROUTES.volumes({integration, band});
+    const endpoint = API_ROUTES.volumes({umapName: umapName, band});
 
     const request = await fetch(endpoint);
     fetchedData.value = await request.json();
-  } catch {
+  }
+  catch {
     options.value.series = [];
     fetchedData.value = undefined;
   }
@@ -93,7 +94,7 @@ function parseData() {
   const {activeSites, activeRange} = volumesOptionsStore;
 
   if (
-    activeSites.length === 0
+      activeSites.length === 0
       || activeRange === null
       || !fetchedData.value
   ) {
@@ -150,7 +151,7 @@ function parseData() {
  */
 
 watch(selectionStore, async () => {
-  if (selectionStore.band === null || selectionStore.integration === null) {
+  if (selectionStore.band === null || selectionStore.umapName === null) {
     return;
   }
 

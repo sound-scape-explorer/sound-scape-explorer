@@ -3,16 +3,34 @@ import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
 import {computed, ComputedRef, ref, watch} from 'vue';
-import {useConfig} from '../composables/useConfig';
+import {useStorage} from '../composables/useStorage';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
-import {API_ROUTES, SLIDER_LIMITS} from '../constants';
+import {SLIDER_LIMITS} from '../constants';
 import {selectionStore} from '../store/selection.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {mapRange} from '../utils/map-range';
 import Button from './Button.vue';
 
 const {isDisabled} = useUMAPStatus();
-const {config} = await useConfig();
+const {
+  getStorageUmaps,
+  getStorageUmapsRanges,
+  getStorageRanges,
+  getGroupTimestamps,
+} = await useStorage();
+const umaps = await getStorageUmaps();
+const umapRanges = await getStorageUmapsRanges();
+const storageRanges = await getStorageRanges();
+
+const allTimestamps = ref<number[]>();
+watch(selectionStore, async () => {
+  if (!selectionStore.band || !selectionStore.umapName) {
+    return;
+  }
+
+  const timestamps = await getGroupTimestamps(selectionStore.band, selectionStore.umapName);
+  allTimestamps.value = timestamps.flat().map((t) => t / 1000);
+});
 
 interface Slider {
   key: string;
@@ -26,11 +44,7 @@ interface Slider {
 const cachedSliders = ref<null | Slider[]>(null);
 
 const sliders: ComputedRef<Slider[]> = computed(() => {
-  if (!config) {
-    return [];
-  }
-
-  if (!selectionStore.integration) {
+  if (!selectionStore.umapName) {
     return [];
   }
 
@@ -42,12 +56,13 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     return cachedSliders.value;
   }
 
-  const umap = config.umaps[selectionStore.integration];
-  const rangeNames = Object.values(umap[3]);
+  const umapIndex = umaps.indexOf(selectionStore.umapName);
+  const ranges = umapRanges[umapIndex];
+
   const sliders = [];
 
-  for (const rangeName of rangeNames) {
-    const rangeValues = config.ranges[rangeName];
+  for (const range of ranges) {
+    const rangeValues = storageRanges[range];
     const rangeStart = rangeValues[0];
     const rangeEnd = rangeValues[1];
     const timeStart = dayjs(rangeStart).unix();
@@ -63,12 +78,12 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     }
 
     const slider = {
-      key: rangeName,
+      key: range,
       min: timeStart,
       max: timeEnd,
       marks: {
         [timeStart]: SLIDER_LIMITS.start,
-        [timeBetween]: rangeName,
+        [timeBetween]: range,
         [timeEnd]: SLIDER_LIMITS.end,
       },
     };
@@ -90,28 +105,6 @@ interface Interest {
   key: string;
   values: boolean[];
 }
-
-const umapEndpoint: ComputedRef<string | null> = computed(() => {
-  const {band, integration} = selectionStore;
-
-  if (!band || !integration) {
-    return null;
-  }
-
-  return API_ROUTES.umap({band, integration});
-});
-
-const allTimestamps = ref<number[]>([]);
-
-watch(umapEndpoint, async () => {
-  if (!umapEndpoint.value) {
-    return;
-  }
-
-  const response = await fetch(umapEndpoint.value);
-  const json = await response.json();
-  allTimestamps.value = json.t;
-});
 
 const interests: ComputedRef<Interest[]> = computed(() => {
   if (!allTimestamps.value) {
