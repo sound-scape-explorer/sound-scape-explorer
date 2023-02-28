@@ -196,7 +196,7 @@ class Config(metaclass=SingletonMeta):
         for file, index in index_by_file.items():
             timestamp = self.__convert_date_to_timestamp(dates[index])
             site = sites[index]
-            tag = tags[index]
+            tag = tags[index] if type(tags[index]) is not numpy.float64 else ''
             meta = [str(m[index]) for m in metas]
 
             self.__files[file] = File(timestamp, site, tag, meta)
