@@ -250,6 +250,9 @@ class Config(metaclass=SingletonMeta):
             meta_slice = meta_value[0 + shift:files_length + shift]
 
             for value in meta_slice:
+                if type(value) is float:
+                    value = str(value)
+
                 if value in meta_sets[meta_index]:
                     continue
 
