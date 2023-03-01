@@ -1,5 +1,5 @@
 import {onUnmounted} from 'vue';
-import {API_ROUTES, RENDERING_DELAY_SLOW} from '../constants';
+import {RENDERING_DELAY_SLOW} from '../constants';
 import {modalLoadingStore} from '../store/modal-loading.store';
 import {selectionImageStore} from '../store/selection-image.store';
 import {selectionStore} from '../store/selection.store';
@@ -15,14 +15,6 @@ export function useUMAPPage() {
 
   function resetImage() {
     selectionImageStore.image = null;
-  }
-
-  function setImage(band: string, intervalLabel: string) {
-    selectionImageStore.image = API_ROUTES.umap({
-      integration: intervalLabel,
-      band,
-      isImage: true,
-    });
   }
 
   function resetSelection() {
@@ -79,7 +71,6 @@ export function useUMAPPage() {
     }
 
     setSelection(band, interval);
-    setImage(band, interval);
     await fetchData(band, interval);
 
     callback();

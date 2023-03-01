@@ -5,7 +5,6 @@ import highchartsMore from 'highcharts/highcharts-more';
 import accessibility from 'highcharts/modules/accessibility';
 import {NP} from 'naive-ui';
 import {ref, watch} from 'vue';
-import {API_ROUTES} from '../constants';
 import type {ApiVolumeInterface} from '../interfaces/api-volume.interface';
 import {selectionStore} from '../store/selection.store';
 import {volumesOptionsStore} from '../store/volumes-options.store';
@@ -75,10 +74,7 @@ async function updateData() {
   }
 
   try {
-    const endpoint = API_ROUTES.volumes({umapName: umapName, band});
-
-    const request = await fetch(endpoint);
-    fetchedData.value = await request.json();
+    // TODO
   }
   catch {
     options.value.series = [];

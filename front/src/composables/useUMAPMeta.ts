@@ -1,18 +1,10 @@
-import {configStore} from '../store/config.store';
 import {UMAPStore} from '../store/UMAP.store';
-import {
-  convertColumnsToColorTypes,
-} from '../utils/convert-columns-to-color-types';
 import {useColors} from './useColors';
 import {useUMAPDataset} from './useUMAPDataset';
 
 export function useUMAPMeta() {
   const {colors} = useColors();
   const {getMetaContent} = useUMAPDataset();
-
-  function getMetaPropertiesAsColorTypes() {
-    return convertColumnsToColorTypes(configStore.metaProperties);
-  }
 
   function createLimitedColorScale(length: number): [number, number, number][] {
     return colors.value.colors(length, 'rgb');
@@ -46,7 +38,6 @@ export function useUMAPMeta() {
   }
 
   return {
-    getMetaPropertiesAsColorTypes,
     getMetaColor,
     getMetaColorFromMetaIndex,
   };

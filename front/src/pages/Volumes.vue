@@ -4,34 +4,29 @@ import Selection from '../components/Selection.vue';
 import Title from '../components/Title.vue';
 import VolumesBoxPlot from '../components/VolumesBoxPlot.vue';
 import VolumesOptions from '../components/VolumesOptions.vue';
-import {useConfig} from '../composables/useConfig';
 import {useSelection} from '../composables/useSelection';
-import {API_ROUTES} from '../constants';
-import {selectionImageStore} from '../store/selection-image.store';
+import {useStorage} from '../composables/useStorage';
 import {selectionStore} from '../store/selection.store';
-import {volumesOptionsStore} from '../store/volumes-options.store';
+
+const {
+  getStorageBands,
+  getStorageIntegrations,
+} = await useStorage()
+const bands = await getStorageBands()
+const integrations = await getStorageIntegrations()
 
 const {clearSelection} = useSelection();
-const {bands, intervals} = await useConfig();
+onUnmounted(clearSelection);
 
-const intervalsAsStrings = intervals.map((i) => i.toString());
-
-function handleSelectionUpdate(band: string, interval: string) {
+function handleSelectionChange(band: string, interval: string) {
   if (!band || !interval) {
     selectionStore.band = null;
     selectionStore.umapName = null;
-    selectionImageStore.image = null;
     return;
   }
 
   selectionStore.band = band;
   selectionStore.umapName = interval;
-
-  selectionImageStore.image = API_ROUTES.volumesImage({
-    integration: interval,
-    band,
-    variable: volumesOptionsStore.activeVariable,
-  });
 }
 
 watch(selectionStore, () => {
@@ -39,15 +34,17 @@ watch(selectionStore, () => {
     return;
   }
 
-  handleSelectionUpdate(selectionStore.band, selectionStore.umapName);
+  handleSelectionChange(selectionStore.band, selectionStore.umapName);
 });
-
-onUnmounted(clearSelection);
 </script>
 
 <template>
   <Title text="Volumes" />
-  <Selection :bands="bands" :callback="handleSelectionUpdate" :integrations="intervalsAsStrings" />
+  <Selection
+      :bands="Object.keys(bands)"
+      :callback="handleSelectionChange"
+      :integrations="integrations"
+  />
   <VolumesOptions />
   <VolumesBoxPlot />
 </template>

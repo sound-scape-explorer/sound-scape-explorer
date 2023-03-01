@@ -1,17 +1,23 @@
 <script lang="ts" setup>
 import {NP} from 'naive-ui';
+import {useStorage} from '../composables/useStorage';
+import VolumesOptionsAggregate from './VolumesOptionsAggregate.vue';
 import VolumesOptionsRange from './VolumesOptionsRange.vue';
 import VolumesOptionsSites from './VolumesOptionsSites.vue';
 import VolumesOptionsVariable from './VolumesOptionsVariable.vue';
-import VolumesOptionsAggregate from './VolumesOptionsAggregate.vue';
-import {useConfig} from '../composables/useConfig';
 
-const {ranges, sites} = await useConfig();
+const {
+  getStorageRanges,
+  getFilesSites,
+} = await useStorage();
+
+const ranges = await getStorageRanges();
+const sites = await getFilesSites();
 </script>
 
 <template>
   <n-p class="first-row">
-    <VolumesOptionsRange :ranges="ranges" />
+    <VolumesOptionsRange :ranges="Object.keys(ranges)" />
     <VolumesOptionsSites :sites="sites" />
     <VolumesOptionsVariable class="variable" />
   </n-p>

@@ -1,5 +1,6 @@
 import type {Point2D, PointMetadata} from '../lib/scatter-gl-0.0.13';
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
+import {getIntegratedIndex} from './get-integrated-index';
 
 interface MyMetadata {
   labelIndex: number;
@@ -23,7 +24,7 @@ export function convertToScatterGlDataset(props: Props) {
   const metadata: MyMetadata[] = [];
 
   for (let i = 0; i < dataPoints.length; i += 1) {
-    const integratedIndex = Math.floor(i / props.files.length) % props.files.length;
+    const integratedIndex = getIntegratedIndex(i, props.files.length);
 
     const label = props.files[integratedIndex];
     const labelIndex = i;

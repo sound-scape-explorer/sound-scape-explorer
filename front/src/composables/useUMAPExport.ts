@@ -12,10 +12,7 @@ import {convertArrayToCsv} from '../utils/convert-array-to-csv';
 import {
   convertObjectToJsonString,
 } from '../utils/convert-object-to-json-string';
-import {fetchFeatures} from '../utils/fetch-features';
-import {
-  getRangeAndSiteFromDatasetLabel,
-} from '../utils/get-range-and-site-from-dataset-label';
+import {getIntegratedIndex} from '../utils/get-integrated-index';
 import {triggerBrowserDownload} from '../utils/trigger-browser-download';
 import {useNotification} from './useNotification';
 import {useStorage} from './useStorage';
@@ -126,23 +123,26 @@ export function useUMAPExport() {
 
       const point = points[i];
       const data = metadata[i];
-
       const label = data.label;
 
       if (!label) {
         continue;
       }
 
-      const {range, site} = getRangeAndSiteFromDatasetLabel(label);
-      const timestamp = data.timestamp as number;
+      const {
+        getFiles,
+        getGroupFeatures,
+      } = await useStorage();
 
-      const features = await fetchFeatures({
-        band,
-        range,
-        site,
-        interval,
+      const files = await getFiles();
+      const index = getIntegratedIndex(i, files.length);
+      const timestamp = data.timestamp as number;
+      const features = await getGroupFeatures(
+        selectionStore.band,
+        selectionStore.umapName,
+        index,
         timestamp,
-      });
+      );
 
       if (type === 'json') {
         payload.push({
@@ -207,7 +207,12 @@ export function useUMAPExport() {
       'Exporting collected points. Selected points are not handled.',
     );
 
-    const results = await parse(UMAPDatasetStore.dataset, filename, metaProperties, type);
+    const results = await parse(
+      UMAPDatasetStore.dataset,
+      filename,
+      metaProperties,
+      type,
+    );
 
     if (!results) {
       return;

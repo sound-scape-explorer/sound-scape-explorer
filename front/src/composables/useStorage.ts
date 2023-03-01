@@ -233,36 +233,24 @@ export async function useStorage() {
     });
   }
 
-  async function getStorageGroupsFeatures(
+  async function getGroupFeatures(
     band: string,
-    integration: string,
+    umapName: string,
+    fileIndex: number,
     timestamp: number,
-    i: number,
   ): Promise<number[]> {
     return await read(async () => {
+      const groupTimestamps = await getGroupTimestamps(band, umapName);
+      const timestamps = groupTimestamps.flat();
+      const index = timestamps.indexOf(timestamp);
+
       const file = getFile();
-
-      const timestampsPath = `${StoragePath.groups_timestamps}/${band}/${integration}`;
-
-      const timestampsGroup = file.get(timestampsPath) as Group;
-      const timestamps: number[][] = [];
-
-      for (const fileIndex in timestampsGroup.keys()) {
-        const dataset = timestampsGroup.get(fileIndex) as Dataset;
-        const array = dataset.to_array() as number[];
-        timestamps.push(array);
-      }
-
-      const fileIndex = timestamps[0].indexOf(timestamp);
-
-      if (fileIndex === -1) {
-        throw new Error('Error');
-      }
-
+      const integration = getIntegrationFromUmapName(file, umapName);
       const path = `${StoragePath.groups_features}/${band}/${integration}/${fileIndex}`;
-      const features = file.get(path) as Dataset;
+      const groupFeatures = file.get(path) as Dataset;
+      const features = groupFeatures.to_array() as number[][];
 
-      return features.to_array() as number[];
+      return features[index % integration];
     });
   }
 
@@ -308,7 +296,7 @@ export async function useStorage() {
     getGroupTimestamps,
     getStorageUmapsRanges,
     getStorageMetas,
-    getStorageGroupsFeatures,
+    getGroupFeatures,
     getStorageSettings,
   };
 }

@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import 'sass-reset';
 import {NLayout, NNotificationProvider, NSpace} from 'naive-ui';
+import 'sass-reset';
 import Content from './components/Content.vue';
 import Menu from './components/Menu.vue';
-import Notification from './components/Notification.vue';
-import ModalConfigurationError from './components/ModalConfigurationError.vue';
 import ModalLoading from './components/ModalLoading.vue';
+import Notification from './components/Notification.vue';
 //
 </script>
 
@@ -15,7 +14,6 @@ import ModalLoading from './components/ModalLoading.vue';
       <Suspense>
         <Menu />
       </Suspense>
-      <ModalConfigurationError />
       <ModalLoading />
 
       <n-layout>
