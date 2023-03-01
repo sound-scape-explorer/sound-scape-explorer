@@ -1,8 +1,7 @@
 {
   "name": "sound-scape-explorer",
   "scripts": {
-    "install": "./install.sh",
-    "dev": "concurrently './run-back.sh' './run-front.sh'",
+    "dev": "./run-front.sh",
     "process": "yarn process:all",
     "process:all": "python3 processing/processing/actions/all.py",
     "process:config": "python3 processing/processing/actions/config.py",

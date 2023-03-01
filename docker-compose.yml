@@ -6,15 +6,6 @@ services:
     depends_on:
       - back
 
-  back:
-    build: back
-    ports:
-      - "8081:8081"
-    volumes:
-      - ./sample:/sample
-    depends_on:
-      - processing
-
   processing:
     build: processing
     volumes:

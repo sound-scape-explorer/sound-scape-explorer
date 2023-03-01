@@ -6,15 +6,6 @@ services:
     depends_on:
       - back
 
-  back:
-    image: ghcr.io/sound-scape-explorer/back:next
-    ports:
-      - "8081:8081"
-    volumes:
-      - ./sample:/sample
-    depends_on:
-      - processing
-
   processing:
     image: ghcr.io/sound-scape-explorer/processing:next
     volumes:
