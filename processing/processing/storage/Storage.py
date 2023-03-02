@@ -4,11 +4,14 @@ from h5py import Dataset, File
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
 
+from processing.config.ConfigBand import ConfigBand, ConfigBands
+from processing.config.ConfigFile import ConfigFile, ConfigFiles
+from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
+from processing.settings.StorageSetting import StorageSetting
 from processing.shared.SingletonMeta import SingletonMeta
-from processing.storage.enums.StorageCompression import StorageCompression
-from processing.storage.enums.StorageMode import StorageMode
-from processing.storage.enums.StoragePath import StoragePath
-from processing.storage.enums.StorageSettings import StorageSettings
+from processing.storage.StorageCompression import StorageCompression
+from processing.storage.StorageMode import StorageMode
+from processing.storage.StoragePath import StoragePath
 
 
 class Storage(metaclass=SingletonMeta):
@@ -42,7 +45,7 @@ class Storage(metaclass=SingletonMeta):
                f'/{file_index}'
 
     @staticmethod
-    def __get_group_suffix(
+    def __get_grouped_suffix(
         band: str,
         integration: int,
         file_index: int,
@@ -138,6 +141,69 @@ class Storage(metaclass=SingletonMeta):
         dataset = self.__get(StoragePath.bands)
         return dataset.asstr()
 
+    def get_config_bands(self) -> ConfigBands:
+        names = self.get_bands()
+        frequencies = self.get_bands_frequencies()
+
+        bands = {}
+
+        for index, name in enumerate(names):
+            f = frequencies[index]
+            low = f[0]
+            high = f[1]
+
+            bands[name] = ConfigBand(
+                name=name,
+                low=low,
+                high=high,
+            )
+
+        return bands
+
+    def get_config_files(self) -> ConfigFiles:
+        names = self.get_files()
+        timestamps = self.get_files_timestamps()
+        sites = self.get_files_sites()
+        metas = self.__get_files_metas()
+
+        files = {}
+
+        for index, name in enumerate(names):
+            timestamp = timestamps[index]
+            site = sites[index]
+            meta = metas[index]
+
+            files[name] = ConfigFile(
+                file=name,
+                timestamp=timestamp,
+                site=site,
+                meta=meta,
+            )
+
+        return files
+
+    def get_config_reducers(self) -> ConfigReducers:
+        names = self.__get(StoragePath.reducers).asstr()
+        dimensions = self.__get(StoragePath.reducers_dimensions)
+        bands = self.__get(StoragePath.reducers_bands).asstr()
+        integrations = self.__get(StoragePath.reducers_integrations).asstr()
+        ranges = self.__get(StoragePath.reducers_ranges).asstr()
+
+        reducers = []
+
+        for index, name in enumerate(names):
+            reducer = ConfigReducer(
+                name=name,
+                dimensions=dimensions[index],
+                bands=bands[index],
+                integrations=integrations[index],
+                ranges=ranges[index],
+            )
+
+            reducers.append(reducer)
+
+        return reducers
+
     def get_bands_frequencies(self) -> Dataset:
         return self.__get(StoragePath.bands_frequencies)
 
@@ -145,15 +211,27 @@ class Storage(metaclass=SingletonMeta):
         dataset = self.__get(StoragePath.files)
         return dataset.asstr()
 
+    def get_indicators(self) -> AsStrWrapper:
+        dataset = self.__get(StoragePath.indicators)
+        return dataset.asstr()
+
+    def get_volumes(self) -> AsStrWrapper:
+        dataset = self.__get(StoragePath.volumes)
+        return dataset.asstr()
+
     def get_files_timestamps(self) -> Dataset:
         return self.__get(StoragePath.files_timestamps)
 
-    def get_integrations(self) -> Dataset:
-        return self.__get(StoragePath.umaps_integrations)
-
-    def get_sites(self) -> Dataset:
-        dataset = self.__get(StoragePath.umaps_sites)
+    def get_files_sites(self) -> Dataset:
+        dataset = self.__get(StoragePath.files_sites)
         return dataset.asstr()
+
+    def __get_files_metas(self) -> AsStrWrapper:
+        dataset = self.__get(StoragePath.files_metas)
+        return dataset.asstr()
+
+    def get_integrations_seconds(self) -> Dataset:
+        return self.__get(StoragePath.integrations_seconds)
 
     def get_umaps(self) -> Dataset:
         dataset = self.__get(StoragePath.umaps)
@@ -193,8 +271,8 @@ class Storage(metaclass=SingletonMeta):
         del self.__file[path]
 
     def delete_groups(self) -> None:
-        self.__delete_silently(StoragePath.groups_features)
-        self.__delete_silently(StoragePath.groups_timestamps)
+        self.__delete_silently(StoragePath.grouped_features)
+        self.__delete_silently(StoragePath.grouped_timestamps)
 
     def delete_files_features(self) -> None:
         self.__delete_silently(StoragePath.files_features)
@@ -204,21 +282,42 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.files)
         self.__delete_silently(StoragePath.files_timestamps)
         self.__delete_silently(StoragePath.files_sites)
-        self.__delete_silently(StoragePath.files_tags)
         self.__delete_silently(StoragePath.files_metas)
         self.__delete_silently(StoragePath.meta_properties)
         self.__delete_silently(StoragePath.meta_sets)
         self.__delete_silently(StoragePath.bands)
         self.__delete_silently(StoragePath.bands_frequencies)
+        self.__delete_silently(StoragePath.integrations)
+        self.__delete_silently(StoragePath.integrations_seconds)
         self.__delete_silently(StoragePath.umaps)
         self.__delete_silently(StoragePath.umaps_integrations)
         self.__delete_silently(StoragePath.umaps_bands)
         self.__delete_silently(StoragePath.umaps_ranges)
         self.__delete_silently(StoragePath.umaps_sites)
 
+    def __get_settings(self) -> Dataset.attrs:
+        return self.__get(StoragePath.configuration).attrs
+
     def get_umap_seed(self) -> int:
-        settings = self.__get(StoragePath.configuration).attrs
-        return settings[StorageSettings.umap_seed.value]
+        settings = self.__get_settings()
+        return settings[StorageSetting.umap_seed.value]
+
+    def get_expected_sample_rate(self) -> int:
+        settings = self.__get_settings()
+        return settings[StorageSetting.expected_sample_rate.value]
+
+    def get_base_path(self) -> str:
+        settings = self.__get_settings()
+        return settings[StorageSetting.base_path.value]
+
+    def get_audio_folder(self) -> str:
+        settings = self.__get_settings()
+        return settings[StorageSetting.audio_folder.value]
+
+    def get_audio_path(self) -> str:
+        base_path = self.get_base_path()
+        audio_folder = self.get_audio_folder()
+        return f'{base_path}/{audio_folder}'
 
     def create_configuration(self) -> None:
         self.__create_dataset(StoragePath.configuration, '')
@@ -239,7 +338,6 @@ class Storage(metaclass=SingletonMeta):
         files: Any,
         timestamps: Any,
         sites: Any,
-        tags: Any,
         metas: Any,
     ) -> None:
         self.__create_dataset(
@@ -256,11 +354,6 @@ class Storage(metaclass=SingletonMeta):
         self.__create_dataset(
             StoragePath.files_sites,
             sites,
-        )
-
-        self.__create_dataset(
-            StoragePath.files_tags,
-            tags,
         )
 
         self.__create_dataset(
@@ -297,6 +390,22 @@ class Storage(metaclass=SingletonMeta):
         self.__create_dataset(
             path=StoragePath.bands_frequencies,
             data=frequencies,
+            compression=StorageCompression.gzip,
+        )
+
+    def create_integrations(
+        self,
+        integrations: List[str],
+        integrations_seconds: List[int],
+    ) -> None:
+        self.__create_dataset(
+            path=StoragePath.integrations,
+            data=integrations,
+        )
+
+        self.__create_dataset(
+            path=StoragePath.integrations_seconds,
+            data=integrations_seconds,
             compression=StorageCompression.gzip,
         )
 
@@ -353,8 +462,8 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.grouped_features.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -369,8 +478,8 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_timestamps.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.grouped_timestamps.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -378,17 +487,15 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def get_group_features(
+    def get_grouped_features(
         self,
         band: str,
         integration: int,
         file_index: int,
     ) -> Dataset:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features.value}{suffix}'
-
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.grouped_features.value}{suffix}'
         features = self.__get(path)
-
         return features
 
     def get_group_timestamps(
@@ -397,8 +504,8 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
         file_index: int,
     ) -> Dataset:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_timestamps.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.grouped_timestamps.value}{suffix}'
 
         features = self.__get(path)
 
@@ -415,9 +522,25 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_umap_2d.value}{suffix}'
 
+        self.__create_dataset(
+            path=path,
+            data=features,
+            compression=StorageCompression.gzip,
+        )
+
+    def write_reduced(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        reducer_index: int,
+        features: List[List[float]],
+    ) -> None:
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.reduced_.value}{reducer_index}{suffix}'
         self.__create_dataset(
             path=path,
             data=features,
@@ -431,7 +554,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_umap_3d.value}{suffix}'
 
         self.__create_dataset(
@@ -447,7 +570,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_pca_2d.value}{suffix}'
 
         self.__create_dataset(
@@ -463,7 +586,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_pca_3d.value}{suffix}'
 
         self.__create_dataset(
@@ -479,7 +602,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_sparse_pca_2d.value}' \
                f'{suffix}'
 
@@ -496,7 +619,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_sparse_pca_3d.value}' \
                f'{suffix}'
 
@@ -513,7 +636,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_vae_2d.value}' \
                f'{suffix}'
 
@@ -530,7 +653,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         features: List[List[float]]
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.groups_features_reduced_vae_3d.value}' \
                f'{suffix}'
 
@@ -541,19 +664,19 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_group_indicators(self) -> None:
-        self.__delete_silently(StoragePath.groups_indicator_leq_enes)
-        self.__delete_silently(StoragePath.groups_indicator_leq_maad)
-        self.__delete_silently(StoragePath.groups_indicator_temporal_median)
-        self.__delete_silently(StoragePath.groups_indicator_temporal_entropy)
-        self.__delete_silently(StoragePath.groups_indicator_frequency_entropy)
+        self.__delete_silently(StoragePath.indicator_leq_enes)
+        self.__delete_silently(StoragePath.indicator_leq_maad)
+        self.__delete_silently(StoragePath.indicator_temporal_median)
+        self.__delete_silently(StoragePath.indicator_temporal_entropy)
+        self.__delete_silently(StoragePath.indicator_frequency_entropy)
         self.__delete_silently(
-            StoragePath.groups_indicator_acoustic_complexity_index,
+            StoragePath.indicator_acoustic_complexity_index,
         )
         self.__delete_silently(
-            StoragePath.groups_indicator_acoustic_diversity_index,
+            StoragePath.indicator_acoustic_diversity_index,
         )
-        self.__delete_silently(StoragePath.groups_indicator_bioacoustics_index)
-        self.__delete_silently(StoragePath.groups_indicator_soundscape_index)
+        self.__delete_silently(StoragePath.indicator_bioacoustics_index)
+        self.__delete_silently(StoragePath.indicator_soundscape_index)
 
     def create_group_indicator_leq_enes(
         self,
@@ -562,8 +685,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_leq_enes.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.indicator_leq_enes.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -578,8 +701,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_leq_maad.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.indicator_leq_maad.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -594,8 +717,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_temporal_median.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.indicator_temporal_median.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -610,8 +733,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_temporal_entropy.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.indicator_temporal_entropy.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -626,8 +749,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_frequency_entropy.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.indicator_frequency_entropy.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -642,8 +765,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = StoragePath.groups_indicator_acoustic_complexity_index.value
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = StoragePath.indicator_acoustic_complexity_index.value
         path += suffix
 
         self.__create_dataset(
@@ -659,8 +782,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = StoragePath.groups_indicator_acoustic_diversity_index.value
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = StoragePath.indicator_acoustic_diversity_index.value
         path += suffix
 
         self.__create_dataset(
@@ -676,8 +799,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_bioacoustics_index.value}' \
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.indicator_bioacoustics_index.value}' \
                f'{suffix}'
 
         self.__create_dataset(
@@ -693,8 +816,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_indicator_soundscape_index.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.indicator_soundscape_index.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -703,10 +826,10 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_groups_volumes(self) -> None:
-        self.__delete_silently(StoragePath.groups_volume_sum_var)
-        self.__delete_silently(StoragePath.groups_volume_sum_std)
-        self.__delete_silently(StoragePath.groups_volume_mean_std)
-        self.__delete_silently(StoragePath.groups_volume_mean_spreading)
+        self.__delete_silently(StoragePath.volume_sum_var)
+        self.__delete_silently(StoragePath.volume_sum_std)
+        self.__delete_silently(StoragePath.volume_mean_std)
+        self.__delete_silently(StoragePath.volume_mean_spreading)
 
     def create_group_volume_sum_var(
         self,
@@ -715,8 +838,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_volume_sum_var.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.volume_sum_var.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -731,8 +854,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_volume_sum_std.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.volume_sum_std.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -747,8 +870,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_volume_mean_std.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.volume_mean_std.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -763,8 +886,8 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_group_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_volume_mean_spreading.value}{suffix}'
+        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        path = f'{StoragePath.volume_mean_spreading.value}{suffix}'
 
         self.__create_dataset(
             path=path,
@@ -794,7 +917,6 @@ class Storage(metaclass=SingletonMeta):
         return self.exists_dataset(StoragePath.files.value) \
             and self.exists_dataset(StoragePath.files_timestamps.value) \
             and self.exists_dataset(StoragePath.files_sites.value) \
-            and self.exists_dataset(StoragePath.files_tags.value) \
             and self.exists_dataset(StoragePath.files_metas.value)
 
     def is_defined_file_features(self, band: str, file_index: int) -> bool:
@@ -815,3 +937,54 @@ class Storage(metaclass=SingletonMeta):
             and self.exists_dataset(StoragePath.umaps_bands.value) \
             and self.exists_dataset(StoragePath.umaps_ranges.value) \
             and self.exists_dataset(StoragePath.umaps_integrations.value)
+
+    def create_reducers(
+        self,
+        reducers: List[str],
+        dimensions: List[int],
+        bands: List[List[str]],
+        integrations: List[List[str]],
+        ranges: List[List[str]],
+    ) -> None:
+        self.__create_dataset(
+            path=StoragePath.reducers,
+            data=reducers,
+        )
+
+        self.__create_dataset(
+            path=StoragePath.reducers_dimensions,
+            data=dimensions,
+        )
+
+        self.__create_dataset(
+            path=StoragePath.reducers_bands,
+            data=bands,
+        )
+
+        self.__create_dataset(
+            path=StoragePath.reducers_integrations,
+            data=integrations,
+        )
+
+        self.__create_dataset(
+            path=StoragePath.reducers_ranges,
+            data=ranges,
+        )
+
+    def create_indicators(
+        self,
+        indicators: List[str],
+    ) -> None:
+        self.__create_dataset(
+            path=StoragePath.indicators,
+            data=indicators,
+        )
+
+    def create_volumes(
+        self,
+        volumes: List[str],
+    ) -> None:
+        self.__create_dataset(
+            path=StoragePath.volumes,
+            data=volumes,
+        )

@@ -6,9 +6,10 @@ from processing.storage.Storage import Storage
 storage = Storage(path='./sample/sse.h5')
 config = Config(path='./sample/config.xlsx')
 
-bands = config.get_bands()
-expected_sample_rate = config.get_expected_sample_rate()
-audio_path = config.get_audio_path()
+bands = storage.get_config_bands()
+expected_sample_rate = storage.get_expected_sample_rate()
+audio_path = storage.get_audio_path()
+files = storage.get_config_files()
 
 storage.delete_files_features()
 
@@ -19,7 +20,7 @@ for band_name, band in bands.items():
     )
 
     extractor = ConfigFilesExtractor(
-        config=config,
+        files=files,
         model=VGGish,
         expected_sample_rate=expected_sample_rate,
         base_path=audio_path,

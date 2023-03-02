@@ -6,15 +6,16 @@ config = Config(path='./sample/config.xlsx')
 
 bands = config.get_bands()
 expected_sample_rate = config.get_expected_sample_rate()
+files = config.get_files()
 
-for band, frequencies in bands.items():
+for _, band in bands.items():
     VGGish = VGGishModel(
-        f_min=frequencies['low'],
-        f_max=frequencies['high'],
+        f_min=band.low,
+        f_max=band.high,
     )
 
     extractor = ConfigFilesExtractor(
-        config=config,
+        files=files,
         model=VGGish,
         expected_sample_rate=expected_sample_rate,
         base_path='./sample/audio',

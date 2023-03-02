@@ -4,7 +4,7 @@ from processing.storage.Storage import Storage
 storage = Storage(path='./sample/sse.h5')
 files = storage.get_files()
 bands = storage.get_bands()
-integrations = storage.get_integrations()
+integrations = storage.get_integrations_seconds()
 
 storage.delete_groups()
 

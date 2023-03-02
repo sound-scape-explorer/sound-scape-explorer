@@ -1,89 +1,173 @@
 import datetime
+from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import math
 import numpy
 import pandas
-from pandas import DataFrame, ExcelFile, Series
+from pandas import DataFrame, Series
 
-from processing.config.Band import Band, Bands
-from processing.config.File import File, Files
-from processing.config.Range import Range, Ranges
-from processing.config.Umap import Umap, Umaps
-from processing.config.enums.ExcelColumn import ExcelColumn
-from processing.config.types.Settings import Settings
+from processing.config.ConfigBand import ConfigBand, ConfigBands
+from processing.config.ConfigFile import ConfigFile, ConfigFiles
+from processing.config.ConfigIntegration import (
+    ConfigIntegration,
+    ConfigIntegrations,
+)
+from processing.config.ConfigRange import ConfigRange, ConfigRanges
+from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
+from processing.config.ExcelBand import ExcelBand
+from processing.config.ExcelFile import ExcelFile
+from processing.config.ExcelIndicator import ExcelIndicator
+from processing.config.ExcelIntegration import ExcelIntegration
+from processing.config.ExcelRange import ExcelRange
+from processing.config.ExcelReducer import ExcelReducer
+from processing.config.ExcelSetting import ExcelSetting
+from processing.config.ExcelSheet import ExcelSheet
+from processing.config.ExcelVolume import ExcelVolume
+from processing.settings.ConfigSetting import ConfigSettings
 from processing.shared.SingletonMeta import SingletonMeta
 from processing.storage.Storage import Storage
+from processing.utils.validate_indicator_name import validate_indicator_name
+from processing.utils.validate_volume_name import validate_volume_name
 
 
 class Config(metaclass=SingletonMeta):
     __path: str
     __sheet: str = 'Sheet1'
-    __excel: ExcelFile
+    __excel: pandas.ExcelFile
     __excel_table: DataFrame
-    __settings: Settings = {}
-    __files: Files = {}
+    __settings: ConfigSettings = {}
+    __files: ConfigFiles = {}
     __files_meta_properties: List[str]
-    __ranges: Ranges = {}
-    __bands: Bands = {}
-    __umaps: Umaps = {}
+    __bands: ConfigBands = {}
+    __integrations: ConfigIntegrations = {}
+    __ranges: ConfigRanges = {}
     __all_sites: List[str] = []
-    __storage: Storage
+    __actions_reducers: ConfigReducers = []
+    __actions_indicators: List[str] = []
+    __actions_volumes: List[str] = []
 
     def __init__(
         self,
         path: Optional[str] = 'config.xlsx',
-        storage: Optional[Storage] = None,
     ) -> None:
         self.__path = path
 
-        if storage is not None:
-            self.__storage = storage
+        self.__validate_path()
 
-        self.__verify_excel()
-
-        self.__load()
+        self.__load_file()
         self.__read()
         self.__set()
 
-    def __verify_excel(self) -> None:
+    def __validate_path(self) -> None:
         path = Path(self.__path)
 
         if not path.exists():
             raise FileNotFoundError(f'Excel file not found: {path}')
 
-    def __load(self) -> None:
+    def __load_file(self) -> None:
         self.__excel = pandas.ExcelFile(self.__path)
-        self.__excel_table = self.__excel.parse(self.__sheet)
+        # self.__excel_table = self.__excel.parse(self.__sheet)
+
+    def __parse_sheet(
+        self,
+        sheet: ExcelSheet,
+    ) -> DataFrame:
+        return self.__excel.parse(sheet.value)
+
+    @staticmethod
+    def __parse_column(
+        sheet: DataFrame,
+        column: Union[str, Enum],
+    ) -> DataFrame:
+        if type(column) is str:
+            return sheet[column]
+
+        return sheet[column.value]
 
     def __read(self) -> None:
         self.__read_settings()
+
         self.__read_files()
-        self.__read_ranges()
+
         self.__read_bands()
-        self.__read_umaps()
+        self.__read_integrations()
+        self.__read_ranges()
+
+        self.__read_actions()
+
+    def __read_actions(self) -> None:
+        self.__read_actions_reducers()
+        self.__read_actions_indicators()
+        self.__read_actions_volumes()
 
     def __set(self) -> None:
         self.__set_all_sites()
 
-    def __verify_storage(self) -> None:
-        try:
-            self.__storage
-        except AttributeError:
-            raise AttributeError('Storage not found!')
+    def store(
+        self,
+        storage: Storage,
+    ) -> None:
+        self.__store_settings(storage)
 
-    def store(self) -> None:
-        self.__verify_storage()
+        self.__store_files(storage)
+        self.__store_metas(storage)
 
-        self.__store_settings()
-        self.__store_files()
-        self.__store_metas()
-        self.__store_ranges()
-        self.__store_bands()
-        self.__store_umaps()
+        self.__store_bands(storage)
+        self.__store_integrations(storage)
+        self.__store_ranges(storage)
 
-        # self.__storage.close()
+        self.__store_actions(storage)
+
+        # self.__store_umaps(storage)
+
+        # storage.close()
+
+    def __store_actions(
+        self,
+        storage: Storage,
+    ) -> None:
+        self.__store_reducers(storage)
+        self.__store_indicators(storage)
+        self.__store_volumes(storage)
+
+    def __store_reducers(
+        self,
+        storage: Storage,
+    ) -> None:
+        reducers = []
+        dimensions = []
+        bands = []
+        integrations = []
+        ranges = []
+
+        for reducer in self.__actions_reducers:
+            reducers.append(reducer.name)
+            dimensions.append(reducer.dimensions)
+            bands.append(reducer.bands)
+            integrations.append(reducer.integrations)
+            ranges.append(reducer.ranges)
+
+        storage.create_reducers(
+            reducers=reducers,
+            dimensions=dimensions,
+            bands=bands,
+            integrations=integrations,
+            ranges=ranges,
+        )
+
+    def __store_indicators(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.create_indicators(self.__actions_indicators)
+
+    def __store_volumes(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.create_volumes(self.__actions_volumes)
 
     def __set_all_sites(self) -> None:
         for file in self.__files.values():
@@ -116,22 +200,21 @@ class Config(metaclass=SingletonMeta):
         audio_folder = self.get_audio_folder()
         return f'{base_path}/{audio_folder}'
 
-    def get_files(self) -> Files:
+    def get_files(self) -> ConfigFiles:
         return self.__files
 
-    def get_bands(self) -> Bands:
+    def get_bands(self) -> ConfigBands:
         return self.__bands
 
     def get_meta_properties(self) -> List[str]:
         return self.__files_meta_properties
 
     def __read_settings(self) -> None:
-        settings = self.__excel_table[ExcelColumn.settings.value]
-        values = self.__excel_table[ExcelColumn.settings_values.value]
+        sheet = self.__parse_sheet(ExcelSheet.settings)
+        settings = self.__parse_column(sheet, ExcelSetting.setting)
+        values = self.__parse_column(sheet, ExcelSetting.value)
 
-        index_by_setting = self.__get_index_map(settings)
-
-        for setting, index in index_by_setting.items():
+        for index, setting in enumerate(settings):
             value = values[index]
 
             if self.__is_nan(value):
@@ -153,31 +236,32 @@ class Config(metaclass=SingletonMeta):
 
     @staticmethod
     def __convert_date_to_timestamp(date_string: str) -> int:
-        date = datetime.datetime.strptime(date_string, "%Y%m%d_%H%M")
+        date = datetime.datetime.strptime(date_string, "%Y%m%d %H%M")
         timestamp = datetime.datetime.timestamp(date)  # seconds
         timestamp = timestamp * 1000  # milliseconds
 
         return int(timestamp)
 
     def __read_files_meta_properties(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.files)
         self.__files_meta_properties = []
 
-        for column in self.__excel_table:
-            if 'files' not in column \
-                    or ExcelColumn.files.value == column \
-                    or ExcelColumn.files_dates.value == column \
-                    or ExcelColumn.files_tags.value == column \
-                    or ExcelColumn.files_sites.value == column:
+        for column in sheet:
+            if 'meta_' not in column:
                 continue
 
-            meta_property = column.replace('files_', '')
+            meta_property = column.replace(ExcelFile.meta_prefix.value, '')
             self.__files_meta_properties.append(meta_property)
 
-    def __read_files_meta_values(self) -> List[str]:
+    def __read_files_meta_values(self) -> List[DataFrame]:
+        sheet = self.__parse_sheet(ExcelSheet.files)
         meta_values = []
 
         for meta_property in self.__files_meta_properties:
-            meta_value = self.__excel_table[f'files_{meta_property}']
+            meta_value = self.__parse_column(
+                sheet,
+                f'{ExcelFile.meta_prefix.value}{meta_property}',
+            )
             meta_values.append(meta_value)
 
         return meta_values
@@ -185,57 +269,66 @@ class Config(metaclass=SingletonMeta):
     def __read_files(self) -> None:
         self.__read_files_meta_properties()
 
-        files = self.__excel_table[ExcelColumn.files.value]
-        dates = self.__excel_table[ExcelColumn.files_dates.value]
-        sites = self.__excel_table[ExcelColumn.files_sites.value]
-        tags = self.__excel_table[ExcelColumn.files_tags.value]
+        sheet = self.__parse_sheet(ExcelSheet.files)
+        files = self.__parse_column(sheet, ExcelFile.file)
+        dates = self.__parse_column(sheet, ExcelFile.date)
+        sites = self.__parse_column(sheet, ExcelFile.site)
         metas = self.__read_files_meta_values()
 
-        index_by_file = self.__get_index_map(files)
-
-        for file, index in index_by_file.items():
-            timestamp = self.__convert_date_to_timestamp(dates[index])
+        for index, file in enumerate(files):
+            date = dates[index]
+            timestamp = self.__convert_date_to_timestamp(date)
             site = sites[index]
-            tag = tags[index] if type(tags[index]) is not numpy.float64 else ''
             meta = [str(m[index]) for m in metas]
 
-            self.__files[file] = File(timestamp, site, tag, meta)
+            self.__files[file] = ConfigFile(
+                file=file,
+                timestamp=timestamp,
+                site=site,
+                meta=meta,
+            )
 
-    def __store_settings(self) -> None:
-        self.__storage.create_configuration()
+    def __store_settings(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.create_configuration()
 
         for setting, value in self.__settings.items():
             if value is None:
                 continue
 
-            self.__storage.create_configuration_setting(setting, value)
+            storage.create_configuration_setting(setting, value)
 
-    def __store_files(self) -> None:
-        if self.__storage.is_defined_files():
+    def __store_files(
+        self,
+        storage: Storage,
+    ) -> None:
+        if storage.is_defined_files():
             return
 
         files = []
         timestamps = []
         sites = []
-        tags = []
         metas = []
 
         for file_name, file in self.__files.items():
             files.append(file_name)
             timestamps.append(file.timestamp)
             sites.append(file.site)
-            tags.append(file.tag)
             metas.append(file.meta)
 
-        self.__storage.create_files(
+        storage.create_files(
             files=files,
             timestamps=timestamps,
             sites=sites,
-            tags=tags,
             metas=metas,
         )
 
-    def __store_metas(self):
+    def __store_metas(
+        self,
+        storage: Storage,
+    ) -> None:
         files_length = len(self.__files)
 
         meta_properties = self.__files_meta_properties
@@ -258,28 +351,35 @@ class Config(metaclass=SingletonMeta):
 
                 meta_sets[meta_index].append(value)
 
-        self.__storage.create_metas(
+        storage.create_metas(
             meta_properties,
             meta_sets,
         )
 
     def __read_ranges(self) -> None:
-        ranges = self.__excel_table[ExcelColumn.ranges.value]
-        values = self.__excel_table[ExcelColumn.ranges_values.value]
+        sheet = self.__parse_sheet(ExcelSheet.ranges)
+        ranges = self.__parse_column(sheet, ExcelRange.range)
+        starts = self.__parse_column(sheet, ExcelRange.start)
+        ends = self.__parse_column(sheet, ExcelRange.end)
 
-        index_by_range = self.__get_index_map(ranges)
+        for index, range_ in enumerate(ranges):
+            start = starts[index]
+            end = ends[index]
 
-        for range_, index in index_by_range.items():
-            date_string = values[index]
-            date_start, date_end = date_string.split('-')
+            timestamp_start = self.__convert_date_to_timestamp(start)
+            timestamp_end = self.__convert_date_to_timestamp(end)
 
-            timestamp_start = self.__convert_date_to_timestamp(date_start)
-            timestamp_end = self.__convert_date_to_timestamp(date_end)
+            self.__ranges[range_] = ConfigRange(
+                name=range_,
+                start=timestamp_start,
+                end=timestamp_end,
+            )
 
-            self.__ranges[range_] = Range(timestamp_start, timestamp_end)
-
-    def __store_ranges(self) -> None:
-        if self.__storage.is_defined_ranges():
+    def __store_ranges(
+        self,
+        storage: Storage,
+    ) -> None:
+        if storage.is_defined_ranges():
             return
 
         ranges = []
@@ -291,25 +391,42 @@ class Config(metaclass=SingletonMeta):
             ranges.append(range_name)
             ranges_timestamps.append(timestamps)
 
-        self.__storage.create_ranges(ranges, ranges_timestamps)
+        storage.create_ranges(ranges, ranges_timestamps)
 
     def __read_bands(self) -> None:
-        bands = self.__excel_table[ExcelColumn.bands.value]
-        values = self.__excel_table[ExcelColumn.bands_values.value]
+        sheet = self.__parse_sheet(ExcelSheet.bands)
+        bands = self.__parse_column(sheet, ExcelBand.band)
+        lows = self.__parse_column(sheet, ExcelBand.low)
+        highs = self.__parse_column(sheet, ExcelBand.high)
 
-        index_by_band = self.__get_index_map(bands)
+        for index, band in enumerate(bands):
+            low = lows[index]
+            high = highs[index]
 
-        for band, index in index_by_band.items():
-            frequencies_string = values[index]
-            low, high = frequencies_string.split('-')
+            self.__bands[band] = ConfigBand(
+                name=band,
+                low=low,
+                high=high,
+            )
 
-            low = int(low)
-            high = int(high)
+    def __read_integrations(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.integrations)
+        integrations = self.__parse_column(sheet, ExcelIntegration.integration)
+        seconds = self.__parse_column(sheet, ExcelIntegration.seconds)
 
-            self.__bands[band] = Band(low, high)
+        for index, integration in enumerate(integrations):
+            second = seconds[index]
 
-    def __store_bands(self) -> None:
-        if self.__storage.is_defined_bands():
+            self.__integrations[integration] = ConfigIntegration(
+                name=integration,
+                seconds=second,
+            )
+
+    def __store_bands(
+        self,
+        storage: Storage,
+    ) -> None:
+        if storage.is_defined_bands():
             return
 
         bands = []
@@ -321,91 +438,71 @@ class Config(metaclass=SingletonMeta):
             bands.append(band_name)
             bands_frequencies.append(frequencies)
 
-        self.__storage.create_bands(bands, bands_frequencies)
+        storage.create_bands(bands, bands_frequencies)
 
-    def __read_umaps_integration(self, umap_index: int) -> int:
-        umaps_integration = self.__excel_table[
-            ExcelColumn.umaps_integration.value
-        ]
+    def __store_integrations(
+        self,
+        storage: Storage,
+    ) -> None:
+        integrations = []
+        integrations_seconds = []
 
-        integration = umaps_integration[umap_index]
+        for integration in self.__integrations.values():
+            integrations.append(integration.name)
+            integrations_seconds.append(integration.seconds)
 
-        if self.__is_nan(integration):
-            raise ValueError(f'`umaps_integration` is not defined.')
+        storage.create_integrations(
+            integrations=integrations,
+            integrations_seconds=integrations_seconds
+        )
 
-        return int(integration)
+    def __read_actions_reducers(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.actions_reducers)
+        reducers = self.__parse_column(sheet, ExcelReducer.reducer)
+        dimensions = self.__parse_column(sheet, ExcelReducer.dimensions)
+        bands = self.__parse_column(sheet, ExcelReducer.bands)
+        integrations = self.__parse_column(sheet, ExcelReducer.integrations)
+        ranges = self.__parse_column(sheet, ExcelReducer.ranges)
 
-    def __read_umaps_bands(self, umap_index: int) -> List[str]:
-        umaps_bands = self.__excel_table[ExcelColumn.umaps_bands.value]
-        bands = umaps_bands[umap_index]
+        for index, reducer_name in enumerate(reducers):
+            bands_ = []
+            integrations_ = []
+            ranges_ = []
 
-        if self.__is_nan(bands):
-            raise ValueError(f'`umaps_bands` is not defined.')
+            for band in bands[index].split(','):
+                _ = self.__bands[band]
+                bands_.append(band)
 
-        bands = [band for band in bands.split(',')]
+            for integration in integrations[index].split(','):
+                _ = self.__integrations[integration]
+                integrations_.append(integration)
 
-        return bands
+            for range_ in ranges[index].split(','):
+                _ = self.__ranges[range_]
+                ranges_.append(range_)
 
-    def __read_umaps_ranges(self, umap_index: int) -> List[str]:
-        umaps_ranges = self.__excel_table[ExcelColumn.umaps_ranges.value]
-        ranges = umaps_ranges[umap_index]
-
-        if self.__is_nan(ranges):
-            raise ValueError(f'`umaps_ranges` is not defined.')
-
-        ranges = [r for r in ranges.split(',')]
-
-        return ranges
-
-    def __read_umaps_sites(self, umap_index: int) -> List[str]:
-        umaps_sites = self.__excel_table[ExcelColumn.umaps_sites.value]
-        sites = umaps_sites[umap_index]
-
-        if self.__is_nan(sites):
-            sites = self.__all_sites
-        else:
-            sites = [s for s in sites.split(',')]
-
-        return sites
-
-    def __read_umaps(self) -> None:
-        umaps = self.__excel_table[ExcelColumn.umaps.value]
-        index_by_umaps = self.__get_index_map(umaps)
-
-        for umap, index in index_by_umaps.items():
-            integration = self.__read_umaps_integration(index)
-            bands = self.__read_umaps_bands(index)
-            ranges = self.__read_umaps_ranges(index)
-            sites = self.__read_umaps_sites(index)
-
-            self.__umaps[umap] = Umap(
-                integration=integration,
-                bands=bands,
-                ranges=ranges,
-                sites=sites,
+            reducer = ConfigReducer(
+                name=reducer_name,
+                dimensions=dimensions[index],
+                bands=bands_,
+                integrations=integrations_,
+                ranges=ranges_,
             )
 
-    def __store_umaps(self) -> None:
-        if self.__storage.is_defined_umaps():
-            return
+            self.__actions_reducers.append(reducer)
 
-        umaps = []
-        umaps_integrations = []
-        umaps_bands = []
-        umaps_ranges = []
-        umaps_sites = []
+    def __read_actions_indicators(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.actions_indicators)
+        indicators = self.__parse_column(sheet, ExcelIndicator.indicator)
 
-        for umap_name, umap in self.__umaps.items():
-            umaps.append(umap_name)
-            umaps_integrations.append(umap.integration)
-            umaps_bands.append(umap.bands)
-            umaps_ranges.append(umap.ranges)
-            umaps_sites.append(umap.sites)
+        for name in indicators:
+            validate_indicator_name(name)
+            self.__actions_indicators.append(name)
 
-        self.__storage.create_umaps(
-            umaps,
-            umaps_integrations,
-            umaps_bands,
-            umaps_ranges,
-            umaps_sites,
-        )
+    def __read_actions_volumes(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.actions_volumes)
+        volumes = self.__parse_column(sheet, ExcelVolume.volume)
+
+        for name in volumes:
+            validate_volume_name(name)
+            self.__actions_volumes.append(name)

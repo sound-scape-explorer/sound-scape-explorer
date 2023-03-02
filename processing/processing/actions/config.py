@@ -1,13 +1,7 @@
 from processing.config.Config import Config
 from processing.storage.Storage import Storage
 
+config = Config(path='./sample/config.xlsx')
 storage = Storage(path='./sample/sse.h5')
-
-config = Config(
-    path='./sample/config.xlsx',
-    storage=storage,
-)
-
 storage.delete_configuration()
-
-config.store()
+config.store(storage)

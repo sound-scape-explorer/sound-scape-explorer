@@ -6,13 +6,13 @@ storage = Storage(path='./sample/sse.h5')
 
 files = storage.get_files()
 bands = storage.get_bands()
-integrations = storage.get_integrations()
+integrations = storage.get_integrations_seconds()
 
 groups_features_pointers = []
 groups_features_values = []
 
 for file_index, _ in enumerate(files):
-    features = storage.get_group_features(
+    features = storage.get_grouped_features(
         band=bands[0],
         integration=integrations[0],
         file_index=file_index,
