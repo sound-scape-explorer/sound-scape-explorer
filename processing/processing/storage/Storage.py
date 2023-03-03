@@ -192,9 +192,14 @@ class Storage(metaclass=SingletonMeta):
     def get_config_reducers(self) -> ConfigReducers:
         names = self.get_reducers()
         dimensions = self.__get(StoragePath.reducers_dimensions)
+
         bands = self.__get(StoragePath.reducers_bands).asstr()
         integrations = self.__get(StoragePath.reducers_integrations).asstr()
         ranges = self.__get(StoragePath.reducers_ranges).asstr()
+
+        bands = self.trim_rectangular(bands, '')
+        integrations = self.trim_rectangular(integrations, '')
+        ranges = self.trim_rectangular(ranges, '')
 
         reducers = []
 
@@ -800,6 +805,19 @@ class Storage(metaclass=SingletonMeta):
 
         # Return the new rectangular array
         return rectangular_array
+
+    @staticmethod
+    def trim_rectangular(
+        rectangular_array,
+        trim_with=None,
+    ):
+        jagged_array = []
+
+        for sub_list in rectangular_array:
+            trimmed_list = [e for e in sub_list if e is not trim_with]
+            jagged_array.append(trimmed_list)
+
+        return jagged_array
 
     def write_reducers(
         self,
