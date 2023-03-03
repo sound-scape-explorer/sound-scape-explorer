@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, Iterable, List, Tuple
+from typing import Iterable, List, Tuple
 
 import torch
 import torchaudio
@@ -9,8 +9,6 @@ from processing.config.ConfigFile import ConfigFiles
 from processing.models.AbstractModel import AbstractModel
 from processing.storage.Storage import Storage
 from processing.timers.Timer import Timer
-
-Features = Dict[str, List[float]]
 
 
 class ConfigFilesExtractor:
