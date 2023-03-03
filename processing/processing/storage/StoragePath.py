@@ -7,30 +7,42 @@ class StoragePath(Enum):
 
     # Bands
 
-    bands = '/bands'
-    bands_frequencies = '/bands_frequencies'
+    bands = '/configuration/bands/names'
+    bands_frequencies = '/configuration/bands/frequencies'
 
     # Integrations
 
-    integrations = '/integrations'
-    integrations_seconds = '/integrations_seconds'
+    integrations = '/configuration/integrations/names'
+    integrations_seconds = '/configuration/integrations/seconds'
 
     # Ranges
 
-    ranges = '/ranges'
-    ranges_timestamps = '/ranges_timestamps'
+    ranges = '/configuration/ranges/names'
+    ranges_timestamps = '/configuration/ranges/timestamps'
 
     # Files
 
     # Example: /files_features/{band}/{file_index}
-    files = '/files'
-    files_features = '/files_features'
-    files_timestamps = '/files_timestamps'
-    files_sites = '/files_sites'
-    files_metas = '/files_metas'
+    files = '/configuration/files/names'
+    files_features = '/configuration/files/features'
+    files_timestamps = '/configuration/files/timestamps'
+    files_sites = '/configuration/files/sites'
+    files_metas = '/configuration/files/metas'
 
-    meta_properties = '/meta_properties'
-    meta_sets = '/meta_sets'
+    meta_properties = '/configuration/meta/properties'
+    meta_sets = '/configuration/meta/sets'
+
+    # Actions
+
+    reducers = '/configuration/reducers/names'
+    reducers_dimensions = '/configuration/reducers/dimensions'
+    reducers_bands = '/configuration/reducers/bands'
+    reducers_integrations = '/configuration/reducers/integrations'
+    reducers_ranges = '/configuration/reducers/ranges'
+
+    indicators = '/configuration/indicators'
+
+    volumes = '/configuration/volumes'
 
     # Grouped
 
@@ -38,22 +50,12 @@ class StoragePath(Enum):
     grouped_features = '/grouped_features'
     grouped_timestamps = '/grouped_timestamps'
 
-    # Reducers
-
-    reducers = '/reducers'
-    reducers_dimensions = '/reducers_dimensions'
-    reducers_bands = '/reducers_bands'
-    reducers_integrations = '/reducers_integrations'
-    reducers_ranges = '/reducers_ranges'
-
     # Reduced
 
     # Example: /reduced_{reducer_index}
     reduced_ = '/reduced_'
 
     # Indicators
-
-    indicators = '/indicators'
 
     indicator_leq_enes = '/indicator_Leq_T_enes'
     indicator_leq_maad = '/indicator_Leq_T_maad'
@@ -66,8 +68,6 @@ class StoragePath(Enum):
     indicator_soundscape_index = '/indicator_NDSI'
 
     # Volumes
-
-    volumes = '/volumes'
 
     volume_sum_var = '/volume_sum_var'
     volume_sum_std = '/volume_sum_std'
