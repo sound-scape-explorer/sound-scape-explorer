@@ -44,9 +44,9 @@ class Config(metaclass=SingletonMeta):
     __integrations: ConfigIntegrations = {}
     __ranges: ConfigRanges = {}
     __all_sites: List[str] = []
-    __actions_reducers: ConfigReducers = []
-    __actions_indicators: List[str] = []
-    __actions_volumes: List[str] = []
+    __reducers: ConfigReducers = []
+    __indicators: List[str] = []
+    __volumes: List[str] = []
 
     def __init__(
         self,
@@ -95,12 +95,9 @@ class Config(metaclass=SingletonMeta):
         self.__read_integrations()
         self.__read_ranges()
 
-        self.__read_actions()
-
-    def __read_actions(self) -> None:
-        self.__read_actions_reducers()
-        self.__read_actions_indicators()
-        self.__read_actions_volumes()
+        self.__read_reducers()
+        self.__read_indicators()
+        self.__read_volumes()
 
     def __set(self) -> None:
         self.__set_all_sites()
@@ -118,16 +115,6 @@ class Config(metaclass=SingletonMeta):
         self.__store_integrations(storage)
         self.__store_ranges(storage)
 
-        self.__store_actions(storage)
-
-        # self.__store_umaps(storage)
-
-        # storage.close()
-
-    def __store_actions(
-        self,
-        storage: Storage,
-    ) -> None:
         self.__store_reducers(storage)
         self.__store_indicators(storage)
         self.__store_volumes(storage)
@@ -142,7 +129,7 @@ class Config(metaclass=SingletonMeta):
         integrations = []
         ranges = []
 
-        for reducer in self.__actions_reducers:
+        for reducer in self.__reducers:
             reducers.append(reducer.name)
             dimensions.append(reducer.dimensions)
             bands.append(reducer.bands)
@@ -161,13 +148,13 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_indicators(self.__actions_indicators)
+        storage.create_indicators(self.__indicators)
 
     def __store_volumes(
         self,
         storage: Storage,
     ) -> None:
-        storage.create_volumes(self.__actions_volumes)
+        storage.create_volumes(self.__volumes)
 
     def __set_all_sites(self) -> None:
         for file in self.__files.values():
@@ -456,8 +443,8 @@ class Config(metaclass=SingletonMeta):
             integrations_seconds=integrations_seconds
         )
 
-    def __read_actions_reducers(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.actions_reducers)
+    def __read_reducers(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.reducers)
         reducers = self.__parse_column(sheet, ExcelReducer.reducer)
         dimensions = self.__parse_column(sheet, ExcelReducer.dimensions)
         bands = self.__parse_column(sheet, ExcelReducer.bands)
@@ -489,20 +476,20 @@ class Config(metaclass=SingletonMeta):
                 ranges=ranges_,
             )
 
-            self.__actions_reducers.append(reducer)
+            self.__reducers.append(reducer)
 
-    def __read_actions_indicators(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.actions_indicators)
+    def __read_indicators(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.indicators)
         indicators = self.__parse_column(sheet, ExcelIndicator.indicator)
 
         for name in indicators:
             Indicator.validate_name(name)
-            self.__actions_indicators.append(name)
+            self.__indicators.append(name)
 
-    def __read_actions_volumes(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.actions_volumes)
+    def __read_volumes(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.volumes)
         volumes = self.__parse_column(sheet, ExcelVolume.volume)
 
         for name in volumes:
             Volume.validate_name(name)
-            self.__actions_volumes.append(name)
+            self.__volumes.append(name)
