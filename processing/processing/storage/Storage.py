@@ -1,5 +1,6 @@
 from typing import Any, List, Optional, Union
 
+import numpy
 from h5py import Dataset, File
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
@@ -337,7 +338,8 @@ class Storage(metaclass=SingletonMeta):
         return f'{base_path}/{audio_folder}'
 
     def create_configuration(self) -> None:
-        self.__create_dataset(StoragePath.configuration, '')
+        self.__file.create_group(StoragePath.configuration.value)
+        # self.__create_dataset(StoragePath.configuration, '')
 
     def create_configuration_setting(
         self,
@@ -471,6 +473,57 @@ class Storage(metaclass=SingletonMeta):
             data=timestamps,
             compression=StorageCompression.gzip,
         )
+
+    def __convert_integration_seconds_to_name(
+        self,
+        integration: int,
+    ) -> str:
+        names = self.get_integrations()
+        integrations = self.get_integrations_seconds()
+
+        index = numpy.where(integrations == integration)
+        index = index[0][0]
+        name = names[index]
+
+        return name
+
+    def is_band_integration_in_reducer(
+        self,
+        reducer: ConfigReducer,
+        band: str,
+        integration: int,
+    ) -> bool:
+        if band not in reducer.bands:
+            return False
+
+        integration_name = self.__convert_integration_seconds_to_name(
+            integration=integration,
+        )
+
+        if integration_name not in reducer.integrations:
+            return False
+
+        return True
+
+    def get_grouped_features_all_files_flat(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[Dataset]:
+        files = self.get_files()
+        all_features = []
+
+        for file_index, _ in enumerate(files):
+            grouped_features = self.get_grouped_features(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
+            for features in grouped_features:
+                all_features.append(features)
+
+        return all_features
 
     def get_grouped_features(
         self,

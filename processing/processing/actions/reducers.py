@@ -1,5 +1,3 @@
-import numpy
-
 from processing.storage.Storage import Storage
 
 storage = Storage(path='./sample/sse.h5')
@@ -15,33 +13,26 @@ storage.delete_reduced()
 
 for band in bands:
     for integration in integrations:
-        files_length = len(files)
-        all_features = []
-
-        for file_index, _ in enumerate(files):
-            grouped_features = storage.get_grouped_features(
-                band=band,
-                integration=integration,
-                file_index=file_index,
-            )
-
-            for features in grouped_features:
-                all_features.append(features)
+        features = storage.get_grouped_features_all_files_flat(
+            band=band,
+            integration=integration,
+        )
 
         for reducer_index, config_reducer in enumerate(reducers):
             reducer = config_reducer.create_reducer(seed)
 
-            integration_index = numpy.where(integrations == integration)
-            integration_index = integration_index[0][0]
-            integration_name = integrations_names[integration_index]
+            is_in_reducer = storage.is_band_integration_in_reducer(
+                reducer=config_reducer,
+                band=band,
+                integration=integration,
+            )
 
-            if band not in config_reducer.bands \
-                    or integration_name not in config_reducer.integrations:
+            if not is_in_reducer:
                 continue
 
             features_split = reducer.reduce_and_split(
-                features=all_features,
-                files_length=files_length,
+                features=features,
+                files_length=len(files),
             )
 
             for file_index, _ in enumerate(files):
