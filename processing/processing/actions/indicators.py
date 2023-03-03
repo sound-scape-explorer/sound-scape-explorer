@@ -1,5 +1,5 @@
 from processing.audio.Audio import Audio
-from processing.maps.IndicatorByName import IndicatorByName
+from processing.indicators.Indicator import Indicator
 from processing.storage.Storage import Storage
 
 storage = Storage(path='./sample/sse.h5')
@@ -19,8 +19,8 @@ for band_index, band in enumerate(bands):
             group = storage.get_grouped_features(band, integration, file_index)
 
             for name in indicators:
-                Indicator = IndicatorByName[name]
                 indicator = Indicator(
+                    name=name,
                     band=band,
                     integration=integration,
                     file_index=file_index,

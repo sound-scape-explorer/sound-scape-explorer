@@ -10,8 +10,7 @@ class VaeReducer(AbstractReducer):
     def __init__(
         self,
         target_dimensions: int,
-        seed: int,
-    ):
+    ) -> None:
         self.__instance = VAE(
             n_components=target_dimensions,
         )

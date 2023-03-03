@@ -1,7 +1,6 @@
 from typing import List
 
-from processing.maps.ReducerByName import ReducerByName
-from processing.reducers import AbstractReducer
+from processing.reducers.Reducer import Reducer
 
 
 class ConfigReducer:
@@ -19,7 +18,7 @@ class ConfigReducer:
         integrations: List[str],
         ranges: List[str],
     ) -> None:
-        self.__validate_name(name)
+        Reducer.validate_name(name)
 
         self.name = name
         self.dimensions = dimensions
@@ -28,19 +27,12 @@ class ConfigReducer:
         self.integrations = integrations
         self.ranges = ranges
 
-    @staticmethod
-    def __validate_name(
-        name: str,
-    ) -> None:
-        if name not in ReducerByName.keys():
-            raise KeyError(f'{name} not found!')
-
     def create_reducer(
         self,
         seed: int,
-    ) -> AbstractReducer:
-        reducer = ReducerByName[self.name]
-        return reducer(
+    ):
+        return Reducer(
+            name=self.name,
             target_dimensions=self.dimensions,
             seed=seed,
         )

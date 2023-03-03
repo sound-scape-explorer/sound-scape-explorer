@@ -25,11 +25,11 @@ from processing.config.ExcelReducer import ExcelReducer
 from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelVolume import ExcelVolume
+from processing.indicators.Indicator import Indicator
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.shared.SingletonMeta import SingletonMeta
 from processing.storage.Storage import Storage
-from processing.utils.validate_indicator_name import validate_indicator_name
-from processing.utils.validate_volume_name import validate_volume_name
+from processing.volumes.Volume import Volume
 
 
 class Config(metaclass=SingletonMeta):
@@ -149,7 +149,7 @@ class Config(metaclass=SingletonMeta):
             integrations.append(reducer.integrations)
             ranges.append(reducer.ranges)
 
-        storage.create_reducers(
+        storage.write_reducers(
             reducers=reducers,
             dimensions=dimensions,
             bands=bands,
@@ -496,7 +496,7 @@ class Config(metaclass=SingletonMeta):
         indicators = self.__parse_column(sheet, ExcelIndicator.indicator)
 
         for name in indicators:
-            validate_indicator_name(name)
+            Indicator.validate_name(name)
             self.__actions_indicators.append(name)
 
     def __read_actions_volumes(self) -> None:
@@ -504,5 +504,5 @@ class Config(metaclass=SingletonMeta):
         volumes = self.__parse_column(sheet, ExcelVolume.volume)
 
         for name in volumes:
-            validate_volume_name(name)
+            Volume.validate_name(name)
             self.__actions_volumes.append(name)

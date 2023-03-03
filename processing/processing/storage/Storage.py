@@ -67,6 +67,8 @@ class Storage(metaclass=SingletonMeta):
         path: Union[StoragePath, str],
         data: Any,
         compression: Optional[StorageCompression] = None,
+        dtype: Optional[Any] = None,
+        shape: Optional[Any] = None,
     ) -> None:
         path = self.__get_path_as_string(path)
 
@@ -81,6 +83,8 @@ class Storage(metaclass=SingletonMeta):
             path,
             data=data,
             compression=compression,
+            dtype=dtype,
+            shape=shape,
         )
 
     def create_attribute(
@@ -182,8 +186,11 @@ class Storage(metaclass=SingletonMeta):
 
         return files
 
+    def get_reducers(self) -> AsStrWrapper:
+        return self.__get(StoragePath.reducers).asstr()
+
     def get_config_reducers(self) -> ConfigReducers:
-        names = self.__get(StoragePath.reducers).asstr()
+        names = self.get_reducers()
         dimensions = self.__get(StoragePath.reducers_dimensions)
         bands = self.__get(StoragePath.reducers_bands).asstr()
         integrations = self.__get(StoragePath.reducers_integrations).asstr()
@@ -230,12 +237,11 @@ class Storage(metaclass=SingletonMeta):
         dataset = self.__get(StoragePath.files_metas)
         return dataset.asstr()
 
+    def get_integrations(self) -> AsStrWrapper:
+        return self.__get(StoragePath.integrations).asstr()
+
     def get_integrations_seconds(self) -> Dataset:
         return self.__get(StoragePath.integrations_seconds)
-
-    def get_umaps(self) -> Dataset:
-        dataset = self.__get(StoragePath.umaps)
-        return dataset.asstr()
 
     def get_file_features(
         self,
@@ -251,9 +257,13 @@ class Storage(metaclass=SingletonMeta):
 
     def __delete_silently(
         self,
-        path: Union[StoragePath, List[StoragePath]],
+        path: Union[StoragePath, str],
     ) -> None:
         try:
+            if type(path) is str:
+                del self.__file[path]
+                return
+
             del self.__file[path.value]
         except KeyError:
             return
@@ -277,7 +287,7 @@ class Storage(metaclass=SingletonMeta):
     def delete_files_features(self) -> None:
         self.__delete_silently(StoragePath.files_features)
 
-    def delete_configuration(self) -> None:
+    def delete_config(self) -> None:
         self.__delete_silently(StoragePath.configuration)
         self.__delete_silently(StoragePath.files)
         self.__delete_silently(StoragePath.files_timestamps)
@@ -289,11 +299,13 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.bands_frequencies)
         self.__delete_silently(StoragePath.integrations)
         self.__delete_silently(StoragePath.integrations_seconds)
-        self.__delete_silently(StoragePath.umaps)
-        self.__delete_silently(StoragePath.umaps_integrations)
-        self.__delete_silently(StoragePath.umaps_bands)
-        self.__delete_silently(StoragePath.umaps_ranges)
-        self.__delete_silently(StoragePath.umaps_sites)
+        self.__delete_silently(StoragePath.reducers)
+        self.__delete_silently(StoragePath.reducers_dimensions)
+        self.__delete_silently(StoragePath.reducers_bands)
+        self.__delete_silently(StoragePath.reducers_integrations)
+        self.__delete_silently(StoragePath.reducers_ranges)
+        self.__delete_silently(StoragePath.indicators)
+        self.__delete_silently(StoragePath.volumes)
 
     def __get_settings(self) -> Dataset.attrs:
         return self.__get(StoragePath.configuration).attrs
@@ -409,38 +421,6 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def create_umaps(
-        self,
-        umaps: Any,
-        umaps_integrations: Any,
-        umaps_bands: Any,
-        umaps_ranges: Any,
-        umaps_sites: Any,
-    ) -> None:
-        self.__create_dataset(
-            StoragePath.umaps,
-            umaps,
-        )
-
-        self.__create_dataset(
-            StoragePath.umaps_integrations,
-            umaps_integrations,
-        )
-        self.__create_dataset(
-            StoragePath.umaps_bands,
-            umaps_bands,
-        )
-
-        self.__create_dataset(
-            StoragePath.umaps_ranges,
-            umaps_ranges,
-        )
-
-        self.__create_dataset(
-            StoragePath.umaps_sites,
-            umaps_sites,
-        )
-
     def create_file_features(
         self,
         features: Any,
@@ -511,26 +491,6 @@ class Storage(metaclass=SingletonMeta):
 
         return features
 
-    def delete_groups_features_reduced(self) -> None:
-        self.__delete_silently(StoragePath.groups_features_reduced_umap_2d)
-        self.__delete_silently(StoragePath.groups_features_reduced_umap_3d)
-
-    def create_group_reduced_umap_2d(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        features: List[List[float]]
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features_reduced_umap_2d.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
     def write_reduced(
         self,
         band: str,
@@ -541,122 +501,6 @@ class Storage(metaclass=SingletonMeta):
     ) -> None:
         suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.reduced_.value}{reducer_index}{suffix}'
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_reduced_umap_3d(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        features: List[List[float]]
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features_reduced_umap_3d.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_reduced_pca_2d(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        features: List[List[float]]
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features_reduced_pca_2d.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_reduced_pca_3d(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        features: List[List[float]]
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features_reduced_pca_3d.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_reduced_sparse_pca_2d(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        features: List[List[float]]
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features_reduced_sparse_pca_2d.value}' \
-               f'{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_reduced_sparse_pca_3d(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        features: List[List[float]]
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features_reduced_sparse_pca_3d.value}' \
-               f'{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_reduced_vae_2d(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        features: List[List[float]]
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features_reduced_vae_2d.value}' \
-               f'{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_reduced_vae_3d(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        features: List[List[float]]
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.groups_features_reduced_vae_3d.value}' \
-               f'{suffix}'
-
         self.__create_dataset(
             path=path,
             data=features,
@@ -825,11 +669,18 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def delete_groups_volumes(self) -> None:
+    def delete_volumes(self) -> None:
         self.__delete_silently(StoragePath.volume_sum_var)
         self.__delete_silently(StoragePath.volume_sum_std)
         self.__delete_silently(StoragePath.volume_mean_std)
         self.__delete_silently(StoragePath.volume_mean_spreading)
+
+    def delete_reduced(self) -> None:
+        reducers = self.get_reducers()
+
+        for index, _ in enumerate(reducers):
+            path = f'{StoragePath.reduced_.value}{index}'
+            self.__delete_silently(path)
 
     def create_group_volume_sum_var(
         self,
@@ -931,14 +782,26 @@ class Storage(metaclass=SingletonMeta):
         return self.exists_dataset(StoragePath.bands.value) \
             and self.exists_dataset(StoragePath.bands_frequencies.value)
 
-    def is_defined_umaps(self) -> bool:
-        return self.exists_dataset(StoragePath.umaps.value) \
-            and self.exists_dataset(StoragePath.umaps_sites.value) \
-            and self.exists_dataset(StoragePath.umaps_bands.value) \
-            and self.exists_dataset(StoragePath.umaps_ranges.value) \
-            and self.exists_dataset(StoragePath.umaps_integrations.value)
+    @staticmethod
+    def make_rectangular(
+        non_rectangular_array,
+        fill_with=None,
+    ):
+        # Determine the maximum length of the sub-arrays
+        max_length = max(len(sub_array) for sub_array in non_rectangular_array)
 
-    def create_reducers(
+        # Iterate through each sub-array and append None values to the end
+        # until it has the maximum length
+        rectangular_array = []
+        for sub_array in non_rectangular_array:
+            if len(sub_array) < max_length:
+                sub_array += [fill_with] * (max_length - len(sub_array))
+            rectangular_array.append(sub_array)
+
+        # Return the new rectangular array
+        return rectangular_array
+
+    def write_reducers(
         self,
         reducers: List[str],
         dimensions: List[int],
@@ -946,6 +809,10 @@ class Storage(metaclass=SingletonMeta):
         integrations: List[List[str]],
         ranges: List[List[str]],
     ) -> None:
+        bands = self.make_rectangular(bands, '')
+        integrations = self.make_rectangular(integrations, '')
+        ranges = self.make_rectangular(ranges, '')
+
         self.__create_dataset(
             path=StoragePath.reducers,
             data=reducers,

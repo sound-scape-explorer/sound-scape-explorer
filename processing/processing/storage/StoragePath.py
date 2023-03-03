@@ -22,7 +22,8 @@ class StoragePath(Enum):
 
     # Files
 
-    files = '/files'  # Example: /files_features/{band}/{file_index}
+    # Example: /files_features/{band}/{file_index}
+    files = '/files'
     files_features = '/files_features'
     files_timestamps = '/files_timestamps'
     files_sites = '/files_sites'
@@ -47,7 +48,8 @@ class StoragePath(Enum):
 
     # Reduced
 
-    reduced_ = '/reduced_'  # Example: /reduced_{reducer_index}
+    # Example: /reduced_{reducer_index}
+    reduced_ = '/reduced_'
 
     # Indicators
 
@@ -71,25 +73,3 @@ class StoragePath(Enum):
     volume_sum_std = '/volume_sum_std'
     volume_mean_std = '/volume_mean_std'
     volume_mean_spreading = '/volume_mean_spreading'
-
-    # Misc
-
-    umaps = '/umaps'
-    umaps_integrations = '/umaps_integrations'
-    umaps_bands = '/umaps_bands'
-    umaps_ranges = '/umaps_ranges'
-    umaps_sites = '/umaps_sites'
-
-    groups_features_reduced_umap_2d = '/groups_features_reduced_umap_2d'
-    groups_features_reduced_umap_3d = '/groups_features_reduced_umap_3d'
-
-    groups_features_reduced_pca_2d = '/groups_features_reduced_pca_2d'
-    groups_features_reduced_pca_3d = '/groups_features_reduced_pca_3d'
-
-    groups_features_reduced_sparse_pca_2d = \
-        '/groups_features_reduced_sparse_pca_2d'
-    groups_features_reduced_sparse_pca_3d = \
-        '/groups_features_reduced_sparse_pca_3d'
-
-    groups_features_reduced_vae_2d = '/groups_features_reduced_vae_2d'
-    groups_features_reduced_vae_3d = '/groups_features_reduced_vae_3d'

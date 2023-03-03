@@ -1,3 +1,5 @@
+import numpy
+
 from processing.storage.Storage import Storage
 
 storage = Storage(path='./sample/sse.h5')
@@ -5,10 +7,11 @@ storage = Storage(path='./sample/sse.h5')
 files = storage.get_files()
 bands = storage.get_bands()
 integrations = storage.get_integrations_seconds()
+integrations_names = storage.get_integrations()
 seed = storage.get_umap_seed()
 reducers = storage.get_config_reducers()
 
-storage.delete_groups_features_reduced()
+storage.delete_reduced()
 
 for band in bands:
     for integration in integrations:
@@ -28,14 +31,13 @@ for band in bands:
         for reducer_index, config_reducer in enumerate(reducers):
             reducer = config_reducer.create_reducer(seed)
 
-            if band not in config_reducer.bands:
+            integration_index = numpy.where(integrations == integration)
+            integration_index = integration_index[0][0]
+            integration_name = integrations_names[integration_index]
+
+            if band not in config_reducer.bands \
+                    or integration_name not in config_reducer.integrations:
                 continue
-
-            # TODO: Map integration name and integration seconds
-            # if integration not in config_reducer.integrations:
-            #     continue
-
-            # TODO: Filter range?
 
             features_split = reducer.reduce_and_split(
                 features=all_features,

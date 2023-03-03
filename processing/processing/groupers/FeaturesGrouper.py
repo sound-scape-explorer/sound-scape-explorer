@@ -141,8 +141,6 @@ class FeaturesGrouper:
 
             groups_features.append(group_features)
 
-        # TODO: add groups_volumes, volume algorithm can be specified at
-        #  runtime.
         return groups_features, groups_timestamps
 
     def get_group(

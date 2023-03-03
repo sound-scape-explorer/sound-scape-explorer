@@ -1,6 +1,5 @@
-from processing.maps.VolumeByName import VolumeByName
 from processing.storage.Storage import Storage
-from processing.utils.validate_volume_name import validate_volume_name
+from processing.volumes.Volume import Volume
 
 storage = Storage(path='./sample/sse.h5')
 
@@ -9,7 +8,7 @@ bands = storage.get_bands()
 integrations = storage.get_integrations_seconds()
 volumes = storage.get_volumes()
 
-storage.delete_groups_volumes()
+storage.delete_volumes()
 
 for band in bands:
     for integration in integrations:
@@ -21,9 +20,8 @@ for band in bands:
             )
 
             for name in volumes:
-                validate_volume_name(name)
-                Volume = VolumeByName[name]
                 volume = Volume(
+                    name=name,
                     band=band,
                     integration=integration,
                     file_index=file_index,
