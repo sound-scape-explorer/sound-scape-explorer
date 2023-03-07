@@ -83,6 +83,7 @@ export function useUMAPComponent() {
 
     scatterGL.updateDataset(UMAPDatasetStore.dataset);
     scatterGL.resize();
+    scatterGL.startOrbitAnimation();
 
     if (isFirstRender) {
       const {getStorageMetas} = await useStorage();
