@@ -50,7 +50,9 @@ export async function useStorage() {
   }
 
   function save() {
-    FS.syncfs(false, () => null);
+    FS.syncfs(false, () => {
+      window.location.reload();
+    });
   }
 
   function getFile(): H5File {
