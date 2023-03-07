@@ -13,22 +13,30 @@ import Button from './Button.vue';
 
 const {isDisabled} = useUMAPStatus();
 const {
-  getStorageUmaps,
-  getStorageUmapsRanges,
+  getRanges,
   getStorageRanges,
-  getGroupTimestamps,
+  getGroupedTimestamps,
+  getReducers,
 } = await useStorage();
-const umaps = await getStorageUmaps();
-const umapRanges = await getStorageUmapsRanges();
+
+const reducers = await getReducers();
 const storageRanges = await getStorageRanges();
 
 const allTimestamps = ref<number[]>();
+
 watch(selectionStore, async () => {
-  if (!selectionStore.band || !selectionStore.umapName) {
+  if (
+    selectionStore.reducer === null
+      || selectionStore.band === null
+      || selectionStore.integration === null
+  ) {
     return;
   }
 
-  const timestamps = await getGroupTimestamps(selectionStore.band, selectionStore.umapName);
+  const timestamps = await getGroupedTimestamps(
+    selectionStore.band,
+    selectionStore.integration,
+  );
   allTimestamps.value = timestamps.flat().map((t) => t / 1000);
 });
 
@@ -44,7 +52,7 @@ interface Slider {
 const cachedSliders = ref<null | Slider[]>(null);
 
 const sliders: ComputedRef<Slider[]> = computed(() => {
-  if (!selectionStore.umapName) {
+  if (selectionStore.integration === null) {
     return [];
   }
 
@@ -56,8 +64,8 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     return cachedSliders.value;
   }
 
-  const umapIndex = umaps.indexOf(selectionStore.umapName);
-  const ranges = umapRanges[umapIndex];
+  const ranges = reducers
+    .filter((reducer) => reducer.index === selectionStore.reducer)[0].ranges;
 
   const sliders = [];
 

@@ -67,9 +67,9 @@ const options = ref<Options>({
  */
 
 async function updateData() {
-  const {band, umapName} = selectionStore;
+  const {band, integration} = selectionStore;
 
-  if (band === null || umapName === null) {
+  if (band === null || integration === null) {
     return;
   }
 
@@ -147,7 +147,7 @@ function parseData() {
  */
 
 watch(selectionStore, async () => {
-  if (selectionStore.band === null || selectionStore.umapName === null) {
+  if (selectionStore.band === null || selectionStore.integration === null) {
     return;
   }
 

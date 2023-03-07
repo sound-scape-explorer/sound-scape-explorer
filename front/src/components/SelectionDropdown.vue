@@ -1,46 +1,58 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
-import {selectionStore} from 'src/store/selection.store';
-import {computed, defineProps, watch} from 'vue';
+import {computed, defineProps, ref, watch} from 'vue';
+import type {Reducer} from '../composables/useStorage';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 
 interface Props {
-  bands: string[];
-  integrations: string[];
+  reducers: Reducer[];
   // eslint-disable-next-line no-unused-vars
-  handleUpdate: (band: string, integration: string) => void;
+  handleUpdate: (reducer: number, band: string, integration: string) => void;
 }
 
-const {bands, integrations, handleUpdate} = defineProps<Props>();
+const {reducers, handleUpdate} = defineProps<Props>();
 
-const bandsOptions = computed(() => convertToNaiveSelectOptions(bands));
-const integrationsOptions = computed(() => convertToNaiveSelectOptions(integrations));
+const reducersOptions = computed(() => {
+  const references: string[] = [];
+
+  for (const reducer of reducers) {
+    for (const band of reducer.bands) {
+      for (const integration of reducer.integrations) {
+        references.push(
+          `${reducer.index} ${reducer.name} ${reducer.dimensions}d ${band} ${integration}`,
+        );
+      }
+    }
+  }
+  return convertToNaiveSelectOptions(references);
+});
 
 function processSelection() {
   if (
-      selectionStore.band === null
-      || selectionStore.umapName === null
+    selectedReducer.value === null
   ) {
     return;
   }
 
-  handleUpdate(selectionStore.band, selectionStore.umapName);
+  const elements = selectedReducer.value.split(' ');
+
+  handleUpdate(
+    Number(elements[0]),
+    elements[3],
+    elements[4],
+  );
 }
 
-watch(selectionStore, processSelection);
+const selectedReducer = ref<string | null>(null);
+
+watch(selectedReducer, processSelection);
 </script>
 
 <template>
   <n-select
-      v-model:value="selectionStore.band"
-      :options="bandsOptions"
-      placeholder="Bands..."
-      size="tiny"
-  />
-  <n-select
-      v-model:value="selectionStore.umapName"
-      :options="integrationsOptions"
-      placeholder="Intervals..."
+      v-model:value="selectedReducer"
+      :options="reducersOptions"
+      placeholder="Reducers..."
       size="tiny"
   />
 </template>

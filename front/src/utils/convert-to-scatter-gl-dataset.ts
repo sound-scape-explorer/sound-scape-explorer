@@ -12,11 +12,9 @@ interface MyMetadata {
 
 interface Props {
   features: number[][][];
-  integration: number,
-  files: string[],
-  timestamps: number[],
-  tags: string[],
-  metas: string[][],
+  files: string[];
+  timestamps: number[];
+  metas: string[][];
 }
 
 export function convertToScatterGlDataset(props: Props) {
@@ -29,7 +27,7 @@ export function convertToScatterGlDataset(props: Props) {
     const label = props.files[integratedIndex];
     const labelIndex = i;
     const timestamp = props.timestamps[i];
-    const tags = props.tags[integratedIndex];
+    const tags = '';
     const metaValues = props.metas[integratedIndex];
 
     metadata.push({

@@ -16,28 +16,20 @@ import UMAPTimeRangeSlider from '../components/UMAPTimeRangeSlider.vue';
 import {useStorage} from '../composables/useStorage';
 import {useUMAPPage} from '../composables/useUMAPPage';
 
-const {
-  getStorageBands,
-  getStorageIntegrations,
-} = await useStorage();
-
 const {delayUpdate} = useUMAPPage();
-
-const bands = await getStorageBands();
-const bandsNames = Object.keys(bands);
-const integrations = await getStorageIntegrations();
+const {getReducers} = await useStorage();
+const reducers = await getReducers();
 </script>
 
 <template>
   <div class="container">
     <div class="options">
-      <Title text="UMAP" />
+      <Title text="Reductions" />
 
-      <div class="row">
+      <div class="row first">
         <Selection
-            :bands="bandsNames"
             :callback="delayUpdate"
-            :integrations="integrations"
+            :reducers="reducers"
         />
         <UMAPFiltersColorTypes />
         <UMAPFiltersColorScales />
@@ -61,7 +53,7 @@ const integrations = await getStorageIntegrations();
       <UMAPTimeRangeOptions />
       <UMAPTimeRangeSlider />
     </div>
-    
+
     <div class="scatter">
       <UMAPScatterPlotGL />
     </div>
@@ -90,6 +82,10 @@ const integrations = await getStorageIntegrations();
   gap: 0.8rem;
   justify-items: center;
   align-items: center;
+}
+
+.first {
+  grid-template-columns: 1fr repeat(2, 6rem) 11rem;
 }
 
 .query-complex {

@@ -6,10 +6,10 @@ export function useSelection() {
   function clearSelection() {
     selectionImageStore.image = null;
     selectionStore.band = null;
-    selectionStore.umapName = null;
+    selectionStore.integration = null;
   }
 
-  const isActive = computed(() => selectionStore.band !== null && selectionStore.umapName !== null);
+  const isActive = computed(() => selectionStore.band !== null && selectionStore.integration !== null);
 
   return {
     clearSelection,

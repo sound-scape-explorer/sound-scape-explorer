@@ -4,10 +4,18 @@ import {StoragePath} from '../enums/StoragePath';
 import {settingsStore} from '../store/settings.store';
 import type {StorageSettings} from '../types/StorageSettings';
 
-export type StorageBand = Partial<StorageBands>
 export type StorageBands = {[band: string]: number[];}
 export type StorageRanges = {[range: string]: number[];}
 export type StorageMetas = {[property: string]: string[];}
+
+export interface Reducer {
+  index: number;
+  name: string;
+  dimensions: number;
+  bands: string[];
+  integrations: string[];
+  ranges: string[];
+}
 
 export async function useStorage() {
   const {FS} = await ready;
@@ -29,7 +37,7 @@ export async function useStorage() {
     const arrayBuffer = await file.arrayBuffer();
     FS.writeFile(filePath, new Uint8Array(arrayBuffer));
     save();
-    window.location.reload();
+    // window.location.reload();
   }
 
   function read<T>(callback: () => T): Promise<T> {
@@ -66,6 +74,23 @@ export async function useStorage() {
     });
   }
 
+  async function getFilesFeatures(band: string): Promise<number[][]> {
+    return await read(async () => {
+      const file = getFile();
+      const files = await getFiles();
+
+      const features = [];
+
+      for (const f in files) {
+        const path = `${StoragePath.files_features}/${band}/${f}`;
+        const feature = file.get(path) as Dataset;
+        features.push(feature.to_array() as number[]);
+      }
+
+      return features;
+    });
+  }
+
   async function getFilesTimestamps(): Promise<number[]> {
     return await read(() => {
       const file = getFile();
@@ -82,15 +107,7 @@ export async function useStorage() {
     });
   }
 
-  async function getStorageFilesTags(): Promise<string[]> {
-    return await read(() => {
-      const file = getFile();
-      const tags = file.get(StoragePath.files_tags) as Dataset;
-      return tags.to_array() as string[];
-    });
-  }
-
-  async function getStorageFilesMetas(): Promise<string[][]> {
+  async function getFilesMetas(): Promise<string[][]> {
     return await read(() => {
       const file = getFile();
       const metas = file.get(StoragePath.files_metas) as Dataset;
@@ -103,19 +120,20 @@ export async function useStorage() {
       const file = getFile();
 
       const metaProperties = (file.get(StoragePath.meta_properties) as Dataset).to_array() as string[];
-      const metaSets = file.get(StoragePath.meta_sets) as Group;
+      const metaSets = (file.get(StoragePath.meta_sets) as Dataset).to_array() as string[][];
 
       const metas: StorageMetas = {};
 
-      for (const property of metaProperties) {
-        metas[property] = (metaSets.get(property) as Dataset).to_array() as string[];
+      for (let i = 0; i < metaProperties.length; i += 1) {
+        const property = metaProperties[i];
+        metas[property] = metaSets[i].filter((element) => element !== '');
       }
 
       return metas;
     });
   }
 
-  async function getStorageBands(): Promise<StorageBands> {
+  async function getBands(): Promise<StorageBands> {
     return await read(() => {
       const file = getFile();
 
@@ -135,10 +153,10 @@ export async function useStorage() {
     });
   }
 
-  async function getStorageIntegrations(): Promise<string[]> {
+  async function getIntegrations(): Promise<string[]> {
     return await read(() => {
       const file = getFile();
-      const integrations = file.get(StoragePath.umaps) as Dataset;
+      const integrations = file.get(StoragePath.integrations) as Dataset;
       return integrations.to_array() as string[];
     });
   }
@@ -160,57 +178,27 @@ export async function useStorage() {
     });
   }
 
-  function getUMAPsFeaturesPath(
-    band: string,
-    integration: number,
-  ): string {
-    const rootPath = StoragePath.groups_features_reduced_umap_2d;
-    return `${rootPath}/${band}/${integration}`;
-  }
+  function getSecondsFromIntegration(file: H5File, integration: string): number {
+    const integrations = (file.get(StoragePath.integrations) as Dataset).to_array() as string[];
+    const seconds = (file.get(StoragePath.integrations_seconds) as Dataset).to_array() as number[];
 
-  function getIntegrationFromUmapName(file: H5File, umapName: string): number {
-    const umaps = (file.get(StoragePath.umaps) as Dataset).to_array() as string[];
-    const umapsIntegrations = (file.get(StoragePath.umaps_integrations) as Dataset).to_array() as number[];
+    const index = integrations.indexOf(integration);
 
-    const umapIndex = umaps.indexOf(umapName);
-
-    if (umapIndex === -1) {
-      throw new Error(`UMAP name not found: ${umapName}`);
+    if (index === -1) {
+      throw new Error(`UMAP name not found: ${integration}`);
     }
 
-    return umapsIntegrations[umapIndex];
+    return seconds[index];
   }
 
-  async function getStorageUmapsFeatures(
+  async function getGroupedTimestamps(
     band: string,
-    umapName: string, // TODO: Is called `integration` previously...
-  ): Promise<number[][][]> {
-    return await read(() => {
-      const file = getFile();
-      const integration = getIntegrationFromUmapName(file, umapName);
-      const path = getUMAPsFeaturesPath(band, integration);
-
-      const umapsGroup = file.get(path) as Group;
-      const umapsFeatures = [];
-
-      for (const fileIndex in umapsGroup.keys()) {
-        const dataset = umapsGroup.get(fileIndex) as Dataset;
-        const array = dataset.to_array() as number[][];
-        umapsFeatures.push(array);
-      }
-
-      return umapsFeatures;
-    });
-  }
-
-  async function getGroupTimestamps(
-    bandName: string,
-    umapName: string,
+    integrations: string,
   ): Promise<number[][]> {
     return await read(() => {
       const file = getFile();
-      const integration = getIntegrationFromUmapName(file, umapName);
-      const path = `${StoragePath.groups_timestamps}/${bandName}/${integration}`;
+      const seconds = getSecondsFromIntegration(file, integrations);
+      const path = `${StoragePath.grouped_timestamps}/${band}/${seconds}`;
 
       const timestampsGroup = file.get(path) as Group;
       const timestamps: number[][] = [];
@@ -225,28 +213,28 @@ export async function useStorage() {
     });
   }
 
-  async function getStorageUmapsRanges(): Promise<string[][]> {
+  async function getRanges(): Promise<string[][]> {
     return await read(() => {
       const file = getFile();
-      const ranges = file.get(StoragePath.umaps_ranges) as Dataset;
+      const ranges = file.get(StoragePath.ranges) as Dataset;
       return ranges.to_array() as string[][];
     });
   }
 
-  async function getGroupFeatures(
+  async function getGroupedFeatures(
     band: string,
-    umapName: string,
+    integrations: string,
     fileIndex: number,
     timestamp: number,
   ): Promise<number[]> {
     return await read(async () => {
-      const groupTimestamps = await getGroupTimestamps(band, umapName);
+      const groupTimestamps = await getGroupedTimestamps(band, integrations);
       const timestamps = groupTimestamps.flat();
       const index = timestamps.indexOf(timestamp);
 
       const file = getFile();
-      const integration = getIntegrationFromUmapName(file, umapName);
-      const path = `${StoragePath.groups_features}/${band}/${integration}/${fileIndex}`;
+      const integration = getSecondsFromIntegration(file, integrations);
+      const path = `${StoragePath.grouped_features}/${band}/${integration}/${fileIndex}`;
       const groupFeatures = file.get(path) as Dataset;
       const features = groupFeatures.to_array() as number[][];
 
@@ -260,7 +248,7 @@ export async function useStorage() {
       const configuration = file.get(StoragePath.configuration) as Dataset;
       const attributes = configuration.attrs;
 
-      let settings: Partial<StorageSettings> = {};
+      const settings: Partial<StorageSettings> = {};
 
       for (const key of Object.keys(attributes)) {
         // @ts-expect-error TS7053
@@ -271,11 +259,111 @@ export async function useStorage() {
     });
   }
 
-  async function getStorageUmaps(): Promise<string[]> {
+  async function getReducersNames(): Promise<string[]> {
     return await read(() => {
       const file = getFile();
-      const umaps = file.get(StoragePath.umaps) as Dataset;
-      return umaps.to_array() as string[];
+      const names = file.get(StoragePath.reducers) as Dataset;
+      return names.to_array() as string[];
+    });
+  }
+
+  async function getReducersDimensions(): Promise<number[]> {
+    return await read(() => {
+      const file = getFile();
+      const names = file.get(StoragePath.reducers_dimensions) as Dataset;
+      return names.to_array() as number[];
+    });
+  }
+
+  function trimRectangular<T>(
+    array: T[][],
+    filterWith: string | number | null = null,
+  ): T[][] {
+    const trimmedArray = [];
+
+    for (const sublist of array) {
+      const trimmedSublist = sublist.filter((element) => element !== filterWith);
+      trimmedArray.push(trimmedSublist);
+    }
+
+    return trimmedArray;
+  }
+
+  async function getReducersBands(): Promise<string[][]> {
+    return await read(() => {
+      const file = getFile();
+      const names = file.get(StoragePath.reducers_bands) as Dataset;
+      const array = names.to_array() as string[][];
+      return trimRectangular(array, '');
+    });
+  }
+
+  async function getReducersIntegrations(): Promise<string[][]> {
+    return await read(() => {
+      const file = getFile();
+      const names = file.get(StoragePath.reducers_integrations) as Dataset;
+      const array = names.to_array() as string[][];
+      return trimRectangular(array, '');
+    });
+  }
+
+  async function getReducersRanges(): Promise<string[][]> {
+    return await read(() => {
+      const file = getFile();
+      const names = file.get(StoragePath.reducers_ranges) as Dataset;
+      const array = names.to_array() as string[][];
+      return trimRectangular(array, '');
+    });
+  }
+
+  async function getReducers(): Promise<Reducer[]> {
+    return await read(async () => {
+      const names = await getReducersNames();
+      const dimensions = await getReducersDimensions();
+      const bands = await getReducersBands();
+      const integrations = await getReducersIntegrations();
+      const ranges = await getReducersRanges();
+
+      const reducers: Reducer[] = [];
+
+      for (let i = 0; i < names.length; i += 1) {
+        const reducer = {
+          index: i,
+          name: names[i],
+          dimensions: dimensions[i],
+          bands: bands[i],
+          integrations: integrations[i],
+          ranges: ranges[i],
+        };
+
+        reducers.push(reducer);
+      }
+
+      return reducers;
+    });
+  }
+
+  async function getReducedFeatures(
+    reducer: number,
+    band: string,
+    integration: string,
+  ): Promise<number[][][]> {
+    return await read(() => {
+      const file = getFile();
+      const seconds = getSecondsFromIntegration(file, integration);
+
+      const path = `${StoragePath.reduced_}${reducer}/${band}/${seconds}`;
+
+      const group = file.get(path) as Group;
+      const features = [];
+
+      for (const fileIndex in group.keys()) {
+        const dataset = group.get(fileIndex) as Dataset;
+        const array = dataset.to_array() as number[][];
+        features.push(array);
+      }
+
+      return features;
     });
   }
 
@@ -285,18 +373,18 @@ export async function useStorage() {
     importUploadedFile,
     getFiles,
     getFilesTimestamps,
+    getFilesFeatures,
     getFilesSites,
-    getStorageFilesTags,
-    getStorageFilesMetas,
-    getStorageBands,
+    getFilesMetas,
+    getBands,
+    getIntegrations,
+    getRanges,
     getStorageRanges,
-    getStorageIntegrations,
-    getStorageUmaps,
-    getStorageUmapsFeatures,
-    getGroupTimestamps,
-    getStorageUmapsRanges,
     getStorageMetas,
-    getGroupFeatures,
     getStorageSettings,
+    getGroupedFeatures,
+    getGroupedTimestamps,
+    getReducers,
+    getReducedFeatures,
   };
 }

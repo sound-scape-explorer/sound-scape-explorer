@@ -18,71 +18,79 @@ export function useUMAPPage() {
   }
 
   function resetSelection() {
+    selectionStore.reducer = null;
     selectionStore.band = null;
-    selectionStore.umapName = null;
+    selectionStore.integration = null;
   }
 
-  function setSelection(band: string, intervalLabel: string) {
+  function setSelection(reducer: number, band: string, integration: string) {
+    selectionStore.reducer = reducer;
     selectionStore.band = band;
-    selectionStore.umapName = intervalLabel;
+    selectionStore.integration = integration;
   }
 
-  async function fetchData(band: string, umapName: string) {
+  async function fetchData(reducer: number, band: string, integration: string) {
     const {
-      getStorageUmapsFeatures,
       getFiles,
-      getGroupTimestamps,
-      getStorageFilesTags,
-      getStorageFilesMetas,
+      getReducedFeatures,
+      getGroupedTimestamps,
+      getFilesMetas,
     } = await useStorage();
 
     try {
-      const features = await getStorageUmapsFeatures(band, umapName);
+      const features = await getReducedFeatures(reducer, band, integration);
       const files = await getFiles();
-      const timestamps = await getGroupTimestamps(band, umapName);
-      const tags = await getStorageFilesTags();
-      const metas = await getStorageFilesMetas();
+      const timestamps = await getGroupedTimestamps(band, integration);
+      const metas = await getFilesMetas();
 
       UMAPDatasetStore.dataset = convertToScatterGlDataset({
         features,
-        integration: 15,
         files,
         timestamps: timestamps.flat(),
-        tags,
         metas,
       });
-    }
-    catch {
+    } catch {
       UMAPDatasetStore.dataset = null;
     }
   }
 
   interface HandleUpdateProps {
+    reducer: number;
     band: string;
-    interval: string;
+    integration: string;
     callback: () => void;
   }
 
-  async function handleUpdate({band, interval, callback}: HandleUpdateProps) {
-    if (!band || !interval) {
+  async function handleUpdate({
+    reducer,
+    band,
+    integration,
+    callback,
+  }: HandleUpdateProps) {
+    if (
+      reducer === null
+      || band === null
+      || integration === null
+    ) {
       resetSelection();
       resetImage();
       return;
     }
 
-    setSelection(band, interval);
-    await fetchData(band, interval);
+    setSelection(reducer, band, integration);
+    await fetchData(reducer, band, integration);
 
     callback();
   }
 
-  function delayUpdate(band: string, interval: string) {
+  function delayUpdate(reducer: number, band: string, integration: string) {
     modalLoadingStore.isLoading = true;
 
     setTimeout(async () => {
       await handleUpdate({
+        reducer,
         band,
-        interval,
+        integration,
         callback: () => modalLoadingStore.isLoading = false,
       });
     }, RENDERING_DELAY_SLOW);

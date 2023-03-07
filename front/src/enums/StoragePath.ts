@@ -1,29 +1,34 @@
 export enum StoragePath {
+  // Configuration
   configuration = '/configuration',
-
-  files = '/files',
-  files_features = '/files_features',
-  files_timestamps = '/files_timestamps',
-  files_sites = '/files_sites',
-  files_tags = '/files_tags',
-  files_metas = '/files_metas',
-
-  meta_properties = '/meta_properties',
-  meta_sets = '/meta_sets',
-
-  ranges = '/ranges',
-  ranges_timestamps = '/ranges_timestamps',
-
-  bands = '/bands',
-  bands_frequencies = '/bands_frequencies',
-
-  umaps = '/umaps',
-  umaps_integrations = '/umaps_integrations',
-  umaps_bands = '/umaps_bands',
-  umaps_ranges = '/umaps_ranges',
-  umaps_sites = '/umaps_sites',
-
-  groups_features = '/groups_features',
-  groups_timestamps = '/groups_timestamps',
-  groups_features_reduced_umap_2d = '/groups_features_reduced_umap_2d',
+  // Bands
+  bands = '/configuration/bands/names',
+  bands_frequencies = '/configuration/bands/frequencies',
+  // Integrations
+  integrations = '/configuration/integrations/names',
+  integrations_seconds = '/configuration/integrations/seconds',
+  // Ranges
+  ranges = '/configuration/ranges/names',
+  ranges_timestamps = '/configuration/ranges/timestamps',
+  // Files
+  files = '/configuration/files/names',
+  files_features = '/configuration/files/features',
+  files_timestamps = '/configuration/files/timestamps',
+  files_sites = '/configuration/files/sites',
+  files_metas = '/configuration/files/metas',
+  meta_properties = '/configuration/meta/properties',
+  meta_sets = '/configuration/meta/sets',
+  // Actions
+  reducers = '/configuration/reducers/names',
+  reducers_dimensions = '/configuration/reducers/dimensions',
+  reducers_bands = '/configuration/reducers/bands',
+  reducers_integrations = '/configuration/reducers/integrations',
+  reducers_ranges = '/configuration/reducers/ranges',
+  indicators = '/configuration/indicators',
+  volumes = '/configuration/volumes',
+  // Grouped
+  grouped_features = '/grouped_features',
+  grouped_timestamps = '/grouped_timestamps',
+  // Reduced
+  reduced_ = '/reduced_',
 }

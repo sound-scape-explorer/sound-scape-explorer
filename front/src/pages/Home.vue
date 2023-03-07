@@ -8,6 +8,10 @@ const inputRef = ref<HTMLInputElement>();
 const {
   importUploadedFile,
   getFiles,
+  getBands,
+  getIntegrations,
+  getRanges,
+  getReducers,
 } = await useStorage();
 
 async function handleChange() {
@@ -22,7 +26,18 @@ async function handleChange() {
 
 async function handleRead() {
   const files = await getFiles();
-  console.log(files);
+  const bands = await getBands();
+  const integrations = await getIntegrations();
+  const ranges = await getRanges();
+  const reducers = await getReducers();
+
+  console.log({
+    files,
+    bands,
+    integrations,
+    ranges,
+    reducers,
+  });
 }
 </script>
 

@@ -7,12 +7,12 @@ import {useSelection} from '../composables/useSelection';
 import {useStorage} from '../composables/useStorage';
 
 const {
-  getStorageBands,
-  getStorageIntegrations,
+  getBands,
+  getIntegrations,
 } = await useStorage();
 
-const bands = await getStorageBands();
-const integrations = await getStorageIntegrations();
+const bands = await getBands();
+const integrations = await getIntegrations();
 
 const {clearSelection} = useSelection();
 onUnmounted(clearSelection);

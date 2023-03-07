@@ -66,15 +66,13 @@ onMounted(async () => {
     getFiles,
     getFilesTimestamps,
     getFilesSites,
-    getStorageFilesTags,
-    getStorageFilesMetas,
+    getFilesMetas,
   } = await useStorage();
 
   const files = await getFiles();
   const timestamps = await getFilesTimestamps();
   const sites = await getFilesSites();
-  const tags = await getStorageFilesTags();
-  const metas = await getStorageFilesMetas();
+  const metas = await getFilesMetas();
 
   const flatFiles = [];
 
@@ -83,7 +81,6 @@ onMounted(async () => {
       files[i],
       timestamps[i],
       sites[i],
-      tags[i],
       metas[i],
     ]);
   }

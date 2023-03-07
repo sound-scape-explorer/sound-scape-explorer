@@ -30,9 +30,9 @@ export function useUMAPExport() {
      * Selection settings
      */
 
-    const {band, umapName} = selectionStore;
+    const {band, integration} = selectionStore;
 
-    name += `_${band}_${umapName}`;
+    name += `_${band}_${integration}`;
 
     /**
      * Query
@@ -110,7 +110,7 @@ export function useUMAPExport() {
 
     const {points, metadata} = dataset;
 
-    if (!selectionStore.band || !selectionStore.umapName) {
+    if (!selectionStore.band || !selectionStore.integration) {
       return payload;
     }
 
@@ -131,15 +131,15 @@ export function useUMAPExport() {
 
       const {
         getFiles,
-        getGroupFeatures,
+        getGroupedFeatures,
       } = await useStorage();
 
       const files = await getFiles();
       const index = getIntegratedIndex(i, files.length);
       const timestamp = data.timestamp as number;
-      const features = await getGroupFeatures(
+      const features = await getGroupedFeatures(
         selectionStore.band,
-        selectionStore.umapName,
+        selectionStore.integration,
         index,
         timestamp,
       );
