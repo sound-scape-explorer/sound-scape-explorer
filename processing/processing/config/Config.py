@@ -240,7 +240,7 @@ class Config(metaclass=SingletonMeta):
             meta_property = column.replace(ExcelFile.meta_prefix.value, '')
             self.__files_meta_properties.append(meta_property)
 
-    def __read_files_meta_values(self) -> List[DataFrame]:
+    def __read_files_meta_values(self) -> List[List[str]]:
         sheet = self.__parse_sheet(ExcelSheet.files)
         meta_values = []
 
@@ -249,6 +249,13 @@ class Config(metaclass=SingletonMeta):
                 sheet,
                 f'{ExcelFile.meta_prefix.value}{meta_property}',
             )
+
+            meta_value = list(meta_value)
+
+            for v, value in enumerate(meta_value):
+                if type(value) is not str:
+                    meta_value[v] = str(value)
+
             meta_values.append(meta_value)
 
         return meta_values
@@ -316,27 +323,21 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        files_length = len(self.__files)
-
         meta_properties = self.__files_meta_properties
         meta_values = self.__read_files_meta_values()
+
         meta_sets: List[List[str]] = []
 
-        for _ in enumerate(meta_values):
-            meta_sets.append([])
+        for index, meta_property in enumerate(meta_properties):
+            meta_set = []
 
-        for meta_index, meta_value in enumerate(meta_values):
-            shift = 1
-            meta_slice = meta_value[0 + shift:files_length + shift]
-
-            for value in meta_slice:
-                if type(value) is float:
-                    value = str(value)
-
-                if value in meta_sets[meta_index]:
+            for meta_value in meta_values[index]:
+                if meta_value in meta_set:
                     continue
 
-                meta_sets[meta_index].append(value)
+                meta_set.append(meta_value)
+
+            meta_sets.append(meta_set)
 
         storage.create_metas(
             meta_properties,

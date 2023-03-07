@@ -810,17 +810,16 @@ class Storage(metaclass=SingletonMeta):
         meta_sets: List[List[str]],
     ) -> None:
         self.__create_dataset(
-            path=StoragePath.meta_properties.value,
+            path=StoragePath.meta_properties,
             data=meta_properties,
         )
 
-        for (index, meta_property) in enumerate(meta_properties):
-            path = f'{StoragePath.meta_sets.value}/{meta_property}'
+        meta_sets = self.make_rectangular(meta_sets, '')
 
-            self.__create_dataset(
-                path=path,
-                data=meta_sets[index],
-            )
+        self.__create_dataset(
+            path=StoragePath.meta_sets,
+            data=meta_sets,
+        )
 
     def is_defined_files(self) -> bool:
         return self.exists_dataset(StoragePath.files.value) \
