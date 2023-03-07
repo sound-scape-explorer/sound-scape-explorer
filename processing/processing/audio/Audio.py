@@ -1,4 +1,4 @@
-from typing import Any, List, Union
+from typing import List, Union
 
 import maad
 import soundfile
@@ -110,7 +110,7 @@ class Audio:
         return self.__spectrogram
 
     @property
-    def spectrogram_amplitude(self) -> Any:
+    def spectrogram_amplitude(self) -> Spectrogram:
         if self.__spectrogram_amplitude_loaded is True:
             return self.__spectrogram_amplitude
 
