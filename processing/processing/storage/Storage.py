@@ -23,7 +23,7 @@ class Storage(metaclass=SingletonMeta):
 
     def __init__(
         self,
-        path: Optional[str] = 'sse.h5'
+        path: Optional[str],
     ) -> None:
         self.__path = path
         self.__set_file_or_fail()
