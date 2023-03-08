@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import time
 
 
@@ -36,11 +38,10 @@ class Timer:
         else:
             self.__duration = (self.__duration + duration) / 2
 
-    def get_timeleft(
+    def __get_timeleft(
         self,
         iteration_index: int,
-        decimals: int = 1,
-    ) -> str:
+    ) -> Tuple[float, str]:
         remaining_iterations = self.__total_iterations - iteration_index
 
         timeleft = self.__duration * remaining_iterations
@@ -54,4 +55,21 @@ class Timer:
             timeleft = timeleft / 60
             units = 'hours'
 
-        return f'{round(timeleft, decimals)} {units}'
+        return timeleft, units
+
+    def print_timeleft(
+        self,
+        iteration_index: int,
+        decimals: int = 1,
+    ):
+        timeleft, units = self.__get_timeleft(iteration_index)
+        string = f'{round(timeleft, decimals)} {units}'
+
+        print(
+            f'Progress: {iteration_index + 1}/{self.__total_iterations}, '
+            f'Timeleft: ~{string}',
+            end='\r',
+        )
+
+        if iteration_index + 1 == self.__total_iterations:
+            print('')

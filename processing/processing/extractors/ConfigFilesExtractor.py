@@ -108,7 +108,7 @@ class ConfigFilesExtractor:
             features = self.__extract_features(wav, sample_rate)
 
             self.__timer.add()
-            self.__print_progress(file_index)
+            self.__timer.print_timeleft(file_index)
 
             yield features, file_index
 
@@ -123,18 +123,6 @@ class ConfigFilesExtractor:
                 band=band,
                 file_index=file_index,
             )
-
-    def __print_progress(self, file_index: int) -> None:
-        timeleft = self.__timer.get_timeleft(file_index)
-
-        print(
-            f'Progress: {file_index + 1}/{self.__files_length}, '
-            f'Timeleft: ~{timeleft}',
-            end='\r',
-        )
-
-        if file_index + 1 == self.__files_length:
-            print('')
 
     def __forward_model(
         self,
