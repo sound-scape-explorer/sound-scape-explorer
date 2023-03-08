@@ -1,6 +1,6 @@
 from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
-from processing.shared import ENES_index
+from processing.lib import ENES_index
 from processing.storage.Storage import Storage
 
 

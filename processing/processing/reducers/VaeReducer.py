@@ -1,7 +1,7 @@
 from typing import List
 
+from processing.lib.VAE_v1 import VAE
 from processing.reducers.AbstractReducer import AbstractReducer
-from processing.shared.VAE_v1 import VAE
 
 
 class VaeReducer(AbstractReducer):

@@ -6,8 +6,8 @@ import torchaudio
 from torch import Tensor, cuda, hub, nn
 from torch.nn import Sequential
 
+from processing.lib.VGG import VGG
 from processing.models.AbstractModel import AbstractModel
-from processing.shared.VGG import VGG
 
 
 class VGGishModel(AbstractModel, VGG):

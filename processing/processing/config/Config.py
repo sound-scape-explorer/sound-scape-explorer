@@ -1,13 +1,15 @@
 import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, List, Optional, Union
 
 import math
 import numpy
 import pandas
-from pandas import DataFrame, Series
+from numpy import nan
+from pandas import DataFrame
 
+from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigIntegration import (
@@ -27,16 +29,13 @@ from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelVolume import ExcelVolume
 from processing.indicators.Indicator import Indicator
 from processing.settings.ConfigSetting import ConfigSettings
-from processing.shared.SingletonMeta import SingletonMeta
 from processing.storage.Storage import Storage
 from processing.volumes.Volume import Volume
 
 
 class Config(metaclass=SingletonMeta):
     __path: str
-    __sheet: str = 'Sheet1'
     __excel: pandas.ExcelFile
-    __excel_table: DataFrame
     __settings: ConfigSettings = {}
     __files: ConfigFiles = {}
     __files_meta_properties: List[str]
@@ -50,7 +49,7 @@ class Config(metaclass=SingletonMeta):
 
     def __init__(
         self,
-        path: Optional[str] = 'config.xlsx',
+        path: Optional[str],
     ) -> None:
         self.__path = path
 
@@ -60,15 +59,20 @@ class Config(metaclass=SingletonMeta):
         self.__read()
         self.__set()
 
+    def __fail(self) -> None:
+        raise FileNotFoundError(f'Could not load Excel file: {self.__path}')
+
     def __validate_path(self) -> None:
+        if self.__path is None:
+            self.__fail()
+
         path = Path(self.__path)
 
         if not path.exists():
-            raise FileNotFoundError(f'Excel file not found: {path}')
+            self.__fail()
 
     def __load_file(self) -> None:
         self.__excel = pandas.ExcelFile(self.__path)
-        # self.__excel_table = self.__excel.parse(self.__sheet)
 
     def __parse_sheet(
         self,
@@ -208,18 +212,6 @@ class Config(metaclass=SingletonMeta):
                 value = None
 
             self.__settings[setting] = value  # type: ignore
-
-    @staticmethod
-    def __get_index_map(series: Series) -> Dict[str, int]:
-        map_ = {}
-
-        for index, key in enumerate(series):
-            if Config.__is_nan(key):
-                continue
-
-            map_[key] = index
-
-        return map_
 
     @staticmethod
     def __convert_date_to_timestamp(date_string: str) -> int:
@@ -444,6 +436,54 @@ class Config(metaclass=SingletonMeta):
             integrations_seconds=integrations_seconds
         )
 
+    def __parse_reducer_bands(
+        self,
+        bands: Union[str, type(nan)],
+    ) -> List[str]:
+        reducer_bands = []
+
+        if bands is nan:
+            for band in self.__bands.keys():
+                reducer_bands.append(band)
+        else:
+            for band in bands.split(','):
+                _ = self.__bands[band]
+                reducer_bands.append(band)
+
+        return reducer_bands
+
+    def __parse_reducer_integrations(
+        self,
+        integrations: Union[str, type(nan)],
+    ) -> List[str]:
+        reducer_integrations = []
+
+        if integrations is nan:
+            for integration in self.__integrations.keys():
+                reducer_integrations.append(integration)
+        else:
+            for integration in integrations.split(','):
+                _ = self.__integrations[integration]
+                reducer_integrations.append(integration)
+
+        return reducer_integrations
+
+    def __parse_reducer_ranges(
+        self,
+        ranges: Union[str, type(nan)],
+    ) -> List[str]:
+        reducer_ranges = []
+
+        if ranges is nan:
+            for range_ in self.__ranges.keys():
+                reducer_ranges.append(range_)
+        else:
+            for range_ in ranges.split(','):
+                _ = self.__ranges[range_]
+                reducer_ranges.append(range_)
+
+        return reducer_ranges
+
     def __read_reducers(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.reducers)
         reducers = self.__parse_column(sheet, ExcelReducer.reducer)
@@ -453,33 +493,11 @@ class Config(metaclass=SingletonMeta):
         ranges = self.__parse_column(sheet, ExcelReducer.ranges)
 
         for index, reducer_name in enumerate(reducers):
-            reducer_bands = []
-            reducer_integrations = []
-            reducer_ranges = []
-
-            if bands[index] is numpy.nan:
-                for band in self.__bands.keys():
-                    reducer_bands.append(band)
-            else:
-                for band in bands[index].split(','):
-                    _ = self.__bands[band]
-                    reducer_bands.append(band)
-
-            if integrations[index] is numpy.nan:
-                for integration in self.__integrations.keys():
-                    reducer_integrations.append(integration)
-            else:
-                for integration in integrations[index].split(','):
-                    _ = self.__integrations[integration]
-                    reducer_integrations.append(integration)
-
-            if ranges[index] is numpy.nan:
-                for range_ in self.__ranges.keys():
-                    reducer_ranges.append(range_)
-            else:
-                for range_ in ranges[index].split(','):
-                    _ = self.__ranges[range_]
-                    reducer_ranges.append(range_)
+            reducer_bands = self.__parse_reducer_bands(bands[index])
+            reducer_integrations = self.__parse_reducer_integrations(
+                integrations=integrations[index]
+            )
+            reducer_ranges = self.__parse_reducer_ranges(ranges[index])
 
             reducer = ConfigReducer(
                 name=reducer_name,

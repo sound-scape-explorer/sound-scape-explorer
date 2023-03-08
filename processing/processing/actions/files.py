@@ -1,10 +1,12 @@
+from processing.common.Env import Env
 from processing.config.Config import Config
 from processing.extractors.ConfigFilesExtractor import ConfigFilesExtractor
 from processing.models.VGGishModel import VGGishModel
 from processing.storage.Storage import Storage
 
-storage = Storage(path='./sample/sse.h5')
-config = Config(path='./sample/config.xlsx')
+env = Env()
+config = Config(path=env.config)
+storage = Storage(path=env.storage)
 
 bands = storage.get_config_bands()
 expected_sample_rate = storage.get_expected_sample_rate()

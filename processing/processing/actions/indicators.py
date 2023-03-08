@@ -1,8 +1,10 @@
 from processing.audio.Audio import Audio
+from processing.common.Env import Env
 from processing.indicators.Indicator import Indicator
 from processing.storage.Storage import Storage
 
-storage = Storage(path='./sample/sse.h5')
+env = Env()
+storage = Storage(path=env.storage)
 
 files = storage.get_files()
 bands = storage.get_bands()

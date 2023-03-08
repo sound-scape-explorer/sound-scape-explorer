@@ -1,7 +1,10 @@
+from processing.common.Env import Env
 from processing.groupers.FeaturesGrouper import FeaturesGrouper
 from processing.storage.Storage import Storage
 
-storage = Storage(path='./sample/sse.h5')
+env = Env()
+storage = Storage(path=env.storage)
+
 files = storage.get_files()
 bands = storage.get_bands()
 integrations = storage.get_integrations_seconds()

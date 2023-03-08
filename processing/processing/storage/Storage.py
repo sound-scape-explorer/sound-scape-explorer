@@ -5,11 +5,11 @@ from h5py import Dataset, File
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
 
+from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
 from processing.settings.StorageSetting import StorageSetting
-from processing.shared.SingletonMeta import SingletonMeta
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -34,7 +34,9 @@ class Storage(metaclass=SingletonMeta):
                 StorageMode.rw_or_create.value,
             )
         except BlockingIOError:
-            raise RuntimeError(f'Could not open file {self.__path}')
+            raise RuntimeError(f'Could not load file: {self.__path}')
+        except TypeError:
+            raise FileNotFoundError(f'Could not find file: {self.__path}')
 
     @staticmethod
     def __get_file_features_path(

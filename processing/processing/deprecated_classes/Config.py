@@ -1,6 +1,7 @@
 from json import dumps
 from typing import Dict, List, Tuple
 
+from processing.common.SingletonMeta import SingletonMeta
 from processing.constants import (
     AUDIO_BASE,
     AUDIO_SUFFIX,
@@ -17,7 +18,6 @@ from processing.deprecated_utils.convert_dict_to_named_tuple import \
     convert_dict_to_named_tuple
 from processing.deprecated_utils.read_version_from_package import \
     read_version_from_package
-from processing.shared.SingletonMeta import SingletonMeta
 
 
 class Config(metaclass=SingletonMeta):
