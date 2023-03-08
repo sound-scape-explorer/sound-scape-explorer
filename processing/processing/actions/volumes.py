@@ -1,5 +1,6 @@
 from processing.common.Env import Env
 from processing.storage.Storage import Storage
+from processing.timers.Timer import Timer
 from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
 
@@ -15,6 +16,8 @@ storage.delete_volumes()
 
 print_new_line()
 print(f'Volumes loading {[v for v in volumes]}')
+
+timer = Timer(len(bands) * len(integrations) * len(files) * len(volumes))
 
 for band in bands:
     for integration in integrations:
@@ -37,3 +40,4 @@ for band in bands:
                     volume.calculate(features)
 
                 volume.store(storage)
+                timer.print_timeleft()

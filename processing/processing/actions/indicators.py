@@ -2,6 +2,7 @@ from processing.audio.Audio import Audio
 from processing.common.Env import Env
 from processing.indicators.Indicator import Indicator
 from processing.storage.Storage import Storage
+from processing.timers.Timer import Timer
 from processing.utils.print_new_line import print_new_line
 
 env = Env()
@@ -18,6 +19,8 @@ storage.delete_group_indicators()
 
 print_new_line()
 print(f'Indicators loading: {[i for i in indicators]}')
+
+timer = Timer(len(files) * len(bands) * len(integrations) * len(indicators))
 
 for band_index, band in enumerate(bands):
     for integration in integrations:
@@ -46,3 +49,4 @@ for band_index, band in enumerate(bands):
                     indicator.calculate(audio)
 
                 indicator.store(storage)
+                timer.print_timeleft()

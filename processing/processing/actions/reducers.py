@@ -1,5 +1,6 @@
 from processing.common.Env import Env
 from processing.storage.Storage import Storage
+from processing.timers.Timer import Timer
 from processing.utils.print_new_line import print_new_line
 
 env = Env()
@@ -16,6 +17,8 @@ storage.delete_reduced()
 
 print_new_line()
 print(f'Reducers loading {[r.name + str(r.dimensions) for r in reducers]}')
+
+timer = Timer(len(bands) * len(integrations) * len(reducers))
 
 for band in bands:
     for integration in integrations:
@@ -34,6 +37,7 @@ for band in bands:
             )
 
             if not is_in_reducer:
+                timer.print_timeleft()
                 continue
 
             features_split = reducer.reduce_and_split(
@@ -49,3 +53,5 @@ for band in bands:
                     reducer_index=reducer_index,
                     features=features_split[file_index],
                 )
+
+            timer.print_timeleft()
