@@ -18,7 +18,12 @@ import {settingsStore} from '../store/settings.store';
       <hr />
 
       <div class="checkboxes">
-        <n-checkbox v-model:checked="settingsStore.debug" class="checkbox">Debug</n-checkbox>
+        <n-checkbox
+            v-model:checked="settingsStore.preview"
+            class="checkbox"
+        >
+          Preview
+        </n-checkbox>
       </div>
 
       <hr>
@@ -26,7 +31,7 @@ import {settingsStore} from '../store/settings.store';
 
     <div>
       <h2>
-        UMAP Settings
+        Reductions Settings
       </h2>
 
       <hr />
@@ -44,7 +49,7 @@ import {settingsStore} from '../store/settings.store';
     </div>
     <div>
       <h2>
-        UMAP CSV export settings
+        Reductions CSV export settings
       </h2>
 
       <hr />

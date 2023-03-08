@@ -2,7 +2,7 @@ import type {File as H5File} from 'h5wasm';
 import {reactive} from 'vue';
 
 interface SettingsStoreInterface {
-  debug: boolean;
+  preview: boolean;
   storage: {
     isReady: boolean;
     file: H5File | null;
@@ -23,7 +23,7 @@ interface SettingsStoreInterface {
 }
 
 export const settingsStore = reactive<SettingsStoreInterface>({
-  debug: false,
+  preview: false,
   storage: {
     isReady: false,
     file: null,

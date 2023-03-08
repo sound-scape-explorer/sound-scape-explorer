@@ -1,16 +1,19 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
 import {computed, defineProps, ref, watch} from 'vue';
-import type {Reducer} from '../composables/useStorage';
+import {useStorage} from '../composables/useStorage';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 
 interface Props {
-  reducers: Reducer[];
   // eslint-disable-next-line no-unused-vars
   handleUpdate: (reducer: number, band: string, integration: string) => void;
 }
 
-const {reducers, handleUpdate} = defineProps<Props>();
+const {handleUpdate} = defineProps<Props>();
+
+const {getReducers} = await useStorage();
+
+const reducers = await getReducers();
 
 const reducersOptions = computed(() => {
   const references: string[] = [];

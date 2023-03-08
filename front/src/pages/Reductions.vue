@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Selection from '../components/Selection.vue';
+import SelectionDropdown from '../components/SelectionDropdown.vue';
 import Title from '../components/Title.vue';
 import UMAPAlphas from '../components/UMAPAlphas.vue';
 import UMAPExport from '../components/UMAPExport.vue';
@@ -13,12 +13,9 @@ import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
 import UMAPScreenshot from '../components/UMAPScreenshot.vue';
 import UMAPTimeRangeOptions from '../components/UMAPTimeRangeOptions.vue';
 import UMAPTimeRangeSlider from '../components/UMAPTimeRangeSlider.vue';
-import {useStorage} from '../composables/useStorage';
 import {useUMAPPage} from '../composables/useUMAPPage';
 
 const {delayUpdate} = useUMAPPage();
-const {getReducers} = await useStorage();
-const reducers = await getReducers();
 </script>
 
 <template>
@@ -27,10 +24,7 @@ const reducers = await getReducers();
       <Title text="Reductions" />
 
       <div class="row first">
-        <Selection
-            :callback="delayUpdate"
-            :reducers="reducers"
-        />
+        <SelectionDropdown :handle-update="delayUpdate" />
         <UMAPFiltersColorTypes />
         <UMAPFiltersColorScales />
         <UMAPScreenshot class="flex" />

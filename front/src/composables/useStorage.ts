@@ -33,11 +33,26 @@ export async function useStorage() {
     settingsStore.storage.isReady = true;
   }
 
+  async function isLoaded(): Promise<boolean> {
+    try {
+      const results = await window.indexedDB.databases();
+      const names = results.map((result) => result.name);
+
+      return names.includes(mountPoint);
+    } catch {
+      return false;
+    }
+  }
+
+  function deleteBrowserStorage() {
+    window.indexedDB.deleteDatabase(mountPoint);
+    window.location.reload();
+  }
+
   async function importUploadedFile(file: File): Promise<void> {
     const arrayBuffer = await file.arrayBuffer();
     FS.writeFile(filePath, new Uint8Array(arrayBuffer));
     save();
-    // window.location.reload();
   }
 
   function read<T>(callback: () => T): Promise<T> {
@@ -244,7 +259,7 @@ export async function useStorage() {
     });
   }
 
-  async function getStorageSettings(): Promise<StorageSettings> {
+  async function getSettings(): Promise<StorageSettings> {
     return await read(() => {
       const file = getFile();
       const configuration = file.get(StoragePath.configuration) as Dataset;
@@ -345,6 +360,22 @@ export async function useStorage() {
     });
   }
 
+  async function getVolumes(): Promise<string[]> {
+    return await read(() => {
+      const file = getFile();
+      const volumes = file.get(StoragePath.volumes) as Dataset;
+      return volumes.to_array() as string[];
+    });
+  }
+
+  async function getIndicators(): Promise<string[]> {
+    return await read(() => {
+      const file = getFile();
+      const indicators = file.get(StoragePath.indicators) as Dataset;
+      return indicators.to_array() as string[];
+    });
+  }
+
   async function getReducedFeatures(
     reducer: number,
     band: string,
@@ -373,6 +404,9 @@ export async function useStorage() {
 
   return {
     importUploadedFile,
+    deleteBrowserStorage,
+    isLoaded,
+    getSettings,
     getFiles,
     getFilesTimestamps,
     getFilesFeatures,
@@ -383,10 +417,11 @@ export async function useStorage() {
     getRanges,
     getStorageRanges,
     getStorageMetas,
-    getStorageSettings,
     getGroupedFeatures,
     getGroupedTimestamps,
     getReducers,
     getReducedFeatures,
+    getVolumes,
+    getIndicators,
   };
 }

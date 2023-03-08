@@ -1,18 +1,18 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
 import Button from '../components/Button.vue';
+import HomeDetails from '../components/HomeDetails.vue';
 import Title from '../components/Title.vue';
 import {useStorage} from '../composables/useStorage';
 
 const inputRef = ref<HTMLInputElement>();
 const {
   importUploadedFile,
-  getFiles,
-  getBands,
-  getIntegrations,
-  getRanges,
-  getReducers,
+  deleteBrowserStorage,
+  isLoaded,
 } = await useStorage();
+
+const isReady = await isLoaded();
 
 async function handleChange() {
   const file = inputRef.value?.files?.[0];
@@ -24,25 +24,34 @@ async function handleChange() {
   await importUploadedFile(file);
 }
 
-async function handleRead() {
-  const files = await getFiles();
-  const bands = await getBands();
-  const integrations = await getIntegrations();
-  const ranges = await getRanges();
-  const reducers = await getReducers();
-
-  console.log({
-    files,
-    bands,
-    integrations,
-    ranges,
-    reducers,
-  });
-}
 </script>
 
 <template>
   <Title text="Sound Scape Explorer" />
-  <input ref="inputRef" type="file" @change="handleChange" />
-  <Button :handle-click="handleRead" text="Print files to console" />
+
+  <div class="container">
+    <input ref="inputRef" type="file" @change="handleChange" />
+    <Button
+        :handle-click="deleteBrowserStorage"
+        class="red"
+        text="Remove data from browser"
+    />
+  </div>
+
+  <HomeDetails v-if="isReady" />
+
 </template>
+
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 1rem;
+}
+
+.red {
+  background: rgba(255, 0, 0, 0.2);
+}
+</style>

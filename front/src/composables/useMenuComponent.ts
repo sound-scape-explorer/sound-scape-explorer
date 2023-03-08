@@ -1,7 +1,3 @@
-import type {Ref} from 'vue';
-import {computed, h, ref} from 'vue';
-import type {MenuOption} from 'naive-ui';
-import {renderNaiveIcon} from '../utils/render-naive-icon';
 import {
   AlbumsOutline,
   CogOutline,
@@ -14,7 +10,11 @@ import {
   PlayOutline,
   StatsChartOutline,
 } from '@vicons/ionicons5';
-import {RouterLink, useRouter} from 'vue-router';
+import type {MenuOption} from 'naive-ui';
+import {computed, ref} from 'vue';
+import {useRouter} from 'vue-router';
+import {settingsStore} from '../store/settings.store';
+import {generateRoute} from '../utils/generate-route';
 
 export function useMenuComponent() {
   const router = useRouter();
@@ -24,59 +24,31 @@ export function useMenuComponent() {
 
   const isCollapsed = ref(true);
 
-  const options: Ref<MenuOption[]> = ref([
-    {
-      label: () => h(RouterLink, {to: {name: 'home'}}, {default: () => 'Sound Scape Explorer'}),
-      key: 'home',
-      icon: renderNaiveIcon(HomeOutline),
-      default: true,
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'preview'}}, {default: () => 'Preview'}),
-      key: 'preview',
-      icon: renderNaiveIcon(EyeOutline),
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'player'}}, {default: () => 'Player'}),
-      key: 'player',
-      icon: renderNaiveIcon(PlayOutline),
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'umap'}}, {default: () => 'UMAP'}),
-      key: 'umap',
-      icon: renderNaiveIcon(StatsChartOutline),
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'volumes'}}, {default: () => 'Volumes'}),
-      key: 'volumes',
-      icon: renderNaiveIcon(EarthOutline),
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'covering'}}, {default: () => 'Covering'}),
-      key: 'covering',
-      icon: renderNaiveIcon(AlbumsOutline),
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'minitools'}}, {default: () => 'MiniTools'}),
-      key: 'minitools',
-      icon: renderNaiveIcon(ConstructOutline),
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'settings'}}, {default: () => 'Settings'}),
-      key: 'settings',
-      icon: renderNaiveIcon(CogOutline),
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'config'}}, {default: () => 'Config'}),
-      key: 'config',
-      icon: renderNaiveIcon(DocumentTextOutline),
-    },
-    {
-      label: () => h(RouterLink, {to: {name: 'docs'}}, {default: () => 'Docs'}),
-      key: 'docs',
-      icon: renderNaiveIcon(InformationOutline),
-    },
-  ]);
+  const options = computed<MenuOption[]>(() => {
+    const routes = {
+      home: generateRoute('home', HomeOutline, true),
+      preview: generateRoute('preview', EarthOutline),
+      player: generateRoute('player', PlayOutline),
+      reductions: generateRoute('reductions', EyeOutline),
+      volumes: generateRoute('volumes', StatsChartOutline),
+      covering: generateRoute('covering', AlbumsOutline),
+      minitools: generateRoute('minitools', ConstructOutline),
+      settings: generateRoute('settings', CogOutline),
+      config: generateRoute('config', DocumentTextOutline),
+      help: generateRoute('help', InformationOutline),
+    };
+
+    if (settingsStore.preview === false) {
+      return [
+        routes.home,
+        routes.reductions,
+        routes.settings,
+        routes.help,
+      ];
+    }
+
+    return Object.values(routes);
+  });
 
   function open() {
     isCollapsed.value = false;

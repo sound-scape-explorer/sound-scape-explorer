@@ -16,9 +16,9 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const {isDisabled} = useUMAPStatus();
-const {getStorageSettings} = await useStorage();
+const {getSettings} = await useStorage();
 
-const settings = await getStorageSettings();
+const settings = await getSettings();
 
 const uiDisabled: ComputedRef<boolean> = computed(() => isDisabled.value || UMAPTimeRangeStore.isAllSelected);
 

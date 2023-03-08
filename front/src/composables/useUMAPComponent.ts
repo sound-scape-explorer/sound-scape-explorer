@@ -68,8 +68,8 @@ export function useUMAPComponent() {
       return;
     }
 
-    const {getStorageSettings} = await useStorage();
-    const settings = await getStorageSettings();
+    const {getSettings} = await useStorage();
+    const settings = await getSettings();
 
     const path = `${settings.base_path}/${settings.audio_folder}${label}`;
     await copyToClipboard(path);

@@ -9,7 +9,7 @@ interface Props {
   callback: (reducer: number, band: string, integration: string) => void;
 }
 
-const {reducers, callback} = defineProps<Props>();
+const {callback} = defineProps<Props>();
 </script>
 
 <template>

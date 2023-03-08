@@ -1,36 +1,13 @@
 <script lang="ts" setup="">
-import {computed} from 'vue';
-
 const appTitle = 'SSE';
 const appVersion = import.meta.env.VITE_SSE_VERSION || '';
-
-const dataTitle = 'Data';
-const dataVersion = computed(() => '');
-
-const isSameVersion = appVersion === dataVersion.value;
-
-const containerClasses = computed(() => {
-  let payload = 'container';
-
-  if (isSameVersion) {
-    payload += ' success';
-  } else {
-    payload += ' warning';
-  }
-
-  return payload;
-});
 </script>
 
 <template>
-  <div :class="containerClasses">
+  <div class="container">
     <div class="row">
       <span>{{ appTitle }}</span>
       <span>{{ appVersion }}</span>
-    </div>
-    <div class="row">
-      <span>{{ dataTitle }}</span>
-      <span>{{ dataVersion }}</span>
     </div>
   </div>
 </template>
@@ -57,13 +34,5 @@ const containerClasses = computed(() => {
   width: 100%;
   justify-content: space-between;
   align-items: center;
-}
-
-.success {
-  background: rgba(158, 235, 71, 0.3);
-}
-
-.warning {
-  background: rgba(255, 188, 71, 0.3);
 }
 </style>
