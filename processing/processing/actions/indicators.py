@@ -1,8 +1,8 @@
 from processing.audio.Audio import Audio
 from processing.common.Env import Env
+from processing.common.Timer import Timer
 from processing.indicators.Indicator import Indicator
 from processing.storage.Storage import Storage
-from processing.timers.Timer import Timer
 from processing.utils.print_new_line import print_new_line
 
 env = Env()

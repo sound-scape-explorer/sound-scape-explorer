@@ -5,10 +5,10 @@ import torch
 import torchaudio
 from torch import Tensor
 
+from processing.common.Timer import Timer
 from processing.config.ConfigFile import ConfigFiles
 from processing.models.AbstractModel import AbstractModel
 from processing.storage.Storage import Storage
-from processing.timers.Timer import Timer
 from processing.utils.print_new_line import print_new_line
 
 

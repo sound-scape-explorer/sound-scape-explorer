@@ -1,6 +1,6 @@
 from processing.common.Env import Env
+from processing.common.Timer import Timer
 from processing.storage.Storage import Storage
-from processing.timers.Timer import Timer
 from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
 
