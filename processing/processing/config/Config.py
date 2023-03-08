@@ -448,12 +448,12 @@ class Config(metaclass=SingletonMeta):
     ) -> List[str]:
         reducer_bands = []
 
-        if bands is nan:
-            for band in self.__bands.keys():
-                reducer_bands.append(band)
-        else:
+        if type(bands) is str:
             for band in bands.split(','):
                 _ = self.__bands[band]
+                reducer_bands.append(band)
+        else:
+            for band in self.__bands.keys():
                 reducer_bands.append(band)
 
         return reducer_bands
@@ -464,12 +464,12 @@ class Config(metaclass=SingletonMeta):
     ) -> List[str]:
         reducer_integrations = []
 
-        if integrations is nan:
-            for integration in self.__integrations.keys():
-                reducer_integrations.append(integration)
-        else:
+        if type(integrations) is str:
             for integration in integrations.split(','):
                 _ = self.__integrations[integration]
+                reducer_integrations.append(integration)
+        else:
+            for integration in self.__integrations.keys():
                 reducer_integrations.append(integration)
 
         return reducer_integrations
@@ -480,12 +480,12 @@ class Config(metaclass=SingletonMeta):
     ) -> List[str]:
         reducer_ranges = []
 
-        if ranges is nan:
-            for range_ in self.__ranges.keys():
-                reducer_ranges.append(range_)
-        else:
+        if type(ranges) is str:
             for range_ in ranges.split(','):
                 _ = self.__ranges[range_]
+                reducer_ranges.append(range_)
+        else:
+            for range_ in self.__ranges.keys():
                 reducer_ranges.append(range_)
 
         return reducer_ranges
