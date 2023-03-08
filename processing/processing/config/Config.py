@@ -453,28 +453,40 @@ class Config(metaclass=SingletonMeta):
         ranges = self.__parse_column(sheet, ExcelReducer.ranges)
 
         for index, reducer_name in enumerate(reducers):
-            bands_ = []
-            integrations_ = []
-            ranges_ = []
+            reducer_bands = []
+            reducer_integrations = []
+            reducer_ranges = []
 
-            for band in bands[index].split(','):
-                _ = self.__bands[band]
-                bands_.append(band)
+            if bands[index] is numpy.nan:
+                for band in self.__bands.keys():
+                    reducer_bands.append(band)
+            else:
+                for band in bands[index].split(','):
+                    _ = self.__bands[band]
+                    reducer_bands.append(band)
 
-            for integration in integrations[index].split(','):
-                _ = self.__integrations[integration]
-                integrations_.append(integration)
+            if integrations[index] is numpy.nan:
+                for integration in self.__integrations.keys():
+                    reducer_integrations.append(integration)
+            else:
+                for integration in integrations[index].split(','):
+                    _ = self.__integrations[integration]
+                    reducer_integrations.append(integration)
 
-            for range_ in ranges[index].split(','):
-                _ = self.__ranges[range_]
-                ranges_.append(range_)
+            if ranges[index] is numpy.nan:
+                for range_ in self.__ranges.keys():
+                    reducer_ranges.append(range_)
+            else:
+                for range_ in ranges[index].split(','):
+                    _ = self.__ranges[range_]
+                    reducer_ranges.append(range_)
 
             reducer = ConfigReducer(
                 name=reducer_name,
                 dimensions=dimensions[index],
-                bands=bands_,
-                integrations=integrations_,
-                ranges=ranges_,
+                bands=reducer_bands,
+                integrations=reducer_integrations,
+                ranges=reducer_ranges,
             )
 
             self.__reducers.append(reducer)
