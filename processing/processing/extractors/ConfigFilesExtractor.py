@@ -107,8 +107,7 @@ class ConfigFilesExtractor:
             wav = self.__fill_wav_to_round_duration(wav, sample_rate)
             features = self.__extract_features(wav, sample_rate)
 
-            self.__timer.add()
-            self.__timer.print_timeleft(file_index)
+            self.__timer.print_timeleft()
 
             yield features, file_index
 

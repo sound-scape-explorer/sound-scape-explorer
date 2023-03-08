@@ -5,7 +5,9 @@ import time
 
 class Timer:
     __start: float
-    __duration: float  # duration in seconds for one iteration
+    __duration: float
+    __duration_init: int = 0
+    __iteration: int
     __total_iterations: int
 
     def __init__(
@@ -20,8 +22,9 @@ class Timer:
         return time.time()
 
     def reset(self) -> None:
-        self.__duration = -1
+        self.__duration = self.__duration_init
         self.__start = self.__get_now()
+        self.__iteration = 0
 
     def __get_duration(self) -> float:
         now = self.__get_now()
@@ -30,21 +33,16 @@ class Timer:
 
         return duration
 
-    def add(self) -> None:
+    def __add(self) -> None:
         duration = self.__get_duration()
+        self.__duration += duration
+        self.__iteration += 1
 
-        if self.__duration == -1:
-            self.__duration = duration
-        else:
-            self.__duration = (self.__duration + duration) / 2
+    def __get_timeleft(self) -> Tuple[float, str]:
+        iteration_duration = self.__duration / self.__iteration
+        remaining_iterations = self.__total_iterations - self.__iteration
 
-    def __get_timeleft(
-        self,
-        iteration_index: int,
-    ) -> Tuple[float, str]:
-        remaining_iterations = self.__total_iterations - iteration_index
-
-        timeleft = self.__duration * remaining_iterations
+        timeleft = iteration_duration * remaining_iterations
         units = 'seconds'
 
         if timeleft >= 60:
@@ -59,17 +57,18 @@ class Timer:
 
     def print_timeleft(
         self,
-        iteration_index: int,
         decimals: int = 1,
-    ):
-        timeleft, units = self.__get_timeleft(iteration_index)
+    ) -> None:
+        self.__add()
+
+        timeleft, units = self.__get_timeleft()
         string = f'{round(timeleft, decimals)} {units}'
 
         print(
-            f'Progress: {iteration_index + 1}/{self.__total_iterations}, '
+            f'Progress: {self.__iteration}/{self.__total_iterations}, '
             f'Timeleft: ~{string}',
             end='\r',
         )
 
-        if iteration_index + 1 == self.__total_iterations:
+        if self.__iteration == self.__total_iterations:
             print('')
