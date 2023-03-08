@@ -1,5 +1,6 @@
 from processing.common.Env import Env
 from processing.storage.Storage import Storage
+from processing.utils.print_new_line import print_new_line
 
 env = Env()
 storage = Storage(path=env.storage)
@@ -12,6 +13,9 @@ seed = storage.get_umap_seed()
 reducers = storage.get_config_reducers()
 
 storage.delete_reduced()
+
+print_new_line()
+print(f'Reducers loading {[r.name + str(r.dimensions) for r in reducers]}')
 
 for band in bands:
     for integration in integrations:

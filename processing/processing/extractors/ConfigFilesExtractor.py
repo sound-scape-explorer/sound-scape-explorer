@@ -9,6 +9,7 @@ from processing.config.ConfigFile import ConfigFiles
 from processing.models.AbstractModel import AbstractModel
 from processing.storage.Storage import Storage
 from processing.timers.Timer import Timer
+from processing.utils.print_new_line import print_new_line
 
 
 class ConfigFilesExtractor:
@@ -36,9 +37,16 @@ class ConfigFilesExtractor:
         self.__expected_sample_rate = expected_sample_rate
         self.__base_path = base_path
 
-        print(f'ConfigFilesExtractor loaded with {model.__class__.__name__}')
-
         self.__model = model
+
+        self.__succeed()
+
+    def __succeed(self) -> None:
+        print_new_line(True)
+        print(
+            f'ConfigFilesExtractor loaded with '
+            f'{self.__model.__class__.__name__}'
+        )
 
     @staticmethod
     def __verify_path_existence(path_string: str) -> None:
@@ -122,8 +130,11 @@ class ConfigFilesExtractor:
         print(
             f'Progress: {file_index + 1}/{self.__files_length}, '
             f'Timeleft: ~{timeleft}',
-            end="\r"
+            end='\r',
         )
+
+        if file_index + 1 == self.__files_length:
+            print('')
 
     def __forward_model(
         self,

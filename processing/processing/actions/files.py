@@ -1,11 +1,9 @@
 from processing.common.Env import Env
-from processing.config.Config import Config
 from processing.extractors.ConfigFilesExtractor import ConfigFilesExtractor
 from processing.models.VGGishModel import VGGishModel
 from processing.storage.Storage import Storage
 
 env = Env()
-config = Config(path=env.config)
 storage = Storage(path=env.storage)
 
 bands = storage.get_config_bands()

@@ -11,14 +11,14 @@ integrations = storage.get_integrations_seconds()
 
 storage.delete_groups()
 
-for band in bands:
-    for integration in integrations:
-        for file_index, _ in enumerate(files):
-            grouper = FeaturesGrouper(
-                storage=storage,
-                integration=integration,
-            )
+for integration in integrations:
+    grouper = FeaturesGrouper(
+        storage=storage,
+        integration=integration,
+    )
 
+    for band in bands:
+        for file_index, _ in enumerate(files):
             group_features, group_timestamps = grouper.get_group(
                 band=band,
                 file_index=file_index,

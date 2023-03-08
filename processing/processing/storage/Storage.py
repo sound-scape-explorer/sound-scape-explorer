@@ -13,6 +13,7 @@ from processing.settings.StorageSetting import StorageSetting
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
+from processing.utils.print_new_line import print_new_line
 
 
 class Storage(metaclass=SingletonMeta):
@@ -26,6 +27,11 @@ class Storage(metaclass=SingletonMeta):
     ) -> None:
         self.__path = path
         self.__set_file_or_fail()
+        self.__succeed()
+
+    def __succeed(self) -> None:
+        print_new_line()
+        print(f'Storage loaded: {self.__path}')
 
     def __set_file_or_fail(self) -> None:
         try:

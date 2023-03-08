@@ -7,6 +7,7 @@ from h5py._hl.dataset import AsStrWrapper
 
 from processing.constants import TIME_DELTA_MS
 from processing.storage.Storage import Storage
+from processing.utils.print_new_line import print_new_line
 
 ChunkFeatures = List[float]
 Features = List[ChunkFeatures]
@@ -31,6 +32,15 @@ class FeaturesGrouper:
         self.__ranges = self.__storage.get_ranges()
         self.__ranges_timestamps = self.__storage.get_ranges_timestamps()
         self.__files_timestamps = self.__storage.get_files_timestamps()
+
+        self.__succeed()
+
+    def __succeed(self) -> None:
+        print_new_line()
+        print(
+            f'FeaturesGrouper loaded with integration of'
+            f' {self.__integration} seconds.'
+        )
 
     @staticmethod
     def __get_duration(features: Dataset) -> float:

@@ -8,6 +8,7 @@ from torch.nn import Sequential
 
 from processing.lib.VGG import VGG
 from processing.models.AbstractModel import AbstractModel
+from processing.utils.print_new_line import print_new_line
 
 
 class VGGishModel(AbstractModel, VGG):
@@ -27,8 +28,6 @@ class VGGishModel(AbstractModel, VGG):
 
         self.device = self.__get_device()
 
-        print(f"VGGish: loading with {self.device}")
-
         layers = self.__make_layers()
         super().__init__(layers)
 
@@ -43,6 +42,15 @@ class VGGishModel(AbstractModel, VGG):
         self.to(self.device)
 
         self.eval()
+
+        self.__succeed()
+
+    def __succeed(self) -> None:
+        print_new_line()
+        print(
+            f"VGGish({self.device}) loaded with filtering from"
+            f" {self.__f_min} to {self.__f_max} Hz"
+        )
 
     @staticmethod
     def __get_device() -> str:

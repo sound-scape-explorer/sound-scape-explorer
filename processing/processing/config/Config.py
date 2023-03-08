@@ -30,6 +30,7 @@ from processing.config.ExcelVolume import ExcelVolume
 from processing.indicators.Indicator import Indicator
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.storage.Storage import Storage
+from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
 
 
@@ -58,6 +59,11 @@ class Config(metaclass=SingletonMeta):
         self.__load_file()
         self.__read()
         self.__set()
+        self.__succeed()
+
+    def __succeed(self) -> None:
+        print_new_line()
+        print(f'Config loaded: {self.__path}')
 
     def __fail(self) -> None:
         raise FileNotFoundError(f'Could not load Excel file: {self.__path}')

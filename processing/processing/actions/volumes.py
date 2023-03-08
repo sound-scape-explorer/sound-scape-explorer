@@ -1,5 +1,6 @@
 from processing.common.Env import Env
 from processing.storage.Storage import Storage
+from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
 
 env = Env()
@@ -11,6 +12,9 @@ integrations = storage.get_integrations_seconds()
 volumes = storage.get_volumes()
 
 storage.delete_volumes()
+
+print_new_line()
+print(f'Volumes loading {[v for v in volumes]}')
 
 for band in bands:
     for integration in integrations:
