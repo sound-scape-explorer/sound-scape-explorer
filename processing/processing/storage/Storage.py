@@ -573,7 +573,7 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def delete_group_indicators(self) -> None:
+    def delete_indicators(self) -> None:
         self.__delete_silently(StoragePath.indicator_leq_enes)
         self.__delete_silently(StoragePath.indicator_leq_maad)
         self.__delete_silently(StoragePath.indicator_temporal_median)

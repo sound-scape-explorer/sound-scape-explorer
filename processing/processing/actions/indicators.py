@@ -15,7 +15,7 @@ integrations = storage.get_integrations_seconds()
 audio_path = storage.get_audio_path()
 indicators = storage.get_indicators()
 
-storage.delete_group_indicators()
+storage.delete_indicators()
 
 print_new_line()
 print(f'Indicators loading: {[i for i in indicators]}')
