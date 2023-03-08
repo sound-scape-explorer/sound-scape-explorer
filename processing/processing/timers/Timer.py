@@ -3,7 +3,7 @@ import time
 
 class Timer:
     __start: float
-    __value: float = 0
+    __duration: float  # duration in seconds for one iteration
     __total_iterations: int
 
     def __init__(
@@ -18,13 +18,23 @@ class Timer:
         return time.time()
 
     def reset(self) -> None:
-        self.__value = 0
+        self.__duration = -1
         self.__start = self.__get_now()
 
-    def add(self) -> None:
+    def __get_duration(self) -> float:
         now = self.__get_now()
-        self.__value += now - self.__start
+        duration = now - self.__start
         self.__start = now
+
+        return duration
+
+    def add(self) -> None:
+        duration = self.__get_duration()
+
+        if self.__duration == -1:
+            self.__duration = duration
+        else:
+            self.__duration = (self.__duration + duration) / 2
 
     def get_timeleft(
         self,
@@ -33,7 +43,7 @@ class Timer:
     ) -> str:
         remaining_iterations = self.__total_iterations - iteration_index
 
-        timeleft = self.__value * remaining_iterations
+        timeleft = self.__duration * remaining_iterations
         units = 'seconds'
 
         if timeleft >= 60:
