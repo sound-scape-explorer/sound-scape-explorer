@@ -4,6 +4,7 @@
     "dev": "./run-front.sh",
     "process": "yarn process:all",
     "process:all": "python3 processing/processing/actions/all.py",
+    "process:all-to-groups": "python3 processing/processing/actions/all-to-groups.py",
     "process:config": "python3 processing/processing/actions/config.py",
     "process:files": "python3 processing/processing/actions/files.py",
     "process:groups": "python3 processing/processing/actions/groups.py",
