@@ -2,7 +2,8 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import {computed, ComputedRef, ref, watch} from 'vue';
+import type {ComputedRef} from 'vue';
+import {computed, ref, watch} from 'vue';
 import {useStorage} from '../composables/useStorage';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {SLIDER_LIMITS} from '../constants';
@@ -13,7 +14,6 @@ import Button from './Button.vue';
 
 const {isDisabled} = useUMAPStatus();
 const {
-  getRanges,
   getStorageRanges,
   getGroupedTimestamps,
   getReducers,
@@ -99,7 +99,7 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     sliders.push(slider);
   }
 
-  // TODO: Can be improved to avoid collisions
+  // Can be improved to avoid collisions
   sliders.sort((a, b) => a.min - b.max);
 
   UMAPTimeRangeStore.value = UMAPTimeRangeStore.min;
