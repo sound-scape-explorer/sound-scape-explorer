@@ -8,7 +8,7 @@ bands = storage.get_bands()
 features_pointers = []
 features_loaded = []
 
-for file_index, _ in enumerate(files):
+for file_index in storage.enumerate_file_indexes():
     features = storage.get_file_features(
         band_name=bands[0],
         file_index=file_index,

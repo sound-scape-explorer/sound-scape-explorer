@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Union
+from typing import Any, Iterable, List, Optional, Union
 
 import numpy
 from h5py import Dataset, File
@@ -264,7 +264,7 @@ class Storage(metaclass=SingletonMeta):
         files = self.get_files()
         features = []
 
-        for f, _ in enumerate(files):
+        for f in self.enumerate_file_indexes():
             file_features = self.get_file_features(band, f)
             features.append(file_features)
 
@@ -308,8 +308,8 @@ class Storage(metaclass=SingletonMeta):
         del self.__file[path]
 
     def delete_groups(self) -> None:
-        self.__delete_silently(StoragePath.grouped_features)
-        self.__delete_silently(StoragePath.grouped_timestamps)
+        self.__delete_silently(StoragePath.group_features)
+        self.__delete_silently(StoragePath.group_timestamps)
 
     def delete_files_features(self) -> None:
         self.__delete_silently(StoragePath.features)
@@ -463,73 +463,35 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def create_grouped_features(
-        self,
-        features: List[List[float]],
-        band: str,
-        integration: int,
-    ) -> None:
+    def enumerate_file_indexes(self) -> Iterable[int]:
         files = self.get_files()
 
         for f, _ in enumerate(files):
+            yield f
+
+    def create_group(
+        self,
+        features: List[List[float]],
+        timestamps: List[int],
+        band: str,
+        integration: int,
+    ):
+        for f in self.enumerate_file_indexes():
             suffix = self.__get_grouped_suffix(band, integration, f)
-            path = f'{StoragePath.grouped_features.value}{suffix}'
+            path_features = f'{StoragePath.group_features.value}{suffix}'
+            path_timestamps = f'{StoragePath.group_timestamps.value}{suffix}'
 
             self.__create_dataset(
-                path=path,
+                path=path_features,
                 data=features[f],
                 compression=StorageCompression.gzip,
             )
 
-    def create_group_features(
-        self,
-        features: List[List[float]],
-        band: str,
-        integration: int,
-        file_index: int,
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.grouped_features.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=features,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_grouped_timestamps(
-        self,
-        timestamps: List[List[int]],
-        band: str,
-        integration: int,
-    ) -> None:
-        files = self.get_files()
-
-        for f, _ in enumerate(files):
-            suffix = self.__get_grouped_suffix(band, integration, f)
-            path = f'{StoragePath.grouped_timestamps.value}{suffix}'
-
             self.__create_dataset(
-                path=path,
+                path=path_timestamps,
                 data=timestamps[f],
                 compression=StorageCompression.gzip,
             )
-
-    def create_group_timestamps(
-        self,
-        timestamps: List[int],
-        band: str,
-        integration: int,
-        file_index: int,
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.grouped_timestamps.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=timestamps,
-            compression=StorageCompression.gzip,
-        )
 
     def __convert_integration_seconds_to_name(
         self,
@@ -570,7 +532,7 @@ class Storage(metaclass=SingletonMeta):
         files = self.get_files()
         all_features = []
 
-        for file_index, _ in enumerate(files):
+        for file_index in self.enumerate_file_indexes():
             grouped_features = self.get_grouped_features(
                 band=band,
                 integration=integration,
@@ -589,7 +551,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
     ) -> Dataset:
         suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.grouped_features.value}{suffix}'
+        path = f'{StoragePath.group_features.value}{suffix}'
         features = self.__get(path)
         return features
 
@@ -600,7 +562,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
     ) -> Dataset:
         suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.grouped_timestamps.value}{suffix}'
+        path = f'{StoragePath.group_timestamps.value}{suffix}'
 
         features = self.__get(path)
 

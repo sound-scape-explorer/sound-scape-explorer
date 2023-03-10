@@ -45,7 +45,7 @@ for band in bands:
                 files_length=len(files),
             )
 
-            for file_index, _ in enumerate(files):
+            for file_index in storage.enumerate_file_indexes():
                 storage.write_reduced(
                     band=band,
                     integration=integration,

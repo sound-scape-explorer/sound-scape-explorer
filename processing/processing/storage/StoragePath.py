@@ -49,8 +49,8 @@ class StoragePath(Enum):
     # Grouped
 
     # Example: /grouped_features/{band}/{integration}/{file_index}
-    grouped_features = '/grouped_features'
-    grouped_timestamps = '/grouped_timestamps'
+    group_features = '/grouped_features'
+    group_timestamps = '/grouped_timestamps'
 
     # Reduced
 

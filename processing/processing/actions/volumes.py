@@ -21,7 +21,7 @@ timer = Timer(len(bands) * len(integrations) * len(files) * len(volumes))
 
 for band in bands:
     for integration in integrations:
-        for file_index, _ in enumerate(files):
+        for file_index in storage.enumerate_file_indexes():
             grouped_features = storage.get_grouped_features(
                 band=band,
                 integration=integration,

@@ -4,14 +4,13 @@ from processing.storage.Storage import Storage
 
 storage = Storage(path='./sample/sse.h5')
 
-files = storage.get_files()
 bands = storage.get_bands()
 integrations = storage.get_integrations_seconds()
 
 groups_features_pointers = []
 groups_features_values = []
 
-for file_index, _ in enumerate(files):
+for file_index in storage.enumerate_file_indexes():
     features = storage.get_grouped_features(
         band=bands[0],
         integration=integrations[0],
