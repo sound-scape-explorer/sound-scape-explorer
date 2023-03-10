@@ -1,181 +1,79 @@
-from typing import List, Tuple
+from typing import List
 
 import numpy
 from h5py import Dataset
-# noinspection PyProtectedMember
-from h5py._hl.dataset import AsStrWrapper
 
+from processing.common.Timer import Timer
 from processing.constants import TIME_DELTA_MS
-from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
-
-ChunkFeatures = List[float]
-Features = List[ChunkFeatures]
-Groups = Tuple[Features, List[int]]
 
 
 class FeaturesGrouper:
-    __storage: Storage
-    __ranges: AsStrWrapper
-    __ranges_timestamps: Dataset
-    __files_timestamps: Dataset
-    __integration: int
+    __features: List[Dataset]
+    __timestamps: Dataset
+    __timer: Timer
 
-    def __init__(
+    def set_features(
         self,
-        storage: Storage,
+        features: List[Dataset],
+    ):
+        self.__features = features
+        return self
+
+    def set_timestamps(
+        self,
+        timestamps: Dataset,
+    ):
+        self.__timestamps = timestamps
+        return self
+
+    def __start(
+        self,
+        integration: int,
+    ) -> None:
+        self.__timer = Timer(len(self.__features))
+
+        print_new_line()
+
+        print(
+            f'FilesFeaturesGrouper loaded with integration of'
+            f' {integration} seconds.'
+        )
+
+    def __progress(self) -> None:
+        self.__timer.print_timeleft()
+
+    def group(
+        self,
         integration: int,
     ):
-        self.__storage = storage
-        self.__integration = integration
+        self.__start(integration)
 
-        self.__ranges = self.__storage.get_ranges()
-        self.__ranges_timestamps = self.__storage.get_ranges_timestamps()
-        self.__files_timestamps = self.__storage.get_files_timestamps()
+        features = []
+        timestamps = []
 
-        self.__succeed()
+        for file_index, file_features in enumerate(self.__features):
+            file_timestamp = self.__timestamps[file_index]
+            groups_count = len(file_features) // integration
 
-    def __succeed(self) -> None:
-        print_new_line()
-        print(
-            f'FeaturesGrouper loaded with integration of'
-            f' {self.__integration} seconds.'
-        )
+            grouped_file_features = []
+            grouped_file_timestamps = []
 
-    @staticmethod
-    def __get_duration(features: Dataset) -> float:
-        return TIME_DELTA_MS * len(features)
+            for g in range(groups_count):
+                start = integration * g
+                end = integration * (g + 1)
+                features_to_group = file_features[start:end]
 
-    def __get_range_timestamps(self, range_index: int) -> Tuple[int, int]:
-        range_timestamps: Tuple[int, int] = \
-            self.__ranges_timestamps[range_index]
+                grouped_file_features.append(
+                    numpy.mean(features_to_group, axis=0)
+                )
 
-        start, end = range_timestamps
+                grouped_file_timestamps.append(
+                    file_timestamp + integration * g * TIME_DELTA_MS
+                )
 
-        return start, end
+            features.append(grouped_file_features)
+            timestamps.append(grouped_file_timestamps)
+            self.__progress()
 
-    def __get_file_timestamp(self, file_index: int) -> int:
-        return self.__files_timestamps[file_index]
-
-    def __get_involved_ranges(
-        self,
-        file_index: int,
-        band: str,
-    ) -> List[str]:
-        features = self.__storage.get_file_features(
-            band_name=band,
-            file_index=file_index,
-        )
-
-        timestamp = self.__get_file_timestamp(file_index)
-        duration = self.__get_duration(features)
-        ranges = []
-
-        for index, range_ in enumerate(self.__ranges):
-            start, end = self.__get_range_timestamps(index)
-
-            if timestamp >= start and timestamp + duration <= end:
-                ranges.append(range_)
-
-        return ranges
-
-    def __get_involved_chunks(
-        self,
-        band_name: str,
-        range_index: int,
-        file_index: int,
-    ) -> Tuple[List[Dataset], List[int]]:
-        file_features = self.__storage.get_file_features(band_name, file_index)
-        file_timestamp = self.__get_file_timestamp(file_index)
-        start, end = self.__get_range_timestamps(range_index)
-
-        chunk_features = []
-        chunk_timestamps = []
-
-        for i in range(len(file_features)):
-            delta = TIME_DELTA_MS * i
-            chunk_timestamp = file_timestamp + delta
-
-            if chunk_timestamp < start or chunk_timestamp > end:
-                continue
-
-            chunk_timestamps.append(chunk_timestamp)
-            chunk_features.append(file_features[i])
-
-        return chunk_features, chunk_timestamps
-
-    def __group_chunks(
-        self,
-        chunks: Tuple[List[Dataset], List[int]],
-        range_index: int,
-    ) -> Groups:
-        integration = self.__integration * 1000  # milliseconds
-        chunks_features, chunks_timestamps = chunks
-        range_start, _ = self.__get_range_timestamps(range_index)
-
-        group_bins = []
-
-        for chunk_timestamp in chunks_timestamps:
-            grouped_bin = (chunk_timestamp - range_start) // integration
-            group_bins.append(grouped_bin)
-
-        chunks_slice_positions = numpy.unique(group_bins, return_index=True)[1]
-
-        groups_timestamps = []
-        groups_starts = []
-        groups_ends = []
-
-        for group_index, chunk_index in enumerate(chunks_slice_positions):
-            group_timestamp = range_start + \
-                              group_bins[chunk_index] * integration
-
-            if group_index == len(chunks_slice_positions) - 1:
-                group_end = None
-            else:
-                group_end = chunks_slice_positions[group_index + 1]
-
-            groups_timestamps.append(group_timestamp)
-            groups_starts.append(chunk_index)
-            groups_ends.append(group_end)
-
-        groups_features = []
-
-        for group_index, _ in enumerate(groups_timestamps):
-            group_start = groups_starts[group_index]
-            group_end = groups_ends[group_index]
-
-            group_features: List[float] = numpy.mean(  # type:ignore
-                chunks_features[group_start:group_end],
-                axis=0,
-            )
-
-            groups_features.append(group_features)
-
-        return groups_features, groups_timestamps
-
-    def get_group(
-        self,
-        band: str,
-        file_index: int,
-    ) -> Tuple[List[List[float]], List[int]]:
-        ranges = self.__get_involved_ranges(file_index=file_index, band=band)
-
-        if len(ranges) == 0:
-            raise RuntimeError(
-                f'Involved range(s) for file_index {file_index} could not be '
-                f'found.'
-            )
-
-        for range_index, _ in enumerate(ranges):
-            chunks = self.__get_involved_chunks(
-                band_name=band,
-                range_index=range_index,
-                file_index=file_index,
-            )
-
-            group = self.__group_chunks(
-                chunks=chunks,
-                range_index=range_index,
-            )
-
-            return group
+        return features, timestamps

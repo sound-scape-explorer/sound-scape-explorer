@@ -5,35 +5,21 @@ from processing.storage.Storage import Storage
 env = Env()
 storage = Storage(path=env.storage)
 
-files = storage.get_files()
 bands = storage.get_bands()
 integrations = storage.get_integrations_seconds()
 
 storage.delete_groups()
 
-for integration in integrations:
-    grouper = FeaturesGrouper(
-        storage=storage,
-        integration=integration,
-    )
+grouper = FeaturesGrouper()
 
-    for band in bands:
-        for file_index, _ in enumerate(files):
-            group_features, group_timestamps = grouper.get_group(
-                band=band,
-                file_index=file_index,
-            )
+for band in bands:
+    features = storage.get_features(band)
+    timestamps = storage.get_timestamps()
 
-            storage.create_group_features(
-                features=group_features,
-                band=band,
-                integration=integration,
-                file_index=file_index,
-            )
+    grouper.set_features(features)
+    grouper.set_timestamps(timestamps)
 
-            storage.create_group_timestamps(
-                timestamps=group_timestamps,
-                band=band,
-                integration=integration,
-                file_index=file_index,
-            )
+    for integration in integrations:
+        grouped_features, grouped_timestamps = grouper.group(integration)
+        storage.create_grouped_features(grouped_features, band, integration)
+        storage.create_grouped_timestamps(grouped_timestamps, band, integration)
