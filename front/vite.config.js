@@ -9,6 +9,22 @@ import wasm from 'vite-plugin-wasm';
 export default defineConfig({
   build: {
     target: 'es2020',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'chroma-js': ['chroma-js'],
+          'dayjs': ['dayjs'],
+          'h5wasm': ['h5wasm'],
+          'highcharts': ['highcharts'],
+          'highcharts-vue': ['highcharts-vue'],
+          'html2canvas': ['html2canvas'],
+          'simple-statistics': ['simple-statistics'],
+          'three': ['three'],
+          'vue': ['vue'],
+          'vue-router': ['vue-router'],
+        },
+      },
+    },
   },
   resolve: {
     alias: {
