@@ -12,12 +12,13 @@ export enum StoragePath {
   ranges_timestamps = '/configuration/ranges/timestamps',
   // Files
   files = '/configuration/files/names',
-  files_features = '/configuration/files/features',
-  files_timestamps = '/configuration/files/timestamps',
   files_sites = '/configuration/files/sites',
   files_metas = '/configuration/files/metas',
   meta_properties = '/configuration/meta/properties',
   meta_sets = '/configuration/meta/sets',
+  // Features
+  features = '/files_features',
+  timestamps = '/files_timestamps',
   // Actions
   reducers = '/configuration/reducers/names',
   reducers_dimensions = '/configuration/reducers/dimensions',

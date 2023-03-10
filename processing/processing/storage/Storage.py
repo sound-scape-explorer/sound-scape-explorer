@@ -49,7 +49,7 @@ class Storage(metaclass=SingletonMeta):
         band_name: str,
         file_index: int,
     ) -> str:
-        return f'{StoragePath.files_features.value}' \
+        return f'{StoragePath.features.value}' \
                f'/{band_name}' \
                f'/{file_index}'
 
@@ -175,7 +175,7 @@ class Storage(metaclass=SingletonMeta):
 
     def get_config_files(self) -> ConfigFiles:
         names = self.get_files()
-        timestamps = self.get_files_timestamps()
+        timestamps = self.get_timestamps()
         sites = self.get_files_sites()
         metas = self.__get_files_metas()
 
@@ -240,8 +240,8 @@ class Storage(metaclass=SingletonMeta):
         dataset = self.__get(StoragePath.volumes)
         return dataset.asstr()
 
-    def get_files_timestamps(self) -> Dataset:
-        return self.__get(StoragePath.files_timestamps)
+    def get_timestamps(self) -> Dataset:
+        return self.__get(StoragePath.timestamps)
 
     def get_files_sites(self) -> Dataset:
         dataset = self.__get(StoragePath.files_sites)
@@ -256,6 +256,19 @@ class Storage(metaclass=SingletonMeta):
 
     def get_integrations_seconds(self) -> Dataset:
         return self.__get(StoragePath.integrations_seconds)
+
+    def get_features(
+        self,
+        band: str,
+    ) -> List[Dataset]:
+        files = self.get_files()
+        features = []
+
+        for f, _ in enumerate(files):
+            file_features = self.get_file_features(band, f)
+            features.append(file_features)
+
+        return features
 
     def get_file_features(
         self,
@@ -299,12 +312,12 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.grouped_timestamps)
 
     def delete_files_features(self) -> None:
-        self.__delete_silently(StoragePath.files_features)
+        self.__delete_silently(StoragePath.features)
 
     def delete_config(self) -> None:
         self.__delete_silently(StoragePath.configuration)
         self.__delete_silently(StoragePath.files)
-        self.__delete_silently(StoragePath.files_timestamps)
+        self.__delete_silently(StoragePath.timestamps)
         self.__delete_silently(StoragePath.files_sites)
         self.__delete_silently(StoragePath.files_metas)
         self.__delete_silently(StoragePath.meta_properties)
@@ -373,7 +386,7 @@ class Storage(metaclass=SingletonMeta):
         )
 
         self.__create_dataset(
-            path=StoragePath.files_timestamps,
+            path=StoragePath.timestamps,
             data=timestamps,
             compression=StorageCompression.gzip,
         )
@@ -450,6 +463,24 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
+    def create_grouped_features(
+        self,
+        features: List[List[float]],
+        band: str,
+        integration: int,
+    ) -> None:
+        files = self.get_files()
+
+        for f, _ in enumerate(files):
+            suffix = self.__get_grouped_suffix(band, integration, f)
+            path = f'{StoragePath.grouped_features.value}{suffix}'
+
+            self.__create_dataset(
+                path=path,
+                data=features[f],
+                compression=StorageCompression.gzip,
+            )
+
     def create_group_features(
         self,
         features: List[List[float]],
@@ -465,6 +496,24 @@ class Storage(metaclass=SingletonMeta):
             data=features,
             compression=StorageCompression.gzip,
         )
+
+    def create_grouped_timestamps(
+        self,
+        timestamps: List[List[int]],
+        band: str,
+        integration: int,
+    ) -> None:
+        files = self.get_files()
+
+        for f, _ in enumerate(files):
+            suffix = self.__get_grouped_suffix(band, integration, f)
+            path = f'{StoragePath.grouped_timestamps.value}{suffix}'
+
+            self.__create_dataset(
+                path=path,
+                data=timestamps[f],
+                compression=StorageCompression.gzip,
+            )
 
     def create_group_timestamps(
         self,
@@ -831,7 +880,7 @@ class Storage(metaclass=SingletonMeta):
 
     def is_defined_files(self) -> bool:
         return self.exists_dataset(StoragePath.files.value) \
-            and self.exists_dataset(StoragePath.files_timestamps.value) \
+            and self.exists_dataset(StoragePath.timestamps.value) \
             and self.exists_dataset(StoragePath.files_sites.value) \
             and self.exists_dataset(StoragePath.files_metas.value)
 

@@ -99,7 +99,7 @@ export async function useStorage() {
       const features = [];
 
       for (const f in files) {
-        const path = `${StoragePath.files_features}/${band}/${f}`;
+        const path = `${StoragePath.features}/${band}/${f}`;
         const feature = file.get(path) as Dataset;
         features.push(feature.to_array() as number[]);
       }
@@ -111,7 +111,7 @@ export async function useStorage() {
   async function getFilesTimestamps(): Promise<number[]> {
     return await read(() => {
       const file = getFile();
-      const timestamps = file.get(StoragePath.files_timestamps) as Dataset;
+      const timestamps = file.get(StoragePath.timestamps) as Dataset;
       return timestamps.to_array() as number[];
     });
   }
@@ -210,11 +210,11 @@ export async function useStorage() {
 
   async function getGroupedTimestamps(
     band: string,
-    integrations: string,
+    integration: string,
   ): Promise<number[][]> {
     return await read(() => {
       const file = getFile();
-      const seconds = getSecondsFromIntegration(file, integrations);
+      const seconds = getSecondsFromIntegration(file, integration);
       const path = `${StoragePath.grouped_timestamps}/${band}/${seconds}`;
 
       const timestampsGroup = file.get(path) as Group;
