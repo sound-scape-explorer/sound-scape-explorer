@@ -66,7 +66,7 @@ class Timer:
 
         print(
             f'Progress: {self.__iteration}/{self.__total_iterations}, '
-            f'Timeleft: ~{string}',
+            f'Timeleft: ~{string:<80}',
             end='\r',
         )
 
