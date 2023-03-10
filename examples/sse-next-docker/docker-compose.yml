@@ -1,13 +1,11 @@
 services:
   front:
-    image: ghcr.io/sound-scape-explorer/front:latest
+    image: ghcr.io/sound-scape-explorer/front:next
     ports:
       - "8080:8080"
-    depends_on:
-      - back
 
   processing:
-    image: ghcr.io/sound-scape-explorer/processing:latest
+    image: ghcr.io/sound-scape-explorer/processing:next
     volumes:
       - ./sample:/sample
     deploy:

@@ -4,9 +4,8 @@ function print_separator {
     echo "---"
 }
 
-function print_welcome {
+function print_splash {
     print_separator
-    echo "Welcome to SSE CUDA Docker for Linux."
     echo "Press CTRL+C to stop the app and exit."
     print_separator
 }
@@ -25,10 +24,10 @@ function print_start {
 
 # Runtime
 
-print_welcome
+print_splash
 
 print_update
-#docker compose pull
+docker compose pull
 
 print_start
 docker compose up

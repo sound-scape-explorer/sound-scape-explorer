@@ -3,10 +3,10 @@ function PrintSeparator()
     echo "---"
 }
 
-function PrintWelcome()
+function PrintSplash()
 {
     PrintSeparator
-    echo "Welcome to SSE CPU Docker for Windows."
+    echo "Welcome to SSE CPU for Docker."
     echo "Press CTRL+C to stop the app and exit."
     PrintSeparator
 }
@@ -27,7 +27,7 @@ function PrintStart()
 
 # Runtime
 
-PrintWelcome
+PrintSplash
 
 PrintUpdate
 docker compose pull

@@ -3,5 +3,3 @@ services:
     image: ghcr.io/sound-scape-explorer/front:latest
     ports:
       - "8080:8080"
-    depends_on:
-      - back

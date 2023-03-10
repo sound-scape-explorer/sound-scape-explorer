@@ -1,7 +1,7 @@
 {
   "name": "sound-scape-explorer",
   "scripts": {
-    "dev": "./run-front.sh",
+    "dev": "cd front && yarn dev",
     "process": "yarn process:all",
     "process:all": "python3 processing/processing/actions/all.py",
     "process:all-actions": "python3 processing/processing/actions/all-actions.py",

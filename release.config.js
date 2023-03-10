@@ -13,13 +13,10 @@ module.exports = {
     }],
     ['@semantic-release/github', {
       assets: [
-        'examples/sse-cpu-docker-linux.zip',
-        'examples/sse-cpu-docker-windows.zip',
-        'examples/sse-cuda-docker-linux.zip',
-        'examples/sse-cuda-docker-windows.zip',
-        'examples/sse-next-docker-windows.zip',
-        'examples/sse-web-docker-linux.zip',
-        'examples/sse-web-docker-windows.zip',
+        'examples/sse-cpu-docker.zip',
+        'examples/sse-cuda-docker.zip',
+        'examples/sse-web-docker.zip',
+        'examples/sse-next-docker.zip',
       ],
     }],
     ['@semantic-release/git', {

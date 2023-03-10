@@ -1,14 +1,18 @@
-# SSE CUDA Docker for Linux
+# SSE CPU for Docker
 
 Welcome to the full version of [Sound Scape Explorer](https://github.com/sound-scape-explorer/sound-scape-explorer).
 
-It will process your data with **CUDA** (Nvidia GPUs).
+It will process your data with **CPU**.
 
 ## Steps
 
-- Install and run Docker
-  - [Debian](https://docs.docker.com/engine/install/debian/)
-  - [Other](https://docs.docker.com/engine/install/)
+- Install and run Docker.
+  - Linux
+    - [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+    - [Debian](https://docs.docker.com/engine/install/debian/)
+    - [Other](https://docs.docker.com/engine/install/)
+  - Windows
+    - Install and run [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - Open the `sample` folder and import the following:
   - Paste your audio samples inside the `audio` directory
   - Edit the `config.xlsx` configuration file to manage your processing settings
@@ -20,7 +24,7 @@ It will process your data with **CUDA** (Nvidia GPUs).
 Your project folder should look like this:
 
 ```
-sse-cuda-docker-linux
+sse-cpu-docker-linux
 ├── sample/
 │   ├── audio/ <- Import files in me
 │   └── config.xlsx <- Edit me
