@@ -18,8 +18,6 @@ from processing.indicators.TemporalMedianIndicator import \
 
 
 class Indicator:
-    """Factory :D"""
-
     def __new__(
         cls,
         name: str,
