@@ -36,7 +36,7 @@ class FeaturesGrouper:
         print_new_line()
 
         print(
-            f'FilesFeaturesGrouper loaded with integration of'
+            f'FeaturesGrouper loaded with integration of'
             f' {integration} seconds.'
         )
 
