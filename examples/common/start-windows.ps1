@@ -6,7 +6,6 @@ function PrintSeparator()
 function PrintSplash()
 {
     PrintSeparator
-    echo "Welcome to SSE CPU for Docker."
     echo "Press CTRL+C to stop the app and exit."
     PrintSeparator
 }
