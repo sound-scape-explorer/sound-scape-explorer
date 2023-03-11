@@ -7,10 +7,10 @@ function iterate(){
 
   function archive(){
     cd "$name" || exit 1
-    cp ../common/start-windows.ps1 .
-    cp ../common/start-linux.sh .
-    [ -d 'sample' ] && cp ../common/config.xlsx sample
-    zip "$name.zip" ./* -x "*.gitignore" "*.png"
+    cp ../common/start-windows.ps1 . && wait
+    cp ../common/start-linux.sh . && wait
+    [ -d 'sample' ] && cp ../common/config.xlsx sample && wait
+    zip "$name.zip" ./* -r -x "*.gitignore" "*.png"
     mv "$name.zip" ..
     cd ..
   }
