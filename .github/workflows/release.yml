@@ -35,14 +35,8 @@ jobs:
             @qiwi/semantic-release-gh-pages-plugin \
             aggregate-error
 
-      - name: Change directory to `front` package
-        run: cd front
-
       - name: Build `front` package
-        run: yarn && yarn build
-
-      - name: Change directory to root folder
-        run: cd ..
+        run: cd front && yarn && yarn build && cd ..
 
       - name: Release
         run: semantic-release -b main
