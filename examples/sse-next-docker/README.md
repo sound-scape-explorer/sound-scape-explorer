@@ -1,12 +1,16 @@
-# SSE Next Docker for Windows
+# SSE Next for Docker
 
-This is the developer version of Sound Scape Explorer.
-
-It will process your audio data through `.xlsx` configuration.
+This is the developer version, expect instability.
 
 ## Steps
 
-- Install and run [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- Install and run Docker.
+  - Linux
+    - [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+    - [Debian](https://docs.docker.com/engine/install/debian/)
+    - [Other](https://docs.docker.com/engine/install/)
+  - Windows
+    - Install and run [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - Open the `sample` folder and import the following:
   - Paste your audio samples inside the `audio` directory
   - Edit the `config.xlsx` configuration file to manage your processing settings

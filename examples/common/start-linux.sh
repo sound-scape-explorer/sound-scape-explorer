@@ -30,4 +30,4 @@ print_update
 docker compose pull
 
 print_start
-docker compose up
+docker compose --env-file ./project.env up

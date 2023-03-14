@@ -6,5 +6,8 @@ services:
 
   processing:
     image: ghcr.io/sound-scape-explorer/processing:latest
+    env_file: project.env
     volumes:
-      - ./sample:/sample
+      - ${PROJECT}:/project
+    environment:
+      - storage=${STORAGE}

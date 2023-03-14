@@ -3,13 +3,15 @@ services:
     build: front
     ports:
       - "8080:8080"
-    depends_on:
-      - back
 
   processing:
     build: processing
     volumes:
-      - ./sample:/sample
+      - ${PROJECT}:${PROJECT}
+      - ${STORAGE}:/storage
+    command:
+      - -c${PROJECT}/config.xlsx
+      - -s/storage/storage.h5
     deploy:
       resources:
         reservations:

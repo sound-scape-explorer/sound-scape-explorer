@@ -32,4 +32,4 @@ PrintUpdate
 docker compose pull
 
 PrintStart
-docker compose up
+docker compose --env-file ./project.env up

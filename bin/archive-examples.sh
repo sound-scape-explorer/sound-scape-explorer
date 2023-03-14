@@ -9,7 +9,8 @@ function iterate(){
     cd "$name" || exit 1
     cp ../common/start-windows.ps1 . && wait
     cp ../common/start-linux.sh . && wait
-    [ -d 'sample' ] && cp ../common/config.xlsx sample && wait
+    cp ../common/project.env . && wait
+    [ -d 'project' ] && cp ../common/config.xlsx project && wait
     zip "$name.zip" ./* -r -x "*.gitignore" "*.png"
     mv "$name.zip" ..
     cd ..
