@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import {useConfig} from '../composables/useConfig';
-
-const {config} = await useConfig();
-const string = JSON.stringify(config, null, 2);
+const string = JSON.stringify({placeholder: true}, null, 2);
 </script>
 
 <template>

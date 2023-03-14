@@ -19,43 +19,72 @@
 - Explore your data with graphical tools such as UMAP projections
 - Analyze your data through metrics, statistics, filters...
 
-## 🚀 Explore
+## 👨‍🏫 For researchers
 
-### 👨‍🏫 For researchers
+### ⚓ Requirements
 
-Choose your project starter kit, unzip then follow instructions in `README.md`
+- Install and run Docker.
+  - Linux
+    - [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+    - [Debian](https://docs.docker.com/engine/install/debian/)
+    - [Other](https://docs.docker.com/engine/install/)
+  - Windows
+    - Install and run [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
-| OS/Docker flavors | CPU versions                                                 | CUDA versions                                                | Web versions                                                 | Dev versions                                                 |
-| ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Windows           | [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker-windows.zip) | [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker-windows.zip) | [SSE Web](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-web-docker-windows.zip) | [SSE Next](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-next-docker-windows.zip) |
-| Linux             | [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker-linux.zip) | [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker-linux.zip) | [SSE Web](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-web-docker-linux.zip) |                                                              |
+### 💽 Generate your data
 
-### 👨‍💻 For programmers
+Choose your project example, download and unzip then follow instructions in `README.md`
 
-#### Requirements
+| Docker flavors                  | CPU versions                                                                                                          |
+|---------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| SSE CPU                         | [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker.zip)   |
+| SSE CUDA                        | [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker.zip) |
+| SSE Web                         | [SSE Web](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-web-docker.zip)   |
+| SSE Next (Development versions) | [SSE Next](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-next-docker.zip) |
+
+### 🚀 Explore your data
+
+Browse to [front](https://github.io) and load your data.
+
+## 👨‍💻 For programmers
+
+### ⚓ Requirements
 
 - [Node.js](https://nodejs.org/en/)
 - [Yarn](https://yarnpkg.com/getting-started/install)
 - [Python 3.8+](https://www.python.org/downloads/)
 
-#### Instructions
+### 🎛️ Instructions
 
 ```bash
+# 📥 Installation
 git clone git@github.com:sound-scape-explorer/sound-scape-explorer.git
 cd sound-scape-explorer
 yarn install
-```
 
-#### Run environment
+# 💽 Generate data, see list of available actions in `package.json`.
+# Examples
+yarn process -c /path/to/config.xlsx -s /path/to/storage.h5
+yarn process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
 
-```bash
+# 🚀 Explore data, serve `front` localhost:8080
 yarn dev
 ```
 
-Browse to
+## ⚒️ Processing commands
 
-- [Front end](http://localhost:8080) `8080`
-- [Back end](http://localhost:8081) `8081`
+| `yarn` command          | Description                                                               |
+|-------------------------|---------------------------------------------------------------------------|
+| `process`               | alias for `process:all`                                                   |
+| `process:all`           | Run all processing commands                                               |
+| `process:all-actions`   | Run `process:indicators` `process:reducers` & `process:volumes` commands. |
+| `process:all-to-groups` | Run `process:config` `process:files` & `process:groups` commands.         |
+| `process:config`        | Process configuration file.                                               |
+| `process:files`         | Process audio files.                                                      |
+| `process:groups`        | Process integration of audio features.                                    |
+| `process:indicators`    | Process indicators from audio slices.                                     |
+| `process:reducers`      | Process reducers from audio features.                                     |
+| `process:volumes`       | Process volumes from audio features.                                      |
 
 ## 🧑‍🤝‍🧑 Contribute
 

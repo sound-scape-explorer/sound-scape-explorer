@@ -1,46 +1,47 @@
-import type {ApiUMAPInterface} from '../interfaces/api-UMAP.interface';
 import type {Point2D, PointMetadata} from '../lib/scatter-gl-0.0.13';
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
-import {findTags} from './find-tags';
-import {
-  getRangeAndSiteFromDatasetLabel,
-} from './get-range-and-site-from-dataset-label';
 
 interface MyMetadata {
   labelIndex: number;
   label: string;
   timestamp: number;
   tags: string;
-  metaContent: string[];
+  metaValues: string[];
 }
 
-export function convertToScatterGlDataset(data: ApiUMAPInterface) {
-  const dataPoints: Point2D[] = [];
+interface Props {
+  features: number[][][];
+  files: string[];
+  timestamps: number[];
+  metas: string[][];
+}
+
+export function convertToScatterGlDataset(props: Props) {
+  const dataPoints: Point2D[] = props.features.flat() as unknown as Point2D[];
   const metadata: MyMetadata[] = [];
+  const integrations = props.features.flat().length / props.features.length;
+  let count = 0;
 
-  data.X.forEach((coordinates, index) => {
-    dataPoints.push(coordinates as Point2D);
+  for (let i = 0; i < props.files.length; i += 1) {
+    const label = props.files[i];
+    const metaValues = props.metas[i];
 
-    const label = data?.l[index];
-    const labelIndex = label && data?.l.indexOf(label);
-    const timestamp = data.t[index];
+    for (let j = 0; j < integrations; j += 1) {
+      const labelIndex = count;
+      const timestamp = props.timestamps[labelIndex];
+      const tags = '';
 
-    const {site} = getRangeAndSiteFromDatasetLabel(label);
-    const tags = findTags(timestamp, `/${site}`);
-    const metaContent = data.c[index];
+      metadata.push({
+        label,
+        labelIndex,
+        timestamp,
+        tags,
+        metaValues,
+      });
 
-    if (labelIndex === '') {
-      return;
+      count += 1;
     }
-
-    metadata.push({
-      labelIndex,
-      label,
-      timestamp,
-      tags,
-      metaContent,
-    });
-  });
+  }
 
   return new ScatterGL.Dataset(dataPoints, metadata as unknown as PointMetadata[]);
 }

@@ -1,5 +1,5 @@
 import {onUnmounted} from 'vue';
-import {API_ROUTES, RENDERING_DELAY_SLOW} from '../constants';
+import {RENDERING_DELAY_SLOW} from '../constants';
 import {modalLoadingStore} from '../store/modal-loading.store';
 import {selectionImageStore} from '../store/selection-image.store';
 import {selectionStore} from '../store/selection.store';
@@ -7,76 +7,90 @@ import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {
   convertToScatterGlDataset,
 } from '../utils/convert-to-scatter-gl-dataset';
-import {useAPI} from './useAPI';
 import {useSelection} from './useSelection';
+import {useStorage} from './useStorage';
 
 export function useUMAPPage() {
   const {clearSelection} = useSelection();
-  const {fetchUMAP} = useAPI();
 
   function resetImage() {
     selectionImageStore.image = null;
   }
 
-  function setImage(band: string, intervalLabel: string) {
-    selectionImageStore.image = API_ROUTES.umap({
-      interval: intervalLabel,
-      band,
-      isImage: true,
-    });
-  }
-
   function resetSelection() {
+    selectionStore.reducer = null;
     selectionStore.band = null;
-    selectionStore.interval = null;
+    selectionStore.integration = null;
   }
 
-  function setSelection(band: string, intervalLabel: string) {
+  function setSelection(reducer: number, band: string, integration: string) {
+    selectionStore.reducer = reducer;
     selectionStore.band = band;
-    selectionStore.interval = intervalLabel;
+    selectionStore.integration = integration;
   }
 
-  async function fetchData(band: string, intervalLabel: string) {
+  async function fetchData(reducer: number, band: string, integration: string) {
+    const {
+      getFiles,
+      getReducedFeatures,
+      getGroupedTimestamps,
+      getFilesMetas,
+    } = await useStorage();
+
     try {
-      const data = await fetchUMAP(intervalLabel, band);
+      const features = await getReducedFeatures(reducer, band, integration);
+      const files = await getFiles();
+      const timestamps = await getGroupedTimestamps(band, integration);
+      const metas = await getFilesMetas();
 
-      if (!data) {
-        return;
-      }
-
-      UMAPDatasetStore.dataset = convertToScatterGlDataset(data);
+      UMAPDatasetStore.dataset = convertToScatterGlDataset({
+        features,
+        files,
+        timestamps: timestamps.flat(),
+        metas,
+      });
     } catch {
       UMAPDatasetStore.dataset = null;
     }
   }
 
   interface HandleUpdateProps {
+    reducer: number;
     band: string;
-    interval: string;
+    integration: string;
     callback: () => void;
   }
 
-  async function handleUpdate({band, interval, callback}: HandleUpdateProps) {
-    if (!band || !interval) {
+  async function handleUpdate({
+    reducer,
+    band,
+    integration,
+    callback,
+  }: HandleUpdateProps) {
+    if (
+      reducer === null
+      || band === null
+      || integration === null
+    ) {
       resetSelection();
       resetImage();
       return;
     }
 
-    setSelection(band, interval);
-    setImage(band, interval);
-    await fetchData(band, interval);
+    setSelection(reducer, band, integration);
+    await fetchData(reducer, band, integration);
 
     callback();
   }
 
-  function delayUpdate(band: string, interval: string) {
+  function delayUpdate(reducer: number, band: string, integration: string) {
     modalLoadingStore.isLoading = true;
 
     setTimeout(async () => {
       await handleUpdate({
+        reducer,
         band,
-        interval,
+        integration,
         callback: () => modalLoadingStore.isLoading = false,
       });
     }, RENDERING_DELAY_SLOW);

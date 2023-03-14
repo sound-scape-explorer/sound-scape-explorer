@@ -10,15 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: actions/checkout@master
+      - name: Checkout repository
+        uses: actions/checkout@master
 
-      - uses: actions/setup-node@master
+      - name: Set up node
+        uses: actions/setup-node@master
         with:
           node-version: '18'
 
-      - run: yarn
+      - name: Install project dependencies
+        run: yarn
 
-      - run: |
+      - name: Install release dependencies
+        run: |
           npm install -g \
             semantic-release \
             @semantic-release/github \
@@ -28,9 +32,20 @@ jobs:
             @semantic-release/npm \
             semantic-release-chrome \
             semantic-release-firefox-add-on \
+            @qiwi/semantic-release-gh-pages-plugin \
             aggregate-error
 
-      - run: semantic-release -b main
+      - name: Change directory to `front` package
+        run: cd front
+
+      - name: Build `front` package
+        run: yarn && yarn build
+
+      - name: Change directory to root folder
+        run: cd ..
+
+      - name: Release
+        run: semantic-release -b main
         env:
           GH_TOKEN: ${{ secrets.PAT }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

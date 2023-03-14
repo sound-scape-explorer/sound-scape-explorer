@@ -1,16 +1,21 @@
-FROM python:3.8-slim
-LABEL maintainer="Bamdad Sabbagh <hi@bamdad.fr>"
+FROM python:3.8-slim as dependencies
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY prepare.py .
+RUN python3 prepare.py
+
+ENV PYTHONPATH=.
+
+ARG storage
+
+ENV storage ${storage}
+
+ENV config /project/config.xlsx
 
 WORKDIR /app
 
-COPY requirements.txt .
-
-RUN pip install -r requirements.txt
-
 COPY . .
 
-RUN pip install -e .
-
-RUN python prepare.py
-
-CMD ["./run.sh", "/sample"]
+ENTRYPOINT ["python3", "processing/actions/all.py"]

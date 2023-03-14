@@ -27,7 +27,7 @@ export function useColors(): UseColors {
         'yellow',
         'orange',
         'yellow',
-        'green',
+        'red',
         'blue',
       ])
       .domain([0, 1.001])

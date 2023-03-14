@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
 import {computed} from 'vue';
-import {useUMAPMeta} from '../composables/useUMAPMeta';
+import {useStorage} from '../composables/useStorage';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import type {UMAPFiltersColorType} from '../store/UMAP-filters.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
+import {convertColumnsToColorTypes} from '../utils/convert-columns-to-color-types';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 
 /**
@@ -12,7 +13,10 @@ import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-opti
  */
 
 const {isDisabled} = useUMAPStatus();
-const {getMetaPropertiesAsColorTypes} = useUMAPMeta();
+
+const {getStorageMetas} = await useStorage();
+const metas = await getStorageMetas();
+const metaProperties = Object.keys(metas);
 
 const options = computed<UMAPFiltersColorType[]>(() => {
   return [
@@ -22,7 +26,7 @@ const options = computed<UMAPFiltersColorType[]>(() => {
     'by10min',
     'isDay',
     'cycleDay',
-    ...getMetaPropertiesAsColorTypes(),
+    ...convertColumnsToColorTypes(metaProperties),
   ];
 });
 

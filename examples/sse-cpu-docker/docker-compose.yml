@@ -1,0 +1,13 @@
+services:
+  front:
+    image: ghcr.io/sound-scape-explorer/front:latest
+    ports:
+      - "8080:8080"
+
+  processing:
+    image: ghcr.io/sound-scape-explorer/processing:latest
+    env_file: project.env
+    volumes:
+      - ${PROJECT}:/project
+    environment:
+      - storage=${STORAGE}

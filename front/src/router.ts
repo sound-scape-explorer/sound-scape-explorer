@@ -1,26 +1,26 @@
 import type {RouteParams, RouteRecordRaw} from 'vue-router';
 import {createRouter, createWebHistory} from 'vue-router';
-import Home from './pages/Home.vue';
-import Preview from './pages/Preview.vue';
-import Player from './pages/Player.vue';
-import UMAP from './pages/UMAP.vue';
-import Volumes from './pages/Volumes.vue';
-import Covering from './pages/Covering.vue';
-import MiniTools from './pages/MiniTools.vue';
 import Config from './pages/Config.vue';
-import Docs from './pages/Docs.vue';
+import Covering from './pages/Covering.vue';
+import Help from './pages/Help.vue';
+import Home from './pages/Home.vue';
+import MiniTools from './pages/MiniTools.vue';
+import Player from './pages/Player.vue';
+import Preview from './pages/Preview.vue';
+import Reductions from './pages/Reductions.vue';
 import Settings from './pages/Settings.vue';
+import Volumes from './pages/Volumes.vue';
 
 export type AppRouteNames =
   | 'home'
   | 'preview'
   | 'player'
-  | 'umap'
+  | 'reductions'
   | 'volumes'
   | 'covering'
   | 'minitools'
   | 'config'
-  | 'docs'
+  | 'help'
   | 'settings'
 
 export const routes: RouteRecordRaw[] = [
@@ -40,9 +40,9 @@ export const routes: RouteRecordRaw[] = [
     component: Player,
   },
   {
-    name: 'umap',
-    path: '/umap',
-    component: UMAP,
+    name: 'reductions',
+    path: '/reductions',
+    component: Reductions,
   },
   {
     name: 'volumes',
@@ -70,9 +70,9 @@ export const routes: RouteRecordRaw[] = [
     component: Config,
   },
   {
-    name: 'docs',
-    path: '/docs',
-    component: Docs,
+    name: 'help',
+    path: '/help',
+    component: Help,
   },
 ];
 

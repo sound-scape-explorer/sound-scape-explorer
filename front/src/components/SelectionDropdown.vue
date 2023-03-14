@@ -1,49 +1,61 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
-import {selectionStore} from 'src/store/selection.store';
-import {computed, defineProps, watch} from 'vue';
+import {computed, defineProps, ref, watch} from 'vue';
+import {useStorage} from '../composables/useStorage';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 
 interface Props {
-  bands: string[];
-  intervals: string[];
   // eslint-disable-next-line no-unused-vars
-  handleUpdate: (band: string, interval: string) => void;
+  handleUpdate: (reducer: number, band: string, integration: string) => void;
 }
 
-const {bands, intervals, handleUpdate} = defineProps<Props>();
+const {handleUpdate} = defineProps<Props>();
 
-const bandsOptions = computed(() => convertToNaiveSelectOptions(bands));
-const intervalsOptions = computed(() => convertToNaiveSelectOptions(intervals));
+const {getReducers} = await useStorage();
+
+const reducers = await getReducers();
+
+const reducersOptions = computed(() => {
+  const references: string[] = [];
+
+  for (const reducer of reducers) {
+    for (const band of reducer.bands) {
+      for (const integration of reducer.integrations) {
+        references.push(
+          `${reducer.index} ${reducer.name} ${reducer.dimensions}d ${band} ${integration}`,
+        );
+      }
+    }
+  }
+  return convertToNaiveSelectOptions(references);
+});
 
 function processSelection() {
   if (
-    selectionStore.band === null
-      || selectionStore.interval === null
+    selectedReducer.value === null
   ) {
     return;
   }
 
-  handleUpdate(selectionStore.band, selectionStore.interval);
+  const elements = selectedReducer.value.split(' ');
+
+  handleUpdate(
+    Number(elements[0]),
+    elements[3],
+    elements[4],
+  );
 }
 
-watch(selectionStore, processSelection);
+const selectedReducer = ref<string | null>(null);
+
+watch(selectedReducer, processSelection);
 </script>
 
 <template>
   <n-select
-      v-model:value="selectionStore.band"
-      :options="bandsOptions"
-      placeholder="Bands..."
-      size="tiny"
-  />
-  <n-select
-      v-model:value="selectionStore.interval"
-      :options="intervalsOptions"
-      placeholder="Intervals..."
+      v-model:value="selectedReducer"
+      :options="reducersOptions"
+      placeholder="Reducers..."
       size="tiny"
   />
 </template>
-
-<style lang="scss" scoped>
-</style>

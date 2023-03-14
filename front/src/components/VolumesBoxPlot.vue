@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-import {ref, watch} from 'vue';
-import {NP} from 'naive-ui';
-import {Chart} from 'highcharts-vue';
 import Highcharts from 'highcharts';
+import {Chart} from 'highcharts-vue';
 import highchartsMore from 'highcharts/highcharts-more';
 import accessibility from 'highcharts/modules/accessibility';
-import {API_ROUTES} from '../constants';
+import {NP} from 'naive-ui';
+import {ref, watch} from 'vue';
 import type {ApiVolumeInterface} from '../interfaces/api-volume.interface';
-import {volumesOptionsStore} from '../store/volumes-options.store';
-import {getQuartiles} from '../utils/get-quartiles';
-import {convertTimestampToDate} from '../utils/convert-timestamp-to-date';
 import {selectionStore} from '../store/selection.store';
+import {volumesOptionsStore} from '../store/volumes-options.store';
+import {convertTimestampToDate} from '../utils/convert-timestamp-to-date';
+import {getQuartiles} from '../utils/get-quartiles';
 
 accessibility(Highcharts);
 highchartsMore(Highcharts);
@@ -68,18 +67,16 @@ const options = ref<Options>({
  */
 
 async function updateData() {
-  const {band, interval} = selectionStore;
+  const {band, integration} = selectionStore;
 
-  if (band === null || interval === null) {
+  if (band === null || integration === null) {
     return;
   }
 
   try {
-    const endpoint = API_ROUTES.volumes({interval, band});
-
-    const request = await fetch(endpoint);
-    fetchedData.value = await request.json();
-  } catch {
+    // TODO
+  }
+  catch {
     options.value.series = [];
     fetchedData.value = undefined;
   }
@@ -93,7 +90,7 @@ function parseData() {
   const {activeSites, activeRange} = volumesOptionsStore;
 
   if (
-    activeSites.length === 0
+      activeSites.length === 0
       || activeRange === null
       || !fetchedData.value
   ) {
@@ -150,7 +147,7 @@ function parseData() {
  */
 
 watch(selectionStore, async () => {
-  if (selectionStore.band === null || selectionStore.interval === null) {
+  if (selectionStore.band === null || selectionStore.integration === null) {
     return;
   }
 

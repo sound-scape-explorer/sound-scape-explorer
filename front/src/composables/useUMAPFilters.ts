@@ -1,4 +1,3 @@
-import {configStore} from '../store/config.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import type {UMAPMetaStoreInterface} from '../store/UMAP-meta.store';
@@ -69,9 +68,9 @@ export function useUMAPFilters() {
       return false;
     }
 
-    const timestamp = Number(dataset.metadata[index]['timestamp']);
+    const timestamp = Number(dataset.metadata[index]['timestamp']) / 1000;
 
-    const start = UMAPTimeRangeStore.value ?? 1;
+    const start = UMAPTimeRangeStore.value ?? 0;
     const duration = UMAPTimeRangeStore.duration;
     const end = start + duration;
 
@@ -84,7 +83,7 @@ export function useUMAPFilters() {
     const {dataset} = UMAPDatasetStore;
 
     // @ts-expect-error TS2322
-    const metaContent: UMAPMetaStoreInterface['metaSelection'] = dataset?.metadata[index]['metaContent'];
+    const metaContent: UMAPMetaStoreInterface['metaSelection'] = dataset?.metadata[index]['metaValues'];
     const metaSelectionKeys = Object.keys(UMAPMetaStore.metaSelection);
     const metaKeys = Object.keys(metaContent);
 
@@ -103,24 +102,20 @@ export function useUMAPFilters() {
       }
 
       const meta = metaContent[metaKeys[i]];
-      const metaValues = Object.values(meta);
-      const metaValue = metaValues[0];
-
-      if (typeof metaValue === 'number') {
-        isVisible = metaSelectionValues.includes(metaValue.toString());
-      } else {
-        isVisible = metaSelectionValues.includes(metaValue);
-      }
+      isVisible = metaSelectionValues.includes(meta);
     }
 
     return isVisible;
   }
 
-  function digestQueryComplexSingleString(metaValues: string[], queryValue: string): boolean {
+  function digestQueryComplexSingleString(
+    metaValues: string,
+    queryValue: string,
+  ): boolean {
     return metaValues.includes(queryValue);
   }
 
-  function digestQueryComplexSingleArray(metaValues: string[], queryValues: string[]): boolean {
+  function digestQueryComplexSingleArray(metaValues: string, queryValues: string[]): boolean {
     return queryValues.reduce((acc, queryValue) => {
       if (acc) {
         return acc;
@@ -133,9 +128,9 @@ export function useUMAPFilters() {
   function digestQueryComplexItem(
     index: number,
     query: UMAPQueryComplexStoreInterface['queryComplex'],
+    metaProperties: string[],
   ): boolean {
     const metaContent = getMetaContent(index);
-    const metaProperties = configStore.metaProperties;
     const queryKeys = Object.keys(query);
     const metaKeys = queryKeys.map((queryKey) => metaProperties.indexOf(queryKey));
 
@@ -159,7 +154,10 @@ export function useUMAPFilters() {
     return isVisible;
   }
 
-  function digestQueryComplexGroups(index: number): boolean {
+  function digestQueryComplexGroups(
+    index: number,
+    metaProperties: string[],
+  ): boolean {
     const queryGroups = UMAPQueryComplexStore.queryComplex;
     const queryGroupsValues = Object.values(queryGroups);
 
@@ -167,14 +165,17 @@ export function useUMAPFilters() {
     const results: boolean[] = [];
 
     for (const query of queryGroupsValues) {
-      isVisible = digestQueryComplexItem(index, query);
+      isVisible = digestQueryComplexItem(index, query, metaProperties);
       results.push(isVisible);
     }
 
     return results.reduce((acc, r) => acc || r, false);
   }
 
-  function isVisibleByQueryComplex(index: number): boolean {
+  function isVisibleByQueryComplex(
+    index: number,
+    metaProperties: string[],
+  ): boolean {
     // @SPECIES=CerBra+LopCri @SEASON=SPRING
     // @TIME=POST
     // (@TIME=POST)
@@ -195,20 +196,24 @@ export function useUMAPFilters() {
       isVisible = digestQueryComplexItem(
         index,
         UMAPQueryComplexStore.queryComplex,
+        metaProperties,
       );
     } else {
-      isVisible = digestQueryComplexGroups(index);
+      isVisible = digestQueryComplexGroups(index, metaProperties);
     }
 
     return isVisible;
   }
 
-  function shouldBeFiltered(index: number): boolean {
+  function shouldBeFiltered(
+    index: number,
+    metaProperties: string[],
+  ): boolean {
     return !isVisibleByTags(index)
       || !isVisibleByTimeRange(index)
       || !isVisibleByQuery(index)
       || !isVisibleByMeta(index)
-      || !isVisibleByQueryComplex(index);
+      || !isVisibleByQueryComplex(index, metaProperties);
   }
 
   return {

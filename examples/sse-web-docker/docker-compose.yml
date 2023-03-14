@@ -1,0 +1,5 @@
+services:
+  front:
+    image: ghcr.io/sound-scape-explorer/front:latest
+    ports:
+      - "8080:8080"

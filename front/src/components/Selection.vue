@@ -1,17 +1,20 @@
 <script lang="ts" setup="">
 import {defineProps} from 'vue';
+import type {Reducer} from '../composables/useStorage';
 import SelectionDropdown from './SelectionDropdown.vue';
 
 interface Props {
-  bands: string[];
-  intervals: string[];
+  reducers: Reducer[];
   // eslint-disable-next-line no-unused-vars
-  callback: (band: string, interval: string) => void;
+  callback: (reducer: number, band: string, integration: string) => void;
 }
 
-const {bands, intervals, callback} = defineProps<Props>();
+const {callback} = defineProps<Props>();
 </script>
 
 <template>
-  <SelectionDropdown :bands="bands" :handle-update="callback" :intervals="intervals" />
+  <SelectionDropdown
+      :handle-update="callback"
+      :reducers="reducers"
+  />
 </template>

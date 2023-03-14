@@ -1,19 +1,27 @@
 <script lang="ts" setup="">
-import {computed, onMounted} from 'vue';
 import {NGi, NGrid, NTag} from 'naive-ui';
-import {useConfig} from '../composables/useConfig';
-import UMAPMetaSelection from './UMAPLegendMetaSelection.vue';
+import {computed, onMounted} from 'vue';
+import {useStorage} from '../composables/useStorage';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
+import UMAPMetaSelection from './UMAPLegendMetaSelection.vue';
 
-const {metaContents, metaProperties} = await useConfig();
-const metaContentsIndexes = computed(() => Object.keys(metaContents));
+const {
+  getStorageMetas,
+} = await useStorage();
+
+const metas = await getStorageMetas();
+
+const metaProperties = Object.keys(metas);
+const metaSets = Object.values(metas);
+const metaSetsIndexes = computed(() => Object.keys(metaSets));
 
 function initializeMetaSelection() {
-  if (!metaContentsIndexes.value) {
+  if (!metaSetsIndexes.value) {
     return;
   }
 
-  for (const index of metaContentsIndexes.value) {
+  for (const index of metaSetsIndexes.value) {
+    // @ts-expect-error TS2322
     UMAPMetaStore.metaSelection[index] = [];
   }
 }
@@ -35,7 +43,7 @@ onMounted(initializeMetaSelection);
 
       <UMAPMetaSelection
           :index="index"
-          :items="metaContents[metaContentsIndexes[index]]"
+          :items="metaSets[metaSetsIndexes[index]]"
           :title="metaProperties[index]"
       />
     </n-gi>

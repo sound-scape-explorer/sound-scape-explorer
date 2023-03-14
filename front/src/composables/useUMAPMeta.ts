@@ -1,23 +1,10 @@
-import {
-  convertColumnsToColorTypes,
-} from '../utils/convert-columns-to-color-types';
-import {configStore} from '../store/config.store';
+import {UMAPStore} from '../store/UMAP.store';
 import {useColors} from './useColors';
 import {useUMAPDataset} from './useUMAPDataset';
-import {UMAPStore} from '../store/UMAP.store';
 
 export function useUMAPMeta() {
   const {colors} = useColors();
   const {getMetaContent} = useUMAPDataset();
-
-  function getMetaPropertiesAsColorTypes() {
-    return convertColumnsToColorTypes(configStore.metaProperties);
-  }
-
-  function getMetaPropertyIndexFromColorType(colorType: string): number {
-    const metaPropertiesAsColorTypes = getMetaPropertiesAsColorTypes();
-    return metaPropertiesAsColorTypes.indexOf(colorType);
-  }
 
   function createLimitedColorScale(length: number): [number, number, number][] {
     return colors.value.colors(length, 'rgb');
@@ -26,11 +13,13 @@ export function useUMAPMeta() {
   function getMetaColor(
     colorType: string,
     index: number,
+    metaPropertiesAsColorTypes: string[],
+    metaSets: string[][],
   ) {
-    const metaPropertyIndex = getMetaPropertyIndexFromColorType(colorType);
-    const metaContent = getMetaContent(index);
-    const metaValue = metaContent[metaPropertyIndex][0];
-    const metaPossibleValues = configStore.metaContents[metaPropertyIndex];
+    const metaPropertyIndex = metaPropertiesAsColorTypes.indexOf(colorType);
+    const metaValues = getMetaContent(index);
+    const metaValue = metaValues[metaPropertyIndex];
+    const metaPossibleValues = metaSets[metaPropertyIndex];
 
     const colors = createLimitedColorScale(metaPossibleValues.length);
     const metaIndex = metaPossibleValues.indexOf(metaValue);
@@ -49,7 +38,6 @@ export function useUMAPMeta() {
   }
 
   return {
-    getMetaPropertiesAsColorTypes,
     getMetaColor,
     getMetaColorFromMetaIndex,
   };
