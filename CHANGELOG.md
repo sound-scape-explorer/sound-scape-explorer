@@ -1,3 +1,111 @@
+# [6.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.17.0...v6.0.0) (2023-03-14)
+
+
+### Bug Fixes
+
+* **CI:** Add dependabot watchers for `front` and `processing` packages ([52bba74](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/52bba74ed2b4e342f0c2d10db090d61ebeb6ca85))
+* **Front/Colors:** Use red for evening in daily cycling color scale ([6feb1ad](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6feb1ad058af369a406d81b51d35bdea69b2ecb6))
+* **Front/Scatter:** Correctly create scatterGL dataset ([cd4b6a1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cd4b6a158ddfb6e61cf4b074278015fefeb20a01))
+* **Front/Storage:** Reload window on browser storage sync completion ([fdf9542](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fdf9542e4926fcd79d6bbf23533fcb6edaaeed90))
+* **Front/TimeRange:** Import `ComputedRef` as type to pass build ([3ee2698](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3ee2698651e5c072c4d82a78e8b6e51c44945ed9))
+* **Front:** Update package.json ([399b3a7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/399b3a7d7b8042da99197797b6f6cbabc2c6f3e3))
+* Ignore only root env file ([ab3ff92](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ab3ff9244a48eb97b69623fa8ade6d1ad8b76ab9))
+* **Processing/Audio:** Add typing for spectrogram amplitude ([63e1bf7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/63e1bf70aed89e53b2c3404cc35bf827a9a90ab7))
+* **Processing/Audio:** Return empty array if audio slice is too short ([a7bd29f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a7bd29f4ff45ce7c1731b788b7fa73755f5fe5b6))
+* **Processing/Config:** Convert meta value floats to strings ([ce1c506](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ce1c506a6ecbcf689cdddab9081a123f8f092f7e))
+* **Processing/Config:** Correctly retrieve bands, integrations or ranges if reducer field is empty ([111bbd5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/111bbd5c47659d0aa67f36971487f198a870a8b7))
+* **Processing/ConfigFilesExtractor:** Improve console output clarity ([f182d51](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f182d510e00c32f8d9982f9391586edb55a94b10))
+* **Processing/ConfigFilesExtractor:** Rename from `FileExtractor` + Pass `storage` only when calling yield and store method ([e8db5be](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e8db5be3ab771fc00bbc3aeaac6f509bb2dedc1f))
+* **Processing/Config:** Improve Excel shape. ([b59431f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b59431f082d7044236bb9767566b843951b15d98))
+* **Processing/Config:** Remove debugging console outputs ([ef585ab](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ef585ab3cc93fa196803ad5c1f1231e36421f196))
+* **Processing/Config:** Set `File.tag` to empty string if undefined ([3d03f89](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3d03f89cec08ad64b39a24c2fb3a33c06098d626))
+* **Processing/Config:** Use correct meta length when creating sets ([6337421](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6337421b14be25c43f2e76d596f3583b718991c7))
+* **Processing/FeaturesGrouper:** Typo ([aac7547](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/aac754721d1fb6389afcfc33d6d72700d24dc2c9))
+* **Processing/Groupers:** Rewrite `FeaturesGrouper` while removing `range` related code ([562ba0a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/562ba0a93bfaba50f747e8655cdb96d0ee25fd0e))
+* **Processing/Indicators:** Rename storage path for ACI and ADI ([6097fbb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6097fbb1edfe8a424e9034f244c08df6c3f32dd0))
+* **Processing/NewClasses:** Improve code readability + Remove dead code ([fa31967](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fa31967aad797ffde2d6613607c9c1d189306bdd))
+* **Processing/NewClasses:** Improve VGG* code + Use 1 seconds chunks ([edd5978](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/edd5978d44e53559df34c57cf0db4e943bcd5e45))
+* **Processing/Storage:** Improve error message on H5 opening fail ([337c76b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/337c76bd4043e79365177e2cf35d96e1316af541))
+* **Processing/Storage:** Improve storage of meta properties and meta sets ([aabd087](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/aabd0874758028ab297f57a6f063715102b308cc))
+* **Processing/Storage:** Move features and timestamps out of configuration scope to prevent collisions on deletion. ([c76cecf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c76cecf1e7887a834d0eb93e76c3cfb7488497d0))
+* **Processing/Storage:** Remove default parameter for `path` ([ddd36b6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ddd36b61b76a0294174e2cd6b5c6315cde9b7449))
+* **Processing/Storage:** Rename delete indicators method ([aba836d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/aba836d295edea09b4d09359dbfac7db0b15edbd))
+* **Processing/Storage:** Trim artificial rectangular arrays back to jagged shape. ([740d23d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/740d23dd958d7e7df0f6ce248d9dc5e6b16fafd4))
+* **Processing/Timer:** Fill the end of timeleft printing with spaces ([11054e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/11054e598e213b318899dc02e6e6ec87f5cdfaee))
+* **Processing/Timer:** Replace previous logic by using the mean duration of a single iteration ([dfd115a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dfd115ad3f6e07d75805bb243eee33f6aeddb05c))
+* **Processing/Timer:** Save iteration count inside class + Use with total duration to get better mean value + Increment when printing ([a35120d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a35120dc7a435513ae0ff1e13d894e5f2e8be2f5))
+* **Processing/VGGishModel:** Fix typings ([60a68a8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/60a68a84f43412580c9f00a62382818c3027afbf))
+* **Processing:** Add missing `__init__` files ([61530dc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/61530dcb3043d311eafee79a07449a45bb4a24b6))
+* **Processing:** Remove unused or duplicate code ([b931faa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b931faa022a40661a1ce53dba70868e61e8fb9f7))
+* **Releases:** Attempting to fix GitHub action when building front ([0ebe9b3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0ebe9b36c83f8bb5625afc951d5b9f5dbd39cd95))
+* **Releases:** Remove specific comment in powershell docker start script ([2e7c603](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2e7c6031b5942ec02fb171c374a0d4f39439ccc7))
+* **Releases:** Wait for copies to complete + Zip recursively ([c3f0be4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c3f0be42da66da2238d546efc71b5fa7dc9c9ab8))
+
+
+### Features
+
+* **CD:** Add publishing to gh pages to release pipeline ([73d207c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/73d207c54ed22564ed4f030443ac8d052f8b5f57))
+* **Front/Scatter:** Start orbiting by default for 3D plots ([d045ca5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d045ca54908378ef455e7f9e2dd4ffbb53b57ef1))
+* **Front:** Adapt to new H5 (dirty) ([64bc188](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/64bc188a472a63fa3b20aa1aa99eeda0e19c65f9))
+* **Front:** Adapt to new storage ([fc75cc5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fc75cc56fe2560b30589d64675def1afaefba062))
+* **Front:** Adapt umap export with new storage + Remove back related code ([8323b8c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8323b8c678c72c4b4ecfc7907e278396e5e787c7))
+* **Front:** Clean front + Add details to home + Replace debug mode with preview mode ([0f8abf5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0f8abf5452f348cd72a394453b3c869109a33527))
+* **Front:** Configure build code splitting ([bdca763](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bdca763cd7e981ccf9c1b51669bf1ea2b3609aa6))
+* **Front:** Upgrade dependencies ([a4d8539](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a4d85397686e38658e89972713fd1542cb4e5d34))
+* **Processing/Actions:** Add timers to all yielding actions ([b1d51bf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b1d51bf9f051ce5c13da36b123f2447e765293af))
+* **Processing/Config/Reducers:** User can omit fields `bands` `integrations` and `ranges` to act as a wildcard ([308211d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/308211d24b7fc6fa7487a63ee8fc8a0aa97c794a))
+* **Processing/Config:** Add getter for meta properties ([63b9e8b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/63b9e8b0a75f9a0de2bbb5a30fccbdd11a972962))
+* **Processing/Config:** Rename user settings + Use dynamic paths in actions ([07a1fff](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/07a1fffee36a5c736aaa45dde24a7418286ead50))
+* **Processing/Indicators:** Add `EnesLesIndicator` `MaadLeqIndicator` and `TemporalEntropyIndicator` + Append old code with `deprecated_` flag ([bf594b3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bf594b305a9b594dd0bb39daa7ae061baf1a2e71))
+* **Processing/Indicators:** Add frequency entropy, ACI and ADI indicators ([6837ca8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6837ca8529724bde680069915631d394361e9689))
+* **Processing/Indicators:** Add new indicators + Add `Audio` class to get sound and spectrograms from and pass in indicators ([8a81da0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8a81da09691a5ea7187357096a87c654e8c0974e))
+* **Processing/Indicators:** Pass `storage` instance only when storing ([4675f30](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4675f305d38786ae7e8f965e9bb1af63a3d04f0d))
+* **Processing/NewClasses:** Add feature reduction ([2afd08f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2afd08f0b291773984d993dc6058b3bc5cc46203))
+* **Processing/Reducers:** Add `PcaReducer` ([09d3c0b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/09d3c0b1c22a1c454bf34081450e0348ae63a3cd))
+* **Processing/Reducers:** Add `SparsePcaReducer` ([37975b5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/37975b5b1aad47b666b60997f1908e0a977a06e6))
+* **Processing/Reducers:** Add `VaeReducer` ([2a09869](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2a09869e28e41162fb001ac9b7934d60f6732dba))
+* **Processing/Storage:** Apply nested shape ([bc3bb54](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bc3bb54a2a9a68e006ca4e3e6c2f9aea9100b626))
+* **Processing/Volumes:** Add `MeanSpreadingVolume` ([5b93812](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5b938125b7a7528458d7940bf517d7ad509ec684))
+* **Processing/Volumes:** Add `MeanStandardDeviationVolume` ([6b0a479](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6b0a479efc888fb21c5b51a2bf3e44b33b4d48c5))
+* **Processing/Volumes:** Add getter for values + Pass `storage` instance only on storing ([fe6f09b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fe6f09b813df907464a94b8ed37e7ae6d17436b0))
+* **Processing:** Add `Env` class to retrieve paths from shell arguments + Add validation checks to `Storage` and `Config` + Move files for better file structure ([ddec373](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ddec373d8788087913033a8a4ea00f3233a36c6a))
+* **Processing:** Add basic `Volumes` + Improve file and folder structure + Misc ([27854f7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/27854f7c486d565d5348a47fc913628f40d5b610))
+* **Processing:** Add command and action `all-actions` ([7800e61](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7800e6131d9449f425f7ff3eef76685d9cfaf55a))
+* **Processing:** Add command and action `all-to-groups` ([9280725](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9280725317dac9f637a0349de064ce8b14171726))
+* **Processing:** Add console outputs ([5d65c37](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5d65c374187d856b03c99795e056ac31e7e1af79))
+* **Processing:** Add new classes (WIP) for Config, Extractor, FeatureGrouper, FeatureReducer, Storage, Timer ([edae5b4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/edae5b4b9347b1342561c7410e48d096d7da52bb))
+* **Processing:** Add new configuration file and storage paths ([d72b27c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d72b27c1773ae9a1c57d9eb86910e900e4cce0c9))
+* **Processing:** Improve `Storage` interface + Improve actions.groups ([b948b46](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b948b462e4a11221d935b532073c29c043851970))
+* **Processing:** Migrate to refactored code (WIP) ([240b07b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/240b07b815e469dec6a3092ce3a09eff42f7e716))
+* **Processing:** Remove unused shell scripts ([2e5e25f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2e5e25fbfbb8d9518ca77a395dfca0c2afd1d479))
+* **Processing:** Replace map objects for reducers, indicators and volumes with factory classes + Update `Storage` + Misc ([785f9ee](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/785f9eeb8b38fcdd3a63a42d0e5ad8cb56f22f0b))
+* Remove flask backend ([39206d0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/39206d00c631a4244ddf0c98918276552907c2bd))
+* Store metadata + Update front to use h5 ([6e59088](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6e5908845a455a71e8f99686827a584187664a4f))
+* Update Dockerfiles (WIP) + Update readmes (WIP) + Update scripts + Update config example ([303798e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/303798e0ec52f011c6e7f325ebaf21b9993524a5))
+* Update documentation + Update examples + Update releases + Update dev commands + Misc ([6a9f287](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6a9f287905d985266fdf12653a91407c31e692a3))
+
+
+### Performance Improvements
+
+* **Processing/Audio:** Merge duplicate code for spectrograms generation ([daeed01](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/daeed0107d76b5a54a125867dc48c6c63f49cab1))
+* **Processing/Indicators:** Remove redundant checks ([58150d1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/58150d17745cb23406d10265fab202eb544a03a0))
+* **Processing/Storage:** Improve interfacing with reducers ([de73e93](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/de73e932cfff166a8f223eda34279e495164d26a))
+* **Processing:** Improve file structure ([3683cec](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3683ceca85bb7f6c6f788210ad08de9639bdcf79))
+* **Processing:** Improve file structure ([cca49a5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cca49a504bac510df6d4ca4bcadb7f48a551da4d))
+* **Processing:** Move `Timer` under common folder ([f2ab5f0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f2ab5f0b40b4cfcd83166c659143488682d3d277))
+* **Processing:** Move timeleft printing logic under `Timer` ([e8a0f28](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e8a0f28cd740c49dddcf9618eecab4614d07563c))
+
+
+### BREAKING CHANGES
+
+* **Processing/Storage:** H5 paths for `files_timestamps` and `files_features` have been changed.
+* **Front:** Front routes have been changed
+* **Front:** Storage has new shape, Front has new reducer selection
+* **Processing/Storage:** New storage shape with heavy nesting
+* **Processing/Config:** Excel sheets have been updated to improve readability.
+* **Processing:** Excel file has a totally new shape.
+* Complete removal of `back` module and related docker images, commands, etc
+
 # [5.17.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.16.0...v5.17.0) (2023-01-31)
 
 
