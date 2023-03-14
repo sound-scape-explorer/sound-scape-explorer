@@ -19,6 +19,10 @@ module.exports = {
         'examples/sse-next-docker.zip',
       ],
     }],
+    ['@qiwi/semantic-release-gh-pages-plugin', {
+      src: 'front/dist',
+      msg: 'Front: Published <%= nextRelease.gitTag %>',
+    }],
     ['@semantic-release/git', {
       assets: [
         'CHANGELOG.md',
