@@ -1,3 +1,12 @@
+## [6.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.0.1...v6.0.2) (2023-03-14)
+
+
+### Bug Fixes
+
+* **Front:** Set absolute public root path to fix vue-router behaviours ([6654f5d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6654f5dc3be4d57e06595d9f95e6bdccb5debffc))
+* **Processing/PcaReducer:** Add scaling before reduction ([e3d5be4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e3d5be4f54b4432b76228fa954c2eca78234a93d))
+* **Processing/UmapReducer:** Add robust scaling before reduction ([cb11dd3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb11dd3579b777fd82166b40db166f3cf5e3bf9b))
+
 ## [6.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.0.0...v6.0.1) (2023-03-14)
 
 
