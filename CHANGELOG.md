@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.0.0...v6.0.1) (2023-03-14)
+
+
+### Bug Fixes
+
+* **Front:** Add base path in vite configuration for builds ([9d610f5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9d610f546019f2c9941d2167702055aa8659b559))
+
 # [6.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v5.17.0...v6.0.0) (2023-03-14)
 
 
