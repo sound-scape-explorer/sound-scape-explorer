@@ -10,4 +10,16 @@ __pycache__/
 
 /sample**
 
-./project.env
+project.env
+!examples/common/project.env
+
+start-linux.sh
+!examples/common/start-linux.sh
+
+start-windows.ps1
+!examples/common/start-windows.ps1
+
+config.xlsx
+!examples/common/config.xlsx
+
+examples/*.zip
