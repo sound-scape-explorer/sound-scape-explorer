@@ -12,10 +12,10 @@ from processing.utils.print_new_line import print_new_line
 
 
 class VGGishModel(AbstractModel, VGG):
-    __sample_rate: int = None
+    __sample_rate: Optional[int]
     __mels_count: int = 64
     __fft_size: int = 2048
-    __fft_hop_length: int = None
+    __fft_hop_length: Optional[int]
     device: str
 
     def __init__(
