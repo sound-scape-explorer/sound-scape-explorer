@@ -5,3 +5,13 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/front"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pip"
+    directory: "/processing"
+    schedule:
+      interval: "daily"
