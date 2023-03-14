@@ -1,10 +1,11 @@
 {
-  "name": "sound-scape-explorer--client",
-  "license": "MIT",
+  "name": "sound-scape-explorer--front",
   "private": true,
   "scripts": {
     "dev": "cross-env VITE_SSE_VERSION=$(git branch | grep \\* | cut -d ' ' -f2) vite --port 8080",
-    "build": "vite build",
+    "build": "yarn build:clean && yarn build:run",
+    "build:clean": "rimraf dist",
+    "build:run": "vite build",
     "preview": "vite preview --port 8080 --host 0.0.0.0"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.35.0",
     "naive-ui": "^2.34.3",
+    "rimraf": "^4.4.0",
     "rollup-plugin-analyzer": "^4.0.0",
     "sass": "^1.58.3",
     "sass-reset": "^1.0.4",
