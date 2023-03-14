@@ -1,5 +1,6 @@
 from typing import List
 
+from sklearn.preprocessing import robust_scale
 from umap.umap_ import UMAP
 
 from processing.reducers.AbstractReducer import AbstractReducer
@@ -25,5 +26,6 @@ class UmapReducer(AbstractReducer):
         self,
         features: List[List[float]],
     ) -> List[List[float]]:
-        reduced_features = self.__instance.fit_transform(features)
+        scaled_features = robust_scale(features)
+        reduced_features = self.__instance.fit_transform(scaled_features)
         return reduced_features
