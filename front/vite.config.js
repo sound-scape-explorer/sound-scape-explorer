@@ -7,7 +7,7 @@ import wasm from 'vite-plugin-wasm';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '',
+  base: 'https://sound-scape-explorer.github.io/sound-scape-explorer',
   build: {
     target: 'es2020',
     rollupOptions: {
