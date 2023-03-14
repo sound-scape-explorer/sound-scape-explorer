@@ -19,7 +19,7 @@ nvidia-cuda-nvrtc-cu11==11.7.99
 nvidia-cuda-runtime-cu11==11.7.99
 nvidia-cudnn-cu11==8.5.0.96
 openpyxl==3.0.10
-packaging==21.3
+packaging==23.0
 pandas==1.5.2
 Pillow==9.3.0
 pycparser==2.21
