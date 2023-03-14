@@ -1,6 +1,7 @@
 from typing import List
 
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import scale
 
 from processing.reducers.AbstractReducer import AbstractReducer
 
@@ -25,5 +26,6 @@ class PcaReducer(AbstractReducer):
         self,
         features: List[List[float]],
     ) -> List[List[float]]:
-        reduced_features = self.__instance.fit_transform(features)
+        scaled_features = scale(features)
+        reduced_features = self.__instance.fit_transform(scaled_features)
         return reduced_features
