@@ -31,7 +31,8 @@
 
 ### ⚙️ Configure your project
 
-Download the [configuration example](examples/common/config.xlsx) and set up your project!
+Download the [configuration example](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
+and set up your project!
 
 ### 💽 Generate your data
 
