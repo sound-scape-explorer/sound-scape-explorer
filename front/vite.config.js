@@ -5,9 +5,13 @@ import {defineConfig} from 'vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 
+export const base = process.env.NODE_ENV === 'production'
+  ? '/sound-scape-explorer/'
+  : '';
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: 'https://sound-scape-explorer.github.io/sound-scape-explorer',
+  base,
   build: {
     target: 'es2020',
     rollupOptions: {

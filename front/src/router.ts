@@ -11,6 +11,8 @@ import Reductions from './pages/Reductions.vue';
 import Settings from './pages/Settings.vue';
 import Volumes from './pages/Volumes.vue';
 
+const base = import.meta.env.BASE_URL;
+
 export type AppRouteNames =
   | 'home'
   | 'preview'
@@ -26,52 +28,52 @@ export type AppRouteNames =
 export const routes: RouteRecordRaw[] = [
   {
     name: 'home',
-    path: '/',
+    path: `${base}`,
     component: Home,
   },
   {
     name: 'preview',
-    path: '/preview',
+    path: `${base}preview`,
     component: Preview,
   },
   {
     name: 'player',
-    path: '/player',
+    path: `${base}player`,
     component: Player,
   },
   {
     name: 'reductions',
-    path: '/reductions',
+    path: `${base}reductions`,
     component: Reductions,
   },
   {
     name: 'volumes',
-    path: '/volumes',
+    path: `${base}volumes`,
     component: Volumes,
   },
   {
     name: 'covering',
-    path: '/covering',
+    path: `${base}covering`,
     component: Covering,
   },
   {
     name: 'minitools',
-    path: '/minitools',
+    path: `${base}minitools`,
     component: MiniTools,
   },
   {
     name: 'settings',
-    path: '/settings',
+    path: `${base}settings`,
     component: Settings,
   },
   {
     name: 'config',
-    path: '/config',
+    path: `${base}config`,
     component: Config,
   },
   {
     name: 'help',
-    path: '/help',
+    path: `${base}help`,
     component: Help,
   },
 ];

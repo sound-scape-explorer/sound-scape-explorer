@@ -5,7 +5,7 @@
     "dev": "cross-env VITE_SSE_VERSION=$(git branch | grep \\* | cut -d ' ' -f2) vite --port 8080",
     "build": "yarn build:clean && yarn build:run",
     "build:clean": "rimraf dist",
-    "build:run": "vite build",
+    "build:run": "cross-env NODE_ENV=production vite build",
     "preview": "vite preview --port 8080 --host 0.0.0.0"
   },
   "dependencies": {
