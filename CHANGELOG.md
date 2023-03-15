@@ -1,3 +1,10 @@
+## [6.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.1.0...v6.1.1) (2023-03-15)
+
+
+### Bug Fixes
+
+* **Releases:** Finalize docker images and composes + Overwrite base path if `processing` running inside container ([2118864](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/211886420353543879f57c26f7c4c3a3ad2b2d08))
+
 # [6.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.0.2...v6.1.0) (2023-03-15)
 
 
