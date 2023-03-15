@@ -1,3 +1,10 @@
+## [6.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.1.1...v6.1.2) (2023-03-15)
+
+
+### Bug Fixes
+
+* **Utils:** Build correct dataframe for JR + Improve `Storage` interface ([b145dd7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b145dd7f4bf8964e0b33a6428cd641694f0d3897))
+
 ## [6.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.1.0...v6.1.1) (2023-03-15)
 
 
