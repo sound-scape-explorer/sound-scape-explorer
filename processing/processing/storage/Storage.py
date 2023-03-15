@@ -472,6 +472,18 @@ class Storage(metaclass=SingletonMeta):
         for f, _ in enumerate(files):
             yield f
 
+    def enumerate_group_indexes(
+        self,
+        band: str,
+        integration: int,
+    ):
+        for file_index in self.enumerate_file_indexes():
+            file_features = self.get_file_features(band, file_index)
+            groups_count = len(file_features) // integration
+
+            for group_index in range(groups_count):
+                yield file_index, group_index
+
     def create_group(
         self,
         features: List[List[float]],
@@ -527,10 +539,11 @@ class Storage(metaclass=SingletonMeta):
 
         return True
 
-    def get_grouped_features_all_files_flat(
+    def get_grouped_features_all_files(
         self,
         band: str,
         integration: int,
+        unwrap=False,
     ) -> List[Dataset]:
         all_features = []
 
@@ -542,25 +555,11 @@ class Storage(metaclass=SingletonMeta):
             )
 
             for features in grouped_features:
+                if unwrap is True:
+                    all_features.append(features[:])
+                    continue
+
                 all_features.append(features)
-
-        return all_features
-
-    def get_grouped_features_all_files(
-        self,
-        band: str,
-        integration: int,
-    ) -> List[Dataset]:
-        all_features = []
-
-        for file_index in self.enumerate_file_indexes():
-            grouped_features = self.get_grouped_features(
-                band=band,
-                integration=integration,
-                file_index=file_index,
-            )
-
-            all_features.append(grouped_features)
 
         return all_features
 
@@ -575,7 +574,7 @@ class Storage(metaclass=SingletonMeta):
         features = self.__get(path)
         return features
 
-    def get_group_timestamps(
+    def get_grouped_timestamps(
         self,
         band: str,
         integration: int,
@@ -587,6 +586,25 @@ class Storage(metaclass=SingletonMeta):
         features = self.__get(path)
 
         return features
+
+    def get_grouped_timestamps_all_files(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[Dataset]:
+        all_timestamps = []
+
+        for file_index in self.enumerate_file_indexes():
+            grouped_timestamps = self.get_grouped_timestamps(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
+            for timestamp in grouped_timestamps:
+                all_timestamps.append(timestamp)
+
+        return all_timestamps
 
     def write_reduced(
         self,

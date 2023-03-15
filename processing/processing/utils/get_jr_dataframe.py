@@ -6,27 +6,26 @@ def get_jr_dataframe(
     band: str,
     integration: int,
 ):
+    grouped_features = storage.get_grouped_features_all_files(
+        band,
+        integration,
+        unwrap=True,
+    )
+
+    grouped_timestamps = storage.get_grouped_timestamps_all_files(
+        band,
+        integration,
+    )
+
     files = storage.get_config_files()
-    files_metas = [file.meta for file in files.values()]
+    metas = [file.meta for file in files.values()]
     filenames = storage.get_files()
-    grouped_features = storage.get_grouped_features_all_files(band, integration)
 
     output_filenames = []
-    output_timestamps = []
     output_metas = []
-    output_features = []
 
-    for group_index, _ in enumerate(grouped_features):
-        for file_index, features in enumerate(grouped_features[group_index]):
-            timestamps = storage.get_group_timestamps(
-                band,
-                integration,
-                file_index
-            )
+    for file_index, _ in storage.enumerate_group_indexes(band, integration):
+        output_filenames.append(filenames[file_index])
+        output_metas.append(metas[file_index])
 
-            output_filenames.append(filenames[group_index])
-            output_timestamps.append(timestamps)
-            output_metas.append(files_metas[group_index])
-            output_features.append(features)
-
-    return output_filenames, output_timestamps, output_metas, output_features
+    return output_filenames, grouped_timestamps, output_metas, grouped_features

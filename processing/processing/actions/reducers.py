@@ -22,7 +22,7 @@ timer = Timer(len(bands) * len(integrations) * len(reducers))
 
 for band in bands:
     for integration in integrations:
-        features = storage.get_grouped_features_all_files_flat(
+        features = storage.get_grouped_features_all_files(
             band=band,
             integration=integration,
         )
