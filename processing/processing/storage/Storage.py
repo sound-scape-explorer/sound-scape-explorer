@@ -5,6 +5,7 @@ from h5py import Dataset, File
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
 
+from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
@@ -261,7 +262,6 @@ class Storage(metaclass=SingletonMeta):
         self,
         band: str,
     ) -> List[Dataset]:
-        files = self.get_files()
         features = []
 
         for f in self.enumerate_file_indexes():
@@ -346,6 +346,9 @@ class Storage(metaclass=SingletonMeta):
         return settings[StorageSetting.expected_sample_rate.value]
 
     def get_base_path(self) -> str:
+        if Env().is_docker is True:
+            return '/mount/project'
+
         settings = self.__get_settings()
         return settings[StorageSetting.base_path.value]
 

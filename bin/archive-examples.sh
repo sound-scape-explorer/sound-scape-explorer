@@ -10,7 +10,6 @@ function iterate(){
     cp ../common/start-windows.ps1 . && wait
     cp ../common/start-linux.sh . && wait
     cp ../common/project.env . && wait
-    [ -d 'project' ] && cp ../common/config.xlsx project && wait
     zip "$name.zip" ./* -r -x "*.gitignore" "*.png"
     mv "$name.zip" ..
     cd ..
@@ -28,7 +27,7 @@ function iterate(){
 names=(
   sse-cpu-docker
   sse-cuda-docker
-  sse-web-docker
+  sse-front-docker
   sse-next-docker
 )
 

@@ -1,4 +1,4 @@
-FROM python:3.8-slim as dependencies
+FROM python:3.8-slim
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
@@ -6,13 +6,9 @@ RUN pip install -r requirements.txt
 COPY prepare.py .
 RUN python3 prepare.py
 
-ENV PYTHONPATH=.
+ENV PYTHONPATH .
 
-ARG storage
-
-ENV storage ${storage}
-
-ENV config /project/config.xlsx
+ENV IS_DOCKER True
 
 WORKDIR /app
 

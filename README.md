@@ -24,27 +24,33 @@
 ### ⚓ Requirements
 
 - Install and run Docker.
-  - Linux
-    - [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
-    - [Debian](https://docs.docker.com/engine/install/debian/)
-    - [Other](https://docs.docker.com/engine/install/)
-  - Windows
-    - Install and run [Docker Desktop](https://www.docker.com/products/docker-desktop)
+  - [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+  - [Debian](https://docs.docker.com/engine/install/debian/)
+  - [Other](https://docs.docker.com/engine/install/)
+  - [Windows](https://www.docker.com/products/docker-desktop)
+
+### ⚙️ Configure your project
+
+Download the [configuration example](examples/common/config.xlsx) and set up your project!
 
 ### 💽 Generate your data
 
-Choose your project example, download and unzip then follow instructions in `README.md`
+Download and unzip a template from the following list:
 
-| Docker flavors                  | CPU versions                                                                                                          |
-|---------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| SSE CPU                         | [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker.zip)   |
-| SSE CUDA                        | [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker.zip) |
-| SSE Web                         | [SSE Web](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-web-docker.zip)   |
-| SSE Next (Development versions) | [SSE Next](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-next-docker.zip) |
+- [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker.zip)
+- [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker.zip)
+- [SSE Front](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-front-docker.zip)
+- [SSE Next](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-next-docker.zip)
+
+Edit `project.env` and specify your folder paths and filenames.
+
+Then run the startup script according to your operating system.
 
 ### 🚀 Explore your data
 
-Browse to [front](https://github.io) and load your data.
+Browse to the [front end](https://sound-scape-explorer.github.io/sound-scape-explorer/) and load your data.
+
+You can also browse to your [local container](http://localhost:8080).
 
 ## 👨‍💻 For programmers
 

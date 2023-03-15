@@ -7,7 +7,11 @@ services:
   processing:
     image: ghcr.io/sound-scape-explorer/processing:latest
     volumes:
-      - ./sample:/sample
+      - ${PROJECT_FOLDER}:/mount/project
+      - ${STORAGE_FOLDER}:/mount/storage
+    command:
+      - -c/mount/project/${PROJECT_NAME}
+      - -s/mount/storage/${STORAGE_NAME}
     deploy:
       resources:
         reservations:

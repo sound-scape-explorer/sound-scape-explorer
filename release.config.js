@@ -15,7 +15,7 @@ module.exports = {
       assets: [
         'examples/sse-cpu-docker.zip',
         'examples/sse-cuda-docker.zip',
-        'examples/sse-web-docker.zip',
+        'examples/sse-front-docker.zip',
         'examples/sse-next-docker.zip',
       ],
     }],
