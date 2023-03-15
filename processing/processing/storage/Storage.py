@@ -529,7 +529,6 @@ class Storage(metaclass=SingletonMeta):
         band: str,
         integration: int,
     ) -> List[Dataset]:
-        files = self.get_files()
         all_features = []
 
         for file_index in self.enumerate_file_indexes():
@@ -541,6 +540,24 @@ class Storage(metaclass=SingletonMeta):
 
             for features in grouped_features:
                 all_features.append(features)
+
+        return all_features
+
+    def get_grouped_features_all_files(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[Dataset]:
+        all_features = []
+
+        for file_index in self.enumerate_file_indexes():
+            grouped_features = self.get_grouped_features(
+                band=band,
+                integration=integration,
+                file_index=file_index,
+            )
+
+            all_features.append(grouped_features)
 
         return all_features
 
