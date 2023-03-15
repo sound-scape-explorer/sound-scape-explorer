@@ -1,3 +1,15 @@
+# [6.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.0.2...v6.1.0) (2023-03-15)
+
+
+### Bug Fixes
+
+* **Front:** Use correct routes in production ([1472ff6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1472ff67a7307ea73e23eefbc774df7e4fb3d195))
+
+
+### Features
+
+* **Processing:** Add helper function for computation engineer ([5e18f9d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5e18f9d90d31c3ce9eee840f6bb2e5c54f4dfa4c))
+
 ## [6.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.0.1...v6.0.2) (2023-03-14)
 
 
