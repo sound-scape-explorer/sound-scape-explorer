@@ -1,3 +1,11 @@
+# [7.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.0.0...v7.1.0) (2023-03-16)
+
+
+### Features
+
+* **Processing/Storage:** Add methods to retrieve volumes and their values + Complete `get_jr_dataframe` ([9868a1d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9868a1d2f767a4d8be94bd32d2abac1d82c908b2))
+* **Processing/Timer:** Print total duration when timer has ended + Improve interface ([ddf26c4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ddf26c4318dca90ca3ac2368838a20bde2a9c51f))
+
 # [7.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.2.0...v7.0.0) (2023-03-16)
 
 
