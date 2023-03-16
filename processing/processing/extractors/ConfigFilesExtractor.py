@@ -61,19 +61,16 @@ class ConfigFilesExtractor:
                 'Sample rate differs from expected sample rate.'
             )
 
-    # TODO: Prefer drop incomplete last second instead of filling it with zeros.
-    # TODO: Add console outputs on drop
     @staticmethod
-    def __fill_wav_to_round_duration(
+    def __drop_last_second(
         wav: Tensor,
         sample_rate: int,
     ) -> Tensor:
-        rest = wav.shape[1] % sample_rate
-
-        if rest != 0:
-            wav = torch.cat((wav, torch.zeros((1, sample_rate - rest))), 1)
-
-        return wav
+        _, wav_length = wav.shape
+        length_sec = wav_length / sample_rate
+        complete_sec = int(length_sec)
+        complete_samples = complete_sec * sample_rate
+        return wav[:, :complete_samples]
 
     @staticmethod
     def __load_audio(path: str) -> Tuple[Tensor, int]:
@@ -104,7 +101,7 @@ class ConfigFilesExtractor:
 
             self.__model.set_sample_rate(sample_rate)
 
-            wav = self.__fill_wav_to_round_duration(wav, sample_rate)
+            wav = self.__drop_last_second(wav, sample_rate)
             features = self.__extract_features(wav, sample_rate)
 
             self.__timer.print_timeleft()
