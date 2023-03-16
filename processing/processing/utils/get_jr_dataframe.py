@@ -31,9 +31,21 @@ def get_jr_dataframe(
     reducers = storage.get_grouped_reducers(band, integration)
     reduced_features = storage.get_reduced_features(reducers, band, integration)
 
+    indicators = storage.get_indicators()
+    indicators_values = storage.get_indicators_values(band, integration)
+
     return output_filenames, \
         grouped_timestamps, \
         output_metas, \
         grouped_features, \
         reducers, \
-        reduced_features
+        reduced_features, \
+        indicators, \
+        indicators_values
+
+
+storage = Storage(
+    '/home/bamdad/git/sound-scape-explorer/sample-lana-small/test.h5'
+)
+
+output = get_jr_dataframe(storage, 'poissons', 30)

@@ -225,7 +225,7 @@ class Storage(metaclass=SingletonMeta):
         reducers: List[ConfigReducer],
         band: str,
         integration: int,
-    ):
+    ) -> List[List[float]]:
         reduced_features = []
 
         for _ in reducers:
@@ -284,6 +284,33 @@ class Storage(metaclass=SingletonMeta):
     def get_indicators(self) -> AsStrWrapper:
         dataset = self.__get(StoragePath.indicators)
         return dataset.asstr()
+
+    def get_indicators_values(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[List[float]]:
+        indicators = self.get_indicators()
+
+        values = []
+
+        for i, _ in enumerate(indicators):
+            values.append([])
+
+        for i, indicator in enumerate(indicators):
+            for file_index in self.enumerate_file_indexes():
+                suffix = self.__get_grouped_suffix(
+                    band,
+                    integration,
+                    file_index,
+                )
+                path = f'{StoragePath.indicator_.value}{i}{suffix}'
+                data = self.__get(path)
+
+                for subset in data:
+                    values[i].append(subset)
+
+        return values
 
     def get_volumes(self) -> AsStrWrapper:
         dataset = self.__get(StoragePath.volumes)
@@ -671,161 +698,22 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_indicators(self) -> None:
-        self.__delete_silently(StoragePath.indicator_leq_enes)
-        self.__delete_silently(StoragePath.indicator_leq_maad)
-        self.__delete_silently(StoragePath.indicator_temporal_median)
-        self.__delete_silently(StoragePath.indicator_temporal_entropy)
-        self.__delete_silently(StoragePath.indicator_frequency_entropy)
-        self.__delete_silently(
-            StoragePath.indicator_acoustic_complexity_index,
-        )
-        self.__delete_silently(
-            StoragePath.indicator_acoustic_diversity_index,
-        )
-        self.__delete_silently(StoragePath.indicator_bioacoustics_index)
-        self.__delete_silently(StoragePath.indicator_soundscape_index)
+        indicators = self.get_indicators()
 
-    def create_group_indicator_leq_enes(
+        for index, _ in enumerate(indicators):
+            path = f'{StoragePath.indicator_.value}{index}'
+            self.__delete_silently(path)
+
+    def write_indicator(
         self,
+        index: int,
         band: str,
         integration: int,
         file_index: int,
         values: List[float],
     ) -> None:
         suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.indicator_leq_enes.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_leq_maad(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.indicator_leq_maad.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_temporal_median(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.indicator_temporal_median.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_temporal_entropy(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.indicator_temporal_entropy.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_frequency_entropy(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.indicator_frequency_entropy.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_acoustic_complexity_index(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = StoragePath.indicator_acoustic_complexity_index.value
-        path += suffix
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_acoustic_diversity_index(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = StoragePath.indicator_acoustic_diversity_index.value
-        path += suffix
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_bioacoustics_index(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.indicator_bioacoustics_index.value}' \
-               f'{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_indicator_soundscape_index(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.indicator_soundscape_index.value}{suffix}'
-
+        path = f'{StoragePath.indicator_.value}{index}{suffix}'
         self.__create_dataset(
             path=path,
             data=values,
@@ -833,10 +721,11 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_volumes(self) -> None:
-        self.__delete_silently(StoragePath.volume_sum_var)
-        self.__delete_silently(StoragePath.volume_sum_std)
-        self.__delete_silently(StoragePath.volume_mean_std)
-        self.__delete_silently(StoragePath.volume_mean_spreading)
+        volumes = self.get_volumes()
+
+        for v, _ in enumerate(volumes):
+            path = f'{StoragePath.volume_.value}{v}'
+            self.__delete_silently(path)
 
     def delete_reduced(self) -> None:
         reducers = self.get_reducers()
@@ -845,63 +734,16 @@ class Storage(metaclass=SingletonMeta):
             path = f'{StoragePath.reduced_.value}{index}'
             self.__delete_silently(path)
 
-    def create_group_volume_sum_var(
+    def write_volume(
         self,
+        index: int,
         band: str,
         integration: int,
         file_index: int,
         values: List[float],
     ) -> None:
         suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.volume_sum_var.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_volume_sum_std(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.volume_sum_std.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_volume_mean_std(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.volume_mean_std.value}{suffix}'
-
-        self.__create_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_group_volume_mean_spreading(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f'{StoragePath.volume_mean_spreading.value}{suffix}'
+        path = f'{StoragePath.volume_.value}{index}{suffix}'
 
         self.__create_dataset(
             path=path,

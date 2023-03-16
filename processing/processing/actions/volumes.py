@@ -28,7 +28,7 @@ for band in bands:
                 file_index=file_index,
             )
 
-            for name in volumes:
+            for v, name in enumerate(volumes):
                 volume = Volume(
                     name=name,
                     band=band,
@@ -39,5 +39,5 @@ for band in bands:
                 for group_index, features in enumerate(grouped_features):
                     volume.calculate(features)
 
-                volume.store(storage)
+                volume.store(storage, v)
                 timer.print_timeleft()

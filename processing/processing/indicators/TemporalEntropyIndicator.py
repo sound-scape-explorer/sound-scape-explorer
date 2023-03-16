@@ -2,7 +2,6 @@ import maad
 
 from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
-from processing.storage.Storage import Storage
 
 
 class TemporalEntropyIndicator(AbstractIndicator):
@@ -13,17 +12,6 @@ class TemporalEntropyIndicator(AbstractIndicator):
         file_index: int,
     ) -> None:
         super().__init__(band, integration, file_index)
-
-    def store(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.create_group_indicator_temporal_entropy(
-            band=self._band,
-            integration=self._integration,
-            file_index=self._file_index,
-            values=self._values,
-        )
 
     def calculate(
         self,

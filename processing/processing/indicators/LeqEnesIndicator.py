@@ -1,7 +1,6 @@
 from processing.audio.Audio import Audio
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.lib import ENES_index
-from processing.storage.Storage import Storage
 
 
 class LeqEnesIndicator(AbstractIndicator):
@@ -12,17 +11,6 @@ class LeqEnesIndicator(AbstractIndicator):
         file_index: int,
     ) -> None:
         super().__init__(band, integration, file_index)
-
-    def store(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.create_group_indicator_leq_enes(
-            band=self._band,
-            integration=self._integration,
-            file_index=self._file_index,
-            values=self._values,
-        )
 
     def calculate(
         self,

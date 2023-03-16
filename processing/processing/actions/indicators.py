@@ -27,7 +27,7 @@ for band_index, band in enumerate(bands):
         for file_index, file_name in enumerate(files):
             group = storage.get_grouped_features(band, integration, file_index)
 
-            for name in indicators:
+            for i, name in enumerate(indicators):
                 indicator = Indicator(
                     name=name,
                     band=band,
@@ -48,5 +48,5 @@ for band_index, band in enumerate(bands):
 
                     indicator.calculate(audio)
 
-                indicator.store(storage)
+                indicator.store(storage, i)
                 timer.print_timeleft()

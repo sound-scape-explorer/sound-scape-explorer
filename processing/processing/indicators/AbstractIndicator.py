@@ -26,18 +26,24 @@ class AbstractIndicator(ABC):
         self._values = []
 
     @abstractmethod
-    def store(
-        self,
-        storage: Storage,
-    ) -> None:
-        pass
-
-    @abstractmethod
     def calculate(
         self,
         audio: Audio,
     ) -> None:
         pass
+
+    def store(
+        self,
+        storage: Storage,
+        index: int,
+    ) -> None:
+        storage.write_indicator(
+            index=index,
+            band=self._band,
+            integration=self._integration,
+            file_index=self._file_index,
+            values=self._values,
+        )
 
     def add_value(
         self,

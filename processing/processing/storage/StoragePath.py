@@ -59,19 +59,8 @@ class StoragePath(Enum):
 
     # Indicators
 
-    indicator_leq_enes = '/indicator_Leq_T_enes'
-    indicator_leq_maad = '/indicator_Leq_T_maad'
-    indicator_temporal_median = '/indicator_MED'
-    indicator_temporal_entropy = '/indicator_Ht'
-    indicator_frequency_entropy = '/indicator_Hf'
-    indicator_acoustic_complexity_index = '/indicator_ACI'
-    indicator_acoustic_diversity_index = '/indicator_ADI'
-    indicator_bioacoustics_index = '/indicator_BI'
-    indicator_soundscape_index = '/indicator_NDSI'
+    indicator_ = '/indicator_'
 
     # Volumes
 
-    volume_sum_var = '/volume_sum_var'
-    volume_sum_std = '/volume_sum_std'
-    volume_mean_std = '/volume_mean_std'
-    volume_mean_spreading = '/volume_mean_spreading'
+    volume_ = '/volume_'
