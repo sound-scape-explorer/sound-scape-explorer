@@ -49,4 +49,4 @@ for band_index, band in enumerate(bands):
                     indicator.calculate(audio)
 
                 indicator.store(storage, i)
-                timer.print_timeleft()
+                timer.progress()

@@ -40,4 +40,4 @@ for band in bands:
                     volume.calculate(features)
 
                 volume.store(storage, v)
-                timer.print_timeleft()
+                timer.progress()
