@@ -37,7 +37,7 @@ for band in bands:
             )
 
             if not is_in_reducer:
-                timer.print_timeleft()
+                timer.progress()
                 continue
 
             features_split = reducer.reduce_and_split(
@@ -54,4 +54,4 @@ for band in bands:
                     features=features_split[file_index],
                 )
 
-            timer.print_timeleft()
+            timer.progress()

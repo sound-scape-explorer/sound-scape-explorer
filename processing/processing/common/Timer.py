@@ -38,24 +38,33 @@ class Timer:
         self.__duration += duration
         self.__iteration += 1
 
+    @staticmethod
+    def __convert_time(
+        time_: float,
+    ) -> Tuple[float, str]:
+        units = 'seconds'
+
+        if time_ >= 60:
+            time_ = time_ / 60
+            units = 'minutes'
+
+        if time_ >= 60:
+            time_ = time_ / 60
+            units = 'hours'
+
+        return time_, units
+
     def __get_timeleft(self) -> Tuple[float, str]:
         iteration_duration = self.__duration / self.__iteration
         remaining_iterations = self.__total_iterations - self.__iteration
 
         timeleft = iteration_duration * remaining_iterations
-        units = 'seconds'
 
-        if timeleft >= 60:
-            timeleft = timeleft / 60
-            units = 'minutes'
-
-        if timeleft >= 60:
-            timeleft = timeleft / 60
-            units = 'hours'
+        timeleft, units = self.__convert_time(timeleft)
 
         return timeleft, units
 
-    def print_timeleft(
+    def progress(
         self,
         decimals: int = 1,
     ) -> None:
@@ -71,4 +80,13 @@ class Timer:
         )
 
         if self.__iteration == self.__total_iterations:
+            duration, units = self.__convert_time(self.__duration)
+            string = f'{round(duration, decimals)} {units}'
+
+            print(
+                f'Progress: {self.__iteration}/{self.__total_iterations}, '
+                f'Duration: {string:<80}',
+                end='\r',
+            )
+
             print('')

@@ -34,6 +34,9 @@ def get_jr_dataframe(
     indicators = storage.get_indicators()
     indicators_values = storage.get_indicators_values(band, integration)
 
+    volumes = storage.get_volumes()
+    volumes_values = storage.get_volumes_values(band, integration)
+
     return output_filenames, \
         grouped_timestamps, \
         output_metas, \
@@ -41,4 +44,6 @@ def get_jr_dataframe(
         reducers, \
         reduced_features, \
         indicators, \
-        indicators_values
+        indicators_values, \
+        volumes[:], \
+        volumes_values

@@ -41,7 +41,7 @@ class FeaturesGrouper:
         )
 
     def __progress(self) -> None:
-        self.__timer.print_timeleft()
+        self.__timer.progress()
 
     def group(
         self,
