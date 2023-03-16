@@ -1,3 +1,10 @@
+# [6.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.1.3...v6.2.0) (2023-03-16)
+
+
+### Features
+
+* **Processing:** Pass index to `ConfigReducer` + Improve storage interface to get grouped reducers and associated reduced_features ([e1f8662](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e1f866256deadfc3c07614f9c4b3dcf422ff44e9))
+
 ## [6.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.1.2...v6.1.3) (2023-03-16)
 
 
