@@ -42,10 +42,3 @@ def get_jr_dataframe(
         reduced_features, \
         indicators, \
         indicators_values
-
-
-storage = Storage(
-    '/home/bamdad/git/sound-scape-explorer/sample-lana-small/test.h5'
-)
-
-output = get_jr_dataframe(storage, 'poissons', 30)
