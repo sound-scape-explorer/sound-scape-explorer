@@ -1,3 +1,13 @@
+## [6.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.1.2...v6.1.3) (2023-03-16)
+
+
+### Bug Fixes
+
+* **Docker:** Feed env file when updating docker images ([d1011e1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d1011e12b00b7bc13df840327ad3ddad2f8c1476))
+* **Processing/Extractors:** Drop last incomplete seconds when extracting ([101a6f2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/101a6f2e8364791035baf804f424810cb7782253))
+* **Processing/Extractors:** Drop last incomplete seconds when extracting ([b67beb5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b67beb5dea84da36929145647e6632db014b8a2b))
+* **Processing/Extractors:** Drop last incomplete seconds when extracting ([8b8d5fb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8b8d5fbe675e8a6df6542bb06727ecc3cde9bedf))
+
 ## [6.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.1.1...v6.1.2) (2023-03-15)
 
 
