@@ -43,7 +43,7 @@ def get_jr_dataframe(
         grouped_features, \
         reducers, \
         reduced_features, \
-        indicators, \
+        indicators[:], \
         indicators_values, \
         volumes[:], \
         volumes_values
