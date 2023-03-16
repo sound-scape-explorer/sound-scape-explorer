@@ -29,7 +29,7 @@ function PrintStart()
 PrintSplash
 
 PrintUpdate
-docker compose pull
+docker compose --env-file project.env pull
 
 PrintStart
-docker compose --env-file ./project.env up
+docker compose --env-file project.env up

@@ -27,7 +27,7 @@ function print_start {
 print_splash
 
 print_update
-docker compose pull
+docker compose --env-file project.env pull
 
 print_start
-docker compose --env-file ./project.env up
+docker compose --env-file project.env up
