@@ -316,6 +316,33 @@ class Storage(metaclass=SingletonMeta):
         dataset = self.__get(StoragePath.volumes)
         return dataset.asstr()
 
+    def get_volumes_values(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[List[float]]:
+        volumes = self.get_volumes()
+
+        values = []
+
+        for v, _ in enumerate(volumes):
+            values.append([])
+
+        for v, volume in enumerate(volumes):
+            for file_index in self.enumerate_file_indexes():
+                suffix = self.__get_grouped_suffix(
+                    band,
+                    integration,
+                    file_index
+                )
+                path = f'{StoragePath.volume_.value}{v}{suffix}'
+                data = self.__get(path)
+
+                for subset in data:
+                    values[v].append(subset)
+
+        return values
+
     def get_timestamps(self) -> Dataset:
         return self.__get(StoragePath.timestamps)
 
