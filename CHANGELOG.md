@@ -1,3 +1,20 @@
+# [7.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.2.0...v7.0.0) (2023-03-16)
+
+
+### Bug Fixes
+
+* **Processing:** Clean and update dependencies ([f5fb983](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f5fb98360f06b4bb474a4727ababb9ad803fce67))
+
+
+### Features
+
+* **Processing/Storage:** Merge store interfaces for `Indicator` and `Volume` ([2b89f45](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2b89f45ffdabe591044299e14252a8b94e629f82))
+
+
+### BREAKING CHANGES
+
+* **Processing/Storage:** Volumes and Indicators are now stored by indexes instead of predeclared namespaces
+
 # [6.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v6.1.3...v6.2.0) (2023-03-16)
 
 
