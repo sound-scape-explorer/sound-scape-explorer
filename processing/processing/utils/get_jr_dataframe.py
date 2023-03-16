@@ -28,4 +28,12 @@ def get_jr_dataframe(
         output_filenames.append(filenames[file_index])
         output_metas.append(metas[file_index])
 
-    return output_filenames, grouped_timestamps, output_metas, grouped_features
+    reducers = storage.get_grouped_reducers(band, integration)
+    reduced_features = storage.get_reduced_features(reducers, band, integration)
+
+    return output_filenames, \
+        grouped_timestamps, \
+        output_metas, \
+        grouped_features, \
+        reducers, \
+        reduced_features

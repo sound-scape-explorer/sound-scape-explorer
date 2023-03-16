@@ -4,6 +4,7 @@ from processing.reducers.Reducer import Reducer
 
 
 class ConfigReducer:
+    index: int
     name: str
     dimensions: int
     bands: List[str]
@@ -12,6 +13,7 @@ class ConfigReducer:
 
     def __init__(
         self,
+        index: int,
         name: str,
         dimensions: int,
         bands: List[str],
@@ -20,6 +22,7 @@ class ConfigReducer:
     ) -> None:
         Reducer.validate_name(name)
 
+        self.index = index
         self.name = name
         self.dimensions = dimensions
 

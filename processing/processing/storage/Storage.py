@@ -199,6 +199,53 @@ class Storage(metaclass=SingletonMeta):
     def get_reducers(self) -> AsStrWrapper:
         return self.__get(StoragePath.reducers).asstr()
 
+    def get_grouped_reducers(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[ConfigReducer]:
+        reducers = self.get_config_reducers()
+
+        grouped_reducers = []
+
+        for reducer in reducers:
+            if not self.is_band_integration_in_reducer(
+                    reducer,
+                    band,
+                    integration
+            ):
+                continue
+
+            grouped_reducers.append(reducer)
+
+        return grouped_reducers
+
+    def get_reduced_features(
+        self,
+        reducers: List[ConfigReducer],
+        band: str,
+        integration: int,
+    ):
+        reduced_features = []
+
+        for _ in reducers:
+            reduced_features.append([])
+
+        for r, reducer in enumerate(reducers):
+            for file_index in self.enumerate_file_indexes():
+                suffix = self.__get_grouped_suffix(
+                    band,
+                    integration,
+                    file_index
+                )
+                path = f'{StoragePath.reduced_.value}{reducer.index}{suffix}'
+                data = self.__get(path)
+
+                for features in data:
+                    reduced_features[r].append(features)
+
+        return reduced_features
+
     def get_config_reducers(self) -> ConfigReducers:
         names = self.get_reducers()
         dimensions = self.__get(StoragePath.reducers_dimensions)
@@ -215,6 +262,7 @@ class Storage(metaclass=SingletonMeta):
 
         for index, name in enumerate(names):
             reducer = ConfigReducer(
+                index=index,
                 name=name,
                 dimensions=dimensions[index],
                 bands=bands[index],
@@ -515,7 +563,7 @@ class Storage(metaclass=SingletonMeta):
         names = self.get_integrations()
         integrations = self.get_integrations_seconds()
 
-        index = numpy.where(integrations == integration)
+        index = numpy.where(integrations[:] == integration)
         index = index[0][0]
         name = names[index]
 

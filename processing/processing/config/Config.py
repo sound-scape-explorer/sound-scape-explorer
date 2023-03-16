@@ -506,6 +506,7 @@ class Config(metaclass=SingletonMeta):
             reducer_ranges = self.__parse_reducer_ranges(ranges[index])
 
             reducer = ConfigReducer(
+                index=index,
                 name=reducer_name,
                 dimensions=dimensions[index],
                 bands=reducer_bands,
