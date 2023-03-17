@@ -26,7 +26,7 @@ const src = computed(() => {
 
   const base = `${settings.base_path}/${settings.audio_folder}`;
   const file = playerStore.src.replace(base, '');
-  return `http://localhost:3000${file}`;
+  return `${settings.audio_host}${file}`;
 });
 
 watch(playerStore, async () => {
