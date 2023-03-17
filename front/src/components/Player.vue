@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
 import audioBufferSlice from 'audiobuffer-slice';
+import dayjs from 'dayjs';
 import {computed, onUnmounted, ref, watch} from 'vue';
 import WavEncoder from 'wav-encoder';
 import WaveSurfer from 'wavesurfer.js';
@@ -9,7 +10,11 @@ import {useStorage} from '../composables/useStorage';
 import {playerStore} from '../store/player.store';
 import {selectionStore} from '../store/selection.store';
 
-const {getSettings} = await useStorage();
+const {
+  getBands,
+  getSettings,
+} = await useStorage();
+const bands = await getBands();
 const settings = await getSettings();
 const containerRef = ref<HTMLDivElement>();
 
@@ -63,12 +68,15 @@ const ws = computed(() => {
   return WaveSurfer.create({
     container: wsRef.value,
     scrollParent: false,
+    barHeight: 20,
+    normalize: false,
+    height: 32,
     plugins: [
       Spectrogram.create({
         container: sRef.value,
         labels: true,
         colorMap,
-        height: 256,
+        height: 128,
       }),
       Cursor.create({
         showTime: true,
@@ -120,9 +128,32 @@ watch(src, async () => {
 
     WavEncoder.encode(wavData).then((wav) => {
       const blob = new Blob([wav]);
+
       ws.value.loadBlob(blob);
-      ws.value.on('ready', () => ws.value.play());
+
       ws.value.on('finish', close);
+
+      ws.value.on('ready', () => {
+        if (!selectionStore.band) {
+          return;
+        }
+
+        const frequencies = bands[selectionStore.band];
+
+        const lpf = ws.value.backend.ac.createBiquadFilter();
+        lpf.type = 'lowshelf';
+        lpf.gain.value = -60;
+        lpf.frequency.value = frequencies[0];
+
+        const hpf = ws.value.backend.ac.createBiquadFilter();
+        hpf.type = 'highshelf';
+        hpf.gain.value = -60;
+        hpf.frequency.value = frequencies[1];
+
+        ws.value.backend.setFilters([lpf, hpf]);
+
+        ws.value.play();
+      });
     });
   });
 });
@@ -134,6 +165,13 @@ onUnmounted(() => {
 
 <template>
   <div ref="containerRef" class="container close" @wheel="handleWheel">
+    <div class="details">
+      <span>{{ playerStore.src }}</span>
+      <span>{{ dayjs(playerStore.timestamp) }}</span>
+      <span v-if="selectionStore.band">
+        {{ bands[selectionStore.band][0] }} - {{ bands[selectionStore.band][1] }} Hz
+      </span>
+    </div>
     <div ref="wsRef" class="wave" />
     <div ref="sRef" class="spectro" />
   </div>
@@ -147,7 +185,7 @@ onUnmounted(() => {
   position: fixed;
   bottom: 1rem;
 
-  max-height: 26rem;
+  max-height: 15rem;
   width: 40rem;
 
   z-index: 120;
@@ -163,6 +201,12 @@ onUnmounted(() => {
   background-color 120ms ease-in-out;
 
   backdrop-filter: blur(5px);
+}
+
+.details {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr 1fr;
 }
 
 $time: 800ms;
