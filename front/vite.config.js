@@ -27,6 +27,7 @@ export default defineConfig({
           'three': ['three'],
           'vue': ['vue'],
           'vue-router': ['vue-router'],
+          'wavesurfer.js': ['wavesurfer.js'],
         },
       },
     },
