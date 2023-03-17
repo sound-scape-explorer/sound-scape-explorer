@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import Player from '../components/Player.vue';
 import SelectionDropdown from '../components/SelectionDropdown.vue';
 import Title from '../components/Title.vue';
 import UMAPAlphas from '../components/UMAPAlphas.vue';
@@ -54,6 +55,7 @@ const {delayUpdate} = useUMAPPage();
   </div>
 
   <UMAPLegend />
+  <Player />
 </template>
 
 <style lang="scss" scoped>
@@ -98,8 +100,5 @@ const {delayUpdate} = useUMAPPage();
   align-items: center;
 
   overflow: hidden;
-}
-
-.float {
 }
 </style>

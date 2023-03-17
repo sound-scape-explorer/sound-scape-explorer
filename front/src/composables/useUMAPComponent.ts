@@ -3,6 +3,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import html2canvas from 'html2canvas';
 import {onUnmounted, watch} from 'vue';
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
+import {playerStore} from '../store/player.store';
 import {settingsStore} from '../store/settings.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
@@ -72,6 +73,7 @@ export function useUMAPComponent() {
     const settings = await getSettings();
 
     const path = `${settings.base_path}/${settings.audio_folder}${label}`;
+    playerStore.src = path;
     await copyToClipboard(path);
     notify('success', 'Audio file path copied to clipboard', path);
   }

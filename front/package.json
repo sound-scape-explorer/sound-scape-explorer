@@ -18,7 +18,8 @@
     "simple-statistics": "^7.8.3",
     "three": "^0.150.1",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "wavesurfer.js": "^6.6.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",

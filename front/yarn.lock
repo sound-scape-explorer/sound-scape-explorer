@@ -1906,6 +1906,11 @@ vueuc@^0.4.47:
     vdirs "^0.1.4"
     vooks "^0.2.4"
 
+wavesurfer.js@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-6.6.0.tgz#5e0ac6a0e75acfb3f3de87394b4dbfe31ff6d64a"
+  integrity sha512-e+1mdjeLNQoZhZqrOV7e13OkCVilYc9JfcGJu7SxuMZAwHUgpUQH9h3ci3KUEIPV4jTTCvmddcBetrHmv3axgw==
+
 which@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/which/-/which-2.0.2.tgz#7c6a8dd0a636a0327e10b59c9286eee93f3f51b1"
