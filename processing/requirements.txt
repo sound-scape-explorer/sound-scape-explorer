@@ -32,7 +32,7 @@ nvidia-curand-cu11==10.2.10.91
 nvidia-cusolver-cu11==11.4.0.1
 nvidia-cusparse-cu11==11.7.4.91
 nvidia-nccl-cu11==2.14.3
-nvidia-nvtx-cu11==11.7.91
+nvidia-nvtx-cu11==11.8.86
 openpyxl==3.1.2
 packaging==23.0
 pandas==1.5.3
