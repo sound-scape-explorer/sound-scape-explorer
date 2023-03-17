@@ -7,7 +7,7 @@ import wasm from 'vite-plugin-wasm';
 
 export const base = process.env.NODE_ENV === 'production'
   ? '/sound-scape-explorer/'
-  : '';
+  : '/';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,6 +17,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
+          'audiobuffer-slice': ['audiobuffer-slice'],
           'chroma-js': ['chroma-js'],
           'dayjs': ['dayjs'],
           'h5wasm': ['h5wasm'],
@@ -27,6 +28,7 @@ export default defineConfig({
           'three': ['three'],
           'vue': ['vue'],
           'vue-router': ['vue-router'],
+          'wav-encoder': ['wav-encoder'],
           'wavesurfer.js': ['wavesurfer.js'],
         },
       },
@@ -37,10 +39,5 @@ export default defineConfig({
       src: fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  plugins: [
-    wasm(),
-    topLevelAwait(),
-    vue(),
-    analyzer({summaryOnly: true}),
-  ],
+  plugins: [wasm(), topLevelAwait(), vue(), analyzer({summaryOnly: true})],
 });
