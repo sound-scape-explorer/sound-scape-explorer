@@ -60,13 +60,8 @@ export function useUMAPComponent() {
     }
 
     const point = UMAPDatasetStore?.dataset?.metadata[index];
-    const label = point?.label;
-
-    if (!label) {
-      return;
-    }
-
-    playerStore.src = label;
+    playerStore.src = point?.label as string;
+    playerStore.timestamp = point?.timestamp as number;
   }
 
   async function render() {

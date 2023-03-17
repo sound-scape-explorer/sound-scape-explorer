@@ -207,6 +207,24 @@ export async function useStorage() {
     return seconds[index];
   }
 
+  async function getGroupIndexAndSeconds(
+    band: string,
+    integration: string,
+    timestamp: number,
+  ): Promise<[number, number]> {
+    return await read(async () => {
+      const file = getFile();
+      const timestamps = await getGroupedTimestamps(band, integration);
+      const groupLength = timestamps[0].length;
+      const timestampIndex = timestamps.flat().indexOf(timestamp);
+      const groupIndex = timestampIndex % groupLength;
+
+      const seconds = getSecondsFromIntegration(file, integration);
+
+      return [groupIndex, seconds];
+    });
+  }
+
   async function getGroupedTimestamps(
     band: string,
     integration: string,
@@ -418,6 +436,7 @@ export async function useStorage() {
     getStorageMetas,
     getGroupedFeatures,
     getGroupedTimestamps,
+    getGroupIndexAndSeconds,
     getReducers,
     getReducedFeatures,
     getVolumes,

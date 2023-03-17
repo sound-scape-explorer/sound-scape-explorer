@@ -1,10 +1,13 @@
 <script lang="ts" setup="">
+import audioBufferSlice from 'audiobuffer-slice';
 import {computed, onUnmounted, ref, watch} from 'vue';
+import WavEncoder from 'wav-encoder';
 import WaveSurfer from 'wavesurfer.js';
 import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import {useStorage} from '../composables/useStorage';
 import {playerStore} from '../store/player.store';
+import {selectionStore} from '../store/selection.store';
 
 const {getSettings} = await useStorage();
 const settings = await getSettings();
@@ -13,6 +16,8 @@ const containerRef = ref<HTMLDivElement>();
 function close() {
   containerRef.value?.classList.remove('open');
   containerRef.value?.classList.add('close');
+  playerStore.src = null;
+  playerStore.timestamp = null;
 }
 
 function open() {
@@ -34,7 +39,7 @@ watch(zoom, () => {
 
 const src = computed(() => {
   if (playerStore.src === null) {
-    return;
+    return null;
   }
 
   return `${settings.audio_host}${playerStore.src}`;
@@ -79,9 +84,47 @@ const ws = computed(() => {
   });
 });
 
-watch(src, () => {
-  ws.value.load(src.value);
-  ws.value.on('ready', () => ws.value.play());
+const audioContext = new AudioContext();
+
+watch(src, async () => {
+  if (!src.value || !selectionStore.band || !selectionStore.integration || !playerStore.timestamp) {
+    return;
+  }
+
+  const response = await fetch(src.value);
+  const arrayBuffer = await response.arrayBuffer();
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+  const {getGroupIndexAndSeconds} = await useStorage();
+
+  const [groupIndex, seconds] = await getGroupIndexAndSeconds(
+    selectionStore.band,
+    selectionStore.integration,
+    playerStore.timestamp,
+  );
+
+  const start = groupIndex * seconds * 1000;
+  const end = start + seconds * 1000;
+
+  audioBufferSlice(audioBuffer, start, end, (error: TypeError, slicedAudioBuffer: AudioBuffer) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    // create a new WAV file with the sliced buffer
+    const wavData = {
+      sampleRate: slicedAudioBuffer.sampleRate,
+      channelData: [slicedAudioBuffer.getChannelData(0)], // use 2 channels for stereo sound
+    };
+
+    WavEncoder.encode(wavData).then((wav) => {
+      const blob = new Blob([wav]);
+      ws.value.loadBlob(blob);
+      ws.value.on('ready', () => ws.value.play());
+      ws.value.on('finish', close);
+    });
+  });
 });
 
 onUnmounted(() => {
@@ -104,8 +147,8 @@ onUnmounted(() => {
   position: fixed;
   bottom: 1rem;
 
-  max-height: 30rem;
-  width: 50rem;
+  max-height: 26rem;
+  width: 40rem;
 
   z-index: 120;
 
