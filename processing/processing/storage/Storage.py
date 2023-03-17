@@ -196,8 +196,14 @@ class Storage(metaclass=SingletonMeta):
 
         return files
 
-    def get_reducers(self) -> AsStrWrapper:
-        return self.__get(StoragePath.reducers).asstr()
+    def get_reducers(self) -> Union[AsStrWrapper, List]:
+        dataset = self.__get(StoragePath.reducers)
+
+        length, = dataset.shape
+        if length == 0:
+            return []
+
+        return dataset.asstr()
 
     def get_grouped_reducers(
         self,
@@ -248,6 +254,10 @@ class Storage(metaclass=SingletonMeta):
 
     def get_config_reducers(self) -> ConfigReducers:
         names = self.get_reducers()
+
+        if len(names) == 0:
+            return []
+
         dimensions = self.__get(StoragePath.reducers_dimensions)
 
         bands = self.__get(StoragePath.reducers_bands).asstr()
@@ -281,8 +291,13 @@ class Storage(metaclass=SingletonMeta):
         dataset = self.__get(StoragePath.files)
         return dataset.asstr()
 
-    def get_indicators(self) -> AsStrWrapper:
+    def get_indicators(self) -> Union[AsStrWrapper, List]:
         dataset = self.__get(StoragePath.indicators)
+
+        length, = dataset.shape
+        if length == 0:
+            return []
+
         return dataset.asstr()
 
     def get_indicators_values(
@@ -312,8 +327,13 @@ class Storage(metaclass=SingletonMeta):
 
         return values
 
-    def get_volumes(self) -> AsStrWrapper:
+    def get_volumes(self) -> Union[AsStrWrapper, List]:
         dataset = self.__get(StoragePath.volumes)
+
+        length, = dataset.shape
+        if length == 0:
+            return []
+
         return dataset.asstr()
 
     def get_volumes_values(
@@ -853,9 +873,14 @@ class Storage(metaclass=SingletonMeta):
         integrations: List[List[str]],
         ranges: List[List[str]],
     ) -> None:
-        bands = self.make_rectangular(bands, '')
-        integrations = self.make_rectangular(integrations, '')
-        ranges = self.make_rectangular(ranges, '')
+        if len(bands) != 0:
+            bands = self.make_rectangular(bands, '')
+
+        if len(integrations) != 0:
+            integrations = self.make_rectangular(integrations, '')
+
+        if len(ranges) != 0:
+            ranges = self.make_rectangular(ranges, '')
 
         self.__create_dataset(
             path=StoragePath.reducers,
