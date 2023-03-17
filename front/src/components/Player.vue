@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {computed, onUnmounted, ref, watch} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
+import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import {useStorage} from '../composables/useStorage';
 import {playerStore} from '../store/player.store';
@@ -19,14 +20,24 @@ function open() {
   containerRef.value?.classList.add('open');
 }
 
+const zoom = ref<number>(1);
+
+function handleWheel(event: WheelEvent) {
+  const isPositive = event.deltaY > 0;
+
+  zoom.value = isPositive ? 0 : 10;
+}
+
+watch(zoom, () => {
+  ws.value.zoom(zoom.value);
+});
+
 const src = computed(() => {
   if (playerStore.src === null) {
     return;
   }
 
-  const base = `${settings.base_path}/${settings.audio_folder}`;
-  const file = playerStore.src.replace(base, '');
-  return `${settings.audio_host}${file}`;
+  return `${settings.audio_host}${playerStore.src}`;
 });
 
 watch(playerStore, async () => {
@@ -54,6 +65,16 @@ const ws = computed(() => {
         colorMap,
         height: 256,
       }),
+      Cursor.create({
+        showTime: true,
+        opacity: 1,
+        customShowTimeStyle: {
+          'background-color': '#000',
+          'color': '#fff',
+          'padding': '2px',
+          'font-size': '10px',
+        },
+      }),
     ],
   });
 });
@@ -69,7 +90,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="containerRef" class="container close">
+  <div ref="containerRef" class="container close" @wheel="handleWheel">
     <div ref="wsRef" class="wave" />
     <div ref="sRef" class="spectro" />
   </div>
@@ -83,7 +104,7 @@ onUnmounted(() => {
   position: fixed;
   bottom: 1rem;
 
-  max-height: 26rem;
+  max-height: 30rem;
   width: 50rem;
 
   z-index: 120;

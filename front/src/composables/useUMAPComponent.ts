@@ -16,12 +16,10 @@ import {UMAPStore} from '../store/UMAP.store';
 import {
   convertColumnsToColorTypes,
 } from '../utils/convert-columns-to-color-types';
-import {copyToClipboard} from '../utils/copy-to-clipboard';
 import {isHourDuringDay} from '../utils/is-hour-during-day';
 import {mapRange} from '../utils/map-range';
 import {useColors} from './useColors';
 import {useEventListener} from './useEventListener';
-import {useNotification} from './useNotification';
 import {useStorage} from './useStorage';
 import {useUMAPFilters} from './useUMAPFilters';
 import {useUMAPMeta} from './useUMAPMeta';
@@ -32,7 +30,6 @@ export function useUMAPComponent() {
   const {colors, nightColor, dayColor, cyclingColors} = useColors();
   const {shouldBeFiltered} = useUMAPFilters();
   const {getMetaColor} = useUMAPMeta();
-  const {notify} = useNotification();
 
   let isFirstRender = true;
   let scatterGL: ScatterGL | null = null;
@@ -69,13 +66,7 @@ export function useUMAPComponent() {
       return;
     }
 
-    const {getSettings} = await useStorage();
-    const settings = await getSettings();
-
-    const path = `${settings.base_path}/${settings.audio_folder}${label}`;
-    playerStore.src = path;
-    await copyToClipboard(path);
-    notify('success', 'Audio file path copied to clipboard', path);
+    playerStore.src = label;
   }
 
   async function render() {
