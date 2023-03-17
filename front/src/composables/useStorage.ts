@@ -34,14 +34,13 @@ export async function useStorage() {
   }
 
   async function isLoaded(): Promise<boolean> {
-    try {
-      const results = await window.indexedDB.databases();
-      const names = results.map((result) => result.name);
-
-      return names.includes(mountPoint);
-    } catch {
-      return false;
-    }
+    return new Promise((resolve) => {
+      const request = window.indexedDB.open(mountPoint);
+      request.onsuccess = () => {
+        const length = request.result.objectStoreNames.length;
+        resolve(length !== 0);
+      };
+    });
   }
 
   function deleteBrowserStorage() {
