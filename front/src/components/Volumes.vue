@@ -72,5 +72,7 @@ watch(volumesValues, async () => {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
+  pointer-events: none;
 }
 </style>
