@@ -117,15 +117,18 @@ export function useUMAPComponent() {
     canvas.style.display = 'none';
     document.body.appendChild(canvas);
 
-    const image = canvas.toDataURL('image/png')
-      .replace('image/png', 'image/octet-stream');
+    setTimeout(() => {
+      const image = canvas
+        .toDataURL('image/png')
+        .replace('image/png', 'image/octet-stream');
 
-    const anchor = document.createElement('a');
-    anchor.download = 'SSE_UMAP.png';
-    anchor.href = image;
+      const anchor = document.createElement('a');
+      anchor.download = 'SSE_UMAP.png';
+      anchor.href = image;
 
-    anchor.click();
-    canvas.remove();
+      anchor.click();
+      canvas.remove();
+    }, 2000);
   }
 
   useEventListener(window, 'resize', handleResize);

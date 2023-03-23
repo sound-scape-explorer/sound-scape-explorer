@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, defineProps} from 'vue';
+import {computed} from 'vue';
 import {NButton, NDropdown} from 'naive-ui';
 import {convertToNaiveDropdownOptions} from '../utils/convert-to-naive-dropdown-options';
 import {volumesOptionsStore} from '../store/volumes-options.store';

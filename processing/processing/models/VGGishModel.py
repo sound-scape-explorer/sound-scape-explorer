@@ -133,7 +133,7 @@ class VGGishModel(AbstractModel, VGG):
         x: Tensor,
     ) -> Tensor:
         if self.__sample_rate is None:
-            raise AttributeError(f'VGGish: Sample rate is not defined.')
+            raise AttributeError('VGGish: Sample rate is not defined.')
 
         converted_x = x.to(device=self.device)
         x = self.__convert_wav_to_examples(converted_x)

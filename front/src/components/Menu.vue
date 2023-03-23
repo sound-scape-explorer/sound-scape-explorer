@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {useMenuComponent} from '../composables/useMenuComponent';
 import {NLayoutSider, NMenu} from 'naive-ui';
-import MenuVersion from './MenuVersion.vue';
+import {useMenuComponent} from '../composables/useMenuComponent';
 
 const {
   close,
@@ -30,6 +29,5 @@ const {
         :options="options"
         :value="currentRoute"
     />
-    <MenuVersion />
   </n-layout-sider>
 </template>

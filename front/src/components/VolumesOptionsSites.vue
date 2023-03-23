@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, defineProps} from 'vue';
+import {computed} from 'vue';
 import {NSelect} from 'naive-ui';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 import {volumesOptionsStore} from '../store/volumes-options.store';

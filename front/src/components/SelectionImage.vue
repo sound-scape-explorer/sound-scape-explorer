@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import {computed} from 'vue';
-import Button from './Button.vue';
 import {ImageOutline} from '@vicons/ionicons5';
+import {computed} from 'vue';
 import {selectionImageStore} from '../store/selection-image.store';
+import Button from './Button.vue';
 
 /**
  * Props
@@ -24,6 +24,3 @@ const isDisabled = computed<boolean>(() => selectionImageStore.image === null);
     <image-outline />
   </Button>
 </template>
-
-<style lang="scss" scoped>
-</style>

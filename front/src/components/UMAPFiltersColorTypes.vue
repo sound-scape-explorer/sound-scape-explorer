@@ -34,7 +34,7 @@ const naiveOptions = computed(() => convertToNaiveSelectOptions(options.value));
 </script>
 
 <template>
-  <n-tooltip placement="top" trigger="hover">
+  <n-tooltip placement="bottom" trigger="hover">
     <template #trigger>
       <n-select
           v-model:value="UMAPFiltersStore.colorType"

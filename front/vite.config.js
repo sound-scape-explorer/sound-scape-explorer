@@ -18,11 +18,12 @@ export default defineConfig({
       output: {
         manualChunks: {
           'audiobuffer-slice': ['audiobuffer-slice'],
+          'colormap': ['colormap'],
           'chroma-js': ['chroma-js'],
           'dayjs': ['dayjs'],
           'h5wasm': ['h5wasm'],
-          'highcharts': ['highcharts'],
-          'highcharts-vue': ['highcharts-vue'],
+          // 'highcharts': ['highcharts'],
+          // 'highcharts-vue': ['highcharts-vue'],
           'html2canvas': ['html2canvas'],
           'simple-statistics': ['simple-statistics'],
           'three': ['three'],
@@ -39,5 +40,10 @@ export default defineConfig({
       src: fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  plugins: [wasm(), topLevelAwait(), vue(), analyzer({summaryOnly: true})],
+  plugins: [
+    wasm(),
+    topLevelAwait(),
+    vue(),
+    analyzer({summaryOnly: true}),
+  ],
 });
