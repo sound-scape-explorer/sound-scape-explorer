@@ -38,6 +38,7 @@ packaging==23.0
 pandas==1.5.3
 Pillow==9.4.0
 pycparser==2.21
+pynndescent==0.5.8
 pyparsing==3.0.9
 python-dateutil==2.8.2
 pytz==2022.7.1
@@ -59,4 +60,5 @@ tqdm==4.65.0
 triton==2.0.0
 typing_extensions==4.5.0
 umap==0.1.1
+umap-learn==0.5.3
 zipp==3.15.0

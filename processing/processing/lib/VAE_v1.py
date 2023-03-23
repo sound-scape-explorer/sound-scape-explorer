@@ -19,8 +19,8 @@ from torch.utils.data import DataLoader, Dataset
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def load_data(X):
-    df = pd.DataFrame(X)
+def load_data(x):
+    df = pd.DataFrame(x)
     # replace nan with -99
     df = df.fillna(-99)
     x = df.values.reshape(-1, df.shape[1]).astype('float32')
@@ -30,15 +30,15 @@ def load_data(X):
     return x, standardizer
 
 
-def numpyToTensor(x):
+def numpy_to_tensor(x):
     x_train = torch.from_numpy(x).to(device)
     return x_train
 
 
 class DataBuilder(Dataset):
-    def __init__(self, X):
-        self.x, self.standardizer = load_data(X)
-        self.x = numpyToTensor(self.x)
+    def __init__(self, x):
+        self.x, self.standardizer = load_data(x)
+        self.x = numpy_to_tensor(self.x)
         self.len = self.x.shape[0]
 
     def __getitem__(self, index):
@@ -49,26 +49,31 @@ class DataBuilder(Dataset):
 
 
 class Autoencoder(nn.Module):
-    def __init__(self, D_in, H=[64, 32], latent_dim=2):
+    def __init__(
+        self,
+        d_in,
+        h=[64, 32],  # TODO: This argument is mutable.
+        latent_dim=2,
+    ):
 
         # Encoder
         super(Autoencoder, self).__init__()
         # input layer
-        self.linear1 = nn.Linear(D_in, H[0])
-        self.lin_bn1 = nn.BatchNorm1d(num_features=H[0])
+        self.linear1 = nn.Linear(d_in, h[0])
+        self.lin_bn1 = nn.BatchNorm1d(num_features=h[0])
 
         # hidden layers
         self.HiddenLayersIn = []
-        for i in range(len(H) - 1):
-            self.linear2 = nn.Linear(H[i], H[i + 1]).to(device)
-            self.lin_bn2 = nn.BatchNorm1d(num_features=H[i + 1]).to(device)
+        for i in range(len(h) - 1):
+            self.linear2 = nn.Linear(h[i], h[i + 1]).to(device)
+            self.lin_bn2 = nn.BatchNorm1d(num_features=h[i + 1]).to(device)
             self.HiddenLayersIn.append([self.linear2, self.lin_bn2])
 
-        self.linear3 = nn.Linear(H[-1], H[-1])
-        self.lin_bn3 = nn.BatchNorm1d(num_features=H[-1])
+        self.linear3 = nn.Linear(h[-1], h[-1])
+        self.lin_bn3 = nn.BatchNorm1d(num_features=h[-1])
 
         #         # Latent vectors mu and sigma
-        self.fc1 = nn.Linear(H[-1], latent_dim)
+        self.fc1 = nn.Linear(h[-1], latent_dim)
         self.bn1 = nn.BatchNorm1d(num_features=latent_dim)
         self.fc21 = nn.Linear(latent_dim, latent_dim)
         self.fc22 = nn.Linear(latent_dim, latent_dim)
@@ -76,34 +81,34 @@ class Autoencoder(nn.Module):
         #         # Sampling vector
         self.fc3 = nn.Linear(latent_dim, latent_dim)
         self.fc_bn3 = nn.BatchNorm1d(latent_dim)
-        self.fc4 = nn.Linear(latent_dim, H[-1])
-        self.fc_bn4 = nn.BatchNorm1d(H[-1])
+        self.fc4 = nn.Linear(latent_dim, h[-1])
+        self.fc_bn4 = nn.BatchNorm1d(h[-1])
 
         #         # Decoder
-        self.linear4 = nn.Linear(H[-1], H[-1])
-        self.lin_bn4 = nn.BatchNorm1d(num_features=H[-1])
+        self.linear4 = nn.Linear(h[-1], h[-1])
+        self.lin_bn4 = nn.BatchNorm1d(num_features=h[-1])
 
         self.HiddenLayersOut = []
-        for i in range(len(H) - 1, 0, -1):
-            self.linear5 = nn.Linear(H[i], H[i - 1]).to(device)
-            self.lin_bn5 = nn.BatchNorm1d(num_features=H[i - 1]).to(device)
+        for i in range(len(h) - 1, 0, -1):
+            self.linear5 = nn.Linear(h[i], h[i - 1]).to(device)
+            self.lin_bn5 = nn.BatchNorm1d(num_features=h[i - 1]).to(device)
             self.HiddenLayersOut.append([self.linear5, self.lin_bn5])
 
         # output layer
-        self.linear6 = nn.Linear(H[0], D_in)
-        self.lin_bn6 = nn.BatchNorm1d(num_features=D_in)
+        self.linear6 = nn.Linear(h[0], d_in)
+        self.lin_bn6 = nn.BatchNorm1d(num_features=d_in)
 
         self.relu = nn.ReLU()
 
     def encode(self, x):
         lin1 = self.relu(self.lin_bn1(self.linear1(x)))
-        linLast = lin1
+        lin_last = lin1
         for i in range(len(self.HiddenLayersIn)):
-            linLast = self.relu(
+            lin_last = self.relu(
                 self.HiddenLayersIn[i][1] \
-                    (self.HiddenLayersIn[i][0](linLast))
+                    (self.HiddenLayersIn[i][0](lin_last))
             )
-        lin3 = self.relu(self.lin_bn3(self.linear3(linLast)))
+        lin3 = self.relu(self.lin_bn3(self.linear3(lin_last)))
 
         fc1 = F.relu(self.bn1(self.fc1(lin3)))
         r1 = self.fc21(fc1)
@@ -124,13 +129,13 @@ class Autoencoder(nn.Module):
 
         fc4 = self.relu(self.fc_bn4(self.fc4(fc3)))
         lin4 = self.relu(self.lin_bn4(self.linear4(fc4)))
-        linLast = lin4
+        lin_last = lin4
         for i in range(len(self.HiddenLayersOut)):
-            linLast = self.relu(
+            lin_last = self.relu(
                 self.HiddenLayersOut[i][1] \
-                    (self.HiddenLayersOut[i][0](linLast))
+                    (self.HiddenLayersOut[i][0](lin_last))
             )
-        return self.lin_bn6(self.linear6(linLast))
+        return self.lin_bn6(self.linear6(lin_last))
 
     def forward(self, x):
         mu, logvar = self.encode(x)
@@ -138,16 +143,16 @@ class Autoencoder(nn.Module):
         return self.decode(z), mu, logvar
 
 
-class customLoss(nn.Module):
+class custom_loss(nn.Module):
     def __init__(self):
-        super(customLoss, self).__init__()
+        super(custom_loss, self).__init__()
         self.mse_loss = nn.MSELoss(reduction="sum")
 
     def forward(self, x_recon, x, mu, logvar):
-        loss_MSE = self.mse_loss(x_recon, x)
-        loss_KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+        loss_mse = self.mse_loss(x_recon, x)
+        loss_kld = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
 
-        return loss_MSE + loss_KLD
+        return loss_mse + loss_kld
 
 
 def weights_init_uniform_rule(m):
@@ -193,34 +198,36 @@ def train(epoch, trainloader, model, optimizer, loss_mse):
 # training
 class VAE():
     def __init__(
-        self, n_components=None,
-        HiddenLayers_dim=[64, 32],
+        self,
+        n_components=None,
+        hidden_layers_dim=[64, 32],  # TODO: This argument can mutate.
         lr=1e-3,
         epochs=1500
     ):
         self.n_components = n_components
-        self.HiddenLayers_dim = HiddenLayers_dim
+        self.hidden_layers_dim = hidden_layers_dim
         self.lr = lr
         self.epochs = epochs
 
-    def fit(self, X, y=None):
-        data_set = DataBuilder(X)
+    def fit(self, x):
+        data_set = DataBuilder(x)
         self.trainloader = DataLoader(dataset=data_set, batch_size=32)
-        self.D_in = data_set.x.shape[1]
-        if self.n_components == None:
-            self.D_out = self.D_in
+        self.d_in = data_set.x.shape[1]
+
+        if self.n_components is None:
+            self.d_out = self.d_in
         else:
-            self.D_out = self.n_components
+            self.d_out = self.n_components
 
         self.model = Autoencoder(
-            self.D_in,
-            H=self.HiddenLayers_dim,
-            latent_dim=self.D_out
+            self.d_in,
+            h=self.hidden_layers_dim,
+            latent_dim=self.d_out
         ).to(device)
         self.model.apply(weights_init_uniform_rule)
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
-        self.loss_mse = customLoss()
-        self.epochs = self.epochs
+        self.loss_mse = custom_loss()
+        # self.epochs = self.epochs # TODO: This is likely a bug. To remove.
         # log_interval = 50
         # val_losses = []
         # train_losses = []
@@ -235,8 +242,8 @@ class VAE():
             self.loss_mse
         )
 
-    def transform(self, X):
-        data_set = DataBuilder(X)
+    def transform(self, x):
+        data_set = DataBuilder(x)
         trainloader = DataLoader(dataset=data_set, batch_size=1024)
         # evaluate
         self.model.eval()

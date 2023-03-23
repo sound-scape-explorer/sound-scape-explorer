@@ -1,10 +1,10 @@
 <script lang="ts" setup="">
-import {defineProps, ref, watch} from 'vue';
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
-import {UMAPMetaStore} from '../store/UMAP-meta.store';
-import {useUMAPStatus} from '../composables/useUMAPStatus';
+import {ref, watch} from 'vue';
 import {useUMAPMeta} from '../composables/useUMAPMeta';
+import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
+import {UMAPMetaStore} from '../store/UMAP-meta.store';
 
 /**
  * Props

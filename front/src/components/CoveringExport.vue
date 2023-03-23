@@ -15,7 +15,3 @@ async function handleClick() {
     <download-outline />
   </Button>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

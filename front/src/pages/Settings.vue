@@ -1,14 +1,20 @@
 <script lang="ts" setup>
-import {NCheckbox} from 'naive-ui';
-import Title from '../components/Title.vue';
+import {NCheckbox, NSelect} from 'naive-ui';
+import {computed} from 'vue';
+import type {ColorMap} from '../store/player.store';
+import {playerStore} from '../store/player.store';
 import {settingsStore} from '../store/settings.store';
+import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 
-//
+const colorMaps: ColorMap[] = [
+  'hot',
+  'jet',
+];
+
+const colorMapsOptions = computed(() => convertToNaiveSelectOptions(colorMaps));
 </script>
 
 <template>
-  <Title text="Settings" />
-
   <div class="settings">
     <div>
       <h2>
@@ -26,7 +32,15 @@ import {settingsStore} from '../store/settings.store';
         </n-checkbox>
       </div>
 
-      <hr>
+      <div>
+        <n-select
+            v-model:value="playerStore.colorMap"
+            :default-value="playerStore.colorMap"
+            :options="colorMapsOptions"
+            size="tiny"
+        />
+      </div>
+
     </div>
 
     <div>
@@ -45,8 +59,8 @@ import {settingsStore} from '../store/settings.store';
         </n-checkbox>
       </div>
 
-      <hr>
     </div>
+
     <div>
       <h2>
         Reductions CSV export settings
@@ -62,8 +76,6 @@ import {settingsStore} from '../store/settings.store';
         <n-checkbox v-model:checked="settingsStore.umap.export.points" class="checkbox">Points</n-checkbox>
         <n-checkbox v-model:checked="settingsStore.umap.export.features" class="checkbox">Features</n-checkbox>
       </div>
-
-      <hr>
     </div>
   </div>
 </template>

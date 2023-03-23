@@ -16,7 +16,7 @@ import torch
 eps = 1e-12
 
 
-def torch_Leq(waveform, sample_rate, dt=0.125, ref=1):
+def torch_leq(waveform, sample_rate, dt=0.125, ref=1):
     '''
     computes the Leq Tensor from a torch Tensor such as given by torchaudio.load
     waveform, sample_rate = torchaudio.load(file_path)
@@ -37,22 +37,28 @@ def torch_Leq(waveform, sample_rate, dt=0.125, ref=1):
     '''
     dn = int(dt * sample_rate)
     n_ch, l_sig = waveform.shape
-    n_Leq = l_sig // dn
-    if n_Leq >= 1:
-        waveform = waveform[:, :n_Leq * dn]
-        waveform = waveform.reshape([n_ch, n_Leq, dn])
-        shortTime_Leq = 10 * torch.log10(
+    n_leq = l_sig // dn
+    if n_leq >= 1:
+        waveform = waveform[:, :n_leq * dn]
+        waveform = waveform.reshape([n_ch, n_leq, dn])
+        short_time_leq = 10 * torch.log10(
             torch.nanmean(waveform ** 2, -1) / (ref ** 2) + eps
-            )
+        )
     else:
         warnings.warn(
             "Too few wav samples according to the Leq integration time"
-            )
-        shortTime_Leq = torch.empty([n_ch, n_Leq])
-    return shortTime_Leq
+        )
+        short_time_leq = torch.empty([n_ch, n_leq])
+    return short_time_leq
 
 
-def numpy_Leq(waveform, sample_rate, dt=0.125, ref=1, freqLim=[]):
+def numpy_leq(
+    waveform,
+    sample_rate,
+    dt=0.125,
+    ref=1,
+    freq_lim=[],  # TODO: This argument is mutable.
+):
     '''
     computes the Leq np.array from a np.array such as given by
     scipy.io.wavfile.read
@@ -73,58 +79,58 @@ def numpy_Leq(waveform, sample_rate, dt=0.125, ref=1, freqLim=[]):
     Leq np.array[nb_channels, nb_Leq _values]
 
     '''
-    if len(freqLim) == 2:
-        if freqLim[0] > 0:
-            PHFiltre = signal.butter(
+    if len(freq_lim) == 2:
+        if freq_lim[0] > 0:
+            ph_filtre = signal.butter(
                 5,
-                freqLim[0],
+                freq_lim[0],
                 btype='highpass',
                 output='sos',
                 fs=sample_rate
-                )
+            )
             waveform = signal.sosfiltfilt(
-                PHFiltre,
+                ph_filtre,
                 waveform,
                 axis=-1,
                 padtype='odd',
                 padlen=None
-                )
-        if freqLim[1] < sample_rate:
-            PBFiltre = signal.butter(
+            )
+        if freq_lim[1] < sample_rate:
+            pb_filtre = signal.butter(
                 5,
-                freqLim[1],
+                freq_lim[1],
                 btype='lowpass',
                 output='sos',
                 fs=sample_rate
-                )
+            )
             waveform = signal.sosfiltfilt(
-                PBFiltre,
+                pb_filtre,
                 waveform,
                 axis=-1,
                 padtype='odd',
                 padlen=None
-                )
+            )
 
     dn = int(dt * sample_rate)
     if len(waveform.shape) == 1:
         waveform = np.reshape(waveform, (len(waveform), 1))
     l_sig, n_ch = waveform.shape
-    n_Leq = l_sig // dn
-    if n_Leq >= 1:
-        waveform = waveform[:n_Leq * dn, :]
-        waveform = waveform.reshape([n_Leq, dn, n_ch])
-        shortTime_Leq = 10 * np.log10(
+    n_leq = l_sig // dn
+    if n_leq >= 1:
+        waveform = waveform[:n_leq * dn, :]
+        waveform = waveform.reshape([n_leq, dn, n_ch])
+        short_time_leq = 10 * np.log10(
             np.nanmean(waveform ** 2, 1) / (ref ** 2) + eps
-            )
+        )
     else:
         warnings.warn(
             "Too few wav samples according to the Leq integration time"
-            )
-        shortTime_Leq = np.empty((0,) * 2)
-    return shortTime_Leq
+        )
+        short_time_leq = np.empty((0,) * 2)
+    return short_time_leq
 
 
-def energyFractFromSpect(waveform, sample_rate, dt=1.):
+def energy_fract_from_spect(waveform, sample_rate, dt=1.):
     '''
     Parameters
     ----------
@@ -171,35 +177,42 @@ def energyFractFromSpect(waveform, sample_rate, dt=1.):
     freq = fftpack.fftfreq(dnfft, d=1 / sample_rate)
     freq = freq[1:int(np.ceil((dnfft) / 2))]
     # cumulative energie per frequency steps
-    cumFourier = np.cumsum(fourierform, axis=0)
+    cum_fourier = np.cumsum(fourierform, axis=0)
 
-    return fourierform, cumFourier, np.array(freq)
+    return fourierform, cum_fourier, np.array(freq)
 
 
-def statisticalLeq(shortTime_Leq, stat=None):
+def statistical_leq(short_time_leq, stat=None):
     if stat == None:
-        Leq_stat = 10 * np.log10(np.mean(10 ** (shortTime_Leq / 10)))
+        leq_stat = 10 * np.log10(np.mean(10 ** (short_time_leq / 10)))
     else:
-        Leq_stat = np.quantile(shortTime_Leq, 1 - stat / 100)
-    return Leq_stat
+        leq_stat = np.quantile(short_time_leq, 1 - stat / 100)
+    return leq_stat
 
 
-def statisticalPowerSpectrum(cumFourier, freq, stat, channel=0, freqLim=[]):
-    cumFourier2 = cumFourier[:, channel]
-    if len(freqLim) == 2:
-        cumFourier2 = cumFourier2[(freq >= freqLim[0]) * (freq <= freqLim[1])]
-        freq = freq[(freq >= freqLim[0]) * (freq <= freqLim[1])]
-    Spect_stat = cumFourier2[-1] * (stat / 100)
-    freq_stat = float(freq[cumFourier2 <= Spect_stat][-1])
+def statistical_power_spectrum(
+    cum_fourier,
+    freq,
+    stat,
+    channel=0,
+    freq_lim=[],  # TODO: This argument is mutable.
+):
+    cum_fourier2 = cum_fourier[:, channel]
+    if len(freq_lim) == 2:
+        cum_fourier2 = cum_fourier2[
+            (freq >= freq_lim[0]) * (freq <= freq_lim[1])]
+        freq = freq[(freq >= freq_lim[0]) * (freq <= freq_lim[1])]
+    spect_stat = cum_fourier2[-1] * (stat / 100)
+    freq_stat = float(freq[cum_fourier2 <= spect_stat][-1])
     return freq_stat
 
 
-def energyRatio(fourierform, freq, freqLim, channel=0, ratioLevel=0.5):
+def energy_ratio(fourierform, freq, freq_lim, channel=0, ratio_level=0.5):
     fourierform = fourierform[:, channel]
-    centerFreq = (freqLim[1] - freqLim[0]) * ratioLevel + freqLim[0]
-    fourierformA = fourierform[(freq >= freqLim[0]) * (freq <= centerFreq)]
-    fourierformB = fourierform[(freq >= centerFreq) * (freq <= freqLim[1])]
-    nrjRatio = 10 * np.log10(np.mean(fourierformA)) - 10 * np.log10(
-        np.mean(fourierformB)
-        )
-    return nrjRatio
+    center_freq = (freq_lim[1] - freq_lim[0]) * ratio_level + freq_lim[0]
+    fourier_form_a = fourierform[(freq >= freq_lim[0]) * (freq <= center_freq)]
+    fourier_form_b = fourierform[(freq >= center_freq) * (freq <= freq_lim[1])]
+    nrj_ratio = 10 * np.log10(np.mean(fourier_form_a)) - 10 * np.log10(
+        np.mean(fourier_form_b)
+    )
+    return nrj_ratio

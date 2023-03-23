@@ -393,6 +393,52 @@ export async function useStorage() {
     });
   }
 
+  async function getIndicatorsValues(
+    band: string,
+    integration: string,
+    groupIndex: number,
+  ): Promise<number[]> {
+    return await read(async () => {
+      const file = getFile();
+      const seconds = getSecondsFromIntegration(file, integration);
+      const indicators = await getIndicators();
+
+      const values = [];
+
+      for (const i in indicators) {
+        const path = `${StoragePath.indicator_}${i}/${band}/${seconds}/${groupIndex}`;
+        const dataset = file.get(path) as Dataset;
+        const array = dataset.to_array() as number[];
+        values.push(array[groupIndex]);
+      }
+
+      return values;
+    });
+  }
+
+  async function getVolumesValues(
+    band: string,
+    integration: string,
+    groupIndex: number,
+  ): Promise<number[]> {
+    return await read(async () => {
+      const file = getFile();
+      const seconds = getSecondsFromIntegration(file, integration);
+      const volumes = await getVolumes();
+
+      const values = [];
+
+      for (const v in volumes) {
+        const path = `${StoragePath.volume_}${v}/${band}/${seconds}/${groupIndex}`;
+        const dataset = file.get(path) as Dataset;
+        const array = dataset.to_array() as number[];
+        values.push(array[groupIndex]);
+      }
+
+      return values;
+    });
+  }
+
   async function getReducedFeatures(
     reducer: number,
     band: string,
@@ -439,7 +485,9 @@ export async function useStorage() {
     getGroupIndexAndSeconds,
     getReducers,
     getReducedFeatures,
-    getVolumes,
     getIndicators,
+    getIndicatorsValues,
+    getVolumes,
+    getVolumesValues,
   };
 }

@@ -4,6 +4,13 @@ services:
     ports:
       - "8080:8080"
 
+  audio:
+    image: ghcr.io/sound-scape-explorer/audio:latest
+    volumes:
+      - ${AUDIO_FOLDER}:/mount/audio
+    ports:
+      - "3000:3000"
+
   processing:
     image: ghcr.io/sound-scape-explorer/processing:next
     volumes:

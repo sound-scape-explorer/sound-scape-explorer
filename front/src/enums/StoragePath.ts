@@ -32,4 +32,11 @@ export enum StoragePath {
   grouped_timestamps = '/grouped_timestamps',
   // Reduced
   reduced_ = '/reduced_',
+
+  // Indicators
+  indicator_ = '/indicator_',
+
+  // Volumes
+
+  volume_ = '/volume_',
 }
