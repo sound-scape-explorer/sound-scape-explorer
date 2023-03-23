@@ -81,7 +81,7 @@ const ws = computed(() => {
   }
 
   if (ws.value) {
-    ws.value.destroy();
+    ws.value.empty();
   }
 
   return WaveSurfer.create({
