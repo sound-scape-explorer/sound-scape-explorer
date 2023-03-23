@@ -17,8 +17,8 @@ services:
       - ${PROJECT_FOLDER}:/mount/project
       - ${STORAGE_FOLDER}:/mount/storage
     command:
-      - -c/mount/project/${PROJECT_NAME}
-      - -s/mount/storage/${STORAGE_NAME}
+      - -c/mount/project/${PROJECT_FILE}
+      - -s/mount/storage/${STORAGE_FILE}
     deploy:
       resources:
         reservations:
