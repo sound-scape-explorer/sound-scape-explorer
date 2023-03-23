@@ -1,3 +1,10 @@
+## [7.2.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.2.0...v7.2.1) (2023-03-23)
+
+
+### Bug Fixes
+
+* **Docker:** Use correct env variables ([d97454e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d97454ee26ec1681e532f4bf2fbd176b73c55762))
+
 # [7.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.1.0...v7.2.0) (2023-03-23)
 
 
