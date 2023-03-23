@@ -253,8 +253,6 @@ export function useUMAPExport() {
       dimensions = Object.values(results)[0].point.length;
     }
 
-    console.log(dimensions);
-
     if (type === 'json') {
       const json = convertObjectToJsonString(results);
 
