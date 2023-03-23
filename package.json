@@ -20,5 +20,5 @@
     "concurrently": "^7.4.0",
     "rimraf": "^3.0.2"
   },
-  "version": "7.1.0"
+  "version": "7.2.0"
 }

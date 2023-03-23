@@ -1,3 +1,34 @@
+# [7.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.1.0...v7.2.0) (2023-03-23)
+
+
+### Bug Fixes
+
+* **Audio:** Use non root docker user ([a16c18c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a16c18c189ca44c464f8683efc303dc7ea53aa0c))
+* **Front/Player:** Empty on unmount instead of destroy ([4a4baa3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4a4baa3d012619992a508808b6de8416327c62c4))
+* **Front:** Fix dev build command + Improve commands ([924d0d8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/924d0d8de9dca7af1f76c79df7f73c0502759d58))
+* **Front:** Fix exploration export + Remove `tags` setting and filter ([02acd2f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/02acd2f2ee0731599d2d405cfc65077085287e57))
+* **Front:** Fix typo in Dockerfile ([6eaa11a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6eaa11ae6dbacb72d5a7e6f7571248aaafc501f0))
+* **Front:** Let mouse events through `Indicators` and `Volumes` ([679ede9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/679ede9f8f07a4862f01095c94e892a64ab61bf0))
+* **Front:** Remove debugging code ([1725cbc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1725cbcb559861256fe2c56ba146a3b5ab0a94d6))
+* **Front:** Update storage existence check to be compatible with all browsers ([c6599a3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c6599a39012d015afd907eb77ac48baa0c343f7c))
+* **Processing/Storage:** Handle empty actions in configuration file (reducers, indicators and volumes) ([8f74451](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8f74451c4e3af2fc3868d15b5dab54cffa86aad5))
+
+
+### Features
+
+* Add `audio_host` user setting ([979f197](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/979f19784f6210a5e6bc78cb42afd824320c4556))
+* Add `audio` package for hosting audio files + Improve `front` player + Add `front` `indicators` and `volumes` Improve and clean code and builds ([8ee3c85](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8ee3c85e191a66b23b5b78ff2c95cef72d777d80))
+* Add `audio` package for hosting audio files + Improve `front` player + Add `front` `indicators` and `volumes` Improve and clean code and builds ([9a3ff1d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9a3ff1defa827bb0e10c5536593b904d8a9f12cd))
+* **Front/Player:** Add scratch version of player for waveform and spectrogram display ([1953790](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1953790242d20902dc429f0364e329c434182e74))
+* **Front/Player:** Add zoom change on wheel + Add time cursor + Improve source declaration ([a57c077](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a57c077f3b0cc4871270a0c0c71e88f9d725fad3))
+* **Front/Player:** Filter audio output + Display basic details ([9131f54](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9131f54b7e079f8c704f5061feff01834b02f3f5))
+* **Front/Player:** Listen to specific part of the audio ([eb61a3f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb61a3f98f6f8df261ed381ecc6572af669b3a59))
+
+
+### Performance Improvements
+
+* **Front/Builds:** Add `wavesurfer` to code splitting ([66bced7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/66bced7911f0fc0ba0666c3e402cc7ac20cda796))
+
 # [7.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.0.0...v7.1.0) (2023-03-16)
 
 
