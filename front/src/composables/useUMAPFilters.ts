@@ -1,5 +1,4 @@
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
-import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import type {UMAPMetaStoreInterface} from '../store/UMAP-meta.store';
 import {UMAPMetaStore} from '../store/UMAP-meta.store';
 import type {
@@ -8,7 +7,6 @@ import type {
 import {UMAPQueryComplexStore} from '../store/UMAP-query-complex.store';
 import {UMAPQueryStore} from '../store/UMAP-query.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
-import {getArraysIntersection} from '../utils/get-arrays-intersection';
 import {useUMAPDataset} from './useUMAPDataset';
 
 export function useUMAPFilters() {
@@ -26,31 +24,6 @@ export function useUMAPFilters() {
 
     // noinspection RedundantIfStatementJS
     if (matches.includes(elementLabel)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  function isVisibleByTags(index: number): boolean {
-    const {tags} = UMAPFiltersStore;
-
-    if (tags.length === 0) {
-      return true;
-    }
-
-    const {dataset} = UMAPDatasetStore;
-    const elementTags = dataset?.metadata[index]['tags'] as string;
-    const elementLabel = dataset?.metadata[index]['label'] as string;
-
-    const tagsIntersection = getArraysIntersection([tags, elementTags.split(' ')]);
-
-    if (tagsIntersection.length !== 0) {
-      return true;
-    }
-
-    // noinspection RedundantIfStatementJS
-    if (tags.includes(elementLabel)) {
       return true;
     }
 
@@ -209,8 +182,7 @@ export function useUMAPFilters() {
     index: number,
     metaProperties: string[],
   ): boolean {
-    return !isVisibleByTags(index)
-      || !isVisibleByTimeRange(index)
+    return !isVisibleByTimeRange(index)
       || !isVisibleByQuery(index)
       || !isVisibleByMeta(index)
       || !isVisibleByQueryComplex(index, metaProperties);

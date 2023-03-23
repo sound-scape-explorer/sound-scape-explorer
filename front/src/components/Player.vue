@@ -41,7 +41,7 @@ function close() {
   containerRef.value?.classList.add('close');
   playerStore.src = null;
   playerStore.timestamp = null;
-  ws.value.empty();
+  empty();
 }
 
 function open() {
@@ -75,14 +75,16 @@ const colors = colormap({
   format: 'float',
 });
 
+function empty() {
+  // ws.value && ws.value.empty();
+}
+
 const ws = computed(() => {
   if (!frequencies.value) {
     return;
   }
 
-  if (ws.value) {
-    ws.value.empty();
-  }
+  empty();
 
   return WaveSurfer.create({
     container: wsRef.value,

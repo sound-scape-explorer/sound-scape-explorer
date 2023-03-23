@@ -1,3 +1,4 @@
 export function getIntegratedIndex(index: number, filesLength: number): number {
-  return Math.floor(index / filesLength) % filesLength;
+  const length = filesLength + 1;
+  return Math.floor(index / length) % length;
 }

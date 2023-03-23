@@ -257,22 +257,17 @@ export async function useStorage() {
 
   async function getGroupedFeatures(
     band: string,
-    integrations: string,
+    integration: string,
     fileIndex: number,
-    timestamp: number,
+    groupIndex: number,
   ): Promise<number[]> {
     return await read(async () => {
-      const groupTimestamps = await getGroupedTimestamps(band, integrations);
-      const timestamps = groupTimestamps.flat();
-      const index = timestamps.indexOf(timestamp);
-
       const file = getFile();
-      const integration = getSecondsFromIntegration(file, integrations);
-      const path = `${StoragePath.grouped_features}/${band}/${integration}/${fileIndex}`;
-      const groupFeatures = file.get(path) as Dataset;
-      const features = groupFeatures.to_array() as number[][];
-
-      return features[index % integration];
+      const seconds = getSecondsFromIntegration(file, integration);
+      const path = `${StoragePath.grouped_features}/${band}/${seconds}/${fileIndex}`;
+      const features = file.get(path) as Dataset;
+      const array = features.to_array() as number[][];
+      return array[groupIndex];
     });
   }
 

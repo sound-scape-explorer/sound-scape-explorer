@@ -6,7 +6,6 @@ import UMAPAlphas from '../components/UMAPAlphas.vue';
 import UMAPExport from '../components/UMAPExport.vue';
 import UMAPFiltersColorScales from '../components/UMAPFiltersColorScales.vue';
 import UMAPFiltersColorTypes from '../components/UMAPFiltersColorTypes.vue';
-import UMAPFiltersTags from '../components/UMAPFiltersTags.vue';
 import UMAPLegend from '../components/UMAPLegend.vue';
 import UMAPQuery from '../components/UMAPQuery.vue';
 import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
@@ -32,7 +31,6 @@ const {delayUpdate} = useUMAPPage();
       </div>
 
       <div class="row">
-        <UMAPFiltersTags />
         <UMAPQuery />
         <UMAPQueryComplex />
 
@@ -76,7 +74,7 @@ const {delayUpdate} = useUMAPPage();
 
 .row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr) 11rem;
+  grid-template-columns: repeat(3, 1fr) 11rem;
   gap: 0.8rem;
   justify-items: center;
   align-items: center;

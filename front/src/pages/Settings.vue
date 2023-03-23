@@ -71,7 +71,6 @@ const colorMapsOptions = computed(() => convertToNaiveSelectOptions(colorMaps));
       <div class="checkboxes">
         <n-checkbox v-model:checked="settingsStore.umap.export.labels" class="checkbox">Labels</n-checkbox>
         <n-checkbox v-model:checked="settingsStore.umap.export.timestamps" class="checkbox">Timestamps</n-checkbox>
-        <n-checkbox v-model:checked="settingsStore.umap.export.tags" class="checkbox">Tags</n-checkbox>
         <n-checkbox v-model:checked="settingsStore.umap.export.meta" class="checkbox">Meta</n-checkbox>
         <n-checkbox v-model:checked="settingsStore.umap.export.points" class="checkbox">Points</n-checkbox>
         <n-checkbox v-model:checked="settingsStore.umap.export.features" class="checkbox">Features</n-checkbox>

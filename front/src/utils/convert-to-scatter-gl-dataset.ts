@@ -1,11 +1,10 @@
 import type {Point2D, PointMetadata} from '../lib/scatter-gl-0.0.13';
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
 
-interface MyMetadata {
+export interface ScatterMetadata {
   labelIndex: number;
   label: string;
   timestamp: number;
-  tags: string;
   metaValues: string[];
 }
 
@@ -18,7 +17,7 @@ interface Props {
 
 export function convertToScatterGlDataset(props: Props) {
   const dataPoints: Point2D[] = props.features.flat() as unknown as Point2D[];
-  const metadata: MyMetadata[] = [];
+  const metadata: ScatterMetadata[] = [];
   const integrations = props.features.flat().length / props.features.length;
   let count = 0;
 
@@ -29,13 +28,11 @@ export function convertToScatterGlDataset(props: Props) {
     for (let j = 0; j < integrations; j += 1) {
       const labelIndex = count;
       const timestamp = props.timestamps[labelIndex];
-      const tags = '';
 
       metadata.push({
         label,
         labelIndex,
         timestamp,
-        tags,
         metaValues,
       });
 
