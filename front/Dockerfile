@@ -19,7 +19,7 @@ COPY src src
 RUN yarn build
 
 # Dependencies
-FROM node:lts-alpine as dependencies
+FROM node:lts-alpine AS dependencies
 
 WORKDIR /app
 
