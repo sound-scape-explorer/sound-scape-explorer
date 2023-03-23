@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {NButton, NIcon} from 'naive-ui';
-import {defineProps, useSlots} from 'vue';
+import {useSlots} from 'vue';
 
 interface Props {
   handleClick: () => void;

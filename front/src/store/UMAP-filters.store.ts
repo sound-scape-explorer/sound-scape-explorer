@@ -10,13 +10,11 @@ export type UMAPFiltersColorType =
   | string
 
 export interface UMAPFiltersStoreInterface {
-  tags: string[];
   colorType: UMAPFiltersColorType;
   colorScale: string;
 }
 
 export const UMAPFiltersStore = reactive<UMAPFiltersStoreInterface>({
-  tags: [],
   colorType: 'labelIndex',
   colorScale: 'Dark2',
 });

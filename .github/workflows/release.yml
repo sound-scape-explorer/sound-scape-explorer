@@ -36,7 +36,7 @@ jobs:
             aggregate-error
 
       - name: Build `front` package
-        run: cd front && yarn && yarn build && cd ..
+        run: cd front && yarn && yarn build:prod && cd ..
 
       - name: Release
         run: semantic-release -b main

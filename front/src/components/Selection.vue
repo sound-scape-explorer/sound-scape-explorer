@@ -1,5 +1,4 @@
 <script lang="ts" setup="">
-import {defineProps} from 'vue';
 import type {Reducer} from '../composables/useStorage';
 import SelectionDropdown from './SelectionDropdown.vue';
 

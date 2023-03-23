@@ -19,7 +19,7 @@ class LeqEnesIndicator(AbstractIndicator):
         if audio.is_sound_too_short():
             return self.add_nan()
 
-        value = ENES_index.numpy_Leq(
+        value = ENES_index.numpy_leq(
             waveform=audio.sound,
             sample_rate=audio.sample_rate,
             dt=audio.integration,

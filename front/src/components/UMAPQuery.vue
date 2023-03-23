@@ -96,6 +96,3 @@ watch(input, () => {
     </template>
   </n-input>
 </template>
-
-<style lang="scss" scoped>
-</style>

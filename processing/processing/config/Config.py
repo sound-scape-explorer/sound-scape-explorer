@@ -192,6 +192,9 @@ class Config(metaclass=SingletonMeta):
     def get_audio_folder(self) -> str:
         return self.__settings['audio_folder']
 
+    def get_audio_host(self) -> str:
+        return self.__settings['audio_host']
+
     def get_audio_path(self) -> str:
         base_path = self.get_base_path()
         audio_folder = self.get_audio_folder()

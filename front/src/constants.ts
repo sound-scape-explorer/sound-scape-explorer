@@ -16,3 +16,14 @@ export const SLIDER_LIMITS = {
 };
 
 export const DATE_FORMAT = 'DD MMM YYYY HH:mm:ss';
+
+export const WAVEFORM = {
+  min: 1,
+  max: 100,
+  step: 5,
+  default: 10,
+};
+
+export const SPECTROGRAM = {
+  fftSize: 4096,
+};

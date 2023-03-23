@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
-import {computed, defineProps, ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 import {useStorage} from '../composables/useStorage';
 import {convertToNaiveSelectOptions} from '../utils/convert-to-naive-select-options';
 

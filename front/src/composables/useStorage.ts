@@ -34,14 +34,13 @@ export async function useStorage() {
   }
 
   async function isLoaded(): Promise<boolean> {
-    try {
-      const results = await window.indexedDB.databases();
-      const names = results.map((result) => result.name);
-
-      return names.includes(mountPoint);
-    } catch {
-      return false;
-    }
+    return new Promise((resolve) => {
+      const request = window.indexedDB.open(mountPoint);
+      request.onsuccess = () => {
+        const length = request.result.objectStoreNames.length;
+        resolve(length !== 0);
+      };
+    });
   }
 
   function deleteBrowserStorage() {
@@ -208,6 +207,24 @@ export async function useStorage() {
     return seconds[index];
   }
 
+  async function getGroupIndexAndSeconds(
+    band: string,
+    integration: string,
+    timestamp: number,
+  ): Promise<[number, number]> {
+    return await read(async () => {
+      const file = getFile();
+      const timestamps = await getGroupedTimestamps(band, integration);
+      const groupLength = timestamps[0].length;
+      const timestampIndex = timestamps.flat().indexOf(timestamp);
+      const groupIndex = timestampIndex % groupLength;
+
+      const seconds = getSecondsFromIntegration(file, integration);
+
+      return [groupIndex, seconds];
+    });
+  }
+
   async function getGroupedTimestamps(
     band: string,
     integration: string,
@@ -240,22 +257,17 @@ export async function useStorage() {
 
   async function getGroupedFeatures(
     band: string,
-    integrations: string,
+    integration: string,
     fileIndex: number,
-    timestamp: number,
+    groupIndex: number,
   ): Promise<number[]> {
     return await read(async () => {
-      const groupTimestamps = await getGroupedTimestamps(band, integrations);
-      const timestamps = groupTimestamps.flat();
-      const index = timestamps.indexOf(timestamp);
-
       const file = getFile();
-      const integration = getSecondsFromIntegration(file, integrations);
-      const path = `${StoragePath.grouped_features}/${band}/${integration}/${fileIndex}`;
-      const groupFeatures = file.get(path) as Dataset;
-      const features = groupFeatures.to_array() as number[][];
-
-      return features[index % integration];
+      const seconds = getSecondsFromIntegration(file, integration);
+      const path = `${StoragePath.grouped_features}/${band}/${seconds}/${fileIndex}`;
+      const features = file.get(path) as Dataset;
+      const array = features.to_array() as number[][];
+      return array[groupIndex];
     });
   }
 
@@ -376,6 +388,52 @@ export async function useStorage() {
     });
   }
 
+  async function getIndicatorsValues(
+    band: string,
+    integration: string,
+    groupIndex: number,
+  ): Promise<number[]> {
+    return await read(async () => {
+      const file = getFile();
+      const seconds = getSecondsFromIntegration(file, integration);
+      const indicators = await getIndicators();
+
+      const values = [];
+
+      for (const i in indicators) {
+        const path = `${StoragePath.indicator_}${i}/${band}/${seconds}/${groupIndex}`;
+        const dataset = file.get(path) as Dataset;
+        const array = dataset.to_array() as number[];
+        values.push(array[groupIndex]);
+      }
+
+      return values;
+    });
+  }
+
+  async function getVolumesValues(
+    band: string,
+    integration: string,
+    groupIndex: number,
+  ): Promise<number[]> {
+    return await read(async () => {
+      const file = getFile();
+      const seconds = getSecondsFromIntegration(file, integration);
+      const volumes = await getVolumes();
+
+      const values = [];
+
+      for (const v in volumes) {
+        const path = `${StoragePath.volume_}${v}/${band}/${seconds}/${groupIndex}`;
+        const dataset = file.get(path) as Dataset;
+        const array = dataset.to_array() as number[];
+        values.push(array[groupIndex]);
+      }
+
+      return values;
+    });
+  }
+
   async function getReducedFeatures(
     reducer: number,
     band: string,
@@ -419,9 +477,12 @@ export async function useStorage() {
     getStorageMetas,
     getGroupedFeatures,
     getGroupedTimestamps,
+    getGroupIndexAndSeconds,
     getReducers,
     getReducedFeatures,
-    getVolumes,
     getIndicators,
+    getIndicatorsValues,
+    getVolumes,
+    getVolumesValues,
   };
 }

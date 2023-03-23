@@ -3,6 +3,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import html2canvas from 'html2canvas';
 import {onUnmounted, watch} from 'vue';
 import {ScatterGL} from '../lib/scatter-gl-0.0.13';
+import {playerStore} from '../store/player.store';
 import {settingsStore} from '../store/settings.store';
 import {UMAPDatasetStore} from '../store/UMAP-dataset.store';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
@@ -15,12 +16,10 @@ import {UMAPStore} from '../store/UMAP.store';
 import {
   convertColumnsToColorTypes,
 } from '../utils/convert-columns-to-color-types';
-import {copyToClipboard} from '../utils/copy-to-clipboard';
 import {isHourDuringDay} from '../utils/is-hour-during-day';
 import {mapRange} from '../utils/map-range';
 import {useColors} from './useColors';
 import {useEventListener} from './useEventListener';
-import {useNotification} from './useNotification';
 import {useStorage} from './useStorage';
 import {useUMAPFilters} from './useUMAPFilters';
 import {useUMAPMeta} from './useUMAPMeta';
@@ -31,7 +30,6 @@ export function useUMAPComponent() {
   const {colors, nightColor, dayColor, cyclingColors} = useColors();
   const {shouldBeFiltered} = useUMAPFilters();
   const {getMetaColor} = useUMAPMeta();
-  const {notify} = useNotification();
 
   let isFirstRender = true;
   let scatterGL: ScatterGL | null = null;
@@ -62,18 +60,8 @@ export function useUMAPComponent() {
     }
 
     const point = UMAPDatasetStore?.dataset?.metadata[index];
-    const label = point?.label;
-
-    if (!label) {
-      return;
-    }
-
-    const {getSettings} = await useStorage();
-    const settings = await getSettings();
-
-    const path = `${settings.base_path}/${settings.audio_folder}${label}`;
-    await copyToClipboard(path);
-    notify('success', 'Audio file path copied to clipboard', path);
+    playerStore.src = point?.label as string;
+    playerStore.timestamp = point?.timestamp as number;
   }
 
   async function render() {
@@ -129,15 +117,18 @@ export function useUMAPComponent() {
     canvas.style.display = 'none';
     document.body.appendChild(canvas);
 
-    const image = canvas.toDataURL('image/png')
-      .replace('image/png', 'image/octet-stream');
+    setTimeout(() => {
+      const image = canvas
+        .toDataURL('image/png')
+        .replace('image/png', 'image/octet-stream');
 
-    const anchor = document.createElement('a');
-    anchor.download = 'SSE_UMAP.png';
-    anchor.href = image;
+      const anchor = document.createElement('a');
+      anchor.download = 'SSE_UMAP.png';
+      anchor.href = image;
 
-    anchor.click();
-    canvas.remove();
+      anchor.click();
+      canvas.remove();
+    }, 2000);
   }
 
   useEventListener(window, 'resize', handleResize);

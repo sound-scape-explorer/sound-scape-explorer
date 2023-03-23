@@ -1,6 +1,6 @@
 import {ref} from 'vue';
 import {UMAP_EXPORT_FILENAME} from '../constants';
-import type {Point2D, Point3D, PointMetadata} from '../lib/scatter-gl-0.0.13';
+import type {Point2D, Point3D} from '../lib/scatter-gl-0.0.13';
 import {selectionStore} from '../store/selection.store';
 import {settingsStore} from '../store/settings.store';
 import type {UMAPDatasetStoreInterface} from '../store/UMAP-dataset.store';
@@ -12,11 +12,13 @@ import {convertArrayToCsv} from '../utils/convert-array-to-csv';
 import {
   convertObjectToJsonString,
 } from '../utils/convert-object-to-json-string';
-import {getIntegratedIndex} from '../utils/get-integrated-index';
+import type {ScatterMetadata} from '../utils/convert-to-scatter-gl-dataset';
 import {triggerBrowserDownload} from '../utils/trigger-browser-download';
 import {useNotification} from './useNotification';
 import {useStorage} from './useStorage';
 import {useUMAPFilters} from './useUMAPFilters';
+
+export type ExportType = 'json' | 'csv'
 
 export function useUMAPExport() {
   const {notify} = useNotification();
@@ -70,7 +72,6 @@ export function useUMAPExport() {
 
     for (let i = 0; i < columnsValues.length; ++i) {
       const value = columnsValues[i];
-      console.log(value);
 
       if (value.length === 0) {
         continue;
@@ -132,16 +133,19 @@ export function useUMAPExport() {
       const {
         getFiles,
         getGroupedFeatures,
+        getGroupIndexAndSeconds,
       } = await useStorage();
 
-      const files = await getFiles();
-      const index = getIntegratedIndex(i, files.length);
       const timestamp = data.timestamp as number;
+      const [groupIndex] = await getGroupIndexAndSeconds(selectionStore.band, selectionStore.integration, timestamp);
+
+      const files = await getFiles();
+      const fileIndex = files.indexOf(label);
       const features = await getGroupedFeatures(
         selectionStore.band,
         selectionStore.integration,
-        index,
-        timestamp,
+        fileIndex,
+        groupIndex,
       );
 
       if (type === 'json') {
@@ -151,7 +155,8 @@ export function useUMAPExport() {
           features,
         });
       } else if (type === 'csv') {
-        const content = createCSVContent(data, points[i], features);
+        // @ts-expect-error: TS2345
+        const content = createCSVContent(point, data, features);
         payload.push(content);
       }
     }
@@ -159,14 +164,17 @@ export function useUMAPExport() {
     return payload;
   }
 
-  function createCSVContent(data: PointMetadata, points: Point2D | Point3D, features: number[]) {
+  function createCSVContent(
+    points: Point2D | Point3D,
+    data: ScatterMetadata,
+    features: number[],
+  ) {
     const content = [];
 
     settingsStore.umap.export.labels && content.push(data['label']);
     settingsStore.umap.export.timestamps && content.push(data['timestamp']);
     settingsStore.umap.export.points && content.push(points);
-    settingsStore.umap.export.tags && content.push(data['tags']);
-    settingsStore.umap.export.meta && content.push(data['metaContent']);
+    settingsStore.umap.export.meta && content.push(data['metaValues']);
     settingsStore.umap.export.features && content.push(features);
 
     return content;
@@ -176,21 +184,38 @@ export function useUMAPExport() {
     return metaProperties.map((c) => `meta_${c}`);
   }
 
-  function createCSVFirstRow(metaProperties: string[]): string[] {
+  function createCSVFirstRow(
+    metaProperties: string[],
+    dimensions: number,
+  ): string[] {
     const firstRow = [];
+
+    const createDimensions = (row: unknown[]): unknown[] => {
+      for (let i = 0; i < dimensions; i += 1) {
+        row.push(`d_${i + 1}`);
+      }
+
+      return row;
+    };
+
+    const createFeatures = (row: unknown[]): unknown[] => {
+      for (let i = 0; i < 128; i += 1) {
+        row.push(`f_${i + 1}`);
+      }
+
+      return row;
+    };
 
     settingsStore.umap.export.labels && firstRow.push('label');
     settingsStore.umap.export.timestamps && firstRow.push('timestamp');
-    settingsStore.umap.export.points && firstRow.push('2D_X');
-    settingsStore.umap.export.points && firstRow.push('2D_Y');
-    settingsStore.umap.export.tags && firstRow.push('tags');
+    settingsStore.umap.export.points && createDimensions(firstRow);
     settingsStore.umap.export.meta && firstRow.push(...convertMetaPropertiesForExport(metaProperties));
-    settingsStore.umap.export.features && firstRow.push('features');
+    settingsStore.umap.export.features && createFeatures(firstRow);
 
     return firstRow;
   }
 
-  async function handleClick(type: 'json' | 'csv' = 'json') {
+  async function handleClick(type: ExportType = 'json') {
     const {getStorageMetas} = await useStorage();
     const metas = await getStorageMetas();
     const metaProperties = Object.keys(metas);
@@ -203,8 +228,8 @@ export function useUMAPExport() {
 
     notify(
       'info',
-      'UMAP',
-      'Exporting collected points. Selected points are not handled.',
+      'Explore',
+      'Exporting collected points. Selected points will be ignored.',
     );
 
     const results = await parse(
@@ -218,6 +243,16 @@ export function useUMAPExport() {
       return;
     }
 
+    let dimensions;
+
+    try {
+      // @ts-expect-error: TS2571
+      dimensions = results[0][2].length;
+    } catch {
+      // @ts-expect-error: TS2571
+      dimensions = Object.values(results)[0].point.length;
+    }
+
     if (type === 'json') {
       const json = convertObjectToJsonString(results);
 
@@ -227,7 +262,7 @@ export function useUMAPExport() {
         callback: () => loadingRef.value = false,
       });
     } else if (type === 'csv') {
-      const firstRow = createCSVFirstRow(metaProperties);
+      const firstRow = createCSVFirstRow(metaProperties, dimensions);
 
       const csv = convertArrayToCsv(
         results as string[][],

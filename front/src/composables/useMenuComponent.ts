@@ -1,19 +1,13 @@
 import {
-  AlbumsOutline,
   CogOutline,
-  ConstructOutline,
-  DocumentTextOutline,
-  EarthOutline,
-  EyeOutline,
   HomeOutline,
   InformationOutline,
-  PlayOutline,
-  StatsChartOutline,
+  RocketOutline,
 } from '@vicons/ionicons5';
 import type {MenuOption} from 'naive-ui';
 import {computed, ref} from 'vue';
 import {useRouter} from 'vue-router';
-import {settingsStore} from '../store/settings.store';
+import {Route} from '../enums/Route';
 import {generateRoute} from '../utils/generate-route';
 
 export function useMenuComponent() {
@@ -26,26 +20,11 @@ export function useMenuComponent() {
 
   const options = computed<MenuOption[]>(() => {
     const routes = {
-      home: generateRoute('home', HomeOutline, true),
-      preview: generateRoute('preview', EarthOutline),
-      player: generateRoute('player', PlayOutline),
-      reductions: generateRoute('reductions', EyeOutline),
-      volumes: generateRoute('volumes', StatsChartOutline),
-      covering: generateRoute('covering', AlbumsOutline),
-      minitools: generateRoute('minitools', ConstructOutline),
-      settings: generateRoute('settings', CogOutline),
-      config: generateRoute('config', DocumentTextOutline),
-      help: generateRoute('help', InformationOutline),
+      home: generateRoute(Route.home, HomeOutline, true),
+      explore: generateRoute(Route.explore, RocketOutline),
+      settings: generateRoute(Route.settings, CogOutline),
+      help: generateRoute(Route.help, InformationOutline),
     };
-
-    if (settingsStore.preview === false) {
-      return [
-        routes.home,
-        routes.reductions,
-        routes.settings,
-        routes.help,
-      ];
-    }
 
     return Object.values(routes);
   });

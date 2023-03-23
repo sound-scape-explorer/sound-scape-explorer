@@ -15,6 +15,6 @@ export function generateRoute(
     }),
     key,
     icon: renderNaiveIcon(icon),
-    default: isDefault,
+    fftSize: isDefault,
   };
 }
