@@ -3,9 +3,7 @@ FROM python:3.8-slim AS build
 RUN useradd -m sse
 USER sse
 
-ENV PYTHONPATH .
 ENV PATH "/home/sse/.local/bin:$PATH"
-ENV IS_DOCKER True
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
@@ -18,8 +16,8 @@ FROM python:3.8-slim
 RUN useradd -m sse
 USER sse
 
-ENV PYTHONPATH .
 ENV PATH "/home/sse/.local/bin:$PATH"
+ENV PYTHONPATH .
 ENV IS_DOCKER True
 
 RUN mkdir /home/sse/.cache
