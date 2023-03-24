@@ -1,3 +1,17 @@
+## [7.2.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.2.1...v7.2.2) (2023-03-24)
+
+
+### Bug Fixes
+
+* **Audio:** Ensure `serve` is preinstalled when building docker image ([e640a1e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e640a1e8c8e6a82739cf713fe608c368906c8c0a))
+
+
+### Performance Improvements
+
+* **Processing:** Improve Dockerfile ([989002d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/989002d07d5c9558b68629468d3de815a50ab12c))
+* **Processing:** Improve dockerfile security ([ffe3ee5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ffe3ee5ccfb3e77ce7607c65c1921db69f8f48dd))
+* **Processing:** Reduce docker image from 7.90GB to 5.42GB ([a9ea7ee](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a9ea7ee69bd85a65a7f154ae1ba91cec6ed11bd3))
+
 ## [7.2.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.2.0...v7.2.1) (2023-03-23)
 
 
