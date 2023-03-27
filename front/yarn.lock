@@ -1847,10 +1847,10 @@ wav-encoder@^1.3.0:
   resolved "https://registry.yarnpkg.com/wav-encoder/-/wav-encoder-1.3.0.tgz#ed1ca1e59c8d2bca50010d6a380ab8d473b12b65"
   integrity sha512-FXJdEu2qDOI+wbVYZpu21CS1vPEg5NaxNskBr4SaULpOJMrLE6xkH8dECa7PiS+ZoeyvP7GllWUAxPN3AvFSEw==
 
-wavesurfer.js@^6.6.0:
-  version "6.6.1"
-  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-6.6.1.tgz#335d0619eab0dcff4c5a6de731833435d9a2d473"
-  integrity sha512-J3Zxm9t6gOueHVH0/lToFyiEoWi7s5W1iUoS6GRJKQr7Jc/sE+2rfAYhdrmB1o+XI1eu4gl4KEicnCwm2z5W8g==
+wavesurfer.js@^6.6.2:
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-6.6.2.tgz#0175fb7ef9167c7be4b6c97bb4f3f89965f94fc8"
+  integrity sha512-aPAU4OADQsyH8mIw2nXmoni8KHo8s1f1bd5ZUrxhN4P/VMWd+oPDqEwA01XPSEfasAJW6mZ/EHQ2bZ9nOWRrNw==
 
 which@^2.0.1:
   version "2.0.2"
