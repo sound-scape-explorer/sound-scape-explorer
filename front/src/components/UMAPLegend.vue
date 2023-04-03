@@ -4,7 +4,7 @@ import {computed} from 'vue';
 import {useColors} from '../composables/useColors';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import {UMAPLegendStore} from '../store/UMAP-legend.store';
-import Button from './Button.vue';
+import Button from './BaseButton.vue';
 import UMAPLegendGradient from './UMAPLegendGradient.vue';
 import UMAPMeta from './UMAPLegendMeta.vue';
 import UMAPLegendSelection from './UMAPLegendSelection.vue';
@@ -55,11 +55,11 @@ const showScale = computed(() => UMAPFiltersStore.colorType === 'cycleDay');
     </div>
 
     <UMAPLegendGradient
-        v-if="showScale"
-        :array="gradientColors"
-        max=""
-        med=""
-        min=""
+      v-if="showScale"
+      :array="gradientColors"
+      max=""
+      med=""
+      min=""
     />
 
     <div class="title">

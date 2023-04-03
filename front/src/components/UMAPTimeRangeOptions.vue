@@ -11,7 +11,7 @@ import {useStorage} from '../composables/useStorage';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {DATE_FORMAT} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
-import Button from './Button.vue';
+import Button from './BaseButton.vue';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -179,9 +179,9 @@ function printLocalizedDate(date: Dayjs): string {
   <div class="container">
     <div class="grid">
       <n-switch
-          v-model:value="UMAPTimeRangeStore.isAllSelected"
-          :disabled="isDisabled"
-          class="toggle"
+        v-model:value="UMAPTimeRangeStore.isAllSelected"
+        :disabled="isDisabled"
+        class="toggle"
       >
         <template #checked>
           all
@@ -190,29 +190,29 @@ function printLocalizedDate(date: Dayjs): string {
 
       <n-button-group>
         <n-button
-            v-for="button in durations"
-            :disabled="uiDisabled"
-            size="tiny"
-            @click="setWindowDuration(button.duration)"
+          v-for="button in durations"
+          :disabled="uiDisabled"
+          size="tiny"
+          @click="setWindowDuration(button.duration)"
         >
           {{ button.name }}
         </n-button>
       </n-button-group>
 
       <n-input-number
-          v-model:value="UMAPTimeRangeStore.duration"
-          :disabled="UMAPTimeRangeStore.isAllSelected"
-          class="input"
-          size="tiny"
+        v-model:value="UMAPTimeRangeStore.duration"
+        :disabled="UMAPTimeRangeStore.isAllSelected"
+        class="input"
+        size="tiny"
       />
 
       <div class="transport-button">
         <n-tooltip trigger="hover">
           <template #trigger>
             <Button
-                :disabled="uiDisabled"
-                :handle-click="skipTimeBackward"
-                class="flex"
+              :disabled="uiDisabled"
+              :handle-click="skipTimeBackward"
+              class="flex"
             >
               <play-skip-back-outline />
             </Button>
@@ -228,18 +228,18 @@ function printLocalizedDate(date: Dayjs): string {
           <template #trigger>
             <div>
               <Button
-                  v-show="!isPlaying"
-                  :disabled="uiDisabled"
-                  :handle-click="togglePlaying"
-                  class="flex"
+                v-show="!isPlaying"
+                :disabled="uiDisabled"
+                :handle-click="togglePlaying"
+                class="flex"
               >
                 <play-outline />
               </Button>
               <Button
-                  v-show="isPlaying"
-                  :disabled="uiDisabled"
-                  :handle-click="togglePlaying"
-                  class="flex"
+                v-show="isPlaying"
+                :disabled="uiDisabled"
+                :handle-click="togglePlaying"
+                class="flex"
               >
                 <pause-outline />
               </Button>
@@ -255,9 +255,9 @@ function printLocalizedDate(date: Dayjs): string {
         <n-tooltip trigger="hover">
           <template #trigger>
             <Button
-                :disabled="uiDisabled"
-                :handle-click="skipTimeForward"
-                class="flex"
+              :disabled="uiDisabled"
+              :handle-click="skipTimeForward"
+              class="flex"
             >
               <play-skip-forward-outline />
             </Button>
@@ -272,11 +272,11 @@ function printLocalizedDate(date: Dayjs): string {
         <n-tooltip placement="bottom" trigger="hover">
           <template #trigger>
             <n-date-picker
-                :disabled="uiDisabled"
-                :on-update:value="handleDateStartUpdate"
-                :value="transposeDateToZone(dateStart)"
-                size="small"
-                type="datetime"
+              :disabled="uiDisabled"
+              :on-update:value="handleDateStartUpdate"
+              :value="transposeDateToZone(dateStart)"
+              size="small"
+              type="datetime"
             />
           </template>
           <span class="button-tooltip">

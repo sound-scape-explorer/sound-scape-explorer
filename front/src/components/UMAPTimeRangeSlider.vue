@@ -10,7 +10,7 @@ import {SLIDER_LIMITS} from '../constants';
 import {selectionStore} from '../store/selection.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {mapRange} from '../utils/map-range';
-import Button from './Button.vue';
+import Button from './BaseButton.vue';
 
 const {isDisabled} = useUMAPStatus();
 const {
@@ -27,8 +27,8 @@ const allTimestamps = ref<number[]>();
 watch(selectionStore, async () => {
   if (
     selectionStore.reducer === null
-      || selectionStore.band === null
-      || selectionStore.integration === null
+    || selectionStore.band === null
+    || selectionStore.integration === null
   ) {
     return;
   }
@@ -169,36 +169,36 @@ function toggleZoom(slider: Slider): void {
   <div class="container">
     <div v-if="!isDisabled" class="layer">
       <n-slider
-          v-for="slider in sliders"
-          :key="slider.key"
-          v-model:value="UMAPTimeRangeStore.value"
-          :disabled="UMAPTimeRangeStore.isAllSelected"
-          :marks="slider.marks"
-          :max="slider.max"
-          :min="slider.min"
-          :style="{ width: 100 / sliders.length + '%' }"
-          :tooltip="false"
-          class="slider"
+        v-for="slider in sliders"
+        :key="slider.key"
+        v-model:value="UMAPTimeRangeStore.value"
+        :disabled="UMAPTimeRangeStore.isAllSelected"
+        :marks="slider.marks"
+        :max="slider.max"
+        :min="slider.min"
+        :style="{ width: 100 / sliders.length + '%' }"
+        :tooltip="false"
+        class="slider"
       />
     </div>
 
     <div v-if="!isDisabled" class="layer">
       <div
-          v-for="interest in interests"
-          class="interest"
+        v-for="interest in interests"
+        class="interest"
       >
       <span
-          v-for="value of interest.values"
-          :style="{background: value ? 'red' : 'gainsboro'}"
-          class="interest__pixel"
+        v-for="value of interest.values"
+        :style="{background: value ? 'red' : 'gainsboro'}"
+        class="interest__pixel"
       />
       </div>
     </div>
 
     <div v-if="!isDisabled" class="layer zoom">
       <Button
-          v-for="slider in sliders"
-          :handle-click="() => toggleZoom(slider)"
+        v-for="slider in sliders"
+        :handle-click="() => toggleZoom(slider)"
       >
         <search-outline />
       </Button>

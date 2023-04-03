@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
-import Button from '../components/Button.vue';
+import BaseButton from '../components/BaseButton.vue';
 import HomeDetails from '../components/HomeDetails.vue';
 import Title from '../components/Title.vue';
 import {useStorage} from '../composables/useStorage';
@@ -31,10 +31,10 @@ async function handleChange() {
 
   <div class="container">
     <input ref="inputRef" type="file" @change="handleChange" />
-    <Button
-        :handle-click="deleteBrowserStorage"
-        class="red"
-        text="Remove data from browser"
+    <BaseButton
+      :handle-click="deleteBrowserStorage"
+      class="red"
+      text="Remove data from browser"
     />
   </div>
 
