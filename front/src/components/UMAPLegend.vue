@@ -4,7 +4,7 @@ import {computed} from 'vue';
 import {useColors} from '../composables/useColors';
 import {UMAPFiltersStore} from '../store/UMAP-filters.store';
 import {UMAPLegendStore} from '../store/UMAP-legend.store';
-import Button from './BaseButton.vue';
+import BaseButton from './BaseButton.vue';
 import UMAPLegendGradient from './UMAPLegendGradient.vue';
 import UMAPMeta from './UMAPLegendMeta.vue';
 import UMAPLegendSelection from './UMAPLegendSelection.vue';
@@ -46,9 +46,9 @@ const showScale = computed(() => UMAPFiltersStore.colorType === 'cycleDay');
 
 <template>
   <div :class="containerClasses">
-    <Button :handle-click="toggle" class="toggle">
+    <BaseButton :handle-click="toggle" class="toggle">
       <search-outline />
-    </Button>
+    </BaseButton>
 
     <div v-if="showScale" class="title">
       Color scale

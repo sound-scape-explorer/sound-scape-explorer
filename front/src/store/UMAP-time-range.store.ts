@@ -12,21 +12,21 @@ export interface UMAPTimeRangeStoreInterface {
   /**
    * The current time.
    */
-  value: number | null;
+  value: number;
   /**
    * The minimum time in range.
    */
-  min: number | null;
+  min: number;
   /**
    * The maximum time in range.
    */
-  max: number | null;
+  max: number;
 }
 
 export const UMAPTimeRangeStore = reactive<UMAPTimeRangeStoreInterface>({
   isAllSelected: true,
   duration: 3600,
-  value: null,
-  min: null,
-  max: null,
+  value: -1,
+  min: -1,
+  max: -1,
 });

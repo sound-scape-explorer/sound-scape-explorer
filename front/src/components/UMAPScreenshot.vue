@@ -2,18 +2,18 @@
 import {ImageOutline} from '@vicons/ionicons5';
 import {useUMAPComponent} from '../composables/useUMAPComponent';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
-import Button from './BaseButton.vue';
+import BaseButton from './BaseButton.vue';
 
 const {screenshot} = useUMAPComponent();
 const {isDisabled} = useUMAPStatus();
 </script>
 
 <template>
-  <Button
+  <BaseButton
     :disabled="isDisabled"
     :handle-click="screenshot"
     text="Screenshot"
   >
     <image-outline />
-  </Button>
+  </BaseButton>
 </template>

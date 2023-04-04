@@ -2,15 +2,14 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import type {ComputedRef} from 'vue';
-import {computed, ref, watch} from 'vue';
+import {computed, ref, unref, watch} from 'vue';
 import {useStorage} from '../composables/useStorage';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {SLIDER_LIMITS} from '../constants';
 import {selectionStore} from '../store/selection.store';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
 import {mapRange} from '../utils/map-range';
-import Button from './BaseButton.vue';
+import BaseButton from './BaseButton.vue';
 
 const {isDisabled} = useUMAPStatus();
 const {
@@ -49,25 +48,29 @@ interface Slider {
   };
 }
 
-const cachedSliders = ref<null | Slider[]>(null);
+const zoomedSlider = ref<Slider | null>(null);
+const cachedSliders = ref<Slider[]>();
 
-const sliders: ComputedRef<Slider[]> = computed(() => {
+const sliders = computed<Slider[]>(() => {
   if (selectionStore.integration === null) {
     return [];
   }
 
-  if (zoomedSlider.value) {
-    return [zoomedSlider.value];
+  const zoomedSliderValue = unref(zoomedSlider);
+  const cachedSlidersValue = unref(cachedSliders);
+
+  if (zoomedSliderValue) {
+    return [zoomedSliderValue];
   }
 
-  if (cachedSliders.value) {
-    return cachedSliders.value;
+  if (cachedSlidersValue) {
+    return cachedSlidersValue;
   }
 
   const ranges = reducers
     .filter((reducer) => reducer.index === selectionStore.reducer)[0].ranges;
 
-  const sliders = [];
+  const sliders: Slider[] = [];
 
   for (const range of ranges) {
     const rangeValues = storageRanges[range];
@@ -77,11 +80,11 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
     const timeEnd = dayjs(rangeEnd).unix();
     const timeBetween = Math.floor(timeStart + 0.5 * (timeEnd - timeStart));
 
-    if (UMAPTimeRangeStore.min === null || timeStart < UMAPTimeRangeStore.min) {
+    if (UMAPTimeRangeStore.min === -1 || timeStart < UMAPTimeRangeStore.min) {
       UMAPTimeRangeStore.min = timeStart;
     }
 
-    if (UMAPTimeRangeStore.max === null || timeEnd > UMAPTimeRangeStore.max) {
+    if (UMAPTimeRangeStore.max === -1 || timeEnd > UMAPTimeRangeStore.max) {
       UMAPTimeRangeStore.max = timeEnd;
     }
 
@@ -94,7 +97,7 @@ const sliders: ComputedRef<Slider[]> = computed(() => {
         [timeBetween]: range,
         [timeEnd]: SLIDER_LIMITS.end,
       },
-    };
+    } satisfies Slider;
 
     sliders.push(slider);
   }
@@ -114,8 +117,8 @@ interface Interest {
   values: boolean[];
 }
 
-const interests: ComputedRef<Interest[]> = computed(() => {
-  if (!allTimestamps.value) {
+const interests = computed<Interest[]>(() => {
+  if (!Array.isArray(allTimestamps.value)) {
     return [];
   }
 
@@ -148,8 +151,6 @@ const interests: ComputedRef<Interest[]> = computed(() => {
 
   return interests;
 });
-
-const zoomedSlider = ref<null | Slider>(null);
 
 function resetZoom() {
   zoomedSlider.value = null;
@@ -196,12 +197,12 @@ function toggleZoom(slider: Slider): void {
     </div>
 
     <div v-if="!isDisabled" class="layer zoom">
-      <Button
+      <BaseButton
         v-for="slider in sliders"
         :handle-click="() => toggleZoom(slider)"
       >
         <search-outline />
-      </Button>
+      </BaseButton>
     </div>
   </div>
 </template>

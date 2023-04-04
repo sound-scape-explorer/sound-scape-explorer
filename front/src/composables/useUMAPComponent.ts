@@ -158,8 +158,8 @@ export function useUMAPComponent() {
     const timestamp = dataset.metadata[index]['timestamp'] as number;
     const date = dayjs(timestamp * 1000);
     const range = {
-      min: dayjs((UMAPTimeRangeStore?.min ?? 0) * 1000),
-      max: dayjs((UMAPTimeRangeStore?.max ?? 0) * 1000),
+      min: dayjs((UMAPTimeRangeStore.min) * 1000),
+      max: dayjs((UMAPTimeRangeStore.max) * 1000),
     };
 
     const hoverColor = 'red';

@@ -11,7 +11,7 @@ import {useStorage} from '../composables/useStorage';
 import {useUMAPStatus} from '../composables/useUMAPStatus';
 import {DATE_FORMAT} from '../constants';
 import {UMAPTimeRangeStore} from '../store/UMAP-time-range.store';
-import Button from './BaseButton.vue';
+import BaseButton from './BaseButton.vue';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -24,10 +24,10 @@ const settings = await getSettings();
 const uiDisabled: ComputedRef<boolean> = computed(() => isDisabled.value || UMAPTimeRangeStore.isAllSelected);
 
 const dateStart: ComputedRef<Dayjs> = computed(() => {
-  let start = UMAPTimeRangeStore.value ?? 0;
+  let start = UMAPTimeRangeStore.value;
 
   if (UMAPTimeRangeStore.isAllSelected) {
-    start = UMAPTimeRangeStore.min ?? 0;
+    start = UMAPTimeRangeStore.min;
   }
 
   if (timezoneName.value !== '') {
@@ -38,11 +38,11 @@ const dateStart: ComputedRef<Dayjs> = computed(() => {
 });
 
 const dateEnd: ComputedRef<Dayjs> = computed(() => {
-  let time = UMAPTimeRangeStore.value ?? 0;
+  let time = UMAPTimeRangeStore.value;
   time += UMAPTimeRangeStore.duration;
 
   if (UMAPTimeRangeStore.isAllSelected) {
-    time = UMAPTimeRangeStore.max ?? 0;
+    time = UMAPTimeRangeStore.max;
   }
 
   return dayjs(time * 1000);
@@ -77,18 +77,10 @@ function togglePlaying() {
 let interval: null | number = null;
 
 function skipTimeForward() {
-  if (!UMAPTimeRangeStore.value) {
-    return;
-  }
-
   UMAPTimeRangeStore.value += UMAPTimeRangeStore.duration;
 }
 
 function skipTimeBackward() {
-  if (!UMAPTimeRangeStore.value) {
-    return;
-  }
-
   UMAPTimeRangeStore.value -= UMAPTimeRangeStore.duration;
 }
 
@@ -209,13 +201,13 @@ function printLocalizedDate(date: Dayjs): string {
       <div class="transport-button">
         <n-tooltip trigger="hover">
           <template #trigger>
-            <Button
+            <BaseButton
               :disabled="uiDisabled"
               :handle-click="skipTimeBackward"
               class="flex"
             >
               <play-skip-back-outline />
-            </Button>
+            </BaseButton>
           </template>
           <span class="button-tooltip">
             <span class="bold">P</span> – Backward
@@ -227,22 +219,22 @@ function printLocalizedDate(date: Dayjs): string {
         <n-tooltip trigger="hover">
           <template #trigger>
             <div>
-              <Button
+              <BaseButton
                 v-show="!isPlaying"
                 :disabled="uiDisabled"
                 :handle-click="togglePlaying"
                 class="flex"
               >
                 <play-outline />
-              </Button>
-              <Button
+              </BaseButton>
+              <BaseButton
                 v-show="isPlaying"
                 :disabled="uiDisabled"
                 :handle-click="togglePlaying"
                 class="flex"
               >
                 <pause-outline />
-              </Button>
+              </BaseButton>
             </div>
           </template>
           <span class="button-tooltip">
@@ -254,13 +246,13 @@ function printLocalizedDate(date: Dayjs): string {
       <div class="transport-button">
         <n-tooltip trigger="hover">
           <template #trigger>
-            <Button
+            <BaseButton
               :disabled="uiDisabled"
               :handle-click="skipTimeForward"
               class="flex"
             >
               <play-skip-forward-outline />
-            </Button>
+            </BaseButton>
           </template>
           <span class="button-tooltip">
             <span class="bold">N</span> – Forward
