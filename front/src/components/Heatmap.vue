@@ -27,12 +27,15 @@ watch(div, async () => {
       y: [...labels].reverse(),
       z: [...values].reverse(),
       hoverongaps: false,
-      hovertemplate: '%{z:.3f}<extra>%{x}/%{y}</extra>',
+      hovertemplate: '%{z:.3f}<extra>%{y}/%{x}</extra>',
     },
   ] as Data[];
 
   const layout: Partial<Layout> = {
     title,
+    yaxis: {
+      scaleanchor: 'x',
+    },
   };
 
   await Plotly.newPlot(div.value, data, layout);
