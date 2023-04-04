@@ -25,6 +25,7 @@ export default defineConfig({
           // 'highcharts': ['highcharts'],
           // 'highcharts-vue': ['highcharts-vue'],
           'html2canvas': ['html2canvas'],
+          'plotly.js-dist-min': ['plotly.js-dist-min'],
           'simple-statistics': ['simple-statistics'],
           'three': ['three'],
           'vue': ['vue'],
