@@ -1,5 +1,8 @@
 FROM python:3.8-slim AS build
 
+RUN apt-get update
+RUN apt-get install -y gcc
+
 RUN useradd -m sse
 USER sse
 
