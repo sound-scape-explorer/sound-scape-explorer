@@ -1,4 +1,4 @@
-name: docker-audio-main
+name: docker-audio-next
 
 on:
   push:
