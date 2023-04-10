@@ -28,6 +28,10 @@ export const MATRIX_NAMES = [
   'Silhouette',
 ];
 
+export const PAIRING_NAMES = [
+  'Cluster',
+];
+
 export const SPECTROGRAM_COLOR_MAPS = [
   'hot',
   'inferno',

@@ -44,4 +44,7 @@ export enum StoragePath {
 
   // Matrices
   matrix_ = '/matrix_',
+
+  // Pairings
+  pairing_ = '/pairing_',
 }

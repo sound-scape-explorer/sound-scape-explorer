@@ -123,7 +123,6 @@ async function run() {
         :labels="labelsRef ?? []"
         :title="titleRef ?? ''"
         :values="valuesRef ?? []"
-        class="test"
       />
     </div>
   </AppDraggable>

@@ -5,14 +5,15 @@ import {ref, unref, watch} from 'vue';
 type Data =
   & PlotlyData
   & {
-  hoverongaps: boolean;
+  hoverongaps?: boolean;
 }
 
 /**
  * Props
  */
 interface Props {
-  labels: string[];
+  x: string[];
+  y: string[];
   values: (number | null)[][];
   title: string;
 }
@@ -60,11 +61,10 @@ function refresh() {
     type: 'heatmap',
     colorscale: 'YlOrRd',
     reversescale: true,
-    x: props.labels,
-    y: [...props.labels].reverse(),
-    z: [...props.values].reverse(),
-    hoverongaps: false,
-    hovertemplate: '%{z:.3f}<extra>%{y}/%{x}</extra>',
+    x: props.x,
+    y: props.y,
+    z: props.values,
+    hovertemplate: '%{z:.3f}<extra>%{x}/%{y}</extra>',
   }];
 
   layoutRef.value = {

@@ -71,3 +71,6 @@ class StoragePath(Enum):
 
     # Matrices
     matrix_ = '/matrix_'
+
+    # Pairings
+    pairing_ = '/pairing_'

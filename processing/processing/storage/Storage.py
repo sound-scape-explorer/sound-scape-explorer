@@ -1,4 +1,4 @@
-from typing import Any, Iterable, List, Optional, Union
+from typing import Any, Iterable, List, Optional, Tuple, Union
 
 import numpy
 from h5py import Dataset, File
@@ -799,6 +799,36 @@ class Storage(metaclass=SingletonMeta):
             data=data,
             compression=StorageCompression.gzip,
         )
+
+    def write_pairing(
+        self,
+        band: str,
+        integration: int,
+        pairing_index: int,
+        meta_index_a: int,
+        meta_index_b: int,
+        data: Tuple[List[float], List[float]],
+    ) -> None:
+        path = f'{StoragePath.pairing_.value}{pairing_index}' \
+               f'/{band}/{integration}' \
+               f'/{meta_index_a}/{meta_index_b}'
+
+        # TODO: We store a only. Verify with business if reverse versuses are
+        #  always identical.
+        a, b = data
+        # array = [a, b]
+        # rect = self.make_rectangular(array, fill_with=numpy.nan)
+
+        self.__write_dataset(
+            path=path,
+            data=a,
+            compression=StorageCompression.gzip,
+        )
+
+    def delete_pairings(self) -> None:
+        for p, _ in enumerate([0]):
+            path = f'{StoragePath.pairing_.value}{p}'
+            self.__delete_silently(path)
 
     def write_matrix(
         self,

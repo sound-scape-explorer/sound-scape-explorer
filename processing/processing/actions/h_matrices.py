@@ -33,6 +33,9 @@ for band in bands:
             unwrap=True,
         )
 
+        # TODO: We should robust scale but not on grouped_features but on all
+        #  features. Do we want this? Can all the grouped features fit into RAM?
+
         meta_values = storage.read_meta_values(band, integration)
 
         for matrix_index, m in enumerate(matrices):

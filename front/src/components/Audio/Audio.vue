@@ -155,6 +155,7 @@ async function load() {
     return;
   }
 
+  appDraggablesStore.details = true;
   appDraggablesStore.audio = true;
 
   const response = await fetch(srcValue);

@@ -5,7 +5,7 @@ import {StoragePath} from '../common/StoragePath';
 import type {StorageSettings} from '../common/StorageSettings';
 import {selectionStore} from '../components/Selection/selectionStore';
 import {settingsStore} from '../components/Settings/settingsStore';
-import {MATRIX_NAMES} from '../constants';
+import {MATRIX_NAMES, PAIRING_NAMES} from '../constants';
 import {buildNestedArray} from '../utils/build-nested-array';
 
 export type StorageBands = {[band: string]: number[];}
@@ -29,7 +29,13 @@ export interface Volume {
 
 type Indicator = Volume
 
-export type Matrix = Volume
+type Matrix = Volume
+
+interface Pairing {
+  index: number;
+  name: string;
+  values: number[][];
+}
 
 export async function useStorage() {
   const {FS} = await ready;
@@ -356,10 +362,18 @@ export async function useStorage() {
     array: T[][],
     filterWith: string | number | null = null,
   ): T[][] {
+    const isNanStrategy = typeof filterWith === 'number' && Number.isNaN(filterWith);
+
     const trimmedArray = [];
 
     for (const sublist of array) {
-      const trimmedSublist = sublist.filter((element) => element !== filterWith);
+      const trimmedSublist = sublist.filter((element) => {
+        if (isNanStrategy) {
+          return !Number.isNaN(element);
+        }
+
+        return element !== filterWith;
+      });
       trimmedArray.push(trimmedSublist);
     }
 
@@ -622,6 +636,22 @@ export async function useStorage() {
     });
   }
 
+  async function getPairing(
+    band: string,
+    integrationName: string,
+    pairingIndex: number,
+    metaIndexA: number,
+    metaIndexB: number,
+  ) {
+    return await read(() => {
+      const h5 = getH5();
+      const integration = getSecondsFromIntegration(h5, integrationName);
+      const path = `${StoragePath.pairing_}${pairingIndex}/${band}/${integration}/${metaIndexA}/${metaIndexB}`;
+      const dataset = h5.get(path) as Dataset;
+      return dataset.to_array() as number[];
+    });
+  }
+
   async function getMatrices(
     band: string,
     integrationName: string,
@@ -647,7 +677,7 @@ export async function useStorage() {
           ];
         }
 
-        const matrix: Volume = {
+        const matrix: Matrix = {
           index: v,
           name: name,
           values: values,
@@ -660,12 +690,62 @@ export async function useStorage() {
     });
   }
 
+  async function getPairings(
+    band: string,
+    integrationName: string,
+  ) {
+    return await read(() => {
+      const h5 = getH5();
+      const integration = getSecondsFromIntegration(h5, integrationName);
+
+      const pairings: Pairing[] = [];
+
+      PAIRING_NAMES.forEach((name, p) => {
+        const path = `${StoragePath.pairing_}${p}/${band}/${integration}`;
+        const pGroup = h5.get(path) as Group;
+
+        let values: number[][] = [];
+
+        for (const pG in pGroup.keys()) {
+          const aGroup = h5.get(`${path}/${pG}`) as Group;
+
+          for (const aG in aGroup.keys()) {
+            const dataset = h5.get(`${path}/${pG}/${aG}`) as Dataset;
+
+            values = [
+              ...values,
+              dataset.to_array() as number[],
+            ];
+          }
+        }
+
+        const pairing: Pairing = {
+          index: p,
+          name: name,
+          values: values,
+        };
+
+        pairings.push(pairing);
+      });
+
+      return pairings;
+    });
+  }
+
   const matricesRef = asyncComputed(async () => {
     if (!selectionStore.band || !selectionStore.integration) {
       return;
     }
 
     return await getMatrices(selectionStore.band, selectionStore.integration);
+  });
+
+  const pairingsRef = asyncComputed(async () => {
+    if (!selectionStore.band || !selectionStore.integration) {
+      return;
+    }
+
+    return await getPairings(selectionStore.band, selectionStore.integration);
   });
 
   return {
@@ -699,7 +779,9 @@ export async function useStorage() {
     volumesRef: volumesRef,
     volumeNamesRef: volumeNamesRef,
     matricesRef: matricesRef,
+    pairingsRef: pairingsRef,
     getMatrix: getMatrix,
     getVolumeNew: getVolumeNew,
+    getPairing: getPairing,
   };
 }
