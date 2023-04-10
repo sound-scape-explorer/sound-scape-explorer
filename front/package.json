@@ -2,7 +2,7 @@
   "name": "sound-scape-explorer--front",
   "private": true,
   "scripts": {
-    "dev": "cross-env VITE_SSE_VERSION=$(git branch | grep \\* | cut -d ' ' -f2) vite --port 8080",
+    "dev": "vite --port 8080",
     "build": "yarn build:clean && yarn build:run:dev",
     "build:clean": "rimraf dist",
     "build:prod": "yarn build:clean && yarn build:run:prod",
