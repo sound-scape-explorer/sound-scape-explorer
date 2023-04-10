@@ -34,4 +34,4 @@ COPY --from=build /home/sse/.cache/torch/hub /home/sse/.cache/torch/hub
 
 WORKDIR /app
 COPY processing processing
-ENTRYPOINT ["python3", "processing/actions/all.py"]
+ENTRYPOINT ["python3", "processing/actions/_all.py"]
