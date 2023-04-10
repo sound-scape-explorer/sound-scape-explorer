@@ -17,9 +17,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const {isDisabled} = useScatterStatus();
-const {getSettings} = await useStorage();
-
-const settings = await getSettings();
+const {timezoneRef} = await useStorage();
 
 const uiDisabled: ComputedRef<boolean> = computed(() => isDisabled.value || timeStore.isAllSelected);
 
@@ -30,8 +28,8 @@ const dateStart: ComputedRef<Dayjs> = computed(() => {
     start = timeStore.min;
   }
 
-  if (timezoneName.value !== '') {
-    return dayjs(start * 1000).tz(timezoneName.value);
+  if (timezoneRef.value !== '') {
+    return dayjs(start * 1000).tz(timezoneRef.value);
   }
 
   return dayjs(start * 1000);
@@ -59,10 +57,6 @@ const durations: Duration[] = [
   {name: '24h', duration: 3600 * 24},
   {name: '1w', duration: 3600 * 24 * 7},
 ];
-
-const timezoneName: ComputedRef<string> = computed(() => {
-  return settings.display_locale;
-});
 
 const isPlaying = ref<boolean>(false);
 
@@ -119,7 +113,7 @@ function handleDateStartUpdate(t: number) {
 }
 
 const timeOffset: ComputedRef<number> = computed(() => {
-  if (timezoneName.value === '') {
+  if (timezoneRef.value === '') {
     return 0;
   }
 
@@ -262,7 +256,7 @@ function printLocalizedDate(date: Dayjs): string {
       </span>
 
       <div class="timezone">
-        {{ timezoneName }}
+        {{ timezoneRef }}
       </div>
     </div>
   </div>

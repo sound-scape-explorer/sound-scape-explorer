@@ -2,11 +2,19 @@ import {asyncComputed} from '@vueuse/core';
 import {Dataset, File as H5File, Group, ready} from 'h5wasm';
 import {StorageMode} from '../common/StorageMode';
 import {StoragePath} from '../common/StoragePath';
-import type {StorageSettings} from '../common/StorageSettings';
 import {selectionStore} from '../components/Selection/selectionStore';
 import {settingsStore} from '../components/Settings/settingsStore';
 import {MATRIX_NAMES, PAIRING_NAMES} from '../constants';
 import {buildNestedArray} from '../utils/build-nested-array';
+
+export interface StorageSettings {
+  audio_folder: string;
+  audio_host: string;
+  base_path: string;
+  expected_sample_rate: number;
+  timezone: string;
+  umap_seed: number;
+}
 
 export type StorageBands = {[band: string]: number[];}
 export type StorageRanges = {[range: string]: number[];}
@@ -748,6 +756,11 @@ export async function useStorage() {
     return await getPairings(selectionStore.band, selectionStore.integration);
   });
 
+  const timezoneRef = asyncComputed(async () => {
+    const settings = await getSettings();
+    return settings?.timezone ?? '';
+  });
+
   return {
     importUploadedFile: importUploadedFile,
     deleteBrowserStorage: deleteBrowserStorage,
@@ -783,5 +796,6 @@ export async function useStorage() {
     getMatrix: getMatrix,
     getVolumeNew: getVolumeNew,
     getPairing: getPairing,
+    timezoneRef: timezoneRef,
   };
 }

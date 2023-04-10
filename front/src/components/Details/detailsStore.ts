@@ -1,13 +1,25 @@
 import {reactive} from 'vue';
 
-export const fileName = reactive<{path: string | null;}>({
+interface Index {
+  value: number | null;
+}
+
+interface FileName {
+  path: string | null;
+}
+
+export const fileNameStore = reactive<FileName>({
   path: null,
 });
 
-// export const fileIndex = reactive<{value: number | null;}>({
-//   value: null,
-// });
+export const fileIndexStore = reactive<Index>({
+  value: null,
+});
 
-export const fileTimestamp = reactive<{value: number | null;}>({
+export const groupIndexStore = reactive<Index>({
+  value: null,
+});
+
+export const fileTimestampStore = reactive<Index>({
   value: null,
 });

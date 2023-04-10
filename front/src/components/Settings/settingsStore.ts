@@ -1,7 +1,7 @@
 import type {File as H5File} from 'h5wasm';
 import {reactive} from 'vue';
 
-interface SettingsStore {
+export interface SettingsStore {
   preview: boolean;
   storage: {
     isReady: boolean;

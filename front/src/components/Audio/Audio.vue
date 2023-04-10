@@ -14,7 +14,7 @@ import {useStorage} from '../../hooks/useStorage';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import AppSuspense from '../AppSuspense/AppSuspense.vue';
-import {fileName, fileTimestamp} from '../Details/detailsStore';
+import {fileNameStore, fileTimestampStore} from '../Details/detailsStore';
 import {scatterSelectedStore} from '../Scatter/scatterStore';
 import {selectionStore} from '../Selection/selectionStore';
 import {audioStore} from './audioStore';
@@ -51,11 +51,11 @@ const colors = computed(() => {
 });
 
 const src = computed(() => {
-  if (fileName.path === null) {
+  if (fileNameStore.path === null) {
     return;
   }
 
-  return `${settings.audio_host}${fileName.path}`;
+  return `${settings.audio_host}${fileNameStore.path}`;
 });
 
 const frequencies = computed(() => {
@@ -150,7 +150,7 @@ async function load() {
     || !wsValue
     || !selectionStore.band
     || !selectionStore.integration
-    || !fileTimestamp.value
+    || !fileTimestampStore.value
   ) {
     return;
   }
@@ -167,7 +167,7 @@ async function load() {
   const [groupIndex, seconds] = await getGroupIndexAndSeconds(
     selectionStore.band,
     selectionStore.integration,
-    fileTimestamp.value,
+    fileTimestampStore.value,
   );
 
   const start = groupIndex * seconds * 1000;
@@ -298,7 +298,7 @@ function handleStop() {
  */
 
 onUnmounted(close);
-watch(fileName, load);
+watch(fileNameStore, load);
 watch(audioStore, async () => {
   if (scatterSelectedStore.index === null) {
     close();

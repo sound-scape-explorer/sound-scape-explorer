@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import html2canvas from 'html2canvas';
 import {onUnmounted, watch} from 'vue';
 import {EXPORT_FILENAME} from '../../constants';
@@ -31,6 +33,8 @@ import {useScatterFilters} from './useScatterFilters';
 import {useScatterMeta} from './useScatterMeta';
 
 dayjs.extend(relativeTime);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export function useScatter() {
   const {colors, nightColor, dayColor, cyclingColors} = useColors();
@@ -86,12 +90,14 @@ export function useScatter() {
       const {
         getStorageMetas,
         getAsyncLengthPerGroup,
+        timezoneRef,
       } = await useStorage();
 
       const metas = await getStorageMetas(selectionStore.band, selectionStore.integration);
       const metaProperties = Object.keys(metas);
       const metaSets = Object.values(metas);
       const lengthPerGroup = await getAsyncLengthPerGroup(selectionStore.band, selectionStore.integration);
+      const timezone = timezoneRef.value;
 
       scatterGL.render(scatterDatasetStore.dataset);
       scatterGL.startOrbitAnimation();
@@ -103,6 +109,7 @@ export function useScatter() {
           metaProperties,
           metaSets,
           lengthPerGroup,
+          timezone,
         ),
       );
       isFirstRender = false;
@@ -159,6 +166,7 @@ export function useScatter() {
     metaProperties: string[],
     metaSets: string[][],
     lengthPerGroup: number,
+    timezone: string,
   ): string {
     const filteredColor = `hsla(0, 0%, 0%, ${scatterAlphasStore.low})`;
     const shouldBeFilteredOut = shouldBeFiltered(index, metaProperties);
@@ -174,10 +182,10 @@ export function useScatter() {
     const metaPropertiesAsColorTypes = convertSlugsToColorTypes(metaProperties);
 
     const timestamp = metadata[index].timestamp;
-    const date = dayjs(timestamp * 1000);
+    const date = dayjs(timestamp * 1000).tz(timezone);
     const range = {
-      min: dayjs((timeStore.min) * 1000),
-      max: dayjs((timeStore.max) * 1000),
+      min: dayjs((timeStore.min) * 1000).tz(timezone),
+      max: dayjs((timeStore.max) * 1000).tz(timezone),
     };
 
     const hoverColor = 'red';
@@ -208,6 +216,7 @@ export function useScatter() {
       color = colors.value(rangedIndex).alpha(scatterAlphasStore.high).css();
     } else if (colorType === 'isDay') {
       const hour = date.get('hours');
+      console.log(index, hour);
       const isDay = isHourDuringDay(hour);
 
       color = isDay

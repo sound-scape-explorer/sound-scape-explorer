@@ -10,13 +10,14 @@ import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {scatterDatasetStore} from '../Scatter/scatterDatasetStore';
 import {scatterHoverStore, scatterSelectedStore} from '../Scatter/scatterStore';
 import {selectionStore} from '../Selection/selectionStore';
-import {fileName, fileTimestamp} from './detailsStore';
+import {fileIndexStore, fileNameStore, fileTimestampStore, groupIndexStore} from './detailsStore';
 
 const {
   getFile,
   getStorageMetas,
   getIndicators,
   getBands,
+  timezoneRef,
 } = await useStorage();
 
 /**
@@ -24,6 +25,7 @@ const {
  */
 
 const bands = await getBands();
+const timezone = timezoneRef.value;
 
 const frequencies = computed(() => {
   if (!selectionStore.band) {
@@ -79,16 +81,19 @@ function getPointFromIndex(point: number): ScatterMetadata {
 
 watch(scatterSelectedStore, async () => {
   if (scatterSelectedStore.index === null) {
-    fileName.path = null;
+    fileNameStore.path = null;
     return;
   }
 
   const metadata = scatterDatasetStore?.dataset?.metadata as ScatterMetadata[];
   const fileIndex = metadata[scatterSelectedStore.index].fileIndex;
+  const groupIndex = metadata[scatterSelectedStore.index].groupIndex;
   const timestamp = metadata[scatterSelectedStore.index].timestamp;
 
-  fileName.path = await getFile(fileIndex);
-  fileTimestamp.value = timestamp;
+  fileIndexStore.value = fileIndex;
+  groupIndexStore.value = groupIndex;
+  fileNameStore.path = await getFile(fileIndex);
+  fileTimestampStore.value = timestamp;
 });
 </script>
 
@@ -106,12 +111,22 @@ watch(scatterSelectedStore, async () => {
       <span class="file index">{{ scatterSelectedStore.index ?? 'none' }}</span>
     </div>
 
+    <div class="file container">
+      <div class="title">Selected file index</div>
+      <span class="file index">{{ fileIndexStore.value ?? 'none' }}</span>
+    </div>
+
+    <div class="file container">
+      <div class="title">Selected group index</div>
+      <span class="file index">{{ groupIndexStore.value ?? 'none' }}</span>
+    </div>
+
     <div class="file-details">
-      <span class="src">{{ fileName.path }}</span>
+      <span class="src">{{ fileNameStore.path }}</span>
       <span v-if="selectionStore.band">
         {{ frequencies?.min }} - {{ frequencies?.max }} Hz
       </span>
-      <span>{{ dayjs(fileTimestamp.value) }}</span>
+      <span>{{ dayjs(fileTimestampStore.value).tz(timezone) }}</span>
       <span>{{ selectionStore.integration }}</span>
     </div>
 
