@@ -4,9 +4,6 @@ on:
   release:
     types:
       - published
-  pull_request:
-    branches:
-      - main
 
 jobs:
   docker-processing-main:
@@ -15,6 +12,9 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Set up GCC
+        uses: egor-tensin/setup-gcc@v1
 
       - name: Docker meta
         id: meta
