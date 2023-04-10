@@ -1,3 +1,7 @@
+from typing import List
+
+from h5py import Dataset
+
 from processing.volumes.MeanSpreadingVolume import MeanSpreadingVolume
 from processing.volumes.MeanStandardDeviationVolume import \
     MeanStandardDeviationVolume
@@ -13,16 +17,47 @@ class Volume:
         name: str,
         band: str,
         integration: int,
-        file_index: int,
+        volume_index: int,
+        meta_index: int,
+        features: List[Dataset],
+        labels: List[str],
     ):
         if name == VolumeName.sum_var.value:
-            return SumVarianceVolume(band, integration, file_index)
+            return SumVarianceVolume(
+                band=band,
+                integration=integration,
+                volume_index=volume_index,
+                meta_index=meta_index,
+                features=features,
+                labels=labels,
+            )
         elif name == VolumeName.sum_std.value:
-            return SumStandardDeviationVolume(band, integration, file_index)
+            return SumStandardDeviationVolume(
+                band=band,
+                integration=integration,
+                volume_index=volume_index,
+                meta_index=meta_index,
+                features=features,
+                labels=labels,
+            )
         elif name == VolumeName.mean_std.value:
-            return MeanStandardDeviationVolume(band, integration, file_index)
+            return MeanStandardDeviationVolume(
+                band=band,
+                integration=integration,
+                volume_index=volume_index,
+                meta_index=meta_index,
+                features=features,
+                labels=labels,
+            )
         elif name == VolumeName.mean_spreading.value:
-            return MeanSpreadingVolume(band, integration, file_index)
+            return MeanSpreadingVolume(
+                band=band,
+                integration=integration,
+                volume_index=volume_index,
+                meta_index=meta_index,
+                features=features,
+                labels=labels,
+            )
         else:
             cls.fail(name)
 

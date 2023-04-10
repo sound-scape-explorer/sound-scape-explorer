@@ -31,7 +31,8 @@
 
 ### ⚙️ Configure your project
 
-Download the [configuration example](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
+Download
+the [configuration example](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
 and set up your project!
 
 ### 💽 Generate your data
@@ -80,18 +81,22 @@ yarn dev
 
 ## ⚒️ Processing commands
 
-| `yarn` command          | Description                                                               |
-|-------------------------|---------------------------------------------------------------------------|
-| `process`               | alias for `process:all`                                                   |
-| `process:all`           | Run all processing commands                                               |
-| `process:all-actions`   | Run `process:indicators` `process:reducers` & `process:volumes` commands. |
-| `process:all-to-groups` | Run `process:config` `process:files` & `process:groups` commands.         |
-| `process:config`        | Process configuration file.                                               |
-| `process:files`         | Process audio files.                                                      |
-| `process:groups`        | Process integration of audio features.                                    |
-| `process:indicators`    | Process indicators from audio slices.                                     |
-| `process:reducers`      | Process reducers from audio features.                                     |
-| `process:volumes`       | Process volumes from audio features.                                      |
+| `yarn` command          | Description                                                                                                                           |
+|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| `process`               | alias for `process:all`                                                                                                               |
+| `process:all`           | Run all processing commands                                                                                                           |
+| `process:all-actions`   | Run `process:autocluster` `process:reducers` `process:indicators` `process:volumes` `process:matrices` & `process:pairings` commands. |
+| `process:all-but-files` | Run all commands except `process:files` & `process:groups`.                                                                           |
+| `process:all-to-groups` | Run `process:config` `process:files` & `process:groups` commands.                                                                     |
+| `process:config`        | Process configuration file.                                                                                                           |
+| `process:files`         | Process audio files.                                                                                                                  |
+| `process:groups`        | Process integration of audio features.                                                                                                |
+| `process:autocluster`   | Process autocluster from grouped audio features.                                                                                      |
+| `process:reducers`      | Process reducers from grouped audio features.                                                                                         |
+| `process:indicators`    | Process indicators from audio slices.                                                                                                 |
+| `process:volumes`       | Process volumes from grouped audio features.                                                                                          |
+| `process:matrices`      | Process matrices from grouped audio features.                                                                                         |
+| `process:pairings`      | Process pairings from grouped audio features.                                                                                         |
 
 ## 🧑‍🤝‍🧑 Contribute
 

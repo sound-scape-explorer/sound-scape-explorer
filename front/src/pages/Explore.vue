@@ -1,104 +1,45 @@
 <script lang="ts" setup>
-import Indicators from '../components/Indicators.vue';
-import Player from '../components/Player.vue';
-import SelectionDropdown from '../components/SelectionDropdown.vue';
-import UMAPAlphas from '../components/UMAPAlphas.vue';
-import UMAPExport from '../components/UMAPExport.vue';
-import UMAPFiltersColorScales from '../components/UMAPFiltersColorScales.vue';
-import UMAPFiltersColorTypes from '../components/UMAPFiltersColorTypes.vue';
-import UMAPLegend from '../components/UMAPLegend.vue';
-import UMAPQuery from '../components/UMAPQuery.vue';
-import UMAPQueryComplex from '../components/UMAPQueryComplex.vue';
-import UMAPScatterPlotGL from '../components/UMAPScatterPlotGL.vue';
-import UMAPScreenshot from '../components/UMAPScreenshot.vue';
-import UMAPTimeRangeOptions from '../components/UMAPTimeRangeOptions.vue';
-import UMAPTimeRangeSlider from '../components/UMAPTimeRangeSlider.vue';
-import Volumes from '../components/Volumes.vue';
-import {useUMAPPage} from '../composables/useUMAPPage';
-import {settingsStore} from '../store/settings.store';
+import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore';
+import Audio from '../components/Audio/Audio.vue';
+import Colors from '../components/Colors/Colors.vue';
+import Details from '../components/Details/Details.vue';
+import Help from '../components/Help/Help.vue';
+import Import from '../components/Import/Import.vue';
+import Matrices from '../components/Matrices/Matrices.vue';
+import Menu from '../components/Menu/Menu.vue';
+import Meta from '../components/Meta/Meta.vue';
+import Pairings from '../components/Pairings/Pairings.vue';
+import Query from '../components/Queries/Query.vue';
+import Scatter from '../components/Scatter/Scatter.vue';
+import Selection from '../components/Selection/Selection.vue';
+import Settings from '../components/Settings/Settings.vue';
+import Time from '../components/Time/Time.vue';
+import Volumes from '../components/Volumes/Volumes.vue';
+import {useStorage} from '../hooks/useStorage';
 
-const {delayUpdate} = useUMAPPage();
+const {initializeFile} = await useStorage();
+const isReady = await initializeFile();
 </script>
 
 <template>
-  <div class="container">
-    <div class="options">
-      <div class="row first">
-        <SelectionDropdown :handle-update="delayUpdate" />
-        <UMAPFiltersColorTypes />
-        <UMAPFiltersColorScales />
-        <UMAPScreenshot class="flex" />
-      </div>
+  <Menu />
+  <Import v-if="appDraggablesStore.import" />
+  <Settings v-if="appDraggablesStore.settings" />
+  <Help v-if="appDraggablesStore.help" />
 
-      <div class="row">
-        <UMAPQuery />
-        <UMAPQueryComplex />
+  <div v-if="isReady">
+    <Selection />
+    <Colors />
+    <Query />
+    <Time />
+    <Audio />
+    <Details />
+    <Volumes />
+    <Matrices />
+    <Pairings />
 
-        <div class="flex">
-          <UMAPAlphas />
-        </div>
+    <Meta />
 
-        <div class="flex">
-          <UMAPExport />
-        </div>
-      </div>
-
-      <UMAPTimeRangeOptions />
-      <UMAPTimeRangeSlider />
-    </div>
-
-    <div class="scatter">
-      <UMAPScatterPlotGL />
-    </div>
+    <Scatter />
   </div>
-
-  <UMAPLegend />
-  <Player v-if="settingsStore.preview" />
-  <Indicators v-if="settingsStore.preview" />
-  <Volumes v-if="settingsStore.preview" />
 </template>
-
-<style lang="scss" scoped>
-.container {
-  height: 100%;
-
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
-
-.options {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr) 11rem;
-  gap: 0.8rem;
-  justify-items: center;
-  align-items: center;
-}
-
-.first {
-  grid-template-columns: 1fr repeat(2, 8rem) 11rem;
-}
-
-.query-complex {
-  grid-column: 3 / span 2;
-}
-
-.flex {
-  display: flex;
-  width: 100%;
-  gap: 0.8rem;
-}
-
-.scatter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  overflow: hidden;
-}
-</style>

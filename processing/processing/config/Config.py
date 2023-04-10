@@ -1,9 +1,9 @@
 import datetime
+import math
 from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
-import math
 import numpy
 import pandas
 from numpy import nan
@@ -340,7 +340,7 @@ class Config(metaclass=SingletonMeta):
 
             meta_sets.append(meta_set)
 
-        storage.create_metas(
+        storage.write_metas(
             meta_properties,
             meta_sets,
         )

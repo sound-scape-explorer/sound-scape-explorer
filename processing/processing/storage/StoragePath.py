@@ -64,3 +64,10 @@ class StoragePath(Enum):
     # Volumes
 
     volume_ = '/volume_'
+
+    # Autocluster
+
+    autocluster = '/autocluster'
+
+    # Matrices
+    matrix_ = '/matrix_'

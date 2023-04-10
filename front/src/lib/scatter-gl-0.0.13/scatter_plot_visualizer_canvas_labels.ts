@@ -16,10 +16,10 @@
 // ==============================================================================
 
 import * as THREE from 'three';
-import type {ScatterPlotVisualizer} from './scatter_plot_visualizer';
-import {CameraType, RenderContext} from './render';
-import {CollisionGrid} from './label';
 import type {BoundingBox} from './label';
+import {CollisionGrid} from './label';
+import {CameraType, RenderContext} from './render';
+import type {ScatterPlotVisualizer} from './scatter_plot_visualizer';
 import type {Styles} from './styles';
 import * as util from './util';
 

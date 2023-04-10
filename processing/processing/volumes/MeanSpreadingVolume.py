@@ -1,6 +1,4 @@
-from typing import List
-
-import numpy
+import numpy as np
 
 from processing.volumes.AbstractVolume import AbstractVolume
 
@@ -8,20 +6,29 @@ from processing.volumes.AbstractVolume import AbstractVolume
 class MeanSpreadingVolume(AbstractVolume):
     def __init__(
         self,
-        band: str,
-        integration: int,
-        file_index: int,
+        band,
+        integration,
+        volume_index,
+        meta_index,
+        features,
+        labels
     ) -> None:
-        super().__init__(band, integration, file_index)
+        super().__init__(
+            band,
+            integration,
+            volume_index,
+            meta_index,
+            features,
+            labels
+        )
 
-    def calculate(
-        self,
-        features: List[float],
-    ) -> None:
-        percentile_95th = numpy.nanpercentile(features, 95, axis=0)
-        percentile_5th = numpy.nanpercentile(features, 5, axis=0)
-        mean = numpy.mean(percentile_95th - percentile_5th)
+    def calculate(self):
+        data = []
 
-        mean_spreading = float(mean)
+        for _, cluster_frame in self._iterate_clusters():
+            percentile_95th = np.nanpercentile(cluster_frame, 95, axis=0)
+            percentile_5th = np.nanpercentile(cluster_frame, 5, axis=0)
+            mean = np.mean(percentile_95th - percentile_5th)
+            data.append(float(mean))
 
-        self._values.append(mean_spreading)
+        self._set(data)

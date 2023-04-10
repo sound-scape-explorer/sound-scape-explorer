@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from sklearn.preprocessing import robust_scale
 from umap.umap_ import UMAP
@@ -12,7 +12,7 @@ class UmapReducer(AbstractReducer):
     def __init__(
         self,
         target_dimensions: int,
-        seed: int,
+        seed: Union[int, None],
     ):
         self.__instance = UMAP(
             n_components=target_dimensions,
@@ -22,6 +22,7 @@ class UmapReducer(AbstractReducer):
     def get_instance(self) -> UMAP:
         return self.__instance
 
+    # TODO: Do we want to inject the scale?
     def reduce(
         self,
         features: List[List[float]],

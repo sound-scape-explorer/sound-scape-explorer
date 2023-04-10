@@ -72,7 +72,7 @@ class Storage(metaclass=SingletonMeta):
 
         return path
 
-    def __create_dataset(
+    def __write_dataset(
         self,
         path: Union[StoragePath, str],
         data: Any,
@@ -140,9 +140,12 @@ class Storage(metaclass=SingletonMeta):
         self,
         path: Union[StoragePath, str],
     ) -> Dataset:
-        path = self.__get_path_as_string(path)
-        payload = self.__file[path]
-        return payload
+        try:
+            path = self.__get_path_as_string(path)
+            payload = self.__file[path]
+            return payload
+        except KeyError:
+            raise KeyError(f'Could not get path: {path}')
 
     def get_ranges(self) -> AsStrWrapper:
         dataset = self.__get(StoragePath.ranges)
@@ -161,6 +164,8 @@ class Storage(metaclass=SingletonMeta):
 
         bands = {}
 
+        # TODO: Fix typings
+
         for index, name in enumerate(names):
             f = frequencies[index]
             low = f[0]
@@ -174,8 +179,8 @@ class Storage(metaclass=SingletonMeta):
 
         return bands
 
-    def get_config_files(self) -> ConfigFiles:
-        names = self.get_files()
+    def read_config_files(self) -> ConfigFiles:
+        names = self.read_files()
         timestamps = self.get_timestamps()
         sites = self.get_files_sites()
         metas = self.__get_files_metas()
@@ -287,7 +292,7 @@ class Storage(metaclass=SingletonMeta):
     def get_bands_frequencies(self) -> Dataset:
         return self.__get(StoragePath.bands_frequencies)
 
-    def get_files(self) -> AsStrWrapper:
+    def read_files(self) -> AsStrWrapper:
         dataset = self.__get(StoragePath.files)
         return dataset.asstr()
 
@@ -327,21 +332,21 @@ class Storage(metaclass=SingletonMeta):
 
         return values
 
-    def get_volumes(self) -> Union[AsStrWrapper, List]:
+    def read_volumes(self) -> List[str]:
         dataset = self.__get(StoragePath.volumes)
 
         length, = dataset.shape
         if length == 0:
             return []
 
-        return dataset.asstr()
+        return dataset.asstr()[:]
 
     def get_volumes_values(
         self,
         band: str,
         integration: int,
     ) -> List[List[float]]:
-        volumes = self.get_volumes()
+        volumes = self.read_volumes()
 
         values = []
 
@@ -505,23 +510,23 @@ class Storage(metaclass=SingletonMeta):
         sites: Any,
         metas: Any,
     ) -> None:
-        self.__create_dataset(
+        self.__write_dataset(
             StoragePath.files,
             files,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.timestamps,
             data=timestamps,
             compression=StorageCompression.gzip,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             StoragePath.files_sites,
             sites,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             StoragePath.files_metas,
             metas,
         )
@@ -531,12 +536,12 @@ class Storage(metaclass=SingletonMeta):
         ranges: Any,
         timestamps: Any,
     ) -> None:
-        self.__create_dataset(
+        self.__write_dataset(
             StoragePath.ranges,
             ranges,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.ranges_timestamps,
             data=timestamps,
             compression=StorageCompression.gzip,
@@ -547,12 +552,12 @@ class Storage(metaclass=SingletonMeta):
         bands: Any,
         frequencies: Any,
     ) -> None:
-        self.__create_dataset(
+        self.__write_dataset(
             StoragePath.bands,
             bands,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.bands_frequencies,
             data=frequencies,
             compression=StorageCompression.gzip,
@@ -563,12 +568,12 @@ class Storage(metaclass=SingletonMeta):
         integrations: List[str],
         integrations_seconds: List[int],
     ) -> None:
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.integrations,
             data=integrations,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.integrations_seconds,
             data=integrations_seconds,
             compression=StorageCompression.gzip,
@@ -582,14 +587,14 @@ class Storage(metaclass=SingletonMeta):
     ) -> None:
         path = self.__get_file_features_path(band, file_index)
 
-        self.__create_dataset(
+        self.__write_dataset(
             path,
             features,
             compression=StorageCompression.gzip,
         )
 
     def enumerate_file_indexes(self) -> Iterable[int]:
-        files = self.get_files()
+        files = self.read_files()
 
         for f, _ in enumerate(files):
             yield f
@@ -606,6 +611,18 @@ class Storage(metaclass=SingletonMeta):
             for group_index in range(groups_count):
                 yield file_index, group_index
 
+    def enumerate_meta_properties(self):
+        meta_properties = self.read_meta_properties()
+
+        for meta_index, meta_property in enumerate(meta_properties):
+            yield meta_index
+
+    def enumerate_volumes(self):
+        volumes = self.read_volumes()
+
+        for index, name in enumerate(volumes):
+            yield index, name
+
     def create_group(
         self,
         features: List[List[float]],
@@ -618,13 +635,13 @@ class Storage(metaclass=SingletonMeta):
             path_features = f'{StoragePath.group_features.value}{suffix}'
             path_timestamps = f'{StoragePath.group_timestamps.value}{suffix}'
 
-            self.__create_dataset(
+            self.__write_dataset(
                 path=path_features,
                 data=features[f],
                 compression=StorageCompression.gzip,
             )
 
-            self.__create_dataset(
+            self.__write_dataset(
                 path=path_timestamps,
                 data=timestamps[f],
                 compression=StorageCompression.gzip,
@@ -661,7 +678,7 @@ class Storage(metaclass=SingletonMeta):
 
         return True
 
-    def get_grouped_features_all_files(
+    def read_grouped_features_all_files(
         self,
         band: str,
         integration: int,
@@ -738,7 +755,7 @@ class Storage(metaclass=SingletonMeta):
     ) -> None:
         suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.reduced_.value}{reducer_index}{suffix}'
-        self.__create_dataset(
+        self.__write_dataset(
             path=path,
             data=features,
             compression=StorageCompression.gzip,
@@ -761,14 +778,51 @@ class Storage(metaclass=SingletonMeta):
     ) -> None:
         suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.indicator_.value}{index}{suffix}'
-        self.__create_dataset(
+        self.__write_dataset(
             path=path,
             data=values,
             compression=StorageCompression.gzip,
         )
 
+    def write_volume_new(
+        self,
+        band: str,
+        integration: int,
+        volume_index: int,
+        meta_index: int,
+        data: List[float],
+    ) -> None:
+        suffix = self.__get_grouped_suffix(band, integration, meta_index)
+        path = f'{StoragePath.volume_.value}{volume_index}{suffix}'
+        self.__write_dataset(
+            path=path,
+            data=data,
+            compression=StorageCompression.gzip,
+        )
+
+    def write_matrix(
+        self,
+        band: str,
+        integration: int,
+        matrix_index: int,
+        meta_index: int,
+        data: List[float],
+    ) -> None:
+        suffix = self.__get_grouped_suffix(band, integration, meta_index)
+        path = f'{StoragePath.matrix_.value}{matrix_index}{suffix}'
+        self.__write_dataset(
+            path=path,
+            data=data,
+            compression=StorageCompression.gzip,
+        )
+
+    def delete_matrices(self) -> None:
+        for m, _ in enumerate([0, 1, 2]):
+            path = f'{StoragePath.matrix_.value}{m}'
+            self.__delete_silently(path)
+
     def delete_volumes(self) -> None:
-        volumes = self.get_volumes()
+        volumes = self.read_volumes()
 
         for v, _ in enumerate(volumes):
             path = f'{StoragePath.volume_.value}{v}'
@@ -792,28 +846,35 @@ class Storage(metaclass=SingletonMeta):
         suffix = self.__get_grouped_suffix(band, integration, file_index)
         path = f'{StoragePath.volume_.value}{index}{suffix}'
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=path,
             data=values,
             compression=StorageCompression.gzip,
         )
 
-    def create_metas(
+    def write_metas(
         self,
         meta_properties: List[str],
         meta_sets: List[List[str]],
     ) -> None:
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.meta_properties,
             data=meta_properties,
         )
 
         meta_sets = self.make_rectangular(meta_sets, '')
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.meta_sets,
             data=meta_sets,
         )
+
+    # TODO: Remove autocluster injection after storage upgrade.
+    def read_meta_properties(self) -> List[str]:
+        meta_properties = self.__get(StoragePath.meta_properties)
+        strings = list(meta_properties.asstr()[:])
+        strings.insert(0, 'AUTOCLUSTER')
+        return strings
 
     def is_defined_files(self) -> bool:
         return self.exists_dataset(StoragePath.files.value) \
@@ -882,27 +943,27 @@ class Storage(metaclass=SingletonMeta):
         if len(ranges) != 0:
             ranges = self.make_rectangular(ranges, '')
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.reducers,
             data=reducers,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.reducers_dimensions,
             data=dimensions,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.reducers_bands,
             data=bands,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.reducers_integrations,
             data=integrations,
         )
 
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.reducers_ranges,
             data=ranges,
         )
@@ -911,7 +972,7 @@ class Storage(metaclass=SingletonMeta):
         self,
         indicators: List[str],
     ) -> None:
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.indicators,
             data=indicators,
         )
@@ -920,7 +981,85 @@ class Storage(metaclass=SingletonMeta):
         self,
         volumes: List[str],
     ) -> None:
-        self.__create_dataset(
+        self.__write_dataset(
             path=StoragePath.volumes,
             data=volumes,
         )
+
+    def write_autocluster(
+        self,
+        autocluster: List[int],
+        band: str,
+        integration: int,
+    ) -> None:
+        path = f'{StoragePath.autocluster.value}/{band}/{integration}'
+
+        self.__write_dataset(
+            path=path,
+            data=autocluster,
+        )
+
+    def delete_autocluster(self) -> None:
+        self.__delete_silently(StoragePath.autocluster)
+
+    def read_autocluster(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[int]:
+        path = f'{StoragePath.autocluster.value}/{band}/{integration}'
+        dataset = self.__get(path)
+        return dataset[:]
+
+    def get_flat_index(
+        self,
+        band: str,
+        integration: int,
+        file_index: int,
+        group_index: int,
+    ) -> int:
+        group_path = f'{StoragePath.group_timestamps.value}/{band}/' \
+                     f'{integration}/0'
+        group = self.__get(group_path)
+        num_elements_per_group = len(group[:])
+        return file_index * num_elements_per_group + group_index
+
+    # TODO: Remove autocluster mix when Storage will migrate to _flattened_
+    #  storing strategy.
+    def read_meta_values(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[List[str]]:
+        files = self.read_config_files()
+
+        meta_properties = self.read_meta_properties()
+        meta_values = []
+
+        autocluster = self.read_autocluster(band, integration)
+
+        for mp, meta_property in enumerate(meta_properties):
+            meta_property_values = []
+
+            for file_index, group_index in self.enumerate_group_indexes(
+                    band=band,
+                    integration=integration,
+            ):
+                f = self.get_flat_index(
+                    band,
+                    integration,
+                    file_index,
+                    group_index
+                )
+
+                file_name = list(files)[file_index]
+                file_ = files[file_name]
+                meta = list(file_.meta)
+                meta.insert(0, str(autocluster[f]))
+
+                meta_value = meta[mp]
+                meta_property_values.append(meta_value)
+
+            meta_values.append(meta_property_values)
+
+        return meta_values

@@ -127,7 +127,8 @@ export function hasWebGLSupport(): boolean {
     const c = document.createElement('canvas');
     const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
     return gl != null;
-  } catch (e) {
+  }
+  catch (e) {
     return false;
   }
 }
@@ -185,6 +186,7 @@ export function packRgbIntoUint8Array(
 export function styleRgbFromHexColor(
   hex: number | string,
 ): [number, number, number] {
+  // @ts-expect-error TS2345
   const c = new THREE.Color(hex as string);
   return [(c.r * 255) | 0, (c.g * 255) | 0, (c.b * 255) | 0];
 }
@@ -202,5 +204,6 @@ export function getDefaultPointInPolylineColor(
   const hue = startHue + ((endHue - startHue) * index) / totalPoints;
 
   const hsl = `hsl(${hue}, ${toPercent(saturation)}, ${toPercent(lightness)})`;
+  // @ts-expect-error TS2345
   return new THREE.Color(hsl);
 }

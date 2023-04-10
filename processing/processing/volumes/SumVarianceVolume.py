@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy
 
 from processing.volumes.AbstractVolume import AbstractVolume
@@ -8,17 +6,28 @@ from processing.volumes.AbstractVolume import AbstractVolume
 class SumVarianceVolume(AbstractVolume):
     def __init__(
         self,
-        band: str,
-        integration: int,
-        file_index: int,
+        band,
+        integration,
+        volume_index,
+        meta_index,
+        features,
+        labels
     ) -> None:
-        super().__init__(band, integration, file_index)
+        super().__init__(
+            band,
+            integration,
+            volume_index,
+            meta_index,
+            features,
+            labels
+        )
 
-    def calculate(
-        self,
-        features: List[float],
-    ) -> None:
-        var = numpy.var(features, axis=0)
-        sum_ = numpy.sum(var)
-        sumvar = float(sum_)
-        self._values.append(sumvar)
+    def calculate(self):
+        data = []
+
+        for _, cluster_frame in self._iterate_clusters():
+            var = numpy.var(cluster_frame, axis=0)
+            sum_var = numpy.sum(var)
+            data.append(float(sum_var))
+            
+        self._set(data)

@@ -6,7 +6,7 @@ def get_jr_dataframe(
     band: str,
     integration: int,
 ):
-    grouped_features = storage.get_grouped_features_all_files(
+    grouped_features = storage.read_grouped_features_all_files(
         band,
         integration,
         unwrap=True,
@@ -17,9 +17,9 @@ def get_jr_dataframe(
         integration,
     )
 
-    files = storage.get_config_files()
+    files = storage.read_config_files()
     metas = [file.meta for file in files.values()]
-    filenames = storage.get_files()
+    filenames = storage.read_files()
 
     output_filenames = []
     output_metas = []
@@ -34,7 +34,7 @@ def get_jr_dataframe(
     indicators = storage.get_indicators()
     indicators_values = storage.get_indicators_values(band, integration)
 
-    volumes = storage.get_volumes()
+    volumes = storage.read_volumes()
     volumes_values = storage.get_volumes_values(band, integration)
 
     return output_filenames, \
