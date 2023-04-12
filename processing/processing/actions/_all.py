@@ -14,3 +14,5 @@ import processing.actions.f_indicators
 import processing.actions.g_volumes
 # noinspection PyUnresolvedReferences
 import processing.actions.h_matrices
+# noinspection PyUnresolvedReferences
+import processing.actions.i_pairings
