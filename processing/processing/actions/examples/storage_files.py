@@ -5,7 +5,7 @@ from processing.storage.Storage import Storage
 # Get `/files` in storage
 storage = Storage(path='./sample/sse.h5')
 
-files = storage.get_files()
+files = storage.read_files()
 
 data_pointer = files
 print(data_pointer)

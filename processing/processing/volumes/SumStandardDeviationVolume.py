@@ -1,6 +1,4 @@
-from typing import List
-
-import numpy
+import numpy as np
 
 from processing.volumes.AbstractVolume import AbstractVolume
 
@@ -8,17 +6,28 @@ from processing.volumes.AbstractVolume import AbstractVolume
 class SumStandardDeviationVolume(AbstractVolume):
     def __init__(
         self,
-        band: str,
-        integration: int,
-        file_index: int,
+        band,
+        integration,
+        volume_index,
+        meta_index,
+        features,
+        labels
     ) -> None:
-        super().__init__(band, integration, file_index)
+        super().__init__(
+            band,
+            integration,
+            volume_index,
+            meta_index,
+            features,
+            labels
+        )
 
-    def calculate(
-        self,
-        features: List[float],
-    ) -> None:
-        std = numpy.std(features, axis=0)
-        sum_ = numpy.sum(std)
-        sumstd = float(sum_)
-        self._values.append(sumstd)
+    def calculate(self):
+        data = []
+
+        for _, cluster_frame in self._iterate_clusters():
+            std = np.std(cluster_frame, axis=0)
+            sum_std = np.sum(std)
+            data.append(float(sum_std))
+
+        self._set(data)

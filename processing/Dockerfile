@@ -1,5 +1,8 @@
 FROM python:3.8-slim AS build
 
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends build-essential
+
 RUN useradd -m sse
 USER sse
 
@@ -31,4 +34,4 @@ COPY --from=build /home/sse/.cache/torch/hub /home/sse/.cache/torch/hub
 
 WORKDIR /app
 COPY processing processing
-ENTRYPOINT ["python3", "processing/actions/all.py"]
+ENTRYPOINT ["python3", "processing/actions/_all.py"]

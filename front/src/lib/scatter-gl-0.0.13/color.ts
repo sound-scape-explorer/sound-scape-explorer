@@ -39,8 +39,11 @@ function parseOpacity(colorString: string) {
 }
 
 export function parseColor(inputColorString: string): Color {
-  if (cache.has(inputColorString)) return cache.get(inputColorString)!;
+  if (cache.has(inputColorString)) {
+    return cache.get(inputColorString)!;
+  }
   const {colorString, opacity} = parseOpacity(inputColorString);
+  // @ts-expect-error: TS2345
   const color = new THREE.Color(colorString);
   const {r, g, b} = color;
   const item = {r, g, b, opacity};

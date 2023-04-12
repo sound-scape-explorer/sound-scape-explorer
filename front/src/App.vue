@@ -1,33 +1,25 @@
 <script lang="ts" setup>
 import {NLayout, NNotificationProvider, NSpace} from 'naive-ui';
 import 'sass-reset';
-import Content from './components/Content.vue';
-import Menu from './components/Menu.vue';
-import ModalLoading from './components/ModalLoading.vue';
-import Notification from './components/Notification.vue';
-//
+import AppNotification from './components/AppNotification/AppNotification.vue';
+import Loading from './components/Loading/Loading.vue';
+import Explore from './pages/Explore.vue';
 </script>
 
 <template>
   <n-space size="large" vertical>
-    <n-layout class="container" has-sider sider-placement="left">
-      <Suspense>
-        <Menu />
-      </Suspense>
-      <ModalLoading />
+    <n-layout has-sider sider-placement="left">
+      <Loading />
 
       <n-layout>
         <n-notification-provider>
-          <Notification />
-          <Content />
+          <AppNotification />
+
+          <Suspense>
+            <Explore />
+          </Suspense>
         </n-notification-provider>
       </n-layout>
     </n-layout>
   </n-space>
 </template>
-
-<style lang="scss" scoped>
-.container {
-  height: 100vh;
-}
-</style>

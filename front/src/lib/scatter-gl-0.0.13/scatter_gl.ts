@@ -15,34 +15,34 @@
 // limitations under the License.
 // ==============================================================================
 
+import {parseColor} from './color';
+import {RGBA_NUM_ELEMENTS, SCATTER_PLOT_CUBE_LENGTH} from './constants';
+import type {Sequence} from './data';
+import {Dataset} from './data';
+import {LabelRenderParams} from './render';
 import type {
   CameraParams,
   OnCameraMoveListener,
   OrbitControlParams,
 } from './scatter_plot';
 import {ScatterPlot} from './scatter_plot';
-import {parseColor} from './color';
-import type {Sequence} from './data';
-import {Dataset} from './data';
-import {LabelRenderParams} from './render';
-import type {Styles, UserStyles} from './styles';
-import {makeStyles} from './styles';
-import type {Optional} from './types';
-import {InteractionMode, RenderMode} from './types';
-import * as util from './util';
-import {RGBA_NUM_ELEMENTS, SCATTER_PLOT_CUBE_LENGTH} from './constants';
 
 import type {ScatterPlotVisualizer} from './scatter_plot_visualizer';
 import {
   ScatterPlotVisualizer3DLabels,
 } from './scatter_plot_visualizer_3d_labels';
-import {ScatterPlotVisualizerSprites} from './scatter_plot_visualizer_sprites';
 import {
   ScatterPlotVisualizerCanvasLabels,
 } from './scatter_plot_visualizer_canvas_labels';
 import {
   ScatterPlotVisualizerPolylines,
 } from './scatter_plot_visualizer_polylines';
+import {ScatterPlotVisualizerSprites} from './scatter_plot_visualizer_sprites';
+import type {Styles, UserStyles} from './styles';
+import {makeStyles} from './styles';
+import type {Optional} from './types';
+import {InteractionMode, RenderMode} from './types';
+import * as util from './util';
 
 export type PointColorer = (
   index: number,
@@ -564,7 +564,7 @@ export class ScatterGL {
         colors[dst++] = c.opacity;
       }
     }
-    // Otherwise, determine whether to first color all points with the default
+      // Otherwise, determine whether to first color all points with the default
     // unselected color or the color where none is selected...
     else {
       // First color all unselected / non-selected points

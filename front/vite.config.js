@@ -11,24 +11,23 @@ export const base = process.env.NODE_ENV === 'production'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base,
+  base: base,
   build: {
     target: 'es2020',
     rollupOptions: {
       output: {
         manualChunks: {
+          '@vueuse/components': ['@vueuse/components'],
+          '@vueuse/core': ['@vueuse/core'],
           'audiobuffer-slice': ['audiobuffer-slice'],
-          'colormap': ['colormap'],
           'chroma-js': ['chroma-js'],
+          'colormap': ['colormap'],
           'dayjs': ['dayjs'],
           'h5wasm': ['h5wasm'],
-          // 'highcharts': ['highcharts'],
-          // 'highcharts-vue': ['highcharts-vue'],
           'html2canvas': ['html2canvas'],
-          'simple-statistics': ['simple-statistics'],
+          'plotly.js-dist-min': ['plotly.js-dist-min'],
           'three': ['three'],
           'vue': ['vue'],
-          'vue-router': ['vue-router'],
           'wav-encoder': ['wav-encoder'],
           'wavesurfer.js': ['wavesurfer.js'],
         },
