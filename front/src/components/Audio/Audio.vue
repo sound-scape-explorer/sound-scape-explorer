@@ -1,5 +1,13 @@
 <script lang="ts" setup="">
-import {PauseOutline, PlayOutline, StopOutline, VolumeHighOutline, VolumeLowOutline} from '@vicons/ionicons5';
+import {
+  AddOutline,
+  PauseOutline,
+  PlayOutline,
+  RemoveOutline,
+  StopOutline,
+  VolumeHighOutline,
+  VolumeLowOutline,
+} from '@vicons/ionicons5';
 import audioBufferSlice from 'audiobuffer-slice';
 import colormap from 'colormap';
 import {NButton, NIcon} from 'naive-ui';
@@ -9,7 +17,7 @@ import WaveSurfer from 'wavesurfer.js';
 import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
-import {SPECTROGRAM, WAVE} from '../../constants';
+import {FFT_SIZE, WAVE} from '../../constants';
 import {useStorage} from '../../hooks/useStorage';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
@@ -19,10 +27,7 @@ import {scatterSelectedStore} from '../Scatter/scatterStore';
 import {selectionStore} from '../Selection/selectionStore';
 import {audioStore} from './audioStore';
 
-const {
-  getSettings,
-  getBands,
-} = await useStorage();
+const {getSettings, getBands} = await useStorage();
 
 /**
  * State
@@ -32,15 +37,16 @@ const settings = await getSettings();
 const bands = await getBands();
 const audioContext = new AudioContext();
 const containerRef = ref<HTMLDivElement>();
-const waveformContainerRef = ref<HTMLDivElement>();
-const spectrogramContainerRef = ref<HTMLDivElement>();
-const isPlaying = ref<boolean>(false);
+const waveformRef = ref<HTMLDivElement>();
+const spectrogramRef = ref<HTMLDivElement>();
+const isPlayingRef = ref<boolean>(false);
+const fftSizeRef = ref<number>(FFT_SIZE.default);
 
-const colors = computed(() => {
-  const wsValue = unref(ws);
+const colorsRef = computed(() => {
+  const ws = unref(wsRef);
 
-  if (wsValue) {
-    wsValue.destroy();
+  if (ws) {
+    ws.destroy();
   }
 
   return colormap({
@@ -50,7 +56,7 @@ const colors = computed(() => {
   });
 });
 
-const src = computed(() => {
+const srcRef = computed(() => {
   if (fileNameStore.path === null) {
     return;
   }
@@ -58,7 +64,7 @@ const src = computed(() => {
   return `${settings.audio_host}${fileNameStore.path}`;
 });
 
-const frequencies = computed(() => {
+const frequenciesRef = computed(() => {
   if (!selectionStore.band) {
     return;
   }
@@ -72,22 +78,21 @@ const frequencies = computed(() => {
   };
 });
 
-const ws = computed(() => {
-  const f = unref(frequencies);
+const wsRef = computed(() => {
+  const frequencies = unref(frequenciesRef);
 
-  if (!f) {
+  if (!frequencies) {
     return;
   }
 
-  const {min, max} = f;
-  const waveform = unref(waveformContainerRef);
-  const spectrogram = unref(spectrogramContainerRef);
+  const {min, max} = frequencies;
+  const waveform = unref(waveformRef);
+  const spectrogram = unref(spectrogramRef);
+  const fftSize = unref(fftSizeRef);
 
-  if (!waveform || !spectrogram || !min || !max) {
+  if (!waveform || !spectrogram || !min || !max || !fftSize) {
     return;
   }
-
-  // empty();
 
   const params: WaveSurferParams = {
     container: waveform,
@@ -100,9 +105,9 @@ const ws = computed(() => {
       Spectrogram.create({
         container: spectrogram,
         labels: true,
-        colorMap: colors.value,
+        colorMap: colorsRef.value,
         height: 192,
-        fftSamples: SPECTROGRAM.fftSize,
+        fftSamples: fftSize,
         frequencyMin: min,
         frequencyMax: max,
       }),
@@ -129,7 +134,6 @@ const ws = computed(() => {
 function close() {
   containerRef.value?.classList.remove('open');
   containerRef.value?.classList.add('close');
-  empty();
 }
 
 function open() {
@@ -137,20 +141,16 @@ function open() {
   containerRef.value?.classList.add('open');
 }
 
-function empty() {
-  // ws.value && ws.value.empty();
-}
-
 async function load() {
-  const srcValue = unref(src);
-  const wsValue = unref(ws);
+  const srcValue = unref(srcRef);
+  const ws = unref(wsRef);
 
   if (
-    !srcValue
-    || !wsValue
-    || !selectionStore.band
-    || !selectionStore.integration
-    || !fileTimestampStore.value
+    !srcValue ||
+    !ws ||
+    !selectionStore.band ||
+    !selectionStore.integration ||
+    !fileTimestampStore.value
   ) {
     return;
   }
@@ -173,124 +173,192 @@ async function load() {
   const start = groupIndex * seconds * 1000;
   const end = start + seconds * 1000;
 
-  audioBufferSlice(audioBuffer, start, end, (error: TypeError, slicedAudioBuffer: AudioBuffer) => {
-    if (error) {
-      console.error(error);
-      return;
-    }
+  audioBufferSlice(audioBuffer, start, end, handleAudioSlice);
+}
 
-    // create a new WAV file with the sliced buffer
-    const wavData = {
-      sampleRate: slicedAudioBuffer.sampleRate,
-      channelData: [slicedAudioBuffer.getChannelData(0)], // use 2 channels for stereo sound
-    };
+function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
+  if (error) {
+    console.error(error);
+    return;
+  }
 
-    WavEncoder.encode(wavData).then((wav) => {
-      const blob = new Blob([wav]);
+  const ws = unref(wsRef);
 
-      wsValue.loadBlob(blob);
+  if (!ws) {
+    return;
+  }
 
-      wsValue.on('seek', () => {
-        if (wsValue.isPlaying()) {
-          return;
-        }
+  // create a new WAV file with the sliced buffer
+  const wavData = {
+    sampleRate: slicedAudioBuffer.sampleRate,
+    channelData: [slicedAudioBuffer.getChannelData(0)], // use 2 channels for stereo sound
+  };
 
-        wsValue.play();
-        isPlaying.value = true;
-      });
+  WavEncoder.encode(wavData).then((wav) => {
+    const blob = new Blob([wav]);
 
-      wsValue.on('finish', () => {
-        isPlaying.value = false;
-      });
-
-      wsValue.on('ready', () => {
-        if (!selectionStore.band) {
-          return;
-        }
-
-        const frequencies = bands[selectionStore.band];
-        const ac = wsValue.backend.getAudioContext();
-
-        // TODO: Replace with bandpass?
-
-        const lowShelf = ac.createBiquadFilter();
-        lowShelf.type = 'lowshelf';
-        lowShelf.gain.value = -60;
-        lowShelf.frequency.value = frequencies[0];
-
-        const highShelf = ac.createBiquadFilter();
-        highShelf.type = 'highshelf';
-        highShelf.gain.value = -60;
-        highShelf.frequency.value = frequencies[1];
-
-        wsValue.backend.setFilters([lowShelf, highShelf]);
-
-        wsValue.play();
-        isPlaying.value = true;
-      });
-    });
+    ws.loadBlob(blob);
+    ws.on('seek', handleAudioSeek);
+    ws.on('finish', handleAudioEnd);
+    ws.on('ready', handleAudioReady);
   });
 }
 
-function handleVolumeUp() {
-  const wsValue = unref(ws);
+function handleAudioEnd() {
+  isPlayingRef.value = false;
+}
 
-  if (!wsValue) {
+function handleAudioReady() {
+  const ws = unref(wsRef);
+
+  if (!selectionStore.band || !ws) {
     return;
   }
 
-  if (wsValue.params.barHeight + WAVE.step > WAVE.max) {
-    wsValue.params.barHeight = WAVE.max;
-  } else {
-    wsValue.params.barHeight += WAVE.step;
+  const frequencies = bands[selectionStore.band];
+  const ac = ws.backend.getAudioContext();
 
-    const volume = wsValue.getVolume();
-    wsValue.setVolume(volume + WAVE.step);
+  const lowShelf = ac.createBiquadFilter();
+  lowShelf.type = 'lowshelf';
+  lowShelf.gain.value = -60;
+  lowShelf.frequency.value = frequencies[0];
+
+  const highShelf = ac.createBiquadFilter();
+  highShelf.type = 'highshelf';
+  highShelf.gain.value = -60;
+  highShelf.frequency.value = frequencies[1];
+
+  ws.backend.setFilters([lowShelf, highShelf]);
+
+  ws.play();
+  isPlayingRef.value = true;
+}
+
+function handleVolumeUp() {
+  const ws = unref(wsRef);
+
+  if (!ws) {
+    return;
   }
 
-  wsValue.drawBuffer();
+  if (ws.params.barHeight + WAVE.step > WAVE.max) {
+    ws.params.barHeight = WAVE.max;
+  } else {
+    ws.params.barHeight += WAVE.step;
+
+    const volume = ws.getVolume();
+    ws.setVolume(volume + WAVE.step);
+  }
+
+  ws.drawBuffer();
+}
+
+function handleAudioSeek() {
+  const ws = unref(wsRef);
+
+  if (!ws) {
+    return;
+  }
+
+  if (ws.isPlaying()) {
+    return;
+  }
+
+  ws.play();
+  isPlayingRef.value = true;
 }
 
 function handleVolumeDown() {
-  const wsValue = unref(ws);
+  const ws = unref(wsRef);
 
-  if (!wsValue) {
+  if (!ws) {
     return;
   }
 
-  if (wsValue.params.barHeight - WAVE.step < WAVE.min) {
-    wsValue.params.barHeight = WAVE.min;
+  if (ws.params.barHeight - WAVE.step < WAVE.min) {
+    ws.params.barHeight = WAVE.min;
   } else {
-    wsValue.params.barHeight -= WAVE.step;
+    ws.params.barHeight -= WAVE.step;
 
-    const volume = wsValue.getVolume();
-    wsValue.setVolume(volume - WAVE.step);
+    const volume = ws.getVolume();
+    ws.setVolume(volume - WAVE.step);
   }
 
-  wsValue.drawBuffer();
+  ws.drawBuffer();
 }
 
 function handlePlayPause() {
-  const wsValue = unref(ws);
+  const ws = unref(wsRef);
 
-  if (!wsValue) {
+  if (!ws) {
     return;
   }
 
-  wsValue.playPause();
-  isPlaying.value = wsValue.isPlaying();
+  ws.playPause();
+  isPlayingRef.value = ws.isPlaying();
 }
 
 function handleStop() {
-  const wsValue = unref(ws);
+  const ws = unref(wsRef);
 
-  if (!wsValue) {
+  if (!ws) {
     return;
   }
 
-  wsValue.seekTo(0);
-  wsValue.pause();
-  isPlaying.value = false;
+  ws.seekTo(0);
+  ws.pause();
+  isPlayingRef.value = false;
+}
+
+async function handleAudioStoreChange() {
+  if (scatterSelectedStore.index === null) {
+    close();
+    return;
+  }
+
+  open();
+}
+
+function handleSpectrogramIncrease() {
+  const ws = unref(wsRef);
+
+  if (!ws) {
+    return;
+  }
+
+  if (ws.spectrogram.fftSamples === FFT_SIZE.max) {
+    return;
+  }
+
+  if (ws.spectrogram.fftSamples > FFT_SIZE.max) {
+    // noinspection JSConstantReassignment
+    ws.spectrogram.fftSamples = FFT_SIZE.max;
+  }
+
+  // noinspection JSConstantReassignment
+  ws.spectrogram.fftSamples *= 2;
+  ws.drawBuffer();
+}
+
+function handleSpectrogramDecrease() {
+  const ws = unref(wsRef);
+
+  if (!ws) {
+    return;
+  }
+
+  if (ws.spectrogram.fftSamples === FFT_SIZE.min) {
+    return;
+  }
+
+  if (ws.spectrogram.fftSamples < FFT_SIZE.min) {
+    // noinspection JSConstantReassignment
+    ws.spectrogram.fftSamples = FFT_SIZE.min;
+  }
+
+  // noinspection JSConstantReassignment
+  ws.spectrogram.fftSamples *= 0.5;
+  ws.drawBuffer();
 }
 
 /**
@@ -299,48 +367,79 @@ function handleStop() {
 
 onUnmounted(close);
 watch(fileNameStore, load);
-watch(audioStore, async () => {
-  if (scatterSelectedStore.index === null) {
-    close();
-    return;
-  }
-
-  open();
-});
+watch(audioStore, handleAudioStoreChange);
 </script>
 
 <template>
-  <AppDraggable :hide-separator="true" draggable-key="audio">
+  <AppDraggable
+    :hide-separator="true"
+    draggable-key="audio"
+  >
     <AppSuspense />
 
-    <div v-if="scatterSelectedStore.index" class="player">
+    <div
+      v-if="scatterSelectedStore.index"
+      class="player"
+    >
       <div class="volume buttons">
-        <n-button size="tiny" @click="handleVolumeUp">
+        <n-button
+          size="tiny"
+          @click="handleVolumeUp"
+        >
           <n-icon>
             <volume-high-outline />
           </n-icon>
         </n-button>
-        <n-button size="tiny" @click="handleVolumeDown">
+        <n-button
+          size="tiny"
+          @click="handleVolumeDown"
+        >
           <n-icon>
             <volume-low-outline />
           </n-icon>
         </n-button>
 
-        <n-button size="tiny" @click="handlePlayPause">
+        <n-button
+          size="tiny"
+          @click="handlePlayPause"
+        >
           <n-icon>
-            <pause-outline v-if="isPlaying" />
-            <play-outline v-if="!isPlaying" />
+            <pause-outline v-if="isPlayingRef" />
+            <play-outline v-if="!isPlayingRef" />
           </n-icon>
         </n-button>
-        <n-button size="tiny" @click="handleStop">
+        <n-button
+          size="tiny"
+          @click="handleStop"
+        >
           <n-icon>
             <stop-outline />
           </n-icon>
         </n-button>
+        <n-button
+          size="tiny"
+          @click="handleSpectrogramIncrease"
+        >
+          <n-icon>
+            <add-outline />
+          </n-icon>
+        </n-button>
+        <n-button
+          size="tiny"
+          @click="handleSpectrogramDecrease"
+        >
+          <n-icon>
+            <remove-outline />
+          </n-icon>
+        </n-button>
       </div>
 
-      <div ref="waveformContainerRef" />
-      <div ref="spectrogramContainerRef" class="spectrogram" />
+      <div ref="waveformRef" />
+
+      <div
+        ref="spectrogramRef"
+        class="spectrogram"
+      />
     </div>
   </AppDraggable>
 </template>
@@ -358,6 +457,8 @@ watch(audioStore, async () => {
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
+
+  gap: 2px;
 
   height: 0;
 
