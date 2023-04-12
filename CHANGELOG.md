@@ -1,3 +1,41 @@
+# [8.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.2.2...v8.0.0) (2023-04-12)
+
+
+### Bug Fixes
+
+* **CD:** Fix typo in `docker-audio-next` workflow ([d0e2e1b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d0e2e1baba0c4de49dc25d88e81bc95d6a440e99))
+* **CD:** Remove `gcc` set up in GitHub action ([542665b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/542665b24a9f487fac6ca04e00f0fcfa2189b016))
+* **CD:** Trigger `next` workflows for PR into branch `main` + Set up GCC for `processing` build ([66a5b60](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/66a5b6049ba8336bc8acf665e3e034a63460d46b))
+* **CD:** Trigger `next` workflows for PR into branch `main` + Set up GCC for `processing` build ([d6d7485](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d6d7485a98209cee996fd9d293d04c5b4db58c2e))
+* **Front/Heatmap:** Force displaying squares ([d1c51d8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d1c51d8471c6282b29c0aa67d938949ddb2aa387))
+* **Front:** Improve sliders computed function + Fix time range init values + Rename `BaseButton` ([78bc03b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/78bc03b8cc5f8c690bffcde4a66587bc05990b45))
+* **Front:** Improve store (display file and group index in `Details`) + Attempt to fix date with timezones ([19c0914](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/19c09148c737e6e5a6a34938b103f251591d8ef1))
+* **Front:** Remove unnecessary version injection in environment. ([6f2cf3d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6f2cf3d884e643bb4227f33804b6948ccf02ebe7))
+* **Processing/Build:** Install `gcc` in Dockerfile ([9250307](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9250307012b463fea9125f0d55cf03a428dbd844))
+* **Processing/Build:** Install `gcc` only from apt ([aa2fb82](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/aa2fb82b720f6db24d0e28e3314a2ecc04792dfb))
+* **Processing/Build:** Prefer installing `build-essential` in Docker ([0dce369](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0dce369622db2a7658be4b4ab28fd95d453216d6))
+* **Processing/Build:** Set new action filename in Docker command. ([d5bb8aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d5bb8aa5987f8dbd07fbcbcbec189245746cd10b))
+* **Processing:** Add pairings calculation to `all` actions ([63f638a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/63f638a0332ee1cb1cfa19cd2c4e16526641b016))
+
+
+### Features
+
+* Add `ClusterPairing` to Processing and Front ([231eb50](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/231eb50d73fd23da0f1d4a4565f91d0a5dd475c5))
+* Enrich `Front` and `Processing` ([6a3f08b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6a3f08b47bafb9233f0b73a0662f484be50dcf0a))
+* **Front:** Add `Histogram` and `Heatmap` components ([c146b08](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c146b0879263709797bd48de81b11f4d9dbbe42b))
+* **Front:** Upgrade all dependencies ([2bfc047](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2bfc047b373e6c96a185d939d615cd636fa110f8))
+
+
+### Performance Improvements
+
+* **Front:** Remove dead code ([78c37ee](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/78c37eeee4aac6e0666000fdd07278cd27e81e2d))
+* **Processing:** Remove dead code ([c301f40](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c301f404ba11836743ec3cc7495970a5d11dffaa))
+
+
+### BREAKING CHANGES
+
+* Storage Paths have been updated. Users need to regenerate `.h5` files with `yarn process:all-but-files`
+
 ## [7.2.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.2.1...v7.2.2) (2023-03-24)
 
 
