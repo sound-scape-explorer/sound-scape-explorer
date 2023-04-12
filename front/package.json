@@ -41,6 +41,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.37.0",
     "naive-ui": "^2.34.3",
+    "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
     "rollup-plugin-analyzer": "^4.0.0",
     "sass": "^1.61.0",
