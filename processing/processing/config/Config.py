@@ -29,6 +29,7 @@ from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelVolume import ExcelVolume
 from processing.indicators.Indicator import Indicator
 from processing.settings.ConfigSetting import ConfigSettings
+from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
@@ -64,6 +65,7 @@ class Config(metaclass=SingletonMeta):
     def __succeed(self) -> None:
         print_new_line()
         print(f'Config loaded: {self.__path}')
+        self.__print_settings()
 
     def __fail(self) -> None:
         raise FileNotFoundError(f'Could not load Excel file: {self.__path}')
@@ -195,6 +197,15 @@ class Config(metaclass=SingletonMeta):
     def get_audio_host(self) -> str:
         return self.__settings['audio_host']
 
+    def get_autocluster(self) -> bool:
+        try:
+            if self.__settings['autocluster'] == 'yes':
+                return True
+
+            return False
+        except KeyError:
+            return False
+
     def get_audio_path(self) -> str:
         base_path = self.get_base_path()
         audio_folder = self.get_audio_folder()
@@ -220,7 +231,21 @@ class Config(metaclass=SingletonMeta):
             if self.__is_nan(value):
                 value = None
 
+            if setting == StorageSetting.autocluster.value:
+                if value == 'yes':
+                    value = True
+                else:
+                    value = False
+
             self.__settings[setting] = value  # type: ignore
+
+    def __print_settings(self) -> None:
+        print_new_line()
+        print('Settings')
+        print_new_line()
+
+        for setting_name, setting in self.__settings.items():
+            print(f'{setting_name}: {setting}')
 
     @staticmethod
     def __convert_date_to_timestamp(date_string: str) -> int:

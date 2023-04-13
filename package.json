@@ -10,7 +10,7 @@
     "process:config": "python3 processing/processing/actions/a_config.py",
     "process:files": "python3 processing/processing/actions/b_files.pyfiles.py",
     "process:groups": "python3 processing/processing/actions/c_groups.py.py",
-    "process:autocluster": "python3 processing/processing/actions/d_autocluster.py.py",
+    "process:autocluster": "python3 processing/processing/actions/d_autocluster.py",
     "process:reducers": "python3 processing/processing/actions/e_reducers.py",
     "process:indicators": "python3 processing/processing/actions/f_indicators.py",
     "process:volumes": "python3 processing/processing/actions/g_volumes.py",

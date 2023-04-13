@@ -7,3 +7,4 @@ class ConfigSettings(TypedDict):
     audio_host: str
     expected_sample_rate: int
     umap_seed: int
+    autocluster: str

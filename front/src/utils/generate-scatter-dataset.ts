@@ -25,17 +25,17 @@ export function generateScatterDataset(props: Props) {
 
   let count = 0;
 
-  for (let i = 0; i < props.files.length; i += 1) {
-    const fileIndex = i;
-
+  for (let fileIndex = 0; fileIndex < props.files.length; fileIndex += 1) {
     for (let j = 0; j < integrations; j += 1) {
       const groupIndex = j;
       const pointIndex = count;
       const timestamp = props.timestamps[pointIndex];
+      const metaValues = [...props.metas[fileIndex]];
 
       // TODO: Remove this after storage update.
-      const metaValues = [...props.metas[i]];
-      metaValues.unshift(props.autocluster[count].toString());
+      if (props.autocluster.length > 0) {
+        metaValues.unshift(props.autocluster[count].toString());
+      }
 
       metadata.push({
         label: pointIndex.toString(),
@@ -50,5 +50,8 @@ export function generateScatterDataset(props: Props) {
     }
   }
 
-  return new ScatterGL.Dataset(dataPoints, metadata as unknown as PointMetadata[]);
+  return new ScatterGL.Dataset(
+    dataPoints,
+    metadata as unknown as PointMetadata[],
+  );
 }

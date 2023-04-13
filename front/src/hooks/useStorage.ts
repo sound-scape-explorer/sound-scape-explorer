@@ -16,9 +16,9 @@ export interface StorageSettings {
   umap_seed: number;
 }
 
-export type StorageBands = {[band: string]: number[];}
-export type StorageRanges = {[range: string]: number[];}
-export type StorageMetas = {[property: string]: string[];}
+export type StorageBands = {[band: string]: number[]};
+export type StorageRanges = {[range: string]: number[]};
+export type StorageMetas = {[property: string]: string[]};
 
 interface Reducer {
   index: number;
@@ -35,9 +35,9 @@ export interface Volume {
   values: number[];
 }
 
-type Indicator = Volume
+type Indicator = Volume;
 
-type Matrix = Volume
+type Matrix = Volume;
 
 interface Pairing {
   index: number;
@@ -132,9 +132,7 @@ export async function useStorage() {
     });
   }
 
-  async function getFile(
-    fileIndex: number,
-  ) {
+  async function getFile(fileIndex: number) {
     return await read(() => {
       const file = getH5();
       const files = file.get(StoragePath.files) as Dataset;
@@ -192,15 +190,24 @@ export async function useStorage() {
       const h5 = getH5();
       const integration = getSecondsFromIntegration(h5, integrationName);
 
-      const metaProperties = (h5.get(StoragePath.meta_properties) as Dataset).to_array() as string[];
-      const metaSets = (h5.get(StoragePath.meta_sets) as Dataset).to_array() as string[][];
+      const metaProperties = (
+        h5.get(StoragePath.meta_properties) as Dataset
+      ).to_array() as string[];
+      const metaSets = (
+        h5.get(StoragePath.meta_sets) as Dataset
+      ).to_array() as string[][];
 
       const metas: StorageMetas = {};
 
       const autoclusterPath = `${StoragePath.autocluster}/${band}/${integration}`;
-      const autocluster = h5.get(autoclusterPath) as Dataset;
-      const autoclusterList = new Set((autocluster.to_array() as number[]).map((n) => n.toString()));
-      metas['AUTOCLUSTER'] = [...autoclusterList];
+      const autocluster = h5.get(autoclusterPath) as Dataset | null;
+
+      if (autocluster !== null) {
+        const autoclusterList = new Set(
+          (autocluster.to_array() as number[]).map((n) => n.toString()),
+        );
+        metas['AUTOCLUSTER'] = [...autoclusterList];
+      }
 
       for (let i = 0; i < metaProperties.length; i += 1) {
         const property = metaProperties[i];
@@ -218,7 +225,9 @@ export async function useStorage() {
       const bands = file.get(StoragePath.bands) as Dataset;
       const bandsValues = bands.to_array() as string[];
 
-      const bandsFrequencies = file.get(StoragePath.bands_frequencies) as Dataset;
+      const bandsFrequencies = file.get(
+        StoragePath.bands_frequencies,
+      ) as Dataset;
       const bandsFrequenciesValues = bandsFrequencies.to_array() as number[][];
 
       const bandsObject: StorageBands = {};
@@ -242,8 +251,12 @@ export async function useStorage() {
   async function getStorageRanges(): Promise<StorageRanges> {
     return await read(() => {
       const file = getH5();
-      const ranges = (file.get(StoragePath.ranges) as Dataset).to_array() as string[];
-      const timestamps = (file.get(StoragePath.ranges_timestamps) as Dataset).to_array() as number[][];
+      const ranges = (
+        file.get(StoragePath.ranges) as Dataset
+      ).to_array() as string[];
+      const timestamps = (
+        file.get(StoragePath.ranges_timestamps) as Dataset
+      ).to_array() as number[][];
 
       const storageRanges: StorageRanges = {};
 
@@ -256,9 +269,16 @@ export async function useStorage() {
     });
   }
 
-  function getSecondsFromIntegration(file: H5File, integration: string): number {
-    const integrations = (file.get(StoragePath.integrations) as Dataset).to_array() as string[];
-    const seconds = (file.get(StoragePath.integrations_seconds) as Dataset).to_array() as number[];
+  function getSecondsFromIntegration(
+    file: H5File,
+    integration: string,
+  ): number {
+    const integrations = (
+      file.get(StoragePath.integrations) as Dataset
+    ).to_array() as string[];
+    const seconds = (
+      file.get(StoragePath.integrations_seconds) as Dataset
+    ).to_array() as number[];
 
     const index = integrations.indexOf(integration);
 
@@ -370,7 +390,8 @@ export async function useStorage() {
     array: T[][],
     filterWith: string | number | null = null,
   ): T[][] {
-    const isNanStrategy = typeof filterWith === 'number' && Number.isNaN(filterWith);
+    const isNanStrategy =
+      typeof filterWith === 'number' && Number.isNaN(filterWith);
 
     const trimmedArray = [];
 
@@ -458,10 +479,7 @@ export async function useStorage() {
     });
   }
 
-  async function getVolumes(
-    band: string,
-    integrationName: string,
-  ) {
+  async function getVolumes(band: string, integrationName: string) {
     return await read(() => {
       const h5 = getH5();
       const integration = getSecondsFromIntegration(h5, integrationName);
@@ -480,10 +498,7 @@ export async function useStorage() {
         for (const g in group.keys()) {
           const dataset = h5.get(`${path}/${g}`) as Dataset;
 
-          values = [
-            ...values,
-            ...dataset.to_array() as number[],
-          ];
+          values = [...values, ...(dataset.to_array() as number[])];
         }
 
         const volume: Volume = {
@@ -521,10 +536,7 @@ export async function useStorage() {
         for (const g in group.keys()) {
           const dataset = h5.get(`${path}/${g}`) as Dataset;
 
-          values = [
-            ...values,
-            ...dataset.to_array() as number[],
-          ];
+          values = [...values, ...(dataset.to_array() as number[])];
         }
 
         const indicator: Indicator = {
@@ -564,15 +576,16 @@ export async function useStorage() {
     });
   }
 
-  async function getAutocluster(
-    band: string,
-    integrationName: string,
-  ) {
+  async function getAutocluster(band: string, integrationName: string) {
     return await read(() => {
       const file = getH5();
       const integration = getSecondsFromIntegration(file, integrationName);
       const path = `${StoragePath.autocluster}/${band}/${integration}`;
-      const autocluster = file.get(path) as Dataset;
+      const autocluster = file.get(path) as Dataset | null;
+
+      if (autocluster === null) {
+        return [];
+      }
 
       const lengthPerGroup = getLengthPerGroup(file, band, integration);
       const flatArray = autocluster.to_array() as number[];
@@ -580,21 +593,14 @@ export async function useStorage() {
     });
   }
 
-  function getLengthPerGroup(
-    file: H5File,
-    band: string,
-    integration: number,
-  ) {
+  function getLengthPerGroup(file: H5File, band: string, integration: number) {
     const fileIndex = 0;
     const path = `${StoragePath.grouped_timestamps}/${band}/${integration}/${fileIndex}`;
     const dataset = file.get(path) as Dataset;
     return dataset.shape[0];
   }
 
-  async function getAsyncLengthPerGroup(
-    band: string,
-    integrationName: string,
-  ) {
+  async function getAsyncLengthPerGroup(band: string, integrationName: string) {
     return await read(() => {
       const h5 = getH5();
       const integration = getSecondsFromIntegration(h5, integrationName);
@@ -660,10 +666,7 @@ export async function useStorage() {
     });
   }
 
-  async function getMatrices(
-    band: string,
-    integrationName: string,
-  ) {
+  async function getMatrices(band: string, integrationName: string) {
     return await read(() => {
       const h5 = getH5();
       const integration = getSecondsFromIntegration(h5, integrationName);
@@ -679,10 +682,7 @@ export async function useStorage() {
         for (const g in group.keys()) {
           const dataset = h5.get(`${path}/${g}`) as Dataset;
 
-          values = [
-            ...values,
-            ...dataset.to_array() as number[],
-          ];
+          values = [...values, ...(dataset.to_array() as number[])];
         }
 
         const matrix: Matrix = {
@@ -698,10 +698,7 @@ export async function useStorage() {
     });
   }
 
-  async function getPairings(
-    band: string,
-    integrationName: string,
-  ) {
+  async function getPairings(band: string, integrationName: string) {
     return await read(() => {
       const h5 = getH5();
       const integration = getSecondsFromIntegration(h5, integrationName);
@@ -720,10 +717,7 @@ export async function useStorage() {
           for (const aG in aGroup.keys()) {
             const dataset = h5.get(`${path}/${pG}/${aG}`) as Dataset;
 
-            values = [
-              ...values,
-              dataset.to_array() as number[],
-            ];
+            values = [...values, dataset.to_array() as number[]];
           }
         }
 

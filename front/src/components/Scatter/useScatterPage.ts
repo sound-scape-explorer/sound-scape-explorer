@@ -22,11 +22,7 @@ export function useScatterPage() {
     selectionStore.integration = integration;
   }
 
-  async function fetchData(
-    reducer: number,
-    band: string,
-    integration: string,
-  ) {
+  async function fetchData(reducer: number, band: string, integration: string) {
     const {
       getFiles,
       getReducedFeatures,
@@ -69,11 +65,7 @@ export function useScatterPage() {
     integration,
     callback,
   }: HandleUpdateProps) {
-    if (
-      reducer === null
-      || band === null
-      || integration === null
-    ) {
+    if (reducer === null || band === null || integration === null) {
       resetSelection();
       return;
     }
@@ -92,7 +84,7 @@ export function useScatterPage() {
         reducer: reducer,
         band: band,
         integration: integration,
-        callback: () => loadingStore.isLoading = false,
+        callback: () => (loadingStore.isLoading = false),
       });
     }, RENDERING_DELAY_SLOW);
   }

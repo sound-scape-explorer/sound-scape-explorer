@@ -10,6 +10,7 @@ from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
+from processing.constants import DOCKER_BASE_PATH
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
@@ -472,9 +473,13 @@ class Storage(metaclass=SingletonMeta):
         settings = self.__get_settings()
         return settings[StorageSetting.expected_sample_rate.value]
 
+    def get_autocluster(self) -> numpy.bool_:
+        settings = self.__get_settings()
+        return settings[StorageSetting.autocluster.value]
+
     def get_base_path(self) -> str:
         if Env().is_docker is True:
-            return '/mount/project'
+            return DOCKER_BASE_PATH
 
         settings = self.__get_settings()
         return settings[StorageSetting.base_path.value]
