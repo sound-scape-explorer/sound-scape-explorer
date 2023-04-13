@@ -16,9 +16,17 @@ export interface StorageSettings {
   umap_seed: number;
 }
 
-export type StorageBands = {[band: string]: number[]};
-export type StorageRanges = {[range: string]: number[]};
-export type StorageMetas = {[property: string]: string[]};
+export type StorageBands = {
+  [band: string]: number[];
+};
+
+export type StorageRanges = {
+  [range: string]: number[];
+};
+
+export type StorageMetas = {
+  [property: string]: string[];
+};
 
 interface Reducer {
   index: number;
