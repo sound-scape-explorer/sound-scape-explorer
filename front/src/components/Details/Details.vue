@@ -26,6 +26,7 @@ const {
 
 const bands = await getBands();
 const timezone = timezoneRef.value;
+const isTimezone = timezone !== '';
 
 const frequencies = computed(() => {
   if (!selectionStore.band) {
@@ -126,7 +127,7 @@ watch(scatterSelectedStore, async () => {
       <span v-if="selectionStore.band">
         {{ frequencies?.min }} - {{ frequencies?.max }} Hz
       </span>
-      <span>{{ dayjs(fileTimestampStore.value).tz(timezone) }}</span>
+      <span>{{ isTimezone ? dayjs(fileTimestampStore.value).tz(timezone) : dayjs(fileTimestampStore.value) }}</span>
       <span>{{ selectionStore.integration }}</span>
     </div>
 
