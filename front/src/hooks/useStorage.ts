@@ -473,7 +473,11 @@ export async function useStorage() {
 
       volumeNamesList.forEach((name, v) => {
         const path = `${StoragePath.volume_}${v}/${band}/${integration}`;
-        const group = h5.get(path) as Group;
+        const group = h5.get(path) as Group|null;
+        
+        if (group === null) {
+          return;
+        }
 
         let values: number[] = [];
 
@@ -672,7 +676,11 @@ export async function useStorage() {
 
       MATRIX_NAMES.forEach((name, v) => {
         const path = `${StoragePath.matrix_}${v}/${band}/${integration}`;
-        const group = h5.get(path) as Group;
+        const group = h5.get(path) as Group|null;
+
+        if (group === null) {
+          return;
+        }
 
         let values: number[] = [];
 
@@ -710,7 +718,11 @@ export async function useStorage() {
 
       PAIRING_NAMES.forEach((name, p) => {
         const path = `${StoragePath.pairing_}${p}/${band}/${integration}`;
-        const pGroup = h5.get(path) as Group;
+        const pGroup = h5.get(path) as Group|null;
+
+        if (pGroup === null) {
+          return;
+        }
 
         let values: number[][] = [];
 
