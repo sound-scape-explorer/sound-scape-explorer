@@ -127,7 +127,7 @@ function swap() {
           v-if="pairingsNaiveRef"
           v-model:value="pairingSelectedRef"
           :options="pairingsNaiveRef"
-          placeholder="Matrix..."
+          placeholder="Pairing..."
           size="tiny"
         />
 
