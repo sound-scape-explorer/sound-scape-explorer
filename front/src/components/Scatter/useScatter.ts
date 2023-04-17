@@ -182,10 +182,23 @@ export function useScatter() {
     const metaPropertiesAsColorTypes = convertSlugsToColorTypes(metaProperties);
 
     const timestamp = metadata[index].timestamp;
-    const date = dayjs(timestamp * 1000).tz(timezone);
+    const isTimezone = timezone !== '';
+
+    const date = isTimezone
+      ? dayjs(timestamp * 1000).tz(timezone)
+      : dayjs(timestamp * 1000);
+
+    const min = isTimezone
+      ? dayjs((timeStore.min) * 1000).tz(timezone)
+      : dayjs((timeStore.min) * 1000);
+
+    const max = isTimezone
+      ? dayjs((timeStore.max) * 1000).tz(timezone)
+      : dayjs((timeStore.max) * 1000);
+
     const range = {
-      min: dayjs((timeStore.min) * 1000).tz(timezone),
-      max: dayjs((timeStore.max) * 1000).tz(timezone),
+      min: min,
+      max: max,
     };
 
     const hoverColor = 'red';
