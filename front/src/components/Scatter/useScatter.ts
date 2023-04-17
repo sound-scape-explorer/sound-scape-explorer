@@ -229,7 +229,6 @@ export function useScatter() {
       color = colors.value(rangedIndex).alpha(scatterAlphasStore.high).css();
     } else if (colorType === 'isDay') {
       const hour = date.get('hours');
-      console.log(index, hour);
       const isDay = isHourDuringDay(hour);
 
       color = isDay
