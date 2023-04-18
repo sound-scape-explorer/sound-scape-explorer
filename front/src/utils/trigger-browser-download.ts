@@ -10,7 +10,7 @@ export function triggerBrowserDownload({
   callback,
 }: DownloadObjectAsJson) {
   const anchor = document.createElement('a');
-  anchor.href = encodeURI(data);
+  anchor.href = data;
   anchor.download = filename;
   anchor.click();
   anchor.remove();

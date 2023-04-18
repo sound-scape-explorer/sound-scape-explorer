@@ -249,7 +249,7 @@ export function useScatterExport() {
       );
 
       triggerBrowserDownload({
-        data: csv,
+        data: encodeURI(csv),
         filename: `${filename}.csv`,
         callback: () => loadingRef.value = false,
       });
