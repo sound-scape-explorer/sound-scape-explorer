@@ -1,3 +1,10 @@
+## [8.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.1...v8.0.2) (2023-04-18)
+
+
+### Bug Fixes
+
+* **Front/Export:** Encode data before browser download ([4390f4f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4390f4fef9cabf00f35e11f69f8cfe04c9bb5647))
+
 ## [8.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.0...v8.0.1) (2023-04-17)
 
 
