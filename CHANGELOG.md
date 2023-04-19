@@ -1,3 +1,10 @@
+## [8.0.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.2...v8.0.3) (2023-04-19)
+
+
+### Bug Fixes
+
+* **Front/Export:** Encode only for CSV exports ([71c068f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/71c068fdd63ac023b7d041eeb79e5745a5f5e6a2))
+
 ## [8.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.1...v8.0.2) (2023-04-18)
 
 
