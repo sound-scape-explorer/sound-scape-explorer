@@ -7,7 +7,7 @@ from typing import Any, List, Optional, Union
 import numpy
 import pandas
 from numpy import nan
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigBand import ConfigBand, ConfigBands
@@ -31,6 +31,7 @@ from processing.indicators.Indicator import Indicator
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
+from processing.utils.get_uniques_from_list import get_uniques_from_list
 from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
 
@@ -197,15 +198,6 @@ class Config(metaclass=SingletonMeta):
     def get_audio_host(self) -> str:
         return self.__settings['audio_host']
 
-    def get_autocluster(self) -> bool:
-        try:
-            if self.__settings['autocluster'] == 'yes':
-                return True
-
-            return False
-        except KeyError:
-            return False
-
     def get_audio_path(self) -> str:
         base_path = self.get_base_path()
         audio_folder = self.get_audio_folder()
@@ -226,18 +218,42 @@ class Config(metaclass=SingletonMeta):
         values = self.__parse_column(sheet, ExcelSetting.value)
 
         for index, setting in enumerate(settings):
-            value = values[index]
-
-            if self.__is_nan(value):
-                value = None
-
-            if setting == StorageSetting.autocluster.value:
-                if value == 'yes':
-                    value = True
-                else:
-                    value = False
-
+            value = self.__digest_setting(setting, values[index])
             self.__settings[setting] = value  # type: ignore
+
+    def __digest_setting(
+        self,
+        setting: str,
+        value: Union[Series, DataFrame],
+    ) -> Union[float, int, bool, Series, DataFrame]:
+        if self.__is_nan(value):
+            value = None
+
+        if setting == StorageSetting.autocluster.value \
+                and value == 'yes':
+            value = True
+
+        elif setting == StorageSetting.autocluster.value \
+                and value is None:
+            value = False
+
+        elif setting == StorageSetting.autocluster_iterations.value \
+                and value is None:
+            value = 100
+
+        elif setting == StorageSetting.autocluster_min_size.value \
+                and value is None:
+            value = 20
+
+        elif setting == StorageSetting.autocluster_max_size.value \
+                and value is None:
+            value = 60
+
+        elif setting == StorageSetting.autocluster_threshold.value \
+                and value is None:
+            value = 0.9
+
+        return value
 
     def __print_settings(self) -> None:
         print_new_line()
@@ -355,14 +371,7 @@ class Config(metaclass=SingletonMeta):
         meta_sets: List[List[str]] = []
 
         for index, meta_property in enumerate(meta_properties):
-            meta_set = []
-
-            for meta_value in meta_values[index]:
-                if meta_value in meta_set:
-                    continue
-
-                meta_set.append(meta_value)
-
+            meta_set = get_uniques_from_list(meta_values[index])
             meta_sets.append(meta_set)
 
         storage.write_metas(

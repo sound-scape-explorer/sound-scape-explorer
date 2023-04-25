@@ -35,7 +35,7 @@ export function useScatterFilters() {
 
     const {dataset} = scatterDatasetStore;
 
-    if (!dataset) {
+    if (dataset === null) {
       return false;
     }
 
@@ -53,7 +53,7 @@ export function useScatterFilters() {
 
     const dataset = scatterDatasetStore.dataset;
 
-    if (!dataset) {
+    if (dataset === null) {
       return false;
     }
 
@@ -69,7 +69,8 @@ export function useScatterFilters() {
         break;
       }
 
-      const metaSelection = metaSelectionStore.selection[metaSelectedIndexes[i]];
+      const metaSelection =
+        metaSelectionStore.selection[metaSelectedIndexes[i]];
       const metaSelectionValues = Object.values(metaSelection);
 
       // no user selection
@@ -92,7 +93,10 @@ export function useScatterFilters() {
     return metaValues.includes(queryValue);
   }
 
-  function digestQueryComplexSingleArray(metaValues: string, queryValues: string[]): boolean {
+  function digestQueryComplexSingleArray(
+    metaValues: string,
+    queryValues: string[],
+  ): boolean {
     return queryValues.reduce((acc, queryValue) => {
       if (acc) {
         return acc;
@@ -109,7 +113,9 @@ export function useScatterFilters() {
   ): boolean {
     const metaContent = getMetaContent(index);
     const queryKeys = Object.keys(query);
-    const metaKeys = queryKeys.map((queryKey) => metaProperties.indexOf(queryKey));
+    const metaKeys = queryKeys.map((queryKey) =>
+      metaProperties.indexOf(queryKey),
+    );
 
     let isVisible = true;
 
@@ -124,7 +130,10 @@ export function useScatterFilters() {
       if (typeof queryValue === 'string') {
         isVisible = digestQueryComplexSingleString(metaValues, queryValue);
       } else {
-        isVisible = digestQueryComplexSingleArray(metaValues, queryValue as unknown as string[]);
+        isVisible = digestQueryComplexSingleArray(
+          metaValues,
+          queryValue as unknown as string[],
+        );
       }
     }
 
@@ -182,14 +191,13 @@ export function useScatterFilters() {
     return isVisible;
   }
 
-  function shouldBeFiltered(
-    index: number,
-    metaProperties: string[],
-  ): boolean {
-    return !isVisibleByTimeRange(index)
-      || !isVisibleByQuery(index)
-      || !isVisibleByMeta(index)
-      || !isVisibleByQueryComplex(index, metaProperties);
+  function shouldBeFiltered(index: number, metaProperties: string[]): boolean {
+    return (
+      !isVisibleByTimeRange(index) ||
+      !isVisibleByQuery(index) ||
+      !isVisibleByMeta(index) ||
+      !isVisibleByQueryComplex(index, metaProperties)
+    );
   }
 
   return {

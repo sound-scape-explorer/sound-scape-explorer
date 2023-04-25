@@ -2,13 +2,13 @@ export enum StoragePath {
   // Configuration
   configuration = '/configuration',
   // Bands
-  bands = '/configuration/bands/names',
+  bands_names = '/configuration/bands/names',
   bands_frequencies = '/configuration/bands/frequencies',
   // Integrations
-  integrations = '/configuration/integrations/names',
+  integrations_names = '/configuration/integrations/names',
   integrations_seconds = '/configuration/integrations/seconds',
   // Ranges
-  ranges = '/configuration/ranges/names',
+  ranges_names = '/configuration/ranges/names',
   ranges_timestamps = '/configuration/ranges/timestamps',
   // Files
   files = '/configuration/files/names',

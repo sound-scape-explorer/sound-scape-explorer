@@ -16,6 +16,3 @@ import processing.actions.g_volumes
 import processing.actions.h_matrices
 # noinspection PyUnresolvedReferences
 import processing.actions.i_pairings
-from processing.actions.d_autocluster import autocluster
-
-autocluster()

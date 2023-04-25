@@ -10,7 +10,7 @@ files = storage.read_files()
 bands = storage.get_bands()
 integrations = storage.get_integrations_seconds()
 integrations_names = storage.get_integrations()
-seed = storage.get_umap_seed()
+settings = storage.read_settings()
 reducers = storage.get_config_reducers()
 
 storage.delete_reduced()
@@ -28,7 +28,7 @@ for band in bands:
         )
 
         for reducer_index, config_reducer in enumerate(reducers):
-            reducer = config_reducer.create_reducer(seed)
+            reducer = config_reducer.create_reducer(settings['umap_seed'])
 
             is_in_reducer = storage.is_band_integration_in_reducer(
                 reducer=config_reducer,

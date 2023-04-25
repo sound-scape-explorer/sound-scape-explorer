@@ -1,12 +1,10 @@
 <script lang="ts" setup="">
 import Plotly, {Data as PlotlyData, Layout} from 'plotly.js-dist-min';
-import {ref, unref, watch} from 'vue';
+import {ref, watch} from 'vue';
 
-type Data =
-  & PlotlyData
-  & {
+type Data = PlotlyData & {
   hoverongaps?: boolean;
-}
+};
 
 /**
  * Props
@@ -41,14 +39,14 @@ watch(props, refresh);
  */
 
 async function render() {
-  const div = unref(divRef);
-  const data = unref(dataRef);
-  const layout = unref(layoutRef);
+  const div = divRef.value;
+  const data = dataRef.value;
+  const layout = layoutRef.value;
 
   if (
-    !div
-    || !data
-    || !layout
+    typeof div === 'undefined' ||
+    typeof data === 'undefined' ||
+    typeof layout === 'undefined'
   ) {
     return;
   }
@@ -57,15 +55,17 @@ async function render() {
 }
 
 function refresh() {
-  dataRef.value = [{
-    type: 'heatmap',
-    colorscale: 'YlOrRd',
-    reversescale: true,
-    x: props.x,
-    y: props.y,
-    z: props.values,
-    hovertemplate: '%{z:.3f}<extra>%{x}/%{y}</extra>',
-  }];
+  dataRef.value = [
+    {
+      type: 'heatmap',
+      colorscale: 'YlOrRd',
+      reversescale: true,
+      x: props.x,
+      y: props.y,
+      z: props.values,
+      hovertemplate: '%{z:.3f}<extra>%{x}/%{y}</extra>',
+    },
+  ];
 
   layoutRef.value = {
     title: props.title,
@@ -78,7 +78,10 @@ function refresh() {
 </script>
 
 <template>
-  <span ref="divRef" class="heatmap" />
+  <span
+    ref="divRef"
+    class="heatmap"
+  />
 </template>
 
 <style lang="scss" scoped>

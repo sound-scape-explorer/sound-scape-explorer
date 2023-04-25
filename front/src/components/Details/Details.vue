@@ -2,52 +2,39 @@
 import {asyncComputed} from '@vueuse/core';
 import dayjs from 'dayjs';
 import {NGi, NGrid, NTag} from 'naive-ui';
-import {computed, unref, watch} from 'vue';
-import type {Volume} from '../../hooks/useStorage';
-import {useStorage} from '../../hooks/useStorage';
+import {computed, watch} from 'vue';
+import {storage} from '../../storage/storage';
+import {useStorage} from '../../storage/useStorage';
 import type {ScatterMetadata} from '../../utils/generate-scatter-dataset';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {scatterDatasetStore} from '../Scatter/scatterDatasetStore';
 import {scatterHoverStore, scatterSelectedStore} from '../Scatter/scatterStore';
 import {selectionStore} from '../Selection/selectionStore';
-import {fileIndexStore, fileNameStore, fileTimestampStore, groupIndexStore} from './detailsStore';
+import {
+  fileIndexStore,
+  fileNameStore,
+  fileTimestampStore,
+  groupIndexStore,
+} from './detailsStore';
 
-const {
-  getFile,
-  getStorageMetas,
-  getIndicators,
-  getBands,
-  timezoneRef,
-} = await useStorage();
+const {readFile, indicatorsRef, metaPropertiesRef} = await useStorage();
 
 /**
  * State
  */
 
-const bands = await getBands();
-const timezone = timezoneRef.value;
-
 const frequencies = computed(() => {
-  if (!selectionStore.band) {
+  if (storage.bands === null || selectionStore.band === null) {
     return;
   }
 
-  const min = bands[selectionStore.band][0];
-  const max = bands[selectionStore.band][1];
+  const min = storage.bands[selectionStore.band][0];
+  const max = storage.bands[selectionStore.band][1];
 
   return {
     min: min,
     max: max,
   };
-});
-
-const metaProperties = asyncComputed<string[]>(async () => {
-  if (!selectionStore.band || !selectionStore.integration) {
-    return;
-  }
-
-  const m = await getStorageMetas(selectionStore.band, selectionStore.integration);
-  return Object.keys(m);
 });
 
 const selectedPoint = asyncComputed(async () => {
@@ -58,20 +45,12 @@ const selectedPoint = asyncComputed(async () => {
   return getPointFromIndex(scatterSelectedStore.index);
 });
 
-const indicators = asyncComputed<Volume[]>(async () => {
-  if (!selectionStore.band || !selectionStore.integration) {
-    return;
-  }
-
-  return await getIndicators(selectionStore.band, selectionStore.integration);
-});
-
 /**
  * Handlers
  */
 
 function getPointFromIndex(point: number): ScatterMetadata {
-  const metadata = unref(scatterDatasetStore.dataset?.metadata);
+  const metadata = scatterDatasetStore.dataset?.metadata;
   return metadata?.[point] as ScatterMetadata;
 }
 
@@ -92,7 +71,7 @@ watch(scatterSelectedStore, async () => {
 
   fileIndexStore.value = fileIndex;
   groupIndexStore.value = groupIndex;
-  fileNameStore.path = await getFile(fileIndex);
+  fileNameStore.path = await readFile(fileIndex);
   fileTimestampStore.value = timestamp;
 });
 </script>
@@ -126,21 +105,31 @@ watch(scatterSelectedStore, async () => {
       <span v-if="selectionStore.band">
         {{ frequencies?.min }} - {{ frequencies?.max }} Hz
       </span>
-      <span>{{ dayjs(fileTimestampStore.value).tz(timezone) }}</span>
+      <!--      TODO: fix-->
+      <span>{{
+        dayjs(fileTimestampStore.value).tz(storage.settings?.timezone)
+      }}</span>
       <span>{{ selectionStore.integration }}</span>
     </div>
 
-    <div v-if="scatterSelectedStore.index" class="file container details">
+    <div
+      v-if="scatterSelectedStore.index !== null"
+      class="file container details"
+    >
       <span />
-      <n-grid :cols="2" class="grid" x-gap="12">
+      <n-grid
+        :cols="2"
+        class="grid"
+        x-gap="12"
+      >
         <!--suppress JSUnusedLocalSymbols -->
-        <n-gi v-for="(_, index) in metaProperties">
+        <n-gi v-for="(_, index) in metaPropertiesRef">
           <n-tag
             :bordered="false"
             class="tag"
             size="small"
           >
-            {{ metaProperties[index] }}
+            {{ metaPropertiesRef[index] }}
           </n-tag>
 
           {{ selectedPoint?.metaValues[index] }}
@@ -149,8 +138,11 @@ watch(scatterSelectedStore, async () => {
 
       <div class="title">Indicators</div>
 
-      <n-grid :cols="2" class="grid">
-        <n-gi v-for="indicator in indicators">
+      <n-grid
+        :cols="2"
+        class="grid"
+      >
+        <n-gi v-for="indicator in indicatorsRef">
           <n-tag
             :bordered="false"
             class="tag"

@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {
   AddOutline,
+  ArrowDownOutline,
   PauseOutline,
   PlayOutline,
   RemoveOutline,
@@ -10,43 +11,55 @@ import {
 } from '@vicons/ionicons5';
 import audioBufferSlice from 'audiobuffer-slice';
 import colormap from 'colormap';
-import {NButton, NIcon} from 'naive-ui';
-import {computed, onUnmounted, ref, unref, watch} from 'vue';
-import WavEncoder from 'wav-encoder';
+import {NButton, NIcon, NTooltip} from 'naive-ui';
+import {computed, onUnmounted, ref, watch} from 'vue';
+import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 import WaveSurfer from 'wavesurfer.js';
 import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 import {FFT_SIZE, WAVE} from '../../constants';
-import {useStorage} from '../../hooks/useStorage';
+import {storage} from '../../storage/storage';
+import {useStorage} from '../../storage/useStorage';
+import {triggerBrowserDownload} from '../../utils/trigger-browser-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import AppSuspense from '../AppSuspense/AppSuspense.vue';
-import {fileNameStore, fileTimestampStore} from '../Details/detailsStore';
+import {
+  fileNameStore,
+  fileTimestampStore,
+  groupIndexStore,
+} from '../Details/detailsStore';
 import {scatterSelectedStore} from '../Scatter/scatterStore';
 import {selectionStore} from '../Selection/selectionStore';
 import {audioStore} from './audioStore';
 
-const {getSettings, getBands} = await useStorage();
+const {readGroupIndexFromTimestamp} = await useStorage();
 
 /**
  * State
  */
 
-const settings = await getSettings();
-const bands = await getBands();
-const audioContext = new AudioContext();
 const containerRef = ref<HTMLDivElement>();
 const waveformRef = ref<HTMLDivElement>();
 const spectrogramRef = ref<HTMLDivElement>();
 const isPlayingRef = ref<boolean>(false);
 const fftSizeRef = ref<number>(FFT_SIZE.default);
+const audioContextRef = computed<OfflineAudioContext | null>(() => {
+  const ws = wsRef.value;
+
+  if (ws === null || storage.settings === null) {
+    return;
+  }
+
+  return ws.backend.getAudioContext();
+});
 
 const colorsRef = computed(() => {
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
 
-  if (ws) {
-    ws.destroy();
+  if (ws !== null) {
+    // ws.destroy();
   }
 
   return colormap({
@@ -57,20 +70,20 @@ const colorsRef = computed(() => {
 });
 
 const srcRef = computed(() => {
-  if (fileNameStore.path === null) {
-    return;
+  if (storage.settings === null || fileNameStore.path === null) {
+    return null;
   }
 
-  return `${settings.audio_host}${fileNameStore.path}`;
+  return `${storage.settings.audio_host}${fileNameStore.path}`;
 });
 
 const frequenciesRef = computed(() => {
-  if (!selectionStore.band) {
+  if (storage.bands === null || selectionStore.band === null) {
     return;
   }
 
-  const min = bands[selectionStore.band][0];
-  const max = bands[selectionStore.band][1];
+  const min = storage.bands[selectionStore.band][0];
+  const max = storage.bands[selectionStore.band][1];
 
   return {
     min: min,
@@ -79,19 +92,18 @@ const frequenciesRef = computed(() => {
 });
 
 const wsRef = computed(() => {
-  const frequencies = unref(frequenciesRef);
+  const frequencies = frequenciesRef.value;
+  const waveform = waveformRef.value;
+  const spectrogram = spectrogramRef.value;
+  const fftSize = fftSizeRef.value;
 
-  if (!frequencies) {
-    return;
-  }
-
-  const {min, max} = frequencies;
-  const waveform = unref(waveformRef);
-  const spectrogram = unref(spectrogramRef);
-  const fftSize = unref(fftSizeRef);
-
-  if (!waveform || !spectrogram || !min || !max || !fftSize) {
-    return;
+  if (
+    typeof waveform === 'undefined' ||
+    typeof spectrogram === 'undefined' ||
+    typeof frequencies === 'undefined' ||
+    typeof fftSize === 'undefined'
+  ) {
+    return null;
   }
 
   const params: WaveSurferParams = {
@@ -108,8 +120,8 @@ const wsRef = computed(() => {
         colorMap: colorsRef.value,
         height: 192,
         fftSamples: fftSize,
-        frequencyMin: min,
-        frequencyMax: max,
+        frequencyMin: frequencies.min,
+        frequencyMax: frequencies.max,
       }),
       Cursor.create({
         showTime: true,
@@ -142,38 +154,40 @@ function open() {
 }
 
 async function load() {
-  const srcValue = unref(srcRef);
-  const ws = unref(wsRef);
+  const srcValue = srcRef.value;
+  const ws = wsRef.value;
+  const audioContext = audioContextRef.value;
 
   if (
-    !srcValue ||
-    !ws ||
-    !selectionStore.band ||
-    !selectionStore.integration ||
-    !fileTimestampStore.value
+    srcValue === null ||
+    ws === null ||
+    audioContext === null ||
+    selectionStore.band === null ||
+    selectionStore.integration === null ||
+    fileTimestampStore.value === null
   ) {
     return;
   }
 
   appDraggablesStore.details = true;
-  appDraggablesStore.audio = true;
+  try {
+    const response = await fetch(srcValue);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-  const response = await fetch(srcValue);
-  const arrayBuffer = await response.arrayBuffer();
-  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    const [groupIndex, seconds] = await readGroupIndexFromTimestamp(
+      fileTimestampStore.value,
+    );
 
-  const {getGroupIndexAndSeconds} = await useStorage();
+    const start = groupIndex * seconds * 1000;
+    const end = start + seconds * 1000;
 
-  const [groupIndex, seconds] = await getGroupIndexAndSeconds(
-    selectionStore.band,
-    selectionStore.integration,
-    fileTimestampStore.value,
-  );
+    audioBufferSlice(audioBuffer, start, end, handleAudioSlice);
 
-  const start = groupIndex * seconds * 1000;
-  const end = start + seconds * 1000;
-
-  audioBufferSlice(audioBuffer, start, end, handleAudioSlice);
+    appDraggablesStore.audio = true;
+  } catch {
+    appDraggablesStore.audio = false;
+  }
 }
 
 function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
@@ -182,26 +196,20 @@ function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
     return;
   }
 
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
 
-  if (!ws) {
+  if (ws === null) {
     return;
   }
 
-  // create a new WAV file with the sliced buffer
-  const wavData = {
-    sampleRate: slicedAudioBuffer.sampleRate,
-    channelData: [slicedAudioBuffer.getChannelData(0)], // use 2 channels for stereo sound
-  };
+  const wav = encodeWavFileFromAudioBuffer(slicedAudioBuffer, 0);
 
-  WavEncoder.encode(wavData).then((wav) => {
-    const blob = new Blob([wav]);
+  const blob = new Blob([wav]);
 
-    ws.loadBlob(blob);
-    ws.on('seek', handleAudioSeek);
-    ws.on('finish', handleAudioEnd);
-    ws.on('ready', handleAudioReady);
-  });
+  ws.loadBlob(blob);
+  ws.on('seek', handleAudioSeek);
+  ws.on('finish', handleAudioEnd);
+  ws.on('ready', handleAudioReady);
 }
 
 function handleAudioEnd() {
@@ -209,14 +217,20 @@ function handleAudioEnd() {
 }
 
 function handleAudioReady() {
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
+  const audioContext = audioContextRef.value;
 
-  if (!selectionStore.band || !ws) {
+  if (
+    selectionStore.band === null ||
+    ws === null ||
+    storage.bands === null ||
+    audioContext === null
+  ) {
     return;
   }
 
-  const frequencies = bands[selectionStore.band];
   const ac = ws.backend.getAudioContext();
+  const frequencies = storage.bands[selectionStore.band];
 
   const lowShelf = ac.createBiquadFilter();
   lowShelf.type = 'lowshelf';
@@ -234,10 +248,38 @@ function handleAudioReady() {
   isPlayingRef.value = true;
 }
 
-function handleVolumeUp() {
-  const ws = unref(wsRef);
+async function handleDownload() {
+  const ws = wsRef.value;
+  const audioContext = audioContextRef.value;
 
-  if (!ws) {
+  if (ws === null || audioContext === null) {
+    return;
+  }
+
+  // noinspection TypeScriptUnresolvedReference
+  const buffer = ws.backend.buffer as AudioBuffer | null;
+  const fileName = fileNameStore.path;
+  const groupIndex = groupIndexStore.value;
+
+  if (
+    buffer === null ||
+    fileName === null ||
+    groupIndex === null ||
+    storage.settings === null
+  ) {
+    return;
+  }
+
+  const wav = encodeWavFileFromAudioBuffer(buffer, 0);
+  const blob = new Blob([wav], {type: 'audio/wav'});
+  const name = `${fileName} - ${groupIndex} - NO FILTER`;
+  triggerBrowserDownload(blob, name);
+}
+
+function handleVolumeUp() {
+  const ws = wsRef.value;
+
+  if (ws === null) {
     return;
   }
 
@@ -254,9 +296,9 @@ function handleVolumeUp() {
 }
 
 function handleAudioSeek() {
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
 
-  if (!ws) {
+  if (ws === null) {
     return;
   }
 
@@ -269,9 +311,9 @@ function handleAudioSeek() {
 }
 
 function handleVolumeDown() {
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
 
-  if (!ws) {
+  if (ws === null) {
     return;
   }
 
@@ -288,9 +330,9 @@ function handleVolumeDown() {
 }
 
 function handlePlayPause() {
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
 
-  if (!ws) {
+  if (ws === null) {
     return;
   }
 
@@ -299,9 +341,9 @@ function handlePlayPause() {
 }
 
 function handleStop() {
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
 
-  if (!ws) {
+  if (ws === null) {
     return;
   }
 
@@ -320,9 +362,9 @@ async function handleAudioStoreChange() {
 }
 
 function handleSpectrogramIncrease() {
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
 
-  if (!ws) {
+  if (ws === null) {
     return;
   }
 
@@ -341,9 +383,9 @@ function handleSpectrogramIncrease() {
 }
 
 function handleSpectrogramDecrease() {
-  const ws = unref(wsRef);
+  const ws = wsRef.value;
 
-  if (!ws) {
+  if (ws === null) {
     return;
   }
 
@@ -378,60 +420,129 @@ watch(audioStore, handleAudioStoreChange);
     <AppSuspense />
 
     <div
-      v-if="scatterSelectedStore.index"
+      v-if="scatterSelectedStore.index !== null"
       class="player"
     >
       <div class="volume buttons">
-        <n-button
-          size="tiny"
-          @click="handleVolumeUp"
+        <n-tooltip
+          placement="left"
+          trigger="hover"
         >
-          <n-icon>
-            <volume-high-outline />
-          </n-icon>
-        </n-button>
-        <n-button
-          size="tiny"
-          @click="handleVolumeDown"
-        >
-          <n-icon>
-            <volume-low-outline />
-          </n-icon>
-        </n-button>
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="handlePlayPause"
+            >
+              <n-icon>
+                <pause-outline v-if="isPlayingRef" />
+                <play-outline v-if="!isPlayingRef" />
+              </n-icon>
+            </n-button>
+          </template>
+          <span>{{ isPlayingRef ? 'Pause' : 'Play' }}</span>
+        </n-tooltip>
 
-        <n-button
-          size="tiny"
-          @click="handlePlayPause"
+        <n-tooltip
+          placement="left"
+          trigger="hover"
         >
-          <n-icon>
-            <pause-outline v-if="isPlayingRef" />
-            <play-outline v-if="!isPlayingRef" />
-          </n-icon>
-        </n-button>
-        <n-button
-          size="tiny"
-          @click="handleStop"
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="handleStop"
+            >
+              <n-icon>
+                <stop-outline />
+              </n-icon>
+            </n-button>
+          </template>
+          <span>Stop</span>
+        </n-tooltip>
+
+        <n-tooltip
+          placement="left"
+          trigger="hover"
         >
-          <n-icon>
-            <stop-outline />
-          </n-icon>
-        </n-button>
-        <n-button
-          size="tiny"
-          @click="handleSpectrogramIncrease"
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="handleVolumeUp"
+            >
+              <n-icon>
+                <volume-high-outline />
+              </n-icon>
+            </n-button>
+          </template>
+          <span>Volume Up</span>
+        </n-tooltip>
+
+        <n-tooltip
+          placement="left"
+          trigger="hover"
         >
-          <n-icon>
-            <add-outline />
-          </n-icon>
-        </n-button>
-        <n-button
-          size="tiny"
-          @click="handleSpectrogramDecrease"
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="handleVolumeDown"
+            >
+              <n-icon>
+                <volume-low-outline />
+              </n-icon>
+            </n-button>
+          </template>
+          <span>Volume Down</span>
+        </n-tooltip>
+
+        <n-tooltip
+          placement="left"
+          trigger="hover"
         >
-          <n-icon>
-            <remove-outline />
-          </n-icon>
-        </n-button>
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="handleSpectrogramIncrease"
+            >
+              <n-icon>
+                <add-outline />
+              </n-icon>
+            </n-button>
+          </template>
+          <span>FFT Size Up</span>
+        </n-tooltip>
+
+        <n-tooltip
+          placement="left"
+          trigger="hover"
+        >
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="handleSpectrogramDecrease"
+            >
+              <n-icon>
+                <remove-outline />
+              </n-icon>
+            </n-button>
+          </template>
+          <span>FFT Size Down</span>
+        </n-tooltip>
+
+        <n-tooltip
+          placement="left"
+          trigger="hover"
+        >
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="handleDownload"
+            >
+              <n-icon>
+                <arrow-down-outline />
+              </n-icon>
+            </n-button>
+          </template>
+          <span>Download</span>
+        </n-tooltip>
       </div>
 
       <div ref="waveformRef" />

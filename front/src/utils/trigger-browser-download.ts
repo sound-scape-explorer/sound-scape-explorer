@@ -1,16 +1,18 @@
-interface DownloadObjectAsJson {
-  data: string;
-  filename: string;
-  callback?: () => void;
-}
-
-export function triggerBrowserDownload({
-  data,
-  filename,
-  callback,
-}: DownloadObjectAsJson) {
+export function triggerBrowserDownload(
+  data: string | Blob,
+  filename: string,
+  callback?: () => void,
+) {
   const anchor = document.createElement('a');
-  anchor.href = data;
+
+  if (typeof data === 'string') {
+    anchor.href = data;
+  } else if (data instanceof Blob) {
+    anchor.href = URL.createObjectURL(data);
+  } else {
+    throw new Error('Data not recognized.');
+  }
+
   anchor.download = filename;
   anchor.click();
   anchor.remove();

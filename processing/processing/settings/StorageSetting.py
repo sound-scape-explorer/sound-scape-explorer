@@ -7,3 +7,7 @@ class StorageSetting(Enum):
     expected_sample_rate = 'expected_sample_rate'
     umap_seed = 'umap_seed'
     autocluster = 'autocluster'
+    autocluster_iterations = 'autocluster_iterations'
+    autocluster_min_size = 'autocluster_min_size'
+    autocluster_max_size = 'autocluster_max_size'
+    autocluster_threshold = 'autocluster_threshold'

@@ -1,21 +1,25 @@
+import {useEventListener} from '@vueuse/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import html2canvas from 'html2canvas';
-import {onUnmounted, watch} from 'vue';
+import {ref, watch} from 'vue';
 import {EXPORT_FILENAME} from '../../constants';
-import {useEventListener} from '../../hooks/useEventListener';
-import {useStorage} from '../../hooks/useStorage';
 import {ScatterGL} from '../../lib/scatter-gl-0.0.13';
-import {
-  convertSlugsToColorTypes,
-} from '../../utils/convert-slugs-to-color-types';
-import type {ScatterMetadata} from '../../utils/generate-scatter-dataset';
+import {storage} from '../../storage/storage';
+import {useStorage} from '../../storage/useStorage';
+import {convertSlugsToColorTypes} from '../../utils/convert-slugs-to-color-types';
+import type {
+  GenerateScatterDatasetProps,
+  ScatterMetadata,
+} from '../../utils/generate-scatter-dataset';
+import {generateScatterDataset} from '../../utils/generate-scatter-dataset';
 import {isHourDuringDay} from '../../utils/is-hour-during-day';
 import {mapRange} from '../../utils/map-range';
 import {colorsStore} from '../Colors/colorsStore';
 import {useColors} from '../Colors/useColors';
+import {loadingStore} from '../Loading/loadingStore';
 import {metaSelectionStore} from '../Meta/metaSelectionStore';
 import {queriesComplexStore} from '../Queries/queryComplexStore';
 import {queryStore} from '../Queries/queryStore';
@@ -36,15 +40,40 @@ dayjs.extend(relativeTime);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export function useScatter() {
+export async function useScatter() {
   const {colors, nightColor, dayColor, cyclingColors} = useColors();
   const {shouldBeFiltered} = useScatterFilters();
   const {getMetaColor} = useScatterMeta();
+  const {
+    autoclusterRef,
+    reducedFeaturesRef,
+    groupedTimestampsRef,
+    lengthPerGroupRef,
+    metaPropertiesRef,
+    metaSetsRef,
+    readReducedFeatures,
+  } = await useStorage();
 
   let isFirstRender = true;
   let scatterGL: ScatterGL | null = null;
 
-  function initializeScatterGL(target: HTMLDivElement) {
+  const isReadyRef = ref<boolean>(false);
+  watch([autoclusterRef, reducedFeaturesRef, groupedTimestampsRef], () => {
+    if (
+      autoclusterRef.value === null ||
+      reducedFeaturesRef.value === null ||
+      groupedTimestampsRef.value === null
+    ) {
+      isReadyRef.value = false;
+      return;
+    }
+
+    isReadyRef.value = true;
+  });
+
+  watch(isReadyRef, fetch);
+
+  function load(target: HTMLDivElement) {
     scatterGL = new ScatterGL(target, {
       orbitControls: {
         zoomSpeed: 1.33,
@@ -61,6 +90,38 @@ export function useScatter() {
     scatterDatasetStore.dataset = null;
   }
 
+  async function fetch() {
+    const reducedFeatures = await readReducedFeatures();
+
+    if (
+      storage.files === null ||
+      storage.filesMetas === null ||
+      autoclusterRef.value === null ||
+      reducedFeatures === null ||
+      groupedTimestampsRef.value === null ||
+      lengthPerGroupRef.value === null
+    ) {
+      return;
+    }
+
+    try {
+      const props: GenerateScatterDatasetProps = {
+        features: reducedFeatures,
+        files: storage.files,
+        timestamps: groupedTimestampsRef.value.flat(),
+        metas: storage.filesMetas,
+        autocluster: autoclusterRef.value.flat(),
+        lengthPerGroup: lengthPerGroupRef.value,
+      };
+
+      scatterDatasetStore.dataset = generateScatterDataset(props);
+      console.log(scatterDatasetStore.dataset);
+      loadingStore.isLoading = false;
+    } catch {
+      scatterDatasetStore.dataset = null;
+    }
+  }
+
   function handleClick(index: number | null) {
     if (index === null) {
       return;
@@ -75,10 +136,10 @@ export function useScatter() {
 
   async function render() {
     if (
-      scatterGL === null
-      || scatterDatasetStore.dataset === null
-      || !selectionStore.band
-      || !selectionStore.integration
+      scatterGL === null ||
+      scatterDatasetStore.dataset === null ||
+      selectionStore.band === null ||
+      selectionStore.integration === null
     ) {
       return;
     }
@@ -86,35 +147,49 @@ export function useScatter() {
     scatterGL.updateDataset(scatterDatasetStore.dataset);
     scatterGL.resize();
 
-    if (isFirstRender) {
-      const {
-        getStorageMetas,
-        getAsyncLengthPerGroup,
-        timezoneRef,
-      } = await useStorage();
-
-      const metas = await getStorageMetas(selectionStore.band, selectionStore.integration);
-      const metaProperties = Object.keys(metas);
-      const metaSets = Object.values(metas);
-      const lengthPerGroup = await getAsyncLengthPerGroup(selectionStore.band, selectionStore.integration);
-      const timezone = timezoneRef.value;
-
-      scatterGL.render(scatterDatasetStore.dataset);
-      scatterGL.startOrbitAnimation();
-      scatterGL.setPointColorer(
-        (i, s, h) => getColor(
-          i,
-          s,
-          h,
-          metaProperties,
-          metaSets,
-          lengthPerGroup,
-          timezone,
-        ),
-      );
-      isFirstRender = false;
+    if (!isFirstRender) {
+      return;
     }
+
+    const lengthPerGroup = lengthPerGroupRef.value;
+    const metaProperties = metaPropertiesRef.value;
+    const metaSets = metaSetsRef.value;
+
+    if (
+      storage.settings === null ||
+      metaProperties === null ||
+      metaSets === null ||
+      lengthPerGroup === null
+    ) {
+      return;
+    }
+
+    const timezone = storage.settings.timezone;
+
+    scatterGL.render(scatterDatasetStore.dataset);
+    scatterGL.startOrbitAnimation();
+    scatterGL.setPointColorer((i, s, h) =>
+      getColor(i, s, h, metaProperties, metaSets, lengthPerGroup, timezone),
+    );
+
+    isFirstRender = false;
   }
+
+  watch(
+    [
+      storage,
+      timeStore,
+      colorsStore,
+      queryStore,
+      metaSelectionStore,
+      queriesComplexStore,
+      scatterAlphasStore,
+      scatterDatasetStore,
+    ],
+    async () => {
+      await render();
+    },
+  );
 
   function handleResize() {
     if (scatterGL === null) {
@@ -125,7 +200,7 @@ export function useScatter() {
   }
 
   async function screenshot() {
-    if (!scatterStore.container) {
+    if (scatterStore.container === null) {
       return;
     }
 
@@ -184,22 +259,43 @@ export function useScatter() {
     const timestamp = metadata[index].timestamp;
     const date = dayjs(timestamp * 1000).tz(timezone);
     const range = {
-      min: dayjs((timeStore.min) * 1000).tz(timezone),
-      max: dayjs((timeStore.max) * 1000).tz(timezone),
+      min: dayjs(timeStore.min * 1000).tz(timezone),
+      max: dayjs(timeStore.max * 1000).tz(timezone),
     };
 
     const hoverColor = 'red';
 
     const rangedPointIndex = mapRange(index, 0, metadata.length, 0, 1);
-    const indexColor = colors.value(rangedPointIndex).alpha(scatterAlphasStore.high).css();
+    const indexColor = colors
+      .value(rangedPointIndex)
+      .alpha(scatterAlphasStore.high)
+      .css();
     let color = indexColor;
 
     if (colorType === 'fileIndex') {
-      const rangedFileIndex = mapRange(metadata[index].fileIndex, 0, metadata.length, 0, 1);
-      color = colors.value(rangedFileIndex).alpha(scatterAlphasStore.high).css();
+      const rangedFileIndex = mapRange(
+        metadata[index].fileIndex,
+        0,
+        metadata.length,
+        0,
+        1,
+      );
+      color = colors
+        .value(rangedFileIndex)
+        .alpha(scatterAlphasStore.high)
+        .css();
     } else if (colorType === 'groupIndex') {
-      const rangedGroupIndex = mapRange(metadata[index].groupIndex, 0, lengthPerGroup, 0, 1);
-      color = colors.value(rangedGroupIndex).alpha(scatterAlphasStore.high).css();
+      const rangedGroupIndex = mapRange(
+        metadata[index].groupIndex,
+        0,
+        lengthPerGroup,
+        0,
+        1,
+      );
+      color = colors
+        .value(rangedGroupIndex)
+        .alpha(scatterAlphasStore.high)
+        .css();
     } else if (colorType === 'pointIndex') {
       color = indexColor;
     } else if (colorType === 'by1h') {
@@ -211,12 +307,17 @@ export function useScatter() {
     } else if (colorType === 'by10min') {
       const rangeInMinutes = range.max.diff(range.min, 'minutes');
       const currentMinuteFromStart = date.diff(range.min, 'minutes');
-      const rangedIndex = mapRange(currentMinuteFromStart, 0, rangeInMinutes, 0, 1);
+      const rangedIndex = mapRange(
+        currentMinuteFromStart,
+        0,
+        rangeInMinutes,
+        0,
+        1,
+      );
 
       color = colors.value(rangedIndex).alpha(scatterAlphasStore.high).css();
     } else if (colorType === 'isDay') {
       const hour = date.get('hours');
-      console.log(index, hour);
       const isDay = isHourDuringDay(hour);
 
       color = isDay
@@ -226,9 +327,17 @@ export function useScatter() {
       const hour = date.get('hours');
       const rangedIndex = mapRange(hour, 0, 24, 0, 1);
 
-      color = cyclingColors.value(rangedIndex).alpha(scatterAlphasStore.high).css();
+      color = cyclingColors
+        .value(rangedIndex)
+        .alpha(scatterAlphasStore.high)
+        .css();
     } else if (metaPropertiesAsColorTypes.includes(colorType)) {
-      color = getMetaColor(colorType, index, metaPropertiesAsColorTypes, metaSets);
+      color = getMetaColor(
+        colorType,
+        index,
+        metaPropertiesAsColorTypes,
+        metaSets,
+      );
     }
 
     if (hoverIndex === index) {
@@ -248,24 +357,12 @@ export function useScatter() {
     return filteredColor;
   }
 
-  onUnmounted(() => {
-    destroy();
-  });
-
-  watch([
-    timeStore,
-    colorsStore,
-    queryStore,
-    metaSelectionStore,
-    queriesComplexStore,
-    scatterAlphasStore,
-    scatterDatasetStore,
-  ], async () => {
-    await render();
-  });
+  // onUnmounted(() => {
+  //   destroy();
+  // });
 
   return {
     screenshot: screenshot,
-    load: initializeScatterGL,
+    load: load,
   };
 }

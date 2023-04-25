@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import {ref, unref, watch} from 'vue';
+import {ref, watch} from 'vue';
 import {scatterStore} from './scatterStore';
 import {useScatter} from './useScatter';
 
 const containerRef = ref<HTMLDivElement>();
-const {load} = useScatter();
+const {load} = await useScatter();
 
 watch(containerRef, () => {
-  const container = unref(containerRef);
+  const container = containerRef.value;
 
-  if (!container) {
+  if (typeof container === 'undefined') {
     return;
   }
 
@@ -19,7 +19,10 @@ watch(containerRef, () => {
 </script>
 
 <template>
-  <div ref="containerRef" class="container" />
+  <div
+    ref="containerRef"
+    class="container"
+  />
 </template>
 
 <style lang="scss" scoped>

@@ -11,7 +11,7 @@ from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
 from processing.constants import DOCKER_BASE_PATH
-from processing.settings.StorageSetting import StorageSetting
+from processing.settings.ConfigSetting import ConfigSettings
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -462,31 +462,28 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.indicators)
         self.__delete_silently(StoragePath.volumes)
 
-    def __get_settings(self) -> Dataset.attrs:
-        return self.__get(StoragePath.configuration).attrs
+    def read_settings(self) -> ConfigSettings:
+        settings: ConfigSettings = self.__get(StoragePath.configuration).attrs
+        return settings
 
     def get_umap_seed(self) -> int:
-        settings = self.__get_settings()
-        return settings[StorageSetting.umap_seed.value]
+        settings = self.read_settings()
+        return settings['umap_seed']
 
     def get_expected_sample_rate(self) -> int:
-        settings = self.__get_settings()
-        return settings[StorageSetting.expected_sample_rate.value]
-
-    def get_autocluster(self) -> numpy.bool_:
-        settings = self.__get_settings()
-        return settings[StorageSetting.autocluster.value]
+        settings = self.read_settings()
+        return settings['expected_sample_rate']
 
     def get_base_path(self) -> str:
         if Env().is_docker is True:
             return DOCKER_BASE_PATH
 
-        settings = self.__get_settings()
-        return settings[StorageSetting.base_path.value]
+        settings = self.read_settings()
+        return settings['base_path']
 
     def get_audio_folder(self) -> str:
-        settings = self.__get_settings()
-        return settings[StorageSetting.audio_folder.value]
+        settings = self.read_settings()
+        return settings['audio_folder']
 
     def get_audio_path(self) -> str:
         base_path = self.get_base_path()
@@ -907,8 +904,13 @@ class Storage(metaclass=SingletonMeta):
     # TODO: Remove autocluster injection after storage upgrade.
     def read_meta_properties(self) -> List[str]:
         meta_properties = self.__get(StoragePath.meta_properties)
+
         strings = list(meta_properties.asstr()[:])
-        strings.insert(0, 'AUTOCLUSTER')
+        settings = self.read_settings()
+
+        if settings['autocluster']:
+            strings.insert(0, 'AUTOCLUSTER')
+
         return strings
 
     def is_defined_files(self) -> bool:
@@ -1037,7 +1039,7 @@ class Storage(metaclass=SingletonMeta):
     def delete_autocluster(self) -> None:
         self.__delete_silently(StoragePath.autocluster)
 
-    def read_autocluster(
+    def __read_autocluster_values(
         self,
         band: str,
         integration: int,
@@ -1071,7 +1073,11 @@ class Storage(metaclass=SingletonMeta):
         meta_properties = self.read_meta_properties()
         meta_values = []
 
-        autocluster = self.read_autocluster(band, integration)
+        settings = self.read_settings()
+        autocluster = None
+
+        if settings['autocluster']:
+            autocluster = self.__read_autocluster_values(band, integration)
 
         for mp, meta_property in enumerate(meta_properties):
             meta_property_values = []
@@ -1090,7 +1096,9 @@ class Storage(metaclass=SingletonMeta):
                 file_name = list(files)[file_index]
                 file_ = files[file_name]
                 meta = list(file_.meta)
-                meta.insert(0, str(autocluster[f]))
+
+                if settings['autocluster'] and autocluster is not None:
+                    meta.insert(0, str(autocluster[f]))
 
                 meta_value = meta[mp]
                 meta_property_values.append(meta_value)

@@ -1,66 +1,83 @@
 <script lang="ts" setup="">
-import {useStorage} from '../../hooks/useStorage';
+import {computed} from 'vue';
+import {storage} from '../../storage/storage';
+import {useStorage} from '../../storage/useStorage';
 
-const {
-  getSettings,
-  getFiles,
-  getBands,
-  getIntegrations,
-  getRanges,
-  getReducers,
-  getIndicatorNames,
-  getVolumeNames,
-} = await useStorage();
+const {isReadyRef} = await useStorage();
 
-const settings = await getSettings();
-const files = await getFiles();
-const bands = await getBands();
-const integrations = await getIntegrations();
-const ranges = await getRanges();
-const reducers = await getReducers();
-const reducersToPrint = reducers.map((reducer) => `${reducer.name}${reducer.dimensions}`);
-const indicators = await getIndicatorNames();
-const volumes = await getVolumeNames();
+const reducersToPrint = computed(() => {
+  if (storage.reducers === null) {
+    return;
+  }
+
+  return storage.reducers.map(
+    (reducer) => `${reducer.name}${reducer.dimensions}`,
+  );
+});
+
+const bandsRef = computed(() => {
+  if (storage.bands === null) {
+    return;
+  }
+
+  return Object.keys(storage.bands);
+});
+
+const integrationsRef = computed(() => {
+  if (storage.integrations === null) {
+    return;
+  }
+
+  return Object.keys(storage.integrations);
+});
+
+const rangesRef = computed(() => {
+  if (storage.ranges === null) {
+    return;
+  }
+
+  return Object.keys(storage.ranges);
+});
 </script>
 
 <template>
-  <div class="container">
-    <div class="title">Settings</div>
-    <code v-for="(value, index) in settings" class="item">
-      <span class="key">{{ index }}</span>
-      <span>{{ value }}</span>
-    </code>
-  </div>
+  <div
+    v-if="isReadyRef"
+    class="wrapper"
+  >
+    <div class="container">
+      <div class="title">Settings</div>
+      <code
+        v-for="(value, index) in storage.settings"
+        class="item"
+      >
+        <span class="key">{{ index }}</span>
+        <span>{{ value }}</span>
+      </code>
+    </div>
 
-  <div class="container">
-    <code class="item">
-      <span class="key">Files count</span>
-      <span>{{ files.length }}</span>
-    </code>
-    <code class="item">
-      <span class="key">Bands</span>
-      <span>{{ Object.keys(bands) }}</span>
-    </code>
-    <code class="item">
-      <span class="key">Integrations</span>
-      <span>{{ integrations }}</span>
-    </code>
-    <code class="item">
-      <span class="key">Ranges</span>
-      <span>{{ ranges }}</span>
-    </code>
-    <code class="item">
-      <span class="key">Reducers</span>
-      <span>{{ reducersToPrint }}</span>
-    </code>
-    <code class="item">
-      <span class="key">Indicators</span>
-      <span>{{ indicators }}</span>
-    </code>
-    <code class="item">
-      <span class="key">Volumes</span>
-      <span>{{ volumes }}</span>
-    </code>
+    <div class="container">
+      <code class="item">
+        <span class="key">Files count</span>
+        <span>{{ storage.files?.length }}</span>
+      </code>
+      <code class="item">
+        <span class="key">Bands</span>
+        <span>{{ bandsRef }}</span>
+      </code>
+      <code class="item">
+        <span class="key">Integrations</span>
+        <span>{{ integrationsRef }}</span>
+      </code>
+      <code class="item">
+        <span class="key">Ranges</span>
+        <span>{{ rangesRef }}</span>
+      </code>
+      <code class="item">
+        <span class="key">Reducers</span>
+        <span>{{ reducersToPrint }}</span>
+      </code>
+    </div>
   </div>
 </template>
 

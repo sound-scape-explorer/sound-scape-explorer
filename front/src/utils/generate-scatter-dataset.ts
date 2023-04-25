@@ -10,23 +10,23 @@ export interface ScatterMetadata {
   metaValues: string[];
 }
 
-interface Props {
-  features: number[][][];
+export interface GenerateScatterDatasetProps {
+  features: number[][];
   files: string[];
   timestamps: number[];
   metas: string[][];
   autocluster: number[];
+  lengthPerGroup: number;
 }
 
-export function generateScatterDataset(props: Props) {
-  const dataPoints: Point2D[] = props.features.flat() as unknown as Point2D[];
+export function generateScatterDataset(props: GenerateScatterDatasetProps) {
+  const dataPoints: Point2D[] = props.features as unknown as Point2D[];
   const metadata: ScatterMetadata[] = [];
-  const integrations = props.features.flat().length / props.features.length;
 
   let count = 0;
 
   for (let fileIndex = 0; fileIndex < props.files.length; fileIndex += 1) {
-    for (let j = 0; j < integrations; j += 1) {
+    for (let j = 0; j < props.lengthPerGroup; j += 1) {
       const groupIndex = j;
       const pointIndex = count;
       const timestamp = props.timestamps[pointIndex];

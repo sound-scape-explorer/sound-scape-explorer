@@ -1,6 +1,6 @@
 import type {Data, Layout} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
-import {ref, unref, watch} from 'vue';
+import {ref, watch} from 'vue';
 
 export interface HistogramProps {
   labels: string[];
@@ -14,14 +14,14 @@ export function useAppHistogram(props: HistogramProps) {
   const layoutRef = ref<Partial<Layout>>();
 
   async function render() {
-    const div = unref(divRef);
-    const data = unref(dataRef);
-    const layout = unref(layoutRef);
+    const div = divRef.value;
+    const data = dataRef.value;
+    const layout = layoutRef.value;
 
     if (
-      !div
-      || !data
-      || !layout
+      typeof div === 'undefined' ||
+      typeof data === 'undefined' ||
+      typeof layout === 'undefined'
     ) {
       return;
     }
@@ -30,12 +30,14 @@ export function useAppHistogram(props: HistogramProps) {
   }
 
   function refresh() {
-    dataRef.value = [{
-      type: 'bar',
-      x: props.labels,
-      y: props.values,
-      hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
-    }];
+    dataRef.value = [
+      {
+        type: 'bar',
+        x: props.labels,
+        y: props.values,
+        hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
+      },
+    ];
 
     layoutRef.value = {
       title: props.title,

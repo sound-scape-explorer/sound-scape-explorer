@@ -1,6 +1,6 @@
 from typing import List, Union
 
-import numpy as np
+import numpy
 import pandas as pd
 from h5py import Dataset
 from pandas import DataFrame
@@ -41,8 +41,8 @@ class ClusterPairing:
 
         self._dataframe = pd.DataFrame(features)
 
-        self._clusters_a = np.array(labels_a)  # type: ignore
-        self._clusters_b = np.array(labels_b)  # type: ignore
+        self._clusters_a = list(labels_a)
+        self._clusters_b = list(labels_b)
 
     def _set(
         self,
@@ -81,26 +81,26 @@ class ClusterPairing:
             self._clusters_b,
         )
 
-        pairing_a = contingency_matrix / np.tile(
-            np.sum(contingency_matrix, axis=1),
+        pairing_a = contingency_matrix / numpy.tile(
+            numpy.sum(contingency_matrix, axis=1),
             (contingency_matrix.shape[1], 1),
         ).T * 100
 
-        pairing_b = contingency_matrix / np.tile(
-            np.sum(contingency_matrix, axis=0),
+        pairing_b = contingency_matrix / numpy.tile(
+            numpy.sum(contingency_matrix, axis=0),
             (contingency_matrix.shape[0], 1),
         ) * 100
 
         payload_a = pd.DataFrame(
             pairing_a.T,
-            index=list(np.unique(self._clusters_b)),
-            columns=list(np.unique(self._clusters_a)),
+            index=list(numpy.unique(self._clusters_b)),
+            columns=list(numpy.unique(self._clusters_a)),
         )
 
         payload_b = pd.DataFrame(
             pairing_b,
-            columns=list(np.unique(self._clusters_b)),
-            index=list(np.unique(self._clusters_a)),
+            columns=list(numpy.unique(self._clusters_b)),
+            index=list(numpy.unique(self._clusters_a)),
         )
 
         self._set(payload_a, payload_b)

@@ -7,7 +7,11 @@ import {appNotificationsStore} from './appNotificationsStore';
 
 const notification = useNotification();
 
-function render(type: NotificationType, title: string, description: string): void {
+function render(
+  type: NotificationType,
+  title: string,
+  description: string,
+): void {
   notification[type]({
     content: title,
     meta: description,
@@ -23,3 +27,5 @@ watch(appNotificationsStore, () => {
   });
 });
 </script>
+
+<template></template>

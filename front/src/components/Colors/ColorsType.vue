@@ -1,34 +1,22 @@
 <script lang="ts" setup>
-import {asyncComputed} from '@vueuse/core';
 import {NSelect, NTooltip} from 'naive-ui';
 import {computed} from 'vue';
-import {useStorage} from '../../hooks/useStorage';
+import {useStorage} from '../../storage/useStorage';
 import {convertSlugsToColorTypes} from '../../utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import {useScatterStatus} from '../Scatter/useScatterStatus';
-import {selectionStore} from '../Selection/selectionStore';
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
 
 const {isDisabled} = useScatterStatus();
-const {getStorageMetas} = await useStorage();
+const {metaPropertiesRef} = await useStorage();
 
 /**
  * State
  */
 
-const metas = asyncComputed(async () => {
-  if (!selectionStore.band || !selectionStore.integration) {
-    return;
-  }
-
-  return await getStorageMetas(selectionStore.band, selectionStore.integration);
-});
-
-const metaProperties = computed(() => Object.keys(metas.value ?? {}));
-
-const options = computed<ColorType[]>(() => {
-  return [
+const optionsRef = computed<ColorType[]>(() => {
+  const defaultOptions = [
     'pointIndex',
     'fileIndex',
     'groupIndex',
@@ -36,19 +24,31 @@ const options = computed<ColorType[]>(() => {
     'by10min',
     'isDay',
     'cycleDay',
-    ...convertSlugsToColorTypes(metaProperties.value),
   ];
+
+  const metaProperties = metaPropertiesRef.value;
+  if (metaProperties === null) {
+    return [];
+  }
+
+  return [...defaultOptions, ...convertSlugsToColorTypes(metaProperties)];
 });
 
-const naiveOptions = computed(() => convertToNaiveSelectOptions(options.value));
+const naiveOptions = computed(() => {
+  const options = optionsRef.value;
+  return convertToNaiveSelectOptions(options);
+});
 </script>
 
 <template>
-  <n-tooltip placement="right" trigger="hover">
+  <n-tooltip
+    placement="right"
+    trigger="hover"
+  >
     <template #trigger>
       <n-select
         v-model:value="colorsStore.colorType"
-        :default-value="options[0]"
+        :default-value="optionsRef[0]"
         :disabled="isDisabled"
         :options="naiveOptions"
         placeholder="Color type..."

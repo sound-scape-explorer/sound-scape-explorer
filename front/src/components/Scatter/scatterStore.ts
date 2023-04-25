@@ -8,11 +8,11 @@ export const scatterStore = reactive<ScatterStore>({
   container: null,
 });
 
-export const scatterHoverStore = reactive<{index: number | null;}>({
+export const scatterHoverStore = reactive<{index: number | null}>({
   index: null,
 });
 
-export const scatterSelectedStore = reactive<{index: number | null;}>({
+export const scatterSelectedStore = reactive<{index: number | null}>({
   index: null,
 });
 

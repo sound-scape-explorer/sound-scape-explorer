@@ -3,7 +3,10 @@ import {scatterSelectedStore} from '../Scatter/scatterStore';
 </script>
 
 <template>
-  <div v-if="!scatterSelectedStore.index" class="suspense">
+  <div
+    v-if="scatterSelectedStore.index === null"
+    class="suspense"
+  >
     Please select a point.
   </div>
 </template>

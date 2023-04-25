@@ -4,7 +4,7 @@ import AppButton from '../AppButton/AppButton.vue';
 import {useScatterExport} from '../Scatter/useScatterExport';
 import {useScatterStatus} from '../Scatter/useScatterStatus';
 
-const {loadingRef, handleClick} = useScatterExport();
+const {loadingRef, handleClick} = await useScatterExport();
 const {isDisabled} = useScatterStatus();
 </script>
 

@@ -1,84 +1,87 @@
 <script lang="ts" setup="">
 import {FlashOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
-import {computed, ref, unref} from 'vue';
-import {useStorage} from '../../hooks/useStorage';
+import {computed, ref} from 'vue';
+import {useStorage} from '../../storage/useStorage';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHistogram from '../AppHistogram/AppHistogram.vue';
-import {useMetas} from '../Meta/useMetas';
-import {selectionStore} from '../Selection/selectionStore';
 
-const {
-  metaPropertiesRef,
-  metaSetsRef,
-} = await useMetas();
-const {
-  volumeNamesRef,
-  getVolumeNew,
-  volumesRef,
-} = await useStorage();
+const {readVolume, volumesRef, metaPropertiesRef, metaSetsRef} =
+  await useStorage();
 
+/**
+ * State
+ */
+
+const titleRef = ref<string>();
+const labelsRef = ref<string[]>();
+const valuesRef = ref<number[]>();
 const volumeSelectedRef = ref();
+const metaSelectedRef = ref();
 
 const volumesNaiveRef = computed(() => {
-  const volumes = unref(volumesRef);
+  const volumes = volumesRef.value;
 
-  if (!volumes) {
+  if (volumes === null) {
     return;
   }
 
   return convertToNaiveSelectOptions(volumes.map((v) => v.name));
 });
 
-const metaPropertiesNaiveRef = computed(() => convertToNaiveSelectOptions(metaPropertiesRef.value ?? {}));
-const metaSelectedRef = ref();
+const metaPropertiesNaiveRef = computed(() => {
+  const metaProperties = metaPropertiesRef.value;
 
-const titleRef = ref<string>();
-const labelsRef = ref<string[]>();
-const valuesRef = ref<number[]>();
+  if (metaProperties === null) {
+    return [];
+  }
+
+  return convertToNaiveSelectOptions(metaProperties);
+});
+
+/**
+ * Handlers
+ */
 
 async function run() {
-  const metaSelected = unref(metaSelectedRef);
-  const metaProperties = unref(metaPropertiesRef);
-  const metaSets = unref(metaSetsRef);
-  const volumeSelected = unref(volumeSelectedRef);
-  const volumeNames = unref(volumeNamesRef);
-  const band = unref(selectionStore.band);
-  const integrationName = unref(selectionStore.integration);
+  const metaProperties = metaPropertiesRef.value;
+  const metaSets = metaSetsRef.value;
+  const metaSelected = metaSelectedRef.value;
+  const volumeSelected = volumeSelectedRef.value;
+  const volumes = volumesRef.value;
+
+  console.log(volumes);
 
   if (
-    !metaSelected
-    || !metaProperties
-    || !metaSets
-    || !volumeSelected
-    || !volumeNames
-    || !band
-    || !integrationName
+    metaSelected === null ||
+    metaProperties === null ||
+    metaSets === null ||
+    volumeSelected === null ||
+    volumes === null
   ) {
     return;
   }
 
+  const volumeNames = volumes.map((volume) => volume.name);
   const volumeIndex = volumeNames.indexOf(volumeSelected);
   const metaIndex = metaProperties.indexOf(metaSelected);
 
-  if (
-    metaIndex === -1
-    || volumeIndex === -1
-  ) {
+  console.log(volumeSelected, volumeNames);
+
+  if (metaIndex === -1 || volumeIndex === -1) {
     return;
   }
 
-  const data = await getVolumeNew(
-    band,
-    integrationName,
-    volumeIndex,
-    metaIndex,
-  );
+  const data = await readVolume(volumeIndex, metaIndex);
 
-  if (!data) {
+  console.log(data);
+
+  if (data === null) {
     return;
   }
+
+  console.log(metaSets);
 
   titleRef.value = `${volumeSelectedRef.value} - ${metaSelectedRef.value}`;
   labelsRef.value = metaSets[metaIndex];
@@ -111,7 +114,11 @@ async function run() {
             placeholder="Meta..."
             size="tiny"
           />
-          <n-button class="button" size="tiny" @click="run">
+          <n-button
+            class="button"
+            size="tiny"
+            @click="run"
+          >
             <n-icon>
               <flash-outline />
             </n-icon>

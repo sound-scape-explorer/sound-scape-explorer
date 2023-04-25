@@ -1,11 +1,9 @@
 import {ref} from 'vue';
 import {EXPORT_FILENAME} from '../../constants';
-import {useStorage} from '../../hooks/useStorage';
 import type {Point2D, Point3D} from '../../lib/scatter-gl-0.0.13';
+import {useStorage} from '../../storage/useStorage';
 import {convertArrayToCsv} from '../../utils/convert-array-to-csv';
-import {
-  convertObjectToJsonString,
-} from '../../utils/convert-object-to-json-string';
+import {convertObjectToJsonString} from '../../utils/convert-object-to-json-string';
 import type {ScatterMetadata} from '../../utils/generate-scatter-dataset';
 import {triggerBrowserDownload} from '../../utils/trigger-browser-download';
 import {useNotification} from '../AppNotification/useNotification';
@@ -17,11 +15,14 @@ import type {ScatterDatasetStore} from './scatterDatasetStore';
 import {scatterDatasetStore} from './scatterDatasetStore';
 import {useScatterFilters} from './useScatterFilters';
 
-export type ExportType = 'json' | 'csv'
+export type ExportType = 'json' | 'csv';
 
-export function useScatterExport() {
+export async function useScatterExport() {
   const {notify} = useNotification();
   const {shouldBeFiltered} = useScatterFilters();
+  const {readGroupedFeatures, readGroupIndexFromTimestamp, metaPropertiesRef} =
+    await useStorage();
+
   const loadingRef = ref(false);
 
   function getFilename() {
@@ -79,7 +80,7 @@ export function useScatterExport() {
   ) {
     loadingRef.value = true;
 
-    if (!dataset) {
+    if (dataset === null) {
       loadingRef.value = false;
       return;
     }
@@ -88,7 +89,7 @@ export function useScatterExport() {
 
     const {points, metadata} = dataset;
 
-    if (!selectionStore.band || !selectionStore.integration) {
+    if (selectionStore.band === null || selectionStore.integration === null) {
       return payload;
     }
 
@@ -101,28 +102,17 @@ export function useScatterExport() {
 
       const point = points[i];
       const data = metadata[i] as unknown as ScatterMetadata;
-      const label = data.label;
-
-      if (!label) {
-        continue;
-      }
-
-      const {
-        getGroupedFeatures,
-        getGroupIndexAndSeconds,
-      } = await useStorage();
-
       const timestamp = data.timestamp;
-      const [groupIndex] = await getGroupIndexAndSeconds(selectionStore.band, selectionStore.integration, timestamp);
+      const [groupIndex] = await readGroupIndexFromTimestamp(timestamp);
 
       const fileIndex = data.fileIndex;
 
-      const features = await getGroupedFeatures(
-        selectionStore.band,
-        selectionStore.integration,
-        fileIndex,
-        groupIndex,
-      );
+      const features = await readGroupedFeatures(fileIndex, groupIndex);
+
+      if (features === null) {
+        console.log(features);
+        continue;
+      }
 
       if (type === 'json') {
         payload.push({
@@ -184,26 +174,25 @@ export function useScatterExport() {
     settingsStore.umap.export.labels && firstRow.push('fileIndex');
     settingsStore.umap.export.timestamps && firstRow.push('timestamp');
     settingsStore.umap.export.points && createDimensions(firstRow);
-    settingsStore.umap.export.meta && firstRow.push(...convertMetaPropertiesForExport(metaProperties));
+    settingsStore.umap.export.meta &&
+      firstRow.push(...convertMetaPropertiesForExport(metaProperties));
     settingsStore.umap.export.features && createFeatures(firstRow);
 
     return firstRow;
   }
 
   async function handleClick(type: ExportType = 'json') {
-    if (!selectionStore.band || !selectionStore.integration) {
+    const metaProperties = metaPropertiesRef.value;
+
+    if (
+      selectionStore.band === null ||
+      selectionStore.integration === null ||
+      metaProperties === null
+    ) {
       return;
     }
-
-    const {getStorageMetas} = await useStorage();
-    const metas = await getStorageMetas(selectionStore.band, selectionStore.integration);
-    const metaProperties = Object.keys(metas);
 
     const filename = getFilename() || EXPORT_FILENAME;
-
-    if (!filename) {
-      return;
-    }
 
     notify(
       'info',
@@ -218,7 +207,7 @@ export function useScatterExport() {
       type,
     );
 
-    if (!results) {
+    if (typeof results === 'undefined') {
       return;
     }
 
@@ -235,24 +224,21 @@ export function useScatterExport() {
     if (type === 'json') {
       const json = convertObjectToJsonString(results);
 
-      triggerBrowserDownload({
-        data: json,
-        filename: `${filename}.json`,
-        callback: () => loadingRef.value = false,
-      });
+      triggerBrowserDownload(
+        json,
+        `${filename}.json`,
+        () => (loadingRef.value = false),
+      );
     } else if (type === 'csv') {
       const firstRow = createCSVFirstRow(metaProperties, dimensions);
 
-      const csv = convertArrayToCsv(
-        results as string[][],
-        firstRow,
-      );
+      const csv = convertArrayToCsv(results as string[][], firstRow);
 
-      triggerBrowserDownload({
-        data: csv,
-        filename: `${filename}.csv`,
-        callback: () => loadingRef.value = false,
-      });
+      triggerBrowserDownload(
+        csv,
+        `${filename}.csv`,
+        () => (loadingRef.value = false),
+      );
     }
   }
 

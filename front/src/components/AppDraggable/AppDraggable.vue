@@ -26,13 +26,13 @@ const props = withDefaults(defineProps<Props>(), {
 
 const containerRef = ref<HTMLElement>();
 const storageKey = `sse-draggable-${props.draggableKey}`;
-const isZoomed = ref<boolean>(false);
-const isSelected = ref<boolean>(true);
+const isZoomedRef = ref<boolean>(false);
+const isSelectedRef = ref<boolean>(true);
 
 const dynamicClasses = computed<string>(() => {
   let classes = '';
 
-  if (isZoomed.value === true) {
+  if (isZoomedRef.value === true) {
     classes += ' zoomed';
   }
 
@@ -40,7 +40,7 @@ const dynamicClasses = computed<string>(() => {
     classes += ' closed';
   }
 
-  if (isSelected.value === true) {
+  if (isSelectedRef.value === true) {
     classes += ' selected';
   }
 
@@ -61,23 +61,23 @@ function close() {
 }
 
 function toggleZoom() {
-  isZoomed.value = !isZoomed.value;
+  isZoomedRef.value = !isZoomedRef.value;
 }
 
 function select() {
-  if (isSelected.value === true) {
+  if (isSelectedRef.value === true) {
     return;
   }
 
-  isSelected.value = true;
+  isSelectedRef.value = true;
 }
 
 function unselect() {
-  if (isSelected.value === false) {
+  if (isSelectedRef.value === false) {
     return;
   }
 
-  isSelected.value = false;
+  isSelectedRef.value = false;
 }
 </script>
 
@@ -86,21 +86,30 @@ function unselect() {
     ref="containerRef"
     :class="dynamicClasses"
     :exact="true"
-    :initialValue="{ x: 100, y: 100 }"
+    :initialValue="{x: 100, y: 100}"
     :storage-key="storageKey"
     class="draggable"
     @click="select"
   >
     <div class="button close">
-      <n-button size="tiny" @click="close">
+      <n-button
+        size="tiny"
+        @click="close"
+      >
         <n-icon>
           <close-outline />
         </n-icon>
       </n-button>
     </div>
 
-    <div v-if="false" class="button zoom">
-      <n-button size="tiny" @click="toggleZoom">
+    <div
+      v-if="false"
+      class="button zoom"
+    >
+      <n-button
+        size="tiny"
+        @click="toggleZoom"
+      >
         <n-icon>
           <search-outline />
         </n-icon>
@@ -144,10 +153,8 @@ $indexSelected: 1001;
   box-shadow: 10px 10px 20px -3px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
 
-  transition: width 120ms ease-in-out,
-  border 120ms ease-in-out,
-  max-height 120ms ease-in,
-  background-color 120ms ease-in-out;
+  transition: width 120ms ease-in-out, border 120ms ease-in-out,
+    max-height 120ms ease-in, background-color 120ms ease-in-out;
 }
 
 .content {

@@ -5,23 +5,20 @@ from processing.clusterings.AutoConsensusClustering import \
 from processing.common.Env import Env
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
-from processing.utils.print_skip_line import print_skip_line
 
 env = Env()
 storage = Storage(path=env.storage)
-autocluster = storage.get_autocluster()
+settings = storage.read_settings()
 
-if not autocluster:
-    print_skip_line()
-else:
+if settings['autocluster']:
+    storage.delete_autocluster()
+
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
 
     for band in bands:
         print_new_line()
         print('AutoCluster loading')
-
-        storage.delete_autocluster()
 
         for integration in integrations:
             grouped_features = storage.read_grouped_features_all_files(
@@ -32,10 +29,10 @@ else:
 
             clustering = AutoConsensusClustering(
                 features=grouped_features,
-                iterations=100,
-                min_cluster_size=20,
-                max_cluster_size=60,
-                threshold=0.9,
+                iterations=settings['autocluster_iterations'],
+                min_cluster_size=settings['autocluster_min_size'],
+                max_cluster_size=settings['autocluster_max_size'],
+                threshold=settings['autocluster_threshold'],
             )
 
             consensus = clustering.get_consensus()

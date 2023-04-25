@@ -1,59 +1,61 @@
 <script lang="ts" setup="">
 import {FlashOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
-import {computed, ref, unref} from 'vue';
+import {computed, ref} from 'vue';
 import {MATRIX_NAMES} from '../../constants';
-import {useStorage} from '../../hooks/useStorage';
+import {useStorage} from '../../storage/useStorage';
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';
-import {useMetas} from '../Meta/useMetas';
-import {selectionStore} from '../Selection/selectionStore';
 
-const {
-  metaPropertiesRef,
-  metaSetsRef,
-} = await useMetas();
-const {
-  getMatrix,
-  matricesRef,
-} = await useStorage();
+const {readMatrix, matricesRef, metaPropertiesRef, metaSetsRef} =
+  await useStorage();
 
+/**
+ * State
+ */
+
+const titleRef = ref<string>();
+const labelsRef = ref<string[]>();
+const valuesRef = ref<number[][]>();
 const volumeSelectedRef = ref();
+const metaSelectedRef = ref();
 
 const volumesNaiveRef = computed(() => {
-  const matrices = unref(matricesRef);
+  const matrices = matricesRef.value;
 
-  if (!matrices) {
+  if (matrices === null) {
     return;
   }
 
   return convertToNaiveSelectOptions(matrices.map((v) => v.name));
 });
 
-const metaPropertiesNaiveRef = computed(() => convertToNaiveSelectOptions(metaPropertiesRef.value ?? {}));
-const metaSelectedRef = ref();
+const metaPropertiesNaiveRef = computed(() => {
+  const metaProperties = metaPropertiesRef.value;
+  if (metaProperties === null) {
+    return [];
+  }
 
-const titleRef = ref<string>();
-const labelsRef = ref<string[]>();
-const valuesRef = ref<number[][]>();
+  return convertToNaiveSelectOptions(metaProperties);
+});
+
+/**
+ * Handlers
+ */
 
 async function run() {
-  const metaSelected = unref(metaSelectedRef);
-  const metaProperties = unref(metaPropertiesRef);
-  const metaSets = unref(metaSetsRef);
-  const volumeSelected = unref(volumeSelectedRef);
-  const band = unref(selectionStore.band);
-  const integrationName = unref(selectionStore.integration);
+  const metaProperties = metaPropertiesRef.value;
+  const metaSets = metaSetsRef.value;
+  const metaSelected = metaSelectedRef.value;
+  const volumeSelected = volumeSelectedRef.value;
 
   if (
-    !metaSelected
-    || !metaProperties
-    || !metaSets
-    || !volumeSelected
-    || !band
-    || !integrationName
+    metaSelected === null ||
+    metaProperties === null ||
+    metaSets === null ||
+    volumeSelected === null
   ) {
     return;
   }
@@ -61,21 +63,13 @@ async function run() {
   const matrixIndex = MATRIX_NAMES.indexOf(volumeSelected);
   const metaIndex = metaProperties.indexOf(metaSelected);
 
-  if (
-    metaIndex === -1
-    || matrixIndex === -1
-  ) {
+  if (metaIndex === -1 || matrixIndex === -1) {
     return;
   }
 
-  const data = await getMatrix(
-    band,
-    integrationName,
-    matrixIndex,
-    metaIndex,
-  );
+  const data = await readMatrix(matrixIndex, metaIndex);
 
-  if (!data) {
+  if (data === null) {
     return;
   }
 
@@ -110,7 +104,11 @@ async function run() {
             placeholder="Meta..."
             size="tiny"
           />
-          <n-button class="button" size="tiny" @click="run">
+          <n-button
+            class="button"
+            size="tiny"
+            @click="run"
+          >
             <n-icon>
               <flash-outline />
             </n-icon>

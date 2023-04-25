@@ -1,55 +1,58 @@
 <script lang="ts" setup>
+import {NButton} from 'naive-ui';
 import {ref} from 'vue';
-import {useStorage} from '../../hooks/useStorage';
-import AppButton from '../AppButton/AppButton.vue';
+import {useStorage} from '../../storage/useStorage';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import ImportDetails from './ImportDetails.vue';
 
 const inputRef = ref<HTMLInputElement>();
-const {
-  importUploadedFile,
-  deleteBrowserStorage,
-  isLoaded,
-} = await useStorage();
+const {load, unload, isReadyRef} = await useStorage();
 
-const isReady = await isLoaded();
-
-async function handleChange() {
+const handleChange = () => {
   const file = inputRef.value?.files?.[0];
 
-  if (!file) {
+  if (typeof file === 'undefined') {
     return;
   }
 
-  await importUploadedFile(file);
-}
+  load(file);
+};
 </script>
 
 <template>
   <AppDraggable draggable-key="import">
     <div class="container">
-      <input ref="inputRef" type="file" @change="handleChange" />
-      <AppButton
-        :handle-click="deleteBrowserStorage"
-        class="red"
-        text="Remove data from browser"
+      <input
+        ref="inputRef"
+        type="file"
+        @change="handleChange"
       />
+      <n-button
+        class="red"
+        size="small"
+        @click="unload"
+      >
+        Unload
+      </n-button>
     </div>
 
-    <ImportDetails v-if="isReady" />
+    <ImportDetails v-if="isReadyRef" />
   </AppDraggable>
 </template>
 
 <style lang="scss" scoped>
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 8rem;
 
   gap: 1rem;
 }
 
 .red {
   background: rgba(255, 0, 0, 0.2);
+}
+
+.green {
+  background: rgba(0, 255, 0, 0.2);
 }
 </style>

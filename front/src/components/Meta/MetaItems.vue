@@ -1,37 +1,51 @@
 <script lang="ts" setup="">
-import {asyncComputed} from '@vueuse/core';
 import {NGi, NGrid, NTag} from 'naive-ui';
-import {computed, watch} from 'vue';
-import {useStorage} from '../../hooks/useStorage';
-import {selectionStore} from '../Selection/selectionStore';
+import {ref, watch} from 'vue';
+import {storage} from '../../storage/storage';
+import {useStorage} from '../../storage/useStorage';
 import MetaSelection from './MetaSelection.vue';
 import {metaSelectionStore} from './metaSelectionStore';
 
-const {
-  getStorageMetas,
-} = await useStorage();
+const {metaPropertiesRef, metaSetsRef} = await useStorage();
 
-const metas = asyncComputed(async () => {
-  if (!selectionStore.band || !selectionStore.integration) {
+/**
+ * State
+ */
+
+const metaSetsIndexesRef = ref();
+
+/**
+ * Handlers
+ */
+
+function handleStorageUpdate() {
+  const metaProperties = metaPropertiesRef.value;
+  const metaSets = metaSetsRef.value;
+
+  if (metaProperties === null || metaSets === null) {
     return;
   }
 
-  return await getStorageMetas(selectionStore.band, selectionStore.integration);
-});
+  metaSetsIndexesRef.value = Object.keys(metaSets);
 
-const metaPropertiesRef = computed(() => Object.keys(metas.value ?? {}));
-const metaSets = computed(() => Object.values(metas.value ?? {}));
-const metaSetsIndexes = computed(() => Object.keys(metaSets.value ?? {}));
-
-watch(metaPropertiesRef, () => {
-  for (let i = 0; i < metaPropertiesRef.value.length; i += 1) {
+  for (let i = 0; i < metaProperties.length; i += 1) {
     metaSelectionStore.selection[i] = Object.assign({});
   }
-});
+}
+
+/**
+ * Lifecycles
+ */
+
+watch(storage, handleStorageUpdate);
 </script>
 
 <template>
-  <n-grid :cols="2" class="grid" x-gap="12">
+  <n-grid
+    :cols="2"
+    class="grid"
+    x-gap="12"
+  >
     <!--suppress JSUnusedLocalSymbols -->
     <n-gi v-for="(_meta, index) in metaPropertiesRef">
       <n-tag
@@ -44,7 +58,7 @@ watch(metaPropertiesRef, () => {
 
       <MetaSelection
         :index="index"
-        :items="metaSets[metaSetsIndexes[index]]"
+        :items="metaSetsRef[metaSetsIndexesRef[index]]"
         :title="metaPropertiesRef[index]"
       />
     </n-gi>
