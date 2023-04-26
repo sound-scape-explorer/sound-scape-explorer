@@ -28,7 +28,7 @@ const optionsRef = computed<ColorType[]>(() => {
 
   const metaProperties = metaPropertiesRef.value;
   if (metaProperties === null) {
-    return [];
+    return defaultOptions;
   }
 
   return [...defaultOptions, ...convertSlugsToColorTypes(metaProperties)];
