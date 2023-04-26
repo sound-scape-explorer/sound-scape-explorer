@@ -272,7 +272,7 @@ async function handleDownload() {
 
   const wav = encodeWavFileFromAudioBuffer(buffer, 0);
   const blob = new Blob([wav], {type: 'audio/wav'});
-  const name = `${fileName} - ${groupIndex} - NO FILTER`;
+  const name = `${fileName} - ${groupIndex} - NO FILTER.wav`;
   triggerBrowserDownload(blob, name);
 }
 
