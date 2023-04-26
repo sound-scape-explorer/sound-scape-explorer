@@ -4,6 +4,7 @@ from processing.matrices.DistanceMatrix import DistanceMatrix
 from processing.matrices.OverlapMatrix import OverlapMatrix
 from processing.matrices.SilhouetteMatrix import SilhouetteMatrix
 from processing.storage.Storage import Storage
+from processing.utils.print_new_line import print_new_line
 
 env = Env()
 storage = Storage(path=env.storage)
@@ -20,6 +21,9 @@ matrices = [
 ]
 
 storage.delete_matrices()
+
+print_new_line()
+print(f'Matrices loading: {[m for m in matrices]}')
 
 timer = Timer(
     len(bands) * len(integrations) * len(matrices) * len(meta_properties)
