@@ -11,7 +11,7 @@ import {
 } from '@vicons/ionicons5';
 import audioBufferSlice from 'audiobuffer-slice';
 import colormap from 'colormap';
-import {NButton, NIcon, NTooltip} from 'naive-ui';
+import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {computed, onUnmounted, ref, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 import WaveSurfer from 'wavesurfer.js';
@@ -45,6 +45,7 @@ const waveformRef = ref<HTMLDivElement>();
 const spectrogramRef = ref<HTMLDivElement>();
 const isPlayingRef = ref<boolean>(false);
 const fftSizeRef = ref<number>(FFT_SIZE.default);
+
 const audioContextRef = computed<OfflineAudioContext | null>(() => {
   const ws = wsRef.value;
 
@@ -95,13 +96,11 @@ const wsRef = computed(() => {
   const frequencies = frequenciesRef.value;
   const waveform = waveformRef.value;
   const spectrogram = spectrogramRef.value;
-  const fftSize = fftSizeRef.value;
 
   if (
     typeof waveform === 'undefined' ||
     typeof spectrogram === 'undefined' ||
-    typeof frequencies === 'undefined' ||
-    typeof fftSize === 'undefined'
+    typeof frequencies === 'undefined'
   ) {
     return null;
   }
@@ -119,7 +118,7 @@ const wsRef = computed(() => {
         labels: true,
         colorMap: colorsRef.value,
         height: 192,
-        fftSamples: fftSize,
+        fftSamples: FFT_SIZE.default,
         frequencyMin: frequencies.min,
         frequencyMax: frequencies.max,
       }),
@@ -361,46 +360,32 @@ async function handleAudioStoreChange() {
   open();
 }
 
-function handleSpectrogramIncrease() {
+watch(fftSizeRef, () => {
   const ws = wsRef.value;
 
   if (ws === null) {
     return;
   }
 
-  if (ws.spectrogram.fftSamples === FFT_SIZE.max) {
+  // noinspection JSConstantReassignment
+  ws.spectrogram.fftSamples = fftSizeRef.value;
+  ws.drawBuffer();
+});
+
+function handleSpectrogramIncrease() {
+  if (fftSizeRef.value * 2 > FFT_SIZE.max) {
     return;
   }
 
-  if (ws.spectrogram.fftSamples > FFT_SIZE.max) {
-    // noinspection JSConstantReassignment
-    ws.spectrogram.fftSamples = FFT_SIZE.max;
-  }
-
-  // noinspection JSConstantReassignment
-  ws.spectrogram.fftSamples *= 2;
-  ws.drawBuffer();
+  fftSizeRef.value *= 2;
 }
 
 function handleSpectrogramDecrease() {
-  const ws = wsRef.value;
-
-  if (ws === null) {
+  if (fftSizeRef.value / 2 < FFT_SIZE.min) {
     return;
   }
 
-  if (ws.spectrogram.fftSamples === FFT_SIZE.min) {
-    return;
-  }
-
-  if (ws.spectrogram.fftSamples < FFT_SIZE.min) {
-    // noinspection JSConstantReassignment
-    ws.spectrogram.fftSamples = FFT_SIZE.min;
-  }
-
-  // noinspection JSConstantReassignment
-  ws.spectrogram.fftSamples *= 0.5;
-  ws.drawBuffer();
+  fftSizeRef.value /= 2;
 }
 
 /**
@@ -544,6 +529,23 @@ watch(audioStore, handleAudioStoreChange);
           <span>Download</span>
         </n-tooltip>
       </div>
+
+      <n-grid
+        :cols="2"
+        class="grid"
+        x-gap="12"
+      >
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            fftSize
+          </n-tag>
+
+          {{ fftSizeRef }}
+        </n-gi>
+      </n-grid>
 
       <div ref="waveformRef" />
 
