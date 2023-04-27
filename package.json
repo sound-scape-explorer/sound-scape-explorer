@@ -16,6 +16,7 @@
     "process:volumes": "python3 processing/processing/actions/g_volumes.py",
     "process:matrices": "python3 processing/processing/actions/h_matrices.py",
     "process:pairings": "python3 processing/processing/actions/i_pairings.py",
+    "dataframe": "python3 processing/processing/utils/get_dataframe.py",
     "release:prepare": "yarn release:prepare:archive-examples",
     "release:prepare:archive-examples": "bin/archive-examples.sh",
     "start": "yarn dev"
