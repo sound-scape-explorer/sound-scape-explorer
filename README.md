@@ -77,6 +77,9 @@ yarn process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
 
 # 🚀 Explore data, serve `front` localhost:8080
 yarn dev
+
+# Want a CSV export from your existing h5?
+yarn dataframe --band all --integration 60 --storage /path/to/storage.h5 --csv /path/to/csv
 ```
 
 ## ⚒️ Processing commands
