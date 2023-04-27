@@ -1,3 +1,15 @@
+# [8.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.3...v8.1.0) (2023-04-27)
+
+
+### Bug Fixes
+
+* **Front/Export:** Add `pointIndex` and `groupIndex` + Fix dimensions ([5caeca5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5caeca53f769f1ec59dbcb9b5b526b0055e67292))
+
+
+### Features
+
+* **Processing:** Add `yarn dataframe` command ([831138d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/831138d820b9aaebfa24907feef7a812b53a3052))
+
 ## [8.0.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.2...v8.0.3) (2023-04-19)
 
 
