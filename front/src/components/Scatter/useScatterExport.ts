@@ -136,7 +136,9 @@ export async function useScatterExport() {
   ) {
     const content = [];
 
+    settingsStore.umap.export.labels && content.push(data.pointIndex);
     settingsStore.umap.export.labels && content.push(data.fileIndex);
+    settingsStore.umap.export.labels && content.push(data.groupIndex);
     settingsStore.umap.export.timestamps && content.push(data.timestamp);
     settingsStore.umap.export.points && content.push(points);
     settingsStore.umap.export.meta && content.push(data.metaValues);
@@ -171,7 +173,9 @@ export async function useScatterExport() {
       return row;
     };
 
-    settingsStore.umap.export.labels && firstRow.push('fileIndex');
+    settingsStore.umap.export.labels && firstRow.push('pointIndex');
+    settingsStore.umap.export.labels && firstRow.push('groupIndex');
+    settingsStore.umap.export.labels && firstRow.push('groupIndex');
     settingsStore.umap.export.timestamps && firstRow.push('timestamp');
     settingsStore.umap.export.points && createDimensions(firstRow);
     settingsStore.umap.export.meta &&
@@ -215,7 +219,7 @@ export async function useScatterExport() {
 
     try {
       // @ts-expect-error: TS2571
-      dimensions = results[0][2].length;
+      dimensions = results[0][4].length;
     } catch {
       // @ts-expect-error: TS2571
       dimensions = Object.values(results)[0].point.length;
