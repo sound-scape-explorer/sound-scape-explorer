@@ -13,11 +13,26 @@ module.exports = {
     }],
     ['@semantic-release/github', {
       assets: [
-        'examples/sse-audio-docker-${nextRelease.version}.zip',
-        'examples/sse-cpu-docker-${nextRelease.version}.zip',
-        'examples/sse-cuda-docker-${nextRelease.version}.zip',
-        'examples/sse-front-docker-${nextRelease.version}.zip',
-        'examples/sse-next-docker-${nextRelease.version}.zip',
+        {
+          'path': 'examples/sse-audio-<%= nextRelease.version %>.zip',
+          'label': 'SSE Audio',
+        },
+        {
+          'path': 'examples/sse-cpu-<%= nextRelease.version %>.zip',
+          'label': 'SSE CPU',
+        },
+        {
+          'path': 'examples/sse-cuda-<%= nextRelease.version %>.zip',
+          'label': 'SSE CUDA',
+        },
+        {
+          'path': 'examples/sse-front-<%= nextRelease.version %>.zip',
+          'label': 'SSE Front',
+        },
+        {
+          'path': 'examples/sse-next-<%= nextRelease.version %>.zip',
+          'label': 'SSE Next',
+        },
       ],
     }],
     ['@qiwi/semantic-release-gh-pages-plugin', {

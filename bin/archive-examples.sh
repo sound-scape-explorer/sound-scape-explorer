@@ -40,11 +40,10 @@ function rename(){
 # Main
 
 names=(
-  sse-audio-docker
-  sse-cpu-docker
-  sse-cuda-docker
-  sse-front-docker
-  sse-next-docker
+  sse-audio
+  sse-cpu
+  sse-cuda
+  sse-front
 )
 
 cd examples || exit 1

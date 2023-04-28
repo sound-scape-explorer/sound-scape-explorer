@@ -49,7 +49,6 @@ and set up your project!
 | [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker.zip)     | Use this if you want to generate your `.h5` using your CPU (slower).                                                                         |
 | [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker.zip)   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                  |
 | [SSE Front](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-front-docker.zip) | Use this if you already have your `.h5` and you intend to work offline by using the [local front end](http://localhost:8080)                 |
-| [SSE Next](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-next-docker.zip)   | Use this if you want to access to unstable versions from development branches.                                                               |
 
 ## 👨‍💻 For programmers
 
