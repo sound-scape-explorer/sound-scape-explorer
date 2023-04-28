@@ -37,22 +37,19 @@ and set up your project!
 
 ### 💽 Generate your data
 
-Download and unzip a template from the following list:
+#### Steps
 
-- [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker.zip)
-- [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker.zip)
-- [SSE Front](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-front-docker.zip)
-- [SSE Next](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-next-docker.zip)
+1. Download and unzip a template from the available flavors.
+2. Edit the `project.env` text file and specify requested paths and filenames.
+3. Run the startup script according to your operating system.
 
-Edit `project.env` and specify your folder paths and filenames.
-
-Then run the startup script according to your operating system.
-
-### 🚀 Explore your data
-
-Browse to the [front end](https://sound-scape-explorer.github.io/sound-scape-explorer/) and load your data.
-
-You can also browse to your [local container](http://localhost:8080).
+| SSE Flavor                                                                                                              | Use case                                                                                                                                     |
+|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| [SSE Audio](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-audio-docker.zip) | Use this if you already have your `.h5` and want to use the [hosted front end](https://sound-scape-explorer.github.io/sound-scape-explorer/) |
+| [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker.zip)     | Use this if you want to generate your `.h5` using your CPU (slower).                                                                         |
+| [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker.zip)   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                  |
+| [SSE Front](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-front-docker.zip) | Use this if you already have your `.h5` and you intend to work offline by using the [local front end](http://localhost:8080)                 |
+| [SSE Next](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-next-docker.zip)   | Use this if you want to access to unstable versions from development branches.                                                               |
 
 ## 👨‍💻 For programmers
 

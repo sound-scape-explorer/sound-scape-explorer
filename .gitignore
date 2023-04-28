@@ -10,9 +10,6 @@ __pycache__/
 
 /sample**
 
-project.env
-!examples/common/project.env
-
 start-linux.sh
 !examples/common/start-linux.sh
 

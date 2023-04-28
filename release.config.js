@@ -6,13 +6,14 @@ module.exports = {
       changelogFile: 'CHANGELOG.md',
     }],
     ['@semantic-release/exec', {
-      prepareCmd: 'yarn release:prepare',
+      prepareCmd: 'yarn release:prepare ${nextRelease.version}',
     }],
     ['@semantic-release/npm', {
       npmPublish: false,
     }],
     ['@semantic-release/github', {
       assets: [
+        'examples/sse-audio-docker.zip',
         'examples/sse-cpu-docker.zip',
         'examples/sse-cuda-docker.zip',
         'examples/sse-front-docker.zip',

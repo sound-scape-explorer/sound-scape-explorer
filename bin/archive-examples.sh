@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Props
+
+version=$1
+
 # Functions
 
 function iterate(){
@@ -9,7 +13,6 @@ function iterate(){
     cd "$name" || exit 1
     cp ../common/start-windows.ps1 . && wait
     cp ../common/start-linux.sh . && wait
-    cp ../common/project.env . && wait
     zip "$name.zip" ./* -r -x "*.gitignore" "*.png"
     mv "$name.zip" ..
     cd ..
@@ -22,9 +25,22 @@ function iterate(){
   done
 }
 
+function rename(){
+  local name
+  local file
+
+  for value in "${names[@]}"
+  do
+    name="${value}"
+    file="$name"/docker-compose.yml
+    sed -i "s/:latest/:$version/g" "$file"
+  done
+}
+
 # Main
 
 names=(
+  sse-audio-docker
   sse-cpu-docker
   sse-cuda-docker
   sse-front-docker
@@ -32,4 +48,5 @@ names=(
 )
 
 cd examples || exit 1
+rename
 iterate
