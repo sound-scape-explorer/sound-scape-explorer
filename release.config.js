@@ -1,5 +1,3 @@
-const generateAssets = require('./bin/generate-assets');
-
 module.exports = {
   plugins: [
     ['@semantic-release/commit-analyzer'],
@@ -14,7 +12,12 @@ module.exports = {
       npmPublish: false,
     }],
     ['@semantic-release/github', {
-      assets: nextRelease => generateAssets(nextRelease.version),
+      assets: [
+        'examples/sse-audio-*.zip',
+        'examples/sse-cpu-*.zip',
+        'examples/sse-cuda-*.zip',
+        'examples/sse-front-*.zip',
+      ],
     }],
     ['@qiwi/semantic-release-gh-pages-plugin', {
       src: 'front/dist',
