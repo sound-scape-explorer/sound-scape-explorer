@@ -1,3 +1,10 @@
+# [8.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.2.0...v8.3.0) (2023-04-28)
+
+
+### Features
+
+* **CD:** Attach version number to output assets ([4e71ef8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4e71ef890d5732ffa42c2fd4c0c199ffff32675a))
+
 # [8.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.1.0...v8.2.0) (2023-04-28)
 
 
