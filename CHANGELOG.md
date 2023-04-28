@@ -1,3 +1,10 @@
+# [8.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.1.0...v8.2.0) (2023-04-28)
+
+
+### Features
+
+* **CD:** Add `SSE Audio` flavor + Set fixed versions in docker compose files + Update documentation and delivery pipelines ([3b6194b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3b6194b0fa63327bdddd457e72eb532a4b88c7d1))
+
 # [8.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.3...v8.1.0) (2023-04-27)
 
 
