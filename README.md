@@ -12,44 +12,43 @@
 
 ---
 
-- Import your audio files
-- Specify your project settings through shareable `.xlsx` configuration
-- Extract features using machine learning processing
-- Visualize results in your web browser
-- Explore your data with graphical tools such as UMAP projections
-- Analyze your data through metrics, statistics, filters...
+- Set up your project with shareable `.xlsx` configuration.
+- Extract data from your audio files to shareable `.h5` file.
+- Visualize data in your web browser [online](https://sound-scape-explorer.github.io/sound-scape-explorer/)
+  or [offline](http://localhost:8080).
+
+> If you already have your `.h5` file and only want to visualize your data with no audio playback, you can directly use
+> the [online front end](https://sound-scape-explorer.github.io/sound-scape-explorer/).
 
 ## 👨‍🏫 For researchers
 
 ### ⚓ Requirements
 
-- Install and run Docker.
-  - [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
-  - [Debian](https://docs.docker.com/engine/install/debian/)
-  - [Other](https://docs.docker.com/engine/install/)
-  - [Windows](https://www.docker.com/products/docker-desktop)
+Install and run Docker.
+
+- [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+- [Debian](https://docs.docker.com/engine/install/debian/)
+- [Other](https://docs.docker.com/engine/install/)
+- [Windows](https://www.docker.com/products/docker-desktop)
 
 ### ⚙️ Configure your project
 
-Download
-the [configuration example](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
+[Download the configuration template](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
 and set up your project!
 
 ### 💽 Generate your data
 
-#### Steps
-
-1. Download and unzip a template from
-   the [available flavors](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest).
+1. Select a template from the available
+   flavors. [Go to downloads](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest).
 2. Edit the `project.env` text file and specify requested paths and filenames.
 3. Run the startup script according to your operating system.
 
-| SSE Flavor | Use case                                                                                                                                     |
-|------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| SSE Audio  | Use this if you already have your `.h5` and want to use the [hosted front end](https://sound-scape-explorer.github.io/sound-scape-explorer/) |
-| SSE CPU    | Use this if you want to generate your `.h5` using your CPU (slower).                                                                         |
-| SSE CUDA   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                  |
-| SSE Front  | Use this if you already have your `.h5` and you intend to work offline by using the [local front end](http://localhost:8080)                 |
+| SSE Flavor | Use case                                                                                                                                      |
+|------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| SSE Audio  | Use this if you already have your `.h5` and want to use the [online front end](https://sound-scape-explorer.github.io/sound-scape-explorer/). |
+| SSE CPU    | Use this if you want to generate your `.h5` using your CPU (slower).                                                                          |
+| SSE CUDA   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                   |
+| SSE Front  | Use this if you already have your `.h5` and intend to work offline by using the [offline front end](http://localhost:8080).                   |
 
 ## 👨‍💻 For programmers
 
