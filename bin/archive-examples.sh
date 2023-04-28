@@ -14,7 +14,7 @@ function iterate(){
     cp ../common/start-windows.ps1 . && wait
     cp ../common/start-linux.sh . && wait
     zip "$name.zip" ./* -r -x "*.gitignore" "*.png"
-    mv "$name.zip" ..
+    mv "$name.zip" ../"$name-$version.zip"
     cd ..
   }
 
