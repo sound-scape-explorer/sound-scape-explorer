@@ -1,3 +1,10 @@
+## [8.3.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.2...v8.3.3) (2023-04-28)
+
+
+### Bug Fixes
+
+* **CD:** Will you ever work as expected? ([3376521](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3376521fa3324a7b6ae3ee11a1355d8a9139fa62))
+
 ## [8.3.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.1...v8.3.2) (2023-04-28)
 
 
