@@ -1,3 +1,10 @@
+## [8.3.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.1...v8.3.2) (2023-04-28)
+
+
+### Bug Fixes
+
+* **CD:** Fix no templating for assets ([172b3fa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/172b3faa2653edac36ff20456a49b9adf92e60ad))
+
 ## [8.3.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.0...v8.3.1) (2023-04-28)
 
 
