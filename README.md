@@ -39,16 +39,17 @@ and set up your project!
 
 #### Steps
 
-1. Download and unzip a template from the available flavors.
+1. Download and unzip a template from
+   the [available flavors](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest).
 2. Edit the `project.env` text file and specify requested paths and filenames.
 3. Run the startup script according to your operating system.
 
-| SSE Flavor                                                                                                              | Use case                                                                                                                                     |
-|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| [SSE Audio](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-audio-docker.zip) | Use this if you already have your `.h5` and want to use the [hosted front end](https://sound-scape-explorer.github.io/sound-scape-explorer/) |
-| [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker.zip)     | Use this if you want to generate your `.h5` using your CPU (slower).                                                                         |
-| [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker.zip)   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                  |
-| [SSE Front](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-front-docker.zip) | Use this if you already have your `.h5` and you intend to work offline by using the [local front end](http://localhost:8080)                 |
+| SSE Flavor | Use case                                                                                                                                     |
+|------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| SSE Audio  | Use this if you already have your `.h5` and want to use the [hosted front end](https://sound-scape-explorer.github.io/sound-scape-explorer/) |
+| SSE CPU    | Use this if you want to generate your `.h5` using your CPU (slower).                                                                         |
+| SSE CUDA   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                  |
+| SSE Front  | Use this if you already have your `.h5` and you intend to work offline by using the [local front end](http://localhost:8080)                 |
 
 ## 👨‍💻 For programmers
 
