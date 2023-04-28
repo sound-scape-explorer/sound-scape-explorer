@@ -1,3 +1,10 @@
+## [8.3.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.0...v8.3.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* **CD:** Use lodash templates for GitHub assets + Use better asset names ([8ffbdfe](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8ffbdfe8530c56a24c30b5e6c3b80c31cfce7994))
+
 # [8.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.2.0...v8.3.0) (2023-04-28)
 
 
