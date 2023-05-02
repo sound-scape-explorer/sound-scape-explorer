@@ -1,3 +1,10 @@
+## [8.3.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.3...v8.3.4) (2023-05-02)
+
+
+### Bug Fixes
+
+* **Processing/Utils:** Parse meta values for correct build of pandas dataframe ([c615503](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c61550382fa20cdfd0da4f85125f55773632b926))
+
 ## [8.3.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.2...v8.3.3) (2023-04-28)
 
 
