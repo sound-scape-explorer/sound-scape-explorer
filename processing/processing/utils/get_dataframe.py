@@ -21,7 +21,7 @@ def build_dataframe(
     for f, _ in storage.enumerate_group_indexes(band, integration):
         output_filenames.append(filenames[f])
 
-    payload['filenames'] = output_filenames
+    payload["filenames"] = output_filenames
 
     # Timestamps
 
@@ -30,40 +30,37 @@ def build_dataframe(
         integration,
     )
 
-    payload['timestamps'] = timestamps
+    payload["timestamps"] = timestamps
 
     # Autocluster
 
     autocluster = storage.read_autocluster(band, integration)
 
-    payload['autocluster'] = autocluster
+    payload["meta_AUTOCLUSTER"] = autocluster
 
     # Metas
-    meta_properties = storage.read_meta_properties()
-    # TODO: Remove after storage flattening
-    meta_properties = meta_properties[1:]
 
+    meta_properties = storage.read_meta_properties()
+    meta_properties = meta_properties[1:]  # TODO: Remove this after storage flattening
+    meta_properties = [f"meta_{property}" for property in meta_properties]
     metas = [file.meta for file in files.values()]
 
-    output_metas = []
-    for f, _ in storage.enumerate_group_indexes(band, integration):
-        output_metas.append(metas[f])
-
     for mp, meta_property in enumerate(meta_properties):
+        payload[meta_property] = []
+
         for f in storage.enumerate_file_indexes():
-            meta_value = output_metas[f][mp]
-            payload[meta_property] = meta_value
+            meta_value = metas[f][mp]
+            payload[meta_property].append(meta_value)
 
     # Reducers
 
     reducers = storage.get_grouped_reducers(band, integration)
 
-    reduced_features = \
-        storage.get_reduced_features(reducers, band, integration)
+    reduced_features = storage.get_reduced_features(reducers, band, integration)
 
     for reducer in reducers:
         for d in range(reducer.dimensions):
-            name = f'{reducer.name}{reducer.index}_{d + 1}'
+            name = f"{reducer.name}{reducer.index}_{d + 1}"
             payload[name] = [rf[d] for rf in reduced_features[reducer.index]]
 
     # Grouped features
@@ -75,19 +72,19 @@ def build_dataframe(
     )
 
     for feature_index in range(128):
-        name = f'f_{feature_index + 1}'
+        name = f"f_{feature_index + 1}"
         payload[name] = [gf[feature_index] for gf in grouped_features]
 
     return pandas.DataFrame(payload)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-b', '--band')
-    parser.add_argument('-i', '--integration')
-    parser.add_argument('-c', '--csv')
-    parser.add_argument('-s', '--storage')
+    parser.add_argument("-b", "--band")
+    parser.add_argument("-i", "--integration")
+    parser.add_argument("-c", "--csv")
+    parser.add_argument("-s", "--storage")
 
     args = parser.parse_args()
 
@@ -96,5 +93,7 @@ if __name__ == '__main__':
         band=args.band,
         integration=int(args.integration),
     )
+
+    print(df)
 
     df.to_csv(path_or_buf=args.csv)

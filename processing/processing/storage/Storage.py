@@ -236,7 +236,7 @@ class Storage(metaclass=SingletonMeta):
         reducers: List[ConfigReducer],
         band: str,
         integration: int,
-    ) -> List[List[float]]:
+    ) -> List[List[List[float]]]:
         reduced_features = []
 
         for _ in reducers:
