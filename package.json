@@ -1,8 +1,8 @@
 {
   "name": "sound-scape-explorer",
   "scripts": {
-    "dev": "cd front && yarn dev",
-    "process": "yarn process:all",
+    "dev": "cd front && pnpm dev",
+    "process": "pnpm process:all",
     "process:all": "python3 processing/processing/actions/_all.py",
     "process:all-actions": "python3 processing/processing/actions/_all_actions.py",
     "process:all-but-files": "python3 processing/processing/actions/_all_but_files.py",
@@ -16,9 +16,9 @@
     "process:volumes": "python3 processing/processing/actions/g_volumes.py",
     "process:matrices": "python3 processing/processing/actions/h_matrices.py",
     "process:pairings": "python3 processing/processing/actions/i_pairings.py",
-    "release:prepare": "yarn release:prepare:archive-examples",
+    "release:prepare": "pnpm release:prepare:archive-examples",
     "release:prepare:archive-examples": "bin/archive-examples.sh",
-    "start": "yarn dev"
+    "start": "pnpm dev"
   },
   "devDependencies": {
     "concurrently": "^7.4.0",

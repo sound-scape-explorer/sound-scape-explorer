@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "dev": "vite --port 8080",
-    "build": "yarn build:clean && yarn build:run:dev",
+    "build": "pnpm build:clean && pnpm build:run:dev",
     "build:clean": "rimraf dist",
-    "build:prod": "yarn build:clean && yarn build:run:prod",
+    "build:prod": "pnpm build:clean && pnpm build:run:prod",
     "build:run:dev": "cross-env NODE_ENV=development vite build",
     "build:run:prod": "cross-env NODE_ENV=production vite build",
     "preview": "vite preview --port 8080 --host 0.0.0.0"
