@@ -6,6 +6,7 @@ from h5py import Dataset
 from pandas import DataFrame
 
 from processing.storage.Storage import Storage
+from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
 
 
 class AbstractVolume(ABC):
@@ -33,23 +34,15 @@ class AbstractVolume(ABC):
 
         self._dataframe = pd.DataFrame(features)
         self._dataframe.index = labels
-        self._clusters = self._dataframe.index.unique()
+        self._clusters = self._dataframe.index.unique()  # type: ignore
 
         self._volume = None
 
     def _iterate_clusters(self):
         for cluster in self._clusters:
-            cluster_frame = self._dataframe[
-                self._dataframe.index == cluster
-                ].to_numpy()
+            cluster_frame = self._dataframe[self._dataframe.index == cluster].to_numpy()
 
             yield cluster, cluster_frame
-
-    @staticmethod
-    def convert_dataframe_to_list(
-        df: DataFrame,
-    ) -> List[float]:
-        return list(df.to_numpy().flatten())
 
     def store(
         self,
@@ -71,15 +64,23 @@ class AbstractVolume(ABC):
     ) -> None:
         self._volume = pd.DataFrame(
             data=data,
-            columns=['volume'],
+            columns=["volume"],
             index=self._clusters,
         )
 
-    def get(self) -> DataFrame:
+    def __validate_volume(self):
+        if self._volume is None:
+            raise ValueError("Volume is undefined. Calculate first.")
+
         return self._volume
 
+    def get(self) -> DataFrame:
+        volume = self.__validate_volume()
+        return volume
+
     def get_as_list(self) -> List[float]:
-        return self.convert_dataframe_to_list(self._volume)
+        volume = self.__validate_volume()
+        return convert_dataframe_to_list(volume)
 
     @abstractmethod
     def calculate(self):

@@ -5,21 +5,25 @@ from processing.indicators.Indicator import Indicator
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
-env = Env()
-storage = Storage(path=env.storage)
 
-files = storage.read_files()
-bands = storage.get_bands()
-bands_frequencies = storage.get_bands_frequencies()
-integrations = storage.get_integrations_seconds()
-audio_path = storage.get_audio_path()
-indicators = storage.get_indicators()
+def run_indicators(env: Env):
+    storage = Storage(path=env.storage)
 
-if len(indicators) > 0:
+    indicators = storage.get_indicators()
+
+    if len(indicators) == 0:
+        return
+
+    files = storage.read_files()
+    bands = storage.get_bands()
+    bands_frequencies = storage.get_bands_frequencies()
+    integrations = storage.get_integrations_seconds()
+    audio_path = storage.get_audio_path()
+
     storage.delete_indicators()
 
     print_new_line()
-    print(f'Indicators loading: {[i for i in indicators]}')
+    print(f"Indicators loading: {[i for i in indicators]}")
 
     timer = Timer(len(files) * len(bands) * len(integrations) * len(indicators))
 
@@ -40,8 +44,11 @@ if len(indicators) > 0:
                         file_index=file_index,
                     )
 
+                    if indicator is None:
+                        continue
+
                     for group_index, _ in enumerate(group):
-                        path = f'{audio_path}{file_name}'
+                        path = f"{audio_path}{file_name}"
 
                         audio = Audio(
                             path=path,
@@ -55,3 +62,8 @@ if len(indicators) > 0:
 
                     indicator.store(storage, i)
                     timer.progress()
+
+
+if __name__ == "__main__":
+    env = Env()
+    run_indicators(env)

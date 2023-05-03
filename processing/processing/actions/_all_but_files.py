@@ -1,12 +1,16 @@
-# noinspection PyUnresolvedReferences
-import processing.actions.a_config
-# noinspection PyUnresolvedReferences
-import processing.actions.d_autocluster
-# noinspection PyUnresolvedReferences
-import processing.actions.e_reducers
-# noinspection PyUnresolvedReferences
-import processing.actions.f_indicators
-# noinspection PyUnresolvedReferences
-import processing.actions.g_volumes
-# noinspection PyUnresolvedReferences
-import processing.actions.h_matrices
+from processing.actions.run_autocluster import run_autocluster
+from processing.actions.run_config import run_config
+from processing.actions.run_indicators import run_indicators
+from processing.actions.run_matrices import run_matrices
+from processing.actions.run_reducers import run_reducers
+from processing.actions.run_volumes import run_volumes
+from processing.common.Env import Env
+
+env = Env()
+
+run_config(env)
+run_autocluster(env)
+run_reducers(env)
+run_indicators(env)
+run_volumes(env)
+run_matrices(env)

@@ -4,24 +4,25 @@ from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
 
-env = Env()
-storage = Storage(path=env.storage)
 
-files = storage.read_config_files()
-bands = storage.get_bands()
-integrations = storage.get_integrations_seconds()
-volumes = storage.read_volumes()
-meta_properties = storage.read_meta_properties()
+def run_volumes(env: Env):
+    storage = Storage(path=env.storage)
 
-if len(volumes) > 0:
+    volumes = storage.read_volumes()
+
+    if len(volumes) == 0:
+        return
+
+    bands = storage.get_bands()
+    integrations = storage.get_integrations_seconds()
+    meta_properties = storage.read_meta_properties()
+
     storage.delete_volumes()
 
     print_new_line()
-    print(f'Volumes loading: {[v for v in volumes]}')
+    print(f"Volumes loading: {[v for v in volumes]}")
 
-    timer = Timer(
-        len(bands) * len(integrations) * len(volumes) * len(meta_properties)
-    )
+    timer = Timer(len(bands) * len(integrations) * len(volumes) * len(meta_properties))
 
     for band in bands:
         for integration in integrations:
@@ -35,7 +36,6 @@ if len(volumes) > 0:
 
             for volume_index, volume_name in enumerate(volumes):
                 for meta_index in storage.enumerate_meta_properties():
-                    meta_property = meta_properties[meta_index]
                     meta_property_values = meta_values[meta_index]
 
                     v = Volume(
@@ -48,6 +48,14 @@ if len(volumes) > 0:
                         labels=meta_property_values,
                     )
 
+                    if v is None:
+                        continue
+
                     v.calculate()
                     v.store(storage)
                     timer.progress()
+
+
+if __name__ == "__main__":
+    env = Env()
+    run_volumes(env)

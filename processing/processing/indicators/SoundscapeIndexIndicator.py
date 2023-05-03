@@ -25,4 +25,4 @@ class SoundscapeIndexIndicator(AbstractIndicator):
             fn=audio.spectrogram.fn,
         )
 
-        self.add_value(ndsi)
+        self.add_value(ndsi)  # type: ignore

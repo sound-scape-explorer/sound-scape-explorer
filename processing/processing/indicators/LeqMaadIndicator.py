@@ -26,4 +26,4 @@ class LeqMaadIndicator(AbstractIndicator):
             gain=42,
         )
 
-        self.add_value(value)
+        self.add_value(value)  # type: ignore

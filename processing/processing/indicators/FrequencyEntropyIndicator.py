@@ -20,8 +20,6 @@ class FrequencyEntropyIndicator(AbstractIndicator):
         if audio.spectrogram is None:
             return self.add_nan()
 
-        frequency_entropy, _ = maad.features.frequency_entropy(
-            audio.spectrogram.s
-        )
+        frequency_entropy, _ = maad.features.frequency_entropy(audio.spectrogram.s)
 
-        self.add_value(frequency_entropy)
+        self.add_value(frequency_entropy)  # type: ignore

@@ -6,7 +6,7 @@ from h5py import Dataset
 from pandas import DataFrame
 
 from processing.storage.Storage import Storage
-from processing.volumes.AbstractVolume import AbstractVolume
+from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
 
 
 class AbstractMatrix(ABC):
@@ -34,7 +34,7 @@ class AbstractMatrix(ABC):
 
         self._dataframe = pd.DataFrame(features)
         self._dataframe.index = labels
-        self._clusters = self._dataframe.index.unique()
+        self._clusters = self._dataframe.index.unique()  # type: ignore
 
         self._matrix = None
 
@@ -42,11 +42,7 @@ class AbstractMatrix(ABC):
         self,
         matrix: List[List[float]],
     ) -> None:
-        payload = pd.DataFrame(
-            matrix,
-            columns=self._clusters,
-            index=self._clusters
-        )
+        payload = pd.DataFrame(matrix, columns=self._clusters, index=self._clusters)
 
         for i in range(payload.shape[0]):
             for j in range(payload.shape[1]):
@@ -57,17 +53,23 @@ class AbstractMatrix(ABC):
 
     def _iterate_clusters(self):
         for c, cluster in enumerate(self._clusters):
-            cluster_frame = self._dataframe[
-                self._dataframe.index == cluster
-                ].to_numpy()
+            cluster_frame = self._dataframe[self._dataframe.index == cluster].to_numpy()
 
             yield c, cluster, cluster_frame
 
-    def get(self) -> DataFrame:
+    def __validate_matrix(self):
+        if self._matrix is None:
+            raise ValueError("Matrix is undefined. Please calculate first.")
+
         return self._matrix
 
+    def get(self) -> DataFrame:
+        matrix = self.__validate_matrix()
+        return matrix
+
     def get_as_list(self) -> List[float]:
-        return AbstractVolume.convert_dataframe_to_list(self._matrix)
+        matrix = self.__validate_matrix()
+        return convert_dataframe_to_list(matrix)
 
     def store(
         self,

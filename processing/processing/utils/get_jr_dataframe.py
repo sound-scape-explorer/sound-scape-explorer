@@ -1,6 +1,7 @@
 from processing.storage.Storage import Storage
 
 
+# FIX: Import from `main` branch then move under actions
 def get_jr_dataframe(
     storage: Storage,
     band: str,
@@ -37,13 +38,15 @@ def get_jr_dataframe(
     volumes = storage.read_volumes()
     volumes_values = storage.get_volumes_values(band, integration)
 
-    return output_filenames, \
-        grouped_timestamps, \
-        output_metas, \
-        grouped_features, \
-        reducers, \
-        reduced_features, \
-        indicators[:], \
-        indicators_values, \
-        volumes[:], \
-        volumes_values
+    return (
+        output_filenames,
+        grouped_timestamps,
+        output_metas,
+        grouped_features,
+        reducers,
+        reduced_features,
+        indicators[:],
+        indicators_values,
+        volumes[:],
+        volumes_values,
+    )

@@ -3,8 +3,8 @@ from typing import List, Union
 import maad
 import soundfile
 
-from processing.audio.Spectrogram import Spectrogram
 from processing.audio.enums.SpectrogramMode import SpectrogramMode
+from processing.audio.Spectrogram import Spectrogram
 
 
 class Audio:
@@ -56,7 +56,7 @@ class Audio:
         frames = self.integration * wav_info.samplerate
         start = self.__group_index * frames
 
-        self.__wav, self.sample_rate = soundfile.read(
+        self.__wav, self.sample_rate = soundfile.read(  # type: ignore
             file=self.__path,
             frames=frames,
             start=start,
@@ -68,15 +68,15 @@ class Audio:
                 fs=self.sample_rate,
                 fcut=self.__frequencies,
                 forder=6,
-                fname='butter',
-                ftype='bandpass',
+                fname="butter",
+                ftype="bandpass",
             )
         except ValueError:
             self.sound = []
 
     def validate_sound_length(self) -> None:
         if self.is_sound_too_short():
-            raise ValueError('')
+            raise ValueError("")
 
     def is_sound_too_short(self) -> bool:
         return len(self.sound) <= 1024
@@ -84,7 +84,7 @@ class Audio:
     def __get_spectrogram(
         self,
         mode: SpectrogramMode = SpectrogramMode.psd,
-    ) -> Spectrogram:
+    ) -> Union[Spectrogram, None]:
         try:
             self.validate_sound_length()
 
@@ -101,7 +101,7 @@ class Audio:
         return spectrogram
 
     @property
-    def spectrogram(self) -> Spectrogram:
+    def spectrogram(self) -> Union[Spectrogram, None]:
         if self.__spectrogram_loaded is True:
             return self.__spectrogram
 
@@ -110,7 +110,7 @@ class Audio:
         return self.__spectrogram
 
     @property
-    def spectrogram_amplitude(self) -> Spectrogram:
+    def spectrogram_amplitude(self) -> Union[Spectrogram, None]:
         if self.__spectrogram_amplitude_loaded is True:
             return self.__spectrogram_amplitude
 

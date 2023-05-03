@@ -30,12 +30,12 @@ class DistanceMatrix(AbstractMatrix):
         # medioids
         centers = np.empty((len(self._clusters), self._dataframe.shape[1]))
 
-        for c, cluster, cluster_frame in self._iterate_clusters():
+        for c, _, cluster_frame in self._iterate_clusters():
             centers[c, :] = np.nanpercentile(cluster_frame, 50, axis=0)
 
         return centers
 
     def calculate(self):
         centers = self.get_centers()
-        distance = metrics.pairwise_distances(centers, metric='manhattan')
-        self._set_matrix(distance)
+        distance = metrics.pairwise_distances(centers, metric="manhattan")
+        self._set_matrix(distance)  # type: ignore

@@ -7,6 +7,7 @@ from pandas import DataFrame
 from sklearn import metrics
 
 from processing.storage.Storage import Storage
+from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
 from processing.volumes.AbstractVolume import AbstractVolume
 
 
@@ -56,8 +57,12 @@ class ClusterPairing:
         return self._pairing_a, self._pairing_b
 
     def get_as_list(self):
-        pairing_a = AbstractVolume.convert_dataframe_to_list(self._pairing_a)
-        pairing_b = AbstractVolume.convert_dataframe_to_list(self._pairing_b)
+        if self._pairing_a is None or self._pairing_b is None:
+            return [], []
+
+        pairing_a = convert_dataframe_to_list(self._pairing_a)
+        pairing_b = convert_dataframe_to_list(self._pairing_b)
+
         return pairing_a, pairing_b
 
     def store(
@@ -81,15 +86,23 @@ class ClusterPairing:
             self._clusters_b,
         )
 
-        pairing_a = contingency_matrix / numpy.tile(
-            numpy.sum(contingency_matrix, axis=1),
-            (contingency_matrix.shape[1], 1),
-        ).T * 100
+        pairing_a = (
+            contingency_matrix
+            / numpy.tile(
+                numpy.sum(contingency_matrix, axis=1),  # type: ignore
+                (contingency_matrix.shape[1], 1),
+            ).T
+            * 100
+        )
 
-        pairing_b = contingency_matrix / numpy.tile(
-            numpy.sum(contingency_matrix, axis=0),
-            (contingency_matrix.shape[0], 1),
-        ) * 100
+        pairing_b = (
+            contingency_matrix
+            / numpy.tile(
+                numpy.sum(contingency_matrix, axis=0),  # type: ignore
+                (contingency_matrix.shape[0], 1),
+            )
+            * 100
+        )
 
         payload_a = pd.DataFrame(
             pairing_a.T,

@@ -22,4 +22,4 @@ class TemporalEntropyIndicator(AbstractIndicator):
 
         temporal_entropy = maad.features.temporal_entropy(audio.sound)
 
-        self.add_value(temporal_entropy)
+        self.add_value(temporal_entropy)  # type: ignore
