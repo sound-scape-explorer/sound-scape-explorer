@@ -1,6 +1,8 @@
 # Build
 FROM node:lts-alpine AS build
 
+RUN npm -g i pnpm
+
 WORKDIR /app
 
 COPY .eslintrc.js .
@@ -10,24 +12,26 @@ COPY tsconfig.config.json .
 COPY tsconfig.json .
 COPY vite.config.js .
 COPY package.json .
-COPY yarn.lock .
-RUN yarn install --frozen-lockfile
+COPY pnpm-lock.yaml .
+RUN pnpm i
 
 COPY index.html .
 COPY public public
 COPY src src
-RUN yarn build
+RUN pnpm build
 
 # Dependencies
 FROM node:lts-alpine AS dependencies
+
+RUN npm -g i pnpm
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 
 COPY package.json .
-COPY yarn.lock .
-RUN yarn install --production --frozen-lockfile
+COPY pnpm-lock.yaml .
+RUN pnpm i
 
 # Run
 FROM node:lts-alpine
@@ -45,4 +49,4 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY package.json .
 
 EXPOSE 8080
-CMD ["yarn", "preview"]
+CMD ["npm", "run", "preview"]
