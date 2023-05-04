@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy
 from h5py import Dataset
 
@@ -9,13 +7,13 @@ from processing.utils.print_new_line import print_new_line
 
 
 class FeaturesGrouper:
-    __features: List[Dataset]
+    __features: Dataset
     __timestamps: Dataset
     __timer: Timer
 
     def set_features(
         self,
-        features: List[Dataset],
+        features: Dataset,
     ):
         self.__features = features
         return self
@@ -35,10 +33,7 @@ class FeaturesGrouper:
 
         print_new_line()
 
-        print(
-            f'FeaturesGrouper loaded with integration of'
-            f' {integration} seconds.'
-        )
+        print(f"FeaturesGrouper loaded with integration of" f" {integration} seconds.")
 
     def __progress(self) -> None:
         self.__timer.progress()
@@ -64,9 +59,7 @@ class FeaturesGrouper:
                 end = integration * (g + 1)
                 features_to_group = file_features[start:end]
 
-                grouped_file_features.append(
-                    numpy.mean(features_to_group, axis=0)
-                )
+                grouped_file_features.append(numpy.mean(features_to_group, axis=0))
 
                 grouped_file_timestamps.append(
                     file_timestamp + integration * g * TIME_DELTA_MS

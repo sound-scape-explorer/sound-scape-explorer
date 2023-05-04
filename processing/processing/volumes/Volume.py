@@ -3,10 +3,8 @@ from typing import List
 from h5py import Dataset
 
 from processing.volumes.MeanSpreadingVolume import MeanSpreadingVolume
-from processing.volumes.MeanStandardDeviationVolume import \
-    MeanStandardDeviationVolume
-from processing.volumes.SumStandardDeviationVolume import \
-    SumStandardDeviationVolume
+from processing.volumes.MeanStandardDeviationVolume import MeanStandardDeviationVolume
+from processing.volumes.SumStandardDeviationVolume import SumStandardDeviationVolume
 from processing.volumes.SumVarianceVolume import SumVarianceVolume
 from processing.volumes.VolumeName import VolumeName
 
@@ -63,7 +61,7 @@ class Volume:
 
     @staticmethod
     def fail(name: str) -> None:
-        raise KeyError(f'Volume {name} not found!')
+        raise KeyError(f"Volume {name} not found!")
 
     @staticmethod
     def validate_name(name: str) -> None:

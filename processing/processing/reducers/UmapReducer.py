@@ -22,11 +22,11 @@ class UmapReducer(AbstractReducer):
     def get_instance(self) -> UMAP:
         return self.__instance
 
-    # TODO: Do we want to inject the scale?
     def reduce(
         self,
         features: List[List[float]],
     ) -> List[List[float]]:
         scaled_features = robust_scale(features)
         reduced_features = self.__instance.fit_transform(scaled_features)
-        return reduced_features
+        reduced_features_list = list(reduced_features)
+        return reduced_features_list

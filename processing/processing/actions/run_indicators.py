@@ -29,25 +29,21 @@ def run_indicators(env: Env):
 
     for band_index, band in enumerate(bands):
         for integration in integrations:
-            for file_index, file_name in enumerate(files):
-                group = storage.get_grouped_features(
-                    band,
-                    integration,
-                    file_index,
-                )
+            _, groups_count, _ = storage.read_grouped_features(band, integration)
 
-                for i, name in enumerate(indicators):
+            for f, file_name in enumerate(files):
+                for i, indicator_name in enumerate(indicators):
                     indicator = Indicator(
-                        name=name,
+                        name=indicator_name,
                         band=band,
                         integration=integration,
-                        file_index=file_index,
+                        file_index=f,
                     )
 
                     if indicator is None:
                         continue
 
-                    for group_index, _ in enumerate(group):
+                    for g, _ in enumerate(range(groups_count)):
                         path = f"{audio_path}{file_name}"
 
                         audio = Audio(
@@ -55,7 +51,7 @@ def run_indicators(env: Env):
                             f_min=bands_frequencies[band_index][0],
                             f_max=bands_frequencies[band_index][1],
                             integration=integration,
-                            group_index=group_index,
+                            group_index=g,
                         )
 
                         indicator.calculate(audio)

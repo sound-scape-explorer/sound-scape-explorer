@@ -1,3 +1,5 @@
+from typing import List
+
 from processing.common.Env import Env
 from processing.common.Timer import Timer
 from processing.storage.Storage import Storage
@@ -22,10 +24,11 @@ def run_reducers(env: Env):
 
     for band in bands:
         for integration in integrations:
-            features = storage.read_grouped_features_all_files(
+            features: List[List[float]] = storage.read_grouped_features_all_files(
                 band=band,
                 integration=integration,
-            )
+                unwrap=True,
+            )  # type: ignore
 
             for reducer_index, config_reducer in enumerate(reducers):
                 reducer = config_reducer.create_reducer(settings["umap_seed"])
@@ -43,19 +46,14 @@ def run_reducers(env: Env):
                     timer.progress()
                     continue
 
-                features_split = reducer.reduce_and_split(
-                    features=features,  # type: ignore
-                    files_length=len(files),
-                )
+                reduced_features = reducer.reduce(features=features)
 
-                for file_index in storage.enumerate_file_indexes():
-                    storage.write_reduced(
-                        band=band,
-                        integration=integration,
-                        file_index=file_index,
-                        reducer_index=reducer_index,
-                        features=features_split[file_index],
-                    )
+                storage.write_reduced(
+                    band=band,
+                    integration=integration,
+                    reducer_index=reducer_index,
+                    features=reduced_features,
+                )
 
                 timer.progress()
 

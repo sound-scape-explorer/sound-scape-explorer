@@ -3,6 +3,7 @@ from typing import Iterable, List, Tuple
 
 import torch
 import torchaudio
+from pandas import pandas
 from torch import Tensor
 
 from processing.common.Timer import Timer
@@ -31,7 +32,7 @@ class ConfigFilesExtractor:
         self.__files_length = len(self.__files.keys())
 
         if self.__files_length == 0:
-            raise ValueError('No files to extract.')
+            raise ValueError("No files to extract.")
 
         self.__timer = Timer(self.__files_length)
         self.__expected_sample_rate = expected_sample_rate
@@ -43,23 +44,18 @@ class ConfigFilesExtractor:
 
     def __succeed(self) -> None:
         print_new_line(True)
-        print(
-            f'ConfigFilesExtractor loaded with '
-            f'{self.__model.__class__.__name__}'
-        )
+        print(f"ConfigFilesExtractor loaded with " f"{self.__model.__class__.__name__}")
 
     @staticmethod
     def __verify_path_existence(path_string: str) -> None:
         path = Path(path_string)
 
         if not path.exists():
-            raise FileNotFoundError(f'Audio file not found: {path}')
+            raise FileNotFoundError(f"Audio file not found: {path}")
 
     def __verify_sample_rates(self, sample_rate: int) -> None:
         if sample_rate != self.__expected_sample_rate:
-            raise ValueError(
-                'Sample rate differs from expected sample rate.'
-            )
+            raise ValueError("Sample rate differs from expected sample rate.")
 
     @staticmethod
     def __drop_last_second(
@@ -91,7 +87,7 @@ class ConfigFilesExtractor:
         self.__timer.reset()
 
         for file_index, file_name in self.__iterate_files():
-            path_string = f'{self.__base_path}{file_name}'
+            path_string = f"{self.__base_path}{file_name}"
 
             self.__verify_path_existence(path_string)
 
@@ -113,12 +109,17 @@ class ConfigFilesExtractor:
         band: str,
         storage: Storage,
     ) -> None:
-        for features, file_index in self.yield_features():
-            storage.create_file_features(
-                features=features,
-                band=band,
-                file_index=file_index,
-            )
+        features: List[List[List[float]]] = []
+
+        for file_features, _ in self.yield_features():
+            file_features_list: List[List[float]] = file_features.tolist()
+            # file_seconds = len(file_features_list)
+            features.append(file_features_list)
+
+        storage.write_features(
+            features=features,
+            band=band,
+        )
 
     def __forward_model(
         self,
@@ -126,7 +127,7 @@ class ConfigFilesExtractor:
     ) -> Tensor:
         tensor = self.__model.forward(samples)
 
-        if self.__model.device == 'cuda':
+        if self.__model.device == "cuda":
             return tensor.cpu()
 
         return tensor
@@ -148,14 +149,14 @@ class ConfigFilesExtractor:
 
         i = 0
         while i < wav.shape[1]:
-            samples: Tensor = wav[:, i:i + batch]
+            start = i
+            end = i + batch
+            samples: Tensor = wav[:, start:end]
             samples_features = self.__forward_model(samples)
 
             i += batch
             features.append(samples_features)
 
-        flattened_features: Tensor = self.__flatten_features(
-            features
-        )
+        flattened_features: Tensor = self.__flatten_features(features)
 
         return flattened_features

@@ -38,7 +38,7 @@ def run_volumes(env: Env):
                 for meta_index in storage.enumerate_meta_properties():
                     meta_property_values = meta_values[meta_index]
 
-                    v = Volume(
+                    volume = Volume(
                         name=volume_name,
                         band=band,
                         integration=integration,
@@ -48,11 +48,11 @@ def run_volumes(env: Env):
                         labels=meta_property_values,
                     )
 
-                    if v is None:
+                    if volume is None:
                         continue
 
-                    v.calculate()
-                    v.store(storage)
+                    volume.calculate()
+                    volume.store(storage)
                     timer.progress()
 
 

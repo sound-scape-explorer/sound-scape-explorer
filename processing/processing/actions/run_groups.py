@@ -1,6 +1,11 @@
+from typing import List
+
 from processing.common.Env import Env
 from processing.groupers.FeaturesGrouper import FeaturesGrouper
 from processing.storage.Storage import Storage
+from processing.storage.StorageFilesFeaturesAttribute import (
+    StorageFilesFeaturesAttribute,
+)
 
 
 def run_groups(env: Env):
@@ -8,22 +13,37 @@ def run_groups(env: Env):
 
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
+    timestamps = storage.get_timestamps()
 
     storage.delete_groups()
 
     grouper = FeaturesGrouper()
-    timestamps = storage.get_timestamps()
     grouper.set_timestamps(timestamps)
 
     for band in bands:
-        features = storage.get_features(band)
-        grouper.set_features(features)
+        features, files_count, seconds = storage.read_features(band)
+
+        sliced_features: List[List[List[float]]] = []
+
+        for f in range(files_count):
+            sliced_features.append([])
+            for s in range(seconds):
+                sliced_features[f].append([])
+
+        i = 0
+        for f in range(files_count):
+            for s in range(seconds):
+                sliced_features[f][s] = features[i]
+                i += 1
+
+        grouper.set_features(sliced_features)  # type: ignore
 
         for integration in integrations:
-            group_features, group_timestamps = grouper.group(integration)
-            storage.create_group(
-                features=group_features,
-                timestamps=group_timestamps,
+            grouped_features, grouped_timestamps = grouper.group(integration)
+
+            storage.write_group(
+                features=grouped_features,
+                timestamps=grouped_timestamps,
                 band=band,
                 integration=integration,
             )

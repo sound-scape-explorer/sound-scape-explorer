@@ -27,7 +27,7 @@ class AutoConsensusClustering:
 
     def __init__(
         self,
-        features: List[Dataset],
+        features: Dataset,
         iterations: int = 10,
         metric: str = "manhattan",
         min_cluster_size: int = 40,
