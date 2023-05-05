@@ -19,12 +19,16 @@ from processing.config.ExcelBand import ExcelBand
 from processing.config.ExcelFile import ExcelFile
 from processing.config.ExcelIndicator import ExcelIndicator
 from processing.config.ExcelIntegration import ExcelIntegration
+from processing.config.ExcelMatrices import ExcelMatrices
+from processing.config.ExcelPairings import ExcelPairings
 from processing.config.ExcelRange import ExcelRange
 from processing.config.ExcelReducer import ExcelReducer
 from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelVolume import ExcelVolume
 from processing.indicators.Indicator import Indicator
+from processing.matrices.Matrix import Matrix
+from processing.pairings.Pairing import Pairing
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
@@ -46,6 +50,8 @@ class Config(metaclass=SingletonMeta):
     __reducers: ConfigReducers = []
     __indicators: List[str] = []
     __volumes: List[str] = []
+    __matrices: List[str] = []
+    __pairings: List[str] = []
 
     def __init__(
         self,
@@ -108,6 +114,8 @@ class Config(metaclass=SingletonMeta):
         self.__read_reducers()
         self.__read_indicators()
         self.__read_volumes()
+        self.__read_matrices()
+        self.__read_pairings()
 
     def __set(self) -> None:
         self.__set_all_sites()
@@ -128,6 +136,8 @@ class Config(metaclass=SingletonMeta):
         self.__store_reducers(storage)
         self.__store_indicators(storage)
         self.__store_volumes(storage)
+        self.__store_matrices(storage)
+        self.__store_pairings(storage)
 
     def __store_reducers(
         self,
@@ -158,13 +168,25 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_indicators(self.__indicators)
+        storage.write_indicators(self.__indicators)
 
     def __store_volumes(
         self,
         storage: Storage,
     ) -> None:
-        storage.create_volumes(self.__volumes)
+        storage.write_volumes(self.__volumes)
+
+    def __store_matrices(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.write_matrices(self.__matrices)
+
+    def __store_pairings(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.write_pairings(self.__pairings)
 
     def __set_all_sites(self) -> None:
         for file in self.__files.values():
@@ -561,3 +583,19 @@ class Config(metaclass=SingletonMeta):
         for name in volumes:
             Volume.validate_name(name)
             self.__volumes.append(name)
+
+    def __read_matrices(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.matrices)
+        matrices = self.__parse_column(sheet, ExcelMatrices.matrix)
+
+        for name in matrices:
+            Matrix.validate_name(name)
+            self.__matrices.append(name)
+
+    def __read_pairings(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.pairings)
+        pairings = self.__parse_column(sheet, ExcelPairings.pairing)
+
+        for name in pairings:
+            Pairing.validate_name(name)
+            self.__pairings.append(name)

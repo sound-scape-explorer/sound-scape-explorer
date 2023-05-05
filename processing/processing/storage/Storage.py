@@ -345,6 +345,26 @@ class Storage(metaclass=SingletonMeta):
         volumes = list(dataset.asstr()[:])
         return volumes
 
+    def read_matrices(self) -> List[str]:
+        dataset = self.__get(StoragePath.matrices)
+
+        (length,) = dataset.shape
+        if length == 0:
+            return []
+
+        matrices = list(dataset.asstr()[:])
+        return matrices
+
+    def read_pairings(self) -> List[str]:
+        dataset = self.__get(StoragePath.pairings)
+
+        (length,) = dataset.shape
+        if length == 0:
+            return []
+
+        pairings = list(dataset.asstr()[:])
+        return pairings
+
     def get_volumes_values(
         self,
         band: str,
@@ -631,14 +651,14 @@ class Storage(metaclass=SingletonMeta):
             yield f
 
     def read_groups_count(self, band: str, integration: int) -> int:
-        timestamps = self.__read_grouped_timestamps(band, integration)
+        timestamps = self.read_grouped_timestamps(band, integration)
         groups_count: int = timestamps.attrs[
             StorageGroupsAttribute.groups_count.value
         ]  # type: ignore
         return groups_count
 
     def read_slices_per_group(self, band: str, integration: int) -> int:
-        timestamps = self.__read_grouped_timestamps(band, integration)
+        timestamps = self.read_grouped_timestamps(band, integration)
         slices_per_group: int = timestamps.attrs[
             StorageGroupsAttribute.slices_per_group.value
         ]  # type: ignore
@@ -794,15 +814,11 @@ class Storage(metaclass=SingletonMeta):
         self,
         band: str,
         integration: int,
-        unwrap=False,
-    ) -> Union[Dataset, List[List[float]]]:
+    ) -> Dataset:
         features, _, _ = self.read_grouped_features(
             band=band,
             integration=integration,
         )
-
-        if unwrap is True:
-            return features[:]
 
         return features
 
@@ -817,7 +833,7 @@ class Storage(metaclass=SingletonMeta):
         features = self.__get(path)
         return features
 
-    def __read_grouped_timestamps(
+    def read_grouped_timestamps(
         self,
         band: str,
         integration: int,
@@ -826,25 +842,6 @@ class Storage(metaclass=SingletonMeta):
         path = f"{StoragePath.group_timestamps.value}{suffix}"
         features = self.__get(path)
         return features
-
-    def get_grouped_timestamps_all_files(
-        self,
-        band: str,
-        integration: int,
-    ) -> List[Dataset]:
-        all_timestamps = []
-
-        for file_index in self.enumerate_file_indexes():
-            grouped_timestamps = self.__read_grouped_timestamps(
-                band=band,
-                integration=integration,
-                file_index=file_index,
-            )
-
-            for timestamp in grouped_timestamps:
-                all_timestamps.append(timestamp)
-
-        return all_timestamps
 
     def write_reduced(
         self,
@@ -1109,7 +1106,7 @@ class Storage(metaclass=SingletonMeta):
             data=ranges,
         )
 
-    def create_indicators(
+    def write_indicators(
         self,
         indicators: List[str],
     ) -> None:
@@ -1118,13 +1115,31 @@ class Storage(metaclass=SingletonMeta):
             data=indicators,
         )
 
-    def create_volumes(
+    def write_volumes(
         self,
         volumes: List[str],
     ) -> None:
         self.__write_dataset(
             path=StoragePath.volumes,
             data=volumes,
+        )
+
+    def write_matrices(
+        self,
+        matrices: List[str],
+    ) -> None:
+        self.__write_dataset(
+            path=StoragePath.matrices,
+            data=matrices,
+        )
+
+    def write_pairings(
+        self,
+        pairings: List[str],
+    ) -> None:
+        self.__write_dataset(
+            path=StoragePath.pairings,
+            data=pairings,
         )
 
     def write_autocluster(

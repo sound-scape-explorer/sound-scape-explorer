@@ -1,8 +1,6 @@
 from processing.common.Env import Env
 from processing.common.Timer import Timer
-from processing.matrices.DistanceMatrix import DistanceMatrix
-from processing.matrices.OverlapMatrix import OverlapMatrix
-from processing.matrices.SilhouetteMatrix import SilhouetteMatrix
+from processing.matrices.Matrix import Matrix
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
@@ -13,17 +11,12 @@ def run_matrices(env: Env):
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
     meta_properties = storage.read_meta_properties()
-
-    matrices = [
-        ["distance", DistanceMatrix],
-        ["overlap", OverlapMatrix],
-        ["silhouette", SilhouetteMatrix],
-    ]
+    matrices = storage.read_matrices()
 
     storage.delete_matrices()
 
     print_new_line()
-    print(f"Matrices loading: {[m[0] for m in matrices]}")
+    print(f"Matrices loading: {[m for m in matrices]}")
 
     timer = Timer(len(bands) * len(integrations) * len(matrices) * len(meta_properties))
 
@@ -32,32 +25,29 @@ def run_matrices(env: Env):
             grouped_features = storage.read_grouped_features_all_files(
                 band=band,
                 integration=integration,
-                unwrap=True,
             )
-
-            # TODO: We should robust scale but not on grouped_features but on all
-            #  features. Do we want this? Can all the grouped features fit into RAM?
 
             meta_values = storage.read_meta_values(band, integration)
 
-            for matrix_index, m in enumerate(matrices):
-                # matrix_name = m[0]
-                matrix = m[1]
+            for m, matrix_name in enumerate(matrices):
                 for meta_index in storage.enumerate_meta_properties():
-                    # meta_property = meta_properties[meta_index]
                     meta_property_values = meta_values[meta_index]
 
-                    instance = matrix(
+                    matrix = Matrix(
+                        name=matrix_name,
                         band=band,
                         integration=integration,
-                        matrix_index=matrix_index,
+                        matrix_index=m,
                         meta_index=meta_index,
-                        features=grouped_features,
+                        features=grouped_features[:],
                         labels=meta_property_values,
                     )
 
-                    instance.calculate()
-                    instance.store(storage)
+                    if matrix is None:
+                        continue
+
+                    matrix.calculate()
+                    matrix.store(storage)
                     timer.progress()
 
 

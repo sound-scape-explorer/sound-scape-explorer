@@ -8,10 +8,9 @@ from sklearn import metrics
 
 from processing.storage.Storage import Storage
 from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
-from processing.volumes.AbstractVolume import AbstractVolume
 
 
-class ClusterPairing:
+class ContingencyPairing:
     _band: str
     _integration: int
     _pairing_index: int

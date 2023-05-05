@@ -26,11 +26,10 @@ def run_autocluster(env: Env):
             grouped_features = storage.read_grouped_features_all_files(
                 band=band,
                 integration=integration,
-                unwrap=True,
             )
 
             clustering = AutoConsensusClustering(
-                features=grouped_features,
+                features=grouped_features[:],
                 iterations=settings["autocluster_iterations"],
                 min_cluster_size=settings["autocluster_min_size"],
                 max_cluster_size=settings["autocluster_max_size"],

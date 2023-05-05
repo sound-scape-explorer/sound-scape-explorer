@@ -43,8 +43,9 @@ class StoragePath(Enum):
     reducers_ranges = "/configuration/reducers/ranges"
 
     indicators = "/configuration/indicators"
-
     volumes = "/configuration/volumes"
+    matrices = "/configuration/matrices"
+    pairings = "/configuration/pairings"
 
     # Grouped
 

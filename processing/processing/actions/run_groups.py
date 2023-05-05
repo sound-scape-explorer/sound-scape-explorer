@@ -3,9 +3,6 @@ from typing import List
 from processing.common.Env import Env
 from processing.groupers.FeaturesGrouper import FeaturesGrouper
 from processing.storage.Storage import Storage
-from processing.storage.StorageFilesFeaturesAttribute import (
-    StorageFilesFeaturesAttribute,
-)
 
 
 def run_groups(env: Env):

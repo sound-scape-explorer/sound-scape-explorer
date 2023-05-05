@@ -29,7 +29,6 @@ def run_volumes(env: Env):
             grouped_features = storage.read_grouped_features_all_files(
                 band=band,
                 integration=integration,
-                unwrap=True,
             )
 
             meta_values = storage.read_meta_values(band, integration)
@@ -44,7 +43,7 @@ def run_volumes(env: Env):
                         integration=integration,
                         volume_index=volume_index,
                         meta_index=meta_index,
-                        features=grouped_features,
+                        features=grouped_features[:],
                         labels=meta_property_values,
                     )
 

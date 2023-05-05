@@ -2,6 +2,7 @@ from processing.storage.Storage import Storage
 
 
 # FIX: Import from `main` branch then move under actions
+# TODO: Rename to action `run_dataframe.py`
 def get_jr_dataframe(
     storage: Storage,
     band: str,
@@ -13,7 +14,7 @@ def get_jr_dataframe(
         unwrap=True,
     )
 
-    grouped_timestamps = storage.get_grouped_timestamps_all_files(
+    grouped_timestamps = storage.read_grouped_timestamps(
         band,
         integration,
     )
