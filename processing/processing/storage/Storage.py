@@ -5,7 +5,6 @@ from h5py import Dataset, File
 
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
-from maad.util import filename_info
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
@@ -241,20 +240,18 @@ class Storage(metaclass=SingletonMeta):
         reducers: List[ConfigReducer],
         band: str,
         integration: int,
-    ) -> List[List[float]]:
+    ) -> List[List[List[float]]]:
         reduced_features = []
 
         for _ in reducers:
             reduced_features.append([])
 
         for r, reducer in enumerate(reducers):
-            for file_index in self.enumerate_file_indexes():
-                suffix = self.__get_grouped_suffix(band, integration, file_index)
-                path = f"{StoragePath.reduced_.value}{reducer.index}{suffix}"
-                data = self.__get(path)
+            path = f"{StoragePath.reduced_.value}{reducer.index}/{band}/{integration}"
+            dataset = self.__get(path)
 
-                for features in data:
-                    reduced_features[r].append(features)
+            for features in dataset:
+                reduced_features[r].append(features)
 
         return reduced_features
 
@@ -669,10 +666,10 @@ class Storage(metaclass=SingletonMeta):
         band: str,
         integration: int,
     ):
-        groups_count = self.read_groups_count(band, integration)
+        slices_per_group = self.read_slices_per_group(band, integration)
 
         for f in self.enumerate_file_indexes():
-            for g in range(groups_count):
+            for g in range(slices_per_group):
                 yield f, g
 
     def enumerate_meta_properties(self):
@@ -1214,3 +1211,8 @@ class Storage(metaclass=SingletonMeta):
             meta_values.append(meta_property_values)
 
         return meta_values
+
+    def read_autocluster(self, band: str, integration: int) -> List[int]:
+        path = f"{StoragePath.autocluster.value}/{band}/{integration}"
+        dataset = self.__get(path)
+        return dataset[:]

@@ -8,6 +8,7 @@
     "process:all-but-files": "python3 processing/processing/actions/_all_but_files.py",
     "process:all-to-groups": "python3 processing/processing/actions/_all_to_groups.py",
     "process:config": "python3 processing/processing/actions/run_config.py",
+    "process:dataframe": "python3 processing/processing/actions/run_dataframe.py",
     "process:files": "python3 processing/processing/actions/run_files.py",
     "process:groups": "python3 processing/processing/actions/run_groups.py",
     "process:autocluster": "python3 processing/processing/actions/run_autocluster.py",

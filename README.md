@@ -12,55 +12,51 @@
 
 ---
 
-- Import your audio files
-- Specify your project settings through shareable `.xlsx` configuration
-- Extract features using machine learning processing
-- Visualize results in your web browser
-- Explore your data with graphical tools such as UMAP projections
-- Analyze your data through metrics, statistics, filters...
+- Set up your project with shareable `.xlsx` configuration.
+- Extract data from your audio files to shareable `.h5` file.
+- Visualize data in your web browser [online](https://sound-scape-explorer.github.io/sound-scape-explorer/)
+  or [offline](http://localhost:8080).
+
+> If you already have your `.h5` file and only want to visualize your data with no audio playback, you can directly use
+> the [online front end](https://sound-scape-explorer.github.io/sound-scape-explorer/).
 
 ## 👨‍🏫 For researchers
 
-### ⚓ Requirements
+### 🐋 Docker
 
-- Install and run Docker.
-  - [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
-  - [Debian](https://docs.docker.com/engine/install/debian/)
-  - [Other](https://docs.docker.com/engine/install/)
-  - [Windows](https://www.docker.com/products/docker-desktop)
+Install and run Docker.
+
+- [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+- [Debian](https://docs.docker.com/engine/install/debian/)
+- [Other](https://docs.docker.com/engine/install/)
+- [Windows](https://www.docker.com/products/docker-desktop)
 
 ### ⚙️ Configure your project
 
-Download
-the [configuration example](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
+[Download the configuration template](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
 and set up your project!
 
 ### 💽 Generate your data
 
-Download and unzip a template from the following list:
+1. Select a template from the available
+   flavors. [Go to downloads](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest).
+2. Edit the `project.env` text file and specify requested paths and filenames.
+3. Run the startup script according to your operating system.
 
-- [SSE CPU](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cpu-docker.zip)
-- [SSE CUDA](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-cuda-docker.zip)
-- [SSE Front](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-front-docker.zip)
-- [SSE Next](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest/download/sse-next-docker.zip)
-
-Edit `project.env` and specify your folder paths and filenames.
-
-Then run the startup script according to your operating system.
-
-### 🚀 Explore your data
-
-Browse to the [front end](https://sound-scape-explorer.github.io/sound-scape-explorer/) and load your data.
-
-You can also browse to your [local container](http://localhost:8080).
+| SSE Flavor | Use case                                                                                                                                      |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| SSE Audio  | Use this if you already have your `.h5` and want to use the [online front end](https://sound-scape-explorer.github.io/sound-scape-explorer/). |
+| SSE CPU    | Use this if you want to generate your `.h5` using your CPU (slower).                                                                          |
+| SSE CUDA   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                   |
+| SSE Front  | Use this if you already have your `.h5` and intend to work offline by using the [offline front end](http://localhost:8080).                   |
 
 ## 👨‍💻 For programmers
 
 ### ⚓ Requirements
 
-- [Node.js](https://nodejs.org/en/)
-- [Yarn](https://yarnpkg.com/getting-started/install)
 - [Python 3.8+](https://www.python.org/downloads/)
+- [Node.js](https://nodejs.org/en/)
+- [pnpm](https://pnpm.io/installation#using-npm)
 
 ### 🎛️ Instructions
 
@@ -68,21 +64,24 @@ You can also browse to your [local container](http://localhost:8080).
 # 📥 Installation
 git clone git@github.com:sound-scape-explorer/sound-scape-explorer.git
 cd sound-scape-explorer
-yarn install
+pnpm i
 
 # 💽 Generate data, see list of available actions in `package.json`.
 # Examples
-yarn process -c /path/to/config.xlsx -s /path/to/storage.h5
-yarn process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
+pnpm process -c /path/to/config.xlsx -s /path/to/storage.h5
+pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
 
-# 🚀 Explore data, serve `front` localhost:8080
-yarn dev
+# 🚀 Explore data, serve `front` at localhost:8080
+pnpm dev
+
+# Want a CSV export from your existing h5?
+pnpm process:dataframe --band all --integration 60 --storage /path/to/storage.h5 --output /path/to/dataframe.csv
 ```
 
 ## ⚒️ Processing commands
 
 | `yarn` command          | Description                                                                                                                           |
-|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `process`               | alias for `process:all`                                                                                                               |
 | `process:all`           | Run all processing commands                                                                                                           |
 | `process:all-actions`   | Run `process:autocluster` `process:reducers` `process:indicators` `process:volumes` `process:matrices` & `process:pairings` commands. |
@@ -97,6 +96,7 @@ yarn dev
 | `process:volumes`       | Process volumes from grouped audio features.                                                                                          |
 | `process:matrices`      | Process matrices from grouped audio features.                                                                                         |
 | `process:pairings`      | Process pairings from grouped audio features.                                                                                         |
+| `process:dataframe`     | Build pandas DataFrame and export to .csv file.                                                                                       |
 
 ## 🧑‍🤝‍🧑 Contribute
 
