@@ -2,11 +2,11 @@
 import {NGi, NGrid, NTag} from 'naive-ui';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {selectionStore} from '../Selection/selectionStore';
-import {indicatorsReactive} from 'src/storage/indicatorsReactive';
 import {useDetails} from './useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {bandRef} from 'src/hooks/useBand';
+import {indicatorsRef} from 'src/hooks/useStorageIndicators';
 
 const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
   useDetails();
@@ -70,7 +70,7 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
         :cols="2"
         class="grid"
       >
-        <n-gi v-for="indicator in indicatorsReactive.data">
+        <n-gi v-for="indicator in indicatorsRef.value">
           <n-tag
             :bordered="false"
             class="tag"

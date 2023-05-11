@@ -1,4 +1,4 @@
-import {onMounted, ref} from 'vue';
+import {onMounted, reactive} from 'vue';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 import {bandRef} from './useBand';
@@ -10,9 +10,15 @@ export interface StorageIndicator {
   values: number[];
 }
 
-export function useStorageIndicators() {
-  const indicatorsRef = ref<StorageIndicator[] | null>(null);
+interface IndicatorsRef {
+  value: StorageIndicator[] | null;
+}
 
+export const indicatorsRef = reactive<IndicatorsRef>({
+  value: null,
+});
+
+export function useStorageIndicators() {
   onMounted(async () => {
     if (
       fileRef.value === null ||
@@ -29,8 +35,4 @@ export function useStorageIndicators() {
       integrationRef.value,
     );
   });
-
-  return {
-    indicatorsRef: indicatorsRef,
-  };
 }
