@@ -1,4 +1,4 @@
-import {onMounted, reactive, ref} from 'vue';
+import {onMounted, reactive} from 'vue';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 
