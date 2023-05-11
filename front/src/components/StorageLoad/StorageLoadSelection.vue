@@ -6,10 +6,12 @@ import {useStorageReducedFeatures} from '../../hooks/useStorageReducedFeatures';
 import {useStorageMetaProperties} from 'src/hooks/useStorageMetaProperties';
 import {useStorageMetaSets} from 'src/hooks/useStorageMetaSets';
 import {useStorageSlicesPerGroup} from 'src/hooks/useStorageSlicesPerGroup';
+import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
 
 useStorageMetas();
 useStorageMetaProperties();
 useStorageMetaSets();
+useStorageVolumes();
 
 useStorageSlicesPerGroup();
 

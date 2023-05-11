@@ -5,12 +5,11 @@ import {computed, ref} from 'vue';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHistogram from '../AppHistogram/AppHistogram.vue';
-import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
+import {volumesRef} from 'src/hooks/useStorageVolumes';
 import {useStorageVolume} from 'src/hooks/useStorageVolume';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
-const {volumesRef} = useStorageVolumes();
 const {readVolume} = useStorageVolume();
 
 /**

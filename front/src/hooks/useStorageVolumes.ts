@@ -1,14 +1,21 @@
-import {ref, watch} from 'vue';
+import {onMounted, reactive} from 'vue';
 import {workerRef} from './useWorker';
 import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
 import type {StorageVolume} from './useStorageVolume';
 import {fileRef} from './useFile';
 
-export function useStorageVolumes() {
-  const volumesRef = ref<StorageVolume[] | null>(null);
+interface VolumesRef {
+  value: StorageVolume[] | null;
+}
 
-  watch([workerRef, fileRef, bandRef, integrationRef], async () => {
+export const volumesRef = reactive<VolumesRef>({
+  value: null,
+});
+
+export function useStorageVolumes() {
+  onMounted(async () => {
+    // watch([workerRef, fileRef, bandRef, integrationRef], async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -24,8 +31,4 @@ export function useStorageVolumes() {
       integrationRef.value,
     );
   });
-
-  return {
-    volumesRef: volumesRef,
-  };
 }
