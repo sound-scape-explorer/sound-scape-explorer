@@ -1,15 +1,11 @@
 <script lang="ts" setup="">
 import {computed} from 'vue';
 import {reducersRef} from 'src/hooks/useStorageReducers';
-import {useStorageBands} from 'src/hooks/useStorageBands';
-import {useStorageIntegrations} from 'src/hooks/useStorageIntegrations';
-import {useStorageRanges} from 'src/hooks/useStorageRanges';
+import {bandsRef} from 'src/hooks/useStorageBands';
+import {integrationsRef} from 'src/hooks/useStorageIntegrations';
+import {rangesRef} from 'src/hooks/useStorageRanges';
 import {filenamesRef} from 'src/hooks/useStorageFilenames';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-
-const {bandsRef} = useStorageBands();
-const {integrationsRef} = useStorageIntegrations();
-const {rangesRef} = useStorageRanges();
 
 const reducerNamesRef = computed(() => {
   if (reducersRef.value === null) {

@@ -27,13 +27,12 @@ import {scatterSelectedStore} from '../Scatter/scatterStore';
 import {audioStore} from './audioStore';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {integrationRef} from 'src/hooks/useIntegration';
-import {useStorageBands} from 'src/hooks/useStorageBands';
+import {bandsRef} from 'src/hooks/useStorageBands';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {bandRef} from 'src/hooks/useBand';
 
 const {groupIndexRef, filenameRef} = useDetails();
-const {bandsRef} = useStorageBands();
 
 /**
  * State
