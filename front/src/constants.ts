@@ -24,10 +24,6 @@ export const FFT_SIZE = {
   min: 128,
 };
 
-export const MATRIX_NAMES = ['Distance', 'Overlap', 'Silhouette'];
-
-export const PAIRING_NAMES = ['Cluster'];
-
 export const SPECTROGRAM_COLOR_MAPS = [
   'hot',
   'inferno',

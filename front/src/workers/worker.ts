@@ -1,18 +1,17 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
-import {MATRIX_NAMES, PAIRING_NAMES} from '../constants';
-import type {
-  Reducer,
-  StorageBands,
-  StorageIntegrations,
-  StorageMetas,
-  StorageRanges,
-  StorageSettings,
-} from '../storage/storage';
 import {StoragePath} from '../storage/StoragePath';
+import {StorageGroupedAttributes} from '../storage/StorageGroupedAttributes';
 import type {Indicator, Matrix, Pairing} from '../storage/useStorage';
 import {buildNestedArray} from '../utils/build-nested-array';
 import {trimRectangular} from '../utils/trim-rectangular';
+import type {StorageReducer} from 'src/hooks/useStorageReducers';
+import type {StorageBands} from 'src/hooks/useStorageBands';
+import type {StorageIntegrations} from 'src/hooks/useStorageIntegrations';
+import type {StorageMetas} from 'src/hooks/useStorageMetas';
+import type {StorageSettings} from 'src/hooks/useStorageSettings';
+import type {StorageRanges} from 'src/hooks/useStorageRanges';
+import {StorageMode} from 'src/storage/StorageMode';
 
 interface Volume {
   index: number;
@@ -22,6 +21,8 @@ interface Volume {
 
 let h5: H5File;
 const PATH = '/work';
+
+console.log('worker');
 
 export async function load(file: File) {
   if (h5) {
@@ -41,7 +42,7 @@ export async function load(file: File) {
     PATH,
   );
 
-  h5 = new h5wasm.File(`${PATH}/${file.name}`, 'r');
+  h5 = new h5wasm.File(`${PATH}/${file.name}`, StorageMode.readonly);
 
   return h5;
 }
@@ -84,31 +85,23 @@ export async function readSettings(file: File) {
   return settings;
 }
 
-export async function readFiles(file: File) {
+export async function readFilenames(file: File) {
   const h5 = await load(file);
   const path = StoragePath.files;
   const dataset = h5.get(path) as Dataset;
   return dataset.to_array() as string[];
 }
 
-export async function readFile(file: File, fileIndex: number) {
-  const filenames = await readFiles(file);
+export async function readFilename(file: File, fileIndex: number) {
+  const filenames = await readFilenames(file);
   return filenames[fileIndex];
 }
 
 export async function readFilesFeatures(file: File, band: string) {
-  const files = await readFiles(file);
-
   const h5 = await load(file);
-  const features = [];
-
-  for (const f in files) {
-    const path = `${StoragePath.features}/${band}/${f}`;
-    const feature = h5.get(path) as Dataset;
-    features.push(feature.to_array() as number[]);
-  }
-
-  return features;
+  const path = `${StoragePath.features}/${band}`;
+  const features = h5.get(path) as Dataset;
+  return features.to_array() as number[][];
 }
 
 export async function readFilesMetas(file: File) {
@@ -222,7 +215,7 @@ export async function readReducers(file: File) {
   const rangesRectangular = rangesDataset.to_array() as string[][];
   const ranges = trimRectangular(rangesRectangular, '');
 
-  const reducers: Reducer[] = [];
+  const reducers: StorageReducer[] = [];
 
   for (let i = 0; i < names.length; i += 1) {
     const reducer = {
@@ -254,30 +247,23 @@ export async function readReducedFeatures(
 ): Promise<number[][]> {
   const h5 = await load(file);
   const path = `${StoragePath.reduced_}${r}/${band}/${integration}`;
-
-  const group = h5.get(path) as Group;
-  const features = [];
-
-  for (const fileIndex in group.keys()) {
-    const dataset = group.get(fileIndex) as Dataset;
-    const array = dataset.to_array() as number[][];
-    features.push(...array);
-  }
-
-  return features;
+  const features = h5.get(path) as Dataset;
+  const featuresList = features.to_array() as number[][];
+  return featuresList;
 }
 
-export async function getLengthPerGroup(
+export async function getSlicesPerGroup(
   file: File,
   band: string,
   integration: number,
 ) {
   const h5 = await load(file);
-
-  const f = 0;
-  const path = `${StoragePath.grouped_timestamps}/${band}/${integration}/${f}`;
+  const path = `${StoragePath.grouped_timestamps}/${band}/${integration}`;
   const dataset = h5.get(path) as Dataset;
-  return dataset.shape[0];
+  const slicesPerGroup =
+    dataset.attrs[StorageGroupedAttributes.slicesPerGroup].json_value;
+
+  return Number(slicesPerGroup);
 }
 
 export async function readAutocluster(
@@ -293,10 +279,11 @@ export async function readAutocluster(
     return [];
   }
 
-  const lengthPerGroup = await getLengthPerGroup(file, band, integration);
+  const slicesPerGroup = await getSlicesPerGroup(file, band, integration);
   const autoclusterFlat = autoclusterDatasetOrNull.to_array() as number[];
 
-  return buildNestedArray(autoclusterFlat, lengthPerGroup);
+  // TODO: Building a nested array is not necessarily after flat storage update
+  return buildNestedArray(autoclusterFlat, slicesPerGroup);
 }
 
 export async function readIndicators(
@@ -382,10 +369,8 @@ export async function readVolume(
   metaIndex: number,
 ) {
   const h5 = await load(file);
-
   const path = `${StoragePath.volume_}${volumeIndex}/${band}/${integration}/${metaIndex}`;
   const dataset = h5.get(path) as Dataset;
-
   return dataset.to_array() as number[];
 }
 
@@ -396,9 +381,12 @@ export async function readMatrices(
 ) {
   const h5 = await load(file);
 
+  const namesDataset = h5.get(StoragePath.matrices) as Dataset;
+  const names = namesDataset.to_array() as string[];
+
   const matrices: Matrix[] = [];
 
-  MATRIX_NAMES.forEach((name, m) => {
+  names.forEach((name, m) => {
     const groupPath = `${StoragePath.matrix_}${m}/${band}/${integration}`;
     const group = h5.get(groupPath) as Group;
 
@@ -442,9 +430,12 @@ export async function readPairings(
 ) {
   const h5 = await load(file);
 
+  const namesDataset = h5.get(StoragePath.pairings) as Dataset;
+  const names = namesDataset.to_array() as string[];
+
   const pairings: Pairing[] = [];
 
-  PAIRING_NAMES.forEach((name, p) => {
+  names.forEach((name, p) => {
     const path = `${StoragePath.pairing_}${p}/${band}/${integration}`;
     const group1 = h5.get(path) as Group;
 
@@ -489,14 +480,12 @@ export async function readGroupedFeatures(
   file: File,
   band: string,
   integration: number,
-  fileIndex: number,
-  groupIndex: number,
 ) {
   const h5 = await load(file);
-  const path = `${StoragePath.grouped_features}/${band}/${integration}/${fileIndex}`;
+  const path = `${StoragePath.grouped_features}/${band}/${integration}`;
   const features = h5.get(path) as Dataset;
   const array = features.to_array() as number[][];
-  return array[groupIndex];
+  return array;
 }
 
 export async function readGroupedTimestamps(
@@ -506,16 +495,50 @@ export async function readGroupedTimestamps(
 ) {
   const h5 = await load(file);
   const path = `${StoragePath.grouped_timestamps}/${band}/${integration}`;
+  const timestamps = h5.get(path) as Dataset;
+  const array = timestamps.to_array() as number[];
+  return array;
+}
 
-  const timestampsGroup = h5.get(path) as Group;
+export async function readGroupedMetas(
+  file: File,
+  band: string,
+  integration: number,
+) {
+  const files = await readFilenames(file);
+  const filesMetas = await readFilesMetas(file);
+  const autocluster = await readAutocluster(file, band, integration);
+  const slicesPerGroup = await getSlicesPerGroup(file, band, integration);
 
-  const timestamps: number[][] = [];
+  const groupedMetas: string[][][] = [];
 
-  for (const fileIndex in timestampsGroup.keys()) {
-    const dataset = timestampsGroup.get(fileIndex) as Dataset;
-    const array = dataset.to_array() as number[];
-    timestamps.push(array);
+  for (let f = 0; f < files.length; f += 1) {
+    groupedMetas[f] = [];
+    for (let s = 0; s < slicesPerGroup; s += 1) {
+      const metas = [autocluster[f][s].toString(), ...filesMetas[f]];
+      groupedMetas[f].push(metas);
+    }
   }
 
-  return timestamps;
+  return groupedMetas.flat();
+}
+
+export async function readGroupedFilenames(
+  file: File,
+  band: string,
+  integration: number,
+) {
+  const filenames = await readFilenames(file);
+  const slicesPerGroup = await getSlicesPerGroup(file, band, integration);
+
+  const groupedFilenames: string[] = [];
+
+  for (let f = 0; f < filenames.length; f += 1) {
+    for (let s = 0; s < slicesPerGroup; s += 1) {
+      const filename = filenames[f];
+      groupedFilenames.push(filename);
+    }
+  }
+
+  return groupedFilenames;
 }

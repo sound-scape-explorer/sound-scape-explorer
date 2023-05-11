@@ -1,7 +1,11 @@
 import {asyncComputed} from '@vueuse/core';
-import {computed} from 'vue';
+import {computed, onMounted} from 'vue';
 import {selectionStore} from '../components/Selection/selectionStore';
 import {storage} from './storage';
+import {metaPropertiesReactive} from './metaPropertiesReactive';
+import {metaSetsReactive} from './metaSetsReactive';
+import {indicatorsReactive} from './indicatorsReactive';
+import {volumesReactive} from './volumesReactive';
 
 export interface Volume {
   index: number;
@@ -21,7 +25,11 @@ export interface Pairing {
 
 type Worker = typeof import('../workers/worker');
 
+let count = 0;
+
 export async function useStorage() {
+  count += 1;
+  console.log('useStorage', count);
   const worker = new ComlinkWorker<Worker>(
     new URL('../workers/worker', import.meta.url),
   );
@@ -123,20 +131,33 @@ export async function useStorage() {
 
   // Meta properties
   const metaPropertiesRef = computed(() => {
-    if (storage.metas === null) {
-      return null;
+    if (metaPropertiesReactive.data !== null) {
+      return;
     }
 
-    return Object.keys(storage.metas);
+    if (storage.metas === null) {
+      return;
+    }
+
+    console.log('metaPropertiesRef');
+    metaPropertiesReactive.data = Object.keys(storage.metas);
+  });
+
+  onMounted(() => {
+    if (storage.file === null) {
+      return;
+    }
+    console.log('hello');
   });
 
   // Meta sets
-  const metaSetsRef = computed<string[][] | null>(() => {
+  const metaSetsRef = computed<void>(() => {
     if (storage.metas === null) {
-      return null;
+      return;
     }
 
-    return Object.values(storage.metas);
+    console.log('metaSetsRef');
+    metaSetsReactive.data = Object.values(storage.metas);
   });
 
   const lengthPerGroupRef = asyncComputed(async () => {
@@ -148,7 +169,7 @@ export async function useStorage() {
       return null;
     }
 
-    return await worker.getLengthPerGroup(
+    return await worker.getSlicesPerGroup(
       storage.file,
       selectionStore.band,
       integrationRef.value,
@@ -170,10 +191,10 @@ export async function useStorage() {
       selectionStore.band === null ||
       integrationRef.value === null
     ) {
-      return [];
+      return;
     }
 
-    return await worker.readIndicators(
+    indicatorsReactive.data = await worker.readIndicators(
       storage.file,
       selectionStore.band,
       integrationRef.value,
@@ -186,10 +207,10 @@ export async function useStorage() {
       selectionStore.band === null ||
       integrationRef.value === null
     ) {
-      return null;
+      return;
     }
 
-    return await worker.readVolumes(
+    volumesReactive.data = await worker.readVolumes(
       storage.file,
       selectionStore.band,
       integrationRef.value,
@@ -309,8 +330,6 @@ export async function useStorage() {
       storage.file,
       selectionStore.band,
       integrationRef.value,
-      fileIndex,
-      groupIndex,
     );
   };
 
@@ -407,10 +426,6 @@ export async function useStorage() {
     // Refs
     isReadyRef: isReadyRef,
     lengthPerGroupRef: lengthPerGroupRef,
-    metaPropertiesRef: metaPropertiesRef,
-    metaSetsRef: metaSetsRef,
-    indicatorsRef: indicatorsRef,
-    volumesRef: volumesRef,
     autoclusterRef: autoclusterRef,
     groupedTimestampsRef: groupedTimestampsRef,
     reducedFeaturesRef: reducedFeaturesRef,

@@ -25,8 +25,12 @@ export enum StoragePath {
   reducers_bands = '/configuration/reducers/bands',
   reducers_integrations = '/configuration/reducers/integrations',
   reducers_ranges = '/configuration/reducers/ranges',
+
   indicators = '/configuration/indicators',
   volumes = '/configuration/volumes',
+  matrices = '/configuration/matrices',
+  pairings = '/configuration/pairings',
+
   // Grouped
   grouped_features = '/grouped_features',
   grouped_timestamps = '/grouped_timestamps',
