@@ -22,8 +22,8 @@
     "start": "pnpm dev"
   },
   "devDependencies": {
-    "concurrently": "^7.4.0",
-    "rimraf": "^3.0.2"
+    "concurrently": "^8.0.1",
+    "rimraf": "^5.0.0"
   },
   "version": "8.0.0"
 }
