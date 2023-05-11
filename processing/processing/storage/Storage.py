@@ -171,8 +171,6 @@ class Storage(metaclass=SingletonMeta):
 
         bands = {}
 
-        # TODO: Fix typings
-
         for index, name in enumerate(names):
             f = frequencies[index]
             low = f[0]
@@ -995,7 +993,6 @@ class Storage(metaclass=SingletonMeta):
             data=meta_sets,
         )
 
-    # TODO: Remove autocluster injection after storage upgrade.
     def read_meta_properties(self) -> List[str]:
         meta_properties = self.__get(StoragePath.meta_properties)
 
@@ -1172,8 +1169,6 @@ class Storage(metaclass=SingletonMeta):
     ) -> int:
         return file_index * slices_per_group + group_index
 
-    # TODO: Remove autocluster mix when Storage will migrate to _flattened_
-    #  storing strategy.
     def read_meta_values(
         self,
         band: str,

@@ -99,8 +99,6 @@ class VGGishModel(AbstractModel, VGG):
         data = data.reshape(-1)
         sample_rate = self.__validate_sample_rate()
 
-        # TODO: Test performance using nnAudio lib instead of torchaudio
-        # TODO: Handle sad cases on bad frequency specifications
         mel_extractor = torchaudio.transforms.MelSpectrogram(
             sample_rate=sample_rate,
             n_fft=self.__fft_size,
