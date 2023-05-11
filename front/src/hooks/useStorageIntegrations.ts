@@ -1,4 +1,4 @@
-import {onMounted, ref} from 'vue';
+import {onMounted, reactive} from 'vue';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 
@@ -6,9 +6,15 @@ export interface StorageIntegrations {
   [band: string]: number;
 }
 
-export function useStorageIntegrations() {
-  const integrationsRef = ref<StorageIntegrations | null>(null);
+interface IntegrationsRef {
+  value: StorageIntegrations | null;
+}
 
+export const integrationsRef = reactive<IntegrationsRef>({
+  value: null,
+});
+
+export function useStorageIntegrations() {
   onMounted(async () => {
     if (fileRef.value === null || workerRef.value === null) {
       return;
