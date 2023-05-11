@@ -1,12 +1,12 @@
 <script lang="ts" setup="">
 import {NGi, NGrid, NTag} from 'naive-ui';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import {selectionStore} from '../Selection/selectionStore';
 import {useDetails} from './useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {bandRef} from 'src/hooks/useBand';
 import {indicatorsRef} from 'src/hooks/useStorageIndicators';
+import {integrationRef} from 'src/hooks/useIntegration';
 
 const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
   useDetails();
@@ -37,7 +37,7 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
       <span>
         {{ dateRef }}
       </span>
-      <span>{{ selectionStore.integration }}</span>
+      <span>{{ integrationRef.value }}</span>
     </div>
 
     <div
