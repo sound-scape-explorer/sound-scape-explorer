@@ -1,34 +1,28 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
 import {computed, ref, watch} from 'vue';
-import {storage} from '../../storage/storage';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
-
-/**
- * Props
- */
-
-interface Props {
-  // eslint-disable-next-line no-unused-vars
-  handleUpdate: (reducer: number, band: string, integration: string) => void;
-}
-
-const props = defineProps<Props>();
+import {reducersRef} from 'src/hooks/useStorageReducers';
+import {useReducer} from 'src/hooks/useReducer';
+import {useIntegration} from 'src/hooks/useIntegration';
+import {useBand} from 'src/hooks/useBand';
 
 /**
  * State
  */
 
-const selectedReducerRef = ref();
+const {setBand} = useBand();
+const {setIntegration} = useIntegration();
+const {setReducer} = useReducer();
 
 const reducersOptions = computed(() => {
-  if (storage.reducers === null) {
+  if (reducersRef.value === null) {
     return [];
   }
 
   const references: string[] = [];
 
-  for (const reducer of storage.reducers) {
+  for (const reducer of reducersRef.value) {
     for (const band of reducer.bands) {
       for (const integration of reducer.integrations) {
         references.push(
@@ -41,36 +35,29 @@ const reducersOptions = computed(() => {
   return convertToNaiveSelectOptions(references);
 });
 
-/**
- * Lifecycles
- */
+const selectedOptionRef = ref<string | null>(null);
 
-watch(selectedReducerRef, processSelection);
-
-/**
- * Handlers
- */
-
-function processSelection() {
-  const selectedReducer = selectedReducerRef.value;
-
-  if (!selectedReducer) {
+watch(selectedOptionRef, () => {
+  if (selectedOptionRef.value === null || reducersRef.value === null) {
     return;
   }
 
-  const elements = selectedReducer.split(' ');
+  const stringElements = selectedOptionRef.value.split(' ');
 
-  const reducerIndex = Number(elements[0]);
-  const band = elements[3];
-  const integrationName = elements[4];
+  const band = stringElements[3];
+  setBand(band);
+  const integrationName = stringElements[4];
+  setIntegration(integrationName);
 
-  props.handleUpdate(reducerIndex, band, integrationName);
-}
+  const reducerIndex = Number(stringElements[0]);
+  const reducer = reducersRef.value.filter((r) => r.index === reducerIndex)[0];
+  setReducer(reducer);
+});
 </script>
 
 <template>
   <n-select
-    v-model:value="selectedReducerRef"
+    v-model:value="selectedOptionRef"
     :options="reducersOptions"
     placeholder="Reducers..."
     size="small"

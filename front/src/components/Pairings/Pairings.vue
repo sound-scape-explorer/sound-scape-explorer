@@ -1,17 +1,18 @@
 <script lang="ts" setup="">
 import {FlashOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
-import {computed, ref} from 'vue';
-import {PAIRING_NAMES} from '../../constants';
-import {useStorage} from '../../storage/useStorage';
+import {computed, ref, unref} from 'vue';
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap2D from '../AppHeatmap2D/AppHeatmap2D.vue';
-import {selectionStore} from '../Selection/selectionStore';
+import {useStoragePairings} from 'src/hooks/useStoragePairings';
+import {useStoragePairing} from 'src/hooks/useStoragePairing';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
-const {readPairing, pairingsRef, metaPropertiesRef, metaSetsRef} =
-  await useStorage();
+const {pairingsRef} = useStoragePairings();
+const {readPairing} = useStoragePairing();
 
 /**
  * State
@@ -26,23 +27,21 @@ const metaSelectedARef = ref<string | null>(null);
 const metaSelectedBRef = ref<string | null>(null);
 
 const pairingsNaiveRef = computed(() => {
-  const pairings = pairingsRef.value;
-
-  if (pairings === null) {
+  if (pairingsRef.value === null) {
     return;
   }
 
-  return convertToNaiveSelectOptions(pairings.map((v) => v.name));
+  return convertToNaiveSelectOptions(
+    pairingsRef.value.map((pairing) => pairing.name),
+  );
 });
 
 const metaPropertiesNaiveRef = computed(() => {
-  const metaProperties = metaPropertiesRef.value;
-
-  if (metaProperties === null) {
+  if (metaPropertiesRef.value === null) {
     return [];
   }
 
-  return convertToNaiveSelectOptions(metaProperties);
+  return convertToNaiveSelectOptions(metaPropertiesRef.value);
 });
 
 /**
@@ -50,29 +49,21 @@ const metaPropertiesNaiveRef = computed(() => {
  */
 
 async function run() {
-  const metaProperties = metaPropertiesRef.value;
-  const metaSets = metaSetsRef.value;
-  const metaSelectedA = metaSelectedARef.value;
-  const metaSelectedB = metaSelectedBRef.value;
-  const pairingSelected = pairingSelectedRef.value;
-  const band = selectionStore.band;
-  const integrationName = selectionStore.integration;
-
   if (
-    metaSelectedA === null ||
-    metaSelectedB === null ||
-    metaProperties === null ||
-    metaSets === null ||
-    pairingSelected === null ||
-    band === null ||
-    integrationName === null
+    pairingsRef.value === null ||
+    metaSelectedARef.value === null ||
+    metaSelectedBRef.value === null ||
+    pairingSelectedRef.value === null ||
+    metaPropertiesRef.value === null ||
+    metaSetsRef.value === null
   ) {
     return;
   }
 
-  const pairingIndex = PAIRING_NAMES.indexOf(pairingSelected);
-  const metaIndexA = metaProperties.indexOf(metaSelectedA);
-  const metaIndexB = metaProperties.indexOf(metaSelectedB);
+  const pairingNames = pairingsRef.value.map((pairing) => pairing.name);
+  const pairingIndex = pairingNames.indexOf(pairingSelectedRef.value);
+  const metaIndexA = metaPropertiesRef.value.indexOf(metaSelectedARef.value);
+  const metaIndexB = metaPropertiesRef.value.indexOf(metaSelectedBRef.value);
 
   if (metaIndexA === -1 || metaIndexB === -1 || pairingIndex === -1) {
     return;
@@ -92,8 +83,8 @@ async function run() {
   }
 
   titleRef.value = `${pairingSelectedRef.value} - ${metaSelectedARef.value} vs. ${metaSelectedBRef.value}`;
-  xRef.value = metaSets[metaIndexA];
-  yRef.value = metaSets[metaIndexB];
+  xRef.value = metaSetsRef.value[metaIndexA];
+  yRef.value = metaSetsRef.value[metaIndexB];
 
   const length = xRef.value.length;
 
@@ -101,12 +92,12 @@ async function run() {
 }
 
 function swap() {
-  const a = metaSelectedARef.value;
-  const b = metaSelectedBRef.value;
-
-  if (a === null || b === null) {
+  if (metaSelectedARef.value === null || metaSelectedBRef.value === null) {
     return;
   }
+
+  const a = unref(metaSelectedARef.value);
+  const b = unref(metaSelectedBRef.value);
 
   metaSelectedARef.value = b;
   metaSelectedBRef.value = a;

@@ -1,19 +1,17 @@
 <script lang="ts" setup="">
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import {useScatterPage} from '../Scatter/useScatterPage';
 import SelectionExport from './SelectionExport.vue';
 import SelectionReducer from './SelectionReducer.vue';
 import SelectionScreenshot from './SelectionScreenshot.vue';
-
-const {delayUpdate} = useScatterPage();
 </script>
 
 <template>
   <AppDraggable draggable-key="selection">
     <div class="container">
-      <SelectionReducer :handle-update="delayUpdate" />
+      <SelectionReducer />
       <SelectionScreenshot class="flex" />
-      <SelectionExport />
+      <!-- FIX: Export -->
+      <!-- <SelectionExport /> -->
     </div>
   </AppDraggable>
 </template>

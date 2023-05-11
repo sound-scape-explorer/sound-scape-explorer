@@ -2,13 +2,16 @@
 import {FlashOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {computed, ref} from 'vue';
-import {useStorage} from '../../storage/useStorage';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHistogram from '../AppHistogram/AppHistogram.vue';
+import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
+import {useStorageVolume} from 'src/hooks/useStorageVolume';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
-const {readVolume, volumesRef, metaPropertiesRef, metaSetsRef} =
-  await useStorage();
+const {volumesRef} = useStorageVolumes();
+const {readVolume} = useStorageVolume();
 
 /**
  * State
@@ -17,27 +20,25 @@ const {readVolume, volumesRef, metaPropertiesRef, metaSetsRef} =
 const titleRef = ref<string>();
 const labelsRef = ref<string[]>();
 const valuesRef = ref<number[]>();
-const volumeSelectedRef = ref();
+const volumeNameSelectedRef = ref<string | null>(null);
 const metaSelectedRef = ref();
 
 const volumesNaiveRef = computed(() => {
-  const volumes = volumesRef.value;
-
-  if (volumes === null) {
+  if (volumesRef.value === null) {
     return;
   }
 
-  return convertToNaiveSelectOptions(volumes.map((v) => v.name));
+  return convertToNaiveSelectOptions(
+    volumesRef.value.map((volumes) => volumes.name),
+  );
 });
 
 const metaPropertiesNaiveRef = computed(() => {
-  const metaProperties = metaPropertiesRef.value;
-
-  if (metaProperties === null) {
+  if (metaPropertiesRef.value === null) {
     return [];
   }
 
-  return convertToNaiveSelectOptions(metaProperties);
+  return convertToNaiveSelectOptions(metaPropertiesRef.value);
 });
 
 /**
@@ -45,29 +46,22 @@ const metaPropertiesNaiveRef = computed(() => {
  */
 
 async function run() {
-  const metaProperties = metaPropertiesRef.value;
-  const metaSets = metaSetsRef.value;
-  const metaSelected = metaSelectedRef.value;
-  const volumeSelected = volumeSelectedRef.value;
-  const volumes = volumesRef.value;
-
-  console.log(volumes);
-
   if (
-    metaSelected === null ||
-    metaProperties === null ||
-    metaSets === null ||
-    volumeSelected === null ||
-    volumes === null
+    metaSelectedRef.value === null ||
+    metaPropertiesRef.value === null ||
+    metaSetsRef.value === null ||
+    volumesRef.value === null ||
+    volumeNameSelectedRef.value === null ||
+    metaSelectedRef.value === null
   ) {
     return;
   }
 
-  const volumeNames = volumes.map((volume) => volume.name);
-  const volumeIndex = volumeNames.indexOf(volumeSelected);
-  const metaIndex = metaProperties.indexOf(metaSelected);
+  const volumeNames = volumesRef.value.map((volume) => volume.name);
+  const volumeIndex = volumeNames.indexOf(volumeNameSelectedRef.value);
+  const metaIndex = metaPropertiesRef.value.indexOf(metaSelectedRef.value);
 
-  console.log(volumeSelected, volumeNames);
+  console.log(volumeNameSelectedRef.value, volumeNames);
 
   if (metaIndex === -1 || volumeIndex === -1) {
     return;
@@ -75,16 +69,12 @@ async function run() {
 
   const data = await readVolume(volumeIndex, metaIndex);
 
-  console.log(data);
-
   if (data === null) {
     return;
   }
 
-  console.log(metaSets);
-
-  titleRef.value = `${volumeSelectedRef.value} - ${metaSelectedRef.value}`;
-  labelsRef.value = metaSets[metaIndex];
+  titleRef.value = `${volumeNameSelectedRef.value} - ${metaSelectedRef.value}`;
+  labelsRef.value = metaSetsRef.value[metaIndex];
   valuesRef.value = data;
 }
 </script>
@@ -97,7 +87,7 @@ async function run() {
 
         <n-select
           v-if="volumesNaiveRef"
-          v-model:value="volumeSelectedRef"
+          v-model:value="volumeNameSelectedRef"
           :options="volumesNaiveRef"
           placeholder="Volume..."
           size="tiny"

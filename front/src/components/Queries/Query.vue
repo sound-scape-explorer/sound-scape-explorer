@@ -7,7 +7,7 @@ import QuerySimple from './QuerySimple.vue';
 <template>
   <AppDraggable draggable-key="queries">
     <div class="container">
-      <QuerySimple />
+      <!-- <QuerySimple /> -->
       <QueryComplex />
     </div>
   </AppDraggable>

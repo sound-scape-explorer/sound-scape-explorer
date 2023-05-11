@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
 import {computed} from 'vue';
-import {useStorage} from '../../storage/useStorage';
 import {convertSlugsToColorTypes} from '../../utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {useScatterDataset} from '../Scatter/useScatterDataset';
 
-const {isDisabled} = useScatterStatus();
-const {metaPropertiesRef} = await useStorage();
+const {isDatasetReadyRef} = useScatterDataset();
 
 /**
  * State
@@ -26,12 +25,14 @@ const optionsRef = computed<ColorType[]>(() => {
     'cycleDay',
   ];
 
-  const metaProperties = metaPropertiesRef.value;
-  if (metaProperties === null) {
+  if (metaPropertiesRef.value === null) {
     return defaultOptions;
   }
 
-  return [...defaultOptions, ...convertSlugsToColorTypes(metaProperties)];
+  return [
+    ...defaultOptions,
+    ...convertSlugsToColorTypes(metaPropertiesRef.value),
+  ];
 });
 
 const naiveOptions = computed(() => {
@@ -49,7 +50,7 @@ const naiveOptions = computed(() => {
       <n-select
         v-model:value="colorsStore.colorType"
         :default-value="optionsRef[0]"
-        :disabled="isDisabled"
+        :disabled="!isDatasetReadyRef"
         :options="naiveOptions"
         placeholder="Color type..."
         size="small"

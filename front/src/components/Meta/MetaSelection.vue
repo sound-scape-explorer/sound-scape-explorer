@@ -3,7 +3,6 @@ import {NCheckbox, NCheckboxGroup} from 'naive-ui';
 import {ref, watch} from 'vue';
 import {colorsStore} from '../Colors/colorsStore';
 import {useScatterMeta} from '../Scatter/useScatterMeta';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
 import {metaSelectionStore} from './metaSelectionStore';
 
 /**
@@ -23,7 +22,6 @@ const props = defineProps<Props>();
  */
 
 const selectionRef = ref();
-const {isDisabled} = useScatterStatus();
 
 /**
  * Lifecycles
@@ -56,12 +54,15 @@ function updateSelection() {
 </script>
 
 <template>
-  <n-checkbox-group v-model:value="selectionRef" :disabled="isDisabled" class="checkboxes">
+  <n-checkbox-group
+    v-model:value="selectionRef"
+    class="checkboxes"
+  >
     <n-checkbox
       v-for="(item, index) in props.items"
       :style="{
-          backgroundColor: getColorByItem(index)
-        }"
+        backgroundColor: getColorByItem(index),
+      }"
       :value="item"
       class="checkbox"
     >

@@ -20,23 +20,25 @@ import {
 import type {ComputedRef} from 'vue';
 import {computed, ref, watch} from 'vue';
 import {DATE_FORMAT} from '../../constants';
-import {storage} from '../../storage/storage';
 import AppButton from '../AppButton/AppButton.vue';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
 import {timeStore} from './timeStore';
+import {settingsRef} from 'src/hooks/useStorageSettings';
+import {useDate} from 'src/hooks/useDate';
+import {useScatterDataset} from '../Scatter/useScatterDataset';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const {isDisabled} = useScatterStatus();
+const {isDatasetReadyRef} = useScatterDataset();
+const {convertTimestampToDate} = useDate();
 
 const uiDisabled: ComputedRef<boolean> = computed(
-  () => isDisabled.value || timeStore.isAllSelected,
+  () => !isDatasetReadyRef.value || timeStore.isAllSelected,
 );
 
-const dateStartRef: ComputedRef<Dayjs> = computed(() => {
-  if (storage.settings === null) {
-    return;
+const dateStartRef = computed<Dayjs | null>(() => {
+  if (settingsRef.value === null) {
+    return null;
   }
 
   let start = timeStore.value;
@@ -45,11 +47,11 @@ const dateStartRef: ComputedRef<Dayjs> = computed(() => {
     start = timeStore.min;
   }
 
-  if (storage.settings.timezone !== '') {
-    return dayjs(start * 1000).tz(storage.settings.timezone);
+  if (settingsRef.value.timezone !== '') {
+    return convertTimestampToDate(start * 1000, settingsRef.value.timezone);
   }
 
-  return dayjs(start * 1000);
+  return convertTimestampToDate(start * 1000);
 });
 
 const dateEndRef: ComputedRef<Dayjs> = computed(() => {
@@ -121,12 +123,12 @@ watch(isPlaying, () => {
   stop();
 });
 
-const timeOffsetRef = computed(() => {
-  if (storage.settings === null) {
-    return;
+const timeOffsetRef = computed<number | null>(() => {
+  if (settingsRef.value === null || dateStartRef.value === null) {
+    return null;
   }
 
-  if (storage.settings.timezone === '') {
+  if (settingsRef.value.timezone === '') {
     return 0;
   }
 
@@ -152,9 +154,8 @@ function handleDateStartUpdate(t: number) {
   timeStore.value = t / 1000;
 }
 
-function transposeDateToZone(date: Dayjs) {
-  if (typeof date === 'undefined') {
-    // TODO: Find why...
+function transposeDateToZone(date: Dayjs | null) {
+  if (date === null) {
     return;
   }
 
@@ -175,7 +176,7 @@ onKeyPressed(' ', () => togglePlaying());
     <div class="grid">
       <n-switch
         v-model:value="timeStore.isAllSelected"
-        :disabled="isDisabled"
+        :disabled="!isDatasetReadyRef"
         class="toggle"
       >
         <template #checked> all</template>
@@ -284,7 +285,7 @@ onKeyPressed(' ', () => togglePlaying());
       <span class="date"> to {{ localizedDateRef }} </span>
 
       <div class="timezone">
-        {{ storage.settings?.timezone }}
+        {{ settingsRef.value?.timezone }}
       </div>
     </div>
   </div>

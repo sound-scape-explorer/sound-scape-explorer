@@ -1,119 +1,47 @@
 <script lang="ts" setup="">
-import {asyncComputed} from '@vueuse/core';
-import dayjs from 'dayjs';
 import {NGi, NGrid, NTag} from 'naive-ui';
-import {computed, watch} from 'vue';
-import {storage} from '../../storage/storage';
-import {useStorage} from '../../storage/useStorage';
-import type {ScatterMetadata} from '../../utils/generate-scatter-dataset';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import {scatterDatasetStore} from '../Scatter/scatterDatasetStore';
-import {scatterHoverStore, scatterSelectedStore} from '../Scatter/scatterStore';
 import {selectionStore} from '../Selection/selectionStore';
-import {
-  fileIndexStore,
-  fileNameStore,
-  fileTimestampStore,
-  groupIndexStore,
-} from './detailsStore';
+import {indicatorsReactive} from 'src/storage/indicatorsReactive';
+import {useDetails} from './useDetails';
+import {clickedRef} from '../Scatter/useScatterClick';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {bandRef} from 'src/hooks/useBand';
 
-const {readFile, indicatorsRef, metaPropertiesRef} = await useStorage();
-
-/**
- * State
- */
-
-const frequencies = computed(() => {
-  if (storage.bands === null || selectionStore.band === null) {
-    return;
-  }
-
-  const min = storage.bands[selectionStore.band][0];
-  const max = storage.bands[selectionStore.band][1];
-
-  return {
-    min: min,
-    max: max,
-  };
-});
-
-const selectedPoint = asyncComputed(async () => {
-  if (scatterSelectedStore.index === null) {
-    return;
-  }
-
-  return getPointFromIndex(scatterSelectedStore.index);
-});
-
-/**
- * Handlers
- */
-
-function getPointFromIndex(point: number): ScatterMetadata {
-  const metadata = scatterDatasetStore.dataset?.metadata;
-  return metadata?.[point] as ScatterMetadata;
-}
-
-/**
- * Lifecycles
- */
-
-watch(scatterSelectedStore, async () => {
-  if (scatterSelectedStore.index === null) {
-    fileNameStore.path = null;
-    return;
-  }
-
-  const metadata = scatterDatasetStore?.dataset?.metadata as ScatterMetadata[];
-  const fileIndex = metadata[scatterSelectedStore.index].fileIndex;
-  const groupIndex = metadata[scatterSelectedStore.index].groupIndex;
-  const timestamp = metadata[scatterSelectedStore.index].timestamp;
-
-  fileIndexStore.value = fileIndex;
-  groupIndexStore.value = groupIndex;
-  fileNameStore.path = await readFile(fileIndex);
-  fileTimestampStore.value = timestamp;
-});
+const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
+  useDetails();
 </script>
 
 <template>
   <AppDraggable draggable-key="details">
-    <div class="hover container">
-      <div class="title">Hover point index</div>
-      <span class="hover index">{{ scatterHoverStore.index ?? 'none' }}</span>
-    </div>
-
-    <hr />
-
     <div class="file container">
       <div class="title">Selected point index</div>
-      <span class="file index">{{ scatterSelectedStore.index ?? 'none' }}</span>
+      <span class="file index">{{ clickedRef.value ?? 'none' }}</span>
     </div>
 
     <div class="file container">
       <div class="title">Selected file index</div>
-      <span class="file index">{{ fileIndexStore.value ?? 'none' }}</span>
+      <span class="file index">{{ fileIndexRef ?? 'none' }}</span>
     </div>
 
     <div class="file container">
       <div class="title">Selected group index</div>
-      <span class="file index">{{ groupIndexStore.value ?? 'none' }}</span>
+      <span class="file index">{{ groupIndexRef ?? 'none' }}</span>
     </div>
 
     <div class="file-details">
-      <span class="src">{{ fileNameStore.path }}</span>
-      <span v-if="selectionStore.band">
-        {{ frequencies?.min }} - {{ frequencies?.max }} Hz
+      <span class="src">{{ filenameRef }}</span>
+      <span v-if="bandRef !== null">
+        {{ bandRef.value }}
       </span>
-      <!--      TODO: fix-->
-      <span>{{
-        dayjs(fileTimestampStore.value).tz(storage.settings?.timezone)
-      }}</span>
+      <span>
+        {{ dateRef }}
+      </span>
       <span>{{ selectionStore.integration }}</span>
     </div>
 
     <div
-      v-if="scatterSelectedStore.index !== null"
+      v-if="clickedRef !== null"
       class="file container details"
     >
       <span />
@@ -123,16 +51,16 @@ watch(scatterSelectedStore, async () => {
         x-gap="12"
       >
         <!--suppress JSUnusedLocalSymbols -->
-        <n-gi v-for="(_, index) in metaPropertiesRef">
+        <n-gi v-for="(_, index) in metaPropertiesRef.value">
           <n-tag
             :bordered="false"
             class="tag"
             size="small"
           >
-            {{ metaPropertiesRef[index] }}
+            {{ metaPropertiesRef.value?.[index] }}
           </n-tag>
 
-          {{ selectedPoint?.metaValues[index] }}
+          {{ metasRef?.[index] }}
         </n-gi>
       </n-grid>
 
@@ -142,7 +70,7 @@ watch(scatterSelectedStore, async () => {
         :cols="2"
         class="grid"
       >
-        <n-gi v-for="indicator in indicatorsRef">
+        <n-gi v-for="indicator in indicatorsReactive.data">
           <n-tag
             :bordered="false"
             class="tag"

@@ -1,54 +1,57 @@
 <script lang="ts" setup="">
 import {computed} from 'vue';
-import {storage} from '../../storage/storage';
-import {useStorage} from '../../storage/useStorage';
+import {reducersRef} from 'src/hooks/useStorageReducers';
+import {useStorageBands} from 'src/hooks/useStorageBands';
+import {useStorageIntegrations} from 'src/hooks/useStorageIntegrations';
+import {useStorageRanges} from 'src/hooks/useStorageRanges';
+import {filenamesRef} from 'src/hooks/useStorageFilenames';
+import {settingsRef} from 'src/hooks/useStorageSettings';
 
-const {isReadyRef} = await useStorage();
+const {bandsRef} = useStorageBands();
+const {integrationsRef} = useStorageIntegrations();
+const {rangesRef} = useStorageRanges();
 
-const reducersToPrint = computed(() => {
-  if (storage.reducers === null) {
+const reducerNamesRef = computed(() => {
+  if (reducersRef.value === null) {
     return;
   }
 
-  return storage.reducers.map(
+  return reducersRef.value.map(
     (reducer) => `${reducer.name}${reducer.dimensions}`,
   );
 });
 
-const bandsRef = computed(() => {
-  if (storage.bands === null) {
+const bandNamesRef = computed(() => {
+  if (bandsRef.value === null) {
     return;
   }
 
-  return Object.keys(storage.bands);
+  return Object.keys(bandsRef.value);
 });
 
-const integrationsRef = computed(() => {
-  if (storage.integrations === null) {
+const integrationNamesRef = computed(() => {
+  if (integrationsRef.value === null) {
     return;
   }
 
-  return Object.keys(storage.integrations);
+  return Object.keys(integrationsRef.value);
 });
 
-const rangesRef = computed(() => {
-  if (storage.ranges === null) {
+const rangeNamesRef = computed(() => {
+  if (rangesRef.value === null) {
     return;
   }
 
-  return Object.keys(storage.ranges);
+  return Object.keys(rangesRef.value);
 });
 </script>
 
 <template>
-  <div
-    v-if="isReadyRef"
-    class="wrapper"
-  >
+  <div class="wrapper">
     <div class="container">
       <div class="title">Settings</div>
       <code
-        v-for="(value, index) in storage.settings"
+        v-for="(value, index) in settingsRef.value"
         class="item"
       >
         <span class="key">{{ index }}</span>
@@ -59,23 +62,23 @@ const rangesRef = computed(() => {
     <div class="container">
       <code class="item">
         <span class="key">Files count</span>
-        <span>{{ storage.files?.length }}</span>
+        <span>{{ filenamesRef.value?.length }}</span>
       </code>
       <code class="item">
         <span class="key">Bands</span>
-        <span>{{ bandsRef }}</span>
+        <span>{{ bandNamesRef }}</span>
       </code>
       <code class="item">
         <span class="key">Integrations</span>
-        <span>{{ integrationsRef }}</span>
+        <span>{{ integrationNamesRef }}</span>
       </code>
       <code class="item">
         <span class="key">Ranges</span>
-        <span>{{ rangesRef }}</span>
+        <span>{{ rangeNamesRef }}</span>
       </code>
       <code class="item">
         <span class="key">Reducers</span>
-        <span>{{ reducersToPrint }}</span>
+        <span>{{ reducerNamesRef }}</span>
       </code>
     </div>
   </div>

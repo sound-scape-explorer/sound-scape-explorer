@@ -4,12 +4,11 @@ import {NIcon, NInput} from 'naive-ui';
 import {ref, watch} from 'vue';
 import {useTimeout} from '../../hooks/useTimeout';
 import {getArraysIntersection} from '../../utils/get-arrays-intersection';
-import {scatterDatasetStore} from '../Scatter/scatterDatasetStore';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
 import {queryStore} from './queryStore';
+import {useScatterDataset, datasetRef} from '../Scatter/useScatterDataset';
 
 const input = ref<string>('');
-const {isDisabled} = useScatterStatus();
+const {isDatasetReadyRef} = useScatterDataset();
 
 function splitLabelByPath(label: string) {
   return label.split('/');
@@ -25,14 +24,12 @@ function splitLabelByColumns(label: string) {
 }
 
 function getDatasetLabels(): string[] {
-  if (!scatterDatasetStore.dataset) {
+  if (datasetRef.value === null) {
     throw new Error('Dataset not ready');
   }
 
-  const data = scatterDatasetStore.dataset.metadata;
-
-  return Object.values(data)
-    .map(({label}) => typeof label === 'undefined' ? '' : label)
+  return Object.values(datasetRef.value.metadata)
+    .map(({label}) => (typeof label === 'undefined' ? '' : label))
     .filter((element) => element !== '');
 }
 
@@ -42,7 +39,9 @@ function filterByString(string: string): string[] {
     const splitPathAndFilename = splitLabelByPath(label);
     const columns = splitLabelByColumns(splitPathAndFilename[1]);
 
-    return columns.some((column) => column.toUpperCase() === string.toUpperCase());
+    return columns.some(
+      (column) => column.toUpperCase() === string.toUpperCase(),
+    );
   });
 }
 
@@ -68,10 +67,7 @@ function processQuery() {
 
     results[key] = matches;
 
-    queryStore.matches = [
-      ...queryStore.matches,
-      ...matches,
-    ];
+    queryStore.matches = [...queryStore.matches, ...matches];
   });
 
   console.log(results);
@@ -88,7 +84,7 @@ watch(input, () => {
 <template>
   <n-input
     v-model:value="input"
-    :disabled="isDisabled"
+    :disabled="!isDatasetReadyRef"
     placeholder="Query..."
     size="small"
     type="text"

@@ -21,6 +21,7 @@ const isCycleDay = computed(() => colorsStore.colorType === 'cycleDay');
   <AppDraggable draggable-key="colors">
     <div class="container">
       <ColorsType />
+
       <AppGradient
         v-if="isCycleDay"
         :colors="cyclingScale"
@@ -30,9 +31,8 @@ const isCycleDay = computed(() => colorsStore.colorType === 'cycleDay');
       />
 
       <ColorsScale />
-      <AppGradient
-        :colors="scale"
-      />
+
+      <AppGradient :colors="scale" />
 
       <ColorsAlphas />
     </div>

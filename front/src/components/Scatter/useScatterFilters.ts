@@ -1,15 +1,14 @@
-import type {ScatterMetadata} from '../../utils/generate-scatter-dataset';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {metaSelectionStore} from '../Meta/metaSelectionStore';
 import type {QueryComplexStore} from '../Queries/queryComplexStore';
 import {queriesComplexStore} from '../Queries/queryComplexStore';
 import {queryStore} from '../Queries/queryStore';
 import {timeStore} from '../Time/timeStore';
-import {scatterDatasetStore} from './scatterDatasetStore';
-import {useScatterDataset} from './useScatterDataset';
+import {datasetRef} from './useScatterDataset';
+import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 
 export function useScatterFilters() {
-  const {getMetaContent} = useScatterDataset();
-
   function isVisibleByQuery(index: number): boolean {
     const {matches, query} = queryStore;
 
@@ -17,8 +16,11 @@ export function useScatterFilters() {
       return true;
     }
 
-    const {dataset} = scatterDatasetStore;
-    const elementLabel = dataset?.metadata[index]['label'] as string;
+    if (datasetRef.value === null) {
+      return true;
+    }
+
+    const elementLabel = datasetRef.value.metadata[index]['label'] as string;
 
     // noinspection RedundantIfStatementJS
     if (matches.includes(elementLabel)) {
@@ -33,13 +35,11 @@ export function useScatterFilters() {
       return true;
     }
 
-    const {dataset} = scatterDatasetStore;
-
-    if (dataset === null) {
+    if (datasetRef.value === null || groupedTimestampsRef.value === null) {
       return false;
     }
 
-    const timestamp = Number(dataset.metadata[index]['timestamp']) / 1000;
+    const timestamp = groupedTimestampsRef.value[index] / 1000;
 
     const start = timeStore.value;
     const duration = timeStore.duration;
@@ -51,14 +51,11 @@ export function useScatterFilters() {
   function isVisibleByMeta(index: number): boolean {
     let isVisible = true;
 
-    const dataset = scatterDatasetStore.dataset;
-
-    if (dataset === null) {
+    if (datasetRef.value === null || groupedMetasRef.value === null) {
       return false;
     }
 
-    const metadata = dataset.metadata as unknown as ScatterMetadata[];
-    const metaValues = metadata[index].metaValues;
+    const metaValues = groupedMetasRef.value[index];
 
     const metaSelectedIndexes = Object.keys(metaSelectionStore.selection);
     const metaIndexes = Object.keys(metaValues);
@@ -109,13 +106,20 @@ export function useScatterFilters() {
   function digestQueryComplexItem(
     index: number,
     query: QueryComplexStore['queryComplex'],
-    metaProperties: string[],
   ): boolean {
-    const metaContent = getMetaContent(index);
+    if (metaPropertiesRef.value === null || groupedMetasRef.value === null) {
+      return true;
+    }
+
+    const metaContent = groupedMetasRef.value[index];
     const queryKeys = Object.keys(query);
-    const metaKeys = queryKeys.map((queryKey) =>
-      metaProperties.indexOf(queryKey),
-    );
+    const metaKeys = queryKeys.map((queryKey) => {
+      if (metaPropertiesRef.value === null) {
+        return -1;
+      }
+
+      return metaPropertiesRef.value.indexOf(queryKey);
+    });
 
     let isVisible = true;
 
@@ -125,7 +129,7 @@ export function useScatterFilters() {
       }
 
       const metaValues = metaContent[metaKey];
-      const queryValue = query[metaProperties[metaKey]];
+      const queryValue = query[metaPropertiesRef.value[metaKey]];
 
       if (typeof queryValue === 'string') {
         isVisible = digestQueryComplexSingleString(metaValues, queryValue);
@@ -140,10 +144,7 @@ export function useScatterFilters() {
     return isVisible;
   }
 
-  function digestQueryComplexGroups(
-    index: number,
-    metaProperties: string[],
-  ): boolean {
+  function digestQueryComplexGroups(index: number): boolean {
     const queryGroups = queriesComplexStore.queryComplex;
     const queryGroupsValues = Object.values(queryGroups);
 
@@ -151,17 +152,14 @@ export function useScatterFilters() {
     const results: boolean[] = [];
 
     for (const query of queryGroupsValues) {
-      isVisible = digestQueryComplexItem(index, query, metaProperties);
+      isVisible = digestQueryComplexItem(index, query);
       results.push(isVisible);
     }
 
     return results.reduce((acc, r) => acc || r, false);
   }
 
-  function isVisibleByQueryComplex(
-    index: number,
-    metaProperties: string[],
-  ): boolean {
+  function isVisibleByQueryComplex(index: number): boolean {
     // @SPECIES=CerBra+LopCri @SEASON=SPRING
     // @TIME=POST
     // (@TIME=POST)
@@ -182,21 +180,20 @@ export function useScatterFilters() {
       isVisible = digestQueryComplexItem(
         index,
         queriesComplexStore.queryComplex,
-        metaProperties,
       );
     } else {
-      isVisible = digestQueryComplexGroups(index, metaProperties);
+      isVisible = digestQueryComplexGroups(index);
     }
 
     return isVisible;
   }
 
-  function shouldBeFiltered(index: number, metaProperties: string[]): boolean {
+  function shouldBeFiltered(index: number): boolean {
     return (
       !isVisibleByTimeRange(index) ||
-      !isVisibleByQuery(index) ||
-      !isVisibleByMeta(index) ||
-      !isVisibleByQueryComplex(index, metaProperties)
+      // !isVisibleByQuery(index) ||
+      // !isVisibleByQueryComplex(index) ||
+      !isVisibleByMeta(index)
     );
   }
 

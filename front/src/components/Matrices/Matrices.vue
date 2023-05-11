@@ -2,15 +2,17 @@
 import {FlashOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {computed, ref} from 'vue';
-import {MATRIX_NAMES} from '../../constants';
-import {useStorage} from '../../storage/useStorage';
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';
+import {useStorageMatrices} from 'src/hooks/useStorageMatrices';
+import {useStorageMatrix} from 'src/hooks/useStorageMatrix';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
-const {readMatrix, matricesRef, metaPropertiesRef, metaSetsRef} =
-  await useStorage();
+const {matricesRef} = useStorageMatrices();
+const {readMatrix} = useStorageMatrix();
 
 /**
  * State
@@ -19,26 +21,25 @@ const {readMatrix, matricesRef, metaPropertiesRef, metaSetsRef} =
 const titleRef = ref<string>();
 const labelsRef = ref<string[]>();
 const valuesRef = ref<number[][]>();
-const volumeSelectedRef = ref();
+const matrixNameSelectedRef = ref();
 const metaSelectedRef = ref();
 
 const volumesNaiveRef = computed(() => {
-  const matrices = matricesRef.value;
-
-  if (matrices === null) {
+  if (matricesRef.value === null) {
     return;
   }
 
-  return convertToNaiveSelectOptions(matrices.map((v) => v.name));
+  return convertToNaiveSelectOptions(
+    matricesRef.value.map((matrix) => matrix.name),
+  );
 });
 
 const metaPropertiesNaiveRef = computed(() => {
-  const metaProperties = metaPropertiesRef.value;
-  if (metaProperties === null) {
+  if (metaPropertiesRef.value === null) {
     return [];
   }
 
-  return convertToNaiveSelectOptions(metaProperties);
+  return convertToNaiveSelectOptions(metaPropertiesRef.value);
 });
 
 /**
@@ -46,22 +47,19 @@ const metaPropertiesNaiveRef = computed(() => {
  */
 
 async function run() {
-  const metaProperties = metaPropertiesRef.value;
-  const metaSets = metaSetsRef.value;
-  const metaSelected = metaSelectedRef.value;
-  const volumeSelected = volumeSelectedRef.value;
-
   if (
-    metaSelected === null ||
-    metaProperties === null ||
-    metaSets === null ||
-    volumeSelected === null
+    metaPropertiesRef.value === null ||
+    metaSetsRef.value === null ||
+    matricesRef.value === null ||
+    metaSelectedRef.value === null ||
+    matrixNameSelectedRef.value === null
   ) {
     return;
   }
 
-  const matrixIndex = MATRIX_NAMES.indexOf(volumeSelected);
-  const metaIndex = metaProperties.indexOf(metaSelected);
+  const matrixNames = matricesRef.value.map((matrix) => matrix.name);
+  const matrixIndex = matrixNames.indexOf(matrixNameSelectedRef.value);
+  const metaIndex = metaPropertiesRef.value.indexOf(metaSelectedRef.value);
 
   if (metaIndex === -1 || matrixIndex === -1) {
     return;
@@ -69,12 +67,14 @@ async function run() {
 
   const data = await readMatrix(matrixIndex, metaIndex);
 
+  console.log(data);
+
   if (data === null) {
     return;
   }
 
-  titleRef.value = `${volumeSelectedRef.value} - ${metaSelectedRef.value}`;
-  labelsRef.value = metaSets[metaIndex];
+  titleRef.value = `${matrixNameSelectedRef.value} - ${metaSelectedRef.value}`;
+  labelsRef.value = metaSetsRef.value[metaIndex];
   valuesRef.value = buildNestedArray(data, Math.sqrt(data.length));
 }
 </script>
@@ -87,7 +87,7 @@ async function run() {
 
         <n-select
           v-if="volumesNaiveRef"
-          v-model:value="volumeSelectedRef"
+          v-model:value="matrixNameSelectedRef"
           :options="volumesNaiveRef"
           placeholder="Matrix..."
           size="tiny"

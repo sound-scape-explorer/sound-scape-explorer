@@ -1,7 +1,6 @@
 import {ref} from 'vue';
 import {EXPORT_FILENAME} from '../../constants';
 import type {Point2D, Point3D} from '../../lib/scatter-gl-0.0.13';
-import {useStorage} from '../../storage/useStorage';
 import {convertArrayToCsv} from '../../utils/convert-array-to-csv';
 import {convertObjectToJsonString} from '../../utils/convert-object-to-json-string';
 import type {ScatterMetadata} from '../../utils/generate-scatter-dataset';
@@ -14,14 +13,14 @@ import {settingsStore} from '../Settings/settingsStore';
 import type {ScatterDatasetStore} from './scatterDatasetStore';
 import {scatterDatasetStore} from './scatterDatasetStore';
 import {useScatterFilters} from './useScatterFilters';
+import {metaPropertiesReactive} from 'src/storage/metaPropertiesReactive';
 
 export type ExportType = 'json' | 'csv';
 
 export async function useScatterExport() {
   const {notify} = useNotification();
   const {shouldBeFiltered} = useScatterFilters();
-  const {readGroupedFeatures, readGroupIndexFromTimestamp, metaPropertiesRef} =
-    await useStorage();
+  // const {readGroupedFeatures, readGroupIndexFromTimestamp} = await useStorage();
 
   const loadingRef = ref(false);
 
@@ -186,12 +185,10 @@ export async function useScatterExport() {
   }
 
   async function handleClick(type: ExportType = 'json') {
-    const metaProperties = metaPropertiesRef.value;
-
     if (
       selectionStore.band === null ||
       selectionStore.integration === null ||
-      metaProperties === null
+      metaPropertiesReactive.data === null
     ) {
       return;
     }
@@ -207,7 +204,7 @@ export async function useScatterExport() {
     const results = await parse(
       scatterDatasetStore.dataset,
       filename,
-      metaProperties,
+      metaPropertiesReactive.data,
       type,
     );
 

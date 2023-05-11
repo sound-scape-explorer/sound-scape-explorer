@@ -16,17 +16,18 @@ import Selection from '../components/Selection/Selection.vue';
 import Settings from '../components/Settings/Settings.vue';
 import Time from '../components/Time/Time.vue';
 import Volumes from '../components/Volumes/Volumes.vue';
-import {useStorage} from '../storage/useStorage';
+import StorageLoad from '../components/StorageLoad/StorageLoad.vue';
+import {useFile} from 'src/hooks/useFile';
+import {useWorker} from 'src/hooks/useWorker';
 
-const handleReadiness = () => {
-  const isReady = isReadyRef.value;
+useWorker();
+const {isFileRef} = useFile();
 
-  if (!isReady) {
+onMounted(() => {
+  if (isFileRef.value === false) {
     appDraggablesStore.import = true;
   }
-};
-onMounted(handleReadiness);
-const {isReadyRef} = await useStorage();
+});
 </script>
 
 <template>
@@ -35,10 +36,11 @@ const {isReadyRef} = await useStorage();
   <Settings v-if="appDraggablesStore.settings" />
   <Help v-if="appDraggablesStore.help" />
 
-  <div v-if="isReadyRef">
+  <div v-if="isFileRef">
+    <StorageLoad />
     <Selection />
     <Colors />
-    <Query />
+    <!-- <Query /> -->
     <Time />
     <Audio />
     <Details />

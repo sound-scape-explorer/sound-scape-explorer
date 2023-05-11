@@ -16,11 +16,11 @@ import {
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
-import {useStorage} from '../../storage/useStorage';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
+import {useFile} from 'src/hooks/useFile';
 
-const {isReadyRef} = await useStorage();
+const {isFileRef} = useFile();
 
 /**
  * Handlers
@@ -94,7 +94,7 @@ onKeyPressed(KeyboardShortcut.pairings, togglePairings);
     </div>
 
     <div
-      v-if="isReadyRef"
+      v-if="isFileRef"
       class="column"
     >
       <MenuItem

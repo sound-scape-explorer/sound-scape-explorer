@@ -5,15 +5,14 @@ import {NSlider} from 'naive-ui';
 import {computed, ref, watch} from 'vue';
 import {SLIDER_LIMITS} from '../../constants';
 import {storage} from '../../storage/storage';
-import {useStorage} from '../../storage/useStorage';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
 import {selectionStore} from '../Selection/selectionStore';
 import {timeStore} from './timeStore';
+import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import {useScatterDataset} from '../Scatter/useScatterDataset';
 
-const {isDisabled} = useScatterStatus();
-const {groupedTimestampsRef} = await useStorage();
+const {isDatasetReadyRef} = useScatterDataset();
 
 /**
  * State
@@ -181,7 +180,7 @@ interface Slider {
 <template>
   <div class="container">
     <div
-      v-if="!isDisabled"
+      v-if="isDatasetReadyRef"
       class="layer"
     >
       <n-slider
@@ -199,7 +198,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="!isDisabled"
+      v-if="isDatasetReadyRef"
       class="layer"
     >
       <div
@@ -215,7 +214,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="!isDisabled"
+      v-if="isDatasetReadyRef"
       class="layer zoom"
     >
       <AppButton
