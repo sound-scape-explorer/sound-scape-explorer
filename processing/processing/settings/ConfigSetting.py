@@ -8,7 +8,10 @@ class ConfigSettings(TypedDict):
     audio_folder: str
     audio_host: str
     expected_sample_rate: int
+    timezone: str
     umap_seed: int
+    umap_neighbors: int
+    umap_metric: str
     autocluster: numpy.bool_
     autocluster_iterations: int
     autocluster_min_size: int

@@ -1,5 +1,6 @@
 from processing.common.Env import Env
 from processing.common.Timer import Timer
+from processing.reducers.Reducer import Reducer
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
@@ -27,7 +28,11 @@ def run_reducers(env: Env):
             )
 
             for reducer_index, config_reducer in enumerate(reducers):
-                reducer = config_reducer.create_reducer(settings["umap_seed"])
+                reducer: Reducer = config_reducer.create_reducer(
+                    seed=settings["umap_seed"],
+                    neighbors=settings["umap_neighbors"],
+                    metric=settings["umap_metric"],
+                )
 
                 if reducer is None:
                     continue

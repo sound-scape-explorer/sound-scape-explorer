@@ -4,10 +4,7 @@ from typing import List
 
 class AbstractReducer(ABC):
     @abstractmethod
-    def reduce(
-        self,
-        features: List[List[float]]
-    ) -> List[List[float]]:
+    def reduce(self, features: List[List[float]]) -> List[List[float]]:
         pass
 
     @abstractmethod
@@ -35,7 +32,7 @@ class AbstractReducer(ABC):
 
             flat_features_slice = reduced_features[start:end]
 
-            for features in flat_features_slice:
-                split_features[file_index].append(features)
+            for flat_features in flat_features_slice:
+                split_features[file_index].append(flat_features)
 
         return split_features

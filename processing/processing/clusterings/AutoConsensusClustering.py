@@ -8,6 +8,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from processing.common.Timer import Timer
 from processing.reducers.UmapReducer import UmapReducer
+from processing.settings.DefaultSetting import DefaultSetting
 from processing.utils.print_new_line import print_new_line
 
 
@@ -74,7 +75,12 @@ class AutoConsensusClustering:
 
     def __run(self) -> None:
         for _ in range(self.__iterations):
-            reducer = UmapReducer(target_dimensions=10, seed=None)
+            reducer = UmapReducer(
+                target_dimensions=10,
+                seed=None,
+                neighbors=DefaultSetting.umap_neighbors,
+                metric=DefaultSetting.umap_metric,
+            )
             features = reducer.reduce(self.__features)
             self.__scan(features)
             self.__timer.progress()

@@ -13,10 +13,14 @@ class UmapReducer(AbstractReducer):
         self,
         target_dimensions: int,
         seed: Union[int, None],
+        neighbors: int,
+        metric: str,
     ):
         self.__instance = UMAP(
             n_components=target_dimensions,
             random_state=seed,
+            n_neighbors=neighbors,
+            metric=metric,
         )
 
     def get_instance(self) -> UMAP:

@@ -2,7 +2,7 @@ import datetime
 import math
 from enum import Enum
 from pathlib import Path
-from typing import Any, List, Literal, Union
+from typing import Any, List, Union
 
 import numpy
 import pandas
@@ -30,6 +30,7 @@ from processing.indicators.Indicator import Indicator
 from processing.matrices.Matrix import Matrix
 from processing.pairings.Pairing import Pairing
 from processing.settings.ConfigSetting import ConfigSettings
+from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
 from processing.utils.get_uniques_from_list import get_uniques_from_list
@@ -245,29 +246,33 @@ class Config(metaclass=SingletonMeta):
         self,
         setting: str,
         value: Union[Series, DataFrame],
-    ) -> Union[float, Literal[100, 20, 60], bool, Series, DataFrame, None]:
+    ):
         payload = value
 
         if self.__is_nan(value):
             payload = None
 
-        if setting == StorageSetting.autocluster.value and value == "yes":
-            payload = True
+        # TODO: Split these blocks
+        if setting == StorageSetting.umap_metric.value and value is None:
+            payload = DefaultSetting.umap_metric
 
-        elif setting == StorageSetting.autocluster.value and value is None:
-            payload = False
+        elif setting == StorageSetting.autocluster.value:
+            if value == "yes":
+                payload = True
+            else:
+                payload = DefaultSetting.autocluster
 
         elif setting == StorageSetting.autocluster_iterations.value and value is None:
-            payload = 100
+            payload = DefaultSetting.autocluster_iterations
 
         elif setting == StorageSetting.autocluster_min_size.value and value is None:
-            payload = 20
+            payload = DefaultSetting.autocluster_min_size
 
         elif setting == StorageSetting.autocluster_max_size.value and value is None:
-            payload = 60
+            payload = DefaultSetting.autocluster_max_size
 
         elif setting == StorageSetting.autocluster_threshold.value and value is None:
-            payload = 0.9
+            payload = DefaultSetting.autocluster_threshold
 
         return payload
 
