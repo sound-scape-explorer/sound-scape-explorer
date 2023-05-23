@@ -25,39 +25,55 @@ def run_indicators(env: Env):
     print_new_line()
     print(f"Indicators loading: {[i for i in indicators]}")
 
-    timer = Timer(len(files) * len(bands) * len(integrations) * len(indicators))
-
     for band_index, band in enumerate(bands):
+        f_min = bands_frequencies[band_index][0]
+        f_max = bands_frequencies[band_index][1]
+
         for integration in integrations:
-            _, groups_count, _ = storage.read_grouped_features(band, integration)
+            print(f"Band: {band}, integration {integration}")
 
-            for f, file_name in enumerate(files):
-                for i, indicator_name in enumerate(indicators):
-                    indicator = Indicator(
-                        name=indicator_name,
-                        band=band,
-                        integration=integration,
-                        file_index=f,
-                    )
+            slices_per_group = storage.read_slices_per_group(band, integration)
+            timer = Timer(
+                len(files)
+                * len(bands)
+                * len(integrations)
+                * len(indicators)
+                * slices_per_group
+            )
 
-                    if indicator is None:
-                        continue
+            # Loading indicators
+            indicators_instances = []
+            for indicator_name in indicators:
+                indicator = Indicator(
+                    name=indicator_name,
+                    band=band,
+                    integration=integration,
+                )
 
-                    for g, _ in enumerate(range(groups_count)):
-                        path = f"{audio_path}{file_name}"
+                indicators_instances.append(indicator)
 
-                        audio = Audio(
-                            path=path,
-                            f_min=bands_frequencies[band_index][0],
-                            f_max=bands_frequencies[band_index][1],
-                            integration=integration,
-                            group_index=g,
-                        )
+            for file_index, group_index in storage.enumerate_group_indexes(
+                band, integration
+            ):
+                # Loading audio
+                file_name = files[file_index]
+                path = f"{audio_path}{file_name}"
 
-                        indicator.calculate(audio)
+                audio = Audio(
+                    path=path,
+                    f_min=f_min,
+                    f_max=f_max,
+                    integration=integration,
+                    group_index=group_index,
+                )
 
-                    indicator.store(storage, i)
+                for indicator in indicators_instances:
+                    indicator.calculate(audio)
                     timer.progress()
+
+            # Store
+            for i, indicator in enumerate(indicators_instances):
+                indicator.store(storage, i)
 
 
 if __name__ == "__main__":

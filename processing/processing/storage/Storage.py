@@ -865,10 +865,9 @@ class Storage(metaclass=SingletonMeta):
         index: int,
         band: str,
         integration: int,
-        file_index: int,
         values: List[float],
     ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
+        suffix = f"/{band}/{integration}"
         path = f"{StoragePath.indicator_.value}{index}{suffix}"
         self.__write_dataset(
             path=path,
@@ -876,7 +875,7 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def write_volume_new(
+    def write_volume(
         self,
         band: str,
         integration: int,
@@ -958,23 +957,6 @@ class Storage(metaclass=SingletonMeta):
         for index, _ in enumerate(reducers):
             path = f"{StoragePath.reduced_.value}{index}"
             self.__delete_silently(path)
-
-    def write_volume(
-        self,
-        index: int,
-        band: str,
-        integration: int,
-        file_index: int,
-        values: List[float],
-    ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f"{StoragePath.volume_.value}{index}{suffix}"
-
-        self.__write_dataset(
-            path=path,
-            data=values,
-            compression=StorageCompression.gzip,
-        )
 
     def write_metas(
         self,

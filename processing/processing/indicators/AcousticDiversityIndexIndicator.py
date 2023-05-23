@@ -9,9 +9,8 @@ class AcousticDiversityIndexIndicator(AbstractIndicator):
         self,
         band: str,
         integration: int,
-        file_index: int,
     ) -> None:
-        super().__init__(band, integration, file_index)
+        super().__init__(band, integration)
 
     def calculate(
         self,

@@ -50,7 +50,7 @@ class AbstractVolume(ABC):
     ) -> None:
         data = self.get_as_list()
 
-        storage.write_volume_new(
+        storage.write_volume(
             band=self._band,
             integration=self._integration,
             volume_index=self._volume_index,
