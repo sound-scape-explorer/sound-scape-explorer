@@ -93,7 +93,7 @@ class Storage(metaclass=SingletonMeta):
             return
 
         if type(compression) is StorageCompression:
-            compression = compression.value
+            compression = compression.value  # type: ignore
 
         self.__file.create_dataset(
             path,
@@ -457,8 +457,8 @@ class Storage(metaclass=SingletonMeta):
         del self.__file[path]
 
     def delete_groups(self) -> None:
-        self.__delete_silently(StoragePath.group_features)
-        self.__delete_silently(StoragePath.group_timestamps)
+        self.__delete_silently(StoragePath.grouped_features)
+        self.__delete_silently(StoragePath.grouped_timestamps)
 
     def delete_files_features(self) -> None:
         self.__delete_silently(StoragePath.features)
@@ -690,8 +690,8 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
     ) -> None:
         suffix = f"{band}/{integration}"
-        path_features = f"{StoragePath.group_features.value}/{suffix}"
-        path_timestamps = f"{StoragePath.group_timestamps.value}/{suffix}"
+        path_features = f"{StoragePath.grouped_features.value}/{suffix}"
+        path_timestamps = f"{StoragePath.grouped_timestamps.value}/{suffix}"
 
         groups_count = len(features)
         # We suppose all audio files have same length, thus same group sizes.
@@ -740,8 +740,8 @@ class Storage(metaclass=SingletonMeta):
     ):
         for f in self.enumerate_file_indexes():
             suffix = self.__get_grouped_suffix(band, integration, f)
-            path_features = f"{StoragePath.group_features.value}{suffix}"
-            path_timestamps = f"{StoragePath.group_timestamps.value}{suffix}"
+            path_features = f"{StoragePath.grouped_features.value}{suffix}"
+            path_timestamps = f"{StoragePath.grouped_timestamps.value}{suffix}"
 
             self.__write_dataset(
                 path=path_features,
@@ -792,7 +792,7 @@ class Storage(metaclass=SingletonMeta):
         band: str,
         integration: int,
     ) -> Tuple[Dataset, int, int]:
-        path = f"{StoragePath.group_features.value}/{band}/{integration}"
+        path = f"{StoragePath.grouped_features.value}/{band}/{integration}"
         dataset = self.__get(path)
 
         groups_count: int = dataset.attrs[
@@ -824,7 +824,7 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
     ) -> Dataset:
         suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f"{StoragePath.group_features.value}{suffix}"
+        path = f"{StoragePath.grouped_features.value}{suffix}"
         features = self.__get(path)
         return features
 
@@ -834,7 +834,7 @@ class Storage(metaclass=SingletonMeta):
         integration: int,
     ) -> Dataset:
         suffix = f"/{band}/{integration}"
-        path = f"{StoragePath.group_timestamps.value}{suffix}"
+        path = f"{StoragePath.grouped_timestamps.value}{suffix}"
         features = self.__get(path)
         return features
 
@@ -1193,3 +1193,55 @@ class Storage(metaclass=SingletonMeta):
         path = f"{StoragePath.autocluster.value}/{band}/{integration}"
         dataset = self.__get(path)
         return dataset[:]
+
+    def migrate_v8(self) -> None:
+        """Migrate from storage v8 to current version"""
+
+        bands = self.get_bands()
+        integrations = self.get_integrations_seconds()
+
+        for band in bands:
+            for integration in integrations:
+                grouped_features = []
+                grouped_timestamps = []
+
+                # Collect v8 data
+                for file_index in self.enumerate_file_indexes():
+                    suffix = f"/{band}/{integration}/{file_index}"
+
+                    # Grouped features
+                    grouped_features_old_path = (
+                        f"{StoragePath.grouped_features.value}{suffix}"
+                    )
+                    grouped_features_old_values = self.__get(grouped_features_old_path)
+                    grouped_features.append(grouped_features_old_values[:])
+                    self.__delete_silently(grouped_features_old_path)
+
+                    # Grouped timestamps
+                    grouped_timestamps_old_path = (
+                        f"{StoragePath.grouped_timestamps.value}{suffix}"
+                    )
+                    grouped_timestamps_old_values = self.__get(
+                        grouped_timestamps_old_path
+                    )
+                    grouped_timestamps.append(grouped_timestamps_old_values[:])
+                    self.__delete_silently(grouped_timestamps_old_path)
+
+                # Purge v8 leftovers
+                grouped_features_path = (
+                    f"{StoragePath.grouped_features.value}/{band}/{integration}"
+                )
+                self.__delete_silently(grouped_features_path)
+
+                grouped_timestamps_path = (
+                    f"{StoragePath.grouped_timestamps.value}/{band}/{integration}"
+                )
+                self.__delete_silently(grouped_timestamps_path)
+
+                # Write new data
+                self.write_group(
+                    features=grouped_features,
+                    timestamps=grouped_timestamps,
+                    band=band,
+                    integration=integration,
+                )

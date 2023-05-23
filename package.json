@@ -2,6 +2,7 @@
   "name": "sound-scape-explorer",
   "scripts": {
     "dev": "cd front && pnpm dev",
+    "migrate:v8": "python3 processing/processing/actions/run_migration_v8.py",
     "process": "pnpm process:all",
     "process:all": "python3 processing/processing/actions/_all.py",
     "process:all-actions": "python3 processing/processing/actions/_all_actions.py",
