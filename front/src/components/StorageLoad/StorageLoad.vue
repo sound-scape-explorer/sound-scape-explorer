@@ -10,13 +10,11 @@ import StorageLoadSelection from './StorageLoadSelection.vue';
 import {useStorageReducers} from 'src/hooks/useStorageReducers';
 import {useStorageIntegrations} from 'src/hooks/useStorageIntegrations';
 import {useStorageRanges} from 'src/hooks/useStorageRanges';
-import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
 
 useStorageBands();
 useStorageIntegrations();
 useStorageRanges();
 useStorageReducers();
-useStorageIndicators();
 
 useBand();
 useIntegration();

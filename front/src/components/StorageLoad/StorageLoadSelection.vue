@@ -7,6 +7,7 @@ import {useStorageMetaProperties} from 'src/hooks/useStorageMetaProperties';
 import {useStorageMetaSets} from 'src/hooks/useStorageMetaSets';
 import {useStorageSlicesPerGroup} from 'src/hooks/useStorageSlicesPerGroup';
 import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
+import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
 
 useStorageMetas();
 useStorageMetaProperties();
@@ -18,4 +19,6 @@ useStorageSlicesPerGroup();
 useStorageReducedFeatures();
 useStorageGroupedTimestamps();
 useStorageGroupedMetas();
+
+useStorageIndicators();
 </script>

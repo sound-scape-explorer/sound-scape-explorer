@@ -300,14 +300,8 @@ export async function readIndicators(
 
   names.forEach((name, i) => {
     const path = `${StoragePath.indicator_}${i}/${band}/${integration}`;
-    const group = h5.get(path) as Group;
-
-    let values: number[] = [];
-
-    for (const g in group.keys()) {
-      const dataset = h5.get(`${path}/${g}`) as Dataset;
-      values = [...values, ...(dataset.to_array() as number[])];
-    }
+    const dataset = h5.get(path) as Dataset;
+    const values = dataset.to_array() as number[];
 
     const indicator: Indicator = {
       index: i,

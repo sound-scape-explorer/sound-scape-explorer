@@ -79,7 +79,7 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
             {{ indicator.name }}
           </n-tag>
 
-          {{ indicator.values[0] }}
+          {{ indicator.values[clickedRef.value ?? 0] }}
         </n-gi>
       </n-grid>
     </div>
