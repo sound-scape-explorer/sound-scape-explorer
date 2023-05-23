@@ -1,7 +1,5 @@
 from abc import abstractmethod
 
-from pandas.errors import AbstractMethodError
-
 from processing.audio.Audio import Audio
 from processing.indicators.AcousticComplexityIndexIndicator import (
     AcousticComplexityIndexIndicator,
