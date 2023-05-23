@@ -49,7 +49,7 @@ class Pairing:
         Pairing.fail(name)
 
     @abstractmethod
-    def calculate() -> None:
+    def calculate(self) -> None:
         pass
 
     @abstractmethod

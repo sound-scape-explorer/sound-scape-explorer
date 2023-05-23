@@ -65,7 +65,7 @@ class Matrix:
         Matrix.fail(name)
 
     @abstractmethod
-    def calculate() -> None:
+    def calculate(self) -> None:
         pass
 
     @abstractmethod
