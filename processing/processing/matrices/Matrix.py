@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import List
 
 from h5py import Dataset
@@ -6,6 +7,7 @@ from processing.matrices.DistanceMatrix import DistanceMatrix
 from processing.matrices.MatrixName import MatrixName
 from processing.matrices.OverlapMatrix import OverlapMatrix
 from processing.matrices.SilhouetteMatrix import SilhouetteMatrix
+from processing.storage.Storage import Storage
 
 
 class Matrix:
@@ -61,3 +63,14 @@ class Matrix:
             return
 
         Matrix.fail(name)
+
+    @abstractmethod
+    def calculate() -> None:
+        pass
+
+    @abstractmethod
+    def store(
+        self,
+        storage: Storage,
+    ) -> None:
+        pass

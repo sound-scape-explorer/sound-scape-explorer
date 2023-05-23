@@ -1,3 +1,6 @@
+from abc import abstractmethod
+from typing import List
+
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.ReducerName import ReducerName
 from processing.reducers.SparsePcaReducer import SparsePcaReducer
@@ -37,3 +40,10 @@ class Reducer:
             return
 
         Reducer.fail(name)
+
+    @abstractmethod
+    def reduce(
+        self,
+        features: List[List[float]],
+    ) -> List[List[float]]:
+        pass

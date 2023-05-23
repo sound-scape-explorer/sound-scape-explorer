@@ -1,9 +1,11 @@
+from abc import abstractmethod
 from typing import List
 
 from h5py import Dataset
 
 from processing.pairings.ContingencyPairing import ContingencyPairing
 from processing.pairings.PairingName import PairingName
+from processing.storage.Storage import Storage
 
 
 class Pairing:
@@ -45,3 +47,11 @@ class Pairing:
             return
 
         Pairing.fail(name)
+
+    @abstractmethod
+    def calculate() -> None:
+        pass
+
+    @abstractmethod
+    def store(self, storage: Storage) -> None:
+        pass

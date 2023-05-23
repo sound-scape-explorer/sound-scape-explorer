@@ -1,7 +1,9 @@
+from abc import abstractmethod
 from typing import List
 
 from h5py import Dataset
 
+from processing.storage.Storage import Storage
 from processing.volumes.MeanSpreadingVolume import MeanSpreadingVolume
 from processing.volumes.MeanStandardDeviationVolume import MeanStandardDeviationVolume
 from processing.volumes.SumStandardDeviationVolume import SumStandardDeviationVolume
@@ -71,3 +73,11 @@ class Volume:
             return
 
         Volume.fail(name)
+
+    @abstractmethod
+    def calculate() -> None:
+        pass
+
+    @abstractmethod
+    def store(self, storage: Storage) -> None:
+        pass
