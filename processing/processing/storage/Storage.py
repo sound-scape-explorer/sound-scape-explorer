@@ -1203,8 +1203,47 @@ class Storage(metaclass=SingletonMeta):
 
         self.__migrate_v8_grouped_features_and_timestamps(bands, integrations)
         self.__migrate_v8_reduced_features(bands, integrations)
+        self.__migrate_v8_indicators(bands, integrations)
 
         print_new_line()
+
+    def __migrate_v8_indicators(
+        self,
+        bands: List[str],
+        integrations: List[int],
+    ) -> None:
+        print_new_line()
+        print("Migrating indicators")
+
+        indicators = self.get_indicators()
+
+        for band in bands:
+            for integration in integrations:
+                for indicator_index, _ in enumerate(indicators):
+                    indicator_values = []
+
+                    for file_index in self.enumerate_file_indexes():
+                        indicator_old_path = (
+                            f"{StoragePath.indicator_.value}{indicator_index}"
+                            f"/{band}/{integration}/{file_index}"
+                        )
+                        indicator_old_values = self.__get(indicator_old_path)[:]
+                        for indicator_old_value in indicator_old_values:
+                            indicator_values.append(indicator_old_value)
+                        self.__delete_silently(indicator_old_path)
+
+                    indicator_path = (
+                        f"{StoragePath.indicator_.value}{indicator_index}"
+                        f"/{band}/{integration}"
+                    )
+                    self.__delete_silently(indicator_path)
+
+                    self.write_indicator(
+                        index=indicator_index,
+                        band=band,
+                        integration=integration,
+                        values=indicator_values,
+                    )
 
     def __migrate_v8_grouped_features_and_timestamps(
         self,
