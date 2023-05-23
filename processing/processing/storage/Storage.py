@@ -1199,8 +1199,18 @@ class Storage(metaclass=SingletonMeta):
         print("Migrating v8 storage file")
 
         bands = self.get_bands()
-        integrations = self.get_integrations_seconds()
+        integrations = self.get_integrations_seconds()[:]
 
+        self.__migrate_v8_grouped_features_and_timestamps(bands, integrations)
+        self.__migrate_v8_reduced_features(bands, integrations)
+
+        print_new_line()
+
+    def __migrate_v8_grouped_features_and_timestamps(
+        self,
+        bands: List[str],
+        integrations: List[int],
+    ) -> None:
         print_new_line()
         print("Migrating grouped features and timestamps")
 
@@ -1250,8 +1260,13 @@ class Storage(metaclass=SingletonMeta):
                     integration=integration,
                 )
 
+    def __migrate_v8_reduced_features(
+        self,
+        bands: List[str],
+        integrations: List[int],
+    ) -> None:
         print_new_line()
-        print("Migrating reducers")
+        print("Migrating reduced features")
 
         reducers = self.get_reducers()
 
@@ -1289,5 +1304,3 @@ class Storage(metaclass=SingletonMeta):
                         reducer_index=reducer_index,
                         features=reduced_features,
                     )
-
-        print_new_line()
