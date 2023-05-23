@@ -1195,17 +1195,21 @@ class Storage(metaclass=SingletonMeta):
         return dataset[:]
 
     def migrate_v8(self) -> None:
-        """Migrate from storage v8 to current version"""
+        print_new_line()
+        print("Migrating v8 storage file")
 
         bands = self.get_bands()
         integrations = self.get_integrations_seconds()
+
+        print_new_line()
+        print("Migrating grouped features and timestamps")
 
         for band in bands:
             for integration in integrations:
                 grouped_features = []
                 grouped_timestamps = []
 
-                # Collect v8 data
+                # Collect old data
                 for file_index in self.enumerate_file_indexes():
                     suffix = f"/{band}/{integration}/{file_index}"
 
@@ -1227,7 +1231,7 @@ class Storage(metaclass=SingletonMeta):
                     grouped_timestamps.append(grouped_timestamps_old_values[:])
                     self.__delete_silently(grouped_timestamps_old_path)
 
-                # Purge v8 leftovers
+                # Remove leftovers
                 grouped_features_path = (
                     f"{StoragePath.grouped_features.value}/{band}/{integration}"
                 )
@@ -1245,3 +1249,45 @@ class Storage(metaclass=SingletonMeta):
                     band=band,
                     integration=integration,
                 )
+
+        print_new_line()
+        print("Migrating reducers")
+
+        reducers = self.get_reducers()
+
+        for band in bands:
+            for integration in integrations:
+                for reducer_index, _ in enumerate(reducers):
+                    reduced_features = []
+
+                    # Collect old data
+                    for file_index in self.enumerate_file_indexes():
+                        suffix = f"/{band}/{integration}/{file_index}"
+                        reduced_features_old_path = (
+                            f"{StoragePath.reduced_.value}{reducer_index}{suffix}"
+                        )
+                        reduced_features_old_values = self.__get(
+                            reduced_features_old_path
+                        )
+
+                        for reduced_features_old_slice in reduced_features_old_values:
+                            reduced_features.append(reduced_features_old_slice)
+
+                        self.__delete_silently(reduced_features_old_path)
+
+                    # Remove leftovers
+                    reduced_features_path = (
+                        f"{StoragePath.reduced_.value}{reducer_index}"
+                        f"/{band}/{integration}"
+                    )
+                    self.__delete_silently(reduced_features_path)
+
+                    # Write new data
+                    self.write_reduced(
+                        band=band,
+                        integration=integration,
+                        reducer_index=reducer_index,
+                        features=reduced_features,
+                    )
+
+        print_new_line()
