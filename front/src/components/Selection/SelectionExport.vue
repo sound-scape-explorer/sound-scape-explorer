@@ -82,6 +82,8 @@ async function handleClick() {
     }
 
     const points = datasetRef.value.points;
+    const fileIndex = Math.floor(pointIndex / slicesPerGroup);
+    const groupIndex = pointIndex % slicesPerGroup;
     const filename = filenames[pointIndex];
     const timestamp = groupedTimestamps[pointIndex];
     const groupedMetas = allGroupedMetas[pointIndex];
@@ -90,8 +92,8 @@ async function handleClick() {
 
     payload.push({
       pointIndex: pointIndex,
-      fileIndex: Math.floor(pointIndex / slicesPerGroup),
-      groupIndex: pointIndex % slicesPerGroup,
+      fileIndex: fileIndex,
+      groupIndex: groupIndex,
       filename: filename,
       timestamp: timestamp,
       groupedMetas: groupedMetas,
