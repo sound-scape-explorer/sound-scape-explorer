@@ -11,9 +11,12 @@ import {integrationRef} from 'src/hooks/useIntegration';
 import {useNotification} from '../AppNotification/useNotification';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
 import {triggerBrowserDownload} from 'src/utils/trigger-browser-download';
+import {ref} from 'vue';
 
 const {shouldBeFiltered} = useScatterFilters();
 const {notify} = useNotification();
+
+const loadingRef = ref<boolean>(false);
 
 interface ExportData {
   pointIndex: number;
@@ -37,6 +40,14 @@ async function handleClick() {
   ) {
     return;
   }
+
+  notify(
+    'info',
+    'Explore',
+    'Exporting collected points. Selected points will be ignored.',
+  );
+
+  loadingRef.value = true;
 
   const filenames = await workerRef.value.readGroupedFilenames(
     fileRef.value,
@@ -102,12 +113,6 @@ async function handleClick() {
     });
   }
 
-  notify(
-    'info',
-    'Explore',
-    'Exporting collected points. Selected points will be ignored.',
-  );
-
   let csvFirstRow = '';
 
   csvFirstRow += 'pointIndex,';
@@ -157,6 +162,7 @@ async function handleClick() {
   const csv = convertArrayToCsv(csvContent, csvFirstRow);
   const csvFilename = `SSE_${bandRef.value}_${integrationRef.value}.csv`;
   triggerBrowserDownload(csv, csvFilename);
+  loadingRef.value = false;
 }
 </script>
 
@@ -164,6 +170,7 @@ async function handleClick() {
   <AppButton
     :disabled="!isDatasetReadyRef.value"
     :handle-click="handleClick"
+    :loading="loadingRef"
     text="csv"
   >
     <download-outline />
