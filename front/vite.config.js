@@ -9,7 +9,11 @@ import wasm from 'vite-plugin-wasm';
 const isProduction = process.env.NODE_ENV === 'production';
 export const base = isProduction ? '/sound-scape-explorer/' : '/';
 
-// https://vitejs.dev/config/
+/**
+ * Do not add following dependencies to code splitting as it will result in corrupted runtime code execution:
+ *  `@vueuse/components`
+ * @see https://vitejs.dev/config/
+ */
 export default defineConfig({
   base: base,
   build: {
@@ -17,7 +21,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          '@vueuse/components': ['@vueuse/components'],
+          // '@vueuse/components': ['@vueuse/components'], // Do not uncomment this!
           '@vueuse/core': ['@vueuse/core'],
           'audiobuffer-slice': ['audiobuffer-slice'],
           'chroma-js': ['chroma-js'],
