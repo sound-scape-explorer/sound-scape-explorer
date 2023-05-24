@@ -5,10 +5,9 @@ import {ref, watch} from 'vue';
 import {useTimeout} from '../../hooks/useTimeout';
 import {getArraysIntersection} from '../../utils/get-arrays-intersection';
 import {queryStore} from './queryStore';
-import {useScatterDataset, datasetRef} from '../Scatter/useScatterDataset';
+import {datasetRef, isDatasetReadyRef} from '../Scatter/useScatterDataset';
 
 const input = ref<string>('');
-const {isDatasetReadyRef} = useScatterDataset();
 
 function splitLabelByPath(label: string) {
   return label.split('/');
@@ -84,7 +83,7 @@ watch(input, () => {
 <template>
   <n-input
     v-model:value="input"
-    :disabled="!isDatasetReadyRef"
+    :disabled="!isDatasetReadyRef.value"
     placeholder="Query..."
     size="small"
     type="text"

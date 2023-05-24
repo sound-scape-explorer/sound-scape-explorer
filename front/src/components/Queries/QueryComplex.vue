@@ -5,10 +5,9 @@ import {ref, watch} from 'vue';
 import {useTimeout} from '../../hooks/useTimeout';
 import type {QueryComplexStore} from './queryComplexStore';
 import {queriesComplexStore} from './queryComplexStore';
-import {useScatterDataset} from '../Scatter/useScatterDataset';
+import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
 
 const inputRef = ref<string>('');
-const {isDatasetReadyRef} = useScatterDataset();
 
 function digestQueryItem(
   item: RegExpMatchArray,
@@ -74,7 +73,7 @@ watch(inputRef, () => {
 <template>
   <n-input
     v-model:value="inputRef"
-    :disabled="!isDatasetReadyRef"
+    :disabled="!isDatasetReadyRef.value"
     placeholder="Query Complex..."
     size="small"
     type="text"

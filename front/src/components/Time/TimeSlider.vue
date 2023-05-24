@@ -10,9 +10,7 @@ import AppButton from '../AppButton/AppButton.vue';
 import {selectionStore} from '../Selection/selectionStore';
 import {timeStore} from './timeStore';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {useScatterDataset} from '../Scatter/useScatterDataset';
-
-const {isDatasetReadyRef} = useScatterDataset();
+import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
 
 /**
  * State
@@ -180,7 +178,7 @@ interface Slider {
 <template>
   <div class="container">
     <div
-      v-if="isDatasetReadyRef"
+      v-if="isDatasetReadyRef.value"
       class="layer"
     >
       <n-slider
@@ -198,7 +196,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="isDatasetReadyRef"
+      v-if="isDatasetReadyRef.value"
       class="layer"
     >
       <div
@@ -214,7 +212,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="isDatasetReadyRef"
+      v-if="isDatasetReadyRef.value"
       class="layer zoom"
     >
       <AppButton

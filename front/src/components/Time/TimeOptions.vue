@@ -24,12 +24,11 @@ import AppButton from '../AppButton/AppButton.vue';
 import {timeStore} from './timeStore';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {useDate} from 'src/hooks/useDate';
-import {useScatterDataset} from '../Scatter/useScatterDataset';
+import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const {isDatasetReadyRef} = useScatterDataset();
 const {convertTimestampToDate} = useDate();
 
 const uiDisabled: ComputedRef<boolean> = computed(
@@ -176,7 +175,7 @@ onKeyPressed(' ', () => togglePlaying());
     <div class="grid">
       <n-switch
         v-model:value="timeStore.isAllSelected"
-        :disabled="!isDatasetReadyRef"
+        :disabled="!isDatasetReadyRef.value"
         class="toggle"
       >
         <template #checked> all</template>

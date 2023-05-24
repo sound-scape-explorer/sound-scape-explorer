@@ -6,9 +6,7 @@ import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-o
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {useScatterDataset} from '../Scatter/useScatterDataset';
-
-const {isDatasetReadyRef} = useScatterDataset();
+import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
 
 /**
  * State
@@ -50,7 +48,7 @@ const naiveOptions = computed(() => {
       <n-select
         v-model:value="colorsStore.colorType"
         :default-value="optionsRef[0]"
-        :disabled="!isDatasetReadyRef"
+        :disabled="!isDatasetReadyRef.value"
         :options="naiveOptions"
         placeholder="Color type..."
         size="small"
