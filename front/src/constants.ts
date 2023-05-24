@@ -24,6 +24,13 @@ export const FFT_SIZE = {
   min: 128,
 };
 
+export const PLAYBACK_RATE = {
+  default: 1,
+  max: 2,
+  min: 0.1,
+  step: 0.01,
+};
+
 export const SPECTROGRAM_COLOR_MAPS = [
   'hot',
   'inferno',

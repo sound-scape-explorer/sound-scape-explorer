@@ -27,6 +27,8 @@ export default defineConfig({
           'h5wasm': ['h5wasm'],
           'html2canvas': ['html2canvas'],
           'plotly.js-dist-min': ['plotly.js-dist-min'],
+          'speed-to-percentage': ['speed-to-percentage'],
+          'speed-to-semitones': ['speed-to-semitones'],
           'three': ['three'],
           'vue': ['vue'],
           'wav-file-encoder': ['wav-file-encoder'],

@@ -11,7 +11,7 @@ import {
 } from '@vicons/ionicons5';
 import audioBufferSlice from 'audiobuffer-slice';
 import colormap from 'colormap';
-import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {NButton, NGi, NGrid, NIcon, NTag, NTooltip, NSlider} from 'naive-ui';
 import {computed, onUnmounted, ref, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 import WaveSurfer from 'wavesurfer.js';
@@ -31,6 +31,9 @@ import {bandsRef} from 'src/hooks/useStorageBands';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {bandRef} from 'src/hooks/useBand';
+import {PLAYBACK_RATE} from 'src/constants';
+import speedToSemitones from 'speed-to-semitones';
+import speedToPercentage from 'speed-to-percentage';
 
 const {groupIndexRef, filenameRef} = useDetails();
 
@@ -59,7 +62,6 @@ const wsRef = computed(() => {
     barHeight: WAVE.default,
     normalize: false,
     height: 48,
-    // volume: 1,
     plugins: [
       Spectrogram.create({
         container: spectrogramRef.value,
@@ -367,6 +369,17 @@ function handleSpectrogramDecrease() {
   fftSizeRef.value /= 2;
 }
 
+const playbackRateRef = ref<number>(PLAYBACK_RATE.default);
+
+watch(playbackRateRef, () => {
+  if (wsRef.value === null) {
+    return;
+  }
+  wsRef.value.pause();
+  wsRef.value.setPlaybackRate(playbackRateRef.value);
+  wsRef.value.play();
+});
+
 /**
  * Lifecycles
  */
@@ -510,7 +523,7 @@ watch(audioStore, handleAudioStoreChange);
       </div>
 
       <n-grid
-        :cols="2"
+        :cols="3"
         class="grid"
         x-gap="12"
       >
@@ -524,7 +537,36 @@ watch(audioStore, handleAudioStoreChange);
 
           {{ fftSizeRef }}
         </n-gi>
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            speed %
+          </n-tag>
+
+          {{ speedToPercentage(playbackRateRef, 2) }}
+        </n-gi>
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            semitones
+          </n-tag>
+
+          {{ speedToSemitones(playbackRateRef, 2) }}
+        </n-gi>
       </n-grid>
+
+      <div>
+        <n-slider
+          v-model:value="playbackRateRef"
+          :min="PLAYBACK_RATE.min"
+          :max="PLAYBACK_RATE.max"
+          :step="PLAYBACK_RATE.step"
+        />
+      </div>
 
       <div ref="waveformRef" />
 
