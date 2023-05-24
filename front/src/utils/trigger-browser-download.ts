@@ -1,8 +1,4 @@
-export function triggerBrowserDownload(
-  data: string | Blob,
-  filename: string,
-  callback?: () => void,
-) {
+export function triggerBrowserDownload(data: string, filename: string) {
   const anchor = document.createElement('a');
 
   if (typeof data === 'string') {
@@ -16,8 +12,4 @@ export function triggerBrowserDownload(
   anchor.download = filename;
   anchor.click();
   anchor.remove();
-
-  if (callback) {
-    callback();
-  }
 }

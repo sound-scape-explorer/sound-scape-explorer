@@ -1,5 +1,5 @@
 import {reducedFeaturesRef} from 'src/hooks/useStorageReducedFeatures';
-import {reactive, ref, watch} from 'vue';
+import {reactive, watch} from 'vue';
 import type {Points, PointMetadata, Dataset} from 'src/lib/scatter-gl-0.0.13';
 import {ScatterGL} from 'src/lib/scatter-gl-0.0.13';
 
@@ -11,9 +11,15 @@ export const datasetRef = reactive<DatasetRef>({
   value: null,
 });
 
-export function useScatterDataset() {
-  const isDatasetReadyRef = ref<boolean | null>(null);
+interface IsDatasetReadyRef {
+  value: boolean | null;
+}
 
+export const isDatasetReadyRef = reactive<IsDatasetReadyRef>({
+  value: null,
+});
+
+export function useScatterDataset() {
   watch(reducedFeaturesRef, () => {
     if (reducedFeaturesRef.value === null) {
       isDatasetReadyRef.value = false;
@@ -29,8 +35,4 @@ export function useScatterDataset() {
     datasetRef.value = new ScatterGL.Dataset(features as Points, metadata);
     isDatasetReadyRef.value = true;
   });
-
-  return {
-    isDatasetReadyRef: isDatasetReadyRef,
-  };
 }
