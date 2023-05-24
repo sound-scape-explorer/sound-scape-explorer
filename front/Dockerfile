@@ -13,7 +13,7 @@ COPY tsconfig.json .
 COPY vite.config.js .
 COPY package.json .
 COPY pnpm-lock.yaml .
-RUN pnpm i --frozen-lockfile
+RUN pnpm i --frozen-lockfile --ignore-scripts
 
 COPY index.html .
 COPY public public
@@ -31,7 +31,7 @@ ENV NODE_ENV=production
 
 COPY package.json .
 COPY pnpm-lock.yaml .
-RUN pnpm i --frozen-lockfile
+RUN pnpm i --frozen-lockfile --ignore-scripts
 
 # Run
 FROM node:lts-alpine
