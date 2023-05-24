@@ -1196,7 +1196,7 @@ class Storage(metaclass=SingletonMeta):
 
     def migrate_v8(self) -> None:
         print_new_line()
-        print("Migrating v8 storage file")
+        print("Migrating storage file from v8 to v9")
 
         bands = self.get_bands()
         integrations = self.get_integrations_seconds()[:]

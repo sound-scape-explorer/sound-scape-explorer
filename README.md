@@ -80,7 +80,7 @@ pnpm process:dataframe --band all --integration 60 --storage /path/to/storage.h5
 
 ## ⚒️ Processing commands
 
-| `yarn` command          | Description                                                                                                                           |
+| `pnpm` command          | Description                                                                                                                           |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `process`               | alias for `process:all`                                                                                                               |
 | `process:all`           | Run all processing commands                                                                                                           |
@@ -97,6 +97,7 @@ pnpm process:dataframe --band all --integration 60 --storage /path/to/storage.h5
 | `process:matrices`      | Process matrices from grouped audio features.                                                                                         |
 | `process:pairings`      | Process pairings from grouped audio features.                                                                                         |
 | `process:dataframe`     | Build pandas DataFrame and export to .csv file.                                                                                       |
+| `migrate:v8`            | Migrate storage file from v8 to v9.                                                                                                   |
 
 ## 🧑‍🤝‍🧑 Contribute
 
