@@ -397,7 +397,7 @@ watch(audioStore, handleAudioStoreChange);
     <AppSuspense />
 
     <div
-      v-if="clickedRef !== null"
+      v-if="clickedRef.value !== null"
       class="player"
     >
       <div class="volume buttons">
