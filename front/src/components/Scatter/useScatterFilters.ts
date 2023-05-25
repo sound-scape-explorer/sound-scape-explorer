@@ -190,7 +190,7 @@ export function useScatterFilters() {
 
   function shouldBeFiltered(index: number): boolean {
     return (
-      !isVisibleByTimeRange(index) ||
+      // !isVisibleByTimeRange(index) ||
       // !isVisibleByQuery(index) ||
       // !isVisibleByQueryComplex(index) ||
       !isVisibleByMeta(index)

@@ -13,6 +13,7 @@ import {queryStore} from '../Queries/queryStore';
 import {queriesComplexStore} from '../Queries/queryComplexStore';
 import {scatterAlphasStore} from './scatterStore';
 import {scatterDatasetStore} from './scatterDatasetStore';
+import {needsRefreshRef} from './useScatterFiltersNew';
 
 interface ScatterRef {
   value: HTMLDivElement | null;
@@ -55,6 +56,7 @@ export function useScatterContainer() {
       queriesComplexStore,
       scatterAlphasStore,
       scatterDatasetStore,
+      needsRefreshRef,
     ],
     () => {
       if (scatter === null || datasetRef.value === null) {

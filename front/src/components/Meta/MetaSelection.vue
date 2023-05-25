@@ -4,6 +4,7 @@ import {ref, watch} from 'vue';
 import {colorsStore} from '../Colors/colorsStore';
 import {useScatterMeta} from '../Scatter/useScatterMeta';
 import {metaSelectionStore} from './metaSelectionStore';
+import {useScatterFiltersNew} from '../Scatter/useScatterFiltersNew';
 
 /**
  * Props
@@ -21,6 +22,7 @@ const props = defineProps<Props>();
  * State
  */
 
+const {askForRefresh} = useScatterFiltersNew();
 const selectionRef = ref();
 
 /**
@@ -50,6 +52,7 @@ function updateSelection() {
   }
 
   metaSelectionStore.selection[props.index] = selectionRef.value;
+  askForRefresh();
 }
 </script>
 

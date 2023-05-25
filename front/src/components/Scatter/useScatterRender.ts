@@ -7,6 +7,8 @@ export function useScatterRender() {
   const {getColor} = useScatterColor();
 
   const render = (scatter: ScatterGL, dataset: Dataset) => {
+    console.log('render');
+
     scatter.updateDataset(dataset);
     scatter.resize();
 
