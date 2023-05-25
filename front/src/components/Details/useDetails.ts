@@ -3,7 +3,7 @@ import {clickedRef} from '../Scatter/useScatterClick';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {workerRef} from 'src/hooks/useWorker';
 import {fileRef} from 'src/hooks/useFile';
-import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
+import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
 import {filenamesRef} from 'src/hooks/useStorageFilenames';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {settingsRef} from 'src/hooks/useStorageSettings';
@@ -13,7 +13,6 @@ import {slicesPerGroupRef} from 'src/hooks/useStorageSlicesPerGroup';
 import {useIndexes} from 'src/hooks/useIndexes';
 
 export function useDetails() {
-  const {groupedFilenamesRef} = useStorageGroupedFilenames();
   const {convertTimestampToDate} = useDate();
   const {convertPointIndex} = useIndexes();
 

@@ -12,6 +12,11 @@ import {useNotification} from '../AppNotification/useNotification';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
 import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
 import {ref} from 'vue';
+import {filenamesRef} from 'src/hooks/useStorageFilenames';
+import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import {groupedFeaturesRef} from 'src/hooks/useStorageGroupedFeatures';
+import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
+import {groupedAttributesRef} from 'src/hooks/useStorageGroupedAttributes';
 
 const {shouldBeFiltered} = useScatterFilters();
 const {notify} = useNotification();
@@ -35,6 +40,11 @@ async function handleClick() {
     fileRef.value === null ||
     bandRef.value === null ||
     integrationRef.value === null ||
+    filenamesRef.value === null ||
+    groupedAttributesRef.value === null ||
+    groupedTimestampsRef.value === null ||
+    groupedFeaturesRef.value === null ||
+    groupedMetasRef.value === null ||
     datasetRef.value === null ||
     metaPropertiesRef.value === null
   ) {
@@ -49,35 +59,7 @@ async function handleClick() {
 
   loadingRef.value = true;
 
-  const filenames = await workerRef.value.readGroupedFilenames(
-    fileRef.value,
-    bandRef.value,
-    integrationRef.value,
-  );
-
-  const groupedTimestamps = await workerRef.value.readGroupedTimestamps(
-    fileRef.value,
-    bandRef.value,
-    integrationRef.value,
-  );
-
-  const allGroupedFeatures = await workerRef.value.readGroupedFeatures(
-    fileRef.value,
-    bandRef.value,
-    integrationRef.value,
-  );
-
-  const allGroupedMetas = await workerRef.value.readGroupedMetas(
-    fileRef.value,
-    bandRef.value,
-    integrationRef.value,
-  );
-
-  const slicesPerGroup = await workerRef.value.getSlicesPerGroup(
-    fileRef.value,
-    bandRef.value,
-    integrationRef.value,
-  );
+  const [, slicesPerGroup] = groupedAttributesRef.value;
 
   const payload: ExportData[] = [];
 
@@ -95,11 +77,11 @@ async function handleClick() {
     const points = datasetRef.value.points;
     const fileIndex = Math.floor(pointIndex / slicesPerGroup);
     const groupIndex = pointIndex % slicesPerGroup;
-    const filename = filenames[pointIndex];
-    const timestamp = groupedTimestamps[pointIndex];
-    const groupedMetas = allGroupedMetas[pointIndex];
+    const filename = filenamesRef.value[pointIndex];
+    const features = groupedFeaturesRef.value[pointIndex];
+    const timestamp = groupedTimestampsRef.value[pointIndex];
+    const groupedMetas = groupedMetasRef.value[pointIndex];
     const reducedFeatures = points[pointIndex];
-    const groupedFeatures = allGroupedFeatures[pointIndex];
 
     payload.push({
       pointIndex: pointIndex,
@@ -109,7 +91,7 @@ async function handleClick() {
       timestamp: timestamp,
       groupedMetas: groupedMetas,
       reducedFeatures: reducedFeatures,
-      groupedFeatures: groupedFeatures,
+      groupedFeatures: features,
     });
   }
 

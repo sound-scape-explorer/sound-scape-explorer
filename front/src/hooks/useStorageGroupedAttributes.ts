@@ -4,15 +4,15 @@ import {fileRef} from './useFile';
 import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
 
-interface GroupedFilenamesRef {
-  value: string[] | null;
+interface GroupedAttributesRef {
+  value: [number, number] | null;
 }
 
-export const groupedFilenamesRef = reactive<GroupedFilenamesRef>({
+export const groupedAttributesRef = reactive<GroupedAttributesRef>({
   value: null,
 });
 
-export function useStorageGroupedFilenames() {
+export function useStorageGroupedAttributes() {
   onMounted(async () => {
     if (
       workerRef.value === null ||
@@ -23,7 +23,7 @@ export function useStorageGroupedFilenames() {
       return;
     }
 
-    groupedFilenamesRef.value = await workerRef.value.readGroupedFilenames(
+    groupedAttributesRef.value = await workerRef.value.readGroupedAttributes(
       fileRef.value,
       bandRef.value,
       integrationRef.value,

@@ -10,17 +10,27 @@ import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
 import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
 import {useScatterDataset} from '../Scatter/useScatterDataset';
 import {useScatterColorScale} from '../Scatter/useScatterColorScale';
+import {useStorageGroupedAttributes} from 'src/hooks/useStorageGroupedAttributes';
+import {useStorageGroupedFeatures} from 'src/hooks/useStorageGroupedFeatures';
+import {useStorageFilenames} from 'src/hooks/useStorageFilenames';
+import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
 
-useStorageMetas();
-useStorageMetaProperties();
+useStorageFilenames();
 useStorageMetaSets();
-useStorageVolumes();
+useStorageMetaProperties();
+useStorageMetas();
 
+useStorageGroupedAttributes();
 useStorageSlicesPerGroup();
 
-useStorageReducedFeatures();
+useStorageGroupedFilenames();
+useStorageGroupedFeatures();
 useStorageGroupedTimestamps();
 useStorageGroupedMetas();
+
+useStorageReducedFeatures();
+
+useStorageVolumes();
 useStorageIndicators();
 
 useScatterDataset();

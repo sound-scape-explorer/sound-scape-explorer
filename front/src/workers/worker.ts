@@ -260,6 +260,26 @@ export async function readReducedFeatures(
   return featuresList;
 }
 
+export async function readGroupedAttributes(
+  file: File,
+  band: string,
+  integration: number,
+): Promise<[number, number]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.grouped_timestamps}/${band}/${integration}`;
+  const dataset = h5.get(path) as Dataset;
+
+  const groupsCount = Number(
+    dataset.attrs[StorageGroupedAttributes.groupsCount].json_value,
+  );
+
+  const slicesPerGroup = Number(
+    dataset.attrs[StorageGroupedAttributes.slicesPerGroup].json_value,
+  );
+
+  return [groupsCount, slicesPerGroup];
+}
+
 export async function getSlicesPerGroup(
   file: File,
   band: string,

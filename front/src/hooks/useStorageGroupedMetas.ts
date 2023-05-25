@@ -4,10 +4,8 @@ import {integrationRef} from './useIntegration';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 
-type StorageGroupedMetas = string[][];
-
 interface GroupedMetasRef {
-  value: StorageGroupedMetas | null;
+  value: string[][] | null;
 }
 
 export const groupedMetasRef = reactive<GroupedMetasRef>({

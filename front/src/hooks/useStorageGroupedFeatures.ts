@@ -1,14 +1,18 @@
-import {onMounted, ref} from 'vue';
+import {onMounted, reactive} from 'vue';
 import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 
-export type StorageGroupedFeatures = number[][];
+interface GroupedFeaturesRef {
+  value: number[][] | null;
+}
+
+export const groupedFeaturesRef = reactive<GroupedFeaturesRef>({
+  value: null,
+});
 
 export function useStorageGroupedFeatures() {
-  const groupedFeaturesRef = ref<StorageGroupedFeatures | null>(null);
-
   onMounted(async () => {
     if (
       workerRef.value === null ||
@@ -25,8 +29,4 @@ export function useStorageGroupedFeatures() {
       integrationRef.value,
     );
   });
-
-  return {
-    groupedFeaturesRef: groupedFeaturesRef,
-  };
 }
