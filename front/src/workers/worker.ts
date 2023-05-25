@@ -2,7 +2,6 @@ import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import {StoragePath} from '../storage/StoragePath';
 import {StorageGroupedAttributes} from '../storage/StorageGroupedAttributes';
-import type {Indicator, Matrix, Pairing} from '../storage/useStorage';
 import {buildNestedArray} from '../utils/build-nested-array';
 import {trimRectangular} from '../utils/trim-rectangular';
 import type {StorageReducer} from 'src/hooks/useStorageReducers';
@@ -17,6 +16,15 @@ interface Volume {
   index: number;
   name: string;
   values: number[];
+}
+
+type Indicator = Volume;
+type Matrix = Volume;
+
+interface Pairing {
+  index: number;
+  name: string;
+  values: number[][];
 }
 
 let h5: H5File;
