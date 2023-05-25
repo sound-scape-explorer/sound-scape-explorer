@@ -10,7 +10,7 @@ import {bandRef} from 'src/hooks/useBand';
 import {integrationRef} from 'src/hooks/useIntegration';
 import {useNotification} from '../AppNotification/useNotification';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
-import {triggerBrowserDownload} from 'src/utils/trigger-browser-download';
+import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
 import {ref} from 'vue';
 
 const {shouldBeFiltered} = useScatterFilters();
@@ -161,7 +161,7 @@ async function handleClick() {
 
   const csv = convertArrayToCsv(csvContent, csvFirstRow);
   const csvFilename = `SSE_${bandRef.value}_${integrationRef.value}.csv`;
-  triggerBrowserDownload(csv, csvFilename);
+  triggerCSVDownload(csv, csvFilename);
   loadingRef.value = false;
 }
 </script>

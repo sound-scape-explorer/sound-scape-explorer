@@ -19,10 +19,9 @@ import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 import {FFT_SIZE, WAVE} from '../../constants';
-import {triggerBrowserDownload} from '../../utils/trigger-browser-download';
+import {triggerWavDownload} from '../../utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import AppSuspense from '../AppSuspense/AppSuspense.vue';
 import {scatterSelectedStore} from '../Scatter/scatterStore';
 import {audioStore} from './audioStore';
 import {settingsRef} from 'src/hooks/useStorageSettings';
@@ -157,13 +156,13 @@ function open() {
 
 async function load() {
   if (
+    clickedRef.value === null ||
+    bandRef.value === null ||
     integrationRef.value === null ||
     groupIndexRef.value === null ||
     srcRef.value === null ||
     wsRef.value === null ||
-    audioContextRef.value === null ||
-    bandRef.value === null ||
-    integrationRef.value === null
+    audioContextRef.value === null
   ) {
     return;
   }
@@ -264,7 +263,7 @@ async function handleDownload() {
   const wav = encodeWavFileFromAudioBuffer(buffer, 0);
   const blob = new Blob([wav], {type: 'audio/wav'});
   const name = `${filenameRef.value} - ${groupIndexRef.value} - NO FILTER.wav`;
-  triggerBrowserDownload(blob, name);
+  triggerWavDownload(blob, name);
 }
 
 function handleVolumeUp() {
@@ -394,12 +393,7 @@ watch(audioStore, handleAudioStoreChange);
     :hide-separator="true"
     draggable-key="audio"
   >
-    <AppSuspense />
-
-    <div
-      v-if="clickedRef.value !== null"
-      class="player"
-    >
+    <div class="player">
       <div class="volume buttons">
         <n-tooltip
           placement="left"
