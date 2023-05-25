@@ -1,6 +1,6 @@
 import type {ScatterGLParams} from 'src/lib/scatter-gl-0.0.13';
 import {ScatterGL} from 'src/lib/scatter-gl-0.0.13';
-import {onMounted, ref, watch} from 'vue';
+import {onMounted, reactive, ref, watch} from 'vue';
 import {useScatterClick} from './useScatterClick';
 import {useScatterHover} from './useScatterHover';
 import {useScatterRender} from './useScatterRender';
@@ -13,6 +13,14 @@ import {queryStore} from '../Queries/queryStore';
 import {queriesComplexStore} from '../Queries/queryComplexStore';
 import {scatterAlphasStore} from './scatterStore';
 import {scatterDatasetStore} from './scatterDatasetStore';
+
+interface ScatterRef {
+  value: HTMLDivElement | null;
+}
+
+export const scatterRef = reactive<ScatterRef>({
+  value: null,
+});
 
 export function useScatterContainer() {
   const {handleClick} = useScatterClick();
@@ -62,7 +70,8 @@ export function useScatterContainer() {
       return;
     }
 
-    load(containerRef.value);
+    scatterRef.value = containerRef.value;
+    load(scatterRef.value);
   });
 
   useEventListener('resize', () => {
@@ -75,6 +84,5 @@ export function useScatterContainer() {
 
   return {
     containerRef: containerRef,
-    load: load,
   };
 }
