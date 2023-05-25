@@ -1204,8 +1204,20 @@ class Storage(metaclass=SingletonMeta):
         self.__migrate_v8_grouped_features_and_timestamps(bands, integrations)
         self.__migrate_v8_reduced_features(bands, integrations)
         self.__migrate_v8_indicators(bands, integrations)
+        self.__migrate_v8_populate_matrices()
+        self.__migrate_v8_populate_pairings()
 
         print_new_line()
+
+    def __migrate_v8_populate_matrices(self) -> None:
+        print_new_line()
+        print("Populating with empty matrices")
+        self.write_matrices([])
+
+    def __migrate_v8_populate_pairings(self) -> None:
+        print_new_line()
+        print("Populating with empty pairings")
+        self.write_pairings([])
 
     def __migrate_v8_indicators(
         self,
