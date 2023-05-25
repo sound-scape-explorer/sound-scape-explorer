@@ -6,6 +6,8 @@ import {mapRange} from 'src/utils/map-range';
 import {useIndexes} from 'src/hooks/useIndexes';
 import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
 import {useScatterMeta} from './useScatterMeta';
+import {filenamesRef} from 'src/hooks/useStorageFilenames';
+import {slicesPerGroupRef} from 'src/hooks/useStorageSlicesPerGroup';
 
 interface AlphaLowRef {
   value: number;
@@ -38,12 +40,16 @@ export function useScatterColorScale() {
   watch([datasetRef, colorsStore, alphaHighRef], () => {
     if (
       datasetRef.value === null ||
-      metaPropertiesAsColorTypesRef.value === null
+      metaPropertiesAsColorTypesRef.value === null ||
+      filenamesRef.value === null ||
+      slicesPerGroupRef.value === null
     ) {
       return;
     }
 
     const pointsCount = datasetRef.value.points.length;
+    const filesCount = filenamesRef.value.length;
+    const groupsCount = filesCount * slicesPerGroupRef.value;
 
     const chromaScale = chroma
       .scale(colorsStore.colorScale)
@@ -61,11 +67,11 @@ export function useScatterColorScale() {
         color = chromaScale(rangedPointIndex).alpha(alphaHighRef.value).css();
       } else if (colorType === 'fileIndex') {
         const [fileIndex] = convertPointIndex(pointIndex);
-        const rangedFileIndex = mapRange(fileIndex, 0, pointsCount, 0, 1);
+        const rangedFileIndex = mapRange(fileIndex, 0, filesCount, 0, 1);
         color = chromaScale(rangedFileIndex).alpha(alphaHighRef.value).css();
       } else if (colorType === 'groupIndex') {
         const [, groupIndex] = convertPointIndex(pointIndex);
-        const rangedGroupIndex = mapRange(groupIndex, 0, pointsCount, 0, 1);
+        const rangedGroupIndex = mapRange(groupIndex, 0, groupsCount, 0, 1);
         color = chromaScale(rangedGroupIndex).alpha(alphaHighRef.value).css();
       } else if (metaPropertiesAsColorTypesRef.value.includes(colorType)) {
         color = getMetaColor(colorType, pointIndex);
