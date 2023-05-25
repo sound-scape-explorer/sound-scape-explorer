@@ -22,8 +22,6 @@ import {FFT_SIZE, WAVE} from '../../constants';
 import {triggerWavDownload} from '../../utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import {scatterSelectedStore} from '../Scatter/scatterStore';
-import {audioStore} from './audioStore';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {integrationRef} from 'src/hooks/useIntegration';
 import {bandsRef} from 'src/hooks/useStorageBands';
@@ -33,6 +31,7 @@ import {bandRef} from 'src/hooks/useBand';
 import {PLAYBACK_RATE} from 'src/constants';
 import speedToSemitones from 'speed-to-semitones';
 import speedToPercentage from 'speed-to-percentage';
+import {spectrogramColorRef} from './useAudioSpectrogramColor';
 
 const {groupIndexRef, filenameRef} = useDetails();
 
@@ -103,7 +102,7 @@ const colorsRef = computed(() => {
   }
 
   return colormap({
-    colormap: audioStore.colorMap,
+    colormap: spectrogramColorRef.value,
     nshades: 256,
     format: 'float',
   });
@@ -142,15 +141,6 @@ function close() {
 
   containerRef.value.classList.remove('open');
   containerRef.value.classList.add('close');
-}
-
-function open() {
-  if (containerRef.value === null) {
-    return;
-  }
-
-  containerRef.value.classList.remove('close');
-  containerRef.value.classList.add('open');
 }
 
 async function load() {
@@ -331,15 +321,6 @@ function handleStop() {
   isPlayingRef.value = false;
 }
 
-async function handleAudioStoreChange() {
-  if (scatterSelectedStore.index === null) {
-    close();
-    return;
-  }
-
-  open();
-}
-
 watch(fftSizeRef, () => {
   if (wsRef.value === null) {
     return;
@@ -384,7 +365,6 @@ watch(playbackRateRef, () => {
 
 onUnmounted(close);
 watch(clickedRef, load);
-watch(audioStore, handleAudioStoreChange);
 </script>
 
 <template>
