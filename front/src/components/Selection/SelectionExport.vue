@@ -12,7 +12,7 @@ import {useNotification} from '../AppNotification/useNotification';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
 import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
 import {ref} from 'vue';
-import {filenamesRef} from 'src/hooks/useStorageFilenames';
+import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {groupedFeaturesRef} from 'src/hooks/useStorageGroupedFeatures';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
@@ -40,7 +40,7 @@ async function handleClick() {
     fileRef.value === null ||
     bandRef.value === null ||
     integrationRef.value === null ||
-    filenamesRef.value === null ||
+    groupedFilenamesRef.value === null ||
     groupedAttributesRef.value === null ||
     groupedTimestampsRef.value === null ||
     groupedFeaturesRef.value === null ||
@@ -74,13 +74,14 @@ async function handleClick() {
       continue;
     }
 
-    const points = datasetRef.value.points;
     const fileIndex = Math.floor(pointIndex / slicesPerGroup);
     const groupIndex = pointIndex % slicesPerGroup;
-    const filename = filenamesRef.value[pointIndex];
+    const filename = groupedFilenamesRef.value[pointIndex];
     const features = groupedFeaturesRef.value[pointIndex];
     const timestamp = groupedTimestampsRef.value[pointIndex];
     const groupedMetas = groupedMetasRef.value[pointIndex];
+
+    const points = datasetRef.value.points;
     const reducedFeatures = points[pointIndex];
 
     payload.push({
