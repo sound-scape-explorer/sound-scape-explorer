@@ -1,8 +1,8 @@
 <script lang="ts" setup="">
 import type {InputNumberProps} from 'naive-ui';
 import {NInputNumber, NTooltip} from 'naive-ui';
-import {scatterAlphasStore} from '../Scatter/scatterStore';
 import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {alphaLowRef, alphaHighRef} from '../Scatter/useScatterColorScale';
 
 type InputNumberThemeOverrides = NonNullable<
   InputNumberProps['themeOverrides']
@@ -24,7 +24,7 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
   >
     <template #trigger>
       <n-input-number
-        v-model:value="scatterAlphasStore.low"
+        v-model:value="alphaLowRef.value"
         :disabled="!isDatasetReadyRef.value"
         :theme-overrides="inputNumberThemeOverrides"
         class="input"
@@ -43,7 +43,7 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
   >
     <template #trigger>
       <n-input-number
-        v-model:value="scatterAlphasStore.high"
+        v-model:value="alphaHighRef.value"
         :disabled="!isDatasetReadyRef.value"
         :theme-overrides="inputNumberThemeOverrides"
         class="input"

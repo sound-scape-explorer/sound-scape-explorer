@@ -1,5 +1,4 @@
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
-import {scatterAlphasStore} from './scatterStore';
 import {datasetRef} from './useScatterDataset';
 import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
@@ -14,10 +13,10 @@ import {isHourDuringDay} from 'src/utils/is-hour-during-day';
 import {useScatterMeta} from './useScatterMeta';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
-import {colorScaleRef} from './useScatterColorScale';
+import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
+import {computed} from 'vue';
 
 const hoverColor = 'red';
-const filteredColor = `hsla(0, 0%, 0%, ${scatterAlphasStore.low})`;
 
 export function useScatterColor() {
   const {colors, nightColor, dayColor, cyclingColors} = useColors();
@@ -26,6 +25,9 @@ export function useScatterColor() {
   const {getMetaColor} = useScatterMeta();
 
   console.log('useScatterColor');
+  const filteredColorRef = computed<string>(
+    () => `hsla(0, 0%, 0%, ${alphaLowRef.value})`,
+  );
 
   const getColor = (
     index: number,
@@ -46,7 +48,7 @@ export function useScatterColor() {
     const isFiltered = pointsFilteredByMetaRef.value[index];
 
     if (isFiltered) {
-      return filteredColor;
+      return filteredColorRef.value;
     }
 
     return colorScaleRef.value[index];

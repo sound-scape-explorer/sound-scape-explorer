@@ -1,8 +1,8 @@
 import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
 import {useColors} from '../Colors/useColors';
-import {scatterAlphasStore} from './scatterStore';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
+import {alphaHighRef} from './useScatterColorScale';
 
 export function useScatterMeta() {
   const {colors} = useColors();
@@ -30,7 +30,7 @@ export function useScatterMeta() {
 
     const [r, g, b] = colors[metaIndex];
 
-    return `rgba(${r},${g},${b},${scatterAlphasStore.high})`;
+    return `rgba(${r},${g},${b},${alphaHighRef.value})`;
   }
 
   function getMetaColorFromMetaIndex(index: number, length: number): string {

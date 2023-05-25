@@ -11,10 +11,9 @@ import {colorsStore} from '../Colors/colorsStore';
 import {timeStore} from '../Time/timeStore';
 import {queryStore} from '../Queries/queryStore';
 import {queriesComplexStore} from '../Queries/queryComplexStore';
-import {scatterAlphasStore} from './scatterStore';
 import {scatterDatasetStore} from './scatterDatasetStore';
 import {needsRefreshRef} from './useScatterFiltersNew';
-import {colorScaleRef} from './useScatterColorScale';
+import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
 
 interface ScatterRef {
   value: HTMLDivElement | null;
@@ -55,10 +54,10 @@ export function useScatterContainer() {
       queryStore,
       metaSelectionStore,
       queriesComplexStore,
-      scatterAlphasStore,
       scatterDatasetStore,
       needsRefreshRef,
       colorScaleRef,
+      alphaLowRef,
     ],
     () => {
       if (scatter === null || datasetRef.value === null) {

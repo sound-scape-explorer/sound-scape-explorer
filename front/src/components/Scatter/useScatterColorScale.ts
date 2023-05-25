@@ -2,11 +2,26 @@ import chroma from 'chroma-js';
 import {reactive, watch} from 'vue';
 import {colorsStore} from '../Colors/colorsStore';
 import {datasetRef} from './useScatterDataset';
-import {scatterAlphasStore} from './scatterStore';
 import {mapRange} from 'src/utils/map-range';
 import {useIndexes} from 'src/hooks/useIndexes';
 import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
 import {useScatterMeta} from './useScatterMeta';
+
+interface AlphaLowRef {
+  value: number;
+}
+
+export const alphaLowRef = reactive<AlphaLowRef>({
+  value: 0.005,
+});
+
+interface AlphaHighRef {
+  value: number;
+}
+
+export const alphaHighRef = reactive<AlphaHighRef>({
+  value: 0.3,
+});
 
 interface ColorScaleRef {
   value: string[] | null;
@@ -20,7 +35,7 @@ export function useScatterColorScale() {
   const {convertPointIndex} = useIndexes();
   const {getMetaColor} = useScatterMeta();
 
-  watch([datasetRef, colorsStore], () => {
+  watch([datasetRef, colorsStore, alphaHighRef], () => {
     if (
       datasetRef.value === null ||
       metaPropertiesAsColorTypesRef.value === null
@@ -43,15 +58,11 @@ export function useScatterColorScale() {
 
       if (colorType === 'pointIndex') {
         const rangedPointIndex = mapRange(pointIndex, 0, pointsCount, 0, 1);
-        color = chromaScale(rangedPointIndex)
-          .alpha(scatterAlphasStore.high)
-          .css();
+        color = chromaScale(rangedPointIndex).alpha(alphaHighRef.value).css();
       } else if (colorType === 'fileIndex') {
         const [fileIndex] = convertPointIndex(pointIndex);
         const rangedFileIndex = mapRange(fileIndex, 0, pointsCount, 0, 1);
-        color = chromaScale(rangedFileIndex)
-          .alpha(scatterAlphasStore.high)
-          .css();
+        color = chromaScale(rangedFileIndex).alpha(alphaHighRef.value).css();
       } else if (metaPropertiesAsColorTypesRef.value.includes(colorType)) {
         color = getMetaColor(colorType, pointIndex);
       }
