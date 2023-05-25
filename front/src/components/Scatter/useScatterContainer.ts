@@ -11,7 +11,6 @@ import {colorsStore} from '../Colors/colorsStore';
 import {timeStore} from '../Time/timeStore';
 import {queryStore} from '../Queries/queryStore';
 import {queriesComplexStore} from '../Queries/queryComplexStore';
-import {scatterDatasetStore} from './scatterDatasetStore';
 import {needsRefreshRef} from './useScatterFiltersNew';
 import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
 
@@ -54,7 +53,6 @@ export function useScatterContainer() {
       queryStore,
       metaSelectionStore,
       queriesComplexStore,
-      scatterDatasetStore,
       needsRefreshRef,
       colorScaleRef,
       alphaLowRef,
