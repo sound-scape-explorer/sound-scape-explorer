@@ -87,8 +87,7 @@ const wsRef = computed(() => {
   return WaveSurfer.create(params);
 });
 
-// @ts-expect-error: 2769
-const audioContextRef = computed<OfflineAudioContext | null>(() => {
+const audioContextRef = computed<AudioContext | null>(() => {
   if (wsRef.value === null) {
     return null;
   }
