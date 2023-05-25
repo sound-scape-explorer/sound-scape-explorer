@@ -17,6 +17,10 @@ export function useScatterClick() {
 
     clickedRef.value = index;
 
+    if (index === null) {
+      return;
+    }
+
     if (appDraggablesStore.details === false) {
       appDraggablesStore.details = true;
     }
