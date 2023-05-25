@@ -63,6 +63,10 @@ export function useScatterColorScale() {
         const [fileIndex] = convertPointIndex(pointIndex);
         const rangedFileIndex = mapRange(fileIndex, 0, pointsCount, 0, 1);
         color = chromaScale(rangedFileIndex).alpha(alphaHighRef.value).css();
+      } else if (colorType === 'groupIndex') {
+        const [, groupIndex] = convertPointIndex(pointIndex);
+        const rangedGroupIndex = mapRange(groupIndex, 0, pointsCount, 0, 1);
+        color = chromaScale(rangedGroupIndex).alpha(alphaHighRef.value).css();
       } else if (metaPropertiesAsColorTypesRef.value.includes(colorType)) {
         color = getMetaColor(colorType, pointIndex);
       }
