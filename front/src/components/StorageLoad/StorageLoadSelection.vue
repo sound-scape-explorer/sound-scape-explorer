@@ -9,6 +9,7 @@ import {useStorageSlicesPerGroup} from 'src/hooks/useStorageSlicesPerGroup';
 import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
 import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
 import {useScatterDataset} from '../Scatter/useScatterDataset';
+import {useScatterColorScale} from '../Scatter/useScatterColorScale';
 
 useStorageMetas();
 useStorageMetaProperties();
@@ -20,7 +21,8 @@ useStorageSlicesPerGroup();
 useStorageReducedFeatures();
 useStorageGroupedTimestamps();
 useStorageGroupedMetas();
-
 useStorageIndicators();
+
 useScatterDataset();
+useScatterColorScale();
 </script>

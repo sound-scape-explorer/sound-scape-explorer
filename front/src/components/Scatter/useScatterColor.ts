@@ -14,7 +14,9 @@ import {isHourDuringDay} from 'src/utils/is-hour-during-day';
 import {useScatterMeta} from './useScatterMeta';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
+import {colorScaleRef} from './useScatterColorScale';
 
+const hoverColor = 'red';
 const filteredColor = `hsla(0, 0%, 0%, ${scatterAlphasStore.low})`;
 
 export function useScatterColor() {
@@ -30,7 +32,14 @@ export function useScatterColor() {
     selectedIndices: Set<number>,
     hoverIndex: number | null,
   ): string => {
-    if (pointsFilteredByMetaRef.value === null) {
+    if (index === hoverIndex) {
+      return hoverColor;
+    }
+
+    if (
+      pointsFilteredByMetaRef.value === null ||
+      colorScaleRef.value === null
+    ) {
       return 'black';
     }
 
@@ -40,9 +49,10 @@ export function useScatterColor() {
       return filteredColor;
     }
 
+    return colorScaleRef.value[index];
+
     return 'blue';
     console.log('getColor');
-    const hoverColor = 'red';
 
     if (
       settingsRef.value === null ||
