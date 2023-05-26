@@ -9,10 +9,10 @@ export type ColorType =
   | 'isDay'
   | 'cycleDay'
   | 'byAutocluster'
-  | string
+  | string;
 
 export interface ColorsStore {
-  colorType: ColorType; // TODO: Rename to better like `sort` or something
+  colorType: ColorType;
   colorScale: string;
 }
 
