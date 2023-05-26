@@ -127,7 +127,7 @@ class AutoConsensusClustering:
 
             clustering_scores = numpy.array(clustering_bests)[clustering_best_id]
 
-        for label, _, score in zip(
+        for label, _, score in zip(  # type: ignore
             clustering_labels,
             clustering_probabilities,
             clustering_scores,
