@@ -28,7 +28,7 @@ const metaSelectedBRef = ref<string | null>(null);
 
 const pairingsNaiveRef = computed(() => {
   if (pairingsRef.value === null) {
-    return;
+    return [];
   }
 
   return convertToNaiveSelectOptions(

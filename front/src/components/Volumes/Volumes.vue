@@ -24,7 +24,7 @@ const metaSelectedRef = ref();
 
 const volumesNaiveRef = computed(() => {
   if (volumesRef.value === null) {
-    return;
+    return [];
   }
 
   return convertToNaiveSelectOptions(

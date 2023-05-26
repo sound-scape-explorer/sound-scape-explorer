@@ -26,7 +26,7 @@ const metaSelectedRef = ref();
 
 const volumesNaiveRef = computed(() => {
   if (matricesRef.value === null) {
-    return;
+    return [];
   }
 
   return convertToNaiveSelectOptions(
@@ -66,8 +66,6 @@ async function run() {
   }
 
   const data = await readMatrix(matrixIndex, metaIndex);
-
-  console.log(data);
 
   if (data === null) {
     return;

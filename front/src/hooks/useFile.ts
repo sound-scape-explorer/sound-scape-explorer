@@ -1,10 +1,10 @@
 import {computed, reactive} from 'vue';
 
-interface FileReactive {
+interface FileRef {
   value: File | null;
 }
 
-export const fileRef = reactive<FileReactive>({
+export const fileRef = reactive<FileRef>({
   value: null,
 });
 

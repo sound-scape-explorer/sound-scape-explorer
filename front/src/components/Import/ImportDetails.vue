@@ -7,9 +7,9 @@ import {rangesRef} from 'src/hooks/useStorageRanges';
 import {filenamesRef} from 'src/hooks/useStorageFilenames';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 
-const reducerNamesRef = computed(() => {
+const reducerNamesRef = computed<string[] | null>(() => {
   if (reducersRef.value === null) {
-    return;
+    return null;
   }
 
   return reducersRef.value.map(
@@ -17,9 +17,9 @@ const reducerNamesRef = computed(() => {
   );
 });
 
-const bandNamesRef = computed(() => {
+const bandNamesRef = computed<string[] | null>(() => {
   if (bandsRef.value === null) {
-    return;
+    return null;
   }
 
   return Object.keys(bandsRef.value);
@@ -33,9 +33,9 @@ const integrationNamesRef = computed(() => {
   return Object.keys(integrationsRef.value);
 });
 
-const rangeNamesRef = computed(() => {
+const rangeNamesRef = computed<string[] | null>(() => {
   if (rangesRef.value === null) {
-    return;
+    return null;
   }
 
   return Object.keys(rangesRef.value);
