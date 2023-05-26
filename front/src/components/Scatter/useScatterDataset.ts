@@ -2,6 +2,7 @@ import {reducedFeaturesRef} from 'src/hooks/useStorageReducedFeatures';
 import {reactive, watch} from 'vue';
 import type {Points, PointMetadata, Dataset} from 'src/lib/scatter-gl-0.0.13';
 import {ScatterGL} from 'src/lib/scatter-gl-0.0.13';
+import {loadingStore} from '../Loading/loadingStore';
 
 interface DatasetRef {
   value: Dataset | null;
@@ -33,6 +34,7 @@ export function useScatterDataset() {
     }));
 
     datasetRef.value = new ScatterGL.Dataset(features as Points, metadata);
+    loadingStore.isLoading = false;
     isDatasetReadyRef.value = true;
   });
 }
