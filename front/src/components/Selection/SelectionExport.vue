@@ -53,11 +53,7 @@ async function handleClick() {
     return;
   }
 
-  notify(
-    'info',
-    'Explore',
-    'Exporting collected points. Selected points will be ignored.',
-  );
+  notify('info', 'Export', 'Generating CSV from collected points.');
 
   loadingRef.value = true;
 
@@ -108,7 +104,7 @@ async function handleClick() {
   csvFirstRow += 'timestamp,';
 
   metaPropertiesRef.value.forEach((metaProperty) => {
-    csvFirstRow += `${metaProperty},`;
+    csvFirstRow += `m_${metaProperty},`;
   });
 
   payload[0].reducedFeatures.forEach((_, r) => {
