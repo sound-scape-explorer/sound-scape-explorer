@@ -2,6 +2,7 @@
   "name": "sound-scape-explorer",
   "scripts": {
     "dev": "cd front && pnpm dev",
+    "audio": "pnpm serve --cors",
     "migrate:v8": "python3 processing/processing/actions/run_migration_v8.py",
     "process": "pnpm process:all",
     "process:all": "python3 processing/processing/actions/_all.py",
@@ -24,7 +25,8 @@
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
-    "rimraf": "^5.0.0"
+    "rimraf": "^5.0.0",
+    "serve": "^14.2.0"
   },
   "version": "8.0.0"
 }

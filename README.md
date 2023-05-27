@@ -82,6 +82,8 @@ pnpm process:dataframe --band all --integration 60 --storage /path/to/storage.h5
 
 | `pnpm` command          | Description                                                                                                                           |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `audio`                 | Serve audio files. Example: `pnpm audio /path/to/audio/folder`.                                                                       |
+| `migrate:v8`            | Migrate storage file from v8 to v9.                                                                                                   |
 | `process`               | alias for `process:all`                                                                                                               |
 | `process:all`           | Run all processing commands                                                                                                           |
 | `process:all-actions`   | Run `process:autocluster` `process:reducers` `process:indicators` `process:volumes` `process:matrices` & `process:pairings` commands. |
@@ -97,7 +99,6 @@ pnpm process:dataframe --band all --integration 60 --storage /path/to/storage.h5
 | `process:matrices`      | Process matrices from grouped audio features.                                                                                         |
 | `process:pairings`      | Process pairings from grouped audio features.                                                                                         |
 | `process:dataframe`     | Build pandas DataFrame and export to .csv file.                                                                                       |
-| `migrate:v8`            | Migrate storage file from v8 to v9.                                                                                                   |
 
 ## 🧑‍🤝‍🧑 Contribute
 
