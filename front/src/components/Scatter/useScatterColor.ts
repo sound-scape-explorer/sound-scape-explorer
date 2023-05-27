@@ -1,7 +1,8 @@
 import {computed} from 'vue';
-import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {clickedRef} from './useScatterClick';
+import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
+import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 const specialAlpha = '0.8';
 
@@ -39,14 +40,16 @@ export function useScatterColor() {
 
     if (
       pointsFilteredByMetaRef.value === null ||
+      pointsFilteredByTimeRef.value === null ||
       colorScaleRef.value === null
     ) {
       return 'black';
     }
 
-    const isFiltered = pointsFilteredByMetaRef.value[index];
+    const isFilteredByMeta = pointsFilteredByMetaRef.value[index];
+    const isFilteredByTime = pointsFilteredByTimeRef.value[index];
 
-    if (isFiltered) {
+    if (isFilteredByMeta || isFilteredByTime) {
       return filteredColorRef.value;
     }
 

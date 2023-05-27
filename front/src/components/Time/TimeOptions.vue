@@ -6,9 +6,7 @@ import {
   PlaySkipForwardOutline,
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
-import dayjs, {Dayjs} from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+import type {Dayjs} from 'dayjs';
 import {
   NButton,
   NButtonGroup,
@@ -19,15 +17,12 @@ import {
 } from 'naive-ui';
 import type {ComputedRef} from 'vue';
 import {computed, ref, watch} from 'vue';
-import {DATE_FORMAT} from '../../constants';
 import AppButton from '../AppButton/AppButton.vue';
 import {timeStore} from './timeStore';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {useDate} from 'src/hooks/useDate';
 import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
+import {useScatterFilterTime} from '../Scatter/useScatterFilterTime';
 
 const {convertTimestampToDate} = useDate();
 
@@ -51,17 +46,6 @@ const dateStartRef = computed<Dayjs | null>(() => {
   }
 
   return convertTimestampToDate(start * 1000);
-});
-
-const dateEndRef: ComputedRef<Dayjs> = computed(() => {
-  let time = timeStore.value;
-  time += timeStore.duration;
-
-  if (timeStore.isAllSelected) {
-    time = timeStore.max;
-  }
-
-  return dayjs(time * 1000);
 });
 
 interface Duration {
@@ -133,9 +117,11 @@ const timeOffsetRef = computed<number | null>(() => {
 
   const getZoneValue = (zone: string) => Number(zone.replace('GMT', ''));
 
-  dayjs.tz.setDefault('Pacific/Tahiti');
-  const guessOffset = dayjs(0).tz(dayjs.tz.guess()).offsetName('short');
-  const targetOffset = dateStartRef.value.offsetName('short');
+  // dayjs.tz.setDefault('Pacific/Tahiti');
+  // const guessOffset = dayjs(0).tz(dayjs.tz.guess()).offsetName('short');
+  // const targetOffset = dateStartRef.value.offsetName('short');
+  const guessOffset = undefined;
+  const targetOffset = undefined;
 
   if (
     typeof guessOffset === 'undefined' ||
@@ -161,8 +147,9 @@ function transposeDateToZone(date: Dayjs | null) {
   return date.unix() * 1000 + (timeOffsetRef.value ?? 0);
 }
 
-const localizedDateRef = computed(() => {
-  return dayjs(transposeDateToZone(dateEndRef.value)).format(DATE_FORMAT);
+const {filterByTime} = useScatterFilterTime();
+watch(timeStore, () => {
+  filterByTime();
 });
 
 onKeyPressed('n', () => skipTimeForward());
@@ -281,7 +268,7 @@ onKeyPressed(' ', () => togglePlaying());
         </n-tooltip>
       </div>
 
-      <span class="date"> to {{ localizedDateRef }} </span>
+      <span class="date"> to LOCALIZED_DATE_REF </span>
 
       <div class="timezone">
         {{ settingsRef.value?.timezone }}

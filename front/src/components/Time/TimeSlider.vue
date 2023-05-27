@@ -2,29 +2,29 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import {computed, ref, watch} from 'vue';
+import {computed, ref} from 'vue';
 import {SLIDER_LIMITS} from '../../constants';
-import {storage} from '../../storage/storage';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';
-import {selectionStore} from '../Selection/selectionStore';
 import {timeStore} from './timeStore';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {integrationRef} from 'src/hooks/useIntegration';
+import {rangesRef} from 'src/hooks/useStorageRanges';
+import {reducerRef} from 'src/hooks/useReducer';
 
 /**
  * State
  */
 
-const allTimestamps = ref<number[]>();
 const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
 const sliders = computed<Slider[]>(() => {
   if (
-    selectionStore.integration === null ||
-    storage.ranges === null ||
-    storage.reducers === null
+    integrationRef.value === null ||
+    rangesRef.value === null ||
+    reducerRef.value === null
   ) {
     return [];
   }
@@ -40,14 +40,11 @@ const sliders = computed<Slider[]>(() => {
     return cachedSliders;
   }
 
-  const ranges = storage.reducers.filter(
-    (reducer) => reducer.index === selectionStore.reducer,
-  )[0].ranges;
-
+  const ranges = reducerRef.value.ranges;
   const sliders: Slider[] = [];
 
   for (const range of ranges) {
-    const rangeValues = storage.ranges[range];
+    const rangeValues = rangesRef.value[range];
     const rangeStart = rangeValues[0];
     const rangeEnd = rangeValues[1];
     const timeStart = dayjs(rangeStart).unix();
@@ -92,9 +89,11 @@ interface Interest {
 }
 
 const interests = computed<Interest[]>(() => {
-  if (!Array.isArray(allTimestamps.value)) {
+  if (groupedTimestampsRef.value === null) {
     return [];
   }
+
+  const allTimestamps = groupedTimestampsRef.value.map((t) => t / 1000);
 
   const interests: Interest[] = [];
   const ignoreDecimalsFactor = 1 / timeStore.duration;
@@ -103,7 +102,7 @@ const interests = computed<Interest[]>(() => {
 
   for (const slider of sliders.value) {
     const {min, max, key} = slider;
-    const timestamps = allTimestamps.value.filter(
+    const timestamps = allTimestamps.filter(
       (timestamp) => timestamp >= min && timestamp <= max,
     );
 
@@ -145,25 +144,6 @@ function toggleZoom(slider: Slider): void {
 
   zoomedSliderRef.value = slider;
 }
-
-/**
- * Lifecycles
- */
-
-watch(selectionStore, async () => {
-  const groupedTimestamps = groupedTimestampsRef.value;
-
-  if (
-    selectionStore.reducer === null ||
-    selectionStore.band === null ||
-    selectionStore.integration === null ||
-    groupedTimestamps === null
-  ) {
-    return;
-  }
-
-  allTimestamps.value = groupedTimestamps.flat().map((t) => t / 1000);
-});
 
 interface Slider {
   key: string;

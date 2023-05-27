@@ -6,13 +6,9 @@ import {useScatterHover} from './useScatterHover';
 import {useScatterRender} from './useScatterRender';
 import {datasetRef} from './useScatterDataset';
 import {useEventListener} from '@vueuse/core';
-import {metaSelectionStore} from '../Meta/metaSelectionStore';
-import {colorsStore} from '../Colors/colorsStore';
-import {timeStore} from '../Time/timeStore';
-import {queryStore} from '../Queries/queryStore';
-import {queriesComplexStore} from '../Queries/queryComplexStore';
-import {needsRefreshRef} from './useScatterFiltersNew';
 import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
+import {pointsFilteredByTimeRef} from './useScatterFilterTime';
+import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 
 interface ScatterRef {
   value: HTMLDivElement | null;
@@ -47,13 +43,8 @@ export function useScatterContainer() {
   watch(
     [
       datasetRef,
-      // storage,
-      timeStore,
-      colorsStore,
-      queryStore,
-      metaSelectionStore,
-      queriesComplexStore,
-      needsRefreshRef,
+      pointsFilteredByMetaRef,
+      pointsFilteredByTimeRef,
       colorScaleRef,
       alphaLowRef,
     ],

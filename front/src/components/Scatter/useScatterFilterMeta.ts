@@ -12,7 +12,7 @@ export const pointsFilteredByMetaRef = reactive<PointsFilteredByMetaRef>({
 });
 
 export function useScatterFilterMeta() {
-  // TODO: This performacne can certainly be improved
+  // TODO: This performance can certainly be improved
   const isVisibleByMeta = (index: number): boolean => {
     let isVisible = true;
 
@@ -65,6 +65,7 @@ export function useScatterFilterMeta() {
     }
 
     pointsFilteredByMetaRef.value = pointsFilteredByMeta;
+    console.log('filterByMeta');
   };
 
   return {

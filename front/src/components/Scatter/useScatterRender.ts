@@ -1,12 +1,14 @@
 import {ref} from 'vue';
 import {ScatterGL, Dataset} from 'src/lib/scatter-gl-0.0.13';
 import {useScatterColor} from './useScatterColor';
-import {useScatterFiltersNew} from './useScatterFiltersNew';
+import {useScatterFilterMeta} from './useScatterFilterMeta';
+import {useScatterFilterTime} from './useScatterFilterTime';
 
 export function useScatterRender() {
   const isFirstRenderRef = ref<boolean>(true);
   const {getColor} = useScatterColor();
-  const {askForRefresh} = useScatterFiltersNew();
+  const {filterByMeta} = useScatterFilterMeta();
+  const {filterByTime} = useScatterFilterTime();
 
   const render = (scatter: ScatterGL, dataset: Dataset) => {
     console.log('render');
@@ -18,7 +20,9 @@ export function useScatterRender() {
       return;
     }
 
-    askForRefresh();
+    filterByMeta();
+    filterByTime();
+
     scatter.setPointColorer(getColor);
     scatter.render(dataset);
 
