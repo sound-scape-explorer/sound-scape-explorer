@@ -45,40 +45,6 @@ const colorMapsOptions = computed(() =>
       </div>
 
       <div>
-        <h2>CSV Export</h2>
-
-        <hr />
-
-        <div class="checkboxes">
-          <n-checkbox
-            v-model:checked="settingsStore.umap.export.labels"
-            class="checkbox"
-            >Labels</n-checkbox
-          >
-          <n-checkbox
-            v-model:checked="settingsStore.umap.export.timestamps"
-            class="checkbox"
-            >Timestamps</n-checkbox
-          >
-          <n-checkbox
-            v-model:checked="settingsStore.umap.export.meta"
-            class="checkbox"
-            >Meta</n-checkbox
-          >
-          <n-checkbox
-            v-model:checked="settingsStore.umap.export.points"
-            class="checkbox"
-            >Points</n-checkbox
-          >
-          <n-checkbox
-            v-model:checked="settingsStore.umap.export.features"
-            class="checkbox"
-            >Features</n-checkbox
-          >
-        </div>
-      </div>
-
-      <div>
         <h2>Debug</h2>
 
         <hr />

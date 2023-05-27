@@ -6,13 +6,6 @@ export interface SettingsStore {
     screenshot: {
       isFull: boolean;
     };
-    export: {
-      labels: boolean;
-      timestamps: boolean;
-      meta: boolean;
-      points: boolean;
-      features: boolean;
-    };
   };
 }
 
@@ -21,13 +14,6 @@ export const settingsStore = reactive<SettingsStore>({
   umap: {
     screenshot: {
       isFull: true,
-    },
-    export: {
-      labels: true,
-      timestamps: true,
-      meta: true,
-      points: true,
-      features: true,
     },
   },
 });
