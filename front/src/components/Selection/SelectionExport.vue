@@ -3,7 +3,6 @@ import {DownloadOutline} from '@vicons/ionicons5';
 import AppButton from '../AppButton/AppButton.vue';
 import {datasetRef, isDatasetReadyRef} from '../Scatter/useScatterDataset';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {useScatterFilters} from '../Scatter/useScatterFilters';
 import {workerRef} from 'src/hooks/useWorker';
 import {fileRef} from 'src/hooks/useFile';
 import {bandRef} from 'src/hooks/useBand';
@@ -17,8 +16,9 @@ import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {groupedFeaturesRef} from 'src/hooks/useStorageGroupedFeatures';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {groupedAttributesRef} from 'src/hooks/useStorageGroupedAttributes';
+import {pointsFilteredByTimeRef} from '../Scatter/useScatterFilterTime';
+import {pointsFilteredByMetaRef} from '../Scatter/useScatterFilterMeta';
 
-const {shouldBeFiltered} = useScatterFilters();
 const {notify} = useNotification();
 
 const loadingRef = ref<boolean>(false);
@@ -46,6 +46,8 @@ async function handleClick() {
     groupedFeaturesRef.value === null ||
     groupedMetasRef.value === null ||
     datasetRef.value === null ||
+    pointsFilteredByMetaRef.value === null ||
+    pointsFilteredByTimeRef.value === null ||
     metaPropertiesRef.value === null
   ) {
     return;
@@ -68,9 +70,10 @@ async function handleClick() {
     pointIndex < datasetRef.value.points.length;
     ++pointIndex
   ) {
-    const isFiltered = shouldBeFiltered(pointIndex);
+    const isFilteredByMeta = pointsFilteredByMetaRef.value[pointIndex];
+    const isFilteredByTime = pointsFilteredByTimeRef.value[pointIndex];
 
-    if (isFiltered) {
+    if (isFilteredByMeta || isFilteredByTime) {
       continue;
     }
 
