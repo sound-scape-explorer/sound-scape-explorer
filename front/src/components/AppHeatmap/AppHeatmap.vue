@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import Plotly, {Data as PlotlyData, Layout} from 'plotly.js-dist-min';
+import Plotly from 'plotly.js-dist-min';
+import type {Data as PlotlyData, Layout} from 'plotly.js-dist-min';
 import {ref, watch} from 'vue';
 
 type Data = PlotlyData & {
@@ -21,9 +22,9 @@ const props = defineProps<Props>();
  * State
  */
 
-const divRef = ref<HTMLDivElement>();
-const dataRef = ref<Data[]>();
-const layoutRef = ref<Partial<Layout>>();
+const divRef = ref<HTMLDivElement | null>(null);
+const dataRef = ref<Data[] | null>(null);
+const layoutRef = ref<Partial<Layout> | null>(null);
 
 /**
  * Lifecycles
@@ -38,19 +39,17 @@ watch(props, refresh);
  */
 
 async function render() {
-  const div = divRef.value;
-  const data = dataRef.value;
-  const layout = layoutRef.value;
-
   if (
-    typeof div === 'undefined' ||
-    typeof data === 'undefined' ||
-    typeof layout === 'undefined'
+    divRef.value === null ||
+    dataRef.value === null ||
+    layoutRef.value === null
   ) {
     return;
   }
 
-  await Plotly.newPlot(div, data, layout, {displaylogo: false});
+  await Plotly.newPlot(divRef.value, dataRef.value, layoutRef.value, {
+    displaylogo: false,
+  });
 }
 
 function refresh() {
