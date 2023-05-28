@@ -16,7 +16,7 @@ export function useScatterFilterMeta() {
   const isVisibleByMeta = (index: number): boolean => {
     let isVisible = true;
 
-    if (datasetRef.value === null || groupedMetasRef.value === null) {
+    if (groupedMetasRef.value === null) {
       return false;
     }
 
