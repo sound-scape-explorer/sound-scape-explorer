@@ -1,0 +1,1 @@
+function o(r,e=0){if(typeof r!="number")throw new TypeError("speed is not a number");if(typeof e!="number")throw new TypeError("digits is not a number");if(e<0||e>20)throw new TypeError("digits is out of range");return(r*100-100).toFixed(e)}export{o as s};
