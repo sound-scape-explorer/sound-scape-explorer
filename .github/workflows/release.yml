@@ -21,7 +21,7 @@ jobs:
         run: npm install -g pnpm
 
       - name: Install project dependencies
-        run: pnpm --ignore-scripts --frozen-lockfile
+        run: pnpm i --ignore-scripts --frozen-lockfile
 
       - name: Install release dependencies
         run: |
@@ -38,7 +38,7 @@ jobs:
             aggregate-error
 
       - name: Build `front` package
-        run: cd front && pnpm && pnpm build:prod && cd ..
+        run: cd front && pnpm i --ignore-scripts --frozen-lockfile && pnpm build:prod && cd ..
 
       - name: Release
         run: semantic-release -b main
