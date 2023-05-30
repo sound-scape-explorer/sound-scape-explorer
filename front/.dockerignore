@@ -1,7 +1,7 @@
 *
 
 !package.json
-!yarn.lock
+!pnpm-lock.yaml
 
 !tsconfig.json
 !tsconfig.app.json

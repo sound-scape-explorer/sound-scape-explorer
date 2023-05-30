@@ -9,9 +9,8 @@ class LeqMaadIndicator(AbstractIndicator):
         self,
         band: str,
         integration: int,
-        file_index: int,
     ) -> None:
-        super().__init__(band, integration, file_index)
+        super().__init__(band, integration)
 
     def calculate(
         self,
@@ -26,4 +25,4 @@ class LeqMaadIndicator(AbstractIndicator):
             gain=42,
         )
 
-        self.add_value(value)
+        self.add_value(value)  # type: ignore

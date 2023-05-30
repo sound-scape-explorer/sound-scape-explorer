@@ -1,29 +1,20 @@
 <script lang="ts" setup="">
-import {asyncComputed} from '@vueuse/core';
 import {NGi, NGrid, NTag} from 'naive-ui';
-import {computed, watch} from 'vue';
-import {useStorage} from '../../hooks/useStorage';
-import {selectionStore} from '../Selection/selectionStore';
+import {ref, watch} from 'vue';
 import MetaSelection from './MetaSelection.vue';
 import {metaSelectionStore} from './metaSelectionStore';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
-const {
-  getStorageMetas,
-} = await useStorage();
+const metaSetsIndexesRef = ref();
 
-const metas = asyncComputed(async () => {
-  if (!selectionStore.band || !selectionStore.integration) {
+watch([metaPropertiesRef, metaSetsRef], () => {
+  if (metaPropertiesRef.value === null || metaSetsRef.value === null) {
     return;
   }
 
-  return await getStorageMetas(selectionStore.band, selectionStore.integration);
-});
+  metaSetsIndexesRef.value = Object.keys(metaSetsRef.value);
 
-const metaPropertiesRef = computed(() => Object.keys(metas.value ?? {}));
-const metaSets = computed(() => Object.values(metas.value ?? {}));
-const metaSetsIndexes = computed(() => Object.keys(metaSets.value ?? {}));
-
-watch(metaPropertiesRef, () => {
   for (let i = 0; i < metaPropertiesRef.value.length; i += 1) {
     metaSelectionStore.selection[i] = Object.assign({});
   }
@@ -31,21 +22,24 @@ watch(metaPropertiesRef, () => {
 </script>
 
 <template>
-  <n-grid :cols="2" class="grid" x-gap="12">
-    <!--suppress JSUnusedLocalSymbols -->
-    <n-gi v-for="(_meta, index) in metaPropertiesRef">
+  <n-grid
+    :cols="2"
+    class="grid"
+    x-gap="12"
+  >
+    <n-gi v-for="(_, m) in metaPropertiesRef.value">
       <n-tag
         :bordered="false"
         class="tag"
         size="small"
       >
-        {{ metaPropertiesRef[index] }}
+        {{ metaPropertiesRef.value?.[m] }}
       </n-tag>
 
       <MetaSelection
-        :index="index"
-        :items="metaSets[metaSetsIndexes[index]]"
-        :title="metaPropertiesRef[index]"
+        :index="m"
+        :items="metaSetsRef.value?.[metaSetsIndexesRef[m]] ?? []"
+        :title="metaPropertiesRef.value?.[m] ?? ''"
       />
     </n-gi>
   </n-grid>

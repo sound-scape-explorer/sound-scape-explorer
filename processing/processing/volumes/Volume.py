@@ -1,12 +1,12 @@
+from abc import abstractmethod
 from typing import List
 
 from h5py import Dataset
 
+from processing.storage.Storage import Storage
 from processing.volumes.MeanSpreadingVolume import MeanSpreadingVolume
-from processing.volumes.MeanStandardDeviationVolume import \
-    MeanStandardDeviationVolume
-from processing.volumes.SumStandardDeviationVolume import \
-    SumStandardDeviationVolume
+from processing.volumes.MeanStandardDeviationVolume import MeanStandardDeviationVolume
+from processing.volumes.SumStandardDeviationVolume import SumStandardDeviationVolume
 from processing.volumes.SumVarianceVolume import SumVarianceVolume
 from processing.volumes.VolumeName import VolumeName
 
@@ -63,7 +63,7 @@ class Volume:
 
     @staticmethod
     def fail(name: str) -> None:
-        raise KeyError(f'Volume {name} not found!')
+        raise KeyError(f"Volume {name} not found!")
 
     @staticmethod
     def validate_name(name: str) -> None:
@@ -73,3 +73,11 @@ class Volume:
             return
 
         Volume.fail(name)
+
+    @abstractmethod
+    def calculate(self) -> None:
+        pass
+
+    @abstractmethod
+    def store(self, storage: Storage) -> None:
+        pass

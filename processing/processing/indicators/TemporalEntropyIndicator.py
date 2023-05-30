@@ -9,9 +9,8 @@ class TemporalEntropyIndicator(AbstractIndicator):
         self,
         band: str,
         integration: int,
-        file_index: int,
     ) -> None:
-        super().__init__(band, integration, file_index)
+        super().__init__(band, integration)
 
     def calculate(
         self,
@@ -22,4 +21,4 @@ class TemporalEntropyIndicator(AbstractIndicator):
 
         temporal_entropy = maad.features.temporal_entropy(audio.sound)
 
-        self.add_value(temporal_entropy)
+        self.add_value(temporal_entropy)  # type: ignore

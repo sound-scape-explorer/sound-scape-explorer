@@ -2,114 +2,102 @@
 import {FlashOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {computed, ref, unref} from 'vue';
-import {PAIRING_NAMES} from '../../constants';
-import {useStorage} from '../../hooks/useStorage';
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap2D from '../AppHeatmap2D/AppHeatmap2D.vue';
-import {useMetas} from '../Meta/useMetas';
-import {selectionStore} from '../Selection/selectionStore';
+import {useStoragePairings} from 'src/hooks/useStoragePairings';
+import {useStoragePairing} from 'src/hooks/useStoragePairing';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
-const {
-  metaPropertiesRef,
-  metaSetsRef,
-} = await useMetas();
-const {
-  getPairing,
-  pairingsRef,
-} = await useStorage();
+const {pairingsRef} = useStoragePairings();
+const {readPairing} = useStoragePairing();
 
-const pairingSelectedRef = ref();
-
-const pairingsNaiveRef = computed(() => {
-  const pairings = unref(pairingsRef);
-
-  if (!pairings) {
-    return;
-  }
-
-  return convertToNaiveSelectOptions(pairings.map((v) => v.name));
-});
-
-const metaPropertiesNaiveRef = computed(() => convertToNaiveSelectOptions(metaPropertiesRef.value ?? {}));
-const metaSelectedARef = ref();
-const metaSelectedBRef = ref();
+/**
+ * State
+ */
 
 const titleRef = ref<string>();
 const xRef = ref<string[]>([]);
 const yRef = ref<string[]>([]);
 const valuesRef = ref<number[][]>();
+const pairingSelectedRef = ref<string | null>(null);
+const metaSelectedARef = ref<string | null>(null);
+const metaSelectedBRef = ref<string | null>(null);
+
+const pairingsNaiveRef = computed(() => {
+  if (pairingsRef.value === null) {
+    return [];
+  }
+
+  return convertToNaiveSelectOptions(
+    pairingsRef.value.map((pairing) => pairing.name),
+  );
+});
+
+const metaPropertiesNaiveRef = computed(() => {
+  if (metaPropertiesRef.value === null) {
+    return [];
+  }
+
+  return convertToNaiveSelectOptions(metaPropertiesRef.value);
+});
+
+/**
+ * Handlers
+ */
 
 async function run() {
-  const metaSelectedA = unref(metaSelectedARef);
-  const metaSelectedB = unref(metaSelectedBRef);
-  const metaProperties = unref(metaPropertiesRef);
-  const metaSets = unref(metaSetsRef);
-  const pairingSelected = unref(pairingSelectedRef);
-  const band = unref(selectionStore.band);
-  const integrationName = unref(selectionStore.integration);
-
   if (
-    !metaSelectedA
-    || !metaSelectedB
-    || !metaProperties
-    || !metaSets
-    || !pairingSelected
-    || !band
-    || !integrationName
+    pairingsRef.value === null ||
+    metaSelectedARef.value === null ||
+    metaSelectedBRef.value === null ||
+    pairingSelectedRef.value === null ||
+    metaPropertiesRef.value === null ||
+    metaSetsRef.value === null
   ) {
     return;
   }
 
-  const pairingIndex = PAIRING_NAMES.indexOf(pairingSelected);
-  const metaIndexA = metaProperties.indexOf(metaSelectedA);
-  const metaIndexB = metaProperties.indexOf(metaSelectedB);
+  const pairingNames = pairingsRef.value.map((pairing) => pairing.name);
+  const pairingIndex = pairingNames.indexOf(pairingSelectedRef.value);
+  const metaIndexA = metaPropertiesRef.value.indexOf(metaSelectedARef.value);
+  const metaIndexB = metaPropertiesRef.value.indexOf(metaSelectedBRef.value);
 
-  if (
-    metaIndexA === -1
-    || metaIndexB === -1
-    || pairingIndex === -1
-  ) {
+  if (metaIndexA === -1 || metaIndexB === -1 || pairingIndex === -1) {
     return;
   }
 
-  const data = await getPairing(
-    band,
-    integrationName,
-    pairingIndex,
-    metaIndexA,
-    metaIndexB,
-  );
+  const isDefault = metaIndexA <= metaIndexB;
+  let data: number[] | null;
 
-  if (!data) {
+  if (isDefault) {
+    data = await readPairing(pairingIndex, metaIndexA, metaIndexB);
+  } else {
+    data = await readPairing(pairingIndex, metaIndexB, metaIndexA);
+  }
+
+  if (data === null) {
     return;
   }
 
   titleRef.value = `${pairingSelectedRef.value} - ${metaSelectedARef.value} vs. ${metaSelectedBRef.value}`;
+  xRef.value = metaSetsRef.value[metaIndexA];
+  yRef.value = metaSetsRef.value[metaIndexB];
 
-  let length = 0;
-
-  if (metaIndexA <= metaIndexB) {
-    xRef.value = metaSets[metaIndexA];
-    yRef.value = metaSets[metaIndexB];
-    length = xRef.value.length;
-  } else {
-    xRef.value = metaSets[metaIndexB];
-    yRef.value = metaSets[metaIndexA];
-    length = yRef.value.length;
-  }
+  const length = xRef.value.length;
 
   valuesRef.value = buildNestedArray(data, length);
 }
 
 function swap() {
-  const a = unref(metaSelectedARef);
-  const b = unref(metaSelectedBRef);
-
-  if (!a || !b) {
+  if (metaSelectedARef.value === null || metaSelectedBRef.value === null) {
     return;
   }
+
+  const a = unref(metaSelectedARef.value);
+  const b = unref(metaSelectedBRef.value);
 
   metaSelectedARef.value = b;
   metaSelectedBRef.value = a;
@@ -139,7 +127,11 @@ function swap() {
             placeholder="Meta A..."
             size="tiny"
           />
-          <n-button class="button" size="tiny" @click="swap">
+          <n-button
+            class="button"
+            size="tiny"
+            @click="swap"
+          >
             <n-icon>
               <repeat-outline />
             </n-icon>
@@ -153,7 +145,11 @@ function swap() {
         </div>
 
         <span>And</span>
-        <n-button class="button" size="tiny" @click="run">
+        <n-button
+          class="button"
+          size="tiny"
+          @click="run"
+        >
           <n-icon>
             <flash-outline />
           </n-icon>

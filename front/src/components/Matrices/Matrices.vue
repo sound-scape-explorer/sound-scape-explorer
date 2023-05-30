@@ -1,86 +1,78 @@
 <script lang="ts" setup="">
 import {FlashOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
-import {computed, ref, unref} from 'vue';
-import {MATRIX_NAMES} from '../../constants';
-import {useStorage} from '../../hooks/useStorage';
+import {computed, ref} from 'vue';
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';
-import {useMetas} from '../Meta/useMetas';
-import {selectionStore} from '../Selection/selectionStore';
+import {useStorageMatrices} from 'src/hooks/useStorageMatrices';
+import {useStorageMatrix} from 'src/hooks/useStorageMatrix';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
-const {
-  metaPropertiesRef,
-  metaSetsRef,
-} = await useMetas();
-const {
-  getMatrix,
-  matricesRef,
-} = await useStorage();
+const {matricesRef} = useStorageMatrices();
+const {readMatrix} = useStorageMatrix();
 
-const volumeSelectedRef = ref();
-
-const volumesNaiveRef = computed(() => {
-  const matrices = unref(matricesRef);
-
-  if (!matrices) {
-    return;
-  }
-
-  return convertToNaiveSelectOptions(matrices.map((v) => v.name));
-});
-
-const metaPropertiesNaiveRef = computed(() => convertToNaiveSelectOptions(metaPropertiesRef.value ?? {}));
-const metaSelectedRef = ref();
+/**
+ * State
+ */
 
 const titleRef = ref<string>();
 const labelsRef = ref<string[]>();
 const valuesRef = ref<number[][]>();
+const matrixNameSelectedRef = ref();
+const metaSelectedRef = ref();
+
+const volumesNaiveRef = computed(() => {
+  if (matricesRef.value === null) {
+    return [];
+  }
+
+  return convertToNaiveSelectOptions(
+    matricesRef.value.map((matrix) => matrix.name),
+  );
+});
+
+const metaPropertiesNaiveRef = computed(() => {
+  if (metaPropertiesRef.value === null) {
+    return [];
+  }
+
+  return convertToNaiveSelectOptions(metaPropertiesRef.value);
+});
+
+/**
+ * Handlers
+ */
 
 async function run() {
-  const metaSelected = unref(metaSelectedRef);
-  const metaProperties = unref(metaPropertiesRef);
-  const metaSets = unref(metaSetsRef);
-  const volumeSelected = unref(volumeSelectedRef);
-  const band = unref(selectionStore.band);
-  const integrationName = unref(selectionStore.integration);
-
   if (
-    !metaSelected
-    || !metaProperties
-    || !metaSets
-    || !volumeSelected
-    || !band
-    || !integrationName
+    metaPropertiesRef.value === null ||
+    metaSetsRef.value === null ||
+    matricesRef.value === null ||
+    metaSelectedRef.value === null ||
+    matrixNameSelectedRef.value === null
   ) {
     return;
   }
 
-  const matrixIndex = MATRIX_NAMES.indexOf(volumeSelected);
-  const metaIndex = metaProperties.indexOf(metaSelected);
+  const matrixNames = matricesRef.value.map((matrix) => matrix.name);
+  const matrixIndex = matrixNames.indexOf(matrixNameSelectedRef.value);
+  const metaIndex = metaPropertiesRef.value.indexOf(metaSelectedRef.value);
 
-  if (
-    metaIndex === -1
-    || matrixIndex === -1
-  ) {
+  if (metaIndex === -1 || matrixIndex === -1) {
     return;
   }
 
-  const data = await getMatrix(
-    band,
-    integrationName,
-    matrixIndex,
-    metaIndex,
-  );
+  const data = await readMatrix(matrixIndex, metaIndex);
 
-  if (!data) {
+  if (data === null) {
     return;
   }
 
-  titleRef.value = `${volumeSelectedRef.value} - ${metaSelectedRef.value}`;
-  labelsRef.value = metaSets[metaIndex];
+  titleRef.value = `${matrixNameSelectedRef.value} - ${metaSelectedRef.value}`;
+  labelsRef.value = metaSetsRef.value[metaIndex];
   valuesRef.value = buildNestedArray(data, Math.sqrt(data.length));
 }
 </script>
@@ -93,7 +85,7 @@ async function run() {
 
         <n-select
           v-if="volumesNaiveRef"
-          v-model:value="volumeSelectedRef"
+          v-model:value="matrixNameSelectedRef"
           :options="volumesNaiveRef"
           placeholder="Matrix..."
           size="tiny"
@@ -110,7 +102,11 @@ async function run() {
             placeholder="Meta..."
             size="tiny"
           />
-          <n-button class="button" size="tiny" @click="run">
+          <n-button
+            class="button"
+            size="tiny"
+            @click="run"
+          >
             <n-icon>
               <flash-outline />
             </n-icon>

@@ -2,56 +2,49 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import {computed, ref, unref, watch} from 'vue';
+import {computed, ref} from 'vue';
 import {SLIDER_LIMITS} from '../../constants';
-import {useStorage} from '../../hooks/useStorage';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
-import {selectionStore} from '../Selection/selectionStore';
 import {timeStore} from './timeStore';
-
-const {isDisabled} = useScatterStatus();
-const {
-  getStorageRanges,
-  getGroupedTimestamps,
-  getReducers,
-} = await useStorage();
-
-const reducers = await getReducers();
-const storageRanges = await getStorageRanges();
+import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {integrationRef} from 'src/hooks/useIntegration';
+import {rangesRef} from 'src/hooks/useStorageRanges';
+import {reducerRef} from 'src/hooks/useReducer';
 
 /**
  * State
  */
 
-const allTimestamps = ref<number[]>();
-const zoomedSlider = ref<Slider | null>(null);
-const cachedSliders = ref<Slider[]>();
+const zoomedSliderRef = ref<Slider | null>(null);
+const cachedSlidersRef = ref<Slider[]>();
 
 const sliders = computed<Slider[]>(() => {
-  if (selectionStore.integration === null) {
+  if (
+    integrationRef.value === null ||
+    rangesRef.value === null ||
+    reducerRef.value === null
+  ) {
     return [];
   }
 
-  const zoomedSliderValue = unref(zoomedSlider);
-  const cachedSlidersValue = unref(cachedSliders);
+  const zoomedSlider = zoomedSliderRef.value;
+  const cachedSliders = cachedSlidersRef.value;
 
-  if (zoomedSliderValue) {
-    return [zoomedSliderValue];
+  if (zoomedSlider !== null) {
+    return [zoomedSlider];
   }
 
-  if (cachedSlidersValue) {
-    return cachedSlidersValue;
+  if (typeof cachedSliders !== 'undefined') {
+    return cachedSliders;
   }
 
-  const ranges = reducers
-    .filter((reducer) => reducer.index === selectionStore.reducer)[0].ranges;
-
+  const ranges = reducerRef.value.ranges;
   const sliders: Slider[] = [];
 
   for (const range of ranges) {
-    const rangeValues = storageRanges[range];
+    const rangeValues = rangesRef.value[range];
     const rangeStart = rangeValues[0];
     const rangeEnd = rangeValues[1];
     const timeStart = dayjs(rangeStart).unix();
@@ -85,7 +78,7 @@ const sliders = computed<Slider[]>(() => {
 
   timeStore.value = timeStore.min;
 
-  cachedSliders.value = sliders;
+  cachedSlidersRef.value = sliders;
 
   return sliders;
 });
@@ -96,17 +89,22 @@ interface Interest {
 }
 
 const interests = computed<Interest[]>(() => {
-  if (!Array.isArray(allTimestamps.value)) {
+  if (groupedTimestampsRef.value === null) {
     return [];
   }
 
+  const allTimestamps = groupedTimestampsRef.value.map((t) => t / 1000);
+
   const interests: Interest[] = [];
-  const ignoreDecimalsFactor = 1 / (timeStore.duration);
-  const ignoreDecimals = (value: number) => Math.floor(ignoreDecimalsFactor * value);
+  const ignoreDecimalsFactor = 1 / timeStore.duration;
+  const ignoreDecimals = (value: number) =>
+    Math.floor(ignoreDecimalsFactor * value);
 
   for (const slider of sliders.value) {
     const {min, max, key} = slider;
-    const timestamps = allTimestamps.value.filter((timestamp) => timestamp >= min && timestamp <= max);
+    const timestamps = allTimestamps.filter(
+      (timestamp) => timestamp >= min && timestamp <= max,
+    );
 
     const values = [];
 
@@ -135,37 +133,17 @@ const interests = computed<Interest[]>(() => {
  */
 
 function resetZoom() {
-  zoomedSlider.value = null;
+  zoomedSliderRef.value = null;
 }
 
 function toggleZoom(slider: Slider): void {
-  if (zoomedSlider.value !== null) {
+  if (zoomedSliderRef.value !== null) {
     resetZoom();
     return;
   }
 
-  zoomedSlider.value = slider;
+  zoomedSliderRef.value = slider;
 }
-
-/**
- * Lifecycles
- */
-
-watch(selectionStore, async () => {
-  if (
-    selectionStore.reducer === null
-    || selectionStore.band === null
-    || selectionStore.integration === null
-  ) {
-    return;
-  }
-
-  const timestamps = await getGroupedTimestamps(
-    selectionStore.band,
-    selectionStore.integration,
-  );
-  allTimestamps.value = timestamps.flat().map((t) => t / 1000);
-});
 
 interface Slider {
   key: string;
@@ -179,7 +157,10 @@ interface Slider {
 
 <template>
   <div class="container">
-    <div v-if="!isDisabled" class="layer">
+    <div
+      v-if="isDatasetReadyRef.value"
+      class="layer"
+    >
       <n-slider
         v-for="slider in sliders"
         :key="slider.key"
@@ -188,26 +169,32 @@ interface Slider {
         :marks="slider.marks"
         :max="slider.max"
         :min="slider.min"
-        :style="{ width: 100 / sliders.length + '%' }"
+        :style="{width: 100 / sliders.length + '%'}"
         :tooltip="false"
         class="slider"
       />
     </div>
 
-    <div v-if="!isDisabled" class="layer">
+    <div
+      v-if="isDatasetReadyRef.value"
+      class="layer"
+    >
       <div
         v-for="interest in interests"
         class="interest"
       >
-      <span
-        v-for="value of interest.values"
-        :style="{background: value ? 'red' : 'gainsboro'}"
-        class="interest__pixel"
-      />
+        <span
+          v-for="value of interest.values"
+          :style="{background: value ? 'red' : 'gainsboro'}"
+          class="interest__pixel"
+        />
       </div>
     </div>
 
-    <div v-if="!isDisabled" class="layer zoom">
+    <div
+      v-if="isDatasetReadyRef.value"
+      class="layer zoom"
+    >
       <AppButton
         v-for="slider in sliders"
         :handle-click="() => toggleZoom(slider)"

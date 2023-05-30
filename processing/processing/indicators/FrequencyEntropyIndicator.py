@@ -9,9 +9,8 @@ class FrequencyEntropyIndicator(AbstractIndicator):
         self,
         band: str,
         integration: int,
-        file_index: int,
     ) -> None:
-        super().__init__(band, integration, file_index)
+        super().__init__(band, integration)
 
     def calculate(
         self,
@@ -20,8 +19,6 @@ class FrequencyEntropyIndicator(AbstractIndicator):
         if audio.spectrogram is None:
             return self.add_nan()
 
-        frequency_entropy, _ = maad.features.frequency_entropy(
-            audio.spectrogram.s
-        )
+        frequency_entropy, _ = maad.features.frequency_entropy(audio.spectrogram.s)
 
-        self.add_value(frequency_entropy)
+        self.add_value(frequency_entropy)  # type: ignore

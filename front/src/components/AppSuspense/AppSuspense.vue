@@ -1,9 +1,12 @@
 <script lang="ts" setup="">
-import {scatterSelectedStore} from '../Scatter/scatterStore';
+import {clickedRef} from '../Scatter/useScatterClick';
 </script>
 
 <template>
-  <div v-if="!scatterSelectedStore.index" class="suspense">
+  <div
+    v-if="clickedRef.value === null"
+    class="suspense"
+  >
     Please select a point.
   </div>
 </template>

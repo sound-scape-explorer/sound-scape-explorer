@@ -17,11 +17,9 @@ class AbstractIndicator(ABC):
         self,
         band: str,
         integration: int,
-        file_index: int,
     ) -> None:
         self._band = band
         self._integration = integration
-        self._file_index = file_index
 
         self._values = []
 
@@ -41,7 +39,6 @@ class AbstractIndicator(ABC):
             index=index,
             band=self._band,
             integration=self._integration,
-            file_index=self._file_index,
             values=self._values,
         )
 

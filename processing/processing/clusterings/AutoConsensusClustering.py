@@ -8,6 +8,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from processing.common.Timer import Timer
 from processing.reducers.UmapReducer import UmapReducer
+from processing.settings.DefaultSetting import DefaultSetting
 from processing.utils.print_new_line import print_new_line
 
 
@@ -27,9 +28,9 @@ class AutoConsensusClustering:
 
     def __init__(
         self,
-        features: List[Dataset],
+        features: Dataset,
         iterations: int = 10,
-        metric: str = 'manhattan',
+        metric: str = "manhattan",
         min_cluster_size: int = 40,
         max_cluster_size: Optional[int] = None,
         best_clusters_to_keep: int = 10,
@@ -66,23 +67,25 @@ class AutoConsensusClustering:
         print_new_line()
 
         print(
-            f'AutoConsensusClustering loaded with'
-            f' {self.__iterations} iterations,'
-            f' cluster {self.__cluster_range},'
-            f' threshold: {self.__threshold}'
+            f"AutoConsensusClustering loaded with"
+            f" {self.__iterations} iterations,"
+            f" cluster {self.__cluster_range},"
+            f" threshold: {self.__threshold}"
         )
 
     def __run(self) -> None:
         for _ in range(self.__iterations):
-            reducer = UmapReducer(target_dimensions=10, seed=None)
+            reducer = UmapReducer(
+                target_dimensions=10,
+                seed=None,
+                neighbors=DefaultSetting.umap_neighbors,
+                metric=DefaultSetting.umap_metric,
+            )
             features = reducer.reduce(self.__features)
             self.__scan(features)
             self.__timer.progress()
 
-    def __scan(
-        self,
-        features: List[List[float]]
-    ) -> None:
+    def __scan(self, features: List[List[float]]) -> None:
         clustering_bests = []
         clustering_labels = []
         clustering_probabilities = []
@@ -113,26 +116,21 @@ class AutoConsensusClustering:
             clustering_labels = [clustering_labels[0]]
             clustering_probabilities = [clustering_probabilities[0]]
         else:
-            clustering_best_id = numpy.argsort(clustering_bests)[
-                                 - self.__best_clusters_to_keep:
-                                 ]
+            bctk = self.__best_clusters_to_keep
+            clustering_best_id = numpy.argsort(clustering_bests)[-bctk:]
 
-            clustering_labels = numpy.array(clustering_labels)[
-                clustering_best_id
-            ]
+            clustering_labels = numpy.array(clustering_labels)[clustering_best_id]
 
             clustering_probabilities = numpy.array(clustering_probabilities)[
                 clustering_best_id
             ]
 
-            clustering_scores = numpy.array(clustering_bests)[
-                clustering_best_id
-            ]
+            clustering_scores = numpy.array(clustering_bests)[clustering_best_id]
 
-        for label, probability, score in zip(
-                clustering_labels,
-                clustering_probabilities,
-                clustering_scores,
+        for label, _, score in zip(  # type: ignore
+            clustering_labels,
+            clustering_probabilities,
+            clustering_scores,
         ):
             # storing the best clusters scores
             self.__score.append(score)
@@ -147,9 +145,7 @@ class AutoConsensusClustering:
             # another, whatever the distance is, then it should be considered as
             # separated : i.e. 1 = different cluster / 0 = same cluster
             separation_matrix = metrics.pairwise_distances(
-                label.reshape(-1, 1),
-                label.reshape(-1, 1),
-                metric='l1'
+                label.reshape(-1, 1), label.reshape(-1, 1), metric="l1"
             )
             separation_matrix[separation_matrix != 0] = 1
 
@@ -163,10 +159,8 @@ class AutoConsensusClustering:
         ratio = self.__separation_matrix / self.__separation_matrix_count
         self.__separation_matrix = 1 - ratio
 
-        self.__separation_matrix[
-            self.__separation_matrix >= self.__threshold] = 1
-        self.__separation_matrix[
-            self.__separation_matrix < self.__threshold] = 0
+        self.__separation_matrix[self.__separation_matrix >= self.__threshold] = 1
+        self.__separation_matrix[self.__separation_matrix < self.__threshold] = 0
 
         unique: numpy.ndarray
         inverse: numpy.ndarray
@@ -184,9 +178,9 @@ class AutoConsensusClustering:
         le = LabelEncoder()
         le.fit(unique)
 
-        unique[count >= self.__min_cluster_size] = le.transform(
-            unique[count >= self.__min_cluster_size]
-        ) - 1
+        unique[count >= self.__min_cluster_size] = (
+            le.transform(unique[count >= self.__min_cluster_size]) - 1
+        )
 
         consensus: numpy.ndarray = unique[inverse].astype(str)
         consensus_list: List[int] = [int(value) for value in consensus]

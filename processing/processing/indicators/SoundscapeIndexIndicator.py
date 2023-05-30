@@ -9,9 +9,8 @@ class SoundscapeIndexIndicator(AbstractIndicator):
         self,
         band: str,
         integration: int,
-        file_index: int,
     ) -> None:
-        super().__init__(band, integration, file_index)
+        super().__init__(band, integration)
 
     def calculate(
         self,
@@ -25,4 +24,4 @@ class SoundscapeIndexIndicator(AbstractIndicator):
             fn=audio.spectrogram.fn,
         )
 
-        self.add_value(ndsi)
+        self.add_value(ndsi)  # type: ignore

@@ -76,7 +76,6 @@
 * **Front/Scatter:** Handle undefined timezone ([a38eaf2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a38eaf20c979247811a98951f16913040daa9ed0))
 * **Front/Scatter:** Remove debug log ([526ebf5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/526ebf54511bff3b2d6ab84862b7f46387140e7d))
 * **Front/Storage:** Handle optional volumes, matrices and pairings ([63317b9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/63317b9db8438ed095b9fb014bbe242c9d429431))
-
 # [8.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.2.2...v8.0.0) (2023-04-12)
 
 

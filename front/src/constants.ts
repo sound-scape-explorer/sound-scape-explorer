@@ -18,19 +18,18 @@ export const WAVE = {
   default: 10,
 };
 
-export const SPECTROGRAM = {
-  fftSize: 4096,
+export const FFT_SIZE = {
+  default: 1024,
+  max: 4096,
+  min: 128,
 };
 
-export const MATRIX_NAMES = [
-  'Distance',
-  'Overlap',
-  'Silhouette',
-];
-
-export const PAIRING_NAMES = [
-  'Cluster',
-];
+export const PLAYBACK_RATE = {
+  default: 1,
+  max: 2,
+  min: 0.1,
+  step: 0.01,
+};
 
 export const SPECTROGRAM_COLOR_MAPS = [
   'hot',

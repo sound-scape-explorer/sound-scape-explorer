@@ -1,6 +1,6 @@
-import type {Data, Layout} from 'plotly.js-dist-min';
+import {ref, watch} from 'vue';
 import Plotly from 'plotly.js-dist-min';
-import {ref, unref, watch} from 'vue';
+import type {Data, Layout} from 'plotly.js-dist-min';
 
 export interface HistogramProps {
   labels: string[];
@@ -9,33 +9,33 @@ export interface HistogramProps {
 }
 
 export function useAppHistogram(props: HistogramProps) {
-  const divRef = ref<HTMLDivElement>();
-  const dataRef = ref<Data[]>();
-  const layoutRef = ref<Partial<Layout>>();
+  const divRef = ref<HTMLDivElement | null>(null);
+  const dataRef = ref<Data[] | null>(null);
+  const layoutRef = ref<Partial<Layout> | null>(null);
 
   async function render() {
-    const div = unref(divRef);
-    const data = unref(dataRef);
-    const layout = unref(layoutRef);
-
     if (
-      !div
-      || !data
-      || !layout
+      divRef.value === null ||
+      dataRef.value === null ||
+      layoutRef.value === null
     ) {
       return;
     }
 
-    await Plotly.newPlot(div, data, layout, {displaylogo: false});
+    await Plotly.newPlot(divRef.value, dataRef.value, layoutRef.value, {
+      displaylogo: false,
+    });
   }
 
   function refresh() {
-    dataRef.value = [{
-      type: 'bar',
-      x: props.labels,
-      y: props.values,
-      hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
-    }];
+    dataRef.value = [
+      {
+        type: 'bar',
+        x: props.labels,
+        y: props.values,
+        hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
+      },
+    ];
 
     layoutRef.value = {
       title: props.title,

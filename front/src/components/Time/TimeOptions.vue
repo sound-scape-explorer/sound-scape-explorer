@@ -1,49 +1,51 @@
 <script lang="ts" setup>
-import {PauseOutline, PlayOutline, PlaySkipBackOutline, PlaySkipForwardOutline} from '@vicons/ionicons5';
+import {
+  PauseOutline,
+  PlayOutline,
+  PlaySkipBackOutline,
+  PlaySkipForwardOutline,
+} from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
-import dayjs, {Dayjs} from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import {NButton, NButtonGroup, NDatePicker, NInputNumber, NSwitch, NTooltip} from 'naive-ui';
+import type {Dayjs} from 'dayjs';
+import {
+  NButton,
+  NButtonGroup,
+  NDatePicker,
+  NInputNumber,
+  NSwitch,
+  NTooltip,
+} from 'naive-ui';
 import type {ComputedRef} from 'vue';
 import {computed, ref, watch} from 'vue';
-import {DATE_FORMAT} from '../../constants';
-import {useStorage} from '../../hooks/useStorage';
 import AppButton from '../AppButton/AppButton.vue';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
 import {timeStore} from './timeStore';
+import {settingsRef} from 'src/hooks/useStorageSettings';
+import {useDate} from 'src/hooks/useDate';
+import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {useScatterFilterTime} from '../Scatter/useScatterFilterTime';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+const {convertTimestampToDate} = useDate();
 
-const {isDisabled} = useScatterStatus();
-const {timezoneRef} = await useStorage();
+const uiDisabled: ComputedRef<boolean> = computed(
+  () => !isDatasetReadyRef.value || timeStore.isAllSelected,
+);
 
-const uiDisabled: ComputedRef<boolean> = computed(() => isDisabled.value || timeStore.isAllSelected);
+const dateStartRef = computed<Dayjs | null>(() => {
+  if (settingsRef.value === null) {
+    return null;
+  }
 
-const dateStart: ComputedRef<Dayjs> = computed(() => {
   let start = timeStore.value;
 
   if (timeStore.isAllSelected) {
     start = timeStore.min;
   }
 
-  if (timezoneRef.value !== '') {
-    return dayjs(start * 1000).tz(timezoneRef.value);
+  if (settingsRef.value.timezone !== '') {
+    return convertTimestampToDate(start * 1000, settingsRef.value.timezone);
   }
 
-  return dayjs(start * 1000);
-});
-
-const dateEnd: ComputedRef<Dayjs> = computed(() => {
-  let time = timeStore.value;
-  time += timeStore.duration;
-
-  if (timeStore.isAllSelected) {
-    time = timeStore.max;
-  }
-
-  return dayjs(time * 1000);
+  return convertTimestampToDate(start * 1000);
 });
 
 interface Duration {
@@ -87,7 +89,7 @@ function start() {
 }
 
 function stop() {
-  if (!interval) {
+  if (interval === null) {
     return;
   }
 
@@ -104,26 +106,27 @@ watch(isPlaying, () => {
   stop();
 });
 
-onKeyPressed('n', () => skipTimeForward());
-onKeyPressed('p', () => skipTimeBackward());
-onKeyPressed(' ', () => togglePlaying());
+const timeOffsetRef = computed<number | null>(() => {
+  if (settingsRef.value === null || dateStartRef.value === null) {
+    return null;
+  }
 
-function handleDateStartUpdate(t: number) {
-  timeStore.value = t / 1000;
-}
-
-const timeOffset: ComputedRef<number> = computed(() => {
-  if (timezoneRef.value === '') {
+  if (settingsRef.value.timezone === '') {
     return 0;
   }
 
   const getZoneValue = (zone: string) => Number(zone.replace('GMT', ''));
 
-  dayjs.tz.setDefault('Pacific/Tahiti');
-  const guessOffset = dayjs(0).tz(dayjs.tz.guess()).offsetName('short');
-  const targetOffset = dateStart.value.offsetName('short');
+  // dayjs.tz.setDefault('Pacific/Tahiti');
+  // const guessOffset = dayjs(0).tz(dayjs.tz.guess()).offsetName('short');
+  // const targetOffset = dateStartRef.value.offsetName('short');
+  const guessOffset = undefined;
+  const targetOffset = undefined;
 
-  if (!guessOffset || !targetOffset) {
+  if (
+    typeof guessOffset === 'undefined' ||
+    typeof targetOffset === 'undefined'
+  ) {
     return 0;
   }
 
@@ -132,13 +135,26 @@ const timeOffset: ComputedRef<number> = computed(() => {
   return offset * 60 * 60 * 1000;
 });
 
-function transposeDateToZone(date: Dayjs): number {
-  return date.unix() * 1000 + timeOffset.value;
+function handleDateStartUpdate(t: number) {
+  timeStore.value = t / 1000;
 }
 
-function printLocalizedDate(date: Dayjs): string {
-  return dayjs(transposeDateToZone(date)).format(DATE_FORMAT);
+function transposeDateToZone(date: Dayjs | null) {
+  if (date === null) {
+    return;
+  }
+
+  return date.unix() * 1000 + (timeOffsetRef.value ?? 0);
 }
+
+const {filterByTime} = useScatterFilterTime();
+watch(timeStore, () => {
+  filterByTime();
+});
+
+onKeyPressed('n', () => skipTimeForward());
+onKeyPressed('p', () => skipTimeBackward());
+onKeyPressed(' ', () => togglePlaying());
 </script>
 
 <template>
@@ -146,12 +162,10 @@ function printLocalizedDate(date: Dayjs): string {
     <div class="grid">
       <n-switch
         v-model:value="timeStore.isAllSelected"
-        :disabled="isDisabled"
+        :disabled="!isDatasetReadyRef.value"
         class="toggle"
       >
-        <template #checked>
-          all
-        </template>
+        <template #checked> all</template>
       </n-switch>
 
       <n-button-group>
@@ -235,12 +249,15 @@ function printLocalizedDate(date: Dayjs): string {
       </div>
 
       <div class="date-picker">
-        <n-tooltip placement="bottom" trigger="hover">
+        <n-tooltip
+          placement="bottom"
+          trigger="hover"
+        >
           <template #trigger>
             <n-date-picker
               :disabled="uiDisabled"
               :on-update:value="handleDateStartUpdate"
-              :value="transposeDateToZone(dateStart)"
+              :value="transposeDateToZone(dateStartRef)"
               size="small"
               type="datetime"
             />
@@ -251,12 +268,10 @@ function printLocalizedDate(date: Dayjs): string {
         </n-tooltip>
       </div>
 
-      <span class="date">
-        to {{ printLocalizedDate(dateEnd) }}
-      </span>
+      <span class="date"> to LOCALIZED_DATE_REF </span>
 
       <div class="timezone">
-        {{ timezoneRef }}
+        {{ settingsRef.value?.timezone }}
       </div>
     </div>
   </div>
@@ -322,7 +337,6 @@ function printLocalizedDate(date: Dayjs): string {
   @media screen and (min-width: 800px) and (max-width: 1000px) {
     font-size: 0.5rem;
     white-space: nowrap;
-
   }
   @media screen and (max-width: 800px) {
     font-size: 0.4rem;

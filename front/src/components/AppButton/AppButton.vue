@@ -29,7 +29,10 @@ const hasText = typeof props.text !== 'undefined';
       size="small"
       @click="props.handleClick"
     >
-      <template v-if="hasChildren" #icon>
+      <template
+        v-if="hasChildren"
+        #icon
+      >
         <n-icon>
           <slot />
         </n-icon>

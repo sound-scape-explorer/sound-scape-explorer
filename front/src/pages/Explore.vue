@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import {onMounted} from 'vue';
 import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore';
 import Audio from '../components/Audio/Audio.vue';
 import Colors from '../components/Colors/Colors.vue';
@@ -15,10 +16,18 @@ import Selection from '../components/Selection/Selection.vue';
 import Settings from '../components/Settings/Settings.vue';
 import Time from '../components/Time/Time.vue';
 import Volumes from '../components/Volumes/Volumes.vue';
-import {useStorage} from '../hooks/useStorage';
+import StorageLoad from '../components/StorageLoad/StorageLoad.vue';
+import {useFile} from 'src/hooks/useFile';
+import {useWorker} from 'src/hooks/useWorker';
 
-const {initializeFile} = await useStorage();
-const isReady = await initializeFile();
+useWorker();
+const {isFileRef} = useFile();
+
+onMounted(() => {
+  if (isFileRef.value === false) {
+    appDraggablesStore.import = true;
+  }
+});
 </script>
 
 <template>
@@ -27,10 +36,11 @@ const isReady = await initializeFile();
   <Settings v-if="appDraggablesStore.settings" />
   <Help v-if="appDraggablesStore.help" />
 
-  <div v-if="isReady">
+  <div v-if="isFileRef">
+    <StorageLoad />
     <Selection />
     <Colors />
-    <Query />
+    <!-- <Query /> -->
     <Time />
     <Audio />
     <Details />

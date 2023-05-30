@@ -1,3 +1,6 @@
+from abc import abstractmethod
+from typing import List
+
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.ReducerName import ReducerName
 from processing.reducers.SparsePcaReducer import SparsePcaReducer
@@ -11,9 +14,11 @@ class Reducer:
         name: str,
         target_dimensions: int,
         seed: int,
+        neighbors: int,
+        metric: str,
     ):
         if name == ReducerName.umap.value:
-            return UmapReducer(target_dimensions, seed)
+            return UmapReducer(target_dimensions, seed, neighbors, metric)
         elif name == ReducerName.vae.value:
             return VaeReducer(target_dimensions)
         elif name == ReducerName.pca.value:
@@ -25,7 +30,7 @@ class Reducer:
 
     @staticmethod
     def fail(name: str) -> None:
-        raise KeyError(f'Reducer {name} not found!')
+        raise KeyError(f"Reducer {name} not found!")
 
     @staticmethod
     def validate_name(name: str) -> None:
@@ -35,3 +40,10 @@ class Reducer:
             return
 
         Reducer.fail(name)
+
+    @abstractmethod
+    def reduce(
+        self,
+        features: List[List[float]],
+    ) -> List[List[float]]:
+        pass

@@ -1,29 +1,32 @@
 {
   "name": "sound-scape-explorer",
   "scripts": {
-    "dev": "cd front && yarn dev",
-    "process": "yarn process:all",
+    "dev": "cd front && pnpm dev",
+    "audio": "pnpm serve --cors",
+    "migrate:v8": "python3 processing/processing/actions/run_migration_v8.py",
+    "process": "pnpm process:all",
     "process:all": "python3 processing/processing/actions/_all.py",
     "process:all-actions": "python3 processing/processing/actions/_all_actions.py",
     "process:all-but-files": "python3 processing/processing/actions/_all_but_files.py",
     "process:all-to-groups": "python3 processing/processing/actions/_all_to_groups.py",
-    "process:config": "python3 processing/processing/actions/a_config.py",
-    "process:files": "python3 processing/processing/actions/b_files.pyfiles.py",
-    "process:groups": "python3 processing/processing/actions/c_groups.py.py",
-    "process:autocluster": "python3 processing/processing/actions/d_autocluster.py.py",
-    "process:reducers": "python3 processing/processing/actions/e_reducers.py",
-    "process:indicators": "python3 processing/processing/actions/f_indicators.py",
-    "process:volumes": "python3 processing/processing/actions/g_volumes.py",
-    "process:matrices": "python3 processing/processing/actions/h_matrices.py",
-    "process:pairings": "python3 processing/processing/actions/i_pairings.py",
-    "dataframe": "python3 processing/processing/utils/get_dataframe.py",
-    "release:prepare": "yarn release:prepare:archive-examples",
+    "process:config": "python3 processing/processing/actions/run_config.py",
+    "process:dataframe": "python3 processing/processing/actions/run_dataframe.py",
+    "process:files": "python3 processing/processing/actions/run_files.py",
+    "process:groups": "python3 processing/processing/actions/run_groups.py",
+    "process:autocluster": "python3 processing/processing/actions/run_autocluster.py",
+    "process:reducers": "python3 processing/processing/actions/run_reducers.py",
+    "process:indicators": "python3 processing/processing/actions/run_indicators.py",
+    "process:volumes": "python3 processing/processing/actions/run_volumes.py",
+    "process:matrices": "python3 processing/processing/actions/run_matrices.py",
+    "process:pairings": "python3 processing/processing/actions/run_pairings.py",
+    "release:prepare": "pnpm release:prepare:archive-examples",
     "release:prepare:archive-examples": "bin/archive-examples.sh",
-    "start": "yarn dev"
+    "start": "pnpm dev"
   },
   "devDependencies": {
-    "concurrently": "^7.4.0",
-    "rimraf": "^3.0.2"
+    "concurrently": "^8.0.1",
+    "rimraf": "^5.0.0",
+    "serve": "^14.2.0"
   },
-  "version": "8.3.4"
+  "version": "8.0.0"
 }

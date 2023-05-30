@@ -2,9 +2,9 @@
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
 import {ref, watch} from 'vue';
 import {colorsStore} from '../Colors/colorsStore';
-import {useScatterMeta} from '../Scatter/useScatterMeta';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
 import {metaSelectionStore} from './metaSelectionStore';
+import {useScatterFilterMeta} from '../Scatter/useScatterFilterMeta';
+import {useColorByMeta} from '../Colors/useColorByMeta';
 
 /**
  * Props
@@ -22,8 +22,9 @@ const props = defineProps<Props>();
  * State
  */
 
+const {getColorByMetaIndex} = useColorByMeta();
+const {filterByMeta} = useScatterFilterMeta();
 const selectionRef = ref();
-const {isDisabled} = useScatterStatus();
 
 /**
  * Lifecycles
@@ -36,14 +37,13 @@ watch(selectionRef, updateSelection);
  */
 
 function getColorByItem(index: number): string | undefined {
-  const {getMetaColorFromMetaIndex} = useScatterMeta();
   const colorType = `by${props.title}`;
 
   if (colorType !== colorsStore.colorType) {
     return undefined;
   }
 
-  return getMetaColorFromMetaIndex(index, props.items.length);
+  return getColorByMetaIndex(index, props.items.length);
 }
 
 function updateSelection() {
@@ -52,16 +52,20 @@ function updateSelection() {
   }
 
   metaSelectionStore.selection[props.index] = selectionRef.value;
+  filterByMeta();
 }
 </script>
 
 <template>
-  <n-checkbox-group v-model:value="selectionRef" :disabled="isDisabled" class="checkboxes">
+  <n-checkbox-group
+    v-model:value="selectionRef"
+    class="checkboxes"
+  >
     <n-checkbox
       v-for="(item, index) in props.items"
       :style="{
-          backgroundColor: getColorByItem(index)
-        }"
+        backgroundColor: getColorByItem(index),
+      }"
       :value="item"
       class="checkbox"
     >

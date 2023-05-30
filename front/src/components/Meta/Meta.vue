@@ -31,9 +31,15 @@ function toggle() {
 
 <template>
   <AppDraggable draggable-key="meta">
-    <div :class="containerClasses" class="container">
+    <div
+      :class="containerClasses"
+      class="container"
+    >
       <div class="button search">
-        <n-button size="tiny" @click="toggle">
+        <n-button
+          size="tiny"
+          @click="toggle"
+        >
           <n-icon>
             <search-outline />
           </n-icon>

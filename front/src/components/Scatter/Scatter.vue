@@ -1,25 +1,14 @@
 <script lang="ts" setup>
-import {ref, unref, watch} from 'vue';
-import {scatterStore} from './scatterStore';
-import {useScatter} from './useScatter';
+import {useScatterContainer} from './useScatterContainer';
 
-const containerRef = ref<HTMLDivElement>();
-const {load} = useScatter();
-
-watch(containerRef, () => {
-  const container = unref(containerRef);
-
-  if (!container) {
-    return;
-  }
-
-  scatterStore.container = container;
-  load(container);
-});
+const {containerRef} = useScatterContainer();
 </script>
 
 <template>
-  <div ref="containerRef" class="container" />
+  <div
+    ref="containerRef"
+    class="container"
+  />
 </template>
 
 <style lang="scss" scoped>

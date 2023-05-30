@@ -1,15 +1,19 @@
-import {convertArrayToCsvRow} from './convert-array-to-csv-row';
-
-export function convertArrayToCsv(array: string[][], firstRow?: string[]): string {
-  let content = 'data:text/csv;charset=utf-8,';
+export function convertArrayToCsv(
+  content: string[],
+  firstRow?: string,
+): string {
+  let csv = 'data:text/csv;charset=utf-8,';
+  const lineBreak = '\r\n';
 
   if (firstRow) {
-    content += convertArrayToCsvRow(firstRow);
+    csv += firstRow;
+    csv += lineBreak;
   }
 
-  array.forEach((row) => {
-    content += convertArrayToCsvRow(row);
+  content.forEach((contentRow) => {
+    csv += contentRow;
+    csv += lineBreak;
   });
 
-  return content;
+  return csv;
 }

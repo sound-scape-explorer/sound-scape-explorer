@@ -22,7 +22,7 @@
 
 ## 👨‍🏫 For researchers
 
-### ⚓ Requirements
+### 🐋 Docker
 
 Install and run Docker.
 
@@ -44,7 +44,7 @@ and set up your project!
 3. Run the startup script according to your operating system.
 
 | SSE Flavor | Use case                                                                                                                                      |
-|------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | SSE Audio  | Use this if you already have your `.h5` and want to use the [online front end](https://sound-scape-explorer.github.io/sound-scape-explorer/). |
 | SSE CPU    | Use this if you want to generate your `.h5` using your CPU (slower).                                                                          |
 | SSE CUDA   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                   |
@@ -54,9 +54,9 @@ and set up your project!
 
 ### ⚓ Requirements
 
-- [Node.js](https://nodejs.org/en/)
-- [Yarn](https://yarnpkg.com/getting-started/install)
 - [Python 3.8+](https://www.python.org/downloads/)
+- [Node.js](https://nodejs.org/en/)
+- [pnpm](https://pnpm.io/installation#using-npm)
 
 ### 🎛️ Instructions
 
@@ -64,24 +64,26 @@ and set up your project!
 # 📥 Installation
 git clone git@github.com:sound-scape-explorer/sound-scape-explorer.git
 cd sound-scape-explorer
-yarn install
+pnpm i
 
 # 💽 Generate data, see list of available actions in `package.json`.
 # Examples
-yarn process -c /path/to/config.xlsx -s /path/to/storage.h5
-yarn process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
+pnpm process -c /path/to/config.xlsx -s /path/to/storage.h5
+pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
 
-# 🚀 Explore data, serve `front` localhost:8080
-yarn dev
+# 🚀 Explore data, serve `front` at localhost:8080
+pnpm dev
 
 # Want a CSV export from your existing h5?
-yarn dataframe --band all --integration 60 --storage /path/to/storage.h5 --csv /path/to/csv
+pnpm process:dataframe --band all --integration 60 --storage /path/to/storage.h5 --output /path/to/dataframe.csv
 ```
 
 ## ⚒️ Processing commands
 
-| `yarn` command          | Description                                                                                                                           |
-|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| `pnpm` command          | Description                                                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `audio`                 | Serve audio files. Example: `pnpm audio /path/to/audio/folder`.                                                                       |
+| `migrate:v8`            | Migrate storage file from v8 to v9.                                                                                                   |
 | `process`               | alias for `process:all`                                                                                                               |
 | `process:all`           | Run all processing commands                                                                                                           |
 | `process:all-actions`   | Run `process:autocluster` `process:reducers` `process:indicators` `process:volumes` `process:matrices` & `process:pairings` commands. |
@@ -96,6 +98,7 @@ yarn dataframe --band all --integration 60 --storage /path/to/storage.h5 --csv /
 | `process:volumes`       | Process volumes from grouped audio features.                                                                                          |
 | `process:matrices`      | Process matrices from grouped audio features.                                                                                         |
 | `process:pairings`      | Process pairings from grouped audio features.                                                                                         |
+| `process:dataframe`     | Build pandas DataFrame and export to .csv file.                                                                                       |
 
 ## 🧑‍🤝‍🧑 Contribute
 

@@ -16,35 +16,39 @@ import {
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
-import {useStorage} from '../../hooks/useStorage';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
+import {useFile} from 'src/hooks/useFile';
 
-const {initializeFile} = await useStorage();
-
-/**
- * State
- */
-
-const isReady = await initializeFile();
+const {isFileRef} = useFile();
 
 /**
  * Handlers
  */
 
-const toggleImport = () => appDraggablesStore.import = !appDraggablesStore.import;
-const toggleSettings = () => appDraggablesStore.settings = !appDraggablesStore.settings;
-const toggleHelp = () => appDraggablesStore.help = !appDraggablesStore.help;
-const toggleSelection = () => appDraggablesStore.selection = !appDraggablesStore.selection;
-const toggleColors = () => appDraggablesStore.colors = !appDraggablesStore.colors;
-const toggleQueries = () => appDraggablesStore.queries = !appDraggablesStore.queries;
-const toggleTime = () => appDraggablesStore.time = !appDraggablesStore.time;
-const toggleMeta = () => appDraggablesStore.meta = !appDraggablesStore.meta;
-const togglePlayer = () => appDraggablesStore.audio = !appDraggablesStore.audio;
-const toggleDetails = () => appDraggablesStore.details = !appDraggablesStore.details;
-const toggleVolumes = () => appDraggablesStore.volumes = !appDraggablesStore.volumes;
-const toggleMatrices = () => appDraggablesStore.matrices = !appDraggablesStore.matrices;
-const togglePairings = () => appDraggablesStore.pairings = !appDraggablesStore.pairings;
+const toggleImport = () =>
+  (appDraggablesStore.import = !appDraggablesStore.import);
+const toggleSettings = () =>
+  (appDraggablesStore.settings = !appDraggablesStore.settings);
+const toggleHelp = () => (appDraggablesStore.help = !appDraggablesStore.help);
+const toggleSelection = () =>
+  (appDraggablesStore.selection = !appDraggablesStore.selection);
+const toggleColors = () =>
+  (appDraggablesStore.colors = !appDraggablesStore.colors);
+const toggleQueries = () =>
+  (appDraggablesStore.queries = !appDraggablesStore.queries);
+const toggleTime = () => (appDraggablesStore.time = !appDraggablesStore.time);
+const toggleMeta = () => (appDraggablesStore.meta = !appDraggablesStore.meta);
+const togglePlayer = () =>
+  (appDraggablesStore.audio = !appDraggablesStore.audio);
+const toggleDetails = () =>
+  (appDraggablesStore.details = !appDraggablesStore.details);
+const toggleVolumes = () =>
+  (appDraggablesStore.volumes = !appDraggablesStore.volumes);
+const toggleMatrices = () =>
+  (appDraggablesStore.matrices = !appDraggablesStore.matrices);
+const togglePairings = () =>
+  (appDraggablesStore.pairings = !appDraggablesStore.pairings);
 
 onKeyPressed(KeyboardShortcut.import, toggleImport);
 onKeyPressed(KeyboardShortcut.settings, toggleSettings);
@@ -89,7 +93,10 @@ onKeyPressed(KeyboardShortcut.pairings, togglePairings);
       </MenuItem>
     </div>
 
-    <div v-if="isReady" class="column">
+    <div
+      v-if="isFileRef"
+      class="column"
+    >
       <MenuItem
         :callback="toggleSelection"
         :shortcut="KeyboardShortcut.selection"

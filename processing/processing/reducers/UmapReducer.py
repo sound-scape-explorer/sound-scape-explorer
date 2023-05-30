@@ -13,20 +13,24 @@ class UmapReducer(AbstractReducer):
         self,
         target_dimensions: int,
         seed: Union[int, None],
+        neighbors: int,
+        metric: str,
     ):
         self.__instance = UMAP(
             n_components=target_dimensions,
             random_state=seed,
+            n_neighbors=neighbors,
+            metric=metric,
         )
 
     def get_instance(self) -> UMAP:
         return self.__instance
 
-    # TODO: Do we want to inject the scale?
     def reduce(
         self,
         features: List[List[float]],
     ) -> List[List[float]]:
         scaled_features = robust_scale(features)
         reduced_features = self.__instance.fit_transform(scaled_features)
-        return reduced_features
+        reduced_features_list = list(reduced_features)
+        return reduced_features_list

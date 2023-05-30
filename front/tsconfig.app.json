@@ -1,5 +1,5 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "env.d.ts",
     "src/**/*",
@@ -11,7 +11,10 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
+    "module": "es2022",
+    "moduleResolution": "Node",
     "lib": [
+      "webworker",
       "ESNext",
       "DOM",
       "DOM.Iterable"

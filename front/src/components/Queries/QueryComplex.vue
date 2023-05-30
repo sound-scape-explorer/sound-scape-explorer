@@ -3,14 +3,16 @@ import {FlaskOutline} from '@vicons/ionicons5';
 import {NIcon, NInput} from 'naive-ui';
 import {ref, watch} from 'vue';
 import {useTimeout} from '../../hooks/useTimeout';
-import {useScatterStatus} from '../Scatter/useScatterStatus';
 import type {QueryComplexStore} from './queryComplexStore';
 import {queriesComplexStore} from './queryComplexStore';
+import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
 
-const input = ref<string>('');
-const {isDisabled} = useScatterStatus();
+const inputRef = ref<string>('');
 
-function digestQueryItem(item: RegExpMatchArray, payload: QueryComplexStore['queryComplex']): void {
+function digestQueryItem(
+  item: RegExpMatchArray,
+  payload: QueryComplexStore['queryComplex'],
+): void {
   const metaProperty = item[1];
   let value: string | string[] = item[2];
 
@@ -27,14 +29,16 @@ function digestQueryItem(item: RegExpMatchArray, payload: QueryComplexStore['que
 }
 
 function processQuery() {
-  if (input.value === '') {
+  if (inputRef.value === '') {
     queriesComplexStore.isActive = false;
     return;
   }
 
   const payload: QueryComplexStore['queryComplex'] = {};
   const groupRegex = /\(([^+.]*)\)/g; // ()+()
-  const groupMatches = [...input.value.matchAll(groupRegex)].map((element) => element[1]);
+  const groupMatches = [...inputRef.value.matchAll(groupRegex)].map(
+    (element) => element[1],
+  );
 
   const itemRegex = /@(\w*)=([\w+]*)/g; // @COL=VALUE1+VALUE2
 
@@ -53,7 +57,7 @@ function processQuery() {
   } else {
     queriesComplexStore.hasGroups = false;
 
-    const itemMatches = [...input.value.matchAll(itemRegex)];
+    const itemMatches = [...inputRef.value.matchAll(itemRegex)];
     itemMatches.forEach((item) => digestQueryItem(item, payload));
   }
 
@@ -61,15 +65,15 @@ function processQuery() {
   queriesComplexStore.queryComplex = payload;
 }
 
-watch(input, () => {
+watch(inputRef, () => {
   useTimeout(processQuery, 500);
 });
 </script>
 
 <template>
   <n-input
-    v-model:value="input"
-    :disabled="isDisabled"
+    v-model:value="inputRef"
+    :disabled="!isDatasetReadyRef.value"
     placeholder="Query Complex..."
     size="small"
     type="text"

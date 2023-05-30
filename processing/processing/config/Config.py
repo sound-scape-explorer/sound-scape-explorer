@@ -2,34 +2,38 @@ import datetime
 import math
 from enum import Enum
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import Any, List, Union
 
 import numpy
 import pandas
 from numpy import nan
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
-from processing.config.ConfigIntegration import (
-    ConfigIntegration,
-    ConfigIntegrations,
-)
+from processing.config.ConfigIntegration import ConfigIntegration, ConfigIntegrations
 from processing.config.ConfigRange import ConfigRange, ConfigRanges
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
 from processing.config.ExcelBand import ExcelBand
 from processing.config.ExcelFile import ExcelFile
 from processing.config.ExcelIndicator import ExcelIndicator
 from processing.config.ExcelIntegration import ExcelIntegration
+from processing.config.ExcelMatrices import ExcelMatrices
+from processing.config.ExcelPairings import ExcelPairings
 from processing.config.ExcelRange import ExcelRange
 from processing.config.ExcelReducer import ExcelReducer
 from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelVolume import ExcelVolume
 from processing.indicators.Indicator import Indicator
+from processing.matrices.Matrix import Matrix
+from processing.pairings.Pairing import Pairing
 from processing.settings.ConfigSetting import ConfigSettings
+from processing.settings.DefaultSetting import DefaultSetting
+from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
+from processing.utils.get_uniques_from_list import get_uniques_from_list
 from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
 
@@ -37,7 +41,7 @@ from processing.volumes.Volume import Volume
 class Config(metaclass=SingletonMeta):
     __path: str
     __excel: pandas.ExcelFile
-    __settings: ConfigSettings = {}
+    __settings: ConfigSettings = {}  # type: ignore
     __files: ConfigFiles = {}
     __files_meta_properties: List[str]
     __bands: ConfigBands = {}
@@ -47,10 +51,12 @@ class Config(metaclass=SingletonMeta):
     __reducers: ConfigReducers = []
     __indicators: List[str] = []
     __volumes: List[str] = []
+    __matrices: List[str] = []
+    __pairings: List[str] = []
 
     def __init__(
         self,
-        path: Optional[str],
+        path: str,
     ) -> None:
         self.__path = path
 
@@ -63,10 +69,11 @@ class Config(metaclass=SingletonMeta):
 
     def __succeed(self) -> None:
         print_new_line()
-        print(f'Config loaded: {self.__path}')
+        print(f"Config loaded: {self.__path}")
+        self.__print_settings()
 
     def __fail(self) -> None:
-        raise FileNotFoundError(f'Could not load Excel file: {self.__path}')
+        raise FileNotFoundError(f"Could not load Excel file: {self.__path}")
 
     def __validate_path(self) -> None:
         if self.__path is None:
@@ -84,7 +91,7 @@ class Config(metaclass=SingletonMeta):
         self,
         sheet: ExcelSheet,
     ) -> DataFrame:
-        return self.__excel.parse(sheet.value)
+        return self.__excel.parse(sheet.value)  # type: ignore
 
     @staticmethod
     def __parse_column(
@@ -94,7 +101,7 @@ class Config(metaclass=SingletonMeta):
         if type(column) is str:
             return sheet[column]
 
-        return sheet[column.value]
+        return sheet[column.value]  # type: ignore
 
     def __read(self) -> None:
         self.__read_settings()
@@ -108,6 +115,8 @@ class Config(metaclass=SingletonMeta):
         self.__read_reducers()
         self.__read_indicators()
         self.__read_volumes()
+        self.__read_matrices()
+        self.__read_pairings()
 
     def __set(self) -> None:
         self.__set_all_sites()
@@ -128,6 +137,8 @@ class Config(metaclass=SingletonMeta):
         self.__store_reducers(storage)
         self.__store_indicators(storage)
         self.__store_volumes(storage)
+        self.__store_matrices(storage)
+        self.__store_pairings(storage)
 
     def __store_reducers(
         self,
@@ -158,13 +169,25 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        storage.create_indicators(self.__indicators)
+        storage.write_indicators(self.__indicators)
 
     def __store_volumes(
         self,
         storage: Storage,
     ) -> None:
-        storage.create_volumes(self.__volumes)
+        storage.write_volumes(self.__volumes)
+
+    def __store_matrices(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.write_matrices(self.__matrices)
+
+    def __store_pairings(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.write_pairings(self.__pairings)
 
     def __set_all_sites(self) -> None:
         for file in self.__files.values():
@@ -177,28 +200,29 @@ class Config(metaclass=SingletonMeta):
 
     @staticmethod
     def __is_nan(payload: Any) -> bool:
-        return (type(payload) is float or type(payload) is numpy.float64) \
-            and math.isnan(payload)
+        return (
+            type(payload) is float or type(payload) is numpy.float64
+        ) and math.isnan(payload)
 
     def get_umap_seed(self) -> int:
-        return self.__settings['umap_seed']
+        return self.__settings["umap_seed"]
 
     def get_expected_sample_rate(self) -> int:
-        return self.__settings['expected_sample_rate']
+        return self.__settings["expected_sample_rate"]
 
     def get_base_path(self) -> str:
-        return self.__settings['base_path']
+        return self.__settings["base_path"]
 
     def get_audio_folder(self) -> str:
-        return self.__settings['audio_folder']
+        return self.__settings["audio_folder"]
 
     def get_audio_host(self) -> str:
-        return self.__settings['audio_host']
+        return self.__settings["audio_host"]
 
     def get_audio_path(self) -> str:
         base_path = self.get_base_path()
         audio_folder = self.get_audio_folder()
-        return f'{base_path}/{audio_folder}'
+        return f"{base_path}/{audio_folder}"
 
     def get_files(self) -> ConfigFiles:
         return self.__files
@@ -211,16 +235,54 @@ class Config(metaclass=SingletonMeta):
 
     def __read_settings(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.settings)
-        settings = self.__parse_column(sheet, ExcelSetting.setting)
-        values = self.__parse_column(sheet, ExcelSetting.value)
+        settings = self.__parse_column(sheet, ExcelSetting.setting.value)
+        values = self.__parse_column(sheet, ExcelSetting.value_.value)
 
         for index, setting in enumerate(settings):
-            value = values[index]
-
-            if self.__is_nan(value):
-                value = None
-
+            value = self.__digest_setting(setting, values[index])
             self.__settings[setting] = value  # type: ignore
+
+    def __digest_setting(
+        self,
+        setting: str,
+        value: Union[Series, DataFrame],
+    ):
+        payload = value
+
+        if self.__is_nan(value):
+            payload = None
+
+        # TODO: Split these blocks
+        if setting == StorageSetting.umap_metric.value and value is None:
+            payload = DefaultSetting.umap_metric
+
+        elif setting == StorageSetting.autocluster.value:
+            if value == "yes":
+                payload = True
+            else:
+                payload = DefaultSetting.autocluster
+
+        elif setting == StorageSetting.autocluster_iterations.value and value is None:
+            payload = DefaultSetting.autocluster_iterations
+
+        elif setting == StorageSetting.autocluster_min_size.value and value is None:
+            payload = DefaultSetting.autocluster_min_size
+
+        elif setting == StorageSetting.autocluster_max_size.value and value is None:
+            payload = DefaultSetting.autocluster_max_size
+
+        elif setting == StorageSetting.autocluster_threshold.value and value is None:
+            payload = DefaultSetting.autocluster_threshold
+
+        return payload
+
+    def __print_settings(self) -> None:
+        print_new_line()
+        print("Settings")
+        print_new_line()
+
+        for setting_name, setting in self.__settings.items():
+            print(f"{setting_name}: {setting}")
 
     @staticmethod
     def __convert_date_to_timestamp(date_string: str) -> int:
@@ -235,10 +297,10 @@ class Config(metaclass=SingletonMeta):
         self.__files_meta_properties = []
 
         for column in sheet:
-            if 'meta_' not in column:
+            if "meta_" not in column:
                 continue
 
-            meta_property = column.replace(ExcelFile.meta_prefix.value, '')
+            meta_property = column.replace(ExcelFile.meta_prefix.value, "")
             self.__files_meta_properties.append(meta_property)
 
     def __read_files_meta_values(self) -> List[List[str]]:
@@ -248,7 +310,7 @@ class Config(metaclass=SingletonMeta):
         for meta_property in self.__files_meta_properties:
             meta_value = self.__parse_column(
                 sheet,
-                f'{ExcelFile.meta_prefix.value}{meta_property}',
+                f"{ExcelFile.meta_prefix.value}{meta_property}",
             )
 
             meta_value = list(meta_value)
@@ -329,15 +391,8 @@ class Config(metaclass=SingletonMeta):
 
         meta_sets: List[List[str]] = []
 
-        for index, meta_property in enumerate(meta_properties):
-            meta_set = []
-
-            for meta_value in meta_values[index]:
-                if meta_value in meta_set:
-                    continue
-
-                meta_set.append(meta_value)
-
+        for index, _ in enumerate(meta_properties):
+            meta_set = get_uniques_from_list(meta_values[index])
             meta_sets.append(meta_set)
 
         storage.write_metas(
@@ -441,18 +496,17 @@ class Config(metaclass=SingletonMeta):
             integrations_seconds.append(integration.seconds)
 
         storage.create_integrations(
-            integrations=integrations,
-            integrations_seconds=integrations_seconds
+            integrations=integrations, integrations_seconds=integrations_seconds
         )
 
     def __parse_reducer_bands(
         self,
-        bands: Union[str, type(nan)],
+        bands: Union[str, type(nan)],  # type: ignore TODO: Learn why
     ) -> List[str]:
         reducer_bands = []
 
         if type(bands) is str:
-            for band in bands.split(','):
+            for band in bands.split(","):
                 _ = self.__bands[band]
                 reducer_bands.append(band)
         else:
@@ -463,12 +517,12 @@ class Config(metaclass=SingletonMeta):
 
     def __parse_reducer_integrations(
         self,
-        integrations: Union[str, type(nan)],
+        integrations: Union[str, type(nan)],  # type: ignore TODO: Learn why
     ) -> List[str]:
         reducer_integrations = []
 
         if type(integrations) is str:
-            for integration in integrations.split(','):
+            for integration in integrations.split(","):
                 _ = self.__integrations[integration]
                 reducer_integrations.append(integration)
         else:
@@ -479,12 +533,12 @@ class Config(metaclass=SingletonMeta):
 
     def __parse_reducer_ranges(
         self,
-        ranges: Union[str, type(nan)],
+        ranges: Union[str, type(nan)],  # type: ignore TODO: Learn why
     ) -> List[str]:
         reducer_ranges = []
 
         if type(ranges) is str:
-            for range_ in ranges.split(','):
+            for range_ in ranges.split(","):
                 _ = self.__ranges[range_]
                 reducer_ranges.append(range_)
         else:
@@ -534,3 +588,19 @@ class Config(metaclass=SingletonMeta):
         for name in volumes:
             Volume.validate_name(name)
             self.__volumes.append(name)
+
+    def __read_matrices(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.matrices)
+        matrices = self.__parse_column(sheet, ExcelMatrices.matrix)
+
+        for name in matrices:
+            Matrix.validate_name(name)
+            self.__matrices.append(name)
+
+    def __read_pairings(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.pairings)
+        pairings = self.__parse_column(sheet, ExcelPairings.pairing)
+
+        for name in pairings:
+            Pairing.validate_name(name)
+            self.__pairings.append(name)

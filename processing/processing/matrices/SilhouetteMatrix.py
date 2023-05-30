@@ -42,23 +42,23 @@ class SilhouetteMatrix(AbstractMatrix):
                         pd.concat(
                             (
                                 self._dataframe[self._dataframe.index == cl1],
-                                self._dataframe[self._dataframe.index == cl2])
+                                self._dataframe[self._dataframe.index == cl2],
+                            )
                         ),
                         pd.concat(
                             (
                                 pd.Series(
-                                    self._dataframe.index[
-                                        self._dataframe.index == cl1]
+                                    self._dataframe.index[self._dataframe.index == cl1]
                                 ),
                                 pd.Series(
-                                    self._dataframe.index[
-                                        self._dataframe.index == cl2]
-                                ))
+                                    self._dataframe.index[self._dataframe.index == cl2]
+                                ),
+                            )
                         ),
-                        metric='manhattan'
+                        metric="manhattan",
                     )
 
         silhouette = silhouette + silhouette.T
         np.fill_diagonal(silhouette, np.nan)
 
-        self._set_matrix(silhouette)
+        self._set_matrix(silhouette)  # type: ignore

@@ -1,12 +1,11 @@
 <script lang="ts" setup="">
-import Plotly, {Data as PlotlyData, Layout} from 'plotly.js-dist-min';
-import {ref, unref, watch} from 'vue';
+import Plotly from 'plotly.js-dist-min';
+import type {Data as PlotlyData, Layout} from 'plotly.js-dist-min';
+import {ref, watch} from 'vue';
 
-type Data =
-  & PlotlyData
-  & {
+type Data = PlotlyData & {
   hoverongaps: boolean;
-}
+};
 
 /**
  * Props
@@ -23,9 +22,9 @@ const props = defineProps<Props>();
  * State
  */
 
-const divRef = ref<HTMLDivElement>();
-const dataRef = ref<Data[]>();
-const layoutRef = ref<Partial<Layout>>();
+const divRef = ref<HTMLDivElement | null>(null);
+const dataRef = ref<Data[] | null>(null);
+const layoutRef = ref<Partial<Layout> | null>(null);
 
 /**
  * Lifecycles
@@ -40,32 +39,32 @@ watch(props, refresh);
  */
 
 async function render() {
-  const div = unref(divRef);
-  const data = unref(dataRef);
-  const layout = unref(layoutRef);
-
   if (
-    !div
-    || !data
-    || !layout
+    divRef.value === null ||
+    dataRef.value === null ||
+    layoutRef.value === null
   ) {
     return;
   }
 
-  await Plotly.newPlot(div, data, layout, {displaylogo: false});
+  await Plotly.newPlot(divRef.value, dataRef.value, layoutRef.value, {
+    displaylogo: false,
+  });
 }
 
 function refresh() {
-  dataRef.value = [{
-    type: 'heatmap',
-    colorscale: 'YlOrRd',
-    reversescale: true,
-    x: props.labels,
-    y: [...props.labels].reverse(),
-    z: [...props.values].reverse(),
-    hoverongaps: false,
-    hovertemplate: '%{z:.3f}<extra>%{y}/%{x}</extra>',
-  }];
+  dataRef.value = [
+    {
+      type: 'heatmap',
+      colorscale: 'YlOrRd',
+      reversescale: true,
+      x: props.labels,
+      y: [...props.labels].reverse(),
+      z: [...props.values].reverse(),
+      hoverongaps: false,
+      hovertemplate: '%{z:.3f}<extra>%{y}/%{x}</extra>',
+    },
+  ];
 
   layoutRef.value = {
     title: props.title,
@@ -78,7 +77,10 @@ function refresh() {
 </script>
 
 <template>
-  <span ref="divRef" class="heatmap" />
+  <span
+    ref="divRef"
+    class="heatmap"
+  />
 </template>
 
 <style lang="scss" scoped>
