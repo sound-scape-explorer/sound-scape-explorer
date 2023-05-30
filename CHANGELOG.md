@@ -1,3 +1,81 @@
+## [8.3.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.3...v8.3.4) (2023-05-02)
+
+
+### Bug Fixes
+
+* **Processing/Utils:** Parse meta values for correct build of pandas dataframe ([c615503](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c61550382fa20cdfd0da4f85125f55773632b926))
+
+## [8.3.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.2...v8.3.3) (2023-04-28)
+
+
+### Bug Fixes
+
+* **CD:** Will you ever work as expected? ([3376521](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3376521fa3324a7b6ae3ee11a1355d8a9139fa62))
+
+## [8.3.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.1...v8.3.2) (2023-04-28)
+
+
+### Bug Fixes
+
+* **CD:** Fix no templating for assets ([172b3fa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/172b3faa2653edac36ff20456a49b9adf92e60ad))
+
+## [8.3.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.0...v8.3.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* **CD:** Use lodash templates for GitHub assets + Use better asset names ([8ffbdfe](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8ffbdfe8530c56a24c30b5e6c3b80c31cfce7994))
+
+# [8.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.2.0...v8.3.0) (2023-04-28)
+
+
+### Features
+
+* **CD:** Attach version number to output assets ([4e71ef8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4e71ef890d5732ffa42c2fd4c0c199ffff32675a))
+
+# [8.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.1.0...v8.2.0) (2023-04-28)
+
+
+### Features
+
+* **CD:** Add `SSE Audio` flavor + Set fixed versions in docker compose files + Update documentation and delivery pipelines ([3b6194b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3b6194b0fa63327bdddd457e72eb532a4b88c7d1))
+
+# [8.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.3...v8.1.0) (2023-04-27)
+
+
+### Bug Fixes
+
+* **Front/Export:** Add `pointIndex` and `groupIndex` + Fix dimensions ([5caeca5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5caeca53f769f1ec59dbcb9b5b526b0055e67292))
+
+
+### Features
+
+* **Processing:** Add `yarn dataframe` command ([831138d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/831138d820b9aaebfa24907feef7a812b53a3052))
+
+## [8.0.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.2...v8.0.3) (2023-04-19)
+
+
+### Bug Fixes
+
+* **Front/Export:** Encode only for CSV exports ([71c068f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/71c068fdd63ac023b7d041eeb79e5745a5f5e6a2))
+
+## [8.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.1...v8.0.2) (2023-04-18)
+
+
+### Bug Fixes
+
+* **Front/Export:** Encode data before browser download ([4390f4f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4390f4fef9cabf00f35e11f69f8cfe04c9bb5647))
+
+## [8.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.0.0...v8.0.1) (2023-04-17)
+
+
+### Bug Fixes
+
+* **Front/Details:** Handle undefined timezone ([c18cb89](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c18cb893f277b8d64a2a452a0ecf544888d7bb01))
+* **Front/Pairings:** Fix typo ([b1a3064](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b1a306429e789e58cb712021bb618aa161a0258a))
+* **Front/Scatter:** Handle undefined timezone ([a38eaf2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a38eaf20c979247811a98951f16913040daa9ed0))
+* **Front/Scatter:** Remove debug log ([526ebf5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/526ebf54511bff3b2d6ab84862b7f46387140e7d))
+* **Front/Storage:** Handle optional volumes, matrices and pairings ([63317b9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/63317b9db8438ed095b9fb014bbe242c9d429431))
 # [8.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v7.2.2...v8.0.0) (2023-04-12)
 
 
