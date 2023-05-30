@@ -9,17 +9,19 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@master
 
       - name: Set up node
         uses: actions/setup-node@master
         with:
-          node-version: '18'
+          node-version: "18"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install project dependencies
-        run: yarn
+        run: pnpm --ignore-scripts --frozen-lockfile
 
       - name: Install release dependencies
         run: |
@@ -36,7 +38,7 @@ jobs:
             aggregate-error
 
       - name: Build `front` package
-        run: cd front && yarn && yarn build:prod && cd ..
+        run: cd front && pnpm && pnpm build:prod && cd ..
 
       - name: Release
         run: semantic-release -b main

@@ -1,0 +1,7 @@
+services:
+  audio:
+    image: ghcr.io/sound-scape-explorer/audio:latest
+    volumes:
+      - ${AUDIO_FOLDER}:/mount/audio
+    ports:
+      - "3000:3000"
