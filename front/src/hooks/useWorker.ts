@@ -1,4 +1,4 @@
-import {onMounted, onUnmounted, reactive} from 'vue';
+import {onMounted, reactive} from 'vue';
 
 type Worker = typeof import('../workers/worker');
 
@@ -15,13 +15,5 @@ export function useWorker() {
     workerRef.value = new ComlinkWorker<Worker>(
       new URL('../workers/worker', import.meta.url),
     );
-  });
-
-  onUnmounted(() => {
-    if (workerRef.value === null) {
-      return;
-    }
-
-    // workerRef.value.terminate();
   });
 }
