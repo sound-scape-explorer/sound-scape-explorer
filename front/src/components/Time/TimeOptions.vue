@@ -14,6 +14,7 @@ import {
   NInputNumber,
   NSwitch,
   NTooltip,
+  NIcon,
 } from 'naive-ui';
 import type {ComputedRef} from 'vue';
 import {computed, ref, watch} from 'vue';
@@ -186,67 +187,65 @@ onKeyPressed(' ', () => togglePlaying());
         size="tiny"
       />
 
-      <div class="transport-button">
-        <n-tooltip trigger="hover">
-          <template #trigger>
-            <AppButton
-              :disabled="uiDisabled"
-              :handle-click="skipTimeBackward"
-              class="flex"
-            >
-              <play-skip-back-outline />
-            </AppButton>
-          </template>
-          <span class="button-tooltip">
-            Backward [<span class="bold">p</span>]
-          </span>
-        </n-tooltip>
-      </div>
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <n-button
+            :disabled="uiDisabled"
+            @click="skipTimeBackward"
+            size="tiny"
+          >
+            <template #icon>
+              <n-icon>
+                <play-skip-back-outline />
+              </n-icon>
+            </template>
+          </n-button>
+        </template>
+        <span class="button-tooltip">
+          Backward [<span class="bold">p</span>]
+        </span>
+      </n-tooltip>
 
-      <div class="transport-button">
-        <n-tooltip trigger="hover">
-          <template #trigger>
-            <div>
-              <AppButton
-                v-show="!isPlaying"
-                :disabled="uiDisabled"
-                :handle-click="togglePlaying"
-                class="flex"
-              >
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <n-button
+            :disabled="uiDisabled"
+            @click="togglePlaying"
+            size="tiny"
+          >
+            <template #icon>
+              <n-icon v-show="!isPlaying">
                 <play-outline />
-              </AppButton>
-              <AppButton
-                v-show="isPlaying"
-                :disabled="uiDisabled"
-                :handle-click="togglePlaying"
-                class="flex"
-              >
+              </n-icon>
+              <n-icon v-show="isPlaying">
                 <pause-outline />
-              </AppButton>
-            </div>
-          </template>
-          <span class="button-tooltip">
-            Play / Pause [<span class="bold">space</span>]
-          </span>
-        </n-tooltip>
-      </div>
+              </n-icon>
+            </template>
+          </n-button>
+        </template>
+        <span class="button-tooltip">
+          Play / Pause [<span class="bold">space</span>]
+        </span>
+      </n-tooltip>
 
-      <div class="transport-button">
-        <n-tooltip trigger="hover">
-          <template #trigger>
-            <AppButton
-              :disabled="uiDisabled"
-              :handle-click="skipTimeForward"
-              class="flex"
-            >
-              <play-skip-forward-outline />
-            </AppButton>
-          </template>
-          <span class="button-tooltip">
-            Forward [<span class="bold">n</span>]
-          </span>
-        </n-tooltip>
-      </div>
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <n-button
+            :disabled="uiDisabled"
+            @click="skipTimeForward"
+            size="tiny"
+          >
+            <template #icon>
+              <n-icon>
+                <play-skip-forward-outline />
+              </n-icon>
+            </template>
+          </n-button>
+        </template>
+        <span class="button-tooltip">
+          Forward [<span class="bold">n</span>]
+        </span>
+      </n-tooltip>
 
       <div class="date-picker">
         <n-tooltip
@@ -287,7 +286,7 @@ onKeyPressed(' ', () => togglePlaying());
 
 .grid {
   display: grid;
-  grid-template-columns: auto auto auto repeat(3, 1rem) auto repeat(3, 1fr) auto;
+  grid-template-columns: auto auto auto repeat(3, 1.5rem) auto repeat(3, 1fr) auto;
   align-items: center;
   justify-items: center;
 
@@ -342,10 +341,6 @@ onKeyPressed(' ', () => togglePlaying());
     font-size: 0.4rem;
     white-space: nowrap;
   }
-}
-
-.transport-button {
-  width: 1.5rem;
 }
 
 .flex {
