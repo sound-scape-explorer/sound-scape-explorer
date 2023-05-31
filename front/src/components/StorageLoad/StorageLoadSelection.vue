@@ -36,3 +36,5 @@ useStorageIndicators();
 useScatterDataset();
 useScatterColorScale();
 </script>
+
+<template></template>
