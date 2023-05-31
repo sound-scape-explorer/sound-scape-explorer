@@ -18,10 +18,10 @@ const {readPairing} = useStoragePairing();
  * State
  */
 
-const titleRef = ref<string>();
+const titleRef = ref<string>('');
 const xRef = ref<string[]>([]);
 const yRef = ref<string[]>([]);
-const valuesRef = ref<number[][]>();
+const valuesRef = ref<number[][]>([]);
 const pairingSelectedRef = ref<string | null>(null);
 const metaSelectedARef = ref<string | null>(null);
 const metaSelectedBRef = ref<string | null>(null);
@@ -157,11 +157,11 @@ function swap() {
       </div>
 
       <AppHeatmap2D
-        v-if="xRef && yRef && valuesRef"
-        :title="titleRef ?? ''"
-        :values="valuesRef ?? []"
-        :x="xRef ?? []"
-        :y="yRef ?? []"
+        v-if="valuesRef.length > 0"
+        :title="titleRef"
+        :values="valuesRef"
+        :x="xRef"
+        :y="yRef"
       />
     </div>
   </AppDraggable>
