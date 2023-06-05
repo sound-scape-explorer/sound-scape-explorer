@@ -18,11 +18,13 @@ const links: Link[] = [
     name: 'Repository',
   },
   {
-    target: 'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/README.md',
+    target:
+      'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/README.md',
     name: 'Readme',
   },
   {
-    target: 'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/CHANGELOG.md',
+    target:
+      'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/CHANGELOG.md',
     name: 'Changelog',
   },
 ];
@@ -46,6 +48,7 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.volumes, name: 'Volumes'},
   {key: KeyboardShortcut.matrices, name: 'Matrices'},
   {key: KeyboardShortcut.pairings, name: 'Pairings'},
+  {key: KeyboardShortcut.resetScatter, name: 'Scatter: Reset'},
   {key: KeyboardShortcut.timePlayPause, name: 'Time: Play / Pause'},
   {key: KeyboardShortcut.timeBackward, name: 'Time: Next'},
   {key: KeyboardShortcut.timeForward, name: 'Time: Previous'},
@@ -57,8 +60,14 @@ const shortcuts: Shortcut[] = [
     <div class="container">
       <div class="title">Keyboard Shortcuts</div>
 
-      <n-grid :cols="1" x-gap="12">
-        <n-gi v-for="shortcut of shortcuts" class="grid">
+      <n-grid
+        :cols="1"
+        x-gap="12"
+      >
+        <n-gi
+          v-for="shortcut of shortcuts"
+          class="grid"
+        >
           <n-tag size="small">
             {{ shortcut.key }}
           </n-tag>

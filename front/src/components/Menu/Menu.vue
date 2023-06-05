@@ -13,12 +13,14 @@ import {
   HelpOutline,
   LayersOutline,
   ListOutline,
+  SearchOutline,
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
 import {useFile} from 'src/hooks/useFile';
+import {scatterResetRef} from '../Scatter/useScatterReset';
 
 const {isFileRef} = useFile();
 
@@ -49,6 +51,7 @@ const toggleMatrices = () =>
   (appDraggablesStore.matrices = !appDraggablesStore.matrices);
 const togglePairings = () =>
   (appDraggablesStore.pairings = !appDraggablesStore.pairings);
+const resetScatter = () => (scatterResetRef.value = true);
 
 onKeyPressed(KeyboardShortcut.import, toggleImport);
 onKeyPressed(KeyboardShortcut.settings, toggleSettings);
@@ -63,34 +66,50 @@ onKeyPressed(KeyboardShortcut.details, toggleDetails);
 onKeyPressed(KeyboardShortcut.volumes, toggleVolumes);
 onKeyPressed(KeyboardShortcut.matrices, toggleMatrices);
 onKeyPressed(KeyboardShortcut.pairings, togglePairings);
+onKeyPressed(KeyboardShortcut.resetScatter, resetScatter);
 </script>
 
 <template>
   <div class="header">
     <div class="row">
-      <MenuItem
-        :callback="toggleImport"
-        :shortcut="KeyboardShortcut.import"
-        text="Import"
-      >
-        <cloud-upload-outline />
-      </MenuItem>
+      <div class="left">
+        <MenuItem
+          :callback="toggleImport"
+          :shortcut="KeyboardShortcut.import"
+          text="Import"
+        >
+          <cloud-upload-outline />
+        </MenuItem>
 
-      <MenuItem
-        :callback="toggleSettings"
-        :shortcut="KeyboardShortcut.settings"
-        text="Settings"
-      >
-        <cog-outline />
-      </MenuItem>
+        <MenuItem
+          :callback="toggleSettings"
+          :shortcut="KeyboardShortcut.settings"
+          text="Settings"
+        >
+          <cog-outline />
+        </MenuItem>
 
-      <MenuItem
-        :callback="toggleHelp"
-        :shortcut="KeyboardShortcut.help"
-        text="Help"
+        <MenuItem
+          :callback="toggleHelp"
+          :shortcut="KeyboardShortcut.help"
+          text="Help"
+        >
+          <help-outline />
+        </MenuItem>
+      </div>
+
+      <div
+        class="right"
+        v-if="isFileRef"
       >
-        <help-outline />
-      </MenuItem>
+        <MenuItem
+          :callback="resetScatter"
+          :shortcut="KeyboardShortcut.resetScatter"
+          text="Reset scatter"
+        >
+          <search-outline />
+        </MenuItem>
+      </div>
     </div>
 
     <div
@@ -194,6 +213,8 @@ onKeyPressed(KeyboardShortcut.pairings, togglePairings);
   top: 0.5rem;
   left: 0.5rem;
 
+  width: 100%;
+
   pointer-events: none;
 }
 
@@ -203,6 +224,18 @@ onKeyPressed(KeyboardShortcut.pairings, togglePairings);
 }
 
 .row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 1rem;
+}
+
+.row .left {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.row .right {
   display: flex;
   gap: 0.5rem;
 }

@@ -14,5 +14,6 @@ export enum KeyboardShortcut {
   time = 't',
   timePlayPause = 'space',
   timeBackward = 'p',
-  timeForward = 'n'
+  timeForward = 'n',
+  resetScatter = 'r',
 }

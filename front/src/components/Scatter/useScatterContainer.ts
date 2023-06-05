@@ -9,6 +9,7 @@ import {useEventListener} from '@vueuse/core';
 import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
+import {scatterResetRef} from './useScatterReset';
 
 interface ScatterRef {
   value: HTMLDivElement | null;
@@ -21,9 +22,9 @@ export const scatterRef = reactive<ScatterRef>({
 export function useScatterContainer() {
   const {handleClick} = useScatterClick();
   const {handleHover} = useScatterHover();
-  const containerRef = ref<HTMLDivElement | null>(null);
-
   const {render} = useScatterRender();
+
+  const containerRef = ref<HTMLDivElement | null>(null);
   let scatter: ScatterGL | null = null;
 
   const load = (container: HTMLDivElement) => {
@@ -56,6 +57,15 @@ export function useScatterContainer() {
       render(scatter, datasetRef.value);
     },
   );
+
+  watch(scatterResetRef, () => {
+    if (scatter === null || scatterResetRef.value === false) {
+      return;
+    }
+
+    scatter.resetZoom();
+    scatterResetRef.value = false;
+  });
 
   onMounted(() => {
     if (containerRef.value === null) {
