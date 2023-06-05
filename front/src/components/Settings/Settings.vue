@@ -7,7 +7,7 @@ import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {spectrogramColorRef} from '../Audio/useAudioSpectrogramColor';
 import {settingsStore} from './settingsStore';
 
-const colorMapsOptions = computed(() =>
+const colorMapsOptionsRef = computed(() =>
   convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS),
 );
 </script>
@@ -23,7 +23,7 @@ const colorMapsOptions = computed(() =>
           <n-select
             v-model:value="spectrogramColorRef.value"
             :default-value="spectrogramColorRef.value"
-            :options="colorMapsOptions"
+            :options="colorMapsOptionsRef"
             size="tiny"
           />
         </div>

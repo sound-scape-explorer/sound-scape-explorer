@@ -24,7 +24,7 @@ useStorageSettings();
 useStorageReducers();
 useStorageFilenames();
 
-const isSelection = computed<boolean>(() => {
+const isSelectionRef = computed<boolean>(() => {
   if (bandRef.value === null || integrationRef.value === null) {
     return false;
   }
@@ -34,5 +34,5 @@ const isSelection = computed<boolean>(() => {
 </script>
 
 <template>
-  <StorageLoadSelection v-if="isSelection" />
+  <StorageLoadSelection v-if="isSelectionRef" />
 </template>
