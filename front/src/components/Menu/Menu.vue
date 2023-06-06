@@ -14,6 +14,8 @@ import {
   LayersOutline,
   ListOutline,
   SearchOutline,
+  ChevronBackOutline,
+  ChevronForwardOutline,
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
@@ -21,6 +23,10 @@ import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
 import {useFile} from 'src/hooks/useFile';
 import {scatterResetRef} from '../Scatter/useScatterReset';
+import {
+  scatterSelectNextRef,
+  scatterSelectPreviousRef,
+} from '../Scatter/useScatterSelect';
 
 const {isFileRef} = useFile();
 
@@ -51,7 +57,10 @@ const toggleMatrices = () =>
   (appDraggablesStore.matrices = !appDraggablesStore.matrices);
 const togglePairings = () =>
   (appDraggablesStore.pairings = !appDraggablesStore.pairings);
+
 const resetScatter = () => (scatterResetRef.value = true);
+const selectScatterPrevious = () => (scatterSelectPreviousRef.value = true);
+const selectScatterNext = () => (scatterSelectNextRef.value = true);
 
 onKeyPressed(KeyboardShortcut.import, toggleImport);
 onKeyPressed(KeyboardShortcut.settings, toggleSettings);
@@ -66,7 +75,9 @@ onKeyPressed(KeyboardShortcut.details, toggleDetails);
 onKeyPressed(KeyboardShortcut.volumes, toggleVolumes);
 onKeyPressed(KeyboardShortcut.matrices, toggleMatrices);
 onKeyPressed(KeyboardShortcut.pairings, togglePairings);
-onKeyPressed(KeyboardShortcut.resetScatter, resetScatter);
+onKeyPressed(KeyboardShortcut.scatterReset, resetScatter);
+onKeyPressed(KeyboardShortcut.scatterPrevious, selectScatterPrevious);
+onKeyPressed(KeyboardShortcut.scatterNext, selectScatterNext);
 </script>
 
 <template>
@@ -103,9 +114,25 @@ onKeyPressed(KeyboardShortcut.resetScatter, resetScatter);
         v-if="isFileRef"
       >
         <MenuItem
+          :callback="selectScatterPrevious"
+          :shortcut="KeyboardShortcut.scatterPrevious"
+          text="Select previous collected point"
+        >
+          <chevron-back-outline />
+        </MenuItem>
+
+        <MenuItem
+          :callback="selectScatterNext"
+          :shortcut="KeyboardShortcut.scatterNext"
+          text="Select next collected point"
+        >
+          <chevron-forward-outline />
+        </MenuItem>
+
+        <MenuItem
           :callback="resetScatter"
-          :shortcut="KeyboardShortcut.resetScatter"
-          text="Reset scatter"
+          :shortcut="KeyboardShortcut.scatterReset"
+          text="Reset scatter camera"
         >
           <search-outline />
         </MenuItem>

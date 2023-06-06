@@ -48,7 +48,9 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.volumes, name: 'Volumes'},
   {key: KeyboardShortcut.matrices, name: 'Matrices'},
   {key: KeyboardShortcut.pairings, name: 'Pairings'},
-  {key: KeyboardShortcut.resetScatter, name: 'Scatter: Reset'},
+  {key: KeyboardShortcut.scatterReset, name: 'Scatter: Reset'},
+  {key: KeyboardShortcut.scatterPrevious, name: 'Scatter: Previous'},
+  {key: KeyboardShortcut.scatterNext, name: 'Scatter: Next'},
   {key: KeyboardShortcut.timePlayPause, name: 'Time: Play / Pause'},
   {key: KeyboardShortcut.timeBackward, name: 'Time: Next'},
   {key: KeyboardShortcut.timeForward, name: 'Time: Previous'},
@@ -61,7 +63,7 @@ const shortcuts: Shortcut[] = [
       <div class="title">Keyboard Shortcuts</div>
 
       <n-grid
-        :cols="1"
+        :cols="2"
         x-gap="12"
       >
         <n-gi
@@ -100,7 +102,7 @@ const shortcuts: Shortcut[] = [
   flex-direction: column;
   gap: 0.5rem;
 
-  width: 14rem;
+  width: 30rem;
 }
 
 .list {

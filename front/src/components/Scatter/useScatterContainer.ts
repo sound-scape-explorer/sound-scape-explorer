@@ -1,7 +1,7 @@
 import type {ScatterGLParams} from 'src/lib/scatter-gl-0.0.13';
 import {ScatterGL} from 'src/lib/scatter-gl-0.0.13';
 import {onMounted, reactive, ref, watch} from 'vue';
-import {useScatterClick} from './useScatterClick';
+import {clickedRef, useScatterClick} from './useScatterClick';
 import {useScatterHover} from './useScatterHover';
 import {useScatterRender} from './useScatterRender';
 import {datasetRef} from './useScatterDataset';
@@ -10,6 +10,11 @@ import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {scatterResetRef} from './useScatterReset';
+import {
+  scatterSelectNextRef,
+  scatterSelectPreviousRef,
+} from './useScatterSelect';
+import {pointsFilteredRef} from './useScatterFilter';
 
 interface ScatterRef {
   value: HTMLDivElement | null;
@@ -44,10 +49,11 @@ export function useScatterContainer() {
   watch(
     [
       datasetRef,
-      pointsFilteredByMetaRef,
-      pointsFilteredByTimeRef,
       colorScaleRef,
       alphaLowRef,
+      clickedRef,
+      pointsFilteredByMetaRef,
+      pointsFilteredByTimeRef,
     ],
     () => {
       if (scatter === null || datasetRef.value === null) {
@@ -65,6 +71,56 @@ export function useScatterContainer() {
 
     scatter.resetZoom();
     scatterResetRef.value = false;
+  });
+
+  watch(scatterSelectPreviousRef, () => {
+    if (
+      scatter === null ||
+      clickedRef.value === null ||
+      pointsFilteredRef.value === null ||
+      scatterSelectPreviousRef.value === false
+    ) {
+      return;
+    }
+
+    scatterSelectPreviousRef.value = false;
+
+    const pointsPrevious = pointsFilteredRef.value.slice(0, clickedRef.value);
+    const previousIndex = pointsPrevious.findLastIndex((p) => p === false);
+
+    if (previousIndex === -1) {
+      return;
+    }
+
+    handleClick(previousIndex);
+  });
+
+  watch(scatterSelectNextRef, () => {
+    if (
+      scatter === null ||
+      clickedRef.value === null ||
+      pointsFilteredRef.value === null ||
+      scatterSelectNextRef.value === false
+    ) {
+      return;
+    }
+
+    scatterSelectNextRef.value = false;
+
+    const pointsNext = pointsFilteredRef.value.slice(clickedRef.value);
+    const nextIndex = pointsNext.findIndex((p) => p === false);
+
+    if (nextIndex === -1) {
+      return;
+    }
+
+    const actualNextIndex = clickedRef.value + nextIndex + 1;
+
+    if (actualNextIndex >= pointsFilteredRef.value.length) {
+      return;
+    }
+
+    handleClick(actualNextIndex);
   });
 
   onMounted(() => {

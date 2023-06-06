@@ -14,6 +14,7 @@ import {useStorageGroupedAttributes} from 'src/hooks/useStorageGroupedAttributes
 import {useStorageGroupedFeatures} from 'src/hooks/useStorageGroupedFeatures';
 import {useStorageFilenames} from 'src/hooks/useStorageFilenames';
 import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
+import {useScatterFilter} from '../Scatter/useScatterFilter';
 
 useStorageFilenames();
 useStorageMetaSets();
@@ -35,6 +36,7 @@ useStorageIndicators();
 
 useScatterDataset();
 useScatterColorScale();
+useScatterFilter();
 </script>
 
 <template></template>

@@ -156,8 +156,6 @@ async function load() {
     return;
   }
 
-  appDraggablesStore.details = true;
-
   try {
     const response = await fetch(srcRef.value);
     const arrayBuffer = await response.arrayBuffer();
@@ -171,8 +169,6 @@ async function load() {
     const end = start + seconds * 1000;
 
     audioBufferSlice(audioBuffer, start, end, handleAudioSlice);
-
-    appDraggablesStore.audio = true;
   } catch {
     appDraggablesStore.audio = false;
   }
