@@ -18,14 +18,12 @@ export const metasRef = reactive<MetasRef>({
 
 export function useStorageMetas() {
   onMounted(async () => {
-    // watch([bandRef, integrationRef], async () => {
     if (
       fileRef.value === null ||
       workerRef.value === null ||
       bandRef.value === null ||
       integrationRef.value === null
     ) {
-      console.log('a');
       return;
     }
 
@@ -34,8 +32,5 @@ export function useStorageMetas() {
       bandRef.value,
       integrationRef.value,
     );
-
-    // setMetaProperties(metasRef.value);
-    // setMetaSets(metasRef.value);
   });
 }
