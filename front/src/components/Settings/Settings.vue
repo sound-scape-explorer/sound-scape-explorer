@@ -36,10 +36,19 @@ const colorMapsOptionsRef = computed(() =>
 
         <div class="checkboxes">
           <n-checkbox
-            v-model:checked="settingsStore.umap.screenshot.isFull"
+            v-model:checked="settingsStore.fullPageScreenshot"
             class="checkbox"
           >
             Full page screenshot
+          </n-checkbox>
+        </div>
+
+        <div class="checkboxes">
+          <n-checkbox
+            v-model:checked="settingsStore.autoOpenOnScatterClick"
+            class="checkbox"
+          >
+            Auto Open on Scatter Click (Details and Audio)
           </n-checkbox>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import {reactive} from 'vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
+import {settingsStore} from '../Settings/settingsStore';
 
 interface ClickedRef {
   value: number | null;
@@ -21,12 +22,14 @@ export function useScatterClick() {
       return;
     }
 
-    if (appDraggablesStore.details === false) {
-      appDraggablesStore.details = true;
-    }
+    if (settingsStore.autoOpenOnScatterClick) {
+      if (appDraggablesStore.details === false) {
+        appDraggablesStore.details = true;
+      }
 
-    if (appDraggablesStore.audio === false) {
-      appDraggablesStore.audio = true;
+      if (appDraggablesStore.audio === false) {
+        appDraggablesStore.audio = true;
+      }
     }
   };
 

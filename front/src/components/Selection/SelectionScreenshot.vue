@@ -19,7 +19,7 @@ async function screenshot() {
 
   let targetElement: HTMLElement = scatterRef.value;
 
-  if (settingsStore.umap.screenshot.isFull) {
+  if (settingsStore.fullPageScreenshot) {
     targetElement = document.body;
   }
 
