@@ -113,29 +113,29 @@ onKeyPressed(KeyboardShortcut.scatterNext, selectScatterNext);
         class="right"
         v-if="isFileRef"
       >
-        <MenuItem
-          :callback="selectScatterPrevious"
-          :shortcut="KeyboardShortcut.scatterPrevious"
-          text="Select previous collected point"
-        >
-          <chevron-back-outline />
-        </MenuItem>
-
-        <MenuItem
-          :callback="selectScatterNext"
-          :shortcut="KeyboardShortcut.scatterNext"
-          text="Select next collected point"
-        >
-          <chevron-forward-outline />
-        </MenuItem>
-
-        <MenuItem
-          :callback="resetScatter"
-          :shortcut="KeyboardShortcut.scatterReset"
-          text="Reset scatter camera"
-        >
-          <search-outline />
-        </MenuItem>
+        <!-- <MenuItem -->
+        <!--   :callback="selectScatterPrevious" -->
+        <!--   :shortcut="KeyboardShortcut.scatterPrevious" -->
+        <!--   text="Select previous collected point" -->
+        <!-- > -->
+        <!--   <chevron-back-outline /> -->
+        <!-- </MenuItem> -->
+        <!---->
+        <!-- <MenuItem -->
+        <!--   :callback="selectScatterNext" -->
+        <!--   :shortcut="KeyboardShortcut.scatterNext" -->
+        <!--   text="Select next collected point" -->
+        <!-- > -->
+        <!--   <chevron-forward-outline /> -->
+        <!-- </MenuItem> -->
+        <!---->
+        <!-- <MenuItem -->
+        <!--   :callback="resetScatter" -->
+        <!--   :shortcut="KeyboardShortcut.scatterReset" -->
+        <!--   text="Reset scatter camera" -->
+        <!-- > -->
+        <!--   <search-outline /> -->
+        <!-- </MenuItem> -->
       </div>
     </div>
 
