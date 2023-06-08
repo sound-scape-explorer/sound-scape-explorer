@@ -18,12 +18,11 @@ import {
 } from 'naive-ui';
 import type {ComputedRef} from 'vue';
 import {computed, ref, watch} from 'vue';
-import AppButton from '../AppButton/AppButton.vue';
 import {timeStore} from './timeStore';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {useDate} from 'src/hooks/useDate';
-import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
-import {useScatterFilterTime} from '../Scatter/useScatterFilterTime';
+import {isDatasetReadyRef} from 'src/components/Scatter/useScatterDataset';
+import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
 
 const {convertTimestampToDate} = useDate();
 
@@ -62,41 +61,52 @@ const durations: Duration[] = [
 ];
 
 const isPlaying = ref<boolean>(false);
-
-function setWindowDuration(duration: number) {
-  timeStore.duration = duration;
-}
-
-function togglePlaying() {
-  isPlaying.value = !isPlaying.value;
-}
-
 let interval: null | number = null;
 
-function skipTimeForward() {
+const setWindowDuration = (duration: number) => {
+  timeStore.duration = duration;
+};
+
+const blurButton = (event?: MouseEvent) => {
+  if (typeof event === 'undefined') {
+    return;
+  }
+
+  const button = event.target as HTMLButtonElement;
+  button.blur();
+};
+
+const togglePlaying = (event?: MouseEvent) => {
+  isPlaying.value = !isPlaying.value;
+  blurButton(event);
+};
+
+const skipTimeForward = (event?: MouseEvent) => {
   timeStore.value += timeStore.duration;
-}
+  blurButton(event);
+};
 
-function skipTimeBackward() {
+const skipTimeBackward = (event?: MouseEvent) => {
   timeStore.value -= timeStore.duration;
-}
+  blurButton(event);
+};
 
-function start() {
+const start = () => {
   if (interval) {
     return;
   }
 
   interval = setInterval(skipTimeForward, 500);
-}
+};
 
-function stop() {
+const stop = () => {
   if (interval === null) {
     return;
   }
 
   clearInterval(interval);
   interval = null;
-}
+};
 
 watch(isPlaying, () => {
   if (isPlaying.value) {
@@ -136,17 +146,17 @@ const timeOffsetRef = computed<number | null>(() => {
   return offset * 60 * 60 * 1000;
 });
 
-function handleDateStartUpdate(t: number) {
+const handleDateStartUpdate = (t: number) => {
   timeStore.value = t / 1000;
-}
+};
 
-function transposeDateToZone(date: Dayjs | null) {
+const transposeDateToZone = (date: Dayjs | null) => {
   if (date === null) {
     return;
   }
 
   return date.unix() * 1000 + (timeOffsetRef.value ?? 0);
-}
+};
 
 const {filterByTime} = useScatterFilterTime();
 watch(timeStore, () => {
