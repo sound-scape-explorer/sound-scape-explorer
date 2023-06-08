@@ -17,6 +17,7 @@ import Settings from '../components/Settings/Settings.vue';
 import Time from '../components/Time/Time.vue';
 import Volumes from '../components/Volumes/Volumes.vue';
 import StorageLoad from '../components/StorageLoad/StorageLoad.vue';
+import ScatterNew from 'src/components/ScatterNew/ScatterNew.vue';
 import {useFile} from 'src/hooks/useFile';
 import {useWorker} from 'src/hooks/useWorker';
 
@@ -50,6 +51,7 @@ onMounted(() => {
 
     <Meta />
 
-    <Scatter />
+    <!-- <Scatter /> -->
+    <ScatterNew />
   </div>
 </template>
