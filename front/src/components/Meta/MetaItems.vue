@@ -14,11 +14,39 @@ watch([metaPropertiesRef, metaSetsRef], () => {
   }
 
   metaSetsIndexesRef.value = Object.keys(metaSetsRef.value);
+  const selection: string[][] = [];
 
-  for (let i = 0; i < metaPropertiesRef.value.length; i += 1) {
-    metaSelectionStore.selection[i] = Object.assign({});
+  for (
+    let metaPropertyIndex = 0;
+    metaPropertyIndex < metaPropertiesRef.value.length;
+    metaPropertyIndex += 1
+  ) {
+    selection[metaPropertyIndex] = [];
   }
+
+  metaSelectionStore.selection = selection;
 });
+
+const handleMetaPropertyClick = (metaPropertyIndex: number) => {
+  if (metaSetsRef.value === null) {
+    return;
+  }
+
+  const oldSelection = metaSelectionStore.selection[metaPropertyIndex];
+  const metaSet = metaSetsRef.value[metaPropertyIndex];
+
+  const newSelection = [];
+
+  for (const metaValue of metaSet) {
+    if (oldSelection.includes(metaValue)) {
+      continue;
+    }
+
+    newSelection.push(metaValue);
+  }
+
+  metaSelectionStore.selection[metaPropertyIndex] = newSelection;
+};
 </script>
 
 <template>
@@ -32,6 +60,7 @@ watch([metaPropertiesRef, metaSetsRef], () => {
         :bordered="false"
         class="tag"
         size="small"
+        @click="() => handleMetaPropertyClick(m)"
       >
         {{ metaPropertiesRef.value?.[m] }}
       </n-tag>
@@ -51,7 +80,7 @@ watch([metaPropertiesRef, metaSetsRef], () => {
   user-select: none;
 
   &:hover {
-    cursor: not-allowed;
+    cursor: pointer;
   }
 }
 </style>

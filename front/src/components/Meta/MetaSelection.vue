@@ -24,7 +24,7 @@ const props = defineProps<Props>();
 
 const {getColorByMetaIndex} = useColorByMeta();
 const {filterByMeta} = useScatterFilterMeta();
-const selectionRef = ref();
+const selectionRef = ref<string[]>([]);
 
 /**
  * Lifecycles
@@ -47,13 +47,13 @@ function getColorByItem(index: number): string | undefined {
 }
 
 function updateSelection() {
-  if (selectionRef.value === null) {
-    return;
-  }
-
   metaSelectionStore.selection[props.index] = selectionRef.value;
   filterByMeta();
 }
+
+watch(metaSelectionStore, () => {
+  selectionRef.value = metaSelectionStore.selection[props.index];
+});
 </script>
 
 <template>
