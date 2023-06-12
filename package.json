@@ -2,6 +2,7 @@
   "name": "sound-scape-explorer",
   "scripts": {
     "dev": "cd front && pnpm dev",
+    "dev:audio": "concurrently -P --kill-others 'pnpm dev' 'pnpm audio {1}'",
     "audio": "pnpm serve --cors",
     "migrate:v8": "python3 processing/processing/actions/run_migration_v8.py",
     "process": "pnpm process:all",
