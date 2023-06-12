@@ -72,6 +72,7 @@ const render = async () => {
 
   console.log('render');
 
+  // TODO: Handle first draw then react
   await Plotly.react(
     divRef.value,
     scatterTracesRef.value,
@@ -79,6 +80,7 @@ const render = async () => {
     config,
   );
 
+  // TODO: Attach event listeners on first draw
   divRef.value.on('plotly_click', handlePlotlyClick);
 };
 
