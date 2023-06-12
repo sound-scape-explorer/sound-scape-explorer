@@ -7,6 +7,8 @@ import {useReducer} from 'src/hooks/useReducer';
 import {useIntegration} from 'src/hooks/useIntegration';
 import {useBand} from 'src/hooks/useBand';
 
+// TODO: User can not currently switch reducers when one has already been loaded
+
 /**
  * State
  */
