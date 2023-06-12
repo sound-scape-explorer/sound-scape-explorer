@@ -22,7 +22,8 @@
     "process:pairings": "python3 processing/processing/actions/run_pairings.py",
     "release:prepare": "pnpm release:prepare:archive-examples",
     "release:prepare:archive-examples": "bin/archive-examples.sh",
-    "start": "pnpm dev"
+    "start": "pnpm dev",
+    "test:python": "bin/test-python.sh"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
