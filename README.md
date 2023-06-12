@@ -54,21 +54,76 @@ and set up your project!
 
 ### ⚓ Requirements
 
-- [Python 3.8+](https://www.python.org/downloads/)
+#### Git
+
+You can either use git to clone the repository or download a zip
+
+- Git
+  - Check: `git --version`
+  - Install: `sudo apt install git`
+- [Python 3.8.10](https://www.python.org/downloads/)
+  - Check: `python3 --version`
+  - Install pip: `sudo apt install python3-pip`
 - [Node.js](https://nodejs.org/en/)
+  - Check: `node --version`
 - [pnpm](https://pnpm.io/installation#using-npm)
+  - Install: `sudo npm i -g pnpm`
+
+#### Node.js
+
+Check your version
+
+```bash
+node --version
+```
+
+Install on ubuntu
+
+curl required
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+```
+
+#### pnpm
 
 ### 🎛️ Instructions
 
+Propose git or download release zip.
+
+```powershell
+set PYTHONPATH=processing
+$env:PYTHONPATH="processing"
+```
+
 ```bash
+# Clone or download the app codebase
+git clone https://github.com/sound-scape-explorer/sound-scape-explorer.git
+
 # 📥 Installation
-git clone git@github.com:sound-scape-explorer/sound-scape-explorer.git
 cd sound-scape-explorer
 pnpm i
+cd front && pnpm i && cd ..
+
+# Create your campaign with configuration file or download this example
+# https://drive.google.com/drive/folders/1XyQ4thJsKoLj-OhHy2ea1A-6VpPlItnX
+
+# Edit your configuration file
+# You can use `pwd` to print your current working directory
+# Link to `sse-config-importer`
+
+# INSTALL PYTHON DEPENDENCIES
+pip install -r processing/requirements.txt
+
+# Python path on linux
+export PYTHONPATH=processing
 
 # 💽 Generate data, see list of available actions in `package.json`.
 # Examples
 pnpm process -c /path/to/config.xlsx -s /path/to/storage.h5
+
+# Explain the smaller processing commands
 pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
 
 # 🚀 Explore data, serve `front` at localhost:8080
