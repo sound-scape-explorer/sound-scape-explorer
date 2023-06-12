@@ -7,7 +7,7 @@ from typing import Any, List, Union
 import numpy
 import pandas
 from numpy import nan
-from pandas import DataFrame, Series
+from pandas import DataFrame, Series, Timestamp
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigBand import ConfigBand, ConfigBands
@@ -285,12 +285,10 @@ class Config(metaclass=SingletonMeta):
             print(f"{setting_name}: {setting}")
 
     @staticmethod
-    def __convert_date_to_timestamp(date_string: str) -> int:
-        date = datetime.datetime.strptime(date_string, "%Y%m%d %H%M")
-        timestamp = datetime.datetime.timestamp(date)  # seconds
-        timestamp = timestamp * 1000  # milliseconds
-
-        return int(timestamp)
+    def __convert_date_to_timestamp(date: Timestamp) -> int:
+        timestamp_seconds = datetime.datetime.timestamp(date)
+        timestamp_milliseconds = timestamp_seconds * 1000
+        return int(timestamp_milliseconds)
 
     def __read_files_meta_properties(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.files)
