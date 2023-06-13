@@ -1,14 +1,47 @@
-<p align="center">
-  <img alt="logo" width="200px" src="https://i.imgur.com/ZFnumtY.png">
-</p>
+<div align="center">
 
-<p align="center">
-  <strong>Soundscape Explorer</strong>
-</p>
+<img alt="logo" width="200px" src="https://i.imgur.com/ZFnumtY.png">
 
-<p align="center">
-  Process. Explore. Analyze.
-</p>
+# [SoundScape Explorer](https://sound-scape-explorer.github.io/sound-scape-explorer/)
+
+**Process. Visualize. Explore.**
+
+![Version](https://img.shields.io/github/package-json/v/sound-scape-explorer/sound-scape-explorer)
+
+</div>
+
+---
+
+## About
+
+Process your audio files through neural network and explore the results of your
+campaign in the browser.
+
+> **Warning**: SoundScape Explorer is currently under development so bugs may
+> be present.
+
+The application is split in 3 modules:
+| | Description |
+| ------------ | --------------- |
+| `Processing` | Responsible for processing your audio files. |
+| `Front` | The user interfaces running in the web browser. |
+| `Audio` | The web server to provide audio files in order to play them back in the browser. |
+
+## Getting started
+
+### Manual installation
+
+> **Note**: Skip to `Docker` section if you do not intend to go through the manual installation.
+
+### Installing `Processing` module
+
+> **Note**: Skip this if you already have your `.h5` storage file.
+
+### Installing `Front` module
+
+> **Note**: Skip this if you do not want to work offline and do not need audio playback.
+
+### Docker installation
 
 ---
 
