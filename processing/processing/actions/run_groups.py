@@ -10,10 +10,12 @@ def run_groups(env: Env):
 
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
-    timestamps = storage.get_timestamps()
+    timestamps = storage.get_timestamps()  # FIX: This can take a long time
 
     storage.delete_groups()
 
+    # TODO: Load grouper before loading `timestamps` to avoid
+    # terminal stalling
     grouper = FeaturesGrouper()
     grouper.set_timestamps(timestamps)
 
