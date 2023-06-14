@@ -14,67 +14,119 @@
 
 [toc]
 
+> **Warning**
+>
+> SoundScape Explorer is currently under heavy development so bugs may
+> be present.
+
+## Table of contents
+
+- [About](#about)
+- [Manual installation](#manual-installation)
+- [Docker installation](#docker-installation)
+- [Usage](#usage)
+- [Migration](#migration)
+- [Dataframe](#dataframe)
+
 ## About
 
 Process your audio files through neural network and explore the results of your
 campaign in the browser.
 
-> **Warning**: SoundScape Explorer is currently under development so bugs may
-> be present.
+The application is split into 3 modules:
 
-The application is split in 3 modules:
-| | Description |
-| ------------ | --------------- |
-| `Processing` | Responsible for processing your audio files. |
-| `Front` | The user interfaces running in the web browser. |
-| `Audio` | The web server to provide audio files in order to play them back in the browser. |
-
-## Getting started
-
-There are two ways of installing `SoundScape Explorer`.
-
-- Manual installation
-  - This is the harder way but gives you more control
-    over what you can do.
-- Docker installation
-  - This is the easiest path to get things up and running.
+| Module       | Description                                                                      |
+| ------------ | -------------------------------------------------------------------------------- |
+| `Processing` | The actions responsible for processing your audio files.                         |
+| `Front`      | The user interface running in the web browser.                                   |
+| `Audio`      | The web server to provide audio files in order to play them back in the browser. |
 
 ## Manual installation
 
-> **Note**: Skip to `Docker` section if you do not intend to go through
-> the manual installation.
+> **Note**
+>
+> Skip to [Docker installation](#docker-installation)
+> if you intend to have basic usage of `SoundScape Explorer`.
+
+These are the tools that are needed in order to proceed:
+
+- [shell](#shell)
+- [package manager](#package-manager)
+- [git](#git)
+- [python](#python)
+- [nodejs](#nodejs)
+- [pnpm](#pnpm)
 
 ### `shell`
 
 In order to proceed to the manual installation of `SoundScape Explorer`,
 you will interact with your system's shell.
 
-After getting access to your operating system's shell,
-we will verify that the required packages are ready
-to be used in order to continue the installation.
+After getting access to it, we will run commands within it
+to install the required packages.
 
-#### `shell` Windows
+#### `shell` for Windows
 
 Please use `PowerShell`.
 
-#### `shell` MacOS
+#### `shell` for macOS
 
 Please use your `Terminal`.
 
-#### `shell` Debian based distributions
+#### `shell` for Debian based distributions
 
 Please use your `Terminal`.
+
+### Package manager
+
+Package managers are useful tools to manage installs, updates and removals of the
+binaries installed on your operating system.
+
+We recommend using them in order to have a more consistent and manageable environment.
+
+> **Note**
+>
+> Those package managers handle binaries and can be compared to
+> programming languages package managers such as `pip` is for Python
+> and `npm` is for Node.js.
+
+> **Warning**
+>
+> Please remember that multiple package managers can collide.
+> It will result in a messy environment and unexpected behaviour.
+>
+> For instance, this can happen when managing packages with `anaconda` and `pip`.
+>
+> In order to have a consistent experience, decide one way
+> of managing packages and stick to it!
+
+#### Package manager for Windows
+
+We recommend using [chocolatey](https://chocolatey.org).
+
+Find its official [installation documentation](https://chocolatey.org/install).
+
+#### Package manager for macOS
+
+We recommend using [Homebrew](https://brew.sh/).
+
+#### Package manager for Debian based distributions
+
+You most definitely already have [APT](https://www.wikiwand.com/en/APT_%28Package_Manager%29).
 
 ### `git`
 
-`git` is a source control manager. This developer tool allow
-you to have the exact same copy of the current codebase.
+[git](https://git-scm.com/) is a source control manager. It versions files
+and their content.
 
-> **Note**: You can skip `git` if you would rather download
-> [released versions](https://placeholder) as zip files.
+This developer tool will allow you to fetch the current codebase easily.
+
+> **Note**
 >
-> If you go that way, you will need to download a new zip file
-> every time a new version is published.
+> Installing `git` is optional.
+>
+> Refer to [Download `SoundScape Explorer`](#download-soundscape-explorer)
+> for further instructions.
 
 Verify that `git` is correctly installed
 by submitting the following command into your shell:
@@ -84,17 +136,23 @@ git --version
 # git version 2.25.1
 ```
 
-#### `git` Windows
+#### `git` for Windows
 
-Install with [Git Bash](https://placeholder)
+```powershell
+choco install git
+```
 
-#### `git` MacOS
+#### `git` for macOS
 
 You should already have `git` installed.
 
-If not, please install with [Homebrew](https://placeholder) package manager.
+If not, please install with the following command:
 
-#### `git` Debian based distributions
+```bash
+brew install git
+```
+
+#### `git` for Debian based distributions
 
 You should already have `git` installed.
 
@@ -108,54 +166,57 @@ sudo apt install git
 
 You will need Python 3.8 installed on your operating system.
 
-You will also need `pip`, Python's package manager in
-order to install the dependencies.
+You will also need [pip](https://pypi.org/project/pip/),
+Python's package manager in order to install the dependencies.
 
-> **Note**: Using the recommended version will ensure
-> not encountering problems during installation of dependencies.
+> **Note**
+>
+> Using the recommended version to ensure
+> not encountering unexpected errors during the installation.
 
-After installation Python and its package manager,
-please enter this command into your shell.
+After installing Python and its package manager,
+please run these commands.
 
 ```bash
 python3 --version
 # Python 3.8.10
+
+pip3 --version
+# pip 23.1.1 from /home/user/.local/lib/python3.8/site-packages/pip (python 3.8)
 ```
 
-> **Warning**: If `python3` binary is not found but `python` is, please either:
+> **Warning**
+>
+> If `python3` binary is not found but `python` is, please either:
 >
 > - Create an alias for `python` as `python3`
 > - Create a symbolic link from `python3` to `python`
-> - Rename all `python3` instance inside `package.json` to `python`
+> - Rename all `python3` and `pip3` instances inside `package.json` to `python` and `pip`
+
+> **Warning**
 >
-> You can test your version on UNIX operating systems
-> by running the following command `pnpm test:python`
+> If you use `anaconda`, skip this part.
+>
+> Instead, create a dedicated environment within `anaconda` user interface
+> then start your shell from there.
 
-#### `python` Windows
+> **Note**
+>
+> Refer to [Testing installation](#testing-installation) for exhaustive
+> testing of your installation.
 
-> **Note**: If you have `conda`, please create a dedicated
-> environment accordingly
-> and start your shell from there.
+#### `python` for Windows
 
-We recommend using [chocolatey](https://placeholder) package manager.
-
-TODO: Verify this fucking command
+Please run the following command to install Python:
 
 ```powershell
-choco install python3
+choco install python3 --version=3.8.10
 ```
 
-#### `python` MacOS
-
-> **Note**: If you have `conda`, please create a dedicated environment accordingly
-> and start your shell from there.
-
-We recommend using [Homebrew](https://placeholder) package manger.
-
-TODO: Verify this fucking command
+#### `python` for macOS
 
 ```bash
-brew install
+brew install python@3.8
 ```
 
 #### `python` Debian based distributions
@@ -163,7 +224,7 @@ brew install
 Please install with:
 
 ```bash
-sudo apt install python3 python3-pip
+sudo apt install python3.8 python3-pip
 ```
 
 ### `nodejs`
@@ -181,33 +242,27 @@ node --version
 
 #### `nodejs` Windows
 
-We recommend using [chocolatey](https://placeholder) package manager.
-
 Please install with the following command in your shell:
-
-TODO: Verify this fucking command
 
 ```powershell
-choco install nodejs16
+choco install nodejs --version=16.20.0
 ```
 
-#### `nodejs` MacOS
-
-We recommend using [Homebrew](https://placeholder) package manager.
+#### `nodejs` macOS
 
 Please install with the following command in your shell:
 
-TODO: Verify this fucking command.
-
 ```bash
-brew install nodejs16
+brew install node@16
 ```
 
 #### `nodejs` Debian based distributions
 
 Please install by runing the following oneliner command inside your shell:
 
-> **Note**: You will need `curl` to be installed on your operating system.
+> **Note**
+>
+> You will need `curl` to run this command.
 >
 > Install with `sudo apt install curl`
 
@@ -218,7 +273,7 @@ curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && sudo apt-ge
 ### `pnpm`
 
 [pnpm](https://pnpm.io/installation#using-npm) is a
-more efficient package manager that the built-in
+more efficient package manager than built-in
 node package manager (npm).
 
 In order to install it, please follow the instructions according
@@ -232,7 +287,7 @@ pnpm --version
 # 8.6.0
 ```
 
-#### `pnpm` Windows
+#### `pnpm` for Windows
 
 Open a new instance of powershell in **administrator**
 and run the following command:
@@ -241,7 +296,7 @@ and run the following command:
 npm -g i pnpm
 ```
 
-#### `pnpm` MacOS
+#### `pnpm` for macOS
 
 Run the following command inside your terminal:
 
@@ -249,30 +304,104 @@ Run the following command inside your terminal:
 sudo npm -g i pnpm
 ```
 
-#### `pnpm` Debian based distributions
+#### `pnpm` for Debian based distributions
 
 Run the following command inside your terminal:
 
 ```bash
 sudo npm -g i pnpm
+```
+
+### Testing installation
+
+You can test your installation all at once or for each specific package.
+
+#### Testing installation for Windows
+
+TODO
+
+#### Testing installation for macOS and Debian based distributions
+
+Please find the following commands below.
+
+> **Note**
+>
+> You can run all tests at once by using `pnpm test:install:unix`
+
+```bash
+pnpm test:git:unix
+
+# > sound-scape-explorer@9.0.0 test:git:unix /home/user/git/sound-scape-explorer
+# > bin/test-git.sh
+#
+# git
+# Version: git version 2.25.1
+# Path: /usr/bin/git
+
+pnpm test:python:unix
+
+# > sound-scape-explorer@9.0.0 test:python:unix /home/user/git/sound-scape-explorer
+# > bin/test-python.sh
+#
+# python3
+# Version: Python 3.8.10
+# Path: /usr/bin/python3
+#
+# pip3
+# Version: pip 23.1.1 from /home/user/.local/lib/python3.8/site-packages/pip (python 3.8)
+# Path: /home/user/.local/bin/pip3
+
+pnpm test:nodejs:unix
+
+# > sound-scape-explorer@9.0.0 test:nodejs:unix /home/user/git/sound-scape-explorer
+# > bin/test-nodejs.sh
+#
+# node
+# Version: v16.20.0
+# Path: /usr/bin/node
+
+pnpm test:pnpm:unix
+
+# > sound-scape-explorer@9.0.0 test:pnpm:unix /home/user/git/sound-scape-explorer
+# > bin/test-pnpm.sh
+#
+# pnpm
+# Version: 8.6.0
+# Path: /usr/bin/pnpm
 ```
 
 ### Download `SoundScape Explorer`
 
-If you choose to use `git`, you can clone the repository by
-submitting the following command inside your shell instance:
+You can download `SoundScape Explorer` following two methods:
+
+- [Clone repository with `git`](#clone-repository-with-git)
+- [Download release as `.zip`](#download-release-as-zip)
+
+#### Clone repository with `git`
+
+If you chose using `git`, you can clone the repository by
+running the following command inside your shell instance:
 
 ```bash
 git clone https://github.com/sound-scape-explorer/sound-scape-explorer.git --depth 1
 ```
 
+#### Download release as `.zip`
+
+If you decide to skip `git`, you will have to download one of the
+[released versions](https://github.com/sound-scape-explorer/sound-scape-explorer/releases)
+that comes as a `.zip` file.
+
+If you go that way, you will need to download a new zip file
+every time a new version is published.
+
 ### Modules
 
 `SoundScape Explorer` comes in three modules.
 
-- Processing
-- Audio
-- Front
+- [Processing](#processing-module-installation)
+- [Front](#front-module-installation)
+- [Audio](#audio-module-installation)
 
 > **Note**: If you succesfully installed all required packages
 > and want to install all modules at once,
@@ -316,22 +445,22 @@ pnpm install:audio
 
 ## Docker installation
 
-Docker is virtualizing tool that gives users the power to
-start apps bundled into **containers**.
+Docker is a virtualizing tool giving users the power to
+start software with its own environment bundled into **containers**.
 
-These containers are created and shipped by the developers
-and ensure that all necessary dependencies are shipped with
+These containers are built by the developers
+thus ensuring that all necessary dependencies are shipped with
 the software.
 
 ### Docker on Windows
 
 Please follow the official documentation to run Docker
-on Windows [here](https://www.docker.com/products/docker-desktop)
+on Windows [here](https://docs.docker.com/desktop/install/windows-install/)
 
-### Docker on MacOS
+### Docker on macOS
 
 Please follow the official documentation to run Docker
-on MacOS [here](https://placeholder)
+on macOS [here](https://docs.docker.com/desktop/install/mac-install/)
 
 ### Docker on Debian
 
@@ -344,6 +473,10 @@ Please follow the official documentation to run Docker
 on Ubuntu [here](https://docs.docker.com/engine/install/ubuntu/)
 
 ## Usage
+
+- [Set up your project](#set-up-your-project)
+- [Process your data](#process-your-data)
+- [Explore your data](#explore-your-data)
 
 ### Set up your project
 
@@ -369,22 +502,25 @@ The following tabs are mandatory in order to process your audio files:
 Once your configuration file is completed, you can start
 processing your audio files.
 
-Your audio files will be filtered by neural network and will result
-in **features**.
+Your audio files will be filtered and processed by neural network
+and each second of audio will result in an array of 128 numbers.
+These arrays are named **features**.
 
 Each of these features will then be integrated according
-to your configuration.
+to your configuration. This stage is called **grouping**.
 
 Because each of these features are in 128 dimensions, they will finally
-be reduced through selected reducing algorithm.
+be reduced in dimensions through selected reducing algorithms.
 
-> **Note**: `UMAP` reducing algorithm is recommended as
-> it is the most used in the community and development has had
-> heavy focus on it.
+> **Note**
+>
+> `UMAP` reducing algorithm is the most recommended algorithm as
+> it is the most used within the community
+> and development has been heavily focusing on it.
 
-All generated data will be stored inside a `h5` file.
+All generated data will be stored inside a `.h5` file.
 
-This will allow to feed the front with later on.
+This file will be fed into the `Front` later on.
 
 Please follow the related instructions depending on the installation
 method you chose above.
@@ -401,7 +537,9 @@ pnpm process --config /path/to/config.xlsx --storage /path/to/storage.h5
 pnpm process -c /path/to/config.xlsx -s /path/to/storage.h5
 ```
 
-> **Note**: Use `pwd` to get the path of your
+> **Note**
+>
+> Use `pwd` to get the path of your
 > current working directory.
 
 ##### Single step process
@@ -410,26 +548,37 @@ Manual installation gives you the control to start each process
 individually.
 
 For instance, you can only refresh the configuration file's digest
-inside your `h5` storage file with the following command:
+inside your `.h5` storage file with the following command:
 
 ```bash
 pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
 ```
 
-#### Process your data (docker installation)
+> **Note**
+>
+> Find all available `pnpm` commands [here](#pnpm-commands).
+
+#### Process your data (Docker installation)
 
 At the moment, Docker installation only allows all processes to trigger.
 
-> **Note**: This could be improved following user needs.
+> **Note**
 >
-> Please send your feedback to the development team [here](https://placeholder)
+> This could be improved following user needs.
+>
+> Please send your feedback to the development team [here](#interact-with-development-team).
 
-Please refer to the [Docker manual](https://placeholder)
+Please refer to the [Docker manual](TODO)
 
 ### Explore your data
 
 In order to explore your generated data, please refer to the two
 following methods.
+
+> **Note**
+>
+> If you do not intend to work offline,
+> you can directly use the [Front online version](https://sound-scape-explorer.github.io/sound-scape-explorer).
 
 #### Without audio playback
 
@@ -442,33 +591,25 @@ pnpm front
 
 #### With audio playback
 
-If you want to listen to your audio files inside the web browser
+If you need listening to your audio files inside the web browser
 and display spectrograms, run the following command:
 
 ```bash
 pnpm front:audio -- path/to/audio/folder
 ```
 
-> **Note**: If you want to launch only the `audio` module,
+> **Note**
+>
+> If you want to launch only the `audio` module,
 > use the `pnpm audio -- path/to/audio/folder`
-
----
-
-- Set up your project with shareable `.xlsx` configuration.
-- Extract data from your audio files to shareable `.h5` file.
-- Visualize data in your web browser [online](https://sound-scape-explorer.github.io/sound-scape-explorer/)
-  or [offline](http://localhost:8080).
-
-> If you already have your `.h5` file and only want to visualize
-> your data with no audio playback, you can directly use
-> the [online front end](https://sound-scape-explorer.github.io/sound-scape-explorer/).
 
 ## Migration
 
-Because of current sustained development, a lot of breaking changes
+Because of the current sustained development,
+a lot of breaking changes
 happened and are expected to occur again.
 
-In order to avoid users to regenerate all their data
+In order to avoid users to regenerate all data
 at each **major** version upgrade, migration scripts have been
 implemented from `v8` and above.
 
@@ -480,7 +621,7 @@ pnpm migrate:v8 --storage /path/to/storage.h5
 
 ## Dataframe
 
-If you need to generate a `csv` file from an existing `h5` file,
+If you need to generate a `.csv` file from an existing `.h5` file,
 you can use the following command:
 
 ```bash
@@ -490,23 +631,7 @@ pnpm dataframe:csv --band human --integration 15 --storage /path/to/storage.h5 -
 pnpm dataframe:csv -b human -i 15 -s /path/to/storage.h5 -c /path/to/dataframe.csv
 ```
 
-## 👨‍🏫 For researchers
-
-### 🐋 Docker
-
-Install and run Docker.
-
-- [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
-- [Debian](https://docs.docker.com/engine/install/debian/)
-- [Other](https://docs.docker.com/engine/install/)
-- [Windows](https://www.docker.com/products/docker-desktop)
-
-### ⚙️ Configure your project
-
-[Download the configuration template](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
-and set up your project!
-
-### 💽 Generate your data
+## Docker flavors
 
 1. Select a template from the available
    flavors. [Go to downloads](https://github.com/sound-scape-explorer/sound-scape-explorer/releases/latest).
@@ -520,94 +645,27 @@ and set up your project!
 | SSE CUDA   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                   |
 | SSE Front  | Use this if you already have your `.h5` and intend to work offline by using the [offline front end](http://localhost:8080).                   |
 
-## 👨‍💻 For programmers
+## Project example
 
-### ⚓ Requirements
+[Lana's light v9](https://drive.google.com/drive/folders/1XyQ4thJsKoLj-OhHy2ea1A-6VpPlItnX)
 
-#### Git
+## Pythonpath
 
-You can either use git to clone the repository or download a zip
-
-- Git
-  - Check: `git --version`
-  - Install: `sudo apt install git`
-- [Python 3.8.10](https://www.python.org/downloads/)
-  - Check: `python3 --version`
-  - Install pip: `sudo apt install python3-pip`
-- [Node.js](https://nodejs.org/en/)
-  - Check: `node --version`
-- [pnpm](https://pnpm.io/installation#using-npm)
-  - Install: `sudo npm i -g pnpm`
-
-#### Node.js
-
-Check your version
+## Documentation TODO
 
 ```bash
-node --version
+# Python path on UNIX
+pnpm set:path:unix
+
+# Python path on Windows
+pnpm set:path:windows
 ```
 
-Install on ubuntu
-
-curl required
-
-```bash
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
-sudo apt-get install -y nodejs
-```
-
-#### pnpm
-
-### 🎛️ Instructions
-
-Propose git or download release zip.
-
-```powershell
-set PYTHONPATH=processing
-$env:PYTHONPATH="processing"
-```
-
-```bash
-# Clone or download the app codebase
-git clone https://github.com/sound-scape-explorer/sound-scape-explorer.git
-
-# 📥 Installation
-cd sound-scape-explorer
-pnpm i
-cd front && pnpm i && cd ..
-
-# Create your campaign with configuration file or download this example
-# https://drive.google.com/drive/folders/1XyQ4thJsKoLj-OhHy2ea1A-6VpPlItnX
-
-# Edit your configuration file
-# You can use `pwd` to print your current working directory
-# Link to `sse-config-importer`
-
-# INSTALL PYTHON DEPENDENCIES
-pip install -r processing/requirements.txt
-
-# Python path on linux
-export PYTHONPATH=processing
-
-# 💽 Generate data, see list of available actions in `package.json`.
-# Examples
-pnpm process -c /path/to/config.xlsx -s /path/to/storage.h5
-
-# Explain the smaller processing commands
-pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
-
-# 🚀 Explore data, serve `front` at localhost:8080
-pnpm dev
-
-# Want a CSV export from your existing h5?
-pnpm process:dataframe --band all --integration 60 --storage /path/to/storage.h5 --output /path/to/dataframe.csv
-```
-
-## ⚒️ `pnpm` commands
+## `pnpm` commands
 
 | `pnpm` command          | Description                                                                                                                           |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `audio`                 | Serve audio files. Example: `pnpm audio -- /path/to/audio/folder`.                                                                       |
+| `audio`                 | Serve audio files. Example: `pnpm audio -- /path/to/audio/folder`.                                                                    |
 | `migrate:v8`            | Migrate storage file from v8 to v9.                                                                                                   |
 | `process`               | alias for `process:all`                                                                                                               |
 | `process:all`           | Run all processing commands                                                                                                           |
@@ -625,6 +683,8 @@ pnpm process:dataframe --band all --integration 60 --storage /path/to/storage.h5
 | `process:pairings`      | Process pairings from grouped audio features.                                                                                         |
 | `process:dataframe`     | Build pandas DataFrame and export to .csv file.                                                                                       |
 
-## 🧑‍🤝‍🧑 Contribute
+## Interact with development team
 
-Feel free to open an issue or PR if you have any questions or suggestions.
+Feel free to open an [issue](https://github.com/sound-scape-explorer/sound-scape-explorer/issues)
+or [Pull Request](https://github.com/sound-scape-explorer/sound-scape-explorer/pulls)
+if you have any questions or suggestions.
