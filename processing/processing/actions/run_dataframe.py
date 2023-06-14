@@ -63,13 +63,14 @@ def run_dataframe(
     return df
 
 
+# TODO: This might be better to split in order to get different output flavors `csv` or `json`?
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-b", "--band")
     parser.add_argument("-i", "--integration")
-    parser.add_argument("-o", "--output")
     parser.add_argument("-s", "--storage")
+    parser.add_argument("-c", "--csv")
 
     args = parser.parse_args()
 
@@ -81,5 +82,5 @@ if __name__ == "__main__":
 
     print(df)
 
-    output = str(args.output)
-    df.to_csv(path_or_buf=output)
+    csv = str(args.csv)
+    df.to_csv(path_or_buf=csv)
