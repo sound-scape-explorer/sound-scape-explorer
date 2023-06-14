@@ -570,6 +570,16 @@ At the moment, Docker installation only allows all processes to trigger.
 
 Please refer to the [Docker manual](TODO)
 
+##### Enable CUDA for Docker
+
+In order to use your GPU via CUDA with Docker, you will need
+to install the NVIDIA Container Runtime.
+
+Please install the package following [this guide](https://nvidia.github.io/nvidia-container-runtime/)
+
+To verify that Docker is working properly with CUDA,
+follow this [Docker documentation](https://docs.docker.com/config/containers/resource_constraints/#gpu)
+
 ### Explore your data
 
 In order to explore your generated data, please refer to the following methods.
