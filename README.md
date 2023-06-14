@@ -572,8 +572,11 @@ Please refer to the [Docker manual](TODO)
 
 ### Explore your data
 
-In order to explore your generated data, please refer to the two
-following methods.
+In order to explore your generated data, please refer to the following methods.
+
+`Front` will be served at [localhost:8080](http://localhost:8080)
+
+`Audio` will be served at [localhost:3000](http://localhost:3000)
 
 > **Note**
 >
