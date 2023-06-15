@@ -138,8 +138,10 @@ git --version
 
 #### `git` for Windows
 
+Run this inside an administrative shell:
+
 ```powershell
-choco install git
+choco install git -y
 ```
 
 #### `git` for macOS
@@ -207,10 +209,10 @@ pip3 --version
 
 #### `python` for Windows
 
-Please run the following command to install Python:
+Please run the following command in an administrative shell to install Python:
 
 ```powershell
-choco install python3 --version=3.8.10
+choco install python3 --version=3.8.10 -y
 ```
 
 #### `python` for macOS
@@ -242,10 +244,10 @@ node --version
 
 #### `nodejs` Windows
 
-Please install with the following command in your shell:
+Please install with the following command in an administrative shell:
 
 ```powershell
-choco install nodejs --version=16.20.0
+choco install nodejs --version=16.20.0 -y
 ```
 
 #### `nodejs` macOS
@@ -318,7 +320,41 @@ You can test your installation all at once or for each specific package.
 
 #### Testing installation for Windows
 
-TODO
+Please find the following commands below.
+
+> **Note**
+>
+> You can run all tests at once by using `pnpm test:install:windows`
+
+```powershell
+pnpm test:git:windows
+
+# git
+# Version: git version 2.41.0.windows.1
+# Path: git.exe.Source
+
+pnpm test:python:windows
+
+# python
+# Version: Python 3.8.10
+# Path: python.exe
+#
+# pip
+# Version: pip 21.1.1 from c:\python38\lib\site-packages\pip (python 3.8)
+# Path: pip.exe
+
+pnpm test:nodejs:windows
+
+# node
+# Version: v16.20.0
+# Path: node.exe.Source
+
+pnpm test:pnpm:windows
+
+# pnpm
+# Version: 8.6.2
+# Path: pnpm.ps1.Source
+```
 
 #### Testing installation for macOS and Debian based distributions
 

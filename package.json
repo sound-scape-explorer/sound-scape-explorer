@@ -35,10 +35,15 @@
     "set:path:unix": "bin/set-python-path.sh",
     "start": "pnpm dev",
     "test:git:unix": "bin/test-git.sh",
+    "test:git:windows": "bin/test-git.ps1",
     "test:install:unix": "pnpm test:git:unix && pnpm test:python:unix && pnpm test:nodejs:unix && pnpm test:pnpm:unix",
+    "test:install:windows": "pnpm test:git:windows && pnpm test:python:windows && pnpm test:nodejs:windows && pnpm test:pnpm:windows",
     "test:nodejs:unix": "bin/test-nodejs.sh",
+    "test:nodejs:windows": "bin/test-nodejs.ps1",
     "test:pnpm:unix": "bin/test-pnpm.sh",
-    "test:python:unix": "bin/test-python.sh"
+    "test:pnpm:windows": "bin/test-pnpm.ps1",
+    "test:python:unix": "bin/test-python.sh",
+    "test:python:windows": "bin/test-python.ps1"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
