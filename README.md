@@ -331,7 +331,7 @@ pnpm test:git:windows
 
 # git
 # Version: git version 2.41.0.windows.1
-# Path: git.exe.Source
+# Path: git.exe
 
 pnpm test:python:windows
 
@@ -347,13 +347,13 @@ pnpm test:nodejs:windows
 
 # node
 # Version: v16.20.0
-# Path: node.exe.Source
+# Path: node.exe
 
 pnpm test:pnpm:windows
 
 # pnpm
 # Version: 8.6.2
-# Path: pnpm.ps1.Source
+# Path: pnpm.ps1
 ```
 
 #### Testing installation for macOS and Debian based distributions
