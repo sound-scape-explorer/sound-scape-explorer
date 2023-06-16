@@ -8,16 +8,17 @@ PathByAction = {
     "all-actions": "processing/processing/actions/_all_actions.py",
     "all-but-files": "processing/processing/actions/_all_but_files.py",
     "all-to-groups": "processing/processing/actions/_all_to_groups.py",
+    "autocluster": "processing/processing/actions/run_autocluster.py",
     "config": "processing/processing/actions/run_config.py",
     "dataframe": "processing/processing/actions/run_dataframe.py",
     "files": "processing/processing/actions/run_files.py",
     "groups": "processing/processing/actions/run_groups.py",
-    "autocluster": "processing/processing/actions/run_autocluster.py",
-    "reducers": "processing/processing/actions/run_reducers.py",
     "indicators": "processing/processing/actions/run_indicators.py",
-    "volumes": "processing/processing/actions/run_volumes.py",
     "matrices": "processing/processing/actions/run_matrices.py",
+    "migrate-v8": "processing/processing/actions/run_migration_v8.py",
     "pairings": "processing/processing/actions/run_pairings.py",
+    "reducers": "processing/processing/actions/run_reducers.py",
+    "volumes": "processing/processing/actions/run_volumes.py",
 }
 
 
