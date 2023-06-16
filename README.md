@@ -674,10 +674,10 @@ If you need to generate a `.csv` file from an existing `.h5` file,
 you can use the following command:
 
 ```bash
-pnpm dataframe:csv --band human --integration 15 --storage /path/to/storage.h5 --csv /path/to/dataframe.csv
+pnpm process:dataframe --band human --integration 15 --storage /path/to/storage.h5 --output /path/to/dataframe.csv
 
 # or shorter
-pnpm dataframe:csv -b human -i 15 -s /path/to/storage.h5 -c /path/to/dataframe.csv
+pnpm process:dataframe -b human -i 15 -s /path/to/storage.h5 -o /path/to/dataframe.csv
 ```
 
 ## Docker flavors
@@ -698,17 +698,6 @@ pnpm dataframe:csv -b human -i 15 -s /path/to/storage.h5 -c /path/to/dataframe.c
 
 [Lana's light v9](https://drive.google.com/drive/folders/1XyQ4thJsKoLj-OhHy2ea1A-6VpPlItnX)
 
-## Pythonpath
-
-## Documentation TODO
-
-```bash
-# Python path on UNIX
-pnpm set:path:unix
-
-# Python path on Windows
-pnpm set:path:windows
-```
 
 ## `pnpm` commands
 
