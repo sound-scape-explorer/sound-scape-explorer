@@ -1,6 +1,8 @@
 import argparse
 import os
 
+from main import Arguments
+
 from processing.common.SingletonMeta import SingletonMeta
 
 
@@ -16,8 +18,8 @@ class Env(metaclass=SingletonMeta):
     def __read_arguments(self) -> None:
         parser = argparse.ArgumentParser()
 
-        parser.add_argument('-c', '--config')
-        parser.add_argument('-s', '--storage')
+        parser.add_argument(Arguments.config[0], Arguments.config[1])
+        parser.add_argument(Arguments.storage[0], Arguments.storage[1])
 
         args = parser.parse_args()
 
@@ -25,5 +27,5 @@ class Env(metaclass=SingletonMeta):
         self.storage = args.storage
 
     def __read_env(self) -> None:
-        is_docker = os.getenv('IS_DOCKER', False)
-        self.is_docker = is_docker == 'True'
+        is_docker = os.getenv("IS_DOCKER", False)
+        self.is_docker = is_docker == "True"

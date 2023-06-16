@@ -1,5 +1,6 @@
 import argparse
 
+from main import Arguments
 from pandas import DataFrame
 
 from processing.storage.Storage import Storage
@@ -63,14 +64,13 @@ def run_dataframe(
     return df
 
 
-# TODO: This might be better to split in order to get different output flavors `csv` or `json`?
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-b", "--band")
-    parser.add_argument("-i", "--integration")
-    parser.add_argument("-s", "--storage")
-    parser.add_argument("-c", "--csv")
+    parser.add_argument(Arguments.band[0], Arguments.band[1])
+    parser.add_argument(Arguments.integration[0], Arguments.integration[1])
+    parser.add_argument(Arguments.storage[0], Arguments.storage[1])
+    parser.add_argument(Arguments.output[0], Arguments.output[1])
 
     args = parser.parse_args()
 
@@ -82,5 +82,5 @@ if __name__ == "__main__":
 
     print(df)
 
-    csv = str(args.csv)
-    df.to_csv(path_or_buf=csv)
+    output = str(args.output)
+    df.to_csv(path_or_buf=output)
