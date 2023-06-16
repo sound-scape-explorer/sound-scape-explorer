@@ -665,7 +665,7 @@ implemented from `v8` and above.
 ### Example
 
 ```bash
-pnpm migrate:v8 --storage /path/to/storage.h5
+pnpm process:migrate:v8 --storage /path/to/storage.h5
 ```
 
 ## Dataframe
@@ -697,7 +697,6 @@ pnpm process:dataframe -b human -i 15 -s /path/to/storage.h5 -o /path/to/datafra
 ## Project example
 
 [Lana's light v9](https://drive.google.com/drive/folders/1XyQ4thJsKoLj-OhHy2ea1A-6VpPlItnX)
-
 
 ## `pnpm` commands
 
