@@ -142,7 +142,19 @@ class Storage(metaclass=SingletonMeta):
         except KeyError:
             return False
 
+    # TODO: Replace with `.read()`
     def __get(
+        self,
+        path: Union[StoragePath, str],
+    ) -> Dataset:
+        try:
+            path = self.__get_path_as_string(path)
+            payload = self.__file[path]
+            return payload  # type: ignore TODO
+        except KeyError:
+            raise KeyError(f"Could not get path: {path}")
+
+    def read(
         self,
         path: Union[StoragePath, str],
     ) -> Dataset:
