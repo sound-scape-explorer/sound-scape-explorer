@@ -1,3 +1,10 @@
+## [9.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.0...v9.1.1) (2023-06-22)
+
+
+### Performance Improvements
+
+* **Processing/Groups:** Write to h5 after each integration to avoid memory limit errors ([d054de5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d054de51245f3fe2de1691c72cdd1c8a5e91b098))
+
 # [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
 
 
