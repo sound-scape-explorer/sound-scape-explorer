@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "cd front && pnpm dev",
     "audio": "pnpm serve --cors",
-    "extract:v8:files_features": "python3 processing/processing/actions/extract_v8_files_features.py",
+    "extract:v9:files_features": "python3 processing/processing/actions/extract_v9_files_features.py",
     "migrate:v8": "python3 processing/processing/actions/run_migration_v8.py",
     "process": "pnpm process:all",
     "process:all": "python3 processing/processing/actions/_all.py",

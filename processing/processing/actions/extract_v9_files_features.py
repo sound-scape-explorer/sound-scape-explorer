@@ -7,7 +7,7 @@ from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
 
-def extract_v8_files_features(
+def extract_v9_files_features(
     storage: Storage,
     band: str,
     output: str,
@@ -57,4 +57,4 @@ if __name__ == "__main__":
     band = str(args.band)
     output = str(args.output)
 
-    extract_v8_files_features(storage=storage, band=band, output=output)
+    extract_v9_files_features(storage=storage, band=band, output=output)
