@@ -44,29 +44,32 @@ class FeaturesGrouper:
     ):
         self.__start(integration)
 
-        features = []
+        grouped_features = []
         timestamps = []
+        durations = []
 
         for file_index, file_features in enumerate(self.__features):
             file_timestamp = self.__timestamps[file_index]
             groups_count = len(file_features) // integration
 
-            grouped_file_features = []
-            grouped_file_timestamps = []
+            all_grouped_features = []
+            all_grouped_timestamps = []
+            all_grouped_durations = []
 
             for g in range(groups_count):
                 start = integration * g
                 end = integration * (g + 1)
+
                 features_to_group = file_features[start:end]
 
-                grouped_file_features.append(numpy.mean(features_to_group, axis=0))
+                grouped_features = list(numpy.mean(features_to_group, axis=0))
+                grouped_timestamp = file_timestamp + integration * g * TIME_DELTA_MS
+                grouped_duration = end - start
 
-                grouped_file_timestamps.append(
-                    file_timestamp + integration * g * TIME_DELTA_MS
-                )
+                all_grouped_features.append(grouped_features)
+                all_grouped_timestamps.append(grouped_timestamp)
+                all_grouped_durations.append(grouped_duration)
 
-            features.append(grouped_file_features)
-            timestamps.append(grouped_file_timestamps)
             self.__progress()
 
-        return features, timestamps
+        return grouped_features, timestamps, durations

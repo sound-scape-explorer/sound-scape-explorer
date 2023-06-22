@@ -57,7 +57,7 @@ class Storage(metaclass=SingletonMeta):
         band_name: str,
         file_index: int,
     ) -> str:
-        return f"{StoragePath.features.value}" f"/{band_name}" f"/{file_index}"
+        return f"{StoragePath.files_features.value}" f"/{band_name}" f"/{file_index}"
 
     @staticmethod
     def __get_grouped_suffix(
@@ -143,6 +143,17 @@ class Storage(metaclass=SingletonMeta):
             return False
 
     def __get(
+        self,
+        path: Union[StoragePath, str],
+    ) -> Dataset:
+        try:
+            path = self.__get_path_as_string(path)
+            payload = self.__file[path]
+            return payload  # type: ignore TODO
+        except KeyError:
+            raise KeyError(f"Could not get path: {path}")
+
+    def read(
         self,
         path: Union[StoragePath, str],
     ) -> Dataset:
@@ -384,7 +395,7 @@ class Storage(metaclass=SingletonMeta):
         return values
 
     def get_timestamps(self) -> Dataset:
-        return self.__get(StoragePath.timestamps)
+        return self.__get(StoragePath.files_timestamps)
 
     def get_files_sites(self) -> List[str]:
         dataset = self.__get(StoragePath.files_sites)
@@ -407,19 +418,20 @@ class Storage(metaclass=SingletonMeta):
     def read_features(
         self,
         band: str,
-    ) -> Tuple[Dataset, int, int]:
-        path = f"{StoragePath.features.value}/{band}"
-        dataset = self.__get(path)
-        files_count: int = dataset.attrs[
+    ) -> Tuple[Dataset, Dataset, int]:
+        files_features_path = f"{StoragePath.files_features.value}/{band}"
+        files_features_dataset = self.__get(files_features_path)
+
+        files_durations_path = f"{StoragePath.files_durations.value}/{band}"
+        files_durations_dataset = self.__get(files_durations_path)
+
+        files_count: int = files_features_dataset.attrs[
             StorageFilesFeaturesAttribute.files_count.value
         ]  # type: ignore
 
-        seconds: int = dataset.attrs[
-            StorageFilesFeaturesAttribute.seconds_per_file.value
-        ]  # type: ignore
+        return files_features_dataset, files_durations_dataset, files_count
 
-        return (dataset, files_count, seconds)
-
+    # TODO: To Remove
     def get_file_features(
         self,
         band_name: str,
@@ -461,12 +473,12 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.grouped_timestamps)
 
     def delete_files_features(self) -> None:
-        self.__delete_silently(StoragePath.features)
+        self.__delete_silently(StoragePath.files_features)
 
     def delete_config(self) -> None:
         self.__delete_silently(StoragePath.configuration)
         self.__delete_silently(StoragePath.files)
-        self.__delete_silently(StoragePath.timestamps)
+        self.__delete_silently(StoragePath.files_timestamps)
         self.__delete_silently(StoragePath.files_sites)
         self.__delete_silently(StoragePath.files_metas)
         self.__delete_silently(StoragePath.meta_properties)
@@ -540,7 +552,7 @@ class Storage(metaclass=SingletonMeta):
         )
 
         self.__write_dataset(
-            path=StoragePath.timestamps,
+            path=StoragePath.files_timestamps,
             data=timestamps,
             compression=StorageCompression.gzip,
         )
@@ -617,27 +629,36 @@ class Storage(metaclass=SingletonMeta):
         features: List[List[List[float]]],
         band: str,
     ) -> None:
-        path = f"{StoragePath.features.value}/{band}"
+        files_features: List[List[float]] = []
+        files_features_path = f"{StoragePath.files_features.value}/{band}"
 
-        flat_features: List[List[float]] = []
+        files_durations: List[int] = []
+        files_durations_path = f"{StoragePath.files_durations.value}/{band}"
 
         files_count = len(features)
-        # We suppose that all audio files have the same length
-        seconds_per_file = len(features[0])
 
         for f in range(files_count):
-            for s in range(seconds_per_file):
-                flat_features.append(features[f][s])
+            seconds = len(features[f])
+            files_durations.append(seconds)
 
+            for s in range(seconds):
+                files_features.append(features[f][s])
+
+        # TODO: Add incremental write to h5 to avoid cluttering the RAM
         self.__write_dataset(
-            path=path, data=flat_features, compression=StorageCompression.gzip
+            path=files_features_path,
+            data=files_features,
+            compression=StorageCompression.gzip,
         )
 
-        dataset = self.__get(path)
+        self.__write_dataset(
+            path=files_durations_path,
+            data=files_durations,
+            compression=StorageCompression.gzip,
+        )
+
+        dataset = self.__get(files_features_path)
         dataset.attrs[StorageFilesFeaturesAttribute.files_count.value] = files_count
-        dataset.attrs[
-            StorageFilesFeaturesAttribute.seconds_per_file.value
-        ] = seconds_per_file
 
     def enumerate_file_indexes(self) -> Iterable[int]:
         files = self.read_files()
@@ -682,44 +703,110 @@ class Storage(metaclass=SingletonMeta):
         for index, name in enumerate(volumes):
             yield index, name
 
+    def append_group(
+        self,
+        features: List[float],
+        timestamp: int,
+        duration: int,
+        band: str,
+        integration: int,
+    ) -> None:
+        suffix = f"{band}/{integration}"
+        features_path = f"{StoragePath.grouped_features.value}/{suffix}"
+        timestamp_path = f"{StoragePath.grouped_timestamps.value}/{suffix}"
+        duration_path = f"{StoragePath.grouped_durations.value}/{suffix}"
+
+        if not self.exists_dataset(features_path):
+            self.__file.create_dataset(
+                name=features_path,
+                data=[features],
+                compression=StorageCompression.gzip.value,
+                chunks=True,
+                shape=(1, 128),
+                maxshape=(None, 128),
+            )
+        else:
+            dataset: Dataset = self.__file[features_path]  # type: ignore
+            new_shape = dataset.shape[0] + 1
+            dataset.resize(new_shape, axis=0)
+            dataset[-1:] = [features]
+
+        if not self.exists_dataset(timestamp_path):
+            self.__file.create_dataset(
+                name=timestamp_path,
+                data=[timestamp],
+                compression=StorageCompression.gzip.value,
+                chunks=True,
+                shape=(1, 1),
+                maxshape=(None, 1),
+            )
+        else:
+            dataset: Dataset = self.__file[timestamp_path]  # type: ignore
+            new_shape = dataset.shape[0] + 1
+            dataset.resize(new_shape, axis=0)
+            dataset[-1:] = [timestamp]
+
+        if not self.exists_dataset(duration_path):
+            self.__file.create_dataset(
+                name=duration_path,
+                data=[duration],
+                compression=StorageCompression.gzip.value,
+                chunks=True,
+                shape=(1, 1),
+                maxshape=(None, 1),
+            )
+        else:
+            dataset: Dataset = self.__file[duration_path]  # type: ignore
+            new_shape = dataset.shape[0] + 1
+            dataset.resize(new_shape, axis=0)
+            dataset[-1:] = [duration]
+
     def write_group(
         self,
         features: List[List[List[float]]],
         timestamps: List[List[int]],
+        durations: List[int],
         band: str,
         integration: int,
     ) -> None:
         suffix = f"{band}/{integration}"
         path_features = f"{StoragePath.grouped_features.value}/{suffix}"
         path_timestamps = f"{StoragePath.grouped_timestamps.value}/{suffix}"
+        path_durations = f"{StoragePath.grouped_durations.value}/{suffix}"
 
         groups_count = len(features)
-        # We suppose all audio files have same length, thus same group sizes.
-        slices_per_group = len(features[0])
 
-        flat_features: List[List[float]] = []
-        flat_timestamps: List[int] = []
+        grouped_features: List[List[float]] = []
+        grouped_timestamps: List[int] = []
+        grouped_durations: List[int] = []
 
         for g in range(groups_count):
-            for s in range(slices_per_group):
-                flat_features.append(features[g][s])
-                flat_timestamps.append(timestamps[g][s])
+            duration = durations[g]
+            print(duration)
+
+            for s in range(duration):
+                grouped_features.append(features[g][s])
+                grouped_timestamps.append(timestamps[g][s])
+                grouped_durations.append(duration)
 
         self.__write_dataset(
             path=path_features,
-            data=flat_features,
+            data=grouped_features,
             compression=StorageCompression.gzip,
         )
 
         dataset_features = self.__get(path_features)
         dataset_features.attrs[StorageGroupsAttribute.groups_count.value] = groups_count
-        dataset_features.attrs[
-            StorageGroupsAttribute.slices_per_group.value
-        ] = slices_per_group
 
         self.__write_dataset(
             path=path_timestamps,
-            data=flat_timestamps,
+            data=grouped_timestamps,
+            compression=StorageCompression.gzip,
+        )
+
+        self.__write_dataset(
+            path=path_durations,
+            data=grouped_durations,
             compression=StorageCompression.gzip,
         )
 
@@ -727,9 +814,6 @@ class Storage(metaclass=SingletonMeta):
         dataset_timestamps.attrs[
             StorageGroupsAttribute.groups_count.value
         ] = groups_count
-        dataset_timestamps.attrs[
-            StorageGroupsAttribute.slices_per_group.value
-        ] = slices_per_group
 
     def create_group(
         self,
@@ -989,7 +1073,7 @@ class Storage(metaclass=SingletonMeta):
     def is_defined_files(self) -> bool:
         return (
             self.exists_dataset(StoragePath.files.value)
-            and self.exists_dataset(StoragePath.timestamps.value)
+            and self.exists_dataset(StoragePath.files_timestamps.value)
             and self.exists_dataset(StoragePath.files_sites.value)
             and self.exists_dataset(StoragePath.files_metas.value)
         )

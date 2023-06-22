@@ -31,8 +31,9 @@ class StoragePath(Enum):
     meta_sets = "/configuration/meta/sets"
 
     # Features
-    features = "/files_features"
-    timestamps = "/files_timestamps"
+    files_features = "/files_features"
+    files_timestamps = "/files_timestamps"
+    files_durations = "/files_durations"
 
     # Actions
 
@@ -52,6 +53,7 @@ class StoragePath(Enum):
     # Example: /grouped_features/{band}/{integration}/{file_index}
     grouped_features = "/grouped_features"
     grouped_timestamps = "/grouped_timestamps"
+    grouped_durations = "/grouped_durations"
 
     # Reduced
 
