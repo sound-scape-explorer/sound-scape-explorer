@@ -5,6 +5,7 @@ from h5py import Dataset, File
 
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
+from numpy.ma import shape
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
@@ -693,6 +694,47 @@ class Storage(metaclass=SingletonMeta):
 
         for index, name in enumerate(volumes):
             yield index, name
+
+    def append_group(
+        self,
+        features: List[float],
+        timestamp: int,
+        band: str,
+        integration: int,
+    ) -> None:
+        suffix = f"{band}/{integration}"
+        features_path = f"{StoragePath.grouped_features.value}/{suffix}"
+        timestamp_path = f"{StoragePath.grouped_timestamps.value}/{suffix}"
+
+        if not self.exists_dataset(features_path):
+            self.__file.create_dataset(
+                name=features_path,
+                data=[features],
+                compression=StorageCompression.gzip.value,
+                chunks=True,
+                shape=(1, 128),
+                maxshape=(None, 128),
+            )
+        else:
+            dataset: Dataset = self.__file[features_path]  # type: ignore
+            new_shape = dataset.shape[0] + 1
+            dataset.resize(new_shape, axis=0)
+            dataset[-1:] = [features]
+
+        if not self.exists_dataset(timestamp_path):
+            self.__file.create_dataset(
+                name=timestamp_path,
+                data=[timestamp],
+                compression=StorageCompression.gzip.value,
+                chunks=True,
+                shape=(1, 1),
+                maxshape=(None, 1),
+            )
+        else:
+            dataset: Dataset = self.__file[timestamp_path]  # type: ignore
+            new_shape = dataset.shape[0] + 1
+            dataset.resize(new_shape, axis=0)
+            dataset[-1:] = [timestamp]
 
     def write_group(
         self,

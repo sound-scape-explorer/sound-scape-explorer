@@ -1,8 +1,11 @@
-from typing import List
+import numpy
 
 from processing.common.Env import Env
+from processing.common.Timer import Timer
+from processing.constants import TIME_DELTA_MS
 from processing.groupers.FeaturesGrouper import FeaturesGrouper
 from processing.storage.Storage import Storage
+from processing.utils.print_new_line import print_new_line
 
 
 def run_groups(env: Env):
@@ -20,30 +23,44 @@ def run_groups(env: Env):
     for band in bands:
         features, files_count, seconds = storage.read_features(band)
 
-        sliced_features: List[List[List[float]]] = []
+        print_new_line()
 
-        for f in range(files_count):
-            sliced_features.append([])
-            for s in range(seconds):
-                sliced_features[f].append([])
+        print(f'Grouping for band "{band}"')
 
-        i = 0
-        for f in range(files_count):
-            for s in range(seconds):
-                sliced_features[f][s] = features[i]
-                i += 1
+        timer = Timer(files_count * len(integrations))
 
-        grouper.set_features(sliced_features)  # type: ignore
+        for file_index in range(files_count):
+            start = file_index * seconds
+            end = (file_index + 1) * seconds
+            file_features = features[start:end]
+            grouper.set_features(file_features)
+            file_timestamp = timestamps[file_index]
 
-        for integration in integrations:
-            grouped_features, grouped_timestamps = grouper.group(integration)
+            for integration in integrations:
+                groups_count = len(file_features) // integration
 
-            storage.write_group(
-                features=grouped_features,
-                timestamps=grouped_timestamps,
-                band=band,
-                integration=integration,
-            )
+                for group_index in range(groups_count):
+                    group_start = group_index * integration
+                    group_end = (group_index + 1) * integration
+                    features_to_group = file_features[group_start:group_end]
+
+                    group_features = list(numpy.mean(features_to_group, axis=0))
+
+                    group_timestamp = (
+                        file_timestamp + integration * group_index * TIME_DELTA_MS
+                    )
+
+                    # At the moment, each integration result in a write
+                    # Writes could be merged for each group to improve performance
+                    # But the current strategy is to be as narrow as possible
+                    storage.append_group(
+                        features=group_features,
+                        timestamp=group_timestamp,
+                        band=band,
+                        integration=integration,
+                    )
+
+                timer.progress()
 
 
 if __name__ == "__main__":
