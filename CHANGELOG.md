@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
+
+
+### Features
+
+* **Processing:** Add v8 files features extraction command ([2572f88](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2572f88d1afd3f0efc67043fe5b7988ab547c73d))
+
 # [9.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.4...v9.0.0) (2023-05-30)
 
 
