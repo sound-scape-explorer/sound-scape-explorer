@@ -1,6 +1,18 @@
 # [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
 
 
+### Bug Fixes
+
+* **Processing:** Fix typo and set correct version for files feature extraction ([6bf94e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6bf94e595283ac5a42355082142ad555d2c44c93))
+
+
+### Features
+
+* **Processing:** Add v9 files features extraction command ([dbf57aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dbf57aaabb8650777ca669b615bf28f8f7206b6a))
+
+# [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
+
+
 ### Features
 
 * **Processing:** Add v8 files features extraction command ([2572f88](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2572f88d1afd3f0efc67043fe5b7988ab547c73d))
