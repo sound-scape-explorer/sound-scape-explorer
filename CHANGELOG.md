@@ -3,6 +3,19 @@
 
 ### Bug Fixes
 
+* **App:** Dummy commit to increment semantic versioning ([eb8b1f1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb8b1f180f06e36c714c00ce2a837d7f97b75cf2))
+* **Processing:** Fix typo and set correct version for files feature extraction ([6bf94e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6bf94e595283ac5a42355082142ad555d2c44c93))
+
+
+### Features
+
+* **Processing:** Add v9 files features extraction command ([dbf57aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dbf57aaabb8650777ca669b615bf28f8f7206b6a))
+
+# [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
+
+
+### Bug Fixes
+
 * **Processing:** Fix typo and set correct version for files feature extraction ([6bf94e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6bf94e595283ac5a42355082142ad555d2c44c93))
 
 
