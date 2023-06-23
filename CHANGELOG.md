@@ -1,3 +1,10 @@
+## [9.1.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.3...v9.1.4) (2023-06-23)
+
+
+### Bug Fixes
+
+* **Processing/Extraction:** Add back `files_count` and `seconds_per_file` attributes ([489bd84](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/489bd84d253097149dba8db58249a0e1222108af))
+
 ## [9.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.2...v9.1.3) (2023-06-23)
 
 
