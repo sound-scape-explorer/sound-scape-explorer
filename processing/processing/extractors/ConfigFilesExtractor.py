@@ -109,17 +109,12 @@ class ConfigFilesExtractor:
         band: str,
         storage: Storage,
     ) -> None:
-        features: List[List[List[float]]] = []
-
         for file_features, _ in self.yield_features():
-            file_features_list: List[List[float]] = file_features.tolist()
-            # file_seconds = len(file_features_list)
-            features.append(file_features_list)
-
-        storage.write_features(
-            features=features,
-            band=band,
-        )
+            features: List[List[float]] = file_features.tolist()
+            storage.append_features(
+                features=features,
+                band=band,
+            )
 
     def __forward_model(
         self,

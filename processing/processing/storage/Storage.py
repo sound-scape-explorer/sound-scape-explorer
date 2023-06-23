@@ -5,7 +5,6 @@ from h5py import Dataset, File
 
 # noinspection PyProtectedMember
 from h5py._hl.dataset import AsStrWrapper
-from numpy.ma import shape
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
@@ -624,6 +623,31 @@ class Storage(metaclass=SingletonMeta):
             features,
             compression=StorageCompression.gzip,
         )
+
+    # TODO: Add files_durations in v10
+    def append_features(
+        self,
+        features: List[List[float]],
+        band: str,
+    ) -> None:
+        path = f"{StoragePath.features.value}/{band}"
+        features_length = len(features)
+
+        if not self.exists_dataset(path):
+            self.__file.create_dataset(
+                name=path,
+                data=features,
+                compression=StorageCompression.gzip.value,
+                chunks=True,
+                shape=(features_length, 128),
+                maxshape=(None, 128),
+            )
+            return
+
+        dataset: Dataset = self.__file[path]  # type: ignore
+        new_shape = dataset.shape[0] + features_length
+        dataset.resize(new_shape, axis=0)
+        dataset[-features_length:] = features
 
     def write_features(
         self,
