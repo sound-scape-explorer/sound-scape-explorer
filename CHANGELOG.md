@@ -1,3 +1,10 @@
+## [9.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.2...v9.1.3) (2023-06-23)
+
+
+### Bug Fixes
+
+* **Processing:** Add incremental h5 writes for file features extraction ([b4b81be](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b4b81be28ef26e041a205029b457ebed84fbe384))
+
 ## [9.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.1...v9.1.2) (2023-06-23)
 
 
