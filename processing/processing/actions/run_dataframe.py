@@ -29,7 +29,10 @@ def run_dataframe(
     payload["filename"] = output_filenames
 
     # Autocluster
-    payload["meta_AUTOCLUSTER"] = storage.read_autocluster(band, integration)
+    try:
+        payload["meta_AUTOCLUSTER"] = storage.read_autocluster(band, integration)
+    except KeyError:
+        print("Autocluster data not found!")
 
     # Metas
     files = storage.read_config_files()
@@ -46,12 +49,15 @@ def run_dataframe(
             payload[meta_property].append(meta_value)
 
     # Reducers
-    reducers = storage.get_grouped_reducers(band, integration)
-    reduced_features = storage.get_reduced_features(reducers, band, integration)
-    for reducer in reducers:
-        for d in range(reducer.dimensions):
-            name = f"{reducer.name}{reducer.index}_{d+1}"
-            payload[name] = [rf[d] for rf in reduced_features[reducer.index]]
+    try:
+        reducers = storage.get_grouped_reducers(band, integration)
+        reduced_features = storage.get_reduced_features(reducers, band, integration)
+        for reducer in reducers:
+            for d in range(reducer.dimensions):
+                name = f"{reducer.name}{reducer.index}_{d+1}"
+                payload[name] = [rf[d] for rf in reduced_features[reducer.index]]
+    except KeyError:
+        print("Reducers data not found!")
 
     # Grouped features
     grouped_features = storage.read_grouped_features_all_files(band, integration)
