@@ -1,3 +1,10 @@
+## [9.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.1...v9.1.2) (2023-06-23)
+
+
+### Bug Fixes
+
+* **Processing/Actions:** Exporting dataframe has optional autocluster and reduced data ([7f4ea81](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7f4ea8154e7f3ded169d9aaa2558a8f858b466c2))
+
 ## [9.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.0...v9.1.1) (2023-06-22)
 
 
