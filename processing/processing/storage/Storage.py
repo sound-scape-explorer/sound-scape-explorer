@@ -642,12 +642,28 @@ class Storage(metaclass=SingletonMeta):
                 shape=(features_length, 128),
                 maxshape=(None, 128),
             )
+
+            self.__file[path].attrs[StorageFilesFeaturesAttribute.files_count.value] = 1
+
             return
 
         dataset: Dataset = self.__file[path]  # type: ignore
         new_shape = dataset.shape[0] + features_length
         dataset.resize(new_shape, axis=0)
         dataset[-features_length:] = features
+
+        old_files_count: int = dataset.attrs[
+            StorageFilesFeaturesAttribute.files_count.value
+        ]  # type: ignore
+
+        dataset.attrs[StorageFilesFeaturesAttribute.files_count.value] = (
+            old_files_count + 1
+        )
+
+        # TODO: This will be deprecated in v10 to handle different audio lengths
+        dataset.attrs[
+            StorageFilesFeaturesAttribute.seconds_per_file.value
+        ] = features_length
 
     def write_features(
         self,
