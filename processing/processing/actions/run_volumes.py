@@ -31,7 +31,7 @@ def run_volumes(env: Env):
                 integration=integration,
             )
 
-            meta_values = storage.read_meta_values(band, integration)
+            meta_values = storage.read_meta_values(band=band, integration=integration)
 
             for volume_index, volume_name in enumerate(volumes):
                 for meta_index in storage.enumerate_meta_properties():

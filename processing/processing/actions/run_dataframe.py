@@ -13,24 +13,51 @@ def run_dataframe(
 ) -> DataFrame:
     payload = {}
 
-    # Group index
-    payload["g"] = []
-    for _, g in storage.enumerate_group_indexes(band, integration):
-        payload["g"].append(g)
+    # Indexes
+    payload["point_index"] = []  # Flat index
+    payload["file_index"] = []
+    payload["group_index"] = []
+    payload["file_name"] = []
+    payload["file_timestamp"] = []
+    payload["file_duration"] = []
+
+    point_index = 0
+    filenames = storage.read_files()
+
+    for (
+        file_index,
+        groups_count,
+        file_timestamp,
+        file_duration,
+        _,
+    ) in storage.enumerate_files(band=band, integration=integration):
+        for group_index in range(groups_count):
+            payload["point_index"].append(point_index)
+            payload["file_index"].append(file_index)
+            payload["group_index"].append(group_index)
+            payload["file_name"].append(filenames[file_index])
+            payload["file_timestamp"].append(file_timestamp)
+            payload["file_duration"].append(file_duration)
+
+            point_index += 1
 
     # Timestamps
-    payload["timestamp"] = storage.read_grouped_timestamps(band, integration)
+    payload["group_timestamp"] = []
+    for group_timestamp in storage.read_grouped_timestamps(band, integration):
+        payload["group_timestamp"].append(group_timestamp[0])
 
-    # Filenames
-    filenames = storage.read_files()
-    output_filenames = []
-    for f, _ in storage.enumerate_group_indexes(band, integration):
-        output_filenames.append(filenames[f])
-
-    payload["filename"] = output_filenames
+    # Durations
+    payload["group_duration"] = []
+    durations = storage.read_grouped_durations(band=band, integration=integration)
+    for _, g in storage.enumerate_group_indexes(band=band, integration=integration):
+        group_duration = durations[g][0]
+        payload["group_duration"].append(group_duration)
 
     # Autocluster
-    payload["meta_AUTOCLUSTER"] = storage.read_autocluster(band, integration)
+    try:
+        payload["meta_AUTOCLUSTER"] = storage.read_autocluster(band, integration)
+    except KeyError:
+        print("Autocluster data not found!")
 
     # Metas
     files = storage.read_config_files()
@@ -47,12 +74,15 @@ def run_dataframe(
             payload[meta_property].append(meta_value)
 
     # Reducers
-    reducers = storage.get_grouped_reducers(band, integration)
-    reduced_features = storage.get_reduced_features(reducers, band, integration)
-    for reducer in reducers:
-        for d in range(reducer.dimensions):
-            name = f"{reducer.name}{reducer.index}_{d+1}"
-            payload[name] = [rf[d] for rf in reduced_features[reducer.index]]
+    try:
+        reducers = storage.get_grouped_reducers(band, integration)
+        reduced_features = storage.get_reduced_features(reducers, band, integration)
+        for reducer in reducers:
+            for d in range(reducer.dimensions):
+                name = f"{reducer.name}{reducer.index}_{d+1}"
+                payload[name] = [rf[d] for rf in reduced_features[reducer.index]]
+    except KeyError:
+        print("Reducers data not found!")
 
     # Grouped features
     grouped_features = storage.read_grouped_features_all_files(band, integration)
@@ -61,6 +91,7 @@ def run_dataframe(
         payload[name] = [gf[feature_index] for gf in grouped_features[:]]
 
     df = DataFrame(payload)
+
     return df
 
 
@@ -83,4 +114,4 @@ if __name__ == "__main__":
     print(df)
 
     output = str(args.output)
-    df.to_csv(path_or_buf=output)
+    df.to_csv(path_or_buf=output, index=False)

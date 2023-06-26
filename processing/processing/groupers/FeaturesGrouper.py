@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy
 from h5py import Dataset
 
@@ -7,13 +9,13 @@ from processing.utils.print_new_line import print_new_line
 
 
 class FeaturesGrouper:
-    __features: Dataset
+    __features: List[List[float]]
     __timestamps: Dataset
     __timer: Timer
 
     def set_features(
         self,
-        features: Dataset,
+        features: List[List[float]],
     ):
         self.__features = features
         return self
