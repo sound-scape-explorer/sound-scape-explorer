@@ -1,3 +1,10 @@
+## [9.1.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.4...v9.1.5) (2023-06-26)
+
+
+### Bug Fixes
+
+* **Processing/Dataframe:** Compute group attributes on the fly if missing in storage ([5231cc9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5231cc9debaf62da126c3b3c54dee1a02641a8ba))
+
 ## [9.1.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.3...v9.1.4) (2023-06-23)
 
 
