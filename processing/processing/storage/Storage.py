@@ -705,12 +705,28 @@ class Storage(metaclass=SingletonMeta):
         ]  # type: ignore
         return groups_count
 
-    def read_slices_per_group(self, band: str, integration: int) -> int:
-        timestamps = self.read_grouped_timestamps(band, integration)
-        slices_per_group: int = timestamps.attrs[
-            StorageGroupsAttribute.slices_per_group.value
-        ]  # type: ignore
-        return slices_per_group
+    # TODO: Write attributes to storage
+    def read_slices_per_group(
+        self,
+        band: str,
+        integration: int,
+    ) -> int:
+        try:
+            timestamps = self.read_grouped_timestamps(band, integration)
+            slices_per_group: int = timestamps.attrs[
+                StorageGroupsAttribute.slices_per_group.value
+            ]  # type: ignore
+            return slices_per_group
+        except KeyError:
+            features, _, _ = self.read_features(band)
+
+            seconds_per_file = features.attrs[
+                StorageFilesFeaturesAttribute.seconds_per_file.value
+            ]
+
+            slices_per_group: int = seconds_per_file // integration  # type: ignore
+
+            return slices_per_group
 
     def enumerate_group_indexes(
         self,
@@ -889,13 +905,15 @@ class Storage(metaclass=SingletonMeta):
         path = f"{StoragePath.grouped_features.value}/{band}/{integration}"
         dataset = self.__get(path)
 
-        groups_count: int = dataset.attrs[
-            StorageGroupsAttribute.groups_count.value
-        ]  # type: ignore
+        try:
+            groups_count: int = dataset.attrs[
+                StorageGroupsAttribute.groups_count.value
+            ]  # type: ignore
+        except KeyError:
+            features = self.read_features(band)
+            groups_count: int = len(features) // integration
 
-        slices_per_group: int = dataset.attrs[
-            StorageGroupsAttribute.slices_per_group.value
-        ]  # type: ignore
+        slices_per_group = self.read_slices_per_group(band, integration)
 
         return (dataset, groups_count, slices_per_group)
 

@@ -18,7 +18,9 @@ def run_dataframe(
         payload["g"].append(g)
 
     # Timestamps
-    payload["timestamp"] = storage.read_grouped_timestamps(band, integration)
+    payload["timestamp"] = []
+    for timestamp in storage.read_grouped_timestamps(band, integration):
+        payload["timestamp"].append(timestamp[0])
 
     # Filenames
     filenames = storage.read_files()
