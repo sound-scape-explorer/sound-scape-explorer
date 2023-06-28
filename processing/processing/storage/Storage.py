@@ -14,9 +14,6 @@ from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.storage.StorageCompression import StorageCompression
-from processing.storage.StorageFilesFeaturesAttribute import (
-    StorageFilesFeaturesAttribute,
-)
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
 from processing.utils.print_new_line import print_new_line
@@ -665,42 +662,6 @@ class Storage(metaclass=SingletonMeta):
         durations_new_shape = durations_dataset.shape[0] + durations_increment
         durations_dataset.resize(durations_new_shape, axis=0)
         durations_dataset[-durations_increment:] = duration
-
-    def write_features(
-        self,
-        features: List[List[List[float]]],
-        band: str,
-    ) -> None:
-        files_features: List[List[float]] = []
-        files_features_path = f"{StoragePath.files_features.value}/{band}"
-
-        files_durations: List[int] = []
-        files_durations_path = f"{StoragePath.files_durations.value}/{band}"
-
-        files_count = len(features)
-
-        for f in range(files_count):
-            seconds = len(features[f])
-            files_durations.append(seconds)
-
-            for s in range(seconds):
-                files_features.append(features[f][s])
-
-        # TODO: Add incremental write to h5 to avoid cluttering the RAM
-        self.__write_dataset(
-            path=files_features_path,
-            data=files_features,
-            compression=StorageCompression.gzip,
-        )
-
-        self.__write_dataset(
-            path=files_durations_path,
-            data=files_durations,
-            compression=StorageCompression.gzip,
-        )
-
-        dataset = self.__get(files_features_path)
-        dataset.attrs[StorageFilesFeaturesAttribute.files_count.value] = files_count
 
     def enumerate_file_indexes(self) -> Iterable[int]:
         files = self.read_files()

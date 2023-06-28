@@ -3,7 +3,6 @@ import numpy
 from processing.common.Env import Env
 from processing.common.Timer import Timer
 from processing.constants import TIME_DELTA_MS
-from processing.groupers.FeaturesGrouper import FeaturesGrouper
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 

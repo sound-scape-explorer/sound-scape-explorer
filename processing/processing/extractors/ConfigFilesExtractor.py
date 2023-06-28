@@ -3,7 +3,6 @@ from typing import Iterable, List, Tuple
 
 import torch
 import torchaudio
-from pandas import pandas
 from torch import Tensor
 
 from processing.common.Timer import Timer
