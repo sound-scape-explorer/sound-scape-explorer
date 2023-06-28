@@ -299,6 +299,11 @@ class Config(metaclass=SingletonMeta):
                 continue
 
             meta_property = column.replace(ExcelFile.meta_prefix.value, "")
+
+            # INFO: Uncomment me to trigger a `KeyError`
+            # and notify the user to use uppercase meta_PROPERTIES
+            # meta_property = str.upper(meta_property)
+
             self.__files_meta_properties.append(meta_property)
 
     def __read_files_meta_values(self) -> List[List[str]]:
@@ -380,11 +385,22 @@ class Config(metaclass=SingletonMeta):
             metas=metas,
         )
 
+    # INFO: Meta properties are made uppercase just before writing to h5.
+    # This is because it is not a critical error to be notified to the user.
+    # Please refer to the commented line in `__read_files_meta_properties()`
+    # to impact the actualy `Config` object copy from Excel in order to trigger
+    # a `KeyError`.
     def __store_metas(
         self,
         storage: Storage,
     ) -> None:
         meta_properties = self.__files_meta_properties
+
+        meta_properties_upper = []
+
+        for meta_property in meta_properties:
+            meta_properties_upper.append(str.upper(meta_property))
+
         meta_values = self.__read_files_meta_values()
 
         meta_sets: List[List[str]] = []
@@ -394,7 +410,7 @@ class Config(metaclass=SingletonMeta):
             meta_sets.append(meta_set)
 
         storage.write_metas(
-            meta_properties,
+            meta_properties_upper,
             meta_sets,
         )
 
