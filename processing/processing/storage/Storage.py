@@ -701,7 +701,7 @@ class Storage(metaclass=SingletonMeta):
 
             file_timestamp: int = timestamps[file_index]
 
-            groups_count = self.get_groups_count(
+            groups_count = self.__get_groups_count(
                 file_features=file_features, integration=integration
             )
 
@@ -738,11 +738,11 @@ class Storage(metaclass=SingletonMeta):
 
         return files_count
 
-    # Floor division will discard any incomplete group slice
     # TODO: Timeline strategy: Handle audio lengths shorter than integration
     # We should only discard the slice when there is no audio at all
+    # Floor division will discard any incomplete group slice
     @staticmethod
-    def get_groups_count(
+    def __get_groups_count(
         file_features: List[List[float]],
         integration: int,
     ) -> int:

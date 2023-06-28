@@ -28,10 +28,6 @@ def run_groups(env: Env):
             file_timestamp,
             file_features,
         ) in storage.enumerate_files(band=band, integration=integration):
-            groups_count = storage.get_groups_count(
-                file_features=file_features, integration=integration
-            )
-
             for group_index in range(groups_count):
                 group_start = group_index * integration
                 group_end = (group_index + 1) * integration
