@@ -108,13 +108,20 @@ class ConfigFilesExtractor:
         band: str,
         storage: Storage,
     ) -> None:
+        # This is used to run files durations only once
+        # when user asks for multiple bands.
+        should_store_durations = not storage.has_files_durations()
+
         for file_features, _ in self.yield_features():
             features: List[List[float]] = file_features.tolist()
 
             storage.append_features(
-                features=features,
                 band=band,
+                features=features,
             )
+
+            if should_store_durations is True:
+                storage.append_files_durations(features=features)
 
     def __forward_model(
         self,

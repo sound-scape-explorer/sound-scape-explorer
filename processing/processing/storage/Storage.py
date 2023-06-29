@@ -620,14 +620,42 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def append_features(
+    def has_files_durations(
+        self,
+    ) -> bool:
+        return self.exists_dataset(StoragePath.files_durations.value)
+
+    def append_files_durations(
         self,
         features: List[List[float]],
+    ) -> None:
+        duration = len(features)
+        durations_path = f"{StoragePath.files_durations.value}"
+        durations_increment = 1
+
+        if not self.has_files_durations():
+            self.__file.create_dataset(
+                name=durations_path,
+                data=duration,
+                compression=StorageCompression.gzip.value,
+                chunks=True,
+                shape=(1, 1),
+                maxshape=(None, 1),
+            )
+            return
+
+        durations_dataset: Dataset = self.__file[durations_path]  # type: ignore
+        durations_new_shape = durations_dataset.shape[0] + durations_increment
+        durations_dataset.resize(durations_new_shape, axis=0)
+        durations_dataset[-durations_increment:] = duration
+
+    def append_features(
+        self,
         band: str,
+        features: List[List[float]],
     ) -> None:
         features_path = f"{StoragePath.files_features.value}/{band}"
         duration = len(features)
-        durations_path = f"{StoragePath.files_durations.value}/{band}"
 
         if not self.exists_dataset(features_path):
             self.__file.create_dataset(
@@ -638,28 +666,12 @@ class Storage(metaclass=SingletonMeta):
                 shape=(duration, 128),
                 maxshape=(None, 128),
             )
-
-            self.__file.create_dataset(
-                name=durations_path,
-                data=duration,
-                compression=StorageCompression.gzip.value,
-                chunks=True,
-                shape=(1, 1),
-                maxshape=(None, 1),
-            )
-
             return
 
         features_dataset: Dataset = self.__file[features_path]  # type: ignore
         features_new_shape = features_dataset.shape[0] + duration
         features_dataset.resize(features_new_shape, axis=0)
         features_dataset[-duration:] = features
-
-        durations_dataset: Dataset = self.__file[durations_path]  # type: ignore
-        durations_increment = 1
-        durations_new_shape = durations_dataset.shape[0] + durations_increment
-        durations_dataset.resize(durations_new_shape, axis=0)
-        durations_dataset[-durations_increment:] = duration
 
     def enumerate_file_indexes(self) -> Iterable[int]:
         files = self.read_files()
