@@ -673,7 +673,7 @@ class Storage(metaclass=SingletonMeta):
             maxshape=(None, 1),
         )
 
-    def append_features(
+    def append_files_features(
         self,
         band: str,
         features: List[List[float]],

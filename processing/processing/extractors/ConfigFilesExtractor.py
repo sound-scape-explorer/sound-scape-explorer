@@ -115,7 +115,7 @@ class ConfigFilesExtractor:
         for file_features, _ in self.yield_features():
             features: List[List[float]] = file_features.tolist()
 
-            storage.append_features(
+            storage.append_files_features(
                 band=band,
                 features=features,
             )
