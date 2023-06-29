@@ -338,7 +338,7 @@ class Config(metaclass=SingletonMeta):
         for index, file in enumerate(files):
             date = dates[index]
             timestamp = self.__convert_date_to_timestamp(date)
-            site = sites[index]
+            site = str(sites[index])
             meta = [str(m[index]) for m in metas]
 
             self.__files[file] = ConfigFile(
