@@ -30,10 +30,41 @@ class StoragePath(Enum):
     meta_properties = "/configuration/meta/properties"
     meta_sets = "/configuration/meta/sets"
 
-    # Features
+    ############
+    # Features #
+    ############
+
+    """The 128D features for each second of audio.
+
+    The group contains one dataset per band.
+    Each dataset is named after the band.
+    Each row of each dataset represents one second of audio by a table of 128 floats.
+
+    Path example: /files_features/{BAND}
+    """
     files_features = "/files_features"
+
+    """The timestamps for each file.
+
+    Each row is one timestamp in UNIX format.
+    """
     files_timestamps = "/files_timestamps"
+
+    """The audio durations in seconds for each file.
+
+    Each rows is the audio length in seconds for given file index.
+    """
     files_durations = "/files_durations"
+
+    """The groups count for each file.
+
+    The group contains one dataset per integration.
+    Each dataset is named after the integration value.
+    Each row represents how many groups (integrations) have been processed.
+
+    Path example: /files_groups_count/{INTEGRATION}
+    """
+    files_groups_count = "/files_groups_count"
 
     # Actions
 
