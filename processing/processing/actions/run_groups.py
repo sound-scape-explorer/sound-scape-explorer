@@ -11,14 +11,11 @@ def run_groups(env: Env):
     storage = Storage(path=env.storage)
 
     storage.delete_groups()
+    files_count = storage.read_files_count()
 
     for band, integration in storage.enumerate_bands_and_integrations():
-        files_count = storage.read_files_count(band=band)
-
         print_new_line()
-
         print(f'Grouping for band "{band}", integration {integration}')
-
         timer = Timer(files_count)
 
         for (
