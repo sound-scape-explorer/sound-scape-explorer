@@ -509,13 +509,11 @@ class Storage(metaclass=SingletonMeta):
     def read_audio_path(self) -> str:
         settings = self.read_settings()
         audio_path = settings["audio_path"]
-        print(audio_path)
 
         if Env().is_docker is True:
             base_path = DOCKER_BASE_PATH
             audio_folder = audio_path.split("/")[-1]
-            docker_path = f"{base_path}/{audio_path}"
-            print(docker_path)
+            docker_path = f"{base_path}/{audio_folder}"
             return docker_path
 
         return audio_path
