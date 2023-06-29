@@ -12,7 +12,7 @@ def run_files(env: Env):
     audio_path = storage.read_audio_path()
     files = storage.read_config_files()
 
-    storage.delete_files_features()
+    storage.delete_files()
 
     for band_name, band in bands.items():
         VGGish = VGGishModel(

@@ -469,9 +469,10 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.grouped_timestamps)
         self.__delete_silently(StoragePath.grouped_durations)
 
-    def delete_files_features(self) -> None:
+    def delete_files(self) -> None:
         self.__delete_silently(StoragePath.files_features)
         self.__delete_silently(StoragePath.files_durations)
+        self.__delete_silently(StoragePath.files_groups_count)
 
     def delete_config(self) -> None:
         self.__delete_silently(StoragePath.configuration)
