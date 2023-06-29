@@ -28,7 +28,8 @@ def run_autocluster(env: Env):
                 integration=integration,
             )
 
-            # TODO: v10: Add multiple thresholds, inject an array of frozen threshold then remove user setting from excel configuration file.
+            # TODO: v10: Add multiple thresholds, inject an array of
+            # frozen threshold then remove user setting from excel configuration file.
             clustering = AutoConsensusClustering(
                 features=grouped_features[:],
                 iterations=settings["autocluster_iterations"],
