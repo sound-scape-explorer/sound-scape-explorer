@@ -14,6 +14,7 @@ def run_files(env: Env):
 
     storage.delete_files()
 
+    # Features
     for band_name, band in bands.items():
         VGGish = VGGishModel(
             f_min=band.low,
@@ -31,6 +32,19 @@ def run_files(env: Env):
             band=band_name,
             storage=storage,
         )
+
+    # Groups
+    first_band_name = list(bands.keys())[0]
+    integrations = storage.get_integrations_seconds()
+
+    for integration in integrations:
+        for _, groups_count, _, _, _ in storage.enumerate_files(
+            band=first_band_name, integration=integration
+        ):
+            storage.append_files_groups_count(
+                integration=integration,
+                groups_count=groups_count,
+            )
 
 
 if __name__ == "__main__":

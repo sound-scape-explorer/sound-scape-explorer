@@ -420,8 +420,7 @@ class Storage(metaclass=SingletonMeta):
         files_features_path = f"{StoragePath.files_features.value}/{band}"
         files_features_dataset = self.__get(files_features_path)
 
-        files_durations_path = f"{StoragePath.files_durations.value}/{band}"
-        files_durations_dataset = self.__get(files_durations_path)  # Dataset[List[int]]
+        files_durations_dataset = self.__get(StoragePath.files_durations.value)
 
         files_count = files_durations_dataset.len()
 
@@ -648,6 +647,32 @@ class Storage(metaclass=SingletonMeta):
         durations_dataset.resize(durations_new_shape, axis=0)
         durations_dataset[-durations_increment:] = duration
 
+    def append_files_groups_count(
+        self,
+        integration: int,
+        groups_count: int,
+    ) -> None:
+        path = f"{StoragePath.files_groups_count.value}/{integration}"
+        payload = [groups_count]
+
+        # Appending
+        if self.exists_dataset(path):
+            dataset: Dataset = self.__file[path]  # type: ignore
+            new_shape = dataset.shape[0] + 1
+            dataset.resize(new_shape, axis=0)
+            dataset[-1:] = payload
+            return
+
+        # Creating
+        self.__file.create_dataset(
+            name=path,
+            data=payload,
+            compression=StorageCompression.gzip.value,
+            chunks=True,
+            shape=(1, 1),
+            maxshape=(None, 1),
+        )
+
     def append_features(
         self,
         band: str,
@@ -738,13 +763,9 @@ class Storage(metaclass=SingletonMeta):
 
     def read_files_count(
         self,
-        band: str,
     ) -> int:
-        files_durations_path = f"{StoragePath.files_durations.value}/{band}"
-        files_durations_dataset = self.__get(files_durations_path)  # Dataset[List[int]]
-
+        files_durations_dataset = self.__get(StoragePath.files_durations.value)
         files_count = files_durations_dataset.len()
-
         return files_count
 
     # TODO: Timeline strategy: Handle audio lengths shorter than integration
