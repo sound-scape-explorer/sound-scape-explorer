@@ -1,7 +1,7 @@
 {
   "name": "sound-scape-explorer",
   "scripts": {
-    "audio": "pnpm serve --cors",
+    "audio": "pnpm serve --cors -p 5531",
     "front": "cd front && pnpm dev",
     "front:audio": "concurrently -P --kill-others 'pnpm front' 'pnpm audio {1}'",
     "dev": "pnpm front",

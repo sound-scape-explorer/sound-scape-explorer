@@ -620,9 +620,9 @@ follow this [Docker documentation](https://docs.docker.com/config/containers/res
 
 In order to explore your generated data, please refer to the following methods.
 
-`Front` will be served at [localhost:8080](http://localhost:8080)
+`Front` will be served at [localhost:5530](http://localhost:5530)
 
-`Audio` will be served at [localhost:3000](http://localhost:3000)
+`Audio` will be served at [localhost:5531](http://localhost:5531)
 
 > **Note**
 >
@@ -692,7 +692,7 @@ pnpm process:dataframe -b human -i 15 -s /path/to/storage.h5 -o /path/to/datafra
 | SSE Audio  | Use this if you already have your `.h5` and want to use the [online front end](https://sound-scape-explorer.github.io/sound-scape-explorer/). |
 | SSE CPU    | Use this if you want to generate your `.h5` using your CPU (slower).                                                                          |
 | SSE CUDA   | Use this if you want to generate your `.h5` using your GPU with CUDA acceleration (faster).                                                   |
-| SSE Front  | Use this if you already have your `.h5` and intend to work offline by using the [offline front end](http://localhost:8080).                   |
+| SSE Front  | Use this if you already have your `.h5` and intend to work offline by using the [offline front end](http://localhost:5530).                   |
 
 ## Project example
 
