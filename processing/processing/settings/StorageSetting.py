@@ -1,6 +1,8 @@
 from enum import Enum
 
 
+# INFO: Enumeration of the actual namings of settings
+# within the Excel configuration file.
 class StorageSetting(Enum):
     base_path = "base_path"
     audio_folder = "audio_folder"

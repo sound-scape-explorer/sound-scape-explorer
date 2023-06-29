@@ -3,6 +3,7 @@ from typing import TypedDict
 import numpy
 
 
+# INFO: The interface for `Config.__settings` class attribute.
 class ConfigSettings(TypedDict):
     base_path: str
     audio_folder: str
