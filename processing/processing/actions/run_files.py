@@ -9,7 +9,7 @@ def run_files(env: Env):
 
     bands = storage.get_config_bands()
     expected_sample_rate = storage.get_expected_sample_rate()
-    audio_path = storage.get_audio_path()
+    audio_path = storage.read_audio_path()
     files = storage.read_config_files()
 
     storage.delete_files_features()

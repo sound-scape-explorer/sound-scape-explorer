@@ -5,8 +5,7 @@ import numpy
 
 # INFO: The interface for `Config.__settings` class attribute.
 class ConfigSettings(TypedDict):
-    base_path: str
-    audio_folder: str
+    audio_path: str
     audio_host: str
     expected_sample_rate: int
     timezone: str

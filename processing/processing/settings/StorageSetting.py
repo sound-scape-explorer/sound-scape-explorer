@@ -4,8 +4,8 @@ from enum import Enum
 # INFO: Enumeration of the actual namings of settings
 # within the Excel configuration file.
 class StorageSetting(Enum):
-    base_path = "base_path"
-    audio_folder = "audio_folder"
+    audio_path = "audio_path"
+    audio_host = "audio_host"
     expected_sample_rate = "expected_sample_rate"
     timezone = "timezone"
     umap_seed = "umap_seed"

@@ -506,21 +506,19 @@ class Storage(metaclass=SingletonMeta):
         settings = self.read_settings()
         return settings["expected_sample_rate"]
 
-    def get_base_path(self) -> str:
+    def read_audio_path(self) -> str:
+        settings = self.read_settings()
+        audio_path = settings["audio_path"]
+        print(audio_path)
+
         if Env().is_docker is True:
-            return DOCKER_BASE_PATH
+            base_path = DOCKER_BASE_PATH
+            audio_folder = audio_path.split("/")[-1]
+            docker_path = f"{base_path}/{audio_path}"
+            print(docker_path)
+            return docker_path
 
-        settings = self.read_settings()
-        return settings["base_path"]
-
-    def get_audio_folder(self) -> str:
-        settings = self.read_settings()
-        return settings["audio_folder"]
-
-    def get_audio_path(self) -> str:
-        base_path = self.get_base_path()
-        audio_folder = self.get_audio_folder()
-        return f"{base_path}/{audio_folder}"
+        return audio_path
 
     def create_configuration(self) -> None:
         self.__file.create_group(StoragePath.configuration.value)

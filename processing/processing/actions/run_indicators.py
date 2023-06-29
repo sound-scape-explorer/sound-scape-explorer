@@ -16,7 +16,7 @@ def run_indicators(env: Env):
 
     files = storage.read_files()
     bands_frequencies = storage.get_bands_frequencies()
-    audio_path = storage.get_audio_path()
+    audio_path = storage.read_audio_path()
 
     storage.delete_indicators()
 

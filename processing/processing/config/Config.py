@@ -210,19 +210,8 @@ class Config(metaclass=SingletonMeta):
     def get_expected_sample_rate(self) -> int:
         return self.__settings["expected_sample_rate"]
 
-    def get_base_path(self) -> str:
-        return self.__settings["base_path"]
-
-    def get_audio_folder(self) -> str:
-        return self.__settings["audio_folder"]
-
     def get_audio_host(self) -> str:
         return self.__settings["audio_host"]
-
-    def get_audio_path(self) -> str:
-        base_path = self.get_base_path()
-        audio_folder = self.get_audio_folder()
-        return f"{base_path}/{audio_folder}"
 
     def get_files(self) -> ConfigFiles:
         return self.__files
