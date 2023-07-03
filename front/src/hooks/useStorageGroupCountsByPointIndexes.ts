@@ -28,6 +28,5 @@ export function useStorageGroupCountsByPointIndexes() {
     }
 
     groupCountsByPointIndexesRef.value = payload;
-    console.log(payload);
   });
 }
