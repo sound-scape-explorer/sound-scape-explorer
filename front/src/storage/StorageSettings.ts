@@ -1,10 +1,13 @@
 export interface StorageSettings {
-  base_path: string;
-  audio_folder: string;
+  audio_path: string;
   audio_host: string;
   expected_sample_rate: number;
-  umap_seed?: number;
   timezone?: string;
-  display_in_utc_plus: string;
-  display_locale: string;
+  umap_seed?: number;
+  umap_neighbors: number;
+  umap_metric?: string;
+  autocluster_iterations?: number;
+  autocluster_min_size?: number;
+  autocluster_max_size?: number;
+  autocluster_threshold?: number;
 }

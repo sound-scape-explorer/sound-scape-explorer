@@ -1,7 +1,6 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import {StoragePath} from '../storage/StoragePath';
-import {StorageGroupedAttributes} from '../storage/StorageGroupedAttributes';
 import {buildNestedArrayFromLengths} from '../utils/build-nested-array-from-lengths';
 import {trimRectangular} from '../utils/trim-rectangular';
 import type {StorageReducer} from 'src/hooks/useStorageReducers';
@@ -258,40 +257,6 @@ export async function readReducedFeatures(
   const features = h5.get(path) as Dataset;
   const featuresList = features.to_array() as number[][];
   return featuresList;
-}
-
-export async function readGroupedAttributes(
-  file: File,
-  band: string,
-  integration: number,
-): Promise<[number, number]> {
-  const h5 = await load(file);
-  const path = `${StoragePath.grouped_timestamps}/${band}/${integration}`;
-  const dataset = h5.get(path) as Dataset;
-
-  const groupsCount = Number(
-    dataset.attrs[StorageGroupedAttributes.groupsCount].json_value,
-  );
-
-  const slicesPerGroup = Number(
-    dataset.attrs[StorageGroupedAttributes.slicesPerGroup].json_value,
-  );
-
-  return [groupsCount, slicesPerGroup];
-}
-
-export async function getSlicesPerGroup(
-  file: File,
-  band: string,
-  integration: number,
-) {
-  const h5 = await load(file);
-  const path = `${StoragePath.grouped_timestamps}/${band}/${integration}`;
-  const dataset = h5.get(path) as Dataset;
-  const slicesPerGroup =
-    dataset.attrs[StorageGroupedAttributes.slicesPerGroup].json_value;
-
-  return Number(slicesPerGroup);
 }
 
 export async function readAutocluster(
