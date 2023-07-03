@@ -2,7 +2,7 @@ import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import {StoragePath} from '../storage/StoragePath';
 import {StorageGroupedAttributes} from '../storage/StorageGroupedAttributes';
-import {buildNestedArray} from '../utils/build-nested-array';
+import {buildNestedArrayFromLengths} from '../utils/build-nested-array-from-lengths';
 import {trimRectangular} from '../utils/trim-rectangular';
 import type {StorageReducer} from 'src/hooks/useStorageReducers';
 import type {StorageBands} from 'src/hooks/useStorageBands';
@@ -107,7 +107,7 @@ export async function readFilename(file: File, fileIndex: number) {
 
 export async function readFilesFeatures(file: File, band: string) {
   const h5 = await load(file);
-  const path = `${StoragePath.features}/${band}`;
+  const path = `${StoragePath.files_features}/${band}`;
   const features = h5.get(path) as Dataset;
   return features.to_array() as number[][];
 }
@@ -307,11 +307,11 @@ export async function readAutocluster(
     return [];
   }
 
-  const slicesPerGroup = await getSlicesPerGroup(file, band, integration);
+  const groupCounts = await readFilesGroupCounts(file, integration);
   const autoclusterFlat = autoclusterDatasetOrNull.to_array() as number[];
 
-  // TODO: Building a nested array is not necessarily after flat storage update
-  return buildNestedArray(autoclusterFlat, slicesPerGroup);
+  // INFO: Building a nested array is not necessarily after flat storage update
+  return buildNestedArrayFromLengths(autoclusterFlat, groupCounts);
 }
 
 export async function readIndicators(
@@ -530,14 +530,22 @@ export async function readGroupedMetas(
   const files = await readFilenames(file);
   const filesMetas = await readFilesMetas(file);
   const autocluster = await readAutocluster(file, band, integration);
-  const slicesPerGroup = await getSlicesPerGroup(file, band, integration);
+  const groupCounts = await readFilesGroupCounts(file, integration);
 
   const groupedMetas: string[][][] = [];
 
   for (let f = 0; f < files.length; f += 1) {
+    const groupCount = groupCounts[f];
     groupedMetas[f] = [];
-    for (let s = 0; s < slicesPerGroup; s += 1) {
-      const metas = [autocluster[f][s].toString(), ...filesMetas[f]];
+
+    for (let s = 0; s < groupCount; s += 1) {
+      let metas: string[] = [];
+
+      if (autocluster.length > 0) {
+        metas = [autocluster[f][s].toString()];
+      }
+
+      metas = [...metas, ...filesMetas[f]];
       groupedMetas[f].push(metas);
     }
   }
@@ -545,22 +553,31 @@ export async function readGroupedMetas(
   return groupedMetas.flat();
 }
 
-export async function readGroupedFilenames(
-  file: File,
-  band: string,
-  integration: number,
-) {
+export async function readGroupedFilenames(file: File, integration: number) {
   const filenames = await readFilenames(file);
-  const slicesPerGroup = await getSlicesPerGroup(file, band, integration);
+  const groupCounts = await readFilesGroupCounts(file, integration);
 
   const groupedFilenames: string[] = [];
 
   for (let f = 0; f < filenames.length; f += 1) {
-    for (let s = 0; s < slicesPerGroup; s += 1) {
+    const groupCount = groupCounts[f];
+
+    for (let s = 0; s < groupCount; s += 1) {
       const filename = filenames[f];
       groupedFilenames.push(filename);
     }
   }
 
   return groupedFilenames;
+}
+
+export async function readFilesGroupCounts(
+  file: File,
+  integration: number,
+): Promise<number[]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.files_group_counts}/${integration}`;
+  const dataset = h5.get(path) as Dataset;
+  const filesGroupCounts = dataset.to_array() as number[][];
+  return filesGroupCounts.map((groupsCount) => groupsCount[0]);
 }

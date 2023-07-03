@@ -1,24 +1,32 @@
 export enum StoragePath {
   // Configuration
   configuration = '/configuration',
+
   // Bands
   bands_names = '/configuration/bands/names',
   bands_frequencies = '/configuration/bands/frequencies',
+
   // Integrations
   integrations_names = '/configuration/integrations/names',
   integrations_seconds = '/configuration/integrations/seconds',
+
   // Ranges
   ranges_names = '/configuration/ranges/names',
   ranges_timestamps = '/configuration/ranges/timestamps',
+
   // Files
   files = '/configuration/files/names',
   files_sites = '/configuration/files/sites',
   files_metas = '/configuration/files/metas',
   meta_properties = '/configuration/meta/properties',
   meta_sets = '/configuration/meta/sets',
+
   // Features
-  features = '/files_features',
-  timestamps = '/files_timestamps',
+  files_features = '/files_features',
+  files_timestamps = '/files_timestamps',
+  files_durations = '/files_durations',
+  files_group_counts = '/files_groups_count',
+
   // Actions
   reducers = '/configuration/reducers/names',
   reducers_dimensions = '/configuration/reducers/dimensions',
@@ -34,6 +42,7 @@ export enum StoragePath {
   // Grouped
   grouped_features = '/grouped_features',
   grouped_timestamps = '/grouped_timestamps',
+
   // Reduced
   reduced_ = '/reduced_',
 

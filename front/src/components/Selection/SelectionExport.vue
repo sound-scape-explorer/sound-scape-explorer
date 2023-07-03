@@ -15,11 +15,12 @@ import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {groupedFeaturesRef} from 'src/hooks/useStorageGroupedFeatures';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
-import {groupedAttributesRef} from 'src/hooks/useStorageGroupedAttributes';
 import {pointsFilteredByTimeRef} from '../Scatter/useScatterFilterTime';
 import {pointsFilteredByMetaRef} from '../Scatter/useScatterFilterMeta';
+import {useIndexes} from 'src/hooks/useIndexes';
 
 const {notify} = useNotification();
+const {convertPointIndex} = useIndexes();
 
 const loadingRef = ref<boolean>(false);
 
@@ -41,7 +42,6 @@ async function handleClick() {
     bandRef.value === null ||
     integrationRef.value === null ||
     groupedFilenamesRef.value === null ||
-    groupedAttributesRef.value === null ||
     groupedTimestampsRef.value === null ||
     groupedFeaturesRef.value === null ||
     groupedMetasRef.value === null ||
@@ -57,8 +57,6 @@ async function handleClick() {
 
   loadingRef.value = true;
 
-  const [, slicesPerGroup] = groupedAttributesRef.value;
-
   const payload: ExportData[] = [];
 
   for (
@@ -73,8 +71,7 @@ async function handleClick() {
       continue;
     }
 
-    const fileIndex = Math.floor(pointIndex / slicesPerGroup);
-    const groupIndex = pointIndex % slicesPerGroup;
+    const [fileIndex, groupIndex] = convertPointIndex(pointIndex);
     const filename = groupedFilenamesRef.value[pointIndex];
     const features = groupedFeaturesRef.value[pointIndex];
     const timestamp = groupedTimestampsRef.value[pointIndex];

@@ -9,7 +9,6 @@ import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {useDate} from 'src/hooks/useDate';
 import type {Dayjs} from 'dayjs';
-import {slicesPerGroupRef} from 'src/hooks/useStorageSlicesPerGroup';
 import {useIndexes} from 'src/hooks/useIndexes';
 
 export function useDetails() {
@@ -29,7 +28,6 @@ export function useDetails() {
       clickedRef.value === null ||
       filenamesRef.value === null ||
       settingsRef.value === null ||
-      slicesPerGroupRef.value === null ||
       groupedFilenamesRef.value === null ||
       groupedTimestampsRef.value === null ||
       groupedMetasRef.value === null

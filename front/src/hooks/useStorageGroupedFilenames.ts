@@ -25,7 +25,6 @@ export function useStorageGroupedFilenames() {
 
     groupedFilenamesRef.value = await workerRef.value.readGroupedFilenames(
       fileRef.value,
-      bandRef.value,
       integrationRef.value,
     );
   });

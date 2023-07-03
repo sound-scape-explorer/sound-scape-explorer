@@ -1,31 +1,28 @@
+import {onMounted, reactive} from 'vue';
 import {workerRef} from './useWorker';
 import {fileRef} from './useFile';
-import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
-import {onMounted, reactive} from 'vue';
 
-interface SlicesPerGroupRef {
-  value: number | null;
+interface FilesGroupCountsRef {
+  value: number[] | null;
 }
 
-export const slicesPerGroupRef = reactive<SlicesPerGroupRef>({
+export const filesGroupCountsRef = reactive<FilesGroupCountsRef>({
   value: null,
 });
 
-export function useStorageSlicesPerGroup() {
+export function useStorageFilesGroupCounts() {
   onMounted(async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
-      bandRef.value === null ||
       integrationRef.value === null
     ) {
       return;
     }
 
-    slicesPerGroupRef.value = await workerRef.value.getSlicesPerGroup(
+    filesGroupCountsRef.value = await workerRef.value.readFilesGroupCounts(
       fileRef.value,
-      bandRef.value,
       integrationRef.value,
     );
   });

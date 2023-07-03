@@ -4,7 +4,6 @@ import {colorsStore} from '../Colors/colorsStore';
 import {datasetRef} from './useScatterDataset';
 import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
 import {filenamesRef} from 'src/hooks/useStorageFilenames';
-import {slicesPerGroupRef} from 'src/hooks/useStorageSlicesPerGroup';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {useColorByPointIndex} from '../Colors/useColorByPointIndex';
 import {useColorByFileIndex} from '../Colors/useColorByFileIndex';
@@ -16,6 +15,7 @@ import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
 import {useColorByMeta} from '../Colors/useColorByMeta';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
+import {groupCountsByPointIndexesRef} from 'src/hooks/useStorageGroupCountsByPointIndexes';
 
 interface AlphaLowRef {
   value: number;
@@ -73,27 +73,27 @@ export function useScatterColorScale() {
       groupedTimestampsRef.value === null ||
       groupedMetasRef.value === null ||
       metaSetsRef.value === null ||
-      slicesPerGroupRef.value === null
+      groupCountsByPointIndexesRef.value === null
     ) {
       return;
     }
 
     const pointsCount = datasetRef.value.points.length;
     const filesCount = filenamesRef.value.length;
-    const groupsCount = slicesPerGroupRef.value;
 
     const colorScale = [];
     const colorType = colorsStore.colorType;
 
     for (let pointIndex = 0; pointIndex < pointsCount; ++pointIndex) {
       let color = '';
+      const groupCount = groupCountsByPointIndexesRef.value[pointIndex];
 
       if (colorType === 'pointIndex') {
         color = getColorByPointIndex(pointIndex, pointsCount);
       } else if (colorType === 'fileIndex') {
         color = getColorByFileIndex(pointIndex, filesCount);
       } else if (colorType === 'groupIndex') {
-        color = getColorByGroupIndex(pointIndex, groupsCount);
+        color = getColorByGroupIndex(pointIndex, groupCount);
       } else if (colorType === 'by1h') {
         const timestamp = groupedTimestampsRef.value[pointIndex];
         color = getColorByOneHour(timestamp);

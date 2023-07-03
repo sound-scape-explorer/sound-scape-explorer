@@ -1,13 +1,14 @@
-import {slicesPerGroupRef} from '../hooks/useStorageSlicesPerGroup';
+import {groupCountsByPointIndexesRef} from './useStorageGroupCountsByPointIndexes';
 
 export function useIndexes() {
   const convertPointIndex = (pointIndex: number) => {
-    if (slicesPerGroupRef.value === null) {
-      throw new Error('Slices per group is null.');
+    if (groupCountsByPointIndexesRef.value === null) {
+      throw new Error('Group counts is null.');
     }
 
-    const fileIndex = Math.floor(pointIndex / slicesPerGroupRef.value);
-    const groupIndex = pointIndex % slicesPerGroupRef.value;
+    const groupCount = groupCountsByPointIndexesRef.value[pointIndex];
+    const fileIndex = Math.floor(pointIndex / groupCount);
+    const groupIndex = pointIndex % groupCount;
 
     return [fileIndex, groupIndex];
   };
