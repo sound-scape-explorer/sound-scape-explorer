@@ -21,8 +21,8 @@ def run_groups(env: Env):
         for (
             _,
             groups_count,
-            _,
             file_timestamp,
+            _,
             file_features,
         ) in storage.enumerate_files(band=band, integration=integration):
             for group_index in range(groups_count):
