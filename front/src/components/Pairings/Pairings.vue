@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
-import {FlashOutline, RepeatOutline} from '@vicons/ionicons5';
+import {RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
-import {computed, ref, unref} from 'vue';
+import {computed, ref, unref, watch} from 'vue';
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -48,7 +48,7 @@ const metaPropertiesNaiveRef = computed(() => {
  * Handlers
  */
 
-async function run() {
+async function handleUpdate() {
   if (
     pairingsRef.value === null ||
     metaSelectedARef.value === null ||
@@ -102,6 +102,20 @@ function swap() {
   metaSelectedARef.value = b;
   metaSelectedBRef.value = a;
 }
+
+watch([pairingSelectedRef, metaSelectedARef, metaSelectedBRef], handleUpdate);
+
+const isVisibleRef = computed<boolean>(() => {
+  if (
+    pairingSelectedRef.value === null ||
+    metaSelectedARef.value === null ||
+    metaSelectedBRef.value === null
+  ) {
+    return false;
+  }
+
+  return true;
+});
 </script>
 
 <template>
@@ -120,7 +134,8 @@ function swap() {
         />
 
         <span>Over</span>
-        <div class="form-split">
+
+        <div class="form-second-line">
           <n-select
             v-model:value="metaSelectedARef"
             :options="metaPropertiesNaiveRef"
@@ -143,21 +158,10 @@ function swap() {
             size="tiny"
           />
         </div>
-
-        <span>And</span>
-        <n-button
-          class="button"
-          size="tiny"
-          @click="run"
-        >
-          <n-icon>
-            <flash-outline />
-          </n-icon>
-        </n-button>
       </div>
 
       <AppHeatmap2D
-        v-if="valuesRef.length > 0"
+        v-if="isVisibleRef"
         :title="titleRef"
         :values="valuesRef"
         :x="xRef"
@@ -185,7 +189,7 @@ function swap() {
   width: 100%;
 }
 
-.form-split {
+.form-second-line {
   display: grid;
   grid-template-columns: 1fr 4rem 1fr;
   gap: 0.5rem;

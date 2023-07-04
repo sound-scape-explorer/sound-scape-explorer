@@ -1,7 +1,6 @@
 <script lang="ts" setup="">
-import {FlashOutline} from '@vicons/ionicons5';
-import {NButton, NIcon, NSelect} from 'naive-ui';
-import {computed, ref} from 'vue';
+import {NSelect} from 'naive-ui';
+import {computed, ref, watch} from 'vue';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHistogram from '../AppHistogram/AppHistogram.vue';
@@ -16,11 +15,11 @@ const {readVolume} = useStorageVolume();
  * State
  */
 
-const titleRef = ref<string>();
-const labelsRef = ref<string[]>();
-const valuesRef = ref<number[]>();
+const titleRef = ref<string>('');
+const labelsRef = ref<string[]>([]);
+const valuesRef = ref<number[]>([]);
 const volumeNameSelectedRef = ref<string | null>(null);
-const metaSelectedRef = ref();
+const metaSelectedRef = ref<string | null>(null);
 
 const volumesNaiveRef = computed(() => {
   if (volumesRef.value === null) {
@@ -44,7 +43,7 @@ const metaPropertiesNaiveRef = computed(() => {
  * Handlers
  */
 
-async function run() {
+async function handleUpdate() {
   if (
     metaSelectedRef.value === null ||
     metaPropertiesRef.value === null ||
@@ -76,6 +75,16 @@ async function run() {
   labelsRef.value = metaSetsRef.value[metaIndex];
   valuesRef.value = data;
 }
+
+watch([volumeNameSelectedRef, metaSelectedRef], handleUpdate);
+
+const isVisibleRef = computed<boolean>(() => {
+  if (volumeNameSelectedRef.value === null || metaSelectedRef.value === null) {
+    return false;
+  }
+
+  return true;
+});
 </script>
 
 <template>
@@ -96,30 +105,21 @@ async function run() {
 
         <span>Over</span>
 
-        <div class="form-split">
+        <div class="form-second-line">
           <n-select
             v-model:value="metaSelectedRef"
             :options="metaPropertiesNaiveRef"
             placeholder="Meta..."
             size="tiny"
           />
-          <n-button
-            class="button"
-            size="tiny"
-            @click="run"
-          >
-            <n-icon>
-              <flash-outline />
-            </n-icon>
-          </n-button>
         </div>
       </div>
 
       <AppHistogram
-        v-if="labelsRef && valuesRef"
-        :labels="labelsRef ?? []"
-        :title="titleRef ?? ''"
-        :values="valuesRef ?? []"
+        v-if="isVisibleRef"
+        :labels="labelsRef"
+        :title="titleRef"
+        :values="valuesRef"
       />
     </div>
   </AppDraggable>
@@ -143,10 +143,10 @@ async function run() {
   width: 100%;
 }
 
-.form-split {
-  display: grid;
-  grid-template-columns: 1fr 4rem;
-  gap: 0.5rem;
+.form-second-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .submit {

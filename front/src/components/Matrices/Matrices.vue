@@ -1,7 +1,6 @@
 <script lang="ts" setup="">
-import {FlashOutline} from '@vicons/ionicons5';
-import {NButton, NIcon, NSelect} from 'naive-ui';
-import {computed, ref} from 'vue';
+import {NSelect} from 'naive-ui';
+import {computed, ref, watch} from 'vue';
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -18,13 +17,13 @@ const {readMatrix} = useStorageMatrix();
  * State
  */
 
-const titleRef = ref<string>();
-const labelsRef = ref<string[]>();
-const valuesRef = ref<number[][]>();
-const matrixNameSelectedRef = ref();
-const metaSelectedRef = ref();
+const titleRef = ref<string>('');
+const labelsRef = ref<string[]>([]);
+const valuesRef = ref<number[][]>([]);
+const matrixNameSelectedRef = ref<string | null>(null);
+const metaSelectedRef = ref<string | null>(null);
 
-const volumesNaiveRef = computed(() => {
+const matricesNaiveRef = computed(() => {
   if (matricesRef.value === null) {
     return [];
   }
@@ -46,7 +45,7 @@ const metaPropertiesNaiveRef = computed(() => {
  * Handlers
  */
 
-async function run() {
+async function handleUpdate() {
   if (
     metaPropertiesRef.value === null ||
     metaSetsRef.value === null ||
@@ -75,6 +74,16 @@ async function run() {
   labelsRef.value = metaSetsRef.value[metaIndex];
   valuesRef.value = buildNestedArray(data, Math.sqrt(data.length));
 }
+
+watch([matrixNameSelectedRef, metaSelectedRef], handleUpdate);
+
+const isVisibleRef = computed<boolean>(() => {
+  if (matrixNameSelectedRef.value === null || metaSelectedRef.value === null) {
+    return false;
+  }
+
+  return true;
+});
 </script>
 
 <template>
@@ -84,41 +93,32 @@ async function run() {
         <span>Select</span>
 
         <n-select
-          v-if="volumesNaiveRef"
+          v-if="matricesNaiveRef"
           v-model:value="matrixNameSelectedRef"
-          :options="volumesNaiveRef"
+          :options="matricesNaiveRef"
           placeholder="Matrix..."
           size="tiny"
         />
 
-        <span v-if="!volumesNaiveRef" />
+        <span v-if="!matricesNaiveRef" />
 
         <span>Over</span>
 
-        <div class="form-split">
+        <div class="form-second-line">
           <n-select
             v-model:value="metaSelectedRef"
             :options="metaPropertiesNaiveRef"
             placeholder="Meta..."
             size="tiny"
           />
-          <n-button
-            class="button"
-            size="tiny"
-            @click="run"
-          >
-            <n-icon>
-              <flash-outline />
-            </n-icon>
-          </n-button>
         </div>
       </div>
 
       <AppHeatmap
-        v-if="labelsRef && valuesRef"
-        :labels="labelsRef ?? []"
-        :title="titleRef ?? ''"
-        :values="valuesRef ?? []"
+        v-if="isVisibleRef"
+        :labels="labelsRef"
+        :title="titleRef"
+        :values="valuesRef"
       />
     </div>
   </AppDraggable>
@@ -142,10 +142,10 @@ async function run() {
   width: 100%;
 }
 
-.form-split {
-  display: grid;
-  grid-template-columns: 1fr 4rem;
-  gap: 0.5rem;
+.form-second-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .submit {
