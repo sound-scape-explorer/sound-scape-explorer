@@ -46,13 +46,6 @@ def run_dataframe(
     for group_timestamp in storage.read_grouped_timestamps(band, integration):
         payload["group_timestamp"].append(group_timestamp[0])
 
-    # Durations
-    payload["group_duration"] = []
-    durations = storage.read_grouped_durations(band=band, integration=integration)
-    for _, g in storage.enumerate_group_indexes(band=band, integration=integration):
-        group_duration = durations[g][0]
-        payload["group_duration"].append(group_duration)
-
     # Autocluster
     try:
         payload["meta_AUTOCLUSTER"] = storage.read_autocluster(band, integration)

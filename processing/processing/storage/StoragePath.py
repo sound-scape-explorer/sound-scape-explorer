@@ -64,7 +64,7 @@ class StoragePath(Enum):
 
     Path example: /files_groups_count/{INTEGRATION}
     """
-    files_groups_count = "/files_groups_count"
+    files_group_counts = "/files_groups_count"
 
     # Actions
 
@@ -84,7 +84,6 @@ class StoragePath(Enum):
     # Example: /grouped_features/{band}/{integration}/{file_index}
     grouped_features = "/grouped_features"
     grouped_timestamps = "/grouped_timestamps"
-    grouped_durations = "/grouped_durations"
 
     # Reduced
 

@@ -20,18 +20,16 @@ def run_groups(env: Env):
 
         for (
             _,
-            groups_count,
+            group_count,
             file_timestamp,
             _,
             file_features,
         ) in storage.enumerate_files(band=band, integration=integration):
-            for group_index in range(groups_count):
-                group_start = group_index * integration
-                group_end = (group_index + 1) * integration
+            for group_index in range(group_count):
+                group_start = integration * group_index
+                group_end = integration * (group_index + 1)
 
                 features_to_group = file_features[group_start:group_end]
-
-                group_duration = len(features_to_group)
 
                 group_features = list(numpy.mean(features_to_group, axis=0))
 
@@ -45,7 +43,6 @@ def run_groups(env: Env):
                 storage.append_group(
                     features=group_features,
                     timestamp=group_timestamp,
-                    duration=group_duration,
                     band=band,
                     integration=integration,
                 )
