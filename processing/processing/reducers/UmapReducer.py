@@ -33,4 +33,4 @@ class UmapReducer(AbstractReducer):
         scaled_features = robust_scale(features)
         reduced_features = self.__instance.fit_transform(scaled_features)
         reduced_features_list = list(reduced_features)
-        return reduced_features_list
+        return reduced_features_list  # type: ignore
