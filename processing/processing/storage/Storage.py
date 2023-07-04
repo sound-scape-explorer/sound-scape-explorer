@@ -771,16 +771,6 @@ class Storage(metaclass=SingletonMeta):
         files_count = files_durations_dataset.len()
         return files_count
 
-    # TODO: Timeline strategy: Handle audio lengths shorter than integration
-    # We should only discard the slice when there is no audio at all
-    # Floor division will discard any incomplete group slice
-    @staticmethod
-    def __get_groups_count(
-        file_features: List[List[float]],
-        integration: int,
-    ) -> int:
-        return len(file_features) // integration
-
     def enumerate_meta_properties(self):
         meta_properties = self.read_meta_properties()
 
