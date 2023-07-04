@@ -13,20 +13,12 @@ import {
   HelpOutline,
   LayersOutline,
   ListOutline,
-  SearchOutline,
-  ChevronBackOutline,
-  ChevronForwardOutline,
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
 import {useFile} from 'src/hooks/useFile';
-import {scatterResetRef} from '../Scatter/useScatterReset';
-import {
-  scatterSelectNextRef,
-  scatterSelectPreviousRef,
-} from '../Scatter/useScatterSelect';
 
 const {isFileRef} = useFile();
 
@@ -58,10 +50,6 @@ const toggleMatrices = () =>
 const togglePairings = () =>
   (appDraggablesStore.pairings = !appDraggablesStore.pairings);
 
-const resetScatter = () => (scatterResetRef.value = true);
-const selectScatterPrevious = () => (scatterSelectPreviousRef.value = true);
-const selectScatterNext = () => (scatterSelectNextRef.value = true);
-
 onKeyPressed(KeyboardShortcut.import, toggleImport);
 onKeyPressed(KeyboardShortcut.settings, toggleSettings);
 onKeyPressed(KeyboardShortcut.help, toggleHelp);
@@ -75,9 +63,6 @@ onKeyPressed(KeyboardShortcut.details, toggleDetails);
 onKeyPressed(KeyboardShortcut.volumes, toggleVolumes);
 onKeyPressed(KeyboardShortcut.matrices, toggleMatrices);
 onKeyPressed(KeyboardShortcut.pairings, togglePairings);
-onKeyPressed(KeyboardShortcut.scatterReset, resetScatter);
-onKeyPressed(KeyboardShortcut.scatterPrevious, selectScatterPrevious);
-onKeyPressed(KeyboardShortcut.scatterNext, selectScatterNext);
 </script>
 
 <template>
@@ -85,24 +70,21 @@ onKeyPressed(KeyboardShortcut.scatterNext, selectScatterNext);
     <div class="row">
       <div class="left">
         <MenuItem
-          :callback="toggleImport"
-          :shortcut="KeyboardShortcut.import"
+          draggable-key="import"
           text="Import"
         >
           <cloud-upload-outline />
         </MenuItem>
 
         <MenuItem
-          :callback="toggleSettings"
-          :shortcut="KeyboardShortcut.settings"
+          draggable-key="settings"
           text="Settings"
         >
           <cog-outline />
         </MenuItem>
 
         <MenuItem
-          :callback="toggleHelp"
-          :shortcut="KeyboardShortcut.help"
+          draggable-key="help"
           text="Help"
         >
           <help-outline />
@@ -113,29 +95,7 @@ onKeyPressed(KeyboardShortcut.scatterNext, selectScatterNext);
         class="right"
         v-if="isFileRef"
       >
-        <!-- <MenuItem -->
-        <!--   :callback="selectScatterPrevious" -->
-        <!--   :shortcut="KeyboardShortcut.scatterPrevious" -->
-        <!--   text="Select previous collected point" -->
-        <!-- > -->
-        <!--   <chevron-back-outline /> -->
-        <!-- </MenuItem> -->
-        <!---->
-        <!-- <MenuItem -->
-        <!--   :callback="selectScatterNext" -->
-        <!--   :shortcut="KeyboardShortcut.scatterNext" -->
-        <!--   text="Select next collected point" -->
-        <!-- > -->
-        <!--   <chevron-forward-outline /> -->
-        <!-- </MenuItem> -->
-        <!---->
-        <!-- <MenuItem -->
-        <!--   :callback="resetScatter" -->
-        <!--   :shortcut="KeyboardShortcut.scatterReset" -->
-        <!--   text="Reset scatter camera" -->
-        <!-- > -->
-        <!--   <search-outline /> -->
-        <!-- </MenuItem> -->
+        <!-- placeholder -->
       </div>
     </div>
 
@@ -144,80 +104,70 @@ onKeyPressed(KeyboardShortcut.scatterNext, selectScatterNext);
       class="column"
     >
       <MenuItem
-        :callback="toggleSelection"
-        :shortcut="KeyboardShortcut.selection"
+        draggable-key="selection"
         text="Selection"
       >
         <eye-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleColors"
-        :shortcut="KeyboardShortcut.colors"
+        draggable-key="colors"
         text="Colors"
       >
         <color-palette-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleQueries"
-        :shortcut="KeyboardShortcut.queries"
+        draggable-key="queries"
         text="Query"
       >
         <flask-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleTime"
-        :shortcut="KeyboardShortcut.time"
+        draggable-key="time"
         text="Time"
       >
         <calendar-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleMeta"
-        :shortcut="KeyboardShortcut.meta"
+        draggable-key="meta"
         text="Meta"
       >
         <layers-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="togglePlayer"
-        :shortcut="KeyboardShortcut.audio"
+        draggable-key="audio"
         text="Audio"
       >
         <headset-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleDetails"
-        :shortcut="KeyboardShortcut.details"
+        draggable-key="details"
         text="Details"
       >
         <list-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleVolumes"
-        :shortcut="KeyboardShortcut.volumes"
+        draggable-key="volumes"
         text="Volumes"
       >
         <analytics-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleMatrices"
-        :shortcut="KeyboardShortcut.matrices"
+        draggable-key="matrices"
         text="Matrices"
       >
         <grid-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="togglePairings"
-        :shortcut="KeyboardShortcut.pairings"
+        draggable-key="pairings"
         text="Pairings"
       >
         <git-compare-outline />
