@@ -133,8 +133,11 @@ export async function readMetas(file: File, band: string, integration: number) {
 
   if (autocluster !== null) {
     const autoclusterList = new Set(
-      (autocluster.to_array() as number[]).map((n) => n.toString()).sort(),
+      (autocluster.to_array() as number[])
+        .map((n) => n.toString())
+        .sort((a, b) => a.localeCompare(b, undefined, {numeric: true})),
     );
+
     metas['AUTOCLUSTER'] = [...autoclusterList];
   }
 
