@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 import {CloseOutline, SearchOutline} from '@vicons/ionicons5';
 import {UseDraggable} from '@vueuse/components';
-import {onClickOutside} from '@vueuse/core';
+import {onClickOutside, useIntersectionObserver} from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
-import {computed, ref} from 'vue';
+import {computed, onMounted, onUnmounted, ref} from 'vue';
 import {capitalizeFirstLetter} from '../../utils/capitalize-first-letter';
 import type {AppDraggablesStore} from './appDraggablesStore';
 import {appDraggablesStore} from './appDraggablesStore';
+import {appDraggableSelectedRef} from './appDraggableSelected';
 
-/**
- * Props
- */
 interface Props {
   draggableKey: keyof AppDraggablesStore;
   hideSeparator?: boolean;
@@ -20,16 +18,11 @@ const props = withDefaults(defineProps<Props>(), {
   hideSeparator: false,
 });
 
-/**
- * Ref
- */
-
-const containerRef = ref<HTMLElement>();
 const storageKey = `sse-draggable-${props.draggableKey}`;
+const containerRef = ref<HTMLElement | null>(null);
 const isZoomedRef = ref<boolean>(false);
-const isSelectedRef = ref<boolean>(true);
 
-const dynamicClasses = computed<string>(() => {
+const classesRef = computed<string>(() => {
   let classes = '';
 
   if (isZoomedRef.value === true) {
@@ -40,51 +33,61 @@ const dynamicClasses = computed<string>(() => {
     classes += ' closed';
   }
 
-  if (isSelectedRef.value === true) {
+  if (appDraggableSelectedRef.value === props.draggableKey) {
     classes += ' selected';
   }
 
   return classes;
 });
 
-/**
- * Lifecycles
- */
-
-onClickOutside(containerRef, unselect);
-
-/**
- * Handlers
- */
-function close() {
+const close = () => {
   appDraggablesStore[props.draggableKey] = false;
-}
+};
 
-function toggleZoom() {
+const toggleZoom = () => {
   isZoomedRef.value = !isZoomedRef.value;
-}
+};
 
-function select() {
-  if (isSelectedRef.value === true) {
+const select = () => {
+  if (appDraggableSelectedRef.value === props.draggableKey) {
     return;
   }
 
-  isSelectedRef.value = true;
-}
+  appDraggableSelectedRef.value = props.draggableKey;
+};
 
-function unselect() {
-  if (isSelectedRef.value === false) {
+const unselect = () => {
+  if (appDraggableSelectedRef.value === null) {
     return;
   }
 
-  isSelectedRef.value = false;
-}
+  appDraggableSelectedRef.value = null;
+};
+
+useIntersectionObserver(containerRef, ([{isIntersecting}]) => {
+  if (isIntersecting === true) {
+    return;
+  }
+
+  if (containerRef.value === null) {
+    return;
+  }
+
+  const container = containerRef.value as unknown as typeof UseDraggable;
+  const element = container.$el as HTMLDivElement;
+  element.style.left = '100px';
+  element.style.top = '100px';
+});
+
+onMounted(select);
+onUnmounted(unselect);
+onClickOutside(containerRef, unselect);
 </script>
 
 <template>
   <UseDraggable
     ref="containerRef"
-    :class="dynamicClasses"
+    :class="classesRef"
     :exact="true"
     :initialValue="{x: 100, y: 100}"
     :storage-key="storageKey"
