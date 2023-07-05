@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import {NCheckbox, NSelect} from 'naive-ui';
+import {NCheckbox, NSelect, NInput} from 'naive-ui';
 import {computed} from 'vue';
 import {SPECTROGRAM_COLOR_MAPS} from '../../constants';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {spectrogramColorRef} from '../Audio/useAudioSpectrogramColor';
 import {settingsStore} from './settingsStore';
+import {audioHostRef} from 'src/hooks/useAudioHost';
 
 const colorMapsOptionsRef = computed(() =>
   convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS),
@@ -33,6 +34,10 @@ const colorMapsOptionsRef = computed(() =>
         <h2>Global settings</h2>
 
         <hr />
+
+        Audio Host
+
+        <n-input v-model:value="audioHostRef.value"></n-input>
 
         <div class="checkboxes">
           <n-checkbox

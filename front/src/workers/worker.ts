@@ -7,7 +7,7 @@ import type {StorageReducer} from 'src/hooks/useStorageReducers';
 import type {StorageBands} from 'src/hooks/useStorageBands';
 import type {StorageIntegrations} from 'src/hooks/useStorageIntegrations';
 import type {StorageMetas} from 'src/hooks/useStorageMetas';
-import type {StorageSettings} from 'src/hooks/useStorageSettings';
+import type {StorageSettings} from 'src/storage/StorageSettings';
 import type {StorageRanges} from 'src/hooks/useStorageRanges';
 import {StorageMode} from 'src/storage/StorageMode';
 

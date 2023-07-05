@@ -22,7 +22,6 @@ import {FFT_SIZE, WAVE} from '../../constants';
 import {triggerWavDownload} from '../../utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import {settingsRef} from 'src/hooks/useStorageSettings';
 import {integrationRef} from 'src/hooks/useIntegration';
 import {bandsRef} from 'src/hooks/useStorageBands';
 import {useDetails} from '../Details/useDetails';
@@ -32,6 +31,7 @@ import {PLAYBACK_RATE} from 'src/constants';
 import speedToSemitones from 'speed-to-semitones';
 import speedToPercentage from 'speed-to-percentage';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
+import {audioHostRef} from 'src/hooks/useAudioHost';
 
 const {groupIndexRef, filenameRef} = useDetails();
 
@@ -109,11 +109,11 @@ const colorsRef = computed(() => {
 });
 
 const srcRef = computed(() => {
-  if (settingsRef.value === null || filenameRef.value === null) {
+  if (audioHostRef.value === null || filenameRef.value === null) {
     return null;
   }
 
-  return `${settingsRef.value.audio_host}${filenameRef.value}`;
+  return `${audioHostRef.value}${filenameRef.value}`;
 });
 
 const frequenciesRef = computed(() => {
@@ -239,8 +239,7 @@ async function handleDownload() {
   if (
     buffer === null ||
     filenameRef.value === null ||
-    groupIndexRef.value === null ||
-    settingsRef.value === null
+    groupIndexRef.value === null
   ) {
     return;
   }
@@ -248,6 +247,7 @@ async function handleDownload() {
   const wav = encodeWavFileFromAudioBuffer(buffer, 0);
   const blob = new Blob([wav], {type: 'audio/wav'});
   const name = `${filenameRef.value} - ${groupIndexRef.value} - NO FILTER.wav`;
+
   triggerWavDownload(blob, name);
 }
 
