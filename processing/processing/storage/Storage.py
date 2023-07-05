@@ -53,7 +53,7 @@ class Storage(metaclass=SingletonMeta):
         band_name: str,
         file_index: int,
     ) -> str:
-        return f"{StoragePath.files_features.value}" f"/{band_name}" f"/{file_index}"
+        return f"{StoragePath.files_features.value}/{band_name}/{file_index}"
 
     @staticmethod
     def __get_grouped_suffix(
