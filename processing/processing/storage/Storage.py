@@ -718,6 +718,16 @@ class Storage(metaclass=SingletonMeta):
             for group_index in range(groups_count):
                 yield file_index, group_index
 
+    # TODO: Timeline strategy: Handle audio lengths shorter than integration
+    # We should only discard the slice when there is no audio at all
+    # Floor division will discard any incomplete group slice
+    @staticmethod
+    def __get_group_count(
+        file_features: List[List[float]],
+        integration: int,
+    ) -> int:
+        return len(file_features) // integration
+
     def enumerate_files(
         self,
         band: str,
@@ -725,7 +735,13 @@ class Storage(metaclass=SingletonMeta):
     ) -> Generator[Tuple[int, int, int, int, List[List[float]]], None, None]:
         features, durations, count = self.read_features(band)
         timestamps = self.read_timestamps()
-        group_counts = self.read_files_group_counts(integration)
+
+        group_counts_path = f"{StoragePath.files_group_counts.value}/{integration}"
+
+        if self.exists_dataset(group_counts_path):
+            group_counts = self.__get(group_counts_path)
+        else:
+            group_counts = None
 
         duration_current_position = 0
 
@@ -740,7 +756,13 @@ class Storage(metaclass=SingletonMeta):
             )
 
             file_timestamp: int = timestamps[file_index]
-            group_count = group_counts[file_index][0]
+
+            if group_counts is not None:
+                group_count = group_counts[file_index][0]
+            else:
+                group_count = self.__get_group_count(
+                    file_features=file_features, integration=integration
+                )
 
             yield file_index, group_count, file_timestamp, file_duration, file_features
 
