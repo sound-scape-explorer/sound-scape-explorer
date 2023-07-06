@@ -2,7 +2,7 @@
 import {useStorageBands} from 'src/hooks/useStorageBands';
 import {useBand, bandRef} from '../../hooks/useBand';
 import {useIntegration, integrationRef} from '../../hooks/useIntegration';
-import {useReducer} from 'src/hooks/useReducer';
+import {reducerRef, useReducer} from 'src/hooks/useReducer';
 import {useStorageSettings} from '../../hooks/useStorageSettings';
 import {useStorageFilenames} from '../../hooks/useStorageFilenames';
 import {computed} from 'vue';
@@ -25,7 +25,11 @@ useStorageReducers();
 useStorageFilenames();
 
 const isSelectionRef = computed<boolean>(() => {
-  if (bandRef.value === null || integrationRef.value === null) {
+  if (
+    bandRef.value === null ||
+    integrationRef.value === null ||
+    reducerRef.value === null
+  ) {
     return false;
   }
 
