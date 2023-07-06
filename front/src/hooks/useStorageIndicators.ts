@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 import {bandRef} from './useBand';
@@ -19,7 +19,7 @@ export const indicatorsRef = reactive<IndicatorsRef>({
 });
 
 export function useStorageIndicators() {
-  onMounted(async () => {
+  const readIndicators = async () => {
     if (
       fileRef.value === null ||
       workerRef.value === null ||
@@ -34,5 +34,7 @@ export function useStorageIndicators() {
       bandRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readIndicators);
 }

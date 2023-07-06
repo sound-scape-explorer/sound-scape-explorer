@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 
@@ -13,11 +13,13 @@ export const filenamesRef = reactive<FilenamesRef>({
 });
 
 export function useStorageFilenames() {
-  onMounted(async () => {
+  const readFilenames = async () => {
     if (fileRef.value === null || workerRef.value === null) {
       return;
     }
 
     filenamesRef.value = await workerRef.value.readFilenames(fileRef.value);
-  });
+  };
+
+  watchEffect(readFilenames);
 }

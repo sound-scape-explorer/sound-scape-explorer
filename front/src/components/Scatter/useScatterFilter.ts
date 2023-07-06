@@ -1,4 +1,4 @@
-import {reactive, watch} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 
@@ -11,7 +11,7 @@ export const pointsFilteredRef = reactive<PointsFilteredRef>({
 });
 
 export function useScatterFilter() {
-  watch([pointsFilteredByTimeRef, pointsFilteredByMetaRef], () => {
+  const readScatterFilter = () => {
     if (
       pointsFilteredByTimeRef.value === null ||
       pointsFilteredByMetaRef.value === null
@@ -40,5 +40,7 @@ export function useScatterFilter() {
     }
 
     pointsFilteredRef.value = pointsFiltered;
-  });
+  };
+
+  watchEffect(readScatterFilter);
 }

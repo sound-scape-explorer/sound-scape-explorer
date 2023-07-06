@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
 import {fileRef} from './useFile';
@@ -13,7 +13,7 @@ export const groupedFeaturesRef = reactive<GroupedFeaturesRef>({
 });
 
 export function useStorageGroupedFeatures() {
-  onMounted(async () => {
+  const readGroupedFeatures = async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -28,5 +28,7 @@ export function useStorageGroupedFeatures() {
       bandRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readGroupedFeatures);
 }

@@ -1,5 +1,5 @@
 import chroma, {type Color, type Scale} from 'chroma-js';
-import {computed, reactive, watch} from 'vue';
+import {computed, reactive, watchEffect} from 'vue';
 import {colorsStore} from '../Colors/colorsStore';
 import {datasetRef} from './useScatterDataset';
 import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
@@ -65,7 +65,7 @@ export function useScatterColorScale() {
   const {getColorByCyclingDay} = useColorByCyclingDay();
   const {getColorByMeta} = useColorByMeta();
 
-  watch([datasetRef, colorsStore, alphaHighRef], () => {
+  const readColorScale = () => {
     if (
       datasetRef.value === null ||
       metaPropertiesAsColorTypesRef.value === null ||
@@ -121,5 +121,7 @@ export function useScatterColorScale() {
 
     colorScaleRef.value = colorScale;
     console.log('generate color scale');
-  });
+  };
+
+  watchEffect(readColorScale);
 }

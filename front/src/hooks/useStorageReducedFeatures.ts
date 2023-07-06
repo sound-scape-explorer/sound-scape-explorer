@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
 import {reducerRef} from './useReducer';
@@ -16,7 +16,7 @@ export const reducedFeaturesRef = reactive<ReducedFeaturesRef>({
 });
 
 export function useStorageReducedFeatures() {
-  onMounted(async () => {
+  const readReducedFeatures = async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -33,5 +33,7 @@ export function useStorageReducedFeatures() {
       bandRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readReducedFeatures);
 }

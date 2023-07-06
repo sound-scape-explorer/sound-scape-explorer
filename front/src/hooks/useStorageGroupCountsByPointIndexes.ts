@@ -1,4 +1,4 @@
-import {reactive, watch} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {filesGroupCountsRef} from 'src/hooks/useStorageFilesGroupCounts';
 
 interface GroupCountsByPointIndexesRef {
@@ -11,7 +11,7 @@ export const groupCountsByPointIndexesRef =
   });
 
 export function useStorageGroupCountsByPointIndexes() {
-  watch(filesGroupCountsRef, () => {
+  const readGroupCountsByPointIndexes = () => {
     if (filesGroupCountsRef.value === null) {
       return;
     }
@@ -28,5 +28,7 @@ export function useStorageGroupCountsByPointIndexes() {
     }
 
     groupCountsByPointIndexesRef.value = payload;
-  });
+  };
+
+  watchEffect(readGroupCountsByPointIndexes);
 }

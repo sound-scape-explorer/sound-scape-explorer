@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {workerRef} from './useWorker';
 import {fileRef} from './useFile';
 import {integrationRef} from './useIntegration';
@@ -12,7 +12,7 @@ export const filesGroupCountsRef = reactive<FilesGroupCountsRef>({
 });
 
 export function useStorageFilesGroupCounts() {
-  onMounted(async () => {
+  const readGroupCounts = async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -25,5 +25,7 @@ export function useStorageFilesGroupCounts() {
       fileRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readGroupCounts);
 }

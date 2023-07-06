@@ -1,4 +1,4 @@
-import {reactive, watch} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {metasRef} from './useStorageMetas';
 
 interface MetaSetsRef {
@@ -10,11 +10,13 @@ export const metaSetsRef = reactive<MetaSetsRef>({
 });
 
 export function useStorageMetaSets() {
-  watch(metasRef, () => {
+  const readMetaSets = () => {
     if (metasRef.value === null) {
       return;
     }
 
     metaSetsRef.value = Object.values(metasRef.value);
-  });
+  };
+
+  watchEffect(readMetaSets);
 }

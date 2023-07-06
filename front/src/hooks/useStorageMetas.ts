@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 import {integrationRef} from './useIntegration';
@@ -17,7 +17,7 @@ export const metasRef = reactive<MetasRef>({
 });
 
 export function useStorageMetas() {
-  onMounted(async () => {
+  const readMetas = async () => {
     if (
       fileRef.value === null ||
       workerRef.value === null ||
@@ -32,5 +32,7 @@ export function useStorageMetas() {
       bandRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readMetas);
 }

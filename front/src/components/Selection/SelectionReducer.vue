@@ -48,6 +48,7 @@ watch(selectedOptionRef, () => {
 
   const band = stringElements[3];
   setBand(band);
+
   const integrationName = stringElements[4];
   setIntegration(integrationName);
 

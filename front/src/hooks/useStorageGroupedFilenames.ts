@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {workerRef} from './useWorker';
 import {fileRef} from './useFile';
 import {bandRef} from './useBand';
@@ -13,7 +13,7 @@ export const groupedFilenamesRef = reactive<GroupedFilenamesRef>({
 });
 
 export function useStorageGroupedFilenames() {
-  onMounted(async () => {
+  const readGroupedFilenames = async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -27,5 +27,7 @@ export function useStorageGroupedFilenames() {
       fileRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readGroupedFilenames);
 }

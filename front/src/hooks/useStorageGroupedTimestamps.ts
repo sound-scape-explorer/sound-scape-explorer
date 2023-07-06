@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
 import {fileRef} from './useFile';
@@ -15,7 +15,7 @@ export const groupedTimestampsRef = reactive<GroupedTimestampsRef>({
 });
 
 export function useStorageGroupedTimestamps() {
-  onMounted(async () => {
+  const readGroupedTimestamps = async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -30,5 +30,7 @@ export function useStorageGroupedTimestamps() {
       bandRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readGroupedTimestamps);
 }

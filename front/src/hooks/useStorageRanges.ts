@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 
@@ -15,11 +15,14 @@ export const rangesRef = reactive<RangesRef>({
 });
 
 export function useStorageRanges() {
-  onMounted(async () => {
+  const readRanges = async () => {
     if (fileRef.value === null || workerRef.value === null) {
       return;
     }
 
     rangesRef.value = await workerRef.value.readRanges(fileRef.value);
-  });
+    console.log(rangesRef.value);
+  };
+
+  watchEffect(readRanges);
 }

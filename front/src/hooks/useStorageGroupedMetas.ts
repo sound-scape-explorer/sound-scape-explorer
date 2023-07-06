@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
 import {fileRef} from './useFile';
@@ -13,7 +13,7 @@ export const groupedMetasRef = reactive<GroupedMetasRef>({
 });
 
 export function useStorageGroupedMetas() {
-  onMounted(async () => {
+  const readGroupedMetas = async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -28,5 +28,7 @@ export function useStorageGroupedMetas() {
       bandRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readGroupedMetas);
 }

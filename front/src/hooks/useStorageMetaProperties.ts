@@ -1,4 +1,4 @@
-import {reactive, watch} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {metasRef} from './useStorageMetas';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 
@@ -15,7 +15,7 @@ export const metaPropertiesAsColorTypesRef = reactive<MetaPropertiesRef>({
 });
 
 export function useStorageMetaProperties() {
-  watch(metasRef, () => {
+  const readMetaProperties = () => {
     if (metasRef.value === null) {
       return;
     }
@@ -24,5 +24,7 @@ export function useStorageMetaProperties() {
     metaPropertiesRef.value = metaProperties;
     metaPropertiesAsColorTypesRef.value =
       convertSlugsToColorTypes(metaProperties);
-  });
+  };
+
+  watchEffect(readMetaProperties);
 }

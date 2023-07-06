@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {reactive, watchEffect} from 'vue';
 import {workerRef} from './useWorker';
 import {bandRef} from './useBand';
 import {integrationRef} from './useIntegration';
@@ -14,8 +14,7 @@ export const volumesRef = reactive<VolumesRef>({
 });
 
 export function useStorageVolumes() {
-  onMounted(async () => {
-    // watch([workerRef, fileRef, bandRef, integrationRef], async () => {
+  const readVolumes = async () => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -30,5 +29,7 @@ export function useStorageVolumes() {
       bandRef.value,
       integrationRef.value,
     );
-  });
+  };
+
+  watchEffect(readVolumes);
 }
