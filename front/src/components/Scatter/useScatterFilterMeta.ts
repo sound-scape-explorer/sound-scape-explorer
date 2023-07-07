@@ -31,8 +31,8 @@ export function useScatterFilterMeta() {
         break;
       }
 
-      const metaSelection =
-        metaSelectionStore.selection[metaSelectedIndexes[i]];
+      const metaSelectedIndex = Number(metaSelectedIndexes[i]);
+      const metaSelection = metaSelectionStore.selection[metaSelectedIndex];
       const metaSelectionValues = Object.values(metaSelection);
 
       // no user selection
