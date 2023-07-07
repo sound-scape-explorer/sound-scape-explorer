@@ -32,6 +32,7 @@ import speedToSemitones from 'speed-to-semitones';
 import speedToPercentage from 'speed-to-percentage';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
 import {audioHostRef} from 'src/hooks/useAudioHost';
+import {settingsRef} from 'src/hooks/useStorageSettings';
 
 const {groupIndexRef, filenameRef} = useDetails();
 
@@ -45,8 +46,17 @@ const spectrogramRef = ref<HTMLDivElement | null>(null);
 const isPlayingRef = ref<boolean>(false);
 const fftSizeRef = ref<number>(FFT_SIZE.default);
 
+const audioContextRef = computed<AudioContext | null>(() => {
+  if (settingsRef.value === null) {
+    return null;
+  }
+
+  return new AudioContext({sampleRate: settingsRef.value.expected_sample_rate});
+});
+
 const wsRef = computed(() => {
   if (
+    audioContextRef.value === null ||
     frequenciesRef.value === null ||
     waveformRef.value === null ||
     spectrogramRef.value === null
@@ -55,6 +65,7 @@ const wsRef = computed(() => {
   }
 
   const params: WaveSurferParams = {
+    audioContext: audioContextRef.value,
     container: waveformRef.value,
     scrollParent: false,
     barHeight: WAVE.default,
@@ -84,14 +95,6 @@ const wsRef = computed(() => {
   };
 
   return WaveSurfer.create(params);
-});
-
-const audioContextRef = computed<AudioContext | null>(() => {
-  if (wsRef.value === null) {
-    return null;
-  }
-
-  return wsRef.value.backend.getAudioContext();
 });
 
 const colorsRef = computed(() => {
@@ -208,7 +211,8 @@ function handleAudioReady() {
     return;
   }
 
-  const ac = wsRef.value.backend.getAudioContext();
+  // const ac = wsRef.value.backend.getAudioContext();
+  const ac = audioContextRef.value;
   const frequencies = bandsRef.value[bandRef.value];
 
   const lowShelf = ac.createBiquadFilter();
