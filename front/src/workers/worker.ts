@@ -1,7 +1,6 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import {StoragePath} from '../storage/StoragePath';
-import {buildNestedArrayFromLengths} from '../utils/build-nested-array-from-lengths';
 import {trimRectangular} from '../utils/trim-rectangular';
 import type {StorageReducer} from 'src/hooks/useStorageReducers';
 import type {StorageBands} from 'src/hooks/useStorageBands';
@@ -266,7 +265,7 @@ export async function readAutocluster(
   file: File,
   band: string,
   integration: number,
-) {
+): Promise<number[]> {
   const h5 = await load(file);
   const path = `${StoragePath.autocluster}/${band}/${integration}`;
   const autoclusterDatasetOrNull = h5.get(path) as Dataset | null;
@@ -275,11 +274,9 @@ export async function readAutocluster(
     return [];
   }
 
-  const groupCounts = await readFilesGroupCounts(file, integration);
   const autoclusterFlat = autoclusterDatasetOrNull.to_array() as number[];
 
-  // INFO: Building a nested array is not necessarily after flat storage update
-  return buildNestedArrayFromLengths(autoclusterFlat, groupCounts);
+  return autoclusterFlat;
 }
 
 export async function readIndicators(
@@ -501,20 +498,23 @@ export async function readGroupedMetas(
   const groupCounts = await readFilesGroupCounts(file, integration);
 
   const groupedMetas: string[][][] = [];
+  let pointIndex = 0;
 
   for (let f = 0; f < files.length; f += 1) {
     const groupCount = groupCounts[f];
     groupedMetas[f] = [];
 
-    for (let s = 0; s < groupCount; s += 1) {
+    for (let g = 0; g < groupCount; g += 1) {
       let metas: string[] = [];
 
       if (autocluster.length > 0) {
-        metas = [autocluster[f][s].toString()];
+        metas = [autocluster[pointIndex].toString()];
       }
 
       metas = [...metas, ...filesMetas[f]];
       groupedMetas[f].push(metas);
+
+      pointIndex += 1;
     }
   }
 
