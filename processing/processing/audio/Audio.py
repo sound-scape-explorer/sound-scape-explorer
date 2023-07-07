@@ -1,7 +1,7 @@
 from typing import List, Union
 
 import maad
-import soundfile
+from pydub import AudioSegment
 
 from processing.audio.enums.SpectrogramMode import SpectrogramMode
 from processing.audio.Spectrogram import Spectrogram
@@ -52,15 +52,14 @@ class Audio:
                 self.__frequencies[i] = 1
 
     def __read(self) -> None:
-        wav_info = soundfile.info(self.__path)
-        frames = self.integration * wav_info.samplerate
-        start = self.__group_index * frames
+        sound = AudioSegment.from_file(self.__path)
 
-        self.__wav, self.sample_rate = soundfile.read(  # type: ignore
-            file=self.__path,
-            frames=frames,
-            start=start,
-        )
+        sound_start = self.__group_index * self.integration * 1000
+        sound_length = sound_start + self.integration * 1000
+        sound_slice = sound[sound_start:sound_length]
+
+        self.__wav = sound_slice.get_array_of_samples()
+        self.sample_rate = sound.frame_rate
 
         try:
             self.sound = maad.sound.select_bandwidth(
