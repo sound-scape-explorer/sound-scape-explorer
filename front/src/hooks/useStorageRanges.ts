@@ -21,7 +21,6 @@ export function useStorageRanges() {
     }
 
     rangesRef.value = await workerRef.value.readRanges(fileRef.value);
-    console.log(rangesRef.value);
   };
 
   watchEffect(readRanges);
