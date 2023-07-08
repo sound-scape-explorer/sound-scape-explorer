@@ -632,25 +632,17 @@ In order to explore your generated data, please refer to the following methods.
 #### Without audio playback
 
 If you do not need audio playback with spectrogram features, you
-can run the following command inside your shell instance:
-
-```bash
-pnpm front
-```
+can run the [`front` command](#front-command) inside your shell instance.
 
 #### With audio playback
 
 If you need listening to your audio files inside the web browser
-and display spectrograms, run the following command:
-
-```bash
-pnpm front:audio -- path/to/audio/folder
-```
+and display spectrograms, run the [`front:audio` command](#frontaudio-command).
 
 > **Note**
 >
-> If you want to launch only the `audio` module,
-> use the `pnpm audio -- path/to/audio/folder`
+> If you only want to serve the `Audio` module,
+> use the [`audio` command](#audio-command)
 
 ## Migration
 
@@ -666,18 +658,6 @@ implemented from `v8` and above.
 
 ```bash
 pnpm process:migrate:v8 --storage /path/to/storage.h5
-```
-
-## Dataframe
-
-If you need to generate a `.csv` file from an existing `.h5` file,
-you can use the following command:
-
-```bash
-pnpm process:dataframe --band human --integration 15 --storage /path/to/storage.h5 --output /path/to/dataframe.csv
-
-# or shorter
-pnpm process:dataframe -b human -i 15 -s /path/to/storage.h5 -o /path/to/dataframe.csv
 ```
 
 ## Docker flavors
@@ -700,27 +680,276 @@ pnpm process:dataframe -b human -i 15 -s /path/to/storage.h5 -o /path/to/datafra
 
 ## `pnpm` commands
 
-| `pnpm` command          | Description                                                                                                                           |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `audio`                 | Serve audio files. Example: `pnpm audio -- /path/to/audio/folder`.                                                                    |
-| `migrate:v8`            | Migrate storage file from v8 to v9.                                                                                                   |
-| `process`               | alias for `process:all`                                                                                                               |
-| `process:all`           | Run all processing commands                                                                                                           |
-| `process:all-actions`   | Run `process:autocluster` `process:reducers` `process:indicators` `process:volumes` `process:matrices` & `process:pairings` commands. |
-| `process:all-but-files` | Run all commands except `process:files` & `process:groups`.                                                                           |
-| `process:all-to-groups` | Run `process:config` `process:files` & `process:groups` commands.                                                                     |
-| `process:config`        | Process configuration file.                                                                                                           |
-| `process:files`         | Process audio files.                                                                                                                  |
-| `process:groups`        | Process integration of audio features.                                                                                                |
-| `process:autocluster`   | Process autocluster from grouped audio features.                                                                                      |
-| `process:reducers`      | Process reducers from grouped audio features.                                                                                         |
-| `process:indicators`    | Process indicators from audio slices.                                                                                                 |
-| `process:volumes`       | Process volumes from grouped audio features.                                                                                          |
-| `process:matrices`      | Process matrices from grouped audio features.                                                                                         |
-| `process:pairings`      | Process pairings from grouped audio features.                                                                                         |
-| `process:dataframe`     | Build pandas DataFrame and export to .csv file.                                                                                       |
+There are three main groups of `pnpm` commands:
 
-## Interact with development team
+- [`Audio` module commands](#audio-module-commands)
+- [`Front` module commands](#front-module-commands)
+- [`Processing` module commands](#processing-module-commands)
+
+### `Audio` module commands
+
+#### `audio` command
+
+Serve `Audio` module on port [5531](http://localhost:5531)
+
+```bash
+pnpm audio -- /path/to/audio/folder
+```
+
+### `Front` module commands
+
+#### `front` command
+
+Serve `Front` module on port [5530](http://localhost:5530)
+
+```bash
+pnpm front
+```
+
+#### `front:audio` command
+
+You can serve both `Front` and `Audio` modules at the same time
+
+```bash
+pnpm front:audio -- /path/to/audio/folder
+```
+
+### `Processing` module commands
+
+All `pnpm` commands relative to this module are preceded with `process:`.
+
+#### Available commands
+
+- [all](#all-command)
+- [all-actions](#all-actions-command)
+- [all-but-files](#all-but-files-command)
+- [all-to-groups](#all-to-groups-command)
+- [autocluster](#autocluster-command)
+- [config](#config-command)
+- [dataframe](#dataframe-command)
+- [files](#files-command)
+- [groups](#groups-command)
+- [indicators](#indicators-command)
+- [matrices](#matrices-command)
+- [migrate:v8](#migratev8-command)
+- [pairings](#pairings-command)
+- [reducers](#reducers-command)
+- [volumes](#volumes-command)
+
+#### Available flags
+
+There are two forms for each flag, one short `-f` and one full `--flag`.
+
+You will find below a list of available flags.
+
+Please note that each command needs its own combination of flags.
+
+```bash
+# Pass your Excel configuration file
+-c /path/to/config.xlsx
+--config /path/to/config.xlsx
+
+# Pass your .h5 storage file
+-s /path/to/storage.h5
+--storage /path/to/storage.h5
+
+# Ask for filtering band
+-b human
+--band human
+
+# Ask for integration time
+-i 15
+--integration 15
+
+# Specify output export file
+-o export.csv
+--output export.csv
+```
+
+#### `all` command
+
+Run all commands.
+
+```bash
+pnpm process --config /path/to/config.xlsx --storage /path/to/storage.h5
+
+# Equivalent to
+pnpm process:all --config /path/to/config.xlsx --storage /path/to/storage.h5
+```
+
+#### `all-actions` command
+
+Run all _action_ commands, in order:
+
+- [autocluster](#autocluster-command)
+- [reducers](#reducers-command)
+- [indicators](#indicators-command)
+- [volumes](#volumes-command)
+- [matrices](#matrices-command)
+- [pairings](#pairings-command)
+
+```bash
+pnpm process:all-actions --storage /path/to/storage.h5
+```
+
+#### `all-but-files` command
+
+Run all commands except [files](#files-command) and [groups](#groups-command)
+
+```bash
+pnpm process:all-but-files --config /path/to/config.xlsx --storage /path/to/storage.h5
+```
+
+#### `all-to-groups` command
+
+Run [config](#config-command), [files](#files-command) and [groups](#groups-command)
+
+```bash
+pnpm process:all-to-groups --config /path/to/config.xlsx --storage /path/to/storage.h5
+```
+
+#### `autocluster` command
+
+For each band and integration, take groups (integrated features)
+and run through [AutoConsensusClustering](./processing/processing/clusterings/AutoConsensusClustering.py)
+with the [settings](#autocluster-settings) specified in your configuration file.
+
+> **Note**
+>
+> Running `autocluster` is optional.
+
+```bash
+pnpm process:autocluster --storage /path/to/storage.h5
+```
+
+##### `autocluster` settings
+
+- `autocluster`
+  - Whether you want to run autocluster process
+  - _Optional_
+  - _Default_ `no`
+  - _Values_ `yes` or `no`
+- `autocluster_iterations`
+  - The number of iterations to run autocluster process
+  - _Optional_
+  - _Default_ `100`
+- `autocluster_min_size`
+  - The expected minimum count of members within a detected cluster.
+  - _Optional_
+  - _Default_ `20`
+- `autocluster_max_size`
+  - The expected maximum count of members within a detected cluster.
+  - _Optional_
+  - _Default_ `60`
+- `autocluster_threshold`
+  - The threshold to specify membership of a given element to a cluster.
+  - _Optional_
+  - _Default_ `0.9`
+
+#### `config` command
+
+Digest your Excel configuration file and copy all its information inside
+your storage file.
+
+> **Note**
+>
+> You will need to run this again if you change your configuration file.
+>
+> For instance, when you add a new `reducer` action to an existing project.
+
+```bash
+pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
+```
+
+#### `dataframe` command
+
+If you need to generate a `.csv` file from an existing `.h5` file,
+you can use the following command:
+
+```bash
+pnpm process:dataframe --band human --integration 15 --storage /path/to/storage.h5 --output /path/to/dataframe.csv
+```
+
+#### `files` command
+
+For each band, run your audio files through neural network and
+extract their features for each second of audio.
+
+```bash
+pnpm process:files --storage /path/to/storage.h5
+```
+
+#### `groups` command
+
+For each band and integration, take files features and group them
+by the integration time.
+
+```bash
+pnpm process:group --storage /path/to/storage.h5
+```
+
+#### `indicators` command
+
+For each group, read the corresponding audio slice and
+compute specified `indicators` from.
+
+```bash
+pnpm process:indicators --storage /path/to/storage.h5
+```
+
+#### `matrices` command
+
+For each group, read the corresponding features and
+compute specified `matrices` from.
+
+```bash
+pnpm process:matrices --storage /path/to/storage.h5
+```
+
+#### `migrate:v8` command
+
+See [Migration](#migration).
+
+#### `pairings` command
+
+For each group, read the corresponding features and
+compute specified `pairings` from.
+
+```bash
+pnpm process:pairings --storage /path/to/storage.h5
+```
+
+#### `reducers` command
+
+For each group, read the corresponding features and
+compute specified `reducers` from.
+
+```bash
+pnpm process:reducers --storage /path/to/storage.h5
+```
+
+#### `reducers` settings
+
+- `umap_seed`
+  - The seed number used for reductions
+  - Used for `UMAP` and `PCA` reduction algorithms
+  - _Optional_
+  - _Default_ `None`
+- `umap_neighbors`
+  - The size of local neighborhood used for reduction algorithms
+  - _Optional_
+  - _Default_ `15`
+- `umap_metric`
+  - The metric to use to compute distances in high dimensional space
+  - _Optional_
+  - _Default_ `euclidean`
+
+#### `volumes` command
+
+For each group, read the corresponding features and
+compute specified `volumes` from.
+
+## Looking for more?
 
 Feel free to open an [issue](https://github.com/sound-scape-explorer/sound-scape-explorer/issues)
 or [Pull Request](https://github.com/sound-scape-explorer/sound-scape-explorer/pulls)
