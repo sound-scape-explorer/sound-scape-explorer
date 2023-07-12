@@ -1170,6 +1170,39 @@ class Storage(metaclass=SingletonMeta):
 
         return jagged_array
 
+    def write_autoclusters(
+        self,
+        autoclusters: List[str],
+        min_cluster_sizes: List[int],
+        min_samples: List[int],
+        alphas: List[float],
+        epsilons: List[float],
+    ) -> None:
+        self.__write_dataset(
+            path=StoragePath.autoclusters_names,
+            data=autoclusters,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.autoclusters_min_cluster_sizes,
+            data=min_cluster_sizes,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.autoclusters_min_samples,
+            data=min_samples,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.autoclusters_alphas,
+            data=alphas,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.autoclusters_epsilons,
+            data=epsilons,
+        )
+
     def write_reducers(
         self,
         reducers: List[str],

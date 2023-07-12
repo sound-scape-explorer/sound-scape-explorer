@@ -30,6 +30,16 @@ class StoragePath(Enum):
     meta_properties = "/configuration/meta/properties"
     meta_sets = "/configuration/meta/sets"
 
+    ################
+    # Autoclusters #
+    ################
+
+    autoclusters_names = "/configuration/autoclusters/names"
+    autoclusters_min_cluster_sizes = "/configuration/autoclusters/min_cluster_sizes"
+    autoclusters_min_samples = "/configuration/autoclusters/min_samples"
+    autoclusters_alphas = "/configuration/autoclusters/alphas"
+    autoclusters_epsilons = "/configuration/autoclusters/epsilons"
+
     ############
     # Features #
     ############

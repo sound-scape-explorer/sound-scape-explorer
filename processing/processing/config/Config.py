@@ -10,11 +10,13 @@ from numpy import nan
 from pandas import DataFrame, Series, Timestamp
 
 from processing.common.SingletonMeta import SingletonMeta
+from processing.config.ConfigAutocluster import ConfigAutocluster, ConfigAutoclusters
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigIntegration import ConfigIntegration, ConfigIntegrations
 from processing.config.ConfigRange import ConfigRange, ConfigRanges
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
+from processing.config.ExcelAutocluster import ExcelAutocluster
 from processing.config.ExcelBand import ExcelBand
 from processing.config.ExcelFile import ExcelFile
 from processing.config.ExcelIndicator import ExcelIndicator
@@ -48,6 +50,7 @@ class Config(metaclass=SingletonMeta):
     __integrations: ConfigIntegrations = {}
     __ranges: ConfigRanges = {}
     __all_sites: List[str] = []
+    __autoclusters: ConfigAutoclusters = []
     __reducers: ConfigReducers = []
     __indicators: List[str] = []
     __volumes: List[str] = []
@@ -112,6 +115,7 @@ class Config(metaclass=SingletonMeta):
         self.__read_integrations()
         self.__read_ranges()
 
+        self.__read_autoclusters()
         self.__read_reducers()
         self.__read_indicators()
         self.__read_volumes()
@@ -134,11 +138,37 @@ class Config(metaclass=SingletonMeta):
         self.__store_integrations(storage)
         self.__store_ranges(storage)
 
+        self.__store_autoclusters(storage)
         self.__store_reducers(storage)
         self.__store_indicators(storage)
         self.__store_volumes(storage)
         self.__store_matrices(storage)
         self.__store_pairings(storage)
+
+    def __store_autoclusters(
+        self,
+        storage: Storage,
+    ) -> None:
+        autoclusters = []
+        min_cluster_sizes = []
+        min_samples = []
+        alphas = []
+        epsilons = []
+
+        for autocluster in self.__autoclusters:
+            autoclusters.append(autocluster.name)
+            min_cluster_sizes.append(autocluster.min_cluster_size)
+            min_samples.append(autocluster.min_samples)
+            alphas.append(autocluster.alpha)
+            epsilons.append(autocluster.epsilon)
+
+        storage.write_autoclusters(
+            autoclusters=autoclusters,
+            min_cluster_sizes=min_cluster_sizes,
+            min_samples=min_samples,
+            alphas=alphas,
+            epsilons=epsilons,
+        )
 
     def __store_reducers(
         self,
@@ -549,6 +579,28 @@ class Config(metaclass=SingletonMeta):
                 reducer_ranges.append(range_)
 
         return reducer_ranges
+
+    def __read_autoclusters(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.autoclusters)
+        autoclusters = self.__parse_column(sheet, ExcelAutocluster.autocluster)
+        min_cluster_sizes = self.__parse_column(
+            sheet, ExcelAutocluster.min_cluster_size
+        )
+        min_samples = self.__parse_column(sheet, ExcelAutocluster.min_samples)
+        alphas = self.__parse_column(sheet, ExcelAutocluster.alpha)
+        epsilons = self.__parse_column(sheet, ExcelAutocluster.epsilon)
+
+        for index, autocluster_name in enumerate(autoclusters):
+            autocluster = ConfigAutocluster(
+                index=index,
+                name=autocluster_name,
+                min_cluster_size=min_cluster_sizes[index],
+                min_samples=min_samples[index],
+                alpha=alphas[index],
+                epsilon=epsilons[index],
+            )
+
+            self.__autoclusters.append(autocluster)
 
     def __read_reducers(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.reducers)
