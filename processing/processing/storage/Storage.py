@@ -502,9 +502,9 @@ class Storage(metaclass=SingletonMeta):
         settings: ConfigSettings = configuration.attrs  # type: ignore
         return settings
 
-    def get_umap_seed(self) -> int:
+    def read_display_umap_seed(self) -> int:
         settings = self.read_settings()
-        return settings["umap_seed"]
+        return settings["display_umap_seed"]
 
     def get_expected_sample_rate(self) -> int:
         settings = self.read_settings()

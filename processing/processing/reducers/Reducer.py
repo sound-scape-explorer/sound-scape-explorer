@@ -14,11 +14,9 @@ class Reducer:
         name: str,
         target_dimensions: int,
         seed: int,
-        neighbors: int,
-        metric: str,
     ):
         if name == ReducerName.umap.value:
-            return UmapReducer(target_dimensions, seed, neighbors, metric)
+            return UmapReducer(target_dimensions, seed)
         elif name == ReducerName.vae.value:
             return VaeReducer(target_dimensions)
         elif name == ReducerName.pca.value:

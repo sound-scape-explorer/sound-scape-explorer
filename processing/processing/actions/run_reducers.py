@@ -10,8 +10,8 @@ def run_reducers(env: Env):
 
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
-    settings = storage.read_settings()
     reducers = storage.get_config_reducers()
+    seed = storage.read_display_umap_seed()
 
     storage.delete_reduced()
 
@@ -29,9 +29,7 @@ def run_reducers(env: Env):
 
             for reducer_index, config_reducer in enumerate(reducers):
                 reducer: Reducer = config_reducer.create_reducer(
-                    seed=settings["umap_seed"],
-                    neighbors=settings["umap_neighbors"],
-                    metric=settings["umap_metric"],
+                    seed=seed,
                 )
 
                 if reducer is None:
