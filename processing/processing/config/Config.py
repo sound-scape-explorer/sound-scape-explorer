@@ -162,7 +162,7 @@ class Config(metaclass=SingletonMeta):
             alphas.append(autocluster.alpha)
             epsilons.append(autocluster.epsilon)
 
-        storage.write_autoclusters(
+        storage.write_config_autoclusters(
             autoclusters=autoclusters,
             min_cluster_sizes=min_cluster_sizes,
             min_samples=min_samples,

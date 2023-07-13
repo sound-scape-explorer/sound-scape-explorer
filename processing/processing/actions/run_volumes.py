@@ -20,12 +20,14 @@ def run_volumes(env: Env):
     storage.delete_volumes()
 
     print_new_line()
-    print(f"Volumes loading: {[v for v in volumes]}")
+    print(f"Volumes list {[v for v in volumes]}")
 
     timer = Timer(len(bands) * len(integrations) * len(volumes) * len(meta_properties))
 
     for band in bands:
         for integration in integrations:
+            print(f"Volumes loaded for band {band}, integration {integration}")
+
             grouped_features = storage.read_grouped_features_all_files(
                 band=band,
                 integration=integration,

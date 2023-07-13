@@ -30,6 +30,20 @@ class StoragePath(Enum):
     meta_properties = "/configuration/meta/properties"
     meta_sets = "/configuration/meta/sets"
 
+    #####################
+    # Computation UMAPs #
+    #####################
+
+    # Example: /computation_umap_0/band/integration
+    computation_umap_ = "/computation_umap_"
+
+    #########################
+    # Mean distances matrix #
+    #########################
+
+    # Example: /mean_distances_matrix/band/integration
+    mean_distances_matrix = "/mean_distances_matrix"
+
     ################
     # Autoclusters #
     ################
@@ -105,12 +119,14 @@ class StoragePath(Enum):
     indicator_ = "/indicator_"
 
     # Volumes
-
     volume_ = "/volume_"
 
-    # Autocluster
+    ###############
+    # Autocluster #
+    ###############
 
-    autocluster = "/autocluster"
+    # Example: /autocluster_0/{band}/{integration}
+    autocluster_ = "/autocluster_"
 
     # Matrices
     matrix_ = "/matrix_"

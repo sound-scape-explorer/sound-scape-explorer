@@ -21,12 +21,13 @@
 
 ## Table of contents
 
+TODO
+
 - [About](#about)
 - [Manual installation](#manual-installation)
 - [Docker installation](#docker-installation)
 - [Usage](#usage)
 - [Migration](#migration)
-- [Dataframe](#dataframe)
 
 ## About
 
@@ -89,7 +90,7 @@ We recommend using them in order to have a more consistent and manageable enviro
 > Those package managers handle binaries and can be compared to
 > programming languages package managers such as `pip` is for Python
 > and `npm` is for Node.js.
-
+>
 > **Warning**
 >
 > Please remember that multiple package managers can collide.
@@ -193,15 +194,16 @@ pip3 --version
 >
 > - Create an alias for `python` as `python3`
 > - Create a symbolic link from `python3` to `python`
-> - Rename all `python3` and `pip3` instances inside `package.json` to `python` and `pip`
-
+> - Rename all `python3` and `pip3` instances inside `package.json` to `python`
+>   and `pip`
+>
 > **Warning**
 >
 > If you use `anaconda`, skip this part.
 >
 > Instead, create a dedicated environment within `anaconda` user interface
 > then start your shell from there.
-
+>
 > **Note**
 >
 > Refer to [Testing installation](#testing-installation) for exhaustive
@@ -602,7 +604,7 @@ At the moment, Docker installation only allows all processes to trigger.
 >
 > This could be improved following user needs.
 >
-> Please send your feedback to the development team [here](#interact-with-development-team).
+> Please send your feedback to the development team [here](#looking-for-more).
 
 Please refer to the [Docker manual](TODO)
 
@@ -724,7 +726,7 @@ All `pnpm` commands relative to this module are preceded with `process:`.
 - [all-actions](#all-actions-command)
 - [all-but-files](#all-but-files-command)
 - [all-to-groups](#all-to-groups-command)
-- [autocluster](#autocluster-command)
+- [autoclusters](#autoclusters-command)
 - [config](#config-command)
 - [dataframe](#dataframe-command)
 - [files](#files-command)
@@ -781,7 +783,7 @@ pnpm process:all --config /path/to/config.xlsx --storage /path/to/storage.h5
 
 Run all _action_ commands, in order:
 
-- [autocluster](#autocluster-command)
+- [autoclusters](#autoclusters-command)
 - [reducers](#reducers-command)
 - [indicators](#indicators-command)
 - [volumes](#volumes-command)
@@ -808,21 +810,19 @@ Run [config](#config-command), [files](#files-command) and [groups](#groups-comm
 pnpm process:all-to-groups --config /path/to/config.xlsx --storage /path/to/storage.h5
 ```
 
-#### `autocluster` command
+#### `autoclusters` command
 
 For each band and integration, take groups (integrated features)
 and run through [AutoConsensusClustering](./processing/processing/clusterings/AutoConsensusClustering.py)
-with the [settings](#autocluster-settings) specified in your configuration file.
-
-> **Note**
->
-> Running `autocluster` is optional.
+with the [settings](#autoclusters-settings) specified in your configuration file.
 
 ```bash
-pnpm process:autocluster --storage /path/to/storage.h5
+pnpm process:autoclusters --storage /path/to/storage.h5
 ```
 
-##### `autocluster` settings
+##### `autoclusters` settings
+
+TODO
 
 - `autocluster`
   - Whether you want to run autocluster process

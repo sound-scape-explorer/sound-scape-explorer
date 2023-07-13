@@ -8,6 +8,7 @@ from h5py._hl.dataset import AsStrWrapper
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
+from processing.config.ConfigAutocluster import ConfigAutocluster, ConfigAutoclusters
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
@@ -213,7 +214,7 @@ class Storage(metaclass=SingletonMeta):
 
         return files
 
-    def get_reducers(self) -> List[str]:
+    def read_reducers(self) -> List[str]:
         dataset = self.__get(StoragePath.reducers)
 
         (length,) = dataset.shape
@@ -261,7 +262,7 @@ class Storage(metaclass=SingletonMeta):
         return reduced_features
 
     def get_config_reducers(self) -> ConfigReducers:
-        names = self.get_reducers()
+        names = self.read_reducers()
 
         if len(names) == 0:
             return []
@@ -501,6 +502,14 @@ class Storage(metaclass=SingletonMeta):
         configuration = self.__get(StoragePath.configuration)
         settings: ConfigSettings = configuration.attrs  # type: ignore
         return settings
+
+    def read_computation_umap_dimensions(self) -> int:
+        settings = self.read_settings()
+        return settings["computation_umap_dimensions"]
+
+    def read_computation_umap_iterations(self) -> int:
+        settings = self.read_settings()
+        return settings["computation_umap_iterations"]
 
     def read_display_umap_seed(self) -> int:
         settings = self.read_settings()
@@ -1082,7 +1091,7 @@ class Storage(metaclass=SingletonMeta):
             self.__delete_silently(path)
 
     def delete_reduced(self) -> None:
-        reducers = self.get_reducers()
+        reducers = self.read_reducers()
 
         for index, _ in enumerate(reducers):
             path = f"{StoragePath.reduced_.value}{index}"
@@ -1109,10 +1118,10 @@ class Storage(metaclass=SingletonMeta):
         meta_properties = self.__get(StoragePath.meta_properties)
 
         strings = list(meta_properties.asstr()[:])
-        settings = self.read_settings()
 
-        if settings["autocluster"]:
-            strings.insert(0, "AUTOCLUSTER")
+        # TODO: Add autoclusters
+        # if settings["autocluster"]:
+        #     strings.insert(0, "AUTOCLUSTER")
 
         return strings
 
@@ -1170,7 +1179,42 @@ class Storage(metaclass=SingletonMeta):
 
         return jagged_array
 
-    def write_autoclusters(
+    @staticmethod
+    def convert_dataset_to_string_list(dataset: Dataset) -> List[str]:
+        (length,) = dataset.shape
+
+        if length == 0:
+            return []
+
+        string_list = list(dataset.asstr()[:])
+
+        return string_list
+
+    def read_config_autoclusters(self) -> ConfigAutoclusters:
+        names_dataset = self.__get(StoragePath.autoclusters_names)
+        names = self.convert_dataset_to_string_list(names_dataset)
+        min_cluster_sizes = self.__get(StoragePath.autoclusters_min_cluster_sizes)[:]
+        min_samples = self.__get(StoragePath.autoclusters_min_samples)[:]
+        alphas = self.__get(StoragePath.autoclusters_alphas)[:]
+        epsilons = self.__get(StoragePath.autoclusters_epsilons)[:]
+
+        autoclusters = []
+
+        for index, name in enumerate(names):
+            autocluster = ConfigAutocluster(
+                index=index,
+                name=name,
+                min_cluster_size=min_cluster_sizes[index],
+                min_samples=min_samples[index],
+                alpha=alphas[index],
+                epsilon=epsilons[index],
+            )
+
+            autoclusters.append(autocluster)
+
+        return autoclusters
+
+    def write_config_autoclusters(
         self,
         autoclusters: List[str],
         min_cluster_sizes: List[int],
@@ -1281,31 +1325,7 @@ class Storage(metaclass=SingletonMeta):
             data=pairings,
         )
 
-    def write_autocluster(
-        self,
-        autocluster: List[int],
-        band: str,
-        integration: int,
-    ) -> None:
-        path = f"{StoragePath.autocluster.value}/{band}/{integration}"
-
-        self.__write_dataset(
-            path=path,
-            data=autocluster,
-        )
-
-    def delete_autocluster(self) -> None:
-        self.__delete_silently(StoragePath.autocluster)
-
-    def __read_autocluster_values(
-        self,
-        band: str,
-        integration: int,
-    ) -> List[int]:
-        path = f"{StoragePath.autocluster.value}/{band}/{integration}"
-        dataset = self.__get(path)
-        return dataset[:]
-
+    # Point index
     @staticmethod
     def get_flat_index(
         file_index: int,
@@ -1324,11 +1344,9 @@ class Storage(metaclass=SingletonMeta):
         meta_properties = self.read_meta_properties()
         meta_values = []
 
-        settings = self.read_settings()
-        autocluster = None
-
-        if settings["autocluster"]:
-            autocluster = self.__read_autocluster_values(band, integration)
+        # TODO: Add autoclusters
+        # if settings["autocluster"]:
+        #     autocluster = self.__read_autocluster_values(band, integration)
 
         for mp, _ in enumerate(meta_properties):
             meta_property_values = []
@@ -1342,8 +1360,9 @@ class Storage(metaclass=SingletonMeta):
                     file_ = files[file_name]
                     meta = list(file_.meta)
 
-                    if settings["autocluster"] and autocluster is not None:
-                        meta.insert(0, str(autocluster[flat_index]))
+                    # TODO: Add autoclusters
+                    # if settings["autocluster"] and autocluster is not None:
+                    #     meta.insert(0, str(autocluster[flat_index]))
 
                     meta_value = meta[mp]
                     meta_property_values.append(meta_value)
@@ -1353,11 +1372,6 @@ class Storage(metaclass=SingletonMeta):
             meta_values.append(meta_property_values)
 
         return meta_values
-
-    def read_autocluster(self, band: str, integration: int) -> List[int]:
-        path = f"{StoragePath.autocluster.value}/{band}/{integration}"
-        dataset = self.__get(path)
-        return dataset[:]
 
     def migrate_v8(self) -> None:
         print_new_line()
@@ -1484,7 +1498,7 @@ class Storage(metaclass=SingletonMeta):
         print_new_line()
         print("Migrating reduced features")
 
-        reducers = self.get_reducers()
+        reducers = self.read_reducers()
 
         for band in bands:
             for integration in integrations:
@@ -1520,3 +1534,160 @@ class Storage(metaclass=SingletonMeta):
                         reducer_index=reducer_index,
                         features=reduced_features,
                     )
+
+    def generate_computation_umap_path(
+        self,
+        band: str,
+        integration: int,
+        index: int,
+    ) -> str:
+        return f"{StoragePath.computation_umap_.value}{index}/{band}/{integration}"
+
+    def iterate_computation_umaps(self, band: str, integration: int):
+        iterations = self.read_computation_umap_iterations()
+
+        for iteration in range(iterations):
+            path = self.generate_computation_umap_path(
+                band=band, integration=integration, index=iteration
+            )
+
+            yield path
+
+    def write_computation_umap(
+        self,
+        band: str,
+        integration: int,
+        computation_index: int,
+        features: List[List[float]],
+    ) -> None:
+        path = self.generate_computation_umap_path(
+            band=band, integration=integration, index=computation_index
+        )
+
+        self.__write_dataset(
+            path=path,
+            data=features,
+            compression=StorageCompression.gzip,
+        )
+
+    # Delete all computation UMAPs
+    def delete_computation_umaps(
+        self,
+    ) -> None:
+        iterations = self.read_computation_umap_iterations()
+
+        for iteration in range(iterations):
+            path = f"{StoragePath.computation_umap_.value}{iteration}"
+            self.__delete_silently(path)
+
+    def read_computation_umaps(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[Dataset]:
+        computation_umaps = []
+
+        for path in self.iterate_computation_umaps(band=band, integration=integration):
+            computation_umap = self.__get(path=path)
+            computation_umaps.append(computation_umap)
+
+        return computation_umaps
+
+    def generate_mean_distances_matrix_path(
+        self,
+        band: str,
+        integration: int,
+    ) -> str:
+        path = f"{StoragePath.mean_distances_matrix.value}/{band}/{integration}"
+        return path
+
+    def write_mean_distances_matrix(
+        self,
+        band: str,
+        integration: int,
+        matrix: List[List[float]],
+    ) -> None:
+        path = self.generate_mean_distances_matrix_path(band, integration)
+        self.__write_dataset(
+            path=path,
+            data=matrix,
+            compression=StorageCompression.gzip,
+        )
+
+    # Delete all mean distances matrices
+    def delete_mean_distances_matrix(self) -> None:
+        self.__delete_silently(StoragePath.mean_distances_matrix)
+
+    def read_mean_distances_matrix(self, band: str, integration: int) -> Dataset:
+        path = self.generate_mean_distances_matrix_path(band, integration)
+        mean_distances_matrix = self.__get(path)
+        return mean_distances_matrix
+
+    def generate_autoclusters_path(
+        self,
+        band: str,
+        integration: int,
+        autocluster_index: int,
+    ) -> str:
+        path = (
+            f"{StoragePath.autocluster_.value}{autocluster_index}"
+            f"/{band}/{integration}"
+        )
+
+        return path
+
+    def iterate_autoclusters(
+        self,
+        band: str,
+        integration: int,
+    ):
+        autoclusters = self.read_config_autoclusters()
+
+        for autocluster_index in range(len(autoclusters)):
+            path = self.generate_autoclusters_path(
+                band=band,
+                integration=integration,
+                autocluster_index=autocluster_index,
+            )
+
+            yield path
+
+    def write_autocluster(
+        self,
+        band: str,
+        integration: int,
+        autocluster_index: int,
+        autocluster: List[int],
+    ) -> None:
+        path = self.generate_autoclusters_path(
+            band=band,
+            integration=integration,
+            autocluster_index=autocluster_index,
+        )
+
+        self.__write_dataset(
+            path=path,
+            data=autocluster,
+            compression=StorageCompression.gzip,
+        )
+
+    def delete_autoclusters(self) -> None:
+        autoclusters = self.read_config_autoclusters()
+
+        for autocluster_index in range(len(autoclusters)):
+            path = f"{StoragePath.autocluster_.value}{autocluster_index}"
+            self.__delete_silently(path)
+
+    def read_autoclusters(
+        self,
+        band: str,
+        integration: int,
+        autocluster_index: int,
+    ) -> Dataset:
+        path = self.generate_autoclusters_path(
+            band=band,
+            integration=integration,
+            autocluster_index=autocluster_index,
+        )
+
+        return self.__get(path)

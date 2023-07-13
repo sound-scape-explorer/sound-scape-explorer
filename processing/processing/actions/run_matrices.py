@@ -16,12 +16,14 @@ def run_matrices(env: Env):
     storage.delete_matrices()
 
     print_new_line()
-    print(f"Matrices loading: {[m for m in matrices]}")
+    print(f"Matrices list {[m for m in matrices]}")
 
     timer = Timer(len(bands) * len(integrations) * len(matrices) * len(meta_properties))
 
     for band in bands:
         for integration in integrations:
+            print(f"Matrices loaded for band {band}, integration {integration}")
+
             grouped_features = storage.read_grouped_features_all_files(
                 band=band,
                 integration=integration,

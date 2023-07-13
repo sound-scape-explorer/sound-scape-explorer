@@ -15,7 +15,7 @@ def run_groups(env: Env):
 
     for band, integration in storage.enumerate_bands_and_integrations():
         print_new_line()
-        print(f'Grouping for band "{band}", integration {integration}')
+        print(f"Grouping for band {band}, integration {integration}")
         timer = Timer(files_count)
 
         for (

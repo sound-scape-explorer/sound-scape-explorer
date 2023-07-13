@@ -16,7 +16,7 @@ def run_pairings(env: Env):
     storage.delete_pairings()
 
     print_new_line()
-    print(f"Pairings loading: {[p for p in pairings]}")
+    print(f"Pairings list {[p for p in pairings]}")
 
     timer = Timer(
         len(bands) * len(integrations) * len(pairings) * (len(meta_properties) ** 2)
@@ -24,6 +24,8 @@ def run_pairings(env: Env):
 
     for band in bands:
         for integration in integrations:
+            print(f"Pairings loaded for band {band}, integration {integration}")
+
             grouped_features = storage.read_grouped_features_all_files(
                 band=band,
                 integration=integration,

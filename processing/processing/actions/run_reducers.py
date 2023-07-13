@@ -16,12 +16,14 @@ def run_reducers(env: Env):
     storage.delete_reduced()
 
     print_new_line()
-    print(f"Reducers loading {[r.name + str(r.dimensions) for r in reducers]}")
+    print(f"Reducers list {[r.name + str(r.dimensions) for r in reducers]}")
 
     timer = Timer(len(bands) * len(integrations) * len(reducers))
 
     for band in bands:
         for integration in integrations:
+            print(f"Reducer loaded for band {band}, integration {integration}")
+
             features = storage.read_grouped_features_all_files(
                 band=band,
                 integration=integration,

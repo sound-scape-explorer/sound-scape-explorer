@@ -21,7 +21,7 @@ def run_indicators(env: Env):
     storage.delete_indicators()
 
     print_new_line()
-    print(f"Indicators loading: {[i for i in indicators]}")
+    print(f"Indicators list {[i for i in indicators]}")
 
     for (
         band_index,
@@ -29,7 +29,7 @@ def run_indicators(env: Env):
         _,
         integration,
     ) in storage.enumerate_bands_and_integrations_with_indexes():
-        print(f"Band: {band}, integration {integration}")
+        print(f"Indicators loaded for band {band}, integration {integration}")
 
         timer = Timer(len(files) * len(indicators))
 
