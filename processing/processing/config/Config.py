@@ -234,14 +234,8 @@ class Config(metaclass=SingletonMeta):
             type(payload) is float or type(payload) is numpy.float64
         ) and math.isnan(payload)
 
-    def get_umap_seed(self) -> int:
-        return self.__settings["umap_seed"]
-
     def get_expected_sample_rate(self) -> int:
         return self.__settings["expected_sample_rate"]
-
-    def get_audio_host(self) -> str:
-        return self.__settings["audio_host"]
 
     def get_files(self) -> ConfigFiles:
         return self.__files
@@ -271,27 +265,23 @@ class Config(metaclass=SingletonMeta):
         if self.__is_nan(value):
             payload = None
 
-        # TODO: Split these blocks
-        if setting == StorageSetting.umap_metric.value and value is None:
-            payload = DefaultSetting.umap_metric
+        if setting == StorageSetting.timezone.value and value is None:
+            payload = DefaultSetting.timezone
 
-        elif setting == StorageSetting.autocluster.value:
-            if value == "yes":
-                payload = True
-            else:
-                payload = DefaultSetting.autocluster
+        elif (
+            setting == StorageSetting.computation_umap_dimensions.value
+            and value is None
+        ):
+            payload = DefaultSetting.computation_umap_dimensions
 
-        elif setting == StorageSetting.autocluster_iterations.value and value is None:
-            payload = DefaultSetting.autocluster_iterations
+        elif (
+            setting == StorageSetting.computation_umap_iterations.value
+            and value is None
+        ):
+            payload = DefaultSetting.computation_umap_iterations
 
-        elif setting == StorageSetting.autocluster_min_size.value and value is None:
-            payload = DefaultSetting.autocluster_min_size
-
-        elif setting == StorageSetting.autocluster_max_size.value and value is None:
-            payload = DefaultSetting.autocluster_max_size
-
-        elif setting == StorageSetting.autocluster_threshold.value and value is None:
-            payload = DefaultSetting.autocluster_threshold
+        elif setting == StorageSetting.display_umap_seed.value and value is None:
+            payload = DefaultSetting.display_umap_seed
 
         return payload
 

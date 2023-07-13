@@ -3,7 +3,6 @@ from enum import Enum
 
 class ExcelSheet(Enum):
     help = "Help"
-    help_settings = "HelpSettings"
     help_autoclusters = "HelpAutoclusters"
     help_reducers = "HelpReducers"
     help_indicators = "HelpIndicators"
