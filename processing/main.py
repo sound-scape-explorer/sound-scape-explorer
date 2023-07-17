@@ -37,6 +37,20 @@ class Arguments:
 
 
 def run_main(args: argparse.Namespace) -> None:
+    """The main entry point after submitting command in terminal.
+
+    See available actions in map `PathByAction`.
+
+    Args:
+        args: The arguments described in the class `Arguments`.
+
+    Returns:
+        None
+
+    Raises:
+        KeyError: A non existent action has been requested.
+    """
+
     # Validate action
     actions = list(PathByAction.keys())
 
