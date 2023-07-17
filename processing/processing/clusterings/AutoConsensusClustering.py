@@ -11,6 +11,7 @@ from processing.reducers.UmapReducer import UmapReducer
 from processing.utils.print_new_line import print_new_line
 
 
+# TODO: This is unused
 class AutoConsensusClustering:
     __features: List[List[float]]
     __iterations: int
