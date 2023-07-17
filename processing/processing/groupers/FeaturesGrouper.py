@@ -8,6 +8,7 @@ from processing.constants import TIME_DELTA_MS
 from processing.utils.print_new_line import print_new_line
 
 
+# TODO: This is unused
 class FeaturesGrouper:
     __features: List[List[float]]
     __timestamps: Dataset
