@@ -2,15 +2,53 @@ from enum import Enum
 
 
 class StoragePath(Enum):
-    # Configuration
-    configuration = "/configuration"
+    """The paths for all data located in the storage file.
 
-    # Bands
+    File type: HDF
+
+    See details at
+    https://www.wikiwand.com/en/Hierarchical_Data_Format
+    """
+
+    #################
+    # Configuration #
+    #################
+
+    configuration = "/configuration"
+    """The information gathered from the configuration file.
+
+    This will contain multiple groups and datasets corresponding to each tab
+    of the user Excel configuration file.
+
+    User will need to refresh using `pnpm process:config` to update data located
+    inside the storage file.
+
+    Type: Group
+    """
+
+    #######################
+    # Configuration/Bands #
+    #######################
 
     bands = "/configuration/bands/names"
-    bands_frequencies = "/configuration/bands/frequencies"
+    """The enumeration of requested bands.
 
-    # Integrations
+    Each row contains a string.
+
+    Type: Dataset
+    """
+
+    bands_frequencies = "/configuration/bands/frequencies"
+    """The frequencies of requested bands.
+
+    Each row contains 2 columns for each integer (low and high frequency in Hertz).
+
+    Type: Dataset
+    """
+
+    ##############################
+    # Configuration/Integrations #
+    ##############################
 
     integrations = "/configuration/integrations/names"
     integrations_seconds = "/configuration/integrations/seconds"
@@ -20,13 +58,16 @@ class StoragePath(Enum):
     ranges = "/configuration/ranges/names"
     ranges_timestamps = "/configuration/ranges/timestamps"
 
-    # Files
+    #########
+    # Files #
+    #########
 
-    # Example: /files_features/{band}/{file_index}
     files = "/configuration/files/names"
+    """Example: /files_features/{band}/{file_index}
+    """
+
     files_sites = "/configuration/files/sites"
     files_metas = "/configuration/files/metas"
-
     meta_properties = "/configuration/meta/properties"
     meta_sets = "/configuration/meta/sets"
 
@@ -34,22 +75,37 @@ class StoragePath(Enum):
     # Computation UMAPs #
     #####################
 
-    # Example: /computation_umap_0/band/integration
     computation_umap_ = "/computation_umap_"
+    """Example: /computation_umap_{computation_umap_index}/{band}/{integration}
+    """
 
     #########################
     # Mean distances matrix #
     #########################
 
-    # Example: /mean_distances_matrix/band/integration
     mean_distances_matrix = "/mean_distances_matrix"
+    """Example: /mean_distances_matrix/{band}/{integration}
+    """
 
     ################
     # Autoclusters #
     ################
 
     autoclusters_names = "/configuration/autoclusters/names"
+    """The names of autoclusters requested in the configuration file.
+
+    Each row is a string referring to a particular algorithm.
+
+    See enumeration at
+    ../clusterings/ClusteringName.py
+    """
+
     autoclusters_min_cluster_sizes = "/configuration/autoclusters/min_cluster_sizes"
+    """The minimum count of elements within a given cluster.
+
+    Each row is an integer.
+    """
+
     autoclusters_min_samples = "/configuration/autoclusters/min_samples"
     autoclusters_alphas = "/configuration/autoclusters/alphas"
     autoclusters_epsilons = "/configuration/autoclusters/epsilons"
@@ -58,39 +114,41 @@ class StoragePath(Enum):
     # Features #
     ############
 
+    files_features = "/files_features"
     """The 128D features for each second of audio.
 
     The group contains one dataset per band.
     Each dataset is named after the band.
     Each row of each dataset represents one second of audio by a table of 128 floats.
 
-    Path example: /files_features/{BAND}
+    Example: /files_features/{band}
     """
-    files_features = "/files_features"
 
+    files_timestamps = "/files_timestamps"
     """The timestamps for each file.
 
     Each row is one timestamp in UNIX format.
     """
-    files_timestamps = "/files_timestamps"
 
+    files_durations = "/files_durations"
     """The audio durations in seconds for each file.
 
     Each rows is the audio length in seconds for given file index.
     """
-    files_durations = "/files_durations"
 
+    files_group_counts = "/files_groups_count"
     """The groups count for each file.
 
     The group contains one dataset per integration.
     Each dataset is named after the integration value.
     Each row represents how many groups (integrations) have been processed.
 
-    Path example: /files_groups_count/{INTEGRATION}
+    Example: /files_groups_count/{INTEGRATION}
     """
-    files_group_counts = "/files_groups_count"
 
-    # Actions
+    ############
+    # Reducers #
+    ############
 
     reducers = "/configuration/reducers/names"
     reducers_dimensions = "/configuration/reducers/dimensions"
@@ -98,35 +156,51 @@ class StoragePath(Enum):
     reducers_integrations = "/configuration/reducers/integrations"
     reducers_ranges = "/configuration/reducers/ranges"
 
-    indicators = "/configuration/indicators"
-    volumes = "/configuration/volumes"
-    matrices = "/configuration/matrices"
-    pairings = "/configuration/pairings"
+    ###########
+    # Grouped #
+    ###########
 
-    # Grouped
-
-    # Example: /grouped_features/{band}/{integration}/{file_index}
     grouped_features = "/grouped_features"
+    """Example: /grouped_features/{band}/{integration}/{file_index}
+    """
+
     grouped_timestamps = "/grouped_timestamps"
 
-    # Reduced
+    ###########
+    # Reduced #
+    ###########
 
-    # Example: /reduced_{reducer_index}
     reduced_ = "/reduced_"
+    """Example: /reduced_{reducer_index}/{band}/{integration}
+    """
 
-    # Indicators
+    ################
+    # Trajectories #
+    ################
 
-    indicator_ = "/indicator_"
-
-    # Volumes
-    volume_ = "/volume_"
+    trajectory_ = "/trajectory_"
+    """Example: /trajectory_{reducer_index}/{band}/{integration}
+    """
 
     ###############
     # Autocluster #
     ###############
 
-    # Example: /autocluster_0/{band}/{integration}
     autocluster_ = "/autocluster_"
+    """Example: /autocluster_{autocluster_index}/{band}/{integration}
+    """
+
+    # Actions
+    indicators = "/configuration/indicators"
+    volumes = "/configuration/volumes"
+    matrices = "/configuration/matrices"
+    pairings = "/configuration/pairings"
+
+    # Indicators
+    indicator_ = "/indicator_"
+
+    # Volumes
+    volume_ = "/volume_"
 
     # Matrices
     matrix_ = "/matrix_"
