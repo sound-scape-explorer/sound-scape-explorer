@@ -43,14 +43,21 @@ def run_dataframe(
 
     # Timestamps
     payload["group_timestamp"] = []
-    for group_timestamp in storage.read_grouped_timestamps(band, integration):
+    for group_timestamp in storage.read_grouped_timestamps(
+        band=band, integration=integration
+    ):
         payload["group_timestamp"].append(group_timestamp[0])
 
     # Autocluster
-    try:
-        payload["meta_AUTOCLUSTER"] = storage.read_autocluster(band, integration)
-    except KeyError:
-        print("Autocluster data not found!")
+    autoclusters = storage.read_autoclusters(band=band, integration=integration)
+    for autocluster_index, autocluster in enumerate(autoclusters):
+        for file_index, groups_count, _, _, _ in storage.enumerate_files(
+            band=band, integration=integration
+        ):
+            for group_index in range(groups_count):
+                label = f"autocluster_{autocluster_index}"
+                value = autocluster[file_index]
+                payload[label] = value
 
     # Metas
     files = storage.read_config_files()

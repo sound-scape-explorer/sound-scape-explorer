@@ -1543,7 +1543,7 @@ class Storage(metaclass=SingletonMeta):
     ) -> str:
         return f"{StoragePath.computation_umap_.value}{index}/{band}/{integration}"
 
-    def iterate_computation_umaps(self, band: str, integration: int):
+    def enumerate_computation_umaps(self, band: str, integration: int):
         iterations = self.read_computation_umap_iterations()
 
         for iteration in range(iterations):
@@ -1587,7 +1587,9 @@ class Storage(metaclass=SingletonMeta):
     ) -> List[Dataset]:
         computation_umaps = []
 
-        for path in self.iterate_computation_umaps(band=band, integration=integration):
+        for path in self.enumerate_computation_umaps(
+            band=band, integration=integration
+        ):
             computation_umap = self.__get(path=path)
             computation_umaps.append(computation_umap)
 
@@ -1636,21 +1638,21 @@ class Storage(metaclass=SingletonMeta):
 
         return path
 
-    def iterate_autoclusters(
+    def enumerate_autoclusters(
         self,
         band: str,
         integration: int,
-    ):
+    ) -> Generator[Tuple[int, str], None, None]:
         autoclusters = self.read_config_autoclusters()
 
-        for autocluster_index in range(len(autoclusters)):
+        for index in range(len(autoclusters)):
             path = self.generate_autoclusters_path(
                 band=band,
                 integration=integration,
-                autocluster_index=autocluster_index,
+                autocluster_index=index,
             )
 
-            yield path
+            yield index, path
 
     def write_autocluster(
         self,
@@ -1678,7 +1680,7 @@ class Storage(metaclass=SingletonMeta):
             path = f"{StoragePath.autocluster_.value}{autocluster_index}"
             self.__delete_silently(path)
 
-    def read_autoclusters(
+    def read_autocluster(
         self,
         band: str,
         integration: int,
@@ -1691,3 +1693,21 @@ class Storage(metaclass=SingletonMeta):
         )
 
         return self.__get(path)
+
+    def read_autoclusters(
+        self,
+        band: str,
+        integration: int,
+    ) -> List[Dataset]:
+        autoclusters = []
+
+        for index, _ in self.enumerate_autoclusters(band, integration):
+            autocluster = self.read_autocluster(
+                band=band,
+                integration=integration,
+                autocluster_index=index,
+            )
+
+            autoclusters.append(autocluster)
+
+        return autoclusters
