@@ -26,56 +26,53 @@ def run_autoclusters(env: Env):
 
     timer = Timer(len(bands) * len(integrations) * len(config_autoclusters))
 
-    for band in bands:
-        for integration in integrations:
-            for config_autocluster in config_autoclusters:
-                print(f"Autocluster loaded for band {band}, integration {integration}")
+    for band, integration in storage.enumerate_bands_and_integrations():
+        for config_autocluster in config_autoclusters:
+            print(f"Autocluster loaded for band {band}, integration {integration}")
 
-                if config_autocluster.name == ClusteringName.hdbscan_eom.value:
-                    method = "eom"
-                elif config_autocluster.name == ClusteringName.hdbscan_leaf.value:
-                    method = "leaf"
-                else:
-                    raise KeyError(
-                        f"Clustering name {config_autocluster.name} not found"
-                    )
+            if config_autocluster.name == ClusteringName.hdbscan_eom.value:
+                method = "eom"
+            elif config_autocluster.name == ClusteringName.hdbscan_leaf.value:
+                method = "leaf"
+            else:
+                raise KeyError(f"Clustering name {config_autocluster.name} not found")
 
-                alpha = float(config_autocluster.alpha)
-                epsilon = float(config_autocluster.epsilon)
+            alpha = float(config_autocluster.alpha)
+            epsilon = float(config_autocluster.epsilon)
 
-                clustering = HDBSCAN(
-                    min_cluster_size=config_autocluster.min_cluster_size,
-                    min_samples=config_autocluster.min_samples,
-                    alpha=alpha,
-                    cluster_selection_epsilon=epsilon,
-                    cluster_selection_method=method,
-                    metric="precomputed",
-                    p=None,
-                    algorithm="best",
-                    leaf_size=50,
-                    approx_min_span_tree=True,
-                    gen_min_span_tree=False,
-                    core_dist_n_jobs=-1,
-                    match_reference_implementation=False,
-                )
+            clustering = HDBSCAN(
+                min_cluster_size=config_autocluster.min_cluster_size,
+                min_samples=config_autocluster.min_samples,
+                alpha=alpha,
+                cluster_selection_epsilon=epsilon,
+                cluster_selection_method=method,
+                metric="precomputed",
+                p=None,
+                algorithm="best",
+                leaf_size=50,
+                approx_min_span_tree=True,
+                gen_min_span_tree=False,
+                core_dist_n_jobs=-1,
+                match_reference_implementation=False,
+            )
 
-                mean_distances_matrix = storage.read_mean_distances_matrix(
-                    band=band,
-                    integration=integration,
-                )
+            mean_distances_matrix = storage.read_mean_distances_matrix(
+                band=band,
+                integration=integration,
+            )
 
-                clustering.fit(mean_distances_matrix[:])
+            clustering.fit(mean_distances_matrix[:])
 
-                autocluster: List[int] = clustering.labels_.tolist()
+            autocluster: List[int] = clustering.labels_.tolist()
 
-                storage.write_autocluster(
-                    band=band,
-                    integration=integration,
-                    autocluster_index=config_autocluster.index,
-                    autocluster=autocluster,
-                )
+            storage.write_autocluster(
+                band=band,
+                integration=integration,
+                autocluster_index=config_autocluster.index,
+                autocluster=autocluster,
+            )
 
-                timer.progress()
+            timer.progress()
 
 
 if __name__ == "__main__":

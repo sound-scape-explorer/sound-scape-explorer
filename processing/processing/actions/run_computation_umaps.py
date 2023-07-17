@@ -24,29 +24,28 @@ def run_computation_umaps(env: Env):
         f" dimensions {computation_umap_dimensions}"
     )
 
-    for band in bands:
-        for integration in integrations:
-            grouped_features = storage.read_grouped_features(
-                band=band, integration=integration
+    for band, integration in storage.enumerate_bands_and_integrations():
+        grouped_features = storage.read_grouped_features(
+            band=band, integration=integration
+        )
+
+        for computation_index in range(computation_umap_iterations):
+            umap = UmapReducer(
+                target_dimensions=computation_umap_dimensions,
+                seed=None,
+                min_dist=0,
             )
 
-            for computation_index in range(computation_umap_iterations):
-                umap = UmapReducer(
-                    target_dimensions=computation_umap_dimensions,
-                    seed=None,
-                    min_dist=0,
-                )
+            reduced_features = umap.reduce(features=grouped_features[:])
 
-                reduced_features = umap.reduce(features=grouped_features[:])
+            storage.write_computation_umap(
+                band=band,
+                integration=integration,
+                computation_index=computation_index,
+                features=reduced_features,
+            )
 
-                storage.write_computation_umap(
-                    band=band,
-                    integration=integration,
-                    computation_index=computation_index,
-                    features=reduced_features,
-                )
-
-                timer.progress()
+            timer.progress()
 
 
 if __name__ == "__main__":

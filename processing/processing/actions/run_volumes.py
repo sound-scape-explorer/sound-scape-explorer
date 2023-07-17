@@ -24,37 +24,36 @@ def run_volumes(env: Env):
 
     timer = Timer(len(bands) * len(integrations) * len(volumes) * len(meta_properties))
 
-    for band in bands:
-        for integration in integrations:
-            print(f"Volumes loaded for band {band}, integration {integration}")
+    for band, integration in storage.enumerate_bands_and_integrations():
+        print(f"Volumes loaded for band {band}, integration {integration}")
 
-            grouped_features = storage.read_grouped_features_all_files(
-                band=band,
-                integration=integration,
-            )
+        grouped_features = storage.read_grouped_features_all_files(
+            band=band,
+            integration=integration,
+        )
 
-            meta_values = storage.read_meta_values(band=band, integration=integration)
+        meta_values = storage.read_meta_values(band=band, integration=integration)
 
-            for volume_index, volume_name in enumerate(volumes):
-                for meta_index in storage.enumerate_meta_properties():
-                    meta_property_values = meta_values[meta_index]
+        for volume_index, volume_name in enumerate(volumes):
+            for meta_index in storage.enumerate_meta_properties():
+                meta_property_values = meta_values[meta_index]
 
-                    volume = Volume(
-                        name=volume_name,
-                        band=band,
-                        integration=integration,
-                        volume_index=volume_index,
-                        meta_index=meta_index,
-                        features=grouped_features[:],
-                        labels=meta_property_values,
-                    )
+                volume = Volume(
+                    name=volume_name,
+                    band=band,
+                    integration=integration,
+                    volume_index=volume_index,
+                    meta_index=meta_index,
+                    features=grouped_features[:],
+                    labels=meta_property_values,
+                )
 
-                    if volume is None:
-                        continue
+                if volume is None:
+                    continue
 
-                    volume.calculate()
-                    volume.store(storage)
-                    timer.progress()
+                volume.calculate()
+                volume.store(storage)
+                timer.progress()
 
 
 if __name__ == "__main__":

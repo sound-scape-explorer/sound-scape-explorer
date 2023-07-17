@@ -9,34 +9,30 @@ def run_mean_distances_matrix(env: Env):
 
     storage.delete_mean_distances_matrix()
 
-    bands = storage.get_bands()
-    integrations = storage.get_integrations_seconds()
-
     print_new_line()
     print("Mean distances matrix requested")
 
-    for band in bands:
-        for integration in integrations:
-            print(
-                f"Mean distances matrix loaded for band {band}"
-                f", integration {integration}"
-            )
+    for band, integration in storage.enumerate_bands_and_integrations():
+        print(
+            f"Mean distances matrix loaded for band {band}"
+            f", integration {integration}"
+        )
 
-            computation_umaps = storage.read_computation_umaps(
-                band=band, integration=integration
-            )
+        computation_umaps = storage.read_computation_umaps(
+            band=band, integration=integration
+        )
 
-            mean_distances_matrix = MeanDistancesMatrix(
-                umaps=computation_umaps,
-            )
+        mean_distances_matrix = MeanDistancesMatrix(
+            umaps=computation_umaps,
+        )
 
-            matrix = mean_distances_matrix.calculate()
+        matrix = mean_distances_matrix.calculate()
 
-            storage.write_mean_distances_matrix(
-                band=band,
-                integration=integration,
-                matrix=matrix,
-            )
+        storage.write_mean_distances_matrix(
+            band=band,
+            integration=integration,
+            matrix=matrix,
+        )
 
 
 if __name__ == "__main__":
