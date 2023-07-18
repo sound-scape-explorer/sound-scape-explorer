@@ -9,6 +9,7 @@ import pandas
 from numpy import nan
 from pandas import DataFrame, Series, Timestamp
 
+from processing.clusterings.Clustering import Clustering
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigAutocluster import ConfigAutocluster, ConfigAutoclusters
 from processing.config.ConfigBand import ConfigBand, ConfigBands
@@ -581,6 +582,8 @@ class Config(metaclass=SingletonMeta):
         epsilons = self.__parse_column(sheet, ExcelAutocluster.epsilon)
 
         for index, autocluster_name in enumerate(autoclusters):
+            Clustering.validate_name(autocluster_name)
+
             autocluster = ConfigAutocluster(
                 index=index,
                 name=autocluster_name,
