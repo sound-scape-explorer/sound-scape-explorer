@@ -9,6 +9,8 @@ from processing.reducers.VaeReducer import VaeReducer
 
 
 class Reducer:
+    names = set(name.value for name in ReducerName)
+
     def __new__(
         cls,
         name: str,
@@ -52,9 +54,7 @@ class Reducer:
         Raises:
             KeyError: An error occured because the reducer name has not been found.
         """
-        names = set(name.value for name in ReducerName)
-
-        if name in names:
+        if name in Reducer.names:
             return
 
         raise KeyError(f"Reducer {name} not found!")
