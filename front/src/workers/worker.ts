@@ -129,7 +129,6 @@ export async function readMetas(file: File, band: string, integration: number) {
   const metas: StorageMetas = {};
 
   const autoclusters = await readAutoclusters(file, band, integration);
-  console.log(autoclusters);
 
   if (autoclusters.length > 0) {
     let a = 0;
