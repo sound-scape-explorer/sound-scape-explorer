@@ -35,7 +35,7 @@ class StoragePath(Enum):
     # INFO: This allows duplicates that can cause collisions because bands
     # are referenced by their names and not absolute indexes.
     # A solution would be to reference by index or force user to have unique names.
-    bands = "/configuration/bands/names"
+    bands_names = "/configuration/bands/names"
     """The names of specified bands.
 
     Each row contains a string.
@@ -59,7 +59,7 @@ class StoragePath(Enum):
 
     # INFO: This allows duplicates thus can cause collisions.
     # See `Configuration/Bands` annotation for more details.
-    integrations = "/configuration/integrations/names"
+    integrations_names = "/configuration/integrations/names"
     """The names of specified integrations.
 
     Each row contains a string.
@@ -83,7 +83,7 @@ class StoragePath(Enum):
 
     # INFO: This allows duplicates thus can cause collisions.
     # See `Configuration/Bands` annotation for more details.
-    ranges = "/configuration/ranges/names"
+    ranges_names = "/configuration/ranges/names"
     """The names of specified ranges.
 
     Each row contains a string.
@@ -535,6 +535,7 @@ class StoragePath(Enum):
     # Data/Trajectory #
     ###################
 
+    # TODO: Assert the need of this. All can be done in Front.
     trajectory_ = "/trajectory_"
     """The trajectories for each reduction.
 

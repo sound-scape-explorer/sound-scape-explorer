@@ -162,14 +162,14 @@ class Storage(metaclass=SingletonMeta):
             raise KeyError(f"Could not get path: {path}")
 
     def get_ranges(self) -> AsStrWrapper:
-        dataset = self.__get(StoragePath.ranges)
+        dataset = self.__get(StoragePath.ranges_names)
         return dataset.asstr()
 
     def get_ranges_timestamps(self) -> Dataset:
         return self.__get(StoragePath.ranges_timestamps)
 
     def get_bands(self) -> List[str]:
-        dataset = self.__get(StoragePath.bands)
+        dataset = self.__get(StoragePath.bands_names)
         bands = list(dataset.asstr()[:])
         return bands
 
@@ -412,7 +412,7 @@ class Storage(metaclass=SingletonMeta):
         return metas
 
     def get_integrations(self) -> List[str]:
-        dataset = self.__get(StoragePath.integrations)
+        dataset = self.__get(StoragePath.integrations_names)
         integrations = list(dataset.asstr()[:])
         return integrations
 
@@ -486,9 +486,9 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.files_metas)
         self.__delete_silently(StoragePath.meta_properties)
         self.__delete_silently(StoragePath.meta_sets)
-        self.__delete_silently(StoragePath.bands)
+        self.__delete_silently(StoragePath.bands_names)
         self.__delete_silently(StoragePath.bands_frequencies)
-        self.__delete_silently(StoragePath.integrations)
+        self.__delete_silently(StoragePath.integrations_names)
         self.__delete_silently(StoragePath.integrations_seconds)
         self.__delete_silently(StoragePath.reducers)
         self.__delete_silently(StoragePath.reducers_dimensions)
@@ -580,7 +580,7 @@ class Storage(metaclass=SingletonMeta):
         timestamps: Any,
     ) -> None:
         self.__write_dataset(
-            StoragePath.ranges,
+            StoragePath.ranges_names,
             ranges,
         )
 
@@ -596,7 +596,7 @@ class Storage(metaclass=SingletonMeta):
         frequencies: Any,
     ) -> None:
         self.__write_dataset(
-            StoragePath.bands,
+            StoragePath.bands_names,
             bands,
         )
 
@@ -612,7 +612,7 @@ class Storage(metaclass=SingletonMeta):
         integrations_seconds: List[int],
     ) -> None:
         self.__write_dataset(
-            path=StoragePath.integrations,
+            path=StoragePath.integrations_names,
             data=integrations,
         )
 
@@ -1138,14 +1138,14 @@ class Storage(metaclass=SingletonMeta):
         return self.exists_dataset(path)
 
     def is_defined_ranges(self) -> bool:
-        return self.exists_dataset(StoragePath.ranges.value) and self.exists_dataset(
-            StoragePath.ranges_timestamps.value
-        )
+        return self.exists_dataset(
+            StoragePath.ranges_names.value
+        ) and self.exists_dataset(StoragePath.ranges_timestamps.value)
 
     def is_defined_bands(self) -> bool:
-        return self.exists_dataset(StoragePath.bands.value) and self.exists_dataset(
-            StoragePath.bands_frequencies.value
-        )
+        return self.exists_dataset(
+            StoragePath.bands_names.value
+        ) and self.exists_dataset(StoragePath.bands_frequencies.value)
 
     @staticmethod
     def make_rectangular(
