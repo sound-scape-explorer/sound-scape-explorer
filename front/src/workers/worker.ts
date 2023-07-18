@@ -119,6 +119,7 @@ export async function readFilesMetas(file: File) {
 
 export async function readMetas(file: File, band: string, integration: number) {
   const h5 = await load(file);
+
   const metaProperties = h5.get(StoragePath.meta_properties) as Dataset;
   const metaPropertiesList = metaProperties.to_array() as string[];
 
@@ -127,17 +128,21 @@ export async function readMetas(file: File, band: string, integration: number) {
 
   const metas: StorageMetas = {};
 
-  const autoclusterPath = `${StoragePath.autocluster}/${band}/${integration}`;
-  const autocluster = h5.get(autoclusterPath) as Dataset | null;
+  const autoclusters = await readAutoclusters(file, band, integration);
+  console.log(autoclusters);
 
-  if (autocluster !== null) {
-    const autoclusterList = new Set(
-      (autocluster.to_array() as number[])
-        .map((n) => n.toString())
-        .sort((a, b) => a.localeCompare(b, undefined, {numeric: true})),
-    );
+  if (autoclusters.length > 0) {
+    let a = 0;
+    for (const autocluster of autoclusters) {
+      const autoclusterList = new Set(
+        autocluster
+          .map((n) => n.toString())
+          .sort((a, b) => a.localeCompare(b, undefined, {numeric: true})),
+      );
 
-    metas['AUTOCLUSTER'] = [...autoclusterList];
+      metas[`AUTOCLUSTER_${a}`] = [...autoclusterList];
+      a += 1;
+    }
   }
 
   for (let i = 0; i < metaPropertiesList.length; i += 1) {
@@ -261,22 +266,31 @@ export async function readReducedFeatures(
   return featuresList;
 }
 
-export async function readAutocluster(
+export async function readAutoclusters(
   file: File,
   band: string,
   integration: number,
-): Promise<number[]> {
+): Promise<number[][]> {
   const h5 = await load(file);
-  const path = `${StoragePath.autocluster}/${band}/${integration}`;
-  const autoclusterDatasetOrNull = h5.get(path) as Dataset | null;
 
-  if (autoclusterDatasetOrNull === null) {
+  const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
+  const namesList = namesDataset.to_array() as string[];
+  const namesCount = namesList.length;
+
+  if (namesCount === 0) {
     return [];
   }
 
-  const autoclusterFlat = autoclusterDatasetOrNull.to_array() as number[];
+  const autoclusters = [];
 
-  return autoclusterFlat;
+  for (let i = 0; i < namesCount; i += 1) {
+    const path = `${StoragePath.autocluster_}${i}/${band}/${integration}`;
+    const dataset = h5.get(path) as Dataset;
+    const values = dataset.to_array() as number[];
+    autoclusters.push(values);
+  }
+
+  return autoclusters;
 }
 
 export async function readIndicators(
@@ -494,7 +508,7 @@ export async function readGroupedMetas(
 ) {
   const files = await readFilenames(file);
   const filesMetas = await readFilesMetas(file);
-  const autocluster = await readAutocluster(file, band, integration);
+  const autoclusters = await readAutoclusters(file, band, integration);
   const groupCounts = await readFilesGroupCounts(file, integration);
 
   const groupedMetas: string[][][] = [];
@@ -507,8 +521,10 @@ export async function readGroupedMetas(
     for (let g = 0; g < groupCount; g += 1) {
       let metas: string[] = [];
 
-      if (autocluster.length > 0) {
-        metas = [autocluster[pointIndex].toString()];
+      if (autoclusters.length > 0) {
+        for (const autocluster of autoclusters) {
+          metas.push(autocluster[pointIndex].toString());
+        }
       }
 
       metas = [...metas, ...filesMetas[f]];
