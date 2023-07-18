@@ -48,7 +48,7 @@ def run_main(args: argparse.Namespace) -> None:
         None
 
     Raises:
-        KeyError: A non existent action has been requested.
+        KeyError: An error occured because the action has not been found.
     """
 
     # Validate action
