@@ -1,6 +1,6 @@
 from typing import List
 
-from hdbscan.hdbscan_ import HDBSCAN
+from hdbscan import HDBSCAN
 
 from processing.clusterings.ClusteringName import ClusteringName
 from processing.common.Env import Env
