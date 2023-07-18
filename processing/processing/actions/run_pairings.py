@@ -7,13 +7,15 @@ from processing.utils.print_new_line import print_new_line
 
 def run_pairings(env: Env):
     storage = Storage(path=env.storage)
+    pairings = storage.read_pairings()
+    storage.delete_pairings()
+
+    if len(pairings) == 0:
+        return
 
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
     meta_properties = storage.read_meta_properties()
-    pairings = storage.read_pairings()
-
-    storage.delete_pairings()
 
     print_new_line()
     print(f"Pairings list {[p for p in pairings]}")

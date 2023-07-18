@@ -8,8 +8,8 @@ from processing.utils.print_new_line import print_new_line
 
 def run_indicators(env: Env):
     storage = Storage(path=env.storage)
-
     indicators = storage.read_indicators()
+    storage.delete_indicators()
 
     if len(indicators) == 0:
         return
@@ -17,8 +17,6 @@ def run_indicators(env: Env):
     files = storage.read_files()
     bands_frequencies = storage.get_bands_frequencies()
     audio_path = storage.read_audio_path()
-
-    storage.delete_indicators()
 
     print_new_line()
     print(f"Indicators list {[i for i in indicators]}")

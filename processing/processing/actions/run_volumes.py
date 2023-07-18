@@ -7,8 +7,8 @@ from processing.volumes.Volume import Volume
 
 def run_volumes(env: Env):
     storage = Storage(path=env.storage)
-
     volumes = storage.read_volumes()
+    storage.delete_volumes()
 
     if len(volumes) == 0:
         return
@@ -16,8 +16,6 @@ def run_volumes(env: Env):
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
     meta_properties = storage.read_meta_properties()
-
-    storage.delete_volumes()
 
     print_new_line()
     print(f"Volumes list {[v for v in volumes]}")

@@ -432,19 +432,6 @@ class Storage(metaclass=SingletonMeta):
 
         return files_features_dataset, files_durations_dataset, files_count
 
-    # TODO: To Remove
-    def get_file_features(
-        self,
-        band_name: str,
-        file_index: int,
-    ) -> Dataset:
-        path = self.__get_file_features_path(
-            band_name,
-            file_index,
-        )
-
-        return self.__get(path)
-
     def __delete_silently(
         self,
         path: Union[StoragePath, str],
@@ -456,6 +443,16 @@ class Storage(metaclass=SingletonMeta):
                 del self.__file[path.value]
         except KeyError:
             return
+
+    def __delete_all_paths_starting_with(
+        self,
+        storage_path: StoragePath,
+    ) -> None:
+        for key in self.__file.keys():
+            path = f"/{key}"
+
+            if path.startswith(storage_path.value):
+                self.__delete_silently(path)
 
     def delete_file_features(
         self,
@@ -993,11 +990,7 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_indicators(self) -> None:
-        indicators = self.read_indicators()
-
-        for index, _ in enumerate(indicators):
-            path = f"{StoragePath.indicator_.value}{index}"
-            self.__delete_silently(path)
+        self.__delete_all_paths_starting_with(StoragePath.indicator_)
 
     def write_indicator(
         self,
@@ -1058,9 +1051,7 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_pairings(self) -> None:
-        for p, _ in enumerate([0]):
-            path = f"{StoragePath.pairing_.value}{p}"
-            self.__delete_silently(path)
+        self.__delete_all_paths_starting_with(StoragePath.pairing_)
 
     def write_matrix(
         self,
@@ -1079,23 +1070,13 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_matrices(self) -> None:
-        for m, _ in enumerate([0, 1, 2]):
-            path = f"{StoragePath.matrix_.value}{m}"
-            self.__delete_silently(path)
+        self.__delete_all_paths_starting_with(StoragePath.matrix_)
 
     def delete_volumes(self) -> None:
-        volumes = self.read_volumes()
-
-        for v, _ in enumerate(volumes):
-            path = f"{StoragePath.volume_.value}{v}"
-            self.__delete_silently(path)
+        self.__delete_all_paths_starting_with(StoragePath.volume_)
 
     def delete_reduced(self) -> None:
-        reducers = self.read_reducers()
-
-        for index, _ in enumerate(reducers):
-            path = f"{StoragePath.reduced_.value}{index}"
-            self.__delete_silently(path)
+        self.__delete_all_paths_starting_with(StoragePath.reduced_)
 
     def write_metas(
         self,
@@ -1570,15 +1551,10 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    # Delete all computation UMAPs
     def delete_computation_umaps(
         self,
     ) -> None:
-        iterations = self.read_computation_umap_iterations()
-
-        for iteration in range(iterations):
-            path = f"{StoragePath.computation_umap_.value}{iteration}"
-            self.__delete_silently(path)
+        self.__delete_all_paths_starting_with(StoragePath.computation_umap_)
 
     def read_computation_umaps(
         self,
@@ -1674,11 +1650,7 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def delete_autoclusters(self) -> None:
-        autoclusters = self.read_config_autoclusters()
-
-        for autocluster_index in range(len(autoclusters)):
-            path = f"{StoragePath.autocluster_.value}{autocluster_index}"
-            self.__delete_silently(path)
+        self.__delete_all_paths_starting_with(StoragePath.autocluster_)
 
     def read_autocluster(
         self,

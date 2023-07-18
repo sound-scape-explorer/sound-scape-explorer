@@ -12,11 +12,10 @@ from processing.utils.print_new_line import print_new_line
 def run_autoclusters(env: Env):
     storage = Storage(path=env.storage)
     config_autoclusters = storage.read_config_autoclusters()
+    storage.delete_autoclusters()
 
     if len(config_autoclusters) == 0:
         return
-
-    storage.delete_autoclusters()
 
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
@@ -28,7 +27,10 @@ def run_autoclusters(env: Env):
 
     for band, integration in storage.enumerate_bands_and_integrations():
         for config_autocluster in config_autoclusters:
-            print(f"Autocluster loaded for band {band}, integration {integration}")
+            print(
+                f"Autocluster '{config_autocluster.name}' loaded"
+                f" for band {band}, integration {integration}"
+            )
 
             if config_autocluster.name == ClusteringName.hdbscan_eom.value:
                 method = "eom"

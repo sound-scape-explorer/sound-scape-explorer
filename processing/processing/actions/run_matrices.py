@@ -7,13 +7,15 @@ from processing.utils.print_new_line import print_new_line
 
 def run_matrices(env: Env):
     storage = Storage(path=env.storage)
+    matrices = storage.read_matrices()
+    storage.delete_matrices()
+
+    if len(matrices) == 0:
+        return
 
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
     meta_properties = storage.read_meta_properties()
-    matrices = storage.read_matrices()
-
-    storage.delete_matrices()
 
     print_new_line()
     print(f"Matrices list {[m for m in matrices]}")

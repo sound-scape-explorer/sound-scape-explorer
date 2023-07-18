@@ -7,13 +7,15 @@ from processing.utils.print_new_line import print_new_line
 
 def run_reducers(env: Env):
     storage = Storage(path=env.storage)
+    reducers = storage.get_config_reducers()
+    storage.delete_reduced()
+
+    if len(reducers) == 0:
+        return
 
     bands = storage.get_bands()
     integrations = storage.get_integrations_seconds()
-    reducers = storage.get_config_reducers()
     seed = storage.read_display_umap_seed()
-
-    storage.delete_reduced()
 
     print_new_line()
     print(f"Reducers list {[r.name + str(r.dimensions) for r in reducers]}")
