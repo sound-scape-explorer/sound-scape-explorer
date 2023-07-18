@@ -174,11 +174,11 @@ Python's package manager in order to install the dependencies.
 
 > **Note**
 >
-> Using the recommended version to ensure
+> Use the recommended version to ensure
 > not encountering unexpected errors during the installation.
 
 After installing Python and its package manager,
-please run these commands.
+please run these commands:
 
 ```bash
 python3 --version
