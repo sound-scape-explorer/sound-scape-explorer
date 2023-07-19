@@ -12,6 +12,7 @@ from processing.config.ConfigAutocluster import ConfigAutocluster, ConfigAutoclu
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
+from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.storage.StorageCompression import StorageCompression
@@ -1592,7 +1593,6 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    # Delete all mean distances matrices
     def delete_mean_distances_matrix(self) -> None:
         self.__delete_silently(StoragePath.mean_distances_matrix)
 
@@ -1683,3 +1683,56 @@ class Storage(metaclass=SingletonMeta):
             autoclusters.append(autocluster)
 
         return autoclusters
+
+    def delete_trajectories(self):
+        self.__delete_all_paths_starting_with(StoragePath.trajectory_)
+
+    def enumerate_trajectories(self):
+        pass
+
+    def generate_trajectory_path(
+        self,
+        band: str,
+        integration: int,
+        reducer_index: int,
+    ) -> str:
+        return f"{StoragePath.trajectory_.value}{reducer_index}/{band}/{integration}"
+
+    def read_config_trajectories(self):
+        names_dataset = self.__get(StoragePath.trajectories_names)
+
+        names = self.convert_dataset_to_string_list(names_dataset)
+        starts = self.__get(StoragePath.trajectories_starts)[:]
+        ends = self.__get(StoragePath.trajectories_ends)[:]
+
+        trajectories = ConfigTrajectory.reconstruct(
+            names=names,
+            starts=starts,
+            ends=ends,
+        )
+
+        return trajectories
+
+    def write_config_trajectories(
+        self,
+        trajectories: List[ConfigTrajectory],
+    ) -> None:
+        names, starts, ends = ConfigTrajectory.flatten(trajectories=trajectories)
+
+        self.__write_dataset(
+            path=StoragePath.trajectories_names,
+            data=names,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.trajectories_starts,
+            data=starts,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.trajectories_ends,
+            data=ends,
+        )
+
+    def write_trajectory(self):
+        pass

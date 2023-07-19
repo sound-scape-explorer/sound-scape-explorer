@@ -15,6 +15,7 @@ class ExcelSheet(Enum):
     integrations = "Integrations"
     ranges = "Ranges"
     autoclusters = "Autoclusters"
+    trajectories = "Trajectories"
     reducers = "Reducers"
     indicators = "Indicators"
     volumes = "Volumes"

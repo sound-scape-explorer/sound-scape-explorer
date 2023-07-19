@@ -1,8 +1,7 @@
-import datetime
 import math
 from enum import Enum
 from pathlib import Path
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 
 import numpy
 import pandas
@@ -17,6 +16,7 @@ from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigIntegration import ConfigIntegration, ConfigIntegrations
 from processing.config.ConfigRange import ConfigRange, ConfigRanges
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
+from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ExcelAutocluster import ExcelAutocluster
 from processing.config.ExcelBand import ExcelBand
 from processing.config.ExcelFile import ExcelFile
@@ -28,6 +28,7 @@ from processing.config.ExcelRange import ExcelRange
 from processing.config.ExcelReducer import ExcelReducer
 from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
+from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
 from processing.indicators.Indicator import Indicator
 from processing.matrices.Matrix import Matrix
@@ -36,6 +37,7 @@ from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
+from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
 from processing.utils.get_uniques_from_list import get_uniques_from_list
 from processing.utils.print_new_line import print_new_line
 from processing.volumes.Volume import Volume
@@ -52,6 +54,7 @@ class Config(metaclass=SingletonMeta):
     __ranges: ConfigRanges = {}
     __all_sites: List[str] = []
     __autoclusters: ConfigAutoclusters = []
+    __trajectories: List[ConfigTrajectory] = []
     __reducers: ConfigReducers = []
     __indicators: List[str] = []
     __volumes: List[str] = []
@@ -100,12 +103,17 @@ class Config(metaclass=SingletonMeta):
     @staticmethod
     def __parse_column(
         sheet: DataFrame,
-        column: Union[str, Enum],
-    ) -> DataFrame:
-        if type(column) is str:
-            return sheet[column]
+        column: Enum,
+        suffix: Optional[str] = None,
+    ) -> List:
+        if suffix is not None:
+            path = f"{column.value}{suffix}"
+        else:
+            path = column.value
 
-        return sheet[column.value]  # type: ignore
+        series = sheet[path]
+        list_ = [value for value in series]
+        return list_
 
     def __read(self) -> None:
         self.__read_settings()
@@ -117,6 +125,7 @@ class Config(metaclass=SingletonMeta):
         self.__read_ranges()
 
         self.__read_autoclusters()
+        self.__read_trajectories()
         self.__read_reducers()
         self.__read_indicators()
         self.__read_volumes()
@@ -140,6 +149,7 @@ class Config(metaclass=SingletonMeta):
         self.__store_ranges(storage)
 
         self.__store_autoclusters(storage)
+        self.__store_trajectories(storage)
         self.__store_reducers(storage)
         self.__store_indicators(storage)
         self.__store_volumes(storage)
@@ -170,6 +180,12 @@ class Config(metaclass=SingletonMeta):
             alphas=alphas,
             epsilons=epsilons,
         )
+
+    def __store_trajectories(
+        self,
+        storage: Storage,
+    ) -> None:
+        storage.write_config_trajectories(trajectories=self.__trajectories)
 
     def __store_reducers(
         self,
@@ -249,8 +265,9 @@ class Config(metaclass=SingletonMeta):
 
     def __read_settings(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.settings)
-        settings = self.__parse_column(sheet, ExcelSetting.setting.value)
-        values = self.__parse_column(sheet, ExcelSetting.value_.value)
+
+        settings = self.__parse_column(sheet, ExcelSetting.setting)
+        values = self.__parse_column(sheet, ExcelSetting.value_)
 
         for index, setting in enumerate(settings):
             value = self.__digest_setting(setting, values[index])
@@ -294,12 +311,6 @@ class Config(metaclass=SingletonMeta):
         for setting_name, setting in self.__settings.items():
             print(f"{setting_name}: {setting}")
 
-    @staticmethod
-    def __convert_date_to_timestamp(date: Timestamp) -> int:
-        timestamp_seconds = datetime.datetime.timestamp(date)
-        timestamp_milliseconds = timestamp_seconds * 1000
-        return int(timestamp_milliseconds)
-
     def __read_files_meta_properties(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.files)
         self.__files_meta_properties = []
@@ -323,7 +334,8 @@ class Config(metaclass=SingletonMeta):
         for meta_property in self.__files_meta_properties:
             meta_value = self.__parse_column(
                 sheet,
-                f"{ExcelFile.meta_prefix.value}{meta_property}",
+                ExcelFile.meta_prefix,
+                suffix=meta_property,
             )
 
             meta_value = list(meta_value)
@@ -347,7 +359,7 @@ class Config(metaclass=SingletonMeta):
 
         for index, file in enumerate(files):
             date = dates[index]
-            timestamp = self.__convert_date_to_timestamp(date)
+            timestamp = convert_date_to_timestamp(date)
             site = str(sites[index])
             meta = [str(m[index]) for m in metas]
 
@@ -434,8 +446,8 @@ class Config(metaclass=SingletonMeta):
             start = starts[index]
             end = ends[index]
 
-            timestamp_start = self.__convert_date_to_timestamp(start)
-            timestamp_end = self.__convert_date_to_timestamp(end)
+            timestamp_start = convert_date_to_timestamp(start)
+            timestamp_end = convert_date_to_timestamp(end)
 
             self.__ranges[range_] = ConfigRange(
                 name=range_,
@@ -594,6 +606,24 @@ class Config(metaclass=SingletonMeta):
             )
 
             self.__autoclusters.append(autocluster)
+
+    def __read_trajectories(self) -> None:
+        sheet = self.__parse_sheet(ExcelSheet.trajectories)
+
+        names: List[str] = self.__parse_column(sheet, ExcelTrajectory.name_)
+        starts: List[Timestamp] = self.__parse_column(sheet, ExcelTrajectory.start)
+        ends: List[Timestamp] = self.__parse_column(sheet, ExcelTrajectory.end)
+
+        starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
+        ends_timestamps = [convert_date_to_timestamp(end) for end in ends]
+
+        trajectories = ConfigTrajectory.reconstruct(
+            names=names,
+            starts=starts_timestamps,
+            ends=ends_timestamps,
+        )
+
+        self.__trajectories = trajectories
 
     def __read_reducers(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.reducers)
