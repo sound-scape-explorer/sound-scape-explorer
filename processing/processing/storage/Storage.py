@@ -8,7 +8,7 @@ from h5py._hl.dataset import AsStrWrapper
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
-from processing.config.ConfigAutocluster import ConfigAutocluster, ConfigAutoclusters
+from processing.config.ConfigAutocluster import ConfigAutocluster
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
@@ -1172,41 +1172,40 @@ class Storage(metaclass=SingletonMeta):
 
         return string_list
 
-    def read_config_autoclusters(self) -> ConfigAutoclusters:
+    def read_config_autoclusters(self) -> List[ConfigAutocluster]:
         names_dataset = self.__get(StoragePath.autoclusters_names)
+
         names = self.convert_dataset_to_string_list(names_dataset)
         min_cluster_sizes = self.__get(StoragePath.autoclusters_min_cluster_sizes)[:]
         min_samples = self.__get(StoragePath.autoclusters_min_samples)[:]
         alphas = self.__get(StoragePath.autoclusters_alphas)[:]
         epsilons = self.__get(StoragePath.autoclusters_epsilons)[:]
 
-        autoclusters = []
-
-        for index, name in enumerate(names):
-            autocluster = ConfigAutocluster(
-                index=index,
-                name=name,
-                min_cluster_size=min_cluster_sizes[index],
-                min_samples=min_samples[index],
-                alpha=alphas[index],
-                epsilon=epsilons[index],
-            )
-
-            autoclusters.append(autocluster)
+        autoclusters = ConfigAutocluster.reconstruct(
+            names=names,
+            min_cluster_sizes=min_cluster_sizes,
+            min_samples=min_samples,
+            alphas=alphas,
+            epsilons=epsilons,
+        )
 
         return autoclusters
 
     def write_config_autoclusters(
         self,
-        autoclusters: List[str],
-        min_cluster_sizes: List[int],
-        min_samples: List[int],
-        alphas: List[float],
-        epsilons: List[float],
+        autoclusters: List[ConfigAutocluster],
     ) -> None:
+        (
+            names,
+            min_cluster_sizes,
+            min_samples,
+            alphas,
+            epsilons,
+        ) = ConfigAutocluster.flatten(autoclusters=autoclusters)
+
         self.__write_dataset(
             path=StoragePath.autoclusters_names,
-            data=autoclusters,
+            data=names,
         )
 
         self.__write_dataset(

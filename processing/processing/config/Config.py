@@ -8,9 +8,8 @@ import pandas
 from numpy import nan
 from pandas import DataFrame, Series, Timestamp
 
-from processing.clusterings.Clustering import Clustering
 from processing.common.SingletonMeta import SingletonMeta
-from processing.config.ConfigAutocluster import ConfigAutocluster, ConfigAutoclusters
+from processing.config.ConfigAutocluster import ConfigAutocluster
 from processing.config.ConfigBand import ConfigBand, ConfigBands
 from processing.config.ConfigFile import ConfigFile, ConfigFiles
 from processing.config.ConfigIntegration import ConfigIntegration, ConfigIntegrations
@@ -53,7 +52,7 @@ class Config(metaclass=SingletonMeta):
     __integrations: ConfigIntegrations = {}
     __ranges: ConfigRanges = {}
     __all_sites: List[str] = []
-    __autoclusters: ConfigAutoclusters = []
+    __autoclusters: List[ConfigAutocluster] = []
     __trajectories: List[ConfigTrajectory] = []
     __reducers: ConfigReducers = []
     __indicators: List[str] = []
@@ -160,26 +159,7 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        autoclusters = []
-        min_cluster_sizes = []
-        min_samples = []
-        alphas = []
-        epsilons = []
-
-        for autocluster in self.__autoclusters:
-            autoclusters.append(autocluster.name)
-            min_cluster_sizes.append(autocluster.min_cluster_size)
-            min_samples.append(autocluster.min_samples)
-            alphas.append(autocluster.alpha)
-            epsilons.append(autocluster.epsilon)
-
-        storage.write_config_autoclusters(
-            autoclusters=autoclusters,
-            min_cluster_sizes=min_cluster_sizes,
-            min_samples=min_samples,
-            alphas=alphas,
-            epsilons=epsilons,
-        )
+        storage.write_config_autoclusters(autoclusters=self.__autoclusters)
 
     def __store_trajectories(
         self,
@@ -585,27 +565,34 @@ class Config(metaclass=SingletonMeta):
 
     def __read_autoclusters(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.autoclusters)
-        autoclusters = self.__parse_column(sheet, ExcelAutocluster.autocluster)
-        min_cluster_sizes = self.__parse_column(
-            sheet, ExcelAutocluster.min_cluster_size
+
+        names: List[str] = self.__parse_column(
+            sheet,
+            ExcelAutocluster.name_,
         )
-        min_samples = self.__parse_column(sheet, ExcelAutocluster.min_samples)
-        alphas = self.__parse_column(sheet, ExcelAutocluster.alpha)
-        epsilons = self.__parse_column(sheet, ExcelAutocluster.epsilon)
 
-        for index, autocluster_name in enumerate(autoclusters):
-            Clustering.validate_name(autocluster_name)
+        min_cluster_sizes: List[int] = self.__parse_column(
+            sheet,
+            ExcelAutocluster.min_cluster_size,
+        )
 
-            autocluster = ConfigAutocluster(
-                index=index,
-                name=autocluster_name,
-                min_cluster_size=min_cluster_sizes[index],
-                min_samples=min_samples[index],
-                alpha=alphas[index],
-                epsilon=epsilons[index],
-            )
+        min_samples: List[int] = self.__parse_column(
+            sheet,
+            ExcelAutocluster.min_samples,
+        )
 
-            self.__autoclusters.append(autocluster)
+        alphas: List[float] = self.__parse_column(sheet, ExcelAutocluster.alpha)
+        epsilons: List[float] = self.__parse_column(sheet, ExcelAutocluster.epsilon)
+
+        autoclusters = ConfigAutocluster.reconstruct(
+            names=names,
+            min_cluster_sizes=min_cluster_sizes,
+            min_samples=min_samples,
+            alphas=alphas,
+            epsilons=epsilons,
+        )
+
+        self.__autoclusters = autoclusters
 
     def __read_trajectories(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.trajectories)
