@@ -7,7 +7,6 @@ from processing.utils.print_new_line import print_new_line
 
 def run_computation_umaps(env: Env):
     storage = Storage(path=env.storage)
-
     storage.delete_computation_umaps()
 
     bands = storage.get_bands()

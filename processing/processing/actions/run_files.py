@@ -6,13 +6,13 @@ from processing.storage.Storage import Storage
 
 def run_files(env: Env):
     storage = Storage(path=env.storage)
+    storage.delete_files()
+
+    files = storage.read_config_files()
 
     bands = storage.get_config_bands()
     expected_sample_rate = storage.get_expected_sample_rate()
     audio_path = storage.read_audio_path()
-    files = storage.read_config_files()
-
-    storage.delete_files()
 
     # Features
     for band_name, band in bands.items():

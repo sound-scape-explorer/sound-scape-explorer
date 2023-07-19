@@ -7,8 +7,9 @@ from processing.volumes.Volume import Volume
 
 def run_volumes(env: Env):
     storage = Storage(path=env.storage)
-    volumes = storage.read_volumes()
     storage.delete_volumes()
+
+    volumes = storage.read_volumes()
 
     if len(volumes) == 0:
         return

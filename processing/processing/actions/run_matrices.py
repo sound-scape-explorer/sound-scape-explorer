@@ -7,8 +7,9 @@ from processing.utils.print_new_line import print_new_line
 
 def run_matrices(env: Env):
     storage = Storage(path=env.storage)
-    matrices = storage.read_matrices()
     storage.delete_matrices()
+
+    matrices = storage.read_matrices()
 
     if len(matrices) == 0:
         return

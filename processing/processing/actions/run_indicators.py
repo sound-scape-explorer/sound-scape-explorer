@@ -8,8 +8,9 @@ from processing.utils.print_new_line import print_new_line
 
 def run_indicators(env: Env):
     storage = Storage(path=env.storage)
-    indicators = storage.read_indicators()
     storage.delete_indicators()
+
+    indicators = storage.read_indicators()
 
     if len(indicators) == 0:
         return

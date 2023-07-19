@@ -11,8 +11,9 @@ from processing.utils.print_new_line import print_new_line
 
 def run_autoclusters(env: Env):
     storage = Storage(path=env.storage)
-    config_autoclusters = storage.read_config_autoclusters()
     storage.delete_autoclusters()
+
+    config_autoclusters = storage.read_config_autoclusters()
 
     if len(config_autoclusters) == 0:
         return

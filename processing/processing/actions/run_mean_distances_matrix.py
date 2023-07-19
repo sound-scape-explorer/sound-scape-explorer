@@ -6,7 +6,6 @@ from processing.utils.print_new_line import print_new_line
 
 def run_mean_distances_matrix(env: Env):
     storage = Storage(path=env.storage)
-
     storage.delete_mean_distances_matrix()
 
     print_new_line()

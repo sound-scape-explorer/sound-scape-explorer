@@ -7,8 +7,9 @@ from processing.utils.print_new_line import print_new_line
 
 def run_pairings(env: Env):
     storage = Storage(path=env.storage)
-    pairings = storage.read_pairings()
     storage.delete_pairings()
+
+    pairings = storage.read_pairings()
 
     if len(pairings) == 0:
         return

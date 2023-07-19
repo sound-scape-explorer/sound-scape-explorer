@@ -7,8 +7,9 @@ from processing.utils.print_new_line import print_new_line
 
 def run_reducers(env: Env):
     storage = Storage(path=env.storage)
-    reducers = storage.get_config_reducers()
     storage.delete_reduced()
+
+    reducers = storage.get_config_reducers()
 
     if len(reducers) == 0:
         return

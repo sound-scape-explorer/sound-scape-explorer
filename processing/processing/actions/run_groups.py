@@ -9,8 +9,8 @@ from processing.utils.print_new_line import print_new_line
 
 def run_groups(env: Env):
     storage = Storage(path=env.storage)
-
     storage.delete_groups()
+
     files_count = storage.read_files_count()
 
     for band, integration in storage.enumerate_bands_and_integrations():
