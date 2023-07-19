@@ -105,6 +105,11 @@ export enum StoragePath {
   reduced_ = '/reduced_',
 
   /**
+   * Data/Trajectory
+   */
+  trajectory_ = '/trajectory_',
+
+  /**
    * Data/Autocluster
    */
   autocluster_ = '/autocluster_',

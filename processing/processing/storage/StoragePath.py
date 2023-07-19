@@ -226,6 +226,41 @@ class StoragePath(Enum):
         Dataset
     """
 
+    ##############################
+    # Configuration/Trajectories #
+    ##############################
+
+    trajectories_names = "/configuration/trajectories/names"
+    """The names of trajectories requested in the configuration file.
+
+    Each row is a string.
+
+    Type:
+        Dataset
+    """
+
+    trajectories_starts = "/configuration/trajectories/starts"
+    """The start date for each trajectory.
+
+    Each row contains a timestamp as an integer.
+
+    Timestamps are in UNIX format and milliseconds.
+
+    Type:
+        Dataset
+    """
+
+    trajectories_ends = "/configuration/trajectories/ends"
+    """The end date for each trajectory.
+
+    Each row contains a timestamp as an integer.
+
+    Timestamps are in UNIX format and milliseconds.
+
+    Type:
+        Dataset
+    """
+
     ##########################
     # Configuration/Reducers #
     ##########################
@@ -535,7 +570,6 @@ class StoragePath(Enum):
     # Data/Trajectory #
     ###################
 
-    # TODO: Assert the need of this. All can be done in Front.
     trajectory_ = "/trajectory_"
     """The trajectories for each reduction.
 
