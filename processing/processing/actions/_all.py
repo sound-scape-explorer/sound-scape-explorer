@@ -15,8 +15,10 @@ from processing.common.Env import Env
 env = Env()
 
 run_config(env)
+
 run_files(env)
 run_groups(env)
+
 run_reducers(env)
 
 run_computation_umaps(env)

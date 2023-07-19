@@ -6,5 +6,6 @@ from processing.common.Env import Env
 env = Env()
 
 run_config(env)
+
 run_files(env)
 run_groups(env)
