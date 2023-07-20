@@ -14,8 +14,8 @@ def run_pairings(env: Env):
     if len(pairings) == 0:
         return
 
-    bands = storage.get_bands()
-    integrations = storage.get_integrations_seconds()
+    bands = storage.read_config_bands()
+    integrations = storage.read_config_integrations()
     meta_properties = storage.read_meta_properties()
 
     print_new_line()
@@ -26,14 +26,17 @@ def run_pairings(env: Env):
     )
 
     for band, integration in storage.enumerate_bands_and_integrations():
-        print(f"Pairings loaded for band {band}, integration {integration}")
+        print(
+            f"Pairings loaded for band {band.name}"
+            f", integration {integration.duration}"
+        )
 
         grouped_features = storage.read_grouped_features_all_files(
             band=band,
             integration=integration,
         )
 
-        meta_values = storage.read_meta_values(band, integration)
+        meta_values = storage.read_grouped_meta_values(band, integration)
 
         for p, pairing_name in enumerate(pairings):
             for m_a in storage.enumerate_meta_properties():

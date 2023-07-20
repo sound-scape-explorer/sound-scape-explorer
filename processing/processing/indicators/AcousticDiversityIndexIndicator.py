@@ -1,14 +1,16 @@
 import maad.features
 
 from processing.audio.Audio import Audio
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.indicators.AbstractIndicator import AbstractIndicator
 
 
 class AcousticDiversityIndexIndicator(AbstractIndicator):
     def __init__(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> None:
         super().__init__(band, integration)
 

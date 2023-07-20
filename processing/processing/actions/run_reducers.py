@@ -9,13 +9,13 @@ def run_reducers(env: Env):
     storage = Storage(path=env.storage)
     storage.delete_reduced()
 
-    reducers = storage.get_config_reducers()
+    reducers = storage.read_config_reducers()
 
     if len(reducers) == 0:
         return
 
-    bands = storage.get_bands()
-    integrations = storage.get_integrations_seconds()
+    bands = storage.read_config_bands()
+    integrations = storage.read_config_integrations()
     seed = storage.read_display_umap_seed()
 
     print_new_line()
@@ -24,7 +24,10 @@ def run_reducers(env: Env):
     timer = Timer(len(bands) * len(integrations) * len(reducers))
 
     for band, integration in storage.enumerate_bands_and_integrations():
-        print(f"Reducer loaded for band {band}, integration {integration}")
+        print(
+            f"Reducer loaded for band {band.name}"
+            f", integration {integration.duration}"
+        )
 
         features = storage.read_grouped_features_all_files(
             band=band,
@@ -36,16 +39,10 @@ def run_reducers(env: Env):
                 seed=seed,
             )
 
-            if reducer is None:
-                continue
-
-            is_in_reducer = storage.is_band_integration_in_reducer(
-                reducer=config_reducer,
+            if not config_reducer.has(
                 band=band,
                 integration=integration,
-            )
-
-            if not is_in_reducer:
+            ):
                 timer.progress()
                 continue
 

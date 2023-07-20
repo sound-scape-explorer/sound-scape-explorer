@@ -18,8 +18,8 @@ def run_autoclusters(env: Env):
     if len(config_autoclusters) == 0:
         return
 
-    bands = storage.get_bands()
-    integrations = storage.get_integrations_seconds()
+    bands = storage.read_config_bands()
+    integrations = storage.read_config_integrations()
 
     print_new_line()
     print(f"Autoclusters list {[ac.name for ac in config_autoclusters]}")
@@ -30,7 +30,7 @@ def run_autoclusters(env: Env):
         for config_autocluster in config_autoclusters:
             print(
                 f"Autocluster '{config_autocluster.name}' loaded"
-                f" for band {band}, integration {integration}"
+                f" for band {band.name}, integration {integration.duration}"
             )
 
             if config_autocluster.name == ClusteringName.hdbscan_eom.value:
@@ -38,7 +38,9 @@ def run_autoclusters(env: Env):
             elif config_autocluster.name == ClusteringName.hdbscan_leaf.value:
                 method = "leaf"
             else:
-                raise KeyError(f"Clustering name {config_autocluster.name} not found")
+                raise KeyError(
+                    f"Unable to find clustering name {config_autocluster.name}."
+                )
 
             alpha = float(config_autocluster.alpha)
             epsilon = float(config_autocluster.epsilon)

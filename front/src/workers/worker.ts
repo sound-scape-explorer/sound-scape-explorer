@@ -64,7 +64,7 @@ export async function readSecondsFromIntegration(
   ).to_array() as string[];
 
   const seconds = (
-    h5.get(StoragePath.integrations_seconds) as Dataset
+    h5.get(StoragePath.integrations_durations) as Dataset
   ).to_array() as number[];
 
   const index = integrations.indexOf(integrationName);
@@ -132,16 +132,20 @@ export async function readMetas(file: File, band: string, integration: number) {
 
   if (autoclusters.length > 0) {
     let a = 0;
+
     for (const autocluster of autoclusters) {
-      const autoclusterList = new Set(
+      const autoclusterSet = new Set(
         autocluster
           .map((n) => n.toString())
           .sort((a, b) => a.localeCompare(b, undefined, {numeric: true})),
       );
 
-      metas[`AUTOCLUSTER_${a}`] = [...autoclusterList];
+      metas[`AUTOCLUSTER_${a}`] = [...autoclusterSet];
+
       a += 1;
     }
+
+    console.log(metas);
   }
 
   for (let i = 0; i < metaPropertiesList.length; i += 1) {
@@ -158,13 +162,16 @@ export async function readBands(file: File) {
   const namesDataset = h5.get(StoragePath.bands_names) as Dataset;
   const names = namesDataset.to_array() as string[];
 
-  const frequenciesDataset = h5.get(StoragePath.bands_frequencies) as Dataset;
-  const frequencies = frequenciesDataset.to_array() as number[][];
+  const lowsDataset = h5.get(StoragePath.bands_lows) as Dataset;
+  const lows = lowsDataset.to_array() as number[];
+
+  const highsDataset = h5.get(StoragePath.bands_highs) as Dataset;
+  const highs = highsDataset.to_array() as number[];
 
   const bands: StorageBands = {};
 
   for (const [b, band] of names.entries()) {
-    bands[band] = frequencies[b];
+    bands[band] = [lows[b], highs[b]];
   }
 
   return bands;
@@ -175,13 +182,13 @@ export async function readIntegrations(file: File) {
   const names = h5.get(StoragePath.integrations_names) as Dataset;
   const namesList = names.to_array() as string[];
 
-  const seconds = h5.get(StoragePath.integrations_seconds) as Dataset;
-  const secondsList = seconds.to_array() as number[];
+  const durations = h5.get(StoragePath.integrations_durations) as Dataset;
+  const durationsList = durations.to_array() as number[];
 
   const integrations: StorageIntegrations = {};
 
   for (const [i, integration] of namesList.entries()) {
-    integrations[integration] = secondsList[i];
+    integrations[integration] = durationsList[i];
   }
 
   return integrations;
@@ -192,14 +199,20 @@ export async function readRanges(file: File) {
 
   const namesDataset = h5.get(StoragePath.ranges_names) as Dataset;
   const names = namesDataset.to_array() as string[];
-  const timestampsDataset = h5.get(StoragePath.ranges_timestamps) as Dataset;
-  const timestamps = timestampsDataset.to_array() as number[][];
+
+  const startsDataset = h5.get(StoragePath.ranges_starts) as Dataset;
+  const starts = startsDataset.to_array() as number[];
+
+  const endsDataset = h5.get(StoragePath.ranges_ends) as Dataset;
+  const ends = endsDataset.to_array() as number[];
 
   const ranges: StorageRanges = {};
 
   for (const n in names) {
     const range = names[n];
-    ranges[range] = timestamps[n];
+    const timestamp = [starts[n], ends[n]];
+
+    ranges[range] = timestamp;
   }
 
   return ranges;
@@ -208,7 +221,7 @@ export async function readRanges(file: File) {
 export async function readReducers(file: File) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.reducers) as Dataset;
+  const namesDataset = h5.get(StoragePath.reducers_names) as Dataset;
   const names = namesDataset.to_array() as string[];
 
   const dimensionsDataset = h5.get(StoragePath.reducers_dimensions) as Dataset;

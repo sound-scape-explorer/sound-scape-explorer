@@ -15,7 +15,7 @@ def run_groups(env: Env):
 
     for band, integration in storage.enumerate_bands_and_integrations():
         print_new_line()
-        print(f"Grouping for band {band}, integration {integration}")
+        print(f"Grouping for band {band.name}, integration {integration.duration}")
         timer = Timer(files_count)
 
         for (
@@ -26,15 +26,15 @@ def run_groups(env: Env):
             file_features,
         ) in storage.enumerate_files(band=band, integration=integration):
             for group_index in range(group_count):
-                group_start = integration * group_index
-                group_end = integration * (group_index + 1)
+                group_start = integration.duration * group_index
+                group_end = integration.duration * (group_index + 1)
 
                 features_to_group = file_features[group_start:group_end]
 
                 group_features = list(numpy.mean(features_to_group, axis=0))
 
                 group_timestamp = (
-                    file_timestamp + integration * group_index * TIME_DELTA_MS
+                    file_timestamp + integration.duration * group_index * TIME_DELTA_MS
                 )
 
                 # At the moment, each integration result in a write

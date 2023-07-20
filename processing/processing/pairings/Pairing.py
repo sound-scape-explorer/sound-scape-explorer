@@ -3,6 +3,8 @@ from typing import List
 
 from h5py import Dataset
 
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.pairings.ContingencyPairing import ContingencyPairing
 from processing.pairings.PairingName import PairingName
 from processing.storage.Storage import Storage
@@ -12,8 +14,8 @@ class Pairing:
     def __new__(
         cls,
         name: str,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         pairing_index: int,
         features: List[Dataset],
         meta_index_a: int,
@@ -37,7 +39,7 @@ class Pairing:
 
     @staticmethod
     def fail(name: str) -> None:
-        raise KeyError(f"Pairing {name} not found.")
+        raise KeyError(f"Unable to find pairing name {name}.")
 
     @staticmethod
     def validate_name(name: str) -> None:

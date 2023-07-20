@@ -6,13 +6,15 @@ from h5py import Dataset
 from pandas import DataFrame
 from sklearn import metrics
 
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.storage.Storage import Storage
 from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
 
 
 class ContingencyPairing:
-    _band: str
-    _integration: int
+    _band: ConfigBand
+    _integration: ConfigIntegration
     _pairing_index: int
     _meta_index_a: int
     _meta_index_b: int
@@ -24,8 +26,8 @@ class ContingencyPairing:
 
     def __init__(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         pairing_index: int,
         features: List[Dataset],
         meta_index_a: int,

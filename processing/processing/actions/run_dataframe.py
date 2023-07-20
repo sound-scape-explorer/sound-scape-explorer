@@ -8,9 +8,14 @@ from processing.storage.Storage import Storage
 
 def run_dataframe(
     storage: Storage,
-    band: str,
-    integration: int,
+    band_name: str,
+    integration_duration: int,
 ) -> DataFrame:
+    band = storage.find_config_band_by_name(band_name=band_name)
+    integration = storage.find_config_integration_by_duration(
+        integration_duration=integration_duration
+    )
+
     payload = {}
 
     # Indexes
@@ -21,8 +26,7 @@ def run_dataframe(
     payload["file_timestamp"] = []
     payload["file_duration"] = []
 
-    point_index = 0
-    filenames = storage.read_files()
+    filenames = storage.read_files_names()
 
     for (
         file_index,
@@ -32,14 +36,16 @@ def run_dataframe(
         _,
     ) in storage.enumerate_files(band=band, integration=integration):
         for group_index in range(groups_count):
+            point_index = storage.generate_point_index(
+                file_index, group_index, groups_count
+            )
+
             payload["point_index"].append(point_index)
             payload["file_index"].append(file_index)
             payload["group_index"].append(group_index)
             payload["file_name"].append(filenames[file_index])
             payload["file_timestamp"].append(file_timestamp)
             payload["file_duration"].append(file_duration)
-
-            point_index += 1
 
     # Timestamps
     payload["group_timestamp"] = []
@@ -49,22 +55,29 @@ def run_dataframe(
         payload["group_timestamp"].append(group_timestamp[0])
 
     # Autocluster
-    autoclusters = storage.read_autoclusters(band=band, integration=integration)
+    autoclusters = storage.read_autoclusters_values(band=band, integration=integration)
     for autocluster_index, autocluster in enumerate(autoclusters):
+        label = f"autocluster_{autocluster_index}"
+        payload[label] = []
+
         for file_index, groups_count, _, _, _ in storage.enumerate_files(
-            band=band, integration=integration
+            band=band,
+            integration=integration,
         ):
             for group_index in range(groups_count):
-                label = f"autocluster_{autocluster_index}"
-                value = autocluster[file_index]
-                payload[label] = value
+                point_index = storage.generate_point_index(
+                    file_index, group_index, groups_count
+                )
+                value = autocluster[point_index]
+                payload[label].append(value)
 
     # Metas
     files = storage.read_config_files()
     meta_properties = storage.read_meta_properties()
-    meta_properties = meta_properties[1:]
+    autoclusters_count = len(autoclusters)
+    meta_properties = meta_properties[autoclusters_count:]
     meta_properties = [f"meta_{property}" for property in meta_properties]
-    metas = [file.meta for file in files.values()]
+    metas = [file.meta for file in files]
 
     for mp, meta_property in enumerate(meta_properties):
         payload[meta_property] = []
@@ -75,8 +88,10 @@ def run_dataframe(
 
     # Reducers
     try:
-        reducers = storage.get_grouped_reducers(band, integration)
-        reduced_features = storage.get_reduced_features(reducers, band, integration)
+        reducers = storage.pick_reducers(band, integration)
+        reduced_features = storage.read_all_reduced_features(
+            reducers, band, integration
+        )
         for reducer in reducers:
             for d in range(reducer.dimensions):
                 name = f"{reducer.name}{reducer.index}_{d+1}"
@@ -106,10 +121,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     storage = Storage(path=str(args.storage))
-    band = str(args.band)
-    integration = int(args.integration)
+    band_name = str(args.band)
+    integration_duration = int(args.integration)
 
-    df = run_dataframe(storage=storage, band=band, integration=integration)
+    df = run_dataframe(
+        storage=storage,
+        band_name=band_name,
+        integration_duration=integration_duration,
+    )
 
     print(df)
 

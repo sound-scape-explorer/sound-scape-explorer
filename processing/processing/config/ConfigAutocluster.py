@@ -1,9 +1,11 @@
 from typing import List
 
-from processing.clusterings.Clustering import Clustering
+from processing.clusterings.ClusteringName import ClusteringName
 
 
 class ConfigAutocluster:
+    names = set(name.value for name in ClusteringName)
+
     index: int
     name: str
     min_cluster_size: int
@@ -20,12 +22,32 @@ class ConfigAutocluster:
         alpha: float,
         epsilon: float,
     ) -> None:
+        ConfigAutocluster.validate_name(name)
+
         self.index = index
         self.name = name
         self.min_cluster_size = min_cluster_size
         self.min_samples = min_samples
         self.alpha = alpha
         self.epsilon = epsilon
+
+    @staticmethod
+    def validate_name(name: str) -> None:
+        """The validator for autoclustering names.
+
+        Args:
+            name: The autoclustering name to validate.
+
+        Returns:
+            None
+
+        Raises:
+            KeyError: An error occured because the clustering name has not been found.
+        """
+        if name in ConfigAutocluster.names:
+            return
+
+        raise KeyError(f"Unable to validate autoclustering name {name}.")
 
     @staticmethod
     def flatten(autoclusters: List["ConfigAutocluster"]):
@@ -48,8 +70,6 @@ class ConfigAutocluster:
         autoclusters = []
 
         for index, name in enumerate(names):
-            Clustering.validate_name(name)
-
             autocluster = ConfigAutocluster(
                 index=index,
                 name=name,

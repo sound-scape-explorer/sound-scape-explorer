@@ -27,7 +27,6 @@ TODO
 - [Manual installation](#manual-installation)
 - [Docker installation](#docker-installation)
 - [Usage](#usage)
-- [Migration](#migration)
 
 ## About
 
@@ -646,22 +645,6 @@ and display spectrograms, run the [`front:audio` command](#frontaudio-command).
 > If you only want to serve the `Audio` module,
 > use the [`audio` command](#audio-command)
 
-## Migration
-
-Because of the current sustained development,
-a lot of breaking changes
-happened and are expected to occur again.
-
-In order to avoid users to regenerate all data
-at each **major** version upgrade, migration scripts have been
-implemented from `v8` and above.
-
-### Example
-
-```bash
-pnpm process:migrate:v8 --storage /path/to/storage.h5
-```
-
 ## Docker flavors
 
 1. Select a template from the available
@@ -733,7 +716,6 @@ All `pnpm` commands relative to this module are preceded with `process:`.
 - [groups](#groups-command)
 - [indicators](#indicators-command)
 - [matrices](#matrices-command)
-- [migrate:v8](#migratev8-command)
 - [pairings](#pairings-command)
 - [reducers](#reducers-command)
 - [volumes](#volumes-command)
@@ -905,10 +887,6 @@ compute specified `matrices` from.
 ```bash
 pnpm process:matrices --storage /path/to/storage.h5
 ```
-
-#### `migrate:v8` command
-
-See [Migration](#migration).
 
 #### `pairings` command
 

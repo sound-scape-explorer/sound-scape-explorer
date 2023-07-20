@@ -6,14 +6,14 @@ import torchaudio
 from torch import Tensor
 
 from processing.common.Timer import Timer
-from processing.config.ConfigFile import ConfigFiles
+from processing.config.ConfigFile import ConfigFile
 from processing.models.AbstractModel import AbstractModel
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
 
 class ConfigFilesExtractor:
-    __files: ConfigFiles
+    __files: List[ConfigFile]
     __files_length: int
     __timer: Timer
     __expected_sample_rate: int
@@ -22,16 +22,16 @@ class ConfigFilesExtractor:
 
     def __init__(
         self,
-        files: ConfigFiles,
+        files: List[ConfigFile],
         model: AbstractModel,
         expected_sample_rate: int,
         base_path: str,
     ) -> None:
         self.__files = files
-        self.__files_length = len(self.__files.keys())
+        self.__files_length = len(files)
 
         if self.__files_length == 0:
-            raise ValueError("No files to extract.")
+            raise ValueError("Unable to find files to extract.")
 
         self.__timer = Timer(self.__files_length)
         self.__expected_sample_rate = expected_sample_rate
@@ -50,11 +50,13 @@ class ConfigFilesExtractor:
         path = Path(path_string)
 
         if not path.exists():
-            raise FileNotFoundError(f"Audio file not found: {path}")
+            raise FileNotFoundError(f"Unable to find file path {path}.")
 
     def __verify_sample_rates(self, sample_rate: int) -> None:
         if sample_rate != self.__expected_sample_rate:
-            raise ValueError("Sample rate differs from expected sample rate.")
+            raise ValueError(
+                f"Unable to validate expected sample rate. Given {sample_rate}."
+            )
 
     @staticmethod
     def __drop_last_second(
@@ -73,20 +75,19 @@ class ConfigFilesExtractor:
 
         return wav, sample_rate
 
-    def __iterate_files(
+    def __enumerate_files(
         self,
-    ) -> Iterable[Tuple[int, str]]:
-        for file_index, item in enumerate(self.__files.items()):
-            file_name, _ = item
-            yield file_index, file_name
+    ) -> Iterable[ConfigFile]:
+        for file_ in self.__files:
+            yield file_
 
     def yield_features(
         self,
-    ) -> Iterable[Tuple[Tensor, int]]:
+    ) -> Iterable[Tuple[Tensor, ConfigFile]]:
         self.__timer.reset()
 
-        for file_index, file_name in self.__iterate_files():
-            path_string = f"{self.__base_path}{file_name}"
+        for file_ in self.__enumerate_files():
+            path_string = f"{self.__base_path}{file_.name}"
 
             self.__verify_path_existence(path_string)
 
@@ -101,7 +102,7 @@ class ConfigFilesExtractor:
 
             self.__timer.progress()
 
-            yield features, file_index
+            yield features, file_
 
     def yield_and_store_features(
         self,

@@ -57,7 +57,7 @@ class Reducer:
         if name in Reducer.names:
             return
 
-        raise KeyError(f"Reducer {name} not found!")
+        raise KeyError(f"Unable to find reducer name {name}.")
 
     @abstractmethod
     def reduce(

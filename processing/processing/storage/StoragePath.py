@@ -44,10 +44,19 @@ class StoragePath(Enum):
         Dataset
     """
 
-    bands_frequencies = "/configuration/bands/frequencies"
-    """The frequencies of requested bands.
+    bands_lows = "/configuration/bands/lows"
+    """The low frequencies for each band.
 
-    Each row contains 2 columns for each integer (low and high frequency in Hertz).
+    Each row contains one integer for the frequency in Hertz.
+
+    Type:
+        Dataset
+    """
+
+    bands_highs = "/configuration/bands/highs"
+    """The high frequencies for each band.
+
+    Each row contains one integer for the frequency in Hertz.
 
     Type:
         Dataset
@@ -68,8 +77,8 @@ class StoragePath(Enum):
         Dataset
     """
 
-    integrations_seconds = "/configuration/integrations/seconds"
-    """The values in seconds for each band.
+    integrations_durations = "/configuration/integrations/durations"
+    """The duration in seconds for each band.
 
     Each row contains an integer.
 
@@ -92,16 +101,23 @@ class StoragePath(Enum):
         Dataset
     """
 
-    ranges_timestamps = "/configuration/ranges/timestamps"
-    """The timestamps for each range.
+    ranges_starts = "/configuration/ranges/starts"
+    """The start date for each range.
 
-    Each row contains two columns of integers.
+    Each row contains a timestamp as an integer.
 
-    The first column is the start date.
+    Timestamps are in UNIX format and milliseconds.
 
-    The second column is the end date.
+    Type:
+        Dataset
+    """
 
-    Each date is in `milliseconds` in UNIX format.
+    ranges_ends = "/configuration/ranges/ends"
+    """The end date for each range.
+
+    Each row contains a timestamp as an integer.
+
+    Timestamps are in UNIX format and milliseconds.
 
     Type:
         Dataset
@@ -111,7 +127,7 @@ class StoragePath(Enum):
     # Configuration/Files #
     #######################
 
-    files = "/configuration/files/names"
+    files_names = "/configuration/files/names"
     """The file paths relative to the audio folder.
 
     Each row contains a string.
@@ -265,7 +281,7 @@ class StoragePath(Enum):
     # Configuration/Reducers #
     ##########################
 
-    reducers = "/configuration/reducers/names"
+    reducers_names = "/configuration/reducers/names"
     """The names of reducers requested in the configuration file.
 
     Each row contains a string.

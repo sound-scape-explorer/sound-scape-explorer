@@ -1,27 +1,53 @@
-from typing import Dict
+from typing import List
 
 from processing.utils.validate_int import validate_int
 
 
 class ConfigRange:
+    index: int
     name: str
     start: int
     end: int
 
     def __init__(
         self,
+        index: int,
         name: str,
         start: int,
         end: int,
     ) -> None:
-        self.name = name
-
         validate_int(start)
         validate_int(end)
 
+        self.index = index
+        self.name = name
         self.start = start
         self.end = end
 
+    @staticmethod
+    def flatten(ranges: List["ConfigRange"]):
+        names = [r.name for r in ranges]
+        starts = [r.start for r in ranges]
+        ends = [r.end for r in ranges]
 
-Range = str
-ConfigRanges = Dict[Range, ConfigRange]
+        return names, starts, ends
+
+    @staticmethod
+    def reconstruct(
+        names: List[str],
+        starts: List[int],
+        ends: List[int],
+    ) -> List["ConfigRange"]:
+        ranges = []
+
+        for index, name in enumerate(names):
+            range = ConfigRange(
+                index=index,
+                name=name,
+                start=starts[index],
+                end=ends[index],
+            )
+
+            ranges.append(range)
+
+        return ranges

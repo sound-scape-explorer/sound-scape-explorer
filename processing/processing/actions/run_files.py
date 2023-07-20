@@ -10,12 +10,12 @@ def run_files(env: Env):
 
     files = storage.read_config_files()
 
-    bands = storage.get_config_bands()
+    bands = storage.read_config_bands()
     expected_sample_rate = storage.get_expected_sample_rate()
     audio_path = storage.read_audio_path()
 
     # Features
-    for band_name, band in bands.items():
+    for band in bands:
         VGGish = VGGishModel(
             f_min=band.low,
             f_max=band.high,
@@ -29,17 +29,18 @@ def run_files(env: Env):
         )
 
         extractor.yield_and_store_features(
-            band=band_name,
+            band=band.name,
             storage=storage,
         )
 
     # Groups
-    first_band_name = list(bands.keys())[0]
-    integrations = storage.get_integrations_seconds()
+    integrations = storage.read_config_integrations()
+    band = bands[0]
 
     for integration in integrations:
         for _, groups_count, _, _, _ in storage.enumerate_files(
-            band=first_band_name, integration=integration
+            band=band,
+            integration=integration,
         ):
             storage.append_files_groups_count(
                 integration=integration,

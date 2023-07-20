@@ -4,19 +4,21 @@ from typing import List
 import numpy
 
 from processing.audio.Audio import Audio
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.storage.Storage import Storage
 
 
 class AbstractIndicator(ABC):
-    _band: str
-    _integration: int
+    _band: ConfigBand
+    _integration: ConfigIntegration
     _file_index: int
     _values: List[float]
 
     def __init__(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> None:
         self._band = band
         self._integration = integration
@@ -36,7 +38,7 @@ class AbstractIndicator(ABC):
         index: int,
     ) -> None:
         storage.write_indicator(
-            index=index,
+            indicator_index=index,
             band=self._band,
             integration=self._integration,
             values=self._values,

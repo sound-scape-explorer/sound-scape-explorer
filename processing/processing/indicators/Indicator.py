@@ -1,6 +1,8 @@
 from abc import abstractmethod
 
 from processing.audio.Audio import Audio
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.indicators.AcousticComplexityIndexIndicator import (
     AcousticComplexityIndexIndicator,
 )
@@ -22,8 +24,8 @@ class Indicator:
     def __new__(
         cls,
         name: str,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ):
         if name == IndicatorName.leq_enes.value:
             return LeqEnesIndicator(band, integration)
@@ -63,7 +65,7 @@ class Indicator:
 
     @staticmethod
     def fail(name: str) -> None:
-        raise KeyError(f"Indicator {name} not found!")
+        raise KeyError(f"Unable to find indicator name {name}.")
 
     @staticmethod
     def validate_name(name: str) -> None:

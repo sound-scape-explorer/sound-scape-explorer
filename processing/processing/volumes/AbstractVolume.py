@@ -5,13 +5,15 @@ import pandas as pd
 from h5py import Dataset
 from pandas import DataFrame
 
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.storage.Storage import Storage
 from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
 
 
 class AbstractVolume(ABC):
-    _band: str
-    _integration: int
+    _band: ConfigBand
+    _integration: ConfigIntegration
     _volume_index: int
     _meta_index: int
     _dataframe: DataFrame
@@ -20,8 +22,8 @@ class AbstractVolume(ABC):
 
     def __init__(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         volume_index: int,
         meta_index: int,
         features: List[Dataset],
@@ -70,7 +72,7 @@ class AbstractVolume(ABC):
 
     def __validate_volume(self):
         if self._volume is None:
-            raise ValueError("Volume is undefined. Calculate first.")
+            raise ValueError("Unable to find volume. Please calculate first.")
 
         return self._volume
 

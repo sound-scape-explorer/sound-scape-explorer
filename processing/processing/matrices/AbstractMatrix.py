@@ -5,13 +5,15 @@ import pandas as pd
 from h5py import Dataset
 from pandas import DataFrame
 
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.storage.Storage import Storage
 from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
 
 
 class AbstractMatrix(ABC):
-    _band: str
-    _integration: int
+    _band: ConfigBand
+    _integration: ConfigIntegration
     _matrix_index: int
     _meta_index: int
     _dataframe: DataFrame
@@ -20,8 +22,8 @@ class AbstractMatrix(ABC):
 
     def __init__(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         matrix_index: int,
         meta_index: int,
         features: List[Dataset],
@@ -59,7 +61,7 @@ class AbstractMatrix(ABC):
 
     def __validate_matrix(self):
         if self._matrix is None:
-            raise ValueError("Matrix is undefined. Please calculate first.")
+            raise ValueError("Unable to find matrix. Please calculate first.")
 
         return self._matrix
 

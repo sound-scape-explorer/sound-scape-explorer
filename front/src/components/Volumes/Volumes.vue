@@ -59,11 +59,11 @@ async function handleUpdate() {
   const volumeIndex = volumeNames.indexOf(volumeNameSelectedRef.value);
   const metaIndex = metaPropertiesRef.value.indexOf(metaSelectedRef.value);
 
-  console.log(volumeNameSelectedRef.value, volumeNames);
-
   if (metaIndex === -1 || volumeIndex === -1) {
     return;
   }
+
+  console.log(metaIndex, volumeIndex);
 
   const data = await readVolume(volumeIndex, metaIndex);
 

@@ -3,15 +3,14 @@ from typing import Any, Generator, Iterable, List, Optional, Tuple, Union
 import numpy
 from h5py import Dataset, File
 
-# noinspection PyProtectedMember
-from h5py._hl.dataset import AsStrWrapper
-
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigAutocluster import ConfigAutocluster
-from processing.config.ConfigBand import ConfigBand, ConfigBands
-from processing.config.ConfigFile import ConfigFile, ConfigFiles
-from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigFile import ConfigFile
+from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.ConfigRange import ConfigRange
+from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
@@ -46,9 +45,9 @@ class Storage(metaclass=SingletonMeta):
                 StorageMode.rw_or_create.value,
             )
         except BlockingIOError:
-            raise RuntimeError(f"Could not load file: {self.__path}")
+            raise RuntimeError(f"Unable to load file {self.__path}.")
         except TypeError:
-            raise FileNotFoundError(f"Could not find file: {self.__path}")
+            raise FileNotFoundError(f"Unable to find file {self.__path}.")
 
     @staticmethod
     def __get_file_features_path(
@@ -56,14 +55,6 @@ class Storage(metaclass=SingletonMeta):
         file_index: int,
     ) -> str:
         return f"{StoragePath.files_features.value}/{band_name}/{file_index}"
-
-    @staticmethod
-    def __get_grouped_suffix(
-        band: str,
-        integration: int,
-        file_index: int,
-    ) -> str:
-        return f"/{band}/{integration}/{file_index}"
 
     def close(self) -> None:
         self.__file.close()
@@ -123,7 +114,7 @@ class Storage(metaclass=SingletonMeta):
         path = self.__get_path_as_string(path)
 
         try:
-            _ = self.__get(path).attrs[key]
+            _ = self.__read(path).attrs[key]
             return True
         except KeyError:
             return False
@@ -135,12 +126,12 @@ class Storage(metaclass=SingletonMeta):
         path = self.__get_path_as_string(path)
 
         try:
-            _ = self.__get(path)
+            _ = self.__read(path)
             return True
         except KeyError:
             return False
 
-    def __get(
+    def __read(
         self,
         path: Union[StoragePath, str],
     ) -> Dataset:
@@ -149,74 +140,25 @@ class Storage(metaclass=SingletonMeta):
             payload = self.__file[path]
             return payload  # type: ignore TODO
         except KeyError:
-            raise KeyError(f"Could not get path: {path}")
+            raise KeyError(f"Unable to find storage path {path}.")
 
-    def read(
-        self,
-        path: Union[StoragePath, str],
-    ) -> Dataset:
-        try:
-            path = self.__get_path_as_string(path)
-            payload = self.__file[path]
-            return payload  # type: ignore TODO
-        except KeyError:
-            raise KeyError(f"Could not get path: {path}")
+    def read_config_files(self) -> List[ConfigFile]:
+        names = self.read_files_names()
+        timestamps = self.read_files_timestamps()
+        sites = self.read_files_sites()
+        metas = self.read_files_metas()
 
-    def get_ranges(self) -> AsStrWrapper:
-        dataset = self.__get(StoragePath.ranges_names)
-        return dataset.asstr()
-
-    def get_ranges_timestamps(self) -> Dataset:
-        return self.__get(StoragePath.ranges_timestamps)
-
-    def get_bands(self) -> List[str]:
-        dataset = self.__get(StoragePath.bands_names)
-        bands = list(dataset.asstr()[:])
-        return bands
-
-    def get_config_bands(self) -> ConfigBands:
-        names = self.get_bands()
-        frequencies = self.get_bands_frequencies()
-
-        bands = {}
-
-        for index, name in enumerate(names):
-            f = frequencies[index]
-            low = f[0]
-            high = f[1]
-
-            bands[name] = ConfigBand(
-                name=name,
-                low=low,
-                high=high,
-            )
-
-        return bands
-
-    def read_config_files(self) -> ConfigFiles:
-        names = self.read_files()
-        timestamps = self.read_timestamps()
-        sites = self.get_files_sites()
-        metas = self.__get_files_metas()
-
-        files = {}
-
-        for index, name in enumerate(names):
-            timestamp = timestamps[index]
-            site = sites[index]
-            meta = metas[index]
-
-            files[name] = ConfigFile(
-                file=name,
-                timestamp=timestamp,
-                site=site,
-                meta=meta,
-            )
+        files = ConfigFile.reconstruct(
+            names=names,
+            timestamps=timestamps[:],
+            sites=sites,
+            metas=metas,
+        )
 
         return files
 
     def read_reducers(self) -> List[str]:
-        dataset = self.__get(StoragePath.reducers)
+        dataset = self.__read(StoragePath.reducers_names)
 
         (length,) = dataset.shape
         if length == 0:
@@ -225,12 +167,12 @@ class Storage(metaclass=SingletonMeta):
         reducers = list(dataset.asstr()[:])
         return reducers
 
-    def get_grouped_reducers(
+    def pick_reducers(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> List[ConfigReducer]:
-        reducers = self.get_config_reducers()
+        reducers = self.read_config_reducers()
 
         grouped_reducers = []
 
@@ -242,73 +184,86 @@ class Storage(metaclass=SingletonMeta):
 
         return grouped_reducers
 
-    def get_reduced_features(
+    def read_all_reduced_features(
         self,
         reducers: List[ConfigReducer],
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> List[List[List[float]]]:
         reduced_features = []
 
         for _ in reducers:
             reduced_features.append([])
 
-        for r, reducer in enumerate(reducers):
-            path = f"{StoragePath.reduced_.value}{reducer.index}/{band}/{integration}"
-            dataset = self.__get(path)
+        for reducer in reducers:
+            path = self.generate_reduced_path(
+                band=band,
+                integration=integration,
+                reducer_index=reducer.index,
+            )
+            dataset = self.__read(path)
 
             for features in dataset:
-                reduced_features[r].append(features)
+                reduced_features[reducer.index].append(features)
 
         return reduced_features
 
-    def get_config_reducers(self) -> ConfigReducers:
-        names = self.read_reducers()
+    def read_config_reducers(self) -> List[ConfigReducer]:
+        names_dataset = self.__read(StoragePath.reducers_names)
 
-        if len(names) == 0:
-            return []
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        dimensions = self.__read(StoragePath.reducers_dimensions)[:]
 
-        dimensions = self.__get(StoragePath.reducers_dimensions)
+        bands_names = self.__read(StoragePath.reducers_bands).asstr()
+        integrations_names = self.__read(StoragePath.reducers_integrations).asstr()
+        ranges_names = self.__read(StoragePath.reducers_ranges).asstr()
 
-        bands = self.__get(StoragePath.reducers_bands).asstr()
-        integrations = self.__get(StoragePath.reducers_integrations).asstr()
-        ranges = self.__get(StoragePath.reducers_ranges).asstr()
+        bands_names = self.trim_rectangular(bands_names, "")
+        integrations_names = self.trim_rectangular(integrations_names, "")
+        ranges_names = self.trim_rectangular(ranges_names, "")
 
-        bands = self.trim_rectangular(bands, "")
-        integrations = self.trim_rectangular(integrations, "")
-        ranges = self.trim_rectangular(ranges, "")
+        bands_names_strings = [
+            ",".join(bands_names_string) for bands_names_string in bands_names
+        ]
 
-        reducers = []
+        integrations_names_strings = [
+            ",".join(integrations_names_string)
+            for integrations_names_string in integrations_names
+        ]
 
-        for index, name in enumerate(names):
-            reducer = ConfigReducer(
-                index=index,
-                name=name,
-                dimensions=dimensions[index],
-                bands=bands[index],
-                integrations=integrations[index],
-                ranges=ranges[index],
-            )
+        ranges_names_strings = [
+            ",".join(ranges_names_string) for ranges_names_string in integrations_names
+        ]
 
-            reducers.append(reducer)
+        bands = self.read_config_bands()
+        integrations = self.read_config_integrations()
+        ranges = self.read_config_ranges()
+
+        reducers = ConfigReducer.reconstruct(
+            names=names,
+            dimensions=dimensions,
+            bands_names_strings=bands_names_strings,
+            integrations_names_strings=integrations_names_strings,
+            ranges_names_strings=ranges_names_strings,
+            bands=bands,
+            integrations=integrations,
+            ranges=ranges,
+        )
 
         return reducers
 
-    def get_bands_frequencies(self) -> Dataset:
-        return self.__get(StoragePath.bands_frequencies)
-
-    def read_files(self) -> List[str]:
-        dataset = self.__get(StoragePath.files)
+    def read_files_names(self) -> List[str]:
+        dataset = self.__read(StoragePath.files_names)
         files = list(dataset.asstr()[:])
         return files
 
     def read_files_group_counts(self, integration: int) -> Dataset:
         path = f"{StoragePath.files_group_counts.value}/{integration}"
-        dataset = self.__get(path)
+        dataset = self.__read(path)
         return dataset
 
     def read_indicators(self) -> List[str]:
-        dataset = self.__get(StoragePath.indicators)
+        dataset = self.__read(StoragePath.indicators)
 
         (length,) = dataset.shape
 
@@ -319,35 +274,8 @@ class Storage(metaclass=SingletonMeta):
 
         return indicators
 
-    def get_indicators_values(
-        self,
-        band: str,
-        integration: int,
-    ) -> List[List[float]]:
-        indicators = self.read_indicators()
-
-        values = []
-
-        for i, _ in enumerate(indicators):
-            values.append([])
-
-        for i, _ in enumerate(indicators):
-            for file_index in self.enumerate_file_indexes():
-                suffix = self.__get_grouped_suffix(
-                    band,
-                    integration,
-                    file_index,
-                )
-                path = f"{StoragePath.indicator_.value}{i}{suffix}"
-                data = self.__get(path)
-
-                for subset in data:
-                    values[i].append(subset)
-
-        return values
-
     def read_volumes(self) -> List[str]:
-        dataset = self.__get(StoragePath.volumes)
+        dataset = self.__read(StoragePath.volumes)
 
         (length,) = dataset.shape
         if length == 0:
@@ -357,7 +285,7 @@ class Storage(metaclass=SingletonMeta):
         return volumes
 
     def read_matrices(self) -> List[str]:
-        dataset = self.__get(StoragePath.matrices)
+        dataset = self.__read(StoragePath.matrices)
 
         (length,) = dataset.shape
         if length == 0:
@@ -367,7 +295,7 @@ class Storage(metaclass=SingletonMeta):
         return matrices
 
     def read_pairings(self) -> List[str]:
-        dataset = self.__get(StoragePath.pairings)
+        dataset = self.__read(StoragePath.pairings)
 
         (length,) = dataset.shape
         if length == 0:
@@ -376,58 +304,33 @@ class Storage(metaclass=SingletonMeta):
         pairings = list(dataset.asstr()[:])
         return pairings
 
-    def get_volumes_values(
-        self,
-        band: str,
-        integration: int,
-    ) -> List[List[float]]:
-        volumes = self.read_volumes()
+    def read_files_timestamps(self) -> Dataset:
+        return self.__read(StoragePath.files_timestamps)
 
-        values = []
-
-        for v, _ in enumerate(volumes):
-            values.append([])
-
-        for v, _ in enumerate(volumes):
-            for file_index in self.enumerate_file_indexes():
-                suffix = self.__get_grouped_suffix(band, integration, file_index)
-                path = f"{StoragePath.volume_.value}{v}{suffix}"
-                data = self.__get(path)
-
-                for subset in data:
-                    values[v].append(subset)
-
-        return values
-
-    def read_timestamps(self) -> Dataset:
-        return self.__get(StoragePath.files_timestamps)
-
-    def get_files_sites(self) -> List[str]:
-        dataset = self.__get(StoragePath.files_sites)
+    def read_files_sites(self) -> List[str]:
+        dataset = self.__read(StoragePath.files_sites)
         sites = list(dataset.asstr()[:])
         return sites
 
-    def __get_files_metas(self) -> List[List[str]]:
-        dataset = self.__get(StoragePath.files_metas)
+    def read_files_metas(self) -> List[List[str]]:
+        dataset = self.__read(StoragePath.files_metas)
         metas = list(list(sublist) for sublist in dataset.asstr()[:])
         return metas
 
-    def get_integrations(self) -> List[str]:
-        dataset = self.__get(StoragePath.integrations_names)
-        integrations = list(dataset.asstr()[:])
-        return integrations
-
-    def get_integrations_seconds(self) -> Dataset:
-        return self.__get(StoragePath.integrations_seconds)
-
-    def read_features(
+    def generate_files_features_path(
         self,
-        band: str,
-    ) -> Tuple[Dataset, Dataset, int]:
-        files_features_path = f"{StoragePath.files_features.value}/{band}"
-        files_features_dataset = self.__get(files_features_path)
+        band: ConfigBand,
+    ) -> str:
+        return f"{StoragePath.files_features.value}/{band.name}"
 
-        files_durations_dataset = self.__get(StoragePath.files_durations.value)
+    def read_files_features(
+        self,
+        band: ConfigBand,
+    ) -> Tuple[Dataset, Dataset, int]:
+        files_features_path = self.generate_files_features_path(band=band)
+        files_features_dataset = self.__read(files_features_path)
+
+        files_durations_dataset = self.__read(StoragePath.files_durations.value)
 
         files_count = files_durations_dataset.len()
 
@@ -478,17 +381,18 @@ class Storage(metaclass=SingletonMeta):
 
     def delete_config(self) -> None:
         self.__delete_silently(StoragePath.configuration)
-        self.__delete_silently(StoragePath.files)
+        self.__delete_silently(StoragePath.files_names)
         self.__delete_silently(StoragePath.files_timestamps)
         self.__delete_silently(StoragePath.files_sites)
         self.__delete_silently(StoragePath.files_metas)
         self.__delete_silently(StoragePath.meta_properties)
         self.__delete_silently(StoragePath.meta_sets)
         self.__delete_silently(StoragePath.bands_names)
-        self.__delete_silently(StoragePath.bands_frequencies)
+        self.__delete_silently(StoragePath.bands_lows)
+        self.__delete_silently(StoragePath.bands_highs)
         self.__delete_silently(StoragePath.integrations_names)
-        self.__delete_silently(StoragePath.integrations_seconds)
-        self.__delete_silently(StoragePath.reducers)
+        self.__delete_silently(StoragePath.integrations_durations)
+        self.__delete_silently(StoragePath.reducers_names)
         self.__delete_silently(StoragePath.reducers_dimensions)
         self.__delete_silently(StoragePath.reducers_bands)
         self.__delete_silently(StoragePath.reducers_integrations)
@@ -497,7 +401,7 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.volumes)
 
     def read_settings(self) -> ConfigSettings:
-        configuration = self.__get(StoragePath.configuration)
+        configuration = self.__read(StoragePath.configuration)
         settings: ConfigSettings = configuration.attrs  # type: ignore
         return settings
 
@@ -544,16 +448,15 @@ class Storage(metaclass=SingletonMeta):
             path=StoragePath.configuration,
         )
 
-    def create_files(
+    def write_config_files(
         self,
-        files: Any,
-        timestamps: Any,
-        sites: Any,
-        metas: Any,
+        files: List[ConfigFile],
     ) -> None:
+        names, timestamps, sites, metas = ConfigFile.flatten(files=files)
+
         self.__write_dataset(
-            StoragePath.files,
-            files,
+            path=StoragePath.files_names,
+            data=names,
         )
 
         self.__write_dataset(
@@ -563,45 +466,13 @@ class Storage(metaclass=SingletonMeta):
         )
 
         self.__write_dataset(
-            StoragePath.files_sites,
-            sites,
+            path=StoragePath.files_sites,
+            data=sites,
         )
 
         self.__write_dataset(
-            StoragePath.files_metas,
-            metas,
-        )
-
-    def create_ranges(
-        self,
-        ranges: Any,
-        timestamps: Any,
-    ) -> None:
-        self.__write_dataset(
-            StoragePath.ranges_names,
-            ranges,
-        )
-
-        self.__write_dataset(
-            path=StoragePath.ranges_timestamps,
-            data=timestamps,
-            compression=StorageCompression.gzip,
-        )
-
-    def create_bands(
-        self,
-        bands: Any,
-        frequencies: Any,
-    ) -> None:
-        self.__write_dataset(
-            StoragePath.bands_names,
-            bands,
-        )
-
-        self.__write_dataset(
-            path=StoragePath.bands_frequencies,
-            data=frequencies,
-            compression=StorageCompression.gzip,
+            path=StoragePath.files_metas,
+            data=metas,
         )
 
     def create_integrations(
@@ -615,7 +486,7 @@ class Storage(metaclass=SingletonMeta):
         )
 
         self.__write_dataset(
-            path=StoragePath.integrations_seconds,
+            path=StoragePath.integrations_durations,
             data=integrations_seconds,
             compression=StorageCompression.gzip,
         )
@@ -658,12 +529,18 @@ class Storage(metaclass=SingletonMeta):
         durations_dataset.resize(durations_new_shape, axis=0)
         durations_dataset[-durations_increment:] = duration
 
+    def generate_group_counts_path(
+        self,
+        integration: ConfigIntegration,
+    ) -> str:
+        return f"{StoragePath.files_group_counts.value}/{integration.duration}"
+
     def append_files_groups_count(
         self,
-        integration: int,
+        integration: ConfigIntegration,
         groups_count: int,
     ) -> None:
-        path = f"{StoragePath.files_group_counts.value}/{integration}"
+        path = self.generate_group_counts_path(integration=integration)
         payload = [groups_count]
 
         # Appending
@@ -709,18 +586,19 @@ class Storage(metaclass=SingletonMeta):
         features_dataset[-duration:] = features
 
     def enumerate_file_indexes(self) -> Iterable[int]:
-        files = self.read_files()
+        files = self.read_files_names()
 
         for f, _ in enumerate(files):
             yield f
 
     def enumerate_group_indexes(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ):
         for file_index, groups_count, _, _, _ in self.enumerate_files(
-            band, integration
+            band,
+            integration,
         ):
             for group_index in range(groups_count):
                 yield file_index, group_index
@@ -731,22 +609,22 @@ class Storage(metaclass=SingletonMeta):
     @staticmethod
     def __get_group_count(
         file_features: List[List[float]],
-        integration: int,
+        integration: ConfigIntegration,
     ) -> int:
-        return len(file_features) // integration
+        return len(file_features) // integration.duration
 
     def enumerate_files(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> Generator[Tuple[int, int, int, int, List[List[float]]], None, None]:
-        features, durations, count = self.read_features(band)
-        timestamps = self.read_timestamps()
+        features, durations, count = self.read_files_features(band=band)
+        timestamps = self.read_files_timestamps()
 
         group_counts_path = f"{StoragePath.files_group_counts.value}/{integration}"
 
         if self.exists_dataset(group_counts_path):
-            group_counts = self.__get(group_counts_path)
+            group_counts = self.__read(group_counts_path)
         else:
             group_counts = None
 
@@ -768,35 +646,26 @@ class Storage(metaclass=SingletonMeta):
                 group_count = group_counts[file_index][0]
             else:
                 group_count = self.__get_group_count(
-                    file_features=file_features, integration=integration
+                    file_features=file_features,
+                    integration=integration,
                 )
 
             yield file_index, group_count, file_timestamp, file_duration, file_features
 
     def enumerate_bands_and_integrations(
         self,
-    ) -> Generator[Tuple[str, int], None, None]:
-        bands = self.get_bands()
-        integrations = self.get_integrations_seconds()
+    ) -> Generator[Tuple[ConfigBand, ConfigIntegration], None, None]:
+        bands = self.read_config_bands()
+        integrations = self.read_config_integrations()
 
         for band in bands:
             for integration in integrations:
                 yield band, integration
 
-    def enumerate_bands_and_integrations_with_indexes(
-        self,
-    ) -> Generator[Tuple[int, str, int, int], None, None]:
-        bands = self.get_bands()
-        integrations = self.get_integrations_seconds()
-
-        for b, band in enumerate(bands):
-            for i, integration in enumerate(integrations):
-                yield b, band, i, integration
-
     def read_files_count(
         self,
     ) -> int:
-        files_durations_dataset = self.__get(StoragePath.files_durations.value)
+        files_durations_dataset = self.__read(StoragePath.files_durations.value)
         files_count = files_durations_dataset.len()
         return files_count
 
@@ -812,16 +681,43 @@ class Storage(metaclass=SingletonMeta):
         for index, name in enumerate(volumes):
             yield index, name
 
+    def generate_grouped_path_suffix(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> str:
+        return f"{band.name}/{integration.duration}"
+
+    def generate_grouped_features_path(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> str:
+        suffix = self.generate_grouped_path_suffix(band=band, integration=integration)
+        return f"{StoragePath.grouped_features.value}/{suffix}"
+
+    def generate_grouped_timestamps_path(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> str:
+        suffix = self.generate_grouped_path_suffix(band=band, integration=integration)
+        return f"{StoragePath.grouped_timestamps.value}/{suffix}"
+
     def append_group(
         self,
         features: List[float],
         timestamp: int,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> None:
-        suffix = f"{band}/{integration}"
-        features_path = f"{StoragePath.grouped_features.value}/{suffix}"
-        timestamp_path = f"{StoragePath.grouped_timestamps.value}/{suffix}"
+        features_path = self.generate_grouped_features_path(
+            band=band, integration=integration
+        )
+
+        timestamp_path = self.generate_grouped_timestamps_path(
+            band=band, integration=integration
+        )
 
         if not self.exists_dataset(features_path):
             self.__file.create_dataset(
@@ -853,62 +749,45 @@ class Storage(metaclass=SingletonMeta):
             dataset.resize(new_shape, axis=0)
             dataset[-1:] = [timestamp]
 
-    def write_group_v8(
-        self,
-        features: List[List[float]],
-        timestamps: List[int],
-        band: str,
-        integration: int,
-    ) -> None:
-        for f in self.enumerate_file_indexes():
-            suffix = self.__get_grouped_suffix(band, integration, f)
-            path_features = f"/grouped_features{suffix}"
-            path_timestamps = f"/grouped_timestamps{suffix}"
-
-            self.__write_dataset(
-                path=path_features,
-                data=features[f],
-                compression=StorageCompression.gzip,
-            )
-
-            self.__write_dataset(
-                path=path_timestamps,
-                data=timestamps[f],
-                compression=StorageCompression.gzip,
-            )
-
     def create_group(
         self,
         features: List[List[float]],
         timestamps: List[int],
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ):
         for f in self.enumerate_file_indexes():
-            suffix = self.__get_grouped_suffix(band, integration, f)
-            path_features = f"{StoragePath.grouped_features.value}{suffix}"
-            path_timestamps = f"{StoragePath.grouped_timestamps.value}{suffix}"
+            grouped_features_path = self.generate_grouped_features_path(
+                band=band,
+                integration=integration,
+            )
+
+            grouped_timestamps_path = self.generate_grouped_timestamps_path(
+                band=band,
+                integration=integration,
+            )
 
             self.__write_dataset(
-                path=path_features,
+                path=grouped_features_path,
                 data=features[f],
                 compression=StorageCompression.gzip,
             )
 
             self.__write_dataset(
-                path=path_timestamps,
+                path=grouped_timestamps_path,
                 data=timestamps[f],
                 compression=StorageCompression.gzip,
             )
 
     def __convert_integration_seconds_to_name(
         self,
-        integration: int,
+        integration: ConfigIntegration,
     ) -> str:
-        names = self.get_integrations()
-        integrations = self.get_integrations_seconds()
+        integrations = self.read_config_integrations()
+        names = [i.name for i in integrations]
+        durations = [i.duration for i in integrations]
 
-        index = numpy.where(integrations[:] == integration)
+        index = numpy.where(durations[:] == integration.duration)
         index = index[0][0]
         name = names[index]
         name = str(name)
@@ -918,8 +797,8 @@ class Storage(metaclass=SingletonMeta):
     def is_band_integration_in_reducer(
         self,
         reducer: ConfigReducer,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> bool:
         if band not in reducer.bands:
             return False
@@ -935,17 +814,20 @@ class Storage(metaclass=SingletonMeta):
 
     def read_grouped_features(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> Dataset:
-        path = f"{StoragePath.grouped_features.value}/{band}/{integration}"
-        dataset = self.__get(path)
+        path = self.generate_grouped_features_path(
+            band=band,
+            integration=integration,
+        )
+        dataset = self.__read(path)
         return dataset
 
     def read_grouped_features_all_files(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> Dataset:
         grouped_features = self.read_grouped_features(
             band=band,
@@ -954,89 +836,139 @@ class Storage(metaclass=SingletonMeta):
 
         return grouped_features
 
-    def get_grouped_features(
-        self,
-        band: str,
-        integration: int,
-        file_index: int,
-    ) -> Dataset:
-        suffix = self.__get_grouped_suffix(band, integration, file_index)
-        path = f"{StoragePath.grouped_features.value}{suffix}"
-        features = self.__get(path)
-        return features
-
     def read_grouped_timestamps(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> Dataset:
-        suffix = f"/{band}/{integration}"
-        path = f"{StoragePath.grouped_timestamps.value}{suffix}"
-        features = self.__get(path)
+        path = self.generate_grouped_timestamps_path(band=band, integration=integration)
+        features = self.__read(path)
         return features
+
+    def generate_reduced_path(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        reducer_index: int,
+    ) -> str:
+        return (
+            f"{StoragePath.reduced_.value}{reducer_index}"
+            f"/{band.name}/{integration.duration}"
+        )
 
     def write_reduced(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         reducer_index: int,
         features: List[List[float]],
     ) -> None:
-        suffix = f"/{band}/{integration}"
-        path = f"{StoragePath.reduced_.value}{reducer_index}{suffix}"
+        path = self.generate_reduced_path(
+            band=band,
+            integration=integration,
+            reducer_index=reducer_index,
+        )
+
         self.__write_dataset(
             path=path,
             data=features,
             compression=StorageCompression.gzip,
         )
 
+    def generate_indicator_path(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        indicator_index: int,
+    ) -> str:
+        suffix = f"/{band.name}/{integration.duration}"
+        path = f"{StoragePath.indicator_.value}{indicator_index}{suffix}"
+        return path
+
     def delete_indicators(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.indicator_)
 
     def write_indicator(
         self,
-        index: int,
-        band: str,
-        integration: int,
+        indicator_index: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         values: List[float],
     ) -> None:
-        suffix = f"/{band}/{integration}"
-        path = f"{StoragePath.indicator_.value}{index}{suffix}"
+        path = self.generate_indicator_path(
+            band=band,
+            integration=integration,
+            indicator_index=indicator_index,
+        )
+
         self.__write_dataset(
             path=path,
             data=values,
             compression=StorageCompression.gzip,
         )
 
+    def generate_volume_path(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        volume_index: int,
+        meta_index: int,
+    ) -> str:
+        return (
+            f"{StoragePath.volume_.value}{volume_index}"
+            f"/{band.name}/{integration.duration}/{meta_index}"
+        )
+
     def write_volume(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         volume_index: int,
         meta_index: int,
         data: List[float],
     ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, meta_index)
-        path = f"{StoragePath.volume_.value}{volume_index}{suffix}"
+        path = self.generate_volume_path(
+            band=band,
+            integration=integration,
+            volume_index=volume_index,
+            meta_index=meta_index,
+        )
+
         self.__write_dataset(
             path=path,
             data=data,
             compression=StorageCompression.gzip,
         )
 
+    def generate_pairing_path(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        pairing_index: int,
+        meta_index_a: int,
+        meta_index_b: int,
+    ) -> str:
+        return (
+            f"{StoragePath.pairing_.value}{pairing_index}"
+            f"/{band.name}/{integration.duration}"
+            f"/{meta_index_a}/{meta_index_b}"
+        )
+
     def write_pairing(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         pairing_index: int,
         meta_index_a: int,
         meta_index_b: int,
         data: Tuple[List[float], List[float]],
     ) -> None:
-        path = (
-            f"{StoragePath.pairing_.value}{pairing_index}"
-            f"/{band}/{integration}"
-            f"/{meta_index_a}/{meta_index_b}"
+        path = self.generate_pairing_path(
+            band=band,
+            integration=integration,
+            pairing_index=pairing_index,
+            meta_index_a=meta_index_a,
+            meta_index_b=meta_index_b,
         )
 
         # TODO: We store a only. Verify with business if reverse versuses are
@@ -1054,16 +986,33 @@ class Storage(metaclass=SingletonMeta):
     def delete_pairings(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.pairing_)
 
+    def generate_matrix_path(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        matrix_index: int,
+        meta_index: int,
+    ) -> str:
+        return (
+            f"{StoragePath.matrix_.value}{matrix_index}"
+            f"/{band.name}/{integration.duration}/{meta_index}"
+        )
+
     def write_matrix(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         matrix_index: int,
         meta_index: int,
         data: List[float],
     ) -> None:
-        suffix = self.__get_grouped_suffix(band, integration, meta_index)
-        path = f"{StoragePath.matrix_.value}{matrix_index}{suffix}"
+        path = self.generate_matrix_path(
+            band=band,
+            integration=integration,
+            matrix_index=matrix_index,
+            meta_index=meta_index,
+        )
+
         self.__write_dataset(
             path=path,
             data=data,
@@ -1097,37 +1046,25 @@ class Storage(metaclass=SingletonMeta):
         )
 
     def read_meta_properties(self) -> List[str]:
-        meta_properties = self.__get(StoragePath.meta_properties)
+        meta_properties = self.__read(StoragePath.meta_properties)
 
         strings = list(meta_properties.asstr()[:])
 
-        # TODO: Add autoclusters
-        # if settings["autocluster"]:
-        #     strings.insert(0, "AUTOCLUSTER")
+        autoclusters = self.read_config_autoclusters()
+
+        if len(autoclusters) > 0:
+            for autocluster in reversed(autoclusters):
+                strings.insert(0, f"AUTOCLUSTER_{autocluster.index}")
 
         return strings
 
     def is_defined_files(self) -> bool:
         return (
-            self.exists_dataset(StoragePath.files.value)
+            self.exists_dataset(StoragePath.files_names.value)
             and self.exists_dataset(StoragePath.files_timestamps.value)
             and self.exists_dataset(StoragePath.files_sites.value)
             and self.exists_dataset(StoragePath.files_metas.value)
         )
-
-    def is_defined_file_features(self, band: str, file_index: int) -> bool:
-        path = self.__get_file_features_path(band, file_index)
-        return self.exists_dataset(path)
-
-    def is_defined_ranges(self) -> bool:
-        return self.exists_dataset(
-            StoragePath.ranges_names.value
-        ) and self.exists_dataset(StoragePath.ranges_timestamps.value)
-
-    def is_defined_bands(self) -> bool:
-        return self.exists_dataset(
-            StoragePath.bands_names.value
-        ) and self.exists_dataset(StoragePath.bands_frequencies.value)
 
     @staticmethod
     def make_rectangular(
@@ -1162,7 +1099,7 @@ class Storage(metaclass=SingletonMeta):
         return jagged_array
 
     @staticmethod
-    def convert_dataset_to_string_list(dataset: Dataset) -> List[str]:
+    def __convert_dataset_to_string_list(dataset: Dataset) -> List[str]:
         (length,) = dataset.shape
 
         if length == 0:
@@ -1173,13 +1110,13 @@ class Storage(metaclass=SingletonMeta):
         return string_list
 
     def read_config_autoclusters(self) -> List[ConfigAutocluster]:
-        names_dataset = self.__get(StoragePath.autoclusters_names)
+        names_dataset = self.__read(StoragePath.autoclusters_names)
 
-        names = self.convert_dataset_to_string_list(names_dataset)
-        min_cluster_sizes = self.__get(StoragePath.autoclusters_min_cluster_sizes)[:]
-        min_samples = self.__get(StoragePath.autoclusters_min_samples)[:]
-        alphas = self.__get(StoragePath.autoclusters_alphas)[:]
-        epsilons = self.__get(StoragePath.autoclusters_epsilons)[:]
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        min_cluster_sizes = self.__read(StoragePath.autoclusters_min_cluster_sizes)[:]
+        min_samples = self.__read(StoragePath.autoclusters_min_samples)[:]
+        alphas = self.__read(StoragePath.autoclusters_alphas)[:]
+        epsilons = self.__read(StoragePath.autoclusters_epsilons)[:]
 
         autoclusters = ConfigAutocluster.reconstruct(
             names=names,
@@ -1190,6 +1127,131 @@ class Storage(metaclass=SingletonMeta):
         )
 
         return autoclusters
+
+    def find_config_band_by_name(
+        self,
+        band_name: str,
+    ) -> ConfigBand:
+        bands = self.read_config_bands()
+
+        for band in bands:
+            if band.name == band_name:
+                return band
+
+        raise KeyError(f"Unable to find band name {band_name}")
+
+    def find_config_integration_by_duration(
+        self,
+        integration_duration: int,
+    ) -> ConfigIntegration:
+        integrations = self.read_config_integrations()
+
+        for integration in integrations:
+            if integration.duration == integration_duration:
+                return integration
+
+        raise KeyError(f"Unable to find integration duration {integration_duration}")
+
+    def read_config_bands(self):
+        names_dataset = self.__read(StoragePath.bands_names)
+
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        lows = self.__read(StoragePath.bands_lows)[:]
+        highs = self.__read(StoragePath.bands_highs)[:]
+
+        bands = ConfigBand.reconstruct(
+            names=names,
+            lows=lows,
+            highs=highs,
+        )
+
+        return bands
+
+    def read_config_integrations(self):
+        names_dataset = self.__read(StoragePath.integrations_names)
+
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        durations = self.__read(StoragePath.integrations_durations)[:]
+
+        integrations = ConfigIntegration.reconstruct(
+            names=names,
+            durations=durations,
+        )
+
+        return integrations
+
+    def read_config_ranges(self):
+        names_dataset = self.__read(StoragePath.ranges_names)
+
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        starts = self.__read(StoragePath.ranges_starts)[:]
+        ends = self.__read(StoragePath.ranges_ends)[:]
+
+        ranges = ConfigRange.reconstruct(
+            names=names,
+            starts=starts,
+            ends=ends,
+        )
+
+        return ranges
+
+    def write_config_bands(
+        self,
+        bands: List[ConfigBand],
+    ) -> None:
+        names, lows, highs = ConfigBand.flatten(bands=bands)
+
+        self.__write_dataset(
+            path=StoragePath.bands_names,
+            data=names,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.bands_lows,
+            data=lows,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.bands_highs,
+            data=highs,
+        )
+
+    def write_config_integrations(
+        self,
+        integrations: List[ConfigIntegration],
+    ) -> None:
+        names, durations = ConfigIntegration.flatten(integrations=integrations)
+
+        self.__write_dataset(
+            path=StoragePath.integrations_names,
+            data=names,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.integrations_durations,
+            data=durations,
+        )
+
+    def write_config_ranges(
+        self,
+        ranges: List[ConfigRange],
+    ) -> None:
+        names, starts, ends = ConfigRange.flatten(ranges=ranges)
+
+        self.__write_dataset(
+            path=StoragePath.ranges_names,
+            data=names,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.ranges_starts,
+            data=starts,
+        )
+
+        self.__write_dataset(
+            path=StoragePath.ranges_ends,
+            data=ends,
+        )
 
     def write_config_autoclusters(
         self,
@@ -1228,14 +1290,18 @@ class Storage(metaclass=SingletonMeta):
             data=epsilons,
         )
 
-    def write_reducers(
+    def write_config_reducers(
         self,
-        reducers: List[str],
-        dimensions: List[int],
-        bands: List[List[str]],
-        integrations: List[List[str]],
-        ranges: List[List[str]],
+        reducers: List[ConfigReducer],
     ) -> None:
+        (
+            names,
+            dimensions,
+            bands,
+            integrations,
+            ranges,
+        ) = ConfigReducer.flatten(reducers=reducers)
+
         if len(bands) != 0:
             bands = self.make_rectangular(bands, "")
 
@@ -1246,8 +1312,8 @@ class Storage(metaclass=SingletonMeta):
             ranges = self.make_rectangular(ranges, "")
 
         self.__write_dataset(
-            path=StoragePath.reducers,
-            data=reducers,
+            path=StoragePath.reducers_names,
+            data=names,
         )
 
         self.__write_dataset(
@@ -1306,243 +1372,104 @@ class Storage(metaclass=SingletonMeta):
             data=pairings,
         )
 
-    # Point index
     @staticmethod
-    def get_flat_index(
+    def generate_point_index(
         file_index: int,
         group_index: int,
         groups_count: int,
     ) -> int:
         return file_index * groups_count + group_index
 
-    def read_meta_values(
+    def read_grouped_meta_values(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> List[List[str]]:
         files = self.read_config_files()
 
         meta_properties = self.read_meta_properties()
+
         meta_values = []
 
-        # TODO: Add autoclusters
-        # if settings["autocluster"]:
-        #     autocluster = self.__read_autocluster_values(band, integration)
+        config_autoclusters = self.read_config_autoclusters()
+        autoclusters_values = []
+
+        if len(config_autoclusters) > 0:
+            for autocluster in reversed(config_autoclusters):
+                autocluster_values = self.read_autocluster(
+                    band=band,
+                    integration=integration,
+                    autocluster_index=autocluster.index,
+                )
+
+                autoclusters_values.append(autocluster_values)
 
         for mp, _ in enumerate(meta_properties):
             meta_property_values = []
 
-            flat_index = 0
+            point_index = 0
+
             for file_index, groups_count, _, _, _ in self.enumerate_files(
-                band=band, integration=integration
+                band=band,
+                integration=integration,
             ):
+                file_ = files[file_index]
+
                 for _ in range(groups_count):
-                    file_name = list(files)[file_index]
-                    file_ = files[file_name]
                     meta = list(file_.meta)
 
-                    # TODO: Add autoclusters
-                    # if settings["autocluster"] and autocluster is not None:
-                    #     meta.insert(0, str(autocluster[flat_index]))
+                    if len(config_autoclusters) > 0:
+                        for autocluster in config_autoclusters:
+                            autocluster_values = autoclusters_values[autocluster.index]
+                            meta.insert(0, str(autocluster_values[point_index]))
 
                     meta_value = meta[mp]
                     meta_property_values.append(meta_value)
 
-                    flat_index += 1
+                    point_index += 1
 
             meta_values.append(meta_property_values)
 
         return meta_values
 
-    def migrate_v8(self) -> None:
-        print_new_line()
-        print("Migrating storage file from v8 to v9")
-
-        bands = self.get_bands()
-        integrations = self.get_integrations_seconds()[:]
-
-        self.__migrate_v8_grouped_features_and_timestamps(bands, integrations)
-        self.__migrate_v8_reduced_features(bands, integrations)
-        self.__migrate_v8_indicators(bands, integrations)
-        self.__migrate_v8_populate_matrices()
-        self.__migrate_v8_populate_pairings()
-
-        print_new_line()
-
-    def __migrate_v8_populate_matrices(self) -> None:
-        print_new_line()
-        print("Populating with empty matrices")
-        self.write_matrices([])
-
-    def __migrate_v8_populate_pairings(self) -> None:
-        print_new_line()
-        print("Populating with empty pairings")
-        self.write_pairings([])
-
-    def __migrate_v8_indicators(
-        self,
-        bands: List[str],
-        integrations: List[int],
-    ) -> None:
-        print_new_line()
-        print("Migrating indicators")
-
-        indicators = self.read_indicators()
-
-        for band in bands:
-            for integration in integrations:
-                for indicator_index, _ in enumerate(indicators):
-                    indicator_values = []
-
-                    for file_index in self.enumerate_file_indexes():
-                        indicator_old_path = (
-                            f"{StoragePath.indicator_.value}{indicator_index}"
-                            f"/{band}/{integration}/{file_index}"
-                        )
-                        indicator_old_values = self.__get(indicator_old_path)[:]
-                        for indicator_old_value in indicator_old_values:
-                            indicator_values.append(indicator_old_value)
-                        self.__delete_silently(indicator_old_path)
-
-                    indicator_path = (
-                        f"{StoragePath.indicator_.value}{indicator_index}"
-                        f"/{band}/{integration}"
-                    )
-                    self.__delete_silently(indicator_path)
-
-                    self.write_indicator(
-                        index=indicator_index,
-                        band=band,
-                        integration=integration,
-                        values=indicator_values,
-                    )
-
-    def __migrate_v8_grouped_features_and_timestamps(
-        self,
-        bands: List[str],
-        integrations: List[int],
-    ) -> None:
-        print_new_line()
-        print("Migrating grouped features and timestamps")
-
-        for band in bands:
-            for integration in integrations:
-                grouped_features = []
-                grouped_timestamps = []
-
-                # Collect old data
-                for file_index in self.enumerate_file_indexes():
-                    suffix = f"/{band}/{integration}/{file_index}"
-
-                    # Grouped features
-                    grouped_features_old_path = (
-                        f"{StoragePath.grouped_features.value}{suffix}"
-                    )
-                    grouped_features_old_values = self.__get(grouped_features_old_path)
-                    grouped_features.append(grouped_features_old_values[:])
-                    self.__delete_silently(grouped_features_old_path)
-
-                    # Grouped timestamps
-                    grouped_timestamps_old_path = (
-                        f"{StoragePath.grouped_timestamps.value}{suffix}"
-                    )
-                    grouped_timestamps_old_values = self.__get(
-                        grouped_timestamps_old_path
-                    )
-                    grouped_timestamps.append(grouped_timestamps_old_values[:])
-                    self.__delete_silently(grouped_timestamps_old_path)
-
-                # Remove leftovers
-                grouped_features_path = (
-                    f"{StoragePath.grouped_features.value}/{band}/{integration}"
-                )
-                self.__delete_silently(grouped_features_path)
-
-                grouped_timestamps_path = (
-                    f"{StoragePath.grouped_timestamps.value}/{band}/{integration}"
-                )
-                self.__delete_silently(grouped_timestamps_path)
-
-                # Write new data
-                self.write_group_v8(
-                    features=grouped_features,
-                    timestamps=grouped_timestamps,
-                    band=band,
-                    integration=integration,
-                )
-
-    def __migrate_v8_reduced_features(
-        self,
-        bands: List[str],
-        integrations: List[int],
-    ) -> None:
-        print_new_line()
-        print("Migrating reduced features")
-
-        reducers = self.read_reducers()
-
-        for band in bands:
-            for integration in integrations:
-                for reducer_index, _ in enumerate(reducers):
-                    reduced_features = []
-
-                    # Collect old data
-                    for file_index in self.enumerate_file_indexes():
-                        suffix = f"/{band}/{integration}/{file_index}"
-                        reduced_features_old_path = (
-                            f"{StoragePath.reduced_.value}{reducer_index}{suffix}"
-                        )
-                        reduced_features_old_values = self.__get(
-                            reduced_features_old_path
-                        )
-
-                        for reduced_features_old_slice in reduced_features_old_values:
-                            reduced_features.append(reduced_features_old_slice)
-
-                        self.__delete_silently(reduced_features_old_path)
-
-                    # Remove leftovers
-                    reduced_features_path = (
-                        f"{StoragePath.reduced_.value}{reducer_index}"
-                        f"/{band}/{integration}"
-                    )
-                    self.__delete_silently(reduced_features_path)
-
-                    # Write new data
-                    self.write_reduced(
-                        band=band,
-                        integration=integration,
-                        reducer_index=reducer_index,
-                        features=reduced_features,
-                    )
-
     def generate_computation_umap_path(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         index: int,
     ) -> str:
-        return f"{StoragePath.computation_umap_.value}{index}/{band}/{integration}"
+        return (
+            f"{StoragePath.computation_umap_.value}{index}"
+            f"/{band.name}/{integration.duration}"
+        )
 
-    def enumerate_computation_umaps(self, band: str, integration: int):
+    def enumerate_computation_umaps(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ):
         iterations = self.read_computation_umap_iterations()
 
         for iteration in range(iterations):
             path = self.generate_computation_umap_path(
-                band=band, integration=integration, index=iteration
+                band=band,
+                integration=integration,
+                index=iteration,
             )
 
             yield path
 
     def write_computation_umap(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         computation_index: int,
         features: List[List[float]],
     ) -> None:
         path = self.generate_computation_umap_path(
-            band=band, integration=integration, index=computation_index
+            band=band,
+            integration=integration,
+            index=computation_index,
         )
 
         self.__write_dataset(
@@ -1558,34 +1485,38 @@ class Storage(metaclass=SingletonMeta):
 
     def read_computation_umaps(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> List[Dataset]:
         computation_umaps = []
 
         for path in self.enumerate_computation_umaps(
-            band=band, integration=integration
+            band=band,
+            integration=integration,
         ):
-            computation_umap = self.__get(path=path)
+            computation_umap = self.__read(path=path)
             computation_umaps.append(computation_umap)
 
         return computation_umaps
 
     def generate_mean_distances_matrix_path(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> str:
-        path = f"{StoragePath.mean_distances_matrix.value}/{band}/{integration}"
-        return path
+        return (
+            f"{StoragePath.mean_distances_matrix.value}"
+            f"/{band.name}/{integration.duration}"
+        )
 
     def write_mean_distances_matrix(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         matrix: List[List[float]],
     ) -> None:
         path = self.generate_mean_distances_matrix_path(band, integration)
+
         self.__write_dataset(
             path=path,
             data=matrix,
@@ -1595,28 +1526,32 @@ class Storage(metaclass=SingletonMeta):
     def delete_mean_distances_matrix(self) -> None:
         self.__delete_silently(StoragePath.mean_distances_matrix)
 
-    def read_mean_distances_matrix(self, band: str, integration: int) -> Dataset:
+    def read_mean_distances_matrix(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> Dataset:
         path = self.generate_mean_distances_matrix_path(band, integration)
-        mean_distances_matrix = self.__get(path)
+        mean_distances_matrix = self.__read(path)
         return mean_distances_matrix
 
     def generate_autoclusters_path(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         autocluster_index: int,
     ) -> str:
         path = (
             f"{StoragePath.autocluster_.value}{autocluster_index}"
-            f"/{band}/{integration}"
+            f"/{band.name}/{integration.duration}"
         )
 
         return path
 
     def enumerate_autoclusters(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> Generator[Tuple[int, str], None, None]:
         autoclusters = self.read_config_autoclusters()
 
@@ -1631,8 +1566,8 @@ class Storage(metaclass=SingletonMeta):
 
     def write_autocluster(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         autocluster_index: int,
         autocluster: List[int],
     ) -> None:
@@ -1653,8 +1588,8 @@ class Storage(metaclass=SingletonMeta):
 
     def read_autocluster(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         autocluster_index: int,
     ) -> Dataset:
         path = self.generate_autoclusters_path(
@@ -1663,12 +1598,12 @@ class Storage(metaclass=SingletonMeta):
             autocluster_index=autocluster_index,
         )
 
-        return self.__get(path)
+        return self.__read(path)
 
-    def read_autoclusters(
+    def read_autoclusters_values(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
     ) -> List[Dataset]:
         autoclusters = []
 
@@ -1698,11 +1633,11 @@ class Storage(metaclass=SingletonMeta):
         return f"{StoragePath.trajectory_.value}{reducer_index}/{band}/{integration}"
 
     def read_config_trajectories(self):
-        names_dataset = self.__get(StoragePath.trajectories_names)
+        names_dataset = self.__read(StoragePath.trajectories_names)
 
-        names = self.convert_dataset_to_string_list(names_dataset)
-        starts = self.__get(StoragePath.trajectories_starts)[:]
-        ends = self.__get(StoragePath.trajectories_ends)[:]
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        starts = self.__read(StoragePath.trajectories_starts)[:]
+        ends = self.__read(StoragePath.trajectories_ends)[:]
 
         trajectories = ConfigTrajectory.reconstruct(
             names=names,

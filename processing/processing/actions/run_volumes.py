@@ -14,8 +14,8 @@ def run_volumes(env: Env):
     if len(volumes) == 0:
         return
 
-    bands = storage.get_bands()
-    integrations = storage.get_integrations_seconds()
+    bands = storage.read_config_bands()
+    integrations = storage.read_config_integrations()
     meta_properties = storage.read_meta_properties()
 
     print_new_line()
@@ -24,14 +24,19 @@ def run_volumes(env: Env):
     timer = Timer(len(bands) * len(integrations) * len(volumes) * len(meta_properties))
 
     for band, integration in storage.enumerate_bands_and_integrations():
-        print(f"Volumes loaded for band {band}, integration {integration}")
+        print(
+            f"Volumes loaded for band {band.name}"
+            f", integration {integration.duration}"
+        )
 
         grouped_features = storage.read_grouped_features_all_files(
             band=band,
             integration=integration,
         )
 
-        meta_values = storage.read_meta_values(band=band, integration=integration)
+        meta_values = storage.read_grouped_meta_values(
+            band=band, integration=integration
+        )
 
         for volume_index, volume_name in enumerate(volumes):
             for meta_index in storage.enumerate_meta_properties():

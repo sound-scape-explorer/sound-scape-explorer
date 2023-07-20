@@ -3,6 +3,8 @@ from typing import List
 
 from h5py import Dataset
 
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.matrices.DistanceMatrix import DistanceMatrix
 from processing.matrices.MatrixName import MatrixName
 from processing.matrices.OverlapMatrix import OverlapMatrix
@@ -14,8 +16,8 @@ class Matrix:
     def __new__(
         cls,
         name: str,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         matrix_index: int,
         meta_index: int,
         features: List[Dataset],
@@ -53,7 +55,7 @@ class Matrix:
 
     @staticmethod
     def fail(name: str) -> None:
-        raise KeyError(f"Matrix {name} not found.")
+        raise KeyError(f"Unable to find matrix name {name}.")
 
     @staticmethod
     def validate_name(name: str) -> None:

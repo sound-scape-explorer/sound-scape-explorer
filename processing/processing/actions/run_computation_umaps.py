@@ -9,8 +9,8 @@ def run_computation_umaps(env: Env):
     storage = Storage(path=env.storage)
     storage.delete_computation_umaps()
 
-    bands = storage.get_bands()
-    integrations = storage.get_integrations_seconds()
+    bands = storage.read_config_bands()
+    integrations = storage.read_config_integrations()
 
     computation_umap_dimensions = storage.read_computation_umap_dimensions()
     computation_umap_iterations = storage.read_computation_umap_iterations()
@@ -25,7 +25,8 @@ def run_computation_umaps(env: Env):
 
     for band, integration in storage.enumerate_bands_and_integrations():
         grouped_features = storage.read_grouped_features(
-            band=band, integration=integration
+            band=band,
+            integration=integration,
         )
 
         for computation_index in range(computation_umap_iterations):

@@ -127,7 +127,7 @@ class VGGishModel(AbstractModel, VGG):
 
     def __validate_sample_rate(self):
         if self.__sample_rate is None:
-            raise AttributeError("VGGish: Sample rate is not defined.")
+            raise AttributeError("Unable to find VGGish sample rate.")
 
         return self.__sample_rate
 

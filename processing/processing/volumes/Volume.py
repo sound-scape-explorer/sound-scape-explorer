@@ -3,6 +3,8 @@ from typing import List
 
 from h5py import Dataset
 
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.storage.Storage import Storage
 from processing.volumes.MeanSpreadingVolume import MeanSpreadingVolume
 from processing.volumes.MeanStandardDeviationVolume import MeanStandardDeviationVolume
@@ -15,8 +17,8 @@ class Volume:
     def __new__(
         cls,
         name: str,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         volume_index: int,
         meta_index: int,
         features: List[Dataset],
@@ -63,7 +65,7 @@ class Volume:
 
     @staticmethod
     def fail(name: str) -> None:
-        raise KeyError(f"Volume {name} not found!")
+        raise KeyError(f"Unable to find volume name {name}.")
 
     @staticmethod
     def validate_name(name: str) -> None:

@@ -8,19 +8,21 @@ export enum StoragePath {
    * Configuration/Bands
    */
   bands_names = '/configuration/bands/names',
-  bands_frequencies = '/configuration/bands/frequencies',
+  bands_lows = '/configuration/bands/lows',
+  bands_highs = '/configuration/bands/highs',
 
   /**
    * Configuration/Integrations
    */
   integrations_names = '/configuration/integrations/names',
-  integrations_seconds = '/configuration/integrations/seconds',
+  integrations_durations = '/configuration/integrations/durations',
 
   /**
    * Configuration/Ranges
    */
   ranges_names = '/configuration/ranges/names',
-  ranges_timestamps = '/configuration/ranges/timestamps',
+  ranges_starts = '/configuration/ranges/starts',
+  ranges_ends = '/configuration/ranges/ends',
 
   /**
    * Configuration/Files
@@ -47,7 +49,7 @@ export enum StoragePath {
   /**
    * Configuration/Reducers
    */
-  reducers = '/configuration/reducers/names',
+  reducers_names = '/configuration/reducers/names',
   reducers_dimensions = '/configuration/reducers/dimensions',
   reducers_bands = '/configuration/reducers/bands',
   reducers_integrations = '/configuration/reducers/integrations',

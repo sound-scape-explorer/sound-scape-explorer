@@ -1,20 +1,17 @@
-import math
 from enum import Enum
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 
-import numpy
 import pandas
-from numpy import nan
 from pandas import DataFrame, Series, Timestamp
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigAutocluster import ConfigAutocluster
-from processing.config.ConfigBand import ConfigBand, ConfigBands
-from processing.config.ConfigFile import ConfigFile, ConfigFiles
-from processing.config.ConfigIntegration import ConfigIntegration, ConfigIntegrations
-from processing.config.ConfigRange import ConfigRange, ConfigRanges
-from processing.config.ConfigReducer import ConfigReducer, ConfigReducers
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigFile import ConfigFile
+from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.ConfigRange import ConfigRange
+from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ExcelAutocluster import ExcelAutocluster
 from processing.config.ExcelBand import ExcelBand
@@ -38,7 +35,9 @@ from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
 from processing.utils.get_uniques_from_list import get_uniques_from_list
+from processing.utils.is_nan import is_nan
 from processing.utils.print_new_line import print_new_line
+from processing.utils.reverse_array import reverse_array
 from processing.volumes.Volume import Volume
 
 
@@ -46,15 +45,15 @@ class Config(metaclass=SingletonMeta):
     __path: str
     __excel: pandas.ExcelFile
     __settings: ConfigSettings = {}  # type: ignore
-    __files: ConfigFiles = {}
+    __files: List[ConfigFile] = []
     __files_meta_properties: List[str]
-    __bands: ConfigBands = {}
-    __integrations: ConfigIntegrations = {}
-    __ranges: ConfigRanges = {}
+    __bands: List[ConfigBand] = []
+    __integrations: List[ConfigIntegration] = []
+    __ranges: List[ConfigRange] = []
     __all_sites: List[str] = []
     __autoclusters: List[ConfigAutocluster] = []
     __trajectories: List[ConfigTrajectory] = []
-    __reducers: ConfigReducers = []
+    __reducers: List[ConfigReducer] = []
     __indicators: List[str] = []
     __volumes: List[str] = []
     __matrices: List[str] = []
@@ -79,7 +78,9 @@ class Config(metaclass=SingletonMeta):
         self.__print_settings()
 
     def __fail(self) -> None:
-        raise FileNotFoundError(f"Could not load Excel file: {self.__path}")
+        raise FileNotFoundError(
+            f"Unable to find Excel configuration file {self.__path}."
+        )
 
     def __validate_path(self) -> None:
         if self.__path is None:
@@ -126,6 +127,7 @@ class Config(metaclass=SingletonMeta):
         self.__read_autoclusters()
         self.__read_trajectories()
         self.__read_reducers()
+
         self.__read_indicators()
         self.__read_volumes()
         self.__read_matrices()
@@ -171,26 +173,7 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        reducers = []
-        dimensions = []
-        bands = []
-        integrations = []
-        ranges = []
-
-        for reducer in self.__reducers:
-            reducers.append(reducer.name)
-            dimensions.append(reducer.dimensions)
-            bands.append(reducer.bands)
-            integrations.append(reducer.integrations)
-            ranges.append(reducer.ranges)
-
-        storage.write_reducers(
-            reducers=reducers,
-            dimensions=dimensions,
-            bands=bands,
-            integrations=integrations,
-            ranges=ranges,
-        )
+        storage.write_config_reducers(reducers=self.__reducers)
 
     def __store_indicators(
         self,
@@ -217,31 +200,11 @@ class Config(metaclass=SingletonMeta):
         storage.write_pairings(self.__pairings)
 
     def __set_all_sites(self) -> None:
-        for file in self.__files.values():
-            site = file.site
-
-            if site in self.__all_sites:
+        for file_ in self.__files:
+            if file_.site in self.__all_sites:
                 continue
 
-            self.__all_sites.append(site)
-
-    @staticmethod
-    def __is_nan(payload: Any) -> bool:
-        return (
-            type(payload) is float or type(payload) is numpy.float64
-        ) and math.isnan(payload)
-
-    def get_expected_sample_rate(self) -> int:
-        return self.__settings["expected_sample_rate"]
-
-    def get_files(self) -> ConfigFiles:
-        return self.__files
-
-    def get_bands(self) -> ConfigBands:
-        return self.__bands
-
-    def get_meta_properties(self) -> List[str]:
-        return self.__files_meta_properties
+            self.__all_sites.append(file_.site)
 
     def __read_settings(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.settings)
@@ -260,7 +223,7 @@ class Config(metaclass=SingletonMeta):
     ):
         payload = value
 
-        if self.__is_nan(value):
+        if is_nan(value):
             payload = None
 
         if setting == StorageSetting.timezone.value and value is None:
@@ -308,8 +271,11 @@ class Config(metaclass=SingletonMeta):
             self.__files_meta_properties.append(meta_property)
 
     def __read_files_meta_values(self) -> List[List[str]]:
+        self.__read_files_meta_properties()
+
         sheet = self.__parse_sheet(ExcelSheet.files)
-        meta_values = []
+
+        meta_values_by_columns = []
 
         for meta_property in self.__files_meta_properties:
             meta_value = self.__parse_column(
@@ -324,31 +290,30 @@ class Config(metaclass=SingletonMeta):
                 if type(value) is not str:
                     meta_value[v] = str(value)
 
-            meta_values.append(meta_value)
+            meta_values_by_columns.append(meta_value)
 
-        return meta_values
+        return reverse_array(meta_values_by_columns)
 
     def __read_files(self) -> None:
-        self.__read_files_meta_properties()
-
         sheet = self.__parse_sheet(ExcelSheet.files)
-        files = self.__parse_column(sheet, ExcelFile.file)
+
+        names = self.__parse_column(sheet, ExcelFile.name_)
+
         dates = self.__parse_column(sheet, ExcelFile.date)
+        timestamps = [convert_date_to_timestamp(d) for d in dates]
+
         sites = self.__parse_column(sheet, ExcelFile.site)
+
         metas = self.__read_files_meta_values()
 
-        for index, file in enumerate(files):
-            date = dates[index]
-            timestamp = convert_date_to_timestamp(date)
-            site = str(sites[index])
-            meta = [str(m[index]) for m in metas]
+        files = ConfigFile.reconstruct(
+            names=names,
+            timestamps=timestamps,
+            sites=sites,
+            metas=metas,
+        )
 
-            self.__files[file] = ConfigFile(
-                file=file,
-                timestamp=timestamp,
-                site=site,
-                meta=meta,
-            )
+        self.__files = files
 
     def __store_settings(
         self,
@@ -366,26 +331,7 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        if storage.is_defined_files():
-            return
-
-        files = []
-        timestamps = []
-        sites = []
-        metas = []
-
-        for file_name, file in self.__files.items():
-            files.append(file_name)
-            timestamps.append(file.timestamp)
-            sites.append(file.site)
-            metas.append(file.meta)
-
-        storage.create_files(
-            files=files,
-            timestamps=timestamps,
-            sites=sites,
-            metas=metas,
-        )
+        storage.write_config_files(files=self.__files)
 
     # INFO: Meta properties are made uppercase just before writing to h5.
     # This is because it is not a critical error to be notified to the user.
@@ -408,7 +354,8 @@ class Config(metaclass=SingletonMeta):
         meta_sets: List[List[str]] = []
 
         for index, _ in enumerate(meta_properties):
-            meta_set = get_uniques_from_list(meta_values[index])
+            meta_values_by_columns = reverse_array(meta_values)
+            meta_set = get_uniques_from_list(meta_values_by_columns[index])
             meta_sets.append(meta_set)
 
         storage.write_metas(
@@ -418,150 +365,67 @@ class Config(metaclass=SingletonMeta):
 
     def __read_ranges(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.ranges)
-        ranges = self.__parse_column(sheet, ExcelRange.range)
-        starts = self.__parse_column(sheet, ExcelRange.start)
-        ends = self.__parse_column(sheet, ExcelRange.end)
 
-        for index, range_ in enumerate(ranges):
-            start = starts[index]
-            end = ends[index]
+        names: List[str] = self.__parse_column(sheet, ExcelRange.name_)
+        starts: List[Timestamp] = self.__parse_column(sheet, ExcelRange.start)
+        ends: List[Timestamp] = self.__parse_column(sheet, ExcelRange.end)
 
-            timestamp_start = convert_date_to_timestamp(start)
-            timestamp_end = convert_date_to_timestamp(end)
+        starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
+        ends_timestamps = [convert_date_to_timestamp(end) for end in ends]
 
-            self.__ranges[range_] = ConfigRange(
-                name=range_,
-                start=timestamp_start,
-                end=timestamp_end,
-            )
+        ranges = ConfigRange.reconstruct(
+            names=names,
+            starts=starts_timestamps,
+            ends=ends_timestamps,
+        )
+
+        self.__ranges = ranges
 
     def __store_ranges(
         self,
         storage: Storage,
     ) -> None:
-        if storage.is_defined_ranges():
-            return
-
-        ranges = []
-        ranges_timestamps = []
-
-        for range_name, range_ in self.__ranges.items():
-            timestamps = [range_.start, range_.end]
-
-            ranges.append(range_name)
-            ranges_timestamps.append(timestamps)
-
-        storage.create_ranges(ranges, ranges_timestamps)
+        storage.write_config_ranges(ranges=self.__ranges)
 
     def __read_bands(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.bands)
-        bands = self.__parse_column(sheet, ExcelBand.band)
-        lows = self.__parse_column(sheet, ExcelBand.low)
-        highs = self.__parse_column(sheet, ExcelBand.high)
 
-        for index, band in enumerate(bands):
-            low = lows[index]
-            high = highs[index]
+        names: List[str] = self.__parse_column(sheet, ExcelBand.name_)
+        lows: List[int] = self.__parse_column(sheet, ExcelBand.low)
+        highs: List[int] = self.__parse_column(sheet, ExcelBand.high)
 
-            self.__bands[band] = ConfigBand(
-                name=band,
-                low=low,
-                high=high,
-            )
+        bands = ConfigBand.reconstruct(
+            names=names,
+            lows=lows,
+            highs=highs,
+        )
+
+        self.__bands = bands
 
     def __read_integrations(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.integrations)
-        integrations = self.__parse_column(sheet, ExcelIntegration.integration)
-        seconds = self.__parse_column(sheet, ExcelIntegration.seconds)
 
-        for index, integration in enumerate(integrations):
-            second = seconds[index]
+        names = self.__parse_column(sheet, ExcelIntegration.name_)
+        durations = self.__parse_column(sheet, ExcelIntegration.duration)
 
-            self.__integrations[integration] = ConfigIntegration(
-                name=integration,
-                seconds=second,
-            )
+        integrations = ConfigIntegration.reconstruct(
+            names=names,
+            durations=durations,
+        )
+
+        self.__integrations = integrations
 
     def __store_bands(
         self,
         storage: Storage,
     ) -> None:
-        if storage.is_defined_bands():
-            return
-
-        bands = []
-        bands_frequencies = []
-
-        for band_name, band in self.__bands.items():
-            frequencies = [band.low, band.high]
-
-            bands.append(band_name)
-            bands_frequencies.append(frequencies)
-
-        storage.create_bands(bands, bands_frequencies)
+        storage.write_config_bands(bands=self.__bands)
 
     def __store_integrations(
         self,
         storage: Storage,
     ) -> None:
-        integrations = []
-        integrations_seconds = []
-
-        for integration in self.__integrations.values():
-            integrations.append(integration.name)
-            integrations_seconds.append(integration.seconds)
-
-        storage.create_integrations(
-            integrations=integrations, integrations_seconds=integrations_seconds
-        )
-
-    def __parse_reducer_bands(
-        self,
-        bands: Union[str, type(nan)],  # type: ignore TODO: Learn why
-    ) -> List[str]:
-        reducer_bands = []
-
-        if type(bands) is str:
-            for band in bands.split(","):
-                _ = self.__bands[band]
-                reducer_bands.append(band)
-        else:
-            for band in self.__bands.keys():
-                reducer_bands.append(band)
-
-        return reducer_bands
-
-    def __parse_reducer_integrations(
-        self,
-        integrations: Union[str, type(nan)],  # type: ignore TODO: Learn why
-    ) -> List[str]:
-        reducer_integrations = []
-
-        if type(integrations) is str:
-            for integration in integrations.split(","):
-                _ = self.__integrations[integration]
-                reducer_integrations.append(integration)
-        else:
-            for integration in self.__integrations.keys():
-                reducer_integrations.append(integration)
-
-        return reducer_integrations
-
-    def __parse_reducer_ranges(
-        self,
-        ranges: Union[str, type(nan)],  # type: ignore TODO: Learn why
-    ) -> List[str]:
-        reducer_ranges = []
-
-        if type(ranges) is str:
-            for range_ in ranges.split(","):
-                _ = self.__ranges[range_]
-                reducer_ranges.append(range_)
-        else:
-            for range_ in self.__ranges.keys():
-                reducer_ranges.append(range_)
-
-        return reducer_ranges
+        storage.write_config_integrations(integrations=self.__integrations)
 
     def __read_autoclusters(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.autoclusters)
@@ -614,29 +478,31 @@ class Config(metaclass=SingletonMeta):
 
     def __read_reducers(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.reducers)
-        reducers = self.__parse_column(sheet, ExcelReducer.reducer)
+
+        names = self.__parse_column(sheet, ExcelReducer.name_)
         dimensions = self.__parse_column(sheet, ExcelReducer.dimensions)
-        bands = self.__parse_column(sheet, ExcelReducer.bands)
-        integrations = self.__parse_column(sheet, ExcelReducer.integrations)
-        ranges = self.__parse_column(sheet, ExcelReducer.ranges)
 
-        for index, reducer_name in enumerate(reducers):
-            reducer_bands = self.__parse_reducer_bands(bands[index])
-            reducer_integrations = self.__parse_reducer_integrations(
-                integrations=integrations[index]
-            )
-            reducer_ranges = self.__parse_reducer_ranges(ranges[index])
+        bands_names_string = self.__parse_column(sheet, ExcelReducer.bands)
 
-            reducer = ConfigReducer(
-                index=index,
-                name=reducer_name,
-                dimensions=dimensions[index],
-                bands=reducer_bands,
-                integrations=reducer_integrations,
-                ranges=reducer_ranges,
-            )
+        integrations_names_string = self.__parse_column(
+            sheet,
+            ExcelReducer.integrations,
+        )
 
-            self.__reducers.append(reducer)
+        ranges_names_strings = self.__parse_column(sheet, ExcelReducer.ranges)
+
+        reducers = ConfigReducer.reconstruct(
+            names=names,
+            dimensions=dimensions,
+            bands_names_strings=bands_names_string,
+            integrations_names_strings=integrations_names_string,
+            ranges_names_strings=ranges_names_strings,
+            bands=self.__bands,
+            integrations=self.__integrations,
+            ranges=self.__ranges,
+        )
+
+        self.__reducers = reducers
 
     def __read_indicators(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.indicators)

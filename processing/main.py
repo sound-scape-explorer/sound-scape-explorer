@@ -19,7 +19,6 @@ PathByAction = {
     "matrices": "processing/processing/actions/run_matrices.py",
     "mean-distances-matrix": "processing/processing/actions/run_mean_distances_matrix.py",
     "mean-distances-matrix-purge": "processing/processing/actions/run_mean_distances_matrix_purge.py",
-    "migrate-v8": "processing/processing/actions/run_migration_v8.py",
     "pairings": "processing/processing/actions/run_pairings.py",
     "reducers": "processing/processing/actions/run_reducers.py",
     "trajectories": "processing/processing/actions/run_trajectories.py",
@@ -55,7 +54,7 @@ def run_main(args: argparse.Namespace) -> None:
     actions = list(PathByAction.keys())
 
     if args.action not in actions:
-        raise KeyError(f'Action "{args.action}" not recognized!')
+        raise KeyError(f"Unable to find action {args.action}.")
 
     current_path = os.getcwd()
     processing_path = f"{current_path}/processing"

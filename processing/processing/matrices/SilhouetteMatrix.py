@@ -5,14 +5,16 @@ import pandas as pd
 from h5py import Dataset
 from sklearn import metrics
 
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 from processing.matrices.AbstractMatrix import AbstractMatrix
 
 
 class SilhouetteMatrix(AbstractMatrix):
     def __init__(
         self,
-        band: str,
-        integration: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
         matrix_index: int,
         meta_index: int,
         features: List[Dataset],
