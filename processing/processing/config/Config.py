@@ -39,7 +39,6 @@ from processing.utils.get_uniques_from_list import get_uniques_from_list
 from processing.utils.is_nan import is_nan
 from processing.utils.print_new_line import print_new_line
 from processing.utils.reverse_array import reverse_array
-from processing.volumes.Volume import Volume
 
 
 class Config(metaclass=SingletonMeta):
