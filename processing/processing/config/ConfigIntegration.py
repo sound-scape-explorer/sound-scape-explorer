@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 
 class ConfigIntegration:
@@ -17,7 +17,9 @@ class ConfigIntegration:
         self.duration = duration
 
     @staticmethod
-    def flatten(integrations: List["ConfigIntegration"]):
+    def flatten(
+        integrations: List["ConfigIntegration"],
+    ) -> Tuple[List[str], List[int]]:
         names = [i.name for i in integrations]
         durations = [i.duration for i in integrations]
 

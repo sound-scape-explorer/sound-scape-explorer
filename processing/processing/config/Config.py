@@ -9,6 +9,7 @@ from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigAutocluster import ConfigAutocluster
 from processing.config.ConfigBand import ConfigBand
 from processing.config.ConfigFile import ConfigFile
+from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
@@ -26,7 +27,6 @@ from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
-from processing.indicators.Indicator import Indicator
 from processing.matrices.Matrix import Matrix
 from processing.pairings.Pairing import Pairing
 from processing.settings.ConfigSetting import ConfigSettings
@@ -54,7 +54,7 @@ class Config(metaclass=SingletonMeta):
     __autoclusters: List[ConfigAutocluster] = []
     __trajectories: List[ConfigTrajectory] = []
     __reducers: List[ConfigReducer] = []
-    __indicators: List[str] = []
+    __indicators: List[ConfigIndicator] = []
     __volumes: List[str] = []
     __matrices: List[str] = []
     __pairings: List[str] = []
@@ -179,7 +179,7 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        storage.write_indicators(self.__indicators)
+        storage.write_config_indicators(self.__indicators)
 
     def __store_volumes(
         self,
@@ -506,11 +506,11 @@ class Config(metaclass=SingletonMeta):
 
     def __read_indicators(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.indicators)
-        indicators = self.__parse_column(sheet, ExcelIndicator.indicator)
+        names = self.__parse_column(sheet, ExcelIndicator.indicator)
 
-        for name in indicators:
-            Indicator.validate_name(name)
-            self.__indicators.append(name)
+        indicators = ConfigIndicator.reconstruct(names=names)
+
+        self.__indicators = indicators
 
     def __read_volumes(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.volumes)

@@ -34,24 +34,24 @@ def run_reducers(env: Env):
             integration=integration,
         )
 
-        for reducer_index, config_reducer in enumerate(reducers):
-            reducer: Reducer = config_reducer.create_reducer(
+        for reducer in reducers:
+            reducer_instance: Reducer = reducer.create_reducer(
                 seed=seed,
             )
 
-            if not config_reducer.has(
+            if not reducer.has(
                 band=band,
                 integration=integration,
             ):
                 timer.progress()
                 continue
 
-            reduced_features = reducer.reduce(features=features[:])
+            reduced_features = reducer_instance.reduce(features=features[:])
 
             storage.write_reduced(
                 band=band,
                 integration=integration,
-                reducer_index=reducer_index,
+                reducer=reducer,
                 features=reduced_features,
             )
 

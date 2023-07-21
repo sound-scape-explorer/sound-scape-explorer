@@ -15,23 +15,39 @@ def run_trajectories(env: Env):
     print_new_line()
     print("Trajectories loaded")
 
+    reducers = storage.read_config_reducers()
+
     for band, integration in storage.enumerate_bands_and_integrations():
-        print(
-            f"Trajectories loaded for band {band.name}"
-            f", integration {integration.duration}"
-        )
+        for reducer in reducers:
+            print(
+                f"Trajectories loaded for band {band.name}"
+                f", integration {integration.duration}"
+            )
 
-        grouped_features = storage.read_grouped_features(
-            band=band,
-            integration=integration,
-        )
+            computation_umaps = storage.read_computation_umaps(
+                band=band,
+                integration=integration,
+            )
 
-        grouped_timestamps = storage.read_grouped_timestamps(
-            band=band,
-            integration=integration,
-        )
+            grouped_timestamps = storage.read_grouped_timestamps(
+                band=band,
+                integration=integration,
+            )
 
-        print(len(grouped_features), len(grouped_timestamps))
+            for trajectory in trajectories:
+                trajectory_instance = trajectory.create(
+                    features=computation_umaps,
+                    timestamps=grouped_timestamps,
+                )
+
+                print(trajectory_instance)
+
+                trajectory_instance.store(
+                    storage=storage,
+                    band=band,
+                    integration=integration,
+                    reducer=reducer,
+                )
 
 
 if __name__ == "__main__":

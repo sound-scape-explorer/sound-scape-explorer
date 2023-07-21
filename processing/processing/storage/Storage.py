@@ -8,6 +8,7 @@ from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigAutocluster import ConfigAutocluster
 from processing.config.ConfigBand import ConfigBand
 from processing.config.ConfigFile import ConfigFile
+from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
@@ -199,7 +200,7 @@ class Storage(metaclass=SingletonMeta):
             path = self.generate_reduced_path(
                 band=band,
                 integration=integration,
-                reducer_index=reducer.index,
+                reducer=reducer,
             )
             dataset = self.__read(path)
 
@@ -262,15 +263,11 @@ class Storage(metaclass=SingletonMeta):
         dataset = self.__read(path)
         return dataset
 
-    def read_indicators(self) -> List[str]:
-        dataset = self.__read(StoragePath.indicators)
+    def read_config_indicators(self) -> List[ConfigIndicator]:
+        names_dataset = self.__read(StoragePath.indicators_names)
+        names = self.__convert_dataset_to_string_list(names_dataset)
 
-        (length,) = dataset.shape
-
-        if length == 0:
-            return []
-
-        indicators = list(dataset.asstr()[:])
+        indicators = ConfigIndicator.reconstruct(names=names)
 
         return indicators
 
@@ -397,7 +394,7 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.reducers_bands)
         self.__delete_silently(StoragePath.reducers_integrations)
         self.__delete_silently(StoragePath.reducers_ranges)
-        self.__delete_silently(StoragePath.indicators)
+        self.__delete_silently(StoragePath.indicators_names)
         self.__delete_silently(StoragePath.volumes)
 
     def read_settings(self) -> ConfigSettings:
@@ -849,10 +846,10 @@ class Storage(metaclass=SingletonMeta):
         self,
         band: ConfigBand,
         integration: ConfigIntegration,
-        reducer_index: int,
+        reducer: ConfigReducer,
     ) -> str:
         return (
-            f"{StoragePath.reduced_.value}{reducer_index}"
+            f"{StoragePath.reduced_.value}{reducer.index}"
             f"/{band.name}/{integration.duration}"
         )
 
@@ -860,13 +857,13 @@ class Storage(metaclass=SingletonMeta):
         self,
         band: ConfigBand,
         integration: ConfigIntegration,
-        reducer_index: int,
+        reducer: ConfigReducer,
         features: List[List[float]],
     ) -> None:
         path = self.generate_reduced_path(
             band=band,
             integration=integration,
-            reducer_index=reducer_index,
+            reducer=reducer,
         )
 
         self.__write_dataset(
@@ -890,20 +887,17 @@ class Storage(metaclass=SingletonMeta):
 
     def write_indicator(
         self,
-        indicator_index: int,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        values: List[float],
+        indicator: ConfigIndicator,
     ) -> None:
         path = self.generate_indicator_path(
-            band=band,
-            integration=integration,
-            indicator_index=indicator_index,
+            band=indicator.band,
+            integration=indicator.integration,
+            indicator_index=indicator.index,
         )
 
         self.__write_dataset(
             path=path,
-            data=values,
+            data=indicator.instance.values,
             compression=StorageCompression.gzip,
         )
 
@@ -1336,13 +1330,15 @@ class Storage(metaclass=SingletonMeta):
             data=ranges,
         )
 
-    def write_indicators(
+    def write_config_indicators(
         self,
-        indicators: List[str],
+        indicators: List[ConfigIndicator],
     ) -> None:
+        names = ConfigIndicator.flatten(indicators=indicators)
+
         self.__write_dataset(
-            path=StoragePath.indicators,
-            data=indicators,
+            path=StoragePath.indicators_names,
+            data=names,
         )
 
     def write_volumes(
@@ -1626,11 +1622,14 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_trajectory_path(
         self,
-        band: str,
-        integration: int,
-        reducer_index: int,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        reducer: ConfigReducer,
     ) -> str:
-        return f"{StoragePath.trajectory_.value}{reducer_index}/{band}/{integration}"
+        return (
+            f"{StoragePath.trajectory_.value}{reducer.index}"
+            f"/{band.name}/{integration.duration}"
+        )
 
     def read_config_trajectories(self) -> List[ConfigTrajectory]:
         names_dataset = self.__read(StoragePath.trajectories_names)
@@ -1668,5 +1667,16 @@ class Storage(metaclass=SingletonMeta):
             data=ends,
         )
 
-    def write_trajectory(self):
-        pass
+    def write_trajectory(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        reducer: ConfigReducer,
+    ):
+        path = self.generate_trajectory_path(
+            band=band,
+            integration=integration,
+            reducer=reducer,
+        )
+
+        print(path)

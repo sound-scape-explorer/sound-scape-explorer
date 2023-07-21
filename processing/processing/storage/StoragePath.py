@@ -345,7 +345,7 @@ class StoragePath(Enum):
     # Configuration/Indicators #
     ############################
 
-    indicators = "/configuration/indicators"
+    indicators_names = "/configuration/indicators"
     """The indicator names requested in the configuration file.
 
     Each row contains a string.

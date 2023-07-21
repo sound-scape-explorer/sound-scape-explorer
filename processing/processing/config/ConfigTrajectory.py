@@ -1,5 +1,9 @@
 from typing import List
 
+from h5py import Dataset
+
+from processing.trajectories.ContinuousTimeTrajectory import ContinuousTimeTrajectory
+
 
 class ConfigTrajectory:
     index: int
@@ -49,3 +53,16 @@ class ConfigTrajectory:
             trajectories.append(trajectory)
 
         return trajectories
+
+    def create(
+        self,
+        features: List[Dataset],
+        timestamps: Dataset,
+    ) -> ContinuousTimeTrajectory:
+        return ContinuousTimeTrajectory(
+            features=features,
+            timestamps=timestamps,
+            date_start=self.start,
+            date_end=self.end,
+            color_by="test",
+        )

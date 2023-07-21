@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from processing.utils.validate_int import validate_int
 
@@ -25,7 +25,9 @@ class ConfigRange:
         self.end = end
 
     @staticmethod
-    def flatten(ranges: List["ConfigRange"]):
+    def flatten(
+        ranges: List["ConfigRange"],
+    ) -> Tuple[List[str], List[int], List[int]]:
         names = [r.name for r in ranges]
         starts = [r.start for r in ranges]
         ends = [r.end for r in ranges]

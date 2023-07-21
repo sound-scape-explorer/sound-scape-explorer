@@ -1,7 +1,6 @@
 from processing.audio.Audio import Audio
 from processing.common.Env import Env
 from processing.common.Timer import Timer
-from processing.indicators.Indicator import Indicator
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
@@ -10,7 +9,7 @@ def run_indicators(env: Env):
     storage = Storage(path=env.storage)
     storage.delete_indicators()
 
-    indicators = storage.read_indicators()
+    indicators = storage.read_config_indicators()
 
     if len(indicators) == 0:
         return
@@ -19,7 +18,7 @@ def run_indicators(env: Env):
     audio_path = storage.read_audio_path()
 
     print_new_line()
-    print(f"Indicators list {[i for i in indicators]}")
+    print(f"Indicators list {[i.name for i in indicators]}")
 
     for band, integration in storage.enumerate_bands_and_integrations():
         print(
@@ -30,17 +29,13 @@ def run_indicators(env: Env):
         timer = Timer(len(files_names) * len(indicators))
 
         # Loading indicators
-        indicators_instances = []
-
-        for indicator_name in indicators:
-            indicator = Indicator(
-                name=indicator_name,
+        for indicator in indicators:
+            indicator.create_instance(
                 band=band,
                 integration=integration,
             )
 
-            indicators_instances.append(indicator)
-
+        # Calculating indicators
         for file_index, groups_count, _, _, _ in storage.enumerate_files(
             band=band,
             integration=integration,
@@ -58,14 +53,14 @@ def run_indicators(env: Env):
                     group_index=group_index,
                 )
 
-                for indicator in indicators_instances:
-                    indicator.calculate(audio)
+                for indicator in indicators:
+                    indicator.instance.calculate(audio=audio)
 
             timer.progress()
 
-        # Store
-        for i, indicator in enumerate(indicators_instances):
-            indicator.store(storage, i)
+        # Storing indicators
+        for indicator in indicators:
+            storage.write_indicator(indicator)
 
 
 if __name__ == "__main__":

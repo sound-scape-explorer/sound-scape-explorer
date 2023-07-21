@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from processing.clusterings.ClusteringName import ClusteringName
 
@@ -50,7 +50,9 @@ class ConfigAutocluster:
         raise KeyError(f"Unable to validate autoclustering name {name}.")
 
     @staticmethod
-    def flatten(autoclusters: List["ConfigAutocluster"]):
+    def flatten(
+        autoclusters: List["ConfigAutocluster"],
+    ) -> Tuple[List[str], List[int], List[int], List[float], List[float]]:
         names = [ac.name for ac in autoclusters]
         min_cluster_sizes = [ac.min_cluster_size for ac in autoclusters]
         min_samples = [ac.min_samples for ac in autoclusters]

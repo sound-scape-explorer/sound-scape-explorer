@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 
 class ConfigFile:
@@ -23,7 +23,9 @@ class ConfigFile:
         self.meta = meta
 
     @staticmethod
-    def flatten(files: List["ConfigFile"]):
+    def flatten(
+        files: List["ConfigFile"],
+    ) -> Tuple[List[str], List[int], List[str], List[List[str]]]:
         names = [f.name for f in files]
         timestamps = [f.timestamp for f in files]
         sites = [f.site for f in files]

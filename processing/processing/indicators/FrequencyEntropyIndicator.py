@@ -1,18 +1,14 @@
 import maad.features
 
 from processing.audio.Audio import Audio
-from processing.config.ConfigBand import ConfigBand
-from processing.config.ConfigIntegration import ConfigIntegration
 from processing.indicators.AbstractIndicator import AbstractIndicator
 
 
 class FrequencyEntropyIndicator(AbstractIndicator):
     def __init__(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
     ) -> None:
-        super().__init__(band, integration)
+        super().__init__()
 
     def calculate(
         self,

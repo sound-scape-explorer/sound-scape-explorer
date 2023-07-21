@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from processing.utils.validate_int import validate_int
 
@@ -25,7 +25,9 @@ class ConfigBand:
         self.high = high
 
     @staticmethod
-    def flatten(bands: List["ConfigBand"]):
+    def flatten(
+        bands: List["ConfigBand"],
+    ) -> Tuple[List[str], List[int], List[int]]:
         names = [b.name for b in bands]
         lows = [b.low for b in bands]
         highs = [b.high for b in bands]

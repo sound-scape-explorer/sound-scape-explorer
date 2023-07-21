@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from processing.config.ConfigBand import ConfigBand
 from processing.config.ConfigIntegration import ConfigIntegration
@@ -48,7 +48,15 @@ class ConfigReducer:
         return False
 
     @staticmethod
-    def flatten(reducers: List["ConfigReducer"]):
+    def flatten(
+        reducers: List["ConfigReducer"],
+    ) -> Tuple[
+        List[str],
+        List[int],
+        List[List[str]],
+        List[List[str]],
+        List[List[str]],
+    ]:
         names = [r.name for r in reducers]
         dimensions = [r.dimensions for r in reducers]
         bands_names = [[b.name for b in r.bands] for r in reducers]
