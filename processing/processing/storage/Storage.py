@@ -13,6 +13,7 @@ from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
+from processing.config.ConfigVolume import ConfigVolume
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.storage.StorageCompression import StorageCompression
@@ -266,19 +267,13 @@ class Storage(metaclass=SingletonMeta):
     def read_config_indicators(self) -> List[ConfigIndicator]:
         names_dataset = self.__read(StoragePath.indicators_names)
         names = self.__convert_dataset_to_string_list(names_dataset)
-
         indicators = ConfigIndicator.reconstruct(names=names)
-
         return indicators
 
-    def read_volumes(self) -> List[str]:
-        dataset = self.__read(StoragePath.volumes)
-
-        (length,) = dataset.shape
-        if length == 0:
-            return []
-
-        volumes = list(dataset.asstr()[:])
+    def read_config_volumes(self) -> List[ConfigVolume]:
+        names_dataset = self.__read(StoragePath.volumes_names)
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        volumes = ConfigVolume.reconstruct(names=names)
         return volumes
 
     def read_matrices(self) -> List[str]:
@@ -395,7 +390,7 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.reducers_integrations)
         self.__delete_silently(StoragePath.reducers_ranges)
         self.__delete_silently(StoragePath.indicators_names)
-        self.__delete_silently(StoragePath.volumes)
+        self.__delete_silently(StoragePath.volumes_names)
 
     def read_settings(self) -> ConfigSettings:
         configuration = self.__read(StoragePath.configuration)
@@ -688,7 +683,7 @@ class Storage(metaclass=SingletonMeta):
             yield meta_index
 
     def enumerate_volumes(self):
-        volumes = self.read_volumes()
+        volumes = self.read_config_volumes()
 
         for index, name in enumerate(volumes):
             yield index, name
@@ -889,26 +884,20 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_indicator_path(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        indicator_index: int,
+        indicator: ConfigIndicator,
     ) -> str:
-        suffix = f"/{band.name}/{integration.duration}"
-        path = f"{StoragePath.indicator_.value}{indicator_index}{suffix}"
+        suffix = f"/{indicator.band.name}/{indicator.integration.duration}"
+        path = f"{StoragePath.indicator_.value}{indicator.index}{suffix}"
         return path
 
     def delete_indicators(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.indicator_)
 
-    def write_indicator(
+    def write_config_indicator(
         self,
         indicator: ConfigIndicator,
     ) -> None:
-        path = self.generate_indicator_path(
-            band=indicator.band,
-            integration=indicator.integration,
-            indicator_index=indicator.index,
-        )
+        path = self.generate_indicator_path(indicator=indicator)
 
         self.__write_dataset(
             path=path,
@@ -918,34 +907,22 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_volume_path(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        volume_index: int,
-        meta_index: int,
+        volume: ConfigVolume,
     ) -> str:
         return (
-            f"{StoragePath.volume_.value}{volume_index}"
-            f"/{band.name}/{integration.duration}/{meta_index}"
+            f"{StoragePath.volume_.value}{volume.index}"
+            f"/{volume.band.name}/{volume.integration.duration}/{volume.meta_index}"
         )
 
     def write_volume(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        volume_index: int,
-        meta_index: int,
-        data: List[float],
+        volume: ConfigVolume,
     ) -> None:
-        path = self.generate_volume_path(
-            band=band,
-            integration=integration,
-            volume_index=volume_index,
-            meta_index=meta_index,
-        )
+        path = self.generate_volume_path(volume=volume)
 
         self.__write_dataset(
             path=path,
-            data=data,
+            data=volume.instance.values,
             compression=StorageCompression.gzip,
         )
 
@@ -1356,13 +1333,15 @@ class Storage(metaclass=SingletonMeta):
             data=names,
         )
 
-    def write_volumes(
+    def write_config_volumes(
         self,
-        volumes: List[str],
+        volumes: List[ConfigVolume],
     ) -> None:
+        names = ConfigVolume.flatten(volumes=volumes)
+
         self.__write_dataset(
-            path=StoragePath.volumes,
-            data=volumes,
+            path=StoragePath.volumes_names,
+            data=names,
         )
 
     def write_matrices(

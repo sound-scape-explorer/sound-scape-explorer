@@ -65,7 +65,7 @@ def run_indicators(env: Env):
         # Storing indicators
         # TODO: This could be written incrementally
         for indicator in indicators:
-            storage.write_indicator(indicator)
+            storage.write_config_indicator(indicator)
 
 
 if __name__ == "__main__":

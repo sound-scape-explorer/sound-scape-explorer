@@ -364,7 +364,7 @@ class StoragePath(Enum):
     # Configuration/Volumes #
     #########################
 
-    volumes = "/configuration/volumes"
+    volumes_names = "/configuration/volumes"
     """The volume names requested in the configuration file.
 
     Each row contains a string.

@@ -14,6 +14,7 @@ from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
+from processing.config.ConfigVolume import ConfigVolume
 from processing.config.ExcelAutocluster import ExcelAutocluster
 from processing.config.ExcelBand import ExcelBand
 from processing.config.ExcelFile import ExcelFile
@@ -55,7 +56,7 @@ class Config(metaclass=SingletonMeta):
     __trajectories: List[ConfigTrajectory] = []
     __reducers: List[ConfigReducer] = []
     __indicators: List[ConfigIndicator] = []
-    __volumes: List[str] = []
+    __volumes: List[ConfigVolume] = []
     __matrices: List[str] = []
     __pairings: List[str] = []
 
@@ -185,7 +186,7 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        storage.write_volumes(self.__volumes)
+        storage.write_config_volumes(self.__volumes)
 
     def __store_matrices(
         self,
@@ -504,21 +505,19 @@ class Config(metaclass=SingletonMeta):
 
         self.__reducers = reducers
 
-    def __read_indicators(self) -> None:
+    def __read_indicators(self) -> List[ConfigIndicator]:
         sheet = self.__parse_sheet(ExcelSheet.indicators)
         names = self.__parse_column(sheet, ExcelIndicator.indicator)
-
         indicators = ConfigIndicator.reconstruct(names=names)
-
         self.__indicators = indicators
+        return self.__indicators
 
-    def __read_volumes(self) -> None:
+    def __read_volumes(self) -> List[ConfigVolume]:
         sheet = self.__parse_sheet(ExcelSheet.volumes)
-        volumes = self.__parse_column(sheet, ExcelVolume.volume)
-
-        for name in volumes:
-            Volume.validate_name(name)
-            self.__volumes.append(name)
+        names = self.__parse_column(sheet, ExcelVolume.volume)
+        volumes = ConfigVolume.reconstruct(names=names)
+        self.__volumes = volumes
+        return self.__volumes
 
     def __read_matrices(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.matrices)
