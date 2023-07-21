@@ -1632,7 +1632,7 @@ class Storage(metaclass=SingletonMeta):
     ) -> str:
         return f"{StoragePath.trajectory_.value}{reducer_index}/{band}/{integration}"
 
-    def read_config_trajectories(self):
+    def read_config_trajectories(self) -> List[ConfigTrajectory]:
         names_dataset = self.__read(StoragePath.trajectories_names)
 
         names = self.__convert_dataset_to_string_list(names_dataset)
