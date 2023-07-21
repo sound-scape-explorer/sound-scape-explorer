@@ -26,7 +26,12 @@ def run_indicators(env: Env):
             f", integration {integration.duration}"
         )
 
-        timer = Timer(len(files_names) * len(indicators))
+        point_indexes_count = storage.read_point_indexes_count(
+            band=band,
+            integration=integration,
+        )
+
+        timer = Timer(len(indicators) * point_indexes_count)
 
         # Loading indicators
         for indicator in indicators:
@@ -36,29 +41,29 @@ def run_indicators(env: Env):
             )
 
         # Calculating indicators
-        for file_index, groups_count, _, _, _ in storage.enumerate_files(
+        for _, file_index, group_index in storage.enumerate_point_indexes(
             band=band,
             integration=integration,
         ):
-            for group_index in range(groups_count):
-                # Loading audio
-                file_name = files_names[file_index]
-                path = f"{audio_path}{file_name}"
+            # Loading audio
+            file_name = files_names[file_index]
+            path = f"{audio_path}{file_name}"
 
-                audio = Audio(
-                    path=path,
-                    f_min=band.low,
-                    f_max=band.high,
-                    integration=integration.duration,
-                    group_index=group_index,
-                )
+            audio = Audio(
+                path=path,
+                f_min=band.low,
+                f_max=band.high,
+                integration=integration.duration,
+                group_index=group_index,
+            )
 
-                for indicator in indicators:
-                    indicator.instance.calculate(audio=audio)
+            for indicator in indicators:
+                indicator.instance.calculate(audio=audio)
 
             timer.progress()
 
         # Storing indicators
+        # TODO: This could be written incrementally
         for indicator in indicators:
             storage.write_indicator(indicator)
 

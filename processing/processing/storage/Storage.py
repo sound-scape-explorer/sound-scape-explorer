@@ -610,6 +610,21 @@ class Storage(metaclass=SingletonMeta):
     ) -> int:
         return len(file_features) // integration.duration
 
+    def enumerate_point_indexes(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> Iterable[Tuple[int, int, int]]:
+        point_index = -1
+
+        for file_index, groups_count, _, _, _ in self.enumerate_files(
+            band=band,
+            integration=integration,
+        ):
+            for group_index in range(groups_count):
+                point_index += 1
+                yield point_index, file_index, group_index
+
     def enumerate_files(
         self,
         band: ConfigBand,
@@ -1680,3 +1695,12 @@ class Storage(metaclass=SingletonMeta):
         )
 
         print(path)
+
+    def read_point_indexes_count(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> int:
+        path = self.generate_grouped_timestamps_path(band=band, integration=integration)
+        dataset = self.__read(path=path)
+        return dataset.len()
