@@ -157,7 +157,6 @@ class ConfigReducer:
                 integrations=integrations,
             )
 
-            # TODO: Is this used?
             reducer_ranges = ConfigReducer.pick_reducer_ranges(
                 ranges_names_string=ranges_names_strings[index],
                 ranges=ranges,

@@ -22,7 +22,6 @@ from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
 from processing.utils.print_new_line import print_new_line
-from processing.utils.split_array_by_length import split_array_by_length
 
 
 class Storage(metaclass=SingletonMeta):
