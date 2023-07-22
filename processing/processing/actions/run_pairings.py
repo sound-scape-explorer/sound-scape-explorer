@@ -1,6 +1,5 @@
 from processing.common.Env import Env
 from processing.common.Timer import Timer
-from processing.pairings.Pairing import Pairing
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
@@ -9,7 +8,7 @@ def run_pairings(env: Env):
     storage = Storage(path=env.storage)
     storage.delete_pairings()
 
-    pairings = storage.read_pairings()
+    pairings = storage.read_config_pairings()
 
     if len(pairings) == 0:
         return
@@ -21,15 +20,13 @@ def run_pairings(env: Env):
     print_new_line()
     print(f"Pairings list {[p for p in pairings]}")
 
-    timer = Timer(
-        len(bands) * len(integrations) * len(pairings) * (len(meta_properties) ** 2)
-    )
-
     for band, integration in storage.enumerate_bands_and_integrations():
+        print_new_line()
         print(
             f"Pairings loaded for band {band.name}"
             f", integration {integration.duration}"
         )
+        timer = Timer(len(bands) * len(integrations) * (len(meta_properties) ** 2))
 
         grouped_features = storage.read_grouped_features_all_files(
             band=band,
@@ -38,32 +35,25 @@ def run_pairings(env: Env):
 
         meta_values = storage.read_grouped_meta_values(band, integration)
 
-        for p, pairing_name in enumerate(pairings):
-            for m_a in storage.enumerate_meta_properties():
-                # meta_property_a = meta_properties[m_a]
-                meta_values_a = meta_values[m_a]
-
-                for m_b in storage.enumerate_meta_properties():
-                    # meta_property_b = meta_properties[m_b]
-                    meta_values_b = meta_values[m_b]
-
-                    pairing = Pairing(
-                        name=pairing_name,
+        for pairing in pairings:
+            for meta_index_a in storage.enumerate_meta_properties():
+                for meta_index_b in storage.enumerate_meta_properties():
+                    pairing.create_instance(
                         band=band,
                         integration=integration,
-                        features=grouped_features[:],
-                        pairing_index=p,
-                        meta_index_a=m_a,
-                        meta_index_b=m_b,
-                        labels_a=meta_values_a,
-                        labels_b=meta_values_b,
+                        meta_index_a=meta_index_a,
+                        meta_index_b=meta_index_b,
                     )
 
-                    if pairing is None:
-                        continue
+                    print(type(grouped_features))
+                    pairing.instance.load(
+                        features=grouped_features[:],
+                        labels_a=meta_values[meta_index_a],
+                        labels_b=meta_values[meta_index_b],
+                    )
 
-                    pairing.calculate()
-                    pairing.store(storage)
+                    pairing.instance.calculate()
+                    storage.write_pairing(pairing)
                     timer.progress()
 
 

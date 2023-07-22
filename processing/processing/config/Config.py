@@ -12,6 +12,7 @@ from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigMatrix import ConfigMatrix
+from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
@@ -29,7 +30,6 @@ from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
-from processing.pairings.Pairing import Pairing
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
@@ -57,7 +57,7 @@ class Config(metaclass=SingletonMeta):
     __indicators: List[ConfigIndicator] = []
     __volumes: List[ConfigVolume] = []
     __matrices: List[ConfigMatrix] = []
-    __pairings: List[str] = []
+    __pairings: List[ConfigPairing] = []
 
     def __init__(
         self,
@@ -197,7 +197,7 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        storage.write_pairings(self.__pairings)
+        storage.write_config_pairings(self.__pairings)
 
     def __set_all_sites(self) -> None:
         for file_ in self.__files:
@@ -507,28 +507,23 @@ class Config(metaclass=SingletonMeta):
     def __read_indicators(self) -> List[ConfigIndicator]:
         sheet = self.__parse_sheet(ExcelSheet.indicators)
         names = self.__parse_column(sheet, ExcelIndicator.indicator)
-        indicators = ConfigIndicator.reconstruct(names=names)
-        self.__indicators = indicators
+        self.__indicators = ConfigIndicator.reconstruct(names=names)
         return self.__indicators
 
     def __read_volumes(self) -> List[ConfigVolume]:
         sheet = self.__parse_sheet(ExcelSheet.volumes)
         names = self.__parse_column(sheet, ExcelVolume.volume)
-        volumes = ConfigVolume.reconstruct(names=names)
-        self.__volumes = volumes
+        self.__volumes = ConfigVolume.reconstruct(names=names)
         return self.__volumes
 
     def __read_matrices(self) -> List[ConfigMatrix]:
         sheet = self.__parse_sheet(ExcelSheet.matrices)
         names = self.__parse_column(sheet, ExcelMatrices.name_)
-        matrices = ConfigMatrix.reconstruct(names=names)
-        self.__matrices = matrices
+        self.__matrices = ConfigMatrix.reconstruct(names=names)
         return self.__matrices
 
-    def __read_pairings(self) -> None:
+    def __read_pairings(self) -> List[ConfigPairing]:
         sheet = self.__parse_sheet(ExcelSheet.pairings)
-        pairings = self.__parse_column(sheet, ExcelPairings.pairing)
-
-        for name in pairings:
-            Pairing.validate_name(name)
-            self.__pairings.append(name)
+        names = self.__parse_column(sheet, ExcelPairings.name_)
+        self.__pairings = ConfigPairing.reconstruct(names=names)
+        return self.__pairings

@@ -2,4 +2,4 @@ from enum import Enum
 
 
 class ExcelPairings(Enum):
-    pairing = "pairing"
+    name_ = "pairing"

@@ -11,6 +11,7 @@ from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigMatrix import ConfigMatrix
+from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
@@ -21,7 +22,6 @@ from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
 from processing.utils.print_new_line import print_new_line
-from processing.volumes.AbstractVolume import AbstractVolume
 
 
 class Storage(metaclass=SingletonMeta):
@@ -284,14 +284,10 @@ class Storage(metaclass=SingletonMeta):
         matrices = ConfigMatrix.reconstruct(names=names)
         return matrices
 
-    def read_pairings(self) -> List[str]:
-        dataset = self.__read(StoragePath.pairings)
-
-        (length,) = dataset.shape
-        if length == 0:
-            return []
-
-        pairings = list(dataset.asstr()[:])
+    def read_config_pairings(self) -> List[ConfigPairing]:
+        names_dataset = self.__read(StoragePath.pairings_names)
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        pairings = ConfigPairing.reconstruct(names=names)
         return pairings
 
     def read_files_timestamps(self) -> Dataset:
@@ -924,46 +920,23 @@ class Storage(metaclass=SingletonMeta):
             compression=StorageCompression.gzip,
         )
 
-    def generate_pairing_path(
-        self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        pairing_index: int,
-        meta_index_a: int,
-        meta_index_b: int,
-    ) -> str:
+    def generate_pairing_path(self, pairing: ConfigPairing) -> str:
         return (
-            f"{StoragePath.pairing_.value}{pairing_index}"
-            f"/{band.name}/{integration.duration}"
-            f"/{meta_index_a}/{meta_index_b}"
+            f"{StoragePath.pairing_.value}{pairing.index}"
+            f"/{pairing.band.name}/{pairing.integration.duration}"
+            f"/{pairing.meta_index_a}/{pairing.meta_index_b}"
         )
 
     def write_pairing(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        pairing_index: int,
-        meta_index_a: int,
-        meta_index_b: int,
-        data: Tuple[List[float], List[float]],
+        pairing: ConfigPairing,
     ) -> None:
-        path = self.generate_pairing_path(
-            band=band,
-            integration=integration,
-            pairing_index=pairing_index,
-            meta_index_a=meta_index_a,
-            meta_index_b=meta_index_b,
-        )
+        path = self.generate_pairing_path(pairing)
 
-        # TODO: We store a only. Verify with business if reverse versuses are
-        #  always identical.
-        a, _ = data
-        # array = [a, b]
-        # rect = self.make_rectangular(array, fill_with=numpy.nan)
-
+        # INFO: We only store `values_a` because `values_b` is symmetrical.
         self.__write_dataset(
             path=path,
-            data=a,
+            data=pairing.instance.values_a,
             compression=StorageCompression.gzip,
         )
 
@@ -1340,13 +1313,15 @@ class Storage(metaclass=SingletonMeta):
             data=names,
         )
 
-    def write_pairings(
+    def write_config_pairings(
         self,
-        pairings: List[str],
+        pairings: List[ConfigPairing],
     ) -> None:
+        names = ConfigPairing.flatten(pairings=pairings)
+
         self.__write_dataset(
-            path=StoragePath.pairings,
-            data=pairings,
+            path=StoragePath.pairings_names,
+            data=names,
         )
 
     @staticmethod
@@ -1646,7 +1621,6 @@ class Storage(metaclass=SingletonMeta):
             data=ends,
         )
 
-    # TODO: Add data
     def write_trajectory(
         self,
         trajectory: ConfigTrajectory,
@@ -1654,8 +1628,6 @@ class Storage(metaclass=SingletonMeta):
         path = self.generate_trajectory_path(
             trajectory=trajectory,
         )
-
-        print(path)
 
         self.__write_dataset(
             path=path,

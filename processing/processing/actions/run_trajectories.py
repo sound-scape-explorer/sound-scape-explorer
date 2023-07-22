@@ -43,6 +43,8 @@ def run_trajectories(env: Env):
                     reducer=reducer,
                 )
 
+                trajectory.instance.calculate()
+
                 storage.write_trajectory(trajectory=trajectory)
 
 

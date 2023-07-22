@@ -1,7 +1,7 @@
 from typing import List, Union
 
 from h5py import Dataset
-from pandas import DataFrame
+from pandas import DataFrame, pandas
 
 
 class ContinuousTimeTrajectory:
@@ -44,5 +44,5 @@ class ContinuousTimeTrajectory:
         pass
 
     def calculate(self) -> None:
-        # TODO: See utils enes sub v2 line 1462
+        self.values = pandas.DataFrame([])
         pass

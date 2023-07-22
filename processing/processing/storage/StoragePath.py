@@ -402,7 +402,7 @@ class StoragePath(Enum):
     # Configuration/Pairings #
     ##########################
 
-    pairings = "/configuration/pairings"
+    pairings_names = "/configuration/pairings"
     """The pairing names requested in the configuration file.
 
     Each row contains a string.
