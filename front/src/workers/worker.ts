@@ -144,8 +144,6 @@ export async function readMetas(file: File, band: string, integration: number) {
 
       a += 1;
     }
-
-    console.log(metas);
   }
 
   for (let i = 0; i < metaPropertiesList.length; i += 1) {

@@ -9,36 +9,37 @@ def run_computation_umaps(env: Env):
     storage = Storage(path=env.storage)
     storage.delete_computation_umaps()
 
-    bands = storage.read_config_bands()
-    integrations = storage.read_config_integrations()
-
     computation_umap_dimensions = storage.read_computation_umap_dimensions()
     computation_umap_iterations = storage.read_computation_umap_iterations()
 
-    timer = Timer(len(bands) * len(integrations) * computation_umap_iterations)
-
     print_new_line()
-    print(
-        f"Computation UMAPs requested with iterations {computation_umap_iterations}"
-        f", dimensions {computation_umap_dimensions}"
-        f", bands {bands}"
-        f", integrations {integrations}"
-    )
+    print("Computation UMAPs requested")
 
     for band, integration in storage.enumerate_bands_and_integrations():
+        print_new_line()
+        print(
+            f"Computation UMAPs loaded with iterations {computation_umap_iterations}"
+            f", dimensions {computation_umap_dimensions}"
+            f", band {band.name}"
+            f", integration {integration.name}"
+        )
+
+        timer = Timer(computation_umap_iterations)
+
         grouped_features = storage.read_grouped_features(
             band=band,
             integration=integration,
         )
 
         for computation_index in range(computation_umap_iterations):
-            umap = UmapReducer(
-                target_dimensions=computation_umap_dimensions,
+            umap = UmapReducer(min_dist=0)
+            umap.load(
+                dimensions=computation_umap_dimensions,
                 seed=None,
-                min_dist=0,
+                features=grouped_features[:],
             )
 
-            reduced_features = umap.reduce(features=grouped_features[:])
+            reduced_features = umap.calculate()
 
             storage.write_computation_umap(
                 band=band,

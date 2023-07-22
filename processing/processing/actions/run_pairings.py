@@ -18,13 +18,12 @@ def run_pairings(env: Env):
     meta_properties = storage.read_meta_properties()
 
     print_new_line()
-    print(f"Pairings list {[p for p in pairings]}")
+    print(f"Pairings list {[p.name for p in pairings]}")
 
     for band, integration in storage.enumerate_bands_and_integrations():
         print_new_line()
         print(
-            f"Pairings loaded for band {band.name}"
-            f", integration {integration.duration}"
+            f"Pairings loaded for band {band.name}" f", integration {integration.name}"
         )
         timer = Timer(len(bands) * len(integrations) * (len(meta_properties) ** 2))
 
@@ -45,7 +44,6 @@ def run_pairings(env: Env):
                         meta_index_b=meta_index_b,
                     )
 
-                    print(type(grouped_features))
                     pairing.instance.load(
                         features=grouped_features[:],
                         labels_a=meta_values[meta_index_a],

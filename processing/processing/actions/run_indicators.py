@@ -21,16 +21,15 @@ def run_indicators(env: Env):
     print(f"Indicators list {[i.name for i in indicators]}")
 
     for band, integration in storage.enumerate_bands_and_integrations():
+        print_new_line()
         print(
             f"Indicators loaded for band {band.name}"
-            f", integration {integration.duration}"
+            f", integration {integration.name}"
         )
-
         point_indexes_count = storage.read_point_indexes_count(
             band=band,
             integration=integration,
         )
-
         timer = Timer(len(indicators) * point_indexes_count)
 
         # Loading indicators
@@ -63,7 +62,7 @@ def run_indicators(env: Env):
             timer.progress()
 
         # Storing indicators
-        # TODO: This could be written incrementally
+        # INFO: This could be written incrementally
         for indicator in indicators:
             storage.write_config_indicator(indicator)
 

@@ -79,7 +79,7 @@ class AutoConsensusClustering:
                 target_dimensions=10,
                 seed=None,
             )
-            features = reducer.reduce(self.__features)
+            features = reducer.calculate(self.__features)
             self.__scan(features)
             self.__timer.progress()
 

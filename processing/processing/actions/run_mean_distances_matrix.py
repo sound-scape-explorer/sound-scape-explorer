@@ -14,7 +14,7 @@ def run_mean_distances_matrix(env: Env):
     for band, integration in storage.enumerate_bands_and_integrations():
         print(
             f"Mean distances matrix loaded for band {band.name}"
-            f", integration {integration.duration}"
+            f", integration {integration.name}"
         )
 
         computation_umaps = storage.read_computation_umaps(

@@ -1,38 +1,43 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Union
+
+from h5py import Dataset
 
 
 class AbstractReducer(ABC):
-    @abstractmethod
-    def reduce(self, features: List[List[float]]) -> List[List[float]]:
-        pass
+    _dimensions: int
+    _seed: Union[None, int]
+    _features: Union[None, Dataset]
+    values: List[List[float]]
+
+    def __init__(
+        self,
+    ) -> None:
+        self._features = None
 
     @abstractmethod
-    def get_instance(self):
+    def calculate(self) -> List[List[float]]:
         pass
 
-    def reduce_and_split(
+    def _validate_load(self) -> Dataset:
+        if self._features is None:
+            raise RuntimeError("Unable to find data for reducer. Please load first.")
+
+        return self._features
+
+    def load(
+        self,
+        dimensions: int,
+        seed: Union[None, int],
+        features: Dataset,
+    ):
+        self._dimensions = dimensions
+        self._seed = seed
+        self._features = features
+
+    def set_values(
         self,
         features: List[List[float]],
-        files_length: int,
-    ) -> List[List[List[float]]]:
-        reduced_features = self.reduce(features)
-
-        split_features = []
-
-        features_per_file = len(reduced_features) / files_length
-        features_per_file = int(features_per_file)
-
-        for _ in range(files_length):
-            split_features.append([])
-
-        for file_index in range(files_length):
-            start = features_per_file * file_index
-            end = features_per_file * (file_index + 1)
-
-            flat_features_slice = reduced_features[start:end]
-
-            for flat_features in flat_features_slice:
-                split_features[file_index].append(flat_features)
-
-        return split_features
+    ) -> List[List[float]]:
+        self.values = features
+        return self.values

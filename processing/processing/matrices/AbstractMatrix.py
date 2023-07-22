@@ -31,7 +31,7 @@ class AbstractMatrix(ABC):
         return self._dataframe, self._clusters
 
     def _iterate_clusters(self):
-        clusters, dataframe = self._validate_load()
+        dataframe, clusters = self._validate_load()
 
         for c, cluster in enumerate(clusters):
             cluster_frame = dataframe[dataframe.index == cluster].to_numpy()
@@ -55,7 +55,6 @@ class AbstractMatrix(ABC):
         features: Dataset,
         labels: List[str],
     ) -> DataFrame:
-        print(type(features))
         self._dataframe = pd.DataFrame(features)
         self._dataframe.index = labels
         self._clusters = self._dataframe.index.unique()  # type: ignore

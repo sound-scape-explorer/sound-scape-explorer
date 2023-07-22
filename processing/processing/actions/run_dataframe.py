@@ -89,9 +89,7 @@ def run_dataframe(
     # Reducers
     try:
         reducers = storage.pick_reducers(band, integration)
-        reduced_features = storage.read_all_reduced_features(
-            reducers, band, integration
-        )
+        reduced_features = storage.read_all_reduced_features(reducers)
         for reducer in reducers:
             for d in range(reducer.dimensions):
                 name = f"{reducer.name}{reducer.index}_{d+1}"

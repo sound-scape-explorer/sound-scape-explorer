@@ -19,9 +19,9 @@ def run_volumes(env: Env):
     print(f"Volumes list {[v.name for v in volumes]}")
 
     for band, integration in storage.enumerate_bands_and_integrations():
+        print_new_line()
         print(
-            f"Volumes loaded for band {band.name}"
-            f", integration {integration.duration}"
+            f"Volumes loaded for band {band.name}" f", integration {integration.name}"
         )
 
         grouped_features = storage.read_grouped_features_all_files(
@@ -50,9 +50,7 @@ def run_volumes(env: Env):
                 )
 
                 instance.calculate()
-
-                storage.write_volume(volume=volume)
-
+                storage.write_volume(volume)
                 timer.progress()
 
 

@@ -13,20 +13,17 @@ def run_matrices(env: Env):
     if len(matrices) == 0:
         return
 
-    bands = storage.read_config_bands()
-    integrations = storage.read_config_integrations()
     meta_properties = storage.read_meta_properties()
 
     print_new_line()
-    print(f"Matrices list {[m for m in matrices]}")
-
-    timer = Timer(len(bands) * len(integrations) * len(matrices) * len(meta_properties))
+    print(f"Matrices list {[m.name for m in matrices]}")
 
     for band, integration in storage.enumerate_bands_and_integrations():
+        print_new_line()
         print(
-            f"Matrices loaded for band {band.name}"
-            f", integration {integration.duration}"
+            f"Matrices loaded for band {band.name}" f", integration {integration.name}"
         )
+        timer = Timer(len(matrices) * len(meta_properties))
 
         grouped_features = storage.read_grouped_features_all_files(
             band=band,
@@ -44,7 +41,7 @@ def run_matrices(env: Env):
                 )
 
                 matrix.instance.load(
-                    features=grouped_features,
+                    features=grouped_features[:],
                     labels=meta_values[meta_index],
                 )
                 matrix.instance.calculate()

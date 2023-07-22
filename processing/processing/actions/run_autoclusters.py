@@ -25,8 +25,8 @@ def run_autoclusters(env: Env):
 
     print(
         f"Autoclusters requested {[ac.name for ac in config_autoclusters]} with"
-        f", bands {bands}"
-        f", integrations {integrations}"
+        f", bands {[b.name for b in bands]}"
+        f", integrations {[i.name for i in integrations]}"
     )
 
     timer = Timer(len(bands) * len(integrations) * len(config_autoclusters))

@@ -1,6 +1,5 @@
 from processing.common.Env import Env
 from processing.common.Timer import Timer
-from processing.reducers.Reducer import Reducer
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
@@ -24,8 +23,7 @@ def run_reducers(env: Env):
     for band, integration in storage.enumerate_bands_and_integrations():
         print_new_line()
         print(
-            f"Reducer loaded for band {band.name}"
-            f", integration {integration.duration}"
+            f"Reducer loaded for band {band.name}" f", integration {integration.name}"
         )
         timer = Timer(len(bands) * len(integrations))
 
@@ -35,26 +33,23 @@ def run_reducers(env: Env):
         )
 
         for reducer in reducers:
-            if not reducer.has(
+            reducer.create_instance(
                 band=band,
                 integration=integration,
-            ):
+            )
+
+            if not reducer.should_calculate():
                 timer.progress()
                 continue
 
-            reducer_instance: Reducer = reducer.create_reducer(
+            reducer.instance.load(
+                dimensions=reducer.dimensions,
                 seed=seed,
+                features=features[:],
             )
 
-            reduced_features = reducer_instance.reduce(features=features[:])
-
-            storage.write_reduced(
-                band=band,
-                integration=integration,
-                reducer=reducer,
-                features=reduced_features,
-            )
-
+            reducer.instance.calculate()
+            storage.write_reducer(reducer)
             timer.progress()
 
 

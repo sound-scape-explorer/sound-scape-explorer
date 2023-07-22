@@ -1,19 +1,33 @@
-from typing import List, Tuple
+from typing import Dict, List, Tuple, Type
 
 from processing.config.ConfigBand import ConfigBand
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigRange import ConfigRange
-from processing.reducers.Reducer import Reducer
+from processing.reducers.AbstractReducer import AbstractReducer
+from processing.reducers.PcaReducer import PcaReducer
+from processing.reducers.SparsePcaReducer import SparsePcaReducer
+from processing.reducers.UmapReducer import UmapReducer
+from processing.reducers.VaeReducer import VaeReducer
 from processing.utils.is_nan import is_nan
 
 
 class ConfigReducer:
+    algorithms: Dict[str, Type[AbstractReducer]] = {
+        "umap": UmapReducer,
+        "vae": VaeReducer,
+        "pca": PcaReducer,
+        "sparse_pca": SparsePcaReducer,
+    }
+
     index: int
     name: str
     dimensions: int
     bands: List[ConfigBand]
     integrations: List[ConfigIntegration]
     ranges: List[ConfigRange]
+    band: ConfigBand
+    integration: ConfigIntegration
+    instance: AbstractReducer
 
     def __init__(
         self,
@@ -24,7 +38,7 @@ class ConfigReducer:
         integrations: List[ConfigIntegration],
         ranges: List[ConfigRange],
     ) -> None:
-        Reducer.validate_name(name)
+        self._validate_name(name)
 
         self.index = index
         self.name = name
@@ -34,15 +48,23 @@ class ConfigReducer:
         self.integrations = integrations
         self.ranges = ranges
 
-    def has(
+    @staticmethod
+    def _validate_name(name: str) -> None:
+        if name in ConfigReducer.algorithms.keys():
+            return
+
+        raise KeyError(f"Unable to find reducer name {name}.")
+
+    def should_calculate(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
     ) -> bool:
         bands_names = [b.name for b in self.bands]
         integrations_names = [i.name for i in self.integrations]
 
-        if band.name in bands_names and integration.name in integrations_names:
+        if (
+            self.band.name in bands_names
+            and self.integration.name in integrations_names
+        ):
             return True
 
         return False
@@ -135,6 +157,7 @@ class ConfigReducer:
                 integrations=integrations,
             )
 
+            # TODO: Is this used?
             reducer_ranges = ConfigReducer.pick_reducer_ranges(
                 ranges_names_string=ranges_names_strings[index],
                 ranges=ranges,
@@ -153,12 +176,12 @@ class ConfigReducer:
 
         return reducers
 
-    def create_reducer(
+    def create_instance(
         self,
-        seed: int,
-    ):
-        return Reducer(
-            name=self.name,
-            target_dimensions=self.dimensions,
-            seed=seed,
-        )
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> AbstractReducer:
+        self.band = band
+        self.integration = integration
+        self.instance = self.algorithms[self.name]()
+        return self.instance

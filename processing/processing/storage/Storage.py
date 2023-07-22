@@ -22,6 +22,7 @@ from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
 from processing.utils.print_new_line import print_new_line
+from processing.utils.split_array_by_length import split_array_by_length
 
 
 class Storage(metaclass=SingletonMeta):
@@ -191,8 +192,6 @@ class Storage(metaclass=SingletonMeta):
     def read_all_reduced_features(
         self,
         reducers: List[ConfigReducer],
-        band: ConfigBand,
-        integration: ConfigIntegration,
     ) -> List[List[List[float]]]:
         reduced_features = []
 
@@ -200,11 +199,7 @@ class Storage(metaclass=SingletonMeta):
             reduced_features.append([])
 
         for reducer in reducers:
-            path = self.generate_reduced_path(
-                band=band,
-                integration=integration,
-                reducer=reducer,
-            )
+            path = self.generate_reduced_path(reducer=reducer)
             dataset = self.__read(path)
 
             for features in dataset:
@@ -848,31 +843,22 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_reduced_path(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
         reducer: ConfigReducer,
     ) -> str:
         return (
             f"{StoragePath.reduced_.value}{reducer.index}"
-            f"/{band.name}/{integration.duration}"
+            f"/{reducer.band.name}/{reducer.integration.duration}"
         )
 
-    def write_reduced(
+    def write_reducer(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
         reducer: ConfigReducer,
-        features: List[List[float]],
     ) -> None:
-        path = self.generate_reduced_path(
-            band=band,
-            integration=integration,
-            reducer=reducer,
-        )
+        path = self.generate_reduced_path(reducer=reducer)
 
         self.__write_dataset(
             path=path,
-            data=features,
+            data=reducer.instance.values,
             compression=StorageCompression.gzip,
         )
 

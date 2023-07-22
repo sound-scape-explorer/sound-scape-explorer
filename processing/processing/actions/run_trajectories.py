@@ -1,4 +1,5 @@
 from processing.common.Env import Env
+from processing.common.Timer import Timer
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
@@ -18,12 +19,14 @@ def run_trajectories(env: Env):
     reducers = storage.read_config_reducers()
 
     for band, integration in storage.enumerate_bands_and_integrations():
-        for reducer in reducers:
-            print(
-                f"Trajectories loaded for band {band.name}"
-                f", integration {integration.duration}"
-            )
+        print_new_line()
+        print(
+            f"Trajectories loaded for band {band.name}"
+            f", integration {integration.name}"
+        )
+        timer = Timer(len(reducers) * len(trajectories))
 
+        for reducer in reducers:
             computation_umaps = storage.read_computation_umaps(
                 band=band,
                 integration=integration,
@@ -46,6 +49,8 @@ def run_trajectories(env: Env):
                 trajectory.instance.calculate()
 
                 storage.write_trajectory(trajectory=trajectory)
+
+                timer.progress()
 
 
 if __name__ == "__main__":
