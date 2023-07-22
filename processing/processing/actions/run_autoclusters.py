@@ -22,17 +22,17 @@ def run_autoclusters(env: Env):
     integrations = storage.read_config_integrations()
 
     print_new_line()
-    print(f"Autoclusters list {[ac.name for ac in config_autoclusters]}")
+
+    print(
+        f"Autoclusters requested {[ac.name for ac in config_autoclusters]} with"
+        f", bands {bands}"
+        f", integrations {integrations}"
+    )
 
     timer = Timer(len(bands) * len(integrations) * len(config_autoclusters))
 
     for band, integration in storage.enumerate_bands_and_integrations():
         for config_autocluster in config_autoclusters:
-            print(
-                f"Autocluster '{config_autocluster.name}' loaded"
-                f" for band {band.name}, integration {integration.duration}"
-            )
-
             if config_autocluster.name == ClusteringName.hdbscan_eom.value:
                 method = "eom"
             elif config_autocluster.name == ClusteringName.hdbscan_leaf.value:
