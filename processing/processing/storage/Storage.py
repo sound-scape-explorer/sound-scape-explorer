@@ -10,6 +10,7 @@ from processing.config.ConfigBand import ConfigBand
 from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
@@ -20,6 +21,7 @@ from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
 from processing.utils.print_new_line import print_new_line
+from processing.volumes.AbstractVolume import AbstractVolume
 
 
 class Storage(metaclass=SingletonMeta):
@@ -276,14 +278,10 @@ class Storage(metaclass=SingletonMeta):
         volumes = ConfigVolume.reconstruct(names=names)
         return volumes
 
-    def read_matrices(self) -> List[str]:
-        dataset = self.__read(StoragePath.matrices)
-
-        (length,) = dataset.shape
-        if length == 0:
-            return []
-
-        matrices = list(dataset.asstr()[:])
+    def read_config_matrices(self) -> List[ConfigMatrix]:
+        names_dataset = self.__read(StoragePath.matrices_names)
+        names = self.__convert_dataset_to_string_list(names_dataset)
+        matrices = ConfigMatrix.reconstruct(names=names)
         return matrices
 
     def read_pairings(self) -> List[str]:
@@ -972,36 +970,23 @@ class Storage(metaclass=SingletonMeta):
     def delete_pairings(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.pairing_)
 
-    def generate_matrix_path(
-        self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        matrix_index: int,
-        meta_index: int,
-    ) -> str:
+    def generate_matrix_path(self, matrix: ConfigMatrix) -> str:
         return (
-            f"{StoragePath.matrix_.value}{matrix_index}"
-            f"/{band.name}/{integration.duration}/{meta_index}"
+            f"{StoragePath.matrix_.value}{matrix.index}"
+            f"/{matrix.band.name}/{matrix.integration.duration}/{matrix.meta_index}"
         )
 
     def write_matrix(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        matrix_index: int,
-        meta_index: int,
-        data: List[float],
+        matrix: ConfigMatrix,
     ) -> None:
         path = self.generate_matrix_path(
-            band=band,
-            integration=integration,
-            matrix_index=matrix_index,
-            meta_index=meta_index,
+            matrix=matrix,
         )
 
         self.__write_dataset(
             path=path,
-            data=data,
+            data=matrix.instance.values,
             compression=StorageCompression.gzip,
         )
 
@@ -1344,13 +1329,15 @@ class Storage(metaclass=SingletonMeta):
             data=names,
         )
 
-    def write_matrices(
+    def write_config_matrices(
         self,
-        matrices: List[str],
+        matrices: List[ConfigMatrix],
     ) -> None:
+        names = ConfigMatrix.flatten(matrices=matrices)
+
         self.__write_dataset(
-            path=StoragePath.matrices,
-            data=matrices,
+            path=StoragePath.matrices_names,
+            data=names,
         )
 
     def write_pairings(
@@ -1616,13 +1603,11 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_trajectory_path(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        reducer: ConfigReducer,
+        trajectory: ConfigTrajectory,
     ) -> str:
         return (
-            f"{StoragePath.trajectory_.value}{reducer.index}"
-            f"/{band.name}/{integration.duration}"
+            f"{StoragePath.trajectory_.value}{trajectory.reducer.index}"
+            f"/{trajectory.band.name}/{trajectory.integration.duration}"
         )
 
     def read_config_trajectories(self) -> List[ConfigTrajectory]:
@@ -1661,19 +1646,21 @@ class Storage(metaclass=SingletonMeta):
             data=ends,
         )
 
+    # TODO: Add data
     def write_trajectory(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        reducer: ConfigReducer,
+        trajectory: ConfigTrajectory,
     ):
         path = self.generate_trajectory_path(
-            band=band,
-            integration=integration,
-            reducer=reducer,
+            trajectory=trajectory,
         )
 
         print(path)
+
+        self.__write_dataset(
+            path=path,
+            data=trajectory.instance.values,
+        )
 
     def read_point_indexes_count(
         self,

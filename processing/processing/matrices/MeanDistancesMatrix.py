@@ -4,25 +4,24 @@ import numpy as np
 from h5py import Dataset
 from sklearn import metrics
 
+from processing.matrices.AbstractMatrix import AbstractMatrix
 
-class MeanDistancesMatrix:
-    __umaps: List[Dataset]
-    __matrix: List[List[float]]
 
-    def __init__(
+class MeanDistancesMatrix(AbstractMatrix):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def calculate(
         self,
-        umaps: List[Dataset],
-    ) -> None:
-        self.__umaps = umaps
-        self.__samples_count = umaps[0].shape[0]
+        features: List[Dataset],
+    ) -> List[List[float]]:
+        samples_count = features[0].shape[0]
+        mean_distances_matrix = np.zeros([samples_count, samples_count])
 
-    def calculate(self) -> List[List[float]]:
-        mean_distances_matrix = np.zeros([self.__samples_count, self.__samples_count])
-
-        for i in range(len(self.__umaps)):
+        for i in range(len(features)):
             previous_mean_distances_matrix = mean_distances_matrix
 
-            umap = self.__umaps[i]
+            umap = features[i]
 
             current_meann_distances_matrix = metrics.pairwise_distances(umap)
 
@@ -30,6 +29,5 @@ class MeanDistancesMatrix:
                 (previous_mean_distances_matrix * i) + current_meann_distances_matrix
             ) / (i + 1)
 
-        self.__matrix: List[List[float]] = mean_distances_matrix.tolist()
-
-        return self.__matrix
+        self.values = mean_distances_matrix.tolist()
+        return self.values

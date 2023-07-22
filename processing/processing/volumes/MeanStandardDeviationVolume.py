@@ -18,3 +18,4 @@ class MeanStandardDeviationVolume(AbstractVolume):
             data.append(float(mean_std))
 
         self._set(data)
+        return self.values

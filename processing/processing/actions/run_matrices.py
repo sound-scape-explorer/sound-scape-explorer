@@ -1,6 +1,5 @@
 from processing.common.Env import Env
 from processing.common.Timer import Timer
-from processing.matrices.Matrix import Matrix
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
 
@@ -9,7 +8,7 @@ def run_matrices(env: Env):
     storage = Storage(path=env.storage)
     storage.delete_matrices()
 
-    matrices = storage.read_matrices()
+    matrices = storage.read_config_matrices()
 
     if len(matrices) == 0:
         return
@@ -36,25 +35,20 @@ def run_matrices(env: Env):
 
         meta_values = storage.read_grouped_meta_values(band, integration)
 
-        for m, matrix_name in enumerate(matrices):
+        for matrix in matrices:
             for meta_index in storage.enumerate_meta_properties():
-                meta_property_values = meta_values[meta_index]
-
-                matrix = Matrix(
-                    name=matrix_name,
+                matrix.create_instance(
                     band=band,
                     integration=integration,
-                    matrix_index=m,
                     meta_index=meta_index,
-                    features=grouped_features[:],
-                    labels=meta_property_values,
                 )
 
-                if matrix is None:
-                    continue
-
-                matrix.calculate()
-                matrix.store(storage)
+                matrix.instance.load(
+                    features=grouped_features,
+                    labels=meta_values[meta_index],
+                )
+                matrix.instance.calculate()
+                storage.write_matrix(matrix=matrix)
                 timer.progress()
 
 

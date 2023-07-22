@@ -11,6 +11,7 @@ from processing.config.ConfigBand import ConfigBand
 from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
@@ -28,7 +29,6 @@ from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
-from processing.matrices.Matrix import Matrix
 from processing.pairings.Pairing import Pairing
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.DefaultSetting import DefaultSetting
@@ -56,7 +56,7 @@ class Config(metaclass=SingletonMeta):
     __reducers: List[ConfigReducer] = []
     __indicators: List[ConfigIndicator] = []
     __volumes: List[ConfigVolume] = []
-    __matrices: List[str] = []
+    __matrices: List[ConfigMatrix] = []
     __pairings: List[str] = []
 
     def __init__(
@@ -191,7 +191,7 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        storage.write_matrices(self.__matrices)
+        storage.write_config_matrices(self.__matrices)
 
     def __store_pairings(
         self,
@@ -518,13 +518,12 @@ class Config(metaclass=SingletonMeta):
         self.__volumes = volumes
         return self.__volumes
 
-    def __read_matrices(self) -> None:
+    def __read_matrices(self) -> List[ConfigMatrix]:
         sheet = self.__parse_sheet(ExcelSheet.matrices)
-        matrices = self.__parse_column(sheet, ExcelMatrices.matrix)
-
-        for name in matrices:
-            Matrix.validate_name(name)
-            self.__matrices.append(name)
+        names = self.__parse_column(sheet, ExcelMatrices.name_)
+        matrices = ConfigMatrix.reconstruct(names=names)
+        self.__matrices = matrices
+        return self.__matrices
 
     def __read_pairings(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.pairings)

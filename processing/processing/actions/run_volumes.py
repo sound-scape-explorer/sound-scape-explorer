@@ -38,18 +38,18 @@ def run_volumes(env: Env):
 
         for volume in volumes:
             for meta_index in storage.enumerate_meta_properties():
-                volume.create_instance(
+                instance = volume.create_instance(
                     band=band,
                     integration=integration,
                     meta_index=meta_index,
                 )
 
-                volume.instance.load(
+                instance.load(
                     features=grouped_features[:],
                     labels=meta_values[meta_index],
                 )
 
-                volume.instance.calculate()
+                instance.calculate()
 
                 storage.write_volume(volume=volume)
 

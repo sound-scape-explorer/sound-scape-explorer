@@ -2,6 +2,9 @@ from typing import List
 
 from h5py import Dataset
 
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.ConfigReducer import ConfigReducer
 from processing.trajectories.ContinuousTimeTrajectory import ContinuousTimeTrajectory
 
 
@@ -10,6 +13,10 @@ class ConfigTrajectory:
     name: str
     start: int
     end: int
+    band: ConfigBand
+    integration: ConfigIntegration
+    reducer: ConfigReducer
+    instance: ContinuousTimeTrajectory
 
     def __init__(
         self,
@@ -54,15 +61,24 @@ class ConfigTrajectory:
 
         return trajectories
 
-    def create(
+    def create_instance(
         self,
         features: List[Dataset],
         timestamps: Dataset,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        reducer: ConfigReducer,
     ) -> ContinuousTimeTrajectory:
-        return ContinuousTimeTrajectory(
+        self.band = band
+        self.integration = integration
+        self.reducer = reducer
+
+        self.instance = ContinuousTimeTrajectory(
             features=features,
             timestamps=timestamps,
             date_start=self.start,
             date_end=self.end,
             color_by="test",
         )
+
+        return self.instance

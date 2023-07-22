@@ -21,13 +21,13 @@ def run_reducers(env: Env):
     print_new_line()
     print(f"Reducers list {[r.name + str(r.dimensions) for r in reducers]}")
 
-    timer = Timer(len(bands) * len(integrations) * len(reducers))
-
     for band, integration in storage.enumerate_bands_and_integrations():
+        print_new_line()
         print(
             f"Reducer loaded for band {band.name}"
             f", integration {integration.duration}"
         )
+        timer = Timer(len(bands) * len(integrations))
 
         features = storage.read_grouped_features_all_files(
             band=band,
@@ -35,16 +35,16 @@ def run_reducers(env: Env):
         )
 
         for reducer in reducers:
-            reducer_instance: Reducer = reducer.create_reducer(
-                seed=seed,
-            )
-
             if not reducer.has(
                 band=band,
                 integration=integration,
             ):
                 timer.progress()
                 continue
+
+            reducer_instance: Reducer = reducer.create_reducer(
+                seed=seed,
+            )
 
             reduced_features = reducer_instance.reduce(features=features[:])
 

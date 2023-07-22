@@ -1,60 +1,33 @@
-from typing import List
-
 import numpy as np
 import pandas as pd
-from h5py import Dataset
 from sklearn import metrics
 
-from processing.config.ConfigBand import ConfigBand
-from processing.config.ConfigIntegration import ConfigIntegration
 from processing.matrices.AbstractMatrix import AbstractMatrix
 
 
 class SilhouetteMatrix(AbstractMatrix):
-    def __init__(
-        self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        matrix_index: int,
-        meta_index: int,
-        features: List[Dataset],
-        labels: List[str],
-    ) -> None:
-        super().__init__(
-            band,
-            integration,
-            matrix_index,
-            meta_index,
-            features,
-            labels,
-        )
+    def __init__(self) -> None:
+        super().__init__()
 
     def calculate(self):
-        silhouette = np.zeros(
-            (
-                len(self._clusters),
-                len(self._clusters),
-            )
-        )
+        dataframe, clusters = self._validate_load()
 
-        for i, cl1 in enumerate(self._clusters):
-            for j, cl2 in enumerate(self._clusters):
+        silhouette = np.zeros((len(clusters), len(clusters)))
+
+        for i, cl1 in enumerate(clusters):
+            for j, cl2 in enumerate(clusters):
                 if i > j:
                     silhouette[i, j] = metrics.silhouette_score(
                         pd.concat(
                             (
-                                self._dataframe[self._dataframe.index == cl1],
-                                self._dataframe[self._dataframe.index == cl2],
+                                dataframe[dataframe.index == cl1],
+                                dataframe[dataframe.index == cl2],
                             )
                         ),
                         pd.concat(
                             (
-                                pd.Series(
-                                    self._dataframe.index[self._dataframe.index == cl1]
-                                ),
-                                pd.Series(
-                                    self._dataframe.index[self._dataframe.index == cl2]
-                                ),
+                                pd.Series(dataframe.index[dataframe.index == cl1]),
+                                pd.Series(dataframe.index[dataframe.index == cl2]),
                             )
                         ),
                         metric="manhattan",
@@ -63,4 +36,6 @@ class SilhouetteMatrix(AbstractMatrix):
         silhouette = silhouette + silhouette.T
         np.fill_diagonal(silhouette, np.nan)
 
-        self._set_matrix(silhouette)  # type: ignore
+        self._set(list(silhouette))
+
+        return silhouette

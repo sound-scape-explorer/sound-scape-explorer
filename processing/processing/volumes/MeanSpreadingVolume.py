@@ -17,3 +17,4 @@ class MeanSpreadingVolume(AbstractVolume):
             data.append(float(mean))
 
         self._set(data)
+        return self.values

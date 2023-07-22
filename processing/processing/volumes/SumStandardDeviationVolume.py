@@ -18,3 +18,4 @@ class SumStandardDeviationVolume(AbstractVolume):
             data.append(float(sum_std))
 
         self._set(data)
+        return self.values

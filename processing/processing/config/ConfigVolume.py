@@ -22,6 +22,7 @@ class ConfigVolume:
     band: ConfigBand
     integration: ConfigIntegration
     meta_index: int
+    instance: AbstractVolume
 
     def __init__(
         self,

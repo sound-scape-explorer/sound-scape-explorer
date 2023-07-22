@@ -1,49 +1,33 @@
 from typing import List
 
 import numpy as np
-from h5py import Dataset
 
-from processing.config.ConfigBand import ConfigBand
-from processing.config.ConfigIntegration import ConfigIntegration
 from processing.matrices.AbstractMatrix import AbstractMatrix
 
 
 class OverlapMatrix(AbstractMatrix):
-    def __init__(
-        self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        matrix_index: int,
-        meta_index: int,
-        features: List[Dataset],
-        labels: List[str],
-    ) -> None:
-        super().__init__(
-            band,
-            integration,
-            matrix_index,
-            meta_index,
-            features,
-            labels,
-        )
+    def __init__(self) -> None:
+        super().__init__()
 
     def calculate(self):
-        nb_clusters = len(self._clusters)
+        dataframe, clusters = self._validate_load()
+
+        nb_clusters = len(clusters)
 
         plus_limits = []
         minus_limits = []
 
-        for cluster in self._clusters:
+        for cluster in clusters:
             plus_limits.append(
                 np.nanpercentile(
-                    self._dataframe[self._dataframe.index == cluster].to_numpy(),
+                    dataframe[dataframe.index == cluster].to_numpy(),
                     95,
                     axis=0,
                 )
             )
             minus_limits.append(
                 np.nanpercentile(
-                    self._dataframe[self._dataframe.index == cluster].to_numpy(),
+                    dataframe[dataframe.index == cluster].to_numpy(),
                     5,
                     axis=0,
                 )
@@ -51,8 +35,8 @@ class OverlapMatrix(AbstractMatrix):
 
         dataframe_b = np.zeros([nb_clusters, nb_clusters])
 
-        for i, cluster in enumerate(self._clusters):
-            dataframe_a = self._dataframe[self._dataframe.index == cluster].to_numpy()
+        for i, cluster in enumerate(clusters):
+            dataframe_a = dataframe[dataframe.index == cluster].to_numpy()
 
             mask_a = (dataframe_a > minus_limits[i]) * (dataframe_a < plus_limits[i])
 
@@ -71,4 +55,6 @@ class OverlapMatrix(AbstractMatrix):
         # TODO: Fix typings
         overlap: List[List[float]] = (dataframe_b + dataframe_b.T) / 2  # type: ignore
 
-        self._set_matrix(overlap)
+        self._set(overlap)
+
+        return overlap

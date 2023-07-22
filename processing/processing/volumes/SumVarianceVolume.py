@@ -18,3 +18,4 @@ class SumVarianceVolume(AbstractVolume):
             data.append(float(sum_var))
 
         self._set(data)
+        return self.values

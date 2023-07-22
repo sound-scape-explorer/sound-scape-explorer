@@ -383,7 +383,7 @@ class StoragePath(Enum):
     # Configuration/Matrices #
     ##########################
 
-    matrices = "/configuration/matrices"
+    matrices_names = "/configuration/matrices"
     """The matrix names requested in the configuration file.
 
     Each row contains a string.

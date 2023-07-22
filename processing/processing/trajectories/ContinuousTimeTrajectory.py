@@ -1,10 +1,7 @@
-from typing import List
+from typing import List, Union
 
 from h5py import Dataset
-
-from processing.config.ConfigBand import ConfigBand
-from processing.config.ConfigIntegration import ConfigIntegration
-from processing.config.ConfigReducer import ConfigReducer
+from pandas import DataFrame
 
 
 class ContinuousTimeTrajectory:
@@ -16,6 +13,7 @@ class ContinuousTimeTrajectory:
     __rolling_step: int
     __dimensions: int
     segments: List[int]
+    values: Union[DataFrame, None]
 
     def __init__(
         self,
@@ -35,19 +33,16 @@ class ContinuousTimeTrajectory:
         self.__dimensions = dimensions
         self.__rolling_step = rolling_step
 
+    @staticmethod
+    def flatten():
+        # TODO: For storage
+        pass
+
+    @staticmethod
+    def reconstruct():
+        # TODO: For runtime
+        pass
+
     def calculate(self) -> None:
         # TODO: See utils enes sub v2 line 1462
         pass
-
-    # def store(
-    #     self,
-    #     storage: Storage,
-    #     band: ConfigBand,
-    #     integration: ConfigIntegration,
-    #     reducer: ConfigReducer,
-    # ) -> None:
-    #     storage.write_trajectory(
-    #         band=band,
-    #         integration=integration,
-    #         reducer=reducer,
-    #     )

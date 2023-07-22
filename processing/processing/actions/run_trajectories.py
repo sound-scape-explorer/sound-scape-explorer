@@ -35,19 +35,15 @@ def run_trajectories(env: Env):
             )
 
             for trajectory in trajectories:
-                trajectory_instance = trajectory.create(
+                trajectory.create_instance(
                     features=computation_umaps,
                     timestamps=grouped_timestamps,
-                )
-
-                print(trajectory_instance)
-
-                trajectory_instance.store(
-                    storage=storage,
                     band=band,
                     integration=integration,
                     reducer=reducer,
                 )
+
+                storage.write_trajectory(trajectory=trajectory)
 
 
 if __name__ == "__main__":

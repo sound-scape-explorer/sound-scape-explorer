@@ -21,11 +21,9 @@ def run_mean_distances_matrix(env: Env):
             band=band, integration=integration
         )
 
-        mean_distances_matrix = MeanDistancesMatrix(
-            umaps=computation_umaps,
-        )
+        mean_distances_matrix = MeanDistancesMatrix()
 
-        matrix = mean_distances_matrix.calculate()
+        matrix = mean_distances_matrix.calculate(features=computation_umaps)
 
         storage.write_mean_distances_matrix(
             band=band,

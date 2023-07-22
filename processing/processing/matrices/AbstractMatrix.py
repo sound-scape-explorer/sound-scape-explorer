@@ -1,46 +1,43 @@
 from abc import ABC, abstractmethod
-from typing import List, Union
+from typing import List, Tuple, Union
 
 import pandas as pd
 from h5py import Dataset
 from pandas import DataFrame
 
-from processing.config.ConfigBand import ConfigBand
-from processing.config.ConfigIntegration import ConfigIntegration
-from processing.storage.Storage import Storage
-from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
-
 
 class AbstractMatrix(ABC):
-    _band: ConfigBand
-    _integration: ConfigIntegration
-    _matrix_index: int
-    _meta_index: int
-    _dataframe: DataFrame
-    _clusters: List[str]
-    _matrix: Union[DataFrame, None]
+    _clusters: Union[List[str], None]
+    _dataframe: Union[DataFrame, None]
+    values: Union[DataFrame, None]
 
     def __init__(
         self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-        matrix_index: int,
-        meta_index: int,
-        features: List[Dataset],
-        labels: List[str],
     ) -> None:
-        self._band = band
-        self._integration = integration
-        self._matrix_index = matrix_index
-        self._meta_index = meta_index
+        self._clusters = None
+        self._dataframe = None
+        self.values = None
 
-        self._dataframe = pd.DataFrame(features)
-        self._dataframe.index = labels
-        self._clusters = self._dataframe.index.unique()  # type: ignore
+    @abstractmethod
+    def calculate(self) -> None:
+        pass
 
-        self._matrix = None
+    def _validate_load(self) -> Tuple[DataFrame, List[str]]:
+        if self._clusters is None or self._dataframe is None:
+            raise RuntimeError(
+                "Unable to find dataframe and/or clusters. Please load first."
+            )
 
-    def _set_matrix(
+        return self._dataframe, self._clusters
+
+    def _iterate_clusters(self):
+        clusters, dataframe = self._validate_load()
+
+        for c, cluster in enumerate(clusters):
+            cluster_frame = dataframe[dataframe.index == cluster].to_numpy()
+            yield c, cluster, cluster_frame
+
+    def _set(
         self,
         matrix: List[List[float]],
     ) -> None:
@@ -51,42 +48,15 @@ class AbstractMatrix(ABC):
                 if i < j:
                     payload.iloc[i, j] = None
 
-        self._matrix = payload
+        self.values = payload
 
-    def _iterate_clusters(self):
-        for c, cluster in enumerate(self._clusters):
-            cluster_frame = self._dataframe[self._dataframe.index == cluster].to_numpy()
-
-            yield c, cluster, cluster_frame
-
-    def __validate_matrix(self):
-        if self._matrix is None:
-            raise ValueError("Unable to find matrix. Please calculate first.")
-
-        return self._matrix
-
-    def get(self) -> DataFrame:
-        matrix = self.__validate_matrix()
-        return matrix
-
-    def get_as_list(self) -> List[float]:
-        matrix = self.__validate_matrix()
-        return convert_dataframe_to_list(matrix)
-
-    def store(
+    def load(
         self,
-        storage: Storage,
-    ) -> None:
-        data = self.get_as_list()
-
-        storage.write_matrix(
-            band=self._band,
-            integration=self._integration,
-            matrix_index=self._matrix_index,
-            meta_index=self._meta_index,
-            data=data,
-        )
-
-    @abstractmethod
-    def calculate(self) -> None:
-        pass
+        features: Dataset,
+        labels: List[str],
+    ) -> DataFrame:
+        print(type(features))
+        self._dataframe = pd.DataFrame(features)
+        self._dataframe.index = labels
+        self._clusters = self._dataframe.index.unique()  # type: ignore
+        return self._dataframe
