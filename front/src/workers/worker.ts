@@ -93,7 +93,7 @@ export async function readSettings(file: File) {
 
 export async function readFilenames(file: File) {
   const h5 = await load(file);
-  const path = StoragePath.files;
+  const path = StoragePath.files_names_names;
   const dataset = h5.get(path) as Dataset;
   return dataset.to_array() as string[];
 }
@@ -310,7 +310,7 @@ export async function readIndicators(
 ) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.indicators) as Dataset;
+  const namesDataset = h5.get(StoragePath.indicators_names_names) as Dataset;
   const names = namesDataset.to_array() as string[];
 
   const indicators: Indicator[] = [];
@@ -339,7 +339,7 @@ export async function readVolumes(
 ) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.volumes) as Dataset;
+  const namesDataset = h5.get(StoragePath.volumes_names_names) as Dataset;
   const names = namesDataset.to_array() as string[];
 
   const volumes: Volume[] = [];
@@ -392,7 +392,7 @@ export async function readMatrices(
 ) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.matrices) as Dataset;
+  const namesDataset = h5.get(StoragePath.matrices_names_names) as Dataset;
   const names = namesDataset.to_array() as string[];
 
   const matrices: Matrix[] = [];
@@ -441,7 +441,7 @@ export async function readPairings(
 ) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.pairings) as Dataset;
+  const namesDataset = h5.get(StoragePath.pairings_names_names) as Dataset;
   const names = namesDataset.to_array() as string[];
 
   const pairings: Pairing[] = [];

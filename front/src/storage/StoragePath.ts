@@ -27,7 +27,7 @@ export enum StoragePath {
   /**
    * Configuration/Files
    */
-  files = '/configuration/files/names',
+  files_names_names = '/configuration/files/names',
   files_sites = '/configuration/files/sites',
   files_metas = '/configuration/files/metas',
 
@@ -47,6 +47,13 @@ export enum StoragePath {
   autoclusters_epsilons = '/configuration/autoclusters/epsilons',
 
   /**
+   * Config/Trajectories
+   */
+  trajectories_names = '/configuration/trajectories/names',
+  trajectories_starts = '/configuration/trajectories/starts',
+  trajectories_ends = '/configuration/trajectories/ends',
+
+  /**
    * Configuration/Reducers
    */
   reducers_names = '/configuration/reducers/names',
@@ -58,22 +65,22 @@ export enum StoragePath {
   /**
    * Configuration/Indicators
    */
-  indicators = '/configuration/indicators',
+  indicators_names_names = '/configuration/indicators',
 
   /**
    * Configuration/Volumes
    */
-  volumes = '/configuration/volumes',
+  volumes_names_names = '/configuration/volumes',
 
   /**
    * Configuration/Matrices
    */
-  matrices = '/configuration/matrices',
+  matrices_names_names = '/configuration/matrices',
 
   /**
    * Configuration/Pairings
    */
-  pairings = '/configuration/pairings',
+  pairings_names_names = '/configuration/pairings',
 
   /**
    * Computation UMAPs
