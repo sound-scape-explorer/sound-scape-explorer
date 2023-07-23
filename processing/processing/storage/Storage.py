@@ -1627,3 +1627,11 @@ class Storage(metaclass=SingletonMeta):
         path = self.generate_grouped_timestamps_path(band=band, integration=integration)
         dataset = self.__read(path=path)
         return dataset.len()
+
+    def read_reducer(
+        self,
+        reducer: ConfigReducer,
+    ) -> Dataset:
+        path = self.generate_reduced_path(reducer)
+        dataset = self.__read(path)
+        return dataset

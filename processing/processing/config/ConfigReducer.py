@@ -175,12 +175,20 @@ class ConfigReducer:
 
         return reducers
 
+    def load(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ):
+        self.band = band
+        self.integration = integration
+        return self
+
     def create_instance(
         self,
         band: ConfigBand,
         integration: ConfigIntegration,
     ) -> AbstractReducer:
-        self.band = band
-        self.integration = integration
+        self.load(band=band, integration=integration)
         self.instance = self.algorithms[self.name]()
         return self.instance

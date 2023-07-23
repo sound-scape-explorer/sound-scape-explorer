@@ -27,10 +27,12 @@ def run_trajectories(env: Env):
         timer = Timer(len(reducers) * len(trajectories))
 
         for reducer in reducers:
-            computation_umaps = storage.read_computation_umaps(
-                band=band,
-                integration=integration,
-            )
+            reducer.load(band=band, integration=integration)
+
+            if not reducer.should_calculate():
+                continue
+
+            reduced_features = storage.read_reducer(reducer)
 
             grouped_timestamps = storage.read_grouped_timestamps(
                 band=band,
@@ -39,17 +41,20 @@ def run_trajectories(env: Env):
 
             for trajectory in trajectories:
                 trajectory.create_instance(
-                    features=computation_umaps,
-                    timestamps=grouped_timestamps,
                     band=band,
                     integration=integration,
                     reducer=reducer,
                 )
 
+                trajectory.instance.load(
+                    features=reduced_features,
+                    timestamps=grouped_timestamps,
+                    timestamp_start=trajectory.start,
+                    timestamp_end=trajectory.end,
+                )
+
                 trajectory.instance.calculate()
-
                 storage.write_trajectory(trajectory=trajectory)
-
                 timer.progress()
 
 
