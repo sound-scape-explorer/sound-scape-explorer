@@ -21,6 +21,7 @@ export function useFile() {
     fileRef.value = file;
   };
 
+  // TODO: Add file close from worker
   const resetFile = () => {
     fileRef.value = null;
   };
