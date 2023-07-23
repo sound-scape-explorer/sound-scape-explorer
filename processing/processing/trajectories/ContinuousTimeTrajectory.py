@@ -48,7 +48,7 @@ class ContinuousTimeTrajectory:
         timestamps: Dataset,
         timestamp_start: int,
         timestamp_end: int,
-        rolling_step: int = 1000,  # 1 second
+        rolling_step: int = 1000,  # milliseconds
     ):
         self.__features = features
         self.__timestamps = timestamps
