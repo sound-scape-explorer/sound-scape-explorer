@@ -8,6 +8,7 @@ import {pointsFilteredByMetaRef} from '../Scatter/useScatterFilterMeta';
 import {chromaScaleRef} from '../Scatter/useScatterColorScale';
 import {colorsStore} from '../Colors/colorsStore';
 import {pointsFilteredByTimeRef} from '../Scatter/useScatterFilterTime';
+import {trajectoriesRef} from 'src/hooks/useStorageTrajectories';
 
 interface ScatterTracesRef {
   value: Data[];
@@ -113,6 +114,7 @@ export function useScatterTraces() {
     if (
       metaSetsRef.value === null ||
       metaIndexRef.value === null ||
+      trajectoriesRef.value === null ||
       reducedFeaturesRef.value === null ||
       pointIndexGroupsRef.value === null ||
       pointsFilteredByMetaRef.value === null ||
@@ -126,6 +128,8 @@ export function useScatterTraces() {
 
     const isThreeDimensional =
       typeof reducedFeaturesRef.value[0]?.[2] !== 'undefined';
+
+    const scatterType = isThreeDimensional ? 'scatter3d' : 'scatter';
 
     for (const pointIndexes of pointIndexGroupsRef.value) {
       const selectedFeatures = [];
@@ -149,7 +153,7 @@ export function useScatterTraces() {
           : undefined,
         name: metaSetsRef.value[metaIndexRef.value][index],
         hovertemplate: metaSetsRef.value[metaIndexRef.value][index],
-        type: isThreeDimensional ? 'scatter3d' : 'scatter',
+        type: scatterType,
         mode: 'markers',
         marker: {
           size: 2,
@@ -161,6 +165,18 @@ export function useScatterTraces() {
       index += 1;
     }
 
+    const trace: Data = {
+      x: trajectoriesRef.value.map((coordinates) => coordinates[0]),
+      y: trajectoriesRef.value.map((coordinates) => coordinates[1]),
+      z: isThreeDimensional
+        ? trajectoriesRef.value.map((coordinates) => coordinates[2])
+        : undefined,
+      name: 'trajectories',
+      type: scatterType,
+      mode: 'lines',
+    };
+
+    traces.push(trace);
     scatterTracesRef.value = traces;
   };
 
