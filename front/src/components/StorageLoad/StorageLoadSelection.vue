@@ -15,6 +15,7 @@ import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
 import {useScatterFilter} from '../Scatter/useScatterFilter';
 import {useStorageFilesGroupCounts} from 'src/hooks/useStorageFilesGroupCounts';
 import {useStorageGroupCountsByPointIndexes} from 'src/hooks/useStorageGroupCountsByPointIndexes';
+import {useStorageTrajectories} from 'src/hooks/useStorageTrajectories';
 
 useStorageFilenames();
 useStorageMetaSets();
@@ -30,6 +31,7 @@ useStorageGroupedTimestamps();
 useStorageGroupedMetas();
 
 useStorageReducedFeatures();
+useStorageTrajectories();
 
 useStorageVolumes();
 useStorageIndicators();
