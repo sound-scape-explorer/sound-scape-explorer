@@ -575,3 +575,16 @@ export async function readFilesGroupCounts(
   const filesGroupCounts = dataset.to_array() as number[][];
   return filesGroupCounts.map((groupsCount) => groupsCount[0]);
 }
+
+export async function readTrajectories(
+  file: File,
+  band: string,
+  integration: number,
+  reducerIndex: number,
+): Promise<number[][]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.trajectory_}${reducerIndex}/${band}/${integration}`;
+  const dataset = h5.get(path) as Dataset;
+  const trajectories = dataset.to_array() as number[][];
+  return trajectories;
+}
