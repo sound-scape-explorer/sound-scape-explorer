@@ -1,6 +1,7 @@
+import time
 from typing import Tuple
 
-import time
+from processing.utils.print_new_line import print_new_line
 
 
 class Timer:
@@ -42,15 +43,15 @@ class Timer:
     def __convert_time(
         time_: float,
     ) -> Tuple[float, str]:
-        units = 'seconds'
+        units = "seconds"
 
         if time_ >= 60:
             time_ = time_ / 60
-            units = 'minutes'
+            units = "minutes"
 
         if time_ >= 60:
             time_ = time_ / 60
-            units = 'hours'
+            units = "hours"
 
         return time_, units
 
@@ -71,22 +72,22 @@ class Timer:
         self.__add()
 
         timeleft, units = self.__get_timeleft()
-        string = f'{round(timeleft, decimals)} {units}'
+        string = f"{round(timeleft, decimals)} {units}"
 
         print(
-            f'Progress: {self.__iteration}/{self.__total_iterations}, '
-            f'Timeleft: ~{string:<80}',
-            end='\r',
+            f"Progress: {self.__iteration}/{self.__total_iterations}, "
+            f"Timeleft: ~{string:<80}",
+            end="\r",
         )
 
         if self.__iteration == self.__total_iterations:
             duration, units = self.__convert_time(self.__duration)
-            string = f'{round(duration, decimals)} {units}'
+            string = f"{round(duration, decimals)} {units}"
 
             print(
-                f'Progress: {self.__iteration}/{self.__total_iterations}, '
-                f'Duration: {string:<80}',
-                end='\r',
+                f"Progress: {self.__iteration}/{self.__total_iterations}, "
+                f"Duration: {string:<80}",
+                end="\r",
             )
 
-            print('')
+            print("")
