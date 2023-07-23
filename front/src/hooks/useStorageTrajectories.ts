@@ -31,8 +31,6 @@ export function useStorageTrajectories() {
       integrationRef.value,
       reducerRef.value.index,
     );
-
-    console.log(trajectoriesRef.value);
   };
 
   watchEffect(readTrajectories);
