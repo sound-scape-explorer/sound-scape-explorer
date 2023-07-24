@@ -25,7 +25,6 @@ export function useConfigFiles() {
     }
 
     configFilesRef.value = await workerRef.value.readConfigFiles(fileRef.value);
-    console.log(configFilesRef.value);
   };
 
   watchEffect(readFiles);
