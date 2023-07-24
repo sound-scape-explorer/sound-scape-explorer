@@ -27,7 +27,7 @@ export enum StoragePath {
   /**
    * Configuration/Files
    */
-  files_names_names = '/configuration/files/names',
+  files_names = '/configuration/files/names',
   files_sites = '/configuration/files/sites',
   files_metas = '/configuration/files/metas',
 

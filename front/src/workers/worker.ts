@@ -94,7 +94,7 @@ export async function readSettings(file: File) {
 
 export async function readFilenames(file: File) {
   const h5 = await load(file);
-  const path = StoragePath.files_names_names;
+  const path = StoragePath.files_names;
   const dataset = h5.get(path) as Dataset;
   return dataset.to_array() as string[];
 }
