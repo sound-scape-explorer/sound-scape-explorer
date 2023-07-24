@@ -85,6 +85,7 @@ export function useScatterTraces() {
   watch(
     [
       reducedFeaturesRef,
+      trajectoriesRef,
       metaIndexRef,
       pointsFilteredByMetaRef,
       pointsFilteredByTimeRef,
@@ -114,7 +115,6 @@ export function useScatterTraces() {
     if (
       metaSetsRef.value === null ||
       metaIndexRef.value === null ||
-      trajectoriesRef.value === null ||
       reducedFeaturesRef.value === null ||
       pointIndexGroupsRef.value === null ||
       pointsFilteredByMetaRef.value === null ||
@@ -165,18 +165,21 @@ export function useScatterTraces() {
       index += 1;
     }
 
-    const trace: Data = {
-      x: trajectoriesRef.value.map((coordinates) => coordinates[0]),
-      y: trajectoriesRef.value.map((coordinates) => coordinates[1]),
-      z: isThreeDimensional
-        ? trajectoriesRef.value.map((coordinates) => coordinates[2])
-        : undefined,
-      name: 'trajectories',
-      type: scatterType,
-      mode: 'lines',
-    };
+    if (trajectoriesRef.value !== null) {
+      const trace: Data = {
+        x: trajectoriesRef.value.map((coordinates) => coordinates[0]),
+        y: trajectoriesRef.value.map((coordinates) => coordinates[1]),
+        z: isThreeDimensional
+          ? trajectoriesRef.value.map((coordinates) => coordinates[2])
+          : undefined,
+        name: 'trajectories',
+        type: scatterType,
+        mode: 'lines',
+      };
 
-    traces.push(trace);
+      traces.push(trace);
+    }
+
     scatterTracesRef.value = traces;
   };
 

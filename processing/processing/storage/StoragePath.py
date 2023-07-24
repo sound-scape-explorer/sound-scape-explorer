@@ -596,7 +596,7 @@ class StoragePath(Enum):
     This path is to be used as a prefix!
 
     Example:
-        /trajectory_{reducer_index}/{band}/{integration}
+        /trajectory_{trajectory_index}/{reducer_index}/{band}/{integration}
 
     Type:
         Group prefix

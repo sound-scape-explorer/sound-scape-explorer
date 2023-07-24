@@ -60,7 +60,7 @@ watch(selectedOptionRef, () => {
   <n-select
     v-model:value="selectedOptionRef"
     :options="reducersOptions"
-    placeholder="Reducers..."
+    placeholder="Reducer..."
     size="small"
   />
 </template>

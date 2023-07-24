@@ -9,6 +9,7 @@ import type {StorageMetas} from 'src/hooks/useStorageMetas';
 import type {StorageSettings} from 'src/storage/StorageSettings';
 import type {StorageRanges} from 'src/hooks/useStorageRanges';
 import {StorageMode} from 'src/storage/StorageMode';
+import type {ConfigTrajectory} from 'src/hooks/useConfigTrajectories';
 
 interface Volume {
   index: number;
@@ -576,14 +577,47 @@ export async function readFilesGroupCounts(
   return filesGroupCounts.map((groupsCount) => groupsCount[0]);
 }
 
-export async function readTrajectories(
+export async function readConfigTrajectories(
+  file: File,
+): Promise<ConfigTrajectory[]> {
+  const h5 = await load(file);
+
+  const namesDataset = h5.get(StoragePath.trajectories_names) as Dataset;
+  const names = namesDataset.to_array() as string[];
+
+  const startsDataset = h5.get(StoragePath.trajectories_starts) as Dataset;
+  const starts = startsDataset.to_array() as number[];
+
+  const endsDataset = h5.get(StoragePath.trajectories_ends) as Dataset;
+  const ends = endsDataset.to_array() as number[];
+
+  const length = namesDataset.shape[0];
+
+  const trajectories = [];
+
+  for (let index = 0; index < length; index += 1) {
+    const trajectory: ConfigTrajectory = {
+      index: index,
+      name: names[index],
+      start: starts[index],
+      end: ends[index],
+    };
+
+    trajectories.push(trajectory);
+  }
+
+  return trajectories;
+}
+
+export async function readTrajectory(
   file: File,
   band: string,
   integration: number,
+  trajectoryIndex: number,
   reducerIndex: number,
 ): Promise<number[][]> {
   const h5 = await load(file);
-  const path = `${StoragePath.trajectory_}${reducerIndex}/${band}/${integration}`;
+  const path = `${StoragePath.trajectory_}${trajectoryIndex}/${reducerIndex}/${band}/${integration}`;
   const dataset = h5.get(path) as Dataset;
   const trajectories = dataset.to_array() as number[][];
   return trajectories;

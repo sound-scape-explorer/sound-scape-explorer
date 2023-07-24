@@ -1,10 +1,10 @@
 import {reactive} from 'vue';
 
-interface BandReactive {
+interface BandRef {
   value: string | null;
 }
 
-export const bandRef = reactive<BandReactive>({
+export const bandRef = reactive<BandRef>({
   value: null,
 });
 

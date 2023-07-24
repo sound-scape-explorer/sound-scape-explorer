@@ -1566,8 +1566,10 @@ class Storage(metaclass=SingletonMeta):
         trajectory: ConfigTrajectory,
     ) -> str:
         return (
-            f"{StoragePath.trajectory_.value}{trajectory.reducer.index}"
-            f"/{trajectory.band.name}/{trajectory.integration.duration}"
+            f"{StoragePath.trajectory_.value}{trajectory.index}"
+            f"/{trajectory.reducer.index}"
+            f"/{trajectory.band.name}"
+            f"/{trajectory.integration.duration}"
         )
 
     def read_config_trajectories(self) -> List[ConfigTrajectory]:
