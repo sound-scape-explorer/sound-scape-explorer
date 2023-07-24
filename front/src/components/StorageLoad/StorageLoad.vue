@@ -1,23 +1,17 @@
 <script setup lang="ts">
-import {useStorageBands} from 'src/hooks/useStorageBands';
-import {useBand, bandRef} from '../../hooks/useBand';
-import {useIntegration, integrationRef} from '../../hooks/useIntegration';
 import {reducerRef, useReducer} from 'src/hooks/useReducer';
 import {useStorageSettings} from '../../hooks/useStorageSettings';
 import {useStorageFilenames} from '../../hooks/useStorageFilenames';
 import {computed} from 'vue';
 import StorageLoadSelection from './StorageLoadSelection.vue';
 import {useStorageReducers} from 'src/hooks/useStorageReducers';
-import {useStorageIntegrations} from 'src/hooks/useStorageIntegrations';
 import {useStorageRanges} from 'src/hooks/useStorageRanges';
+import {configBandRef} from 'src/hooks/useConfigBands';
+import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
 
-useStorageBands();
-useStorageIntegrations();
 useStorageRanges();
 useStorageReducers();
 
-useBand();
-useIntegration();
 useReducer();
 
 useStorageSettings();
@@ -26,8 +20,8 @@ useStorageFilenames();
 
 const isSelectionRef = computed<boolean>(() => {
   if (
-    bandRef.value === null ||
-    integrationRef.value === null ||
+    configBandRef.value === null ||
+    configIntegrationRef.value === null ||
     reducerRef.value === null
   ) {
     return false;

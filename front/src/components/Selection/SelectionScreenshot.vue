@@ -5,13 +5,13 @@ import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
 import {scatterRef} from '../Scatter/useScatterContainer';
 import {settingsStore} from '../Settings/settingsStore';
 import html2canvas from 'html2canvas';
-import {bandRef} from 'src/hooks/useBand';
-import {integrationRef} from 'src/hooks/useIntegration';
+import {configBandRef} from 'src/hooks/useConfigBands';
+import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
 
 async function screenshot() {
   if (
-    bandRef.value === null ||
-    integrationRef.value === null ||
+    configBandRef.value === null ||
+    configIntegrationRef.value === null ||
     scatterRef.value === null
   ) {
     return;
@@ -24,6 +24,8 @@ async function screenshot() {
   }
 
   const canvas = await html2canvas(targetElement);
+  const bandName = configBandRef.value.name;
+  const integrationSeconds = configIntegrationRef.value.duration;
 
   canvas.style.display = 'none';
   document.body.appendChild(canvas);
@@ -33,7 +35,7 @@ async function screenshot() {
       .toDataURL('image/png')
       .replace('image/png', 'image/octet-stream');
     const anchor = document.createElement('a');
-    anchor.download = `SSE_${bandRef.value}_${integrationRef.value}.png`;
+    anchor.download = `SSE_${bandName}_${integrationSeconds}.png`;
     anchor.href = image;
     anchor.click();
     canvas.remove();

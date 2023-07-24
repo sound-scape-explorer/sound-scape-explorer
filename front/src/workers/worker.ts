@@ -3,13 +3,13 @@ import h5wasm from 'h5wasm';
 import {StoragePath} from '../storage/StoragePath';
 import {trimRectangular} from '../utils/trim-rectangular';
 import type {StorageReducer} from 'src/hooks/useStorageReducers';
-import type {StorageBands} from 'src/hooks/useStorageBands';
-import type {StorageIntegrations} from 'src/hooks/useStorageIntegrations';
 import type {StorageMetas} from 'src/hooks/useStorageMetas';
 import type {StorageSettings} from 'src/storage/StorageSettings';
 import type {StorageRanges} from 'src/hooks/useStorageRanges';
 import {StorageMode} from 'src/storage/StorageMode';
 import type {ConfigTrajectory} from 'src/hooks/useConfigTrajectories';
+import type {ConfigBand} from 'src/hooks/useConfigBands';
+import type {ConfigIntegration} from 'src/hooks/useConfigIntegrations';
 
 interface Volume {
   index: number;
@@ -155,7 +155,7 @@ export async function readMetas(file: File, band: string, integration: number) {
   return metas;
 }
 
-export async function readBands(file: File) {
+export async function readConfigBands(file: File): Promise<ConfigBand[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.bands_names) as Dataset;
@@ -167,27 +167,45 @@ export async function readBands(file: File) {
   const highsDataset = h5.get(StoragePath.bands_highs) as Dataset;
   const highs = highsDataset.to_array() as number[];
 
-  const bands: StorageBands = {};
+  const bands = [];
+  const length = namesDataset.shape[0];
 
-  for (const [b, band] of names.entries()) {
-    bands[band] = [lows[b], highs[b]];
+  for (let index = 0; index < length; index += 1) {
+    const band: ConfigBand = {
+      index: index,
+      name: names[index],
+      low: lows[index],
+      high: highs[index],
+    };
+
+    bands.push(band);
   }
 
   return bands;
 }
 
-export async function readIntegrations(file: File) {
+export async function readConfigIntegrations(file: File) {
   const h5 = await load(file);
-  const names = h5.get(StoragePath.integrations_names) as Dataset;
-  const namesList = names.to_array() as string[];
 
-  const durations = h5.get(StoragePath.integrations_durations) as Dataset;
-  const durationsList = durations.to_array() as number[];
+  const namesDataset = h5.get(StoragePath.integrations_names) as Dataset;
+  const names = namesDataset.to_array() as string[];
 
-  const integrations: StorageIntegrations = {};
+  const durationsDataset = h5.get(
+    StoragePath.integrations_durations,
+  ) as Dataset;
+  const durations = durationsDataset.to_array() as number[];
 
-  for (const [i, integration] of namesList.entries()) {
-    integrations[integration] = durationsList[i];
+  const integrations: ConfigIntegration[] = [];
+  const length = namesDataset.shape[0];
+
+  for (let index = 0; index < length; index += 1) {
+    const integration: ConfigIntegration = {
+      index: index,
+      name: names[index],
+      duration: durations[index],
+    };
+
+    integrations.push(integration);
   }
 
   return integrations;

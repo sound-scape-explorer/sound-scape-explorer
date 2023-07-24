@@ -9,7 +9,6 @@ import AppButton from '../AppButton/AppButton.vue';
 import {timeStore} from './timeStore';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
-import {integrationRef} from 'src/hooks/useIntegration';
 import {rangesRef} from 'src/hooks/useStorageRanges';
 import {reducerRef} from 'src/hooks/useReducer';
 
@@ -21,11 +20,7 @@ const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
 const sliders = computed<Slider[]>(() => {
-  if (
-    integrationRef.value === null ||
-    rangesRef.value === null ||
-    reducerRef.value === null
-  ) {
+  if (rangesRef.value === null || reducerRef.value === null) {
     return [];
   }
 

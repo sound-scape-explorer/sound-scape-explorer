@@ -4,9 +4,9 @@ import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from './useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {bandRef} from 'src/hooks/useBand';
 import {indicatorsRef} from 'src/hooks/useStorageIndicators';
-import {integrationRef} from 'src/hooks/useIntegration';
+import {configBandRef} from 'src/hooks/useConfigBands';
+import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
 
 const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
   useDetails();
@@ -31,13 +31,13 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
 
     <div class="file-details">
       <span class="src">{{ filenameRef }}</span>
-      <span v-if="bandRef !== null">
-        {{ bandRef.value }}
+      <span>
+        {{ configBandRef.value?.name }}
       </span>
       <span>
         {{ dateRef }}
       </span>
-      <span>{{ integrationRef.value }}</span>
+      <span>{{ configIntegrationRef.value?.name }}</span>
     </div>
 
     <div

@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {
   AddOutline,
   ArrowDownOutline,
@@ -22,17 +22,16 @@ import {FFT_SIZE, WAVE} from '../../constants';
 import {triggerWavDownload} from '../../utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import {integrationRef} from 'src/hooks/useIntegration';
-import {bandsRef} from 'src/hooks/useStorageBands';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
-import {bandRef} from 'src/hooks/useBand';
 import {PLAYBACK_RATE} from 'src/constants';
 import speedToSemitones from 'speed-to-semitones';
 import speedToPercentage from 'speed-to-percentage';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
 import {audioHostRef} from 'src/hooks/useAudioHost';
 import {settingsRef} from 'src/hooks/useStorageSettings';
+import {configBandRef} from 'src/hooks/useConfigBands';
+import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
 
 const {groupIndexRef, filenameRef} = useDetails();
 
@@ -57,7 +56,7 @@ const audioContextRef = computed<AudioContext | null>(() => {
 const wsRef = computed(() => {
   if (
     audioContextRef.value === null ||
-    frequenciesRef.value === null ||
+    configBandRef.value === null ||
     waveformRef.value === null ||
     spectrogramRef.value === null
   ) {
@@ -78,8 +77,8 @@ const wsRef = computed(() => {
         colorMap: colorsRef.value,
         height: 192,
         fftSamples: FFT_SIZE.default,
-        frequencyMin: frequenciesRef.value.min,
-        frequencyMax: frequenciesRef.value.max,
+        frequencyMin: configBandRef.value.low,
+        frequencyMax: configBandRef.value.high,
       }),
       Cursor.create({
         showTime: true,
@@ -119,20 +118,6 @@ const srcRef = computed(() => {
   return `${audioHostRef.value}${filenameRef.value}`;
 });
 
-const frequenciesRef = computed(() => {
-  if (bandsRef.value === null || bandRef.value === null) {
-    return null;
-  }
-
-  const min = bandsRef.value[bandRef.value][0];
-  const max = bandsRef.value[bandRef.value][1];
-
-  return {
-    min: min,
-    max: max,
-  };
-});
-
 /**
  * Handlers
  */
@@ -149,8 +134,7 @@ function close() {
 async function load() {
   if (
     clickedRef.value === null ||
-    bandRef.value === null ||
-    integrationRef.value === null ||
+    configIntegrationRef.value === null ||
     groupIndexRef.value === null ||
     srcRef.value === null ||
     wsRef.value === null ||
@@ -166,8 +150,7 @@ async function load() {
       arrayBuffer,
     );
 
-    const seconds = integrationRef.value;
-
+    const seconds = configIntegrationRef.value.duration;
     const start = groupIndexRef.value * seconds * 1000;
     const end = start + seconds * 1000;
 
@@ -203,9 +186,8 @@ function handleAudioEnd() {
 
 function handleAudioReady() {
   if (
-    bandsRef.value === null ||
     wsRef.value === null ||
-    bandRef.value === null ||
+    configBandRef.value === null ||
     audioContextRef.value === null
   ) {
     return;
@@ -213,17 +195,16 @@ function handleAudioReady() {
 
   // const ac = wsRef.value.backend.getAudioContext();
   const ac = audioContextRef.value;
-  const frequencies = bandsRef.value[bandRef.value];
 
   const lowShelf = ac.createBiquadFilter();
   lowShelf.type = 'lowshelf';
   lowShelf.gain.value = -60;
-  lowShelf.frequency.value = frequencies[0];
+  lowShelf.frequency.value = configBandRef.value.low;
 
   const highShelf = ac.createBiquadFilter();
   highShelf.type = 'highshelf';
   highShelf.gain.value = -60;
-  highShelf.frequency.value = frequencies[1];
+  highShelf.frequency.value = configBandRef.value.high;
 
   wsRef.value.backend.setFilters([lowShelf, highShelf]);
 

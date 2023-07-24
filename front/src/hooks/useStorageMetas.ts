@@ -1,8 +1,8 @@
 import {reactive, watchEffect} from 'vue';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
-import {integrationRef} from './useIntegration';
-import {bandRef} from './useBand';
+import {configBandRef} from './useConfigBands';
+import {configIntegrationRef} from './useConfigIntegrations';
 
 export interface StorageMetas {
   [property: string]: string[];
@@ -21,16 +21,16 @@ export function useStorageMetas() {
     if (
       fileRef.value === null ||
       workerRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null
+      configBandRef.value === null ||
+      configIntegrationRef.value === null
     ) {
       return;
     }
 
     metasRef.value = await workerRef.value.readMetas(
       fileRef.value,
-      bandRef.value,
-      integrationRef.value,
+      configBandRef.value.name,
+      configIntegrationRef.value.duration,
     );
   };
 

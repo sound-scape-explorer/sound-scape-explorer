@@ -1,7 +1,7 @@
 import {reactive, watchEffect} from 'vue';
 import {workerRef} from './useWorker';
 import {fileRef} from './useFile';
-import {integrationRef} from './useIntegration';
+import {configIntegrationRef} from './useConfigIntegrations';
 
 interface FilesGroupCountsRef {
   value: number[] | null;
@@ -16,14 +16,14 @@ export function useStorageFilesGroupCounts() {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
-      integrationRef.value === null
+      configIntegrationRef.value === null
     ) {
       return;
     }
 
     filesGroupCountsRef.value = await workerRef.value.readFilesGroupCounts(
       fileRef.value,
-      integrationRef.value,
+      configIntegrationRef.value.duration,
     );
   };
 

@@ -1,7 +1,7 @@
-import {bandRef} from './useBand';
-import {integrationRef} from './useIntegration';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
+import {configBandRef} from './useConfigBands';
+import {configIntegrationRef} from './useConfigIntegrations';
 
 export function useStoragePairing() {
   const readPairing = (
@@ -12,16 +12,16 @@ export function useStoragePairing() {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null
+      configBandRef.value === null ||
+      configIntegrationRef.value === null
     ) {
       return null;
     }
 
     const values = workerRef.value.readPairing(
       fileRef.value,
-      bandRef.value,
-      integrationRef.value,
+      configBandRef.value.name,
+      configIntegrationRef.value.duration,
       pairingIndex,
       metaIndexA,
       metaIndexB,

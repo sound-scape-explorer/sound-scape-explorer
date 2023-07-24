@@ -1,11 +1,11 @@
 <script lang="ts" setup="">
 import {computed} from 'vue';
 import {reducersRef} from 'src/hooks/useStorageReducers';
-import {bandsRef} from 'src/hooks/useStorageBands';
-import {integrationsRef} from 'src/hooks/useStorageIntegrations';
 import {rangesRef} from 'src/hooks/useStorageRanges';
 import {filenamesRef} from 'src/hooks/useStorageFilenames';
 import {settingsRef} from 'src/hooks/useStorageSettings';
+import {configBandsRef} from 'src/hooks/useConfigBands';
+import {configIntegrationsRef} from 'src/hooks/useConfigIntegrations';
 
 const reducerNamesRef = computed<string[] | null>(() => {
   if (reducersRef.value === null) {
@@ -18,19 +18,19 @@ const reducerNamesRef = computed<string[] | null>(() => {
 });
 
 const bandNamesRef = computed<string[] | null>(() => {
-  if (bandsRef.value === null) {
+  if (configBandsRef.value === null) {
     return null;
   }
 
-  return Object.keys(bandsRef.value);
+  return configBandsRef.value.map((band) => band.name);
 });
 
 const integrationNamesRef = computed(() => {
-  if (integrationsRef.value === null) {
+  if (configIntegrationsRef.value === null) {
     return;
   }
 
-  return Object.keys(integrationsRef.value);
+  return configIntegrationsRef.value.map((integration) => integration.name);
 });
 
 const rangeNamesRef = computed<string[] | null>(() => {

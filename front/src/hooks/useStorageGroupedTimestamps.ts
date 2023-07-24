@@ -1,8 +1,8 @@
 import {reactive, watchEffect} from 'vue';
-import {bandRef} from './useBand';
-import {integrationRef} from './useIntegration';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
+import {configBandRef} from './useConfigBands';
+import {configIntegrationRef} from './useConfigIntegrations';
 
 export type StorageGroupedTimestamps = number[];
 
@@ -19,16 +19,16 @@ export function useStorageGroupedTimestamps() {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null
+      configBandRef.value === null ||
+      configIntegrationRef.value === null
     ) {
       return;
     }
 
     groupedTimestampsRef.value = await workerRef.value.readGroupedTimestamps(
       fileRef.value,
-      bandRef.value,
-      integrationRef.value,
+      configBandRef.value.name,
+      configIntegrationRef.value.duration,
     );
   };
 

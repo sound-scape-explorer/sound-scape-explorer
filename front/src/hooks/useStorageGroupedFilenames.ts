@@ -1,8 +1,7 @@
 import {reactive, watchEffect} from 'vue';
 import {workerRef} from './useWorker';
 import {fileRef} from './useFile';
-import {bandRef} from './useBand';
-import {integrationRef} from './useIntegration';
+import {configIntegrationRef} from './useConfigIntegrations';
 
 interface GroupedFilenamesRef {
   value: string[] | null;
@@ -17,15 +16,14 @@ export function useStorageGroupedFilenames() {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null
+      configIntegrationRef.value === null
     ) {
       return;
     }
 
     groupedFilenamesRef.value = await workerRef.value.readGroupedFilenames(
       fileRef.value,
-      integrationRef.value,
+      configIntegrationRef.value.duration,
     );
   };
 

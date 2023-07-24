@@ -1,10 +1,10 @@
 import {reactive, watchEffect} from 'vue';
-import {bandRef} from './useBand';
-import {integrationRef} from './useIntegration';
 import {reducerRef} from './useReducer';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 import {configTrajectoryRef} from './useConfigTrajectories';
+import {configBandRef} from './useConfigBands';
+import {configIntegrationRef} from './useConfigIntegrations';
 
 interface TrajectoriesRef {
   value: number[][] | null;
@@ -19,8 +19,8 @@ export function useStorageTrajectories() {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
+      configBandRef.value === null ||
+      configIntegrationRef.value === null ||
       configTrajectoryRef.value === null ||
       reducerRef.value === null
     ) {
@@ -29,8 +29,8 @@ export function useStorageTrajectories() {
 
     trajectoriesRef.value = await workerRef.value.readTrajectory(
       fileRef.value,
-      bandRef.value,
-      integrationRef.value,
+      configBandRef.value.name,
+      configIntegrationRef.value.duration,
       configTrajectoryRef.value.index,
       reducerRef.value.index,
     );

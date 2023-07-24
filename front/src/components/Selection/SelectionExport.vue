@@ -5,8 +5,6 @@ import {datasetRef, isDatasetReadyRef} from '../Scatter/useScatterDataset';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {workerRef} from 'src/hooks/useWorker';
 import {fileRef} from 'src/hooks/useFile';
-import {bandRef} from 'src/hooks/useBand';
-import {integrationRef} from 'src/hooks/useIntegration';
 import {useNotification} from '../AppNotification/useNotification';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
 import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
@@ -18,6 +16,8 @@ import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {pointsFilteredByTimeRef} from '../Scatter/useScatterFilterTime';
 import {pointsFilteredByMetaRef} from '../Scatter/useScatterFilterMeta';
 import {useIndexes} from 'src/hooks/useIndexes';
+import {configBandRef} from 'src/hooks/useConfigBands';
+import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
 
 const {notify} = useNotification();
 const {convertPointIndex} = useIndexes();
@@ -39,8 +39,8 @@ async function handleClick() {
   if (
     workerRef.value === null ||
     fileRef.value === null ||
-    bandRef.value === null ||
-    integrationRef.value === null ||
+    configBandRef.value === null ||
+    configIntegrationRef.value === null ||
     groupedFilenamesRef.value === null ||
     groupedTimestampsRef.value === null ||
     groupedFeaturesRef.value === null ||
@@ -139,7 +139,7 @@ async function handleClick() {
   });
 
   const csv = convertArrayToCsv(csvContent, csvFirstRow);
-  const csvFilename = `SSE_${bandRef.value}_${integrationRef.value}.csv`;
+  const csvFilename = `SSE_${configBandRef.value.name}_${configIntegrationRef.value.name}.csv`;
   triggerCSVDownload(csv, csvFilename);
   loadingRef.value = false;
 }

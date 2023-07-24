@@ -1,8 +1,8 @@
 import {reactive, watchEffect} from 'vue';
-import {bandRef} from './useBand';
-import {integrationRef} from './useIntegration';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
+import {configBandRef} from './useConfigBands';
+import {configIntegrationRef} from './useConfigIntegrations';
 
 interface GroupedFeaturesRef {
   value: number[][] | null;
@@ -17,16 +17,16 @@ export function useStorageGroupedFeatures() {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null
+      configBandRef.value === null ||
+      configIntegrationRef.value === null
     ) {
       return;
     }
 
     groupedFeaturesRef.value = await workerRef.value.readGroupedFeatures(
       fileRef.value,
-      bandRef.value,
-      integrationRef.value,
+      configBandRef.value.name,
+      configIntegrationRef.value.duration,
     );
   };
 

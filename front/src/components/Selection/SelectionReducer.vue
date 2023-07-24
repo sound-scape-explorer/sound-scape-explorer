@@ -4,15 +4,15 @@ import {computed, ref, watch} from 'vue';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import {reducersRef} from 'src/hooks/useStorageReducers';
 import {useReducer} from 'src/hooks/useReducer';
-import {useIntegration} from 'src/hooks/useIntegration';
-import {useBand} from 'src/hooks/useBand';
+import {useConfigBands} from 'src/hooks/useConfigBands';
+import {useConfigIntegrations} from 'src/hooks/useConfigIntegrations';
 
 /**
  * State
  */
 
-const {setBand} = useBand();
-const {setIntegration} = useIntegration();
+const {selectBand} = useConfigBands();
+const {selectIntegration} = useConfigIntegrations();
 const {setReducer} = useReducer();
 
 const reducersOptions = computed(() => {
@@ -44,11 +44,11 @@ watch(selectedOptionRef, () => {
 
   const stringElements = selectedOptionRef.value.split(' ');
 
-  const band = stringElements[3];
-  setBand(band);
+  const bandName = stringElements[3];
+  selectBand(bandName);
 
   const integrationName = stringElements[4];
-  setIntegration(integrationName);
+  selectIntegration(integrationName);
 
   const reducerIndex = Number(stringElements[0]);
   const reducer = reducersRef.value.filter((r) => r.index === reducerIndex)[0];
