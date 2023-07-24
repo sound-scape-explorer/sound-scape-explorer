@@ -2,10 +2,12 @@
 import {NSelect} from 'naive-ui';
 import {computed, ref, watch} from 'vue';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
-import {reducersRef} from 'src/hooks/useStorageReducers';
-import {useReducer} from 'src/hooks/useReducer';
 import {useConfigBands} from 'src/hooks/useConfigBands';
 import {useConfigIntegrations} from 'src/hooks/useConfigIntegrations';
+import {
+  configReducersRef,
+  useConfigReducers,
+} from 'src/hooks/useConfigReducers';
 
 /**
  * State
@@ -13,20 +15,20 @@ import {useConfigIntegrations} from 'src/hooks/useConfigIntegrations';
 
 const {selectBand} = useConfigBands();
 const {selectIntegration} = useConfigIntegrations();
-const {setReducer} = useReducer();
+const {selectReducer} = useConfigReducers();
 
 const reducersOptions = computed(() => {
-  if (reducersRef.value === null) {
+  if (configReducersRef.value === null) {
     return [];
   }
 
   const references: string[] = [];
 
-  for (const reducer of reducersRef.value) {
-    for (const band of reducer.bands) {
-      for (const integration of reducer.integrations) {
+  for (const reducer of configReducersRef.value) {
+    for (const bandName of reducer.bandsNames) {
+      for (const integrationName of reducer.integrationsNames) {
         references.push(
-          `${reducer.index} ${reducer.name} ${reducer.dimensions}d ${band} ${integration}`,
+          `${reducer.index} ${reducer.name} ${reducer.dimensions}d ${bandName} ${integrationName}`,
         );
       }
     }
@@ -38,7 +40,7 @@ const reducersOptions = computed(() => {
 const selectedOptionRef = ref<string | null>(null);
 
 watch(selectedOptionRef, () => {
-  if (selectedOptionRef.value === null || reducersRef.value === null) {
+  if (selectedOptionRef.value === null || configReducersRef.value === null) {
     return;
   }
 
@@ -51,8 +53,7 @@ watch(selectedOptionRef, () => {
   selectIntegration(integrationName);
 
   const reducerIndex = Number(stringElements[0]);
-  const reducer = reducersRef.value.filter((r) => r.index === reducerIndex)[0];
-  setReducer(reducer);
+  selectReducer(reducerIndex);
 });
 </script>
 

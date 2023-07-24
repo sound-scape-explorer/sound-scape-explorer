@@ -10,8 +10,6 @@ import Matrices from '../components/Matrices/Matrices.vue';
 import Menu from '../components/Menu/Menu.vue';
 import Meta from '../components/Meta/Meta.vue';
 import Pairings from '../components/Pairings/Pairings.vue';
-import Query from '../components/Queries/Query.vue';
-import Scatter from '../components/Scatter/Scatter.vue';
 import Selection from '../components/Selection/Selection.vue';
 import Settings from '../components/Settings/Settings.vue';
 import Time from '../components/Time/Time.vue';
@@ -22,6 +20,7 @@ import {useFile} from 'src/hooks/useFile';
 import {useWorker} from 'src/hooks/useWorker';
 
 useWorker();
+
 const {isFileRef} = useFile();
 
 onMounted(() => {
@@ -39,9 +38,9 @@ onMounted(() => {
 
   <div v-if="isFileRef">
     <StorageLoad />
+
     <Selection />
     <Colors />
-    <!-- <Query /> -->
     <Time />
     <Audio />
     <Details />
@@ -51,7 +50,6 @@ onMounted(() => {
 
     <Meta />
 
-    <!-- <Scatter /> -->
     <ScatterNew />
   </div>
 </template>

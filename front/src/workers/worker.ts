@@ -2,15 +2,15 @@ import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import {StoragePath} from '../storage/StoragePath';
 import {trimRectangular} from '../utils/trim-rectangular';
-import type {StorageReducer} from 'src/hooks/useStorageReducers';
 import type {StorageMetas} from 'src/hooks/useStorageMetas';
 import type {StorageSettings} from 'src/storage/StorageSettings';
-import type {StorageRanges} from 'src/hooks/useStorageRanges';
 import {StorageMode} from 'src/storage/StorageMode';
 import type {ConfigTrajectory} from 'src/hooks/useConfigTrajectories';
 import type {ConfigBand} from 'src/hooks/useConfigBands';
 import type {ConfigIntegration} from 'src/hooks/useConfigIntegrations';
 import type {ConfigFile} from 'src/hooks/useConfigFiles';
+import type {ConfigReducer} from 'src/hooks/useConfigReducers';
+import type {ConfigRange} from 'src/hooks/useConfigRanges';
 
 interface Volume {
   index: number;
@@ -245,7 +245,7 @@ export async function readConfigIntegrations(file: File) {
   return integrations;
 }
 
-export async function readRanges(file: File) {
+export async function readConfigRanges(file: File): Promise<ConfigRange[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.ranges_names) as Dataset;
@@ -257,19 +257,24 @@ export async function readRanges(file: File) {
   const endsDataset = h5.get(StoragePath.ranges_ends) as Dataset;
   const ends = endsDataset.to_array() as number[];
 
-  const ranges: StorageRanges = {};
+  const ranges: ConfigRange[] = [];
+  const length = namesDataset.shape[0];
 
-  for (const n in names) {
-    const range = names[n];
-    const timestamp = [starts[n], ends[n]];
+  for (let index = 0; index < length; index += 1) {
+    const range: ConfigRange = {
+      index: index,
+      name: names[index],
+      start: starts[index],
+      end: ends[index],
+    };
 
-    ranges[range] = timestamp;
+    ranges.push(range);
   }
 
   return ranges;
 }
 
-export async function readReducers(file: File) {
+export async function readConfigReducers(file: File): Promise<ConfigReducer[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.reducers_names) as Dataset;
@@ -292,16 +297,17 @@ export async function readReducers(file: File) {
   const rangesRectangular = rangesDataset.to_array() as string[][];
   const ranges = trimRectangular(rangesRectangular, '');
 
-  const reducers: StorageReducer[] = [];
+  const reducers: ConfigReducer[] = [];
+  const length = namesDataset.shape[0];
 
-  for (let i = 0; i < names.length; i += 1) {
-    const reducer = {
-      index: i,
-      name: names[i],
-      dimensions: dimensions[i],
-      bands: bands[i],
-      integrations: integrations[i],
-      ranges: ranges[i],
+  for (let index = 0; index < length; index += 1) {
+    const reducer: ConfigReducer = {
+      index: index,
+      name: names[index],
+      dimensions: dimensions[index],
+      bandsNames: bands[index],
+      integrationsNames: integrations[index],
+      rangesNames: ranges[index],
     };
 
     reducers.push(reducer);
@@ -324,9 +330,9 @@ export async function readReducedFeatures(
 ): Promise<number[][]> {
   const h5 = await load(file);
   const path = `${StoragePath.reduced_}${r}/${band}/${integration}`;
-  const features = h5.get(path) as Dataset;
-  const featuresList = features.to_array() as number[][];
-  return featuresList;
+  const featuresDataset = h5.get(path) as Dataset;
+  const features = featuresDataset.to_array() as number[][];
+  return features;
 }
 
 export async function readAutoclusters(

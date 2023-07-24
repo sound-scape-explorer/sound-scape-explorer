@@ -63,8 +63,6 @@ async function handleUpdate() {
     return;
   }
 
-  console.log(metaIndex, volumeIndex);
-
   const data = await readVolume(volumeIndex, metaIndex);
 
   if (data === null) {

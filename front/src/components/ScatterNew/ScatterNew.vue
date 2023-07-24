@@ -19,6 +19,7 @@ import {pointIndexGroupsRef} from './useScatterTraces';
 
 const divRef = ref<PlotlyHTMLElement | null>(null);
 const {handleClick} = useScatterClick();
+
 useScatterTraces();
 
 const handlePlotlyClick = (data: PlotMouseEvent) => {

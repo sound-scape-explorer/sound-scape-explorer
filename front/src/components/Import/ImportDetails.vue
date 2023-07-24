@@ -1,18 +1,18 @@
 <script lang="ts" setup="">
 import {computed} from 'vue';
-import {reducersRef} from 'src/hooks/useStorageReducers';
-import {rangesRef} from 'src/hooks/useStorageRanges';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {configBandsRef} from 'src/hooks/useConfigBands';
 import {configIntegrationsRef} from 'src/hooks/useConfigIntegrations';
 import {configFilesRef} from 'src/hooks/useConfigFiles';
+import {configRangesRef} from 'src/hooks/useConfigRanges';
+import {configReducersRef} from 'src/hooks/useConfigReducers';
 
 const reducerNamesRef = computed<string[] | null>(() => {
-  if (reducersRef.value === null) {
+  if (configReducersRef.value === null) {
     return null;
   }
 
-  return reducersRef.value.map(
+  return configReducersRef.value.map(
     (reducer) => `${reducer.name}${reducer.dimensions}`,
   );
 });
@@ -25,20 +25,20 @@ const bandNamesRef = computed<string[] | null>(() => {
   return configBandsRef.value.map((band) => band.name);
 });
 
-const integrationNamesRef = computed(() => {
+const integrationNamesRef = computed<string[] | null>(() => {
   if (configIntegrationsRef.value === null) {
-    return;
+    return null;
   }
 
   return configIntegrationsRef.value.map((integration) => integration.name);
 });
 
 const rangeNamesRef = computed<string[] | null>(() => {
-  if (rangesRef.value === null) {
+  if (configRangesRef.value === null) {
     return null;
   }
 
-  return Object.keys(rangesRef.value);
+  return configRangesRef.value.map((range) => range.name);
 });
 </script>
 

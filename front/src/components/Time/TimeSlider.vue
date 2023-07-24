@@ -9,8 +9,8 @@ import AppButton from '../AppButton/AppButton.vue';
 import {timeStore} from './timeStore';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
-import {rangesRef} from 'src/hooks/useStorageRanges';
-import {reducerRef} from 'src/hooks/useReducer';
+import {configRangesRef} from 'src/hooks/useConfigRanges';
+import {configReducerRef} from 'src/hooks/useConfigReducers';
 
 /**
  * State
@@ -20,7 +20,7 @@ const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
 const sliders = computed<Slider[]>(() => {
-  if (rangesRef.value === null || reducerRef.value === null) {
+  if (configRangesRef.value === null || configReducerRef.value === null) {
     return [];
   }
 
@@ -35,15 +35,11 @@ const sliders = computed<Slider[]>(() => {
     return cachedSliders;
   }
 
-  const ranges = reducerRef.value.ranges;
   const sliders: Slider[] = [];
 
-  for (const range of ranges) {
-    const rangeValues = rangesRef.value[range];
-    const rangeStart = rangeValues[0];
-    const rangeEnd = rangeValues[1];
-    const timeStart = dayjs(rangeStart).unix();
-    const timeEnd = dayjs(rangeEnd).unix();
+  for (const range of configRangesRef.value) {
+    const timeStart = dayjs(range.start).unix();
+    const timeEnd = dayjs(range.end).unix();
     const timeBetween = Math.floor(timeStart + 0.5 * (timeEnd - timeStart));
 
     if (timeStore.min === -1 || timeStart < timeStore.min) {
@@ -55,12 +51,12 @@ const sliders = computed<Slider[]>(() => {
     }
 
     const slider = {
-      key: range,
+      key: range.index,
       min: timeStart,
       max: timeEnd,
       marks: {
         [timeStart]: SLIDER_LIMITS.start,
-        [timeBetween]: range,
+        [timeBetween]: range.index.toString(),
         [timeEnd]: SLIDER_LIMITS.end,
       },
     } satisfies Slider;
@@ -79,7 +75,7 @@ const sliders = computed<Slider[]>(() => {
 });
 
 interface Interest {
-  key: string;
+  key: number;
   values: boolean[];
 }
 
@@ -141,7 +137,7 @@ function toggleZoom(slider: Slider): void {
 }
 
 interface Slider {
-  key: string;
+  key: number;
   min: number;
   max: number;
   marks: {

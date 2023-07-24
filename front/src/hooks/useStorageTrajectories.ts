@@ -1,10 +1,10 @@
 import {reactive, watchEffect} from 'vue';
-import {reducerRef} from './useReducer';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 import {configTrajectoryRef} from './useConfigTrajectories';
 import {configBandRef} from './useConfigBands';
 import {configIntegrationRef} from './useConfigIntegrations';
+import {configReducerRef} from './useConfigReducers';
 
 interface TrajectoriesRef {
   value: number[][] | null;
@@ -22,7 +22,7 @@ export function useStorageTrajectories() {
       configBandRef.value === null ||
       configIntegrationRef.value === null ||
       configTrajectoryRef.value === null ||
-      reducerRef.value === null
+      configReducerRef.value === null
     ) {
       return;
     }
@@ -32,7 +32,7 @@ export function useStorageTrajectories() {
       configBandRef.value.name,
       configIntegrationRef.value.duration,
       configTrajectoryRef.value.index,
-      reducerRef.value.index,
+      configReducerRef.value.index,
     );
   };
 

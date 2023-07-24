@@ -1,9 +1,9 @@
 import {reactive, watchEffect} from 'vue';
-import {reducerRef} from './useReducer';
 import {fileRef} from './useFile';
 import {workerRef} from './useWorker';
 import {configBandRef} from './useConfigBands';
 import {configIntegrationRef} from './useConfigIntegrations';
+import {configReducerRef} from './useConfigReducers';
 
 type StorageReducedFeatures = number[][];
 
@@ -22,14 +22,14 @@ export function useStorageReducedFeatures() {
       fileRef.value === null ||
       configBandRef.value === null ||
       configIntegrationRef.value === null ||
-      reducerRef.value === null
+      configReducerRef.value === null
     ) {
       return;
     }
 
     reducedFeaturesRef.value = await workerRef.value.readReducedFeatures(
       fileRef.value,
-      reducerRef.value.index,
+      configReducerRef.value.index,
       configBandRef.value.name,
       configIntegrationRef.value.duration,
     );
