@@ -1,10 +1,17 @@
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
-from processing.clusterings.ClusteringName import ClusteringName
+from h5py import Dataset
+from hdbscan import HDBSCAN
+
+from processing.config.ConfigBand import ConfigBand
+from processing.config.ConfigIntegration import ConfigIntegration
 
 
 class ConfigAutocluster:
-    names = set(name.value for name in ClusteringName)
+    methodsByName: Dict[str, str] = {
+        "hdbscan-eom": "eom",
+        "hdbscan-leaf": "leaf",
+    }
 
     index: int
     name: str
@@ -12,6 +19,10 @@ class ConfigAutocluster:
     min_samples: int
     alpha: float
     epsilon: float
+    band: ConfigBand
+    integration: ConfigIntegration
+    instance: HDBSCAN
+    values: List[int]
 
     def __init__(
         self,
@@ -28,8 +39,8 @@ class ConfigAutocluster:
         self.name = name
         self.min_cluster_size = min_cluster_size
         self.min_samples = min_samples
-        self.alpha = alpha
-        self.epsilon = epsilon
+        self.alpha = float(alpha)
+        self.epsilon = float(epsilon)
 
     @staticmethod
     def validate_name(name: str) -> None:
@@ -42,9 +53,10 @@ class ConfigAutocluster:
             None
 
         Raises:
-            KeyError: An error occured because the clustering name has not been found.
+            KeyError: An error occured because the autoclustering name
+            has not been found.
         """
-        if name in ConfigAutocluster.names:
+        if name in ConfigAutocluster.methodsByName.keys():
             return
 
         raise KeyError(f"Unable to validate autoclustering name {name}.")
@@ -84,3 +96,40 @@ class ConfigAutocluster:
             autoclusters.append(autocluster)
 
         return autoclusters
+
+    def create_instance(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> HDBSCAN:
+        self.band = band
+        self.integration = integration
+
+        method = self.methodsByName[self.name]
+
+        self.instance = HDBSCAN(
+            min_cluster_size=self.min_cluster_size,
+            min_samples=self.min_samples,
+            alpha=self.alpha,
+            cluster_selection_epsilon=self.epsilon,
+            cluster_selection_method=method,
+            metric="precomputed",
+            p=None,
+            algorithm="best",
+            leaf_size=50,
+            approx_min_span_tree=True,
+            gen_min_span_tree=False,
+            core_dist_n_jobs=-1,
+            match_reference_implementation=False,
+        )
+
+        return self.instance
+
+    def calculate(
+        self,
+        mean_distances_matrix: Dataset,
+    ) -> List[str]:
+        clustering = self.instance.fit(mean_distances_matrix[:])
+        labels = clustering.labels_.tolist()
+        self.values = labels
+        return self.values

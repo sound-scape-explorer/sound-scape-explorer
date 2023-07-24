@@ -1,4 +1,4 @@
-from typing import Any, Generator, Iterable, List, Optional, Tuple, Union
+from typing import Any, Iterable, List, Optional, Tuple, Union
 
 import numpy
 from h5py import Dataset, File
@@ -612,7 +612,7 @@ class Storage(metaclass=SingletonMeta):
         self,
         band: ConfigBand,
         integration: ConfigIntegration,
-    ) -> Generator[Tuple[int, int, int, int, List[List[float]]], None, None]:
+    ) -> Iterable[Tuple[int, int, int, int, List[List[float]]]]:
         features, durations, count = self.read_files_features(band=band)
         timestamps = self.read_files_timestamps()
 
@@ -649,7 +649,7 @@ class Storage(metaclass=SingletonMeta):
 
     def enumerate_bands_and_integrations(
         self,
-    ) -> Generator[Tuple[ConfigBand, ConfigIntegration], None, None]:
+    ) -> Iterable[Tuple[ConfigBand, ConfigIntegration]]:
         bands = self.read_config_bands()
         integrations = self.read_config_integrations()
 
@@ -1338,7 +1338,6 @@ class Storage(metaclass=SingletonMeta):
                     integration=integration,
                     autocluster_index=autocluster.index,
                 )
-
                 autoclusters_values.append(autocluster_values)
 
         for mp, _ in enumerate(meta_properties):
@@ -1480,7 +1479,8 @@ class Storage(metaclass=SingletonMeta):
     ) -> str:
         path = (
             f"{StoragePath.autocluster_.value}{autocluster_index}"
-            f"/{band.name}/{integration.duration}"
+            f"/{band.name}"
+            f"/{integration.duration}"
         )
 
         return path
@@ -1489,7 +1489,7 @@ class Storage(metaclass=SingletonMeta):
         self,
         band: ConfigBand,
         integration: ConfigIntegration,
-    ) -> Generator[Tuple[int, str], None, None]:
+    ) -> Iterable[Tuple[int, str]]:
         autoclusters = self.read_config_autoclusters()
 
         for index in range(len(autoclusters)):
@@ -1498,7 +1498,6 @@ class Storage(metaclass=SingletonMeta):
                 integration=integration,
                 autocluster_index=index,
             )
-
             yield index, path
 
     def write_autocluster(
@@ -1506,7 +1505,7 @@ class Storage(metaclass=SingletonMeta):
         band: ConfigBand,
         integration: ConfigIntegration,
         autocluster_index: int,
-        autocluster: List[int],
+        values: List[int],
     ) -> None:
         path = self.generate_autoclusters_path(
             band=band,
@@ -1516,7 +1515,7 @@ class Storage(metaclass=SingletonMeta):
 
         self.__write_dataset(
             path=path,
-            data=autocluster,
+            data=values,
             compression=StorageCompression.gzip,
         )
 
@@ -1534,7 +1533,6 @@ class Storage(metaclass=SingletonMeta):
             integration=integration,
             autocluster_index=autocluster_index,
         )
-
         return self.__read(path)
 
     def read_autoclusters_values(
@@ -1545,13 +1543,12 @@ class Storage(metaclass=SingletonMeta):
         autoclusters = []
 
         for index, _ in self.enumerate_autoclusters(band, integration):
-            autocluster = self.read_autocluster(
+            values = self.read_autocluster(
                 band=band,
                 integration=integration,
                 autocluster_index=index,
             )
-
-            autoclusters.append(autocluster)
+            autoclusters.append(values)
 
         return autoclusters
 
