@@ -1,15 +1,13 @@
 import {ref, watch} from 'vue';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {workerRef} from 'src/hooks/useWorker';
-import {fileRef} from 'src/hooks/useFile';
 import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
-import {filenamesRef} from 'src/hooks/useStorageFilenames';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {useDate} from 'src/hooks/useDate';
 import type {Dayjs} from 'dayjs';
 import {useIndexes} from 'src/hooks/useIndexes';
+import {configFilesRef} from 'src/hooks/useConfigFiles';
 
 export function useDetails() {
   const {convertTimestampToDate} = useDate();
@@ -23,10 +21,8 @@ export function useDetails() {
 
   watch(clickedRef, async () => {
     if (
-      workerRef.value === null ||
-      fileRef.value === null ||
       clickedRef.value === null ||
-      filenamesRef.value === null ||
+      configFilesRef.value === null ||
       settingsRef.value === null ||
       groupedFilenamesRef.value === null ||
       groupedTimestampsRef.value === null ||
@@ -40,9 +36,10 @@ export function useDetails() {
     fileIndexRef.value = fileIndex;
     groupIndexRef.value = groupIndex;
 
-    filenameRef.value = filenamesRef.value[fileIndex];
+    filenameRef.value = configFilesRef.value[fileIndex].name;
 
     const timestamp = groupedTimestampsRef.value[pointIndex];
+
     dateRef.value = convertTimestampToDate(
       timestamp,
       settingsRef.value.timezone,

@@ -10,14 +10,12 @@ import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
 import {useScatterDataset} from '../Scatter/useScatterDataset';
 import {useScatterColorScale} from '../Scatter/useScatterColorScale';
 import {useStorageGroupedFeatures} from 'src/hooks/useStorageGroupedFeatures';
-import {useStorageFilenames} from 'src/hooks/useStorageFilenames';
 import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
 import {useScatterFilter} from '../Scatter/useScatterFilter';
 import {useStorageFilesGroupCounts} from 'src/hooks/useStorageFilesGroupCounts';
 import {useStorageGroupCountsByPointIndexes} from 'src/hooks/useStorageGroupCountsByPointIndexes';
 import {useStorageTrajectories} from 'src/hooks/useStorageTrajectories';
 
-useStorageFilenames();
 useStorageMetaSets();
 useStorageMetaProperties();
 useStorageMetas();

@@ -30,6 +30,8 @@ export enum StoragePath {
   files_names = '/configuration/files/names',
   files_sites = '/configuration/files/sites',
   files_metas = '/configuration/files/metas',
+  files_timestamps = '/files_timestamps',
+  files_durations = '/files_durations',
 
   /**
    * Configuration/Meta
@@ -98,8 +100,6 @@ export enum StoragePath {
    * Data/Files
    */
   files_features = '/files_features',
-  files_timestamps = '/files_timestamps',
-  files_durations = '/files_durations',
   files_group_counts = '/files_group_counts',
 
   /**

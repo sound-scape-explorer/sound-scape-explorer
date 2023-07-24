@@ -3,7 +3,6 @@ import {computed, reactive, watchEffect} from 'vue';
 import {colorsStore} from '../Colors/colorsStore';
 import {datasetRef} from './useScatterDataset';
 import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
-import {filenamesRef} from 'src/hooks/useStorageFilenames';
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {useColorByPointIndex} from '../Colors/useColorByPointIndex';
 import {useColorByFileIndex} from '../Colors/useColorByFileIndex';
@@ -16,6 +15,7 @@ import {useColorByMeta} from '../Colors/useColorByMeta';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {groupCountsByPointIndexesRef} from 'src/hooks/useStorageGroupCountsByPointIndexes';
+import {configFilesRef} from 'src/hooks/useConfigFiles';
 
 interface AlphaLowRef {
   value: number;
@@ -69,7 +69,7 @@ export function useScatterColorScale() {
     if (
       datasetRef.value === null ||
       metaPropertiesAsColorTypesRef.value === null ||
-      filenamesRef.value === null ||
+      configFilesRef.value === null ||
       groupedTimestampsRef.value === null ||
       groupedMetasRef.value === null ||
       metaSetsRef.value === null ||
@@ -79,7 +79,7 @@ export function useScatterColorScale() {
     }
 
     const pointsCount = datasetRef.value.points.length;
-    const filesCount = filenamesRef.value.length;
+    const filesCount = configFilesRef.value.length;
 
     const colorScale = [];
     const colorType = colorsStore.colorType;

@@ -10,6 +10,7 @@ import {StorageMode} from 'src/storage/StorageMode';
 import type {ConfigTrajectory} from 'src/hooks/useConfigTrajectories';
 import type {ConfigBand} from 'src/hooks/useConfigBands';
 import type {ConfigIntegration} from 'src/hooks/useConfigIntegrations';
+import type {ConfigFile} from 'src/hooks/useConfigFiles';
 
 interface Volume {
   index: number;
@@ -90,6 +91,39 @@ export async function readSettings(file: File) {
   }
 
   return settings;
+}
+
+export async function readConfigFiles(file: File): Promise<ConfigFile[]> {
+  const h5 = await load(file);
+
+  const namesDataset = h5.get(StoragePath.files_names) as Dataset;
+  const names = namesDataset.to_array() as string[];
+
+  const timestampsDataset = h5.get(StoragePath.files_timestamps) as Dataset;
+  const timestamps = timestampsDataset.to_array() as number[];
+
+  const sitesDataset = h5.get(StoragePath.files_sites) as Dataset;
+  const sites = sitesDataset.to_array() as string[];
+
+  const metasDataset = h5.get(StoragePath.files_metas) as Dataset;
+  const metas = metasDataset.to_array() as string[][];
+
+  const files: ConfigFile[] = [];
+  const length = namesDataset.shape[0];
+
+  for (let index = 0; index < length; index += 1) {
+    const file: ConfigFile = {
+      index: index,
+      name: names[index],
+      timestamp: timestamps[index],
+      site: sites[index],
+      meta: metas[index],
+    };
+
+    files.push(file);
+  }
+
+  return files;
 }
 
 export async function readFilenames(file: File) {

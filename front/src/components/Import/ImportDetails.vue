@@ -2,10 +2,10 @@
 import {computed} from 'vue';
 import {reducersRef} from 'src/hooks/useStorageReducers';
 import {rangesRef} from 'src/hooks/useStorageRanges';
-import {filenamesRef} from 'src/hooks/useStorageFilenames';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {configBandsRef} from 'src/hooks/useConfigBands';
 import {configIntegrationsRef} from 'src/hooks/useConfigIntegrations';
+import {configFilesRef} from 'src/hooks/useConfigFiles';
 
 const reducerNamesRef = computed<string[] | null>(() => {
   if (reducersRef.value === null) {
@@ -58,7 +58,7 @@ const rangeNamesRef = computed<string[] | null>(() => {
     <div class="container">
       <code class="item">
         <span class="key">Files count</span>
-        <span>{{ filenamesRef.value?.length }}</span>
+        <span>{{ configFilesRef.value?.length }}</span>
       </code>
       <code class="item">
         <span class="key">Bands</span>

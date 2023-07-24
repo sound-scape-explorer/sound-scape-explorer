@@ -163,6 +163,26 @@ class StoragePath(Enum):
         Dataset
     """
 
+    files_timestamps = "/files_timestamps"
+    """The timestamp for each file.
+
+    Timestamps are in UNIX format and milliseconds.
+    Each row contains an integer.
+
+    Type:
+        Dataset
+    """
+
+    files_durations = "/files_durations"
+    """The audio durations for each file.
+
+    Audio durations are in seconds.
+    Each row contains an integer.
+
+    Type:
+        Dataset
+    """
+
     ######################
     # Configuration/Meta #
     ######################
@@ -483,26 +503,6 @@ class StoragePath(Enum):
 
     Type:
         Group
-    """
-
-    files_timestamps = "/files_timestamps"
-    """The timestamp for each file.
-
-    Timestamps are in UNIX format and milliseconds.
-    Each row contains an integer.
-
-    Type:
-        Dataset
-    """
-
-    files_durations = "/files_durations"
-    """The audio durations for each file.
-
-    Audio durations are in seconds.
-    Each row contains an integer.
-
-    Type:
-        Dataset
     """
 
     files_group_counts = "/files_group_counts"
