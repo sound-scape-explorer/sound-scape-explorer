@@ -398,7 +398,7 @@ class Storage(metaclass=SingletonMeta):
         settings = self.read_settings()
         return settings["display_umap_seed"]
 
-    def get_expected_sample_rate(self) -> int:
+    def read_expected_sample_rate(self) -> int:
         settings = self.read_settings()
         return settings["expected_sample_rate"]
 

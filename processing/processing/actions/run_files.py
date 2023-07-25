@@ -11,7 +11,7 @@ def run_files(env: Env):
     files = storage.read_config_files()
 
     bands = storage.read_config_bands()
-    expected_sample_rate = storage.get_expected_sample_rate()
+    expected_sample_rate = storage.read_expected_sample_rate()
     audio_path = storage.read_audio_path()
 
     # Features
