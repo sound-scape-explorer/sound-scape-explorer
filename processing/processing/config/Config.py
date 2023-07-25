@@ -12,6 +12,7 @@ from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigMatrix import ConfigMatrix
+from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
@@ -35,10 +36,8 @@ from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
-from processing.utils.get_uniques_from_list import get_uniques_from_list
 from processing.utils.is_nan import is_nan
 from processing.utils.print_new_line import print_new_line
-from processing.utils.reverse_array import reverse_array
 
 
 class Config(metaclass=SingletonMeta):
@@ -46,6 +45,7 @@ class Config(metaclass=SingletonMeta):
     __excel: pandas.ExcelFile
     __settings: ConfigSettings = {}  # type: ignore
     __files: List[ConfigFile] = []
+    __metas: List[ConfigMeta] = []
     __bands: List[ConfigBand] = []
     __integrations: List[ConfigIntegration] = []
     __ranges: List[ConfigRange] = []
@@ -117,6 +117,7 @@ class Config(metaclass=SingletonMeta):
     def __read(self) -> None:
         self.__read_settings()
 
+        self.__read_metas()
         self.__read_files()
 
         self.__read_bands()
@@ -253,49 +254,33 @@ class Config(metaclass=SingletonMeta):
         for setting_name, setting in self.__settings.items():
             print(f"{setting_name}: {setting}")
 
-    def __read_meta_properties(self) -> List[str]:
+    def __read_metas(self) -> List[ConfigMeta]:
         sheet = self.__parse_sheet(ExcelSheet.files)
 
-        meta_properties = []
+        metas: List[ConfigMeta] = []
+        index = 0
 
         for column in sheet:
-            if ExcelFile.meta_prefix.value not in column:
+            if not ConfigMeta.is_meta_property(column):
                 continue
 
-            meta_property = column.replace(ExcelFile.meta_prefix.value, "")
-
-            # INFO: Uncomment me to trigger a `KeyError`
-            # and notify the user to use uppercase meta_PROPERTIES
-            # meta_property = str.upper(meta_property)
-
-            meta_properties.append(meta_property)
-
-        return meta_properties
-
-    def __read_meta_values(self) -> List[List[str]]:
-        meta_properties = self.__read_meta_properties()
-
-        sheet = self.__parse_sheet(ExcelSheet.files)
-
-        meta_values_by_columns = []
-
-        for meta_property in meta_properties:
-            meta_value = self.__parse_column(
-                sheet,
-                ExcelFile.meta_prefix,
-                suffix=meta_property,
+            meta: ConfigMeta = ConfigMeta(
+                index=index,
+                string=column,
             )
 
-            meta_value = list(meta_value)
+            values = self.__parse_column(
+                sheet,
+                ExcelFile.meta_prefix,
+                suffix=meta.property,
+            )
 
-            for v, value in enumerate(meta_value):
-                if type(value) is not str:
-                    meta_value[v] = str(value)
+            meta.load_values(values)
+            metas.append(meta)
+            index += 1
 
-            meta_values_by_columns.append(meta_value)
-
-        reversed_values = reverse_array(meta_values_by_columns)
-        return reversed_values
+        self.__metas = metas
+        return self.__metas
 
     def __read_files(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.files)
@@ -307,13 +292,13 @@ class Config(metaclass=SingletonMeta):
 
         sites = self.__parse_column(sheet, ExcelFile.site)
 
-        metas = self.__read_meta_values()
+        meta_values = ConfigMeta.convert_to_values_by_file(self.__metas)
 
         files = ConfigFile.reconstruct(
             names=names,
             timestamps=timestamps,
             sites=sites,
-            metas=metas,
+            metas=meta_values,
         )
 
         self.__files = files
@@ -336,35 +321,11 @@ class Config(metaclass=SingletonMeta):
     ) -> None:
         storage.write_config_files(files=self.__files)
 
-    # INFO: Meta properties are made uppercase just before writing to h5.
-    # This is because it is not a critical error to be notified to the user.
-    # Please refer to the commented line in `__read_meta_properties()`
-    # to impact the actualy `Config` object copy from Excel in order to trigger
-    # a `KeyError`.
     def __store_metas(
         self,
         storage: Storage,
     ) -> None:
-        meta_properties = self.__read_meta_properties()
-
-        meta_properties_upper = []
-
-        for meta_property in meta_properties:
-            meta_properties_upper.append(str.upper(meta_property))
-
-        meta_values = self.__read_meta_values()
-
-        meta_sets: List[List[str]] = []
-
-        for index, _ in enumerate(meta_properties):
-            meta_values_by_columns = reverse_array(meta_values)
-            meta_set = get_uniques_from_list(meta_values_by_columns[index])
-            meta_sets.append(meta_set)
-
-        storage.write_metas(
-            meta_properties_upper,
-            meta_sets,
-        )
+        storage.write_metas(self.__metas)
 
     def __read_ranges(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.ranges)

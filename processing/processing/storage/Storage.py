@@ -11,6 +11,7 @@ from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigMatrix import ConfigMatrix
+from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
@@ -959,19 +960,20 @@ class Storage(metaclass=SingletonMeta):
 
     def write_metas(
         self,
-        meta_properties: List[str],
-        meta_sets: List[List[str]],
+        metas: List[ConfigMeta],
     ) -> None:
+        properties, sets = ConfigMeta.flatten(metas)
+
         self.__write_dataset(
             path=StoragePath.meta_properties,
-            data=meta_properties,
+            data=properties,
         )
 
-        meta_sets = self.make_rectangular(meta_sets, "")
+        sets_rectangular = self.make_rectangular(sets, "")
 
         self.__write_dataset(
             path=StoragePath.meta_sets,
-            data=meta_sets,
+            data=sets_rectangular,
         )
 
     def read_meta_properties(self) -> List[str]:
@@ -997,7 +999,7 @@ class Storage(metaclass=SingletonMeta):
 
     @staticmethod
     def make_rectangular(
-        non_rectangular_array,
+        non_rectangular_array: List[List[Any]],
         fill_with=None,
     ):
         # Determine the maximum length of the sub-arrays
