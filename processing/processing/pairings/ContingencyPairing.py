@@ -52,9 +52,6 @@ class ContingencyPairing(AbstractPairing):
             index=list(numpy.unique(clusters_a)),
         )
 
-        values_a = convert_dataframe_to_list(payload_a)
-        values_b = convert_dataframe_to_list(payload_b)
-
-        self._set(values_a, values_b)
+        self._set(payload_a, payload_b)
 
         return self.values_a, self.values_b

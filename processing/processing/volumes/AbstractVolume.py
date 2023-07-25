@@ -5,11 +5,13 @@ import pandas as pd
 from h5py import Dataset
 from pandas import DataFrame
 
+from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
+
 
 class AbstractVolume(ABC):
     _clusters: Union[List[str], None]
     _dataframe: Union[DataFrame, None]
-    values: Union[DataFrame, None]
+    values: Union[List[float], None]
 
     def __init__(
         self,
@@ -41,11 +43,13 @@ class AbstractVolume(ABC):
         self,
         data: List[float],
     ) -> None:
-        self.values = pd.DataFrame(
+        dataframe = pd.DataFrame(
             data=data,
             columns=["volume"],
             index=self._clusters,
         )
+
+        self.values = convert_dataframe_to_list(dataframe)
 
     def load(
         self,

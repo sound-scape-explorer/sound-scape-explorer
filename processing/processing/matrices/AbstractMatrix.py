@@ -5,11 +5,13 @@ import pandas as pd
 from h5py import Dataset
 from pandas import DataFrame
 
+from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
+
 
 class AbstractMatrix(ABC):
     _clusters: Union[List[str], None]
     _dataframe: Union[DataFrame, None]
-    values: Union[DataFrame, None]
+    values: Union[List[float], None]
 
     def __init__(
         self,
@@ -48,7 +50,8 @@ class AbstractMatrix(ABC):
                 if i < j:
                     payload.iloc[i, j] = None
 
-        self.values = payload
+        payload_list = convert_dataframe_to_list(payload)
+        self.values = payload_list
 
     def load(
         self,

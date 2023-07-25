@@ -5,6 +5,8 @@ import pandas as pd
 from h5py import Dataset
 from pandas import DataFrame
 
+from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
+
 
 class AbstractPairing(ABC):
     _dataframe: Union[None, DataFrame]
@@ -42,11 +44,11 @@ class AbstractPairing(ABC):
 
     def _set(
         self,
-        values_a: List[float],
-        values_b: List[float],
+        values_a: DataFrame,
+        values_b: DataFrame,
     ) -> Tuple[List[float], List[float]]:
-        self.values_a = values_a
-        self.values_b = values_b
+        self.values_a = convert_dataframe_to_list(values_a)
+        self.values_b = convert_dataframe_to_list(values_b)
         return self.values_a, self.values_b
 
     def load(

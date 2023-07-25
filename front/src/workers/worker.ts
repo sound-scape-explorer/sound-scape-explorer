@@ -437,11 +437,12 @@ export async function readVolume(
   integration: number,
   volumeIndex: number,
   metaIndex: number,
-) {
+): Promise<number[]> {
   const h5 = await load(file);
   const path = `${StoragePath.volume_}${volumeIndex}/${band}/${integration}/${metaIndex}`;
   const dataset = h5.get(path) as Dataset;
-  return dataset.to_array() as number[];
+  const values = dataset.to_array() as number[];
+  return values;
 }
 
 export async function readMatrices(
@@ -486,11 +487,12 @@ export async function readMatrix(
   integration: number,
   matrixIndex: number,
   metaIndex: number,
-) {
+): Promise<number[]> {
   const h5 = await load(file);
   const path = `${StoragePath.matrix_}${matrixIndex}/${band}/${integration}/${metaIndex}`;
   const dataset = h5.get(path) as Dataset;
-  return dataset.to_array() as number[];
+  const values = dataset.to_array() as number[];
+  return values;
 }
 
 export async function readPairings(
@@ -539,11 +541,12 @@ export async function readPairing(
   pairingIndex: number,
   metaIndexA: number,
   metaIndexB: number,
-) {
+): Promise<number[]> {
   const h5 = await load(file);
   const path = `${StoragePath.pairing_}${pairingIndex}/${band}/${integration}/${metaIndexA}/${metaIndexB}`;
   const dataset = h5.get(path) as Dataset;
-  return dataset.to_array() as number[];
+  const values = dataset.to_array() as number[];
+  return values;
 }
 
 export async function readGroupedFeatures(
