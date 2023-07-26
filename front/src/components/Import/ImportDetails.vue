@@ -81,7 +81,7 @@ const rangeNamesRef = computed<string[] | null>(() => {
 </template>
 
 <style lang="scss" scoped>
-$width: 10rem;
+$width: 14rem;
 
 .container {
   margin-top: 1rem;
