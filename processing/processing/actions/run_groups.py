@@ -100,10 +100,11 @@ def run_groups(env: Env):
                 # Flatten features chunks
                 features_flat = [features for fc in features_chunks for features in fc]
                 features_meaned = list(numpy.mean(features_flat, axis=0))
+                interval_original_start = interval_start - interval_duration
 
                 storage.append_group(
                     features=features_meaned,
-                    timestamp=interval_start,
+                    timestamp=interval_original_start,
                     band=band,
                     integration=integration,
                 )
