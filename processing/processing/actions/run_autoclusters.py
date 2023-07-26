@@ -13,20 +13,16 @@ def run_autoclusters(env: Env):
     if len(autoclusters) == 0:
         return
 
-    bands = storage.read_config_bands()
-    integrations = storage.read_config_integrations()
-
     print_new_line()
-
-    print(
-        f"Autoclusters requested {[ac.name for ac in autoclusters]} with"
-        f", bands {[b.name for b in bands]}"
-        f", integrations {[i.name for i in integrations]}"
-    )
-
-    timer = Timer(len(bands) * len(integrations) * len(autoclusters))
+    print(f"Autoclusters list {[ac.name for ac in autoclusters]}")
 
     for band, integration in storage.enumerate_bands_and_integrations():
+        print_new_line()
+        print(
+            f"Autoclusters loaded for band {band.name}, integration {integration.name}"
+        )
+        timer = Timer(len(autoclusters))
+
         for autocluster in autoclusters:
             autocluster.create_instance(
                 band=band,

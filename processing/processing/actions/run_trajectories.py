@@ -14,7 +14,7 @@ def run_trajectories(env: Env):
         return
 
     print_new_line()
-    print("Trajectories loaded")
+    print(f"Trajectories list {[t.name for t in trajectories]}")
 
     reducers = storage.read_config_reducers()
 
@@ -25,12 +25,12 @@ def run_trajectories(env: Env):
             if not reducer.should_calculate():
                 continue
 
+            print_new_line()
             print(
                 f"Trajectories loaded for band {band.name}"
                 f", integration {integration.name}"
             )
-
-            timer = Timer(len(reducers) * len(trajectories))
+            timer = Timer(len(trajectories))
 
             reduced_features = storage.read_reducer(reducer)
 

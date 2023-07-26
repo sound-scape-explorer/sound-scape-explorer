@@ -13,14 +13,15 @@ def run_computation_umaps(env: Env):
     computation_umap_iterations = storage.read_computation_umap_iterations()
 
     print_new_line()
-    print("Computation UMAPs requested")
+    print(
+        f"Computation UMAPs requested with iterations {computation_umap_iterations}"
+        f", dimensions {computation_umap_dimensions}"
+    )
 
     for band, integration in storage.enumerate_bands_and_integrations():
         print_new_line()
         print(
-            f"Computation UMAPs loaded with iterations {computation_umap_iterations}"
-            f", dimensions {computation_umap_dimensions}"
-            f", band {band.name}"
+            f"Computation UMAPs loaded for band {band.name}"
             f", integration {integration.name}"
         )
 
