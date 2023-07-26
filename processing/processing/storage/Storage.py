@@ -307,15 +307,12 @@ class Storage(metaclass=SingletonMeta):
     def read_files_features(
         self,
         band: ConfigBand,
-    ) -> Tuple[Dataset, Dataset, int]:
-        files_features_path = self.generate_files_features_path(band=band)
-        files_features_dataset = self.__read(files_features_path)
+    ) -> Dataset:
+        path = self.generate_files_features_path(band=band)
+        return self.__read(path)
 
-        files_durations_dataset = self.__read(StoragePath.files_durations.value)
-
-        files_count = files_durations_dataset.len()
-
-        return files_features_dataset, files_durations_dataset, files_count
+    def read_files_durations(self) -> Dataset:
+        return self.__read(StoragePath.files_durations.value)
 
     def __delete_silently(
         self,
@@ -401,6 +398,10 @@ class Storage(metaclass=SingletonMeta):
     def read_expected_sample_rate(self) -> int:
         settings = self.read_settings()
         return settings["expected_sample_rate"]
+
+    def read_grouping_start(self) -> int:
+        settings = self.read_settings()
+        return settings["grouping_start"]
 
     def read_audio_path(self) -> str:
         settings = self.read_settings()
@@ -614,8 +615,10 @@ class Storage(metaclass=SingletonMeta):
         band: ConfigBand,
         integration: ConfigIntegration,
     ) -> Iterable[Tuple[int, int, int, int, List[List[float]]]]:
-        features, durations, count = self.read_files_features(band=band)
+        features = self.read_files_features(band=band)
         timestamps = self.read_files_timestamps()
+        durations = self.read_files_durations()
+        count = durations.len()
 
         group_counts_path = f"{StoragePath.files_group_counts.value}/{integration}"
 

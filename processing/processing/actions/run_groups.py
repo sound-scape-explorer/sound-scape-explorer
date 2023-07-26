@@ -1,53 +1,111 @@
+from typing import List
+
 import numpy
 
 from processing.common.Env import Env
 from processing.common.Timer import Timer
-from processing.constants import TIME_DELTA_MS
 from processing.storage.Storage import Storage
+from processing.utils.is_within_interval import is_within_interval
 from processing.utils.print_new_line import print_new_line
 
 
+# TODO: Reduce cognitive complexity
 def run_groups(env: Env):
-    storage = Storage(path=env.storage)
+    storage = Storage(env.storage)
     storage.delete_groups()
 
-    files_count = storage.read_files_count()
+    bands = storage.read_config_bands()
+    integrations = storage.read_config_integrations()
 
-    for band, integration in storage.enumerate_bands_and_integrations():
-        print_new_line()
-        print(f"Grouping for band {band.name}, integration {integration.name}")
-        timer = Timer(files_count)
+    files = storage.read_config_files()
+    files_durations = storage.read_files_durations()
 
-        for (
-            _,
-            group_count,
-            file_timestamp,
-            _,
-            file_features,
-        ) in storage.enumerate_files(band=band, integration=integration):
-            for group_index in range(group_count):
-                group_start = integration.duration * group_index
-                group_end = integration.duration * (group_index + 1)
+    timestamp_end = -1
 
-                features_to_group = file_features[group_start:group_end]
+    # Finding the interval_end
+    for file in files:
+        timestamp = file.timestamp
+        interval_duration = files_durations[file.index][0] * 1000  # milliseconds
+        end = timestamp + interval_duration
 
-                group_features = list(numpy.mean(features_to_group, axis=0))
+        if end <= timestamp_end:
+            continue
 
-                group_timestamp = (
-                    file_timestamp + integration.duration * group_index * TIME_DELTA_MS
-                )
+        timestamp_end = end
 
-                # At the moment, each integration result in a write
-                # Writes could be merged for each group to improve performance
-                # But the current strategy is to be as narrow as possible
+    grouping_start = storage.read_grouping_start()
+
+    for band in bands:
+        files_features = storage.read_files_features(band)
+
+        for integration in integrations:
+            interval_duration = integration.duration * 1000  # milliseconds
+            interval_index = 0
+            interval_start = grouping_start
+
+            print_new_line()
+            print(f"Grouping for band {band.name}, integration {integration.name}.")
+            timer = Timer((timestamp_end - interval_start) // interval_duration)
+
+            while interval_start < timestamp_end:
+                interval_end = interval_start + interval_duration
+
+                # INFO: This can contain features from multiple files.
+                audio_chunks: List[List[float]] = []
+
+                for file in files:
+                    file_duration = (
+                        files_durations[file.index][0] * 1000
+                    )  # milliseconds
+
+                    file_start = file.timestamp
+                    file_end = file_start + file_duration
+
+                    if not is_within_interval(
+                        interval_start=interval_start,
+                        interval_end=interval_end,
+                        data_start=file_start,
+                        data_end=file_end,
+                    ):
+                        continue
+
+                    # Finding `files_features` array positions
+                    position_start = int((interval_start - file_start) / 1000)
+
+                    for f in files:
+                        if f.index == file.index:
+                            break
+                        position_start += files_durations[f.index][0]
+
+                    position_end = position_start + integration.duration
+
+                    # Slicing `files_features`
+                    audio_chunk = files_features[position_start:position_end]
+                    audio_chunks.append(audio_chunk)
+
+                    # DEBUG
+                    # print("Itvl", interval_index, interval_start, interval_end)
+                    # print("File", file.index, file_start, file_end)
+                    # print("Posi", position_start, position_end)
+
+                interval_index += 1
+                interval_start += interval_duration
+                timer.progress()
+
+                # Handling audio chunks
+                if len(audio_chunks) == 0:
+                    continue
+
+                # Flatten chunks features
+                audio_features = [features for ac in audio_chunks for features in ac]
+                meaned_features = list(numpy.mean(audio_features, axis=0))
+
                 storage.append_group(
-                    features=group_features,
-                    timestamp=group_timestamp,
+                    features=meaned_features,
+                    timestamp=interval_start,
                     band=band,
                     integration=integration,
                 )
-
-            timer.progress()
 
 
 if __name__ == "__main__":

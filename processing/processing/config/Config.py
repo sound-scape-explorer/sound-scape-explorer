@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import List, Optional, Union
@@ -219,9 +220,12 @@ class Config(metaclass=SingletonMeta):
     def __digest_setting(
         self,
         setting: str,
-        value: Union[Series, DataFrame],
+        value: Union[Series, DataFrame, datetime],
     ):
         payload = value
+
+        if type(value) is datetime:
+            payload = int(value.timestamp()) * 1000  # milliseconds
 
         if is_nan(value):
             payload = None
