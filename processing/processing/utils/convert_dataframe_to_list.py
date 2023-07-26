@@ -5,5 +5,11 @@ from pandas import DataFrame
 
 def convert_dataframe_to_list(
     df: DataFrame,
+    flatten: bool = True,
 ) -> List[float]:
-    return list(df.to_numpy().flatten())
+    list_ = df.to_numpy()
+
+    if flatten is True:
+        list_.flatten()
+
+    return list(list_)
