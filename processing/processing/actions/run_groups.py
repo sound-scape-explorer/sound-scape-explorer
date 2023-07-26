@@ -9,6 +9,7 @@ from processing.utils.is_within_interval import is_within_interval
 from processing.utils.print_new_line import print_new_line
 
 
+# INFO: This step can be very long. Find a way to reduce processing time?
 # TODO: Reduce cognitive complexity
 def run_groups(env: Env):
     storage = Storage(env.storage)
@@ -22,7 +23,7 @@ def run_groups(env: Env):
 
     timestamp_end = -1
 
-    # Finding the interval_end
+    # Finding timestamp_end
     for file in files:
         timestamp = file.timestamp
         interval_duration = files_durations[file.index][0] * 1000  # milliseconds
@@ -51,7 +52,7 @@ def run_groups(env: Env):
                 interval_end = interval_start + interval_duration
 
                 # INFO: This can contain features from multiple files.
-                audio_chunks: List[List[float]] = []
+                features_chunks: List[List[float]] = []
 
                 for file in files:
                     file_duration = (
@@ -80,8 +81,8 @@ def run_groups(env: Env):
                     position_end = position_start + integration.duration
 
                     # Slicing `files_features`
-                    audio_chunk = files_features[position_start:position_end]
-                    audio_chunks.append(audio_chunk)
+                    features_chunk = files_features[position_start:position_end]
+                    features_chunks.append(features_chunk)
 
                     # DEBUG
                     # print("Itvl", interval_index, interval_start, interval_end)
@@ -92,16 +93,16 @@ def run_groups(env: Env):
                 interval_start += interval_duration
                 timer.progress()
 
-                # Handling audio chunks
-                if len(audio_chunks) == 0:
+                # Handling features chunks
+                if len(features_chunks) == 0:
                     continue
 
-                # Flatten chunks features
-                audio_features = [features for ac in audio_chunks for features in ac]
-                meaned_features = list(numpy.mean(audio_features, axis=0))
+                # Flatten features chunks
+                features_flat = [features for fc in features_chunks for features in fc]
+                features_meaned = list(numpy.mean(features_flat, axis=0))
 
                 storage.append_group(
-                    features=meaned_features,
+                    features=features_meaned,
                     timestamp=interval_start,
                     band=band,
                     integration=integration,
