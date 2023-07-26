@@ -52,11 +52,12 @@ const sliders = computed<Slider[]>(() => {
 
     const slider = {
       key: range.index,
+      name: range.name,
       min: timeStart,
       max: timeEnd,
       marks: {
         [timeStart]: SLIDER_LIMITS.start,
-        [timeBetween]: range.index.toString(),
+        [timeBetween]: range.name.toString(),
         [timeEnd]: SLIDER_LIMITS.end,
       },
     } satisfies Slider;
@@ -138,6 +139,7 @@ function toggleZoom(slider: Slider): void {
 
 interface Slider {
   key: number;
+  name: string;
   min: number;
   max: number;
   marks: {
