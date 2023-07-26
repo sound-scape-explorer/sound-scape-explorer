@@ -26,11 +26,8 @@ def run_indicators(env: Env):
             f"Indicators loaded for band {band.name}"
             f", integration {integration.name}"
         )
-        point_indexes_count = storage.read_point_indexes_count(
-            band=band,
-            integration=integration,
-        )
-        timer = Timer(len(indicators) * point_indexes_count)
+        groups_count = storage.read_groups_count(integration)
+        timer = Timer(groups_count)
 
         # Loading indicators
         for indicator in indicators:

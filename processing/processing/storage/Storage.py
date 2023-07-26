@@ -256,10 +256,26 @@ class Storage(metaclass=SingletonMeta):
         files = list(dataset.asstr()[:])
         return files
 
-    def read_files_group_counts(self, integration: int) -> Dataset:
-        path = f"{StoragePath.files_group_counts.value}/{integration}"
+    def read_files_group_counts(
+        self,
+        integration: ConfigIntegration,
+    ) -> Dataset:
+        path = f"{StoragePath.files_group_counts.value}/{integration.duration}"
         dataset = self.__read(path)
         return dataset
+
+    def read_groups_count(
+        self,
+        integration: ConfigIntegration,
+    ) -> int:
+        group_counts = self.read_files_group_counts(integration)
+
+        groups_count = 0
+
+        for group_count in group_counts:
+            groups_count += group_count[0]
+
+        return groups_count
 
     def read_config_indicators(self) -> List[ConfigIndicator]:
         names_dataset = self.__read(StoragePath.indicators_names)
