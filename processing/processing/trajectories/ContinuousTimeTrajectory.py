@@ -12,7 +12,7 @@ class ContinuousTimeTrajectory:
     __timestamp_end: Union[None, int]  # milliseconds
     __rolling_step: Union[None, int]  # milliseconds
     segments: List[int]
-    values: DataFrame
+    values: List[List[float]]
 
     def __init__(self) -> None:
         self.__features = None
@@ -38,8 +38,8 @@ class ContinuousTimeTrajectory:
             self.__rolling_step,
         )
 
-    def _set(self, values: DataFrame) -> DataFrame:
-        self.values = values
+    def _set(self, values: DataFrame) -> List[List[float]]:
+        self.values = list(values.to_numpy())
         return self.values
 
     def load(
@@ -56,7 +56,7 @@ class ContinuousTimeTrajectory:
         self.__timestamp_end = timestamp_end
         self.__rolling_step = rolling_step
 
-    def calculate(self) -> DataFrame:
+    def calculate(self) -> List[List[float]]:
         (
             features,
             timestamps,
@@ -78,11 +78,10 @@ class ContinuousTimeTrajectory:
 
         # Calculating coordinates
         dimensions = len(filtered_features[0])
-        coordinates = numpy.empty([dimensions, dimensions])
+        coordinates = numpy.empty([dimensions, len(filtered_features)])
 
         filtered_features_dataframe = pandas.DataFrame(filtered_features)
         filtered_features_dataframe.columns = [d for d in range(dimensions)]
-        filtered_features_dataframe = filtered_features_dataframe.T
 
         for d in range(dimensions):
             coordinates[d, :] = (
@@ -92,7 +91,5 @@ class ContinuousTimeTrajectory:
             )
 
         coordinates_dataframe = pandas.DataFrame(coordinates)
-
         self._set(coordinates_dataframe.T)
-
         return self.values
