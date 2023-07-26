@@ -5,7 +5,6 @@ import pandas as pd
 from sklearn import metrics
 
 from processing.pairings.AbstractPairing import AbstractPairing
-from processing.utils.convert_dataframe_to_list import convert_dataframe_to_list
 
 
 class ContingencyPairing(AbstractPairing):
