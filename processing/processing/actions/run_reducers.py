@@ -13,8 +13,6 @@ def run_reducers(env: Env):
     if len(reducers) == 0:
         return
 
-    bands = storage.read_config_bands()
-    integrations = storage.read_config_integrations()
     seed = storage.read_display_umap_seed()
 
     print_new_line()
@@ -25,7 +23,7 @@ def run_reducers(env: Env):
         print(
             f"Reducer loaded for band {band.name}" f", integration {integration.name}"
         )
-        timer = Timer(len(bands) * len(integrations))
+        timer = Timer(len(reducers))
 
         features = storage.read_grouped_features_all_files(
             band=band,
