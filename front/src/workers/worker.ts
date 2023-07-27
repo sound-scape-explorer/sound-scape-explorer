@@ -541,11 +541,11 @@ export async function readPairing(
   pairingIndex: number,
   metaIndexA: number,
   metaIndexB: number,
-): Promise<number[]> {
+): Promise<number[][]> {
   const h5 = await load(file);
   const path = `${StoragePath.pairing_}${pairingIndex}/${band}/${integration}/${metaIndexA}/${metaIndexB}`;
   const dataset = h5.get(path) as Dataset;
-  const values = dataset.to_array() as number[];
+  const values = dataset.to_array() as number[][];
   return values;
 }
 

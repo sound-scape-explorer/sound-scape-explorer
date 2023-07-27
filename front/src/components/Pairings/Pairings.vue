@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import {RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
-import {computed, ref, unref, watch} from 'vue';
+import {computed, ref, unref, watch, watchEffect} from 'vue';
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -69,14 +69,7 @@ async function handleUpdate() {
     return;
   }
 
-  const isDefault = metaIndexA <= metaIndexB;
-  let data: number[] | null;
-
-  if (isDefault) {
-    data = await readPairing(pairingIndex, metaIndexA, metaIndexB);
-  } else {
-    data = await readPairing(pairingIndex, metaIndexB, metaIndexA);
-  }
+  const data = await readPairing(pairingIndex, metaIndexA, metaIndexB);
 
   if (data === null) {
     return;
@@ -86,10 +79,10 @@ async function handleUpdate() {
   xRef.value = metaSetsRef.value[metaIndexA];
   yRef.value = metaSetsRef.value[metaIndexB];
 
-  const length = xRef.value.length;
-
-  valuesRef.value = buildNestedArray(data, length);
+  valuesRef.value = data;
 }
+
+watchEffect(handleUpdate);
 
 function swap() {
   if (metaSelectedARef.value === null || metaSelectedBRef.value === null) {
@@ -102,8 +95,6 @@ function swap() {
   metaSelectedARef.value = b;
   metaSelectedBRef.value = a;
 }
-
-watch([pairingSelectedRef, metaSelectedARef, metaSelectedBRef], handleUpdate);
 
 const isVisibleRef = computed<boolean>(() => {
   if (

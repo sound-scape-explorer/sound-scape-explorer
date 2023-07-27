@@ -8,7 +8,7 @@ export function useStoragePairing() {
     pairingIndex: number,
     metaIndexA: number,
     metaIndexB: number,
-  ) => {
+  ): Promise<number[][]> | null => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
