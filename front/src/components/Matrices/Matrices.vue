@@ -72,7 +72,7 @@ async function handleUpdate() {
 
   titleRef.value = `${matrixNameSelectedRef.value} - ${metaSelectedRef.value}`;
   labelsRef.value = metaSetsRef.value[metaIndex];
-  valuesRef.value = buildNestedArray(data, Math.sqrt(data.length));
+  valuesRef.value = data;
 }
 
 watch([matrixNameSelectedRef, metaSelectedRef], handleUpdate);

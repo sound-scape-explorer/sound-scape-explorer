@@ -487,11 +487,11 @@ export async function readMatrix(
   integration: number,
   matrixIndex: number,
   metaIndex: number,
-): Promise<number[]> {
+): Promise<number[][]> {
   const h5 = await load(file);
   const path = `${StoragePath.matrix_}${matrixIndex}/${band}/${integration}/${metaIndex}`;
   const dataset = h5.get(path) as Dataset;
-  const values = dataset.to_array() as number[];
+  const values = dataset.to_array() as number[][];
   return values;
 }
 

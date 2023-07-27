@@ -4,7 +4,10 @@ import {configBandRef} from './useConfigBands';
 import {configIntegrationRef} from './useConfigIntegrations';
 
 export function useStorageMatrix() {
-  const readMatrix = async (matrixIndex: number, metaIndex: number) => {
+  const readMatrix = async (
+    matrixIndex: number,
+    metaIndex: number,
+  ): Promise<number[][] | null> => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
