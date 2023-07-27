@@ -23,10 +23,10 @@ class MeanDistancesMatrix(AbstractMatrix):
 
             umap = features[i]
 
-            current_meann_distances_matrix = metrics.pairwise_distances(umap)
+            current_mean_distances_matrix = metrics.pairwise_distances(umap)
 
             mean_distances_matrix = (
-                (previous_mean_distances_matrix * i) + current_meann_distances_matrix
+                (previous_mean_distances_matrix * i) + current_mean_distances_matrix
             ) / (i + 1)
 
         self.values = mean_distances_matrix.tolist()
