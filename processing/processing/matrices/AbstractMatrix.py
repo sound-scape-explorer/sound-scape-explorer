@@ -45,6 +45,7 @@ class AbstractMatrix(ABC):
     ) -> None:
         payload = pd.DataFrame(matrix, columns=self._clusters, index=self._clusters)
 
+        # Keep half of the matrix
         for i in range(payload.shape[0]):
             for j in range(payload.shape[1]):
                 if i < j:
