@@ -10,6 +10,8 @@ def run_config(env: Env):
     config = Config(path=env.config)
     config.store(storage)
 
+    storage.write_sites(config.sites)
+
 
 if __name__ == "__main__":
     env = Env()

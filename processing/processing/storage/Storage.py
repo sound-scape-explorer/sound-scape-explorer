@@ -19,6 +19,7 @@ from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
+from processing.sites.Site import Site
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -365,8 +366,9 @@ class Storage(metaclass=SingletonMeta):
         del self.__file[path]
 
     def delete_groups(self) -> None:
-        self.__delete_silently(StoragePath.grouped_features)
-        self.__delete_silently(StoragePath.grouped_timestamps)
+        self.__delete_silently(StoragePath.group_features)
+        self.__delete_silently(StoragePath.group_timestamps)
+        self.__delete_silently(StoragePath.group_site_index)
 
     def delete_files(self) -> None:
         self.__delete_silently(StoragePath.files_features)
@@ -393,6 +395,8 @@ class Storage(metaclass=SingletonMeta):
         self.__delete_silently(StoragePath.reducers_ranges)
         self.__delete_silently(StoragePath.indicators_names)
         self.__delete_silently(StoragePath.volumes_names)
+        self.__delete_silently(StoragePath.site_names)
+        self.__delete_silently(StoragePath.site_file_indexes)
 
     def read_settings(self) -> ConfigSettings:
         configuration = self.__read(StoragePath.configuration)
@@ -729,7 +733,7 @@ class Storage(metaclass=SingletonMeta):
         integration: ConfigIntegration,
     ) -> str:
         suffix = self.generate_grouped_path_suffix(band=band, integration=integration)
-        return f"{StoragePath.grouped_features.value}/{suffix}"
+        return f"{StoragePath.group_features.value}/{suffix}"
 
     def generate_grouped_timestamps_path(
         self,
@@ -737,21 +741,28 @@ class Storage(metaclass=SingletonMeta):
         integration: ConfigIntegration,
     ) -> str:
         suffix = self.generate_grouped_path_suffix(band=band, integration=integration)
-        return f"{StoragePath.grouped_timestamps.value}/{suffix}"
+        return f"{StoragePath.group_timestamps.value}/{suffix}"
+
+    def generate_group_site_index_path(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> str:
+        suffix = self.generate_grouped_path_suffix(band=band, integration=integration)
+        return f"{StoragePath.group_site_index.value}/{suffix}"
 
     def append_group(
         self,
-        features: List[float],
-        timestamp: int,
         band: ConfigBand,
         integration: ConfigIntegration,
+        features: List[float],
+        timestamp: int,
+        site: Site,
     ) -> None:
+        # Features
         features_path = self.generate_grouped_features_path(
-            band=band, integration=integration
-        )
-
-        timestamp_path = self.generate_grouped_timestamps_path(
-            band=band, integration=integration
+            band=band,
+            integration=integration,
         )
 
         if not self.exists_dataset(features_path):
@@ -769,6 +780,12 @@ class Storage(metaclass=SingletonMeta):
             dataset.resize(new_shape, axis=0)
             dataset[-1:] = [features]
 
+        # Timestamp
+        timestamp_path = self.generate_grouped_timestamps_path(
+            band=band,
+            integration=integration,
+        )
+
         if not self.exists_dataset(timestamp_path):
             self.__file.create_dataset(
                 name=timestamp_path,
@@ -784,35 +801,26 @@ class Storage(metaclass=SingletonMeta):
             dataset.resize(new_shape, axis=0)
             dataset[-1:] = [timestamp]
 
-    def create_group(
-        self,
-        features: List[List[float]],
-        timestamps: List[int],
-        band: ConfigBand,
-        integration: ConfigIntegration,
-    ):
-        for f in self.enumerate_file_indexes():
-            grouped_features_path = self.generate_grouped_features_path(
-                band=band,
-                integration=integration,
-            )
+        # Site by group
+        group_site_index_path = self.generate_group_site_index_path(
+            band=band,
+            integration=integration,
+        )
 
-            grouped_timestamps_path = self.generate_grouped_timestamps_path(
-                band=band,
-                integration=integration,
+        if not self.exists_dataset(group_site_index_path):
+            self.__file.create_dataset(
+                name=group_site_index_path,
+                data=site.index,
+                compression=StorageCompression.gzip.value,
+                chunks=True,
+                shape=(1, 1),
+                maxshape=(None, 1),
             )
-
-            self.__write_dataset(
-                path=grouped_features_path,
-                data=features[f],
-                compression=StorageCompression.gzip,
-            )
-
-            self.__write_dataset(
-                path=grouped_timestamps_path,
-                data=timestamps[f],
-                compression=StorageCompression.gzip,
-            )
+        else:
+            dataset: Dataset = self.__file[group_site_index_path]  # type: ignore
+            new_shape = dataset.shape[0] + 1
+            dataset.resize(new_shape, axis=0)
+            dataset[-1:] = site.index
 
     def __convert_integration_seconds_to_name(
         self,
@@ -1679,3 +1687,49 @@ class Storage(metaclass=SingletonMeta):
         path = self.generate_reduced_path(reducer)
         dataset = self.__read(path)
         return dataset
+
+    def write_sites(
+        self,
+        sites: List[Site],
+    ) -> None:
+        names, file_indexes = Site.flatten(sites)
+
+        self.__write_dataset(
+            path=StoragePath.site_names.value,
+            data=names,
+        )
+
+        file_indexes_rectangular = self.make_rectangular(file_indexes, -1)
+
+        self.__write_dataset(
+            path=StoragePath.site_file_indexes.value,
+            data=file_indexes_rectangular,
+        )
+
+    def read_sites(self) -> List[Site]:
+        names_dataset = self.__read(StoragePath.site_names.value)
+        names = self.__convert_dataset_to_string_list(names_dataset)
+
+        file_indexes_rectangular = self.__read(StoragePath.site_file_indexes.value)[:]
+        file_indexes = self.trim_rectangular(file_indexes_rectangular)
+
+        files = self.read_config_files()
+
+        sites: List[Site] = []
+
+        for index in range(names_dataset.len()):
+            site_files: List[ConfigFile] = []
+
+            for file in files:
+                if file.index in file_indexes[index]:
+                    site_files.append(file)
+
+            site: Site = Site(
+                index=index,
+                name=names[index],
+                files=site_files,
+            )
+
+            sites.append(site)
+
+        return sites

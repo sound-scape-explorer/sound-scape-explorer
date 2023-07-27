@@ -35,6 +35,7 @@ def run_groups(env: Env):
         timestamp_end = end
 
     grouping_start = storage.read_grouping_start()
+    sites = storage.read_sites()
 
     for band in bands:
         files_features = storage.read_files_features(band)
@@ -51,63 +52,60 @@ def run_groups(env: Env):
             while interval_start < timestamp_end:
                 interval_end = interval_start + interval_duration
 
-                # INFO: This can contain features from multiple files.
-                features_chunks: List[List[float]] = []
+                # Iterating over sites
+                for site in sites:
+                    # INFO: This can contain features from multiple files.
+                    features_chunks: List[List[float]] = []
 
-                for file in files:
-                    file_duration = (
-                        files_durations[file.index][0] * 1000
-                    )  # milliseconds
+                    # Iterating over files defined by the current site
+                    for file in site.files:
+                        # Defining file timestamps
+                        file_duration = files_durations[file.index][0] * 1000
+                        file_start = file.timestamp
+                        file_end = file_start + file_duration
 
-                    file_start = file.timestamp
-                    file_end = file_start + file_duration
+                        # Skipping file if not in interval
+                        if not is_within_interval(
+                            interval_start=interval_start,
+                            interval_end=interval_end,
+                            data_start=file_start,
+                            data_end=file_end,
+                        ):
+                            continue
 
-                    if not is_within_interval(
-                        interval_start=interval_start,
-                        interval_end=interval_end,
-                        data_start=file_start,
-                        data_end=file_end,
-                    ):
+                        # Finding `files_features` array positions
+                        position_start = int((interval_start - file_start) / 1000)
+
+                        for f in files:
+                            if f.index == file.index:
+                                break
+                            position_start += files_durations[f.index][0]
+
+                        position_end = position_start + integration.duration
+
+                        # Slicing `files_features`
+                        features_chunk = files_features[position_start:position_end]
+                        features_chunks.append(features_chunk)
+
+                    # Handling features chunks
+                    if len(features_chunks) == 0:
                         continue
 
-                    # Finding `files_features` array positions
-                    position_start = int((interval_start - file_start) / 1000)
+                    # Flatten features chunks
+                    features_flat = [f for fc in features_chunks for f in fc]
+                    features_meaned = list(numpy.mean(features_flat, axis=0))
 
-                    for f in files:
-                        if f.index == file.index:
-                            break
-                        position_start += files_durations[f.index][0]
-
-                    position_end = position_start + integration.duration
-
-                    # Slicing `files_features`
-                    features_chunk = files_features[position_start:position_end]
-                    features_chunks.append(features_chunk)
-
-                    # DEBUG
-                    # print("Itvl", interval_index, interval_start, interval_end)
-                    # print("File", file.index, file_start, file_end)
-                    # print("Posi", position_start, position_end)
+                    storage.append_group(
+                        band=band,
+                        integration=integration,
+                        site=site,
+                        features=features_meaned,
+                        timestamp=interval_start,
+                    )
 
                 interval_index += 1
                 interval_start += interval_duration
                 timer.progress()
-
-                # Handling features chunks
-                if len(features_chunks) == 0:
-                    continue
-
-                # Flatten features chunks
-                features_flat = [features for fc in features_chunks for features in fc]
-                features_meaned = list(numpy.mean(features_flat, axis=0))
-                interval_original_start = interval_start - interval_duration
-
-                storage.append_group(
-                    features=features_meaned,
-                    timestamp=interval_original_start,
-                    band=band,
-                    integration=integration,
-                )
 
 
 if __name__ == "__main__":

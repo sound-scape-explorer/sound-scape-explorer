@@ -487,6 +487,31 @@ class StoragePath(Enum):
         Group
     """
 
+    #############
+    # Data/Site #
+    #############
+
+    site_names = "/site_names"
+    """The unique site names found in the project.
+
+    Each row contains a string.
+
+    Type:
+        Dataset
+    """
+
+    site_file_indexes = "/site_file_indexes"
+    """The file indexes for each site.
+
+    Each row contains one or more integers representing file indexes.
+
+    The number of file indexes per site can varry.
+    Making rectangular for storage and trimming for reconstructing is therefore needed.
+
+    Type:
+        Dataset
+    """
+
     ##############
     # Data/Files #
     ##############
@@ -528,8 +553,9 @@ class StoragePath(Enum):
     # Data/Grouped #
     ################
 
-    grouped_features = "/grouped_features"
-    """The grouped (integrated) features for each file.
+    # TODO: Change value
+    group_features = "/grouped_features"
+    """The group features for each file.
 
     The group contains one dataset per band, integration value and file.
     Each dataset is named after the file index.
@@ -542,8 +568,9 @@ class StoragePath(Enum):
         Group
     """
 
-    grouped_timestamps = "/grouped_timestamps"
-    """The grouped timestamps for each file.
+    # TODO: Change value
+    group_timestamps = "/grouped_timestamps"
+    """The group timestamps for each file.
 
     The group contains one dataset per band and integration value.
     Each dataset is named after the integration value.
@@ -552,6 +579,18 @@ class StoragePath(Enum):
 
     Example:
         /grouped_timestamps/{band}/{integration}
+
+    Type:
+        Group
+    """
+
+    group_site_index = "/group_site_index"
+    """The site index for each group.
+
+    Each row contains an integer.
+
+    Example:
+        /group_site_index/{band}/{integration}
 
     Type:
         Group

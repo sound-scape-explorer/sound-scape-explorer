@@ -97,6 +97,12 @@ export enum StoragePath {
   mean_distances_matrix = '/mean_distances_matrix',
 
   /**
+   * Data/Site
+   */
+  site_names = '/site_names',
+  site_file_indexes = '/site_file_indexes',
+
+  /**
    * Data/Files
    */
   files_features = '/files_features',
@@ -105,8 +111,11 @@ export enum StoragePath {
   /**
    * Data/Grouped
    */
+  // TODO: Rename
   grouped_features = '/grouped_features',
+  // TODO: Rename
   grouped_timestamps = '/grouped_timestamps',
+  group_site_index = '/group_site_index',
 
   /**
    * Data/Reduced
