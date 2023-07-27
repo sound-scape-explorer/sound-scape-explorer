@@ -4,11 +4,11 @@ import {configBandRef} from './useConfigBands';
 import {configIntegrationRef} from './useConfigIntegrations';
 
 export function useStoragePairing() {
-  const readPairing = (
+  const readPairing = async (
     pairingIndex: number,
     metaIndexA: number,
     metaIndexB: number,
-  ): Promise<number[][]> | null => {
+  ): Promise<number[][] | null> => {
     if (
       workerRef.value === null ||
       fileRef.value === null ||
@@ -18,7 +18,7 @@ export function useStoragePairing() {
       return null;
     }
 
-    const values = workerRef.value.readPairing(
+    const values = await workerRef.value.readPairing(
       fileRef.value,
       configBandRef.value.name,
       configIntegrationRef.value.duration,
