@@ -601,6 +601,41 @@ class Storage(metaclass=SingletonMeta):
             for group_index in range(groups_count):
                 yield file_index, group_index
 
+    def get_file_indexes_from_point_index(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+        point_index: int,
+    ) -> List[int]:
+        group_timestamps = self.read_grouped_timestamps(band, integration)
+        group_timestamp = group_timestamps[point_index][0]
+
+        file_indexes = []
+
+        group_counts = self.read_files_group_counts(integration)
+        files_timestamps = self.read_files_timestamps()
+
+        for file_index, file_timestamp in enumerate(files_timestamps):
+            file_start = file_timestamp
+            file_end = (
+                file_start + group_counts[file_index][0] * integration.duration * 1000
+            )
+
+            if file_start <= group_timestamp < file_end:
+                file_indexes.append(file_index)
+
+        return file_indexes
+
+    def enumerate_point_indexes(
+        self,
+        band: ConfigBand,
+        integration: ConfigIntegration,
+    ) -> Iterable[int]:
+        grouped_timestamps = self.read_grouped_timestamps(band, integration)
+
+        for group_index in range(grouped_timestamps.len()):
+            yield group_index
+
     # TODO: Timeline strategy: Handle audio lengths shorter than integration
     # We should only discard the slice when there is no audio at all
     # Floor division will discard any incomplete group slice
@@ -610,21 +645,6 @@ class Storage(metaclass=SingletonMeta):
         integration: ConfigIntegration,
     ) -> int:
         return len(file_features) // integration.duration
-
-    def enumerate_point_indexes(
-        self,
-        band: ConfigBand,
-        integration: ConfigIntegration,
-    ) -> Iterable[Tuple[int, int, int]]:
-        point_index = -1
-
-        for file_index, groups_count, _, _, _ in self.enumerate_files(
-            band=band,
-            integration=integration,
-        ):
-            for group_index in range(groups_count):
-                point_index += 1
-                yield point_index, file_index, group_index
 
     def enumerate_files(
         self,
@@ -892,11 +912,11 @@ class Storage(metaclass=SingletonMeta):
     def delete_indicators(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.indicator_)
 
-    def write_config_indicator(
+    def write_indicator(
         self,
         indicator: ConfigIndicator,
     ) -> None:
-        path = self.generate_indicator_path(indicator=indicator)
+        path = self.generate_indicator_path(indicator)
 
         self.__write_dataset(
             path=path,
