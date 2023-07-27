@@ -21,29 +21,34 @@ def run_groups(env: Env):
     files = storage.read_config_files()
     files_durations = storage.read_files_durations()
 
-    timestamp_end = -1
+    timestamp_start = None
+    timestamp_end = None
 
-    # Finding timestamp_end
+    # Finding timestamp min and max
     for file in files:
-        timestamp = file.timestamp
         interval_duration = files_durations[file.index][0] * 1000  # milliseconds
-        end = timestamp + interval_duration
+        start = file.timestamp
+        end = start + interval_duration
 
-        if end <= timestamp_end:
-            continue
+        if timestamp_end is None or end > timestamp_end:
+            timestamp_end = end
 
-        timestamp_end = end
+        if timestamp_start is None or start < timestamp_start:
+            timestamp_start = start
 
-    grouping_start = storage.read_grouping_start()
+    # grouping_start = storage.read_grouping_start()
     sites = storage.read_sites()
 
     for band in bands:
         files_features = storage.read_files_features(band)
 
         for integration in integrations:
+            if timestamp_start is None or timestamp_end is None:
+                raise RuntimeError("Unable to specify timestamps.")
+
             interval_duration = integration.duration * 1000  # milliseconds
             interval_index = 0
-            interval_start = grouping_start
+            interval_start = timestamp_start
 
             print_new_line()
             print(f"Grouping for band {band.name}, integration {integration.name}.")
@@ -82,6 +87,19 @@ def run_groups(env: Env):
                             position_start += files_durations[f.index][0]
 
                         position_end = position_start + integration.duration
+
+                        # DEBUG: Print matches
+                        # print(
+                        #     interval_index,
+                        #     site.index,
+                        #     file.index,
+                        #     position_start,
+                        #     position_end,
+                        #     file_start,
+                        #     file_end,
+                        #     interval_start,
+                        #     interval_end,
+                        # )
 
                         # Slicing `files_features`
                         features_chunk = files_features[position_start:position_end]
