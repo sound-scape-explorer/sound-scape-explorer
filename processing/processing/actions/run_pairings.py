@@ -20,9 +20,7 @@ def run_pairings(env: Env):
 
     for band, integration in storage.enumerate_bands_and_integrations():
         print_new_line()
-        print(
-            f"Pairings loaded for band {band.name}" f", integration {integration.name}"
-        )
+        print(f"Pairings loaded for band {band.name}, integration {integration.name}")
         timer = Timer((len(meta_properties) ** 2))
 
         grouped_features = storage.read_grouped_features_all_files(
