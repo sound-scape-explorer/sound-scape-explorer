@@ -29,7 +29,8 @@ def run_indicators(env: Env):
             f", integration {integration.name}"
         )
         group_counts = storage.read_files_group_counts(integration)
-        timer = Timer(len(indicators))
+        point_indexes_count = storage.read_point_indexes_count(band, integration)
+        timer = Timer(point_indexes_count)
 
         # Loading indicators
         for indicator in indicators:
@@ -71,9 +72,10 @@ def run_indicators(env: Env):
                 for indicator in indicators:
                     indicator.instance.calculate(audio)
 
+            timer.progress()
+
         for indicator in indicators:
             storage.write_indicator(indicator)
-            timer.progress()
 
         # for _, file_index, group_index in storage.enumerate_point_indexes(
         #     band=band,
