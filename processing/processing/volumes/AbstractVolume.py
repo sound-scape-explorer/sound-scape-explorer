@@ -43,13 +43,7 @@ class AbstractVolume(ABC):
         self,
         data: List[float],
     ) -> None:
-        dataframe = pd.DataFrame(
-            data=data,
-            columns=["volume"],
-            index=self._clusters,
-        )
-
-        self.values = convert_dataframe_to_list(dataframe)
+        self.values = data
 
     def load(
         self,
