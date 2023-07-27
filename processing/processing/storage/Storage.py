@@ -1354,21 +1354,16 @@ class Storage(metaclass=SingletonMeta):
     def generate_point_index(
         file_index: int,
         group_index: int,
-        groups_count: int,
+        group_count: int,
     ) -> int:
-        return file_index * groups_count + group_index
+        return file_index * group_count + group_index
 
     def read_grouped_meta_values(
         self,
         band: ConfigBand,
         integration: ConfigIntegration,
     ) -> List[List[str]]:
-        files = self.read_config_files()
-
-        meta_properties = self.read_meta_properties()
-
-        meta_values = []
-
+        # Autoclusters values
         config_autoclusters = self.read_config_autoclusters()
         autoclusters_values = []
 
@@ -1381,29 +1376,38 @@ class Storage(metaclass=SingletonMeta):
                 )
                 autoclusters_values.append(autocluster_values)
 
-        for mp, _ in enumerate(meta_properties):
+        meta_properties = self.read_meta_properties()
+        meta_values = []
+
+        files = self.read_config_files()
+
+        for mp in range(len(meta_properties)):
             meta_property_values = []
 
-            point_index = 0
-
-            for file_index, groups_count, _, _, _ in self.enumerate_files(
+            for point_index in self.enumerate_point_indexes(
                 band=band,
                 integration=integration,
             ):
-                file_ = files[file_index]
+                file_indexes = self.get_file_indexes_from_point_index(
+                    band=band,
+                    integration=integration,
+                    point_index=point_index,
+                )
 
-                for _ in range(groups_count):
-                    meta = list(file_.meta)
+                # WARNING: We take the first file_index
+                # TODO: Merging meta values need to be specified
+                file_index = file_indexes[0]
 
-                    if len(config_autoclusters) > 0:
-                        for autocluster in config_autoclusters:
-                            autocluster_values = autoclusters_values[autocluster.index]
-                            meta.insert(0, str(autocluster_values[point_index]))
+                file = files[file_index]
+                meta = list(file.meta)  # Copy
 
-                    meta_value = meta[mp]
-                    meta_property_values.append(meta_value)
+                if len(config_autoclusters) > 0:
+                    for autocluster in config_autoclusters:
+                        autocluster_values = autoclusters_values[autocluster.index]
+                        meta.insert(0, str(autocluster_values[point_index]))
 
-                    point_index += 1
+                meta_value = meta[mp]
+                meta_property_values.append(meta_value)
 
             meta_values.append(meta_property_values)
 
