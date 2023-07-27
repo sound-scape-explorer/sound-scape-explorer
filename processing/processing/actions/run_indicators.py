@@ -77,32 +77,6 @@ def run_indicators(env: Env):
         for indicator in indicators:
             storage.write_indicator(indicator)
 
-        # for _, file_index, group_index in storage.enumerate_point_indexes(
-        #     band=band,
-        #     integration=integration,
-        # ):
-        #     # Loading audio
-        #     file_name = files_names[file_index]
-        #     path = f"{audio_path}{file_name}"
-        #
-        #     audio = Audio(
-        #         path=path,
-        #         f_min=band.low,
-        #         f_max=band.high,
-        #         integration=integration.duration,
-        #         group_index=group_index,
-        #     )
-        #
-        # for indicator in indicators:
-        #     indicator.instance.calculate(audio=audio)
-        #
-        #     timer.progress()
-        #
-        # # Storing indicators
-        # # INFO: This could be written incrementally
-        # for indicator in indicators:
-        #     storage.write_config_indicator(indicator)
-
 
 if __name__ == "__main__":
     env = Env()
