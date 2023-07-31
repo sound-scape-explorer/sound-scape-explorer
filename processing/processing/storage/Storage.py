@@ -419,10 +419,6 @@ class Storage(metaclass=SingletonMeta):
         settings = self.read_settings()
         return settings["expected_sample_rate"]
 
-    def read_grouping_start(self) -> int:
-        settings = self.read_settings()
-        return settings["grouping_start"]
-
     def read_audio_path(self) -> str:
         settings = self.read_settings()
         audio_path = settings["audio_path"]

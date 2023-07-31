@@ -36,7 +36,6 @@ def run_groups(env: Env):
         if timestamp_start is None or start < timestamp_start:
             timestamp_start = start
 
-    # grouping_start = storage.read_grouping_start()
     sites = storage.read_sites()
 
     for band in bands:
