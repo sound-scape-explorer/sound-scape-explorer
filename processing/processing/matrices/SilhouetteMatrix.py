@@ -5,6 +5,7 @@ from sklearn import metrics
 from processing.matrices.AbstractMatrix import AbstractMatrix
 
 
+# INFO: This is the only `Indicator` that can be fed with mean distances matrix
 class SilhouetteMatrix(AbstractMatrix):
     def __init__(self) -> None:
         super().__init__()
