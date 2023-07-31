@@ -12,6 +12,12 @@ from processing.utils.print_new_line import print_new_line
 
 
 class VGGishModel(AbstractModel, VGG):
+    """
+    Potential future modifications:
+        - fft_size
+        - window_fn
+    """
+
     __sample_rate: Optional[int]
     __mels_count: int = 64
     __fft_size: int = 2048
