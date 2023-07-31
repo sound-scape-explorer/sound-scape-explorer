@@ -9,8 +9,10 @@ from processing.utils.is_within_interval import is_within_interval
 from processing.utils.print_new_line import print_new_line
 
 
-# INFO: This step can be very long. Find a way to reduce processing time?
 # TODO: Reduce cognitive complexity
+# TODO: To reduce length of this process, use an empty hash map that will be
+# filled by a new class `Extractors`.
+# Extractors take audio as inputs, they will merge previous `Models` and `Indicators`
 def run_groups(env: Env):
     storage = Storage(env.storage)
     storage.delete_groups()
