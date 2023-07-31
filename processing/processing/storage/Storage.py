@@ -1400,6 +1400,7 @@ class Storage(metaclass=SingletonMeta):
 
                 # WARNING: We take the first file_index
                 # TODO: Merging meta values need to be specified
+                # TODO: Concatenate meta values with specified separator like `/`
                 file_index = file_indexes[0]
 
                 file = files[file_index]
