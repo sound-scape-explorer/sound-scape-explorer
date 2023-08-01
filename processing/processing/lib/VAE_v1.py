@@ -16,14 +16,14 @@ from torch import optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader, Dataset
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def load_data(x):
     df = pd.DataFrame(x)
     # replace nan with -99
     df = df.fillna(-99)
-    x = df.values.reshape(-1, df.shape[1]).astype('float32')
+    x = df.values.reshape(-1, df.shape[1]).astype("float32")
     # stadardize values
     standardizer = preprocessing.StandardScaler()
     x = standardizer.fit_transform(x)
@@ -52,10 +52,9 @@ class Autoencoder(nn.Module):
     def __init__(
         self,
         d_in,
-        h=[64, 32],  # TODO: This argument is mutable.
+        h=[64, 32],  # INFO: This argument is mutable.
         latent_dim=2,
     ):
-
         # Encoder
         super(Autoencoder, self).__init__()
         # input layer
@@ -105,8 +104,7 @@ class Autoencoder(nn.Module):
         lin_last = lin1
         for i in range(len(self.HiddenLayersIn)):
             lin_last = self.relu(
-                self.HiddenLayersIn[i][1] \
-                    (self.HiddenLayersIn[i][0](lin_last))
+                self.HiddenLayersIn[i][1](self.HiddenLayersIn[i][0](lin_last))
             )
         lin3 = self.relu(self.lin_bn3(self.linear3(lin_last)))
 
@@ -132,8 +130,7 @@ class Autoencoder(nn.Module):
         lin_last = lin4
         for i in range(len(self.HiddenLayersOut)):
             lin_last = self.relu(
-                self.HiddenLayersOut[i][1] \
-                    (self.HiddenLayersOut[i][0](lin_last))
+                self.HiddenLayersOut[i][1](self.HiddenLayersOut[i][0](lin_last))
             )
         return self.lin_bn6(self.linear6(lin_last))
 
@@ -159,7 +156,7 @@ def weights_init_uniform_rule(m):
     # TODO : but why a uniform init? why not a random one with a fixed seed
     classname = m.__class__.__name__
     # for every Linear layer in a model..
-    if classname.find('Linear') != -1:
+    if classname.find("Linear") != -1:
         # get the number of the inputs
         n = m.in_features
         y = 1.0 / np.sqrt(n)
@@ -186,7 +183,7 @@ def train(epoch, trainloader, model, optimizer, loss_mse):
     #                       loss.item() / len(data)))
     if epoch % 200 == 0:
         print(
-            '====> Epoch: {} Average loss: {:.4f}'.format(
+            "====> Epoch: {} Average loss: {:.4f}".format(
                 epoch, train_loss / len(trainloader.dataset)
             )
         )
@@ -196,13 +193,13 @@ def train(epoch, trainloader, model, optimizer, loss_mse):
 
 # %%
 # training
-class VAE():
+class VAE:
     def __init__(
         self,
         n_components=None,
-        hidden_layers_dim=[64, 32],  # TODO: This argument can mutate.
+        hidden_layers_dim=[64, 32],  # INFO: This argument can mutate.
         lr=1e-3,
-        epochs=1500
+        epochs=1500,
     ):
         self.n_components = n_components
         self.hidden_layers_dim = hidden_layers_dim
@@ -220,14 +217,12 @@ class VAE():
             self.d_out = self.n_components
 
         self.model = Autoencoder(
-            self.d_in,
-            h=self.hidden_layers_dim,
-            latent_dim=self.d_out
+            self.d_in, h=self.hidden_layers_dim, latent_dim=self.d_out
         ).to(device)
         self.model.apply(weights_init_uniform_rule)
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
         self.loss_mse = custom_loss()
-        # self.epochs = self.epochs # TODO: This is likely a bug. To remove.
+        # self.epochs = self.epochs # INFO: This is likely a bug.
         # log_interval = 50
         # val_losses = []
         # train_losses = []
@@ -235,11 +230,7 @@ class VAE():
 
     def __train(self):
         self.model, self.train_losses = train(
-            self.epochs,
-            self.trainloader,
-            self.model,
-            self.optimizer,
-            self.loss_mse
+            self.epochs, self.trainloader, self.model, self.optimizer, self.loss_mse
         )
 
     def transform(self, x):
@@ -262,6 +253,7 @@ class VAE():
                 logvar_output.append(logvar_tensor)
                 self.logvar_result = torch.cat(logvar_output, dim=0)
         return mu_result.cpu().detach().numpy()
+
 
 # #%%
 # from mpl_toolkits import mplot3d

@@ -17,7 +17,7 @@ eps = 1e-12
 
 
 def torch_leq(waveform, sample_rate, dt=0.125, ref=1):
-    '''
+    """
     computes the Leq Tensor from a torch Tensor such as given by torchaudio.load
     waveform, sample_rate = torchaudio.load(file_path)
 
@@ -34,20 +34,18 @@ def torch_leq(waveform, sample_rate, dt=0.125, ref=1):
     -------
     Leq torch.Tensor[nb_channels, nb_Leq _values]
 
-    '''
+    """
     dn = int(dt * sample_rate)
     n_ch, l_sig = waveform.shape
     n_leq = l_sig // dn
     if n_leq >= 1:
-        waveform = waveform[:, :n_leq * dn]
+        waveform = waveform[:, : n_leq * dn]
         waveform = waveform.reshape([n_ch, n_leq, dn])
         short_time_leq = 10 * torch.log10(
-            torch.nanmean(waveform ** 2, -1) / (ref ** 2) + eps
+            torch.nanmean(waveform**2, -1) / (ref**2) + eps
         )
     else:
-        warnings.warn(
-            "Too few wav samples according to the Leq integration time"
-        )
+        warnings.warn("Too few wav samples according to the Leq integration time")
         short_time_leq = torch.empty([n_ch, n_leq])
     return short_time_leq
 
@@ -57,9 +55,9 @@ def numpy_leq(
     sample_rate,
     dt=0.125,
     ref=1,
-    freq_lim=[],  # TODO: This argument is mutable.
+    freq_lim=[],  # INFO: This argument is mutable.
 ):
-    '''
+    """
     computes the Leq np.array from a np.array such as given by
     scipy.io.wavfile.read
     import scipy.io.wavfile as wavfile
@@ -78,37 +76,21 @@ def numpy_leq(
     -------
     Leq np.array[nb_channels, nb_Leq _values]
 
-    '''
+    """
     if len(freq_lim) == 2:
         if freq_lim[0] > 0:
             ph_filtre = signal.butter(
-                5,
-                freq_lim[0],
-                btype='highpass',
-                output='sos',
-                fs=sample_rate
+                5, freq_lim[0], btype="highpass", output="sos", fs=sample_rate
             )
             waveform = signal.sosfiltfilt(
-                ph_filtre,
-                waveform,
-                axis=-1,
-                padtype='odd',
-                padlen=None
+                ph_filtre, waveform, axis=-1, padtype="odd", padlen=None
             )
         if freq_lim[1] < sample_rate:
             pb_filtre = signal.butter(
-                5,
-                freq_lim[1],
-                btype='lowpass',
-                output='sos',
-                fs=sample_rate
+                5, freq_lim[1], btype="lowpass", output="sos", fs=sample_rate
             )
             waveform = signal.sosfiltfilt(
-                pb_filtre,
-                waveform,
-                axis=-1,
-                padtype='odd',
-                padlen=None
+                pb_filtre, waveform, axis=-1, padtype="odd", padlen=None
             )
 
     dn = int(dt * sample_rate)
@@ -117,21 +99,17 @@ def numpy_leq(
     l_sig, n_ch = waveform.shape
     n_leq = l_sig // dn
     if n_leq >= 1:
-        waveform = waveform[:n_leq * dn, :]
+        waveform = waveform[: n_leq * dn, :]
         waveform = waveform.reshape([n_leq, dn, n_ch])
-        short_time_leq = 10 * np.log10(
-            np.nanmean(waveform ** 2, 1) / (ref ** 2) + eps
-        )
+        short_time_leq = 10 * np.log10(np.nanmean(waveform**2, 1) / (ref**2) + eps)
     else:
-        warnings.warn(
-            "Too few wav samples according to the Leq integration time"
-        )
+        warnings.warn("Too few wav samples according to the Leq integration time")
         short_time_leq = np.empty((0,) * 2)
     return short_time_leq
 
 
-def energy_fract_from_spect(waveform, sample_rate, dt=1.):
-    '''
+def energy_fract_from_spect(waveform, sample_rate, dt=1.0):
+    """
     Parameters
     ----------
     waveform : np.array[nb_samples_per_channels, nb_channels]
@@ -148,7 +126,7 @@ def energy_fract_from_spect(waveform, sample_rate, dt=1.):
     freq : np.array[nb_of_frequency]
         the corresponding frequency values
 
-    '''
+    """
     dnfft = int(dt * sample_rate)
     if len(waveform.shape) == 1:
         waveform = np.reshape(waveform, (len(waveform), 1))
@@ -169,13 +147,13 @@ def energy_fract_from_spect(waveform, sample_rate, dt=1.):
     # energy per frequency steps
     # import matplotlib.pyplot as plt
     # plt.plot(10*np.log10(np.abs(fourierform)**2))
-    fourierform = fourierform[1:int(np.ceil((dnfft) / 2)), :, :]
+    fourierform = fourierform[1 : int(np.ceil((dnfft) / 2)), :, :]
     fourierform = np.abs(fourierform) ** 2
     fourierform = fourierform * alpha
     fourierform = np.nansum(fourierform, axis=1)
     # frequency steps
     freq = fftpack.fftfreq(dnfft, d=1 / sample_rate)
-    freq = freq[1:int(np.ceil((dnfft) / 2))]
+    freq = freq[1 : int(np.ceil((dnfft) / 2))]
     # cumulative energie per frequency steps
     cum_fourier = np.cumsum(fourierform, axis=0)
 
@@ -195,12 +173,11 @@ def statistical_power_spectrum(
     freq,
     stat,
     channel=0,
-    freq_lim=[],  # TODO: This argument is mutable.
+    freq_lim=[],  # INFO: This argument is mutable.
 ):
     cum_fourier2 = cum_fourier[:, channel]
     if len(freq_lim) == 2:
-        cum_fourier2 = cum_fourier2[
-            (freq >= freq_lim[0]) * (freq <= freq_lim[1])]
+        cum_fourier2 = cum_fourier2[(freq >= freq_lim[0]) * (freq <= freq_lim[1])]
         freq = freq[(freq >= freq_lim[0]) * (freq <= freq_lim[1])]
     spect_stat = cum_fourier2[-1] * (stat / 100)
     freq_stat = float(freq[cum_fourier2 <= spect_stat][-1])
