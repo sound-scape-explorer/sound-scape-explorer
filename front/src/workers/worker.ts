@@ -555,7 +555,7 @@ export async function readGroupedFeatures(
   integration: number,
 ) {
   const h5 = await load(file);
-  const path = `${StoragePath.grouped_features}/${band}/${integration}`;
+  const path = `${StoragePath.group_features}/${band}/${integration}`;
   const features = h5.get(path) as Dataset;
   const array = features.to_array() as number[][];
   return array;
@@ -567,7 +567,7 @@ export async function readGroupedTimestamps(
   integration: number,
 ) {
   const h5 = await load(file);
-  const path = `${StoragePath.grouped_timestamps}/${band}/${integration}`;
+  const path = `${StoragePath.group_timestamps}/${band}/${integration}`;
   const timestamps = h5.get(path) as Dataset;
   const array = timestamps.to_array() as number[];
   return array;

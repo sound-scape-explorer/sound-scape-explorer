@@ -111,10 +111,8 @@ export enum StoragePath {
   /**
    * Data/Grouped
    */
-  // TODO: Rename
-  grouped_features = '/grouped_features',
-  // TODO: Rename
-  grouped_timestamps = '/grouped_timestamps',
+  group_features = '/group_features',
+  group_timestamps = '/group_timestamps',
   group_site_index = '/group_site_index',
 
   /**

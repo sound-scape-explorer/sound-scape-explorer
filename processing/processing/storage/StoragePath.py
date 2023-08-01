@@ -553,8 +553,7 @@ class StoragePath(Enum):
     # Data/Grouped #
     ################
 
-    # TODO: Change value
-    group_features = "/grouped_features"
+    group_features = "/group_features"
     """The group features for each file.
 
     The group contains one dataset per band, integration value and file.
@@ -568,8 +567,7 @@ class StoragePath(Enum):
         Group
     """
 
-    # TODO: Change value
-    group_timestamps = "/grouped_timestamps"
+    group_timestamps = "/group_timestamps"
     """The group timestamps for each file.
 
     The group contains one dataset per band and integration value.
