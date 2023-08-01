@@ -52,8 +52,7 @@ class OverlapMatrix(AbstractMatrix):
                     / np.sum(mask_a, axis=0)
                 )
 
-        # TODO: Fix typings
-        overlap: List[List[float]] = (dataframe_b + dataframe_b.T) / 2  # type: ignore
+        overlap: List[List[float]] = list((dataframe_b + dataframe_b.T) / 2)
 
         self._set(overlap)
 
