@@ -1,21 +1,21 @@
 import chroma, {type Color, type Scale} from 'chroma-js';
+import {configFilesRef} from 'src/hooks/useConfigFiles';
+import {groupCountsByPointIndexesRef} from 'src/hooks/useStorageGroupCountsByPointIndexes';
+import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
+import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {computed, reactive, watchEffect} from 'vue';
 import {colorsStore} from '../Colors/colorsStore';
-import {datasetRef} from './useScatterDataset';
-import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {useColorByPointIndex} from '../Colors/useColorByPointIndex';
+import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
+import {useColorByDay} from '../Colors/useColorByDay';
 import {useColorByFileIndex} from '../Colors/useColorByFileIndex';
 import {useColorByGroupIndex} from '../Colors/useColorByGroupIndex';
-import {useColorByOneHour} from '../Colors/useColorByOneHour';
-import {useColorByTenMinutes} from '../Colors/useColorByTenMinutes';
-import {useColorByDay} from '../Colors/useColorByDay';
-import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
 import {useColorByMeta} from '../Colors/useColorByMeta';
-import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
-import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
-import {groupCountsByPointIndexesRef} from 'src/hooks/useStorageGroupCountsByPointIndexes';
-import {configFilesRef} from 'src/hooks/useConfigFiles';
+import {useColorByOneHour} from '../Colors/useColorByOneHour';
+import {useColorByPointIndex} from '../Colors/useColorByPointIndex';
+import {useColorByTenMinutes} from '../Colors/useColorByTenMinutes';
+import {pointIndexesRef} from './usePointIndexes';
 
 interface AlphaLowRef {
   value: number;
@@ -67,7 +67,7 @@ export function useScatterColorScale() {
 
   const readColorScale = () => {
     if (
-      datasetRef.value === null ||
+      pointIndexesRef.value === null ||
       metaPropertiesAsColorTypesRef.value === null ||
       configFilesRef.value === null ||
       groupedTimestampsRef.value === null ||
@@ -78,7 +78,7 @@ export function useScatterColorScale() {
       return;
     }
 
-    const pointsCount = datasetRef.value.points.length;
+    const pointsCount = pointIndexesRef.value.length;
     const filesCount = configFilesRef.value.length;
 
     const colorScale = [];

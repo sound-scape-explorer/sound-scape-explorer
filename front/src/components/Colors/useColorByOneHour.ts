@@ -1,7 +1,7 @@
 import {useDate} from 'src/hooks/useDate';
-import {timeStore} from '../Time/timeStore';
 import {mapRange} from 'src/utils/map-range';
-import {alphaHighRef, chromaScaleRef} from '../Scatter/useScatterColorScale';
+import {alphaHighRef, chromaScaleRef} from '.././Scatter/useScatterColorScale';
+import {timeStore} from '../Time/timeStore';
 
 export function useColorByOneHour() {
   const {convertTimestampToDate} = useDate();

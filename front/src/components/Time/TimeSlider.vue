@@ -2,15 +2,15 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
+import {configRangesRef} from 'src/hooks/useConfigRanges';
+import {configReducerRef} from 'src/hooks/useConfigReducers';
+import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {computed, ref} from 'vue';
 import {SLIDER_LIMITS} from '../../constants';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';
 import {timeStore} from './timeStore';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
-import {configRangesRef} from 'src/hooks/useConfigRanges';
-import {configReducerRef} from 'src/hooks/useConfigReducers';
+import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 /**
  * State
@@ -151,7 +151,7 @@ interface Slider {
 <template>
   <div class="container">
     <div
-      v-if="isDatasetReadyRef.value"
+      v-if="scatterReadyRef.value"
       class="layer"
     >
       <n-slider
@@ -169,7 +169,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="isDatasetReadyRef.value"
+      v-if="scatterReadyRef.value"
       class="layer"
     >
       <div
@@ -185,7 +185,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="isDatasetReadyRef.value"
+      v-if="scatterReadyRef.value"
       class="layer zoom"
     >
       <AppButton

@@ -5,7 +5,7 @@ import {ref, watch} from 'vue';
 import {useTimeout} from '../../hooks/useTimeout';
 import type {QueryComplexStore} from './queryComplexStore';
 import {queriesComplexStore} from './queryComplexStore';
-import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 const inputRef = ref<string>('');
 
@@ -73,7 +73,7 @@ watch(inputRef, () => {
 <template>
   <n-input
     v-model:value="inputRef"
-    :disabled="!isDatasetReadyRef.value"
+    :disabled="!scatterReadyRef.value"
     placeholder="Query Complex..."
     size="small"
     type="text"

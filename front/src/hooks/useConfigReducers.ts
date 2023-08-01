@@ -3,7 +3,7 @@ import type {ConfigBand} from './useConfigBands';
 import type {ConfigIntegration} from './useConfigIntegrations';
 import {workerRef} from './useWorker';
 import {fileRef} from './useFile';
-import {loadingStore} from 'src/components/Loading/loadingStore';
+import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
 
 export interface ConfigReducer {
   index: number;
@@ -53,7 +53,7 @@ export function useConfigReducers() {
       return;
     }
 
-    loadingStore.isLoading = true;
+    scatterLoadingRef.value = true;
 
     configReducerRef.value = configReducersRef.value.filter(
       (reducer) => reducer.index === index,

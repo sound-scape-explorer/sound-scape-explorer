@@ -1,7 +1,7 @@
 import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {timeStore} from '../Time/timeStore';
-import {datasetRef} from './useScatterDataset';
 import {reactive} from 'vue';
+import {pointIndexesRef} from './usePointIndexes';
 
 interface PointsFilteredByTimeRef {
   value: boolean[] | null;
@@ -17,7 +17,7 @@ export function useScatterFilterTime() {
       return true;
     }
 
-    if (datasetRef.value === null || groupedTimestampsRef.value === null) {
+    if (groupedTimestampsRef.value === null) {
       return false;
     }
 
@@ -31,7 +31,7 @@ export function useScatterFilterTime() {
   };
 
   const filterByTime = () => {
-    if (datasetRef.value === null) {
+    if (pointIndexesRef.value === null) {
       return;
     }
 
@@ -39,7 +39,7 @@ export function useScatterFilterTime() {
 
     for (
       let pointIndex = 0;
-      pointIndex < datasetRef.value.points.length;
+      pointIndex < pointIndexesRef.value.length;
       ++pointIndex
     ) {
       const isVisible = isVisibleByTime(pointIndex);

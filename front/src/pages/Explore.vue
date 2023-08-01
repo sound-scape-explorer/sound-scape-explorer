@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import ScatterNew from 'src/components/Scatter/Scatter.vue';
+import {useFile} from 'src/hooks/useFile';
+import {useWorker} from 'src/hooks/useWorker';
 import {onMounted} from 'vue';
 import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore';
 import Audio from '../components/Audio/Audio.vue';
@@ -12,12 +15,9 @@ import Meta from '../components/Meta/Meta.vue';
 import Pairings from '../components/Pairings/Pairings.vue';
 import Selection from '../components/Selection/Selection.vue';
 import Settings from '../components/Settings/Settings.vue';
+import StorageLoad from '../components/StorageLoad/StorageLoad.vue';
 import Time from '../components/Time/Time.vue';
 import Volumes from '../components/Volumes/Volumes.vue';
-import StorageLoad from '../components/StorageLoad/StorageLoad.vue';
-import ScatterNew from 'src/components/ScatterNew/ScatterNew.vue';
-import {useFile} from 'src/hooks/useFile';
-import {useWorker} from 'src/hooks/useWorker';
 
 useWorker();
 

@@ -3,12 +3,12 @@ import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {reducedFeaturesRef} from 'src/hooks/useStorageReducedFeatures';
-import {reactive, watch} from 'vue';
-import {pointsFilteredByMetaRef} from '../Scatter/useScatterFilterMeta';
-import {chromaScaleRef} from '../Scatter/useScatterColorScale';
-import {colorsStore} from '../Colors/colorsStore';
-import {pointsFilteredByTimeRef} from '../Scatter/useScatterFilterTime';
 import {trajectoriesRef} from 'src/hooks/useStorageTrajectories';
+import {reactive, watchEffect} from 'vue';
+import {colorsStore} from '../Colors/colorsStore';
+import {chromaScaleRef} from './useScatterColorScale';
+import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
+import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 interface ScatterTracesRef {
   value: Data[];
@@ -43,7 +43,7 @@ export const newScatterColorScaleRef = reactive<NewScatterColorScaleRef>({
 });
 
 export function useScatterTraces() {
-  watch(pointIndexGroupsRef, () => {
+  watchEffect(() => {
     if (pointIndexGroupsRef.value === null) {
       return [];
     }
@@ -53,7 +53,7 @@ export function useScatterTraces() {
     );
   });
 
-  // FIX: This heavy computing is called too often.
+  // INFO: Sorting point indexes by the selected meta value
   const parsePointIndexGroups = () => {
     if (
       reducedFeaturesRef.value === null ||
@@ -80,20 +80,12 @@ export function useScatterTraces() {
     }
 
     pointIndexGroupsRef.value = pointIndexGroups;
+    console.log(pointIndexGroupsRef.value);
   };
 
-  watch(
-    [
-      reducedFeaturesRef,
-      trajectoriesRef,
-      metaIndexRef,
-      pointsFilteredByMetaRef,
-      pointsFilteredByTimeRef,
-    ],
-    parsePointIndexGroups,
-  );
+  watchEffect(parsePointIndexGroups);
 
-  watch(colorsStore, () => {
+  watchEffect(() => {
     if (
       metaPropertiesRef.value === null ||
       !colorsStore.colorType.includes('by')
@@ -183,5 +175,5 @@ export function useScatterTraces() {
     scatterTracesRef.value = traces;
   };
 
-  watch(pointIndexGroupsRef, parseFeaturesFromPointIndexGroups);
+  watchEffect(parseFeaturesFromPointIndexGroups);
 }

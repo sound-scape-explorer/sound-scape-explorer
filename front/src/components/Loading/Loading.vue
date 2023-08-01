@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 import {NAlert} from 'naive-ui';
-import {loadingStore} from 'src/components/Loading/loadingStore';
 import AppModal from '../AppModal/AppModal.vue';
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 </script>
 
 <template>
-  <AppModal v-if="loadingStore.isLoading" :is-wait="true">
-    <n-alert
-      type="info"
-    >
-      <div>
-        Loading...
-      </div>
+  <AppModal
+    v-if="scatterLoadingRef.value"
+    :is-wait="true"
+  >
+    <n-alert type="info">
+      <div>Loading...</div>
     </n-alert>
   </AppModal>
 </template>

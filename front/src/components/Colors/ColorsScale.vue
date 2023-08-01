@@ -3,7 +3,7 @@ import {NSelect, NTooltip} from 'naive-ui';
 import {computed} from 'vue';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import {colorsStore} from './colorsStore';
-import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 const options = ['Accent', 'Dark2', 'Spectral'];
 
@@ -19,7 +19,7 @@ const naiveOptions = computed(() => convertToNaiveSelectOptions(options));
       <n-select
         v-model:value="colorsStore.colorScale"
         :default-value="options[1]"
-        :disabled="!isDatasetReadyRef.value"
+        :disabled="!scatterReadyRef.value"
         :options="naiveOptions"
         placeholder="Color scale..."
         size="small"

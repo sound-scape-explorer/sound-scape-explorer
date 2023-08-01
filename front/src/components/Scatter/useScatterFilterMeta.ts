@@ -1,7 +1,7 @@
 import {reactive} from 'vue';
-import {datasetRef} from './useScatterDataset';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
 import {metaSelectionStore} from '../Meta/metaSelectionStore';
+import {pointIndexesRef} from './usePointIndexes';
 
 interface PointsFilteredByMetaRef {
   value: boolean[] | null;
@@ -49,7 +49,7 @@ export function useScatterFilterMeta() {
   };
 
   const filterByMeta = () => {
-    if (datasetRef.value === null) {
+    if (pointIndexesRef.value === null) {
       return;
     }
 
@@ -57,7 +57,7 @@ export function useScatterFilterMeta() {
 
     for (
       let pointIndex = 0;
-      pointIndex < datasetRef.value.points.length;
+      pointIndex < pointIndexesRef.value.length;
       ++pointIndex
     ) {
       const isVisible = isVisibleByMeta(pointIndex);

@@ -11,7 +11,14 @@ import {
 } from '@vicons/ionicons5';
 import audioBufferSlice from 'audiobuffer-slice';
 import colormap from 'colormap';
-import {NButton, NGi, NGrid, NIcon, NTag, NTooltip, NSlider} from 'naive-ui';
+import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
+import speedToPercentage from 'speed-to-percentage';
+import speedToSemitones from 'speed-to-semitones';
+import {PLAYBACK_RATE} from 'src/constants';
+import {audioHostRef} from 'src/hooks/useAudioHost';
+import {configBandRef} from 'src/hooks/useConfigBands';
+import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
+import {settingsRef} from 'src/hooks/useStorageSettings';
 import {computed, onUnmounted, ref, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 import WaveSurfer from 'wavesurfer.js';
@@ -20,18 +27,11 @@ import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 import {FFT_SIZE, WAVE} from '../../constants';
 import {triggerWavDownload} from '../../utils/trigger-wav-download';
+import {clickedRef} from '.././Scatter/useScatterClick';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {useDetails} from '../Details/useDetails';
-import {clickedRef} from '../Scatter/useScatterClick';
-import {PLAYBACK_RATE} from 'src/constants';
-import speedToSemitones from 'speed-to-semitones';
-import speedToPercentage from 'speed-to-percentage';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
-import {audioHostRef} from 'src/hooks/useAudioHost';
-import {settingsRef} from 'src/hooks/useStorageSettings';
-import {configBandRef} from 'src/hooks/useConfigBands';
-import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
 
 const {groupIndexRef, filenameRef} = useDetails();
 
@@ -516,8 +516,8 @@ watch(clickedRef, load);
       <div>
         <n-slider
           v-model:value="playbackRateRef"
-          :min="PLAYBACK_RATE.min"
           :max="PLAYBACK_RATE.max"
+          :min="PLAYBACK_RATE.min"
           :step="PLAYBACK_RATE.step"
         />
       </div>

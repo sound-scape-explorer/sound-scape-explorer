@@ -1,12 +1,12 @@
 <script lang="ts" setup="">
 import {NGi, NGrid, NTag} from 'naive-ui';
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import {useDetails} from './useDetails';
-import {clickedRef} from '../Scatter/useScatterClick';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {indicatorsRef} from 'src/hooks/useStorageIndicators';
 import {configBandRef} from 'src/hooks/useConfigBands';
 import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
+import {indicatorsRef} from 'src/hooks/useStorageIndicators';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {clickedRef} from '.././Scatter/useScatterClick';
+import AppDraggable from '../AppDraggable/AppDraggable.vue';
+import {useDetails} from './useDetails';
 
 const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
   useDetails();

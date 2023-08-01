@@ -1,10 +1,10 @@
 <script lang="ts" setup="">
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
 import {ref, watch} from 'vue';
+import {useScatterFilterMeta} from '.././Scatter/useScatterFilterMeta';
 import {colorsStore} from '../Colors/colorsStore';
-import {metaSelectionStore} from './metaSelectionStore';
-import {useScatterFilterMeta} from '../Scatter/useScatterFilterMeta';
 import {useColorByMeta} from '../Colors/useColorByMeta';
+import {metaSelectionStore} from './metaSelectionStore';
 
 /**
  * Props

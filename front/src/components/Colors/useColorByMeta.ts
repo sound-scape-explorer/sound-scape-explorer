@@ -1,4 +1,4 @@
-import {alphaHighRef} from '../Scatter/useScatterColorScale';
+import {alphaHighRef} from '.././Scatter/useScatterColorScale';
 import {useLimitedColorScale} from './useLimitedColorScale';
 
 export function useColorByMeta() {

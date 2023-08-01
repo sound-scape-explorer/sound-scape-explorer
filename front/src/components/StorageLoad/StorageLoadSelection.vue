@@ -1,20 +1,21 @@
-<script setup lang="ts">
-import {useStorageMetas} from 'src/hooks/useStorageMetas';
-import {useStorageGroupedTimestamps} from '../../hooks/useStorageGroupedTimestamps';
-import {useStorageGroupedMetas} from '../../hooks/useStorageGroupedMetas';
-import {useStorageReducedFeatures} from '../../hooks/useStorageReducedFeatures';
-import {useStorageMetaProperties} from 'src/hooks/useStorageMetaProperties';
-import {useStorageMetaSets} from 'src/hooks/useStorageMetaSets';
-import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
-import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
-import {useScatterDataset} from '../Scatter/useScatterDataset';
-import {useScatterColorScale} from '../Scatter/useScatterColorScale';
-import {useStorageGroupedFeatures} from 'src/hooks/useStorageGroupedFeatures';
-import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
-import {useScatterFilter} from '../Scatter/useScatterFilter';
+<script lang="ts" setup>
 import {useStorageFilesGroupCounts} from 'src/hooks/useStorageFilesGroupCounts';
 import {useStorageGroupCountsByPointIndexes} from 'src/hooks/useStorageGroupCountsByPointIndexes';
+import {useStorageGroupedFeatures} from 'src/hooks/useStorageGroupedFeatures';
+import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
+import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
+import {useStorageMetaProperties} from 'src/hooks/useStorageMetaProperties';
+import {useStorageMetas} from 'src/hooks/useStorageMetas';
+import {useStorageMetaSets} from 'src/hooks/useStorageMetaSets';
 import {useStorageTrajectories} from 'src/hooks/useStorageTrajectories';
+import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
+import {useStorageGroupedMetas} from '../../hooks/useStorageGroupedMetas';
+import {useStorageGroupedTimestamps} from '../../hooks/useStorageGroupedTimestamps';
+import {useStorageReducedFeatures} from '../../hooks/useStorageReducedFeatures';
+import {useScatterColorScale} from '.././Scatter/useScatterColorScale';
+import {useScatterFilter} from '.././Scatter/useScatterFilter';
+import {usePointIndexes} from '../Scatter/usePointIndexes';
+import {useScatterReady} from '../Scatter/useScatterReady';
 
 useStorageMetaSets();
 useStorageMetaProperties();
@@ -34,9 +35,11 @@ useStorageTrajectories();
 useStorageVolumes();
 useStorageIndicators();
 
-useScatterDataset();
 useScatterColorScale();
 useScatterFilter();
+
+useScatterReady();
+usePointIndexes();
 </script>
 
 <template></template>

@@ -5,7 +5,7 @@ import {ref, watch} from 'vue';
 import {useTimeout} from '../../hooks/useTimeout';
 import {getArraysIntersection} from '../../utils/get-arrays-intersection';
 import {queryStore} from './queryStore';
-import {datasetRef, isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 const input = ref<string>('');
 
@@ -83,7 +83,7 @@ watch(input, () => {
 <template>
   <n-input
     v-model:value="input"
-    :disabled="!isDatasetReadyRef.value"
+    :disabled="!scatterReadyRef.value"
     placeholder="Query..."
     size="small"
     type="text"

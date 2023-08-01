@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {computed} from 'vue';
 import {convertSlugsToColorTypes} from '../../utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 /**
  * State
@@ -48,7 +48,7 @@ const naiveOptions = computed(() => {
       <n-select
         v-model:value="colorsStore.colorType"
         :default-value="optionsRef[0]"
-        :disabled="!isDatasetReadyRef.value"
+        :disabled="!scatterReadyRef.value"
         :options="naiveOptions"
         placeholder="Color type..."
         size="small"

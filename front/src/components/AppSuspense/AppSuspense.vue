@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {clickedRef} from '../Scatter/useScatterClick';
+import {clickedRef} from '.././Scatter/useScatterClick';
 </script>
 
 <template>

@@ -11,23 +11,23 @@ import {
   NButton,
   NButtonGroup,
   NDatePicker,
+  NIcon,
   NInputNumber,
   NSwitch,
   NTooltip,
-  NIcon,
 } from 'naive-ui';
+import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
+import {useDate} from 'src/hooks/useDate';
+import {settingsRef} from 'src/hooks/useStorageSettings';
 import type {ComputedRef} from 'vue';
 import {computed, ref, watch} from 'vue';
 import {timeStore} from './timeStore';
-import {settingsRef} from 'src/hooks/useStorageSettings';
-import {useDate} from 'src/hooks/useDate';
-import {isDatasetReadyRef} from 'src/components/Scatter/useScatterDataset';
-import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
+import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 const {convertTimestampToDate} = useDate();
 
 const uiDisabled: ComputedRef<boolean> = computed(
-  () => !isDatasetReadyRef.value || timeStore.isAllSelected,
+  () => !scatterReadyRef.value || timeStore.isAllSelected,
 );
 
 const dateStartRef = computed<Dayjs | null>(() => {
@@ -173,7 +173,7 @@ onKeyPressed(' ', () => togglePlaying());
     <div class="grid">
       <n-switch
         v-model:value="timeStore.isAllSelected"
-        :disabled="!isDatasetReadyRef.value"
+        :disabled="!scatterReadyRef.value"
         class="toggle"
       >
         <template #checked> all</template>
@@ -201,8 +201,8 @@ onKeyPressed(' ', () => togglePlaying());
         <template #trigger>
           <n-button
             :disabled="uiDisabled"
-            @click="skipTimeBackward"
             size="tiny"
+            @click="skipTimeBackward"
           >
             <template #icon>
               <n-icon>
@@ -220,8 +220,8 @@ onKeyPressed(' ', () => togglePlaying());
         <template #trigger>
           <n-button
             :disabled="uiDisabled"
-            @click="togglePlaying"
             size="tiny"
+            @click="togglePlaying"
           >
             <template #icon>
               <n-icon v-show="!isPlaying">
@@ -242,8 +242,8 @@ onKeyPressed(' ', () => togglePlaying());
         <template #trigger>
           <n-button
             :disabled="uiDisabled"
-            @click="skipTimeForward"
             size="tiny"
+            @click="skipTimeForward"
           >
             <template #icon>
               <n-icon>

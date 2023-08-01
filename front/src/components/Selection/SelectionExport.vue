@@ -1,23 +1,25 @@
 <script lang="ts" setup>
 import {DownloadOutline} from '@vicons/ionicons5';
-import AppButton from '../AppButton/AppButton.vue';
-import {datasetRef, isDatasetReadyRef} from '../Scatter/useScatterDataset';
+import {configBandRef} from 'src/hooks/useConfigBands';
+import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
+import {fileRef} from 'src/hooks/useFile';
+import {useIndexes} from 'src/hooks/useIndexes';
+import {groupedFeaturesRef} from 'src/hooks/useStorageGroupedFeatures';
+import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
+import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
+import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {workerRef} from 'src/hooks/useWorker';
-import {fileRef} from 'src/hooks/useFile';
-import {useNotification} from '../AppNotification/useNotification';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
 import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
 import {ref} from 'vue';
-import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {groupedFeaturesRef} from 'src/hooks/useStorageGroupedFeatures';
-import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
-import {pointsFilteredByTimeRef} from '../Scatter/useScatterFilterTime';
-import {pointsFilteredByMetaRef} from '../Scatter/useScatterFilterMeta';
-import {useIndexes} from 'src/hooks/useIndexes';
-import {configBandRef} from 'src/hooks/useConfigBands';
-import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
+import {pointsFilteredByMetaRef} from '.././Scatter/useScatterFilterMeta';
+import {pointsFilteredByTimeRef} from '.././Scatter/useScatterFilterTime';
+import AppButton from '../AppButton/AppButton.vue';
+import {useNotification} from '../AppNotification/useNotification';
+import {scatterReadyRef} from '../Scatter/useScatterReady';
+import {pointIndexesRef} from '../Scatter/usePointIndexes';
+import {reducedFeaturesRef} from 'src/hooks/useStorageReducedFeatures';
 
 const {notify} = useNotification();
 const {convertPointIndex} = useIndexes();
@@ -45,10 +47,11 @@ async function handleClick() {
     groupedTimestampsRef.value === null ||
     groupedFeaturesRef.value === null ||
     groupedMetasRef.value === null ||
-    datasetRef.value === null ||
+    pointIndexesRef.value === null ||
     pointsFilteredByMetaRef.value === null ||
     pointsFilteredByTimeRef.value === null ||
-    metaPropertiesRef.value === null
+    metaPropertiesRef.value === null ||
+    reducedFeaturesRef.value === null
   ) {
     return;
   }
@@ -61,7 +64,7 @@ async function handleClick() {
 
   for (
     let pointIndex = 0;
-    pointIndex < datasetRef.value.points.length;
+    pointIndex < pointIndexesRef.value.length;
     ++pointIndex
   ) {
     const isFilteredByMeta = pointsFilteredByMetaRef.value[pointIndex];
@@ -77,8 +80,7 @@ async function handleClick() {
     const timestamp = groupedTimestampsRef.value[pointIndex];
     const groupedMetas = groupedMetasRef.value[pointIndex];
 
-    const points = datasetRef.value.points;
-    const reducedFeatures = points[pointIndex];
+    const reducedFeatures = reducedFeaturesRef.value[pointIndex];
 
     payload.push({
       pointIndex: pointIndex,
@@ -147,7 +149,7 @@ async function handleClick() {
 
 <template>
   <AppButton
-    :disabled="!isDatasetReadyRef.value"
+    :disabled="!scatterReadyRef.value"
     :handle-click="handleClick"
     :loading="loadingRef"
     text="csv"

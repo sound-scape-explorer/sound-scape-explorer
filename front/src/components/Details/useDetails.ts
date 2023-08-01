@@ -1,13 +1,13 @@
-import {ref, watch} from 'vue';
-import {clickedRef} from '../Scatter/useScatterClick';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import type {Dayjs} from 'dayjs';
+import {configFilesRef} from 'src/hooks/useConfigFiles';
+import {useDate} from 'src/hooks/useDate';
+import {useIndexes} from 'src/hooks/useIndexes';
 import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
 import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
+import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {useDate} from 'src/hooks/useDate';
-import type {Dayjs} from 'dayjs';
-import {useIndexes} from 'src/hooks/useIndexes';
-import {configFilesRef} from 'src/hooks/useConfigFiles';
+import {ref, watch} from 'vue';
+import {clickedRef} from '.././Scatter/useScatterClick';
 
 export function useDetails() {
   const {convertTimestampToDate} = useDate();

@@ -1,6 +1,6 @@
 import {useIndexes} from 'src/hooks/useIndexes';
-import {alphaHighRef, chromaScaleRef} from '../Scatter/useScatterColorScale';
 import {mapRange} from 'src/utils/map-range';
+import {alphaHighRef, chromaScaleRef} from '.././Scatter/useScatterColorScale';
 
 export function useColorByGroupIndex() {
   const {convertPointIndex} = useIndexes();

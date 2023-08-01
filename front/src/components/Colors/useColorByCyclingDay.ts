@@ -1,6 +1,6 @@
 import {useDate} from 'src/hooks/useDate';
 import {mapRange} from 'src/utils/map-range';
-import {alphaHighRef, cyclingScaleRef} from '../Scatter/useScatterColorScale';
+import {alphaHighRef, cyclingScaleRef} from '.././Scatter/useScatterColorScale';
 
 export function useColorByCyclingDay() {
   const {convertTimestampToDate} = useDate();
