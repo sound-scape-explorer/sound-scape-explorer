@@ -21,6 +21,7 @@ export function useScatterFilterTime() {
       return false;
     }
 
+    // Unix time in seconds
     const timestamp = groupedTimestampsRef.value[index] / 1000;
 
     const start = timeStore.value;
@@ -30,7 +31,7 @@ export function useScatterFilterTime() {
     return timestamp >= start && timestamp <= end;
   };
 
-  const filterByTime = () => {
+  const filterByTime = (): void => {
     if (pointIndexesRef.value === null) {
       return;
     }

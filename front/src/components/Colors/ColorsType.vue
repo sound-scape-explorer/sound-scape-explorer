@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
+import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
-import {convertSlugsToColorTypes} from '../../utils/convert-slugs-to-color-types';
-import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
+import {scatterReadyRef} from '../Scatter/useScatterReady';
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
-import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 /**
  * State

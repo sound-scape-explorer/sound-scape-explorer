@@ -53,7 +53,7 @@ export function useScatterTraces() {
     );
   });
 
-  // INFO: Sorting point indexes by the selected meta value
+  // Sorting point indexes by the selected meta value
   const parsePointIndexGroups = () => {
     if (
       reducedFeaturesRef.value === null ||

@@ -19,7 +19,7 @@ import {
 import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
 import {useDate} from 'src/hooks/useDate';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import type {ComputedRef} from 'vue';
+import {watchEffect, type ComputedRef} from 'vue';
 import {computed, ref, watch} from 'vue';
 import {timeStore} from './timeStore';
 import {scatterReadyRef} from '../Scatter/useScatterReady';
@@ -159,9 +159,7 @@ const transposeDateToZone = (date: Dayjs | null) => {
 };
 
 const {filterByTime} = useScatterFilterTime();
-watch(timeStore, () => {
-  filterByTime();
-});
+watchEffect(filterByTime);
 
 onKeyPressed('n', () => skipTimeForward());
 onKeyPressed('p', () => skipTimeBackward());
