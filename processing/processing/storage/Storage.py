@@ -15,11 +15,11 @@ from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
+from processing.config.ConfigSite import ConfigSite
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
-from processing.sites.Site import Site
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -753,7 +753,7 @@ class Storage(metaclass=SingletonMeta):
         integration: ConfigIntegration,
         features: List[float],
         timestamp: int,
-        site: Site,
+        site: ConfigSite,
     ) -> None:
         # Features
         features_path = self.generate_grouped_features_path(
@@ -1687,9 +1687,9 @@ class Storage(metaclass=SingletonMeta):
 
     def write_sites(
         self,
-        sites: List[Site],
+        sites: List[ConfigSite],
     ) -> None:
-        names, file_indexes = Site.flatten(sites)
+        names, file_indexes = ConfigSite.flatten(sites)
 
         self.__write_dataset(
             path=StoragePath.site_names.value,
@@ -1703,7 +1703,7 @@ class Storage(metaclass=SingletonMeta):
             data=file_indexes_rectangular,
         )
 
-    def read_sites(self) -> List[Site]:
+    def read_sites(self) -> List[ConfigSite]:
         names_dataset = self.__read(StoragePath.site_names.value)
         names = self.__convert_dataset_to_string_list(names_dataset)
 
@@ -1712,21 +1712,10 @@ class Storage(metaclass=SingletonMeta):
 
         files = self.read_config_files()
 
-        sites: List[Site] = []
-
-        for index in range(names_dataset.len()):
-            site_files: List[ConfigFile] = []
-
-            for file in files:
-                if file.index in file_indexes[index]:
-                    site_files.append(file)
-
-            site: Site = Site(
-                index=index,
-                name=names[index],
-                files=site_files,
-            )
-
-            sites.append(site)
+        sites = ConfigSite.reconstruct(
+            names=names,
+            file_indexes=file_indexes,
+            files=files,
+        )
 
         return sites

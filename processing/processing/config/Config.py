@@ -17,6 +17,7 @@ from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
+from processing.config.ConfigSite import ConfigSite
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.ExcelAutocluster import ExcelAutocluster
@@ -35,7 +36,6 @@ from processing.config.ExcelVolume import ExcelVolume
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
-from processing.sites.Site import Site
 from processing.storage.Storage import Storage
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
 from processing.utils.is_nan import is_nan
@@ -59,7 +59,7 @@ class Config(metaclass=SingletonMeta):
     __volumes: List[ConfigVolume] = []
     __matrices: List[ConfigMatrix] = []
     __pairings: List[ConfigPairing] = []
-    sites: List[Site] = []
+    sites: List[ConfigSite] = []
 
     def __init__(
         self,
@@ -310,7 +310,7 @@ class Config(metaclass=SingletonMeta):
 
         self.__files = files
 
-    def __generate_sites(self) -> List[Site]:
+    def __generate_sites(self) -> List[ConfigSite]:
         # Listing unique site names
         # Making this by hand because using `set()` has inconsistent order
         site_names = []
@@ -325,7 +325,7 @@ class Config(metaclass=SingletonMeta):
         for site_index, site_name in enumerate(site_names):
             picked_files = [file for file in self.__files if file.site == site_name]
 
-            site = Site(
+            site = ConfigSite(
                 index=site_index,
                 name=site_name,
                 files=picked_files,
