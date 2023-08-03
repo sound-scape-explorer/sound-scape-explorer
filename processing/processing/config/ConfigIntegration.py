@@ -4,7 +4,7 @@ from typing import List, Tuple
 class ConfigIntegration:
     index: int
     name: str
-    duration: int
+    duration: int  # seconds
 
     def __init__(
         self,
