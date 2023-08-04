@@ -66,7 +66,7 @@ export async function readSecondsFromIntegration(
   ).to_array() as string[];
 
   const seconds = (
-    h5.get(StoragePath.integrations_durations) as Dataset
+    h5.get(StoragePath.integrations_milliseconds) as Dataset
   ).to_array() as number[];
 
   const index = integrations.indexOf(integrationName);
@@ -105,8 +105,8 @@ export async function readConfigFiles(file: File): Promise<ConfigFile[]> {
   const sitesDataset = h5.get(StoragePath.files_sites) as Dataset;
   const sites = sitesDataset.to_array() as string[];
 
-  const metasDataset = h5.get(StoragePath.files_metas) as Dataset;
-  const metas = metasDataset.to_array() as string[][];
+  const labelsDataset = h5.get(StoragePath.files_labels) as Dataset;
+  const labels = labelsDataset.to_array() as string[][];
 
   const files: ConfigFile[] = [];
   const length = namesDataset.shape[0];
@@ -117,7 +117,7 @@ export async function readConfigFiles(file: File): Promise<ConfigFile[]> {
       name: names[index],
       timestamp: timestamps[index],
       site: sites[index],
-      meta: metas[index],
+      labels: labels[index],
     };
 
     files.push(file);
@@ -147,7 +147,7 @@ export async function readFilesFeatures(file: File, band: string) {
 
 export async function readFilesMetas(file: File) {
   const h5 = await load(file);
-  const path = StoragePath.files_metas;
+  const path = StoragePath.files_labels;
   const metas = h5.get(path) as Dataset;
   return metas.to_array() as string[][];
 }
@@ -225,7 +225,7 @@ export async function readConfigIntegrations(file: File) {
   const names = namesDataset.to_array() as string[];
 
   const durationsDataset = h5.get(
-    StoragePath.integrations_durations,
+    StoragePath.integrations_milliseconds,
   ) as Dataset;
   const durations = durationsDataset.to_array() as number[];
 

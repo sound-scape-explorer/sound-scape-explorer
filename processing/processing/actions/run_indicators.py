@@ -28,7 +28,7 @@ def run_indicators(env: Env):
             f"Indicators loaded for band {band.name}"
             f", integration {integration.name}"
         )
-        group_counts = storage.read_files_group_counts(integration)
+        group_counts = storage.read_files_interval_counts(integration)
         point_indexes_count = storage.read_point_indexes_count(band, integration)
         timer = Timer(point_indexes_count)
 
@@ -62,7 +62,7 @@ def run_indicators(env: Env):
                     path=path,
                     f_min=band.low,
                     f_max=band.high,
-                    integration=integration.duration,
+                    integration=integration.seconds,
                     group_index=group_index_,
                 )
 

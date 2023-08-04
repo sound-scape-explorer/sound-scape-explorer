@@ -8,7 +8,7 @@ class StorageSetting(Enum):
     audio_path = "audio_path"
     audio_host = "audio_host"
     expected_sample_rate = "expected_sample_rate"
-    grouping_start = "grouping_start"
+    timeline_origin = "timeline_origin"
 
     # Optional settings
     timezone = "timezone"

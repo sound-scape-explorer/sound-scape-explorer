@@ -7,7 +7,7 @@ export interface ConfigFile {
   name: string;
   timestamp: number;
   site: string;
-  meta: string[];
+  labels: string[];
 }
 
 interface ConfigFilesRef {

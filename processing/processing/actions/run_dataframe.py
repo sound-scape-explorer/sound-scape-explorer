@@ -77,7 +77,7 @@ def run_dataframe(
     autoclusters_count = len(autoclusters)
     meta_properties = meta_properties[autoclusters_count:]
     meta_properties = [f"meta_{property}" for property in meta_properties]
-    metas = [file.meta for file in files]
+    metas = [file.labels for file in files]
 
     for mp, meta_property in enumerate(meta_properties):
         payload[meta_property] = []

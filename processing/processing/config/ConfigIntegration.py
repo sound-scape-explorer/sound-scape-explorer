@@ -4,7 +4,8 @@ from typing import List, Tuple
 class ConfigIntegration:
     index: int
     name: str
-    duration: int  # seconds
+    __duration: int
+    """milliseconds"""
 
     def __init__(
         self,
@@ -14,15 +15,14 @@ class ConfigIntegration:
     ) -> None:
         self.index = index
         self.name = name
-        self.duration = duration
+        self.__duration = duration
 
     @staticmethod
     def flatten(
         integrations: List["ConfigIntegration"],
     ) -> Tuple[List[str], List[int]]:
         names = [i.name for i in integrations]
-        durations = [i.duration for i in integrations]
-
+        durations = [i.__duration for i in integrations]
         return names, durations
 
     @staticmethod
@@ -42,3 +42,11 @@ class ConfigIntegration:
             integrations.append(integration)
 
         return integrations
+
+    @property
+    def seconds(self) -> int:
+        return self.__duration
+
+    @property
+    def milliseconds(self) -> int:
+        return self.__duration * 1000

@@ -7,15 +7,15 @@ export enum StoragePath {
   /**
    * Configuration/Bands
    */
-  bands_names = '/configuration/bands/names',
-  bands_lows = '/configuration/bands/lows',
-  bands_highs = '/configuration/bands/highs',
+  bands_names = '/bands/names',
+  bands_lows = '/bands/lows',
+  bands_highs = '/bands/highs',
 
   /**
    * Configuration/Integrations
    */
-  integrations_names = '/configuration/integrations/names',
-  integrations_durations = '/configuration/integrations/durations',
+  integrations_names = '/integrations/names',
+  integrations_milliseconds = '/integrations/milliseconds',
 
   /**
    * Configuration/Ranges
@@ -25,13 +25,15 @@ export enum StoragePath {
   ranges_ends = '/configuration/ranges/ends',
 
   /**
-   * Configuration/Files
+   * Files
    */
-  files_names = '/configuration/files/names',
-  files_sites = '/configuration/files/sites',
-  files_metas = '/configuration/files/metas',
-  files_timestamps = '/files_timestamps',
-  files_durations = '/files_durations',
+  files_names = '/files/names',
+  files_sites = '/files/sites',
+  files_labels = '/files/labels',
+  files_timestamps = '/files/timestamps',
+  files_durations = '/files/durations',
+  files_group_counts = '/files/interval_counts',
+  files_features = '/files_features',
 
   /**
    * Configuration/Meta
@@ -101,12 +103,6 @@ export enum StoragePath {
    */
   site_names = '/site_names',
   site_file_indexes = '/site_file_indexes',
-
-  /**
-   * Data/Files
-   */
-  files_features = '/files_features',
-  files_group_counts = '/files_group_counts',
 
   /**
    * Data/Grouped

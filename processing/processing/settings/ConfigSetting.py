@@ -7,7 +7,7 @@ class ConfigSettings(TypedDict):
     audio_path: str
     audio_host: str
     expected_sample_rate: int
-    grouping_start: int
+    timeline_origin: int
 
     # Optional settings
     timezone: str

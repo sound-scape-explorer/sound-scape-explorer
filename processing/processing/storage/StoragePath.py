@@ -35,7 +35,7 @@ class StoragePath(Enum):
     # INFO: This allows duplicates that can cause collisions because bands
     # are referenced by their names and not absolute indexes.
     # A solution would be to reference by index or force user to have unique names.
-    bands_names = "/configuration/bands/names"
+    bands_names = "/bands/names"
     """The names of specified bands.
 
     Each row contains a string.
@@ -44,7 +44,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    bands_lows = "/configuration/bands/lows"
+    bands_lows = "/bands/lows"
     """The low frequencies for each band.
 
     Each row contains one integer for the frequency in Hertz.
@@ -53,7 +53,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    bands_highs = "/configuration/bands/highs"
+    bands_highs = "/bands/highs"
     """The high frequencies for each band.
 
     Each row contains one integer for the frequency in Hertz.
@@ -66,9 +66,7 @@ class StoragePath(Enum):
     # Configuration/Integrations #
     ##############################
 
-    # INFO: This allows duplicates thus can cause collisions.
-    # See `Configuration/Bands` annotation for more details.
-    integrations_names = "/configuration/integrations/names"
+    integrations_names = "/integrations/names"
     """The names of specified integrations.
 
     Each row contains a string.
@@ -77,8 +75,8 @@ class StoragePath(Enum):
         Dataset
     """
 
-    integrations_durations = "/configuration/integrations/durations"
-    """The duration in seconds for each band.
+    integrations_milliseconds = "/integrations/milliseconds"
+    """The duration in milliseconds for each band.
 
     Each row contains an integer.
 
@@ -123,11 +121,11 @@ class StoragePath(Enum):
         Dataset
     """
 
-    #######################
-    # Configuration/Files #
-    #######################
+    #########
+    # Files #
+    #########
 
-    files_names = "/configuration/files/names"
+    files_names = "/files/names"
     """The file paths relative to the audio folder.
 
     Each row contains a string.
@@ -136,14 +134,11 @@ class StoragePath(Enum):
 
     This `/` is a convention because it gets merged with the audio folder path.
 
-    Example:
-        /files_features/{band}/{file_index}
-
     Type:
         Dataset
     """
 
-    files_sites = "/configuration/files/sites"
+    files_sites = "/files/sites"
     """The site for each file.
 
     Each row contains a string.
@@ -152,18 +147,18 @@ class StoragePath(Enum):
         Dataset
     """
 
-    files_metas = "/configuration/files/metas"
-    """The meta values for each file.
+    files_labels = "/files/labels"
+    """The labels for each file.
 
-    Each row contains `n` columns of meta values as strings.
+    Each row contains `n` columns of strings.
 
-    Each column has the index of the corresponding meta property.
+    Each column has the index of the corresponding label property.
 
     Type:
         Dataset
     """
 
-    files_timestamps = "/files_timestamps"
+    files_timestamps = "/files/timestamps"
     """The timestamp for each file.
 
     Timestamps are in UNIX format and milliseconds.
@@ -173,7 +168,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    files_durations = "/files_durations"
+    files_durations = "/files/durations"
     """The audio durations for each file.
 
     Audio durations are in seconds.
@@ -181,6 +176,21 @@ class StoragePath(Enum):
 
     Type:
         Dataset
+    """
+
+    files_extractors = "/extractors"
+    extracted = "/extracted"
+    """The 128D features for each second of audio.
+
+    The group contains one dataset per band.
+    Each dataset is named after the band.
+    Each row contains an array (columns) of 128 floats.
+
+    Example:
+        /extracted/{band.name}/{extractor.index}
+
+    Type:
+        Group
     """
 
     ######################
@@ -491,7 +501,7 @@ class StoragePath(Enum):
     # Data/Site #
     #############
 
-    site_names = "/site_names"
+    sites_names = "/sites/names"
     """The unique site names found in the project.
 
     Each row contains a string.
@@ -500,7 +510,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    site_file_indexes = "/site_file_indexes"
+    sites_file_indexes = "/sites/file_indexes"
     """The file indexes for each site.
 
     Each row contains one or more integers representing file indexes.
@@ -510,43 +520,6 @@ class StoragePath(Enum):
 
     Type:
         Dataset
-    """
-
-    ##############
-    # Data/Files #
-    ##############
-
-    files_features = "/files_features"
-    """The 128D features for each second of audio.
-
-    The group contains one dataset per band.
-    Each dataset is named after the band.
-    Each row contains an array (columns) of 128 floats.
-
-    Example:
-        /files_features/{band}
-
-    Type:
-        Group
-    """
-
-    files_group_counts = "/files_group_counts"
-    """The group counts for each file.
-
-    The group contains one dataset per integration.
-
-    Each dataset is named after the integration value.
-
-    Each row contains an integer.
-
-    Each integer represents how many groups (integrations) fits within
-    the file's audio duration.
-
-    Example:
-        /files_groups_count/{integration}
-
-    Type:
-        Group
     """
 
     ################
@@ -751,3 +724,5 @@ class StoragePath(Enum):
     Type:
         Group prefix
     """
+
+    extractors = "/extractors"

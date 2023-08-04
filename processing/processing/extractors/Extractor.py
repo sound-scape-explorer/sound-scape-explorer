@@ -1,0 +1,72 @@
+from abc import ABC, abstractmethod
+from typing import Any, List, Optional
+
+from processing.config.ConfigBand import ConfigBand
+from processing.loaders.Loader import Loader
+from processing.storage.Storage import Storage
+from processing.storage.StoragePath import StoragePath
+
+Extracted = List[List[Any]]
+
+
+class Extractor(ABC):
+    index: Optional[int] = None
+    __band: Optional[ConfigBand] = None
+    __offset: Optional[int] = None
+    __step: Optional[int] = None
+    is_persist: bool = False
+
+    @property
+    def path(self):
+        assert self.index is not None, "Please add an extractor index"
+        return f"{StoragePath.extracted.value}/{self.band.name}/{self.index}"
+
+    @property
+    def band(self) -> ConfigBand:
+        assert self.__band is not None, "Please define band"
+        return self.__band
+
+    @band.setter
+    def band(self, band: ConfigBand) -> ConfigBand:
+        self.__band = band
+        return self.__band
+
+    @property
+    def offset(self) -> int:
+        assert self.__offset is not None, "Please define offset"
+        return self.__offset
+
+    @offset.setter
+    def offset(self, offset: int) -> int:
+        self.__offset = offset
+        return self.__offset
+
+    @property
+    def step(self) -> int:
+        assert self.__step is not None, "Please define step"
+        return self.__step
+
+    @step.setter
+    def step(self, step: int) -> int:
+        self.__step = step
+        return self.__step
+
+    @abstractmethod
+    def extract(self, loader: Loader) -> Extracted:
+        pass
+
+    def persist(self):
+        self.is_persist = True
+
+    def store(self, data: Extracted, storage: Storage):
+        storage.append(
+            path=self.path,
+            data=data,
+            compression=True,
+            attributes={
+                "extractor": self.__class__.__name__,
+                "offset": str(self.offset),
+                "step": str(self.step),
+                "method": "for step in file in site",
+            },
+        )

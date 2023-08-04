@@ -1,8 +1,6 @@
 import time
 from typing import Tuple
 
-from processing.utils.print_new_line import print_new_line
-
 
 class Timer:
     __start: float
@@ -20,7 +18,7 @@ class Timer:
 
     @staticmethod
     def __get_now() -> float:
-        return time.time()
+        return time.perf_counter()
 
     def reset(self) -> None:
         self.__duration = self.__duration_init

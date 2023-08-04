@@ -21,24 +21,19 @@ def run_groups(env: Env):
     integrations = storage.read_config_integrations()
 
     files = storage.read_config_files()
-    files_durations = storage.read_files_durations()
 
     timestamp_start = None
     timestamp_end = None
 
     # Finding timestamp min and max
     for file in files:
-        interval_duration = files_durations[file.index][0] * 1000  # milliseconds
-        start = file.timestamp
-        end = start + interval_duration
+        if timestamp_end is None or file.end > timestamp_end:
+            timestamp_end = file.end
 
-        if timestamp_end is None or end > timestamp_end:
-            timestamp_end = end
+        if timestamp_start is None or file.start < timestamp_start:
+            timestamp_start = file.start
 
-        if timestamp_start is None or start < timestamp_start:
-            timestamp_start = start
-
-    sites = storage.read_sites()
+    sites = storage.read_config_sites()
 
     for band in bands:
         files_features = storage.read_files_features(band)
@@ -47,13 +42,13 @@ def run_groups(env: Env):
             if timestamp_start is None or timestamp_end is None:
                 raise RuntimeError("Unable to specify timestamps.")
 
-            interval_duration = integration.duration * 1000  # milliseconds
+            interval_duration = integration.milliseconds
             interval_index = 0
             interval_start = timestamp_start
 
             print_new_line()
             print(f"Grouping for band {band.name}, integration {integration.name}.")
-            timer = Timer((timestamp_end - interval_start) // interval_duration)
+            timer = Timer(((timestamp_end - interval_start) // interval_duration) + 1)
 
             while interval_start < timestamp_end:
                 interval_end = interval_start + interval_duration
@@ -65,29 +60,24 @@ def run_groups(env: Env):
 
                     # Iterating over files defined by the current site
                     for file in site.files:
-                        # Defining file timestamps
-                        file_duration = files_durations[file.index][0] * 1000
-                        file_start = file.timestamp
-                        file_end = file_start + file_duration
-
                         # Skipping file if not in interval
                         if not is_within_interval(
                             interval_start=interval_start,
                             interval_end=interval_end,
-                            data_start=file_start,
-                            data_end=file_end,
+                            data_start=file.start,
+                            data_end=file.end,
                         ):
                             continue
 
                         # Finding `files_features` array positions
-                        position_start = int((interval_start - file_start) / 1000)
+                        position_start = int((interval_start - file.start) / 1000)
 
                         for f in files:
                             if f.index == file.index:
                                 break
-                            position_start += files_durations[f.index][0]
+                            position_start += file.seconds
 
-                        position_end = position_start + integration.duration
+                        position_end = position_start + integration.milliseconds
 
                         # DEBUG: Print matches
                         # print(

@@ -144,5 +144,4 @@ class VGGishModel(AbstractModel, VGG):
         self.__validate_sample_rate()
         converted_x = x.to(device=self.device)
         x = self.__convert_wav_to_examples(converted_x)
-
         return VGG.forward(self, x)

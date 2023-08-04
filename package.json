@@ -21,6 +21,7 @@
     "process:computation-umaps-purge": "pnpm _process --action computation-umaps-purge",
     "process:config": "pnpm _process --action config",
     "process:dataframe": "pnpm _process --action dataframe",
+    "process:extractions": "pnpm _process --action extractions",
     "process:files": "pnpm _process --action files",
     "process:groups": "pnpm _process --action groups",
     "process:indicators": "pnpm _process --action indicators",

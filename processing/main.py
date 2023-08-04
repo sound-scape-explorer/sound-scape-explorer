@@ -13,6 +13,7 @@ PathByAction = {
     "computation-umaps-purge": "processing/processing/actions/run_computation_umaps_purge.py",
     "config": "processing/processing/actions/run_config.py",
     "dataframe": "processing/processing/actions/run_dataframe.py",
+    "extractions": "processing/processing/actions/run_extractions.py",
     "files": "processing/processing/actions/run_files.py",
     "groups": "processing/processing/actions/run_groups.py",
     "indicators": "processing/processing/actions/run_indicators.py",

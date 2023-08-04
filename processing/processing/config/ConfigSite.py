@@ -34,16 +34,16 @@ class ConfigSite:
         sites: List[ConfigSite] = []
 
         for index, name in enumerate(names):
-            site_files: List[ConfigFile] = []
+            files_by_site: List[ConfigFile] = []
 
             for file in files:
                 if file.index in file_indexes[index]:
-                    site_files.append(file)
+                    files_by_site.append(file)
 
             site: ConfigSite = ConfigSite(
                 index=index,
                 name=name,
-                files=site_files,
+                files=files_by_site,
             )
 
             sites.append(site)

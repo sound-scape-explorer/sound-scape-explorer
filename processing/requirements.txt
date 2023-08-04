@@ -21,6 +21,7 @@ llvmlite==0.39.1
 MarkupSafe==2.1.2
 matplotlib==3.7.1
 mpmath==1.3.0
+mutagen==1.46.0
 networkx==3.0
 numba==0.56.4
 numpy==1.23.5

@@ -33,13 +33,17 @@ from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
+from processing.constants import INT_NONE
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
+from processing.storage.StorageCompression import StorageCompression
+from processing.storage.StoragePath import StoragePath
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
 from processing.utils.is_nan import is_nan
 from processing.utils.print_new_line import print_new_line
+from processing.utils.read_files_durations import read_files_durations
 
 
 class Config(metaclass=SingletonMeta):
@@ -140,14 +144,42 @@ class Config(metaclass=SingletonMeta):
     def __set(self) -> None:
         self.__set_all_sites()
 
-    def store(
+    def __clean_storage(self, storage: Storage) -> None:
+        storage.delete(StoragePath.configuration)
+
+        storage.delete(StoragePath.files_names)
+        storage.delete(StoragePath.files_timestamps)
+        storage.delete(StoragePath.files_sites)
+        storage.delete(StoragePath.files_labels)
+        storage.delete(StoragePath.files_durations)
+
+        storage.delete(StoragePath.meta_properties)
+        storage.delete(StoragePath.meta_sets)
+        storage.delete(StoragePath.bands_names)
+        storage.delete(StoragePath.bands_lows)
+        storage.delete(StoragePath.bands_highs)
+        storage.delete(StoragePath.integrations_names)
+        storage.delete(StoragePath.integrations_milliseconds)
+        storage.delete(StoragePath.reducers_names)
+        storage.delete(StoragePath.reducers_dimensions)
+        storage.delete(StoragePath.reducers_bands)
+        storage.delete(StoragePath.reducers_integrations)
+        storage.delete(StoragePath.reducers_ranges)
+        storage.delete(StoragePath.indicators_names)
+        storage.delete(StoragePath.volumes_names)
+        storage.delete(StoragePath.sites_names)
+        storage.delete(StoragePath.sites_file_indexes)
+
+    def write(
         self,
         storage: Storage,
     ) -> None:
+        self.__clean_storage(storage)
         self.__store_settings(storage)
 
         self.__store_files(storage)
         self.__store_metas(storage)
+        self.__store_sites(storage)
 
         self.__store_bands(storage)
         self.__store_integrations(storage)
@@ -289,6 +321,9 @@ class Config(metaclass=SingletonMeta):
         self.__metas = metas
         return self.__metas
 
+    def __get_audio_path(self) -> str:
+        return self.__settings["audio_path"]
+
     def __read_files(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.files)
 
@@ -299,13 +334,18 @@ class Config(metaclass=SingletonMeta):
 
         sites = self.__parse_column(sheet, ExcelFile.site)
 
-        meta_values = ConfigMeta.convert_to_values_by_file(self.__metas)
+        labels = ConfigMeta.convert_to_values_by_file(self.__metas)
+
+        audio_path = self.__get_audio_path()
+        durations = read_files_durations(names, audio_path)
 
         files = ConfigFile.reconstruct(
             names=names,
             timestamps=timestamps,
             sites=sites,
-            metas=meta_values,
+            labels=labels,
+            durations=durations,
+            audio_path=audio_path,
         )
 
         self.__files = files
@@ -352,7 +392,59 @@ class Config(metaclass=SingletonMeta):
         self,
         storage: Storage,
     ) -> None:
-        storage.write_config_files(files=self.__files)
+        (
+            names,
+            timestamps,
+            sites,
+            labels,
+            durations,
+        ) = ConfigFile.flatten(files=self.__files)
+
+        storage.write_dataset(
+            path=StoragePath.files_names,
+            data=names,
+        )
+
+        storage.write_dataset(
+            path=StoragePath.files_timestamps,
+            data=timestamps,
+            compression=StorageCompression.gzip,
+            attributes={"unit": "milliseconds"},
+        )
+
+        storage.write_dataset(
+            path=StoragePath.files_sites,
+            data=sites,
+        )
+
+        storage.write_dataset(
+            path=StoragePath.files_labels,
+            data=labels,
+        )
+
+        storage.write_dataset(
+            path=StoragePath.files_durations,
+            data=durations,
+            attributes={"unit": "milliseconds"},
+        )
+
+    def __store_sites(
+        self,
+        storage: Storage,
+    ) -> None:
+        names, file_indexes = ConfigSite.flatten(self.sites)
+
+        storage.write_dataset(
+            path=StoragePath.sites_names.value,
+            data=names,
+        )
+
+        file_indexes_rectangular = storage.make_rectangular(file_indexes, INT_NONE)
+
+        storage.write_dataset(
+            path=StoragePath.sites_file_indexes.value,
+            data=file_indexes_rectangular,
+        )
 
     def __store_metas(
         self,

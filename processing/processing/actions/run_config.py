@@ -5,12 +5,13 @@ from processing.storage.Storage import Storage
 
 def run_config(env: Env):
     storage = Storage(path=env.storage)
-    storage.delete_config()
-
     config = Config(path=env.config)
-    config.store(storage)
+    config.write(storage)
 
-    storage.write_sites(config.sites)
+    sites = storage.read_config_sites()
+
+    for site in sites:
+        print(site.name, [f.index for f in site.files])
 
 
 if __name__ == "__main__":
