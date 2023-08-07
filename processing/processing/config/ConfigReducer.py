@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple, Type
 
 from processing.config.BandConfig import BandConfig
 from processing.config.IntegrationConfig import IntegrationConfig
-from processing.config.ConfigRange import ConfigRange
+from processing.config.RangeConfig import RangeConfig
 from processing.reducers.AbstractReducer import AbstractReducer
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.SparsePcaReducer import SparsePcaReducer
@@ -24,7 +24,7 @@ class ConfigReducer:
     dimensions: int
     bands: List[BandConfig]
     integrations: List[IntegrationConfig]
-    ranges: List[ConfigRange]
+    ranges: List[RangeConfig]
     band: BandConfig
     integration: IntegrationConfig
     instance: AbstractReducer
@@ -36,7 +36,7 @@ class ConfigReducer:
         dimensions: int,
         bands: List[BandConfig],
         integrations: List[IntegrationConfig],
-        ranges: List[ConfigRange],
+        ranges: List[RangeConfig],
     ) -> None:
         self._validate_name(name)
 
@@ -122,8 +122,8 @@ class ConfigReducer:
     @staticmethod
     def pick_reducer_ranges(
         ranges_names_string: str,
-        ranges: List[ConfigRange],
-    ) -> List[ConfigRange]:
+        ranges: List[RangeConfig],
+    ) -> List[RangeConfig]:
         if is_nan(ranges_names_string):
             return ranges
 
@@ -142,7 +142,7 @@ class ConfigReducer:
         ranges_names_strings: List[str],
         bands: List[BandConfig],
         integrations: List[IntegrationConfig],
-        ranges: List[ConfigRange],
+        ranges: List[RangeConfig],
     ) -> List["ConfigReducer"]:
         reducers = []
 

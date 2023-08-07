@@ -11,11 +11,11 @@ from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
-from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.IntegrationConfig import IntegrationConfig
+from processing.config.RangeConfig import RangeConfig
 from processing.config.SiteConfig import SiteConfig
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
@@ -1088,42 +1088,6 @@ class Storage(metaclass=SingletonMeta):
                 return integration
 
         raise KeyError(f"Unable to find integration duration {integration_duration}")
-
-    def read_config_ranges(self):
-        names_dataset = self.read(StoragePath.ranges_names)
-
-        names = self.convert_dataset_to_string_list(names_dataset)
-        starts = self.read(StoragePath.ranges_starts)[:]
-        ends = self.read(StoragePath.ranges_ends)[:]
-
-        ranges = ConfigRange.reconstruct(
-            names=names,
-            starts=starts,
-            ends=ends,
-        )
-
-        return ranges
-
-    def write_config_ranges(
-        self,
-        ranges: List[ConfigRange],
-    ) -> None:
-        names, starts, ends = ConfigRange.flatten(ranges=ranges)
-
-        self.write(
-            path=StoragePath.ranges_names,
-            data=names,
-        )
-
-        self.write(
-            path=StoragePath.ranges_starts,
-            data=starts,
-        )
-
-        self.write(
-            path=StoragePath.ranges_ends,
-            data=ends,
-        )
 
     def write_config_autoclusters(
         self,

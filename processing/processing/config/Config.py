@@ -15,7 +15,6 @@ from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigParser import ConfigParser
-from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
@@ -23,7 +22,6 @@ from processing.config.ExcelAutocluster import ExcelAutocluster
 from processing.config.ExcelIndicator import ExcelIndicator
 from processing.config.ExcelMatrices import ExcelMatrices
 from processing.config.ExcelPairings import ExcelPairings
-from processing.config.ExcelRange import ExcelRange
 from processing.config.ExcelReducer import ExcelReducer
 from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
@@ -34,6 +32,8 @@ from processing.config.FileExcel import FileExcel
 from processing.config.FileStorage import FileStorage
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.IntegrationStorage import IntegrationStorage
+from processing.config.RangeConfig import RangeConfig
+from processing.config.RangeStorage import RangeStorage
 from processing.config.SiteConfig import SiteConfig
 from processing.config.SiteStorage import SiteStorage
 from processing.settings.ConfigSetting import ConfigSettings
@@ -51,7 +51,6 @@ class Config(metaclass=SingletonMeta):
     __excel: pandas.ExcelFile
     __settings: ConfigSettings = {}  # type: ignore
     __metas: List[ConfigMeta] = []
-    __ranges: List[ConfigRange] = []
     __autoclusters: List[ConfigAutocluster] = []
     __trajectories: List[ConfigTrajectory] = []
     __reducers: List[ConfigReducer] = []
@@ -70,6 +69,7 @@ class Config(metaclass=SingletonMeta):
         self.sites: List[SiteConfig] = []
         self.bands: List[BandConfig] = []
         self.integrations: List[IntegrationConfig] = []
+        self.ranges: List[RangeConfig] = []
 
         self.__validate_path()
 
@@ -132,8 +132,7 @@ class Config(metaclass=SingletonMeta):
         self.sites = SiteStorage.parse_from_config(self.files)
         self.bands = BandStorage.read_from_config(self.parser)
         self.integrations = IntegrationStorage.read_from_config(self.parser)
-
-        self.__read_ranges()
+        self.ranges = RangeStorage.read_from_config(self.parser)
 
         self.__read_autoclusters()
         self.__read_trajectories()
@@ -150,14 +149,10 @@ class Config(metaclass=SingletonMeta):
         FileStorage.delete_from_storage(storage)
         BandStorage.delete_from_storage(storage)
         IntegrationStorage.delete_from_storage(storage)
+        RangeStorage.delete_from_storage(storage)
 
         storage.delete(StoragePath.meta_properties)
         storage.delete(StoragePath.meta_sets)
-        storage.delete(StoragePath.bands_names)
-        storage.delete(StoragePath.bands_lows)
-        storage.delete(StoragePath.bands_highs)
-        storage.delete(StoragePath.integrations_names)
-        storage.delete(StoragePath.integrations_milliseconds)
         storage.delete(StoragePath.reducers_names)
         storage.delete(StoragePath.reducers_dimensions)
         storage.delete(StoragePath.reducers_bands)
@@ -167,10 +162,7 @@ class Config(metaclass=SingletonMeta):
         storage.delete(StoragePath.volumes_names)
         SiteStorage.delete_from_storage(storage)
 
-    def write(
-        self,
-        storage: Storage,
-    ) -> None:
+    def write(self, storage: Storage) -> None:
         self.__clean_storage(storage)
         self.__store_settings(storage)
 
@@ -179,7 +171,7 @@ class Config(metaclass=SingletonMeta):
         SiteStorage.write_to_storage(self.sites, storage)
         BandStorage.write_to_storage(self.bands, storage)
         IntegrationStorage.write_to_storage(self.integrations, storage)
-        self.__store_ranges(storage)
+        RangeStorage.write_to_storage(self.ranges, storage)
 
         self.__store_autoclusters(storage)
         self.__store_trajectories(storage)
@@ -331,30 +323,6 @@ class Config(metaclass=SingletonMeta):
     ) -> None:
         storage.write_metas(self.__metas)
 
-    def __read_ranges(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.ranges)
-
-        names: List[str] = self.parse_column(sheet, ExcelRange.name_)
-        starts: List[Timestamp] = self.parse_column(sheet, ExcelRange.start)
-        ends: List[Timestamp] = self.parse_column(sheet, ExcelRange.end)
-
-        starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
-        ends_timestamps = [convert_date_to_timestamp(end) for end in ends]
-
-        ranges = ConfigRange.reconstruct(
-            names=names,
-            starts=starts_timestamps,
-            ends=ends_timestamps,
-        )
-
-        self.__ranges = ranges
-
-    def __store_ranges(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.write_config_ranges(ranges=self.__ranges)
-
     def __read_autoclusters(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.autoclusters)
 
@@ -427,7 +395,7 @@ class Config(metaclass=SingletonMeta):
             ranges_names_strings=ranges_names_strings,
             bands=self.bands,
             integrations=self.integrations,
-            ranges=self.__ranges,
+            ranges=self.ranges,
         )
 
         self.__reducers = reducers

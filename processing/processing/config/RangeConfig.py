@@ -3,7 +3,7 @@ from typing import List, Tuple
 from processing.utils.validate_int import validate_int
 
 
-class ConfigRange:
+class RangeConfig:
     index: int
     name: str
     start: int
@@ -26,7 +26,7 @@ class ConfigRange:
 
     @staticmethod
     def flatten(
-        ranges: List["ConfigRange"],
+        ranges: List["RangeConfig"],
     ) -> Tuple[List[str], List[int], List[int]]:
         names = [r.name for r in ranges]
         starts = [r.start for r in ranges]
@@ -39,11 +39,11 @@ class ConfigRange:
         names: List[str],
         starts: List[int],
         ends: List[int],
-    ) -> List["ConfigRange"]:
+    ) -> List["RangeConfig"]:
         ranges = []
 
         for index, name in enumerate(names):
-            range = ConfigRange(
+            range = RangeConfig(
                 index=index,
                 name=name,
                 start=starts[index],
