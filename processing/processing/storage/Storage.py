@@ -14,8 +14,6 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
-from processing.constants import DOCKER_BASE_PATH
-from processing.settings.ConfigSetting import ConfigSettings
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -149,25 +147,6 @@ class Storage(metaclass=SingletonMeta):
             return payload  # type: ignore TODO
         except KeyError:
             raise KeyError(f"Unable to find storage path {path}.")
-
-    # def read_config_files(self) -> List[FileConfig]:
-    #     names = self.read_files_names()
-    #     timestamps = self.read_files_timestamps()
-    #     sites = self.read_files_sites()
-    #     labels = self.read_files_metas()
-    #     durations = self.read_files_durations()
-    #     audio_path = self.read_audio_path()
-    #
-    #     files = FileConfig.reconstruct(
-    #         names=names,
-    #         timestamps=timestamps[:],
-    #         sites=sites,
-    #         labels=labels,
-    #         durations=durations,
-    #         audio_path=audio_path,
-    #     )
-    #
-    #     return files
 
     def read_reducers(self) -> List[str]:
         dataset = self.read(StoragePath.reducers_names)
@@ -329,57 +308,8 @@ class Storage(metaclass=SingletonMeta):
         self.delete(StoragePath.group_timestamps)
         self.delete(StoragePath.group_site_index)
 
-    def read_settings(self) -> ConfigSettings:
-        configuration = self.read(StoragePath.configuration)
-        settings: ConfigSettings = configuration.attrs  # type: ignore
-        return settings
-
-    def read_computation_umap_dimensions(self) -> int:
-        settings = self.read_settings()
-        return settings["computation_umap_dimensions"]
-
-    def read_computation_umap_iterations(self) -> int:
-        settings = self.read_settings()
-        return settings["computation_umap_iterations"]
-
-    def read_display_umap_seed(self) -> int:
-        settings = self.read_settings()
-        return settings["display_umap_seed"]
-
-    def read_expected_sample_rate(self) -> int:
-        settings = self.read_settings()
-        return settings["expected_sample_rate"]
-
-    def read_timeline_origin(self) -> int:
-        settings = self.read_settings()
-        return settings["timeline_origin"]
-
-    def read_audio_path(self) -> str:
-        settings = self.read_settings()
-        audio_path = settings["audio_path"]
-
-        if Env().is_docker is True:
-            base_path = DOCKER_BASE_PATH
-            audio_folder = audio_path.split("/")[-1]
-            docker_path = f"{base_path}/{audio_folder}"
-            return docker_path
-
-        return audio_path
-
-    def create_configuration(self) -> None:
-        self.__file.create_group(StoragePath.configuration.value)
-        # self.__create_dataset(StoragePath.configuration, '')
-
-    def create_configuration_setting(
-        self,
-        setting: Any,
-        value: Any,
-    ) -> None:
-        self.create_attribute(
-            key=setting,
-            value=value,
-            path=StoragePath.configuration,
-        )
+    def write_empty_group(self, path: str) -> None:
+        self.__file.create_group(path)
 
     def create_integrations(
         self,

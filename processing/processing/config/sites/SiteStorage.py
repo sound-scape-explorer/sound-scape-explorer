@@ -2,6 +2,7 @@ from typing import List
 
 from processing.config.files.FileConfig import FileConfig
 from processing.config.files.FileStorage import FileStorage
+from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.constants import INT_NONE
 from processing.storage.Storage import Storage
@@ -18,7 +19,10 @@ class SiteStorage:
         storage.delete(SiteStorage.path_file_indexes)
 
     @staticmethod
-    def read_from_storage(storage: Storage) -> List[SiteConfig]:
+    def read_from_storage(
+        storage: Storage,
+        settings: SettingsConfig,
+    ) -> List[SiteConfig]:
         names_dataset = storage.read(SiteStorage.path_names)
         names: List[str] = storage.convert_dataset_to_string_list(names_dataset)
 
@@ -29,7 +33,7 @@ class SiteStorage:
             INT_NONE,
         )
 
-        files = FileStorage.read_from_storage(storage)
+        files = FileStorage.read_from_storage(storage, settings)
 
         sites = SiteConfig.reconstruct(
             names=names,

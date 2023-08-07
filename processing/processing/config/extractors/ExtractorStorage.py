@@ -45,13 +45,14 @@ class ExtractorStorage:
         names = parser.get(sheet, ExtractorExcel.name_)
         offsets = parser.get(sheet, ExtractorExcel.offset)
         steps = parser.get(sheet, ExtractorExcel.step)
-        persists = parser.get(sheet, ExtractorExcel.persist)
+        persists_strings = parser.get(sheet, ExtractorExcel.persist)
+        persists = [True if ps == "yes" else False for ps in persists_strings]
 
         extractors = ExtractorConfig.reconstruct(
             names=names,
             offsets=offsets[:],
             steps=steps[:],
-            persists=persists[:],
+            persists=persists,
         )
 
         return extractors

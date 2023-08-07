@@ -46,7 +46,7 @@ class ExtractorConfig:
         names: List[str],
         offsets: List[int],
         steps: List[int],
-        persists: List[int],
+        persists: List[bool],
     ) -> List["ExtractorConfig"]:
         extractors: List["ExtractorConfig"] = []
 
@@ -56,7 +56,7 @@ class ExtractorConfig:
                 name=name,
                 offset=offsets[index],
                 step=steps[index],
-                persist=True if persists[index] == 1 else False,
+                persist=persists[index],
             )
 
             extractors.append(extractor)

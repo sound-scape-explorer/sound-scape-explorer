@@ -1,8 +1,4 @@
-from datetime import datetime
-from enum import Enum
-from typing import List, Optional, Union
-
-from pandas import DataFrame, Series
+from typing import List
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
@@ -15,7 +11,6 @@ from processing.config.ConfigParser import ConfigParser
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.ExcelMatrices import ExcelMatrices
 from processing.config.ExcelPairings import ExcelPairings
-from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelVolume import ExcelVolume
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
@@ -32,21 +27,18 @@ from processing.config.ranges.RangeConfig import RangeConfig
 from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.reducers.ReducerStorage import ReducerStorage
+from processing.config.settings.SettingsConfig import SettingsConfig
+from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.config.sites.SiteStorage import SiteStorage
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
 from processing.config.trajectories.TrajectoryStorage import TrajectoryStorage
-from processing.settings.ConfigSetting import ConfigSettings
-from processing.settings.DefaultSetting import DefaultSetting
-from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
-from processing.utils.is_nan import is_nan
 from processing.utils.print_new_line import print_new_line
 
 
 class Config(metaclass=SingletonMeta):
-    __settings: ConfigSettings = {}  # type: ignore
     __volumes: List[ConfigVolume] = []
     __matrices: List[ConfigMatrix] = []
     __pairings: List[ConfigPairing] = []
@@ -56,6 +48,8 @@ class Config(metaclass=SingletonMeta):
         path: str,
     ) -> None:
         self.parser = ConfigParser(path)
+
+        self.settings: SettingsConfig
 
         self.bands: List[BandConfig] = []
         self.integrations: List[IntegrationConfig] = []
@@ -80,24 +74,8 @@ class Config(metaclass=SingletonMeta):
         print(f"Config loaded: {self.parser.path}")
         self.__print_settings()
 
-    @staticmethod
-    def parse_column(
-        sheet: DataFrame,
-        column: Enum,
-        suffix: Optional[str] = None,
-    ) -> List:
-        if suffix is not None:
-            path = f"{column.value}{suffix}"
-        else:
-            path = column.value
-
-        series = sheet[path]
-        list_ = [value for value in series]
-        return list_
-
     def __read(self) -> None:
-        self.__read_settings()
-        audio_path = self.__get_audio_path()
+        self.settings = SettingsStorage.read_from_config(self.parser)
 
         self.bands = BandStorage.read_from_config(self.parser)
         self.integrations = IntegrationStorage.read_from_config(self.parser)
@@ -107,7 +85,7 @@ class Config(metaclass=SingletonMeta):
         self.files = FileStorage.read_from_config(
             parser=self.parser,
             labels=self.labels,
-            audio_path=audio_path,
+            settings=self.settings,
         )
 
         self.sites = SiteStorage.parse_from_config(self.files)
@@ -129,7 +107,7 @@ class Config(metaclass=SingletonMeta):
         self.__read_pairings()
 
     def delete_from_storage(self, storage: Storage) -> None:
-        storage.delete(StoragePath.configuration)
+        SettingsStorage.delete_from_storage(storage)
 
         BandStorage.delete_from_storage(storage)
         IntegrationStorage.delete_from_storage(storage)
@@ -146,15 +124,10 @@ class Config(metaclass=SingletonMeta):
         ReducerStorage.delete_from_storage(storage)
         IndicatorStorage.delete_from_storage(storage)
 
-        storage.delete(StoragePath.labels_properties)
-        storage.delete(StoragePath.labels_sets)
-        storage.delete(StoragePath.indicators_names)
-        storage.delete(StoragePath.volumes_names)
-
     def write(self, storage: Storage) -> None:
         self.delete_from_storage(storage)
 
-        self.__store_settings(storage)
+        SettingsStorage.write_to_storage(self.settings, storage)
 
         BandStorage.write_to_storage(self.bands, storage)
         IntegrationStorage.write_to_storage(self.integrations, storage)
@@ -193,69 +166,13 @@ class Config(metaclass=SingletonMeta):
     ) -> None:
         storage.write_config_pairings(self.__pairings)
 
-    def __read_settings(self) -> None:
-        settings = self.parser.get(ExcelSheet.settings, ExcelSetting.setting)
-        values = self.parser.get(ExcelSheet.settings, ExcelSetting.value_)
-
-        for index, setting in enumerate(settings):
-            value = self.__digest_setting(setting, values[index])
-            self.__settings[setting] = value  # type: ignore
-
-    def __digest_setting(
-        self,
-        setting: str,
-        value: Union[Series, DataFrame, datetime],
-    ):
-        payload = value
-
-        if type(value) is datetime:
-            payload = int(value.timestamp()) * 1000  # milliseconds
-
-        if is_nan(value):
-            payload = None
-
-        if setting == StorageSetting.timezone.value and value is None:
-            payload = DefaultSetting.timezone
-
-        elif (
-            setting == StorageSetting.computation_umap_dimensions.value
-            and value is None
-        ):
-            payload = DefaultSetting.computation_umap_dimensions
-
-        elif (
-            setting == StorageSetting.computation_umap_iterations.value
-            and value is None
-        ):
-            payload = DefaultSetting.computation_umap_iterations
-
-        elif setting == StorageSetting.display_umap_seed.value and value is None:
-            payload = DefaultSetting.display_umap_seed
-
-        return payload
-
     def __print_settings(self) -> None:
         print_new_line()
         print("Settings")
         print_new_line()
 
-        for setting_name, setting in self.__settings.items():
-            print(f"{setting_name}: {setting}")
-
-    def __get_audio_path(self) -> str:
-        return self.__settings["audio_path"]
-
-    def __store_settings(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.create_configuration()
-
-        for setting, value in self.__settings.items():
-            if value is None:
-                continue
-
-            storage.create_configuration_setting(setting, value)
+        for k, v in vars(self.settings).items():
+            print(f"{k}: {v}")
 
     def __read_volumes(self) -> List[ConfigVolume]:
         sheet = ExcelSheet.volumes

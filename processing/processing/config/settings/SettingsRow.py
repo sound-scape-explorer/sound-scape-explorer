@@ -1,9 +1,7 @@
 from enum import Enum
 
 
-# INFO: Enumeration of the actual namings of settings
-# within the Excel configuration file.
-class StorageSetting(Enum):
+class SettingsRow(Enum):
     # Mandatory settings
     audio_path = "audio_path"
     audio_host = "audio_host"
@@ -12,6 +10,6 @@ class StorageSetting(Enum):
 
     # Optional settings
     timezone = "timezone"
-    computation_umap_dimensions = "computation_umap_dimensions"
-    computation_umap_iterations = "computation_umap_iterations"
+    c_umap_dimensions = "computation_umap_dimensions"
+    c_umap_iterations = "computation_umap_iterations"
     display_umap_seed = "display_umap_seed"

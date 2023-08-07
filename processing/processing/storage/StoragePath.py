@@ -15,7 +15,7 @@ class StoragePath(Enum):
     # Configuration #
     #################
 
-    configuration = "/configuration"
+    settings = "/settings"
     """The information gathered from the configuration file.
 
     This will contain multiple groups and datasets corresponding to each tab
@@ -90,7 +90,7 @@ class StoragePath(Enum):
 
     # INFO: This allows duplicates thus can cause collisions.
     # See `Configuration/Bands` annotation for more details.
-    ranges_names = "/configuration/ranges/names"
+    ranges_names = "/ranges/names"
     """The names of specified ranges.
 
     Each row contains a string.
@@ -99,7 +99,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    ranges_starts = "/configuration/ranges/starts"
+    ranges_starts = "/ranges/starts"
     """The start date for each range.
 
     Each row contains a timestamp as an integer.
@@ -110,7 +110,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    ranges_ends = "/configuration/ranges/ends"
+    ranges_ends = "/ranges/ends"
     """The end date for each range.
 
     Each row contains a timestamp as an integer.
@@ -224,7 +224,7 @@ class StoragePath(Enum):
     # Configuration/Autoclusters #
     ##############################
 
-    autoclusters_names = "/configuration/autoclusters/names"
+    autoclusters_names = "/autoclusters/names"
     """The names of autoclusters requested in the configuration file.
 
     Each row is a string referring to a particular algorithm.
@@ -236,7 +236,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    autoclusters_min_cluster_sizes = "/configuration/autoclusters/min_cluster_sizes"
+    autoclusters_min_cluster_sizes = "/autoclusters/min_cluster_sizes"
     """The minimum count of elements within a given cluster.
 
     Each row contains an integer.
@@ -245,7 +245,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    autoclusters_min_samples = "/configuration/autoclusters/min_samples"
+    autoclusters_min_samples = "/autoclusters/min_samples"
     """The minimum samples for autoclustering algorithms.
 
     Each row contains an integer.
@@ -254,7 +254,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    autoclusters_alphas = "/configuration/autoclusters/alphas"
+    autoclusters_alphas = "/autoclusters/alphas"
     """The alpha values for autoclustering algorithms.
 
     Each row contains a float.
@@ -263,7 +263,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    autoclusters_epsilons = "/configuration/autoclusters/epsilons"
+    autoclusters_epsilons = "/autoclusters/epsilons"
     """The epsilon values for autoclustering algorithms.
 
     Each row contains a float.
@@ -276,7 +276,7 @@ class StoragePath(Enum):
     # Configuration/Trajectories #
     ##############################
 
-    trajectories_names = "/configuration/trajectories/names"
+    trajectories_names = "/trajectories/names"
     """The names of trajectories requested in the configuration file.
 
     Each row is a string.
@@ -285,7 +285,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    trajectories_starts = "/configuration/trajectories/starts"
+    trajectories_starts = "/trajectories/starts"
     """The start date for each trajectory.
 
     Each row contains a timestamp as an integer.
@@ -296,7 +296,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    trajectories_ends = "/configuration/trajectories/ends"
+    trajectories_ends = "/trajectories/ends"
     """The end date for each trajectory.
 
     Each row contains a timestamp as an integer.
@@ -311,7 +311,7 @@ class StoragePath(Enum):
     # Configuration/Reducers #
     ##########################
 
-    reducers_names = "/configuration/reducers/names"
+    reducers_names = "/reducers/names"
     """The names of reducers requested in the configuration file.
 
     Each row contains a string.
@@ -326,7 +326,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    reducers_dimensions = "/configuration/reducers/dimensions"
+    reducers_dimensions = "/reducers/dimensions"
     """The dimensions for each reducer.
 
     Each row contains an integer.
@@ -335,7 +335,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    reducers_bands = "/configuration/reducers/bands"
+    reducers_bands = "/reducers/bands"
     """The bands for each reducer.
 
     Each row contains an array of strings (stored as columns) corresponding
@@ -347,7 +347,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    reducers_integrations = "/configuration/reducers/integrations"
+    reducers_integrations = "/reducers/integrations"
     """The integration names for each reducer.
 
     Each row contains an array of strings (stored as columns) corresponding
@@ -359,7 +359,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    reducers_ranges = "/configuration/reducers/ranges"
+    reducers_ranges = "/reducers/ranges"
     """The range names for each reducer.
 
     Each row contains an array of strings (stored as columns) corresponding
@@ -375,7 +375,7 @@ class StoragePath(Enum):
     # Configuration/Indicators #
     ############################
 
-    indicators_names = "/configuration/indicators"
+    indicators_names = "/indicators/names"
     """The indicator names requested in the configuration file.
 
     Each row contains a string.
@@ -394,7 +394,7 @@ class StoragePath(Enum):
     # Configuration/Volumes #
     #########################
 
-    volumes_names = "/configuration/volumes"
+    volumes_names = "/volumes/names"
     """The volume names requested in the configuration file.
 
     Each row contains a string.
@@ -413,7 +413,7 @@ class StoragePath(Enum):
     # Configuration/Matrices #
     ##########################
 
-    matrices_names = "/configuration/matrices"
+    matrices_names = "/matrices/names"
     """The matrix names requested in the configuration file.
 
     Each row contains a string.
@@ -432,7 +432,7 @@ class StoragePath(Enum):
     # Configuration/Pairings #
     ##########################
 
-    pairings_names = "/configuration/pairings"
+    pairings_names = "/pairings/names"
     """The pairing names requested in the configuration file.
 
     Each row contains a string.

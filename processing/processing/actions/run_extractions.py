@@ -6,6 +6,7 @@ from tqdm import tqdm
 from processing.common.Env import Env
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
+from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.config.sites.SiteStorage import SiteStorage
 from processing.extractors.Extractor import Extracted, Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
@@ -26,6 +27,8 @@ def run_extractions(env: Env):
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)
     sites = SiteStorage.read_from_storage(storage)
+    settings = SettingsStorage.read_from_storage(storage)
+    print(settings)
     expected_sample_rate = storage.read_expected_sample_rate()
     timeline_origin = storage.read_timeline_origin()
 

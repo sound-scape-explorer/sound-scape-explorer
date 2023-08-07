@@ -1,10 +1,11 @@
 from typing import List
 
-from processing.config.labels.LabelConfig import LabelConfig
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.files.FileConfig import FileConfig
 from processing.config.files.FileExcel import FileExcel
+from processing.config.labels.LabelConfig import LabelConfig
+from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
@@ -27,7 +28,10 @@ class FileStorage:
         storage.delete(FileStorage.durations)
 
     @staticmethod
-    def read_from_storage(storage: Storage) -> List[FileConfig]:
+    def read_from_storage(
+        storage: Storage,
+        settings: SettingsConfig,
+    ) -> List[FileConfig]:
         names_dataset = storage.read(FileStorage.names)
         names = storage.convert_dataset_to_string_list(names_dataset)
 
@@ -41,15 +45,13 @@ class FileStorage:
 
         durations = storage.read(FileStorage.durations)
 
-        audio_path = storage.read_audio_path()
-
         files = FileConfig.reconstruct(
             names=names,
             timestamps=timestamps[:],
             sites=sites,
             labels=labels,
             durations=durations[:],
-            audio_path=audio_path,
+            audio_path=settings.audio_path,
         )
 
         return files
@@ -96,7 +98,7 @@ class FileStorage:
     def read_from_config(
         parser: ConfigParser,
         labels: List[LabelConfig],
-        audio_path: str,
+        settings: SettingsConfig,
     ) -> List[FileConfig]:
         sheet = ExcelSheet.files
 
@@ -109,7 +111,7 @@ class FileStorage:
 
         labels_values = LabelConfig.convert_to_values_by_file(labels)
 
-        durations = read_files_durations(names, audio_path)
+        durations = read_files_durations(names, settings.audio_path)
 
         files = FileConfig.reconstruct(
             names=names,
@@ -117,7 +119,7 @@ class FileStorage:
             sites=sites,
             labels=labels_values,
             durations=durations,
-            audio_path=audio_path,
+            audio_path=settings.audio_path,
         )
 
         return files

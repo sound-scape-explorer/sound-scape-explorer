@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from mutagen import File
+from mutagen import File  # type: ignore
 from mutagen.flac import FLAC
 from mutagen.mp3 import MP3
 from mutagen.wave import WAVE

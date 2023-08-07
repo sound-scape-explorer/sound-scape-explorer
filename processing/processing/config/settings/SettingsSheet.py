@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class ExcelSetting(Enum):
+class SettingsSheet(Enum):
     setting = "setting"
     value_ = "value"
