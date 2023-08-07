@@ -18,6 +18,9 @@ ExtractorIndex = int
 BlockIndex = int
 
 
+# TODO: This taking all timelines and iterating through make no sense as it is
+# above its concern.
+# This should only loop over intervals within the give timeline...
 class TimelineWalker:
     def __init__(self) -> None:
         self.__timelines: Optional[List[Timeline]] = None
