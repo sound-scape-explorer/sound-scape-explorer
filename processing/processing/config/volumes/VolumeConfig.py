@@ -9,7 +9,7 @@ from processing.volumes.SumStandardDeviationVolume import SumStandardDeviationVo
 from processing.volumes.SumVarianceVolume import SumVarianceVolume
 
 
-class ConfigVolume:
+class VolumeConfig:
     algorithms: Dict[str, Type[AbstractVolume]] = {
         "sum_var": SumVarianceVolume,
         "sum_std": SumStandardDeviationVolume,
@@ -38,14 +38,14 @@ class ConfigVolume:
     def validate_name(
         name: str,
     ) -> None:
-        if name in ConfigVolume.algorithms.keys():
+        if name in VolumeConfig.algorithms.keys():
             return
 
         raise KeyError(f"Unable to find volume name {name}.")
 
     @staticmethod
     def flatten(
-        volumes: List["ConfigVolume"],
+        volumes: List["VolumeConfig"],
     ) -> List[str]:
         names = [v.name for v in volumes]
         return names
@@ -53,11 +53,11 @@ class ConfigVolume:
     @staticmethod
     def reconstruct(
         names: List[str],
-    ) -> List["ConfigVolume"]:
+    ) -> List["VolumeConfig"]:
         volumes = []
 
         for index, name in enumerate(names):
-            volume = ConfigVolume(
+            volume = VolumeConfig(
                 index=index,
                 name=name,
             )

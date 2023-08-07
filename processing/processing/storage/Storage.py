@@ -3,17 +3,16 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 import numpy
 from h5py import Dataset, File
 
-from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigPairing import ConfigPairing
-from processing.config.ConfigVolume import ConfigVolume
 from processing.config.indicators.IndicatorConfig import IndicatorConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
+from processing.config.volumes.VolumeConfig import VolumeConfig
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -223,12 +222,6 @@ class Storage(metaclass=SingletonMeta):
             groups_count += group_count[0]
 
         return groups_count
-
-    def read_config_volumes(self) -> List[ConfigVolume]:
-        names_dataset = self.read(StoragePath.volumes_names)
-        names = self.convert_dataset_to_string_list(names_dataset)
-        volumes = ConfigVolume.reconstruct(names=names)
-        return volumes
 
     def read_config_matrices(self) -> List[ConfigMatrix]:
         names_dataset = self.read(StoragePath.matrices_names)
@@ -770,7 +763,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_volume_path(
         self,
-        volume: ConfigVolume,
+        volume: VolumeConfig,
     ) -> str:
         return (
             f"{StoragePath.volume_.value}{volume.index}"
@@ -779,7 +772,7 @@ class Storage(metaclass=SingletonMeta):
 
     def write_volume(
         self,
-        volume: ConfigVolume,
+        volume: VolumeConfig,
     ) -> None:
         path = self.generate_volume_path(volume=volume)
 
@@ -928,17 +921,6 @@ class Storage(metaclass=SingletonMeta):
                 return integration
 
         raise KeyError(f"Unable to find integration duration {integration_duration}")
-
-    def write_config_volumes(
-        self,
-        volumes: List[ConfigVolume],
-    ) -> None:
-        names = ConfigVolume.flatten(volumes=volumes)
-
-        self.write(
-            path=StoragePath.volumes_names,
-            data=names,
-        )
 
     def write_config_matrices(
         self,
