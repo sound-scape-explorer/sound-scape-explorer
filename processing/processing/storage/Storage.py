@@ -6,10 +6,10 @@ from h5py import Dataset, File
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.bands.BandConfig import BandConfig
-from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigVolume import ConfigVolume
+from processing.config.indicators.IndicatorConfig import IndicatorConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.sites.SiteConfig import SiteConfig
@@ -244,12 +244,6 @@ class Storage(metaclass=SingletonMeta):
             groups_count += group_count[0]
 
         return groups_count
-
-    def read_config_indicators(self) -> List[ConfigIndicator]:
-        names_dataset = self.read(StoragePath.indicators_names)
-        names = self.convert_dataset_to_string_list(names_dataset)
-        indicators = ConfigIndicator.reconstruct(names=names)
-        return indicators
 
     def read_config_volumes(self) -> List[ConfigVolume]:
         names_dataset = self.read(StoragePath.volumes_names)
@@ -823,7 +817,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_indicator_path(
         self,
-        indicator: ConfigIndicator,
+        indicator: IndicatorConfig,
     ) -> str:
         suffix = f"/{indicator.band.name}/{indicator.integration.seconds}"
         path = f"{StoragePath.indicator_.value}{indicator.index}{suffix}"
@@ -834,7 +828,7 @@ class Storage(metaclass=SingletonMeta):
 
     def write_indicator(
         self,
-        indicator: ConfigIndicator,
+        indicator: IndicatorConfig,
     ) -> None:
         path = self.generate_indicator_path(indicator)
 
@@ -1004,17 +998,6 @@ class Storage(metaclass=SingletonMeta):
                 return integration
 
         raise KeyError(f"Unable to find integration duration {integration_duration}")
-
-    def write_config_indicators(
-        self,
-        indicators: List[ConfigIndicator],
-    ) -> None:
-        names = ConfigIndicator.flatten(indicators=indicators)
-
-        self.write(
-            path=StoragePath.indicators_names,
-            data=names,
-        )
 
     def write_config_volumes(
         self,

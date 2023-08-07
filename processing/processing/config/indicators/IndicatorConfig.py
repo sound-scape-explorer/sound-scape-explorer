@@ -18,7 +18,7 @@ from processing.indicators.TemporalEntropyIndicator import TemporalEntropyIndica
 from processing.indicators.TemporalMedianIndicator import TemporalMedianIndicator
 
 
-class ConfigIndicator:
+class IndicatorConfig:
     algorithms: Dict[str, Type[AbstractIndicator]] = {
         "leq_enes": LeqEnesIndicator,
         "leq_maad": LeqMaadIndicator,
@@ -51,14 +51,14 @@ class ConfigIndicator:
     def validate_name(
         name: str,
     ) -> None:
-        if name in ConfigIndicator.algorithms.keys():
+        if name in IndicatorConfig.algorithms.keys():
             return
 
         raise KeyError(f"Unable to find indicator name {name}.")
 
     @staticmethod
     def flatten(
-        indicators: List["ConfigIndicator"],
+        indicators: List["IndicatorConfig"],
     ) -> List[str]:
         names = [i.name for i in indicators]
 
@@ -67,11 +67,11 @@ class ConfigIndicator:
     @staticmethod
     def reconstruct(
         names: List[str],
-    ) -> List["ConfigIndicator"]:
+    ) -> List["IndicatorConfig"]:
         indicators = []
 
         for index, name in enumerate(names):
-            indicator = ConfigIndicator(
+            indicator = IndicatorConfig(
                 index=index,
                 name=name,
             )

@@ -1,5 +1,5 @@
 from enum import Enum
 
 
-class ExcelIndicator(Enum):
+class IndicatorSheet(Enum):
     indicator = 'indicator'
