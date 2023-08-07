@@ -194,6 +194,12 @@ class TimelineWalker:
         interval: Interval,
         timeline: Timeline,
     ):
+        # Removing extracted data
+        # TODO: this lefts over the last operation in memory
+        if self.cfi is not None and f != self.cfi:
+            del self.extracted[self.cfi]
+
+        # Unloading file
         is_last_integration = timeline.integration.index == len(self.integrations) - 1
         is_last_band = b == len(self.bands) - 1
         is_last_extractor = e == len(self.extractors) - 1
@@ -202,12 +208,6 @@ class TimelineWalker:
         is_last_op = (
             is_last_integration and is_last_band and is_last_extractor and is_last_block
         )
-
-        # Purge
-        # TODO: this lefts over the last operation in memory
-        if self.cfi is not None and f != self.cfi:
-            del self.extracted[self.cfi]
-            # loaded[cfi].destroy()
 
         if self.cfi is not None and is_last_op:
             self.loaders[self.cfi].release()
