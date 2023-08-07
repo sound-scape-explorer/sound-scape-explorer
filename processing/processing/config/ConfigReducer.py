@@ -1,6 +1,6 @@
 from typing import Dict, List, Tuple, Type
 
-from processing.config.ConfigBand import ConfigBand
+from processing.config.BandConfig import BandConfig
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigRange import ConfigRange
 from processing.reducers.AbstractReducer import AbstractReducer
@@ -22,10 +22,10 @@ class ConfigReducer:
     index: int
     name: str
     dimensions: int
-    bands: List[ConfigBand]
+    bands: List[BandConfig]
     integrations: List[ConfigIntegration]
     ranges: List[ConfigRange]
-    band: ConfigBand
+    band: BandConfig
     integration: ConfigIntegration
     instance: AbstractReducer
 
@@ -34,7 +34,7 @@ class ConfigReducer:
         index: int,
         name: str,
         dimensions: int,
-        bands: List[ConfigBand],
+        bands: List[BandConfig],
         integrations: List[ConfigIntegration],
         ranges: List[ConfigRange],
     ) -> None:
@@ -90,8 +90,8 @@ class ConfigReducer:
     @staticmethod
     def pick_reducer_bands(
         bands_names_string: str,
-        bands: List[ConfigBand],
-    ) -> List[ConfigBand]:
+        bands: List[BandConfig],
+    ) -> List[BandConfig]:
         if is_nan(bands_names_string):
             return bands
 
@@ -140,7 +140,7 @@ class ConfigReducer:
         bands_names_strings: List[str],
         integrations_names_strings: List[str],
         ranges_names_strings: List[str],
-        bands: List[ConfigBand],
+        bands: List[BandConfig],
         integrations: List[ConfigIntegration],
         ranges: List[ConfigRange],
     ) -> List["ConfigReducer"]:
@@ -177,7 +177,7 @@ class ConfigReducer:
 
     def load(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ):
         self.band = band
@@ -186,7 +186,7 @@ class ConfigReducer:
 
     def create_instance(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> AbstractReducer:
         self.load(band=band, integration=integration)

@@ -1,6 +1,6 @@
 from typing import Dict, List, Type
 
-from processing.config.ConfigBand import ConfigBand
+from processing.config.BandConfig import BandConfig
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.matrices.AbstractMatrix import AbstractMatrix
 from processing.matrices.DistanceMatrix import DistanceMatrix
@@ -17,7 +17,7 @@ class ConfigMatrix:
 
     index: int
     name: str
-    band: ConfigBand
+    band: BandConfig
     integration: ConfigIntegration
     meta_index: int
     instance: AbstractMatrix
@@ -62,7 +62,7 @@ class ConfigMatrix:
 
     def create_instance(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         meta_index: int,
     ):

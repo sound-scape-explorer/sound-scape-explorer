@@ -4,6 +4,7 @@ import numpy
 
 from processing.common.Env import Env
 from processing.common.Timer import Timer
+from processing.config.BandStorage import BandStorage
 from processing.config.FileStorage import FileStorage
 from processing.config.SiteStorage import SiteStorage
 from processing.storage.Storage import Storage
@@ -19,7 +20,7 @@ def run_groups(env: Env):
     storage = Storage(env.storage)
     storage.delete_groups()
 
-    bands = storage.read_config_bands()
+    bands = BandStorage.read_from_storage(storage)
     integrations = storage.read_config_integrations()
 
     files = FileStorage.read_from_storage(storage)

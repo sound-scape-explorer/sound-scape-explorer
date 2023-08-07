@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from pandas import DataFrame, ExcelFile
 
@@ -25,7 +25,7 @@ class ConfigParser:
         sheet_name: ExcelSheet,
         column: Enum,
         suffix: Optional[str] = None,
-    ):
+    ) -> List:
         if suffix is not None:
             path = f"{column.value}{suffix}"
         else:

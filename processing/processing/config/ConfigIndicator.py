@@ -1,6 +1,6 @@
 from typing import Dict, List, Type
 
-from processing.config.ConfigBand import ConfigBand
+from processing.config.BandConfig import BandConfig
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.indicators.AcousticComplexityIndexIndicator import (
@@ -33,7 +33,7 @@ class ConfigIndicator:
 
     index: int
     name: str
-    band: ConfigBand
+    band: BandConfig
     integration: ConfigIntegration
     instance: AbstractIndicator
 
@@ -82,7 +82,7 @@ class ConfigIndicator:
 
     def create_instance(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> AbstractIndicator:
         self.band = band

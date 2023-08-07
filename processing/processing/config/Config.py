@@ -7,8 +7,9 @@ import pandas
 from pandas import DataFrame, Series, Timestamp
 
 from processing.common.SingletonMeta import SingletonMeta
+from processing.config.BandConfig import BandConfig
+from processing.config.BandStorage import BandStorage
 from processing.config.ConfigAutocluster import ConfigAutocluster
-from processing.config.ConfigBand import ConfigBand
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigMatrix import ConfigMatrix
@@ -20,7 +21,6 @@ from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.ExcelAutocluster import ExcelAutocluster
-from processing.config.ExcelBand import ExcelBand
 from processing.config.ExcelIndicator import ExcelIndicator
 from processing.config.ExcelIntegration import ExcelIntegration
 from processing.config.ExcelMatrices import ExcelMatrices
@@ -51,7 +51,6 @@ class Config(metaclass=SingletonMeta):
     __excel: pandas.ExcelFile
     __settings: ConfigSettings = {}  # type: ignore
     __metas: List[ConfigMeta] = []
-    __bands: List[ConfigBand] = []
     __integrations: List[ConfigIntegration] = []
     __ranges: List[ConfigRange] = []
     __autoclusters: List[ConfigAutocluster] = []
@@ -70,6 +69,7 @@ class Config(metaclass=SingletonMeta):
         self.parser = ConfigParser(self.__path)
         self.files: List[FileConfig] = []
         self.sites: List[SiteConfig] = []
+        self.bands: List[BandConfig] = []
 
         self.__validate_path()
 
@@ -117,26 +117,20 @@ class Config(metaclass=SingletonMeta):
         list_ = [value for value in series]
         return list_
 
-    def read_files(self):
+    def __read(self) -> None:
+        self.__read_settings()
         audio_path = self.__get_audio_path()
 
-        files = FileStorage.read_from_config(
+        self.__read_metas()
+
+        self.files = FileStorage.read_from_config(
             parser=self.parser,
             labels=self.__metas,
             audio_path=audio_path,
         )
 
-        return files
-
-    def __read(self) -> None:
-        self.__read_settings()
-
-        self.__read_metas()
-
-        self.files = self.read_files()
-        self.sites = SiteStorage.read_from_config(self.files)
-
-        self.__read_bands()
+        self.sites = SiteStorage.parse_from_config(self.files)
+        self.bands = BandStorage.read_from_config(self.parser)
         self.__read_integrations()
         self.__read_ranges()
 
@@ -180,8 +174,7 @@ class Config(metaclass=SingletonMeta):
         FileStorage.write_to_storage(self.files, storage)
         self.__store_metas(storage)
         SiteStorage.write_to_storage(self.sites, storage)
-
-        self.__store_bands(storage)
+        BandStorage.write_to_storage(self.bands, storage)
         self.__store_integrations(storage)
         self.__store_ranges(storage)
 
@@ -359,21 +352,6 @@ class Config(metaclass=SingletonMeta):
     ) -> None:
         storage.write_config_ranges(ranges=self.__ranges)
 
-    def __read_bands(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.bands)
-
-        names: List[str] = self.parse_column(sheet, ExcelBand.name_)
-        lows: List[int] = self.parse_column(sheet, ExcelBand.low)
-        highs: List[int] = self.parse_column(sheet, ExcelBand.high)
-
-        bands = ConfigBand.reconstruct(
-            names=names,
-            lows=lows,
-            highs=highs,
-        )
-
-        self.__bands = bands
-
     def __read_integrations(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.integrations)
 
@@ -386,12 +364,6 @@ class Config(metaclass=SingletonMeta):
         )
 
         self.__integrations = integrations
-
-    def __store_bands(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.write_config_bands(bands=self.__bands)
 
     def __store_integrations(
         self,
@@ -469,7 +441,7 @@ class Config(metaclass=SingletonMeta):
             bands_names_strings=bands_names_string,
             integrations_names_strings=integrations_names_string,
             ranges_names_strings=ranges_names_strings,
-            bands=self.__bands,
+            bands=self.bands,
             integrations=self.__integrations,
             ranges=self.__ranges,
         )

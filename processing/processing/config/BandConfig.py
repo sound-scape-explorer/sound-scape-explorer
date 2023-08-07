@@ -3,7 +3,7 @@ from typing import List, Tuple
 from processing.utils.validate_int import validate_int
 
 
-class ConfigBand:
+class BandConfig:
     index: int
     name: str
     low: int
@@ -26,7 +26,7 @@ class ConfigBand:
 
     @staticmethod
     def flatten(
-        bands: List["ConfigBand"],
+        bands: List["BandConfig"],
     ) -> Tuple[List[str], List[int], List[int]]:
         names = [b.name for b in bands]
         lows = [b.low for b in bands]
@@ -39,11 +39,11 @@ class ConfigBand:
         names: List[str],
         lows: List[int],
         highs: List[int],
-    ) -> List["ConfigBand"]:
+    ) -> List["BandConfig"]:
         bands = []
 
         for index, name in enumerate(names):
-            band = ConfigBand(
+            band = BandConfig(
                 index=index,
                 name=name,
                 low=lows[index],

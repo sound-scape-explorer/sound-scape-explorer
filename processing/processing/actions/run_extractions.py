@@ -4,6 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from processing.common.Env import Env
+from processing.config.BandStorage import BandStorage
 from processing.config.SiteStorage import SiteStorage
 from processing.extractors.Extractor import Extracted, Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
@@ -22,7 +23,7 @@ def run_extractions(env: Env):
     storage.delete("/extracted")
 
     # retrieve configuration
-    bands = storage.read_config_bands()
+    bands = BandStorage.read_from_storage(storage)
     integrations = storage.read_config_integrations()
     sites = SiteStorage.read_from_storage(storage)
     expected_sample_rate = storage.read_expected_sample_rate()

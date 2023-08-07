@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 from h5py import Dataset
 from hdbscan import HDBSCAN
 
-from processing.config.ConfigBand import ConfigBand
+from processing.config.BandConfig import BandConfig
 from processing.config.ConfigIntegration import ConfigIntegration
 
 
@@ -19,7 +19,7 @@ class ConfigAutocluster:
     min_samples: int
     alpha: float
     epsilon: float
-    band: ConfigBand
+    band: BandConfig
     integration: ConfigIntegration
     instance: HDBSCAN
     values: List[int]
@@ -99,7 +99,7 @@ class ConfigAutocluster:
 
     def create_instance(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> HDBSCAN:
         self.band = band

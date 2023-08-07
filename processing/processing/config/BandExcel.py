@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ExcelBand(Enum):
+class BandExcel(Enum):
     name_ = "band"
     low = "low"
     high = "high"

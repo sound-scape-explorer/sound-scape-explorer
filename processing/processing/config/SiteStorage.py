@@ -56,7 +56,7 @@ class SiteStorage:
         )
 
     @staticmethod
-    def read_from_config(files: List[FileConfig]) -> List[SiteConfig]:
+    def parse_from_config(files: List[FileConfig]) -> List[SiteConfig]:
         # Listing unique site names
         # Making this by hand because using `set()` has inconsistent order
         site_names = []

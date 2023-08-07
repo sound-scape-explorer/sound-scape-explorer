@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, List, Optional
 
-from processing.config.ConfigBand import ConfigBand
+from processing.config.BandConfig import BandConfig
 from processing.loaders.Loader import Loader
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
@@ -11,7 +11,7 @@ Extracted = List[List[Any]]
 
 class Extractor(ABC):
     index: Optional[int] = None
-    __band: Optional[ConfigBand] = None
+    __band: Optional[BandConfig] = None
     __offset: Optional[int] = None
     __step: Optional[int] = None
     is_persist: bool = False
@@ -22,12 +22,12 @@ class Extractor(ABC):
         return f"{StoragePath.extracted.value}/{self.band.name}/{self.index}"
 
     @property
-    def band(self) -> ConfigBand:
+    def band(self) -> BandConfig:
         assert self.__band is not None, "Please define band"
         return self.__band
 
     @band.setter
-    def band(self, band: ConfigBand) -> ConfigBand:
+    def band(self, band: BandConfig) -> BandConfig:
         self.__band = band
         return self.__band
 

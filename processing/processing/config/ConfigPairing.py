@@ -1,6 +1,6 @@
 from typing import Dict, List, Type
 
-from processing.config.ConfigBand import ConfigBand
+from processing.config.BandConfig import BandConfig
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.pairings.AbstractPairing import AbstractPairing
 from processing.pairings.ContingencyPairing import ContingencyPairing
@@ -50,7 +50,7 @@ class ConfigPairing:
 
     def create_instance(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         meta_index_a: int,
         meta_index_b: int,

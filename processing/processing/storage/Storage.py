@@ -5,8 +5,8 @@ from h5py import Dataset, File
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
+from processing.config.BandConfig import BandConfig
 from processing.config.ConfigAutocluster import ConfigAutocluster
-from processing.config.ConfigBand import ConfigBand
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigMatrix import ConfigMatrix
@@ -185,7 +185,7 @@ class Storage(metaclass=SingletonMeta):
 
     def pick_reducers(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> List[ConfigReducer]:
         reducers = self.read_config_reducers()
@@ -332,13 +332,13 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_files_features_path(
         self,
-        band: ConfigBand,
+        band: BandConfig,
     ) -> str:
         return f"{StoragePath.extracted.value}/{band.name}"
 
     def read_files_features(
         self,
-        band: ConfigBand,
+        band: BandConfig,
     ) -> Dataset:
         path = self.generate_files_features_path(band=band)
         return self.read(path)
@@ -555,7 +555,7 @@ class Storage(metaclass=SingletonMeta):
 
     def enumerate_group_indexes(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ):
         for file_index, groups_count, _, _, _ in self.enumerate_files(
@@ -567,7 +567,7 @@ class Storage(metaclass=SingletonMeta):
 
     def get_file_indexes_from_point_index(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         point_index: int,
     ) -> List[int]:
@@ -592,7 +592,7 @@ class Storage(metaclass=SingletonMeta):
 
     def enumerate_point_indexes(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> Iterable[int]:
         grouped_timestamps = self.read_grouped_timestamps(band, integration)
@@ -612,7 +612,7 @@ class Storage(metaclass=SingletonMeta):
 
     def enumerate_files(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> Iterable[Tuple[int, int, int, int, List[List[float]]]]:
         files = self.read_config_files()
@@ -653,7 +653,7 @@ class Storage(metaclass=SingletonMeta):
 
     def enumerate_bands_and_integrations(
         self,
-    ) -> Iterable[Tuple[ConfigBand, ConfigIntegration]]:
+    ) -> Iterable[Tuple[BandConfig, ConfigIntegration]]:
         bands = self.read_config_bands()
         integrations = self.read_config_integrations()
 
@@ -682,14 +682,14 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_grouped_path_suffix(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> str:
         return f"{band.name}/{integration.seconds}"
 
     def generate_grouped_features_path(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> str:
         suffix = self.generate_grouped_path_suffix(band=band, integration=integration)
@@ -697,7 +697,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_grouped_timestamps_path(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> str:
         suffix = self.generate_grouped_path_suffix(band=band, integration=integration)
@@ -705,7 +705,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_group_site_index_path(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> str:
         suffix = self.generate_grouped_path_suffix(band=band, integration=integration)
@@ -713,7 +713,7 @@ class Storage(metaclass=SingletonMeta):
 
     def append_group(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         features: List[float],
         timestamp: int,
@@ -800,7 +800,7 @@ class Storage(metaclass=SingletonMeta):
     def is_band_integration_in_reducer(
         self,
         reducer: ConfigReducer,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> bool:
         if band not in reducer.bands:
@@ -817,7 +817,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_grouped_features(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> Dataset:
         path = self.generate_grouped_features_path(
@@ -829,7 +829,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_grouped_features_all_files(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> Dataset:
         grouped_features = self.read_grouped_features(
@@ -841,7 +841,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_grouped_timestamps(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> Dataset:
         path = self.generate_grouped_timestamps_path(band=band, integration=integration)
@@ -1069,7 +1069,7 @@ class Storage(metaclass=SingletonMeta):
     def find_config_band_by_name(
         self,
         band_name: str,
-    ) -> ConfigBand:
+    ) -> BandConfig:
         bands = self.read_config_bands()
 
         for band in bands:
@@ -1097,7 +1097,7 @@ class Storage(metaclass=SingletonMeta):
         lows = self.read(StoragePath.bands_lows)[:]
         highs = self.read(StoragePath.bands_highs)[:]
 
-        bands = ConfigBand.reconstruct(
+        bands = BandConfig.reconstruct(
             names=names,
             lows=lows,
             highs=highs,
@@ -1132,27 +1132,6 @@ class Storage(metaclass=SingletonMeta):
         )
 
         return ranges
-
-    def write_config_bands(
-        self,
-        bands: List[ConfigBand],
-    ) -> None:
-        names, lows, highs = ConfigBand.flatten(bands=bands)
-
-        self.write(
-            path=StoragePath.bands_names,
-            data=names,
-        )
-
-        self.write(
-            path=StoragePath.bands_lows,
-            data=lows,
-        )
-
-        self.write(
-            path=StoragePath.bands_highs,
-            data=highs,
-        )
 
     def write_config_integrations(
         self,
@@ -1328,7 +1307,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_grouped_meta_values(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> List[List[str]]:
         # Autoclusters values
@@ -1384,7 +1363,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_computation_umap_path(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         index: int,
     ) -> str:
@@ -1395,7 +1374,7 @@ class Storage(metaclass=SingletonMeta):
 
     def enumerate_computation_umaps(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ):
         iterations = self.read_computation_umap_iterations()
@@ -1411,7 +1390,7 @@ class Storage(metaclass=SingletonMeta):
 
     def write_computation_umap(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         computation_index: int,
         features: List[List[float]],
@@ -1435,7 +1414,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_computation_umaps(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> List[Dataset]:
         computation_umaps = []
@@ -1451,7 +1430,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_mean_distances_matrix_path(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> str:
         return (
@@ -1461,7 +1440,7 @@ class Storage(metaclass=SingletonMeta):
 
     def write_mean_distances_matrix(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         matrix: List[List[float]],
     ) -> None:
@@ -1478,7 +1457,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_mean_distances_matrix(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> Dataset:
         path = self.generate_mean_distances_matrix_path(band, integration)
@@ -1487,7 +1466,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_autoclusters_path(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         autocluster_index: int,
     ) -> str:
@@ -1501,7 +1480,7 @@ class Storage(metaclass=SingletonMeta):
 
     def enumerate_autoclusters(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> Iterable[Tuple[int, str]]:
         autoclusters = self.read_config_autoclusters()
@@ -1516,7 +1495,7 @@ class Storage(metaclass=SingletonMeta):
 
     def write_autocluster(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         autocluster_index: int,
         values: List[int],
@@ -1538,7 +1517,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_autocluster(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
         autocluster_index: int,
     ) -> Dataset:
@@ -1551,7 +1530,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_autoclusters_values(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> List[Dataset]:
         autoclusters = []
@@ -1634,7 +1613,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_point_indexes_count(
         self,
-        band: ConfigBand,
+        band: BandConfig,
         integration: ConfigIntegration,
     ) -> int:
         path = self.generate_grouped_timestamps_path(band=band, integration=integration)
