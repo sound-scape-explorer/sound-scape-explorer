@@ -24,13 +24,10 @@ def run_extractions(env: Env):
     storage.delete("/extracted")
 
     # retrieve configuration
+    settings = SettingsStorage.read_from_storage(storage)
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)
-    sites = SiteStorage.read_from_storage(storage)
-    settings = SettingsStorage.read_from_storage(storage)
-    print(settings)
-    expected_sample_rate = storage.read_expected_sample_rate()
-    timeline_origin = storage.read_timeline_origin()
+    sites = SiteStorage.read_from_storage(storage, settings)
 
     # configure extraction
     extractors: List[Extractor] = []
@@ -42,7 +39,7 @@ def run_extractions(env: Env):
 
     extractors.append(leq)
 
-    vgg = VggExtractor(expected_sample_rate=expected_sample_rate)
+    vgg = VggExtractor(expected_sample_rate=settings.expected_sample_rate)
     vgg.persist()
 
     extractors.append(vgg)
@@ -55,7 +52,7 @@ def run_extractions(env: Env):
                 site=site,
                 integration=integration,
                 storage=storage,
-                origin=timeline_origin,
+                origin=settings.timeline_origin,
                 # debug=True,
             )
 
