@@ -4,8 +4,8 @@ from pandas import Timestamp
 
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
-from processing.config.TrajectoryConfig import TrajectoryConfig
-from processing.config.TrajectoryExcel import TrajectoryExcel
+from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
+from processing.config.trajectories.TrajectoryExcel import TrajectoryExcel
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp

@@ -1,6 +1,6 @@
 from typing import List, Set, Tuple
 
-from processing.config.FileExcel import FileExcel
+from processing.config.files.FileExcel import FileExcel
 from processing.utils.reverse_array import reverse_array
 
 

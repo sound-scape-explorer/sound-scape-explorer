@@ -3,7 +3,7 @@ import argparse
 from main import Arguments
 from pandas import DataFrame
 
-from processing.config.FileStorage import FileStorage
+from processing.config.files.FileStorage import FileStorage
 from processing.storage.Storage import Storage
 
 

@@ -4,10 +4,10 @@ import numpy
 
 from processing.common.Env import Env
 from processing.common.Timer import Timer
-from processing.config.BandStorage import BandStorage
-from processing.config.FileStorage import FileStorage
-from processing.config.IntegrationStorage import IntegrationStorage
-from processing.config.SiteStorage import SiteStorage
+from processing.config.bands.BandStorage import BandStorage
+from processing.config.files.FileStorage import FileStorage
+from processing.config.integrations.IntegrationStorage import IntegrationStorage
+from processing.config.sites.SiteStorage import SiteStorage
 from processing.storage.Storage import Storage
 from processing.utils.is_within_interval import is_within_interval
 from processing.utils.print_new_line import print_new_line

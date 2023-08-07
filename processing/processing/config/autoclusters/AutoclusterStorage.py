@@ -1,7 +1,7 @@
 from typing import List
 
-from processing.config.AutoclusterConfig import AutoclusterConfig
-from processing.config.AutoclusterExcel import AutoclusterExcel
+from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
+from processing.config.autoclusters.AutoclusterExcel import AutoclusterExcel
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.storage.Storage import Storage

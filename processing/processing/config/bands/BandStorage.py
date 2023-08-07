@@ -1,7 +1,7 @@
 from typing import List
 
-from processing.config.BandConfig import BandConfig
-from processing.config.BandExcel import BandExcel
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.bands.BandExcel import BandExcel
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.storage.Storage import Storage

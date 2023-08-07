@@ -1,12 +1,12 @@
 from typing import List
 
-from processing.config.BandConfig import BandConfig
+from processing.config.bands.BandConfig import BandConfig
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
-from processing.config.IntegrationConfig import IntegrationConfig
-from processing.config.RangeConfig import RangeConfig
-from processing.config.ReducerConfig import ReducerConfig
-from processing.config.ReducerExcel import ReducerExcel
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.config.ranges.RangeConfig import RangeConfig
+from processing.config.reducers.ReducerConfig import ReducerConfig
+from processing.config.reducers.ReducerExcel import ReducerExcel
 from processing.constants import STRING_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath

@@ -4,7 +4,7 @@ import maad
 import pydub
 from pydub import AudioSegment
 
-from processing.config.FileConfig import FileConfig
+from processing.config.files.FileConfig import FileConfig
 
 
 class SoundLoader:

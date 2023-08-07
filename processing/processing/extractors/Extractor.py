@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, List, Optional
 
-from processing.config.BandConfig import BandConfig
+from processing.config.bands.BandConfig import BandConfig
 from processing.loaders.Loader import Loader
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath

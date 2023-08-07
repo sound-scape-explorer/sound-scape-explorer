@@ -2,8 +2,8 @@ from typing import List
 
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
-from processing.config.ExtractorConfig import ExtractorConfig
-from processing.config.ExtractorExcel import ExtractorExcel
+from processing.config.extractors.ExtractorConfig import ExtractorConfig
+from processing.config.extractors.ExtractorExcel import ExtractorExcel
 from processing.storage.Storage import Storage
 
 

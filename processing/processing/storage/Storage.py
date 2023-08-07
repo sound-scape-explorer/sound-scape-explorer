@@ -5,16 +5,15 @@ from h5py import Dataset, File
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
-from processing.config.BandConfig import BandConfig
+from processing.config.bands.BandConfig import BandConfig
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigVolume import ConfigVolume
-from processing.config.IntegrationConfig import IntegrationConfig
-from processing.config.LabelConfig import LabelConfig
-from processing.config.ReducerConfig import ReducerConfig
-from processing.config.SiteConfig import SiteConfig
-from processing.config.TrajectoryConfig import TrajectoryConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.config.reducers.ReducerConfig import ReducerConfig
+from processing.config.sites.SiteConfig import SiteConfig
+from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.storage.StorageCompression import StorageCompression

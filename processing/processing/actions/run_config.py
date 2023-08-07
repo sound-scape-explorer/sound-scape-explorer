@@ -1,6 +1,6 @@
 from processing.common.Env import Env
 from processing.config.Config import Config
-from processing.config.SiteStorage import SiteStorage
+from processing.config.sites.SiteStorage import SiteStorage
 from processing.storage.Storage import Storage
 
 

@@ -1,7 +1,7 @@
 from typing import Dict, List, Type
 
-from processing.config.BandConfig import BandConfig
-from processing.config.IntegrationConfig import IntegrationConfig
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.indicators.AbstractIndicator import AbstractIndicator
 from processing.indicators.AcousticComplexityIndexIndicator import (
     AcousticComplexityIndexIndicator,

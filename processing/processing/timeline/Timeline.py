@@ -1,8 +1,8 @@
 from typing import Dict, List
 
-from processing.config.FileConfig import FileConfig
-from processing.config.IntegrationConfig import IntegrationConfig
-from processing.config.SiteConfig import SiteConfig
+from processing.config.files.FileConfig import FileConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.config.sites.SiteConfig import SiteConfig
 from processing.storage.Storage import Storage
 from processing.timeline.FileLoader import FileLoader
 from processing.timeline.FileWalker import FileWalker

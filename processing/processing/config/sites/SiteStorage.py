@@ -1,8 +1,8 @@
 from typing import List
 
-from processing.config.FileConfig import FileConfig
-from processing.config.FileStorage import FileStorage
-from processing.config.SiteConfig import SiteConfig
+from processing.config.files.FileConfig import FileConfig
+from processing.config.files.FileStorage import FileStorage
+from processing.config.sites.SiteConfig import SiteConfig
 from processing.constants import INT_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath

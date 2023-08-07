@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 import torchaudio
 from torch import Tensor
 
-from processing.config.FileConfig import FileConfig
+from processing.config.files.FileConfig import FileConfig
 
 
 class TorchLoader:

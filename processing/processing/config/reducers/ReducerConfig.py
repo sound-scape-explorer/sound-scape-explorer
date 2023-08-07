@@ -1,8 +1,8 @@
 from typing import Dict, List, Tuple, Type
 
-from processing.config.BandConfig import BandConfig
-from processing.config.IntegrationConfig import IntegrationConfig
-from processing.config.RangeConfig import RangeConfig
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.config.ranges.RangeConfig import RangeConfig
 from processing.reducers.AbstractReducer import AbstractReducer
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.SparsePcaReducer import SparsePcaReducer

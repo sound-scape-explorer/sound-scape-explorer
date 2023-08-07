@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from processing.config.FileConfig import FileConfig
+from processing.config.files.FileConfig import FileConfig
 
 
 class SiteConfig:

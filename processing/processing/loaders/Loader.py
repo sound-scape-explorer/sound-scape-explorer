@@ -1,4 +1,4 @@
-from processing.config.FileConfig import FileConfig
+from processing.config.files.FileConfig import FileConfig
 from processing.loaders.SoundLoader import SoundLoader
 from processing.loaders.TorchLoader import TorchLoader
 

@@ -4,9 +4,9 @@ import numpy as np
 from tqdm import tqdm
 
 from processing.common.Env import Env
-from processing.config.BandStorage import BandStorage
-from processing.config.IntegrationStorage import IntegrationStorage
-from processing.config.SiteStorage import SiteStorage
+from processing.config.bands.BandStorage import BandStorage
+from processing.config.integrations.IntegrationStorage import IntegrationStorage
+from processing.config.sites.SiteStorage import SiteStorage
 from processing.extractors.Extractor import Extracted, Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
 from processing.extractors.VggExtractor import VggExtractor

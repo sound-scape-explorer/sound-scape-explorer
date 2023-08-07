@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from processing.config.FileConfig import FileConfig
+from processing.config.files.FileConfig import FileConfig
 
 
 @dataclass(frozen=True, order=True)

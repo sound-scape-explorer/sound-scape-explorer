@@ -1,8 +1,8 @@
 from typing import List
 
-from processing.config.BandConfig import BandConfig
-from processing.config.IntegrationConfig import IntegrationConfig
-from processing.config.ReducerConfig import ReducerConfig
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.trajectories.ContinuousTimeTrajectory import ContinuousTimeTrajectory
 
 

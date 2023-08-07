@@ -1,7 +1,7 @@
 from typing import Dict, List, Type
 
-from processing.config.BandConfig import BandConfig
-from processing.config.IntegrationConfig import IntegrationConfig
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.matrices.AbstractMatrix import AbstractMatrix
 from processing.matrices.DistanceMatrix import DistanceMatrix
 from processing.matrices.OverlapMatrix import OverlapMatrix

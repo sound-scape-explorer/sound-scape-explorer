@@ -1,10 +1,10 @@
 from typing import List
 
-from processing.config.LabelConfig import LabelConfig
+from processing.config.labels.LabelConfig import LabelConfig
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
-from processing.config.FileConfig import FileConfig
-from processing.config.FileExcel import FileExcel
+from processing.config.files.FileConfig import FileConfig
+from processing.config.files.FileExcel import FileExcel
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp

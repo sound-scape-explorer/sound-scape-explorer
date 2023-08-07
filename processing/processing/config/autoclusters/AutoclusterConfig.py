@@ -3,8 +3,8 @@ from typing import Dict, List, Tuple
 from h5py import Dataset
 from hdbscan import HDBSCAN
 
-from processing.config.BandConfig import BandConfig
-from processing.config.IntegrationConfig import IntegrationConfig
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
 
 
 class AutoclusterConfig:
