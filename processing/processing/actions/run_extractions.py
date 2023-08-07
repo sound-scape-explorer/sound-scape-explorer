@@ -16,7 +16,6 @@ from processing.timeline.Timeline import Timeline
 from processing.utils.print_new_line import print_new_line
 
 
-# run_extractions
 def run_extractions(env: Env):
     storage = Storage(path=env.storage)
     storage.overwrite()

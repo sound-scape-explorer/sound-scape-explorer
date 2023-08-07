@@ -7,9 +7,10 @@ import pandas
 from pandas import DataFrame, Series, Timestamp
 
 from processing.common.SingletonMeta import SingletonMeta
+from processing.config.AutoclusterConfig import AutoclusterConfig
+from processing.config.AutoclusterStorage import AutoclusterStorage
 from processing.config.BandConfig import BandConfig
 from processing.config.BandStorage import BandStorage
-from processing.config.ConfigAutocluster import ConfigAutocluster
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
@@ -17,7 +18,6 @@ from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
-from processing.config.ExcelAutocluster import ExcelAutocluster
 from processing.config.ExcelIndicator import ExcelIndicator
 from processing.config.ExcelMatrices import ExcelMatrices
 from processing.config.ExcelPairings import ExcelPairings
@@ -53,7 +53,6 @@ class Config(metaclass=SingletonMeta):
     __excel: pandas.ExcelFile
     __settings: ConfigSettings = {}  # type: ignore
     __metas: List[ConfigMeta] = []
-    __autoclusters: List[ConfigAutocluster] = []
     __trajectories: List[ConfigTrajectory] = []
     __indicators: List[ConfigIndicator] = []
     __volumes: List[ConfigVolume] = []
@@ -73,6 +72,7 @@ class Config(metaclass=SingletonMeta):
         self.ranges: List[RangeConfig] = []
         self.extractors: List[ExtractorConfig] = []
         self.reducers: List[ReducerConfig] = []
+        self.autoclusters: List[AutoclusterConfig] = []
 
         self.__validate_path()
 
@@ -124,8 +124,11 @@ class Config(metaclass=SingletonMeta):
         self.__read_settings()
         audio_path = self.__get_audio_path()
 
-        self.__read_metas()
+        self.bands = BandStorage.read_from_config(self.parser)
+        self.integrations = IntegrationStorage.read_from_config(self.parser)
+        self.ranges = RangeStorage.read_from_config(self.parser)
 
+        self.__read_metas()
         self.files = FileStorage.read_from_config(
             parser=self.parser,
             labels=self.__metas,
@@ -133,19 +136,17 @@ class Config(metaclass=SingletonMeta):
         )
 
         self.sites = SiteStorage.parse_from_config(self.files)
-        self.bands = BandStorage.read_from_config(self.parser)
-        self.integrations = IntegrationStorage.read_from_config(self.parser)
-        self.ranges = RangeStorage.read_from_config(self.parser)
         self.extractors = ExtractorStorage.read_from_config(self.parser)
 
-        self.__read_autoclusters()
-        self.__read_trajectories()
+        self.autoclusters = AutoclusterStorage.read_from_config(self.parser)
         self.reducers = ReducerStorage.read_from_config(
             parser=self.parser,
             bands=self.bands,
             integrations=self.integrations,
             ranges=self.ranges,
         )
+
+        self.__read_trajectories()
 
         self.__read_indicators()
         self.__read_volumes()
@@ -155,17 +156,21 @@ class Config(metaclass=SingletonMeta):
     def __clean_storage(self, storage: Storage) -> None:
         storage.delete(StoragePath.configuration)
 
-        FileStorage.delete_from_storage(storage)
         BandStorage.delete_from_storage(storage)
         IntegrationStorage.delete_from_storage(storage)
         RangeStorage.delete_from_storage(storage)
 
+        FileStorage.delete_from_storage(storage)
+        SiteStorage.delete_from_storage(storage)
+        ExtractorStorage.delete_from_storage(storage)
+
+        AutoclusterStorage.delete_from_storage(storage)
+        ReducerStorage.delete_from_storage(storage)
+
         storage.delete(StoragePath.meta_properties)
         storage.delete(StoragePath.meta_sets)
-        ReducerStorage.delete_from_storage(storage)
         storage.delete(StoragePath.indicators_names)
         storage.delete(StoragePath.volumes_names)
-        SiteStorage.delete_from_storage(storage)
 
     def write(self, storage: Storage) -> None:
         self.__clean_storage(storage)
@@ -179,19 +184,13 @@ class Config(metaclass=SingletonMeta):
         RangeStorage.write_to_storage(self.ranges, storage)
         ExtractorStorage.write_to_storage(self.extractors, storage)
 
-        self.__store_autoclusters(storage)
+        AutoclusterStorage.write_to_storage(self.autoclusters, storage)
         self.__store_trajectories(storage)
         ReducerStorage.write_to_storage(self.reducers, storage)
         self.__store_indicators(storage)
         self.__store_volumes(storage)
         self.__store_matrices(storage)
         self.__store_pairings(storage)
-
-    def __store_autoclusters(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.write_config_autoclusters(autoclusters=self.__autoclusters)
 
     def __store_trajectories(
         self,
@@ -322,37 +321,6 @@ class Config(metaclass=SingletonMeta):
         storage: Storage,
     ) -> None:
         storage.write_metas(self.__metas)
-
-    def __read_autoclusters(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.autoclusters)
-
-        names: List[str] = self.parse_column(
-            sheet,
-            ExcelAutocluster.name_,
-        )
-
-        min_cluster_sizes: List[int] = self.parse_column(
-            sheet,
-            ExcelAutocluster.min_cluster_size,
-        )
-
-        min_samples: List[int] = self.parse_column(
-            sheet,
-            ExcelAutocluster.min_samples,
-        )
-
-        alphas: List[float] = self.parse_column(sheet, ExcelAutocluster.alpha)
-        epsilons: List[float] = self.parse_column(sheet, ExcelAutocluster.epsilon)
-
-        autoclusters = ConfigAutocluster.reconstruct(
-            names=names,
-            min_cluster_sizes=min_cluster_sizes,
-            min_samples=min_samples,
-            alphas=alphas,
-            epsilons=epsilons,
-        )
-
-        self.__autoclusters = autoclusters
 
     def __read_trajectories(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.trajectories)

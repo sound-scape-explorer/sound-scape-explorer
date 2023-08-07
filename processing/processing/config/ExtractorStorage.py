@@ -18,6 +18,7 @@ class ExtractorStorage:
         storage.delete(ExtractorStorage.names)
         storage.delete(ExtractorStorage.offsets)
         storage.delete(ExtractorStorage.steps)
+        storage.delete(ExtractorStorage.persists)
 
     @staticmethod
     def read_from_storage(storage: Storage) -> List[ExtractorConfig]:

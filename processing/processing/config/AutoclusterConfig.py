@@ -7,7 +7,7 @@ from processing.config.BandConfig import BandConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 
 
-class ConfigAutocluster:
+class AutoclusterConfig:
     methodsByName: Dict[str, str] = {
         "hdbscan-eom": "eom",
         "hdbscan-leaf": "leaf",
@@ -33,7 +33,7 @@ class ConfigAutocluster:
         alpha: float,
         epsilon: float,
     ) -> None:
-        ConfigAutocluster.validate_name(name)
+        AutoclusterConfig.validate_name(name)
 
         self.index = index
         self.name = name
@@ -56,14 +56,14 @@ class ConfigAutocluster:
             KeyError: An error occured because the autoclustering name
             has not been found.
         """
-        if name in ConfigAutocluster.methodsByName.keys():
+        if name in AutoclusterConfig.methodsByName.keys():
             return
 
         raise KeyError(f"Unable to validate autoclustering name {name}.")
 
     @staticmethod
     def flatten(
-        autoclusters: List["ConfigAutocluster"],
+        autoclusters: List["AutoclusterConfig"],
     ) -> Tuple[List[str], List[int], List[int], List[float], List[float]]:
         names = [ac.name for ac in autoclusters]
         min_cluster_sizes = [ac.min_cluster_size for ac in autoclusters]
@@ -80,11 +80,11 @@ class ConfigAutocluster:
         min_samples: List[int],
         alphas: List[float],
         epsilons: List[float],
-    ) -> List["ConfigAutocluster"]:
+    ) -> List["AutoclusterConfig"]:
         autoclusters = []
 
         for index, name in enumerate(names):
-            autocluster = ConfigAutocluster(
+            autocluster = AutoclusterConfig(
                 index=index,
                 name=name,
                 min_cluster_size=min_cluster_sizes[index],

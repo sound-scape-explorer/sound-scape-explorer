@@ -5,8 +5,8 @@ from h5py import Dataset, File
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
+from processing.config.AutoclusterConfig import AutoclusterConfig
 from processing.config.BandConfig import BandConfig
-from processing.config.ConfigAutocluster import ConfigAutocluster
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
@@ -1002,25 +1002,6 @@ class Storage(metaclass=SingletonMeta):
 
         return string_list
 
-    def read_config_autoclusters(self) -> List[ConfigAutocluster]:
-        names_dataset = self.read(StoragePath.autoclusters_names)
-
-        names = self.convert_dataset_to_string_list(names_dataset)
-        min_cluster_sizes = self.read(StoragePath.autoclusters_min_cluster_sizes)[:]
-        min_samples = self.read(StoragePath.autoclusters_min_samples)[:]
-        alphas = self.read(StoragePath.autoclusters_alphas)[:]
-        epsilons = self.read(StoragePath.autoclusters_epsilons)[:]
-
-        autoclusters = ConfigAutocluster.reconstruct(
-            names=names,
-            min_cluster_sizes=min_cluster_sizes,
-            min_samples=min_samples,
-            alphas=alphas,
-            epsilons=epsilons,
-        )
-
-        return autoclusters
-
     def find_config_band_by_name(
         self,
         band_name: str,
@@ -1044,43 +1025,6 @@ class Storage(metaclass=SingletonMeta):
                 return integration
 
         raise KeyError(f"Unable to find integration duration {integration_duration}")
-
-    def write_config_autoclusters(
-        self,
-        autoclusters: List[ConfigAutocluster],
-    ) -> None:
-        (
-            names,
-            min_cluster_sizes,
-            min_samples,
-            alphas,
-            epsilons,
-        ) = ConfigAutocluster.flatten(autoclusters=autoclusters)
-
-        self.write(
-            path=StoragePath.autoclusters_names,
-            data=names,
-        )
-
-        self.write(
-            path=StoragePath.autoclusters_min_cluster_sizes,
-            data=min_cluster_sizes,
-        )
-
-        self.write(
-            path=StoragePath.autoclusters_min_samples,
-            data=min_samples,
-        )
-
-        self.write(
-            path=StoragePath.autoclusters_alphas,
-            data=alphas,
-        )
-
-        self.write(
-            path=StoragePath.autoclusters_epsilons,
-            data=epsilons,
-        )
 
     def write_config_indicators(
         self,
