@@ -1,6 +1,6 @@
 from typing import List
 
-from processing.config.ConfigMeta import ConfigMeta
+from processing.config.LabelConfig import LabelConfig
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.FileConfig import FileConfig
@@ -95,7 +95,7 @@ class FileStorage:
     @staticmethod
     def read_from_config(
         parser: ConfigParser,
-        labels: List[ConfigMeta],
+        labels: List[LabelConfig],
         audio_path: str,
     ) -> List[FileConfig]:
         sheet = ExcelSheet.files
@@ -107,7 +107,7 @@ class FileStorage:
 
         sites = parser.get(sheet, FileExcel.site)
 
-        labels_values = ConfigMeta.convert_to_values_by_file(labels)
+        labels_values = LabelConfig.convert_to_values_by_file(labels)
 
         durations = read_files_durations(names, audio_path)
 

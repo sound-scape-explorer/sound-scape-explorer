@@ -4,7 +4,7 @@ from processing.config.FileExcel import FileExcel
 from processing.utils.reverse_array import reverse_array
 
 
-class ConfigMeta:
+class LabelConfig:
     index: int
     property: str
     values: List[str]
@@ -32,14 +32,14 @@ class ConfigMeta:
 
     @staticmethod
     def convert_to_values_by_file(
-        metas: List["ConfigMeta"],
+        metas: List["LabelConfig"],
     ) -> List[List[str]]:
         meta_values = [m.values for m in metas]
         return reverse_array(meta_values)
 
     @staticmethod
     def flatten(
-        metas: List["ConfigMeta"],
+        metas: List["LabelConfig"],
     ) -> Tuple[List[str], List[List[str]]]:
         properties = [str.upper(m.property) for m in metas]
         sets = [list(m.set) for m in metas]

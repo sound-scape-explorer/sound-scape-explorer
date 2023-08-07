@@ -197,7 +197,7 @@ class StoragePath(Enum):
     # Configuration/Meta #
     ######################
 
-    meta_properties = "/configuration/meta/properties"
+    labels_properties = "/labels/properties"
     """The meta properties specified in the configuration file.
 
     Each row contains a string.
@@ -206,7 +206,7 @@ class StoragePath(Enum):
         Dataset
     """
 
-    meta_sets = "/configuration/meta/sets"
+    labels_sets = "/labels/sets"
     """The meta unique values (sets).
 
     Each row contains a variable number of strings (separated as columns).

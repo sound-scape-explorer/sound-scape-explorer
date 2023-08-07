@@ -5,15 +5,13 @@ from h5py import Dataset, File
 
 from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
-from processing.config.AutoclusterConfig import AutoclusterConfig
 from processing.config.BandConfig import BandConfig
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
-from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.IntegrationConfig import IntegrationConfig
-from processing.config.RangeConfig import RangeConfig
+from processing.config.LabelConfig import LabelConfig
 from processing.config.ReducerConfig import ReducerConfig
 from processing.config.SiteConfig import SiteConfig
 from processing.config.TrajectoryConfig import TrajectoryConfig
@@ -920,26 +918,8 @@ class Storage(metaclass=SingletonMeta):
     def delete_reduced(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.reduced_)
 
-    def write_metas(
-        self,
-        metas: List[ConfigMeta],
-    ) -> None:
-        properties, sets = ConfigMeta.flatten(metas)
-
-        self.write(
-            path=StoragePath.meta_properties,
-            data=properties,
-        )
-
-        sets_rectangular = self.make_rectangular(sets, "")
-
-        self.write(
-            path=StoragePath.meta_sets,
-            data=sets_rectangular,
-        )
-
     def read_meta_properties(self) -> List[str]:
-        meta_properties = self.read(StoragePath.meta_properties)
+        meta_properties = self.read(StoragePath.labels_properties)
 
         strings = list(meta_properties.asstr()[:])
 

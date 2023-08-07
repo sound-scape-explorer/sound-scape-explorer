@@ -17,8 +17,8 @@ class ConfigParser:
         assert Path(path).exists(), f"Path {path} does not exist"
         return path
 
-    def parse(self, sheet_name: ExcelSheet) -> DataFrame:
-        return self.excel.parse(sheet_name.value)  # type: ignore
+    def parse(self, sheet: ExcelSheet) -> DataFrame:
+        return self.excel.parse(sheet.value)  # type: ignore
 
     def get(
         self,

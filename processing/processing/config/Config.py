@@ -13,7 +13,6 @@ from processing.config.BandConfig import BandConfig
 from processing.config.BandStorage import BandStorage
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
-from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ConfigVolume import ConfigVolume
@@ -26,10 +25,11 @@ from processing.config.ExcelVolume import ExcelVolume
 from processing.config.ExtractorConfig import ExtractorConfig
 from processing.config.ExtractorStorage import ExtractorStorage
 from processing.config.FileConfig import FileConfig
-from processing.config.FileExcel import FileExcel
 from processing.config.FileStorage import FileStorage
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.IntegrationStorage import IntegrationStorage
+from processing.config.LabelConfig import LabelConfig
+from processing.config.LabelStorage import LabelStorage
 from processing.config.RangeConfig import RangeConfig
 from processing.config.RangeStorage import RangeStorage
 from processing.config.ReducerConfig import ReducerConfig
@@ -51,7 +51,6 @@ class Config(metaclass=SingletonMeta):
     __path: str
     __excel: pandas.ExcelFile
     __settings: ConfigSettings = {}  # type: ignore
-    __metas: List[ConfigMeta] = []
     __indicators: List[ConfigIndicator] = []
     __volumes: List[ConfigVolume] = []
     __matrices: List[ConfigMatrix] = []
@@ -63,15 +62,20 @@ class Config(metaclass=SingletonMeta):
     ) -> None:
         self.__path = path
         self.parser = ConfigParser(self.__path)
-        self.files: List[FileConfig] = []
-        self.sites: List[SiteConfig] = []
+
         self.bands: List[BandConfig] = []
         self.integrations: List[IntegrationConfig] = []
         self.ranges: List[RangeConfig] = []
+
+        self.labels: List[LabelConfig] = []
+        self.files: List[FileConfig] = []
+        self.sites: List[SiteConfig] = []
         self.extractors: List[ExtractorConfig] = []
-        self.reducers: List[ReducerConfig] = []
+
         self.autoclusters: List[AutoclusterConfig] = []
         self.trajectories: List[TrajectoryConfig] = []
+
+        self.reducers: List[ReducerConfig] = []
 
         self.__validate_path()
 
@@ -127,10 +131,10 @@ class Config(metaclass=SingletonMeta):
         self.integrations = IntegrationStorage.read_from_config(self.parser)
         self.ranges = RangeStorage.read_from_config(self.parser)
 
-        self.__read_metas()
+        self.labels = LabelStorage.read_from_config(self.parser)
         self.files = FileStorage.read_from_config(
             parser=self.parser,
-            labels=self.__metas,
+            labels=self.labels,
             audio_path=audio_path,
         )
 
@@ -159,6 +163,7 @@ class Config(metaclass=SingletonMeta):
         IntegrationStorage.delete_from_storage(storage)
         RangeStorage.delete_from_storage(storage)
 
+        LabelStorage.delete_from_storage(storage)
         FileStorage.delete_from_storage(storage)
         SiteStorage.delete_from_storage(storage)
         ExtractorStorage.delete_from_storage(storage)
@@ -168,8 +173,8 @@ class Config(metaclass=SingletonMeta):
 
         ReducerStorage.delete_from_storage(storage)
 
-        storage.delete(StoragePath.meta_properties)
-        storage.delete(StoragePath.meta_sets)
+        storage.delete(StoragePath.labels_properties)
+        storage.delete(StoragePath.labels_sets)
         storage.delete(StoragePath.indicators_names)
         storage.delete(StoragePath.volumes_names)
 
@@ -177,13 +182,13 @@ class Config(metaclass=SingletonMeta):
         self.__clean_storage(storage)
         self.__store_settings(storage)
 
-        FileStorage.write_to_storage(self.files, storage)
-        self.__store_metas(storage)
-        SiteStorage.write_to_storage(self.sites, storage)
         BandStorage.write_to_storage(self.bands, storage)
-
         IntegrationStorage.write_to_storage(self.integrations, storage)
         RangeStorage.write_to_storage(self.ranges, storage)
+
+        LabelStorage.write_to_storage(self.labels, storage)
+        FileStorage.write_to_storage(self.files, storage)
+        SiteStorage.write_to_storage(self.sites, storage)
         ExtractorStorage.write_to_storage(self.extractors, storage)
 
         AutoclusterStorage.write_to_storage(self.autoclusters, storage)
@@ -270,34 +275,6 @@ class Config(metaclass=SingletonMeta):
         for setting_name, setting in self.__settings.items():
             print(f"{setting_name}: {setting}")
 
-    def __read_metas(self) -> List[ConfigMeta]:
-        sheet = self.__parse_sheet(ExcelSheet.files)
-
-        metas: List[ConfigMeta] = []
-        index = 0
-
-        for column in sheet:
-            if not ConfigMeta.is_meta_property(column):
-                continue
-
-            meta: ConfigMeta = ConfigMeta(
-                index=index,
-                string=column,
-            )
-
-            values = self.parse_column(
-                sheet,
-                FileExcel.label_prefix,
-                suffix=meta.property,
-            )
-
-            meta.load_values(values)
-            metas.append(meta)
-            index += 1
-
-        self.__metas = metas
-        return self.__metas
-
     def __get_audio_path(self) -> str:
         return self.__settings["audio_path"]
 
@@ -312,12 +289,6 @@ class Config(metaclass=SingletonMeta):
                 continue
 
             storage.create_configuration_setting(setting, value)
-
-    def __store_metas(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.write_metas(self.__metas)
 
     def __read_indicators(self) -> List[ConfigIndicator]:
         sheet = self.__parse_sheet(ExcelSheet.indicators)
