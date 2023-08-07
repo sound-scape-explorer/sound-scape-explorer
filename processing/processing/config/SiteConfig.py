@@ -3,7 +3,7 @@ from typing import List, Tuple
 from processing.config.ConfigFile import ConfigFile
 
 
-class ConfigSite:
+class SiteConfig:
     index: int
     name: str
     files: List[ConfigFile]
@@ -19,7 +19,7 @@ class ConfigSite:
         self.files = files
 
     @staticmethod
-    def flatten(sites: List["ConfigSite"]) -> Tuple[List[str], List[List[int]]]:
+    def flatten(sites: List["SiteConfig"]) -> Tuple[List[str], List[List[int]]]:
         names = [s.name for s in sites]
         file_indexes = [[f.index for f in s.files] for s in sites]
 
@@ -30,8 +30,8 @@ class ConfigSite:
         names: List[str],
         file_indexes: List[List[int]],
         files: List[ConfigFile],
-    ) -> List["ConfigSite"]:
-        sites: List[ConfigSite] = []
+    ) -> List["SiteConfig"]:
+        sites: List[SiteConfig] = []
 
         for index, name in enumerate(names):
             files_by_site: List[ConfigFile] = []
@@ -40,7 +40,7 @@ class ConfigSite:
                 if file.index in file_indexes[index]:
                     files_by_site.append(file)
 
-            site: ConfigSite = ConfigSite(
+            site: SiteConfig = SiteConfig(
                 index=index,
                 name=name,
                 files=files_by_site,

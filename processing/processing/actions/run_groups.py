@@ -4,6 +4,7 @@ import numpy
 
 from processing.common.Env import Env
 from processing.common.Timer import Timer
+from processing.config.SiteStorage import SiteStorage
 from processing.storage.Storage import Storage
 from processing.utils.is_within_interval import is_within_interval
 from processing.utils.print_new_line import print_new_line
@@ -33,7 +34,7 @@ def run_groups(env: Env):
         if timestamp_start is None or file.start < timestamp_start:
             timestamp_start = file.start
 
-    sites = storage.read_config_sites()
+    sites = SiteStorage.read_from_storage(storage)
 
     for band in bands:
         files_features = storage.read_files_features(band)

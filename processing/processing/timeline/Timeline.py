@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIntegration import ConfigIntegration
-from processing.config.ConfigSite import ConfigSite
+from processing.config.SiteConfig import SiteConfig
 from processing.storage.Storage import Storage
 from processing.timeline.FileLoader import FileLoader
 from processing.timeline.FileWalker import FileWalker
@@ -16,7 +16,7 @@ FileIndex = int
 class Timeline:
     def __init__(
         self,
-        site: ConfigSite,
+        site: SiteConfig,
         integration: ConfigIntegration,
         storage: Storage,
         origin: int,

@@ -1,0 +1,81 @@
+from typing import List
+
+from processing.config.ConfigFile import ConfigFile
+from processing.config.SiteConfig import SiteConfig
+from processing.constants import INT_NONE
+from processing.storage.Storage import Storage
+from processing.storage.StoragePath import StoragePath
+
+
+class SiteStorage:
+    path_names = StoragePath.sites_names.value
+    path_file_indexes = StoragePath.sites_file_indexes.value
+
+    @staticmethod
+    def delete(storage: Storage):
+        storage.delete(SiteStorage.path_names)
+        storage.delete(SiteStorage.path_file_indexes)
+
+    @staticmethod
+    def read_from_storage(storage: Storage) -> List[SiteConfig]:
+        names_dataset = storage.read(SiteStorage.path_names)
+        names: List[str] = storage.__convert_dataset_to_string_list(names_dataset)
+
+        file_indexes_rectangular = storage.read(SiteStorage.path_file_indexes)[:]
+
+        file_indexes: List[List[int]] = storage.trim_rectangular(
+            file_indexes_rectangular,
+            INT_NONE,
+        )
+
+        files = storage.read_config_files()
+
+        sites = SiteConfig.reconstruct(
+            names=names,
+            file_indexes=file_indexes,
+            files=files,
+        )
+
+        return sites
+
+    @staticmethod
+    def write_to_storage(sites: List[SiteConfig], storage: Storage) -> None:
+        names, file_indexes = SiteConfig.flatten(sites)
+
+        storage.write(
+            path=SiteStorage.path_names,
+            data=names,
+        )
+
+        file_indexes_rectangular = storage.make_rectangular(file_indexes, INT_NONE)
+
+        storage.write(
+            path=SiteStorage.path_file_indexes,
+            data=file_indexes_rectangular,
+        )
+
+    @staticmethod
+    def generate_from_config(files: List[ConfigFile]) -> List[SiteConfig]:
+        # Listing unique site names
+        # Making this by hand because using `set()` has inconsistent order
+        site_names = []
+        for file in files:
+            if file.site in site_names:
+                continue
+
+            site_names.append(file.site)
+
+        sites = []
+
+        for site_index, site_name in enumerate(site_names):
+            picked_files = [file for file in files if file.site == site_name]
+
+            site = SiteConfig(
+                index=site_index,
+                name=site_name,
+                files=picked_files,
+            )
+
+            sites.append(site)
+
+        return sites

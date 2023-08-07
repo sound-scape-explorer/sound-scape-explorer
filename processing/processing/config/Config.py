@@ -17,7 +17,6 @@ from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
-from processing.config.ConfigSite import ConfigSite
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.ExcelAutocluster import ExcelAutocluster
@@ -33,7 +32,8 @@ from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
-from processing.constants import INT_NONE
+from processing.config.SiteConfig import SiteConfig
+from processing.config.SiteStorage import SiteStorage
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
@@ -55,7 +55,6 @@ class Config(metaclass=SingletonMeta):
     __bands: List[ConfigBand] = []
     __integrations: List[ConfigIntegration] = []
     __ranges: List[ConfigRange] = []
-    __all_sites: List[str] = []
     __autoclusters: List[ConfigAutocluster] = []
     __trajectories: List[ConfigTrajectory] = []
     __reducers: List[ConfigReducer] = []
@@ -63,7 +62,7 @@ class Config(metaclass=SingletonMeta):
     __volumes: List[ConfigVolume] = []
     __matrices: List[ConfigMatrix] = []
     __pairings: List[ConfigPairing] = []
-    sites: List[ConfigSite] = []
+    sites: List[SiteConfig] = []
 
     def __init__(
         self,
@@ -75,8 +74,6 @@ class Config(metaclass=SingletonMeta):
 
         self.__load_file()
         self.__read()
-        self.__set()
-        self.__generate_sites()
         self.__succeed()
 
     def __succeed(self) -> None:
@@ -127,6 +124,7 @@ class Config(metaclass=SingletonMeta):
 
         self.__read_metas()
         self.__read_files()
+        self.sites = SiteStorage.generate_from_config(self.__files)
 
         self.__read_bands()
         self.__read_integrations()
@@ -140,9 +138,6 @@ class Config(metaclass=SingletonMeta):
         self.__read_volumes()
         self.__read_matrices()
         self.__read_pairings()
-
-    def __set(self) -> None:
-        self.__set_all_sites()
 
     def __clean_storage(self, storage: Storage) -> None:
         storage.delete(StoragePath.configuration)
@@ -167,8 +162,7 @@ class Config(metaclass=SingletonMeta):
         storage.delete(StoragePath.reducers_ranges)
         storage.delete(StoragePath.indicators_names)
         storage.delete(StoragePath.volumes_names)
-        storage.delete(StoragePath.sites_names)
-        storage.delete(StoragePath.sites_file_indexes)
+        SiteStorage.delete(storage)
 
     def write(
         self,
@@ -234,13 +228,6 @@ class Config(metaclass=SingletonMeta):
         storage: Storage,
     ) -> None:
         storage.write_config_pairings(self.__pairings)
-
-    def __set_all_sites(self) -> None:
-        for file_ in self.__files:
-            if file_.site in self.__all_sites:
-                continue
-
-            self.__all_sites.append(file_.site)
 
     def __read_settings(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.settings)
@@ -350,32 +337,6 @@ class Config(metaclass=SingletonMeta):
 
         self.__files = files
 
-    def __generate_sites(self) -> List[ConfigSite]:
-        # Listing unique site names
-        # Making this by hand because using `set()` has inconsistent order
-        site_names = []
-        for file in self.__files:
-            if file.site in site_names:
-                continue
-
-            site_names.append(file.site)
-
-        sites = []
-
-        for site_index, site_name in enumerate(site_names):
-            picked_files = [file for file in self.__files if file.site == site_name]
-
-            site = ConfigSite(
-                index=site_index,
-                name=site_name,
-                files=picked_files,
-            )
-
-            sites.append(site)
-
-        self.sites = sites
-        return self.sites
-
     def __store_settings(
         self,
         storage: Storage,
@@ -400,51 +361,36 @@ class Config(metaclass=SingletonMeta):
             durations,
         ) = ConfigFile.flatten(files=self.__files)
 
-        storage.write_dataset(
+        storage.write(
             path=StoragePath.files_names,
             data=names,
         )
 
-        storage.write_dataset(
+        storage.write(
             path=StoragePath.files_timestamps,
             data=timestamps,
             compression=StorageCompression.gzip,
             attributes={"unit": "milliseconds"},
         )
 
-        storage.write_dataset(
+        storage.write(
             path=StoragePath.files_sites,
             data=sites,
         )
 
-        storage.write_dataset(
+        storage.write(
             path=StoragePath.files_labels,
             data=labels,
         )
 
-        storage.write_dataset(
+        storage.write(
             path=StoragePath.files_durations,
             data=durations,
             attributes={"unit": "milliseconds"},
         )
 
-    def __store_sites(
-        self,
-        storage: Storage,
-    ) -> None:
-        names, file_indexes = ConfigSite.flatten(self.sites)
-
-        storage.write_dataset(
-            path=StoragePath.sites_names.value,
-            data=names,
-        )
-
-        file_indexes_rectangular = storage.make_rectangular(file_indexes, INT_NONE)
-
-        storage.write_dataset(
-            path=StoragePath.sites_file_indexes.value,
-            data=file_indexes_rectangular,
-        )
+    def __store_sites(self, storage: Storage) -> None:
+        SiteStorage.write_to_storage(self.sites, storage)
 
     def __store_metas(
         self,
