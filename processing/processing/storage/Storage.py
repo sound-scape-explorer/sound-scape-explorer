@@ -5,7 +5,7 @@ from h5py import Dataset, File
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.bands.BandConfig import BandConfig
-from processing.config.ConfigPairing import ConfigPairing
+from processing.config.pairings.PairingConfig import PairingConfig
 from processing.config.indicators.IndicatorConfig import IndicatorConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.matrices.MatrixConfig import MatrixConfig
@@ -223,10 +223,10 @@ class Storage(metaclass=SingletonMeta):
 
         return groups_count
 
-    def read_config_pairings(self) -> List[ConfigPairing]:
+    def read_config_pairings(self) -> List[PairingConfig]:
         names_dataset = self.read(StoragePath.pairings_names)
         names = self.convert_dataset_to_string_list(names_dataset)
-        pairings = ConfigPairing.reconstruct(names=names)
+        pairings = PairingConfig.reconstruct(names=names)
         return pairings
 
     def read_files_timestamps(self) -> Dataset:
@@ -770,7 +770,7 @@ class Storage(metaclass=SingletonMeta):
             compression=True,
         )
 
-    def generate_pairing_path(self, pairing: ConfigPairing) -> str:
+    def generate_pairing_path(self, pairing: PairingConfig) -> str:
         return (
             f"{StoragePath.pairing_.value}{pairing.index}"
             f"/{pairing.band.name}/{pairing.integration.seconds}"
@@ -779,7 +779,7 @@ class Storage(metaclass=SingletonMeta):
 
     def write_pairing(
         self,
-        pairing: ConfigPairing,
+        pairing: PairingConfig,
     ) -> None:
         path = self.generate_pairing_path(pairing)
 
@@ -906,9 +906,9 @@ class Storage(metaclass=SingletonMeta):
 
     def write_config_pairings(
         self,
-        pairings: List[ConfigPairing],
+        pairings: List[PairingConfig],
     ) -> None:
-        names = ConfigPairing.flatten(pairings=pairings)
+        names = PairingConfig.flatten(pairings=pairings)
 
         self.write(
             path=StoragePath.pairings_names,

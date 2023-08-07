@@ -6,7 +6,7 @@ from processing.pairings.AbstractPairing import AbstractPairing
 from processing.pairings.ContingencyPairing import ContingencyPairing
 
 
-class ConfigPairing:
+class PairingConfig:
     algorithms: Dict[str, Type[AbstractPairing]] = {"contingency": ContingencyPairing}
     index: int
     name: str
@@ -23,23 +23,23 @@ class ConfigPairing:
 
     @staticmethod
     def _validate_name(name: str) -> None:
-        if name in ConfigPairing.algorithms.keys():
+        if name in PairingConfig.algorithms.keys():
             return
 
         raise KeyError("Unable to find pairing name {name}.")
 
     @staticmethod
-    def flatten(pairings: List["ConfigPairing"]):
+    def flatten(pairings: List["PairingConfig"]):
         names = [p.name for p in pairings]
 
         return names
 
     @staticmethod
-    def reconstruct(names: List[str]) -> List["ConfigPairing"]:
+    def reconstruct(names: List[str]) -> List["PairingConfig"]:
         pairings = []
 
         for index, name in enumerate(names):
-            pairing = ConfigPairing(
+            pairing = PairingConfig(
                 index=index,
                 name=name,
             )

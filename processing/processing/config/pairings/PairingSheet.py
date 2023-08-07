@@ -1,5 +1,5 @@
 from enum import Enum
 
 
-class ExcelPairings(Enum):
+class PairingSheet(Enum):
     name_ = "pairing"

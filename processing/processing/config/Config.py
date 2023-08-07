@@ -5,10 +5,7 @@ from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.bands.BandStorage import BandStorage
-from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigParser import ConfigParser
-from processing.config.ExcelPairings import ExcelPairings
-from processing.config.ExcelSheet import ExcelSheet
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.files.FileConfig import FileConfig
@@ -20,8 +17,9 @@ from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.labels.LabelConfig import LabelConfig
 from processing.config.labels.LabelStorage import LabelStorage
 from processing.config.matrices.MatrixConfig import MatrixConfig
-from processing.config.matrices.MatrixSheet import MatrixSheet
 from processing.config.matrices.MatrixStorage import MatrixStorage
+from processing.config.pairings.PairingConfig import PairingConfig
+from processing.config.pairings.PairingStorage import PairingStorage
 from processing.config.ranges.RangeConfig import RangeConfig
 from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerConfig import ReducerConfig
@@ -39,8 +37,6 @@ from processing.utils.print_new_line import print_new_line
 
 
 class Config(metaclass=SingletonMeta):
-    __pairings: List[ConfigPairing] = []
-
     def __init__(
         self,
         path: str,
@@ -65,16 +61,25 @@ class Config(metaclass=SingletonMeta):
         self.indicators: List[IndicatorConfig] = []
         self.volumes: List[VolumeConfig] = []
         self.matrices: List[MatrixConfig] = []
+        self.pairings: List[PairingConfig] = []
 
-        self.__read()
-        self.__succeed()
+        self.parse()
+        self.print()
 
-    def __succeed(self) -> None:
+    def print(self) -> None:
         print_new_line()
         print(f"Config loaded: {self.parser.path}")
-        self.__print_settings()
+        self.print_settings()
 
-    def __read(self) -> None:
+    def print_settings(self) -> None:
+        print_new_line()
+        print("Settings")
+        print_new_line()
+
+        for k, v in vars(self.settings).items():
+            print(f"{k}: {v}")
+
+    def parse(self) -> None:
         self.settings = SettingsStorage.read_from_config(self.parser)
 
         self.bands = BandStorage.read_from_config(self.parser)
@@ -104,7 +109,7 @@ class Config(metaclass=SingletonMeta):
         self.indicators = IndicatorStorage.read_from_config(self.parser)
         self.volumes = VolumeStorage.read_from_config(self.parser)
         self.matrices = MatrixStorage.read_from_config(self.parser)
-        self.__read_pairings()
+        self.pairings = PairingStorage.read_from_config(self.parser)
 
     def delete_from_storage(self, storage: Storage) -> None:
         SettingsStorage.delete_from_storage(storage)
@@ -116,14 +121,17 @@ class Config(metaclass=SingletonMeta):
         LabelStorage.delete_from_storage(storage)
         FileStorage.delete_from_storage(storage)
         SiteStorage.delete_from_storage(storage)
+
         ExtractorStorage.delete_from_storage(storage)
+        IndicatorStorage.delete_from_storage(storage)
 
         AutoclusterStorage.delete_from_storage(storage)
         TrajectoryStorage.delete_from_storage(storage)
 
         ReducerStorage.delete_from_storage(storage)
-        IndicatorStorage.delete_from_storage(storage)
         VolumeStorage.delete_from_storage(storage)
+        MatrixStorage.delete_from_storage(storage)
+        PairingStorage.delete_from_storage(storage)
 
     def write(self, storage: Storage) -> None:
         self.delete_from_storage(storage)
@@ -137,34 +145,14 @@ class Config(metaclass=SingletonMeta):
         LabelStorage.write_to_storage(self.labels, storage)
         FileStorage.write_to_storage(self.files, storage)
         SiteStorage.write_to_storage(self.sites, storage)
+
         ExtractorStorage.write_to_storage(self.extractors, storage)
+        IndicatorStorage.write_to_storage(self.indicators, storage)
 
         AutoclusterStorage.write_to_storage(self.autoclusters, storage)
         TrajectoryStorage.write_to_storage(self.trajectories, storage)
 
         ReducerStorage.write_to_storage(self.reducers, storage)
-        IndicatorStorage.write_to_storage(self.indicators, storage)
         VolumeStorage.write_to_storage(self.volumes, storage)
         MatrixStorage.write_to_storage(self.matrices, storage)
-
-        self.__store_pairings(storage)
-
-    def __store_pairings(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.write_config_pairings(self.__pairings)
-
-    def __print_settings(self) -> None:
-        print_new_line()
-        print("Settings")
-        print_new_line()
-
-        for k, v in vars(self.settings).items():
-            print(f"{k}: {v}")
-
-    def __read_pairings(self) -> List[ConfigPairing]:
-        sheet = ExcelSheet.pairings
-        names = self.parser.get(sheet, ExcelPairings.name_)
-        self.__pairings = ConfigPairing.reconstruct(names=names)
-        return self.__pairings
+        PairingStorage.write_to_storage(self.pairings, storage)
