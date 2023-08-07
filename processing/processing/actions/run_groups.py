@@ -6,6 +6,7 @@ from processing.common.Env import Env
 from processing.common.Timer import Timer
 from processing.config.BandStorage import BandStorage
 from processing.config.FileStorage import FileStorage
+from processing.config.IntegrationStorage import IntegrationStorage
 from processing.config.SiteStorage import SiteStorage
 from processing.storage.Storage import Storage
 from processing.utils.is_within_interval import is_within_interval
@@ -21,7 +22,7 @@ def run_groups(env: Env):
     storage.delete_groups()
 
     bands = BandStorage.read_from_storage(storage)
-    integrations = storage.read_config_integrations()
+    integrations = IntegrationStorage.read_from_storage(storage)
 
     files = FileStorage.read_from_storage(storage)
 

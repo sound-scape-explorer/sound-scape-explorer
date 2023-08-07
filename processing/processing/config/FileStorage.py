@@ -19,7 +19,7 @@ class FileStorage:
     durations = StoragePath.files_durations.value
 
     @staticmethod
-    def delete(storage: Storage) -> None:
+    def delete_from_storage(storage: Storage) -> None:
         storage.delete(FileStorage.names)
         storage.delete(FileStorage.timestamps)
         storage.delete(FileStorage.sites)

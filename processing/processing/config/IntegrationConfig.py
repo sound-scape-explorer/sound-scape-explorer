@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 
-class ConfigIntegration:
+class IntegrationConfig:
     index: int
     name: str
     __duration: int
@@ -19,7 +19,7 @@ class ConfigIntegration:
 
     @staticmethod
     def flatten(
-        integrations: List["ConfigIntegration"],
+        integrations: List["IntegrationConfig"],
     ) -> Tuple[List[str], List[int]]:
         names = [i.name for i in integrations]
         durations = [i.__duration for i in integrations]
@@ -29,11 +29,11 @@ class ConfigIntegration:
     def reconstruct(
         names: List[str],
         durations: List[int],
-    ) -> List["ConfigIntegration"]:
+    ) -> List["IntegrationConfig"]:
         integrations = []
 
         for index, name in enumerate(names):
-            integration = ConfigIntegration(
+            integration = IntegrationConfig(
                 index=index,
                 name=name,
                 duration=durations[index],

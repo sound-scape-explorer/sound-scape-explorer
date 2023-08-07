@@ -1,7 +1,7 @@
 from typing import List
 
 from processing.config.BandConfig import BandConfig
-from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.ConfigReducer import ConfigReducer
 from processing.trajectories.ContinuousTimeTrajectory import ContinuousTimeTrajectory
 
@@ -12,7 +12,7 @@ class ConfigTrajectory:
     start: int
     end: int
     band: BandConfig
-    integration: ConfigIntegration
+    integration: IntegrationConfig
     reducer: ConfigReducer
     instance: ContinuousTimeTrajectory
 
@@ -62,7 +62,7 @@ class ConfigTrajectory:
     def create_instance(
         self,
         band: BandConfig,
-        integration: ConfigIntegration,
+        integration: IntegrationConfig,
         reducer: ConfigReducer,
     ) -> ContinuousTimeTrajectory:
         self.band = band

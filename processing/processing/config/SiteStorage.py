@@ -13,7 +13,7 @@ class SiteStorage:
     path_file_indexes = StoragePath.sites_file_indexes.value
 
     @staticmethod
-    def delete(storage: Storage):
+    def delete_from_storage(storage: Storage):
         storage.delete(SiteStorage.path_names)
         storage.delete(SiteStorage.path_file_indexes)
 

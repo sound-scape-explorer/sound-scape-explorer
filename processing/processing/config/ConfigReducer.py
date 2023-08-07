@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple, Type
 
 from processing.config.BandConfig import BandConfig
-from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.ConfigRange import ConfigRange
 from processing.reducers.AbstractReducer import AbstractReducer
 from processing.reducers.PcaReducer import PcaReducer
@@ -23,10 +23,10 @@ class ConfigReducer:
     name: str
     dimensions: int
     bands: List[BandConfig]
-    integrations: List[ConfigIntegration]
+    integrations: List[IntegrationConfig]
     ranges: List[ConfigRange]
     band: BandConfig
-    integration: ConfigIntegration
+    integration: IntegrationConfig
     instance: AbstractReducer
 
     def __init__(
@@ -35,7 +35,7 @@ class ConfigReducer:
         name: str,
         dimensions: int,
         bands: List[BandConfig],
-        integrations: List[ConfigIntegration],
+        integrations: List[IntegrationConfig],
         ranges: List[ConfigRange],
     ) -> None:
         self._validate_name(name)
@@ -104,8 +104,8 @@ class ConfigReducer:
     @staticmethod
     def pick_reducer_integrations(
         integrations_names_string: str,
-        integrations: List[ConfigIntegration],
-    ) -> List[ConfigIntegration]:
+        integrations: List[IntegrationConfig],
+    ) -> List[IntegrationConfig]:
         if is_nan(integrations_names_string):
             return integrations
 
@@ -141,7 +141,7 @@ class ConfigReducer:
         integrations_names_strings: List[str],
         ranges_names_strings: List[str],
         bands: List[BandConfig],
-        integrations: List[ConfigIntegration],
+        integrations: List[IntegrationConfig],
         ranges: List[ConfigRange],
     ) -> List["ConfigReducer"]:
         reducers = []
@@ -178,7 +178,7 @@ class ConfigReducer:
     def load(
         self,
         band: BandConfig,
-        integration: ConfigIntegration,
+        integration: IntegrationConfig,
     ):
         self.band = band
         self.integration = integration
@@ -187,7 +187,7 @@ class ConfigReducer:
     def create_instance(
         self,
         band: BandConfig,
-        integration: ConfigIntegration,
+        integration: IntegrationConfig,
     ) -> AbstractReducer:
         self.load(band=band, integration=integration)
         self.instance = self.algorithms[self.name]()

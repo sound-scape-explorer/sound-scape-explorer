@@ -1,7 +1,7 @@
 from typing import Dict, List, Type
 
 from processing.config.BandConfig import BandConfig
-from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.IntegrationConfig import IntegrationConfig
 from processing.volumes.AbstractVolume import AbstractVolume
 from processing.volumes.MeanSpreadingVolume import MeanSpreadingVolume
 from processing.volumes.MeanStandardDeviationVolume import MeanStandardDeviationVolume
@@ -20,7 +20,7 @@ class ConfigVolume:
     index: int
     name: str
     band: BandConfig
-    integration: ConfigIntegration
+    integration: IntegrationConfig
     meta_index: int
     instance: AbstractVolume
 
@@ -69,7 +69,7 @@ class ConfigVolume:
     def create_instance(
         self,
         band: BandConfig,
-        integration: ConfigIntegration,
+        integration: IntegrationConfig,
         meta_index: int,
     ) -> AbstractVolume:
         self.band = band

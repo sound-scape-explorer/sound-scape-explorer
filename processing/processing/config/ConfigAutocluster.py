@@ -4,7 +4,7 @@ from h5py import Dataset
 from hdbscan import HDBSCAN
 
 from processing.config.BandConfig import BandConfig
-from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.IntegrationConfig import IntegrationConfig
 
 
 class ConfigAutocluster:
@@ -20,7 +20,7 @@ class ConfigAutocluster:
     alpha: float
     epsilon: float
     band: BandConfig
-    integration: ConfigIntegration
+    integration: IntegrationConfig
     instance: HDBSCAN
     values: List[int]
 
@@ -100,7 +100,7 @@ class ConfigAutocluster:
     def create_instance(
         self,
         band: BandConfig,
-        integration: ConfigIntegration,
+        integration: IntegrationConfig,
     ) -> HDBSCAN:
         self.band = band
         self.integration = integration

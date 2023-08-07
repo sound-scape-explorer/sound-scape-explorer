@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from processing.config.FileConfig import FileConfig
-from processing.config.ConfigIntegration import ConfigIntegration
+from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.SiteConfig import SiteConfig
 from processing.storage.Storage import Storage
 from processing.timeline.FileLoader import FileLoader
@@ -17,7 +17,7 @@ class Timeline:
     def __init__(
         self,
         site: SiteConfig,
-        integration: ConfigIntegration,
+        integration: IntegrationConfig,
         storage: Storage,
         origin: int,
         debug: bool = False,
