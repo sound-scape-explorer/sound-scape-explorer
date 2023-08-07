@@ -1,5 +1,5 @@
 from enum import Enum
 
 
-class ExcelMatrices(Enum):
+class MatrixSheet(Enum):
     name_ = "matrix"

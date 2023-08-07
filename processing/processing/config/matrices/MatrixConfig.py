@@ -8,7 +8,7 @@ from processing.matrices.OverlapMatrix import OverlapMatrix
 from processing.matrices.SilhouetteMatrix import SilhouetteMatrix
 
 
-class ConfigMatrix:
+class MatrixConfig:
     algorithms: Dict[str, Type[AbstractMatrix]] = {
         "distance": DistanceMatrix,
         "overlap": OverlapMatrix,
@@ -34,24 +34,24 @@ class ConfigMatrix:
 
     @staticmethod
     def validate_name(name: str) -> None:
-        if name in ConfigMatrix.algorithms.keys():
+        if name in MatrixConfig.algorithms.keys():
             return
 
         raise KeyError(f"Unable to find matrix name {name}.")
 
     @staticmethod
-    def flatten(matrices: List["ConfigMatrix"]):
+    def flatten(matrices: List["MatrixConfig"]):
         names = [m.name for m in matrices]
         return names
 
     @staticmethod
     def reconstruct(
         names: List[str],
-    ) -> List["ConfigMatrix"]:
+    ) -> List["MatrixConfig"]:
         matrices = []
 
         for index, name in enumerate(names):
-            matrix = ConfigMatrix(
+            matrix = MatrixConfig(
                 index=index,
                 name=name,
             )

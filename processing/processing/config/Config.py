@@ -5,10 +5,8 @@ from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.bands.BandStorage import BandStorage
-from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigParser import ConfigParser
-from processing.config.ExcelMatrices import ExcelMatrices
 from processing.config.ExcelPairings import ExcelPairings
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
@@ -21,6 +19,9 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.labels.LabelConfig import LabelConfig
 from processing.config.labels.LabelStorage import LabelStorage
+from processing.config.matrices.MatrixConfig import MatrixConfig
+from processing.config.matrices.MatrixSheet import MatrixSheet
+from processing.config.matrices.MatrixStorage import MatrixStorage
 from processing.config.ranges.RangeConfig import RangeConfig
 from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerConfig import ReducerConfig
@@ -38,7 +39,6 @@ from processing.utils.print_new_line import print_new_line
 
 
 class Config(metaclass=SingletonMeta):
-    __matrices: List[ConfigMatrix] = []
     __pairings: List[ConfigPairing] = []
 
     def __init__(
@@ -64,6 +64,7 @@ class Config(metaclass=SingletonMeta):
         self.reducers: List[ReducerConfig] = []
         self.indicators: List[IndicatorConfig] = []
         self.volumes: List[VolumeConfig] = []
+        self.matrices: List[MatrixConfig] = []
 
         self.__read()
         self.__succeed()
@@ -102,7 +103,7 @@ class Config(metaclass=SingletonMeta):
 
         self.indicators = IndicatorStorage.read_from_config(self.parser)
         self.volumes = VolumeStorage.read_from_config(self.parser)
-        self.__read_matrices()
+        self.matrices = MatrixStorage.read_from_config(self.parser)
         self.__read_pairings()
 
     def delete_from_storage(self, storage: Storage) -> None:
@@ -144,15 +145,9 @@ class Config(metaclass=SingletonMeta):
         ReducerStorage.write_to_storage(self.reducers, storage)
         IndicatorStorage.write_to_storage(self.indicators, storage)
         VolumeStorage.write_to_storage(self.volumes, storage)
+        MatrixStorage.write_to_storage(self.matrices, storage)
 
-        self.__store_matrices(storage)
         self.__store_pairings(storage)
-
-    def __store_matrices(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.write_config_matrices(self.__matrices)
 
     def __store_pairings(
         self,
@@ -167,12 +162,6 @@ class Config(metaclass=SingletonMeta):
 
         for k, v in vars(self.settings).items():
             print(f"{k}: {v}")
-
-    def __read_matrices(self) -> List[ConfigMatrix]:
-        sheet = ExcelSheet.matrices
-        names = self.parser.get(sheet, ExcelMatrices.name_)
-        self.__matrices = ConfigMatrix.reconstruct(names=names)
-        return self.__matrices
 
     def __read_pairings(self) -> List[ConfigPairing]:
         sheet = ExcelSheet.pairings

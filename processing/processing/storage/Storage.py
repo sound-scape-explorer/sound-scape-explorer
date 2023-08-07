@@ -5,10 +5,10 @@ from h5py import Dataset, File
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.bands.BandConfig import BandConfig
-from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.indicators.IndicatorConfig import IndicatorConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.config.matrices.MatrixConfig import MatrixConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
@@ -222,12 +222,6 @@ class Storage(metaclass=SingletonMeta):
             groups_count += group_count[0]
 
         return groups_count
-
-    def read_config_matrices(self) -> List[ConfigMatrix]:
-        names_dataset = self.read(StoragePath.matrices_names)
-        names = self.convert_dataset_to_string_list(names_dataset)
-        matrices = ConfigMatrix.reconstruct(names=names)
-        return matrices
 
     def read_config_pairings(self) -> List[ConfigPairing]:
         names_dataset = self.read(StoragePath.pairings_names)
@@ -543,12 +537,6 @@ class Storage(metaclass=SingletonMeta):
         for meta_index, _ in enumerate(meta_properties):
             yield meta_index
 
-    def enumerate_volumes(self):
-        volumes = self.read_config_volumes()
-
-        for index, name in enumerate(volumes):
-            yield index, name
-
     def generate_grouped_path_suffix(
         self,
         band: BandConfig,
@@ -805,7 +793,7 @@ class Storage(metaclass=SingletonMeta):
     def delete_pairings(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.pairing_)
 
-    def generate_matrix_path(self, matrix: ConfigMatrix) -> str:
+    def generate_matrix_path(self, matrix: MatrixConfig) -> str:
         return (
             f"{StoragePath.matrix_.value}{matrix.index}"
             f"/{matrix.band.name}/{matrix.integration.seconds}/{matrix.meta_index}"
@@ -813,7 +801,7 @@ class Storage(metaclass=SingletonMeta):
 
     def write_matrix(
         self,
-        matrix: ConfigMatrix,
+        matrix: MatrixConfig,
     ) -> None:
         path = self.generate_matrix_path(
             matrix=matrix,
@@ -824,12 +812,6 @@ class Storage(metaclass=SingletonMeta):
             data=matrix.instance.values,
             compression=True,
         )
-
-    def delete_matrices(self) -> None:
-        self.__delete_all_paths_starting_with(StoragePath.matrix_)
-
-    def delete_volumes(self) -> None:
-        self.__delete_all_paths_starting_with(StoragePath.volume_)
 
     def delete_reduced(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.reduced_)
@@ -921,17 +903,6 @@ class Storage(metaclass=SingletonMeta):
                 return integration
 
         raise KeyError(f"Unable to find integration duration {integration_duration}")
-
-    def write_config_matrices(
-        self,
-        matrices: List[ConfigMatrix],
-    ) -> None:
-        names = ConfigMatrix.flatten(matrices=matrices)
-
-        self.write(
-            path=StoragePath.matrices_names,
-            data=names,
-        )
 
     def write_config_pairings(
         self,
