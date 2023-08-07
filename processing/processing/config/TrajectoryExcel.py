@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ExcelTrajectory(Enum):
+class TrajectoryExcel(Enum):
     name_ = "trajectory"
     start = "start"
     end = "end"

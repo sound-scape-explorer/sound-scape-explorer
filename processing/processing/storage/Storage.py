@@ -11,12 +11,12 @@ from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
-from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.RangeConfig import RangeConfig
 from processing.config.ReducerConfig import ReducerConfig
 from processing.config.SiteConfig import SiteConfig
+from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.storage.StorageCompression import StorageCompression
@@ -1326,7 +1326,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_trajectory_path(
         self,
-        trajectory: ConfigTrajectory,
+        trajectory: TrajectoryConfig,
     ) -> str:
         return (
             f"{StoragePath.trajectory_.value}{trajectory.index}"
@@ -1335,45 +1335,9 @@ class Storage(metaclass=SingletonMeta):
             f"/{trajectory.integration.seconds}"
         )
 
-    def read_config_trajectories(self) -> List[ConfigTrajectory]:
-        names_dataset = self.read(StoragePath.trajectories_names)
-
-        names = self.convert_dataset_to_string_list(names_dataset)
-        starts = self.read(StoragePath.trajectories_starts)[:]
-        ends = self.read(StoragePath.trajectories_ends)[:]
-
-        trajectories = ConfigTrajectory.reconstruct(
-            names=names,
-            starts=starts,
-            ends=ends,
-        )
-
-        return trajectories
-
-    def write_config_trajectories(
-        self,
-        trajectories: List[ConfigTrajectory],
-    ) -> None:
-        names, starts, ends = ConfigTrajectory.flatten(trajectories=trajectories)
-
-        self.write(
-            path=StoragePath.trajectories_names,
-            data=names,
-        )
-
-        self.write(
-            path=StoragePath.trajectories_starts,
-            data=starts,
-        )
-
-        self.write(
-            path=StoragePath.trajectories_ends,
-            data=ends,
-        )
-
     def write_trajectory(
         self,
-        trajectory: ConfigTrajectory,
+        trajectory: TrajectoryConfig,
     ):
         path = self.generate_trajectory_path(
             trajectory=trajectory,

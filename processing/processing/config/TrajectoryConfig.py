@@ -6,7 +6,7 @@ from processing.config.ReducerConfig import ReducerConfig
 from processing.trajectories.ContinuousTimeTrajectory import ContinuousTimeTrajectory
 
 
-class ConfigTrajectory:
+class TrajectoryConfig:
     index: int
     name: str
     start: int
@@ -29,7 +29,7 @@ class ConfigTrajectory:
         self.end = end
 
     @staticmethod
-    def flatten(trajectories: List["ConfigTrajectory"]):
+    def flatten(trajectories: List["TrajectoryConfig"]):
         names = [t.name for t in trajectories]
         starts = [t.start for t in trajectories]
         ends = [t.end for t in trajectories]
@@ -41,14 +41,14 @@ class ConfigTrajectory:
         names: List[str],
         starts: List[int],
         ends: List[int],
-    ) -> List["ConfigTrajectory"]:
+    ) -> List["TrajectoryConfig"]:
         trajectories = []
 
         for index, name in enumerate(names):
             start = starts[index]
             end = ends[index]
 
-            trajectory = ConfigTrajectory(
+            trajectory = TrajectoryConfig(
                 index=index,
                 name=name,
                 start=start,

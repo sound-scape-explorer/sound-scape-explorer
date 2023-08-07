@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 import pandas
-from pandas import DataFrame, Series, Timestamp
+from pandas import DataFrame, Series
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.AutoclusterConfig import AutoclusterConfig
@@ -16,14 +16,12 @@ from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigParser import ConfigParser
-from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.ExcelIndicator import ExcelIndicator
 from processing.config.ExcelMatrices import ExcelMatrices
 from processing.config.ExcelPairings import ExcelPairings
 from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
-from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
 from processing.config.ExtractorConfig import ExtractorConfig
 from processing.config.ExtractorStorage import ExtractorStorage
@@ -38,12 +36,13 @@ from processing.config.ReducerConfig import ReducerConfig
 from processing.config.ReducerStorage import ReducerStorage
 from processing.config.SiteConfig import SiteConfig
 from processing.config.SiteStorage import SiteStorage
+from processing.config.TrajectoryConfig import TrajectoryConfig
+from processing.config.TrajectoryStorage import TrajectoryStorage
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
-from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
 from processing.utils.is_nan import is_nan
 from processing.utils.print_new_line import print_new_line
 
@@ -53,7 +52,6 @@ class Config(metaclass=SingletonMeta):
     __excel: pandas.ExcelFile
     __settings: ConfigSettings = {}  # type: ignore
     __metas: List[ConfigMeta] = []
-    __trajectories: List[ConfigTrajectory] = []
     __indicators: List[ConfigIndicator] = []
     __volumes: List[ConfigVolume] = []
     __matrices: List[ConfigMatrix] = []
@@ -73,6 +71,7 @@ class Config(metaclass=SingletonMeta):
         self.extractors: List[ExtractorConfig] = []
         self.reducers: List[ReducerConfig] = []
         self.autoclusters: List[AutoclusterConfig] = []
+        self.trajectories: List[TrajectoryConfig] = []
 
         self.__validate_path()
 
@@ -139,14 +138,14 @@ class Config(metaclass=SingletonMeta):
         self.extractors = ExtractorStorage.read_from_config(self.parser)
 
         self.autoclusters = AutoclusterStorage.read_from_config(self.parser)
+        self.trajectories = TrajectoryStorage.read_from_config(self.parser)
+
         self.reducers = ReducerStorage.read_from_config(
             parser=self.parser,
             bands=self.bands,
             integrations=self.integrations,
             ranges=self.ranges,
         )
-
-        self.__read_trajectories()
 
         self.__read_indicators()
         self.__read_volumes()
@@ -165,6 +164,8 @@ class Config(metaclass=SingletonMeta):
         ExtractorStorage.delete_from_storage(storage)
 
         AutoclusterStorage.delete_from_storage(storage)
+        TrajectoryStorage.delete_from_storage(storage)
+
         ReducerStorage.delete_from_storage(storage)
 
         storage.delete(StoragePath.meta_properties)
@@ -180,23 +181,19 @@ class Config(metaclass=SingletonMeta):
         self.__store_metas(storage)
         SiteStorage.write_to_storage(self.sites, storage)
         BandStorage.write_to_storage(self.bands, storage)
+
         IntegrationStorage.write_to_storage(self.integrations, storage)
         RangeStorage.write_to_storage(self.ranges, storage)
         ExtractorStorage.write_to_storage(self.extractors, storage)
 
         AutoclusterStorage.write_to_storage(self.autoclusters, storage)
-        self.__store_trajectories(storage)
+        TrajectoryStorage.write_to_storage(self.trajectories, storage)
+
         ReducerStorage.write_to_storage(self.reducers, storage)
         self.__store_indicators(storage)
         self.__store_volumes(storage)
         self.__store_matrices(storage)
         self.__store_pairings(storage)
-
-    def __store_trajectories(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.write_config_trajectories(trajectories=self.__trajectories)
 
     def __store_indicators(
         self,
@@ -321,24 +318,6 @@ class Config(metaclass=SingletonMeta):
         storage: Storage,
     ) -> None:
         storage.write_metas(self.__metas)
-
-    def __read_trajectories(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.trajectories)
-
-        names: List[str] = self.parse_column(sheet, ExcelTrajectory.name_)
-        starts: List[Timestamp] = self.parse_column(sheet, ExcelTrajectory.start)
-        ends: List[Timestamp] = self.parse_column(sheet, ExcelTrajectory.end)
-
-        starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
-        ends_timestamps = [convert_date_to_timestamp(end) for end in ends]
-
-        trajectories = ConfigTrajectory.reconstruct(
-            names=names,
-            starts=starts_timestamps,
-            ends=ends_timestamps,
-        )
-
-        self.__trajectories = trajectories
 
     def __read_indicators(self) -> List[ConfigIndicator]:
         sheet = self.__parse_sheet(ExcelSheet.indicators)
