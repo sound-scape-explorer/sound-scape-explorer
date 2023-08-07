@@ -15,14 +15,12 @@ from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
 from processing.config.ConfigParser import ConfigParser
-from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.ExcelAutocluster import ExcelAutocluster
 from processing.config.ExcelIndicator import ExcelIndicator
 from processing.config.ExcelMatrices import ExcelMatrices
 from processing.config.ExcelPairings import ExcelPairings
-from processing.config.ExcelReducer import ExcelReducer
 from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelTrajectory import ExcelTrajectory
@@ -36,6 +34,8 @@ from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.IntegrationStorage import IntegrationStorage
 from processing.config.RangeConfig import RangeConfig
 from processing.config.RangeStorage import RangeStorage
+from processing.config.ReducerConfig import ReducerConfig
+from processing.config.ReducerStorage import ReducerStorage
 from processing.config.SiteConfig import SiteConfig
 from processing.config.SiteStorage import SiteStorage
 from processing.settings.ConfigSetting import ConfigSettings
@@ -55,7 +55,6 @@ class Config(metaclass=SingletonMeta):
     __metas: List[ConfigMeta] = []
     __autoclusters: List[ConfigAutocluster] = []
     __trajectories: List[ConfigTrajectory] = []
-    __reducers: List[ConfigReducer] = []
     __indicators: List[ConfigIndicator] = []
     __volumes: List[ConfigVolume] = []
     __matrices: List[ConfigMatrix] = []
@@ -73,6 +72,7 @@ class Config(metaclass=SingletonMeta):
         self.integrations: List[IntegrationConfig] = []
         self.ranges: List[RangeConfig] = []
         self.extractors: List[ExtractorConfig] = []
+        self.reducers: List[ReducerConfig] = []
 
         self.__validate_path()
 
@@ -140,7 +140,12 @@ class Config(metaclass=SingletonMeta):
 
         self.__read_autoclusters()
         self.__read_trajectories()
-        self.__read_reducers()
+        self.reducers = ReducerStorage.read_from_config(
+            parser=self.parser,
+            bands=self.bands,
+            integrations=self.integrations,
+            ranges=self.ranges,
+        )
 
         self.__read_indicators()
         self.__read_volumes()
@@ -157,11 +162,7 @@ class Config(metaclass=SingletonMeta):
 
         storage.delete(StoragePath.meta_properties)
         storage.delete(StoragePath.meta_sets)
-        storage.delete(StoragePath.reducers_names)
-        storage.delete(StoragePath.reducers_dimensions)
-        storage.delete(StoragePath.reducers_bands)
-        storage.delete(StoragePath.reducers_integrations)
-        storage.delete(StoragePath.reducers_ranges)
+        ReducerStorage.delete_from_storage(storage)
         storage.delete(StoragePath.indicators_names)
         storage.delete(StoragePath.volumes_names)
         SiteStorage.delete_from_storage(storage)
@@ -180,7 +181,7 @@ class Config(metaclass=SingletonMeta):
 
         self.__store_autoclusters(storage)
         self.__store_trajectories(storage)
-        self.__store_reducers(storage)
+        ReducerStorage.write_to_storage(self.reducers, storage)
         self.__store_indicators(storage)
         self.__store_volumes(storage)
         self.__store_matrices(storage)
@@ -197,12 +198,6 @@ class Config(metaclass=SingletonMeta):
         storage: Storage,
     ) -> None:
         storage.write_config_trajectories(trajectories=self.__trajectories)
-
-    def __store_reducers(
-        self,
-        storage: Storage,
-    ) -> None:
-        storage.write_config_reducers(reducers=self.__reducers)
 
     def __store_indicators(
         self,
@@ -376,34 +371,6 @@ class Config(metaclass=SingletonMeta):
         )
 
         self.__trajectories = trajectories
-
-    def __read_reducers(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.reducers)
-
-        names = self.parse_column(sheet, ExcelReducer.name_)
-        dimensions = self.parse_column(sheet, ExcelReducer.dimensions)
-
-        bands_names_string = self.parse_column(sheet, ExcelReducer.bands)
-
-        integrations_names_string = self.parse_column(
-            sheet,
-            ExcelReducer.integrations,
-        )
-
-        ranges_names_strings = self.parse_column(sheet, ExcelReducer.ranges)
-
-        reducers = ConfigReducer.reconstruct(
-            names=names,
-            dimensions=dimensions,
-            bands_names_strings=bands_names_string,
-            integrations_names_strings=integrations_names_string,
-            ranges_names_strings=ranges_names_strings,
-            bands=self.bands,
-            integrations=self.integrations,
-            ranges=self.ranges,
-        )
-
-        self.__reducers = reducers
 
     def __read_indicators(self) -> List[ConfigIndicator]:
         sheet = self.__parse_sheet(ExcelSheet.indicators)

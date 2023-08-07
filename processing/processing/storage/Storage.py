@@ -11,11 +11,11 @@ from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
-from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.RangeConfig import RangeConfig
+from processing.config.ReducerConfig import ReducerConfig
 from processing.config.SiteConfig import SiteConfig
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
@@ -186,7 +186,7 @@ class Storage(metaclass=SingletonMeta):
         self,
         band: BandConfig,
         integration: IntegrationConfig,
-    ) -> List[ConfigReducer]:
+    ) -> List[ReducerConfig]:
         reducers = self.read_config_reducers()
 
         grouped_reducers = []
@@ -201,7 +201,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_all_reduced_features(
         self,
-        reducers: List[ConfigReducer],
+        reducers: List[ReducerConfig],
     ) -> List[List[List[float]]]:
         reduced_features = []
 
@@ -216,50 +216,6 @@ class Storage(metaclass=SingletonMeta):
                 reduced_features[reducer.index].append(features)
 
         return reduced_features
-
-    def read_config_reducers(self) -> List[ConfigReducer]:
-        names_dataset = self.read(StoragePath.reducers_names)
-
-        names = self.convert_dataset_to_string_list(names_dataset)
-        dimensions = self.read(StoragePath.reducers_dimensions)[:]
-
-        bands_names = self.read(StoragePath.reducers_bands).asstr()
-        integrations_names = self.read(StoragePath.reducers_integrations).asstr()
-        ranges_names = self.read(StoragePath.reducers_ranges).asstr()
-
-        bands_names = self.trim_rectangular(bands_names, "")
-        integrations_names = self.trim_rectangular(integrations_names, "")
-        ranges_names = self.trim_rectangular(ranges_names, "")
-
-        bands_names_strings = [
-            ",".join(bands_names_string) for bands_names_string in bands_names
-        ]
-
-        integrations_names_strings = [
-            ",".join(integrations_names_string)
-            for integrations_names_string in integrations_names
-        ]
-
-        ranges_names_strings = [
-            ",".join(ranges_names_string) for ranges_names_string in integrations_names
-        ]
-
-        bands = self.read_config_bands()
-        integrations = self.read_config_integrations()
-        ranges = self.read_config_ranges()
-
-        reducers = ConfigReducer.reconstruct(
-            names=names,
-            dimensions=dimensions,
-            bands_names_strings=bands_names_strings,
-            integrations_names_strings=integrations_names_strings,
-            ranges_names_strings=ranges_names_strings,
-            bands=bands,
-            integrations=integrations,
-            ranges=ranges,
-        )
-
-        return reducers
 
     def read_files_names(self) -> List[str]:
         dataset = self.read(StoragePath.files_names)
@@ -798,7 +754,7 @@ class Storage(metaclass=SingletonMeta):
 
     def is_band_integration_in_reducer(
         self,
-        reducer: ConfigReducer,
+        reducer: ReducerConfig,
         band: BandConfig,
         integration: IntegrationConfig,
     ) -> bool:
@@ -849,7 +805,7 @@ class Storage(metaclass=SingletonMeta):
 
     def generate_reduced_path(
         self,
-        reducer: ConfigReducer,
+        reducer: ReducerConfig,
     ) -> str:
         return (
             f"{StoragePath.reduced_.value}{reducer.index}"
@@ -858,7 +814,7 @@ class Storage(metaclass=SingletonMeta):
 
     def write_reducer(
         self,
-        reducer: ConfigReducer,
+        reducer: ReducerConfig,
     ) -> None:
         path = self.generate_reduced_path(reducer=reducer)
 
@@ -1124,52 +1080,6 @@ class Storage(metaclass=SingletonMeta):
         self.write(
             path=StoragePath.autoclusters_epsilons,
             data=epsilons,
-        )
-
-    def write_config_reducers(
-        self,
-        reducers: List[ConfigReducer],
-    ) -> None:
-        (
-            names,
-            dimensions,
-            bands,
-            integrations,
-            ranges,
-        ) = ConfigReducer.flatten(reducers=reducers)
-
-        if len(bands) != 0:
-            bands = self.make_rectangular(bands, "")
-
-        if len(integrations) != 0:
-            integrations = self.make_rectangular(integrations, "")
-
-        if len(ranges) != 0:
-            ranges = self.make_rectangular(ranges, "")
-
-        self.write(
-            path=StoragePath.reducers_names,
-            data=names,
-        )
-
-        self.write(
-            path=StoragePath.reducers_dimensions,
-            data=dimensions,
-        )
-
-        self.write(
-            path=StoragePath.reducers_bands,
-            data=bands,
-        )
-
-        self.write(
-            path=StoragePath.reducers_integrations,
-            data=integrations,
-        )
-
-        self.write(
-            path=StoragePath.reducers_ranges,
-            data=ranges,
         )
 
     def write_config_indicators(
@@ -1541,7 +1451,7 @@ class Storage(metaclass=SingletonMeta):
 
     def read_reducer(
         self,
-        reducer: ConfigReducer,
+        reducer: ReducerConfig,
     ) -> Dataset:
         path = self.generate_reduced_path(reducer)
         dataset = self.read(path)

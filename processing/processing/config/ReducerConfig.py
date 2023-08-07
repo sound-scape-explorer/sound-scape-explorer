@@ -11,7 +11,7 @@ from processing.reducers.VaeReducer import VaeReducer
 from processing.utils.is_nan import is_nan
 
 
-class ConfigReducer:
+class ReducerConfig:
     algorithms: Dict[str, Type[AbstractReducer]] = {
         "umap": UmapReducer,
         "vae": VaeReducer,
@@ -50,7 +50,7 @@ class ConfigReducer:
 
     @staticmethod
     def _validate_name(name: str) -> None:
-        if name in ConfigReducer.algorithms.keys():
+        if name in ReducerConfig.algorithms.keys():
             return
 
         raise KeyError(f"Unable to find reducer name {name}.")
@@ -71,7 +71,7 @@ class ConfigReducer:
 
     @staticmethod
     def flatten(
-        reducers: List["ConfigReducer"],
+        reducers: List["ReducerConfig"],
     ) -> Tuple[
         List[str],
         List[int],
@@ -143,26 +143,26 @@ class ConfigReducer:
         bands: List[BandConfig],
         integrations: List[IntegrationConfig],
         ranges: List[RangeConfig],
-    ) -> List["ConfigReducer"]:
+    ) -> List["ReducerConfig"]:
         reducers = []
 
         for index, name in enumerate(names):
-            reducer_bands = ConfigReducer.pick_reducer_bands(
+            reducer_bands = ReducerConfig.pick_reducer_bands(
                 bands_names_string=bands_names_strings[index],
                 bands=bands,
             )
 
-            reducer_integrations = ConfigReducer.pick_reducer_integrations(
+            reducer_integrations = ReducerConfig.pick_reducer_integrations(
                 integrations_names_string=integrations_names_strings[index],
                 integrations=integrations,
             )
 
-            reducer_ranges = ConfigReducer.pick_reducer_ranges(
+            reducer_ranges = ReducerConfig.pick_reducer_ranges(
                 ranges_names_string=ranges_names_strings[index],
                 ranges=ranges,
             )
 
-            reducer = ConfigReducer(
+            reducer = ReducerConfig(
                 index=index,
                 name=name,
                 dimensions=dimensions[index],

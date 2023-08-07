@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ExcelReducer(Enum):
+class ReducerExcel(Enum):
     name_ = "reducer"
     dimensions = "dimensions"
     ranges = "ranges"
