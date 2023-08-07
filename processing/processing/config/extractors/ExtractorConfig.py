@@ -59,6 +59,6 @@ class ExtractorConfig:
                 persist=True if persists[index] == 1 else False,
             )
 
-            extractors = [*extractors, extractor]
+            extractors.append(extractor)
 
         return extractors

@@ -41,7 +41,7 @@ class LabelStorage:
             )
 
             label.load_values(values)
-            labels = [*labels, label]
+            labels.append(label)
             index += 1
 
         return labels
