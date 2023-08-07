@@ -1,8 +1,8 @@
 from enum import Enum
 
 
-class ExcelFile(Enum):
+class FileExcel(Enum):
     name_ = "file"
     date = "date"
     site = "site"
-    meta_prefix = "meta_"
+    label_prefix = "meta_"

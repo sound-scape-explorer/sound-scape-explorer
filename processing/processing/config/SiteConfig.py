@@ -1,18 +1,18 @@
 from typing import List, Tuple
 
-from processing.config.ConfigFile import ConfigFile
+from processing.config.FileConfig import FileConfig
 
 
 class SiteConfig:
     index: int
     name: str
-    files: List[ConfigFile]
+    files: List[FileConfig]
 
     def __init__(
         self,
         index: int,
         name: str,
-        files: List[ConfigFile],
+        files: List[FileConfig],
     ) -> None:
         self.index = index
         self.name = name
@@ -29,12 +29,12 @@ class SiteConfig:
     def reconstruct(
         names: List[str],
         file_indexes: List[List[int]],
-        files: List[ConfigFile],
+        files: List[FileConfig],
     ) -> List["SiteConfig"]:
         sites: List[SiteConfig] = []
 
         for index, name in enumerate(names):
-            files_by_site: List[ConfigFile] = []
+            files_by_site: List[FileConfig] = []
 
             for file in files:
                 if file.index in file_indexes[index]:

@@ -7,7 +7,6 @@ from processing.common.Env import Env
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigAutocluster import ConfigAutocluster
 from processing.config.ConfigBand import ConfigBand
-from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigMatrix import ConfigMatrix
@@ -17,6 +16,7 @@ from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
+from processing.config.FileConfig import FileConfig
 from processing.config.SiteConfig import SiteConfig
 from processing.constants import DOCKER_BASE_PATH
 from processing.settings.ConfigSetting import ConfigSettings
@@ -81,7 +81,7 @@ class Storage(metaclass=SingletonMeta):
         self,
         path: Union[StoragePath, str],
         data: Any,
-        compression: Optional[StorageCompression] = None,
+        compression: Optional[bool] = False,
         dtype: Optional[Any] = None,
         shape: Optional[Any] = None,
         attributes: Optional[Dict[str, str]] = None,
@@ -92,13 +92,10 @@ class Storage(metaclass=SingletonMeta):
             print(f"Dataset already exists: {path}")
             return
 
-        if type(compression) is StorageCompression:
-            compression = compression.value  # type: ignore
-
         dataset = self.__file.create_dataset(
             path,
             data=data,
-            compression=compression,
+            compression=StorageCompression.gzip.value if compression else None,
             dtype=dtype,
             shape=shape,
         )
@@ -157,24 +154,24 @@ class Storage(metaclass=SingletonMeta):
         except KeyError:
             raise KeyError(f"Unable to find storage path {path}.")
 
-    def read_config_files(self) -> List[ConfigFile]:
-        names = self.read_files_names()
-        timestamps = self.read_files_timestamps()
-        sites = self.read_files_sites()
-        labels = self.read_files_metas()
-        durations = self.read_files_durations()
-        audio_path = self.read_audio_path()
-
-        files = ConfigFile.reconstruct(
-            names=names,
-            timestamps=timestamps[:],
-            sites=sites,
-            labels=labels,
-            durations=durations,
-            audio_path=audio_path,
-        )
-
-        return files
+    # def read_config_files(self) -> List[FileConfig]:
+    #     names = self.read_files_names()
+    #     timestamps = self.read_files_timestamps()
+    #     sites = self.read_files_sites()
+    #     labels = self.read_files_metas()
+    #     durations = self.read_files_durations()
+    #     audio_path = self.read_audio_path()
+    #
+    #     files = FileConfig.reconstruct(
+    #         names=names,
+    #         timestamps=timestamps[:],
+    #         sites=sites,
+    #         labels=labels,
+    #         durations=durations,
+    #         audio_path=audio_path,
+    #     )
+    #
+    #     return files
 
     def read_reducers(self) -> List[str]:
         dataset = self.read(StoragePath.reducers_names)
@@ -224,7 +221,7 @@ class Storage(metaclass=SingletonMeta):
     def read_config_reducers(self) -> List[ConfigReducer]:
         names_dataset = self.read(StoragePath.reducers_names)
 
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         dimensions = self.read(StoragePath.reducers_dimensions)[:]
 
         bands_names = self.read(StoragePath.reducers_bands).asstr()
@@ -298,25 +295,25 @@ class Storage(metaclass=SingletonMeta):
 
     def read_config_indicators(self) -> List[ConfigIndicator]:
         names_dataset = self.read(StoragePath.indicators_names)
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         indicators = ConfigIndicator.reconstruct(names=names)
         return indicators
 
     def read_config_volumes(self) -> List[ConfigVolume]:
         names_dataset = self.read(StoragePath.volumes_names)
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         volumes = ConfigVolume.reconstruct(names=names)
         return volumes
 
     def read_config_matrices(self) -> List[ConfigMatrix]:
         names_dataset = self.read(StoragePath.matrices_names)
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         matrices = ConfigMatrix.reconstruct(names=names)
         return matrices
 
     def read_config_pairings(self) -> List[ConfigPairing]:
         names_dataset = self.read(StoragePath.pairings_names)
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         pairings = ConfigPairing.reconstruct(names=names)
         return pairings
 
@@ -1040,7 +1037,7 @@ class Storage(metaclass=SingletonMeta):
         return jagged_array
 
     @staticmethod
-    def __convert_dataset_to_string_list(dataset: Dataset) -> List[str]:
+    def convert_dataset_to_string_list(dataset: Dataset) -> List[str]:
         (length,) = dataset.shape
 
         if length == 0:
@@ -1053,7 +1050,7 @@ class Storage(metaclass=SingletonMeta):
     def read_config_autoclusters(self) -> List[ConfigAutocluster]:
         names_dataset = self.read(StoragePath.autoclusters_names)
 
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         min_cluster_sizes = self.read(StoragePath.autoclusters_min_cluster_sizes)[:]
         min_samples = self.read(StoragePath.autoclusters_min_samples)[:]
         alphas = self.read(StoragePath.autoclusters_alphas)[:]
@@ -1096,7 +1093,7 @@ class Storage(metaclass=SingletonMeta):
     def read_config_bands(self):
         names_dataset = self.read(StoragePath.bands_names)
 
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         lows = self.read(StoragePath.bands_lows)[:]
         highs = self.read(StoragePath.bands_highs)[:]
 
@@ -1111,7 +1108,7 @@ class Storage(metaclass=SingletonMeta):
     def read_config_integrations(self):
         names_dataset = self.read(StoragePath.integrations_names)
 
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         durations = self.read(StoragePath.integrations_milliseconds)[:]
 
         integrations = ConfigIntegration.reconstruct(
@@ -1124,7 +1121,7 @@ class Storage(metaclass=SingletonMeta):
     def read_config_ranges(self):
         names_dataset = self.read(StoragePath.ranges_names)
 
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         starts = self.read(StoragePath.ranges_starts)[:]
         ends = self.read(StoragePath.ranges_ends)[:]
 
@@ -1589,7 +1586,7 @@ class Storage(metaclass=SingletonMeta):
     def read_config_trajectories(self) -> List[ConfigTrajectory]:
         names_dataset = self.read(StoragePath.trajectories_names)
 
-        names = self.__convert_dataset_to_string_list(names_dataset)
+        names = self.convert_dataset_to_string_list(names_dataset)
         starts = self.read(StoragePath.trajectories_starts)[:]
         ends = self.read(StoragePath.trajectories_ends)[:]
 

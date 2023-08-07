@@ -1,4 +1,4 @@
-from processing.config.ConfigFile import ConfigFile
+from processing.config.FileConfig import FileConfig
 from processing.loaders.SoundLoader import SoundLoader
 from processing.loaders.TorchLoader import TorchLoader
 
@@ -11,7 +11,7 @@ class Loader:
         self.torch = TorchLoader()
         self.sound = SoundLoader()
 
-    def load(self, file: ConfigFile):
+    def load(self, file: FileConfig):
         self.torch.load(file)
         self.sound.load(file)
 

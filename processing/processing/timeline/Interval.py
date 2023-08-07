@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from processing.config.ConfigFile import ConfigFile
+from processing.config.FileConfig import FileConfig
 
 
 @dataclass(frozen=True, order=True)
 class Block:  # aka Slice / EnrichedAudio
     start: int
     end: int
-    file: ConfigFile
+    file: FileConfig
 
 
 @dataclass(frozen=True, order=True)

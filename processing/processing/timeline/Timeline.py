@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from processing.config.ConfigFile import ConfigFile
+from processing.config.FileConfig import FileConfig
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.SiteConfig import SiteConfig
 from processing.storage.Storage import Storage
@@ -30,13 +30,13 @@ class Timeline:
 
         self.map: TimelineMap = {}
         self.step = integration.milliseconds
-        self.loaded_files: List[ConfigFile] = []
+        self.loaded_files: List[FileConfig] = []
         self.efs: Dict[FileIndex, FileLoader] = {}
 
         self.load()
         self.print_debug()
 
-    def get_interval_count_in_file(self, file: ConfigFile) -> int:
+    def get_interval_count_in_file(self, file: FileConfig) -> int:
         count = (file.end - file.start) // self.step
 
         if file.duration < self.step:

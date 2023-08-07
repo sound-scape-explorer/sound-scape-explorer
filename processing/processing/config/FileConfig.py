@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 
-class ConfigFile:
+class FileConfig:
     index: int
     name: str
     timestamp: int  # UNIX timestamp in milliseconds
@@ -31,7 +31,7 @@ class ConfigFile:
 
     @staticmethod
     def flatten(
-        files: List["ConfigFile"],
+        files: List["FileConfig"],
     ) -> Tuple[List[str], List[int], List[str], List[List[str]], List[int]]:
         names = [f.name for f in files]
         timestamps = [f.timestamp for f in files]
@@ -49,11 +49,11 @@ class ConfigFile:
         labels: List[List[str]],
         durations: List[int],
         audio_path: str,
-    ) -> List["ConfigFile"]:
+    ) -> List["FileConfig"]:
         files = []
 
         for index, name in enumerate(names):
-            file_ = ConfigFile(
+            file_ = FileConfig(
                 index=index,
                 name=name,
                 timestamp=timestamps[index],

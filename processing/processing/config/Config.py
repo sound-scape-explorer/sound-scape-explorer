@@ -9,19 +9,18 @@ from pandas import DataFrame, Series, Timestamp
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.ConfigAutocluster import ConfigAutocluster
 from processing.config.ConfigBand import ConfigBand
-from processing.config.ConfigFile import ConfigFile
 from processing.config.ConfigIndicator import ConfigIndicator
 from processing.config.ConfigIntegration import ConfigIntegration
 from processing.config.ConfigMatrix import ConfigMatrix
 from processing.config.ConfigMeta import ConfigMeta
 from processing.config.ConfigPairing import ConfigPairing
+from processing.config.ConfigParser import ConfigParser
 from processing.config.ConfigRange import ConfigRange
 from processing.config.ConfigReducer import ConfigReducer
 from processing.config.ConfigTrajectory import ConfigTrajectory
 from processing.config.ConfigVolume import ConfigVolume
 from processing.config.ExcelAutocluster import ExcelAutocluster
 from processing.config.ExcelBand import ExcelBand
-from processing.config.ExcelFile import ExcelFile
 from processing.config.ExcelIndicator import ExcelIndicator
 from processing.config.ExcelIntegration import ExcelIntegration
 from processing.config.ExcelMatrices import ExcelMatrices
@@ -32,25 +31,25 @@ from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
+from processing.config.FileConfig import FileConfig
+from processing.config.FileExcel import FileExcel
+from processing.config.FileStorage import FileStorage
 from processing.config.SiteConfig import SiteConfig
 from processing.config.SiteStorage import SiteStorage
 from processing.settings.ConfigSetting import ConfigSettings
 from processing.settings.DefaultSetting import DefaultSetting
 from processing.settings.StorageSetting import StorageSetting
 from processing.storage.Storage import Storage
-from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StoragePath import StoragePath
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
 from processing.utils.is_nan import is_nan
 from processing.utils.print_new_line import print_new_line
-from processing.utils.read_files_durations import read_files_durations
 
 
 class Config(metaclass=SingletonMeta):
     __path: str
     __excel: pandas.ExcelFile
     __settings: ConfigSettings = {}  # type: ignore
-    __files: List[ConfigFile] = []
     __metas: List[ConfigMeta] = []
     __bands: List[ConfigBand] = []
     __integrations: List[ConfigIntegration] = []
@@ -62,13 +61,15 @@ class Config(metaclass=SingletonMeta):
     __volumes: List[ConfigVolume] = []
     __matrices: List[ConfigMatrix] = []
     __pairings: List[ConfigPairing] = []
-    sites: List[SiteConfig] = []
 
     def __init__(
         self,
         path: str,
     ) -> None:
         self.__path = path
+        self.parser = ConfigParser(self.__path)
+        self.files: List[FileConfig] = []
+        self.sites: List[SiteConfig] = []
 
         self.__validate_path()
 
@@ -98,14 +99,11 @@ class Config(metaclass=SingletonMeta):
     def __load_file(self) -> None:
         self.__excel = pandas.ExcelFile(self.__path)
 
-    def __parse_sheet(
-        self,
-        sheet: ExcelSheet,
-    ) -> DataFrame:
+    def __parse_sheet(self, sheet: ExcelSheet) -> DataFrame:
         return self.__excel.parse(sheet.value)  # type: ignore
 
     @staticmethod
-    def __parse_column(
+    def parse_column(
         sheet: DataFrame,
         column: Enum,
         suffix: Optional[str] = None,
@@ -119,12 +117,24 @@ class Config(metaclass=SingletonMeta):
         list_ = [value for value in series]
         return list_
 
+    def read_files(self):
+        audio_path = self.__get_audio_path()
+
+        files = FileStorage.read_from_config(
+            parser=self.parser,
+            labels=self.__metas,
+            audio_path=audio_path,
+        )
+
+        return files
+
     def __read(self) -> None:
         self.__read_settings()
 
         self.__read_metas()
-        self.__read_files()
-        self.sites = SiteStorage.generate_from_config(self.__files)
+
+        self.files = self.read_files()
+        self.sites = SiteStorage.read_from_config(self.files)
 
         self.__read_bands()
         self.__read_integrations()
@@ -142,11 +152,7 @@ class Config(metaclass=SingletonMeta):
     def __clean_storage(self, storage: Storage) -> None:
         storage.delete(StoragePath.configuration)
 
-        storage.delete(StoragePath.files_names)
-        storage.delete(StoragePath.files_timestamps)
-        storage.delete(StoragePath.files_sites)
-        storage.delete(StoragePath.files_labels)
-        storage.delete(StoragePath.files_durations)
+        FileStorage.delete(storage)
 
         storage.delete(StoragePath.meta_properties)
         storage.delete(StoragePath.meta_sets)
@@ -171,9 +177,9 @@ class Config(metaclass=SingletonMeta):
         self.__clean_storage(storage)
         self.__store_settings(storage)
 
-        self.__store_files(storage)
+        FileStorage.write_to_storage(self.files, storage)
         self.__store_metas(storage)
-        self.__store_sites(storage)
+        SiteStorage.write_to_storage(self.sites, storage)
 
         self.__store_bands(storage)
         self.__store_integrations(storage)
@@ -232,8 +238,8 @@ class Config(metaclass=SingletonMeta):
     def __read_settings(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.settings)
 
-        settings = self.__parse_column(sheet, ExcelSetting.setting)
-        values = self.__parse_column(sheet, ExcelSetting.value_)
+        settings = self.parse_column(sheet, ExcelSetting.setting)
+        values = self.parse_column(sheet, ExcelSetting.value_)
 
         for index, setting in enumerate(settings):
             value = self.__digest_setting(setting, values[index])
@@ -295,9 +301,9 @@ class Config(metaclass=SingletonMeta):
                 string=column,
             )
 
-            values = self.__parse_column(
+            values = self.parse_column(
                 sheet,
-                ExcelFile.meta_prefix,
+                FileExcel.label_prefix,
                 suffix=meta.property,
             )
 
@@ -311,32 +317,6 @@ class Config(metaclass=SingletonMeta):
     def __get_audio_path(self) -> str:
         return self.__settings["audio_path"]
 
-    def __read_files(self) -> None:
-        sheet = self.__parse_sheet(ExcelSheet.files)
-
-        names = self.__parse_column(sheet, ExcelFile.name_)
-
-        dates = self.__parse_column(sheet, ExcelFile.date)
-        timestamps = [convert_date_to_timestamp(d) for d in dates]
-
-        sites = self.__parse_column(sheet, ExcelFile.site)
-
-        labels = ConfigMeta.convert_to_values_by_file(self.__metas)
-
-        audio_path = self.__get_audio_path()
-        durations = read_files_durations(names, audio_path)
-
-        files = ConfigFile.reconstruct(
-            names=names,
-            timestamps=timestamps,
-            sites=sites,
-            labels=labels,
-            durations=durations,
-            audio_path=audio_path,
-        )
-
-        self.__files = files
-
     def __store_settings(
         self,
         storage: Storage,
@@ -349,49 +329,6 @@ class Config(metaclass=SingletonMeta):
 
             storage.create_configuration_setting(setting, value)
 
-    def __store_files(
-        self,
-        storage: Storage,
-    ) -> None:
-        (
-            names,
-            timestamps,
-            sites,
-            labels,
-            durations,
-        ) = ConfigFile.flatten(files=self.__files)
-
-        storage.write(
-            path=StoragePath.files_names,
-            data=names,
-        )
-
-        storage.write(
-            path=StoragePath.files_timestamps,
-            data=timestamps,
-            compression=StorageCompression.gzip,
-            attributes={"unit": "milliseconds"},
-        )
-
-        storage.write(
-            path=StoragePath.files_sites,
-            data=sites,
-        )
-
-        storage.write(
-            path=StoragePath.files_labels,
-            data=labels,
-        )
-
-        storage.write(
-            path=StoragePath.files_durations,
-            data=durations,
-            attributes={"unit": "milliseconds"},
-        )
-
-    def __store_sites(self, storage: Storage) -> None:
-        SiteStorage.write_to_storage(self.sites, storage)
-
     def __store_metas(
         self,
         storage: Storage,
@@ -401,9 +338,9 @@ class Config(metaclass=SingletonMeta):
     def __read_ranges(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.ranges)
 
-        names: List[str] = self.__parse_column(sheet, ExcelRange.name_)
-        starts: List[Timestamp] = self.__parse_column(sheet, ExcelRange.start)
-        ends: List[Timestamp] = self.__parse_column(sheet, ExcelRange.end)
+        names: List[str] = self.parse_column(sheet, ExcelRange.name_)
+        starts: List[Timestamp] = self.parse_column(sheet, ExcelRange.start)
+        ends: List[Timestamp] = self.parse_column(sheet, ExcelRange.end)
 
         starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
         ends_timestamps = [convert_date_to_timestamp(end) for end in ends]
@@ -425,9 +362,9 @@ class Config(metaclass=SingletonMeta):
     def __read_bands(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.bands)
 
-        names: List[str] = self.__parse_column(sheet, ExcelBand.name_)
-        lows: List[int] = self.__parse_column(sheet, ExcelBand.low)
-        highs: List[int] = self.__parse_column(sheet, ExcelBand.high)
+        names: List[str] = self.parse_column(sheet, ExcelBand.name_)
+        lows: List[int] = self.parse_column(sheet, ExcelBand.low)
+        highs: List[int] = self.parse_column(sheet, ExcelBand.high)
 
         bands = ConfigBand.reconstruct(
             names=names,
@@ -440,8 +377,8 @@ class Config(metaclass=SingletonMeta):
     def __read_integrations(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.integrations)
 
-        names = self.__parse_column(sheet, ExcelIntegration.name_)
-        durations = self.__parse_column(sheet, ExcelIntegration.duration)
+        names = self.parse_column(sheet, ExcelIntegration.name_)
+        durations = self.parse_column(sheet, ExcelIntegration.duration)
 
         integrations = ConfigIntegration.reconstruct(
             names=names,
@@ -465,23 +402,23 @@ class Config(metaclass=SingletonMeta):
     def __read_autoclusters(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.autoclusters)
 
-        names: List[str] = self.__parse_column(
+        names: List[str] = self.parse_column(
             sheet,
             ExcelAutocluster.name_,
         )
 
-        min_cluster_sizes: List[int] = self.__parse_column(
+        min_cluster_sizes: List[int] = self.parse_column(
             sheet,
             ExcelAutocluster.min_cluster_size,
         )
 
-        min_samples: List[int] = self.__parse_column(
+        min_samples: List[int] = self.parse_column(
             sheet,
             ExcelAutocluster.min_samples,
         )
 
-        alphas: List[float] = self.__parse_column(sheet, ExcelAutocluster.alpha)
-        epsilons: List[float] = self.__parse_column(sheet, ExcelAutocluster.epsilon)
+        alphas: List[float] = self.parse_column(sheet, ExcelAutocluster.alpha)
+        epsilons: List[float] = self.parse_column(sheet, ExcelAutocluster.epsilon)
 
         autoclusters = ConfigAutocluster.reconstruct(
             names=names,
@@ -496,9 +433,9 @@ class Config(metaclass=SingletonMeta):
     def __read_trajectories(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.trajectories)
 
-        names: List[str] = self.__parse_column(sheet, ExcelTrajectory.name_)
-        starts: List[Timestamp] = self.__parse_column(sheet, ExcelTrajectory.start)
-        ends: List[Timestamp] = self.__parse_column(sheet, ExcelTrajectory.end)
+        names: List[str] = self.parse_column(sheet, ExcelTrajectory.name_)
+        starts: List[Timestamp] = self.parse_column(sheet, ExcelTrajectory.start)
+        ends: List[Timestamp] = self.parse_column(sheet, ExcelTrajectory.end)
 
         starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
         ends_timestamps = [convert_date_to_timestamp(end) for end in ends]
@@ -514,17 +451,17 @@ class Config(metaclass=SingletonMeta):
     def __read_reducers(self) -> None:
         sheet = self.__parse_sheet(ExcelSheet.reducers)
 
-        names = self.__parse_column(sheet, ExcelReducer.name_)
-        dimensions = self.__parse_column(sheet, ExcelReducer.dimensions)
+        names = self.parse_column(sheet, ExcelReducer.name_)
+        dimensions = self.parse_column(sheet, ExcelReducer.dimensions)
 
-        bands_names_string = self.__parse_column(sheet, ExcelReducer.bands)
+        bands_names_string = self.parse_column(sheet, ExcelReducer.bands)
 
-        integrations_names_string = self.__parse_column(
+        integrations_names_string = self.parse_column(
             sheet,
             ExcelReducer.integrations,
         )
 
-        ranges_names_strings = self.__parse_column(sheet, ExcelReducer.ranges)
+        ranges_names_strings = self.parse_column(sheet, ExcelReducer.ranges)
 
         reducers = ConfigReducer.reconstruct(
             names=names,
@@ -541,24 +478,24 @@ class Config(metaclass=SingletonMeta):
 
     def __read_indicators(self) -> List[ConfigIndicator]:
         sheet = self.__parse_sheet(ExcelSheet.indicators)
-        names = self.__parse_column(sheet, ExcelIndicator.indicator)
+        names = self.parse_column(sheet, ExcelIndicator.indicator)
         self.__indicators = ConfigIndicator.reconstruct(names=names)
         return self.__indicators
 
     def __read_volumes(self) -> List[ConfigVolume]:
         sheet = self.__parse_sheet(ExcelSheet.volumes)
-        names = self.__parse_column(sheet, ExcelVolume.volume)
+        names = self.parse_column(sheet, ExcelVolume.volume)
         self.__volumes = ConfigVolume.reconstruct(names=names)
         return self.__volumes
 
     def __read_matrices(self) -> List[ConfigMatrix]:
         sheet = self.__parse_sheet(ExcelSheet.matrices)
-        names = self.__parse_column(sheet, ExcelMatrices.name_)
+        names = self.parse_column(sheet, ExcelMatrices.name_)
         self.__matrices = ConfigMatrix.reconstruct(names=names)
         return self.__matrices
 
     def __read_pairings(self) -> List[ConfigPairing]:
         sheet = self.__parse_sheet(ExcelSheet.pairings)
-        names = self.__parse_column(sheet, ExcelPairings.name_)
+        names = self.parse_column(sheet, ExcelPairings.name_)
         self.__pairings = ConfigPairing.reconstruct(names=names)
         return self.__pairings

@@ -1,6 +1,7 @@
 from typing import List
 
-from processing.config.ConfigFile import ConfigFile
+from processing.config.FileConfig import FileConfig
+from processing.config.FileStorage import FileStorage
 from processing.config.SiteConfig import SiteConfig
 from processing.constants import INT_NONE
 from processing.storage.Storage import Storage
@@ -19,7 +20,7 @@ class SiteStorage:
     @staticmethod
     def read_from_storage(storage: Storage) -> List[SiteConfig]:
         names_dataset = storage.read(SiteStorage.path_names)
-        names: List[str] = storage.__convert_dataset_to_string_list(names_dataset)
+        names: List[str] = storage.convert_dataset_to_string_list(names_dataset)
 
         file_indexes_rectangular = storage.read(SiteStorage.path_file_indexes)[:]
 
@@ -28,7 +29,7 @@ class SiteStorage:
             INT_NONE,
         )
 
-        files = storage.read_config_files()
+        files = FileStorage.read_from_storage(storage)
 
         sites = SiteConfig.reconstruct(
             names=names,
@@ -55,7 +56,7 @@ class SiteStorage:
         )
 
     @staticmethod
-    def generate_from_config(files: List[ConfigFile]) -> List[SiteConfig]:
+    def read_from_config(files: List[FileConfig]) -> List[SiteConfig]:
         # Listing unique site names
         # Making this by hand because using `set()` has inconsistent order
         site_names = []

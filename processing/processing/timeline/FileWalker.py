@@ -1,11 +1,11 @@
-from processing.config.ConfigFile import ConfigFile
+from processing.config.FileConfig import FileConfig
 from processing.timeline.Interval import Block, Interval
 
 
 class FileWalker:
     def __init__(
         self,
-        file: ConfigFile,
+        file: FileConfig,
         origin: int,
         step: int,
         debug: bool = False,

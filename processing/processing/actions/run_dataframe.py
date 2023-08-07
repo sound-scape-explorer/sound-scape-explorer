@@ -3,6 +3,7 @@ import argparse
 from main import Arguments
 from pandas import DataFrame
 
+from processing.config.FileStorage import FileStorage
 from processing.storage.Storage import Storage
 
 
@@ -72,7 +73,7 @@ def run_dataframe(
                 payload[label].append(value)
 
     # Metas
-    files = storage.read_config_files()
+    files = FileStorage.read_from_storage(storage)
     meta_properties = storage.read_meta_properties()
     autoclusters_count = len(autoclusters)
     meta_properties = meta_properties[autoclusters_count:]

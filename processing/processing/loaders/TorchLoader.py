@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 import torchaudio
 from torch import Tensor
 
-from processing.config.ConfigFile import ConfigFile
+from processing.config.FileConfig import FileConfig
 
 
 class TorchLoader:
@@ -19,7 +19,7 @@ class TorchLoader:
         self.audio = None
         self.sample_rate = None
 
-    def load(self, file: ConfigFile):
+    def load(self, file: FileConfig):
         if self.audio is not None and self.sample_rate is not None:
             return self.audio, self.sample_rate
 

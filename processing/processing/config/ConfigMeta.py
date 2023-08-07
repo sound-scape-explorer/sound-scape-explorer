@@ -1,6 +1,6 @@
 from typing import List, Set, Tuple
 
-from processing.config.ExcelFile import ExcelFile
+from processing.config.FileExcel import FileExcel
 from processing.utils.reverse_array import reverse_array
 
 
@@ -21,7 +21,7 @@ class ConfigMeta:
 
     @staticmethod
     def is_meta_property(string: str) -> bool:
-        prefix = ExcelFile.meta_prefix.value
+        prefix = FileExcel.label_prefix.value
         prefix_length = len(prefix)
         string_slice = string[:prefix_length]
 
@@ -58,7 +58,7 @@ class ConfigMeta:
         string: str,
     ) -> str:
         self.__validate_excel_string(string)
-        return string.replace(ExcelFile.meta_prefix.value, "")
+        return string.replace(FileExcel.label_prefix.value, "")
 
     def load_values(
         self,

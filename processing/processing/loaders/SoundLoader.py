@@ -4,7 +4,7 @@ import maad
 import pydub
 from pydub import AudioSegment
 
-from processing.config.ConfigFile import ConfigFile
+from processing.config.FileConfig import FileConfig
 
 
 class SoundLoader:
@@ -20,7 +20,7 @@ class SoundLoader:
         self.audio = None
         self.sample_rate = None
 
-    def load(self, file: ConfigFile):
+    def load(self, file: FileConfig):
         if self.audio is not None:
             return self.audio
 
