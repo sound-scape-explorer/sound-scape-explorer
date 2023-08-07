@@ -100,12 +100,12 @@ class FileStorage:
     ) -> List[FileConfig]:
         sheet = ExcelSheet.files
 
-        names = parser.parse_column(sheet, FileExcel.name_)
+        names = parser.get(sheet, FileExcel.name_)
 
-        dates = parser.parse_column(sheet, FileExcel.date)
+        dates = parser.get(sheet, FileExcel.date)
         timestamps = [convert_date_to_timestamp(d) for d in dates]
 
-        sites = parser.parse_column(sheet, FileExcel.site)
+        sites = parser.get(sheet, FileExcel.site)
 
         labels_values = ConfigMeta.convert_to_values_by_file(labels)
 

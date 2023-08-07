@@ -20,7 +20,7 @@ class ConfigParser:
     def parse(self, sheet_name: ExcelSheet) -> DataFrame:
         return self.excel.parse(sheet_name.value)  # type: ignore
 
-    def parse_column(
+    def get(
         self,
         sheet_name: ExcelSheet,
         column: Enum,

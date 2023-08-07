@@ -3,7 +3,7 @@ from typing import List
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExtractorConfig import ExtractorConfig
-from processing.config.ExtractorSheet import ExtractorSheet
+from processing.config.ExtractorExcel import ExtractorExcel
 from processing.storage.Storage import Storage
 
 
@@ -42,10 +42,10 @@ class ExtractorStorage:
     def read_from_config(parser: ConfigParser) -> List[ExtractorConfig]:
         sheet = ExcelSheet.extractors
 
-        names = parser.parse_column(sheet, ExtractorSheet.name_)
-        offsets = parser.parse_column(sheet, ExtractorSheet.offset)
-        steps = parser.parse_column(sheet, ExtractorSheet.step)
-        persists = parser.parse_column(sheet, ExtractorSheet.persist)
+        names = parser.get(sheet, ExtractorExcel.name_)
+        offsets = parser.get(sheet, ExtractorExcel.offset)
+        steps = parser.get(sheet, ExtractorExcel.step)
+        persists = parser.get(sheet, ExtractorExcel.persist)
 
         extractors = ExtractorConfig.reconstruct(
             names=names,

@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ExtractorSheet(Enum):
+class ExtractorExcel(Enum):
     name_ = "extractor"
     offset = "offset"
     step = "step"

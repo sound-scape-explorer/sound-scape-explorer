@@ -47,9 +47,9 @@ class BandStorage:
     def read_from_config(parser: ConfigParser) -> List[BandConfig]:
         sheet = ExcelSheet.bands
 
-        names: List[str] = parser.parse_column(sheet, BandExcel.name_)
-        lows: List[int] = parser.parse_column(sheet, BandExcel.low)
-        highs: List[int] = parser.parse_column(sheet, BandExcel.high)
+        names: List[str] = parser.get(sheet, BandExcel.name_)
+        lows: List[int] = parser.get(sheet, BandExcel.low)
+        highs: List[int] = parser.get(sheet, BandExcel.high)
 
         bands = BandConfig.reconstruct(
             names=names,

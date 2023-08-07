@@ -47,11 +47,11 @@ class AutoclusterStorage:
     def read_from_config(parser: ConfigParser) -> List[AutoclusterConfig]:
         sheet = ExcelSheet.autoclusters
 
-        names = parser.parse_column(sheet, AutoclusterExcel.name_)
-        mns = parser.parse_column(sheet, AutoclusterExcel.min_cluster_size)
-        min_samples = parser.parse_column(sheet, AutoclusterExcel.min_samples)
-        alphas = parser.parse_column(sheet, AutoclusterExcel.alpha)
-        epsilons = parser.parse_column(sheet, AutoclusterExcel.epsilon)
+        names = parser.get(sheet, AutoclusterExcel.name_)
+        mns = parser.get(sheet, AutoclusterExcel.min_cluster_size)
+        min_samples = parser.get(sheet, AutoclusterExcel.min_samples)
+        alphas = parser.get(sheet, AutoclusterExcel.alpha)
+        epsilons = parser.get(sheet, AutoclusterExcel.epsilon)
 
         autoclusters = AutoclusterConfig.reconstruct(
             names=names,

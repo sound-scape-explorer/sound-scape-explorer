@@ -50,9 +50,9 @@ class RangeStorage:
     def read_from_config(parser: ConfigParser) -> List[RangeConfig]:
         sheet = ExcelSheet.ranges
 
-        names: List[str] = parser.parse_column(sheet, RangeExcel.name_)
-        starts: List[Timestamp] = parser.parse_column(sheet, RangeExcel.start)
-        ends: List[Timestamp] = parser.parse_column(sheet, RangeExcel.end)
+        names: List[str] = parser.get(sheet, RangeExcel.name_)
+        starts: List[Timestamp] = parser.get(sheet, RangeExcel.start)
+        ends: List[Timestamp] = parser.get(sheet, RangeExcel.end)
 
         starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
         ends_timestamps = [convert_date_to_timestamp(end) for end in ends]

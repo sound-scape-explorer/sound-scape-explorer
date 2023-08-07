@@ -82,17 +82,17 @@ class ReducerStorage:
     ) -> List[ReducerConfig]:
         sheet = ExcelSheet.reducers
 
-        names = parser.parse_column(sheet, ReducerExcel.name_)
-        dimensions = parser.parse_column(sheet, ReducerExcel.dimensions)
+        names = parser.get(sheet, ReducerExcel.name_)
+        dimensions = parser.get(sheet, ReducerExcel.dimensions)
 
-        bands_names_string = parser.parse_column(sheet, ReducerExcel.bands)
+        bands_names_string = parser.get(sheet, ReducerExcel.bands)
 
-        integrations_names_string = parser.parse_column(
+        integrations_names_string = parser.get(
             sheet,
             ReducerExcel.integrations,
         )
 
-        ranges_names_strings = parser.parse_column(sheet, ReducerExcel.ranges)
+        ranges_names_strings = parser.get(sheet, ReducerExcel.ranges)
 
         reducers = ReducerConfig.reconstruct(
             names=names,

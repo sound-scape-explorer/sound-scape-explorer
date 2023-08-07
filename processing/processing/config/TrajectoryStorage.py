@@ -42,9 +42,9 @@ class TrajectoryStorage:
     def read_from_config(parser: ConfigParser) -> List[TrajectoryConfig]:
         sheet = ExcelSheet.trajectories
 
-        names = parser.parse_column(sheet, TrajectoryExcel.name_)
-        starts: List[Timestamp] = parser.parse_column(sheet, TrajectoryExcel.start)
-        ends: List[Timestamp] = parser.parse_column(sheet, TrajectoryExcel.end)
+        names = parser.get(sheet, TrajectoryExcel.name_)
+        starts: List[Timestamp] = parser.get(sheet, TrajectoryExcel.start)
+        ends: List[Timestamp] = parser.get(sheet, TrajectoryExcel.end)
 
         starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
         ends_timestamps = [convert_date_to_timestamp(end) for end in ends]

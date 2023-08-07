@@ -44,8 +44,8 @@ class IntegrationStorage:
     def read_from_config(parser: ConfigParser) -> List[IntegrationConfig]:
         sheet = ExcelSheet.integrations
 
-        names = parser.parse_column(sheet, IntegrationExcel.name_)
-        durations = parser.parse_column(sheet, IntegrationExcel.duration)
+        names = parser.get(sheet, IntegrationExcel.name_)
+        durations = parser.get(sheet, IntegrationExcel.duration)
 
         integrations = IntegrationConfig.reconstruct(
             names=names,
