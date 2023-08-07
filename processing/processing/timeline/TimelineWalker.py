@@ -3,16 +3,19 @@ from typing import Dict, List, Optional
 from tqdm import tqdm
 
 from processing.config.bands.BandConfig import BandConfig
+from processing.config.files.FileConfig import FileConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.extractors.Extractor import Extracted, Extractor
 from processing.storage.Storage import Storage
 from processing.timeline.FileLoader import FileLoader
+from processing.timeline.Interval import Block, Interval
 from processing.timeline.Timeline import Timeline
 from processing.utils.print_new_line import print_new_line
 
 FileIndex = int
 BandIndex = int
 ExtractorIndex = int
+BlockIndex = int
 
 
 class TimelineWalker:
@@ -119,6 +122,96 @@ class TimelineWalker:
                             extractor,
                         )
 
+    def load_file(self, file: FileConfig) -> FileLoader:
+        if file.index in self.loaders.keys():
+            return self.loaders[file.index]
+
+        loader = FileLoader(file)
+        loader.load()
+        self.loaders[file.index] = loader
+        return self.loaders[file.index]
+
+    def prepare_extracted(self, file: FileConfig) -> None:
+        if file.index in self.extracted.keys():
+            return
+
+        self.extracted[file.index] = {}
+
+    def load_band(self, band: BandConfig, file: FileConfig):
+        if band.index in self.extracted[file.index].keys():
+            return
+
+        self.extracted[file.index][band.index] = {}
+
+    def run_extraction(
+        self,
+        e: ExtractorIndex,
+        extractor: Extractor,
+        band: BandConfig,
+        file: FileConfig,
+        timeline: Timeline,
+    ):
+        if e in self.extracted[file.index][band.index].keys():
+            return
+
+        extractor.index = e
+        extractor.band = band
+        loader = self.loaders[file.index]
+        self.extracted[file.index][band.index][extractor.index] = extractor.extract(
+            loader.loader
+        )
+
+        if extractor.is_persist:
+            # Store only for first integration
+            # this could be above
+            if timeline.integration.index == 0:
+                extractor.store(
+                    self.extracted[file.index][band.index][extractor.index],
+                    self.storage,
+                )
+
+    def get_block_data(
+        self,
+        block: Block,
+        interval: Interval,
+        band: BandConfig,
+        e: ExtractorIndex,
+    ):
+        duration = (block.end - block.start) // 1000  # seconds
+        start = (block.start - interval.start) // 1000  # seconds
+        end = start + duration
+
+        file_data = self.extracted[block.file.index][band.index][e]
+        block_data = file_data[start:end]
+        return block_data
+
+    def purge(
+        self,
+        f: FileIndex,
+        b: BandIndex,
+        e: ExtractorIndex,
+        b_: BlockIndex,
+        interval: Interval,
+        timeline: Timeline,
+    ):
+        is_last_integration = timeline.integration.index == len(self.integrations) - 1
+        is_last_band = b == len(self.bands) - 1
+        is_last_extractor = e == len(self.extractors) - 1
+        is_last_block = b_ == len(interval.blocks) - 1
+
+        is_last_op = (
+            is_last_integration and is_last_band and is_last_extractor and is_last_block
+        )
+
+        # Purge
+        # TODO: this lefts over the last operation in memory
+        if self.cfi is not None and f != self.cfi:
+            del self.extracted[self.cfi]
+            # loaded[cfi].destroy()
+
+        if self.cfi is not None and is_last_op:
+            self.loaders[self.cfi].release()
+
     def walk(self):
         for timeline, interval, b, band, e, extractor in self.__enumerate():
             interval_data = []
@@ -126,64 +219,15 @@ class TimelineWalker:
             for b_, block in enumerate(interval.blocks):
                 f = block.file.index
 
-                # Load file
-                if f not in self.loaders.keys():
-                    loader = FileLoader(block.file)
-                    loader.load()
+                self.load_file(block.file)
+                self.prepare_extracted(block.file)
+                self.load_band(band, block.file)
+                self.run_extraction(e, extractor, band, block.file, timeline)
 
-                    self.loaders[f] = loader
-
-                if f not in self.extracted.keys():
-                    self.extracted[f] = {}
-
-                # Load band
-                if b not in self.extracted[f].keys():
-                    self.extracted[f][band.index] = {}
-
-                # Load extractor
-                if e not in self.extracted[f][b].keys():
-                    extractor.index = e
-                    extractor.band = band
-
-                    loader = self.loaders[f]
-                    self.extracted[f][b][e] = extractor.extract(loader.loader)
-
-                    if extractor.is_persist:
-                        # Store only for first integration
-                        # this could be above
-                        if timeline.integration.index == 0:
-                            extractor.store(self.extracted[f][b][e], self.storage)
-
-                duration = (block.end - block.start) // 1000  # seconds
-                start = (block.start - interval.start) // 1000  # seconds
-                end = start + duration
-
-                file_data = self.extracted[f][b][e]
-                block_data = file_data[start:end]
+                block_data = self.get_block_data(block, interval, band, e)
                 interval_data = [*interval_data, *block_data]
 
-                is_last_integration = (
-                    timeline.integration.index == len(self.integrations) - 1
-                )
-                is_last_band = b == len(self.bands) - 1
-                is_last_extractor = e == len(self.extractors) - 1
-                is_last_block = b_ == len(interval.blocks) - 1
-
-                is_last_op = (
-                    is_last_integration
-                    and is_last_band
-                    and is_last_extractor
-                    and is_last_block
-                )
-
-                # Purge
-                # TODO: this lefts over the last operation in memory
-                if self.cfi is not None and f != self.cfi:
-                    del self.extracted[self.cfi]
-                    # loaded[cfi].destroy()
-
-                if self.cfi is not None and is_last_op:
-                    self.loaders[self.cfi].release()
+                self.purge(f, b, e, b_, interval, timeline)
 
                 self.cfi = f
 
