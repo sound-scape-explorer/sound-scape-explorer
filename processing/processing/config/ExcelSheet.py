@@ -14,6 +14,7 @@ class ExcelSheet(Enum):
     bands = "Bands"
     integrations = "Integrations"
     ranges = "Ranges"
+    extractors = "Extractors"
     autoclusters = "Autoclusters"
     trajectories = "Trajectories"
     reducers = "Reducers"

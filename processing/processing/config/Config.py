@@ -27,6 +27,8 @@ from processing.config.ExcelSetting import ExcelSetting
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.ExcelTrajectory import ExcelTrajectory
 from processing.config.ExcelVolume import ExcelVolume
+from processing.config.ExtractorConfig import ExtractorConfig
+from processing.config.ExtractorStorage import ExtractorStorage
 from processing.config.FileConfig import FileConfig
 from processing.config.FileExcel import FileExcel
 from processing.config.FileStorage import FileStorage
@@ -70,6 +72,7 @@ class Config(metaclass=SingletonMeta):
         self.bands: List[BandConfig] = []
         self.integrations: List[IntegrationConfig] = []
         self.ranges: List[RangeConfig] = []
+        self.extractors: List[ExtractorConfig] = []
 
         self.__validate_path()
 
@@ -133,6 +136,7 @@ class Config(metaclass=SingletonMeta):
         self.bands = BandStorage.read_from_config(self.parser)
         self.integrations = IntegrationStorage.read_from_config(self.parser)
         self.ranges = RangeStorage.read_from_config(self.parser)
+        self.extractors = ExtractorStorage.read_from_config(self.parser)
 
         self.__read_autoclusters()
         self.__read_trajectories()
@@ -172,6 +176,7 @@ class Config(metaclass=SingletonMeta):
         BandStorage.write_to_storage(self.bands, storage)
         IntegrationStorage.write_to_storage(self.integrations, storage)
         RangeStorage.write_to_storage(self.ranges, storage)
+        ExtractorStorage.write_to_storage(self.extractors, storage)
 
         self.__store_autoclusters(storage)
         self.__store_trajectories(storage)
