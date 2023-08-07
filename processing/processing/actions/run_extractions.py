@@ -36,12 +36,12 @@ def run_extractions(env: Env):
     leq = LeqMaadExtractor()
     leq.offset = 0
     leq.step = 1000
-    # leq.persist()
+    leq.persist()
 
     extractors.append(leq)
 
     vgg = VggExtractor(expected_sample_rate=expected_sample_rate)
-    # vgg.persist()
+    vgg.persist()
 
     extractors.append(vgg)
 
@@ -107,8 +107,10 @@ def run_extractions(env: Env):
                             extracted[f][b][e] = extractor.extract(loader.loader)
 
                             if extractor.is_persist:
-                                # add overwrite
-                                extractor.store(extracted[f][b][e], storage)
+                                # Store only for first integration
+                                # this could be above
+                                if timeline.integration.index == 0:
+                                    extractor.store(extracted[f][b][e], storage)
 
                         duration = (block.end - block.start) // 1000  # seconds
                         start = (block.start - interval.start) // 1000  # seconds
