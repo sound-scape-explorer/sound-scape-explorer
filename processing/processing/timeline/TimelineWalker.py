@@ -115,13 +115,12 @@ class TimelineWalker:
             self.print(timeline)
             for interval in tqdm(timeline.intervals):
                 for band_index, band in enumerate(self.bands):
-                    for extractor_index, extractor in enumerate(self.extractors):
+                    for extractor in self.extractors:
                         yield (
                             timeline,
                             interval,
                             band_index,
                             band,
-                            extractor_index,
                             extractor,
                         )
 
@@ -148,18 +147,18 @@ class TimelineWalker:
 
     def run_extraction(
         self,
-        e: ExtractorIndex,
         extractor: Extractor,
         band: BandConfig,
         file: FileConfig,
         timeline: Timeline,
     ):
-        if e in self.extracted[file.index][band.index].keys():
+        if extractor.index in self.extracted[file.index][band.index].keys():
             return
 
-        extractor.index = e
         extractor.band = band
+
         loader = self.loaders[file.index]
+
         self.extracted[file.index][band.index][extractor.index] = extractor.extract(
             loader.loader
         )
@@ -178,13 +177,13 @@ class TimelineWalker:
         block: Block,
         interval: Interval,
         band: BandConfig,
-        e: ExtractorIndex,
+        extractor: Extractor,
     ):
         duration = (block.end - block.start) // 1000  # seconds
         start = (block.start - interval.start) // 1000  # seconds
         end = start + duration
 
-        file_data = self.extracted[block.file.index][band.index][e]
+        file_data = self.extracted[block.file.index][band.index][extractor.index]
         block_data = file_data[start:end]
         return block_data
 
@@ -192,7 +191,7 @@ class TimelineWalker:
         self,
         f: FileIndex,
         b: BandIndex,
-        e: ExtractorIndex,
+        extractor: Extractor,
         b_: BlockIndex,
         interval: Interval,
         timeline: Timeline,
@@ -205,7 +204,7 @@ class TimelineWalker:
         # Unloading file
         is_last_integration = timeline.integration.index == len(self.integrations) - 1
         is_last_band = b == len(self.bands) - 1
-        is_last_extractor = e == len(self.extractors) - 1
+        is_last_extractor = extractor.index == len(self.extractors) - 1
         is_last_block = b_ == len(interval.blocks) - 1
 
         is_last_op = (
@@ -216,7 +215,7 @@ class TimelineWalker:
             self.loaders[self.cfi].release()
 
     def walk(self):
-        for timeline, interval, b, band, e, extractor in self.__enumerate():
+        for timeline, interval, b, band, extractor in self.__enumerate():
             interval_data = []
 
             for b_, block in enumerate(interval.blocks):
@@ -225,12 +224,12 @@ class TimelineWalker:
                 self.load_file(block.file)
                 self.prepare_extracted(block.file)
                 self.load_band(band, block.file)
-                self.run_extraction(e, extractor, band, block.file, timeline)
+                self.run_extraction(extractor, band, block.file, timeline)
 
-                block_data = self.get_block_data(block, interval, band, e)
+                block_data = self.get_block_data(block, interval, band, extractor)
                 interval_data = [*interval_data, *block_data]
 
-                self.purge(f, b, e, b_, interval, timeline)
+                self.purge(f, b, extractor, b_, interval, timeline)
 
                 self.cfi = f
 

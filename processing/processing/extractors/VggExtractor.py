@@ -10,32 +10,22 @@ from processing.loaders.Loader import Loader
 
 
 class VggExtractor(nn.Module, Extractor):
-    expected_sample_rate: int
-    mel_count: int
-    fft_size: int
-
-    features: nn.Sequential
-    embeddings: nn.Sequential
-    device: Literal["cuda", "cpu"]
-
-    def __init__(
-        self,
-        expected_sample_rate: int,
-        mel_count: int = 64,
-        fft_size: int = 2048,
-    ) -> None:
+    def __init__(self) -> None:
         super(VggExtractor, self).__init__()
-        self.expected_sample_rate = expected_sample_rate
-        self.mel_count = mel_count
-        self.fft_size = fft_size
 
-        self.load()
+        self.features: nn.Sequential
+        self.embeddings: nn.Sequential
+        self.device: Literal["cuda", "cpu"]
 
         # Hardcoding vgg behaviour
         # This is a reflection of the current implemetation
         # Those values are not actually read
-        self.offset = 0
-        self.step = 1000
+        self.mel_count: int = 64
+        self.fft_size: int = 2048
+        self.offset: int = 0
+        self.step: int = 1000
+
+        self.load()
 
     # Loading model
     def load(self):
@@ -106,9 +96,7 @@ class VggExtractor(nn.Module, Extractor):
         window_length = hop_length = 100
 
         num_samples = data.shape[0]
-        num_frames = 1 + int(
-            np.floor((num_samples - window_length) / hop_length)
-            )
+        num_frames = 1 + int(np.floor((num_samples - window_length) / hop_length))
         shape = (num_frames, window_length) + data.shape[1:]
 
         strides = data.stride(0) * hop_length, data.stride(0), data.stride(1)
@@ -151,8 +139,7 @@ class VggExtractor(nn.Module, Extractor):
         sample_rate = loader.torch.sample_rate
 
         assert wav is not None and sample_rate is not None, "not loaded"
-        assert sample_rate == self.expected_sample_rate, ("Sample rates do not "
-                                                          "match.")
+        assert sample_rate == self.expected_sample_rate, "Sample rates do not " "match."
 
         # `batch` acts as the maximum audio duration of 5 minutes.
         batch = sample_rate * 60 * 5

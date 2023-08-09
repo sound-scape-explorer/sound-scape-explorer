@@ -1,5 +1,6 @@
 from typing import Dict, List, Tuple, Type
 
+from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.extractors.Extractor import Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
 from processing.extractors.VggExtractor import VggExtractor
@@ -29,6 +30,19 @@ class ExtractorConfig:
 
     def validate_name(self, name: str) -> None:
         assert name in self.extractors.keys(), f"Unable to find extractor name {name}"
+
+    def create_instance(self, settings: SettingsConfig) -> Extractor:
+        instance = self.extractors[self.name]()
+
+        instance.index = self.index
+        instance.expected_sample_rate = settings.expected_sample_rate
+        instance.offset = self.offset
+        instance.step = self.step
+
+        if self.persist:
+            instance.persist()
+
+        return instance
 
     @staticmethod
     def flatten(

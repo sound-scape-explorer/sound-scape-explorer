@@ -10,7 +10,8 @@ Extracted = List[List[Any]]
 
 
 class Extractor(ABC):
-    index: Optional[int] = None
+    index: int
+    __expected_sample_rate: Optional[int] = None
     __band: Optional[BandConfig] = None
     __offset: Optional[int] = None
     __step: Optional[int] = None
@@ -20,6 +21,18 @@ class Extractor(ABC):
     def path(self):
         assert self.index is not None, "Please add an extractor index"
         return f"{StoragePath.extracted.value}/{self.band.name}/{self.index}"
+
+    @property
+    def expected_sample_rate(self) -> int:
+        assert (
+            self.__expected_sample_rate is not None
+        ), "Please define expected sample rate"
+        return self.__expected_sample_rate
+
+    @expected_sample_rate.setter
+    def expected_sample_rate(self, expected_sample_rate: int) -> int:
+        self.__expected_sample_rate = expected_sample_rate
+        return self.__expected_sample_rate
 
     @property
     def band(self) -> BandConfig:

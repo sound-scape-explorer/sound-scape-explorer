@@ -1,15 +1,11 @@
-from typing import List
-
 import numpy as np
 
 from processing.common.Env import Env
 from processing.config.bands.BandStorage import BandStorage
+from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.config.sites.SiteStorage import SiteStorage
-from processing.extractors.Extractor import Extractor
-from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
-from processing.extractors.VggExtractor import VggExtractor
 from processing.storage.Storage import Storage
 from processing.timeline.create_timelines import create_timelines
 from processing.timeline.TimelineWalker import TimelineWalker
@@ -27,21 +23,7 @@ def run_extractions(env: Env):
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)
     sites = SiteStorage.read_from_storage(storage, settings)
-
-    # configure extraction
-    extractors: List[Extractor] = []
-
-    leq = LeqMaadExtractor()
-    leq.offset = 0
-    leq.step = 1000
-    leq.persist()
-
-    extractors.append(leq)
-
-    vgg = VggExtractor(expected_sample_rate=settings.expected_sample_rate)
-    vgg.persist()
-
-    extractors.append(vgg)
+    extractors = ExtractorStorage.instanciate_from_storage(storage, settings)
 
     # build timelines
     timelines = create_timelines(

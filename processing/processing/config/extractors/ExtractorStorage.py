@@ -4,6 +4,8 @@ from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
 from processing.config.extractors.ExtractorExcel import ExtractorExcel
+from processing.config.settings.SettingsConfig import SettingsConfig
+from processing.extractors.Extractor import Extractor
 from processing.storage.Storage import Storage
 
 
@@ -64,3 +66,18 @@ class ExtractorStorage:
         storage.write(ExtractorStorage.offsets, offsets)
         storage.write(ExtractorStorage.steps, steps)
         storage.write(ExtractorStorage.persists, persists)
+
+    @staticmethod
+    def instanciate_from_storage(
+        storage: Storage,
+        settings: SettingsConfig,
+    ) -> List[Extractor]:
+        configs = ExtractorStorage.read_from_storage(storage)
+
+        extractors: List[Extractor] = []
+
+        for config in configs:
+            extractor: Extractor = config.create_instance(settings)
+            extractors.append(extractor)
+
+        return extractors
