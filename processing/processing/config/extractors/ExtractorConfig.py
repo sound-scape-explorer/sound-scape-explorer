@@ -3,6 +3,7 @@ from typing import Dict, List, Tuple, Type
 from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.extractors.Extractor import Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
+from processing.extractors.TemporalEntropyExtractor import TemporalEntropyExtractor
 from processing.extractors.VggExtractor import VggExtractor
 
 
@@ -10,6 +11,7 @@ class ExtractorConfig:
     extractors: Dict[str, Type[Extractor]] = {
         "vgg": VggExtractor,
         "leq_maad": LeqMaadExtractor,
+        "ht": TemporalEntropyExtractor,
     }
 
     def __init__(
