@@ -19,6 +19,7 @@ def run_extractions(env: Env):
     storage = Storage(path=env.storage)
     storage.overwrite()
     storage.delete("/aggregated")
+    storage.delete("/aggregated_timestamps")
     storage.delete("/extracted")
 
     # retrieve configuration
@@ -60,7 +61,7 @@ def run_extractions(env: Env):
     tw.extractors = extractors
 
     # walk intervals in timelines
-    for interval_data, band, integration, extractor in tw.walk():
+    for interval_data, interval, band, integration, extractor in tw.walk():
         # Aggregate
         aggregated_data = list(np.mean(interval_data, axis=0))
 
@@ -75,6 +76,20 @@ def run_extractions(env: Env):
             path=path,
             data=[aggregated_data],
             compression=True,
+        )
+
+        # INFO: This stores duplicated data as timestamps are the same for
+        # band and extractor given a single integration
+        t_path = (
+            f"/aggregated_timestamps"
+            f"/{band.name}"
+            f"/{integration.seconds}"
+            f"/{extractor.index}"
+        )
+
+        storage.append(
+            path=t_path,
+            data=[[interval.start]],
         )
 
     tw.print_leftovers()

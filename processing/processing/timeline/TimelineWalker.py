@@ -234,4 +234,4 @@ class TimelineWalker:
 
                 self.cfi = f
 
-            yield interval_data, band, timeline.integration, extractor
+            yield interval_data, interval, band, timeline.integration, extractor
