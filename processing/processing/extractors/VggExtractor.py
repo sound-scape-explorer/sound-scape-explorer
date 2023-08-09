@@ -18,8 +18,9 @@ class VggExtractor(nn.Module, Extractor):
         self.device: Literal["cuda", "cpu"]
 
         # Hardcoding vgg behaviour
-        # This is a reflection of the current implemetation
-        # Those values are not actually read
+        # This is a reflection of the current implementation.
+        # `offset` and `step` are not actually read.
+        # This is for abstract parent class validation
         self.mel_count: int = 64
         self.fft_size: int = 2048
         self.offset: int = 0
