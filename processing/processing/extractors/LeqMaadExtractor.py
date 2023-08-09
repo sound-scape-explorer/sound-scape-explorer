@@ -9,8 +9,6 @@ class LeqMaadExtractor(Extractor):
         sound = loader.sound.audio
         sample_rate = loader.sound.sample_rate
 
-        assert sound is not None and sample_rate is not None, "Please load file"
-
         t = self.offset
         step = self.step
 

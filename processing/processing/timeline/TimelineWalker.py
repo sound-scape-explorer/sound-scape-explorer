@@ -108,7 +108,7 @@ class TimelineWalker:
         # show loaded files
         for _, loader in self.loaders.items():
             print(type(loader.loader.torch.audio))
-            print(type(loader.loader.sound.audio))
+            loader.loader.sound.print_leftovers()
 
     def __enumerate(self):
         for timeline in self.timelines:

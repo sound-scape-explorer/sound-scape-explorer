@@ -8,22 +8,40 @@ from processing.config.files.FileConfig import FileConfig
 
 
 class SoundLoader:
-    audio: Optional[AudioSegment] = None
-    sample_rate: Optional[int] = None
+    __audio: Optional[AudioSegment] = None
+    __sample_rate: Optional[int] = None
+
+    @property
+    def audio(self) -> AudioSegment:
+        assert self.__audio is not None, "Please load file"
+        return self.__audio
+
+    @audio.setter
+    def audio(self, audio: AudioSegment) -> None:
+        self.__audio = audio
+
+    @property
+    def sample_rate(self) -> int:
+        assert self.__sample_rate is not None, "Please load file"
+        return self.__sample_rate
+
+    @sample_rate.setter
+    def sample_rate(self, sample_rate: int) -> None:
+        self.__sample_rate = sample_rate
 
     def destroy(self):
         # this will raise `AttributeError` if you try loading the file again
-        del self.audio
-        del self.sample_rate
+        del self.__audio
+        del self.__sample_rate
 
     def release(self):
-        self.audio = None
-        self.sample_rate = None
+        self.__audio = None
+        self.__sample_rate = None
+
+    def print_leftovers(self):
+        print(type(self.__audio))
 
     def load(self, file: FileConfig):
-        if self.audio is not None:
-            return self.audio
-
         # print(f"SoundLoader: file index {file.index}")
         sound: pydub.AudioSegment = AudioSegment.from_file(file.path)
         sample_rate: int = sound.frame_rate  # type: ignore
