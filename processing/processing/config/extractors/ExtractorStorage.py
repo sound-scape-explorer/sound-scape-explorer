@@ -1,9 +1,11 @@
 from typing import List
 
+from pandas import pandas
+
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
-from processing.config.extractors.ExtractorExcel import ExtractorExcel
+from processing.config.extractors.ExtractorSheet import ExtractorSheet
 from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.extractors.Extractor import Extractor
 from processing.storage.Storage import Storage
@@ -29,7 +31,8 @@ class ExtractorStorage:
 
         offsets = storage.read(ExtractorStorage.offsets)
         steps = storage.read(ExtractorStorage.steps)
-        persists = storage.read(ExtractorStorage.persists)
+        persists_ints = storage.read(ExtractorStorage.persists)
+        persists = [True if p == 1 else False for p in persists_ints]
 
         extractors = ExtractorConfig.reconstruct(
             names=names,
@@ -44,16 +47,27 @@ class ExtractorStorage:
     def read_from_config(parser: ConfigParser) -> List[ExtractorConfig]:
         sheet = ExcelSheet.extractors
 
-        names = parser.get(sheet, ExtractorExcel.name_)
-        offsets = parser.get(sheet, ExtractorExcel.offset)
-        steps = parser.get(sheet, ExtractorExcel.step)
-        persists_strings = parser.get(sheet, ExtractorExcel.persist)
-        persists = [True if ps == "yes" else False for ps in persists_strings]
+        df = pandas.DataFrame(
+            [
+                parser.get(sheet, ExtractorSheet.name_),
+                parser.get(sheet, ExtractorSheet.offset),
+                parser.get(sheet, ExtractorSheet.step),
+                parser.get(sheet, ExtractorSheet.persist),
+            ]
+        )
+        df = df.T
+        df = df.dropna(how="all")
+        df.columns = ["names", "offsets", "steps", "persists"]
+
+        names = df["names"].tolist()
+        offsets = df["offsets"].tolist()
+        steps = df["steps"].tolist()
+        persists = [True if p == 1 else False for p in df["persists"].tolist()]
 
         extractors = ExtractorConfig.reconstruct(
             names=names,
-            offsets=offsets[:],
-            steps=steps[:],
+            offsets=offsets,
+            steps=steps,
             persists=persists,
         )
 
