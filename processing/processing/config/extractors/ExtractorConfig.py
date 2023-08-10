@@ -4,6 +4,9 @@ from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.extractors.AcousticComplexityExtractor import (
     AcousticComplexityExtractor,
 )
+from processing.extractors.AcousticDiversityIndexIndicator import (
+    AcousticDiversityIndexExtractor,
+)
 from processing.extractors.Extractor import Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
 from processing.extractors.SoundscapeIndexExtractor import SoundscapeIndexExtractor
@@ -20,6 +23,7 @@ class ExtractorConfig:
         "med": TemporalMedianExtractor,
         "ndsi": SoundscapeIndexExtractor,
         "aci": AcousticComplexityExtractor,
+        "adi": AcousticDiversityIndexExtractor,
     }
 
     def __init__(
