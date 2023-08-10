@@ -60,8 +60,8 @@ class ExtractorStorage:
         df.columns = ["names", "offsets", "steps", "persists"]
 
         names = df["names"].tolist()
-        offsets = df["offsets"].tolist()
-        steps = df["steps"].tolist()
+        offsets = [int(o) for o in df["offsets"].tolist()]
+        steps = [int(s) for s in df["steps"].tolist()]
         persists = [True if p == "yes" else False for p in df["persists"].tolist()]
 
         extractors = ExtractorConfig.reconstruct(
