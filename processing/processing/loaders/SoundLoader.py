@@ -1,9 +1,11 @@
-from typing import Optional
+from typing import Dict, List, Optional
 
 import maad
 import pydub
+from numpy import ndarray
 from pydub import AudioSegment
 
+from processing.config.bands.BandConfig import BandConfig
 from processing.config.files.FileConfig import FileConfig
 
 
@@ -48,6 +50,7 @@ class SoundLoader:
 
         self.audio = sound
         self.sample_rate = sample_rate
+        self.__filtered: Dict[str, List[float]] = {}
         return self.audio, sample_rate
 
     def slice(
@@ -58,6 +61,26 @@ class SoundLoader:
         assert self.audio is not None, "not loaded"
         slice: AudioSegment = self.audio[start:end]  # type: ignore
         return slice
+
+    def get_filtered(self, band: BandConfig):
+        kf = f"{band.low}-{band.high}"
+
+        if kf in self.__filtered.keys():
+            return self.__filtered[kf]
+
+        samples = self.audio.get_array_of_samples()
+
+        filtered: ndarray = maad.sound.select_bandwidth(
+            x=samples,
+            fs=self.sample_rate,
+            fcut=[band.low, band.high],
+            forder=6,
+            fname="butter",
+            ftype="bandpass",
+        )
+
+        self.__filtered[kf] = filtered.tolist()
+        return self.__filtered[kf]
 
     def filter(
         self,
