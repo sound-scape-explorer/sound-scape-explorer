@@ -6,29 +6,17 @@ from processing.loaders.Loader import Loader
 
 class LeqMaadExtractor(Extractor):
     def extract(self, loader: Loader):
-        sound = loader.sound.audio
         sample_rate = loader.sound.sample_rate
-
-        t = self.offset
-        step = self.step
 
         data = []
 
-        while t < len(sound):
-            start = t
-            end = start + step
-
-            slice = loader.sound.slice(start, end)
-            filtered = loader.sound.filter(slice, self.band.low, self.band.high)
-
+        for slice in self.sound_walk(loader):
             leq = maad.features.temporal_leq(
-                s=filtered,
+                s=slice,
                 fs=sample_rate,
                 gain=42,
             )
 
             data.append([leq])
-
-            t += step
 
         return data

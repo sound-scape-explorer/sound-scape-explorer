@@ -83,3 +83,24 @@ class Extractor(ABC):
                 "method": "for step in file in site",
             },
         )
+
+    def sound_walk(self, loader: Loader):
+        sample_rate = loader.sound.sample_rate
+        filtered = loader.sound.get_filtered(self.band)
+
+        t = int(self.offset / 1000 * sample_rate)
+        step = int(self.step / 1000 * sample_rate)
+
+        while t < len(filtered):
+            start = t
+            end = start + step
+
+            slice = filtered[start:end]
+
+            # skipping for incomplete step
+            if len(slice) < step:
+                t += step
+                continue
+
+            t += step
+            yield slice
