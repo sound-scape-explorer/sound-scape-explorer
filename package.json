@@ -10,6 +10,7 @@
     "install:audio": "sudo npm -g i serve",
     "install:front": "cd front && pnpm i && cd ..",
     "install:processing": "cd processing && pip3 install -r requirements.txt && cd ..",
+    "cli": "python3 processing/cli.py",
     "_process": "python3 processing/main.py",
     "process": "pnpm process:all",
     "process:all": "pnpm _process --action all",

@@ -1,3 +1,5 @@
+import subprocess
+
 from processing.common.Env import Env
 from processing.config.Config import Config
 from processing.storage.Storage import Storage
@@ -12,6 +14,10 @@ def run_config(env: Env):
 
     print_file_indexes_by_site(storage, config.settings)
     print_extractors(storage)
+
+    storage.close()
+
+    subprocess.run(["python3", "processing/cli.py"])
 
 
 if __name__ == "__main__":

@@ -1,5 +1,9 @@
 from typing import List
 
+from rich import print
+from rich.console import Console
+from rich.table import Table
+
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
@@ -69,12 +73,16 @@ class Config(metaclass=SingletonMeta):
         self.print_settings()
 
     def print_settings(self) -> None:
-        print_new_line()
-        print("Settings")
-        print_new_line()
+        console = Console()
+
+        table = Table(show_header=True, header_style="bold magenta")
+        table.add_column("Setting")
+        table.add_column("Value")
 
         for k, v in vars(self.settings).items():
-            print(f"{k}: {v}")
+            table.add_row(str(k), str(v))
+
+        console.print(table)
 
     def parse(self) -> None:
         self.settings = SettingsStorage.read_from_config(self.parser)
