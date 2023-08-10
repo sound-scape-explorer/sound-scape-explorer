@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Optional
+from typing import Any, Iterable, List, Optional
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.loaders.Loader import Loader
+from processing.loaders.SoundSlice import SoundSlice
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 
@@ -84,7 +85,7 @@ class Extractor(ABC):
             },
         )
 
-    def sound_walk(self, loader: Loader):
+    def sound_walk(self, loader: Loader) -> Iterable[SoundSlice]:
         sample_rate = loader.sound.sample_rate
         filtered = loader.sound.get_filtered(self.band)
 
@@ -103,4 +104,5 @@ class Extractor(ABC):
                 continue
 
             t += step
-            yield slice
+
+            yield SoundSlice(slice, start, end)

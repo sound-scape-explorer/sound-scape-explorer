@@ -1,5 +1,9 @@
 from typing import List
 
+from rich import print
+from rich.console import Console
+from rich.table import Table
+
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
@@ -10,8 +14,6 @@ from processing.config.extractors.ExtractorConfig import ExtractorConfig
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.files.FileConfig import FileConfig
 from processing.config.files.FileStorage import FileStorage
-from processing.config.indicators.IndicatorConfig import IndicatorConfig
-from processing.config.indicators.IndicatorStorage import IndicatorStorage
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.labels.LabelConfig import LabelConfig
@@ -58,7 +60,6 @@ class Config(metaclass=SingletonMeta):
         self.trajectories: List[TrajectoryConfig] = []
 
         self.reducers: List[ReducerConfig] = []
-        self.indicators: List[IndicatorConfig] = []
         self.volumes: List[VolumeConfig] = []
         self.matrices: List[MatrixConfig] = []
         self.pairings: List[PairingConfig] = []
@@ -72,12 +73,16 @@ class Config(metaclass=SingletonMeta):
         self.print_settings()
 
     def print_settings(self) -> None:
-        print_new_line()
-        print("Settings")
-        print_new_line()
+        console = Console()
+
+        table = Table(show_header=True, header_style="bold magenta")
+        table.add_column("Setting")
+        table.add_column("Value")
 
         for k, v in vars(self.settings).items():
-            print(f"{k}: {v}")
+            table.add_row(str(k), str(v))
+
+        console.print(table)
 
     def parse(self) -> None:
         self.settings = SettingsStorage.read_from_config(self.parser)
@@ -106,7 +111,6 @@ class Config(metaclass=SingletonMeta):
             ranges=self.ranges,
         )
 
-        self.indicators = IndicatorStorage.read_from_config(self.parser)
         self.volumes = VolumeStorage.read_from_config(self.parser)
         self.matrices = MatrixStorage.read_from_config(self.parser)
         self.pairings = PairingStorage.read_from_config(self.parser)
@@ -123,7 +127,6 @@ class Config(metaclass=SingletonMeta):
         SiteStorage.delete_from_storage(storage)
 
         ExtractorStorage.delete_from_storage(storage)
-        IndicatorStorage.delete_from_storage(storage)
 
         AutoclusterStorage.delete_from_storage(storage)
         TrajectoryStorage.delete_from_storage(storage)
@@ -147,7 +150,6 @@ class Config(metaclass=SingletonMeta):
         SiteStorage.write_to_storage(self.sites, storage)
 
         ExtractorStorage.write_to_storage(self.extractors, storage)
-        IndicatorStorage.write_to_storage(self.indicators, storage)
 
         AutoclusterStorage.write_to_storage(self.autoclusters, storage)
         TrajectoryStorage.write_to_storage(self.trajectories, storage)

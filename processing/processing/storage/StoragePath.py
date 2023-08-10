@@ -75,8 +75,8 @@ class StoragePath(Enum):
         Dataset
     """
 
-    integrations_milliseconds = "/integrations/milliseconds"
-    """The duration in milliseconds for each band.
+    integrations_seconds = "/integrations/seconds"
+    """The duration in seconds for each band.
 
     Each row contains an integer.
 
@@ -371,25 +371,6 @@ class StoragePath(Enum):
         Dataset
     """
 
-    ############################
-    # Configuration/Indicators #
-    ############################
-
-    indicators_names = "/indicators/names"
-    """The indicator names requested in the configuration file.
-
-    Each row contains a string.
-
-    Enumeration:
-        ../indicators/IndicatorName.py
-
-    Factory:
-        ../indicators/Indicator.py
-
-    Type:
-        Dataset
-    """
-
     #########################
     # Configuration/Volumes #
     #########################
@@ -629,28 +610,6 @@ class StoragePath(Enum):
 
     Example:
         /autocluster_{autocluster_index}/{band}/{integration}
-
-    Type:
-        Group prefix
-    """
-
-    ##################
-    # Data/Indicator #
-    ##################
-
-    indicator_ = "/indicator_"
-    """The indicator values for each grouping.
-
-    The group contains one dataset per indicator, band and integration value.
-
-    Each dataset is named after the integration value.
-
-    Each row contains a float.
-
-    This path is to be used as a prefix!
-
-    Example:
-        /indicator_{indicator_index}/{band}/{integration}
 
     Type:
         Group prefix

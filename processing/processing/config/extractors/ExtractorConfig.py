@@ -1,9 +1,19 @@
 from typing import Dict, List, Tuple, Type
 
 from processing.config.settings.SettingsConfig import SettingsConfig
+from processing.extractors.AcousticComplexityExtractor import (
+    AcousticComplexityExtractor,
+)
+from processing.extractors.AcousticDiversityIndexIndicator import (
+    AcousticDiversityIndexExtractor,
+)
+from processing.extractors.BioacousticsIndexExtractor import BioacousticsIndexExtractor
 from processing.extractors.Extractor import Extractor
+from processing.extractors.FrequencyEntropyIndicator import FrequencyEntropyExtractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
+from processing.extractors.SoundscapeIndexExtractor import SoundscapeIndexExtractor
 from processing.extractors.TemporalEntropyExtractor import TemporalEntropyExtractor
+from processing.extractors.TemporalMedianExtractor import TemporalMedianExtractor
 from processing.extractors.VggExtractor import VggExtractor
 
 
@@ -12,6 +22,13 @@ class ExtractorConfig:
         "vgg": VggExtractor,
         "leq_maad": LeqMaadExtractor,
         "ht": TemporalEntropyExtractor,
+        "med": TemporalMedianExtractor,
+        "ndsi": SoundscapeIndexExtractor,
+        "aci": AcousticComplexityExtractor,
+        "adi": AcousticDiversityIndexExtractor,
+        "bi": BioacousticsIndexExtractor,
+        "hf": FrequencyEntropyExtractor,
+        # TODO: Adapt leq enes output before adding here
     }
 
     def __init__(

@@ -2,20 +2,15 @@ from typing import List, Tuple
 
 
 class IntegrationConfig:
-    index: int
-    name: str
-    __duration: int
-    """milliseconds"""
-
     def __init__(
         self,
         index: int,
         name: str,
         duration: int,
     ) -> None:
-        self.index = index
-        self.name = name
-        self.__duration = duration
+        self.index: int = index
+        self.name: str = name
+        self.__duration: int = duration  # seconds
 
     @staticmethod
     def flatten(

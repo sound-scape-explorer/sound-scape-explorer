@@ -4,14 +4,15 @@ from processing.extractors.Extractor import Extractor
 from processing.loaders.Loader import Loader
 
 
-class TemporalEntropyExtractor(Extractor):
-    """ht"""
+class FrequencyEntropyExtractor(Extractor):
+    """hf"""
 
     def extract(self, loader: Loader):
         data = []
 
         for slice in self.sound_walk(loader):
-            temporal_entropy = maad.features.temporal_entropy(slice.sound)
-            data.append([temporal_entropy])
+            spectrogram = loader.sound.get_spectrogram(slice)
+            hf, _ = maad.features.frequency_entropy(spectrogram.s)
+            data.append([hf])
 
         return data
