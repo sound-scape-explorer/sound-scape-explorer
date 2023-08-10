@@ -4,6 +4,7 @@ from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.extractors.Extractor import Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
 from processing.extractors.TemporalEntropyExtractor import TemporalEntropyExtractor
+from processing.extractors.TemporalMedianExtractor import TemporalMedianExtractor
 from processing.extractors.VggExtractor import VggExtractor
 
 
@@ -12,6 +13,7 @@ class ExtractorConfig:
         "vgg": VggExtractor,
         "leq_maad": LeqMaadExtractor,
         "ht": TemporalEntropyExtractor,
+        "med": TemporalMedianExtractor,
     }
 
     def __init__(
