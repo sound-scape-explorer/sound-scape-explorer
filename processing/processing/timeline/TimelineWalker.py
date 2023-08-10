@@ -18,10 +18,16 @@ ExtractorIndex = int
 BlockIndex = int
 
 
-# TODO: This taking all timelines and iterating through make no sense as it is
-# above its concern.
-# This should only loop over intervals within the give timeline...
 class TimelineWalker:
+    """The walker for timelines
+
+    Feed multiple timelines to enumerate their intervals.
+
+    The name can be misleading as this class takes multiple timelines as input.
+    This behaviour allows keeping track of loaded files and extracted data (in
+    order to do it once per file and extractor).
+    """
+
     def __init__(self) -> None:
         self.__timelines: Optional[List[Timeline]] = None
         self.__bands: Optional[List[BandConfig]] = None
