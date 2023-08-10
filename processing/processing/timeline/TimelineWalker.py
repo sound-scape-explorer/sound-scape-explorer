@@ -175,12 +175,11 @@ class TimelineWalker:
     def get_block_data(
         self,
         block: Block,
-        interval: Interval,
         band: BandConfig,
         extractor: Extractor,
     ):
         duration = (block.end - block.start) // 1000  # seconds
-        start = (block.start - interval.start) // 1000  # seconds
+        start = (block.start - block.file.start) // 1000  # seconds
         end = start + duration
 
         file_data = self.extracted[block.file.index][band.index][extractor.index]
@@ -221,12 +220,23 @@ class TimelineWalker:
             for b_, block in enumerate(interval.blocks):
                 f = block.file.index
 
-                self.load_file(block.file)
-                self.prepare_extracted(block.file)
-                self.load_band(band, block.file)
-                self.run_extraction(extractor, band, block.file, timeline)
+                self.load_file(file=block.file)
+                self.prepare_extracted(file=block.file)
+                self.load_band(band=band, file=block.file)
 
-                block_data = self.get_block_data(block, interval, band, extractor)
+                self.run_extraction(
+                    extractor=extractor,
+                    band=band,
+                    file=block.file,
+                    timeline=timeline,
+                )
+
+                block_data = self.get_block_data(
+                    block=block,
+                    band=band,
+                    extractor=extractor,
+                )
+
                 interval_data = [*interval_data, *block_data]
 
                 self.purge(f, b, extractor, b_, interval, timeline)
