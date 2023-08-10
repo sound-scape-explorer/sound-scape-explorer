@@ -11,7 +11,7 @@ class TemporalMedianExtractor(Extractor):
         data = []
 
         for slice in self.sound_walk(loader):
-            temporal_median = maad.features.temporal_median(slice)
+            temporal_median = maad.features.temporal_median(slice.sound)
             data.append([temporal_median])
 
         return data

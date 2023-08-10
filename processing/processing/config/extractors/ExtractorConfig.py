@@ -3,6 +3,7 @@ from typing import Dict, List, Tuple, Type
 from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.extractors.Extractor import Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
+from processing.extractors.SoundscapeIndexExtractor import SoundscapeIndexExtractor
 from processing.extractors.TemporalEntropyExtractor import TemporalEntropyExtractor
 from processing.extractors.TemporalMedianExtractor import TemporalMedianExtractor
 from processing.extractors.VggExtractor import VggExtractor
@@ -14,6 +15,7 @@ class ExtractorConfig:
         "leq_maad": LeqMaadExtractor,
         "ht": TemporalEntropyExtractor,
         "med": TemporalMedianExtractor,
+        "ndsi": SoundscapeIndexExtractor,
     }
 
     def __init__(
