@@ -28,6 +28,7 @@ class ExtractorConfig:
         "adi": AcousticDiversityIndexExtractor,
         "bi": BioacousticsIndexExtractor,
         "hf": FrequencyEntropyExtractor,
+        # TODO: Adapt leq enes output before adding here
     }
 
     def __init__(
