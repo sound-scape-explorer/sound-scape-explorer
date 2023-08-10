@@ -81,23 +81,3 @@ class SoundLoader:
 
         self.__filtered[kf] = filtered.tolist()
         return self.__filtered[kf]
-
-    def filter(
-        self,
-        audio: AudioSegment,
-        low: int,
-        high: int,
-    ):
-        assert self.sample_rate is not None, "not loaded"
-
-        try:
-            return maad.sound.select_bandwidth(
-                x=audio.get_array_of_samples(),
-                fs=self.sample_rate,
-                fcut=[low, high],
-                forder=6,
-                fname="butter",
-                ftype="bandpass",
-            )
-        except ValueError:
-            return []
