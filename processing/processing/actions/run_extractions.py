@@ -1,4 +1,5 @@
 import numpy as np
+from rich import print
 
 from processing.common.Env import Env
 from processing.config.bands.BandStorage import BandStorage
@@ -6,6 +7,7 @@ from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.config.sites.SiteStorage import SiteStorage
+from processing.prompts.prompt_on_end import prompt_on_end
 from processing.storage.Storage import Storage
 from processing.timeline.create_timelines import create_timelines
 from processing.timeline.TimelineWalker import TimelineWalker
@@ -74,7 +76,10 @@ def run_extractions(env: Env):
             data=[[interval.start]],
         )
 
-    tw.print_leftovers()
+    # tw.print_leftovers()
+    storage.close()
+    print("Extraction and aggregation completed :rocket:")
+    prompt_on_end()
 
 
 if __name__ == "__main__":

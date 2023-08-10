@@ -1,17 +1,13 @@
 import subprocess
-from dataclasses import dataclass
 
 import yaml
 from joblib.memory import pathlib
 from PyInquirer import prompt
-from rich import print
+from rich.console import Console
+from rich.table import Table
 from yaml.loader import SafeLoader
 
-
-@dataclass
-class YamlEnv:
-    config: str
-    storage: str
+from processing.common.YamlEnv import YamlEnv
 
 
 def does_path_exists(path: str):
@@ -27,12 +23,24 @@ def get_yaml_data():
     assert does_path_exists(config) is True, "Config file does not exist."
 
     storage = data["storage"]
-    return YamlEnv(config=config, storage=storage)
+    env = YamlEnv(config=config, storage=storage)
+
+    return env
 
 
 def main():
     env = get_yaml_data()
-    print(env)
+
+    console = Console()
+    table = Table(show_header=True, header_style="bold magenta")
+
+    table.add_column("File")
+    table.add_column("Path")
+
+    table.add_row("config", env.config)
+    table.add_row("storage", env.storage)
+
+    console.print(table)
 
     actions = {
         "Refresh configuration": [
@@ -67,6 +75,7 @@ def main():
         }
     ]
 
+    print()
     answers = prompt(questions)
     answer = answers["choices"]
     command = actions[answer]

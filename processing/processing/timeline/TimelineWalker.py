@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional
 
-from tqdm import tqdm
+from rich import print
+from rich.progress import track
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.files.FileConfig import FileConfig
@@ -95,13 +96,6 @@ class TimelineWalker:
         self.__storage = storage
         return self.__storage
 
-    def print(self, timeline: Timeline):
-        print_new_line()
-        print(
-            f"Walking intervals in site {timeline.site.name}"
-            f" with integration {timeline.integration.seconds}"
-        )
-
     def print_leftovers(self):
         print_new_line()
         print("Memory leftovers")
@@ -118,8 +112,13 @@ class TimelineWalker:
 
     def __enumerate(self):
         for timeline in self.timelines:
-            self.print(timeline)
-            for interval in tqdm(timeline.intervals):
+            for interval in track(
+                timeline.intervals,
+                description=(
+                    f"integration {timeline.integration.seconds}"
+                    f", site {timeline.site.name}"
+                ),
+            ):
                 for band_index, band in enumerate(self.bands):
                     for extractor in self.extractors:
                         yield (
