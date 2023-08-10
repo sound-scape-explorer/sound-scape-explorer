@@ -7,6 +7,7 @@ from processing.extractors.AcousticComplexityExtractor import (
 from processing.extractors.AcousticDiversityIndexIndicator import (
     AcousticDiversityIndexExtractor,
 )
+from processing.extractors.BioacousticsIndexExtractor import BioacousticsIndexExtractor
 from processing.extractors.Extractor import Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
 from processing.extractors.SoundscapeIndexExtractor import SoundscapeIndexExtractor
@@ -24,6 +25,7 @@ class ExtractorConfig:
         "ndsi": SoundscapeIndexExtractor,
         "aci": AcousticComplexityExtractor,
         "adi": AcousticDiversityIndexExtractor,
+        "bi": BioacousticsIndexExtractor,
     }
 
     def __init__(
