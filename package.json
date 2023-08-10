@@ -24,7 +24,6 @@
     "process:extractions": "pnpm _process --action extractions",
     "process:files": "pnpm _process --action files",
     "process:groups": "pnpm _process --action groups",
-    "process:indicators": "pnpm _process --action indicators",
     "process:matrices": "pnpm _process --action matrices",
     "process:mean-distances-matrix": "pnpm _process --action mean-distances-matrix",
     "process:mean-distances-matrix-purge": "pnpm _process --action mean-distances-matrix-purge",

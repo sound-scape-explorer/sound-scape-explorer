@@ -714,7 +714,6 @@ All `pnpm` commands relative to this module are preceded with `process:`.
 - [dataframe](#dataframe-command)
 - [files](#files-command)
 - [groups](#groups-command)
-- [indicators](#indicators-command)
 - [matrices](#matrices-command)
 - [pairings](#pairings-command)
 - [reducers](#reducers-command)
@@ -767,7 +766,6 @@ Run all _action_ commands, in order:
 
 - [autoclusters](#autoclusters-command)
 - [reducers](#reducers-command)
-- [indicators](#indicators-command)
 - [volumes](#volumes-command)
 - [matrices](#matrices-command)
 - [pairings](#pairings-command)
@@ -868,15 +866,6 @@ by the integration time.
 
 ```bash
 pnpm process:group --storage /path/to/storage.h5
-```
-
-#### `indicators` command
-
-For each group, read the corresponding audio slice and
-compute specified `indicators` from.
-
-```bash
-pnpm process:indicators --storage /path/to/storage.h5
 ```
 
 #### `matrices` command
