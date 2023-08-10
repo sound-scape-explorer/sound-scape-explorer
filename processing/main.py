@@ -16,7 +16,6 @@ PathByAction = {
     "extractions": "processing/processing/actions/run_extractions.py",
     "files": "processing/processing/actions/run_files.py",
     "groups": "processing/processing/actions/run_groups.py",
-    "indicators": "processing/processing/actions/run_indicators.py",
     "matrices": "processing/processing/actions/run_matrices.py",
     "mean-distances-matrix": "processing/processing/actions/run_mean_distances_matrix.py",
     "mean-distances-matrix-purge": "processing/processing/actions/run_mean_distances_matrix_purge.py",

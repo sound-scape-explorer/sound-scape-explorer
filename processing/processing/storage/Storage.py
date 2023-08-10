@@ -5,7 +5,6 @@ from h5py import Dataset, File
 
 from processing.common.SingletonMeta import SingletonMeta
 from processing.config.bands.BandConfig import BandConfig
-from processing.config.indicators.IndicatorConfig import IndicatorConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.matrices.MatrixConfig import MatrixConfig
 from processing.config.pairings.PairingConfig import PairingConfig
@@ -723,29 +722,6 @@ class Storage(metaclass=SingletonMeta):
         self.write(
             path=path,
             data=reducer.instance.values,
-            compression=True,
-        )
-
-    def generate_indicator_path(
-        self,
-        indicator: IndicatorConfig,
-    ) -> str:
-        suffix = f"/{indicator.band.name}/{indicator.integration.seconds}"
-        path = f"{StoragePath.indicator_.value}{indicator.index}{suffix}"
-        return path
-
-    def delete_indicators(self) -> None:
-        self.__delete_all_paths_starting_with(StoragePath.indicator_)
-
-    def write_indicator(
-        self,
-        indicator: IndicatorConfig,
-    ) -> None:
-        path = self.generate_indicator_path(indicator)
-
-        self.write(
-            path=path,
-            data=indicator.instance.values,
             compression=True,
         )
 
