@@ -9,6 +9,7 @@ from processing.extractors.AcousticDiversityIndexIndicator import (
 )
 from processing.extractors.BioacousticsIndexExtractor import BioacousticsIndexExtractor
 from processing.extractors.Extractor import Extractor
+from processing.extractors.FrequencyEntropyIndicator import FrequencyEntropyExtractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
 from processing.extractors.SoundscapeIndexExtractor import SoundscapeIndexExtractor
 from processing.extractors.TemporalEntropyExtractor import TemporalEntropyExtractor
@@ -26,6 +27,7 @@ class ExtractorConfig:
         "aci": AcousticComplexityExtractor,
         "adi": AcousticDiversityIndexExtractor,
         "bi": BioacousticsIndexExtractor,
+        "hf": FrequencyEntropyExtractor,
     }
 
     def __init__(
