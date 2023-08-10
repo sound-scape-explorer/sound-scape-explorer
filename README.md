@@ -927,6 +927,27 @@ pnpm process:reducers --storage /path/to/storage.h5
 For each group, read the corresponding features and
 compute specified `volumes` from.
 
+## Repack storage
+
+When you delete an entire dataset in an HDF5 file using h5py, the space that
+was occupied by the dataset is not immediately freed. This is due to how the
+HDF5 library works.
+
+The most common method to truly free the space that was occupied by a deleted
+dataset is to copy the remaining data to a new HDF5 file, and then delete the
+old file. Here is a basic example using the `h5repack` tool provided by the
+HDF5 library:
+
+```bash
+h5repack old_file.h5 new_file.h5
+```
+
+Install `h5repack` on Debian based distributions:
+
+```bash
+sudo apt install hdf5-tools
+```
+
 ## Looking for more?
 
 Feel free to open an [issue](https://github.com/sound-scape-explorer/sound-scape-explorer/issues)
