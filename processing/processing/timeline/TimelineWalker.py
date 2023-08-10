@@ -178,12 +178,21 @@ class TimelineWalker:
         band: BandConfig,
         extractor: Extractor,
     ):
-        duration = (block.end - block.start) // 1000  # seconds
+        offset = extractor.offset / 1000  # seconds floats
+        step = extractor.step / 1000  # seconds float
+
         start = (block.start - block.file.start) // 1000  # seconds
+        duration = (block.end - block.start) // 1000  # seconds
+
+        start = int((start + offset) / step)
+        duration = int(duration / step)
+
         end = start + duration
 
         file_data = self.extracted[block.file.index][band.index][extractor.index]
+
         block_data = file_data[start:end]
+
         return block_data
 
     def purge(
