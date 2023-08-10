@@ -75,8 +75,8 @@ class StoragePath(Enum):
         Dataset
     """
 
-    integrations_milliseconds = "/integrations/milliseconds"
-    """The duration in milliseconds for each band.
+    integrations_seconds = "/integrations/seconds"
+    """The duration in seconds for each band.
 
     Each row contains an integer.
 

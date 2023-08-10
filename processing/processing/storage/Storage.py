@@ -308,7 +308,7 @@ class Storage(metaclass=SingletonMeta):
         )
 
         self.write(
-            path=StoragePath.integrations_milliseconds,
+            path=StoragePath.integrations_seconds,
             data=integrations_seconds,
             compression=True,
         )

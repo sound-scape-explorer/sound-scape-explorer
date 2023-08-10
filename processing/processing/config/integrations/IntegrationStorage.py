@@ -10,19 +10,19 @@ from processing.storage.StoragePath import StoragePath
 
 class IntegrationStorage:
     names = StoragePath.integrations_names
-    milliseconds = StoragePath.integrations_milliseconds
+    seconds = StoragePath.integrations_seconds
 
     @staticmethod
     def delete_from_storage(storage: Storage) -> None:
         storage.delete(IntegrationStorage.names)
-        storage.delete(IntegrationStorage.milliseconds)
+        storage.delete(IntegrationStorage.seconds)
 
     @staticmethod
     def read_from_storage(storage: Storage) -> List[IntegrationConfig]:
         names_dataset = storage.read(IntegrationStorage.names)
 
         names = storage.convert_dataset_to_string_list(names_dataset)
-        durations = storage.read(IntegrationStorage.milliseconds)
+        durations = storage.read(IntegrationStorage.seconds)
 
         integrations = IntegrationConfig.reconstruct(
             names=names,
@@ -38,7 +38,7 @@ class IntegrationStorage:
     ) -> None:
         names, durations = IntegrationConfig.flatten(integrations)
         storage.write(path=IntegrationStorage.names, data=names)
-        storage.write(path=IntegrationStorage.milliseconds, data=durations)
+        storage.write(path=IntegrationStorage.seconds, data=durations)
 
     @staticmethod
     def read_from_config(parser: ConfigParser) -> List[IntegrationConfig]:
