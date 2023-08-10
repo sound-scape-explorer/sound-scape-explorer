@@ -1,6 +1,9 @@
 from typing import Dict, List, Tuple, Type
 
 from processing.config.settings.SettingsConfig import SettingsConfig
+from processing.extractors.AcousticComplexityExtractor import (
+    AcousticComplexityExtractor,
+)
 from processing.extractors.Extractor import Extractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
 from processing.extractors.SoundscapeIndexExtractor import SoundscapeIndexExtractor
@@ -16,6 +19,7 @@ class ExtractorConfig:
         "ht": TemporalEntropyExtractor,
         "med": TemporalMedianExtractor,
         "ndsi": SoundscapeIndexExtractor,
+        "aci": AcousticComplexityExtractor,
     }
 
     def __init__(
