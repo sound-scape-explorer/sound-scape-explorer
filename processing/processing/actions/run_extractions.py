@@ -87,5 +87,5 @@ def run_extractions(
         )
 
     # tw.print_leftovers()
-    print(":rocket: Extraction and aggregation completed")
+    print("[bold green]:rocket: Extraction and aggregation completed[/bold green]")
     callback(storage)
