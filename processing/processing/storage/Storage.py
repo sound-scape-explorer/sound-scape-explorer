@@ -510,16 +510,6 @@ class Storage:
 
             yield file_index, group_count, file_timestamp, file_duration, file_features
 
-    def enumerate_bands_and_integrations(
-        self,
-    ) -> Iterable[Tuple[BandConfig, IntegrationConfig]]:
-        bands = self.read_config_bands()
-        integrations = self.read_config_integrations()
-
-        for band in bands:
-            for integration in integrations:
-                yield band, integration
-
     def read_files_count(
         self,
     ) -> int:
