@@ -43,13 +43,13 @@ class RangeConfig:
         ranges = []
 
         for index, name in enumerate(names):
-            range = RangeConfig(
+            range_ = RangeConfig(
                 index=index,
                 name=name,
                 start=starts[index],
                 end=ends[index],
             )
 
-            ranges.append(range)
+            ranges.append(range_)
 
         return ranges
