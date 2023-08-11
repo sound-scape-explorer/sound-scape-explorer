@@ -10,8 +10,8 @@ class AcousticComplexityExtractor(Extractor):
     def extract(self, loader: Loader):
         data = []
 
-        for slice in self.sound_walk(loader):
-            spectrogram = loader.sound.get_spectrogram(slice, "amplitude")
+        for slice_ in self.sound_walk(loader):
+            spectrogram = loader.sound.get_spectrogram(slice_, "amplitude")
             _, _, aci = maad.features.acoustic_complexity_index(spectrogram.s)
             data.append([aci])
 

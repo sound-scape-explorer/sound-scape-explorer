@@ -10,8 +10,8 @@ class TemporalMedianExtractor(Extractor):
     def extract(self, loader: Loader):
         data = []
 
-        for slice in self.sound_walk(loader):
-            temporal_median = maad.features.temporal_median(slice.sound)
+        for slice_ in self.sound_walk(loader):
+            temporal_median = maad.features.temporal_median(slice_.sound)
             data.append([temporal_median])
 
         return data

@@ -10,8 +10,8 @@ class FrequencyEntropyExtractor(Extractor):
     def extract(self, loader: Loader):
         data = []
 
-        for slice in self.sound_walk(loader):
-            spectrogram = loader.sound.get_spectrogram(slice)
+        for slice_ in self.sound_walk(loader):
+            spectrogram = loader.sound.get_spectrogram(slice_)
             hf, _ = maad.features.frequency_entropy(spectrogram.s)
             data.append([hf])
 

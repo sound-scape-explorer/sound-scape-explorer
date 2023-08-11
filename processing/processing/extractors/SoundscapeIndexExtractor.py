@@ -10,8 +10,8 @@ class SoundscapeIndexExtractor(Extractor):
     def extract(self, loader: Loader):
         data = []
 
-        for slice in self.sound_walk(loader):
-            spectrogram = loader.sound.get_spectrogram(slice)
+        for slice_ in self.sound_walk(loader):
+            spectrogram = loader.sound.get_spectrogram(slice_)
 
             ndsi, _, _, _ = maad.features.soundscape_index(
                 Sxx_power=spectrogram.s,

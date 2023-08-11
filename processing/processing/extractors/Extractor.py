@@ -96,13 +96,13 @@ class Extractor(ABC):
             start = t
             end = start + step
 
-            slice = filtered[start:end]
+            slice_ = filtered[start:end]
 
             # skipping for incomplete step
-            if len(slice) < step:
+            if len(slice_) < step:
                 t += step
                 continue
 
             t += step
 
-            yield SoundSlice(slice, start, end)
+            yield SoundSlice(slice_, start, end)

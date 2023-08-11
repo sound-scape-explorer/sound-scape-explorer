@@ -10,9 +10,9 @@ class LeqMaadExtractor(Extractor):
 
         data = []
 
-        for slice in self.sound_walk(loader):
+        for slice_ in self.sound_walk(loader):
             leq = maad.features.temporal_leq(
-                s=slice.sound,
+                s=slice_.sound,
                 fs=sample_rate,
                 gain=42,
             )
