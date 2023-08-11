@@ -9,6 +9,7 @@ from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.config.sites.SiteStorage import SiteStorage
 from processing.interfaces import IMain
 from processing.storage.Storage import Storage
+from processing.storage.StoragePath import StoragePath
 from processing.timeline.create_timelines import create_timelines
 from processing.timeline.TimelineWalker import TimelineWalker
 from processing.utils.print_extractors import print_extractors
@@ -24,9 +25,9 @@ def run_extractions(
         return
 
     storage.overwrite()
-    storage.delete("/aggregated")
-    storage.delete("/aggregated_timestamps")
-    storage.delete("/extracted")
+    storage.delete(StoragePath.aggregated.value)
+    storage.delete(StoragePath.aggregated_timestamps.value)
+    storage.delete(StoragePath.extracted.value)
 
     # retrieve configuration
     settings = SettingsStorage.read_from_storage(storage)
@@ -70,6 +71,12 @@ def run_extractions(
             path=path,
             data=[aggregated_data],
             compression=True,
+            attributes={
+                "extractor": extractor.__class__.__name__,
+                "offset": str(extractor.offset),
+                "step": str(extractor.step),
+                "method": "for step in file in site",
+            },
         )
 
         # INFO: This stores duplicated data as timestamps are the same for
