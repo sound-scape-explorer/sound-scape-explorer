@@ -16,6 +16,10 @@ class MatrixStorage:
         storage.delete(MatrixStorage.names)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return storage.exists_dataset(MatrixStorage.names)
+
+    @staticmethod
     def write_to_storage(matrices: List[MatrixConfig], storage: Storage) -> None:
         names = MatrixConfig.flatten(matrices)
 

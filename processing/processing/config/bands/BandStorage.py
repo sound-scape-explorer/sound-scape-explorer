@@ -20,6 +20,14 @@ class BandStorage:
         storage.delete(BandStorage.highs)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(BandStorage.names)
+            and storage.exists_dataset(BandStorage.lows)
+            and storage.exists_dataset(BandStorage.highs)
+        )
+
+    @staticmethod
     def read_from_storage(storage: Storage) -> List[BandConfig]:
         names_dataset = storage.read(BandStorage.names)
 

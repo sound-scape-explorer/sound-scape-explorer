@@ -155,3 +155,22 @@ class Config:
         VolumeStorage.write_to_storage(self.volumes, storage)
         MatrixStorage.write_to_storage(self.matrices, storage)
         PairingStorage.write_to_storage(self.pairings, storage)
+
+    @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return (
+            SettingsStorage.exists_in_storage(storage)
+            and BandStorage.exists_in_storage(storage)
+            and IntegrationStorage.exists_in_storage(storage)
+            and RangeStorage.exists_in_storage(storage)
+            and LabelStorage.exists_in_storage(storage)
+            and FileStorage.exists_in_storage(storage)
+            and SiteStorage.exists_in_storage(storage)
+            and ExtractorStorage.exists_in_storage(storage)
+            and AutoclusterStorage.exists_in_storage(storage)
+            and TrajectoryStorage.exists_in_storage(storage)
+            and ReducerStorage.exists_in_storage(storage)
+            and VolumeStorage.exists_in_storage(storage)
+            and MatrixStorage.exists_in_storage(storage)
+            and PairingStorage.exists_in_storage(storage)
+        )

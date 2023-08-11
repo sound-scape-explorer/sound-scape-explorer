@@ -25,6 +25,15 @@ class ExtractorStorage:
         storage.delete(ExtractorStorage.persists)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(ExtractorStorage.names)
+            and storage.exists_dataset(ExtractorStorage.offsets)
+            and storage.exists_dataset(ExtractorStorage.steps)
+            and storage.exists_dataset(ExtractorStorage.persists)
+        )
+
+    @staticmethod
     def read_from_storage(storage: Storage) -> List[ExtractorConfig]:
         names_dataset = storage.read(ExtractorStorage.names)
         names = storage.convert_dataset_to_string_list(names_dataset)

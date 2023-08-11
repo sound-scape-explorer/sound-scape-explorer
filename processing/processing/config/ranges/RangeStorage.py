@@ -23,6 +23,14 @@ class RangeStorage:
         storage.delete(RangeStorage.ends)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(RangeStorage.names)
+            and storage.exists_dataset(RangeStorage.starts)
+            and storage.exists_dataset(RangeStorage.ends)
+        )
+
+    @staticmethod
     def read_from_storage(storage: Storage) -> List[RangeConfig]:
         names_dataset = storage.read(RangeStorage.names)
 

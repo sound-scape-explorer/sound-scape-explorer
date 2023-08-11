@@ -28,6 +28,16 @@ class FileStorage:
         storage.delete(FileStorage.durations)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(FileStorage.names)
+            and storage.exists_dataset(FileStorage.timestamps)
+            and storage.exists_dataset(FileStorage.sites)
+            and storage.exists_dataset(FileStorage.labels)
+            and storage.exists_dataset(FileStorage.durations)
+        )
+
+    @staticmethod
     def read_from_storage(
         storage: Storage,
         settings: SettingsConfig,

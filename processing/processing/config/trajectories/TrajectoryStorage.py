@@ -23,6 +23,14 @@ class TrajectoryStorage:
         storage.delete(TrajectoryStorage.ends)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(TrajectoryStorage.names)
+            and storage.exists_dataset(TrajectoryStorage.starts)
+            and storage.exists_dataset(TrajectoryStorage.ends)
+        )
+
+    @staticmethod
     def read_from_storage(storage: Storage) -> List[TrajectoryConfig]:
         names_dataset = storage.read(TrajectoryStorage.names)
 

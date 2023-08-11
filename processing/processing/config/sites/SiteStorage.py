@@ -14,9 +14,15 @@ class SiteStorage:
     path_file_indexes = StoragePath.sites_file_indexes.value
 
     @staticmethod
-    def delete_from_storage(storage: Storage):
+    def delete_from_storage(storage: Storage) -> None:
         storage.delete(SiteStorage.path_names)
         storage.delete(SiteStorage.path_file_indexes)
+
+    @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return storage.exists_dataset(
+            SiteStorage.path_names
+        ) and storage.exists_dataset(SiteStorage.path_file_indexes)
 
     @staticmethod
     def read_from_storage(

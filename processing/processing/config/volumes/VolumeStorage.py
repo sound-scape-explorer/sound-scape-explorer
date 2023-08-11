@@ -16,6 +16,10 @@ class VolumeStorage:
         storage.delete(VolumeStorage.names)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return storage.exists_dataset(VolumeStorage.names)
+
+    @staticmethod
     def write_to_storage(volumes: List[VolumeConfig], storage: Storage) -> None:
         names = VolumeConfig.flatten(volumes)
 

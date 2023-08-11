@@ -24,6 +24,16 @@ class AutoclusterStorage:
         storage.delete(AutoclusterStorage.epsilons)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(AutoclusterStorage.names)
+            and storage.exists_dataset(AutoclusterStorage.min_cluster_sizes)
+            and storage.exists_dataset(AutoclusterStorage.min_samples)
+            and storage.exists_dataset(AutoclusterStorage.alphas)
+            and storage.exists_dataset(AutoclusterStorage.epsilons)
+        )
+
+    @staticmethod
     def read_from_storage(storage: Storage) -> List[AutoclusterConfig]:
         names_dataset = storage.read(AutoclusterStorage.names)
 

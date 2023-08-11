@@ -1,11 +1,11 @@
 import numpy as np
 
 from processing.config.ConfigParser import ConfigParser
-from processing.config.settings.SettingsSheet import SettingsSheet
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.config.settings.SettingsDefaults import SettingsDefaults
 from processing.config.settings.SettingsRow import SettingsRow
+from processing.config.settings.SettingsSheet import SettingsSheet
 from processing.constants import STRING_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
@@ -17,6 +17,10 @@ class SettingsStorage:
     @staticmethod
     def delete_from_storage(storage: Storage) -> None:
         storage.delete(SettingsStorage.settings)
+
+    @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return storage.exists_dataset(SettingsStorage.settings)
 
     @staticmethod
     def read_from_storage(storage: Storage) -> SettingsConfig:
@@ -74,7 +78,7 @@ class SettingsStorage:
         expected_sample_rate = obj[SettingsRow.expected_sample_rate.value]
 
         timeline_origin = (
-                int(obj[SettingsRow.timeline_origin.value].timestamp()) * 1000
+            int(obj[SettingsRow.timeline_origin.value].timestamp()) * 1000
         )  # milliseconds
 
         timezone = (

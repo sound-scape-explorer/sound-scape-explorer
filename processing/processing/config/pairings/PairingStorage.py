@@ -16,6 +16,10 @@ class PairingStorage:
         storage.delete(PairingStorage.names)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return storage.exists_dataset(PairingStorage.names)
+
+    @staticmethod
     def write_to_storage(matrices: List[PairingConfig], storage: Storage) -> None:
         names = PairingConfig.flatten(matrices)
 

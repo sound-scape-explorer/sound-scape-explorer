@@ -18,6 +18,12 @@ class IntegrationStorage:
         storage.delete(IntegrationStorage.seconds)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return storage.exists_dataset(
+            IntegrationStorage.names
+        ) and storage.exists_dataset(IntegrationStorage.seconds)
+
+    @staticmethod
     def read_from_storage(storage: Storage) -> List[IntegrationConfig]:
         names_dataset = storage.read(IntegrationStorage.names)
 

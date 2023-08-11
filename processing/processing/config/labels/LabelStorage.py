@@ -18,6 +18,12 @@ class LabelStorage:
         storage.delete(LabelStorage.sets)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return storage.exists_dataset(
+            LabelStorage.properties
+        ) and storage.exists_dataset(LabelStorage.sets)
+
+    @staticmethod
     def read_from_storage(storage: Storage) -> List[LabelConfig]:
         pass
 

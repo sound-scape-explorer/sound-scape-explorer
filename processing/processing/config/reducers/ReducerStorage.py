@@ -28,6 +28,16 @@ class ReducerStorage:
         storage.delete(ReducerStorage.integrations)
 
     @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(ReducerStorage.names)
+            and storage.exists_dataset(ReducerStorage.dimensions)
+            and storage.exists_dataset(ReducerStorage.ranges)
+            and storage.exists_dataset(ReducerStorage.bands)
+            and storage.exists_dataset(ReducerStorage.integrations)
+        )
+
+    @staticmethod
     def read_from_storage(
         storage: Storage,
         bands: List[BandConfig],
