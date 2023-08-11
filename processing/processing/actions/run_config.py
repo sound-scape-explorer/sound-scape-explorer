@@ -19,5 +19,5 @@ def run_config(
     print_file_indexes_by_site(storage, config.settings)
     print_extractors(storage)
 
-    print("[bold green]:rocket: Configuration refreshed[/bold green]")
+    print("[bold green]:rocket: Configuration refresh completed![/bold green]")
     callback(storage)
