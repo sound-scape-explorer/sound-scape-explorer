@@ -16,10 +16,9 @@ def run_repack(
         [
             "h5repack",
             storage.path,
-            f"{storage.path.replace('.h5', '.repack.h5')}",
+            f"{path_repack}",
         ]
     )
 
     print(f":rocket: Storage file repacked to {path_repack}")
-
     callback(storage)
