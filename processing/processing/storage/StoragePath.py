@@ -178,21 +178,6 @@ class StoragePath(Enum):
         Dataset
     """
 
-    files_extractors = "/extractors"
-    extracted = "/extracted"
-    """The 128D features for each second of audio.
-
-    The group contains one dataset per band.
-    Each dataset is named after the band.
-    Each row contains an array (columns) of 128 floats.
-
-    Example:
-        /extracted/{band.name}/{extractor.index}
-
-    Type:
-        Group
-    """
-
     ######################
     # Configuration/Meta #
     ######################
@@ -685,3 +670,4 @@ class StoragePath(Enum):
     """
 
     extractors = "/extractors"
+    extracted = "/extracted"
