@@ -8,6 +8,11 @@ class MenuChoice(Enum):
     RefreshConfig = "Refresh configuration"
     ExtractAggregate = "Run extractions and aggregations"
     Reduce = "Run reductions"
+    RunComputationRequirements = (
+        "Run computation UMAPs and mean distances matrix"
+        " (needed for autoclusters and trajectories)"
+    )
+    RunAutoclusters = "Run autoclusters and trajectories"
     Repack = "Repack storage with `h5repack` (UNIX only)"
     Quit = "Quit"
 

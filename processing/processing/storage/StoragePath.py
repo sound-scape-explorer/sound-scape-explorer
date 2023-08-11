@@ -674,3 +674,5 @@ class StoragePath(Enum):
     aggregated = "/aggregated"
     aggregated_timestamps = "/aggregated_timestamps"
     reduced = "/reduced"
+    autoclustered = "/autoclustered"
+    computation_umap = "/computation_umap"

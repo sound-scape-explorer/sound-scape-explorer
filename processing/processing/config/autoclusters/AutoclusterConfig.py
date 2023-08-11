@@ -8,21 +8,21 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 
 
 class AutoclusterConfig:
-    methodsByName: Dict[str, str] = {
+    methods_by_name: Dict[str, str] = {
         "hdbscan-eom": "eom",
         "hdbscan-leaf": "leaf",
     }
 
-    index: int
-    name: str
-    min_cluster_size: int
-    min_samples: int
-    alpha: float
-    epsilon: float
-    band: BandConfig
-    integration: IntegrationConfig
-    instance: HDBSCAN
-    values: List[int]
+    # index: int
+    # name: str
+    # min_cluster_size: int
+    # min_samples: int
+    # alpha: float
+    # epsilon: float
+    # band: BandConfig
+    # integration: IntegrationConfig
+    # instance: HDBSCAN
+    # values: List[int]
 
     def __init__(
         self,
@@ -56,7 +56,7 @@ class AutoclusterConfig:
             KeyError: An error occured because the autoclustering name
             has not been found.
         """
-        if name in AutoclusterConfig.methodsByName.keys():
+        if name in AutoclusterConfig.methods_by_name.keys():
             return
 
         raise KeyError(f"Unable to validate autoclustering name {name}.")
@@ -105,7 +105,7 @@ class AutoclusterConfig:
         self.band = band
         self.integration = integration
 
-        method = self.methodsByName[self.name]
+        method = self.methods_by_name[self.name]
 
         self.instance = HDBSCAN(
             min_cluster_size=self.min_cluster_size,

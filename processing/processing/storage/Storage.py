@@ -135,6 +135,7 @@ class Storage:
         except KeyError:
             return False
 
+    # TODO: This can output a group!
     def read(
         self,
         path: Union[StoragePath, str],

@@ -3,6 +3,8 @@ from typing import Optional
 
 from rich.console import Console
 
+from processing.actions.run_autoclusters_new import run_autoclusters_new
+from processing.actions.run_computation_requirements import run_computation_requirements
 from processing.actions.run_config import run_config
 from processing.actions.run_extractions import run_extractions
 from processing.actions.run_reductions import run_reductions
@@ -43,6 +45,10 @@ def main(
             run_reductions(storage, main)
         if answer == MenuChoice.Repack.value:
             run_repack(storage, main)
+        if answer == MenuChoice.RunComputationRequirements.value:
+            run_computation_requirements(storage, main)
+        if answer == MenuChoice.RunAutoclusters.value:
+            run_autoclusters_new(storage, main)
         else:
             quit_sse(storage)
     except Exception:

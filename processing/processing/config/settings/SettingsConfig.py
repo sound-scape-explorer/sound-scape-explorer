@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Union
 
 
 @dataclass(frozen=True)
@@ -9,7 +9,7 @@ class SettingsConfig:
     expected_sample_rate: int
     timeline_origin: int
 
-    timezone: Optional[str]
-    computation_umap_dimensions: Optional[int]
-    computation_umap_iterations: Optional[int]
-    display_umap_seed: Optional[int]
+    timezone: Union[str, None]
+    computation_umap_dimensions: int
+    computation_umap_iterations: int
+    display_umap_seed: int
