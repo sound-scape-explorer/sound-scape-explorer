@@ -1,6 +1,12 @@
 import subprocess
+from enum import Enum
 
 from PyInquirer import prompt
+
+
+class OnEndChoice(Enum):
+    Menu = "Menu"
+    Quit = "Quit"
 
 
 def prompt_on_end():
@@ -8,7 +14,7 @@ def prompt_on_end():
         {
             "type": "list",
             "name": "choices",
-            "choices": ["Menu", "Quit"],
+            "choices": [choice.value for choice in OnEndChoice],
             "message": "Go to",
         }
     ]
@@ -17,5 +23,7 @@ def prompt_on_end():
     answers = prompt(questions)
     answer = answers["choices"]
 
-    if answer == "Menu":
+    if answer == OnEndChoice.Quit.value:
+        exit()
+    elif answer == OnEndChoice.Menu.value:
         subprocess.run(["python3", "processing/cli.py"])
