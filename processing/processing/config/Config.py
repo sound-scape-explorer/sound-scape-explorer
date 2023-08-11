@@ -26,6 +26,7 @@ from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.reducers.ReducerStorage import ReducerStorage
 from processing.config.settings.SettingsConfig import SettingsConfig
+from processing.config.settings.SettingsRow import SettingsRow
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.config.sites.SiteStorage import SiteStorage
@@ -34,6 +35,7 @@ from processing.config.trajectories.TrajectoryStorage import TrajectoryStorage
 from processing.config.volumes.VolumeConfig import VolumeConfig
 from processing.config.volumes.VolumeStorage import VolumeStorage
 from processing.storage.Storage import Storage
+from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
 
 
 class Config:
@@ -77,6 +79,9 @@ class Config:
         table.add_column("Value")
 
         for k, v in vars(self.settings).items():
+            if k == SettingsRow.timeline_origin.value:
+                v = convert_timestamp_to_date(v)
+
             table.add_row(str(k), str(v))
 
         console.print(table)
