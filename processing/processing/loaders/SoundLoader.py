@@ -11,7 +11,7 @@ from processing.loaders.SoundSlice import SoundSlice
 from processing.loaders.Spectrogram import Spectrogram
 
 FilteredKey = str
-SoundSliceStart = int
+SoundSliceStartEnd = str
 SpectrogramMode = Literal["psd", "amplitude"]
 
 
@@ -59,7 +59,7 @@ class SoundLoader:
 
     def __initialize_spectrogram(self):
         self.__spectrograms: Dict[
-            SpectrogramMode, Dict[SoundSliceStart, Spectrogram]
+            SpectrogramMode, Dict[SoundSliceStartEnd, Spectrogram]
         ] = {}
         self.__spectrograms["psd"] = {}
         self.__spectrograms["amplitude"] = {}
@@ -108,17 +108,19 @@ class SoundLoader:
 
     def get_spectrogram(
         self,
-        slice: SoundSlice,
+        slice_: SoundSlice,
         mode: SpectrogramMode = "psd",
     ) -> Spectrogram:
-        if slice.start in self.__spectrograms[mode].keys():
-            return self.__spectrograms[mode][slice.start]
+        ks = f"{slice_.start}-{slice_.end}"
+
+        if ks in self.__spectrograms[mode].keys():
+            return self.__spectrograms[mode][ks]
 
         s, tn, fn, ext = maad.sound.spectrogram(
-            x=np.array(slice.sound),
+            x=np.array(slice_.sound),
             fs=self.sample_rate,
             mode=mode,
         )
 
-        self.__spectrograms[mode][slice.start] = Spectrogram(s, tn, fn, ext)
-        return self.__spectrograms[mode][slice.start]
+        self.__spectrograms[mode][ks] = Spectrogram(s, tn, fn, ext)
+        return self.__spectrograms[mode][ks]
