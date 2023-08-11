@@ -16,10 +16,8 @@ def run_config(env: Env):
     print_file_indexes_by_site(storage, config.settings)
     print_extractors(storage)
 
-    storage.close()
-
     print("Configuration refreshed :rocket:")
-
+    storage.close()
     prompt_on_end()
 
 

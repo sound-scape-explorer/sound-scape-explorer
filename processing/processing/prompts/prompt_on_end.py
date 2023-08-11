@@ -26,4 +26,4 @@ def prompt_on_end():
     if answer == OnEndChoice.Quit.value:
         exit()
     elif answer == OnEndChoice.Menu.value:
-        subprocess.run(["python3", "processing/cli.py"])
+        subprocess.run(["python3", "processing/processing/prompts/prompt_main.py"])

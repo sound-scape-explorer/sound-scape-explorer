@@ -11,6 +11,7 @@ from processing.prompts.prompt_on_end import prompt_on_end
 from processing.storage.Storage import Storage
 from processing.timeline.create_timelines import create_timelines
 from processing.timeline.TimelineWalker import TimelineWalker
+from processing.utils.print_extractors import print_extractors
 
 
 def run_extractions(env: Env):
@@ -26,6 +27,8 @@ def run_extractions(env: Env):
     integrations = IntegrationStorage.read_from_storage(storage)
     sites = SiteStorage.read_from_storage(storage, settings)
     extractors = ExtractorStorage.instanciate_from_storage(storage, settings)
+
+    print_extractors(storage)
 
     # build timelines
     timelines = create_timelines(
