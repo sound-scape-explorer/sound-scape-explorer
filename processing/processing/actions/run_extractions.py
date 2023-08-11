@@ -2,6 +2,7 @@ import numpy as np
 from rich import print
 
 from processing.config.bands.BandStorage import BandStorage
+from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
@@ -17,6 +18,11 @@ def run_extractions(
     storage: Storage,
     callback: IMain,
 ):
+    if not Config.exists_in_storage(storage):
+        print("[bold red]:no_entry: No configuration found in storage[/bold red]")
+        callback(storage)
+        return
+
     storage.overwrite()
     storage.delete("/aggregated")
     storage.delete("/aggregated_timestamps")
