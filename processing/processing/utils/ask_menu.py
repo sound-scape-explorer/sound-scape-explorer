@@ -12,7 +12,7 @@ class MenuChoice(Enum):
     Quit = "Quit"
 
 
-def ask_menu():
+def ask_menu() -> str:
     questions = [
         {
             "type": "list",
@@ -24,5 +24,5 @@ def ask_menu():
 
     print()
     answers = prompt(questions)
-    answer = answers["choices"]
+    answer: str = answers["choices"]
     return answer
