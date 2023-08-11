@@ -673,3 +673,4 @@ class StoragePath(Enum):
     extracted = "/extracted"
     aggregated = "/aggregated"
     aggregated_timestamps = "/aggregated_timestamps"
+    reduced = "/reduced"

@@ -58,6 +58,9 @@ class Storage:
     def close(self) -> None:
         self.__file.close()
 
+    def load(self) -> None:
+        self.__set_file_or_fail()
+
     @staticmethod
     def __get_path_as_string(path: Union[StoragePath, str]) -> str:
         if type(path) is StoragePath:
@@ -698,18 +701,6 @@ class Storage:
         return (
             f"{StoragePath.reduced_.value}{reducer.index}"
             f"/{reducer.band.name}/{reducer.integration.seconds}"
-        )
-
-    def write_reducer(
-        self,
-        reducer: ReducerConfig,
-    ) -> None:
-        path = self.generate_reduced_path(reducer=reducer)
-
-        self.write(
-            path=path,
-            data=reducer.instance.values,
-            compression=True,
         )
 
     def generate_volume_path(
