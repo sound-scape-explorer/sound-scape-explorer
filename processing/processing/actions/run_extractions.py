@@ -13,6 +13,7 @@ from processing.storage.StoragePath import StoragePath
 from processing.timeline.create_timelines import create_timelines
 from processing.timeline.TimelineWalker import TimelineWalker
 from processing.utils.print_extractors import print_extractors
+from processing.utils.print_no_configuration import print_no_configuration
 
 
 def run_extractions(
@@ -20,14 +21,14 @@ def run_extractions(
     callback: IMain,
 ):
     if not Config.exists_in_storage(storage):
-        print("[bold red]:no_entry: No configuration found in storage[/bold red]")
+        print_no_configuration()
         callback(storage)
         return
 
     storage.overwrite()
-    storage.delete(StoragePath.aggregated.value)
-    storage.delete(StoragePath.aggregated_timestamps.value)
-    storage.delete(StoragePath.extracted.value)
+    storage.delete(StoragePath.extracted)
+    storage.delete(StoragePath.aggregated)
+    storage.delete(StoragePath.aggregated_timestamps)
 
     # retrieve configuration
     settings = SettingsStorage.read_from_storage(storage)
@@ -94,5 +95,5 @@ def run_extractions(
         )
 
     # tw.print_leftovers()
-    print("[bold green]:rocket: Extraction and aggregation completed[/bold green]")
+    print("[bold green]:rocket: Extractions and aggregations completed![/bold green]")
     callback(storage)
