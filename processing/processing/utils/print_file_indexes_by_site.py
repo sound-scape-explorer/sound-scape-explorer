@@ -16,6 +16,9 @@ def print_file_indexes_by_site(storage: Storage, settings: SettingsConfig):
     sites = SiteStorage.read_from_storage(storage, settings)
 
     for site in sites:
-        table.add_row(site.name, str([f.index for f in site.files]))
+        table.add_row(
+            site.name,
+            str(", ".join([str(f.index) for f in site.files])),
+        )
 
     console.print(table)
