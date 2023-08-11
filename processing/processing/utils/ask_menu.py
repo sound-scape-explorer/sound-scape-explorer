@@ -6,8 +6,9 @@ from rich import print
 
 class MenuChoice(Enum):
     RefreshConfig = "Refresh configuration"
-    ExtractAggregate = "Extract and aggregate"
-    Repack = "Repack with `h5repack`"
+    ExtractAggregate = "Run extractions and aggregations"
+    Reduce = "Run reductions"
+    Repack = "Repack storage with `h5repack` (UNIX only)"
     Quit = "Quit"
 
 
