@@ -14,8 +14,8 @@ def print_extractors(storage: Storage):
     table = Table(show_header=True, header_style="bold magenta")
     table.add_column("Name")
     table.add_column("Extractor")
-    table.add_column("Offset")
-    table.add_column("Step")
+    table.add_column("Offset (ms)")
+    table.add_column("Step (ms)")
     table.add_column("Persist")
 
     for extractor in extractors:
@@ -24,7 +24,9 @@ def print_extractors(storage: Storage):
             ExtractorConfig.extractors[extractor.name].__name__,
             str(extractor.offset),
             str(extractor.step),
-            str(extractor.persist),
+            "[green]:heavy_check_mark:[/green]"
+            if extractor.persist
+            else "[red]:x:[/red]",
         )
 
     console.print(table)
