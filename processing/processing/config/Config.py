@@ -4,7 +4,6 @@ from rich import print
 from rich.console import Console
 from rich.table import Table
 
-from processing.common.SingletonMeta import SingletonMeta
 from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
@@ -35,10 +34,9 @@ from processing.config.trajectories.TrajectoryStorage import TrajectoryStorage
 from processing.config.volumes.VolumeConfig import VolumeConfig
 from processing.config.volumes.VolumeStorage import VolumeStorage
 from processing.storage.Storage import Storage
-from processing.utils.print_new_line import print_new_line
 
 
-class Config(metaclass=SingletonMeta):
+class Config:
     def __init__(
         self,
         path: str,
@@ -68,7 +66,6 @@ class Config(metaclass=SingletonMeta):
         self.print()
 
     def print(self) -> None:
-        print_new_line()
         print(f"Config loaded: {self.parser.path}")
         self.print_settings()
 

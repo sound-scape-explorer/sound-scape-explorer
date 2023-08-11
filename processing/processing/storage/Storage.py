@@ -3,7 +3,6 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 import numpy
 from h5py import Dataset, File
 
-from processing.common.SingletonMeta import SingletonMeta
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.matrices.MatrixConfig import MatrixConfig
@@ -17,10 +16,10 @@ from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
 
 
-class Storage(metaclass=SingletonMeta):
+class Storage:
     """The interface for handling HDF5 storage file."""
 
-    __path: str
+    path: str
     __file: File
     is_overwrite: bool = False
 
@@ -28,7 +27,7 @@ class Storage(metaclass=SingletonMeta):
         self,
         path: str,
     ) -> None:
-        self.__path = path
+        self.path = path
         self.__set_file_or_fail()
         self.__succeed()
 
@@ -36,18 +35,18 @@ class Storage(metaclass=SingletonMeta):
         self.is_overwrite = True
 
     def __succeed(self) -> None:
-        print(f"Storage loaded: {self.__path}")
+        print(f"Storage loaded: {self.path}")
 
     def __set_file_or_fail(self) -> None:
         try:
             self.__file = File(
-                self.__path,
+                self.path,
                 StorageMode.rw_or_create.value,
             )
         except BlockingIOError:
-            raise RuntimeError(f"Unable to load file {self.__path}.")
+            raise RuntimeError(f"Unable to load file {self.path}.")
         except TypeError:
-            raise FileNotFoundError(f"Unable to find file {self.__path}.")
+            raise FileNotFoundError(f"Unable to find file {self.path}.")
 
     @staticmethod
     def __get_file_features_path(

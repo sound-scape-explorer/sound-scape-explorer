@@ -1,26 +1,23 @@
 from rich import print
 
-from processing.common.Env import Env
+from processing.common.YamlEnv import YamlEnv
 from processing.config.Config import Config
-from processing.prompts.prompt_on_end import prompt_on_end
+from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.utils.print_extractors import print_extractors
 from processing.utils.print_file_indexes_by_site import print_file_indexes_by_site
 
 
-def run_config(env: Env):
-    storage = Storage(path=env.storage)
+def run_config(
+    env: YamlEnv,
+    storage: Storage,
+    callback: IMain,
+):
     config = Config(path=env.config)
     config.write(storage)
 
     print_file_indexes_by_site(storage, config.settings)
     print_extractors(storage)
 
-    print("Configuration refreshed :rocket:")
-    storage.close()
-    prompt_on_end()
-
-
-if __name__ == "__main__":
-    env = Env()
-    run_config(env)
+    print(":rocket: Configuration refreshed")
+    callback(storage)

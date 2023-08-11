@@ -1,21 +1,22 @@
 import numpy as np
 from rich import print
 
-from processing.common.Env import Env
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.config.sites.SiteStorage import SiteStorage
-from processing.prompts.prompt_on_end import prompt_on_end
+from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.timeline.create_timelines import create_timelines
 from processing.timeline.TimelineWalker import TimelineWalker
 from processing.utils.print_extractors import print_extractors
 
 
-def run_extractions(env: Env):
-    storage = Storage(path=env.storage)
+def run_extractions(
+    storage: Storage,
+    callback: IMain,
+):
     storage.overwrite()
     storage.delete("/aggregated")
     storage.delete("/aggregated_timestamps")
@@ -80,11 +81,5 @@ def run_extractions(env: Env):
         )
 
     # tw.print_leftovers()
-    storage.close()
-    print("Extraction and aggregation completed :rocket:")
-    prompt_on_end()
-
-
-if __name__ == "__main__":
-    env = Env()
-    run_extractions(env)
+    print(":rocket: Extraction and aggregation completed")
+    callback(storage)

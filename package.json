@@ -10,7 +10,7 @@
     "install:audio": "sudo npm -g i serve",
     "install:front": "cd front && pnpm i && cd ..",
     "install:processing": "cd processing && pip3 install -r requirements.txt && cd ..",
-    "process": "python3 processing/processing/prompts/prompt_main.py",
+    "process": "python3 processing/processing/main.py",
     "release:prepare": "pnpm release:prepare:archive-examples",
     "release:prepare:archive-examples": "bin/archive-examples.sh",
     "start": "pnpm dev",
