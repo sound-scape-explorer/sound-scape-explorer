@@ -7,7 +7,7 @@ from processing.storage.Storage import Storage
 from processing.utils.ask_for_repack_replacement import ask_for_repack_replacement
 
 
-def run_repack(
+def repack_storage(
     storage: Storage,
     callback: IMain,
 ):

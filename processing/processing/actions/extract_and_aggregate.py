@@ -16,7 +16,7 @@ from processing.utils.print_extractors import print_extractors
 from processing.utils.print_no_configuration import print_no_configuration
 
 
-def run_extractions(
+def extract_and_aggregate(
     storage: Storage,
     callback: IMain,
 ):

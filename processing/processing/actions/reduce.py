@@ -19,7 +19,7 @@ from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.print_reducers import print_reducers
 
 
-def run_reductions(
+def reduce(
     storage: Storage,
     callback: IMain,
 ):

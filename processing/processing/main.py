@@ -3,15 +3,13 @@ from typing import Optional
 
 from rich.console import Console
 
+from processing.actions.compute_requirements import compute_requirements
+from processing.actions.extract_and_aggregate import extract_and_aggregate
+from processing.actions.purge_requirements import purge_requirements
+from processing.actions.reduce import reduce
+from processing.actions.refresh_configuration import refresh_configuration
+from processing.actions.repack_storage import repack_storage
 from processing.actions.run_autoclusters_new import run_autoclusters_new
-from processing.actions.run_computation_requirements import run_computation_requirements
-from processing.actions.run_computation_requirements_purge import (
-    run_computation_requirements_purge,
-)
-from processing.actions.run_config import run_config
-from processing.actions.run_extractions import run_extractions
-from processing.actions.run_reductions import run_reductions
-from processing.actions.run_repack import run_repack
 from processing.storage.Storage import Storage
 from processing.utils.ask_menu import MenuChoice, ask_menu
 from processing.utils.get_yaml_data import get_yaml_data
@@ -41,17 +39,17 @@ def main(
         answer = ask_menu()
 
         if answer == MenuChoice.RefreshConfig.value:
-            run_config(env, storage, main)
+            refresh_configuration(env, storage, main)
         if answer == MenuChoice.ExtractAggregate.value:
-            run_extractions(storage, main)
+            extract_and_aggregate(storage, main)
         if answer == MenuChoice.Reduce.value:
-            run_reductions(storage, main)
+            reduce(storage, main)
         if answer == MenuChoice.Repack.value:
-            run_repack(storage, main)
+            repack_storage(storage, main)
         if answer == MenuChoice.RunComputationRequirements.value:
-            run_computation_requirements(storage, main)
+            compute_requirements(storage, main)
         if answer == MenuChoice.PurgeComputationRequirements.value:
-            run_computation_requirements_purge(storage, main)
+            purge_requirements(storage, main)
         if answer == MenuChoice.RunAutoclusters.value:
             run_autoclusters_new(storage, main)
         else:

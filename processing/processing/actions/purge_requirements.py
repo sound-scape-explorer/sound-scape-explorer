@@ -5,7 +5,7 @@ from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 
 
-def run_computation_requirements_purge(
+def purge_requirements(
     storage: Storage,
     callback: IMain,
 ):

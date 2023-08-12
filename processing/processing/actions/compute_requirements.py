@@ -18,7 +18,7 @@ from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 
-def run_computation_requirements(
+def compute_requirements(
     storage: Storage,
     callback: IMain,
 ):

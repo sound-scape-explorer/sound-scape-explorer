@@ -8,7 +8,7 @@ from processing.utils.print_extractors import print_extractors
 from processing.utils.print_file_indexes_by_site import print_file_indexes_by_site
 
 
-def run_config(
+def refresh_configuration(
     env: YamlEnv,
     storage: Storage,
     callback: IMain,
