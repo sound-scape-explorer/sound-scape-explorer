@@ -1,15 +1,15 @@
-from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
+from rich import print
+
 from processing.config.Config import Config
 from processing.config.trajectories.TrajectoryStorage import TrajectoryStorage
 from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
-from processing.utils.print_autoclusters import print_autoclusters
 from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.print_trajectories import print_trajectories
 
 
-def run_autoclusters_new(
+def run_trajectories_new(
     storage: Storage,
     callback: IMain,
 ):
@@ -18,13 +18,11 @@ def run_autoclusters_new(
         callback(storage)
         return
 
-    # Verify for computation UMAPs
-    storage.delete(StoragePath.autoclustered)
+    storage.delete(StoragePath.trajectories)
 
-    autoclusters = AutoclusterStorage.read_from_storage(storage)
     trajectories = TrajectoryStorage.read_from_storage(storage)
 
-    print_autoclusters(autoclusters)
     print_trajectories(trajectories)
 
+    print("[bold green]:rocket: Trajectories completed![/bold green]")
     callback(storage)

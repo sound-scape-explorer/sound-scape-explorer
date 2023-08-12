@@ -3,13 +3,14 @@ from typing import Optional
 
 from rich.console import Console
 
+from processing.actions.autocluster import autocluster
 from processing.actions.compute_requirements import compute_requirements
 from processing.actions.extract_and_aggregate import extract_and_aggregate
 from processing.actions.purge_requirements import purge_requirements
 from processing.actions.reduce import reduce
 from processing.actions.refresh_configuration import refresh_configuration
 from processing.actions.repack_storage import repack_storage
-from processing.actions.run_autoclusters_new import run_autoclusters_new
+from processing.actions.run_trajectories_new import run_trajectories_new
 from processing.storage.Storage import Storage
 from processing.utils.ask_menu import MenuChoice, ask_menu
 from processing.utils.get_yaml_data import get_yaml_data
@@ -50,8 +51,10 @@ def main(
             compute_requirements(storage, main)
         if answer == MenuChoice.PurgeComputationRequirements.value:
             purge_requirements(storage, main)
-        if answer == MenuChoice.RunAutoclusters.value:
-            run_autoclusters_new(storage, main)
+        if answer == MenuChoice.Autocluster.value:
+            autocluster(storage, main)
+        if answer == MenuChoice.RunTrajectories.value:
+            run_trajectories_new(storage, main)
         else:
             quit_sse(storage)
     except Exception:
