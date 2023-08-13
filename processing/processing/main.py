@@ -44,7 +44,6 @@ def main(
             extract_and_aggregate(storage)
             reduce(storage)
             compute_requirements(storage)
-            purge_requirements(storage)
             autocluster(storage)
             trace_trajectories(storage, main)
         if answer == MenuChoice.RefreshConfig.value:
