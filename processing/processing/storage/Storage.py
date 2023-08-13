@@ -10,7 +10,6 @@ from processing.config.pairings.PairingConfig import PairingConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
-from processing.config.volumes.VolumeConfig import VolumeConfig
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -704,27 +703,6 @@ class Storage:
             f"/{reducer.band.name}/{reducer.integration.seconds}"
         )
 
-    def generate_volume_path(
-        self,
-        volume: VolumeConfig,
-    ) -> str:
-        return (
-            f"{StoragePath.volume_.value}{volume.index}"
-            f"/{volume.band.name}/{volume.integration.seconds}/{volume.meta_index}"
-        )
-
-    def write_volume(
-        self,
-        volume: VolumeConfig,
-    ) -> None:
-        path = self.generate_volume_path(volume=volume)
-
-        self.write(
-            path=path,
-            data=volume.instance.values,
-            compression=True,
-        )
-
     def generate_pairing_path(self, pairing: PairingConfig) -> str:
         return (
             f"{StoragePath.pairing_.value}{pairing.index}"
@@ -747,26 +725,6 @@ class Storage:
 
     def delete_pairings(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.pairing_)
-
-    def generate_matrix_path(self, matrix: MatrixConfig) -> str:
-        return (
-            f"{StoragePath.matrix_.value}{matrix.index}"
-            f"/{matrix.band.name}/{matrix.integration.seconds}/{matrix.meta_index}"
-        )
-
-    def write_matrix(
-        self,
-        matrix: MatrixConfig,
-    ) -> None:
-        path = self.generate_matrix_path(
-            matrix=matrix,
-        )
-
-        self.write(
-            path=path,
-            data=matrix.instance.values,
-            compression=True,
-        )
 
     def delete_reduced(self) -> None:
         self.__delete_all_paths_starting_with(StoragePath.reduced_)
