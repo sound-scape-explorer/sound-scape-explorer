@@ -1,15 +1,22 @@
 from typing import Dict, List, Type
 
 from processing.digesters.Digester import Digester
+from processing.digesters.MeanSpreadingDigester import MeanSpreadingDigester
+from processing.digesters.MeanStandardDeviationDigester import (
+    MeanStandardDeviationDigester,
+)
+from processing.digesters.SumStandardDeviationDigester import (
+    SumStandardDeviationDigester,
+)
 from processing.digesters.SumVarianceDigester import SumVarianceDigester
 
 
 class DigesterConfig:
     digesters: Dict[str, Type[Digester]] = {
         "sum_var": SumVarianceDigester,
-        # "sum_std": None,
-        # "mean_std": None,
-        # "mean_spreading": None,
+        "sum_std": SumStandardDeviationDigester,
+        "mean_std": MeanStandardDeviationDigester,
+        "mean_spreading": MeanSpreadingDigester,
         # "distance": None,
         # "overlap": None,
         # "silhouette": None,

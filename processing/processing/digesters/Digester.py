@@ -34,7 +34,7 @@ class Digester(ABC):
     def label(self, label: LabelConfig) -> None:
         self.__label = label
 
-    def walk_labels(self):
+    def walk_label_values(self):
         df = self.features
         df.index = self.label.values
         values = df.index.unique()  # type: ignore
