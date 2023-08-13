@@ -70,16 +70,8 @@ def reduce(
 
             reducer.instance.calculate()
 
-            path = (
-                f"{StoragePath.reduced.value}"
-                f"/{ar.band.name}"
-                f"/{ar.integration.seconds}"
-                f"/{ar.extractor.index}"
-                f"/{reducer.index}"
-            )
-
             storage.append(
-                path=path,
+                path=ar.get_reduced_path(reducer),
                 data=reducer.instance.values,
                 compression=True,
                 attributes={
