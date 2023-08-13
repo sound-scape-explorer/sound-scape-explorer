@@ -6,6 +6,7 @@ from processing.common.YamlEnv import YamlEnv
 from processing.config.Config import Config
 from processing.interfaces import IMain
 from processing.storage.Storage import Storage
+from processing.utils.print_digesters import print_digesters
 from processing.utils.print_extractors import print_extractors
 from processing.utils.print_file_indexes_by_site import print_file_indexes_by_site
 
@@ -19,7 +20,8 @@ def refresh_configuration(
     config.write(storage)
 
     print_file_indexes_by_site(storage, config.settings)
-    print_extractors(storage)
+    print_extractors(config.extractors)
+    print_digesters(config.digesters)
 
     print("[bold green]:rocket: Configuration refresh completed![/bold green]")
 

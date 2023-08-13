@@ -1,14 +1,12 @@
+from typing import List
+
 from rich.console import Console
 from rich.table import Table
 
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
-from processing.config.extractors.ExtractorStorage import ExtractorStorage
-from processing.storage.Storage import Storage
 
 
-def print_extractors(storage: Storage):
-    extractors = ExtractorStorage.read_from_storage(storage)
-
+def print_extractors(extractors: List[ExtractorConfig]):
     console = Console()
 
     table = Table(show_header=True, header_style="bold magenta")
