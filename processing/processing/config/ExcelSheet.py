@@ -17,6 +17,7 @@ class ExcelSheet(Enum):
     autoclusters = "Autoclusters"
     trajectories = "Trajectories"
     reducers = "Reducers"
+    digesters = "Digesters"
     volumes = "Volumes"
     matrices = "Matrices"
     pairings = "Pairings"

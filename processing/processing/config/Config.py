@@ -9,6 +9,8 @@ from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.ConfigParser import ConfigParser
+from processing.config.digesters.DigesterConfig import DigesterConfig
+from processing.config.digesters.DigesterStorage import DigesterStorage
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.files.FileConfig import FileConfig
@@ -17,10 +19,6 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.labels.LabelConfig import LabelConfig
 from processing.config.labels.LabelStorage import LabelStorage
-from processing.config.matrices.MatrixConfig import MatrixConfig
-from processing.config.matrices.MatrixStorage import MatrixStorage
-from processing.config.pairings.PairingConfig import PairingConfig
-from processing.config.pairings.PairingStorage import PairingStorage
 from processing.config.ranges.RangeConfig import RangeConfig
 from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerConfig import ReducerConfig
@@ -32,8 +30,6 @@ from processing.config.sites.SiteConfig import SiteConfig
 from processing.config.sites.SiteStorage import SiteStorage
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
 from processing.config.trajectories.TrajectoryStorage import TrajectoryStorage
-from processing.config.volumes.VolumeConfig import VolumeConfig
-from processing.config.volumes.VolumeStorage import VolumeStorage
 from processing.storage.Storage import Storage
 from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
 
@@ -60,9 +56,7 @@ class Config:
         self.trajectories: List[TrajectoryConfig] = []
 
         self.reducers: List[ReducerConfig] = []
-        self.volumes: List[VolumeConfig] = []
-        self.matrices: List[MatrixConfig] = []
-        self.pairings: List[PairingConfig] = []
+        self.digesters: List[DigesterConfig] = []
 
         self.parse()
         self.print()
@@ -113,9 +107,7 @@ class Config:
             ranges=self.ranges,
         )
 
-        self.volumes = VolumeStorage.read_from_config(self.parser)
-        self.matrices = MatrixStorage.read_from_config(self.parser)
-        self.pairings = PairingStorage.read_from_config(self.parser)
+        self.digesters = DigesterStorage.read_from_config(self.parser)
 
     def delete_from_storage(self, storage: Storage) -> None:
         SettingsStorage.delete_from_storage(storage)
@@ -134,9 +126,7 @@ class Config:
         TrajectoryStorage.delete_from_storage(storage)
 
         ReducerStorage.delete_from_storage(storage)
-        VolumeStorage.delete_from_storage(storage)
-        MatrixStorage.delete_from_storage(storage)
-        PairingStorage.delete_from_storage(storage)
+        DigesterStorage.delete_from_storage(storage)
 
     def write(self, storage: Storage) -> None:
         self.delete_from_storage(storage)
@@ -157,9 +147,7 @@ class Config:
         TrajectoryStorage.write_to_storage(self.trajectories, storage)
 
         ReducerStorage.write_to_storage(self.reducers, storage)
-        VolumeStorage.write_to_storage(self.volumes, storage)
-        MatrixStorage.write_to_storage(self.matrices, storage)
-        PairingStorage.write_to_storage(self.pairings, storage)
+        DigesterStorage.write_to_storage(self.digesters, storage)
 
     @staticmethod
     def exists_in_storage(storage: Storage) -> bool:
@@ -175,7 +163,5 @@ class Config:
             and AutoclusterStorage.exists_in_storage(storage)
             and TrajectoryStorage.exists_in_storage(storage)
             and ReducerStorage.exists_in_storage(storage)
-            and VolumeStorage.exists_in_storage(storage)
-            and MatrixStorage.exists_in_storage(storage)
-            and PairingStorage.exists_in_storage(storage)
+            and DigesterStorage.exists_in_storage(storage)
         )
