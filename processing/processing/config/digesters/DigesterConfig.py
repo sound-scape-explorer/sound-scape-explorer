@@ -5,7 +5,7 @@ from processing.digesters.SumVarianceDigester import SumVarianceDigester
 
 
 class DigesterConfig:
-    algorithms: Dict[str, Type[Digester]] = {
+    digesters: Dict[str, Type[Digester]] = {
         "sum_var": SumVarianceDigester,
         # "sum_std": None,
         # "mean_std": None,
@@ -27,11 +27,11 @@ class DigesterConfig:
         self.name = name
 
     def validate_name(self, name: str) -> None:
-        assert name in self.algorithms.keys(), f"Unable to find digester name {name}"
+        assert name in self.digesters.keys(), f"Unable to find digester name {name}"
 
     @staticmethod
     def flatten(digesters: List["DigesterConfig"]) -> List[str]:
-        names = [v.name for v in digesters]
+        names = [d.name for d in digesters]
         return names
 
     @staticmethod

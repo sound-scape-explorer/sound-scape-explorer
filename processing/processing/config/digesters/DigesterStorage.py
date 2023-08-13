@@ -19,8 +19,8 @@ class DigesterStorage:
         return storage.exists_dataset(DigesterStorage.names)
 
     @staticmethod
-    def write_to_storage(volumes: List[DigesterConfig], storage: Storage) -> None:
-        names = DigesterConfig.flatten(volumes)
+    def write_to_storage(digesters: List[DigesterConfig], storage: Storage) -> None:
+        names = DigesterConfig.flatten(digesters)
 
         storage.write(path=DigesterStorage.names, data=names)
 

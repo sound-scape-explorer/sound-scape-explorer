@@ -16,7 +16,7 @@ def print_digesters(digesters: List[DigesterConfig]):
     for digester in digesters:
         table.add_row(
             digester.name,
-            DigesterConfig.algorithms[digester.name].__name__,
+            DigesterConfig.digesters[digester.name].__name__,
         )
 
     console.print(table)
