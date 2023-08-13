@@ -38,9 +38,10 @@ def extract_and_aggregate(
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)
     sites = SiteStorage.read_from_storage(storage, settings)
-    extractors = ExtractorStorage.instanciate_from_storage(storage, settings)
+    extractors = ExtractorStorage.read_from_storage(storage)
+    extractors_instances = [ex.instanciate(settings) for ex in extractors]
 
-    print_extractors(storage)
+    print_extractors(extractors)
 
     # build timelines
     timelines = create_timelines(
@@ -57,15 +58,15 @@ def extract_and_aggregate(
     tw.bands = bands
     tw.integrations = integrations
     tw.timelines = timelines
-    tw.extractors = extractors
+    tw.extractors = extractors_instances
 
     # walk intervals in timelines
-    for interval_data, interval, band, integration, extractor in tw.walk():
+    for interval_data, labels, interval, band, integration, extractor in tw.walk():
         # Aggregate
         aggregated_data = list(np.mean(interval_data, axis=0))
 
         path = (
-            f"/aggregated"
+            f"/{StoragePath.aggregated.value}"
             f"/{band.name}"
             f"/{integration.seconds}"
             f"/{extractor.index}"
@@ -83,10 +84,11 @@ def extract_and_aggregate(
             },
         )
 
+        # Aggregated timestamps
         # INFO: This stores duplicated data as timestamps are the same for
         # band and extractor given a single integration
         t_path = (
-            f"/aggregated_timestamps"
+            f"/{StoragePath.aggregated_timestamps.value}"
             f"/{band.name}"
             f"/{integration.seconds}"
             f"/{extractor.index}"
@@ -95,6 +97,20 @@ def extract_and_aggregate(
         storage.append(
             path=t_path,
             data=[[interval.start]],
+        )
+
+        # Aggregated labels
+        # INFO: Same as above
+        l_path = (
+            f"/{StoragePath.aggregated_labels.value}"
+            f"/{band.name}"
+            f"/{integration.seconds}"
+            f"/{extractor.index}"
+        )
+
+        storage.append(
+            path=l_path,
+            data=[labels],
         )
 
     # tw.print_leftovers()

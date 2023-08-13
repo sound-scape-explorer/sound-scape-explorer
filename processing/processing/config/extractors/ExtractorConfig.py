@@ -50,7 +50,7 @@ class ExtractorConfig:
     def validate_name(self, name: str) -> None:
         assert name in self.extractors.keys(), f"Unable to find extractor name {name}"
 
-    def create_instance(self, settings: SettingsConfig) -> Extractor:
+    def instanciate(self, settings: SettingsConfig) -> Extractor:
         instance = self.extractors[self.name]()
 
         instance.index = self.index

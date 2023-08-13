@@ -230,6 +230,7 @@ class TimelineWalker:
     def walk(self):
         for timeline, interval, b, band, extractor in self.__enumerate():
             interval_data = []
+            labels = []
 
             for b_, block in enumerate(interval.blocks):
                 f = block.file.index
@@ -252,9 +253,10 @@ class TimelineWalker:
                 )
 
                 interval_data = [*interval_data, *block_data]
+                labels = [*labels, *block.file.labels]
 
                 self.purge(f, b, extractor, b_, interval, timeline)
 
                 self.cfi = f
 
-            yield interval_data, interval, band, timeline.integration, extractor
+            yield interval_data, labels, interval, band, timeline.integration, extractor
