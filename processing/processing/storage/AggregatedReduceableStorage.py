@@ -6,6 +6,7 @@ from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.storage.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
+from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 
 class AggregatedReduceableStorage:
@@ -28,14 +29,13 @@ class AggregatedReduceableStorage:
         aggregated_reduceables: List[AggregatedReduceable] = []
 
         for pe in picked_extractors:
-            for band in bands:
-                for integration in integrations:
-                    aggregated_reduceable = AggregatedReduceable(
-                        extractor=pe,
-                        band=band,
-                        integration=integration,
-                    )
+            for band, integration in walk_bands_integrations(bands, integrations):
+                aggregated_reduceable = AggregatedReduceable(
+                    extractor=pe,
+                    band=band,
+                    integration=integration,
+                )
 
-                    aggregated_reduceables.append(aggregated_reduceable)
+                aggregated_reduceables.append(aggregated_reduceable)
 
         return aggregated_reduceables
