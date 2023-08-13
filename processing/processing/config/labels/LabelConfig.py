@@ -7,20 +7,19 @@ from processing.utils.reverse_array import reverse_array
 class LabelConfig:
     index: int
     property: str
-    values: List[str]
-    """Meta value by file index."""
-    set: Set[str]
+    values: List[str]  # label values by file index
+    uniques: Set[str]
 
     def __init__(
         self,
         index: int,
-        string: str,
+        property: str,
     ) -> None:
         self.index = index
-        self.property = self.__digest_string(string)
+        self.property = property
 
     @staticmethod
-    def is_meta_property(string: str) -> bool:
+    def is_label_property(string: str) -> bool:
         prefix = FileExcel.label_prefix.value
         prefix_length = len(prefix)
         string_slice = string[:prefix_length]
@@ -42,22 +41,16 @@ class LabelConfig:
         metas: List["LabelConfig"],
     ) -> Tuple[List[str], List[List[str]]]:
         properties = [str.upper(m.property) for m in metas]
-        sets = [list(m.set) for m in metas]
+        sets = [list(m.uniques) for m in metas]
 
         return properties, sets
 
-    def __validate_excel_string(
-        self,
-        string: str,
-    ) -> None:
-        if not self.is_meta_property(string):
-            raise KeyError(f"Unable to find meta prefix in string {string}.")
+    @staticmethod
+    def trim_prefixed_property_from_config(string: str) -> str:
+        assert LabelConfig.is_label_property(
+            string
+        ), f"Unable to find label prefix in string {string}."
 
-    def __digest_string(
-        self,
-        string: str,
-    ) -> str:
-        self.__validate_excel_string(string)
         return string.replace(FileExcel.label_prefix.value, "")
 
     def load_values(
@@ -65,7 +58,7 @@ class LabelConfig:
         array: List,
     ) -> List[str]:
         self.values = [str(value) for value in array]
-        self.set = set(self.values)
+        self.uniques = set(self.values)
         return self.values
 
     def get_value(
