@@ -27,6 +27,7 @@ def compute_requirements(
         callback(storage)
         return
 
+    # TODO: Add check for aggregated data
     storage.delete(StoragePath.computation_umap)
     storage.delete(StoragePath.mean_distances_matrix)
 
