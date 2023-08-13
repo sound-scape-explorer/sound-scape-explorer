@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rich import print
 from rich.progress import track
 
@@ -17,11 +19,12 @@ from processing.utils.print_trajectories import print_trajectories
 
 def trace_trajectories(
     storage: Storage,
-    callback: IMain,
+    callback: Optional[IMain] = None,
 ):
     if not Config.exists_in_storage(storage):
         print_no_configuration()
-        callback(storage)
+        if callback is not None:
+            callback(storage)
         return
 
     storage.delete(StoragePath.traced)
@@ -87,4 +90,5 @@ def trace_trajectories(
                 )
 
     print("[bold green]:rocket: Trajectories completed![/bold green]")
-    callback(storage)
+    if callback is not None:
+        callback(storage)

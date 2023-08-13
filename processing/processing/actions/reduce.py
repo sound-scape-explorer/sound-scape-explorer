@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rich import print
 from rich.progress import track
 
@@ -21,11 +23,12 @@ from processing.utils.print_reducers import print_reducers
 
 def reduce(
     storage: Storage,
-    callback: IMain,
+    callback: Optional[IMain] = None,
 ):
     if not Config.exists_in_storage(storage):
         print_no_configuration()
-        callback(storage)
+        if callback is not None:
+            callback(storage)
         return
 
     storage.delete(StoragePath.reduced)
@@ -44,7 +47,8 @@ def reduce(
 
     if len(aggregated_reduceables) == 0:
         print_no_aggregated_reduceables()
-        callback(storage)
+        if callback is not None:
+            callback(storage)
         return
 
     print_reducers(reducers)
@@ -84,4 +88,6 @@ def reduce(
             )
 
     print("[bold green]:rocket: Reductions completed![/bold green]")
-    callback(storage)
+
+    if callback is not None:
+        callback(storage)

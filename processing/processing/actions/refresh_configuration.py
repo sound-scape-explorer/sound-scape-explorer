@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rich import print
 
 from processing.common.YamlEnv import YamlEnv
@@ -11,7 +13,7 @@ from processing.utils.print_file_indexes_by_site import print_file_indexes_by_si
 def refresh_configuration(
     env: YamlEnv,
     storage: Storage,
-    callback: IMain,
+    callback: Optional[IMain] = None,
 ):
     config = Config(path=env.config)
     config.write(storage)
@@ -20,4 +22,6 @@ def refresh_configuration(
     print_extractors(storage)
 
     print("[bold green]:rocket: Configuration refresh completed![/bold green]")
-    callback(storage)
+
+    if callback is not None:
+        callback(storage)

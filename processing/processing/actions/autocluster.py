@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rich import print
 
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
@@ -17,16 +19,18 @@ from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 def autocluster(
     storage: Storage,
-    callback: IMain,
+    callback: Optional[IMain] = None,
 ):
     if not Config.exists_in_storage(storage):
         print_no_configuration()
-        callback(storage)
+        if callback is not None:
+            callback(storage)
         return
 
     if not storage.exists_dataset(StoragePath.mean_distances_matrix):
         print_no_mean_distances_matrices()
-        callback(storage)
+        if callback is not None:
+            callback(storage)
         return
 
     storage.delete(StoragePath.autoclustered)
@@ -36,7 +40,8 @@ def autocluster(
     print_autoclusters(autoclusters)
 
     if len(autoclusters) == 0:
-        callback(storage)
+        if callback is not None:
+            callback(storage)
         return
 
     bands = BandStorage.read_from_storage(storage)
@@ -60,4 +65,5 @@ def autocluster(
             )
 
     print("[bold green]:rocket: Autoclusters completed![/bold green]")
-    callback(storage)
+    if callback is not None:
+        callback(storage)

@@ -39,7 +39,14 @@ def main(
 
         answer = ask_menu()
 
-        # TODO: Add all with optional callback
+        if answer == MenuChoice.RunAll.value:
+            refresh_configuration(env, storage)
+            extract_and_aggregate(storage)
+            reduce(storage)
+            compute_requirements(storage)
+            purge_requirements(storage)
+            autocluster(storage)
+            trace_trajectories(storage, main)
         if answer == MenuChoice.RefreshConfig.value:
             refresh_configuration(env, storage, main)
         if answer == MenuChoice.ExtractAggregate.value:

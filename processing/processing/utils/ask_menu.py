@@ -5,6 +5,7 @@ from rich import print
 
 
 class MenuChoice(Enum):
+    RunAll = "Run all"
     RefreshConfig = "Refresh configuration"
     ExtractAggregate = "Run extractions and aggregations"
     Reduce = "Run reductions"

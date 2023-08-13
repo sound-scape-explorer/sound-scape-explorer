@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from h5py import Dataset, Group
 from rich import print
@@ -20,11 +20,12 @@ from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 def compute_requirements(
     storage: Storage,
-    callback: IMain,
+    callback: Optional[IMain] = None,
 ):
     if not Config.exists_in_storage(storage):
         print_no_configuration()
-        callback(storage)
+        if callback is not None:
+            callback(storage)
         return
 
     # TODO: Add check for aggregated data
@@ -103,4 +104,5 @@ def compute_requirements(
 
     print()
     print("[bold green]:rocket: Computation requirements completed![/bold green]")
-    callback(storage)
+    if callback is not None:
+        callback(storage)

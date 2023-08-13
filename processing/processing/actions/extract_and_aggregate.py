@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 from rich import print
 
@@ -18,11 +20,12 @@ from processing.utils.print_no_configuration import print_no_configuration
 
 def extract_and_aggregate(
     storage: Storage,
-    callback: IMain,
+    callback: Optional[IMain] = None,
 ):
     if not Config.exists_in_storage(storage):
         print_no_configuration()
-        callback(storage)
+        if callback is not None:
+            callback(storage)
         return
 
     storage.overwrite()
@@ -96,4 +99,6 @@ def extract_and_aggregate(
 
     # tw.print_leftovers()
     print("[bold green]:rocket: Extractions and aggregations completed![/bold green]")
-    callback(storage)
+
+    if callback is not None:
+        callback(storage)
