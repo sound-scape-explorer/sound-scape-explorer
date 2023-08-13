@@ -2,6 +2,7 @@ from typing import List
 
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
+from processing.config.files.FileConfig import FileConfig
 from processing.config.files.FileExcel import FileExcel
 from processing.config.labels.LabelConfig import LabelConfig
 from processing.storage.Storage import Storage
@@ -24,8 +25,22 @@ class LabelStorage:
         ) and storage.exists_dataset(LabelStorage.sets)
 
     @staticmethod
-    def read_from_storage(storage: Storage) -> List[LabelConfig]:
-        pass
+    def read_from_storage(
+        storage: Storage,
+        files: List[FileConfig],
+    ) -> List[LabelConfig]:
+        properties_dataset = storage.read(LabelStorage.properties)
+        properties = storage.convert_dataset_to_string_list(properties_dataset)
+
+        labels: List[LabelConfig] = []
+
+        for index, property in enumerate(properties):
+            label: LabelConfig = LabelConfig(index, property)
+            values = [file.labels[index] for file in files]
+            label.load_values(values)
+            labels.append(label)
+
+        return labels
 
     @staticmethod
     def read_from_config(parser: ConfigParser) -> List[LabelConfig]:
@@ -35,10 +50,11 @@ class LabelStorage:
 
         index = 0
         for column in sheet:
-            if not LabelConfig.is_meta_property(column):
+            if not LabelConfig.is_label_property(column):
                 continue
 
-            label: LabelConfig = LabelConfig(index=index, string=column)
+            property = LabelConfig.trim_prefixed_property_from_config(column)
+            label: LabelConfig = LabelConfig(index=index, property=property)
 
             values = parser.get(
                 ExcelSheet.files,
