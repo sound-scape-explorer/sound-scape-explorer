@@ -72,6 +72,6 @@ class TrajectoryStorage:
     ) -> None:
         names, starts, ends = TrajectoryConfig.flatten(trajectories)
 
-        storage.write(path=StoragePath.trajectories_names, data=names)
-        storage.write(path=StoragePath.trajectories_starts, data=starts)
-        storage.write(path=StoragePath.trajectories_ends, data=ends)
+        storage.write(path=TrajectoryStorage.names, data=names)
+        storage.write(path=TrajectoryStorage.starts, data=starts)
+        storage.write(path=TrajectoryStorage.ends, data=ends)
