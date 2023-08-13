@@ -1,10 +1,13 @@
 from typing import Dict, List, Type
 
 from processing.digesters.Digester import Digester
+from processing.digesters.DistanceDigester import DistanceDigester
 from processing.digesters.MeanSpreadingDigester import MeanSpreadingDigester
 from processing.digesters.MeanStandardDeviationDigester import (
     MeanStandardDeviationDigester,
 )
+from processing.digesters.OverlapDigester import OverlapDigester
+from processing.digesters.SilhouetteDigester import SilhouetteDigester
 from processing.digesters.SumStandardDeviationDigester import (
     SumStandardDeviationDigester,
 )
@@ -17,9 +20,9 @@ class DigesterConfig:
         "sum_std": SumStandardDeviationDigester,
         "mean_std": MeanStandardDeviationDigester,
         "mean_spreading": MeanSpreadingDigester,
-        # "distance": None,
-        # "overlap": None,
-        # "silhouette": None,
+        "distance": DistanceDigester,
+        "overlap": OverlapDigester,
+        "silhouette": SilhouetteDigester,
         # "contingency": None,
     }
 

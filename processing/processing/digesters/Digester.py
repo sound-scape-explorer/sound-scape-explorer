@@ -34,22 +34,19 @@ class Digester(ABC):
     def label(self, label: LabelConfig) -> None:
         self.__label = label
 
-    def walk_label_values(self):
+    def get_inputs(self):
         df = self.features
         df.index = self.label.values
         values = df.index.unique()  # type: ignore
 
+        return df, values
+
+    def walk(self):
+        df, values = self.get_inputs()
+
         for index, value in enumerate(values):
             frame: ndarray = df[df.index == value].to_numpy()
-
-            if index == len(values) - 1:
-                value_next = values[0]
-            else:
-                value_next = values[index]
-
-            frame_next: ndarray = df[df.index == value_next].to_numpy()
-
-            yield value, frame, value_next, frame_next
+            yield index, frame, value
 
     @abstractmethod
     def digest(self) -> Digested:
