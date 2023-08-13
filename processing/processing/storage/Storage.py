@@ -5,7 +5,6 @@ from h5py import Dataset, File
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
-from processing.config.matrices.MatrixConfig import MatrixConfig
 from processing.config.pairings.PairingConfig import PairingConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.sites.SiteConfig import SiteConfig

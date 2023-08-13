@@ -356,44 +356,6 @@ class StoragePath(Enum):
         Dataset
     """
 
-    #########################
-    # Configuration/Volumes #
-    #########################
-
-    volumes_names = "/volumes/names"
-    """The volume names requested in the configuration file.
-
-    Each row contains a string.
-
-    Enumeration:
-        ../volumes/VolumeName.py
-
-    Factory:
-        ../volumes/Volume.py
-
-    Type:
-        Dataset
-    """
-
-    ##########################
-    # Configuration/Matrices #
-    ##########################
-
-    matrices_names = "/matrices/names"
-    """The matrix names requested in the configuration file.
-
-    Each row contains a string.
-
-    Enumeration:
-        ../matrices/MatrixName.py
-
-    Factory:
-        ../matrices/Matrix.py
-
-    Type:
-        Dataset
-    """
-
     ##########################
     # Configuration/Pairings #
     ##########################
@@ -595,52 +557,6 @@ class StoragePath(Enum):
 
     Example:
         /autocluster_{autocluster_index}/{band}/{integration}
-
-    Type:
-        Group prefix
-    """
-
-    ###############
-    # Data/Volume #
-    ###############
-
-    volume_ = "/volume_"
-    """The volume values for each grouping.
-
-    The group contains one dataset per volume, band, integration value
-    and meta property.
-
-    Each dataset is named after the meta property index.
-
-    Each row contains a float.
-
-    This path is to be used as a prefix!
-
-    Example:
-        /volume_{volume_index}/{band}/{integration}/{meta_property_index}
-
-    Type:
-        Group prefix
-    """
-
-    ###############
-    # Data/Matrix #
-    ###############
-
-    matrix_ = "/matrix_"
-    """The matrix values for each grouping.
-
-    The group contains one dataset per matrix, band, integration value
-    and meta property.
-
-    Each dataset is named after the meta property index.
-
-    Each row contains a float.
-
-    This path is to be used as a prefix!
-
-    Example:
-        /matrix_{matrix_index}/{band}/{integration}/{meta_property_index}
 
     Type:
         Group prefix
