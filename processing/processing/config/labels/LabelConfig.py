@@ -1,4 +1,4 @@
-from typing import List, Set, Tuple
+from typing import List, Tuple
 
 from processing.config.files.FileExcel import FileExcel
 from processing.utils.reverse_array import reverse_array
@@ -8,7 +8,7 @@ class LabelConfig:
     index: int
     property: str
     values: List[str]  # label values by file index
-    uniques: Set[str]
+    uniques: List[str]
 
     def __init__(
         self,
@@ -58,7 +58,8 @@ class LabelConfig:
         array: List,
     ) -> List[str]:
         self.values = [str(value) for value in array]
-        self.uniques = set(self.values)
+        # Always sort uniques! ascending alphabetical / numerical
+        self.uniques = sorted(list(set(self.values)))
         return self.values
 
     def get_value(
