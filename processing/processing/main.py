@@ -5,6 +5,7 @@ from rich.console import Console
 
 from processing.actions.autocluster import autocluster
 from processing.actions.compute_requirements import compute_requirements
+from processing.actions.digest import digest
 from processing.actions.extract_and_aggregate import extract_and_aggregate
 from processing.actions.purge_requirements import purge_requirements
 from processing.actions.reduce import reduce
@@ -39,29 +40,32 @@ def main(
 
         answer = ask_menu()
 
-        if answer == MenuChoice.RunAll.value:
-            refresh_configuration(env, storage)
-            extract_and_aggregate(storage)
-            reduce(storage)
-            compute_requirements(storage)
-            autocluster(storage)
-            trace_trajectories(storage, main)
         if answer == MenuChoice.RefreshConfig.value:
             refresh_configuration(env, storage, main)
         if answer == MenuChoice.ExtractAggregate.value:
             extract_and_aggregate(storage, main)
         if answer == MenuChoice.Reduce.value:
             reduce(storage, main)
-        if answer == MenuChoice.Repack.value:
-            repack_storage(storage, main)
-        if answer == MenuChoice.RunComputationRequirements.value:
+        if answer == MenuChoice.ComputeRequirements.value:
             compute_requirements(storage, main)
-        if answer == MenuChoice.PurgeComputationRequirements.value:
+        if answer == MenuChoice.PurgeRequirements.value:
             purge_requirements(storage, main)
         if answer == MenuChoice.Autocluster.value:
             autocluster(storage, main)
-        if answer == MenuChoice.RunTrajectories.value:
+        if answer == MenuChoice.Trace.value:
             trace_trajectories(storage, main)
+        if answer == MenuChoice.Digest.value:
+            digest(storage, main)
+        if answer == MenuChoice.RunAll.value:
+            refresh_configuration(env, storage)
+            extract_and_aggregate(storage)
+            reduce(storage)
+            compute_requirements(storage)
+            autocluster(storage)
+            trace_trajectories(storage)
+            digest(storage, main)
+        if answer == MenuChoice.Repack.value:
+            repack_storage(storage, main)
         else:
             quit_sse(storage)
     except Exception:
