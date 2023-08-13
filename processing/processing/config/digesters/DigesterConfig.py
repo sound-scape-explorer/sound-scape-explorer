@@ -29,6 +29,11 @@ class DigesterConfig:
     def validate_name(self, name: str) -> None:
         assert name in self.digesters.keys(), f"Unable to find digester name {name}"
 
+    def instanciate(self) -> Digester:
+        instance = self.digesters[self.name]()
+        instance.index = self.index
+        return instance
+
     @staticmethod
     def flatten(digesters: List["DigesterConfig"]) -> List[str]:
         names = [d.name for d in digesters]

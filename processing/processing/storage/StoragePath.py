@@ -678,3 +678,4 @@ class StoragePath(Enum):
     autoclustered = "/autoclustered"
     computation_umap = "/computation_umap"
     traced = "/traced"
+    digested = "/digested"
