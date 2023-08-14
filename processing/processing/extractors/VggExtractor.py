@@ -140,7 +140,7 @@ class VggExtractor(nn.Module, Extractor):
         sample_rate = loader.torch.sample_rate
 
         assert wav is not None and sample_rate is not None, "not loaded"
-        assert sample_rate == self.expected_sample_rate, "Sample rates do not " "match."
+        assert sample_rate == self.expected_sample_rate, "Sample rates do not match."
 
         # `batch` acts as the maximum audio duration of 5 minutes.
         batch = sample_rate * 60 * 5
