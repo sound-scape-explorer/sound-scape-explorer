@@ -5,4 +5,4 @@ class FileSheet(Enum):
     name_ = "file"
     date = "date"
     site = "site"
-    label_prefix = "meta_"  # TODO: Change this to `label_`
+    label_prefix = "label_"
