@@ -588,6 +588,7 @@ class StoragePath(Enum):
     extractors = "/extractors"
     extracted = "/extracted"
     aggregated = "/aggregated"
+    aggregated_site_file_indexes = "/aggregated_site_file_indexes"
     aggregated_timestamps = "/aggregated_timestamps"
     aggregated_labels = "/aggregated_labels"
     reduced = "/reduced"

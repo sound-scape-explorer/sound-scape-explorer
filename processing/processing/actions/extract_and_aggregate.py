@@ -14,12 +14,7 @@ from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.create_timelines import create_timelines
-from processing.utils.print_extractions_aggregations_end import (
-    print_extractions_aggregations_end,
-)
-from processing.utils.print_extractions_aggregations_start import (
-    print_extractions_aggregations_start,
-)
+from processing.utils.print_action import print_action
 from processing.utils.print_extractors import print_extractors
 from processing.utils.print_no_configuration import print_no_configuration
 
@@ -34,11 +29,13 @@ def extract_and_aggregate(
             callback(storage)
         return
 
-    print_extractions_aggregations_start()
+    print_action("Extractions and aggregations started!", "start")
 
     storage.delete(StoragePath.extracted)
     storage.delete(StoragePath.aggregated)
+    storage.delete(StoragePath.aggregated_site_file_indexes)
     storage.delete(StoragePath.aggregated_timestamps)
+    storage.delete(StoragePath.aggregated_labels)
 
     # retrieve configuration
     settings = SettingsStorage.read_from_storage(storage)
@@ -68,14 +65,22 @@ def extract_and_aggregate(
     tw.extractors = extractors_instances
 
     # walk intervals in timelines
-    for interval_data, labels, interval, band, integration, extractor in tw.walk():
+    for (
+        interval_data,
+        labels,
+        file_indexes,
+        interval,
+        band,
+        extractor,
+        timeline,
+    ) in tw.walk():
         # Aggregate
         aggregated_data = list(np.mean(interval_data, axis=0))
 
         path = (
             f"/{StoragePath.aggregated.value}"
             f"/{band.name}"
-            f"/{integration.seconds}"
+            f"/{timeline.integration.seconds}"
             f"/{extractor.index}"
         )
 
@@ -91,13 +96,31 @@ def extract_and_aggregate(
             },
         )
 
+        # Aggregated site and file indexes
+        s_path = (
+            f"/{StoragePath.aggregated_site_file_indexes.value}"
+            f"/{band.name}"
+            f"/{timeline.integration.seconds}"
+            f"/{extractor.index}"
+        )
+
+        site_file_indexes = [timeline.site.name, *[str(f) for f in file_indexes]]
+
+        storage.append(
+            path=s_path,
+            data=[site_file_indexes],
+            attributes={
+                "description": "First column is site name followed by file indexes",
+            },
+        )
+
         # Aggregated timestamps
         # INFO: This stores duplicated data as timestamps are the same for
         # band and extractor given a single integration
         t_path = (
             f"/{StoragePath.aggregated_timestamps.value}"
             f"/{band.name}"
-            f"/{integration.seconds}"
+            f"/{timeline.integration.seconds}"
             f"/{extractor.index}"
         )
 
@@ -111,7 +134,7 @@ def extract_and_aggregate(
         l_path = (
             f"/{StoragePath.aggregated_labels.value}"
             f"/{band.name}"
-            f"/{integration.seconds}"
+            f"/{timeline.integration.seconds}"
             f"/{extractor.index}"
         )
 
@@ -121,7 +144,7 @@ def extract_and_aggregate(
         )
 
     # tw.print_leftovers()
-    print_extractions_aggregations_end()
+    print_action("Extractions and aggregations completed!", "end")
 
     if callback is not None:
         callback(storage)
