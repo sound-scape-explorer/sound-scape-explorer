@@ -2,6 +2,7 @@ from typing import Optional
 
 from rich import print
 
+from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
@@ -50,7 +51,7 @@ def autocluster(
     for band, integration in walk_bands_integrations(bands, integrations):
         for autocluster in autoclusters:
             autocluster.create_instance(band, integration)
-            mdm = storage.read_mean_distances_matrix(band, integration)
+            mdm = storage.read(MeanDistancesMatrix.get_path(band, integration))
             autocluster.calculate(mdm[:])
             path = (
                 f"{StoragePath.autoclustered.value}"

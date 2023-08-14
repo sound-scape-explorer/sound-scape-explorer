@@ -96,14 +96,13 @@ def compute_requirements(
         for dataset in group.values():
             datasets.append(dataset)
 
-        mean_distances_matrix = MeanDistancesMatrix()
+        mdm = MeanDistancesMatrix.calculate(features=datasets)
+        path = MeanDistancesMatrix.get_path(band, integration)
 
-        matrix = mean_distances_matrix.calculate(features=datasets)
-
-        storage.write_mean_distances_matrix(
-            band=band,
-            integration=integration,
-            matrix=matrix,
+        storage.write(
+            path=path,
+            data=mdm,
+            compression=True,
         )
 
     print()

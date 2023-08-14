@@ -2,8 +2,6 @@ from typing import Any, Dict, List, Optional, Union
 
 from h5py import Dataset, File
 
-from processing.config.bands.BandConfig import BandConfig
-from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -223,36 +221,3 @@ class Storage:
         string_list = list(dataset.asstr()[:])
 
         return string_list
-
-    def generate_mean_distances_matrix_path(
-        self,
-        band: BandConfig,
-        integration: IntegrationConfig,
-    ) -> str:
-        return (
-            f"{StoragePath.mean_distances_matrix.value}"
-            f"/{band.name}/{integration.seconds}"
-        )
-
-    def write_mean_distances_matrix(
-        self,
-        band: BandConfig,
-        integration: IntegrationConfig,
-        matrix: List[List[float]],
-    ) -> None:
-        path = self.generate_mean_distances_matrix_path(band, integration)
-
-        self.write(
-            path=path,
-            data=matrix,
-            compression=True,
-        )
-
-    def read_mean_distances_matrix(
-        self,
-        band: BandConfig,
-        integration: IntegrationConfig,
-    ) -> Dataset:
-        path = self.generate_mean_distances_matrix_path(band, integration)
-        mean_distances_matrix = self.read(path)
-        return mean_distances_matrix
