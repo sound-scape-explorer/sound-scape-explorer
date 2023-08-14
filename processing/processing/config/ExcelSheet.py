@@ -5,7 +5,6 @@ class ExcelSheet(Enum):
     help = "Help"
     help_autoclusters = "HelpAutoclusters"
     help_reducers = "HelpReducers"
-    help_pairings = "HelpPairings"
     settings = "Settings"
     files = "Files"
     bands = "Bands"
@@ -16,4 +15,3 @@ class ExcelSheet(Enum):
     trajectories = "Trajectories"
     reducers = "Reducers"
     digesters = "Digesters"
-    pairings = "Pairings"

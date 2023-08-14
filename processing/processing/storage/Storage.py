@@ -5,7 +5,6 @@ from h5py import Dataset, File
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
-from processing.config.pairings.PairingConfig import PairingConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
@@ -220,12 +219,6 @@ class Storage:
             groups_count += group_count[0]
 
         return groups_count
-
-    def read_config_pairings(self) -> List[PairingConfig]:
-        names_dataset = self.read(StoragePath.pairings_names)
-        names = self.convert_dataset_to_string_list(names_dataset)
-        pairings = PairingConfig.reconstruct(names=names)
-        return pairings
 
     def read_files_timestamps(self) -> Dataset:
         return self.read(StoragePath.files_timestamps)
@@ -702,32 +695,6 @@ class Storage:
             f"/{reducer.band.name}/{reducer.integration.seconds}"
         )
 
-    def generate_pairing_path(self, pairing: PairingConfig) -> str:
-        return (
-            f"{StoragePath.pairing_.value}{pairing.index}"
-            f"/{pairing.band.name}/{pairing.integration.seconds}"
-            f"/{pairing.meta_index_a}/{pairing.meta_index_b}"
-        )
-
-    def write_pairing(
-        self,
-        pairing: PairingConfig,
-    ) -> None:
-        path = self.generate_pairing_path(pairing)
-
-        # INFO: We only store `values_a` because `values_b` is symmetrical.
-        self.write(
-            path=path,
-            data=pairing.instance.values_a,
-            compression=True,
-        )
-
-    def delete_pairings(self) -> None:
-        self.__delete_all_paths_starting_with(StoragePath.pairing_)
-
-    def delete_reduced(self) -> None:
-        self.__delete_all_paths_starting_with(StoragePath.reduced_)
-
     def read_meta_properties(self) -> List[str]:
         meta_properties = self.read(StoragePath.labels_properties)
 
@@ -815,17 +782,6 @@ class Storage:
                 return integration
 
         raise KeyError(f"Unable to find integration duration {integration_duration}")
-
-    def write_config_pairings(
-        self,
-        pairings: List[PairingConfig],
-    ) -> None:
-        names = PairingConfig.flatten(pairings=pairings)
-
-        self.write(
-            path=StoragePath.pairings_names,
-            data=names,
-        )
 
     @staticmethod
     def generate_point_index(
