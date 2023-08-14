@@ -17,6 +17,8 @@ from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.print_no_configuration import print_no_configuration
+from processing.utils.print_requirements_end import print_requirements_end
+from processing.utils.print_requirements_start import print_requirements_start
 from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 
@@ -31,6 +33,9 @@ def compute_requirements(
         return
 
     # TODO: Add check for aggregated data
+
+    print_requirements_start()
+
     storage.delete(StoragePath.computation_umap)
     storage.delete(StoragePath.mean_distances_matrix)
 
@@ -45,7 +50,6 @@ def compute_requirements(
         nn_extractors=nn_extractors,
     )
 
-    print()
     print(
         f"Computing UMAPs..."
         f" (iterations: {settings.computation_umap_iterations},"
@@ -105,7 +109,7 @@ def compute_requirements(
             compression=True,
         )
 
-    print()
-    print("[bold green]:rocket: Computation requirements completed![/bold green]")
+    print_requirements_end()
+
     if callback is not None:
         callback(storage)

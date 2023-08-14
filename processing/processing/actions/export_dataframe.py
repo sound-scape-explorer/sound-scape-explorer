@@ -19,6 +19,8 @@ from processing.utils.ask_csv_path import ask_csv_path
 from processing.utils.ask_extractor import ask_extractor
 from processing.utils.ask_integration import ask_integration
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.print_export_end import print_export_end
+from processing.utils.print_export_start import print_export_start
 from processing.utils.print_no_configuration import print_no_configuration
 
 
@@ -32,6 +34,8 @@ def export_dataframe(
         if callback is not None:
             callback(storage)
         return
+
+    print_export_start()
 
     payload = {}
 
@@ -111,6 +115,8 @@ def export_dataframe(
 
     df = DataFrame(payload)
     df.to_csv(csv_path, index=False)
+
+    print_export_end()
 
     if callback is not None:
         callback(storage)

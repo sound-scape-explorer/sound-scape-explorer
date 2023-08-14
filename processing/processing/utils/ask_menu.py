@@ -1,7 +1,6 @@
 from enum import Enum
 
 from PyInquirer import Separator, prompt
-from rich import print
 
 
 class MenuChoice(Enum):
@@ -9,8 +8,7 @@ class MenuChoice(Enum):
     ExtractAggregate = "Run extractions and aggregations"
     Reduce = "Run reductions"
     ComputeRequirements = (
-        "Run computation UMAPs and mean distances matrix"
-        " (needed for autoclusters and trajectories)"
+        "Run computation UMAPs and mean distances matrix (needed for autocluster)"
     )
     PurgeRequirements = "Purge computation UMAPs and mean distances matrix"
     Autocluster = "Run autoclusters"
@@ -49,7 +47,6 @@ def ask_menu() -> str:
         }
     ]
 
-    print()
     answers = prompt(questions)
     answer: str = answers["choices"]
     return answer

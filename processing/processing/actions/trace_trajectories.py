@@ -1,6 +1,5 @@
 from typing import Optional
 
-from rich import print
 from rich.progress import track
 
 from processing.common.AggregatedReduceable import AggregatedReduceable
@@ -17,6 +16,8 @@ from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.print_trajectories import print_trajectories
+from processing.utils.print_trajectories_end import print_trajectories_end
+from processing.utils.print_trajectories_start import print_trajectories_start
 
 
 def trace_trajectories(
@@ -28,6 +29,8 @@ def trace_trajectories(
         if callback is not None:
             callback(storage)
         return
+
+    print_trajectories_start()
 
     storage.delete(StoragePath.traced)
 
@@ -93,6 +96,7 @@ def trace_trajectories(
                     },
                 )
 
-    print("[bold green]:rocket: Trajectories completed![/bold green]")
+    print_trajectories_end()
+
     if callback is not None:
         callback(storage)

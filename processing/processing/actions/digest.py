@@ -13,6 +13,8 @@ from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.print_digest_end import print_digest_end
+from processing.utils.print_digest_start import print_digest_start
 from processing.utils.print_no_configuration import print_no_configuration
 
 
@@ -25,6 +27,8 @@ def digest(
         if callback is not None:
             callback(storage)
         return
+
+    print_digest_start()
 
     storage.delete(StoragePath.digested)
     digesters = DigesterStorage.read_from_storage(storage)
@@ -89,6 +93,8 @@ def digest(
                     compression=True,
                     attributes=attributes,
                 )
+
+    print_digest_end()
 
     if callback is not None:
         callback(storage)

@@ -14,6 +14,12 @@ from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.create_timelines import create_timelines
+from processing.utils.print_extractions_aggregations_end import (
+    print_extractions_aggregations_end,
+)
+from processing.utils.print_extractions_aggregations_start import (
+    print_extractions_aggregations_start,
+)
 from processing.utils.print_extractors import print_extractors
 from processing.utils.print_no_configuration import print_no_configuration
 
@@ -28,7 +34,8 @@ def extract_and_aggregate(
             callback(storage)
         return
 
-    storage.overwrite()
+    print_extractions_aggregations_start()
+
     storage.delete(StoragePath.extracted)
     storage.delete(StoragePath.aggregated)
     storage.delete(StoragePath.aggregated_timestamps)
@@ -114,7 +121,7 @@ def extract_and_aggregate(
         )
 
     # tw.print_leftovers()
-    print("[bold green]:rocket: Extractions and aggregations completed![/bold green]")
+    print_extractions_aggregations_end()
 
     if callback is not None:
         callback(storage)

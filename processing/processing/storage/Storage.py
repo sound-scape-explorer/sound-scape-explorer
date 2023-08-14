@@ -10,10 +10,6 @@ from processing.storage.StoragePath import StoragePath
 class Storage:
     """The interface for handling HDF5 storage file."""
 
-    path: str
-    __file: File
-    is_overwrite: bool = False
-
     def __init__(
         self,
         path: str,
@@ -21,9 +17,6 @@ class Storage:
         self.path = path
         self.__set_file_or_fail()
         self.__succeed()
-
-    def overwrite(self):
-        self.is_overwrite = True
 
     def __succeed(self) -> None:
         print(f"Storage loaded: {self.path}")
