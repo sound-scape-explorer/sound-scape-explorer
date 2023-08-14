@@ -5,6 +5,7 @@ import numpy as np
 from processing.common.AutoclusteredStorage import AutoclusteredStorage
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
+from processing.config.extractors.ExtractorConfig import ExtractorConfig
 from processing.config.files.FileStorage import FileStorage
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.labels.LabelConfig import LabelConfig
@@ -20,6 +21,7 @@ class AggregatedLabelStorage:
         storage: Storage,
         band: BandConfig,
         integration: IntegrationConfig,
+        extractor: ExtractorConfig,
     ) -> List[LabelConfig]:
         aggregated_labels: List[LabelConfig] = []
 
@@ -45,7 +47,7 @@ class AggregatedLabelStorage:
             f"{StoragePath.aggregated_labels.value}"
             f"/{band.name}"
             f"/{integration.seconds}"
-            f"/0"  # INFO: Hack because we store too much information (extractor)
+            f"/{extractor.index}"
         )
 
         aggregated_values = storage.read(path)

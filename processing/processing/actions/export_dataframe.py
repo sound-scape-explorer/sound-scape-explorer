@@ -86,6 +86,7 @@ def export_dataframe(
         storage=storage,
         band=band,
         integration=integration,
+        extractor=ar.extractor,
     )
     for al in aggregated_labels:
         key = f"{FileSheet.label_prefix.value}{al.property}"

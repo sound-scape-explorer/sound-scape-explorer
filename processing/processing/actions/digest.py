@@ -53,6 +53,7 @@ def digest(
             storage=storage,
             band=ar.band,
             integration=ar.integration,
+            extractor=ar.extractor,
         )
 
         for digester in track(digesters):
