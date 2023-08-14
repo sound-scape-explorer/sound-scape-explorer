@@ -12,7 +12,7 @@ def repack_storage(
     storage: Storage,
     callback: IMain,
 ):
-    print_action("Repacking started!", "started")
+    print_action("Repacking started!", "start")
 
     # Need to close the storage first
     storage.close()
