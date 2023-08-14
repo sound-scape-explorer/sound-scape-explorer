@@ -53,8 +53,8 @@ class LabelStorage:
             if not LabelConfig.is_label_property(column):
                 continue
 
-            property = LabelConfig.trim_prefixed_property_from_config(column)
-            label: LabelConfig = LabelConfig(index=index, property=property)
+            property_ = LabelConfig.trim_prefixed_property_from_config(column)
+            label: LabelConfig = LabelConfig(index=index, property=property_)
 
             values = parser.get(
                 ExcelSheet.files,
