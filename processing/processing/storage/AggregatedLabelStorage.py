@@ -52,10 +52,10 @@ class AggregatedLabelStorage:
         aggregated_values_transposed = np.array(aggregated_values.asstr()).T
 
         for index, values in enumerate(aggregated_values_transposed):
-            property = properties[index]
+            property_ = properties[index]
             aggregated_label = LabelConfig(
                 index=index + len(autoclustereds),
-                property=property,
+                property=property_,
             )
             aggregated_label.load_values(values)
             aggregated_labels.append(aggregated_label)
