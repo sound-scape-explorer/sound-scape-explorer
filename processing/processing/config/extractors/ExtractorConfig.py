@@ -32,6 +32,10 @@ class ExtractorConfig:
     }
 
     nn_extractors = ["vgg"]
+    """The list of extractors using neural networks.
+
+    Add extractor key to this list in order to enable reduction and export features.
+    """
 
     def __init__(
         self,

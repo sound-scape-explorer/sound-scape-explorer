@@ -7,7 +7,6 @@ def filter_nn_extractors(extractors: List[ExtractorConfig]) -> List[ExtractorCon
     filtered_extractors: List[ExtractorConfig] = []
 
     for extractor in extractors:
-        # TODO: Bad hardcoding
         if extractor.name not in ExtractorConfig.nn_extractors:
             continue
 
