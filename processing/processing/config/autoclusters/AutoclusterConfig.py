@@ -13,17 +13,6 @@ class AutoclusterConfig:
         "hdbscan-leaf": "leaf",
     }
 
-    # index: int
-    # name: str
-    # min_cluster_size: int
-    # min_samples: int
-    # alpha: float
-    # epsilon: float
-    # band: BandConfig
-    # integration: IntegrationConfig
-    # instance: HDBSCAN
-    # values: List[int]
-
     def __init__(
         self,
         index: int,
