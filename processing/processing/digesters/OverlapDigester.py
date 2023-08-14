@@ -6,8 +6,9 @@ from processing.digesters.Digester import Digester
 
 
 class OverlapDigester(Digester):
-    def digest(self):
-        dataframe, values = self.get_inputs()
+    def digest(self, labels):
+        label = labels[0]
+        dataframe, values = self.get_label_data(label)
 
         nb_clusters = len(values)
 

@@ -51,28 +51,39 @@ def digest(
         for digester in track(digesters):
             d = digester.instanciate()
             d.features = aggregated_features
+            d.labels = aggregated_labels
 
-            for label in aggregated_labels:
-                d.label = label
-                data = d.digest()
-
+            for data, label_a, label_b in d.walk_labels():
                 path = (
                     f"{StoragePath.digested.value}"
                     f"/{ar.band.name}"
                     f"/{ar.integration.seconds}"
                     f"/{digester.index}"
-                    f"/{label.index}"
+                    f"/{label_a.index}"
                 )
+
+                attributes = {
+                    "digester_name": digester.name,
+                    "label_a_property": label_a.property,
+                    "label_a_index": str(label_a.index),
+                }
+
+                if label_b is not None:
+                    path = f"{path}/{label_b.index}"
+
+                    attributes = {
+                        **attributes,
+                        **{
+                            "label_b_property": label_b.property,
+                            "label_b_index": str(label_b.index),
+                        },
+                    }
 
                 storage.write(
                     path=path,
                     data=data,
                     compression=True,
-                    attributes={
-                        "digester_name": digester.name,
-                        "label_property": label.property,
-                        "label_index": str(label.index),
-                    },
+                    attributes=attributes,
                 )
 
     if callback is not None:

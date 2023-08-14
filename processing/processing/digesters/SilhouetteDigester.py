@@ -7,8 +7,9 @@ from processing.digesters.Digester import Digester
 
 # INFO: This is the only `Indicator` that can be fed with mean distances matrix
 class SilhouetteDigester(Digester):
-    def digest(self):
-        dataframe, values = self.get_inputs()
+    def digest(self, labels):
+        label = labels[0]
+        dataframe, values = self.get_label_data(label)
 
         silhouette = np.zeros((len(values), len(values)))
 
