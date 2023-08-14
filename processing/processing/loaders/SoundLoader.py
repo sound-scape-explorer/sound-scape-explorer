@@ -83,8 +83,8 @@ class SoundLoader:
         end: int,
     ) -> AudioSegment:
         assert self.audio is not None, "not loaded"
-        slice: AudioSegment = self.audio[start:end]  # type: ignore
-        return slice
+        slice_: AudioSegment = self.audio[start:end]  # type: ignore
+        return slice_
 
     def get_filtered(self, band: BandConfig):
         kf = f"{band.low}-{band.high}"
