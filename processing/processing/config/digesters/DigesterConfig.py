@@ -1,5 +1,6 @@
 from typing import Dict, List, Type
 
+from processing.digesters.ContingencyDigester import ContingencyDigester
 from processing.digesters.Digester import Digester
 from processing.digesters.DistanceDigester import DistanceDigester
 from processing.digesters.MeanSpreadingDigester import MeanSpreadingDigester
@@ -23,7 +24,7 @@ class DigesterConfig:
         "distance": DistanceDigester,
         "overlap": OverlapDigester,
         "silhouette": SilhouetteDigester,
-        # "contingency": None,
+        "contingency": ContingencyDigester,
     }
 
     pairings = ["contingency"]
