@@ -16,10 +16,6 @@ class Storage:
     ) -> None:
         self.path = path
         self.__set_file_or_fail()
-        self.__succeed()
-
-    def __succeed(self) -> None:
-        print(f"Storage loaded: {self.path}")
 
     def __set_file_or_fail(self) -> None:
         try:
