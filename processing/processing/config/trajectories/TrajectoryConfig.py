@@ -7,15 +7,6 @@ from processing.trajectories.ContinuousTimeTrajectory import ContinuousTimeTraje
 
 
 class TrajectoryConfig:
-    # index: int
-    # name: str
-    # start: int
-    # end: int
-    # band: BandConfig
-    # integration: IntegrationConfig
-    # reducer: ReducerConfig
-    # instance: ContinuousTimeTrajectory
-
     def __init__(
         self,
         index: int,
