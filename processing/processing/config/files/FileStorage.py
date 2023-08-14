@@ -3,7 +3,7 @@ from typing import List
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.files.FileConfig import FileConfig
-from processing.config.files.FileExcel import FileExcel
+from processing.config.files.FileSheet import FileSheet
 from processing.config.labels.LabelConfig import LabelConfig
 from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.storage.Storage import Storage
@@ -112,12 +112,12 @@ class FileStorage:
     ) -> List[FileConfig]:
         sheet = ExcelSheet.files
 
-        names = parser.get(sheet, FileExcel.name_)
+        names = parser.get(sheet, FileSheet.name_)
 
-        dates = parser.get(sheet, FileExcel.date)
+        dates = parser.get(sheet, FileSheet.date)
         timestamps = [convert_date_to_timestamp(d) for d in dates]
 
-        sites = parser.get(sheet, FileExcel.site)
+        sites = parser.get(sheet, FileSheet.site)
 
         labels_values = LabelConfig.convert_to_values_by_file(labels)
 

@@ -5,12 +5,14 @@ from rich.progress import track
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
 from processing.config.digesters.DigesterStorage import DigesterStorage
+from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.interfaces import IMain
 from processing.storage.AggregatedLabelStorage import AggregatedLabelStorage
-from processing.storage.AggregatedReduceableStorage import AggregatedReduceableStorage
+from processing.storage.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.print_no_configuration import print_no_configuration
 
 
@@ -34,10 +36,12 @@ def digest(
 
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)
-    aggregated_reduceables = AggregatedReduceableStorage.read_from_storage(
-        storage=storage,
+    extractors = ExtractorStorage.read_from_storage(storage)
+    nn_extractors = filter_nn_extractors(extractors)
+    aggregated_reduceables = AggregatedReduceable.reconstruct(
         bands=bands,
         integrations=integrations,
+        nn_extractors=nn_extractors,
     )
 
     for ar in aggregated_reduceables:

@@ -14,7 +14,7 @@ def print_extractors(extractors: List[ExtractorConfig]):
     table.add_column("Extractor")
     table.add_column("Offset (ms)")
     table.add_column("Step (ms)")
-    table.add_column("Persist")
+    table.add_column("Persist (extracted data)")
 
     for extractor in extractors:
         table.add_row(

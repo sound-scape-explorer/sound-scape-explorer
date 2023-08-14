@@ -1,3 +1,5 @@
+from typing import List
+
 from h5py import Dataset
 
 from processing.config.bands.BandConfig import BandConfig
@@ -6,6 +8,7 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 
 class AggregatedReduceable:
@@ -48,3 +51,23 @@ class AggregatedReduceable:
             f"/{self.extractor.index}"
             f"/{reducer.index}"
         )
+
+    @staticmethod
+    def reconstruct(
+        bands: List[BandConfig],
+        integrations: List[IntegrationConfig],
+        nn_extractors: List[ExtractorConfig],
+    ) -> List["AggregatedReduceable"]:
+        aggregated_reduceables: List[AggregatedReduceable] = []
+
+        for nn_ex in nn_extractors:
+            for band, integration in walk_bands_integrations(bands, integrations):
+                aggregated_reduceable = AggregatedReduceable(
+                    extractor=nn_ex,
+                    band=band,
+                    integration=integration,
+                )
+
+                aggregated_reduceables.append(aggregated_reduceable)
+
+        return aggregated_reduceables

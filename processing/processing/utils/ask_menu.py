@@ -5,7 +5,6 @@ from rich import print
 
 
 class MenuChoice(Enum):
-    RunAll = "Run all"
     RefreshConfig = "Refresh configuration"
     ExtractAggregate = "Run extractions and aggregations"
     Reduce = "Run reductions"
@@ -17,6 +16,8 @@ class MenuChoice(Enum):
     Autocluster = "Run autoclusters"
     Trace = "Run trajectories"
     Digest = "Run digests (volumes, matrices, pairings)"
+    RunAll = "Run all"
+    ExportDataframe = "Export dataframe as .csv"
     Repack = "Repack storage with `h5repack` (UNIX only)"
     Quit = "Quit"
 
@@ -26,7 +27,6 @@ def ask_menu() -> str:
         {
             "type": "list",
             "name": "choices",
-            # "choices": [choice.value for choice in MenuChoice],
             "choices": [
                 MenuChoice.RefreshConfig.value,
                 MenuChoice.ExtractAggregate.value,
@@ -40,6 +40,7 @@ def ask_menu() -> str:
                 MenuChoice.Digest.value,
                 Separator(),
                 MenuChoice.RunAll.value,
+                MenuChoice.ExportDataframe.value,
                 MenuChoice.Repack.value,
                 Separator(),
                 MenuChoice.Quit.value,

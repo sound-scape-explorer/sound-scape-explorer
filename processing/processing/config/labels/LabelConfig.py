@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from processing.config.files.FileExcel import FileExcel
+from processing.config.files.FileSheet import FileSheet
 from processing.utils.reverse_array import reverse_array
 
 
@@ -20,7 +20,7 @@ class LabelConfig:
 
     @staticmethod
     def is_label_property(string: str) -> bool:
-        prefix = FileExcel.label_prefix.value
+        prefix = FileSheet.label_prefix.value
         prefix_length = len(prefix)
         string_slice = string[:prefix_length]
 
@@ -51,7 +51,7 @@ class LabelConfig:
             string
         ), f"Unable to find label prefix in string {string}."
 
-        return string.replace(FileExcel.label_prefix.value, "")
+        return string.replace(FileSheet.label_prefix.value, "")
 
     def load_values(
         self,

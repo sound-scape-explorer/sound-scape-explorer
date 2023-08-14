@@ -7,13 +7,15 @@ from rich.progress import track
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
+from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.interfaces import IMain
 from processing.reducers.UmapReducer import UmapReducer
-from processing.storage.AggregatedReduceableStorage import AggregatedReduceableStorage
+from processing.storage.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.walk_bands_integrations import walk_bands_integrations
 
@@ -35,10 +37,12 @@ def compute_requirements(
     settings = SettingsStorage.read_from_storage(storage)
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)
-    aggregated_features = AggregatedReduceableStorage.read_from_storage(
-        storage,
-        bands,
-        integrations,
+    extractors = ExtractorStorage.read_from_storage(storage)
+    nn_extractors = filter_nn_extractors(extractors)
+    aggregated_reduceables = AggregatedReduceable.reconstruct(
+        bands=bands,
+        integrations=integrations,
+        nn_extractors=nn_extractors,
     )
 
     print()
@@ -48,11 +52,11 @@ def compute_requirements(
         f" dimensions: {settings.computation_umap_dimensions})"
     )
 
-    for af in aggregated_features:
-        features = af.read_features_from_storage(storage)
+    for ar in aggregated_reduceables:
+        features = ar.read_features_from_storage(storage)
         for computation_index in track(
             range(settings.computation_umap_iterations),
-            description=f"Band {af.band.name}, integration {af.integration.seconds}",
+            description=f"Band {ar.band.name}, integration {ar.integration.seconds}",
         ):
             umap = UmapReducer(min_dist=0)
             umap.load(
@@ -65,8 +69,8 @@ def compute_requirements(
 
             path = (
                 f"{StoragePath.computation_umap.value}"
-                f"/{af.band.name}"
-                f"/{af.integration.seconds}"
+                f"/{ar.band.name}"
+                f"/{ar.integration.seconds}"
                 f"/{computation_index}"
             )
 

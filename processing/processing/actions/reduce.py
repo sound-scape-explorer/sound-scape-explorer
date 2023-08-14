@@ -5,14 +5,16 @@ from rich.progress import track
 
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
+from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerStorage import ReducerStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.interfaces import IMain
-from processing.storage.AggregatedReduceableStorage import AggregatedReduceableStorage
+from processing.storage.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.print_aggregated_reduceables import print_aggregated_reduceables
 from processing.utils.print_no_aggregated_reduceables import (
     print_no_aggregated_reduceables,
@@ -38,11 +40,13 @@ def reduce(
     integrations = IntegrationStorage.read_from_storage(storage)
     ranges = RangeStorage.read_from_storage(storage)
     reducers = ReducerStorage.read_from_storage(storage, bands, integrations, ranges)
+    extractors = ExtractorStorage.read_from_storage(storage)
+    nn_extractors = filter_nn_extractors(extractors)
 
-    aggregated_reduceables = AggregatedReduceableStorage.read_from_storage(
-        storage,
-        bands,
-        integrations,
+    aggregated_reduceables = AggregatedReduceable.reconstruct(
+        bands=bands,
+        integrations=integrations,
+        nn_extractors=nn_extractors,
     )
 
     if len(aggregated_reduceables) == 0:

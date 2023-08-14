@@ -31,6 +31,8 @@ class ExtractorConfig:
         # TODO: Adapt leq enes output before adding here
     }
 
+    nn_extractors = ["vgg"]
+
     def __init__(
         self,
         index: int,

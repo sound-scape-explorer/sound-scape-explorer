@@ -3,7 +3,7 @@ from typing import List
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.files.FileConfig import FileConfig
-from processing.config.files.FileExcel import FileExcel
+from processing.config.files.FileSheet import FileSheet
 from processing.config.labels.LabelConfig import LabelConfig
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
@@ -58,7 +58,7 @@ class LabelStorage:
 
             values = parser.get(
                 ExcelSheet.files,
-                FileExcel.label_prefix,
+                FileSheet.label_prefix,
                 suffix=label.property,
             )
 
