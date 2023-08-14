@@ -1,12 +1,12 @@
 from typing import Dict, List
 
+from processing.common.FileLoader import FileLoader
+from processing.common.FileWalker import FileWalker
+from processing.common.Interval import Block, Interval
 from processing.config.files.FileConfig import FileConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.storage.Storage import Storage
-from processing.timeline.FileLoader import FileLoader
-from processing.timeline.FileWalker import FileWalker
-from processing.timeline.Interval import Block, Interval
 
 TimelineMap = Dict[int, Interval]
 FileIndex = int

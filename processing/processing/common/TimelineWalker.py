@@ -3,14 +3,14 @@ from typing import Dict, List, Optional
 from rich import print
 from rich.progress import track
 
+from processing.common.FileLoader import FileLoader
+from processing.common.Interval import Block, Interval
+from processing.common.Timeline import Timeline
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.files.FileConfig import FileConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.extractors.Extractor import Extracted, Extractor
 from processing.storage.Storage import Storage
-from processing.timeline.FileLoader import FileLoader
-from processing.timeline.Interval import Block, Interval
-from processing.timeline.Timeline import Timeline
 from processing.utils.print_new_line import print_new_line
 
 FileIndex = int

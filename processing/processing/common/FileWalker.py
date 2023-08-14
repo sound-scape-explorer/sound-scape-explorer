@@ -1,5 +1,5 @@
 from processing.config.files.FileConfig import FileConfig
-from processing.timeline.Interval import Block, Interval
+from processing.common.Interval import Block, Interval
 
 
 class FileWalker:

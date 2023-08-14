@@ -3,7 +3,7 @@ from typing import List
 from rich.console import Console
 from rich.table import Table
 
-from processing.storage.AggregatedReduceable import AggregatedReduceable
+from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
 
 

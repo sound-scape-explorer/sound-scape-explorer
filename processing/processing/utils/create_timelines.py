@@ -1,10 +1,10 @@
 from typing import List
 
+from processing.common.Timeline import Timeline
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.config.sites.SiteConfig import SiteConfig
 from processing.storage.Storage import Storage
-from processing.timeline.Timeline import Timeline
 
 
 def create_timelines(

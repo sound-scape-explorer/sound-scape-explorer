@@ -2,14 +2,14 @@ from typing import Optional
 
 from rich.progress import track
 
+from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
+from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
 from processing.config.digesters.DigesterStorage import DigesterStorage
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.interfaces import IMain
-from processing.storage.AggregatedLabelStorage import AggregatedLabelStorage
-from processing.storage.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors

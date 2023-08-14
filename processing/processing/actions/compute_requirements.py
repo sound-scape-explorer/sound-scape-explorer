@@ -4,6 +4,7 @@ from h5py import Dataset, Group
 from rich import print
 from rich.progress import track
 
+from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
@@ -12,7 +13,6 @@ from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.interfaces import IMain
 from processing.reducers.UmapReducer import UmapReducer
-from processing.storage.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors

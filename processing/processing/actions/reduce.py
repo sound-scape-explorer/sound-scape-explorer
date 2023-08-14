@@ -3,6 +3,7 @@ from typing import Optional
 from rich import print
 from rich.progress import track
 
+from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
@@ -11,7 +12,6 @@ from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerStorage import ReducerStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.interfaces import IMain
-from processing.storage.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors

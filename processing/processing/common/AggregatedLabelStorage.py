@@ -2,6 +2,7 @@ from typing import List
 
 import numpy as np
 
+from processing.common.AutoclusteredStorage import AutoclusteredStorage
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.files.FileStorage import FileStorage
@@ -9,7 +10,6 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.labels.LabelConfig import LabelConfig
 from processing.config.labels.LabelStorage import LabelStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
-from processing.storage.AutoclusteredStorage import AutoclusteredStorage
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 

@@ -3,6 +3,7 @@ from typing import Optional
 import numpy as np
 from rich import print
 
+from processing.common.TimelineWalker import TimelineWalker
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
@@ -12,8 +13,7 @@ from processing.config.sites.SiteStorage import SiteStorage
 from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
-from processing.timeline.create_timelines import create_timelines
-from processing.timeline.TimelineWalker import TimelineWalker
+from processing.utils.create_timelines import create_timelines
 from processing.utils.print_extractors import print_extractors
 from processing.utils.print_no_configuration import print_no_configuration
 

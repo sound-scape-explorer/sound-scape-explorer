@@ -2,6 +2,8 @@ from typing import Optional
 
 from pandas import DataFrame
 
+from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
+from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.common.YamlEnv import YamlEnv
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
@@ -11,8 +13,6 @@ from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerStorage import ReducerStorage
 from processing.interfaces import IMain
-from processing.storage.AggregatedLabelStorage import AggregatedLabelStorage
-from processing.storage.AggregatedReduceable import AggregatedReduceable
 from processing.storage.Storage import Storage
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_csv_path import ask_csv_path
