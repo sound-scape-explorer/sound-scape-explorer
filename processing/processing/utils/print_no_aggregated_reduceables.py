@@ -1,10 +1,5 @@
-from rich import print
+from processing.utils.print_action import print_action
 
 
 def print_no_aggregated_reduceables():
-    print(
-        "[red bold]"
-        ":no_entry: No aggregated reduceable data"
-        " found in storage"
-        "[/red bold]"
-    )
+    print_action("No aggregated reduceable data found in storage!", "error")

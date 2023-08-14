@@ -16,9 +16,8 @@ from processing.reducers.UmapReducer import UmapReducer
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.print_action import print_action
 from processing.utils.print_no_configuration import print_no_configuration
-from processing.utils.print_requirements_end import print_requirements_end
-from processing.utils.print_requirements_start import print_requirements_start
 from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 
@@ -34,7 +33,7 @@ def compute_requirements(
 
     # TODO: Add check for aggregated data
 
-    print_requirements_start()
+    print_action("Requirements computation started!", "start")
 
     storage.delete(StoragePath.computation_umap)
     storage.delete(StoragePath.mean_distances_matrix)
@@ -109,7 +108,7 @@ def compute_requirements(
             compression=True,
         )
 
-    print_requirements_end()
+    print_action("Requirements computation completed!", "end")
 
     if callback is not None:
         callback(storage)

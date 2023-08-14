@@ -1,7 +1,5 @@
-from rich import print
+from processing.utils.print_action import print_action
 
 
 def print_no_configuration():
-    print()
-    print("[bold red]:no_entry: No configuration found in storage[/bold red]")
-    print()
+    print_action("No configuration found in storage!", "error")

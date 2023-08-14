@@ -14,10 +14,9 @@ from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.print_action import print_action
 from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.print_trajectories import print_trajectories
-from processing.utils.print_trajectories_end import print_trajectories_end
-from processing.utils.print_trajectories_start import print_trajectories_start
 
 
 def trace_trajectories(
@@ -30,7 +29,7 @@ def trace_trajectories(
             callback(storage)
         return
 
-    print_trajectories_start()
+    print_action("Tracing trajectories started!", "start")
 
     storage.delete(StoragePath.traced)
 
@@ -96,7 +95,7 @@ def trace_trajectories(
                     },
                 )
 
-    print_trajectories_end()
+    print_action("Tracing trajectories completed!", "end")
 
     if callback is not None:
         callback(storage)

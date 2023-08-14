@@ -16,6 +16,7 @@ from processing.actions.trace_trajectories import trace_trajectories
 from processing.storage.Storage import Storage
 from processing.utils.ask_menu import MenuChoice, ask_menu
 from processing.utils.get_yaml_data import get_yaml_data
+from processing.utils.print_welcome import print_welcome
 from processing.utils.print_yaml_env import print_yaml_env
 from processing.utils.quit_sse import quit_sse
 from processing.utils.update_python_path import update_python_path
@@ -32,6 +33,7 @@ def main(
         env = get_yaml_data()
 
         if loaded_storage is None:
+            print_welcome()
             print_yaml_env(env)
             storage = Storage(env.storage)
         else:

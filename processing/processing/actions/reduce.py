@@ -14,14 +14,13 @@ from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.print_action import print_action
 from processing.utils.print_aggregated_reduceables import print_aggregated_reduceables
 from processing.utils.print_no_aggregated_reduceables import (
     print_no_aggregated_reduceables,
 )
 from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.print_reducers import print_reducers
-from processing.utils.print_reductions_end import print_reductions_end
-from processing.utils.print_reductions_start import print_reductions_start
 
 
 def reduce(
@@ -34,7 +33,7 @@ def reduce(
             callback(storage)
         return
 
-    print_reductions_start()
+    print_action("Reductions started!", "start")
 
     storage.delete(StoragePath.reduced)
 
@@ -94,7 +93,7 @@ def reduce(
                 },
             )
 
-    print_reductions_end()
+    print_action("Reductions completed!", "end")
 
     if callback is not None:
         callback(storage)

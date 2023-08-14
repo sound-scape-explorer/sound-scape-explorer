@@ -8,8 +8,7 @@ from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.interfaces import IMain
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
-from processing.utils.print_autocluster_end import print_autocluster_end
-from processing.utils.print_autocluster_start import print_autocluster_start
+from processing.utils.print_action import print_action
 from processing.utils.print_autoclusters import print_autoclusters
 from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.print_no_mean_distances_matrices import (
@@ -34,7 +33,7 @@ def autocluster(
             callback(storage)
         return
 
-    print_autocluster_start()
+    print_action("Autoclustering started!", "start")
 
     storage.delete(StoragePath.autoclustered)
 
@@ -67,7 +66,7 @@ def autocluster(
                 compression=True,
             )
 
-    print_autocluster_end()
+    print_action("Autoclustering completed!", "end")
 
     if callback is not None:
         callback(storage)
