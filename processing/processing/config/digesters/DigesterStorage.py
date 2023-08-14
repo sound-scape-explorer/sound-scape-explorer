@@ -1,5 +1,7 @@
 from typing import List
 
+from pandas import pandas
+
 from processing.config.ConfigParser import ConfigParser
 from processing.config.digesters.DigesterConfig import DigesterConfig
 from processing.config.digesters.DigesterSheet import DigesterSheet
@@ -34,6 +36,13 @@ class DigesterStorage:
     @staticmethod
     def read_from_config(parser: ConfigParser) -> List[DigesterConfig]:
         sheet = ExcelSheet.digesters
-        names = parser.get(sheet, DigesterSheet.name_)
+
+        df = pandas.DataFrame([parser.get(sheet, DigesterSheet.name_)])
+        df = df.T
+        df = df.dropna(how="all")
+        df.columns = ["names"]
+
+        names = df["names"].tolist()
+
         digests = DigesterConfig.reconstruct(names)
         return digests
