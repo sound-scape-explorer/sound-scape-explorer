@@ -1,8 +1,8 @@
 import {reactive, watchEffect} from 'vue';
-import {fileRef} from './useFile';
+import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
-import {configBandRef} from './useConfigBands';
-import {configIntegrationRef} from './useConfigIntegrations';
+import {bandRef} from './useBands';
+import {integrationRef} from './useIntegrations';
 
 export interface StorageIndicator {
   index: number;
@@ -21,19 +21,19 @@ export const indicatorsRef = reactive<IndicatorsRef>({
 export function useStorageIndicators() {
   const readIndicators = async () => {
     if (
-      fileRef.value === null ||
+      storageFileRef.value === null ||
       workerRef.value === null ||
-      configBandRef.value === null ||
-      configIntegrationRef.value === null
+      bandRef.value === null ||
+      integrationRef.value === null
     ) {
       return;
     }
 
-    indicatorsRef.value = await workerRef.value.readIndicators(
-      fileRef.value,
-      configBandRef.value.name,
-      configIntegrationRef.value.duration,
-    );
+    // indicatorsRef.value = await workerRef.value.readIndicators(
+    //   storageFileRef.value,
+    //   bandRef.value.name,
+    //   integrationRef.value.duration,
+    // );
   };
 
   watchEffect(readIndicators);

@@ -1,8 +1,8 @@
 import {ref, watch} from 'vue';
-import {fileRef} from './useFile';
+import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
-import {configBandRef} from './useConfigBands';
-import {configIntegrationRef} from './useConfigIntegrations';
+import {bandRef} from './useBands';
+import {integrationRef} from './useIntegrations';
 
 export interface StoragePairing {
   index: number;
@@ -13,21 +13,21 @@ export interface StoragePairing {
 export function useStoragePairings() {
   const pairingsRef = ref<StoragePairing[] | null>(null);
 
-  watch([workerRef, fileRef, configBandRef, configIntegrationRef], async () => {
+  watch([workerRef, storageFileRef, bandRef, integrationRef], async () => {
     if (
       workerRef.value === null ||
-      fileRef.value === null ||
-      configBandRef.value === null ||
-      configIntegrationRef.value === null
+      storageFileRef.value === null ||
+      bandRef.value === null ||
+      integrationRef.value === null
     ) {
       return;
     }
 
-    pairingsRef.value = await workerRef.value.readPairings(
-      fileRef.value,
-      configBandRef.value.name,
-      configIntegrationRef.value.duration,
-    );
+    // pairingsRef.value = await workerRef.value.readPairings(
+    //   storageFileRef.value,
+    //   bandRef.value.name,
+    //   integrationRef.value.seconds,
+    // );
   });
 
   return {

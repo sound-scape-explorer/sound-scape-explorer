@@ -1,8 +1,9 @@
 <script lang="ts" setup="">
 import type {InputNumberProps} from 'naive-ui';
 import {NInputNumber, NTooltip} from 'naive-ui';
+
 import {alphaHighRef, alphaLowRef} from '.././Scatter/useScatterColorScale';
-import {scatterReadyRef} from '../Scatter/useScatterReady';
+import {scatterReadyRef} from '../Scatter/useScatterStatus';
 
 type InputNumberThemeOverrides = NonNullable<
   InputNumberProps['themeOverrides']

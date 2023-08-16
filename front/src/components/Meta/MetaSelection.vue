@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
 import {ref, watch} from 'vue';
+
 import {useScatterFilterMeta} from '.././Scatter/useScatterFilterMeta';
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByMeta} from '../Colors/useColorByMeta';
@@ -18,23 +19,9 @@ interface Props {
 
 const props = defineProps<Props>();
 
-/**
- * State
- */
-
 const {getColorByMetaIndex} = useColorByMeta();
 const {filterByMeta} = useScatterFilterMeta();
 const selectionRef = ref<string[]>([]);
-
-/**
- * Lifecycles
- */
-
-watch(selectionRef, updateSelection);
-
-/**
- * Handlers
- */
 
 function getColorByItem(index: number): string | undefined {
   const colorType = `by${props.title}`;
@@ -46,14 +33,18 @@ function getColorByItem(index: number): string | undefined {
   return getColorByMetaIndex(index, props.items.length);
 }
 
-function updateSelection() {
+const updateSelection = () => {
   metaSelectionStore.selection[props.index] = selectionRef.value;
   filterByMeta();
-}
+};
 
-watch(metaSelectionStore, () => {
+watch(selectionRef, updateSelection);
+
+const updateReverse = () => {
   selectionRef.value = metaSelectionStore.selection[props.index];
-});
+};
+
+watch(metaSelectionStore.selection, updateReverse);
 </script>
 
 <template>

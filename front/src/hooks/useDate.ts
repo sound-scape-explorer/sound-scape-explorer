@@ -9,7 +9,7 @@ dayjs.extend(timezone);
 
 export function useDate() {
   const convertTimestampToDate = (timestamp: number, timezone?: string) => {
-    if (typeof timezone === 'undefined') {
+    if (timezone === '') {
       return dayjs(timestamp);
     }
 

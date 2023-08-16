@@ -24,7 +24,10 @@ module.exports = {
     },
   ],
   ignorePatterns: ['src/lib/**/*.ts'],
+  plugins: ['simple-import-sort'],
   rules: {
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     // Rules from @bamdadsabbagh/eslint-config

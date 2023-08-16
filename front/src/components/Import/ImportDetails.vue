@@ -1,44 +1,44 @@
 <script lang="ts" setup="">
 import {computed} from 'vue';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {configBandsRef} from 'src/hooks/useConfigBands';
-import {configIntegrationsRef} from 'src/hooks/useConfigIntegrations';
-import {configFilesRef} from 'src/hooks/useConfigFiles';
-import {configRangesRef} from 'src/hooks/useConfigRanges';
-import {configReducersRef} from 'src/hooks/useConfigReducers';
+import {bandsRef} from 'src/hooks/useBands';
+import {integrationsRef} from 'src/hooks/useIntegrations';
+import {filesRef} from 'src/hooks/useFiles';
+import {rangesRef} from 'src/hooks/useRanges';
+import {reducersRef} from 'src/hooks/useReducers';
 
 const reducerNamesRef = computed<string[] | null>(() => {
-  if (configReducersRef.value === null) {
+  if (reducersRef.value === null) {
     return null;
   }
 
-  return configReducersRef.value.map(
+  return reducersRef.value.map(
     (reducer) => `${reducer.name}${reducer.dimensions}`,
   );
 });
 
 const bandNamesRef = computed<string[] | null>(() => {
-  if (configBandsRef.value === null) {
+  if (bandsRef.value === null) {
     return null;
   }
 
-  return configBandsRef.value.map((band) => band.name);
+  return bandsRef.value.map((band) => band.name);
 });
 
 const integrationNamesRef = computed<string[] | null>(() => {
-  if (configIntegrationsRef.value === null) {
+  if (integrationsRef.value === null) {
     return null;
   }
 
-  return configIntegrationsRef.value.map((integration) => integration.name);
+  return integrationsRef.value.map((integration) => integration.name);
 });
 
 const rangeNamesRef = computed<string[] | null>(() => {
-  if (configRangesRef.value === null) {
+  if (rangesRef.value === null) {
     return null;
   }
 
-  return configRangesRef.value.map((range) => range.name);
+  return rangesRef.value.map((range) => range.name);
 });
 </script>
 
@@ -58,7 +58,7 @@ const rangeNamesRef = computed<string[] | null>(() => {
     <div class="container">
       <code class="item">
         <span class="key">Files count</span>
-        <span>{{ configFilesRef.value?.length }}</span>
+        <span>{{ filesRef.value?.length }}</span>
       </code>
       <code class="item">
         <span class="key">Bands</span>

@@ -2,10 +2,11 @@
 import {FlaskOutline} from '@vicons/ionicons5';
 import {NIcon, NInput} from 'naive-ui';
 import {ref, watch} from 'vue';
+
 import {useTimeout} from '../../hooks/useTimeout';
+import {scatterReadyRef} from '../Scatter/useScatterStatus';
 import type {QueryComplexStore} from './queryComplexStore';
 import {queriesComplexStore} from './queryComplexStore';
-import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 const inputRef = ref<string>('');
 

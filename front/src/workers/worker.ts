@@ -1,16 +1,22 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
+import type {AggregatedSite} from 'src/hooks/useAggregatedSites';
+import type {Band} from 'src/hooks/useBands';
+import type {Extractor} from 'src/hooks/useExtractors';
+import type {File as FileConfig} from 'src/hooks/useFiles';
+import type {Integration} from 'src/hooks/useIntegrations';
+import type {Labels} from 'src/hooks/useLabels';
+import type {Range} from 'src/hooks/useRanges';
+import type {ReducedFeatures} from 'src/hooks/useReducedFeatures';
+import type {ReducerFromStorage} from 'src/hooks/useReducers';
+import type {Site} from 'src/hooks/useSites';
+import type {TracedData} from 'src/hooks/useTraced';
+import type {Trajectory} from 'src/hooks/useTrajectories';
+import {StorageMode} from 'src/storage/StorageMode';
+import type {StorageSettings} from 'src/storage/StorageSettings';
+
 import {StoragePath} from '../storage/StoragePath';
 import {trimRectangular} from '../utils/trim-rectangular';
-import type {StorageMetas} from 'src/hooks/useStorageMetas';
-import type {StorageSettings} from 'src/storage/StorageSettings';
-import {StorageMode} from 'src/storage/StorageMode';
-import type {ConfigTrajectory} from 'src/hooks/useConfigTrajectories';
-import type {ConfigBand} from 'src/hooks/useConfigBands';
-import type {ConfigIntegration} from 'src/hooks/useConfigIntegrations';
-import type {ConfigFile} from 'src/hooks/useConfigFiles';
-import type {ConfigReducer} from 'src/hooks/useConfigReducers';
-import type {ConfigRange} from 'src/hooks/useConfigRanges';
 
 interface Volume {
   index: number;
@@ -66,7 +72,7 @@ export async function readSecondsFromIntegration(
   ).to_array() as string[];
 
   const seconds = (
-    h5.get(StoragePath.integrations_milliseconds) as Dataset
+    h5.get(StoragePath.integrations_seconds) as Dataset
   ).to_array() as number[];
 
   const index = integrations.indexOf(integrationName);
@@ -81,7 +87,7 @@ export async function readSecondsFromIntegration(
 export async function readSettings(file: File) {
   const h5 = await load(file);
 
-  const path = StoragePath.configuration;
+  const path = StoragePath.settings;
   const configuration = h5.get(path) as Group;
   const settings = {} as StorageSettings;
 
@@ -93,7 +99,7 @@ export async function readSettings(file: File) {
   return settings;
 }
 
-export async function readConfigFiles(file: File): Promise<ConfigFile[]> {
+export async function readFiles(file: File): Promise<FileConfig[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.files_names) as Dataset;
@@ -108,11 +114,11 @@ export async function readConfigFiles(file: File): Promise<ConfigFile[]> {
   const labelsDataset = h5.get(StoragePath.files_labels) as Dataset;
   const labels = labelsDataset.to_array() as string[][];
 
-  const files: ConfigFile[] = [];
+  const files: FileConfig[] = [];
   const length = namesDataset.shape[0];
 
   for (let index = 0; index < length; index += 1) {
-    const file: ConfigFile = {
+    const file: FileConfig = {
       index: index,
       name: names[index],
       timestamp: timestamps[index],
@@ -124,6 +130,30 @@ export async function readConfigFiles(file: File): Promise<ConfigFile[]> {
   }
 
   return files;
+}
+
+export async function readSites(file: File): Promise<Site[]> {
+  const h5 = await load(file);
+
+  const namesDataset = h5.get(StoragePath.sites_names) as Dataset;
+  const names = namesDataset.to_array() as string[];
+
+  const fileIndexesDataset = h5.get(StoragePath.sites_file_indexes) as Dataset;
+  const fileIndexes = fileIndexesDataset.to_array() as number[][];
+
+  const sites: Site[] = [];
+
+  for (let index = 0; index < names.length; index += 1) {
+    const site: Site = {
+      index: index,
+      name: names[index],
+      fileIndexes: fileIndexes[index],
+    };
+
+    sites.push(site);
+  }
+
+  return sites;
 }
 
 export async function readFilenames(file: File) {
@@ -138,13 +168,6 @@ export async function readFilename(file: File, fileIndex: number) {
   return filenames[fileIndex];
 }
 
-export async function readFilesFeatures(file: File, band: string) {
-  const h5 = await load(file);
-  const path = `${StoragePath.files_features}/${band}`;
-  const features = h5.get(path) as Dataset;
-  return features.to_array() as number[][];
-}
-
 export async function readFilesMetas(file: File) {
   const h5 = await load(file);
   const path = StoragePath.files_labels;
@@ -152,18 +175,26 @@ export async function readFilesMetas(file: File) {
   return metas.to_array() as string[][];
 }
 
-export async function readMetas(file: File, band: string, integration: number) {
+export async function readLabels(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+): Promise<Labels> {
   const h5 = await load(file);
 
-  const metaProperties = h5.get(StoragePath.meta_properties) as Dataset;
-  const metaPropertiesList = metaProperties.to_array() as string[];
+  const propertiesDataset = h5.get(StoragePath.labels_properties) as Dataset;
+  const properties = propertiesDataset.to_array() as string[];
 
-  const metaSets = h5.get(StoragePath.meta_sets) as Dataset;
-  const metaSetsList = metaSets.to_array() as string[][];
+  const setsDataset = h5.get(StoragePath.labels_sets) as Dataset;
+  const sets = setsDataset.to_array() as string[][];
 
-  const metas: StorageMetas = {};
+  const labels: Labels = {};
 
-  const autoclusters = await readAutoclusters(file, band, integration);
+  const autoclusters = await readAutoclusters(
+    file,
+    bandName,
+    integrationSeconds,
+  );
 
   if (autoclusters.length > 0) {
     let a = 0;
@@ -175,21 +206,21 @@ export async function readMetas(file: File, band: string, integration: number) {
           .sort((a, b) => a.localeCompare(b, undefined, {numeric: true})),
       );
 
-      metas[`AUTOCLUSTER_${a}`] = [...autoclusterSet];
+      labels[`AUTOCLUSTER_${a}`] = [...autoclusterSet];
 
       a += 1;
     }
   }
 
-  for (let i = 0; i < metaPropertiesList.length; i += 1) {
-    const property = metaPropertiesList[i];
-    metas[property] = metaSetsList[i].filter((element) => element !== '');
+  for (let i = 0; i < properties.length; i += 1) {
+    const property = properties[i];
+    labels[property] = sets[i].filter((element) => element !== '');
   }
 
-  return metas;
+  return labels;
 }
 
-export async function readConfigBands(file: File): Promise<ConfigBand[]> {
+export async function readBands(file: File): Promise<Band[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.bands_names) as Dataset;
@@ -205,7 +236,7 @@ export async function readConfigBands(file: File): Promise<ConfigBand[]> {
   const length = namesDataset.shape[0];
 
   for (let index = 0; index < length; index += 1) {
-    const band: ConfigBand = {
+    const band: Band = {
       index: index,
       name: names[index],
       low: lows[index],
@@ -218,25 +249,23 @@ export async function readConfigBands(file: File): Promise<ConfigBand[]> {
   return bands;
 }
 
-export async function readConfigIntegrations(file: File) {
+export async function readIntegrations(file: File): Promise<Integration[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.integrations_names) as Dataset;
   const names = namesDataset.to_array() as string[];
 
-  const durationsDataset = h5.get(
-    StoragePath.integrations_milliseconds,
-  ) as Dataset;
-  const durations = durationsDataset.to_array() as number[];
+  const secondsDataset = h5.get(StoragePath.integrations_seconds) as Dataset;
+  const seconds = secondsDataset.to_array() as number[];
 
-  const integrations: ConfigIntegration[] = [];
+  const integrations: Integration[] = [];
   const length = namesDataset.shape[0];
 
   for (let index = 0; index < length; index += 1) {
-    const integration: ConfigIntegration = {
+    const integration: Integration = {
       index: index,
       name: names[index],
-      duration: durations[index],
+      seconds: seconds[index],
     };
 
     integrations.push(integration);
@@ -245,7 +274,7 @@ export async function readConfigIntegrations(file: File) {
   return integrations;
 }
 
-export async function readConfigRanges(file: File): Promise<ConfigRange[]> {
+export async function readRanges(file: File): Promise<Range[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.ranges_names) as Dataset;
@@ -257,11 +286,11 @@ export async function readConfigRanges(file: File): Promise<ConfigRange[]> {
   const endsDataset = h5.get(StoragePath.ranges_ends) as Dataset;
   const ends = endsDataset.to_array() as number[];
 
-  const ranges: ConfigRange[] = [];
+  const ranges: Range[] = [];
   const length = namesDataset.shape[0];
 
   for (let index = 0; index < length; index += 1) {
-    const range: ConfigRange = {
+    const range: Range = {
       index: index,
       name: names[index],
       start: starts[index],
@@ -274,7 +303,40 @@ export async function readConfigRanges(file: File): Promise<ConfigRange[]> {
   return ranges;
 }
 
-export async function readConfigReducers(file: File): Promise<ConfigReducer[]> {
+export async function readExtractors(file: File): Promise<Extractor[]> {
+  const h5 = await load(file);
+
+  const namesDataset = h5.get(StoragePath.extractors_names) as Dataset;
+  const names = namesDataset.to_array() as string[];
+
+  const offsetsDataset = h5.get(StoragePath.extractors_offsets) as Dataset;
+  const offsets = offsetsDataset.to_array() as number[];
+
+  const stepsDataset = h5.get(StoragePath.extractors_steps) as Dataset;
+  const steps = stepsDataset.to_array() as number[];
+
+  const persistsDataset = h5.get(StoragePath.extractors_persists) as Dataset;
+  const persists = persistsDataset.to_array() as number[];
+
+  const extractors: Extractor[] = [];
+  const length = namesDataset.shape[0];
+
+  for (let index = 0; index < length; index += 1) {
+    const extractor: Extractor = {
+      index: index,
+      name: names[index],
+      offset: offsets[index],
+      step: steps[index],
+      persist: persists[index] === 1 ? true : false,
+    };
+
+    extractors.push(extractor);
+  }
+
+  return extractors;
+}
+
+export async function readReducers(file: File): Promise<ReducerFromStorage[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.reducers_names) as Dataset;
@@ -297,11 +359,11 @@ export async function readConfigReducers(file: File): Promise<ConfigReducer[]> {
   const rangesRectangular = rangesDataset.to_array() as string[][];
   const ranges = trimRectangular(rangesRectangular, '');
 
-  const reducers: ConfigReducer[] = [];
+  const reducers: ReducerFromStorage[] = [];
   const length = namesDataset.shape[0];
 
   for (let index = 0; index < length; index += 1) {
-    const reducer: ConfigReducer = {
+    const reducer: ReducerFromStorage = {
       index: index,
       name: names[index],
       dimensions: dimensions[index],
@@ -316,30 +378,25 @@ export async function readConfigReducers(file: File): Promise<ConfigReducer[]> {
   return reducers;
 }
 
-/**
- * @param {File} file - The input file.
- * @param {number} r - The reducer index.
- * @param {string} band - The band name.
- * @param {number} integration - The number of seconds for the current integration.
- */
 export async function readReducedFeatures(
   file: File,
-  r: number,
-  band: string,
-  integration: number,
-): Promise<number[][]> {
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+  reducerIndex: number,
+): Promise<ReducedFeatures> {
   const h5 = await load(file);
-  const path = `${StoragePath.reduced_}${r}/${band}/${integration}`;
-  const featuresDataset = h5.get(path) as Dataset;
-  const features = featuresDataset.to_array() as number[][];
+  const path = `${StoragePath.reduced}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}`;
+  const dataset = h5.get(path) as Dataset;
+  const features = dataset.to_array() as number[][];
   return features;
 }
 
 export async function readAutoclusters(
   file: File,
-  band: string,
-  integration: number,
-): Promise<number[][]> {
+  bandName: string,
+  integrationSeconds: number,
+): Promise<string[][]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
@@ -353,209 +410,210 @@ export async function readAutoclusters(
   const autoclusters = [];
 
   for (let i = 0; i < namesCount; i += 1) {
-    const path = `${StoragePath.autocluster_}${i}/${band}/${integration}`;
+    const path = `${StoragePath.autoclustered}/${bandName}/${integrationSeconds}/${i}`;
     const dataset = h5.get(path) as Dataset;
     const values = dataset.to_array() as number[];
-    autoclusters.push(values);
+    autoclusters.push(values.map((v) => v.toString()));
   }
 
   return autoclusters;
 }
 
-export async function readIndicators(
-  file: File,
-  band: string,
-  integration: number,
-) {
-  const h5 = await load(file);
+// export async function readIndicators(
+//   file: File,
+//   band: string,
+//   integration: number,
+// ) {
+//   const h5 = await load(file);
+//
+//   const namesDataset = h5.get(StoragePath.indicators_names_names) as Dataset;
+//   const names = namesDataset.to_array() as string[];
+//
+//   const indicators: Indicator[] = [];
+//
+//   names.forEach((name, i) => {
+//     const path = `${StoragePath.indicator_}${i}/${band}/${integration}`;
+//     const dataset = h5.get(path) as Dataset;
+//     const values = dataset.to_array() as number[];
+//
+//     const indicator: Indicator = {
+//       index: i,
+//       name: name,
+//       values: values,
+//     };
+//
+//     indicators.push(indicator);
+//   });
+//
+//   return indicators;
+// }
 
-  const namesDataset = h5.get(StoragePath.indicators_names_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+// export async function readVolumes(
+//   file: File,
+//   band: string,
+//   integration: number,
+// ) {
+//   const h5 = await load(file);
+//
+//   const namesDataset = h5.get(StoragePath.volumes_names_names) as Dataset;
+//   const names = namesDataset.to_array() as string[];
+//
+//   const volumes: Volume[] = [];
+//
+//   names.forEach((name, v) => {
+//     const groupPath = `${StoragePath.volume_}${v}/${band}/${integration}`;
+//     const group = h5.get(groupPath) as Group;
+//
+//     if (group === null) {
+//       return;
+//     }
+//
+//     let values: number[] = [];
+//
+//     for (const g in group.keys()) {
+//       const path = `${groupPath}/${g}`;
+//       const dataset = h5.get(path) as Dataset;
+//       values = [...values, ...(dataset.to_array() as number[])];
+//     }
+//
+//     const volume: Volume = {
+//       index: v,
+//       name: name,
+//       values: values,
+//     };
+//
+//     volumes.push(volume);
+//   });
+//
+//   return volumes;
+// }
 
-  const indicators: Indicator[] = [];
+// export async function readVolume(
+//   file: File,
+//   band: string,
+//   integration: number,
+//   volumeIndex: number,
+//   metaIndex: number,
+// ): Promise<number[]> {
+//   const h5 = await load(file);
+//   const path = `${StoragePath.volume_}${volumeIndex}/${band}/${integration}/${metaIndex}`;
+//   const dataset = h5.get(path) as Dataset;
+//   const values = dataset.to_array() as number[];
+//   return values;
+// }
 
-  names.forEach((name, i) => {
-    const path = `${StoragePath.indicator_}${i}/${band}/${integration}`;
-    const dataset = h5.get(path) as Dataset;
-    const values = dataset.to_array() as number[];
+// export async function readMatrices(
+//   file: File,
+//   band: string,
+//   integration: number,
+// ) {
+//   const h5 = await load(file);
+//
+//   const namesDataset = h5.get(StoragePath.matrices_names_names) as Dataset;
+//   const names = namesDataset.to_array() as string[];
+//
+//   const matrices: Matrix[] = [];
+//
+//   names.forEach((name, m) => {
+//     const groupPath = `${StoragePath.matrix_}${m}/${band}/${integration}`;
+//     const group = h5.get(groupPath) as Group;
+//
+//     let values: number[] = [];
+//
+//     for (const g in group.keys()) {
+//       const path = `${groupPath}/${g}`;
+//       const dataset = h5.get(path) as Dataset;
+//       values = [...values, ...(dataset.to_array() as number[])];
+//     }
+//
+//     const matrix: Matrix = {
+//       index: m,
+//       name: name,
+//       values: values,
+//     };
+//
+//     matrices.push(matrix);
+//   });
+//
+//   return matrices;
+// }
 
-    const indicator: Indicator = {
-      index: i,
-      name: name,
-      values: values,
-    };
+// export async function readMatrix(
+//   file: File,
+//   band: string,
+//   integration: number,
+//   matrixIndex: number,
+//   metaIndex: number,
+// ): Promise<number[][]> {
+//   const h5 = await load(file);
+//   const path = `${StoragePath.matrix_}${matrixIndex}/${band}/${integration}/${metaIndex}`;
+//   const dataset = h5.get(path) as Dataset;
+//   const values = dataset.to_array() as number[][];
+//   return values;
+// }
 
-    indicators.push(indicator);
-  });
+// export async function readPairings(
+//   file: File,
+//   band: string,
+//   integration: number,
+// ) {
+//   const h5 = await load(file);
+//
+//   const namesDataset = h5.get(StoragePath.pairings_names_names) as Dataset;
+//   const names = namesDataset.to_array() as string[];
+//
+//   const pairings: Pairing[] = [];
+//
+//   names.forEach((name, p) => {
+//     const path = `${StoragePath.pairing_}${p}/${band}/${integration}`;
+//     const group1 = h5.get(path) as Group;
+//
+//     let values: number[][] = [];
+//
+//     for (const g1 in group1.keys()) {
+//       const group2 = h5.get(`${path}/${g1}`) as Group;
+//
+//       for (const g2 in group2.keys()) {
+//         const dataset = h5.get(`${path}/${g1}/${g2}`) as Dataset;
+//         values = [...values, dataset.to_array() as number[]];
+//       }
+//     }
+//
+//     const pairing: Pairing = {
+//       index: p,
+//       name: name,
+//       values: values,
+//     };
+//
+//     pairings.push(pairing);
+//   });
+//
+//   return pairings;
+// }
 
-  return indicators;
-}
-
-export async function readVolumes(
-  file: File,
-  band: string,
-  integration: number,
-) {
-  const h5 = await load(file);
-
-  const namesDataset = h5.get(StoragePath.volumes_names_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
-
-  const volumes: Volume[] = [];
-
-  names.forEach((name, v) => {
-    const groupPath = `${StoragePath.volume_}${v}/${band}/${integration}`;
-    const group = h5.get(groupPath) as Group;
-
-    if (group === null) {
-      return;
-    }
-
-    let values: number[] = [];
-
-    for (const g in group.keys()) {
-      const path = `${groupPath}/${g}`;
-      const dataset = h5.get(path) as Dataset;
-      values = [...values, ...(dataset.to_array() as number[])];
-    }
-
-    const volume: Volume = {
-      index: v,
-      name: name,
-      values: values,
-    };
-
-    volumes.push(volume);
-  });
-
-  return volumes;
-}
-
-export async function readVolume(
-  file: File,
-  band: string,
-  integration: number,
-  volumeIndex: number,
-  metaIndex: number,
-): Promise<number[]> {
-  const h5 = await load(file);
-  const path = `${StoragePath.volume_}${volumeIndex}/${band}/${integration}/${metaIndex}`;
-  const dataset = h5.get(path) as Dataset;
-  const values = dataset.to_array() as number[];
-  return values;
-}
-
-export async function readMatrices(
-  file: File,
-  band: string,
-  integration: number,
-) {
-  const h5 = await load(file);
-
-  const namesDataset = h5.get(StoragePath.matrices_names_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
-
-  const matrices: Matrix[] = [];
-
-  names.forEach((name, m) => {
-    const groupPath = `${StoragePath.matrix_}${m}/${band}/${integration}`;
-    const group = h5.get(groupPath) as Group;
-
-    let values: number[] = [];
-
-    for (const g in group.keys()) {
-      const path = `${groupPath}/${g}`;
-      const dataset = h5.get(path) as Dataset;
-      values = [...values, ...(dataset.to_array() as number[])];
-    }
-
-    const matrix: Matrix = {
-      index: m,
-      name: name,
-      values: values,
-    };
-
-    matrices.push(matrix);
-  });
-
-  return matrices;
-}
-
-export async function readMatrix(
-  file: File,
-  band: string,
-  integration: number,
-  matrixIndex: number,
-  metaIndex: number,
-): Promise<number[][]> {
-  const h5 = await load(file);
-  const path = `${StoragePath.matrix_}${matrixIndex}/${band}/${integration}/${metaIndex}`;
-  const dataset = h5.get(path) as Dataset;
-  const values = dataset.to_array() as number[][];
-  return values;
-}
-
-export async function readPairings(
-  file: File,
-  band: string,
-  integration: number,
-) {
-  const h5 = await load(file);
-
-  const namesDataset = h5.get(StoragePath.pairings_names_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
-
-  const pairings: Pairing[] = [];
-
-  names.forEach((name, p) => {
-    const path = `${StoragePath.pairing_}${p}/${band}/${integration}`;
-    const group1 = h5.get(path) as Group;
-
-    let values: number[][] = [];
-
-    for (const g1 in group1.keys()) {
-      const group2 = h5.get(`${path}/${g1}`) as Group;
-
-      for (const g2 in group2.keys()) {
-        const dataset = h5.get(`${path}/${g1}/${g2}`) as Dataset;
-        values = [...values, dataset.to_array() as number[]];
-      }
-    }
-
-    const pairing: Pairing = {
-      index: p,
-      name: name,
-      values: values,
-    };
-
-    pairings.push(pairing);
-  });
-
-  return pairings;
-}
-
-export async function readPairing(
-  file: File,
-  band: string,
-  integration: number,
-  pairingIndex: number,
-  metaIndexA: number,
-  metaIndexB: number,
-): Promise<number[][]> {
-  const h5 = await load(file);
-  const path = `${StoragePath.pairing_}${pairingIndex}/${band}/${integration}/${metaIndexA}/${metaIndexB}`;
-  const dataset = h5.get(path) as Dataset;
-  const values = dataset.to_array() as number[][];
-  return values;
-}
+// export async function readPairing(
+//   file: File,
+//   band: string,
+//   integration: number,
+//   pairingIndex: number,
+//   metaIndexA: number,
+//   metaIndexB: number,
+// ): Promise<number[][]> {
+//   const h5 = await load(file);
+//   const path = `${StoragePath.pairing_}${pairingIndex}/${band}/${integration}/${metaIndexA}/${metaIndexB}`;
+//   const dataset = h5.get(path) as Dataset;
+//   const values = dataset.to_array() as number[][];
+//   return values;
+// }
 
 export async function readGroupedFeatures(
   file: File,
-  band: string,
-  integration: number,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
 ) {
   const h5 = await load(file);
-  const path = `${StoragePath.group_features}/${band}/${integration}`;
+  const path = `${StoragePath.aggregated}/${bandName}/${integrationSeconds}/${extractorIndex}`;
   const features = h5.get(path) as Dataset;
   const array = features.to_array() as number[][];
   return array;
@@ -563,84 +621,83 @@ export async function readGroupedFeatures(
 
 export async function readGroupedTimestamps(
   file: File,
-  band: string,
-  integration: number,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
 ) {
   const h5 = await load(file);
-  const path = `${StoragePath.group_timestamps}/${band}/${integration}`;
+  const path = `${StoragePath.aggregated_timestamps}/${bandName}/${integrationSeconds}/${extractorIndex}`;
   const timestamps = h5.get(path) as Dataset;
   const array = timestamps.to_array() as number[];
   return array;
 }
 
-export async function readGroupedMetas(
-  file: File,
-  band: string,
-  integration: number,
-) {
-  const files = await readFilenames(file);
-  const filesMetas = await readFilesMetas(file);
-  const autoclusters = await readAutoclusters(file, band, integration);
-  const groupCounts = await readFilesGroupCounts(file, integration);
+// export async function readGroupedMetas(
+//   file: File,
+//   band: string,
+//   integration: number,
+// ) {
+//   const files = await readFilenames(file);
+//   const filesMetas = await readFilesMetas(file);
+//   const autoclusters = await readAutoclusters(file, band, integration);
+//   const groupCounts = await readFilesGroupCounts(file, integration);
+//
+//   const groupedMetas: string[][][] = [];
+//   let pointIndex = 0;
+//
+//   for (let f = 0; f < files.length; f += 1) {
+//     const groupCount = groupCounts[f];
+//     groupedMetas[f] = [];
+//
+//     for (let g = 0; g < groupCount; g += 1) {
+//       let metas: string[] = [];
+//
+//       if (autoclusters.length > 0) {
+//         for (const autocluster of autoclusters) {
+//           metas.push(autocluster[pointIndex].toString());
+//         }
+//       }
+//
+//       metas = [...metas, ...filesMetas[f]];
+//       groupedMetas[f].push(metas);
+//
+//       pointIndex += 1;
+//     }
+//   }
+//
+//   return groupedMetas.flat();
+// }
 
-  const groupedMetas: string[][][] = [];
-  let pointIndex = 0;
+// export async function readGroupedFilenames(file: File, integration: number) {
+//   const filenames = await readFilenames(file);
+//   const groupCounts = await readFilesGroupCounts(file, integration);
+//
+//   const groupedFilenames: string[] = [];
+//
+//   for (let f = 0; f < filenames.length; f += 1) {
+//     const groupCount = groupCounts[f];
+//
+//     for (let s = 0; s < groupCount; s += 1) {
+//       const filename = filenames[f];
+//       groupedFilenames.push(filename);
+//     }
+//   }
+//
+//   return groupedFilenames;
+// }
 
-  for (let f = 0; f < files.length; f += 1) {
-    const groupCount = groupCounts[f];
-    groupedMetas[f] = [];
+// export async function readFilesGroupCounts(
+//   file: File,
+//   integration: number,
+// ): Promise<number[]> {
+//   const h5 = await load(file);
+//   const path = `${StoragePath.files_group_counts}/${integration}`;
+//   const dataset = h5.get(path) as Dataset;
+//   const filesGroupCounts = dataset.to_array() as number[][];
+//   return filesGroupCounts.map((groupsCount) => groupsCount[0]);
+// }
 
-    for (let g = 0; g < groupCount; g += 1) {
-      let metas: string[] = [];
-
-      if (autoclusters.length > 0) {
-        for (const autocluster of autoclusters) {
-          metas.push(autocluster[pointIndex].toString());
-        }
-      }
-
-      metas = [...metas, ...filesMetas[f]];
-      groupedMetas[f].push(metas);
-
-      pointIndex += 1;
-    }
-  }
-
-  return groupedMetas.flat();
-}
-
-export async function readGroupedFilenames(file: File, integration: number) {
-  const filenames = await readFilenames(file);
-  const groupCounts = await readFilesGroupCounts(file, integration);
-
-  const groupedFilenames: string[] = [];
-
-  for (let f = 0; f < filenames.length; f += 1) {
-    const groupCount = groupCounts[f];
-
-    for (let s = 0; s < groupCount; s += 1) {
-      const filename = filenames[f];
-      groupedFilenames.push(filename);
-    }
-  }
-
-  return groupedFilenames;
-}
-
-export async function readFilesGroupCounts(
-  file: File,
-  integration: number,
-): Promise<number[]> {
-  const h5 = await load(file);
-  const path = `${StoragePath.files_group_counts}/${integration}`;
-  const dataset = h5.get(path) as Dataset;
-  const filesGroupCounts = dataset.to_array() as number[][];
-  return filesGroupCounts.map((groupsCount) => groupsCount[0]);
-}
-
-export async function readConfigTrajectories(
-  file: File,
-): Promise<ConfigTrajectory[]> {
+export async function readTrajectories(file: File): Promise<Trajectory[]> {
   const h5 = await load(file);
 
   const namesDataset = h5.get(StoragePath.trajectories_names) as Dataset;
@@ -657,7 +714,7 @@ export async function readConfigTrajectories(
   const trajectories = [];
 
   for (let index = 0; index < length; index += 1) {
-    const trajectory: ConfigTrajectory = {
+    const trajectory: Trajectory = {
       index: index,
       name: names[index],
       start: starts[index],
@@ -670,16 +727,97 @@ export async function readConfigTrajectories(
   return trajectories;
 }
 
-export async function readTrajectory(
+export async function readTraced(
   file: File,
-  band: string,
-  integration: number,
-  trajectoryIndex: number,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
   reducerIndex: number,
-): Promise<number[][]> {
+  trajectoryIndex: number,
+): Promise<TracedData> {
   const h5 = await load(file);
-  const path = `${StoragePath.trajectory_}${trajectoryIndex}/${reducerIndex}/${band}/${integration}`;
+  const path = `${StoragePath.traced}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
   const dataset = h5.get(path) as Dataset;
-  const trajectories = dataset.to_array() as number[][];
-  return trajectories;
+  const traced = dataset.to_array() as number[][];
+  return traced;
+}
+
+export async function readAggregated(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+) {
+  const h5 = await load(file);
+  const path = `${StoragePath.aggregated}/${bandName}/${integrationSeconds}/${extractorIndex}`;
+  const dataset = h5.get(path) as Dataset;
+  const features = dataset.to_array() as number[][];
+  return features;
+}
+
+export async function readAggregatedTimestamps(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+): Promise<number[]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.aggregated_timestamps}/${bandName}/${integrationSeconds}/${extractorIndex}`;
+  const timestampsDataset = h5.get(path) as Dataset;
+  const timestamps = timestampsDataset.to_array() as number[][];
+  return timestamps.map((t) => t[0]);
+}
+
+export async function readAggregatedSites(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+): Promise<AggregatedSite[]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.aggregated_site_file_indexes}/${bandName}/${integrationSeconds}/${extractorIndex}`;
+  const dataset = h5.get(path) as Dataset;
+  const siteFileIndexes = dataset.to_array() as string[][];
+
+  const sites: AggregatedSite[] = [];
+
+  for (const item of siteFileIndexes) {
+    // TODO: Add ignore case for file indexes if non rectangular
+    const site: AggregatedSite = {
+      site: item[0],
+      fileIndexes: item.slice(1).map((fi) => Number(fi)),
+    };
+
+    sites.push(site);
+  }
+
+  return sites;
+}
+
+export async function readAggregatedLabels(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+): Promise<string[][]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.aggregated_labels}/${bandName}/${integrationSeconds}/${extractorIndex}`;
+  const labelsDataset = h5.get(path) as Dataset;
+  const labels = labelsDataset.to_array() as string[][];
+
+  const autoclusters = await readAutoclusters(
+    file,
+    bandName,
+    integrationSeconds,
+  );
+
+  if (autoclusters.length > 0) {
+    for (const autocluster of autoclusters.reverse()) {
+      for (let index = 0; index < labels.length; index += 1) {
+        labels[index] = [autocluster[index], ...labels[index]];
+      }
+    }
+  }
+
+  return labels;
 }

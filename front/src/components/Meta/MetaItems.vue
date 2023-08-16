@@ -1,10 +1,11 @@
 <script lang="ts" setup="">
-import {NGi, NGrid, NTag} from 'naive-ui';
-import {ref, watch} from 'vue';
-import MetaSelection from './MetaSelection.vue';
-import {metaSelectionStore} from './metaSelectionStore';
+import {NGi, NGrid, NTag, NTooltip} from 'naive-ui';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
+import {ref, watch} from 'vue';
+
+import MetaSelection from './MetaSelection.vue';
+import {metaSelectionStore} from './metaSelectionStore';
 
 const metaSetsIndexesRef = ref();
 
@@ -47,6 +48,16 @@ const handleMetaPropertyClick = (metaPropertyIndex: number) => {
 
   metaSelectionStore.selection[metaPropertyIndex] = newSelection;
 };
+
+const handlePropertyRightClick = (e: PointerEvent, propertyIndex: number) => {
+  e.preventDefault();
+
+  if (metaSelectionStore.selection[propertyIndex].length === 0) {
+    return;
+  }
+
+  metaSelectionStore.selection[propertyIndex] = [];
+};
 </script>
 
 <template>
@@ -56,14 +67,28 @@ const handleMetaPropertyClick = (metaPropertyIndex: number) => {
     x-gap="12"
   >
     <n-gi v-for="(_, m) in metaPropertiesRef.value">
-      <n-tag
-        :bordered="false"
-        class="tag"
-        size="small"
-        @click="() => handleMetaPropertyClick(m)"
+      <n-tooltip
+        trigger="hover"
+        placement="top-start"
+        :show-arrow="false"
       >
-        {{ metaPropertiesRef.value?.[m] }}
-      </n-tag>
+        <template #trigger>
+          <n-tag
+            :bordered="false"
+            class="tag"
+            size="small"
+            @click="() => handleMetaPropertyClick(m)"
+            @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, m)"
+          >
+            {{ metaPropertiesRef.value?.[m] }}
+          </n-tag>
+        </template>
+        <div>
+          <span>Left click: Invert selection</span>
+          <br />
+          <span>Right click: Clear selection</span>
+        </div>
+      </n-tooltip>
 
       <MetaSelection
         :index="m"

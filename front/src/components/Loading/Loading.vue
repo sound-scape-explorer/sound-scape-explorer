@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import {NAlert} from 'naive-ui';
+
 import AppModal from '../AppModal/AppModal.vue';
-import {scatterLoadingRef} from '../Scatter/useScatterLoading';
+import {scatterLoadingRef} from '../Scatter/useScatterStatus';
 </script>
 
 <template>

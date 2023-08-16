@@ -1,15 +1,16 @@
 <script lang="ts" setup="">
 import {RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
+import {useStoragePairing} from 'src/hooks/useStoragePairing';
+import {useStoragePairings} from 'src/hooks/useStoragePairings';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
+
 import {buildNestedArray} from '../../utils/build-nested-array';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap2D from '../AppHeatmap2D/AppHeatmap2D.vue';
-import {useStoragePairings} from 'src/hooks/useStoragePairings';
-import {useStoragePairing} from 'src/hooks/useStoragePairing';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
 const {pairingsRef} = useStoragePairings();
 const {readPairing} = useStoragePairing();

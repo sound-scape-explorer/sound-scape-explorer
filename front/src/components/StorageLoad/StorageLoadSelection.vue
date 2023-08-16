@@ -1,36 +1,33 @@
 <script lang="ts" setup>
-import {useStorageFilesGroupCounts} from 'src/hooks/useStorageFilesGroupCounts';
-import {useStorageGroupCountsByPointIndexes} from 'src/hooks/useStorageGroupCountsByPointIndexes';
+import {useAggregatedSites} from 'src/hooks/useAggregatedSites';
+import {useLabels} from 'src/hooks/useLabels';
 import {useStorageGroupedFeatures} from 'src/hooks/useStorageGroupedFeatures';
 import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
 import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
 import {useStorageMetaProperties} from 'src/hooks/useStorageMetaProperties';
-import {useStorageMetas} from 'src/hooks/useStorageMetas';
 import {useStorageMetaSets} from 'src/hooks/useStorageMetaSets';
-import {useStorageTrajectories} from 'src/hooks/useStorageTrajectories';
 import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
-import {useStorageGroupedMetas} from '../../hooks/useStorageGroupedMetas';
-import {useStorageGroupedTimestamps} from '../../hooks/useStorageGroupedTimestamps';
-import {useStorageReducedFeatures} from '../../hooks/useStorageReducedFeatures';
+import {useTraced} from 'src/hooks/useTraced';
+
+import {useAggregatedLabels} from '../../hooks/useAggregatedLabels';
+import {useAggregatedTimestamps} from '../../hooks/useAggregatedTimestamps';
+import {useReducedFeatures} from '../../hooks/useReducedFeatures';
 import {useScatterColorScale} from '.././Scatter/useScatterColorScale';
 import {useScatterFilter} from '.././Scatter/useScatterFilter';
-import {usePointIndexes} from '../Scatter/usePointIndexes';
-import {useScatterReady} from '../Scatter/useScatterReady';
+import {useScatterStatus} from '../Scatter/useScatterStatus';
 
 useStorageMetaSets();
 useStorageMetaProperties();
-useStorageMetas();
-
-useStorageFilesGroupCounts();
-useStorageGroupCountsByPointIndexes();
+useLabels();
 
 useStorageGroupedFilenames();
 useStorageGroupedFeatures();
-useStorageGroupedTimestamps();
-useStorageGroupedMetas();
+useAggregatedTimestamps();
+useAggregatedLabels();
+useAggregatedSites();
 
-useStorageReducedFeatures();
-useStorageTrajectories();
+useReducedFeatures();
+useTraced();
 
 useStorageVolumes();
 useStorageIndicators();
@@ -38,8 +35,7 @@ useStorageIndicators();
 useScatterColorScale();
 useScatterFilter();
 
-useScatterReady();
-usePointIndexes();
+useScatterStatus();
 </script>
 
 <template></template>

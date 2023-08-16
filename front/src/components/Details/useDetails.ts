@@ -1,58 +1,50 @@
 import type {Dayjs} from 'dayjs';
-import {configFilesRef} from 'src/hooks/useConfigFiles';
+import {filesRef} from 'src/hooks/useFiles';
 import {useDate} from 'src/hooks/useDate';
-import {useIndexes} from 'src/hooks/useIndexes';
-import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
-import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
+import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {ref, watch} from 'vue';
+import {ref, watchEffect} from 'vue';
 import {clickedRef} from '.././Scatter/useScatterClick';
+import {
+  type AggregatedSite,
+  aggregatedSitesRef,
+} from 'src/hooks/useAggregatedSites';
 
 export function useDetails() {
   const {convertTimestampToDate} = useDate();
-  const {convertPointIndex} = useIndexes();
 
-  const fileIndexRef = ref<number | null>(null);
-  const filenameRef = ref<string | null>(null);
-  const groupIndexRef = ref<number | null>(null);
-  const dateRef = ref<Dayjs | null>(null);
-  const metasRef = ref<string[] | null>(null);
+  const intervalDateRef = ref<Dayjs | null>(null);
+  const intervalLabelsRef = ref<string[] | null>(null);
+  const intervalSiteRef = ref<AggregatedSite | null>(null);
 
-  watch(clickedRef, async () => {
+  watchEffect(async () => {
     if (
       clickedRef.value === null ||
-      configFilesRef.value === null ||
+      filesRef.value === null ||
       settingsRef.value === null ||
-      groupedFilenamesRef.value === null ||
-      groupedTimestampsRef.value === null ||
-      groupedMetasRef.value === null
+      aggregatedSitesRef.value === null ||
+      aggregatedTimestampsRef.value === null ||
+      aggregatedLabelsRef.value === null
     ) {
       return;
     }
 
-    const pointIndex = clickedRef.value;
-    const [fileIndex, groupIndex] = convertPointIndex(pointIndex);
-    fileIndexRef.value = fileIndex;
-    groupIndexRef.value = groupIndex;
+    const intervalIndex = clickedRef.value;
+    const timestamp = aggregatedTimestampsRef.value[intervalIndex];
 
-    filenameRef.value = configFilesRef.value[fileIndex].name;
-
-    const timestamp = groupedTimestampsRef.value[pointIndex];
-
-    dateRef.value = convertTimestampToDate(
+    intervalDateRef.value = convertTimestampToDate(
       timestamp,
       settingsRef.value.timezone,
     );
 
-    metasRef.value = groupedMetasRef.value[pointIndex];
+    intervalLabelsRef.value = aggregatedLabelsRef.value[intervalIndex];
+    intervalSiteRef.value = aggregatedSitesRef.value[intervalIndex];
   });
 
   return {
-    fileIndexRef: fileIndexRef,
-    groupIndexRef: groupIndexRef,
-    filenameRef: filenameRef,
-    dateRef: dateRef,
-    metasRef: metasRef,
+    intervalDateRef: intervalDateRef,
+    intervalLabelsRef: intervalLabelsRef,
+    intervalSiteRef: intervalSiteRef,
   };
 }

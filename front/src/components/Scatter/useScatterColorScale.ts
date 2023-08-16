@@ -1,21 +1,18 @@
 import chroma, {type Color, type Scale} from 'chroma-js';
-import {configFilesRef} from 'src/hooks/useConfigFiles';
-import {groupCountsByPointIndexesRef} from 'src/hooks/useStorageGroupCountsByPointIndexes';
-import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
+import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
+import {filesRef} from 'src/hooks/useFiles';
 import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {computed, reactive, watchEffect} from 'vue';
+
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
 import {useColorByDay} from '../Colors/useColorByDay';
-import {useColorByFileIndex} from '../Colors/useColorByFileIndex';
-import {useColorByGroupIndex} from '../Colors/useColorByGroupIndex';
 import {useColorByMeta} from '../Colors/useColorByMeta';
 import {useColorByOneHour} from '../Colors/useColorByOneHour';
 import {useColorByPointIndex} from '../Colors/useColorByPointIndex';
 import {useColorByTenMinutes} from '../Colors/useColorByTenMinutes';
-import {pointIndexesRef} from './usePointIndexes';
 
 interface AlphaLowRef {
   value: number;
@@ -30,7 +27,7 @@ interface AlphaHighRef {
 }
 
 export const alphaHighRef = reactive<AlphaHighRef>({
-  value: 0.3,
+  value: 0.8,
 });
 
 interface ColorScaleRef {
@@ -57,8 +54,6 @@ export const nightColor = chroma('blue');
 
 export function useScatterColorScale() {
   const {getColorByPointIndex} = useColorByPointIndex();
-  const {getColorByFileIndex} = useColorByFileIndex();
-  const {getColorByGroupIndex} = useColorByGroupIndex();
   const {getColorByOneHour} = useColorByOneHour();
   const {getColorByTenMinutes} = useColorByTenMinutes();
   const {getColorByDay} = useColorByDay();
@@ -67,51 +62,47 @@ export function useScatterColorScale() {
 
   const readColorScale = () => {
     if (
-      pointIndexesRef.value === null ||
       metaPropertiesAsColorTypesRef.value === null ||
-      configFilesRef.value === null ||
-      groupedTimestampsRef.value === null ||
-      groupedMetasRef.value === null ||
-      metaSetsRef.value === null ||
-      groupCountsByPointIndexesRef.value === null
+      filesRef.value === null ||
+      aggregatedTimestampsRef.value === null ||
+      aggregatedLabelsRef.value === null ||
+      metaSetsRef.value === null
     ) {
       return;
     }
 
-    const pointsCount = pointIndexesRef.value.length;
-    const filesCount = configFilesRef.value.length;
+    const intervalsCount = aggregatedTimestampsRef.value.length;
 
     const colorScale = [];
     const colorType = colorsStore.colorType;
 
-    for (let pointIndex = 0; pointIndex < pointsCount; ++pointIndex) {
+    for (
+      let intervalIndex = 0;
+      intervalIndex < intervalsCount;
+      intervalIndex += 1
+    ) {
       let color = '';
-      const groupCount = groupCountsByPointIndexesRef.value[pointIndex];
 
       if (colorType === 'pointIndex') {
-        color = getColorByPointIndex(pointIndex, pointsCount);
-      } else if (colorType === 'fileIndex') {
-        color = getColorByFileIndex(pointIndex, filesCount);
-      } else if (colorType === 'groupIndex') {
-        color = getColorByGroupIndex(pointIndex, groupCount);
+        color = getColorByPointIndex(intervalIndex, intervalsCount);
       } else if (colorType === 'by1h') {
-        const timestamp = groupedTimestampsRef.value[pointIndex];
+        const timestamp = aggregatedTimestampsRef.value[intervalIndex];
         color = getColorByOneHour(timestamp);
       } else if (colorType === 'by10min') {
-        const timestamp = groupedTimestampsRef.value[pointIndex];
+        const timestamp = aggregatedTimestampsRef.value[intervalIndex];
         color = getColorByTenMinutes(timestamp);
       } else if (colorType === 'isDay') {
-        const timestamp = groupedTimestampsRef.value[pointIndex];
+        const timestamp = aggregatedTimestampsRef.value[intervalIndex];
         color = getColorByDay(timestamp);
       } else if (colorType === 'cycleDay') {
-        const timestamp = groupedTimestampsRef.value[pointIndex];
+        const timestamp = aggregatedTimestampsRef.value[intervalIndex];
         color = getColorByCyclingDay(timestamp);
       } else if (metaPropertiesAsColorTypesRef.value.includes(colorType)) {
         color = getColorByMeta(
-          pointIndex,
+          intervalIndex,
           colorType,
           metaPropertiesAsColorTypesRef.value,
-          groupedMetasRef.value,
+          aggregatedLabelsRef.value,
           metaSetsRef.value,
         );
       }

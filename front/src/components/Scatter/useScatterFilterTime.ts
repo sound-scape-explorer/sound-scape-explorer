@@ -1,7 +1,7 @@
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {timeStore} from '../Time/timeStore';
+import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {reactive} from 'vue';
-import {pointIndexesRef} from './usePointIndexes';
+
+import {timeStore} from '../Time/timeStore';
 
 interface PointsFilteredByTimeRef {
   value: boolean[] | null;
@@ -17,12 +17,12 @@ export function useScatterFilterTime() {
       return true;
     }
 
-    if (groupedTimestampsRef.value === null) {
+    if (aggregatedTimestampsRef.value === null) {
       return false;
     }
 
     // Unix time in seconds
-    const timestamp = groupedTimestampsRef.value[index] / 1000;
+    const timestamp = aggregatedTimestampsRef.value[index] / 1000;
 
     const start = timeStore.value;
     const duration = timeStore.duration;
@@ -32,18 +32,18 @@ export function useScatterFilterTime() {
   };
 
   const filterByTime = (): void => {
-    if (pointIndexesRef.value === null) {
+    if (aggregatedTimestampsRef.value === null) {
       return;
     }
 
     const pointsFilteredByTime = [];
 
     for (
-      let pointIndex = 0;
-      pointIndex < pointIndexesRef.value.length;
-      ++pointIndex
+      let intervalIndex = 0;
+      intervalIndex < aggregatedTimestampsRef.value.length;
+      intervalIndex += 1
     ) {
-      const isVisible = isVisibleByTime(pointIndex);
+      const isVisible = isVisibleByTime(intervalIndex);
       pointsFilteredByTime.push(!isVisible);
     }
 

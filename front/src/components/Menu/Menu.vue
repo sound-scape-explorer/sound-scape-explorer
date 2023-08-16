@@ -15,12 +15,13 @@ import {
   ListOutline,
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
+import {useStorageFile} from 'src/hooks/useStorageFile';
+
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
-import {useFile} from 'src/hooks/useFile';
 
-const {isFileRef} = useFile();
+const {isStorageFileRef} = useStorageFile();
 
 /**
  * Handlers
@@ -49,6 +50,8 @@ const toggleMatrices = () =>
   (appDraggablesStore.matrices = !appDraggablesStore.matrices);
 const togglePairings = () =>
   (appDraggablesStore.pairings = !appDraggablesStore.pairings);
+const toggleTrajectories = () =>
+  (appDraggablesStore.trajectories = !appDraggablesStore.trajectories);
 
 onKeyPressed(KeyboardShortcut.import, toggleImport);
 onKeyPressed(KeyboardShortcut.settings, toggleSettings);
@@ -63,6 +66,7 @@ onKeyPressed(KeyboardShortcut.details, toggleDetails);
 onKeyPressed(KeyboardShortcut.volumes, toggleVolumes);
 onKeyPressed(KeyboardShortcut.matrices, toggleMatrices);
 onKeyPressed(KeyboardShortcut.pairings, togglePairings);
+onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
 </script>
 
 <template>
@@ -93,14 +97,14 @@ onKeyPressed(KeyboardShortcut.pairings, togglePairings);
 
       <div
         class="right"
-        v-if="isFileRef"
+        v-if="isStorageFileRef"
       >
         <!-- placeholder -->
       </div>
     </div>
 
     <div
-      v-if="isFileRef"
+      v-if="isStorageFileRef"
       class="column"
     >
       <MenuItem
@@ -108,6 +112,13 @@ onKeyPressed(KeyboardShortcut.pairings, togglePairings);
         text="Selection"
       >
         <eye-outline />
+      </MenuItem>
+
+      <MenuItem
+        draggable-key="trajectories"
+        text="Trajectories"
+      >
+        <analytics-outline />
       </MenuItem>
 
       <MenuItem

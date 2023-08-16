@@ -7,12 +7,11 @@ import Plotly, {
 } from 'plotly.js-dist-min';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
-import {computed, ref, watch} from 'vue';
+import {computed, onMounted, ref, watchEffect} from 'vue';
+
 import {useScatterClick} from './useScatterClick';
 import {
   metaIndexRef,
-  newScatterColorScaleRef,
-  pointIndexGroupsRef,
   scatterTracesRef,
   useScatterTraces,
 } from './useScatterTraces';
@@ -24,7 +23,6 @@ useScatterTraces();
 
 const handlePlotlyClick = (data: PlotMouseEvent) => {
   if (
-    pointIndexGroupsRef.value === null ||
     metaPropertiesRef.value === null ||
     metaSetsRef.value === null ||
     metaIndexRef.value === null
@@ -33,14 +31,11 @@ const handlePlotlyClick = (data: PlotMouseEvent) => {
   }
 
   // @ts-expect-error: 2339
-  const metaValue = data.points[0].fullData.name;
-  const metaSetIndex = metaSetsRef.value[metaIndexRef.value].indexOf(metaValue);
-  const pointNumber = data.points[0].pointNumber;
-  const pointIndex = pointIndexGroupsRef.value[metaSetIndex][pointNumber];
-  handleClick(pointIndex);
+  const intervalIndex = data.points[0].fullData.index;
+  handleClick(intervalIndex);
 };
 
-const layoutRef = computed<Partial<Layout>>(() => {
+const layoutRef = computed<Partial<Layout> | null>(() => {
   return {
     // title: 'hello',
     margin: {
@@ -55,8 +50,7 @@ const layoutRef = computed<Partial<Layout>>(() => {
       scaleanchor: 'x',
       scaleratio: 1,
     },
-    uirevision: 1,
-    colorway: newScatterColorScaleRef.value,
+    // uirevision: 'true',
     showlegend: false,
   };
 });
@@ -66,14 +60,49 @@ const config: Partial<Config> = {
   responsive: true,
 };
 
-const render = async () => {
-  if (scatterTracesRef.value === null || divRef.value === null) {
+const isFirstRenderedRef = ref<boolean>(false);
+const renderInitial = async () => {
+  if (
+    divRef.value === null ||
+    layoutRef.value === null ||
+    isFirstRenderedRef.value === true
+  ) {
     return;
   }
 
-  console.log('render');
+  await Plotly.newPlot(divRef.value, [], layoutRef.value, config);
+  isFirstRenderedRef.value = true;
+  console.log('first render');
+};
 
-  // TODO: Handle first draw then react
+onMounted(renderInitial);
+
+const isAttachedRef = ref<boolean>(false);
+const attachListeners = () => {
+  if (
+    divRef.value === null ||
+    isFirstRenderedRef.value === false ||
+    isAttachedRef.value === true
+  ) {
+    return;
+  }
+
+  divRef.value.on('plotly_click', handlePlotlyClick);
+  isAttachedRef.value = true;
+};
+
+watchEffect(attachListeners);
+
+const render = async () => {
+  if (
+    isFirstRenderedRef.value === false ||
+    divRef.value === null ||
+    layoutRef.value === null ||
+    scatterTracesRef.value === null
+  ) {
+    return;
+  }
+
   await Plotly.react(
     divRef.value,
     scatterTracesRef.value,
@@ -81,11 +110,10 @@ const render = async () => {
     config,
   );
 
-  // TODO: Attach event listeners on first draw
-  divRef.value.on('plotly_click', handlePlotlyClick);
+  console.log('render');
 };
 
-watch(scatterTracesRef, render);
+watchEffect(render);
 </script>
 
 <template>

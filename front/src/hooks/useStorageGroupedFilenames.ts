@@ -1,7 +1,8 @@
 import {reactive, watchEffect} from 'vue';
+
+import {integrationRef} from './useIntegrations';
+import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
-import {fileRef} from './useFile';
-import {configIntegrationRef} from './useConfigIntegrations';
 
 interface GroupedFilenamesRef {
   value: string[] | null;
@@ -15,16 +16,16 @@ export function useStorageGroupedFilenames() {
   const readGroupedFilenames = async () => {
     if (
       workerRef.value === null ||
-      fileRef.value === null ||
-      configIntegrationRef.value === null
+      storageFileRef.value === null ||
+      integrationRef.value === null
     ) {
       return;
     }
 
-    groupedFilenamesRef.value = await workerRef.value.readGroupedFilenames(
-      fileRef.value,
-      configIntegrationRef.value.duration,
-    );
+    // groupedFilenamesRef.value = await workerRef.value.readGroupedFilenames(
+    //   storageFileRef.value,
+    //   integrationRef.value.seconds,
+    // );
   };
 
   watchEffect(readGroupedFilenames);

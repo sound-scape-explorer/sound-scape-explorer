@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {NGi, NGrid, NTag} from 'naive-ui';
+
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 
@@ -39,6 +40,7 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.settings, name: 'Settings'},
   {key: KeyboardShortcut.help, name: 'Help'},
   {key: KeyboardShortcut.selection, name: 'Selection'},
+  {key: KeyboardShortcut.trajectories, name: 'Trajectories'},
   {key: KeyboardShortcut.colors, name: 'Colors'},
   {key: KeyboardShortcut.queries, name: 'Query'},
   {key: KeyboardShortcut.time, name: 'Time'},
@@ -48,9 +50,6 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.volumes, name: 'Volumes'},
   {key: KeyboardShortcut.matrices, name: 'Matrices'},
   {key: KeyboardShortcut.pairings, name: 'Pairings'},
-  {key: KeyboardShortcut.scatterReset, name: 'Scatter: Reset'},
-  {key: KeyboardShortcut.scatterPrevious, name: 'Scatter: Previous'},
-  {key: KeyboardShortcut.scatterNext, name: 'Scatter: Next'},
   {key: KeyboardShortcut.timePlayPause, name: 'Time: Play / Pause'},
   {key: KeyboardShortcut.timeBackward, name: 'Time: Next'},
   {key: KeyboardShortcut.timeForward, name: 'Time: Previous'},

@@ -16,8 +16,8 @@ import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
 import {PLAYBACK_RATE} from 'src/constants';
 import {audioHostRef} from 'src/hooks/useAudioHost';
-import {configBandRef} from 'src/hooks/useConfigBands';
-import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
+import {bandRef} from 'src/hooks/useBands';
+import {integrationRef} from 'src/hooks/useIntegrations';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {computed, onUnmounted, ref, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
@@ -56,7 +56,7 @@ const audioContextRef = computed<AudioContext | null>(() => {
 const wsRef = computed(() => {
   if (
     audioContextRef.value === null ||
-    configBandRef.value === null ||
+    bandRef.value === null ||
     waveformRef.value === null ||
     spectrogramRef.value === null
   ) {
@@ -77,8 +77,8 @@ const wsRef = computed(() => {
         colorMap: colorsRef.value,
         height: 192,
         fftSamples: FFT_SIZE.default,
-        frequencyMin: configBandRef.value.low,
-        frequencyMax: configBandRef.value.high,
+        frequencyMin: bandRef.value.low,
+        frequencyMax: bandRef.value.high,
       }),
       Cursor.create({
         showTime: true,
@@ -134,7 +134,7 @@ function close() {
 async function load() {
   if (
     clickedRef.value === null ||
-    configIntegrationRef.value === null ||
+    integrationRef.value === null ||
     groupIndexRef.value === null ||
     srcRef.value === null ||
     wsRef.value === null ||
@@ -150,7 +150,7 @@ async function load() {
       arrayBuffer,
     );
 
-    const seconds = configIntegrationRef.value.duration;
+    const {seconds} = integrationRef.value;
     const start = groupIndexRef.value * seconds * 1000;
     const end = start + seconds * 1000;
 
@@ -187,7 +187,7 @@ function handleAudioEnd() {
 function handleAudioReady() {
   if (
     wsRef.value === null ||
-    configBandRef.value === null ||
+    bandRef.value === null ||
     audioContextRef.value === null
   ) {
     return;
@@ -199,12 +199,12 @@ function handleAudioReady() {
   const lowShelf = ac.createBiquadFilter();
   lowShelf.type = 'lowshelf';
   lowShelf.gain.value = -60;
-  lowShelf.frequency.value = configBandRef.value.low;
+  lowShelf.frequency.value = bandRef.value.low;
 
   const highShelf = ac.createBiquadFilter();
   highShelf.type = 'highshelf';
   highShelf.gain.value = -60;
-  highShelf.frequency.value = configBandRef.value.high;
+  highShelf.frequency.value = bandRef.value.high;
 
   wsRef.value.backend.setFilters([lowShelf, highShelf]);
 

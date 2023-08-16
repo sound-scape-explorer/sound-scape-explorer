@@ -2,10 +2,11 @@
 import {ColorWandOutline} from '@vicons/ionicons5';
 import {NIcon, NInput} from 'naive-ui';
 import {ref, watch} from 'vue';
+
 import {useTimeout} from '../../hooks/useTimeout';
 import {getArraysIntersection} from '../../utils/get-arrays-intersection';
+import {scatterReadyRef} from '../Scatter/useScatterStatus';
 import {queryStore} from './queryStore';
-import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 const input = ref<string>('');
 

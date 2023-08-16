@@ -4,7 +4,8 @@ import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
-import {scatterReadyRef} from '../Scatter/useScatterReady';
+
+import {scatterReadyRef} from '../Scatter/useScatterStatus';
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
 

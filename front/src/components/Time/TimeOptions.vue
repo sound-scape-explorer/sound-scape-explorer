@@ -19,10 +19,11 @@ import {
 import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
 import {useDate} from 'src/hooks/useDate';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {watchEffect, type ComputedRef} from 'vue';
+import {type ComputedRef, watchEffect} from 'vue';
 import {computed, ref, watch} from 'vue';
+
+import {scatterReadyRef} from '../Scatter/useScatterStatus';
 import {timeStore} from './timeStore';
-import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 const {convertTimestampToDate} = useDate();
 

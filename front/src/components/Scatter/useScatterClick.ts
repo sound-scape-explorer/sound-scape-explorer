@@ -1,4 +1,5 @@
 import {reactive} from 'vue';
+
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {settingsStore} from '../Settings/settingsStore';
 
@@ -25,10 +26,6 @@ export function useScatterClick() {
     if (settingsStore.autoOpenOnScatterClick) {
       if (appDraggablesStore.details === false) {
         appDraggablesStore.details = true;
-      }
-
-      if (appDraggablesStore.audio === false) {
-        appDraggablesStore.audio = true;
       }
     }
   };

@@ -2,7 +2,6 @@
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import SelectionExport from './SelectionExport.vue';
 import SelectionReducer from './SelectionReducer.vue';
-import SelectionTrajectory from './SelectionTrajectory.vue';
 import SelectionScreenshot from './SelectionScreenshot.vue';
 </script>
 
@@ -10,7 +9,6 @@ import SelectionScreenshot from './SelectionScreenshot.vue';
   <AppDraggable draggable-key="selection">
     <div class="container">
       <SelectionReducer />
-      <SelectionTrajectory />
       <SelectionScreenshot />
       <SelectionExport />
     </div>

@@ -1,44 +1,52 @@
 <script lang="ts" setup="">
 import {NGi, NGrid, NTag} from 'naive-ui';
-import {configBandRef} from 'src/hooks/useConfigBands';
-import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
+import {bandRef} from 'src/hooks/useBands';
+import {integrationRef} from 'src/hooks/useIntegrations';
 import {indicatorsRef} from 'src/hooks/useStorageIndicators';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {clickedRef} from '.././Scatter/useScatterClick';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from './useDetails';
+import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 
-const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
-  useDetails();
+const {intervalDateRef, intervalLabelsRef, intervalSiteRef} = useDetails();
 </script>
 
 <template>
   <AppDraggable draggable-key="details">
     <div class="file container">
-      <div class="title">Selected point index</div>
+      <div class="title">Selected interval index</div>
       <span class="file index">{{ clickedRef.value ?? 'none' }}</span>
     </div>
 
     <div class="file container">
-      <div class="title">Selected file index</div>
-      <span class="file index">{{ fileIndexRef ?? 'none' }}</span>
+      <div class="title">Site</div>
+      <span class="file index">{{ intervalSiteRef?.site ?? '' }}</span>
     </div>
 
     <div class="file container">
-      <div class="title">Selected group index</div>
-      <span class="file index">{{ groupIndexRef ?? 'none' }}</span>
+      <div class="title">File indexes</div>
+      <span class="file index">{{ intervalSiteRef?.fileIndexes ?? '' }}</span>
     </div>
 
-    <div class="file-details">
-      <span class="src">{{ filenameRef }}</span>
-      <span>
-        {{ configBandRef.value?.name }}
-      </span>
-      <span>
-        {{ dateRef }}
-      </span>
-      <span>{{ configIntegrationRef.value?.name }}</span>
+    <div class="file container">
+      <div class="title">Timestamp</div>
+      <span class="file index">{{ intervalDateRef }}</span>
     </div>
+
+    <div class="file container">
+      <div class="title">Band</div>
+      <span class="file index">{{ bandRef.value?.name ?? '' }}</span>
+    </div>
+
+    <div class="file container">
+      <div class="title">Integration</div>
+      <span class="file index">{{ integrationRef.value?.name ?? '' }}</span>
+    </div>
+
+    <div class="separator" />
+
+    <div class="title">Labels</div>
 
     <div
       v-if="clickedRef !== null"
@@ -60,26 +68,29 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
             {{ metaPropertiesRef.value?.[index] }}
           </n-tag>
 
-          {{ metasRef?.[index] }}
+          {{ intervalLabelsRef?.[index] }}
         </n-gi>
       </n-grid>
 
-      <div class="title">Indicators</div>
+      <div class="separator" />
+
+      <div class="title">Extracted Data</div>
 
       <n-grid
         :cols="2"
         class="grid"
       >
-        <n-gi v-for="indicator in indicatorsRef.value">
+        <n-gi v-for="ex in nonNnExtractorsRef.value">
           <n-tag
             :bordered="false"
             class="tag"
             size="small"
           >
-            {{ indicator.name }}
+            {{ ex.name }}
           </n-tag>
 
-          {{ indicator.values[clickedRef.value ?? 0] }}
+          <!-- TODO: Add -->
+          <!-- {{ indicator.values[clickedRef.value ?? 0] }} -->
         </n-gi>
       </n-grid>
     </div>
@@ -126,5 +137,9 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
 
 .src {
   overflow: hidden;
+}
+
+.separator {
+  height: 1rem;
 }
 </style>

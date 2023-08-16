@@ -1,5 +1,5 @@
 import {ref, watch} from 'vue';
-import {fileRef} from './useFile';
+import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
 type StorageFilesMetas = string[][];
@@ -7,12 +7,14 @@ type StorageFilesMetas = string[][];
 export function useStorageFilesMetas() {
   const filesMetasRef = ref<StorageFilesMetas | null>(null);
 
-  watch([workerRef, fileRef], async () => {
-    if (fileRef.value === null || workerRef.value === null) {
+  watch([workerRef, storageFileRef], async () => {
+    if (storageFileRef.value === null || workerRef.value === null) {
       return;
     }
 
-    filesMetasRef.value = await workerRef.value.readFilesMetas(fileRef.value);
+    filesMetasRef.value = await workerRef.value.readFilesMetas(
+      storageFileRef.value,
+    );
   });
 
   return {

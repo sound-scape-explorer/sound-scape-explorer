@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
 import {computed} from 'vue';
+
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
+import {scatterReadyRef} from '../Scatter/useScatterStatus';
 import {colorsStore} from './colorsStore';
-import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 const options = ['Accent', 'Dark2', 'Spectral'];
 

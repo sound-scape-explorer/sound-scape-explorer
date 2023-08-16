@@ -1,9 +1,9 @@
 import {reactive, watchEffect} from 'vue';
 import {workerRef} from './useWorker';
 import type {StorageVolume} from './useStorageVolume';
-import {fileRef} from './useFile';
-import {configBandRef} from './useConfigBands';
-import {configIntegrationRef} from './useConfigIntegrations';
+import {storageFileRef} from './useStorageFile';
+import {bandRef} from './useBands';
+import {integrationRef} from './useIntegrations';
 
 interface VolumesRef {
   value: StorageVolume[] | null;
@@ -17,18 +17,18 @@ export function useStorageVolumes() {
   const readVolumes = async () => {
     if (
       workerRef.value === null ||
-      fileRef.value === null ||
-      configBandRef.value === null ||
-      configIntegrationRef.value === null
+      storageFileRef.value === null ||
+      bandRef.value === null ||
+      integrationRef.value === null
     ) {
       return;
     }
 
-    volumesRef.value = await workerRef.value.readVolumes(
-      fileRef.value,
-      configBandRef.value.name,
-      configIntegrationRef.value.duration,
-    );
+    // volumesRef.value = await workerRef.value.readVolumes(
+    //   storageFileRef.value,
+    //   bandRef.value.name,
+    //   integrationRef.value.seconds,
+    // );
   };
 
   watchEffect(readVolumes);

@@ -1,12 +1,15 @@
 import type {Data} from 'plotly.js-dist-min';
-import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
+import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
+import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
-import {reducedFeaturesRef} from 'src/hooks/useStorageReducedFeatures';
-import {trajectoriesRef} from 'src/hooks/useStorageTrajectories';
+import {tracedFusedRef, tracedRef} from 'src/hooks/useTraced';
+import {interpolateArray} from 'src/utils/interpolate-array';
+import {sumArraysIndexWise} from 'src/utils/sum-arrays-index-wise';
 import {reactive, watchEffect} from 'vue';
+
 import {colorsStore} from '../Colors/colorsStore';
-import {chromaScaleRef} from './useScatterColorScale';
+import {colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
@@ -26,65 +29,7 @@ export const metaIndexRef = reactive<MetaIndexRef>({
   value: 0,
 });
 
-interface PointIndexGroupsRef {
-  value: number[][] | null;
-}
-
-export const pointIndexGroupsRef = reactive<PointIndexGroupsRef>({
-  value: null,
-});
-
-interface NewScatterColorScaleRef {
-  value: string[];
-}
-
-export const newScatterColorScaleRef = reactive<NewScatterColorScaleRef>({
-  value: [],
-});
-
 export function useScatterTraces() {
-  watchEffect(() => {
-    if (pointIndexGroupsRef.value === null) {
-      return [];
-    }
-
-    newScatterColorScaleRef.value = chromaScaleRef.value.colors(
-      pointIndexGroupsRef.value.length,
-    );
-  });
-
-  // Sorting point indexes by the selected meta value
-  const parsePointIndexGroups = () => {
-    if (
-      reducedFeaturesRef.value === null ||
-      groupedMetasRef.value === null ||
-      metaPropertiesRef.value === null ||
-      metaSetsRef.value === null ||
-      metaIndexRef.value === null
-    ) {
-      return;
-    }
-
-    const metaIndex = metaIndexRef.value;
-    const metaSet = metaSetsRef.value[metaIndex];
-    const pointIndexGroups = [];
-
-    for (const metaValue of metaSet) {
-      const pointIndexes = groupedMetasRef.value
-        .map((metaValues, pointIndex) =>
-          metaValues[metaIndex] === metaValue ? pointIndex : null,
-        )
-        .filter((p) => p !== null) as number[];
-
-      pointIndexGroups.push(pointIndexes);
-    }
-
-    pointIndexGroupsRef.value = pointIndexGroups;
-    console.log(pointIndexGroupsRef.value);
-  };
-
-  watchEffect(parsePointIndexGroups);
-
   watchEffect(() => {
     if (
       metaPropertiesRef.value === null ||
@@ -105,10 +50,12 @@ export function useScatterTraces() {
 
   const parseFeaturesFromPointIndexGroups = () => {
     if (
+      metaPropertiesRef.value === null ||
       metaSetsRef.value === null ||
       metaIndexRef.value === null ||
       reducedFeaturesRef.value === null ||
-      pointIndexGroupsRef.value === null ||
+      aggregatedLabelsRef.value === null ||
+      colorScaleRef.value === null ||
       pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null
     ) {
@@ -116,60 +63,127 @@ export function useScatterTraces() {
     }
 
     const traces: Data[] = [];
-    let index = 0;
 
     const isThreeDimensional =
       typeof reducedFeaturesRef.value[0]?.[2] !== 'undefined';
 
     const scatterType = isThreeDimensional ? 'scatter3d' : 'scatter';
 
-    for (const pointIndexes of pointIndexGroupsRef.value) {
-      const selectedFeatures = [];
+    for (
+      let intervalIndex = 0;
+      intervalIndex < reducedFeaturesRef.value.length;
+      intervalIndex += 1
+    ) {
+      if (
+        pointsFilteredByMetaRef.value[intervalIndex] ||
+        pointsFilteredByTimeRef.value[intervalIndex]
+      ) {
+        continue;
+      }
 
-      for (const pointIndex of pointIndexes) {
-        if (
-          pointsFilteredByMetaRef.value[pointIndex] ||
-          pointsFilteredByTimeRef.value[pointIndex]
-        ) {
-          continue;
-        }
+      const features = reducedFeaturesRef.value[intervalIndex];
 
-        selectedFeatures.push(reducedFeaturesRef.value[pointIndex]);
+      let hoverTemplate = '';
+
+      for (const [
+        propertyIndex,
+        property,
+      ] of metaPropertiesRef.value.entries()) {
+        const lineBreak = propertyIndex === 0 ? '' : '<br>';
+        hoverTemplate += `${lineBreak}${property} <b>${aggregatedLabelsRef.value[intervalIndex][propertyIndex]}</b>`;
       }
 
       const trace: Data = {
-        x: selectedFeatures.map((feature) => feature[0]),
-        y: selectedFeatures.map((feature) => feature[1]),
-        z: isThreeDimensional
-          ? selectedFeatures.map((feature) => feature[2])
-          : undefined,
-        name: metaSetsRef.value[metaIndexRef.value][index],
-        hovertemplate: metaSetsRef.value[metaIndexRef.value][index],
+        x: [features[0]],
+        y: [features[1]],
+        z: isThreeDimensional ? [features[2]] : undefined,
+        name: `interval: ${intervalIndex}`,
+        hovertemplate: hoverTemplate,
         type: scatterType,
         mode: 'markers',
         marker: {
-          size: 2,
+          size: 4,
           symbol: 'circle',
+          color: colorScaleRef.value[intervalIndex],
         },
       } as Data;
 
       traces.push(trace);
-      index += 1;
     }
 
-    if (trajectoriesRef.value !== null) {
-      const trace: Data = {
-        x: trajectoriesRef.value.map((coordinates) => coordinates[0]),
-        y: trajectoriesRef.value.map((coordinates) => coordinates[1]),
-        z: isThreeDimensional
-          ? trajectoriesRef.value.map((coordinates) => coordinates[2])
-          : undefined,
-        name: 'trajectories',
-        type: scatterType,
-        mode: 'lines',
-      };
+    if (tracedRef.value.length > 0) {
+      if (tracedFusedRef.value === true) {
+        let axisLength = -1;
+        interface IData {
+          x: number[];
+          y: number[];
+          z: number[];
+        }
 
-      traces.push(trace);
+        const datas: IData[] = [];
+
+        for (const traced of tracedRef.value) {
+          if (traced.data.length > axisLength) {
+            axisLength = traced.data.length;
+          }
+        }
+
+        for (const traced of tracedRef.value) {
+          const data = {} as IData;
+          data.x = traced.data.map((coords) => coords[0]);
+          data.y = traced.data.map((coords) => coords[1]);
+          if (isThreeDimensional) {
+            data.z = traced.data.map((coords) => coords[2]);
+          }
+
+          if (data.x.length < axisLength) {
+            data.x = interpolateArray(data.x, axisLength);
+            data.y = interpolateArray(data.y, axisLength);
+            if (isThreeDimensional) {
+              data.z = interpolateArray(data.z, axisLength);
+            }
+          }
+
+          datas.push(data);
+        }
+
+        const averagedTrace: Data = {
+          x: sumArraysIndexWise({
+            arrays: datas.map((data) => data.x),
+            doAveraging: true,
+          }),
+          y: sumArraysIndexWise({
+            arrays: datas.map((data) => data.y),
+            doAveraging: true,
+          }),
+          z: isThreeDimensional
+            ? sumArraysIndexWise({
+              arrays: datas.map((data) => data.z),
+              doAveraging: true,
+            })
+            : undefined,
+          name: 'Averaged Trace',
+          type: scatterType,
+          mode: 'lines',
+        };
+
+        traces.push(averagedTrace);
+      } else {
+        for (const traced of tracedRef.value) {
+          const trace: Data = {
+            x: traced.data.map((coordinates) => coordinates[0]),
+            y: traced.data.map((coordinates) => coordinates[1]),
+            z: isThreeDimensional
+              ? traced.data.map((coordinates) => coordinates[2])
+              : undefined,
+            name: traced.trajectory.name,
+            type: scatterType,
+            mode: 'lines',
+          };
+
+          traces.push(trace);
+        }
+      }
     }
 
     scatterTracesRef.value = traces;

@@ -1,13 +1,13 @@
 <script lang="ts" setup="">
 import {ImageOutline} from '@vicons/ionicons5';
 import html2canvas from 'html2canvas';
-import {configBandRef} from 'src/hooks/useConfigBands';
-import {configIntegrationRef} from 'src/hooks/useConfigIntegrations';
+import {bandRef} from 'src/hooks/useBands';
+import {integrationRef} from 'src/hooks/useIntegrations';
 import AppButton from '../AppButton/AppButton.vue';
 import {computed} from 'vue';
 
 const isReadyRef = computed<boolean>(() => {
-  if (configBandRef.value === null || configIntegrationRef.value === null) {
+  if (bandRef.value === null || integrationRef.value === null) {
     return false;
   }
 
@@ -15,15 +15,15 @@ const isReadyRef = computed<boolean>(() => {
 });
 
 async function screenshot() {
-  if (configBandRef.value === null || configIntegrationRef.value === null) {
+  if (bandRef.value === null || integrationRef.value === null) {
     return;
   }
 
   const targetElement = document.body;
 
   const canvas = await html2canvas(targetElement);
-  const bandName = configBandRef.value.name;
-  const integrationSeconds = configIntegrationRef.value.duration;
+  const bandName = bandRef.value.name;
+  const integrationSeconds = integrationRef.value.seconds;
 
   canvas.style.display = 'none';
   document.body.appendChild(canvas);

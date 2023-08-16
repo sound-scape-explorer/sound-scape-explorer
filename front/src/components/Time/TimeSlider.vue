@@ -2,15 +2,16 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import {configRangesRef} from 'src/hooks/useConfigRanges';
-import {configReducerRef} from 'src/hooks/useConfigReducers';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
+import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
+import {rangesRef} from 'src/hooks/useRanges';
+import {reducerRef} from 'src/hooks/useReducers';
 import {computed, ref} from 'vue';
+
 import {SLIDER_LIMITS} from '../../constants';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';
+import {scatterReadyRef} from '../Scatter/useScatterStatus';
 import {timeStore} from './timeStore';
-import {scatterReadyRef} from '../Scatter/useScatterReady';
 
 /**
  * State
@@ -20,7 +21,7 @@ const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
 const sliders = computed<Slider[]>(() => {
-  if (configRangesRef.value === null || configReducerRef.value === null) {
+  if (rangesRef.value === null || reducerRef.value === null) {
     return [];
   }
 
@@ -37,7 +38,7 @@ const sliders = computed<Slider[]>(() => {
 
   const sliders: Slider[] = [];
 
-  for (const range of configRangesRef.value) {
+  for (const range of rangesRef.value) {
     const timeStart = dayjs(range.start).unix();
     const timeEnd = dayjs(range.end).unix();
     const timeBetween = Math.floor(timeStart + 0.5 * (timeEnd - timeStart));
@@ -81,11 +82,11 @@ interface Interest {
 }
 
 const interests = computed<Interest[]>(() => {
-  if (groupedTimestampsRef.value === null) {
+  if (aggregatedTimestampsRef.value === null) {
     return [];
   }
 
-  const allTimestamps = groupedTimestampsRef.value.map((t) => t / 1000);
+  const allTimestamps = aggregatedTimestampsRef.value.map((t) => t / 1000);
 
   const interests: Interest[] = [];
   const ignoreDecimalsFactor = 1 / timeStore.duration;

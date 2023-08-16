@@ -1,7 +1,8 @@
+import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
+import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {reactive} from 'vue';
-import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
+
 import {metaSelectionStore} from '../Meta/metaSelectionStore';
-import {pointIndexesRef} from './usePointIndexes';
 
 interface PointsFilteredByMetaRef {
   value: boolean[] | null;
@@ -16,14 +17,14 @@ export function useScatterFilterMeta() {
   const isVisibleByMeta = (index: number): boolean => {
     let isVisible = true;
 
-    if (groupedMetasRef.value === null) {
+    if (aggregatedLabelsRef.value === null) {
       return false;
     }
 
-    const metaValues = groupedMetasRef.value[index];
+    const labelValues = aggregatedLabelsRef.value[index];
 
     const metaSelectedIndexes = Object.keys(metaSelectionStore.selection);
-    const metaIndexes = Object.keys(metaValues);
+    const metaIndexes = Object.keys(labelValues);
 
     for (let i = 0; i < metaSelectedIndexes.length; ++i) {
       // item is already not visible
@@ -41,7 +42,7 @@ export function useScatterFilterMeta() {
       }
 
       const metaIndex = Number(metaIndexes[i]);
-      const meta = metaValues[metaIndex];
+      const meta = labelValues[metaIndex];
       isVisible = metaSelectionValues.includes(meta);
     }
 
@@ -49,18 +50,18 @@ export function useScatterFilterMeta() {
   };
 
   const filterByMeta = () => {
-    if (pointIndexesRef.value === null) {
+    if (aggregatedTimestampsRef.value === null) {
       return;
     }
 
     const pointsFilteredByMeta = [];
 
     for (
-      let pointIndex = 0;
-      pointIndex < pointIndexesRef.value.length;
-      ++pointIndex
+      let intervalIndex = 0;
+      intervalIndex < aggregatedTimestampsRef.value.length;
+      ++intervalIndex
     ) {
-      const isVisible = isVisibleByMeta(pointIndex);
+      const isVisible = isVisibleByMeta(intervalIndex);
       pointsFilteredByMeta.push(!isVisible);
     }
 

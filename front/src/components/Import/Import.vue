@@ -3,10 +3,10 @@ import {NButton} from 'naive-ui';
 import {ref} from 'vue';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import ImportDetails from './ImportDetails.vue';
-import {useFile} from 'src/hooks/useFile';
+import {useStorageFile} from 'src/hooks/useStorageFile';
 
 const inputRef = ref<HTMLInputElement>();
-const {setFile, isFileRef, resetFile} = useFile();
+const {setFile, isStorageFileRef, resetFile} = useStorageFile();
 
 const handleChange = () => {
   const file = inputRef.value?.files?.[0];
@@ -36,7 +36,7 @@ const handleChange = () => {
       </n-button>
     </div>
 
-    <ImportDetails v-if="isFileRef" />
+    <ImportDetails v-if="isStorageFileRef" />
   </AppDraggable>
 </template>
 

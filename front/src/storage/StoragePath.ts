@@ -52,8 +52,8 @@ export enum StoragePath {
   mean_distances_matrix = '/mean_distances_matrix',
 
   // Sites
-  site_names = '/site_names',
-  site_file_indexes = '/site_file_indexes',
+  sites_names = '/sites/names',
+  sites_file_indexes = '/sites/file_indexes',
 
   // Extractors
   extractors_names = '/extractors/names',
