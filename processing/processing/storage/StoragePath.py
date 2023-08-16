@@ -438,6 +438,7 @@ class StoragePath(Enum):
         Dataset
     """
 
+    # TODO: Store paths instead
     sites_file_indexes = "/sites/file_indexes"
     """The file indexes for each site.
 
@@ -450,143 +451,13 @@ class StoragePath(Enum):
         Dataset
     """
 
-    ################
-    # Data/Grouped #
-    ################
-
-    group_features = "/group_features"
-    """The group features for each file.
-
-    The group contains one dataset per band, integration value and file.
-    Each dataset is named after the file index.
-    Each row contains an array (columns) of 128 floats.
-
-    Example:
-        /grouped_features/{band}/{integration}/{file_index}
-
-    Type:
-        Group
-    """
-
-    group_timestamps = "/group_timestamps"
-    """The group timestamps for each file.
-
-    The group contains one dataset per band and integration value.
-    Each dataset is named after the integration value.
-    Each row contains an integer.
-    Each integer is UNIX timestamp in milliseconds.
-
-    Example:
-        /grouped_timestamps/{band}/{integration}
-
-    Type:
-        Group
-    """
-
-    group_site_index = "/group_site_index"
-    """The site index for each group.
-
-    Each row contains an integer.
-
-    Example:
-        /group_site_index/{band}/{integration}
-
-    Type:
-        Group
-    """
-
-    ################
-    # Data/Reduced #
-    ################
-
-    reduced_ = "/reduced_"
-    """The reduced features for each grouping.
-
-    The group contains one dataset per reducer, band and integration value.
-
-    Each dataset is named after the integration value.
-
-    Each row contains an array (columns) of `n` dimensions requested
-    in the configuration.
-
-    Each value is a float.
-
-    This path is to be used as a prefix!
-
-    Example:
-        /reduced_{reducer_index}/{band}/{integration}
-
-    Type:
-        Group prefix
-    """
-
-    ###################
-    # Data/Trajectory #
-    ###################
-
-    trajectory_ = "/trajectory_"
-    """The trajectories for each reduction.
-
-    The group contains one dataset per reducer, band and integration value.
-
-    Each dataset is named after the integration value.
-
-    This path is to be used as a prefix!
-
-    Example:
-        /trajectory_{trajectory_index}/{reducer_index}/{band}/{integration}
-
-    Type:
-        Group prefix
-    """
-
-    ####################
-    # Data/Autocluster #
-    ####################
-
-    autocluster_ = "/autocluster_"
-    """The autocluster values (labels) for each grouping.
-
-    The group contains one dataset per autocluster, band and integration value.
-
-    Each dataset is named after the integration value.
-
-    Each row contains an integer.
-
-    This path is to be used as a prefix!
-
-    Example:
-        /autocluster_{autocluster_index}/{band}/{integration}
-
-    Type:
-        Group prefix
-    """
-
-    #################
-    # Data/Pairings #
-    #################
-
-    pairing_ = "/pairing_"
-    """The pairing values for each grouping.
-
-    The group contains one dataset per pairing, band, integration value,
-    first meta property and second meta property.
-
-    Each dataset is named after the second meta property index.
-
-    Each row contains a float.
-
-    This path is to be used as a prefix!
-
-    Example:
-        /pairing_{pairing_index}/{band}/{integration}/{meta_property_A_index}/{meta_property_B_index}
-
-    Type:
-        Group prefix
-    """
-
-    extractors = "/extractors"
+    # Extractors
+    extractors_names = "/extractors/names"
+    extractors_offsets = "/extractors/offsets"
+    extractors_steps = "/extractors/steps"
+    extractors_persists = "/extractors/persists"
     extracted = "/extracted"
+
     aggregated = "/aggregated"
     aggregated_site_file_indexes = "/aggregated_site_file_indexes"
     aggregated_timestamps = "/aggregated_timestamps"

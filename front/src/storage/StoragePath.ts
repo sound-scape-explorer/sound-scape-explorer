@@ -1,148 +1,85 @@
 export enum StoragePath {
-  /**
-   * Configuration
-   */
-  configuration = '/configuration',
+  settings = '/settings',
 
-  /**
-   * Configuration/Bands
-   */
+  // Bands
   bands_names = '/bands/names',
   bands_lows = '/bands/lows',
   bands_highs = '/bands/highs',
 
-  /**
-   * Configuration/Integrations
-   */
+  // Integrations
   integrations_names = '/integrations/names',
-  integrations_milliseconds = '/integrations/milliseconds',
+  integrations_seconds = '/integrations/seconds',
 
-  /**
-   * Configuration/Ranges
-   */
-  ranges_names = '/configuration/ranges/names',
-  ranges_starts = '/configuration/ranges/starts',
-  ranges_ends = '/configuration/ranges/ends',
+  // Ranges
+  ranges_names = '/ranges/names',
+  ranges_starts = '/ranges/starts',
+  ranges_ends = '/ranges/ends',
 
-  /**
-   * Files
-   */
+  // Files
   files_names = '/files/names',
   files_sites = '/files/sites',
   files_labels = '/files/labels',
   files_timestamps = '/files/timestamps',
   files_durations = '/files/durations',
-  files_group_counts = '/files/interval_counts',
-  files_features = '/files_features',
 
-  /**
-   * Configuration/Meta
-   */
-  meta_properties = '/configuration/meta/properties',
-  meta_sets = '/configuration/meta/sets',
+  // Labels
+  labels_properties = '/labels/properties',
+  labels_sets = '/labels/sets',
 
-  /**
-   * Configuration/Autoclusters
-   */
-  autoclusters_names = '/configuration/autoclusters/names',
-  autoclusters_min_cluster_sizes = '/configuration/autoclusters/min_cluster_sizes',
-  autoclusters_min_samples = '/configuration/autoclusters/min_samples',
-  autoclusters_alphas = '/configuration/autoclusters/alphas',
-  autoclusters_epsilons = '/configuration/autoclusters/epsilons',
+  // Autoclusters
+  autoclusters_names = '/autoclusters/names',
+  autoclusters_min_cluster_sizes = '/autoclusters/min_cluster_sizes',
+  autoclusters_min_samples = '/autoclusters/min_samples',
+  autoclusters_alphas = '/autoclusters/alphas',
+  autoclusters_epsilons = '/autoclusters/epsilons',
 
-  /**
-   * Config/Trajectories
-   */
-  trajectories_names = '/configuration/trajectories/names',
-  trajectories_starts = '/configuration/trajectories/starts',
-  trajectories_ends = '/configuration/trajectories/ends',
+  // Trajectories
+  trajectories_names = '/trajectories/names',
+  trajectories_starts = '/trajectories/starts',
+  trajectories_ends = '/trajectories/ends',
 
-  /**
-   * Configuration/Reducers
-   */
-  reducers_names = '/configuration/reducers/names',
-  reducers_dimensions = '/configuration/reducers/dimensions',
-  reducers_bands = '/configuration/reducers/bands',
-  reducers_integrations = '/configuration/reducers/integrations',
-  reducers_ranges = '/configuration/reducers/ranges',
+  // Reducers
+  reducers_names = '/reducers/names',
+  reducers_dimensions = '/reducers/dimensions',
+  reducers_bands = '/reducers/bands',
+  reducers_integrations = '/reducers/integrations',
+  reducers_ranges = '/reducers/ranges',
 
-  /**
-   * Configuration/Indicators
-   */
-  indicators_names_names = '/configuration/indicators',
-
-  /**
-   * Configuration/Volumes
-   */
-  volumes_names_names = '/configuration/volumes',
-
-  /**
-   * Configuration/Matrices
-   */
-  matrices_names_names = '/configuration/matrices',
-
-  /**
-   * Configuration/Pairings
-   */
-  pairings_names_names = '/configuration/pairings',
-
-  /**
-   * Computation UMAPs
-   * INFO: Optional
-   */
+  // Computation UMAPs (INFO: Optional)
   computation_umap_ = '/computation_umap_',
 
-  /**
-   * Mean distances matrix
-   * INFO: Optional
-   */
+  // Mean distances matrix (INFO: Optional)
   mean_distances_matrix = '/mean_distances_matrix',
 
-  /**
-   * Data/Site
-   */
+  // Sites
   site_names = '/site_names',
   site_file_indexes = '/site_file_indexes',
 
-  /**
-   * Data/Grouped
-   */
-  group_features = '/group_features',
-  group_timestamps = '/group_timestamps',
-  group_site_index = '/group_site_index',
+  // Extractors
+  extractors_names = '/extractors/names',
+  extractors_offsets = '/extractors/offsets',
+  extractors_steps = '/extractors/steps',
+  extractors_persists = '/extractors/persists',
 
-  /**
-   * Data/Reduced
-   */
-  reduced_ = '/reduced_',
+  // Extracted
+  extracted = '/extracted',
 
-  /**
-   * Data/Trajectory
-   */
-  trajectory_ = '/trajectory_',
+  // Aggregations
+  aggregated = '/aggregated',
+  aggregated_site_file_indexes = '/aggregated_site_file_indexes',
+  aggregated_timestamps = '/aggregated_timestamps',
+  aggregated_labels = '/aggregated_labels',
 
-  /**
-   * Data/Autocluster
-   */
-  autocluster_ = '/autocluster_',
+  // Reductions
+  reduced = '/reduced',
 
-  /**
-   * Data/Indicator
-   */
-  indicator_ = '/indicator_',
+  // Autoclusters
+  autoclustered = '/autoclustered',
+  computation_umap = '/computation_umap',
 
-  /**
-   * Data/Volume
-   */
-  volume_ = '/volume_',
+  // Digestions
+  digested = '/digested',
 
-  /**
-   * Data/Matrix
-   */
-  matrix_ = '/matrix_',
-
-  /**
-   * Data/Pairing
-   */
-  pairing_ = '/pairing_',
+  // Trajectories
+  traced = '/traced',
 }
