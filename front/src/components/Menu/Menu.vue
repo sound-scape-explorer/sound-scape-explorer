@@ -18,55 +18,34 @@ import {onKeyPressed} from '@vueuse/core';
 import {useStorageFile} from 'src/hooks/useStorageFile';
 
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
-import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
+import {appDraggableSelectedRef} from '../AppDraggable/appDraggableSelected';
+import {
+  type AppDraggablesStore,
+  appDraggablesStore,
+} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
 
 const {isStorageFileRef} = useStorageFile();
 
-/**
- * Handlers
- */
+const toggle = (key: keyof AppDraggablesStore): void => {
+  appDraggableSelectedRef.value = key;
+  appDraggablesStore[key] = !appDraggablesStore[key];
+};
 
-const toggleImport = () =>
-  (appDraggablesStore.import = !appDraggablesStore.import);
-const toggleSettings = () =>
-  (appDraggablesStore.settings = !appDraggablesStore.settings);
-const toggleHelp = () => (appDraggablesStore.help = !appDraggablesStore.help);
-const toggleSelection = () =>
-  (appDraggablesStore.selection = !appDraggablesStore.selection);
-const toggleColors = () =>
-  (appDraggablesStore.colors = !appDraggablesStore.colors);
-const toggleQueries = () =>
-  (appDraggablesStore.queries = !appDraggablesStore.queries);
-const toggleTime = () => (appDraggablesStore.time = !appDraggablesStore.time);
-const toggleMeta = () => (appDraggablesStore.meta = !appDraggablesStore.meta);
-const togglePlayer = () =>
-  (appDraggablesStore.audio = !appDraggablesStore.audio);
-const toggleDetails = () =>
-  (appDraggablesStore.details = !appDraggablesStore.details);
-const toggleVolumes = () =>
-  (appDraggablesStore.volumes = !appDraggablesStore.volumes);
-const toggleMatrices = () =>
-  (appDraggablesStore.matrices = !appDraggablesStore.matrices);
-const togglePairings = () =>
-  (appDraggablesStore.pairings = !appDraggablesStore.pairings);
-const toggleTrajectories = () =>
-  (appDraggablesStore.trajectories = !appDraggablesStore.trajectories);
-
-onKeyPressed(KeyboardShortcut.import, toggleImport);
-onKeyPressed(KeyboardShortcut.settings, toggleSettings);
-onKeyPressed(KeyboardShortcut.help, toggleHelp);
-onKeyPressed(KeyboardShortcut.selection, toggleSelection);
-onKeyPressed(KeyboardShortcut.colors, toggleColors);
-onKeyPressed(KeyboardShortcut.queries, toggleQueries);
-onKeyPressed(KeyboardShortcut.time, toggleTime);
-onKeyPressed(KeyboardShortcut.meta, toggleMeta);
-onKeyPressed(KeyboardShortcut.audio, togglePlayer);
-onKeyPressed(KeyboardShortcut.details, toggleDetails);
-onKeyPressed(KeyboardShortcut.volumes, toggleVolumes);
-onKeyPressed(KeyboardShortcut.matrices, toggleMatrices);
-onKeyPressed(KeyboardShortcut.pairings, togglePairings);
-onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
+onKeyPressed(KeyboardShortcut.import, () => toggle('import'));
+onKeyPressed(KeyboardShortcut.settings, () => toggle('settings'));
+onKeyPressed(KeyboardShortcut.help, () => toggle('help'));
+onKeyPressed(KeyboardShortcut.selection, () => toggle('selection'));
+onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
+onKeyPressed(KeyboardShortcut.colors, () => toggle('colors'));
+onKeyPressed(KeyboardShortcut.queries, () => toggle('queries'));
+onKeyPressed(KeyboardShortcut.time, () => toggle('time'));
+onKeyPressed(KeyboardShortcut.meta, () => toggle('meta'));
+onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
+onKeyPressed(KeyboardShortcut.details, () => toggle('details'));
+onKeyPressed(KeyboardShortcut.volumes, () => toggle('volumes'));
+onKeyPressed(KeyboardShortcut.matrices, () => toggle('matrices'));
+onKeyPressed(KeyboardShortcut.pairings, () => toggle('pairings'));
 </script>
 
 <template>
@@ -76,6 +55,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
         <MenuItem
           draggable-key="import"
           text="Import"
+          :toggle="toggle"
         >
           <cloud-upload-outline />
         </MenuItem>
@@ -83,6 +63,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
         <MenuItem
           draggable-key="settings"
           text="Settings"
+          :toggle="toggle"
         >
           <cog-outline />
         </MenuItem>
@@ -90,6 +71,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
         <MenuItem
           draggable-key="help"
           text="Help"
+          :toggle="toggle"
         >
           <help-outline />
         </MenuItem>
@@ -110,6 +92,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="selection"
         text="Selection"
+        :toggle="toggle"
       >
         <eye-outline />
       </MenuItem>
@@ -117,6 +100,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="trajectories"
         text="Trajectories"
+        :toggle="toggle"
       >
         <analytics-outline />
       </MenuItem>
@@ -124,6 +108,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="colors"
         text="Colors"
+        :toggle="toggle"
       >
         <color-palette-outline />
       </MenuItem>
@@ -131,6 +116,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="queries"
         text="Query"
+        :toggle="toggle"
       >
         <flask-outline />
       </MenuItem>
@@ -138,6 +124,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="time"
         text="Time"
+        :toggle="toggle"
       >
         <calendar-outline />
       </MenuItem>
@@ -145,6 +132,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="meta"
         text="Meta"
+        :toggle="toggle"
       >
         <layers-outline />
       </MenuItem>
@@ -152,6 +140,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="audio"
         text="Audio"
+        :toggle="toggle"
       >
         <headset-outline />
       </MenuItem>
@@ -159,6 +148,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="details"
         text="Details"
+        :toggle="toggle"
       >
         <list-outline />
       </MenuItem>
@@ -166,6 +156,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="volumes"
         text="Volumes"
+        :toggle="toggle"
       >
         <analytics-outline />
       </MenuItem>
@@ -173,6 +164,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="matrices"
         text="Matrices"
+        :toggle="toggle"
       >
         <grid-outline />
       </MenuItem>
@@ -180,6 +172,7 @@ onKeyPressed(KeyboardShortcut.trajectories, toggleTrajectories);
       <MenuItem
         draggable-key="pairings"
         text="Pairings"
+        :toggle="toggle"
       >
         <git-compare-outline />
       </MenuItem>

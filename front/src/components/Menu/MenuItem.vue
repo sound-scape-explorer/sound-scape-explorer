@@ -1,15 +1,18 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
-import {computed, ref} from 'vue';
-import {
-  appDraggablesStore,
-  type AppDraggablesStore,
-} from '../AppDraggable/appDraggablesStore';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
+import {computed, ref} from 'vue';
+
+import {
+  type AppDraggablesStore,
+  appDraggablesStore,
+} from '../AppDraggable/appDraggablesStore';
 
 interface Props {
   draggableKey: keyof AppDraggablesStore;
   text: string;
+  // eslint-disable-next-line no-unused-vars
+  toggle: (key: keyof AppDraggablesStore) => void;
 }
 
 const props = defineProps<Props>();
@@ -21,9 +24,7 @@ const handleClick = () => {
     return;
   }
 
-  appDraggablesStore[props.draggableKey] =
-    !appDraggablesStore[props.draggableKey];
-
+  props.toggle(props.draggableKey);
   buttonRef.value.$el.blur();
 };
 

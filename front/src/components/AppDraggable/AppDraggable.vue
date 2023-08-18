@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import {CloseOutline, SearchOutline} from '@vicons/ionicons5';
-import {UseDraggable} from '@vueuse/components';
-import {onClickOutside, useIntersectionObserver} from '@vueuse/core';
+import {useDraggable, useLocalStorage} from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
-import {computed, onMounted, onUnmounted, ref} from 'vue';
+import {computed, ref, watch} from 'vue';
+
 import {capitalizeFirstLetter} from '../../utils/capitalize-first-letter';
+import {appDraggableSelectedRef} from './appDraggableSelected';
 import type {AppDraggablesStore} from './appDraggablesStore';
 import {appDraggablesStore} from './appDraggablesStore';
-import {appDraggableSelectedRef} from './appDraggableSelected';
 
 interface Props {
   draggableKey: keyof AppDraggablesStore;
@@ -23,7 +23,7 @@ const containerRef = ref<HTMLElement | null>(null);
 const isZoomedRef = ref<boolean>(false);
 
 const classesRef = computed<string>(() => {
-  let classes = '';
+  let classes = 'draggable';
 
   if (isZoomedRef.value === true) {
     classes += ' zoomed';
@@ -44,6 +44,26 @@ const close = () => {
   appDraggablesStore[props.draggableKey] = false;
 };
 
+const open = () => {
+  if (
+    appDraggableSelectedRef.value !== props.draggableKey ||
+    appDraggablesStore[props.draggableKey] === false ||
+    window.visualViewport === null
+  ) {
+    return;
+  }
+
+  if (x.value >= window.visualViewport.width) {
+    x.value = 100;
+  }
+
+  if (y.value >= window.visualViewport.height) {
+    y.value = 100;
+  }
+};
+
+watch(appDraggablesStore, open);
+
 const toggleZoom = () => {
   isZoomedRef.value = !isZoomedRef.value;
 };
@@ -56,42 +76,33 @@ const select = () => {
   appDraggableSelectedRef.value = props.draggableKey;
 };
 
-const unselect = () => {
-  if (appDraggableSelectedRef.value === null) {
-    return;
-  }
+const storageRef = useLocalStorage(storageKey, {x: 100, y: 100});
 
-  appDraggableSelectedRef.value = null;
-};
+const {x, y, style} = useDraggable(containerRef, {
+  initialValue: {x: storageRef.value.x, y: storageRef.value.y},
+  onEnd: (position) => {
+    if (window.visualViewport === null) {
+      return;
+    }
 
-useIntersectionObserver(containerRef, ([{isIntersecting}]) => {
-  if (isIntersecting === true) {
-    return;
-  }
+    if (position.x >= window.visualViewport.width) {
+      x.value = 100;
+    }
 
-  if (containerRef.value === null) {
-    return;
-  }
+    if (position.y >= window.visualViewport.height) {
+      y.value = 100;
+    }
 
-  const container = containerRef.value as unknown as typeof UseDraggable;
-  const element = container.$el as HTMLDivElement;
-  element.style.left = '100px';
-  element.style.top = '100px';
+    storageRef.value = {x: x.value, y: y.value};
+  },
 });
-
-onMounted(select);
-onUnmounted(unselect);
-onClickOutside(containerRef, unselect);
 </script>
 
 <template>
-  <UseDraggable
+  <div
     ref="containerRef"
     :class="classesRef"
-    :exact="true"
-    :initialValue="{x: 100, y: 100}"
-    :storage-key="storageKey"
-    class="draggable"
+    :style="style"
     @click="select"
   >
     <div class="button close">
@@ -127,7 +138,7 @@ onClickOutside(containerRef, unselect);
     <div class="content">
       <slot />
     </div>
-  </UseDraggable>
+  </div>
 </template>
 
 <style lang="scss" scoped>

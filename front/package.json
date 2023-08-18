@@ -11,8 +11,8 @@
     "preview": "vite preview --port 5530 --host 0.0.0.0"
   },
   "dependencies": {
-    "@vueuse/components": "^10.1.2",
-    "@vueuse/core": "^10.1.2",
+    "@vueuse/components": "^10.3.0",
+    "@vueuse/core": "^10.3.0",
     "audiobuffer-slice": "^0.0.7",
     "chroma-js": "^2.4.2",
     "colormap": "^2.3.2",
