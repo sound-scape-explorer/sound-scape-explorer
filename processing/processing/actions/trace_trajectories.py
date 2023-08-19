@@ -13,7 +13,6 @@ from processing.config.reducers.ReducerStorage import ReducerStorage
 from processing.config.trajectories.TrajectoryStorage import TrajectoryStorage
 from processing.interfaces import IMain
 from processing.storage.Storage import Storage
-from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.print_action import print_action
 from processing.utils.print_no_configuration import print_no_configuration
@@ -32,7 +31,7 @@ def trace_trajectories(
 
     print_action("Tracing trajectories started!", "start")
 
-    storage.delete(StoragePath.traced)
+    TracedStorage.delete(storage)
 
     trajectories = TrajectoryStorage.read_from_storage(storage)
     print_trajectories(trajectories)

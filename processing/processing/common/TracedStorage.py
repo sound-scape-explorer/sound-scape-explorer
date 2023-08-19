@@ -7,6 +7,11 @@ from processing.storage.StoragePath import StoragePath
 
 class TracedStorage:
     @staticmethod
+    def delete(storage: Storage) -> None:
+        storage.delete(StoragePath.traced)
+        storage.delete(StoragePath.traced_timestamps)
+
+    @staticmethod
     def get_data_path(
         ar: AggregatedReduceable,
         reducer: ReducerConfig,
