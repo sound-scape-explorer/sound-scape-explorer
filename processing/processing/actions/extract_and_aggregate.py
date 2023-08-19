@@ -115,20 +115,6 @@ def extract_and_aggregate(
             extractor=extractor,
         )
 
-        # Aggregated labels
-        # INFO: Same as above
-        l_path = (
-            f"/{StoragePath.aggregated_labels.value}"
-            f"/{band.name}"
-            f"/{timeline.integration.seconds}"
-            f"/{extractor.index}"
-        )
-
-        storage.append(
-            path=l_path,
-            data=[labels],
-        )
-
     # tw.print_leftovers()
     print_action("Extractions and aggregations completed!", "end")
 
