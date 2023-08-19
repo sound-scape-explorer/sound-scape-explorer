@@ -200,6 +200,14 @@ class TimelineWalker:
 
         return block_data
 
+    def get_block_details(
+        self,
+        block: Block,
+    ) -> str:
+        file_relative_start = block.start - block.file.start
+        block_details = f"{block.start}/{file_relative_start}{block.file.path}"
+        return block_details
+
     def purge(
         self,
         f: FileIndex,
@@ -231,7 +239,7 @@ class TimelineWalker:
         for timeline, interval, b, band, extractor in self.__enumerate():
             interval_data = []
             labels: List[str] = []
-            file_indexes: List[int] = []
+            blocks_details: List[str] = []
 
             for b_, block in enumerate(interval.blocks):
                 f = block.file.index
@@ -256,8 +264,9 @@ class TimelineWalker:
                 interval_data = [*interval_data, *block_data]
                 labels = [*labels, *block.file.labels]
 
-                if f not in file_indexes:
-                    file_indexes.append(f)
+                block_details = self.get_block_details(block=block)
+                if block_details not in blocks_details:
+                    blocks_details.append(block_details)
 
                 self.purge(f, b, extractor, b_, interval, timeline)
 
@@ -266,7 +275,7 @@ class TimelineWalker:
             yield (
                 interval_data,
                 labels,
-                file_indexes,
+                blocks_details,
                 interval,
                 band,
                 extractor,

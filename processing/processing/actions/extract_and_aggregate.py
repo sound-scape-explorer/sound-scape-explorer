@@ -3,6 +3,7 @@ from typing import Optional
 import numpy as np
 from rich import print
 
+from processing.common.AggregatedStorage import AggregatedStorage
 from processing.common.TimelineWalker import TimelineWalker
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
@@ -32,10 +33,7 @@ def extract_and_aggregate(
     print_action("Extractions and aggregations started!", "start")
 
     storage.delete(StoragePath.extracted)
-    storage.delete(StoragePath.aggregated)
-    storage.delete(StoragePath.aggregated_site_file_indexes)
-    storage.delete(StoragePath.aggregated_timestamps)
-    storage.delete(StoragePath.aggregated_labels)
+    AggregatedStorage.delete(storage)
 
     # retrieve configuration
     settings = SettingsStorage.read_from_storage(storage)
@@ -68,7 +66,7 @@ def extract_and_aggregate(
     for (
         interval_data,
         labels,
-        file_indexes,
+        blocks_details,
         interval,
         band,
         extractor,
@@ -77,56 +75,44 @@ def extract_and_aggregate(
         # Aggregate
         aggregated_data = list(np.mean(interval_data, axis=0))
 
-        path = (
-            f"/{StoragePath.aggregated.value}"
-            f"/{band.name}"
-            f"/{timeline.integration.seconds}"
-            f"/{extractor.index}"
+        AggregatedStorage.append_data(
+            storage=storage,
+            data=aggregated_data,
+            band=band,
+            integration=timeline.integration,
+            extractor=extractor,
         )
 
-        storage.append(
-            path=path,
-            data=[aggregated_data],
-            compression=True,
-            attributes={
-                "extractor": extractor.__class__.__name__,
-                "offset": str(extractor.offset),
-                "step": str(extractor.step),
-                "method": "for step in file in site",
-            },
+        AggregatedStorage.append_site(
+            storage=storage,
+            site=timeline.site.name,
+            band=band,
+            integration=timeline.integration,
+            extractor=extractor,
         )
 
-        # Aggregated site and file indexes
-        s_path = (
-            f"/{StoragePath.aggregated_site_file_indexes.value}"
-            f"/{band.name}"
-            f"/{timeline.integration.seconds}"
-            f"/{extractor.index}"
+        AggregatedStorage.append_blocks_details(
+            storage=storage,
+            blocks_details=blocks_details,
+            band=band,
+            integration=timeline.integration,
+            extractor=extractor,
         )
 
-        site_file_indexes = [timeline.site.name, *[str(f) for f in file_indexes]]
-
-        storage.append(
-            path=s_path,
-            data=[site_file_indexes],
-            attributes={
-                "description": "First column is site name followed by file indexes",
-            },
+        AggregatedStorage.append_timestamp(
+            storage=storage,
+            timestamp=interval.start,
+            band=band,
+            integration=timeline.integration,
+            extractor=extractor,
         )
 
-        # Aggregated timestamps
-        # INFO: This stores duplicated data as timestamps are the same for
-        # band and extractor given a single integration
-        t_path = (
-            f"/{StoragePath.aggregated_timestamps.value}"
-            f"/{band.name}"
-            f"/{timeline.integration.seconds}"
-            f"/{extractor.index}"
-        )
-
-        storage.append(
-            path=t_path,
-            data=[[interval.start]],
+        AggregatedStorage.append_labels(
+            storage=storage,
+            labels=labels,
+            band=band,
+            integration=timeline.integration,
+            extractor=extractor,
         )
 
         # Aggregated labels
