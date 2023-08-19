@@ -11,7 +11,7 @@ class AggregatedStorage:
     @staticmethod
     def delete(storage: Storage) -> None:
         storage.delete(StoragePath.aggregated)
-        storage.delete(StoragePath.aggregated_site)
+        storage.delete(StoragePath.aggregated_sites)
         storage.delete(StoragePath.aggregated_blocks_details)
         storage.delete(StoragePath.aggregated_timestamps)
         storage.delete(StoragePath.aggregated_labels)
@@ -62,7 +62,7 @@ class AggregatedStorage:
         extractor: Extractor,
     ) -> str:
         return (
-            f"/{StoragePath.aggregated_site.value}"
+            f"/{StoragePath.aggregated_sites.value}"
             f"/{band.name}"
             f"/{integration.seconds}"
             f"/{extractor.index}"
