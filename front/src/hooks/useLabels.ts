@@ -1,8 +1,9 @@
 import {reactive, watchEffect} from 'vue';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+
 import {bandRef} from './useBands';
 import {integrationRef} from './useIntegrations';
+import {storageFileRef} from './useStorageFile';
+import {workerRef} from './useWorker';
 
 // Label properties and sets
 export interface Labels {

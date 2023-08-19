@@ -8,9 +8,9 @@ import Colors from '../components/Colors/Colors.vue';
 import Details from '../components/Details/Details.vue';
 import Help from '../components/Help/Help.vue';
 import Import from '../components/Import/Import.vue';
+import Label from '../components/Label/Label.vue';
 import Matrices from '../components/Matrices/Matrices.vue';
 import Menu from '../components/Menu/Menu.vue';
-import Meta from '../components/Meta/Meta.vue';
 import Pairings from '../components/Pairings/Pairings.vue';
 import Scatter from '../components/Scatter/Scatter.vue';
 import Selection from '../components/Selection/Selection.vue';
@@ -42,6 +42,8 @@ onMounted(() => {
     <StorageLoad />
 
     <Selection />
+    <Trajectories />
+
     <Colors />
     <Time />
     <Audio />
@@ -49,9 +51,8 @@ onMounted(() => {
     <Volumes />
     <Matrices />
     <Pairings />
-    <Trajectories />
 
-    <Meta />
+    <Label />
 
     <Scatter />
   </div>

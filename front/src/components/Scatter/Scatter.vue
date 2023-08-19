@@ -61,6 +61,7 @@ const config: Partial<Config> = {
 };
 
 const isFirstRenderedRef = ref<boolean>(false);
+
 const renderInitial = async () => {
   if (
     divRef.value === null ||

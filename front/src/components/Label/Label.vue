@@ -2,31 +2,27 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import {NButton, NIcon} from 'naive-ui';
 import {computed} from 'vue';
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import MetaItems from './MetaItems.vue';
-import {metaStore} from './metaStore';
 
-/**
- * State
- */
+import AppDraggable from '../AppDraggable/AppDraggable.vue';
+import LabelItems from './LabelItems.vue';
+import {useLabelsSelection} from './useLabelsSelection';
+import {labelZoomedRef} from './useLabelZoomed';
+
+useLabelsSelection();
 
 const containerClasses = computed<string>(() => {
   let classes = 'container';
 
-  if (metaStore.isOpen) {
+  if (labelZoomedRef.value === true) {
     classes += ' open';
   }
 
   return classes;
 });
 
-/**
- * Handlers
- */
-
-function toggle() {
-  metaStore.isOpen = !metaStore.isOpen;
-}
+const toggle = () => {
+  labelZoomedRef.value = !labelZoomedRef.value;
+};
 </script>
 
 <template>
@@ -46,7 +42,7 @@ function toggle() {
         </n-button>
       </div>
 
-      <MetaItems />
+      <LabelItems />
     </div>
   </AppDraggable>
 </template>

@@ -1,50 +1,55 @@
 <script lang="ts" setup="">
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
-import {ref, watch} from 'vue';
+import {labelsRef} from 'src/hooks/useLabels';
+import {computed, ref, watch, watchEffect} from 'vue';
 
-import {useScatterFilterMeta} from '.././Scatter/useScatterFilterMeta';
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByMeta} from '../Colors/useColorByMeta';
-import {metaSelectionStore} from './metaSelectionStore';
-
-/**
- * Props
- */
+import {labelsSelectionRef, useLabelsSelection} from './useLabelsSelection';
 
 interface Props {
-  title: string;
-  items: string[];
-  index: number;
+  property: string;
 }
 
 const props = defineProps<Props>();
 
 const {getColorByMetaIndex} = useColorByMeta();
-const {filterByMeta} = useScatterFilterMeta();
 const selectionRef = ref<string[]>([]);
+const {updateSelection} = useLabelsSelection();
+
+const uniquesRef = computed<string[]>(() => {
+  if (labelsRef.value === null) {
+    return [];
+  }
+
+  return labelsRef.value[props.property];
+});
 
 function getColorByItem(index: number): string | undefined {
-  const colorType = `by${props.title}`;
+  const colorType = `by${props.property}`;
 
   if (colorType !== colorsStore.colorType) {
     return undefined;
   }
 
-  return getColorByMetaIndex(index, props.items.length);
+  return getColorByMetaIndex(index, uniquesRef.value.length);
 }
 
-const updateSelection = () => {
-  metaSelectionStore.selection[props.index] = selectionRef.value;
-  filterByMeta();
-};
-
-watch(selectionRef, updateSelection);
+watch(selectionRef, () => updateSelection(props.property, selectionRef.value));
 
 const updateReverse = () => {
-  selectionRef.value = metaSelectionStore.selection[props.index];
+  if (labelsSelectionRef.value === null) {
+    return;
+  }
+
+  if (selectionRef.value === labelsSelectionRef.value[props.property]) {
+    return;
+  }
+
+  selectionRef.value = labelsSelectionRef.value[props.property];
 };
 
-watch(metaSelectionStore.selection, updateReverse);
+watchEffect(updateReverse);
 </script>
 
 <template>
@@ -53,7 +58,7 @@ watch(metaSelectionStore.selection, updateReverse);
     class="checkboxes"
   >
     <n-checkbox
-      v-for="(item, index) in props.items"
+      v-for="(item, index) in uniquesRef"
       :style="{
         backgroundColor: getColorByItem(index),
       }"

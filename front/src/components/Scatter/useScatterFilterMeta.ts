@@ -1,8 +1,8 @@
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
-import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
+import {labelsRef} from 'src/hooks/useLabels';
 import {reactive} from 'vue';
 
-import {metaSelectionStore} from '../Meta/metaSelectionStore';
+import {labelsSelectionRef} from '../Label/useLabelsSelection';
 
 interface PointsFilteredByMetaRef {
   value: boolean[] | null;
@@ -13,44 +13,44 @@ export const pointsFilteredByMetaRef = reactive<PointsFilteredByMetaRef>({
 });
 
 export function useScatterFilterMeta() {
-  // TODO: This performance can certainly be improved
-  const isVisibleByMeta = (index: number): boolean => {
+  const isVisibleByMeta = (intervalIndex: number): boolean => {
     let isVisible = true;
 
-    if (aggregatedLabelsRef.value === null) {
+    if (
+      aggregatedLabelsRef.value === null ||
+      labelsRef.value === null ||
+      labelsSelectionRef.value === null
+    ) {
       return false;
     }
 
-    const labelValues = aggregatedLabelsRef.value[index];
+    const properties = Object.keys(labelsRef.value);
+    const values = aggregatedLabelsRef.value[intervalIndex];
+    const valuesIndexes = Object.keys(values);
 
-    const metaSelectedIndexes = Object.keys(metaSelectionStore.selection);
-    const metaIndexes = Object.keys(labelValues);
-
-    for (let i = 0; i < metaSelectedIndexes.length; ++i) {
+    for (let index = 0; index < valuesIndexes.length; index += 1) {
       // item is already not visible
       if (!isVisible) {
         break;
       }
 
-      const metaSelectedIndex = Number(metaSelectedIndexes[i]);
-      const metaSelection = metaSelectionStore.selection[metaSelectedIndex];
-      const metaSelectionValues = Object.values(metaSelection);
+      const property = properties[index];
+      const valuesSelection = labelsSelectionRef.value[property];
 
       // no user selection
-      if (metaSelectionValues.length === 0) {
+      if (valuesSelection.length === 0) {
         continue;
       }
 
-      const metaIndex = Number(metaIndexes[i]);
-      const meta = labelValues[metaIndex];
-      isVisible = metaSelectionValues.includes(meta);
+      const value = values[index];
+      isVisible = valuesSelection.includes(value);
     }
 
     return isVisible;
   };
 
   const filterByMeta = () => {
-    if (aggregatedTimestampsRef.value === null) {
+    if (aggregatedLabelsRef.value === null) {
       return;
     }
 
@@ -58,7 +58,7 @@ export function useScatterFilterMeta() {
 
     for (
       let intervalIndex = 0;
-      intervalIndex < aggregatedTimestampsRef.value.length;
+      intervalIndex < aggregatedLabelsRef.value.length;
       ++intervalIndex
     ) {
       const isVisible = isVisibleByMeta(intervalIndex);

@@ -6,8 +6,10 @@ import {integrationRef} from './useIntegrations';
 import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
+export type AggregatedLabels = string[][];
+
 interface AggregatedLabelsRef {
-  value: string[][] | null;
+  value: AggregatedLabels | null;
 }
 
 export const aggregatedLabelsRef = reactive<AggregatedLabelsRef>({
