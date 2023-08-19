@@ -66,7 +66,8 @@ export enum StoragePath {
 
   // Aggregations
   aggregated = '/aggregated',
-  aggregated_site_file_indexes = '/aggregated_site_file_indexes',
+  aggregated_sites = '/aggregated_sites',
+  aggregated_blocks_details = '/aggregated_blocks_details',
   aggregated_timestamps = '/aggregated_timestamps',
   aggregated_labels = '/aggregated_labels',
 
