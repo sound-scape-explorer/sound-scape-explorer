@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 import numpy
 from h5py import Dataset
@@ -6,14 +6,6 @@ from pandas import DataFrame, pandas
 
 
 class ContinuousTimeTrajectory:
-    __features: Union[None, Dataset]
-    __timestamps: Union[None, Dataset]  # List[milliseconds]
-    __timestamp_start: Union[None, int]  # milliseconds
-    __timestamp_end: Union[None, int]  # milliseconds
-    __rolling_step: Union[None, int]  # milliseconds
-    segments: List[int]
-    values: List[List[float]]
-
     def __init__(self) -> None:
         self.__features = None
         self.__timestamps = None
@@ -38,9 +30,13 @@ class ContinuousTimeTrajectory:
             self.__rolling_step,
         )
 
-    def _set(self, values: DataFrame) -> List[List[float]]:
+    def _set_values(self, values: DataFrame) -> List[List[float]]:
         self.values = list(values.to_numpy())
         return self.values
+
+    def set_timestamps(self, timestamps: List[int]) -> List[int]:
+        self.timestamps = timestamps
+        return self.timestamps
 
     def load(
         self,
@@ -67,7 +63,7 @@ class ContinuousTimeTrajectory:
 
         # Filtering by timestamps
         filtered_features = []
-        filtered_timestamps = []
+        filtered_timestamps: List[int] = []
 
         for index, timestamp in enumerate(timestamps):
             if timestamp[0] <= timestamp_start or timestamp[0] >= timestamp_end:
@@ -76,6 +72,7 @@ class ContinuousTimeTrajectory:
             filtered_features.append(features[index])
             filtered_timestamps.append(timestamp[0])
 
+        self.set_timestamps(filtered_timestamps)
         # Calculating coordinates
         dimensions = len(filtered_features[0])
         coordinates = numpy.empty([dimensions, len(filtered_features)])
@@ -91,5 +88,5 @@ class ContinuousTimeTrajectory:
             )
 
         coordinates_dataframe = pandas.DataFrame(coordinates)
-        self._set(coordinates_dataframe.T)
+        self._set_values(coordinates_dataframe.T)
         return self.values

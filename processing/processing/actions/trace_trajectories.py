@@ -3,6 +3,7 @@ from typing import Optional
 from rich.progress import track
 
 from processing.common.AggregatedReduceable import AggregatedReduceable
+from processing.common.TracedStorage import TracedStorage
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
@@ -75,25 +76,8 @@ def trace_trajectories(
 
                 trajectory.instance.calculate()
 
-                path = (
-                    f"{StoragePath.traced.value}"
-                    f"/{ar.band.name}"
-                    f"/{ar.integration.seconds}"
-                    f"/{ar.extractor.index}"
-                    f"/{reducer.index}"
-                    f"/{trajectory.index}"
-                )
-
-                storage.write(
-                    path=path,
-                    data=trajectory.instance.values,
-                    compression=True,
-                    attributes={
-                        "extractor_index": str(ar.extractor.index),
-                        "reducer_index": str(reducer.index),
-                        "trajectory_index": str(trajectory.index),
-                    },
-                )
+                TracedStorage.write_data(storage, trajectory, reducer, ar)
+                TracedStorage.write_timestamps(storage, trajectory, reducer, ar)
 
     print_action("Tracing trajectories completed!", "end")
 
