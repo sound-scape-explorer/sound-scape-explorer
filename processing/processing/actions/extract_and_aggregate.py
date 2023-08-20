@@ -66,7 +66,7 @@ def extract_and_aggregate(
     for (
         interval_data,
         labels,
-        blocks_details,
+        interval_details,
         interval,
         band,
         extractor,
@@ -91,9 +91,9 @@ def extract_and_aggregate(
             extractor=extractor,
         )
 
-        AggregatedStorage.append_blocks_details(
+        AggregatedStorage.append_interval_details(
             storage=storage,
-            blocks_details=blocks_details,
+            interval_details=interval_details,
             band=band,
             integration=timeline.integration,
             extractor=extractor,

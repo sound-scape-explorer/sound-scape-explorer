@@ -1,15 +1,20 @@
 <script lang="ts" setup="">
 import {NGi, NGrid, NTag} from 'naive-ui';
 import {bandRef} from 'src/hooks/useBands';
+import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
-import {indicatorsRef} from 'src/hooks/useStorageIndicators';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+
 import {clickedRef} from '.././Scatter/useScatterClick';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from './useDetails';
-import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 
-const {intervalDateRef, intervalLabelsRef, intervalSiteRef} = useDetails();
+const {
+  intervalDateRef,
+  intervalLabelsRef,
+  intervalSiteRef,
+  intervalDetailsRef,
+} = useDetails();
 </script>
 
 <template>
@@ -26,7 +31,7 @@ const {intervalDateRef, intervalLabelsRef, intervalSiteRef} = useDetails();
 
     <div class="file container">
       <div class="title">File indexes</div>
-      <span class="file index">{{ intervalSiteRef?.fileIndexes ?? '' }}</span>
+      <span class="file index">{{ intervalDetailsRef ?? '' }}</span>
     </div>
 
     <div class="file container">

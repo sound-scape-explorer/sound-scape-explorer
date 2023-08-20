@@ -12,7 +12,7 @@ class AggregatedStorage:
     def delete(storage: Storage) -> None:
         storage.delete(StoragePath.aggregated)
         storage.delete(StoragePath.aggregated_sites)
-        storage.delete(StoragePath.aggregated_blocks_details)
+        storage.delete(StoragePath.aggregated_interval_details)
         storage.delete(StoragePath.aggregated_timestamps)
         storage.delete(StoragePath.aggregated_labels)
 
@@ -88,27 +88,27 @@ class AggregatedStorage:
         )
 
     @staticmethod
-    def get_blocks_details_path(
+    def get_interval_details_path(
         band: BandConfig,
         integration: IntegrationConfig,
         extractor: Extractor,
     ) -> str:
         return (
-            f"/{StoragePath.aggregated_blocks_details.value}"
+            f"/{StoragePath.aggregated_interval_details.value}"
             f"/{band.name}"
             f"/{integration.seconds}"
             f"/{extractor.index}"
         )
 
     @staticmethod
-    def append_blocks_details(
+    def append_interval_details(
         storage: Storage,
-        blocks_details: List[str],
+        interval_details: List[str],
         band: BandConfig,
         integration: IntegrationConfig,
         extractor: Extractor,
     ) -> None:
-        path = AggregatedStorage.get_blocks_details_path(
+        path = AggregatedStorage.get_interval_details_path(
             band=band,
             integration=integration,
             extractor=extractor,
@@ -116,7 +116,7 @@ class AggregatedStorage:
 
         storage.append(
             path=path,
-            data=[blocks_details],
+            data=[interval_details],
             attributes={
                 "description": "Each column is {block_start}"
                 "/{relative_file_start}{file_path}",

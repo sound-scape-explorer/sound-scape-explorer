@@ -1,5 +1,9 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
+import type {
+  BlockDetails,
+  IntervalDetails,
+} from 'src/hooks/useAggregatedIntervalDetails';
 import type {AggregatedSite} from 'src/hooks/useAggregatedSites';
 import type {Band} from 'src/hooks/useBands';
 import type {Extractor} from 'src/hooks/useExtractors';
@@ -775,23 +779,56 @@ export async function readAggregatedSites(
   extractorIndex: number,
 ): Promise<AggregatedSite[]> {
   const h5 = await load(file);
-  const path = `${StoragePath.aggregated_site_file_indexes}/${bandName}/${integrationSeconds}/${extractorIndex}`;
+  const path = `${StoragePath.aggregated_sites}/${bandName}/${integrationSeconds}/${extractorIndex}`;
   const dataset = h5.get(path) as Dataset;
   const siteFileIndexes = dataset.to_array() as string[][];
 
   const sites: AggregatedSite[] = [];
 
   for (const item of siteFileIndexes) {
-    // TODO: Add ignore case for file indexes if non rectangular
     const site: AggregatedSite = {
       site: item[0],
-      fileIndexes: item.slice(1).map((fi) => Number(fi)),
     };
 
     sites.push(site);
   }
 
   return sites;
+}
+
+export async function readAggregatedIntervalDetails(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+): Promise<IntervalDetails[]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.aggregated_interval_details}/${bandName}/${integrationSeconds}/${extractorIndex}`;
+  const dataset = h5.get(path) as Dataset;
+  // TODO: This can be non rectangular,
+  const strings_list = dataset.to_array() as string[][];
+
+  const intervalDetails: IntervalDetails[] = [];
+
+  for (const strings of strings_list) {
+    const blocksDetails: BlockDetails[] = [];
+
+    for (const string of strings) {
+      const elements = string.split('/');
+
+      const blockDetails: BlockDetails = {
+        start: elements[0],
+        fileStart: elements[1],
+        file: `/${elements.slice(2).join('/')}`,
+      };
+
+      blocksDetails.push(blockDetails);
+    }
+
+    intervalDetails.push(blocksDetails);
+  }
+
+  return intervalDetails;
 }
 
 export async function readAggregatedLabels(

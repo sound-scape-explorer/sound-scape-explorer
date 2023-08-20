@@ -239,7 +239,7 @@ class TimelineWalker:
         for timeline, interval, b, band, extractor in self.__enumerate():
             interval_data = []
             labels: List[str] = []
-            blocks_details: List[str] = []
+            interval_details: List[str] = []
 
             for b_, block in enumerate(interval.blocks):
                 f = block.file.index
@@ -265,8 +265,8 @@ class TimelineWalker:
                 labels = [*labels, *block.file.labels]
 
                 block_details = self.get_block_details(block=block)
-                if block_details not in blocks_details:
-                    blocks_details.append(block_details)
+                if block_details not in interval_details:
+                    interval_details.append(block_details)
 
                 self.purge(f, b, extractor, b_, interval, timeline)
 
@@ -275,7 +275,7 @@ class TimelineWalker:
             yield (
                 interval_data,
                 labels,
-                blocks_details,
+                interval_details,
                 interval,
                 band,
                 extractor,

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import {useAggregatedIntervalDetails} from 'src/hooks/useAggregatedIntervalDetails';
 import {useAggregatedSites} from 'src/hooks/useAggregatedSites';
 import {useLabels} from 'src/hooks/useLabels';
 import {useStorageGroupedFeatures} from 'src/hooks/useStorageGroupedFeatures';
@@ -25,6 +26,7 @@ useStorageGroupedFeatures();
 useAggregatedTimestamps();
 useAggregatedLabels();
 useAggregatedSites();
+useAggregatedIntervalDetails();
 
 useReducedFeatures();
 useTraced();

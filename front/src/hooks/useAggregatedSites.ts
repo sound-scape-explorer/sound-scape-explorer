@@ -8,7 +8,6 @@ import {workerRef} from './useWorker';
 
 export interface AggregatedSite {
   site: string;
-  fileIndexes: number[];
 }
 
 interface AggregatedSitesRef {
