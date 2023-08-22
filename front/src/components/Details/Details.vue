@@ -1,12 +1,16 @@
 <script lang="ts" setup="">
-import {NGi, NGrid, NTag} from 'naive-ui';
+import {HeadsetOutline} from '@vicons/ionicons5';
+import type {Dayjs} from 'dayjs';
+import {NButton, NGi, NGrid, NIcon, NTag} from 'naive-ui';
 import {bandRef} from 'src/hooks/useBands';
 import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {computed} from 'vue';
 
 import {clickedRef} from '.././Scatter/useScatterClick';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
+import {useAudio} from '../Audio/useAudio';
 import {useDetails} from './useDetails';
 
 const {
@@ -15,6 +19,15 @@ const {
   intervalSiteRef,
   intervalDetailsRef,
 } = useDetails();
+const {setAudioFile} = useAudio();
+
+const dateEndRef = computed<Dayjs | null>(() => {
+  if (intervalDateRef.value === null || integrationRef.value === null) {
+    return null;
+  }
+
+  return intervalDateRef.value.add(integrationRef.value.seconds, 'seconds');
+});
 </script>
 
 <template>
@@ -30,13 +43,33 @@ const {
     </div>
 
     <div class="file container">
-      <div class="title">File indexes</div>
-      <span class="file index">{{ intervalDetailsRef ?? '' }}</span>
+      <div class="title">Audio blocks</div>
+      <span class="file index">
+        <n-button
+          v-for="blockDetails in intervalDetailsRef"
+          class="zoom"
+          size="tiny"
+          @click="() => setAudioFile(blockDetails)"
+        >
+          <template #icon>
+            <n-icon>
+              <HeadsetOutline />
+            </n-icon>
+          </template>
+        </n-button>
+      </span>
+    </div>
+
+    <div class="separator" />
+
+    <div class="file container">
+      <div class="title">Date Start</div>
+      <span class="file index">{{ intervalDateRef }}</span>
     </div>
 
     <div class="file container">
-      <div class="title">Timestamp</div>
-      <span class="file index">{{ intervalDateRef }}</span>
+      <div class="title">Date End</div>
+      <span class="file index">{{ dateEndRef }}</span>
     </div>
 
     <div class="file container">

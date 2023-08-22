@@ -6,12 +6,14 @@ import {integrationRef} from './useIntegrations';
 import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
+// INFO: A block corresponds to one audio
 export interface BlockDetails {
-  start: string;
-  fileStart: string;
+  start: number;
+  fileStart: number;
   file: string;
 }
 
+// INFO: An interval can have multiple blocks thus multiple audio files (portions of them)
 export type IntervalDetails = BlockDetails[];
 
 interface AggregatedIntervalDetailsRef {

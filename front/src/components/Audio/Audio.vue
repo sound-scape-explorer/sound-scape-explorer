@@ -25,15 +25,13 @@ import WaveSurfer from 'wavesurfer.js';
 import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
+
 import {FFT_SIZE, WAVE} from '../../constants';
 import {triggerWavDownload} from '../../utils/trigger-wav-download';
-import {clickedRef} from '.././Scatter/useScatterClick';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import {useDetails} from '../Details/useDetails';
+import {currentAudioFileRef} from './useAudio';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
-
-const {groupIndexRef, filenameRef} = useDetails();
 
 /**
  * State
@@ -110,14 +108,6 @@ const colorsRef = computed(() => {
   });
 });
 
-const srcRef = computed(() => {
-  if (audioHostRef.value === null || filenameRef.value === null) {
-    return null;
-  }
-
-  return `${audioHostRef.value}${filenameRef.value}`;
-});
-
 /**
  * Handlers
  */
@@ -133,10 +123,8 @@ function close() {
 
 async function load() {
   if (
-    clickedRef.value === null ||
     integrationRef.value === null ||
-    groupIndexRef.value === null ||
-    srcRef.value === null ||
+    currentAudioFileRef.value === null ||
     wsRef.value === null ||
     audioContextRef.value === null
   ) {
@@ -144,15 +132,15 @@ async function load() {
   }
 
   try {
-    const response = await fetch(srcRef.value);
+    const src = `${audioHostRef.value}${currentAudioFileRef.value.file}`;
+    const response = await fetch(src);
     const arrayBuffer = await response.arrayBuffer();
     const audioBuffer = await audioContextRef.value.decodeAudioData(
       arrayBuffer,
     );
 
-    const {seconds} = integrationRef.value;
-    const start = groupIndexRef.value * seconds * 1000;
-    const end = start + seconds * 1000;
+    const start = currentAudioFileRef.value.fileStart;
+    const end = start + integrationRef.value.seconds * 1000;
 
     audioBufferSlice(audioBuffer, start, end, handleAudioSlice);
   } catch {
@@ -221,17 +209,13 @@ async function handleDownload() {
   // noinspection TypeScriptUnresolvedReference
   const buffer = wsRef.value.backend.buffer as AudioBuffer | null;
 
-  if (
-    buffer === null ||
-    filenameRef.value === null ||
-    groupIndexRef.value === null
-  ) {
+  if (buffer === null || currentAudioFileRef.value === null) {
     return;
   }
 
   const wav = encodeWavFileFromAudioBuffer(buffer, 0);
   const blob = new Blob([wav], {type: 'audio/wav'});
-  const name = `${filenameRef.value} - ${groupIndexRef.value} - NO FILTER.wav`;
+  const name = `${currentAudioFileRef.value.file} - ${currentAudioFileRef.value.start} - NO FILTER.wav`;
 
   triggerWavDownload(blob, name);
 }
@@ -345,7 +329,7 @@ watch(playbackRateRef, () => {
  */
 
 onUnmounted(close);
-watch(clickedRef, load);
+watch(currentAudioFileRef, load);
 </script>
 
 <template>

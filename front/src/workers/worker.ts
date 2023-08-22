@@ -803,6 +803,8 @@ export async function readAggregatedIntervalDetails(
   extractorIndex: number,
 ): Promise<IntervalDetails[]> {
   const h5 = await load(file);
+  const settings = await readSettings(file);
+
   const path = `${StoragePath.aggregated_interval_details}/${bandName}/${integrationSeconds}/${extractorIndex}`;
   const dataset = h5.get(path) as Dataset;
   // TODO: This can be non rectangular,
@@ -815,11 +817,13 @@ export async function readAggregatedIntervalDetails(
 
     for (const string of strings) {
       const elements = string.split('/');
+      const fullPath = `/${elements.slice(2).join('/')}`;
+      const relativePath = fullPath.replace(settings.audio_path, '');
 
       const blockDetails: BlockDetails = {
-        start: elements[0],
-        fileStart: elements[1],
-        file: `/${elements.slice(2).join('/')}`,
+        start: Number(elements[0]),
+        fileStart: Number(elements[1]),
+        file: relativePath,
       };
 
       blocksDetails.push(blockDetails);
