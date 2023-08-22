@@ -83,4 +83,5 @@ export enum StoragePath {
 
   // Trajectories
   traced = '/traced',
+  traced_timestamps = '/traced_timestamps',
 }

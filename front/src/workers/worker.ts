@@ -746,6 +746,21 @@ export async function readTraced(
   return traced;
 }
 
+export async function readTracedTimestamps(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+  reducerIndex: number,
+  trajectoryIndex: number,
+): Promise<number[]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.traced_timestamps}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
+  const dataset = h5.get(path) as Dataset;
+  const timestamps = dataset.to_array() as number[];
+  return timestamps;
+}
+
 export async function readAggregated(
   file: File,
   bandName: string,

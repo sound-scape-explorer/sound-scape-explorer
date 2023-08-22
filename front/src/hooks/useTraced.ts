@@ -13,6 +13,7 @@ export type TracedData = number[][];
 interface Traced {
   trajectory: Trajectory;
   data: TracedData;
+  timestamps: number[];
 }
 
 interface TracedRef {
@@ -57,9 +58,19 @@ export function useTraced() {
         sT.index,
       );
 
+      const timestamps: number[] = await workerRef.value.readTracedTimestamps(
+        storageFileRef.value,
+        bandRef.value.name,
+        integrationRef.value.seconds,
+        extractorRef.value.index,
+        reducerRef.value.index,
+        sT.index,
+      );
+
       const traced: Traced = {
         trajectory: sT,
         data: data,
+        timestamps: timestamps,
       };
 
       traceds.push(traced);
