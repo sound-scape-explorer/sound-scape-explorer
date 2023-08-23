@@ -14,7 +14,11 @@ import type {Range} from 'src/hooks/useRanges';
 import type {ReducedFeatures} from 'src/hooks/useReducedFeatures';
 import type {ReducerFromStorage} from 'src/hooks/useReducers';
 import type {Site} from 'src/hooks/useSites';
-import type {TracedData} from 'src/hooks/useTraced';
+import type {
+  TracedData,
+  TracedRelativeTimestamps,
+  TracedTimestamps,
+} from 'src/hooks/useTraced';
 import type {Trajectory} from 'src/hooks/useTrajectories';
 import {StorageMode} from 'src/storage/StorageMode';
 import type {StorageSettings} from 'src/storage/StorageSettings';
@@ -738,27 +742,28 @@ export async function readTraced(
   extractorIndex: number,
   reducerIndex: number,
   trajectoryIndex: number,
-): Promise<TracedData> {
+): Promise<[TracedData, TracedTimestamps, TracedRelativeTimestamps]> {
   const h5 = await load(file);
-  const path = `${StoragePath.traced}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
-  const dataset = h5.get(path) as Dataset;
-  const traced = dataset.to_array() as number[][];
-  return traced;
-}
 
-export async function readTracedTimestamps(
-  file: File,
-  bandName: string,
-  integrationSeconds: number,
-  extractorIndex: number,
-  reducerIndex: number,
-  trajectoryIndex: number,
-): Promise<number[]> {
-  const h5 = await load(file);
-  const path = `${StoragePath.traced_timestamps}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
-  const dataset = h5.get(path) as Dataset;
-  const timestamps = dataset.to_array() as number[];
-  return timestamps;
+  const dataPath = `${StoragePath.traced}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
+  const dataDataset = h5.get(dataPath) as Dataset;
+  const data = dataDataset.to_array() as number[][];
+
+  const timestampsPath = `${StoragePath.traced_timestamps}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
+  const timestampsDataset = h5.get(timestampsPath) as Dataset;
+  const timestamps = timestampsDataset.to_array() as number[];
+
+  // Building indices of the original order for easy sorting
+  const indices = Array.from({length: timestamps.length}, (_, i) => i);
+  indices.sort((a, b) => timestamps[a] - timestamps[b]);
+
+  const sortedData = indices.map((i) => data[i]);
+  const sortedTimestamps = indices.map((i) => timestamps[i]);
+  const relativeTimestamps = sortedTimestamps.map(
+    (t) => t - sortedTimestamps[0],
+  );
+
+  return [sortedData, sortedTimestamps, relativeTimestamps];
 }
 
 export async function readAggregated(

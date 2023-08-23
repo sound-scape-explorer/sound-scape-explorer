@@ -9,11 +9,14 @@ import {selectedTrajectoriesRef, type Trajectory} from './useTrajectories';
 import {workerRef} from './useWorker';
 
 export type TracedData = number[][];
+export type TracedTimestamps = number[];
+export type TracedRelativeTimestamps = number[];
 
 interface Traced {
   trajectory: Trajectory;
   data: TracedData;
-  timestamps: number[];
+  timestamps: TracedTimestamps;
+  relativeTimestamps: TracedRelativeTimestamps;
 }
 
 interface TracedRef {
@@ -49,33 +52,27 @@ export function useTraced() {
     const traceds: Traced[] = [];
 
     for (const sT of selectedTrajectoriesRef.value) {
-      const data: TracedData = await workerRef.value.readTraced(
-        storageFileRef.value,
-        bandRef.value.name,
-        integrationRef.value.seconds,
-        extractorRef.value.index,
-        reducerRef.value.index,
-        sT.index,
-      );
-
-      const timestamps: number[] = await workerRef.value.readTracedTimestamps(
-        storageFileRef.value,
-        bandRef.value.name,
-        integrationRef.value.seconds,
-        extractorRef.value.index,
-        reducerRef.value.index,
-        sT.index,
-      );
+      const [data, timestamps, relativeTimestamps] =
+        await workerRef.value.readTraced(
+          storageFileRef.value,
+          bandRef.value.name,
+          integrationRef.value.seconds,
+          extractorRef.value.index,
+          reducerRef.value.index,
+          sT.index,
+        );
 
       const traced: Traced = {
         trajectory: sT,
         data: data,
         timestamps: timestamps,
+        relativeTimestamps: relativeTimestamps,
       };
 
       traceds.push(traced);
     }
 
+    console.log(traceds);
     tracedRef.value = traceds;
   };
 
