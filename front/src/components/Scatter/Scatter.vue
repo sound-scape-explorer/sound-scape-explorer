@@ -10,11 +10,7 @@ import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
 import {useScatterClick} from './useScatterClick';
-import {
-  metaIndexRef,
-  scatterTracesRef,
-  useScatterTraces,
-} from './useScatterTraces';
+import {scatterTracesRef, useScatterTraces} from './useScatterTraces';
 
 const divRef = ref<PlotlyHTMLElement | null>(null);
 const {handleClick} = useScatterClick();
@@ -22,11 +18,7 @@ const {handleClick} = useScatterClick();
 useScatterTraces();
 
 const handlePlotlyClick = (data: PlotMouseEvent) => {
-  if (
-    metaPropertiesRef.value === null ||
-    metaSetsRef.value === null ||
-    metaIndexRef.value === null
-  ) {
+  if (metaPropertiesRef.value === null || metaSetsRef.value === null) {
     return;
   }
 

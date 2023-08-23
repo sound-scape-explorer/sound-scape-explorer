@@ -19,7 +19,7 @@ interface Traced {
   relativeTimestamps: TracedRelativeTimestamps;
 }
 
-interface TracedRef {
+export interface TracedRef {
   value: Traced[];
 }
 
@@ -72,7 +72,6 @@ export function useTraced() {
       traceds.push(traced);
     }
 
-    console.log(traceds);
     tracedRef.value = traceds;
   };
 
