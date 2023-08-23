@@ -2,6 +2,7 @@
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import {scatterReadyRef} from 'src/components/Scatter/useScatterStatus';
+import TrajectoriesColorScale from 'src/components/Trajectories/TrajectoriesColorScale.vue';
 import {tracedFusedRef} from 'src/hooks/useTraced';
 import {trajectoriesRef, useTrajectories} from 'src/hooks/useTrajectories';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
@@ -74,6 +75,8 @@ const handleUpdateValue = (names: string[]) => {
         size="small"
       />
     </div>
+
+    <TrajectoriesColorScale />
   </AppDraggable>
 </template>
 
