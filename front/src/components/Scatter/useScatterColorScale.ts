@@ -44,7 +44,7 @@ export const chromaScaleRef = computed<Scale<Color>>(() => {
 
 export const cyclingScaleRef = computed<Scale<Color>>(() => {
   return chroma
-    .scale(['blue', 'green', 'yellow', 'orange', 'yellow', 'red', 'blue'])
+    .scale(['blue', 'cyan', 'green', 'yellow', 'orange', 'red', 'blue'])
     .domain([0, 1])
     .mode('hsl');
 });
