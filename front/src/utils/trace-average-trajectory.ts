@@ -1,4 +1,5 @@
 import type {Data} from 'plotly.js-dist-min';
+import {cyclingScaleRef} from 'src/components/Scatter/useScatterColorScale';
 import type {TracedRef} from 'src/hooks/useTraced';
 
 import {interpolateArray} from './interpolate-array';
@@ -60,6 +61,9 @@ export function traceAverageTrajectory(traceds: TracedRef['value']) {
     name: 'Averaged Trace',
     type: scatterType,
     mode: 'lines',
+    line: {
+      color: cyclingScaleRef.value.colors(axisLength),
+    },
   };
 
   return averageTrace;
