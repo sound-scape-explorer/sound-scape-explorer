@@ -5,6 +5,7 @@ import {useNotification} from 'src/components/AppNotification/useNotification';
 import {pointsFilteredByMetaRef} from 'src/components/Scatter/useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from 'src/components/Scatter/useScatterFilterTime';
 import {scatterReadyRef} from 'src/components/Scatter/useScatterStatus';
+import {aggregatedFeaturesRef} from 'src/hooks/useAggregatedFeatures';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
@@ -12,7 +13,6 @@ import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 import {storageFileRef} from 'src/hooks/useStorageFile';
-import {groupedFeaturesRef} from 'src/hooks/useStorageGroupedFeatures';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {workerRef} from 'src/hooks/useWorker';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
@@ -38,7 +38,7 @@ async function handleClick() {
     bandRef.value === null ||
     integrationRef.value === null ||
     aggregatedTimestampsRef.value === null ||
-    groupedFeaturesRef.value === null ||
+    aggregatedFeaturesRef.value === null ||
     aggregatedLabelsRef.value === null ||
     pointsFilteredByMetaRef.value === null ||
     pointsFilteredByTimeRef.value === null ||
@@ -68,7 +68,7 @@ async function handleClick() {
       continue;
     }
 
-    const features = groupedFeaturesRef.value[intervalIndex];
+    const features = aggregatedFeaturesRef.value[intervalIndex];
     const timestamp = aggregatedTimestampsRef.value[intervalIndex];
     const groupedMetas = aggregatedLabelsRef.value[intervalIndex];
 

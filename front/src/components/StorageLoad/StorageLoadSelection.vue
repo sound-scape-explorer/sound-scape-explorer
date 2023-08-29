@@ -1,9 +1,8 @@
 <script lang="ts" setup>
+import {useAggregatedFeatures} from 'src/hooks/useAggregatedFeatures';
 import {useAggregatedIntervalDetails} from 'src/hooks/useAggregatedIntervalDetails';
 import {useAggregatedSites} from 'src/hooks/useAggregatedSites';
 import {useLabels} from 'src/hooks/useLabels';
-import {useStorageGroupedFeatures} from 'src/hooks/useStorageGroupedFeatures';
-import {useStorageGroupedFilenames} from 'src/hooks/useStorageGroupedFilenames';
 import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
 import {useStorageMetaProperties} from 'src/hooks/useStorageMetaProperties';
 import {useStorageMetaSets} from 'src/hooks/useStorageMetaSets';
@@ -21,8 +20,7 @@ useStorageMetaSets();
 useStorageMetaProperties();
 useLabels();
 
-useStorageGroupedFilenames();
-useStorageGroupedFeatures();
+useAggregatedFeatures();
 useAggregatedTimestamps();
 useAggregatedLabels();
 useAggregatedSites();
