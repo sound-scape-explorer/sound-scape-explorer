@@ -1,13 +1,14 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
+import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
+import {useStorageVolume} from 'src/hooks/useStorageVolume';
+import {volumesRef} from 'src/hooks/useStorageVolumes';
 import {computed, ref, watch} from 'vue';
+
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHistogram from '../AppHistogram/AppHistogram.vue';
-import {volumesRef} from 'src/hooks/useStorageVolumes';
-import {useStorageVolume} from 'src/hooks/useStorageVolume';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 
 const {readVolume} = useStorageVolume();
 

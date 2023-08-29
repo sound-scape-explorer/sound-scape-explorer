@@ -1,3 +1,4 @@
+// TODO: Refine
 export enum KeyboardShortcut {
   import = 'i',
   settings = ',',
@@ -12,6 +13,7 @@ export enum KeyboardShortcut {
   matrices = 'm',
   pairings = 'p',
   trajectories = 'T',
+  indicators = 'I',
   time = 't',
   timePlayPause = 'space',
   timeBackward = 'p',

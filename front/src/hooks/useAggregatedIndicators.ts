@@ -40,7 +40,6 @@ export function useAggregatedIndicators() {
       extractorsIndexes,
     );
 
-    console.log(aggregated);
     aggregatedIndicatorsRef.value = aggregated;
   };
 

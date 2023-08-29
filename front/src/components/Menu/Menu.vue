@@ -1,12 +1,12 @@
 <script lang="ts" setup="">
 import {
   AnalyticsOutline,
+  BarChartOutline,
   CalendarOutline,
   CloudUploadOutline,
   CogOutline,
   ColorPaletteOutline,
   EyeOutline,
-  FlaskOutline,
   GitCompareOutline,
   GridOutline,
   HeadsetOutline,
@@ -37,6 +37,7 @@ onKeyPressed(KeyboardShortcut.settings, () => toggle('settings'));
 onKeyPressed(KeyboardShortcut.help, () => toggle('help'));
 onKeyPressed(KeyboardShortcut.selection, () => toggle('selection'));
 onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
+onKeyPressed(KeyboardShortcut.indicators, () => toggle('indicators'));
 onKeyPressed(KeyboardShortcut.colors, () => toggle('colors'));
 onKeyPressed(KeyboardShortcut.queries, () => toggle('queries'));
 onKeyPressed(KeyboardShortcut.time, () => toggle('time'));
@@ -113,12 +114,20 @@ onKeyPressed(KeyboardShortcut.pairings, () => toggle('pairings'));
         <color-palette-outline />
       </MenuItem>
 
+      <!-- <MenuItem -->
+      <!--   draggable-key="queries" -->
+      <!--   text="Query" -->
+      <!--   :toggle="toggle" -->
+      <!-- > -->
+      <!--   <flask-outline /> -->
+      <!-- </MenuItem> -->
+
       <MenuItem
-        draggable-key="queries"
-        text="Query"
+        draggable-key="indicators"
+        text="Indicators"
         :toggle="toggle"
       >
-        <flask-outline />
+        <bar-chart-outline />
       </MenuItem>
 
       <MenuItem

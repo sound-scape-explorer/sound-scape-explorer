@@ -1,11 +1,12 @@
-import {ref, watch} from 'vue';
-import Plotly from 'plotly.js-dist-min';
 import type {Data, Layout} from 'plotly.js-dist-min';
+import Plotly from 'plotly.js-dist-min';
+import {ref, watch} from 'vue';
 
 export interface HistogramProps {
   labels: string[];
   values: number[];
-  title: string;
+  colors: string[];
+  title?: string;
 }
 
 export function useAppHistogram(props: HistogramProps) {
@@ -34,6 +35,9 @@ export function useAppHistogram(props: HistogramProps) {
         x: props.labels,
         y: props.values,
         hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
+        marker: {
+          color: props.colors,
+        },
       },
     ];
 

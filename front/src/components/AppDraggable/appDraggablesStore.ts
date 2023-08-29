@@ -15,6 +15,7 @@ export interface AppDraggablesStore {
   matrices: boolean;
   pairings: boolean;
   trajectories: boolean;
+  indicators: boolean;
 }
 
 export const appDraggablesStore = reactive<AppDraggablesStore>({
@@ -32,4 +33,5 @@ export const appDraggablesStore = reactive<AppDraggablesStore>({
   matrices: false,
   pairings: false,
   trajectories: false,
+  indicators: false,
 });
