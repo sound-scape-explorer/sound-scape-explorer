@@ -1,5 +1,6 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
+import type {AggregatedIndicator} from 'src/hooks/useAggregatedIndicators';
 import type {
   BlockDetails,
   IntervalDetails,
@@ -588,4 +589,31 @@ export async function readAggregatedLabels(
   }
 
   return labels;
+}
+
+export async function readAggregatedIndicators(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorsIndexes: number[], // non nn extractors indexes
+): Promise<AggregatedIndicator[]> {
+  const h5 = await load(file);
+  const extractors = await readExtractors(file);
+
+  const aggregateds: AggregatedIndicator[] = [];
+
+  for (const extractorIndex of extractorsIndexes) {
+    const path = `${StoragePath.aggregated}/${bandName}/${integrationSeconds}/${extractorIndex}`;
+    const dataset = h5.get(path) as Dataset;
+    const values = dataset.to_array() as number[][];
+
+    const aggregated: AggregatedIndicator = {
+      extractor: extractors[extractorIndex],
+      values: values,
+    };
+
+    aggregateds.push(aggregated);
+  }
+
+  return aggregateds;
 }
