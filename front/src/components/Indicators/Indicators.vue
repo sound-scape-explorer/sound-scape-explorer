@@ -112,7 +112,7 @@ const chartDataRef = computed<ChartData>(() => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="volumes">
+  <AppDraggable draggable-key="indicators">
     <div class="container">
       <div class="row">
         <n-cascader

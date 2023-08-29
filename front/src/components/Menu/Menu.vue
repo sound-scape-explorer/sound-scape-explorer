@@ -44,7 +44,6 @@ onKeyPressed(KeyboardShortcut.time, () => toggle('time'));
 onKeyPressed(KeyboardShortcut.meta, () => toggle('meta'));
 onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
 onKeyPressed(KeyboardShortcut.details, () => toggle('details'));
-onKeyPressed(KeyboardShortcut.volumes, () => toggle('volumes'));
 onKeyPressed(KeyboardShortcut.matrices, () => toggle('matrices'));
 onKeyPressed(KeyboardShortcut.pairings, () => toggle('pairings'));
 </script>
@@ -123,14 +122,6 @@ onKeyPressed(KeyboardShortcut.pairings, () => toggle('pairings'));
       <!-- </MenuItem> -->
 
       <MenuItem
-        draggable-key="indicators"
-        text="Indicators"
-        :toggle="toggle"
-      >
-        <bar-chart-outline />
-      </MenuItem>
-
-      <MenuItem
         draggable-key="time"
         text="Time"
         :toggle="toggle"
@@ -163,11 +154,11 @@ onKeyPressed(KeyboardShortcut.pairings, () => toggle('pairings'));
       </MenuItem>
 
       <MenuItem
-        draggable-key="volumes"
-        text="Volumes"
+        draggable-key="indicators"
+        text="Indicators"
         :toggle="toggle"
       >
-        <analytics-outline />
+        <bar-chart-outline />
       </MenuItem>
 
       <MenuItem

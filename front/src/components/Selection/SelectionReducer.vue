@@ -58,6 +58,7 @@ const bandsOptionsRef = computed(() => {
   const options = reducerRef.value.bands.map(
     (band) => `${band.index} - ${band.name} (${band.low} Hz - ${band.high} Hz)`,
   );
+
   return convertToNaiveSelectOptions(options);
 });
 
