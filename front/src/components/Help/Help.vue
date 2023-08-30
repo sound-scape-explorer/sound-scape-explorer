@@ -43,7 +43,7 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.trajectories, name: 'Trajectories'},
   {key: KeyboardShortcut.colors, name: 'Colors'},
   {key: KeyboardShortcut.time, name: 'Time'},
-  {key: KeyboardShortcut.meta, name: 'Meta'},
+  {key: KeyboardShortcut.labels, name: 'Meta'},
   {key: KeyboardShortcut.audio, name: 'Audio'},
   {key: KeyboardShortcut.details, name: 'Details'},
   {key: KeyboardShortcut.timePlayPause, name: 'Time: Play / Pause'},

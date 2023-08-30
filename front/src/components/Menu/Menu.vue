@@ -35,12 +35,12 @@ onKeyPressed(KeyboardShortcut.import, () => toggle('import'));
 onKeyPressed(KeyboardShortcut.settings, () => toggle('settings'));
 onKeyPressed(KeyboardShortcut.help, () => toggle('help'));
 onKeyPressed(KeyboardShortcut.selection, () => toggle('selection'));
-onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
 onKeyPressed(KeyboardShortcut.colors, () => toggle('colors'));
 onKeyPressed(KeyboardShortcut.time, () => toggle('time'));
-onKeyPressed(KeyboardShortcut.meta, () => toggle('meta'));
-onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
+onKeyPressed(KeyboardShortcut.labels, () => toggle('labels'));
 onKeyPressed(KeyboardShortcut.details, () => toggle('details'));
+onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
+onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
 onKeyPressed(KeyboardShortcut.indicators, () => toggle('indicators'));
 onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
 </script>
@@ -95,14 +95,6 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        draggable-key="trajectories"
-        text="Trajectories"
-        :toggle="toggle"
-      >
-        <analytics-outline />
-      </MenuItem>
-
-      <MenuItem
         draggable-key="colors"
         text="Colors"
         :toggle="toggle"
@@ -119,11 +111,19 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        draggable-key="meta"
-        text="Meta"
+        draggable-key="labels"
+        text="Labels"
         :toggle="toggle"
       >
         <layers-outline />
+      </MenuItem>
+
+      <MenuItem
+        draggable-key="details"
+        text="Details"
+        :toggle="toggle"
+      >
+        <list-outline />
       </MenuItem>
 
       <MenuItem
@@ -135,11 +135,11 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        draggable-key="details"
-        text="Details"
+        draggable-key="trajectories"
+        text="Trajectories"
         :toggle="toggle"
       >
-        <list-outline />
+        <analytics-outline />
       </MenuItem>
 
       <MenuItem

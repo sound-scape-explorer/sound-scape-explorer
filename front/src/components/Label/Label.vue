@@ -26,7 +26,7 @@ const toggle = () => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="meta">
+  <AppDraggable draggable-key="labels">
     <div
       :class="containerClasses"
       class="container"
