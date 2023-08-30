@@ -11,11 +11,9 @@ export interface AppDraggablesStore {
   meta: boolean;
   audio: boolean;
   details: boolean;
-  volumes: boolean;
-  matrices: boolean;
-  pairings: boolean;
   trajectories: boolean;
   indicators: boolean;
+  digested: boolean;
 }
 
 export const appDraggablesStore = reactive<AppDraggablesStore>({
@@ -29,9 +27,7 @@ export const appDraggablesStore = reactive<AppDraggablesStore>({
   meta: false,
   audio: false,
   details: false,
-  volumes: false,
-  matrices: false,
-  pairings: false,
   trajectories: false,
   indicators: false,
+  digested: false,
 });

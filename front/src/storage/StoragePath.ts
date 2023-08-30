@@ -79,6 +79,7 @@ export enum StoragePath {
   computation_umap = '/computation_umap',
 
   // Digestions
+  digesters_names = '/digesters/names',
   digested = '/digested',
 
   // Trajectories

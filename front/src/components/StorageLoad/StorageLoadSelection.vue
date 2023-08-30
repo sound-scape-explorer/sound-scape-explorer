@@ -4,10 +4,8 @@ import {useAggregatedIndicators} from 'src/hooks/useAggregatedIndicators';
 import {useAggregatedIntervalDetails} from 'src/hooks/useAggregatedIntervalDetails';
 import {useAggregatedSites} from 'src/hooks/useAggregatedSites';
 import {useLabels} from 'src/hooks/useLabels';
-import {useStorageIndicators} from 'src/hooks/useStorageIndicators';
 import {useStorageMetaProperties} from 'src/hooks/useStorageMetaProperties';
 import {useStorageMetaSets} from 'src/hooks/useStorageMetaSets';
-import {useStorageVolumes} from 'src/hooks/useStorageVolumes';
 import {useTraced} from 'src/hooks/useTraced';
 
 import {useAggregatedLabels} from '../../hooks/useAggregatedLabels';
@@ -30,9 +28,6 @@ useAggregatedIndicators();
 
 useReducedFeatures();
 useTraced();
-
-useStorageVolumes();
-useStorageIndicators();
 
 useScatterColorScale();
 useScatterFilter();

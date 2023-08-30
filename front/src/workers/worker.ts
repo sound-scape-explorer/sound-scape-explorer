@@ -1,5 +1,6 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
+import type {Digested} from 'src/components/Digested/useDigested';
 import type {AggregatedIndicator} from 'src/hooks/useAggregatedIndicators';
 import type {
   BlockDetails,
@@ -7,6 +8,7 @@ import type {
 } from 'src/hooks/useAggregatedIntervalDetails';
 import type {AggregatedSite} from 'src/hooks/useAggregatedSites';
 import type {Band} from 'src/hooks/useBands';
+import type {Digester} from 'src/hooks/useDigesters';
 import type {Extractor} from 'src/hooks/useExtractors';
 import type {File as FileConfig} from 'src/hooks/useFiles';
 import type {Integration} from 'src/hooks/useIntegrations';
@@ -616,4 +618,63 @@ export async function readAggregatedIndicators(
   }
 
   return aggregateds;
+}
+
+export async function readDigesters(file: File): Promise<Digester[]> {
+  const h5 = await load(file);
+  const path = `${StoragePath.digesters_names}`;
+  const dataset = h5.get(path) as Dataset;
+  const names = dataset.to_array() as string[];
+
+  const digesters: Digester[] = [];
+
+  for (let index = 0; index < names.length; index += 1) {
+    const digester: Digester = {
+      index: index,
+      name: names[index],
+    };
+
+    digesters.push(digester);
+  }
+
+  return digesters;
+}
+
+export async function readDigested(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  digesterIndex: number,
+): Promise<Digested['values']> {
+  const h5 = await load(file);
+  const groupPath = `${StoragePath.digested}/${bandName}/${integrationSeconds}/${digesterIndex}`;
+  const group = h5.get(groupPath) as Group;
+
+  const digestedValues: Digested['values'] = {};
+
+  for (const key of group.keys()) {
+    const keyPath = `${groupPath}/${key}`;
+    const keyDatasetOrGroup = h5.get(keyPath) as Dataset | Group;
+
+    if (keyDatasetOrGroup.type === 'Dataset') {
+      const keyDataset = keyDatasetOrGroup as Dataset;
+      const values = keyDataset.to_array() as number[][];
+      digestedValues[key] = values;
+    } else if (keyDatasetOrGroup.type === 'Group') {
+      const keyGroup = keyDatasetOrGroup as Group;
+
+      const values: {[key: string]: number[][]} = {};
+
+      for (const subKey of keyGroup.keys()) {
+        const subKeyPath = `${keyPath}/${subKey}`;
+        const subKeyDataset = h5.get(subKeyPath) as Dataset;
+        const subKeyValues = subKeyDataset.to_array() as number[][];
+        values[subKey] = subKeyValues;
+      }
+
+      digestedValues[key] = values;
+    }
+  }
+
+  return digestedValues;
 }

@@ -7,7 +7,6 @@ import {
   CogOutline,
   ColorPaletteOutline,
   EyeOutline,
-  GitCompareOutline,
   GridOutline,
   HeadsetOutline,
   HelpOutline,
@@ -37,15 +36,14 @@ onKeyPressed(KeyboardShortcut.settings, () => toggle('settings'));
 onKeyPressed(KeyboardShortcut.help, () => toggle('help'));
 onKeyPressed(KeyboardShortcut.selection, () => toggle('selection'));
 onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
-onKeyPressed(KeyboardShortcut.indicators, () => toggle('indicators'));
 onKeyPressed(KeyboardShortcut.colors, () => toggle('colors'));
 onKeyPressed(KeyboardShortcut.queries, () => toggle('queries'));
 onKeyPressed(KeyboardShortcut.time, () => toggle('time'));
 onKeyPressed(KeyboardShortcut.meta, () => toggle('meta'));
 onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
 onKeyPressed(KeyboardShortcut.details, () => toggle('details'));
-onKeyPressed(KeyboardShortcut.matrices, () => toggle('matrices'));
-onKeyPressed(KeyboardShortcut.pairings, () => toggle('pairings'));
+onKeyPressed(KeyboardShortcut.indicators, () => toggle('indicators'));
+onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
 </script>
 
 <template>
@@ -162,19 +160,11 @@ onKeyPressed(KeyboardShortcut.pairings, () => toggle('pairings'));
       </MenuItem>
 
       <MenuItem
-        draggable-key="matrices"
-        text="Matrices"
+        draggable-key="digested"
+        text="Digested"
         :toggle="toggle"
       >
         <grid-outline />
-      </MenuItem>
-
-      <MenuItem
-        draggable-key="pairings"
-        text="Pairings"
-        :toggle="toggle"
-      >
-        <git-compare-outline />
       </MenuItem>
     </div>
   </div>

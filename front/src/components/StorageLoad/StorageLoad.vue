@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useDigesters} from 'src/hooks/useDigesters';
 import {useFiles} from 'src/hooks/useFiles';
 import {useRanges} from 'src/hooks/useRanges';
 import {isSelectedRef, useSelection} from 'src/hooks/useSelection';
@@ -12,6 +13,7 @@ useStorageSettings();
 useFiles();
 useSites();
 useRanges();
+useDigesters();
 </script>
 
 <template>
