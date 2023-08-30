@@ -461,7 +461,7 @@ watch(currentAudioFileRef, load);
       </div>
 
       <n-grid
-        :cols="3"
+        :cols="4"
         class="grid"
         x-gap="12"
       >
@@ -494,6 +494,20 @@ watch(currentAudioFileRef, load);
           </n-tag>
 
           {{ speedToSemitones(playbackRateRef, 2) }}
+        </n-gi>
+        <n-gi v-if="settingsRef.value !== null">
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            Hertz
+          </n-tag>
+
+          {{
+            (
+              settingsRef.value['expected_sample_rate'] * playbackRateRef
+            ).toFixed()
+          }}
         </n-gi>
       </n-grid>
 
