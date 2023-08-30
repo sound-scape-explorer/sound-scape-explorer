@@ -5,7 +5,7 @@ import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {bandRef} from 'src/hooks/useBands';
 import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {convertTimestampToDateShort} from 'src/utils/convert-timestamp-to-date-short';
 import {computed} from 'vue';
 
@@ -20,6 +20,7 @@ const {
   intervalSiteRef,
   intervalDetailsRef,
 } = useDetails();
+
 const {setAudioFile} = useAudio();
 
 const dateEndRef = computed<Dayjs | null>(() => {
@@ -138,13 +139,13 @@ const dateEndRef = computed<Dayjs | null>(() => {
         x-gap="12"
       >
         <!--suppress JSUnusedLocalSymbols -->
-        <n-gi v-for="(_, index) in metaPropertiesRef.value">
+        <n-gi v-for="(_, index) in labelsPropertiesRef.value">
           <n-tag
             :bordered="false"
             class="tag"
             size="small"
           >
-            {{ metaPropertiesRef.value?.[index] }}
+            {{ labelsPropertiesRef.value?.[index] }}
           </n-tag>
 
           {{ intervalLabelsRef?.[index] }}

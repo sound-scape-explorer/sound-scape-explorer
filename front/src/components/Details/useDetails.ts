@@ -24,6 +24,7 @@ export function useDetails() {
   const intervalSiteRef = ref<AggregatedSite | null>(null);
   const intervalDetailsRef = ref<IntervalDetails | null>(null);
 
+  // TODO: Performance can be improved (react on clickedRef change only)
   watchEffect(async () => {
     if (
       clickedRef.value === null ||

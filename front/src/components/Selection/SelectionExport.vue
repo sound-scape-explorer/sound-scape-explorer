@@ -11,9 +11,9 @@ import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
+import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 import {storageFileRef} from 'src/hooks/useStorageFile';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 import {workerRef} from 'src/hooks/useWorker';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
 import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
@@ -42,7 +42,7 @@ async function handleClick() {
     aggregatedLabelsRef.value === null ||
     pointsFilteredByMetaRef.value === null ||
     pointsFilteredByTimeRef.value === null ||
-    metaPropertiesRef.value === null ||
+    labelsPropertiesRef.value === null ||
     reducedFeaturesRef.value === null ||
     aggregatedSitesRef.value === null
   ) {
@@ -89,7 +89,7 @@ async function handleClick() {
   csvFirstRow += 'intervalIndex,';
   csvFirstRow += 'timestamp,';
 
-  metaPropertiesRef.value.forEach((metaProperty) => {
+  labelsPropertiesRef.value.forEach((metaProperty) => {
     csvFirstRow += `label_${metaProperty},`;
   });
 

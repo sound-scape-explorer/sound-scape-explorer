@@ -3,6 +3,7 @@ import {labelsRef} from 'src/hooks/useLabels';
 import {reactive} from 'vue';
 
 import {labelsSelectionRef} from '../Label/useLabelsSelection';
+import {useScatterTraces} from './useScatterTraces';
 
 interface PointsFilteredByMetaRef {
   value: boolean[] | null;
@@ -49,6 +50,8 @@ export function useScatterFilterMeta() {
     return isVisible;
   };
 
+  const {renderTraces} = useScatterTraces();
+
   const filterByMeta = () => {
     if (aggregatedLabelsRef.value === null) {
       return;
@@ -67,6 +70,7 @@ export function useScatterFilterMeta() {
 
     pointsFilteredByMetaRef.value = pointsFilteredByMeta;
     console.log('filterByMeta');
+    renderTraces();
   };
 
   return {

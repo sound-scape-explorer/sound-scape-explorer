@@ -2,9 +2,11 @@ import chroma, {type Color, type Scale} from 'chroma-js';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {filesRef} from 'src/hooks/useFiles';
-import {metaPropertiesAsColorTypesRef} from 'src/hooks/useStorageMetaProperties';
-import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
-import {computed, reactive, watchEffect} from 'vue';
+import {
+  labelsPropertiesAsColorTypesRef,
+  labelsSetsRef,
+} from 'src/hooks/useLabels';
+import {computed, reactive} from 'vue';
 
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
@@ -61,11 +63,11 @@ export function useScatterColorScale() {
 
   const readColorScale = () => {
     if (
-      metaPropertiesAsColorTypesRef.value === null ||
+      labelsPropertiesAsColorTypesRef.value === null ||
       filesRef.value === null ||
       aggregatedTimestampsRef.value === null ||
       aggregatedLabelsRef.value === null ||
-      metaSetsRef.value === null
+      labelsSetsRef.value === null
     ) {
       return;
     }
@@ -96,13 +98,13 @@ export function useScatterColorScale() {
       } else if (colorType === 'cycleDay') {
         const timestamp = aggregatedTimestampsRef.value[intervalIndex];
         color = getColorByCyclingDay(timestamp);
-      } else if (metaPropertiesAsColorTypesRef.value.includes(colorType)) {
+      } else if (labelsPropertiesAsColorTypesRef.value.includes(colorType)) {
         color = getColorByMeta(
           intervalIndex,
           colorType,
-          metaPropertiesAsColorTypesRef.value,
+          labelsPropertiesAsColorTypesRef.value,
           aggregatedLabelsRef.value,
-          metaSetsRef.value,
+          labelsSetsRef.value,
         );
       }
 
@@ -110,8 +112,10 @@ export function useScatterColorScale() {
     }
 
     colorScaleRef.value = colorScale;
-    console.log('generate color scale');
+    console.log('readColorScale');
   };
 
-  watchEffect(readColorScale);
+  return {
+    readColorScale: readColorScale,
+  };
 }

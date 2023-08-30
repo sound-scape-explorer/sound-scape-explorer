@@ -1,16 +1,16 @@
 import type {Data} from 'plotly.js-dist-min';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
+import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
 
-import {colorScaleRef} from './useScatterColorScale';
+import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 export function useScatterFeatures() {
   const traceFeatures = (): Data[] => {
     if (
-      metaPropertiesRef.value === null ||
+      labelsPropertiesRef.value === null ||
       reducedFeaturesRef.value === null ||
       aggregatedLabelsRef.value === null ||
       colorScaleRef.value === null ||
@@ -20,56 +20,55 @@ export function useScatterFeatures() {
       return [];
     }
 
-    const traces: Data[] = [];
+    const colorScale = colorScaleRef.value;
+    const pointsFilteredByMeta = pointsFilteredByMetaRef.value;
+    const pointsFilteredByTime = pointsFilteredByTimeRef.value;
+
+    const plotlyColorscale = colorScale.map((color, index) => {
+      let filteredColor = color;
+
+      if (
+        pointsFilteredByMeta[index] === true ||
+        pointsFilteredByTime[index] === true
+      ) {
+        filteredColor = `rgba(0, 0, 0, ${alphaLowRef.value})`;
+      }
+
+      return [index / (colorScale.length - 1), filteredColor];
+    });
 
     const isThreeDimensional =
       typeof reducedFeaturesRef.value[0]?.[2] !== 'undefined';
+    const scatterType = isThreeDimensional ? 'scatter3d' : 'scattergl';
 
-    const scatterType = isThreeDimensional ? 'scatter3d' : 'scatter';
+    const indices = reducedFeaturesRef.value.map((_, i) => i);
+    const texts = indices.map((i) => `${i}`);
+    const hoverTemplate = '<b>%{text}</b>';
 
-    for (
-      let intervalIndex = 0;
-      intervalIndex < reducedFeaturesRef.value.length;
-      intervalIndex += 1
-    ) {
-      if (
-        pointsFilteredByMetaRef.value[intervalIndex] ||
-        pointsFilteredByTimeRef.value[intervalIndex]
-      ) {
-        continue;
-      }
+    const xs = reducedFeaturesRef.value.map((f) => f[0]);
+    const ys = reducedFeaturesRef.value.map((f) => f[1]);
+    const zs = isThreeDimensional
+      ? reducedFeaturesRef.value.map((f) => f[2])
+      : undefined;
 
-      const features = reducedFeaturesRef.value[intervalIndex];
+    const trace: Data = {
+      x: xs,
+      y: ys,
+      z: zs,
+      name: 'interval',
+      type: scatterType,
+      mode: 'markers',
+      text: texts,
+      hovertemplate: hoverTemplate,
+      marker: {
+        size: 4,
+        symbol: 'circle',
+        color: indices,
+        colorscale: plotlyColorscale,
+      },
+    } as Data;
 
-      let hoverTemplate = '';
-
-      for (const [
-        propertyIndex,
-        property,
-      ] of metaPropertiesRef.value.entries()) {
-        const lineBreak = propertyIndex === 0 ? '' : '<br>';
-        hoverTemplate += `${lineBreak}${property} <b>${aggregatedLabelsRef.value[intervalIndex][propertyIndex]}</b>`;
-      }
-
-      const trace: Data = {
-        x: [features[0]],
-        y: [features[1]],
-        z: isThreeDimensional ? [features[2]] : undefined,
-        name: `interval: ${intervalIndex}`,
-        hovertemplate: hoverTemplate,
-        type: scatterType,
-        mode: 'markers',
-        marker: {
-          size: 4,
-          symbol: 'circle',
-          color: colorScaleRef.value[intervalIndex],
-        },
-      } as Data;
-
-      traces.push(trace);
-    }
-
-    return traces;
+    return [trace];
   };
 
   return {

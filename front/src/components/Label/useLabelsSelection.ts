@@ -1,6 +1,5 @@
-import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {labelsRef} from 'src/hooks/useLabels';
-import {computed, reactive, watch} from 'vue';
+import {computed, reactive} from 'vue';
 
 import {useScatterFilterMeta} from '../Scatter/useScatterFilterMeta';
 
@@ -34,10 +33,8 @@ export function useLabelsSelection() {
 
     labelsSelectionRef.value = selection;
     filterByMeta();
+    console.log('build');
   };
-
-  // TODO: This iterates too much (length of labels properties)
-  watch([aggregatedLabelsRef], buildSelection);
 
   const updateSelection = (property: string, values: string[]) => {
     if (labelsSelectionRef.value === null) {
@@ -53,6 +50,7 @@ export function useLabelsSelection() {
   };
 
   return {
+    buildSelection: buildSelection,
     updateSelection: updateSelection,
   };
 }

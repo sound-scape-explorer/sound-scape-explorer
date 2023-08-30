@@ -31,18 +31,4 @@ export function useScatterStatus() {
     scatterReadyRef.value = true;
     scatterLoadingRef.value = false;
   });
-
-  // TODO: Side effects?
-  watchEffect(() => {
-    if (
-      reducerRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
-      extractorRef.value === null
-    ) {
-      return;
-    }
-
-    scatterLoadingRef.value = true;
-  });
 }

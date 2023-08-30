@@ -1,4 +1,5 @@
 import {mapRange} from 'src/utils/map-range';
+
 import {alphaHighRef, chromaScaleRef} from '.././Scatter/useScatterColorScale';
 
 export function useColorByPointIndex() {

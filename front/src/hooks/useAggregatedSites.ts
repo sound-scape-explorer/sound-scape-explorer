@@ -1,4 +1,4 @@
-import {reactive, watchEffect} from 'vue';
+import {reactive} from 'vue';
 
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
@@ -38,5 +38,7 @@ export function useAggregatedSites() {
     );
   };
 
-  watchEffect(readAggregatedSites);
+  return {
+    readAggregatedSites: readAggregatedSites,
+  };
 }

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
@@ -24,13 +24,13 @@ const optionsRef = computed<ColorType[]>(() => {
     'cycleDay',
   ];
 
-  if (metaPropertiesRef.value === null) {
+  if (labelsPropertiesRef.value === null) {
     return defaultOptions;
   }
 
   return [
     ...defaultOptions,
-    ...convertSlugsToColorTypes(metaPropertiesRef.value),
+    ...convertSlugsToColorTypes(labelsPropertiesRef.value),
   ];
 });
 

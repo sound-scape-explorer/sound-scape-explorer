@@ -1,4 +1,4 @@
-import {reactive, watchEffect} from 'vue';
+import {reactive} from 'vue';
 
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
@@ -26,7 +26,7 @@ export const aggregatedIntervalDetailsRef =
   });
 
 export function useAggregatedIntervalDetails() {
-  const readAggregatedBlocksDetails = async () => {
+  const readAggregatedIntervalDetails = async () => {
     if (
       workerRef.value === null ||
       storageFileRef.value === null ||
@@ -46,5 +46,7 @@ export function useAggregatedIntervalDetails() {
       );
   };
 
-  watchEffect(readAggregatedBlocksDetails);
+  return {
+    readAggregatedIntervalDetails: readAggregatedIntervalDetails,
+  };
 }

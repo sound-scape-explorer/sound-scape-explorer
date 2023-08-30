@@ -1,7 +1,6 @@
 <script lang="ts" setup="">
 import {NGi, NGrid, NTag, NTooltip} from 'naive-ui';
-import {labelsRef} from 'src/hooks/useLabels';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {labelsPropertiesRef, labelsRef} from 'src/hooks/useLabels';
 
 import LabelItemsSelection from './LabelItemsSelection.vue';
 import {labelsSelectionRef, useLabelsSelection} from './useLabelsSelection';
@@ -50,7 +49,7 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
     class="grid"
     x-gap="12"
   >
-    <n-gi v-for="property in metaPropertiesRef.value">
+    <n-gi v-for="property in labelsPropertiesRef.value">
       <n-tooltip
         trigger="hover"
         placement="top-start"

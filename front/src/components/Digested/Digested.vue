@@ -2,8 +2,7 @@
 import {RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {digestersRef} from 'src/hooks/useDigesters';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
+import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
@@ -19,11 +18,11 @@ const labelSelectedARef = ref<string | null>(null);
 const labelSelectedBRef = ref<string | null>(null);
 
 const labelPropertiesOptionsRef = computed(() => {
-  if (metaPropertiesRef.value === null) {
+  if (labelsPropertiesRef.value === null) {
     return [];
   }
 
-  return convertToNaiveSelectOptions(metaPropertiesRef.value);
+  return convertToNaiveSelectOptions(labelsPropertiesRef.value);
 });
 
 const digestersOptionsRef = computed(() => {
@@ -72,8 +71,8 @@ const valuesRef = ref<number[][]>([]);
 
 const update = () => {
   if (
-    metaPropertiesRef.value === null ||
-    metaSetsRef.value === null ||
+    labelsPropertiesRef.value === null ||
+    labelsSetsRef.value === null ||
     digestedRef.value === null ||
     labelSelectedARef.value === null
   ) {
@@ -81,14 +80,14 @@ const update = () => {
   }
 
   titleRef.value = `${digestedRef.value.digester.name} - ${labelSelectedARef.value}`;
-  const aIndex = metaPropertiesRef.value.indexOf(labelSelectedARef.value);
-  xRef.value = metaSetsRef.value[aIndex];
+  const aIndex = labelsPropertiesRef.value.indexOf(labelSelectedARef.value);
+  xRef.value = labelsSetsRef.value[aIndex];
 
   // with 2 labels
   if (digestedRef.value.isPairing && labelSelectedBRef.value !== null) {
     titleRef.value = `${titleRef.value} - ${labelSelectedBRef.value}`;
-    const bIndex = metaPropertiesRef.value.indexOf(labelSelectedBRef.value);
-    yRef.value = metaSetsRef.value[bIndex];
+    const bIndex = labelsPropertiesRef.value.indexOf(labelSelectedBRef.value);
+    yRef.value = labelsSetsRef.value[bIndex];
 
     // @ts-expect-error: 7053
     valuesRef.value = digestedRef.value.values[aIndex][bIndex] as number[][];

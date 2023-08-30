@@ -5,8 +5,6 @@ import Plotly, {
   type PlotlyHTMLElement,
   type PlotMouseEvent,
 } from 'plotly.js-dist-min';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {metaSetsRef} from 'src/hooks/useStorageMetaSets';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
 import {useScatterClick} from './useScatterClick';
@@ -18,12 +16,7 @@ const {handleClick} = useScatterClick();
 useScatterTraces();
 
 const handlePlotlyClick = (data: PlotMouseEvent) => {
-  if (metaPropertiesRef.value === null || metaSetsRef.value === null) {
-    return;
-  }
-
-  // @ts-expect-error: 2339
-  const intervalIndex = data.points[0].fullData.index;
+  const intervalIndex = data.points[0].pointNumber;
   handleClick(intervalIndex);
 };
 
