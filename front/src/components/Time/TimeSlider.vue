@@ -5,12 +5,13 @@ import {NSlider} from 'naive-ui';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {rangesRef} from 'src/hooks/useRanges';
 import {reducerRef} from 'src/hooks/useReducers';
-import {computed, ref} from 'vue';
+import {computed, ref, watch} from 'vue';
 
 import {SLIDER_LIMITS} from '../../constants';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';
-import {scatterReadyRef} from '../Scatter/useScatterStatus';
+import {useScatterFilterTime} from '../Scatter/useScatterFilterTime';
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 
 /**
@@ -147,12 +148,15 @@ interface Slider {
     [time: number]: string;
   };
 }
+
+const {filterByTime} = useScatterFilterTime();
+watch(timeStore, () => filterByTime());
 </script>
 
 <template>
   <div class="container">
     <div
-      v-if="scatterReadyRef.value"
+      v-if="!scatterLoadingRef.value"
       class="layer"
     >
       <n-slider
@@ -170,7 +174,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="scatterReadyRef.value"
+      v-if="!scatterLoadingRef.value"
       class="layer"
     >
       <div
@@ -186,7 +190,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="scatterReadyRef.value"
+      v-if="!scatterLoadingRef.value"
       class="layer zoom"
     >
       <AppButton

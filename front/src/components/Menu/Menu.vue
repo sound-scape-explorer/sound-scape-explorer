@@ -37,7 +37,6 @@ onKeyPressed(KeyboardShortcut.help, () => toggle('help'));
 onKeyPressed(KeyboardShortcut.selection, () => toggle('selection'));
 onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
 onKeyPressed(KeyboardShortcut.colors, () => toggle('colors'));
-onKeyPressed(KeyboardShortcut.queries, () => toggle('queries'));
 onKeyPressed(KeyboardShortcut.time, () => toggle('time'));
 onKeyPressed(KeyboardShortcut.meta, () => toggle('meta'));
 onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
@@ -110,14 +109,6 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
       >
         <color-palette-outline />
       </MenuItem>
-
-      <!-- <MenuItem -->
-      <!--   draggable-key="queries" -->
-      <!--   text="Query" -->
-      <!--   :toggle="toggle" -->
-      <!-- > -->
-      <!--   <flask-outline /> -->
-      <!-- </MenuItem> -->
 
       <MenuItem
         draggable-key="time"

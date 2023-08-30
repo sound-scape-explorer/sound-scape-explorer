@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
-import {scatterReadyRef} from 'src/components/Scatter/useScatterStatus';
 import TrajectoriesColorScale from 'src/components/Trajectories/TrajectoriesColorScale.vue';
 import {tracedFusedRef} from 'src/hooks/useTraced';
 import {trajectoriesRef, useTrajectories} from 'src/hooks/useTrajectories';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref} from 'vue';
+
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 
 const {selectTrajectories} = useTrajectories();
 
@@ -21,7 +22,7 @@ const optionsRef = computed(() => {
 
 const valueRef = ref([]);
 const fuseReadyRef = computed<boolean>(() => {
-  if (scatterReadyRef.value === false) {
+  if (scatterLoadingRef.value === false) {
     return false;
   }
 
@@ -64,7 +65,7 @@ const handleUpdateValue = (names: string[]) => {
         clearable
         max-tag-count="responsive"
         expand-trigger="click"
-        :disabled="!scatterReadyRef.value || tracedFusedRef.value"
+        :disabled="scatterLoadingRef.value || tracedFusedRef.value"
         :options="optionsRef"
         :cascade="false"
         check-strategy="child"

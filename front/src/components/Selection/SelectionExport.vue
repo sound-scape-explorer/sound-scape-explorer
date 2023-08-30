@@ -4,7 +4,6 @@ import AppButton from 'src/components/AppButton/AppButton.vue';
 import {useNotification} from 'src/components/AppNotification/useNotification';
 import {pointsFilteredByMetaRef} from 'src/components/Scatter/useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from 'src/components/Scatter/useScatterFilterTime';
-import {scatterReadyRef} from 'src/components/Scatter/useScatterStatus';
 import {aggregatedFeaturesRef} from 'src/hooks/useAggregatedFeatures';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
@@ -18,6 +17,8 @@ import {workerRef} from 'src/hooks/useWorker';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
 import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
 import {ref} from 'vue';
+
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 
 const {notify} = useNotification();
 
@@ -133,7 +134,7 @@ async function handleClick() {
 
 <template>
   <AppButton
-    :disabled="!scatterReadyRef.value"
+    :disabled="scatterLoadingRef.value"
     :handle-click="handleClick"
     :loading="loadingRef"
     text="csv"

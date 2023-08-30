@@ -32,8 +32,6 @@ export function useLabelsSelection() {
     }
 
     labelsSelectionRef.value = selection;
-    filterByMeta();
-    console.log('build');
   };
 
   const updateSelection = (property: string, values: string[]) => {

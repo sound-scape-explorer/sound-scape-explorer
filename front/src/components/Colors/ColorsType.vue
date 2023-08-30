@@ -5,7 +5,7 @@ import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
-import {scatterReadyRef} from '../Scatter/useScatterStatus';
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
 
@@ -49,7 +49,7 @@ const naiveOptions = computed(() => {
       <n-select
         v-model:value="colorsStore.colorType"
         :default-value="optionsRef[0]"
-        :disabled="!scatterReadyRef.value"
+        :disabled="scatterLoadingRef.value"
         :options="naiveOptions"
         placeholder="Color type..."
         size="small"

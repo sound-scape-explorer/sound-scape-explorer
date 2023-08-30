@@ -5,7 +5,6 @@ export enum KeyboardShortcut {
   help = 'h',
   selection = 's',
   colors = 'c',
-  queries = 'q',
   meta = 'z',
   audio = 'a',
   details = 'd',

@@ -2,6 +2,7 @@ import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {reactive} from 'vue';
 
 import {timeStore} from '../Time/timeStore';
+import {useScatterTraces} from './useScatterTraces';
 
 interface PointsFilteredByTimeRef {
   value: boolean[] | null;
@@ -31,6 +32,8 @@ export function useScatterFilterTime() {
     return timestamp >= start && timestamp <= end;
   };
 
+  const {renderTraces} = useScatterTraces();
+
   const filterByTime = (): void => {
     if (aggregatedTimestampsRef.value === null) {
       return;
@@ -49,6 +52,7 @@ export function useScatterFilterTime() {
 
     pointsFilteredByTimeRef.value = pointsFilteredByTime;
     console.log('filterByTime');
+    renderTraces();
   };
 
   return {

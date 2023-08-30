@@ -1,6 +1,8 @@
 import {useLabelsSelection} from 'src/components/Label/useLabelsSelection';
 import {useScatterColorScale} from 'src/components/Scatter/useScatterColorScale';
-import {scatterLoadingRef} from 'src/components/Scatter/useScatterStatus';
+import {useScatterFilterMeta} from 'src/components/Scatter/useScatterFilterMeta';
+import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
+import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {reactive, watchEffect} from 'vue';
 
@@ -33,6 +35,8 @@ export function useSelection() {
   const {readColorScale} = useScatterColorScale();
   const {buildSelection} = useLabelsSelection();
   const {renderTraces} = useScatterTraces();
+  const {filterByMeta} = useScatterFilterMeta();
+  const {filterByTime} = useScatterFilterTime();
 
   watchEffect(async () => {
     if (
@@ -59,6 +63,10 @@ export function useSelection() {
 
     buildSelection();
     readColorScale();
+
+    filterByMeta();
+    filterByTime();
+
     renderTraces();
 
     console.log('selection done');

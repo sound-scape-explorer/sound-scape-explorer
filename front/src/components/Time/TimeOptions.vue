@@ -19,16 +19,17 @@ import {
 import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
 import {useDate} from 'src/hooks/useDate';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {type ComputedRef, watchEffect} from 'vue';
+import {type ComputedRef} from 'vue';
 import {computed, ref, watch} from 'vue';
 
-import {scatterReadyRef} from '../Scatter/useScatterStatus';
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 
 const {convertTimestampToDate} = useDate();
+const {filterByTime} = useScatterFilterTime();
 
 const uiDisabled: ComputedRef<boolean> = computed(
-  () => !scatterReadyRef.value || timeStore.isAllSelected,
+  () => scatterLoadingRef.value || timeStore.isAllSelected,
 );
 
 const dateStartRef = computed<Dayjs | null>(() => {
@@ -66,6 +67,7 @@ let interval: null | number = null;
 
 const setWindowDuration = (duration: number) => {
   timeStore.duration = duration;
+  filterByTime();
 };
 
 const blurButton = (event?: MouseEvent) => {
@@ -79,16 +81,19 @@ const blurButton = (event?: MouseEvent) => {
 
 const togglePlaying = (event?: MouseEvent) => {
   isPlaying.value = !isPlaying.value;
+  filterByTime();
   blurButton(event);
 };
 
 const skipTimeForward = (event?: MouseEvent) => {
   timeStore.value += timeStore.duration;
+  filterByTime();
   blurButton(event);
 };
 
 const skipTimeBackward = (event?: MouseEvent) => {
   timeStore.value -= timeStore.duration;
+  filterByTime();
   blurButton(event);
 };
 
@@ -159,9 +164,6 @@ const transposeDateToZone = (date: Dayjs | null) => {
   return date.unix() * 1000 + (timeOffsetRef.value ?? 0);
 };
 
-const {filterByTime} = useScatterFilterTime();
-watchEffect(filterByTime);
-
 onKeyPressed('n', () => skipTimeForward());
 onKeyPressed('p', () => skipTimeBackward());
 onKeyPressed(' ', () => togglePlaying());
@@ -172,7 +174,7 @@ onKeyPressed(' ', () => togglePlaying());
     <div class="grid">
       <n-switch
         v-model:value="timeStore.isAllSelected"
-        :disabled="!scatterReadyRef.value"
+        :disabled="scatterLoadingRef.value"
         class="toggle"
       >
         <template #checked> all</template>
