@@ -80,6 +80,7 @@ const storageRef = useLocalStorage(storageKey, {x: 100, y: 100});
 
 const {x, y, style} = useDraggable(containerRef, {
   initialValue: {x: storageRef.value.x, y: storageRef.value.y},
+  exact: true,
   onEnd: (position) => {
     if (window.visualViewport === null) {
       return;
