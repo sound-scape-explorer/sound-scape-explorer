@@ -21,17 +21,18 @@ export function useAudio() {
   };
 
   const setAudioFile = (audioFile: BlockDetails | null) => {
-    if (audioFile === currentAudioFileRef.value) {
-      return;
-    }
-
     if (audioFile === null) {
       currentAudioFileRef.value = null;
       return;
     }
 
-    currentAudioFileRef.value = audioFile;
     openAudioModal();
+
+    if (audioFile === currentAudioFileRef.value) {
+      return;
+    }
+
+    currentAudioFileRef.value = audioFile;
   };
 
   return {
