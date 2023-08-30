@@ -195,9 +195,7 @@ function handleAudioReady() {
   highShelf.frequency.value = bandRef.value.high;
 
   wsRef.value.backend.setFilters([lowShelf, highShelf]);
-
-  wsRef.value.play();
-  isPlayingRef.value = true;
+  playPause();
 }
 
 async function handleDownload() {
@@ -246,8 +244,7 @@ function handleAudioSeek() {
     return;
   }
 
-  wsRef.value.play();
-  isPlayingRef.value = true;
+  playPause();
 }
 
 function handleVolumeDown() {
@@ -267,14 +264,14 @@ function handleVolumeDown() {
   wsRef.value.drawBuffer();
 }
 
-function handlePlayPause() {
+const playPause = () => {
   if (wsRef.value === null) {
     return;
   }
 
   wsRef.value.playPause();
   isPlayingRef.value = wsRef.value.isPlaying();
-}
+};
 
 function handleStop() {
   if (wsRef.value === null) {
@@ -319,9 +316,10 @@ watch(playbackRateRef, () => {
   if (wsRef.value === null) {
     return;
   }
+
   wsRef.value.pause();
   wsRef.value.setPlaybackRate(playbackRateRef.value);
-  wsRef.value.play();
+  playPause();
 });
 
 /**
@@ -346,7 +344,7 @@ watch(currentAudioFileRef, load);
           <template #trigger>
             <n-button
               size="tiny"
-              @click="handlePlayPause"
+              @click="playPause"
             >
               <n-icon>
                 <pause-outline v-if="isPlayingRef" />
