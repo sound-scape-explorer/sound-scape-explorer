@@ -1,11 +1,12 @@
 <script lang="ts" setup="">
 import {HeadsetOutline} from '@vicons/ionicons5';
 import type {Dayjs} from 'dayjs';
-import {NButton, NGi, NGrid, NIcon, NTag} from 'naive-ui';
+import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {bandRef} from 'src/hooks/useBands';
 import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import {convertTimestampToDateShort} from 'src/utils/convert-timestamp-to-date-short';
 import {computed} from 'vue';
 
 import {clickedRef} from '.././Scatter/useScatterClick';
@@ -45,18 +46,58 @@ const dateEndRef = computed<Dayjs | null>(() => {
     <div class="file container">
       <div class="title">Audio blocks</div>
       <span class="file index">
-        <n-button
+        <n-tooltip
           v-for="blockDetails in intervalDetailsRef"
-          class="zoom"
-          size="tiny"
-          @click="() => setAudioFile(blockDetails)"
+          placement="bottom"
+          trigger="hover"
         >
-          <template #icon>
-            <n-icon>
-              <HeadsetOutline />
-            </n-icon>
+          <template #trigger>
+            <n-button
+              class="zoom"
+              size="tiny"
+              @click="() => setAudioFile(blockDetails)"
+            >
+              <template #icon>
+                <n-icon>
+                  <HeadsetOutline />
+                </n-icon>
+              </template>
+            </n-button>
           </template>
-        </n-button>
+          <n-grid
+            :cols="1"
+            class="grid"
+            x-gap="12"
+          >
+            <n-gi>
+              <n-tag
+                :bordered="false"
+                size="small"
+              >
+                file
+              </n-tag>
+              {{ blockDetails.file }}
+            </n-gi>
+            <n-gi>
+              <n-tag
+                :bordered="false"
+                size="small"
+              >
+                file start
+              </n-tag>
+              {{ blockDetails.fileStart }} ms
+            </n-gi>
+            <n-gi>
+              <n-tag
+                :bordered="false"
+                size="small"
+              >
+                start
+              </n-tag>
+              {{ convertTimestampToDateShort(blockDetails.start) }}
+            </n-gi>
+          </n-grid>
+        </n-tooltip>
       </span>
     </div>
 
@@ -143,7 +184,7 @@ const dateEndRef = computed<Dayjs | null>(() => {
 .container {
   display: flex;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 2rem;
 }
 
 .title {
