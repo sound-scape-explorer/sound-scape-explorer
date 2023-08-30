@@ -459,6 +459,23 @@ watch(currentAudioFileRef, load);
       </div>
 
       <n-grid
+        :cols="1"
+        class="grid"
+        x-gap="12"
+      >
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            file
+          </n-tag>
+
+          {{ currentAudioFileRef.value?.file }}
+        </n-gi>
+      </n-grid>
+
+      <n-grid
         :cols="4"
         class="grid"
         x-gap="12"
