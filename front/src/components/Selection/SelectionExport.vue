@@ -51,7 +51,6 @@ async function handleClick() {
   }
 
   notify('info', 'Export', 'Generating CSV from collected points.');
-  console.log(aggregatedLabelsRef.value);
 
   loadingRef.value = true;
 
@@ -74,7 +73,6 @@ async function handleClick() {
     const groupedMetas = aggregatedLabelsRef.value[intervalIndex];
 
     const reducedFeatures = reducedFeaturesRef.value[intervalIndex];
-    console.log(intervalIndex, aggregatedSitesRef.value[intervalIndex]);
 
     payload.push({
       intervalIndex: intervalIndex,

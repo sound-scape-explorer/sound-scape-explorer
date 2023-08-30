@@ -6,6 +6,7 @@ import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {reactive, watchEffect} from 'vue';
 
+import {useAggregatedFeatures} from './useAggregatedFeatures';
 import {useAggregatedIntervalDetails} from './useAggregatedIntervalDetails';
 import {useAggregatedLabels} from './useAggregatedLabels';
 import {useAggregatedSites} from './useAggregatedSites';
@@ -27,6 +28,7 @@ export const isSelectedRef = reactive<IsSelectedRef>({
 
 export function useSelection() {
   const {readLabels} = useLabels();
+  const {readAggregatedFeatures} = useAggregatedFeatures();
   const {readAggregatedTimestamps} = useAggregatedTimestamps();
   const {readAggregatedSites} = useAggregatedSites();
   const {readAggregatedIntervalDetails} = useAggregatedIntervalDetails();
@@ -55,6 +57,7 @@ export function useSelection() {
     scatterLoadingRef.value = true;
 
     await readLabels();
+    await readAggregatedFeatures();
     await readAggregatedTimestamps();
     await readAggregatedSites();
     await readAggregatedIntervalDetails();
