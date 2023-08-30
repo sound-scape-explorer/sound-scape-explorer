@@ -6,7 +6,7 @@ import {
   labelsPropertiesAsColorTypesRef,
   labelsSetsRef,
 } from 'src/hooks/useLabels';
-import {computed, reactive} from 'vue';
+import {computed, reactive, watch} from 'vue';
 
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
@@ -15,6 +15,7 @@ import {useColorByMeta} from '../Colors/useColorByMeta';
 import {useColorByOneHour} from '../Colors/useColorByOneHour';
 import {useColorByPointIndex} from '../Colors/useColorByPointIndex';
 import {useColorByTenMinutes} from '../Colors/useColorByTenMinutes';
+import {useScatterTraces} from './useScatterTraces';
 
 interface AlphaLowRef {
   value: number;
@@ -61,6 +62,7 @@ export function useScatterColorScale() {
   const {getColorByCyclingDay} = useColorByCyclingDay();
   const {getColorByMeta} = useColorByMeta();
 
+  // TODO: Rename to generate color scale
   const readColorScale = () => {
     if (
       labelsPropertiesAsColorTypesRef.value === null ||
@@ -84,7 +86,7 @@ export function useScatterColorScale() {
     ) {
       let color = '';
 
-      if (colorType === 'pointIndex') {
+      if (colorType === 'intervalIndex') {
         color = getColorByPointIndex(intervalIndex, intervalsCount);
       } else if (colorType === 'by1h') {
         const timestamp = aggregatedTimestampsRef.value[intervalIndex];
@@ -114,6 +116,12 @@ export function useScatterColorScale() {
     colorScaleRef.value = colorScale;
     console.log('readColorScale');
   };
+
+  const {renderTraces} = useScatterTraces();
+  watch(colorsStore, () => {
+    readColorScale();
+    renderTraces();
+  });
 
   return {
     readColorScale: readColorScale,

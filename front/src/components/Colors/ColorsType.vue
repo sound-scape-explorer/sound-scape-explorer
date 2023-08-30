@@ -13,11 +13,9 @@ import {colorsStore} from './colorsStore';
  * State
  */
 
-const optionsRef = computed<ColorType[]>(() => {
-  const defaultOptions = [
-    'pointIndex',
-    'fileIndex',
-    'groupIndex',
+const optionsRef = computed<string[]>(() => {
+  const defaultOptions: ColorType[] = [
+    'intervalIndex',
     'by1h',
     'by10min',
     'isDay',

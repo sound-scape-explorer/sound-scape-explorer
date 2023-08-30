@@ -18,8 +18,6 @@ export function useScatterTraces() {
   const {traceFeatures} = useScatterFeatures();
 
   const renderTraces = () => {
-    console.log('renderTraces');
-
     const traces: Data[] = [];
     const featuresTraces = traceFeatures();
     traces.push(...featuresTraces);

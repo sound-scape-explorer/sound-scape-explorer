@@ -9,7 +9,6 @@ import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 export function useScatterFeatures() {
   const traceFeatures = (): Data[] => {
-    console.log('traceFeatures');
     if (
       labelsPropertiesRef.value === null ||
       reducedFeaturesRef.value === null ||
