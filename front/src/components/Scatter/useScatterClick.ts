@@ -7,6 +7,7 @@ interface ClickedRef {
   value: number | null;
 }
 
+// INFO: Interval index
 export const clickedRef = reactive<ClickedRef>({
   value: null,
 });
