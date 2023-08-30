@@ -115,6 +115,14 @@ const chartDataRef = computed<ChartData>(() => {
   <AppDraggable draggable-key="indicators">
     <div class="container">
       <div class="row">
+        <n-select
+          v-model:value="indicatorSelectedRef"
+          :options="indicatorsOptionsRef"
+          placeholder="Indicator..."
+          size="small"
+          class="sites"
+        />
+
         <n-cascader
           v-model:value="sitesSelectedRef"
           multiple
@@ -126,17 +134,11 @@ const chartDataRef = computed<ChartData>(() => {
           :cascade="false"
           check-strategy="child"
           :show-path="false"
-          :filterable="false"
+          :filterable="true"
           :clear-filter-after-select="false"
           @update:value="updateSites"
           size="small"
-        />
-
-        <n-select
-          v-model:value="indicatorSelectedRef"
-          :options="indicatorsOptionsRef"
-          placeholder="Indicator..."
-          size="small"
+          class="cascader"
         />
       </div>
 
@@ -169,11 +171,14 @@ const chartDataRef = computed<ChartData>(() => {
 }
 
 .row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 10rem 1fr;
   gap: 1rem;
 
   width: 100%;
+}
+
+.cascader {
+  max-width: 33rem;
 }
 </style>
