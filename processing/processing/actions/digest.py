@@ -14,6 +14,7 @@ from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.print_action import print_action
+from processing.utils.print_digesters import print_digesters
 from processing.utils.print_no_configuration import print_no_configuration
 
 
@@ -36,6 +37,8 @@ def digest(
         if callback is not None:
             callback(storage)
         return
+
+    print_digesters(digesters)
 
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)

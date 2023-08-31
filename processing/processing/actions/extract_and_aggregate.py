@@ -1,7 +1,6 @@
 from typing import Optional
 
 import numpy as np
-from rich import print
 
 from processing.common.AggregatedStorage import AggregatedStorage
 from processing.common.TimelineWalker import TimelineWalker
@@ -52,8 +51,6 @@ def extract_and_aggregate(
         storage=storage,
         settings=settings,
     )
-
-    print([(t.site.name, t.integration.seconds) for t in timelines])
 
     tw = TimelineWalker()
     tw.storage = storage
