@@ -2,7 +2,10 @@ import {useLabelsSelection} from 'src/components/Label/useLabelsSelection';
 import {useScatterColorScale} from 'src/components/Scatter/useScatterColorScale';
 import {useScatterFilterMeta} from 'src/components/Scatter/useScatterFilterMeta';
 import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
-import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
+import {
+  scatterLoadingRef,
+  scatterLoadingTextRef,
+} from 'src/components/Scatter/useScatterLoading';
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {reactive, watchEffect} from 'vue';
 
@@ -58,13 +61,28 @@ export function useSelection() {
     isSelectedRef.value = true;
     scatterLoadingRef.value = true;
 
+    scatterLoadingTextRef.value = 'Reading labels';
     await readLabels();
+
+    scatterLoadingTextRef.value = 'Reading features';
     await readAggregatedFeatures();
+
+    scatterLoadingTextRef.value = 'Reading indicators';
     await readAggregatedIndicators();
+
+    scatterLoadingTextRef.value = 'Reading timestamps';
     await readAggregatedTimestamps();
+
+    scatterLoadingTextRef.value = 'Reading sites';
     await readAggregatedSites();
+
+    scatterLoadingTextRef.value = 'Reading intervals';
     await readAggregatedIntervalDetails();
+
+    scatterLoadingTextRef.value = 'Reading labels';
     await readAggregatedLabels();
+
+    scatterLoadingTextRef.value = 'Reading reduced features';
     await readReducedFeatures();
 
     buildSelection();

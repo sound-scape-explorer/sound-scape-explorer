@@ -7,3 +7,11 @@ interface ScatterLoadingRef {
 export const scatterLoadingRef = reactive<ScatterLoadingRef>({
   value: false,
 });
+
+interface ScatterLoadingTextRef {
+  value: string;
+}
+
+export const scatterLoadingTextRef = reactive<ScatterLoadingTextRef>({
+  value: '',
+});
