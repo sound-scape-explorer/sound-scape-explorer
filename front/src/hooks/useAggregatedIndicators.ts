@@ -1,4 +1,4 @@
-import {reactive, watchEffect} from 'vue';
+import {reactive} from 'vue';
 
 import {bandRef} from './useBands';
 import {type Extractor, nonNnExtractorsRef} from './useExtractors';
@@ -43,5 +43,7 @@ export function useAggregatedIndicators() {
     aggregatedIndicatorsRef.value = aggregated;
   };
 
-  watchEffect(readAggregatedIndicators);
+  return {
+    readAggregatedIndicators: readAggregatedIndicators,
+  };
 }
