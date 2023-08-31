@@ -1,3 +1,4 @@
+import argparse
 from signal import SIGINT, signal
 from typing import Optional
 
@@ -13,6 +14,7 @@ from processing.actions.reduce import reduce
 from processing.actions.refresh_configuration import refresh_configuration
 from processing.actions.repack_storage import repack_storage
 from processing.actions.trace_trajectories import trace_trajectories
+from processing.common.YamlEnv import YamlEnv
 from processing.storage.Storage import Storage
 from processing.utils.ask_menu import MenuChoice, ask_menu
 from processing.utils.get_yaml_data import get_yaml_data
@@ -21,16 +23,25 @@ from processing.utils.print_yaml_env import print_yaml_env
 from processing.utils.quit_sse import quit_sse
 from processing.utils.update_python_path import update_python_path
 
+stored_env: YamlEnv
+
 
 def main(
     loaded_storage: Optional[Storage] = None,
+    yaml_path: Optional[str] = None,
 ):
     """CLI entry point"""
+
+    global stored_env
 
     try:
         update_python_path()
 
-        env = get_yaml_data()
+        if yaml_path is None:
+            env = stored_env
+        else:
+            env = get_yaml_data(yaml_path)
+            stored_env = env
 
         if loaded_storage is None:
             print_welcome()
@@ -79,4 +90,7 @@ def main(
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("yaml_path")
+    args = parser.parse_args()
+    main(yaml_path=args.yaml_path)

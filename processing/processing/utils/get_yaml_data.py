@@ -5,8 +5,8 @@ from processing.common.YamlEnv import YamlEnv
 from processing.utils.does_path_exist import does_path_exist
 
 
-def get_yaml_data():
-    file = open("sse.yaml")
+def get_yaml_data(path: str):
+    file = open(path)
     data = yaml.load(file, Loader=SafeLoader)
     file.close()
 
