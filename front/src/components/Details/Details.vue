@@ -2,6 +2,7 @@
 import {HeadsetOutline} from '@vicons/ionicons5';
 import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {bandRef} from 'src/hooks/useBands';
 import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
@@ -159,8 +160,10 @@ const dateEndRef = computed<Dayjs | null>(() => {
       <n-grid
         :cols="2"
         class="grid"
+        x-gap="12"
+        v-if="aggregatedIndicatorsRef.value !== null"
       >
-        <n-gi v-for="ex in nonNnExtractorsRef.value">
+        <n-gi v-for="(ex, index) in nonNnExtractorsRef.value">
           <n-tag
             :bordered="false"
             class="tag"
@@ -169,8 +172,9 @@ const dateEndRef = computed<Dayjs | null>(() => {
             {{ ex.name }}
           </n-tag>
 
-          <!-- TODO: Add -->
-          <!-- {{ indicator.values[clickedRef.value ?? 0] }} -->
+          {{
+            aggregatedIndicatorsRef.value[index].values[clickedRef.value ?? 0]
+          }}
         </n-gi>
       </n-grid>
     </div>
