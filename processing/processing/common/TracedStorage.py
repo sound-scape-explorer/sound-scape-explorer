@@ -10,6 +10,7 @@ class TracedStorage:
     def delete(storage: Storage) -> None:
         storage.delete(StoragePath.traced)
         storage.delete(StoragePath.traced_timestamps)
+        storage.delete(StoragePath.traced_relative_timestamps)
 
     @staticmethod
     def get_data_path(
@@ -62,6 +63,21 @@ class TracedStorage:
         )
 
     @staticmethod
+    def get_relative_timestamps_path(
+        ar: AggregatedReduceable,
+        reducer: ReducerConfig,
+        trajectory: TrajectoryConfig,
+    ) -> str:
+        return (
+            f"{StoragePath.traced_relative_timestamps.value}"
+            f"/{ar.band.name}"
+            f"/{ar.integration.seconds}"
+            f"/{ar.extractor.index}"
+            f"/{reducer.index}"
+            f"/{trajectory.index}"
+        )
+
+    @staticmethod
     def write_timestamps(
         storage: Storage,
         trajectory: TrajectoryConfig,
@@ -73,6 +89,26 @@ class TracedStorage:
         storage.write(
             path=path,
             data=trajectory.instance.timestamps,
+            compression=True,
+            attributes={
+                "extractor_index": str(ar.extractor.index),
+                "reducer_index": str(reducer.index),
+                "trajectory_index": str(trajectory.index),
+            },
+        )
+
+    @staticmethod
+    def write_relative_timestamps(
+        storage: Storage,
+        trajectory: TrajectoryConfig,
+        reducer: ReducerConfig,
+        ar: AggregatedReduceable,
+    ) -> None:
+        path = TracedStorage.get_relative_timestamps_path(ar, reducer, trajectory)
+
+        storage.write(
+            path=path,
+            data=trajectory.instance.relative_timestamps,
             compression=True,
             attributes={
                 "extractor_index": str(ar.extractor.index),

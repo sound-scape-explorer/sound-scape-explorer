@@ -15,12 +15,18 @@ class TrajectoryStorage:
     names = StoragePath.trajectories_names.value
     starts = StoragePath.trajectories_starts.value
     ends = StoragePath.trajectories_ends.value
+    label_properties = StoragePath.trajectories_label_properties.value
+    label_values = StoragePath.trajectories_label_values.value
+    steps = StoragePath.trajectories_steps.value
 
     @staticmethod
     def delete_from_storage(storage: Storage) -> None:
         storage.delete(TrajectoryStorage.names)
         storage.delete(TrajectoryStorage.starts)
         storage.delete(TrajectoryStorage.ends)
+        storage.delete(TrajectoryStorage.label_properties)
+        storage.delete(TrajectoryStorage.label_values)
+        storage.delete(TrajectoryStorage.steps)
 
     @staticmethod
     def exists_in_storage(storage: Storage) -> bool:
@@ -28,20 +34,33 @@ class TrajectoryStorage:
             storage.exists_dataset(TrajectoryStorage.names)
             and storage.exists_dataset(TrajectoryStorage.starts)
             and storage.exists_dataset(TrajectoryStorage.ends)
+            and storage.exists_dataset(TrajectoryStorage.label_properties)
+            and storage.exists_dataset(TrajectoryStorage.label_values)
+            and storage.exists_dataset(TrajectoryStorage.steps)
         )
 
     @staticmethod
     def read_from_storage(storage: Storage) -> List[TrajectoryConfig]:
         names_dataset = storage.read(TrajectoryStorage.names)
-
         names = storage.convert_dataset_to_string_list(names_dataset)
         starts = storage.read(TrajectoryStorage.starts)
         ends = storage.read(TrajectoryStorage.ends)
+        label_properties_dataset = storage.read(TrajectoryStorage.label_properties)
+        label_properties = storage.convert_dataset_to_string_list(
+            label_properties_dataset
+        )
+        label_values_dataset = storage.read(TrajectoryStorage.label_values)
+        label_values = storage.convert_dataset_to_string_list(label_values_dataset)
+        step_names_dataset = storage.read(TrajectoryStorage.steps)
+        step_names = storage.convert_dataset_to_string_list(step_names_dataset)
 
         trajectories = TrajectoryConfig.reconstruct(
             names=names,
             starts=starts[:],
             ends=ends[:],
+            label_properties=label_properties,
+            label_values=label_values,
+            step_names=step_names,
         )
 
         return trajectories
@@ -57,10 +76,17 @@ class TrajectoryStorage:
         starts_timestamps = [convert_date_to_timestamp(start) for start in starts]
         ends_timestamps = [convert_date_to_timestamp(end) for end in ends]
 
+        label_properties = parser.get(sheet, TrajectoryExcel.label_property)
+        label_values = parser.get(sheet, TrajectoryExcel.label_value)
+        step_names = parser.get(sheet, TrajectoryExcel.step)
+
         trajectories = TrajectoryConfig.reconstruct(
             names=names,
             starts=starts_timestamps,
             ends=ends_timestamps,
+            label_properties=label_properties,
+            label_values=label_values,
+            step_names=step_names,
         )
 
         return trajectories
@@ -70,8 +96,18 @@ class TrajectoryStorage:
         trajectories: List[TrajectoryConfig],
         storage: Storage,
     ) -> None:
-        names, starts, ends = TrajectoryConfig.flatten(trajectories)
+        (
+            names,
+            starts,
+            ends,
+            label_properties,
+            label_values,
+            steps,
+        ) = TrajectoryConfig.flatten(trajectories)
 
         storage.write(path=TrajectoryStorage.names, data=names)
         storage.write(path=TrajectoryStorage.starts, data=starts)
         storage.write(path=TrajectoryStorage.ends, data=ends)
+        storage.write(path=TrajectoryStorage.label_properties, data=label_properties)
+        storage.write(path=TrajectoryStorage.label_values, data=label_values)
+        storage.write(path=TrajectoryStorage.steps, data=steps)

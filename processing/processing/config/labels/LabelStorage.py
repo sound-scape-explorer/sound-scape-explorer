@@ -43,6 +43,14 @@ class LabelStorage:
         return labels
 
     @staticmethod
+    def read_properties_from_storage(
+        storage: Storage,
+    ) -> List[str]:
+        properties_dataset = storage.read(LabelStorage.properties)
+        properties = storage.convert_dataset_to_string_list(properties_dataset)
+        return properties
+
+    @staticmethod
     def read_from_config(parser: ConfigParser) -> List[LabelConfig]:
         sheet = parser.parse(ExcelSheet.files)
 

@@ -43,6 +43,14 @@ class AggregatedReduceable:
             f"/{self.extractor.index}"
         )
 
+    def get_labels_path(self) -> str:
+        return (
+            f"{StoragePath.aggregated_labels.value}"
+            f"/{self.band.name}"
+            f"/{self.integration.seconds}"
+            f"/{self.extractor.index}"
+        )
+
     def get_reduced_path(self, reducer: ReducerConfig) -> str:
         return (
             f"{StoragePath.reduced.value}"
