@@ -681,7 +681,7 @@ and display spectrograms, run the [`front:audio` command](#frontaudio-command).
 
 ## Project example
 
-[Coral reef light](https://github.com/sound-scape-explorer/sound-scape-explorer/main/examples/coral-reef-light/)
+[Coral reef light](https://github.com/sound-scape-explorer/sound-scape-explorer/tree/main/examples/campaigns/coral-reef-light)
 
 ## `pnpm` commands
 
