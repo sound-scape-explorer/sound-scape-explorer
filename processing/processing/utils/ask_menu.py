@@ -13,7 +13,7 @@ class MenuChoice(Enum):
     PurgeRequirements = "Purge computation UMAPs and mean distances matrix"
     Autocluster = "Run autoclusters"
     Trace = "Run trajectories"
-    Digest = "Run digests (volumes, matrices, pairings)"
+    Digest = "Run digests"
     RunAll = "Run all"
     ExportDataframe = "Export dataframe as .csv"
     Repack = "Repack storage with `h5repack` (UNIX only)"
