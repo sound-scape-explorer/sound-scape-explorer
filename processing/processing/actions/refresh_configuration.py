@@ -7,7 +7,6 @@ from processing.storage.Storage import Storage
 from processing.utils.print_action import print_action
 from processing.utils.print_digesters import print_digesters
 from processing.utils.print_extractors import print_extractors
-from processing.utils.print_file_indexes_by_site import print_file_indexes_by_site
 
 
 def refresh_configuration(
@@ -20,7 +19,6 @@ def refresh_configuration(
     config = Config(path=env.config)
     config.write(storage)
 
-    print_file_indexes_by_site(storage, config.settings)
     print_extractors(config.extractors)
     print_digesters(config.digesters)
 
