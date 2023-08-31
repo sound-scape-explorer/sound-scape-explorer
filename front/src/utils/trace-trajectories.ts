@@ -11,7 +11,12 @@ export function traceTrajectories(traceds: TracedRef['value']) {
   const traces = [];
 
   for (const traced of traceds) {
-    const colors = getTracedColors(traced, cyclingScaleRef.value);
+    const colors = getTracedColors(
+      traced.relativeTimestamps,
+      traced.trajectory.start,
+      traced.trajectory.step,
+      cyclingScaleRef.value,
+    );
 
     const trace: Data = {
       x: traced.data.map((coordinates) => coordinates[0]),

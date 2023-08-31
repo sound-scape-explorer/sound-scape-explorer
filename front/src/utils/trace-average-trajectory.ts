@@ -1,7 +1,9 @@
 import type {Data} from 'plotly.js-dist-min';
 import {cyclingScaleRef} from 'src/components/Scatter/useScatterColorScale';
 import type {TracedRef} from 'src/hooks/useTraced';
+import type {Trajectory} from 'src/hooks/useTrajectories';
 
+import {getTracedColors} from './get-traced-colors';
 import {interpolateArray} from './interpolate-array';
 import {sumArraysIndexWise} from './sum-arrays-index-wise';
 
@@ -16,14 +18,21 @@ export function traceAverageTrajectory(traceds: TracedRef['value']) {
     z: number[];
   }
 
+  let trajectory: Trajectory = null as unknown as Trajectory;
+  let relativeTimestamps: number[] = [];
+
   const datas: IData[] = [];
 
+  // Pick the longest trajectory
   for (const traced of traceds) {
     if (traced.data.length > axisLength) {
       axisLength = traced.data.length;
+      trajectory = traced.trajectory;
+      relativeTimestamps = traced.relativeTimestamps;
     }
   }
 
+  // Interpolating
   for (const traced of traceds) {
     const data = {} as IData;
     data.x = traced.data.map((coords) => coords[0]);
@@ -43,6 +52,15 @@ export function traceAverageTrajectory(traceds: TracedRef['value']) {
     datas.push(data);
   }
 
+  // Colors
+  const colors = getTracedColors(
+    relativeTimestamps,
+    trajectory.start,
+    trajectory.step,
+    cyclingScaleRef.value,
+  );
+
+  // Trace
   const averageTrace: Data = {
     x: sumArraysIndexWise({
       arrays: datas.map((data) => data.x),
@@ -62,7 +80,8 @@ export function traceAverageTrajectory(traceds: TracedRef['value']) {
     type: scatterType,
     mode: 'lines',
     line: {
-      color: cyclingScaleRef.value.colors(axisLength),
+      color: colors,
+      width: 4,
     },
   };
 
