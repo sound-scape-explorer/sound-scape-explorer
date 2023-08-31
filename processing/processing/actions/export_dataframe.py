@@ -69,10 +69,10 @@ def export_dataframe(
         f"/{extractors[0].index}"
     )
     aggregated_sites = storage.read(aggregated_sites_path)
-    payload["sites"] = [s[0].decode("utf-8") for s in aggregated_sites]
+    payload["site"] = [s[0].decode("utf-8") for s in aggregated_sites]
 
     # Timestamps
-    payload["aggregated_timestamps"] = [at[0] for at in aggregated_timestamps]
+    payload["timestamp"] = [at[0] for at in aggregated_timestamps]
 
     # Labels
     aggregated_labels = AggregatedLabelStorage.read_from_storage(
