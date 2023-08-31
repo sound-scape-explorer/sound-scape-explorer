@@ -49,7 +49,7 @@ class TrajectoryConfig:
         ends: List[int],
         label_properties: List[str],
         label_values: List[str],
-        step_names: List[str],
+        steps: List[int],
     ) -> List["TrajectoryConfig"]:
         trajectories = []
 
@@ -58,8 +58,7 @@ class TrajectoryConfig:
             end = ends[index]
             label_property = label_properties[index]
             label_value = label_values[index]
-            step_name = step_names[index]
-            step = TrajectoryConfig.step_by_name[step_name]
+            step = steps[index]
 
             trajectory = TrajectoryConfig(
                 index=index,

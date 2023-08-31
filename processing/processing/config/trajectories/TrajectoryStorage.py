@@ -51,8 +51,7 @@ class TrajectoryStorage:
         )
         label_values_dataset = storage.read(TrajectoryStorage.label_values)
         label_values = storage.convert_dataset_to_string_list(label_values_dataset)
-        step_names_dataset = storage.read(TrajectoryStorage.steps)
-        step_names = storage.convert_dataset_to_string_list(step_names_dataset)
+        steps = storage.read(TrajectoryStorage.steps)
 
         trajectories = TrajectoryConfig.reconstruct(
             names=names,
@@ -60,7 +59,7 @@ class TrajectoryStorage:
             ends=ends[:],
             label_properties=label_properties,
             label_values=label_values,
-            step_names=step_names,
+            steps=steps[:],
         )
 
         return trajectories
@@ -79,6 +78,7 @@ class TrajectoryStorage:
         label_properties = parser.get(sheet, TrajectoryExcel.label_property)
         label_values = parser.get(sheet, TrajectoryExcel.label_value)
         step_names = parser.get(sheet, TrajectoryExcel.step)
+        steps = [TrajectoryConfig.step_by_name[sn] for sn in step_names]
 
         trajectories = TrajectoryConfig.reconstruct(
             names=names,
@@ -86,7 +86,7 @@ class TrajectoryStorage:
             ends=ends_timestamps,
             label_properties=label_properties,
             label_values=label_values,
-            step_names=step_names,
+            steps=steps,
         )
 
         return trajectories
