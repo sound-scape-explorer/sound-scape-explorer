@@ -27,9 +27,10 @@ const loadingRef = ref<boolean>(false);
 interface ExportData {
   intervalIndex: number;
   timestamp: number;
-  groupedMetas: string[];
+  site: string;
+  aggregatedLabels: string[];
   reducedFeatures: number[];
-  groupedFeatures: number[];
+  aggregatedFeatures: number[];
 }
 
 async function handleClick() {
@@ -68,18 +69,20 @@ async function handleClick() {
       continue;
     }
 
-    const features = aggregatedFeaturesRef.value[intervalIndex];
+    const aggregatedFeatures = aggregatedFeaturesRef.value[intervalIndex];
     const timestamp = aggregatedTimestampsRef.value[intervalIndex];
-    const groupedMetas = aggregatedLabelsRef.value[intervalIndex];
+    const site = aggregatedSitesRef.value[intervalIndex];
+    const aggregatedLabels = aggregatedLabelsRef.value[intervalIndex];
 
     const reducedFeatures = reducedFeaturesRef.value[intervalIndex];
 
     payload.push({
       intervalIndex: intervalIndex,
       timestamp: timestamp,
-      groupedMetas: groupedMetas,
+      site: site.site,
+      aggregatedLabels: aggregatedLabels,
       reducedFeatures: reducedFeatures,
-      groupedFeatures: features,
+      aggregatedFeatures: aggregatedFeatures,
     });
   }
 
@@ -87,6 +90,7 @@ async function handleClick() {
 
   csvFirstRow += 'intervalIndex,';
   csvFirstRow += 'timestamp,';
+  csvFirstRow += 'site,';
 
   labelsPropertiesRef.value.forEach((metaProperty) => {
     csvFirstRow += `label_${metaProperty},`;
@@ -96,7 +100,7 @@ async function handleClick() {
     csvFirstRow += `r_${r},`;
   });
 
-  payload[0].groupedFeatures.forEach((_, f) => {
+  payload[0].aggregatedFeatures.forEach((_, f) => {
     csvFirstRow += `f_${f},`;
   });
 
@@ -105,17 +109,18 @@ async function handleClick() {
 
     content += `${data.intervalIndex},`;
     content += `${data.timestamp},`;
+    content += `${data.site},`;
 
-    data.groupedMetas.forEach((groupedMeta) => {
-      content += `${groupedMeta},`;
+    data.aggregatedLabels.forEach((aggregatedLabel) => {
+      content += `${aggregatedLabel},`;
     });
 
     data.reducedFeatures.forEach((reducedFeature) => {
       content += `${reducedFeature},`;
     });
 
-    data.groupedFeatures.forEach((groupedFeature) => {
-      content += `${groupedFeature},`;
+    data.aggregatedFeatures.forEach((aggregatedFeature) => {
+      content += `${aggregatedFeature},`;
     });
 
     content = content.slice(0, -1);
