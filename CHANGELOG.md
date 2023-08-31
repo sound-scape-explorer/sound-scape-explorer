@@ -1,3 +1,84 @@
+## [9.1.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.4...v9.1.5) (2023-06-26)
+
+
+### Bug Fixes
+
+* **Processing/Dataframe:** Compute group attributes on the fly if missing in storage ([5231cc9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5231cc9debaf62da126c3b3c54dee1a02641a8ba))
+
+## [9.1.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.3...v9.1.4) (2023-06-23)
+
+
+### Bug Fixes
+
+* **Processing/Extraction:** Add back `files_count` and `seconds_per_file` attributes ([489bd84](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/489bd84d253097149dba8db58249a0e1222108af))
+
+## [9.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.2...v9.1.3) (2023-06-23)
+
+
+### Bug Fixes
+
+* **Processing:** Add incremental h5 writes for file features extraction ([b4b81be](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b4b81be28ef26e041a205029b457ebed84fbe384))
+
+## [9.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.1...v9.1.2) (2023-06-23)
+
+
+### Bug Fixes
+
+* **Processing/Actions:** Exporting dataframe has optional autocluster and reduced data ([7f4ea81](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7f4ea8154e7f3ded169d9aaa2558a8f858b466c2))
+
+## [9.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.0...v9.1.1) (2023-06-22)
+
+
+### Performance Improvements
+
+* **Processing/Groups:** Write to h5 after each integration to avoid memory limit errors ([d054de5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d054de51245f3fe2de1691c72cdd1c8a5e91b098))
+
+# [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
+
+
+### Bug Fixes
+
+* **App:** Dummy commit to increment semantic versioning ([8b10b68](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8b10b6899c3c869e3f0ae577b3090f974cc345a6))
+* **App:** Dummy commit to increment semantic versioning ([eb8b1f1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb8b1f180f06e36c714c00ce2a837d7f97b75cf2))
+* **Processing:** Fix typo and set correct version for files feature extraction ([6bf94e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6bf94e595283ac5a42355082142ad555d2c44c93))
+
+
+### Features
+
+* **Processing:** Add v9 files features extraction command ([dbf57aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dbf57aaabb8650777ca669b615bf28f8f7206b6a))
+
+# [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
+
+
+### Bug Fixes
+
+* **App:** Dummy commit to increment semantic versioning ([eb8b1f1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb8b1f180f06e36c714c00ce2a837d7f97b75cf2))
+* **Processing:** Fix typo and set correct version for files feature extraction ([6bf94e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6bf94e595283ac5a42355082142ad555d2c44c93))
+
+
+### Features
+
+* **Processing:** Add v9 files features extraction command ([dbf57aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dbf57aaabb8650777ca669b615bf28f8f7206b6a))
+
+# [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
+
+
+### Bug Fixes
+
+* **Processing:** Fix typo and set correct version for files feature extraction ([6bf94e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6bf94e595283ac5a42355082142ad555d2c44c93))
+
+
+### Features
+
+* **Processing:** Add v9 files features extraction command ([dbf57aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dbf57aaabb8650777ca669b615bf28f8f7206b6a))
+
+# [9.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.0.0...v9.1.0) (2023-06-22)
+
+
+### Features
+
+* **Processing:** Add v8 files features extraction command ([2572f88](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2572f88d1afd3f0efc67043fe5b7988ab547c73d))
+
 # [9.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v8.3.4...v9.0.0) (2023-05-30)
 
 
