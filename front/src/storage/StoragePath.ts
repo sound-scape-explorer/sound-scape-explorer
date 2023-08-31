@@ -37,6 +37,9 @@ export enum StoragePath {
   trajectories_names = '/trajectories/names',
   trajectories_starts = '/trajectories/starts',
   trajectories_ends = '/trajectories/ends',
+  trajectories_label_properties = '/trajectories/label_properties',
+  trajectories_label_values = '/trajectories/label_values',
+  trajectories_steps = '/trajectories/steps',
 
   // Reducers
   reducers_names = '/reducers/names',
@@ -85,4 +88,5 @@ export enum StoragePath {
   // Trajectories
   traced = '/traced',
   traced_timestamps = '/traced_timestamps',
+  traced_relative_timestamps = '/traced_relative_timestamps',
 }

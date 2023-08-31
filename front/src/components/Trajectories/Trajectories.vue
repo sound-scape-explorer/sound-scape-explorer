@@ -5,9 +5,10 @@ import TrajectoriesColorScale from 'src/components/Trajectories/TrajectoriesColo
 import {tracedFusedRef} from 'src/hooks/useTraced';
 import {trajectoriesRef, useTrajectories} from 'src/hooks/useTrajectories';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {computed, ref} from 'vue';
+import {computed, ref, watch} from 'vue';
 
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
+import {useScatterTraces} from '../Scatter/useScatterTraces';
 
 const {selectTrajectories} = useTrajectories();
 
@@ -22,7 +23,7 @@ const optionsRef = computed(() => {
 
 const valueRef = ref([]);
 const fuseReadyRef = computed<boolean>(() => {
-  if (scatterLoadingRef.value === false) {
+  if (scatterLoadingRef.value === true) {
     return false;
   }
 
@@ -33,9 +34,12 @@ const fuseReadyRef = computed<boolean>(() => {
   return true;
 });
 
-const handleUpdateValue = (names: string[]) => {
-  selectTrajectories(names);
+const handleUpdateValue = async (names: string[]) => {
+  await selectTrajectories(names);
 };
+
+const {renderTraces} = useScatterTraces();
+watch(tracedFusedRef, renderTraces);
 </script>
 
 <template>

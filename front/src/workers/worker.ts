@@ -427,6 +427,19 @@ export async function readTrajectories(file: File): Promise<Trajectory[]> {
   const endsDataset = h5.get(StoragePath.trajectories_ends) as Dataset;
   const ends = endsDataset.to_array() as number[];
 
+  const labelPropertiesDataset = h5.get(
+    StoragePath.trajectories_label_properties,
+  ) as Dataset;
+  const labelProperties = labelPropertiesDataset.to_array() as string[];
+
+  const labelValuesDataset = h5.get(
+    StoragePath.trajectories_label_values,
+  ) as Dataset;
+  const labelValues = labelValuesDataset.to_array() as string[];
+
+  const stepsDataset = h5.get(StoragePath.trajectories_steps) as Dataset;
+  const steps = stepsDataset.to_array() as number[];
+
   const length = namesDataset.shape[0];
 
   const trajectories = [];
@@ -437,6 +450,9 @@ export async function readTrajectories(file: File): Promise<Trajectory[]> {
       name: names[index],
       start: starts[index],
       end: ends[index],
+      labelProperty: labelProperties[index],
+      labelValue: labelValues[index],
+      step: steps[index],
     };
 
     trajectories.push(trajectory);
@@ -454,26 +470,21 @@ export async function readTraced(
   trajectoryIndex: number,
 ): Promise<[TracedData, TracedTimestamps, TracedRelativeTimestamps]> {
   const h5 = await load(file);
+  const suffixPath = `/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
 
-  const dataPath = `${StoragePath.traced}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
+  const dataPath = `${StoragePath.traced}${suffixPath}`;
   const dataDataset = h5.get(dataPath) as Dataset;
   const data = dataDataset.to_array() as number[][];
 
-  const timestampsPath = `${StoragePath.traced_timestamps}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
+  const timestampsPath = `${StoragePath.traced_timestamps}${suffixPath}`;
   const timestampsDataset = h5.get(timestampsPath) as Dataset;
   const timestamps = timestampsDataset.to_array() as number[];
 
-  // Building indices of the original order for easy sorting
-  const indices = Array.from({length: timestamps.length}, (_, i) => i);
-  indices.sort((a, b) => timestamps[a] - timestamps[b]);
+  const relativeTimestampsPath = `${StoragePath.traced_relative_timestamps}${suffixPath}`;
+  const relativeTimestampsDataset = h5.get(relativeTimestampsPath) as Dataset;
+  const relativeTimestamps = relativeTimestampsDataset.to_array() as number[];
 
-  const sortedData = indices.map((i) => data[i]);
-  const sortedTimestamps = indices.map((i) => timestamps[i]);
-  const relativeTimestamps = sortedTimestamps.map(
-    (t) => t - sortedTimestamps[0],
-  );
-
-  return [sortedData, sortedTimestamps, relativeTimestamps];
+  return [data, timestamps, relativeTimestamps];
 }
 
 export async function readAggregatedFeatures(

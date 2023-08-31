@@ -1,4 +1,4 @@
-import {reactive, watchEffect} from 'vue';
+import {reactive} from 'vue';
 
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
@@ -12,7 +12,7 @@ export type TracedData = number[][];
 export type TracedTimestamps = number[];
 export type TracedRelativeTimestamps = number[];
 
-interface Traced {
+export interface Traced {
   trajectory: Trajectory;
   data: TracedData;
   timestamps: TracedTimestamps;
@@ -75,5 +75,7 @@ export function useTraced() {
     tracedRef.value = traceds;
   };
 
-  watchEffect(readTraced);
+  return {
+    readTraced: readTraced,
+  };
 }
