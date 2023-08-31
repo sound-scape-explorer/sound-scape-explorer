@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import {NButton} from 'naive-ui';
+import {useStorageFile} from 'src/hooks/useStorageFile';
 import {ref} from 'vue';
+
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import ImportDetails from './ImportDetails.vue';
-import {useStorageFile} from 'src/hooks/useStorageFile';
 
 const inputRef = ref<HTMLInputElement>();
 const {setFile, isStorageFileRef, resetFile} = useStorageFile();

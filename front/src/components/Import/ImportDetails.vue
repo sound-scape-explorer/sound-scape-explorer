@@ -1,11 +1,11 @@
 <script lang="ts" setup="">
-import {computed} from 'vue';
-import {settingsRef} from 'src/hooks/useStorageSettings';
 import {bandsRef} from 'src/hooks/useBands';
-import {integrationsRef} from 'src/hooks/useIntegrations';
 import {filesRef} from 'src/hooks/useFiles';
+import {integrationsRef} from 'src/hooks/useIntegrations';
 import {rangesRef} from 'src/hooks/useRanges';
 import {reducersRef} from 'src/hooks/useReducers';
+import {settingsRef} from 'src/hooks/useStorageSettings';
+import {computed} from 'vue';
 
 const reducerNamesRef = computed<string[] | null>(() => {
   if (reducersRef.value === null) {
