@@ -11,23 +11,25 @@ import {
   NButton,
   NButtonGroup,
   NDatePicker,
+  NIcon,
   NInputNumber,
   NSwitch,
   NTooltip,
 } from 'naive-ui';
-import type {ComputedRef} from 'vue';
-import {computed, ref, watch} from 'vue';
-import AppButton from '../AppButton/AppButton.vue';
-import {timeStore} from './timeStore';
-import {settingsRef} from 'src/hooks/useStorageSettings';
+import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
 import {useDate} from 'src/hooks/useDate';
-import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
-import {useScatterFilterTime} from '../Scatter/useScatterFilterTime';
+import {settingsRef} from 'src/hooks/useStorageSettings';
+import {type ComputedRef} from 'vue';
+import {computed, ref, watch} from 'vue';
+
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
+import {timeStore} from './timeStore';
 
 const {convertTimestampToDate} = useDate();
+const {filterByTime} = useScatterFilterTime();
 
 const uiDisabled: ComputedRef<boolean> = computed(
-  () => !isDatasetReadyRef.value || timeStore.isAllSelected,
+  () => scatterLoadingRef.value || timeStore.isAllSelected,
 );
 
 const dateStartRef = computed<Dayjs | null>(() => {
@@ -61,41 +63,56 @@ const durations: Duration[] = [
 ];
 
 const isPlaying = ref<boolean>(false);
-
-function setWindowDuration(duration: number) {
-  timeStore.duration = duration;
-}
-
-function togglePlaying() {
-  isPlaying.value = !isPlaying.value;
-}
-
 let interval: null | number = null;
 
-function skipTimeForward() {
+const setWindowDuration = (duration: number) => {
+  timeStore.duration = duration;
+  filterByTime();
+};
+
+const blurButton = (event?: MouseEvent) => {
+  if (typeof event === 'undefined') {
+    return;
+  }
+
+  const button = event.target as HTMLButtonElement;
+  button.blur();
+};
+
+const togglePlaying = (event?: MouseEvent) => {
+  isPlaying.value = !isPlaying.value;
+  filterByTime();
+  blurButton(event);
+};
+
+const skipTimeForward = (event?: MouseEvent) => {
   timeStore.value += timeStore.duration;
-}
+  filterByTime();
+  blurButton(event);
+};
 
-function skipTimeBackward() {
+const skipTimeBackward = (event?: MouseEvent) => {
   timeStore.value -= timeStore.duration;
-}
+  filterByTime();
+  blurButton(event);
+};
 
-function start() {
+const start = () => {
   if (interval) {
     return;
   }
 
   interval = setInterval(skipTimeForward, 500);
-}
+};
 
-function stop() {
+const stop = () => {
   if (interval === null) {
     return;
   }
 
   clearInterval(interval);
   interval = null;
-}
+};
 
 watch(isPlaying, () => {
   if (isPlaying.value) {
@@ -135,22 +152,17 @@ const timeOffsetRef = computed<number | null>(() => {
   return offset * 60 * 60 * 1000;
 });
 
-function handleDateStartUpdate(t: number) {
+const handleDateStartUpdate = (t: number) => {
   timeStore.value = t / 1000;
-}
+};
 
-function transposeDateToZone(date: Dayjs | null) {
+const transposeDateToZone = (date: Dayjs | null) => {
   if (date === null) {
     return;
   }
 
   return date.unix() * 1000 + (timeOffsetRef.value ?? 0);
-}
-
-const {filterByTime} = useScatterFilterTime();
-watch(timeStore, () => {
-  filterByTime();
-});
+};
 
 onKeyPressed('n', () => skipTimeForward());
 onKeyPressed('p', () => skipTimeBackward());
@@ -162,7 +174,7 @@ onKeyPressed(' ', () => togglePlaying());
     <div class="grid">
       <n-switch
         v-model:value="timeStore.isAllSelected"
-        :disabled="!isDatasetReadyRef.value"
+        :disabled="scatterLoadingRef.value"
         class="toggle"
       >
         <template #checked> all</template>
@@ -186,67 +198,65 @@ onKeyPressed(' ', () => togglePlaying());
         size="tiny"
       />
 
-      <div class="transport-button">
-        <n-tooltip trigger="hover">
-          <template #trigger>
-            <AppButton
-              :disabled="uiDisabled"
-              :handle-click="skipTimeBackward"
-              class="flex"
-            >
-              <play-skip-back-outline />
-            </AppButton>
-          </template>
-          <span class="button-tooltip">
-            Backward [<span class="bold">p</span>]
-          </span>
-        </n-tooltip>
-      </div>
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <n-button
+            :disabled="uiDisabled"
+            size="tiny"
+            @click="skipTimeBackward"
+          >
+            <template #icon>
+              <n-icon>
+                <play-skip-back-outline />
+              </n-icon>
+            </template>
+          </n-button>
+        </template>
+        <span class="button-tooltip">
+          Backward [<span class="bold">p</span>]
+        </span>
+      </n-tooltip>
 
-      <div class="transport-button">
-        <n-tooltip trigger="hover">
-          <template #trigger>
-            <div>
-              <AppButton
-                v-show="!isPlaying"
-                :disabled="uiDisabled"
-                :handle-click="togglePlaying"
-                class="flex"
-              >
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <n-button
+            :disabled="uiDisabled"
+            size="tiny"
+            @click="togglePlaying"
+          >
+            <template #icon>
+              <n-icon v-show="!isPlaying">
                 <play-outline />
-              </AppButton>
-              <AppButton
-                v-show="isPlaying"
-                :disabled="uiDisabled"
-                :handle-click="togglePlaying"
-                class="flex"
-              >
+              </n-icon>
+              <n-icon v-show="isPlaying">
                 <pause-outline />
-              </AppButton>
-            </div>
-          </template>
-          <span class="button-tooltip">
-            Play / Pause [<span class="bold">space</span>]
-          </span>
-        </n-tooltip>
-      </div>
+              </n-icon>
+            </template>
+          </n-button>
+        </template>
+        <span class="button-tooltip">
+          Play / Pause [<span class="bold">space</span>]
+        </span>
+      </n-tooltip>
 
-      <div class="transport-button">
-        <n-tooltip trigger="hover">
-          <template #trigger>
-            <AppButton
-              :disabled="uiDisabled"
-              :handle-click="skipTimeForward"
-              class="flex"
-            >
-              <play-skip-forward-outline />
-            </AppButton>
-          </template>
-          <span class="button-tooltip">
-            Forward [<span class="bold">n</span>]
-          </span>
-        </n-tooltip>
-      </div>
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <n-button
+            :disabled="uiDisabled"
+            size="tiny"
+            @click="skipTimeForward"
+          >
+            <template #icon>
+              <n-icon>
+                <play-skip-forward-outline />
+              </n-icon>
+            </template>
+          </n-button>
+        </template>
+        <span class="button-tooltip">
+          Forward [<span class="bold">n</span>]
+        </span>
+      </n-tooltip>
 
       <div class="date-picker">
         <n-tooltip
@@ -287,7 +297,7 @@ onKeyPressed(' ', () => togglePlaying());
 
 .grid {
   display: grid;
-  grid-template-columns: auto auto auto repeat(3, 1rem) auto repeat(3, 1fr) auto;
+  grid-template-columns: auto auto auto repeat(3, 1.5rem) auto repeat(3, 1fr) auto;
   align-items: center;
   justify-items: center;
 
@@ -342,10 +352,6 @@ onKeyPressed(' ', () => togglePlaying());
     font-size: 0.4rem;
     white-space: nowrap;
   }
-}
-
-.transport-button {
-  width: 1.5rem;
 }
 
 .flex {

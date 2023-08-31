@@ -5,22 +5,12 @@ from processing.reducers.AbstractReducer import AbstractReducer
 
 
 class VaeReducer(AbstractReducer):
-    __instance: VAE
-
-    def __init__(
+    def calculate(
         self,
-        target_dimensions: int,
-    ) -> None:
-        self.__instance = VAE(
-            n_components=target_dimensions,
-        )
-
-    def get_instance(self) -> VAE:
-        return self.__instance
-
-    def reduce(
-        self,
-        features: List[List[float]],
     ) -> List[List[float]]:
-        self.__instance.fit(features)
-        return self.__instance.transform(features)
+        features = self._validate_load()
+        vae = VAE(n_components=self._dimensions)
+        vae.fit(features)
+        reduced_features = vae.transform(features)
+        self.set_values(reduced_features)
+        return self.values

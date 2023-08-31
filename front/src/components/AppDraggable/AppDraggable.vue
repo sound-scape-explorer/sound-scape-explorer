@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 import {CloseOutline, SearchOutline} from '@vicons/ionicons5';
-import {UseDraggable} from '@vueuse/components';
-import {onClickOutside} from '@vueuse/core';
+import {useDraggable, useLocalStorage} from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
-import {computed, ref} from 'vue';
+import {computed, ref, watch} from 'vue';
+
 import {capitalizeFirstLetter} from '../../utils/capitalize-first-letter';
+import {appDraggableSelectedRef} from './appDraggableSelected';
 import type {AppDraggablesStore} from './appDraggablesStore';
 import {appDraggablesStore} from './appDraggablesStore';
 
-/**
- * Props
- */
 interface Props {
   draggableKey: keyof AppDraggablesStore;
   hideSeparator?: boolean;
@@ -20,17 +18,12 @@ const props = withDefaults(defineProps<Props>(), {
   hideSeparator: false,
 });
 
-/**
- * Ref
- */
-
-const containerRef = ref<HTMLElement>();
 const storageKey = `sse-draggable-${props.draggableKey}`;
+const containerRef = ref<HTMLElement | null>(null);
 const isZoomedRef = ref<boolean>(false);
-const isSelectedRef = ref<boolean>(true);
 
-const dynamicClasses = computed<string>(() => {
-  let classes = '';
+const classesRef = computed<string>(() => {
+  let classes = 'draggable';
 
   if (isZoomedRef.value === true) {
     classes += ' zoomed';
@@ -40,55 +33,77 @@ const dynamicClasses = computed<string>(() => {
     classes += ' closed';
   }
 
-  if (isSelectedRef.value === true) {
+  if (appDraggableSelectedRef.value === props.draggableKey) {
     classes += ' selected';
   }
 
   return classes;
 });
 
-/**
- * Lifecycles
- */
-
-onClickOutside(containerRef, unselect);
-
-/**
- * Handlers
- */
-function close() {
+const close = () => {
   appDraggablesStore[props.draggableKey] = false;
-}
+};
 
-function toggleZoom() {
+const open = () => {
+  if (
+    appDraggableSelectedRef.value !== props.draggableKey ||
+    appDraggablesStore[props.draggableKey] === false ||
+    window.visualViewport === null
+  ) {
+    return;
+  }
+
+  if (x.value >= window.visualViewport.width) {
+    x.value = 100;
+  }
+
+  if (y.value >= window.visualViewport.height) {
+    y.value = 100;
+  }
+};
+
+watch(appDraggablesStore, open);
+
+const toggleZoom = () => {
   isZoomedRef.value = !isZoomedRef.value;
-}
+};
 
-function select() {
-  if (isSelectedRef.value === true) {
+const select = () => {
+  if (appDraggableSelectedRef.value === props.draggableKey) {
     return;
   }
 
-  isSelectedRef.value = true;
-}
+  appDraggableSelectedRef.value = props.draggableKey;
+};
 
-function unselect() {
-  if (isSelectedRef.value === false) {
-    return;
-  }
+const storageRef = useLocalStorage(storageKey, {x: 100, y: 100});
 
-  isSelectedRef.value = false;
-}
+const {x, y, style} = useDraggable(containerRef, {
+  initialValue: {x: storageRef.value.x, y: storageRef.value.y},
+  exact: true,
+  onEnd: (position) => {
+    if (window.visualViewport === null) {
+      return;
+    }
+
+    if (position.x >= window.visualViewport.width) {
+      x.value = 100;
+    }
+
+    if (position.y >= window.visualViewport.height) {
+      y.value = 100;
+    }
+
+    storageRef.value = {x: x.value, y: y.value};
+  },
+});
 </script>
 
 <template>
-  <UseDraggable
+  <div
     ref="containerRef"
-    :class="dynamicClasses"
-    :exact="true"
-    :initialValue="{x: 100, y: 100}"
-    :storage-key="storageKey"
-    class="draggable"
+    :class="classesRef"
+    :style="style"
     @click="select"
   >
     <div class="button close">
@@ -124,7 +139,7 @@ function unselect() {
     <div class="content">
       <slot />
     </div>
-  </UseDraggable>
+  </div>
 </template>
 
 <style lang="scss" scoped>

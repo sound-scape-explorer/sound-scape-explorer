@@ -1,38 +1,18 @@
 <script setup lang="ts">
-import {useStorageBands} from 'src/hooks/useStorageBands';
-import {useBand, bandRef} from '../../hooks/useBand';
-import {useIntegration, integrationRef} from '../../hooks/useIntegration';
-import {useReducer} from 'src/hooks/useReducer';
+import {useDigesters} from 'src/hooks/useDigesters';
+import {useFiles} from 'src/hooks/useFiles';
+import {useRanges} from 'src/hooks/useRanges';
+import {useSelection} from 'src/hooks/useSelection';
+import {useSites} from 'src/hooks/useSites';
+
 import {useStorageSettings} from '../../hooks/useStorageSettings';
-import {useStorageFilenames} from '../../hooks/useStorageFilenames';
-import {computed} from 'vue';
-import StorageLoadSelection from './StorageLoadSelection.vue';
-import {useStorageReducers} from 'src/hooks/useStorageReducers';
-import {useStorageIntegrations} from 'src/hooks/useStorageIntegrations';
-import {useStorageRanges} from 'src/hooks/useStorageRanges';
 
-useStorageBands();
-useStorageIntegrations();
-useStorageRanges();
-useStorageReducers();
-
-useBand();
-useIntegration();
-useReducer();
-
+useSelection();
 useStorageSettings();
-useStorageReducers();
-useStorageFilenames();
-
-const isSelection = computed<boolean>(() => {
-  if (bandRef.value === null || integrationRef.value === null) {
-    return false;
-  }
-
-  return true;
-});
+useFiles();
+useSites();
+useRanges();
+useDigesters();
 </script>
 
-<template>
-  <StorageLoadSelection v-if="isSelection" />
-</template>
+<template></template>

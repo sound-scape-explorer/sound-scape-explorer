@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 from sklearn.preprocessing import robust_scale
 from umap.umap_ import UMAP
@@ -7,30 +7,27 @@ from processing.reducers.AbstractReducer import AbstractReducer
 
 
 class UmapReducer(AbstractReducer):
-    __instance: UMAP
+    min_dist: float
 
     def __init__(
         self,
-        target_dimensions: int,
-        seed: Union[int, None],
-        neighbors: int,
-        metric: str,
+        min_dist: float = 0.1,
     ):
-        self.__instance = UMAP(
-            n_components=target_dimensions,
-            random_state=seed,
-            n_neighbors=neighbors,
-            metric=metric,
+        self.min_dist = min_dist
+
+    def calculate(
+        self,
+    ) -> List[List[float]]:
+        features = self._validate_load()
+        scaled_features = robust_scale(features)
+
+        umap = UMAP(
+            n_components=self._dimensions,
+            random_state=self._seed,
+            metric="manhattan",
+            min_dist=self.min_dist,
         )
 
-    def get_instance(self) -> UMAP:
-        return self.__instance
-
-    def reduce(
-        self,
-        features: List[List[float]],
-    ) -> List[List[float]]:
-        scaled_features = robust_scale(features)
-        reduced_features = self.__instance.fit_transform(scaled_features)
-        reduced_features_list = list(reduced_features)
-        return reduced_features_list
+        reduced_features = umap.fit_transform(scaled_features)
+        self.set_values(list(reduced_features))  # type: ignore
+        return self.values

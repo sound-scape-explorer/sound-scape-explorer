@@ -1,15 +1,8 @@
-import {onMounted, reactive, ref} from 'vue';
+import {onMounted, reactive} from 'vue';
 import {workerRef} from './useWorker';
-import {fileRef} from './useFile';
-
-export interface StorageSettings {
-  audio_folder: string;
-  audio_host: string;
-  base_path: string;
-  expected_sample_rate: number;
-  timezone: string;
-  umap_seed: number;
-}
+import {storageFileRef} from './useStorageFile';
+import type {StorageSettings} from 'src/storage/StorageSettings';
+import {useAudioHost} from './useAudioHost';
 
 interface SettingsRef {
   value: StorageSettings | null;
@@ -20,12 +13,18 @@ export const settingsRef = reactive<SettingsRef>({
 });
 
 export function useStorageSettings() {
+  const {setAudioHost} = useAudioHost();
+
   onMounted(async () => {
-    if (workerRef.value === null || fileRef.value === null) {
+    if (workerRef.value === null || storageFileRef.value === null) {
       return;
     }
 
-    settingsRef.value = await workerRef.value.readSettings(fileRef.value);
+    settingsRef.value = await workerRef.value.readSettings(
+      storageFileRef.value,
+    );
+
+    setAudioHost();
   });
 
   return {

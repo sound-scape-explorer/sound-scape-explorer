@@ -1,8 +1,11 @@
 <script lang="ts" setup="">
 import {computed} from 'vue';
+import {
+  chromaScaleRef,
+  cyclingScaleRef,
+} from '.././Scatter/useScatterColorScale';
 import AppGradient from '../AppGradient/AppGradient.vue';
 import {colorsStore} from './colorsStore';
-import {chromaScaleRef, cyclingScaleRef} from '../Scatter/useScatterColorScale';
 
 const size = 100;
 

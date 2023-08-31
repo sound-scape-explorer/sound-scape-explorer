@@ -1,54 +1,92 @@
 export enum StoragePath {
-  // Configuration
-  configuration = '/configuration',
+  settings = '/settings',
+
   // Bands
-  bands_names = '/configuration/bands/names',
-  bands_frequencies = '/configuration/bands/frequencies',
+  bands_names = '/bands/names',
+  bands_lows = '/bands/lows',
+  bands_highs = '/bands/highs',
+
   // Integrations
-  integrations_names = '/configuration/integrations/names',
-  integrations_seconds = '/configuration/integrations/seconds',
+  integrations_names = '/integrations/names',
+  integrations_seconds = '/integrations/seconds',
+
   // Ranges
-  ranges_names = '/configuration/ranges/names',
-  ranges_timestamps = '/configuration/ranges/timestamps',
+  ranges_names = '/ranges/names',
+  ranges_starts = '/ranges/starts',
+  ranges_ends = '/ranges/ends',
+
   // Files
-  files = '/configuration/files/names',
-  files_sites = '/configuration/files/sites',
-  files_metas = '/configuration/files/metas',
-  meta_properties = '/configuration/meta/properties',
-  meta_sets = '/configuration/meta/sets',
-  // Features
-  features = '/files_features',
-  timestamps = '/files_timestamps',
-  // Actions
-  reducers = '/configuration/reducers/names',
-  reducers_dimensions = '/configuration/reducers/dimensions',
-  reducers_bands = '/configuration/reducers/bands',
-  reducers_integrations = '/configuration/reducers/integrations',
-  reducers_ranges = '/configuration/reducers/ranges',
+  files_names = '/files/names',
+  files_sites = '/files/sites',
+  files_labels = '/files/labels',
+  files_timestamps = '/files/timestamps',
+  files_durations = '/files/durations',
 
-  indicators = '/configuration/indicators',
-  volumes = '/configuration/volumes',
-  matrices = '/configuration/matrices',
-  pairings = '/configuration/pairings',
+  // Labels
+  labels_properties = '/labels/properties',
+  labels_sets = '/labels/sets',
 
-  // Grouped
-  grouped_features = '/grouped_features',
-  grouped_timestamps = '/grouped_timestamps',
-  // Reduced
-  reduced_ = '/reduced_',
+  // Autoclusters
+  autoclusters_names = '/autoclusters/names',
+  autoclusters_min_cluster_sizes = '/autoclusters/min_cluster_sizes',
+  autoclusters_min_samples = '/autoclusters/min_samples',
+  autoclusters_alphas = '/autoclusters/alphas',
+  autoclusters_epsilons = '/autoclusters/epsilons',
 
-  // Indicators
-  indicator_ = '/indicator_',
+  // Trajectories
+  trajectories_names = '/trajectories/names',
+  trajectories_starts = '/trajectories/starts',
+  trajectories_ends = '/trajectories/ends',
+  trajectories_label_properties = '/trajectories/label_properties',
+  trajectories_label_values = '/trajectories/label_values',
+  trajectories_steps = '/trajectories/steps',
 
-  // Volumes
-  volume_ = '/volume_',
+  // Reducers
+  reducers_names = '/reducers/names',
+  reducers_dimensions = '/reducers/dimensions',
+  reducers_bands = '/reducers/bands',
+  reducers_integrations = '/reducers/integrations',
+  reducers_ranges = '/reducers/ranges',
 
-  // Autocluster
-  autocluster = '/autocluster',
+  // Computation UMAPs (INFO: Optional)
+  computation_umap_ = '/computation_umap_',
 
-  // Matrices
-  matrix_ = '/matrix_',
+  // Mean distances matrix (INFO: Optional)
+  mean_distances_matrix = '/mean_distances_matrix',
 
-  // Pairings
-  pairing_ = '/pairing_',
+  // Sites
+  sites_names = '/sites/names',
+  sites_file_indexes = '/sites/file_indexes',
+
+  // Extractors
+  extractors_names = '/extractors/names',
+  extractors_offsets = '/extractors/offsets',
+  extractors_steps = '/extractors/steps',
+  extractors_persists = '/extractors/persists',
+
+  // Extracted
+  extracted = '/extracted',
+
+  // Aggregations
+  aggregated = '/aggregated',
+  aggregated_sites = '/aggregated_sites',
+  aggregated_interval_details = '/aggregated_interval_details',
+  aggregated_timestamps = '/aggregated_timestamps',
+  aggregated_labels = '/aggregated_labels',
+
+  // Reductions
+  reduced = '/reduced',
+
+  // Autoclusters
+  autoclustered = '/autoclustered',
+  computation_umap = '/computation_umap',
+
+  // Digestions
+  digesters_names = '/digesters/names',
+  digested = '/digested',
+
+  // Trajectories
+  traced = '/traced',
+  traced_timestamps = '/traced_timestamps',
+  traced_relative_timestamps = '/traced_relative_timestamps',
 }

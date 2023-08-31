@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
-import Plotly from 'plotly.js-dist-min';
 import type {Data as PlotlyData, Layout} from 'plotly.js-dist-min';
+import Plotly from 'plotly.js-dist-min';
 import {ref, watch} from 'vue';
 
 type Data = PlotlyData & {
@@ -11,9 +11,9 @@ type Data = PlotlyData & {
  * Props
  */
 interface Props {
+  title?: string;
   labels: string[];
   values: (number | null)[][];
-  title: string;
 }
 
 const props = defineProps<Props>();

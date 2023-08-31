@@ -1,54 +1,52 @@
 <script lang="ts" setup>
 import {DownloadOutline} from '@vicons/ionicons5';
-import AppButton from '../AppButton/AppButton.vue';
-import {datasetRef, isDatasetReadyRef} from '../Scatter/useScatterDataset';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
+import AppButton from 'src/components/AppButton/AppButton.vue';
+import {useNotification} from 'src/components/AppNotification/useNotification';
+import {pointsFilteredByMetaRef} from 'src/components/Scatter/useScatterFilterMeta';
+import {pointsFilteredByTimeRef} from 'src/components/Scatter/useScatterFilterTime';
+import {aggregatedFeaturesRef} from 'src/hooks/useAggregatedFeatures';
+import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
+import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
+import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
+import {bandRef} from 'src/hooks/useBands';
+import {integrationRef} from 'src/hooks/useIntegrations';
+import {labelsPropertiesRef} from 'src/hooks/useLabels';
+import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
+import {storageFileRef} from 'src/hooks/useStorageFile';
 import {workerRef} from 'src/hooks/useWorker';
-import {fileRef} from 'src/hooks/useFile';
-import {bandRef} from 'src/hooks/useBand';
-import {integrationRef} from 'src/hooks/useIntegration';
-import {useNotification} from '../AppNotification/useNotification';
 import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
 import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
 import {ref} from 'vue';
-import {groupedFilenamesRef} from 'src/hooks/useStorageGroupedFilenames';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {groupedFeaturesRef} from 'src/hooks/useStorageGroupedFeatures';
-import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
-import {groupedAttributesRef} from 'src/hooks/useStorageGroupedAttributes';
-import {pointsFilteredByTimeRef} from '../Scatter/useScatterFilterTime';
-import {pointsFilteredByMetaRef} from '../Scatter/useScatterFilterMeta';
+
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 
 const {notify} = useNotification();
 
 const loadingRef = ref<boolean>(false);
 
 interface ExportData {
-  pointIndex: number;
-  fileIndex: number;
-  groupIndex: number;
-  filename: string;
+  intervalIndex: number;
   timestamp: number;
-  groupedMetas: string[];
+  site: string;
+  aggregatedLabels: string[];
   reducedFeatures: number[];
-  groupedFeatures: number[];
+  aggregatedFeatures: number[];
 }
 
 async function handleClick() {
   if (
     workerRef.value === null ||
-    fileRef.value === null ||
+    storageFileRef.value === null ||
     bandRef.value === null ||
     integrationRef.value === null ||
-    groupedFilenamesRef.value === null ||
-    groupedAttributesRef.value === null ||
-    groupedTimestampsRef.value === null ||
-    groupedFeaturesRef.value === null ||
-    groupedMetasRef.value === null ||
-    datasetRef.value === null ||
+    aggregatedTimestampsRef.value === null ||
+    aggregatedFeaturesRef.value === null ||
+    aggregatedLabelsRef.value === null ||
     pointsFilteredByMetaRef.value === null ||
     pointsFilteredByTimeRef.value === null ||
-    metaPropertiesRef.value === null
+    labelsPropertiesRef.value === null ||
+    reducedFeaturesRef.value === null ||
+    aggregatedSitesRef.value === null
   ) {
     return;
   }
@@ -57,83 +55,72 @@ async function handleClick() {
 
   loadingRef.value = true;
 
-  const [, slicesPerGroup] = groupedAttributesRef.value;
-
   const payload: ExportData[] = [];
 
   for (
-    let pointIndex = 0;
-    pointIndex < datasetRef.value.points.length;
-    ++pointIndex
+    let intervalIndex = 0;
+    intervalIndex < aggregatedTimestampsRef.value.length;
+    intervalIndex += 1
   ) {
-    const isFilteredByMeta = pointsFilteredByMetaRef.value[pointIndex];
-    const isFilteredByTime = pointsFilteredByTimeRef.value[pointIndex];
+    const isFilteredByMeta = pointsFilteredByMetaRef.value[intervalIndex];
+    const isFilteredByTime = pointsFilteredByTimeRef.value[intervalIndex];
 
     if (isFilteredByMeta || isFilteredByTime) {
       continue;
     }
 
-    const fileIndex = Math.floor(pointIndex / slicesPerGroup);
-    const groupIndex = pointIndex % slicesPerGroup;
-    const filename = groupedFilenamesRef.value[pointIndex];
-    const features = groupedFeaturesRef.value[pointIndex];
-    const timestamp = groupedTimestampsRef.value[pointIndex];
-    const groupedMetas = groupedMetasRef.value[pointIndex];
+    const aggregatedFeatures = aggregatedFeaturesRef.value[intervalIndex];
+    const timestamp = aggregatedTimestampsRef.value[intervalIndex];
+    const site = aggregatedSitesRef.value[intervalIndex];
+    const aggregatedLabels = aggregatedLabelsRef.value[intervalIndex];
 
-    const points = datasetRef.value.points;
-    const reducedFeatures = points[pointIndex];
+    const reducedFeatures = reducedFeaturesRef.value[intervalIndex];
 
     payload.push({
-      pointIndex: pointIndex,
-      fileIndex: fileIndex,
-      groupIndex: groupIndex,
-      filename: filename,
+      intervalIndex: intervalIndex,
       timestamp: timestamp,
-      groupedMetas: groupedMetas,
+      site: site.site,
+      aggregatedLabels: aggregatedLabels,
       reducedFeatures: reducedFeatures,
-      groupedFeatures: features,
+      aggregatedFeatures: aggregatedFeatures,
     });
   }
 
   let csvFirstRow = '';
 
-  csvFirstRow += 'pointIndex,';
-  csvFirstRow += 'fileIndex,';
-  csvFirstRow += 'groupIndex,';
-  csvFirstRow += 'filename,';
+  csvFirstRow += 'intervalIndex,';
   csvFirstRow += 'timestamp,';
+  csvFirstRow += 'site,';
 
-  metaPropertiesRef.value.forEach((metaProperty) => {
-    csvFirstRow += `m_${metaProperty},`;
+  labelsPropertiesRef.value.forEach((metaProperty) => {
+    csvFirstRow += `label_${metaProperty},`;
   });
 
   payload[0].reducedFeatures.forEach((_, r) => {
     csvFirstRow += `r_${r},`;
   });
 
-  payload[0].groupedFeatures.forEach((_, f) => {
+  payload[0].aggregatedFeatures.forEach((_, f) => {
     csvFirstRow += `f_${f},`;
   });
 
   const csvContent = payload.map((data) => {
     let content = '';
 
-    content += `${data.pointIndex},`;
-    content += `${data.fileIndex},`;
-    content += `${data.groupIndex},`;
-    content += `${data.filename},`;
+    content += `${data.intervalIndex},`;
     content += `${data.timestamp},`;
+    content += `${data.site},`;
 
-    data.groupedMetas.forEach((groupedMeta) => {
-      content += `${groupedMeta},`;
+    data.aggregatedLabels.forEach((aggregatedLabel) => {
+      content += `${aggregatedLabel},`;
     });
 
     data.reducedFeatures.forEach((reducedFeature) => {
       content += `${reducedFeature},`;
     });
 
-    data.groupedFeatures.forEach((groupedFeature) => {
-      content += `${groupedFeature},`;
+    data.aggregatedFeatures.forEach((aggregatedFeature) => {
+      content += `${aggregatedFeature},`;
     });
 
     content = content.slice(0, -1);
@@ -142,7 +129,7 @@ async function handleClick() {
   });
 
   const csv = convertArrayToCsv(csvContent, csvFirstRow);
-  const csvFilename = `SSE_${bandRef.value}_${integrationRef.value}.csv`;
+  const csvFilename = `SSE_${bandRef.value.name}_${integrationRef.value.name}.csv`;
   triggerCSVDownload(csv, csvFilename);
   loadingRef.value = false;
 }
@@ -150,7 +137,7 @@ async function handleClick() {
 
 <template>
   <AppButton
-    :disabled="!isDatasetReadyRef.value"
+    :disabled="scatterLoadingRef.value"
     :handle-click="handleClick"
     :loading="loadingRef"
     text="csv"

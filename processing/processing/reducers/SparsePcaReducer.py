@@ -6,24 +6,16 @@ from processing.reducers.AbstractReducer import AbstractReducer
 
 
 class SparsePcaReducer(AbstractReducer):
-    __instance: SparsePCA
-
-    def __init__(
+    def calculate(
         self,
-        target_dimensions: int,
-        seed: int,
-    ):
-        self.__instance = SparsePCA(
-            n_components=target_dimensions,
-            random_state=seed,
+    ) -> List[List[float]]:
+        features = self._validate_load()
+
+        sparse_pca = SparsePCA(
+            n_components=self._dimensions,
+            random_state=self._seed,
         )
 
-    def get_instance(self) -> SparsePCA:
-        return self.__instance
-
-    def reduce(
-        self,
-        features: List[List[float]],
-    ) -> List[List[float]]:
-        reduced_features = self.__instance.fit_transform(features)
-        return reduced_features
+        reduced_features = sparse_pca.fit_transform(features)
+        self.set_values(list(reduced_features))
+        return self.values

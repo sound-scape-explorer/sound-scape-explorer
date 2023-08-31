@@ -4,7 +4,7 @@ import {
   alphaHighRef,
   dayColor,
   nightColor,
-} from '../Scatter/useScatterColorScale';
+} from '.././Scatter/useScatterColorScale';
 
 export function useColorByDay() {
   const {convertTimestampToDate} = useDate();

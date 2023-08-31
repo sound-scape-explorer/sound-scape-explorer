@@ -1,9 +1,9 @@
 <script lang="ts" setup="">
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import ColorsAlphas from './ColorsAlphas.vue';
+import ColorsGradients from './ColorsGradients.vue';
 import ColorsScale from './ColorsScale.vue';
 import ColorsType from './ColorsType.vue';
-import ColorsGradients from './ColorsGradients.vue';
 </script>
 
 <template>

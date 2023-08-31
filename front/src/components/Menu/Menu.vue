@@ -1,13 +1,12 @@
 <script lang="ts" setup="">
 import {
   AnalyticsOutline,
+  BarChartOutline,
   CalendarOutline,
   CloudUploadOutline,
   CogOutline,
   ColorPaletteOutline,
   EyeOutline,
-  FlaskOutline,
-  GitCompareOutline,
   GridOutline,
   HeadsetOutline,
   HelpOutline,
@@ -15,166 +14,148 @@ import {
   ListOutline,
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
+import {useStorageFile} from 'src/hooks/useStorageFile';
+
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
-import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
+import {appDraggableSelectedRef} from '../AppDraggable/appDraggableSelected';
+import {
+  type AppDraggablesStore,
+  appDraggablesStore,
+} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
-import {useFile} from 'src/hooks/useFile';
 
-const {isFileRef} = useFile();
+const {isStorageFileRef} = useStorageFile();
 
-/**
- * Handlers
- */
+const toggle = (key: keyof AppDraggablesStore): void => {
+  appDraggableSelectedRef.value = key;
+  appDraggablesStore[key] = !appDraggablesStore[key];
+};
 
-const toggleImport = () =>
-  (appDraggablesStore.import = !appDraggablesStore.import);
-const toggleSettings = () =>
-  (appDraggablesStore.settings = !appDraggablesStore.settings);
-const toggleHelp = () => (appDraggablesStore.help = !appDraggablesStore.help);
-const toggleSelection = () =>
-  (appDraggablesStore.selection = !appDraggablesStore.selection);
-const toggleColors = () =>
-  (appDraggablesStore.colors = !appDraggablesStore.colors);
-const toggleQueries = () =>
-  (appDraggablesStore.queries = !appDraggablesStore.queries);
-const toggleTime = () => (appDraggablesStore.time = !appDraggablesStore.time);
-const toggleMeta = () => (appDraggablesStore.meta = !appDraggablesStore.meta);
-const togglePlayer = () =>
-  (appDraggablesStore.audio = !appDraggablesStore.audio);
-const toggleDetails = () =>
-  (appDraggablesStore.details = !appDraggablesStore.details);
-const toggleVolumes = () =>
-  (appDraggablesStore.volumes = !appDraggablesStore.volumes);
-const toggleMatrices = () =>
-  (appDraggablesStore.matrices = !appDraggablesStore.matrices);
-const togglePairings = () =>
-  (appDraggablesStore.pairings = !appDraggablesStore.pairings);
-
-onKeyPressed(KeyboardShortcut.import, toggleImport);
-onKeyPressed(KeyboardShortcut.settings, toggleSettings);
-onKeyPressed(KeyboardShortcut.help, toggleHelp);
-onKeyPressed(KeyboardShortcut.selection, toggleSelection);
-onKeyPressed(KeyboardShortcut.colors, toggleColors);
-onKeyPressed(KeyboardShortcut.queries, toggleQueries);
-onKeyPressed(KeyboardShortcut.time, toggleTime);
-onKeyPressed(KeyboardShortcut.meta, toggleMeta);
-onKeyPressed(KeyboardShortcut.audio, togglePlayer);
-onKeyPressed(KeyboardShortcut.details, toggleDetails);
-onKeyPressed(KeyboardShortcut.volumes, toggleVolumes);
-onKeyPressed(KeyboardShortcut.matrices, toggleMatrices);
-onKeyPressed(KeyboardShortcut.pairings, togglePairings);
+onKeyPressed(KeyboardShortcut.import, () => toggle('import'));
+onKeyPressed(KeyboardShortcut.settings, () => toggle('settings'));
+onKeyPressed(KeyboardShortcut.help, () => toggle('help'));
+onKeyPressed(KeyboardShortcut.selection, () => toggle('selection'));
+onKeyPressed(KeyboardShortcut.colors, () => toggle('colors'));
+onKeyPressed(KeyboardShortcut.time, () => toggle('time'));
+onKeyPressed(KeyboardShortcut.labels, () => toggle('labels'));
+onKeyPressed(KeyboardShortcut.details, () => toggle('details'));
+onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
+onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
+onKeyPressed(KeyboardShortcut.indicators, () => toggle('indicators'));
+onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
 </script>
 
 <template>
   <div class="header">
     <div class="row">
-      <MenuItem
-        :callback="toggleImport"
-        :shortcut="KeyboardShortcut.import"
-        text="Import"
-      >
-        <cloud-upload-outline />
-      </MenuItem>
+      <div class="left">
+        <MenuItem
+          draggable-key="import"
+          text="Import"
+          :toggle="toggle"
+        >
+          <cloud-upload-outline />
+        </MenuItem>
 
-      <MenuItem
-        :callback="toggleSettings"
-        :shortcut="KeyboardShortcut.settings"
-        text="Settings"
-      >
-        <cog-outline />
-      </MenuItem>
+        <MenuItem
+          draggable-key="settings"
+          text="Settings"
+          :toggle="toggle"
+        >
+          <cog-outline />
+        </MenuItem>
 
-      <MenuItem
-        :callback="toggleHelp"
-        :shortcut="KeyboardShortcut.help"
-        text="Help"
+        <MenuItem
+          draggable-key="help"
+          text="Help"
+          :toggle="toggle"
+        >
+          <help-outline />
+        </MenuItem>
+      </div>
+
+      <div
+        class="right"
+        v-if="isStorageFileRef"
       >
-        <help-outline />
-      </MenuItem>
+        <!-- placeholder -->
+      </div>
     </div>
 
     <div
-      v-if="isFileRef"
+      v-if="isStorageFileRef"
       class="column"
     >
       <MenuItem
-        :callback="toggleSelection"
-        :shortcut="KeyboardShortcut.selection"
+        draggable-key="selection"
         text="Selection"
+        :toggle="toggle"
       >
         <eye-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleColors"
-        :shortcut="KeyboardShortcut.colors"
+        draggable-key="colors"
         text="Colors"
+        :toggle="toggle"
       >
         <color-palette-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleQueries"
-        :shortcut="KeyboardShortcut.queries"
-        text="Query"
-      >
-        <flask-outline />
-      </MenuItem>
-
-      <MenuItem
-        :callback="toggleTime"
-        :shortcut="KeyboardShortcut.time"
+        draggable-key="time"
         text="Time"
+        :toggle="toggle"
       >
         <calendar-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleMeta"
-        :shortcut="KeyboardShortcut.meta"
-        text="Meta"
+        draggable-key="labels"
+        text="Labels"
+        :toggle="toggle"
       >
         <layers-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="togglePlayer"
-        :shortcut="KeyboardShortcut.audio"
-        text="Audio"
-      >
-        <headset-outline />
-      </MenuItem>
-
-      <MenuItem
-        :callback="toggleDetails"
-        :shortcut="KeyboardShortcut.details"
+        draggable-key="details"
         text="Details"
+        :toggle="toggle"
       >
         <list-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleVolumes"
-        :shortcut="KeyboardShortcut.volumes"
-        text="Volumes"
+        draggable-key="audio"
+        text="Audio"
+        :toggle="toggle"
+      >
+        <headset-outline />
+      </MenuItem>
+
+      <MenuItem
+        draggable-key="trajectories"
+        text="Trajectories"
+        :toggle="toggle"
       >
         <analytics-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="toggleMatrices"
-        :shortcut="KeyboardShortcut.matrices"
-        text="Matrices"
+        draggable-key="indicators"
+        text="Indicators"
+        :toggle="toggle"
       >
-        <grid-outline />
+        <bar-chart-outline />
       </MenuItem>
 
       <MenuItem
-        :callback="togglePairings"
-        :shortcut="KeyboardShortcut.pairings"
-        text="Pairings"
+        draggable-key="digested"
+        text="Digested"
+        :toggle="toggle"
       >
-        <git-compare-outline />
+        <grid-outline />
       </MenuItem>
     </div>
   </div>
@@ -194,6 +175,8 @@ onKeyPressed(KeyboardShortcut.pairings, togglePairings);
   top: 0.5rem;
   left: 0.5rem;
 
+  width: 100%;
+
   pointer-events: none;
 }
 
@@ -203,6 +186,18 @@ onKeyPressed(KeyboardShortcut.pairings, togglePairings);
 }
 
 .row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 1rem;
+}
+
+.row .left {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.row .right {
   display: flex;
   gap: 0.5rem;
 }

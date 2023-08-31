@@ -1,11 +1,11 @@
 <script lang="ts" setup="">
-import {computed} from 'vue';
-import {reducersRef} from 'src/hooks/useStorageReducers';
-import {bandsRef} from 'src/hooks/useStorageBands';
-import {integrationsRef} from 'src/hooks/useStorageIntegrations';
-import {rangesRef} from 'src/hooks/useStorageRanges';
-import {filenamesRef} from 'src/hooks/useStorageFilenames';
+import {bandsRef} from 'src/hooks/useBands';
+import {filesRef} from 'src/hooks/useFiles';
+import {integrationsRef} from 'src/hooks/useIntegrations';
+import {rangesRef} from 'src/hooks/useRanges';
+import {reducersRef} from 'src/hooks/useReducers';
 import {settingsRef} from 'src/hooks/useStorageSettings';
+import {computed} from 'vue';
 
 const reducerNamesRef = computed<string[] | null>(() => {
   if (reducersRef.value === null) {
@@ -22,15 +22,15 @@ const bandNamesRef = computed<string[] | null>(() => {
     return null;
   }
 
-  return Object.keys(bandsRef.value);
+  return bandsRef.value.map((band) => band.name);
 });
 
-const integrationNamesRef = computed(() => {
+const integrationNamesRef = computed<string[] | null>(() => {
   if (integrationsRef.value === null) {
-    return;
+    return null;
   }
 
-  return Object.keys(integrationsRef.value);
+  return integrationsRef.value.map((integration) => integration.name);
 });
 
 const rangeNamesRef = computed<string[] | null>(() => {
@@ -38,7 +38,7 @@ const rangeNamesRef = computed<string[] | null>(() => {
     return null;
   }
 
-  return Object.keys(rangesRef.value);
+  return rangesRef.value.map((range) => range.name);
 });
 </script>
 
@@ -58,7 +58,7 @@ const rangeNamesRef = computed<string[] | null>(() => {
     <div class="container">
       <code class="item">
         <span class="key">Files count</span>
-        <span>{{ filenamesRef.value?.length }}</span>
+        <span>{{ filesRef.value?.length }}</span>
       </code>
       <code class="item">
         <span class="key">Bands</span>
@@ -81,7 +81,7 @@ const rangeNamesRef = computed<string[] | null>(() => {
 </template>
 
 <style lang="scss" scoped>
-$width: 10rem;
+$width: 14rem;
 
 .container {
   margin-top: 1rem;

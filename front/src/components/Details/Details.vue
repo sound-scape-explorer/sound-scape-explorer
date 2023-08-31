@@ -1,44 +1,133 @@
 <script lang="ts" setup="">
-import {NGi, NGrid, NTag} from 'naive-ui';
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import {useDetails} from './useDetails';
-import {clickedRef} from '../Scatter/useScatterClick';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {bandRef} from 'src/hooks/useBand';
-import {indicatorsRef} from 'src/hooks/useStorageIndicators';
-import {integrationRef} from 'src/hooks/useIntegration';
+import {HeadsetOutline} from '@vicons/ionicons5';
+import type {Dayjs} from 'dayjs';
+import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
+import {bandRef} from 'src/hooks/useBands';
+import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
+import {integrationRef} from 'src/hooks/useIntegrations';
+import {labelsPropertiesRef} from 'src/hooks/useLabels';
+import {convertTimestampToDateShort} from 'src/utils/convert-timestamp-to-date-short';
+import {computed} from 'vue';
 
-const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
-  useDetails();
+import {clickedRef} from '.././Scatter/useScatterClick';
+import AppDraggable from '../AppDraggable/AppDraggable.vue';
+import {useAudio} from '../Audio/useAudio';
+import {useDetails} from './useDetails';
+
+const {
+  intervalDateRef,
+  intervalLabelsRef,
+  intervalSiteRef,
+  intervalDetailsRef,
+} = useDetails();
+
+const {setAudioFile} = useAudio();
+
+const dateEndRef = computed<Dayjs | null>(() => {
+  if (intervalDateRef.value === null || integrationRef.value === null) {
+    return null;
+  }
+
+  return intervalDateRef.value.add(integrationRef.value.seconds, 'seconds');
+});
 </script>
 
 <template>
   <AppDraggable draggable-key="details">
     <div class="file container">
-      <div class="title">Selected point index</div>
+      <div class="title">Selected interval index</div>
       <span class="file index">{{ clickedRef.value ?? 'none' }}</span>
     </div>
 
     <div class="file container">
-      <div class="title">Selected file index</div>
-      <span class="file index">{{ fileIndexRef ?? 'none' }}</span>
+      <div class="title">Site</div>
+      <span class="file index">{{ intervalSiteRef?.site ?? '' }}</span>
     </div>
 
     <div class="file container">
-      <div class="title">Selected group index</div>
-      <span class="file index">{{ groupIndexRef ?? 'none' }}</span>
+      <div class="title">Audio blocks</div>
+      <span class="file index">
+        <n-tooltip
+          v-for="blockDetails in intervalDetailsRef"
+          placement="bottom"
+          trigger="hover"
+        >
+          <template #trigger>
+            <n-button
+              class="zoom"
+              size="tiny"
+              @click="() => setAudioFile(blockDetails)"
+            >
+              <template #icon>
+                <n-icon>
+                  <HeadsetOutline />
+                </n-icon>
+              </template>
+            </n-button>
+          </template>
+          <n-grid
+            :cols="1"
+            class="grid"
+            x-gap="12"
+          >
+            <n-gi>
+              <n-tag
+                :bordered="false"
+                size="small"
+              >
+                file
+              </n-tag>
+              {{ blockDetails.file }}
+            </n-gi>
+            <n-gi>
+              <n-tag
+                :bordered="false"
+                size="small"
+              >
+                file start
+              </n-tag>
+              {{ blockDetails.fileStart }} ms
+            </n-gi>
+            <n-gi>
+              <n-tag
+                :bordered="false"
+                size="small"
+              >
+                start
+              </n-tag>
+              {{ convertTimestampToDateShort(blockDetails.start) }}
+            </n-gi>
+          </n-grid>
+        </n-tooltip>
+      </span>
     </div>
 
-    <div class="file-details">
-      <span class="src">{{ filenameRef }}</span>
-      <span v-if="bandRef !== null">
-        {{ bandRef.value }}
-      </span>
-      <span>
-        {{ dateRef }}
-      </span>
-      <span>{{ integrationRef.value }}</span>
+    <div class="separator" />
+
+    <div class="file container">
+      <div class="title">Date Start</div>
+      <span class="file index">{{ intervalDateRef }}</span>
     </div>
+
+    <div class="file container">
+      <div class="title">Date End</div>
+      <span class="file index">{{ dateEndRef }}</span>
+    </div>
+
+    <div class="file container">
+      <div class="title">Band</div>
+      <span class="file index">{{ bandRef.value?.name ?? '' }}</span>
+    </div>
+
+    <div class="file container">
+      <div class="title">Integration</div>
+      <span class="file index">{{ integrationRef.value?.name ?? '' }}</span>
+    </div>
+
+    <div class="separator" />
+
+    <div class="title">Labels</div>
 
     <div
       v-if="clickedRef !== null"
@@ -51,35 +140,41 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
         x-gap="12"
       >
         <!--suppress JSUnusedLocalSymbols -->
-        <n-gi v-for="(_, index) in metaPropertiesRef.value">
+        <n-gi v-for="(_, index) in labelsPropertiesRef.value">
           <n-tag
             :bordered="false"
             class="tag"
             size="small"
           >
-            {{ metaPropertiesRef.value?.[index] }}
+            {{ labelsPropertiesRef.value?.[index] }}
           </n-tag>
 
-          {{ metasRef?.[index] }}
+          {{ intervalLabelsRef?.[index] }}
         </n-gi>
       </n-grid>
 
-      <div class="title">Indicators</div>
+      <div class="separator" />
+
+      <div class="title">Extracted Data</div>
 
       <n-grid
         :cols="2"
         class="grid"
+        x-gap="12"
+        v-if="aggregatedIndicatorsRef.value !== null"
       >
-        <n-gi v-for="indicator in indicatorsRef.value">
+        <n-gi v-for="(ex, index) in nonNnExtractorsRef.value">
           <n-tag
             :bordered="false"
             class="tag"
             size="small"
           >
-            {{ indicator.name }}
+            {{ ex.name }}
           </n-tag>
 
-          {{ indicator.values[clickedRef.value ?? 0] }}
+          {{
+            aggregatedIndicatorsRef.value[index].values[clickedRef.value ?? 0]
+          }}
         </n-gi>
       </n-grid>
     </div>
@@ -94,7 +189,7 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
 .container {
   display: flex;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 2rem;
 }
 
 .title {
@@ -126,5 +221,9 @@ const {filenameRef, dateRef, fileIndexRef, groupIndexRef, metasRef} =
 
 .src {
   overflow: hidden;
+}
+
+.separator {
+  height: 1rem;
 }
 </style>

@@ -1,35 +1,34 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
+import {labelsPropertiesRef} from 'src/hooks/useLabels';
+import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
+import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
-import {convertSlugsToColorTypes} from '../../utils/convert-slugs-to-color-types';
-import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
+
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
-import {metaPropertiesRef} from 'src/hooks/useStorageMetaProperties';
-import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
 
 /**
  * State
  */
 
-const optionsRef = computed<ColorType[]>(() => {
-  const defaultOptions = [
-    'pointIndex',
-    'fileIndex',
-    'groupIndex',
+const optionsRef = computed<string[]>(() => {
+  const defaultOptions: ColorType[] = [
+    'intervalIndex',
     'by1h',
     'by10min',
     'isDay',
     'cycleDay',
   ];
 
-  if (metaPropertiesRef.value === null) {
+  if (labelsPropertiesRef.value === null) {
     return defaultOptions;
   }
 
   return [
     ...defaultOptions,
-    ...convertSlugsToColorTypes(metaPropertiesRef.value),
+    ...convertSlugsToColorTypes(labelsPropertiesRef.value),
   ];
 });
 
@@ -48,7 +47,7 @@ const naiveOptions = computed(() => {
       <n-select
         v-model:value="colorsStore.colorType"
         :default-value="optionsRef[0]"
-        :disabled="!isDatasetReadyRef.value"
+        :disabled="scatterLoadingRef.value"
         :options="naiveOptions"
         placeholder="Color type..."
         size="small"

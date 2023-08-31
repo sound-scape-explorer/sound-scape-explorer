@@ -1,9 +1,10 @@
-import {alphaHighRef} from '../Scatter/useScatterColorScale';
+import {alphaHighRef} from '.././Scatter/useScatterColorScale';
 import {useLimitedColorScale} from './useLimitedColorScale';
 
 export function useColorByMeta() {
   const {createLimitedColorScale} = useLimitedColorScale();
 
+  // TODO: Rename
   const getColorByMeta = (
     pointIndex: number,
     metaPropertyAsColorType: string,

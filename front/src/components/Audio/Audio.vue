@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {
   AddOutline,
   ArrowDownOutline,
@@ -11,29 +11,27 @@ import {
 } from '@vicons/ionicons5';
 import audioBufferSlice from 'audiobuffer-slice';
 import colormap from 'colormap';
-import {NButton, NGi, NGrid, NIcon, NTag, NTooltip, NSlider} from 'naive-ui';
+import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
+import speedToPercentage from 'speed-to-percentage';
+import speedToSemitones from 'speed-to-semitones';
+import {PLAYBACK_RATE} from 'src/constants';
+import {audioHostRef} from 'src/hooks/useAudioHost';
+import {bandRef} from 'src/hooks/useBands';
+import {integrationRef} from 'src/hooks/useIntegrations';
+import {settingsRef} from 'src/hooks/useStorageSettings';
 import {computed, onUnmounted, ref, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 import WaveSurfer from 'wavesurfer.js';
 import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
+
 import {FFT_SIZE, WAVE} from '../../constants';
 import {triggerWavDownload} from '../../utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import {settingsRef} from 'src/hooks/useStorageSettings';
-import {integrationRef} from 'src/hooks/useIntegration';
-import {bandsRef} from 'src/hooks/useStorageBands';
-import {useDetails} from '../Details/useDetails';
-import {clickedRef} from '../Scatter/useScatterClick';
-import {bandRef} from 'src/hooks/useBand';
-import {PLAYBACK_RATE} from 'src/constants';
-import speedToSemitones from 'speed-to-semitones';
-import speedToPercentage from 'speed-to-percentage';
+import {currentAudioFileRef} from './useAudio';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
-
-const {groupIndexRef, filenameRef} = useDetails();
 
 /**
  * State
@@ -45,9 +43,18 @@ const spectrogramRef = ref<HTMLDivElement | null>(null);
 const isPlayingRef = ref<boolean>(false);
 const fftSizeRef = ref<number>(FFT_SIZE.default);
 
+const audioContextRef = computed<AudioContext | null>(() => {
+  if (settingsRef.value === null) {
+    return null;
+  }
+
+  return new AudioContext({sampleRate: settingsRef.value.expected_sample_rate});
+});
+
 const wsRef = computed(() => {
   if (
-    frequenciesRef.value === null ||
+    audioContextRef.value === null ||
+    bandRef.value === null ||
     waveformRef.value === null ||
     spectrogramRef.value === null
   ) {
@@ -55,6 +62,7 @@ const wsRef = computed(() => {
   }
 
   const params: WaveSurferParams = {
+    audioContext: audioContextRef.value,
     container: waveformRef.value,
     scrollParent: false,
     barHeight: WAVE.default,
@@ -67,8 +75,8 @@ const wsRef = computed(() => {
         colorMap: colorsRef.value,
         height: 192,
         fftSamples: FFT_SIZE.default,
-        frequencyMin: frequenciesRef.value.min,
-        frequencyMax: frequenciesRef.value.max,
+        frequencyMin: bandRef.value.low,
+        frequencyMax: bandRef.value.high,
       }),
       Cursor.create({
         showTime: true,
@@ -86,14 +94,6 @@ const wsRef = computed(() => {
   return WaveSurfer.create(params);
 });
 
-const audioContextRef = computed<AudioContext | null>(() => {
-  if (wsRef.value === null) {
-    return null;
-  }
-
-  return wsRef.value.backend.getAudioContext();
-});
-
 const colorsRef = computed(() => {
   // TODO: Assess utility of this
   if (wsRef.value !== null) {
@@ -106,28 +106,6 @@ const colorsRef = computed(() => {
     nshades: 256,
     format: 'float',
   });
-});
-
-const srcRef = computed(() => {
-  if (settingsRef.value === null || filenameRef.value === null) {
-    return null;
-  }
-
-  return `${settingsRef.value.audio_host}${filenameRef.value}`;
-});
-
-const frequenciesRef = computed(() => {
-  if (bandsRef.value === null || bandRef.value === null) {
-    return null;
-  }
-
-  const min = bandsRef.value[bandRef.value][0];
-  const max = bandsRef.value[bandRef.value][1];
-
-  return {
-    min: min,
-    max: max,
-  };
 });
 
 /**
@@ -145,34 +123,26 @@ function close() {
 
 async function load() {
   if (
-    clickedRef.value === null ||
-    bandRef.value === null ||
     integrationRef.value === null ||
-    groupIndexRef.value === null ||
-    srcRef.value === null ||
+    currentAudioFileRef.value === null ||
     wsRef.value === null ||
     audioContextRef.value === null
   ) {
     return;
   }
 
-  appDraggablesStore.details = true;
-
   try {
-    const response = await fetch(srcRef.value);
+    const src = `${audioHostRef.value}${currentAudioFileRef.value.file}`;
+    const response = await fetch(src);
     const arrayBuffer = await response.arrayBuffer();
     const audioBuffer = await audioContextRef.value.decodeAudioData(
       arrayBuffer,
     );
 
-    const seconds = integrationRef.value;
-
-    const start = groupIndexRef.value * seconds * 1000;
-    const end = start + seconds * 1000;
+    const start = currentAudioFileRef.value.fileStart;
+    const end = start + integrationRef.value.seconds * 1000;
 
     audioBufferSlice(audioBuffer, start, end, handleAudioSlice);
-
-    appDraggablesStore.audio = true;
   } catch {
     appDraggablesStore.audio = false;
   }
@@ -204,7 +174,6 @@ function handleAudioEnd() {
 
 function handleAudioReady() {
   if (
-    bandsRef.value === null ||
     wsRef.value === null ||
     bandRef.value === null ||
     audioContextRef.value === null
@@ -212,23 +181,21 @@ function handleAudioReady() {
     return;
   }
 
-  const ac = wsRef.value.backend.getAudioContext();
-  const frequencies = bandsRef.value[bandRef.value];
+  // const ac = wsRef.value.backend.getAudioContext();
+  const ac = audioContextRef.value;
 
   const lowShelf = ac.createBiquadFilter();
   lowShelf.type = 'lowshelf';
   lowShelf.gain.value = -60;
-  lowShelf.frequency.value = frequencies[0];
+  lowShelf.frequency.value = bandRef.value.low;
 
   const highShelf = ac.createBiquadFilter();
   highShelf.type = 'highshelf';
   highShelf.gain.value = -60;
-  highShelf.frequency.value = frequencies[1];
+  highShelf.frequency.value = bandRef.value.high;
 
   wsRef.value.backend.setFilters([lowShelf, highShelf]);
-
-  wsRef.value.play();
-  isPlayingRef.value = true;
+  playPause();
 }
 
 async function handleDownload() {
@@ -240,18 +207,14 @@ async function handleDownload() {
   // noinspection TypeScriptUnresolvedReference
   const buffer = wsRef.value.backend.buffer as AudioBuffer | null;
 
-  if (
-    buffer === null ||
-    filenameRef.value === null ||
-    groupIndexRef.value === null ||
-    settingsRef.value === null
-  ) {
+  if (buffer === null || currentAudioFileRef.value === null) {
     return;
   }
 
   const wav = encodeWavFileFromAudioBuffer(buffer, 0);
   const blob = new Blob([wav], {type: 'audio/wav'});
-  const name = `${filenameRef.value} - ${groupIndexRef.value} - NO FILTER.wav`;
+  const name = `${currentAudioFileRef.value.file} - ${currentAudioFileRef.value.start} - NO FILTER.wav`;
+
   triggerWavDownload(blob, name);
 }
 
@@ -281,8 +244,7 @@ function handleAudioSeek() {
     return;
   }
 
-  wsRef.value.play();
-  isPlayingRef.value = true;
+  playPause();
 }
 
 function handleVolumeDown() {
@@ -302,14 +264,14 @@ function handleVolumeDown() {
   wsRef.value.drawBuffer();
 }
 
-function handlePlayPause() {
+const playPause = () => {
   if (wsRef.value === null) {
     return;
   }
 
   wsRef.value.playPause();
   isPlayingRef.value = wsRef.value.isPlaying();
-}
+};
 
 function handleStop() {
   if (wsRef.value === null) {
@@ -354,9 +316,10 @@ watch(playbackRateRef, () => {
   if (wsRef.value === null) {
     return;
   }
+
   wsRef.value.pause();
   wsRef.value.setPlaybackRate(playbackRateRef.value);
-  wsRef.value.play();
+  playPause();
 });
 
 /**
@@ -364,7 +327,7 @@ watch(playbackRateRef, () => {
  */
 
 onUnmounted(close);
-watch(clickedRef, load);
+watch(currentAudioFileRef, load);
 </script>
 
 <template>
@@ -381,7 +344,7 @@ watch(clickedRef, load);
           <template #trigger>
             <n-button
               size="tiny"
-              @click="handlePlayPause"
+              @click="playPause"
             >
               <n-icon>
                 <pause-outline v-if="isPlayingRef" />
@@ -496,7 +459,24 @@ watch(clickedRef, load);
       </div>
 
       <n-grid
-        :cols="3"
+        :cols="1"
+        class="grid"
+        x-gap="12"
+      >
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            file
+          </n-tag>
+
+          {{ currentAudioFileRef.value?.file }}
+        </n-gi>
+      </n-grid>
+
+      <n-grid
+        :cols="4"
         class="grid"
         x-gap="12"
       >
@@ -530,13 +510,27 @@ watch(clickedRef, load);
 
           {{ speedToSemitones(playbackRateRef, 2) }}
         </n-gi>
+        <n-gi v-if="settingsRef.value !== null">
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            Hertz
+          </n-tag>
+
+          {{
+            (
+              settingsRef.value['expected_sample_rate'] * playbackRateRef
+            ).toFixed()
+          }}
+        </n-gi>
       </n-grid>
 
       <div>
         <n-slider
           v-model:value="playbackRateRef"
-          :min="PLAYBACK_RATE.min"
           :max="PLAYBACK_RATE.max"
+          :min="PLAYBACK_RATE.min"
           :step="PLAYBACK_RATE.step"
         />
       </div>

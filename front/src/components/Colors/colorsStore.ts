@@ -1,15 +1,11 @@
 import {reactive} from 'vue';
 
 export type ColorType =
-  | 'pointIndex'
-  | 'fileIndex'
-  | 'groupIndex'
+  | 'intervalIndex'
   | 'by1h'
   | 'by10min'
   | 'isDay'
-  | 'cycleDay'
-  | 'byAutocluster'
-  | string;
+  | 'cycleDay';
 
 export interface ColorsStore {
   colorType: ColorType;
@@ -17,6 +13,6 @@ export interface ColorsStore {
 }
 
 export const colorsStore = reactive<ColorsStore>({
-  colorType: 'pointIndex',
+  colorType: 'intervalIndex',
   colorScale: 'Dark2',
 });

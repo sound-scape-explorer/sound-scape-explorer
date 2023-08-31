@@ -9,7 +9,7 @@ import SelectionScreenshot from './SelectionScreenshot.vue';
   <AppDraggable draggable-key="selection">
     <div class="container">
       <SelectionReducer />
-      <SelectionScreenshot class="flex" />
+      <SelectionScreenshot />
       <SelectionExport />
     </div>
   </AppDraggable>

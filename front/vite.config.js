@@ -33,7 +33,6 @@ export default defineConfig({
           'plotly.js-dist-min': ['plotly.js-dist-min'],
           'speed-to-percentage': ['speed-to-percentage'],
           'speed-to-semitones': ['speed-to-semitones'],
-          'three': ['three'],
           'vue': ['vue'],
           'wav-file-encoder': ['wav-file-encoder'],
           'wavesurfer.js': ['wavesurfer.js'],

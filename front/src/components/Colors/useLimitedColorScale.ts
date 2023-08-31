@@ -1,4 +1,4 @@
-import {chromaScaleRef} from '../Scatter/useScatterColorScale';
+import {chromaScaleRef} from '.././Scatter/useScatterColorScale';
 
 export function useLimitedColorScale() {
   const createLimitedColorScale = (

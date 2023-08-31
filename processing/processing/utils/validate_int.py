@@ -8,4 +8,4 @@ def validate_int(value: int) -> None:
     if type(value) is numpy.int64:
         return
 
-    raise TypeError(f'{value} is not an int!')
+    raise TypeError(f"Unable to validate int for {value}")

@@ -1,7 +1,8 @@
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {timeStore} from '../Time/timeStore';
-import {datasetRef} from './useScatterDataset';
+import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {reactive} from 'vue';
+
+import {timeStore} from '../Time/timeStore';
+import {useScatterTraces} from './useScatterTraces';
 
 interface PointsFilteredByTimeRef {
   value: boolean[] | null;
@@ -17,11 +18,12 @@ export function useScatterFilterTime() {
       return true;
     }
 
-    if (datasetRef.value === null || groupedTimestampsRef.value === null) {
+    if (aggregatedTimestampsRef.value === null) {
       return false;
     }
 
-    const timestamp = groupedTimestampsRef.value[index] / 1000;
+    // Unix time in seconds
+    const timestamp = aggregatedTimestampsRef.value[index] / 1000;
 
     const start = timeStore.value;
     const duration = timeStore.duration;
@@ -30,24 +32,27 @@ export function useScatterFilterTime() {
     return timestamp >= start && timestamp <= end;
   };
 
-  const filterByTime = () => {
-    if (datasetRef.value === null) {
+  const {renderTraces} = useScatterTraces();
+
+  const filterByTime = (): void => {
+    if (aggregatedTimestampsRef.value === null) {
       return;
     }
 
     const pointsFilteredByTime = [];
 
     for (
-      let pointIndex = 0;
-      pointIndex < datasetRef.value.points.length;
-      ++pointIndex
+      let intervalIndex = 0;
+      intervalIndex < aggregatedTimestampsRef.value.length;
+      intervalIndex += 1
     ) {
-      const isVisible = isVisibleByTime(pointIndex);
+      const isVisible = isVisibleByTime(intervalIndex);
       pointsFilteredByTime.push(!isVisible);
     }
 
     pointsFilteredByTimeRef.value = pointsFilteredByTime;
     console.log('filterByTime');
+    renderTraces();
   };
 
   return {

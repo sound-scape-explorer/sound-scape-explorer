@@ -2,16 +2,17 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import {computed, ref} from 'vue';
+import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
+import {rangesRef} from 'src/hooks/useRanges';
+import {reducerRef} from 'src/hooks/useReducers';
+import {computed, ref, watch} from 'vue';
+
 import {SLIDER_LIMITS} from '../../constants';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';
+import {useScatterFilterTime} from '../Scatter/useScatterFilterTime';
+import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
-import {groupedTimestampsRef} from 'src/hooks/useStorageGroupedTimestamps';
-import {isDatasetReadyRef} from '../Scatter/useScatterDataset';
-import {integrationRef} from 'src/hooks/useIntegration';
-import {rangesRef} from 'src/hooks/useStorageRanges';
-import {reducerRef} from 'src/hooks/useReducer';
 
 /**
  * State
@@ -21,11 +22,7 @@ const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
 const sliders = computed<Slider[]>(() => {
-  if (
-    integrationRef.value === null ||
-    rangesRef.value === null ||
-    reducerRef.value === null
-  ) {
+  if (rangesRef.value === null || reducerRef.value === null) {
     return [];
   }
 
@@ -40,15 +37,11 @@ const sliders = computed<Slider[]>(() => {
     return cachedSliders;
   }
 
-  const ranges = reducerRef.value.ranges;
   const sliders: Slider[] = [];
 
-  for (const range of ranges) {
-    const rangeValues = rangesRef.value[range];
-    const rangeStart = rangeValues[0];
-    const rangeEnd = rangeValues[1];
-    const timeStart = dayjs(rangeStart).unix();
-    const timeEnd = dayjs(rangeEnd).unix();
+  for (const range of rangesRef.value) {
+    const timeStart = dayjs(range.start).unix();
+    const timeEnd = dayjs(range.end).unix();
     const timeBetween = Math.floor(timeStart + 0.5 * (timeEnd - timeStart));
 
     if (timeStore.min === -1 || timeStart < timeStore.min) {
@@ -60,12 +53,13 @@ const sliders = computed<Slider[]>(() => {
     }
 
     const slider = {
-      key: range,
+      key: range.index,
+      name: range.name,
       min: timeStart,
       max: timeEnd,
       marks: {
         [timeStart]: SLIDER_LIMITS.start,
-        [timeBetween]: range,
+        [timeBetween]: range.name.toString(),
         [timeEnd]: SLIDER_LIMITS.end,
       },
     } satisfies Slider;
@@ -84,16 +78,16 @@ const sliders = computed<Slider[]>(() => {
 });
 
 interface Interest {
-  key: string;
+  key: number;
   values: boolean[];
 }
 
 const interests = computed<Interest[]>(() => {
-  if (groupedTimestampsRef.value === null) {
+  if (aggregatedTimestampsRef.value === null) {
     return [];
   }
 
-  const allTimestamps = groupedTimestampsRef.value.map((t) => t / 1000);
+  const allTimestamps = aggregatedTimestampsRef.value.map((t) => t / 1000);
 
   const interests: Interest[] = [];
   const ignoreDecimalsFactor = 1 / timeStore.duration;
@@ -146,19 +140,23 @@ function toggleZoom(slider: Slider): void {
 }
 
 interface Slider {
-  key: string;
+  key: number;
+  name: string;
   min: number;
   max: number;
   marks: {
     [time: number]: string;
   };
 }
+
+const {filterByTime} = useScatterFilterTime();
+watch(timeStore, () => filterByTime());
 </script>
 
 <template>
   <div class="container">
     <div
-      v-if="isDatasetReadyRef.value"
+      v-if="!scatterLoadingRef.value"
       class="layer"
     >
       <n-slider
@@ -176,7 +174,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="isDatasetReadyRef.value"
+      v-if="!scatterLoadingRef.value"
       class="layer"
     >
       <div
@@ -192,7 +190,7 @@ interface Slider {
     </div>
 
     <div
-      v-if="isDatasetReadyRef.value"
+      v-if="!scatterLoadingRef.value"
       class="layer zoom"
     >
       <AppButton

@@ -1,7 +1,9 @@
+import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
+import {labelsRef} from 'src/hooks/useLabels';
 import {reactive} from 'vue';
-import {datasetRef} from './useScatterDataset';
-import {groupedMetasRef} from 'src/hooks/useStorageGroupedMetas';
-import {metaSelectionStore} from '../Meta/metaSelectionStore';
+
+import {labelsSelectionRef} from '../Label/useLabelsSelection';
+import {useScatterTraces} from './useScatterTraces';
 
 interface PointsFilteredByMetaRef {
   value: boolean[] | null;
@@ -12,60 +14,63 @@ export const pointsFilteredByMetaRef = reactive<PointsFilteredByMetaRef>({
 });
 
 export function useScatterFilterMeta() {
-  // TODO: This performance can certainly be improved
-  const isVisibleByMeta = (index: number): boolean => {
+  const isVisibleByMeta = (intervalIndex: number): boolean => {
     let isVisible = true;
 
-    if (groupedMetasRef.value === null) {
+    if (
+      aggregatedLabelsRef.value === null ||
+      labelsRef.value === null ||
+      labelsSelectionRef.value === null
+    ) {
       return false;
     }
 
-    const metaValues = groupedMetasRef.value[index];
+    const properties = Object.keys(labelsRef.value);
+    const values = aggregatedLabelsRef.value[intervalIndex];
+    const valuesIndexes = Object.keys(values);
 
-    const metaSelectedIndexes = Object.keys(metaSelectionStore.selection);
-    const metaIndexes = Object.keys(metaValues);
-
-    for (let i = 0; i < metaSelectedIndexes.length; ++i) {
+    for (let index = 0; index < valuesIndexes.length; index += 1) {
       // item is already not visible
       if (!isVisible) {
         break;
       }
 
-      const metaSelection =
-        metaSelectionStore.selection[metaSelectedIndexes[i]];
-      const metaSelectionValues = Object.values(metaSelection);
+      const property = properties[index];
+      const valuesSelection = labelsSelectionRef.value[property];
 
       // no user selection
-      if (metaSelectionValues.length === 0) {
+      if (valuesSelection.length === 0) {
         continue;
       }
 
-      const metaIndex = Number(metaIndexes[i]);
-      const meta = metaValues[metaIndex];
-      isVisible = metaSelectionValues.includes(meta);
+      const value = values[index];
+      isVisible = valuesSelection.includes(value);
     }
 
     return isVisible;
   };
 
+  const {renderTraces} = useScatterTraces();
+
   const filterByMeta = () => {
-    if (datasetRef.value === null) {
+    if (aggregatedLabelsRef.value === null) {
       return;
     }
 
     const pointsFilteredByMeta = [];
 
     for (
-      let pointIndex = 0;
-      pointIndex < datasetRef.value.points.length;
-      ++pointIndex
+      let intervalIndex = 0;
+      intervalIndex < aggregatedLabelsRef.value.length;
+      ++intervalIndex
     ) {
-      const isVisible = isVisibleByMeta(pointIndex);
+      const isVisible = isVisibleByMeta(intervalIndex);
       pointsFilteredByMeta.push(!isVisible);
     }
 
     pointsFilteredByMetaRef.value = pointsFilteredByMeta;
     console.log('filterByMeta');
+    renderTraces();
   };
 
   return {
