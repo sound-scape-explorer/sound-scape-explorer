@@ -3,16 +3,8 @@ import {ImageOutline} from '@vicons/ionicons5';
 import html2canvas from 'html2canvas';
 import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
+
 import AppButton from '../AppButton/AppButton.vue';
-import {computed} from 'vue';
-
-const isReadyRef = computed<boolean>(() => {
-  if (bandRef.value === null || integrationRef.value === null) {
-    return false;
-  }
-
-  return true;
-});
 
 async function screenshot() {
   if (bandRef.value === null || integrationRef.value === null) {
@@ -41,7 +33,6 @@ async function screenshot() {
 
 <template>
   <AppButton
-    :disabled="!isReadyRef"
     :handle-click="screenshot"
     text="Screenshot"
   >
