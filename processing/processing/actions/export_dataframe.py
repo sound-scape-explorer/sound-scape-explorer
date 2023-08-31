@@ -62,8 +62,14 @@ def export_dataframe(
         payload["interval_index"].append(interval_index)
         interval_index += 1
 
-    # TODO: Sites
-    # TODO: File indexes / paths
+    aggregated_sites_path = (
+        f"{StoragePath.aggregated_sites.value}"
+        f"/{band.name}"
+        f"/{integration.seconds}"
+        f"/{extractors[0].index}"
+    )
+    aggregated_sites = storage.read(aggregated_sites_path)
+    payload["sites"] = [s[0].decode("utf-8") for s in aggregated_sites]
 
     # Timestamps
     payload["aggregated_timestamps"] = [at[0] for at in aggregated_timestamps]
