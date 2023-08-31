@@ -14,14 +14,7 @@
 
 [toc]
 
-> **Warning**
->
-> SoundScape Explorer is currently under heavy development so bugs may
-> be present.
-
 ## Table of contents
-
-TODO
 
 - [About](#about)
 - [Manual installation](#manual-installation)
@@ -30,7 +23,7 @@ TODO
 
 ## About
 
-Process your audio files through neural network and explore the results of your
+Process your audio files through neural networks and explore the results of your
 campaign in the browser.
 
 The application is split into 3 modules:
@@ -434,7 +427,7 @@ every time a new version is published.
 
 ### Modules
 
-`SoundScape Explorer` comes in three modules.
+`SoundScape Explorer` comes as three modules.
 
 - [Processing](#processing-module-installation)
 - [Front](#front-module-installation)
@@ -482,6 +475,8 @@ pnpm install:audio
 
 ## Docker installation
 
+- [ ] TODO: Test docker installation in real conditions
+
 Docker is a virtualizing tool giving users the power to
 start software with its own environment bundled into **containers**.
 
@@ -517,43 +512,42 @@ on Ubuntu [here](https://docs.docker.com/engine/install/ubuntu/)
 
 ### Set up your project
 
+#### Excel file
+
 Download the [configuration template](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
 and set up your project!
 
 Please refer to the `Help` tab in order to get information about
 how to fill this configuration file.
 
-Tabs that you should be editing are colored in yellow.
+Tabs that you should be editing are colored in **yellow**.
 
-The following tabs are mandatory in order to process your audio files:
+#### YAML file
 
-- Settings
-- Files
-- Bands
-- Integrations
-- Ranges
-- Reducers
+Once your configuration done, you will need to download the [YAML configuration
+file](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/sse.yaml)
+and specify both file paths.
 
 ### Process your data
 
-Once your configuration file is completed, you can start
-processing your audio files.
+Once your configuration file is completed and your YAML file ready, you can
+start processing your audio files.
 
 Your audio files will be filtered and processed by neural network
 and each second of audio will result in an array of 128 numbers.
 These arrays are named **features**.
 
 Each of these features will then be integrated according
-to your configuration. This stage is called **grouping**.
+to your configuration. This stage is called **aggregation**.
 
-Because each of these features are in 128 dimensions, they will finally
+Because each of these features are in very high dimensions, they will finally
 be reduced in dimensions through selected reducing algorithms.
 
 > **Note**
 >
 > `UMAP` reducing algorithm is the most recommended algorithm as
 > it is the most used within the community
-> and development has been heavily focusing on it.
+> and development has been heavily focused on it.
 
 All generated data will be stored inside a `.h5` file.
 
@@ -564,23 +558,51 @@ method you chose above.
 
 #### Process your data (manual installation)
 
-Please run the following command in order to start all processing steps
-according to your Excel configuration file.
+Please run the following command in order to start the `Processing` module.
 
 ```bash
-pnpm process --config /path/to/config.xlsx --storage /path/to/storage.h5
-
-# or shorter
-pnpm process -c /path/to/config.xlsx -s /path/to/storage.h5
+pnpm process path/to/sse.yaml
 ```
 
 > **Note**
 >
-> Use `pwd` to get the path of your
-> current working directory.
+> Remember to use `pwd` to get absolute path of your current working directory.
 
-##### Single step process
+You will get the menu below.
 
+Use you `arrow` and `Enter` keys to navigate through it.
+
+```bash
+👋 Welcome to SoundScape Explorer!
+
+┏━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ File    ┃ Path                                      ┃
+┡━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ config  │ relative/or/absolute/path/to/config.xlsx  │
+│ storage │ relative/or/absolute/path/to/storage.h5   │
+└─────────┴───────────────────────────────────────────┘
+? Choose your action  (Use arrow keys)
+ ❯ Refresh configuration
+   Run extractions and aggregations
+   Run reductions
+   ---------------
+   Run computation UMAPs and mean distances matrix (needed for autocluster)
+   Purge computation UMAPs and mean distances matrix
+   ---------------
+   Run autoclusters
+   Run trajectories
+   Run digests
+   ---------------
+   Run all
+   Export dataframe as .csv
+   Repack storage with `h5repack` (UNIX only)
+   ---------------
+   Quit
+```
+
+##### Menu
+
+Once the
 Manual installation gives you the control to start each process
 individually.
 
@@ -597,15 +619,13 @@ pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
 
 #### Process your data (Docker installation)
 
-At the moment, Docker installation only allows all processes to trigger.
+- [ ] TODO: Add documentation
 
 > **Note**
 >
 > This could be improved following user needs.
 >
 > Please send your feedback to the development team [here](#looking-for-more).
-
-Please refer to the [Docker manual](TODO)
 
 ##### Enable CUDA for Docker
 
@@ -661,7 +681,7 @@ and display spectrograms, run the [`front:audio` command](#frontaudio-command).
 
 ## Project example
 
-[Lana's light v9](https://drive.google.com/drive/folders/1XyQ4thJsKoLj-OhHy2ea1A-6VpPlItnX)
+[Coral reef](https://drive.google.com/drive/folders/192t5UYiX9xGeBMdiquM8ZJ01DVq4BjwD)
 
 ## `pnpm` commands
 
@@ -699,134 +719,26 @@ You can serve both `Front` and `Audio` modules at the same time
 pnpm front:audio -- /path/to/audio/folder
 ```
 
-### `Processing` module commands
+### `Processing` module menu
 
 All `pnpm` commands relative to this module are preceded with `process:`.
 
 #### Available commands
 
-- [all](#all-command)
-- [all-actions](#all-actions-command)
-- [all-but-files](#all-but-files-command)
-- [all-to-groups](#all-to-groups-command)
-- [autoclusters](#autoclusters-command)
-- [config](#config-command)
-- [dataframe](#dataframe-command)
-- [files](#files-command)
-- [groups](#groups-command)
-- [matrices](#matrices-command)
-- [pairings](#pairings-command)
-- [reducers](#reducers-command)
-- [volumes](#volumes-command)
+- [Refresh configuration](#refresh-configuration-command)
+- [Run extractions and aggregations](#run-extractions-and-aggregations-command)
+- [Run reductions](#run-reductions-command)
+- [Run computation UMAPs and mean distances matrix](#run-computation-umaps-and-mean-distances-matrix-command)
+- [Purge computation UMAPs and mean distances matrix](#purge-computation-umaps-and-mean-distances-matrix-command)
+- [Run autoclusters](#run-autoclusters-command)
+- [Run trajectories](#run-trajectories-command)
+- [Run digests](#run-digests-command)
+- [Run all](#run-all-command)
+- [Export dataframe](#export-dataframe-command)
+- [Repack storage](#repack-storage-command)
+- [Quit](#quit-command)
 
-#### Available flags
-
-There are two forms for each flag, one short `-f` and one full `--flag`.
-
-You will find below a list of available flags.
-
-Please note that each command needs its own combination of flags.
-
-```bash
-# Pass your Excel configuration file
--c /path/to/config.xlsx
---config /path/to/config.xlsx
-
-# Pass your .h5 storage file
--s /path/to/storage.h5
---storage /path/to/storage.h5
-
-# Ask for filtering band
--b human
---band human
-
-# Ask for integration time
--i 15
---integration 15
-
-# Specify output export file
--o export.csv
---output export.csv
-```
-
-#### `all` command
-
-Run all commands.
-
-```bash
-pnpm process --config /path/to/config.xlsx --storage /path/to/storage.h5
-
-# Equivalent to
-pnpm process:all --config /path/to/config.xlsx --storage /path/to/storage.h5
-```
-
-#### `all-actions` command
-
-Run all _action_ commands, in order:
-
-- [autoclusters](#autoclusters-command)
-- [reducers](#reducers-command)
-- [volumes](#volumes-command)
-- [matrices](#matrices-command)
-- [pairings](#pairings-command)
-
-```bash
-pnpm process:all-actions --storage /path/to/storage.h5
-```
-
-#### `all-but-files` command
-
-Run all commands except [files](#files-command) and [groups](#groups-command)
-
-```bash
-pnpm process:all-but-files --config /path/to/config.xlsx --storage /path/to/storage.h5
-```
-
-#### `all-to-groups` command
-
-Run [config](#config-command), [files](#files-command) and [groups](#groups-command)
-
-```bash
-pnpm process:all-to-groups --config /path/to/config.xlsx --storage /path/to/storage.h5
-```
-
-#### `autoclusters` command
-
-For each band and integration, take groups (integrated features)
-and run through [AutoConsensusClustering](./processing/processing/clusterings/AutoConsensusClustering.py)
-with the [settings](#autoclusters-settings) specified in your configuration file.
-
-```bash
-pnpm process:autoclusters --storage /path/to/storage.h5
-```
-
-##### `autoclusters` settings
-
-TODO
-
-- `autocluster`
-  - Whether you want to run autocluster process
-  - _Optional_
-  - _Default_ `no`
-  - _Values_ `yes` or `no`
-- `autocluster_iterations`
-  - The number of iterations to run autocluster process
-  - _Optional_
-  - _Default_ `100`
-- `autocluster_min_size`
-  - The expected minimum count of members within a detected cluster.
-  - _Optional_
-  - _Default_ `20`
-- `autocluster_max_size`
-  - The expected maximum count of members within a detected cluster.
-  - _Optional_
-  - _Default_ `60`
-- `autocluster_threshold`
-  - The threshold to specify membership of a given element to a cluster.
-  - _Optional_
-  - _Default_ `0.9`
-
-#### `config` command
+#### Refresh configuration command
 
 Digest your Excel configuration file and copy all its information inside
 your storage file.
@@ -834,108 +746,82 @@ your storage file.
 > **Note**
 >
 > You will need to run this again if you change your configuration file.
+
+#### Run extractions and aggregations command
+
+Extract data from your audio files either through neural networks or indicators algorithms.
+
+Take the raw data and aggregate them using your integration settings.
+
+> **Note**
 >
-> For instance, when you add a new `reducer` action to an existing project.
+> These raw data can optionally be stored with the `persist` option.
 
-```bash
-pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
-```
+#### Run reductions command
 
-#### `dataframe` command
+Take the aggregated data produced by neural networks and reduce them using your
+reducers settings.
+
+#### Run computation UMAPs and mean distances matrix command
+
+Run the necessary data for autoclusters to be performed.
+
+Those data will never be read in the `Front` so you can use the following
+command to remove it from your storage file.
+
+#### Purge computation UMAPs and mean distances matrix command
+
+Remove computation data from your storage file as it will not be consumed by
+the `Front`.
+
+#### Run autoclusters command
+
+Automatically attribute numerical clusters (groups) of intervals that are
+related together depending on your settings.
+
+These clusters will appear in the `Front` as standard labels.
+
+#### Run trajectories command
+
+Compute the coordinates of the requested trajectories.
+
+#### Run digests command
+
+Take aggregated data and produce derived data using digesters algorithms.
+
+#### Run all command
+
+Run all the commands necessary for a complete campaign.
+
+#### Export dataframe command
 
 If you need to generate a `.csv` file from an existing `.h5` file,
 you can use the following command:
 
-```bash
-pnpm process:dataframe --band human --integration 15 --storage /path/to/storage.h5 --output /path/to/dataframe.csv
-```
+#### Repack storage command
 
-#### `files` command
+When you overwrite a lot to your storage file, the space that was occupied
+by the deleted dataset is not immediately freed. This is due to how the
+HDF5 technology works.
 
-For each band, run your audio files through neural network and
-extract their features for each second of audio.
+Repacking allows you to create a new file with your data but with the smallest
+possible size.
 
-```bash
-pnpm process:files --storage /path/to/storage.h5
-```
+> **Note**
+>
+> This command is only available on UNIX systems at the moment.
+> On Debian based distributions, install it with
+>
+> ```bash
+> sudo apt install hdf5-tools
+> ```
 
-#### `groups` command
+#### Quit command
 
-For each band and integration, take files features and group them
-by the integration time.
+When the `Processing` module is running, your storage file is kept open thus
+not available to other programs to reading from it.
 
-```bash
-pnpm process:group --storage /path/to/storage.h5
-```
-
-#### `matrices` command
-
-For each group, read the corresponding features and
-compute specified `matrices` from.
-
-```bash
-pnpm process:matrices --storage /path/to/storage.h5
-```
-
-#### `pairings` command
-
-For each group, read the corresponding features and
-compute specified `pairings` from.
-
-```bash
-pnpm process:pairings --storage /path/to/storage.h5
-```
-
-#### `reducers` command
-
-For each group, read the corresponding features and
-compute specified `reducers` from.
-
-```bash
-pnpm process:reducers --storage /path/to/storage.h5
-```
-
-#### `reducers` settings
-
-- `umap_seed`
-  - The seed number used for reductions
-  - Used for `UMAP` and `PCA` reduction algorithms
-  - _Optional_
-  - _Default_ `None`
-- `umap_neighbors`
-  - The size of local neighborhood used for reduction algorithms
-  - _Optional_
-  - _Default_ `15`
-- `umap_metric`
-  - The metric to use to compute distances in high dimensional space
-  - _Optional_
-  - _Default_ `euclidean`
-
-#### `volumes` command
-
-For each group, read the corresponding features and
-compute specified `volumes` from.
-
-## Repack storage
-
-When you delete an entire dataset in an HDF5 file using h5py, the space that
-was occupied by the dataset is not immediately freed. This is due to how the
-HDF5 library works.
-
-The most common method to truly free the space that was occupied by a deleted
-dataset is to copy the remaining data to a new HDF5 file, and then delete the
-old file. Here is a basic example using the `h5repack` tool provided by the
-HDF5 library:
-
-```bash
-h5repack old_file.h5 new_file.h5
-```
-
-Install `h5repack` on Debian based distributions:
-
-```bash
-sudo apt install hdf5-tools
-```
+Use this to properly close and release your storage file.
 
 ## Looking for more?
 
