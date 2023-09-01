@@ -1,3 +1,16 @@
+# [10.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.0.0...v10.1.0) (2023-09-01)
+
+
+### Bug Fixes
+
+* **Front/Colors:** Apply dynamic opacity to label coloring ([4644410](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4644410c9f7c81d8b29e57620e3326edebeeb3da))
+* **Front/Scatter:** Trigger new render on opacity change ([15eab2e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/15eab2e025808434107096b66f4eaaa10e2facf6))
+
+
+### Features
+
+* **Front/Selection:** Add indicators to selection export ([db2897b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/db2897b1b90c9689f2c49a7899e1200d27150f22))
+
 # [10.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v9.1.5...v10.0.0) (2023-08-31)
 
 
