@@ -31,9 +31,8 @@ export function useColorByMeta() {
   const getColorByMetaIndex = (index: number, length: number): string => {
     const colors = createLimitedColorScale(length);
     const [r, g, b] = colors[index];
-    const a = 0.8;
 
-    return `rgba(${r},${g},${b},${a})`;
+    return `rgba(${r},${g},${b},${alphaHighRef.value})`;
   };
 
   return {
