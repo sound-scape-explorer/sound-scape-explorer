@@ -5,6 +5,7 @@ import {useNotification} from 'src/components/AppNotification/useNotification';
 import {pointsFilteredByMetaRef} from 'src/components/Scatter/useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from 'src/components/Scatter/useScatterFilterTime';
 import {aggregatedFeaturesRef} from 'src/hooks/useAggregatedFeatures';
+import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
@@ -46,7 +47,8 @@ async function handleClick() {
     pointsFilteredByTimeRef.value === null ||
     labelsPropertiesRef.value === null ||
     reducedFeaturesRef.value === null ||
-    aggregatedSitesRef.value === null
+    aggregatedSitesRef.value === null ||
+    aggregatedIndicatorsRef.value === null
   ) {
     return;
   }
@@ -55,6 +57,7 @@ async function handleClick() {
 
   loadingRef.value = true;
 
+  const aggregatedIndicators = aggregatedIndicatorsRef.value;
   const payload: ExportData[] = [];
 
   for (
@@ -96,6 +99,10 @@ async function handleClick() {
     csvFirstRow += `label_${metaProperty},`;
   });
 
+  aggregatedIndicators.forEach(({extractor}) => {
+    csvFirstRow += `i_${extractor.index}_${extractor.name},`;
+  });
+
   payload[0].reducedFeatures.forEach((_, r) => {
     csvFirstRow += `r_${r},`;
   });
@@ -111,16 +118,20 @@ async function handleClick() {
     content += `${data.timestamp},`;
     content += `${data.site},`;
 
-    data.aggregatedLabels.forEach((aggregatedLabel) => {
-      content += `${aggregatedLabel},`;
+    data.aggregatedLabels.forEach((aL) => {
+      content += `${aL},`;
     });
 
-    data.reducedFeatures.forEach((reducedFeature) => {
-      content += `${reducedFeature},`;
+    aggregatedIndicators.forEach((aI) => {
+      content += `${aI.values[data.intervalIndex]},`;
     });
 
-    data.aggregatedFeatures.forEach((aggregatedFeature) => {
-      content += `${aggregatedFeature},`;
+    data.reducedFeatures.forEach((rF) => {
+      content += `${rF},`;
+    });
+
+    data.aggregatedFeatures.forEach((aF) => {
+      content += `${aF},`;
     });
 
     content = content.slice(0, -1);
