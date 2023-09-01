@@ -118,7 +118,7 @@ export function useScatterColorScale() {
   };
 
   const {renderTraces} = useScatterTraces();
-  watch(colorsStore, () => {
+  watch([colorsStore, alphaHighRef, alphaLowRef], () => {
     readColorScale();
     renderTraces();
   });
