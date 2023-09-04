@@ -45,8 +45,6 @@ def main(
     global stored_env
 
     try:
-        update_python_path()
-
         if yaml_path is None:
             env = stored_env
         else:
