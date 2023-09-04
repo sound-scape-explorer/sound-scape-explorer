@@ -1,4 +1,3 @@
-import {alphaHighRef} from '.././Scatter/useScatterColorScale';
 import {useLimitedColorScale} from './useLimitedColorScale';
 
 export function useColorByMeta() {
@@ -25,14 +24,14 @@ export function useColorByMeta() {
 
     const [r, g, b] = colors[metaIndex];
 
-    return `rgba(${r},${g},${b},${alphaHighRef.value})`;
+    return `rgb(${r},${g},${b})`;
   };
 
   const getColorByMetaIndex = (index: number, length: number): string => {
     const colors = createLimitedColorScale(length);
     const [r, g, b] = colors[index];
 
-    return `rgba(${r},${g},${b},${alphaHighRef.value})`;
+    return `rgb(${r},${g},${b})`;
   };
 
   return {

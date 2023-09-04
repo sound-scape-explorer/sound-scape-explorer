@@ -3,7 +3,7 @@ import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 
-import {alphaLowRef, colorScaleRef} from './useScatterColorScale';
+import {alphaHighRef, alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
@@ -61,10 +61,15 @@ export function useScatterFeatures() {
       text: texts,
       hovertemplate: hoverTemplate,
       marker: {
-        size: 4,
+        size: 3,
         symbol: 'circle',
+        opacity: alphaHighRef.value,
         color: indices,
         colorscale: plotlyColorscale,
+        line: {
+          color: 'rgba(0,0,0,0.1)',
+          width: 1,
+        },
       },
     } as Data;
 
