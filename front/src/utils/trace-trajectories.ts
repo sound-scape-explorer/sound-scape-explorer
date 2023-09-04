@@ -1,5 +1,6 @@
 import type {Data} from 'plotly.js-dist-min';
 import {cyclingScaleRef} from 'src/components/Scatter/useScatterColorScale';
+import {TRACE_WIDTH} from 'src/constants';
 import type {TracedRef} from 'src/hooks/useTraced';
 
 import {getTracedColors} from './get-traced-colors';
@@ -29,7 +30,7 @@ export function traceTrajectories(traceds: TracedRef['value']) {
       mode: 'lines',
       line: {
         color: colors,
-        width: 4,
+        width: TRACE_WIDTH,
       },
     };
 

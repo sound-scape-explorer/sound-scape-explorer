@@ -38,3 +38,5 @@ export const SPECTROGRAM_COLOR_MAPS = [
   'greys',
   'viridis',
 ];
+
+export const TRACE_WIDTH = 8;
