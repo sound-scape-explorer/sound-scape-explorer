@@ -31,10 +31,8 @@ def update_python_path():
     current_path = os.getcwd()
     processing_path = f"{current_path}/processing"
 
-    print("a", sys.path)
     # Append `processing` path to PYTHONPATH
     if processing_path not in sys.path:
-        print("b")
         sys.path.append(processing_path)
 
 
