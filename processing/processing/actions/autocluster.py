@@ -60,10 +60,19 @@ def autocluster(
                 f"/{integration.seconds}"
                 f"/{autocluster.index}"
             )
+            attributes = {
+                "min_cluster_size": autocluster.min_cluster_size,
+                "min_samples": autocluster.min_samples,
+                "alpha": autocluster.alpha,
+                "epsilon": autocluster.epsilon,
+                "name": autocluster.name,
+                "index": autocluster.index,
+            }
             storage.write(
                 path=path,
                 data=autocluster.values,
                 compression=True,
+                attributes=attributes,
             )
 
     print_action("Autoclustering completed!", "end")
