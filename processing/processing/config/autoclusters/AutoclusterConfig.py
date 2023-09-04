@@ -13,12 +13,14 @@ class AutoclusterConfig:
         "hdbscan-leaf": "leaf",
     }
 
+    none_string = "None"
+
     def __init__(
         self,
         index: int,
         name: str,
         min_cluster_size: int,
-        min_samples: int,
+        min_samples: str,
         alpha: float,
         epsilon: float,
     ) -> None:
@@ -53,7 +55,7 @@ class AutoclusterConfig:
     @staticmethod
     def flatten(
         autoclusters: List["AutoclusterConfig"],
-    ) -> Tuple[List[str], List[int], List[int], List[float], List[float]]:
+    ) -> Tuple[List[str], List[int], List[str], List[float], List[float]]:
         names = [ac.name for ac in autoclusters]
         min_cluster_sizes = [ac.min_cluster_size for ac in autoclusters]
         min_samples = [ac.min_samples for ac in autoclusters]
@@ -66,7 +68,7 @@ class AutoclusterConfig:
     def reconstruct(
         names: List[str],
         min_cluster_sizes: List[int],
-        min_samples: List[int],
+        min_samples: List[str],
         alphas: List[float],
         epsilons: List[float],
     ) -> List["AutoclusterConfig"]:
@@ -95,10 +97,13 @@ class AutoclusterConfig:
         self.integration = integration
 
         method = self.methods_by_name[self.name]
+        min_samples = (
+            None if self.min_samples == self.none_string else int(self.min_samples)
+        )
 
         self.instance = HDBSCAN(
             min_cluster_size=self.min_cluster_size,
-            min_samples=self.min_samples,
+            min_samples=min_samples,
             alpha=self.alpha,
             cluster_selection_epsilon=self.epsilon,
             cluster_selection_method=method,
@@ -120,5 +125,6 @@ class AutoclusterConfig:
     ) -> List[str]:
         clustering = self.instance.fit(mean_distances_matrix[:])
         labels = clustering.labels_.tolist()
+        print(set(labels))
         self.values = labels
         return self.values
