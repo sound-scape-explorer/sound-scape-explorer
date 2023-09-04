@@ -1,10 +1,7 @@
 import {useDate} from 'src/hooks/useDate';
 import {isHourDuringDay} from 'src/utils/is-hour-during-day';
-import {
-  alphaHighRef,
-  dayColor,
-  nightColor,
-} from '.././Scatter/useScatterColorScale';
+
+import {dayColor, nightColor} from '.././Scatter/useScatterColorScale';
 
 export function useColorByDay() {
   const {convertTimestampToDate} = useDate();
@@ -15,10 +12,10 @@ export function useColorByDay() {
     const isDay = isHourDuringDay(hour);
 
     if (isDay) {
-      return dayColor.alpha(alphaHighRef.value).css();
+      return dayColor.css();
     }
 
-    return nightColor.alpha(alphaHighRef.value).css();
+    return nightColor.css();
   };
 
   return {

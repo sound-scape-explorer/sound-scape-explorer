@@ -85,6 +85,8 @@ class ContinuousTimeTrajectory:
             rolling_step,
         ) = self._validate_load()
 
+        step = 1
+
         # Filtering by timestamps
         filtered_features = []
         filtered_timestamps: List[int] = []
@@ -120,8 +122,7 @@ class ContinuousTimeTrajectory:
             lambda ms: (ms / 1000) / rolling_step
         )
 
-        rolling_count = len(df[df["relative_timestamps"] <= rolling_step])
-
+        rolling_count = len(df[df["relative_timestamps"] <= step])
         self.set_relative_timestamps(df["relative_timestamps"].tolist())
 
         # Calculating coordinates

@@ -1,7 +1,7 @@
 import {useDate} from 'src/hooks/useDate';
 import {mapRange} from 'src/utils/map-range';
 
-import {alphaHighRef, chromaScaleRef} from '.././Scatter/useScatterColorScale';
+import {chromaScaleRef} from '.././Scatter/useScatterColorScale';
 import {timeStore} from '../Time/timeStore';
 
 export function useColorByOneHour() {
@@ -22,7 +22,7 @@ export function useColorByOneHour() {
       1,
     );
 
-    return chromaScaleRef.value(rangedHour).alpha(alphaHighRef.value).css();
+    return chromaScaleRef.value(rangedHour).css();
   };
 
   return {

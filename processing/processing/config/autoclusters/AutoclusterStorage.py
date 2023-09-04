@@ -39,7 +39,8 @@ class AutoclusterStorage:
 
         names = storage.convert_dataset_to_string_list(names_dataset)
         min_cluster_sizes = storage.read(AutoclusterStorage.min_cluster_sizes)
-        min_samples = storage.read(AutoclusterStorage.min_samples)
+        min_samples_dataset = storage.read(AutoclusterStorage.min_samples)
+        min_samples = storage.convert_dataset_to_string_list(min_samples_dataset)
         alphas = storage.read(AutoclusterStorage.alphas)
         epsilons = storage.read(AutoclusterStorage.epsilons)
 
@@ -60,6 +61,7 @@ class AutoclusterStorage:
         names = parser.get(sheet, AutoclusterExcel.name_)
         mns = parser.get(sheet, AutoclusterExcel.min_cluster_size)
         min_samples = parser.get(sheet, AutoclusterExcel.min_samples)
+        min_samples = [str(ms) for ms in min_samples]
         alphas = parser.get(sheet, AutoclusterExcel.alpha)
         epsilons = parser.get(sheet, AutoclusterExcel.epsilon)
 

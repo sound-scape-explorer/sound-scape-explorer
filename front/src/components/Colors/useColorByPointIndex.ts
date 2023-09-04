@@ -1,6 +1,6 @@
 import {mapRange} from 'src/utils/map-range';
 
-import {alphaHighRef, chromaScaleRef} from '.././Scatter/useScatterColorScale';
+import {chromaScaleRef} from '.././Scatter/useScatterColorScale';
 
 export function useColorByPointIndex() {
   const getColorByPointIndex = (
@@ -9,10 +9,7 @@ export function useColorByPointIndex() {
   ): string => {
     const rangedPointIndex = mapRange(pointIndex, 0, pointsCount, 0, 1);
 
-    return chromaScaleRef
-      .value(rangedPointIndex)
-      .alpha(alphaHighRef.value)
-      .css();
+    return chromaScaleRef.value(rangedPointIndex).css();
   };
 
   return {

@@ -103,6 +103,8 @@ Find its official [installation documentation](https://chocolatey.org/install).
 
 We recommend using [Homebrew](https://brew.sh/).
 
+Install it with the provided command <a href="https://brew.sh/" target="_blank">Homebrew</a>
+
 #### Package manager for Debian based distributions
 
 You most definitely already have [APT](https://www.wikiwand.com/en/APT_%28Package_Manager%29).
@@ -400,7 +402,7 @@ pnpm test:pnpm:unix
 # Path: /usr/bin/pnpm
 ```
 
-### Download `SoundScape Explorer`
+### Download `Sound Scape Explorer`
 
 You can download `SoundScape Explorer` following two methods:
 
@@ -424,6 +426,19 @@ that comes as a `.zip` file.
 
 If you go that way, you will need to download a new zip file
 every time a new version is published.
+
+- Download the `Source code (zip)` file from the release page.
+- Extract the zip file.
+- Open a shell.
+- Type `cd` and the path or drag and drop the folder from your file
+  explorer. Press `Enter`.
+- Test your requirements
+  - `pnpm test:install:macos`
+  - `pnpm test:install:unix`
+- Install
+  - `pnpm install:processing`
+  - `pnpm install:front`
+  - `pnpm install:audio`
 
 ### Modules
 
@@ -512,6 +527,12 @@ on Ubuntu [here](https://docs.docker.com/engine/install/ubuntu/)
 
 ### Set up your project
 
+#### Project folder
+
+- Create a folder on your system where you will be storing your files.
+
+You will download two files. One Excel and one YAML.
+
 #### Excel file
 
 Download the [configuration template](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
@@ -528,7 +549,18 @@ Once your configuration done, you will need to download the [YAML configuration
 file](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/sse.yaml)
 and specify both file paths.
 
+#### Project setup end
+
+Your project is now setup and you can start processing your data!
+
 ### Process your data
+
+#### New
+
+- Navigate back to the SSE folder.
+- `pnpm process path/to/project/folder/sse.yaml`
+
+#### Old
 
 Once your configuration file is completed and your YAML file ready, you can
 start processing your audio files.
@@ -599,23 +631,6 @@ Use you `arrow` and `Enter` keys to navigate through it.
    ---------------
    Quit
 ```
-
-##### Menu
-
-Once the
-Manual installation gives you the control to start each process
-individually.
-
-For instance, you can only refresh the configuration file's digest
-inside your `.h5` storage file with the following command:
-
-```bash
-pnpm process:config --config /path/to/config.xlsx --storage /path/to/storage.h5
-```
-
-> **Note**
->
-> Find all available `pnpm` commands [here](#pnpm-commands).
 
 #### Process your data (Docker installation)
 
