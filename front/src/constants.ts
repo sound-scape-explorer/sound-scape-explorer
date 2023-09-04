@@ -39,4 +39,4 @@ export const SPECTROGRAM_COLOR_MAPS = [
   'viridis',
 ];
 
-export const TRACE_WIDTH = 8;
+export const TRACE_WIDTH = 6;

@@ -28,6 +28,7 @@ export function traceTrajectories(traceds: TracedRef['value']) {
       name: traced.trajectory.name,
       type: scatterType,
       mode: 'lines',
+      opacity: 0.8,
       line: {
         color: colors,
         width: TRACE_WIDTH,

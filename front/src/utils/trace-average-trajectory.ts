@@ -80,6 +80,7 @@ export function traceAverageTrajectory(traceds: TracedRef['value']) {
     name: 'Averaged Trace',
     type: scatterType,
     mode: 'lines',
+    opacity: 0.8,
     line: {
       color: colors,
       width: TRACE_WIDTH,
