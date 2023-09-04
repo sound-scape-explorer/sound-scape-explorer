@@ -1,4 +1,6 @@
 import argparse
+import os
+import sys
 from signal import SIGINT, signal
 from typing import Optional
 
@@ -21,9 +23,19 @@ from processing.utils.get_yaml_data import get_yaml_data
 from processing.utils.print_welcome import print_welcome
 from processing.utils.print_yaml_env import print_yaml_env
 from processing.utils.quit_sse import quit_sse
-from processing.utils.update_python_path import update_python_path
 
 stored_env: YamlEnv
+
+
+def update_python_path():
+    current_path = os.getcwd()
+    processing_path = f"{current_path}/processing"
+
+    print("a", sys.path)
+    # Append `processing` path to PYTHONPATH
+    if processing_path not in sys.path:
+        print("b")
+        sys.path.append(processing_path)
 
 
 def main(
@@ -90,6 +102,7 @@ def main(
 
 
 if __name__ == "__main__":
+    update_python_path()
     parser = argparse.ArgumentParser()
     parser.add_argument("yaml_path")
     args = parser.parse_args()
