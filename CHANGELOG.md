@@ -1,3 +1,27 @@
+# [10.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.1.0...v10.2.0) (2023-09-04)
+
+
+### Bug Fixes
+
+* **Processing/Trajectories:** Compute rolling count correctly (via single step and not rolling step) ([4276afd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4276afdfbdc2132e792d77363f7303bb7aea8a3b))
+* **Processing/Utils:** Allow integers to be 32 bits (Windows environments) ([77371a3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/77371a3a728a6ae07bc57652669a08e83ca98652))
+* **Processing:** Move PYTHONPATH helper function under main, might not work as it is ([11f9777](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/11f9777a598db966952475941673915b68d7ae37))
+
+
+### Features
+
+* **Front/Scatter:** Improve color rendering ([873a99b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/873a99b13f7966449f33b0e09e669a8776c9eff6))
+* **Front/Trajectories:** Improve rendering ([776bc0f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/776bc0f3e584f669ef787ab3775771371e156131))
+* **Front/Trajectories:** Set trace width as constant ([ceabcc8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ceabcc837afcd177a75c69ca167674986242fa8d))
+* **Processing/Autoclusters:** Allow min_samples to be `None` by using values as strings ([9b9bc5c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9b9bc5ce974db78409942f6e2d7c1db5f9ec973d))
+* **Processing/Autoclusters:** Write autoclustering options to dataset attributes ([e976c47](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e976c47457bf06ca7b581b1eed9af9e41d133a81))
+
+
+### Performance Improvements
+
+* **Processing/Main:** Remove doubled PYTHONPATH updater ([7e8189a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7e8189a4b6a22684a49cdf3fdae45aa44e3e3977))
+* **Processing/Main:** Remove unnecessary prints ([faff7b3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/faff7b32028343688b2894b062ee41c746c534e2))
+
 # [10.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.0.0...v10.1.0) (2023-09-01)
 
 
