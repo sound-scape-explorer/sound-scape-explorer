@@ -535,7 +535,7 @@ You will download two files. One Excel and one YAML.
 
 #### Excel file
 
-Download the [configuration template](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/config.xlsx)
+Download the [configuration template](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/campaigns/new-campaign/config.xlsx)
 and set up your project!
 
 Please refer to the `Help` tab in order to get information about
@@ -546,7 +546,7 @@ Tabs that you should be editing are colored in **yellow**.
 #### YAML file
 
 Once your configuration done, you will need to download the [YAML configuration
-file](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/common/sse.yaml)
+file](https://github.com/sound-scape-explorer/sound-scape-explorer/raw/main/examples/campaigns/new-campaign/sse.yaml)
 and specify both file paths.
 
 #### Project setup end
@@ -673,7 +673,7 @@ can run the [`front` command](#front-command) inside your shell instance.
 #### With audio playback
 
 If you need listening to your audio files inside the web browser
-and display spectrograms, run the [`front:audio` command](#frontaudio-command).
+and display spectrograms, run the [`audio:front` command](#audiofront-command).
 
 > **Note**
 >
@@ -704,7 +704,7 @@ There are three main groups of `pnpm` commands:
 
 - [`Audio` module commands](#audio-module-commands)
 - [`Front` module commands](#front-module-commands)
-- [`Processing` module commands](#processing-module-commands)
+- [`Processing` module menu](#processing-module-menu)
 
 ### `Audio` module commands
 
@@ -726,12 +726,12 @@ Serve `Front` module on port [5530](http://localhost:5530)
 pnpm front
 ```
 
-#### `front:audio` command
+#### `audio:front` command
 
 You can serve both `Front` and `Audio` modules at the same time
 
 ```bash
-pnpm front:audio -- /path/to/audio/folder
+pnpm audio:front -- /path/to/audio/folder
 ```
 
 ### `Processing` module menu
