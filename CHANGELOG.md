@@ -1,3 +1,15 @@
+# [10.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.2.0...v10.3.0) (2023-09-05)
+
+
+### Features
+
+* **App:** Add startup scripts for Windows ([8053034](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/80530342eaa45e6ce35b5bf20e1bd75207a0aa80))
+* **App:** Update `pnpm` commands ([eba9171](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eba917142e598b2d50798daa6ef9dbc21392f58b))
+* **Examples:** Move template files under `new-campaign` folder ([ac1f50a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ac1f50ac5d39450fda456a9cccf1b2b671b28b02))
+* **Processing:** Add list of requirements for Nvidia less users ([69cb42b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/69cb42bf85f400dfdff18071da395b45454ed48c))
+* **Processing:** Instanciate app correctly (checking PYTHONPATH before imports) ([049a6ea](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/049a6ea4af9edc2e3809f930587b02c9027deedc))
+* **Processing:** Prepare dictionnaries downloads prior for download at installation stage ([59308b5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/59308b5d3c8b709791af8ce928bdc26b45270166))
+
 # [10.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.1.0...v10.2.0) (2023-09-04)
 
 
