@@ -17,6 +17,6 @@ start-windows.ps1
 !examples/common/start-windows.ps1
 
 config.xlsx
-!examples/common/config.xlsx
+!examples/campaigns/new-campaign/config.xlsx
 
 examples/*.zip
