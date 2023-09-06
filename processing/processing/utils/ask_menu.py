@@ -1,6 +1,7 @@
 from enum import Enum
 
-from PyInquirer import Separator, prompt
+from InquirerPy import prompt
+from InquirerPy.separator import Separator
 
 
 class MenuChoice(Enum):
@@ -48,5 +49,5 @@ def ask_menu() -> str:
     ]
 
     answers = prompt(questions)
-    answer: str = answers["choices"]
+    answer: str = str(answers["choices"])
     return answer

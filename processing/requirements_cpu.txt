@@ -9,6 +9,7 @@ filelock==3.10.0
 fonttools==4.39.1
 h5py==3.8.0
 hdbscan==0.8.33
+inquirerpy==0.3.4
 imageio==2.26.0
 importlib-metadata==6.0.0
 importlib-resources==5.12.0

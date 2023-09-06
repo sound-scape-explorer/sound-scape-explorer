@@ -1,6 +1,6 @@
 from typing import List
 
-from PyInquirer import prompt
+from InquirerPy import prompt
 from rich import print
 
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
@@ -18,7 +18,7 @@ def ask_integration(integrations: List[IntegrationConfig]) -> IntegrationConfig:
 
     print()
     answers = prompt(questions)
-    name: str = answers["choices"]
+    name: str = str(answers["choices"])
 
     results: List[IntegrationConfig] = list(
         filter(lambda i: i.name == name, integrations)
