@@ -1,3 +1,11 @@
+## [10.3.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.3.0...v10.3.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* **App:** Update pnpm scripts ([ad05e70](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ad05e70b789b55be61d1076edabc8eced5d62477))
+* **App:** Update powershell scripts ([c276b7a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c276b7a92232e51a8acc3aa188e9b79f33fb155e))
+
 # [10.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.2.0...v10.3.0) (2023-09-05)
 
 
