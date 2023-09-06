@@ -9,6 +9,7 @@ filelock==3.10.0
 fonttools==4.39.1
 h5py==3.8.0
 hdbscan==0.8.33
+inquirerpy==0.3.4
 imageio==2.26.0
 importlib-metadata==6.0.0
 importlib-resources==5.12.0
@@ -42,11 +43,10 @@ openpyxl==3.1.2
 packaging==23.0
 pandas==1.5.3
 Pillow==9.4.0
-prompt-toolkit==1.0.14
+prompt-toolkit==3.0.39
 pycparser==2.21
 pydub==0.25.1
 Pygments==2.16.1
-PyInquirer==1.0.3
 pynndescent==0.5.8
 pyparsing==3.0.9
 python-dateutil==2.8.2

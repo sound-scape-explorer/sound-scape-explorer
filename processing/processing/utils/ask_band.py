@@ -1,6 +1,6 @@
 from typing import List
 
-from PyInquirer import prompt
+from InquirerPy import prompt
 
 from processing.config.bands.BandConfig import BandConfig
 
@@ -16,7 +16,7 @@ def ask_band(bands: List[BandConfig]) -> BandConfig:
     ]
 
     answers = prompt(questions)
-    name: str = answers["choices"]
+    name: str = str(answers["choices"])
 
     results: List[BandConfig] = list(filter(lambda b: b.name == name, bands))
 

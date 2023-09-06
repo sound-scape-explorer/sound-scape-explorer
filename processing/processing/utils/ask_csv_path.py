@@ -1,4 +1,4 @@
-from PyInquirer import prompt
+from InquirerPy import prompt
 from rich import print
 
 from processing.common.YamlEnv import YamlEnv
@@ -16,7 +16,7 @@ def ask_csv_path(env: YamlEnv) -> str:
 
     print()
     answers = prompt(questions)
-    filename: str = answers["filename"]
+    filename: str = str(answers["filename"])
 
     storage_filename = env.storage.split("/")[-1]
 

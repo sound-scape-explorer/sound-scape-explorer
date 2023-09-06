@@ -1,4 +1,4 @@
-from PyInquirer import prompt
+from InquirerPy import prompt
 from rich import print
 
 
@@ -14,5 +14,5 @@ def ask_for_repack_replacement() -> bool:
 
     print()
     answers = prompt(questions)
-    answer: bool = answers["replace"]
+    answer: bool = bool(answers["replace"])
     return answer
