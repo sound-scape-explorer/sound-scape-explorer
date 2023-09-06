@@ -32,7 +32,7 @@ openpyxl==3.1.2
 packaging==23.0
 pandas==1.5.3
 Pillow==9.4.0
-prompt-toolkit==1.0.14
+prompt-toolkit==3.0.39
 pycparser==2.21
 pydub==0.25.1
 Pygments==2.16.1
