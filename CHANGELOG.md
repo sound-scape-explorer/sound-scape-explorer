@@ -1,3 +1,16 @@
+# [10.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.3.1...v10.4.0) (2023-09-06)
+
+
+### Bug Fixes
+
+* **App:** Update pnpm scripts ([f30f632](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f30f6321babf4e7c10fee89953b0fbe3fb342a8a))
+* **Processing:** Update `prompt-toolkit` dependency ([54c55e3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/54c55e3c911fc3c98a2c6560e7000383c598903b))
+
+
+### Features
+
+* **Processing:** Use `InquirerPy` instead of `PyInquirer` making app compatible with Python 3.10 ([79d2c55](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/79d2c557961767cd179f40dfb8e5a162d8b732a0))
+
 ## [10.3.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.3.0...v10.3.1) (2023-09-06)
 
 
