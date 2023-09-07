@@ -1,3 +1,20 @@
+# [10.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.4.0...v10.5.0) (2023-09-07)
+
+
+### Features
+
+* **Front/Common:** Create new Csv class to create csv files and exports ([6afe536](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6afe53621c8be7334763adb13be117375c7dfb5d))
+* **Front/Digested:** Add export to csv ([10fe486](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/10fe48625e5dbed6ce7b021734ab5daa39c1d051))
+* **Front/Heatmaps:** Improve rendering presentation ([69bdf6e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/69bdf6ee89f1c7b5bf0002b2d30530e86b6dfc41))
+* **Front/Indicators:** Add export to csv ([891dc23](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/891dc2366ce4fe6762b442cb90ba022b0e93d511))
+* **Front/Trajectories:** Add csv export for single trajectories ([76b8493](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/76b84935028a9c125660e5a71e4221dc1d6db400))
+* **Processing/Menu:** Add new action to export MDM ([42f7aba](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/42f7aba6213ce5cc590da923ac397f17b1fad5bc))
+
+
+### Performance Improvements
+
+* **Front/Selection:** Use new `Csv` class ([3a55801](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3a558018761f79bf22872706787f0342708c7ffa))
+
 # [10.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.3.1...v10.4.0) (2023-09-06)
 
 
