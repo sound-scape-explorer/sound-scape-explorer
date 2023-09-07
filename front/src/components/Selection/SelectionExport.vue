@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {DownloadOutline} from '@vicons/ionicons5';
+import {Csv} from 'src/common/Csv';
 import AppButton from 'src/components/AppButton/AppButton.vue';
 import {useNotification} from 'src/components/AppNotification/useNotification';
 import {pointsFilteredByMetaRef} from 'src/components/Scatter/useScatterFilterMeta';
@@ -15,8 +16,6 @@ import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 import {storageFileRef} from 'src/hooks/useStorageFile';
 import {workerRef} from 'src/hooks/useWorker';
-import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
-import {triggerCSVDownload} from 'src/utils/trigger-csv-download';
 import {ref} from 'vue';
 
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
@@ -57,6 +56,7 @@ async function handleClick() {
 
   loadingRef.value = true;
 
+  const csv = new Csv();
   const aggregatedIndicators = aggregatedIndicatorsRef.value;
   const payload: ExportData[] = [];
 
@@ -89,59 +89,51 @@ async function handleClick() {
     });
   }
 
-  let csvFirstRow = '';
-
-  csvFirstRow += 'intervalIndex,';
-  csvFirstRow += 'timestamp,';
-  csvFirstRow += 'site,';
+  csv.addColumn('intervalIndex');
+  csv.addColumn('timestamp');
+  csv.addColumn('site');
 
   labelsPropertiesRef.value.forEach((metaProperty) => {
-    csvFirstRow += `label_${metaProperty},`;
+    csv.addColumn(`label_${metaProperty}`);
   });
 
   aggregatedIndicators.forEach(({extractor}) => {
-    csvFirstRow += `i_${extractor.index}_${extractor.name},`;
+    csv.addColumn(`i_${extractor.index}_${extractor.name}`);
   });
 
   payload[0].reducedFeatures.forEach((_, r) => {
-    csvFirstRow += `r_${r},`;
+    csv.addColumn(`r_${r}`);
   });
 
   payload[0].aggregatedFeatures.forEach((_, f) => {
-    csvFirstRow += `f_${f},`;
+    csv.addColumn(`f_${f}`);
   });
 
-  const csvContent = payload.map((data) => {
-    let content = '';
-
-    content += `${data.intervalIndex},`;
-    content += `${data.timestamp},`;
-    content += `${data.site},`;
+  payload.forEach((data) => {
+    csv.createRow();
+    csv.addToCurrentRow(data.intervalIndex.toString());
+    csv.addToCurrentRow(data.timestamp.toString());
+    csv.addToCurrentRow(data.site);
 
     data.aggregatedLabels.forEach((aL) => {
-      content += `${aL},`;
+      csv.addToCurrentRow(aL);
     });
 
     aggregatedIndicators.forEach((aI) => {
-      content += `${aI.values[data.intervalIndex]},`;
+      csv.addToCurrentRow(`${aI.values[data.intervalIndex]}`);
     });
 
     data.reducedFeatures.forEach((rF) => {
-      content += `${rF},`;
+      csv.addToCurrentRow(`${rF}`);
     });
 
     data.aggregatedFeatures.forEach((aF) => {
-      content += `${aF},`;
+      csv.addToCurrentRow(`${aF}`);
     });
-
-    content = content.slice(0, -1);
-
-    return content;
   });
 
-  const csv = convertArrayToCsv(csvContent, csvFirstRow);
   const csvFilename = `SSE_${bandRef.value.name}_${integrationRef.value.name}.csv`;
-  triggerCSVDownload(csv, csvFilename);
+  csv.download(csvFilename);
   loadingRef.value = false;
 }
 </script>

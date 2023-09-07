@@ -1,8 +1,11 @@
 <script lang="ts" setup>
+import {DownloadOutline} from '@vicons/ionicons5';
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
+import {Csv} from 'src/common/Csv';
+import AppButton from 'src/components/AppButton/AppButton.vue';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import TrajectoriesColorScale from 'src/components/Trajectories/TrajectoriesColorScale.vue';
-import {tracedFusedRef} from 'src/hooks/useTraced';
+import {tracedFusedRef, tracedRef} from 'src/hooks/useTraced';
 import {trajectoriesRef, useTrajectories} from 'src/hooks/useTrajectories';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
@@ -40,6 +43,39 @@ const handleUpdateValue = async (names: string[]) => {
 
 const {renderTraces} = useScatterTraces();
 watch(tracedFusedRef, renderTraces);
+
+const handleExportClick = () => {
+  const isFused = tracedFusedRef.value;
+
+  if (isFused === true) {
+    // TODO: Download fused trace
+    console.log('return fused trace');
+    return;
+  }
+
+  const csv = new Csv();
+  csv.addColumn('name');
+  csv.addColumn('timestamps');
+  csv.addColumn('relativeTimestamps');
+  csv.addColumn('x');
+  csv.addColumn('y');
+  csv.addColumn('z');
+
+  for (const traced of tracedRef.value) {
+    console.log(traced);
+    traced.data.forEach((coordinates, index) => {
+      csv.createRow();
+      csv.addToCurrentRow(traced.trajectory.name);
+      csv.addToCurrentRow(traced.timestamps[index].toString());
+      csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
+      csv.addToCurrentRow(coordinates[0].toString());
+      csv.addToCurrentRow(coordinates[1].toString());
+      csv.addToCurrentRow(coordinates[2].toString());
+    });
+  }
+
+  csv.download('trajectories.csv');
+};
 </script>
 
 <template>
@@ -79,9 +115,15 @@ watch(tracedFusedRef, renderTraces);
         @update:value="handleUpdateValue"
         size="small"
       />
-    </div>
+      <TrajectoriesColorScale />
 
-    <TrajectoriesColorScale />
+      <AppButton
+        :handle-click="handleExportClick"
+        text="Export"
+      >
+        <download-outline />
+      </AppButton>
+    </div>
   </AppDraggable>
 </template>
 

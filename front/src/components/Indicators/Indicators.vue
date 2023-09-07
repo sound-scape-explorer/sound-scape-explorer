@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import {DownloadOutline} from '@vicons/ionicons5';
 import {NCascader, NSelect, NSwitch} from 'naive-ui';
+import {Csv} from 'src/common/Csv';
+import AppButton from 'src/components/AppButton/AppButton.vue';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppHistogram from 'src/components/AppHistogram/AppHistogram.vue';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
@@ -109,6 +112,26 @@ const chartDataRef = computed<ChartData>(() => {
     colors: indices.map((i) => colors[i]),
   };
 });
+
+const handleExportClick = () => {
+  console.log('export', indicatorDataRef.value);
+
+  const csv = new Csv();
+  csv.addColumn('intervalIndex');
+  csv.addColumn('site');
+  csv.addColumn('timestamp');
+  csv.addColumn('values');
+
+  for (const d of indicatorDataRef.value) {
+    csv.createRow();
+    csv.addToCurrentRow(d.index.toString());
+    csv.addToCurrentRow(d.site);
+    csv.addToCurrentRow(d.timestamp.toString());
+    csv.addToCurrentRow(d.values.join('; '));
+  }
+
+  csv.download('indicators');
+};
 </script>
 
 <template>
@@ -155,6 +178,13 @@ const chartDataRef = computed<ChartData>(() => {
         :labels="chartDataRef.labels"
         :colors="chartDataRef.colors"
       />
+
+      <AppButton
+        :handle-click="handleExportClick"
+        text="Export"
+      >
+        <download-outline />
+      </AppButton>
     </div>
   </AppDraggable>
 </template>

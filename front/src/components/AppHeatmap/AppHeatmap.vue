@@ -53,16 +53,19 @@ async function render() {
 }
 
 function refresh() {
+  console.log(props.values);
   dataRef.value = [
     {
       type: 'heatmap',
-      colorscale: 'YlOrRd',
+      colorscale: 'Blues',
       reversescale: true,
       x: props.labels,
-      y: [...props.labels].reverse(),
+      y: props.values.length === 1 ? [''] : [...props.labels].reverse(),
       z: [...props.values].reverse(),
-      hoverongaps: false,
       hovertemplate: '%{z:.3f}<extra>%{y}/%{x}</extra>',
+      hoverongaps: false,
+      xgap: 10,
+      ygap: 10,
     },
   ];
 
@@ -72,6 +75,24 @@ function refresh() {
     plot_bgcolor: 'transparent',
     clickmode: 'none',
     showlegend: false,
+    width: 500,
+    height: 500,
+    xaxis: {
+      zeroline: false,
+      showgrid: false,
+      fixedrange: true,
+      ticks: '',
+      type: 'category',
+      tickmode: 'linear',
+    },
+    yaxis: {
+      zeroline: false,
+      showgrid: false,
+      fixedrange: true,
+      ticks: '',
+      type: 'category',
+      tickmode: 'linear',
+    },
   };
 }
 </script>
