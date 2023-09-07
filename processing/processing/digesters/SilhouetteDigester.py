@@ -33,6 +33,4 @@ class SilhouetteDigester(Digester):
                     )
 
         silhouette = silhouette + silhouette.T
-        np.fill_diagonal(silhouette, np.nan)
-        silhouette[np.triu_indices(silhouette.shape[0])] = np.nan
         return silhouette
