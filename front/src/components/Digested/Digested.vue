@@ -1,6 +1,8 @@
 <script lang="ts" setup="">
-import {RepeatOutline} from '@vicons/ionicons5';
+import {DownloadOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
+import {Csv} from 'src/common/Csv';
+import AppButton from 'src/components/AppButton/AppButton.vue';
 import {digestersRef} from 'src/hooks/useDigesters';
 import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
@@ -106,6 +108,41 @@ const update = () => {
 };
 
 watchEffect(update);
+
+const handleExportClick = () => {
+  if (
+    digestedRef.value === null ||
+    xRef.value.length === 0 ||
+    valuesRef.value.length === 0
+  ) {
+    return;
+  }
+
+  const csv = new Csv();
+  const isPairing = digestedRef.value.isPairing;
+  csv.addColumn('y');
+
+  xRef.value.forEach((x) => {
+    csv.addColumn(x);
+  });
+
+  valuesRef.value.forEach((values, index) => {
+    csv.createRow();
+    if (valuesRef.value.length === 1) {
+      csv.addToCurrentRow('value');
+    } else if (isPairing) {
+      csv.addToCurrentRow(yRef.value[index]);
+    } else {
+      csv.addToCurrentRow(xRef.value[index]);
+    }
+
+    values.forEach((value) => {
+      csv.addToCurrentRow(value.toString());
+    });
+  });
+
+  csv.download('digested.csv');
+};
 </script>
 
 <template>
@@ -166,6 +203,13 @@ watchEffect(update);
         :y="yRef"
         :values="valuesRef"
       />
+
+      <AppButton
+        :handle-click="handleExportClick"
+        text="Export"
+      >
+        <download-outline />
+      </AppButton>
     </div>
   </AppDraggable>
 </template>
