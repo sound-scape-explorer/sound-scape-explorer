@@ -25,7 +25,7 @@ def export_mdm(
             callback(storage)
         return
 
-    print_action("Mean distances matrix export started", "start")
+    print_action("Mean distances matrix export started!", "start")
 
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)

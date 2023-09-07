@@ -49,7 +49,7 @@ def export_computation_umaps(
     npy_path = ask_npy_path(env)
     np.save(npy_path, datasets_np)
 
-    print_action("Computation UMAPs export finished!", "end")
+    print_action("Computation UMAPs export completed!", "end")
 
     if callback is not None:
         callback(storage)
