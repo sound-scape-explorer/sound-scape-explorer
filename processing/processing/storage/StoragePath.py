@@ -383,6 +383,7 @@ class StoragePath(Enum):
     # Computation UMAPs #
     #####################
 
+    # TODO: Remove because unused
     computation_umap_ = "/computation_umap_"
     """The computation UMAPs needed for further data generation.
 
