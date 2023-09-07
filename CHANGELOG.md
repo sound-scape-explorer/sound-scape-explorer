@@ -1,3 +1,21 @@
+# [10.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.5.0...v10.6.0) (2023-09-07)
+
+
+### Bug Fixes
+
+* **Processing/Actions:** Fix console prints unconsistency for new exports ([0ce57b6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0ce57b6744196ba729f590f5bdd0305620ca90b3))
+* **Processing/Actions:** Save computation UMAPs to `.npy` file + Misc ([d241a62](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d241a62b44b308257e4eb0232ea25d96ab145f0b))
+* **Processing/Digests:** Trying to mitigate Théo's bug ([6c67e45](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6c67e45ad45172224258fccb1e21942422b2f12f))
+
+
+### Features
+
+* **App:** Add `audio:front:windows` pnpm command ([0d18347](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0d183476b4921539eac526113d2d1e5bb3890b5e))
+* **Examples:** Provide coral-reef-light example with 50 computation UMAPs ([d0b4b2c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d0b4b2c30ce95f65d103f5a02b47c30c363ac6af))
+* **Processing/Actions:** Add computation UMAPs export ([7f56e8a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7f56e8aceebd193b26325d5a71c26649b45002f1))
+* **Processing/Menu:** Add choice for computation UMAPs exports ([cd933f9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cd933f900b919624e0e9762d705c95fe61728937))
+* **Processing/Silhouette:** Keep all values to verify symmetry in UI ([4e872bb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4e872bb54bc0120d4d702f53e524ec4fdab41336))
+
 # [10.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.4.0...v10.5.0) (2023-09-07)
 
 
