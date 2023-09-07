@@ -9,7 +9,7 @@ from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_integration import ask_integration
-from processing.utils.ask_path_npy import ask_path_npy
+from processing.utils.ask_npy_path import ask_npy_path
 from processing.utils.print_action import print_action
 from processing.utils.print_no_configuration import print_no_configuration
 
@@ -37,7 +37,7 @@ def export_mdm(
     mdm = storage.read(path)
 
     matrix = np.array(mdm)
-    npy_path = ask_path_npy(env)
+    npy_path = ask_npy_path(env)
     np.save(npy_path, matrix)
 
     print_action("Mean distances matrix export completed!", "end")

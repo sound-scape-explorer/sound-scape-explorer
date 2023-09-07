@@ -10,7 +10,7 @@ from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_integration import ask_integration
-from processing.utils.ask_path_npy import ask_path_npy
+from processing.utils.ask_npy_path import ask_npy_path
 from processing.utils.print_action import print_action
 from processing.utils.print_no_mean_distances_matrices import print_no_mean_distances_matrices
 
@@ -42,12 +42,13 @@ def export_computation_umaps(
 
     for i in range(length):
         dataset: Dataset = group.get(f"{i}") # type: ignore
-        datasets.append(np.array(dataset))
+        datasets.append(np.array(dataset[:]))
 
     datasets_np = np.array(datasets)
 
-    csv_path = ask_path_npy(env)
-    print(datasets_np.shape)
+    npy_path = ask_npy_path(env)
+    np.save(npy_path, datasets_np)
+
     print_action("Computation UMAPs export finished!", "end")
 
     if callback is not None:

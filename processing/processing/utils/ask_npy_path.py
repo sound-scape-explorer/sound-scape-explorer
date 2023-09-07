@@ -4,7 +4,7 @@ from rich import print
 from processing.common.YamlEnv import YamlEnv
 
 
-def ask_path_npy(env: YamlEnv) -> str:
+def ask_npy_path(env: YamlEnv) -> str:
     questions = [
         {
             "type": "input",
