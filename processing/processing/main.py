@@ -6,6 +6,7 @@ from rich.console import Console
 from processing.actions.autocluster import autocluster
 from processing.actions.compute_requirements import compute_requirements
 from processing.actions.digest import digest
+from processing.actions.export_computation_umaps import export_computation_umaps
 from processing.actions.export_dataframe import export_dataframe
 from processing.actions.export_mdm import export_mdm
 from processing.actions.extract_and_aggregate import extract_and_aggregate
@@ -77,6 +78,8 @@ def main(
             digest(storage, main)
         if answer == MenuChoice.ExportDataframe.value:
             export_dataframe(env, storage, main)
+        if answer == MenuChoice.ExportComputationUmaps.value:
+            export_computation_umaps(env, storage, main)
         if answer == MenuChoice.ExportMeanDistancesMatrix.value:
             export_mdm(env, storage, main)
         if answer == MenuChoice.Repack.value:
