@@ -7,6 +7,7 @@ from processing.actions.autocluster import autocluster
 from processing.actions.compute_requirements import compute_requirements
 from processing.actions.digest import digest
 from processing.actions.export_dataframe import export_dataframe
+from processing.actions.export_mdm import export_mdm
 from processing.actions.extract_and_aggregate import extract_and_aggregate
 from processing.actions.purge_requirements import purge_requirements
 from processing.actions.reduce import reduce
@@ -76,6 +77,8 @@ def main(
             digest(storage, main)
         if answer == MenuChoice.ExportDataframe.value:
             export_dataframe(env, storage, main)
+        if answer == MenuChoice.ExportMeanDistancesMatrix.value:
+            export_mdm(env, storage, main)
         if answer == MenuChoice.Repack.value:
             repack_storage(storage, main)
         else:

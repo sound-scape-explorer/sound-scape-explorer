@@ -17,6 +17,7 @@ class MenuChoice(Enum):
     Digest = "Run digests"
     RunAll = "Run all"
     ExportDataframe = "Export dataframe as .csv"
+    ExportMeanDistancesMatrix = "Export mean distances matrix as .npy"
     Repack = "Repack storage with `h5repack` (UNIX only)"
     Quit = "Quit"
 
@@ -40,6 +41,7 @@ def ask_menu() -> str:
                 Separator(),
                 MenuChoice.RunAll.value,
                 MenuChoice.ExportDataframe.value,
+                MenuChoice.ExportMeanDistancesMatrix.value,
                 MenuChoice.Repack.value,
                 Separator(),
                 MenuChoice.Quit.value,
