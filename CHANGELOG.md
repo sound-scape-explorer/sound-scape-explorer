@@ -1,3 +1,21 @@
+# [10.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.6.0...v10.7.0) (2023-09-08)
+
+
+### Bug Fixes
+
+* **Examples:** Update excel template ([4920085](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/49200851b4b79077bc7fc9d403bb30c152a1cea5))
+* **Processing/Aggregations:** Ensure interval_data is not empty before aggregating ([72c585b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/72c585b4beea7bdb243e6f8b2ac9fe49a9146adc))
+
+
+### Features
+
+* **Front/Trajectories:** Add csv export for fused traces ([4333e5d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4333e5d9071219af03c9e7bbe76984e96518419d))
+
+
+### Performance Improvements
+
+* **Examples:** Replace coral reef light h5 with repacked version ([7695f1e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7695f1e59d02cc5aa508b1476b2d48dbd394b81f))
+
 # [10.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.5.0...v10.6.0) (2023-09-07)
 
 
