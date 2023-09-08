@@ -93,8 +93,8 @@ async function handleClick() {
   csv.addColumn('timestamp');
   csv.addColumn('site');
 
-  labelsPropertiesRef.value.forEach((metaProperty) => {
-    csv.addColumn(`label_${metaProperty}`);
+  labelsPropertiesRef.value.forEach((property) => {
+    csv.addColumn(`label_${property}`);
   });
 
   aggregatedIndicators.forEach(({extractor}) => {

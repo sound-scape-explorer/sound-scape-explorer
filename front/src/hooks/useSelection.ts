@@ -39,7 +39,7 @@ export function useSelection() {
   const {readAggregatedIntervalDetails} = useAggregatedIntervalDetails();
   const {readAggregatedLabels} = useAggregatedLabels();
   const {readReducedFeatures} = useReducedFeatures();
-  const {readColorScale} = useScatterColorScale();
+  const {generateColorScale} = useScatterColorScale();
   const {buildSelection} = useLabelsSelection();
   const {renderTraces} = useScatterTraces();
   const {filterByMeta} = useScatterFilterMeta();
@@ -86,7 +86,7 @@ export function useSelection() {
     await readReducedFeatures();
 
     buildSelection();
-    readColorScale();
+    generateColorScale();
 
     filterByMeta();
     filterByTime();

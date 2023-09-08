@@ -7,7 +7,7 @@ export function useColorByDay() {
   const {convertTimestampToDate} = useDate();
 
   const getColorByDay = (timestamp: number) => {
-    const date = convertTimestampToDate(timestamp * 1000);
+    const date = convertTimestampToDate(timestamp);
     const hour = date.get('hours');
     const isDay = isHourDuringDay(hour);
 

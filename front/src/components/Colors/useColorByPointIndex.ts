@@ -8,7 +8,6 @@ export function useColorByPointIndex() {
     pointsCount: number,
   ): string => {
     const rangedPointIndex = mapRange(pointIndex, 0, pointsCount, 0, 1);
-
     return chromaScaleRef.value(rangedPointIndex).css();
   };
 

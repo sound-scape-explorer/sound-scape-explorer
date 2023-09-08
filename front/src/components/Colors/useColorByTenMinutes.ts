@@ -8,7 +8,7 @@ export function useColorByTenMinutes() {
   const {convertTimestampToDate} = useDate();
 
   const getColorByTenMinutes = (timestamp: number): string => {
-    const date = convertTimestampToDate(timestamp * 1000);
+    const date = convertTimestampToDate(timestamp);
     const rangeStart = convertTimestampToDate(timeStore.min * 1000);
     const rangeEnd = convertTimestampToDate(timeStore.max * 1000);
 
@@ -17,7 +17,7 @@ export function useColorByTenMinutes() {
 
     const rangedMinute = mapRange(
       currentMinuteFromStart,
-      rangeStart.unix(),
+      0,
       rangeInMinutes,
       0,
       1,

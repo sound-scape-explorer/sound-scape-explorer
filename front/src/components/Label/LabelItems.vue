@@ -7,7 +7,7 @@ import {labelsSelectionRef, useLabelsSelection} from './useLabelsSelection';
 
 const {updateSelection} = useLabelsSelection();
 
-const handleMetaPropertyClick = (property: string) => {
+const handlePropertyClick = (property: string) => {
   if (labelsRef.value === null || labelsSelectionRef.value === null) {
     return;
   }
@@ -60,7 +60,7 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
             :bordered="false"
             class="tag"
             size="small"
-            @click="() => handleMetaPropertyClick(property)"
+            @click="() => handlePropertyClick(property)"
             @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
           >
             {{ property }}

@@ -8,10 +8,11 @@ import {
 } from 'src/hooks/useLabels';
 import {computed, reactive, watch} from 'vue';
 
+import {useNotification} from '../AppNotification/useNotification';
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
 import {useColorByDay} from '../Colors/useColorByDay';
-import {useColorByMeta} from '../Colors/useColorByMeta';
+import {useColorByLabel} from '../Colors/useColorByLabel';
 import {useColorByOneHour} from '../Colors/useColorByOneHour';
 import {useColorByPointIndex} from '../Colors/useColorByPointIndex';
 import {useColorByTenMinutes} from '../Colors/useColorByTenMinutes';
@@ -60,10 +61,10 @@ export function useScatterColorScale() {
   const {getColorByTenMinutes} = useColorByTenMinutes();
   const {getColorByDay} = useColorByDay();
   const {getColorByCyclingDay} = useColorByCyclingDay();
-  const {getColorByMeta} = useColorByMeta();
+  const {getColorByLabel} = useColorByLabel();
+  const {notify} = useNotification();
 
-  // TODO: Rename to generate color scale
-  const readColorScale = () => {
+  const generateColorScale = () => {
     if (
       labelsPropertiesAsColorTypesRef.value === null ||
       filesRef.value === null ||
@@ -101,7 +102,7 @@ export function useScatterColorScale() {
         const timestamp = aggregatedTimestampsRef.value[intervalIndex];
         color = getColorByCyclingDay(timestamp);
       } else if (labelsPropertiesAsColorTypesRef.value.includes(colorType)) {
-        color = getColorByMeta(
+        color = getColorByLabel(
           intervalIndex,
           colorType,
           labelsPropertiesAsColorTypesRef.value,
@@ -114,16 +115,16 @@ export function useScatterColorScale() {
     }
 
     colorScaleRef.value = colorScale;
-    console.log('readColorScale');
+    notify('success', 'Colors', `${colorType} color scale generated`);
   };
 
   const {renderTraces} = useScatterTraces();
   watch([colorsStore, alphaHighRef, alphaLowRef], () => {
-    readColorScale();
+    generateColorScale();
     renderTraces();
   });
 
   return {
-    readColorScale: readColorScale,
+    generateColorScale: generateColorScale,
   };
 }

@@ -7,10 +7,9 @@ export function useColorByCyclingDay() {
   const {convertTimestampToDate} = useDate();
 
   const getColorByCyclingDay = (timestamp: number): string => {
-    const date = convertTimestampToDate(timestamp * 1000);
+    const date = convertTimestampToDate(timestamp);
     const hour = date.get('hours');
     const rangedHour = mapRange(hour, 0, 24, 0, 1);
-
     return cyclingScaleRef.value(rangedHour).css();
   };
 

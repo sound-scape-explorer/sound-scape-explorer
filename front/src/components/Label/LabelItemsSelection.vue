@@ -4,7 +4,7 @@ import {labelsRef} from 'src/hooks/useLabels';
 import {computed, ref, watch, watchEffect} from 'vue';
 
 import {colorsStore} from '../Colors/colorsStore';
-import {useColorByMeta} from '../Colors/useColorByMeta';
+import {useColorByLabel} from '../Colors/useColorByLabel';
 import {labelsSelectionRef, useLabelsSelection} from './useLabelsSelection';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const {getColorByMetaIndex} = useColorByMeta();
+const {getColorByLabelIndex} = useColorByLabel();
 const selectionRef = ref<string[]>([]);
 const {updateSelection} = useLabelsSelection();
 
@@ -32,7 +32,7 @@ function getColorByItem(index: number): string | undefined {
     return undefined;
   }
 
-  return getColorByMetaIndex(index, uniquesRef.value.length);
+  return getColorByLabelIndex(index, uniquesRef.value.length);
 }
 
 watch(selectionRef, () => updateSelection(props.property, selectionRef.value));
