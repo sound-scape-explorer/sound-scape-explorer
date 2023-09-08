@@ -23,7 +23,6 @@ class TorchLoader:
         if self.audio is not None and self.sample_rate is not None:
             return self.audio, self.sample_rate
 
-        # TODO: Backend on windows
         loaded: Tuple[Tensor, int] = torchaudio.load(file.path)  # type: ignore
         self.audio, self.sample_rate = loaded
         return self.audio, self.sample_rate

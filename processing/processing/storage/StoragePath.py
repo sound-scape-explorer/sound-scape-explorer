@@ -383,8 +383,7 @@ class StoragePath(Enum):
     # Computation UMAPs #
     #####################
 
-    # TODO: Remove because unused
-    computation_umap_ = "/computation_umap_"
+    computation_umap = "/computation_umap"
     """The computation UMAPs needed for further data generation.
 
     Computation UMAPs are used for:
@@ -470,7 +469,6 @@ class StoragePath(Enum):
     aggregated_labels = "/aggregated_labels"
     reduced = "/reduced"
     autoclustered = "/autoclustered"
-    computation_umap = "/computation_umap"
     traced = "/traced"
     traced_timestamps = "/traced_timestamps"
     traced_relative_timestamps = "/traced_relative_timestamps"
