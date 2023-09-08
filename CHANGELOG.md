@@ -1,3 +1,11 @@
+## [10.7.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.7.0...v10.7.1) (2023-09-08)
+
+
+### Bug Fixes
+
+* **Front:** Add various improvements ([0ce0c6c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0ce0c6cd83f4624d0bd5a5584b576b1277eff343))
+* **Processing:** Remove some inline TODOs ([d47015a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d47015a528eae58d1ca603061337d235550ba34b))
+
 # [10.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.6.0...v10.7.0) (2023-09-08)
 
 
