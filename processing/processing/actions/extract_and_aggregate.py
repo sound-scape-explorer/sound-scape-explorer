@@ -69,6 +69,9 @@ def extract_and_aggregate(
         extractor,
         timeline,
     ) in tw.walk():
+        if len(interval_data) == 0:
+            continue
+
         # Aggregate
         aggregated_data = list(np.mean(interval_data, axis=0))
 

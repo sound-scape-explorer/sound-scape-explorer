@@ -7,6 +7,7 @@ import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import TrajectoriesColorScale from 'src/components/Trajectories/TrajectoriesColorScale.vue';
 import {tracedFusedRef, tracedRef} from 'src/hooks/useTraced';
 import {trajectoriesRef, useTrajectories} from 'src/hooks/useTrajectories';
+import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
@@ -47,12 +48,6 @@ watch(tracedFusedRef, renderTraces);
 const handleExportClick = () => {
   const isFused = tracedFusedRef.value;
 
-  if (isFused === true) {
-    // TODO: Download fused trace
-    console.log('return fused trace');
-    return;
-  }
-
   const csv = new Csv();
   csv.addColumn('name');
   csv.addColumn('timestamps');
@@ -61,8 +56,26 @@ const handleExportClick = () => {
   csv.addColumn('y');
   csv.addColumn('z');
 
+  if (isFused === true) {
+    const {data, traced} = buildAverageTrajectory(tracedRef.value);
+
+    traced.data.forEach((_, index) => {
+      csv.createRow();
+      csv.addToCurrentRow('fused');
+      csv.addToCurrentRow(traced.timestamps[index].toString());
+      csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
+      csv.addToCurrentRow(data.x[index].toString());
+      csv.addToCurrentRow(data.y[index].toString());
+      if (typeof data.z !== 'undefined') {
+        csv.addToCurrentRow(data.z[index].toString());
+      }
+    });
+
+    csv.download('trajectories.csv');
+    return;
+  }
+
   for (const traced of tracedRef.value) {
-    console.log(traced);
     traced.data.forEach((coordinates, index) => {
       csv.createRow();
       csv.addToCurrentRow(traced.trajectory.name);
