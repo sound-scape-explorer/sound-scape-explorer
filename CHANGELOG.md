@@ -1,3 +1,10 @@
+## [10.7.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.7.1...v10.7.2) (2023-10-12)
+
+
+### Bug Fixes
+
+* **Processing:** Remove `PyInquirer` dependency from CPU requirements ([accfcb4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/accfcb47cdcc3ed435446c4a0e368c9a4da61a91))
+
 ## [10.7.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.7.0...v10.7.1) (2023-09-08)
 
 
