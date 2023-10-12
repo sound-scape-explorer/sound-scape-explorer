@@ -32,5 +32,6 @@ class SilhouetteDigester(Digester):
                         metric="manhattan",
                     )
 
+        # FIX: Check if the transposed matrix is correctly applied
         silhouette = silhouette + silhouette.T
         return silhouette
