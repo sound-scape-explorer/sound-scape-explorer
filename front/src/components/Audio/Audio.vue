@@ -150,6 +150,8 @@ async function load() {
 
 function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
   if (error) {
+    // FIX: This fails on Windows
+    // Failed to execute 'createBuffer' on 'BaseAudioContext': The number of frames (0) is less or equal tto the minimum bound (0)
     console.error(error);
     return;
   }
