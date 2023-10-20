@@ -19,7 +19,7 @@ def update_python_path():
         sys.path.append(processing_path)
 
 
-if __name__ == "__main__":
+def start():
     update_python_path()
 
     parser = argparse.ArgumentParser()
