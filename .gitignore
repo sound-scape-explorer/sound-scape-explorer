@@ -4,6 +4,8 @@ __pycache__/
 /.project
 /.settings/
 /.pydevproject
+/venv
+/processing/build
 
 /node_modules
 /front/node_modules
