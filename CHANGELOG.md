@@ -1,3 +1,30 @@
+# [10.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.7.2...v10.8.0) (2023-10-23)
+
+
+### Bug Fixes
+
+* **App:** Remove powershell scripts (replaced with simple batch script) ([d86a5e4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d86a5e4e73866c1bc1dee047fd456ff27f448543))
+* **App:** Update pnpm commands for Windows ([8e0d2f3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8e0d2f3ee69662e6a06623e2a6afb4831aff0079))
+* **App:** Update process commands ([9cd41ec](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9cd41ec2c1396d3201bc3b9d0c8fddc35fc48c55))
+* **Front/Audio:** Adding checks and console outputs to reproduce Windows error ([e5fe139](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e5fe1392dfe958af1ff1e30710eba07e3f606628))
+* **Front:** Open the dev command to public networks ([6078133](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/607813372d5cedb01d4913eac3ea0a74cdd756c2))
+* **Processing/AggregatedDetails:** Add missing separator to `block_details` ([14965d0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/14965d03b7545198399d1731955ce1a5d70ba3df))
+* **Processing:** Add missing init files for proper imports ([54897b2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/54897b2483ad2b6951f5005a73e143c87ba0821b))
+* **Processing:** Synchronize current version ([d07aadb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d07aadba49569bda44567dbed2795671136bea9b))
+* **Processing:** Update default dicts ([7f4c62d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7f4c62d56d0118132445bde8085b318d74450a26))
+
+
+### Features
+
+* **App:** Activate venv for windows powershell script ([fd22ac7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fd22ac7631fb3a23eca4ef499c8e695ee356a39d))
+* **App:** Add `start.bat` for easy venv setup on Windows ([86be984](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/86be984e0f698d13605d96ed68bc3a17f305bf41))
+* **App:** Add commands for processing on windows with venv ([d691a3a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d691a3abb1de9e4e1f2795866777820e2c6b71ff))
+* **App:** Add new commands using venv ([cf5c09a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cf5c09ab101efbc8b56383d0f64c38a182c3d7b5))
+* **App:** Add processing module version increment on publish ([df60896](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/df60896d0b3121876db2f498a962cddd708af229))
+* **App:** Add script to increment setup.py ([4e6a5e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4e6a5e56b662d57724e5a433b70aad833e770828))
+* **Processing/Action:** Add action for fixing audio on Windows ([389b1dc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/389b1dc62aa0f8b4acdf37450092b0ea509c6ca8))
+* **Processing:** Use `sse` cli shortcut ([f2d22c6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f2d22c6de3801f8967c98059af6222cf5d9f661a))
+
 ## [10.7.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.7.1...v10.7.2) (2023-10-12)
 
 
