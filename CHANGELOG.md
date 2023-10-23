@@ -1,3 +1,10 @@
+## [10.8.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.8.0...v10.8.1) (2023-10-23)
+
+
+### Bug Fixes
+
+* **Processing/Setup:** Increment version on release then commit ([6882a6f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6882a6f86758912ac43ee9e8be5ed1c7cfb8d07e))
+
 # [10.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.7.2...v10.8.0) (2023-10-23)
 
 

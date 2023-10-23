@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="sse",
-    version="10.8.0",
+    version="10.8.1",
     description="Sound Scape Explorer",
     author="Bamdad Sabbagh",
     author_email="hi@bamdad.fr",
