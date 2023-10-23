@@ -119,7 +119,7 @@ class AggregatedStorage:
             data=[interval_details],
             attributes={
                 "description": "Each column is {block_start}"
-                "/{relative_file_start}{file_path}",
+                "/{relative_file_start}/{file_path}",
             },
         )
 

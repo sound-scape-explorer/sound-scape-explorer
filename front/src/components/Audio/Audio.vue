@@ -30,6 +30,7 @@ import {FFT_SIZE, WAVE} from '../../constants';
 import {triggerWavDownload} from '../../utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
+import {useNotification} from '../AppNotification/useNotification';
 import {currentAudioFileRef} from './useAudio';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
 
@@ -37,6 +38,7 @@ import {spectrogramColorRef} from './useAudioSpectrogramColor';
  * State
  */
 
+const {notify} = useNotification();
 const containerRef = ref<HTMLDivElement | null>(null);
 const waveformRef = ref<HTMLDivElement | null>(null);
 const spectrogramRef = ref<HTMLDivElement | null>(null);
@@ -122,19 +124,46 @@ function close() {
 }
 
 async function load() {
-  if (
-    integrationRef.value === null ||
-    currentAudioFileRef.value === null ||
-    wsRef.value === null ||
-    audioContextRef.value === null
-  ) {
-    return;
-  }
-
   try {
+    if (
+      integrationRef.value === null ||
+      currentAudioFileRef.value === null ||
+      wsRef.value === null ||
+      audioContextRef.value === null
+    ) {
+      return;
+    }
+
+    // FIX: This can fail on Windows runtime, can't reproduce yet...
+    // const ab = audioContextRef.value.createBuffer(1, 0, 44100);
+    // console.log(ab);
+
     const src = `${audioHostRef.value}${currentAudioFileRef.value.file}`;
+
     const response = await fetch(src);
+
+    if (!response.ok) {
+      notify(
+        'error',
+        'Failed to fetch audio',
+        `${response.status}: ${response.statusText}`,
+      );
+      console.error(
+        'Failed to fetch audio:',
+        response.status,
+        response.statusText,
+      );
+      return;
+    }
+
     const arrayBuffer = await response.arrayBuffer();
+
+    if (arrayBuffer.byteLength === 0) {
+      notify('error', 'Empty audio data', '');
+      console.error('Empty audio data');
+      return;
+    }
+
     const audioBuffer = await audioContextRef.value.decodeAudioData(
       arrayBuffer,
     );
@@ -143,13 +172,17 @@ async function load() {
     const end = start + integrationRef.value.seconds * 1000;
 
     audioBufferSlice(audioBuffer, start, end, handleAudioSlice);
-  } catch {
+  } catch (error) {
     appDraggablesStore.audio = false;
+    notify('error', 'Failed to load audio', `${error}`);
+    console.error(error);
   }
 }
 
 function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
   if (error) {
+    // FIX: This fails on Windows
+    // Failed to execute 'createBuffer' on 'BaseAudioContext': The number of frames (0) is less or equal tto the minimum bound (0)
     console.error(error);
     return;
   }

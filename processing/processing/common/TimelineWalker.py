@@ -205,7 +205,7 @@ class TimelineWalker:
         block: Block,
     ) -> str:
         file_relative_start = block.start - block.file.start
-        block_details = f"{block.start}/{file_relative_start}{block.file.path}"
+        block_details = f"{block.start}/{file_relative_start}/{block.file.path}"
         return block_details
 
     def purge(
