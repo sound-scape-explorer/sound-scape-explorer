@@ -20,6 +20,7 @@ class MenuChoice(Enum):
     ExportComputationUmaps = "Export computation UMAPs as .npy"
     ExportMeanDistancesMatrix = "Export mean distances matrix as .npy"
     Repack = "Repack storage with `h5repack` (UNIX only)"
+    FixAudioWindows10_7_2 = "Fix audio on Windows for versions <=10.7.2"
     Quit = "Quit"
 
 
@@ -45,6 +46,8 @@ def ask_menu() -> str:
                 MenuChoice.ExportComputationUmaps.value,
                 MenuChoice.ExportMeanDistancesMatrix.value,
                 MenuChoice.Repack.value,
+                Separator(),
+                MenuChoice.FixAudioWindows10_7_2.value,
                 Separator(),
                 MenuChoice.Quit.value,
             ],

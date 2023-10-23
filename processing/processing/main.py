@@ -10,6 +10,7 @@ from processing.actions.export_computation_umaps import export_computation_umaps
 from processing.actions.export_dataframe import export_dataframe
 from processing.actions.export_mdm import export_mdm
 from processing.actions.extract_and_aggregate import extract_and_aggregate
+from processing.actions.fix_audio_windows_10_7_2 import fix_audio_windows_10_7_2
 from processing.actions.purge_requirements import purge_requirements
 from processing.actions.reduce import reduce
 from processing.actions.refresh_configuration import refresh_configuration
@@ -84,6 +85,8 @@ def main(
             export_mdm(env, storage, main)
         if answer == MenuChoice.Repack.value:
             repack_storage(storage, main)
+        if answer == MenuChoice.FixAudioWindows10_7_2.value:
+            fix_audio_windows_10_7_2(storage, main)
         else:
             quit_sse(storage)
     except Exception:
