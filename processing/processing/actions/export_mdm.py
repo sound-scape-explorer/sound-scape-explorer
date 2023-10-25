@@ -1,6 +1,5 @@
 import numpy as np
 from typing import Optional
-from processing.common.YamlEnv import YamlEnv
 from processing.config.Config import Config
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
@@ -15,10 +14,10 @@ from processing.utils.print_no_configuration import print_no_configuration
 
 
 def export_mdm(
-    env: YamlEnv,
+    config: Config,
     storage: Storage,
     callback: Optional[IMain] = None,
-    ):
+):
     if not Config.exists_in_storage(storage):
         print_no_configuration()
         if callback is not None:
@@ -33,11 +32,13 @@ def export_mdm(
     band = ask_band(bands)
     integration = ask_integration(integrations)
 
-    path = f"{StoragePath.mean_distances_matrix.value}/{band.name}/{integration.seconds}"
+    path = (
+        f"{StoragePath.mean_distances_matrix.value}/{band.name}/{integration.seconds}"
+    )
     mdm = storage.read(path)
 
     matrix = np.array(mdm)
-    npy_path = ask_npy_path(env)
+    npy_path = ask_npy_path(config)
     np.save(npy_path, matrix)
 
     print_action("Mean distances matrix export completed!", "end")

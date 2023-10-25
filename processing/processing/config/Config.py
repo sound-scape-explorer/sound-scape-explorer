@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from rich import print
@@ -39,7 +40,9 @@ class Config:
         self,
         path: str,
     ) -> None:
-        self.parser = ConfigParser(path)
+        self.path = os.path.abspath(path)
+        self.folder = os.path.dirname(self.path)
+        self.parser = ConfigParser(self.path, self.folder)
 
         self.settings: SettingsConfig
 

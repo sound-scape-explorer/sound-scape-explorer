@@ -1,4 +1,4 @@
-from InquirerPy import prompt
+from InquirerPy.resolver import prompt
 from rich import print
 
 

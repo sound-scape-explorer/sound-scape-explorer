@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 
 from processing.config.ConfigParser import ConfigParser
@@ -27,6 +29,7 @@ class SettingsStorage:
         dataset = storage.read(SettingsStorage.settings)
         attributes = dataset.attrs
 
+        storage_path: str = attributes[SettingsRow.storage_path.value]  # type: ignore
         audio_path: str = attributes[SettingsRow.audio_path.value]  # type: ignore
         audio_host: str = attributes[SettingsRow.audio_host.value]  # type: ignore
         expected_sample_rate: int = attributes[
@@ -47,6 +50,7 @@ class SettingsStorage:
         ]  # type: ignore
 
         settings = SettingsConfig(
+            storage_path=storage_path,
             audio_path=audio_path,
             audio_host=audio_host,
             expected_sample_rate=expected_sample_rate,
@@ -71,7 +75,15 @@ class SettingsStorage:
         for property, value in zip(properties, values):
             obj[property] = value
 
+        storage_path = obj[SettingsRow.storage_path.value]
+
+        if not os.path.isabs(storage_path):
+            storage_path = os.path.join(parser.folder, storage_path)
+
         audio_path = obj[SettingsRow.audio_path.value]
+
+        if not os.path.isabs(audio_path):
+            audio_path = os.path.join(parser.folder, audio_path)
 
         audio_host = obj[SettingsRow.audio_host.value]
 
@@ -106,6 +118,7 @@ class SettingsStorage:
         )
 
         settings = SettingsConfig(
+            storage_path=storage_path,
             audio_path=audio_path,
             audio_host=audio_host,
             expected_sample_rate=expected_sample_rate,

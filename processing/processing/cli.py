@@ -23,7 +23,7 @@ def start():
     update_python_path()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("yaml_path")
+    parser.add_argument("config_path")
     args = parser.parse_args()
 
-    main(yaml_path=args.yaml_path)
+    main(config_path=args.config_path)

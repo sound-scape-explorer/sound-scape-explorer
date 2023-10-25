@@ -1,6 +1,6 @@
 from typing import List
 
-from InquirerPy import prompt
+from InquirerPy.resolver import prompt
 from rich import print
 
 from processing.config.integrations.IntegrationConfig import IntegrationConfig

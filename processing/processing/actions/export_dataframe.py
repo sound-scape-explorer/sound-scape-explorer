@@ -4,7 +4,6 @@ from pandas import DataFrame
 
 from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
 from processing.common.AggregatedReduceable import AggregatedReduceable
-from processing.common.YamlEnv import YamlEnv
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
@@ -24,7 +23,7 @@ from processing.utils.print_no_configuration import print_no_configuration
 
 
 def export_dataframe(
-    env: YamlEnv,
+    config: Config,
     storage: Storage,
     callback: Optional[IMain] = None,
 ):
@@ -45,7 +44,7 @@ def export_dataframe(
 
     band = ask_band(bands)
     integration = ask_integration(integrations)
-    csv_path = ask_csv_path(env)
+    csv_path = ask_csv_path(config)
 
     timestamps_path = (
         f"{StoragePath.aggregated_timestamps.value}"

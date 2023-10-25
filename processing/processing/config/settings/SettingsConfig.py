@@ -4,6 +4,7 @@ from typing import Union
 
 @dataclass(frozen=True)
 class SettingsConfig:
+    storage_path: str
     audio_path: str
     audio_host: str
     expected_sample_rate: int

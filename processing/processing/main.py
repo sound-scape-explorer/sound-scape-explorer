@@ -16,36 +16,34 @@ from processing.actions.reduce import reduce
 from processing.actions.refresh_configuration import refresh_configuration
 from processing.actions.repack_storage import repack_storage
 from processing.actions.trace_trajectories import trace_trajectories
-from processing.common.YamlEnv import YamlEnv
+from processing.config.Config import Config
 from processing.storage.Storage import Storage
 from processing.utils.ask_menu import MenuChoice, ask_menu
-from processing.utils.get_yaml_data import get_yaml_data
 from processing.utils.print_welcome import print_welcome
-from processing.utils.print_yaml_env import print_yaml_env
 from processing.utils.quit_sse import quit_sse
 
-stored_env: YamlEnv
+stored_config: Config
 
 
 def main(
     loaded_storage: Optional[Storage] = None,
-    yaml_path: Optional[str] = None,
+    config_path: Optional[str] = None,
 ):
     """CLI entry point"""
 
     global stored_env
+    global stored_config
 
     try:
-        if yaml_path is None:
-            env = stored_env
+        if config_path is not None:
+            config = Config(path=config_path)
+            stored_config = config
         else:
-            env = get_yaml_data(yaml_path)
-            stored_env = env
+            config = stored_config
 
         if loaded_storage is None:
             print_welcome()
-            print_yaml_env(env)
-            storage = Storage(env.storage)
+            storage = Storage(config.settings.storage_path)
         else:
             storage = loaded_storage
 
@@ -54,7 +52,7 @@ def main(
         answer = ask_menu()
 
         if answer == MenuChoice.RefreshConfig.value:
-            refresh_configuration(env, storage, main)
+            refresh_configuration(config, storage, main)
         if answer == MenuChoice.ExtractAggregate.value:
             extract_and_aggregate(storage, main)
         if answer == MenuChoice.Reduce.value:
@@ -70,7 +68,7 @@ def main(
         if answer == MenuChoice.Digest.value:
             digest(storage, main)
         if answer == MenuChoice.RunAll.value:
-            refresh_configuration(env, storage)
+            refresh_configuration(config, storage)
             extract_and_aggregate(storage)
             reduce(storage)
             compute_requirements(storage)
@@ -78,11 +76,11 @@ def main(
             trace_trajectories(storage)
             digest(storage, main)
         if answer == MenuChoice.ExportDataframe.value:
-            export_dataframe(env, storage, main)
+            export_dataframe(config, storage, main)
         if answer == MenuChoice.ExportComputationUmaps.value:
-            export_computation_umaps(env, storage, main)
+            export_computation_umaps(config, storage, main)
         if answer == MenuChoice.ExportMeanDistancesMatrix.value:
-            export_mdm(env, storage, main)
+            export_mdm(config, storage, main)
         if answer == MenuChoice.Repack.value:
             repack_storage(storage, main)
         if answer == MenuChoice.FixAudioWindows10_7_2.value:
