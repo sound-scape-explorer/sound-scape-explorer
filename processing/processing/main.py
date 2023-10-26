@@ -53,18 +53,25 @@ def main(
         if answer == MenuChoice.RefreshConfig.value:
             refresh_configuration(config, storage, main)
         if answer == MenuChoice.ExtractAggregate.value:
+            refresh_configuration(config, storage)
             extract_and_aggregate(storage, main)
         if answer == MenuChoice.Reduce.value:
+            refresh_configuration(config, storage)
             reduce(storage, main)
         if answer == MenuChoice.ComputeRequirements.value:
+            refresh_configuration(config, storage)
             compute_requirements(storage, main)
         if answer == MenuChoice.PurgeRequirements.value:
+            refresh_configuration(config, storage)
             purge_requirements(storage, main)
         if answer == MenuChoice.Autocluster.value:
+            refresh_configuration(config, storage)
             autocluster(storage, main)
         if answer == MenuChoice.Trace.value:
+            refresh_configuration(config, storage)
             trace_trajectories(storage, main)
         if answer == MenuChoice.Digest.value:
+            refresh_configuration(config, storage)
             digest(storage, main)
         if answer == MenuChoice.RunAll.value:
             refresh_configuration(config, storage)
@@ -75,14 +82,19 @@ def main(
             trace_trajectories(storage)
             digest(storage, main)
         if answer == MenuChoice.ExportDataframe.value:
+            refresh_configuration(config, storage)
             export_dataframe(config, storage, main)
         if answer == MenuChoice.ExportComputationUmaps.value:
+            refresh_configuration(config, storage)
             export_computation_umaps(config, storage, main)
         if answer == MenuChoice.ExportMeanDistancesMatrix.value:
+            refresh_configuration(config, storage)
             export_mdm(config, storage, main)
         if answer == MenuChoice.Repack.value:
+            refresh_configuration(config, storage)
             repack_storage(storage, main)
         if answer == MenuChoice.FixAudioWindows10_7_2.value:
+            refresh_configuration(config, storage)
             fix_audio_windows_10_7_2(storage, main)
         else:
             quit_sse(storage)
