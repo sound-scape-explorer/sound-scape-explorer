@@ -1,3 +1,10 @@
+## [11.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.0.0...v11.0.1) (2023-10-26)
+
+
+### Bug Fixes
+
+* **Processing/Main:** Remove unused var ([e0d9cb4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e0d9cb433a21bc1827938b1c4c5db8d59ffd4ed9))
+
 # [11.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.8.1...v11.0.0) (2023-10-26)
 
 
