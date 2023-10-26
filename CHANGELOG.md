@@ -1,3 +1,25 @@
+# [11.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.0.2...v11.1.0) (2023-10-26)
+
+
+### Bug Fixes
+
+* **Examples/CoralReefLight:** Update results with 10 iterations, 3d calculation UMAPs ([549c5f8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/549c5f8805d743dd441f55c1f69ba74b4b9040b4))
+* **Examples:** Update Excel documentation ([9423aee](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9423aeefca9030a73a27165a825dbc4c0ee5eede))
+* **Processing/Autocluster:** Print warning no cluster selected FIXES [#119](https://github.com/sound-scape-explorer/sound-scape-explorer/issues/119) ([283cd9a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/283cd9a4a0bfde0dd8644b573896a9bb162232f7))
+* **Processing/Config:** Allow numbers as trajectory names ([e0adf9e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e0adf9e0ac8837a9d102c62a263a4bbf9500a58e))
+* **Processing/Config:** Allow numbers of names for bands, integrations and ranges ([778845f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/778845ffd39c1eed4b33b982425f39579bbc70d1))
+* **Processing/Files:** Fix typo in full path helper ([a8693aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a8693aa88e2b806dcc6ec7b5f5baae71316c3f29))
+* **Processing/Files:** Handle files in configuration not starting with '/' ([a333133](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a33313309c0916fd4df4f06489613b78ed481cea))
+* **Processing/Requirements:** Avoid computation if no autoclusters are requested ([c0bbee5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c0bbee503349eed9ba92e5fab9c77b932560eba4)), closes [#119](https://github.com/sound-scape-explorer/sound-scape-explorer/issues/119)
+* **Processing:** Add automatic refresh configuration for single menu actions ([768f529](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/768f529d5389fb01850a3a722a759f59500d4fcd))
+
+
+### Features
+
+* **Config:** Update default configuration's ergonomy ([75fe5a8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/75fe5a8602827501a004a01789be7db36429b94f))
+* **Front:** Open browser on node server start ([250e024](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/250e024c16fa9aaa26c749b6aff35b88fcc7c39e))
+* **Processing:** Add binary storage for configuration file ([4590550](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/45905505d7980821bddcc3c0954e6057de1d8487))
+
 ## [11.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.0.1...v11.0.2) (2023-10-26)
 
 
