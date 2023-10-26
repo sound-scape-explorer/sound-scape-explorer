@@ -1,3 +1,34 @@
+# [11.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.8.1...v11.0.0) (2023-10-26)
+
+
+### Bug Fixes
+
+* **App:** Make `sse_front` behave differently on Windows ([7c87d01](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7c87d018fd170a98002686fa8976580628e399b0))
+* **Examples:** Update `new-campaign` template (remove YAML + Update xlsx) ([a4821c6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a4821c6434e57c1b3683fda6366920c3a478584f))
+* **Processing/Docker:** Update dicts filename ([c6646dd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c6646dd9099ab867e5b3a6bc21a1011c19b7c5a9))
+
+
+### Features
+
+* **App:** Add `sse_front` cli command available if Processing module has been installed ([16ba5b1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/16ba5b13cd2d101a6b9617d0b060086130d494a3))
+* **Config:** Added `storage_path` + Update documentation ([4057334](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4057334efa78a3777ad9e462b2c673b55594716c))
+* **Examples:** Add audio files of coral-reef-light campaign + Update xlsx and h5 ([0cf2502](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0cf2502c6866d93d477402fc3c87b19450c11210))
+* **Processing:** Add storage path under configuration object + Remove YAML file ([f8bf152](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f8bf152920676553219ac043e52b1b85e3c740ab))
+
+
+### Performance Improvements
+
+* **Processing:** Remove old dictionnary preparation file ([3d1c655](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3d1c65549de69d14111862e4c372a09a332ca23f))
+
+
+### BREAKING CHANGES
+
+* **Config:** `storage_path` has been added to the configuration.
+* **Examples:** Configuration file has been changed (`storage_path` has
+been added).
+* **Processing:** YAML file has been removed. Users need to specify the
+storage path inside the Excel configuration file.
+
 ## [10.8.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v10.8.0...v10.8.1) (2023-10-23)
 
 
