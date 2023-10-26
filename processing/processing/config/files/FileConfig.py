@@ -1,5 +1,7 @@
 from typing import List, Tuple
 
+from processing.utils.get_file_full_path import get_file_full_path
+
 
 class FileConfig:
     index: int
@@ -26,8 +28,7 @@ class FileConfig:
         self.labels = labels
         self.duration = duration
         self.audio_path = audio_path
-
-        self.path = f"{self.audio_path}{self.name}"
+        self.path = get_file_full_path(name, audio_path)
 
     @staticmethod
     def flatten(
