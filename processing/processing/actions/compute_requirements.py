@@ -6,6 +6,7 @@ from rich.progress import track
 
 from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
+from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
@@ -27,6 +28,14 @@ def compute_requirements(
 ):
     if not Config.exists_in_storage(storage):
         print_no_configuration()
+        if callback is not None:
+            callback(storage)
+        return
+
+    # Avoid computing requirements if no autoclusters are requested
+    autoclusters = AutoclusterStorage.read_from_storage(storage)
+
+    if len(autoclusters) == 0:
         if callback is not None:
             callback(storage)
         return

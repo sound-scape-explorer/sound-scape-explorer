@@ -10,6 +10,7 @@ from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.print_action import print_action
 from processing.utils.print_autoclusters import print_autoclusters
+from processing.utils.print_no_autoclusters import print_no_autoclusters
 from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.print_no_mean_distances_matrices import (
     print_no_mean_distances_matrices,
@@ -23,6 +24,13 @@ def autocluster(
 ):
     if not Config.exists_in_storage(storage):
         print_no_configuration()
+        if callback is not None:
+            callback(storage)
+        return
+
+    autoclusters = AutoclusterStorage.read_from_storage(storage)
+    if len(autoclusters) == 0:
+        print_no_autoclusters()
         if callback is not None:
             callback(storage)
         return

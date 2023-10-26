@@ -5,6 +5,8 @@ from mutagen.flac import FLAC
 from mutagen.mp3 import MP3
 from mutagen.wave import WAVE
 
+from processing.utils.get_file_full_path import get_file_full_path
+
 MyFile = Union[WAVE, MP3, FLAC, None]
 
 
@@ -15,7 +17,7 @@ def read_files_durations(
     durations: List[int] = []
 
     for name in names:
-        path = f"{base_path}{name}"
+        path = get_file_full_path(name, base_path)
         file: MyFile = File(path, easy=True)
 
         assert file is not None, f"File {path} not found"

@@ -1,5 +1,6 @@
 export enum StoragePath {
   settings = '/settings',
+  config_file = '/config_file',
 
   // Bands
   bands_names = '/bands/names',

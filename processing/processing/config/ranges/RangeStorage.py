@@ -9,6 +9,7 @@ from processing.config.ranges.RangeExcel import RangeExcel
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
+from processing.utils.sanitize_excel_column import validate_excel_names
 
 
 class RangeStorage:
@@ -59,6 +60,8 @@ class RangeStorage:
         sheet = ExcelSheet.ranges
 
         names: List[str] = parser.get(sheet, RangeExcel.name_)
+        names = validate_excel_names(names)
+
         starts: List[Timestamp] = parser.get(sheet, RangeExcel.start)
         ends: List[Timestamp] = parser.get(sheet, RangeExcel.end)
 
