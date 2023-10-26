@@ -31,7 +31,6 @@ def main(
 ):
     """CLI entry point"""
 
-    global stored_env
     global stored_config
 
     try:
