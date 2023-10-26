@@ -47,18 +47,22 @@ def start_front():
     os.chdir(venv_path)
     os.chdir("..")
 
-    # Detect right command to execute
-    if platform.system() == "Windows":
-        command = "audio:front:windows"
-    else:
-        command = "audio:front"
-
     # Spawn audio and front modules
-    subprocess.run(
-        [
-            "pnpm",
-            command,
-            "--",
-            config.settings.audio_path,
-        ]
-    )
+    if platform.system() == "Windows":
+        subprocess.run(
+            [
+                "pnpm",
+                "audio:front:windows",
+                config.settings.audio_path,
+            ],
+            shell=True,
+        )
+    else:
+        subprocess.run(
+            [
+                "pnpm",
+                "audio:front",
+                "--",
+                config.settings.audio_path,
+            ],
+        )
