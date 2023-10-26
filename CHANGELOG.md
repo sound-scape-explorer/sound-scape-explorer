@@ -1,3 +1,10 @@
+## [11.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.0.1...v11.0.2) (2023-10-26)
+
+
+### Bug Fixes
+
+* **App:** Use common pnpm commands between operating systems ([caf7d20](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/caf7d20dbc263fef0c7300ef5b01d9b8c0e23d91))
+
 ## [11.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.0.0...v11.0.1) (2023-10-26)
 
 
