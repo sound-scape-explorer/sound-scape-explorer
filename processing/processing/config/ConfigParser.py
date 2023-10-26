@@ -8,8 +8,13 @@ from processing.config.ExcelSheet import ExcelSheet
 
 
 class ConfigParser:
-    def __init__(self, path: str) -> None:
+    def __init__(
+        self,
+        path: str,
+        folder: str,
+    ) -> None:
         self.path = self.validate(path)
+        self.folder = folder
         self.excel = ExcelFile(self.path)
 
     def validate(self, path: str) -> str:

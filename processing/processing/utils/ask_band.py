@@ -1,6 +1,6 @@
 from typing import List
 
-from InquirerPy import prompt
+from InquirerPy.resolver import prompt
 
 from processing.config.bands.BandConfig import BandConfig
 

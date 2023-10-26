@@ -2,7 +2,7 @@ from typing import Optional
 import numpy as np
 
 from h5py import Dataset, Group
-from processing.common.YamlEnv import YamlEnv
+from processing.config.Config import Config
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.interfaces import IMain
@@ -12,11 +12,13 @@ from processing.utils.ask_band import ask_band
 from processing.utils.ask_integration import ask_integration
 from processing.utils.ask_npy_path import ask_npy_path
 from processing.utils.print_action import print_action
-from processing.utils.print_no_mean_distances_matrices import print_no_mean_distances_matrices
+from processing.utils.print_no_mean_distances_matrices import (
+    print_no_mean_distances_matrices,
+)
 
 
 def export_computation_umaps(
-    env: YamlEnv,
+    config: Config,
     storage: Storage,
     callback: Optional[IMain] = None,
 ):
@@ -34,19 +36,21 @@ def export_computation_umaps(
     band = ask_band(bands)
     integration = ask_integration(integrations)
 
-    group_path = f"{StoragePath.computation_umap.value}/{band.name}/{integration.seconds}"
-    group: Group = storage.read(group_path) # type: ignore
+    group_path = (
+        f"{StoragePath.computation_umap.value}/{band.name}/{integration.seconds}"
+    )
+    group: Group = storage.read(group_path)  # type: ignore
 
     datasets = []
     length = group.__len__()
 
     for i in range(length):
-        dataset: Dataset = group.get(f"{i}") # type: ignore
+        dataset: Dataset = group.get(f"{i}")  # type: ignore
         datasets.append(np.array(dataset[:]))
 
     datasets_np = np.array(datasets)
 
-    npy_path = ask_npy_path(env)
+    npy_path = ask_npy_path(config)
     np.save(npy_path, datasets_np)
 
     print_action("Computation UMAPs export completed!", "end")

@@ -12,7 +12,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "sse = processing.cli:start",
+            "sse = processing.cli:start_processing",
+            "sse_front = processing.cli:start_front",
         ],
     },
 )

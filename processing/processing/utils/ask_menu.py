@@ -1,6 +1,6 @@
 from enum import Enum
 
-from InquirerPy import prompt
+from InquirerPy.resolver import prompt
 from InquirerPy.separator import Separator
 
 
