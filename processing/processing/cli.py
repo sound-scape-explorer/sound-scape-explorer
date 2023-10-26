@@ -62,7 +62,6 @@ def start_front():
             [
                 "pnpm",
                 "audio:front",
-                "--",
                 config.settings.audio_path,
             ],
         )
