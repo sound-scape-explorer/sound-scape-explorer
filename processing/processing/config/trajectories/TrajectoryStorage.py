@@ -9,6 +9,7 @@ from processing.config.trajectories.TrajectoryExcel import TrajectoryExcel
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
+from processing.utils.sanitize_excel_column import validate_excel_names
 
 
 class TrajectoryStorage:
@@ -69,6 +70,8 @@ class TrajectoryStorage:
         sheet = ExcelSheet.trajectories
 
         names = parser.get(sheet, TrajectoryExcel.name_)
+        names = validate_excel_names(names)
+
         starts: List[Timestamp] = parser.get(sheet, TrajectoryExcel.start)
         ends: List[Timestamp] = parser.get(sheet, TrajectoryExcel.end)
 
