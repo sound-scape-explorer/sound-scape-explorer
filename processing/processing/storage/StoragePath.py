@@ -473,3 +473,4 @@ class StoragePath(Enum):
     traced_timestamps = "/traced_timestamps"
     traced_relative_timestamps = "/traced_relative_timestamps"
     digested = "/digested"
+    config_file = "/config_file"

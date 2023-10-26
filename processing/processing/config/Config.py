@@ -9,6 +9,7 @@ from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.bands.BandStorage import BandStorage
+from processing.config.binary.BinaryStorage import BinaryStorage
 from processing.config.ConfigParser import ConfigParser
 from processing.config.digesters.DigesterConfig import DigesterConfig
 from processing.config.digesters.DigesterStorage import DigesterStorage
@@ -113,6 +114,7 @@ class Config:
         self.digesters = DigesterStorage.read_from_config(self.parser)
 
     def delete_from_storage(self, storage: Storage) -> None:
+        BinaryStorage.delete_from_storage(storage)
         SettingsStorage.delete_from_storage(storage)
 
         BandStorage.delete_from_storage(storage)
@@ -134,6 +136,7 @@ class Config:
     def write(self, storage: Storage) -> None:
         self.delete_from_storage(storage)
 
+        BinaryStorage.write_to_storage(self.path, storage)
         SettingsStorage.write_to_storage(self.settings, storage)
 
         BandStorage.write_to_storage(self.bands, storage)
@@ -155,7 +158,8 @@ class Config:
     @staticmethod
     def exists_in_storage(storage: Storage) -> bool:
         return (
-            SettingsStorage.exists_in_storage(storage)
+            BinaryStorage.exists_in_storage(storage)
+            and SettingsStorage.exists_in_storage(storage)
             and BandStorage.exists_in_storage(storage)
             and IntegrationStorage.exists_in_storage(storage)
             and RangeStorage.exists_in_storage(storage)

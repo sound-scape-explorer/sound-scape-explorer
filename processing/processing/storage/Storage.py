@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Optional, Union
 
+import numpy as np
 from h5py import Dataset, File
 
 from processing.storage.StorageCompression import StorageCompression
@@ -135,6 +136,19 @@ class Storage:
 
     def write_empty_group(self, path: str) -> None:
         self.__file.create_group(path)
+
+    def write_binary(
+        self,
+        path: str,
+        bytes: bytes,
+    ) -> None:
+        bytes_array = np.frombuffer(bytes, dtype="uint8")
+
+        self.__file.create_dataset(
+            name=path,
+            data=bytes_array,
+            compression=StorageCompression.gzip.value,
+        )
 
     def append(
         self,
