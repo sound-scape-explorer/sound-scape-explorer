@@ -14,8 +14,8 @@ WORKDIR /home/sse
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY prepare.py .
-RUN python3 prepare.py
+COPY dicts.py .
+RUN python3 dicts.py
 
 # Run
 FROM python:3.8-slim
