@@ -1,3 +1,16 @@
+# [11.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.1.0...v11.2.0) (2023-10-27)
+
+
+### Bug Fixes
+
+* **Processing/Binary:** Rename variables shadowing builtin names ([95efa87](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/95efa8707e5cf58dc0330db36e292fbe3936f9bb))
+* **Processing/CLI:** Use single purpose function to retrieve audio path from configuration file ([35a88aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/35a88aa2fef81d4fa6ea0d31f360a3ee2b2aed13))
+
+
+### Features
+
+* **Processing/CLI:** Add `sse_config` CLI to export .xlsx from .h5 ([751caa7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/751caa71d71906e1f77ce867c8f0d3cb89ce00d4))
+
 # [11.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.0.2...v11.1.0) (2023-10-26)
 
 
