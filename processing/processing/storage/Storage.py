@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional, Union
 
-import numpy as np
+import numpy
 from h5py import Dataset, File
 
 from processing.storage.StorageCompression import StorageCompression
@@ -127,7 +127,7 @@ class Storage:
         path: Union[StoragePath, str],
     ) -> None:
         try:
-            if type(path) is str:
+            if isinstance(path, str):
                 del self.__file[path]
             elif type(path) is StoragePath:
                 del self.__file[path.value]
@@ -142,7 +142,7 @@ class Storage:
         path: str,
         binary_data: bytes,
     ) -> None:
-        binary_array = np.frombuffer(binary_data, dtype="uint8")
+        binary_array = numpy.frombuffer(binary_data, dtype="uint8")
 
         self.__file.create_dataset(
             name=path,
