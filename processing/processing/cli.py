@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from processing.main import main
+from processing.utils.extract_config_from_storage import extract_config_from_storage
 from processing.utils.read_audio_path_from_config import read_audio_path_from_config
 
 
@@ -65,3 +66,9 @@ def start_front():
                 audio_path,
             ],
         )
+
+
+def extract_config():
+    update_python_path()
+    storage_path = parse_arguments()
+    extract_config_from_storage(storage_path)
