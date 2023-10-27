@@ -29,9 +29,12 @@ class BinaryStorage:
         version = pkg_resources.require("sse")[0].version
 
         with open(path, "rb") as f:
-            bytes = f.read()
+            binary_data = f.read()
 
-            storage.write_binary(path=BinaryStorage.config_file, bytes=bytes)
+            storage.write_binary(
+                path=BinaryStorage.config_file,
+                binary_data=binary_data,
+            )
 
             storage.create_attribute(
                 path=BinaryStorage.config_file,

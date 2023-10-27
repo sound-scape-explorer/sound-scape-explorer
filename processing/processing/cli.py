@@ -4,8 +4,9 @@ import platform
 import subprocess
 import sys
 
-from processing.config.Config import Config
 from processing.main import main
+from processing.utils.extract_config_from_storage import extract_config_from_storage
+from processing.utils.read_audio_path_from_config import read_audio_path_from_config
 
 
 def update_python_path():
@@ -40,7 +41,7 @@ def start_front():
     config_path = parse_arguments()
 
     # Parse config
-    config = Config(path=config_path)
+    audio_path = read_audio_path_from_config(config_path)
 
     # Navigate to SSE root directory
     venv_path = sys.exec_prefix
@@ -53,7 +54,7 @@ def start_front():
             [
                 "pnpm",
                 "audio:front:windows",
-                config.settings.audio_path,
+                audio_path,
             ],
             shell=True,
         )
@@ -62,6 +63,12 @@ def start_front():
             [
                 "pnpm",
                 "audio:front",
-                config.settings.audio_path,
+                audio_path,
             ],
         )
+
+
+def extract_config():
+    update_python_path()
+    storage_path = parse_arguments()
+    extract_config_from_storage(storage_path)

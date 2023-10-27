@@ -140,13 +140,13 @@ class Storage:
     def write_binary(
         self,
         path: str,
-        bytes: bytes,
+        binary_data: bytes,
     ) -> None:
-        bytes_array = np.frombuffer(bytes, dtype="uint8")
+        binary_array = np.frombuffer(binary_data, dtype="uint8")
 
         self.__file.create_dataset(
             name=path,
-            data=bytes_array,
+            data=binary_array,
             compression=StorageCompression.gzip.value,
         )
 

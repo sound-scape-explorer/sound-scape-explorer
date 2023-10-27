@@ -14,6 +14,7 @@ setup(
         "console_scripts": [
             "sse = processing.cli:start_processing",
             "sse_front = processing.cli:start_front",
+            "sse_config = processing.cli:extract_config",
         ],
     },
 )
