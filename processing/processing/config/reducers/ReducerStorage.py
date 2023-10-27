@@ -10,6 +10,7 @@ from processing.config.reducers.ReducerExcel import ReducerExcel
 from processing.constants import STRING_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.is_nan import is_nan
 
 
 class ReducerStorage:
@@ -94,6 +95,9 @@ class ReducerStorage:
 
         names = parser.get(sheet, ReducerExcel.name_)
         dimensions = parser.get(sheet, ReducerExcel.dimensions)
+
+        for d in dimensions:
+            assert is_nan(d) is False, f"{d} is not a valid dimension"
 
         bands_names_string = parser.get(sheet, ReducerExcel.bands)
 
