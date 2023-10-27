@@ -5,9 +5,12 @@ from pandas import pandas
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
+from processing.config.extractors.ExtractorDefaults import ExtractorDefaults
 from processing.config.extractors.ExtractorSheet import ExtractorSheet
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.validate_excel_booleans import validate_excel_booleans
+from processing.utils.validate_excel_ints import validate_excel_ints
 
 
 class ExtractorStorage:
@@ -68,9 +71,9 @@ class ExtractorStorage:
         df.columns = ["names", "offsets", "steps", "persists"]
 
         names = df["names"].tolist()
-        offsets = [int(o) for o in df["offsets"].tolist()]
-        steps = [int(s) for s in df["steps"].tolist()]
-        persists = [True if p == "yes" else False for p in df["persists"].tolist()]
+        offsets = validate_excel_ints(df["offsets"], ExtractorDefaults.offset)
+        steps = validate_excel_ints(df["steps"], ExtractorDefaults.step)
+        persists = validate_excel_booleans(df["persists"], ExtractorDefaults.persist)
 
         extractors = ExtractorConfig.reconstruct(
             names=names,

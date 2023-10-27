@@ -6,7 +6,7 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.integrations.IntegrationExcel import IntegrationExcel
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
-from processing.utils.sanitize_excel_column import validate_excel_names
+from processing.utils.validate_excel_names import validate_excel_names
 
 
 class IntegrationStorage:
