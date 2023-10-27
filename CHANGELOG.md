@@ -1,3 +1,10 @@
+# [11.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.2.0...v11.3.0) (2023-10-27)
+
+
+### Features
+
+* **App:** Add all variants of `install:all` ([cb1e433](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb1e433f03f44c54651e6d2df5acd8da7c6c5a81))
+
 # [11.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.1.0...v11.2.0) (2023-10-27)
 
 
