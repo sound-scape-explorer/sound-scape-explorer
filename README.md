@@ -14,7 +14,7 @@
 
 ## Documentation
 
-Please consult the [wiki](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki).
+Please consult the [wiki](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki#documentation).
 
 ## Project examples
 
