@@ -56,9 +56,8 @@ body:
   - type: textarea
     id: sample-storage
     attributes:
-      label: Add any relevant `.h5` storage.
-      description: Please attach a link to any relevant `.h5` storage.
-      render: shell
+      label: Additional storage file
+      description: Please attach a link to any relevant `.h5` storage file.
 
   - type: markdown
     attributes:
@@ -70,7 +69,7 @@ body:
   - type: input
     id: env-sse
     attributes:
-      label: What `SoundScapeExplorer` version are you using?
+      label: What SoundScapeExplorer version are you using?
       placeholder: "e.g. SSE 11.3.0"
     validations:
       required: true
@@ -108,6 +107,6 @@ body:
     id: env-node
     attributes:
       label: What Node.js version does it have installed?
-      placeholder: "e.g. v18.18.2"
+      placeholder: "e.g. Node v18.18.2"
     validations:
       required: true
