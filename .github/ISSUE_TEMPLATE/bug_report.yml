@@ -1,0 +1,113 @@
+name: 🐛 Bug Report
+description: If something isn't working the way you expect it to
+title: "Bug: "
+labels: ["needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thanks for reporting an issue!** Please make sure you read our [wiki](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki) first, then fill out the fields below.
+
+        If you’re unsure whether the issue you’re having is a bug, you can post in [Discussions](https://github.com/sound-scape-explorer/sound-scape-explorer/discussions) instead.
+
+  - type: textarea
+    id: bug-steps
+    attributes:
+      label: What are the steps to reproduce this issue?
+      placeholder: |
+        1. Make new project
+        2. Run `sse config.xlsx`
+        3. …
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: What happens?
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-expectation
+    attributes:
+      label: What were you expecting to happen?
+      description: A clear and concise description of what was supposed to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-logs
+    attributes:
+      label: Paste any relevant logs, error output, etc.
+      description: |
+        Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+        (If it’s long, please paste to https://gist.github.com/ and insert the link here.)
+      render: shell
+
+  - type: textarea
+    id: bug-context
+    attributes:
+      label: Additional context
+      description: Add any other context you can provide about the problem here.
+
+  - type: textarea
+    id: sample-storage
+    attributes:
+      label: Add any relevant `.h5` storage.
+      description: Please attach a link to any relevant `.h5` storage.
+      render: shell
+
+  - type: markdown
+    attributes:
+      value: |
+        ----
+
+        # Environment
+
+  - type: input
+    id: env-sse
+    attributes:
+      label: What `SoundScapeExplorer` version are you using?
+      placeholder: "e.g. SSE 11.3.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: env-os
+    attributes:
+      label: What OS are you seeing the problem on?
+      options:
+        - Windows
+        - macOS
+        - Ubuntu
+        - Other
+      multiple: true
+    validations:
+      required: true
+
+  - type: input
+    id: env-os-version
+    attributes:
+      label: What OS version does it have installed?
+      placeholder: "e.g. Debian 12"
+    validations:
+      required: true
+
+  - type: input
+    id: env-python
+    attributes:
+      label: What Python version does it have installed?
+      placeholder: "e.g. Python 3.10.13"
+    validations:
+      required: true
+
+  - type: input
+    id: env-node
+    attributes:
+      label: What Node.js version does it have installed?
+      placeholder: "e.g. v18.18.2"
+    validations:
+      required: true
