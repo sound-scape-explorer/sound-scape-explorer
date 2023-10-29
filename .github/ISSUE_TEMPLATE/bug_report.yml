@@ -1,7 +1,7 @@
 name: 🐛 Bug Report
 description: If something isn't working the way you expect it to
-title: "Bug: "
-labels: ["needs triage"]
+title: "bug: "
+labels: ["needs triage", "bug"]
 body:
   - type: markdown
     attributes:
