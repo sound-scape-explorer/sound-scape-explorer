@@ -9,12 +9,12 @@ yourself before reporting:
 - Have you followed everything on the
   [wiki](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki)?
 - Is your Python virtual environment active?
-- Did you download the latest version of SoundScapeExplorer?
+- Did you download the latest version of _SoundScapeExplorer_?
 - Have you checked the versions of Python, Node.js and pnpm?
 
 ## General issues
 
-- Are you using the latest version of SoundScapeExplorer? Run the [installing
+- Are you using the latest version of _SoundScapeExplorer_? Run the [installing
   or updating SoundScapeExplorer
   guide](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki/installing-or-updating-sse),
   then try again.
@@ -26,9 +26,9 @@ yourself before reporting:
 If you're sure you've followed all instructions and haven't made any of the
 common mistakes listed above, here are some guidelines for creating an issue:
 
-- Is this an issue with SoundScapeExplorer itself, or an installation error, or
-  are you looking for help with your configuration? The SoundScapeExplorer issue
-  tracker is for SoundScapeExplorer issues only. Try the [GitHub Discussions
+- Is this an issue with _SoundScapeExplorer_ itself, or an installation error, or
+  are you looking for help with your configuration? The _SoundScapeExplorer_ issue
+  tracker is for _SoundScapeExplorer_ issues only. Try the [GitHub Discussions
   tab](https://github.com/sound-scape-explorer/sound-scape-explorer/discussions),
   [Discord](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki/discord).
 - When you ask a question, make sure it's not [an XY
@@ -45,7 +45,7 @@ common mistakes listed above, here are some guidelines for creating an issue:
 ## In your issue, please
 
 - List all operating system names and versions involved in the issue, as well
-  as the version of SoundScapeExplorer, your Python version, your Node.js
+  as the version of _SoundScapeExplorer_, your Python version, your Node.js
   version, your pnpm version, and your browser name and version.
 - List any other software name/version you think may be related.
 - Link to any relevant files (such as `.h5` storage file).
@@ -68,7 +68,7 @@ Thanks!
 
 # Contribution Standards
 
-Don't be afraid to contribute to the development of SoundScapeExplorer! Even if
+Don't be afraid to contribute to the development of _SoundScapeExplorer_! Even if
 you don't think you've contributed much, it's still greatly appreciated.
 
 Please make sure you abide by these contribution standards so we can retain a
@@ -78,7 +78,7 @@ contribute to the code.
 - Follow all coding standards set by existing code in the repo. Using your own
   preferences over the established ones for the project just ends up making the
   code messy.
-- Use a commit message using [angular
+- Use a commit message using [angular commit
   guidelines](https://github.com/angular/angular/blob/main/CONTRIBUTING.md). The
   first line of commit messages should not be longer than 70 characters. Any
   subsequent lines should not be longer than 80 characters.
