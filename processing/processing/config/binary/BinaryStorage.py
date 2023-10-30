@@ -1,5 +1,3 @@
-import pkg_resources
-
 from processing.config.ConfigParser import ConfigParser
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
@@ -26,18 +24,10 @@ class BinaryStorage:
 
     @staticmethod
     def write_to_storage(path: str, storage: Storage) -> None:
-        version = pkg_resources.require("sse")[0].version
-
         with open(path, "rb") as f:
             binary_data = f.read()
 
             storage.write_binary(
                 path=BinaryStorage.config_file,
                 binary_data=binary_data,
-            )
-
-            storage.create_attribute(
-                path=BinaryStorage.config_file,
-                key="version",
-                value=version,
             )
