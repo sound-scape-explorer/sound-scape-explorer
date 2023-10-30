@@ -1,9 +1,11 @@
 from setuptools import find_packages, setup
 
+from constants import APP_NAME, CLI_NAME
+
 setup(
-    name="sse",
+    name=CLI_NAME,
     version="11.3.0",
-    description="Sound Scape Explorer",
+    description=APP_NAME,
     author="Bamdad Sabbagh",
     author_email="hi@bamdad.fr",
     packages=find_packages(),
@@ -12,9 +14,10 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "sse = processing.cli:start_processing",
-            "sse_front = processing.cli:start_front",
-            "sse_config = processing.cli:extract_config",
+            f"{CLI_NAME} = processing.cli:start_processing",
+            f"{CLI_NAME}_front = processing.cli:start_front",
+            f"{CLI_NAME}_config = processing.cli:extract_config",
+            f"{CLI_NAME}_vis = processing.cli:start_front",
         ],
     },
 )
