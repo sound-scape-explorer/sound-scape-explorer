@@ -1,3 +1,26 @@
+# [11.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.3.0...v11.4.0) (2023-10-30)
+
+
+### Bug Fixes
+
+* **Processing/Config:** Add fallback to default values for extractors parameters + Misc ([9a3fc02](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9a3fc02e81497cc4d29bb50d4f2bbcae710e45c1))
+* **Processing/Config:** Forbid reducers with no dimensions requested ([c5e90f9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c5e90f93ef5f6f09582bc536906d2748a859b465))
+* **Processing/Storage:** Improve string comparison ([5daa174](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5daa174cefd25ede8ca7cee7bc2cfaf3356f073e))
+* **Processing:** Print CUDA device in console ([7d1086d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7d1086dce7abf0bbb7ac670188187113ce60f943))
+* **Processing:** Replace `sse_front` with `sse_vis` CLI command ([1e9a2f7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1e9a2f76ec0471cea89babd950ed5105c3b067ed))
+
+
+### Features
+
+* **Config:** Add inline help + Improve UX ([34fd0b0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/34fd0b0548ce119646b8f985ce32981b61439a36))
+* **Processing/Storage:** Attach app version as attribute to every dataset ([577f658](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/577f6582b5c812b25e42024ad5d7e4366032c474))
+* **Processing:** Add constants for app name and CLI prefix for easy modification ([c8044b9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c8044b951f44235ddd1363c3f6f2a859e85071ce))
+
+
+### Performance Improvements
+
+* **Processing:** Move previous constants upper scope ([dfd9e2f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dfd9e2f01ed521a56f159a18aae6c05da64dd222))
+
 # [11.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.2.0...v11.3.0) (2023-10-27)
 
 

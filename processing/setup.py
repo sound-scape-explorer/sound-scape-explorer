@@ -4,7 +4,7 @@ from constants import APP_NAME, CLI_NAME
 
 setup(
     name=CLI_NAME,
-    version="11.3.0",
+    version="11.4.0",
     description=APP_NAME,
     author="Bamdad Sabbagh",
     author_email="hi@bamdad.fr",
