@@ -75,8 +75,10 @@ class VggExtractor(nn.Module, Extractor):
 
     def load_device(self):
         if cuda.is_available():
+            print("Using GPU")
             return "cuda"
         else:
+            print("Using CPU")
             return "cpu"
 
     def forward(

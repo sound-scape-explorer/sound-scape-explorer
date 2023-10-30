@@ -1,10 +1,10 @@
 from typing import List
 
+from constants import INT_NONE
 from processing.config.files.FileConfig import FileConfig
 from processing.config.files.FileStorage import FileStorage
 from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.config.sites.SiteConfig import SiteConfig
-from processing.constants import INT_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 

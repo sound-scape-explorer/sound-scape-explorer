@@ -1,11 +1,12 @@
 from typing import Any, Dict, List, Optional, Union
 
-import numpy as np
+import numpy
 from h5py import Dataset, File
 
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
+from processing.utils.get_version_from_setup import get_version_from_setup
 
 
 class Storage:
@@ -43,6 +44,14 @@ class Storage:
         path = str(path)
         return path
 
+    def __write_version_to_dataset(
+        self,
+        dataset: Dataset,
+    ) -> Dataset:
+        # Attach app version to all datasets
+        dataset.attrs["version"] = get_version_from_setup()
+        return dataset
+
     def write(
         self,
         path: Union[StoragePath, str],
@@ -69,6 +78,8 @@ class Storage:
         if attributes is not None:
             for k, v in attributes.items():
                 dataset.attrs[k] = v
+
+        self.__write_version_to_dataset(dataset)
 
     def create_attribute(
         self,
@@ -127,7 +138,7 @@ class Storage:
         path: Union[StoragePath, str],
     ) -> None:
         try:
-            if type(path) is str:
+            if isinstance(path, str):
                 del self.__file[path]
             elif type(path) is StoragePath:
                 del self.__file[path.value]
@@ -142,7 +153,7 @@ class Storage:
         path: str,
         binary_data: bytes,
     ) -> None:
-        binary_array = np.frombuffer(binary_data, dtype="uint8")
+        binary_array = numpy.frombuffer(binary_data, dtype="uint8")
 
         self.__file.create_dataset(
             name=path,
@@ -181,6 +192,8 @@ class Storage:
         if attributes is not None:
             for k, v in attributes.items():
                 dataset.attrs[k] = v
+
+        self.__write_version_to_dataset(dataset)
 
     @staticmethod
     def make_rectangular(
