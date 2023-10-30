@@ -2,13 +2,13 @@ import os
 
 import numpy as np
 
+from constants import STRING_NONE
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.settings.SettingsConfig import SettingsConfig
 from processing.config.settings.SettingsDefaults import SettingsDefaults
 from processing.config.settings.SettingsRow import SettingsRow
 from processing.config.settings.SettingsSheet import SettingsSheet
-from processing.constants import STRING_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 

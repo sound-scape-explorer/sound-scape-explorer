@@ -2,7 +2,7 @@ from typing import List
 
 from pandas import DataFrame
 
-from processing.constants import STRING_YES
+from constants import STRING_YES
 
 
 def validate_excel_booleans(df: DataFrame, default: bool) -> List[bool]:
