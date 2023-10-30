@@ -15,7 +15,6 @@ setup(
     entry_points={
         "console_scripts": [
             f"{CLI_NAME} = processing.cli:start_processing",
-            f"{CLI_NAME}_front = processing.cli:start_front",
             f"{CLI_NAME}_config = processing.cli:extract_config",
             f"{CLI_NAME}_vis = processing.cli:start_front",
         ],
