@@ -2,7 +2,7 @@
 
 <img alt="logo" width="200px" src="https://i.imgur.com/ZFnumtY.png">
 
-# [SoundScape Explorer](https://sound-scape-explorer.github.io/sound-scape-explorer/)
+# [_SoundScapeExplorer_](https://sound-scape-explorer.github.io/sound-scape-explorer/)
 
 **Process. Visualize. Explore.**
 
@@ -14,14 +14,17 @@
 
 ## Documentation
 
-Please consult the [wiki](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki#documentation).
+Please consult our [wiki](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki#documentation).
 
 ## Project examples
 
 - [coral reef light](https://github.com/sound-scape-explorer/sound-scape-explorer/tree/main/examples/campaigns/coral-reef-light)
 
-## Looking for more?
+## Future development
 
-Feel free to open an [issue](https://github.com/sound-scape-explorer/sound-scape-explorer/issues)
-or [Pull Request](https://github.com/sound-scape-explorer/sound-scape-explorer/pulls)
-if you have any questions or suggestions.
+To facilitate bug fixes and the addition of new features, we encourage users
+and researchers to share their feedback and suggestions by creating [new GitHub
+issues](https://github.com/sound-scape-explorer/sound-scape-explorer/issues/new/choose).
+Please also find our [contribution
+guidelines](https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/.github/CONTRIBUTING.md)
+Your input is invaluable for the continued improvement of _SoundScapeExplorer_!
