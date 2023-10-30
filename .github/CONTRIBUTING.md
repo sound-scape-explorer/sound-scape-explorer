@@ -16,7 +16,7 @@ yourself before reporting:
 
 - Are you using the latest version of _SoundScapeExplorer_? Run the [installing
   or updating SoundScapeExplorer
-  guide](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki/installing-or-updating-sse),
+  guide](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki/install-sse),
   then try again.
 - Has this issue been reported already? Please check the [list of open
   issues](https://github.com/sound-scape-explorer/sound-scape-explorer/issues).
