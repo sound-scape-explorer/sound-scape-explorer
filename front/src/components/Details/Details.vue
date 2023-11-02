@@ -69,7 +69,7 @@ watch(intervalDetailsRef, () => {
           <template #trigger>
             <n-button
               class="zoom"
-              size="tiny"
+              size="small"
               @click="() => setAudioFile(blockDetails)"
             >
               <template #icon>
@@ -207,6 +207,8 @@ watch(intervalDetailsRef, () => {
 
 .title {
   font-weight: bold;
+  display: flex;
+  align-items: center;
 }
 
 .file.container.details {
