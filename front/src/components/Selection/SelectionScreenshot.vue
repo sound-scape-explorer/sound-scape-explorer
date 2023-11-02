@@ -3,6 +3,7 @@ import {ImageOutline} from '@vicons/ionicons5';
 import html2canvas from 'html2canvas';
 import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
+import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
 
 import AppButton from '../AppButton/AppButton.vue';
 
@@ -17,17 +18,8 @@ async function screenshot() {
   const bandName = bandRef.value.name;
   const integrationSeconds = integrationRef.value.seconds;
 
-  canvas.style.display = 'none';
-  document.body.appendChild(canvas);
-
-  const image = canvas
-    .toDataURL('image/png')
-    .replace('image/png', 'image/octet-stream');
-  const anchor = document.createElement('a');
-  anchor.download = `SSE_${bandName}_${integrationSeconds}.png`;
-  anchor.href = image;
-  anchor.click();
-  canvas.remove();
+  const name = `SSE_${bandName}_${integrationSeconds}`;
+  triggerCanvasDownload(canvas, name);
 }
 </script>
 

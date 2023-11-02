@@ -1,4 +1,4 @@
-export const ALERT_TIMER = 5000;
+export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
 
@@ -40,3 +40,5 @@ export const SPECTROGRAM_COLOR_MAPS = [
 ];
 
 export const TRACE_WIDTH = 6;
+
+export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend';

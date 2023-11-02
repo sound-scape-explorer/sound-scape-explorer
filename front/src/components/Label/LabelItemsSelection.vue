@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
 import {NCheckbox, NCheckboxGroup} from 'naive-ui';
+import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 import {labelsRef} from 'src/hooks/useLabels';
 import {computed, ref, watch, watchEffect} from 'vue';
 
@@ -50,12 +51,23 @@ const updateReverse = () => {
 };
 
 watchEffect(updateReverse);
+
+const isActiveIdRef = computed<string>(() => {
+  const colorType = `by${props.property}`;
+
+  if (colorType !== colorsStore.colorType) {
+    return '';
+  }
+
+  return CURRENT_SCATTER_LEGEND_ID;
+});
 </script>
 
 <template>
   <n-checkbox-group
     v-model:value="selectionRef"
     class="checkboxes"
+    :id="isActiveIdRef"
   >
     <n-checkbox
       v-for="(item, index) in uniquesRef"

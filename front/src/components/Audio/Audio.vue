@@ -15,6 +15,7 @@ import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
 import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
 import {PLAYBACK_RATE} from 'src/constants';
+import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {audioHostRef} from 'src/hooks/useAudioHost';
 import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
@@ -31,6 +32,8 @@ import {triggerWavDownload} from '../../utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {useNotification} from '../AppNotification/useNotification';
+import {useDetails} from '../Details/useDetails';
+import {clickedRef} from '../Scatter/useScatterClick';
 import {currentAudioFileRef} from './useAudio';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
 
@@ -44,6 +47,7 @@ const waveformRef = ref<HTMLDivElement | null>(null);
 const spectrogramRef = ref<HTMLDivElement | null>(null);
 const isPlayingRef = ref<boolean>(false);
 const fftSizeRef = ref<number>(FFT_SIZE.default);
+const {intervalDateRef} = useDetails();
 
 const audioContextRef = computed<AudioContext | null>(() => {
   if (settingsRef.value === null) {
@@ -501,10 +505,55 @@ watch(currentAudioFileRef, load);
             :bordered="false"
             size="small"
           >
-            file
+            File
           </n-tag>
 
           {{ currentAudioFileRef.value?.file }}
+        </n-gi>
+      </n-grid>
+
+      <n-grid
+        :cols="1"
+        class="grid"
+        x-gap="12"
+        v-if="aggregatedSitesRef.value !== null && clickedRef.value !== null"
+      >
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            Site
+          </n-tag>
+
+          {{ aggregatedSitesRef.value[clickedRef.value].site }}
+        </n-gi>
+      </n-grid>
+
+      <n-grid
+        :cols="2"
+        class="grid"
+        x-gap="12"
+      >
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            Interval Index
+          </n-tag>
+
+          {{ clickedRef.value }}
+        </n-gi>
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            Interval Date
+          </n-tag>
+
+          {{ intervalDateRef }}
         </n-gi>
       </n-grid>
 
@@ -518,7 +567,7 @@ watch(currentAudioFileRef, load);
             :bordered="false"
             size="small"
           >
-            fftSize
+            FFT Size
           </n-tag>
 
           {{ fftSizeRef }}
@@ -528,7 +577,7 @@ watch(currentAudioFileRef, load);
             :bordered="false"
             size="small"
           >
-            speed %
+            Speed %
           </n-tag>
 
           {{ speedToPercentage(playbackRateRef, 2) }}
@@ -538,7 +587,7 @@ watch(currentAudioFileRef, load);
             :bordered="false"
             size="small"
           >
-            semitones
+            Semitones
           </n-tag>
 
           {{ speedToSemitones(playbackRateRef, 2) }}

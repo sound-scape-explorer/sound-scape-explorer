@@ -2,7 +2,6 @@
 import {DownloadOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
-import AppButton from 'src/components/AppButton/AppButton.vue';
 import {digestersRef} from 'src/hooks/useDigesters';
 import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
@@ -143,6 +142,37 @@ const handleExportClick = () => {
 
   csv.download('digested.csv');
 };
+
+const colorScales = ['RdBu', 'Blues'];
+const colorScaleRef = ref(colorScales[0]);
+const colorScalesOptionsRef = computed(() => {
+  return convertToNaiveSelectOptions(colorScales);
+});
+
+interface Range {
+  min: number | undefined;
+  max: number | undefined;
+}
+
+const ranges: Range[] = [
+  {min: undefined, max: undefined},
+  {min: -1, max: 1},
+  {min: 0, max: 1},
+  {min: 0, max: 100},
+];
+
+const rangeIndexRef = ref<number>(1);
+const rangesOptionsRef = computed(() => {
+  return ranges.map((range, index) => {
+    const label = `[${range.min ?? 'auto'}, ${range.max ?? 'auto'}]`;
+    const value = index;
+
+    return {
+      label: label,
+      value: value,
+    };
+  });
+});
 </script>
 
 <template>
@@ -170,7 +200,7 @@ const handleExportClick = () => {
 
           <n-button
             :disabled="!digestedRef.value?.isPairing"
-            class="button"
+            class="swap-button"
             size="tiny"
             @click="swap"
           >
@@ -187,6 +217,41 @@ const handleExportClick = () => {
             size="tiny"
           />
         </div>
+
+        <span>Colorscale</span>
+        <div class="form-additional-line">
+          <n-select
+            v-model:value="colorScaleRef"
+            :options="colorScalesOptionsRef"
+            placeholder="Colorscale..."
+            size="tiny"
+          />
+
+          <span>Range</span>
+          <div>
+            <n-select
+              v-model:value="rangeIndexRef"
+              :options="rangesOptionsRef"
+              placeholder="Range..."
+              size="tiny"
+            />
+          </div>
+        </div>
+
+        <span>Export</span>
+        <div class="form-additional-line">
+          <n-button
+            size="tiny"
+            @click="handleExportClick"
+          >
+            <template #icon>
+              <n-icon>
+                <download-outline />
+              </n-icon>
+            </template>
+            Export .csv
+          </n-button>
+        </div>
       </div>
 
       <AppHeatmap
@@ -194,6 +259,8 @@ const handleExportClick = () => {
         :title="titleRef"
         :labels="xRef"
         :values="valuesRef"
+        :colorscale="colorScaleRef"
+        :range="ranges[rangeIndexRef]"
       />
 
       <AppHeatmap2D
@@ -202,14 +269,9 @@ const handleExportClick = () => {
         :x="xRef"
         :y="yRef"
         :values="valuesRef"
+        :colorscale="colorScaleRef"
+        :range="ranges[rangeIndexRef]"
       />
-
-      <AppButton
-        :handle-click="handleExportClick"
-        text="Export"
-      >
-        <download-outline />
-      </AppButton>
     </div>
   </AppDraggable>
 </template>
@@ -227,7 +289,7 @@ const handleExportClick = () => {
 
 .form {
   display: grid;
-  grid-template-columns: 3rem 1fr;
+  grid-template-columns: 4.5rem 1fr;
   gap: 0.5rem;
   width: 100%;
 }
@@ -238,7 +300,13 @@ const handleExportClick = () => {
   gap: 0.5rem;
 }
 
-.button {
+.form-additional-line {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+  gap: 0.5rem;
+}
+
+.swap-button {
   transform: translateY(1px);
   width: 100%;
 }
