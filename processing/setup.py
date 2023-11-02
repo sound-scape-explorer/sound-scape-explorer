@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-from processing.constants import APP_NAME, CLI_NAME
+from env import APP_NAME, CLI_NAME
 
 setup(
     name=CLI_NAME,

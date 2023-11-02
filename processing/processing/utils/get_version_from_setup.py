@@ -1,6 +1,6 @@
 import pkg_resources
 
-from constants import CLI_NAME
+from env import CLI_NAME
 
 
 def get_version_from_setup() -> str:
