@@ -1,3 +1,10 @@
+## [11.4.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.4.0...v11.4.1) (2023-11-02)
+
+
+### Bug Fixes
+
+* **Processing:** Move constants file to `processing` module (bug introduced in 11.4.0) ([2227a6e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2227a6ecba319a4f0af035c31ec0c03dc6400bb4))
+
 # [11.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.3.0...v11.4.0) (2023-10-30)
 
 
