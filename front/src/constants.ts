@@ -40,3 +40,5 @@ export const SPECTROGRAM_COLOR_MAPS = [
 ];
 
 export const TRACE_WIDTH = 6;
+
+export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend';
