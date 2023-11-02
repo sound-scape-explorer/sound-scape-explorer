@@ -1,3 +1,19 @@
+# [11.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.4.2...v11.5.0) (2023-11-02)
+
+
+### Bug Fixes
+
+* **Front/Details:** Increase audio block listening buttons size ([f6f31b1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f6f31b1371c0d90e6fdf61ac455e2283b9b0b03d))
+* **Front:** Use shorter notification timer ([d535954](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d53595457f97aab8d7fae17872aeadd448f2d72f))
+
+
+### Features
+
+* **Front/Audio:** Add interval details ([5b85255](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5b85255c8dde8a9ba819fface1342ae6b9586535))
+* **Front/Details:** Autoplay audio if interval contains one file ([79fe696](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/79fe6968cff2126371c76b8c30c0db6d5035c522))
+* **Front/Digested:** Add dynamic color scales and multiple value ranges ([8da51a5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8da51a51f3eea612e8e08e4edf622306d5e445de))
+* **Front/Scatter:** Add new downloads as PNG and SVG with label legends ([e0c27d9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e0c27d9a49375f6e44d47674652495f797f85f6c))
+
 ## [11.4.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.4.1...v11.4.2) (2023-11-02)
 
 
