@@ -6,7 +6,7 @@ from h5py import Dataset, File
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
-from setup import get_version_from_setup
+from processing.utils.get_version_from_setup import get_version_from_setup
 
 
 class Storage:
