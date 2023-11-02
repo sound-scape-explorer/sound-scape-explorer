@@ -2,6 +2,7 @@
 import type {NotificationType} from 'naive-ui';
 import {useNotification} from 'naive-ui';
 import {watch} from 'vue';
+
 import {ALERT_TIMER} from '../../constants';
 import {appNotificationsStore} from './appNotificationsStore';
 
