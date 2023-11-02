@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import type {Data as PlotlyData, Layout} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
+import {useHeatmapLayout} from 'src/hooks/useHeatmapLayout';
 import {ref, watch} from 'vue';
 
 type Data = PlotlyData & {
@@ -15,6 +16,8 @@ interface Props {
   x: string[];
   y: string[];
   values: (number | null)[][];
+  colorscale: string;
+  range: {min: number | undefined; max: number | undefined};
 }
 
 const props = defineProps<Props>();
@@ -23,6 +26,7 @@ const props = defineProps<Props>();
  * State
  */
 
+const {generateLayout} = useHeatmapLayout();
 const divRef = ref<HTMLDivElement | null>(null);
 const dataRef = ref<Data[] | null>(null);
 const layoutRef = ref<Partial<Layout> | null>(null);
@@ -57,7 +61,7 @@ function refresh() {
   dataRef.value = [
     {
       type: 'heatmap',
-      colorscale: 'Blues',
+      colorscale: props.colorscale,
       reversescale: true,
       x: props.x,
       y: props.y,
@@ -66,34 +70,12 @@ function refresh() {
       hoverongaps: false,
       xgap: 10,
       ygap: 10,
+      zmin: props.range.min,
+      zmax: props.range.max,
     },
   ];
 
-  layoutRef.value = {
-    title: props.title,
-    paper_bgcolor: 'transparent',
-    plot_bgcolor: 'transparent',
-    clickmode: 'none',
-    showlegend: false,
-    width: 500,
-    height: 500,
-    xaxis: {
-      zeroline: false,
-      showgrid: false,
-      fixedrange: true,
-      ticks: '',
-      type: 'category',
-      tickmode: 'linear',
-    },
-    yaxis: {
-      zeroline: false,
-      showgrid: false,
-      fixedrange: true,
-      ticks: '',
-      type: 'category',
-      tickmode: 'linear',
-    },
-  };
+  layoutRef.value = generateLayout(props.title ?? '');
 }
 </script>
 
