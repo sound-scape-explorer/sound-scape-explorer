@@ -1,6 +1,5 @@
 from typing import List
 
-from constants import STRING_NONE
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
@@ -8,6 +7,7 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.ranges.RangeConfig import RangeConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.reducers.ReducerExcel import ReducerExcel
+from processing.constants import STRING_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.is_nan import is_nan

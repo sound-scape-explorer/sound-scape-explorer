@@ -1,4 +1,4 @@
-from constants import DOCKER_BASE_PATH
+from processing.constants import DOCKER_BASE_PATH
 
 
 def read_audio_path_in_docker(audio_path: str) -> str:
