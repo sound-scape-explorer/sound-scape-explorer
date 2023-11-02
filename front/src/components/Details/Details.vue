@@ -8,7 +8,7 @@ import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {convertTimestampToDateShort} from 'src/utils/convert-timestamp-to-date-short';
-import {computed} from 'vue';
+import {computed, watch} from 'vue';
 
 import {clickedRef} from '.././Scatter/useScatterClick';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -30,6 +30,19 @@ const dateEndRef = computed<Dayjs | null>(() => {
   }
 
   return intervalDateRef.value.add(integrationRef.value.seconds, 'seconds');
+});
+
+watch(intervalDetailsRef, () => {
+  if (intervalDetailsRef.value === null) {
+    return;
+  }
+
+  if (intervalDetailsRef.value.length !== 1) {
+    return;
+  }
+
+  const blockDetails = intervalDetailsRef.value[0];
+  setAudioFile(blockDetails);
 });
 </script>
 
