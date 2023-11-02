@@ -1,11 +1,11 @@
 from setuptools import find_packages, setup
 
-from processing.constants import APP_NAME, CLI_NAME
-
+# INFO: Upon changing `sse` name, change string value in
+# processing/utils/get_version_from_setup.py
 setup(
-    name=CLI_NAME,
+    name="sse",
     version="11.4.1",
-    description=APP_NAME,
+    description="SoundScapeExplorer",
     author="Bamdad Sabbagh",
     author_email="hi@bamdad.fr",
     packages=find_packages(),
@@ -14,9 +14,9 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            f"{CLI_NAME} = processing.cli:start_processing",
-            f"{CLI_NAME}_config = processing.cli:extract_config",
-            f"{CLI_NAME}_vis = processing.cli:start_front",
+            "sse = processing.cli:start_processing",
+            "sse_config = processing.cli:extract_config",
+            "sse_vis = processing.cli:start_front",
         ],
     },
 )
