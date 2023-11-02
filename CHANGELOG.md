@@ -1,3 +1,20 @@
+## [11.4.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.4.1...v11.4.2) (2023-11-02)
+
+
+### Bug Fixes
+
+* **Processing/Config:** Initialize python module for binary ([91038ab](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/91038ab7734b7a2ea390895de875c5d6674e3f41))
+* **Processing:** Make starter with installation for windows script correctly print line breaks ([416b8ae](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/416b8ae1293488632a588e9590550abce2cd097e))
+* **Processing:** Merge get_version_from_setup into setup file to fix import issues ([eb589cd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb589cdb6e262bbdf376680bc226f981e9b857ae))
+* **Processing:** Removing windows batch starter script with installation as it can have unwanted side effects ([658f2fd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/658f2fddc79577f2648935ad0b72b7f4d3777620))
+* **Processing:** Return to hardcoded cli name and add documentation about needed changes to modify this ([b0abbc1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b0abbc1b17cec94c56974de011bfd562a9331845))
+* **Processing:** Split setup env variables and app constants ([4deabb0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4deabb0ff13c70c6c2aa74aa8ac2ffeb1be3a685))
+
+
+### Performance Improvements
+
+* **Processing:** Add starter windows batch script with auto install of visualisation modules ([db5002d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/db5002dd37ee851981e1ca26626329f4341b39b1))
+
 ## [11.4.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.4.0...v11.4.1) (2023-11-02)
 
 
