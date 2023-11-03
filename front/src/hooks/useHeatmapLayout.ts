@@ -22,6 +22,7 @@ export function useHeatmapLayout() {
         zeroline: false,
         showgrid: false,
         fixedrange: true,
+        autorange: 'reversed',
         ticks: '',
         type: 'category',
         tickmode: 'linear',
