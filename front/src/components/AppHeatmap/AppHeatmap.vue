@@ -31,18 +31,10 @@ const dataRef = ref<Data[] | null>(null);
 const layoutRef = ref<Partial<Layout> | null>(null);
 
 /**
- * Lifecycles
- */
-
-refresh();
-watch([divRef, dataRef, layoutRef], render);
-watch(props, refresh);
-
-/**
  * Handlers
  */
 
-async function render() {
+const render = async () => {
   if (
     divRef.value === null ||
     dataRef.value === null ||
@@ -54,9 +46,9 @@ async function render() {
   await Plotly.newPlot(divRef.value, dataRef.value, layoutRef.value, {
     displaylogo: false,
   });
-}
+};
 
-function refresh() {
+const refresh = () => {
   dataRef.value = [
     {
       type: 'heatmap',
@@ -75,7 +67,15 @@ function refresh() {
   ];
 
   layoutRef.value = generateLayout(props.title ?? '');
-}
+};
+
+/**
+ * Lifecycles
+ */
+
+refresh();
+watch([divRef, dataRef, layoutRef], render);
+watch(props, refresh);
 </script>
 
 <template>
