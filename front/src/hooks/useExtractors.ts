@@ -48,7 +48,7 @@ export function useExtractors() {
 
   const selectExtractor = (index: number | null) => {
     if (index === null) {
-      extractorRef.value === null;
+      extractorRef.value = null;
       return;
     }
 
