@@ -1,4 +1,6 @@
-import {reactive, watchEffect} from 'vue';
+import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
+import {parseSelectionOption} from 'src/utils/parse-selection-option';
+import {computed, reactive, watchEffect} from 'vue';
 
 import {type Band, bandsRef} from './useBands';
 import {type Extractor, nnExtractorsRef} from './useExtractors';
@@ -37,6 +39,14 @@ interface ReducersRef {
 }
 
 export const reducersRef = reactive<ReducersRef>({
+  value: null,
+});
+
+interface ReducerSelectedRef {
+  value: Reducer['name'] | null;
+}
+
+export const reducerSelectedRef = reactive<ReducerSelectedRef>({
   value: null,
 });
 
@@ -95,7 +105,28 @@ export function useReducers() {
     )[0];
   };
 
+  const reducerOptionsRef = computed(() => {
+    if (reducersRef.value === null) {
+      return [];
+    }
+
+    const options = reducersRef.value.map(
+      (r) => `${r.index} - ${r.name} (${r.dimensions}d)`,
+    );
+    return convertToNaiveSelectOptions(options);
+  });
+
+  watchEffect(() => {
+    selectReducer(parseSelectionOption(reducerSelectedRef.value));
+  });
+
+  const resetReducer = () => {
+    reducerRef.value = null;
+    reducerSelectedRef.value = null;
+  };
+
   return {
-    selectReducer: selectReducer,
+    reducerOptionsRef: reducerOptionsRef,
+    resetReducer: resetReducer,
   };
 }

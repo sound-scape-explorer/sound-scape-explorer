@@ -15,12 +15,13 @@ import {useAggregatedIntervalDetails} from './useAggregatedIntervalDetails';
 import {useAggregatedLabels} from './useAggregatedLabels';
 import {useAggregatedSites} from './useAggregatedSites';
 import {useAggregatedTimestamps} from './useAggregatedTimestamps';
-import {bandRef} from './useBands';
-import {extractorRef} from './useExtractors';
-import {integrationRef} from './useIntegrations';
+import {bandRef, useBands} from './useBands';
+import {extractorRef, useExtractors} from './useExtractors';
+import {integrationRef, useIntegrations} from './useIntegrations';
 import {useLabels} from './useLabels';
 import {useReducedFeatures} from './useReducedFeatures';
-import {reducerRef} from './useReducers';
+import {reducerRef, useReducers} from './useReducers';
+import {useTrajectories} from './useTrajectories';
 
 interface IsSelectedRef {
   value: boolean;
@@ -31,19 +32,57 @@ export const isSelectedRef = reactive<IsSelectedRef>({
 });
 
 export function useSelection() {
-  const {readLabels} = useLabels();
-  const {readAggregatedFeatures} = useAggregatedFeatures();
-  const {readAggregatedIndicators} = useAggregatedIndicators();
-  const {readAggregatedTimestamps} = useAggregatedTimestamps();
-  const {readAggregatedSites} = useAggregatedSites();
-  const {readAggregatedIntervalDetails} = useAggregatedIntervalDetails();
-  const {readAggregatedLabels} = useAggregatedLabels();
-  const {readReducedFeatures} = useReducedFeatures();
-  const {generateColorScale} = useScatterColorScale();
-  const {buildSelection} = useLabelsSelection();
-  const {renderTraces} = useScatterTraces();
-  const {filterByMeta} = useScatterFilterMeta();
-  const {filterByTime} = useScatterFilterTime();
+  const {readLabels, resetLabels} = useLabels();
+  const {readAggregatedFeatures, resetAggregatedFeatures} =
+    useAggregatedFeatures();
+  const {readAggregatedIndicators, resetAggregatedIndicators} =
+    useAggregatedIndicators();
+  const {readAggregatedTimestamps, resetAggregatedTimestamps} =
+    useAggregatedTimestamps();
+  const {readAggregatedSites, resetAggregatedSites} = useAggregatedSites();
+  const {readAggregatedIntervalDetails, resetAggregatedIntervalDetails} =
+    useAggregatedIntervalDetails();
+  const {readAggregatedLabels, resetAggregatedLabels} = useAggregatedLabels();
+  const {readReducedFeatures, resetReducedFeatures} = useReducedFeatures();
+  const {generateColorScale, resetColorScale} = useScatterColorScale();
+  const {buildSelection, resetSelection} = useLabelsSelection();
+  const {resetTrajectories} = useTrajectories();
+  const {renderTraces, resetTraces} = useScatterTraces();
+  const {filterByMeta, resetFilterByMeta} = useScatterFilterMeta();
+  const {filterByTime, resetFilterByTime} = useScatterFilterTime();
+  const {resetBand} = useBands();
+  const {resetIntegration} = useIntegrations();
+  const {resetExtractor} = useExtractors();
+  const {resetReducer} = useReducers();
+
+  const unloadSelection = () => {
+    scatterLoadingTextRef.value = 'Unloading selection...';
+    scatterLoadingRef.value = true;
+
+    resetBand();
+    resetIntegration();
+    resetExtractor();
+    resetReducer();
+
+    resetLabels();
+    resetAggregatedFeatures();
+    resetAggregatedIndicators();
+    resetAggregatedTimestamps();
+    resetAggregatedSites();
+    resetAggregatedIntervalDetails();
+    resetAggregatedLabels();
+    resetReducedFeatures();
+
+    resetTrajectories();
+    resetSelection();
+    resetColorScale();
+    resetTraces();
+    resetFilterByMeta();
+    resetFilterByTime();
+
+    scatterLoadingRef.value = false;
+    isSelectedRef.value = false;
+  };
 
   watchEffect(async () => {
     if (
@@ -52,12 +91,10 @@ export function useSelection() {
       extractorRef.value === null ||
       reducerRef.value === null
     ) {
-      console.log('selected false');
       isSelectedRef.value = false;
       return;
     }
 
-    console.log('selected true');
     isSelectedRef.value = true;
     scatterLoadingRef.value = true;
 
@@ -93,7 +130,10 @@ export function useSelection() {
 
     renderTraces();
 
-    console.log('selection done');
     scatterLoadingRef.value = false;
   });
+
+  return {
+    unloadSelection: unloadSelection,
+  };
 }

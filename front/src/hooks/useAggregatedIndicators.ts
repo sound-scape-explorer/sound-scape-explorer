@@ -43,7 +43,12 @@ export function useAggregatedIndicators() {
     aggregatedIndicatorsRef.value = aggregated;
   };
 
+  const resetAggregatedIndicators = () => {
+    aggregatedIndicatorsRef.value = null;
+  };
+
   return {
     readAggregatedIndicators: readAggregatedIndicators,
+    resetAggregatedIndicators: resetAggregatedIndicators,
   };
 }

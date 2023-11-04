@@ -38,7 +38,12 @@ export function useAggregatedSites() {
     );
   };
 
+  const resetAggregatedSites = () => {
+    aggregatedSitesRef.value = null;
+  };
+
   return {
     readAggregatedSites: readAggregatedSites,
+    resetAggregatedSites: resetAggregatedSites,
   };
 }

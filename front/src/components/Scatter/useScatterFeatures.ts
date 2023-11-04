@@ -8,6 +8,9 @@ import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 export function useScatterFeatures() {
+  const size2d = 5;
+  const size3d = 3;
+
   const traceFeatures = (): Data[] => {
     if (
       labelsPropertiesRef.value === null ||
@@ -37,8 +40,7 @@ export function useScatterFeatures() {
       return [index / (colorScale.length - 1), filteredColor];
     });
 
-    const isThreeDimensional =
-      typeof reducedFeaturesRef.value[0]?.[2] !== 'undefined';
+    const isThreeDimensional = reducedFeaturesRef.value[0].length === 3;
     const scatterType = isThreeDimensional ? 'scatter3d' : 'scattergl';
 
     const indices = reducedFeaturesRef.value.map((_, i) => i);
@@ -61,7 +63,7 @@ export function useScatterFeatures() {
       text: texts,
       hovertemplate: hoverTemplate,
       marker: {
-        size: 3,
+        size: isThreeDimensional ? size3d : size2d,
         symbol: 'circle',
         opacity: alphaHighRef.value,
         color: indices,

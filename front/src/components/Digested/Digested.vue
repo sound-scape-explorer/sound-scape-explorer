@@ -2,6 +2,8 @@
 import {DownloadOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
+import {HeatmapColorScale} from 'src/common/HeatmapColorScale';
+import {type HeatmapRange, heatmapRanges} from 'src/common/HeatmapRange';
 import {digestersRef} from 'src/hooks/useDigesters';
 import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
@@ -10,8 +12,7 @@ import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-o
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';
 import AppHeatmap2D from '../AppHeatmap2D/AppHeatmap2D.vue';
-import {digestedRef} from './useDigested';
-import {useDigested} from './useDigested';
+import {type Digested, digestedRef, useDigested} from './useDigested';
 
 const {readDigested} = useDigested();
 
@@ -70,6 +71,28 @@ const xRef = ref<string[]>([]);
 const yRef = ref<string[]>([]);
 const valuesRef = ref<number[][]>([]);
 
+const updateRange = (digested: Digested) => {
+  // TODO: Extract to enum
+  switch (digested.digester.name) {
+    case 'silhouette':
+      colorScaleRef.value = HeatmapColorScale.RdBu;
+      rangeIndexRef.value = ranges.indexOf(heatmapRanges.min1to1);
+      break;
+    case 'overlap':
+      colorScaleRef.value = HeatmapColorScale.Blues;
+      rangeIndexRef.value = ranges.indexOf(heatmapRanges.min0to1);
+      break;
+    case 'contingency':
+      colorScaleRef.value = HeatmapColorScale.Blues;
+      rangeIndexRef.value = ranges.indexOf(heatmapRanges.min0to100);
+      break;
+    default:
+      colorScaleRef.value = HeatmapColorScale.RdBu;
+      rangeIndexRef.value = ranges.indexOf(heatmapRanges.auto);
+      break;
+  }
+};
+
 const update = () => {
   if (
     labelsPropertiesRef.value === null ||
@@ -79,6 +102,8 @@ const update = () => {
   ) {
     return;
   }
+
+  updateRange(digestedRef.value);
 
   titleRef.value = `${digestedRef.value.digester.name} - ${labelSelectedARef.value}`;
   const aIndex = labelsPropertiesRef.value.indexOf(labelSelectedARef.value);
@@ -143,25 +168,24 @@ const handleExportClick = () => {
   csv.download('digested.csv');
 };
 
-const colorScales = ['RdBu', 'Blues'];
-const colorScaleRef = ref(colorScales[0]);
+const colorScales: HeatmapColorScale[] = [
+  HeatmapColorScale.RdBu,
+  HeatmapColorScale.Blues,
+];
+
+const colorScaleRef = ref<HeatmapColorScale>(HeatmapColorScale.RdBu);
 const colorScalesOptionsRef = computed(() => {
   return convertToNaiveSelectOptions(colorScales);
 });
 
-interface Range {
-  min: number | undefined;
-  max: number | undefined;
-}
-
-const ranges: Range[] = [
-  {min: undefined, max: undefined},
-  {min: -1, max: 1},
-  {min: 0, max: 1},
-  {min: 0, max: 100},
+const ranges: HeatmapRange[] = [
+  heatmapRanges.auto,
+  heatmapRanges.min1to1,
+  heatmapRanges.min0to1,
+  heatmapRanges.min0to100,
 ];
 
-const rangeIndexRef = ref<number>(1);
+const rangeIndexRef = ref<number>(ranges.indexOf(heatmapRanges.min1to1));
 const rangesOptionsRef = computed(() => {
   return ranges.map((range, index) => {
     const label = `[${range.min ?? 'auto'}, ${range.max ?? 'auto'}]`;

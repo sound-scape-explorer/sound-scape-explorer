@@ -57,7 +57,12 @@ export function useScatterFilterTime() {
     renderTraces();
   };
 
+  const resetFilterByTime = () => {
+    pointsFilteredByTimeRef.value = null;
+  };
+
   return {
     filterByTime: filterByTime,
+    resetFilterByTime: resetFilterByTime,
   };
 }

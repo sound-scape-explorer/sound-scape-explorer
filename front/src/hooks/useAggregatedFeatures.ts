@@ -34,7 +34,12 @@ export function useAggregatedFeatures() {
     );
   };
 
+  const resetAggregatedFeatures = () => {
+    aggregatedFeaturesRef.value = null;
+  };
+
   return {
     readAggregatedFeatures: readAggregatedFeatures,
+    resetAggregatedFeatures: resetAggregatedFeatures,
   };
 }

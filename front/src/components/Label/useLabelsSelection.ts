@@ -47,8 +47,13 @@ export function useLabelsSelection() {
     filterByMeta();
   };
 
+  const resetSelection = () => {
+    labelsSelectionRef.value = null;
+  };
+
   return {
     buildSelection: buildSelection,
     updateSelection: updateSelection,
+    resetSelection: resetSelection,
   };
 }

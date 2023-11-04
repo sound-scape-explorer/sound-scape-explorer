@@ -35,7 +35,14 @@ export function useScatterTraces() {
     scatterTracesRef.value = traces;
   };
 
+  const resetTraces = () => {
+    scatterTracesRef.value = [];
+    tracedFusedRef.value = false;
+    tracedRef.value = [];
+  };
+
   return {
     renderTraces: renderTraces,
+    resetTraces: resetTraces,
   };
 }

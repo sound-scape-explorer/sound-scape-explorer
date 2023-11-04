@@ -124,7 +124,12 @@ export function useScatterColorScale() {
     renderTraces();
   });
 
+  const resetColorScale = () => {
+    colorScaleRef.value = null;
+  };
+
   return {
     generateColorScale: generateColorScale,
+    resetColorScale: resetColorScale,
   };
 }

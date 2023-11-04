@@ -46,7 +46,12 @@ export function useAggregatedIntervalDetails() {
       );
   };
 
+  const resetAggregatedIntervalDetails = () => {
+    aggregatedIntervalDetailsRef.value = null;
+  };
+
   return {
     readAggregatedIntervalDetails: readAggregatedIntervalDetails,
+    resetAggregatedIntervalDetails: resetAggregatedIntervalDetails,
   };
 }
