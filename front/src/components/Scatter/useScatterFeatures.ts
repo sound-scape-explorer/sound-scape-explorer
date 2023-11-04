@@ -40,8 +40,7 @@ export function useScatterFeatures() {
       return [index / (colorScale.length - 1), filteredColor];
     });
 
-    const isThreeDimensional =
-      typeof reducedFeaturesRef.value[0]?.[2] !== 'undefined';
+    const isThreeDimensional = reducedFeaturesRef.value[0].length === 3;
     const scatterType = isThreeDimensional ? 'scatter3d' : 'scattergl';
 
     const indices = reducedFeaturesRef.value.map((_, i) => i);
