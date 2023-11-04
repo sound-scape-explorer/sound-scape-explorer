@@ -31,8 +31,8 @@ export function useHeatmapData() {
       z: z,
       hovertemplate: '%{z:.3f}<extra>%{y}/%{x}</extra>',
       hoverongaps: false,
-      xgap: 10,
-      ygap: 10,
+      xgap: 1,
+      ygap: 1,
       zmin: zmin,
       zmax: zmax,
     };
