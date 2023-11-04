@@ -39,6 +39,7 @@ export const SPECTROGRAM_COLOR_MAPS = [
   'viridis',
 ];
 
-export const TRACE_WIDTH = 6;
+export const TRACE_WIDTH_3D = 6;
+export const TRACE_WIDTH_2D = 2;
 
 export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend';
