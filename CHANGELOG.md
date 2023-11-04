@@ -1,3 +1,30 @@
+# [11.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.5.0...v11.6.0) (2023-11-04)
+
+
+### Bug Fixes
+
+* **Front/Scatter:** Increase marker size for 2d datasets ([8839562](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/883956299ec222f203fe3969b6f898ae659a5435))
+* **Front/Selection:** Correctly reset extractor reference ([16b0a46](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/16b0a4681d3c78d40cdde4af8bfd3d0dd438b504))
+* **Front/Trajectories:** Fix 3D detection for traced data (fixes 2D trajectories) ([9c34660](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9c34660824b46fc48578b584fcf44d6b7204d1b0))
+
+
+### Features
+
+* **Front/AppHeatmap:** Add margins to figure layout and improve readability ([b4a982e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b4a982eeae5077d041eba9fc6853336cc1061f37))
+* **Front/AppHeatmap:** Autoswitch color scales and ranges on digester change ([db32df5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/db32df5fc57bbf2e28ab1ec77ac60b2c8bde4d3e))
+* **Front/AppHeatmap:** Reduce gap width for increased readability ([abfabf9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/abfabf94792dcc1c0ffcb71debd6f941520dfe51))
+* **Front/Selection:** Lock selection when done + Add selection unloader for clean state purge ([fef62e0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fef62e07085b5507ce6a67ef88644f92d56b2f79))
+
+
+### Performance Improvements
+
+* **Front/AppHeatmap2D:** Organize Vue file without hoisting ([0188033](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0188033af9d5b922c3d7692e0936a9526d1a964e))
+* **Front/AppHeatmap:** Merge data generation to common hook ([85a458f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/85a458fa3a7d19fbbae49c52d8f2a74035a520a9))
+* **Front/AppHeatmap:** Organize Vue file without hoisting ([c6dc1af](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c6dc1afe6ee63c5a420616a2cf8ecb39c554c3b6))
+* **Front/AppHeatmaps:** Improve rendering performance ([dedda49](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dedda49312eebadca8af6d535026cfa82b8a2f2b))
+* **Front/ScatterFeatures:** Improve 3D check ([b34b5ac](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b34b5ac18fc0eedbc5e386b630d54f916076d5f5))
+* **Front/Trajectories:** Merge default options + Adjust size for 2D traces ([1269719](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/126971915e522d07c2e822ff3fd45cf19f7862fa))
+
 # [11.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.4.2...v11.5.0) (2023-11-02)
 
 
