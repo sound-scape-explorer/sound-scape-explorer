@@ -4,9 +4,10 @@ import {TRACE_WIDTH} from 'src/constants';
 import type {TracedRef} from 'src/hooks/useTraced';
 
 import {getTracedColors} from './get-traced-colors';
+import {isTracedThreeDimensional} from './is-traced-three-dimensional';
 
 export function traceTrajectories(traceds: TracedRef['value']) {
-  const isThreeDimensional = typeof traceds[0].data?.[2] !== 'undefined';
+  const isThreeDimensional = isTracedThreeDimensional(traceds[0]);
   const scatterType = isThreeDimensional ? 'scatter3d' : 'scatter';
 
   const traces = [];

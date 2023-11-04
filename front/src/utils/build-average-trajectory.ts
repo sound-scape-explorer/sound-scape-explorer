@@ -1,10 +1,11 @@
 import type {Traced, TracedRef} from 'src/hooks/useTraced';
 
 import {interpolateArray} from './interpolate-array';
+import {isTracedThreeDimensional} from './is-traced-three-dimensional';
 import {sumArraysIndexWise} from './sum-arrays-index-wise';
 
 export function buildAverageTrajectory(traceds: TracedRef['value']) {
-  const isThreeDimensional = typeof traceds[0].data?.[2] !== 'undefined';
+  const isThreeDimensional = isTracedThreeDimensional(traceds[0]);
 
   interface IData {
     x: number[];
@@ -56,9 +57,9 @@ export function buildAverageTrajectory(traceds: TracedRef['value']) {
     }),
     z: isThreeDimensional
       ? sumArraysIndexWise({
-        arrays: data.map((data) => data.z),
-        doAveraging: true,
-      })
+          arrays: data.map((data) => data.z),
+          doAveraging: true,
+        })
       : undefined,
   };
 
