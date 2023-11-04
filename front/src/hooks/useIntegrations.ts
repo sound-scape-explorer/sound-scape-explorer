@@ -1,5 +1,8 @@
-import {reactive, watchEffect} from 'vue';
+import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
+import {parseSelectionOption} from 'src/utils/parse-selection-option';
+import {computed, reactive, watchEffect} from 'vue';
 
+import {reducerRef} from './useReducers';
 import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
@@ -22,6 +25,14 @@ export const integrationRef = reactive<IntegrationRef>({
 });
 
 export const integrationsRef = reactive<IntegrationsRef>({
+  value: null,
+});
+
+interface IntegrationSelectedRef {
+  value: Integration['name'] | null;
+}
+
+export const integrationSelectedRef = reactive<IntegrationSelectedRef>({
   value: null,
 });
 
@@ -55,7 +66,29 @@ export function useIntegrations() {
     )[0];
   };
 
+  const integrationOptionsRef = computed(() => {
+    if (reducerRef.value === null) {
+      return [];
+    }
+
+    const options = reducerRef.value.integrations.map(
+      (integration) =>
+        `${integration.index} - ${integration.name} (${integration.seconds} s)`,
+    );
+    return convertToNaiveSelectOptions(options);
+  });
+
+  watchEffect(() => {
+    selectIntegration(parseSelectionOption(integrationSelectedRef.value));
+  });
+
+  const resetIntegration = () => {
+    integrationRef.value = null;
+    integrationSelectedRef.value = null;
+  };
+
   return {
-    selectIntegration: selectIntegration,
+    integrationOptionsRef: integrationOptionsRef,
+    resetIntegration: resetIntegration,
   };
 }

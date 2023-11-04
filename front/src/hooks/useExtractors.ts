@@ -1,5 +1,8 @@
-import {reactive, watchEffect} from 'vue';
+import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
+import {parseSelectionOption} from 'src/utils/parse-selection-option';
+import {computed, reactive, watchEffect} from 'vue';
 
+import {reducerRef} from './useReducers';
 import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
@@ -43,6 +46,14 @@ export const nonNnExtractorsRef = reactive<NonNnExtractorsRef>({
   value: null,
 });
 
+interface ExtractorSelectedRef {
+  value: Extractor['name'] | null;
+}
+
+export const extractorSelectedRef = reactive<ExtractorSelectedRef>({
+  value: null,
+});
+
 export function useExtractors() {
   const nnExtractors = ['vgg'];
 
@@ -81,7 +92,28 @@ export function useExtractors() {
 
   watchEffect(readExtractors);
 
+  const extractorOptionsRef = computed(() => {
+    if (reducerRef.value === null) {
+      return [];
+    }
+
+    const options = reducerRef.value.nnExtractors.map(
+      (ex) => `${ex.index} - ${ex.name}`,
+    );
+    return convertToNaiveSelectOptions(options);
+  });
+
+  watchEffect(() => {
+    selectExtractor(parseSelectionOption(extractorSelectedRef.value));
+  });
+
+  const resetExtractor = () => {
+    extractorSelectedRef.value = null;
+    extractorRef.value = null;
+  };
+
   return {
-    selectExtractor: selectExtractor,
+    extractorOptionsRef: extractorOptionsRef,
+    resetExtractor: resetExtractor,
   };
 }

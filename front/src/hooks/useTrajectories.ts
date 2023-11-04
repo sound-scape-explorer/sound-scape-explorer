@@ -24,11 +24,11 @@ export const trajectoriesRef = reactive<TrajectoriesRef>({
 });
 
 interface SelectedTrajectoriesRef {
-  value: Trajectory[] | null;
+  value: Trajectory[];
 }
 
 export const selectedTrajectoriesRef = reactive<SelectedTrajectoriesRef>({
-  value: null,
+  value: [],
 });
 
 export function useTrajectories() {
@@ -60,7 +60,12 @@ export function useTrajectories() {
 
   watchEffect(readTrajectories);
 
+  const resetTrajectories = () => {
+    selectedTrajectoriesRef.value = [];
+  };
+
   return {
     selectTrajectories: selectTrajectories,
+    resetTrajectories: resetTrajectories,
   };
 }

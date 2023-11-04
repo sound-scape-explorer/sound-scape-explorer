@@ -1,14 +1,16 @@
 <script lang="ts" setup="">
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import SelectionExport from './SelectionExport.vue';
-import SelectionReducer from './SelectionReducer.vue';
+import SelectionMenu from './SelectionMenu.vue';
 import SelectionScreenshot from './SelectionScreenshot.vue';
+import SelectionUnload from './SelectionUnload.vue';
 </script>
 
 <template>
   <AppDraggable draggable-key="selection">
     <div class="container">
-      <SelectionReducer />
+      <SelectionMenu />
+      <SelectionUnload />
       <SelectionScreenshot />
       <SelectionExport />
     </div>

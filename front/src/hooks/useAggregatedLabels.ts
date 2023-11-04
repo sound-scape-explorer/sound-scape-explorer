@@ -36,7 +36,12 @@ export function useAggregatedLabels() {
     );
   };
 
+  const resetAggregatedLabels = () => {
+    aggregatedLabelsRef.value = null;
+  };
+
   return {
     readAggregatedLabels: readAggregatedLabels,
+    resetAggregatedLabels: resetAggregatedLabels,
   };
 }

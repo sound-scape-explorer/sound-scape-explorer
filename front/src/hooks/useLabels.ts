@@ -63,7 +63,15 @@ export function useLabels() {
       convertSlugsToColorTypes(properties);
   };
 
+  const resetLabels = () => {
+    labelsRef.value = null;
+    labelsSetsRef.value = null;
+    labelsPropertiesRef.value = null;
+    labelsPropertiesAsColorTypesRef.value = null;
+  };
+
   return {
     readLabels: readLabels,
+    resetLabels: resetLabels,
   };
 }

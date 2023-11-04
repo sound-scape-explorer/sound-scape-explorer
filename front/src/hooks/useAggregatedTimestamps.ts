@@ -37,7 +37,12 @@ export function useAggregatedTimestamps() {
       );
   };
 
+  const resetAggregatedTimestamps = () => {
+    aggregatedTimestampsRef.value = null;
+  };
+
   return {
     readAggregatedTimestamps: readAggregatedTimestamps,
+    resetAggregatedTimestamps: resetAggregatedTimestamps,
   };
 }

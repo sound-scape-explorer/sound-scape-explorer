@@ -76,7 +76,12 @@ export function useScatterFilterMeta() {
     renderTraces();
   };
 
+  const resetFilterByMeta = () => {
+    pointsFilteredByMetaRef.value = null;
+  };
+
   return {
     filterByMeta: filterByMeta,
+    resetFilterByMeta: resetFilterByMeta,
   };
 }

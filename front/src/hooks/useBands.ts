@@ -1,5 +1,8 @@
-import {reactive, watchEffect} from 'vue';
+import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
+import {parseSelectionOption} from 'src/utils/parse-selection-option';
+import {computed, reactive, watchEffect} from 'vue';
 
+import {reducerRef} from './useReducers';
 import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
@@ -23,6 +26,14 @@ export const bandRef = reactive<BandRef>({
 });
 
 export const bandsRef = reactive<BandsRef>({
+  value: null,
+});
+
+interface BandSelectedRef {
+  value: Band['name'] | null;
+}
+
+export const bandSelectedRef = reactive<BandSelectedRef>({
   value: null,
 });
 
@@ -50,7 +61,30 @@ export function useBands() {
 
   watchEffect(readBands);
 
+  const bandOptionsRef = computed(() => {
+    if (reducerRef.value === null) {
+      return [];
+    }
+
+    const options = reducerRef.value.bands.map(
+      (band) =>
+        `${band.index} - ${band.name} (${band.low} Hz - ${band.high} Hz)`,
+    );
+
+    return convertToNaiveSelectOptions(options);
+  });
+
+  watchEffect(() => {
+    selectBand(parseSelectionOption(bandSelectedRef.value));
+  });
+
+  const resetBand = () => {
+    bandRef.value = null;
+    bandSelectedRef.value = null;
+  };
+
   return {
-    selectBand: selectBand,
+    resetBand: resetBand,
+    bandOptionsRef: bandOptionsRef,
   };
 }

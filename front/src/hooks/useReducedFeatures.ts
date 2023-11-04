@@ -39,7 +39,12 @@ export function useReducedFeatures() {
     );
   };
 
+  const resetReducedFeatures = () => {
+    reducedFeaturesRef.value = null;
+  };
+
   return {
     readReducedFeatures: readReducedFeatures,
+    resetReducedFeatures: resetReducedFeatures,
   };
 }
