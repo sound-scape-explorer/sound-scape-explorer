@@ -1,4 +1,3 @@
-// TODO: Refine
 export enum KeyboardShortcut {
   import = 'i',
   settings = ',',
