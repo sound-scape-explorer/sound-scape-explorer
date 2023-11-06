@@ -1,3 +1,4 @@
+import {NN_EXTRACTORS} from 'src/constants';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {computed, reactive, watchEffect} from 'vue';
@@ -55,8 +56,6 @@ export const extractorSelectedRef = reactive<ExtractorSelectedRef>({
 });
 
 export function useExtractors() {
-  const nnExtractors = ['vgg'];
-
   const selectExtractor = (index: number | null) => {
     if (index === null) {
       extractorRef.value = null;
@@ -82,11 +81,11 @@ export function useExtractors() {
     );
 
     nnExtractorsRef.value = extractorsRef.value.filter((extractor) =>
-      nnExtractors.includes(extractor.name),
+      NN_EXTRACTORS.includes(extractor.name),
     );
 
     nonNnExtractorsRef.value = extractorsRef.value.filter(
-      (extractors) => !nnExtractors.includes(extractors.name),
+      (extractors) => !NN_EXTRACTORS.includes(extractors.name),
     );
   };
 
