@@ -54,12 +54,14 @@ class FileConfig:
         files = []
 
         for index, name in enumerate(names):
+            label = FileConfig.extract_labels(labels, index)
+
             file_ = FileConfig(
                 index=index,
                 name=name,
                 timestamp=timestamps[index],
                 site=sites[index],
-                labels=labels[index],
+                labels=label,
                 duration=durations[index],
                 audio_path=audio_path,
             )
@@ -86,3 +88,12 @@ class FileConfig:
 
     def get_interval_count(self, interval_step: int) -> int:
         return (self.end - self.start) // interval_step
+
+    @staticmethod
+    def extract_labels(labels: List[List[str]], index: int) -> List[str]:
+        try:
+            label = labels[index]
+        except IndexError:
+            label = []
+
+        return label
