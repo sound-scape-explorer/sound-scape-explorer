@@ -1,3 +1,10 @@
+## [11.6.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.6.0...v11.6.1) (2023-11-06)
+
+
+### Bug Fixes
+
+* **Front/Extractors:** Add `yamnet` as nn extractor (Add to constants file) ([410862d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/410862da1ba28ce2b73dc265366ebcaa2596caa0))
+
 # [11.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.5.0...v11.6.0) (2023-11-04)
 
 
