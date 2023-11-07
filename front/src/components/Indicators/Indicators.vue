@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import {DownloadOutline} from '@vicons/ionicons5';
-import {NCascader, NSelect, NSwitch} from 'naive-ui';
+import {NButton, NCascader, NIcon, NSelect, NSwitch} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
-import AppButton from 'src/components/AppButton/AppButton.vue';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppHistogram from 'src/components/AppHistogram/AppHistogram.vue';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
@@ -165,26 +164,33 @@ const handleExportClick = () => {
         />
       </div>
 
-      <n-switch
-        v-model:value="isByDateRef"
-        class="toggle"
-      >
-        <template #unchecked> by site</template>
-        <template #checked> by date</template>
-      </n-switch>
+      <div class="row">
+        <n-switch
+          v-model:value="isByDateRef"
+          class="toggle"
+        >
+          <template #unchecked>Sorted by site</template>
+          <template #checked>Sorted by date</template>
+        </n-switch>
+
+        <n-button
+          size="tiny"
+          @click="handleExportClick"
+        >
+          <template #icon>
+            <n-icon>
+              <download-outline />
+            </n-icon>
+          </template>
+          Export .csv
+        </n-button>
+      </div>
 
       <AppHistogram
         :values="chartDataRef.values"
         :labels="chartDataRef.labels"
         :colors="chartDataRef.colors"
       />
-
-      <AppButton
-        :handle-click="handleExportClick"
-        text="Export"
-      >
-        <download-outline />
-      </AppButton>
     </div>
   </AppDraggable>
 </template>
