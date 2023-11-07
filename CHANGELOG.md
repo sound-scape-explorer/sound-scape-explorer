@@ -1,3 +1,28 @@
+# [11.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.6.1...v11.7.0) (2023-11-07)
+
+
+### Bug Fixes
+
+* **Examples:** Update `coral-reef-light` configuration and storage files ([1519c9a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1519c9a78ec90bf9e40aff7052eb32fab392dc1f))
+* **Front/Audio:** Remove resolved FIX comments ([c4034e6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c4034e63d72987fce965556ecfda81e9898a982b))
+* **Front/Indicators:** Remove console output on CSV export ([8f63ecf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8f63ecfe28740639c009ef4b6126d15e919aa0a5))
+* **Front/KeyboardShortcut:** Remove resolved TODO ([0e6b790](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0e6b79023da29ba7e329ccc61a912480703ee910))
+* **Processing/CLI:** Paths on Windows containing a string are now supported ([b44b664](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b44b6644ee993297bd0a92efbdab129794d90429))
+* **Processing/TimelineWalker:** Reassign TODO comment as INFO ([6d35dc3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6d35dc3fcebc3fa7461c51ce1727a4bf740ce4d5))
+
+
+### Features
+
+* **Front/Indicators:** Replace histogram by scatter markers and lines ([fab053b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fab053be79eecbdb8f94a6ab79847e46c75b6608))
+* **Processing/Config:** Allow configuration files with no labels (dirty) ([5c6640d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5c6640d3e608e06a654b6930d2e8d4fcf4f9cbf6))
+
+
+### Performance Improvements
+
+* **Examples:** Rename coral reef files with light suffix ([6c5ba04](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6c5ba049f12a5b3af4ab0f7a3cf63ee8df19bce8))
+* **Front/Digested:** Extract heatmap presets keys to single enum file ([eb71bf0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb71bf03ac52e965c9265973113adc65ec15febe))
+* **Processing/Utils:** Write more pythonic string comparison ([20ea69c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/20ea69cdf6809988ba2cce3f052ae9107e822dc8))
+
 ## [11.6.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.6.0...v11.6.1) (2023-11-06)
 
 
