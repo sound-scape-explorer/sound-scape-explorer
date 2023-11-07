@@ -8,6 +8,7 @@ export function useHeatmapLayout() {
       plot_bgcolor: 'transparent',
       clickmode: 'none',
       showlegend: false,
+      // TODO: Make height and width dynamic, changeable by the user
       width: 600,
       height: 600,
       margin: {
