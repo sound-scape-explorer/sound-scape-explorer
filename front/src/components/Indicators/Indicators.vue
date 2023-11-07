@@ -113,8 +113,6 @@ const chartDataRef = computed<ChartData>(() => {
 });
 
 const handleExportClick = () => {
-  console.log('export', indicatorDataRef.value);
-
   const csv = new Csv();
   csv.addColumn('intervalIndex');
   csv.addColumn('site');
@@ -161,6 +159,7 @@ const handleExportClick = () => {
           @update:value="updateSites"
           size="small"
           class="cascader"
+          width="800"
         />
       </div>
 
