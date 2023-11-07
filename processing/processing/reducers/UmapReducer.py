@@ -1,7 +1,6 @@
 from typing import List
 
 from sklearn.preprocessing import robust_scale
-from umap.umap_ import UMAP
 
 from processing.reducers.AbstractReducer import AbstractReducer
 
@@ -20,6 +19,9 @@ class UmapReducer(AbstractReducer):
     ) -> List[List[float]]:
         features = self._validate_load()
         scaled_features = robust_scale(features)
+
+        # using dynamic import to prevent numba's AOT
+        from umap.umap_ import UMAP
 
         umap = UMAP(
             n_components=self._dimensions,
