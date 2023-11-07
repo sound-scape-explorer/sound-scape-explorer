@@ -1,5 +1,6 @@
 import type {Data, Layout} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
+import {PLOTLY_SIZE} from 'src/constants';
 import {ref, watch} from 'vue';
 
 export interface HistogramProps {
@@ -31,12 +32,14 @@ export function useAppHistogram(props: HistogramProps) {
   function refresh() {
     dataRef.value = [
       {
-        type: 'bar',
+        type: 'scatter',
+        mode: 'lines+markers',
         x: props.labels,
         y: props.values,
         hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
         marker: {
           color: props.colors,
+          size: 6,
         },
       },
     ];
@@ -45,11 +48,26 @@ export function useAppHistogram(props: HistogramProps) {
       title: props.title,
       plot_bgcolor: 'transparent',
       paper_bgcolor: 'transparent',
+      showlegend: false,
+      clickmode: 'none',
+      width: PLOTLY_SIZE,
+      height: PLOTLY_SIZE,
+      margin: {
+        l: 50,
+        r: 50,
+        b: 50,
+        t: 50,
+        pad: 1,
+      },
       xaxis: {
+        zeroline: false,
         fixedrange: true,
+        showticklabels: false,
       },
       yaxis: {
+        zeroline: false,
         fixedrange: true,
+        ticks: '',
       },
     };
   }

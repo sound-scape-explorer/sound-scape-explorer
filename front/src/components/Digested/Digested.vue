@@ -2,6 +2,7 @@
 import {DownloadOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
+import {DigesterHeatmap} from 'src/common/DigesterHeatmap';
 import {HeatmapColorScale} from 'src/common/HeatmapColorScale';
 import {type HeatmapRange, heatmapRanges} from 'src/common/HeatmapRange';
 import {digestersRef} from 'src/hooks/useDigesters';
@@ -72,17 +73,16 @@ const yRef = ref<string[]>([]);
 const valuesRef = ref<number[][]>([]);
 
 const updateRange = (digested: Digested) => {
-  // TODO: Extract to enum
   switch (digested.digester.name) {
-    case 'silhouette':
+    case DigesterHeatmap.silhouette:
       colorScaleRef.value = HeatmapColorScale.RdBu;
       rangeIndexRef.value = ranges.indexOf(heatmapRanges.min1to1);
       break;
-    case 'overlap':
+    case DigesterHeatmap.overlap:
       colorScaleRef.value = HeatmapColorScale.Blues;
       rangeIndexRef.value = ranges.indexOf(heatmapRanges.min0to1);
       break;
-    case 'contingency':
+    case DigesterHeatmap.contingency:
       colorScaleRef.value = HeatmapColorScale.Blues;
       rangeIndexRef.value = ranges.indexOf(heatmapRanges.min0to100);
       break;

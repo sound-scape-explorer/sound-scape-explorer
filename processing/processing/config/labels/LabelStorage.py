@@ -78,8 +78,12 @@ class LabelStorage:
 
     @staticmethod
     def write_to_storage(labels: List[LabelConfig], storage: Storage) -> None:
-        properties, sets = LabelConfig.flatten(labels)
+        if len(labels) == 0:
+            properties = []
+            sets_rectangular = []
+        else:
+            properties, sets = LabelConfig.flatten(labels)
+            sets_rectangular = storage.make_rectangular(sets, "")
 
         storage.write(path=LabelStorage.properties, data=properties)
-        sets_rectangular = storage.make_rectangular(sets, "")
         storage.write(path=LabelStorage.sets, data=sets_rectangular)

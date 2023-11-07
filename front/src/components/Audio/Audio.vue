@@ -138,10 +138,6 @@ async function load() {
       return;
     }
 
-    // FIX: This can fail on Windows runtime, can't reproduce yet...
-    // const ab = audioContextRef.value.createBuffer(1, 0, 44100);
-    // console.log(ab);
-
     const src = `${audioHostRef.value}${currentAudioFileRef.value.file}`;
 
     const response = await fetch(src);
@@ -185,8 +181,6 @@ async function load() {
 
 function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
   if (error) {
-    // FIX: This fails on Windows
-    // Failed to execute 'createBuffer' on 'BaseAudioContext': The number of frames (0) is less or equal tto the minimum bound (0)
     console.error(error);
     return;
   }

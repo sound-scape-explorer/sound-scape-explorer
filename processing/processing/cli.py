@@ -7,6 +7,7 @@ import sys
 from processing.main import main
 from processing.utils.extract_config_from_storage import extract_config_from_storage
 from processing.utils.read_audio_path_from_config import read_audio_path_from_config
+from processing.utils.trim_quotes_if_needed import trim_quotes_if_needed
 
 
 def update_python_path():
@@ -50,22 +51,12 @@ def start_front():
 
     # Spawn audio and front modules
     if platform.system() == "Windows":
-        subprocess.run(
-            [
-                "pnpm",
-                "audio:front:windows",
-                audio_path,
-            ],
-            shell=True,
-        )
+        audio_path = trim_quotes_if_needed(audio_path)
+        command = ["pnpm", "audio:front", audio_path]
+        subprocess.run(command, shell=True)
     else:
-        subprocess.run(
-            [
-                "pnpm",
-                "audio:front",
-                audio_path,
-            ],
-        )
+        command = ["pnpm", "audio:front", audio_path]
+        subprocess.run(command)
 
 
 def extract_config():

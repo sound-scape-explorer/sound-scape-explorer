@@ -51,7 +51,12 @@ class FileStorage:
         sites = storage.convert_dataset_to_string_list(sites_dataset)
 
         labels_dataset = storage.read(FileStorage.labels)
-        labels = list(list(sublist) for sublist in labels_dataset.asstr()[:])
+
+        # INFO: As labels can be empty, this check is needed
+        if labels_dataset.shape[1] == 0:
+            labels = []
+        else:
+            labels = list(list(sublist) for sublist in labels_dataset.asstr()[:])
 
         durations = storage.read(FileStorage.durations)
 

@@ -218,7 +218,7 @@ class TimelineWalker:
         timeline: Timeline,
     ):
         # Removing extracted data
-        # TODO: this lefts over the last operation in memory
+        # INFO: this lefts over the last operation in memory
         if self.cfi is not None and f != self.cfi:
             del self.extracted[self.cfi]
 

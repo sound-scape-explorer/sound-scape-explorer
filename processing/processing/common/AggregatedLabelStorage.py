@@ -51,7 +51,13 @@ class AggregatedLabelStorage:
         )
 
         aggregated_values = storage.read(path)
-        aggregated_values_strings = aggregated_values.asstr()
+
+        # INFO: As labels can be empty, this check is needed
+        if aggregated_values.shape[1] == 0:
+            aggregated_values_strings = []
+        else:
+            aggregated_values_strings = aggregated_values.asstr()
+
         aggregated_values_np = np.array(aggregated_values_strings)
 
         for index, values in enumerate(aggregated_values_np.T):
