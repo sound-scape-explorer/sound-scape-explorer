@@ -1,3 +1,4 @@
+import {PLOTLY_SIZE} from 'src/constants';
 import {reactive} from 'vue';
 
 interface HeatmapWidthRef {
@@ -5,7 +6,7 @@ interface HeatmapWidthRef {
 }
 
 export const heatmapWidthRef = reactive<HeatmapWidthRef>({
-  value: 600,
+  value: PLOTLY_SIZE,
 });
 
 interface HeatmapHeightRef {
@@ -13,5 +14,5 @@ interface HeatmapHeightRef {
 }
 
 export const heatmapHeightRef = reactive<HeatmapHeightRef>({
-  value: 600,
+  value: PLOTLY_SIZE,
 });
