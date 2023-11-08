@@ -57,6 +57,10 @@ export async function load(file: File) {
   return h5;
 }
 
+export async function close() {
+  h5.close();
+}
+
 export async function readSecondsFromIntegration(
   file: File,
   integrationName: string,
