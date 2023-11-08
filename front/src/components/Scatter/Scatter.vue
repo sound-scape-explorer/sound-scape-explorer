@@ -1,28 +1,18 @@
 <script lang="ts" setup>
 import Plotly, {
-  type Config,
-  type DownloadImgopts,
   type Layout,
   type PlotlyHTMLElement,
   type PlotMouseEvent,
 } from 'plotly.js-dist-min';
-import {bandRef} from 'src/hooks/useBands';
-import {integrationRef} from 'src/hooks/useIntegrations';
-import {reducerRef} from 'src/hooks/useReducers';
-import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
-import {useLabelScreenshot} from '../Label/useLabelScreenshot';
 import {useScatterClick} from './useScatterClick';
+import {useScatterConfig} from './useScatterConfig';
 import {scatterTracesRef, useScatterTraces} from './useScatterTraces';
-
-interface ScatterExportOptions extends DownloadImgopts {
-  scale?: number;
-}
 
 const divRef = ref<PlotlyHTMLElement | null>(null);
 const {handleClick} = useScatterClick();
-const {screenshotLabel} = useLabelScreenshot();
+const {config} = useScatterConfig();
 
 useScatterTraces();
 
@@ -50,84 +40,6 @@ const layoutRef = computed<Partial<Layout> | null>(() => {
 
   return layout;
 });
-
-const scatterWidth = 800;
-const scatterHeight = 600;
-const scatterScale = 4;
-
-const scatterOptions: ScatterExportOptions = {
-  filename: 'test',
-  width: scatterWidth,
-  height: scatterHeight,
-  format: 'svg',
-  scale: scatterScale,
-};
-
-const config: Partial<Config> = {
-  displaylogo: false,
-  responsive: true,
-  modeBarButtonsToAdd: [
-    {
-      name: 'download-png',
-      title: 'Download as PNG with legend',
-      icon: Plotly.Icons.camera,
-      click: async (gd) => {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.width = scatterWidth * scatterScale;
-        canvas.height = scatterHeight * scatterScale;
-
-        if (context === null) {
-          return;
-        }
-
-        const scatterData = await Plotly.toImage(gd, scatterOptions);
-        const scatterImage = new Image();
-        scatterImage.src = scatterData;
-        scatterImage.onload = () => {
-          context.drawImage(scatterImage, 0, 0);
-        };
-
-        const legendCanvas = await screenshotLabel();
-        if (legendCanvas === null) {
-          await Plotly.downloadImage(gd, {...scatterOptions, format: 'png'});
-          return;
-        }
-
-        const legendContext = legendCanvas?.getContext('2d');
-        if (legendContext === null) {
-          return;
-        }
-
-        const legendScale = 0.5;
-        const legendWidth =
-          legendContext.canvas.width * scatterScale * legendScale;
-        const legendHeight =
-          legendContext.canvas.height * scatterScale * legendScale;
-
-        context.drawImage(
-          legendCanvas,
-          canvas.width - legendWidth,
-          canvas.height - legendHeight,
-          legendWidth,
-          legendHeight,
-        );
-
-        const exportName = `SSE-${reducerRef.value?.name}-${bandRef.value?.name}-${integrationRef.value?.name}`;
-        triggerCanvasDownload(canvas, exportName);
-      },
-    },
-    {
-      name: 'download-svg',
-      title: 'Download as SVG without legend',
-      icon: Plotly.Icons['camera-retro'],
-      click: async (gd) => {
-        await Plotly.downloadImage(gd, scatterOptions);
-      },
-    },
-  ],
-  modeBarButtonsToRemove: ['toImage'],
-};
 
 const isFirstRenderedRef = ref<boolean>(false);
 
