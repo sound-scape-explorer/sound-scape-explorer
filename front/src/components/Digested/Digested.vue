@@ -12,7 +12,7 @@ import {computed, ref, unref, watch, watchEffect} from 'vue';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';
-import AppHeatmap2D from '../AppHeatmap2D/AppHeatmap2D.vue';
+import AppHeatmap2d from '../AppHeatmap2d/AppHeatmap2d.vue';
 import {type Digested, digestedRef, useDigested} from './useDigested';
 
 const {readDigested} = useDigested();
@@ -287,7 +287,7 @@ const rangesOptionsRef = computed(() => {
         :range="ranges[rangeIndexRef]"
       />
 
-      <AppHeatmap2D
+      <AppHeatmap2d
         v-if="digestedRef.value?.isPairing"
         :title="titleRef"
         :x="xRef"
