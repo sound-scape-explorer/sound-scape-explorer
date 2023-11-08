@@ -1,5 +1,7 @@
 import {type Layout} from 'plotly.js-dist-min';
 
+import {heatmapHeightRef, heatmapWidthRef} from './useHeatmapSize';
+
 export function useHeatmapLayout() {
   const generateLayout = (title: string): Partial<Layout> => {
     const layout: Partial<Layout> = {
@@ -9,8 +11,8 @@ export function useHeatmapLayout() {
       clickmode: 'none',
       showlegend: false,
       // TODO: Make height and width dynamic, changeable by the user
-      width: 600,
-      height: 600,
+      width: heatmapWidthRef.value,
+      height: heatmapHeightRef.value,
       margin: {
         l: 100,
         r: 100,
