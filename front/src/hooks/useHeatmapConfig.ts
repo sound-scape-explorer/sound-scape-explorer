@@ -1,5 +1,6 @@
 import {type Config} from 'plotly.js-dist-min';
 import {digestedRef} from 'src/components/Digested/useDigested';
+import {createPlotlyExportPngButtonDigested} from 'src/utils/create-plotly-export-png-button-digested';
 import {
   createPlotlyExportSvgButton,
   type PlotlyExportOptions,
@@ -27,7 +28,10 @@ export function useHeatmapConfig() {
     const config: Partial<Config> = {
       displaylogo: false,
       responsive: true,
-      modeBarButtonsToAdd: [createPlotlyExportSvgButton(optionsRef.value)],
+      modeBarButtonsToAdd: [
+        createPlotlyExportPngButtonDigested(optionsRef.value),
+        createPlotlyExportSvgButton(optionsRef.value),
+      ],
       modeBarButtonsToRemove: ['toImage'],
     };
 

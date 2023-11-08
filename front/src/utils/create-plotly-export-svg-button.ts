@@ -11,6 +11,8 @@ export interface PlotlyExportOptions extends DownloadImgopts {
 export function createPlotlyExportSvgButton(
   options: PlotlyExportOptions,
 ): ModeBarButtonAny {
+  options.format = 'svg';
+
   return {
     name: 'download-svg',
     title: 'Download as SVG',
