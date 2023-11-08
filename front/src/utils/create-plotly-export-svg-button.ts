@@ -13,7 +13,7 @@ export function createPlotlyExportSvgButton(
 ): ModeBarButtonAny {
   return {
     name: 'download-svg',
-    title: 'Download as SVG without legend',
+    title: 'Download as SVG',
     icon: Plotly.Icons['camera-retro'],
     click: async (gd: PlotlyHTMLElement) => {
       await Plotly.downloadImage(gd, options);
