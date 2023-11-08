@@ -1,11 +1,12 @@
 <script lang="ts" setup="">
-import {DownloadOutline, RepeatOutline} from '@vicons/ionicons5';
+import {DownloadOutline, RepeatOutline, ResizeOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
 import {DigesterHeatmap} from 'src/common/DigesterHeatmap';
 import {HeatmapColorScale} from 'src/common/HeatmapColorScale';
 import {type HeatmapRange, heatmapRanges} from 'src/common/HeatmapRange';
 import {digestersRef} from 'src/hooks/useDigesters';
+import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
@@ -197,6 +198,21 @@ const rangesOptionsRef = computed(() => {
     };
   });
 });
+
+const resize1by1 = () => {
+  heatmapWidthRef.value = 600;
+  heatmapHeightRef.value = 600;
+};
+
+const resize4by3 = () => {
+  heatmapWidthRef.value = 800;
+  heatmapHeightRef.value = 600;
+};
+
+const resize16by9 = () => {
+  heatmapWidthRef.value = 1920 * 0.5;
+  heatmapHeightRef.value = 1080 * 0.5;
+};
 </script>
 
 <template>
@@ -275,6 +291,45 @@ const rangesOptionsRef = computed(() => {
             </template>
             Export .csv
           </n-button>
+
+          <span>Resize</span>
+          <div class="resize-row">
+            <n-button
+              size="tiny"
+              @click="resize16by9"
+            >
+              <template #icon>
+                <n-icon>
+                  <resize-outline />
+                </n-icon>
+              </template>
+              16:9
+            </n-button>
+
+            <n-button
+              size="tiny"
+              @click="resize4by3"
+            >
+              <template #icon>
+                <n-icon>
+                  <resize-outline />
+                </n-icon>
+              </template>
+              4:3
+            </n-button>
+
+            <n-button
+              size="tiny"
+              @click="resize1by1"
+            >
+              <template #icon>
+                <n-icon>
+                  <resize-outline />
+                </n-icon>
+              </template>
+              1:1
+            </n-button>
+          </div>
         </div>
       </div>
 
@@ -337,5 +392,11 @@ const rangesOptionsRef = computed(() => {
 
 .title {
   font-weight: bold;
+}
+
+.resize-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>

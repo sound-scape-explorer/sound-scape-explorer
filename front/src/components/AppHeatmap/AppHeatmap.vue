@@ -4,6 +4,7 @@ import Plotly from 'plotly.js-dist-min';
 import {useHeatmapConfig} from 'src/hooks/useHeatmapConfig';
 import {type HeatmapData, useHeatmapData} from 'src/hooks/useHeatmapData';
 import {useHeatmapLayout} from 'src/hooks/useHeatmapLayout';
+import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {ref, watch} from 'vue';
 
 /**
@@ -75,6 +76,7 @@ const refresh = () => {
 refresh();
 watch([divRef, dataRef, layoutRef], render);
 watch(props, refresh);
+watch([heatmapWidthRef, heatmapHeightRef], refresh);
 </script>
 
 <template>
