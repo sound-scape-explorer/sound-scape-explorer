@@ -6,6 +6,9 @@ import Plotly, {
   type PlotlyHTMLElement,
   type PlotMouseEvent,
 } from 'plotly.js-dist-min';
+import {bandRef} from 'src/hooks/useBands';
+import {integrationRef} from 'src/hooks/useIntegrations';
+import {reducerRef} from 'src/hooks/useReducers';
 import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
@@ -110,7 +113,8 @@ const config: Partial<Config> = {
           legendHeight,
         );
 
-        triggerCanvasDownload(canvas, 'test');
+        const exportName = `SSE-${reducerRef.value?.name}-${bandRef.value?.name}-${integrationRef.value?.name}`;
+        triggerCanvasDownload(canvas, exportName);
       },
     },
     {
