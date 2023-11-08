@@ -96,7 +96,7 @@ const config: Partial<Config> = {
           return;
         }
 
-        const labelScale = 1;
+        const labelScale = 0.5;
         const labelWidth =
           labelContext.canvas.width * scatterScale * labelScale;
         const labelHeight =
