@@ -209,6 +209,11 @@ const resize4by3 = () => {
   heatmapHeightRef.value = 600;
 };
 
+const resize16by10 = () => {
+  heatmapWidthRef.value = 1280 * 0.7;
+  heatmapHeightRef.value = 800 * 0.7;
+};
+
 const resize16by9 = () => {
   heatmapWidthRef.value = 1920 * 0.5;
   heatmapHeightRef.value = 1080 * 0.5;
@@ -296,14 +301,14 @@ const resize16by9 = () => {
           <div class="resize-row">
             <n-button
               size="tiny"
-              @click="resize16by9"
+              @click="resize1by1"
             >
               <template #icon>
                 <n-icon>
                   <resize-outline />
                 </n-icon>
               </template>
-              16:9
+              1:1
             </n-button>
 
             <n-button
@@ -320,14 +325,26 @@ const resize16by9 = () => {
 
             <n-button
               size="tiny"
-              @click="resize1by1"
+              @click="resize16by10"
             >
               <template #icon>
                 <n-icon>
                   <resize-outline />
                 </n-icon>
               </template>
-              1:1
+              16:10
+            </n-button>
+
+            <n-button
+              size="tiny"
+              @click="resize16by9"
+            >
+              <template #icon>
+                <n-icon>
+                  <resize-outline />
+                </n-icon>
+              </template>
+              16:9
             </n-button>
           </div>
         </div>
