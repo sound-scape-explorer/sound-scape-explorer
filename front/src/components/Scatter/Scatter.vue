@@ -85,29 +85,29 @@ const config: Partial<Config> = {
           context.drawImage(scatterImage, 0, 0);
         };
 
-        const labelCanvas = await screenshotLabel();
-        if (labelCanvas === null) {
+        const legendCanvas = await screenshotLabel();
+        if (legendCanvas === null) {
           await Plotly.downloadImage(gd, {...scatterOptions, format: 'png'});
           return;
         }
 
-        const labelContext = labelCanvas?.getContext('2d');
-        if (labelContext === null) {
+        const legendContext = legendCanvas?.getContext('2d');
+        if (legendContext === null) {
           return;
         }
 
-        const labelScale = 0.5;
-        const labelWidth =
-          labelContext.canvas.width * scatterScale * labelScale;
-        const labelHeight =
-          labelContext.canvas.height * scatterScale * labelScale;
+        const legendScale = 0.5;
+        const legendWidth =
+          legendContext.canvas.width * scatterScale * legendScale;
+        const legendHeight =
+          legendContext.canvas.height * scatterScale * legendScale;
 
         context.drawImage(
-          labelCanvas,
-          canvas.width - labelWidth,
-          canvas.height - labelHeight,
-          labelWidth,
-          labelHeight,
+          legendCanvas,
+          canvas.width - legendWidth,
+          canvas.height - legendHeight,
+          legendWidth,
+          legendHeight,
         );
 
         triggerCanvasDownload(canvas, 'test');
