@@ -9,7 +9,7 @@ export const SLIDER_LIMITS = {
   end: '⟧',
 };
 
-export const DATE_FORMAT = 'DD MMM YYYY HH:mm:ss';
+export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 export const WAVE = {
   min: 1,

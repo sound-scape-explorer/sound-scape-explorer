@@ -5,6 +5,7 @@ import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppHistogram from 'src/components/AppHistogram/AppHistogram.vue';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
+import {useDate} from 'src/hooks/useDate';
 import {sitesRef} from 'src/hooks/useSites';
 import {convertTimestampToDateShort} from 'src/utils/convert-timestamp-to-date-short';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
@@ -14,6 +15,7 @@ import {cyclingScaleRef} from '../Scatter/useScatterColorScale';
 import {indicatorDataRef, useIndicators} from './useIndicators';
 
 const {selectIndicator, selectSites} = useIndicators();
+const {convertTimestampToIsoDate} = useDate();
 
 const parseIndex = (optionString: string | null): number | null => {
   if (optionString === null) {
@@ -123,7 +125,7 @@ const handleExportClick = () => {
     csv.createRow();
     csv.addToCurrentRow(d.index.toString());
     csv.addToCurrentRow(d.site);
-    csv.addToCurrentRow(d.timestamp.toString());
+    csv.addToCurrentRow(convertTimestampToIsoDate(d.timestamp));
     csv.addToCurrentRow(d.values.join('; '));
   }
 
