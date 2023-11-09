@@ -1,3 +1,37 @@
+# [11.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.7.0...v11.8.0) (2023-11-09)
+
+
+### Bug Fixes
+
+* **Front/AggregatedLabels:** Filtering on labels now works with empty files labels ([399328d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/399328d8f2b2c5c82fe59da75bc194b2c9726a89))
+* **Front/AppHeatmap2d:** Rename component with `2d` instead of `2D` ([57f652d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/57f652d30fea86bfc063d947d735b33f220b9cb8))
+* **Front/Digested:** Use global constant as plotly base size ([030c1bb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/030c1bb5a0a41c26de046e5b204a2c133230db2d))
+* **Front/Scatter:** Add useful name to PNG export files ([04362a2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/04362a207f93137c8d44ce67ab8c168164be2139))
+* **Front/Scatter:** Reduce legend size on PNG export ([9cf6e1e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9cf6e1e1e2beaa65bc867d0d29fab4259e7d6d80))
+* **Front/Scatter:** Use better variable wording for PNG exports ([b4384a8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b4384a82eb8be573bb852e721fa84b4244bdb410))
+* **Front/Utils:** Remove too strict typing on naive options conversion helper ([e048794](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e048794631f1de087507fe025950780006f46b84))
+* **Front/Utils:** Rename svg export button tooltip ([91d1eed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/91d1eed8a46c6ea099f0a7d9c5aa5debb0711655))
+* **Processing/Config:** Add checks for labels declared in trajectory tab ([99338d7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/99338d7f4f1aea56d7e1048722cd657a1134f3fd))
+
+
+### Features
+
+* **Front/AppHeatmap2D:** Add SVG export ([6fa92a4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6fa92a4579d1d45e557ff28db511e8d9d28491f5))
+* **Front/AppHeatmap:** Add SVG export + Split component code ([39032ea](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/39032eae70efba943623cb9bc26ba42538d0328b))
+* **Front/Digested:** Add 16:10 rendering size + Sort button positions ([fa3e41a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fa3e41afd3a72b753554b2fd1f3b91a5744f7a05))
+* **Front/Digested:** Add PNG exports (heatmaps) ([4dbd369](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4dbd36961f8d44b4e7e1caa3e177b87e99bcd92f))
+* **Front/Digested:** Add rendering size presets ([5639198](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5639198b0019d1c37772845147b52e1e68ac8343))
+* **Front/Exports:** All timestamps in CSV exports are now converted to ISO dates ([c58ae68](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c58ae68554285fb814e647c77e2b6bcad9642b26))
+* **Front/Import:** Add lock to storage file + Populate unload function ([9f7d25e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9f7d25e29dc496e790bf8c8603280f572b43f5cd))
+* **Front/Selection:** Add auto selecting bands, integrations and extractors if single option available + Use reactive references for naive dropdown options ([7723f7b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7723f7b2a557c13e02184e4ed2bbb2d32d3d9253))
+* **Processing/CLI:** Add `sse_viz` and `viz` as aliases to `sse_vis` ([befffb2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/befffb2bdfd71ea0073fb30c11fd1ce673a5cb64))
+
+
+### Performance Improvements
+
+* **Front/Scatter:** Export scatter configuration to its own hook ([04cef2f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/04cef2f0ee4ced6078e158971c72189e53741cca))
+* **Processing/UmapReducer:** Import UMAP dependency dynamically to prevent numba's AOT ([c549e3a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c549e3a832e494ae25404722916e158dff04199d))
+
 # [11.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.6.1...v11.7.0) (2023-11-07)
 
 
