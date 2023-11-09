@@ -1,4 +1,6 @@
-from typing import List
+from typing import List, Union
+
+from pandas import Timestamp
 
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
@@ -119,7 +121,7 @@ class FileStorage:
 
         names = parser.get(sheet, FileSheet.name_)
 
-        dates = parser.get(sheet, FileSheet.date)
+        dates: List[Union[Timestamp, str]] = parser.get(sheet, FileSheet.date)
         timestamps = [convert_date_to_timestamp(d) for d in dates]
 
         sites = parser.get(sheet, FileSheet.site)
