@@ -1,6 +1,7 @@
 from typing import List, Tuple
 
 from processing.utils.get_file_full_path import get_file_full_path
+from processing.utils.print_action import print_action
 
 
 class FileConfig:
@@ -27,6 +28,7 @@ class FileConfig:
         self.site = site
         self.labels = labels
         self.duration = duration
+        self.__warn_small_duration(self.duration)
         self.audio_path = audio_path
         self.path = get_file_full_path(name, audio_path)
 
@@ -97,3 +99,10 @@ class FileConfig:
             label = []
 
         return label
+
+    def __warn_small_duration(self, duration: int) -> None:
+        if duration < 1000:
+            print_action(
+                f"File index {self.index} has a duration of {duration} milliseconds.",
+                "warning",
+            )
