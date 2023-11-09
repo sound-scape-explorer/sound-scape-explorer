@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 # processing/utils/get_version_from_setup.py
 setup(
     name="sse",
-    version="11.8.0",
+    version="11.9.0",
     description="SoundScapeExplorer",
     author="Bamdad Sabbagh",
     author_email="hi@bamdad.fr",

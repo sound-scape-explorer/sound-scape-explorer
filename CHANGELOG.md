@@ -1,3 +1,18 @@
+# [11.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.8.0...v11.9.0) (2023-11-09)
+
+
+### Bug Fixes
+
+* **Processing/CLI:** Feed absolute audio path to visualisation command ([3675fec](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3675fecd175625d1b1471c2f2f26384511f2c8c3))
+* **Processing/Files:** Handle files' dates that can be parsed as strings from pandas ([977e653](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/977e653627dd9a66f52db620c97b2dce57b84900))
+* **Processing/Storage:** Attach version as dataset attribute to binary storage ([0373913](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0373913b5535de4d2e865975759234bf518e92d5))
+
+
+### Features
+
+* **Processing/Config:** Warn user for files under 1 sec in duration ([aa2a7c0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/aa2a7c04b8d64e17a0f7f6756e3b8e0bda1f0279))
+* **Processing/Utils:** Add warning mode to console print ([5a882ef](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5a882efcc62deda7aa94e448ce37600f2f3a5b52))
+
 # [11.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.7.0...v11.8.0) (2023-11-09)
 
 
