@@ -57,6 +57,10 @@ export async function load(file: File) {
   return h5;
 }
 
+export async function close() {
+  h5.close();
+}
+
 export async function readSecondsFromIntegration(
   file: File,
   integrationName: string,
@@ -594,9 +598,25 @@ export async function readAggregatedLabels(
   );
 
   if (autoclusters.length > 0) {
-    for (const autocluster of autoclusters.reverse()) {
-      for (let index = 0; index < labels.length; index += 1) {
-        labels[index] = [autocluster[index], ...labels[index]];
+    if (labels.length === 0) {
+      // files labels are empty
+      for (const autocluster of autoclusters.reverse()) {
+        for (let index = 0; index < autocluster.length; index += 1) {
+          const value = autocluster[index];
+
+          if (typeof labels[index] === 'undefined') {
+            labels[index] = [];
+          }
+
+          labels[index] = [value, ...labels[index]];
+        }
+      }
+    } else if (labels.length > 0) {
+      // files labels are populated
+      for (const autocluster of autoclusters.reverse()) {
+        for (let index = 0; index < labels.length; index += 1) {
+          labels[index] = [autocluster[index], ...labels[index]];
+        }
       }
     }
   }

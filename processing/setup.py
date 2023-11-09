@@ -17,6 +17,8 @@ setup(
             "sse = processing.cli:start_processing",
             "sse_config = processing.cli:extract_config",
             "sse_vis = processing.cli:start_front",
+            "sse_viz = processing.cli:start_front",
+            "viz = processing.cli:start_front",
         ],
     },
 )

@@ -1,4 +1,8 @@
+import {appDraggablesStore} from 'src/components/AppDraggable/appDraggablesStore';
+import {importLockRef} from 'src/components/Import/useImportLock';
 import {computed, reactive} from 'vue';
+
+import {workerRef} from './useWorker';
 
 interface StorageFileRef {
   value: File | null;
@@ -19,11 +23,14 @@ export function useStorageFile() {
     }
 
     storageFileRef.value = file;
+    appDraggablesStore.import = false;
+    appDraggablesStore.selection = true;
+    importLockRef.value = true;
   };
 
-  // TODO: Add file close from worker
   const resetFile = () => {
-    storageFileRef.value = null;
+    workerRef.value?.close();
+    location.reload();
   };
 
   return {

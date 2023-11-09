@@ -1,8 +1,10 @@
 <script lang="ts" setup="">
-import type {Layout} from 'plotly.js-dist-min';
+import {type Config, type Layout} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
+import {useHeatmapConfig} from 'src/hooks/useHeatmapConfig';
 import {type HeatmapData, useHeatmapData} from 'src/hooks/useHeatmapData';
 import {useHeatmapLayout} from 'src/hooks/useHeatmapLayout';
+import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {ref, watch} from 'vue';
 
 /**
@@ -24,9 +26,11 @@ const props = defineProps<Props>();
 
 const {generateLayout} = useHeatmapLayout();
 const {generateData} = useHeatmapData();
+const {generateConfig} = useHeatmapConfig();
 const divRef = ref<HTMLDivElement | null>(null);
 const dataRef = ref<HeatmapData[] | null>(null);
 const layoutRef = ref<Partial<Layout> | null>(null);
+const configRef = ref<Partial<Config> | null>(null);
 
 /**
  * Handlers
@@ -36,14 +40,18 @@ const render = async () => {
   if (
     divRef.value === null ||
     dataRef.value === null ||
-    layoutRef.value === null
+    layoutRef.value === null ||
+    configRef.value === null
   ) {
     return;
   }
 
-  await Plotly.newPlot(divRef.value, dataRef.value, layoutRef.value, {
-    displaylogo: false,
-  });
+  await Plotly.newPlot(
+    divRef.value,
+    dataRef.value,
+    layoutRef.value,
+    configRef.value,
+  );
 };
 
 const refresh = () => {
@@ -58,6 +66,7 @@ const refresh = () => {
 
   dataRef.value = [data];
   layoutRef.value = generateLayout(props.title ?? '');
+  configRef.value = generateConfig();
 };
 
 /**
@@ -67,6 +76,7 @@ const refresh = () => {
 refresh();
 watch([divRef, dataRef, layoutRef], render);
 watch(props, refresh);
+watch([heatmapWidthRef, heatmapHeightRef], refresh);
 </script>
 
 <template>

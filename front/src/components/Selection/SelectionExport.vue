@@ -11,6 +11,7 @@ import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {bandRef} from 'src/hooks/useBands';
+import {useDate} from 'src/hooks/useDate';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
@@ -21,6 +22,7 @@ import {ref} from 'vue';
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 
 const {notify} = useNotification();
+const {convertTimestampToIsoDate} = useDate();
 
 const loadingRef = ref<boolean>(false);
 
@@ -112,7 +114,7 @@ async function handleClick() {
   payload.forEach((data) => {
     csv.createRow();
     csv.addToCurrentRow(data.intervalIndex.toString());
-    csv.addToCurrentRow(data.timestamp.toString());
+    csv.addToCurrentRow(convertTimestampToIsoDate(data.timestamp));
     csv.addToCurrentRow(data.site);
 
     data.aggregatedLabels.forEach((aL) => {

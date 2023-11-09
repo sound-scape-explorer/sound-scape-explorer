@@ -5,6 +5,8 @@ import {Csv} from 'src/common/Csv';
 import AppButton from 'src/components/AppButton/AppButton.vue';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import TrajectoriesColorScale from 'src/components/Trajectories/TrajectoriesColorScale.vue';
+import {EXPORT_FILENAME} from 'src/constants';
+import {useDate} from 'src/hooks/useDate';
 import {tracedFusedRef, tracedRef} from 'src/hooks/useTraced';
 import {trajectoriesRef, useTrajectories} from 'src/hooks/useTrajectories';
 import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
@@ -15,6 +17,7 @@ import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {useScatterTraces} from '../Scatter/useScatterTraces';
 
 const {selectTrajectories} = useTrajectories();
+const {convertTimestampToIsoDate} = useDate();
 
 const optionsRef = computed(() => {
   if (trajectoriesRef.value === null) {
@@ -62,7 +65,7 @@ const handleExportClick = () => {
     traced.data.forEach((_, index) => {
       csv.createRow();
       csv.addToCurrentRow('fused');
-      csv.addToCurrentRow(traced.timestamps[index].toString());
+      csv.addToCurrentRow(convertTimestampToIsoDate(traced.timestamps[index]));
       csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
       csv.addToCurrentRow(data.x[index].toString());
       csv.addToCurrentRow(data.y[index].toString());
@@ -71,7 +74,7 @@ const handleExportClick = () => {
       }
     });
 
-    csv.download('trajectories.csv');
+    csv.download(`${EXPORT_FILENAME}-trajectories.csv`);
     return;
   }
 
@@ -79,7 +82,7 @@ const handleExportClick = () => {
     traced.data.forEach((coordinates, index) => {
       csv.createRow();
       csv.addToCurrentRow(traced.trajectory.name);
-      csv.addToCurrentRow(traced.timestamps[index].toString());
+      csv.addToCurrentRow(convertTimestampToIsoDate(traced.timestamps[index]));
       csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
       csv.addToCurrentRow(coordinates[0].toString());
       csv.addToCurrentRow(coordinates[1].toString());
@@ -87,7 +90,7 @@ const handleExportClick = () => {
     });
   }
 
-  csv.download('trajectories.csv');
+  csv.download(`${EXPORT_FILENAME}-trajectories.csv`);
 };
 </script>
 

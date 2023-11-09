@@ -5,6 +5,7 @@ import {ref} from 'vue';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import ImportDetails from './ImportDetails.vue';
+import {importLockRef} from './useImportLock';
 
 const inputRef = ref<HTMLInputElement>();
 const {setFile, isStorageFileRef, resetFile} = useStorageFile();
@@ -27,11 +28,13 @@ const handleChange = () => {
         ref="inputRef"
         type="file"
         @change="handleChange"
+        :disabled="importLockRef.value"
       />
       <n-button
         class="red"
         size="small"
         @click="resetFile"
+        :disabled="!importLockRef.value"
       >
         Unload
       </n-button>

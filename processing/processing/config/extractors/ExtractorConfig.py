@@ -17,6 +17,7 @@ from processing.extractors.TemporalMedianExtractor import TemporalMedianExtracto
 from processing.extractors.VggExtractor import VggExtractor
 
 
+# TODO: Add `yamnet` and `YamnetExtractor`
 class ExtractorConfig:
     extractors: Dict[str, Type[Extractor]] = {
         "vgg": VggExtractor,

@@ -1,18 +1,20 @@
 <script lang="ts" setup="">
-import {DownloadOutline, RepeatOutline} from '@vicons/ionicons5';
+import {DownloadOutline, RepeatOutline, ResizeOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
 import {DigesterHeatmap} from 'src/common/DigesterHeatmap';
 import {HeatmapColorScale} from 'src/common/HeatmapColorScale';
 import {type HeatmapRange, heatmapRanges} from 'src/common/HeatmapRange';
+import {PLOTLY_SIZE} from 'src/constants';
 import {digestersRef} from 'src/hooks/useDigesters';
+import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';
-import AppHeatmap2D from '../AppHeatmap2D/AppHeatmap2D.vue';
+import AppHeatmap2d from '../AppHeatmap2d/AppHeatmap2d.vue';
 import {type Digested, digestedRef, useDigested} from './useDigested';
 
 const {readDigested} = useDigested();
@@ -197,6 +199,26 @@ const rangesOptionsRef = computed(() => {
     };
   });
 });
+
+const resize1by1 = () => {
+  heatmapWidthRef.value = PLOTLY_SIZE;
+  heatmapHeightRef.value = PLOTLY_SIZE;
+};
+
+const resize4by3 = () => {
+  heatmapWidthRef.value = PLOTLY_SIZE * (4 / 3);
+  heatmapHeightRef.value = PLOTLY_SIZE;
+};
+
+const resize16by10 = () => {
+  heatmapWidthRef.value = PLOTLY_SIZE * (16 / 10);
+  heatmapHeightRef.value = PLOTLY_SIZE;
+};
+
+const resize16by9 = () => {
+  heatmapWidthRef.value = PLOTLY_SIZE * (16 / 9);
+  heatmapHeightRef.value = PLOTLY_SIZE;
+};
 </script>
 
 <template>
@@ -275,6 +297,57 @@ const rangesOptionsRef = computed(() => {
             </template>
             Export .csv
           </n-button>
+
+          <span>Resize</span>
+          <div class="resize-row">
+            <n-button
+              size="tiny"
+              @click="resize1by1"
+            >
+              <template #icon>
+                <n-icon>
+                  <resize-outline />
+                </n-icon>
+              </template>
+              1:1
+            </n-button>
+
+            <n-button
+              size="tiny"
+              @click="resize4by3"
+            >
+              <template #icon>
+                <n-icon>
+                  <resize-outline />
+                </n-icon>
+              </template>
+              4:3
+            </n-button>
+
+            <n-button
+              size="tiny"
+              @click="resize16by10"
+            >
+              <template #icon>
+                <n-icon>
+                  <resize-outline />
+                </n-icon>
+              </template>
+              16:10
+            </n-button>
+
+            <n-button
+              size="tiny"
+              @click="resize16by9"
+            >
+              <template #icon>
+                <n-icon>
+                  <resize-outline />
+                </n-icon>
+              </template>
+              16:9
+            </n-button>
+          </div>
         </div>
       </div>
 
@@ -287,7 +360,7 @@ const rangesOptionsRef = computed(() => {
         :range="ranges[rangeIndexRef]"
       />
 
-      <AppHeatmap2D
+      <AppHeatmap2d
         v-if="digestedRef.value?.isPairing"
         :title="titleRef"
         :x="xRef"
@@ -337,5 +410,11 @@ const rangesOptionsRef = computed(() => {
 
 .title {
   font-weight: bold;
+}
+
+.resize-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>

@@ -1,9 +1,10 @@
+import type {DropdownOption} from 'src/common/DropdownOption';
 import {NN_EXTRACTORS} from 'src/constants';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
-import {computed, reactive, watchEffect} from 'vue';
+import {reactive, watchEffect} from 'vue';
 
-import {reducerRef} from './useReducers';
+import {reducerRef, reducerSelectedRef} from './useReducers';
 import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
@@ -55,6 +56,14 @@ export const extractorSelectedRef = reactive<ExtractorSelectedRef>({
   value: null,
 });
 
+interface ExtractorOptionsRef {
+  value: DropdownOption[];
+}
+
+export const extractorOptionsRef = reactive<ExtractorOptionsRef>({
+  value: [],
+});
+
 export function useExtractors() {
   const selectExtractor = (index: number | null) => {
     if (index === null) {
@@ -91,16 +100,20 @@ export function useExtractors() {
 
   watchEffect(readExtractors);
 
-  const extractorOptionsRef = computed(() => {
+  const generateExtractorOptions = () => {
     if (reducerRef.value === null) {
-      return [];
+      extractorOptionsRef.value = [];
+      return;
     }
 
     const options = reducerRef.value.nnExtractors.map(
       (ex) => `${ex.index} - ${ex.name}`,
     );
-    return convertToNaiveSelectOptions(options);
-  });
+
+    extractorOptionsRef.value = convertToNaiveSelectOptions(options);
+  };
+
+  watchEffect(generateExtractorOptions);
 
   watchEffect(() => {
     selectExtractor(parseSelectionOption(extractorSelectedRef.value));
@@ -111,8 +124,21 @@ export function useExtractors() {
     extractorRef.value = null;
   };
 
+  const autoSelectExtractor = () => {
+    if (reducerSelectedRef.value === null) {
+      return;
+    }
+
+    if (extractorOptionsRef.value.length !== 1) {
+      return;
+    }
+
+    extractorSelectedRef.value = extractorOptionsRef.value[0].value;
+  };
+
+  watchEffect(autoSelectExtractor);
+
   return {
-    extractorOptionsRef: extractorOptionsRef,
     resetExtractor: resetExtractor,
   };
 }

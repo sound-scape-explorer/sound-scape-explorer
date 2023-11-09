@@ -102,7 +102,10 @@ class Config:
         self.extractors = ExtractorStorage.read_from_config(self.parser)
 
         self.autoclusters = AutoclusterStorage.read_from_config(self.parser)
-        self.trajectories = TrajectoryStorage.read_from_config(self.parser)
+        self.trajectories = TrajectoryStorage.read_from_config(
+            parser=self.parser,
+            labels=self.labels,
+        )
 
         self.reducers = ReducerStorage.read_from_config(
             parser=self.parser,
