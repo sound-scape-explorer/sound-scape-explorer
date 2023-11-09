@@ -155,11 +155,13 @@ class Storage:
     ) -> None:
         binary_array = numpy.frombuffer(binary_data, dtype="uint8")
 
-        self.__file.create_dataset(
+        dataset = self.__file.create_dataset(
             name=path,
             data=binary_array,
             compression=StorageCompression.gzip.value,
         )
+
+        self.__write_version_to_dataset(dataset)
 
     def append(
         self,
