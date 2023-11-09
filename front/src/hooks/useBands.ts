@@ -1,8 +1,9 @@
+import {type DropdownOption} from 'src/common/DropdownOption';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
-import {computed, reactive, watchEffect} from 'vue';
+import {reactive, watchEffect} from 'vue';
 
-import {reducerRef} from './useReducers';
+import {reducerRef, reducerSelectedRef} from './useReducers';
 import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
@@ -37,6 +38,14 @@ export const bandSelectedRef = reactive<BandSelectedRef>({
   value: null,
 });
 
+interface BandOptionsRef {
+  value: DropdownOption[];
+}
+
+export const bandOptionsRef = reactive<BandOptionsRef>({
+  value: [],
+});
+
 export function useBands() {
   const selectBand = (index: number | null): void => {
     if (index === null) {
@@ -61,9 +70,10 @@ export function useBands() {
 
   watchEffect(readBands);
 
-  const bandOptionsRef = computed(() => {
+  const generateBandOptions = () => {
     if (reducerRef.value === null) {
-      return [];
+      bandOptionsRef.value = [];
+      return;
     }
 
     const options = reducerRef.value.bands.map(
@@ -71,8 +81,10 @@ export function useBands() {
         `${band.index} - ${band.name} (${band.low} Hz - ${band.high} Hz)`,
     );
 
-    return convertToNaiveSelectOptions(options);
-  });
+    bandOptionsRef.value = convertToNaiveSelectOptions(options);
+  };
+
+  watchEffect(generateBandOptions);
 
   watchEffect(() => {
     selectBand(parseSelectionOption(bandSelectedRef.value));
@@ -83,8 +95,21 @@ export function useBands() {
     bandSelectedRef.value = null;
   };
 
+  const autoSelectBand = () => {
+    if (reducerSelectedRef.value === null) {
+      return;
+    }
+
+    if (bandOptionsRef.value.length !== 1) {
+      return;
+    }
+
+    bandSelectedRef.value = bandOptionsRef.value[0].value;
+  };
+
+  watchEffect(autoSelectBand);
+
   return {
     resetBand: resetBand,
-    bandOptionsRef: bandOptionsRef,
   };
 }

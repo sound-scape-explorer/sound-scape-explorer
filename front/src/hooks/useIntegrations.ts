@@ -1,8 +1,10 @@
+import type {DropdownOption} from 'src/common/DropdownOption';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
-import {computed, reactive, watchEffect} from 'vue';
+import {reactive, watchEffect} from 'vue';
 
 import {reducerRef} from './useReducers';
+import {reducerSelectedRef} from './useReducers';
 import {storageFileRef} from './useStorageFile';
 import {workerRef} from './useWorker';
 
@@ -36,6 +38,14 @@ export const integrationSelectedRef = reactive<IntegrationSelectedRef>({
   value: null,
 });
 
+interface IntegrationOptionsRef {
+  value: DropdownOption[];
+}
+
+export const integrationOptionsRef = reactive<IntegrationOptionsRef>({
+  value: [],
+});
+
 export function useIntegrations() {
   const readIntegrations = async (): Promise<void> => {
     if (workerRef.value === null || storageFileRef.value === null) {
@@ -66,17 +76,21 @@ export function useIntegrations() {
     )[0];
   };
 
-  const integrationOptionsRef = computed(() => {
+  const generateIntegrationOptions = () => {
     if (reducerRef.value === null) {
-      return [];
+      integrationOptionsRef.value = [];
+      return;
     }
 
     const options = reducerRef.value.integrations.map(
       (integration) =>
         `${integration.index} - ${integration.name} (${integration.seconds} s)`,
     );
-    return convertToNaiveSelectOptions(options);
-  });
+
+    integrationOptionsRef.value = convertToNaiveSelectOptions(options);
+  };
+
+  watchEffect(generateIntegrationOptions);
 
   watchEffect(() => {
     selectIntegration(parseSelectionOption(integrationSelectedRef.value));
@@ -87,8 +101,21 @@ export function useIntegrations() {
     integrationSelectedRef.value = null;
   };
 
+  const autoSelectIntegration = () => {
+    if (reducerSelectedRef.value === null) {
+      return;
+    }
+
+    if (integrationOptionsRef.value.length !== 1) {
+      return;
+    }
+
+    integrationSelectedRef.value = integrationOptionsRef.value[0].value;
+  };
+
+  watchEffect(autoSelectIntegration);
+
   return {
-    integrationOptionsRef: integrationOptionsRef,
     resetIntegration: resetIntegration,
   };
 }
