@@ -1,6 +1,10 @@
 from typing import List
 
+from h5py import Dataset, Group
+
 from processing.common.AggregatedReduceable import AggregatedReduceable
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 
@@ -39,3 +43,18 @@ class ComputationUmapStorage:
             data=data,
             compression=True,
         )
+
+    @staticmethod
+    def read_from_storage(
+        storage: Storage,
+        band: BandConfig,
+        integration: IntegrationConfig,
+    ) -> None:
+        group_path = (
+            f"{StoragePath.computation_umap.value}"
+            f"/{band.name}"
+            f"/{integration.seconds}"
+        )
+
+        group: Group = storage.read(group_path)  # type: ignore
+        print(group)

@@ -15,6 +15,7 @@ from processing.actions.purge_requirements import purge_requirements
 from processing.actions.reduce import reduce
 from processing.actions.refresh_configuration import refresh_configuration
 from processing.actions.repack_storage import repack_storage
+from processing.actions.trace_relative_trajectories import trace_relative_trajectories
 from processing.actions.trace_trajectories import trace_trajectories
 from processing.config.Config import Config
 from processing.storage.Storage import Storage
@@ -70,6 +71,9 @@ def main(
         if answer == MenuChoice.Trace.value:
             refresh_configuration(config, storage)
             trace_trajectories(storage, main)
+        if answer == MenuChoice.RelativeTrajectories.value:
+            refresh_configuration(config, storage)
+            trace_relative_trajectories(storage, main)
         if answer == MenuChoice.Digest.value:
             refresh_configuration(config, storage)
             digest(storage, main)

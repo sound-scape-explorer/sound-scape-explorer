@@ -9,11 +9,13 @@ class MenuChoice(Enum):
     ExtractAggregate = "Run extractions and aggregations"
     Reduce = "Run reductions"
     ComputeRequirements = (
-        "Run computation UMAPs and mean distances matrix (needed for autocluster)"
+        "Run computation UMAPs and mean distances matrix"
+        "(needed for autocluster and relative trajectories)"
     )
     PurgeRequirements = "Purge computation UMAPs and mean distances matrix"
     Autocluster = "Run autoclusters"
     Trace = "Run trajectories"
+    RelativeTrajectories = "Run relative trajectories"
     Digest = "Run digests"
     RunAll = "Run all"
     ExportDataframe = "Export dataframe as .csv"
@@ -39,6 +41,7 @@ def ask_menu() -> str:
                 Separator(),
                 MenuChoice.Autocluster.value,
                 MenuChoice.Trace.value,
+                MenuChoice.RelativeTrajectories.value,
                 MenuChoice.Digest.value,
                 Separator(),
                 MenuChoice.RunAll.value,
