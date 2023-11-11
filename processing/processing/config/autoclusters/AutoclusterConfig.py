@@ -1,7 +1,6 @@
 from typing import Dict, List, Tuple
 
 from h5py import Dataset
-from hdbscan import HDBSCAN
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
@@ -92,7 +91,9 @@ class AutoclusterConfig:
         self,
         band: BandConfig,
         integration: IntegrationConfig,
-    ) -> HDBSCAN:
+    ):  # -> HDBSCAN
+        from hdbscan import HDBSCAN
+
         self.band = band
         self.integration = integration
 

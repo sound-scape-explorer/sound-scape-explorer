@@ -1,6 +1,5 @@
 from typing import Dict, List, Literal
 
-import maad
 import numpy as np
 import pydub
 from pydub import AudioSegment
@@ -87,6 +86,8 @@ class SoundLoader:
         return slice_
 
     def get_filtered(self, band: BandConfig):
+        import maad
+
         kf = f"{band.low}-{band.high}"
 
         if kf in self.__filtered.keys():
@@ -111,6 +112,8 @@ class SoundLoader:
         slice_: SoundSlice,
         mode: SpectrogramMode = "psd",
     ) -> Spectrogram:
+        import maad
+
         ks = f"{slice_.start}-{slice_.end}"
 
         if ks in self.__spectrograms[mode].keys():
