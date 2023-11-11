@@ -15,6 +15,11 @@ export function useAudioHost() {
       return;
     }
 
+    if (settingsRef.value.audio_host === '') {
+      audioHostRef.value = 'http://localhost:5531/';
+      return;
+    }
+
     audioHostRef.value = settingsRef.value.audio_host;
   };
 

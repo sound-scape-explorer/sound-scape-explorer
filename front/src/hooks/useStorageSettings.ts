@@ -1,8 +1,9 @@
-import {onMounted, reactive} from 'vue';
-import {workerRef} from './useWorker';
-import {storageFileRef} from './useStorageFile';
 import type {StorageSettings} from 'src/storage/StorageSettings';
+import {onMounted, reactive} from 'vue';
+
 import {useAudioHost} from './useAudioHost';
+import {storageFileRef} from './useStorageFile';
+import {workerRef} from './useWorker';
 
 interface SettingsRef {
   value: StorageSettings | null;
