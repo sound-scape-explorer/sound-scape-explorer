@@ -3,12 +3,15 @@ import {useLabelScreenshot} from 'src/components/Label/useLabelScreenshot';
 import {PLOTLY_SIZE} from 'src/constants';
 import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
 
+import {useScatterExport} from './useScatterExport';
+
 interface ScatterExportOptions extends DownloadImgopts {
   scale?: number;
 }
 
 export function useScatterConfig() {
   const {screenshotLabel} = useLabelScreenshot();
+  const {handleScatterExportClick} = useScatterExport();
 
   const scatterWidth = PLOTLY_SIZE * (4 / 3);
   const scatterHeight = PLOTLY_SIZE;
@@ -82,6 +85,14 @@ export function useScatterConfig() {
         icon: Plotly.Icons['camera-retro'],
         click: async (gd) => {
           await Plotly.downloadImage(gd, scatterOptions);
+        },
+      },
+      {
+        name: 'export-csv',
+        title: 'Export as CSV',
+        icon: Plotly.Icons['disk'],
+        click: async () => {
+          await handleScatterExportClick();
         },
       },
     ],
