@@ -14,6 +14,7 @@ import {
   ListOutline,
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
+import {isSelectedRef} from 'src/hooks/useSelection';
 import {useStorageFile} from 'src/hooks/useStorageFile';
 
 import {KeyboardShortcut} from '../../common/KeyboardShortcut';
@@ -98,6 +99,7 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="colors"
         text="Colors"
         :toggle="toggle"
+        :disabled="!isSelectedRef.value"
       >
         <color-palette-outline />
       </MenuItem>
@@ -106,6 +108,7 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="time"
         text="Time"
         :toggle="toggle"
+        :disabled="!isSelectedRef.value"
       >
         <calendar-outline />
       </MenuItem>
@@ -114,6 +117,7 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="labels"
         text="Labels"
         :toggle="toggle"
+        :disabled="!isSelectedRef.value"
       >
         <layers-outline />
       </MenuItem>
@@ -122,6 +126,7 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="details"
         text="Details"
         :toggle="toggle"
+        :disabled="!isSelectedRef.value"
       >
         <list-outline />
       </MenuItem>
@@ -130,6 +135,7 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="audio"
         text="Audio"
         :toggle="toggle"
+        :disabled="!isSelectedRef.value"
       >
         <headset-outline />
       </MenuItem>
@@ -138,6 +144,7 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="trajectories"
         text="Trajectories"
         :toggle="toggle"
+        :disabled="!isSelectedRef.value"
       >
         <analytics-outline />
       </MenuItem>
@@ -146,6 +153,7 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="indicators"
         text="Indicators"
         :toggle="toggle"
+        :disabled="!isSelectedRef.value"
       >
         <bar-chart-outline />
       </MenuItem>
@@ -154,6 +162,7 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="digested"
         text="Digested"
         :toggle="toggle"
+        :disabled="!isSelectedRef.value"
       >
         <grid-outline />
       </MenuItem>
