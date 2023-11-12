@@ -18,7 +18,7 @@
     "colormap": "^2.3.2",
     "comlink": "^4.4.1",
     "dayjs": "^1.11.7",
-    "h5wasm": "^0.5.2",
+    "h5wasm": "^0.6.10",
     "html2canvas": "^1.4.1",
     "plotly.js-dist-min": "^2.23.2",
     "speed-to-percentage": "^1.2.1",

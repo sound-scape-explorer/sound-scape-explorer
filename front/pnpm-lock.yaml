@@ -27,8 +27,8 @@ dependencies:
     specifier: ^1.11.7
     version: 1.11.7
   h5wasm:
-    specifier: ^0.5.2
-    version: 0.5.2
+    specifier: ^0.6.10
+    version: 0.6.10
   html2canvas:
     specifier: ^1.4.1
     version: 1.4.1
@@ -1820,8 +1820,8 @@ packages:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: true
 
-  /h5wasm@0.5.2:
-    resolution: {integrity: sha512-5hceMJnleFgkLir7WUjRqcKasIaB0kU1ro/wexBOG5HI/Q27Jx3QnKUdyVfatgzTFnU9iicNILI9zxfOAVrRrQ==}
+  /h5wasm@0.6.10:
+    resolution: {integrity: sha512-GxBWGVxBftyq67kAbS4WPmTH3a8hGKigdMm+IVJ7tLY7BHj+nqDTUKO9RmmPBHy6Pvq5uW1YpIJr/oGanw+RyQ==}
     dev: false
 
   /has-flag@3.0.0:
