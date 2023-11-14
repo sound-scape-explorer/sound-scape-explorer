@@ -2,7 +2,6 @@ from typing import List, Literal
 
 import numpy as np
 import torch
-import torchaudio
 from torch import Tensor, cuda, hub, nn
 
 from processing.extractors.Extractor import Extractor
@@ -112,6 +111,8 @@ class VggExtractor(nn.Module, Extractor):
         sample_rate: int,
         hop_length: int,
     ) -> Tensor:
+        import torchaudio
+
         data = wav.reshape(-1)
 
         mel_extractor = torchaudio.transforms.MelSpectrogram(

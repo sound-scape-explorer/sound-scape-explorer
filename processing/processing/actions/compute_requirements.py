@@ -5,6 +5,7 @@ from rich import print
 from rich.progress import track
 
 from processing.common.AggregatedReduceable import AggregatedReduceable
+from processing.common.ComputationUmapStorage import ComputationUmapStorage
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandStorage import BandStorage
@@ -44,7 +45,7 @@ def compute_requirements(
 
     print_action("Requirements computation started!", "start")
 
-    storage.delete(StoragePath.computation_umap)
+    ComputationUmapStorage.delete(storage)
     storage.delete(StoragePath.mean_distances_matrix)
 
     settings = SettingsStorage.read_from_storage(storage)
@@ -79,17 +80,11 @@ def compute_requirements(
 
             computation_features = umap.calculate()
 
-            path = (
-                f"{StoragePath.computation_umap.value}"
-                f"/{ar.band.name}"
-                f"/{ar.integration.seconds}"
-                f"/{computation_index}"
-            )
-
-            storage.write(
-                path=path,
+            ComputationUmapStorage.write(
+                storage=storage,
+                ar=ar,
                 data=computation_features,
-                compression=True,
+                index=computation_index,
             )
 
     print()

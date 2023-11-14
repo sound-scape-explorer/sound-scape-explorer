@@ -1,14 +1,13 @@
 export interface StorageSettings {
+  storage_path: string;
   audio_path: string;
-  audio_host: string;
   expected_sample_rate: number;
-  timezone?: string;
-  umap_seed?: number;
-  umap_neighbors?: number;
-  umap_metric?: string;
-  autocluster: boolean;
-  autocluster_iterations?: number;
-  autocluster_min_size?: number;
-  autocluster_max_size?: number;
-  autocluster_threshold?: number;
+  timeline_origin: number;
+
+  // Optional, see `SettingsDefaults.py`
+  audio_host: string;
+  timezone: string;
+  computation_umap_dimensions: number;
+  compoutation_umap_iterations: number;
+  display_umap_seed: number;
 }

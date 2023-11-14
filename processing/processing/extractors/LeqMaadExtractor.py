@@ -1,11 +1,11 @@
-import maad
-
 from processing.extractors.Extractor import Extractor
 from processing.loaders.Loader import Loader
 
 
 class LeqMaadExtractor(Extractor):
     def extract(self, loader: Loader):
+        import maad
+
         sample_rate = loader.sound.sample_rate
 
         data = []

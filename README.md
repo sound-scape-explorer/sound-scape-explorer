@@ -8,13 +8,13 @@
 
 ![Version](https://img.shields.io/github/package-json/v/sound-scape-explorer/sound-scape-explorer)
 
-![](examples/images/demo.png)
+![](https://sound-scape-explorer.github.io/img/demo.png)
 
 </div>
 
 ## Documentation
 
-Please consult our [wiki](https://github.com/sound-scape-explorer/sound-scape-explorer/wiki).
+Please consult our [documentation website](https://sound-scape-explorer.github.io).
 
 ## Project examples
 
