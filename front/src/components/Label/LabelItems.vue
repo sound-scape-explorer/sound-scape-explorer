@@ -44,11 +44,7 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
 </script>
 
 <template>
-  <n-grid
-    :cols="2"
-    class="grid"
-    x-gap="12"
-  >
+  <n-grid :cols="2">
     <n-gi v-for="property in labelsPropertiesRef.value">
       <n-tooltip
         trigger="hover"
@@ -56,15 +52,17 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
         :show-arrow="false"
       >
         <template #trigger>
-          <n-tag
-            :bordered="false"
-            class="tag"
-            size="small"
-            @click="() => handlePropertyClick(property)"
-            @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
-          >
-            {{ property }}
-          </n-tag>
+          <div class="col">
+            <n-tag
+              :bordered="false"
+              class="tag"
+              size="small"
+              @click="() => handlePropertyClick(property)"
+              @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
+            >
+              {{ property }}
+            </n-tag>
+          </div>
         </template>
         <div>
           <span>Left click: Invert selection</span>
@@ -73,18 +71,31 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
         </div>
       </n-tooltip>
 
-      <LabelItemsSelection :property="property" />
+      <LabelItemsSelection
+        class="checkboxes"
+        :property="property"
+      />
     </n-gi>
   </n-grid>
 </template>
 
 <style lang="scss" scoped>
+.col {
+  display: flex;
+  align-items: flex-start;
+  height: auto;
+  padding-top: 8px;
+}
+
 .tag {
-  margin: 0.5rem 0;
   user-select: none;
 
   &:hover {
     cursor: pointer;
   }
+}
+
+.checkboxes {
+  padding-top: 8px;
 }
 </style>

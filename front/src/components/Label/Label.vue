@@ -53,6 +53,7 @@ const toggle = () => {
   flex-direction: column;
   height: 14rem;
   overflow-y: auto;
+  padding-right: 0.5rem;
 }
 
 .title {
