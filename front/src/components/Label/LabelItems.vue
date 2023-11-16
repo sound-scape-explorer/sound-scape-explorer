@@ -1,7 +1,10 @@
 <script lang="ts" setup="">
-import {NGi, NGrid, NTag, NTooltip} from 'naive-ui';
+// TODO: Rename this component to LabelHeader or something
+import {ColorFillOutline} from '@vicons/ionicons5';
+import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {labelsPropertiesRef, labelsRef} from 'src/hooks/useLabels';
 
+import {colorsStore, type ColorType} from '../Colors/colorsStore';
 import LabelItemsSelection from './LabelItemsSelection.vue';
 import {labelsSelectionRef, useLabelsSelection} from './useLabelsSelection';
 
@@ -41,18 +44,38 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
 
   updateSelection(property, []);
 };
+
+const handleBucketClick = (property: string) => {
+  const colorType = `by${property}` as ColorType;
+
+  if (colorsStore.colorType === colorType) {
+    return;
+  }
+
+  colorsStore.colorType = colorType;
+};
 </script>
 
 <template>
   <n-grid :cols="2">
     <n-gi v-for="property in labelsPropertiesRef.value">
-      <n-tooltip
-        trigger="hover"
-        placement="top-start"
-        :show-arrow="false"
-      >
-        <template #trigger>
-          <div class="col">
+      <div class="col">
+        <n-button
+          size="tiny"
+          @click="() => handleBucketClick(property)"
+        >
+          <template #icon>
+            <n-icon>
+              <color-fill-outline />
+            </n-icon>
+          </template>
+        </n-button>
+        <n-tooltip
+          trigger="hover"
+          placement="top-start"
+          :show-arrow="false"
+        >
+          <template #trigger>
             <n-tag
               :bordered="false"
               class="tag"
@@ -62,14 +85,14 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
             >
               {{ property }}
             </n-tag>
+          </template>
+          <div>
+            <span>Left click: Invert selection</span>
+            <br />
+            <span>Right click: Clear selection</span>
           </div>
-        </template>
-        <div>
-          <span>Left click: Invert selection</span>
-          <br />
-          <span>Right click: Clear selection</span>
-        </div>
-      </n-tooltip>
+        </n-tooltip>
+      </div>
 
       <LabelItemsSelection
         class="checkboxes"
