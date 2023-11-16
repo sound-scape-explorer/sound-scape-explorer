@@ -41,6 +41,7 @@ class Config:
         self,
         path: str,
     ) -> None:
+        self.__print_load()
         self.path = os.path.abspath(path)
         self.folder = os.path.dirname(self.path)
         self.parser = ConfigParser(self.path, self.folder)
@@ -63,9 +64,12 @@ class Config:
         self.digesters: List[DigesterConfig] = []
 
         self.parse()
-        self.print()
+        self.__print_success()
 
-    def print(self) -> None:
+    def __print_load(self) -> None:
+        print("Loading configuration...")
+
+    def __print_success(self) -> None:
         print(f"Config loaded: {self.parser.path}")
         self.print_settings()
 
