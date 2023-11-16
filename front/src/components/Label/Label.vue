@@ -1,6 +1,8 @@
 <script lang="ts" setup="">
 import {SearchOutline} from '@vicons/ionicons5';
+import {onKeyPressed} from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
+import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {computed} from 'vue';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -23,6 +25,8 @@ const containerClasses = computed<string>(() => {
 const toggle = () => {
   labelZoomedRef.value = !labelZoomedRef.value;
 };
+
+onKeyPressed(KeyboardShortcut.labelsZoom, toggle);
 </script>
 
 <template>
