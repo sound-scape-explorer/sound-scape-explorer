@@ -2,6 +2,7 @@
 // TODO: Rename this component to LabelHeader or something
 import {ColorFillOutline} from '@vicons/ionicons5';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {labelsColumnsRef} from 'src/components/Label/useLabelsColumns';
 import {labelsPropertiesRef, labelsRef} from 'src/hooks/useLabels';
 
 import {colorsStore, type ColorType} from '../Colors/colorsStore';
@@ -57,7 +58,7 @@ const handleBucketClick = (property: string) => {
 </script>
 
 <template>
-  <n-grid :cols="2">
+  <n-grid :cols="labelsColumnsRef.value">
     <n-gi v-for="property in labelsPropertiesRef.value">
       <div class="col">
         <n-button
@@ -71,9 +72,9 @@ const handleBucketClick = (property: string) => {
           </template>
         </n-button>
         <n-tooltip
-          trigger="hover"
-          placement="top-start"
           :show-arrow="false"
+          placement="top-start"
+          trigger="hover"
         >
           <template #trigger>
             <n-tag
@@ -95,8 +96,8 @@ const handleBucketClick = (property: string) => {
       </div>
 
       <LabelItemsSelection
-        class="checkboxes"
         :property="property"
+        class="checkboxes"
       />
     </n-gi>
   </n-grid>
