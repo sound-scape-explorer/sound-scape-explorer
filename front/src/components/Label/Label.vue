@@ -1,8 +1,9 @@
 <script lang="ts" setup="">
 import {SearchOutline} from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
-import {NButton, NIcon} from 'naive-ui';
+import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
+import {labelsColumnsRef} from 'src/components/Label/useLabelsColumns';
 import {computed} from 'vue';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -22,11 +23,20 @@ const containerClasses = computed<string>(() => {
   return classes;
 });
 
-const toggle = () => {
+const toggleZoom = () => {
   labelZoomedRef.value = !labelZoomedRef.value;
 };
 
-onKeyPressed(KeyboardShortcut.labelsZoom, toggle);
+onKeyPressed(KeyboardShortcut.labelsZoom, toggleZoom);
+
+const toggleColumns = () => {
+  if (labelsColumnsRef.value === 1) {
+    labelsColumnsRef.value = 2;
+    return;
+  }
+
+  labelsColumnsRef.value = 1;
+};
 </script>
 
 <template>
@@ -36,14 +46,33 @@ onKeyPressed(KeyboardShortcut.labelsZoom, toggle);
       class="container"
     >
       <div class="button search">
-        <n-button
-          size="tiny"
-          @click="toggle"
-        >
-          <n-icon>
-            <search-outline />
-          </n-icon>
-        </n-button>
+        <n-tooltip placement="left">
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="toggleZoom"
+            >
+              <n-icon>
+                <search-outline />
+              </n-icon>
+            </n-button>
+          </template>
+          <span>Zoom</span>
+        </n-tooltip>
+      </div>
+
+      <div class="button columns">
+        <n-tooltip placement="left">
+          <template #trigger>
+            <n-button
+              size="tiny"
+              @click="toggleColumns"
+            >
+              <n-icon>{{ labelsColumnsRef.value }}</n-icon>
+            </n-button>
+          </template>
+          <span>Columns</span>
+        </n-tooltip>
       </div>
 
       <LabelItems />
@@ -82,6 +111,10 @@ onKeyPressed(KeyboardShortcut.labelsZoom, toggle);
 
 .button.search {
   top: 2.5rem;
+}
+
+.button.columns {
+  top: 4.5rem;
 }
 
 .toggle {
