@@ -3,6 +3,7 @@ import analyzer from 'rollup-plugin-analyzer';
 import {fileURLToPath, URL} from 'url';
 import {defineConfig} from 'vite';
 import {comlink} from 'vite-plugin-comlink';
+import {VitePWA as vitePwa} from 'vite-plugin-pwa';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 
@@ -51,6 +52,27 @@ export default defineConfig({
     topLevelAwait(),
     vue(),
     analyzer({summaryOnly: true}),
+    vitePwa({
+      registerType: 'autoUpdate',
+      includeAssets: ['/logo.svg', '/logo.png'],
+      manifest: {
+        short_name: 'SSE',
+        name: 'SoundScapeExplorer',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: 'logo.svg',
+            sizes: '192x192',
+            type: 'image/svg+xml',
+          },
+          {
+            src: 'logo.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
   ],
   worker: {
     plugins: [comlink()],
