@@ -1,4 +1,4 @@
-import chroma, {type Color, type Scale} from 'chroma-js';
+import chroma, {type Scale} from 'chroma-js';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {filesRef} from 'src/hooks/useFiles';
@@ -8,7 +8,6 @@ import {
 } from 'src/hooks/useLabels';
 import {computed, reactive, watch} from 'vue';
 
-import {useNotification} from '../AppNotification/useNotification';
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
 import {useColorByDay} from '../Colors/useColorByDay';
@@ -42,11 +41,11 @@ export const colorScaleRef = reactive<ColorScaleRef>({
   value: null,
 });
 
-export const chromaScaleRef = computed<Scale<Color>>(() => {
+export const chromaScaleRef = computed<Scale>(() => {
   return chroma.scale(colorsStore.colorScale).domain([0, 1]).mode('hsl');
 });
 
-export const cyclingScaleRef = computed<Scale<Color>>(() => {
+export const cyclingScaleRef = computed<Scale>(() => {
   return chroma
     .scale(['blue', 'cyan', 'green', 'yellow', 'orange', 'red', 'blue'])
     .mode('hsl');
@@ -62,7 +61,6 @@ export function useScatterColorScale() {
   const {getColorByDay} = useColorByDay();
   const {getColorByCyclingDay} = useColorByCyclingDay();
   const {getColorByLabel} = useColorByLabel();
-  const {notify} = useNotification();
 
   const generateColorScale = () => {
     if (
@@ -115,7 +113,7 @@ export function useScatterColorScale() {
     }
 
     colorScaleRef.value = colorScale;
-    notify('success', 'Colors', `${colorType} color scale generated`);
+    // notify('success', 'Colors', `${colorType} color scale generated`);
   };
 
   const {renderTraces} = useScatterTraces();
