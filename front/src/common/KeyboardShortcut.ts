@@ -5,6 +5,7 @@ export enum KeyboardShortcut {
   selection = 's',
   colors = 'c',
   labels = 'z',
+  labelsZoom = 'Z',
   audio = 'a',
   details = 'd',
   trajectories = 'x',

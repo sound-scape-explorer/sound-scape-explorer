@@ -1,8 +1,6 @@
 <script lang="ts" setup="">
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import SelectionExport from './SelectionExport.vue';
 import SelectionMenu from './SelectionMenu.vue';
-import SelectionScreenshot from './SelectionScreenshot.vue';
 import SelectionUnload from './SelectionUnload.vue';
 </script>
 
@@ -11,8 +9,6 @@ import SelectionUnload from './SelectionUnload.vue';
     <div class="container">
       <SelectionMenu />
       <SelectionUnload />
-      <SelectionScreenshot />
-      <SelectionExport />
     </div>
   </AppDraggable>
 </template>

@@ -2,7 +2,6 @@ from typing import List
 
 import numpy as np
 from h5py import Dataset
-from sklearn import metrics
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
@@ -14,6 +13,8 @@ class MeanDistancesMatrix:
     def calculate(
         features: List[Dataset],
     ) -> List[List[float]]:
+        from sklearn import metrics
+
         samples_count = features[0].shape[0]
         mean_distances_matrix = np.zeros([samples_count, samples_count])
 

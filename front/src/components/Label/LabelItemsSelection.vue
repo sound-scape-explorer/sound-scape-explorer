@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {NCheckbox, NCheckboxGroup} from 'naive-ui';
+import {NCheckbox, NCheckboxGroup, NGi, NGrid} from 'naive-ui';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 import {labelsRef} from 'src/hooks/useLabels';
 import {computed, ref, watch, watchEffect} from 'vue';
@@ -66,32 +66,34 @@ const isActiveIdRef = computed<string>(() => {
 <template>
   <n-checkbox-group
     v-model:value="selectionRef"
-    class="checkboxes"
     :id="isActiveIdRef"
   >
-    <n-checkbox
-      v-for="(item, index) in uniquesRef"
-      :style="{
-        backgroundColor: getColorByItem(index),
-      }"
-      :value="item"
-      class="checkbox"
+    <n-grid
+      :cols="2"
+      :y-gap="4"
+      :x-gap="4"
     >
-      {{ item }}
-    </n-checkbox>
+      <n-gi v-for="(item, index) in uniquesRef">
+        <n-checkbox
+          :style="{
+            backgroundColor: getColorByItem(index),
+          }"
+          :value="item"
+          class="checkbox"
+        >
+          {{ item }}
+        </n-checkbox>
+      </n-gi>
+    </n-grid>
   </n-checkbox-group>
 </template>
 
 <style lang="scss" scoped>
-.checkboxes {
-  display: grid;
-  padding-left: 0.8rem;
-  gap: 0.2rem 1rem;
-}
-
 .checkbox {
-  padding-left: 0.2rem;
-  border-radius: 0.2rem;
+  width: 100%;
+
+  padding-left: 4px;
+  border-radius: 4px;
 
   transition: background-color 120ms ease-in-out, opacity 120ms ease-in-out;
 

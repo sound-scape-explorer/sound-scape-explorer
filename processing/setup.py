@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 # processing/utils/get_version_from_setup.py
 setup(
     name="sse",
-    version="11.9.0",
+    version="11.10.0",
     description="SoundScapeExplorer",
     author="Bamdad Sabbagh",
     author_email="hi@bamdad.fr",
@@ -18,7 +18,6 @@ setup(
             "sse_config = processing.cli:extract_config",
             "sse_vis = processing.cli:start_front",
             "sse_viz = processing.cli:start_front",
-            "viz = processing.cli:start_front",
         ],
     },
 )

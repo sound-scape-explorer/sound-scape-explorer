@@ -1,3 +1,31 @@
+# [11.10.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.9.0...v11.10.0) (2023-11-14)
+
+
+### Bug Fixes
+
+* **Examples/CoralReefLight:** Update configuration and storage file ([ae0875d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ae0875d1652e0a30f8759edf69cc714a1e82a215))
+* **Examples/DefaultConfig:** Center file headers ([3cc8c31](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3cc8c31f0c78188a67e702990c3d553807dfc44e))
+* **Examples/DefaultConfig:** Make audio_host optional ([8dec8a2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8dec8a2b3a590be0035f54596fe5f05b00af000e))
+* **Examples/DefaultConfig:** Replace audio_path with relative ([47e0cd7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/47e0cd7c760d8425e1992133be17f03c390dd1b0))
+* **Examples/DefaultConfig:** Update audio host example ([4e823f6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4e823f69e1679a94414ad606405b570d9809e306))
+* **Front/Help:** Update links to add new docs + Change order ([5b3b904](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5b3b9045fe897de6f339b584f6fdf5fc3111489a))
+* **Front/Import:** Validate file extension before hitting worker load ([b1d6e0a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b1d6e0a7c6f44998a66573e9f9a3cd044a1f72d1))
+* **Front/Plotly:** Use more consistent button behaviours ([11bcc50](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/11bcc507e5f64498dffdf93e405dcf793f93fbbd))
+* **Processing:** Improve console outputs when extracting files ([3721e66](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3721e6617ecad43d59ddaa276e73f4511f8ee521))
+
+
+### Features
+
+* **Front/Menu:** Lock exploration icons waiting for selection ([640d547](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/640d547fb8708b728b0aed78311b353bf5c420d4))
+* **Front/Scatter:** Add export csv as plotly button + Clean selection ([835750b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/835750bdc7a223113ab95eb1d3afc65cc94d15ed))
+* **Processing/Config:** Allow optional `audio_host` + Update vue settings ([c04b892](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c04b892d486f920b635678dc95081f1ed3a25a45))
+
+
+### Performance Improvements
+
+* **Processing/ComputationUmap:** Extract storage operations to dedicated `ComputationUmapStorage` ([4cd9996](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4cd99963cb32fc58b3bfe4c40318ebbd16311c91))
+* **Processing:** Import some libraries dynamically ([ca9ef2a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ca9ef2a35da871ef54881182a4c2c3c349d1cc01))
+
 # [11.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.8.0...v11.9.0) (2023-11-09)
 
 

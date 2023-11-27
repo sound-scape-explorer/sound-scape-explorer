@@ -11,6 +11,7 @@ from processing.config.settings.SettingsSheet import SettingsSheet
 from processing.constants import STRING_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.is_nan import is_nan
 
 
 class SettingsStorage:
@@ -86,6 +87,9 @@ class SettingsStorage:
             audio_path = os.path.join(parser.folder, audio_path)
 
         audio_host = obj[SettingsRow.audio_host.value]
+
+        if is_nan(audio_host):
+            audio_host = SettingsDefaults.audio_host
 
         expected_sample_rate = obj[SettingsRow.expected_sample_rate.value]
 

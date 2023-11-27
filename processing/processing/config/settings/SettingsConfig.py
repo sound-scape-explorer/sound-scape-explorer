@@ -6,10 +6,11 @@ from typing import Union
 class SettingsConfig:
     storage_path: str
     audio_path: str
-    audio_host: str
     expected_sample_rate: int
     timeline_origin: int
 
+    # Optional
+    audio_host: str
     timezone: Union[str, None]
     computation_umap_dimensions: int
     computation_umap_iterations: int

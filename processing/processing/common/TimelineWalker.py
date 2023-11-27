@@ -12,6 +12,7 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.extractors.Extractor import Extracted, Extractor
 from processing.storage.Storage import Storage
 from processing.utils.print_new_line import print_new_line
+from processing.utils.print_timeline_progress import print_timeline_progress
 
 FileIndex = int
 BandIndex = int
@@ -111,14 +112,9 @@ class TimelineWalker:
             loader.loader.sound.print_leftovers()
 
     def __enumerate(self):
-        for timeline in self.timelines:
-            for interval in track(
-                timeline.intervals,
-                description=(
-                    f"integration {timeline.integration.seconds}"
-                    f", site {timeline.site.name}"
-                ),
-            ):
+        for timeline in track(self.timelines, description=("Extracting...")):
+            for interval in timeline.intervals:
+                print_timeline_progress(timeline, interval)
                 for band_index, band in enumerate(self.bands):
                     for extractor in self.extractors:
                         yield (

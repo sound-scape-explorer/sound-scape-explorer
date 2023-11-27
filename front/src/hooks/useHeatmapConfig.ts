@@ -20,7 +20,6 @@ export function useHeatmapConfig() {
     filename: exportNameRef.value,
     width: heatmapWidthRef.value,
     height: heatmapHeightRef.value,
-    format: 'svg',
     scale: scale,
   }));
 

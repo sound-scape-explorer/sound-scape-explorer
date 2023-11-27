@@ -15,13 +15,13 @@ interface Link {
 
 const links: Link[] = [
   {
-    target: 'https://github.com/sound-scape-explorer/sound-scape-explorer',
-    name: 'Repository',
+    target: 'https://sound-scape-explorer.github.io',
+    name: 'Docs',
   },
   {
     target:
-      'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/README.md',
-    name: 'Readme',
+      'https://github.com/sound-scape-explorer/sound-scape-explorer/issues/new/choose',
+    name: 'Issues',
   },
   {
     target:
@@ -43,8 +43,9 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.trajectories, name: 'Trajectories'},
   {key: KeyboardShortcut.colors, name: 'Colors'},
   {key: KeyboardShortcut.time, name: 'Time'},
-  {key: KeyboardShortcut.labels, name: 'Meta'},
   {key: KeyboardShortcut.audio, name: 'Audio'},
+  {key: KeyboardShortcut.labels, name: 'Labels'},
+  {key: KeyboardShortcut.labelsZoom, name: 'Labels: Zoom'},
   {key: KeyboardShortcut.details, name: 'Details'},
   {key: KeyboardShortcut.timePlayPause, name: 'Time: Play / Pause'},
   {key: KeyboardShortcut.timeBackward, name: 'Time: Next'},
@@ -55,6 +56,19 @@ const shortcuts: Shortcut[] = [
 <template>
   <AppDraggable draggable-key="help">
     <div class="container">
+      <div class="title">External links</div>
+
+      <ul class="list">
+        <li v-for="link in links">
+          <a
+            :href="link.target"
+            target="_blank"
+          >
+            {{ link.name }}
+          </a>
+        </li>
+      </ul>
+
       <div class="title">Keyboard Shortcuts</div>
 
       <n-grid
@@ -72,19 +86,6 @@ const shortcuts: Shortcut[] = [
           {{ shortcut.name }}
         </n-gi>
       </n-grid>
-
-      <div class="title">External links</div>
-
-      <ul class="list">
-        <li v-for="link in links">
-          <a
-            :href="link.target"
-            target="_blank"
-          >
-            {{ link.name }}
-          </a>
-        </li>
-      </ul>
     </div>
   </AppDraggable>
 </template>
@@ -95,7 +96,7 @@ const shortcuts: Shortcut[] = [
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 
   width: 30rem;
 }

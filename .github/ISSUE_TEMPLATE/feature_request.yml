@@ -1,38 +1,34 @@
+---
 name: 🚀 Feature Request
 description: Suggestions for new or different behavior
-title: "feat: "
-labels: ["needs triage", "enhancement"]
+title: 'feat: '
+labels: [needs triage, enhancement]
 body:
   - type: markdown
     attributes:
       value: |
-        **Thanks for taking the time to suggest a new feature!** Please make sure you read our [issue guidelines](https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/.github/CONTRIBUTING.md) first, then fill out the fields below.
-
+        **Thanks for taking the time to suggest a new feature!** Please make sure you read our [issue guidelines](https://sound-scape-explorer.github.io/contributing) first, then fill out the fields below.
         If you feel an open-ended discussion with the community and SoundScapeExplorer maintainers would be more suitable to forming the right details for your feature request, you can post in [Discussions](https://github.com/sound-scape-explorer/sound-scape-explorer/discussions) instead.
-
   - type: textarea
     attributes:
       label: What problem are you trying to solve?
       description: A concise description of what the problem is.
-      placeholder: "e.g. I want to …"
+      placeholder: e.g. I want to …
     validations:
       required: true
-
   - type: textarea
     attributes:
-      label: "Describe the solution you’d like"
+      label: Describe the solution you’d like
     validations:
       required: true
-
   - type: textarea
     attributes:
-      label: "Describe any alternatives you’ve considered"
+      label: Describe any alternatives you’ve considered
       description: |
         Can SoundScapeExplorer already do this, but in a less convenient way?
         Can you do this using other tools?
-
   - type: textarea
     attributes:
-      label: "Documentation, Adoption, Migration Strategy"
-      description: |
+      label: Documentation, Adoption, Migration Strategy
+      description: |-
         If you can, explain how users will be able to use this and how it might be documented. Maybe a mock-up?

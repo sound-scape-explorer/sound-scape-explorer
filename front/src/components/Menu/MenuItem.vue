@@ -13,6 +13,7 @@ interface Props {
   text: string;
   // eslint-disable-next-line no-unused-vars
   toggle: (key: keyof AppDraggablesStore) => void;
+  disabled?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -54,6 +55,7 @@ const classesRef = computed<string>(() => {
         :class="classesRef"
         size="small"
         @click="handleClick"
+        :disabled="props.disabled"
       >
         <n-icon>
           <slot />

@@ -1,3 +1,4 @@
+import {appDraggablesStore} from 'src/components/AppDraggable/appDraggablesStore';
 import {useLabelsSelection} from 'src/components/Label/useLabelsSelection';
 import {useScatterColorScale} from 'src/components/Scatter/useScatterColorScale';
 import {useScatterFilterMeta} from 'src/components/Scatter/useScatterFilterMeta';
@@ -84,7 +85,7 @@ export function useSelection() {
     isSelectedRef.value = false;
   };
 
-  watchEffect(async () => {
+  const loadSelection = async () => {
     if (
       bandRef.value === null ||
       integrationRef.value === null ||
@@ -131,7 +132,10 @@ export function useSelection() {
     renderTraces();
 
     scatterLoadingRef.value = false;
-  });
+    appDraggablesStore.selection = false;
+  };
+
+  watchEffect(loadSelection);
 
   return {
     unloadSelection: unloadSelection,
