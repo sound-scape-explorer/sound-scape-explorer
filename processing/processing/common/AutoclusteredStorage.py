@@ -10,6 +10,10 @@ from processing.storage.StoragePath import StoragePath
 
 class AutoclusteredStorage:
     @staticmethod
+    def delete(storage: Storage) -> None:
+        storage.delete(StoragePath.autoclustered)
+
+    @staticmethod
     def read_from_storage(
         storage: Storage,
         autoclusters: List[AutoclusterConfig],

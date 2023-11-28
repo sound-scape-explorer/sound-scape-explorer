@@ -1,12 +1,13 @@
 import re
-from typing import Optional
 
-from processing.config.Config import Config
-from processing.interfaces import IMain
+from h5py import Group
+
+from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
-from processing.utils.print_no_configuration import print_no_configuration
+from processing.utils.validate_configuration import validate_configuration
 
 regex = "([0-9]{13})\/([0-9]{0,5})(.*)"
 
@@ -29,29 +30,25 @@ def fix_string(string: str) -> str:
     return f"{m.group(0)}/{m.group(1)}/{m.group(2)}"
 
 
-# Fix audio on Windows happening in versions before 10.7.2
+@validate_configuration
 def fix_audio_windows_10_7_2(
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
-    if not Config.exists_in_storage(storage):
-        print_no_configuration()
-        if callback is not None:
-            callback(storage)
-        return
+    """Fix audio on Windows happening in versions before 10.7.2"""
 
     print_action("Audio on Windows for versions <=10.7.2 started!", "start")
 
     path = f"{StoragePath.aggregated_interval_details.value}"
-    group = storage.read(path)
+    group: Group = storage.read(path)
 
     for band in group.keys():
         band_path = f"{path}/{band}"
-        band_group = storage.read(band_path)
+        band_group: Group = storage.read(band_path)
 
         for integration in band_group.keys():
             integration_path = f"{band_path}/{integration}"
-            integration_group = storage.read(integration_path)
+            integration_group: Group = storage.read(integration_path)
 
             for dataset_index in integration_group.keys():
                 dataset_path = f"{integration_path}/{dataset_index}"
@@ -63,5 +60,4 @@ def fix_audio_windows_10_7_2(
 
     print_action("Audio on Windows for versions <=10.7.2 started!", "end")
 
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)

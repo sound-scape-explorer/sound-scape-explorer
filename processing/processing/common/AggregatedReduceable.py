@@ -32,6 +32,22 @@ class AggregatedReduceable:
     def read_features_from_storage(self, storage: Storage) -> Dataset:
         return storage.read(self.path)
 
+    def read_timestamps_from_storage(self, storage: Storage) -> Dataset:
+        path = self.get_timestamps_path()
+        return storage.read(path)
+
+    def read_labels_from_storage(self, storage: Storage) -> Dataset:
+        path = self.get_labels_path()
+        return storage.read(path)
+
+    def read_reduced_from_storage(
+        self,
+        storage: Storage,
+        reducer: ReducerConfig,
+    ) -> Dataset:
+        path = self.get_reduced_path(reducer)
+        return storage.read(path)
+
     def exists_in_storage(self, storage: Storage) -> bool:
         return storage.exists_dataset(self.path)
 

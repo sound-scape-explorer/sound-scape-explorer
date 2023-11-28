@@ -1,38 +1,32 @@
-from typing import Optional
-
 from pandas import DataFrame
 
 from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
 from processing.common.AggregatedReduceable import AggregatedReduceable
-from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
+from processing.config.bands.BandStorage import BandStorage
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.files.FileSheet import FileSheet
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerStorage import ReducerStorage
-from processing.interfaces import IMain
+from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_csv_path import ask_csv_path
 from processing.utils.ask_integration import ask_integration
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
-from processing.utils.print_no_configuration import print_no_configuration
+from processing.utils.validate_configuration import validate_configuration
 
 
+@validate_configuration
 def export_dataframe(
     config: Config,
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
-    if not Config.exists_in_storage(storage):
-        print_no_configuration()
-        if callback is not None:
-            callback(storage)
-        return
-
     print_action("Export started", "start")
 
     payload = {}
@@ -58,7 +52,7 @@ def export_dataframe(
     payload["interval_index"] = []
     interval_index = 0
     for _ in aggregated_timestamps:
-        payload["interval_index"].append(interval_index)
+        payload["interval_index"].append(str(interval_index))
         interval_index += 1
 
     aggregated_sites_path = (
@@ -96,7 +90,7 @@ def export_dataframe(
 
     ars = list(
         filter(
-            lambda ar: ar.band == band and ar.integration == integration,
+            lambda ar_: ar_.band == band and ar_.integration == integration,
             aggregated_reduceables,
         )
     )
@@ -130,6 +124,4 @@ def export_dataframe(
     df.to_csv(csv_path, index=False)
 
     print_action("Export completed!", "end")
-
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)

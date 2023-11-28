@@ -1,29 +1,25 @@
 import numpy as np
-from typing import Optional
+
 from processing.config.Config import Config
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
-from processing.interfaces import IMain
+from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_integration import ask_integration
 from processing.utils.ask_npy_path import ask_npy_path
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
-from processing.utils.print_no_configuration import print_no_configuration
+from processing.utils.validate_configuration import validate_configuration
 
 
+@validate_configuration
 def export_mdm(
     config: Config,
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
-    if not Config.exists_in_storage(storage):
-        print_no_configuration()
-        if callback is not None:
-            callback(storage)
-        return
-
     print_action("Mean distances matrix export started!", "start")
 
     bands = BandStorage.read_from_storage(storage)
@@ -42,6 +38,4 @@ def export_mdm(
     np.save(npy_path, matrix)
 
     print_action("Mean distances matrix export completed!", "end")
-
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)

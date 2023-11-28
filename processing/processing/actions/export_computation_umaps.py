@@ -1,33 +1,28 @@
-from typing import Optional
 import numpy as np
-
 from h5py import Dataset, Group
+
 from processing.config.Config import Config
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
-from processing.interfaces import IMain
+from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_integration import ask_integration
 from processing.utils.ask_npy_path import ask_npy_path
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
-from processing.utils.print_no_mean_distances_matrices import (
-    print_no_mean_distances_matrices,
+from processing.utils.validate_mean_distances_matrix import (
+    validate_mean_distances_matrix,
 )
 
 
+@validate_mean_distances_matrix
 def export_computation_umaps(
     config: Config,
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
-    if not storage.exists_dataset(StoragePath.mean_distances_matrix):
-        print_no_mean_distances_matrices()
-        if callback is not None:
-            callback(storage)
-        return
-
     print_action("Computation UMAPs export started!", "start")
 
     bands = BandStorage.read_from_storage(storage)
@@ -54,6 +49,4 @@ def export_computation_umaps(
     np.save(npy_path, datasets_np)
 
     print_action("Computation UMAPs export completed!", "end")
-
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)

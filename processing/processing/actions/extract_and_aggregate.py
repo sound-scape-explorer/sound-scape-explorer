@@ -1,34 +1,27 @@
-from typing import Optional
-
 import numpy as np
 
 from processing.common.AggregatedStorage import AggregatedStorage
 from processing.common.TimelineWalker import TimelineWalker
 from processing.config.bands.BandStorage import BandStorage
-from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
 from processing.config.sites.SiteStorage import SiteStorage
-from processing.interfaces import IMain
+from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.create_timelines import create_timelines
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 from processing.utils.print_extractors import print_extractors
-from processing.utils.print_no_configuration import print_no_configuration
+from processing.utils.validate_configuration import validate_configuration
 
 
+@validate_configuration
 def extract_and_aggregate(
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
-    if not Config.exists_in_storage(storage):
-        print_no_configuration()
-        if callback is not None:
-            callback(storage)
-        return
-
     print_action("Extractions and aggregations started!", "start")
 
     storage.delete(StoragePath.extracted)
@@ -117,6 +110,4 @@ def extract_and_aggregate(
 
     # tw.print_leftovers()
     print_action("Extractions and aggregations completed!", "end")
-
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)

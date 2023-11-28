@@ -1,43 +1,33 @@
-from typing import Optional
-
 from rich.progress import track
 
 from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
 from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.config.bands.BandStorage import BandStorage
-from processing.config.Config import Config
 from processing.config.digesters.DigesterStorage import DigesterStorage
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
-from processing.interfaces import IMain
+from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 from processing.utils.print_digesters import print_digesters
-from processing.utils.print_no_configuration import print_no_configuration
+from processing.utils.validate_configuration import validate_configuration
+from processing.utils.validate_digesters import validate_digesters
 
 
+@validate_configuration
+@validate_digesters
 def digest(
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
-    if not Config.exists_in_storage(storage):
-        print_no_configuration()
-        if callback is not None:
-            callback(storage)
-        return
-
     print_action("Digestions started!", "start")
 
     storage.delete(StoragePath.digested)
+
     digesters = DigesterStorage.read_from_storage(storage)
-
-    if len(digesters) == 0:
-        if callback is not None:
-            callback(storage)
-        return
-
     print_digesters(digesters)
 
     bands = BandStorage.read_from_storage(storage)
@@ -98,6 +88,4 @@ def digest(
                 )
 
     print_action("Digestions completed!", "end")
-
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)
