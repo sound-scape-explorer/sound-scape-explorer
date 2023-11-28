@@ -1,5 +1,5 @@
-import pkg_resources
+import importlib.metadata
 
 
 def get_version_from_setup() -> str:
-    return pkg_resources.require("sse")[0].version
+    return importlib.metadata.version("sse")
