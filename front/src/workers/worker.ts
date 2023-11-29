@@ -26,6 +26,7 @@ import type {Trajectory} from 'src/hooks/useTrajectories';
 import {StorageMode} from 'src/storage/StorageMode';
 import type {StorageSettings} from 'src/storage/StorageSettings';
 
+import type {RelativeTrajectory} from '../hooks/useRelativeTrajectories';
 import {StoragePath} from '../storage/StoragePath';
 import {trimRectangular} from '../utils/trim-rectangular';
 
@@ -463,6 +464,48 @@ export async function readTrajectories(file: File): Promise<Trajectory[]> {
   }
 
   return trajectories;
+}
+
+export async function readRelativeTrajectories(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+): Promise<RelativeTrajectory[]> {
+  const h5 = await load(file);
+  const pathSuffix = `/${bandName}/${integrationSeconds}/${extractorIndex}`;
+  const path = `${StoragePath.relative_traced}${pathSuffix}`;
+  const group = h5.get(path) as Group;
+
+  const relativeTrajectories: RelativeTrajectory[] = [];
+
+  for (const key of group.keys()) {
+    const relativeTracedPath = `${StoragePath.relative_traced}${pathSuffix}/${key}`;
+    const relativeTracedDataset = h5.get(relativeTracedPath) as Dataset;
+    const relativeTimestampsPath = `${StoragePath.relative_traced_relative_timetamps}${pathSuffix}/${key}`;
+    const relativeTimestampsDataset = h5.get(relativeTimestampsPath) as Dataset;
+    const trajectoryName =
+      relativeTracedDataset.attrs['trajectory_name'].value.toString();
+    const labelProperty =
+      relativeTracedDataset.attrs['label_property'].value.toString();
+    const labelValue =
+      relativeTracedDataset.attrs['label_value'].value.toString();
+
+    const relativeTrajectory: RelativeTrajectory = {
+      index: Number(key),
+      name: `${labelProperty} - ${labelValue} - ${trajectoryName}`,
+      labelProperty: labelProperty,
+      labelValue: labelValue,
+      values: relativeTracedDataset.to_array() as number[],
+      timestamps: (relativeTimestampsDataset.to_array() as number[][]).map(
+        (v) => v[0],
+      ),
+    };
+
+    relativeTrajectories.push(relativeTrajectory);
+  }
+
+  return relativeTrajectories;
 }
 
 export async function readTraced(

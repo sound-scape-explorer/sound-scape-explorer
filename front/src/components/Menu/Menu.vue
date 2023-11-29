@@ -12,12 +12,13 @@ import {
   HelpOutline,
   LayersOutline,
   ListOutline,
+  TimerOutline,
 } from '@vicons/ionicons5';
 import {onKeyPressed} from '@vueuse/core';
+import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {isSelectedRef} from 'src/hooks/useSelection';
 import {useStorageFile} from 'src/hooks/useStorageFile';
 
-import {KeyboardShortcut} from '../../common/KeyboardShortcut';
 import {appDraggableSelectedRef} from '../AppDraggable/appDraggableSelected';
 import {
   type AppDraggablesStore,
@@ -42,6 +43,9 @@ onKeyPressed(KeyboardShortcut.labels, () => toggle('labels'));
 onKeyPressed(KeyboardShortcut.details, () => toggle('details'));
 onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
 onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
+onKeyPressed(KeyboardShortcut.relativeTrajectories, () =>
+  toggle('relativeTrajectories'),
+);
 onKeyPressed(KeyboardShortcut.indicators, () => toggle('indicators'));
 onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
 </script>
@@ -51,33 +55,33 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
     <div class="row">
       <div class="left">
         <MenuItem
+          :toggle="toggle"
           draggable-key="import"
           text="Import"
-          :toggle="toggle"
         >
           <cloud-upload-outline />
         </MenuItem>
 
         <MenuItem
+          :toggle="toggle"
           draggable-key="settings"
           text="Settings"
-          :toggle="toggle"
         >
           <cog-outline />
         </MenuItem>
 
         <MenuItem
+          :toggle="toggle"
           draggable-key="help"
           text="Help"
-          :toggle="toggle"
         >
           <help-outline />
         </MenuItem>
       </div>
 
       <div
-        class="right"
         v-if="isStorageFileRef"
+        class="right"
       >
         <!-- placeholder -->
       </div>
@@ -88,81 +92,90 @@ onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
       class="column"
     >
       <MenuItem
+        :toggle="toggle"
         draggable-key="selection"
         text="Selection"
-        :toggle="toggle"
       >
         <eye-outline />
       </MenuItem>
 
       <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
         draggable-key="colors"
         text="Colors"
-        :toggle="toggle"
-        :disabled="!isSelectedRef.value"
       >
         <color-palette-outline />
       </MenuItem>
 
       <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
         draggable-key="time"
         text="Time"
-        :toggle="toggle"
-        :disabled="!isSelectedRef.value"
       >
         <calendar-outline />
       </MenuItem>
 
       <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
         draggable-key="labels"
         text="Labels"
-        :toggle="toggle"
-        :disabled="!isSelectedRef.value"
       >
         <layers-outline />
       </MenuItem>
 
       <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
         draggable-key="details"
         text="Details"
-        :toggle="toggle"
-        :disabled="!isSelectedRef.value"
       >
         <list-outline />
       </MenuItem>
 
       <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
         draggable-key="audio"
         text="Audio"
-        :toggle="toggle"
-        :disabled="!isSelectedRef.value"
       >
         <headset-outline />
       </MenuItem>
 
       <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
         draggable-key="trajectories"
         text="Trajectories"
-        :toggle="toggle"
-        :disabled="!isSelectedRef.value"
       >
         <analytics-outline />
       </MenuItem>
 
       <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
+        draggable-key="relativeTrajectories"
+        text="Relative Trajectories"
+      >
+        <timer-outline />
+      </MenuItem>
+
+      <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
         draggable-key="indicators"
         text="Indicators"
-        :toggle="toggle"
-        :disabled="!isSelectedRef.value"
       >
         <bar-chart-outline />
       </MenuItem>
 
       <MenuItem
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
         draggable-key="digested"
         text="Digested"
-        :toggle="toggle"
-        :disabled="!isSelectedRef.value"
       >
         <grid-outline />
       </MenuItem>

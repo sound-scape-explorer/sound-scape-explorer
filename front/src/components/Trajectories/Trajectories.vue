@@ -98,9 +98,9 @@ const handleExportClick = () => {
   <AppDraggable draggable-key="trajectories">
     <div class="container">
       <n-tooltip
-        trigger="hover"
-        placement="top-start"
         :show-arrow="false"
+        placement="top-start"
+        trigger="hover"
       >
         <template #trigger>
           <n-switch
@@ -116,20 +116,20 @@ const handleExportClick = () => {
 
       <n-cascader
         v-model:value="valueRef"
+        :cascade="false"
+        :clear-filter-after-select="false"
+        :disabled="scatterLoadingRef.value || tracedFusedRef.value"
+        :filterable="false"
+        :options="optionsRef"
+        :show-path="false"
+        check-strategy="child"
+        clearable
+        expand-trigger="click"
+        max-tag-count="responsive"
         multiple
         placeholder="Select trajectories"
-        clearable
-        max-tag-count="responsive"
-        expand-trigger="click"
-        :disabled="scatterLoadingRef.value || tracedFusedRef.value"
-        :options="optionsRef"
-        :cascade="false"
-        check-strategy="child"
-        :show-path="false"
-        :filterable="false"
-        :clear-filter-after-select="false"
-        @update:value="handleUpdateValue"
         size="small"
+        @update:value="handleUpdateValue"
       />
       <TrajectoriesColorScale />
 

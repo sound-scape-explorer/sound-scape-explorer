@@ -90,4 +90,8 @@ export enum StoragePath {
   traced = '/traced',
   traced_timestamps = '/traced_timestamps',
   traced_relative_timestamps = '/traced_relative_timestamps',
+
+  // Relative Trajectories
+  relative_traced = '/relative_traced',
+  relative_traced_relative_timetamps = '/relative_traced_relative_timestamps',
 }

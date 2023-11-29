@@ -3,9 +3,9 @@ import Plotly from 'plotly.js-dist-min';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref, watch} from 'vue';
 
-import type {AppHistogramProps} from './AppHistogram.vue';
+import type {AppPlotProps} from './AppPlot.vue';
 
-export function useAppHistogram(props: AppHistogramProps) {
+export function useAppPlot(props: AppPlotProps) {
   const divRef = ref<HTMLDivElement | null>(null);
   const dataRef = ref<Data[] | null>(null);
   const layoutRef = ref<Partial<Layout> | null>(null);
@@ -25,19 +25,25 @@ export function useAppHistogram(props: AppHistogramProps) {
   }
 
   function refresh() {
-    dataRef.value = [
-      {
+    const data: Data[] = [];
+
+    for (const index in props.values) {
+      const d: Data = {
         type: 'scatter',
         mode: 'lines+markers',
-        x: props.labels,
-        y: props.values,
+        x: props.labels[index],
+        y: props.values[index],
         hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
         marker: {
           color: props.colors,
           size: 6,
         },
-      },
-    ];
+      };
+
+      data.push(d);
+    }
+
+    dataRef.value = data;
 
     layoutRef.value = {
       title: props.title,
@@ -57,7 +63,7 @@ export function useAppHistogram(props: AppHistogramProps) {
       xaxis: {
         zeroline: false,
         fixedrange: true,
-        showticklabels: false,
+        ticks: '',
       },
       yaxis: {
         zeroline: false,

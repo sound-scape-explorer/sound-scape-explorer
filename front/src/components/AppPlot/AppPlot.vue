@@ -1,18 +1,18 @@
 <script lang="ts" setup="">
 import {watch} from 'vue';
 
-import {useAppHistogram} from './useAppHistogram';
+import {useAppPlot} from './useAppPlot';
 
-export interface AppHistogramProps {
-  labels: string[];
-  values: number[];
+export interface AppPlotProps {
+  labels: string[][];
+  values: number[][];
   colors: string[];
   title?: string;
 }
 
-const props = defineProps<AppHistogramProps>();
+const props = defineProps<AppPlotProps>();
 
-const {divRef, refresh} = useAppHistogram(props);
+const {divRef, refresh} = useAppPlot(props);
 
 watch(props, refresh);
 </script>

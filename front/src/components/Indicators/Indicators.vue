@@ -3,7 +3,9 @@ import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NCascader, NIcon, NSelect, NSwitch} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
-import AppHistogram from 'src/components/AppHistogram/AppHistogram.vue';
+import AppHistogram, {
+  type AppHistogramProps,
+} from 'src/components/AppHistogram/AppHistogram.vue';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {useDate} from 'src/hooks/useDate';
 import {sitesRef} from 'src/hooks/useSites';
@@ -59,14 +61,8 @@ const updateSites = (sitesNames: string[]) => {
 
 const isByDateRef = ref<boolean>(false);
 
-interface ChartData {
-  values: number[];
-  labels: string[];
-  colors: string[];
-}
-
-const chartDataRef = computed<ChartData>(() => {
-  if (cyclingScaleRef.value === null || sitesRef.value === null) {
+const chartDataRef = computed<AppHistogramProps>(() => {
+  if (sitesRef.value === null) {
     return {
       values: [],
       labels: [],
@@ -140,28 +136,28 @@ const handleExportClick = () => {
         <n-select
           v-model:value="indicatorSelectedRef"
           :options="indicatorsOptionsRef"
+          class="sites"
           placeholder="Indicator..."
           size="small"
-          class="sites"
         />
 
         <n-cascader
           v-model:value="sitesSelectedRef"
+          :cascade="false"
+          :clear-filter-after-select="false"
+          :filterable="true"
+          :options="sitesOptionsRef"
+          :show-path="false"
+          check-strategy="child"
+          class="cascader"
+          clearable
+          expand-trigger="click"
+          max-tag-count="responsive"
           multiple
           placeholder="Select sites"
-          clearable
-          max-tag-count="responsive"
-          expand-trigger="click"
-          :options="sitesOptionsRef"
-          :cascade="false"
-          check-strategy="child"
-          :show-path="false"
-          :filterable="true"
-          :clear-filter-after-select="false"
-          @update:value="updateSites"
           size="small"
-          class="cascader"
           width="800"
+          @update:value="updateSites"
         />
       </div>
 
@@ -188,9 +184,9 @@ const handleExportClick = () => {
       </div>
 
       <AppHistogram
-        :values="chartDataRef.values"
-        :labels="chartDataRef.labels"
         :colors="chartDataRef.colors"
+        :labels="chartDataRef.labels"
+        :values="chartDataRef.values"
       />
     </div>
   </AppDraggable>
