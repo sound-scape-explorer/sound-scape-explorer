@@ -74,6 +74,8 @@ def trace_relative_trajectories(
                 pack=pack,
                 ar=ar,
                 relative_distances=relative_distances,
+                label_property=label_property,
+                label_value=label_value,
             )
 
             RelativeTracedStorage.write_timestamps(

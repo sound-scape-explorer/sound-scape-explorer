@@ -44,6 +44,8 @@ class RelativeTracedStorage:
         pack: List[TrajectoryConfig],
         ar: AggregatedReduceable,
         relative_distances: List[List[float]],
+        label_property: str,
+        label_value: str,
     ) -> None:
         for t, trajectory in enumerate(pack):
             path = RelativeTracedStorage.get_distance_path(
@@ -60,6 +62,9 @@ class RelativeTracedStorage:
                 attributes={
                     "extractor_index": str(ar.extractor.index),
                     "trajectory_index": str(trajectory.index),
+                    "trajectory_name": trajectory.name,
+                    "label_property": label_property,
+                    "label_value": label_value,
                 },
             )
 
