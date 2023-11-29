@@ -62,6 +62,6 @@ def ask_menu(
         }
     ]
 
-    answers = prompt(questions)
+    answers = prompt(questions=questions, vi_mode=True)
     answer: str = str(answers["choices"])
     return answer
