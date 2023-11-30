@@ -3,9 +3,8 @@ import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NCascader, NIcon, NSelect, NSwitch} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
-import AppHistogram, {
-  type AppHistogramProps,
-} from 'src/components/AppHistogram/AppHistogram.vue';
+import {type AppHistogramProps} from 'src/components/AppHistogram/AppHistogram.vue';
+import AppPlot from 'src/components/AppPlot/AppPlot.vue';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {useDate} from 'src/hooks/useDate';
 import {sitesRef} from 'src/hooks/useSites';
@@ -183,10 +182,10 @@ const handleExportClick = () => {
         </n-button>
       </div>
 
-      <AppHistogram
-        :colors="chartDataRef.colors"
-        :labels="chartDataRef.labels"
-        :values="chartDataRef.values"
+      <AppPlot
+        :colors="[chartDataRef.colors]"
+        :labels="[chartDataRef.labels]"
+        :values="[chartDataRef.values]"
       />
     </div>
   </AppDraggable>

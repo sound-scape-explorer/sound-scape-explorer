@@ -76,6 +76,7 @@ const handleUpdateValue = (indexes: number[]) => {
         :labels="histogramLabelsRef"
         :names="histogramNamesRef"
         :values="histogramValuesRef"
+        legend
         title="Relative Trajectories"
         xTitle="Relative daytime"
         yTitle="Relative distance from average starting point"

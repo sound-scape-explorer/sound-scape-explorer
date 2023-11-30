@@ -6,10 +6,12 @@ import {useAppPlot} from './useAppPlot';
 export interface AppPlotProps {
   labels: string[][];
   values: number[][];
-  names: string[];
+  names?: string[];
+  colors?: string[][];
   title?: string;
   xTitle?: string;
   yTitle?: string;
+  legend?: boolean;
 }
 
 const props = defineProps<AppPlotProps>();
