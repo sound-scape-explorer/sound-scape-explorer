@@ -5,7 +5,6 @@ import {
   PlaySkipBackOutline,
   PlaySkipForwardOutline,
 } from '@vicons/ionicons5';
-import {onKeyPressed} from '@vueuse/core';
 import type {Dayjs} from 'dayjs';
 import {
   NButton,
@@ -16,11 +15,12 @@ import {
   NSwitch,
   NTooltip,
 } from 'naive-ui';
+import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
 import {useDate} from 'src/hooks/useDate';
+import {useKeyboard} from 'src/hooks/useKeyboard';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {type ComputedRef} from 'vue';
-import {computed, ref, watch} from 'vue';
+import {computed, type ComputedRef, ref, watch} from 'vue';
 
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
@@ -164,9 +164,10 @@ const transposeDateToZone = (date: Dayjs | null) => {
   return date.unix() * 1000 + (timeOffsetRef.value ?? 0);
 };
 
-onKeyPressed('n', () => skipTimeForward());
-onKeyPressed('p', () => skipTimeBackward());
-onKeyPressed(' ', () => togglePlaying());
+const {registerKey} = useKeyboard();
+registerKey(KeyboardShortcut.timeForward, () => skipTimeForward());
+registerKey(KeyboardShortcut.timeBackward, () => skipTimeBackward());
+registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
 </script>
 
 <template>

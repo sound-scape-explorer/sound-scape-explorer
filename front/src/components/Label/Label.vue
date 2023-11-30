@@ -1,9 +1,9 @@
 <script lang="ts" setup="">
 import {SearchOutline} from '@vicons/ionicons5';
-import {onKeyPressed} from '@vueuse/core';
 import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {labelsColumnsRef} from 'src/components/Label/useLabelsColumns';
+import {useKeyboard} from 'src/hooks/useKeyboard';
 import {computed} from 'vue';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -27,7 +27,8 @@ const toggleZoom = () => {
   labelZoomedRef.value = !labelZoomedRef.value;
 };
 
-onKeyPressed(KeyboardShortcut.labelsZoom, toggleZoom);
+const {registerKey} = useKeyboard();
+registerKey(KeyboardShortcut.labelsZoom, toggleZoom);
 
 const toggleColumns = () => {
   if (labelsColumnsRef.value === 1) {

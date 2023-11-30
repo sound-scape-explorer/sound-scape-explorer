@@ -14,8 +14,8 @@ import {
   ListOutline,
   TimerOutline,
 } from '@vicons/ionicons5';
-import {onKeyPressed} from '@vueuse/core';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
+import {useKeyboard} from 'src/hooks/useKeyboard';
 import {isSelectedRef} from 'src/hooks/useSelection';
 import {useStorageFile} from 'src/hooks/useStorageFile';
 
@@ -27,27 +27,28 @@ import {
 import MenuItem from './MenuItem.vue';
 
 const {isStorageFileRef} = useStorageFile();
+const {registerKey} = useKeyboard();
 
 const toggle = (key: keyof AppDraggablesStore): void => {
   appDraggableSelectedRef.value = key;
   appDraggablesStore[key] = !appDraggablesStore[key];
 };
 
-onKeyPressed(KeyboardShortcut.import, () => toggle('import'));
-onKeyPressed(KeyboardShortcut.settings, () => toggle('settings'));
-onKeyPressed(KeyboardShortcut.help, () => toggle('help'));
-onKeyPressed(KeyboardShortcut.selection, () => toggle('selection'));
-onKeyPressed(KeyboardShortcut.colors, () => toggle('colors'));
-onKeyPressed(KeyboardShortcut.time, () => toggle('time'));
-onKeyPressed(KeyboardShortcut.labels, () => toggle('labels'));
-onKeyPressed(KeyboardShortcut.details, () => toggle('details'));
-onKeyPressed(KeyboardShortcut.audio, () => toggle('audio'));
-onKeyPressed(KeyboardShortcut.trajectories, () => toggle('trajectories'));
-onKeyPressed(KeyboardShortcut.relativeTrajectories, () =>
+registerKey(KeyboardShortcut.import, () => toggle('import'));
+registerKey(KeyboardShortcut.settings, () => toggle('settings'));
+registerKey(KeyboardShortcut.help, () => toggle('help'));
+registerKey(KeyboardShortcut.selection, () => toggle('selection'));
+registerKey(KeyboardShortcut.colors, () => toggle('colors'));
+registerKey(KeyboardShortcut.time, () => toggle('time'));
+registerKey(KeyboardShortcut.labels, () => toggle('labels'));
+registerKey(KeyboardShortcut.details, () => toggle('details'));
+registerKey(KeyboardShortcut.audio, () => toggle('audio'));
+registerKey(KeyboardShortcut.trajectories, () => toggle('trajectories'));
+registerKey(KeyboardShortcut.relativeTrajectories, () =>
   toggle('relativeTrajectories'),
 );
-onKeyPressed(KeyboardShortcut.indicators, () => toggle('indicators'));
-onKeyPressed(KeyboardShortcut.digested, () => toggle('digested'));
+registerKey(KeyboardShortcut.indicators, () => toggle('indicators'));
+registerKey(KeyboardShortcut.digested, () => toggle('digested'));
 </script>
 
 <template>
