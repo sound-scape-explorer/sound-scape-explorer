@@ -53,7 +53,7 @@ class ContinuousTimeTrajectory:
         self,
         relative_timestamps: List[float],
     ) -> List[int]:
-        self.relative_timestamps = [int(rt) for rt in relative_timestamps]
+        self.relative_timestamps = relative_timestamps
         return self.relative_timestamps
 
     def load(
