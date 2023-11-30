@@ -79,9 +79,9 @@ watch(intervalDetailsRef, () => {
               </template>
             </n-button>
           </template>
+
           <n-grid
             :cols="1"
-            class="grid"
             x-gap="12"
           >
             <n-gi>
@@ -149,14 +149,12 @@ watch(intervalDetailsRef, () => {
       <span />
       <n-grid
         :cols="2"
-        class="grid"
         x-gap="12"
       >
         <!--suppress JSUnusedLocalSymbols -->
         <n-gi v-for="(_, index) in labelsPropertiesRef.value">
           <n-tag
             :bordered="false"
-            class="tag"
             size="small"
           >
             {{ labelsPropertiesRef.value?.[index] }}
@@ -171,15 +169,13 @@ watch(intervalDetailsRef, () => {
       <div class="title">Extracted Data</div>
 
       <n-grid
-        :cols="2"
-        class="grid"
-        x-gap="12"
         v-if="aggregatedIndicatorsRef.value !== null"
+        :cols="2"
+        x-gap="12"
       >
         <n-gi v-for="(ex, index) in nonNnExtractorsRef.value">
           <n-tag
             :bordered="false"
-            class="tag"
             size="small"
           >
             {{ ex.name }}
