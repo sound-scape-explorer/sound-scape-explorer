@@ -28,21 +28,26 @@ const optionsRef = computed(() => {
 
 const histogramValuesRef = ref<AppPlotProps['values']>([]);
 const histogramLabelsRef = ref<AppPlotProps['labels']>([]);
-const histogramColorsRef = ref<AppPlotProps['colors']>([]);
+const histogramNamesRef = ref<AppPlotProps['names']>([]);
 
 const handleUpdateValue = (indexes: number[]) => {
   const selectedRelativeTrajectories = selectRelativeTrajectories(indexes);
 
   if (selectedRelativeTrajectories.length === 0) {
+    histogramValuesRef.value = [];
+    histogramLabelsRef.value = [];
     return;
   }
 
   histogramValuesRef.value = selectedRelativeTrajectories.map(
     (rT) => rT.values,
   );
+
   histogramLabelsRef.value = selectedRelativeTrajectories.map((rT) =>
-    rT.timestamps.map((i, t) => (t + i).toString()),
+    rT.timestamps.map((t) => t.toString()),
   );
+
+  histogramNamesRef.value = selectedRelativeTrajectories.map((rT) => rT.name);
 };
 </script>
 
@@ -68,10 +73,12 @@ const handleUpdateValue = (indexes: number[]) => {
       />
 
       <AppPlot
-        :colors="histogramColorsRef"
         :labels="histogramLabelsRef"
+        :names="histogramNamesRef"
         :values="histogramValuesRef"
         title="Relative Trajectories"
+        xTitle="Relative daytime"
+        yTitle="Relative distance from average starting point"
       />
     </div>
   </AppDraggable>

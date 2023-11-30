@@ -31,12 +31,12 @@ export function useAppPlot(props: AppPlotProps) {
       const d: Data = {
         type: 'scatter',
         mode: 'lines+markers',
+        name: props.names[index],
         x: props.labels[index],
         y: props.values[index],
         hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
         marker: {
-          color: props.colors,
-          size: 6,
+          size: 2,
         },
       };
 
@@ -49,7 +49,7 @@ export function useAppPlot(props: AppPlotProps) {
       title: props.title,
       plot_bgcolor: 'transparent',
       paper_bgcolor: 'transparent',
-      showlegend: false,
+      showlegend: true,
       clickmode: 'none',
       width: PLOTLY_SIZE,
       height: PLOTLY_SIZE,
@@ -61,14 +61,16 @@ export function useAppPlot(props: AppPlotProps) {
         pad: 1,
       },
       xaxis: {
-        zeroline: false,
-        fixedrange: true,
-        ticks: '',
+        title: props.xTitle,
       },
       yaxis: {
-        zeroline: false,
-        fixedrange: true,
-        ticks: '',
+        title: props.yTitle,
+      },
+      legend: {
+        xanchor: 'left',
+        yanchor: 'top',
+        x: 0,
+        y: 1,
       },
     };
   }
