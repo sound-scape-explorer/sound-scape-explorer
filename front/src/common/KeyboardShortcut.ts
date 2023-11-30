@@ -13,7 +13,7 @@ export enum KeyboardShortcut {
   indicators = 'v',
   digested = 'b',
   time = 't',
-  timePlayPause = 'space',
+  timePlayPause = ' ',
   timeBackward = 'p',
   timeForward = 'n',
 }
