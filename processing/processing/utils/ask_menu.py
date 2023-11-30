@@ -48,6 +48,7 @@ def ask_menu(
                 MenuChoice.Digest.value,
                 Separator(),
                 MenuChoice.RunAll.value,
+                Separator(),
                 MenuChoice.ExportDataframe.value,
                 MenuChoice.ExportComputationUmaps.value,
                 MenuChoice.ExportMeanDistancesMatrix.value,
