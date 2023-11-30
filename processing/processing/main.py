@@ -90,16 +90,12 @@ def main(
             trace_relative_trajectories(storage)
             digest(storage, main)
         if answer == MenuChoice.ExportDataframe.value:
-            refresh_configuration(config, storage)
             export_dataframe(config, storage, main)
         if answer == MenuChoice.ExportComputationUmaps.value:
-            refresh_configuration(config, storage)
             export_computation_umaps(config, storage, main)
         if answer == MenuChoice.ExportMeanDistancesMatrix.value:
-            refresh_configuration(config, storage)
             export_mdm(config, storage, main)
         if answer == MenuChoice.Repack.value:
-            refresh_configuration(config, storage)
             repack_storage(storage, main)
         if answer == MenuChoice.FixAudioWindows10_7_2.value:
             refresh_configuration(config, storage)
