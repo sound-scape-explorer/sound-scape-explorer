@@ -69,9 +69,9 @@ export function useAppPlot(props: AppPlotProps) {
         title: props.yTitle,
       },
       legend: {
-        xanchor: 'left',
+        xanchor: 'right',
         yanchor: 'top',
-        x: 0,
+        x: 1,
         y: 1,
       },
     };
