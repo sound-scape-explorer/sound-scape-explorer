@@ -3,6 +3,7 @@ import Plotly from 'plotly.js-dist-min';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref, watch} from 'vue';
 
+import {settingsStore} from '../Settings/settingsStore';
 import type {AppPlotProps} from './AppPlot.vue';
 
 export function useAppPlot(props: AppPlotProps) {
@@ -48,8 +49,8 @@ export function useAppPlot(props: AppPlotProps) {
 
     layoutRef.value = {
       title: props.title,
-      plot_bgcolor: 'transparent',
-      paper_bgcolor: 'transparent',
+      plot_bgcolor: settingsStore.plotBackground,
+      paper_bgcolor: settingsStore.plotBackground,
       showlegend: !!props.legend,
       clickmode: 'none',
       width: PLOTLY_SIZE,

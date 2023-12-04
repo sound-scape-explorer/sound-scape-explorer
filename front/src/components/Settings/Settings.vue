@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
-import {SPECTROGRAM_COLOR_MAPS} from 'src/constants';
+import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {audioHostRef} from 'src/hooks/useAudioHost';
 import {useKeyboard} from 'src/hooks/useKeyboard';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
@@ -12,9 +12,13 @@ import {settingsStore} from './settingsStore';
 
 const {lockKeyboard, unlockKeyboard} = useKeyboard();
 
-const colorMapsOptionsRef = computed(() =>
-  convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS),
-);
+const spectrogramColorMapsOptionsRef = computed(() => {
+  return convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS);
+});
+
+const plotBackgroundOptionsRef = computed(() => {
+  return convertToNaiveSelectOptions(Object.values(PLOT_BACKGROUND));
+});
 </script>
 
 <template>
@@ -44,7 +48,7 @@ const colorMapsOptionsRef = computed(() =>
         <n-select
           v-model:value="spectrogramColorRef.value"
           :default-value="spectrogramColorRef.value"
-          :options="colorMapsOptionsRef"
+          :options="spectrogramColorMapsOptionsRef"
           size="tiny"
         />
       </n-gi>
@@ -53,11 +57,25 @@ const colorMapsOptionsRef = computed(() =>
           :bordered="false"
           size="small"
         >
-          Auto open Details and Audio panels on scatter click
+          Auto open Details panel on scatter click
         </n-tag>
         <n-checkbox
           v-model:checked="settingsStore.autoOpenOnScatterClick"
           class="checkbox"
+        />
+      </n-gi>
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Plot background
+        </n-tag>
+        <n-select
+          v-model:value="settingsStore.plotBackground"
+          :default-value="settingsStore.plotBackground"
+          :options="plotBackgroundOptionsRef"
+          size="tiny"
         />
       </n-gi>
     </n-grid>

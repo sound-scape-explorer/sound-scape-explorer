@@ -4,6 +4,7 @@ import Plotly, {
   type PlotlyHTMLElement,
   type PlotMouseEvent,
 } from 'plotly.js-dist-min';
+import {settingsStore} from 'src/components/Settings/settingsStore';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
 import {useScatterClick} from './useScatterClick';
@@ -30,7 +31,7 @@ const layoutRef = computed<Partial<Layout> | null>(() => {
       b: 0,
       l: 0,
     },
-    plot_bgcolor: 'transparent',
+    plot_bgcolor: settingsStore.plotBackground,
     yaxis: {
       scaleanchor: 'x',
       scaleratio: 1,
