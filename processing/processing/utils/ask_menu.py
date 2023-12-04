@@ -19,6 +19,7 @@ class MenuChoice(Enum):
     RelativeTrace = "Run relative trajectories"
     Digest = "Run digests"
     RunAll = "Run all"
+    DetectFiles = "Detect files and add to configuration"
     ExportDataframe = "Export dataframe as .csv"
     ExportComputationUmaps = "Export computation UMAPs as .npy"
     ExportMeanDistancesMatrix = "Export mean distances matrix as .npy"
@@ -49,6 +50,7 @@ def ask_menu(
                 Separator(),
                 MenuChoice.RunAll.value,
                 Separator(),
+                MenuChoice.DetectFiles.value,
                 MenuChoice.ExportDataframe.value,
                 MenuChoice.ExportComputationUmaps.value,
                 MenuChoice.ExportMeanDistancesMatrix.value,
