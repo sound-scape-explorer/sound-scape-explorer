@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {NCheckbox, NInput, NSelect} from 'naive-ui';
+import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
 import {SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {audioHostRef} from 'src/hooks/useAudioHost';
 import {useKeyboard} from 'src/hooks/useKeyboard';
@@ -19,92 +19,56 @@ const colorMapsOptionsRef = computed(() =>
 
 <template>
   <AppDraggable draggable-key="settings">
-    <div class="settings">
-      <div>
-        <h2>Spectrogram color map</h2>
-        <hr />
-
-        <div>
-          <n-select
-            v-model:value="spectrogramColorRef.value"
-            :default-value="spectrogramColorRef.value"
-            :options="colorMapsOptionsRef"
-            size="tiny"
-          />
-        </div>
-      </div>
-
-      <div>
-        <h2>Global settings</h2>
-
-        <hr />
-
-        Audio Host
-
+    <n-grid cols="1">
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Audio host
+        </n-tag>
         <n-input
           v-model:value="audioHostRef.value"
+          size="tiny"
           @inputBlur="() => unlockKeyboard()"
           @inputFocus="() => lockKeyboard()"
         />
-
-        <div class="checkboxes">
-          <n-checkbox
-            v-model:checked="settingsStore.fullPageScreenshot"
-            class="checkbox"
-          >
-            Full page screenshot
-          </n-checkbox>
-        </div>
-
-        <div class="checkboxes">
-          <n-checkbox
-            v-model:checked="settingsStore.autoOpenOnScatterClick"
-            class="checkbox"
-          >
-            Auto Open on Scatter Click (Details and Audio)
-          </n-checkbox>
-        </div>
-      </div>
-
-      <div>
-        <h2>Debug</h2>
-
-        <hr />
-
-        <div class="checkboxes">
-          <n-checkbox
-            v-model:checked="settingsStore.preview"
-            class="checkbox"
-          >
-            Preview
-          </n-checkbox>
-        </div>
-      </div>
-    </div>
+      </n-gi>
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Spectrogram color map
+        </n-tag>
+        <n-select
+          v-model:value="spectrogramColorRef.value"
+          :default-value="spectrogramColorRef.value"
+          :options="colorMapsOptionsRef"
+          size="tiny"
+        />
+      </n-gi>
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Auto open Details and Audio panels on scatter click
+        </n-tag>
+        <n-checkbox
+          v-model:checked="settingsStore.autoOpenOnScatterClick"
+          class="checkbox"
+        />
+      </n-gi>
+    </n-grid>
   </AppDraggable>
 </template>
 
 <style lang="scss" scoped>
-.settings {
+.gi {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  & h2 {
-    font-weight: bold;
-  }
-}
-
-.zoom {
-  width: 10rem;
-}
-
-.checkboxes {
-  display: flex;
-  flex-direction: column;
-}
-
-.checkbox {
-  width: fit-content;
+  justify-content: space-between;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
 }
 </style>
