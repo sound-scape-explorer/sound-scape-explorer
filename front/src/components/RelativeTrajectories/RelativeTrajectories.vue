@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import {NCascader} from 'naive-ui';
+import {DownloadOutline} from '@vicons/ionicons5';
+import {NButton, NCascader, NIcon} from 'naive-ui';
+import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
-import {type AppHistogramProps} from 'src/components/AppHistogram/AppHistogram.vue';
-import AppPlot, {AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
+import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
 import {
   relativeTrajectoriesRef,
   useRelativeTrajectories,
 } from 'src/hooks/useRelativeTrajectories';
-import {tracedFusedRef} from 'src/hooks/useTraced';
 import {computed, ref} from 'vue';
 
 const {selectRelativeTrajectories} = useRelativeTrajectories();
@@ -36,6 +36,7 @@ const handleUpdateValue = (indexes: number[]) => {
   if (selectedRelativeTrajectories.length === 0) {
     histogramValuesRef.value = [];
     histogramLabelsRef.value = [];
+    histogramNamesRef.value = [];
     return;
   }
 
@@ -49,6 +50,34 @@ const handleUpdateValue = (indexes: number[]) => {
 
   histogramNamesRef.value = selectedRelativeTrajectories.map((rT) => rT.name);
 };
+
+const handleExportClick = () => {
+  if (
+    histogramValuesRef.value.length === 0 ||
+    histogramLabelsRef.value.length === 0 ||
+    histogramNamesRef.value?.length === 0 ||
+    typeof histogramNamesRef?.value === 'undefined'
+  ) {
+    return;
+  }
+
+  const csv = new Csv();
+  csv.addColumn('relativeTrajectory');
+
+  for (const index in histogramValuesRef.value) {
+    csv.createRow();
+    csv.addToCurrentRow(`${histogramNamesRef?.value[index]} - relative time`);
+    csv.addToCurrentRow(histogramLabelsRef.value[index].toString());
+
+    csv.createRow();
+    csv.addToCurrentRow(
+      `${histogramNamesRef?.value[index]} - relative distance`,
+    );
+    csv.addToCurrentRow(histogramValuesRef.value[index].toString());
+  }
+
+  csv.download('relative-trajectories');
+};
 </script>
 
 <template>
@@ -58,7 +87,7 @@ const handleUpdateValue = (indexes: number[]) => {
         v-model:value="valueRef"
         :cascade="false"
         :clear-filter-after-select="false"
-        :disabled="scatterLoadingRef.value || tracedFusedRef.value"
+        :disabled="scatterLoadingRef.value"
         :filterable="false"
         :options="optionsRef"
         :show-path="false"
@@ -71,6 +100,19 @@ const handleUpdateValue = (indexes: number[]) => {
         size="small"
         @update:value="handleUpdateValue"
       />
+
+      <n-button
+        class="export"
+        size="tiny"
+        @click="handleExportClick"
+      >
+        <template #icon>
+          <n-icon>
+            <download-outline />
+          </n-icon>
+        </template>
+        Export .csv
+      </n-button>
 
       <AppPlot
         :labels="histogramLabelsRef"
@@ -94,5 +136,9 @@ const handleUpdateValue = (indexes: number[]) => {
   gap: 0.5rem;
 
   min-width: 20rem;
+}
+
+.export {
+  width: 100%;
 }
 </style>
