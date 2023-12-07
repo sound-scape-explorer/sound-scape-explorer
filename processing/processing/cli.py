@@ -54,8 +54,14 @@ def start_front():
     # spawn audio and front modules
     if platform.system() == "Windows":
         audio_path = trim_quotes_if_needed(audio_path)
-        command = ["pnpm", "audio:front", audio_path]
-        subprocess.run(command, shell=True)
+        audio_command = ["pnpm", "audio", audio_path]
+        front_command = ["pnpm", "front"]
+
+        audio_process = subprocess.Popen(audio_command)
+        front_process = subprocess.Popen(front_command)
+
+        audio_process.wait()
+        front_process.wait()
     else:
         command = ["pnpm", "audio:front", audio_path]
         subprocess.run(command)
