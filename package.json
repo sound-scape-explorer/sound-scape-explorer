@@ -3,7 +3,6 @@
   "scripts": {
     "audio": "pnpm serve --cors -p 5531",
     "audio:front": "concurrently -P pnpm:front \"pnpm:audio {1}\" --",
-    "audio:front:windows": "concurrently -P pnpm:front \"pnpm:audio {1}\" --",
     "dev": "pnpm front",
     "dev:audio": "pnpm front:audio",
     "front": "cd front && pnpm dev",
