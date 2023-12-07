@@ -8,7 +8,7 @@ sudo apt update
 sudo apt upgrade -y
 
 # deps
-sudo apt install -y curl ffmpeg hdf5-tools ca-certificates gnupg
+sudo apt install -y gcc curl ffmpeg hdf5-tools ca-certificates gnupg
 
 # python
 sudo apt install -y software-properties-common
