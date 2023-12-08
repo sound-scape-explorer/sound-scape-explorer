@@ -1,3 +1,77 @@
+# [12.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.10.0...v12.0.0) (2023-12-08)
+
+
+### Bug Fixes
+
+* **App:** Remove `audio:front:windows` unused pnpm command ([87dbf99](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/87dbf99c52ebcec7fa8b2ee454f0b2e1635a5bf8))
+* **Bin:** Add gcc to ubuntu requirements ([c457d1e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c457d1ef16c2f8fc0dca00c874994b657f1fe86d))
+* **Front/AppPlot:** Move legend to right top corner ([e3704b9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e3704b9b14cd33af05e4cef406ac4484f0641d13))
+* **Front/Help:** Improve layout ([3afbdb7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3afbdb7418492df48ce1d7fece691ef928c18833))
+* **Front/Indicators:** Rectify typings ([ec83b67](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ec83b675b4cb2f1df5921bebc96d4beb9edc1240))
+* **Front/KeyboardShortcut:** Replace `space` with actual raw string ([ac5806e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ac5806e88f6b8d671a6b683d371fc97a7d79c5b5))
+* **Front/Labels:** Remove coloring notifications ([c20ac69](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c20ac69762f1634c7c7ae4dd02dad4ac8a22a9b2))
+* **Front/Scatter:** Remove last camera position button ([afed7f7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/afed7f761228773f2886ce0c0f0e691904a8e7ec))
+* **Front/Selection:** Close modal on selection load ([4cf5879](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4cf5879d02fc599efa45a7bcafcbeaf6eb1b6013))
+* **Front/Settings:** Lock keyboard shortcuts when typing in audio host field ([6fb5bab](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6fb5bab280db3644f65eb2a650ba3c66bd13ef7b))
+* **Front/Settings:** Rework interface + Remove unused settings ([cb6ad95](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb6ad95290f43b8e6580df2b0d94052dbf96d054))
+* **Front/Storage:** Fix typo in settings ([8b596b1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8b596b17821174a39e074d67e99eeb08c1db91d9))
+* **Front/Worker:** Catch unpopulated data for autoclusters and relative trajectories ([95291bf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/95291bf74758c4dbe930c33ab93dcd7a802de371))
+* **Front:** Improve plot layout + Add relative trajectories legends ([247803f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/247803fea913db3eddf1f45fd85bae28771e180e))
+* **Front:** Improve plot layout + Replace old histogram component with plot ([6560bed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6560bed4ec4c7cad30d2529b9ac031d9dfbb782c))
+* **Processing/CLI:** Audio paths containing spaces are now working on Windows ([73d0991](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/73d0991a34e71ac121096cdcb6546154fc68047d))
+* **Processing/CLI:** Remove bare `viz` sse command ([40ae89f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/40ae89f954bef6e248f45842bcd884563958db59))
+* **Processing/Config:** Display config loading status in console ([767b812](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/767b812e04e2685426a4478e7ac6bd01ff344d26))
+* **Processing/ContinuousTimeTrajectory:** Store relative timestamps as floats and not ints ([96538cd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/96538cddb196bc1bc542832df93de477ae7df6d6))
+* **Processing/ExportComputationUmaps:** Add specific decorator with configuration object ([17d4f1e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/17d4f1e4d2216497cd968e6e0307fa5d56fe90c3))
+* **Processing/ExportMeanDistancesMatrix:** Add specific decorator with configuration object ([0c31efb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0c31efb33672979c52cd410c8f4c7059a6e54e6b))
+* **Processing/Menu:** Improve layout ([82024aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/82024aa23904b1a059a3fd6c146244355ca00c99))
+* **Processing/Menu:** Remove configuration refresh from export choices ([3256f9f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3256f9f225c4b7300a4a7d796dc10125fafca226))
+* **Processing/Menu:** Remove unused file detection choice ([49a1645](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/49a1645164c81e7b68f0d6c0fc87bc6c1a5dc022))
+* **Processing/Reduce:** Improve console output ([d8f1c10](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d8f1c1016993670fc8c197ec01daa6c62e51271a))
+* **Processing/RelativeTrajectories:** Add attributes to written datasets ([681af9f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/681af9f8ce4760f60598d782fb8e1895b9bbc1eb))
+* **Processing/RelativeTrajectories:** Add console output ([724756a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/724756a1ddb5034d573cb8cd153066d483fd13f6))
+* **Processing/RelativeTrajectories:** Rectify relative trajectories implementation ([8d3cea7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8d3cea7f679c0741d47a4128070539f2a99450d1))
+* **Processing/Utils:** Use importlib instead of deprecating pkg_resources to retrieve app version ([d1824f2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d1824f26639451903971c12dc418b7ec9db51b53))
+
+
+### Features
+
+* **App:** Add shell script to install requirements on ubuntu systems ([18723f2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/18723f2a57c1dc245d75a5e97f3f0a01c269b803))
+* **Examples/Config:** Add VLOOKUP descriptors ([591e254](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/591e2545cd91c13d9ec52ea0c8ac6ff1a3f4ce08))
+* **Front/AppGrid:** Add grid dumb component ([3e3b8d3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3e3b8d3ebbda5ecdd589ff0492e7a61781f4fac4))
+* **Front/Hooks:** Add keyboard hook to register keys with finer ([a081323](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a0813231c223fd3a144b37722ac9b8023618eb8e))
+* **Front/Hooks:** Read config file version and autoclusters configuration ([e620e5d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e620e5dd5e165a02ca85a78b3b4b0fbe12effcdf))
+* **Front/ImportDetails:** Display all settings, specs and confs ([c9566f2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c9566f23f07ba2d8ab51638665267031bc2b5d48))
+* **Front/Labels:** Add <S-z> shortcut to toggle labels' zoom ([51745dd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/51745dd30c3694229d1f1d3eadb8a68a69cade07))
+* **Front/Labels:** Add bucket icon for quick scatter coloring change ([4047682](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/40476823592258025237a95c7c261d5cbda188f7))
+* **Front/Labels:** Add columns toggle ([6b57c30](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6b57c3098223c6770e4b1f6f5512b80f539eb476))
+* **Front/Labels:** Rework styling + Spread checkboxes on two columns ([0c1906b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0c1906b94566f18c95c06d6655baa158db97d01f))
+* **Front/RelativeTrajectories:** Add CSV export ([550fe5b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/550fe5b476a2fe8cc305724cb4d440ae9ad71de9))
+* **Front/RelativeTrajectories:** Add relative trajectories interface ([41bcb69](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/41bcb6935756be1d046a6415a8b201a5533fffc3))
+* **Front/Settings:** Add background options for plots + Update label for auto open ([fd33aa7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fd33aa73e6afeb2dd5b893570d4622ca06715477))
+* **Front:** Add PWA integration ([5ee0519](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5ee05197f5d580a285979a76d531ef0285436bfc))
+* **Processing/CLI:** Add `sse_fill` command for automatic file appends ([902384e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/902384e30627b99b5c9dad4fe1a13f407c6c2368))
+* **Processing/Menu:** Add vim motions ([0a6fb95](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0a6fb950ca150bdb154432d5b58309c87636a3d8))
+* **Processing/Menu:** Improve menu welcome message ([65a5ef1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/65a5ef13f1af93460116b67a144b95dc73b0ee86))
+* **Processing:** Add relative trajectories + Various ([880177a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/880177a48a70576080fb593251624882e369d6e2))
+* **Processing:** Replace installation commands ([267b36a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/267b36ac094dec2906f9b6b97f86ee7479064746))
+
+
+### Performance Improvements
+
+* **Examples/CoralReefLight:** Remove old processing log ([56400ba](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/56400ba46137baf7a124121712a5e196a0a17676))
+* **Front/Details:** Clean component ([a0d2443](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a0d244397050dbe6daa9d5ad487d6ade5d1b2bb7))
+* **Processing/Autocluster:** Extract write to storage ([9e6a24b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9e6a24b6b88734853111c7687e50ccfdbfa35517))
+* **Processing/ComputationUmaps:** Extract storage helpers ([bc26073](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bc26073b0f7286abba7d5963c21472f584dc5ec7))
+
+
+### BREAKING CHANGES
+
+* **Processing:** This commit introduces new installation process for the
+`Processing` module. Now, CPU dependencies are installed first and by
+default, then users can add CUDA dependencies on top by using the new
+commands.
+
 # [11.10.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.9.0...v11.10.0) (2023-11-14)
 
 
