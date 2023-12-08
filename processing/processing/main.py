@@ -15,6 +15,7 @@ from processing.actions.purge_requirements import purge_requirements
 from processing.actions.reduce import reduce
 from processing.actions.refresh_configuration import refresh_configuration
 from processing.actions.repack_storage import repack_storage
+from processing.actions.trace_relative_trajectories import trace_relative_trajectories
 from processing.actions.trace_trajectories import trace_trajectories
 from processing.config.Config import Config
 from processing.storage.Storage import Storage
@@ -23,6 +24,7 @@ from processing.utils.print_welcome import print_welcome
 from processing.utils.quit_sse import quit_sse
 
 stored_config: Config
+last_choice: Optional[MenuChoice] = None
 
 
 def main(
@@ -32,6 +34,7 @@ def main(
     """CLI entry point"""
 
     global stored_config
+    global last_choice
 
     try:
         if config_path is not None:
@@ -48,7 +51,8 @@ def main(
 
         signal(SIGINT, lambda _signum, _frame: quit_sse(storage))
 
-        answer = ask_menu()
+        answer = ask_menu(last_choice)
+        last_choice = answer
 
         if answer == MenuChoice.RefreshConfig.value:
             refresh_configuration(config, storage, main)
@@ -70,6 +74,9 @@ def main(
         if answer == MenuChoice.Trace.value:
             refresh_configuration(config, storage)
             trace_trajectories(storage, main)
+        if answer == MenuChoice.RelativeTrace.value:
+            refresh_configuration(config, storage)
+            trace_relative_trajectories(storage, main)
         if answer == MenuChoice.Digest.value:
             refresh_configuration(config, storage)
             digest(storage, main)
@@ -80,18 +87,15 @@ def main(
             compute_requirements(storage)
             autocluster(storage)
             trace_trajectories(storage)
+            trace_relative_trajectories(storage)
             digest(storage, main)
         if answer == MenuChoice.ExportDataframe.value:
-            refresh_configuration(config, storage)
             export_dataframe(config, storage, main)
         if answer == MenuChoice.ExportComputationUmaps.value:
-            refresh_configuration(config, storage)
             export_computation_umaps(config, storage, main)
         if answer == MenuChoice.ExportMeanDistancesMatrix.value:
-            refresh_configuration(config, storage)
             export_mdm(config, storage, main)
         if answer == MenuChoice.Repack.value:
-            refresh_configuration(config, storage)
             repack_storage(storage, main)
         if answer == MenuChoice.FixAudioWindows10_7_2.value:
             refresh_configuration(config, storage)

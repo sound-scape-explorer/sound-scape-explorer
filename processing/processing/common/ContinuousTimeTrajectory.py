@@ -4,6 +4,10 @@ import numpy
 from h5py import Dataset
 from pandas import pandas
 
+from processing.utils.filter_features_by_label_and_time import (
+    filter_features_by_label_and_time,
+)
+
 
 class ContinuousTimeTrajectory:
     def __init__(self) -> None:
@@ -49,7 +53,7 @@ class ContinuousTimeTrajectory:
         self,
         relative_timestamps: List[float],
     ) -> List[int]:
-        self.relative_timestamps = [int(rt) for rt in relative_timestamps]
+        self.relative_timestamps = relative_timestamps
         return self.relative_timestamps
 
     def load(
@@ -87,24 +91,16 @@ class ContinuousTimeTrajectory:
 
         step = 1
 
-        # Filtering by timestamps
-        filtered_features = []
-        filtered_timestamps: List[int] = []
-        label_property_index = labels_properties.index(trajectory_label_property)
-
-        for index, timestamp in enumerate(timestamps):
-            label_values = labels_values[index]
-            label_value = label_values[label_property_index].decode("utf-8")
-
-            if (
-                timestamp[0] <= timestamp_start
-                or timestamp[0] >= timestamp_end
-                or label_value != trajectory_label_value
-            ):
-                continue
-
-            filtered_features.append(features[index])
-            filtered_timestamps.append(timestamp[0])
+        filtered_features, filtered_timestamps = filter_features_by_label_and_time(
+            features=features,
+            timestamps=timestamps,
+            timestamp_start=timestamp_start,
+            timestamp_end=timestamp_end,
+            labels_properties=labels_properties,
+            labels_values=labels_values,
+            trajectory_label_property=trajectory_label_property,
+            trajectory_label_value=trajectory_label_value,
+        )
 
         self.set_timestamps(filtered_timestamps)
 

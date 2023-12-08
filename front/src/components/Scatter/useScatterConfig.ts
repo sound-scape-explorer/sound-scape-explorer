@@ -96,7 +96,7 @@ export function useScatterConfig() {
         },
       },
     ],
-    modeBarButtonsToRemove: ['toImage'],
+    modeBarButtonsToRemove: ['toImage', 'resetCameraLastSave3d'],
   };
 
   return {

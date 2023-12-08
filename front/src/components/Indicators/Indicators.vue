@@ -3,7 +3,7 @@ import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NCascader, NIcon, NSelect, NSwitch} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
-import AppHistogram from 'src/components/AppHistogram/AppHistogram.vue';
+import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {useDate} from 'src/hooks/useDate';
 import {sitesRef} from 'src/hooks/useSites';
@@ -59,14 +59,8 @@ const updateSites = (sitesNames: string[]) => {
 
 const isByDateRef = ref<boolean>(false);
 
-interface ChartData {
-  values: number[];
-  labels: string[];
-  colors: string[];
-}
-
-const chartDataRef = computed<ChartData>(() => {
-  if (cyclingScaleRef.value === null || sitesRef.value === null) {
+const chartDataRef = computed<AppPlotProps>(() => {
+  if (sitesRef.value === null) {
     return {
       values: [],
       labels: [],
@@ -87,14 +81,16 @@ const chartDataRef = computed<ChartData>(() => {
 
   if (isByDateRef.value === false) {
     return {
-      values: values,
-      labels: timestamps.map(
-        (t, i) =>
-          `${convertTimestampToDateShort(t)}<br>Site: ${
-            sites[i]
-          }<br>Interval: ${i}`,
-      ),
-      colors: colors,
+      values: [values],
+      labels: [
+        timestamps.map(
+          (t, i) =>
+            `${convertTimestampToDateShort(t)}<br>Site: ${
+              sites[i]
+            }<br>Interval: ${i}`,
+        ),
+      ],
+      colors: [colors],
     };
   }
 
@@ -103,14 +99,16 @@ const chartDataRef = computed<ChartData>(() => {
   indices.sort((a, b) => timestamps[a] - timestamps[b]);
 
   return {
-    values: indices.map((i) => values[i]),
-    labels: indices.map(
-      (i) =>
-        `${convertTimestampToDateShort(timestamps[i])}<br>Site: ${
-          sites[i]
-        }<br>Interval: ${i}`,
-    ),
-    colors: indices.map((i) => colors[i]),
+    values: [indices.map((i) => values[i])],
+    labels: [
+      indices.map(
+        (i) =>
+          `${convertTimestampToDateShort(timestamps[i])}<br>Site: ${
+            sites[i]
+          }<br>Interval: ${i}`,
+      ),
+    ],
+    colors: [indices.map((i) => colors[i])],
   };
 });
 
@@ -140,28 +138,28 @@ const handleExportClick = () => {
         <n-select
           v-model:value="indicatorSelectedRef"
           :options="indicatorsOptionsRef"
+          class="sites"
           placeholder="Indicator..."
           size="small"
-          class="sites"
         />
 
         <n-cascader
           v-model:value="sitesSelectedRef"
+          :cascade="false"
+          :clear-filter-after-select="false"
+          :filterable="true"
+          :options="sitesOptionsRef"
+          :show-path="false"
+          check-strategy="child"
+          class="cascader"
+          clearable
+          expand-trigger="click"
+          max-tag-count="responsive"
           multiple
           placeholder="Select sites"
-          clearable
-          max-tag-count="responsive"
-          expand-trigger="click"
-          :options="sitesOptionsRef"
-          :cascade="false"
-          check-strategy="child"
-          :show-path="false"
-          :filterable="true"
-          :clear-filter-after-select="false"
-          @update:value="updateSites"
           size="small"
-          class="cascader"
           width="800"
+          @update:value="updateSites"
         />
       </div>
 
@@ -187,10 +185,10 @@ const handleExportClick = () => {
         </n-button>
       </div>
 
-      <AppHistogram
-        :values="chartDataRef.values"
-        :labels="chartDataRef.labels"
+      <AppPlot
         :colors="chartDataRef.colors"
+        :labels="chartDataRef.labels"
+        :values="chartDataRef.values"
       />
     </div>
   </AppDraggable>

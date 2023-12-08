@@ -5,6 +5,7 @@ from h5py import Dataset
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 
 
@@ -43,3 +44,7 @@ class MeanDistancesMatrix:
             f"/{band.name}"
             f"/{integration.seconds}"
         )
+
+    @staticmethod
+    def exists_in_storage(storage: Storage) -> bool:
+        return storage.exists_dataset(StoragePath.mean_distances_matrix)

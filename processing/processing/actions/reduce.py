@@ -1,38 +1,31 @@
-from typing import Optional
-
 from rich.progress import track
 
 from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.config.bands.BandStorage import BandStorage
-from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.ranges.RangeStorage import RangeStorage
 from processing.config.reducers.ReducerStorage import ReducerStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
-from processing.interfaces import IMain
+from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 from processing.utils.print_aggregated_reduceables import print_aggregated_reduceables
 from processing.utils.print_no_aggregated_reduceables import (
     print_no_aggregated_reduceables,
 )
-from processing.utils.print_no_configuration import print_no_configuration
 from processing.utils.print_reducers import print_reducers
+from processing.utils.validate_configuration import validate_configuration
 
 
+@validate_configuration
 def reduce(
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
-    if not Config.exists_in_storage(storage):
-        print_no_configuration()
-        if callback is not None:
-            callback(storage)
-        return
-
     print_action("Reductions started!", "start")
 
     storage.delete(StoragePath.reduced)
@@ -60,7 +53,7 @@ def reduce(
     print_reducers(reducers)
     print_aggregated_reduceables(aggregated_reduceables, storage)
 
-    for ar in track(aggregated_reduceables, description=("Reducing")):
+    for ar in track(aggregated_reduceables, description="Reducing..."):
         if not ar.exists_in_storage(storage):
             continue
 
@@ -94,6 +87,4 @@ def reduce(
             )
 
     print_action("Reductions completed!", "end")
-
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)

@@ -1,24 +1,25 @@
 <script lang="ts" setup>
+import Audio from 'src/components/Audio/Audio.vue';
+import Colors from 'src/components/Colors/Colors.vue';
+import Details from 'src/components/Details/Details.vue';
+import Digested from 'src/components/Digested/Digested.vue';
+import Help from 'src/components/Help/Help.vue';
+import Import from 'src/components/Import/Import.vue';
+import Indicators from 'src/components/Indicators/Indicators.vue';
+import Label from 'src/components/Label/Label.vue';
+import Menu from 'src/components/Menu/Menu.vue';
+import RelativeTrajectories from 'src/components/RelativeTrajectories/RelativeTrajectories.vue';
+import Scatter from 'src/components/Scatter/Scatter.vue';
+import Selection from 'src/components/Selection/Selection.vue';
+import Settings from 'src/components/Settings/Settings.vue';
+import StorageLoad from 'src/components/StorageLoad/StorageLoad.vue';
+import Time from 'src/components/Time/Time.vue';
+import Trajectories from 'src/components/Trajectories/Trajectories.vue';
+import {useStorageFile} from 'src/hooks/useStorageFile';
 import {useWorker} from 'src/hooks/useWorker';
 import {onMounted} from 'vue';
 
 import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore';
-import Audio from '../components/Audio/Audio.vue';
-import Colors from '../components/Colors/Colors.vue';
-import Details from '../components/Details/Details.vue';
-import Digested from '../components/Digested/Digested.vue';
-import Help from '../components/Help/Help.vue';
-import Import from '../components/Import/Import.vue';
-import Indicators from '../components/Indicators/Indicators.vue';
-import Label from '../components/Label/Label.vue';
-import Menu from '../components/Menu/Menu.vue';
-import Scatter from '../components/Scatter/Scatter.vue';
-import Selection from '../components/Selection/Selection.vue';
-import Settings from '../components/Settings/Settings.vue';
-import StorageLoad from '../components/StorageLoad/StorageLoad.vue';
-import Time from '../components/Time/Time.vue';
-import Trajectories from '../components/Trajectories/Trajectories.vue';
-import {useStorageFile} from '../hooks/useStorageFile';
 
 useWorker();
 
@@ -42,6 +43,7 @@ onMounted(() => {
 
     <Selection />
     <Trajectories />
+    <RelativeTrajectories />
 
     <Colors />
     <Time />

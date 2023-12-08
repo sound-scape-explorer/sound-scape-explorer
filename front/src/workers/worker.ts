@@ -26,6 +26,8 @@ import type {Trajectory} from 'src/hooks/useTrajectories';
 import {StorageMode} from 'src/storage/StorageMode';
 import type {StorageSettings} from 'src/storage/StorageSettings';
 
+import type {Autocluster} from '../hooks/useAutoclusters';
+import type {RelativeTrajectory} from '../hooks/useRelativeTrajectories';
 import {StoragePath} from '../storage/StoragePath';
 import {trimRectangular} from '../utils/trim-rectangular';
 
@@ -97,6 +99,15 @@ export async function readSettings(file: File) {
   }
 
   return settings;
+}
+
+export async function readVersion(file: File): Promise<string> {
+  const h5 = await load(file);
+
+  const path = StoragePath.config_file;
+  const dataset = h5.get(path) as Dataset;
+
+  return dataset.attrs['version'].value.toString();
 }
 
 export async function readFiles(file: File): Promise<FileConfig[]> {
@@ -392,28 +403,75 @@ export async function readReducedFeatures(
   return features;
 }
 
+// This is called `autoclustered` in Processing module
+// See `AutoclusteredStorage.py`
 export async function readAutoclusters(
   file: File,
   bandName: string,
   integrationSeconds: number,
 ): Promise<string[][]> {
-  const h5 = await load(file);
+  try {
+    const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
-  const namesList = namesDataset.to_array() as string[];
-  const namesCount = namesList.length;
+    const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
+    const namesList = namesDataset.to_array() as string[];
+    const namesCount = namesList.length;
 
-  if (namesCount === 0) {
+    if (namesCount === 0) {
+      return [];
+    }
+
+    const autoclusters = [];
+
+    for (let i = 0; i < namesCount; i += 1) {
+      const path = `${StoragePath.autoclustered}/${bandName}/${integrationSeconds}/${i}`;
+      const dataset = h5.get(path) as Dataset;
+      const values = dataset.to_array() as number[];
+      autoclusters.push(values.map((v) => v.toString()));
+    }
+
+    return autoclusters;
+  } catch (error) {
+    console.error('Failed to read autoclusters', error);
     return [];
   }
+}
 
-  const autoclusters = [];
+export async function readAutoclustersConfiguration(
+  file: File,
+): Promise<Autocluster[]> {
+  const h5 = await load(file);
 
-  for (let i = 0; i < namesCount; i += 1) {
-    const path = `${StoragePath.autoclustered}/${bandName}/${integrationSeconds}/${i}`;
-    const dataset = h5.get(path) as Dataset;
-    const values = dataset.to_array() as number[];
-    autoclusters.push(values.map((v) => v.toString()));
+  const autoclusters: Autocluster[] = [];
+
+  const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
+  const names = namesDataset.to_array() as string[];
+
+  const minClusterSizesDataset = h5.get(
+    StoragePath.autoclusters_min_cluster_sizes,
+  ) as Dataset;
+  const minClusterSizes = minClusterSizesDataset.to_array() as number[];
+
+  const minSamplesDataset = h5.get(
+    StoragePath.autoclusters_min_samples,
+  ) as Dataset;
+  const minSamples = minSamplesDataset.to_array() as number[];
+
+  const alphasDataset = h5.get(StoragePath.autoclusters_alphas) as Dataset;
+  const alphas = alphasDataset.to_array() as number[];
+
+  const epsilonsDataset = h5.get(StoragePath.autoclusters_epsilons) as Dataset;
+  const epsilons = epsilonsDataset.to_array() as number[];
+
+  for (let i = 0; i < names.length; i += 1) {
+    autoclusters.push({
+      index: i,
+      name: names[i],
+      min_cluster_size: minClusterSizes[i],
+      min_samples: minSamples[i],
+      alpha: alphas[i],
+      epsilon: epsilons[i],
+    });
   }
 
   return autoclusters;
@@ -463,6 +521,55 @@ export async function readTrajectories(file: File): Promise<Trajectory[]> {
   }
 
   return trajectories;
+}
+
+export async function readRelativeTrajectories(
+  file: File,
+  bandName: string,
+  integrationSeconds: number,
+  extractorIndex: number,
+): Promise<RelativeTrajectory[]> {
+  try {
+    const h5 = await load(file);
+    const pathSuffix = `/${bandName}/${integrationSeconds}/${extractorIndex}`;
+    const path = `${StoragePath.relative_traced}${pathSuffix}`;
+    const group = h5.get(path) as Group;
+
+    const relativeTrajectories: RelativeTrajectory[] = [];
+
+    for (const key of group.keys()) {
+      const relativeTracedPath = `${StoragePath.relative_traced}${pathSuffix}/${key}`;
+      const relativeTracedDataset = h5.get(relativeTracedPath) as Dataset;
+      const relativeTimestampsPath = `${StoragePath.relative_traced_relative_timetamps}${pathSuffix}/${key}`;
+      const relativeTimestampsDataset = h5.get(
+        relativeTimestampsPath,
+      ) as Dataset;
+      const trajectoryName =
+        relativeTracedDataset.attrs['trajectory_name'].value.toString();
+      const labelProperty =
+        relativeTracedDataset.attrs['label_property'].value.toString();
+      const labelValue =
+        relativeTracedDataset.attrs['label_value'].value.toString();
+
+      const relativeTrajectory: RelativeTrajectory = {
+        index: Number(key),
+        name: `${labelProperty} - ${labelValue} - ${trajectoryName}`,
+        labelProperty: labelProperty,
+        labelValue: labelValue,
+        values: relativeTracedDataset.to_array() as number[],
+        timestamps: (relativeTimestampsDataset.to_array() as number[][]).map(
+          (v) => v[0],
+        ),
+      };
+
+      relativeTrajectories.push(relativeTrajectory);
+    }
+
+    return relativeTrajectories;
+  } catch (error) {
+    console.error('Failed to read relative trajectories', error);
+    return [];
+  }
 }
 
 export async function readTraced(

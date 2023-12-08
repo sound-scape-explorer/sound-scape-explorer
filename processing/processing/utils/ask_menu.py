@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 from InquirerPy.resolver import prompt
 from InquirerPy.separator import Separator
@@ -9,11 +10,13 @@ class MenuChoice(Enum):
     ExtractAggregate = "Run extractions and aggregations"
     Reduce = "Run reductions"
     ComputeRequirements = (
-        "Run computation UMAPs and mean distances matrix (needed for autocluster)"
+        "Run computation UMAPs and mean distances matrix"
+        " (needed for autocluster and relative trajectories)"
     )
     PurgeRequirements = "Purge computation UMAPs and mean distances matrix"
     Autocluster = "Run autoclusters"
     Trace = "Run trajectories"
+    RelativeTrace = "Run relative trajectories"
     Digest = "Run digests"
     RunAll = "Run all"
     ExportDataframe = "Export dataframe as .csv"
@@ -24,7 +27,9 @@ class MenuChoice(Enum):
     Quit = "Quit"
 
 
-def ask_menu() -> str:
+def ask_menu(
+    last_choice: Optional[str] = None,
+) -> str:
     questions = [
         {
             "type": "list",
@@ -39,9 +44,11 @@ def ask_menu() -> str:
                 Separator(),
                 MenuChoice.Autocluster.value,
                 MenuChoice.Trace.value,
+                MenuChoice.RelativeTrace.value,
                 MenuChoice.Digest.value,
                 Separator(),
                 MenuChoice.RunAll.value,
+                Separator(),
                 MenuChoice.ExportDataframe.value,
                 MenuChoice.ExportComputationUmaps.value,
                 MenuChoice.ExportMeanDistancesMatrix.value,
@@ -52,9 +59,10 @@ def ask_menu() -> str:
                 MenuChoice.Quit.value,
             ],
             "message": "Choose your action",
+            "default": last_choice,
         }
     ]
 
-    answers = prompt(questions)
+    answers = prompt(questions=questions, vi_mode=True)
     answer: str = str(answers["choices"])
     return answer

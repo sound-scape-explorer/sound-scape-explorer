@@ -1,46 +1,33 @@
-from typing import List, Optional
-
-from h5py import Dataset, Group
 from rich import print
 from rich.progress import track
 
 from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.common.ComputationUmapStorage import ComputationUmapStorage
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
-from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandStorage import BandStorage
-from processing.config.Config import Config
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.settings.SettingsStorage import SettingsStorage
-from processing.interfaces import IMain
+from processing.interfaces import MenuCallback
 from processing.reducers.UmapReducer import UmapReducer
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
-from processing.utils.print_no_configuration import print_no_configuration
+from processing.utils.validate_autoclusters import validate_autoclusters
+from processing.utils.validate_configuration import validate_configuration
 from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 
+# TODO: The validation for autoclusters is now not enough because of relative
+#  trajectories. Validation should handle both requirements at the same time.
+@validate_configuration
+@validate_autoclusters  # skipping computing if no autoclusters are requested
 def compute_requirements(
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
-    if not Config.exists_in_storage(storage):
-        print_no_configuration()
-        if callback is not None:
-            callback(storage)
-        return
-
-    # Avoid computing requirements if no autoclusters are requested
-    autoclusters = AutoclusterStorage.read_from_storage(storage)
-
-    if len(autoclusters) == 0:
-        if callback is not None:
-            callback(storage)
-        return
-
     # TODO: Add check for aggregated data
 
     print_action("Requirements computation started!", "start")
@@ -91,19 +78,13 @@ def compute_requirements(
     print("Computing mean distances matrix...")
 
     for band, integration in walk_bands_integrations(bands, integrations):
-        path = (
-            f"{StoragePath.computation_umap.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
+        computation_umaps = ComputationUmapStorage.read_from_storage(
+            storage=storage,
+            band=band,
+            integration=integration,
         )
 
-        group: Group = storage.read(path)  # type: ignore
-
-        datasets: List[Dataset] = []
-        for dataset in group.values():
-            datasets.append(dataset)
-
-        mdm = MeanDistancesMatrix.calculate(features=datasets)
+        mdm = MeanDistancesMatrix.calculate(features=computation_umaps)
         path = MeanDistancesMatrix.get_path(band, integration)
 
         storage.write(
@@ -113,6 +94,4 @@ def compute_requirements(
         )
 
     print_action("Requirements computation completed!", "end")
-
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)

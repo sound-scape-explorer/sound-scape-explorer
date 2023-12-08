@@ -1,7 +1,11 @@
 <script lang="ts" setup="">
-import {NGi, NGrid, NTag, NTooltip} from 'naive-ui';
+// TODO: Rename this component to LabelHeader or something
+import {ColorFillOutline} from '@vicons/ionicons5';
+import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {labelsColumnsRef} from 'src/components/Label/useLabelsColumns';
 import {labelsPropertiesRef, labelsRef} from 'src/hooks/useLabels';
 
+import {colorsStore, type ColorType} from '../Colors/colorsStore';
 import LabelItemsSelection from './LabelItemsSelection.vue';
 import {labelsSelectionRef, useLabelsSelection} from './useLabelsSelection';
 
@@ -41,50 +45,81 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
 
   updateSelection(property, []);
 };
+
+const handleBucketClick = (property: string) => {
+  const colorType = `by${property}` as ColorType;
+
+  if (colorsStore.colorType === colorType) {
+    return;
+  }
+
+  colorsStore.colorType = colorType;
+};
 </script>
 
 <template>
-  <n-grid
-    :cols="2"
-    class="grid"
-    x-gap="12"
-  >
+  <n-grid :cols="labelsColumnsRef.value">
     <n-gi v-for="property in labelsPropertiesRef.value">
-      <n-tooltip
-        trigger="hover"
-        placement="top-start"
-        :show-arrow="false"
-      >
-        <template #trigger>
-          <n-tag
-            :bordered="false"
-            class="tag"
-            size="small"
-            @click="() => handlePropertyClick(property)"
-            @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
-          >
-            {{ property }}
-          </n-tag>
-        </template>
-        <div>
-          <span>Left click: Invert selection</span>
-          <br />
-          <span>Right click: Clear selection</span>
-        </div>
-      </n-tooltip>
+      <div class="col">
+        <n-button
+          size="tiny"
+          @click="() => handleBucketClick(property)"
+        >
+          <template #icon>
+            <n-icon>
+              <color-fill-outline />
+            </n-icon>
+          </template>
+        </n-button>
+        <n-tooltip
+          :show-arrow="false"
+          placement="top-start"
+          trigger="hover"
+        >
+          <template #trigger>
+            <n-tag
+              :bordered="false"
+              class="tag"
+              size="small"
+              @click="() => handlePropertyClick(property)"
+              @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
+            >
+              {{ property }}
+            </n-tag>
+          </template>
+          <div>
+            <span>Left click: Invert selection</span>
+            <br />
+            <span>Right click: Clear selection</span>
+          </div>
+        </n-tooltip>
+      </div>
 
-      <LabelItemsSelection :property="property" />
+      <LabelItemsSelection
+        :property="property"
+        class="checkboxes"
+      />
     </n-gi>
   </n-grid>
 </template>
 
 <style lang="scss" scoped>
+.col {
+  display: flex;
+  align-items: flex-start;
+  height: auto;
+  padding-top: 8px;
+}
+
 .tag {
-  margin: 0.5rem 0;
   user-select: none;
 
   &:hover {
     cursor: pointer;
   }
+}
+
+.checkboxes {
+  padding-top: 8px;
 }
 </style>

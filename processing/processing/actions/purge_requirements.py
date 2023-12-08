@@ -1,16 +1,15 @@
-from typing import Optional
-
 from rich.progress import track
 
-from processing.interfaces import IMain
+from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 
 
 def purge_requirements(
     storage: Storage,
-    callback: Optional[IMain] = None,
+    callback: MenuCallback,
 ):
     print_action("Requirements computation purge started!", "start")
 
@@ -19,6 +18,4 @@ def purge_requirements(
         storage.delete(StoragePath.mean_distances_matrix)
 
     print_action("Requirements computation purge completed!", "end")
-
-    if callback is not None:
-        callback(storage)
+    invoke_menu(storage, callback)

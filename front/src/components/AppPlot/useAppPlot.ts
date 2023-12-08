@@ -3,14 +3,10 @@ import Plotly from 'plotly.js-dist-min';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref, watch} from 'vue';
 
-export interface HistogramProps {
-  labels: string[];
-  values: number[];
-  colors: string[];
-  title?: string;
-}
+import {settingsStore} from '../Settings/settingsStore';
+import type {AppPlotProps} from './AppPlot.vue';
 
-export function useAppHistogram(props: HistogramProps) {
+export function useAppPlot(props: AppPlotProps) {
   const divRef = ref<HTMLDivElement | null>(null);
   const dataRef = ref<Data[] | null>(null);
   const layoutRef = ref<Partial<Layout> | null>(null);
@@ -30,25 +26,32 @@ export function useAppHistogram(props: HistogramProps) {
   }
 
   function refresh() {
-    dataRef.value = [
-      {
+    const data: Data[] = [];
+
+    for (const index in props.values) {
+      const d: Data = {
         type: 'scatter',
         mode: 'lines+markers',
-        x: props.labels,
-        y: props.values,
+        name: props.names?.[index] ?? undefined,
+        x: props.labels[index],
+        y: props.values[index],
         hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
         marker: {
-          color: props.colors,
-          size: 6,
+          color: props.colors?.[index] ?? undefined,
+          size: props.colors?.[index] ? 6 : 2,
         },
-      },
-    ];
+      };
+
+      data.push(d);
+    }
+
+    dataRef.value = data;
 
     layoutRef.value = {
       title: props.title,
-      plot_bgcolor: 'transparent',
-      paper_bgcolor: 'transparent',
-      showlegend: false,
+      plot_bgcolor: settingsStore.plotBackground,
+      paper_bgcolor: settingsStore.plotBackground,
+      showlegend: !!props.legend,
       clickmode: 'none',
       width: PLOTLY_SIZE,
       height: PLOTLY_SIZE,
@@ -60,14 +63,16 @@ export function useAppHistogram(props: HistogramProps) {
         pad: 1,
       },
       xaxis: {
-        zeroline: false,
-        fixedrange: true,
-        showticklabels: false,
+        title: props.xTitle,
       },
       yaxis: {
-        zeroline: false,
-        fixedrange: true,
-        ticks: '',
+        title: props.yTitle,
+      },
+      legend: {
+        xanchor: 'right',
+        yanchor: 'top',
+        x: 1,
+        y: 1,
       },
     };
   }

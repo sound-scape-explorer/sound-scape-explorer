@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {NGi, NGrid, NTag} from 'naive-ui';
+import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 
-import {KeyboardShortcut} from '../../common/KeyboardShortcut';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 
 /**
@@ -43,8 +43,9 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.trajectories, name: 'Trajectories'},
   {key: KeyboardShortcut.colors, name: 'Colors'},
   {key: KeyboardShortcut.time, name: 'Time'},
-  {key: KeyboardShortcut.labels, name: 'Meta'},
   {key: KeyboardShortcut.audio, name: 'Audio'},
+  {key: KeyboardShortcut.labels, name: 'Labels'},
+  {key: KeyboardShortcut.labelsZoom, name: 'Labels: Zoom'},
   {key: KeyboardShortcut.details, name: 'Details'},
   {key: KeyboardShortcut.timePlayPause, name: 'Time: Play / Pause'},
   {key: KeyboardShortcut.timeBackward, name: 'Time: Next'},
@@ -55,20 +56,26 @@ const shortcuts: Shortcut[] = [
 <template>
   <AppDraggable draggable-key="help">
     <div class="container">
-      <div class="title">External links</div>
+      <h2>External Links</h2>
 
-      <ul class="list">
-        <li v-for="link in links">
+      <n-grid
+        cols="1"
+        x-gap="12"
+      >
+        <n-gi
+          v-for="link of links"
+          class="grid"
+        >
           <a
             :href="link.target"
             target="_blank"
           >
             {{ link.name }}
           </a>
-        </li>
-      </ul>
+        </n-gi>
+      </n-grid>
 
-      <div class="title">Keyboard Shortcuts</div>
+      <h2>Keyboard Shortcuts</h2>
 
       <n-grid
         :cols="2"
@@ -78,7 +85,10 @@ const shortcuts: Shortcut[] = [
           v-for="shortcut of shortcuts"
           class="grid"
         >
-          <n-tag size="small">
+          <n-tag
+            class="key"
+            size="small"
+          >
             {{ shortcut.key }}
           </n-tag>
 
@@ -95,26 +105,23 @@ const shortcuts: Shortcut[] = [
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5em;
 
-  width: 30rem;
-}
-
-.list {
-  list-style: disc inside;
+  width: 30em;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 3rem 1fr;
-  gap: 0.5rem;
-
-  * {
-    justify-content: center;
-  }
+  grid-template-columns: 3em 1fr;
+  gap: 0.5em;
 }
 
-.title {
-  font-style: italic;
+.key {
+  font-weight: bold;
+  justify-content: center;
+}
+
+h2 {
+  font-weight: bold;
 }
 </style>

@@ -8,6 +8,6 @@ export interface StorageSettings {
   audio_host: string;
   timezone: string;
   computation_umap_dimensions: number;
-  compoutation_umap_iterations: number;
+  computation_umap_iterations: number;
   display_umap_seed: number;
 }

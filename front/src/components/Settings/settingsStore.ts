@@ -1,13 +1,13 @@
 import {reactive} from 'vue';
 
+import {PLOT_BACKGROUND} from '../../constants';
+
 export interface SettingsStore {
-  preview: boolean;
-  fullPageScreenshot: boolean;
   autoOpenOnScatterClick: boolean;
+  plotBackground: PLOT_BACKGROUND;
 }
 
 export const settingsStore = reactive<SettingsStore>({
-  preview: false,
-  fullPageScreenshot: true,
   autoOpenOnScatterClick: true,
+  plotBackground: PLOT_BACKGROUND.transparent,
 });
