@@ -53,7 +53,7 @@ def reduce(
     print_reducers(reducers)
     print_aggregated_reduceables(aggregated_reduceables, storage)
 
-    for ar in track(aggregated_reduceables, description=("Reducing")):
+    for ar in track(aggregated_reduceables, description="Reducing..."):
         if not ar.exists_in_storage(storage):
             continue
 
