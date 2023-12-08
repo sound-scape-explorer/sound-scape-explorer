@@ -410,26 +410,31 @@ export async function readAutoclusters(
   bandName: string,
   integrationSeconds: number,
 ): Promise<string[][]> {
-  const h5 = await load(file);
+  try {
+    const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
-  const namesList = namesDataset.to_array() as string[];
-  const namesCount = namesList.length;
+    const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
+    const namesList = namesDataset.to_array() as string[];
+    const namesCount = namesList.length;
 
-  if (namesCount === 0) {
+    if (namesCount === 0) {
+      return [];
+    }
+
+    const autoclusters = [];
+
+    for (let i = 0; i < namesCount; i += 1) {
+      const path = `${StoragePath.autoclustered}/${bandName}/${integrationSeconds}/${i}`;
+      const dataset = h5.get(path) as Dataset;
+      const values = dataset.to_array() as number[];
+      autoclusters.push(values.map((v) => v.toString()));
+    }
+
+    return autoclusters;
+  } catch (error) {
+    console.error('Failed to read autoclusters', error);
     return [];
   }
-
-  const autoclusters = [];
-
-  for (let i = 0; i < namesCount; i += 1) {
-    const path = `${StoragePath.autoclustered}/${bandName}/${integrationSeconds}/${i}`;
-    const dataset = h5.get(path) as Dataset;
-    const values = dataset.to_array() as number[];
-    autoclusters.push(values.map((v) => v.toString()));
-  }
-
-  return autoclusters;
 }
 
 export async function readAutoclustersConfiguration(
@@ -524,40 +529,47 @@ export async function readRelativeTrajectories(
   integrationSeconds: number,
   extractorIndex: number,
 ): Promise<RelativeTrajectory[]> {
-  const h5 = await load(file);
-  const pathSuffix = `/${bandName}/${integrationSeconds}/${extractorIndex}`;
-  const path = `${StoragePath.relative_traced}${pathSuffix}`;
-  const group = h5.get(path) as Group;
+  try {
+    const h5 = await load(file);
+    const pathSuffix = `/${bandName}/${integrationSeconds}/${extractorIndex}`;
+    const path = `${StoragePath.relative_traced}${pathSuffix}`;
+    const group = h5.get(path) as Group;
 
-  const relativeTrajectories: RelativeTrajectory[] = [];
+    const relativeTrajectories: RelativeTrajectory[] = [];
 
-  for (const key of group.keys()) {
-    const relativeTracedPath = `${StoragePath.relative_traced}${pathSuffix}/${key}`;
-    const relativeTracedDataset = h5.get(relativeTracedPath) as Dataset;
-    const relativeTimestampsPath = `${StoragePath.relative_traced_relative_timetamps}${pathSuffix}/${key}`;
-    const relativeTimestampsDataset = h5.get(relativeTimestampsPath) as Dataset;
-    const trajectoryName =
-      relativeTracedDataset.attrs['trajectory_name'].value.toString();
-    const labelProperty =
-      relativeTracedDataset.attrs['label_property'].value.toString();
-    const labelValue =
-      relativeTracedDataset.attrs['label_value'].value.toString();
+    for (const key of group.keys()) {
+      const relativeTracedPath = `${StoragePath.relative_traced}${pathSuffix}/${key}`;
+      const relativeTracedDataset = h5.get(relativeTracedPath) as Dataset;
+      const relativeTimestampsPath = `${StoragePath.relative_traced_relative_timetamps}${pathSuffix}/${key}`;
+      const relativeTimestampsDataset = h5.get(
+        relativeTimestampsPath,
+      ) as Dataset;
+      const trajectoryName =
+        relativeTracedDataset.attrs['trajectory_name'].value.toString();
+      const labelProperty =
+        relativeTracedDataset.attrs['label_property'].value.toString();
+      const labelValue =
+        relativeTracedDataset.attrs['label_value'].value.toString();
 
-    const relativeTrajectory: RelativeTrajectory = {
-      index: Number(key),
-      name: `${labelProperty} - ${labelValue} - ${trajectoryName}`,
-      labelProperty: labelProperty,
-      labelValue: labelValue,
-      values: relativeTracedDataset.to_array() as number[],
-      timestamps: (relativeTimestampsDataset.to_array() as number[][]).map(
-        (v) => v[0],
-      ),
-    };
+      const relativeTrajectory: RelativeTrajectory = {
+        index: Number(key),
+        name: `${labelProperty} - ${labelValue} - ${trajectoryName}`,
+        labelProperty: labelProperty,
+        labelValue: labelValue,
+        values: relativeTracedDataset.to_array() as number[],
+        timestamps: (relativeTimestampsDataset.to_array() as number[][]).map(
+          (v) => v[0],
+        ),
+      };
 
-    relativeTrajectories.push(relativeTrajectory);
+      relativeTrajectories.push(relativeTrajectory);
+    }
+
+    return relativeTrajectories;
+  } catch (error) {
+    console.error('Failed to read relative trajectories', error);
+    return [];
   }
-
-  return relativeTrajectories;
 }
 
 export async function readTraced(
