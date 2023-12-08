@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/sound-scape-explorer/sw.js', { scope: '/sound-scape-explorer/' })})}
