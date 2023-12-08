@@ -11,10 +11,12 @@ from processing.utils.ask_integration import ask_integration
 from processing.utils.ask_npy_path import ask_npy_path
 from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
-from processing.utils.validate_configuration import validate_configuration
+from processing.utils.validate_configuration_with_config import (
+    validate_configuration_with_config,
+)
 
 
-@validate_configuration
+@validate_configuration_with_config
 def export_mdm(
     config: Config,
     storage: Storage,
