@@ -41,54 +41,48 @@ class RelativeTracedStorage:
     @staticmethod
     def write_distances(
         storage: Storage,
-        pack: List[TrajectoryConfig],
+        trajectory: TrajectoryConfig,
         ar: AggregatedReduceable,
-        relative_distances: List[List[float]],
+        relative_distances: List[float],
         label_property: str,
         label_value: str,
     ) -> None:
-        for t, trajectory in enumerate(pack):
-            path = RelativeTracedStorage.get_distance_path(
-                trajectory=trajectory,
-                ar=ar,
-            )
+        path = RelativeTracedStorage.get_distance_path(
+            trajectory=trajectory,
+            ar=ar,
+        )
 
-            data = relative_distances[t]
-
-            storage.write(
-                path=path,
-                data=data,
-                compression=True,
-                attributes={
-                    "extractor_index": str(ar.extractor.index),
-                    "trajectory_index": str(trajectory.index),
-                    "trajectory_name": trajectory.name,
-                    "label_property": label_property,
-                    "label_value": label_value,
-                },
-            )
+        storage.write(
+            path=path,
+            data=relative_distances,
+            compression=True,
+            attributes={
+                "extractor_index": str(ar.extractor.index),
+                "trajectory_index": str(trajectory.index),
+                "trajectory_name": trajectory.name,
+                "label_property": label_property,
+                "label_value": label_value,
+            },
+        )
 
     @staticmethod
     def write_timestamps(
         storage: Storage,
-        pack: List[TrajectoryConfig],
+        trajectory: TrajectoryConfig,
         ar: AggregatedReduceable,
         relative_timestamps: List[List[float]],
     ) -> None:
-        for t, trajectory in enumerate(pack):
-            path = RelativeTracedStorage.get_timestamp_path(
-                trajectory=trajectory,
-                ar=ar,
-            )
+        path = RelativeTracedStorage.get_timestamp_path(
+            trajectory=trajectory,
+            ar=ar,
+        )
 
-            data = relative_timestamps[t]
-
-            storage.write(
-                path=path,
-                data=data,
-                compression=True,
-                attributes={
-                    "extractor_index": str(ar.extractor.index),
-                    "trajectory_index": str(trajectory.index),
-                },
-            )
+        storage.write(
+            path=path,
+            data=relative_timestamps,
+            compression=True,
+            attributes={
+                "extractor_index": str(ar.extractor.index),
+                "trajectory_index": str(trajectory.index),
+            },
+        )
