@@ -1,6 +1,3 @@
-from typing import List
-
-from h5py import Dataset, Group
 from rich import print
 from rich.progress import track
 
@@ -81,19 +78,13 @@ def compute_requirements(
     print("Computing mean distances matrix...")
 
     for band, integration in walk_bands_integrations(bands, integrations):
-        path = (
-            f"{StoragePath.computation_umap.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
+        computation_umaps = ComputationUmapStorage.read_from_storage(
+            storage=storage,
+            band=band,
+            integration=integration,
         )
 
-        group: Group = storage.read(path)  # type: ignore
-
-        datasets: List[Dataset] = []
-        for dataset in group.values():
-            datasets.append(dataset)
-
-        mdm = MeanDistancesMatrix.calculate(features=datasets)
+        mdm = MeanDistancesMatrix.calculate(features=computation_umaps)
         path = MeanDistancesMatrix.get_path(band, integration)
 
         storage.write(
