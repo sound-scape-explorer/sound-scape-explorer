@@ -1,4 +1,5 @@
 import numpy
+from rich.progress import track
 from sklearn.neighbors import NearestNeighbors
 
 from processing.common.ComputationUmapStorage import ComputationUmapStorage
@@ -66,7 +67,10 @@ def trace_relative_trajectories(
                 pack_relative_timestamps.append([])
 
             # iterating through computation UMAPs
-            for computation_umap in computation_umaps:
+            for computation_umap in track(
+                computation_umaps,
+                description=f"Tracing {label_property}: {label_value}",
+            ):
                 paths = []
 
                 # reading path for each trajectory because all are needed to compute
