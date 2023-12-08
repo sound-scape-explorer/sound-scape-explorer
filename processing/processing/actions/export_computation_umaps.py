@@ -12,12 +12,12 @@ from processing.utils.ask_integration import ask_integration
 from processing.utils.ask_npy_path import ask_npy_path
 from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
-from processing.utils.validate_mean_distances_matrix import (
-    validate_mean_distances_matrix,
+from processing.utils.validate_mean_distances_matrix_with_config import (
+    validate_mean_distances_matrix_with_config,
 )
 
 
-@validate_mean_distances_matrix
+@validate_mean_distances_matrix_with_config
 def export_computation_umaps(
     config: Config,
     storage: Storage,
