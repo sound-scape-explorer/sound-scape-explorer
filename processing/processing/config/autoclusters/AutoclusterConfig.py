@@ -1,9 +1,11 @@
 from typing import Dict, List, Tuple
 
 from h5py import Dataset
+from rich import print
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.utils.print_action import print_action
 
 
 class AutoclusterConfig:
@@ -127,10 +129,16 @@ class AutoclusterConfig:
         try:
             clustering = self.instance.fit(mean_distances_matrix[:])
             labels = clustering.labels_.tolist()
-            print(set(labels))
-            self.values = labels
-            return self.values
         except MemoryError:
-            raise MemoryError(
-                f"Autocluster: The mean distances matrix {mean_distances_matrix.shape} exceeds the available RAM",
+            print_action(
+                f"The mean distances matrix {mean_distances_matrix.shape} "
+                f"exceeds the available RAM.",
+                "warning",
             )
+            print("Filling with dummy results to continue processing...")
+
+            labels = ["MemoryError"] * mean_distances_matrix.shape[0]
+
+        print(set(labels))
+        self.values = labels
+        return self.values
