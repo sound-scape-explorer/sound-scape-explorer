@@ -124,8 +124,13 @@ class AutoclusterConfig:
         self,
         mean_distances_matrix: Dataset,
     ) -> List[str]:
-        clustering = self.instance.fit(mean_distances_matrix[:])
-        labels = clustering.labels_.tolist()
-        print(set(labels))
-        self.values = labels
-        return self.values
+        try:
+            clustering = self.instance.fit(mean_distances_matrix[:])
+            labels = clustering.labels_.tolist()
+            print(set(labels))
+            self.values = labels
+            return self.values
+        except MemoryError:
+            raise MemoryError(
+                f"Autocluster: The mean distances matrix {mean_distances_matrix.shape} exceeds the available RAM",
+            )
