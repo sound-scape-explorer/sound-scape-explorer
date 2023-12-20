@@ -19,6 +19,7 @@ const props = defineProps<AppGridProps>();
   <n-grid
     :cols="props.columns"
     x-gap="12"
+    y-gap="4"
   >
     <n-gi
       v-for="item in props.items"
