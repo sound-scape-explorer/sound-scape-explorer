@@ -1,3 +1,20 @@
+# [12.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v12.0.0...v12.1.0) (2023-12-20)
+
+
+### Bug Fixes
+
+* **Examples/Campaigns:** Update configuration files to version 12 ([1a0d323](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1a0d3232c9d85cc06b5ed8e9232745329f2c34a0))
+* **Processing/Autocluster:** Add clustering fallback values if OOM ([4de3a92](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4de3a92ba975a0249b4954c6cd864bba6091e960))
+* **Processing/Autocluster:** Catch memory errors when fitting ([aa40a70](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/aa40a704bf758969a33483c9c1dcd987cd3f2add))
+* **Processing/Autocluster:** Feed the MDM dataset ([3566ecc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3566ecc959e6c3863665e80a5a64ee84074bb2d1))
+* **Processing/ExportDataframe:** Use correct config validator ([6e29e6f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6e29e6f8aef21e0f6fdb76c0488c81728d508288))
+* **Processing/Utils:** Remove misleading default gigabytes ram limit (test) ([19cb44b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/19cb44b1363a4c1f25e708cd4df799db7152911b))
+
+
+### Features
+
+* **Processing/Utils:** Add memory resource limiter helper for testing purposes ([837eb15](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/837eb158c9952ff4e55b87061f47150c81b561c4))
+
 # [12.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v11.10.0...v12.0.0) (2023-12-08)
 
 
