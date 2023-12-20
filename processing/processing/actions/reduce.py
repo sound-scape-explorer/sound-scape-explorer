@@ -18,10 +18,12 @@ from processing.utils.print_no_aggregated_reduceables import (
     print_no_aggregated_reduceables,
 )
 from processing.utils.print_reducers import print_reducers
+from processing.utils.validate_aggregated import validate_aggregated
 from processing.utils.validate_configuration import validate_configuration
 
 
 @validate_configuration
+@validate_aggregated
 def reduce(
     storage: Storage,
     callback: MenuCallback,
