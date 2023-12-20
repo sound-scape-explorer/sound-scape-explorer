@@ -13,6 +13,14 @@ class TracedStorage:
         storage.delete(StoragePath.traced_relative_timestamps)
 
     @staticmethod
+    def exists(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(StoragePath.traced)
+            and storage.exists_dataset(StoragePath.traced_timestamps)
+            and storage.exists_dataset(StoragePath.traced_relative_timestamps)
+        )
+
+    @staticmethod
     def get_data_path(
         ar: AggregatedReduceable,
         reducer: ReducerConfig,

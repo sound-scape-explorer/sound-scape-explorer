@@ -17,6 +17,16 @@ class AggregatedStorage:
         storage.delete(StoragePath.aggregated_labels)
 
     @staticmethod
+    def exists(storage: Storage) -> bool:
+        return (
+            storage.exists_dataset(StoragePath.aggregated)
+            and storage.exists_dataset(StoragePath.aggregated_sites)
+            and storage.exists_dataset(StoragePath.aggregated_interval_details)
+            and storage.exists_dataset(StoragePath.aggregated_timestamps)
+            and storage.exists_dataset(StoragePath.aggregated_labels)
+        )
+
+    @staticmethod
     def get_data_path(
         band: BandConfig,
         integration: IntegrationConfig,

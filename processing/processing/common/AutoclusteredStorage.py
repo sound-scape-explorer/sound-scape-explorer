@@ -14,6 +14,10 @@ class AutoclusteredStorage:
         storage.delete(StoragePath.autoclustered)
 
     @staticmethod
+    def exists(storage: Storage) -> bool:
+        return storage.exists_dataset(StoragePath.autoclustered)
+
+    @staticmethod
     def read_from_storage(
         storage: Storage,
         autoclusters: List[AutoclusterConfig],
