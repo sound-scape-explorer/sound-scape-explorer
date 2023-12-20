@@ -9,9 +9,7 @@ from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 from processing.utils.print_autoclusters import print_autoclusters
 from processing.utils.validate_autoclusters import validate_autoclusters
-from processing.utils.validate_configuration import (
-    validate_configuration,
-)
+from processing.utils.validate_configuration import validate_configuration
 from processing.utils.validate_mean_distances_matrix import (
     validate_mean_distances_matrix,
 )
@@ -38,7 +36,7 @@ def autocluster(
         for ac in autoclusters:
             ac.create_instance(band, integration)
             mdm = storage.read(MeanDistancesMatrix.get_path(band, integration))
-            ac.calculate(mdm[:])
+            ac.calculate(mdm)
             AutoclusteredStorage.write(storage, band, integration, ac)
 
     print_action("Autoclustering completed!", "end")
