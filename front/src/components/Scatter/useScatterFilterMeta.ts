@@ -2,7 +2,6 @@ import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {labelsRef} from 'src/hooks/useLabels';
 import {reactive} from 'vue';
 
-import {useNotification} from '../AppNotification/useNotification';
 import {labelsSelectionRef} from '../Label/useLabelsSelection';
 import {useScatterTraces} from './useScatterTraces';
 
@@ -52,7 +51,6 @@ export function useScatterFilterMeta() {
   };
 
   const {renderTraces} = useScatterTraces();
-  const {notify} = useNotification();
 
   const filterByMeta = () => {
     if (aggregatedLabelsRef.value === null) {
@@ -72,7 +70,6 @@ export function useScatterFilterMeta() {
 
     pointsFilteredByMetaRef.value = pointsFilteredByMeta;
 
-    notify('success', 'Labels', 'Filter applied');
     renderTraces();
   };
 
