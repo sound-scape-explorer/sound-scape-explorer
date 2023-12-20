@@ -13,12 +13,14 @@ from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 from processing.utils.print_digesters import print_digesters
+from processing.utils.validate_autoclustered import validate_autoclustered
 from processing.utils.validate_configuration import validate_configuration
 from processing.utils.validate_digesters import validate_digesters
 
 
 @validate_configuration
 @validate_digesters
+@validate_autoclustered
 def digest(
     storage: Storage,
     callback: MenuCallback,
