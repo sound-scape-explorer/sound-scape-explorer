@@ -1,3 +1,27 @@
+# [12.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v12.1.0...v12.2.0) (2023-12-21)
+
+
+### Bug Fixes
+
+* **App:** Add bash util to increment front version ([a38c5ea](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a38c5eaec532a4d971decff4c929265bbde939b1))
+* **App:** Add front version increment on next release preparation ([d0a4e1a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d0a4e1a56445fe77daa6b5331f118578373a7bb0))
+* **Front/AppGrid:** Add tiny y gap ([f9d5fad](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f9d5fad79b3f7c80ed92dfb33504ea4e7e5e013f))
+* **Front/Audio:** Prevent creating multiple WaveSurfer instances ([484737e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/484737ef59c3d1dc3a6b210a765d6e35b8bf2956))
+* **Front/Scatter:** Remove obtrusive notifications ([f19d0ed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f19d0ed289c843d76d97edc1dce2e130c2d7514c))
+* **Front:** Add current module version ([66249d0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/66249d0756b059b6967c9703aed370bab2e07dec))
+* **Processing/Action:** Validate aggregated data before computing requirements ([5408460](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/54084609bfd06444a15de0f1d8b25ec0dfa86eeb))
+* **Processing/Action:** Validate aggregated data before reducing ([87fa748](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/87fa74826c653ccda638ffb5dd65e1d543bb0f3d))
+* **Processing/Action:** Validate aggregated data before tracing trajectories ([dcb56d5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dcb56d58320278010c716b8b0f66a98a04ee0978))
+* **Processing/Action:** Validate autoclustered data before digesting ([0802622](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0802622fa9eb689636c195b67be62c0468fab5b8))
+* **Processing/Action:** Validate reduced data before tracing trajectories ([192e5cd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/192e5cd165c741c70a0676fe6f4ffe1d01a37bb9))
+* **Processing/Menu:** Improve action rendering ([fb5e905](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fb5e9054974487c53a91e4919657155e585caa89))
+
+
+### Features
+
+* **Front/Help:** Display current module version + Improve UI ([edc09c9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/edc09c909a847a6b5a2ff419f022469c59d8e380))
+* **Processing/Menu:** Add storage state in menu choices ([bc0230a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bc0230a8a487f49c30592c8a06d9003413098cfb))
+
 # [12.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v12.0.0...v12.1.0) (2023-12-20)
 
 
