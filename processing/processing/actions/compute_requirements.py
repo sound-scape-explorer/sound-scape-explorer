@@ -15,15 +15,15 @@ from processing.storage.StoragePath import StoragePath
 from processing.utils.filter_nn_extractors import filter_nn_extractors
 from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
+from processing.utils.validate_aggregated import validate_aggregated
 from processing.utils.validate_autoclusters import validate_autoclusters
 from processing.utils.validate_configuration import validate_configuration
 from processing.utils.walk_bands_integrations import walk_bands_integrations
 
 
-# TODO: The validation for autoclusters is now not enough because of relative
-#  trajectories. Validation should handle both requirements at the same time.
 @validate_configuration
 @validate_autoclusters  # skipping computing if no autoclusters are requested
+@validate_aggregated
 def compute_requirements(
     storage: Storage,
     callback: MenuCallback,

@@ -10,10 +10,14 @@ from processing.utils.build_reducers import read_reducers
 from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 from processing.utils.print_trajectories import print_trajectories
+from processing.utils.validate_aggregated import validate_aggregated
 from processing.utils.validate_configuration import validate_configuration
+from processing.utils.validate_reduced import validate_reduced
 
 
 @validate_configuration
+@validate_aggregated
+@validate_reduced
 def trace_trajectories(
     storage: Storage,
     callback: MenuCallback,

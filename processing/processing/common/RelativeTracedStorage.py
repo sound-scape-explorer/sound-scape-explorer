@@ -13,6 +13,12 @@ class RelativeTracedStorage:
         storage.delete(StoragePath.relative_traced_relative_timestamps)
 
     @staticmethod
+    def exists(storage: Storage) -> bool:
+        return storage.exists_dataset(
+            StoragePath.relative_traced
+        ) and storage.exists_dataset(StoragePath.relative_traced_relative_timestamps)
+
+    @staticmethod
     def get_distance_path(
         trajectory: TrajectoryConfig,
         ar: AggregatedReduceable,

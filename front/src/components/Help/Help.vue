@@ -1,34 +1,10 @@
 <script lang="ts" setup>
-import {NGi, NGrid, NTag} from 'naive-ui';
+import {NButton, NGi, NGrid, NTag} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
+import AppGrid from 'src/components/AppGrid/AppGrid.vue';
+import {VERSION} from 'src/version';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
-
-/**
- * State
- */
-
-interface Link {
-  target: string;
-  name: string;
-}
-
-const links: Link[] = [
-  {
-    target: 'https://sound-scape-explorer.github.io',
-    name: 'Docs',
-  },
-  {
-    target:
-      'https://github.com/sound-scape-explorer/sound-scape-explorer/issues/new/choose',
-    name: 'Issues',
-  },
-  {
-    target:
-      'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/CHANGELOG.md',
-    name: 'Changelog',
-  },
-];
 
 interface Shortcut {
   key: string;
@@ -51,35 +27,35 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.timeBackward, name: 'Time: Next'},
   {key: KeyboardShortcut.timeForward, name: 'Time: Previous'},
 ];
+
+const openDocumentation = () => {
+  window.open('https://sound-scape-explorer.github.io');
+};
 </script>
 
 <template>
   <AppDraggable draggable-key="help">
     <div class="container">
-      <h2>External Links</h2>
+      <AppGrid
+        :columns="1"
+        :items="[{tag: 'Version', value: VERSION}]"
+      />
 
-      <n-grid
-        cols="1"
-        x-gap="12"
-      >
-        <n-gi
-          v-for="link of links"
-          class="grid"
-        >
-          <a
-            :href="link.target"
-            target="_blank"
-          >
-            {{ link.name }}
-          </a>
-        </n-gi>
-      </n-grid>
+      <div class="full">
+        <n-button
+          :on-click="openDocumentation"
+          class="full"
+          size="small"
+          >Open documentation
+        </n-button>
+      </div>
 
-      <h2>Keyboard Shortcuts</h2>
+      <h2 class="full">⌨ Keyboard Shortcuts</h2>
 
       <n-grid
         :cols="2"
         x-gap="12"
+        y-gap="4"
       >
         <n-gi
           v-for="shortcut of shortcuts"
@@ -108,6 +84,12 @@ const shortcuts: Shortcut[] = [
   gap: 0.5em;
 
   width: 30em;
+}
+
+.full {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .grid {

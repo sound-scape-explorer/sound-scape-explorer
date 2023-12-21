@@ -7,8 +7,6 @@ def print_action(
     payload: str,
     mode: Literal["start", "end", "error", "warning"],
 ) -> None:
-    print()
-
     if mode == "start":
         print(f"[bold yellow]:rocket: {payload}[/bold yellow]")
     if mode == "end":

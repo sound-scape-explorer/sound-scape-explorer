@@ -51,7 +51,7 @@ def main(
 
         signal(SIGINT, lambda _signum, _frame: quit_sse(storage))
 
-        answer = ask_menu(last_choice)
+        answer = ask_menu(storage, last_choice)
         last_choice = answer
 
         if answer == MenuChoice.RefreshConfig.value:
