@@ -20,15 +20,15 @@ import {audioHostRef} from 'src/hooks/useAudioHost';
 import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {computed, onUnmounted, ref, watch} from 'vue';
+import {computed, type ComputedRef, onUnmounted, ref, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 import WaveSurfer from 'wavesurfer.js';
 import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
-import {FFT_SIZE, WAVE} from '../../constants';
-import {triggerWavDownload} from '../../utils/trigger-wav-download';
+import {FFT_SIZE, WAVE} from 'src/constants';
+import {triggerWavDownload} from 'src/utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {useNotification} from '../AppNotification/useNotification';
@@ -57,7 +57,7 @@ const audioContextRef = computed<AudioContext | null>(() => {
   return new AudioContext({sampleRate: settingsRef.value.expected_sample_rate});
 });
 
-const wsRef = computed(() => {
+const wsRef: ComputedRef<WaveSurfer | null> = computed(() => {
   if (
     audioContextRef.value === null ||
     bandRef.value === null ||
@@ -65,6 +65,11 @@ const wsRef = computed(() => {
     spectrogramRef.value === null
   ) {
     return null;
+  }
+
+  if (typeof wsRef.value !== 'undefined') {
+    // Prevent multiple WaveSurfer instances
+    return wsRef.value as WaveSurfer;
   }
 
   const params: WaveSurferParams = {
@@ -507,10 +512,10 @@ watch(currentAudioFileRef, load);
       </n-grid>
 
       <n-grid
+        v-if="aggregatedSitesRef.value !== null && clickedRef.value !== null"
         :cols="1"
         class="grid"
         x-gap="12"
-        v-if="aggregatedSitesRef.value !== null && clickedRef.value !== null"
       >
         <n-gi>
           <n-tag
