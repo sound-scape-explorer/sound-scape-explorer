@@ -5,6 +5,7 @@ import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
+import {EXPORT_FILENAME} from 'src/constants';
 import {
   relativeTrajectoriesRef,
   useRelativeTrajectories,
@@ -92,7 +93,7 @@ const handleExportClick = () => {
     csv.addToCurrentRow(row.join(csv.separator));
   }
 
-  csv.download('relative-trajectories');
+  csv.download(`${EXPORT_FILENAME}-relative-trajectories`);
 };
 </script>
 
