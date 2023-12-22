@@ -39,7 +39,7 @@ def start_processing():
     main(config_path=config_path)
 
 
-def start_front():
+def start_visualisation():
     update_python_path()
     config_path = parse_arguments()
 

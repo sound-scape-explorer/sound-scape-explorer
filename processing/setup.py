@@ -16,8 +16,8 @@ setup(
         "console_scripts": [
             "sse = processing.cli:start_processing",
             "sse_config = processing.cli:extract_config",
-            "sse_vis = processing.cli:start_front",
-            "sse_viz = processing.cli:start_front",
+            "sse_vis = processing.cli:start_visualisation",
+            "sse_viz = processing.cli:start_visualisation",
             "sse_fill = processing.cli:start_fill",
             "sse_audio = processing.cli:start_audio",
         ],
