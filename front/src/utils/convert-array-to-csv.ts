@@ -3,7 +3,7 @@ export function convertArrayToCsv(
   firstRow?: string,
 ): string {
   let csv = 'data:text/csv;charset=utf-8,';
-  const lineBreak = '\r\n';
+  const lineBreak = '%0D%0A';
 
   if (firstRow) {
     csv += firstRow;
