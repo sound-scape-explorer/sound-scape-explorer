@@ -19,6 +19,7 @@ setup(
             "sse_vis = processing.cli:start_front",
             "sse_viz = processing.cli:start_front",
             "sse_fill = processing.cli:start_fill",
+            "sse_audio = processing.cli:start_audio",
         ],
     },
 )
