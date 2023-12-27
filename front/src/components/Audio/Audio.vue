@@ -53,7 +53,8 @@ const {
 } = useAudioComponent();
 
 const {audioContextRef} = useAudioContext();
-const {waveSurferRef: wsRef} = useWaveSurfer({
+
+const {waveSurferRef} = useWaveSurfer({
   audioContextRef: audioContextRef,
   waveformContainerRef: waveformContainerRef,
   spectrogramContainerRef: spectrogramContainerRef,
@@ -73,7 +74,7 @@ async function load() {
     if (
       integrationRef.value === null ||
       currentAudioFileRef.value === null ||
-      wsRef.value === null ||
+      waveSurferRef.value === null ||
       audioContextRef.value === null
     ) {
       return;
@@ -126,7 +127,7 @@ function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
     return;
   }
 
-  if (wsRef.value === null) {
+  if (waveSurferRef.value === null) {
     return;
   }
 
@@ -134,10 +135,10 @@ function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
 
   const blob = new Blob([wav]);
 
-  wsRef.value.loadBlob(blob);
-  wsRef.value.on('seek', handleAudioSeek);
-  wsRef.value.on('finish', handleAudioEnd);
-  wsRef.value.on('ready', handleAudioReady);
+  waveSurferRef.value.loadBlob(blob);
+  waveSurferRef.value.on('seek', handleAudioSeek);
+  waveSurferRef.value.on('finish', handleAudioEnd);
+  waveSurferRef.value.on('ready', handleAudioReady);
 }
 
 function handleAudioEnd() {
@@ -146,7 +147,7 @@ function handleAudioEnd() {
 
 function handleAudioReady() {
   if (
-    wsRef.value === null ||
+    waveSurferRef.value === null ||
     bandRef.value === null ||
     audioContextRef.value === null
   ) {
@@ -166,18 +167,18 @@ function handleAudioReady() {
   highShelf.gain.value = -60;
   highShelf.frequency.value = bandRef.value.high;
 
-  wsRef.value.backend.setFilters([lowShelf, highShelf]);
+  waveSurferRef.value.backend.setFilters([lowShelf, highShelf]);
   playPause();
 }
 
 async function handleDownload() {
-  if (wsRef.value === null || audioContextRef.value === null) {
+  if (waveSurferRef.value === null || audioContextRef.value === null) {
     return;
   }
 
   // @ts-expect-error: 2339
   // noinspection TypeScriptUnresolvedReference
-  const buffer = wsRef.value.backend.buffer as AudioBuffer | null;
+  const buffer = waveSurferRef.value.backend.buffer as AudioBuffer | null;
 
   if (buffer === null || currentAudioFileRef.value === null) {
     return;
@@ -191,28 +192,28 @@ async function handleDownload() {
 }
 
 function handleVolumeUp() {
-  if (wsRef.value === null) {
+  if (waveSurferRef.value === null) {
     return;
   }
 
-  if (wsRef.value.params.barHeight + WAVE.step > WAVE.max) {
-    wsRef.value.params.barHeight = WAVE.max;
+  if (waveSurferRef.value.params.barHeight + WAVE.step > WAVE.max) {
+    waveSurferRef.value.params.barHeight = WAVE.max;
   } else {
-    wsRef.value.params.barHeight += WAVE.step;
+    waveSurferRef.value.params.barHeight += WAVE.step;
 
-    const volume = wsRef.value.getVolume();
-    wsRef.value.setVolume(volume + WAVE.step);
+    const volume = waveSurferRef.value.getVolume();
+    waveSurferRef.value.setVolume(volume + WAVE.step);
   }
 
-  wsRef.value.drawBuffer();
+  waveSurferRef.value.drawBuffer();
 }
 
 function handleAudioSeek() {
-  if (wsRef.value === null) {
+  if (waveSurferRef.value === null) {
     return;
   }
 
-  if (wsRef.value.isPlaying()) {
+  if (waveSurferRef.value.isPlaying()) {
     return;
   }
 
@@ -220,50 +221,50 @@ function handleAudioSeek() {
 }
 
 function handleVolumeDown() {
-  if (wsRef.value === null) {
+  if (waveSurferRef.value === null) {
     return;
   }
 
-  if (wsRef.value.params.barHeight - WAVE.step < WAVE.min) {
-    wsRef.value.params.barHeight = WAVE.min;
+  if (waveSurferRef.value.params.barHeight - WAVE.step < WAVE.min) {
+    waveSurferRef.value.params.barHeight = WAVE.min;
   } else {
-    wsRef.value.params.barHeight -= WAVE.step;
+    waveSurferRef.value.params.barHeight -= WAVE.step;
 
-    const volume = wsRef.value.getVolume();
-    wsRef.value.setVolume(volume - WAVE.step);
+    const volume = waveSurferRef.value.getVolume();
+    waveSurferRef.value.setVolume(volume - WAVE.step);
   }
 
-  wsRef.value.drawBuffer();
+  waveSurferRef.value.drawBuffer();
 }
 
 const playPause = () => {
-  if (wsRef.value === null) {
+  if (waveSurferRef.value === null) {
     return;
   }
 
-  wsRef.value.playPause();
-  isPlayingRef.value = wsRef.value.isPlaying();
+  waveSurferRef.value.playPause();
+  isPlayingRef.value = waveSurferRef.value.isPlaying();
 };
 
 function handleStop() {
-  if (wsRef.value === null) {
+  if (waveSurferRef.value === null) {
     return;
   }
 
-  wsRef.value.seekTo(0);
-  wsRef.value.pause();
+  waveSurferRef.value.seekTo(0);
+  waveSurferRef.value.pause();
   isPlayingRef.value = false;
 }
 
 const playbackRateRef = ref<number>(PLAYBACK_RATE.default);
 
 watch(playbackRateRef, () => {
-  if (wsRef.value === null) {
+  if (waveSurferRef.value === null) {
     return;
   }
 
-  wsRef.value.pause();
-  wsRef.value.setPlaybackRate(playbackRateRef.value);
+  waveSurferRef.value.pause();
+  waveSurferRef.value.setPlaybackRate(playbackRateRef.value);
   playPause();
 });
 
