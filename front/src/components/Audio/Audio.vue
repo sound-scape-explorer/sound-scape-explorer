@@ -19,7 +19,7 @@ import {
 } from 'src/components/Audio/useAudioComponent';
 import {useAudioContext} from 'src/components/Audio/useAudioContext';
 import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
-import {PLAYBACK_RATE, WAVE} from 'src/constants';
+import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {audioHostRef} from 'src/hooks/useAudioHost';
 import {bandRef} from 'src/hooks/useBands';
@@ -54,7 +54,7 @@ const {
 
 const {audioContextRef} = useAudioContext();
 
-const {waveSurferRef} = useWaveSurfer({
+const {waveSurferRef, increaseVolume, decreaseVolume} = useWaveSurfer({
   audioContextRef: audioContextRef,
   waveformContainerRef: waveformContainerRef,
   spectrogramContainerRef: spectrogramContainerRef,
@@ -191,23 +191,6 @@ async function handleDownload() {
   triggerWavDownload(blob, name);
 }
 
-function handleVolumeUp() {
-  if (waveSurferRef.value === null) {
-    return;
-  }
-
-  if (waveSurferRef.value.params.barHeight + WAVE.step > WAVE.max) {
-    waveSurferRef.value.params.barHeight = WAVE.max;
-  } else {
-    waveSurferRef.value.params.barHeight += WAVE.step;
-
-    const volume = waveSurferRef.value.getVolume();
-    waveSurferRef.value.setVolume(volume + WAVE.step);
-  }
-
-  waveSurferRef.value.drawBuffer();
-}
-
 function handleAudioSeek() {
   if (waveSurferRef.value === null) {
     return;
@@ -218,23 +201,6 @@ function handleAudioSeek() {
   }
 
   playPause();
-}
-
-function handleVolumeDown() {
-  if (waveSurferRef.value === null) {
-    return;
-  }
-
-  if (waveSurferRef.value.params.barHeight - WAVE.step < WAVE.min) {
-    waveSurferRef.value.params.barHeight = WAVE.min;
-  } else {
-    waveSurferRef.value.params.barHeight -= WAVE.step;
-
-    const volume = waveSurferRef.value.getVolume();
-    waveSurferRef.value.setVolume(volume - WAVE.step);
-  }
-
-  waveSurferRef.value.drawBuffer();
 }
 
 const playPause = () => {
@@ -325,7 +291,7 @@ watch(currentAudioFileRef, load);
           <template #trigger>
             <n-button
               size="tiny"
-              @click="handleVolumeUp"
+              @click="increaseVolume"
             >
               <n-icon>
                 <volume-high-outline />
@@ -342,7 +308,7 @@ watch(currentAudioFileRef, load);
           <template #trigger>
             <n-button
               size="tiny"
-              @click="handleVolumeDown"
+              @click="decreaseVolume"
             >
               <n-icon>
                 <volume-low-outline />

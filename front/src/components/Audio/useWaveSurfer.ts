@@ -92,7 +92,51 @@ export function useWaveSurfer({
 
   watch(fftSizeRef, updateSpectrogramDefinition);
 
+  const renderWaveform = () => {
+    if (waveSurferRef.value === null) {
+      return;
+    }
+
+    waveSurferRef.value.drawBuffer();
+  };
+
+  const increaseVolume = () => {
+    if (waveSurferRef.value === null) {
+      return;
+    }
+
+    if (waveSurferRef.value.params.barHeight + WAVE.step > WAVE.max) {
+      waveSurferRef.value.params.barHeight = WAVE.max;
+    } else {
+      waveSurferRef.value.params.barHeight += WAVE.step;
+
+      const volume = waveSurferRef.value.getVolume();
+      waveSurferRef.value.setVolume(volume + WAVE.step);
+    }
+
+    renderWaveform();
+  };
+
+  const decreaseVolume = () => {
+    if (waveSurferRef.value === null) {
+      return;
+    }
+
+    if (waveSurferRef.value.params.barHeight - WAVE.step < WAVE.min) {
+      waveSurferRef.value.params.barHeight = WAVE.min;
+    } else {
+      waveSurferRef.value.params.barHeight -= WAVE.step;
+
+      const volume = waveSurferRef.value.getVolume();
+      waveSurferRef.value.setVolume(volume - WAVE.step);
+    }
+
+    waveSurferRef.value.drawBuffer();
+  };
+
   return {
     waveSurferRef: waveSurferRef,
+    increaseVolume: increaseVolume,
+    decreaseVolume: decreaseVolume,
   };
 }
