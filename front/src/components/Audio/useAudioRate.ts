@@ -1,10 +1,10 @@
 import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
-import {reactive, type Ref, watch, watchEffect} from 'vue';
-import type WaveSurfer from 'wavesurfer.js';
+import {reactive, watch, watchEffect} from 'vue';
 
 import {PLAYBACK_RATE} from '../../constants';
 import {settingsRef} from '../../hooks/useStorageSettings';
+import {waveSurferRef} from './useWaveSurfer';
 
 interface AudioRateRef {
   value: number;
@@ -33,15 +33,11 @@ export const audioRateHumanReadableRef = reactive<AudioRateHumanReadableRef>({
 });
 
 interface UseAudioRateProps {
-  waveSurferRef: Ref<WaveSurfer | null>;
   togglePlayPause: () => void;
 }
 
 // Playback rate: audio speed
-export function useAudioRate({
-  waveSurferRef,
-  togglePlayPause,
-}: UseAudioRateProps) {
+export function useAudioRate({togglePlayPause}: UseAudioRateProps) {
   const updatePlaybackRate = () => {
     if (waveSurferRef.value === null) {
       return;

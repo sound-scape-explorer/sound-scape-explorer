@@ -1,6 +1,6 @@
-import type {Ref} from 'vue';
 import {reactive} from 'vue';
-import type WaveSurfer from 'wavesurfer.js';
+
+import {waveSurferRef} from './useWaveSurfer';
 
 interface AudioIsPlayingRef {
   value: boolean;
@@ -10,7 +10,7 @@ export const audioIsPlayingRef = reactive<AudioIsPlayingRef>({
   value: false,
 });
 
-export function useAudioTransport(waveSurferRef: Ref<WaveSurfer | null>) {
+export function useAudioTransport() {
   const togglePlayPause = () => {
     if (waveSurferRef.value === null) {
       return;

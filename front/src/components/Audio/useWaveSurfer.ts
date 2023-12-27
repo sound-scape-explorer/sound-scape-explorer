@@ -1,6 +1,6 @@
 import colormap from 'colormap';
-import type {ComputedRef, Ref} from 'vue';
-import {computed, watch} from 'vue';
+import type {Ref} from 'vue';
+import {computed, reactive, watch, watchEffect} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
 import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
@@ -9,16 +9,23 @@ import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 import {FFT_SIZE, WAVE} from '../../constants';
 import {bandRef} from '../../hooks/useBands';
 import {fftSizeRef} from './useAudioComponent';
+import {audioContextRef} from './useAudioContext';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
 
+interface WaveSurferRef {
+  value: WaveSurfer | null;
+}
+
+export const waveSurferRef = reactive<WaveSurferRef>({
+  value: null,
+});
+
 interface UseWaveSurferProps {
-  audioContextRef: Ref<AudioContext | null>;
   waveformContainerRef: Ref<HTMLDivElement | null>;
   spectrogramContainerRef: Ref<HTMLDivElement | null>;
 }
 
 export function useWaveSurfer({
-  audioContextRef,
   waveformContainerRef,
   spectrogramContainerRef,
 }: UseWaveSurferProps) {
@@ -30,20 +37,19 @@ export function useWaveSurfer({
     });
   });
 
-  const waveSurferRef: ComputedRef<WaveSurfer | null> = computed(() => {
+  const createWaveSurfer = () => {
     if (
       audioContextRef.value === null ||
       bandRef.value === null ||
       waveformContainerRef.value === null ||
       spectrogramContainerRef.value === null
     ) {
-      console.log(waveformContainerRef.value, spectrogramContainerRef.value);
-      return null;
+      return;
     }
 
-    if (typeof waveSurferRef.value !== 'undefined') {
-      // Prevent multiple WaveSurfer instances
-      return waveSurferRef.value as WaveSurfer;
+    // Prevent multiple WaveSurfer instances
+    if (waveSurferRef.value !== null) {
+      return;
     }
 
     const params: WaveSurferParams = {
@@ -76,8 +82,10 @@ export function useWaveSurfer({
       ],
     };
 
-    return WaveSurfer.create(params);
-  });
+    waveSurferRef.value = WaveSurfer.create(params);
+  };
+
+  watchEffect(createWaveSurfer);
 
   const updateSpectrogramDefinition = () => {
     if (waveSurferRef.value === null) {
@@ -135,7 +143,6 @@ export function useWaveSurfer({
   };
 
   return {
-    waveSurferRef: waveSurferRef,
     increaseVolume: increaseVolume,
     decreaseVolume: decreaseVolume,
   };
