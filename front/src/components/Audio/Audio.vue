@@ -13,10 +13,13 @@ import audioBufferSlice from 'audiobuffer-slice';
 import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
 import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
-import {useAudioComponent} from 'src/components/Audio/useAudioComponent';
+import {
+  fftSizeRef,
+  useAudioComponent,
+} from 'src/components/Audio/useAudioComponent';
 import {useAudioContext} from 'src/components/Audio/useAudioContext';
 import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
-import {FFT_SIZE, PLAYBACK_RATE, WAVE} from 'src/constants';
+import {PLAYBACK_RATE, WAVE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {audioHostRef} from 'src/hooks/useAudioHost';
 import {bandRef} from 'src/hooks/useBands';
@@ -39,12 +42,17 @@ import {currentAudioFileRef} from './useAudio';
 
 const {notify} = useNotification();
 const isPlayingRef = ref<boolean>(false);
-const fftSizeRef = ref<number>(FFT_SIZE.default);
 const {intervalDateRef} = useDetails();
 
+const {
+  containerRef,
+  waveformContainerRef,
+  spectrogramContainerRef,
+  increaseFftSize,
+  decreaseFftSize,
+} = useAudioComponent();
+
 const {audioContextRef} = useAudioContext();
-const {containerRef, waveformContainerRef, spectrogramContainerRef} =
-  useAudioComponent();
 const {waveSurferRef: wsRef} = useWaveSurfer({
   audioContextRef: audioContextRef,
   waveformContainerRef: waveformContainerRef,
@@ -247,33 +255,6 @@ function handleStop() {
   isPlayingRef.value = false;
 }
 
-watch(fftSizeRef, () => {
-  if (wsRef.value === null) {
-    return;
-  }
-
-  // @ts-expect-error: 2540
-  // noinspection JSConstantReassignment
-  wsRef.value.spectrogram.fftSamples = fftSizeRef.value;
-  wsRef.value.drawBuffer();
-});
-
-function handleSpectrogramIncrease() {
-  if (fftSizeRef.value * 2 > FFT_SIZE.max) {
-    return;
-  }
-
-  fftSizeRef.value *= 2;
-}
-
-function handleSpectrogramDecrease() {
-  if (fftSizeRef.value / 2 < FFT_SIZE.min) {
-    return;
-  }
-
-  fftSizeRef.value /= 2;
-}
-
 const playbackRateRef = ref<number>(PLAYBACK_RATE.default);
 
 watch(playbackRateRef, () => {
@@ -377,7 +358,7 @@ watch(currentAudioFileRef, load);
           <template #trigger>
             <n-button
               size="tiny"
-              @click="handleSpectrogramIncrease"
+              @click="increaseFftSize"
             >
               <n-icon>
                 <add-outline />
@@ -394,7 +375,7 @@ watch(currentAudioFileRef, load);
           <template #trigger>
             <n-button
               size="tiny"
-              @click="handleSpectrogramDecrease"
+              @click="decreaseFftSize"
             >
               <n-icon>
                 <remove-outline />
@@ -497,7 +478,7 @@ watch(currentAudioFileRef, load);
             FFT Size
           </n-tag>
 
-          {{ fftSizeRef }}
+          {{ fftSizeRef.value }}
         </n-gi>
         <n-gi>
           <n-tag

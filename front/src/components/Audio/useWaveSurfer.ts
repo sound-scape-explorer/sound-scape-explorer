@@ -1,6 +1,6 @@
 import colormap from 'colormap';
 import type {ComputedRef, Ref} from 'vue';
-import {computed} from 'vue';
+import {computed, watch} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
 import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
@@ -8,6 +8,7 @@ import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
 import {FFT_SIZE, WAVE} from '../../constants';
 import {bandRef} from '../../hooks/useBands';
+import {fftSizeRef} from './useAudioComponent';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
 
 interface UseWaveSurferProps {
@@ -82,6 +83,19 @@ export function useWaveSurfer({
 
     return WaveSurfer.create(params);
   });
+
+  const updateSpectrogramDefinition = () => {
+    if (waveSurferRef.value === null) {
+      return;
+    }
+
+    // @ts-expect-error: 2540
+    // noinspection JSConstantReassignment
+    waveSurferRef.value.spectrogram.fftSamples = fftSizeRef.value;
+    waveSurferRef.value.drawBuffer();
+  };
+
+  watch(fftSizeRef, updateSpectrogramDefinition);
 
   return {
     waveSurferRef: waveSurferRef,
