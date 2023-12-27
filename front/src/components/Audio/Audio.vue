@@ -10,6 +10,7 @@ import {
   VolumeLowOutline,
 } from '@vicons/ionicons5';
 import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
+import AudioButton from 'src/components/Audio/AudioButton.vue';
 import {
   fftSizeRef,
   useAudioComponent,
@@ -60,19 +61,6 @@ useAudioRate({
 });
 
 const {downloadAudio} = useAudioDownload();
-
-function close() {
-  if (containerRef.value === null) {
-    console.log('b');
-    return;
-  }
-
-  console.log('b');
-  containerRef.value.classList.remove('open');
-  containerRef.value.classList.add('close');
-}
-
-onUnmounted(close);
 </script>
 
 <template>
@@ -82,125 +70,55 @@ onUnmounted(close);
   >
     <div class="player">
       <div class="volume buttons">
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          :alt="audioIsPlayingRef.value ? 'Pause' : 'Play'"
+          :callback="togglePlayPause"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="togglePlayPause"
-            >
-              <n-icon>
-                <pause-outline v-if="audioIsPlayingRef.value" />
-                <play-outline v-if="!audioIsPlayingRef.value" />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>{{ audioIsPlayingRef.value ? 'Pause' : 'Play' }}</span>
-        </n-tooltip>
+          <pause-outline v-if="audioIsPlayingRef.value" />
+          <play-outline v-if="!audioIsPlayingRef.value" />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="Stop"
+          :callback="stop"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="stop"
-            >
-              <n-icon>
-                <stop-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>Stop</span>
-        </n-tooltip>
+          <stop-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="Volume Up"
+          :callback="increaseVolume"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="increaseVolume"
-            >
-              <n-icon>
-                <volume-high-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>Volume Up</span>
-        </n-tooltip>
+          <volume-high-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="Volume Down"
+          :callback="decreaseVolume"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="decreaseVolume"
-            >
-              <n-icon>
-                <volume-low-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>Volume Down</span>
-        </n-tooltip>
+          <volume-low-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="FFT Size Up"
+          :callback="increaseFftSize"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="increaseFftSize"
-            >
-              <n-icon>
-                <add-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>FFT Size Up</span>
-        </n-tooltip>
+          <add-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="FFT Size Down"
+          :callback="decreaseFftSize"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="decreaseFftSize"
-            >
-              <n-icon>
-                <remove-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>FFT Size Down</span>
-        </n-tooltip>
+          <remove-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="Download"
+          :callback="downloadAudio"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="downloadAudio"
-            >
-              <n-icon>
-                <arrow-down-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>Download</span>
-        </n-tooltip>
+          <arrow-down-outline />
+        </AudioButton>
       </div>
 
       <n-grid
