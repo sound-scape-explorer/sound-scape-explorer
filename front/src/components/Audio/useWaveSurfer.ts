@@ -23,11 +23,6 @@ export function useWaveSurfer({
   spectrogramContainerRef,
 }: UseWaveSurferProps) {
   const colorsRef = computed(() => {
-    if (waveSurferRef.value !== null) {
-      console.log('destroy?');
-      // ws.destroy();
-    }
-
     return colormap({
       colormap: spectrogramColorRef.value,
       nshades: 256,
