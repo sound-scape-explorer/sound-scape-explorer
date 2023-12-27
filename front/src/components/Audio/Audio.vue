@@ -9,7 +9,7 @@ import {
   VolumeHighOutline,
   VolumeLowOutline,
 } from '@vicons/ionicons5';
-import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
+import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AudioButton from 'src/components/Audio/AudioButton.vue';
 import {
   fftSizeRef,
@@ -30,7 +30,6 @@ import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {onUnmounted} from 'vue';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from '../Details/useDetails';
@@ -40,7 +39,6 @@ import {audioBlockRef} from './useAudioFile';
 const {intervalDateRef} = useDetails();
 
 const {
-  containerRef,
   waveformContainerRef,
   spectrogramContainerRef,
   increaseFftSize,
