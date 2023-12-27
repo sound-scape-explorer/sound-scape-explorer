@@ -11,13 +11,20 @@ import {
 } from '@vicons/ionicons5';
 import audioBufferSlice from 'audiobuffer-slice';
 import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
-import speedToPercentage from 'speed-to-percentage';
-import speedToSemitones from 'speed-to-semitones';
 import {
   fftSizeRef,
   useAudioComponent,
 } from 'src/components/Audio/useAudioComponent';
 import {useAudioContext} from 'src/components/Audio/useAudioContext';
+import {
+  audioRateHumanReadableRef,
+  audioRateRef,
+  useAudioRate,
+} from 'src/components/Audio/useAudioRate';
+import {
+  audioIsPlayingRef,
+  useAudioTransport,
+} from 'src/components/Audio/useAudioTransport';
 import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
@@ -26,7 +33,7 @@ import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {triggerWavDownload} from 'src/utils/trigger-wav-download';
-import {onUnmounted, ref, watch} from 'vue';
+import {onUnmounted, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -36,12 +43,7 @@ import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {currentAudioFileRef} from './useAudio';
 
-/**
- * State
- */
-
 const {notify} = useNotification();
-const isPlayingRef = ref<boolean>(false);
 const {intervalDateRef} = useDetails();
 
 const {
@@ -58,6 +60,13 @@ const {waveSurferRef, increaseVolume, decreaseVolume} = useWaveSurfer({
   audioContextRef: audioContextRef,
   waveformContainerRef: waveformContainerRef,
   spectrogramContainerRef: spectrogramContainerRef,
+});
+
+const {togglePlayPause, seek, stop} = useAudioTransport(waveSurferRef);
+
+useAudioRate({
+  waveSurferRef: waveSurferRef,
+  togglePlayPause: togglePlayPause,
 });
 
 function close() {
@@ -136,13 +145,13 @@ function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
   const blob = new Blob([wav]);
 
   waveSurferRef.value.loadBlob(blob);
-  waveSurferRef.value.on('seek', handleAudioSeek);
+  waveSurferRef.value.on('seek', seek);
   waveSurferRef.value.on('finish', handleAudioEnd);
   waveSurferRef.value.on('ready', handleAudioReady);
 }
 
 function handleAudioEnd() {
-  isPlayingRef.value = false;
+  audioIsPlayingRef.value = false;
 }
 
 function handleAudioReady() {
@@ -168,7 +177,7 @@ function handleAudioReady() {
   highShelf.frequency.value = bandRef.value.high;
 
   waveSurferRef.value.backend.setFilters([lowShelf, highShelf]);
-  playPause();
+  togglePlayPause();
 }
 
 async function handleDownload() {
@@ -191,53 +200,6 @@ async function handleDownload() {
   triggerWavDownload(blob, name);
 }
 
-function handleAudioSeek() {
-  if (waveSurferRef.value === null) {
-    return;
-  }
-
-  if (waveSurferRef.value.isPlaying()) {
-    return;
-  }
-
-  playPause();
-}
-
-const playPause = () => {
-  if (waveSurferRef.value === null) {
-    return;
-  }
-
-  waveSurferRef.value.playPause();
-  isPlayingRef.value = waveSurferRef.value.isPlaying();
-};
-
-function handleStop() {
-  if (waveSurferRef.value === null) {
-    return;
-  }
-
-  waveSurferRef.value.seekTo(0);
-  waveSurferRef.value.pause();
-  isPlayingRef.value = false;
-}
-
-const playbackRateRef = ref<number>(PLAYBACK_RATE.default);
-
-watch(playbackRateRef, () => {
-  if (waveSurferRef.value === null) {
-    return;
-  }
-
-  waveSurferRef.value.pause();
-  waveSurferRef.value.setPlaybackRate(playbackRateRef.value);
-  playPause();
-});
-
-/**
- * Lifecycles
- */
-
 onUnmounted(close);
 watch(currentAudioFileRef, load);
 </script>
@@ -256,15 +218,15 @@ watch(currentAudioFileRef, load);
           <template #trigger>
             <n-button
               size="tiny"
-              @click="playPause"
+              @click="togglePlayPause"
             >
               <n-icon>
-                <pause-outline v-if="isPlayingRef" />
-                <play-outline v-if="!isPlayingRef" />
+                <pause-outline v-if="audioIsPlayingRef.value" />
+                <play-outline v-if="!audioIsPlayingRef.value" />
               </n-icon>
             </n-button>
           </template>
-          <span>{{ isPlayingRef ? 'Pause' : 'Play' }}</span>
+          <span>{{ audioIsPlayingRef.value ? 'Pause' : 'Play' }}</span>
         </n-tooltip>
 
         <n-tooltip
@@ -274,7 +236,7 @@ watch(currentAudioFileRef, load);
           <template #trigger>
             <n-button
               size="tiny"
-              @click="handleStop"
+              @click="stop"
             >
               <n-icon>
                 <stop-outline />
@@ -455,7 +417,7 @@ watch(currentAudioFileRef, load);
             Speed %
           </n-tag>
 
-          {{ speedToPercentage(playbackRateRef, 2) }}
+          {{ audioRateHumanReadableRef.value.percentage }}
         </n-gi>
         <n-gi>
           <n-tag
@@ -465,7 +427,7 @@ watch(currentAudioFileRef, load);
             Semitones
           </n-tag>
 
-          {{ speedToSemitones(playbackRateRef, 2) }}
+          {{ audioRateHumanReadableRef.value.semitones }}
         </n-gi>
         <n-gi v-if="settingsRef.value !== null">
           <n-tag
@@ -475,17 +437,13 @@ watch(currentAudioFileRef, load);
             Hertz
           </n-tag>
 
-          {{
-            (
-              settingsRef.value['expected_sample_rate'] * playbackRateRef
-            ).toFixed()
-          }}
+          {{ audioRateHumanReadableRef.value.hertz }}
         </n-gi>
       </n-grid>
 
       <div>
         <n-slider
-          v-model:value="playbackRateRef"
+          v-model:value="audioRateRef.value"
           :max="PLAYBACK_RATE.max"
           :min="PLAYBACK_RATE.min"
           :step="PLAYBACK_RATE.step"
