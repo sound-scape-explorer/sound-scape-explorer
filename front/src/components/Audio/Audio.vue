@@ -10,10 +10,12 @@ import {
   VolumeLowOutline,
 } from '@vicons/ionicons5';
 import audioBufferSlice from 'audiobuffer-slice';
-import colormap from 'colormap';
 import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
 import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
+import {useAudioComponent} from 'src/components/Audio/useAudioComponent';
+import {useAudioContext} from 'src/components/Audio/useAudioContext';
+import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {FFT_SIZE, PLAYBACK_RATE, WAVE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {audioHostRef} from 'src/hooks/useAudioHost';
@@ -21,12 +23,8 @@ import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {triggerWavDownload} from 'src/utils/trigger-wav-download';
-import {computed, type ComputedRef, onUnmounted, ref, watch} from 'vue';
+import {onUnmounted, ref, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
-import WaveSurfer from 'wavesurfer.js';
-import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
-import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
-import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
@@ -34,93 +32,24 @@ import {useNotification} from '../AppNotification/useNotification';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {currentAudioFileRef} from './useAudio';
-import {spectrogramColorRef} from './useAudioSpectrogramColor';
 
 /**
  * State
  */
 
 const {notify} = useNotification();
-const containerRef = ref<HTMLDivElement | null>(null);
-const waveformRef = ref<HTMLDivElement | null>(null);
-const spectrogramRef = ref<HTMLDivElement | null>(null);
 const isPlayingRef = ref<boolean>(false);
 const fftSizeRef = ref<number>(FFT_SIZE.default);
 const {intervalDateRef} = useDetails();
 
-const audioContextRef = computed<AudioContext | null>(() => {
-  if (settingsRef.value === null) {
-    return null;
-  }
-
-  return new AudioContext({sampleRate: settingsRef.value.expected_sample_rate});
+const {audioContextRef} = useAudioContext();
+const {containerRef, waveformContainerRef, spectrogramContainerRef} =
+  useAudioComponent();
+const {waveSurferRef: wsRef} = useWaveSurfer({
+  audioContextRef: audioContextRef,
+  waveformContainerRef: waveformContainerRef,
+  spectrogramContainerRef: spectrogramContainerRef,
 });
-
-const wsRef: ComputedRef<WaveSurfer | null> = computed(() => {
-  if (
-    audioContextRef.value === null ||
-    bandRef.value === null ||
-    waveformRef.value === null ||
-    spectrogramRef.value === null
-  ) {
-    return null;
-  }
-
-  if (typeof wsRef.value !== 'undefined') {
-    // Prevent multiple WaveSurfer instances
-    return wsRef.value as WaveSurfer;
-  }
-
-  const params: WaveSurferParams = {
-    audioContext: audioContextRef.value,
-    container: waveformRef.value,
-    scrollParent: false,
-    barHeight: WAVE.default,
-    normalize: false,
-    height: 48,
-    plugins: [
-      Spectrogram.create({
-        container: spectrogramRef.value,
-        labels: true,
-        colorMap: colorsRef.value,
-        height: 192,
-        fftSamples: FFT_SIZE.default,
-        frequencyMin: bandRef.value.low,
-        frequencyMax: bandRef.value.high,
-      }),
-      Cursor.create({
-        showTime: true,
-        opacity: 1,
-        customShowTimeStyle: {
-          'background-color': '#000',
-          'color': '#fff',
-          'padding': '2px',
-          'font-size': '10px',
-        },
-      }),
-    ],
-  };
-
-  return WaveSurfer.create(params);
-});
-
-const colorsRef = computed(() => {
-  // TODO: Assess utility of this
-  if (wsRef.value !== null) {
-    console.log('destroy?');
-    // ws.destroy();
-  }
-
-  return colormap({
-    colormap: spectrogramColorRef.value,
-    nshades: 256,
-    format: 'float',
-  });
-});
-
-/**
- * Handlers
- */
 
 function close() {
   if (containerRef.value === null) {
@@ -615,10 +544,10 @@ watch(currentAudioFileRef, load);
         />
       </div>
 
-      <div ref="waveformRef" />
+      <div ref="waveformContainerRef" />
 
       <div
-        ref="spectrogramRef"
+        ref="spectrogramContainerRef"
         class="spectrogram"
       />
     </div>
