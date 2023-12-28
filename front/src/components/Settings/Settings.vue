@@ -78,6 +78,18 @@ const plotBackgroundOptionsRef = computed(() => {
           size="tiny"
         />
       </n-gi>
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Apply timezone
+        </n-tag>
+        <n-checkbox
+          v-model:checked="settingsStore.applyTimezone"
+          class="checkbox"
+        />
+      </n-gi>
     </n-grid>
   </AppDraggable>
 </template>
