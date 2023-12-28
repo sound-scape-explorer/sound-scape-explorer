@@ -1,6 +1,6 @@
 import Plotly, {type Config, type DownloadImgopts} from 'plotly.js-dist-min';
 import {useLabelScreenshot} from 'src/components/Label/useLabelScreenshot';
-import {PLOTLY_SIZE} from 'src/constants';
+import {EXPORT_FILENAME, PLOTLY_SIZE} from 'src/constants';
 import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
 
 import {useScatterExport} from './useScatterExport';
@@ -16,7 +16,7 @@ export function useScatterConfig() {
   const scatterWidth = PLOTLY_SIZE * (4 / 3);
   const scatterHeight = PLOTLY_SIZE;
   const scatterScale = 4;
-  const scatterName = 'SSE-scatter-export';
+  const scatterName = `${EXPORT_FILENAME}-scatter-export`;
 
   const scatterOptions: ScatterExportOptions = {
     filename: scatterName,
