@@ -166,7 +166,7 @@ watch(intervalDetailsRef, () => {
 
       <div class="separator" />
 
-      <div class="title">Extracted Data</div>
+      <div class="title">Indicators</div>
 
       <n-grid
         v-if="aggregatedIndicatorsRef.value !== null"
