@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
-import {type Config, type Layout} from 'plotly.js-dist-min';
-import Plotly from 'plotly.js-dist-min';
+import Plotly, {type Config, type Layout} from 'plotly.js-dist-min';
+import {settingsStore} from 'src/components/Settings/settingsStore';
 import {useHeatmapConfig} from 'src/hooks/useHeatmapConfig';
 import {type HeatmapData, useHeatmapData} from 'src/hooks/useHeatmapData';
 import {useHeatmapLayout} from 'src/hooks/useHeatmapLayout';
@@ -76,7 +76,7 @@ const refresh = () => {
 refresh();
 watch([divRef, dataRef, layoutRef], render);
 watch(props, refresh);
-watch([heatmapWidthRef, heatmapHeightRef], refresh);
+watch([heatmapWidthRef, heatmapHeightRef, settingsStore], refresh);
 </script>
 
 <template>
