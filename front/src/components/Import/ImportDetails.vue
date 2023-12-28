@@ -2,6 +2,7 @@
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {autoclustersRef, useAutoclusters} from 'src/hooks/useAutoclusters';
 import {bandsRef} from 'src/hooks/useBands';
+import {useDate} from 'src/hooks/useDate';
 import {digestersRef} from 'src/hooks/useDigesters';
 import {extractorsRef} from 'src/hooks/useExtractors';
 import {filesRef} from 'src/hooks/useFiles';
@@ -11,11 +12,24 @@ import {reducersRef} from 'src/hooks/useReducers';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {trajectoriesRef} from 'src/hooks/useTrajectories';
 import {versionRef} from 'src/hooks/useVersion';
+import {computed} from 'vue';
 
 // invoking this here because no other place uses it
 useAutoclusters();
 
 const separator = ', ';
+
+const {convertTimestampToDate, convertDateToIsoDate} = useDate();
+
+const timelineOrigin = computed<string>(() => {
+  if (settingsRef.value === null) {
+    return '';
+  }
+
+  const origin = settingsRef.value.timeline_origin;
+  const date = convertTimestampToDate(origin);
+  return convertDateToIsoDate(date);
+});
 </script>
 
 <template>
@@ -42,11 +56,15 @@ const separator = ', ';
       },
       {
         tag: 'timeline_origin',
-        value: settingsRef.value?.timeline_origin.toString() ?? '',
+        value: timelineOrigin,
       },
       {
         tag: 'audio_host',
         value: settingsRef.value?.audio_host ?? '',
+      },
+      {
+        tag: 'timezone',
+        value: settingsRef.value?.timezone ?? '',
       },
       {
         tag: 'computation_umap_dimensions',
