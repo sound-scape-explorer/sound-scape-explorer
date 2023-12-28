@@ -59,7 +59,7 @@ const updateSites = (sitesNames: string[]) => {
 
 const isByDateRef = ref<boolean>(false);
 
-const chartDataRef = computed<AppPlotProps>(() => {
+const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
   if (sitesRef.value === null) {
     return {
       values: [],
