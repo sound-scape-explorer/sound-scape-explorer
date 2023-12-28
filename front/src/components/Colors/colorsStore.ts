@@ -13,6 +13,6 @@ export interface ColorsStore {
 }
 
 export const colorsStore = reactive<ColorsStore>({
-  colorType: 'intervalIndex',
+  colorType: 'cycleDay',
   colorScale: 'Dark2',
 });
