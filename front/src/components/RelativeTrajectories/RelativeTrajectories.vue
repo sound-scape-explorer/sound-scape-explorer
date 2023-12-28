@@ -132,6 +132,7 @@ const handleExportClick = () => {
       </n-button>
 
       <AppPlot
+        export-filename="relative-trajectories"
         :labels="histogramLabelsRef"
         :names="histogramNamesRef"
         :values="histogramValuesRef"

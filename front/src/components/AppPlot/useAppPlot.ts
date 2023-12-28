@@ -1,8 +1,9 @@
-import type {Data, Layout} from 'plotly.js-dist-min';
+import type {Config, Data, Layout} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref, watch} from 'vue';
 
+import {useHeatmapConfig} from '../../hooks/useHeatmapConfig';
 import {settingsStore} from '../Settings/settingsStore';
 import type {AppPlotProps} from './AppPlot.vue';
 
@@ -10,19 +11,25 @@ export function useAppPlot(props: AppPlotProps) {
   const divRef = ref<HTMLDivElement | null>(null);
   const dataRef = ref<Data[] | null>(null);
   const layoutRef = ref<Partial<Layout> | null>(null);
+  const configRef = ref<Partial<Config> | null>(null);
+  const {generateConfig} = useHeatmapConfig(props.exportFilename);
 
   async function render() {
     if (
       divRef.value === null ||
       dataRef.value === null ||
-      layoutRef.value === null
+      layoutRef.value === null ||
+      configRef.value === null
     ) {
       return;
     }
 
-    await Plotly.newPlot(divRef.value, dataRef.value, layoutRef.value, {
-      displaylogo: false,
-    });
+    await Plotly.newPlot(
+      divRef.value,
+      dataRef.value,
+      layoutRef.value,
+      configRef.value,
+    );
   }
 
   function refresh() {
@@ -75,6 +82,8 @@ export function useAppPlot(props: AppPlotProps) {
         y: 1,
       },
     };
+
+    configRef.value = generateConfig();
   }
 
   refresh();

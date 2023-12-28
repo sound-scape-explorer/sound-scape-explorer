@@ -186,6 +186,7 @@ const handleExportClick = () => {
       </div>
 
       <AppPlot
+        export-filename="indicators"
         :colors="chartDataRef.colors"
         :labels="chartDataRef.labels"
         :values="chartDataRef.values"

@@ -13,6 +13,7 @@ export interface AppPlotProps {
   xTitle?: string;
   yTitle?: string;
   legend?: boolean;
+  exportFilename: string;
 }
 
 const props = defineProps<AppPlotProps>();

@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
 import Plotly, {type Config, type Layout} from 'plotly.js-dist-min';
+import {digestedRef} from 'src/components/Digested/useDigested';
 import {settingsStore} from 'src/components/Settings/settingsStore';
 import {useHeatmapConfig} from 'src/hooks/useHeatmapConfig';
 import {type HeatmapData, useHeatmapData} from 'src/hooks/useHeatmapData';
@@ -27,7 +28,9 @@ const props = defineProps<Props>();
 
 const {generateLayout} = useHeatmapLayout();
 const {generateData} = useHeatmapData();
-const {generateConfig} = useHeatmapConfig();
+const {generateConfig} = useHeatmapConfig(
+  digestedRef.value?.digester.name ?? 'heatmap',
+);
 const divRef = ref<HTMLDivElement | null>(null);
 const dataRef = ref<HeatmapData[] | null>(null);
 const layoutRef = ref<Partial<Layout> | null>(null);
