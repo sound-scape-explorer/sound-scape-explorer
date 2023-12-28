@@ -14,7 +14,7 @@ interface Props {
   title?: string;
   x: string[];
   y: string[];
-  values: (number | null)[][];
+  values: {[key: string]: number[][]};
   colorscale: string;
   range: {min: number | undefined; max: number | undefined};
 }
