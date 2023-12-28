@@ -25,29 +25,28 @@ import {computed, type ComputedRef, ref, watch} from 'vue';
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 
-const {convertTimestampToDate} = useDate();
+const {convertTimestampToDate, convertDateToIsoDate} = useDate();
 const {filterByTime} = useScatterFilterTime();
 
 const uiDisabled: ComputedRef<boolean> = computed(
   () => scatterLoadingRef.value || timeStore.isAllSelected,
 );
 
-const dateStartRef = computed<Dayjs | null>(() => {
-  if (settingsRef.value === null) {
-    return null;
-  }
-
+const dateStartRef = computed<Dayjs>(() => {
   let start = timeStore.value;
 
   if (timeStore.isAllSelected) {
     start = timeStore.min;
   }
 
-  if (settingsRef.value.timezone !== '') {
-    return convertTimestampToDate(start * 1000, settingsRef.value.timezone);
-  }
-
   return convertTimestampToDate(start * 1000);
+});
+
+const dateEndRef = computed<string>(() => {
+  const end = convertTimestampToDate(
+    dateStartRef.value.unix() * 1000 + timeStore.duration * 1000,
+  );
+  return convertDateToIsoDate(end);
 });
 
 interface Duration {
@@ -123,45 +122,8 @@ watch(isPlaying, () => {
   stop();
 });
 
-const timeOffsetRef = computed<number | null>(() => {
-  if (settingsRef.value === null || dateStartRef.value === null) {
-    return null;
-  }
-
-  if (settingsRef.value.timezone === '') {
-    return 0;
-  }
-
-  const getZoneValue = (zone: string) => Number(zone.replace('GMT', ''));
-
-  // dayjs.tz.setDefault('Pacific/Tahiti');
-  // const guessOffset = dayjs(0).tz(dayjs.tz.guess()).offsetName('short');
-  // const targetOffset = dateStartRef.value.offsetName('short');
-  const guessOffset = undefined;
-  const targetOffset = undefined;
-
-  if (
-    typeof guessOffset === 'undefined' ||
-    typeof targetOffset === 'undefined'
-  ) {
-    return 0;
-  }
-
-  const offset = getZoneValue(targetOffset) - getZoneValue(guessOffset);
-
-  return offset * 60 * 60 * 1000;
-});
-
 const handleDateStartUpdate = (t: number) => {
   timeStore.value = t / 1000;
-};
-
-const transposeDateToZone = (date: Dayjs | null) => {
-  if (date === null) {
-    return;
-  }
-
-  return date.unix() * 1000 + (timeOffsetRef.value ?? 0);
 };
 
 const {registerKey} = useKeyboard();
@@ -265,10 +227,11 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
           trigger="hover"
         >
           <template #trigger>
+            <!-- TODO: Replace naive ui date picker with custom to support timezones -->
             <n-date-picker
               :disabled="uiDisabled"
               :on-update:value="handleDateStartUpdate"
-              :value="transposeDateToZone(dateStartRef)"
+              :value="dateStartRef.unix() * 1000"
               size="small"
               type="datetime"
             />
@@ -279,7 +242,7 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
         </n-tooltip>
       </div>
 
-      <span class="date"> to LOCALIZED_DATE_REF </span>
+      <span class="date"> to {{ dateEndRef }} </span>
 
       <div class="timezone">
         {{ settingsRef.value?.timezone }}
