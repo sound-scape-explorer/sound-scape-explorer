@@ -1,4 +1,5 @@
 <script lang="ts" setup="">
+import {settingsStore} from 'src/components/Settings/settingsStore';
 import {watch} from 'vue';
 
 import {useAppPlot} from './useAppPlot';
@@ -18,7 +19,7 @@ const props = defineProps<AppPlotProps>();
 
 const {divRef, refresh} = useAppPlot(props);
 
-watch(props, refresh);
+watch([props, settingsStore], refresh);
 </script>
 
 <template>
