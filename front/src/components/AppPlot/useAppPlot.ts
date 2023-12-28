@@ -3,7 +3,7 @@ import Plotly from 'plotly.js-dist-min';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref, watch} from 'vue';
 
-import {useHeatmapConfig} from '../../hooks/useHeatmapConfig';
+import {usePlotConfig} from '../../hooks/usePlotConfig';
 import {settingsStore} from '../Settings/settingsStore';
 import type {AppPlotProps} from './AppPlot.vue';
 
@@ -12,7 +12,7 @@ export function useAppPlot(props: AppPlotProps) {
   const dataRef = ref<Data[] | null>(null);
   const layoutRef = ref<Partial<Layout> | null>(null);
   const configRef = ref<Partial<Config> | null>(null);
-  const {generateConfig} = useHeatmapConfig(props.exportFilename);
+  const {generateConfig} = usePlotConfig(props.exportFilename);
 
   async function render() {
     if (

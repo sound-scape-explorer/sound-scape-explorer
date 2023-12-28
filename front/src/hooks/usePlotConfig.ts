@@ -9,7 +9,7 @@ import {computed} from 'vue';
 import {EXPORT_FILENAME} from '../constants';
 import {heatmapHeightRef, heatmapWidthRef} from './useHeatmapSize';
 
-export function useHeatmapConfig(name: string) {
+export function usePlotConfig(name: string) {
   const scale = 4;
 
   const exportNameRef = computed<string>(() => `${EXPORT_FILENAME}-${name}`);
