@@ -46,7 +46,6 @@ const naiveOptions = computed(() => {
     <template #trigger>
       <n-select
         v-model:value="colorsStore.colorType"
-        :default-value="optionsRef[0]"
         :disabled="scatterLoadingRef.value"
         :options="naiveOptions"
         placeholder="Color type..."
