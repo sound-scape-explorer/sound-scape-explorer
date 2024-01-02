@@ -9,361 +9,56 @@ import {
   VolumeHighOutline,
   VolumeLowOutline,
 } from '@vicons/ionicons5';
-import audioBufferSlice from 'audiobuffer-slice';
-import colormap from 'colormap';
-import {NButton, NGi, NGrid, NIcon, NSlider, NTag, NTooltip} from 'naive-ui';
-import speedToPercentage from 'speed-to-percentage';
-import speedToSemitones from 'speed-to-semitones';
+import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
+import AudioButton from 'src/components/Audio/AudioButton.vue';
+import {
+  fftSizeRef,
+  useAudioComponent,
+} from 'src/components/Audio/useAudioComponent';
+import {useAudioContext} from 'src/components/Audio/useAudioContext';
+import {useAudioDownload} from 'src/components/Audio/useAudioDownload';
+import {
+  audioRateHumanReadableRef,
+  audioRateRef,
+  useAudioRate,
+} from 'src/components/Audio/useAudioRate';
+import {
+  audioIsPlayingRef,
+  useAudioTransport,
+} from 'src/components/Audio/useAudioTransport';
+import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
-import {audioHostRef} from 'src/hooks/useAudioHost';
-import {bandRef} from 'src/hooks/useBands';
-import {integrationRef} from 'src/hooks/useIntegrations';
 import {settingsRef} from 'src/hooks/useStorageSettings';
-import {computed, type ComputedRef, onUnmounted, ref, watch} from 'vue';
-import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
-import WaveSurfer from 'wavesurfer.js';
-import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
-import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
-import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
-import {FFT_SIZE, WAVE} from 'src/constants';
-import {triggerWavDownload} from 'src/utils/trigger-wav-download';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import {useNotification} from '../AppNotification/useNotification';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
-import {currentAudioFileRef} from './useAudio';
-import {spectrogramColorRef} from './useAudioSpectrogramColor';
+import {audioBlockRef} from './useAudioFile';
 
-/**
- * State
- */
-
-const {notify} = useNotification();
-const containerRef = ref<HTMLDivElement | null>(null);
-const waveformRef = ref<HTMLDivElement | null>(null);
-const spectrogramRef = ref<HTMLDivElement | null>(null);
-const isPlayingRef = ref<boolean>(false);
-const fftSizeRef = ref<number>(FFT_SIZE.default);
 const {intervalDateRef} = useDetails();
 
-const audioContextRef = computed<AudioContext | null>(() => {
-  if (settingsRef.value === null) {
-    return null;
-  }
+const {
+  waveformContainerRef,
+  spectrogramContainerRef,
+  increaseFftSize,
+  decreaseFftSize,
+} = useAudioComponent();
 
-  return new AudioContext({sampleRate: settingsRef.value.expected_sample_rate});
+useAudioContext();
+
+const {increaseVolume, decreaseVolume} = useWaveSurfer({
+  waveformContainerRef: waveformContainerRef,
+  spectrogramContainerRef: spectrogramContainerRef,
 });
 
-const wsRef: ComputedRef<WaveSurfer | null> = computed(() => {
-  if (
-    audioContextRef.value === null ||
-    bandRef.value === null ||
-    waveformRef.value === null ||
-    spectrogramRef.value === null
-  ) {
-    return null;
-  }
+const {togglePlayPause, stop} = useAudioTransport();
 
-  if (typeof wsRef.value !== 'undefined') {
-    // Prevent multiple WaveSurfer instances
-    return wsRef.value as WaveSurfer;
-  }
-
-  const params: WaveSurferParams = {
-    audioContext: audioContextRef.value,
-    container: waveformRef.value,
-    scrollParent: false,
-    barHeight: WAVE.default,
-    normalize: false,
-    height: 48,
-    plugins: [
-      Spectrogram.create({
-        container: spectrogramRef.value,
-        labels: true,
-        colorMap: colorsRef.value,
-        height: 192,
-        fftSamples: FFT_SIZE.default,
-        frequencyMin: bandRef.value.low,
-        frequencyMax: bandRef.value.high,
-      }),
-      Cursor.create({
-        showTime: true,
-        opacity: 1,
-        customShowTimeStyle: {
-          'background-color': '#000',
-          'color': '#fff',
-          'padding': '2px',
-          'font-size': '10px',
-        },
-      }),
-    ],
-  };
-
-  return WaveSurfer.create(params);
+useAudioRate({
+  togglePlayPause: togglePlayPause,
 });
 
-const colorsRef = computed(() => {
-  // TODO: Assess utility of this
-  if (wsRef.value !== null) {
-    console.log('destroy?');
-    // ws.destroy();
-  }
-
-  return colormap({
-    colormap: spectrogramColorRef.value,
-    nshades: 256,
-    format: 'float',
-  });
-});
-
-/**
- * Handlers
- */
-
-function close() {
-  if (containerRef.value === null) {
-    return;
-  }
-
-  containerRef.value.classList.remove('open');
-  containerRef.value.classList.add('close');
-}
-
-async function load() {
-  try {
-    if (
-      integrationRef.value === null ||
-      currentAudioFileRef.value === null ||
-      wsRef.value === null ||
-      audioContextRef.value === null
-    ) {
-      return;
-    }
-
-    const src = `${audioHostRef.value}${currentAudioFileRef.value.file}`;
-
-    const response = await fetch(src);
-
-    if (!response.ok) {
-      notify(
-        'error',
-        'Failed to fetch audio',
-        `${response.status}: ${response.statusText}`,
-      );
-      console.error(
-        'Failed to fetch audio:',
-        response.status,
-        response.statusText,
-      );
-      return;
-    }
-
-    const arrayBuffer = await response.arrayBuffer();
-
-    if (arrayBuffer.byteLength === 0) {
-      notify('error', 'Empty audio data', '');
-      console.error('Empty audio data');
-      return;
-    }
-
-    const audioBuffer = await audioContextRef.value.decodeAudioData(
-      arrayBuffer,
-    );
-
-    const start = currentAudioFileRef.value.fileStart;
-    const end = start + integrationRef.value.seconds * 1000;
-
-    audioBufferSlice(audioBuffer, start, end, handleAudioSlice);
-  } catch (error) {
-    appDraggablesStore.audio = false;
-    notify('error', 'Failed to load audio', `${error}`);
-    console.error(error);
-  }
-}
-
-function handleAudioSlice(error: TypeError, slicedAudioBuffer: AudioBuffer) {
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  if (wsRef.value === null) {
-    return;
-  }
-
-  const wav = encodeWavFileFromAudioBuffer(slicedAudioBuffer, 0);
-
-  const blob = new Blob([wav]);
-
-  wsRef.value.loadBlob(blob);
-  wsRef.value.on('seek', handleAudioSeek);
-  wsRef.value.on('finish', handleAudioEnd);
-  wsRef.value.on('ready', handleAudioReady);
-}
-
-function handleAudioEnd() {
-  isPlayingRef.value = false;
-}
-
-function handleAudioReady() {
-  if (
-    wsRef.value === null ||
-    bandRef.value === null ||
-    audioContextRef.value === null
-  ) {
-    return;
-  }
-
-  // const ac = wsRef.value.backend.getAudioContext();
-  const ac = audioContextRef.value;
-
-  const lowShelf = ac.createBiquadFilter();
-  lowShelf.type = 'lowshelf';
-  lowShelf.gain.value = -60;
-  lowShelf.frequency.value = bandRef.value.low;
-
-  const highShelf = ac.createBiquadFilter();
-  highShelf.type = 'highshelf';
-  highShelf.gain.value = -60;
-  highShelf.frequency.value = bandRef.value.high;
-
-  wsRef.value.backend.setFilters([lowShelf, highShelf]);
-  playPause();
-}
-
-async function handleDownload() {
-  if (wsRef.value === null || audioContextRef.value === null) {
-    return;
-  }
-
-  // @ts-expect-error: 2339
-  // noinspection TypeScriptUnresolvedReference
-  const buffer = wsRef.value.backend.buffer as AudioBuffer | null;
-
-  if (buffer === null || currentAudioFileRef.value === null) {
-    return;
-  }
-
-  const wav = encodeWavFileFromAudioBuffer(buffer, 0);
-  const blob = new Blob([wav], {type: 'audio/wav'});
-  const name = `${currentAudioFileRef.value.file} - ${currentAudioFileRef.value.start} - NO FILTER.wav`;
-
-  triggerWavDownload(blob, name);
-}
-
-function handleVolumeUp() {
-  if (wsRef.value === null) {
-    return;
-  }
-
-  if (wsRef.value.params.barHeight + WAVE.step > WAVE.max) {
-    wsRef.value.params.barHeight = WAVE.max;
-  } else {
-    wsRef.value.params.barHeight += WAVE.step;
-
-    const volume = wsRef.value.getVolume();
-    wsRef.value.setVolume(volume + WAVE.step);
-  }
-
-  wsRef.value.drawBuffer();
-}
-
-function handleAudioSeek() {
-  if (wsRef.value === null) {
-    return;
-  }
-
-  if (wsRef.value.isPlaying()) {
-    return;
-  }
-
-  playPause();
-}
-
-function handleVolumeDown() {
-  if (wsRef.value === null) {
-    return;
-  }
-
-  if (wsRef.value.params.barHeight - WAVE.step < WAVE.min) {
-    wsRef.value.params.barHeight = WAVE.min;
-  } else {
-    wsRef.value.params.barHeight -= WAVE.step;
-
-    const volume = wsRef.value.getVolume();
-    wsRef.value.setVolume(volume - WAVE.step);
-  }
-
-  wsRef.value.drawBuffer();
-}
-
-const playPause = () => {
-  if (wsRef.value === null) {
-    return;
-  }
-
-  wsRef.value.playPause();
-  isPlayingRef.value = wsRef.value.isPlaying();
-};
-
-function handleStop() {
-  if (wsRef.value === null) {
-    return;
-  }
-
-  wsRef.value.seekTo(0);
-  wsRef.value.pause();
-  isPlayingRef.value = false;
-}
-
-watch(fftSizeRef, () => {
-  if (wsRef.value === null) {
-    return;
-  }
-
-  // @ts-expect-error: 2540
-  // noinspection JSConstantReassignment
-  wsRef.value.spectrogram.fftSamples = fftSizeRef.value;
-  wsRef.value.drawBuffer();
-});
-
-function handleSpectrogramIncrease() {
-  if (fftSizeRef.value * 2 > FFT_SIZE.max) {
-    return;
-  }
-
-  fftSizeRef.value *= 2;
-}
-
-function handleSpectrogramDecrease() {
-  if (fftSizeRef.value / 2 < FFT_SIZE.min) {
-    return;
-  }
-
-  fftSizeRef.value /= 2;
-}
-
-const playbackRateRef = ref<number>(PLAYBACK_RATE.default);
-
-watch(playbackRateRef, () => {
-  if (wsRef.value === null) {
-    return;
-  }
-
-  wsRef.value.pause();
-  wsRef.value.setPlaybackRate(playbackRateRef.value);
-  playPause();
-});
-
-/**
- * Lifecycles
- */
-
-onUnmounted(close);
-watch(currentAudioFileRef, load);
+const {downloadAudio} = useAudioDownload();
 </script>
 
 <template>
@@ -373,125 +68,55 @@ watch(currentAudioFileRef, load);
   >
     <div class="player">
       <div class="volume buttons">
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          :alt="audioIsPlayingRef.value ? 'Pause' : 'Play'"
+          :callback="togglePlayPause"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="playPause"
-            >
-              <n-icon>
-                <pause-outline v-if="isPlayingRef" />
-                <play-outline v-if="!isPlayingRef" />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>{{ isPlayingRef ? 'Pause' : 'Play' }}</span>
-        </n-tooltip>
+          <pause-outline v-if="audioIsPlayingRef.value" />
+          <play-outline v-if="!audioIsPlayingRef.value" />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="Stop"
+          :callback="stop"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="handleStop"
-            >
-              <n-icon>
-                <stop-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>Stop</span>
-        </n-tooltip>
+          <stop-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="Volume Up"
+          :callback="increaseVolume"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="handleVolumeUp"
-            >
-              <n-icon>
-                <volume-high-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>Volume Up</span>
-        </n-tooltip>
+          <volume-high-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="Volume Down"
+          :callback="decreaseVolume"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="handleVolumeDown"
-            >
-              <n-icon>
-                <volume-low-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>Volume Down</span>
-        </n-tooltip>
+          <volume-low-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="FFT Size Up"
+          :callback="increaseFftSize"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="handleSpectrogramIncrease"
-            >
-              <n-icon>
-                <add-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>FFT Size Up</span>
-        </n-tooltip>
+          <add-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="FFT Size Down"
+          :callback="decreaseFftSize"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="handleSpectrogramDecrease"
-            >
-              <n-icon>
-                <remove-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>FFT Size Down</span>
-        </n-tooltip>
+          <remove-outline />
+        </AudioButton>
 
-        <n-tooltip
-          placement="left"
-          trigger="hover"
+        <AudioButton
+          alt="Download"
+          :callback="downloadAudio"
         >
-          <template #trigger>
-            <n-button
-              size="tiny"
-              @click="handleDownload"
-            >
-              <n-icon>
-                <arrow-down-outline />
-              </n-icon>
-            </n-button>
-          </template>
-          <span>Download</span>
-        </n-tooltip>
+          <arrow-down-outline />
+        </AudioButton>
       </div>
 
       <n-grid
@@ -507,7 +132,7 @@ watch(currentAudioFileRef, load);
             File
           </n-tag>
 
-          {{ currentAudioFileRef.value?.file }}
+          {{ audioBlockRef.value?.file }}
         </n-gi>
       </n-grid>
 
@@ -569,7 +194,7 @@ watch(currentAudioFileRef, load);
             FFT Size
           </n-tag>
 
-          {{ fftSizeRef }}
+          {{ fftSizeRef.value }}
         </n-gi>
         <n-gi>
           <n-tag
@@ -579,7 +204,7 @@ watch(currentAudioFileRef, load);
             Speed %
           </n-tag>
 
-          {{ speedToPercentage(playbackRateRef, 2) }}
+          {{ audioRateHumanReadableRef.value.percentage }}
         </n-gi>
         <n-gi>
           <n-tag
@@ -589,7 +214,7 @@ watch(currentAudioFileRef, load);
             Semitones
           </n-tag>
 
-          {{ speedToSemitones(playbackRateRef, 2) }}
+          {{ audioRateHumanReadableRef.value.semitones }}
         </n-gi>
         <n-gi v-if="settingsRef.value !== null">
           <n-tag
@@ -599,27 +224,23 @@ watch(currentAudioFileRef, load);
             Hertz
           </n-tag>
 
-          {{
-            (
-              settingsRef.value['expected_sample_rate'] * playbackRateRef
-            ).toFixed()
-          }}
+          {{ audioRateHumanReadableRef.value.hertz }}
         </n-gi>
       </n-grid>
 
       <div>
         <n-slider
-          v-model:value="playbackRateRef"
+          v-model:value="audioRateRef.value"
           :max="PLAYBACK_RATE.max"
           :min="PLAYBACK_RATE.min"
           :step="PLAYBACK_RATE.step"
         />
       </div>
 
-      <div ref="waveformRef" />
+      <div ref="waveformContainerRef" />
 
       <div
-        ref="spectrogramRef"
+        ref="spectrogramContainerRef"
         class="spectrogram"
       />
     </div>

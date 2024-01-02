@@ -75,13 +75,13 @@ const isActiveIdRef = computed<string>(() => {
     >
       <n-gi v-for="(item, index) in uniquesRef">
         <n-checkbox
+          class="checkbox"
           :style="{
             backgroundColor: getColorByItem(index),
           }"
           :value="item"
-          class="checkbox"
         >
-          {{ item }}
+          <span>{{ item }}</span>
         </n-checkbox>
       </n-gi>
     </n-grid>
@@ -100,6 +100,10 @@ const isActiveIdRef = computed<string>(() => {
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
     opacity: 0.9;
+  }
+
+  span {
+    color: inherit;
   }
 }
 </style>

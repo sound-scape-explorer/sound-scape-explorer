@@ -39,7 +39,7 @@ def start_processing():
     main(config_path=config_path)
 
 
-def start_front():
+def start_visualisation():
     update_python_path()
     config_path = parse_arguments()
 
@@ -79,3 +79,26 @@ def start_fill():
     audio_path = read_audio_path_from_config(config_path)
     paths = walk_directory(audio_path)
     append_to_config(config_path, paths)
+
+
+def start_audio():
+    update_python_path()
+    config_path = parse_arguments()
+
+    # parse config
+    audio_path = read_audio_path_from_config(config_path)
+
+    # navigate to app root directory
+    venv_path = sys.exec_prefix
+    os.chdir(venv_path)
+    os.chdir("..")
+
+    # spawn audio and front modules
+    if platform.system() == "Windows":
+        audio_path = trim_quotes_if_needed(audio_path)
+        audio_command = ["pnpm", "audio", audio_path]
+        audio_process = subprocess.Popen(audio_command)
+        audio_process.wait()
+    else:
+        command = ["pnpm", "audio", audio_path]
+        subprocess.run(command)

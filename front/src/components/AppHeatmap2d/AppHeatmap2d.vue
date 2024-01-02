@@ -1,10 +1,11 @@
 <script lang="ts" setup="">
-import type {Layout} from 'plotly.js-dist-min';
-import Plotly, {type Config} from 'plotly.js-dist-min';
-import {useHeatmapConfig} from 'src/hooks/useHeatmapConfig';
+import Plotly, {type Config, type Layout} from 'plotly.js-dist-min';
+import {digestedRef} from 'src/components/Digested/useDigested';
+import {settingsStore} from 'src/components/Settings/settingsStore';
 import {type HeatmapData, useHeatmapData} from 'src/hooks/useHeatmapData';
 import {useHeatmapLayout} from 'src/hooks/useHeatmapLayout';
 import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
+import {usePlotConfig} from 'src/hooks/usePlotConfig';
 import {ref, watch} from 'vue';
 
 /**
@@ -14,7 +15,7 @@ interface Props {
   title?: string;
   x: string[];
   y: string[];
-  values: (number | null)[][];
+  values: {[key: string]: number[][]};
   colorscale: string;
   range: {min: number | undefined; max: number | undefined};
 }
@@ -27,7 +28,9 @@ const props = defineProps<Props>();
 
 const {generateLayout} = useHeatmapLayout();
 const {generateData} = useHeatmapData();
-const {generateConfig} = useHeatmapConfig();
+const {generateConfig} = usePlotConfig(
+  digestedRef.value?.digester.name ?? 'heatmap',
+);
 const divRef = ref<HTMLDivElement | null>(null);
 const dataRef = ref<HeatmapData[] | null>(null);
 const layoutRef = ref<Partial<Layout> | null>(null);
@@ -77,7 +80,7 @@ const refresh = () => {
 refresh();
 watch([divRef, dataRef, layoutRef], render);
 watch(props, refresh);
-watch([heatmapWidthRef, heatmapHeightRef], refresh);
+watch([heatmapWidthRef, heatmapHeightRef, settingsStore], refresh);
 </script>
 
 <template>

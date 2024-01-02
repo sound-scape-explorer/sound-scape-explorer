@@ -2,6 +2,7 @@
 import {HeadsetOutline} from '@vicons/ionicons5';
 import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {useAudioFile} from 'src/components/Audio/useAudioFile';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {bandRef} from 'src/hooks/useBands';
 import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
@@ -12,7 +13,6 @@ import {computed, watch} from 'vue';
 
 import {clickedRef} from '.././Scatter/useScatterClick';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
-import {useAudio} from '../Audio/useAudio';
 import {useDetails} from './useDetails';
 
 const {
@@ -22,7 +22,7 @@ const {
   intervalDetailsRef,
 } = useDetails();
 
-const {setAudioFile} = useAudio();
+const {selectAudioBlock} = useAudioFile();
 
 const dateEndRef = computed<Dayjs | null>(() => {
   if (intervalDateRef.value === null || integrationRef.value === null) {
@@ -42,7 +42,7 @@ watch(intervalDetailsRef, () => {
   }
 
   const blockDetails = intervalDetailsRef.value[0];
-  setAudioFile(blockDetails);
+  selectAudioBlock(blockDetails);
 });
 </script>
 
@@ -70,7 +70,7 @@ watch(intervalDetailsRef, () => {
             <n-button
               class="zoom"
               size="small"
-              @click="() => setAudioFile(blockDetails)"
+              @click="() => selectAudioBlock(blockDetails)"
             >
               <template #icon>
                 <n-icon>
@@ -166,7 +166,7 @@ watch(intervalDetailsRef, () => {
 
       <div class="separator" />
 
-      <div class="title">Extracted Data</div>
+      <div class="title">Indicators</div>
 
       <n-grid
         v-if="aggregatedIndicatorsRef.value !== null"

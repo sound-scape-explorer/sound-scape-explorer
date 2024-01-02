@@ -5,6 +5,7 @@ import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
+import {EXPORT_FILENAME} from 'src/constants';
 import {
   relativeTrajectoriesRef,
   useRelativeTrajectories,
@@ -28,7 +29,7 @@ const optionsRef = computed(() => {
 
 const histogramValuesRef = ref<AppPlotProps['values']>([]);
 const histogramLabelsRef = ref<AppPlotProps['labels']>([]);
-const histogramNamesRef = ref<AppPlotProps['names']>([]);
+const histogramNamesRef = ref<string[]>([]);
 
 const handleUpdateValue = (indexes: number[]) => {
   const selectedRelativeTrajectories = selectRelativeTrajectories(indexes);
@@ -55,28 +56,44 @@ const handleExportClick = () => {
   if (
     histogramValuesRef.value.length === 0 ||
     histogramLabelsRef.value.length === 0 ||
-    histogramNamesRef.value?.length === 0 ||
+    histogramNamesRef.value.length === 0 ||
     typeof histogramNamesRef?.value === 'undefined'
   ) {
     return;
   }
 
   const csv = new Csv();
-  csv.addColumn('relativeTrajectory');
 
-  for (const index in histogramValuesRef.value) {
-    csv.createRow();
-    csv.addToCurrentRow(`${histogramNamesRef?.value[index]} - relative time`);
-    csv.addToCurrentRow(histogramLabelsRef.value[index].toString());
+  const maxLength = histogramValuesRef.value
+    .map((values) => values.length)
+    .reduce((a, b) => Math.max(a, b), 0);
 
-    csv.createRow();
-    csv.addToCurrentRow(
-      `${histogramNamesRef?.value[index]} - relative distance`,
-    );
-    csv.addToCurrentRow(histogramValuesRef.value[index].toString());
+  // create columns
+  for (const name of histogramNamesRef.value) {
+    csv.addColumn(`${name} - relative time`);
+    csv.addColumn(`${name} - relative distance`);
   }
 
-  csv.download('relative-trajectories');
+  for (let i = 0; i < maxLength; i += 1) {
+    let row: string[] = [];
+
+    for (const j in histogramNamesRef.value) {
+      const time = histogramLabelsRef.value[j][i];
+      const distance = histogramValuesRef.value[j][i];
+
+      if (typeof time === 'undefined' || typeof distance === 'undefined') {
+        row = [...row, '', ''];
+        continue;
+      }
+
+      row = [...row, time, distance.toString()];
+    }
+
+    csv.createRow();
+    csv.addToCurrentRow(row.join(csv.separator));
+  }
+
+  csv.download(`${EXPORT_FILENAME}-relative-trajectories`);
 };
 </script>
 
@@ -115,6 +132,7 @@ const handleExportClick = () => {
       </n-button>
 
       <AppPlot
+        export-filename="relative-trajectories"
         :labels="histogramLabelsRef"
         :names="histogramNamesRef"
         :values="histogramValuesRef"

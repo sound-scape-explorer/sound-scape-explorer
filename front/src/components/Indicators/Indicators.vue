@@ -59,7 +59,7 @@ const updateSites = (sitesNames: string[]) => {
 
 const isByDateRef = ref<boolean>(false);
 
-const chartDataRef = computed<AppPlotProps>(() => {
+const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
   if (sitesRef.value === null) {
     return {
       values: [],
@@ -186,6 +186,7 @@ const handleExportClick = () => {
       </div>
 
       <AppPlot
+        export-filename="indicators"
         :colors="chartDataRef.colors"
         :labels="chartDataRef.labels"
         :values="chartDataRef.values"

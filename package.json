@@ -51,8 +51,10 @@
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
-    "rimraf": "^5.0.1",
-    "serve": "^14.2.0"
+    "rimraf": "^5.0.1"
   },
-  "version": "12.2.0"
+  "version": "12.2.0",
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
 }
