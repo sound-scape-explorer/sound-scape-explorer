@@ -39,8 +39,6 @@ def ask_menu(
                 MenuChoice.ExportMeanDistancesMatrix.value,
                 MenuChoice.Repack.value,
                 Separator(),
-                MenuChoice.FixAudioWindows10_7_2.value,
-                Separator(),
                 MenuChoice.Quit.value,
             ],
             "message": "Choose your action",
