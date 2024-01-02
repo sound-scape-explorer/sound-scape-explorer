@@ -1,3 +1,51 @@
+# [12.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v12.2.0...v12.3.0) (2024-01-02)
+
+
+### Bug Fixes
+
+* **App:** Commit incremented front version file ([9c8bd60](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9c8bd600c0b341c4efafc37d87590c1e891f845e))
+* **App:** Set `serve` package to production dependency ([9a66e9a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9a66e9a14f7c899aa2a997c3330509d39f43c447))
+* **Examples/Config:** Add link to campaign user guide ([6b9db54](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6b9db54f66407a322fce63dc6ac28736829f28ea))
+* **Examples/Config:** Fix first column in files tab ([92f95cf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/92f95cf5af19f21d83b91f2d09801b629fe48fd0))
+* **Examples/Config:** Remove `vae` and `sparse_pca` reducers to prevent usage ([685e771](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/685e77141458f8d3e5be486f4bd9a72a0f402d0c))
+* **Examples/CoralReefLight:** Regenerate processed data ([ad266ac](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ad266ac6fdb7990b1379ef3c2e4a88e652471948))
+* **Examples/CoralReefLight:** Translate files labels to english ([e934949](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e9349491829fea1c44001d1444c0b958c80a1ac0))
+* **Examples/CoralReefLight:** Use latest template + Remove unwanted data ([422d2bc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/422d2bc081a744172d33d7277b1c923577355367))
+* **Front/AppHeatmap2d:** Fix values prop typing ([a58aab9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a58aab9e988ac52b63dc874bce741a53a680f301))
+* **Front/AppHeatmaps:** Refresh plot backgrounds on settings change ([ccc124f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ccc124f0dd27f71d90ca051dcca561a4ec657ff4))
+* **Front/AppPlot:** Refresh plot background on settings change ([313f1a4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/313f1a405c8ad1f3a8974dc44c46b029c293eb70))
+* **Front/Audio:** Extract rate and transport functions to composable ([ccd0648](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ccd0648362eaffedc1bc0cadd7626287885eee5f))
+* **Front/Audio:** Extract volume handlers to composable ([4e51e8b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4e51e8bcbdb5b855da2f6e253f88a4f7219a027e))
+* **Front/Audio:** Improve code splitting + Remove unused unmounted hook ([53393e5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/53393e50b792e9d51b6a853bccde381487cf2028))
+* **front/Audio:** Improve composability ([2b3e3b5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2b3e3b5bf31d0755b7e2d1ce9dd7c749e628ac09))
+* **Front/Audio:** Improve composability ([2c63cff](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2c63cffc039477881028713aea2f7b1be667ece9))
+* **Front/Audio:** Improve composability ([cbb3684](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cbb36843137d91c1ef5e2c3cadcfa345b3eeae48))
+* **Front/Audio:** Remove unused check for spectrogram colors ([7a135df](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7a135df8726d1c88c3227e8e0ebfa5b6d59dcc5b))
+* **Front/Audio:** Remove unused imports ([8ae961f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8ae961f9dfa94e596b15391c3461df5c70e3aecd))
+* **Front/Colors:** Remove color type shadow default value ([fcdeaae](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fcdeaae00120e6fe02f7e501117db6c6276f95ba))
+* **Front/Colors:** Use `cycleDay` as default color type ([4cffece](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4cffeceb2ad6ac0129c6aab8ffde78812d75e31b))
+* **Front/Details:** Rename extracted data to indicators ([ebf64f6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ebf64f6a1a5d578bb948736207a7109a170ebb7e))
+* **Front/Indicators:** Fix typing ([adc1c66](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/adc1c668cb6ba0e9255689cde3c167dd1c4d9d04))
+* **Front/Label:** Encapsulate text to control coloring behaviour ([0435967](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/043596724f6ad77beb190f809912ec8091adda12))
+* **Front/RelativeTrajectories:** Add app prefix to exported CSV ([871953a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/871953a60caecc21da685cb6a70e9025bc8b8291))
+* **Front/RelativeTrajectories:** Transpose exported CSV data ([efbd045](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/efbd045d20cbb974cf529b21de215a28baac245e))
+* **Front/Scatter:** Rewrite PNG export for stable behaviour ([c1527ec](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c1527ecc82470e1074b11f6c4796f99372ebec06))
+* **Front/Scatter:** Use dynamic export filename ([5ecfac0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5ecfac0f1c65ef8708a6b6a889338b3b1b27b881))
+* **Front/Time:** Display end date + Improve behaviour ([d256e3d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d256e3d6c7abd66892e758e48400cfc769c07474))
+* **Front/Utils:** Use base64 line breaks ([e3570f0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e3570f0f0b85fc4884bb5bc5cb2b893ffec7df3d))
+* **Processing/Utils:** Add line break before printing action status ([8250204](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8250204b108b05d60cc927f12399e652e57740d9))
+
+
+### Features
+
+* **App:** Add MIT License ([d2d1800](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d2d180080c8b0de5f36bbdbc5e2e0d6f04f1ad30))
+* **Front/Import:** Display timeline origin in human readable format + Display timezone ([161ec00](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/161ec00687014dc7c3117ac698d7be5758110746))
+* **Front/RelativeTrajectories:** Add custom exports + Use dynamic filenames ([3c33875](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3c3387509e2e39759764a762946380395d530b98))
+* **Front/Settings:** Add apply timezone option ([751af34](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/751af34e8b502457ec77d76ae4fac7cc9489596f))
+* **Processing/CLI:** Add `sse_audio` command ([fe0c694](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fe0c6944b5db0362e720d406e8ff59de11d80137))
+* **Processing/Menu:** Remove audio windows fix for versions prior to 10.7.2 ([82b4ea4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/82b4ea4a5f368f43a509049330201679eb005bed))
+* **Processing/Menu:** Remove repack menu option to avoid errors on non UNIX systems ([b46994f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b46994fccfccc4898980d9cea5e6c31c09713b87))
+
 # [12.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v12.1.0...v12.2.0) (2023-12-21)
 
 
