@@ -11,7 +11,8 @@ module.exports = {
     [
       "@semantic-release/exec",
       {
-        prepareCmd: "pnpm release:prepare ${nextRelease.version}",
+        prepareCmd:
+          "pnpm release:prepare ${nextRelease.version} && pnpm release:prepare:front ${nextRelease.version} && pnpm release:prepare:processing ${nextRelease.version}",
       },
     ],
     [
