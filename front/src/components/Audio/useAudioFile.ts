@@ -8,6 +8,7 @@ import {integrationRef} from '../../hooks/useIntegrations';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {useNotification} from '../AppNotification/useNotification';
 import {audioContextRef} from './useAudioContext';
+import {audioIsLoadingRef, useAudioLoading} from './useAudioLoading';
 import {waveSurferRef} from './useWaveSurfer';
 import {useWaveSurferLoader} from './useWaveSurferLoader';
 
@@ -22,6 +23,8 @@ export const audioBlockRef = reactive<AudioBlockRef>({
 export function useAudioFile() {
   const {notify} = useNotification();
   const {loadBlob} = useWaveSurferLoader();
+  const {verifyAudioLoading} = useAudioLoading();
+
   const openAudioModal = () => {
     if (appDraggablesStore.audio === true) {
       return;
@@ -31,6 +34,10 @@ export function useAudioFile() {
   };
 
   const selectAudioBlock = (block: BlockDetails | null) => {
+    if (!verifyAudioLoading()) {
+      return;
+    }
+
     if (block === null) {
       audioBlockRef.value = null;
       return;
@@ -54,6 +61,8 @@ export function useAudioFile() {
       ) {
         return;
       }
+
+      audioIsLoadingRef.value = true;
 
       const src = `${audioHostRef.value}${audioBlockRef.value.file}`;
 
@@ -89,8 +98,11 @@ export function useAudioFile() {
       const end = start + integrationRef.value.seconds * 1000;
 
       audioBufferSlice(audioBuffer, start, end, sliceAudio);
+      audioIsLoadingRef.value = false;
     } catch (error) {
       appDraggablesStore.audio = false;
+      audioIsLoadingRef.value = false;
+
       notify('error', 'Failed to load audio', `${error}`);
       console.error(error);
     }

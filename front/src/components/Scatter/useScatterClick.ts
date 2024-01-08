@@ -1,6 +1,7 @@
 import {reactive} from 'vue';
 
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
+import {useAudioLoading} from '../Audio/useAudioLoading';
 import {settingsStore} from '../Settings/settingsStore';
 
 interface ClickedRef {
@@ -13,8 +14,14 @@ export const clickedRef = reactive<ClickedRef>({
 });
 
 export function useScatterClick() {
+  const {verifyAudioLoading} = useAudioLoading();
+
   const handleClick = (index: number | null) => {
     if (clickedRef.value === index) {
+      return;
+    }
+
+    if (!verifyAudioLoading()) {
       return;
     }
 
