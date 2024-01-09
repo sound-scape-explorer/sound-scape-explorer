@@ -34,6 +34,7 @@
     "process": ". venv/bin/activate && python processing/processing/main.py",
     "process:windows": "python.exe .\\processing\\processing\\main.py",
     "release:prepare:archive-examples": "bin/archive-examples.sh",
+    "release:prepare:audio": "bin/increment-audio-version.sh",
     "release:prepare:front": "bin/increment-front-version.sh",
     "release:prepare:processing": "bin/increment-processing-version.sh",
     "start": "pnpm dev",

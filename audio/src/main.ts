@@ -4,6 +4,7 @@ import {existsSync} from 'fs';
 import {getAudioDurationInSeconds} from 'get-audio-duration';
 
 import {sliceAudio} from './slice-audio';
+import {VERSION} from './version';
 
 const app = express();
 const port = 5531;
@@ -21,8 +22,8 @@ app.listen(port, () => {
 // root endpoint
 app.get('/', (_req, res) => {
   res.send({
-    message: 'hello',
-    version: '1.0.0',
+    message: 'SoundScapeExplorer Audio Service',
+    version: VERSION,
   });
 });
 

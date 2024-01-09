@@ -12,7 +12,7 @@ module.exports = {
       "@semantic-release/exec",
       {
         prepareCmd:
-          "pnpm release:prepare ${nextRelease.version} && pnpm release:prepare:front ${nextRelease.version} && pnpm release:prepare:processing ${nextRelease.version}",
+          "pnpm release:prepare ${nextRelease.version} && pnpm release:prepare:front ${nextRelease.version} && pnpm release:prepare:audio ${nextRelease.version} && pnpm release:prepare:processing ${nextRelease.version}",
       },
     ],
     [
@@ -47,6 +47,7 @@ module.exports = {
           "package.json",
           "processing/setup.py",
           "front/src/version.ts",
+          "audio/src/version.ts",
         ],
         // eslint-disable-next-line no-template-curly-in-string
         message:
