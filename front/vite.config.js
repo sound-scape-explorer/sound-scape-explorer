@@ -24,7 +24,6 @@ export default defineConfig({
         manualChunks: {
           // '@vueuse/components': ['@vueuse/components'], // Do not uncomment this!
           '@vueuse/core': ['@vueuse/core'],
-          'audiobuffer-slice': ['audiobuffer-slice'],
           'chroma-js': ['chroma-js'],
           'colormap': ['colormap'],
           'comlink': ['comlink'],
