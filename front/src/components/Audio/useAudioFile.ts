@@ -1,4 +1,3 @@
-import audioBufferSlice from 'audiobuffer-slice';
 import {reactive, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
@@ -9,7 +8,6 @@ import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {useNotification} from '../AppNotification/useNotification';
 import {audioContextRef} from './useAudioContext';
 import {audioIsLoadingRef, useAudioLoading} from './useAudioLoading';
-import {waveSurferRef} from './useWaveSurfer';
 import {useWaveSurferLoader} from './useWaveSurferLoader';
 
 interface AudioBlockRef {
@@ -64,11 +62,13 @@ export function useAudioFile() {
 
       audioIsLoadingRef.value = true;
 
-      const src = `${audioHostRef.value}${audioBlockRef.value.file}`;
+      const start = audioBlockRef.value.fileStart;
+      const end = start + integrationRef.value.seconds * 1000;
+      const endpoint = `${audioHostRef.value}get?file=${audioBlockRef.value.file}&start=${start}&end=${end}`;
 
-      const response = await fetch(src);
+      const response = await fetch(endpoint);
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         notify(
           'error',
           'Failed to fetch audio',
@@ -94,11 +94,11 @@ export function useAudioFile() {
         arrayBuffer,
       );
 
-      const start = audioBlockRef.value.fileStart;
-      const end = start + integrationRef.value.seconds * 1000;
-
-      audioBufferSlice(audioBuffer, start, end, sliceAudio);
       audioIsLoadingRef.value = false;
+
+      const wav = encodeWavFileFromAudioBuffer(audioBuffer, 0);
+      const blob = new Blob([wav]);
+      loadBlob(blob);
     } catch (error) {
       appDraggablesStore.audio = false;
       audioIsLoadingRef.value = false;
@@ -109,23 +109,6 @@ export function useAudioFile() {
   };
 
   watch(audioBlockRef, loadAudioFile);
-
-  const sliceAudio = (error: TypeError, slicedAudioBuffer: AudioBuffer) => {
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    if (waveSurferRef.value === null) {
-      return;
-    }
-
-    const wav = encodeWavFileFromAudioBuffer(slicedAudioBuffer, 0);
-
-    const blob = new Blob([wav]);
-
-    loadBlob(blob);
-  };
 
   return {
     selectAudioBlock: selectAudioBlock,
