@@ -32,7 +32,6 @@ export function sliceAudio(
     });
 
     ffmpeg.on('close', () => {
-      console.log(existsSync(tempFile));
       readFile(tempFile, (err, data) => {
         if (err) {
           console.error(`Error: ${err.message}`);
