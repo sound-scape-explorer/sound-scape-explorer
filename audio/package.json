@@ -5,7 +5,7 @@
   "main": "src/main.ts",
   "scripts": {
     "start": "node dist/main.js",
-    "dev": "nodemon src/main.ts"
+    "dev": "nodemon src/main.ts --exitcrash"
   },
   "keywords": [
     "sound-scape-explorer",
