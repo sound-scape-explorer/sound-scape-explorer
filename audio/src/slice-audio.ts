@@ -1,21 +1,25 @@
-import {spawn} from 'child_process';
-import {existsSync, readFile, unlinkSync} from 'fs';
+import {spawn} from 'node:child_process';
+import {existsSync, readFile, unlinkSync} from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
-const tempFile = 'scratch.wav';
+const tempPath = path.join(os.tmpdir(), 'scratch.wav');
+console.log(`temp path: ${tempPath}`);
 
 export function sliceAudio(
+  ffmpegPath: string,
   file: string,
   start: number,
   end: number,
 ): Promise<Buffer> {
   return new Promise((resolve) => {
-    if (existsSync(tempFile)) {
-      unlinkSync(tempFile);
+    if (existsSync(tempPath)) {
+      unlinkSync(tempPath);
     }
 
     const duration = end - start;
 
-    const ffmpeg = spawn('ffmpeg', [
+    const ffmpeg = spawn(ffmpegPath, [
       '-i',
       file,
       '-acodec',
@@ -24,7 +28,7 @@ export function sliceAudio(
       `00:00:${start}`,
       '-t',
       `00:00:${duration}`,
-      tempFile,
+      tempPath,
     ]);
 
     ffmpeg.on('error', (error) => {
@@ -32,7 +36,7 @@ export function sliceAudio(
     });
 
     ffmpeg.on('close', () => {
-      readFile(tempFile, (err, data) => {
+      readFile(tempPath, (err, data) => {
         if (err) {
           console.error(`Error: ${err.message}`);
         }

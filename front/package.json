@@ -5,8 +5,10 @@
     "dev": "vite --port 5530 --host 0.0.0.0 --open",
     "build": "pnpm build:clean && pnpm build:run:dev",
     "build:clean": "rimraf dist",
+    "build:electron": "pnpm build:clean && pnpm build:run:electron",
     "build:prod": "pnpm build:clean && pnpm build:run:prod",
     "build:run:dev": "cross-env NODE_ENV=development vite build",
+    "build:run:electron": "cross-env NODE_ENV=electron vite build",
     "build:run:prod": "cross-env NODE_ENV=production vite build",
     "preview": "vite preview --port 5530 --host 0.0.0.0"
   },

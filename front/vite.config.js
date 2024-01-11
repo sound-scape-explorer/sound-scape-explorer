@@ -8,7 +8,15 @@ import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 
 const isProduction = process.env.NODE_ENV === 'production';
-export const base = isProduction ? '/sound-scape-explorer/' : '/';
+const isElectron = process.env.NODE_ENV === 'electron';
+
+let base = '/';
+
+if (isElectron) {
+  base = './';
+} else if (isProduction) {
+  base = '/sound-scape-explorer/';
+}
 
 /**
  * Do not add following dependencies to code splitting as it will result in corrupted runtime code execution:

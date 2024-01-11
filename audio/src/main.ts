@@ -4,11 +4,16 @@ import {existsSync} from 'fs';
 import {getAudioDurationInSeconds} from 'get-audio-duration';
 
 import {sliceAudio} from './slice-audio';
+import {validateArgs} from './validate-args';
 import {VERSION} from './version';
+
+const args = process.argv;
+validateArgs(args);
 
 const app = express();
 const port = 5531;
-const args = process.argv;
+const ffmpegPath = args[args.length - 3];
+const ffprobePath = args[args.length - 2];
 const audioPath = args[args.length - 1];
 
 app.use(cors());
@@ -16,6 +21,8 @@ app.use(cors());
 // service
 app.listen(port, () => {
   console.log(`port: ${port}`);
+  console.log(`ffmpeg path: ${ffmpegPath}`);
+  console.log(`ffprobe path: ${ffprobePath}`);
   console.log(`audio path: ${audioPath}`);
 });
 
@@ -47,7 +54,7 @@ app.get('/get', async (req, res) => {
     return;
   }
 
-  const fileDuration = await getAudioDurationInSeconds(path);
+  const fileDuration = await getAudioDurationInSeconds(path, ffprobePath);
   const startSeconds = Number(start) / 1000;
   const endSeconds = Number(end) / 1000;
 
@@ -71,7 +78,7 @@ app.get('/get', async (req, res) => {
   }
 
   // slice
-  const slice = await sliceAudio(path, startSeconds, endSeconds);
+  const slice = await sliceAudio(ffmpegPath, path, startSeconds, endSeconds);
   res.writeHead(200, {'Content-Type': 'audio/wav'});
   res.end(slice);
 });
