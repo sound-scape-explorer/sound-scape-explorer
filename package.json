@@ -3,7 +3,6 @@
   "scripts": {
     "audio": "cd audio && pnpm dev",
     "audio:build:electron": "cd audio && pnpm build",
-    "audio:front": "concurrently -P pnpm:front \"pnpm:audio {1}\" --",
     "dev": "pnpm front",
     "dev:audio": "pnpm front:audio",
     "front": "cd front && pnpm dev",
@@ -63,7 +62,6 @@
     "visualisation:prebuild:move:windows": "move .\\audio\\dist .\\visualisation\\audio & move .\\front\\dist .\\visualisation\\front"
   },
   "devDependencies": {
-    "concurrently": "^8.0.1",
     "rimraf": "^5.0.1"
   },
   "version": "12.3.0"
