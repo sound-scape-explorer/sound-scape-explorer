@@ -47,6 +47,7 @@ module.exports = {
           'processing/setup.py',
           'front/src/version.ts',
           'audio/src/version.ts',
+          'visualisation/src/version.ts',
         ],
         // eslint-disable-next-line no-template-curly-in-string
         message:
