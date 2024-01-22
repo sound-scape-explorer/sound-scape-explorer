@@ -14,7 +14,7 @@ import {filesRef} from 'src/hooks/useFiles';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {ref, watchEffect} from 'vue';
 
-import {clickedRef} from '.././Scatter/useScatterClick';
+import {clickedRef} from '../Scatter/useScatterClick';
 
 export function useDetails() {
   const {convertTimestampToDate} = useDate();
@@ -41,10 +41,7 @@ export function useDetails() {
     const intervalIndex = clickedRef.value;
     const timestamp = aggregatedTimestampsRef.value[intervalIndex];
 
-    intervalDateRef.value = convertTimestampToDate(
-      timestamp,
-      settingsRef.value.timezone,
-    );
+    intervalDateRef.value = convertTimestampToDate(timestamp);
 
     intervalLabelsRef.value = aggregatedLabelsRef.value[intervalIndex];
     intervalSiteRef.value = aggregatedSitesRef.value[intervalIndex];

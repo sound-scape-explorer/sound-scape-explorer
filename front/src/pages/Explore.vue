@@ -14,6 +14,7 @@ import Selection from 'src/components/Selection/Selection.vue';
 import Settings from 'src/components/Settings/Settings.vue';
 import StorageLoad from 'src/components/StorageLoad/StorageLoad.vue';
 import Time from 'src/components/Time/Time.vue';
+import Timeline from 'src/components/Timeline/Timeline.vue';
 import Trajectories from 'src/components/Trajectories/Trajectories.vue';
 import {useStorageFile} from 'src/hooks/useStorageFile';
 import {useWorker} from 'src/hooks/useWorker';
@@ -46,9 +47,12 @@ onMounted(() => {
     <RelativeTrajectories />
 
     <Colors />
+
+    <Timeline />
     <Time />
-    <Audio />
+
     <Details />
+    <Audio />
 
     <Indicators />
     <Digested />
