@@ -10,18 +10,31 @@
 <div class="container">
   <h1 class="title" id="title"></h1>
 
-  <div class="drop-zone" id="drop-zone">
-    <div class="outline"></div>
-    <span>Drop your configuration file here.</span>
+  <div id="loading-zone">
+    <input
+      accept=".xlsx"
+      id="configuration-input"
+      name="configuration-input"
+      style="display: none;"
+      type="file"
+    />
+    <label
+      class="label border"
+      for="configuration-input"
+      id="configuration-label"
+    >
+      Add a configuration file here.
+    </label>
   </div>
 
   <div id="loaded-zone">
-    <button class="button" id="visualise-button">Visualise</button>
-    <button class="button" id="audio-stop-button">Stop Audio service</button>
+    <button class="button border" id="visualise-button">Visualise</button>
+    <button class="button border" id="audio-stop-button">Stop Audio service
+    </button>
   </div>
 </div>
 
-<script src="/src/renderer/renderer.ts" type="module"></script>
+<script src="./src/renderer/renderer.ts" type="module"></script>
 
 </body>
 </html>

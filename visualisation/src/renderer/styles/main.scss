@@ -28,54 +28,32 @@ body {
   top: 1em;
 }
 
-.outline {
-  z-index: 0;
-
-  width: $boxSize;
-  height: $boxSize;
-
-  position: absolute;
-
-  border: 2px dashed $darker;
-}
-
-.drop-zone {
+.label {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  z-index: 1;
+  width: 500px;
+  height: 300px;
 
-  width: $boxSize;
-  height: $boxSize;
+  cursor: pointer;
+}
+
+.border {
+  background-color: $darker;
+
+  border-radius: 0.5em;
+  border: 2px solid $darkest;
 
   transition: background 0.1s ease-in-out;
 
-  background: $darker;
-
   &:hover {
-    background: $dark;
-    cursor: crosshair;
-  }
-
-  span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    height: 100%;
+    border: 2px solid $darker;
+    background-color: $dark;
   }
 }
 
 .button {
-  background: red;
   padding: 1em;
-  border-radius: 0.5em;
-  border: 2px solid $darkest;
-
-  &:hover {
-    background: blue;
-  }
 }

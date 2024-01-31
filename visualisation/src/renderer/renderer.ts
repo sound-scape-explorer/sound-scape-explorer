@@ -1,24 +1,24 @@
 import 'sass-reset';
 import './styles/main.scss';
 
-import {DropZone} from './controllers/DropZone';
 import {LoadedZone} from './controllers/LoadedZone';
+import {LoadingZone} from './controllers/LoadingZone';
 import {Title} from './controllers/Title';
 
 new Title();
-const dropZone = new DropZone();
+const loadingZone = new LoadingZone();
 const loadedZone = new LoadedZone();
 
 export const render = async () => {
   const audioStatus = await window.electronAPI.getAudioStatus();
 
   if (audioStatus === true) {
-    dropZone.hide();
+    loadingZone.hide();
     loadedZone.show();
     return;
   }
 
-  dropZone.show();
+  loadingZone.show();
   loadedZone.hide();
 };
 

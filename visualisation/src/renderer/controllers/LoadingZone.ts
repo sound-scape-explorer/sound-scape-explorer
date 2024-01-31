@@ -2,11 +2,10 @@ import Excel from 'exceljs';
 
 import {render} from '../renderer';
 
-export class DropZone {
-  private node = document.getElementById('drop-zone');
+export class LoadingZone {
+  private node = document.getElementById('loading-zone');
 
   public constructor() {
-    this.attachDragOver();
     this.attachDrop();
   }
 
@@ -18,20 +17,15 @@ export class DropZone {
     this.node.style.display = 'block';
   }
 
-  private attachDragOver() {
-    this.node.addEventListener('dragover', (e: DragEvent) => {
-      e.preventDefault();
-    });
-  }
-
   private attachDrop() {
-    this.node.addEventListener('drop', async (e: DragEvent) => {
+    this.node.addEventListener('change', async (e: InputEvent) => {
       e.preventDefault();
 
-      const files = e.dataTransfer.files;
+      const input = e.target as HTMLInputElement;
+      const files = input.files;
 
       if (files.length !== 1) {
-        alert('Please drop only one file');
+        alert('Please add only one file');
         return;
       }
 
@@ -40,10 +34,11 @@ export class DropZone {
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
       if (file.type !== type) {
-        alert('Please drop only excel file');
+        alert('Please add only excel file');
         return;
       }
 
+      input.value = null;
       const audioPath = await this.readAudioPathFromExcel(file);
       await window.electronAPI.startAudioService(audioPath);
       await render();
