@@ -7,6 +7,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
   Arial, sans-serif;
   margin: 0;
+  background: $darkest;
 }
 
 .container {
@@ -16,7 +17,6 @@ body {
   flex-direction: column;
   gap: 1em;
 
-  background: $darkest;
   width: 100vw;
   height: 100vh;
 }

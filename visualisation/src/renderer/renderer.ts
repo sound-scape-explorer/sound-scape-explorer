@@ -12,14 +12,14 @@ const loadedZone = new LoadedZone();
 export const render = async () => {
   const audioStatus = await window.electronAPI.getAudioStatus();
 
-  if (audioStatus === true) {
-    loadingZone.hide();
-    loadedZone.show();
+  if (audioStatus === false) {
+    loadingZone.show();
+    loadedZone.hide();
     return;
   }
 
-  loadingZone.show();
-  loadedZone.hide();
+  loadingZone.hide();
+  loadedZone.show();
 };
 
 render().then();
