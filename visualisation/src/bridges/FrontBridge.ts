@@ -19,8 +19,8 @@ export class FrontBridge {
     this.setHandlers();
   }
 
-  public static async createFromRenderer(storagePath: string) {
-    await ipcRenderer.invoke(Channels.FrontCreate, [storagePath]);
+  public static async createFromRenderer() {
+    await ipcRenderer.invoke(Channels.FrontCreate);
   }
 
   private validateServicePath() {
@@ -29,8 +29,8 @@ export class FrontBridge {
     }
   }
 
-  private create(storagePath: string) {
-    new FrontWindow(storagePath);
+  private create() {
+    new FrontWindow();
   }
 
   private setHandlers() {
@@ -38,8 +38,6 @@ export class FrontBridge {
   }
 
   private setCreateHandler() {
-    ipcMain.handle(Channels.FrontCreate, (_, [storagePath]: [string]) => {
-      this.create(storagePath);
-    });
+    ipcMain.handle(Channels.FrontCreate, this.create.bind(this));
   }
 }

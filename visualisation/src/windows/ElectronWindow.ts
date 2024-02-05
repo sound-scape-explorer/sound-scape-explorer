@@ -8,8 +8,6 @@ export abstract class ElectronWindow {
 
   protected window: Electron.BrowserWindow;
 
-  protected storagePath: string | undefined;
-
   protected constructor(preferences: Electron.WebPreferences) {
     this.window = new BrowserWindow({
       width: 800,
@@ -24,14 +22,6 @@ export abstract class ElectronWindow {
       }
 
       this.appendTitle();
-
-      if (this.storagePath) {
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.search);
-        params.set('storagePath', this.storagePath);
-        url.search = params.toString();
-        window.history.pushState({}, '', url);
-      }
     });
   }
 

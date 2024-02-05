@@ -2,10 +2,8 @@ import {FrontBridge} from '../bridges/FrontBridge';
 import {ElectronWindow} from './ElectronWindow';
 
 export class FrontWindow extends ElectronWindow {
-  public constructor(storagePath: string) {
+  public constructor() {
     super({});
-
-    this.storagePath = storagePath;
   }
 
   public async load() {

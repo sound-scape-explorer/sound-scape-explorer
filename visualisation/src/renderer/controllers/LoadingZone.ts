@@ -103,7 +103,6 @@ export class LoadingZone {
       input.value = null;
       const audioPath = await this.readAudioPathFromStorage(file);
       await window.electronAPI.startAudioService(audioPath);
-      await window.electronAPI.setStoragePath(file.path);
       await render();
     });
   }
