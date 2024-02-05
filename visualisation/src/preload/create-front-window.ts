@@ -1,5 +1,7 @@
 import {FrontBridge} from '../bridges/FrontBridge';
+import {StorageBridge} from '../bridges/StorageBridge';
 
 export async function createFrontWindow() {
-  await FrontBridge.createFromRenderer();
+  const storagePath = await StorageBridge.getFromRenderer();
+  await FrontBridge.createFromRenderer(storagePath);
 }

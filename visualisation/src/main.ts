@@ -2,10 +2,12 @@ import {app, BrowserWindow} from 'electron';
 
 import {AudioBridge} from './bridges/AudioBridge';
 import {FrontBridge} from './bridges/FrontBridge';
+import {StorageBridge} from './bridges/StorageBridge';
 import {MainWindow} from './windows/MainWindow';
 
 const audioBridge = new AudioBridge();
 new FrontBridge();
+new StorageBridge();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {

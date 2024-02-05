@@ -27,9 +27,11 @@ useWorker();
 const {isStorageFileRef} = useStorageFile();
 
 onMounted(() => {
-  if (isStorageFileRef.value === false) {
-    appDraggablesStore.import = true;
+  if (isStorageFileRef.value) {
+    return;
   }
+
+  appDraggablesStore.import = true;
 });
 </script>
 

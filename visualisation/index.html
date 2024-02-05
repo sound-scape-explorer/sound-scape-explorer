@@ -13,10 +13,10 @@
 
 <body>
 
-<div class="container">
+<div class="container flex flex-col">
   <h1 class="title" id="title"></h1>
 
-  <div id="loading-zone">
+  <div class="flex flex-col" id="loading-zone">
     <input
       accept=".xlsx"
       id="configuration-input"
@@ -30,6 +30,21 @@
       id="configuration-label"
     >
       Add a configuration file here.
+    </label>
+
+    <input
+      accept=".h5"
+      id="storage-input"
+      name="storage-input"
+      style="display: none;"
+      type="file"
+    />
+    <label
+      class="label border"
+      for="storage-input"
+      id="storage-label"
+    >
+      Add a storage file here.
     </label>
   </div>
 

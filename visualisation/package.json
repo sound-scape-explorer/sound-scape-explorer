@@ -43,6 +43,7 @@
   "dependencies": {
     "command-exists": "^1.2.9",
     "electron-squirrel-startup": "^1.0.0",
-    "exceljs": "^4.4.0"
+    "exceljs": "^4.4.0",
+    "jsfive": "^0.3.14"
   }
 }

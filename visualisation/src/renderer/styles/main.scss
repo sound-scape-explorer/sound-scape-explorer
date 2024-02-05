@@ -11,14 +11,19 @@ body {
 }
 
 .container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.flex {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   gap: 1em;
+}
 
-  width: 100vw;
-  height: 100vh;
+.flex-col {
+  flex-direction: column;
 }
 
 .title {
@@ -35,7 +40,7 @@ body {
   align-items: center;
 
   width: 500px;
-  height: 300px;
+  height: 100px;
 
   cursor: pointer;
 }
