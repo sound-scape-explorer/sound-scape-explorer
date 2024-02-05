@@ -28,7 +28,7 @@ export class LoadingZone {
   }
 
   public show() {
-    this.node.style.display = 'block';
+    this.node.style.display = 'inherit';
   }
 
   private attachConfigurationEvent() {

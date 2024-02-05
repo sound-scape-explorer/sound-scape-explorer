@@ -17,35 +17,39 @@
   <h1 class="title" id="title"></h1>
 
   <div class="flex flex-col" id="loading-zone">
-    <input
-      accept=".xlsx"
-      id="configuration-input"
-      name="configuration-input"
-      style="display: none;"
-      type="file"
-    />
-    <label
-      class="label border"
-      for="configuration-input"
-      id="configuration-label"
-    >
-      Add a configuration file here.
-    </label>
+    <div>
+      <input
+        accept=".xlsx"
+        id="configuration-input"
+        name="configuration-input"
+        style="display: none;"
+        type="file"
+      />
+      <label
+        class="label border"
+        for="configuration-input"
+        id="configuration-label"
+      >
+        Add a configuration file here.
+      </label>
+    </div>
 
-    <input
-      accept=".h5"
-      id="storage-input"
-      name="storage-input"
-      style="display: none;"
-      type="file"
-    />
-    <label
-      class="label border"
-      for="storage-input"
-      id="storage-label"
-    >
-      Add a storage file here.
-    </label>
+    <div>
+      <input
+        accept=".h5"
+        id="storage-input"
+        name="storage-input"
+        style="display: none;"
+        type="file"
+      />
+      <label
+        class="label border"
+        for="storage-input"
+        id="storage-label"
+      >
+        Add a storage file here.
+      </label>
+    </div>
   </div>
 
   <div id="loaded-zone" style="display: none;">
