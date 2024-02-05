@@ -60,8 +60,8 @@ const render = async () => {
 const refresh = () => {
   const data = generateData({
     colorscale: props.colorscale,
-    x: props.labels,
-    y: props.labels,
+    x: props.labels.map((l) => l.trim()),
+    y: props.labels.map((l) => l.trim()),
     z: props.values,
     zmin: props.range.min,
     zmax: props.range.max,
