@@ -20,6 +20,14 @@ export const waveSurferRef = reactive<WaveSurferRef>({
   value: null,
 });
 
+interface waveSurferShowDecibelsRef {
+  value: boolean;
+}
+
+export const waveSurferShowDecibelsRef = reactive<waveSurferShowDecibelsRef>({
+  value: true,
+});
+
 interface UseWaveSurferProps {
   waveformContainerRef: Ref<HTMLDivElement | null>;
   spectrogramContainerRef: Ref<HTMLDivElement | null>;
@@ -110,13 +118,13 @@ export function useWaveSurfer({
       fftSamples: FFT_SIZE.default,
       frequencyMin: bandRef.value.low,
       frequencyMax: bandRef.value.high,
-      decibels: true,
+      decibels: waveSurferShowDecibelsRef.value,
     });
 
     waveSurferRef.value.registerPlugins([spectrogram]);
   };
 
-  watch(spectrogramColorRef, registerSpectrogram);
+  watch([spectrogramColorRef, waveSurferShowDecibelsRef], registerSpectrogram);
 
   const updateSpectrogramDefinition = () => {
     if (waveSurferRef.value === null) {

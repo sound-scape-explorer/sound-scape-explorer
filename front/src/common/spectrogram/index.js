@@ -522,6 +522,10 @@ export default class SpectrogramPlugin {
   }
 
   createDecibels() {
+    if (this.params.decibels === false) {
+      return;
+    }
+
     const decibelsEl = (this.decibelsEl = document.createElement('canvas'));
     decibelsEl.classList.add('spec-labels');
 

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
+import {waveSurferShowDecibelsRef} from 'src/components/Audio/useWaveSurfer';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {audioHostRef} from 'src/hooks/useAudioHost';
 import {useKeyboard} from 'src/hooks/useKeyboard';
@@ -43,7 +44,7 @@ const plotBackgroundOptionsRef = computed(() => {
           :bordered="false"
           size="small"
         >
-          Spectrogram color map
+          Spectrogram: Color map
         </n-tag>
         <n-select
           v-model:value="spectrogramColorRef.value"
@@ -52,6 +53,20 @@ const plotBackgroundOptionsRef = computed(() => {
           size="tiny"
         />
       </n-gi>
+
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Spectrogram: Show decibels
+        </n-tag>
+        <n-checkbox
+          v-model:checked="waveSurferShowDecibelsRef.value"
+          class="checkbox"
+        />
+      </n-gi>
+
       <n-gi class="gi">
         <n-tag
           :bordered="false"
