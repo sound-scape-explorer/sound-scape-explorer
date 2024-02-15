@@ -12,6 +12,7 @@ declare module 'src/common/spectrogram' {
   export interface SpectrogramPluginParams
     extends StockSpectrogramPluginParams {
     decibels: boolean;
+    overflowLegends: boolean;
   }
 
   export default class StockSpectrogram extends StockSpectrogramPlugin {

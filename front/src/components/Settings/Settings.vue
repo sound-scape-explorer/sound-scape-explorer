@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
-import {waveSurferShowDecibelsRef} from 'src/components/Audio/useWaveSurfer';
+import {
+  waveSurferOverflowLegendsRef,
+  waveSurferShowDecibelsRef,
+} from 'src/components/Audio/useWaveSurfer';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {audioHostRef} from 'src/hooks/useAudioHost';
 import {useKeyboard} from 'src/hooks/useKeyboard';
@@ -63,6 +66,19 @@ const plotBackgroundOptionsRef = computed(() => {
         </n-tag>
         <n-checkbox
           v-model:checked="waveSurferShowDecibelsRef.value"
+          class="checkbox"
+        />
+      </n-gi>
+
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Spectrogram: Overflow legends
+        </n-tag>
+        <n-checkbox
+          v-model:checked="waveSurferOverflowLegendsRef.value"
           class="checkbox"
         />
       </n-gi>

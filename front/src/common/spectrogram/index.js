@@ -255,6 +255,19 @@ export default class SpectrogramPlugin {
     } else {
       this.getFrequencies(this.drawSpectrogram);
     }
+
+    this.overflowLegends();
+  }
+
+  overflowLegends() {
+    if (this.params.overflowLegends === false) {
+      return;
+    }
+
+    const s = document.querySelector('spectrogram');
+    s.style.overflow = null;
+    s.children[0].style.left = '-55px';
+    s.children[1].style.right = '-70px';
   }
 
   updateCanvasStyle() {

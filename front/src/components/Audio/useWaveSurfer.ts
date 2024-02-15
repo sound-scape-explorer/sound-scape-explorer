@@ -28,6 +28,15 @@ export const waveSurferShowDecibelsRef = reactive<WaveSurferShowDecibelsRef>({
   value: true,
 });
 
+interface WaveSurferOverflowLegendsRef {
+  value: boolean;
+}
+
+export const waveSurferOverflowLegendsRef =
+  reactive<WaveSurferOverflowLegendsRef>({
+    value: false,
+  });
+
 interface UseWaveSurferProps {
   waveformContainerRef: Ref<HTMLDivElement | null>;
   spectrogramContainerRef: Ref<HTMLDivElement | null>;
@@ -119,12 +128,20 @@ export function useWaveSurfer({
       frequencyMin: bandRef.value.low,
       frequencyMax: bandRef.value.high,
       decibels: waveSurferShowDecibelsRef.value,
+      overflowLegends: waveSurferOverflowLegendsRef.value,
     });
 
     waveSurferRef.value.registerPlugins([spectrogram]);
   };
 
-  watch([spectrogramColorRef, waveSurferShowDecibelsRef], registerSpectrogram);
+  watch(
+    [
+      spectrogramColorRef,
+      waveSurferShowDecibelsRef,
+      waveSurferOverflowLegendsRef,
+    ],
+    registerSpectrogram,
+  );
 
   const updateSpectrogramDefinition = () => {
     if (waveSurferRef.value === null) {
