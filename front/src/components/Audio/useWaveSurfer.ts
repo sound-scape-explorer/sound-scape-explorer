@@ -20,11 +20,11 @@ export const waveSurferRef = reactive<WaveSurferRef>({
   value: null,
 });
 
-interface waveSurferShowDecibelsRef {
+interface WaveSurferShowDecibelsRef {
   value: boolean;
 }
 
-export const waveSurferShowDecibelsRef = reactive<waveSurferShowDecibelsRef>({
+export const waveSurferShowDecibelsRef = reactive<WaveSurferShowDecibelsRef>({
   value: true,
 });
 
