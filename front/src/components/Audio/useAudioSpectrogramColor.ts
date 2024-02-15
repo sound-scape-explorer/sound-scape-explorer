@@ -1,4 +1,5 @@
 import {reactive} from 'vue';
+
 import {SPECTROGRAM_COLOR_MAPS} from '../../constants';
 
 interface SpectrogramColorRef {

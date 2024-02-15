@@ -61,34 +61,62 @@ export function useWaveSurfer({
       barHeight: WAVE.default,
       normalize: false,
       height: 48,
-      plugins: [
-        SpectrogramPlugin.create({
-          container: spectrogramContainerRef.value,
-          labels: true,
-          colorMap: colorsRef.value,
-          height: 192,
-          fftSamples: FFT_SIZE.default,
-          frequencyMin: bandRef.value.low,
-          frequencyMax: bandRef.value.high,
-          decibels: true,
-        }),
-        CursorPlugin.create({
-          showTime: true,
-          opacity: 'solid',
-          customShowTimeStyle: {
-            'background-color': '#000',
-            'color': '#fff',
-            'padding': '2px',
-            'font-size': '10px',
-          },
-        }),
-      ],
     };
 
     waveSurferRef.value = WaveSurfer.create(params);
+    registerCursor();
+    registerSpectrogram();
   };
 
   watchEffect(createWaveSurfer);
+
+  const registerCursor = () => {
+    if (waveSurferRef.value === null) {
+      return;
+    }
+
+    const cursor = CursorPlugin.create({
+      showTime: true,
+      opacity: 'solid',
+      customShowTimeStyle: {
+        'background-color': '#000',
+        'color': '#fff',
+        'padding': '2px',
+        'font-size': '10px',
+      },
+    });
+
+    waveSurferRef.value.registerPlugins([cursor]);
+  };
+
+  const registerSpectrogram = () => {
+    if (
+      spectrogramContainerRef.value === null ||
+      waveSurferRef.value === null ||
+      bandRef.value === null
+    ) {
+      return;
+    }
+
+    if (typeof waveSurferRef.value.spectrogram !== 'undefined') {
+      waveSurferRef.value.destroyPlugin('spectrogram');
+    }
+
+    const spectrogram = SpectrogramPlugin.create({
+      container: spectrogramContainerRef.value,
+      labels: true,
+      colorMap: colorsRef.value,
+      height: 192,
+      fftSamples: FFT_SIZE.default,
+      frequencyMin: bandRef.value.low,
+      frequencyMax: bandRef.value.high,
+      decibels: true,
+    });
+
+    waveSurferRef.value.registerPlugins([spectrogram]);
+  };
+
+  watch(spectrogramColorRef, registerSpectrogram);
 
   const updateSpectrogramDefinition = () => {
     if (waveSurferRef.value === null) {
