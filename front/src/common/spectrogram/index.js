@@ -499,9 +499,10 @@ export default class SpectrogramPlugin {
         /* eslint-disable max-depth */
         if (overlap > 0) {
           for (k = 0; k < oldMatrix[0].length; k++) {
-            if (column[k] == null) {
+            if (typeof column[k] === 'undefined') {
               column[k] = 0;
             }
+
             column[k] += (overlap / newPiece) * oldMatrix[j][k];
           }
         }
@@ -533,11 +534,11 @@ export default class SpectrogramPlugin {
     ctx.canvas.width = 70;
 
     decibelsEl.style.position = 'absolute';
-    decibelsEl.style.zIndex = 9;
-    decibelsEl.style.right = 0;
+    decibelsEl.style.zIndex = '9';
+    decibelsEl.style.right = '0';
 
-    decibelsEl.width = `${ctx.canvas.width}`;
-    decibelsEl.height = `${ctx.canvas.height}`;
+    decibelsEl.width = ctx.canvas.width;
+    decibelsEl.height = ctx.canvas.height;
 
     this.wrapper.appendChild(decibelsEl);
 
