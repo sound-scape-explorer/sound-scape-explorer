@@ -595,9 +595,11 @@ export default class SpectrogramPlugin {
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
 
+    const dynamicRange = 20 * Math.log10(2 ** this.params.bitDepth);
+
     for (let h = 0; h <= height; h += height / ticksCount) {
       const y = startY + h;
-      const p = pixelsToDBFSLinear(h, height);
+      const p = this.pixelsToDBFSLinear(h, height, dynamicRange);
 
       ctx.beginPath();
       ctx.moveTo(startX, y);
@@ -610,6 +612,13 @@ export default class SpectrogramPlugin {
       ctx.fillText(label, startX - fontSize + 2, startY + h);
     }
   }
+
+  pixelsToDBFSLinear(position, total, dynamicRange) {
+    const max = 0;
+    const min = -dynamicRange;
+    const linearPosition = (total - position) / total;
+    return min + (max - min) * linearPosition;
+  }
 }
 
 const bits = 16; // AudioBuffer
@@ -620,11 +629,4 @@ function pixelsToDBFSLog(position, total) {
   const min = -dynamicRange;
   const scale = Math.log10(1 + total);
   return min + (max - min) * (Math.log10(1 + total - position) / scale);
-}
-
-function pixelsToDBFSLinear(position, total) {
-  const max = 0;
-  const min = -dynamicRange;
-  const linearPosition = (total - position) / total;
-  return min + (max - min) * linearPosition;
 }

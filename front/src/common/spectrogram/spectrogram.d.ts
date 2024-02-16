@@ -13,6 +13,7 @@ declare module 'src/common/spectrogram' {
     extends StockSpectrogramPluginParams {
     decibels: boolean;
     overflowLegends: boolean;
+    bitDepth: number;
   }
 
   export default class StockSpectrogram extends StockSpectrogramPlugin {

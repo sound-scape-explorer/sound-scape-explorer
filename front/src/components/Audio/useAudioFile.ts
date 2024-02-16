@@ -4,6 +4,7 @@ import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 import type {BlockDetails} from '../../hooks/useAggregatedIntervalDetails';
 import {audioHostRef} from '../../hooks/useAudioHost';
 import {integrationRef} from '../../hooks/useIntegrations';
+import {getBitDepthFromWav} from '../../utils/get-bit-depth-from-wav';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {useNotification} from '../AppNotification/useNotification';
 import {audioContextRef} from './useAudioContext';
@@ -15,6 +16,14 @@ interface AudioBlockRef {
 }
 
 export const audioBlockRef = reactive<AudioBlockRef>({
+  value: null,
+});
+
+interface AudioFileBitDepthRef {
+  value: number | null;
+}
+
+export const audioFileBitDepthRef = reactive<AudioFileBitDepthRef>({
   value: null,
 });
 
@@ -83,6 +92,7 @@ export function useAudioFile() {
       }
 
       const arrayBuffer = await response.arrayBuffer();
+      audioFileBitDepthRef.value = getBitDepthFromWav(arrayBuffer);
 
       if (arrayBuffer.byteLength === 0) {
         notify('error', 'Empty audio data', '');

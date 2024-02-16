@@ -10,6 +10,7 @@ import {WAVE} from '../../constants';
 import {bandRef} from '../../hooks/useBands';
 import {fftSizeRef} from './useAudioComponent';
 import {audioContextRef} from './useAudioContext';
+import {audioFileBitDepthRef} from './useAudioFile';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
 
 interface WaveSurferRef {
@@ -110,7 +111,8 @@ export function useWaveSurfer({
     if (
       spectrogramContainerRef.value === null ||
       waveSurferRef.value === null ||
-      bandRef.value === null
+      bandRef.value === null ||
+      audioFileBitDepthRef.value === null
     ) {
       return;
     }
@@ -129,6 +131,7 @@ export function useWaveSurfer({
       frequencyMax: bandRef.value.high,
       decibels: waveSurferShowDecibelsRef.value,
       overflowLegends: waveSurferOverflowLegendsRef.value,
+      bitDepth: audioFileBitDepthRef.value,
     });
 
     waveSurferRef.value.registerPlugins([spectrogram]);
@@ -139,6 +142,7 @@ export function useWaveSurfer({
       spectrogramColorRef,
       waveSurferShowDecibelsRef,
       waveSurferOverflowLegendsRef,
+      audioFileBitDepthRef,
     ],
     registerSpectrogram,
   );
