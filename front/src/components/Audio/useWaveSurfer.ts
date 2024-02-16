@@ -6,7 +6,7 @@ import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/src/plugin/cursor';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
-import {FFT_SIZE, WAVE} from '../../constants';
+import {WAVE} from '../../constants';
 import {bandRef} from '../../hooks/useBands';
 import {fftSizeRef} from './useAudioComponent';
 import {audioContextRef} from './useAudioContext';
@@ -124,7 +124,7 @@ export function useWaveSurfer({
       labels: true,
       colorMap: colorsRef.value,
       height: 192,
-      fftSamples: FFT_SIZE.default,
+      fftSamples: fftSizeRef.value,
       frequencyMin: bandRef.value.low,
       frequencyMax: bandRef.value.high,
       decibels: waveSurferShowDecibelsRef.value,
