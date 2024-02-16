@@ -454,7 +454,7 @@ export default class SpectrogramPlugin {
         const x = 16;
         let y;
 
-        if (i == 0) {
+        if (i === 0) {
           y = (1 + c) * getMaxY + i - 10;
           // unit label
           ctx.fillStyle = textColorUnit;
