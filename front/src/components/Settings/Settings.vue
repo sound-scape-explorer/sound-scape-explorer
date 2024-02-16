@@ -109,6 +109,7 @@ const plotBackgroundOptionsRef = computed(() => {
           size="tiny"
         />
       </n-gi>
+
       <n-gi class="gi">
         <n-tag
           :bordered="false"
@@ -118,6 +119,19 @@ const plotBackgroundOptionsRef = computed(() => {
         </n-tag>
         <n-checkbox
           v-model:checked="settingsStore.applyTimezone"
+          class="checkbox"
+        />
+      </n-gi>
+
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Preview
+        </n-tag>
+        <n-checkbox
+          v-model:checked="settingsStore.preview"
           class="checkbox"
         />
       </n-gi>
