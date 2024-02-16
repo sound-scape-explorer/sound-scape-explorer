@@ -267,7 +267,10 @@ export default class SpectrogramPlugin {
     const s = document.querySelector('spectrogram');
     s.style.overflow = null;
     s.children[0].style.left = '-55px';
-    s.children[1].style.right = '-70px';
+
+    if (this.params.decibels === true) {
+      s.children[1].style.right = '-70px';
+    }
   }
 
   updateCanvasStyle() {
