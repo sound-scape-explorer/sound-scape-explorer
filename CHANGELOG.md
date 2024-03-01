@@ -1,3 +1,60 @@
+# [13.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v12.3.0...v13.0.0) (2024-03-01)
+
+
+### Bug Fixes
+
+* **App:** Remove `audio:front` unused command + Remove dev deps ([8f678fb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8f678fb7d3095910113f0799f102fe210e176de2))
+* **App:** Update audio command + Add install:audio command + Remove serve dependency ([5981229](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/59812292763ae90f5890a7c8072129ece5de2caa))
+* **Audio:** Add exitcrash flag ([caccf15](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/caccf1548783d4a1d478b0f9454f806701f527ff))
+* **Audio:** Remove unnecessary console output ([70ecce3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/70ecce394348eb03ffa729998a2465c72721dc28))
+* **CI/CD:** Commit visualisation version file with release ([3240629](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/32406299a3b002796f6fff07babc3d52284f75e2))
+* **CI:** Increment modules versions correctly ([1caca18](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1caca18859b7a6a0100af42cfee65a1403b31a8b))
+* **Front/AppHeatmaps:** Trim labels for consistent display ([da7de0e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/da7de0e945f94625f3874b051da8088ae5451382))
+* **Front/Audio:** Add audio loading state ([5afd957](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5afd957c16b2425404d4da67c043e7a9e7907e81))
+* **Front/Audio:** Fix spectrogram legacy code + styling ([1c3fa92](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1c3fa922d959bd5794e1acb8614b3fb4cde901d2))
+* **Front/Audio:** Fix wavesurfer typings ([448744f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/448744f20b1bb61fdb670716d8ae8ff8361b8b1a))
+* **Front/Audio:** Rectify interface typo ([2061ec4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2061ec49b3f7fb957954253a2c0f8476f2273735))
+* **Front/Spectrogram:** Overflow decibels legend when present ([3158c7d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3158c7dbb1b30abdfef0f23b631c6d544c082d36))
+* **Front/Spectrogram:** Use strict comparison in legacy code ([c81d4ab](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c81d4ab94304eda705039a85d81cba6e13e4012c))
+* **Front/Spectrogram:** Use user FFT size on new plugin register ([b5d0873](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b5d0873f6acb61f143f093e3bd4b35a4dbce0f7a))
+* **Processing/CLI:** Feed ffmpeg and ffprobe paths to new audio command ([c100e0d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c100e0d7e30c302d9be81986ea76f2fecbb42eb3))
+* **Processing:** Report CSE fixes to SSE (Silhouette and MDM) ([10506b0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/10506b01c886b421ac8f60f6ca73d6c388932573))
+* **Visualisation/Renderer:** Improve configuration file loading zone ([2db2481](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2db248141833bf0bc3c7ea0266f8dbda3ef36701))
+* **Visualisation/Renderer:** Improve styling ([1a0687d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1a0687d5bd75999c83bb0d68a4e3d89986b510a7))
+* **Visualisation:** Improve home screen styling ([9a1382a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9a1382a19bbc9dc2b44deffe772efef3f78f4c55))
+* **Visualisation:** Remove storage path injection as input file modification is forbidden ([20913d3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/20913d334e6171b2dbe50e12e5d90f7b2b7553e6))
+
+
+### Features
+
+* **Audio:** Add versioning to audio service + Update CI/CD pipeline ([dec8554](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dec85542559939de3b01ace2e4c66686f96c8286))
+* **Audio:** Create API to slice files before sending over network ([87ef944](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/87ef944aae93bed8b25a283addf280adb6fc920a))
+* **CI/CD:** Add visualisation building to release pipeline + Remove old Docker pipelines ([41e4632](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/41e46328caa39848406df1d3edbef3b84b9f539e))
+* **Front/AppHeatmaps:** Add dynamic font sizes ([e26e52f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e26e52f9d5af48110aa5ebef03441665fc1c51a6))
+* **Front/Audio:** Add decibel scale legend to spectrograms ([cdc5be6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cdc5be679589c29e7f52c2cc3f8ed57528423299))
+* **Front/Audio:** Add overflow setting to spectrogram legends ([463232c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/463232c4148156c7a3ffcd035090497804854947))
+* **Front/Audio:** Allow decibels legend toggling ([4ffd8e3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4ffd8e30e3aa3219c6469a39ae8375607ab74214))
+* **Front/Audio:** Allow on the fly spectrogram color map changes ([bbd81d8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bbd81d8122022ce48c2f957f94cd99bdcff223b3))
+* **Front/Spectrogram:** Use dynamic bit depth ([f0dc985](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f0dc9859643567c1d25f770afe340f0c78ef9a90))
+* **Front/Timeline:** Add WIP component ([deb81c0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/deb81c00a6f7986c08d6b715efa96731ed09b5b9))
+* **Front:** Add preview setting for beta features ([1a87ed0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1a87ed0e8542ba6acbab5b7c5fe24e871beb73cb))
+* **Front:** Use new audio service API ([4715765](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/47157653bcc5f7a5749b5e34b31ffa01b3e41ef6))
+* **Visualisation:** Allow input h5 files ([934eb35](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/934eb35eca1797a3b0f4dd142a1f3cf6c5004691))
+* **Visualisation:** Bundle visualisation services with Electron ([d95a0bc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d95a0bceaa11dd0bc9eff9f13af8537b98e67230))
+
+
+### Performance Improvements
+
+* **Front:** Remove audiobuffer-slice dependency ([e49a765](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e49a7657ca4f508f745cb7ce91c96b6f44d18209))
+
+
+### BREAKING CHANGES
+
+* **CI/CD:** The visualisation binaries are now built and added to
+each release
+* **Visualisation:** The `front` and `audio` services are now bundled inside
+an Electron app.
+
 # [12.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v12.2.0...v12.3.0) (2024-01-02)
 
 

@@ -64,5 +64,5 @@
   "devDependencies": {
     "rimraf": "^5.0.1"
   },
-  "version": "12.3.0"
+  "version": "13.0.0"
 }
