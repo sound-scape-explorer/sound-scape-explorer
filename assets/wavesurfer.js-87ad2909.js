@@ -1,4 +1,4 @@
-import{g as ae}from"./audiobuffer-slice-6dad15f5.js";var $={exports:{}};/*!
+import{g as ae}from"./chroma-js-b6626927.js";var $={exports:{}};/*!
  * wavesurfer.js 6.6.3 (2023-04-04)
  * https://wavesurfer-js.org
  * @license BSD-3-Clause
