@@ -1,7 +1,16 @@
 import {type Layout} from 'plotly.js-dist-min';
+import {reactive} from 'vue';
 
 import {settingsStore} from '../components/Settings/settingsStore';
 import {heatmapHeightRef, heatmapWidthRef} from './useHeatmapSize';
+
+interface PlotlyFontSizeRef {
+  value: string;
+}
+
+export const plotlyFontSizeRef = reactive<PlotlyFontSizeRef>({
+  value: '12',
+});
 
 export function useHeatmapLayout() {
   const generateLayout = (title: string): Partial<Layout> => {
@@ -14,6 +23,9 @@ export function useHeatmapLayout() {
       // TODO: Make height and width dynamic, changeable by the user
       width: heatmapWidthRef.value,
       height: heatmapHeightRef.value,
+      font: {
+        size: Number(plotlyFontSizeRef.value),
+      },
       margin: {
         l: 100,
         r: 100,
