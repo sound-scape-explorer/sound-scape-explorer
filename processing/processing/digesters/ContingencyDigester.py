@@ -18,6 +18,9 @@ class ContingencyDigester(Digester):
             clusters_b,
         )
 
+        # we don't need computing both 'a vs b' and 'b vs a' as they are
+        # mirrored
+
         pairing_a = (
             contingency_matrix
             / numpy.tile(
@@ -27,26 +30,6 @@ class ContingencyDigester(Digester):
             * 100
         )
 
-        payload_a = pd.DataFrame(
-            pairing_a.T,
-            index=list(numpy.unique(clusters_b)),
-            columns=list(numpy.unique(clusters_a)),
-        )
-
-        # INFO: We don't need this as it strictly is the transposed matrix of payload_a
-        # pairing_b = (
-        #     contingency_matrix
-        #     / numpy.tile(
-        #         numpy.sum(contingency_matrix, axis=0),  # type: ignore
-        #         (contingency_matrix.shape[0], 1),
-        #     )
-        #     * 100
-        # )
-        #
-        # payload_b = pd.DataFrame(
-        #     pairing_b,
-        #     columns=list(numpy.unique(clusters_b)),
-        #     index=list(numpy.unique(clusters_a)),
-        # )
+        payload_a = pd.DataFrame(pairing_a.T)
 
         return payload_a

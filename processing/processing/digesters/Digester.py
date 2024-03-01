@@ -5,7 +5,10 @@ from h5py import Dataset
 from numpy import ndarray
 from pandas import DataFrame, Index
 
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.labels.LabelConfig import LabelConfig
+from processing.storage.Storage import Storage
 
 Features = List[List[float]]
 Digested = List[Any]
@@ -16,6 +19,9 @@ class Digester(ABC):
     is_pairing: bool
     __features: Optional[DataFrame] = None
     __labels: Optional[List[LabelConfig]] = None
+    __storage: Optional[Storage] = None
+    __band: Optional[BandConfig] = None
+    __integration: Optional[IntegrationConfig] = None
 
     @property
     def features(self) -> DataFrame:
@@ -34,6 +40,33 @@ class Digester(ABC):
     @labels.setter
     def labels(self, labels: List[LabelConfig]) -> None:
         self.__labels = labels
+
+    @property
+    def storage(self) -> Storage:
+        assert self.__storage is not None, "Please define storage"
+        return self.__storage
+
+    @storage.setter
+    def storage(self, storage: Storage) -> None:
+        self.__storage = storage
+
+    @property
+    def band(self) -> BandConfig:
+        assert self.__band is not None, "Please define band"
+        return self.__band
+
+    @band.setter
+    def band(self, band: BandConfig) -> None:
+        self.__band = band
+
+    @property
+    def integration(self) -> IntegrationConfig:
+        assert self.__integration is not None, "Please define integration"
+        return self.__integration
+
+    @integration.setter
+    def integration(self, integration: IntegrationConfig) -> None:
+        self.__integration = integration
 
     def get_label_data(self, label: LabelConfig) -> Tuple[DataFrame, Index]:
         df = self.features
