@@ -6,6 +6,11 @@
       <sourceFolder url="file://$MODULE_DIR$/processing" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/processing/build" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/.vite" />
+      <excludeFolder url="file://$MODULE_DIR$/audio/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/out" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/audio" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/front" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

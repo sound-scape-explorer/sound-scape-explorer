@@ -1,0 +1,40 @@
+{
+  "name": "audio",
+  "version": "1.0.0",
+  "description": "Audio service for sound-scape-explorer",
+  "scripts": {
+    "build": "pnpm build:clean && pnpm build:esbuild",
+    "build:clean": "rimraf dist",
+    "build:esbuild": "esbuild src/main.ts --bundle --minify --platform=node --target=es2019 --outfile=dist/main.js",
+    "dev": "nodemon src/main.ts --exitcrash",
+    "start": "node dist/main.js"
+  },
+  "keywords": [
+    "sound-scape-explorer",
+    "visualisation-module",
+    "audio-service"
+  ],
+  "author": {
+    "name": "Bamdad Sabbagh",
+    "email": "hi@bamdad.fr"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "get-audio-duration": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.7",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "esbuild": "^0.19.11",
+    "eslint": "^8.56.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "nodemon": "^3.0.2",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

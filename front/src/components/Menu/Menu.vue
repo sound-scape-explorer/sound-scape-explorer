@@ -12,9 +12,11 @@ import {
   HelpOutline,
   LayersOutline,
   ListOutline,
+  ReceiptOutline,
   TimerOutline,
 } from '@vicons/ionicons5';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
+import {settingsStore} from 'src/components/Settings/settingsStore';
 import {useKeyboard} from 'src/hooks/useKeyboard';
 import {isSelectedRef} from 'src/hooks/useSelection';
 import {useStorageFile} from 'src/hooks/useStorageFile';
@@ -40,6 +42,10 @@ registerKey(KeyboardShortcut.help, () => toggle('help'));
 registerKey(KeyboardShortcut.selection, () => toggle('selection'));
 registerKey(KeyboardShortcut.colors, () => toggle('colors'));
 registerKey(KeyboardShortcut.time, () => toggle('time'));
+registerKey(
+  KeyboardShortcut.timeline,
+  () => settingsStore.preview && toggle('timeline'),
+);
 registerKey(KeyboardShortcut.labels, () => toggle('labels'));
 registerKey(KeyboardShortcut.details, () => toggle('details'));
 registerKey(KeyboardShortcut.audio, () => toggle('audio'));
@@ -107,6 +113,16 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         text="Colors"
       >
         <color-palette-outline />
+      </MenuItem>
+
+      <MenuItem
+        v-if="settingsStore.preview"
+        :disabled="!isSelectedRef.value"
+        :toggle="toggle"
+        draggable-key="timeline"
+        text="Timeline"
+      >
+        <receipt-outline />
       </MenuItem>
 
       <MenuItem

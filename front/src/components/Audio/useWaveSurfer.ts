@@ -1,15 +1,16 @@
 import colormap from 'colormap';
+import SpectrogramPlugin, {type RGBA} from 'src/common/spectrogram';
 import type {Ref} from 'vue';
 import {computed, reactive, watch, watchEffect} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
-import Cursor from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
-import Spectrogram from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js';
+import CursorPlugin from 'wavesurfer.js/src/plugin/cursor';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
-import {FFT_SIZE, WAVE} from '../../constants';
+import {WAVE} from '../../constants';
 import {bandRef} from '../../hooks/useBands';
 import {fftSizeRef} from './useAudioComponent';
 import {audioContextRef} from './useAudioContext';
+import {audioFileBitDepthRef} from './useAudioFile';
 import {spectrogramColorRef} from './useAudioSpectrogramColor';
 
 interface WaveSurferRef {
@@ -19,6 +20,23 @@ interface WaveSurferRef {
 export const waveSurferRef = reactive<WaveSurferRef>({
   value: null,
 });
+
+interface WaveSurferShowDecibelsRef {
+  value: boolean;
+}
+
+export const waveSurferShowDecibelsRef = reactive<WaveSurferShowDecibelsRef>({
+  value: true,
+});
+
+interface WaveSurferOverflowLegendsRef {
+  value: boolean;
+}
+
+export const waveSurferOverflowLegendsRef =
+  reactive<WaveSurferOverflowLegendsRef>({
+    value: false,
+  });
 
 interface UseWaveSurferProps {
   waveformContainerRef: Ref<HTMLDivElement | null>;
@@ -30,11 +48,13 @@ export function useWaveSurfer({
   spectrogramContainerRef,
 }: UseWaveSurferProps) {
   const colorsRef = computed(() => {
-    return colormap({
+    const colors = colormap({
       colormap: spectrogramColorRef.value,
       nshades: 256,
       format: 'float',
     });
+
+    return colors as RGBA[] & {length: 256};
   });
 
   const createWaveSurfer = () => {
@@ -59,33 +79,73 @@ export function useWaveSurfer({
       barHeight: WAVE.default,
       normalize: false,
       height: 48,
-      plugins: [
-        Spectrogram.create({
-          container: spectrogramContainerRef.value,
-          labels: true,
-          colorMap: colorsRef.value,
-          height: 192,
-          fftSamples: FFT_SIZE.default,
-          frequencyMin: bandRef.value.low,
-          frequencyMax: bandRef.value.high,
-        }),
-        Cursor.create({
-          showTime: true,
-          opacity: 1,
-          customShowTimeStyle: {
-            'background-color': '#000',
-            'color': '#fff',
-            'padding': '2px',
-            'font-size': '10px',
-          },
-        }),
-      ],
     };
 
     waveSurferRef.value = WaveSurfer.create(params);
+    registerCursor();
+    registerSpectrogram();
   };
 
   watchEffect(createWaveSurfer);
+
+  const registerCursor = () => {
+    if (waveSurferRef.value === null) {
+      return;
+    }
+
+    const cursor = CursorPlugin.create({
+      showTime: true,
+      opacity: 'solid',
+      customShowTimeStyle: {
+        'background-color': '#000',
+        'color': '#fff',
+        'padding': '2px',
+        'font-size': '10px',
+      },
+    });
+
+    waveSurferRef.value.registerPlugins([cursor]);
+  };
+
+  const registerSpectrogram = () => {
+    if (
+      spectrogramContainerRef.value === null ||
+      waveSurferRef.value === null ||
+      bandRef.value === null ||
+      audioFileBitDepthRef.value === null
+    ) {
+      return;
+    }
+
+    if (typeof waveSurferRef.value.spectrogram !== 'undefined') {
+      waveSurferRef.value.destroyPlugin('spectrogram');
+    }
+
+    const spectrogram = SpectrogramPlugin.create({
+      container: spectrogramContainerRef.value,
+      labels: true,
+      colorMap: colorsRef.value,
+      height: 192,
+      fftSamples: fftSizeRef.value,
+      frequencyMin: bandRef.value.low,
+      frequencyMax: bandRef.value.high,
+      decibels: waveSurferShowDecibelsRef.value,
+      overflowLegends: waveSurferOverflowLegendsRef.value,
+      bitDepth: audioFileBitDepthRef.value,
+    });
+
+    waveSurferRef.value.registerPlugins([spectrogram]);
+  };
+
+  watch(
+    [
+      spectrogramColorRef,
+      waveSurferShowDecibelsRef,
+      waveSurferOverflowLegendsRef,
+      audioFileBitDepthRef,
+    ],
+    registerSpectrogram,
+  );
 
   const updateSpectrogramDefinition = () => {
     if (waveSurferRef.value === null) {

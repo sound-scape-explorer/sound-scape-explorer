@@ -6,10 +6,12 @@ export interface SettingsStore {
   autoOpenOnScatterClick: boolean;
   plotBackground: PLOT_BACKGROUND;
   applyTimezone: boolean;
+  preview: boolean;
 }
 
 export const settingsStore = reactive<SettingsStore>({
   autoOpenOnScatterClick: true,
   plotBackground: PLOT_BACKGROUND.transparent,
   applyTimezone: false,
+  preview: false,
 });

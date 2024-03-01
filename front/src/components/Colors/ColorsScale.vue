@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
+import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
-import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {colorsStore} from './colorsStore';
 

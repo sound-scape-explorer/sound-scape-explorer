@@ -42,9 +42,10 @@ class DigesterConfig:
         self.is_pairing = True if self.name in self.pairings else False
 
     def validate_name(self, name: str) -> None:
-        assert name in self.digesters.keys(), f"Unable to find digester name {name}"
+        keys = self.digesters.keys()
+        assert name in keys, f"Unable to find digester name {name}"
 
-    def instanciate(self) -> Digester:
+    def instantiate(self) -> Digester:
         instance = self.digesters[self.name]()
         instance.index = self.index
         instance.is_pairing = self.is_pairing

@@ -1,7 +1,12 @@
 <script lang="ts" setup>
 import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
+import {
+  waveSurferOverflowLegendsRef,
+  waveSurferShowDecibelsRef,
+} from 'src/components/Audio/useWaveSurfer';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {audioHostRef} from 'src/hooks/useAudioHost';
+import {plotlyFontSizeRef} from 'src/hooks/useHeatmapLayout';
 import {useKeyboard} from 'src/hooks/useKeyboard';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
@@ -43,7 +48,7 @@ const plotBackgroundOptionsRef = computed(() => {
           :bordered="false"
           size="small"
         >
-          Spectrogram color map
+          Spectrogram: Color map
         </n-tag>
         <n-select
           v-model:value="spectrogramColorRef.value"
@@ -52,6 +57,33 @@ const plotBackgroundOptionsRef = computed(() => {
           size="tiny"
         />
       </n-gi>
+
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Spectrogram: Show decibels
+        </n-tag>
+        <n-checkbox
+          v-model:checked="waveSurferShowDecibelsRef.value"
+          class="checkbox"
+        />
+      </n-gi>
+
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Spectrogram: Overflow legends
+        </n-tag>
+        <n-checkbox
+          v-model:checked="waveSurferOverflowLegendsRef.value"
+          class="checkbox"
+        />
+      </n-gi>
+
       <n-gi class="gi">
         <n-tag
           :bordered="false"
@@ -78,6 +110,7 @@ const plotBackgroundOptionsRef = computed(() => {
           size="tiny"
         />
       </n-gi>
+
       <n-gi class="gi">
         <n-tag
           :bordered="false"
@@ -88,6 +121,35 @@ const plotBackgroundOptionsRef = computed(() => {
         <n-checkbox
           v-model:checked="settingsStore.applyTimezone"
           class="checkbox"
+        />
+      </n-gi>
+
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Preview
+        </n-tag>
+        <n-checkbox
+          v-model:checked="settingsStore.preview"
+          class="checkbox"
+        />
+      </n-gi>
+
+      <n-gi class="gi">
+        <n-tag
+          :bordered="false"
+          size="small"
+        >
+          Plotly font size
+        </n-tag>
+        <n-input
+          v-model:value="plotlyFontSizeRef.value"
+          size="tiny"
+          type="number"
+          @inputBlur="() => unlockKeyboard()"
+          @inputFocus="() => lockKeyboard()"
         />
       </n-gi>
     </n-grid>

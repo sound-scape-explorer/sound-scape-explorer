@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title></title>
+
+  <style>
+    body {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container flex flex-col">
+  <h1 class="title" id="title"></h1>
+
+  <div class="flex flex-col" id="loading-zone">
+    <div>
+      <input
+        accept=".xlsx"
+        id="configuration-input"
+        name="configuration-input"
+        style="display: none;"
+        type="file"
+      />
+      <label
+        class="label border"
+        for="configuration-input"
+        id="configuration-label"
+      >
+        Add a configuration file here.
+      </label>
+    </div>
+
+    <div>
+      <input
+        accept=".h5"
+        id="storage-input"
+        name="storage-input"
+        style="display: none;"
+        type="file"
+      />
+      <label
+        class="label border"
+        for="storage-input"
+        id="storage-label"
+      >
+        Add a storage file here.
+      </label>
+    </div>
+  </div>
+
+  <div id="loaded-zone" style="display: none;">
+    <button class="button border" id="visualise-button">Visualise</button>
+    <button class="button border" id="audio-stop-button">
+      Stop Audio service
+    </button>
+  </div>
+</div>
+
+<script src="./src/renderer/renderer.ts" type="module"></script>
+
+</body>
+</html>

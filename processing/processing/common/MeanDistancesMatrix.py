@@ -35,6 +35,22 @@ class MeanDistancesMatrix:
         return values
 
     @staticmethod
+    def read_from_storage(
+        storage: Storage,
+        band: BandConfig,
+        integration: IntegrationConfig,
+        trim_half: bool = False,
+    ):
+        path = MeanDistancesMatrix.get_path(band, integration)
+        dataset = storage.read(path)
+        matrix = np.array(dataset)
+
+        if trim_half is True:
+            np.fill_diagonal(matrix, 0)
+
+        return matrix
+
+    @staticmethod
     def get_path(
         band: BandConfig,
         integration: IntegrationConfig,

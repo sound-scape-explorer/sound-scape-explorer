@@ -3,6 +3,7 @@ import os
 import platform
 import subprocess
 import sys
+from distutils.spawn import find_executable
 
 from processing.main import main
 from processing.utils.append_to_config import append_to_config
@@ -51,20 +52,21 @@ def start_visualisation():
     os.chdir(venv_path)
     os.chdir("..")
 
-    # spawn audio and front modules
-    if platform.system() == "Windows":
-        audio_path = trim_quotes_if_needed(audio_path)
-        audio_command = ["pnpm", "audio", audio_path]
-        front_command = ["pnpm", "front"]
+    # get paths
+    ffmpeg_path = find_executable("ffmpeg")
+    ffprobe_path = find_executable("ffprobe")
+    audio_path = trim_quotes_if_needed(audio_path)
 
-        audio_process = subprocess.Popen(audio_command)
-        front_process = subprocess.Popen(front_command)
+    # create commands
+    audio_command = ["pnpm", "audio", ffmpeg_path, ffprobe_path, audio_path]
+    front_command = ["pnpm", "front"]
 
-        audio_process.wait()
-        front_process.wait()
-    else:
-        command = ["pnpm", "audio:front", audio_path]
-        subprocess.run(command)
+    # spawn
+    audio_process = subprocess.Popen(audio_command)
+    front_process = subprocess.Popen(front_command)
+
+    audio_process.wait()
+    front_process.wait()
 
 
 def extract_config():

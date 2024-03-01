@@ -1,14 +1,14 @@
-import audioBufferSlice from 'audiobuffer-slice';
 import {reactive, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
 import type {BlockDetails} from '../../hooks/useAggregatedIntervalDetails';
 import {audioHostRef} from '../../hooks/useAudioHost';
 import {integrationRef} from '../../hooks/useIntegrations';
+import {getBitDepthFromWav} from '../../utils/get-bit-depth-from-wav';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {useNotification} from '../AppNotification/useNotification';
 import {audioContextRef} from './useAudioContext';
-import {waveSurferRef} from './useWaveSurfer';
+import {audioIsLoadingRef, useAudioLoading} from './useAudioLoading';
 import {useWaveSurferLoader} from './useWaveSurferLoader';
 
 interface AudioBlockRef {
@@ -19,9 +19,19 @@ export const audioBlockRef = reactive<AudioBlockRef>({
   value: null,
 });
 
+interface AudioFileBitDepthRef {
+  value: number | null;
+}
+
+export const audioFileBitDepthRef = reactive<AudioFileBitDepthRef>({
+  value: null,
+});
+
 export function useAudioFile() {
   const {notify} = useNotification();
   const {loadBlob} = useWaveSurferLoader();
+  const {verifyAudioLoading} = useAudioLoading();
+
   const openAudioModal = () => {
     if (appDraggablesStore.audio === true) {
       return;
@@ -31,6 +41,10 @@ export function useAudioFile() {
   };
 
   const selectAudioBlock = (block: BlockDetails | null) => {
+    if (!verifyAudioLoading()) {
+      return;
+    }
+
     if (block === null) {
       audioBlockRef.value = null;
       return;
@@ -55,11 +69,15 @@ export function useAudioFile() {
         return;
       }
 
-      const src = `${audioHostRef.value}${audioBlockRef.value.file}`;
+      audioIsLoadingRef.value = true;
 
-      const response = await fetch(src);
+      const start = audioBlockRef.value.fileStart;
+      const end = start + integrationRef.value.seconds * 1000;
+      const endpoint = `${audioHostRef.value}get?file=${audioBlockRef.value.file}&start=${start}&end=${end}`;
 
-      if (!response.ok) {
+      const response = await fetch(endpoint);
+
+      if (response.status !== 200) {
         notify(
           'error',
           'Failed to fetch audio',
@@ -74,6 +92,7 @@ export function useAudioFile() {
       }
 
       const arrayBuffer = await response.arrayBuffer();
+      audioFileBitDepthRef.value = getBitDepthFromWav(arrayBuffer);
 
       if (arrayBuffer.byteLength === 0) {
         notify('error', 'Empty audio data', '');
@@ -85,35 +104,21 @@ export function useAudioFile() {
         arrayBuffer,
       );
 
-      const start = audioBlockRef.value.fileStart;
-      const end = start + integrationRef.value.seconds * 1000;
+      audioIsLoadingRef.value = false;
 
-      audioBufferSlice(audioBuffer, start, end, sliceAudio);
+      const wav = encodeWavFileFromAudioBuffer(audioBuffer, 0);
+      const blob = new Blob([wav]);
+      loadBlob(blob);
     } catch (error) {
       appDraggablesStore.audio = false;
+      audioIsLoadingRef.value = false;
+
       notify('error', 'Failed to load audio', `${error}`);
       console.error(error);
     }
   };
 
   watch(audioBlockRef, loadAudioFile);
-
-  const sliceAudio = (error: TypeError, slicedAudioBuffer: AudioBuffer) => {
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    if (waveSurferRef.value === null) {
-      return;
-    }
-
-    const wav = encodeWavFileFromAudioBuffer(slicedAudioBuffer, 0);
-
-    const blob = new Blob([wav]);
-
-    loadBlob(blob);
-  };
 
   return {
     selectAudioBlock: selectAudioBlock,

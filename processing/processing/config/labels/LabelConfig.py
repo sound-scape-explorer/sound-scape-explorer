@@ -1,6 +1,8 @@
 from typing import List, Tuple
 
 from processing.config.files.FileSheet import FileSheet
+from processing.utils.get_uniques_sorted import get_uniques_sorted
+from processing.utils.get_uniques_unsorted import get_uniques_unsorted
 from processing.utils.reverse_array import reverse_array
 
 
@@ -8,7 +10,8 @@ class LabelConfig:
     index: int
     property: str
     values: List[str]  # label values by file index
-    uniques: List[str]
+    uniques_sorted: List[str]  # by alphanumerical order
+    uniques_unsorted: List[str]  # by order of occurrence
 
     def __init__(
         self,
@@ -41,7 +44,7 @@ class LabelConfig:
         metas: List["LabelConfig"],
     ) -> Tuple[List[str], List[List[str]]]:
         properties = [str.upper(m.property) for m in metas]
-        sets = [list(m.uniques) for m in metas]
+        sets = [list(m.uniques_sorted) for m in metas]
 
         return properties, sets
 
@@ -58,8 +61,8 @@ class LabelConfig:
         array: List,
     ) -> List[str]:
         self.values = [str(value) for value in array]
-        # Always sort uniques! ascending alphabetical / numerical
-        self.uniques = sorted(list(set(self.values)))
+        self.uniques_sorted = get_uniques_sorted(self.values)
+        self.uniques_unsorted = get_uniques_unsorted(self.values)
         return self.values
 
     def get_value(

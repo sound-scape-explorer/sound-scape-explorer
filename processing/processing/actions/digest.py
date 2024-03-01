@@ -52,9 +52,12 @@ def digest(
         )
 
         for digester in track(digesters):
-            d = digester.instanciate()
+            d = digester.instantiate()
             d.features = aggregated_features
             d.labels = aggregated_labels
+            d.storage = storage
+            d.band = ar.band
+            d.integration = ar.integration
 
             for data, label_a, label_b in d.walk_labels():
                 path = (

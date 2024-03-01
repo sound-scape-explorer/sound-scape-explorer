@@ -1,15 +1,17 @@
 {
   "name": "sound-scape-explorer",
   "scripts": {
-    "audio": "pnpm serve --cors -p 5531",
-    "audio:front": "concurrently -P pnpm:front \"pnpm:audio {1}\" --",
+    "audio": "cd audio && pnpm dev",
+    "audio:build:electron": "cd audio && pnpm build",
     "dev": "pnpm front",
     "dev:audio": "pnpm front:audio",
     "front": "cd front && pnpm dev",
+    "front:build:electron": "cd front && pnpm build:electron",
     "install:all": "pnpm i && pnpm install:front && pnpm install:processing",
     "install:all:windows": "pnpm i && pnpm install:front && pnpm install:processing:windows",
     "install:all:cuda": "pnpm i && pnpm install:front && pnpm install:processing:cuda",
     "install:all:cuda:windows": "pnpm i && pnpm install:front && pnpm install:processing:cuda:windows",
+    "install:audio": "cd audio && pnpm i && cd ..",
     "install:front": "cd front && pnpm i && cd ..",
     "install:processing": "pnpm install:processing:prepare && pnpm install:processing:deps && pnpm install:processing:cli",
     "install:processing:windows": "pnpm install:processing:prepare:windows && pnpm install:processing:deps:windows && pnpm install:processing:cli:windows",
@@ -33,10 +35,7 @@
     "install:processing:cli:windows": "python.exe -m pip install .\\processing\\",
     "process": ". venv/bin/activate && python processing/processing/main.py",
     "process:windows": "python.exe .\\processing\\processing\\main.py",
-    "release:prepare": "pnpm release:prepare:archive-examples && pnpm release:prepare:increment-front-version && pnpm release:prepare:increment-processing-version",
     "release:prepare:archive-examples": "bin/archive-examples.sh",
-    "release:prepare:increment-front-version": "bin/increment-front-version.sh",
-    "release:prepare:increment-processing-version": "bin/increment-processing-version.sh",
     "start": "pnpm dev",
     "test:git:unix": "bin/test-git.sh",
     "test:git:windows": "bin/test-git.ps1",
@@ -47,14 +46,23 @@
     "test:pnpm:unix": "bin/test-pnpm.sh",
     "test:pnpm:windows": "bin/test-pnpm.ps1",
     "test:python:unix": "bin/test-python.sh",
-    "test:python:windows": "bin/test-python.ps1"
+    "test:python:windows": "bin/test-python.ps1",
+    "vis": "pnpm visualisation",
+    "vis:build": "pnpm visualisation:build",
+    "vis:prebuild": "pnpm visualisation:prebuild",
+    "vis:prebuild:windows": "pnpm visualisation:prebuild:windows",
+    "vis:prepare-bins": "pnpm visualisation:prepare-bins",
+    "visualisation": "cd visualisation && npm run start",
+    "visualisation:build": "cd visualisation && npm run make",
+    "visualisation:prebuild": "pnpm visualisation:prebuild:clean && pnpm front:build:electron && pnpm audio:build:electron && pnpm visualisation:prebuild:move",
+    "visualisation:prepare-bins": "cp /usr/bin/node visualisation/bin && cp /usr/bin/ffmpeg visualisation/bin && cp /usr/bin/ffprobe visualisation/bin",
+    "visualisation:prebuild:windows": "pnpm visualisation:prebuild:clean && pnpm front:build:electron && pnpm audio:build:electron && pnpm visualisation:prebuild:move:windows",
+    "visualisation:prebuild:clean": "rimraf visualisation/audio && rimraf visualisation/front",
+    "visualisation:prebuild:move": "mv audio/dist visualisation/audio && mv front/dist visualisation/front",
+    "visualisation:prebuild:move:windows": "move .\\audio\\dist .\\visualisation\\audio & move .\\front\\dist .\\visualisation\\front"
   },
   "devDependencies": {
-    "concurrently": "^8.0.1",
     "rimraf": "^5.0.1"
   },
-  "version": "12.3.0",
-  "dependencies": {
-    "serve": "^14.2.1"
-  }
+  "version": "12.3.0"
 }

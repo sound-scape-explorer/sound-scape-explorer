@@ -3,7 +3,7 @@ import Plotly, {type Config, type Layout} from 'plotly.js-dist-min';
 import {digestedRef} from 'src/components/Digested/useDigested';
 import {settingsStore} from 'src/components/Settings/settingsStore';
 import {type HeatmapData, useHeatmapData} from 'src/hooks/useHeatmapData';
-import {useHeatmapLayout} from 'src/hooks/useHeatmapLayout';
+import {plotlyFontSizeRef, useHeatmapLayout} from 'src/hooks/useHeatmapLayout';
 import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {usePlotConfig} from 'src/hooks/usePlotConfig';
 import {ref, watch} from 'vue';
@@ -60,8 +60,8 @@ const render = async () => {
 const refresh = () => {
   const data = generateData({
     colorscale: props.colorscale,
-    x: props.labels,
-    y: props.labels,
+    x: props.labels.map((l) => l.trim()),
+    y: props.labels.map((l) => l.trim()),
     z: props.values,
     zmin: props.range.min,
     zmax: props.range.max,
@@ -79,7 +79,10 @@ const refresh = () => {
 refresh();
 watch([divRef, dataRef, layoutRef], render);
 watch(props, refresh);
-watch([heatmapWidthRef, heatmapHeightRef, settingsStore], refresh);
+watch(
+  [heatmapWidthRef, heatmapHeightRef, settingsStore, plotlyFontSizeRef],
+  refresh,
+);
 </script>
 
 <template>

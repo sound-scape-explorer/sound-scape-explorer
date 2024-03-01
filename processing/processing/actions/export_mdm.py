@@ -1,11 +1,11 @@
 import numpy as np
 
+from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.config.Config import Config
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
-from processing.storage.StoragePath import StoragePath
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_integration import ask_integration
 from processing.utils.ask_npy_path import ask_npy_path
@@ -30,14 +30,9 @@ def export_mdm(
     band = ask_band(bands)
     integration = ask_integration(integrations)
 
-    path = (
-        f"{StoragePath.mean_distances_matrix.value}/{band.name}/{integration.seconds}"
-    )
-    mdm = storage.read(path)
-
-    matrix = np.array(mdm)
+    mdm = MeanDistancesMatrix.read_from_storage(storage, band, integration)
     npy_path = ask_npy_path(config)
-    np.save(npy_path, matrix)
+    np.save(npy_path, mdm)
 
     print_action("Mean distances matrix export completed!", "end")
     invoke_menu(storage, callback)
