@@ -1,3 +1,15 @@
+# [13.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.0.0...v13.1.0) (2024-03-11)
+
+
+### Bug Fixes
+
+* **Release:** Fix pipelines ([1cca474](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1cca47404b9c4c8153326664e4aafe71aa68e5ed))
+
+
+### Features
+
+* **Processing:** Migrate to pyproject.toml ([8d58b3b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8d58b3b6b50949b22b823803be45002c44f7d9bc))
+
 # [13.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v12.3.0...v13.0.0) (2024-03-01)
 
 
