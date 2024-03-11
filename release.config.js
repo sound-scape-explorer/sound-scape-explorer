@@ -21,7 +21,12 @@ module.exports = {
         npmPublish: false,
       },
     ],
-    ["semantic-release-pypi"],
+    [
+      "semantic-release-pypi",
+      {
+        srcDir: "processing",
+      },
+    ],
     [
       "@semantic-release/github",
       {
@@ -45,7 +50,7 @@ module.exports = {
         assets: [
           "CHANGELOG.md",
           "package.json",
-          "processing/setup.py",
+          "processing/pyproject.toml",
           "front/src/version.ts",
           "audio/src/version.ts",
           "visualisation/src/version.ts",
