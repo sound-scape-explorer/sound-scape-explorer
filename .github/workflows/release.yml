@@ -49,6 +49,7 @@ jobs:
         run: semantic-release --dry-run
         env:
           GH_TOKEN: ${{ secrets.PAT }}
+          PYPI_TOKEN: ${{secrets.PYPI_TOKEN}}
       - name: store next version to env
         run: echo "NEXT_VERSION=$(cat .VERSION)" >> $GITHUB_ENV
 
@@ -127,6 +128,7 @@ jobs:
         run: semantic-release --dry-run
         env:
           GH_TOKEN: ${{ secrets.PAT }}
+          PYPI_TOKEN: ${{secrets.PYPI_TOKEN}}
       - name: store next version to env
         run: echo "NEXT_VERSION=$(cat .VERSION)" >> $GITHUB_ENV
 
@@ -203,6 +205,7 @@ jobs:
         run: semantic-release --dry-run
         env:
           GH_TOKEN: ${{ secrets.PAT }}
+          PYPI_TOKEN: ${{secrets.PYPI_TOKEN}}
       - name: store next version to env
         run: echo ("NEXT_VERSION=" + (cat .\.VERSION)).Trim() >> $env:GITHUB_ENV
 
@@ -272,6 +275,7 @@ jobs:
         run: semantic-release --dry-run
         env:
           GH_TOKEN: ${{ secrets.PAT }}
+          PYPI_TOKEN: ${{secrets.PYPI_TOKEN}}
       - name: store next version to env
         run: echo "NEXT_VERSION=$(cat .VERSION)" >> $GITHUB_ENV
       - name: update modules versions to next version
@@ -304,3 +308,4 @@ jobs:
         run: semantic-release -b main
         env:
           GH_TOKEN: ${{ secrets.PAT }}
+          PYPI_TOKEN: ${{secrets.PYPI_TOKEN}}
