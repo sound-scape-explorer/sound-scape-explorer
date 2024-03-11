@@ -197,7 +197,8 @@ jobs:
             @semantic-release/exec `
             @semantic-release/changelog `
             @semantic-release/npm `
-            @qiwi/semantic-release-gh-pages-plugin
+            @qiwi/semantic-release-gh-pages-plugin `
+            semantic-release-pypi
       - name: get next version
         run: semantic-release --dry-run
         env:
