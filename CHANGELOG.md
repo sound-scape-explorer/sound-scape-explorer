@@ -1,3 +1,13 @@
+## [13.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.0...v13.1.1) (2024-03-11)
+
+
+### Bug Fixes
+
+* **App:** Add new python build process + Purge old files ([1a8b508](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1a8b508c1f67085ab0c6c976cf6080bc7d22aec0))
+* **Release:** Add pypi token to env variables ([30a3a36](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/30a3a3615a9ff35d19e3974292c1d25b845ad174))
+* **Release:** Avoid appending comma when replacing pyproject version to next ([a1e384f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a1e384f3802b4b4043fdfae008ebf91110b89580))
+* **Release:** Specify src dir and commit next pyproject.toml ([dfda5b6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dfda5b64265679bfe0b4081142d89a9790a82e59))
+
 # [13.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.0.0...v13.1.0) (2024-03-11)
 
 
