@@ -1,3 +1,13 @@
+## [13.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.1...v13.1.2) (2024-03-12)
+
+
+### Bug Fixes
+
+* **App:** Add new venv scripts for easy processing installation & activation ([096aeb7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/096aeb78451db81db4ce1027f44ca21d3654bf5a))
+* **Front/Settings:** Use explicit preview tag ([3d5effc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3d5effc77210e88d50885c4696a84b549d1f0488))
+* **Front:** Remove old docker files ([36992ff](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/36992ff028093a5c41bbd82e39319fee7b909def))
+* **Processing:** Add `soundfile` backend for Windows systems ([081f3b4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/081f3b4a7e977ecc5d553c1a4886fe4a94c78061))
+
 ## [13.1.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.0...v13.1.1) (2024-03-11)
 
 

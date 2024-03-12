@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="13.1.1"
+version="13.1.2"
 venv="sse-venv-$version"
 script="$venv/bin/activate"
 
