@@ -129,7 +129,7 @@ const plotBackgroundOptionsRef = computed(() => {
           :bordered="false"
           size="small"
         >
-          Preview
+          Preview beta features
         </n-tag>
         <n-checkbox
           v-model:checked="settingsStore.preview"

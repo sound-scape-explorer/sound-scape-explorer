@@ -25,6 +25,7 @@ dependencies = [
   "mutagen==1.46.0",
   "rich==13.5.2",
   "inquirerpy==0.3.4",
+  "soundfile==0.12.1",
 ]
 
 [project.scripts]

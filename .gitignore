@@ -22,3 +22,7 @@ config.xlsx
 !examples/campaigns/new-campaign/config.xlsx
 
 examples/*.zip
+
+sse-venv-*
+!sse-venv-*.bat
+!sse-venv-*.sh
