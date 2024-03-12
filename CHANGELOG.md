@@ -1,3 +1,11 @@
+## [13.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.2...v13.1.3) (2024-03-12)
+
+
+### Bug Fixes
+
+* **Bin:** Remove unneeded system requirements for ubuntu systems ([c9122fc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c9122fcfaa50d2c0f66d57ef3ff653fc1c5b70f0))
+* **Bin:** Rename requirements file for ubuntu systems ([db2f8b0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/db2f8b03e3c843b774d902cabb790deadad02164))
+
 ## [13.1.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.1...v13.1.2) (2024-03-12)
 
 
