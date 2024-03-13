@@ -1,3 +1,11 @@
+## [13.1.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.4...v13.1.5) (2024-03-13)
+
+
+### Bug Fixes
+
+* **Bin:** Fix typo when incrementing version for venv script for linux ([04fa7d7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/04fa7d7fb1664757e9fa04f17b700a78566baa23))
+* **Bin:** Fix venv scripts and incrementing script for linux ([98a5449](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/98a5449a5b3e33aae24b40ec4bd9d00f5d17f831))
+
 ## [13.1.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.3...v13.1.4) (2024-03-13)
 
 
