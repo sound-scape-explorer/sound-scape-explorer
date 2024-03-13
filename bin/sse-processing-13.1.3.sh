@@ -1,7 +1,7 @@
 #!/bin/bash
 
 version="13.1.3"
-venv="sse-venv-$version"
+venv="sse-processing-$version"
 script="$venv/bin/activate"
 
 function activate() {

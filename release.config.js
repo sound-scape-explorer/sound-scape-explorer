@@ -54,8 +54,8 @@ module.exports = {
           "front/src/version.ts",
           "audio/src/version.ts",
           "visualisation/src/version.ts",
-          "sse-venv-*.bat",
-          "sse-venv-*.sh",
+          "bin/sse-processing-*.bat",
+          "bin/sse-processing-*.sh",
         ],
         // eslint-disable-next-line no-template-curly-in-string
         message:
