@@ -1,3 +1,12 @@
+## [13.1.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.3...v13.1.4) (2024-03-13)
+
+
+### Bug Fixes
+
+* **Bin:** Add curl to installed requirements ([a2f416e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a2f416e2158bf5db6c363e821971c600a0d5b0ed))
+* **Bin:** Rename sse-venv scripts to sse-processing and move to bin folder ([1c88818](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1c88818f45a93c581dd9c91e15a670a09e3d87b6))
+* **Processing/Utils:** Sanitize Windows paths when auto filling config ([6085bd0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6085bd0ed66321f8ff4d73cb372685c20dae9981))
+
 ## [13.1.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.2...v13.1.3) (2024-03-12)
 
 
