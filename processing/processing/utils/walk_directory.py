@@ -1,16 +1,22 @@
 import os
+import platform
 from typing import List
 
 
 def walk_directory(path: str) -> List[str]:
-    absolute_paths = []
+    relative_paths = []
     supported_formats = [".wav", ".mp3", ".flac"]
 
-    for dir_path, dir_names, filenames in os.walk(path):
+    for dir_path, _, filenames in os.walk(path):
         for f in filenames:
             for format_ in supported_formats:
                 if f.endswith(format_):
-                    absolute_paths.append(os.path.join(dir_path, f))
+                    absolute_path = os.path.join(dir_path, f)
+                    relative_path = absolute_path.replace(path, "")
 
-    relative_paths = [p.replace(path, "") for p in absolute_paths]
+                    if platform.system() == "Windows":
+                        relative_path = relative_path.replace("\\", "/")
+
+                    relative_paths.append(relative_path)
+
     return relative_paths
