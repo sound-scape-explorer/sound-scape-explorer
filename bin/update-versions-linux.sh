@@ -14,8 +14,8 @@ sed -i 's/version = \(.\)*/version = \"'"$NEXT_VERSION"'\"/' processing/pyprojec
 
 # venv script for Windows
 mv bin/sse-processing-*.bat bin/sse-processing-"$NEXT_VERSION".bat
-sed -i 's/set version=\(.\)*/set version='$NEXT_VERSION'/' sse-processing-"$NEXT_VERSION".bat
+sed -i 's/set version=\(.\)*/set version='$NEXT_VERSION'/' bin/sse-processing-"$NEXT_VERSION".bat
 
 # venv script for Linux
 mv bin/sse-processing-*.sh bin/sse-processing-"$NEXT_VERSION".sh
-sed -i 's/version=\(.\)*/version=\"'$NEXT_VERSION'\"/' sse-processing-"$NEXT_VERSION".sh
+sed -i 's/version=\(.\)*/version=\"'$NEXT_VERSION'\"/' bin/sse-processing-"$NEXT_VERSION".sh
