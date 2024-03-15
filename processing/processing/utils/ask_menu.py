@@ -11,8 +11,8 @@ from processing.utils.wrap_menu_choice_with_state import wrap_menu_choice_with_s
 
 def ask_menu(
     storage: Storage,
-    last_choice: Optional[str] = None,
-) -> str:
+    last_choice: Optional[MenuChoice] = None,
+) -> MenuChoice:
     print_menu_legend()
 
     questions = [
@@ -46,5 +46,5 @@ def ask_menu(
     ]
 
     answers = prompt(questions=questions, vi_mode=True)
-    answer: str = str(answers["choices"])
+    answer: MenuChoice = str(answers["choices"])  # type: ignore
     return answer

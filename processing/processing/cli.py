@@ -6,6 +6,7 @@ import sys
 from processing.main import main
 from processing.utils.append_to_config import append_to_config
 from processing.utils.extract_config_from_storage import extract_config_from_storage
+from processing.utils.prettify_exceptions import prettify_exceptions
 from processing.utils.read_audio_path_from_config import read_audio_path_from_config
 from processing.utils.walk_directory import walk_directory
 
@@ -33,16 +34,17 @@ def parse_arguments() -> str:
 def start_processing():
     update_python_path()
     config_path = parse_arguments()
-
     main(config_path=config_path)
 
 
+@prettify_exceptions
 def extract_config():
     update_python_path()
     storage_path = parse_arguments()
     extract_config_from_storage(storage_path)
 
 
+@prettify_exceptions
 def fill_config():
     update_python_path()
     config_path = parse_arguments()
