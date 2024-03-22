@@ -1,3 +1,11 @@
+## [13.1.6](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.5...v13.1.6) (2024-03-22)
+
+
+### Bug Fixes
+
+* **Examples:** Update campaigns configurations and datasets ([8cf862c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8cf862c318e1a6434b8c653ca427dd4c9b3b042c))
+* **Processing:** Use decorator to intercept and prettify exceptions ([0c82ebc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0c82ebcbc098e20b808f72449d695ab187d7458c))
+
 ## [13.1.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.4...v13.1.5) (2024-03-13)
 
 
