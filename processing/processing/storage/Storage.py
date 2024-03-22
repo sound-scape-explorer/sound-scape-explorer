@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import numpy
 from h5py import Dataset, File
+from rich import print
 
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
@@ -25,10 +26,15 @@ class Storage:
                 self.path,
                 StorageMode.rw_or_create.value,
             )
+            print("success")
         except BlockingIOError:
+            print("blocking error")
             raise RuntimeError(f"Unable to load file {self.path}.")
         except TypeError:
+            print("type error")
             raise FileNotFoundError(f"Unable to find file {self.path}.")
+        except OSError:
+            raise TypeError(f"Unable to load file {self.path}.")
 
     def close(self) -> None:
         self.__file.close()
@@ -177,9 +183,9 @@ class Storage:
             dataset = self.__file.create_dataset(
                 name=path,
                 data=data,
-                compression=StorageCompression.gzip.value
-                if compression is True
-                else None,
+                compression=(
+                    StorageCompression.gzip.value if compression is True else None
+                ),
                 chunks=True,
                 shape=(length, dimensions),
                 maxshape=(None, dimensions),
