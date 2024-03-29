@@ -1,4 +1,4 @@
-from typing import Dict, List, Literal
+from typing import Dict, List, Literal, Optional
 
 import numpy as np
 import pydub
@@ -12,9 +12,13 @@ from processing.loaders.Spectrogram import Spectrogram
 FilteredKey = str
 SoundSliceStartEnd = str
 SpectrogramMode = Literal["psd", "amplitude"]
+Spectrograms = Dict[SpectrogramMode, Dict[SoundSliceStartEnd, Spectrogram]]
 
 
 class SoundLoader:
+    __audio: Optional[AudioSegment] = None
+    __sample_rate: Optional[int] = None
+
     @property
     def audio(self) -> AudioSegment:
         assert self.__audio is not None, "Please load file"
@@ -57,11 +61,10 @@ class SoundLoader:
         self.__filtered: Dict[FilteredKey, List[float]] = {}
 
     def __initialize_spectrogram(self):
-        self.__spectrograms: Dict[
-            SpectrogramMode, Dict[SoundSliceStartEnd, Spectrogram]
-        ] = {}
-        self.__spectrograms["psd"] = {}
-        self.__spectrograms["amplitude"] = {}
+        self.__spectrograms: Spectrograms = {
+            "psd": {},
+            "amplitude": {},
+        }
 
     def load(self, file: FileConfig):
         # print(f"SoundLoader: file index {file.index}")
@@ -86,7 +89,7 @@ class SoundLoader:
         return slice_
 
     def get_filtered(self, band: BandConfig):
-        import maad
+        from maad import sound
 
         kf = f"{band.low}-{band.high}"
 
@@ -95,7 +98,7 @@ class SoundLoader:
 
         samples = self.audio.get_array_of_samples()
 
-        filtered: np.ndarray = maad.sound.select_bandwidth(
+        filtered: np.ndarray = sound.select_bandwidth(
             x=samples,
             fs=self.sample_rate,
             fcut=[band.low, band.high],
@@ -112,14 +115,14 @@ class SoundLoader:
         slice_: SoundSlice,
         mode: SpectrogramMode = "psd",
     ) -> Spectrogram:
-        import maad
+        from maad import sound
 
         ks = f"{slice_.start}-{slice_.end}"
 
         if ks in self.__spectrograms[mode].keys():
             return self.__spectrograms[mode][ks]
 
-        s, tn, fn, ext = maad.sound.spectrogram(
+        s, tn, fn, ext = sound.spectrogram(
             x=np.array(slice_.sound),
             fs=self.sample_rate,
             mode=mode,

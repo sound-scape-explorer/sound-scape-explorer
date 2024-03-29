@@ -6,14 +6,14 @@ class BioacousticsIndexExtractor(Extractor):
     """bi"""
 
     def extract(self, loader: Loader):
-        import maad
+        from maad import features
 
         data = []
 
         for slice_ in self.sound_walk(loader):
             spectrogram = loader.sound.get_spectrogram(slice_, "amplitude")
 
-            bi = maad.features.bioacoustics_index(
+            bi = features.bioacoustics_index(
                 Sxx=spectrogram.s,
                 fn=spectrogram.fn,
             )

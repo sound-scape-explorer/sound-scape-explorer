@@ -6,14 +6,14 @@ class SoundscapeIndexExtractor(Extractor):
     """ndsi"""
 
     def extract(self, loader: Loader):
-        import maad
+        from maad import features
 
         data = []
 
         for slice_ in self.sound_walk(loader):
             spectrogram = loader.sound.get_spectrogram(slice_)
 
-            ndsi, _, _, _ = maad.features.soundscape_index(
+            ndsi, _, _, _ = features.soundscape_index(
                 Sxx_power=spectrogram.s,
                 fn=spectrogram.fn,
             )

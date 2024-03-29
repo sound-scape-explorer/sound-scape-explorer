@@ -6,12 +6,12 @@ class TemporalEntropyExtractor(Extractor):
     """ht"""
 
     def extract(self, loader: Loader):
-        import maad
+        from maad import features
 
         data = []
 
         for slice_ in self.sound_walk(loader):
-            temporal_entropy = maad.features.temporal_entropy(slice_.sound)
+            temporal_entropy = features.temporal_entropy(slice_.sound)
             data.append([temporal_entropy])
 
         return data
