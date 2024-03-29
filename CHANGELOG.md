@@ -1,3 +1,11 @@
+## [13.1.7](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.6...v13.1.7) (2024-03-29)
+
+
+### Bug Fixes
+
+* **Examples:** Create test campaign for Processing E2E all features ([d2cd23f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d2cd23fc976e7f6a4271c46acfb78a7a4ab578c3))
+* **Processing:** Fix maad regression + Use latest version of maad ([49bb086](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/49bb086ef992adafca47007a9dcdf592b285370d))
+
 ## [13.1.6](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.5...v13.1.6) (2024-03-22)
 
 
