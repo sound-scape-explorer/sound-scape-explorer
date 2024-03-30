@@ -129,7 +129,7 @@ class ReducerConfig:
 
         ranges_names = ranges_names_string.split(",")
 
-        picked_ranges = [range for range in ranges if range.name in ranges_names]
+        picked_ranges = [range_ for range_ in ranges if range_.name in ranges_names]
 
         return picked_ranges
 

@@ -19,7 +19,7 @@ def print_labels(labels: List[LabelConfig]):
         table.add_row(
             str(label.index),
             label.property,
-            ", ".join([unique for unique in label.uniques]),
+            ", ".join([unique for unique in label.uniques_sorted]),
             str(len(label.values)),
         )
 

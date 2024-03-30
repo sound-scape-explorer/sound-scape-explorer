@@ -10,7 +10,7 @@ def convert_date_to_timestamp(date_string: Union[Timestamp, str]) -> int:
     The resulting timestamp is in UNIX format and milliseconds.
 
     Args:
-        date: A pandas Timestamp object.
+        date_string: A pandas Timestamp object.
 
     Returns:
         The timestamp in milliseconds as an integer.

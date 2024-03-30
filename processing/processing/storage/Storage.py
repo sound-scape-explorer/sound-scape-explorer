@@ -50,8 +50,8 @@ class Storage:
         path = str(path)
         return path
 
+    @staticmethod
     def __write_version_to_dataset(
-        self,
         dataset: Dataset,
     ) -> Dataset:
         # Attach app version to all datasets

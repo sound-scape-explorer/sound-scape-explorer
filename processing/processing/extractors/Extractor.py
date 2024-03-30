@@ -31,9 +31,8 @@ class Extractor(ABC):
         return self.__expected_sample_rate
 
     @expected_sample_rate.setter
-    def expected_sample_rate(self, expected_sample_rate: int) -> int:
+    def expected_sample_rate(self, expected_sample_rate: int):
         self.__expected_sample_rate = expected_sample_rate
-        return self.__expected_sample_rate
 
     @property
     def band(self) -> BandConfig:
@@ -41,9 +40,8 @@ class Extractor(ABC):
         return self.__band
 
     @band.setter
-    def band(self, band: BandConfig) -> BandConfig:
+    def band(self, band: BandConfig):
         self.__band = band
-        return self.__band
 
     @property
     def offset(self) -> int:
@@ -51,9 +49,8 @@ class Extractor(ABC):
         return self.__offset
 
     @offset.setter
-    def offset(self, offset: int) -> int:
+    def offset(self, offset: int):
         self.__offset = offset
-        return self.__offset
 
     @property
     def step(self) -> int:
@@ -61,9 +58,8 @@ class Extractor(ABC):
         return self.__step
 
     @step.setter
-    def step(self, step: int) -> int:
+    def step(self, step: int):
         self.__step = step
-        return self.__step
 
     @abstractmethod
     def extract(self, loader: Loader) -> Extracted:

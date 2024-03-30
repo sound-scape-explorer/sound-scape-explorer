@@ -12,18 +12,18 @@ def validate_trajectory_labels(
 ) -> None:
     files_properties, files_values = LabelConfig.flatten(labels)
 
-    for i, property in enumerate(properties):
-        if property not in files_properties:
+    for i, property_ in enumerate(properties):
+        if property_ not in files_properties:
             raise TrajectoryConfigError(
-                f"Property {property} not found in files for trajectory {names[i]}."
+                f"Property {property_} not found in files for trajectory {names[i]}."
             )
 
-        property_index = files_properties.index(property)
+        property_index = files_properties.index(property_)
         value = values[i]
         files_value = files_values[property_index]
 
         if value not in files_value:
             raise TrajectoryConfigError(
                 f"Value {value} not found in files for property"
-                f" {property} for trajectory {names[i]}."
+                f" {property_} for trajectory {names[i]}."
             )
