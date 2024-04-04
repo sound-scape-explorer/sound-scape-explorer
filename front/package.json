@@ -2,7 +2,7 @@
   "name": "sound-scape-explorer--front",
   "private": true,
   "scripts": {
-    "dev": "vite --port 5530 --host 0.0.0.0 --open",
+    "dev": "vite --port 5530 --host 0.0.0.0",
     "build": "pnpm build:clean && pnpm build:run:dev",
     "build:clean": "rimraf dist",
     "build:electron": "pnpm build:clean && pnpm build:run:electron",
