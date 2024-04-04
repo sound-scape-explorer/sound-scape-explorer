@@ -29,7 +29,7 @@ export function useDate() {
   };
 
   const convertTimestampToIsoDate = (timestamp: number): string => {
-    const date = dayjs(timestamp);
+    const date = convertTimestampToDate(timestamp);
     return date.format(DATE_FORMAT);
   };
 

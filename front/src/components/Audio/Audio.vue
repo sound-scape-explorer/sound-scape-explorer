@@ -29,6 +29,7 @@ import {
 import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
+import {useDate} from 'src/hooks/useDate';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -37,6 +38,7 @@ import {clickedRef} from '../Scatter/useScatterClick';
 import {audioBlockRef} from './useAudioFile';
 
 const {intervalDateRef} = useDetails();
+const {convertDateToIsoDate} = useDate();
 
 const {
   waveformContainerRef,
@@ -77,43 +79,43 @@ const {downloadAudio} = useAudioDownload();
         </AudioButton>
 
         <AudioButton
-          alt="Stop"
           :callback="stop"
+          alt="Stop"
         >
           <stop-outline />
         </AudioButton>
 
         <AudioButton
-          alt="Volume Up"
           :callback="increaseVolume"
+          alt="Volume Up"
         >
           <volume-high-outline />
         </AudioButton>
 
         <AudioButton
-          alt="Volume Down"
           :callback="decreaseVolume"
+          alt="Volume Down"
         >
           <volume-low-outline />
         </AudioButton>
 
         <AudioButton
-          alt="FFT Size Up"
           :callback="increaseFftSize"
+          alt="FFT Size Up"
         >
           <add-outline />
         </AudioButton>
 
         <AudioButton
-          alt="FFT Size Down"
           :callback="decreaseFftSize"
+          alt="FFT Size Down"
         >
           <remove-outline />
         </AudioButton>
 
         <AudioButton
-          alt="Download"
           :callback="downloadAudio"
+          alt="Download"
         >
           <arrow-down-outline />
         </AudioButton>
@@ -177,7 +179,7 @@ const {downloadAudio} = useAudioDownload();
             Interval Date
           </n-tag>
 
-          {{ intervalDateRef }}
+          {{ intervalDateRef && convertDateToIsoDate(intervalDateRef) }}
         </n-gi>
       </n-grid>
 
