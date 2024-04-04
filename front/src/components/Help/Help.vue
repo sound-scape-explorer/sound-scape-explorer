@@ -7,26 +7,18 @@ import {VERSION} from 'src/version';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 
 interface Shortcut {
-  key: string;
+  keycode: string;
   name: string;
 }
 
-const shortcuts: Shortcut[] = [
-  {key: KeyboardShortcut.import, name: 'Import'},
-  {key: KeyboardShortcut.settings, name: 'Settings'},
-  {key: KeyboardShortcut.help, name: 'Help'},
-  {key: KeyboardShortcut.selection, name: 'Selection'},
-  {key: KeyboardShortcut.trajectories, name: 'Trajectories'},
-  {key: KeyboardShortcut.colors, name: 'Colors'},
-  {key: KeyboardShortcut.time, name: 'Time'},
-  {key: KeyboardShortcut.audio, name: 'Audio'},
-  {key: KeyboardShortcut.labels, name: 'Labels'},
-  {key: KeyboardShortcut.labelsZoom, name: 'Labels: Zoom'},
-  {key: KeyboardShortcut.details, name: 'Details'},
-  {key: KeyboardShortcut.timePlayPause, name: 'Time: Play / Pause'},
-  {key: KeyboardShortcut.timeBackward, name: 'Time: Next'},
-  {key: KeyboardShortcut.timeForward, name: 'Time: Previous'},
-];
+const shortcuts: Shortcut[] = Object.entries(KeyboardShortcut).map((entry) => {
+  const [name, keycode] = entry;
+
+  return {
+    keycode: keycode,
+    name: name,
+  };
+});
 
 const openDocumentation = () => {
   window.open('https://sound-scape-explorer.github.io');
@@ -65,7 +57,7 @@ const openDocumentation = () => {
             class="key"
             size="small"
           >
-            {{ shortcut.key }}
+            {{ shortcut.keycode }}
           </n-tag>
 
           {{ shortcut.name }}
