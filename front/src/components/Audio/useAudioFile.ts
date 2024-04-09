@@ -88,26 +88,16 @@ export function useAudioFile() {
       const response = await fetch(url);
 
       if (response.status !== 200) {
-        notify(
-          'error',
-          'Failed to fetch audio',
-          `${response.status}: ${response.statusText}`,
-        );
-        console.error(
-          'Failed to fetch audio:',
-          response.status,
-          response.statusText,
-        );
-        return;
+        // noinspection ExceptionCaughtLocallyJS
+        throw new Error(`Failed to fetch audio at ${url}`);
       }
 
       const arrayBuffer = await response.arrayBuffer();
       audioFileBitDepthRef.value = getBitDepthFromWav(arrayBuffer);
 
       if (arrayBuffer.byteLength === 0) {
-        notify('error', 'Empty audio data', '');
-        console.error('Empty audio data');
-        return;
+        // noinspection ExceptionCaughtLocallyJS
+        throw new Error('Empty audio data');
       }
 
       const audioBuffer = await audioContextRef.value.decodeAudioData(
@@ -120,11 +110,10 @@ export function useAudioFile() {
       const blob = new Blob([wav]);
       loadBlob(blob);
     } catch (error) {
+      notify('error', 'Failed to load audio', `${error}`);
+
       appDraggablesStore.audio = false;
       audioIsLoadingRef.value = false;
-
-      notify('error', 'Failed to load audio', `${error}`);
-      console.error(error);
     }
   };
 

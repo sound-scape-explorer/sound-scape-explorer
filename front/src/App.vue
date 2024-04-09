@@ -1,7 +1,12 @@
 <script lang="ts" setup>
 import 'sass-reset';
 
-import {NLayout, NNotificationProvider, NSpace} from 'naive-ui';
+import {
+  NLayout,
+  NMessageProvider,
+  NNotificationProvider,
+  NSpace,
+} from 'naive-ui';
 
 import AppNotification from './components/AppNotification/AppNotification.vue';
 import Loading from './components/Loading/Loading.vue';
@@ -21,11 +26,13 @@ import Explore from './pages/Explore.vue';
 
       <n-layout>
         <n-notification-provider>
-          <AppNotification />
+          <n-message-provider>
+            <AppNotification />
 
-          <Suspense>
-            <Explore />
-          </Suspense>
+            <Suspense>
+              <Explore />
+            </Suspense>
+          </n-message-provider>
         </n-notification-provider>
       </n-layout>
     </n-layout>

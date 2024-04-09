@@ -1,11 +1,15 @@
 <script lang="ts" setup>
 import type {NotificationType} from 'naive-ui';
-import {useNotification} from 'naive-ui';
-import {watch} from 'vue';
+import {NButton, useMessage, useNotification} from 'naive-ui';
+import {h, watch} from 'vue';
 
-import {ALERT_TIMER} from '../../constants';
+import {ALERT_TIMER, LINK_BUG_REPORT} from '../../constants';
+import {combineStringsWithBreaks} from '../../utils/combine-strings-with-breaks';
+import {copyToClipboard} from '../../utils/copy-to-clipboard';
+import {VERSION} from '../../version';
 import {appNotificationsStore} from './appNotificationsStore';
 
+const message = useMessage();
 const notification = useNotification();
 
 function render(
@@ -13,11 +17,49 @@ function render(
   title: string,
   description: string,
 ): void {
-  notification[type]({
-    content: title,
-    meta: description,
-    duration: ALERT_TIMER,
+  const isError = type === 'error';
+  let isCopied = false;
+
+  const n = notification[type]({
+    content: description,
+    meta: title,
+    duration: !isError ? ALERT_TIMER : undefined,
     keepAliveOnHover: true,
+    action: !isError
+      ? undefined
+      : () => {
+        return h(
+          NButton,
+          {
+            text: true,
+            type: 'primary',
+            onClick: () => {
+              isCopied = true;
+              const message = combineStringsWithBreaks([
+                `version=${VERSION}`,
+                `type=${type}`,
+                '---',
+                title,
+                description,
+              ]);
+              copyToClipboard(message);
+              window.open(LINK_BUG_REPORT);
+              n.destroy();
+            },
+          },
+          {
+            default: () => 'Copy error & open bug report',
+          },
+        );
+      },
+    onClose: !isError
+      ? undefined
+      : () => {
+        if (!isCopied) {
+          message.warning('Please copy error first');
+          return false;
+        }
+      },
   });
 }
 
