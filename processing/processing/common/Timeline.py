@@ -62,8 +62,8 @@ class Timeline:
         for existing_block in existing_interval.blocks:
             if block.start <= existing_block.end or block.end <= existing_block.start:
                 raise ValueError(
-                    f"Unable to add duplicate file {block.file.index}"
-                    f" overlaping with file {existing_block.file.index}"
+                    f"Unable to add duplicate file #{block.file.index}."
+                    f" Interval overlapping with file #{existing_block.file.index}."
                 )
 
     def add_interval(self, interval: Interval) -> TimelineMap:
