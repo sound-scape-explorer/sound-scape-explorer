@@ -1,3 +1,17 @@
+## [13.1.8](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.7...v13.1.8) (2024-04-09)
+
+
+### Bug Fixes
+
+* **Front/AppNotification:** Show copy and bug report button on error notifications ([eb74aee](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb74aee7fe5fcec8ea2e7e7648503e875baf9452))
+* **Front/Audio:** Improve audio endpoint generation ([34b5695](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/34b5695ee79dd8e0bed3c54346db3aff406ef7d8))
+* **Issues:** Improve bug report form ([7a1dd27](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7a1dd27161783fd9dcc96c16d8bd47e8528d7c2a))
+* **Processing/Menu:** Move `run all` choice to first position ([d9f6c8e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d9f6c8ea16db2ab6bd8dd7127e6cbc818c5046ee))
+* **Processing/Storage:** Ensure converting numbers to strings when reading from h5 ([dfef938](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dfef93839d7373a3e36c2fbf002afd9c248397fd))
+* **Processing/Storage:** Extract exception ([d494ee4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d494ee4a9e80593a410064c9edbd5e123a2bea0a))
+* **Processing/Storage:** Extract exception and make custom error code ([b7edcfd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b7edcfdab6175d9503b3408281f1f6dd606f1a9e))
+* **Processing/Timeline:** Improve error message for overlapping interval ([62faa01](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/62faa016dec21b3111cb213da7e003518d82cdf2))
+
 ## [13.1.7](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.6...v13.1.7) (2024-03-29)
 
 
