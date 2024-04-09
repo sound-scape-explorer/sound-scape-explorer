@@ -20,6 +20,8 @@ def ask_menu(
             "type": "list",
             "name": "choices",
             "choices": [
+                MenuChoice.RunAll.value,
+                Separator(),
                 wrap_menu_choice_with_state(MenuChoice.RefreshConfig, storage),
                 wrap_menu_choice_with_state(MenuChoice.ExtractAggregate, storage),
                 wrap_menu_choice_with_state(MenuChoice.Reduce, storage),
@@ -31,8 +33,6 @@ def ask_menu(
                 wrap_menu_choice_with_state(MenuChoice.Trace, storage),
                 wrap_menu_choice_with_state(MenuChoice.RelativeTrace, storage),
                 wrap_menu_choice_with_state(MenuChoice.Digest, storage),
-                Separator(),
-                MenuChoice.RunAll.value,
                 Separator(),
                 MenuChoice.ExportDataframe.value,
                 MenuChoice.ExportComputationUmaps.value,
