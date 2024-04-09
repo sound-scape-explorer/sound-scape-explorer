@@ -2,7 +2,7 @@
 name: 🐛 Bug Report
 description: If something isn't working the way you expect it to
 title: 'bug: '
-labels: [needs triage, bug]
+labels: [ needs triage, bug ]
 body:
   - type: markdown
     attributes:
@@ -65,39 +65,17 @@ body:
       placeholder: e.g. SSE 11.3.0
     validations:
       required: true
-  - type: dropdown
-    id: env-os
-    attributes:
-      label: What OS are you seeing the problem on?
-      options: [Windows, macOS, Ubuntu, Other]
-      multiple: true
-    validations:
-      required: true
   - type: input
     id: env-os-version
     attributes:
-      label: What OS version does it have installed?
+      label: What OS and version are you running?
       placeholder: e.g. Debian 12
     validations:
       required: true
   - type: input
     id: env-python
     attributes:
-      label: What Python version does it have installed? Use `python --version`
+      label: What Python version are you using? Use `python --version`
       placeholder: e.g. Python 3.10.13
-    validations:
-      required: true
-  - type: input
-    id: env-node
-    attributes:
-      label: What Node.js version does it have installed? Use `node --version`
-      placeholder: e.g. Node v18.18.2
-    validations:
-      required: true
-  - type: input
-    id: env-pnpm
-    attributes:
-      label: What pnpm version does it have installed? Use `pnpm --version`
-      placeholder: e.g. pnpm 8.10.0
     validations:
       required: true

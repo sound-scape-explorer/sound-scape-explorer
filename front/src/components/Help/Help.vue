@@ -4,6 +4,7 @@ import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {VERSION} from 'src/version';
 
+import {LINK_DOCS} from '../../constants';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 
 interface Shortcut {
@@ -29,7 +30,7 @@ const shortcuts: Shortcut[] = [
 ];
 
 const openDocumentation = () => {
-  window.open('https://sound-scape-explorer.github.io');
+  window.open(LINK_DOCS);
 };
 </script>
 

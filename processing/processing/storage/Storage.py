@@ -4,6 +4,7 @@ import numpy
 from h5py import Dataset, File
 from rich import print
 
+from processing.errors.DatasetTypeError import DatasetTypeError
 from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
 from processing.storage.StoragePath import StoragePath
@@ -242,6 +243,11 @@ class Storage:
         if length == 0:
             return []
 
-        string_list = list(dataset.asstr()[:])
+        if dataset.dtype == "object":  # strings
+            string_list = list(dataset.asstr()[:])
+        elif dataset.dtype == "int64":  # numbers
+            string_list = [str(v) for v in dataset]
+        else:
+            raise DatasetTypeError
 
         return string_list

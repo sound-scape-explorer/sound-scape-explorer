@@ -6,6 +6,7 @@ from processing.common.Interval import Block, Interval
 from processing.config.files.FileConfig import FileConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.sites.SiteConfig import SiteConfig
+from processing.errors.TimelineIntervalOverlapError import TimelineIntervalOverlapError
 from processing.storage.Storage import Storage
 
 TimelineMap = Dict[int, Interval]
@@ -61,10 +62,7 @@ class Timeline:
         existing_interval = self.map[interval.start]
         for existing_block in existing_interval.blocks:
             if block.start <= existing_block.end or block.end <= existing_block.start:
-                raise ValueError(
-                    f"Unable to add duplicate file {block.file.index}"
-                    f" overlaping with file {existing_block.file.index}"
-                )
+                raise TimelineIntervalOverlapError(block.file, existing_block.file)
 
     def add_interval(self, interval: Interval) -> TimelineMap:
         self.map[interval.start] = interval
