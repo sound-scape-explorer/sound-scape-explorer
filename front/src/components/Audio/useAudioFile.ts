@@ -64,7 +64,8 @@ export function useAudioFile() {
       if (
         integrationRef.value === null ||
         audioBlockRef.value === null ||
-        audioContextRef.value === null
+        audioContextRef.value === null ||
+        audioHostRef.value === null
       ) {
         return;
       }
@@ -73,9 +74,18 @@ export function useAudioFile() {
 
       const start = audioBlockRef.value.fileStart;
       const end = start + integrationRef.value.seconds * 1000;
-      const endpoint = `${audioHostRef.value}get?file=${audioBlockRef.value.file}&start=${start}&end=${end}`;
 
-      const response = await fetch(endpoint);
+      let audioHost = audioHostRef.value;
+      if (!audioHost.endsWith('/')) {
+        audioHost = `${audioHost}/`;
+      }
+
+      const url = new URL(`${audioHost}get`);
+      url.searchParams.append('file', audioBlockRef.value.file);
+      url.searchParams.append('start', start.toString());
+      url.searchParams.append('end', end.toString());
+
+      const response = await fetch(url);
 
       if (response.status !== 200) {
         notify(
