@@ -242,6 +242,11 @@ class Storage:
         if length == 0:
             return []
 
-        string_list = list(dataset.asstr()[:])
+        if dataset.dtype == "object":  # strings
+            string_list = list(dataset.asstr()[:])
+        elif dataset.dtype == "int64":  # numbers
+            string_list = [str(v) for v in dataset]
+        else:
+            raise Exception("Unsupported data type")
 
         return string_list
