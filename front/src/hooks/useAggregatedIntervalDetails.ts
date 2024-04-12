@@ -3,8 +3,7 @@ import {reactive} from 'vue';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 // INFO: A block corresponds to one audio
 export interface BlockDetails {
@@ -26,25 +25,26 @@ export const aggregatedIntervalDetailsRef =
   });
 
 export function useAggregatedIntervalDetails() {
-  const readAggregatedIntervalDetails = async () => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
-      extractorRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    aggregatedIntervalDetailsRef.value =
-      await workerRef.value.readAggregatedIntervalDetails(
-        storageFileRef.value,
-        bandRef.value.name,
-        integrationRef.value.seconds,
-        extractorRef.value.index,
-      );
-  };
+  const readAggregatedIntervalDetails = () =>
+    read(async (worker, storage) => {
+      if (
+        bandRef.value === null ||
+        integrationRef.value === null ||
+        extractorRef.value === null
+      ) {
+        return;
+      }
+
+      aggregatedIntervalDetailsRef.value =
+        await worker.readAggregatedIntervalDetails(
+          storage,
+          bandRef.value.name,
+          integrationRef.value.seconds,
+          extractorRef.value.index,
+        );
+    });
 
   const resetAggregatedIntervalDetails = () => {
     aggregatedIntervalDetailsRef.value = null;

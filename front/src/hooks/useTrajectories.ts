@@ -1,9 +1,8 @@
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {reactive, watchEffect} from 'vue';
 
-import {storageFileRef} from './useStorageFile';
 import {useTraced} from './useTraced';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface Trajectory {
   index: number;
@@ -34,6 +33,14 @@ export const selectedTrajectoriesRef = reactive<SelectedTrajectoriesRef>({
 export function useTrajectories() {
   const {readTraced} = useTraced();
   const {renderTraces} = useScatterTraces();
+  const {read} = useWorker();
+
+  const readTrajectories = () =>
+    read(async (worker, storage) => {
+      trajectoriesRef.value = await worker.readTrajectories(storage);
+    });
+
+  watchEffect(readTrajectories);
 
   const selectTrajectories = async (names: string[]) => {
     if (trajectoriesRef.value === null) {
@@ -47,18 +54,6 @@ export function useTrajectories() {
     await readTraced();
     renderTraces();
   };
-
-  const readTrajectories = async () => {
-    if (workerRef.value === null || storageFileRef.value === null) {
-      return;
-    }
-
-    trajectoriesRef.value = await workerRef.value.readTrajectories(
-      storageFileRef.value,
-    );
-  };
-
-  watchEffect(readTrajectories);
 
   const resetTrajectories = () => {
     selectedTrajectoriesRef.value = [];

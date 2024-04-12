@@ -1,7 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 interface VersionRef {
   value: string | null;
@@ -12,13 +11,12 @@ export const versionRef = reactive<VersionRef>({
 });
 
 export function useVersion() {
-  const readVersion = async () => {
-    if (workerRef.value === null || storageFileRef.value === null) {
-      return;
-    }
+  const {read} = useWorker();
 
-    versionRef.value = await workerRef.value.readVersion(storageFileRef.value);
-  };
+  const readVersion = () =>
+    read(async (worker, storage) => {
+      versionRef.value = await worker.readVersion(storage);
+    });
 
   watchEffect(readVersion);
 }

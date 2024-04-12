@@ -1,6 +1,6 @@
 import {reactive, watchEffect} from 'vue';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+
+import {useWorker} from './useWorker';
 
 export interface Site {
   index: number;
@@ -25,13 +25,12 @@ export const sitesRef = reactive<SitesRef>({
 });
 
 export function useSites() {
-  const readSites = async () => {
-    if (workerRef.value === null || storageFileRef.value === null) {
-      return;
-    }
+  const {read} = useWorker();
 
-    sitesRef.value = await workerRef.value.readSites(storageFileRef.value);
-  };
+  const readSites = () =>
+    read(async (worker, storage) => {
+      sitesRef.value = await worker.readSites(storage);
+    });
 
   watchEffect(readSites);
 }

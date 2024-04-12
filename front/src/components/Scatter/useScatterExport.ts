@@ -9,8 +9,6 @@ import {useDate} from 'src/hooks/useDate';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
-import {storageFileRef} from 'src/hooks/useStorageFile';
-import {workerRef} from 'src/hooks/useWorker';
 import {ref} from 'vue';
 
 import {useNotification} from '../AppNotification/useNotification';
@@ -34,8 +32,6 @@ export function useScatterExport() {
 
   const handleScatterExportClick = async () => {
     if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
       bandRef.value === null ||
       integrationRef.value === null ||
       aggregatedTimestampsRef.value === null ||

@@ -3,8 +3,7 @@ import {reactive} from 'vue';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 interface AggregatedFeaturesRef {
   value: number[][] | null;
@@ -15,24 +14,25 @@ export const aggregatedFeaturesRef = reactive<AggregatedFeaturesRef>({
 });
 
 export function useAggregatedFeatures() {
-  const readAggregatedFeatures = async () => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
-      extractorRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    aggregatedFeaturesRef.value = await workerRef.value.readAggregatedFeatures(
-      storageFileRef.value,
-      bandRef.value.name,
-      integrationRef.value.seconds,
-      extractorRef.value.index,
-    );
-  };
+  const readAggregatedFeatures = () =>
+    read(async (worker, storage) => {
+      if (
+        bandRef.value === null ||
+        integrationRef.value === null ||
+        extractorRef.value === null
+      ) {
+        return;
+      }
+
+      aggregatedFeaturesRef.value = await worker.readAggregatedFeatures(
+        storage,
+        bandRef.value.name,
+        integrationRef.value.seconds,
+        extractorRef.value.index,
+      );
+    });
 
   const resetAggregatedFeatures = () => {
     aggregatedFeaturesRef.value = null;

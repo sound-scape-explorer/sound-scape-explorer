@@ -1,7 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface Autocluster {
   index: number;
@@ -22,15 +21,14 @@ export const autoclustersRef = reactive<AutoclustersRef>({
 
 // These are autoclusters configurations
 export function useAutoclusters() {
-  const readAutoclusters = async () => {
-    if (workerRef.value === null || storageFileRef.value === null) {
-      return;
-    }
+  const {read} = useWorker();
 
-    autoclustersRef.value = await workerRef.value.readAutoclustersConfiguration(
-      storageFileRef.value,
-    );
-  };
+  const readAutoclusters = () =>
+    read(async (worker, storage) => {
+      autoclustersRef.value = await worker.readAutoclustersConfiguration(
+        storage,
+      );
+    });
 
   watchEffect(readAutoclusters);
 }

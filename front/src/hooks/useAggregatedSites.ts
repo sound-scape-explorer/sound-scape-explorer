@@ -3,8 +3,7 @@ import {reactive} from 'vue';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface AggregatedSite {
   site: string;
@@ -19,24 +18,25 @@ export const aggregatedSitesRef = reactive<AggregatedSitesRef>({
 });
 
 export function useAggregatedSites() {
-  const readAggregatedSites = async () => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
-      extractorRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    aggregatedSitesRef.value = await workerRef.value.readAggregatedSites(
-      storageFileRef.value,
-      bandRef.value.name,
-      integrationRef.value.seconds,
-      extractorRef.value.index,
-    );
-  };
+  const readAggregatedSites = () =>
+    read(async (worker, storage) => {
+      if (
+        bandRef.value === null ||
+        integrationRef.value === null ||
+        extractorRef.value === null
+      ) {
+        return;
+      }
+
+      aggregatedSitesRef.value = await worker.readAggregatedSites(
+        storage,
+        bandRef.value.name,
+        integrationRef.value.seconds,
+        extractorRef.value.index,
+      );
+    });
 
   const resetAggregatedSites = () => {
     aggregatedSitesRef.value = null;

@@ -3,8 +3,7 @@ import {reactive, watchEffect} from 'vue';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface RelativeTrajectory {
   index: number;
@@ -24,25 +23,25 @@ export const relativeTrajectoriesRef = reactive<RelativeTrajectoriesRef>({
 });
 
 export function useRelativeTrajectories() {
-  const readRelativeTrajectories = async () => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
-      extractorRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    relativeTrajectoriesRef.value =
-      await workerRef.value.readRelativeTrajectories(
-        storageFileRef.value,
+  const readRelativeTrajectories = () =>
+    read(async (worker, storage) => {
+      if (
+        bandRef.value === null ||
+        integrationRef.value === null ||
+        extractorRef.value === null
+      ) {
+        return;
+      }
+
+      relativeTrajectoriesRef.value = await worker.readRelativeTrajectories(
+        storage,
         bandRef.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,
       );
-  };
+    });
 
   watchEffect(readRelativeTrajectories);
 
