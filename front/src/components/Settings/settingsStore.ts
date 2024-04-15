@@ -10,7 +10,7 @@ export interface SettingsStore {
 }
 
 export const settingsStore = reactive<SettingsStore>({
-  autoOpenOnScatterClick: true,
+  autoOpenOnScatterClick: false,
   plotBackground: PLOT_BACKGROUND.transparent,
   applyTimezone: false,
   preview: false,
