@@ -1,3 +1,20 @@
+# [13.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.8...v13.2.0) (2024-04-17)
+
+
+### Bug Fixes
+
+* **Front/Audio:** Mitigate erroring when reading bit depth from audio slice (Added TODO) ([e20deb7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e20deb700d978652840a0ecb36f9b72788514eb7))
+* **Front/Settings:** Disable details panel auto open ([980f46f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/980f46f2e284cc61b99523bdddff8efbe4974692))
+* **Front/Worker:** Ensure file paths starts with single / ([f94eace](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f94eace6f1b834a38c83b88afae25754acedf882))
+* **Front/Worker:** Wrap all read actions in error catcher ([e152367](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e152367386b401e2b67fd54639bde148935d11ee))
+* **Processing/Menu:** Add warning message to remind user to Quit before visualing ([00628be](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/00628be7b1416ee768846249ae229f02e3062d85))
+* **Visualisation:** Allow single Electron instance ([1da68da](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1da68dab0e424cb71aebcc90dc173e085093369d))
+
+
+### Features
+
+* **Front/Scatter:** Display details when hovering interval point ([458abf8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/458abf8ab205fd92412b471507a2ee49303161c8))
+
 ## [13.1.8](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.7...v13.1.8) (2024-04-09)
 
 
