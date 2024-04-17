@@ -669,7 +669,10 @@ export async function readAggregatedIntervalDetails(
 
     for (const string of strings) {
       const elements = string.split('/');
-      const fullPath = `/${elements.slice(2).join('/')}`;
+      let fullPath = `/${elements.slice(2).join('/')}`;
+      if (fullPath.startsWith('//')) {
+        fullPath = fullPath.substring(1);
+      }
       const relativePath = fullPath.replace(settings.audio_path, '');
 
       const blockDetails: BlockDetails = {

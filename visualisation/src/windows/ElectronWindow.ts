@@ -31,6 +31,14 @@ export abstract class ElectronWindow {
 
   abstract load(): Promise<void>;
 
+  public focus() {
+    if (this.window.isMinimized()) {
+      this.window.restore();
+    }
+
+    this.window.focus();
+  }
+
   private openDevTools() {
     this.window.webContents.openDevTools();
   }

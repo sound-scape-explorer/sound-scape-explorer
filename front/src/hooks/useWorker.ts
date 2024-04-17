@@ -1,19 +1,54 @@
-import {onMounted, reactive} from 'vue';
+import {onMounted, ref} from 'vue';
 
-type Worker = typeof import('../workers/worker');
+import {useNotification} from '../components/AppNotification/useNotification';
+import {storageFileRef} from './useStorageFile';
 
-interface WorkerRef {
-  value: Worker | null;
-}
-
-export const workerRef = reactive<WorkerRef>({
-  value: null,
-});
+export type Worker = typeof import('../workers/worker');
+const worker = ref<Worker | null>(null);
+let isLoaded = false;
 
 export function useWorker() {
+  const {notify} = useNotification();
+
+  const read = async (
+    // eslint-disable-next-line no-unused-vars
+    callback: (worker: Worker, storage: File) => Promise<unknown>,
+  ) => {
+    try {
+      if (worker.value === null || storageFileRef.value === null) {
+        // noinspection ExceptionCaughtLocallyJS
+        throw new Error('Worker/Read: worker or storage is undefined');
+      }
+
+      await callback(worker.value, storageFileRef.value);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`Worker/Read: ${error.message}`);
+        notify('error', 'Worker/Read', error.message);
+        throw new Error(error.message);
+      }
+    }
+  };
+
+  const close = () => {
+    worker.value?.close();
+  };
+
   onMounted(() => {
-    workerRef.value = new ComlinkWorker<Worker>(
+    if (isLoaded) {
+      return;
+    }
+
+    isLoaded = true;
+
+    worker.value = new ComlinkWorker<Worker>(
       new URL('../workers/worker', import.meta.url),
     );
   });
+
+  return {
+    worker: worker,
+    read: read,
+    close: close,
+  };
 }

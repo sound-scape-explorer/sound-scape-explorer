@@ -5,8 +5,7 @@ import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
 import {reducerRef, reducerSelectedRef} from './useReducers';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface Extractor {
   index: number;
@@ -65,6 +64,23 @@ export const extractorOptionsRef = reactive<ExtractorOptionsRef>({
 });
 
 export function useExtractors() {
+  const {read} = useWorker();
+
+  const readExtractors = () =>
+    read(async (worker, storage) => {
+      extractorsRef.value = await worker.readExtractors(storage);
+
+      nnExtractorsRef.value = extractorsRef.value.filter((extractor) =>
+        NN_EXTRACTORS.includes(extractor.name),
+      );
+
+      nonNnExtractorsRef.value = extractorsRef.value.filter(
+        (extractors) => !NN_EXTRACTORS.includes(extractors.name),
+      );
+    });
+
+  watchEffect(readExtractors);
+
   const selectExtractor = (index: number | null) => {
     if (index === null) {
       extractorRef.value = null;
@@ -79,26 +95,6 @@ export function useExtractors() {
       (extractor) => extractor.index === index,
     )[0];
   };
-
-  const readExtractors = async (): Promise<void> => {
-    if (workerRef.value === null || storageFileRef.value === null) {
-      return;
-    }
-
-    extractorsRef.value = await workerRef.value.readExtractors(
-      storageFileRef.value,
-    );
-
-    nnExtractorsRef.value = extractorsRef.value.filter((extractor) =>
-      NN_EXTRACTORS.includes(extractor.name),
-    );
-
-    nonNnExtractorsRef.value = extractorsRef.value.filter(
-      (extractors) => !NN_EXTRACTORS.includes(extractors.name),
-    );
-  };
-
-  watchEffect(readExtractors);
 
   const generateExtractorOptions = () => {
     if (reducerRef.value === null) {

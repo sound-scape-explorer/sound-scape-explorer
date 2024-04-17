@@ -3,8 +3,7 @@ import {reactive} from 'vue';
 import {bandRef} from './useBands';
 import {type Extractor, nonNnExtractorsRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface AggregatedIndicator {
   extractor: Extractor;
@@ -20,28 +19,29 @@ export const aggregatedIndicatorsRef = reactive<AggregatedIndicatorsRef>({
 });
 
 export function useAggregatedIndicators() {
-  const readAggregatedIndicators = async () => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
-      nonNnExtractorsRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    const extractorsIndexes = nonNnExtractorsRef.value.map((ex) => ex.index);
+  const readAggregatedIndicators = () =>
+    read(async (worker, storage) => {
+      if (
+        bandRef.value === null ||
+        integrationRef.value === null ||
+        nonNnExtractorsRef.value === null
+      ) {
+        return;
+      }
 
-    const aggregated = await workerRef.value.readAggregatedIndicators(
-      storageFileRef.value,
-      bandRef.value.name,
-      integrationRef.value.seconds,
-      extractorsIndexes,
-    );
+      const extractorsIndexes = nonNnExtractorsRef.value.map((ex) => ex.index);
 
-    aggregatedIndicatorsRef.value = aggregated;
-  };
+      const aggregated = await worker.readAggregatedIndicators(
+        storage,
+        bandRef.value.name,
+        integrationRef.value.seconds,
+        extractorsIndexes,
+      );
+
+      aggregatedIndicatorsRef.value = aggregated;
+    });
 
   const resetAggregatedIndicators = () => {
     aggregatedIndicatorsRef.value = null;

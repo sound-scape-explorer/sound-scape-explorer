@@ -3,6 +3,7 @@ import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 
+import {aggregatedIntervalDetailsRef} from '../../hooks/useAggregatedIntervalDetails';
 import {alphaHighRef, alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
@@ -42,10 +43,41 @@ export function useScatterFeatures() {
 
     const isThreeDimensional = reducedFeaturesRef.value[0].length === 3;
     const scatterType = isThreeDimensional ? 'scatter3d' : 'scattergl';
+    const properties = labelsPropertiesRef.value;
 
     const indices = reducedFeaturesRef.value.map((_, i) => i);
-    const texts = indices.map((i) => `${i}`);
-    const hoverTemplate = '<b>%{text}</b>';
+    const texts = indices.map((i) => {
+      if (
+        aggregatedLabelsRef.value === null ||
+        aggregatedIntervalDetailsRef.value === null
+      ) {
+        return 'N/A';
+      }
+
+      const labels = aggregatedLabelsRef.value[i];
+
+      const payload: [string, string][] = [];
+      payload.push(['Interval', i.toString()]);
+
+      const intervalDetails = aggregatedIntervalDetailsRef.value[i];
+      for (const block of intervalDetails) {
+        payload.push(['Filename', block.file]);
+      }
+
+      for (let p = 0; p < properties.length; p += 1) {
+        const property = properties[p];
+        const label = labels[p];
+
+        payload.push([property, label]);
+      }
+
+      return payload;
+    });
+
+    let hoverTemplate = '';
+    for (let p = 0; p < properties.length; p += 1) {
+      hoverTemplate += `<br><b>%{text[${p}][0]}: </b>%{text[${p}][1]}`;
+    }
 
     const xs = reducedFeaturesRef.value.map((f) => f[0]);
     const ys = reducedFeaturesRef.value.map((f) => f[1]);

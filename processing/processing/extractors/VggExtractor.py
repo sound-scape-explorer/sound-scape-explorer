@@ -22,8 +22,8 @@ class VggExtractor(nn.Module, Extractor):
         # This is for abstract parent class validation
         self.mel_count: int = 64
         self.fft_size: int = 2048
-        self.offset: int = 0
-        self.step: int = 1000
+        self.offset = 0
+        self.step = 1000
 
         self.load()
 

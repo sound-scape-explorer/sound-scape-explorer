@@ -3,8 +3,7 @@ import {reactive} from 'vue';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export type AggregatedLabels = string[][];
 
@@ -17,24 +16,25 @@ export const aggregatedLabelsRef = reactive<AggregatedLabelsRef>({
 });
 
 export function useAggregatedLabels() {
-  const readAggregatedLabels = async () => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
-      extractorRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    aggregatedLabelsRef.value = await workerRef.value.readAggregatedLabels(
-      storageFileRef.value,
-      bandRef.value.name,
-      integrationRef.value.seconds,
-      extractorRef.value.index,
-    );
-  };
+  const readAggregatedLabels = () =>
+    read(async (worker, storage) => {
+      if (
+        bandRef.value === null ||
+        integrationRef.value === null ||
+        extractorRef.value === null
+      ) {
+        return;
+      }
+
+      aggregatedLabelsRef.value = await worker.readAggregatedLabels(
+        storage,
+        bandRef.value.name,
+        integrationRef.value.seconds,
+        extractorRef.value.index,
+      );
+    });
 
   const resetAggregatedLabels = () => {
     aggregatedLabelsRef.value = null;

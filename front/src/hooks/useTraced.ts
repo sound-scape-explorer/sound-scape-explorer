@@ -4,9 +4,8 @@ import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
 import {reducerRef} from './useReducers';
-import {storageFileRef} from './useStorageFile';
 import {selectedTrajectoriesRef, type Trajectory} from './useTrajectories';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export type TracedData = number[][];
 export type TracedTimestamps = number[];
@@ -36,25 +35,25 @@ export const tracedFusedRef = reactive<TracedFusedRef>({
 });
 
 export function useTraced() {
-  const readTraced = async () => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null ||
-      extractorRef.value === null ||
-      reducerRef.value === null ||
-      selectedTrajectoriesRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    const traceds: Traced[] = [];
+  const readTraced = () =>
+    read(async (worker, storage) => {
+      if (
+        bandRef.value === null ||
+        integrationRef.value === null ||
+        extractorRef.value === null ||
+        reducerRef.value === null ||
+        selectedTrajectoriesRef.value === null
+      ) {
+        return;
+      }
 
-    for (const sT of selectedTrajectoriesRef.value) {
-      const [data, timestamps, relativeTimestamps] =
-        await workerRef.value.readTraced(
-          storageFileRef.value,
+      const traceds: Traced[] = [];
+
+      for (const sT of selectedTrajectoriesRef.value) {
+        const [data, timestamps, relativeTimestamps] = await worker.readTraced(
+          storage,
           bandRef.value.name,
           integrationRef.value.seconds,
           extractorRef.value.index,
@@ -62,18 +61,18 @@ export function useTraced() {
           sT.index,
         );
 
-      const traced: Traced = {
-        trajectory: sT,
-        data: data,
-        timestamps: timestamps,
-        relativeTimestamps: relativeTimestamps,
-      };
+        const traced: Traced = {
+          trajectory: sT,
+          data: data,
+          timestamps: timestamps,
+          relativeTimestamps: relativeTimestamps,
+        };
 
-      traceds.push(traced);
-    }
+        traceds.push(traced);
+      }
 
-    tracedRef.value = traceds;
-  };
+      tracedRef.value = traceds;
+    });
 
   return {
     readTraced: readTraced,

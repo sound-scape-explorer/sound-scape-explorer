@@ -4,8 +4,7 @@ import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
 import {reducerRef, reducerSelectedRef} from './useReducers';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface Band {
   index: number;
@@ -47,6 +46,15 @@ export const bandOptionsRef = reactive<BandOptionsRef>({
 });
 
 export function useBands() {
+  const {read} = useWorker();
+
+  const readBands = () =>
+    read(async (worker, storage) => {
+      bandsRef.value = await worker.readBands(storage);
+    });
+
+  watchEffect(readBands);
+
   const selectBand = (index: number | null): void => {
     if (index === null) {
       bandRef.value = null;
@@ -59,16 +67,6 @@ export function useBands() {
 
     bandRef.value = bandsRef.value.filter((band) => band.index === index)[0];
   };
-
-  const readBands = async (): Promise<void> => {
-    if (workerRef.value === null || storageFileRef.value === null) {
-      return;
-    }
-
-    bandsRef.value = await workerRef.value.readBands(storageFileRef.value);
-  };
-
-  watchEffect(readBands);
 
   const generateBandOptions = () => {
     if (reducerRef.value === null) {

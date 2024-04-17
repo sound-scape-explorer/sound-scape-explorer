@@ -1,6 +1,6 @@
 import {reactive, watchEffect} from 'vue';
-import {workerRef} from './useWorker';
-import {storageFileRef} from './useStorageFile';
+
+import {useWorker} from './useWorker';
 
 export interface File {
   index: number;
@@ -19,13 +19,12 @@ export const filesRef = reactive<FilesRef>({
 });
 
 export function useFiles() {
-  const readFiles = async () => {
-    if (workerRef.value === null || storageFileRef.value === null) {
-      return;
-    }
+  const {read} = useWorker();
 
-    filesRef.value = await workerRef.value.readFiles(storageFileRef.value);
-  };
+  const readFiles = () =>
+    read(async (worker, storage) => {
+      filesRef.value = await worker.readFiles(storage);
+    });
 
   watchEffect(readFiles);
 }

@@ -1,7 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface Digester {
   index: number;
@@ -17,15 +16,12 @@ export const digestersRef = reactive<DigestersRef>({
 });
 
 export function useDigesters() {
-  const readDigesters = async () => {
-    if (workerRef.value === null || storageFileRef.value === null) {
-      return;
-    }
+  const {read} = useWorker();
 
-    digestersRef.value = await workerRef.value.readDigesters(
-      storageFileRef.value,
-    );
-  };
+  const readDigesters = () =>
+    read(async (worker, storage) => {
+      digestersRef.value = await worker.readDigesters(storage);
+    });
 
   watchEffect(readDigesters);
 }

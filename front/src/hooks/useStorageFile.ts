@@ -3,7 +3,7 @@ import {useNotification} from 'src/components/AppNotification/useNotification';
 import {importLockRef} from 'src/components/Import/useImportLock';
 import {computed, reactive} from 'vue';
 
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 interface StorageFileRef {
   value: File | null;
@@ -14,6 +14,7 @@ export const storageFileRef = reactive<StorageFileRef>({
 });
 
 export function useStorageFile() {
+  const {close} = useWorker();
   const {notify} = useNotification();
 
   const isStorageFileRef = computed<boolean>(() => {
@@ -46,7 +47,7 @@ export function useStorageFile() {
   };
 
   const resetFile = () => {
-    workerRef.value?.close();
+    close();
     location.reload();
   };
 

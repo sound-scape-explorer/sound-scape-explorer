@@ -1,8 +1,7 @@
 import {bandRef} from 'src/hooks/useBands';
 import type {Digester} from 'src/hooks/useDigesters';
 import {integrationRef} from 'src/hooks/useIntegrations';
-import {storageFileRef} from 'src/hooks/useStorageFile';
-import {workerRef} from 'src/hooks/useWorker';
+import {useWorker} from 'src/hooks/useWorker';
 import {reactive} from 'vue';
 
 export interface Digested {
@@ -27,31 +26,29 @@ export const digestedRef = reactive<DigestedRef>({
 });
 
 export function useDigested() {
-  const readDigested = async (digester: Digester) => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    const values = await workerRef.value.readDigested(
-      storageFileRef.value,
-      bandRef.value.name,
-      integrationRef.value.seconds,
-      digester.index,
-    );
+  const readDigested = (digester: Digester) =>
+    read(async (worker, storage) => {
+      if (bandRef.value === null || integrationRef.value === null) {
+        return;
+      }
 
-    const isPairing = !Array.isArray(values[0]);
+      const values = await worker.readDigested(
+        storage,
+        bandRef.value.name,
+        integrationRef.value.seconds,
+        digester.index,
+      );
 
-    digestedRef.value = {
-      digester: digester,
-      isPairing: isPairing,
-      values: values,
-    };
-  };
+      const isPairing = !Array.isArray(values[0]);
+
+      digestedRef.value = {
+        digester: digester,
+        isPairing: isPairing,
+        values: values,
+      };
+    });
 
   return {
     readDigested: readDigested,

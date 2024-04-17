@@ -3,8 +3,7 @@ import {reactive} from 'vue';
 
 import {bandRef} from './useBands';
 import {integrationRef} from './useIntegrations';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 // Label properties and sets
 export interface Labels {
@@ -40,28 +39,26 @@ export const labelsPropertiesAsColorTypesRef = reactive<LabelsPropertiesRef>({
 });
 
 export function useLabels() {
-  const readLabels = async () => {
-    if (
-      storageFileRef.value === null ||
-      workerRef.value === null ||
-      bandRef.value === null ||
-      integrationRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    labelsRef.value = await workerRef.value.readLabels(
-      storageFileRef.value,
-      bandRef.value.name,
-      integrationRef.value.seconds,
-    );
+  const readLabels = () =>
+    read(async (worker, storage) => {
+      if (bandRef.value === null || integrationRef.value === null) {
+        return;
+      }
 
-    labelsSetsRef.value = Object.values(labelsRef.value);
-    const properties = Object.keys(labelsRef.value);
-    labelsPropertiesRef.value = properties;
-    labelsPropertiesAsColorTypesRef.value =
-      convertSlugsToColorTypes(properties);
-  };
+      labelsRef.value = await worker.readLabels(
+        storage,
+        bandRef.value.name,
+        integrationRef.value.seconds,
+      );
+
+      labelsSetsRef.value = Object.values(labelsRef.value);
+      const properties = Object.keys(labelsRef.value);
+      labelsPropertiesRef.value = properties;
+      labelsPropertiesAsColorTypesRef.value =
+        convertSlugsToColorTypes(properties);
+    });
 
   const resetLabels = () => {
     labelsRef.value = null;

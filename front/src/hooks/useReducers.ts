@@ -6,8 +6,7 @@ import {reactive, watchEffect} from 'vue';
 import {type Band, bandsRef} from './useBands';
 import {type Extractor, nnExtractorsRef} from './useExtractors';
 import {type Integration, integrationsRef} from './useIntegrations';
-import {storageFileRef} from './useStorageFile';
-import {workerRef} from './useWorker';
+import {useWorker} from './useWorker';
 
 export interface ReducerFromStorage {
   index: number;
@@ -60,42 +59,40 @@ export const reducerOptionsRef = reactive<ReducerOptionsRef>({
 });
 
 export function useReducers() {
-  const readReducers = async () => {
-    if (
-      workerRef.value === null ||
-      storageFileRef.value === null ||
-      bandsRef.value === null ||
-      integrationsRef.value === null ||
-      nnExtractorsRef.value === null
-    ) {
-      return;
-    }
+  const {read} = useWorker();
 
-    const reducersFromStorage = await workerRef.value.readReducers(
-      storageFileRef.value,
-    );
+  const readReducers = () =>
+    read(async (worker, storage) => {
+      if (
+        bandsRef.value === null ||
+        integrationsRef.value === null ||
+        nnExtractorsRef.value === null
+      ) {
+        return;
+      }
 
-    const reducers: Reducer[] = [];
+      const reducersFromStorage = await worker.readReducers(storage);
+      const reducers: Reducer[] = [];
 
-    for (const rFS of reducersFromStorage) {
-      const reducer: Reducer = {
-        index: rFS.index,
-        name: rFS.name,
-        dimensions: rFS.dimensions,
-        bands: bandsRef.value.filter((band) =>
-          rFS.bandsNames.includes(band.name),
-        ),
-        integrations: integrationsRef.value.filter((integration) =>
-          rFS.integrationsNames.includes(integration.name),
-        ),
-        nnExtractors: nnExtractorsRef.value,
-      };
+      for (const rFS of reducersFromStorage) {
+        const reducer: Reducer = {
+          index: rFS.index,
+          name: rFS.name,
+          dimensions: rFS.dimensions,
+          bands: bandsRef.value.filter((band) =>
+            rFS.bandsNames.includes(band.name),
+          ),
+          integrations: integrationsRef.value.filter((integration) =>
+            rFS.integrationsNames.includes(integration.name),
+          ),
+          nnExtractors: nnExtractorsRef.value,
+        };
 
-      reducers.push(reducer);
-    }
+        reducers.push(reducer);
+      }
 
-    reducersRef.value = reducers;
-  };
+      reducersRef.value = reducers;
+    });
 
   watchEffect(readReducers);
 
