@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 # INFO: When changing `name`, also change in `utils/get_version_from_setup.py`
 name = "sound-scape-explorer"
-version = "13.2.1"
+version = "13.2.2"
 description = "SoundScapeExplorer"
 authors = [{ name = "Bamdad Sabbagh", email = "hi@bamdad.fr" }]
 

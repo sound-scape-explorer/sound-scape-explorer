@@ -1,3 +1,10 @@
+## [13.2.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.1...v13.2.2) (2024-04-17)
+
+
+### Bug Fixes
+
+* **Processing/Timeline:** Add details to TimelineIntervalOverlapError ([d55988c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d55988ce5130292bf992052ced537983b3266111))
+
 ## [13.2.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.0...v13.2.1) (2024-04-17)
 
 
