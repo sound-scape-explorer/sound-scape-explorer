@@ -1,3 +1,10 @@
+## [13.2.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.0...v13.2.1) (2024-04-17)
+
+
+### Bug Fixes
+
+* **Audio:** Send whole file if no slice asked + Set requested end to max file duration if needed ([83ffcc9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/83ffcc92c197c0b12207a99cbef098e92f4e5df0))
+
 # [13.2.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.1.8...v13.2.0) (2024-04-17)
 
 
