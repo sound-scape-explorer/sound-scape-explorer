@@ -62,7 +62,11 @@ class Timeline:
         existing_interval = self.map[interval.start]
         for existing_block in existing_interval.blocks:
             if block.start <= existing_block.end or block.end <= existing_block.start:
-                raise TimelineIntervalOverlapError(block.file, existing_block.file)
+                raise TimelineIntervalOverlapError(
+                    existing_interval,
+                    block.file,
+                    existing_block.file,
+                )
 
     def add_interval(self, interval: Interval) -> TimelineMap:
         self.map[interval.start] = interval
