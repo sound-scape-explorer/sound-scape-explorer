@@ -1,6 +1,7 @@
+import {existsSync, readFile} from 'node:fs';
+
 import cors from 'cors';
 import express from 'express';
-import {existsSync} from 'fs';
 import {getAudioDurationInSeconds} from 'get-audio-duration';
 
 import {sliceAudio} from './slice-audio';
@@ -41,7 +42,11 @@ app.get('/get', async (req, res) => {
   const path = `${audioPath}${file}`;
 
   // validate parameters
-  if (typeof file === 'undefined' || typeof start === 'undefined' || typeof end === 'undefined') {
+  if (
+    typeof file === 'undefined' ||
+    typeof start === 'undefined' ||
+    typeof end === 'undefined'
+  ) {
     res.writeHead(403, {'Content-Type': 'text/html'});
     res.end('Error: Missing parameters');
     return;
@@ -56,7 +61,12 @@ app.get('/get', async (req, res) => {
 
   const fileDuration = await getAudioDurationInSeconds(path, ffprobePath);
   const startSeconds = Number(start) / 1000;
-  const endSeconds = Number(end) / 1000;
+
+  let endSeconds = Number(end) / 1000;
+
+  if (endSeconds > fileDuration) {
+    endSeconds = fileDuration;
+  }
 
   // validate start and end
   if (startSeconds < 0 || endSeconds < 0) {
@@ -67,13 +77,26 @@ app.get('/get', async (req, res) => {
 
   if (startSeconds >= endSeconds) {
     res.writeHead(403, {'Content-Type': 'text/html'});
-    res.end('Error: Start is greater than end');
+    res.end('Error: Start after end');
     return;
   }
 
-  if (startSeconds > fileDuration || endSeconds > fileDuration) {
+  if (startSeconds > fileDuration) {
     res.writeHead(403, {'Content-Type': 'text/html'});
-    res.end('Error: Start or end is greater than audio duration');
+    res.end('Error: Start after file ended');
+    return;
+  }
+
+  if (startSeconds === 0 && endSeconds === fileDuration) {
+    readFile(path, (err, data) => {
+      if (err) {
+        console.error(`Error: ${err.message}`);
+      }
+
+      res.writeHead(200, {'Content-Type': 'audio/wav'});
+      res.end(data);
+    });
+
     return;
   }
 
