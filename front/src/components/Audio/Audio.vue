@@ -35,7 +35,7 @@ import {settingsRef} from 'src/hooks/useStorageSettings';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
-import {audioBlockRef} from './useAudioFile';
+import {audioBlockRef, audioDurationRef} from './useAudioFile';
 
 const {intervalDateRef} = useDetails();
 const {convertDateToIsoDate} = useDate();
@@ -154,10 +154,20 @@ const {downloadAudio} = useAudioDownload();
 
           {{ aggregatedSitesRef.value[clickedRef.value].site }}
         </n-gi>
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            Interval Date
+          </n-tag>
+
+          {{ intervalDateRef && convertDateToIsoDate(intervalDateRef) }}
+        </n-gi>
       </n-grid>
 
       <n-grid
-        :cols="2"
+        :cols="3"
         class="grid"
         x-gap="12"
       >
@@ -176,18 +186,11 @@ const {downloadAudio} = useAudioDownload();
             :bordered="false"
             size="small"
           >
-            Interval Date
+            Audio duration
           </n-tag>
 
-          {{ intervalDateRef && convertDateToIsoDate(intervalDateRef) }}
+          {{ audioDurationRef.value.toFixed(2) }} seconds
         </n-gi>
-      </n-grid>
-
-      <n-grid
-        :cols="4"
-        class="grid"
-        x-gap="12"
-      >
         <n-gi>
           <n-tag
             :bordered="false"
@@ -198,6 +201,7 @@ const {downloadAudio} = useAudioDownload();
 
           {{ fftSizeRef.value }}
         </n-gi>
+
         <n-gi>
           <n-tag
             :bordered="false"

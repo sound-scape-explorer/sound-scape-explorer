@@ -27,6 +27,14 @@ export const audioFileBitDepthRef = reactive<AudioFileBitDepthRef>({
   value: null,
 });
 
+interface AudioDurationRef {
+  value: number; // seconds
+}
+
+export const audioDurationRef = reactive<AudioDurationRef>({
+  value: 0,
+});
+
 export function useAudioFile() {
   const {notify} = useNotification();
   const {loadBlob} = useWaveSurferLoader();
@@ -106,6 +114,7 @@ export function useAudioFile() {
       );
 
       audioIsLoadingRef.value = false;
+      audioDurationRef.value = audioBuffer.duration;
 
       const wav = encodeWavFileFromAudioBuffer(audioBuffer, 0);
       const blob = new Blob([wav]);
