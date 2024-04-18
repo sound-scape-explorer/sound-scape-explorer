@@ -4,11 +4,13 @@ import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 
 import {aggregatedIntervalDetailsRef} from '../../hooks/useAggregatedIntervalDetails';
+import {useDate} from '../../hooks/useDate';
 import {alphaHighRef, alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 export function useScatterFeatures() {
+  const {convertTimestampToIsoDate} = useDate();
   const size2d = 5;
   const size3d = 3;
 
@@ -61,7 +63,8 @@ export function useScatterFeatures() {
 
       const intervalDetails = aggregatedIntervalDetailsRef.value[i];
       for (const block of intervalDetails) {
-        payload.push(['Filename', block.file]);
+        const blockStartDate = convertTimestampToIsoDate(block.start);
+        payload.push(['Block start', blockStartDate.toString()]);
       }
 
       for (let p = 0; p < properties.length; p += 1) {
