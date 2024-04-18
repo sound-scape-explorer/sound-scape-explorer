@@ -55,34 +55,44 @@ const checkBounds = (position?: Position) => {
     return;
   }
 
-  const w = position
-    ? position.x + containerRef.value.clientWidth
-    : x.value + containerRef.value.clientWidth;
-
-  const h = position
-    ? position.y + containerRef.value.clientHeight
-    : y.value + containerRef.value.clientHeight;
-
+  const w = containerRef.value.clientWidth;
+  const h = containerRef.value.clientHeight;
   const maxWidth = window.visualViewport.width;
   const maxHeight = window.visualViewport.height;
 
   if (position) {
-    if (position.x >= maxWidth || w >= maxWidth || position.x <= 0) {
-      x.value = defaultPos;
+    if (position.x <= 0) {
+      x.value = 0;
     }
 
-    if (position.y >= maxHeight || h >= maxHeight || position.y <= 0) {
-      y.value = defaultPos;
+    if (position.x >= maxWidth || position.x + w >= maxWidth) {
+      x.value = maxWidth - w;
+    }
+
+    if (position.y <= 0) {
+      y.value = 0;
+    }
+
+    if (position.y >= maxHeight || position.y + h >= maxHeight) {
+      y.value = maxHeight - h;
     }
     return;
   }
 
-  if (x.value >= maxWidth || w >= maxWidth || x.value <= 0) {
-    x.value = defaultPos;
+  if (x.value <= 0) {
+    x.value = 0;
   }
 
-  if (y.value >= maxHeight || h >= maxHeight || y.value <= 0) {
-    y.value = defaultPos;
+  if (x.value >= maxWidth || x.value + w >= maxWidth) {
+    x.value = maxWidth - w;
+  }
+
+  if (y.value <= 0) {
+    y.value = 0;
+  }
+
+  if (y.value >= maxHeight || y.value + h >= maxHeight) {
+    y.value = maxHeight - h;
   }
 };
 
@@ -246,17 +256,18 @@ $indexSelected: 1001;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 25%;
 }
 
-@keyframes oscillateHorizontal {
+@keyframes oscillate {
   0% {
-    margin-left: 0;
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    margin-left: 3px;
+    transform: translate3d(0, -2px, 0);
   }
   100% {
-    margin-left: 0;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -265,15 +276,29 @@ $indexSelected: 1001;
   justify-content: center;
   align-items: center;
 
-  width: 20%;
+  width: 100%;
   min-width: 100px;
 
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
-  cursor: grabbing;
+  cursor: grab;
 
-  span {
-    animation: oscillateHorizontal 1800ms infinite;
+  opacity: 0.45;
+  filter: grayscale(0.95);
+
+  transition: opacity 100ms ease-in, filter 100ms ease-in;
+
+  &:hover {
+    opacity: 0.99;
+    filter: grayscale(0.05);
+
+    span {
+      animation: oscillate 1200ms infinite;
+    }
+  }
+
+  &:active {
+    cursor: grabbing;
   }
 }
 </style>
