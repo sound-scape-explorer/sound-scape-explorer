@@ -77,6 +77,10 @@ const blurButton = (event?: MouseEvent) => {
 };
 
 const togglePlaying = (event?: MouseEvent) => {
+  if (timeStore.isAllSelected) {
+    return;
+  }
+
   isPlaying.value = !isPlaying.value;
   filterByTime();
   blurButton(event);
