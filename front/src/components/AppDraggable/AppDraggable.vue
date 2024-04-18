@@ -256,17 +256,18 @@ $indexSelected: 1001;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 25%;
 }
 
-@keyframes oscillateHorizontal {
+@keyframes oscillate {
   0% {
-    margin-left: 0;
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    margin-left: 3px;
+    transform: translate3d(0, -2px, 0);
   }
   100% {
-    margin-left: 0;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -275,15 +276,29 @@ $indexSelected: 1001;
   justify-content: center;
   align-items: center;
 
-  width: 20%;
+  width: 100%;
   min-width: 100px;
 
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
-  cursor: grabbing;
+  cursor: grab;
 
-  span {
-    animation: oscillateHorizontal 1800ms infinite;
+  opacity: 0.45;
+  filter: grayscale(0.95);
+
+  transition: opacity 100ms ease-in, filter 100ms ease-in;
+
+  &:hover {
+    opacity: 0.99;
+    filter: grayscale(0.05);
+
+    span {
+      animation: oscillate 1200ms infinite;
+    }
+  }
+
+  &:active {
+    cursor: grabbing;
   }
 }
 </style>
