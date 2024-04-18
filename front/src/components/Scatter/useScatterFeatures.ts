@@ -64,7 +64,7 @@ export function useScatterFeatures() {
       const intervalDetails = aggregatedIntervalDetailsRef.value[i];
       for (const block of intervalDetails) {
         const blockStartDate = convertTimestampToIsoDate(block.start);
-        payload.push(['Block start', blockStartDate.toString()]);
+        payload.push(['Date', blockStartDate.toString()]);
       }
 
       for (let p = 0; p < properties.length; p += 1) {
