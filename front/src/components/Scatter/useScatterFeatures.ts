@@ -92,7 +92,7 @@ export function useScatterFeatures() {
       x: xs,
       y: ys,
       z: zs,
-      name: 'interval',
+      name: '',
       type: scatterType,
       mode: 'markers',
       text: texts,
