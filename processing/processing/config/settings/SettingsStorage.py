@@ -73,8 +73,8 @@ class SettingsStorage:
 
         obj = {}
 
-        for property, value in zip(properties, values):
-            obj[property] = value
+        for property_, value in zip(properties, values):
+            obj[property_] = value
 
         storage_path = obj[SettingsRow.storage_path.value]
 

@@ -6,7 +6,8 @@ from processing.digesters.Digester import Digester
 
 
 class DistanceDigester(Digester):
-    def get_centers(self, dataframe: DataFrame, values: Index):
+    @staticmethod
+    def get_centers(dataframe: DataFrame, values: Index):
         # medioids
         centers = np.empty((len(values), dataframe.shape[1]))
 

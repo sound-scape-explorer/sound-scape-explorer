@@ -19,7 +19,7 @@ useAutoclusters();
 
 const separator = ', ';
 
-const {convertTimestampToDate, convertDateToIsoDate} = useDate();
+const {convertTimestampToIsoDate} = useDate();
 
 const timelineOrigin = computed<string>(() => {
   if (settingsRef.value === null) {
@@ -27,8 +27,7 @@ const timelineOrigin = computed<string>(() => {
   }
 
   const origin = settingsRef.value.timeline_origin;
-  const date = convertTimestampToDate(origin);
-  return convertDateToIsoDate(date);
+  return convertTimestampToIsoDate(origin);
 });
 </script>
 

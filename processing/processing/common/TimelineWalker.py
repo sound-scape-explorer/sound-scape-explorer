@@ -51,9 +51,8 @@ class TimelineWalker:
         return self.__timelines
 
     @timelines.setter
-    def timelines(self, timelines: List[Timeline]) -> List[Timeline]:
+    def timelines(self, timelines: List[Timeline]):
         self.__timelines = timelines
-        return self.__timelines
 
     @property
     def bands(self) -> List[BandConfig]:
@@ -61,9 +60,8 @@ class TimelineWalker:
         return self.__bands
 
     @bands.setter
-    def bands(self, bands: List[BandConfig]) -> List[BandConfig]:
+    def bands(self, bands: List[BandConfig]):
         self.__bands = bands
-        return self.__bands
 
     @property
     def integrations(self) -> List[IntegrationConfig]:
@@ -71,11 +69,8 @@ class TimelineWalker:
         return self.__integrations
 
     @integrations.setter
-    def integrations(
-        self, integrations: List[IntegrationConfig]
-    ) -> List[IntegrationConfig]:
+    def integrations(self, integrations: List[IntegrationConfig]):
         self.__integrations = integrations
-        return self.__integrations
 
     @property
     def extractors(self) -> List[Extractor]:
@@ -83,9 +78,8 @@ class TimelineWalker:
         return self.__extractors
 
     @extractors.setter
-    def extractors(self, extractors: List[Extractor]) -> List[Extractor]:
+    def extractors(self, extractors: List[Extractor]):
         self.__extractors = extractors
-        return self.__extractors
 
     @property
     def storage(self) -> Storage:
@@ -93,9 +87,8 @@ class TimelineWalker:
         return self.__storage
 
     @storage.setter
-    def storage(self, storage: Storage) -> Storage:
+    def storage(self, storage: Storage):
         self.__storage = storage
-        return self.__storage
 
     def print_leftovers(self):
         print_new_line()
@@ -112,7 +105,7 @@ class TimelineWalker:
             loader.loader.sound.print_leftovers()
 
     def __enumerate(self):
-        for timeline in track(self.timelines, description=("Extracting...")):
+        for timeline in track(self.timelines, description="Extracting..."):
             for interval in timeline.intervals:
                 print_timeline_progress(timeline, interval)
                 for band_index, band in enumerate(self.bands):
@@ -196,8 +189,8 @@ class TimelineWalker:
 
         return block_data
 
+    @staticmethod
     def get_block_details(
-        self,
         block: Block,
     ) -> str:
         file_relative_start = block.start - block.file.start

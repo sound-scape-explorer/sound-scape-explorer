@@ -34,8 +34,8 @@ class LabelStorage:
 
         labels: List[LabelConfig] = []
 
-        for index, property in enumerate(properties):
-            label: LabelConfig = LabelConfig(index, property)
+        for index, property_ in enumerate(properties):
+            label: LabelConfig = LabelConfig(index, property_)
             values = [file.labels[index] for file in files]
             label.load_values(values)
             labels.append(label)
@@ -62,7 +62,7 @@ class LabelStorage:
                 continue
 
             property_ = LabelConfig.trim_prefixed_property_from_config(column)
-            label: LabelConfig = LabelConfig(index=index, property=property_)
+            label: LabelConfig = LabelConfig(index=index, property_=property_)
 
             values = parser.get(
                 ExcelSheet.files,

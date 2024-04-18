@@ -5,10 +5,10 @@ import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useAudioFile} from 'src/components/Audio/useAudioFile';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {bandRef} from 'src/hooks/useBands';
+import {useDate} from 'src/hooks/useDate';
 import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
-import {convertTimestampToDateShort} from 'src/utils/convert-timestamp-to-date-short';
 import {computed, watch} from 'vue';
 
 import {clickedRef} from '.././Scatter/useScatterClick';
@@ -23,6 +23,7 @@ const {
 } = useDetails();
 
 const {selectAudioBlock} = useAudioFile();
+const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
 
 const dateEndRef = computed<Dayjs | null>(() => {
   if (intervalDateRef.value === null || integrationRef.value === null) {
@@ -109,7 +110,7 @@ watch(intervalDetailsRef, () => {
               >
                 start
               </n-tag>
-              {{ convertTimestampToDateShort(blockDetails.start) }}
+              {{ convertTimestampToIsoDate(blockDetails.start) }}
             </n-gi>
           </n-grid>
         </n-tooltip>
@@ -120,12 +121,16 @@ watch(intervalDetailsRef, () => {
 
     <div class="file container">
       <div class="title">Date Start</div>
-      <span class="file index">{{ intervalDateRef }}</span>
+      <span class="file index">{{
+        intervalDateRef && convertDateToIsoDate(intervalDateRef)
+      }}</span>
     </div>
 
     <div class="file container">
       <div class="title">Date End</div>
-      <span class="file index">{{ dateEndRef }}</span>
+      <span class="file index">{{
+        dateEndRef && convertDateToIsoDate(dateEndRef)
+      }}</span>
     </div>
 
     <div class="file container">
@@ -143,7 +148,7 @@ watch(intervalDetailsRef, () => {
     <div class="title">Labels</div>
 
     <div
-      v-if="clickedRef !== null"
+      v-if="clickedRef.value !== null"
       class="file container details"
     >
       <span />

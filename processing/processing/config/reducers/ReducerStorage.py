@@ -1,8 +1,8 @@
 from typing import List
 
-from processing.config.bands.BandConfig import BandConfig
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
+from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.ranges.RangeConfig import RangeConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
@@ -68,7 +68,7 @@ class ReducerStorage:
         ]
 
         ranges_names_strings = [
-            ",".join(ranges_names_string) for ranges_names_string in integrations_names
+            ",".join(ranges_names_string) for ranges_names_string in ranges_names
         ]
 
         reducers = ReducerConfig.reconstruct(
