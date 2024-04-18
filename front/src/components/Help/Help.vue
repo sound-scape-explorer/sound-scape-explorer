@@ -4,7 +4,7 @@ import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {VERSION} from 'src/version';
 
-import {LINK_DOCS} from '../../constants';
+import {LINK_BUG_REPORT, LINK_CHANGELOG, LINK_DOCS} from '../../constants';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 
 interface Shortcut {
@@ -29,9 +29,9 @@ const shortcuts: Shortcut[] = [
   {key: KeyboardShortcut.timeForward, name: 'Time: Previous'},
 ];
 
-const openDocumentation = () => {
-  window.open(LINK_DOCS);
-};
+const openDocumentation = () => window.open(LINK_DOCS);
+const openBugReport = () => window.open(LINK_BUG_REPORT);
+const openChangelog = () => window.open(LINK_CHANGELOG);
 </script>
 
 <template>
@@ -47,7 +47,28 @@ const openDocumentation = () => {
           :on-click="openDocumentation"
           class="full"
           size="small"
-          >Open documentation
+        >
+          Open documentation
+        </n-button>
+      </div>
+
+      <div class="full">
+        <n-button
+          :on-click="openChangelog"
+          class="full"
+          size="small"
+        >
+          Open changelog
+        </n-button>
+      </div>
+
+      <div class="full">
+        <n-button
+          :on-click="openBugReport"
+          class="full"
+          size="small"
+        >
+          Open bug report
         </n-button>
       </div>
 
