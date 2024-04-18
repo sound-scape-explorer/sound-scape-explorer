@@ -1,7 +1,9 @@
 import {spawn} from 'node:child_process';
-import {existsSync, readFile, unlinkSync} from 'node:fs';
+import {existsSync, unlinkSync} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+
+import {readFileAsync} from './read-file-async';
 
 const tempPath = path.join(os.tmpdir(), 'scratch.wav');
 console.log(`temp path: ${tempPath}`);
@@ -35,14 +37,9 @@ export function sliceAudio(
       console.error(`Error: ${error.message}`);
     });
 
-    ffmpeg.on('close', () => {
-      readFile(tempPath, (err, data) => {
-        if (err) {
-          console.error(`Error: ${err.message}`);
-        }
-
-        resolve(data);
-      });
+    ffmpeg.on('close', async () => {
+      const data = await readFileAsync(tempPath);
+      resolve(data);
     });
   });
 }

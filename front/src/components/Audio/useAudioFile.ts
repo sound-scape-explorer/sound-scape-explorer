@@ -88,8 +88,9 @@ export function useAudioFile() {
       const response = await fetch(url);
 
       if (response.status !== 200) {
+        const text = await response.text();
         // noinspection ExceptionCaughtLocallyJS
-        throw new Error(`Failed to fetch audio at ${url}`);
+        throw `${response.status}: ${text}`;
       }
 
       const arrayBuffer = await response.arrayBuffer();
