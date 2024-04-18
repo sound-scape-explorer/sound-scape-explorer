@@ -7,6 +7,7 @@ import Plotly, {
 import {settingsStore} from 'src/components/Settings/settingsStore';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
+import {useScatterCamera} from './useScatterCamera';
 import {useScatterClick} from './useScatterClick';
 import {useScatterConfig} from './useScatterConfig';
 import {scatterTracesRef, useScatterTraces} from './useScatterTraces';
@@ -14,6 +15,7 @@ import {scatterTracesRef, useScatterTraces} from './useScatterTraces';
 const divRef = ref<PlotlyHTMLElement | null>(null);
 const {handleClick} = useScatterClick();
 const {config} = useScatterConfig();
+const {isLocked} = useScatterCamera();
 
 useScatterTraces();
 
@@ -102,6 +104,7 @@ watchEffect(render);
 <template>
   <div
     ref="divRef"
+    :style="{'--pointer-events': isLocked ? 'none' : 'all'}"
     class="container"
   />
 </template>
@@ -110,5 +113,6 @@ watchEffect(render);
 .container {
   width: 100vw;
   height: 100vh;
+  pointer-events: var(--pointer-events);
 }
 </style>

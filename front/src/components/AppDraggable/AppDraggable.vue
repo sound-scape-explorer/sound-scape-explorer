@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import {CloseOutline, SearchOutline} from '@vicons/ionicons5';
-import {useDraggable, useLocalStorage} from '@vueuse/core';
+import {useDraggable, useLocalStorage, useMousePressed} from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
 import {computed, ref, watch} from 'vue';
 
 import {capitalizeFirstLetter} from '../../utils/capitalize-first-letter';
+import {useScatterCamera} from '../Scatter/useScatterCamera';
 import {appDraggableSelectedRef} from './appDraggableSelected';
 import type {AppDraggablesStore} from './appDraggablesStore';
 import {appDraggablesStore} from './appDraggablesStore';
@@ -21,6 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 const storageKey = `sse-draggable-${props.draggableKey}`;
 const containerRef = ref<HTMLElement | null>(null);
 const isZoomedRef = ref<boolean>(false);
+const {lock, unlock} = useScatterCamera();
 
 const classesRef = computed<string>(() => {
   let classes = 'draggable';
@@ -45,6 +47,7 @@ const close = () => {
 };
 
 const open = () => {
+  // noinspection PointlessBooleanExpressionJS,JSIncompatibleTypesComparison
   if (
     appDraggableSelectedRef.value !== props.draggableKey ||
     appDraggablesStore[props.draggableKey] === false ||
@@ -68,20 +71,13 @@ const toggleZoom = () => {
   isZoomedRef.value = !isZoomedRef.value;
 };
 
-const select = () => {
-  if (appDraggableSelectedRef.value === props.draggableKey) {
-    return;
-  }
-
-  appDraggableSelectedRef.value = props.draggableKey;
-};
-
 const storageRef = useLocalStorage(storageKey, {x: 100, y: 100});
 
 const {x, y, style} = useDraggable(containerRef, {
   initialValue: {x: storageRef.value.x, y: storageRef.value.y},
   exact: true,
   onEnd: (position) => {
+    // noinspection JSIncompatibleTypesComparison
     if (window.visualViewport === null) {
       return;
     }
@@ -97,6 +93,21 @@ const {x, y, style} = useDraggable(containerRef, {
     storageRef.value = {x: x.value, y: y.value};
   },
 });
+
+const {pressed} = useMousePressed({target: containerRef});
+watch(pressed, () => {
+  // noinspection PointlessBooleanExpressionJS
+  if (pressed.value === false) {
+    unlock();
+    return;
+  }
+
+  lock();
+
+  if (appDraggableSelectedRef.value !== props.draggableKey) {
+    appDraggableSelectedRef.value = props.draggableKey;
+  }
+});
 </script>
 
 <template>
@@ -104,7 +115,6 @@ const {x, y, style} = useDraggable(containerRef, {
     ref="containerRef"
     :class="classesRef"
     :style="style"
-    @click="select"
   >
     <div class="button close">
       <n-button
