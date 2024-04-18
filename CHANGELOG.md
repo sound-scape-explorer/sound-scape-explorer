@@ -1,3 +1,27 @@
+## [13.2.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.2...v13.2.3) (2024-04-18)
+
+
+### Bug Fixes
+
+* **Audio:** Prevent audio service from crashing + Catch better errors and feed them to Front + Improve code quality ([9a70db4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9a70db41b5cbd02012868c8ddd5bbeb5b5ab5f9a))
+* **Front/AppDraggable:** Use dedicated drag zone ([0f23bed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0f23bed7abc771296a4d2562b5ce0c9662901b65))
+* **Front/Audio:** Display audio duration + Improve layout ([ea1663a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ea1663ab7970f857f7c7915aabc4e18b1ba07e5d))
+* **Front/Audio:** Do not throw primitives + Pass string to fetch ([52c1303](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/52c130344e80fd600d6bf892f1cad27cd2b86821))
+* **Front/Colors:** Add color legend for isDay scale ([a57daf1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a57daf14f9d7dab8b840ae103a0d4abda0ee9fd0))
+* **Front/Dates:** Apply timezone setting to all time fields + Streamline behaviour ([08a4554](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/08a4554e7d0c659ed9be8d7980a824bc0ee98840))
+* **Front/Help:** Add links to changelog and bug report ([8b378e0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8b378e06a5cd986150bbdbb87d7edec1501ac624))
+* **Front/Help:** Generate keyboard short dynamically from enum ([ec6afeb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ec6afeb16a0af9e1e5a707528a6fc63dc0c0ae9e))
+* **Front/Notifications:** Remove auto bug report opening ([e017f7d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e017f7d33a048d38059280a71a0817c973906cb8))
+* **Front/Scatter:** Lock camera and all interactions when handling draggables ([98a8fba](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/98a8fba23f4d7dd106c75347e56f125adf91d00b))
+* **Front/Worker:** Handle missing relative trajectories in storage ([15994c2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/15994c2ec4b50f9edc2a66f9584db290194cf72e))
+* **Front:** Remove auto open for dev env ([8caceef](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8caceefd274661f5a72560b2b3d03570439bde89))
+* **Processing/AutoFill:** Transform filename to be case insensitive ([0e3c882](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0e3c8828292e9e24394d22de34636eb568f7a262))
+
+
+### Performance Improvements
+
+* **Processing:** Improve code quality + Remove code smells ([b328f49](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b328f49bdfe122d6b3b48b4b11f147596c76305c))
+
 ## [13.2.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.1...v13.2.2) (2024-04-17)
 
 
