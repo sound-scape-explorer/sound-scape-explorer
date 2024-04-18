@@ -533,7 +533,11 @@ export async function readRelativeTrajectories(
     const h5 = await load(file);
     const pathSuffix = `/${bandName}/${integrationSeconds}/${extractorIndex}`;
     const path = `${StoragePath.relative_traced}${pathSuffix}`;
-    const group = h5.get(path) as Group;
+    const group = h5.get(path) as Group | null;
+
+    if (group === null) {
+      return [];
+    }
 
     const relativeTrajectories: RelativeTrajectory[] = [];
 
