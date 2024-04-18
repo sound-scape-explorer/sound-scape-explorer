@@ -191,7 +191,6 @@ $indexSelected: 1001;
   padding: 0.6rem 0.9rem 0.6rem 2.5rem;
 
   user-select: none;
-  //cursor: grabbing;
 
   opacity: 1;
 
@@ -233,19 +232,6 @@ $indexSelected: 1001;
 
 .button.close {
   top: 0.5rem;
-}
-
-.button.zoom {
-  bottom: 0.5rem;
-}
-
-.button.move {
-  top: 2rem;
-  cursor: grabbing;
-
-  button {
-    cursor: grabbing;
-  }
 }
 
 .selected {
