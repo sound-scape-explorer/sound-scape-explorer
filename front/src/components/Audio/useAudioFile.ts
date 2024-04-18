@@ -93,12 +93,12 @@ export function useAudioFile() {
       url.searchParams.append('start', start.toString());
       url.searchParams.append('end', end.toString());
 
-      const response = await fetch(url);
+      const response = await fetch(url.toString());
 
       if (response.status !== 200) {
         const text = await response.text();
         // noinspection ExceptionCaughtLocallyJS
-        throw `${response.status}: ${text}`;
+        throw new Error(`${response.status}: ${text}`);
       }
 
       const arrayBuffer = await response.arrayBuffer();
