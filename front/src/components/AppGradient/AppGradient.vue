@@ -7,12 +7,14 @@ interface Props {
   legendMin?: string;
   legendMed?: string;
   legendMax?: string;
+  width?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   legendMin: '',
   legendMed: '',
   legendMax: '',
+  width: 1,
 });
 
 const paddingBottomRef = computed(() => {
@@ -28,7 +30,9 @@ const tooltipText = ref<string>(tooltipTextDefaultValue);
 
 const tooltipPositionDefaultValue = -1;
 const tooltipPosition = ref(tooltipPositionDefaultValue);
-const tooltipPositionString = computed<string>(() => `${tooltipPosition.value}%`);
+const tooltipPositionString = computed<string>(
+  () => `${tooltipPosition.value}%`,
+);
 
 function updateTooltipText(text: string) {
   if (text === tooltipText.value) {
@@ -62,7 +66,7 @@ function leaveStep() {
   <div class="gradient">
     <span
       v-for="(element, index) in props.colors"
-      :style="{backgroundColor: element}"
+      :style="{'backgroundColor': element, '--width': `${width}%`}"
       class="step"
       @mouseleave="leaveStep"
       @mouseover="() => enterStep(index)"
@@ -70,7 +74,12 @@ function leaveStep() {
     <span class="domain min">{{ props.legendMin }}</span>
     <span class="domain med">{{ props.legendMed }}</span>
     <span class="domain max">{{ props.legendMax }}</span>
-    <span v-if="tooltipText !== ''" :style="{left: tooltipPositionString}" class="tooltip">{{ tooltipText }}</span>
+    <span
+      v-if="tooltipText !== ''"
+      :style="{left: tooltipPositionString}"
+      class="tooltip"
+      >{{ tooltipText }}</span
+    >
   </div>
 </template>
 
@@ -86,7 +95,7 @@ function leaveStep() {
 .step {
   display: inline-block;
   height: 20px;
-  width: 1%;
+  width: var(--width);
 
   cursor: crosshair;
 
