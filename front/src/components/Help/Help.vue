@@ -4,34 +4,26 @@ import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {VERSION} from 'src/version';
 
-import {LINK_DOCS} from '../../constants';
+import {LINK_BUG_REPORT, LINK_CHANGELOG, LINK_DOCS} from '../../constants';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 
 interface Shortcut {
-  key: string;
+  keycode: string;
   name: string;
 }
 
-const shortcuts: Shortcut[] = [
-  {key: KeyboardShortcut.import, name: 'Import'},
-  {key: KeyboardShortcut.settings, name: 'Settings'},
-  {key: KeyboardShortcut.help, name: 'Help'},
-  {key: KeyboardShortcut.selection, name: 'Selection'},
-  {key: KeyboardShortcut.trajectories, name: 'Trajectories'},
-  {key: KeyboardShortcut.colors, name: 'Colors'},
-  {key: KeyboardShortcut.time, name: 'Time'},
-  {key: KeyboardShortcut.audio, name: 'Audio'},
-  {key: KeyboardShortcut.labels, name: 'Labels'},
-  {key: KeyboardShortcut.labelsZoom, name: 'Labels: Zoom'},
-  {key: KeyboardShortcut.details, name: 'Details'},
-  {key: KeyboardShortcut.timePlayPause, name: 'Time: Play / Pause'},
-  {key: KeyboardShortcut.timeBackward, name: 'Time: Next'},
-  {key: KeyboardShortcut.timeForward, name: 'Time: Previous'},
-];
+const shortcuts: Shortcut[] = Object.entries(KeyboardShortcut).map((entry) => {
+  const [name, keycode] = entry;
 
-const openDocumentation = () => {
-  window.open(LINK_DOCS);
-};
+  return {
+    keycode: keycode,
+    name: name,
+  };
+});
+
+const openDocumentation = () => window.open(LINK_DOCS);
+const openBugReport = () => window.open(LINK_BUG_REPORT);
+const openChangelog = () => window.open(LINK_CHANGELOG);
 </script>
 
 <template>
@@ -47,7 +39,28 @@ const openDocumentation = () => {
           :on-click="openDocumentation"
           class="full"
           size="small"
-          >Open documentation
+        >
+          Open documentation
+        </n-button>
+      </div>
+
+      <div class="full">
+        <n-button
+          :on-click="openChangelog"
+          class="full"
+          size="small"
+        >
+          Open changelog
+        </n-button>
+      </div>
+
+      <div class="full">
+        <n-button
+          :on-click="openBugReport"
+          class="full"
+          size="small"
+        >
+          Open bug report
         </n-button>
       </div>
 
@@ -66,7 +79,7 @@ const openDocumentation = () => {
             class="key"
             size="small"
           >
-            {{ shortcut.key }}
+            {{ shortcut.keycode }}
           </n-tag>
 
           {{ shortcut.name }}

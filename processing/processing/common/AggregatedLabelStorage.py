@@ -64,7 +64,7 @@ class AggregatedLabelStorage:
             property_ = properties[index]
             aggregated_label = LabelConfig(
                 index=index + len(autoclustereds),
-                property=property_,
+                property_=property_,
             )
             aggregated_label.load_values(values)
             aggregated_labels.append(aggregated_label)

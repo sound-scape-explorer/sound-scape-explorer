@@ -5,12 +5,12 @@ from rich import print
 from rich.console import Console
 from rich.table import Table
 
+from processing.config.ConfigParser import ConfigParser
 from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.binary.BinaryStorage import BinaryStorage
-from processing.config.ConfigParser import ConfigParser
 from processing.config.digesters.DigesterConfig import DigesterConfig
 from processing.config.digesters.DigesterStorage import DigesterStorage
 from processing.config.extractors.ExtractorConfig import ExtractorConfig
@@ -37,6 +37,8 @@ from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
 
 
 class Config:
+    settings: SettingsConfig
+
     def __init__(
         self,
         path: str,
@@ -45,8 +47,6 @@ class Config:
         self.path = os.path.abspath(path)
         self.folder = os.path.dirname(self.path)
         self.parser = ConfigParser(self.path, self.folder)
-
-        self.settings: SettingsConfig
 
         self.bands: List[BandConfig] = []
         self.integrations: List[IntegrationConfig] = []
@@ -66,7 +66,8 @@ class Config:
         self.parse()
         self.__print_success()
 
-    def __print_load(self) -> None:
+    @staticmethod
+    def __print_load() -> None:
         print("Loading configuration...")
 
     def __print_success(self) -> None:
@@ -120,7 +121,8 @@ class Config:
 
         self.digesters = DigesterStorage.read_from_config(self.parser)
 
-    def delete_from_storage(self, storage: Storage) -> None:
+    @staticmethod
+    def delete_from_storage(storage: Storage) -> None:
         BinaryStorage.delete_from_storage(storage)
         SettingsStorage.delete_from_storage(storage)
 
@@ -143,6 +145,7 @@ class Config:
     def write(self, storage: Storage) -> None:
         self.delete_from_storage(storage)
 
+        # noinspection DuplicatedCode
         BinaryStorage.write_to_storage(self.path, storage)
         SettingsStorage.write_to_storage(self.settings, storage)
 
@@ -151,6 +154,7 @@ class Config:
         RangeStorage.write_to_storage(self.ranges, storage)
 
         LabelStorage.write_to_storage(self.labels, storage)
+        # noinspection DuplicatedCode
         FileStorage.write_to_storage(self.files, storage)
         SiteStorage.write_to_storage(self.sites, storage)
 

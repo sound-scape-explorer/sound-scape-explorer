@@ -1,10 +1,16 @@
 <script lang="ts" setup>
-import {CloseOutline, SearchOutline} from '@vicons/ionicons5';
-import {useDraggable, useLocalStorage} from '@vueuse/core';
+import {CloseOutline} from '@vicons/ionicons5';
+import {
+  type Position,
+  useDraggable,
+  useLocalStorage,
+  useMousePressed,
+} from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
-import {computed, ref, watch} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 
 import {capitalizeFirstLetter} from '../../utils/capitalize-first-letter';
+import {useScatterCamera} from '../Scatter/useScatterCamera';
 import {appDraggableSelectedRef} from './appDraggableSelected';
 import type {AppDraggablesStore} from './appDraggablesStore';
 import {appDraggablesStore} from './appDraggablesStore';
@@ -21,6 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
 const storageKey = `sse-draggable-${props.draggableKey}`;
 const containerRef = ref<HTMLElement | null>(null);
 const isZoomedRef = ref<boolean>(false);
+const {lock, unlock} = useScatterCamera();
 
 const classesRef = computed<string>(() => {
   let classes = 'draggable';
@@ -40,11 +47,51 @@ const classesRef = computed<string>(() => {
   return classes;
 });
 
+const defaultPos = 100;
+const checkBounds = (position?: Position) => {
+  if (window.visualViewport === null || containerRef.value === null) {
+    x.value = defaultPos;
+    y.value = defaultPos;
+    return;
+  }
+
+  const w = position
+    ? position.x + containerRef.value.clientWidth
+    : x.value + containerRef.value.clientWidth;
+
+  const h = position
+    ? position.y + containerRef.value.clientHeight
+    : y.value + containerRef.value.clientHeight;
+
+  const maxWidth = window.visualViewport.width;
+  const maxHeight = window.visualViewport.height;
+
+  if (position) {
+    if (position.x >= maxWidth || w >= maxWidth || position.x <= 0) {
+      x.value = defaultPos;
+    }
+
+    if (position.y >= maxHeight || h >= maxHeight || position.y <= 0) {
+      y.value = defaultPos;
+    }
+    return;
+  }
+
+  if (x.value >= maxWidth || w >= maxWidth || x.value <= 0) {
+    x.value = defaultPos;
+  }
+
+  if (y.value >= maxHeight || h >= maxHeight || y.value <= 0) {
+    y.value = defaultPos;
+  }
+};
+
 const close = () => {
   appDraggablesStore[props.draggableKey] = false;
 };
 
 const open = () => {
+  // noinspection PointlessBooleanExpressionJS,JSIncompatibleTypesComparison
   if (
     appDraggableSelectedRef.value !== props.draggableKey ||
     appDraggablesStore[props.draggableKey] === false ||
@@ -53,49 +100,42 @@ const open = () => {
     return;
   }
 
-  if (x.value >= window.visualViewport.width) {
-    x.value = 100;
-  }
-
-  if (y.value >= window.visualViewport.height) {
-    y.value = 100;
-  }
+  checkBounds();
 };
 
 watch(appDraggablesStore, open);
 
-const toggleZoom = () => {
-  isZoomedRef.value = !isZoomedRef.value;
-};
-
-const select = () => {
-  if (appDraggableSelectedRef.value === props.draggableKey) {
-    return;
-  }
-
-  appDraggableSelectedRef.value = props.draggableKey;
-};
+onMounted(() => checkBounds);
 
 const storageRef = useLocalStorage(storageKey, {x: 100, y: 100});
+const dragRef = ref<HTMLElement | null>(null);
 
 const {x, y, style} = useDraggable(containerRef, {
   initialValue: {x: storageRef.value.x, y: storageRef.value.y},
-  exact: true,
+  handle: dragRef,
   onEnd: (position) => {
+    // noinspection JSIncompatibleTypesComparison
     if (window.visualViewport === null) {
       return;
     }
-
-    if (position.x >= window.visualViewport.width) {
-      x.value = 100;
-    }
-
-    if (position.y >= window.visualViewport.height) {
-      y.value = 100;
-    }
-
+    checkBounds(position);
     storageRef.value = {x: x.value, y: y.value};
   },
+});
+
+const {pressed} = useMousePressed({target: dragRef});
+watch(pressed, () => {
+  // noinspection PointlessBooleanExpressionJS
+  if (pressed.value === false) {
+    unlock();
+    return;
+  }
+
+  lock();
+
+  if (appDraggableSelectedRef.value !== props.draggableKey) {
+    appDraggableSelectedRef.value = props.draggableKey;
+  }
 });
 </script>
 
@@ -104,7 +144,6 @@ const {x, y, style} = useDraggable(containerRef, {
     ref="containerRef"
     :class="classesRef"
     :style="style"
-    @click="select"
   >
     <div class="button close">
       <n-button
@@ -117,22 +156,18 @@ const {x, y, style} = useDraggable(containerRef, {
       </n-button>
     </div>
 
-    <div
-      v-if="false"
-      class="button zoom"
-    >
-      <n-button
-        size="tiny"
-        @click="toggleZoom"
-      >
-        <n-icon>
-          <search-outline />
-        </n-icon>
-      </n-button>
-    </div>
-
     <div class="title content">
-      {{ capitalizeFirstLetter(props.draggableKey) }}
+      <div class="title container">
+        <span>
+          {{ capitalizeFirstLetter(props.draggableKey) }}
+        </span>
+        <div
+          ref="dragRef"
+          class="drag"
+        >
+          <span>👋</span>
+        </div>
+      </div>
       <hr v-if="!props.hideSeparator" />
     </div>
 
@@ -156,7 +191,6 @@ $indexSelected: 1001;
   padding: 0.6rem 0.9rem 0.6rem 2.5rem;
 
   user-select: none;
-  cursor: grabbing;
 
   opacity: 1;
 
@@ -200,24 +234,46 @@ $indexSelected: 1001;
   top: 0.5rem;
 }
 
-.button.zoom {
-  bottom: 0.5rem;
-}
-
-.button.move {
-  top: 2rem;
-  cursor: grabbing;
-
-  button {
-    cursor: grabbing;
-  }
-}
-
 .selected {
   z-index: $indexSelected;
 }
 
 .title {
   font-weight: bold;
+}
+
+.title.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@keyframes oscillateHorizontal {
+  0% {
+    margin-left: 0;
+  }
+  50% {
+    margin-left: 3px;
+  }
+  100% {
+    margin-left: 0;
+  }
+}
+
+.drag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 20%;
+  min-width: 100px;
+
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  cursor: grabbing;
+
+  span {
+    animation: oscillateHorizontal 1800ms infinite;
+  }
 }
 </style>

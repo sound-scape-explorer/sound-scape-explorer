@@ -36,7 +36,8 @@ class VggExtractor(nn.Module, Extractor):
         self.to(self.device)
         self.eval()
 
-    def load_embeddings(self):
+    @staticmethod
+    def load_embeddings():
         return nn.Sequential(
             nn.Linear(512 * 4 * 6, 4096),
             nn.ReLU(True),
@@ -46,7 +47,8 @@ class VggExtractor(nn.Module, Extractor):
             nn.ReLU(True),
         )
 
-    def load_features(self):
+    @staticmethod
+    def load_features():
         layers = []
         in_channels = 1
 
@@ -60,7 +62,7 @@ class VggExtractor(nn.Module, Extractor):
 
         return nn.Sequential(*layers)
 
-    def load_state_dict(self):
+    def load_state_dict(self, **kwargs):
         state_dict = self.fetch_state_dict()
         super().load_state_dict(state_dict)
 
@@ -72,7 +74,8 @@ class VggExtractor(nn.Module, Extractor):
             progress=True,
         )
 
-    def load_device(self):
+    @staticmethod
+    def load_device():
         if cuda.is_available():
             print("Using GPU")
             return "cuda"
@@ -94,7 +97,8 @@ class VggExtractor(nn.Module, Extractor):
             x = x.view(x.size(0), -1)
             return self.embeddings(x)
 
-    def to_frames(self, data: Tensor) -> Tensor:
+    @staticmethod
+    def to_frames(data: Tensor) -> Tensor:
         window_length = hop_length = 100
 
         num_samples = data.shape[0]

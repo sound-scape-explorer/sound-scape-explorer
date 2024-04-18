@@ -113,10 +113,10 @@ export function useScatterColorScale() {
     }
 
     colorScaleRef.value = colorScale;
-    // notify('success', 'Colors', `${colorType} color scale generated`);
   };
 
   const {renderTraces} = useScatterTraces();
+  // TODO: Add settingsStore.applyTimezone (needs extraction). Probably make a hook to add watchers
   watch([colorsStore, alphaHighRef, alphaLowRef], () => {
     generateColorScale();
     renderTraces();

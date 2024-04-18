@@ -16,10 +16,10 @@ class LabelConfig:
     def __init__(
         self,
         index: int,
-        property: str,
+        property_: str,
     ) -> None:
         self.index = index
-        self.property = property
+        self.property = property_
 
     @staticmethod
     def is_label_property(string: str) -> bool:

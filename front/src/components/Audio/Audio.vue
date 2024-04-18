@@ -29,14 +29,16 @@ import {
 import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
+import {useDate} from 'src/hooks/useDate';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
-import {audioBlockRef} from './useAudioFile';
+import {audioBlockRef, audioDurationRef} from './useAudioFile';
 
 const {intervalDateRef} = useDetails();
+const {convertDateToIsoDate} = useDate();
 
 const {
   waveformContainerRef,
@@ -77,43 +79,43 @@ const {downloadAudio} = useAudioDownload();
         </AudioButton>
 
         <AudioButton
-          alt="Stop"
           :callback="stop"
+          alt="Stop"
         >
           <stop-outline />
         </AudioButton>
 
         <AudioButton
-          alt="Volume Up"
           :callback="increaseVolume"
+          alt="Volume Up"
         >
           <volume-high-outline />
         </AudioButton>
 
         <AudioButton
-          alt="Volume Down"
           :callback="decreaseVolume"
+          alt="Volume Down"
         >
           <volume-low-outline />
         </AudioButton>
 
         <AudioButton
-          alt="FFT Size Up"
           :callback="increaseFftSize"
+          alt="FFT Size Up"
         >
           <add-outline />
         </AudioButton>
 
         <AudioButton
-          alt="FFT Size Down"
           :callback="decreaseFftSize"
+          alt="FFT Size Down"
         >
           <remove-outline />
         </AudioButton>
 
         <AudioButton
-          alt="Download"
           :callback="downloadAudio"
+          alt="Download"
         >
           <arrow-down-outline />
         </AudioButton>
@@ -152,10 +154,20 @@ const {downloadAudio} = useAudioDownload();
 
           {{ aggregatedSitesRef.value[clickedRef.value].site }}
         </n-gi>
+        <n-gi>
+          <n-tag
+            :bordered="false"
+            size="small"
+          >
+            Interval Date
+          </n-tag>
+
+          {{ intervalDateRef && convertDateToIsoDate(intervalDateRef) }}
+        </n-gi>
       </n-grid>
 
       <n-grid
-        :cols="2"
+        :cols="3"
         class="grid"
         x-gap="12"
       >
@@ -174,18 +186,11 @@ const {downloadAudio} = useAudioDownload();
             :bordered="false"
             size="small"
           >
-            Interval Date
+            Audio duration
           </n-tag>
 
-          {{ intervalDateRef }}
+          {{ audioDurationRef.value.toFixed(2) }} seconds
         </n-gi>
-      </n-grid>
-
-      <n-grid
-        :cols="4"
-        class="grid"
-        x-gap="12"
-      >
         <n-gi>
           <n-tag
             :bordered="false"
@@ -196,6 +201,7 @@ const {downloadAudio} = useAudioDownload();
 
           {{ fftSizeRef.value }}
         </n-gi>
+
         <n-gi>
           <n-tag
             :bordered="false"

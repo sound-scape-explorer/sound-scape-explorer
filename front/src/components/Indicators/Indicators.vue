@@ -7,7 +7,6 @@ import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {useDate} from 'src/hooks/useDate';
 import {sitesRef} from 'src/hooks/useSites';
-import {convertTimestampToDateShort} from 'src/utils/convert-timestamp-to-date-short';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
@@ -85,7 +84,7 @@ const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
       labels: [
         timestamps.map(
           (t, i) =>
-            `${convertTimestampToDateShort(t)}<br>Site: ${
+            `${convertTimestampToIsoDate(t)}<br>Site: ${
               sites[i]
             }<br>Interval: ${i}`,
         ),
@@ -103,7 +102,7 @@ const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
     labels: [
       indices.map(
         (i) =>
-          `${convertTimestampToDateShort(timestamps[i])}<br>Site: ${
+          `${convertTimestampToIsoDate(timestamps[i])}<br>Site: ${
             sites[i]
           }<br>Interval: ${i}`,
       ),
@@ -186,10 +185,10 @@ const handleExportClick = () => {
       </div>
 
       <AppPlot
-        export-filename="indicators"
         :colors="chartDataRef.colors"
         :labels="chartDataRef.labels"
         :values="chartDataRef.values"
+        export-filename="indicators"
       />
     </div>
   </AppDraggable>

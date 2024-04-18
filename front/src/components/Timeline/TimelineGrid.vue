@@ -10,11 +10,11 @@ import {
   type VisibleBlock,
 } from 'src/components/Timeline/useTimelinePagination';
 import {aggregatedIntervalDetailsRef} from 'src/hooks/useAggregatedIntervalDetails';
+import {useDate} from 'src/hooks/useDate';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
-import {convertTimestampToDateShort} from '../../utils/convert-timestamp-to-date-short';
-
 const containerRef = ref<HTMLDivElement | null>(null);
+const {convertTimestampToIsoDate} = useDate();
 
 useTimelinePagination();
 
@@ -121,7 +121,7 @@ const handleBlockClick = (block: VisibleBlock) => {
 
       <div class="timeline-grid__header timeline-grid__grid">
         <span v-for="vI in pageVisibleIntervalsRef.value">
-          {{ convertTimestampToDateShort(vI.timestamp) }}
+          {{ convertTimestampToIsoDate(vI.timestamp) }}
         </span>
       </div>
 
@@ -165,7 +165,7 @@ const handleBlockClick = (block: VisibleBlock) => {
                 >
                   File timestamp
                 </n-tag>
-                {{ convertTimestampToDateShort(vB.start) }}
+                {{ convertTimestampToIsoDate(vB.start) }}
               </div>
             </div>
           </n-tooltip>

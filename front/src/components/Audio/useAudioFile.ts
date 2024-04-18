@@ -27,6 +27,14 @@ export const audioFileBitDepthRef = reactive<AudioFileBitDepthRef>({
   value: null,
 });
 
+interface AudioDurationRef {
+  value: number; // seconds
+}
+
+export const audioDurationRef = reactive<AudioDurationRef>({
+  value: 0,
+});
+
 export function useAudioFile() {
   const {notify} = useNotification();
   const {loadBlob} = useWaveSurferLoader();
@@ -85,11 +93,12 @@ export function useAudioFile() {
       url.searchParams.append('start', start.toString());
       url.searchParams.append('end', end.toString());
 
-      const response = await fetch(url);
+      const response = await fetch(url.toString());
 
       if (response.status !== 200) {
+        const text = await response.text();
         // noinspection ExceptionCaughtLocallyJS
-        throw new Error(`Failed to fetch audio at ${url}`);
+        throw new Error(`${response.status}: ${text}`);
       }
 
       const arrayBuffer = await response.arrayBuffer();
@@ -105,6 +114,7 @@ export function useAudioFile() {
       );
 
       audioIsLoadingRef.value = false;
+      audioDurationRef.value = audioBuffer.duration;
 
       const wav = encodeWavFileFromAudioBuffer(audioBuffer, 0);
       const blob = new Blob([wav]);

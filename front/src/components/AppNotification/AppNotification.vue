@@ -3,7 +3,7 @@ import type {NotificationType} from 'naive-ui';
 import {NButton, useMessage, useNotification} from 'naive-ui';
 import {h, watch} from 'vue';
 
-import {ALERT_TIMER, LINK_BUG_REPORT} from '../../constants';
+import {ALERT_TIMER} from '../../constants';
 import {combineStringsWithBreaks} from '../../utils/combine-strings-with-breaks';
 import {copyToClipboard} from '../../utils/copy-to-clipboard';
 import {VERSION} from '../../version';
@@ -43,12 +43,11 @@ function render(
                 description,
               ]);
               copyToClipboard(message);
-              window.open(LINK_BUG_REPORT);
               n.destroy();
             },
           },
           {
-            default: () => 'Copy error & open bug report',
+            default: () => 'Copy error',
           },
         );
       },

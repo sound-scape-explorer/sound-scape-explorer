@@ -17,7 +17,8 @@ class ConfigParser:
         self.folder = folder
         self.excel = ExcelFile(self.path)
 
-    def validate(self, path: str) -> str:
+    @staticmethod
+    def validate(path: str) -> str:
         assert path is not None, "Please define a path"
         assert Path(path).exists(), f"Path {path} does not exist"
         return path

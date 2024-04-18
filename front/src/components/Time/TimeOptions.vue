@@ -25,7 +25,7 @@ import {computed, type ComputedRef, ref, watch} from 'vue';
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 
-const {convertTimestampToDate, convertDateToIsoDate} = useDate();
+const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
 const {filterByTime} = useScatterFilterTime();
 
 const uiDisabled: ComputedRef<boolean> = computed(
@@ -43,10 +43,8 @@ const dateStartRef = computed<Dayjs>(() => {
 });
 
 const dateEndRef = computed<string>(() => {
-  const end = convertTimestampToDate(
-    dateStartRef.value.unix() * 1000 + timeStore.duration * 1000,
-  );
-  return convertDateToIsoDate(end);
+  const endDate = dateStartRef.value.unix() * 1000 + timeStore.duration * 1000;
+  return convertTimestampToIsoDate(endDate);
 });
 
 interface Duration {
