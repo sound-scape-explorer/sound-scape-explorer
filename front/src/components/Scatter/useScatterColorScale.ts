@@ -113,7 +113,6 @@ export function useScatterColorScale() {
     }
 
     colorScaleRef.value = colorScale;
-    // notify('success', 'Colors', `${colorType} color scale generated`);
   };
 
   const {renderTraces} = useScatterTraces();
