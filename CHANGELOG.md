@@ -1,3 +1,16 @@
+## [13.2.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.3...v13.2.4) (2024-04-18)
+
+
+### Bug Fixes
+
+* **Front/AppDraggable:** Improve border repositionning ([2a094c0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2a094c0c3bf8e51f4c11dd6b517bade75292696c))
+* **Front/AppDraggable:** Improve drag zone styling ([83d6681](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/83d6681a8c48adae7b8b5b2c541f5b19efa25b6d))
+* **Front/Help:** Actually redirect to /docs ([05c2430](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/05c24307e12107d7a289d8dbb4d1abb8820ce4c6))
+* **Front/Scatter:** Clarify label ([2a5bd04](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2a5bd047b87b0ad0a76bc853165166bf71769471))
+* **Front/Scatter:** Display block start date instead of filename ([9df97c1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9df97c1aacae33288dd93ced4c1d90e526910602))
+* **Front/Scatter:** Set no name to scatter points to gain space on hover ([d8c9d4a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d8c9d4a7a68a8a4aae030bd6a14d5e7584867590))
+* **Front/Time:** Prevent changing play state if all points are selected ([37c6b96](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/37c6b9600991d09c42604f840d9ac12ab27e5057))
+
 ## [13.2.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.2...v13.2.3) (2024-04-18)
 
 
