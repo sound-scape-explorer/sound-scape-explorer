@@ -55,34 +55,44 @@ const checkBounds = (position?: Position) => {
     return;
   }
 
-  const w = position
-    ? position.x + containerRef.value.clientWidth
-    : x.value + containerRef.value.clientWidth;
-
-  const h = position
-    ? position.y + containerRef.value.clientHeight
-    : y.value + containerRef.value.clientHeight;
-
+  const w = containerRef.value.clientWidth;
+  const h = containerRef.value.clientHeight;
   const maxWidth = window.visualViewport.width;
   const maxHeight = window.visualViewport.height;
 
   if (position) {
-    if (position.x >= maxWidth || w >= maxWidth || position.x <= 0) {
-      x.value = defaultPos;
+    if (position.x <= 0) {
+      x.value = 0;
     }
 
-    if (position.y >= maxHeight || h >= maxHeight || position.y <= 0) {
-      y.value = defaultPos;
+    if (position.x >= maxWidth || position.x + w >= maxWidth) {
+      x.value = maxWidth - w;
+    }
+
+    if (position.y <= 0) {
+      y.value = 0;
+    }
+
+    if (position.y >= maxHeight || position.y + h >= maxHeight) {
+      y.value = maxHeight - h;
     }
     return;
   }
 
-  if (x.value >= maxWidth || w >= maxWidth || x.value <= 0) {
-    x.value = defaultPos;
+  if (x.value <= 0) {
+    x.value = 0;
   }
 
-  if (y.value >= maxHeight || h >= maxHeight || y.value <= 0) {
-    y.value = defaultPos;
+  if (x.value >= maxWidth || x.value + w >= maxWidth) {
+    x.value = maxWidth - w;
+  }
+
+  if (y.value <= 0) {
+    y.value = 0;
+  }
+
+  if (y.value >= maxHeight || y.value + h >= maxHeight) {
+    y.value = maxHeight - h;
   }
 };
 
