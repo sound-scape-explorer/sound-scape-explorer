@@ -1,3 +1,11 @@
+## [13.2.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.4...v13.2.5) (2024-04-19)
+
+
+### Bug Fixes
+
+* **Processing/AutoclusteredStorage:** Skip reading if path does not exist ([bd70e4e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bd70e4eb595a6bb133e9ddd2392aaa6c090a15cb))
+* **Processing/ExportDataframe:** Skip reduced features if path does not exist ([eaa44ce](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eaa44ce9ce5a8166b94bc298c658b553989635de))
+
 ## [13.2.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.3...v13.2.4) (2024-04-18)
 
 

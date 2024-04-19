@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="13.2.4"
+version="13.2.5"
 venv="sse-processing-$version"
 script="$venv/bin/activate"
 
