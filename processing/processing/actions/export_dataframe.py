@@ -2,8 +2,8 @@ from pandas import DataFrame
 
 from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
 from processing.common.AggregatedReduceable import AggregatedReduceable
-from processing.config.bands.BandStorage import BandStorage
 from processing.config.Config import Config
+from processing.config.bands.BandStorage import BandStorage
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
 from processing.config.files.FileSheet import FileSheet
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
@@ -104,9 +104,16 @@ def export_dataframe(
             continue
 
         for ar in ars:
-            aggregated_features = storage.read(ar.get_reduced_path(reducer))
+            reduced_path = ar.get_reduced_path(reducer)
+            reduced_path_exists = storage.exists_dataset(reduced_path)
+
+            if not reduced_path_exists:
+                continue
+
+            aggregated_features = storage.read(reduced_path)
+
             for d in range(reducer.dimensions):
-                key = f"{reducer.index}_{reducer.name}_{reducer.dimensions}d_{d+1}"
+                key = f"{reducer.index}_{reducer.name}_{reducer.dimensions}d_{d + 1}"
                 payload[key] = [af[d] for af in aggregated_features]
 
     # Aggregated data
@@ -119,7 +126,7 @@ def export_dataframe(
         )
         data = storage.read(path)
         for index in range(data.shape[1]):
-            key = f"{extractor.index}_{extractor.name}_{index+1}"
+            key = f"{extractor.index}_{extractor.name}_{index + 1}"
             payload[key] = [d[index] for d in data]
 
     df = DataFrame(payload)
