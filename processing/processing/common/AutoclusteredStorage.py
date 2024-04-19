@@ -36,10 +36,12 @@ class AutoclusteredStorage:
                 f"/{autocluster.index}"
             )
 
+            path_exists = storage.exists_dataset(path)
+            if not path_exists:
+                continue
+
             values = storage.read(path)
-
             autoclustered.load_values(values[:])
-
             autoclustereds.append(autoclustered)
 
         return autoclustereds
