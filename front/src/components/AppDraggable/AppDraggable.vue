@@ -115,8 +115,6 @@ const open = () => {
 
 watch(appDraggablesStore, open);
 
-onMounted(() => checkBounds);
-
 const storageRef = useLocalStorage(storageKey, {x: 100, y: 100});
 const dragRef = ref<HTMLElement | null>(null);
 
@@ -147,6 +145,8 @@ watch(pressed, () => {
     appDraggableSelectedRef.value = props.draggableKey;
   }
 });
+
+onMounted(() => checkBounds());
 </script>
 
 <template>
