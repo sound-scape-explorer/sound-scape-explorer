@@ -1,6 +1,6 @@
 import {onMounted, ref} from 'vue';
 
-import {useNotification} from '../components/AppNotification/useNotification';
+import {useAppNotification} from '../components/AppNotification/useAppNotification';
 import {storageFileRef} from './useStorageFile';
 
 export type Worker = typeof import('../workers/worker');
@@ -8,7 +8,7 @@ const worker = ref<Worker | null>(null);
 let isLoaded = false;
 
 export function useWorker() {
-  const {notify} = useNotification();
+  const {notify} = useAppNotification();
 
   const read = async (
     // eslint-disable-next-line no-unused-vars

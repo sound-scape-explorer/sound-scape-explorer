@@ -6,7 +6,7 @@ import {audioHostRef} from '../../hooks/useAudioHost';
 import {integrationRef} from '../../hooks/useIntegrations';
 import {getBitDepthFromWav} from '../../utils/get-bit-depth-from-wav';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import {useNotification} from '../AppNotification/useNotification';
+import {useAppNotification} from '../AppNotification/useAppNotification';
 import {audioContextRef} from './useAudioContext';
 import {audioIsLoadingRef, useAudioLoading} from './useAudioLoading';
 import {useWaveSurferLoader} from './useWaveSurferLoader';
@@ -36,7 +36,7 @@ export const audioDurationRef = reactive<AudioDurationRef>({
 });
 
 export function useAudioFile() {
-  const {notify} = useNotification();
+  const {notify} = useAppNotification();
   const {loadBlob} = useWaveSurferLoader();
   const {verifyAudioLoading} = useAudioLoading();
 

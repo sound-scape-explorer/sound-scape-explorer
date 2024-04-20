@@ -11,7 +11,7 @@ import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 import {ref} from 'vue';
 
-import {useNotification} from '../AppNotification/useNotification';
+import {useAppNotification} from '../AppNotification/useAppNotification';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
@@ -25,7 +25,7 @@ interface ExportData {
 }
 
 export function useScatterExport() {
-  const {notify} = useNotification();
+  const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
 
   const loadingRef = ref<boolean>(false);

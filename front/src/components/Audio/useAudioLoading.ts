@@ -1,4 +1,4 @@
-import {useNotification} from 'src/components/AppNotification/useNotification';
+import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
 import {reactive} from 'vue';
 
 interface AudioIsLoadingRef {
@@ -10,7 +10,7 @@ export const audioIsLoadingRef = reactive<AudioIsLoadingRef>({
 });
 
 export function useAudioLoading() {
-  const {notify} = useNotification();
+  const {notify} = useAppNotification();
   const verifyAudioLoading = (): boolean => {
     if (audioIsLoadingRef.value === true) {
       notify('error', 'Audio is already loading', '');

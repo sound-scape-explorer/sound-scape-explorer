@@ -1,5 +1,5 @@
 import {appDraggablesStore} from 'src/components/AppDraggable/appDraggablesStore';
-import {useNotification} from 'src/components/AppNotification/useNotification';
+import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
 import {importLockRef} from 'src/components/Import/useImportLock';
 import {computed, reactive} from 'vue';
 
@@ -15,7 +15,7 @@ export const storageFileRef = reactive<StorageFileRef>({
 
 export function useStorageFile() {
   const {close} = useWorker();
-  const {notify} = useNotification();
+  const {notify} = useAppNotification();
 
   const isStorageFileRef = computed<boolean>(() => {
     return storageFileRef.value !== null;
