@@ -62,38 +62,39 @@ const checkBounds = (position?: Position) => {
   const maxHeight = window.visualViewport.height;
 
   if (position) {
-    if (position.x <= 0) {
-      x.value = 0;
-    }
-
     if (position.x >= maxWidth || position.x + w >= maxWidth) {
       x.value = maxWidth - w;
+    }
+
+    if (position.y >= maxHeight || position.y + h >= maxHeight) {
+      y.value = maxHeight - h;
+    }
+
+    if (position.x <= 0) {
+      x.value = 0;
     }
 
     if (position.y <= 0) {
       y.value = 0;
     }
 
-    if (position.y >= maxHeight || position.y + h >= maxHeight) {
-      y.value = maxHeight - h;
-    }
     return;
-  }
-
-  if (x.value <= 0) {
-    x.value = 0;
   }
 
   if (x.value >= maxWidth || x.value + w >= maxWidth) {
     x.value = maxWidth - w;
   }
 
-  if (y.value <= 0) {
-    y.value = 0;
-  }
-
   if (y.value >= maxHeight || y.value + h >= maxHeight) {
     y.value = maxHeight - h;
+  }
+
+  if (x.value <= 0) {
+    x.value = 0;
+  }
+
+  if (y.value <= 0) {
+    y.value = 0;
   }
 };
 
