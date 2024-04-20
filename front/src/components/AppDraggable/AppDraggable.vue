@@ -5,6 +5,7 @@ import {
   useDraggable,
   useLocalStorage,
   useMousePressed,
+  useWindowSize,
 } from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
 import {computed, onMounted, ref, watch} from 'vue';
@@ -147,6 +148,8 @@ watch(pressed, () => {
 });
 
 onMounted(() => checkBounds());
+const {width, height} = useWindowSize();
+watch([width, height], () => checkBounds());
 </script>
 
 <template>
