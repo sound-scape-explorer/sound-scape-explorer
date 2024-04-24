@@ -3,7 +3,7 @@ import type {Digester} from 'src/hooks/useDigesters';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {reactive} from 'vue';
 
-import {useFileReader} from '../../hooks/file-reader';
+import {useStorageReader} from '../../composables/storage-reader';
 
 export interface Digested {
   digester: Digester;
@@ -27,16 +27,16 @@ export const digestedRef = reactive<DigestedRef>({
 });
 
 export function useDigested() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readDigested = (digester: Digester) =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (bandRef.value === null || integrationRef.value === null) {
         return;
       }
 
       const values = await worker.readDigested(
-        storage,
+        file,
         bandRef.value.name,
         integrationRef.value.seconds,
         digester.index,

@@ -12,8 +12,8 @@ import {reducersRef} from 'src/hooks/useReducers';
 import {trajectoriesRef} from 'src/hooks/useTrajectories';
 import {computed} from 'vue';
 
+import {useVersion} from '../../composables/version';
 import {useStorageSettings} from '../../hooks/useStorageSettings';
-import {useVersion} from '../../hooks/useVersion';
 
 const {settings} = useStorageSettings();
 const {version} = useVersion();

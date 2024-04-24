@@ -1,6 +1,6 @@
 import {reactive} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
@@ -16,10 +16,10 @@ export const aggregatedLabelsRef = reactive<AggregatedLabelsRef>({
 });
 
 export function useAggregatedLabels() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readAggregatedLabels = () =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -29,7 +29,7 @@ export function useAggregatedLabels() {
       }
 
       aggregatedLabelsRef.value = await worker.readAggregatedLabels(
-        storage,
+        file,
         bandRef.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,

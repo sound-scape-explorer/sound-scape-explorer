@@ -1,12 +1,12 @@
 import {onMounted, ref} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from './storage-reader';
 
 const version = ref<string | null>(null);
 let isLoaded = false;
 
 export function useVersion() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   onMounted(async () => {
     if (isLoaded) {

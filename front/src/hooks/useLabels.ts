@@ -1,7 +1,7 @@
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {reactive} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {bandRef} from './useBands';
 import {integrationRef} from './useIntegrations';
 
@@ -39,7 +39,7 @@ export const labelsPropertiesAsColorTypesRef = reactive<LabelsPropertiesRef>({
 });
 
 export function useLabels() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readLabels = () =>
     read(async (worker, file) => {

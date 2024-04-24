@@ -1,6 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 
 export interface Range {
   index: number;
@@ -26,7 +26,7 @@ export const rangesRef = reactive<RangesRef>({
 });
 
 export function useRanges() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readRanges = () =>
     read(async (worker, file) => {

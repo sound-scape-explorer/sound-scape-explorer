@@ -1,6 +1,6 @@
 import {reactive} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
@@ -35,7 +35,7 @@ export const tracedFusedRef = reactive<TracedFusedRef>({
 });
 
 export function useTraced() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readTraced = () =>
     read(async (worker, file) => {

@@ -3,7 +3,7 @@ import {useAppNotification} from 'src/components/AppNotification/useAppNotificat
 import {importLockRef} from 'src/components/Import/useImportLock';
 import {computed, ref} from 'vue';
 
-import {useWorker} from './useWorker';
+import {useWorker} from './worker';
 
 const file = ref<File | null>(null);
 const hasFile = computed<boolean>(() => file.value !== null);

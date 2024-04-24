@@ -1,8 +1,8 @@
 import {reactive, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
+import {useStorageAudioHost} from '../../composables/storage-audio-host';
 import type {BlockDetails} from '../../hooks/useAggregatedIntervalDetails';
-import {useAudioHost} from '../../hooks/useAudioHost';
 import {integrationRef} from '../../hooks/useIntegrations';
 import {getBitDepthFromWav} from '../../utils/get-bit-depth-from-wav';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
@@ -39,7 +39,7 @@ export function useAudioFile() {
   const {notify} = useAppNotification();
   const {loadBlob} = useWaveSurferLoader();
   const {verifyAudioLoading} = useAudioLoading();
-  const {audioHost} = useAudioHost();
+  const {audioHost} = useStorageAudioHost();
 
   const openAudioModal = () => {
     if (appDraggablesStore.audio === true) {

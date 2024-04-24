@@ -3,7 +3,7 @@ import {ref, watch} from 'vue';
 
 const audioHost = ref<string | null>(null);
 
-export function useAudioHost() {
+export function useStorageAudioHost() {
   const {settings} = useStorageSettings();
 
   watch(settings, () => {

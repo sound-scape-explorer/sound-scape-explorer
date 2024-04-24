@@ -3,7 +3,7 @@ import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-opt
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {reducerRef, reducerSelectedRef} from './useReducers';
 
 export interface Integration {
@@ -45,7 +45,7 @@ export const integrationOptionsRef = reactive<IntegrationOptionsRef>({
 });
 
 export function useIntegrations() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readIntegrations = () =>
     read(async (worker, file) => {

@@ -1,6 +1,6 @@
 import {reactive} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
@@ -17,7 +17,7 @@ export const reducedFeaturesRef = reactive<ReducedFeaturesRef>({
 });
 
 export function useReducedFeatures() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readReducedFeatures = () =>
     read(async (worker, file) => {

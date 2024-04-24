@@ -3,7 +3,7 @@ import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-opt
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {reducerRef, reducerSelectedRef} from './useReducers';
 
 export interface Band {
@@ -46,11 +46,11 @@ export const bandOptionsRef = reactive<BandOptionsRef>({
 });
 
 export function useBands() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readBands = () =>
-    read(async (worker, storage) => {
-      bandsRef.value = await worker.readBands(storage);
+    read(async (worker, file) => {
+      bandsRef.value = await worker.readBands(file);
     });
 
   watchEffect(readBands);

@@ -1,6 +1,6 @@
 import {reactive} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
@@ -16,7 +16,7 @@ export const aggregatedTimestampsRef = reactive<AggregatedTimestampsRef>({
 });
 
 export function useAggregatedTimestamps() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readAggregatedTimestamps = () =>
     read(async (worker, file) => {

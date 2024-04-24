@@ -1,6 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 
 export interface Site {
   index: number;
@@ -25,7 +25,7 @@ export const sitesRef = reactive<SitesRef>({
 });
 
 export function useSites() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readSites = () =>
     read(async (worker, file) => {

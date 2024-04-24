@@ -17,9 +17,9 @@ import {
 } from '@vicons/ionicons5';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {settingsStore} from 'src/components/Settings/settingsStore';
+import {useStorageFile} from 'src/composables/storage-file';
 import {useKeyboard} from 'src/hooks/useKeyboard';
 import {isSelectedRef} from 'src/hooks/useSelection';
-import {useStorageFile} from 'src/hooks/useStorageFile';
 
 import {appDraggableSelectedRef} from '../AppDraggable/appDraggableSelected';
 import {

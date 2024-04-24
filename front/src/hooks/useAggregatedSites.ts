@@ -1,6 +1,6 @@
 import {reactive} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
@@ -18,10 +18,10 @@ export const aggregatedSitesRef = reactive<AggregatedSitesRef>({
 });
 
 export function useAggregatedSites() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readAggregatedSites = () =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -31,7 +31,7 @@ export function useAggregatedSites() {
       }
 
       aggregatedSitesRef.value = await worker.readAggregatedSites(
-        storage,
+        file,
         bandRef.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,

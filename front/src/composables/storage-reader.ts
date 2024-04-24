@@ -1,8 +1,8 @@
-import {useAppNotification} from '../components/AppNotification/useAppNotification';
-import {useStorageFile} from './useStorageFile';
-import {useWorker, type Worker} from './useWorker';
+import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
+import {useStorageFile} from 'src/composables/storage-file';
+import {useWorker, type Worker} from 'src/composables/worker';
 
-export function useFileReader() {
+export function useStorageReader() {
   const {worker} = useWorker();
   const {file} = useStorageFile();
   const {notify} = useAppNotification();

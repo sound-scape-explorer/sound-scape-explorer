@@ -16,8 +16,8 @@ import StorageLoad from 'src/components/StorageLoad/StorageLoad.vue';
 import Time from 'src/components/Time/Time.vue';
 import Timeline from 'src/components/Timeline/Timeline.vue';
 import Trajectories from 'src/components/Trajectories/Trajectories.vue';
-import {useStorageFile} from 'src/hooks/useStorageFile';
-import {useWorker} from 'src/hooks/useWorker';
+import {useStorageFile} from 'src/composables/storage-file';
+import {useWorker} from 'src/composables/worker';
 import {onMounted} from 'vue';
 
 import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore';

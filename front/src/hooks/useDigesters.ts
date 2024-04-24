@@ -1,6 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 
 export interface Digester {
   index: number;
@@ -16,11 +16,11 @@ export const digestersRef = reactive<DigestersRef>({
 });
 
 export function useDigesters() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readDigesters = () =>
-    read(async (worker, storage) => {
-      digestersRef.value = await worker.readDigesters(storage);
+    read(async (worker, file) => {
+      digestersRef.value = await worker.readDigesters(file);
     });
 
   watchEffect(readDigesters);

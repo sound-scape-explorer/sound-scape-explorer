@@ -1,6 +1,6 @@
 import {reactive} from 'vue';
 
-import {useFileReader} from './file-reader';
+import {useStorageReader} from '../composables/storage-reader';
 import {bandRef} from './useBands';
 import {type Extractor, nonNnExtractorsRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
@@ -19,10 +19,10 @@ export const aggregatedIndicatorsRef = reactive<AggregatedIndicatorsRef>({
 });
 
 export function useAggregatedIndicators() {
-  const {read} = useFileReader();
+  const {read} = useStorageReader();
 
   const readAggregatedIndicators = () =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -34,7 +34,7 @@ export function useAggregatedIndicators() {
       const extractorsIndexes = nonNnExtractorsRef.value.map((ex) => ex.index);
 
       const aggregated = await worker.readAggregatedIndicators(
-        storage,
+        file,
         bandRef.value.name,
         integrationRef.value.seconds,
         extractorsIndexes,
