@@ -6,10 +6,10 @@ import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {useDate} from 'src/composables/date';
 import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
-import {sitesRef} from 'src/hooks/useSites';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
+import {useStorageSites} from '../../composables/storage-sites';
 import {cyclingScaleRef} from '../Scatter/useScatterColorScale';
 import {indicatorDataRef, useIndicators} from './useIndicators';
 
@@ -42,13 +42,15 @@ watch(indicatorSelectedRef, () =>
   selectIndicator(parseIndex(indicatorSelectedRef.value)),
 );
 
+const {sites} = useStorageSites();
+
 const sitesSelectedRef = ref([]);
 const sitesOptionsRef = computed(() => {
-  if (sitesRef.value === null) {
+  if (sites.value === null) {
     return [];
   }
 
-  const names = sitesRef.value.map((s) => s.name);
+  const names = sites.value.map((s) => s.name);
   return convertToNaiveSelectOptions(names);
 });
 
@@ -59,7 +61,7 @@ const updateSites = (sitesNames: string[]) => {
 const isByDateRef = ref<boolean>(false);
 
 const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
-  if (sitesRef.value === null) {
+  if (sites.value === null) {
     return {
       values: [],
       labels: [],
@@ -69,9 +71,8 @@ const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
 
   const values = indicatorDataRef.value.map((d) => d.values[0]);
   const timestamps = indicatorDataRef.value.map((d) => d.timestamp);
-  const sites = indicatorDataRef.value.map((d) => d.site);
-
-  const sitesNames = sitesRef.value.map((site) => site.name);
+  const sitesValues = indicatorDataRef.value.map((d) => d.site);
+  const sitesNames = sites.value.map((site) => site.name);
   const scale = cyclingScaleRef.value.colors(sitesNames.length + 1);
 
   const colors = indicatorDataRef.value.map(
@@ -85,7 +86,7 @@ const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
         timestamps.map(
           (t, i) =>
             `${convertTimestampToIsoDate(t)}<br>Site: ${
-              sites[i]
+              sitesValues[i]
             }<br>Interval: ${i}`,
         ),
       ],
@@ -103,7 +104,7 @@ const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
       indices.map(
         (i) =>
           `${convertTimestampToIsoDate(timestamps[i])}<br>Site: ${
-            sites[i]
+            sitesValues[i]
           }<br>Interval: ${i}`,
       ),
     ],
