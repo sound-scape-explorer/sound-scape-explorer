@@ -1,4 +1,4 @@
-import {useDate} from 'src/hooks/useDate';
+import {useDate} from 'src/composables/date';
 import {mapRange} from 'src/utils/map-range';
 
 import {chromaScaleRef} from '.././Scatter/useScatterColorScale';

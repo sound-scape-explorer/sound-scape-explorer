@@ -1,4 +1,4 @@
-import {useDate} from 'src/hooks/useDate';
+import {useDate} from 'src/composables/date';
 import {isHourDuringDay} from 'src/utils/is-hour-during-day';
 
 import {dayColor, nightColor} from '.././Scatter/useScatterColorScale';

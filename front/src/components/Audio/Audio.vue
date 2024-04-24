@@ -27,9 +27,9 @@ import {
   useAudioTransport,
 } from 'src/components/Audio/useAudioTransport';
 import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
+import {useDate} from 'src/composables/date';
 import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
-import {useDate} from 'src/hooks/useDate';
 
 import {useStorageSettings} from '../../hooks/useStorageSettings';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';

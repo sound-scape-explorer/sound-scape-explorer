@@ -1,4 +1,5 @@
 import type {Dayjs} from 'dayjs';
+import {useDate} from 'src/composables/date';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {
   aggregatedIntervalDetailsRef,
@@ -10,7 +11,6 @@ import {
   aggregatedSitesRef,
 } from 'src/hooks/useAggregatedSites';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
-import {useDate} from 'src/hooks/useDate';
 import {ref, watchEffect} from 'vue';
 
 import {useStorageSettings} from '../../hooks/useStorageSettings';

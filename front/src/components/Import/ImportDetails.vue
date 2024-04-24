@@ -1,8 +1,8 @@
 <script lang="ts" setup="">
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
+import {useDate} from 'src/composables/date';
 import {autoclustersRef, useAutoclusters} from 'src/hooks/useAutoclusters';
 import {bandsRef} from 'src/hooks/useBands';
-import {useDate} from 'src/hooks/useDate';
 import {digestersRef} from 'src/hooks/useDigesters';
 import {extractorsRef} from 'src/hooks/useExtractors';
 import {integrationsRef} from 'src/hooks/useIntegrations';

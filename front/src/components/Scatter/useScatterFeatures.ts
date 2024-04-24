@@ -3,8 +3,8 @@ import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 
+import {useDate} from '../../composables/date';
 import {aggregatedIntervalDetailsRef} from '../../hooks/useAggregatedIntervalDetails';
-import {useDate} from '../../hooks/useDate';
 import {alphaHighRef, alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';

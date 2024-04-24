@@ -17,7 +17,7 @@ import {
 } from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
-import {useDate} from 'src/hooks/useDate';
+import {useDate} from 'src/composables/date';
 import {useKeyboard} from 'src/hooks/useKeyboard';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 

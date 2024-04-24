@@ -9,8 +9,8 @@ import {
   useTimelinePagination,
   type VisibleBlock,
 } from 'src/components/Timeline/useTimelinePagination';
+import {useDate} from 'src/composables/date';
 import {aggregatedIntervalDetailsRef} from 'src/hooks/useAggregatedIntervalDetails';
-import {useDate} from 'src/hooks/useDate';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
 const containerRef = ref<HTMLDivElement | null>(null);
