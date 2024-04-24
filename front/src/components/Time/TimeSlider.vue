@@ -2,11 +2,11 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {rangesRef} from 'src/hooks/useRanges';
 import {reducerRef} from 'src/hooks/useReducers';
 import {computed, ref, watch} from 'vue';
 
+import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {SLIDER_LIMITS} from '../../constants';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';
@@ -14,10 +14,7 @@ import {useScatterFilterTime} from '../Scatter/useScatterFilterTime';
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 
-/**
- * State
- */
-
+const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
@@ -83,11 +80,11 @@ interface Interest {
 }
 
 const interests = computed<Interest[]>(() => {
-  if (aggregatedTimestampsRef.value === null) {
+  if (aggregatedTimestamps.value === null) {
     return [];
   }
 
-  const allTimestamps = aggregatedTimestampsRef.value.map((t) => t / 1000);
+  const allTimestamps = aggregatedTimestamps.value.map((t) => t / 1000);
 
   const interests: Interest[] = [];
   const ignoreDecimalsFactor = 1 / timeStore.duration;

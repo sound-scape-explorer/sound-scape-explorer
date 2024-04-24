@@ -29,8 +29,8 @@ import {
 import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {useDate} from 'src/composables/date';
 import {PLAYBACK_RATE} from 'src/constants';
-import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 
+import {useStorageAggregatedSites} from '../../composables/storage-aggregated-sites';
 import {useStorageSettings} from '../../composables/storage-settings';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from '../Details/useDetails';
@@ -38,6 +38,7 @@ import {clickedRef} from '../Scatter/useScatterClick';
 import {audioBlockRef, audioDurationRef} from './useAudioFile';
 
 const {settings} = useStorageSettings();
+const {aggregatedSites} = useStorageAggregatedSites();
 const {intervalDateRef} = useDetails();
 const {convertDateToIsoDate} = useDate();
 
@@ -140,7 +141,7 @@ const {downloadAudio} = useAudioDownload();
       </n-grid>
 
       <n-grid
-        v-if="aggregatedSitesRef.value !== null && clickedRef.value !== null"
+        v-if="aggregatedSites !== null && clickedRef.value !== null"
         :cols="1"
         class="grid"
         x-gap="12"
@@ -153,7 +154,7 @@ const {downloadAudio} = useAudioDownload();
             Site
           </n-tag>
 
-          {{ aggregatedSitesRef.value[clickedRef.value].site }}
+          {{ aggregatedSites[clickedRef.value].site }}
         </n-gi>
         <n-gi>
           <n-tag

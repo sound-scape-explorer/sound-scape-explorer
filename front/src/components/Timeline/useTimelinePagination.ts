@@ -1,10 +1,10 @@
 import {reactive, watchEffect} from 'vue';
 
 import {
-  aggregatedIntervalDetailsRef,
   type BlockDetails,
-} from '../../hooks/useAggregatedIntervalDetails';
-import {aggregatedTimestampsRef} from '../../hooks/useAggregatedTimestamps';
+  useStorageAggregatedIntervalDetails,
+} from '../../composables/storage-aggregated-interval-details';
+import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {integrationRef} from '../../hooks/useIntegrations';
 import {isSelectedRef} from '../../hooks/useSelection';
 import {countIterations} from '../../utils/count-iterations';
@@ -99,20 +99,23 @@ export const pageVisibleBlocksRef = reactive<PageVisibleBlocksRef>({
 });
 
 export function useTimelinePagination() {
+  const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
+  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+
   const computePaginationTotal = () => {
     // total number of intervals in the timeline (between min and max timestamps)
 
     if (
       isSelectedRef.value === false ||
       integrationRef.value === null ||
-      aggregatedTimestampsRef.value === null
+      aggregatedTimestamps.value === null
     ) {
       return;
     }
 
     const milliseconds = integrationRef.value.seconds * 1000;
-    pageTimestampMinRef.value = Math.min(...aggregatedTimestampsRef.value);
-    pageTimestampMaxRef.value = Math.max(...aggregatedTimestampsRef.value);
+    pageTimestampMinRef.value = Math.min(...aggregatedTimestamps.value);
+    pageTimestampMaxRef.value = Math.max(...aggregatedTimestamps.value);
 
     pageTotalRef.value = countIterations(
       pageTimestampMinRef.value,
@@ -151,8 +154,8 @@ export function useTimelinePagination() {
 
   const computeVisibleBlocks = () => {
     if (
-      aggregatedIntervalDetailsRef.value === null ||
-      aggregatedTimestampsRef.value === null ||
+      aggregatedIntervalDetails.value === null ||
+      aggregatedTimestamps.value === null ||
       integrationRef.value === null
     ) {
       return;
@@ -164,19 +167,17 @@ export function useTimelinePagination() {
     const timestampMin = timestampOrigin + min * milliseconds;
     const timestampMax = timestampMin + pageSizeRef.value * milliseconds;
 
-    const filteredBlocks = aggregatedIntervalDetailsRef.value.filter(
-      (blocks) => {
-        let inBound = false;
+    const filteredBlocks = aggregatedIntervalDetails.value.filter((blocks) => {
+      let inBound = false;
 
-        for (const block of blocks) {
-          if (block.start >= timestampMin && block.start < timestampMax) {
-            inBound = true;
-          }
+      for (const block of blocks) {
+        if (block.start >= timestampMin && block.start < timestampMax) {
+          inBound = true;
         }
+      }
 
-        return inBound;
-      },
-    );
+      return inBound;
+    });
 
     const visibleBlocks: VisibleBlock[] = [];
 

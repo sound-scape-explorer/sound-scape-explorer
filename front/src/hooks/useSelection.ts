@@ -12,11 +12,11 @@ import {reactive, watchEffect} from 'vue';
 
 import {useStorageAggregatedFeatures} from '../composables/storage-aggregated-features';
 import {useStorageAggregatedIndicators} from '../composables/storage-aggregated-indicators';
+import {useStorageAggregatedIntervalDetails} from '../composables/storage-aggregated-interval-details';
+import {useStorageAggregatedLabels} from '../composables/storage-aggregated-labels';
+import {useStorageAggregatedSites} from '../composables/storage-aggregated-sites';
+import {useStorageAggregatedTimestamps} from '../composables/storage-aggregated-timestamps';
 import {useStorageReducedFeatures} from '../composables/storage-reduced-features';
-import {useAggregatedIntervalDetails} from './useAggregatedIntervalDetails';
-import {useAggregatedLabels} from './useAggregatedLabels';
-import {useAggregatedSites} from './useAggregatedSites';
-import {useAggregatedTimestamps} from './useAggregatedTimestamps';
 import {bandRef, useBands} from './useBands';
 import {extractorRef, useExtractors} from './useExtractors';
 import {integrationRef, useIntegrations} from './useIntegrations';
@@ -39,11 +39,13 @@ export function useSelection() {
   const {readAggregatedIndicators, resetAggregatedIndicators} =
     useStorageAggregatedIndicators();
   const {readAggregatedTimestamps, resetAggregatedTimestamps} =
-    useAggregatedTimestamps();
-  const {readAggregatedSites, resetAggregatedSites} = useAggregatedSites();
+    useStorageAggregatedTimestamps();
+  const {readAggregatedSites, resetAggregatedSites} =
+    useStorageAggregatedSites();
   const {readAggregatedIntervalDetails, resetAggregatedIntervalDetails} =
-    useAggregatedIntervalDetails();
-  const {readAggregatedLabels, resetAggregatedLabels} = useAggregatedLabels();
+    useStorageAggregatedIntervalDetails();
+  const {readAggregatedLabels, resetAggregatedLabels} =
+    useStorageAggregatedLabels();
   const {readReducedFeatures, resetReducedFeatures} =
     useStorageReducedFeatures();
   const {generateColorScale, resetColorScale} = useScatterColorScale();

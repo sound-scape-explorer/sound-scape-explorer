@@ -1,8 +1,8 @@
 import {reactive, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
+import type {BlockDetails} from '../../composables/storage-aggregated-interval-details';
 import {useStorageAudioHost} from '../../composables/storage-audio-host';
-import type {BlockDetails} from '../../hooks/useAggregatedIntervalDetails';
 import {integrationRef} from '../../hooks/useIntegrations';
 import {getBitDepthFromWav} from '../../utils/get-bit-depth-from-wav';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';

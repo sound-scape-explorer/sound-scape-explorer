@@ -1,6 +1,6 @@
-import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {reactive} from 'vue';
 
+import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {timeStore} from '../Time/timeStore';
 import {useScatterTraces} from './useScatterTraces';
 
@@ -13,17 +13,19 @@ export const pointsFilteredByTimeRef = reactive<PointsFilteredByTimeRef>({
 });
 
 export function useScatterFilterTime() {
+  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+
   const isVisibleByTime = (index: number): boolean => {
     if (timeStore.isAllSelected) {
       return true;
     }
 
-    if (aggregatedTimestampsRef.value === null) {
+    if (aggregatedTimestamps.value === null) {
       return false;
     }
 
     // Unix time in seconds
-    const timestamp = aggregatedTimestampsRef.value[index] / 1000;
+    const timestamp = aggregatedTimestamps.value[index] / 1000;
 
     const start = timeStore.value;
     const duration = timeStore.duration;
@@ -35,7 +37,7 @@ export function useScatterFilterTime() {
   const {renderTraces} = useScatterTraces();
 
   const filterByTime = (): void => {
-    if (aggregatedTimestampsRef.value === null) {
+    if (aggregatedTimestamps.value === null) {
       return;
     }
 
@@ -43,7 +45,7 @@ export function useScatterFilterTime() {
 
     for (
       let intervalIndex = 0;
-      intervalIndex < aggregatedTimestampsRef.value.length;
+      intervalIndex < aggregatedTimestamps.value.length;
       intervalIndex += 1
     ) {
       const isVisible = isVisibleByTime(intervalIndex);

@@ -2,14 +2,14 @@ import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import type {Digested} from 'src/components/Digested/useDigested';
 import type {AggregatedIndicator} from 'src/composables/storage-aggregated-indicators';
-import type {File as FileConfig} from 'src/composables/storage-files';
-import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
-import type {Site} from 'src/composables/storage-sites';
 import type {
   BlockDetails,
   IntervalDetails,
-} from 'src/hooks/useAggregatedIntervalDetails';
-import type {AggregatedSite} from 'src/hooks/useAggregatedSites';
+} from 'src/composables/storage-aggregated-interval-details';
+import type {AggregatedSite} from 'src/composables/storage-aggregated-sites';
+import type {File as FileConfig} from 'src/composables/storage-files';
+import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
+import type {Site} from 'src/composables/storage-sites';
 import type {Band} from 'src/hooks/useBands';
 import type {Digester} from 'src/hooks/useDigesters';
 import type {Extractor} from 'src/hooks/useExtractors';

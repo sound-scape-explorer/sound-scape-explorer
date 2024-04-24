@@ -1,15 +1,15 @@
 import {Csv} from 'src/common/Csv';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
-import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
-import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
-import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {ref} from 'vue';
 
 import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
+import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
+import {useStorageAggregatedSites} from '../../composables/storage-aggregated-sites';
+import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {useStorageReducedFeatures} from '../../composables/storage-reduced-features';
 import {useAppNotification} from '../AppNotification/useAppNotification';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
@@ -30,6 +30,9 @@ export function useScatterExport() {
   const {reducedFeatures} = useStorageReducedFeatures();
   const {aggregatedFeatures} = useStorageAggregatedFeatures();
   const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedLabels} = useStorageAggregatedLabels();
+  const {aggregatedSites} = useStorageAggregatedSites();
+  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
   const loadingRef = ref<boolean>(false);
 
@@ -37,14 +40,14 @@ export function useScatterExport() {
     if (
       bandRef.value === null ||
       integrationRef.value === null ||
-      aggregatedTimestampsRef.value === null ||
+      aggregatedTimestamps.value === null ||
       aggregatedFeatures.value === null ||
-      aggregatedLabelsRef.value === null ||
+      aggregatedLabels.value === null ||
       pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null ||
       labelsPropertiesRef.value === null ||
       reducedFeatures.value === null ||
-      aggregatedSitesRef.value === null ||
+      aggregatedSites.value === null ||
       aggregatedIndicators.value === null
     ) {
       return;
@@ -60,7 +63,7 @@ export function useScatterExport() {
 
     for (
       let intervalIndex = 0;
-      intervalIndex < aggregatedTimestampsRef.value.length;
+      intervalIndex < aggregatedTimestamps.value.length;
       intervalIndex += 1
     ) {
       const isFilteredByMeta = pointsFilteredByMetaRef.value[intervalIndex];
@@ -72,9 +75,9 @@ export function useScatterExport() {
 
       const aggregatedFeaturesInterval =
         aggregatedFeatures.value[intervalIndex];
-      const timestamp = aggregatedTimestampsRef.value[intervalIndex];
-      const site = aggregatedSitesRef.value[intervalIndex];
-      const aggregatedLabels = aggregatedLabelsRef.value[intervalIndex];
+      const timestamp = aggregatedTimestamps.value[intervalIndex];
+      const site = aggregatedSites.value[intervalIndex];
+      const aggregatedLabelsInterval = aggregatedLabels.value[intervalIndex];
 
       const reducedFeaturesInterval = reducedFeatures.value[intervalIndex];
 
@@ -82,7 +85,7 @@ export function useScatterExport() {
         intervalIndex: intervalIndex,
         timestamp: timestamp,
         site: site.site,
-        aggregatedLabels: aggregatedLabels,
+        aggregatedLabels: aggregatedLabelsInterval,
         reducedFeatures: reducedFeaturesInterval,
         aggregatedFeatures: aggregatedFeaturesInterval,
       });

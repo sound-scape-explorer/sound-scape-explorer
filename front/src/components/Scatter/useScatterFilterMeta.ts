@@ -1,7 +1,7 @@
-import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {labelsRef} from 'src/hooks/useLabels';
 import {reactive} from 'vue';
 
+import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
 import {labelsSelectionRef} from '../Label/useLabelsSelection';
 import {useScatterTraces} from './useScatterTraces';
 
@@ -14,11 +14,13 @@ export const pointsFilteredByMetaRef = reactive<PointsFilteredByMetaRef>({
 });
 
 export function useScatterFilterMeta() {
+  const {aggregatedLabels} = useStorageAggregatedLabels();
+
   const isVisibleByMeta = (intervalIndex: number): boolean => {
     let isVisible = true;
 
     if (
-      aggregatedLabelsRef.value === null ||
+      aggregatedLabels.value === null ||
       labelsRef.value === null ||
       labelsSelectionRef.value === null
     ) {
@@ -26,7 +28,7 @@ export function useScatterFilterMeta() {
     }
 
     const properties = Object.keys(labelsRef.value);
-    const values = aggregatedLabelsRef.value[intervalIndex];
+    const values = aggregatedLabels.value[intervalIndex];
     const valuesIndexes = Object.keys(values);
 
     for (let index = 0; index < valuesIndexes.length; index += 1) {
@@ -53,7 +55,7 @@ export function useScatterFilterMeta() {
   const {renderTraces} = useScatterTraces();
 
   const filterByMeta = () => {
-    if (aggregatedLabelsRef.value === null) {
+    if (aggregatedLabels.value === null) {
       return;
     }
 
@@ -61,7 +63,7 @@ export function useScatterFilterMeta() {
 
     for (
       let intervalIndex = 0;
-      intervalIndex < aggregatedLabelsRef.value.length;
+      intervalIndex < aggregatedLabels.value.length;
       ++intervalIndex
     ) {
       const isVisible = isVisibleByMeta(intervalIndex);

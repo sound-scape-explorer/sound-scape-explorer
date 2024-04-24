@@ -10,11 +10,13 @@ import {
   type VisibleBlock,
 } from 'src/components/Timeline/useTimelinePagination';
 import {useDate} from 'src/composables/date';
-import {aggregatedIntervalDetailsRef} from 'src/hooks/useAggregatedIntervalDetails';
 import {computed, onMounted, ref, watchEffect} from 'vue';
+
+import {useStorageAggregatedIntervalDetails} from '../../composables/storage-aggregated-interval-details';
 
 const containerRef = ref<HTMLDivElement | null>(null);
 const {convertTimestampToIsoDate} = useDate();
+const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
 
 useTimelinePagination();
 
@@ -89,12 +91,12 @@ const colWidthRef = computed(() => {
 const {handleClick} = useScatterClick();
 
 const handleBlockClick = (block: VisibleBlock) => {
-  if (aggregatedIntervalDetailsRef.value === null) {
+  if (aggregatedIntervalDetails.value === null) {
     return;
   }
 
   // TODO: CAN YOU BE MORE UGLY PLEASE?
-  aggregatedIntervalDetailsRef.value.map((intervals, index) => {
+  aggregatedIntervalDetails.value.map((intervals, index) => {
     intervals.map((interval) => {
       if (interval.start === block.start) {
         handleClick(index);

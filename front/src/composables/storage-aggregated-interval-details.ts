@@ -1,9 +1,9 @@
-import {reactive} from 'vue';
+import {ref} from 'vue';
 
-import {useStorageReader} from '../composables/storage-reader';
-import {bandRef} from './useBands';
-import {extractorRef} from './useExtractors';
-import {integrationRef} from './useIntegrations';
+import {bandRef} from '../hooks/useBands';
+import {extractorRef} from '../hooks/useExtractors';
+import {integrationRef} from '../hooks/useIntegrations';
+import {useStorageReader} from './storage-reader';
 
 // INFO: A block corresponds to one audio
 export interface BlockDetails {
@@ -15,20 +15,20 @@ export interface BlockDetails {
 // INFO: An interval can have multiple blocks thus multiple audio files (portions of them)
 export type IntervalDetails = BlockDetails[];
 
-interface AggregatedIntervalDetailsRef {
-  value: IntervalDetails[] | null;
-}
+const aggregatedIntervalDetails = ref<IntervalDetails[] | null>(null);
+let isLoaded = false;
 
-export const aggregatedIntervalDetailsRef =
-  reactive<AggregatedIntervalDetailsRef>({
-    value: null,
-  });
-
-export function useAggregatedIntervalDetails() {
+export function useStorageAggregatedIntervalDetails() {
   const {read} = useStorageReader();
 
-  const readAggregatedIntervalDetails = () =>
-    read(async (worker, file) => {
+  const readAggregatedIntervalDetails = async () => {
+    if (isLoaded) {
+      return;
+    }
+
+    isLoaded = true;
+
+    await read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -37,7 +37,7 @@ export function useAggregatedIntervalDetails() {
         return;
       }
 
-      aggregatedIntervalDetailsRef.value =
+      aggregatedIntervalDetails.value =
         await worker.readAggregatedIntervalDetails(
           file,
           bandRef.value.name,
@@ -45,12 +45,15 @@ export function useAggregatedIntervalDetails() {
           extractorRef.value.index,
         );
     });
+  };
 
   const resetAggregatedIntervalDetails = () => {
-    aggregatedIntervalDetailsRef.value = null;
+    aggregatedIntervalDetails.value = null;
+    isLoaded = false;
   };
 
   return {
+    aggregatedIntervalDetails: aggregatedIntervalDetails,
     readAggregatedIntervalDetails: readAggregatedIntervalDetails,
     resetAggregatedIntervalDetails: resetAggregatedIntervalDetails,
   };

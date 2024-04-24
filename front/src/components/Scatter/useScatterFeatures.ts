@@ -1,16 +1,18 @@
 import type {Data} from 'plotly.js-dist-min';
-import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 
 import {useDate} from '../../composables/date';
+import {useStorageAggregatedIntervalDetails} from '../../composables/storage-aggregated-interval-details';
+import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
 import {useStorageReducedFeatures} from '../../composables/storage-reduced-features';
-import {aggregatedIntervalDetailsRef} from '../../hooks/useAggregatedIntervalDetails';
 import {alphaHighRef, alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 export function useScatterFeatures() {
   const {reducedFeatures} = useStorageReducedFeatures();
+  const {aggregatedLabels} = useStorageAggregatedLabels();
+  const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {convertTimestampToIsoDate} = useDate();
   const size2d = 5;
   const size3d = 3;
@@ -19,7 +21,7 @@ export function useScatterFeatures() {
     if (
       labelsPropertiesRef.value === null ||
       reducedFeatures.value === null ||
-      aggregatedLabelsRef.value === null ||
+      aggregatedLabels.value === null ||
       colorScaleRef.value === null ||
       pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null
@@ -51,18 +53,18 @@ export function useScatterFeatures() {
     const indices = reducedFeatures.value.map((_, i) => i);
     const texts = indices.map((i) => {
       if (
-        aggregatedLabelsRef.value === null ||
-        aggregatedIntervalDetailsRef.value === null
+        aggregatedLabels.value === null ||
+        aggregatedIntervalDetails.value === null
       ) {
         return 'N/A';
       }
 
-      const labels = aggregatedLabelsRef.value[i];
+      const labels = aggregatedLabels.value[i];
 
       const payload: [string, string][] = [];
       payload.push(['Interval', i.toString()]);
 
-      const intervalDetails = aggregatedIntervalDetailsRef.value[i];
+      const intervalDetails = aggregatedIntervalDetails.value[i];
       for (const block of intervalDetails) {
         const blockStartDate = convertTimestampToIsoDate(block.start);
         payload.push(['Date', blockStartDate.toString()]);

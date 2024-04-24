@@ -1,13 +1,13 @@
 import chroma, {type Scale} from 'chroma-js';
 import {useStorageFiles} from 'src/composables/storage-files';
-import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
-import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {
   labelsPropertiesAsColorTypesRef,
   labelsSetsRef,
 } from 'src/hooks/useLabels';
 import {computed, reactive, watch} from 'vue';
 
+import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
+import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
 import {useColorByDay} from '../Colors/useColorByDay';
@@ -56,6 +56,8 @@ export const nightColor = chroma('blue');
 
 export function useScatterColorScale() {
   const {files} = useStorageFiles();
+  const {aggregatedLabels} = useStorageAggregatedLabels();
+  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {getColorByPointIndex} = useColorByPointIndex();
   const {getColorByOneHour} = useColorByOneHour();
   const {getColorByTenMinutes} = useColorByTenMinutes();
@@ -67,14 +69,14 @@ export function useScatterColorScale() {
     if (
       labelsPropertiesAsColorTypesRef.value === null ||
       files.value === null ||
-      aggregatedTimestampsRef.value === null ||
-      aggregatedLabelsRef.value === null ||
+      aggregatedTimestamps.value === null ||
+      aggregatedLabels.value === null ||
       labelsSetsRef.value === null
     ) {
       return;
     }
 
-    const intervalsCount = aggregatedTimestampsRef.value.length;
+    const intervalsCount = aggregatedTimestamps.value.length;
 
     const colorScale = [];
     const colorType = colorsStore.colorType;
@@ -89,23 +91,23 @@ export function useScatterColorScale() {
       if (colorType === 'intervalIndex') {
         color = getColorByPointIndex(intervalIndex, intervalsCount);
       } else if (colorType === 'by1h') {
-        const timestamp = aggregatedTimestampsRef.value[intervalIndex];
+        const timestamp = aggregatedTimestamps.value[intervalIndex];
         color = getColorByOneHour(timestamp);
       } else if (colorType === 'by10min') {
-        const timestamp = aggregatedTimestampsRef.value[intervalIndex];
+        const timestamp = aggregatedTimestamps.value[intervalIndex];
         color = getColorByTenMinutes(timestamp);
       } else if (colorType === 'isDay') {
-        const timestamp = aggregatedTimestampsRef.value[intervalIndex];
+        const timestamp = aggregatedTimestamps.value[intervalIndex];
         color = getColorByDay(timestamp);
       } else if (colorType === 'cycleDay') {
-        const timestamp = aggregatedTimestampsRef.value[intervalIndex];
+        const timestamp = aggregatedTimestamps.value[intervalIndex];
         color = getColorByCyclingDay(timestamp);
       } else if (labelsPropertiesAsColorTypesRef.value.includes(colorType)) {
         color = getColorByLabel(
           intervalIndex,
           colorType,
           labelsPropertiesAsColorTypesRef.value,
-          aggregatedLabelsRef.value,
+          aggregatedLabels.value,
           labelsSetsRef.value,
         );
       }

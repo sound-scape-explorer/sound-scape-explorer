@@ -1,18 +1,18 @@
 import type {Dayjs} from 'dayjs';
 import {useDate} from 'src/composables/date';
-import {useStorageFiles} from 'src/composables/storage-files';
 import {
-  aggregatedIntervalDetailsRef,
   type IntervalDetails,
-} from 'src/hooks/useAggregatedIntervalDetails';
-import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
+  useStorageAggregatedIntervalDetails,
+} from 'src/composables/storage-aggregated-interval-details';
 import {
   type AggregatedSite,
-  aggregatedSitesRef,
-} from 'src/hooks/useAggregatedSites';
-import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
+  useStorageAggregatedSites,
+} from 'src/composables/storage-aggregated-sites';
+import {useStorageFiles} from 'src/composables/storage-files';
 import {ref, watchEffect} from 'vue';
 
+import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
+import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {useStorageSettings} from '../../composables/storage-settings';
 import {clickedRef} from '../Scatter/useScatterClick';
 
@@ -20,6 +20,10 @@ export function useDetails() {
   const {settings} = useStorageSettings();
   const {files} = useStorageFiles();
   const {convertTimestampToDate} = useDate();
+  const {aggregatedLabels} = useStorageAggregatedLabels();
+  const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
+  const {aggregatedSites} = useStorageAggregatedSites();
+  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
   const intervalDateRef = ref<Dayjs | null>(null);
   const intervalLabelsRef = ref<string[] | null>(null);
@@ -32,23 +36,22 @@ export function useDetails() {
       clickedRef.value === null ||
       files.value === null ||
       settings.value === null ||
-      aggregatedSitesRef.value === null ||
-      aggregatedTimestampsRef.value === null ||
-      aggregatedLabelsRef.value === null ||
-      aggregatedIntervalDetailsRef.value === null
+      aggregatedSites.value === null ||
+      aggregatedTimestamps.value === null ||
+      aggregatedLabels.value === null ||
+      aggregatedIntervalDetails.value === null
     ) {
       return;
     }
 
     const intervalIndex = clickedRef.value;
-    const timestamp = aggregatedTimestampsRef.value[intervalIndex];
+    const timestamp = aggregatedTimestamps.value[intervalIndex];
 
     intervalDateRef.value = convertTimestampToDate(timestamp);
 
-    intervalLabelsRef.value = aggregatedLabelsRef.value[intervalIndex];
-    intervalSiteRef.value = aggregatedSitesRef.value[intervalIndex];
-    intervalDetailsRef.value =
-      aggregatedIntervalDetailsRef.value[intervalIndex];
+    intervalLabelsRef.value = aggregatedLabels.value[intervalIndex];
+    intervalSiteRef.value = aggregatedSites.value[intervalIndex];
+    intervalDetailsRef.value = aggregatedIntervalDetails.value[intervalIndex];
   });
 
   return {

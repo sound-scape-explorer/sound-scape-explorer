@@ -2,9 +2,10 @@ import {
   type AggregatedIndicator,
   useStorageAggregatedIndicators,
 } from 'src/composables/storage-aggregated-indicators';
-import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
-import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {reactive, watchEffect} from 'vue';
+
+import {useStorageAggregatedSites} from '../../composables/storage-aggregated-sites';
+import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 
 interface IndicatorRef {
   value: AggregatedIndicator | null;
@@ -39,6 +40,8 @@ export const indicatorDataRef = reactive<IndicatorDataRef>({
 
 export function useIndicators() {
   const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedSites} = useStorageAggregatedSites();
+  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
   const selectIndicator = (index: number | null) => {
     if (index === null) {
@@ -66,8 +69,8 @@ export function useIndicators() {
 
   const buildIndicatorData = () => {
     if (
-      aggregatedSitesRef.value === null ||
-      aggregatedTimestampsRef.value === null ||
+      aggregatedSites.value === null ||
+      aggregatedTimestamps.value === null ||
       indicatorRef.value === null
     ) {
       return;
@@ -75,7 +78,7 @@ export function useIndicators() {
 
     const datas: IndicatorData[] = [];
 
-    for (const [index, aSite] of aggregatedSitesRef.value.entries()) {
+    for (const [index, aSite] of aggregatedSites.value.entries()) {
       if (!indicatorSitesRef.value.includes(aSite.site)) {
         continue;
       }
@@ -83,7 +86,7 @@ export function useIndicators() {
       const data: IndicatorData = {
         index: index,
         site: aSite.site,
-        timestamp: aggregatedTimestampsRef.value[index],
+        timestamp: aggregatedTimestamps.value[index],
         values: indicatorRef.value.values[index],
       };
 
