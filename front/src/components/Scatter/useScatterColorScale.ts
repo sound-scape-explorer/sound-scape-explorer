@@ -1,7 +1,7 @@
 import chroma, {type Scale} from 'chroma-js';
+import {useStorageFiles} from 'src/composables/storage-files';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
-import {filesRef} from 'src/hooks/useFiles';
 import {
   labelsPropertiesAsColorTypesRef,
   labelsSetsRef,
@@ -55,6 +55,7 @@ export const dayColor = chroma('orange');
 export const nightColor = chroma('blue');
 
 export function useScatterColorScale() {
+  const {files} = useStorageFiles();
   const {getColorByPointIndex} = useColorByPointIndex();
   const {getColorByOneHour} = useColorByOneHour();
   const {getColorByTenMinutes} = useColorByTenMinutes();
@@ -65,7 +66,7 @@ export function useScatterColorScale() {
   const generateColorScale = () => {
     if (
       labelsPropertiesAsColorTypesRef.value === null ||
-      filesRef.value === null ||
+      files.value === null ||
       aggregatedTimestampsRef.value === null ||
       aggregatedLabelsRef.value === null ||
       labelsSetsRef.value === null

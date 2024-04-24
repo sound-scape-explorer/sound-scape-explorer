@@ -1,6 +1,7 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import type {Digested} from 'src/components/Digested/useDigested';
+import type {File as FileConfig} from 'src/composables/storage-files';
 import type {AggregatedIndicator} from 'src/hooks/useAggregatedIndicators';
 import type {
   BlockDetails,
@@ -10,7 +11,6 @@ import type {AggregatedSite} from 'src/hooks/useAggregatedSites';
 import type {Band} from 'src/hooks/useBands';
 import type {Digester} from 'src/hooks/useDigesters';
 import type {Extractor} from 'src/hooks/useExtractors';
-import type {File as FileConfig} from 'src/hooks/useFiles';
 import type {Integration} from 'src/hooks/useIntegrations';
 import type {Labels} from 'src/hooks/useLabels';
 import type {Range} from 'src/hooks/useRanges';

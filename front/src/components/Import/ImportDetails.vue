@@ -5,18 +5,19 @@ import {bandsRef} from 'src/hooks/useBands';
 import {useDate} from 'src/hooks/useDate';
 import {digestersRef} from 'src/hooks/useDigesters';
 import {extractorsRef} from 'src/hooks/useExtractors';
-import {filesRef} from 'src/hooks/useFiles';
 import {integrationsRef} from 'src/hooks/useIntegrations';
 import {rangesRef} from 'src/hooks/useRanges';
 import {reducersRef} from 'src/hooks/useReducers';
 import {trajectoriesRef} from 'src/hooks/useTrajectories';
 import {computed} from 'vue';
 
+import {useStorageFiles} from '../../composables/storage-files';
 import {useVersion} from '../../composables/version';
 import {useStorageSettings} from '../../hooks/useStorageSettings';
 
 const {settings} = useStorageSettings();
 const {version} = useVersion();
+const {files} = useStorageFiles();
 
 // invoking this here because no other place uses it
 useAutoclusters();
@@ -91,7 +92,7 @@ const timelineOrigin = computed<string>(() => {
     :items="[
       {
         tag: 'Files',
-        value: filesRef.value?.length.toString() ?? '',
+        value: files?.length.toString() ?? '',
       },
       {
         tag: 'Bands',

@@ -8,6 +8,7 @@ import {useWorker} from './worker';
 const file = ref<File | null>(null);
 const hasFile = computed<boolean>(() => file.value !== null);
 
+// this is the H5 input file provided by the user
 export function useStorageFile() {
   const {close} = useWorker();
   const {notify} = useAppNotification();

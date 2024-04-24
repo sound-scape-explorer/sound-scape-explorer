@@ -1,4 +1,5 @@
 import type {Dayjs} from 'dayjs';
+import {useStorageFiles} from 'src/composables/storage-files';
 import {
   aggregatedIntervalDetailsRef,
   type IntervalDetails,
@@ -10,7 +11,6 @@ import {
 } from 'src/hooks/useAggregatedSites';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {useDate} from 'src/hooks/useDate';
-import {filesRef} from 'src/hooks/useFiles';
 import {ref, watchEffect} from 'vue';
 
 import {useStorageSettings} from '../../hooks/useStorageSettings';
@@ -18,6 +18,7 @@ import {clickedRef} from '../Scatter/useScatterClick';
 
 export function useDetails() {
   const {settings} = useStorageSettings();
+  const {files} = useStorageFiles();
   const {convertTimestampToDate} = useDate();
 
   const intervalDateRef = ref<Dayjs | null>(null);
@@ -29,7 +30,7 @@ export function useDetails() {
   watchEffect(async () => {
     if (
       clickedRef.value === null ||
-      filesRef.value === null ||
+      files.value === null ||
       settings.value === null ||
       aggregatedSitesRef.value === null ||
       aggregatedTimestampsRef.value === null ||
