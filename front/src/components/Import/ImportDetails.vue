@@ -11,8 +11,11 @@ import {rangesRef} from 'src/hooks/useRanges';
 import {reducersRef} from 'src/hooks/useReducers';
 import {settingsRef} from 'src/hooks/useStorageSettings';
 import {trajectoriesRef} from 'src/hooks/useTrajectories';
-import {versionRef} from 'src/hooks/useVersion';
 import {computed} from 'vue';
+
+import {useVersion} from '../../hooks/useVersion';
+
+const {version} = useVersion();
 
 // invoking this here because no other place uses it
 useAutoclusters();
@@ -39,7 +42,7 @@ const timelineOrigin = computed<string>(() => {
     :items="[
       {
         tag: 'version',
-        value: versionRef.value ?? '',
+        value: version ?? '',
       },
       {
         tag: 'storage_path',

@@ -12,7 +12,7 @@ export function useWorker() {
 
   const read = async (
     // eslint-disable-next-line no-unused-vars
-    callback: (worker: Worker, storage: File) => Promise<unknown>,
+    callback: (worker: Worker, file: File) => Promise<unknown>,
   ) => {
     try {
       if (!isLoaded) {
