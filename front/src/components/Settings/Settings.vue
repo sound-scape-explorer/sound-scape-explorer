@@ -4,10 +4,10 @@ import {
   waveSurferOverflowLegendsRef,
   waveSurferShowDecibelsRef,
 } from 'src/components/Audio/useWaveSurfer';
+import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {plotlyFontSizeRef} from 'src/hooks/useHeatmapLayout';
-import {useKeyboard} from 'src/hooks/useKeyboard';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
@@ -15,7 +15,7 @@ import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {spectrogramColorRef} from '../Audio/useAudioSpectrogramColor';
 import {settingsStore} from './settingsStore';
 
-const {lockKeyboard, unlockKeyboard} = useKeyboard();
+const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
 
 const spectrogramColorMapsOptionsRef = computed(() => {
@@ -40,8 +40,8 @@ const plotBackgroundOptionsRef = computed(() => {
         <n-input
           v-model:value="audioHost"
           size="tiny"
-          @inputBlur="() => unlockKeyboard()"
-          @inputFocus="() => lockKeyboard()"
+          @inputBlur="() => unlock()"
+          @inputFocus="() => lock()"
         />
       </n-gi>
       <n-gi class="gi">
@@ -149,8 +149,8 @@ const plotBackgroundOptionsRef = computed(() => {
           v-model:value="plotlyFontSizeRef.value"
           size="tiny"
           type="number"
-          @inputBlur="() => unlockKeyboard()"
-          @inputFocus="() => lockKeyboard()"
+          @inputBlur="() => unlock()"
+          @inputFocus="() => lock()"
         />
       </n-gi>
     </n-grid>

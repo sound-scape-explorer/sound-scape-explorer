@@ -1,22 +1,16 @@
 import {onKeyStroke} from '@vueuse/core';
-import {reactive} from 'vue';
+import {ref} from 'vue';
 
 import type {KeyboardShortcut} from '../common/KeyboardShortcut';
 
-interface KeyboardLockedRef {
-  value: boolean;
-}
-
-export const keyboardLockedRef = reactive<KeyboardLockedRef>({
-  value: false,
-});
+const isLocked = ref<boolean>(false);
 
 export function useKeyboard() {
   const registerKey = (key: KeyboardShortcut, callback: () => void): void => {
     onKeyStroke(
       key,
       () => {
-        if (keyboardLockedRef.value) {
+        if (isLocked.value) {
           return;
         }
 
@@ -29,17 +23,17 @@ export function useKeyboard() {
     );
   };
 
-  const lockKeyboard = () => {
-    keyboardLockedRef.value = true;
+  const lock = () => {
+    isLocked.value = true;
   };
 
-  const unlockKeyboard = () => {
-    keyboardLockedRef.value = false;
+  const unlock = () => {
+    isLocked.value = false;
   };
 
   return {
     registerKey: registerKey,
-    lockKeyboard: lockKeyboard,
-    unlockKeyboard: unlockKeyboard,
+    lock: lock,
+    unlock: unlock,
   };
 }

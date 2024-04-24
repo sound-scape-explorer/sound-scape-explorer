@@ -3,7 +3,7 @@ import {SearchOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {labelsColumnsRef} from 'src/components/Label/useLabelsColumns';
-import {useKeyboard} from 'src/hooks/useKeyboard';
+import {useKeyboard} from 'src/composables/keyboard';
 import {computed} from 'vue';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
