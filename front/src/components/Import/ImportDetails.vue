@@ -12,8 +12,8 @@ import {trajectoriesRef} from 'src/hooks/useTrajectories';
 import {computed} from 'vue';
 
 import {useStorageFiles} from '../../composables/storage-files';
+import {useStorageSettings} from '../../composables/storage-settings';
 import {useVersion} from '../../composables/version';
-import {useStorageSettings} from '../../hooks/useStorageSettings';
 
 const {settings} = useStorageSettings();
 const {version} = useVersion();

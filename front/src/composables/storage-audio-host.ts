@@ -1,4 +1,4 @@
-import {useStorageSettings} from 'src/hooks/useStorageSettings';
+import {useStorageSettings} from 'src/composables/storage-settings';
 import {ref, watch} from 'vue';
 
 const audioHost = ref<string | null>(null);

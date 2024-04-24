@@ -3,7 +3,7 @@ import Plotly from 'plotly.js-dist-min';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref, watch} from 'vue';
 
-import {usePlotConfig} from '../../hooks/usePlotConfig';
+import {usePlotConfig} from '../../composables/plot-config';
 import {settingsStore} from '../Settings/settingsStore';
 import type {AppPlotProps} from './AppPlot.vue';
 

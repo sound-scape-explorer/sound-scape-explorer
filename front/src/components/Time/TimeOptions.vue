@@ -21,7 +21,7 @@ import {useDate} from 'src/composables/date';
 import {useKeyboard} from 'src/composables/keyboard';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 
-import {useStorageSettings} from '../../hooks/useStorageSettings';
+import {useStorageSettings} from '../../composables/storage-settings';
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 

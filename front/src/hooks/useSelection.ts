@@ -10,6 +10,7 @@ import {
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {reactive, watchEffect} from 'vue';
 
+import {useStorageReducedFeatures} from '../composables/storage-reduced-features';
 import {useAggregatedFeatures} from './useAggregatedFeatures';
 import {useAggregatedIndicators} from './useAggregatedIndicators';
 import {useAggregatedIntervalDetails} from './useAggregatedIntervalDetails';
@@ -20,7 +21,6 @@ import {bandRef, useBands} from './useBands';
 import {extractorRef, useExtractors} from './useExtractors';
 import {integrationRef, useIntegrations} from './useIntegrations';
 import {useLabels} from './useLabels';
-import {useReducedFeatures} from './useReducedFeatures';
 import {reducerRef, useReducers} from './useReducers';
 import {useTrajectories} from './useTrajectories';
 
@@ -44,7 +44,8 @@ export function useSelection() {
   const {readAggregatedIntervalDetails, resetAggregatedIntervalDetails} =
     useAggregatedIntervalDetails();
   const {readAggregatedLabels, resetAggregatedLabels} = useAggregatedLabels();
-  const {readReducedFeatures, resetReducedFeatures} = useReducedFeatures();
+  const {readReducedFeatures, resetReducedFeatures} =
+    useStorageReducedFeatures();
   const {generateColorScale, resetColorScale} = useScatterColorScale();
   const {buildSelection, resetSelection} = useLabelsSelection();
   const {resetTrajectories} = useTrajectories();

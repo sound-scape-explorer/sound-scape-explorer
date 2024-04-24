@@ -8,9 +8,9 @@ import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
-import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 import {ref} from 'vue';
 
+import {useStorageReducedFeatures} from '../../composables/storage-reduced-features';
 import {useAppNotification} from '../AppNotification/useAppNotification';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
@@ -27,6 +27,7 @@ interface ExportData {
 export function useScatterExport() {
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
+  const {reducedFeatures} = useStorageReducedFeatures();
 
   const loadingRef = ref<boolean>(false);
 
@@ -40,7 +41,7 @@ export function useScatterExport() {
       pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null ||
       labelsPropertiesRef.value === null ||
-      reducedFeaturesRef.value === null ||
+      reducedFeatures.value === null ||
       aggregatedSitesRef.value === null ||
       aggregatedIndicatorsRef.value === null
     ) {
@@ -72,14 +73,14 @@ export function useScatterExport() {
       const site = aggregatedSitesRef.value[intervalIndex];
       const aggregatedLabels = aggregatedLabelsRef.value[intervalIndex];
 
-      const reducedFeatures = reducedFeaturesRef.value[intervalIndex];
+      const reducedFeaturesInterval = reducedFeatures.value[intervalIndex];
 
       payload.push({
         intervalIndex: intervalIndex,
         timestamp: timestamp,
         site: site.site,
         aggregatedLabels: aggregatedLabels,
-        reducedFeatures: reducedFeatures,
+        reducedFeatures: reducedFeaturesInterval,
         aggregatedFeatures: aggregatedFeatures,
       });
     }

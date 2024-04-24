@@ -13,7 +13,7 @@ import {
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {ref, watchEffect} from 'vue';
 
-import {useStorageSettings} from '../../hooks/useStorageSettings';
+import {useStorageSettings} from '../../composables/storage-settings';
 import {clickedRef} from '../Scatter/useScatterClick';
 
 export function useDetails() {

@@ -1,15 +1,16 @@
 import type {Data} from 'plotly.js-dist-min';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
-import {reducedFeaturesRef} from 'src/hooks/useReducedFeatures';
 
 import {useDate} from '../../composables/date';
+import {useStorageReducedFeatures} from '../../composables/storage-reduced-features';
 import {aggregatedIntervalDetailsRef} from '../../hooks/useAggregatedIntervalDetails';
 import {alphaHighRef, alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 export function useScatterFeatures() {
+  const {reducedFeatures} = useStorageReducedFeatures();
   const {convertTimestampToIsoDate} = useDate();
   const size2d = 5;
   const size3d = 3;
@@ -17,7 +18,7 @@ export function useScatterFeatures() {
   const traceFeatures = (): Data[] => {
     if (
       labelsPropertiesRef.value === null ||
-      reducedFeaturesRef.value === null ||
+      reducedFeatures.value === null ||
       aggregatedLabelsRef.value === null ||
       colorScaleRef.value === null ||
       pointsFilteredByMetaRef.value === null ||
@@ -43,11 +44,11 @@ export function useScatterFeatures() {
       return [index / (colorScale.length - 1), filteredColor];
     });
 
-    const isThreeDimensional = reducedFeaturesRef.value[0].length === 3;
+    const isThreeDimensional = reducedFeatures.value[0].length === 3;
     const scatterType = isThreeDimensional ? 'scatter3d' : 'scattergl';
     const properties = labelsPropertiesRef.value;
 
-    const indices = reducedFeaturesRef.value.map((_, i) => i);
+    const indices = reducedFeatures.value.map((_, i) => i);
     const texts = indices.map((i) => {
       if (
         aggregatedLabelsRef.value === null ||
@@ -82,10 +83,10 @@ export function useScatterFeatures() {
       hoverTemplate += `<br><b>%{text[${p}][0]}: </b>%{text[${p}][1]}`;
     }
 
-    const xs = reducedFeaturesRef.value.map((f) => f[0]);
-    const ys = reducedFeaturesRef.value.map((f) => f[1]);
+    const xs = reducedFeatures.value.map((f) => f[0]);
+    const ys = reducedFeatures.value.map((f) => f[1]);
     const zs = isThreeDimensional
-      ? reducedFeaturesRef.value.map((f) => f[2])
+      ? reducedFeatures.value.map((f) => f[2])
       : undefined;
 
     const trace: Data = {

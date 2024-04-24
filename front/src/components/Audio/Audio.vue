@@ -31,7 +31,7 @@ import {useDate} from 'src/composables/date';
 import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 
-import {useStorageSettings} from '../../hooks/useStorageSettings';
+import {useStorageSettings} from '../../composables/storage-settings';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';

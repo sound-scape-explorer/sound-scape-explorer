@@ -7,15 +7,15 @@ import {
 import {computed} from 'vue';
 
 import {EXPORT_FILENAME} from '../constants';
-import {heatmapHeightRef, heatmapWidthRef} from './useHeatmapSize';
+import {heatmapHeightRef, heatmapWidthRef} from '../hooks/useHeatmapSize';
 
 export function usePlotConfig(name: string) {
   const scale = 4;
 
-  const exportNameRef = computed<string>(() => `${EXPORT_FILENAME}-${name}`);
+  const exportName = computed<string>(() => `${EXPORT_FILENAME}-${name}`);
 
-  const optionsRef = computed<PlotlyExportOptions>(() => ({
-    filename: exportNameRef.value,
+  const options = computed<PlotlyExportOptions>(() => ({
+    filename: exportName.value,
     width: heatmapWidthRef.value,
     height: heatmapHeightRef.value,
     scale: scale,
@@ -26,8 +26,8 @@ export function usePlotConfig(name: string) {
       displaylogo: false,
       responsive: true,
       modeBarButtonsToAdd: [
-        createPlotlyExportPngButtonDigested(optionsRef.value),
-        createPlotlyExportSvgButton(optionsRef.value),
+        createPlotlyExportPngButtonDigested(options.value),
+        createPlotlyExportSvgButton(options.value),
       ],
       modeBarButtonsToRemove: ['toImage'],
     };

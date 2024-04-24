@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 import {DATE_FORMAT} from 'src/constants';
 
 import {settingsStore} from '../components/Settings/settingsStore';
-import {useStorageSettings} from '../hooks/useStorageSettings';
+import {useStorageSettings} from './storage-settings';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);

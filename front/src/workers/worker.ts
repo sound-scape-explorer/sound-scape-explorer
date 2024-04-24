@@ -2,6 +2,7 @@ import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import type {Digested} from 'src/components/Digested/useDigested';
 import type {File as FileConfig} from 'src/composables/storage-files';
+import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
 import type {Site} from 'src/composables/storage-sites';
 import type {AggregatedIndicator} from 'src/hooks/useAggregatedIndicators';
 import type {
@@ -15,7 +16,6 @@ import type {Extractor} from 'src/hooks/useExtractors';
 import type {Integration} from 'src/hooks/useIntegrations';
 import type {Labels} from 'src/hooks/useLabels';
 import type {Range} from 'src/hooks/useRanges';
-import type {ReducedFeatures} from 'src/hooks/useReducedFeatures';
 import type {ReducerFromStorage} from 'src/hooks/useReducers';
 import type {
   TracedData,
