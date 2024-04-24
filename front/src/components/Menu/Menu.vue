@@ -70,6 +70,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         </MenuItem>
 
         <MenuItem
+          :disabled="!hasFile"
           :toggle="toggle"
           draggable-key="settings"
           text="Settings"
