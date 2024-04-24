@@ -24,10 +24,10 @@ import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore'
 
 useWorker();
 
-const {isStorageFileRef} = useStorageFile();
+const {isStorageFileRef: isLoaded} = useStorageFile();
 
 onMounted(() => {
-  if (isStorageFileRef.value) {
+  if (isLoaded.value) {
     return;
   }
 
@@ -41,26 +41,17 @@ onMounted(() => {
   <Settings v-if="appDraggablesStore.settings" />
   <Help v-if="appDraggablesStore.help" />
 
-  <div v-if="isStorageFileRef">
-    <StorageLoad />
-
-    <Selection />
-    <Trajectories />
-    <RelativeTrajectories />
-
-    <Colors />
-
-    <Timeline />
-    <Time />
-
-    <Details />
-    <Audio />
-
-    <Indicators />
-    <Digested />
-
-    <Label />
-
-    <Scatter />
-  </div>
+  <StorageLoad v-if="isLoaded" />
+  <Selection v-if="isLoaded" />
+  <Trajectories v-if="isLoaded" />
+  <RelativeTrajectories v-if="isLoaded" />
+  <Colors v-if="isLoaded" />
+  <Timeline v-if="isLoaded" />
+  <Time v-if="isLoaded" />
+  <Details v-if="isLoaded" />
+  <Audio v-if="isLoaded" />
+  <Indicators v-if="isLoaded" />
+  <Digested v-if="isLoaded" />
+  <Label v-if="isLoaded" />
+  <Scatter v-if="isLoaded" />
 </template>
