@@ -1,8 +1,8 @@
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {reactive, watchEffect} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {useTraced} from './useTraced';
-import {useWorker} from './useWorker';
 
 export interface Trajectory {
   index: number;
@@ -33,11 +33,11 @@ export const selectedTrajectoriesRef = reactive<SelectedTrajectoriesRef>({
 export function useTrajectories() {
   const {readTraced} = useTraced();
   const {renderTraces} = useScatterTraces();
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readTrajectories = () =>
-    read(async (worker, storage) => {
-      trajectoriesRef.value = await worker.readTrajectories(storage);
+    read(async (worker, file) => {
+      trajectoriesRef.value = await worker.readTrajectories(file);
     });
 
   watchEffect(readTrajectories);

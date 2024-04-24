@@ -24,10 +24,10 @@ import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore'
 
 useWorker();
 
-const {isStorageFileRef: isLoaded} = useStorageFile();
+const {hasFile} = useStorageFile();
 
 onMounted(() => {
-  if (isLoaded.value) {
+  if (hasFile.value) {
     return;
   }
 
@@ -41,17 +41,17 @@ onMounted(() => {
   <Settings v-if="appDraggablesStore.settings" />
   <Help v-if="appDraggablesStore.help" />
 
-  <StorageLoad v-if="isLoaded" />
-  <Selection v-if="isLoaded" />
-  <Trajectories v-if="isLoaded" />
-  <RelativeTrajectories v-if="isLoaded" />
-  <Colors v-if="isLoaded && appDraggablesStore.colors" />
-  <Timeline v-if="isLoaded" />
-  <Time v-if="isLoaded" />
-  <Details v-if="isLoaded" />
-  <Audio v-if="isLoaded" />
-  <Indicators v-if="isLoaded" />
-  <Digested v-if="isLoaded" />
-  <Label v-if="isLoaded" />
-  <Scatter v-if="isLoaded" />
+  <StorageLoad v-if="hasFile" />
+  <Selection v-if="hasFile" />
+  <Trajectories v-if="hasFile" />
+  <RelativeTrajectories v-if="hasFile" />
+  <Colors v-if="hasFile && appDraggablesStore.colors" />
+  <Timeline v-if="hasFile" />
+  <Time v-if="hasFile" />
+  <Details v-if="hasFile" />
+  <Audio v-if="hasFile" />
+  <Indicators v-if="hasFile" />
+  <Digested v-if="hasFile" />
+  <Label v-if="hasFile" />
+  <Scatter v-if="hasFile" />
 </template>

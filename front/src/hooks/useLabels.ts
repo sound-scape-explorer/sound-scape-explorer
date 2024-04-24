@@ -1,9 +1,9 @@
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {reactive} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {integrationRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 // Label properties and sets
 export interface Labels {
@@ -39,16 +39,16 @@ export const labelsPropertiesAsColorTypesRef = reactive<LabelsPropertiesRef>({
 });
 
 export function useLabels() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readLabels = () =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (bandRef.value === null || integrationRef.value === null) {
         return;
       }
 
       labelsRef.value = await worker.readLabels(
-        storage,
+        file,
         bandRef.value.name,
         integrationRef.value.seconds,
       );

@@ -1,8 +1,9 @@
 import {bandRef} from 'src/hooks/useBands';
 import type {Digester} from 'src/hooks/useDigesters';
 import {integrationRef} from 'src/hooks/useIntegrations';
-import {useWorker} from 'src/hooks/useWorker';
 import {reactive} from 'vue';
+
+import {useFileReader} from '../../hooks/file-reader';
 
 export interface Digested {
   digester: Digester;
@@ -26,7 +27,7 @@ export const digestedRef = reactive<DigestedRef>({
 });
 
 export function useDigested() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readDigested = (digester: Digester) =>
     read(async (worker, storage) => {

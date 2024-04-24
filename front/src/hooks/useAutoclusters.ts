@@ -1,6 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {useWorker} from './useWorker';
+import {useFileReader} from './file-reader';
 
 export interface Autocluster {
   index: number;
@@ -21,7 +21,7 @@ export const autoclustersRef = reactive<AutoclustersRef>({
 
 // These are autoclusters configurations
 export function useAutoclusters() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readAutoclusters = () =>
     read(async (worker, storage) => {

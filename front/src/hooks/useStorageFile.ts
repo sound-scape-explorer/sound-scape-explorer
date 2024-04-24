@@ -1,28 +1,19 @@
 import {appDraggablesStore} from 'src/components/AppDraggable/appDraggablesStore';
 import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
 import {importLockRef} from 'src/components/Import/useImportLock';
-import {computed, reactive} from 'vue';
+import {computed, ref} from 'vue';
 
 import {useWorker} from './useWorker';
 
-interface StorageFileRef {
-  value: File | null;
-}
-
-export const storageFileRef = reactive<StorageFileRef>({
-  value: null,
-});
+const file = ref<File | null>(null);
+const hasFile = computed<boolean>(() => file.value !== null);
 
 export function useStorageFile() {
   const {close} = useWorker();
   const {notify} = useAppNotification();
 
-  const isStorageFileRef = computed<boolean>(() => {
-    return storageFileRef.value !== null;
-  });
-
-  const validateFile = (file: File) => {
-    const fileExtension = file.name.split('.').pop();
+  const validateFile = (inputFile: File) => {
+    const fileExtension = inputFile.name.split('.').pop();
     const isHDF = fileExtension === 'hdf';
     const isH5 = fileExtension === 'h5';
 
@@ -33,14 +24,9 @@ export function useStorageFile() {
     }
   };
 
-  const setFile = (file: File) => {
-    validateFile(file);
-
-    if (storageFileRef.value === file) {
-      return;
-    }
-
-    storageFileRef.value = file;
+  const setFile = (inputFile: File) => {
+    validateFile(inputFile);
+    file.value = inputFile;
     appDraggablesStore.import = false;
     appDraggablesStore.selection = true;
     importLockRef.value = true;
@@ -52,7 +38,8 @@ export function useStorageFile() {
   };
 
   return {
-    isStorageFileRef: isStorageFileRef,
+    file: file,
+    hasFile: hasFile,
     setFile: setFile,
     resetFile: resetFile,
   };

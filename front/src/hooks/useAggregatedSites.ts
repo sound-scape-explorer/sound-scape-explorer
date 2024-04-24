@@ -1,9 +1,9 @@
 import {reactive} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 export interface AggregatedSite {
   site: string;
@@ -18,7 +18,7 @@ export const aggregatedSitesRef = reactive<AggregatedSitesRef>({
 });
 
 export function useAggregatedSites() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readAggregatedSites = () =>
     read(async (worker, storage) => {

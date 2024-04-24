@@ -2,7 +2,7 @@ import {reactive, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
 import type {BlockDetails} from '../../hooks/useAggregatedIntervalDetails';
-import {audioHostRef} from '../../hooks/useAudioHost';
+import {useAudioHost} from '../../hooks/useAudioHost';
 import {integrationRef} from '../../hooks/useIntegrations';
 import {getBitDepthFromWav} from '../../utils/get-bit-depth-from-wav';
 import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
@@ -39,6 +39,7 @@ export function useAudioFile() {
   const {notify} = useAppNotification();
   const {loadBlob} = useWaveSurferLoader();
   const {verifyAudioLoading} = useAudioLoading();
+  const {audioHost} = useAudioHost();
 
   const openAudioModal = () => {
     if (appDraggablesStore.audio === true) {
@@ -73,7 +74,7 @@ export function useAudioFile() {
         integrationRef.value === null ||
         audioBlockRef.value === null ||
         audioContextRef.value === null ||
-        audioHostRef.value === null
+        audioHost.value === null
       ) {
         return;
       }
@@ -83,12 +84,12 @@ export function useAudioFile() {
       const start = audioBlockRef.value.fileStart;
       const end = start + integrationRef.value.seconds * 1000;
 
-      let audioHost = audioHostRef.value;
-      if (!audioHost.endsWith('/')) {
-        audioHost = `${audioHost}/`;
+      let formattedHost = audioHost.value;
+      if (!formattedHost.endsWith('/')) {
+        formattedHost = `${formattedHost}/`;
       }
 
-      const url = new URL(`${audioHost}get`);
+      const url = new URL(`${formattedHost}get`);
       url.searchParams.append('file', audioBlockRef.value.file);
       url.searchParams.append('start', start.toString());
       url.searchParams.append('end', end.toString());

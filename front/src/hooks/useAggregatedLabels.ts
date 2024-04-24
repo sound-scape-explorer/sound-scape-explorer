@@ -1,9 +1,9 @@
 import {reactive} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 export type AggregatedLabels = string[][];
 
@@ -16,7 +16,7 @@ export const aggregatedLabelsRef = reactive<AggregatedLabelsRef>({
 });
 
 export function useAggregatedLabels() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readAggregatedLabels = () =>
     read(async (worker, storage) => {

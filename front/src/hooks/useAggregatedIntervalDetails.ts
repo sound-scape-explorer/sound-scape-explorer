@@ -1,9 +1,9 @@
 import {reactive} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 // INFO: A block corresponds to one audio
 export interface BlockDetails {
@@ -25,7 +25,7 @@ export const aggregatedIntervalDetailsRef =
   });
 
 export function useAggregatedIntervalDetails() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readAggregatedIntervalDetails = () =>
     read(async (worker, storage) => {

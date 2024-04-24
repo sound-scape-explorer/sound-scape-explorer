@@ -1,9 +1,9 @@
 import {reactive, watchEffect} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 export interface RelativeTrajectory {
   index: number;
@@ -23,10 +23,10 @@ export const relativeTrajectoriesRef = reactive<RelativeTrajectoriesRef>({
 });
 
 export function useRelativeTrajectories() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readRelativeTrajectories = () =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -36,7 +36,7 @@ export function useRelativeTrajectories() {
       }
 
       relativeTrajectoriesRef.value = await worker.readRelativeTrajectories(
-        storage,
+        file,
         bandRef.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,

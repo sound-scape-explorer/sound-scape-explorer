@@ -1,10 +1,10 @@
 import {reactive} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
 import {reducerRef} from './useReducers';
-import {useWorker} from './useWorker';
 
 export type ReducedFeatures = number[][];
 
@@ -17,10 +17,10 @@ export const reducedFeaturesRef = reactive<ReducedFeaturesRef>({
 });
 
 export function useReducedFeatures() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readReducedFeatures = () =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -31,7 +31,7 @@ export function useReducedFeatures() {
       }
 
       reducedFeaturesRef.value = await worker.readReducedFeatures(
-        storage,
+        file,
         bandRef.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,

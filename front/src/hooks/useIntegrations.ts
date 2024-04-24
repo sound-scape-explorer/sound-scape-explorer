@@ -3,8 +3,8 @@ import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-opt
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {reducerRef, reducerSelectedRef} from './useReducers';
-import {useWorker} from './useWorker';
 
 export interface Integration {
   index: number;
@@ -45,11 +45,11 @@ export const integrationOptionsRef = reactive<IntegrationOptionsRef>({
 });
 
 export function useIntegrations() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readIntegrations = () =>
-    read(async (worker, storage) => {
-      const integrations = await worker.readIntegrations(storage);
+    read(async (worker, file) => {
+      const integrations = await worker.readIntegrations(file);
       integrationsRef.value = integrations;
     });
 

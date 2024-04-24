@@ -3,7 +3,7 @@ import speedToSemitones from 'speed-to-semitones';
 import {reactive, watch, watchEffect} from 'vue';
 
 import {PLAYBACK_RATE} from '../../constants';
-import {settingsRef} from '../../hooks/useStorageSettings';
+import {useStorageSettings} from '../../hooks/useStorageSettings';
 import {waveSurferRef} from './useWaveSurfer';
 
 interface AudioRateRef {
@@ -38,6 +38,8 @@ interface UseAudioRateProps {
 
 // Playback rate: audio speed
 export function useAudioRate({togglePlayPause}: UseAudioRateProps) {
+  const {settings} = useStorageSettings();
+
   const updatePlaybackRate = () => {
     if (waveSurferRef.value === null) {
       return;
@@ -51,13 +53,13 @@ export function useAudioRate({togglePlayPause}: UseAudioRateProps) {
   watch(audioRateRef, updatePlaybackRate);
 
   const updateHumanReadableValues = () => {
-    if (settingsRef.value === null) {
+    if (settings.value === null) {
       return;
     }
 
     audioRateHumanReadableRef.value = {
       hertz: (
-        settingsRef.value['expected_sample_rate'] * audioRateRef.value
+        settings.value['expected_sample_rate'] * audioRateRef.value
       ).toFixed(),
       percentage: speedToPercentage(audioRateRef.value, 2),
       semitones: speedToSemitones(audioRateRef.value, 2),

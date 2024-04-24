@@ -19,12 +19,13 @@ import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
 import {useDate} from 'src/hooks/useDate';
 import {useKeyboard} from 'src/hooks/useKeyboard';
-import {settingsRef} from 'src/hooks/useStorageSettings';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 
+import {useStorageSettings} from '../../hooks/useStorageSettings';
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 
+const {settings} = useStorageSettings();
 const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
 const {filterByTime} = useScatterFilterTime();
 
@@ -247,7 +248,7 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
       <span class="date"> to {{ dateEndRef }} </span>
 
       <div class="timezone">
-        {{ settingsRef.value?.timezone }}
+        {{ settings?.timezone }}
       </div>
     </div>
   </div>

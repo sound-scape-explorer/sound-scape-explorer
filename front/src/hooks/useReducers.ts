@@ -3,10 +3,10 @@ import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-opt
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {type Band, bandsRef} from './useBands';
 import {type Extractor, nnExtractorsRef} from './useExtractors';
 import {type Integration, integrationsRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 export interface ReducerFromStorage {
   index: number;
@@ -59,10 +59,10 @@ export const reducerOptionsRef = reactive<ReducerOptionsRef>({
 });
 
 export function useReducers() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readReducers = () =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (
         bandsRef.value === null ||
         integrationsRef.value === null ||
@@ -71,7 +71,7 @@ export function useReducers() {
         return;
       }
 
-      const reducersFromStorage = await worker.readReducers(storage);
+      const reducersFromStorage = await worker.readReducers(file);
       const reducers: Reducer[] = [];
 
       for (const rFS of reducersFromStorage) {

@@ -8,7 +8,7 @@ import ImportDetails from './ImportDetails.vue';
 import {importLockRef} from './useImportLock';
 
 const inputRef = ref<HTMLInputElement | null>(null);
-const {setFile, isStorageFileRef, resetFile} = useStorageFile();
+const {setFile, hasFile, resetFile} = useStorageFile();
 
 const handleChange = () => {
   const file = inputRef.value?.files?.[0];
@@ -41,7 +41,7 @@ const handleChange = () => {
       </n-button>
     </div>
 
-    <ImportDetails v-if="isStorageFileRef" />
+    <ImportDetails v-if="hasFile" />
   </AppDraggable>
 </template>
 

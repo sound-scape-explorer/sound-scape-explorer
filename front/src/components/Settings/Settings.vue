@@ -5,7 +5,7 @@ import {
   waveSurferShowDecibelsRef,
 } from 'src/components/Audio/useWaveSurfer';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
-import {audioHostRef} from 'src/hooks/useAudioHost';
+import {useAudioHost} from 'src/hooks/useAudioHost';
 import {plotlyFontSizeRef} from 'src/hooks/useHeatmapLayout';
 import {useKeyboard} from 'src/hooks/useKeyboard';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
@@ -16,6 +16,7 @@ import {spectrogramColorRef} from '../Audio/useAudioSpectrogramColor';
 import {settingsStore} from './settingsStore';
 
 const {lockKeyboard, unlockKeyboard} = useKeyboard();
+const {audioHost} = useAudioHost();
 
 const spectrogramColorMapsOptionsRef = computed(() => {
   return convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS);
@@ -37,7 +38,7 @@ const plotBackgroundOptionsRef = computed(() => {
           Audio host
         </n-tag>
         <n-input
-          v-model:value="audioHostRef.value"
+          v-model:value="audioHost"
           size="tiny"
           @inputBlur="() => unlockKeyboard()"
           @inputFocus="() => lockKeyboard()"

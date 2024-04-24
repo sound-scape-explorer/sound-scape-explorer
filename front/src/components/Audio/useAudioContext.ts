@@ -1,6 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {settingsRef} from '../../hooks/useStorageSettings';
+import {useStorageSettings} from '../../hooks/useStorageSettings';
 
 interface AudioContextRef {
   value: AudioContext | null;
@@ -11,13 +11,15 @@ export const audioContextRef = reactive<AudioContextRef>({
 });
 
 export function useAudioContext() {
+  const {settings} = useStorageSettings();
+
   const createAudioContext = () => {
-    if (settingsRef.value === null) {
+    if (settings.value === null) {
       return;
     }
 
     audioContextRef.value = new AudioContext({
-      sampleRate: settingsRef.value.expected_sample_rate,
+      sampleRate: settings.value.expected_sample_rate,
     });
   };
 

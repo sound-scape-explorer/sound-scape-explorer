@@ -4,8 +4,8 @@ import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-opt
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {reducerRef, reducerSelectedRef} from './useReducers';
-import {useWorker} from './useWorker';
 
 export interface Extractor {
   index: number;
@@ -64,7 +64,7 @@ export const extractorOptionsRef = reactive<ExtractorOptionsRef>({
 });
 
 export function useExtractors() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readExtractors = () =>
     read(async (worker, storage) => {

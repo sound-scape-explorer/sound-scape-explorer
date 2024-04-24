@@ -1,9 +1,9 @@
 import {reactive} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {type Extractor, nonNnExtractorsRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 export interface AggregatedIndicator {
   extractor: Extractor;
@@ -19,7 +19,7 @@ export const aggregatedIndicatorsRef = reactive<AggregatedIndicatorsRef>({
 });
 
 export function useAggregatedIndicators() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readAggregatedIndicators = () =>
     read(async (worker, storage) => {

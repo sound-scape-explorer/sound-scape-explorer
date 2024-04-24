@@ -30,13 +30,14 @@ import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {PLAYBACK_RATE} from 'src/constants';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {useDate} from 'src/hooks/useDate';
-import {settingsRef} from 'src/hooks/useStorageSettings';
 
+import {useStorageSettings} from '../../hooks/useStorageSettings';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {audioBlockRef, audioDurationRef} from './useAudioFile';
 
+const {settings} = useStorageSettings();
 const {intervalDateRef} = useDetails();
 const {convertDateToIsoDate} = useDate();
 
@@ -222,7 +223,7 @@ const {downloadAudio} = useAudioDownload();
 
           {{ audioRateHumanReadableRef.value.semitones }}
         </n-gi>
-        <n-gi v-if="settingsRef.value !== null">
+        <n-gi v-if="settings !== null">
           <n-tag
             :bordered="false"
             size="small"

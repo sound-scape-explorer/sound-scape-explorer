@@ -28,7 +28,7 @@ import {
 } from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
 
-const {isStorageFileRef} = useStorageFile();
+const {hasFile} = useStorageFile();
 const {registerKey} = useKeyboard();
 
 const toggle = (key: keyof AppDraggablesStore): void => {
@@ -87,7 +87,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </div>
 
       <div
-        v-if="isStorageFileRef"
+        v-if="hasFile"
         class="right"
       >
         <!-- placeholder -->
@@ -95,7 +95,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
     </div>
 
     <div
-      v-if="isStorageFileRef"
+      v-if="hasFile"
       class="column"
     >
       <MenuItem

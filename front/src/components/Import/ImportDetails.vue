@@ -9,12 +9,13 @@ import {filesRef} from 'src/hooks/useFiles';
 import {integrationsRef} from 'src/hooks/useIntegrations';
 import {rangesRef} from 'src/hooks/useRanges';
 import {reducersRef} from 'src/hooks/useReducers';
-import {settingsRef} from 'src/hooks/useStorageSettings';
 import {trajectoriesRef} from 'src/hooks/useTrajectories';
 import {computed} from 'vue';
 
+import {useStorageSettings} from '../../hooks/useStorageSettings';
 import {useVersion} from '../../hooks/useVersion';
 
+const {settings} = useStorageSettings();
 const {version} = useVersion();
 
 // invoking this here because no other place uses it
@@ -25,11 +26,11 @@ const separator = ', ';
 const {convertTimestampToIsoDate} = useDate();
 
 const timelineOrigin = computed<string>(() => {
-  if (settingsRef.value === null) {
+  if (settings.value === null) {
     return '';
   }
 
-  const origin = settingsRef.value.timeline_origin;
+  const origin = settings.value.timeline_origin;
   return convertTimestampToIsoDate(origin);
 });
 </script>
@@ -46,15 +47,15 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'storage_path',
-        value: settingsRef.value?.storage_path ?? '',
+        value: settings?.storage_path ?? '',
       },
       {
         tag: 'audio_path',
-        value: settingsRef.value?.audio_path ?? '',
+        value: settings?.audio_path ?? '',
       },
       {
         tag: 'expected_sample_rate',
-        value: settingsRef.value?.expected_sample_rate.toString() ?? '',
+        value: settings?.expected_sample_rate.toString() ?? '',
       },
       {
         tag: 'timeline_origin',
@@ -62,23 +63,23 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'audio_host',
-        value: settingsRef.value?.audio_host ?? '',
+        value: settings?.audio_host ?? '',
       },
       {
         tag: 'timezone',
-        value: settingsRef.value?.timezone ?? '',
+        value: settings?.timezone ?? '',
       },
       {
         tag: 'computation_umap_dimensions',
-        value: settingsRef.value?.computation_umap_dimensions.toString() ?? '',
+        value: settings?.computation_umap_dimensions.toString() ?? '',
       },
       {
         tag: 'computation_umap_iterations',
-        value: settingsRef.value?.computation_umap_iterations.toString() ?? '',
+        value: settings?.computation_umap_iterations.toString() ?? '',
       },
       {
         tag: 'display_umap_seed',
-        value: settingsRef.value?.display_umap_seed.toString() ?? '',
+        value: settings?.display_umap_seed.toString() ?? '',
       },
     ]"
   />

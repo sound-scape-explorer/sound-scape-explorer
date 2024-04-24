@@ -1,29 +1,25 @@
-import {settingsRef} from 'src/hooks/useStorageSettings';
-import {reactive} from 'vue';
+import {useStorageSettings} from 'src/hooks/useStorageSettings';
+import {ref, watch} from 'vue';
 
-interface AudioHostRef {
-  value: string | null;
-}
-
-export const audioHostRef = reactive<AudioHostRef>({
-  value: null,
-});
+const audioHost = ref<string | null>(null);
 
 export function useAudioHost() {
-  const setAudioHost = () => {
-    if (settingsRef.value === null) {
+  const {settings} = useStorageSettings();
+
+  watch(settings, () => {
+    if (settings.value === null) {
       return;
     }
 
-    if (settingsRef.value.audio_host === '') {
-      audioHostRef.value = 'http://localhost:5531/';
+    if (settings.value.audio_host === '') {
+      audioHost.value = 'http://localhost:5531/';
       return;
     }
 
-    audioHostRef.value = settingsRef.value.audio_host;
-  };
+    audioHost.value = settings.value.audio_host;
+  });
 
   return {
-    setAudioHost: setAudioHost,
+    audioHost: audioHost,
   };
 }

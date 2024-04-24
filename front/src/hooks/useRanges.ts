@@ -1,6 +1,6 @@
 import {reactive, watchEffect} from 'vue';
 
-import {useWorker} from './useWorker';
+import {useFileReader} from './file-reader';
 
 export interface Range {
   index: number;
@@ -26,11 +26,11 @@ export const rangesRef = reactive<RangesRef>({
 });
 
 export function useRanges() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readRanges = () =>
-    read(async (worker, storage) => {
-      rangesRef.value = await worker.readRanges(storage);
+    read(async (worker, file) => {
+      rangesRef.value = await worker.readRanges(file);
     });
 
   watchEffect(readRanges);

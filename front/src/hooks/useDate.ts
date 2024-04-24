@@ -5,27 +5,29 @@ import utc from 'dayjs/plugin/utc';
 import {DATE_FORMAT} from 'src/constants';
 
 import {settingsStore} from '../components/Settings/settingsStore';
-import {settingsRef} from './useStorageSettings';
+import {useStorageSettings} from './useStorageSettings';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export function useDate() {
+  const {settings} = useStorageSettings();
+
   const convertTimestampToDate = (timestamp: number) => {
     if (settingsStore.applyTimezone === false) {
       return dayjs(timestamp);
     }
 
-    if (settingsRef.value === null) {
+    if (settings.value === null) {
       return dayjs(timestamp);
     }
 
-    if (settingsRef.value.timezone === '') {
+    if (settings.value.timezone === '') {
       return dayjs(timestamp);
     }
 
-    return dayjs(timestamp).tz(settingsRef.value.timezone);
+    return dayjs(timestamp).tz(settings.value.timezone);
   };
 
   const convertTimestampToIsoDate = (timestamp: number): string => {

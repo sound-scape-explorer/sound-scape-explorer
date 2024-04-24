@@ -1,31 +1,27 @@
 import type {StorageSettings} from 'src/storage/StorageSettings';
-import {onMounted, reactive} from 'vue';
+import {onMounted, ref} from 'vue';
 
-import {useAudioHost} from './useAudioHost';
-import {useWorker} from './useWorker';
+import {useFileReader} from './file-reader';
 
-interface SettingsRef {
-  value: StorageSettings | null;
-}
-
-export const settingsRef = reactive<SettingsRef>({
-  value: null,
-});
+const settings = ref<StorageSettings | null>(null);
+let isLoaded = false;
 
 export function useStorageSettings() {
-  const {read} = useWorker();
-  const {setAudioHost} = useAudioHost();
+  const {read} = useFileReader();
 
-  const readSettings = () =>
-    read(async (worker, storage) => {
-      settingsRef.value = await worker.readSettings(storage);
+  onMounted(async () => {
+    if (isLoaded) {
+      return;
+    }
 
-      setAudioHost();
+    isLoaded = true;
+
+    await read(async (worker, file) => {
+      settings.value = await worker.readSettings(file);
     });
-
-  onMounted(readSettings);
+  });
 
   return {
-    settingsRef: settingsRef,
+    settings: settings,
   };
 }

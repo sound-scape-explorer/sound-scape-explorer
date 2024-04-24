@@ -1,9 +1,9 @@
 import {reactive} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 export type AggregatedTimestamps = number[];
 
@@ -16,10 +16,10 @@ export const aggregatedTimestampsRef = reactive<AggregatedTimestampsRef>({
 });
 
 export function useAggregatedTimestamps() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readAggregatedTimestamps = () =>
-    read(async (worker, storage) => {
+    read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -29,7 +29,7 @@ export function useAggregatedTimestamps() {
       }
 
       aggregatedTimestampsRef.value = await worker.readAggregatedTimestamps(
-        storage,
+        file,
         bandRef.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,

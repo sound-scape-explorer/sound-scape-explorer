@@ -11,12 +11,13 @@ import {
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {useDate} from 'src/hooks/useDate';
 import {filesRef} from 'src/hooks/useFiles';
-import {settingsRef} from 'src/hooks/useStorageSettings';
 import {ref, watchEffect} from 'vue';
 
+import {useStorageSettings} from '../../hooks/useStorageSettings';
 import {clickedRef} from '../Scatter/useScatterClick';
 
 export function useDetails() {
+  const {settings} = useStorageSettings();
   const {convertTimestampToDate} = useDate();
 
   const intervalDateRef = ref<Dayjs | null>(null);
@@ -29,7 +30,7 @@ export function useDetails() {
     if (
       clickedRef.value === null ||
       filesRef.value === null ||
-      settingsRef.value === null ||
+      settings.value === null ||
       aggregatedSitesRef.value === null ||
       aggregatedTimestampsRef.value === null ||
       aggregatedLabelsRef.value === null ||

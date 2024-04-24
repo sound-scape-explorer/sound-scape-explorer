@@ -1,9 +1,9 @@
 import {reactive} from 'vue';
 
+import {useFileReader} from './file-reader';
 import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
-import {useWorker} from './useWorker';
 
 interface AggregatedFeaturesRef {
   value: number[][] | null;
@@ -14,7 +14,7 @@ export const aggregatedFeaturesRef = reactive<AggregatedFeaturesRef>({
 });
 
 export function useAggregatedFeatures() {
-  const {read} = useWorker();
+  const {read} = useFileReader();
 
   const readAggregatedFeatures = () =>
     read(async (worker, storage) => {
