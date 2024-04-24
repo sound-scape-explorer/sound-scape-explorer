@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {useDate} from 'src/composables/date';
-import {autoclustersRef, useAutoclusters} from 'src/hooks/useAutoclusters';
+import {useStorageAutoclusters} from 'src/composables/storage-autoclusters';
 import {bandsRef} from 'src/hooks/useBands';
 import {digestersRef} from 'src/hooks/useDigesters';
 import {extractorsRef} from 'src/hooks/useExtractors';
@@ -19,8 +19,7 @@ const {settings} = useStorageSettings();
 const {version} = useVersion();
 const {files} = useStorageFiles();
 
-// invoking this here because no other place uses it
-useAutoclusters();
+const {autoclusters} = useStorageAutoclusters();
 
 const separator = ', ';
 
@@ -135,8 +134,7 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'autoclusters',
-        value:
-          autoclustersRef.value?.map((ac) => ac.name).join(separator) ?? '',
+        value: autoclusters?.map((ac) => ac.name).join(separator) ?? '',
       },
     ]"
   />

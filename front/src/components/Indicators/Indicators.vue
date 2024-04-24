@@ -5,14 +5,15 @@ import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {useDate} from 'src/composables/date';
-import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
+import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
 import {useStorageSites} from '../../composables/storage-sites';
 import {cyclingScaleRef} from '../Scatter/useScatterColorScale';
 import {indicatorDataRef, useIndicators} from './useIndicators';
 
+const {aggregatedIndicators} = useStorageAggregatedIndicators();
 const {selectIndicator, selectSites} = useIndicators();
 const {convertTimestampToIsoDate} = useDate();
 
@@ -26,11 +27,11 @@ const parseIndex = (optionString: string | null): number | null => {
 };
 
 const indicatorsOptionsRef = computed(() => {
-  if (aggregatedIndicatorsRef.value === null) {
+  if (aggregatedIndicators.value === null) {
     return [];
   }
 
-  const options = aggregatedIndicatorsRef.value.map(
+  const options = aggregatedIndicators.value.map(
     (i) => `${i.extractor.index} - ${i.extractor.name}`,
   );
 

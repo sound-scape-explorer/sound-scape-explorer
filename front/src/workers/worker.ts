@@ -1,10 +1,10 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import type {Digested} from 'src/components/Digested/useDigested';
+import type {AggregatedIndicator} from 'src/composables/storage-aggregated-indicators';
 import type {File as FileConfig} from 'src/composables/storage-files';
 import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
 import type {Site} from 'src/composables/storage-sites';
-import type {AggregatedIndicator} from 'src/hooks/useAggregatedIndicators';
 import type {
   BlockDetails,
   IntervalDetails,
@@ -26,7 +26,7 @@ import type {Trajectory} from 'src/hooks/useTrajectories';
 import {StorageMode} from 'src/storage/StorageMode';
 import type {StorageSettings} from 'src/storage/StorageSettings';
 
-import type {Autocluster} from '../hooks/useAutoclusters';
+import type {Autocluster} from '../composables/storage-autoclusters';
 import type {RelativeTrajectory} from '../hooks/useRelativeTrajectories';
 import {StoragePath} from '../storage/StoragePath';
 import {trimRectangular} from '../utils/trim-rectangular';

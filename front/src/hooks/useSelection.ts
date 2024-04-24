@@ -10,9 +10,9 @@ import {
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {reactive, watchEffect} from 'vue';
 
+import {useStorageAggregatedFeatures} from '../composables/storage-aggregated-features';
+import {useStorageAggregatedIndicators} from '../composables/storage-aggregated-indicators';
 import {useStorageReducedFeatures} from '../composables/storage-reduced-features';
-import {useAggregatedFeatures} from './useAggregatedFeatures';
-import {useAggregatedIndicators} from './useAggregatedIndicators';
 import {useAggregatedIntervalDetails} from './useAggregatedIntervalDetails';
 import {useAggregatedLabels} from './useAggregatedLabels';
 import {useAggregatedSites} from './useAggregatedSites';
@@ -35,9 +35,9 @@ export const isSelectedRef = reactive<IsSelectedRef>({
 export function useSelection() {
   const {readLabels, resetLabels} = useLabels();
   const {readAggregatedFeatures, resetAggregatedFeatures} =
-    useAggregatedFeatures();
+    useStorageAggregatedFeatures();
   const {readAggregatedIndicators, resetAggregatedIndicators} =
-    useAggregatedIndicators();
+    useStorageAggregatedIndicators();
   const {readAggregatedTimestamps, resetAggregatedTimestamps} =
     useAggregatedTimestamps();
   const {readAggregatedSites, resetAggregatedSites} = useAggregatedSites();

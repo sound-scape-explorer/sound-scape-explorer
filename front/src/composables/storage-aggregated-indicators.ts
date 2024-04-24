@@ -1,28 +1,29 @@
-import {reactive} from 'vue';
+import {ref} from 'vue';
 
-import {useStorageReader} from '../composables/storage-reader';
-import {bandRef} from './useBands';
-import {type Extractor, nonNnExtractorsRef} from './useExtractors';
-import {integrationRef} from './useIntegrations';
+import {bandRef} from '../hooks/useBands';
+import {type Extractor, nonNnExtractorsRef} from '../hooks/useExtractors';
+import {integrationRef} from '../hooks/useIntegrations';
+import {useStorageReader} from './storage-reader';
 
 export interface AggregatedIndicator {
   extractor: Extractor;
   values: number[][];
 }
 
-interface AggregatedIndicatorsRef {
-  value: AggregatedIndicator[] | null;
-}
+const aggregatedIndicators = ref<AggregatedIndicator[] | null>(null);
+let isLoaded = false;
 
-export const aggregatedIndicatorsRef = reactive<AggregatedIndicatorsRef>({
-  value: null,
-});
-
-export function useAggregatedIndicators() {
+export function useStorageAggregatedIndicators() {
   const {read} = useStorageReader();
 
-  const readAggregatedIndicators = () =>
-    read(async (worker, file) => {
+  const readAggregatedIndicators = async () => {
+    if (isLoaded) {
+      return;
+    }
+
+    isLoaded = true;
+
+    await read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -40,14 +41,17 @@ export function useAggregatedIndicators() {
         extractorsIndexes,
       );
 
-      aggregatedIndicatorsRef.value = aggregated;
+      aggregatedIndicators.value = aggregated;
     });
+  };
 
   const resetAggregatedIndicators = () => {
-    aggregatedIndicatorsRef.value = null;
+    aggregatedIndicators.value = null;
+    isLoaded = false;
   };
 
   return {
+    aggregatedIndicators: aggregatedIndicators,
     readAggregatedIndicators: readAggregatedIndicators,
     resetAggregatedIndicators: resetAggregatedIndicators,
   };

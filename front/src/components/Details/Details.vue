@@ -4,16 +4,18 @@ import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useAudioFile} from 'src/components/Audio/useAudioFile';
 import {useDate} from 'src/composables/date';
-import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
 import {bandRef} from 'src/hooks/useBands';
 import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {computed, watch} from 'vue';
 
+import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {useDetails} from './useDetails';
+
+const {aggregatedIndicators} = useStorageAggregatedIndicators();
 
 const {
   intervalDateRef,
@@ -174,7 +176,7 @@ watch(intervalDetailsRef, () => {
       <div class="title">Indicators</div>
 
       <n-grid
-        v-if="aggregatedIndicatorsRef.value !== null"
+        v-if="aggregatedIndicators !== null"
         :cols="2"
         x-gap="12"
       >
@@ -186,9 +188,7 @@ watch(intervalDetailsRef, () => {
             {{ ex.name }}
           </n-tag>
 
-          {{
-            aggregatedIndicatorsRef.value[index].values[clickedRef.value ?? 0]
-          }}
+          {{ aggregatedIndicators[index].values[clickedRef.value ?? 0] }}
         </n-gi>
       </n-grid>
     </div>

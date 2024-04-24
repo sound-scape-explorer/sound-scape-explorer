@@ -1,7 +1,7 @@
 import {
   type AggregatedIndicator,
-  aggregatedIndicatorsRef,
-} from 'src/hooks/useAggregatedIndicators';
+  useStorageAggregatedIndicators,
+} from 'src/composables/storage-aggregated-indicators';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
 import {reactive, watchEffect} from 'vue';
@@ -38,17 +38,19 @@ export const indicatorDataRef = reactive<IndicatorDataRef>({
 });
 
 export function useIndicators() {
+  const {aggregatedIndicators} = useStorageAggregatedIndicators();
+
   const selectIndicator = (index: number | null) => {
     if (index === null) {
-      indicatorRef.value === null;
+      indicatorRef.value = null;
       return;
     }
 
-    if (aggregatedIndicatorsRef.value === null) {
+    if (aggregatedIndicators.value === null) {
       return;
     }
 
-    indicatorRef.value = aggregatedIndicatorsRef.value.filter(
+    indicatorRef.value = aggregatedIndicators.value.filter(
       (indicator) => indicator.extractor.index === index,
     )[0];
   };

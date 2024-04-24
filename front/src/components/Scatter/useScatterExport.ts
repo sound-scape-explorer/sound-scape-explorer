@@ -1,7 +1,6 @@
 import {Csv} from 'src/common/Csv';
 import {useDate} from 'src/composables/date';
-import {aggregatedFeaturesRef} from 'src/hooks/useAggregatedFeatures';
-import {aggregatedIndicatorsRef} from 'src/hooks/useAggregatedIndicators';
+import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
 import {aggregatedLabelsRef} from 'src/hooks/useAggregatedLabels';
 import {aggregatedSitesRef} from 'src/hooks/useAggregatedSites';
 import {aggregatedTimestampsRef} from 'src/hooks/useAggregatedTimestamps';
@@ -10,6 +9,7 @@ import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {ref} from 'vue';
 
+import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
 import {useStorageReducedFeatures} from '../../composables/storage-reduced-features';
 import {useAppNotification} from '../AppNotification/useAppNotification';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
@@ -28,6 +28,8 @@ export function useScatterExport() {
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
   const {reducedFeatures} = useStorageReducedFeatures();
+  const {aggregatedFeatures} = useStorageAggregatedFeatures();
+  const {aggregatedIndicators} = useStorageAggregatedIndicators();
 
   const loadingRef = ref<boolean>(false);
 
@@ -36,14 +38,14 @@ export function useScatterExport() {
       bandRef.value === null ||
       integrationRef.value === null ||
       aggregatedTimestampsRef.value === null ||
-      aggregatedFeaturesRef.value === null ||
+      aggregatedFeatures.value === null ||
       aggregatedLabelsRef.value === null ||
       pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null ||
       labelsPropertiesRef.value === null ||
       reducedFeatures.value === null ||
       aggregatedSitesRef.value === null ||
-      aggregatedIndicatorsRef.value === null
+      aggregatedIndicators.value === null
     ) {
       return;
     }
@@ -53,7 +55,7 @@ export function useScatterExport() {
     loadingRef.value = true;
 
     const csv = new Csv();
-    const aggregatedIndicators = aggregatedIndicatorsRef.value;
+    const aggregatedIndicatorsCopy = aggregatedIndicators.value;
     const payload: ExportData[] = [];
 
     for (
@@ -68,7 +70,8 @@ export function useScatterExport() {
         continue;
       }
 
-      const aggregatedFeatures = aggregatedFeaturesRef.value[intervalIndex];
+      const aggregatedFeaturesInterval =
+        aggregatedFeatures.value[intervalIndex];
       const timestamp = aggregatedTimestampsRef.value[intervalIndex];
       const site = aggregatedSitesRef.value[intervalIndex];
       const aggregatedLabels = aggregatedLabelsRef.value[intervalIndex];
@@ -81,7 +84,7 @@ export function useScatterExport() {
         site: site.site,
         aggregatedLabels: aggregatedLabels,
         reducedFeatures: reducedFeaturesInterval,
-        aggregatedFeatures: aggregatedFeatures,
+        aggregatedFeatures: aggregatedFeaturesInterval,
       });
     }
 
@@ -93,7 +96,7 @@ export function useScatterExport() {
       csv.addColumn(`label_${property}`);
     });
 
-    aggregatedIndicators.forEach(({extractor}) => {
+    aggregatedIndicatorsCopy.forEach(({extractor}) => {
       csv.addColumn(`i_${extractor.index}_${extractor.name}`);
     });
 
@@ -115,7 +118,7 @@ export function useScatterExport() {
         csv.addToCurrentRow(aL);
       });
 
-      aggregatedIndicators.forEach((aI) => {
+      aggregatedIndicatorsCopy.forEach((aI) => {
         csv.addToCurrentRow(`${aI.values[data.intervalIndex]}`);
       });
 
