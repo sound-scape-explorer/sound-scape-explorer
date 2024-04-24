@@ -11,8 +11,8 @@ import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {computed, watch} from 'vue';
 
-import {clickedRef} from '.././Scatter/useScatterClick';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
+import {clickedRef} from '../Scatter/useScatterClick';
 import {useDetails} from './useDetails';
 
 const {
