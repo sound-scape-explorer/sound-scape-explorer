@@ -15,6 +15,11 @@ export function useWorker() {
     callback: (worker: Worker, storage: File) => Promise<unknown>,
   ) => {
     try {
+      if (!isLoaded) {
+        // noinspection ExceptionCaughtLocallyJS
+        throw new Error('Worker: Not loaded');
+      }
+
       if (worker.value === null || storageFileRef.value === null) {
         // noinspection ExceptionCaughtLocallyJS
         throw new Error('Worker/Read: worker or storage is undefined');
