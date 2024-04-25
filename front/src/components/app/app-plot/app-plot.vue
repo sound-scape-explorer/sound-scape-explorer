@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {useAppPlot} from 'src/components/app/AppPlot/useAppPlot';
+import {useAppPlot} from 'src/components/app/app-plot/app-plot';
 import {settingsStore} from 'src/components/Settings/settingsStore';
 import {watch} from 'vue';
 

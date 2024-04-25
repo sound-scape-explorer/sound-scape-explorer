@@ -7,8 +7,8 @@ import {
   NNotificationProvider,
   NSpace,
 } from 'naive-ui';
+import AppNotification from 'src/components/app/app-notification/app-notification.vue';
 
-import AppNotification from './components/app/AppNotification/AppNotification.vue';
 import Loading from './components/Loading/Loading.vue';
 import Explore from './pages/Explore.vue';
 </script>

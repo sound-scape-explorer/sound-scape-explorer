@@ -5,7 +5,7 @@ import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/app/app-draggable.vue';
 import AppPlot, {
   type AppPlotProps,
-} from 'src/components/app/AppPlot/AppPlot.vue';
+} from 'src/components/app/app-plot/app-plot.vue';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
 import {useStorageSites} from 'src/composables/storage-sites';

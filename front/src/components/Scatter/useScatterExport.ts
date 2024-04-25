@@ -1,5 +1,5 @@
 import {Csv} from 'src/common/Csv';
-import {useAppNotification} from 'src/components/app/AppNotification/useAppNotification';
+import {useAppNotification} from 'src/components/app/app-notification/app-notification';
 import {useBandSelection} from 'src/composables/band-selection';
 import {useDate} from 'src/composables/date';
 import {useIntegrationSelection} from 'src/composables/integration-selection';

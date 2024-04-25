@@ -6,10 +6,10 @@ export interface AppNotification {
   type: 'success' | 'error' | 'warning' | 'info';
 }
 
-export interface AppNotificationsStore {
+export interface AppNotificationStore {
   list: AppNotification[];
 }
 
-export const appNotificationsStore = reactive<AppNotificationsStore>({
+export const appNotificationStore = reactive<AppNotificationStore>({
   list: [],
 });

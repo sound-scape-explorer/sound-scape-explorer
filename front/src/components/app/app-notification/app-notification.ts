@@ -1,5 +1,5 @@
 import type {NotificationType} from 'naive-ui';
-import {appNotificationsStore} from 'src/components/app/AppNotification/appNotificationsStore';
+import {appNotificationStore} from 'src/components/app/app-notification/app-notification-store';
 
 export function useAppNotification() {
   function notify(
@@ -7,7 +7,7 @@ export function useAppNotification() {
     title: string,
     description: string,
   ): void {
-    appNotificationsStore.list.push({
+    appNotificationStore.list.push({
       type: type,
       title: title,
       description: description,
