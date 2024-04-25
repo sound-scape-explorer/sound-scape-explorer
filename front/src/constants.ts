@@ -2,8 +2,6 @@ export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
 
-export const RENDERING_DELAY_SLOW = 250;
-
 export const SLIDER_LIMITS = {
   start: '⟦',
   end: '⟧',
