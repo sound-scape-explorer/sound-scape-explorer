@@ -18,7 +18,6 @@ export function useStorageReducedFeatures() {
     if (isLoaded) {
       return;
     }
-    console.log('READ');
 
     isLoaded = false;
 
