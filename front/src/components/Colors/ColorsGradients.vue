@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import AppGradient from 'src/components/app/app-gradient.vue';
 import {createHourlyLabels} from 'src/utils/create-hourly-labels';
 import {computed} from 'vue';
 
-import AppGradient from '../AppGradient/AppGradient.vue';
 import {colorScaleRef, cyclingScaleRef} from '../Scatter/useScatterColorScale';
 import {colorsStore} from './colorsStore';
 

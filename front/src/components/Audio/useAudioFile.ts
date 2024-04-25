@@ -1,4 +1,4 @@
-import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
+import {useAppNotification} from 'src/components/app/AppNotification/useAppNotification';
 import {useDraggables} from 'src/composables/draggables';
 import type {BlockDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';

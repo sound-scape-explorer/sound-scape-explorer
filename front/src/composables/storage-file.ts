@@ -1,4 +1,4 @@
-import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
+import {useAppNotification} from 'src/components/app/AppNotification/useAppNotification';
 import {importLockRef} from 'src/components/Import/useImportLock';
 import {useDraggables} from 'src/composables/draggables';
 import {useWorker} from 'src/composables/worker';

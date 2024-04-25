@@ -1,4 +1,5 @@
 import {Csv} from 'src/common/Csv';
+import {useAppNotification} from 'src/components/app/AppNotification/useAppNotification';
 import {useDate} from 'src/composables/date';
 import {useSelectBand} from 'src/composables/select-band';
 import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
@@ -11,7 +12,6 @@ import {useStorageReducedFeatures} from 'src/composables/storage-reduced-feature
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {ref} from 'vue';
 
-import {useAppNotification} from '../AppNotification/useAppNotification';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 

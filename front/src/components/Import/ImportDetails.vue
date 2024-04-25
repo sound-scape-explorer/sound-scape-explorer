@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import AppGrid from 'src/components/AppGrid/AppGrid.vue';
+import AppGrid from 'src/components/app/app-grid.vue';
 import {useDate} from 'src/composables/date';
 import {useStorageAutoclusters} from 'src/composables/storage-autoclusters';
 import {useStorageBands} from 'src/composables/storage-bands';

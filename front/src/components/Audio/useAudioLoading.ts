@@ -1,4 +1,4 @@
-import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
+import {useAppNotification} from 'src/components/app/AppNotification/useAppNotification';
 import {reactive} from 'vue';
 
 interface AudioIsLoadingRef {

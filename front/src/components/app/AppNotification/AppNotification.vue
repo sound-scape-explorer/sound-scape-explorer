@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import type {NotificationType} from 'naive-ui';
 import {NButton, useMessage, useNotification} from 'naive-ui';
+import {appNotificationsStore} from 'src/components/app/AppNotification/appNotificationsStore';
+import {ALERT_TIMER} from 'src/constants';
+import {combineStringsWithBreaks} from 'src/utils/combine-strings-with-breaks';
+import {copyToClipboard} from 'src/utils/copy-to-clipboard';
+import {VERSION} from 'src/version';
 import {h, watch} from 'vue';
-
-import {ALERT_TIMER} from '../../constants';
-import {combineStringsWithBreaks} from '../../utils/combine-strings-with-breaks';
-import {copyToClipboard} from '../../utils/copy-to-clipboard';
-import {VERSION} from '../../version';
-import {appNotificationsStore} from './appNotificationsStore';
 
 const message = useMessage();
 const notification = useNotification();
@@ -63,6 +62,7 @@ function render(
 }
 
 watch(appNotificationsStore, () => {
+  console.log('watch');
   appNotificationsStore.list.forEach((n, i) => {
     render(n.type, n.title, n.description);
     appNotificationsStore.list.splice(i, 1);

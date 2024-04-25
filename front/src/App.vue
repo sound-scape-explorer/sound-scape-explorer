@@ -8,7 +8,7 @@ import {
   NSpace,
 } from 'naive-ui';
 
-import AppNotification from './components/AppNotification/AppNotification.vue';
+import AppNotification from './components/app/AppNotification/AppNotification.vue';
 import Loading from './components/Loading/Loading.vue';
 import Explore from './pages/Explore.vue';
 </script>

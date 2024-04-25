@@ -3,7 +3,9 @@ import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NCascader, NIcon} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/app/app-draggable.vue';
-import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
+import AppPlot, {
+  type AppPlotProps,
+} from 'src/components/app/AppPlot/AppPlot.vue';
 import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
 import {useStorageRelativeTrajectories} from 'src/composables/storage-relative-trajectories';
 import {EXPORT_FILENAME} from 'src/constants';

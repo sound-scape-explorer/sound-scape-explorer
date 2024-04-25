@@ -1,11 +1,10 @@
 import type {Config, Data, Layout} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
+import type {AppPlotProps} from 'src/components/app/AppPlot/AppPlot.vue';
+import {settingsStore} from 'src/components/Settings/settingsStore';
+import {usePlotConfig} from 'src/composables/plot-config';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref, watch} from 'vue';
-
-import {usePlotConfig} from '../../composables/plot-config';
-import {settingsStore} from '../Settings/settingsStore';
-import type {AppPlotProps} from './AppPlot.vue';
 
 export function useAppPlot(props: AppPlotProps) {
   const divRef = ref<HTMLDivElement | null>(null);

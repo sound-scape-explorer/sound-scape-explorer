@@ -3,7 +3,9 @@ import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NCascader, NIcon, NSelect, NSwitch} from 'naive-ui';
 import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/app/app-draggable.vue';
-import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
+import AppPlot, {
+  type AppPlotProps,
+} from 'src/components/app/AppPlot/AppPlot.vue';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
 import {useStorageSites} from 'src/composables/storage-sites';

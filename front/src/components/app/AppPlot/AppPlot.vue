@@ -1,8 +1,7 @@
 <script lang="ts" setup="">
+import {useAppPlot} from 'src/components/app/AppPlot/useAppPlot';
 import {settingsStore} from 'src/components/Settings/settingsStore';
 import {watch} from 'vue';
-
-import {useAppPlot} from './useAppPlot';
 
 export interface AppPlotProps {
   labels: string[][];
