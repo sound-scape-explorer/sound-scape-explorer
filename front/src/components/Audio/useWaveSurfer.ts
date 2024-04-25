@@ -1,6 +1,6 @@
 import colormap from 'colormap';
 import SpectrogramPlugin, {type RGBA} from 'src/common/spectrogram';
-import {useSelectBand} from 'src/composables/select-band';
+import {useBandSelection} from 'src/composables/band-selection';
 import type {Ref} from 'vue';
 import {computed, reactive, watch, watchEffect} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
@@ -47,7 +47,7 @@ export function useWaveSurfer({
   waveformContainerRef,
   spectrogramContainerRef,
 }: UseWaveSurferProps) {
-  const {band} = useSelectBand();
+  const {band} = useBandSelection();
 
   const colorsRef = computed(() => {
     const colors = colormap({

@@ -1,8 +1,8 @@
 import {useAppNotification} from 'src/components/app/AppNotification/useAppNotification';
 import {useDraggables} from 'src/composables/draggables';
+import {useIntegrationSelection} from 'src/composables/integration-selection';
 import type {BlockDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
-import {integrationRef} from 'src/hooks/useIntegrations';
 import {getBitDepthFromWav} from 'src/utils/get-bit-depth-from-wav';
 import {reactive, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
@@ -41,6 +41,7 @@ export function useAudioFile() {
   const {verifyAudioLoading} = useAudioLoading();
   const {audioHost} = useStorageAudioHost();
   const {store} = useDraggables();
+  const {integration} = useIntegrationSelection();
 
   const openAudioModal = () => {
     if (store.audio === true) {
@@ -72,7 +73,7 @@ export function useAudioFile() {
   const loadAudioFile = async () => {
     try {
       if (
-        integrationRef.value === null ||
+        integration.value === null ||
         audioBlockRef.value === null ||
         audioContextRef.value === null ||
         audioHost.value === null
@@ -83,7 +84,7 @@ export function useAudioFile() {
       audioIsLoadingRef.value = true;
 
       const start = audioBlockRef.value.fileStart;
-      const end = start + integrationRef.value.seconds * 1000;
+      const end = start + integration.value.seconds * 1000;
 
       let formattedHost = audioHost.value;
       if (!formattedHost.endsWith('/')) {

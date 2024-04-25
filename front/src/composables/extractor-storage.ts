@@ -1,9 +1,6 @@
-import type {DropdownOption} from 'src/common/DropdownOption';
 import {useStorageReader} from 'src/composables/storage-reader';
 import {NN_EXTRACTORS} from 'src/constants';
-import {reducerRef} from 'src/hooks/useReducers';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {onMounted, ref, watchEffect} from 'vue';
+import {onMounted, ref} from 'vue';
 
 export interface Extractor {
   index: number;
@@ -17,9 +14,8 @@ let isLoaded = false;
 const extractors = ref<Extractor[] | null>(null);
 const nnExtractors = ref<Extractor[] | null>(null);
 const nonNnExtractors = ref<Extractor[] | null>(null);
-const options = ref<DropdownOption[]>([]);
 
-export function useStorageExtractors() {
+export function useExtractorStorage() {
   const {read} = useStorageReader();
 
   const readExtractors = async () => {
@@ -44,25 +40,9 @@ export function useStorageExtractors() {
 
   onMounted(readExtractors);
 
-  const createOptions = () => {
-    if (reducerRef.value === null) {
-      options.value = [];
-      return;
-    }
-
-    const o = reducerRef.value.nnExtractors.map(
-      (ex) => `${ex.index} - ${ex.name}`,
-    );
-
-    options.value = convertToNaiveSelectOptions(o);
-  };
-
-  watchEffect(createOptions);
-
   return {
     extractors: extractors,
     nnExtractors: nnExtractors,
     nonNnExtractors: nonNnExtractors,
-    options: options,
   };
 }

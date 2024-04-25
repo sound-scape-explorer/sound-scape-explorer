@@ -4,19 +4,20 @@ import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import AppDraggable from 'src/components/app/app-draggable.vue';
 import {useAudioFile} from 'src/components/Audio/useAudioFile';
+import {useBandSelection} from 'src/composables/band-selection';
 import {useDate} from 'src/composables/date';
-import {useSelectBand} from 'src/composables/select-band';
+import {useExtractorStorage} from 'src/composables/extractor-storage';
+import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
-import {useStorageExtractors} from 'src/composables/storage-extractors';
 import {useStorageLabels} from 'src/composables/storage-labels';
-import {integrationRef} from 'src/hooks/useIntegrations';
 import {computed, watch} from 'vue';
 
 import {clickedRef} from '../Scatter/useScatterClick';
 import {useDetails} from './useDetails';
 
-const {nonNnExtractors} = useStorageExtractors();
-const {band} = useSelectBand();
+const {nonNnExtractors} = useExtractorStorage();
+const {band} = useBandSelection();
+const {integration} = useIntegrationSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
 const {labelsProperties} = useStorageLabels();
 
@@ -31,11 +32,11 @@ const {selectAudioBlock} = useAudioFile();
 const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
 
 const dateEndRef = computed<Dayjs | null>(() => {
-  if (intervalDateRef.value === null || integrationRef.value === null) {
+  if (intervalDateRef.value === null || integration.value === null) {
     return null;
   }
 
-  return intervalDateRef.value.add(integrationRef.value.seconds, 'seconds');
+  return intervalDateRef.value.add(integration.value.seconds, 'seconds');
 });
 
 watch(intervalDetailsRef, () => {
@@ -145,7 +146,7 @@ watch(intervalDetailsRef, () => {
 
     <div class="file container">
       <div class="title">Integration</div>
-      <span class="file index">{{ integrationRef.value?.name ?? '' }}</span>
+      <span class="file index">{{ integration?.name ?? '' }}</span>
     </div>
 
     <div class="separator" />

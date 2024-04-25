@@ -1,16 +1,16 @@
 <script lang="ts" setup="">
 import AppGrid from 'src/components/app/app-grid.vue';
+import {useBandStorage} from 'src/composables/band-storage';
 import {useDate} from 'src/composables/date';
+import {useExtractorStorage} from 'src/composables/extractor-storage';
+import {useIntegrationStorage} from 'src/composables/integration-storage';
+import {useReducerStorage} from 'src/composables/reducer-storage';
 import {useStorageAutoclusters} from 'src/composables/storage-autoclusters';
-import {useStorageBands} from 'src/composables/storage-bands';
 import {useStorageDigesters} from 'src/composables/storage-digesters';
-import {useStorageExtractors} from 'src/composables/storage-extractors';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {useStorageVersion} from 'src/composables/storage-version';
-import {integrationsRef} from 'src/hooks/useIntegrations';
 import {rangesRef} from 'src/hooks/useRanges';
-import {reducersRef} from 'src/hooks/useReducers';
 import {trajectoriesRef} from 'src/hooks/useTrajectories';
 import {computed} from 'vue';
 
@@ -19,8 +19,10 @@ const {version} = useStorageVersion();
 const {files} = useStorageFiles();
 const {digesters} = useStorageDigesters();
 
-const {bands} = useStorageBands();
-const {extractors} = useStorageExtractors();
+const {bands} = useBandStorage();
+const {integrations} = useIntegrationStorage();
+const {extractors} = useExtractorStorage();
+const {reducers} = useReducerStorage();
 const {autoclusters} = useStorageAutoclusters();
 
 const separator = ', ';
@@ -101,7 +103,7 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'Integrations',
-        value: integrationsRef.value?.map((i) => i.name).join(separator) ?? '',
+        value: integrations?.map((i) => i.name).join(separator) ?? '',
       },
       {
         tag: 'Ranges',
@@ -130,9 +132,8 @@ const timelineOrigin = computed<string>(() => {
       {
         tag: 'reducers',
         value:
-          reducersRef.value
-            ?.map((r) => `${r.name}${r.dimensions}`)
-            .join(separator) ?? '',
+          reducers?.map((r) => `${r.name}${r.dimensions}`).join(separator) ??
+          '',
       },
       {
         tag: 'autoclusters',

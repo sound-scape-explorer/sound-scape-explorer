@@ -7,9 +7,11 @@ import {
   scatterLoadingTextRef,
 } from 'src/components/Scatter/useScatterLoading';
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
+import {useBandSelection} from 'src/composables/band-selection';
 import {useDraggables} from 'src/composables/draggables';
-import {useSelectBand} from 'src/composables/select-band';
-import {useSelectExtractor} from 'src/composables/select-extractor';
+import {useSelectExtractor} from 'src/composables/extractor-selection';
+import {useIntegrationSelection} from 'src/composables/integration-selection';
+import {useReducerSelection} from 'src/composables/reducer-selection';
 import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
@@ -18,8 +20,6 @@ import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-site
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
-import {integrationRef, useIntegrations} from 'src/hooks/useIntegrations';
-import {reducerRef, useReducers} from 'src/hooks/useReducers';
 import {useTrajectories} from 'src/hooks/useTrajectories';
 import {reactive, watchEffect} from 'vue';
 
@@ -54,10 +54,11 @@ export function useSelect() {
   const {renderTraces, resetTraces} = useScatterTraces();
   const {filterByMeta, resetFilterByMeta} = useScatterFilterMeta();
   const {filterByTime, resetFilterByTime} = useScatterFilterTime();
-  const {band, reset: resetBand} = useSelectBand();
-  const {resetIntegration} = useIntegrations();
+
+  const {band, reset: resetBand} = useBandSelection();
+  const {integration, reset: resetIntegration} = useIntegrationSelection();
   const {extractor, reset: resetExtractor} = useSelectExtractor();
-  const {resetReducer} = useReducers();
+  const {reducer, reset: resetReducer} = useReducerSelection();
 
   const unloadSelection = () => {
     scatterLoadingTextRef.value = 'Unloading selection...';
@@ -91,9 +92,9 @@ export function useSelect() {
   const loadSelection = async () => {
     if (
       band.value === null ||
-      integrationRef.value === null ||
+      integration.value === null ||
       extractor.value === null ||
-      reducerRef.value === null
+      reducer.value === null
     ) {
       return;
     }

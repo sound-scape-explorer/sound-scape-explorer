@@ -3,23 +3,24 @@ import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
 import AppButton from 'src/components/app/app-button.vue';
+import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
+import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
+import {useReducerSelection} from 'src/composables/reducer-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
+import {SLIDER_LIMITS} from 'src/constants';
 import {rangesRef} from 'src/hooks/useRanges';
-import {reducerRef} from 'src/hooks/useReducers';
+import {mapRange} from 'src/utils/map-range';
 import {computed, ref, watch} from 'vue';
 
-import {SLIDER_LIMITS} from '../../constants';
-import {mapRange} from '../../utils/map-range';
-import {useScatterFilterTime} from '../Scatter/useScatterFilterTime';
-import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 
+const {reducer} = useReducerSelection();
 const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
 const sliders = computed<Slider[]>(() => {
-  if (rangesRef.value === null || reducerRef.value === null) {
+  if (rangesRef.value === null || reducer.value === null) {
     return [];
   }
 

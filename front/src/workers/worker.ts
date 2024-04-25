@@ -1,6 +1,10 @@
 import type {Dataset, File as H5File, Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
 import type {Digested} from 'src/components/Digested/useDigested';
+import type {Band} from 'src/composables/band-storage';
+import type {Extractor} from 'src/composables/extractor-storage';
+import type {Integration} from 'src/composables/integration-storage';
+import type {ReducerFromStorage} from 'src/composables/reducer-storage';
 import type {AggregatedIndicator} from 'src/composables/storage-aggregated-indicators';
 import type {
   BlockDetails,
@@ -8,17 +12,13 @@ import type {
 } from 'src/composables/storage-aggregated-interval-details';
 import type {AggregatedSite} from 'src/composables/storage-aggregated-sites';
 import type {Autocluster} from 'src/composables/storage-autoclusters';
-import type {Band} from 'src/composables/storage-bands';
 import type {Digester} from 'src/composables/storage-digesters';
-import type {Extractor} from 'src/composables/storage-extractors';
 import type {File as FileConfig} from 'src/composables/storage-files';
 import type {Labels} from 'src/composables/storage-labels';
 import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
 import type {RelativeTrajectory} from 'src/composables/storage-relative-trajectories';
 import type {Site} from 'src/composables/storage-sites';
-import type {Integration} from 'src/hooks/useIntegrations';
 import type {Range} from 'src/hooks/useRanges';
-import type {ReducerFromStorage} from 'src/hooks/useReducers';
 import type {
   TracedData,
   TracedRelativeTimestamps,

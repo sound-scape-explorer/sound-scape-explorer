@@ -1,7 +1,8 @@
 import {Csv} from 'src/common/Csv';
 import {useAppNotification} from 'src/components/app/AppNotification/useAppNotification';
+import {useBandSelection} from 'src/composables/band-selection';
 import {useDate} from 'src/composables/date';
-import {useSelectBand} from 'src/composables/select-band';
+import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
@@ -9,7 +10,6 @@ import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-site
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
-import {integrationRef} from 'src/hooks/useIntegrations';
 import {ref} from 'vue';
 
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
@@ -25,7 +25,8 @@ interface ExportData {
 }
 
 export function useScatterExport() {
-  const {band} = useSelectBand();
+  const {band} = useBandSelection();
+  const {integration} = useIntegrationSelection();
   const {labelsProperties} = useStorageLabels();
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
@@ -41,7 +42,7 @@ export function useScatterExport() {
   const handleScatterExportClick = async () => {
     if (
       band.value === null ||
-      integrationRef.value === null ||
+      integration.value === null ||
       aggregatedTimestamps.value === null ||
       aggregatedFeatures.value === null ||
       aggregatedLabels.value === null ||
@@ -136,7 +137,7 @@ export function useScatterExport() {
       });
     });
 
-    const csvFilename = `SSE_${band.value.name}_${integrationRef.value.name}.csv`;
+    const csvFilename = `SSE_${band.value.name}_${integration.value.name}.csv`;
     csv.download(csvFilename);
     loadingRef.value = false;
   };

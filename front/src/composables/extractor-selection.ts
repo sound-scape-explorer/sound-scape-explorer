@@ -1,16 +1,18 @@
+import {useExtractorOptions} from 'src/composables/extractor-options';
 import {
   type Extractor,
-  useStorageExtractors,
-} from 'src/composables/storage-extractors';
-import {reducerSelectedRef} from 'src/hooks/useReducers';
+  useExtractorStorage,
+} from 'src/composables/extractor-storage';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
-import {ref, watchEffect} from 'vue';
+import {ref, watch} from 'vue';
 
 const extractor = ref<Extractor | null>(null);
 const selected = ref<Extractor['name'] | null>(null);
+let hasAutoSelected = false;
 
 export function useSelectExtractor() {
-  const {extractors, options: options} = useStorageExtractors();
+  const {extractors} = useExtractorStorage();
+  const {options} = useExtractorOptions();
 
   const select = (index: number) => {
     if (extractors.value === null || extractor.value !== null) {
@@ -25,31 +27,32 @@ export function useSelectExtractor() {
     selected.value = null;
   };
 
-  const handleSelectedChange = () => {
+  const handleChange = () => {
     if (selected.value === null) {
       return;
     }
 
-    const extractorIndex = parseSelectionOption(selected.value);
+    const index = parseSelectionOption(selected.value);
 
-    if (extractorIndex === null) {
+    if (index === null) {
       return;
     }
 
-    select(extractorIndex);
+    select(index);
   };
 
-  watchEffect(handleSelectedChange);
+  watch(selected, handleChange);
 
-  const autoSelect = () => {
-    if (reducerSelectedRef.value === null) {
+  const autoselect = () => {
+    if (hasAutoSelected || options.value.length !== 1) {
       return;
     }
 
+    hasAutoSelected = true;
     selected.value = options.value[0].value;
   };
 
-  watchEffect(autoSelect);
+  watch(options, autoselect);
 
   return {
     extractor: extractor,

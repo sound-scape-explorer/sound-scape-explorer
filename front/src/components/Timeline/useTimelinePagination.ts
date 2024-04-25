@@ -1,13 +1,12 @@
+import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {isSelectedRef} from 'src/composables/select';
 import {
   type BlockDetails,
   useStorageAggregatedIntervalDetails,
 } from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
+import {countIterations} from 'src/utils/count-iterations';
 import {reactive, watchEffect} from 'vue';
-
-import {integrationRef} from '../../hooks/useIntegrations';
-import {countIterations} from '../../utils/count-iterations';
 
 export const pageSizes = [100, 250, 500, 750, 1000];
 
@@ -99,6 +98,7 @@ export const pageVisibleBlocksRef = reactive<PageVisibleBlocksRef>({
 });
 
 export function useTimelinePagination() {
+  const {integration} = useIntegrationSelection();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
@@ -107,13 +107,13 @@ export function useTimelinePagination() {
 
     if (
       isSelectedRef.value === false ||
-      integrationRef.value === null ||
+      integration.value === null ||
       aggregatedTimestamps.value === null
     ) {
       return;
     }
 
-    const milliseconds = integrationRef.value.seconds * 1000;
+    const milliseconds = integration.value.seconds * 1000;
     pageTimestampMinRef.value = Math.min(...aggregatedTimestamps.value);
     pageTimestampMaxRef.value = Math.max(...aggregatedTimestamps.value);
 
@@ -156,12 +156,12 @@ export function useTimelinePagination() {
     if (
       aggregatedIntervalDetails.value === null ||
       aggregatedTimestamps.value === null ||
-      integrationRef.value === null
+      integration.value === null
     ) {
       return;
     }
 
-    const milliseconds = integrationRef.value.seconds * 1000;
+    const milliseconds = integration.value.seconds * 1000;
     const min = pageCurrentBoundariesRef.value.min - 1;
     const timestampOrigin = pageTimestampMinRef.value;
     const timestampMin = timestampOrigin + min * milliseconds;

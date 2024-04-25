@@ -1,6 +1,6 @@
-import {useSelectBand} from 'src/composables/select-band';
+import {useBandSelection} from 'src/composables/band-selection';
+import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useStorageReader} from 'src/composables/storage-reader';
-import {integrationRef} from 'src/hooks/useIntegrations';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {ref} from 'vue';
 
@@ -17,7 +17,8 @@ const labelsPropertiesAsColorTypes = ref<string[] | null>(null);
 
 export function useStorageLabels() {
   const {read} = useStorageReader();
-  const {band} = useSelectBand();
+  const {band} = useBandSelection();
+  const {integration} = useIntegrationSelection();
 
   const readLabels = async () => {
     if (isLoaded) {
@@ -27,14 +28,14 @@ export function useStorageLabels() {
     isLoaded = true;
 
     await read(async (worker, file) => {
-      if (band.value === null || integrationRef.value === null) {
+      if (band.value === null || integration.value === null) {
         return;
       }
 
       labels.value = await worker.readLabels(
         file,
         band.value.name,
-        integrationRef.value.seconds,
+        integration.value.seconds,
       );
 
       labelsSets.value = Object.values(labels.value);

@@ -1,14 +1,16 @@
-import {type Band, useStorageBands} from 'src/composables/storage-bands';
-import {ref, watchEffect} from 'vue';
+import {useBandOptions} from 'src/composables/band-options';
+import {type Band, useBandStorage} from 'src/composables/band-storage';
+import {ref, watch} from 'vue';
 
-import {reducerSelectedRef} from '../hooks/useReducers';
 import {parseSelectionOption} from '../utils/parse-selection-option';
 
 const band = ref<Band | null>(null);
 const selected = ref<Band['name'] | null>(null);
+let hasAutoSelected = false;
 
-export function useSelectBand() {
-  const {bands, options} = useStorageBands();
+export function useBandSelection() {
+  const {bands} = useBandStorage();
+  const {options} = useBandOptions();
 
   const select = (index: number) => {
     if (bands.value === null || band.value !== null) {
@@ -23,31 +25,32 @@ export function useSelectBand() {
     selected.value = null;
   };
 
-  const handleSelectedChange = () => {
+  const handleChange = () => {
     if (selected.value === null) {
       return;
     }
 
-    const bandIndex = parseSelectionOption(selected.value);
+    const index = parseSelectionOption(selected.value);
 
-    if (bandIndex === null) {
+    if (index === null) {
       return;
     }
 
-    select(bandIndex);
+    select(index);
   };
 
-  watchEffect(handleSelectedChange);
+  watch(selected, handleChange);
 
-  const autoSelect = () => {
-    if (reducerSelectedRef.value === null) {
+  const autoselect = () => {
+    if (hasAutoSelected || options.value.length !== 1) {
       return;
     }
 
+    hasAutoSelected = true;
     selected.value = options.value[0].value;
   };
 
-  watchEffect(autoSelect);
+  watch(options, autoselect);
 
   return {
     band: band,

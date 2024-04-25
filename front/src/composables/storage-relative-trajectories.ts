@@ -1,7 +1,7 @@
-import {useSelectBand} from 'src/composables/select-band';
-import {useSelectExtractor} from 'src/composables/select-extractor';
+import {useBandSelection} from 'src/composables/band-selection';
+import {useSelectExtractor} from 'src/composables/extractor-selection';
+import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useStorageReader} from 'src/composables/storage-reader';
-import {integrationRef} from 'src/hooks/useIntegrations';
 import {ref, watchEffect} from 'vue';
 
 export interface RelativeTrajectory {
@@ -18,7 +18,8 @@ let isLoaded = false;
 
 export function useStorageRelativeTrajectories() {
   const {read} = useStorageReader();
-  const {band} = useSelectBand();
+  const {band} = useBandSelection();
+  const {integration} = useIntegrationSelection();
   const {extractor} = useSelectExtractor();
 
   const readRelativeTrajectories = async () => {
@@ -31,7 +32,7 @@ export function useStorageRelativeTrajectories() {
     await read(async (worker, file) => {
       if (
         band.value === null ||
-        integrationRef.value === null ||
+        integration.value === null ||
         extractor.value === null
       ) {
         return;
@@ -40,7 +41,7 @@ export function useStorageRelativeTrajectories() {
       relativeTrajectories.value = await worker.readRelativeTrajectories(
         file,
         band.value.name,
-        integrationRef.value.seconds,
+        integration.value.seconds,
         extractor.value.index,
       );
     });

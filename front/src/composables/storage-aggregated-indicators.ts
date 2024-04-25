@@ -1,10 +1,10 @@
-import {useSelectBand} from 'src/composables/select-band';
+import {useBandSelection} from 'src/composables/band-selection';
 import {
   type Extractor,
-  useStorageExtractors,
-} from 'src/composables/storage-extractors';
+  useExtractorStorage,
+} from 'src/composables/extractor-storage';
+import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useStorageReader} from 'src/composables/storage-reader';
-import {integrationRef} from 'src/hooks/useIntegrations';
 import {ref} from 'vue';
 
 export interface AggregatedIndicator {
@@ -17,8 +17,9 @@ let isLoaded = false;
 
 export function useStorageAggregatedIndicators() {
   const {read} = useStorageReader();
-  const {band} = useSelectBand();
-  const {nonNnExtractors} = useStorageExtractors();
+  const {band} = useBandSelection();
+  const {integration} = useIntegrationSelection();
+  const {nonNnExtractors} = useExtractorStorage();
 
   const readAggregatedIndicators = async () => {
     if (isLoaded) {
@@ -30,7 +31,7 @@ export function useStorageAggregatedIndicators() {
     await read(async (worker, file) => {
       if (
         band.value === null ||
-        integrationRef.value === null ||
+        integration.value === null ||
         nonNnExtractors.value === null
       ) {
         return;
@@ -41,7 +42,7 @@ export function useStorageAggregatedIndicators() {
       const aggregated = await worker.readAggregatedIndicators(
         file,
         band.value.name,
-        integrationRef.value.seconds,
+        integration.value.seconds,
         extractorsIndexes,
       );
 
