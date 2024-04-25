@@ -1,4 +1,4 @@
-import {labelsRef} from 'src/hooks/useLabels';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {computed, reactive} from 'vue';
 
 import {useScatterFilterMeta} from '../Scatter/useScatterFilterMeta';
@@ -14,14 +14,15 @@ export const labelsSelectionRef = reactive<LabelsSelectionRef>({
 });
 
 export function useLabelsSelection() {
+  const {labels} = useStorageLabels();
   const {filterByMeta} = useScatterFilterMeta();
 
   const propertiesRef = computed<string[]>(() => {
-    if (labelsRef.value === null) {
+    if (labels.value === null) {
       return [];
     }
 
-    return Object.keys(labelsRef.value);
+    return Object.keys(labels.value);
   });
 
   const buildSelection = () => {

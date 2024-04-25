@@ -7,7 +7,7 @@ import {parseSelectionOption} from '../utils/parse-selection-option';
 const band = ref<Band | null>(null);
 const selected = ref<Band['name'] | null>(null);
 
-export function useBandSelection() {
+export function useSelectBand() {
   const {bands, options} = useStorageBands();
 
   const select = (index: number) => {

@@ -2,10 +2,7 @@ import chroma, {type Scale} from 'chroma-js';
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageFiles} from 'src/composables/storage-files';
-import {
-  labelsPropertiesAsColorTypesRef,
-  labelsSetsRef,
-} from 'src/hooks/useLabels';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {computed, reactive, watch} from 'vue';
 
 import {colorsStore} from '../Colors/colorsStore';
@@ -56,6 +53,7 @@ export const nightColor = chroma('blue');
 
 export function useScatterColorScale() {
   const {files} = useStorageFiles();
+  const {labelsSets, labelsPropertiesAsColorTypes} = useStorageLabels();
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {getColorByPointIndex} = useColorByPointIndex();
@@ -67,11 +65,11 @@ export function useScatterColorScale() {
 
   const generateColorScale = () => {
     if (
-      labelsPropertiesAsColorTypesRef.value === null ||
+      labelsPropertiesAsColorTypes.value === null ||
       files.value === null ||
       aggregatedTimestamps.value === null ||
       aggregatedLabels.value === null ||
-      labelsSetsRef.value === null
+      labelsSets.value === null
     ) {
       return;
     }
@@ -102,13 +100,13 @@ export function useScatterColorScale() {
       } else if (colorType === 'cycleDay') {
         const timestamp = aggregatedTimestamps.value[intervalIndex];
         color = getColorByCyclingDay(timestamp);
-      } else if (labelsPropertiesAsColorTypesRef.value.includes(colorType)) {
+      } else if (labelsPropertiesAsColorTypes.value.includes(colorType)) {
         color = getColorByLabel(
           intervalIndex,
           colorType,
-          labelsPropertiesAsColorTypesRef.value,
+          labelsPropertiesAsColorTypes.value,
           aggregatedLabels.value,
-          labelsSetsRef.value,
+          labelsSets.value,
         );
       }
 

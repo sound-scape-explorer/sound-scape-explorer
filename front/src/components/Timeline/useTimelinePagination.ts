@@ -1,3 +1,4 @@
+import {isSelectedRef} from 'src/composables/select';
 import {
   type BlockDetails,
   useStorageAggregatedIntervalDetails,
@@ -6,7 +7,6 @@ import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated
 import {reactive, watchEffect} from 'vue';
 
 import {integrationRef} from '../../hooks/useIntegrations';
-import {isSelectedRef} from '../../hooks/useSelection';
 import {countIterations} from '../../utils/count-iterations';
 
 export const pageSizes = [100, 250, 500, 750, 1000];

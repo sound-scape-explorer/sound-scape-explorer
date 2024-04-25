@@ -12,11 +12,11 @@ import type {Band} from 'src/composables/storage-bands';
 import type {Digester} from 'src/composables/storage-digesters';
 import type {Extractor} from 'src/composables/storage-extractors';
 import type {File as FileConfig} from 'src/composables/storage-files';
+import type {Labels} from 'src/composables/storage-labels';
 import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
 import type {RelativeTrajectory} from 'src/composables/storage-relative-trajectories';
 import type {Site} from 'src/composables/storage-sites';
 import type {Integration} from 'src/hooks/useIntegrations';
-import type {Labels} from 'src/hooks/useLabels';
 import type {Range} from 'src/hooks/useRanges';
 import type {ReducerFromStorage} from 'src/hooks/useReducers';
 import type {

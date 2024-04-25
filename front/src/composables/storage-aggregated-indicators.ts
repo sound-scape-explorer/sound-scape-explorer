@@ -1,4 +1,4 @@
-import {useBandSelection} from 'src/composables/band-selection';
+import {useSelectBand} from 'src/composables/select-band';
 import {
   type Extractor,
   useStorageExtractors,
@@ -17,7 +17,7 @@ let isLoaded = false;
 
 export function useStorageAggregatedIndicators() {
   const {read} = useStorageReader();
-  const {band} = useBandSelection();
+  const {band} = useSelectBand();
   const {nonNnExtractors} = useStorageExtractors();
 
   const readAggregatedIndicators = async () => {

@@ -1,15 +1,16 @@
 import type {Data} from 'plotly.js-dist-min';
+import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
-import {labelsPropertiesRef} from 'src/hooks/useLabels';
 
-import {useDate} from '../../composables/date';
 import {alphaHighRef, alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
 
 export function useScatterFeatures() {
+  const {labelsProperties} = useStorageLabels();
   const {reducedFeatures} = useStorageReducedFeatures();
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
@@ -19,7 +20,7 @@ export function useScatterFeatures() {
 
   const traceFeatures = (): Data[] => {
     if (
-      labelsPropertiesRef.value === null ||
+      labelsProperties.value === null ||
       reducedFeatures.value === null ||
       aggregatedLabels.value === null ||
       colorScaleRef.value === null ||
@@ -48,7 +49,7 @@ export function useScatterFeatures() {
 
     const isThreeDimensional = reducedFeatures.value[0].length === 3;
     const scatterType = isThreeDimensional ? 'scatter3d' : 'scattergl';
-    const properties = labelsPropertiesRef.value;
+    const properties = labelsProperties.value;
 
     const indices = reducedFeatures.value.map((_, i) => i);
     const texts = indices.map((i) => {

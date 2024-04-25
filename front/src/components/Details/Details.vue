@@ -4,20 +4,21 @@ import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useAudioFile} from 'src/components/Audio/useAudioFile';
 import {useDate} from 'src/composables/date';
+import {useSelectBand} from 'src/composables/select-band';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
 import {useStorageExtractors} from 'src/composables/storage-extractors';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {integrationRef} from 'src/hooks/useIntegrations';
-import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {computed, watch} from 'vue';
 
-import {useBandSelection} from '../../composables/band-selection';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {useDetails} from './useDetails';
 
 const {nonNnExtractors} = useStorageExtractors();
-const {band} = useBandSelection();
+const {band} = useSelectBand();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
+const {labelsProperties} = useStorageLabels();
 
 const {
   intervalDateRef,
@@ -161,12 +162,12 @@ watch(intervalDetailsRef, () => {
         x-gap="12"
       >
         <!--suppress JSUnusedLocalSymbols -->
-        <n-gi v-for="(_, index) in labelsPropertiesRef.value">
+        <n-gi v-for="(_, index) in labelsProperties">
           <n-tag
             :bordered="false"
             size="small"
           >
-            {{ labelsPropertiesRef.value?.[index] }}
+            {{ labelsProperties?.[index] }}
           </n-tag>
 
           {{ intervalLabelsRef?.[index] }}

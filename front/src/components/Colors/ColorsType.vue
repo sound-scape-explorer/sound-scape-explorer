@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
-import {labelsPropertiesRef} from 'src/hooks/useLabels';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
@@ -9,9 +9,7 @@ import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import type {ColorType} from './colorsStore';
 import {colorsStore} from './colorsStore';
 
-/**
- * State
- */
+const {labelsProperties} = useStorageLabels();
 
 const optionsRef = computed<string[]>(() => {
   const defaultOptions: ColorType[] = [
@@ -22,13 +20,13 @@ const optionsRef = computed<string[]>(() => {
     'cycleDay',
   ];
 
-  if (labelsPropertiesRef.value === null) {
+  if (labelsProperties.value === null) {
     return defaultOptions;
   }
 
   return [
     ...defaultOptions,
-    ...convertSlugsToColorTypes(labelsPropertiesRef.value),
+    ...convertSlugsToColorTypes(labelsProperties.value),
   ];
 });
 

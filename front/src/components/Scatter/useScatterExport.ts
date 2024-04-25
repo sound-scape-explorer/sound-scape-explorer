@@ -1,16 +1,16 @@
 import {Csv} from 'src/common/Csv';
 import {useDate} from 'src/composables/date';
+import {useSelectBand} from 'src/composables/select-band';
 import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
 import {integrationRef} from 'src/hooks/useIntegrations';
-import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {ref} from 'vue';
 
-import {useBandSelection} from '../../composables/band-selection';
 import {useAppNotification} from '../AppNotification/useAppNotification';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';
@@ -25,7 +25,8 @@ interface ExportData {
 }
 
 export function useScatterExport() {
-  const {band} = useBandSelection();
+  const {band} = useSelectBand();
+  const {labelsProperties} = useStorageLabels();
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
   const {reducedFeatures} = useStorageReducedFeatures();
@@ -46,7 +47,7 @@ export function useScatterExport() {
       aggregatedLabels.value === null ||
       pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null ||
-      labelsPropertiesRef.value === null ||
+      labelsProperties.value === null ||
       reducedFeatures.value === null ||
       aggregatedSites.value === null ||
       aggregatedIndicators.value === null
@@ -96,7 +97,7 @@ export function useScatterExport() {
     csv.addColumn('timestamp');
     csv.addColumn('site');
 
-    labelsPropertiesRef.value.forEach((property) => {
+    labelsProperties.value.forEach((property) => {
       csv.addColumn(`label_${property}`);
     });
 

@@ -1,8 +1,10 @@
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
+
+let isLoaded = false;
 
 export type Worker = typeof import('../workers/worker');
 const worker = ref<Worker | null>(null);
-let isLoaded = false;
+const hasWorker = computed<boolean>(() => worker.value !== null);
 
 export function useWorker() {
   const close = () => {
@@ -23,6 +25,7 @@ export function useWorker() {
 
   return {
     worker: worker,
+    hasWorker: hasWorker,
     close: close,
   };
 }

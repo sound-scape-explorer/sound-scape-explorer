@@ -1,5 +1,5 @@
-import {useBandSelection} from 'src/composables/band-selection';
-import {useExtractorSelection} from 'src/composables/extractor-selection';
+import {useSelectBand} from 'src/composables/select-band';
+import {useSelectExtractor} from 'src/composables/select-extractor';
 import {useStorageReader} from 'src/composables/storage-reader';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {ref} from 'vue';
@@ -19,8 +19,8 @@ let isLoaded = false;
 
 export function useStorageAggregatedIntervalDetails() {
   const {read} = useStorageReader();
-  const {band} = useBandSelection();
-  const {extractor} = useExtractorSelection();
+  const {band} = useSelectBand();
+  const {extractor} = useSelectExtractor();
 
   const readAggregatedIntervalDetails = async () => {
     if (isLoaded) {

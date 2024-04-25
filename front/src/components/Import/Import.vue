@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {NButton} from 'naive-ui';
 import {useStorageFile} from 'src/composables/storage-file';
+import {useStorageReady} from 'src/composables/storage-load';
 import {ref} from 'vue';
 
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
@@ -8,7 +9,8 @@ import ImportDetails from './ImportDetails.vue';
 import {importLockRef} from './useImportLock';
 
 const inputRef = ref<HTMLInputElement | null>(null);
-const {setFile, hasFile, resetFile} = useStorageFile();
+const {setFile, resetFile} = useStorageFile();
+const {isReady} = useStorageReady();
 
 const handleChange = () => {
   const file = inputRef.value?.files?.[0];
@@ -41,7 +43,7 @@ const handleChange = () => {
       </n-button>
     </div>
 
-    <ImportDetails v-if="hasFile" />
+    <ImportDetails v-if="isReady" />
   </AppDraggable>
 </template>
 

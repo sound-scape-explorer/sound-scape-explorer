@@ -1,9 +1,8 @@
+import {useSelectBand} from 'src/composables/select-band';
 import type {Digester} from 'src/composables/storage-digesters';
 import {useStorageReader} from 'src/composables/storage-reader';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {reactive} from 'vue';
-
-import {useBandSelection} from '../../composables/band-selection';
 
 export interface Digested {
   digester: Digester;
@@ -28,7 +27,7 @@ export const digestedRef = reactive<DigestedRef>({
 
 export function useDigested() {
   const {read} = useStorageReader();
-  const {band} = useBandSelection();
+  const {band} = useSelectBand();
 
   const readDigested = (digester: Digester) =>
     read(async (worker, file) => {

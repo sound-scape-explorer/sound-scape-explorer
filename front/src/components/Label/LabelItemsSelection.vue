@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import {NCheckbox, NCheckboxGroup, NGi, NGrid} from 'naive-ui';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
-import {labelsRef} from 'src/hooks/useLabels';
 import {computed, ref, watch, watchEffect} from 'vue';
 
 import {colorsStore} from '../Colors/colorsStore';
@@ -14,16 +14,17 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const {labels} = useStorageLabels();
 const {getColorByLabelIndex} = useColorByLabel();
 const selectionRef = ref<string[]>([]);
 const {updateSelection} = useLabelsSelection();
 
 const uniquesRef = computed<string[]>(() => {
-  if (labelsRef.value === null) {
+  if (labels.value === null) {
     return [];
   }
 
-  return labelsRef.value[props.property];
+  return labels.value[props.property];
 });
 
 function getColorByItem(index: number): string | undefined {
@@ -65,21 +66,21 @@ const isActiveIdRef = computed<string>(() => {
 
 <template>
   <n-checkbox-group
-    v-model:value="selectionRef"
     :id="isActiveIdRef"
+    v-model:value="selectionRef"
   >
     <n-grid
       :cols="2"
-      :y-gap="4"
       :x-gap="4"
+      :y-gap="4"
     >
       <n-gi v-for="(item, index) in uniquesRef">
         <n-checkbox
-          class="checkbox"
           :style="{
             backgroundColor: getColorByItem(index),
           }"
           :value="item"
+          class="checkbox"
         >
           <span>{{ item }}</span>
         </n-checkbox>

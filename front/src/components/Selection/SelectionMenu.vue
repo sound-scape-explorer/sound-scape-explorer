@@ -1,5 +1,8 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
+import {isSelectedRef} from 'src/composables/select';
+import {useSelectBand} from 'src/composables/select-band';
+import {useSelectExtractor} from 'src/composables/select-extractor';
 import {useStorageBands} from 'src/composables/storage-bands';
 import {useStorageExtractors} from 'src/composables/storage-extractors';
 import {
@@ -11,16 +14,12 @@ import {
   reducerRef,
   reducerSelectedRef,
 } from 'src/hooks/useReducers';
-import {isSelectedRef} from 'src/hooks/useSelection';
-
-import {useBandSelection} from '../../composables/band-selection';
-import {useExtractorSelection} from '../../composables/extractor-selection';
 
 const {options: bandOptions} = useStorageBands();
 const {options: extractorOptions} = useStorageExtractors();
 
-const {selected: bandSelected} = useBandSelection();
-const {selected: extractorSelected} = useExtractorSelection();
+const {selected: bandSelected} = useSelectBand();
+const {selected: extractorSelected} = useSelectExtractor();
 </script>
 
 <template>

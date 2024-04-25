@@ -9,7 +9,7 @@ import {ref, watchEffect} from 'vue';
 const extractor = ref<Extractor | null>(null);
 const selected = ref<Extractor['name'] | null>(null);
 
-export function useExtractorSelection() {
+export function useSelectExtractor() {
   const {extractors, options: options} = useStorageExtractors();
 
   const select = (index: number) => {

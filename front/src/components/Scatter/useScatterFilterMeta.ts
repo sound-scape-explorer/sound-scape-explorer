@@ -1,5 +1,5 @@
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
-import {labelsRef} from 'src/hooks/useLabels';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {reactive} from 'vue';
 
 import {labelsSelectionRef} from '../Label/useLabelsSelection';
@@ -14,6 +14,7 @@ export const pointsFilteredByMetaRef = reactive<PointsFilteredByMetaRef>({
 });
 
 export function useScatterFilterMeta() {
+  const {labels} = useStorageLabels();
   const {aggregatedLabels} = useStorageAggregatedLabels();
 
   const isVisibleByMeta = (intervalIndex: number): boolean => {
@@ -21,13 +22,13 @@ export function useScatterFilterMeta() {
 
     if (
       aggregatedLabels.value === null ||
-      labelsRef.value === null ||
+      labels.value === null ||
       labelsSelectionRef.value === null
     ) {
       return false;
     }
 
-    const properties = Object.keys(labelsRef.value);
+    const properties = Object.keys(labels.value);
     const values = aggregatedLabels.value[intervalIndex];
     const valuesIndexes = Object.keys(values);
 

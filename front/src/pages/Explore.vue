@@ -7,27 +7,26 @@ import Help from 'src/components/Help/Help.vue';
 import Import from 'src/components/Import/Import.vue';
 import Indicators from 'src/components/Indicators/Indicators.vue';
 import Label from 'src/components/Label/Label.vue';
+import AppLoader from 'src/components/loader/app-loader.vue';
 import Menu from 'src/components/Menu/Menu.vue';
 import RelativeTrajectories from 'src/components/RelativeTrajectories/RelativeTrajectories.vue';
 import Scatter from 'src/components/Scatter/Scatter.vue';
 import Selection from 'src/components/Selection/Selection.vue';
 import Settings from 'src/components/Settings/Settings.vue';
-import StorageLoad from 'src/components/StorageLoad/StorageLoad.vue';
 import Time from 'src/components/Time/Time.vue';
 import Timeline from 'src/components/Timeline/Timeline.vue';
 import Trajectories from 'src/components/Trajectories/Trajectories.vue';
-import {useStorageFile} from 'src/composables/storage-file';
+import {useStorageReady} from 'src/composables/storage-load';
 import {useWorker} from 'src/composables/worker';
 import {onMounted} from 'vue';
 
 import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore';
 
 useWorker();
-
-const {hasFile} = useStorageFile();
+const {isReady} = useStorageReady();
 
 onMounted(() => {
-  if (hasFile.value) {
+  if (isReady.value) {
     return;
   }
 
@@ -41,17 +40,17 @@ onMounted(() => {
   <Settings v-if="appDraggablesStore.settings" />
   <Help v-if="appDraggablesStore.help" />
 
-  <StorageLoad v-if="hasFile" />
-  <Selection v-if="hasFile" />
-  <Trajectories v-if="hasFile" />
-  <RelativeTrajectories v-if="hasFile" />
-  <Colors v-if="hasFile && appDraggablesStore.colors" />
-  <Timeline v-if="hasFile" />
-  <Time v-if="hasFile" />
-  <Details v-if="hasFile" />
-  <Audio v-if="hasFile" />
-  <Indicators v-if="hasFile" />
-  <Digested v-if="hasFile" />
-  <Label v-if="hasFile" />
-  <Scatter v-if="hasFile" />
+  <AppLoader v-if="isReady" />
+  <Selection v-if="isReady" />
+  <Trajectories v-if="isReady" />
+  <RelativeTrajectories v-if="isReady" />
+  <Colors v-if="isReady && appDraggablesStore.colors" />
+  <Timeline v-if="isReady" />
+  <Time v-if="isReady" />
+  <Details v-if="isReady" />
+  <Audio v-if="isReady" />
+  <Indicators v-if="isReady" />
+  <Digested v-if="isReady" />
+  <Label v-if="isReady" />
+  <Scatter v-if="isReady" />
 </template>

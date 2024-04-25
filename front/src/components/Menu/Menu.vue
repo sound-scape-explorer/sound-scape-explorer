@@ -18,8 +18,8 @@ import {
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {settingsStore} from 'src/components/Settings/settingsStore';
 import {useKeyboard} from 'src/composables/keyboard';
-import {useStorageFile} from 'src/composables/storage-file';
-import {isSelectedRef} from 'src/hooks/useSelection';
+import {isSelectedRef} from 'src/composables/select';
+import {useStorageReady} from 'src/composables/storage-load';
 
 import {appDraggableSelectedRef} from '../AppDraggable/appDraggableSelected';
 import {
@@ -28,7 +28,7 @@ import {
 } from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
 
-const {hasFile} = useStorageFile();
+const {isReady} = useStorageReady();
 const {registerKey} = useKeyboard();
 
 const toggle = (key: keyof AppDraggablesStore): void => {
@@ -70,7 +70,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         </MenuItem>
 
         <MenuItem
-          :disabled="!hasFile"
+          :disabled="!isReady"
           :toggle="toggle"
           draggable-key="settings"
           text="Settings"
@@ -88,7 +88,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </div>
 
       <div
-        v-if="hasFile"
+        v-if="isReady"
         class="right"
       >
         <!-- placeholder -->
@@ -96,7 +96,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
     </div>
 
     <div
-      v-if="hasFile"
+      v-if="isReady"
       class="column"
     >
       <MenuItem

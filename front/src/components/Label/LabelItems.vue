@@ -3,21 +3,22 @@
 import {ColorFillOutline} from '@vicons/ionicons5';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {labelsColumnsRef} from 'src/components/Label/useLabelsColumns';
-import {labelsPropertiesRef, labelsRef} from 'src/hooks/useLabels';
+import {useStorageLabels} from 'src/composables/storage-labels';
 
 import {colorsStore, type ColorType} from '../Colors/colorsStore';
 import LabelItemsSelection from './LabelItemsSelection.vue';
 import {labelsSelectionRef, useLabelsSelection} from './useLabelsSelection';
 
+const {labels, labelsProperties} = useStorageLabels();
 const {updateSelection} = useLabelsSelection();
 
 const handlePropertyClick = (property: string) => {
-  if (labelsRef.value === null || labelsSelectionRef.value === null) {
+  if (labels.value === null || labelsSelectionRef.value === null) {
     return;
   }
 
   const oldSelection = labelsSelectionRef.value[property];
-  const uniques = labelsRef.value[property];
+  const uniques = labels.value[property];
 
   const newSelection = [];
 
@@ -59,7 +60,7 @@ const handleBucketClick = (property: string) => {
 
 <template>
   <n-grid :cols="labelsColumnsRef.value">
-    <n-gi v-for="property in labelsPropertiesRef.value">
+    <n-gi v-for="property in labelsProperties">
       <div class="col">
         <n-button
           size="tiny"

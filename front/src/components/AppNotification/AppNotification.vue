@@ -47,7 +47,7 @@ function render(
             },
           },
           {
-            default: () => 'Copy error',
+            default: () => 'Copy',
           },
         );
       },
@@ -55,7 +55,7 @@ function render(
       ? undefined
       : () => {
         if (!isCopied) {
-          message.warning('Please copy error first');
+          message.warning('Copy error first');
           return false;
         }
       },

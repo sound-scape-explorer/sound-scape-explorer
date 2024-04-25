@@ -1,18 +1,18 @@
 <script lang="ts" setup="">
 import {ArrowUndoCircleOutline} from '@vicons/ionicons5';
-import {isSelectedRef, useSelection} from 'src/hooks/useSelection';
+import {isSelectedRef, useSelect} from 'src/composables/select';
 
 import AppButton from '../AppButton/AppButton.vue';
 
-const {unloadSelection} = useSelection();
+const {unloadSelection} = useSelect();
 </script>
 
 <template>
   <AppButton
-    :handle-click="unloadSelection"
-    text="Unload selection"
-    class="button"
     :disabled="!isSelectedRef.value"
+    :handle-click="unloadSelection"
+    class="button"
+    text="Unload selection"
   >
     <arrow-undo-circle-outline />
   </AppButton>

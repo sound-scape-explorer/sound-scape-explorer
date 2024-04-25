@@ -1,12 +1,12 @@
 import colormap from 'colormap';
 import SpectrogramPlugin, {type RGBA} from 'src/common/spectrogram';
+import {useSelectBand} from 'src/composables/select-band';
 import type {Ref} from 'vue';
 import {computed, reactive, watch, watchEffect} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/src/plugin/cursor';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
-import {useBandSelection} from '../../composables/band-selection';
 import {WAVE} from '../../constants';
 import {fftSizeRef} from './useAudioComponent';
 import {audioContextRef} from './useAudioContext';
@@ -47,7 +47,7 @@ export function useWaveSurfer({
   waveformContainerRef,
   spectrogramContainerRef,
 }: UseWaveSurferProps) {
-  const {band} = useBandSelection();
+  const {band} = useSelectBand();
 
   const colorsRef = computed(() => {
     const colors = colormap({

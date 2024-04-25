@@ -1,10 +1,11 @@
-import {useBandSelection} from '../../composables/band-selection';
+import {useSelectBand} from 'src/composables/select-band';
+
 import {audioContextRef} from './useAudioContext';
 import {audioIsPlayingRef, useAudioTransport} from './useAudioTransport';
 import {waveSurferRef} from './useWaveSurfer';
 
 export function useWaveSurferLoader() {
-  const {band} = useBandSelection();
+  const {band} = useSelectBand();
   const {seek, stop} = useAudioTransport();
   const handleAudioEnd = () => {
     audioIsPlayingRef.value = false;

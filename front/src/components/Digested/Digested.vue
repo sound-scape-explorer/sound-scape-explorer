@@ -6,12 +6,12 @@ import {DigesterHeatmap} from 'src/common/DigesterHeatmap';
 import {HeatmapColorScale} from 'src/common/HeatmapColorScale';
 import {type HeatmapRange, heatmapRanges} from 'src/common/HeatmapRange';
 import {useStorageDigesters} from 'src/composables/storage-digesters';
+import {useStorageLabels} from 'src/composables/storage-labels';
 import {PLOTLY_SIZE} from 'src/constants';
 import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
-import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
+import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
-import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';
 import AppHeatmap2d from '../AppHeatmap2d/AppHeatmap2d.vue';
@@ -19,16 +19,17 @@ import {type Digested, digestedRef, useDigested} from './useDigested';
 
 const {readDigested} = useDigested();
 const {digesters} = useStorageDigesters();
+const {labelsProperties, labelsSets} = useStorageLabels();
 
 const labelSelectedARef = ref<string | null>(null);
 const labelSelectedBRef = ref<string | null>(null);
 
 const labelPropertiesOptionsRef = computed(() => {
-  if (labelsPropertiesRef.value === null) {
+  if (labelsProperties.value === null) {
     return [];
   }
 
-  return convertToNaiveSelectOptions(labelsPropertiesRef.value);
+  return convertToNaiveSelectOptions(labelsProperties.value);
 });
 
 const digestersOptionsRef = computed(() => {
@@ -98,8 +99,8 @@ const updateRange = (digested: Digested) => {
 
 const update = () => {
   if (
-    labelsPropertiesRef.value === null ||
-    labelsSetsRef.value === null ||
+    labelsProperties.value === null ||
+    labelsSets.value === null ||
     digestedRef.value === null ||
     labelSelectedARef.value === null
   ) {
@@ -109,14 +110,14 @@ const update = () => {
   updateRange(digestedRef.value);
 
   titleRef.value = `${digestedRef.value.digester.name} - ${labelSelectedARef.value}`;
-  const aIndex = labelsPropertiesRef.value.indexOf(labelSelectedARef.value);
-  xRef.value = labelsSetsRef.value[aIndex];
+  const aIndex = labelsProperties.value.indexOf(labelSelectedARef.value);
+  xRef.value = labelsSets.value[aIndex];
 
   // with 2 labels
   if (digestedRef.value.isPairing && labelSelectedBRef.value !== null) {
     titleRef.value = `${titleRef.value} - ${labelSelectedBRef.value}`;
-    const bIndex = labelsPropertiesRef.value.indexOf(labelSelectedBRef.value);
-    yRef.value = labelsSetsRef.value[bIndex];
+    const bIndex = labelsProperties.value.indexOf(labelSelectedBRef.value);
+    yRef.value = labelsSets.value[bIndex];
 
     // @ts-expect-error: 7053
     valuesRef.value = digestedRef.value.values[aIndex][bIndex] as number[][];
