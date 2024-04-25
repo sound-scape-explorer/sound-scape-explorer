@@ -6,11 +6,11 @@ import {DigesterHeatmap} from 'src/common/DigesterHeatmap';
 import {HeatmapColorScale} from 'src/common/HeatmapColorScale';
 import {type HeatmapRange, heatmapRanges} from 'src/common/HeatmapRange';
 import {PLOTLY_SIZE} from 'src/constants';
-import {digestersRef} from 'src/hooks/useDigesters';
 import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
+import {useStorageDigesters} from '../../composables/storage-digesters';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';
@@ -18,6 +18,7 @@ import AppHeatmap2d from '../AppHeatmap2d/AppHeatmap2d.vue';
 import {type Digested, digestedRef, useDigested} from './useDigested';
 
 const {readDigested} = useDigested();
+const {digesters} = useStorageDigesters();
 
 const labelSelectedARef = ref<string | null>(null);
 const labelSelectedBRef = ref<string | null>(null);
@@ -31,22 +32,22 @@ const labelPropertiesOptionsRef = computed(() => {
 });
 
 const digestersOptionsRef = computed(() => {
-  if (digestersRef.value === null) {
+  if (digesters.value === null) {
     return [];
   }
 
-  const names = digestersRef.value.map((d) => d.name);
+  const names = digesters.value.map((d) => d.name);
   return convertToNaiveSelectOptions(names);
 });
 
 const digesterSelectedRef = ref();
 
 watch(digesterSelectedRef, () => {
-  if (digestersRef.value === null) {
+  if (digesters.value === null) {
     return;
   }
 
-  const digester = digestersRef.value.find(
+  const digester = digesters.value.find(
     (d) => d.name === digesterSelectedRef.value,
   );
 
@@ -256,8 +257,8 @@ const resize16by9 = () => {
           </n-button>
 
           <n-select
-            :disabled="!digestedRef.value?.isPairing"
             v-model:value="labelSelectedBRef"
+            :disabled="!digestedRef.value?.isPairing"
             :options="labelPropertiesOptionsRef"
             placeholder="Label B..."
             size="tiny"
@@ -353,21 +354,22 @@ const resize16by9 = () => {
 
       <AppHeatmap
         v-if="!digestedRef.value?.isPairing"
-        :title="titleRef"
-        :labels="xRef"
-        :values="valuesRef"
         :colorscale="colorScaleRef"
+        :labels="xRef"
         :range="ranges[rangeIndexRef]"
+        :title="titleRef"
+        :values="valuesRef"
       />
 
+      <!--    TODO: Fix values    -->
       <AppHeatmap2d
         v-if="digestedRef.value?.isPairing"
-        :title="titleRef"
-        :x="xRef"
-        :y="yRef"
-        :values="valuesRef"
         :colorscale="colorScaleRef"
         :range="ranges[rangeIndexRef]"
+        :title="titleRef"
+        :values="valuesRef"
+        :x="xRef"
+        :y="yRef"
       />
     </div>
   </AppDraggable>

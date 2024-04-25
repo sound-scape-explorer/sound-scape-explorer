@@ -3,7 +3,6 @@ import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {useDate} from 'src/composables/date';
 import {useStorageAutoclusters} from 'src/composables/storage-autoclusters';
 import {bandsRef} from 'src/hooks/useBands';
-import {digestersRef} from 'src/hooks/useDigesters';
 import {extractorsRef} from 'src/hooks/useExtractors';
 import {integrationsRef} from 'src/hooks/useIntegrations';
 import {rangesRef} from 'src/hooks/useRanges';
@@ -11,6 +10,7 @@ import {reducersRef} from 'src/hooks/useReducers';
 import {trajectoriesRef} from 'src/hooks/useTrajectories';
 import {computed} from 'vue';
 
+import {useStorageDigesters} from '../../composables/storage-digesters';
 import {useStorageFiles} from '../../composables/storage-files';
 import {useStorageSettings} from '../../composables/storage-settings';
 import {useVersion} from '../../composables/version';
@@ -18,6 +18,7 @@ import {useVersion} from '../../composables/version';
 const {settings} = useStorageSettings();
 const {version} = useVersion();
 const {files} = useStorageFiles();
+const {digesters} = useStorageDigesters();
 
 const {autoclusters} = useStorageAutoclusters();
 
@@ -123,7 +124,7 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'digesters',
-        value: digestersRef.value?.map((d) => d.name).join(separator) ?? '',
+        value: digesters?.map((d) => d.name).join(separator) ?? '',
       },
       {
         tag: 'reducers',

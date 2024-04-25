@@ -1,5 +1,5 @@
+import type {Digester} from 'src/composables/storage-digesters';
 import {bandRef} from 'src/hooks/useBands';
-import type {Digester} from 'src/hooks/useDigesters';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {reactive} from 'vue';
 
