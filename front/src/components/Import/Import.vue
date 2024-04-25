@@ -2,7 +2,7 @@
 import {NButton} from 'naive-ui';
 import AppDraggable from 'src/components/app/app-draggable.vue';
 import {useStorageFile} from 'src/composables/storage-file';
-import {useStorageReady} from 'src/composables/storage-load';
+import {useStorageReady} from 'src/composables/storage-ready';
 import {ref} from 'vue';
 
 import ImportDetails from './ImportDetails.vue';

@@ -20,7 +20,7 @@ import {settingsStore} from 'src/components/Settings/settingsStore';
 import {useDraggables} from 'src/composables/draggables';
 import {useKeyboard} from 'src/composables/keyboard';
 import {isSelectedRef} from 'src/composables/select';
-import {useStorageReady} from 'src/composables/storage-load';
+import {useStorageReady} from 'src/composables/storage-ready';
 
 import MenuItem from './MenuItem.vue';
 

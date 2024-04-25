@@ -17,7 +17,7 @@ import Time from 'src/components/Time/Time.vue';
 import Timeline from 'src/components/Timeline/Timeline.vue';
 import Trajectories from 'src/components/Trajectories/Trajectories.vue';
 import {useDraggables} from 'src/composables/draggables';
-import {useStorageReady} from 'src/composables/storage-load';
+import {useStorageReady} from 'src/composables/storage-ready';
 import {useWorker} from 'src/composables/worker';
 import {onMounted} from 'vue';
 
