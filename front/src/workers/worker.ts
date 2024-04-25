@@ -338,7 +338,7 @@ export async function readExtractors(file: File): Promise<Extractor[]> {
       name: names[index],
       offset: offsets[index],
       step: steps[index],
-      persist: persists[index] === 1 ? true : false,
+      persist: persists[index] === 1,
     };
 
     extractors.push(extractor);
