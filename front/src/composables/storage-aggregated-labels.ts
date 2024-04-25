@@ -1,8 +1,8 @@
 import {ref} from 'vue';
 
-import {bandRef} from '../hooks/useBands';
 import {extractorRef} from '../hooks/useExtractors';
 import {integrationRef} from '../hooks/useIntegrations';
+import {useBandSelection} from './band-selection';
 import {useStorageReader} from './storage-reader';
 
 export type AggregatedLabels = string[][];
@@ -12,6 +12,7 @@ let isLoaded = false;
 
 export function useStorageAggregatedLabels() {
   const {read} = useStorageReader();
+  const {band} = useBandSelection();
 
   const readAggregatedLabels = async () => {
     if (isLoaded) {
@@ -22,7 +23,7 @@ export function useStorageAggregatedLabels() {
 
     await read(async (worker, file) => {
       if (
-        bandRef.value === null ||
+        band.value === null ||
         integrationRef.value === null ||
         extractorRef.value === null
       ) {
@@ -31,7 +32,7 @@ export function useStorageAggregatedLabels() {
 
       aggregatedLabels.value = await worker.readAggregatedLabels(
         file,
-        bandRef.value.name,
+        band.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,
       );

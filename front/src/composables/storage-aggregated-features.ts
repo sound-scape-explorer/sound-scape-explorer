@@ -1,8 +1,8 @@
 import {ref} from 'vue';
 
-import {bandRef} from '../hooks/useBands';
 import {extractorRef} from '../hooks/useExtractors';
 import {integrationRef} from '../hooks/useIntegrations';
+import {useBandSelection} from './band-selection';
 import {useStorageReader} from './storage-reader';
 
 type AggregatedFeatures = number[][];
@@ -11,6 +11,7 @@ let isLoaded = false;
 
 export function useStorageAggregatedFeatures() {
   const {read} = useStorageReader();
+  const {band} = useBandSelection();
 
   const readAggregatedFeatures = async () => {
     if (isLoaded) {
@@ -21,7 +22,7 @@ export function useStorageAggregatedFeatures() {
 
     await read(async (worker, file) => {
       if (
-        bandRef.value === null ||
+        band.value === null ||
         integrationRef.value === null ||
         extractorRef.value === null
       ) {
@@ -30,7 +31,7 @@ export function useStorageAggregatedFeatures() {
 
       aggregatedFeatures.value = await worker.readAggregatedFeatures(
         file,
-        bandRef.value.name,
+        band.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,
       );

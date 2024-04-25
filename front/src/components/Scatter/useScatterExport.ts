@@ -1,11 +1,11 @@
 import {Csv} from 'src/common/Csv';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
-import {bandRef} from 'src/hooks/useBands';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {ref} from 'vue';
 
+import {useBandSelection} from '../../composables/band-selection';
 import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
 import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
 import {useStorageAggregatedSites} from '../../composables/storage-aggregated-sites';
@@ -25,6 +25,7 @@ interface ExportData {
 }
 
 export function useScatterExport() {
+  const {band} = useBandSelection();
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
   const {reducedFeatures} = useStorageReducedFeatures();
@@ -38,7 +39,7 @@ export function useScatterExport() {
 
   const handleScatterExportClick = async () => {
     if (
-      bandRef.value === null ||
+      band.value === null ||
       integrationRef.value === null ||
       aggregatedTimestamps.value === null ||
       aggregatedFeatures.value === null ||
@@ -134,7 +135,7 @@ export function useScatterExport() {
       });
     });
 
-    const csvFilename = `SSE_${bandRef.value.name}_${integrationRef.value.name}.csv`;
+    const csvFilename = `SSE_${band.value.name}_${integrationRef.value.name}.csv`;
     csv.download(csvFilename);
     loadingRef.value = false;
   };

@@ -1,8 +1,8 @@
 import {ref} from 'vue';
 
-import {bandRef} from '../hooks/useBands';
 import {extractorRef} from '../hooks/useExtractors';
 import {integrationRef} from '../hooks/useIntegrations';
+import {useBandSelection} from './band-selection';
 import {useStorageReader} from './storage-reader';
 
 export type AggregatedTimestamps = number[];
@@ -12,6 +12,7 @@ let isLoaded = false;
 
 export function useStorageAggregatedTimestamps() {
   const {read} = useStorageReader();
+  const {band} = useBandSelection();
 
   const readAggregatedTimestamps = async () => {
     if (isLoaded) {
@@ -22,7 +23,7 @@ export function useStorageAggregatedTimestamps() {
 
     await read(async (worker, file) => {
       if (
-        bandRef.value === null ||
+        band.value === null ||
         integrationRef.value === null ||
         extractorRef.value === null
       ) {
@@ -31,7 +32,7 @@ export function useStorageAggregatedTimestamps() {
 
       aggregatedTimestamps.value = await worker.readAggregatedTimestamps(
         file,
-        bandRef.value.name,
+        band.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,
       );

@@ -1,8 +1,8 @@
 import {ref} from 'vue';
 
-import {bandRef} from '../hooks/useBands';
 import {extractorRef} from '../hooks/useExtractors';
 import {integrationRef} from '../hooks/useIntegrations';
+import {useBandSelection} from './band-selection';
 import {useStorageReader} from './storage-reader';
 
 export interface AggregatedSite {
@@ -14,6 +14,7 @@ let isLoaded = false;
 
 export function useStorageAggregatedSites() {
   const {read} = useStorageReader();
+  const {band} = useBandSelection();
 
   const readAggregatedSites = async () => {
     if (isLoaded) {
@@ -24,7 +25,7 @@ export function useStorageAggregatedSites() {
 
     await read(async (worker, file) => {
       if (
-        bandRef.value === null ||
+        band.value === null ||
         integrationRef.value === null ||
         extractorRef.value === null
       ) {
@@ -33,7 +34,7 @@ export function useStorageAggregatedSites() {
 
       aggregatedSites.value = await worker.readAggregatedSites(
         file,
-        bandRef.value.name,
+        band.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,
       );

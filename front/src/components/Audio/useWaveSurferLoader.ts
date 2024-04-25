@@ -1,9 +1,10 @@
-import {bandRef} from '../../hooks/useBands';
+import {useBandSelection} from '../../composables/band-selection';
 import {audioContextRef} from './useAudioContext';
 import {audioIsPlayingRef, useAudioTransport} from './useAudioTransport';
 import {waveSurferRef} from './useWaveSurfer';
 
 export function useWaveSurferLoader() {
+  const {band} = useBandSelection();
   const {seek, stop} = useAudioTransport();
   const handleAudioEnd = () => {
     audioIsPlayingRef.value = false;
@@ -12,7 +13,7 @@ export function useWaveSurferLoader() {
   const prepareAudio = () => {
     if (
       waveSurferRef.value === null ||
-      bandRef.value === null ||
+      band.value === null ||
       audioContextRef.value === null
     ) {
       return;
@@ -21,12 +22,12 @@ export function useWaveSurferLoader() {
     const lowShelf = audioContextRef.value.createBiquadFilter();
     lowShelf.type = 'lowshelf';
     lowShelf.gain.value = -60;
-    lowShelf.frequency.value = bandRef.value.low;
+    lowShelf.frequency.value = band.value.low;
 
     const highShelf = audioContextRef.value.createBiquadFilter();
     highShelf.type = 'highshelf';
     highShelf.gain.value = -60;
-    highShelf.frequency.value = bandRef.value.high;
+    highShelf.frequency.value = band.value.high;
 
     waveSurferRef.value.backend.setFilters([lowShelf, highShelf]);
   };

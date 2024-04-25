@@ -6,8 +6,8 @@ import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/src/plugin/cursor';
 import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
+import {useBandSelection} from '../../composables/band-selection';
 import {WAVE} from '../../constants';
-import {bandRef} from '../../hooks/useBands';
 import {fftSizeRef} from './useAudioComponent';
 import {audioContextRef} from './useAudioContext';
 import {audioFileBitDepthRef} from './useAudioFile';
@@ -47,6 +47,8 @@ export function useWaveSurfer({
   waveformContainerRef,
   spectrogramContainerRef,
 }: UseWaveSurferProps) {
+  const {band} = useBandSelection();
+
   const colorsRef = computed(() => {
     const colors = colormap({
       colormap: spectrogramColorRef.value,
@@ -60,7 +62,7 @@ export function useWaveSurfer({
   const createWaveSurfer = () => {
     if (
       audioContextRef.value === null ||
-      bandRef.value === null ||
+      band.value === null ||
       waveformContainerRef.value === null ||
       spectrogramContainerRef.value === null
     ) {
@@ -111,7 +113,7 @@ export function useWaveSurfer({
     if (
       spectrogramContainerRef.value === null ||
       waveSurferRef.value === null ||
-      bandRef.value === null ||
+      band.value === null ||
       audioFileBitDepthRef.value === null
     ) {
       return;
@@ -127,8 +129,8 @@ export function useWaveSurfer({
       colorMap: colorsRef.value,
       height: 192,
       fftSamples: fftSizeRef.value,
-      frequencyMin: bandRef.value.low,
-      frequencyMax: bandRef.value.high,
+      frequencyMin: band.value.low,
+      frequencyMax: band.value.high,
       decibels: waveSurferShowDecibelsRef.value,
       overflowLegends: waveSurferOverflowLegendsRef.value,
       bitDepth: audioFileBitDepthRef.value,

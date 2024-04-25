@@ -1,6 +1,5 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
-import {bandOptionsRef, bandSelectedRef} from 'src/hooks/useBands';
 import {
   extractorOptionsRef,
   extractorSelectedRef,
@@ -15,34 +14,40 @@ import {
   reducerSelectedRef,
 } from 'src/hooks/useReducers';
 import {isSelectedRef} from 'src/hooks/useSelection';
+
+import {useBandSelection} from '../../composables/band-selection';
+import {useStorageBands} from '../../composables/storage-bands';
+
+const {options} = useStorageBands();
+const {selected} = useBandSelection();
 </script>
 
 <template>
   <n-select
     v-model:value="reducerSelectedRef.value"
+    :disabled="isSelectedRef.value"
     :options="reducerOptionsRef.value"
     placeholder="Reducer..."
     size="small"
-    :disabled="isSelectedRef.value"
   />
   <n-select
-    v-model:value="bandSelectedRef.value"
-    :options="bandOptionsRef.value"
+    v-model:value="selected"
     :disabled="reducerRef.value === null || isSelectedRef.value"
+    :options="options"
     placeholder="Band..."
     size="small"
   />
   <n-select
     v-model:value="integrationSelectedRef.value"
-    :options="integrationOptionsRef.value"
     :disabled="reducerRef.value === null || isSelectedRef.value"
+    :options="integrationOptionsRef.value"
     placeholder="Integration..."
     size="small"
   />
   <n-select
     v-model:value="extractorSelectedRef.value"
-    :options="extractorOptionsRef.value"
     :disabled="reducerRef.value === null || isSelectedRef.value"
+    :options="extractorOptionsRef.value"
     placeholder="Extractor..."
     size="small"
   />

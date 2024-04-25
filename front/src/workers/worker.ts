@@ -7,11 +7,11 @@ import type {
   IntervalDetails,
 } from 'src/composables/storage-aggregated-interval-details';
 import type {AggregatedSite} from 'src/composables/storage-aggregated-sites';
+import type {Band} from 'src/composables/storage-bands';
 import type {Digester} from 'src/composables/storage-digesters';
 import type {File as FileConfig} from 'src/composables/storage-files';
 import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
 import type {Site} from 'src/composables/storage-sites';
-import type {Band} from 'src/hooks/useBands';
 import type {Extractor} from 'src/hooks/useExtractors';
 import type {Integration} from 'src/hooks/useIntegrations';
 import type {Labels} from 'src/hooks/useLabels';

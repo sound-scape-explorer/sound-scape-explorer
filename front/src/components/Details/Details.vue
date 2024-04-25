@@ -4,17 +4,18 @@ import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useAudioFile} from 'src/components/Audio/useAudioFile';
 import {useDate} from 'src/composables/date';
-import {bandRef} from 'src/hooks/useBands';
 import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {computed, watch} from 'vue';
 
+import {useBandSelection} from '../../composables/band-selection';
 import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {useDetails} from './useDetails';
 
+const {band} = useBandSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
 
 const {
@@ -137,7 +138,7 @@ watch(intervalDetailsRef, () => {
 
     <div class="file container">
       <div class="title">Band</div>
-      <span class="file index">{{ bandRef.value?.name ?? '' }}</span>
+      <span class="file index">{{ band?.name ?? '' }}</span>
     </div>
 
     <div class="file container">

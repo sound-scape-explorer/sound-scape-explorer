@@ -1,7 +1,7 @@
 import {reactive} from 'vue';
 
+import {useBandSelection} from '../composables/band-selection';
 import {useStorageReader} from '../composables/storage-reader';
-import {bandRef} from './useBands';
 import {extractorRef} from './useExtractors';
 import {integrationRef} from './useIntegrations';
 import {reducerRef} from './useReducers';
@@ -36,11 +36,12 @@ export const tracedFusedRef = reactive<TracedFusedRef>({
 
 export function useTraced() {
   const {read} = useStorageReader();
+  const {band} = useBandSelection();
 
   const readTraced = () =>
     read(async (worker, file) => {
       if (
-        bandRef.value === null ||
+        band.value === null ||
         integrationRef.value === null ||
         extractorRef.value === null ||
         reducerRef.value === null ||
@@ -54,7 +55,7 @@ export function useTraced() {
       for (const sT of selectedTrajectoriesRef.value) {
         const [data, timestamps, relativeTimestamps] = await worker.readTraced(
           file,
-          bandRef.value.name,
+          band.value.name,
           integrationRef.value.seconds,
           extractorRef.value.index,
           reducerRef.value.index,

@@ -3,8 +3,8 @@ import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-opt
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
+import {type Band, useStorageBands} from '../composables/storage-bands';
 import {useStorageReader} from '../composables/storage-reader';
-import {type Band, bandsRef} from './useBands';
 import {type Extractor, nnExtractorsRef} from './useExtractors';
 import {type Integration, integrationsRef} from './useIntegrations';
 
@@ -60,11 +60,12 @@ export const reducerOptionsRef = reactive<ReducerOptionsRef>({
 
 export function useReducers() {
   const {read} = useStorageReader();
+  const {bands} = useStorageBands();
 
   const readReducers = () =>
     read(async (worker, file) => {
       if (
-        bandsRef.value === null ||
+        bands.value === null ||
         integrationsRef.value === null ||
         nnExtractorsRef.value === null
       ) {
@@ -79,7 +80,7 @@ export function useReducers() {
           index: rFS.index,
           name: rFS.name,
           dimensions: rFS.dimensions,
-          bands: bandsRef.value.filter((band) =>
+          bands: bands.value.filter((band) =>
             rFS.bandsNames.includes(band.name),
           ),
           integrations: integrationsRef.value.filter((integration) =>
