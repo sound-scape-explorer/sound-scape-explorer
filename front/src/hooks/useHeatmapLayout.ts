@@ -1,7 +1,7 @@
 import {type Layout} from 'plotly.js-dist-min';
+import {settingsStore} from 'src/draggables/settings/settings-store';
 import {reactive} from 'vue';
 
-import {settingsStore} from '../components/Settings/settingsStore';
 import {heatmapHeightRef, heatmapWidthRef} from './useHeatmapSize';
 
 interface PlotlyFontSizeRef {

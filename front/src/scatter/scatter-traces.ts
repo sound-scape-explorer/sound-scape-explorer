@@ -1,0 +1,47 @@
+import type {Data} from 'plotly.js-dist-min';
+import {tracedFusedRef, tracedRef} from 'src/hooks/useTraced';
+import {useScatterFeatures} from 'src/scatter/scatter-features';
+import {traceAverageTrajectory} from 'src/utils/trace-average-trajectory';
+import {traceTrajectories} from 'src/utils/trace-trajectories';
+import {reactive} from 'vue';
+
+interface ScatterTracesRef {
+  value: Data[];
+}
+
+export const scatterTracesRef = reactive<ScatterTracesRef>({
+  value: [],
+});
+
+export function useScatterTraces() {
+  const {traceFeatures} = useScatterFeatures();
+
+  const renderTraces = () => {
+    const traces: Data[] = [];
+    const featuresTraces = traceFeatures();
+    traces.push(...featuresTraces);
+
+    if (tracedRef.value.length > 0) {
+      if (tracedFusedRef.value === true) {
+        const averageTrace = traceAverageTrajectory(tracedRef.value);
+        traces.push(averageTrace);
+      } else {
+        const trajectories = traceTrajectories(tracedRef.value);
+        traces.push(...trajectories);
+      }
+    }
+
+    scatterTracesRef.value = traces;
+  };
+
+  const resetTraces = () => {
+    scatterTracesRef.value = [];
+    tracedFusedRef.value = false;
+    tracedRef.value = [];
+  };
+
+  return {
+    renderTraces: renderTraces,
+    resetTraces: resetTraces,
+  };
+}

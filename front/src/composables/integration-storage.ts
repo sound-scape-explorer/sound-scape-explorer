@@ -1,4 +1,4 @@
-import type {DropdownOption} from 'src/common/DropdownOption';
+import type {DropdownOption} from 'src/common/dropdown-option';
 import {useStorageReader} from 'src/composables/storage-reader';
 import {ref, watchEffect} from 'vue';
 

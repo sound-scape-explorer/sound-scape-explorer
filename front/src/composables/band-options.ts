@@ -1,4 +1,4 @@
-import type {DropdownOption} from 'src/common/DropdownOption';
+import type {DropdownOption} from 'src/common/dropdown-option';
 import type {Band} from 'src/composables/band-storage';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {ref} from 'vue';

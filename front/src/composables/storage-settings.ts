@@ -1,5 +1,5 @@
+import type {StorageSettings} from 'src/common/storage-settings';
 import {useStorageReader} from 'src/composables/storage-reader';
-import type {StorageSettings} from 'src/storage/StorageSettings';
 import {onMounted, ref} from 'vue';
 
 const settings = ref<StorageSettings | null>(null);

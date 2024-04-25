@@ -1,5 +1,5 @@
-import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {useStorageReader} from 'src/composables/storage-reader';
+import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {reactive, watchEffect} from 'vue';
 
 import {useTraced} from './useTraced';

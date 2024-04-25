@@ -1,7 +1,7 @@
-import {useAppNotification} from 'src/components/app/app-notification/app-notification';
-import {importLockRef} from 'src/components/Import/useImportLock';
+import {useAppNotification} from 'src/app/app-notification/app-notification';
 import {useDraggables} from 'src/composables/draggables';
 import {useWorker} from 'src/composables/worker';
+import {importLockRef} from 'src/draggables/import/import-lock';
 import {computed, ref} from 'vue';
 
 const file = ref<File | null>(null);

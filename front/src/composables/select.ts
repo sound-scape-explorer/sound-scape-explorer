@@ -1,12 +1,3 @@
-import {useLabelsSelection} from 'src/components/Label/useLabelsSelection';
-import {useScatterColorScale} from 'src/components/Scatter/useScatterColorScale';
-import {useScatterFilterMeta} from 'src/components/Scatter/useScatterFilterMeta';
-import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
-import {
-  scatterLoadingRef,
-  scatterLoadingTextRef,
-} from 'src/components/Scatter/useScatterLoading';
-import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {useBandSelection} from 'src/composables/band-selection';
 import {useDraggables} from 'src/composables/draggables';
 import {useSelectExtractor} from 'src/composables/extractor-selection';
@@ -20,7 +11,16 @@ import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-site
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
+import {useLabelSelection} from 'src/draggables/label/label-selection';
 import {useTrajectories} from 'src/hooks/useTrajectories';
+import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
+import {useScatterFilterMeta} from 'src/scatter/scatter-filter-meta';
+import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
+import {
+  scatterLoadingRef,
+  scatterLoadingTextRef,
+} from 'src/scatter/scatter-loading';
+import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {reactive, watchEffect} from 'vue';
 
 interface IsSelectedRef {
@@ -49,7 +49,7 @@ export function useSelect() {
   const {readReducedFeatures, resetReducedFeatures} =
     useStorageReducedFeatures();
   const {generateColorScale, resetColorScale} = useScatterColorScale();
-  const {buildSelection, resetSelection} = useLabelsSelection();
+  const {buildSelection, resetSelection} = useLabelSelection();
   const {resetTrajectories} = useTrajectories();
   const {renderTraces, resetTraces} = useScatterTraces();
   const {filterByMeta, resetFilterByMeta} = useScatterFilterMeta();

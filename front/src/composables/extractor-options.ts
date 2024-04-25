@@ -1,4 +1,4 @@
-import type {DropdownOption} from 'src/common/DropdownOption';
+import type {DropdownOption} from 'src/common/dropdown-option';
 import type {Extractor} from 'src/composables/extractor-storage';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {ref} from 'vue';

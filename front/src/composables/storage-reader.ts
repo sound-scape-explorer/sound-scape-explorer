@@ -1,4 +1,4 @@
-import {useAppNotification} from 'src/components/app/app-notification/app-notification';
+import {useAppNotification} from 'src/app/app-notification/app-notification';
 import {useStorageFile} from 'src/composables/storage-file';
 import {useWorker, type Worker} from 'src/composables/worker';
 

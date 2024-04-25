@@ -1,7 +1,6 @@
 import {onKeyStroke} from '@vueuse/core';
+import type {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {ref} from 'vue';
-
-import type {KeyboardShortcut} from '../common/KeyboardShortcut';
 
 const isLocked = ref<boolean>(false);
 

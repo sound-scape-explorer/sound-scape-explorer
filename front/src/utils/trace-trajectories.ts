@@ -1,6 +1,6 @@
 import type {Data} from 'plotly.js-dist-min';
-import {cyclingScaleRef} from 'src/components/Scatter/useScatterColorScale';
 import type {TracedRef} from 'src/hooks/useTraced';
+import {cyclingScaleRef} from 'src/scatter/scatter-color-scale';
 
 import {generateTraceDefaultDataOptions} from './generate-trace-default-data-options';
 import {getTracedColors} from './get-traced-colors';

@@ -2,7 +2,7 @@ import {computed, onMounted, ref} from 'vue';
 
 let isLoaded = false;
 
-export type Worker = typeof import('../workers/worker');
+export type Worker = typeof import('src/common/worker');
 const worker = ref<Worker | null>(null);
 const hasWorker = computed<boolean>(() => worker.value !== null);
 
@@ -19,7 +19,7 @@ export function useWorker() {
     isLoaded = true;
 
     worker.value = new ComlinkWorker<Worker>(
-      new URL('../workers/worker', import.meta.url),
+      new URL('../common/worker', import.meta.url),
     );
   });
 

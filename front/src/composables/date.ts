@@ -4,8 +4,7 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {DATE_FORMAT} from 'src/constants';
-
-import {settingsStore} from '../components/Settings/settingsStore';
+import {settingsStore} from 'src/draggables/settings/settings-store';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
