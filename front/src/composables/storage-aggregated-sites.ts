@@ -1,8 +1,8 @@
 import {ref} from 'vue';
 
-import {extractorRef} from '../hooks/useExtractors';
 import {integrationRef} from '../hooks/useIntegrations';
 import {useBandSelection} from './band-selection';
+import {useExtractorSelection} from './extractor-selection';
 import {useStorageReader} from './storage-reader';
 
 export interface AggregatedSite {
@@ -15,6 +15,7 @@ let isLoaded = false;
 export function useStorageAggregatedSites() {
   const {read} = useStorageReader();
   const {band} = useBandSelection();
+  const {extractor} = useExtractorSelection();
 
   const readAggregatedSites = async () => {
     if (isLoaded) {
@@ -27,7 +28,7 @@ export function useStorageAggregatedSites() {
       if (
         band.value === null ||
         integrationRef.value === null ||
-        extractorRef.value === null
+        extractor.value === null
       ) {
         return;
       }
@@ -36,7 +37,7 @@ export function useStorageAggregatedSites() {
         file,
         band.value.name,
         integrationRef.value.seconds,
-        extractorRef.value.index,
+        extractor.value.index,
       );
     });
   };

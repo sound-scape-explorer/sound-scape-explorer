@@ -4,17 +4,18 @@ import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useAudioFile} from 'src/components/Audio/useAudioFile';
 import {useDate} from 'src/composables/date';
-import {nonNnExtractorsRef} from 'src/hooks/useExtractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {computed, watch} from 'vue';
 
 import {useBandSelection} from '../../composables/band-selection';
 import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
+import {useStorageExtractors} from '../../composables/storage-extractors';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {useDetails} from './useDetails';
 
+const {nonNnExtractors} = useStorageExtractors();
 const {band} = useBandSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
 
@@ -181,7 +182,7 @@ watch(intervalDetailsRef, () => {
         :cols="2"
         x-gap="12"
       >
-        <n-gi v-for="(ex, index) in nonNnExtractorsRef.value">
+        <n-gi v-for="(ex, index) in nonNnExtractors">
           <n-tag
             :bordered="false"
             size="small"

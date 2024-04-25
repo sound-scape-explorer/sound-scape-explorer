@@ -2,7 +2,6 @@
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {useDate} from 'src/composables/date';
 import {useStorageAutoclusters} from 'src/composables/storage-autoclusters';
-import {extractorsRef} from 'src/hooks/useExtractors';
 import {integrationsRef} from 'src/hooks/useIntegrations';
 import {rangesRef} from 'src/hooks/useRanges';
 import {reducersRef} from 'src/hooks/useReducers';
@@ -11,6 +10,7 @@ import {computed} from 'vue';
 
 import {useStorageBands} from '../../composables/storage-bands';
 import {useStorageDigesters} from '../../composables/storage-digesters';
+import {useStorageExtractors} from '../../composables/storage-extractors';
 import {useStorageFiles} from '../../composables/storage-files';
 import {useStorageSettings} from '../../composables/storage-settings';
 import {useStorageVersion} from '../../composables/storage-version';
@@ -21,6 +21,7 @@ const {files} = useStorageFiles();
 const {digesters} = useStorageDigesters();
 
 const {bands} = useStorageBands();
+const {extractors} = useStorageExtractors();
 const {autoclusters} = useStorageAutoclusters();
 
 const separator = ', ';
@@ -121,7 +122,7 @@ const timelineOrigin = computed<string>(() => {
     :items="[
       {
         tag: 'extractors',
-        value: extractorsRef.value?.map((ex) => ex.name).join(separator) ?? '',
+        value: extractors?.map((ex) => ex.name).join(separator) ?? '',
       },
       {
         tag: 'digesters',

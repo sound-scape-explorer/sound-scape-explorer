@@ -4,8 +4,11 @@ import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
 import {type Band, useStorageBands} from '../composables/storage-bands';
+import {
+  type Extractor,
+  useStorageExtractors,
+} from '../composables/storage-extractors';
 import {useStorageReader} from '../composables/storage-reader';
-import {type Extractor, nnExtractorsRef} from './useExtractors';
 import {type Integration, integrationsRef} from './useIntegrations';
 
 export interface ReducerFromStorage {
@@ -61,13 +64,14 @@ export const reducerOptionsRef = reactive<ReducerOptionsRef>({
 export function useReducers() {
   const {read} = useStorageReader();
   const {bands} = useStorageBands();
+  const {nnExtractors} = useStorageExtractors();
 
   const readReducers = () =>
     read(async (worker, file) => {
       if (
         bands.value === null ||
         integrationsRef.value === null ||
-        nnExtractorsRef.value === null
+        nnExtractors.value === null
       ) {
         return;
       }
@@ -86,7 +90,7 @@ export function useReducers() {
           integrations: integrationsRef.value.filter((integration) =>
             rFS.integrationsNames.includes(integration.name),
           ),
-          nnExtractors: nnExtractorsRef.value,
+          nnExtractors: nnExtractors.value,
         };
 
         reducers.push(reducer);

@@ -11,6 +11,7 @@ import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
 import {reactive, watchEffect} from 'vue';
 
 import {useBandSelection} from '../composables/band-selection';
+import {useExtractorSelection} from '../composables/extractor-selection';
 import {useStorageAggregatedFeatures} from '../composables/storage-aggregated-features';
 import {useStorageAggregatedIndicators} from '../composables/storage-aggregated-indicators';
 import {useStorageAggregatedIntervalDetails} from '../composables/storage-aggregated-interval-details';
@@ -18,7 +19,6 @@ import {useStorageAggregatedLabels} from '../composables/storage-aggregated-labe
 import {useStorageAggregatedSites} from '../composables/storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from '../composables/storage-aggregated-timestamps';
 import {useStorageReducedFeatures} from '../composables/storage-reduced-features';
-import {extractorRef, useExtractors} from './useExtractors';
 import {integrationRef, useIntegrations} from './useIntegrations';
 import {useLabels} from './useLabels';
 import {reducerRef, useReducers} from './useReducers';
@@ -56,7 +56,7 @@ export function useSelection() {
   const {filterByTime, resetFilterByTime} = useScatterFilterTime();
   const {band, reset: resetBand} = useBandSelection();
   const {resetIntegration} = useIntegrations();
-  const {resetExtractor} = useExtractors();
+  const {extractor, reset: resetExtractor} = useExtractorSelection();
   const {resetReducer} = useReducers();
 
   const unloadSelection = () => {
@@ -92,7 +92,7 @@ export function useSelection() {
     if (
       band.value === null ||
       integrationRef.value === null ||
-      extractorRef.value === null ||
+      extractor.value === null ||
       reducerRef.value === null
     ) {
       isSelectedRef.value = false;

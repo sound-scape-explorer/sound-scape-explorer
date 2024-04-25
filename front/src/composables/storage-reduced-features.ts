@@ -1,9 +1,9 @@
 import {ref} from 'vue';
 
-import {extractorRef} from '../hooks/useExtractors';
 import {integrationRef} from '../hooks/useIntegrations';
 import {reducerRef} from '../hooks/useReducers';
 import {useBandSelection} from './band-selection';
+import {useExtractorSelection} from './extractor-selection';
 import {useStorageReader} from './storage-reader';
 
 export type ReducedFeatures = number[][];
@@ -13,6 +13,7 @@ let isLoaded = false;
 export function useStorageReducedFeatures() {
   const {read} = useStorageReader();
   const {band} = useBandSelection();
+  const {extractor} = useExtractorSelection();
 
   // TODO: why is this called two times at runtime???
   const readReducedFeatures = async () => {
@@ -26,7 +27,7 @@ export function useStorageReducedFeatures() {
       if (
         band.value === null ||
         integrationRef.value === null ||
-        extractorRef.value === null ||
+        extractor.value === null ||
         reducerRef.value === null
       ) {
         return;
@@ -36,7 +37,7 @@ export function useStorageReducedFeatures() {
         file,
         band.value.name,
         integrationRef.value.seconds,
-        extractorRef.value.index,
+        extractor.value.index,
         reducerRef.value.index,
       );
     });

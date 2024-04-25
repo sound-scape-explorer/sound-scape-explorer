@@ -23,7 +23,7 @@ export function useBandSelection() {
     selected.value = null;
   };
 
-  watchEffect(() => {
+  const handleSelectedChange = () => {
     if (selected.value === null) {
       return;
     }
@@ -35,7 +35,9 @@ export function useBandSelection() {
     }
 
     select(bandIndex);
-  });
+  };
+
+  watchEffect(handleSelectedChange);
 
   const autoSelect = () => {
     if (reducerSelectedRef.value === null) {
