@@ -29,7 +29,10 @@ const {registerKey} = useKeyboard();
 const {toggle} = useDraggables();
 
 registerKey(KeyboardShortcut.import, () => toggle('import'));
-registerKey(KeyboardShortcut.settings, () => toggle('settings'));
+registerKey(
+  KeyboardShortcut.settings,
+  () => isReady.value && toggle('settings'),
+);
 registerKey(KeyboardShortcut.help, () => toggle('help'));
 registerKey(KeyboardShortcut.selection, () => toggle('selection'));
 registerKey(KeyboardShortcut.colors, () => toggle('colors'));
