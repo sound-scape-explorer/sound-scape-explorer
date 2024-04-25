@@ -5,12 +5,12 @@ import {Csv} from 'src/common/Csv';
 import {DigesterHeatmap} from 'src/common/DigesterHeatmap';
 import {HeatmapColorScale} from 'src/common/HeatmapColorScale';
 import {type HeatmapRange, heatmapRanges} from 'src/common/HeatmapRange';
+import {useStorageDigesters} from 'src/composables/storage-digesters';
 import {PLOTLY_SIZE} from 'src/constants';
 import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {labelsPropertiesRef, labelsSetsRef} from 'src/hooks/useLabels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
-import {useStorageDigesters} from '../../composables/storage-digesters';
 import {convertToNaiveSelectOptions} from '../../utils/convert-to-naive-select-options';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import AppHeatmap from '../AppHeatmap/AppHeatmap.vue';

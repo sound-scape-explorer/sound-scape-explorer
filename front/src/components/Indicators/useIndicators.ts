@@ -2,10 +2,9 @@ import {
   type AggregatedIndicator,
   useStorageAggregatedIndicators,
 } from 'src/composables/storage-aggregated-indicators';
+import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
+import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {reactive, watchEffect} from 'vue';
-
-import {useStorageAggregatedSites} from '../../composables/storage-aggregated-sites';
-import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 
 interface IndicatorRef {
   value: AggregatedIndicator | null;

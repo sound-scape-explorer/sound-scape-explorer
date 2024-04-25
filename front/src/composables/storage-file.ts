@@ -1,9 +1,8 @@
 import {appDraggablesStore} from 'src/components/AppDraggable/appDraggablesStore';
 import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
 import {importLockRef} from 'src/components/Import/useImportLock';
+import {useWorker} from 'src/composables/worker';
 import {computed, ref} from 'vue';
-
-import {useWorker} from './worker';
 
 const file = ref<File | null>(null);
 const hasFile = computed<boolean>(() => file.value !== null);

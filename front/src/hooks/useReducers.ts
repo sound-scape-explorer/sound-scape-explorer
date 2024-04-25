@@ -1,14 +1,14 @@
 import type {DropdownOption} from 'src/common/DropdownOption';
+import {type Band, useStorageBands} from 'src/composables/storage-bands';
+import {
+  type Extractor,
+  useStorageExtractors,
+} from 'src/composables/storage-extractors';
+import {useStorageReader} from 'src/composables/storage-reader';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
-import {type Band, useStorageBands} from '../composables/storage-bands';
-import {
-  type Extractor,
-  useStorageExtractors,
-} from '../composables/storage-extractors';
-import {useStorageReader} from '../composables/storage-reader';
 import {type Integration, integrationsRef} from './useIntegrations';
 
 export interface ReducerFromStorage {

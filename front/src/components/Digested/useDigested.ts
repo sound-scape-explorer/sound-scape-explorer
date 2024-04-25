@@ -1,9 +1,9 @@
 import type {Digester} from 'src/composables/storage-digesters';
+import {useStorageReader} from 'src/composables/storage-reader';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {reactive} from 'vue';
 
 import {useBandSelection} from '../../composables/band-selection';
-import {useStorageReader} from '../../composables/storage-reader';
 
 export interface Digested {
   digester: Digester;

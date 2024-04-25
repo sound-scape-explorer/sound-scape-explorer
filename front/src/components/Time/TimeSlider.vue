@@ -2,11 +2,11 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
+import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {rangesRef} from 'src/hooks/useRanges';
 import {reducerRef} from 'src/hooks/useReducers';
 import {computed, ref, watch} from 'vue';
 
-import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {SLIDER_LIMITS} from '../../constants';
 import {mapRange} from '../../utils/map-range';
 import AppButton from '../AppButton/AppButton.vue';

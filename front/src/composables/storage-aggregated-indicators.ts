@@ -1,9 +1,11 @@
+import {useBandSelection} from 'src/composables/band-selection';
+import {
+  type Extractor,
+  useStorageExtractors,
+} from 'src/composables/storage-extractors';
+import {useStorageReader} from 'src/composables/storage-reader';
+import {integrationRef} from 'src/hooks/useIntegrations';
 import {ref} from 'vue';
-
-import {integrationRef} from '../hooks/useIntegrations';
-import {useBandSelection} from './band-selection';
-import {type Extractor, useStorageExtractors} from './storage-extractors';
-import {useStorageReader} from './storage-reader';
 
 export interface AggregatedIndicator {
   extractor: Extractor;

@@ -1,6 +1,5 @@
+import {useStorageReader} from 'src/composables/storage-reader';
 import {reactive, watchEffect} from 'vue';
-
-import {useStorageReader} from '../composables/storage-reader';
 
 export interface Range {
   index: number;

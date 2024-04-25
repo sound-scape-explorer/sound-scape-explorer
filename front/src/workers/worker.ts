@@ -7,11 +7,13 @@ import type {
   IntervalDetails,
 } from 'src/composables/storage-aggregated-interval-details';
 import type {AggregatedSite} from 'src/composables/storage-aggregated-sites';
+import type {Autocluster} from 'src/composables/storage-autoclusters';
 import type {Band} from 'src/composables/storage-bands';
 import type {Digester} from 'src/composables/storage-digesters';
 import type {Extractor} from 'src/composables/storage-extractors';
 import type {File as FileConfig} from 'src/composables/storage-files';
 import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
+import type {RelativeTrajectory} from 'src/composables/storage-relative-trajectories';
 import type {Site} from 'src/composables/storage-sites';
 import type {Integration} from 'src/hooks/useIntegrations';
 import type {Labels} from 'src/hooks/useLabels';
@@ -26,8 +28,6 @@ import type {Trajectory} from 'src/hooks/useTrajectories';
 import {StorageMode} from 'src/storage/StorageMode';
 import type {StorageSettings} from 'src/storage/StorageSettings';
 
-import type {Autocluster} from '../composables/storage-autoclusters';
-import type {RelativeTrajectory} from '../composables/storage-relative-trajectories';
 import {StoragePath} from '../storage/StoragePath';
 import {trimRectangular} from '../utils/trim-rectangular';
 

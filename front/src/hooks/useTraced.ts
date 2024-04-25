@@ -1,8 +1,8 @@
+import {useStorageReader} from 'src/composables/storage-reader';
 import {reactive} from 'vue';
 
 import {useBandSelection} from '../composables/band-selection';
 import {useExtractorSelection} from '../composables/extractor-selection';
-import {useStorageReader} from '../composables/storage-reader';
 import {integrationRef} from './useIntegrations';
 import {reducerRef} from './useReducers';
 import {selectedTrajectoriesRef, type Trajectory} from './useTrajectories';

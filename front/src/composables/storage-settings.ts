@@ -1,7 +1,6 @@
+import {useStorageReader} from 'src/composables/storage-reader';
 import type {StorageSettings} from 'src/storage/StorageSettings';
 import {onMounted, ref} from 'vue';
-
-import {useStorageReader} from './storage-reader';
 
 const settings = ref<StorageSettings | null>(null);
 let isLoaded = false;

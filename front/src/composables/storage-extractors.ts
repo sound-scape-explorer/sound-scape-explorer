@@ -1,10 +1,9 @@
 import type {DropdownOption} from 'src/common/DropdownOption';
+import {useStorageReader} from 'src/composables/storage-reader';
 import {NN_EXTRACTORS} from 'src/constants';
 import {reducerRef} from 'src/hooks/useReducers';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {onMounted, ref, watchEffect} from 'vue';
-
-import {useStorageReader} from './storage-reader';
 
 export interface Extractor {
   index: number;

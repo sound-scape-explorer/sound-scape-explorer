@@ -1,10 +1,10 @@
 import type {Data} from 'plotly.js-dist-min';
+import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
+import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
+import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 
 import {useDate} from '../../composables/date';
-import {useStorageAggregatedIntervalDetails} from '../../composables/storage-aggregated-interval-details';
-import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
-import {useStorageReducedFeatures} from '../../composables/storage-reduced-features';
 import {alphaHighRef, alphaLowRef, colorScaleRef} from './useScatterColorScale';
 import {pointsFilteredByMetaRef} from './useScatterFilterMeta';
 import {pointsFilteredByTimeRef} from './useScatterFilterTime';

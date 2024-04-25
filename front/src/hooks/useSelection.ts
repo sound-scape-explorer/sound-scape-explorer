@@ -8,17 +8,17 @@ import {
   scatterLoadingTextRef,
 } from 'src/components/Scatter/useScatterLoading';
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
+import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
+import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
+import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
+import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
+import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
+import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
+import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
 import {reactive, watchEffect} from 'vue';
 
 import {useBandSelection} from '../composables/band-selection';
 import {useExtractorSelection} from '../composables/extractor-selection';
-import {useStorageAggregatedFeatures} from '../composables/storage-aggregated-features';
-import {useStorageAggregatedIndicators} from '../composables/storage-aggregated-indicators';
-import {useStorageAggregatedIntervalDetails} from '../composables/storage-aggregated-interval-details';
-import {useStorageAggregatedLabels} from '../composables/storage-aggregated-labels';
-import {useStorageAggregatedSites} from '../composables/storage-aggregated-sites';
-import {useStorageAggregatedTimestamps} from '../composables/storage-aggregated-timestamps';
-import {useStorageReducedFeatures} from '../composables/storage-reduced-features';
 import {integrationRef, useIntegrations} from './useIntegrations';
 import {useLabels} from './useLabels';
 import {reducerRef, useReducers} from './useReducers';

@@ -1,8 +1,8 @@
+import {type Band, useStorageBands} from 'src/composables/storage-bands';
 import {ref, watchEffect} from 'vue';
 
 import {reducerSelectedRef} from '../hooks/useReducers';
 import {parseSelectionOption} from '../utils/parse-selection-option';
-import {type Band, useStorageBands} from './storage-bands';
 
 const band = ref<Band | null>(null);
 const selected = ref<Band['name'] | null>(null);

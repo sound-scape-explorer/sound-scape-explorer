@@ -2,18 +2,17 @@
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {useDate} from 'src/composables/date';
 import {useStorageAutoclusters} from 'src/composables/storage-autoclusters';
+import {useStorageBands} from 'src/composables/storage-bands';
+import {useStorageDigesters} from 'src/composables/storage-digesters';
+import {useStorageExtractors} from 'src/composables/storage-extractors';
+import {useStorageFiles} from 'src/composables/storage-files';
+import {useStorageSettings} from 'src/composables/storage-settings';
+import {useStorageVersion} from 'src/composables/storage-version';
 import {integrationsRef} from 'src/hooks/useIntegrations';
 import {rangesRef} from 'src/hooks/useRanges';
 import {reducersRef} from 'src/hooks/useReducers';
 import {trajectoriesRef} from 'src/hooks/useTrajectories';
 import {computed} from 'vue';
-
-import {useStorageBands} from '../../composables/storage-bands';
-import {useStorageDigesters} from '../../composables/storage-digesters';
-import {useStorageExtractors} from '../../composables/storage-extractors';
-import {useStorageFiles} from '../../composables/storage-files';
-import {useStorageSettings} from '../../composables/storage-settings';
-import {useStorageVersion} from '../../composables/storage-version';
 
 const {settings} = useStorageSettings();
 const {version} = useStorageVersion();

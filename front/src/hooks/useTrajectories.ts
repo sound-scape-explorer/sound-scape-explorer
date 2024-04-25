@@ -1,7 +1,7 @@
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
+import {useStorageReader} from 'src/composables/storage-reader';
 import {reactive, watchEffect} from 'vue';
 
-import {useStorageReader} from '../composables/storage-reader';
 import {useTraced} from './useTraced';
 
 export interface Trajectory {

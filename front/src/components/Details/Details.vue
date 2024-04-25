@@ -4,13 +4,13 @@ import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useAudioFile} from 'src/components/Audio/useAudioFile';
 import {useDate} from 'src/composables/date';
+import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
+import {useStorageExtractors} from 'src/composables/storage-extractors';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {labelsPropertiesRef} from 'src/hooks/useLabels';
 import {computed, watch} from 'vue';
 
 import {useBandSelection} from '../../composables/band-selection';
-import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
-import {useStorageExtractors} from '../../composables/storage-extractors';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {useDetails} from './useDetails';

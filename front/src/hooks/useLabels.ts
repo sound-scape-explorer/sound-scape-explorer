@@ -1,8 +1,8 @@
+import {useStorageReader} from 'src/composables/storage-reader';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {reactive} from 'vue';
 
 import {useBandSelection} from '../composables/band-selection';
-import {useStorageReader} from '../composables/storage-reader';
 import {integrationRef} from './useIntegrations';
 
 // Label properties and sets

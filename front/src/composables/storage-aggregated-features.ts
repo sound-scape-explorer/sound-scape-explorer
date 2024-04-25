@@ -1,9 +1,8 @@
+import {useBandSelection} from 'src/composables/band-selection';
+import {useExtractorSelection} from 'src/composables/extractor-selection';
+import {useStorageReader} from 'src/composables/storage-reader';
+import {integrationRef} from 'src/hooks/useIntegrations';
 import {ref} from 'vue';
-
-import {integrationRef} from '../hooks/useIntegrations';
-import {useBandSelection} from './band-selection';
-import {useExtractorSelection} from './extractor-selection';
-import {useStorageReader} from './storage-reader';
 
 type AggregatedFeatures = number[][];
 const aggregatedFeatures = ref<AggregatedFeatures | null>(null);

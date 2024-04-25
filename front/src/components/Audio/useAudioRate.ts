@@ -1,8 +1,8 @@
 import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
+import {useStorageSettings} from 'src/composables/storage-settings';
 import {reactive, watch, watchEffect} from 'vue';
 
-import {useStorageSettings} from '../../composables/storage-settings';
 import {PLAYBACK_RATE} from '../../constants';
 import {waveSurferRef} from './useWaveSurfer';
 

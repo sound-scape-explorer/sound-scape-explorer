@@ -19,9 +19,9 @@ import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {useScatterFilterTime} from 'src/components/Scatter/useScatterFilterTime';
 import {useDate} from 'src/composables/date';
 import {useKeyboard} from 'src/composables/keyboard';
+import {useStorageSettings} from 'src/composables/storage-settings';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 
-import {useStorageSettings} from '../../composables/storage-settings';
 import {scatterLoadingRef} from '../Scatter/useScatterLoading';
 import {timeStore} from './timeStore';
 

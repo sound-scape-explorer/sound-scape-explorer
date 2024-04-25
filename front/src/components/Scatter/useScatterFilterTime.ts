@@ -1,6 +1,6 @@
+import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {reactive} from 'vue';
 
-import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {timeStore} from '../Time/timeStore';
 import {useScatterTraces} from './useScatterTraces';
 

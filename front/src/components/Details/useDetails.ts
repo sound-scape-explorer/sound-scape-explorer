@@ -4,16 +4,16 @@ import {
   type IntervalDetails,
   useStorageAggregatedIntervalDetails,
 } from 'src/composables/storage-aggregated-interval-details';
+import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {
   type AggregatedSite,
   useStorageAggregatedSites,
 } from 'src/composables/storage-aggregated-sites';
+import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageFiles} from 'src/composables/storage-files';
+import {useStorageSettings} from 'src/composables/storage-settings';
 import {ref, watchEffect} from 'vue';
 
-import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
-import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
-import {useStorageSettings} from '../../composables/storage-settings';
 import {clickedRef} from '../Scatter/useScatterClick';
 
 export function useDetails() {

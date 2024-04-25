@@ -1,7 +1,7 @@
+import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {labelsRef} from 'src/hooks/useLabels';
 import {reactive} from 'vue';
 
-import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
 import {labelsSelectionRef} from '../Label/useLabelsSelection';
 import {useScatterTraces} from './useScatterTraces';
 

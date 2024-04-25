@@ -10,9 +10,8 @@ import {
   type VisibleBlock,
 } from 'src/components/Timeline/useTimelinePagination';
 import {useDate} from 'src/composables/date';
+import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
 import {computed, onMounted, ref, watchEffect} from 'vue';
-
-import {useStorageAggregatedIntervalDetails} from '../../composables/storage-aggregated-interval-details';
 
 const containerRef = ref<HTMLDivElement | null>(null);
 const {convertTimestampToIsoDate} = useDate();

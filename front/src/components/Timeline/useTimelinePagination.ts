@@ -1,10 +1,10 @@
-import {reactive, watchEffect} from 'vue';
-
 import {
   type BlockDetails,
   useStorageAggregatedIntervalDetails,
-} from '../../composables/storage-aggregated-interval-details';
-import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
+} from 'src/composables/storage-aggregated-interval-details';
+import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
+import {reactive, watchEffect} from 'vue';
+
 import {integrationRef} from '../../hooks/useIntegrations';
 import {isSelectedRef} from '../../hooks/useSelection';
 import {countIterations} from '../../utils/count-iterations';

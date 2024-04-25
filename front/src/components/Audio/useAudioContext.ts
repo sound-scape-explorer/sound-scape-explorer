@@ -1,6 +1,5 @@
+import {useStorageSettings} from 'src/composables/storage-settings';
 import {reactive, watchEffect} from 'vue';
-
-import {useStorageSettings} from '../../composables/storage-settings';
 
 interface AudioContextRef {
   value: AudioContext | null;

@@ -2,10 +2,10 @@ import dayjs, {type Dayjs} from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import {useStorageSettings} from 'src/composables/storage-settings';
 import {DATE_FORMAT} from 'src/constants';
 
 import {settingsStore} from '../components/Settings/settingsStore';
-import {useStorageSettings} from './storage-settings';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);

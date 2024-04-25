@@ -1,6 +1,5 @@
+import {useStorageReader} from 'src/composables/storage-reader';
 import {onMounted, ref} from 'vue';
-
-import {useStorageReader} from './storage-reader';
 
 export interface Autocluster {
   index: number;

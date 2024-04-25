@@ -28,10 +28,10 @@ import {
 } from 'src/components/Audio/useAudioTransport';
 import {useWaveSurfer} from 'src/components/Audio/useWaveSurfer';
 import {useDate} from 'src/composables/date';
+import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
+import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 
-import {useStorageAggregatedSites} from '../../composables/storage-aggregated-sites';
-import {useStorageSettings} from '../../composables/storage-settings';
 import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';

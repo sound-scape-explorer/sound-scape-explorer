@@ -1,9 +1,8 @@
 import {type DropdownOption} from 'src/common/DropdownOption';
+import {useStorageReader} from 'src/composables/storage-reader';
+import {reducerRef} from 'src/hooks/useReducers';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {onMounted, ref, watchEffect} from 'vue';
-
-import {reducerRef} from '../hooks/useReducers';
-import {useStorageReader} from './storage-reader';
 
 export interface Band {
   index: number;

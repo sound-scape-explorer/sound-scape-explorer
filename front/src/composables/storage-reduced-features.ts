@@ -1,10 +1,9 @@
+import {useBandSelection} from 'src/composables/band-selection';
+import {useExtractorSelection} from 'src/composables/extractor-selection';
+import {useStorageReader} from 'src/composables/storage-reader';
+import {integrationRef} from 'src/hooks/useIntegrations';
+import {reducerRef} from 'src/hooks/useReducers';
 import {ref} from 'vue';
-
-import {integrationRef} from '../hooks/useIntegrations';
-import {reducerRef} from '../hooks/useReducers';
-import {useBandSelection} from './band-selection';
-import {useExtractorSelection} from './extractor-selection';
-import {useStorageReader} from './storage-reader';
 
 export type ReducedFeatures = number[][];
 const reducedFeatures = ref<ReducedFeatures | null>(null);

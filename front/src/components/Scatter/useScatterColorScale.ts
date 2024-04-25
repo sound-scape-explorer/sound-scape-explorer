@@ -1,4 +1,6 @@
 import chroma, {type Scale} from 'chroma-js';
+import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
+import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {
   labelsPropertiesAsColorTypesRef,
@@ -6,8 +8,6 @@ import {
 } from 'src/hooks/useLabels';
 import {computed, reactive, watch} from 'vue';
 
-import {useStorageAggregatedLabels} from '../../composables/storage-aggregated-labels';
-import {useStorageAggregatedTimestamps} from '../../composables/storage-aggregated-timestamps';
 import {colorsStore} from '../Colors/colorsStore';
 import {useColorByCyclingDay} from '../Colors/useColorByCyclingDay';
 import {useColorByDay} from '../Colors/useColorByDay';

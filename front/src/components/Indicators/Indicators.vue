@@ -5,11 +5,11 @@ import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {useDate} from 'src/composables/date';
+import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
+import {useStorageSites} from 'src/composables/storage-sites';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
-import {useStorageAggregatedIndicators} from '../../composables/storage-aggregated-indicators';
-import {useStorageSites} from '../../composables/storage-sites';
 import {cyclingScaleRef} from '../Scatter/useScatterColorScale';
 import {indicatorDataRef, useIndicators} from './useIndicators';
 

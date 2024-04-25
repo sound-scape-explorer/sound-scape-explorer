@@ -1,9 +1,9 @@
 import type {DropdownOption} from 'src/common/DropdownOption';
+import {useStorageReader} from 'src/composables/storage-reader';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {reactive, watchEffect} from 'vue';
 
-import {useStorageReader} from '../composables/storage-reader';
 import {reducerRef, reducerSelectedRef} from './useReducers';
 
 export interface Integration {
