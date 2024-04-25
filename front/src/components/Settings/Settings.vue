@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
+import AppDraggable from 'src/components/app/app-draggable.vue';
 import {
   waveSurferOverflowLegendsRef,
   waveSurferShowDecibelsRef,
@@ -11,7 +12,6 @@ import {plotlyFontSizeRef} from 'src/hooks/useHeatmapLayout';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {spectrogramColorRef} from '../Audio/useAudioSpectrogramColor';
 import {settingsStore} from './settingsStore';
 

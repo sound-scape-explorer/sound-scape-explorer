@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import {NButton, NGi, NGrid, NTag} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
+import AppDraggable from 'src/components/app/app-draggable.vue';
 import AppGrid from 'src/components/AppGrid/AppGrid.vue';
 import {VERSION} from 'src/version';
 
 import {LINK_BUG_REPORT, LINK_CHANGELOG, LINK_DOCS} from '../../constants';
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
 
 interface Shortcut {
   keycode: string;

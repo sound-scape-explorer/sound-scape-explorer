@@ -17,24 +17,16 @@ import {
 } from '@vicons/ionicons5';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
 import {settingsStore} from 'src/components/Settings/settingsStore';
+import {useDraggables} from 'src/composables/draggables';
 import {useKeyboard} from 'src/composables/keyboard';
 import {isSelectedRef} from 'src/composables/select';
 import {useStorageReady} from 'src/composables/storage-load';
 
-import {appDraggableSelectedRef} from '../AppDraggable/appDraggableSelected';
-import {
-  type AppDraggablesStore,
-  appDraggablesStore,
-} from '../AppDraggable/appDraggablesStore';
 import MenuItem from './MenuItem.vue';
 
 const {isReady} = useStorageReady();
 const {registerKey} = useKeyboard();
-
-const toggle = (key: keyof AppDraggablesStore): void => {
-  appDraggableSelectedRef.value = key;
-  appDraggablesStore[key] = !appDraggablesStore[key];
-};
+const {toggle} = useDraggables();
 
 registerKey(KeyboardShortcut.import, () => toggle('import'));
 registerKey(KeyboardShortcut.settings, () => toggle('settings'));

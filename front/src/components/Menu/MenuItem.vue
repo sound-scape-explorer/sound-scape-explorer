@@ -1,18 +1,16 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
+import {type DraggablesStore, useDraggables} from 'src/composables/draggables';
 import {computed, ref} from 'vue';
 
-import {
-  type AppDraggablesStore,
-  appDraggablesStore,
-} from '../AppDraggable/appDraggablesStore';
+const {store} = useDraggables();
 
 interface Props {
-  draggableKey: keyof AppDraggablesStore;
+  draggableKey: keyof DraggablesStore;
   text: string;
   // eslint-disable-next-line no-unused-vars
-  toggle: (key: keyof AppDraggablesStore) => void;
+  toggle: (key: keyof DraggablesStore) => void;
   disabled?: boolean;
 }
 
@@ -36,7 +34,7 @@ const shortcutRef = computed<string>(() => {
 const classesRef = computed<string>(() => {
   let classes = 'button';
 
-  if (appDraggablesStore[props.draggableKey] === true) {
+  if (store[props.draggableKey]) {
     classes += ' active';
   }
 
@@ -53,9 +51,9 @@ const classesRef = computed<string>(() => {
       <n-button
         ref="buttonRef"
         :class="classesRef"
+        :disabled="props.disabled"
         size="small"
         @click="handleClick"
-        :disabled="props.disabled"
       >
         <n-icon>
           <slot />

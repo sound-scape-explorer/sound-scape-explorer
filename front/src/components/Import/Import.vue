@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {NButton} from 'naive-ui';
+import AppDraggable from 'src/components/app/app-draggable.vue';
 import {useStorageFile} from 'src/composables/storage-file';
 import {useStorageReady} from 'src/composables/storage-load';
 import {ref} from 'vue';
 
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import ImportDetails from './ImportDetails.vue';
 import {importLockRef} from './useImportLock';
 

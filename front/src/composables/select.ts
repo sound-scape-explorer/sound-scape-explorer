@@ -1,4 +1,3 @@
-import {appDraggablesStore} from 'src/components/AppDraggable/appDraggablesStore';
 import {useLabelsSelection} from 'src/components/Label/useLabelsSelection';
 import {useScatterColorScale} from 'src/components/Scatter/useScatterColorScale';
 import {useScatterFilterMeta} from 'src/components/Scatter/useScatterFilterMeta';
@@ -8,6 +7,7 @@ import {
   scatterLoadingTextRef,
 } from 'src/components/Scatter/useScatterLoading';
 import {useScatterTraces} from 'src/components/Scatter/useScatterTraces';
+import {useDraggables} from 'src/composables/draggables';
 import {useSelectBand} from 'src/composables/select-band';
 import {useSelectExtractor} from 'src/composables/select-extractor';
 import {useStorageAggregatedFeatures} from 'src/composables/storage-aggregated-features';
@@ -32,6 +32,7 @@ export const isSelectedRef = reactive<IsSelectedRef>({
 });
 
 export function useSelect() {
+  const {store} = useDraggables();
   const {readLabels, resetLabels} = useStorageLabels();
   const {readAggregatedFeatures, resetAggregatedFeatures} =
     useStorageAggregatedFeatures();
@@ -133,7 +134,7 @@ export function useSelect() {
     renderTraces();
 
     scatterLoadingRef.value = false;
-    appDraggablesStore.selection = false;
+    store.selection = false;
   };
 
   watchEffect(loadSelection);

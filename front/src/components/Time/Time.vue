@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
+import AppDraggable from 'src/components/app/app-draggable.vue';
+
 import TimeOptions from './TimeOptions.vue';
 import TimeSlider from './TimeSlider.vue';
 </script>

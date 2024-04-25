@@ -2,6 +2,7 @@
 import {HeadsetOutline} from '@vicons/ionicons5';
 import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import AppDraggable from 'src/components/app/app-draggable.vue';
 import {useAudioFile} from 'src/components/Audio/useAudioFile';
 import {useDate} from 'src/composables/date';
 import {useSelectBand} from 'src/composables/select-band';
@@ -11,7 +12,6 @@ import {useStorageLabels} from 'src/composables/storage-labels';
 import {integrationRef} from 'src/hooks/useIntegrations';
 import {computed, watch} from 'vue';
 
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {useDetails} from './useDetails';
 

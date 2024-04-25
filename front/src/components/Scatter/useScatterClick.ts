@@ -1,6 +1,6 @@
+import {useDraggables} from 'src/composables/draggables';
 import {reactive} from 'vue';
 
-import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
 import {useAudioLoading} from '../Audio/useAudioLoading';
 import {settingsStore} from '../Settings/settingsStore';
 
@@ -15,6 +15,7 @@ export const clickedRef = reactive<ClickedRef>({
 
 export function useScatterClick() {
   const {verifyAudioLoading} = useAudioLoading();
+  const {store} = useDraggables();
 
   const handleClick = (index: number | null) => {
     if (clickedRef.value === index) {
@@ -32,8 +33,8 @@ export function useScatterClick() {
     }
 
     if (settingsStore.autoOpenOnScatterClick) {
-      if (appDraggablesStore.details === false) {
-        appDraggablesStore.details = true;
+      if (store.details === false) {
+        store.details = true;
       }
     }
   };

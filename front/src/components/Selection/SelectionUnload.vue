@@ -1,8 +1,7 @@
 <script lang="ts" setup="">
 import {ArrowUndoCircleOutline} from '@vicons/ionicons5';
+import AppButton from 'src/components/app/app-button.vue';
 import {isSelectedRef, useSelect} from 'src/composables/select';
-
-import AppButton from '../AppButton/AppButton.vue';
 
 const {unloadSelection} = useSelect();
 </script>

@@ -8,16 +8,15 @@ import {
   useWindowSize,
 } from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
+import {useScatterCamera} from 'src/components/Scatter/useScatterCamera';
+import {type DraggablesStore, useDraggables} from 'src/composables/draggables';
+import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 import {computed, onMounted, ref, watch} from 'vue';
 
-import {capitalizeFirstLetter} from '../../utils/capitalize-first-letter';
-import {useScatterCamera} from '../Scatter/useScatterCamera';
-import {appDraggableSelectedRef} from './appDraggableSelected';
-import type {AppDraggablesStore} from './appDraggablesStore';
-import {appDraggablesStore} from './appDraggablesStore';
+const {store, selected} = useDraggables();
 
 interface Props {
-  draggableKey: keyof AppDraggablesStore;
+  draggableKey: keyof DraggablesStore;
   hideSeparator?: boolean;
 }
 
@@ -37,11 +36,11 @@ const classesRef = computed<string>(() => {
     classes += ' zoomed';
   }
 
-  if (!appDraggablesStore[props.draggableKey]) {
+  if (!store[props.draggableKey]) {
     classes += ' closed';
   }
 
-  if (appDraggableSelectedRef.value === props.draggableKey) {
+  if (selected.value === props.draggableKey) {
     classes += ' selected';
   }
 
@@ -99,14 +98,14 @@ const checkBounds = (position?: Position) => {
 };
 
 const close = () => {
-  appDraggablesStore[props.draggableKey] = false;
+  store[props.draggableKey] = false;
 };
 
 const open = () => {
   // noinspection PointlessBooleanExpressionJS,JSIncompatibleTypesComparison
   if (
-    appDraggableSelectedRef.value !== props.draggableKey ||
-    appDraggablesStore[props.draggableKey] === false ||
+    selected.value !== props.draggableKey ||
+    store[props.draggableKey] === false ||
     window.visualViewport === null
   ) {
     return;
@@ -115,7 +114,7 @@ const open = () => {
   checkBounds();
 };
 
-watch(appDraggablesStore, open);
+watch(store, open);
 
 const storageRef = useLocalStorage(storageKey, {x: 100, y: 100});
 const dragRef = ref<HTMLElement | null>(null);
@@ -143,8 +142,8 @@ watch(pressed, () => {
 
   lock();
 
-  if (appDraggableSelectedRef.value !== props.draggableKey) {
-    appDraggableSelectedRef.value = props.draggableKey;
+  if (selected.value !== props.draggableKey) {
+    selected.value = props.draggableKey;
   }
 });
 

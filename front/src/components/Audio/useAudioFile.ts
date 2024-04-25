@@ -1,12 +1,12 @@
+import {useAppNotification} from 'src/components/AppNotification/useAppNotification';
+import {useDraggables} from 'src/composables/draggables';
 import type {BlockDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
+import {integrationRef} from 'src/hooks/useIntegrations';
+import {getBitDepthFromWav} from 'src/utils/get-bit-depth-from-wav';
 import {reactive, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
-import {integrationRef} from '../../hooks/useIntegrations';
-import {getBitDepthFromWav} from '../../utils/get-bit-depth-from-wav';
-import {appDraggablesStore} from '../AppDraggable/appDraggablesStore';
-import {useAppNotification} from '../AppNotification/useAppNotification';
 import {audioContextRef} from './useAudioContext';
 import {audioIsLoadingRef, useAudioLoading} from './useAudioLoading';
 import {useWaveSurferLoader} from './useWaveSurferLoader';
@@ -40,13 +40,14 @@ export function useAudioFile() {
   const {loadBlob} = useWaveSurferLoader();
   const {verifyAudioLoading} = useAudioLoading();
   const {audioHost} = useStorageAudioHost();
+  const {store} = useDraggables();
 
   const openAudioModal = () => {
-    if (appDraggablesStore.audio === true) {
+    if (store.audio === true) {
       return;
     }
 
-    appDraggablesStore.audio = true;
+    store.audio = true;
   };
 
   const selectAudioBlock = (block: BlockDetails | null) => {
@@ -123,7 +124,7 @@ export function useAudioFile() {
     } catch (error) {
       notify('error', 'Failed to load audio', `${error}`);
 
-      appDraggablesStore.audio = false;
+      store.audio = false;
       audioIsLoadingRef.value = false;
     }
   };

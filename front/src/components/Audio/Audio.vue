@@ -10,6 +10,7 @@ import {
   VolumeLowOutline,
 } from '@vicons/ionicons5';
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
+import AppDraggable from 'src/components/app/app-draggable.vue';
 import AudioButton from 'src/components/Audio/AudioButton.vue';
 import {
   fftSizeRef,
@@ -32,7 +33,6 @@ import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-site
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import {useDetails} from '../Details/useDetails';
 import {clickedRef} from '../Scatter/useScatterClick';
 import {audioBlockRef, audioDurationRef} from './useAudioFile';

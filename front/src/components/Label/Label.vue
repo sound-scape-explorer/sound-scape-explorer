@@ -2,11 +2,11 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/KeyboardShortcut';
+import AppDraggable from 'src/components/app/app-draggable.vue';
 import {labelsColumnsRef} from 'src/components/Label/useLabelsColumns';
 import {useKeyboard} from 'src/composables/keyboard';
 import {computed} from 'vue';
 
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
 import LabelItems from './LabelItems.vue';
 import {useLabelsSelection} from './useLabelsSelection';
 import {labelZoomedRef} from './useLabelZoomed';

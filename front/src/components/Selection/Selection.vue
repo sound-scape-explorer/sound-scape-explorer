@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import AppDraggable from '../AppDraggable/AppDraggable.vue';
+import AppDraggable from 'src/components/app/app-draggable.vue';
+
 import SelectionMenu from './SelectionMenu.vue';
 import SelectionUnload from './SelectionUnload.vue';
 </script>

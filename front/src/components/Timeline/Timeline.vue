@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
+import AppDraggable from 'src/components/app/app-draggable.vue';
 import TimelineGrid from 'src/components/Timeline/TimelineGrid.vue';
 import TimelineMenu from 'src/components/Timeline/TimelineMenu.vue';
 </script>

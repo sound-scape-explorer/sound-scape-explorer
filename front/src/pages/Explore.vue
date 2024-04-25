@@ -16,35 +16,35 @@ import Settings from 'src/components/Settings/Settings.vue';
 import Time from 'src/components/Time/Time.vue';
 import Timeline from 'src/components/Timeline/Timeline.vue';
 import Trajectories from 'src/components/Trajectories/Trajectories.vue';
+import {useDraggables} from 'src/composables/draggables';
 import {useStorageReady} from 'src/composables/storage-load';
 import {useWorker} from 'src/composables/worker';
 import {onMounted} from 'vue';
 
-import {appDraggablesStore} from '../components/AppDraggable/appDraggablesStore';
-
 useWorker();
 const {isReady} = useStorageReady();
+const {store} = useDraggables();
 
 onMounted(() => {
   if (isReady.value) {
     return;
   }
 
-  appDraggablesStore.import = true;
+  store.import = true;
 });
 </script>
 
 <template>
   <Menu />
-  <Import v-if="appDraggablesStore.import" />
-  <Settings v-if="appDraggablesStore.settings" />
-  <Help v-if="appDraggablesStore.help" />
+  <Import v-if="store.import" />
+  <Settings v-if="store.settings" />
+  <Help v-if="store.help" />
 
   <AppLoader v-if="isReady" />
   <Selection v-if="isReady" />
   <Trajectories v-if="isReady" />
   <RelativeTrajectories v-if="isReady" />
-  <Colors v-if="isReady && appDraggablesStore.colors" />
+  <Colors v-if="isReady && store.colors" />
   <Timeline v-if="isReady" />
   <Time v-if="isReady" />
   <Details v-if="isReady" />

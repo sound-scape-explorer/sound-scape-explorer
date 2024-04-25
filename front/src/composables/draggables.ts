@@ -1,6 +1,6 @@
-import {reactive} from 'vue';
+import {reactive, ref} from 'vue';
 
-export interface AppDraggablesStore {
+export interface DraggablesStore {
   import: boolean;
   settings: boolean;
   help: boolean;
@@ -17,7 +17,7 @@ export interface AppDraggablesStore {
   digested: boolean;
 }
 
-export const appDraggablesStore = reactive<AppDraggablesStore>({
+const store = reactive<DraggablesStore>({
   import: false,
   settings: false,
   help: false,
@@ -33,3 +33,18 @@ export const appDraggablesStore = reactive<AppDraggablesStore>({
   indicators: false,
   digested: false,
 });
+
+const selected = ref<string | null>(null);
+
+export function useDraggables() {
+  const toggle = (key: keyof DraggablesStore): void => {
+    selected.value = key;
+    store[key] = !store[key];
+  };
+
+  return {
+    selected: selected,
+    store: store,
+    toggle: toggle,
+  };
+}
