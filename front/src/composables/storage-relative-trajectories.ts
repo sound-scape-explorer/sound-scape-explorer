@@ -1,9 +1,9 @@
-import {reactive, watchEffect} from 'vue';
+import {ref, watchEffect} from 'vue';
 
-import {useStorageReader} from '../composables/storage-reader';
-import {bandRef} from './useBands';
-import {extractorRef} from './useExtractors';
-import {integrationRef} from './useIntegrations';
+import {bandRef} from '../hooks/useBands';
+import {extractorRef} from '../hooks/useExtractors';
+import {integrationRef} from '../hooks/useIntegrations';
+import {useStorageReader} from './storage-reader';
 
 export interface RelativeTrajectory {
   index: number;
@@ -14,19 +14,20 @@ export interface RelativeTrajectory {
   timestamps: number[];
 }
 
-interface RelativeTrajectoriesRef {
-  value: null | RelativeTrajectory[];
-}
+const relativeTrajectories = ref<RelativeTrajectory[] | null>(null);
+let isLoaded = false;
 
-export const relativeTrajectoriesRef = reactive<RelativeTrajectoriesRef>({
-  value: null,
-});
-
-export function useRelativeTrajectories() {
+export function useStorageRelativeTrajectories() {
   const {read} = useStorageReader();
 
-  const readRelativeTrajectories = () =>
-    read(async (worker, file) => {
+  const readRelativeTrajectories = async () => {
+    if (isLoaded) {
+      return;
+    }
+
+    isLoaded = true;
+
+    await read(async (worker, file) => {
       if (
         bandRef.value === null ||
         integrationRef.value === null ||
@@ -35,29 +36,31 @@ export function useRelativeTrajectories() {
         return;
       }
 
-      relativeTrajectoriesRef.value = await worker.readRelativeTrajectories(
+      relativeTrajectories.value = await worker.readRelativeTrajectories(
         file,
         bandRef.value.name,
         integrationRef.value.seconds,
         extractorRef.value.index,
       );
     });
+  };
 
   watchEffect(readRelativeTrajectories);
 
   const selectRelativeTrajectories = (
     indexes: number[],
   ): RelativeTrajectory[] => {
-    if (relativeTrajectoriesRef.value === null) {
+    if (relativeTrajectories.value === null) {
       return [];
     }
 
-    return relativeTrajectoriesRef.value.filter((relativeTrajectory) =>
+    return relativeTrajectories.value.filter((relativeTrajectory) =>
       indexes.includes(relativeTrajectory.index),
     );
   };
 
   return {
+    relativeTrajectories: relativeTrajectories,
     selectRelativeTrajectories: selectRelativeTrajectories,
   };
 }

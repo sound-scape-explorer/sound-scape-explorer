@@ -5,23 +5,21 @@ import {Csv} from 'src/common/Csv';
 import AppDraggable from 'src/components/AppDraggable/AppDraggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/components/AppPlot/AppPlot.vue';
 import {scatterLoadingRef} from 'src/components/Scatter/useScatterLoading';
+import {useStorageRelativeTrajectories} from 'src/composables/storage-relative-trajectories';
 import {EXPORT_FILENAME} from 'src/constants';
-import {
-  relativeTrajectoriesRef,
-  useRelativeTrajectories,
-} from 'src/hooks/useRelativeTrajectories';
 import {computed, ref} from 'vue';
 
-const {selectRelativeTrajectories} = useRelativeTrajectories();
+const {selectRelativeTrajectories, relativeTrajectories} =
+  useStorageRelativeTrajectories();
 
 const valueRef = ref([]);
 
 const optionsRef = computed(() => {
-  if (relativeTrajectoriesRef.value === null) {
+  if (relativeTrajectories.value === null) {
     return [];
   }
 
-  return relativeTrajectoriesRef.value.map((rT) => ({
+  return relativeTrajectories.value.map((rT) => ({
     label: rT.name,
     value: rT.index,
   }));
@@ -132,10 +130,10 @@ const handleExportClick = () => {
       </n-button>
 
       <AppPlot
-        export-filename="relative-trajectories"
         :labels="histogramLabelsRef"
         :names="histogramNamesRef"
         :values="histogramValuesRef"
+        export-filename="relative-trajectories"
         legend
         title="Relative Trajectories"
         xTitle="Relative daytime"

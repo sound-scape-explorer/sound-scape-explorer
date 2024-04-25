@@ -27,7 +27,7 @@ import {StorageMode} from 'src/storage/StorageMode';
 import type {StorageSettings} from 'src/storage/StorageSettings';
 
 import type {Autocluster} from '../composables/storage-autoclusters';
-import type {RelativeTrajectory} from '../hooks/useRelativeTrajectories';
+import type {RelativeTrajectory} from '../composables/storage-relative-trajectories';
 import {StoragePath} from '../storage/StoragePath';
 import {trimRectangular} from '../utils/trim-rectangular';
 
