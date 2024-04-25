@@ -13,10 +13,10 @@ import {useStorageBands} from '../../composables/storage-bands';
 import {useStorageDigesters} from '../../composables/storage-digesters';
 import {useStorageFiles} from '../../composables/storage-files';
 import {useStorageSettings} from '../../composables/storage-settings';
-import {useVersion} from '../../composables/version';
+import {useStorageVersion} from '../../composables/storage-version';
 
 const {settings} = useStorageSettings();
-const {version} = useVersion();
+const {version} = useStorageVersion();
 const {files} = useStorageFiles();
 const {digesters} = useStorageDigesters();
 

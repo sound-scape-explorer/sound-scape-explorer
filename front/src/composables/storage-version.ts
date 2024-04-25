@@ -5,7 +5,7 @@ import {useStorageReader} from './storage-reader';
 const version = ref<string | null>(null);
 let isLoaded = false;
 
-export function useVersion() {
+export function useStorageVersion() {
   const {read} = useStorageReader();
 
   onMounted(async () => {
