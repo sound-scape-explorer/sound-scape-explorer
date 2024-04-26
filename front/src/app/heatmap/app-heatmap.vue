@@ -7,7 +7,6 @@ import {
 import {useAppHeatmapLayout} from 'src/app/heatmap/app-heatmap-layout';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {usePlotConfig} from 'src/composables/plot-config';
-import {digestedRef} from 'src/draggables/digested/digested';
 import {settingsStore} from 'src/draggables/settings/settings-store';
 import {ref, watch} from 'vue';
 
@@ -21,6 +20,7 @@ interface Props {
   values: (number | null)[][];
   colorscale: string;
   range: {min: number | undefined; max: number | undefined};
+  exportName?: string;
 }
 
 const props = defineProps<Props>();
@@ -32,9 +32,7 @@ const props = defineProps<Props>();
 const {fontSize, width, height} = useAppHeatmapSize();
 const {createLayout} = useAppHeatmapLayout();
 const {buildData} = useAppHeatmapData();
-const {generateConfig} = usePlotConfig(
-  digestedRef.value?.digester.name ?? 'heatmap',
-);
+const {generateConfig} = usePlotConfig(props.exportName ?? 'heatmap');
 const divRef = ref<HTMLDivElement | null>(null);
 const dataRef = ref<HeatmapData[] | null>(null);
 const layoutRef = ref<Partial<Layout> | null>(null);

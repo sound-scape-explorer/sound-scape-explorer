@@ -14,6 +14,7 @@ import type {
 } from 'src/composables/storage-aggregated-interval-details';
 import type {AggregatedSite} from 'src/composables/storage-aggregated-sites';
 import type {Autocluster} from 'src/composables/storage-autoclusters';
+import type {Digested} from 'src/composables/storage-digested';
 import type {Digester} from 'src/composables/storage-digesters';
 import type {File as FileConfig} from 'src/composables/storage-files';
 import type {Labels} from 'src/composables/storage-labels';
@@ -27,7 +28,6 @@ import type {
   TracedTimestamps,
 } from 'src/composables/trajectories-data';
 import type {Trajectory} from 'src/composables/trajectories-storage';
-import type {Digested} from 'src/draggables/digested/digested';
 import {trimRectangular} from 'src/utils/trim-rectangular';
 
 let h5: H5File;

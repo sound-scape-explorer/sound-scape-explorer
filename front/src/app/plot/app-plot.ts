@@ -87,6 +87,7 @@ export function useAppPlot(props: AppPlotProps) {
 
   refresh();
   watch([divRef, dataRef, layoutRef], render);
+  watch([props, settingsStore], refresh);
 
   return {
     divRef: divRef,

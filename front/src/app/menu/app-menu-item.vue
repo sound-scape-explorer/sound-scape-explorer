@@ -1,12 +1,9 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
-import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
-import {type DraggablesStore, useDraggables} from 'src/composables/draggables';
-import {computed, ref} from 'vue';
+import {useAppMenuItem} from 'src/app/menu/app-menu-item';
+import {type DraggablesStore} from 'src/composables/draggables';
 
-const {store} = useDraggables();
-
-interface Props {
+export interface AppMenuItemProps {
   draggableKey: keyof DraggablesStore;
   text: string;
   // eslint-disable-next-line no-unused-vars
@@ -14,32 +11,8 @@ interface Props {
   disabled?: boolean;
 }
 
-const props = defineProps<Props>();
-
-const buttonRef = ref<typeof NButton | null>(null);
-
-const handleClick = () => {
-  if (buttonRef.value === null) {
-    return;
-  }
-
-  props.toggle(props.draggableKey);
-  buttonRef.value.$el.blur();
-};
-
-const shortcutRef = computed<string>(() => {
-  return KeyboardShortcut[props.draggableKey];
-});
-
-const classesRef = computed<string>(() => {
-  let classes = 'button';
-
-  if (store[props.draggableKey]) {
-    classes += ' active';
-  }
-
-  return classes;
-});
+const props = defineProps<AppMenuItemProps>();
+const {button, handleClick, shortcut, classNames} = useAppMenuItem(props);
 </script>
 
 <template>
@@ -47,10 +20,11 @@ const classesRef = computed<string>(() => {
     placement="right"
     trigger="hover"
   >
+    <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
       <NButton
-        ref="buttonRef"
-        :class="classesRef"
+        ref="button"
+        :class="classNames"
         :disabled="props.disabled"
         size="small"
         @click="handleClick"
@@ -61,7 +35,7 @@ const classesRef = computed<string>(() => {
       </NButton>
     </template>
     <span
-      >{{ props.text }} [<span class="bold">{{ shortcutRef }}</span
+      >{{ props.text }} [<span class="bold">{{ shortcut }}</span
       >]</span
     >
   </NTooltip>

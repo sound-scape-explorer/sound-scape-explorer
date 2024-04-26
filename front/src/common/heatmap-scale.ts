@@ -1,4 +1,4 @@
-export enum HeatmapColorScale {
+export enum HeatmapScale {
   RdBu = 'RdBu',
   Blues = 'Blues',
 }

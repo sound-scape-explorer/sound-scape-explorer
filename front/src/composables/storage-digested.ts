@@ -2,7 +2,7 @@ import {useBandSelection} from 'src/composables/band-selection';
 import {useIntegrationSelection} from 'src/composables/integration-selection';
 import type {Digester} from 'src/composables/storage-digesters';
 import {useStorageReader} from 'src/composables/storage-reader';
-import {reactive} from 'vue';
+import {ref} from 'vue';
 
 export interface Digested {
   digester: Digester;
@@ -17,15 +17,9 @@ export interface Digested {
   };
 }
 
-interface DigestedRef {
-  value: Digested | null;
-}
+const digested = ref<Digested | null>(null);
 
-export const digestedRef = reactive<DigestedRef>({
-  value: null,
-});
-
-export function useDigested() {
+export function useStorageDigested() {
   const {read} = useStorageReader();
   const {band} = useBandSelection();
   const {integration} = useIntegrationSelection();
@@ -45,7 +39,7 @@ export function useDigested() {
 
       const isPairing = !Array.isArray(values[0]);
 
-      digestedRef.value = {
+      digested.value = {
         digester: digester,
         isPairing: isPairing,
         values: values,
@@ -53,6 +47,7 @@ export function useDigested() {
     });
 
   return {
+    digested: digested,
     readDigested: readDigested,
   };
 }

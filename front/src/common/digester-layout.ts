@@ -1,5 +1,4 @@
-// TODO: rename
-export enum DigesterHeatmap {
+export enum DigesterLayout {
   silhouette = 'silhouette',
   overlap = 'overlap',
   contingency = 'contingency',

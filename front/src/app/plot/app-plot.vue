@@ -1,7 +1,5 @@
 <script lang="ts" setup="">
 import {useAppPlot} from 'src/app/plot/app-plot';
-import {settingsStore} from 'src/draggables/settings/settings-store';
-import {watch} from 'vue';
 
 export interface AppPlotProps {
   labels: string[][];
@@ -17,9 +15,7 @@ export interface AppPlotProps {
 
 const props = defineProps<AppPlotProps>();
 
-const {divRef, refresh} = useAppPlot(props);
-
-watch([props, settingsStore], refresh);
+const {divRef} = useAppPlot(props);
 </script>
 
 <template>
