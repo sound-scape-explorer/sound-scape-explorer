@@ -202,6 +202,7 @@ $indexSelected: 1001;
   justify-content: flex-start;
 
   padding: 0.6rem 0.9rem 0.6rem 2.5rem;
+  min-width: 20em;
 
   user-select: none;
 
