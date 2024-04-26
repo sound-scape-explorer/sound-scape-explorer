@@ -2,7 +2,7 @@ import colormap from 'colormap';
 import SpectrogramPlugin, {type RGBA} from 'src/common/spectrogram';
 import {useBandSelection} from 'src/composables/band-selection';
 import {WAVE} from 'src/constants';
-import {fftSizeRef} from 'src/draggables/audio/audio-component';
+import {useAudioComponent} from 'src/draggables/audio/audio-component';
 import {audioContextRef} from 'src/draggables/audio/audio-context';
 import {audioFileBitDepthRef} from 'src/draggables/audio/audio-file';
 import {spectrogramColorRef} from 'src/draggables/audio/spectrogram-color';
@@ -47,6 +47,7 @@ export function useWavesurfer({
   spectrogramContainerRef,
 }: UseWaveSurferProps) {
   const {band} = useBandSelection();
+  const {fftSize} = useAudioComponent();
 
   const colorsRef = computed(() => {
     const colors = colormap({
@@ -127,7 +128,7 @@ export function useWavesurfer({
       labels: true,
       colorMap: colorsRef.value,
       height: 192,
-      fftSamples: fftSizeRef.value,
+      fftSamples: fftSize.value,
       frequencyMin: band.value.low,
       frequencyMax: band.value.high,
       decibels: waveSurferShowDecibelsRef.value,
@@ -153,13 +154,12 @@ export function useWavesurfer({
       return;
     }
 
-    // @ts-expect-error: 2540
-    // noinspection JSConstantReassignment
-    waveSurferRef.value.spectrogram.fftSamples = fftSizeRef.value;
+    // @ts-expect-error overwrite variable
+    waveSurferRef.value.spectrogram.fftSamples = fftSize.value;
     waveSurferRef.value.drawBuffer();
   };
 
-  watch(fftSizeRef, updateSpectrogramDefinition);
+  watch(fftSize, updateSpectrogramDefinition);
 
   const renderWaveform = () => {
     if (waveSurferRef.value === null) {

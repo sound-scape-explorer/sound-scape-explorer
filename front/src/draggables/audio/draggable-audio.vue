@@ -15,10 +15,7 @@ import {useDate} from 'src/composables/date';
 import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
-import {
-  fftSizeRef,
-  useAudioComponent,
-} from 'src/draggables/audio/audio-component';
+import {useAudioComponent} from 'src/draggables/audio/audio-component';
 import {useAudioContext} from 'src/draggables/audio/audio-context';
 import {useAudioDownload} from 'src/draggables/audio/audio-download';
 import {audioBlockRef, audioDurationRef} from 'src/draggables/audio/audio-file';
@@ -46,6 +43,7 @@ const {
   spectrogramContainerRef,
   increaseFftSize,
   decreaseFftSize,
+  fftSize,
 } = useAudioComponent();
 
 useAudioContext();
@@ -200,7 +198,7 @@ const {downloadAudio} = useAudioDownload();
             FFT Size
           </NTag>
 
-          {{ fftSizeRef.value }}
+          {{ fftSize }}
         </NGi>
 
         <NGi>
