@@ -1,13 +1,5 @@
 import {waveSurferRef} from 'src/draggables/audio/wavesurfer';
-import {reactive, ref} from 'vue';
-
-interface AudioIsPlayingRef {
-  value: boolean;
-}
-
-export const audioIsPlayingRef = reactive<AudioIsPlayingRef>({
-  value: false,
-});
+import {ref} from 'vue';
 
 const isPlaying = ref<boolean>(false);
 

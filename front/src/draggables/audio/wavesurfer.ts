@@ -4,9 +4,9 @@ import {useBandSelection} from 'src/composables/band-selection';
 import {WAVE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/audio-component';
 import {useAudioContext} from 'src/draggables/audio/audio-context';
-import {audioFileBitDepthRef} from 'src/draggables/audio/audio-file';
+import {useAudioFile} from 'src/draggables/audio/audio-file';
 import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
-import {spectrogramColorRef} from 'src/draggables/audio/spectrogram-color';
+import {useSpectrogramColormap} from 'src/draggables/audio/spectrogram-colormap';
 import {computed, reactive, watch, watchEffect} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/src/plugin/cursor';
@@ -39,14 +39,16 @@ export const waveSurferOverflowLegendsRef =
 
 export function useWavesurfer() {
   const {waveform, spectrogram} = useDraggableAudio();
+  const {bitDepth} = useAudioFile();
   const {band} = useBandSelection();
   const {size} = useAudioFourier();
   const {context} = useAudioContext();
+  const {colormap: spectrogramColormap} = useSpectrogramColormap();
 
   const colorsRef = computed(() => {
     // noinspection SpellCheckingInspection
     const colors = colormap({
-      colormap: spectrogramColorRef.value,
+      colormap: spectrogramColormap.value,
       nshades: 256,
       format: 'float',
     });
@@ -109,7 +111,7 @@ export function useWavesurfer() {
       spectrogram.value === null ||
       waveSurferRef.value === null ||
       band.value === null ||
-      audioFileBitDepthRef.value === null
+      bitDepth.value === null
     ) {
       return;
     }
@@ -128,7 +130,7 @@ export function useWavesurfer() {
       frequencyMax: band.value.high,
       decibels: waveSurferShowDecibelsRef.value,
       overflowLegends: waveSurferOverflowLegendsRef.value,
-      bitDepth: audioFileBitDepthRef.value,
+      bitDepth: bitDepth.value,
     });
 
     waveSurferRef.value.registerPlugins([spectro]);
@@ -136,10 +138,10 @@ export function useWavesurfer() {
 
   watch(
     [
-      spectrogramColorRef,
+      spectrogramColormap,
       waveSurferShowDecibelsRef,
       waveSurferOverflowLegendsRef,
-      audioFileBitDepthRef,
+      bitDepth,
     ],
     registerSpectrogram,
   );

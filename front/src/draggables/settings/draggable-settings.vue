@@ -5,7 +5,7 @@ import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
-import {spectrogramColorRef} from 'src/draggables/audio/spectrogram-color';
+import {useSpectrogramColormap} from 'src/draggables/audio/spectrogram-colormap';
 import {
   waveSurferOverflowLegendsRef,
   waveSurferShowDecibelsRef,
@@ -17,6 +17,7 @@ import {computed} from 'vue';
 const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
+const {colormap} = useSpectrogramColormap();
 
 const spectrogramColorMapsOptionsRef = computed(() => {
   return convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS);
@@ -52,8 +53,8 @@ const plotBackgroundOptionsRef = computed(() => {
           Spectrogram: Color map
         </NTag>
         <NSelect
-          v-model:value="spectrogramColorRef.value"
-          :default-value="spectrogramColorRef.value"
+          v-model:value="colormap"
+          :default-value="colormap"
           :options="spectrogramColorMapsOptionsRef"
           size="tiny"
         />

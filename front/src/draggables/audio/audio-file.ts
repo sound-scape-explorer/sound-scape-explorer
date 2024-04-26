@@ -4,81 +4,61 @@ import {useIntegrationSelection} from 'src/composables/integration-selection';
 import type {BlockDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
 import {useAudioContext} from 'src/draggables/audio/audio-context';
-import {
-  audioIsLoadingRef,
-  useAudioLoading,
-} from 'src/draggables/audio/audio-loading';
 import {useWavesurferLoader} from 'src/draggables/audio/wavesurfer-loader';
 import {getBitDepthFromWav} from 'src/utils/get-bit-depth-from-wav';
-import {reactive, watch} from 'vue';
+import {ref, watch} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
-interface AudioBlockRef {
-  value: BlockDetails | null;
-}
-
-export const audioBlockRef = reactive<AudioBlockRef>({
-  value: null,
-});
-
-interface AudioFileBitDepthRef {
-  value: number | null;
-}
-
-export const audioFileBitDepthRef = reactive<AudioFileBitDepthRef>({
-  value: null,
-});
-
-interface AudioDurationRef {
-  value: number; // seconds
-}
-
-export const audioDurationRef = reactive<AudioDurationRef>({
-  value: 0,
-});
+const block = ref<BlockDetails | null>(null);
+const duration = ref<number>(0); // seconds
+const bitDepth = ref<number | null>(null);
+const isLoading = ref<boolean>(false);
 
 export function useAudioFile() {
   const {notify} = useAppNotification();
   const {loadBlob} = useWavesurferLoader();
-  const {verifyAudioLoading} = useAudioLoading();
   const {audioHost} = useStorageAudioHost();
   const {openAudio, closeAudio} = useDraggables();
   const {integration} = useIntegrationSelection();
   const {context} = useAudioContext();
 
-  const selectAudioBlock = (block: BlockDetails | null) => {
-    if (!verifyAudioLoading()) {
+  const select = (newBlock: BlockDetails | null) => {
+    if (isLoading.value) {
       return;
     }
 
-    if (block === null) {
-      audioBlockRef.value = null;
+    if (newBlock === null) {
+      block.value = null;
       return;
     }
 
     openAudio();
 
-    if (audioBlockRef.value === block) {
+    if (block.value === newBlock) {
       return;
     }
 
-    audioBlockRef.value = block;
+    block.value = newBlock;
   };
 
-  const loadAudioFile = async () => {
+  const load = async () => {
+    if (isLoading.value) {
+      return;
+    }
+
     try {
       if (
         integration.value === null ||
-        audioBlockRef.value === null ||
+        block.value === null ||
         context.value === null ||
         audioHost.value === null
       ) {
         return;
       }
 
-      audioIsLoadingRef.value = true;
+      isLoading.value = true;
 
-      const start = audioBlockRef.value.fileStart;
+      const start = block.value.fileStart;
       const end = start + integration.value.seconds * 1000;
 
       let formattedHost = audioHost.value;
@@ -87,7 +67,7 @@ export function useAudioFile() {
       }
 
       const url = new URL(`${formattedHost}get`);
-      url.searchParams.append('file', audioBlockRef.value.file);
+      url.searchParams.append('file', block.value.file);
       url.searchParams.append('start', start.toString());
       url.searchParams.append('end', end.toString());
 
@@ -110,7 +90,7 @@ export function useAudioFile() {
       }
 
       const arrayBuffer = await response.arrayBuffer();
-      audioFileBitDepthRef.value = getBitDepthFromWav(arrayBuffer);
+      bitDepth.value = getBitDepthFromWav(arrayBuffer);
 
       if (arrayBuffer.byteLength === 0) {
         // noinspection ExceptionCaughtLocallyJS
@@ -119,8 +99,8 @@ export function useAudioFile() {
 
       const audioBuffer = await context.value.decodeAudioData(arrayBuffer);
 
-      audioIsLoadingRef.value = false;
-      audioDurationRef.value = audioBuffer.duration;
+      isLoading.value = false;
+      duration.value = audioBuffer.duration;
 
       const wav = encodeWavFileFromAudioBuffer(audioBuffer, 0);
       const blob = new Blob([wav]);
@@ -129,13 +109,17 @@ export function useAudioFile() {
       notify('error', 'audio-file', `${error}`);
 
       closeAudio();
-      audioIsLoadingRef.value = false;
+      isLoading.value = false;
     }
   };
 
-  watch(audioBlockRef, loadAudioFile);
+  watch(block, load);
 
   return {
-    selectAudioBlock: selectAudioBlock,
+    block: block,
+    duration: duration,
+    bitDepth: bitDepth,
+    select: select,
+    isLoading: isLoading,
   };
 }

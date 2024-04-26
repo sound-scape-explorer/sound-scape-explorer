@@ -29,7 +29,7 @@ const {
   intervalDetailsRef,
 } = useDetails();
 
-const {selectAudioBlock} = useAudioFile();
+const {select} = useAudioFile();
 const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
 
 const dateEndRef = computed<Dayjs | null>(() => {
@@ -50,7 +50,7 @@ watch(intervalDetailsRef, () => {
   }
 
   const blockDetails = intervalDetailsRef.value[0];
-  selectAudioBlock(blockDetails);
+  select(blockDetails);
 });
 </script>
 
@@ -78,11 +78,12 @@ watch(intervalDetailsRef, () => {
             placement="bottom"
             trigger="hover"
           >
+            <!--suppress VueUnrecognizedSlot -->
             <template #trigger>
               <NButton
                 class="zoom"
                 size="small"
-                @click="() => selectAudioBlock(blockDetails)"
+                @click="() => select(blockDetails)"
               >
                 <template #icon>
                   <NIcon>

@@ -18,7 +18,7 @@ import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/audio-component';
 import {useAudioDownload} from 'src/draggables/audio/audio-download';
-import {audioBlockRef, audioDurationRef} from 'src/draggables/audio/audio-file';
+import {useAudioFile} from 'src/draggables/audio/audio-file';
 import {useAudioLock} from 'src/draggables/audio/audio-lock';
 import {useAudioRate} from 'src/draggables/audio/audio-rate';
 import {useAudioTransport} from 'src/draggables/audio/audio-transport';
@@ -40,6 +40,7 @@ const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {rate, readable} = useAudioRate();
 const {downloadAudio} = useAudioDownload();
 const {lock, unlock} = useAudioLock();
+const {block, duration} = useAudioFile();
 </script>
 
 <template>
@@ -117,7 +118,7 @@ const {lock, unlock} = useAudioLock();
               File
             </NTag>
 
-            {{ audioBlockRef.value?.file }}
+            {{ block?.file }}
           </NGi>
         </NGrid>
 
@@ -172,7 +173,7 @@ const {lock, unlock} = useAudioLock();
               Audio duration
             </NTag>
 
-            {{ audioDurationRef.value.toFixed(2) }} seconds
+            {{ duration.toFixed(2) }} seconds
           </NGi>
           <NGi>
             <NTag
