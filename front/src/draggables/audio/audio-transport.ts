@@ -1,5 +1,5 @@
 import {waveSurferRef} from 'src/draggables/audio/wavesurfer';
-import {reactive} from 'vue';
+import {reactive, ref} from 'vue';
 
 interface AudioIsPlayingRef {
   value: boolean;
@@ -9,6 +9,8 @@ export const audioIsPlayingRef = reactive<AudioIsPlayingRef>({
   value: false,
 });
 
+const isPlaying = ref<boolean>(false);
+
 export function useAudioTransport() {
   const togglePlayPause = () => {
     if (waveSurferRef.value === null) {
@@ -16,7 +18,7 @@ export function useAudioTransport() {
     }
 
     waveSurferRef.value.playPause();
-    audioIsPlayingRef.value = waveSurferRef.value.isPlaying();
+    isPlaying.value = waveSurferRef.value.isPlaying();
   };
 
   const seek = () => {
@@ -38,10 +40,11 @@ export function useAudioTransport() {
 
     waveSurferRef.value.seekTo(0);
     waveSurferRef.value.pause();
-    audioIsPlayingRef.value = false;
+    isPlaying.value = false;
   };
 
   return {
+    isPlaying: isPlaying,
     togglePlayPause: togglePlayPause,
     seek: seek,
     stop: stop,

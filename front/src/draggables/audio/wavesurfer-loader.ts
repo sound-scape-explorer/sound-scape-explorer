@@ -1,18 +1,16 @@
 import {useBandSelection} from 'src/composables/band-selection';
 import {useAudioContext} from 'src/draggables/audio/audio-context';
-import {
-  audioIsPlayingRef,
-  useAudioTransport,
-} from 'src/draggables/audio/audio-transport';
+import {useAudioTransport} from 'src/draggables/audio/audio-transport';
 import {waveSurferRef} from 'src/draggables/audio/wavesurfer';
 
 export function useWavesurferLoader() {
   const {band} = useBandSelection();
   const {seek, stop} = useAudioTransport();
   const {context} = useAudioContext();
+  const {isPlaying} = useAudioTransport();
 
   const handleAudioEnd = () => {
-    audioIsPlayingRef.value = false;
+    isPlaying.value = false;
   };
 
   const prepareAudio = () => {

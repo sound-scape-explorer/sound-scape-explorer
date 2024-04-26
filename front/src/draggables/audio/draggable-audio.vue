@@ -19,15 +19,8 @@ import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/audio-component';
 import {useAudioDownload} from 'src/draggables/audio/audio-download';
 import {audioBlockRef, audioDurationRef} from 'src/draggables/audio/audio-file';
-import {
-  audioRateHumanReadableRef,
-  audioRateRef,
-  useAudioRate,
-} from 'src/draggables/audio/audio-rate';
-import {
-  audioIsPlayingRef,
-  useAudioTransport,
-} from 'src/draggables/audio/audio-transport';
+import {useAudioRate} from 'src/draggables/audio/audio-rate';
+import {useAudioTransport} from 'src/draggables/audio/audio-transport';
 import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
 import AudioButton from 'src/draggables/audio/draggable-audio-button.vue';
 import {useWavesurfer} from 'src/draggables/audio/wavesurfer';
@@ -42,12 +35,8 @@ const {intervalDateRef} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {clickedIndex, hasClicked} = useScatterClick();
 const {increaseVolume, decreaseVolume} = useWavesurfer();
-const {togglePlayPause, stop} = useAudioTransport();
-
-useAudioRate({
-  togglePlayPause: togglePlayPause,
-});
-
+const {isPlaying, togglePlayPause, stop} = useAudioTransport();
+const {rate, readable} = useAudioRate();
 const {downloadAudio} = useAudioDownload();
 </script>
 
@@ -63,11 +52,11 @@ const {downloadAudio} = useAudioDownload();
       <div class="player">
         <div class="volume buttons">
           <AudioButton
-            :alt="audioIsPlayingRef.value ? 'Pause' : 'Play'"
+            :alt="isPlaying ? 'Pause' : 'Play'"
             :callback="togglePlayPause"
           >
-            <PauseOutline v-if="audioIsPlayingRef.value" />
-            <PlayOutline v-if="!audioIsPlayingRef.value" />
+            <PauseOutline v-if="isPlaying" />
+            <PlayOutline v-if="!isPlaying" />
           </AudioButton>
 
           <AudioButton
@@ -202,7 +191,7 @@ const {downloadAudio} = useAudioDownload();
               Speed %
             </NTag>
 
-            {{ audioRateHumanReadableRef.value.percentage }}
+            {{ readable.percentage }}
           </NGi>
           <NGi>
             <NTag
@@ -212,7 +201,7 @@ const {downloadAudio} = useAudioDownload();
               Semitones
             </NTag>
 
-            {{ audioRateHumanReadableRef.value.semitones }}
+            {{ readable.semitones }}
           </NGi>
           <NGi v-if="settings !== null">
             <NTag
@@ -222,13 +211,13 @@ const {downloadAudio} = useAudioDownload();
               Hertz
             </NTag>
 
-            {{ audioRateHumanReadableRef.value.hertz }}
+            {{ readable.hertz }}
           </NGi>
         </NGrid>
 
         <div>
           <NSlider
-            v-model:value="audioRateRef.value"
+            v-model:value="rate"
             :max="PLAYBACK_RATE.max"
             :min="PLAYBACK_RATE.min"
             :step="PLAYBACK_RATE.step"
