@@ -19,6 +19,7 @@ import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/audio-component';
 import {useAudioDownload} from 'src/draggables/audio/audio-download';
 import {audioBlockRef, audioDurationRef} from 'src/draggables/audio/audio-file';
+import {useAudioLock} from 'src/draggables/audio/audio-lock';
 import {useAudioRate} from 'src/draggables/audio/audio-rate';
 import {useAudioTransport} from 'src/draggables/audio/audio-transport';
 import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
@@ -38,6 +39,7 @@ const {increaseVolume, decreaseVolume} = useWavesurfer();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {rate, readable} = useAudioRate();
 const {downloadAudio} = useAudioDownload();
+const {lock, unlock} = useAudioLock();
 </script>
 
 <template>
@@ -221,6 +223,8 @@ const {downloadAudio} = useAudioDownload();
             :max="PLAYBACK_RATE.max"
             :min="PLAYBACK_RATE.min"
             :step="PLAYBACK_RATE.step"
+            @mousedown="lock"
+            @mouseup="unlock"
           />
         </div>
 
