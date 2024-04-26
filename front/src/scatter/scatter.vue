@@ -113,5 +113,6 @@ watchEffect(render);
   width: 100vw;
   height: 100vh;
   pointer-events: var(--pointer-events);
+  overflow-y: hidden;
 }
 </style>
