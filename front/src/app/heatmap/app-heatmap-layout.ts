@@ -1,30 +1,22 @@
 import {type Layout} from 'plotly.js-dist-min';
+import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {settingsStore} from 'src/draggables/settings/settings-store';
-import {reactive} from 'vue';
 
-import {heatmapHeightRef, heatmapWidthRef} from './useHeatmapSize';
+export function useAppHeatmapLayout() {
+  const {width, height, fontSize} = useAppHeatmapSize();
 
-interface PlotlyFontSizeRef {
-  value: string;
-}
-
-export const plotlyFontSizeRef = reactive<PlotlyFontSizeRef>({
-  value: '12',
-});
-
-export function useHeatmapLayout() {
-  const generateLayout = (title: string): Partial<Layout> => {
+  const createLayout = (title: string): Partial<Layout> => {
+    // noinspection SpellCheckingInspection
     const layout: Partial<Layout> = {
       title: title,
       paper_bgcolor: settingsStore.plotBackground,
       plot_bgcolor: settingsStore.plotBackground,
       clickmode: 'none',
       showlegend: false,
-      // TODO: Make height and width dynamic, changeable by the user
-      width: heatmapWidthRef.value,
-      height: heatmapHeightRef.value,
+      width: width.value,
+      height: height.value,
       font: {
-        size: Number(plotlyFontSizeRef.value),
+        size: Number(fontSize.value),
       },
       margin: {
         l: 100,
@@ -55,6 +47,6 @@ export function useHeatmapLayout() {
   };
 
   return {
-    generateLayout: generateLayout,
+    createLayout: createLayout,
   };
 }

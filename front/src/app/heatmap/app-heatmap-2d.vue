@@ -1,21 +1,25 @@
 <script lang="ts" setup="">
 import Plotly, {type Config, type Layout} from 'plotly.js-dist-min';
+import {
+  type HeatmapData,
+  useAppHeatmapData,
+} from 'src/app/heatmap/app-heatmap-data';
+import {useAppHeatmapLayout} from 'src/app/heatmap/app-heatmap-layout';
+import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {usePlotConfig} from 'src/composables/plot-config';
 import {digestedRef} from 'src/draggables/digested/digested';
 import {settingsStore} from 'src/draggables/settings/settings-store';
-import {type HeatmapData, useHeatmapData} from 'src/hooks/useHeatmapData';
-import {useHeatmapLayout} from 'src/hooks/useHeatmapLayout';
-import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {ref, watch} from 'vue';
 
 /**
  * Props
  */
+
 interface Props {
   title?: string;
   x: string[];
   y: string[];
-  values: {[key: string]: number[][]};
+  values: (number | null)[][];
   colorscale: string;
   range: {min: number | undefined; max: number | undefined};
 }
@@ -26,8 +30,9 @@ const props = defineProps<Props>();
  * State
  */
 
-const {generateLayout} = useHeatmapLayout();
-const {generateData} = useHeatmapData();
+const {width, height} = useAppHeatmapSize();
+const {createLayout} = useAppHeatmapLayout();
+const {buildData} = useAppHeatmapData();
 const {generateConfig} = usePlotConfig(
   digestedRef.value?.digester.name ?? 'heatmap',
 );
@@ -59,7 +64,7 @@ const render = async () => {
 };
 
 const refresh = () => {
-  const data = generateData({
+  const data = buildData({
     colorscale: props.colorscale,
     x: props.x.map((x) => x.trim()),
     y: props.y.map((y) => y.trim()),
@@ -69,7 +74,7 @@ const refresh = () => {
   });
 
   dataRef.value = [data];
-  layoutRef.value = generateLayout(props.title ?? '');
+  layoutRef.value = createLayout(props.title ?? '');
   configRef.value = generateConfig();
 };
 
@@ -80,7 +85,7 @@ const refresh = () => {
 refresh();
 watch([divRef, dataRef, layoutRef], render);
 watch(props, refresh);
-watch([heatmapWidthRef, heatmapHeightRef, settingsStore], refresh);
+watch([width, height, settingsStore], refresh);
 </script>
 
 <template>

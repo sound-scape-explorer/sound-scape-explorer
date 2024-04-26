@@ -1,6 +1,6 @@
 import {useStorageReader} from 'src/composables/storage-reader';
 import {useStorageReady} from 'src/composables/storage-ready';
-import {ref, watch} from 'vue';
+import {onMounted, ref} from 'vue';
 
 export interface Digester {
   index: number;
@@ -30,7 +30,7 @@ export function useStorageDigesters() {
     });
   };
 
-  watch(isReady, readAll);
+  onMounted(readAll);
 
   return {
     digesters: digesters,

@@ -2,21 +2,20 @@
 import {DownloadOutline, RepeatOutline, ResizeOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
 import AppDraggable from 'src/app/app-draggable.vue';
-import AppHeatmap from 'src/app/app-heatmap.vue';
-import AppHeatmap2d from 'src/app/app-heatmap-2d.vue';
+import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
+import AppHeatmap2d from 'src/app/heatmap/app-heatmap-2d.vue';
+import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {Csv} from 'src/common/csv';
 import {DigesterHeatmap} from 'src/common/digester-heatmap';
 import {HeatmapColorScale} from 'src/common/heatmap-color-scale';
 import {type HeatmapRange, heatmapRanges} from 'src/common/heatmap-range';
 import {useStorageDigesters} from 'src/composables/storage-digesters';
 import {useStorageLabels} from 'src/composables/storage-labels';
-import {PLOTLY_SIZE} from 'src/constants';
 import {
   type Digested,
   digestedRef,
   useDigested,
 } from 'src/draggables/digested/digested';
-import {heatmapHeightRef, heatmapWidthRef} from 'src/hooks/useHeatmapSize';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
@@ -26,6 +25,8 @@ const {labelsProperties, labelsSets} = useStorageLabels();
 
 const labelSelectedARef = ref<string | null>(null);
 const labelSelectedBRef = ref<string | null>(null);
+
+const {resize1by1, resize4by3, resize16by10, resize16by9} = useAppHeatmapSize();
 
 const labelPropertiesOptionsRef = computed(() => {
   if (labelsProperties.value === null) {
@@ -204,26 +205,6 @@ const rangesOptionsRef = computed(() => {
     };
   });
 });
-
-const resize1by1 = () => {
-  heatmapWidthRef.value = PLOTLY_SIZE;
-  heatmapHeightRef.value = PLOTLY_SIZE;
-};
-
-const resize4by3 = () => {
-  heatmapWidthRef.value = PLOTLY_SIZE * (4 / 3);
-  heatmapHeightRef.value = PLOTLY_SIZE;
-};
-
-const resize16by10 = () => {
-  heatmapWidthRef.value = PLOTLY_SIZE * (16 / 10);
-  heatmapHeightRef.value = PLOTLY_SIZE;
-};
-
-const resize16by9 = () => {
-  heatmapWidthRef.value = PLOTLY_SIZE * (16 / 9);
-  heatmapHeightRef.value = PLOTLY_SIZE;
-};
 </script>
 
 <template>
@@ -357,7 +338,11 @@ const resize16by9 = () => {
       </div>
 
       <AppHeatmap
-        v-if="!digestedRef.value?.isPairing"
+        v-if="
+          !digestedRef.value?.isPairing &&
+          digesterSelectedRef &&
+          (labelSelectedARef || labelSelectedBRef)
+        "
         :colorscale="colorScaleRef"
         :labels="xRef"
         :range="ranges[rangeIndexRef]"
@@ -365,9 +350,13 @@ const resize16by9 = () => {
         :values="valuesRef"
       />
 
-      <!--    TODO: Fix values    -->
       <AppHeatmap2d
-        v-if="digestedRef.value?.isPairing"
+        v-if="
+          digestedRef.value?.isPairing &&
+          digesterSelectedRef &&
+          labelSelectedARef &&
+          labelSelectedBRef
+        "
         :colorscale="colorScaleRef"
         :range="ranges[rangeIndexRef]"
         :title="titleRef"

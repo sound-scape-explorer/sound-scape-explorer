@@ -1,4 +1,5 @@
 import {type Config} from 'plotly.js-dist-min';
+import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {createPlotlyExportPngButtonDigested} from 'src/utils/create-plotly-export-png-button-digested';
 import {
   createPlotlyExportSvgButton,
@@ -7,17 +8,17 @@ import {
 import {computed} from 'vue';
 
 import {EXPORT_FILENAME} from '../constants';
-import {heatmapHeightRef, heatmapWidthRef} from '../hooks/useHeatmapSize';
+
+const scale = 4;
 
 export function usePlotConfig(name: string) {
-  const scale = 4;
-
+  const {width, height} = useAppHeatmapSize();
   const exportName = computed<string>(() => `${EXPORT_FILENAME}-${name}`);
 
   const options = computed<PlotlyExportOptions>(() => ({
     filename: exportName.value,
-    width: heatmapWidthRef.value,
-    height: heatmapHeightRef.value,
+    width: width.value,
+    height: height.value,
     scale: scale,
   }));
 

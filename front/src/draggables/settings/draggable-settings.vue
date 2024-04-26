@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
 import AppDraggable from 'src/app/app-draggable.vue';
+import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
@@ -10,12 +11,12 @@ import {
   waveSurferShowDecibelsRef,
 } from 'src/draggables/audio/wavesurfer';
 import {settingsStore} from 'src/draggables/settings/settings-store';
-import {plotlyFontSizeRef} from 'src/hooks/useHeatmapLayout';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
 const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
+const {fontSize} = useAppHeatmapSize();
 
 const spectrogramColorMapsOptionsRef = computed(() => {
   return convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS);
@@ -145,7 +146,7 @@ const plotBackgroundOptionsRef = computed(() => {
           Plotly font size
         </NTag>
         <NInput
-          v-model:value="plotlyFontSizeRef.value"
+          v-model:value="fontSize"
           size="tiny"
           type="number"
           @inputBlur="() => unlock()"

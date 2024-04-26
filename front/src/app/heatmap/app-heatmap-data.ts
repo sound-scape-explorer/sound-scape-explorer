@@ -13,8 +13,8 @@ interface GenerateDataProps {
   zmax: number | undefined;
 }
 
-export function useHeatmapData() {
-  const generateData = ({
+export function useAppHeatmapData() {
+  const buildData = ({
     colorscale,
     x,
     y,
@@ -41,6 +41,6 @@ export function useHeatmapData() {
   };
 
   return {
-    generateData: generateData,
+    buildData: buildData,
   };
 }
