@@ -1,17 +1,11 @@
-import {reactive} from 'vue';
+import {ref} from 'vue';
 
-interface ScatterLoadingRef {
-  value: boolean;
+const isLoading = ref<boolean>(false);
+const loadingText = ref<string>('');
+
+export function useScatterLoading() {
+  return {
+    isLoading: isLoading,
+    loadingText: loadingText,
+  };
 }
-
-export const scatterLoadingRef = reactive<ScatterLoadingRef>({
-  value: false,
-});
-
-interface ScatterLoadingTextRef {
-  value: string;
-}
-
-export const scatterLoadingTextRef = reactive<ScatterLoadingTextRef>({
-  value: '',
-});

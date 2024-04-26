@@ -21,15 +21,18 @@ import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {timeStore} from 'src/draggables/time/time-store';
 import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
-import {scatterLoadingRef} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 
 const {settings} = useStorageSettings();
 const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
 const {filterByTime} = useScatterFilterTime();
+const {isLoading} = useScatterLoading();
+
+// todo: refactor this gigantic file
 
 const uiDisabled: ComputedRef<boolean> = computed(
-  () => scatterLoadingRef.value || timeStore.isAllSelected,
+  () => isLoading.value || timeStore.isAllSelected,
 );
 
 const dateStartRef = computed<Dayjs>(() => {
@@ -139,7 +142,7 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
     <div class="grid">
       <NSwitch
         v-model:value="timeStore.isAllSelected"
-        :disabled="scatterLoadingRef.value"
+        :disabled="isLoading"
         class="toggle"
       >
         <template #checked> all</template>

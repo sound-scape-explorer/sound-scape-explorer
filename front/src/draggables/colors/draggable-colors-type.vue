@@ -3,12 +3,13 @@ import {NSelect, NTooltip} from 'naive-ui';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import type {ColorType} from 'src/draggables/colors/colors-store';
 import {colorsStore} from 'src/draggables/colors/colors-store';
-import {scatterLoadingRef} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
 const {labelsProperties} = useStorageLabels();
+const {isLoading} = useScatterLoading();
 
 const optionsRef = computed<string[]>(() => {
   const defaultOptions: ColorType[] = [
@@ -43,7 +44,7 @@ const naiveOptions = computed(() => {
     <template #trigger>
       <NSelect
         v-model:value="colorsStore.colorType"
-        :disabled="scatterLoadingRef.value"
+        :disabled="isLoading"
         :options="naiveOptions"
         placeholder="Color type..."
         size="small"

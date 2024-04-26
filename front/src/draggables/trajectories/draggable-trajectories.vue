@@ -10,7 +10,7 @@ import {useTrajectoriesSelection} from 'src/composables/trajectories-selection';
 import {useTrajectoriesStorage} from 'src/composables/trajectories-storage';
 import {EXPORT_FILENAME} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
-import {scatterLoadingRef} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
@@ -20,6 +20,7 @@ const {trajectories} = useTrajectoriesStorage();
 const {select} = useTrajectoriesSelection();
 const {convertTimestampToIsoDate} = useDate();
 const {traceds, isFused} = useTrajectoriesData();
+const {isLoading} = useScatterLoading();
 
 const optionsRef = computed(() => {
   if (trajectories.value === null) {
@@ -32,7 +33,7 @@ const optionsRef = computed(() => {
 
 const valueRef = ref([]);
 const fuseReadyRef = computed<boolean>(() => {
-  if (scatterLoadingRef.value === true) {
+  if (isLoading.value === true) {
     return false;
   }
 
@@ -97,6 +98,7 @@ const handleExportClick = () => {
         placement="top-start"
         trigger="hover"
       >
+        <!--suppress VueUnrecognizedSlot -->
         <template #trigger>
           <NSwitch
             v-model:value="isFused"
@@ -113,7 +115,7 @@ const handleExportClick = () => {
         v-model:value="valueRef"
         :cascade="false"
         :clear-filter-after-select="false"
-        :disabled="scatterLoadingRef.value || isFused"
+        :disabled="isLoading || isFused"
         :filterable="false"
         :options="optionsRef"
         :show-path="false"

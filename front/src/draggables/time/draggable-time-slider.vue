@@ -9,13 +9,17 @@ import {useStorageRanges} from 'src/composables/storage-ranges';
 import {SLIDER_LIMITS} from 'src/constants';
 import {timeStore} from 'src/draggables/time/time-store';
 import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
-import {scatterLoadingRef} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {mapRange} from 'src/utils/map-range';
 import {computed, ref, watch} from 'vue';
+
+// todo: refactor me
 
 const {ranges} = useStorageRanges();
 const {reducer} = useReducerSelection();
 const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+const {isLoading} = useScatterLoading();
+
 const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
@@ -154,7 +158,7 @@ watch(timeStore, () => filterByTime());
 <template>
   <div class="container">
     <div
-      v-if="!scatterLoadingRef.value"
+      v-if="!isLoading"
       class="layer"
     >
       <NSlider
@@ -172,7 +176,7 @@ watch(timeStore, () => filterByTime());
     </div>
 
     <div
-      v-if="!scatterLoadingRef.value"
+      v-if="!isLoading"
       class="layer"
     >
       <div
@@ -188,7 +192,7 @@ watch(timeStore, () => filterByTime());
     </div>
 
     <div
-      v-if="!scatterLoadingRef.value"
+      v-if="!isLoading"
       class="layer zoom"
     >
       <AppButton

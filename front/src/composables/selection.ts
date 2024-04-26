@@ -16,10 +16,7 @@ import {useLabelSelection} from 'src/draggables/label/label-selection';
 import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {useScatterFilterMeta} from 'src/scatter/scatter-filter-meta';
 import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
-import {
-  scatterLoadingRef,
-  scatterLoadingTextRef,
-} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {ref, watchEffect} from 'vue';
 
@@ -54,9 +51,11 @@ export function useSelection() {
   const {extractor, reset: resetExtractor} = useSelectExtractor();
   const {reducer, reset: resetReducer} = useReducerSelection();
 
+  const {isLoading, loadingText} = useScatterLoading();
+
   const unloadSelection = () => {
-    scatterLoadingTextRef.value = 'Unloading selection...';
-    scatterLoadingRef.value = true;
+    loadingText.value = 'Unloading selection...';
+    isLoading.value = true;
 
     resetBand();
     resetIntegration();
@@ -79,7 +78,7 @@ export function useSelection() {
     resetFilterByMeta();
     resetFilterByTime();
 
-    scatterLoadingRef.value = false;
+    isLoading.value = false;
     hasSelection.value = false;
   };
 
@@ -94,31 +93,31 @@ export function useSelection() {
       return;
     }
     hasSelection.value = true;
-    scatterLoadingRef.value = true;
+    isLoading.value = true;
     console.log('selection');
 
-    scatterLoadingTextRef.value = 'Reading labels';
+    loadingText.value = 'Reading labels';
     await readLabels();
 
-    scatterLoadingTextRef.value = 'Reading features';
+    loadingText.value = 'Reading features';
     await readAggregatedFeatures();
 
-    scatterLoadingTextRef.value = 'Reading indicators';
+    loadingText.value = 'Reading indicators';
     await readAggregatedIndicators();
 
-    scatterLoadingTextRef.value = 'Reading timestamps';
+    loadingText.value = 'Reading timestamps';
     await readAggregatedTimestamps();
 
-    scatterLoadingTextRef.value = 'Reading sites';
+    loadingText.value = 'Reading sites';
     await readAggregatedSites();
 
-    scatterLoadingTextRef.value = 'Reading intervals';
+    loadingText.value = 'Reading intervals';
     await readAggregatedIntervalDetails();
 
-    scatterLoadingTextRef.value = 'Reading labels';
+    loadingText.value = 'Reading labels';
     await readAggregatedLabels();
 
-    scatterLoadingTextRef.value = 'Reading reduced features';
+    loadingText.value = 'Reading reduced features';
     await readReducedFeatures();
 
     buildSelection();
@@ -129,7 +128,7 @@ export function useSelection() {
 
     renderTraces();
 
-    scatterLoadingRef.value = false;
+    isLoading.value = false;
     store.selection = false;
   };
 

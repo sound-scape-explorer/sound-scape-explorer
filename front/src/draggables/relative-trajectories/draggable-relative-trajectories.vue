@@ -6,13 +6,14 @@ import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
 import {useStorageRelativeTrajectories} from 'src/composables/storage-relative-trajectories';
 import {EXPORT_FILENAME} from 'src/constants';
-import {scatterLoadingRef} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {computed, ref} from 'vue';
 
 const {selectRelativeTrajectories, relativeTrajectories} =
   useStorageRelativeTrajectories();
 
 const valueRef = ref([]);
+const {isLoading} = useScatterLoading();
 
 const optionsRef = computed(() => {
   if (relativeTrajectories.value === null) {
@@ -102,7 +103,7 @@ const handleExportClick = () => {
         v-model:value="valueRef"
         :cascade="false"
         :clear-filter-after-select="false"
-        :disabled="scatterLoadingRef.value"
+        :disabled="isLoading"
         :filterable="false"
         :options="optionsRef"
         :show-path="false"

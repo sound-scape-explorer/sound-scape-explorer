@@ -50,6 +50,7 @@ export const cyclingScaleRef = computed<Scale>(() => {
 export const dayColor = chroma('orange');
 export const nightColor = chroma('blue');
 
+// todo: refactor me
 export function useScatterColorScale() {
   const {files} = useStorageFiles();
   const {labelsSets, labelsPropertiesAsColorTypes} = useStorageLabels();

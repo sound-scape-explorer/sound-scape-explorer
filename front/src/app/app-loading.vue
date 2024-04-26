@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import {NAlert} from 'naive-ui';
 import AppModal from 'src/app/app-modal.vue';
-import {
-  scatterLoadingRef,
-  scatterLoadingTextRef,
-} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/scatter/scatter-loading';
+
+const {isLoading, loadingText} = useScatterLoading();
 </script>
 
 <template>
   <AppModal
-    v-if="scatterLoadingRef.value"
+    v-if="isLoading"
     :is-wait="true"
   >
     <NAlert
@@ -17,7 +16,7 @@ import {
       type="info"
     >
       <div>Loading...</div>
-      <span>{{ scatterLoadingTextRef.value }}</span>
+      <span>{{ loadingText }}</span>
     </NAlert>
   </AppModal>
 </template>

@@ -2,7 +2,7 @@
 import type {InputNumberProps} from 'naive-ui';
 import {NInputNumber, NTooltip} from 'naive-ui';
 import {alphaHighRef, alphaLowRef} from 'src/scatter/scatter-color-scale';
-import {scatterLoadingRef} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/scatter/scatter-loading';
 
 type InputNumberThemeOverrides = NonNullable<
   InputNumberProps['themeOverrides']
@@ -15,6 +15,8 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
     },
   },
 };
+
+const {isLoading} = useScatterLoading();
 </script>
 
 <template>
@@ -25,7 +27,7 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
     <template #trigger>
       <NInputNumber
         v-model:value="alphaLowRef.value"
-        :disabled="scatterLoadingRef.value"
+        :disabled="isLoading"
         :theme-overrides="inputNumberThemeOverrides"
         class="input"
         max="1"
@@ -44,7 +46,7 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
     <template #trigger>
       <NInputNumber
         v-model:value="alphaHighRef.value"
-        :disabled="scatterLoadingRef.value"
+        :disabled="isLoading"
         :theme-overrides="inputNumberThemeOverrides"
         class="input"
         max="1"
