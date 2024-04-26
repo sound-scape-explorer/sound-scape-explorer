@@ -81,8 +81,7 @@ const render = async () => {
   if (
     isFirstRenderedRef.value === false ||
     divRef.value === null ||
-    layoutRef.value === null ||
-    scatterTracesRef.value === null
+    layoutRef.value === null
   ) {
     return;
   }
