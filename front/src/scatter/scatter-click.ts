@@ -1,23 +1,17 @@
 import {useDraggables} from 'src/composables/draggables';
 import {useAudioLoading} from 'src/draggables/audio/audio-loading';
 import {settingsStore} from 'src/draggables/settings/settings-store';
-import {reactive} from 'vue';
+import {computed, ref} from 'vue';
 
-interface ClickedRef {
-  value: number | null;
-}
-
-// INFO: Interval index
-export const clickedRef = reactive<ClickedRef>({
-  value: null,
-});
+const clickedIndex = ref<number | null>(null);
+const hasClicked = computed<boolean>(() => clickedIndex.value !== null);
 
 export function useScatterClick() {
   const {verifyAudioLoading} = useAudioLoading();
   const {store} = useDraggables();
 
   const handleClick = (index: number | null) => {
-    if (clickedRef.value === index) {
+    if (clickedIndex.value === index) {
       return;
     }
 
@@ -25,7 +19,7 @@ export function useScatterClick() {
       return;
     }
 
-    clickedRef.value = index;
+    clickedIndex.value = index;
 
     if (index === null) {
       return;
@@ -39,6 +33,8 @@ export function useScatterClick() {
   };
 
   return {
+    clickedIndex: clickedIndex,
+    hasClicked: hasClicked,
     handleClick: handleClick,
   };
 }

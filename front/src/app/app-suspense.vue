@@ -1,10 +1,12 @@
 <script lang="ts" setup="">
-import {clickedRef} from 'src/scatter/scatter-click';
+import {useScatterClick} from 'src/scatter/scatter-click';
+
+const {hasClicked} = useScatterClick();
 </script>
 
 <template>
   <div
-    v-if="clickedRef.value === null"
+    v-if="!hasClicked"
     class="suspense"
   >
     Please select a point.

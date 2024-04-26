@@ -12,7 +12,7 @@ import {
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageSettings} from 'src/composables/storage-settings';
-import {clickedRef} from 'src/scatter/scatter-click';
+import {useScatterClick} from 'src/scatter/scatter-click';
 import {ref, watchEffect} from 'vue';
 
 export function useDetails() {
@@ -23,6 +23,7 @@ export function useDetails() {
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {clickedIndex} = useScatterClick();
 
   const intervalDateRef = ref<Dayjs | null>(null);
   const intervalLabelsRef = ref<string[] | null>(null);
@@ -32,7 +33,7 @@ export function useDetails() {
   // TODO: Performance can be improved (react on clickedRef change only)
   watchEffect(async () => {
     if (
-      clickedRef.value === null ||
+      clickedIndex.value === null ||
       files.value === null ||
       settings.value === null ||
       aggregatedSites.value === null ||
@@ -43,7 +44,7 @@ export function useDetails() {
       return;
     }
 
-    const intervalIndex = clickedRef.value;
+    const intervalIndex = clickedIndex.value;
     const timestamp = aggregatedTimestamps.value[intervalIndex];
 
     intervalDateRef.value = convertTimestampToDate(timestamp);

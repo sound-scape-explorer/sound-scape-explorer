@@ -31,12 +31,13 @@ import {
 import AudioButton from 'src/draggables/audio/draggable-audio-button.vue';
 import {useWavesurfer} from 'src/draggables/audio/wavesurfer';
 import {useDetails} from 'src/draggables/details/details';
-import {clickedRef} from 'src/scatter/scatter-click';
+import {useScatterClick} from 'src/scatter/scatter-click';
 
 const {settings} = useStorageSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
 const {intervalDateRef} = useDetails();
 const {convertDateToIsoDate} = useDate();
+const {clickedIndex, hasClicked} = useScatterClick();
 
 const {
   waveformContainerRef,
@@ -138,7 +139,7 @@ const {downloadAudio} = useAudioDownload();
       </NGrid>
 
       <NGrid
-        v-if="aggregatedSites !== null && clickedRef.value !== null"
+        v-if="aggregatedSites !== null && clickedIndex !== null"
         :cols="1"
         class="grid"
         x-gap="12"
@@ -151,7 +152,7 @@ const {downloadAudio} = useAudioDownload();
             Site
           </NTag>
 
-          {{ aggregatedSites[clickedRef.value].site }}
+          {{ aggregatedSites[clickedIndex].site }}
         </NGi>
         <NGi>
           <NTag
@@ -178,7 +179,7 @@ const {downloadAudio} = useAudioDownload();
             Interval Index
           </NTag>
 
-          {{ clickedRef.value }}
+          {{ clickedIndex }}
         </NGi>
         <NGi>
           <NTag
