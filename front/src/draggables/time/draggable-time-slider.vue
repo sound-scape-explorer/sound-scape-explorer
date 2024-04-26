@@ -5,21 +5,22 @@ import {NSlider} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import {useReducerSelection} from 'src/composables/reducer-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
+import {useStorageRanges} from 'src/composables/storage-ranges';
 import {SLIDER_LIMITS} from 'src/constants';
 import {timeStore} from 'src/draggables/time/time-store';
-import {rangesRef} from 'src/hooks/storage-ranges';
 import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
 import {scatterLoadingRef} from 'src/scatter/scatter-loading';
 import {mapRange} from 'src/utils/map-range';
 import {computed, ref, watch} from 'vue';
 
+const {ranges} = useStorageRanges();
 const {reducer} = useReducerSelection();
 const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
 
 const sliders = computed<Slider[]>(() => {
-  if (rangesRef.value === null || reducer.value === null) {
+  if (ranges.value === null || reducer.value === null) {
     return [];
   }
 
@@ -36,7 +37,7 @@ const sliders = computed<Slider[]>(() => {
 
   const sliders: Slider[] = [];
 
-  for (const range of rangesRef.value) {
+  for (const range of ranges.value) {
     const timeStart = dayjs(range.start).unix();
     const timeEnd = dayjs(range.end).unix();
     const timeBetween = Math.floor(timeStart + 0.5 * (timeEnd - timeStart));

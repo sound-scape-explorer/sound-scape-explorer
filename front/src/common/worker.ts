@@ -17,11 +17,11 @@ import type {Autocluster} from 'src/composables/storage-autoclusters';
 import type {Digester} from 'src/composables/storage-digesters';
 import type {File as FileConfig} from 'src/composables/storage-files';
 import type {Labels} from 'src/composables/storage-labels';
+import type {Range} from 'src/composables/storage-ranges';
 import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
 import type {RelativeTrajectory} from 'src/composables/storage-relative-trajectories';
 import type {Site} from 'src/composables/storage-sites';
 import type {Digested} from 'src/draggables/digested/digested';
-import type {Range} from 'src/hooks/storage-ranges';
 import type {Trajectory} from 'src/hooks/storage-trajectories';
 import type {
   TracedData,

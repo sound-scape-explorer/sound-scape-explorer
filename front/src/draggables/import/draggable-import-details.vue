@@ -8,9 +8,9 @@ import {useReducerStorage} from 'src/composables/reducer-storage';
 import {useStorageAutoclusters} from 'src/composables/storage-autoclusters';
 import {useStorageDigesters} from 'src/composables/storage-digesters';
 import {useStorageFiles} from 'src/composables/storage-files';
+import {useStorageRanges} from 'src/composables/storage-ranges';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {useStorageVersion} from 'src/composables/storage-version';
-import {rangesRef} from 'src/hooks/storage-ranges';
 import {trajectoriesRef} from 'src/hooks/storage-trajectories';
 import {computed} from 'vue';
 
@@ -23,6 +23,7 @@ const {bands} = useBandStorage();
 const {integrations} = useIntegrationStorage();
 const {extractors} = useExtractorStorage();
 const {reducers} = useReducerStorage();
+const {ranges} = useStorageRanges();
 const {autoclusters} = useStorageAutoclusters();
 
 const separator = ', ';
@@ -107,7 +108,7 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'Ranges',
-        value: rangesRef.value?.map((r) => r.name).join(separator) ?? '',
+        value: ranges?.map((r) => r.name).join(separator) ?? '',
       },
       {
         tag: 'Trajectories',
