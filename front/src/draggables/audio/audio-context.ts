@@ -8,7 +8,6 @@ export function useAudioContext() {
   const {settings} = useStorageSettings();
 
   const create = () => {
-    console.log('audio-context: call');
     if (settings.value === null) {
       return;
     }
@@ -17,7 +16,6 @@ export function useAudioContext() {
       return;
     }
 
-    console.log('audio-context: run');
     isCreated = true;
 
     context.value = new AudioContext({
