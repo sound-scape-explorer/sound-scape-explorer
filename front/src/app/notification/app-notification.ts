@@ -1,5 +1,5 @@
 import type {NotificationType} from 'naive-ui';
-import {appNotificationStore} from 'src/app/app-notification/app-notification-store';
+import {appNotificationStore} from 'src/app/notification/app-notification-store';
 
 export function useAppNotification() {
   function notify(

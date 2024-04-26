@@ -46,33 +46,33 @@ const toggleColumns = () => {
       class="container"
     >
       <div class="button search">
-        <n-tooltip placement="left">
+        <NTooltip placement="left">
           <template #trigger>
-            <n-button
+            <NButton
               size="tiny"
               @click="toggleZoom"
             >
-              <n-icon>
-                <search-outline />
-              </n-icon>
-            </n-button>
+              <NIcon>
+                <SearchOutline />
+              </NIcon>
+            </NButton>
           </template>
           <span>Zoom</span>
-        </n-tooltip>
+        </NTooltip>
       </div>
 
       <div class="button columns">
-        <n-tooltip placement="left">
+        <NTooltip placement="left">
           <template #trigger>
-            <n-button
+            <NButton
               size="tiny"
               @click="toggleColumns"
             >
-              <n-icon>{{ labelColumnsRef.value }}</n-icon>
-            </n-button>
+              <NIcon>{{ labelColumnsRef.value }}</NIcon>
+            </NButton>
           </template>
           <span>Columns</span>
-        </n-tooltip>
+        </NTooltip>
       </div>
 
       <LabelItems />

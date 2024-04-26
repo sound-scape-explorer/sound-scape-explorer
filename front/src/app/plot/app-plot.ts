@@ -1,6 +1,6 @@
 import type {Config, Data, Layout} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
-import type {AppPlotProps} from 'src/app/app-plot/app-plot.vue';
+import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {usePlotConfig} from 'src/composables/plot-config';
 import {PLOTLY_SIZE} from 'src/constants';
 import {settingsStore} from 'src/draggables/settings/settings-store';

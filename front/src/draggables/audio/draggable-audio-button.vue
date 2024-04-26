@@ -10,20 +10,20 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-  <n-tooltip
+  <NTooltip
     placement="left"
     trigger="hover"
   >
     <template #trigger>
-      <n-button
+      <NButton
         size="tiny"
         @click="props.callback"
       >
-        <n-icon>
+        <NIcon>
           <slot />
-        </n-icon>
-      </n-button>
+        </NIcon>
+      </NButton>
     </template>
     <span>{{ props.alt }}</span>
-  </n-tooltip>
+  </NTooltip>
 </template>

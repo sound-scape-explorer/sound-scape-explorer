@@ -67,17 +67,17 @@ const isActiveIdRef = computed<string>(() => {
 </script>
 
 <template>
-  <n-checkbox-group
+  <NCheckboxGroup
     :id="isActiveIdRef"
     v-model:value="selectionRef"
   >
-    <n-grid
+    <NGrid
       :cols="2"
       :x-gap="4"
       :y-gap="4"
     >
-      <n-gi v-for="(item, index) in uniquesRef">
-        <n-checkbox
+      <NGi v-for="(item, index) in uniquesRef">
+        <NCheckbox
           :style="{
             backgroundColor: getColorByItem(index),
           }"
@@ -85,10 +85,10 @@ const isActiveIdRef = computed<string>(() => {
           class="checkbox"
         >
           <span>{{ item }}</span>
-        </n-checkbox>
-      </n-gi>
-    </n-grid>
-  </n-checkbox-group>
+        </NCheckbox>
+      </NGi>
+    </NGrid>
+  </NCheckboxGroup>
 </template>
 
 <style lang="scss" scoped>

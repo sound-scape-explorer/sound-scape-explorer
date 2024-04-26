@@ -34,56 +34,56 @@ const openChangelog = () => window.open(LINK_CHANGELOG);
       />
 
       <div class="full">
-        <n-button
+        <NButton
           :on-click="openDocumentation"
           class="full"
           size="small"
         >
           Open documentation
-        </n-button>
+        </NButton>
       </div>
 
       <div class="full">
-        <n-button
+        <NButton
           :on-click="openChangelog"
           class="full"
           size="small"
         >
           Open changelog
-        </n-button>
+        </NButton>
       </div>
 
       <div class="full">
-        <n-button
+        <NButton
           :on-click="openBugReport"
           class="full"
           size="small"
         >
           Open bug report
-        </n-button>
+        </NButton>
       </div>
 
       <h2 class="full">⌨ Keyboard Shortcuts</h2>
 
-      <n-grid
+      <NGrid
         :cols="2"
         x-gap="12"
         y-gap="4"
       >
-        <n-gi
+        <NGi
           v-for="shortcut of shortcuts"
           class="grid"
         >
-          <n-tag
+          <NTag
             class="key"
             size="small"
           >
             {{ shortcut.keycode }}
-          </n-tag>
+          </NTag>
 
           {{ shortcut.name }}
-        </n-gi>
-      </n-grid>
+        </NGi>
+      </NGrid>
     </div>
   </AppDraggable>
 </template>

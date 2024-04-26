@@ -135,41 +135,41 @@ const handleBlockClick = (block: VisibleBlock) => {
           class="timeline-grid__block"
           @click="() => handleBlockClick(vB)"
         >
-          <n-tooltip
+          <NTooltip
             placement="top"
             trigger="hover"
           >
             <template #trigger>{{ vB.file }}</template>
             <div>
               <div>
-                <n-tag
+                <NTag
                   :bordered="false"
                   size="small"
                 >
                   File
-                </n-tag>
+                </NTag>
                 {{ vB.file }}
               </div>
               <div>
-                <n-tag
+                <NTag
                   :bordered="false"
                   size="small"
                 >
                   File start
-                </n-tag>
+                </NTag>
                 {{ vB.fileStart }}
               </div>
               <div>
-                <n-tag
+                <NTag
                   :bordered="false"
                   size="small"
                 >
                   File timestamp
-                </n-tag>
+                </NTag>
                 {{ convertTimestampToIsoDate(vB.start) }}
               </div>
             </div>
-          </n-tooltip>
+          </NTooltip>
         </div>
       </div>
     </div>

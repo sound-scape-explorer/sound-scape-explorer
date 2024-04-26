@@ -1,4 +1,4 @@
-import {useAppNotification} from 'src/app/app-notification/app-notification';
+import {useAppNotification} from 'src/app/notification/app-notification';
 import {Csv} from 'src/common/csv';
 import {useBandSelection} from 'src/composables/band-selection';
 import {useDate} from 'src/composables/date';

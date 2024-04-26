@@ -11,12 +11,12 @@ const naiveOptions = computed(() => convertToNaiveSelectOptions(options));
 </script>
 
 <template>
-  <n-tooltip
+  <NTooltip
     placement="right"
     trigger="hover"
   >
     <template #trigger>
-      <n-select
+      <NSelect
         v-model:value="colorsStore.colorScale"
         :default-value="options[1]"
         :disabled="scatterLoadingRef.value"
@@ -26,5 +26,5 @@ const naiveOptions = computed(() => convertToNaiveSelectOptions(options));
       />
     </template>
     <span>Color scale</span>
-  </n-tooltip>
+  </NTooltip>
 </template>

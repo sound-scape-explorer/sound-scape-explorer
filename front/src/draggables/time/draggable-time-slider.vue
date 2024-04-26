@@ -156,7 +156,7 @@ watch(timeStore, () => filterByTime());
       v-if="!scatterLoadingRef.value"
       class="layer"
     >
-      <n-slider
+      <NSlider
         v-for="slider in sliders"
         :key="slider.key"
         v-model:value="timeStore.value"
@@ -194,7 +194,7 @@ watch(timeStore, () => filterByTime());
         v-for="slider in sliders"
         :handle-click="() => toggleZoom(slider)"
       >
-        <search-outline />
+        <SearchOutline />
       </AppButton>
     </div>
   </div>

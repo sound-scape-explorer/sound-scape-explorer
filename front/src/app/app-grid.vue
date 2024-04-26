@@ -16,25 +16,25 @@ const props = defineProps<AppGridProps>();
 </script>
 
 <template>
-  <n-grid
+  <NGrid
     :cols="props.columns"
     x-gap="12"
     y-gap="4"
   >
-    <n-gi
+    <NGi
       v-for="item in props.items"
       class="gi"
     >
-      <n-tag
+      <NTag
         :bordered="false"
         :style="{backgroundColor: item.color ?? ''}"
         size="small"
       >
         {{ item.tag }}
-      </n-tag>
+      </NTag>
       {{ item.value }}
-    </n-gi>
-  </n-grid>
+    </NGi>
+  </NGrid>
 </template>
 
 <style lang="scss" scoped>

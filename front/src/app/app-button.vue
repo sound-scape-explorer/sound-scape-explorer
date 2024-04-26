@@ -22,7 +22,7 @@ const hasText = typeof props.text !== 'undefined';
 
 <template>
   <div class="container">
-    <n-button
+    <NButton
       :disabled="props.disabled"
       :loading="props.loading"
       class="zoom"
@@ -33,14 +33,14 @@ const hasText = typeof props.text !== 'undefined';
         v-if="hasChildren"
         #icon
       >
-        <n-icon>
+        <NIcon>
           <slot />
-        </n-icon>
+        </NIcon>
       </template>
       <template v-if="hasText">
         {{ props.text }}
       </template>
-    </n-button>
+    </NButton>
   </div>
 </template>
 

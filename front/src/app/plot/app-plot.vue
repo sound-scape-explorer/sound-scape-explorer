@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {useAppPlot} from 'src/app/app-plot/app-plot';
+import {useAppPlot} from 'src/app/plot/app-plot';
 import {settingsStore} from 'src/draggables/settings/settings-store';
 import {watch} from 'vue';
 

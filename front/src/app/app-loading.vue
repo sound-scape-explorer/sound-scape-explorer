@@ -12,13 +12,13 @@ import {
     v-if="scatterLoadingRef.value"
     :is-wait="true"
   >
-    <n-alert
+    <NAlert
       class="loading"
       type="info"
     >
       <div>Loading...</div>
       <span>{{ scatterLoadingTextRef.value }}</span>
-    </n-alert>
+    </NAlert>
   </AppModal>
 </template>
 

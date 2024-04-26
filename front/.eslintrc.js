@@ -24,7 +24,7 @@ module.exports = {
     },
   ],
   ignorePatterns: ['src/lib/**/*.ts'],
-  plugins: ['simple-import-sort'],
+  plugins: ['simple-import-sort', 'eslint-plugin-vue'],
   rules: {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
@@ -153,5 +153,14 @@ module.exports = {
       },
     ],
     '@typescript-eslint/object-curly-spacing': ['error', 'never'],
+    // vue
+    'vue/component-name-in-template-casing': [
+      'error',
+      'PascalCase',
+      {
+        registeredComponentsOnly: true,
+        ignores: [],
+      },
+    ],
   },
 };

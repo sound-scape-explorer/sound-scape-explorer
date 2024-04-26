@@ -22,28 +22,28 @@ const {selected: extractorSelected} = useSelectExtractor();
 </script>
 
 <template>
-  <n-select
+  <NSelect
     v-model:value="reducerSelected"
     :disabled="isSelectedRef.value"
     :options="reducerOptions"
     placeholder="Reducer..."
     size="small"
   />
-  <n-select
+  <NSelect
     v-model:value="bandSelected"
     :disabled="reducer === null || isSelectedRef.value"
     :options="bandOptions"
     placeholder="Band..."
     size="small"
   />
-  <n-select
+  <NSelect
     v-model:value="integrationSelected"
     :disabled="reducer === null || isSelectedRef.value"
     :options="integrationOptions"
     placeholder="Integration..."
     size="small"
   />
-  <n-select
+  <NSelect
     v-model:value="extractorSelected"
     :disabled="reducer === null || isSelectedRef.value"
     :options="extractorOptions"

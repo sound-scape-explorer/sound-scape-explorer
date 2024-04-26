@@ -36,12 +36,12 @@ const naiveOptions = computed(() => {
 </script>
 
 <template>
-  <n-tooltip
+  <NTooltip
     placement="right"
     trigger="hover"
   >
     <template #trigger>
-      <n-select
+      <NSelect
         v-model:value="colorsStore.colorType"
         :disabled="scatterLoadingRef.value"
         :options="naiveOptions"
@@ -50,5 +50,5 @@ const naiveOptions = computed(() => {
       />
     </template>
     <span>Color by</span>
-  </n-tooltip>
+  </NTooltip>
 </template>

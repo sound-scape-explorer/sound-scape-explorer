@@ -232,7 +232,7 @@ const resize16by9 = () => {
       <div class="form">
         <span>Select</span>
 
-        <n-select
+        <NSelect
           v-model:value="digesterSelectedRef"
           :options="digestersOptionsRef"
           placeholder="Digester..."
@@ -242,25 +242,25 @@ const resize16by9 = () => {
         <span>Over</span>
 
         <div class="form-second-line">
-          <n-select
+          <NSelect
             v-model:value="labelSelectedARef"
             :options="labelPropertiesOptionsRef"
             placeholder="Label A..."
             size="tiny"
           />
 
-          <n-button
+          <NButton
             :disabled="!digestedRef.value?.isPairing"
             class="swap-button"
             size="tiny"
             @click="swap"
           >
-            <n-icon>
-              <repeat-outline />
-            </n-icon>
-          </n-button>
+            <NIcon>
+              <RepeatOutline />
+            </NIcon>
+          </NButton>
 
-          <n-select
+          <NSelect
             v-model:value="labelSelectedBRef"
             :disabled="!digestedRef.value?.isPairing"
             :options="labelPropertiesOptionsRef"
@@ -271,7 +271,7 @@ const resize16by9 = () => {
 
         <span>Colorscale</span>
         <div class="form-additional-line">
-          <n-select
+          <NSelect
             v-model:value="colorScaleRef"
             :options="colorScalesOptionsRef"
             placeholder="Colorscale..."
@@ -280,7 +280,7 @@ const resize16by9 = () => {
 
           <span>Range</span>
           <div>
-            <n-select
+            <NSelect
               v-model:value="rangeIndexRef"
               :options="rangesOptionsRef"
               placeholder="Range..."
@@ -291,67 +291,67 @@ const resize16by9 = () => {
 
         <span>Export</span>
         <div class="form-additional-line">
-          <n-button
+          <NButton
             size="tiny"
             @click="handleExportClick"
           >
             <template #icon>
-              <n-icon>
-                <download-outline />
-              </n-icon>
+              <NIcon>
+                <DownloadOutline />
+              </NIcon>
             </template>
             Export .csv
-          </n-button>
+          </NButton>
 
           <span>Resize</span>
           <div class="resize-row">
-            <n-button
+            <NButton
               size="tiny"
               @click="resize1by1"
             >
               <template #icon>
-                <n-icon>
-                  <resize-outline />
-                </n-icon>
+                <NIcon>
+                  <ResizeOutline />
+                </NIcon>
               </template>
               1:1
-            </n-button>
+            </NButton>
 
-            <n-button
+            <NButton
               size="tiny"
               @click="resize4by3"
             >
               <template #icon>
-                <n-icon>
-                  <resize-outline />
-                </n-icon>
+                <NIcon>
+                  <ResizeOutline />
+                </NIcon>
               </template>
               4:3
-            </n-button>
+            </NButton>
 
-            <n-button
+            <NButton
               size="tiny"
               @click="resize16by10"
             >
               <template #icon>
-                <n-icon>
-                  <resize-outline />
-                </n-icon>
+                <NIcon>
+                  <ResizeOutline />
+                </NIcon>
               </template>
               16:10
-            </n-button>
+            </NButton>
 
-            <n-button
+            <NButton
               size="tiny"
               @click="resize16by9"
             >
               <template #icon>
-                <n-icon>
-                  <resize-outline />
-                </n-icon>
+                <NIcon>
+                  <ResizeOutline />
+                </NIcon>
               </template>
               16:9
-            </n-button>
+            </NButton>
           </div>
         </div>
       </div>

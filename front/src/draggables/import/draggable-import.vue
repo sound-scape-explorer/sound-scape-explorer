@@ -32,14 +32,14 @@ const handleChange = () => {
         type="file"
         @change="handleChange"
       />
-      <n-button
+      <NButton
         :disabled="!importLockRef.value"
         class="red"
         size="small"
         @click="resetFile"
       >
         Unload
-      </n-button>
+      </NButton>
     </div>
 
     <ImportDetails v-if="isReady" />

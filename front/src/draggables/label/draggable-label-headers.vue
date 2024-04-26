@@ -61,26 +61,26 @@ const handleBucketClick = (property: string) => {
 </script>
 
 <template>
-  <n-grid :cols="labelColumnsRef.value">
-    <n-gi v-for="property in labelsProperties">
+  <NGrid :cols="labelColumnsRef.value">
+    <NGi v-for="property in labelsProperties">
       <div class="col">
-        <n-button
+        <NButton
           size="tiny"
           @click="() => handleBucketClick(property)"
         >
           <template #icon>
-            <n-icon>
-              <color-fill-outline />
-            </n-icon>
+            <NIcon>
+              <ColorFillOutline />
+            </NIcon>
           </template>
-        </n-button>
-        <n-tooltip
+        </NButton>
+        <NTooltip
           :show-arrow="false"
           placement="top-start"
           trigger="hover"
         >
           <template #trigger>
-            <n-tag
+            <NTag
               :bordered="false"
               class="tag"
               size="small"
@@ -88,22 +88,22 @@ const handleBucketClick = (property: string) => {
               @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
             >
               {{ property }}
-            </n-tag>
+            </NTag>
           </template>
           <div>
             <span>Left click: Invert selection</span>
             <br />
             <span>Right click: Clear selection</span>
           </div>
-        </n-tooltip>
+        </NTooltip>
       </div>
 
       <LabelItemsSelection
         :property="property"
         class="checkboxes"
       />
-    </n-gi>
-  </n-grid>
+    </NGi>
+  </NGrid>
 </template>
 
 <style lang="scss" scoped>

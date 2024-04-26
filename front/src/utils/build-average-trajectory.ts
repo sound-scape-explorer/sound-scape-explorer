@@ -57,9 +57,9 @@ export function buildAverageTrajectory(traceds: TracedRef['value']) {
     }),
     z: isThreeDimensional
       ? sumArraysIndexWise({
-          arrays: data.map((data) => data.z),
-          doAveraging: true,
-        })
+        arrays: data.map((data) => data.z),
+        doAveraging: true,
+      })
       : undefined,
   };
 

@@ -13,7 +13,7 @@ const {unloadSelection} = useSelect();
     class="button"
     text="Unload selection"
   >
-    <arrow-undo-circle-outline />
+    <ArrowUndoCircleOutline />
   </AppButton>
 </template>
 

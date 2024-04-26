@@ -159,14 +159,14 @@ watch([width, height], () => checkBounds());
     :style="style"
   >
     <div class="button close">
-      <n-button
+      <NButton
         size="tiny"
         @click="close"
       >
-        <n-icon>
-          <close-outline />
-        </n-icon>
-      </n-button>
+        <NIcon>
+          <CloseOutline />
+        </NIcon>
+      </NButton>
     </div>
 
     <div class="title content">

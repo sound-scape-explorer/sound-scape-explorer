@@ -28,131 +28,131 @@ const plotBackgroundOptionsRef = computed(() => {
 
 <template>
   <AppDraggable draggable-key="settings">
-    <n-grid cols="1">
-      <n-gi class="gi">
-        <n-tag
+    <NGrid cols="1">
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Audio host
-        </n-tag>
-        <n-input
+        </NTag>
+        <NInput
           v-model:value="audioHost"
           size="tiny"
           @inputBlur="() => unlock()"
           @inputFocus="() => lock()"
         />
-      </n-gi>
-      <n-gi class="gi">
-        <n-tag
+      </NGi>
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Spectrogram: Color map
-        </n-tag>
-        <n-select
+        </NTag>
+        <NSelect
           v-model:value="spectrogramColorRef.value"
           :default-value="spectrogramColorRef.value"
           :options="spectrogramColorMapsOptionsRef"
           size="tiny"
         />
-      </n-gi>
+      </NGi>
 
-      <n-gi class="gi">
-        <n-tag
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Spectrogram: Show decibels
-        </n-tag>
-        <n-checkbox
+        </NTag>
+        <NCheckbox
           v-model:checked="waveSurferShowDecibelsRef.value"
           class="checkbox"
         />
-      </n-gi>
+      </NGi>
 
-      <n-gi class="gi">
-        <n-tag
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Spectrogram: Overflow legends
-        </n-tag>
-        <n-checkbox
+        </NTag>
+        <NCheckbox
           v-model:checked="waveSurferOverflowLegendsRef.value"
           class="checkbox"
         />
-      </n-gi>
+      </NGi>
 
-      <n-gi class="gi">
-        <n-tag
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Auto open Details panel on scatter click
-        </n-tag>
-        <n-checkbox
+        </NTag>
+        <NCheckbox
           v-model:checked="settingsStore.autoOpenOnScatterClick"
           class="checkbox"
         />
-      </n-gi>
-      <n-gi class="gi">
-        <n-tag
+      </NGi>
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Plot background
-        </n-tag>
-        <n-select
+        </NTag>
+        <NSelect
           v-model:value="settingsStore.plotBackground"
           :default-value="settingsStore.plotBackground"
           :options="plotBackgroundOptionsRef"
           size="tiny"
         />
-      </n-gi>
+      </NGi>
 
-      <n-gi class="gi">
-        <n-tag
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Apply timezone
-        </n-tag>
-        <n-checkbox
+        </NTag>
+        <NCheckbox
           v-model:checked="settingsStore.applyTimezone"
           class="checkbox"
         />
-      </n-gi>
+      </NGi>
 
-      <n-gi class="gi">
-        <n-tag
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Preview beta features
-        </n-tag>
-        <n-checkbox
+        </NTag>
+        <NCheckbox
           v-model:checked="settingsStore.preview"
           class="checkbox"
         />
-      </n-gi>
+      </NGi>
 
-      <n-gi class="gi">
-        <n-tag
+      <NGi class="gi">
+        <NTag
           :bordered="false"
           size="small"
         >
           Plotly font size
-        </n-tag>
-        <n-input
+        </NTag>
+        <NInput
           v-model:value="plotlyFontSizeRef.value"
           size="tiny"
           type="number"
           @inputBlur="() => unlock()"
           @inputFocus="() => lock()"
         />
-      </n-gi>
-    </n-grid>
+      </NGi>
+    </NGrid>
   </AppDraggable>
 </template>
 

@@ -18,12 +18,12 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
 </script>
 
 <template>
-  <n-tooltip
+  <NTooltip
     placement="right"
     trigger="hover"
   >
     <template #trigger>
-      <n-input-number
+      <NInputNumber
         v-model:value="alphaLowRef.value"
         :disabled="scatterLoadingRef.value"
         :theme-overrides="inputNumberThemeOverrides"
@@ -35,14 +35,14 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
       />
     </template>
     <span>Opacity for excluded points</span>
-  </n-tooltip>
+  </NTooltip>
 
-  <n-tooltip
+  <NTooltip
     placement="right"
     trigger="hover"
   >
     <template #trigger>
-      <n-input-number
+      <NInputNumber
         v-model:value="alphaHighRef.value"
         :disabled="scatterLoadingRef.value"
         :theme-overrides="inputNumberThemeOverrides"
@@ -54,7 +54,7 @@ const inputNumberThemeOverrides: InputNumberThemeOverrides = {
       />
     </template>
     <span>Opacity for collected points</span>
-  </n-tooltip>
+  </NTooltip>
 </template>
 
 <style lang="scss" scoped>

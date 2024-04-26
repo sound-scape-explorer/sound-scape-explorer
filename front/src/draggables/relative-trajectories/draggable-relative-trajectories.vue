@@ -2,7 +2,7 @@
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NCascader, NIcon} from 'naive-ui';
 import AppDraggable from 'src/app/app-draggable.vue';
-import AppPlot, {type AppPlotProps} from 'src/app/app-plot/app-plot.vue';
+import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
 import {useStorageRelativeTrajectories} from 'src/composables/storage-relative-trajectories';
 import {EXPORT_FILENAME} from 'src/constants';
@@ -98,7 +98,7 @@ const handleExportClick = () => {
 <template>
   <AppDraggable draggable-key="relativeTrajectories">
     <div class="container">
-      <n-cascader
+      <NCascader
         v-model:value="valueRef"
         :cascade="false"
         :clear-filter-after-select="false"
@@ -116,18 +116,18 @@ const handleExportClick = () => {
         @update:value="handleUpdateValue"
       />
 
-      <n-button
+      <NButton
         class="export"
         size="tiny"
         @click="handleExportClick"
       >
         <template #icon>
-          <n-icon>
-            <download-outline />
-          </n-icon>
+          <NIcon>
+            <DownloadOutline />
+          </NIcon>
         </template>
         Export .csv
-      </n-button>
+      </NButton>
 
       <AppPlot
         :labels="histogramLabelsRef"

@@ -16,15 +16,15 @@ import {
 <template>
   <div class="timeline-menu__container">
     <div class="timeline-menu__block-count">
-      <n-tag
+      <NTag
         :bordered="false"
         size="small"
         >Audio blocks count
-      </n-tag>
+      </NTag>
       {{ pageVisibleBlocksRef.value.length }}
     </div>
 
-    <n-pagination
+    <NPagination
       v-model:page="pageIndexRef.value"
       v-model:page-size="pageSizeRef.value"
       :page-count="pageCountRef.value"
@@ -35,12 +35,12 @@ import {
     />
 
     <div class="timeline-menu__gap-size">
-      <n-tooltip
+      <NTooltip
         placement="top"
         trigger="hover"
       >
         <template #trigger>
-          <n-select
+          <NSelect
             v-model:value="selectedGapSizeRef.value"
             :default-value="selectedGapSizeRef.value"
             :options="gapSizesRef.value"
@@ -48,7 +48,7 @@ import {
           />
         </template>
         <span>Gap size</span>
-      </n-tooltip>
+      </NTooltip>
     </div>
   </div>
 </template>

@@ -96,24 +96,24 @@ const handleExportClick = () => {
 <template>
   <AppDraggable draggable-key="trajectories">
     <div class="container">
-      <n-tooltip
+      <NTooltip
         :show-arrow="false"
         placement="top-start"
         trigger="hover"
       >
         <template #trigger>
-          <n-switch
+          <NSwitch
             v-model:value="tracedFusedRef.value"
             :disabled="!fuseReadyRef"
             class="toggle"
           >
             <template #checked> fuse</template>
-          </n-switch>
+          </NSwitch>
         </template>
         Average trajectories
-      </n-tooltip>
+      </NTooltip>
 
-      <n-cascader
+      <NCascader
         v-model:value="valueRef"
         :cascade="false"
         :clear-filter-after-select="false"
@@ -136,7 +136,7 @@ const handleExportClick = () => {
         :handle-click="handleExportClick"
         text="Export"
       >
-        <download-outline />
+        <DownloadOutline />
       </AppButton>
     </div>
   </AppDraggable>

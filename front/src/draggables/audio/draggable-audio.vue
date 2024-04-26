@@ -75,168 +75,168 @@ const {downloadAudio} = useAudioDownload();
           :alt="audioIsPlayingRef.value ? 'Pause' : 'Play'"
           :callback="togglePlayPause"
         >
-          <pause-outline v-if="audioIsPlayingRef.value" />
-          <play-outline v-if="!audioIsPlayingRef.value" />
+          <PauseOutline v-if="audioIsPlayingRef.value" />
+          <PlayOutline v-if="!audioIsPlayingRef.value" />
         </AudioButton>
 
         <AudioButton
           :callback="stop"
           alt="Stop"
         >
-          <stop-outline />
+          <StopOutline />
         </AudioButton>
 
         <AudioButton
           :callback="increaseVolume"
           alt="Volume Up"
         >
-          <volume-high-outline />
+          <VolumeHighOutline />
         </AudioButton>
 
         <AudioButton
           :callback="decreaseVolume"
           alt="Volume Down"
         >
-          <volume-low-outline />
+          <VolumeLowOutline />
         </AudioButton>
 
         <AudioButton
           :callback="increaseFftSize"
           alt="FFT Size Up"
         >
-          <add-outline />
+          <AddOutline />
         </AudioButton>
 
         <AudioButton
           :callback="decreaseFftSize"
           alt="FFT Size Down"
         >
-          <remove-outline />
+          <RemoveOutline />
         </AudioButton>
 
         <AudioButton
           :callback="downloadAudio"
           alt="Download"
         >
-          <arrow-down-outline />
+          <ArrowDownOutline />
         </AudioButton>
       </div>
 
-      <n-grid
+      <NGrid
         :cols="1"
         class="grid"
         x-gap="12"
       >
-        <n-gi>
-          <n-tag
+        <NGi>
+          <NTag
             :bordered="false"
             size="small"
           >
             File
-          </n-tag>
+          </NTag>
 
           {{ audioBlockRef.value?.file }}
-        </n-gi>
-      </n-grid>
+        </NGi>
+      </NGrid>
 
-      <n-grid
+      <NGrid
         v-if="aggregatedSites !== null && clickedRef.value !== null"
         :cols="1"
         class="grid"
         x-gap="12"
       >
-        <n-gi>
-          <n-tag
+        <NGi>
+          <NTag
             :bordered="false"
             size="small"
           >
             Site
-          </n-tag>
+          </NTag>
 
           {{ aggregatedSites[clickedRef.value].site }}
-        </n-gi>
-        <n-gi>
-          <n-tag
+        </NGi>
+        <NGi>
+          <NTag
             :bordered="false"
             size="small"
           >
             Interval Date
-          </n-tag>
+          </NTag>
 
           {{ intervalDateRef && convertDateToIsoDate(intervalDateRef) }}
-        </n-gi>
-      </n-grid>
+        </NGi>
+      </NGrid>
 
-      <n-grid
+      <NGrid
         :cols="3"
         class="grid"
         x-gap="12"
       >
-        <n-gi>
-          <n-tag
+        <NGi>
+          <NTag
             :bordered="false"
             size="small"
           >
             Interval Index
-          </n-tag>
+          </NTag>
 
           {{ clickedRef.value }}
-        </n-gi>
-        <n-gi>
-          <n-tag
+        </NGi>
+        <NGi>
+          <NTag
             :bordered="false"
             size="small"
           >
             Audio duration
-          </n-tag>
+          </NTag>
 
           {{ audioDurationRef.value.toFixed(2) }} seconds
-        </n-gi>
-        <n-gi>
-          <n-tag
+        </NGi>
+        <NGi>
+          <NTag
             :bordered="false"
             size="small"
           >
             FFT Size
-          </n-tag>
+          </NTag>
 
           {{ fftSizeRef.value }}
-        </n-gi>
+        </NGi>
 
-        <n-gi>
-          <n-tag
+        <NGi>
+          <NTag
             :bordered="false"
             size="small"
           >
             Speed %
-          </n-tag>
+          </NTag>
 
           {{ audioRateHumanReadableRef.value.percentage }}
-        </n-gi>
-        <n-gi>
-          <n-tag
+        </NGi>
+        <NGi>
+          <NTag
             :bordered="false"
             size="small"
           >
             Semitones
-          </n-tag>
+          </NTag>
 
           {{ audioRateHumanReadableRef.value.semitones }}
-        </n-gi>
-        <n-gi v-if="settings !== null">
-          <n-tag
+        </NGi>
+        <NGi v-if="settings !== null">
+          <NTag
             :bordered="false"
             size="small"
           >
             Hertz
-          </n-tag>
+          </NTag>
 
           {{ audioRateHumanReadableRef.value.hertz }}
-        </n-gi>
-      </n-grid>
+        </NGi>
+      </NGrid>
 
       <div>
-        <n-slider
+        <NSlider
           v-model:value="audioRateRef.value"
           :max="PLAYBACK_RATE.max"
           :min="PLAYBACK_RATE.min"

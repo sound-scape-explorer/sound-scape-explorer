@@ -137,100 +137,100 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
 <template>
   <div class="container">
     <div class="grid">
-      <n-switch
+      <NSwitch
         v-model:value="timeStore.isAllSelected"
         :disabled="scatterLoadingRef.value"
         class="toggle"
       >
         <template #checked> all</template>
-      </n-switch>
+      </NSwitch>
 
-      <n-button-group>
-        <n-button
+      <NButtonGroup>
+        <NButton
           v-for="button in durations"
           :disabled="uiDisabled"
           size="tiny"
           @click="setWindowDuration(button.duration)"
         >
           {{ button.name }}
-        </n-button>
-      </n-button-group>
+        </NButton>
+      </NButtonGroup>
 
-      <n-input-number
+      <NInputNumber
         v-model:value="timeStore.duration"
         :disabled="timeStore.isAllSelected"
         class="input"
         size="tiny"
       />
 
-      <n-tooltip trigger="hover">
+      <NTooltip trigger="hover">
         <template #trigger>
-          <n-button
+          <NButton
             :disabled="uiDisabled"
             size="tiny"
             @click="skipTimeBackward"
           >
             <template #icon>
-              <n-icon>
-                <play-skip-back-outline />
-              </n-icon>
+              <NIcon>
+                <PlaySkipBackOutline />
+              </NIcon>
             </template>
-          </n-button>
+          </NButton>
         </template>
         <span class="button-tooltip">
           Backward [<span class="bold">p</span>]
         </span>
-      </n-tooltip>
+      </NTooltip>
 
-      <n-tooltip trigger="hover">
+      <NTooltip trigger="hover">
         <template #trigger>
-          <n-button
+          <NButton
             :disabled="uiDisabled"
             size="tiny"
             @click="togglePlaying"
           >
             <template #icon>
-              <n-icon v-show="!isPlaying">
-                <play-outline />
-              </n-icon>
-              <n-icon v-show="isPlaying">
-                <pause-outline />
-              </n-icon>
+              <NIcon v-show="!isPlaying">
+                <PlayOutline />
+              </NIcon>
+              <NIcon v-show="isPlaying">
+                <PauseOutline />
+              </NIcon>
             </template>
-          </n-button>
+          </NButton>
         </template>
         <span class="button-tooltip">
           Play / Pause [<span class="bold">space</span>]
         </span>
-      </n-tooltip>
+      </NTooltip>
 
-      <n-tooltip trigger="hover">
+      <NTooltip trigger="hover">
         <template #trigger>
-          <n-button
+          <NButton
             :disabled="uiDisabled"
             size="tiny"
             @click="skipTimeForward"
           >
             <template #icon>
-              <n-icon>
-                <play-skip-forward-outline />
-              </n-icon>
+              <NIcon>
+                <PlaySkipForwardOutline />
+              </NIcon>
             </template>
-          </n-button>
+          </NButton>
         </template>
         <span class="button-tooltip">
           Forward [<span class="bold">n</span>]
         </span>
-      </n-tooltip>
+      </NTooltip>
 
       <div class="date-picker">
-        <n-tooltip
+        <NTooltip
           placement="bottom"
           trigger="hover"
         >
           <template #trigger>
             <!-- TODO: Replace naive ui date picker with custom to support timezones -->
-            <n-date-picker
+            <NDatePicker
               :disabled="uiDisabled"
               :on-update:value="handleDateStartUpdate"
               :value="dateStartRef.unix() * 1000"
@@ -241,7 +241,7 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
           <span class="button-tooltip">
             <span class="bold">Date</span> start
           </span>
-        </n-tooltip>
+        </NTooltip>
       </div>
 
       <span class="date"> to {{ dateEndRef }} </span>

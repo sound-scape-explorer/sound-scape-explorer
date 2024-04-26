@@ -60,7 +60,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
           draggable-key="import"
           text="Import"
         >
-          <cloud-upload-outline />
+          <CloudUploadOutline />
         </MenuItem>
 
         <MenuItem
@@ -69,7 +69,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
           draggable-key="settings"
           text="Settings"
         >
-          <cog-outline />
+          <CogOutline />
         </MenuItem>
 
         <MenuItem
@@ -77,7 +77,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
           draggable-key="help"
           text="Help"
         >
-          <help-outline />
+          <HelpOutline />
         </MenuItem>
       </div>
 
@@ -98,7 +98,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="selection"
         text="Selection"
       >
-        <eye-outline />
+        <EyeOutline />
       </MenuItem>
 
       <MenuItem
@@ -107,7 +107,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="colors"
         text="Colors"
       >
-        <color-palette-outline />
+        <ColorPaletteOutline />
       </MenuItem>
 
       <MenuItem
@@ -117,7 +117,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="timeline"
         text="Timeline"
       >
-        <receipt-outline />
+        <ReceiptOutline />
       </MenuItem>
 
       <MenuItem
@@ -126,7 +126,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="time"
         text="Time"
       >
-        <calendar-outline />
+        <CalendarOutline />
       </MenuItem>
 
       <MenuItem
@@ -135,7 +135,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="labels"
         text="Labels"
       >
-        <layers-outline />
+        <LayersOutline />
       </MenuItem>
 
       <MenuItem
@@ -144,7 +144,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="details"
         text="Details"
       >
-        <list-outline />
+        <ListOutline />
       </MenuItem>
 
       <MenuItem
@@ -153,7 +153,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="audio"
         text="Audio"
       >
-        <headset-outline />
+        <HeadsetOutline />
       </MenuItem>
 
       <MenuItem
@@ -162,7 +162,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="trajectories"
         text="Trajectories"
       >
-        <analytics-outline />
+        <AnalyticsOutline />
       </MenuItem>
 
       <MenuItem
@@ -171,7 +171,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="relativeTrajectories"
         text="Relative Trajectories"
       >
-        <timer-outline />
+        <TimerOutline />
       </MenuItem>
 
       <MenuItem
@@ -180,7 +180,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="indicators"
         text="Indicators"
       >
-        <bar-chart-outline />
+        <BarChartOutline />
       </MenuItem>
 
       <MenuItem
@@ -189,7 +189,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
         draggable-key="digested"
         text="Digested"
       >
-        <grid-outline />
+        <GridOutline />
       </MenuItem>
     </div>
   </div>

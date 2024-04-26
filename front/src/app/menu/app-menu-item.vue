@@ -43,28 +43,28 @@ const classesRef = computed<string>(() => {
 </script>
 
 <template>
-  <n-tooltip
+  <NTooltip
     placement="right"
     trigger="hover"
   >
     <template #trigger>
-      <n-button
+      <NButton
         ref="buttonRef"
         :class="classesRef"
         :disabled="props.disabled"
         size="small"
         @click="handleClick"
       >
-        <n-icon>
+        <NIcon>
           <slot />
-        </n-icon>
-      </n-button>
+        </NIcon>
+      </NButton>
     </template>
     <span
       >{{ props.text }} [<span class="bold">{{ shortcutRef }}</span
       >]</span
     >
-  </n-tooltip>
+  </NTooltip>
 </template>
 
 <style lang="scss" scoped>

@@ -2,7 +2,7 @@
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NCascader, NIcon, NSelect, NSwitch} from 'naive-ui';
 import AppDraggable from 'src/app/app-draggable.vue';
-import AppPlot, {type AppPlotProps} from 'src/app/app-plot/app-plot.vue';
+import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
@@ -138,7 +138,7 @@ const handleExportClick = () => {
   <AppDraggable draggable-key="indicators">
     <div class="container">
       <div class="row">
-        <n-select
+        <NSelect
           v-model:value="indicatorSelectedRef"
           :options="indicatorsOptionsRef"
           class="sites"
@@ -146,7 +146,7 @@ const handleExportClick = () => {
           size="small"
         />
 
-        <n-cascader
+        <NCascader
           v-model:value="sitesSelectedRef"
           :cascade="false"
           :clear-filter-after-select="false"
@@ -167,25 +167,25 @@ const handleExportClick = () => {
       </div>
 
       <div class="row">
-        <n-switch
+        <NSwitch
           v-model:value="isByDateRef"
           class="toggle"
         >
           <template #unchecked>Sorted by site</template>
           <template #checked>Sorted by date</template>
-        </n-switch>
+        </NSwitch>
 
-        <n-button
+        <NButton
           size="tiny"
           @click="handleExportClick"
         >
           <template #icon>
-            <n-icon>
-              <download-outline />
-            </n-icon>
+            <NIcon>
+              <DownloadOutline />
+            </NIcon>
           </template>
           Export .csv
-        </n-button>
+        </NButton>
       </div>
 
       <AppPlot

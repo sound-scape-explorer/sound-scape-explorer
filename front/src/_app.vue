@@ -9,31 +9,31 @@ import {
 } from 'naive-ui';
 import Explore from 'src/_explore.vue';
 import AppLoading from 'src/app/app-loading.vue';
-import AppNotification from 'src/app/app-notification/app-notification.vue';
+import AppNotification from 'src/app/notification/app-notification.vue';
 </script>
 
 <template>
-  <n-space
+  <NSpace
     size="large"
     vertical
   >
-    <n-layout
+    <NLayout
       has-sider
       sider-placement="left"
     >
       <AppLoading />
 
-      <n-layout>
-        <n-notification-provider>
-          <n-message-provider>
+      <NLayout>
+        <NNotificationProvider>
+          <NMessageProvider>
             <AppNotification />
+          </NMessageProvider>
+        </NNotificationProvider>
 
-            <Suspense>
-              <Explore />
-            </Suspense>
-          </n-message-provider>
-        </n-notification-provider>
-      </n-layout>
-    </n-layout>
-  </n-space>
+        <Suspense>
+          <Explore />
+        </Suspense>
+      </NLayout>
+    </NLayout>
+  </NSpace>
 </template>

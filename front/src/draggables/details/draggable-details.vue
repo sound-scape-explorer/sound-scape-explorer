@@ -67,58 +67,58 @@ watch(intervalDetailsRef, () => {
     <div class="file container">
       <div class="title">Audio blocks</div>
       <span class="file index">
-        <n-tooltip
+        <NTooltip
           v-for="blockDetails in intervalDetailsRef"
           placement="bottom"
           trigger="hover"
         >
           <template #trigger>
-            <n-button
+            <NButton
               class="zoom"
               size="small"
               @click="() => selectAudioBlock(blockDetails)"
             >
               <template #icon>
-                <n-icon>
+                <NIcon>
                   <HeadsetOutline />
-                </n-icon>
+                </NIcon>
               </template>
-            </n-button>
+            </NButton>
           </template>
 
-          <n-grid
+          <NGrid
             :cols="1"
             x-gap="12"
           >
-            <n-gi>
-              <n-tag
+            <NGi>
+              <NTag
                 :bordered="false"
                 size="small"
               >
                 file
-              </n-tag>
+              </NTag>
               {{ blockDetails.file }}
-            </n-gi>
-            <n-gi>
-              <n-tag
+            </NGi>
+            <NGi>
+              <NTag
                 :bordered="false"
                 size="small"
               >
                 file start
-              </n-tag>
+              </NTag>
               {{ blockDetails.fileStart }} ms
-            </n-gi>
-            <n-gi>
-              <n-tag
+            </NGi>
+            <NGi>
+              <NTag
                 :bordered="false"
                 size="small"
               >
                 start
-              </n-tag>
+              </NTag>
               {{ convertTimestampToIsoDate(blockDetails.start) }}
-            </n-gi>
-          </n-grid>
-        </n-tooltip>
+            </NGi>
+          </NGrid>
+        </NTooltip>
       </span>
     </div>
 
@@ -157,43 +157,43 @@ watch(intervalDetailsRef, () => {
       class="file container details"
     >
       <span />
-      <n-grid
+      <NGrid
         :cols="2"
         x-gap="12"
       >
         <!--suppress JSUnusedLocalSymbols -->
-        <n-gi v-for="(_, index) in labelsProperties">
-          <n-tag
+        <NGi v-for="(_, index) in labelsProperties">
+          <NTag
             :bordered="false"
             size="small"
           >
             {{ labelsProperties?.[index] }}
-          </n-tag>
+          </NTag>
 
           {{ intervalLabelsRef?.[index] }}
-        </n-gi>
-      </n-grid>
+        </NGi>
+      </NGrid>
 
       <div class="separator" />
 
       <div class="title">Indicators</div>
 
-      <n-grid
+      <NGrid
         v-if="aggregatedIndicators !== null"
         :cols="2"
         x-gap="12"
       >
-        <n-gi v-for="(ex, index) in nonNnExtractors">
-          <n-tag
+        <NGi v-for="(ex, index) in nonNnExtractors">
+          <NTag
             :bordered="false"
             size="small"
           >
             {{ ex.name }}
-          </n-tag>
+          </NTag>
 
           {{ aggregatedIndicators[index].values[clickedRef.value ?? 0] }}
-        </n-gi>
-      </n-grid>
+        </NGi>
+      </NGrid>
     </div>
   </AppDraggable>
 </template>

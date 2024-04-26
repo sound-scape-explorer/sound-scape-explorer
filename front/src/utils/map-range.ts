@@ -21,7 +21,7 @@ export function mapRange(
   stop2: number,
   isClamp = false,
 ): number {
-  const value = (n - start1) / (stop1 - start1) * (stop2 - start2) + start2;
+  const value = ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
 
   if (!isClamp) {
     return value;
