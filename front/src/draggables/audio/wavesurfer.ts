@@ -16,6 +16,7 @@ interface WaveSurferRef {
   value: WaveSurfer | null;
 }
 
+// todo: refactor, might lead to circular imports
 export const waveSurferRef = reactive<WaveSurferRef>({
   value: null,
 });
