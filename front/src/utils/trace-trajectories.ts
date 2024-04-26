@@ -1,12 +1,12 @@
 import type {Data} from 'plotly.js-dist-min';
-import type {TracedRef} from 'src/hooks/useTraced';
+import type {Traced} from 'src/composables/trajectories-data';
 import {cyclingScaleRef} from 'src/scatter/scatter-color-scale';
 
 import {generateTraceDefaultDataOptions} from './generate-trace-default-data-options';
 import {getTracedColors} from './get-traced-colors';
 import {isTracedThreeDimensional} from './is-traced-three-dimensional';
 
-export function traceTrajectories(traceds: TracedRef['value']) {
+export function traceTrajectories(traceds: Traced[]) {
   const isThreeDimensional = isTracedThreeDimensional(traceds[0]);
 
   const traces = [];

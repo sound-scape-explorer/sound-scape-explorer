@@ -1,10 +1,10 @@
-import type {Traced, TracedRef} from 'src/hooks/useTraced';
+import type {Traced} from 'src/composables/trajectories-data';
 
 import {interpolateArray} from './interpolate-array';
 import {isTracedThreeDimensional} from './is-traced-three-dimensional';
 import {sumArraysIndexWise} from './sum-arrays-index-wise';
 
-export function buildAverageTrajectory(traceds: TracedRef['value']) {
+export function buildAverageTrajectory(traceds: Traced[]) {
   const isThreeDimensional = isTracedThreeDimensional(traceds[0]);
 
   interface IData {

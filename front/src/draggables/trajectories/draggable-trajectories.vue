@@ -5,11 +5,11 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/app-draggable.vue';
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/date';
+import {useTrajectoriesData} from 'src/composables/trajectories-data';
 import {useTrajectoriesSelection} from 'src/composables/trajectories-selection';
 import {useTrajectoriesStorage} from 'src/composables/trajectories-storage';
 import {EXPORT_FILENAME} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
-import {tracedFusedRef, tracedRef} from 'src/hooks/useTraced';
 import {scatterLoadingRef} from 'src/scatter/scatter-loading';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
@@ -19,6 +19,7 @@ import {computed, ref, watch} from 'vue';
 const {trajectories} = useTrajectoriesStorage();
 const {select} = useTrajectoriesSelection();
 const {convertTimestampToIsoDate} = useDate();
+const {traceds, isFused} = useTrajectoriesData();
 
 const optionsRef = computed(() => {
   if (trajectories.value === null) {
@@ -43,11 +44,9 @@ const handleUpdateValue = async (names: string[]) => {
 };
 
 const {renderTraces} = useScatterTraces();
-watch(tracedFusedRef, renderTraces);
+watch(isFused, renderTraces);
 
 const handleExportClick = () => {
-  const isFused = tracedFusedRef.value;
-
   const csv = new Csv();
   csv.addColumn('name');
   csv.addColumn('timestamps');
@@ -56,8 +55,8 @@ const handleExportClick = () => {
   csv.addColumn('y');
   csv.addColumn('z');
 
-  if (isFused) {
-    const {data, traced} = buildAverageTrajectory(tracedRef.value);
+  if (isFused.value) {
+    const {data, traced} = buildAverageTrajectory(traceds.value);
 
     traced.data.forEach((_, index) => {
       csv.createRow();
@@ -70,21 +69,20 @@ const handleExportClick = () => {
         csv.addToCurrentRow(data.z[index].toString());
       }
     });
-
-    csv.download(`${EXPORT_FILENAME}-trajectories.csv`);
-    return;
-  }
-
-  for (const traced of tracedRef.value) {
-    traced.data.forEach((coordinates, index) => {
-      csv.createRow();
-      csv.addToCurrentRow(traced.trajectory.name);
-      csv.addToCurrentRow(convertTimestampToIsoDate(traced.timestamps[index]));
-      csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
-      csv.addToCurrentRow(coordinates[0].toString());
-      csv.addToCurrentRow(coordinates[1].toString());
-      csv.addToCurrentRow(coordinates[2].toString());
-    });
+  } else {
+    for (const traced of traceds.value) {
+      traced.data.forEach((coordinates, index) => {
+        csv.createRow();
+        csv.addToCurrentRow(traced.trajectory.name);
+        csv.addToCurrentRow(
+          convertTimestampToIsoDate(traced.timestamps[index]),
+        );
+        csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
+        csv.addToCurrentRow(coordinates[0].toString());
+        csv.addToCurrentRow(coordinates[1].toString());
+        csv.addToCurrentRow(coordinates[2].toString());
+      });
+    }
   }
 
   csv.download(`${EXPORT_FILENAME}-trajectories.csv`);
@@ -101,7 +99,7 @@ const handleExportClick = () => {
       >
         <template #trigger>
           <NSwitch
-            v-model:value="tracedFusedRef.value"
+            v-model:value="isFused"
             :disabled="!fuseReadyRef"
             class="toggle"
           >
@@ -115,7 +113,7 @@ const handleExportClick = () => {
         v-model:value="valueRef"
         :cascade="false"
         :clear-filter-after-select="false"
-        :disabled="scatterLoadingRef.value || tracedFusedRef.value"
+        :disabled="scatterLoadingRef.value || isFused"
         :filterable="false"
         :options="optionsRef"
         :show-path="false"

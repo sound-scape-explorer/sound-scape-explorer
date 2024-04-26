@@ -1,8 +1,8 @@
+import {useTrajectoriesData} from 'src/composables/trajectories-data';
 import {
   type Trajectory,
   useTrajectoriesStorage,
 } from 'src/composables/trajectories-storage';
-import {useTraced} from 'src/hooks/useTraced';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {ref} from 'vue';
 
@@ -28,7 +28,7 @@ export function useTrajectoriesSelection() {
   };
 
   const render = async () => {
-    const {readTraced} = useTraced();
+    const {readTraced} = useTrajectoriesData();
     const {renderTraces} = useScatterTraces();
 
     await readTraced();

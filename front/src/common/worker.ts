@@ -21,13 +21,13 @@ import type {Range} from 'src/composables/storage-ranges';
 import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
 import type {RelativeTrajectory} from 'src/composables/storage-relative-trajectories';
 import type {Site} from 'src/composables/storage-sites';
-import type {Trajectory} from 'src/composables/trajectories-storage';
-import type {Digested} from 'src/draggables/digested/digested';
 import type {
   TracedData,
   TracedRelativeTimestamps,
   TracedTimestamps,
-} from 'src/hooks/useTraced';
+} from 'src/composables/trajectories-data';
+import type {Trajectory} from 'src/composables/trajectories-storage';
+import type {Digested} from 'src/draggables/digested/digested';
 import {trimRectangular} from 'src/utils/trim-rectangular';
 
 let h5: H5File;

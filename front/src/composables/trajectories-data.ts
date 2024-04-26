@@ -6,12 +6,13 @@ import {useStorageReader} from 'src/composables/storage-reader';
 import {useStorageReady} from 'src/composables/storage-ready';
 import {useTrajectoriesSelection} from 'src/composables/trajectories-selection';
 import {type Trajectory} from 'src/composables/trajectories-storage';
-import {reactive} from 'vue';
+import {ref} from 'vue';
 
 export type TracedData = number[][];
 export type TracedTimestamps = number[];
 export type TracedRelativeTimestamps = number[];
 
+// this is trajectory data
 export interface Traced {
   trajectory: Trajectory;
   data: TracedData;
@@ -19,23 +20,10 @@ export interface Traced {
   relativeTimestamps: TracedRelativeTimestamps;
 }
 
-export interface TracedRef {
-  value: Traced[];
-}
+const traceds = ref<Traced[]>([]);
+const isFused = ref<boolean>(false);
 
-export const tracedRef = reactive<TracedRef>({
-  value: [],
-});
-
-interface TracedFusedRef {
-  value: boolean;
-}
-
-export const tracedFusedRef = reactive<TracedFusedRef>({
-  value: false,
-});
-
-export function useTraced() {
+export function useTrajectoriesData() {
   const {read} = useStorageReader();
   const {isReady} = useStorageReady();
   const {selected} = useTrajectoriesSelection();
@@ -61,7 +49,7 @@ export function useTraced() {
         return;
       }
 
-      const traceds: Traced[] = [];
+      const ts: Traced[] = [];
 
       for (const sT of selected.value) {
         const [data, timestamps, relativeTimestamps] = await worker.readTraced(
@@ -73,21 +61,23 @@ export function useTraced() {
           sT.index,
         );
 
-        const traced: Traced = {
+        const t: Traced = {
           trajectory: sT,
           data: data,
           timestamps: timestamps,
           relativeTimestamps: relativeTimestamps,
         };
 
-        traceds.push(traced);
+        ts.push(t);
       }
 
-      tracedRef.value = traceds;
+      traceds.value = ts;
     });
   };
 
   return {
+    traceds: traceds,
+    isFused: isFused,
     readTraced: readTraced,
   };
 }
