@@ -1,5 +1,5 @@
 import {useBandSelection} from 'src/composables/band-selection';
-import {audioContextRef} from 'src/draggables/audio/audio-context';
+import {useAudioContext} from 'src/draggables/audio/audio-context';
 import {
   audioIsPlayingRef,
   useAudioTransport,
@@ -9,6 +9,8 @@ import {waveSurferRef} from 'src/draggables/audio/wavesurfer';
 export function useWavesurferLoader() {
   const {band} = useBandSelection();
   const {seek, stop} = useAudioTransport();
+  const {context} = useAudioContext();
+
   const handleAudioEnd = () => {
     audioIsPlayingRef.value = false;
   };
@@ -17,17 +19,17 @@ export function useWavesurferLoader() {
     if (
       waveSurferRef.value === null ||
       band.value === null ||
-      audioContextRef.value === null
+      context.value === null
     ) {
       return;
     }
 
-    const lowShelf = audioContextRef.value.createBiquadFilter();
+    const lowShelf = context.value.createBiquadFilter();
     lowShelf.type = 'lowshelf';
     lowShelf.gain.value = -60;
     lowShelf.frequency.value = band.value.low;
 
-    const highShelf = audioContextRef.value.createBiquadFilter();
+    const highShelf = context.value.createBiquadFilter();
     highShelf.type = 'highshelf';
     highShelf.gain.value = -60;
     highShelf.frequency.value = band.value.high;

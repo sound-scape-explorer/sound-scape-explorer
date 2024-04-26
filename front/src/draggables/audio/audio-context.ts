@@ -1,26 +1,33 @@
 import {useStorageSettings} from 'src/composables/storage-settings';
-import {reactive, watchEffect} from 'vue';
+import {ref, watch} from 'vue';
 
-interface AudioContextRef {
-  value: AudioContext | null;
-}
-
-export const audioContextRef = reactive<AudioContextRef>({
-  value: null,
-});
+let isCreated = false;
+const context = ref<AudioContext | null>(null);
 
 export function useAudioContext() {
   const {settings} = useStorageSettings();
 
-  const createAudioContext = () => {
+  const create = () => {
+    console.log('audio-context: call');
     if (settings.value === null) {
       return;
     }
 
-    audioContextRef.value = new AudioContext({
+    if (isCreated) {
+      return;
+    }
+
+    console.log('audio-context: run');
+    isCreated = true;
+
+    context.value = new AudioContext({
       sampleRate: settings.value.expected_sample_rate,
     });
   };
 
-  watchEffect(createAudioContext);
+  watch(settings, create);
+
+  return {
+    context: context,
+  };
 }

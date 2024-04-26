@@ -17,7 +17,6 @@ import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-site
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/audio-component';
-import {useAudioContext} from 'src/draggables/audio/audio-context';
 import {useAudioDownload} from 'src/draggables/audio/audio-download';
 import {audioBlockRef, audioDurationRef} from 'src/draggables/audio/audio-file';
 import {
@@ -42,11 +41,7 @@ const {aggregatedSites} = useStorageAggregatedSites();
 const {intervalDateRef} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {clickedIndex, hasClicked} = useScatterClick();
-
-useAudioContext();
-
 const {increaseVolume, decreaseVolume} = useWavesurfer();
-
 const {togglePlayPause, stop} = useAudioTransport();
 
 useAudioRate({

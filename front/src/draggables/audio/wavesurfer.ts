@@ -3,7 +3,7 @@ import SpectrogramPlugin, {type RGBA} from 'src/common/spectrogram';
 import {useBandSelection} from 'src/composables/band-selection';
 import {WAVE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/audio-component';
-import {audioContextRef} from 'src/draggables/audio/audio-context';
+import {useAudioContext} from 'src/draggables/audio/audio-context';
 import {audioFileBitDepthRef} from 'src/draggables/audio/audio-file';
 import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
 import {spectrogramColorRef} from 'src/draggables/audio/spectrogram-color';
@@ -41,8 +41,10 @@ export function useWavesurfer() {
   const {waveform, spectrogram} = useDraggableAudio();
   const {band} = useBandSelection();
   const {size} = useAudioFourier();
+  const {context} = useAudioContext();
 
   const colorsRef = computed(() => {
+    // noinspection SpellCheckingInspection
     const colors = colormap({
       colormap: spectrogramColorRef.value,
       nshades: 256,
@@ -54,7 +56,7 @@ export function useWavesurfer() {
 
   const createWaveSurfer = () => {
     if (
-      audioContextRef.value === null ||
+      context.value === null ||
       band.value === null ||
       waveform.value === null ||
       spectrogram.value === null
@@ -68,7 +70,7 @@ export function useWavesurfer() {
     }
 
     const params: WaveSurferParams = {
-      audioContext: audioContextRef.value,
+      audioContext: context.value,
       container: waveform.value,
       scrollParent: false,
       barHeight: WAVE.default,

@@ -3,7 +3,7 @@ import {useDraggables} from 'src/composables/draggables';
 import {useIntegrationSelection} from 'src/composables/integration-selection';
 import type {BlockDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
-import {audioContextRef} from 'src/draggables/audio/audio-context';
+import {useAudioContext} from 'src/draggables/audio/audio-context';
 import {
   audioIsLoadingRef,
   useAudioLoading,
@@ -44,6 +44,7 @@ export function useAudioFile() {
   const {audioHost} = useStorageAudioHost();
   const {store} = useDraggables();
   const {integration} = useIntegrationSelection();
+  const {context} = useAudioContext();
 
   const openAudioModal = () => {
     if (store.audio === true) {
@@ -77,7 +78,7 @@ export function useAudioFile() {
       if (
         integration.value === null ||
         audioBlockRef.value === null ||
-        audioContextRef.value === null ||
+        context.value === null ||
         audioHost.value === null
       ) {
         return;
@@ -124,9 +125,7 @@ export function useAudioFile() {
         throw new Error('empty audio data');
       }
 
-      const audioBuffer = await audioContextRef.value.decodeAudioData(
-        arrayBuffer,
-      );
+      const audioBuffer = await context.value.decodeAudioData(arrayBuffer);
 
       audioIsLoadingRef.value = false;
       audioDurationRef.value = audioBuffer.duration;
