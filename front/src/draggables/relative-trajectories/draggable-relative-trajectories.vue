@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NCascader, NIcon} from 'naive-ui';
-import AppDraggable from 'src/app/app-draggable.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
 import {useStorageRelativeTrajectories} from 'src/composables/storage-relative-trajectories';

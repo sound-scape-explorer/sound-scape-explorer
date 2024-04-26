@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import {SearchOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NTooltip} from 'naive-ui';
-import AppDraggable from 'src/app/app-draggable.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useKeyboard} from 'src/composables/keyboard';
 import LabelItems from 'src/draggables/label/draggable-label-headers.vue';

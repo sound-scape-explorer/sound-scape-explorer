@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {NButton, NGi, NGrid, NTag} from 'naive-ui';
-import AppDraggable from 'src/app/app-draggable.vue';
 import AppGrid from 'src/app/app-grid.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {LINK_BUG_REPORT, LINK_CHANGELOG, LINK_DOCS} from 'src/constants';
 import {VERSION} from 'src/version';

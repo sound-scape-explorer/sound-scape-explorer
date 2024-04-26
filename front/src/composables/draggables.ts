@@ -17,6 +17,8 @@ export interface DraggablesStore {
   digested: boolean;
 }
 
+export type DraggableKey = keyof DraggablesStore;
+
 const store = reactive<DraggablesStore>({
   import: false,
   settings: false,
@@ -34,12 +36,10 @@ const store = reactive<DraggablesStore>({
   digested: false,
 });
 
-type Key = keyof DraggablesStore;
-
-const selected = ref<Key | null>(null);
+const selected = ref<DraggableKey | null>(null);
 
 export function useDraggables() {
-  const toggle = (key: Key): void => {
+  const toggle = (key: DraggableKey): void => {
     selected.value = key;
     store[key] = !store[key];
   };

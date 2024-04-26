@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import {DownloadOutline, RepeatOutline, ResizeOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NSelect} from 'naive-ui';
-import AppDraggable from 'src/app/app-draggable.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
 import AppHeatmap2d from 'src/app/heatmap/app-heatmap-2d.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';

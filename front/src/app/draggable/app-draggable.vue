@@ -3,60 +3,70 @@ import {CloseOutline} from '@vicons/ionicons5';
 import {
   type Position,
   useDraggable,
-  useLocalStorage,
   useMousePressed,
   useWindowSize,
 } from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
-import {type DraggablesStore, useDraggables} from 'src/composables/draggables';
+import {useAppDraggable} from 'src/app/draggable/app-draggable';
+import {useAppDraggableStyles} from 'src/app/draggable/app-draggable-styles';
+import {type DraggableKey, useDraggables} from 'src/composables/draggables';
 import {useScatterCamera} from 'src/scatter/scatter-camera';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
-import {computed, onMounted, ref, watch} from 'vue';
+import {onMounted, watch} from 'vue';
 
-const {store, selected} = useDraggables();
-
-interface Props {
-  draggableKey: keyof DraggablesStore;
+export interface AppDraggableProps {
+  draggableKey: DraggableKey;
   hideSeparator?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<AppDraggableProps>(), {
   hideSeparator: false,
 });
 
-const storageKey = `sse-draggable-${props.draggableKey}`;
-const containerRef = ref<HTMLElement | null>(null);
-const isZoomedRef = ref<boolean>(false);
-const {lock, unlock} = useScatterCamera();
-
-const classesRef = computed<string>(() => {
-  let classes = 'draggable';
-
-  if (isZoomedRef.value === true) {
-    classes += ' zoomed';
-  }
-
-  if (!store[props.draggableKey]) {
-    classes += ' closed';
-  }
-
-  if (selected.value === props.draggableKey) {
-    classes += ' selected';
-  }
-
-  return classes;
-});
-
 const defaultPos = 100;
+const {container, storage, drag} = useAppDraggable(props);
+const {store, selected} = useDraggables();
+const {x, y, style} = useDraggable(container, {
+  initialValue: {x: storage.value.x, y: storage.value.y},
+  handle: drag,
+  onEnd: (position) => {
+    // noinspection JSIncompatibleTypesComparison
+    if (window.visualViewport === null) {
+      return;
+    }
+    checkBounds(position);
+    storage.value = {x: x.value, y: y.value};
+  },
+});
+const {pressed} = useMousePressed({target: drag});
+const {lock, unlock} = useScatterCamera();
+const {classes} = useAppDraggableStyles(props);
+const {width, height} = useWindowSize();
+
+const close = () => {
+  store[props.draggableKey] = false;
+};
+const open = () => {
+  // noinspection PointlessBooleanExpressionJS,JSIncompatibleTypesComparison
+  if (
+    selected.value !== props.draggableKey ||
+    store[props.draggableKey] === false ||
+    window.visualViewport === null
+  ) {
+    return;
+  }
+
+  checkBounds();
+};
 const checkBounds = (position?: Position) => {
-  if (window.visualViewport === null || containerRef.value === null) {
+  if (window.visualViewport === null || container.value === null) {
     x.value = defaultPos;
     y.value = defaultPos;
     return;
   }
 
-  const w = containerRef.value.clientWidth;
-  const h = containerRef.value.clientHeight;
+  const w = container.value.clientWidth;
+  const h = container.value.clientHeight;
   const maxWidth = window.visualViewport.width;
   const maxHeight = window.visualViewport.height;
 
@@ -97,42 +107,7 @@ const checkBounds = (position?: Position) => {
   }
 };
 
-const close = () => {
-  store[props.draggableKey] = false;
-};
-
-const open = () => {
-  // noinspection PointlessBooleanExpressionJS,JSIncompatibleTypesComparison
-  if (
-    selected.value !== props.draggableKey ||
-    store[props.draggableKey] === false ||
-    window.visualViewport === null
-  ) {
-    return;
-  }
-
-  checkBounds();
-};
-
 watch(store, open);
-
-const storageRef = useLocalStorage(storageKey, {x: 100, y: 100});
-const dragRef = ref<HTMLElement | null>(null);
-
-const {x, y, style} = useDraggable(containerRef, {
-  initialValue: {x: storageRef.value.x, y: storageRef.value.y},
-  handle: dragRef,
-  onEnd: (position) => {
-    // noinspection JSIncompatibleTypesComparison
-    if (window.visualViewport === null) {
-      return;
-    }
-    checkBounds(position);
-    storageRef.value = {x: x.value, y: y.value};
-  },
-});
-
-const {pressed} = useMousePressed({target: dragRef});
 watch(pressed, () => {
   // noinspection PointlessBooleanExpressionJS
   if (pressed.value === false) {
@@ -146,16 +121,14 @@ watch(pressed, () => {
     selected.value = props.draggableKey;
   }
 });
-
 onMounted(() => checkBounds());
-const {width, height} = useWindowSize();
 watch([width, height], () => checkBounds());
 </script>
 
 <template>
   <div
-    ref="containerRef"
-    :class="classesRef"
+    ref="container"
+    :class="classes"
     :style="style"
   >
     <div class="button close">
@@ -175,7 +148,7 @@ watch([width, height], () => checkBounds());
           {{ capitalizeFirstLetter(props.draggableKey) }}
         </span>
         <div
-          ref="dragRef"
+          ref="drag"
           class="drag"
         >
           <span>👋</span>

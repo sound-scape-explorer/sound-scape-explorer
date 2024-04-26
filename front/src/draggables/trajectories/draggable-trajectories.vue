@@ -2,7 +2,7 @@
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
-import AppDraggable from 'src/app/app-draggable.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/date';
 import {useTrajectoriesData} from 'src/composables/trajectories-data';

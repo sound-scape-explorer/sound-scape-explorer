@@ -11,7 +11,7 @@ import {
 } from '@vicons/ionicons5';
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AppCondition from 'src/app/app-condition.vue';
-import AppDraggable from 'src/app/app-draggable.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
 import {useStorageSettings} from 'src/composables/storage-settings';

@@ -3,7 +3,7 @@ import {HeadsetOutline} from '@vicons/ionicons5';
 import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import AppCondition from 'src/app/app-condition.vue';
-import AppDraggable from 'src/app/app-draggable.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useBandSelection} from 'src/composables/band-selection';
 import {useDate} from 'src/composables/date';
 import {useExtractorStorage} from 'src/composables/extractor-storage';

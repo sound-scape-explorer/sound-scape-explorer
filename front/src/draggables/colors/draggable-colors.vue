@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import AppDraggable from 'src/app/app-draggable.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import ColorsAlphas from 'src/draggables/colors/draggable-colors-alphas.vue';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import ColorsScale from 'src/draggables/colors/draggable-colors-scale.vue';

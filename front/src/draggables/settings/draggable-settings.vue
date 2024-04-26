@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
-import AppDraggable from 'src/app/app-draggable.vue';
+import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
