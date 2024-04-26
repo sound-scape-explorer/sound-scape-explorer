@@ -11,7 +11,7 @@ import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageRanges} from 'src/composables/storage-ranges';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {useStorageVersion} from 'src/composables/storage-version';
-import {trajectoriesRef} from 'src/hooks/storage-trajectories';
+import {useTrajectoriesStorage} from 'src/composables/trajectories-storage';
 import {computed} from 'vue';
 
 const {settings} = useStorageSettings();
@@ -25,6 +25,7 @@ const {extractors} = useExtractorStorage();
 const {reducers} = useReducerStorage();
 const {ranges} = useStorageRanges();
 const {autoclusters} = useStorageAutoclusters();
+const {trajectories} = useTrajectoriesStorage();
 
 const separator = ', ';
 
@@ -112,7 +113,7 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'Trajectories',
-        value: trajectoriesRef.value?.map((t) => t.name).join(separator) ?? '',
+        value: trajectories?.map((t) => t.name).join(separator) ?? '',
       },
     ]"
   />

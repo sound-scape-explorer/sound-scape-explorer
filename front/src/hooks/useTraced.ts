@@ -4,10 +4,8 @@ import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useReducerSelection} from 'src/composables/reducer-selection';
 import {useStorageReader} from 'src/composables/storage-reader';
 import {useStorageReady} from 'src/composables/storage-ready';
-import {
-  selectedTrajectoriesRef,
-  type Trajectory,
-} from 'src/hooks/storage-trajectories';
+import {useTrajectoriesSelection} from 'src/composables/trajectories-selection';
+import {type Trajectory} from 'src/composables/trajectories-storage';
 import {reactive} from 'vue';
 
 export type TracedData = number[][];
@@ -40,6 +38,7 @@ export const tracedFusedRef = reactive<TracedFusedRef>({
 export function useTraced() {
   const {read} = useStorageReader();
   const {isReady} = useStorageReady();
+  const {selected} = useTrajectoriesSelection();
 
   const readTraced = async () => {
     if (!isReady.value) {
@@ -57,14 +56,14 @@ export function useTraced() {
         integration.value === null ||
         extractor.value === null ||
         reducer.value === null ||
-        selectedTrajectoriesRef.value === null
+        selected.value === null
       ) {
         return;
       }
 
       const traceds: Traced[] = [];
 
-      for (const sT of selectedTrajectoriesRef.value) {
+      for (const sT of selected.value) {
         const [data, timestamps, relativeTimestamps] = await worker.readTraced(
           file,
           band.value.name,

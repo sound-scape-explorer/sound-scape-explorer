@@ -5,12 +5,10 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/app-draggable.vue';
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/date';
+import {useTrajectoriesSelection} from 'src/composables/trajectories-selection';
+import {useTrajectoriesStorage} from 'src/composables/trajectories-storage';
 import {EXPORT_FILENAME} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
-import {
-  trajectoriesRef,
-  useStorageTrajectories,
-} from 'src/hooks/storage-trajectories';
 import {tracedFusedRef, tracedRef} from 'src/hooks/useTraced';
 import {scatterLoadingRef} from 'src/scatter/scatter-loading';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
@@ -18,15 +16,16 @@ import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
-const {selectTrajectories} = useStorageTrajectories();
+const {trajectories} = useTrajectoriesStorage();
+const {select} = useTrajectoriesSelection();
 const {convertTimestampToIsoDate} = useDate();
 
 const optionsRef = computed(() => {
-  if (trajectoriesRef.value === null) {
+  if (trajectories.value === null) {
     return [];
   }
 
-  const names = trajectoriesRef.value.map((t) => t.name);
+  const names = trajectories.value.map((t) => t.name);
   return convertToNaiveSelectOptions(names);
 });
 
@@ -36,15 +35,11 @@ const fuseReadyRef = computed<boolean>(() => {
     return false;
   }
 
-  if (valueRef.value.length <= 1) {
-    return false;
-  }
-
-  return true;
+  return valueRef.value.length > 1;
 });
 
 const handleUpdateValue = async (names: string[]) => {
-  await selectTrajectories(names);
+  await select(names);
 };
 
 const {renderTraces} = useScatterTraces();
@@ -61,7 +56,7 @@ const handleExportClick = () => {
   csv.addColumn('y');
   csv.addColumn('z');
 
-  if (isFused === true) {
+  if (isFused) {
     const {data, traced} = buildAverageTrajectory(tracedRef.value);
 
     traced.data.forEach((_, index) => {

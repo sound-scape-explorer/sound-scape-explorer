@@ -11,8 +11,8 @@ import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-site
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
+import {useTrajectoriesSelection} from 'src/composables/trajectories-selection';
 import {useLabelSelection} from 'src/draggables/label/label-selection';
-import {useStorageTrajectories} from 'src/hooks/storage-trajectories';
 import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {useScatterFilterMeta} from 'src/scatter/scatter-filter-meta';
 import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
@@ -44,7 +44,7 @@ export function useSelection() {
     useStorageReducedFeatures();
   const {generateColorScale, resetColorScale} = useScatterColorScale();
   const {buildSelection, resetSelection} = useLabelSelection();
-  const {resetTrajectories} = useStorageTrajectories();
+  const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
   const {renderTraces, resetTraces} = useScatterTraces();
   const {filterByMeta, resetFilterByMeta} = useScatterFilterMeta();
   const {filterByTime, resetFilterByTime} = useScatterFilterTime();
@@ -72,7 +72,7 @@ export function useSelection() {
     resetAggregatedLabels();
     resetReducedFeatures();
 
-    resetTrajectories();
+    resetTrajectoriesSelection();
     resetSelection();
     resetColorScale();
     resetTraces();
