@@ -34,17 +34,41 @@ const store = reactive<DraggablesStore>({
   digested: false,
 });
 
-const selected = ref<string | null>(null);
+type Key = keyof DraggablesStore;
+
+const selected = ref<Key | null>(null);
 
 export function useDraggables() {
-  const toggle = (key: keyof DraggablesStore): void => {
+  const toggle = (key: Key): void => {
     selected.value = key;
     store[key] = !store[key];
+  };
+
+  const openAudio = () => {
+    if (!store.audio) {
+      store.audio = true;
+    }
+
+    if (selected.value !== 'audio') {
+      selected.value = 'audio';
+    }
+  };
+
+  const closeAudio = () => {
+    if (store.audio) {
+      store.audio = false;
+    }
+
+    if (selected.value === 'audio') {
+      selected.value = null;
+    }
   };
 
   return {
     selected: selected,
     store: store,
     toggle: toggle,
+    openAudio: openAudio,
+    closeAudio: closeAudio,
   };
 }

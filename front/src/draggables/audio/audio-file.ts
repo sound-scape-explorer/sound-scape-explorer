@@ -42,17 +42,9 @@ export function useAudioFile() {
   const {loadBlob} = useWavesurferLoader();
   const {verifyAudioLoading} = useAudioLoading();
   const {audioHost} = useStorageAudioHost();
-  const {store} = useDraggables();
+  const {openAudio, closeAudio} = useDraggables();
   const {integration} = useIntegrationSelection();
   const {context} = useAudioContext();
-
-  const openAudioModal = () => {
-    if (store.audio === true) {
-      return;
-    }
-
-    store.audio = true;
-  };
 
   const selectAudioBlock = (block: BlockDetails | null) => {
     if (!verifyAudioLoading()) {
@@ -64,7 +56,7 @@ export function useAudioFile() {
       return;
     }
 
-    openAudioModal();
+    openAudio();
 
     if (audioBlockRef.value === block) {
       return;
@@ -136,7 +128,7 @@ export function useAudioFile() {
     } catch (error) {
       notify('error', 'audio-file', `${error}`);
 
-      store.audio = false;
+      closeAudio();
       audioIsLoadingRef.value = false;
     }
   };
