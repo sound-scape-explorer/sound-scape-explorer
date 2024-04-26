@@ -1,9 +1,9 @@
-import {reactive} from 'vue';
+import {ref} from 'vue';
 
-interface ImportLockRef {
-  value: boolean;
+const isLocked = ref<boolean>(false);
+
+export function useImportLock() {
+  return {
+    isLocked: isLocked,
+  };
 }
-
-export const importLockRef = reactive<ImportLockRef>({
-  value: false,
-});

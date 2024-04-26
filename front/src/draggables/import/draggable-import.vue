@@ -4,12 +4,13 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useStorageFile} from 'src/composables/storage-file';
 import {useStorageReady} from 'src/composables/storage-ready';
 import ImportDetails from 'src/draggables/import/draggable-import-details.vue';
-import {importLockRef} from 'src/draggables/import/import-lock';
+import {useImportLock} from 'src/draggables/import/import-lock';
 import {ref} from 'vue';
 
 const inputRef = ref<HTMLInputElement | null>(null);
 const {setFile, resetFile} = useStorageFile();
 const {isReady} = useStorageReady();
+const {isLocked} = useImportLock();
 
 const handleChange = () => {
   const file = inputRef.value?.files?.[0];
@@ -27,13 +28,13 @@ const handleChange = () => {
     <div class="container">
       <input
         ref="inputRef"
-        :disabled="importLockRef.value"
+        :disabled="isLocked"
         accept=".h5"
         type="file"
         @change="handleChange"
       />
       <NButton
-        :disabled="!importLockRef.value"
+        :disabled="!isLocked"
         class="red"
         size="small"
         @click="resetFile"
