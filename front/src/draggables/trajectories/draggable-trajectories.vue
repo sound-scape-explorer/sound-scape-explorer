@@ -7,15 +7,18 @@ import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/date';
 import {EXPORT_FILENAME} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
+import {
+  trajectoriesRef,
+  useStorageTrajectories,
+} from 'src/hooks/storage-trajectories';
 import {tracedFusedRef, tracedRef} from 'src/hooks/useTraced';
-import {trajectoriesRef, useTrajectories} from 'src/hooks/useTrajectories';
 import {scatterLoadingRef} from 'src/scatter/scatter-loading';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
-const {selectTrajectories} = useTrajectories();
+const {selectTrajectories} = useStorageTrajectories();
 const {convertTimestampToIsoDate} = useDate();
 
 const optionsRef = computed(() => {

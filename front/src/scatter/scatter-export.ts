@@ -55,7 +55,7 @@ export function useScatterExport() {
       return;
     }
 
-    notify('info', 'Export', 'Generating CSV from collected points.');
+    notify('info', 'scatter-export', 'generating csv file...');
 
     loadingRef.value = true;
 

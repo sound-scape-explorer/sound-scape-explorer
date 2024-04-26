@@ -6,7 +6,7 @@ const audioHost = ref<string | null>(null);
 export function useStorageAudioHost() {
   const {settings} = useStorageSettings();
 
-  watch(settings, () => {
+  const readAudioHost = () => {
     if (settings.value === null) {
       return;
     }
@@ -17,7 +17,9 @@ export function useStorageAudioHost() {
     }
 
     audioHost.value = settings.value.audio_host;
-  });
+  };
+
+  watch(settings, readAudioHost);
 
   return {
     audioHost: audioHost,

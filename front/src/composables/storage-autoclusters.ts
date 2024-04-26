@@ -1,5 +1,6 @@
 import {useStorageReader} from 'src/composables/storage-reader';
-import {onMounted, ref} from 'vue';
+import {useStorageReady} from 'src/composables/storage-ready';
+import {ref, watch} from 'vue';
 
 export interface Autocluster {
   index: number;
@@ -16,8 +17,13 @@ let isLoaded = false;
 // These are autoclusters configurations
 export function useStorageAutoclusters() {
   const {read} = useStorageReader();
+  const {isReady} = useStorageReady();
 
-  onMounted(async () => {
+  const readAll = async () => {
+    if (!isReady.value) {
+      return;
+    }
+
     if (isLoaded) {
       return;
     }
@@ -27,7 +33,9 @@ export function useStorageAutoclusters() {
     await read(async (worker, file) => {
       autoclusters.value = await worker.readAutoclustersConfiguration(file);
     });
-  });
+  };
+
+  watch(isReady, readAll);
 
   return {
     autoclusters: autoclusters,

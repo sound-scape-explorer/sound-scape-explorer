@@ -1,4 +1,4 @@
-import {computed, onMounted, ref} from 'vue';
+import {computed, ref, watchEffect} from 'vue';
 
 let isLoaded = false;
 
@@ -11,7 +11,7 @@ export function useWorker() {
     worker.value?.close();
   };
 
-  onMounted(() => {
+  const init = () => {
     if (isLoaded) {
       return;
     }
@@ -21,7 +21,9 @@ export function useWorker() {
     worker.value = new ComlinkWorker<Worker>(
       new URL('../common/worker', import.meta.url),
     );
-  });
+  };
+
+  watchEffect(init);
 
   return {
     worker: worker,

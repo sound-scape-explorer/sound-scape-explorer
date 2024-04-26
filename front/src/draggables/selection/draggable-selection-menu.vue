@@ -8,7 +8,9 @@ import {useIntegrationOptions} from 'src/composables/integration-options';
 import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useReducerOptions} from 'src/composables/reducer-options';
 import {useReducerSelection} from 'src/composables/reducer-selection';
-import {isSelectedRef} from 'src/composables/select';
+import {useSelection} from 'src/composables/selection';
+
+const {hasSelection} = useSelection();
 
 const {options: reducerOptions} = useReducerOptions();
 const {options: bandOptions} = useBandOptions();
@@ -24,28 +26,28 @@ const {selected: extractorSelected} = useSelectExtractor();
 <template>
   <NSelect
     v-model:value="reducerSelected"
-    :disabled="isSelectedRef.value"
+    :disabled="hasSelection"
     :options="reducerOptions"
     placeholder="Reducer..."
     size="small"
   />
   <NSelect
     v-model:value="bandSelected"
-    :disabled="reducer === null || isSelectedRef.value"
+    :disabled="reducer === null || hasSelection"
     :options="bandOptions"
     placeholder="Band..."
     size="small"
   />
   <NSelect
     v-model:value="integrationSelected"
-    :disabled="reducer === null || isSelectedRef.value"
+    :disabled="reducer === null || hasSelection"
     :options="integrationOptions"
     placeholder="Integration..."
     size="small"
   />
   <NSelect
     v-model:value="extractorSelected"
-    :disabled="reducer === null || isSelectedRef.value"
+    :disabled="reducer === null || hasSelection"
     :options="extractorOptions"
     placeholder="Extractor..."
     size="small"

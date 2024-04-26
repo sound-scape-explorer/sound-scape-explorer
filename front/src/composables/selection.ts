@@ -12,7 +12,7 @@ import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
 import {useLabelSelection} from 'src/draggables/label/label-selection';
-import {useTrajectories} from 'src/hooks/useTrajectories';
+import {useStorageTrajectories} from 'src/hooks/storage-trajectories';
 import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {useScatterFilterMeta} from 'src/scatter/scatter-filter-meta';
 import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
@@ -21,17 +21,11 @@ import {
   scatterLoadingTextRef,
 } from 'src/scatter/scatter-loading';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
-import {reactive, watchEffect} from 'vue';
+import {ref, watchEffect} from 'vue';
 
-interface IsSelectedRef {
-  value: boolean;
-}
+const hasSelection = ref<boolean>(false);
 
-export const isSelectedRef = reactive<IsSelectedRef>({
-  value: false,
-});
-
-export function useSelect() {
+export function useSelection() {
   const {store} = useDraggables();
   const {readLabels, resetLabels} = useStorageLabels();
   const {readAggregatedFeatures, resetAggregatedFeatures} =
@@ -50,7 +44,7 @@ export function useSelect() {
     useStorageReducedFeatures();
   const {generateColorScale, resetColorScale} = useScatterColorScale();
   const {buildSelection, resetSelection} = useLabelSelection();
-  const {resetTrajectories} = useTrajectories();
+  const {resetTrajectories} = useStorageTrajectories();
   const {renderTraces, resetTraces} = useScatterTraces();
   const {filterByMeta, resetFilterByMeta} = useScatterFilterMeta();
   const {filterByTime, resetFilterByTime} = useScatterFilterTime();
@@ -86,11 +80,12 @@ export function useSelect() {
     resetFilterByTime();
 
     scatterLoadingRef.value = false;
-    isSelectedRef.value = false;
+    hasSelection.value = false;
   };
 
-  const loadSelection = async () => {
+  const load = async () => {
     if (
+      hasSelection.value ||
       band.value === null ||
       integration.value === null ||
       extractor.value === null ||
@@ -98,9 +93,9 @@ export function useSelect() {
     ) {
       return;
     }
-
-    isSelectedRef.value = true;
+    hasSelection.value = true;
     scatterLoadingRef.value = true;
+    console.log('selection');
 
     scatterLoadingTextRef.value = 'Reading labels';
     await readLabels();
@@ -138,9 +133,10 @@ export function useSelect() {
     store.selection = false;
   };
 
-  watchEffect(loadSelection);
+  watchEffect(load);
 
   return {
+    hasSelection: hasSelection,
     unloadSelection: unloadSelection,
   };
 }

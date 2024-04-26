@@ -1,14 +1,20 @@
 import type {StorageSettings} from 'src/common/storage-settings';
 import {useStorageReader} from 'src/composables/storage-reader';
-import {onMounted, ref} from 'vue';
+import {useStorageReady} from 'src/composables/storage-ready';
+import {ref, watch} from 'vue';
 
 const settings = ref<StorageSettings | null>(null);
 let isLoaded = false;
 
 export function useStorageSettings() {
   const {read} = useStorageReader();
+  const {isReady} = useStorageReady();
 
-  onMounted(async () => {
+  const readAll = async () => {
+    if (!isReady.value) {
+      return;
+    }
+
     if (isLoaded) {
       return;
     }
@@ -18,7 +24,9 @@ export function useStorageSettings() {
     await read(async (worker, file) => {
       settings.value = await worker.readSettings(file);
     });
-  });
+  };
+
+  watch(isReady, readAll);
 
   return {
     settings: settings,

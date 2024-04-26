@@ -20,7 +20,7 @@ export function useStorageFile() {
 
     if (!isHDF && !isH5) {
       const msg = `File extension ${fileExtension} is not supported`;
-      notify('error', 'Import', msg);
+      notify('error', 'storage-file', msg);
       throw new Error(msg);
     }
   };

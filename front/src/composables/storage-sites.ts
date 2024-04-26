@@ -1,5 +1,6 @@
 import {useStorageReader} from 'src/composables/storage-reader';
-import {onMounted, ref} from 'vue';
+import {useStorageReady} from 'src/composables/storage-ready';
+import {ref, watch} from 'vue';
 
 export interface Site {
   index: number;
@@ -12,8 +13,13 @@ let isLoaded = false;
 
 export function useStorageSites() {
   const {read} = useStorageReader();
+  const {isReady} = useStorageReady();
 
-  onMounted(async () => {
+  const readAll = async () => {
+    if (!isReady.value) {
+      return;
+    }
+
     if (isLoaded) {
       return;
     }
@@ -23,7 +29,9 @@ export function useStorageSites() {
     await read(async (worker, file) => {
       sites.value = await worker.readSites(file);
     });
-  });
+  };
+
+  watch(isReady, readAll);
 
   return {
     sites: sites,

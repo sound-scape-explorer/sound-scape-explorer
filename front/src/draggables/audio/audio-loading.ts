@@ -13,7 +13,7 @@ export function useAudioLoading() {
   const {notify} = useAppNotification();
   const verifyAudioLoading = (): boolean => {
     if (audioIsLoadingRef.value === true) {
-      notify('error', 'Audio is already loading', '');
+      notify('error', 'audio-loading', 'already loading');
       return false;
     }
 

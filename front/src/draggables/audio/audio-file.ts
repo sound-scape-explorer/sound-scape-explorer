@@ -98,7 +98,17 @@ export function useAudioFile() {
       url.searchParams.append('start', start.toString());
       url.searchParams.append('end', end.toString());
 
-      const response = await fetch(url.toString());
+      let response: Response | null = null;
+      try {
+        response = await fetch(url.toString());
+      } catch {
+        //
+      }
+
+      if (response === null) {
+        // noinspection ExceptionCaughtLocallyJS
+        throw new Error(`could not fetch ${url}`);
+      }
 
       if (response.status !== 200) {
         const text = await response.text();
@@ -111,7 +121,7 @@ export function useAudioFile() {
 
       if (arrayBuffer.byteLength === 0) {
         // noinspection ExceptionCaughtLocallyJS
-        throw new Error('Empty audio data');
+        throw new Error('empty audio data');
       }
 
       const audioBuffer = await audioContextRef.value.decodeAudioData(
@@ -125,7 +135,7 @@ export function useAudioFile() {
       const blob = new Blob([wav]);
       loadBlob(blob);
     } catch (error) {
-      notify('error', 'Failed to load audio', `${error}`);
+      notify('error', 'audio-file', `${error}`);
 
       store.audio = false;
       audioIsLoadingRef.value = false;

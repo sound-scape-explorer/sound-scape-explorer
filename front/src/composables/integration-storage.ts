@@ -1,6 +1,7 @@
 import type {DropdownOption} from 'src/common/dropdown-option';
 import {useStorageReader} from 'src/composables/storage-reader';
-import {ref, watchEffect} from 'vue';
+import {useStorageReady} from 'src/composables/storage-ready';
+import {ref, watch} from 'vue';
 
 export interface Integration {
   index: number;
@@ -14,8 +15,13 @@ const options = ref<DropdownOption[]>([]);
 
 export function useIntegrationStorage() {
   const {read} = useStorageReader();
+  const {isReady} = useStorageReady();
 
   const readIntegrations = async () => {
+    if (!isReady.value) {
+      return;
+    }
+
     if (isLoaded) {
       return;
     }
@@ -27,7 +33,7 @@ export function useIntegrationStorage() {
     });
   };
 
-  watchEffect(readIntegrations);
+  watch(isReady, readIntegrations);
 
   return {
     integrations: integrations,

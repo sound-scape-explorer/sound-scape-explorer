@@ -1,6 +1,7 @@
 import {useStorageReader} from 'src/composables/storage-reader';
+import {useStorageReady} from 'src/composables/storage-ready';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
-import {reactive, watchEffect} from 'vue';
+import {reactive, watch} from 'vue';
 
 import {useTraced} from './useTraced';
 
@@ -30,17 +31,23 @@ export const selectedTrajectoriesRef = reactive<SelectedTrajectoriesRef>({
   value: [],
 });
 
-export function useTrajectories() {
+export function useStorageTrajectories() {
   const {readTraced} = useTraced();
   const {renderTraces} = useScatterTraces();
-  const {read} = useStorageReader();
+  const {isReady} = useStorageReady();
 
-  const readTrajectories = () =>
-    read(async (worker, file) => {
+  const readTrajectories = async () => {
+    if (!isReady.value) {
+      return;
+    }
+
+    const {read} = useStorageReader();
+    await read(async (worker, file) => {
       trajectoriesRef.value = await worker.readTrajectories(file);
     });
+  };
 
-  watchEffect(readTrajectories);
+  watch(isReady, readTrajectories);
 
   const selectTrajectories = async (names: string[]) => {
     if (trajectoriesRef.value === null) {

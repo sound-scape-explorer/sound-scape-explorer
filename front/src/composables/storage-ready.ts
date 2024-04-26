@@ -9,13 +9,15 @@ export function useStorageReady() {
   const {hasWorker} = useWorker();
   const {hasFile} = useStorageFile();
 
-  watch([hasWorker, hasFile], () => {
+  const updateReady = () => {
     if (!hasWorker.value || !hasFile.value) {
       return;
     }
 
     isReady.value = hasWorker.value && hasFile.value;
-  });
+  };
+
+  watch([hasWorker, hasFile], updateReady);
 
   return {
     isReady: isReady,

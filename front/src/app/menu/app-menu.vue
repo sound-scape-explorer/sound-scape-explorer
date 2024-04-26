@@ -19,13 +19,14 @@ import MenuItem from 'src/app/menu/app-menu-item.vue';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useDraggables} from 'src/composables/draggables';
 import {useKeyboard} from 'src/composables/keyboard';
-import {isSelectedRef} from 'src/composables/select';
+import {useSelection} from 'src/composables/selection';
 import {useStorageReady} from 'src/composables/storage-ready';
 import {settingsStore} from 'src/draggables/settings/settings-store';
 
 const {isReady} = useStorageReady();
 const {registerKey} = useKeyboard();
 const {toggle} = useDraggables();
+const {hasSelection} = useSelection();
 
 registerKey(KeyboardShortcut.import, () => toggle('import'));
 registerKey(
@@ -102,7 +103,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="colors"
         text="Colors"
@@ -112,7 +113,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
 
       <MenuItem
         v-if="settingsStore.preview"
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="timeline"
         text="Timeline"
@@ -121,7 +122,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="time"
         text="Time"
@@ -130,7 +131,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="labels"
         text="Labels"
@@ -139,7 +140,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="details"
         text="Details"
@@ -148,7 +149,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="audio"
         text="Audio"
@@ -157,7 +158,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="trajectories"
         text="Trajectories"
@@ -166,7 +167,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="relativeTrajectories"
         text="Relative Trajectories"
@@ -175,7 +176,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="indicators"
         text="Indicators"
@@ -184,7 +185,7 @@ registerKey(KeyboardShortcut.digested, () => toggle('digested'));
       </MenuItem>
 
       <MenuItem
-        :disabled="!isSelectedRef.value"
+        :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="digested"
         text="Digested"

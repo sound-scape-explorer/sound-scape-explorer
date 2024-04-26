@@ -1,5 +1,5 @@
 import {useIntegrationSelection} from 'src/composables/integration-selection';
-import {isSelectedRef} from 'src/composables/select';
+import {useSelection} from 'src/composables/selection';
 import {
   type BlockDetails,
   useStorageAggregatedIntervalDetails,
@@ -101,12 +101,13 @@ export function useTimelinePagination() {
   const {integration} = useIntegrationSelection();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {hasSelection} = useSelection();
 
   const computePaginationTotal = () => {
     // total number of intervals in the timeline (between min and max timestamps)
 
     if (
-      isSelectedRef.value === false ||
+      hasSelection.value === false ||
       integration.value === null ||
       aggregatedTimestamps.value === null
     ) {

@@ -10,8 +10,8 @@ import {useStorageDigesters} from 'src/composables/storage-digesters';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {useStorageVersion} from 'src/composables/storage-version';
-import {rangesRef} from 'src/hooks/useRanges';
-import {trajectoriesRef} from 'src/hooks/useTrajectories';
+import {rangesRef} from 'src/hooks/storage-ranges';
+import {trajectoriesRef} from 'src/hooks/storage-trajectories';
 import {computed} from 'vue';
 
 const {settings} = useStorageSettings();

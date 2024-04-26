@@ -3,9 +3,12 @@ import {useSelectExtractor} from 'src/composables/extractor-selection';
 import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useReducerSelection} from 'src/composables/reducer-selection';
 import {useStorageReader} from 'src/composables/storage-reader';
+import {useStorageReady} from 'src/composables/storage-ready';
+import {
+  selectedTrajectoriesRef,
+  type Trajectory,
+} from 'src/hooks/storage-trajectories';
 import {reactive} from 'vue';
-
-import {selectedTrajectoriesRef, type Trajectory} from './useTrajectories';
 
 export type TracedData = number[][];
 export type TracedTimestamps = number[];
@@ -36,13 +39,19 @@ export const tracedFusedRef = reactive<TracedFusedRef>({
 
 export function useTraced() {
   const {read} = useStorageReader();
-  const {band} = useBandSelection();
-  const {integration} = useIntegrationSelection();
-  const {extractor} = useSelectExtractor();
-  const {reducer} = useReducerSelection();
+  const {isReady} = useStorageReady();
 
-  const readTraced = () =>
-    read(async (worker, file) => {
+  const readTraced = async () => {
+    if (!isReady.value) {
+      return;
+    }
+
+    const {band} = useBandSelection();
+    const {integration} = useIntegrationSelection();
+    const {extractor} = useSelectExtractor();
+    const {reducer} = useReducerSelection();
+
+    await read(async (worker, file) => {
       if (
         band.value === null ||
         integration.value === null ||
@@ -77,6 +86,7 @@ export function useTraced() {
 
       tracedRef.value = traceds;
     });
+  };
 
   return {
     readTraced: readTraced,

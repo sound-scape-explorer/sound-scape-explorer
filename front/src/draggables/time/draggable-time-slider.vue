@@ -7,7 +7,7 @@ import {useReducerSelection} from 'src/composables/reducer-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {SLIDER_LIMITS} from 'src/constants';
 import {timeStore} from 'src/draggables/time/time-store';
-import {rangesRef} from 'src/hooks/useRanges';
+import {rangesRef} from 'src/hooks/storage-ranges';
 import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
 import {scatterLoadingRef} from 'src/scatter/scatter-loading';
 import {mapRange} from 'src/utils/map-range';

@@ -1,5 +1,6 @@
 import {useStorageReader} from 'src/composables/storage-reader';
-import {reactive, watchEffect} from 'vue';
+import {useStorageReady} from 'src/composables/storage-ready';
+import {reactive, watch} from 'vue';
 
 export interface Range {
   index: number;
@@ -24,15 +25,21 @@ export const rangesRef = reactive<RangesRef>({
   value: null,
 });
 
-export function useRanges() {
+export function useStorageRanges() {
   const {read} = useStorageReader();
+  const {isReady} = useStorageReady();
 
-  const readRanges = () =>
-    read(async (worker, file) => {
+  const readAll = async () => {
+    if (!isReady.value) {
+      return;
+    }
+
+    await read(async (worker, file) => {
       rangesRef.value = await worker.readRanges(file);
     });
+  };
 
-  watchEffect(readRanges);
+  watch(isReady, readAll);
 
   const selectRange = (name: string | null) => {
     if (name === null) {

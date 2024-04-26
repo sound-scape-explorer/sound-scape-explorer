@@ -62,7 +62,6 @@ function render(
 }
 
 watch(appNotificationStore, () => {
-  console.log('watch');
   appNotificationStore.list.forEach((n, i) => {
     render(n.type, n.title, n.description);
     appNotificationStore.list.splice(i, 1);

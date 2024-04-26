@@ -30,9 +30,9 @@ export function useStorageReader() {
       await callback(worker.value, file.value);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        const message = `storage-reader: ${error.message}`;
+        const message = `${error.message}`;
         console.error(message);
-        notify('error', 'Error', message);
+        notify('error', 'storage-reader', message);
         throw new Error(error.message);
       }
     }
