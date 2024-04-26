@@ -2,11 +2,11 @@ import colormap from 'colormap';
 import SpectrogramPlugin, {type RGBA} from 'src/common/spectrogram';
 import {useBandSelection} from 'src/composables/band-selection';
 import {WAVE} from 'src/constants';
-import {useAudioComponent} from 'src/draggables/audio/audio-component';
+import {useAudioFourier} from 'src/draggables/audio/audio-component';
 import {audioContextRef} from 'src/draggables/audio/audio-context';
 import {audioFileBitDepthRef} from 'src/draggables/audio/audio-file';
+import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
 import {spectrogramColorRef} from 'src/draggables/audio/spectrogram-color';
-import type {Ref} from 'vue';
 import {computed, reactive, watch, watchEffect} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/src/plugin/cursor';
@@ -37,17 +37,10 @@ export const waveSurferOverflowLegendsRef =
     value: false,
   });
 
-interface UseWaveSurferProps {
-  waveformContainerRef: Ref<HTMLDivElement | null>;
-  spectrogramContainerRef: Ref<HTMLDivElement | null>;
-}
-
-export function useWavesurfer({
-  waveformContainerRef,
-  spectrogramContainerRef,
-}: UseWaveSurferProps) {
+export function useWavesurfer() {
+  const {waveform, spectrogram} = useDraggableAudio();
   const {band} = useBandSelection();
-  const {fftSize} = useAudioComponent();
+  const {size} = useAudioFourier();
 
   const colorsRef = computed(() => {
     const colors = colormap({
@@ -63,8 +56,8 @@ export function useWavesurfer({
     if (
       audioContextRef.value === null ||
       band.value === null ||
-      waveformContainerRef.value === null ||
-      spectrogramContainerRef.value === null
+      waveform.value === null ||
+      spectrogram.value === null
     ) {
       return;
     }
@@ -76,7 +69,7 @@ export function useWavesurfer({
 
     const params: WaveSurferParams = {
       audioContext: audioContextRef.value,
-      container: waveformContainerRef.value,
+      container: waveform.value,
       scrollParent: false,
       barHeight: WAVE.default,
       normalize: false,
@@ -111,7 +104,7 @@ export function useWavesurfer({
 
   const registerSpectrogram = () => {
     if (
-      spectrogramContainerRef.value === null ||
+      spectrogram.value === null ||
       waveSurferRef.value === null ||
       band.value === null ||
       audioFileBitDepthRef.value === null
@@ -123,12 +116,12 @@ export function useWavesurfer({
       waveSurferRef.value.destroyPlugin('spectrogram');
     }
 
-    const spectrogram = SpectrogramPlugin.create({
-      container: spectrogramContainerRef.value,
+    const spectro = SpectrogramPlugin.create({
+      container: spectrogram.value,
       labels: true,
       colorMap: colorsRef.value,
       height: 192,
-      fftSamples: fftSize.value,
+      fftSamples: size.value,
       frequencyMin: band.value.low,
       frequencyMax: band.value.high,
       decibels: waveSurferShowDecibelsRef.value,
@@ -136,7 +129,7 @@ export function useWavesurfer({
       bitDepth: audioFileBitDepthRef.value,
     });
 
-    waveSurferRef.value.registerPlugins([spectrogram]);
+    waveSurferRef.value.registerPlugins([spectro]);
   };
 
   watch(
@@ -155,11 +148,11 @@ export function useWavesurfer({
     }
 
     // @ts-expect-error overwrite variable
-    waveSurferRef.value.spectrogram.fftSamples = fftSize.value;
+    waveSurferRef.value.spectrogram.fftSamples = size.value;
     waveSurferRef.value.drawBuffer();
   };
 
-  watch(fftSize, updateSpectrogramDefinition);
+  watch(size, updateSpectrogramDefinition);
 
   const renderWaveform = () => {
     if (waveSurferRef.value === null) {

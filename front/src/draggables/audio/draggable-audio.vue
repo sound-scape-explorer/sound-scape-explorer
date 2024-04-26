@@ -16,7 +16,7 @@ import {useDate} from 'src/composables/date';
 import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
-import {useAudioComponent} from 'src/draggables/audio/audio-component';
+import {useAudioFourier} from 'src/draggables/audio/audio-component';
 import {useAudioContext} from 'src/draggables/audio/audio-context';
 import {useAudioDownload} from 'src/draggables/audio/audio-download';
 import {audioBlockRef, audioDurationRef} from 'src/draggables/audio/audio-file';
@@ -29,31 +29,23 @@ import {
   audioIsPlayingRef,
   useAudioTransport,
 } from 'src/draggables/audio/audio-transport';
+import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
 import AudioButton from 'src/draggables/audio/draggable-audio-button.vue';
 import {useWavesurfer} from 'src/draggables/audio/wavesurfer';
 import {useDetails} from 'src/draggables/details/details';
 import {useScatterClick} from 'src/scatter/scatter-click';
 
+const {waveform, spectrogram} = useDraggableAudio();
+const {increase, decrease, size} = useAudioFourier();
 const {settings} = useStorageSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
 const {intervalDateRef} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {clickedIndex, hasClicked} = useScatterClick();
 
-const {
-  waveformContainerRef,
-  spectrogramContainerRef,
-  increaseFftSize,
-  decreaseFftSize,
-  fftSize,
-} = useAudioComponent();
-
 useAudioContext();
 
-const {increaseVolume, decreaseVolume} = useWavesurfer({
-  waveformContainerRef: waveformContainerRef,
-  spectrogramContainerRef: spectrogramContainerRef,
-});
+const {increaseVolume, decreaseVolume} = useWavesurfer();
 
 const {togglePlayPause, stop} = useAudioTransport();
 
@@ -105,14 +97,14 @@ const {downloadAudio} = useAudioDownload();
           </AudioButton>
 
           <AudioButton
-            :callback="increaseFftSize"
+            :callback="increase"
             alt="FFT Size Up"
           >
             <AddOutline />
           </AudioButton>
 
           <AudioButton
-            :callback="decreaseFftSize"
+            :callback="decrease"
             alt="FFT Size Down"
           >
             <RemoveOutline />
@@ -204,7 +196,7 @@ const {downloadAudio} = useAudioDownload();
               FFT Size
             </NTag>
 
-            {{ fftSize }}
+            {{ size }}
           </NGi>
 
           <NGi>
@@ -248,10 +240,10 @@ const {downloadAudio} = useAudioDownload();
           />
         </div>
 
-        <div ref="waveformContainerRef" />
+        <div ref="waveform" />
 
         <div
-          ref="spectrogramContainerRef"
+          ref="spectrogram"
           class="spectrogram"
         />
       </div>
