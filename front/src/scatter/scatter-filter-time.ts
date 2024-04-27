@@ -11,6 +11,7 @@ export const pointsFilteredByTimeRef = reactive<PointsFilteredByTimeRef>({
   value: null,
 });
 
+// todo: refactor me
 export function useScatterFilterTime() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 

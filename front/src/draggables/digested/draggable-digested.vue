@@ -20,7 +20,7 @@ import {computed, ref, unref, watch, watchEffect} from 'vue';
 
 const {readDigested, digested} = useStorageDigested();
 const {digesters} = useStorageDigesters();
-const {labelsProperties, labelsSets} = useStorageLabels();
+const {labelProperties, labelSets} = useStorageLabels();
 
 const labelSelectedARef = ref<string | null>(null);
 const labelSelectedBRef = ref<string | null>(null);
@@ -60,11 +60,11 @@ const rangesOptionsRef = computed(() => {
 const {resize1by1, resize4by3, resize16by10, resize16by9} = useAppHeatmapSize();
 
 const labelPropertiesOptionsRef = computed(() => {
-  if (labelsProperties.value === null) {
+  if (labelProperties.value === null) {
     return [];
   }
 
-  return convertToNaiveSelectOptions(labelsProperties.value);
+  return convertToNaiveSelectOptions(labelProperties.value);
 });
 
 const digestersOptionsRef = computed(() => {
@@ -111,8 +111,8 @@ const updateRange = (digested: Digested) => {
 
 const update = () => {
   if (
-    labelsProperties.value === null ||
-    labelsSets.value === null ||
+    labelProperties.value === null ||
+    labelSets.value === null ||
     digested.value === null ||
     labelSelectedARef.value === null
   ) {
@@ -122,14 +122,14 @@ const update = () => {
   updateRange(digested.value);
 
   titleRef.value = `${digested.value.digester.name} - ${labelSelectedARef.value}`;
-  const aIndex = labelsProperties.value.indexOf(labelSelectedARef.value);
-  xRef.value = labelsSets.value[aIndex];
+  const aIndex = labelProperties.value.indexOf(labelSelectedARef.value);
+  xRef.value = labelSets.value[aIndex];
 
   // with 2 labels
   if (digested.value.isPairing && labelSelectedBRef.value !== null) {
     titleRef.value = `${titleRef.value} - ${labelSelectedBRef.value}`;
-    const bIndex = labelsProperties.value.indexOf(labelSelectedBRef.value);
-    yRef.value = labelsSets.value[bIndex];
+    const bIndex = labelProperties.value.indexOf(labelSelectedBRef.value);
+    yRef.value = labelSets.value[bIndex];
 
     // @ts-expect-error: 7053
     valuesRef.value = digested.value.values[aIndex][bIndex] as number[][];

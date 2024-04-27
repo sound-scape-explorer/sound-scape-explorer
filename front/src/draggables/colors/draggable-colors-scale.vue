@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
-import {colorsStore} from 'src/draggables/colors/colors-store';
+import {COLOR_FLAVORS} from 'src/constants';
+import {useColorSelection} from 'src/scatter/color-selection';
 import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
-const options = ['Accent', 'Dark2', 'Spectral'];
-
-const naiveOptions = computed(() => convertToNaiveSelectOptions(options));
+const {flavor} = useColorSelection();
+const naiveOptions = computed(() => convertToNaiveSelectOptions(COLOR_FLAVORS));
 const {isLoading} = useScatterLoading();
 </script>
 
@@ -16,10 +16,11 @@ const {isLoading} = useScatterLoading();
     placement="right"
     trigger="hover"
   >
+    <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
       <NSelect
-        v-model:value="colorsStore.colorScale"
-        :default-value="options[1]"
+        v-model:value="flavor"
+        :default-value="flavor"
         :disabled="isLoading"
         :options="naiveOptions"
         placeholder="Color scale..."

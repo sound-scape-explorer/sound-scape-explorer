@@ -26,7 +26,7 @@ interface ExportData {
 export function useScatterExport() {
   const {band} = useBandSelection();
   const {integration} = useIntegrationSelection();
-  const {labelsProperties} = useStorageLabels();
+  const {labelProperties} = useStorageLabels();
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
   const {reducedFeatures} = useStorageReducedFeatures();
@@ -47,7 +47,7 @@ export function useScatterExport() {
       aggregatedLabels.value === null ||
       pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null ||
-      labelsProperties.value === null ||
+      labelProperties.value === null ||
       reducedFeatures.value === null ||
       aggregatedSites.value === null ||
       aggregatedIndicators.value === null
@@ -97,7 +97,7 @@ export function useScatterExport() {
     csv.addColumn('timestamp');
     csv.addColumn('site');
 
-    labelsProperties.value.forEach((property) => {
+    labelProperties.value.forEach((property) => {
       csv.addColumn(`label_${property}`);
     });
 

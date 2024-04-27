@@ -12,9 +12,9 @@ export interface Labels {
 
 let isLoaded = false;
 const labels = ref<Labels | null>(null);
-const labelsProperties = ref<string[] | null>(null);
-const labelsSets = ref<string[][] | null>(null);
-const labelsPropertiesAsColorTypes = ref<string[] | null>(null);
+const labelProperties = ref<string[] | null>(null);
+const labelSets = ref<string[][] | null>(null);
+const labelPropertiesAsColorTypes = ref<string[] | null>(null);
 
 export function useStorageLabels() {
   const {read} = useStorageReader();
@@ -44,25 +44,25 @@ export function useStorageLabels() {
         integration.value.seconds,
       );
 
-      labelsSets.value = Object.values(labels.value);
+      labelSets.value = Object.values(labels.value);
       const properties = Object.keys(labels.value);
-      labelsProperties.value = properties;
-      labelsPropertiesAsColorTypes.value = convertSlugsToColorTypes(properties);
+      labelProperties.value = properties;
+      labelPropertiesAsColorTypes.value = convertSlugsToColorTypes(properties);
     });
   };
 
   const resetLabels = () => {
     labels.value = null;
-    labelsSets.value = null;
-    labelsProperties.value = null;
-    labelsPropertiesAsColorTypes.value = null;
+    labelSets.value = null;
+    labelProperties.value = null;
+    labelPropertiesAsColorTypes.value = null;
   };
 
   return {
     labels: labels,
-    labelsProperties: labelsProperties,
-    labelsSets: labelsSets,
-    labelsPropertiesAsColorTypes: labelsPropertiesAsColorTypes,
+    labelProperties: labelProperties,
+    labelSets: labelSets,
+    labelPropertiesAsColorTypes: labelPropertiesAsColorTypes,
     readLabels: readLabels,
     resetLabels: resetLabels,
   };

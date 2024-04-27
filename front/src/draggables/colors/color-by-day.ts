@@ -1,6 +1,9 @@
+import chroma from 'chroma-js';
 import {useDate} from 'src/composables/date';
-import {dayColor, nightColor} from 'src/scatter/scatter-color-scale';
 import {isHourDuringDay} from 'src/utils/is-hour-during-day';
+
+const dayColor = chroma('orange');
+const nightColor = chroma('blue');
 
 export function useColorByDay() {
   const {convertTimestampToDate} = useDate();

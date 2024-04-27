@@ -1,18 +1,19 @@
 <script lang="ts" setup="">
-// TODO: Rename this component to LabelHeader or something
 import {ColorFillOutline} from '@vicons/ionicons5';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useStorageLabels} from 'src/composables/storage-labels';
-import {colorsStore, type ColorType} from 'src/draggables/colors/colors-store';
+import {type ColorType} from 'src/draggables/colors/color-type';
 import LabelItemsSelection from 'src/draggables/label/draggable-label-options.vue';
 import {
   labelsSelectionRef,
   useLabelSelection,
 } from 'src/draggables/label/label-selection';
 import {labelColumnsRef} from 'src/draggables/label/labels-columns';
+import {useColorSelection} from 'src/scatter/color-selection';
 
-const {labels, labelsProperties} = useStorageLabels();
+const {labels, labelProperties} = useStorageLabels();
 const {updateSelection} = useLabelSelection();
+const {type} = useColorSelection();
 
 const handlePropertyClick = (property: string) => {
   if (labels.value === null || labelsSelectionRef.value === null) {
@@ -52,17 +53,15 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
 const handleBucketClick = (property: string) => {
   const colorType = `by${property}` as ColorType;
 
-  if (colorsStore.colorType === colorType) {
-    return;
+  if (type.value !== colorType) {
+    type.value = colorType;
   }
-
-  colorsStore.colorType = colorType;
 };
 </script>
 
 <template>
   <NGrid :cols="labelColumnsRef.value">
-    <NGi v-for="property in labelsProperties">
+    <NGi v-for="property in labelProperties">
       <div class="col">
         <NButton
           size="tiny"

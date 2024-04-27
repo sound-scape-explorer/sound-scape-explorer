@@ -19,7 +19,7 @@ const {nonNnExtractors} = useExtractorStorage();
 const {band} = useBandSelection();
 const {integration} = useIntegrationSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
-const {labelsProperties} = useStorageLabels();
+const {labelProperties} = useStorageLabels();
 const {clickedIndex, hasClicked} = useScatterClick();
 
 const {
@@ -169,12 +169,12 @@ watch(intervalDetailsRef, () => {
           x-gap="12"
         >
           <!--suppress JSUnusedLocalSymbols -->
-          <NGi v-for="(_, index) in labelsProperties">
+          <NGi v-for="(_, index) in labelProperties">
             <NTag
               :bordered="false"
               size="small"
             >
-              {{ labelsProperties?.[index] }}
+              {{ labelProperties?.[index] }}
             </NTag>
 
             {{ intervalLabelsRef?.[index] }}

@@ -12,6 +12,7 @@ export const pointsFilteredByMetaRef = reactive<PointsFilteredByMetaRef>({
   value: null,
 });
 
+// todo: refactor me
 export function useScatterFilterMeta() {
   const {labels} = useStorageLabels();
   const {aggregatedLabels} = useStorageAggregatedLabels();

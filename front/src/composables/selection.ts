@@ -121,7 +121,7 @@ export function useSelection() {
     await readReducedFeatures();
 
     buildSelection();
-    generateColorScale();
+    await generateColorScale();
 
     filterByMeta();
     filterByTime();

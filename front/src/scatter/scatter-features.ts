@@ -4,47 +4,44 @@ import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggre
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
-import {
-  alphaHighRef,
-  alphaLowRef,
-  colorScaleRef,
-} from 'src/scatter/scatter-color-scale';
+import {useScatterColorAlpha} from 'src/scatter/scatter-color-alpha';
+import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {pointsFilteredByMetaRef} from 'src/scatter/scatter-filter-meta';
 import {pointsFilteredByTimeRef} from 'src/scatter/scatter-filter-time';
 
+const size2d = 5;
+const size3d = 3;
+
 export function useScatterFeatures() {
-  const {labelsProperties} = useStorageLabels();
+  const {labelProperties} = useStorageLabels();
   const {reducedFeatures} = useStorageReducedFeatures();
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {convertTimestampToIsoDate} = useDate();
-  const size2d = 5;
-  const size3d = 3;
+  const {low, high} = useScatterColorAlpha();
+  const {scale} = useScatterColorScale();
 
   const traceFeatures = (): Data[] => {
     if (
-      labelsProperties.value === null ||
+      labelProperties.value === null ||
       reducedFeatures.value === null ||
       aggregatedLabels.value === null ||
-      colorScaleRef.value === null ||
+      scale.value === null ||
       pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null
     ) {
       return [];
     }
 
-    const colorScale = colorScaleRef.value;
+    const colorScale = scale.value;
     const pointsFilteredByMeta = pointsFilteredByMetaRef.value;
     const pointsFilteredByTime = pointsFilteredByTimeRef.value;
 
     const plotlyColorscale = colorScale.map((color, index) => {
       let filteredColor = color;
 
-      if (
-        pointsFilteredByMeta[index] === true ||
-        pointsFilteredByTime[index] === true
-      ) {
-        filteredColor = `rgba(0, 0, 0, ${alphaLowRef.value})`;
+      if (pointsFilteredByMeta[index] || pointsFilteredByTime[index]) {
+        filteredColor = `rgba(0, 0, 0, ${low.value})`;
       }
 
       return [index / (colorScale.length - 1), filteredColor];
@@ -52,7 +49,7 @@ export function useScatterFeatures() {
 
     const isThreeDimensional = reducedFeatures.value[0].length === 3;
     const scatterType = isThreeDimensional ? 'scatter3d' : 'scattergl';
-    const properties = labelsProperties.value;
+    const properties = labelProperties.value;
 
     const indices = reducedFeatures.value.map((_, i) => i);
     const texts = indices.map((i) => {
@@ -107,7 +104,7 @@ export function useScatterFeatures() {
       marker: {
         size: isThreeDimensional ? size3d : size2d,
         symbol: 'circle',
-        opacity: alphaHighRef.value,
+        opacity: high.value,
         color: indices,
         colorscale: plotlyColorscale,
         line: {

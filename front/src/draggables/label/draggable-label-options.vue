@@ -1,21 +1,26 @@
 <script lang="ts" setup="">
+import type {Scale} from 'chroma-js';
 import {NCheckbox, NCheckboxGroup, NGi, NGrid} from 'naive-ui';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 import {useColorByLabel} from 'src/draggables/colors/color-by-label';
-import {colorsStore} from 'src/draggables/colors/colors-store';
 import {
   labelsSelectionRef,
   useLabelSelection,
 } from 'src/draggables/label/label-selection';
+import {useColorSelection} from 'src/scatter/color-selection';
+import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {computed, ref, watch, watchEffect} from 'vue';
 
 interface Props {
   property: string;
 }
 
+// todo: refactor this component
 const props = defineProps<Props>();
 
+const {type} = useColorSelection();
+const {userScale} = useScatterColorScale();
 const {labels} = useStorageLabels();
 const {getColorByLabelIndex} = useColorByLabel();
 const selectionRef = ref<string[]>([]);
@@ -29,14 +34,14 @@ const uniquesRef = computed<string[]>(() => {
   return labels.value[props.property];
 });
 
-function getColorByItem(index: number): string | undefined {
+function getColorByItem(index: number, scale: Scale): string | undefined {
   const colorType = `by${props.property}`;
 
-  if (colorType !== colorsStore.colorType) {
+  if (colorType !== type.value) {
     return undefined;
   }
 
-  return getColorByLabelIndex(index, uniquesRef.value.length);
+  return getColorByLabelIndex(index, uniquesRef.value.length, scale);
 }
 
 watch(selectionRef, () => updateSelection(props.property, selectionRef.value));
@@ -58,7 +63,7 @@ watchEffect(updateReverse);
 const isActiveIdRef = computed<string>(() => {
   const colorType = `by${props.property}`;
 
-  if (colorType !== colorsStore.colorType) {
+  if (colorType !== type.value) {
     return '';
   }
 
@@ -79,7 +84,7 @@ const isActiveIdRef = computed<string>(() => {
       <NGi v-for="(item, index) in uniquesRef">
         <NCheckbox
           :style="{
-            backgroundColor: getColorByItem(index),
+            backgroundColor: getColorByItem(index, userScale),
           }"
           :value="item"
           class="checkbox"

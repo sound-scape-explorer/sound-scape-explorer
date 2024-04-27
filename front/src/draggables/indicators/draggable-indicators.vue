@@ -11,10 +11,11 @@ import {
   indicatorDataRef,
   useIndicators,
 } from 'src/draggables/indicators/indicators';
-import {cyclingScaleRef} from 'src/scatter/scatter-color-scale';
+import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
+const {cyclingScale} = useScatterColorScale();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
 const {selectIndicator, selectSites} = useIndicators();
 const {convertTimestampToIsoDate} = useDate();
@@ -76,7 +77,7 @@ const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
   const timestamps = indicatorDataRef.value.map((d) => d.timestamp);
   const sitesValues = indicatorDataRef.value.map((d) => d.site);
   const sitesNames = sites.value.map((site) => site.name);
-  const scale = cyclingScaleRef.value.colors(sitesNames.length + 1);
+  const scale = cyclingScale.value.colors(sitesNames.length + 1);
 
   const colors = indicatorDataRef.value.map(
     (d) => scale[sitesNames.indexOf(d.site)],

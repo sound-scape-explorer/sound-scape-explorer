@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import {NSelect, NTooltip} from 'naive-ui';
 import {useStorageLabels} from 'src/composables/storage-labels';
-import type {ColorType} from 'src/draggables/colors/colors-store';
-import {colorsStore} from 'src/draggables/colors/colors-store';
+import type {ColorType} from 'src/draggables/colors/color-type';
+import {useColorSelection} from 'src/scatter/color-selection';
 import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
-const {labelsProperties} = useStorageLabels();
+const {labelProperties} = useStorageLabels();
 const {isLoading} = useScatterLoading();
+const {type} = useColorSelection();
 
+// todo: refactor me
 const optionsRef = computed<string[]>(() => {
   const defaultOptions: ColorType[] = [
     'intervalIndex',
@@ -20,13 +22,13 @@ const optionsRef = computed<string[]>(() => {
     'cycleDay',
   ];
 
-  if (labelsProperties.value === null) {
+  if (labelProperties.value === null) {
     return defaultOptions;
   }
 
   return [
     ...defaultOptions,
-    ...convertSlugsToColorTypes(labelsProperties.value),
+    ...convertSlugsToColorTypes(labelProperties.value),
   ];
 });
 
@@ -41,9 +43,10 @@ const naiveOptions = computed(() => {
     placement="right"
     trigger="hover"
   >
+    <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
       <NSelect
-        v-model:value="colorsStore.colorType"
+        v-model:value="type"
         :disabled="isLoading"
         :options="naiveOptions"
         placeholder="Color type..."
