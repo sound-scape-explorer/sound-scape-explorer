@@ -1,10 +1,11 @@
 import type {StorageSettings} from 'src/common/storage-settings';
 import {useStorageReader} from 'src/composables/storage-reader';
 import {useStorageReady} from 'src/composables/storage-ready';
-import {ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 
-const settings = ref<StorageSettings | null>(null);
 let isLoaded = false;
+const settings = ref<StorageSettings | null>(null);
+const hasTimezone = computed(() => settings.value?.timezone !== '');
 
 export function useStorageSettings() {
   const {read} = useStorageReader();
@@ -30,5 +31,6 @@ export function useStorageSettings() {
 
   return {
     settings: settings,
+    hasTimezone: hasTimezone,
   };
 }

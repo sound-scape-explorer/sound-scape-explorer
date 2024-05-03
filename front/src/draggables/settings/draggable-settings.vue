@@ -5,6 +5,7 @@ import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {useClientSettings} from 'src/composables/client-settings';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
+import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {useSpectrogramColormap} from 'src/draggables/audio/spectrogram-colormap';
 import {
@@ -14,12 +15,18 @@ import {
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
-const {openDetailsOnScatterClick, plotBackground, preview, applyTimezone} =
-  useClientSettings();
+const {
+  openDetailsOnScatterClick,
+  plotBackground,
+  preview,
+  applyTimezone,
+  timeShift,
+} = useClientSettings();
 const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
 const {colormap} = useSpectrogramColormap();
+const {settings, hasTimezone} = useStorageSettings();
 
 const spectrogramColorMapsOptionsRef = computed(() => {
   return convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS);
@@ -31,7 +38,10 @@ const plotBackgroundOptionsRef = computed(() => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="settings">
+  <AppDraggable
+    class="draggable-settings"
+    draggable-key="settings"
+  >
     <NGrid cols="1">
       <NGi class="gi">
         <NTag
@@ -40,6 +50,7 @@ const plotBackgroundOptionsRef = computed(() => {
         >
           Audio host
         </NTag>
+        <span />
         <NInput
           v-model:value="audioHost"
           size="tiny"
@@ -47,6 +58,7 @@ const plotBackgroundOptionsRef = computed(() => {
           @inputFocus="() => lock()"
         />
       </NGi>
+
       <NGi class="gi">
         <NTag
           :bordered="false"
@@ -54,6 +66,7 @@ const plotBackgroundOptionsRef = computed(() => {
         >
           Spectrogram: Color map
         </NTag>
+        <span />
         <NSelect
           v-model:value="colormap"
           :default-value="colormap"
@@ -69,6 +82,7 @@ const plotBackgroundOptionsRef = computed(() => {
         >
           Spectrogram: Show decibels
         </NTag>
+        <span />
         <NCheckbox
           v-model:checked="waveSurferShowDecibelsRef.value"
           class="checkbox"
@@ -82,6 +96,7 @@ const plotBackgroundOptionsRef = computed(() => {
         >
           Spectrogram: Overflow legends
         </NTag>
+        <span />
         <NCheckbox
           v-model:checked="waveSurferOverflowLegendsRef.value"
           class="checkbox"
@@ -95,6 +110,7 @@ const plotBackgroundOptionsRef = computed(() => {
         >
           Auto open Details panel on scatter click
         </NTag>
+        <span />
         <NCheckbox
           v-model:checked="openDetailsOnScatterClick"
           class="checkbox"
@@ -107,6 +123,7 @@ const plotBackgroundOptionsRef = computed(() => {
         >
           Plot background
         </NTag>
+        <span />
         <NSelect
           v-model:value="plotBackground"
           :default-value="plotBackground"
@@ -120,11 +137,50 @@ const plotBackgroundOptionsRef = computed(() => {
           :bordered="false"
           size="small"
         >
-          Apply timezone
+          Plotly font size
         </NTag>
+        <span />
+        <NInput
+          v-model:value="fontSize"
+          size="tiny"
+          type="number"
+          @inputBlur="() => unlock()"
+          @inputFocus="() => lock()"
+        />
+      </NGi>
+
+      <NGi class="gi">
+        <NTag
+          :bordered="false"
+          size="small"
+        >
+          <span v-if="!hasTimezone">Apply timezone (disabled)</span>
+          <span v-if="hasTimezone">
+            Apply timezone ({{ settings?.timezone }})
+          </span>
+        </NTag>
+        <span />
         <NCheckbox
           v-model:checked="applyTimezone"
+          :disabled="!hasTimezone"
           class="checkbox"
+        />
+      </NGi>
+
+      <NGi class="gi">
+        <NTag
+          :bordered="false"
+          size="small"
+        >
+          Time shift in hours
+        </NTag>
+        <span />
+        <NInput
+          v-model:value="timeShift"
+          size="tiny"
+          type="number"
+          @inputBlur="() => unlock()"
+          @inputFocus="() => lock()"
         />
       </NGi>
 
@@ -135,25 +191,10 @@ const plotBackgroundOptionsRef = computed(() => {
         >
           Preview beta features
         </NTag>
+        <span />
         <NCheckbox
           v-model:checked="preview"
           class="checkbox"
-        />
-      </NGi>
-
-      <NGi class="gi">
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Plotly font size
-        </NTag>
-        <NInput
-          v-model:value="fontSize"
-          size="tiny"
-          type="number"
-          @inputBlur="() => unlock()"
-          @inputFocus="() => lock()"
         />
       </NGi>
     </NGrid>
@@ -161,10 +202,14 @@ const plotBackgroundOptionsRef = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+.draggable-settings {
+  width: 32em;
+}
+
 .gi {
-  display: flex;
-  justify-content: space-between;
   gap: 0.5em;
   margin-bottom: 0.5em;
+  display: grid;
+  grid-template-columns: auto 1fr 10em;
 }
 </style>

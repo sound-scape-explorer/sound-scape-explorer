@@ -12,22 +12,24 @@ dayjs.extend(timezone);
 
 export function useDate() {
   const {settings} = useStorageSettings();
-  const {applyTimezone} = useClientSettings();
+  const {applyTimezone, timeShift} = useClientSettings();
 
   const convertTimestampToDate = (timestamp: number) => {
+    const shift = Number(timeShift.value);
+
     if (applyTimezone.value === false) {
-      return dayjs(timestamp);
+      return dayjs(timestamp).add(shift, 'hours');
     }
 
     if (settings.value === null) {
-      return dayjs(timestamp);
+      return dayjs(timestamp).add(shift, 'hours');
     }
 
     if (settings.value.timezone === '') {
-      return dayjs(timestamp);
+      return dayjs(timestamp).add(shift, 'hours');
     }
 
-    return dayjs(timestamp).tz(settings.value.timezone);
+    return dayjs(timestamp).tz(settings.value.timezone).add(shift, 'hours');
   };
 
   const convertTimestampToIsoDate = (timestamp: number): string => {

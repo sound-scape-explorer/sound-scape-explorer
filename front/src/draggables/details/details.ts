@@ -1,4 +1,5 @@
 import type {Dayjs} from 'dayjs';
+import {useClientSettings} from 'src/composables/client-settings';
 import {useDate} from 'src/composables/date';
 import {
   type IntervalDetails,
@@ -31,6 +32,7 @@ export function useDetails() {
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {clickedIndex} = useScatterClick();
+  const {timeShift} = useClientSettings();
 
   const readDetails = async () => {
     if (
@@ -58,6 +60,16 @@ export function useDetails() {
   };
 
   watch(clickedIndex, readDetails);
+  watch(timeShift, () => {
+    if (clickedIndex.value === null || aggregatedTimestamps.value === null) {
+      return;
+    }
+
+    const i = clickedIndex.value;
+    const t = aggregatedTimestamps.value[i];
+
+    date.value = convertTimestampToDate(t);
+  });
 
   return {
     date: date,

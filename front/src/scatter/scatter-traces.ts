@@ -1,4 +1,5 @@
 import type {Data} from 'plotly.js-dist-min';
+import {useClientSettings} from 'src/composables/client-settings';
 import {useTrajectoriesData} from 'src/composables/trajectories-data';
 import {useColorSelection} from 'src/scatter/color-selection';
 import {useScatterColorAlpha} from 'src/scatter/scatter-color-alpha';
@@ -17,6 +18,7 @@ export function useScatterTraces() {
   const {cyclingScale, generateColorScale: generate} = useScatterColorScale();
   const {type, flavor} = useColorSelection();
   const {low, high} = useScatterColorAlpha();
+  const {timeShift} = useClientSettings();
 
   const render = () => {
     let newTraces: Data[] = [];
@@ -52,7 +54,8 @@ export function useScatterTraces() {
   };
 
   // todo: i don't know why this gets triggered so many times...
-  watch([type, flavor, low, high], async () => {
+  // todo: time shift should trigger only the concerned color scales generation functions
+  watch([type, flavor, low, high, timeShift], async () => {
     if (isRendering) {
       return;
     }
