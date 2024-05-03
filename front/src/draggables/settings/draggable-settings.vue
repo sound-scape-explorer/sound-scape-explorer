@@ -2,6 +2,7 @@
 import {NCheckbox, NGi, NGrid, NInput, NSelect, NTag} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
+import {useClientSettings} from 'src/composables/client-settings';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
@@ -10,10 +11,11 @@ import {
   waveSurferOverflowLegendsRef,
   waveSurferShowDecibelsRef,
 } from 'src/draggables/audio/wavesurfer';
-import {settingsStore} from 'src/draggables/settings/settings-store';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
+const {openDetailsOnScatterClick, plotBackground, preview, applyTimezone} =
+  useClientSettings();
 const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
@@ -94,7 +96,7 @@ const plotBackgroundOptionsRef = computed(() => {
           Auto open Details panel on scatter click
         </NTag>
         <NCheckbox
-          v-model:checked="settingsStore.autoOpenOnScatterClick"
+          v-model:checked="openDetailsOnScatterClick"
           class="checkbox"
         />
       </NGi>
@@ -106,8 +108,8 @@ const plotBackgroundOptionsRef = computed(() => {
           Plot background
         </NTag>
         <NSelect
-          v-model:value="settingsStore.plotBackground"
-          :default-value="settingsStore.plotBackground"
+          v-model:value="plotBackground"
+          :default-value="plotBackground"
           :options="plotBackgroundOptionsRef"
           size="tiny"
         />
@@ -121,7 +123,7 @@ const plotBackgroundOptionsRef = computed(() => {
           Apply timezone
         </NTag>
         <NCheckbox
-          v-model:checked="settingsStore.applyTimezone"
+          v-model:checked="applyTimezone"
           class="checkbox"
         />
       </NGi>
@@ -134,7 +136,7 @@ const plotBackgroundOptionsRef = computed(() => {
           Preview beta features
         </NTag>
         <NCheckbox
-          v-model:checked="settingsStore.preview"
+          v-model:checked="preview"
           class="checkbox"
         />
       </NGi>

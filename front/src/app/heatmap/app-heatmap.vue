@@ -6,8 +6,8 @@ import {
 } from 'src/app/heatmap/app-heatmap-data';
 import {useAppHeatmapLayout} from 'src/app/heatmap/app-heatmap-layout';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
+import {useClientSettings} from 'src/composables/client-settings';
 import {usePlotConfig} from 'src/composables/plot-config';
-import {settingsStore} from 'src/draggables/settings/settings-store';
 import {ref, watch} from 'vue';
 
 /**
@@ -30,6 +30,7 @@ const props = defineProps<Props>();
  */
 
 const {fontSize, width, height} = useAppHeatmapSize();
+const {plotBackground} = useClientSettings();
 const {createLayout} = useAppHeatmapLayout();
 const {buildData} = useAppHeatmapData();
 const {generateConfig} = usePlotConfig(props.exportName ?? 'heatmap');
@@ -82,7 +83,7 @@ const refresh = () => {
 refresh();
 watch([divRef, dataRef, layoutRef], render);
 watch(props, refresh);
-watch([fontSize, width, height, settingsStore], refresh);
+watch([fontSize, width, height, plotBackground], refresh);
 </script>
 
 <template>

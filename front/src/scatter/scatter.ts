@@ -3,7 +3,7 @@ import Plotly, {
   type PlotlyHTMLElement,
   type PlotMouseEvent,
 } from 'plotly.js-dist-min';
-import {settingsStore} from 'src/draggables/settings/settings-store';
+import {useClientSettings} from 'src/composables/client-settings';
 import {useScatterCamera} from 'src/scatter/scatter-camera';
 import {useScatterClick} from 'src/scatter/scatter-click';
 import {useScatterConfig} from 'src/scatter/scatter-config';
@@ -16,6 +16,7 @@ export function useScatter() {
   const {config} = useScatterConfig();
   const {isLocked} = useScatterCamera();
   const {traces} = useScatterTraces();
+  const {plotBackground} = useClientSettings();
 
   const handlePlotlyClick = (data: PlotMouseEvent) => {
     const intervalIndex = data.points[0].pointNumber;
@@ -32,7 +33,7 @@ export function useScatter() {
         b: 0,
         l: 0,
       },
-      plot_bgcolor: settingsStore.plotBackground,
+      plot_bgcolor: plotBackground.value,
       yaxis: {
         scaleanchor: 'x',
         scaleratio: 1,

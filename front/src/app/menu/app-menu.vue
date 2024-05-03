@@ -17,11 +17,12 @@ import {
 } from '@vicons/ionicons5';
 import {useAppMenu} from 'src/app/menu/app-menu';
 import MenuItem from 'src/app/menu/app-menu-item.vue';
+import {useClientSettings} from 'src/composables/client-settings';
 import {useSelection} from 'src/composables/selection';
-import {settingsStore} from 'src/draggables/settings/settings-store';
 
 const {isReady, toggle} = useAppMenu();
 const {hasSelection} = useSelection();
+const {preview} = useClientSettings();
 </script>
 
 <template>
@@ -84,7 +85,7 @@ const {hasSelection} = useSelection();
       </MenuItem>
 
       <MenuItem
-        v-if="settingsStore.preview"
+        v-if="preview"
         :disabled="!hasSelection"
         :toggle="toggle"
         draggable-key="timeline"

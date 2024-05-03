@@ -2,9 +2,9 @@ import dayjs, {type Dayjs} from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import {useClientSettings} from 'src/composables/client-settings';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {DATE_FORMAT} from 'src/constants';
-import {settingsStore} from 'src/draggables/settings/settings-store';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -12,9 +12,10 @@ dayjs.extend(timezone);
 
 export function useDate() {
   const {settings} = useStorageSettings();
+  const {applyTimezone} = useClientSettings();
 
   const convertTimestampToDate = (timestamp: number) => {
-    if (settingsStore.applyTimezone === false) {
+    if (applyTimezone.value === false) {
       return dayjs(timestamp);
     }
 

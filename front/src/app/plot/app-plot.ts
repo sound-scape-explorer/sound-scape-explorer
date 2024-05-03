@@ -1,9 +1,9 @@
 import type {Config, Data, Layout} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
 import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
+import {useClientSettings} from 'src/composables/client-settings';
 import {usePlotConfig} from 'src/composables/plot-config';
 import {PLOTLY_SIZE} from 'src/constants';
-import {settingsStore} from 'src/draggables/settings/settings-store';
 import {ref, watch} from 'vue';
 
 export function useAppPlot(props: AppPlotProps) {
@@ -12,6 +12,7 @@ export function useAppPlot(props: AppPlotProps) {
   const layoutRef = ref<Partial<Layout> | null>(null);
   const configRef = ref<Partial<Config> | null>(null);
   const {generateConfig} = usePlotConfig(props.exportFilename);
+  const {plotBackground} = useClientSettings();
 
   async function render() {
     if (
@@ -55,8 +56,8 @@ export function useAppPlot(props: AppPlotProps) {
 
     layoutRef.value = {
       title: props.title,
-      plot_bgcolor: settingsStore.plotBackground,
-      paper_bgcolor: settingsStore.plotBackground,
+      plot_bgcolor: plotBackground.value,
+      paper_bgcolor: plotBackground.value,
       showlegend: !!props.legend,
       clickmode: 'none',
       width: PLOTLY_SIZE,
@@ -87,7 +88,7 @@ export function useAppPlot(props: AppPlotProps) {
 
   refresh();
   watch([divRef, dataRef, layoutRef], render);
-  watch([props, settingsStore], refresh);
+  watch([props, plotBackground], refresh);
 
   return {
     divRef: divRef,

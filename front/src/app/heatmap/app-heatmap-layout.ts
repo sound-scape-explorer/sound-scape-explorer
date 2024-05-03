@@ -1,16 +1,17 @@
 import {type Layout} from 'plotly.js-dist-min';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
-import {settingsStore} from 'src/draggables/settings/settings-store';
+import {useClientSettings} from 'src/composables/client-settings';
 
 export function useAppHeatmapLayout() {
   const {width, height, fontSize} = useAppHeatmapSize();
+  const {plotBackground} = useClientSettings();
 
   const createLayout = (title: string): Partial<Layout> => {
     // noinspection SpellCheckingInspection
     const layout: Partial<Layout> = {
       title: title,
-      paper_bgcolor: settingsStore.plotBackground,
-      plot_bgcolor: settingsStore.plotBackground,
+      paper_bgcolor: plotBackground.value,
+      plot_bgcolor: plotBackground.value,
       clickmode: 'none',
       showlegend: false,
       width: width.value,
