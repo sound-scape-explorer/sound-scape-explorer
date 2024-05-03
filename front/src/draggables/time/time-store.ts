@@ -23,6 +23,7 @@ interface TimeStore {
   max: number;
 }
 
+// todo: refactor me
 export const timeStore = reactive<TimeStore>({
   isAllSelected: true,
   duration: 3600,
