@@ -22,34 +22,29 @@ const {aggregatedIndicators} = useStorageAggregatedIndicators();
 const {labelProperties} = useStorageLabels();
 const {clickedIndex, hasClicked} = useScatterClick();
 
-const {
-  intervalDateRef,
-  intervalLabelsRef,
-  intervalSiteRef,
-  intervalDetailsRef,
-} = useDetails();
+const {date, labelValues, site, blocks} = useDetails();
 
 const {select} = useAudioFile();
 const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
 
 const dateEndRef = computed<Dayjs | null>(() => {
-  if (intervalDateRef.value === null || integration.value === null) {
+  if (date.value === null || integration.value === null) {
     return null;
   }
 
-  return intervalDateRef.value.add(integration.value.seconds, 'seconds');
+  return date.value.add(integration.value.seconds, 'seconds');
 });
 
-watch(intervalDetailsRef, () => {
-  if (intervalDetailsRef.value === null) {
+watch(blocks, () => {
+  if (blocks.value === null) {
     return;
   }
 
-  if (intervalDetailsRef.value.length !== 1) {
+  if (blocks.value.length !== 1) {
     return;
   }
 
-  const blockDetails = intervalDetailsRef.value[0];
+  const blockDetails = blocks.value[0];
   select(blockDetails);
 });
 </script>
@@ -67,14 +62,14 @@ watch(intervalDetailsRef, () => {
 
       <div class="file container">
         <div class="title">Site</div>
-        <span class="file index">{{ intervalSiteRef?.site ?? '' }}</span>
+        <span class="file index">{{ site?.site ?? '' }}</span>
       </div>
 
       <div class="file container">
         <div class="title">Audio blocks</div>
         <span class="file index">
           <NTooltip
-            v-for="blockDetails in intervalDetailsRef"
+            v-for="blockDetails in blocks"
             placement="bottom"
             trigger="hover"
           >
@@ -133,9 +128,7 @@ watch(intervalDetailsRef, () => {
 
       <div class="file container">
         <div class="title">Date Start</div>
-        <span class="file index">{{
-          intervalDateRef && convertDateToIsoDate(intervalDateRef)
-        }}</span>
+        <span class="file index">{{ date && convertDateToIsoDate(date) }}</span>
       </div>
 
       <div class="file container">
@@ -177,7 +170,7 @@ watch(intervalDetailsRef, () => {
               {{ labelProperties?.[index] }}
             </NTag>
 
-            {{ intervalLabelsRef?.[index] }}
+            {{ labelValues?.[index] }}
           </NGi>
         </NGrid>
 

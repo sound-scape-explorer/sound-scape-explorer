@@ -13,8 +13,15 @@ import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated
 import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {useScatterClick} from 'src/scatter/scatter-click';
-import {ref, watchEffect} from 'vue';
+import {ref, watch} from 'vue';
 
+const currentIndex = ref<number | null>(null);
+const date = ref<Dayjs | null>(null);
+const labelValues = ref<string[] | null>(null);
+const site = ref<AggregatedSite | null>(null);
+const blocks = ref<IntervalDetails | null>(null);
+
+// interval details
 export function useDetails() {
   const {settings} = useStorageSettings();
   const {files} = useStorageFiles();
@@ -25,13 +32,7 @@ export function useDetails() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {clickedIndex} = useScatterClick();
 
-  const intervalDateRef = ref<Dayjs | null>(null);
-  const intervalLabelsRef = ref<string[] | null>(null);
-  const intervalSiteRef = ref<AggregatedSite | null>(null);
-  const intervalDetailsRef = ref<IntervalDetails | null>(null);
-
-  // TODO: Performance can be improved (react on clickedRef change only)
-  watchEffect(async () => {
+  const readDetails = async () => {
     if (
       clickedIndex.value === null ||
       files.value === null ||
@@ -39,25 +40,29 @@ export function useDetails() {
       aggregatedSites.value === null ||
       aggregatedTimestamps.value === null ||
       aggregatedLabels.value === null ||
-      aggregatedIntervalDetails.value === null
+      aggregatedIntervalDetails.value === null ||
+      clickedIndex.value === currentIndex.value
     ) {
       return;
     }
 
-    const intervalIndex = clickedIndex.value;
-    const timestamp = aggregatedTimestamps.value[intervalIndex];
+    const i = clickedIndex.value; // interval index
+    const t = aggregatedTimestamps.value[i];
 
-    intervalDateRef.value = convertTimestampToDate(timestamp);
+    date.value = convertTimestampToDate(t);
+    labelValues.value = aggregatedLabels.value[i];
+    site.value = aggregatedSites.value[i];
+    blocks.value = aggregatedIntervalDetails.value[i];
 
-    intervalLabelsRef.value = aggregatedLabels.value[intervalIndex];
-    intervalSiteRef.value = aggregatedSites.value[intervalIndex];
-    intervalDetailsRef.value = aggregatedIntervalDetails.value[intervalIndex];
-  });
+    currentIndex.value = i;
+  };
+
+  watch(clickedIndex, readDetails);
 
   return {
-    intervalDateRef: intervalDateRef,
-    intervalLabelsRef: intervalLabelsRef,
-    intervalSiteRef: intervalSiteRef,
-    intervalDetailsRef: intervalDetailsRef,
+    date: date,
+    labelValues: labelValues,
+    site: site,
+    blocks: blocks,
   };
 }

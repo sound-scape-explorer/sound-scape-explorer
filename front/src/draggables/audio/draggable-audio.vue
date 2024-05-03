@@ -32,7 +32,7 @@ const {waveform, spectrogram} = useDraggableAudio();
 const {increase, decrease, size} = useAudioFourier();
 const {settings} = useStorageSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
-const {intervalDateRef} = useDetails();
+const {date} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {clickedIndex, hasClicked} = useScatterClick();
 const {increaseVolume, decreaseVolume} = useWavesurfer();
@@ -146,7 +146,7 @@ const {block, duration} = useAudioFile();
               Interval Date
             </NTag>
 
-            {{ intervalDateRef && convertDateToIsoDate(intervalDateRef) }}
+            {{ date && convertDateToIsoDate(date) }}
           </NGi>
         </NGrid>
 
