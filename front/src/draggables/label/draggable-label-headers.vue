@@ -3,17 +3,18 @@ import {ColorFillOutline} from '@vicons/ionicons5';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {type ColorType} from 'src/draggables/colors/color-type';
+import {useDraggableLabel} from 'src/draggables/label/draggable-label';
 import DraggableLabelOptions from 'src/draggables/label/draggable-label-options.vue';
 import {
   labelsSelectionRef,
   useLabelSelection,
 } from 'src/draggables/label/label-selection';
-import {labelColumnsRef} from 'src/draggables/label/labels-columns';
 import {useColorSelection} from 'src/scatter/color-selection';
 
 const {labels, labelProperties} = useStorageLabels();
 const {updateSelection} = useLabelSelection();
 const {type} = useColorSelection();
+const {columns} = useDraggableLabel();
 
 const handlePropertyClick = (property: string) => {
   if (labels.value === null || labelsSelectionRef.value === null) {
@@ -60,7 +61,7 @@ const handleBucketClick = (property: string) => {
 </script>
 
 <template>
-  <NGrid :cols="labelColumnsRef.value">
+  <NGrid :cols="columns">
     <NGi v-for="property in labelProperties">
       <div class="col">
         <NButton

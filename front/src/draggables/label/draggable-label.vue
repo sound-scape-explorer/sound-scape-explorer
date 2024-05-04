@@ -1,29 +1,30 @@
 <script lang="ts" setup="">
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {useDraggableLabel} from 'src/draggables/label/draggable-label';
 import DraggableLabelButtons from 'src/draggables/label/draggable-label-buttons.vue';
 import DraggableLabelHeaders from 'src/draggables/label/draggable-label-headers.vue';
 import {useLabelSelection} from 'src/draggables/label/label-selection';
-import {labelZoomedRef} from 'src/draggables/label/label-zoom';
 import {computed} from 'vue';
 
 useLabelSelection();
+const {isZoomed} = useDraggableLabel();
 // const {build} = useLabelSelection();
 
-const containerClasses = computed<string>(() => {
-  let classes = 'container';
+const classes = computed<string>(() => {
+  let string = 'container';
 
-  if (labelZoomedRef.value === true) {
-    classes += ' open';
+  if (isZoomed.value === true) {
+    string += ' open';
   }
 
-  return classes;
+  return string;
 });
 </script>
 
 <template>
   <AppDraggable draggable-key="labels">
     <div
-      :class="containerClasses"
+      :class="classes"
       class="container"
     >
       <DraggableLabelButtons />

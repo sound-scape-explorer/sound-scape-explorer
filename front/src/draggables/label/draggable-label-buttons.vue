@@ -3,23 +3,12 @@ import {SearchOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useKeyboard} from 'src/composables/keyboard';
-import {labelZoomedRef} from 'src/draggables/label/label-zoom';
-import {labelColumnsRef} from 'src/draggables/label/labels-columns';
-
-const toggleZoom = () => {
-  labelZoomedRef.value = !labelZoomedRef.value;
-};
+import {useDraggableLabel} from 'src/draggables/label/draggable-label';
 
 const {registerKey} = useKeyboard();
-registerKey(KeyboardShortcut.labelsZoom, toggleZoom);
-const toggleColumns = () => {
-  if (labelColumnsRef.value === 1) {
-    labelColumnsRef.value = 2;
-    return;
-  }
+const {columns, toggleColumns, toggleZoom} = useDraggableLabel();
 
-  labelColumnsRef.value = 1;
-};
+registerKey(KeyboardShortcut.labelsZoom, toggleZoom);
 </script>
 
 <template>
@@ -48,7 +37,7 @@ const toggleColumns = () => {
           size="tiny"
           @click="toggleColumns"
         >
-          <NIcon>{{ labelColumnsRef.value }}</NIcon>
+          <NIcon>{{ columns }}</NIcon>
         </NButton>
       </template>
       <span>Columns</span>
