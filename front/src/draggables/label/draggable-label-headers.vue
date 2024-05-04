@@ -3,7 +3,7 @@ import {ColorFillOutline} from '@vicons/ionicons5';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {type ColorType} from 'src/draggables/colors/color-type';
-import LabelItemsSelection from 'src/draggables/label/draggable-label-options.vue';
+import DraggableLabelOptions from 'src/draggables/label/draggable-label-options.vue';
 import {
   labelsSelectionRef,
   useLabelSelection,
@@ -78,6 +78,7 @@ const handleBucketClick = (property: string) => {
           placement="top-start"
           trigger="hover"
         >
+          <!--suppress VueUnrecognizedSlot -->
           <template #trigger>
             <NTag
               :bordered="false"
@@ -97,7 +98,7 @@ const handleBucketClick = (property: string) => {
         </NTooltip>
       </div>
 
-      <LabelItemsSelection
+      <DraggableLabelOptions
         :property="property"
         class="checkboxes"
       />
@@ -111,6 +112,7 @@ const handleBucketClick = (property: string) => {
   align-items: flex-start;
   height: auto;
   padding-top: 8px;
+  gap: 2px;
 }
 
 .tag {
