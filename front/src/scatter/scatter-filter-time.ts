@@ -1,20 +1,13 @@
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {timeStore} from 'src/draggables/time/time-store';
-import {reactive} from 'vue';
+import {ref} from 'vue';
 
-interface PointsFilteredByTimeRef {
-  value: boolean[] | null;
-}
+const filtered = ref<boolean[]>([]);
 
-export const pointsFilteredByTimeRef = reactive<PointsFilteredByTimeRef>({
-  value: null,
-});
-
-// todo: refactor me
 export function useScatterFilterTime() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
-  const isVisibleByTime = (index: number): boolean => {
+  const isVisible = (index: number): boolean => {
     if (timeStore.isAllSelected) {
       return true;
     }
@@ -33,7 +26,7 @@ export function useScatterFilterTime() {
     return timestamp >= start && timestamp <= end;
   };
 
-  const filterByTime = (): void => {
+  const filter = (): void => {
     if (aggregatedTimestamps.value === null) {
       return;
     }
@@ -45,19 +38,20 @@ export function useScatterFilterTime() {
       intervalIndex < aggregatedTimestamps.value.length;
       intervalIndex += 1
     ) {
-      const isVisible = isVisibleByTime(intervalIndex);
-      pointsFilteredByTime.push(!isVisible);
+      const isFiltered = !isVisible(intervalIndex);
+      pointsFilteredByTime.push(isFiltered);
     }
 
-    pointsFilteredByTimeRef.value = pointsFilteredByTime;
+    filtered.value = pointsFilteredByTime;
   };
 
-  const resetFilterByTime = () => {
-    pointsFilteredByTimeRef.value = null;
+  const reset = () => {
+    filtered.value = [];
   };
 
   return {
-    filterByTime: filterByTime,
-    resetFilterByTime: resetFilterByTime,
+    filtered: filtered,
+    filterByTime: filter,
+    resetFilterByTime: reset,
   };
 }

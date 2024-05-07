@@ -7,7 +7,7 @@ import {useStorageReducedFeatures} from 'src/composables/storage-reduced-feature
 import {useScatterColorAlpha} from 'src/scatter/scatter-color-alpha';
 import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
-import {pointsFilteredByTimeRef} from 'src/scatter/scatter-filter-time';
+import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
 
 const size2d = 5;
 const size3d = 3;
@@ -20,22 +20,22 @@ export function useScatterFeatures() {
   const {convertTimestampToIsoDate} = useDate();
   const {low, high} = useScatterColorAlpha();
   const {scale} = useScatterColorScale();
-  const {filtered} = useScatterFilterLabel();
+  const {filtered: labelFiltered} = useScatterFilterLabel();
+  const {filtered: timeFiltered} = useScatterFilterTime();
 
   const trace = (): Data[] => {
     if (
       labelProperties.value === null ||
       reducedFeatures.value === null ||
       aggregatedLabels.value === null ||
-      scale.value === null ||
-      pointsFilteredByTimeRef.value === null
+      scale.value === null
     ) {
       return [];
     }
 
     const colorScale = scale.value;
-    const pointsFilteredByMeta = filtered.value;
-    const pointsFilteredByTime = pointsFilteredByTimeRef.value;
+    const pointsFilteredByMeta = labelFiltered.value;
+    const pointsFilteredByTime = timeFiltered.value;
 
     const plotlyColorscale = colorScale.map((color, index) => {
       let filteredColor = color;

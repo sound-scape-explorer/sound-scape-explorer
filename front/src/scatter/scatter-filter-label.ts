@@ -6,6 +6,7 @@ import {type Ref, ref} from 'vue';
 // by interval indexes
 const filtered = ref<boolean[]>([]);
 
+// todo: fix performance loss
 export function useScatterFilterLabel() {
   const {labels} = useStorageLabels();
   const {aggregatedLabels} = useStorageAggregatedLabels();
