@@ -1,6 +1,5 @@
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {timeStore} from 'src/draggables/time/time-store';
-import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {reactive} from 'vue';
 
 interface PointsFilteredByTimeRef {
@@ -34,8 +33,6 @@ export function useScatterFilterTime() {
     return timestamp >= start && timestamp <= end;
   };
 
-  const {renderTraces} = useScatterTraces();
-
   const filterByTime = (): void => {
     if (aggregatedTimestamps.value === null) {
       return;
@@ -53,7 +50,6 @@ export function useScatterFilterTime() {
     }
 
     pointsFilteredByTimeRef.value = pointsFilteredByTime;
-    renderTraces();
   };
 
   const resetFilterByTime = () => {

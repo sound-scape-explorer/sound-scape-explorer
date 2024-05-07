@@ -1,23 +1,16 @@
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {type LabelSelection} from 'src/draggables/label/label-selection';
-import {useScatterTraces} from 'src/scatter/scatter-traces';
-import {reactive, type Ref} from 'vue';
+import {type Ref, ref} from 'vue';
 
-interface PointsFilteredByMetaRef {
-  value: boolean[] | null;
-}
+// by interval indexes
+const filtered = ref<boolean[]>([]);
 
-export const pointsFilteredByMetaRef = reactive<PointsFilteredByMetaRef>({
-  value: null,
-});
-
-// todo: refactor me
-export function useScatterFilterMeta() {
+export function useScatterFilterLabel() {
   const {labels} = useStorageLabels();
   const {aggregatedLabels} = useStorageAggregatedLabels();
 
-  const isVisibleByMeta = (
+  const isVisible = (
     intervalIndex: number,
     newSelection: Ref<LabelSelection>,
   ): boolean => {
@@ -52,9 +45,7 @@ export function useScatterFilterMeta() {
     return isVisible;
   };
 
-  const {renderTraces} = useScatterTraces();
-
-  const filterByMeta = (newSelection: Ref<LabelSelection>) => {
+  const filter = (newSelection: Ref<LabelSelection>) => {
     if (aggregatedLabels.value === null) {
       return;
     }
@@ -66,21 +57,20 @@ export function useScatterFilterMeta() {
       intervalIndex < aggregatedLabels.value.length;
       ++intervalIndex
     ) {
-      const isVisible = isVisibleByMeta(intervalIndex, newSelection);
-      pointsFilteredByMeta.push(!isVisible);
+      const isFiltered = !isVisible(intervalIndex, newSelection);
+      pointsFilteredByMeta.push(isFiltered);
     }
 
-    pointsFilteredByMetaRef.value = pointsFilteredByMeta;
-
-    renderTraces();
+    filtered.value = pointsFilteredByMeta;
   };
 
-  const resetFilterByMeta = () => {
-    pointsFilteredByMetaRef.value = null;
+  const reset = () => {
+    filtered.value = [];
   };
 
   return {
-    filterByMeta: filterByMeta,
-    resetFilterByMeta: resetFilterByMeta,
+    filtered: filtered,
+    filter: filter,
+    reset: reset,
   };
 }

@@ -5,6 +5,7 @@ import {useColorSelection} from 'src/scatter/color-selection';
 import {useScatterColorAlpha} from 'src/scatter/scatter-color-alpha';
 import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {useScatterFeatures} from 'src/scatter/scatter-features';
+import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
 import {traceAverageTrajectory} from 'src/utils/trace-average-trajectory';
 import {traceTrajectories} from 'src/utils/trace-trajectories';
 import {ref, watch} from 'vue';
@@ -19,6 +20,7 @@ export function useScatterTraces() {
   const {type, flavor} = useColorSelection();
   const {low, high} = useScatterColorAlpha();
   const {timeShift} = useClientSettings();
+  const {filtered} = useScatterFilterLabel();
 
   const render = () => {
     let newTraces: Data[] = [];
@@ -55,7 +57,7 @@ export function useScatterTraces() {
 
   // todo: i don't know why this gets triggered so many times...
   // todo: time shift should trigger only the concerned color scales generation functions
-  watch([type, flavor, low, high, timeShift], async () => {
+  watch([type, flavor, low, high, timeShift, filtered], async () => {
     if (isRendering) {
       return;
     }

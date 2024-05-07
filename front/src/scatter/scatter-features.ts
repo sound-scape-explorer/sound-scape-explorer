@@ -6,7 +6,7 @@ import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
 import {useScatterColorAlpha} from 'src/scatter/scatter-color-alpha';
 import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
-import {pointsFilteredByMetaRef} from 'src/scatter/scatter-filter-meta';
+import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
 import {pointsFilteredByTimeRef} from 'src/scatter/scatter-filter-time';
 
 const size2d = 5;
@@ -20,21 +20,21 @@ export function useScatterFeatures() {
   const {convertTimestampToIsoDate} = useDate();
   const {low, high} = useScatterColorAlpha();
   const {scale} = useScatterColorScale();
+  const {filtered} = useScatterFilterLabel();
 
-  const traceFeatures = (): Data[] => {
+  const trace = (): Data[] => {
     if (
       labelProperties.value === null ||
       reducedFeatures.value === null ||
       aggregatedLabels.value === null ||
       scale.value === null ||
-      pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null
     ) {
       return [];
     }
 
     const colorScale = scale.value;
-    const pointsFilteredByMeta = pointsFilteredByMetaRef.value;
+    const pointsFilteredByMeta = filtered.value;
     const pointsFilteredByTime = pointsFilteredByTimeRef.value;
 
     const plotlyColorscale = colorScale.map((color, index) => {
@@ -118,6 +118,6 @@ export function useScatterFeatures() {
   };
 
   return {
-    traceFeatures: traceFeatures,
+    traceFeatures: trace,
   };
 }

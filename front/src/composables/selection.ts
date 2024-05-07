@@ -14,7 +14,7 @@ import {useStorageReducedFeatures} from 'src/composables/storage-reduced-feature
 import {useTrajectoriesSelection} from 'src/composables/trajectories-selection';
 import {useLabelSelection} from 'src/draggables/label/label-selection';
 import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
-import {useScatterFilterMeta} from 'src/scatter/scatter-filter-meta';
+import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
 import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
 import {useScatterLoading} from 'src/scatter/scatter-loading';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
@@ -47,7 +47,8 @@ export function useSelection() {
   } = useLabelSelection();
   const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
   const {renderTraces, resetTraces} = useScatterTraces();
-  const {filterByMeta, resetFilterByMeta} = useScatterFilterMeta();
+  const {filter: filterByLabel, reset: resetFilterByLabel} =
+    useScatterFilterLabel();
   const {filterByTime, resetFilterByTime} = useScatterFilterTime();
 
   const {band, reset: resetBand} = useBandSelection();
@@ -79,7 +80,7 @@ export function useSelection() {
     resetSelection();
     resetColorScale();
     resetTraces();
-    resetFilterByMeta();
+    resetFilterByLabel();
     resetFilterByTime();
 
     isLoading.value = false;
@@ -127,7 +128,7 @@ export function useSelection() {
     buildSelection();
     await generateColorScale();
 
-    filterByMeta(labelSelection);
+    filterByLabel(labelSelection);
     filterByTime();
 
     renderTraces();

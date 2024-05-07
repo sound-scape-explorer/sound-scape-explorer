@@ -10,7 +10,7 @@ import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-site
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
-import {pointsFilteredByMetaRef} from 'src/scatter/scatter-filter-meta';
+import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
 import {pointsFilteredByTimeRef} from 'src/scatter/scatter-filter-time';
 import {ref} from 'vue';
 
@@ -35,6 +35,7 @@ export function useScatterExport() {
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {filtered: labelFiltered} = useScatterFilterLabel();
 
   const loadingRef = ref<boolean>(false);
 
@@ -45,7 +46,6 @@ export function useScatterExport() {
       aggregatedTimestamps.value === null ||
       aggregatedFeatures.value === null ||
       aggregatedLabels.value === null ||
-      pointsFilteredByMetaRef.value === null ||
       pointsFilteredByTimeRef.value === null ||
       labelProperties.value === null ||
       reducedFeatures.value === null ||
@@ -68,7 +68,7 @@ export function useScatterExport() {
       intervalIndex < aggregatedTimestamps.value.length;
       intervalIndex += 1
     ) {
-      const isFilteredByMeta = pointsFilteredByMetaRef.value[intervalIndex];
+      const isFilteredByMeta = labelFiltered.value[intervalIndex];
       const isFilteredByTime = pointsFilteredByTimeRef.value[intervalIndex];
 
       if (isFilteredByMeta || isFilteredByTime) {
