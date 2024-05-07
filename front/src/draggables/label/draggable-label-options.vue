@@ -20,7 +20,7 @@ const {type} = useColorSelection();
 const {userScale} = useScatterColorScale();
 const {labels} = useStorageLabels();
 const {getColorByLabelIndex} = useColorByLabel();
-const checkboxes = ref<string[] | undefined>([]);
+const checkboxes = ref<string[] | undefined>([]); // todo: don't know why this gets overwritten to undefined at component mount
 const {updateSelection, selection} = useLabelSelection();
 
 const uniquesRef = computed<string[]>(() => {
