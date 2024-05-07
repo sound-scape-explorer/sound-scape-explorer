@@ -14,7 +14,6 @@ export function useStorageReducedFeatures() {
   const {read} = useStorageReader();
   const {isReady} = useStorageReady();
 
-  // TODO: why is this called two times at runtime???
   const readReducedFeatures = async () => {
     if (!isReady.value) {
       return;
