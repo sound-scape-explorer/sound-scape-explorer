@@ -1,8 +1,8 @@
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/storage-labels';
-import {labelsSelectionRef} from 'src/draggables/label/label-selection';
+import {type LabelSelection} from 'src/draggables/label/label-selection';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
-import {reactive} from 'vue';
+import {reactive, type Ref} from 'vue';
 
 interface PointsFilteredByMetaRef {
   value: boolean[] | null;
@@ -17,14 +17,13 @@ export function useScatterFilterMeta() {
   const {labels} = useStorageLabels();
   const {aggregatedLabels} = useStorageAggregatedLabels();
 
-  const isVisibleByMeta = (intervalIndex: number): boolean => {
+  const isVisibleByMeta = (
+    intervalIndex: number,
+    newSelection: Ref<LabelSelection>,
+  ): boolean => {
     let isVisible = true;
 
-    if (
-      aggregatedLabels.value === null ||
-      labels.value === null ||
-      labelsSelectionRef.value === null
-    ) {
+    if (aggregatedLabels.value === null || labels.value === null) {
       return false;
     }
 
@@ -39,7 +38,7 @@ export function useScatterFilterMeta() {
       }
 
       const property = properties[index];
-      const valuesSelection = labelsSelectionRef.value[property];
+      const valuesSelection = newSelection.value[property];
 
       // no user selection
       if (valuesSelection.length === 0) {
@@ -55,7 +54,7 @@ export function useScatterFilterMeta() {
 
   const {renderTraces} = useScatterTraces();
 
-  const filterByMeta = () => {
+  const filterByMeta = (newSelection: Ref<LabelSelection>) => {
     if (aggregatedLabels.value === null) {
       return;
     }
@@ -67,7 +66,7 @@ export function useScatterFilterMeta() {
       intervalIndex < aggregatedLabels.value.length;
       ++intervalIndex
     ) {
-      const isVisible = isVisibleByMeta(intervalIndex);
+      const isVisible = isVisibleByMeta(intervalIndex, newSelection);
       pointsFilteredByMeta.push(!isVisible);
     }
 

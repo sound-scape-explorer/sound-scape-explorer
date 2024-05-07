@@ -40,7 +40,11 @@ export function useSelection() {
   const {readReducedFeatures, resetReducedFeatures} =
     useStorageReducedFeatures();
   const {generateColorScale, resetColorScale} = useScatterColorScale();
-  const {buildSelection, resetSelection} = useLabelSelection();
+  const {
+    buildSelection,
+    resetSelection,
+    selection: labelSelection,
+  } = useLabelSelection();
   const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
   const {renderTraces, resetTraces} = useScatterTraces();
   const {filterByMeta, resetFilterByMeta} = useScatterFilterMeta();
@@ -123,7 +127,7 @@ export function useSelection() {
     buildSelection();
     await generateColorScale();
 
-    filterByMeta();
+    filterByMeta(labelSelection);
     filterByTime();
 
     renderTraces();

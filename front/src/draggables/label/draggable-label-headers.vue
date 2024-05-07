@@ -5,46 +5,39 @@ import {useStorageLabels} from 'src/composables/storage-labels';
 import {type ColorType} from 'src/draggables/colors/color-type';
 import {useDraggableLabel} from 'src/draggables/label/draggable-label';
 import DraggableLabelOptions from 'src/draggables/label/draggable-label-options.vue';
-import {
-  labelsSelectionRef,
-  useLabelSelection,
-} from 'src/draggables/label/label-selection';
+import {useLabelSelection} from 'src/draggables/label/label-selection';
 import {useColorSelection} from 'src/scatter/color-selection';
 
 const {labels, labelProperties} = useStorageLabels();
-const {updateSelection} = useLabelSelection();
+const {updateSelection, selection} = useLabelSelection();
 const {type} = useColorSelection();
 const {columns} = useDraggableLabel();
 
 const handlePropertyClick = (property: string) => {
-  if (labels.value === null || labelsSelectionRef.value === null) {
+  if (labels.value === null) {
     return;
   }
 
-  const oldSelection = labelsSelectionRef.value[property];
+  const oldSelection = selection.value[property];
   const uniques = labels.value[property];
 
-  const newSelection = [];
+  const reverseSelection = [];
 
   for (const unique of uniques) {
     if (oldSelection.includes(unique)) {
       continue;
     }
 
-    newSelection.push(unique);
+    reverseSelection.push(unique);
   }
 
-  updateSelection(property, newSelection);
+  updateSelection(property, reverseSelection);
 };
 
 const handlePropertyRightClick = (e: PointerEvent, property: string) => {
   e.preventDefault();
 
-  if (labelsSelectionRef.value === null) {
-    return;
-  }
-
-  if (labelsSelectionRef.value[property].length === 0) {
+  if (selection.value[property].length === 0) {
     return;
   }
 

@@ -4,10 +4,7 @@ import {NCheckbox, NCheckboxGroup, NGi, NGrid} from 'naive-ui';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 import {useColorByLabel} from 'src/draggables/colors/color-by-label';
-import {
-  labelsSelectionRef,
-  useLabelSelection,
-} from 'src/draggables/label/label-selection';
+import {useLabelSelection} from 'src/draggables/label/label-selection';
 import {useColorSelection} from 'src/scatter/color-selection';
 import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
 import {computed, ref, watch, watchEffect} from 'vue';
@@ -23,8 +20,8 @@ const {type} = useColorSelection();
 const {userScale} = useScatterColorScale();
 const {labels} = useStorageLabels();
 const {getColorByLabelIndex} = useColorByLabel();
-const selectionRef = ref<string[]>([]);
-const {updateSelection} = useLabelSelection();
+const checkboxes = ref<string[] | undefined>([]);
+const {updateSelection, selection} = useLabelSelection();
 
 const uniquesRef = computed<string[]>(() => {
   if (labels.value === null) {
@@ -44,18 +41,20 @@ function getColorByItem(index: number, scale: Scale): string | undefined {
   return getColorByLabelIndex(index, uniquesRef.value.length, scale);
 }
 
-watch(selectionRef, () => updateSelection(props.property, selectionRef.value));
+watch(checkboxes, () => {
+  if (typeof checkboxes.value === 'undefined') {
+    return;
+  }
+
+  updateSelection(props.property, checkboxes.value ?? []);
+});
 
 const updateReverse = () => {
-  if (labelsSelectionRef.value === null) {
+  if (checkboxes.value === selection.value[props.property]) {
     return;
   }
 
-  if (selectionRef.value === labelsSelectionRef.value[props.property]) {
-    return;
-  }
-
-  selectionRef.value = labelsSelectionRef.value[props.property];
+  checkboxes.value = selection.value[props.property];
 };
 
 watchEffect(updateReverse);
@@ -74,7 +73,7 @@ const isActiveIdRef = computed<string>(() => {
 <template>
   <NCheckboxGroup
     :id="isActiveIdRef"
-    v-model:value="selectionRef"
+    v-model:value="checkboxes"
   >
     <NGrid
       :cols="2"

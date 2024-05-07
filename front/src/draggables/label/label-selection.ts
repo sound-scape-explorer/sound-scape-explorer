@@ -1,59 +1,50 @@
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useScatterFilterMeta} from 'src/scatter/scatter-filter-meta';
-import {computed, reactive} from 'vue';
+import {ref} from 'vue';
 
-interface LabelsSelectionRef {
-  value: {
-    [property: string]: string[];
-  } | null;
+export interface LabelSelection {
+  [property: string]: string[];
 }
 
-export const labelsSelectionRef = reactive<LabelsSelectionRef>({
-  value: null,
-});
+const selection = ref<LabelSelection>({});
+let hasBuilt = false;
 
 export function useLabelSelection() {
-  const {labels} = useStorageLabels();
+  const {labelProperties} = useStorageLabels();
   const {filterByMeta} = useScatterFilterMeta();
 
-  const propertiesRef = computed<string[]>(() => {
-    if (labels.value === null) {
-      return [];
-    }
-
-    return Object.keys(labels.value);
-  });
-
-  const buildSelection = () => {
-    const selection: LabelsSelectionRef['value'] = {};
-
-    for (const property of propertiesRef.value) {
-      selection[property] = [];
-    }
-
-    labelsSelectionRef.value = selection;
-  };
-
-  const updateSelection = (property: string, values: string[]) => {
-    if (labelsSelectionRef.value === null) {
+  const build = () => {
+    if (labelProperties.value === null) {
       return;
     }
 
-    if (labelsSelectionRef.value[property] === values) {
+    const newSelection: LabelSelection = {};
+
+    for (const property of labelProperties.value) {
+      newSelection[property] = [];
+    }
+
+    selection.value = newSelection;
+    hasBuilt = true;
+  };
+
+  const update = (property: string, values: string[]) => {
+    if (!hasBuilt || selection.value[property] === values) {
       return;
     }
 
-    labelsSelectionRef.value[property] = values;
-    filterByMeta();
+    selection.value[property] = values;
+    filterByMeta(selection);
   };
 
-  const resetSelection = () => {
-    labelsSelectionRef.value = null;
+  const reset = () => {
+    selection.value = {};
   };
 
   return {
-    buildSelection: buildSelection,
-    updateSelection: updateSelection,
-    resetSelection: resetSelection,
+    selection: selection,
+    buildSelection: build,
+    updateSelection: update,
+    resetSelection: reset,
   };
 }

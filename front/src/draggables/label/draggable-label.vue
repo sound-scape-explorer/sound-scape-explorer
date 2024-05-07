@@ -3,12 +3,9 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useDraggableLabel} from 'src/draggables/label/draggable-label';
 import DraggableLabelButtons from 'src/draggables/label/draggable-label-buttons.vue';
 import DraggableLabelHeaders from 'src/draggables/label/draggable-label-headers.vue';
-import {useLabelSelection} from 'src/draggables/label/label-selection';
 import {computed} from 'vue';
 
-useLabelSelection();
 const {isZoomed} = useDraggableLabel();
-// const {build} = useLabelSelection();
 
 const classes = computed<string>(() => {
   let string = 'container';
