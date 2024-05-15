@@ -32,6 +32,7 @@ export function useReducerSelection() {
   const reset = () => {
     reducer.value = null;
     selected.value = null;
+    hasAutoSelected = false;
   };
 
   const handleChange = () => {

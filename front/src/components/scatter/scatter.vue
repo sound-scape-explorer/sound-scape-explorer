@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {useScatter} from 'src/scatter/scatter';
+import {useScatter} from 'src/components/scatter/scatter';
 
 const {container, isLocked} = useScatter();
 </script>
@@ -17,6 +17,6 @@ const {container, isLocked} = useScatter();
   width: 100vw;
   height: 100vh;
   pointer-events: var(--pointer-events);
-  overflow-y: hidden;
+  overflow-x: hidden;
 }
 </style>

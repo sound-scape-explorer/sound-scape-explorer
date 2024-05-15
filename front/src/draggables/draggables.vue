@@ -10,11 +10,12 @@ import DraggableImport from 'src/draggables/import/draggable-import.vue';
 import DraggableIndicators from 'src/draggables/indicators/draggable-indicators.vue';
 import DraggableLabel from 'src/draggables/label/draggable-label.vue';
 import DraggableRelativeTrajectories from 'src/draggables/relative-trajectories/draggable-relative-trajectories.vue';
-import DraggableSelection from 'src/draggables/selection/draggable-selection.vue';
+import DraggableSelection from 'src/draggables/selection/selection.vue';
 import DraggableSettings from 'src/draggables/settings/draggable-settings.vue';
 import DraggableTime from 'src/draggables/time/draggable-time.vue';
 import DraggableTimeline from 'src/draggables/timeline/draggable-timeline.vue';
 import DraggableTrajectories from 'src/draggables/trajectories/draggable-trajectories.vue';
+import DraggableView from 'src/draggables/view/draggable-view.vue';
 
 const {store} = useDraggables();
 const {isReady} = useStorageReady();
@@ -25,7 +26,7 @@ const {isReady} = useStorageReady();
   <DraggableSettings v-if="store.settings" />
   <DraggableHelp v-if="store.help" />
 
-  <DraggableSelection v-if="isReady" />
+  <DraggableView v-if="isReady" />
   <DraggableColors v-if="isReady && store.colors" />
   <DraggableTime v-if="isReady" />
   <DraggableLabel v-if="isReady" />
@@ -35,6 +36,7 @@ const {isReady} = useStorageReady();
   <DraggableRelativeTrajectories v-if="isReady" />
   <DraggableIndicators v-if="isReady" />
   <DraggableDigested v-if="isReady" />
+  <DraggableSelection v-if="isReady" />
 
   <DraggableTimeline v-if="isReady" />
 </template>

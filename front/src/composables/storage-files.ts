@@ -1,6 +1,6 @@
 import {useStorageReader} from 'src/composables/storage-reader';
 import {useStorageReady} from 'src/composables/storage-ready';
-import {ref, watch} from 'vue';
+import {onMounted, ref} from 'vue';
 
 export interface File {
   index: number;
@@ -33,7 +33,7 @@ export function useStorageFiles() {
     });
   };
 
-  watch(isReady, readAll);
+  onMounted(readAll);
 
   return {
     files: files,

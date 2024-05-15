@@ -6,6 +6,7 @@ import {
   CloudUploadOutline,
   CogOutline,
   ColorPaletteOutline,
+  CropOutline,
   EyeOutline,
   GridOutline,
   HeadsetOutline,
@@ -18,10 +19,10 @@ import {
 import {useAppMenu} from 'src/app/menu/app-menu';
 import MenuItem from 'src/app/menu/app-menu-item.vue';
 import {useClientSettings} from 'src/composables/client-settings';
-import {useSelection} from 'src/composables/selection';
+import {useViewState} from 'src/composables/view-state';
 
 const {isReady, toggle} = useAppMenu();
-const {hasSelection} = useSelection();
+const {hasView} = useViewState();
 const {preview} = useClientSettings();
 </script>
 
@@ -69,14 +70,14 @@ const {preview} = useClientSettings();
     >
       <MenuItem
         :toggle="toggle"
-        draggable-key="selection"
-        text="Selection"
+        draggable-key="view"
+        text="View"
       >
         <EyeOutline />
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="colors"
         text="Colors"
@@ -86,7 +87,7 @@ const {preview} = useClientSettings();
 
       <MenuItem
         v-if="preview"
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="timeline"
         text="Timeline"
@@ -95,7 +96,7 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="time"
         text="Time"
@@ -104,7 +105,7 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="labels"
         text="Labels"
@@ -113,7 +114,7 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="details"
         text="Details"
@@ -122,7 +123,7 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="audio"
         text="Audio"
@@ -131,7 +132,16 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
+        :toggle="toggle"
+        draggable-key="selection"
+        text="Selection"
+      >
+        <CropOutline />
+      </MenuItem>
+
+      <MenuItem
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="trajectories"
         text="Trajectories"
@@ -140,7 +150,7 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="relativeTrajectories"
         text="Relative Trajectories"
@@ -149,7 +159,7 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="indicators"
         text="Indicators"
@@ -158,7 +168,7 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
-        :disabled="!hasSelection"
+        :disabled="!hasView"
         :toggle="toggle"
         draggable-key="digested"
         text="Digested"

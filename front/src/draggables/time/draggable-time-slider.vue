@@ -8,8 +8,8 @@ import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated
 import {useStorageRanges} from 'src/composables/storage-ranges';
 import {SLIDER_LIMITS} from 'src/constants';
 import {timeStore} from 'src/draggables/time/time-store';
-import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
-import {useScatterLoading} from 'src/scatter/scatter-loading';
+import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
+import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {mapRange} from 'src/utils/map-range';
 import {computed, ref, watch} from 'vue';
 

@@ -10,7 +10,7 @@ import {
   useTimelinePagination,
   type VisibleBlock,
 } from 'src/draggables/timeline/timeline-pagination';
-import {useScatterClick} from 'src/scatter/scatter-click';
+import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
 const containerRef = ref<HTMLDivElement | null>(null);

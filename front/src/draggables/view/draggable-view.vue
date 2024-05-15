@@ -1,14 +1,14 @@
 <script lang="ts" setup="">
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import SelectionMenu from 'src/draggables/selection/draggable-selection-menu.vue';
-import SelectionUnload from 'src/draggables/selection/draggable-selection-unloader.vue';
+import ViewMenu from 'src/draggables/view/draggable-view-menu.vue';
+import ViewUnload from 'src/draggables/view/draggable-view-unloader.vue';
 </script>
 
 <template>
-  <AppDraggable draggable-key="selection">
+  <AppDraggable draggable-key="view">
     <div class="container">
-      <SelectionMenu />
-      <SelectionUnload />
+      <ViewMenu />
+      <ViewUnload />
     </div>
   </AppDraggable>
 </template>

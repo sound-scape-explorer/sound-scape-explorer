@@ -1,4 +1,5 @@
 import chroma, {type Scale} from 'chroma-js';
+import {useColorSelection} from 'src/components/scatter/color-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageLabels} from 'src/composables/storage-labels';
@@ -8,7 +9,6 @@ import {useColorByCyclingDay} from 'src/draggables/colors/color-by-cycling-day';
 import {useColorByDay} from 'src/draggables/colors/color-by-day';
 import {useColorByIntervalIndex} from 'src/draggables/colors/color-by-interval-index';
 import {useColorByLabel} from 'src/draggables/colors/color-by-label';
-import {useColorSelection} from 'src/scatter/color-selection';
 import {computed, ref} from 'vue';
 
 const scale = ref<string[] | null>(null);
@@ -41,6 +41,11 @@ export function useScatterColorScale() {
         files.value === null ||
         aggregatedTimestamps.value === null
       ) {
+        console.log({
+          labelPropertiesAsColorTypes: labelPropertiesAsColorTypes,
+          files: files,
+          aggregatedTimestamps: aggregatedTimestamps,
+        });
         reject(new Error('generateColorScale: missing props'));
         return;
       }

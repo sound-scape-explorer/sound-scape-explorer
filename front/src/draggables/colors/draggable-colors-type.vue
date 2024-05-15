@@ -2,8 +2,8 @@
 import {NSelect, NTooltip} from 'naive-ui';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import type {ColorType} from 'src/draggables/colors/color-type';
-import {useColorSelection} from 'src/scatter/color-selection';
-import {useScatterLoading} from 'src/scatter/scatter-loading';
+import {useColorSelection} from 'src/components/scatter/color-selection';
+import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';

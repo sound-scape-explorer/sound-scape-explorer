@@ -20,8 +20,8 @@ import {useDate} from 'src/composables/date';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {timeStore} from 'src/draggables/time/time-store';
-import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
-import {useScatterLoading} from 'src/scatter/scatter-loading';
+import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
+import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 
 const {settings} = useStorageSettings();

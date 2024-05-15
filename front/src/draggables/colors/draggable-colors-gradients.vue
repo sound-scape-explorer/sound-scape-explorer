@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import AppGradient from 'src/app/app-gradient.vue';
-import {useColorSelection} from 'src/scatter/color-selection';
-import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
+import {useColorSelection} from 'src/components/scatter/color-selection';
+import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
 import {createHourlyLabels} from 'src/utils/create-hourly-labels';
 import {computed} from 'vue';
 

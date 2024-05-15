@@ -23,6 +23,7 @@ export function useBandSelection() {
   const reset = () => {
     band.value = null;
     selected.value = null;
+    hasAutoSelected = false;
   };
 
   const handleChange = () => {

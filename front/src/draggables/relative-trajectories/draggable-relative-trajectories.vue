@@ -6,7 +6,7 @@ import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
 import {useStorageRelativeTrajectories} from 'src/composables/storage-relative-trajectories';
 import {EXPORT_FILENAME} from 'src/constants';
-import {useScatterLoading} from 'src/scatter/scatter-loading';
+import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {computed, ref} from 'vue';
 
 const {selectRelativeTrajectories, relativeTrajectories} =

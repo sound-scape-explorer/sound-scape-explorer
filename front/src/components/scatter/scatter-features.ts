@@ -1,13 +1,14 @@
 import type {Data} from 'plotly.js-dist-min';
+import {useScatterColorAlpha} from 'src/components/scatter/scatter-color-alpha';
+import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
+import {useScatterFilterLabel} from 'src/components/scatter/scatter-filter-label';
+import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
+import {useScreen} from 'src/components/screen/screen';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
-import {useScatterColorAlpha} from 'src/scatter/scatter-color-alpha';
-import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
-import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
-import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
 
 const size2d = 5;
 const size3d = 3;
@@ -22,6 +23,7 @@ export function useScatterFeatures() {
   const {scale} = useScatterColorScale();
   const {filtered: labelFiltered} = useScatterFilterLabel();
   const {filtered: timeFiltered} = useScatterFilterTime();
+  const {selected} = useScreen();
 
   const trace = (): Data[] => {
     if (
@@ -36,12 +38,18 @@ export function useScatterFeatures() {
     const colorScale = scale.value;
     const pointsFilteredByMeta = labelFiltered.value;
     const pointsFilteredByTime = timeFiltered.value;
+    const pointsSelected = selected.value;
 
+    // TODO: improve me
     const plotlyColorscale = colorScale.map((color, index) => {
       let filteredColor = color;
 
       if (pointsFilteredByMeta[index] || pointsFilteredByTime[index]) {
         filteredColor = `rgba(0, 0, 0, ${low.value})`;
+      }
+
+      if (pointsSelected.indexOf(index) !== -1) {
+        filteredColor = `rgba(255, 0, 0, ${high.value})`;
       }
 
       return [index / (colorScale.length - 1), filteredColor];

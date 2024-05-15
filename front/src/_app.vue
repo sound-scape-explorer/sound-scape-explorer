@@ -11,11 +11,12 @@ import AppLoader from 'src/app/app-loader.vue';
 import AppLoading from 'src/app/app-loading.vue';
 import AppMenu from 'src/app/menu/app-menu.vue';
 import AppNotification from 'src/app/notification/app-notification.vue';
+import Scatter from 'src/components/scatter/scatter.vue';
+import Screen from 'src/components/screen/screen.vue';
 import {useDraggables} from 'src/composables/draggables';
 import {useStorageReady} from 'src/composables/storage-ready';
 import {useWorker} from 'src/composables/worker';
 import Draggables from 'src/draggables/draggables.vue';
-import Scatter from 'src/scatter/scatter.vue';
 import {onMounted} from 'vue';
 
 // TODO: is the Suspense component actually needed?
@@ -58,6 +59,7 @@ onMounted(showImport);
             <AppMenu />
             <AppLoader v-if="isReady" />
             <Scatter v-if="isReady" />
+            <Screen v-if="isReady" />
             <Draggables />
           </div>
         </Suspense>

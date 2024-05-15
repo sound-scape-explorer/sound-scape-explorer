@@ -1,10 +1,10 @@
 import {useIntegrationSelection} from 'src/composables/integration-selection';
-import {useSelection} from 'src/composables/selection';
 import {
   type BlockDetails,
   useStorageAggregatedIntervalDetails,
 } from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
+import {useViewState} from 'src/composables/view-state';
 import {countIterations} from 'src/utils/count-iterations';
 import {reactive, watchEffect} from 'vue';
 
@@ -101,13 +101,13 @@ export function useTimelinePagination() {
   const {integration} = useIntegrationSelection();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {hasSelection} = useSelection();
+  const {hasView} = useViewState();
 
   const computePaginationTotal = () => {
     // total number of intervals in the timeline (between min and max timestamps)
 
     if (
-      hasSelection.value === false ||
+      !hasView.value ||
       integration.value === null ||
       aggregatedTimestamps.value === null
     ) {

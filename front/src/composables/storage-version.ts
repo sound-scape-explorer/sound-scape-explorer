@@ -1,6 +1,6 @@
 import {useStorageReader} from 'src/composables/storage-reader';
 import {useStorageReady} from 'src/composables/storage-ready';
-import {ref, watch} from 'vue';
+import {onMounted, ref} from 'vue';
 
 const version = ref<string | null>(null);
 let isLoaded = false;
@@ -25,7 +25,7 @@ export function useStorageVersion() {
     });
   };
 
-  watch(isReady, readVersion);
+  onMounted(readVersion);
 
   return {
     version: version,

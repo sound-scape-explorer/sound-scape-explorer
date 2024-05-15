@@ -4,7 +4,7 @@ export interface DraggablesStore {
   import: boolean;
   settings: boolean;
   help: boolean;
-  selection: boolean;
+  view: boolean;
   colors: boolean;
   time: boolean;
   timeline: boolean;
@@ -15,6 +15,7 @@ export interface DraggablesStore {
   relativeTrajectories: boolean;
   indicators: boolean;
   digested: boolean;
+  selection: boolean;
 }
 
 export type DraggableKey = keyof DraggablesStore;
@@ -23,7 +24,7 @@ const store = reactive<DraggablesStore>({
   import: false,
   settings: false,
   help: false,
-  selection: false,
+  view: false,
   colors: false,
   time: false,
   timeline: false,
@@ -34,6 +35,7 @@ const store = reactive<DraggablesStore>({
   relativeTrajectories: false,
   indicators: false,
   digested: false,
+  selection: false,
 });
 
 const selected = ref<DraggableKey | null>(null);
@@ -64,11 +66,26 @@ export function useDraggables() {
     }
   };
 
+  const closeAllDraggables = () => {
+    const keys = Object.keys(store);
+
+    for (let i = 0; i < keys.length; i += 1) {
+      const key = keys[i] as DraggableKey;
+
+      if (!store[key]) {
+        continue;
+      }
+
+      store[key] = false;
+    }
+  };
+
   return {
     selected: selected,
     store: store,
     toggle: toggle,
     openAudio: openAudio,
     closeAudio: closeAudio,
+    closeAllDraggables: closeAllDraggables,
   };
 }

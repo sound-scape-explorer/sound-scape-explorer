@@ -1,15 +1,17 @@
 <script lang="ts" setup="">
 import {ArrowUndoCircleOutline} from '@vicons/ionicons5';
 import AppButton from 'src/app/app-button.vue';
-import {useSelection} from 'src/composables/selection';
+import {useViewState} from 'src/composables/view-state';
+import {useViewUnloader} from 'src/composables/view-unloader';
 
-const {unloadSelection, hasSelection} = useSelection();
+const {unload} = useViewUnloader();
+const {hasView} = useViewState();
 </script>
 
 <template>
   <AppButton
-    :disabled="!hasSelection"
-    :handle-click="unloadSelection"
+    :disabled="!hasView"
+    :handle-click="unload"
     class="button"
     text="Unload selection"
   >

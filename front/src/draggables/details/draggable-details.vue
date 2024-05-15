@@ -12,7 +12,7 @@ import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useAudioFile} from 'src/draggables/audio/audio-file';
 import {useDetails} from 'src/draggables/details/details';
-import {useScatterClick} from 'src/scatter/scatter-click';
+import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {computed, watch} from 'vue';
 
 const {nonNnExtractors} = useExtractorStorage();

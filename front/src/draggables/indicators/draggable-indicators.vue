@@ -11,7 +11,7 @@ import {
   indicatorDataRef,
   useIndicators,
 } from 'src/draggables/indicators/indicators';
-import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
+import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 

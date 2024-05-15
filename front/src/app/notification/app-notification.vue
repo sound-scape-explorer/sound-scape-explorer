@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type {NotificationType} from 'naive-ui';
 import {NButton, useMessage, useNotification} from 'naive-ui';
-import {appNotificationStore} from 'src/app/notification/app-notification-store';
+import {useAppNotification} from 'src/app/notification/app-notification';
 import {ALERT_TIMER} from 'src/constants';
 import {combineStringsWithBreaks} from 'src/utils/combine-strings-with-breaks';
 import {copyToClipboard} from 'src/utils/copy-to-clipboard';
@@ -10,6 +10,7 @@ import {h, watch} from 'vue';
 
 const message = useMessage();
 const notification = useNotification();
+const {notifications} = useAppNotification();
 
 function render(
   type: NotificationType,
@@ -53,18 +54,15 @@ function render(
     onClose: !isError
       ? undefined
       : () => {
-        if (!isCopied) {
-          message.warning('Copy error first');
-          return false;
-        }
+        return true;
       },
   });
 }
 
-watch(appNotificationStore, () => {
-  appNotificationStore.list.forEach((n, i) => {
+watch(notifications, () => {
+  notifications.value.forEach((n, i) => {
     render(n.type, n.title, n.description);
-    appNotificationStore.list.splice(i, 1);
+    notifications.value.splice(i, 1);
   });
 });
 </script>

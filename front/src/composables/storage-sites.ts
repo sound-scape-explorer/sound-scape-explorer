@@ -1,6 +1,6 @@
 import {useStorageReader} from 'src/composables/storage-reader';
 import {useStorageReady} from 'src/composables/storage-ready';
-import {ref, watch} from 'vue';
+import {onMounted, ref} from 'vue';
 
 export interface Site {
   index: number;
@@ -31,7 +31,7 @@ export function useStorageSites() {
     });
   };
 
-  watch(isReady, readAll);
+  onMounted(readAll);
 
   return {
     sites: sites,

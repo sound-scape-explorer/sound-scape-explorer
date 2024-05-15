@@ -12,6 +12,7 @@ import {
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AppCondition from 'src/app/app-condition.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
 import {useStorageSettings} from 'src/composables/storage-settings';
@@ -26,7 +27,6 @@ import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
 import AudioButton from 'src/draggables/audio/draggable-audio-button.vue';
 import {useWavesurfer} from 'src/draggables/audio/wavesurfer';
 import {useDetails} from 'src/draggables/details/details';
-import {useScatterClick} from 'src/scatter/scatter-click';
 
 const {waveform, spectrogram} = useDraggableAudio();
 const {increase, decrease, size} = useAudioFourier();

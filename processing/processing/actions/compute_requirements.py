@@ -77,6 +77,7 @@ def compute_requirements(
     print()
     print("Computing mean distances matrix...")
 
+    # TODO: This can exceed the available memory and crash the computation altogether
     for band, integration in walk_bands_integrations(bands, integrations):
         computation_umaps = ComputationUmapStorage.read_from_storage(
             storage=storage,

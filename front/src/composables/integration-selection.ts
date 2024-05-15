@@ -26,6 +26,7 @@ export function useIntegrationSelection() {
   const reset = () => {
     integration.value = null;
     selected.value = null;
+    hasAutoSelected = false;
   };
 
   const handleChange = () => {

@@ -13,7 +13,7 @@ import {
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageSettings} from 'src/composables/storage-settings';
-import {useScatterClick} from 'src/scatter/scatter-click';
+import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {ref, watch} from 'vue';
 
 const currentIndex = ref<number | null>(null);

@@ -30,7 +30,7 @@ export function useStorageFile() {
     validateFile(inputFile);
     file.value = inputFile;
     store.import = false;
-    store.selection = true;
+    store.view = true;
     isLocked.value = true;
   };
 

@@ -1,17 +1,19 @@
 import type {Data} from 'plotly.js-dist-min';
+import {useColorSelection} from 'src/components/scatter/color-selection';
+import {useScatterColorAlpha} from 'src/components/scatter/scatter-color-alpha';
+import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
+import {useScatterFeatures} from 'src/components/scatter/scatter-features';
+import {useScatterFilterLabel} from 'src/components/scatter/scatter-filter-label';
+import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
+import {useScreen} from 'src/components/screen/screen';
 import {useClientSettings} from 'src/composables/client-settings';
 import {useTrajectoriesData} from 'src/composables/trajectories-data';
-import {useColorSelection} from 'src/scatter/color-selection';
-import {useScatterColorAlpha} from 'src/scatter/scatter-color-alpha';
-import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
-import {useScatterFeatures} from 'src/scatter/scatter-features';
-import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
-import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
 import {traceAverageTrajectory} from 'src/utils/trace-average-trajectory';
 import {traceTrajectories} from 'src/utils/trace-trajectories';
 import {ref, watch} from 'vue';
 
 const traces = ref<Data[]>([]);
+const isEnabled = ref<boolean>(false);
 let isRendering = false;
 
 export function useScatterTraces() {
@@ -23,8 +25,10 @@ export function useScatterTraces() {
   const {timeShift} = useClientSettings();
   const {filtered: labelFiltered} = useScatterFilterLabel();
   const {filtered: timeFiltered} = useScatterFilterTime();
+  const {selected} = useScreen();
 
   const render = () => {
+    console.log('render traces');
     let newTraces: Data[] = [];
 
     // add features
@@ -60,7 +64,7 @@ export function useScatterTraces() {
   // todo: i don't know why this gets triggered so many times...
   // todo: time shift should trigger only the concerned color scales generation functions
   watch(
-    [type, flavor, low, high, timeShift, labelFiltered, timeFiltered],
+    [type, flavor, low, high, timeShift, labelFiltered, timeFiltered, selected],
     async () => {
       if (isRendering) {
         return;
@@ -74,6 +78,7 @@ export function useScatterTraces() {
   );
 
   return {
+    isEnabled: isEnabled,
     traces: traces,
     renderTraces: render,
     resetTraces: reset,

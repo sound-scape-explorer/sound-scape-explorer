@@ -25,6 +25,7 @@ export function useSelectExtractor() {
   const reset = () => {
     extractor.value = null;
     selected.value = null;
+    hasAutoSelected = false;
   };
 
   const handleChange = () => {

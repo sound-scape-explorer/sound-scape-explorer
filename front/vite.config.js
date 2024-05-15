@@ -36,6 +36,7 @@ export default defineConfig({
           'colormap': ['colormap'],
           'comlink': ['comlink'],
           'dayjs': ['dayjs'],
+          'gl-matrix': ['gl-matrix'],
           'h5wasm': ['h5wasm'],
           'html2canvas': ['html2canvas'],
           'plotly.js-dist-min': ['plotly.js-dist-min'],

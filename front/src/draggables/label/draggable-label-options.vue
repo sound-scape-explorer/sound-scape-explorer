@@ -5,8 +5,8 @@ import {useStorageLabels} from 'src/composables/storage-labels';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 import {useColorByLabel} from 'src/draggables/colors/color-by-label';
 import {useLabelSelection} from 'src/draggables/label/label-selection';
-import {useColorSelection} from 'src/scatter/color-selection';
-import {useScatterColorScale} from 'src/scatter/scatter-color-scale';
+import {useColorSelection} from 'src/components/scatter/color-selection';
+import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
 import {computed, ref, watch, watchEffect} from 'vue';
 
 interface Props {

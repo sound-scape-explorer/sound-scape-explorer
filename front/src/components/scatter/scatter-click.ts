@@ -12,6 +12,7 @@ export function useScatterClick() {
   const {openDetailsOnScatterClick} = useClientSettings();
 
   const handleClick = (index: number | null) => {
+    console.log(index);
     if (clickedIndex.value === index) {
       return;
     }

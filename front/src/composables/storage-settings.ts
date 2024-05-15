@@ -1,7 +1,7 @@
 import type {StorageSettings} from 'src/common/storage-settings';
 import {useStorageReader} from 'src/composables/storage-reader';
 import {useStorageReady} from 'src/composables/storage-ready';
-import {computed, ref, watch} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 
 let isLoaded = false;
 const settings = ref<StorageSettings | null>(null);
@@ -27,7 +27,7 @@ export function useStorageSettings() {
     });
   };
 
-  watch(isReady, readAll);
+  onMounted(readAll);
 
   return {
     settings: settings,

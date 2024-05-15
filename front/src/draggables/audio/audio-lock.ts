@@ -1,4 +1,4 @@
-import {useScatterCamera} from 'src/scatter/scatter-camera';
+import {useScatterCamera} from 'src/components/scatter/scatter-camera';
 
 export function useAudioLock() {
   const {lock: scatterLock, unlock: scatterUnlock} = useScatterCamera();

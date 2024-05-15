@@ -1,5 +1,5 @@
 import {useStorageLabels} from 'src/composables/storage-labels';
-import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
+import {useScatterFilterLabel} from 'src/components/scatter/scatter-filter-label';
 import {ref} from 'vue';
 
 export interface LabelSelection {

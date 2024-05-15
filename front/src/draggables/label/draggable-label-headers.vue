@@ -6,7 +6,7 @@ import {type ColorType} from 'src/draggables/colors/color-type';
 import {useDraggableLabel} from 'src/draggables/label/draggable-label';
 import DraggableLabelOptions from 'src/draggables/label/draggable-label-options.vue';
 import {useLabelSelection} from 'src/draggables/label/label-selection';
-import {useColorSelection} from 'src/scatter/color-selection';
+import {useColorSelection} from 'src/components/scatter/color-selection';
 
 const {labels, labelProperties} = useStorageLabels();
 const {updateSelection, selection} = useLabelSelection();

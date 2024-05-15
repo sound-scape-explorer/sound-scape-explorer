@@ -51,19 +51,12 @@ export function useStorageLabels() {
     });
   };
 
-  const resetLabels = () => {
-    labels.value = null;
-    labelSets.value = null;
-    labelProperties.value = null;
-    labelPropertiesAsColorTypes.value = null;
-  };
-
   return {
     labels: labels,
     labelProperties: labelProperties,
     labelSets: labelSets,
     labelPropertiesAsColorTypes: labelPropertiesAsColorTypes,
     readLabels: readLabels,
-    resetLabels: resetLabels,
+    // resetLabels: resetLabels,
   };
 }

@@ -3,9 +3,10 @@ import Plotly, {
   type DownloadImgopts,
   type ToImgopts,
 } from 'plotly.js-dist-min';
+import {useScatterExport} from 'src/components/scatter/scatter-export';
+import {useScreen} from 'src/components/screen/screen';
 import {EXPORT_FILENAME, PLOTLY_SIZE} from 'src/constants';
 import {useLabelScreenshot} from 'src/draggables/label/label-screenshot';
-import {useScatterExport} from 'src/scatter/scatter-export';
 import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
 
 interface ScatterExportOptions extends DownloadImgopts {
@@ -15,6 +16,7 @@ interface ScatterExportOptions extends DownloadImgopts {
 export function useScatterConfig() {
   const {screenshotLabel} = useLabelScreenshot();
   const {handleScatterExportClick} = useScatterExport();
+  const {enable} = useScreen();
 
   const scatterWidth = PLOTLY_SIZE * (4 / 3);
   const scatterHeight = PLOTLY_SIZE;
@@ -34,6 +36,14 @@ export function useScatterConfig() {
     responsive: true,
     displayModeBar: true,
     modeBarButtonsToAdd: [
+      {
+        name: 'toggle-selection',
+        title: 'Toggle selection',
+        icon: Plotly.Icons['selectbox'],
+        click: () => {
+          enable();
+        },
+      },
       {
         name: 'download-png',
         title: 'Download as PNG with legend',

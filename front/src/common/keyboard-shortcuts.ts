@@ -1,8 +1,8 @@
 export enum KeyboardShortcut {
-  import = 'i',
+  import = 'o',
   settings = ',',
   help = 'h',
-  selection = 's',
+  view = 'i',
   colors = 'c',
   labels = 'z',
   labelsZoom = 'Z',
@@ -17,4 +17,6 @@ export enum KeyboardShortcut {
   timePlayPause = ' ',
   timeBackward = 'p',
   timeForward = 'n',
+  selection = 's',
+  shift = 'j',
 }

@@ -10,8 +10,8 @@ import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-site
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
-import {useScatterFilterLabel} from 'src/scatter/scatter-filter-label';
-import {useScatterFilterTime} from 'src/scatter/scatter-filter-time';
+import {useScatterFilterLabel} from 'src/components/scatter/scatter-filter-label';
+import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
 import {ref} from 'vue';
 
 interface ExportData {
