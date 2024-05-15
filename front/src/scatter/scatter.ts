@@ -10,8 +10,11 @@ import {useScatterConfig} from 'src/scatter/scatter-config';
 import {useScatterTraces} from 'src/scatter/scatter-traces';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
+const container = ref<PlotlyHTMLElement | null>(null);
+const isAttached = ref<boolean>(false);
+const hasRenderedFirstTime = ref<boolean>(false);
+
 export function useScatter() {
-  const container = ref<PlotlyHTMLElement | null>(null);
   const {handleClick} = useScatterClick();
   const {config} = useScatterConfig();
   const {isLocked} = useScatterCamera();
@@ -23,10 +26,9 @@ export function useScatter() {
     handleClick(intervalIndex);
   };
 
-  const layoutRef = computed<Partial<Layout> | null>(() => {
+  const layout = computed<Partial<Layout> | null>(() => {
     // noinspection SpellCheckingInspection
-    const layout: Partial<Layout> = {
-      // title: 'hello',
+    const l: Partial<Layout> = {
       margin: {
         t: 0,
         r: 0,
@@ -41,53 +43,50 @@ export function useScatter() {
       showlegend: false,
     };
 
-    return layout;
+    return l;
   });
-
-  const isFirstRenderedRef = ref<boolean>(false);
 
   const renderInitial = async () => {
     if (
       container.value === null ||
-      layoutRef.value === null ||
-      isFirstRenderedRef.value === true
+      layout.value === null ||
+      hasRenderedFirstTime.value === true
     ) {
       return;
     }
 
-    await Plotly.newPlot(container.value, [], layoutRef.value, config);
-    isFirstRenderedRef.value = true;
+    await Plotly.newPlot(container.value, [], layout.value, config);
+    hasRenderedFirstTime.value = true;
     console.log('first render');
   };
 
   onMounted(renderInitial);
 
-  const isAttachedRef = ref<boolean>(false);
   const attachListeners = () => {
     if (
       container.value === null ||
-      isFirstRenderedRef.value === false ||
-      isAttachedRef.value === true
+      hasRenderedFirstTime.value === false ||
+      isAttached.value === true
     ) {
       return;
     }
 
     container.value.on('plotly_click', handlePlotlyClick);
-    isAttachedRef.value = true;
+    isAttached.value = true;
   };
 
   watchEffect(attachListeners);
 
   const render = async () => {
     if (
-      isFirstRenderedRef.value === false ||
+      hasRenderedFirstTime.value === false ||
       container.value === null ||
-      layoutRef.value === null
+      layout.value === null
     ) {
       return;
     }
 
-    await Plotly.react(container.value, traces.value, layoutRef.value, config);
+    await Plotly.react(container.value, traces.value, layout.value, config);
     console.log('render');
   };
 
