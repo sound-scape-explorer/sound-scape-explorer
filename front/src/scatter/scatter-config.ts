@@ -32,6 +32,7 @@ export function useScatterConfig() {
   const config: Partial<Config> = {
     displaylogo: false,
     responsive: true,
+    displayModeBar: true,
     modeBarButtonsToAdd: [
       {
         name: 'download-png',
