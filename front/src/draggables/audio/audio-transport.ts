@@ -1,24 +1,26 @@
-import {waveSurferRef} from 'src/draggables/audio/wavesurfer';
+import {useWavesurfer} from 'src/draggables/audio/wavesurfer';
 import {ref} from 'vue';
 
 const isPlaying = ref<boolean>(false);
 
 export function useAudioTransport() {
+  const {ws} = useWavesurfer();
+
   const togglePlayPause = () => {
-    if (waveSurferRef.value === null) {
+    if (ws.value === null) {
       return;
     }
 
-    waveSurferRef.value.playPause();
-    isPlaying.value = waveSurferRef.value.isPlaying();
+    ws.value.playPause();
+    isPlaying.value = ws.value.isPlaying();
   };
 
   const seek = () => {
-    if (waveSurferRef.value === null) {
+    if (ws.value === null) {
       return;
     }
 
-    if (waveSurferRef.value.isPlaying()) {
+    if (ws.value.isPlaying()) {
       return;
     }
 
@@ -26,12 +28,12 @@ export function useAudioTransport() {
   };
 
   const stop = () => {
-    if (waveSurferRef.value === null) {
+    if (ws.value === null) {
       return;
     }
 
-    waveSurferRef.value.seekTo(0);
-    waveSurferRef.value.pause();
+    ws.value.seekTo(0);
+    ws.value.pause();
     isPlaying.value = false;
   };
 

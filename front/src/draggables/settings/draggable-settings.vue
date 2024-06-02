@@ -8,10 +8,7 @@ import {useStorageAudioHost} from 'src/composables/storage-audio-host';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {useSpectrogramColormap} from 'src/draggables/audio/spectrogram-colormap';
-import {
-  waveSurferOverflowLegendsRef,
-  waveSurferShowDecibelsRef,
-} from 'src/draggables/audio/wavesurfer';
+import {useWavesurferSettings} from 'src/draggables/audio/wavesurfer-settings';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
@@ -27,6 +24,7 @@ const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
 const {colormap} = useSpectrogramColormap();
 const {settings, hasTimezone} = useStorageSettings();
+const {showDecibels, overflowLegends} = useWavesurferSettings();
 
 const spectrogramColorMapsOptionsRef = computed(() => {
   return convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS);
@@ -84,7 +82,7 @@ const plotBackgroundOptionsRef = computed(() => {
         </NTag>
         <span />
         <NCheckbox
-          v-model:checked="waveSurferShowDecibelsRef.value"
+          v-model:checked="showDecibels"
           class="checkbox"
         />
       </NGi>
@@ -98,7 +96,7 @@ const plotBackgroundOptionsRef = computed(() => {
         </NTag>
         <span />
         <NCheckbox
-          v-model:checked="waveSurferOverflowLegendsRef.value"
+          v-model:checked="overflowLegends"
           class="checkbox"
         />
       </NGi>

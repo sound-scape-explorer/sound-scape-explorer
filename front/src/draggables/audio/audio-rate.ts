@@ -3,7 +3,7 @@ import speedToSemitones from 'speed-to-semitones';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioTransport} from 'src/draggables/audio/audio-transport';
-import {waveSurferRef} from 'src/draggables/audio/wavesurfer';
+import {useWavesurfer} from 'src/draggables/audio/wavesurfer';
 import {ref, watch, watchEffect} from 'vue';
 
 interface Readable {
@@ -23,14 +23,15 @@ const readable = ref<Readable>({
 export function useAudioRate() {
   const {settings} = useStorageSettings();
   const {togglePlayPause} = useAudioTransport();
+  const {ws} = useWavesurfer();
 
   const update = () => {
-    if (waveSurferRef.value === null) {
+    if (ws.value === null) {
       return;
     }
 
-    waveSurferRef.value.pause();
-    waveSurferRef.value.setPlaybackRate(rate.value);
+    ws.value.pause();
+    ws.value.setPlaybackRate(rate.value);
     togglePlayPause();
   };
 

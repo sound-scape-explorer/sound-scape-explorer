@@ -25,7 +25,8 @@ import {useAudioRate} from 'src/draggables/audio/audio-rate';
 import {useAudioTransport} from 'src/draggables/audio/audio-transport';
 import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
 import AudioButton from 'src/draggables/audio/draggable-audio-button.vue';
-import {useWavesurfer} from 'src/draggables/audio/wavesurfer';
+import {useWavesurferHandlers} from 'src/draggables/audio/wavesurfer-handlers';
+import {useWavesurferMounter} from 'src/draggables/audio/wavesurfer-mounter';
 import {useDetails} from 'src/draggables/details/details';
 
 const {waveform, spectrogram} = useDraggableAudio();
@@ -35,12 +36,14 @@ const {aggregatedSites} = useStorageAggregatedSites();
 const {date} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {clickedIndex, hasClicked} = useScatterClick();
-const {increaseVolume, decreaseVolume} = useWavesurfer();
+const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {rate, readable} = useAudioRate();
 const {downloadAudio} = useAudioDownload();
 const {lock, unlock} = useAudioLock();
 const {block, duration} = useAudioFile();
+
+useWavesurferMounter();
 </script>
 
 <template>
