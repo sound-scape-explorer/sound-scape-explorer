@@ -1,6 +1,7 @@
+import {fileURLToPath, URL} from 'node:url';
+
 import vue from '@vitejs/plugin-vue';
 import analyzer from 'rollup-plugin-analyzer';
-import {fileURLToPath, URL} from 'url';
 import {defineConfig} from 'vite';
 import {comlink} from 'vite-plugin-comlink';
 import {VitePWA as vitePwa} from 'vite-plugin-pwa';
@@ -36,7 +37,6 @@ export default defineConfig({
           'colormap': ['colormap'],
           'comlink': ['comlink'],
           'dayjs': ['dayjs'],
-          'gl-matrix': ['gl-matrix'],
           'h5wasm': ['h5wasm'],
           'html2canvas': ['html2canvas'],
           'plotly.js-dist-min': ['plotly.js-dist-min'],
