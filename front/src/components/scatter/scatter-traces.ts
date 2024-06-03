@@ -66,7 +66,7 @@ export function useScatterTraces() {
   watch(
     [type, flavor, low, high, timeShift, labelFiltered, timeFiltered, selected],
     async () => {
-      if (isRendering) {
+      if (isRendering || !isEnabled.value) {
         return;
       }
 
