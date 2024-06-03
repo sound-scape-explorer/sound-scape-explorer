@@ -8,7 +8,7 @@ import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {useScatterConfig} from 'src/components/scatter/scatter-config';
 import {useScatterTraces} from 'src/components/scatter/scatter-traces';
 import {useClientSettings} from 'src/composables/client-settings';
-import {computed, onMounted, ref, watch} from 'vue';
+import {computed, ref} from 'vue';
 
 const container = ref<PlotlyHTMLElement | null>(null);
 const isAttached = ref<boolean>(false);
@@ -48,7 +48,7 @@ export function useScatter() {
     return l;
   });
 
-  const renderMount = async () => {
+  const mount = async () => {
     if (
       container.value === null ||
       layout.value === null ||
@@ -61,8 +61,6 @@ export function useScatter() {
     await Plotly.newPlot(container.value, [], layout.value, config.value);
     console.log('first render');
   };
-
-  onMounted(renderMount);
 
   const attachListeners = () => {
     if (
@@ -80,8 +78,6 @@ export function useScatter() {
       console.log(e);
     });
   };
-
-  watch([container, isMounted, isAttached], attachListeners);
 
   const render = async () => {
     if (
@@ -104,10 +100,13 @@ export function useScatter() {
     isRendering.value = false;
   };
 
-  watch([container, traces, isMounted, isAttached, config], render);
-
   return {
     container: container,
     isLocked: isLocked,
+    isMounted: isMounted,
+    isAttached: isAttached,
+    mount: mount,
+    attachListeners: attachListeners,
+    render: render,
   };
 }
