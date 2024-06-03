@@ -1,3 +1,5 @@
+export const LINEBREAK = '%0D%0A';
+
 export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
