@@ -10,10 +10,6 @@ import {useClientSettings} from 'src/composables/client-settings';
 import {EXPORT_FILENAME, PLOTLY_SIZE} from 'src/constants';
 import {computed} from 'vue';
 
-export interface ScatterExportOptions extends DownloadImgopts {
-  scale?: number;
-}
-
 export interface ScatterProps extends DownloadImgopts {
   width: number;
   height: number;
