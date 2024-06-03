@@ -18,6 +18,7 @@ const {
   preview,
   applyTimezone,
   timeShift,
+  copySelect2d,
 } = useClientSettings();
 const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
@@ -179,6 +180,20 @@ const plotBackgroundOptionsRef = computed(() => {
           type="number"
           @inputBlur="() => unlock()"
           @inputFocus="() => lock()"
+        />
+      </NGi>
+
+      <NGi class="gi">
+        <NTag
+          :bordered="false"
+          size="small"
+        >
+          Copy on 2d selection
+        </NTag>
+        <span />
+        <NCheckbox
+          v-model:checked="copySelect2d"
+          class="checkbox"
         />
       </NGi>
 
