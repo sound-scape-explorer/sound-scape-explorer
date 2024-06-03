@@ -41,11 +41,6 @@ export function useScatterColorScale() {
         files.value === null ||
         aggregatedTimestamps.value === null
       ) {
-        console.log({
-          labelPropertiesAsColorTypes: labelPropertiesAsColorTypes,
-          files: files,
-          aggregatedTimestamps: aggregatedTimestamps,
-        });
         reject(new Error('generateColorScale: missing props'));
         return;
       }

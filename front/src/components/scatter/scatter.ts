@@ -33,8 +33,8 @@ export function useScatter() {
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {copySelect2d} = useClientSettings();
 
-  const handlePlotlyClick = (data: PlotMouseEvent) => {
-    const intervalIndex = data.points[0].pointNumber;
+  const handlePlotlyClick = (e: PlotMouseEvent) => {
+    const intervalIndex = e.points[0].pointNumber;
     handleClick(intervalIndex);
   };
 
@@ -85,9 +85,6 @@ export function useScatter() {
     isAttached.value = true;
 
     container.value.on('plotly_click', handlePlotlyClick);
-    container.value.on('plotly_click', (e) => {
-      console.log(e);
-    });
     container.value.on('plotly_selected', handleSelection);
   };
 

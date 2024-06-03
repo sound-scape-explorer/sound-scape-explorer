@@ -8,8 +8,6 @@ export function useViewWatcher() {
   const {load} = useViewLoader();
   const {unload} = useViewUnloader();
 
-  console.log('watcher');
-
   watch(hasView, async () => {
     if (hasView) {
       await load();
