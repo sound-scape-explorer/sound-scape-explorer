@@ -1,9 +1,10 @@
-import type {Data} from 'plotly.js-dist-min';
+import type {Data, PlotType} from 'plotly.js-dist-min';
 import {useScatterColorAlpha} from 'src/components/scatter/scatter-color-alpha';
 import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
 import {useScatterFilterLabel} from 'src/components/scatter/scatter-filter-label';
 import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
 import {useScreen} from 'src/components/screen/screen';
+import {useClientSettings} from 'src/composables/client-settings';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
@@ -24,6 +25,7 @@ export function useScatterFeatures() {
   const {filtered: labelFiltered} = useScatterFilterLabel();
   const {filtered: timeFiltered} = useScatterFilterTime();
   const {selected} = useScreen();
+  const {scatter2dGl} = useClientSettings();
 
   const trace = (): Data[] => {
     if (
@@ -56,7 +58,16 @@ export function useScatterFeatures() {
     });
 
     const isThreeDimensional = reducedFeatures.value[0].length === 3;
-    const scatterType = isThreeDimensional ? 'scatter3d' : 'scattergl';
+    let scatterType: PlotType;
+
+    if (isThreeDimensional) {
+      scatterType = 'scatter3d';
+    } else if (!isThreeDimensional && scatter2dGl.value) {
+      scatterType = 'scattergl';
+    } else {
+      scatterType = 'scatter';
+    }
+
     const properties = labelProperties.value;
 
     const indices = reducedFeatures.value.map((_, i) => i);
@@ -115,8 +126,9 @@ export function useScatterFeatures() {
         opacity: high.value,
         color: indices,
         colorscale: plotlyColorscale,
+        colors: plotlyColorscale,
         line: {
-          color: 'rgba(0,0,0,0.1)',
+          color: 'rgba(0, 0, 0, 0.1)',
           width: 1,
         },
       },
