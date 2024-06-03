@@ -659,6 +659,7 @@ export async function readAggregatedIntervalDetails(
 ): Promise<IntervalDetails[]> {
   const h5 = await load(file);
   const settings = await readSettings(file);
+  const fileNames = await readFilenames(file);
 
   const path = `${StoragePath.aggregated_interval_details}/${bandName}/${integrationSeconds}/${extractorIndex}`;
   const dataset = h5.get(path) as Dataset;
@@ -682,6 +683,7 @@ export async function readAggregatedIntervalDetails(
         start: Number(elements[0]),
         fileStart: Number(elements[1]),
         file: relativePath,
+        fileIndex: fileNames.indexOf(relativePath),
       };
 
       blocksDetails.push(blockDetails);

@@ -10,6 +10,7 @@ export interface BlockDetails {
   start: number;
   fileStart: number;
   file: string;
+  fileIndex: number;
 }
 
 // INFO: An interval can have multiple blocks thus multiple audio files (portions of them)
