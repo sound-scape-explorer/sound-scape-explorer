@@ -7,6 +7,7 @@ const preview = ref<boolean>(false);
 const applyTimezone = ref<boolean>(false);
 const timeShift = ref<string>('0'); // hours as string
 const copySelect2d = ref<boolean>(true);
+const scatter2dGl = ref<boolean>(true);
 
 export function useClientSettings() {
   return {
@@ -16,5 +17,6 @@ export function useClientSettings() {
     applyTimezone: applyTimezone,
     timeShift: timeShift,
     copySelect2d: copySelect2d,
+    scatter2dGl: scatter2dGl,
   };
 }

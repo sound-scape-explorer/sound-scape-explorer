@@ -19,6 +19,7 @@ const {
   applyTimezone,
   timeShift,
   copySelect2d,
+  scatter2dGl,
 } = useClientSettings();
 const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
@@ -193,6 +194,20 @@ const plotBackgroundOptionsRef = computed(() => {
         <span />
         <NCheckbox
           v-model:checked="copySelect2d"
+          class="checkbox"
+        />
+      </NGi>
+
+      <NGi class="gi">
+        <NTag
+          :bordered="false"
+          size="small"
+        >
+          Use WebGL for 2d scatters
+        </NTag>
+        <span />
+        <NCheckbox
+          v-model:checked="scatter2dGl"
           class="checkbox"
         />
       </NGi>
