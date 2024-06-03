@@ -1,115 +1,78 @@
 import Plotly, {
   type Config,
   type DownloadImgopts,
-  type ToImgopts,
+  type ModeBarButtonAny,
 } from 'plotly.js-dist-min';
+import {useScatterDownloadPngButton} from 'src/components/scatter/scatter-download-png-button';
 import {useScatterExport} from 'src/components/scatter/scatter-export';
 import {useScreen} from 'src/components/screen/screen';
+import {useClientSettings} from 'src/composables/client-settings';
 import {EXPORT_FILENAME, PLOTLY_SIZE} from 'src/constants';
-import {useLabelScreenshot} from 'src/draggables/label/label-screenshot';
-import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
+import {computed} from 'vue';
 
-interface ScatterExportOptions extends DownloadImgopts {
+export interface ScatterExportOptions extends DownloadImgopts {
   scale?: number;
 }
 
+export interface ScatterProps extends DownloadImgopts {
+  width: number;
+  height: number;
+  name: string;
+  scale: number;
+}
+
 export function useScatterConfig() {
-  const {screenshotLabel} = useLabelScreenshot();
   const {handleScatterExportClick} = useScatterExport();
   const {enable} = useScreen();
+  const {preview} = useClientSettings();
 
   const scatterWidth = PLOTLY_SIZE * (4 / 3);
   const scatterHeight = PLOTLY_SIZE;
   const scatterScale = 4;
   const scatterName = `${EXPORT_FILENAME}-scatter-export`;
 
-  const scatterOptions: ScatterExportOptions = {
+  const props: ScatterProps = {
     filename: scatterName,
     width: scatterWidth,
     height: scatterHeight,
     format: 'svg',
     scale: scatterScale,
+    name: scatterName,
   };
 
-  const config: Partial<Config> = {
-    displaylogo: false,
-    responsive: true,
-    displayModeBar: true,
-    modeBarButtonsToAdd: [
-      {
-        name: 'toggle-selection',
-        title: 'Toggle selection',
-        icon: Plotly.Icons['selectbox'],
-        click: () => {
-          enable();
+  const config = computed<Partial<Config>>(() => {
+    let barButtons: ModeBarButtonAny[] = [];
+
+    if (preview.value === true) {
+      barButtons = [
+        {
+          name: 'toggle-selection',
+          title: 'Toggle selection',
+          icon: Plotly.Icons['selectbox'],
+          click: () => {
+            enable();
+          },
         },
-      },
-      {
-        name: 'download-png',
-        title: 'Download as PNG with legend',
-        icon: Plotly.Icons.camera,
-        click: async (gd) => {
-          const options: ToImgopts = {...scatterOptions, format: 'png'};
+      ];
+    }
 
-          let data = await Plotly.toImage(gd, options);
-          const prefix = 'data:image/png;base64,';
-          if (!data.startsWith(prefix)) {
-            data = prefix + data;
-          }
+    const {button: downloadPngButton} = useScatterDownloadPngButton(props);
+    barButtons = [...barButtons, downloadPngButton];
 
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.width = scatterWidth * scatterScale;
-          canvas.height = scatterHeight * scatterScale;
-
-          const finish = () => {
-            triggerCanvasDownload(canvas, scatterName);
-          };
-
-          if (context === null) {
-            finish();
-            return;
-          }
-
-          const image = new Image();
-          image.src = data;
-          image.onload = async () => {
-            context.drawImage(image, 0, 0);
-
-            const legendCanvas = await screenshotLabel();
-            const legendContext = legendCanvas?.getContext('2d') ?? null;
-
-            if (legendCanvas === null || legendContext === null) {
-              finish();
-              return;
-            }
-
-            const legendScale = 0.5;
-            const legendWidth =
-              legendContext.canvas.width * scatterScale * legendScale;
-            const legendHeight =
-              legendContext.canvas.height * scatterScale * legendScale;
-
-            context.drawImage(
-              legendCanvas,
-              canvas.width - legendWidth,
-              canvas.height - legendHeight,
-              legendWidth,
-              legendHeight,
-            );
-
-            finish();
-          };
-        },
-      },
+    barButtons = [
+      ...barButtons,
       {
         name: 'download-svg',
         title: 'Download as SVG without legend',
         icon: Plotly.Icons['camera-retro'],
         click: async (gd) => {
-          await Plotly.downloadImage(gd, scatterOptions);
+          await Plotly.downloadImage(gd, props);
         },
       },
+    ];
+
+    barButtons = [
+      ...barButtons,
       {
         name: 'export-csv',
         title: 'Export as CSV',
@@ -118,9 +81,16 @@ export function useScatterConfig() {
           await handleScatterExportClick();
         },
       },
-    ],
-    modeBarButtonsToRemove: ['toImage', 'resetCameraLastSave3d'],
-  };
+    ];
+
+    return {
+      displaylogo: false,
+      responsive: true,
+      displayModeBar: true,
+      modeBarButtonsToAdd: barButtons,
+      modeBarButtonsToRemove: ['toImage', 'resetCameraLastSave3d'],
+    };
+  });
 
   return {
     config: config,

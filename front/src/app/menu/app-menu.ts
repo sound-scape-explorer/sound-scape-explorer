@@ -21,7 +21,10 @@ export function useAppMenu() {
   registerKey(KeyboardShortcut.view, () => toggle('view'));
   registerKey(KeyboardShortcut.colors, () => toggle('colors'));
   registerKey(KeyboardShortcut.time, () => toggle('time'));
-  registerKey(KeyboardShortcut.timeline, () => preview && toggle('timeline'));
+  registerKey(
+    KeyboardShortcut.timeline,
+    () => preview.value && toggle('timeline'),
+  );
   registerKey(KeyboardShortcut.labels, () => toggle('labels'));
   registerKey(KeyboardShortcut.details, () => toggle('details'));
   registerKey(KeyboardShortcut.audio, () => toggle('audio'));
@@ -31,8 +34,11 @@ export function useAppMenu() {
   );
   registerKey(KeyboardShortcut.indicators, () => toggle('indicators'));
   registerKey(KeyboardShortcut.digested, () => toggle('digested'));
-  registerKey(KeyboardShortcut.selection, () => toggle('selection'));
-  registerKey(KeyboardShortcut.shift, () => enable());
+  registerKey(
+    KeyboardShortcut.selection,
+    () => preview.value && toggle('selection'),
+  );
+  registerKey(KeyboardShortcut.selectHotkey, () => preview.value && enable());
 
   return {
     isReady: isReady,

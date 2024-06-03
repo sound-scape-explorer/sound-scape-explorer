@@ -18,5 +18,5 @@ export enum KeyboardShortcut {
   timeBackward = 'p',
   timeForward = 'n',
   selection = 's',
-  shift = 'j',
+  selectHotkey = 'j',
 }

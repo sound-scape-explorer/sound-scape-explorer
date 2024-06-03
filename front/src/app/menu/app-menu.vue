@@ -132,6 +132,7 @@ const {preview} = useClientSettings();
       </MenuItem>
 
       <MenuItem
+        v-if="preview"
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="selection"

@@ -6,8 +6,8 @@ import Plotly, {
 import {useScatterCamera} from 'src/components/scatter/scatter-camera';
 import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {useScatterConfig} from 'src/components/scatter/scatter-config';
-import {useClientSettings} from 'src/composables/client-settings';
 import {useScatterTraces} from 'src/components/scatter/scatter-traces';
+import {useClientSettings} from 'src/composables/client-settings';
 import {computed, onMounted, ref, watch} from 'vue';
 
 const container = ref<PlotlyHTMLElement | null>(null);
@@ -58,7 +58,7 @@ export function useScatter() {
     }
 
     isMounted.value = true;
-    await Plotly.newPlot(container.value, [], layout.value, config);
+    await Plotly.newPlot(container.value, [], layout.value, config.value);
     console.log('first render');
   };
 
@@ -94,12 +94,17 @@ export function useScatter() {
     }
 
     isRendering.value = true;
-    await Plotly.react(container.value, traces.value, layout.value, config);
+    await Plotly.react(
+      container.value,
+      traces.value,
+      layout.value,
+      config.value,
+    );
     console.log('render');
     isRendering.value = false;
   };
 
-  watch([container, traces, isMounted, isAttached], render);
+  watch([container, traces, isMounted, isAttached, config], render);
 
   return {
     container: container,
