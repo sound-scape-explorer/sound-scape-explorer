@@ -10,7 +10,7 @@ export function useStorageReady() {
   const {hasFile} = useStorageFile();
 
   const updateReady = () => {
-    if (!hasWorker.value || !hasFile.value) {
+    if (!hasWorker.value || !hasFile.value || isReady.value) {
       return;
     }
 

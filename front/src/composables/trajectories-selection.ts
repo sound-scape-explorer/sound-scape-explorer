@@ -1,9 +1,9 @@
+import {useScatterTraces} from 'src/components/scatter/scatter-traces';
 import {useTrajectoriesData} from 'src/composables/trajectories-data';
 import {
   type Trajectory,
   useTrajectoriesStorage,
 } from 'src/composables/trajectories-storage';
-import {useScatterTraces} from 'src/components/scatter/scatter-traces';
 import {ref} from 'vue';
 
 const selected = ref<Trajectory[]>([]);

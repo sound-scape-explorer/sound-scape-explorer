@@ -57,7 +57,7 @@ onMounted(showImport);
         <Suspense>
           <div>
             <AppMenu />
-            <AppLoader v-if="isReady" />
+            <AppLoader />
             <Scatter v-if="isReady" />
             <Screen v-if="isReady" />
             <Draggables />
