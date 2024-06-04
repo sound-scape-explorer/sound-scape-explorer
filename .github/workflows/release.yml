@@ -80,7 +80,7 @@ jobs:
           name: visualisation-ubuntu
           path: visualisation/out/make/deb/x64/*.deb
   build-macos:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       #############
       # preparing  #
