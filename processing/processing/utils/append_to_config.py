@@ -14,6 +14,7 @@ def append_to_config(config_path: str, paths: List[str]) -> None:
     parser = ConfigParser(config_path, folder_path)
     filenames = parser.get(ExcelSheet.files, FileSheet.name_)
 
+    # TODO: could use a set() for faster "not in"
     files_to_append = [path for path in paths if path not in filenames]
 
     if len(files_to_append) == 0:
