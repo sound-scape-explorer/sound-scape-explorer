@@ -8,6 +8,7 @@ from processing.config.files.FileConfig import FileConfig
 from processing.config.files.FileSheet import FileSheet
 from processing.config.labels.LabelConfig import LabelConfig
 from processing.config.settings.SettingsConfig import SettingsConfig
+from processing.constants import FILE_TEMPLATE_PREFIX
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.convert_date_to_timestamp import convert_date_to_timestamp
@@ -119,16 +120,16 @@ class FileStorage:
     ) -> List[FileConfig]:
         sheet = ExcelSheet.files
 
-        names = parser.get(sheet, FileSheet.name_)
+        names: List[str] = parser.get(sheet, FileSheet.name_)
         dates: List[Union[Timestamp, str]] = parser.get(sheet, FileSheet.date)
         sites = parser.get(sheet, FileSheet.site)
 
         # file template detection
         # todo: extract this to its own method
         # todo: call this only on sse_fill for now
-        prefix = "[[AUTO]]"
+        # todo: we get an IndexError later on (see notes)
+        prefix = FILE_TEMPLATE_PREFIX
         prefix_length = len(prefix)
-        print(prefix)
         auto_indices = list(
             reversed([i for i, n in enumerate(names) if str(n).startswith(prefix)])
         )
@@ -180,8 +181,10 @@ class FileStorage:
                         auto_sites.append(sites[i].format(**match))
                         for il, label in enumerate(labels):
                             if type(label.values[i]) == str:
+                                print("a")
                                 auto_labels[il].append(label.values[i].format(**match))
                             else:
+                                print("b")
                                 auto_labels[il].append(label.values[i])
 
                 # splice
@@ -200,6 +203,9 @@ class FileStorage:
         labels_values = LabelConfig.convert_to_values_by_file(labels)
 
         durations = read_files_durations(names, settings.audio_path)
+        names = [name for name in names if not name.startswith(prefix)]
+        print(len(names), type(names))
+        print(names)
 
         files = FileConfig.reconstruct(
             names=names,
