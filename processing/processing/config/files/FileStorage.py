@@ -118,52 +118,81 @@ class FileStorage:
         settings: SettingsConfig,
     ) -> List[FileConfig]:
         sheet = ExcelSheet.files
-        
+
         names = parser.get(sheet, FileSheet.name_)
         dates: List[Union[Timestamp, str]] = parser.get(sheet, FileSheet.date)
         sites = parser.get(sheet, FileSheet.site)
 
-        prefix = '[[AUTO]]'
+        # file template detection
+        # todo: extract this to its own method
+        # todo: call this only on sse_fill for now
+        prefix = "[[AUTO]]"
+        prefix_length = len(prefix)
         print(prefix)
-        auto_indices = list(reversed([i for i,n in enumerate(names) if str(n).startswith(prefix)]))
+        auto_indices = list(
+            reversed([i for i, n in enumerate(names) if str(n).startswith(prefix)])
+        )
+
+        print("number of auto indices detected", len(auto_indices))
+
         if len(auto_indices) > 0:
             import re
-            from processing.utils import walk_directory, read_audio_path_from_config
-            audio_path = read_audio_path_from_config.read_audio_path_from_config(parser.path)
-            set_names = set(names)
-            paths = [p for p in walk_directory.walk_directory(audio_path) if p not in set_names]
+            from processing.utils.walk_directory import walk_directory
+            from processing.utils.read_audio_path_from_config import (
+                read_audio_path_from_config,
+            )
+
+            audio_path = read_audio_path_from_config(parser.path)
+            set_names = set(names)  # todo: names are already unique
+            paths = [p for p in walk_directory(audio_path) if p not in set_names]
+
             for i in auto_indices:
-                rre = re.sub(':([a-zA-Z]+)', r'(?P<\1>[^/]*)', names[i][len(prefix):])
+                rre = re.sub(":([a-zA-Z]+)", r"(?P<\1>[^/]*)", names[i][prefix_length:])
                 auto_names = []
                 auto_dates = []
                 auto_sites = []
-                auto_labels = [[] for label in labels]
+                auto_labels = [[] for _label in labels]
                 for p in paths:
                     match = re.fullmatch(rre, p)
                     if match is not None:
-                        match = { **match.groupdict(), "_": match.group(0) }
+                        match = {**match.groupdict(), "_": match.group(0)}
                         auto_names.append(p)
-                        if 'date' in match:
-                            d = match['date']
-                            if re.match(r'[0-9]{8}T[0-9]{6}_?[0-9]*', d):
-                                auto_dates.append(d[:4]+'-'+d[4:6]+'-'+d[6:8]+' '+d[9:11]+':'+d[11:13]+':'+d[13:15])
+                        if "date" in match:
+                            d = match["date"]
+                            if re.match(r"[0-9]{8}T[0-9]{6}_?[0-9]*", d):
+                                auto_dates.append(
+                                    d[:4]
+                                    + "-"
+                                    + d[4:6]
+                                    + "-"
+                                    + d[6:8]
+                                    + " "
+                                    + d[9:11]
+                                    + ":"
+                                    + d[11:13]
+                                    + ":"
+                                    + d[13:15]
+                                )
                             else:
                                 auto_dates.append(d)
                         else:
                             auto_dates.append(dates[i])
                         auto_sites.append(sites[i].format(**match))
-                        for il,label in enumerate(labels):
+                        for il, label in enumerate(labels):
                             if type(label.values[i]) == str:
                                 auto_labels[il].append(label.values[i].format(**match))
                             else:
                                 auto_labels[il].append(label.values[i])
-                            
+
                 # splice
-                names = names[:i] + auto_names + names[i+1:]
-                dates = dates[:i] + auto_dates + dates[i+1:]
-                sites = sites[:i] + auto_sites + sites[i+1:]
-                for il,label in enumerate(labels):
-                    label.values = label.values[:i] + auto_labels[il] + label.values[i+1:]
+                i1 = i + 1
+                names = names[:i] + auto_names + names[i1:]
+                dates = dates[:i] + auto_dates + dates[i1:]
+                sites = sites[:i] + auto_sites + sites[i1:]
+                for il, label in enumerate(labels):
+                    label.values = (
+                        label.values[:i] + auto_labels[il] + label.values[i1:]
+                    )
                 paths = [p for p in paths if not p in auto_names]
 
         timestamps = [convert_date_to_timestamp(d) for d in dates]
@@ -180,9 +209,13 @@ class FileStorage:
             durations=durations,
             audio_path=settings.audio_path,
         )
-        
+
         print(files)
         print(len(files))
-        print('\n'.join([f'{f.site} {f.duration} {f.labels} {f.timestamp}' for f in files]))
+        print(
+            "\n".join(
+                [f"{f.site} {f.duration} {f.labels} {f.timestamp}" for f in files]
+            )
+        )
 
         return files
