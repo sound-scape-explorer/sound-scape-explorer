@@ -42,6 +42,7 @@ def digest(
         nn_extractors=nn_extractors,
     )
 
+    # todo: add case where data has to be skipped (set autocluster verification for silhouette by example at digester level and not action level)
     for ar in aggregated_reduceables:
         aggregated_features = ar.read_features_from_storage(storage)
         aggregated_labels = AggregatedLabelStorage.read_from_storage(

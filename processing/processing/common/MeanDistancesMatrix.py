@@ -5,6 +5,9 @@ from h5py import Dataset
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
+    MeanDistancesMatrixOutOfMemoryWarning,
+)
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 
@@ -14,24 +17,31 @@ class MeanDistancesMatrix:
     def calculate(
         features: List[Dataset],
     ) -> List[List[float]]:
-        from sklearn import metrics
+        try:
+            from sklearn import metrics
 
-        samples_count = features[0].shape[0]
-        mean_distances_matrix = np.zeros([samples_count, samples_count])
+            samples_count = features[0].shape[0]
+            mean_distances_matrix = np.zeros([samples_count, samples_count])
 
-        for i in range(len(features)):
-            previous_mean_distances_matrix = mean_distances_matrix
+            for i in range(len(features)):
+                previous_mean_distances_matrix = mean_distances_matrix
 
-            umap = features[i]
+                umap = features[i]
 
-            current_mean_distances_matrix = metrics.pairwise_distances(umap)
+                current_mean_distances_matrix = metrics.pairwise_distances(umap)
 
-            mean_distances_matrix = (
-                (previous_mean_distances_matrix * i) + current_mean_distances_matrix
-            ) / (i + 1)
+                mean_distances_matrix = (
+                    (previous_mean_distances_matrix * i) + current_mean_distances_matrix
+                ) / (i + 1)
 
-        # TODO: This can fail OOM
-        values = mean_distances_matrix.tolist()
+                values = mean_distances_matrix.tolist()
+
+        except MemoryError:
+            MeanDistancesMatrixOutOfMemoryWarning(
+                "null",
+                "Filling storage with empty array...",
+            )
+            values = []
 
         return values
 

@@ -33,7 +33,6 @@ def compute_requirements(
     print_action("Requirements computation started!", "start")
 
     ComputationUmapStorage.delete(storage)
-    storage.delete(StoragePath.mean_distances_matrix)
 
     settings = SettingsStorage.read_from_storage(storage)
     bands = BandStorage.read_from_storage(storage)
@@ -74,10 +73,10 @@ def compute_requirements(
                 index=computation_index,
             )
 
+    storage.delete(StoragePath.mean_distances_matrix)
     print()
     print("Computing mean distances matrix...")
 
-    # TODO: This can exceed the available memory and crash the computation altogether
     for band, integration in walk_bands_integrations(bands, integrations):
         computation_umaps = ComputationUmapStorage.read_from_storage(
             storage=storage,
