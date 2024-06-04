@@ -1,8 +1,8 @@
+export const LINEBREAK = '%0D%0A';
+
 export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
-
-export const RENDERING_DELAY_SLOW = 250;
 
 export const SLIDER_LIMITS = {
   start: '⟦',
@@ -45,6 +45,9 @@ export const TRACE_WIDTH_2D = 2;
 export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend';
 
 export const NN_EXTRACTORS = ['vgg', 'yamnet'];
+
+export type ColorFlavor = 'Accent' | 'Dark2' | 'Spectral';
+export const COLOR_FLAVORS: ColorFlavor[] = ['Accent', 'Dark2', 'Spectral'];
 
 // Plotly instances for Indicators and Digesters.
 export const PLOTLY_SIZE = 600;

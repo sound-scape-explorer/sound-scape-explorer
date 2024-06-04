@@ -30,6 +30,7 @@ class MeanDistancesMatrix:
                 (previous_mean_distances_matrix * i) + current_mean_distances_matrix
             ) / (i + 1)
 
+        # TODO: This can fail OOM
         values = mean_distances_matrix.tolist()
 
         return values

@@ -1,6 +1,7 @@
+import {fileURLToPath, URL} from 'node:url';
+
 import vue from '@vitejs/plugin-vue';
 import analyzer from 'rollup-plugin-analyzer';
-import {fileURLToPath, URL} from 'url';
 import {defineConfig} from 'vite';
 import {comlink} from 'vite-plugin-comlink';
 import {VitePWA as vitePwa} from 'vite-plugin-pwa';

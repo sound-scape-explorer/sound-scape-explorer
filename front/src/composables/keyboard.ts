@@ -1,0 +1,38 @@
+import {onKeyStroke} from '@vueuse/core';
+import type {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
+import {ref} from 'vue';
+
+const isLocked = ref<boolean>(false);
+
+export function useKeyboard() {
+  const registerKey = (key: KeyboardShortcut, callback: () => void): void => {
+    onKeyStroke(
+      key,
+      () => {
+        if (isLocked.value) {
+          return;
+        }
+
+        callback();
+      },
+      {
+        eventName: 'keypress',
+        dedupe: true,
+      },
+    );
+  };
+
+  const lock = () => {
+    isLocked.value = true;
+  };
+
+  const unlock = () => {
+    isLocked.value = false;
+  };
+
+  return {
+    registerKey: registerKey,
+    lock: lock,
+    unlock: unlock,
+  };
+}

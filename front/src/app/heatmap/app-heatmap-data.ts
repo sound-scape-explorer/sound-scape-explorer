@@ -1,0 +1,46 @@
+import {type Data} from 'plotly.js-dist-min';
+
+export type HeatmapData = Data & {
+  hoverongaps: boolean;
+};
+
+interface GenerateDataProps {
+  colorscale: string;
+  x: string[];
+  y: string[];
+  z: (number | null)[][];
+  zmin: number | undefined;
+  zmax: number | undefined;
+}
+
+export function useAppHeatmapData() {
+  const buildData = ({
+    colorscale,
+    x,
+    y,
+    z,
+    zmin,
+    zmax,
+  }: GenerateDataProps): HeatmapData => {
+    const data: HeatmapData = {
+      type: 'heatmap',
+      colorscale: colorscale,
+      reversescale: true,
+      x: x,
+      y: y,
+      z: z,
+      hovertemplate: '%{z:.3f}<extra>%{y}/%{x}</extra>',
+      hoverongaps: false,
+      xgap: 1,
+      ygap: 1,
+      zmin: zmin,
+      zmax: zmax,
+    };
+
+    return data;
+  };
+
+  return {
+    buildData: buildData,
+  };
+}

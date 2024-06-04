@@ -1,0 +1,133 @@
+<script lang="ts" setup>
+import {useScatter} from 'src/components/scatter/scatter';
+import {LassoSelector} from 'src/components/screen/lasso';
+import {useScreen} from 'src/components/screen/screen';
+import {useScreenCheck} from 'src/components/screen/screen-check';
+import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
+import {ref, watch} from 'vue';
+
+import {project} from './project';
+
+const {isEnabled, disable, selected} = useScreen();
+const {isPointInPolygon} = useScreenCheck();
+const {container: scatterContainer} = useScatter();
+
+const container = ref<HTMLDivElement | null>(null);
+const isDown = ref<boolean>(false);
+
+const canvas = document.createElement('canvas');
+const context = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const {reducedFeatures} = useStorageReducedFeatures();
+
+const selector = new LassoSelector(canvas);
+
+watch([container, isEnabled], () => {
+  if (
+    container.value === null ||
+    context === null ||
+    isEnabled.value === false
+  ) {
+    return;
+  }
+
+  container.value.appendChild(canvas);
+
+  container.value.onmousedown = () => {
+    isDown.value = true;
+  };
+
+  container.value.onmouseup = () => {
+    if (scatterContainer.value === null || reducedFeatures.value === null) {
+      return;
+    }
+
+    const width = scatterContainer.value.clientWidth;
+    const height = scatterContainer.value.clientHeight;
+
+    const lassoPath = selector.getData(width, height);
+    selector.close();
+    isDown.value = false;
+    disable();
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore: undocumented api
+    const scene = scatterContainer.value._fullLayout.scene;
+    const gl = scene._scene.glplot;
+
+    const firstTrace = Object.keys(scene._scene.traces)[0];
+    const dataPoints = scene._scene.traces[firstTrace].dataPoints as [
+      number,
+      number,
+      number,
+    ][];
+
+    // https://github.com/mrdoob/three.js/blob/master/src/math/Vector3.js#L273
+    // https://github.com/plotly/plotly.js/blob/master/src/plots/gl3d/project.js
+    const projectedPoints: [number, number][] = dataPoints.map((point) => {
+      const v = project(gl.cameraParams, [point[0], point[1], point[2]]);
+      const x = v[0] / v[3];
+      const y = v[1] / v[3];
+      const screenX = Math.round(((x + 1) * width) / 2);
+      const screenY = Math.round(((-y + 1) * height) / 2);
+      return [screenX, screenY];
+    });
+
+    const selectedPoints = projectedPoints.map((projectedPoint, i) =>
+      isPointInPolygon(projectedPoint, lassoPath) ? i : null,
+    );
+
+    let filtered: number[] = [];
+
+    for (let i = 0; i < selectedPoints.length; i += 1) {
+      const index = selectedPoints[i];
+
+      if (index === null) {
+        continue;
+      }
+
+      filtered = [...filtered, index];
+    }
+
+    console.log({
+      width: width,
+      height: height,
+      projectedPoints: projectedPoints,
+      lassoPath: lassoPath,
+      filtered: filtered,
+    });
+
+    selected.value = filtered;
+  };
+
+  container.value.onmousemove = (e: MouseEvent) => {
+    if (isDown.value === false) {
+      return;
+    }
+
+    selector.mouseMove(e);
+    selector.draw();
+  };
+});
+</script>
+
+<template>
+  <div
+    v-if="isEnabled"
+    ref="container"
+    class="selectors-container"
+  />
+</template>
+
+<style lang="scss" scoped>
+.selectors-container {
+  background: rgba(0, 0, 255, 0.2);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  cursor: crosshair;
+}
+</style>
