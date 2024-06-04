@@ -5,6 +5,7 @@ from h5py import Dataset
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.constants import MDM_DEFAULT
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
@@ -41,7 +42,7 @@ class MeanDistancesMatrix:
                 "null",
                 "Filling storage with empty array...",
             )
-            values = []
+            values = MDM_DEFAULT
 
         return values
 
