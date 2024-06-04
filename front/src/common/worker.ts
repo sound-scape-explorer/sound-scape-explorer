@@ -431,7 +431,7 @@ export async function readAutoclusters(
 
     return autoclusters;
   } catch (error) {
-    console.error('Failed to read autoclusters', error);
+    console.error('Worker: readAutoclusters', error);
     return [];
   }
 }
