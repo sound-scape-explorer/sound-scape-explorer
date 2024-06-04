@@ -1,3 +1,42 @@
+# [13.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.5...v13.3.0) (2024-06-04)
+
+
+### Bug Fixes
+
+* **App:** Upgrade pnpm lock file ([140c6c4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/140c6c49f23b71805dace60732b2e7d2d464c372))
+* **Audio:** Upgrade pnpm lock file ([076c838](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/076c838f420495069b0bbac497cc4cff38393988))
+* **CI:** Use macos 13 ([d572219](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d5722199308ca2999c258a70a8b159b854ceb84e))
+* **Front/AppDraggable:** Change bound order checking ([83eda96](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/83eda9672da2689e2e5d3187ca7fdf1f1455e328))
+* **Front/AppDraggable:** Check bounds on every mount ([2873855](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/28738553df6cc8b7c378f34ffbb8078cdd1efbb7))
+* **Front/AppDraggable:** Check bounds on window resize ([116d519](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/116d519c920eb5224d634f726a52b25766066c83))
+* **Front/Audio:** Lock scatter camera on slider use ([77587c7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/77587c773398fc8abb9dcb75c998a11850cdf32b))
+* **Front/Menu:** Disable settings button if no storage file provided ([675f63f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/675f63f6134e2a61dcf91c9bc17a3d6a8abd05f8))
+* **Front/Menu:** Restrict settings if storage not ready ([8150ba5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8150ba507569437db94a1edbe226206d9125021f))
+* **Front/Scatter:** Add client setting for copy on 2d selection ([2588e8f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2588e8ff6047988370f6997f014566e556716a0f))
+* **Front/Scatter:** Always show mode bar ([0806447](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0806447c4ef95836eee075aafe75645097b2fc2d))
+* **Front/Scatter:** Check if enabled before rendering ([dad9bf3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dad9bf304aeca52ff4786571180ad78f27c38100))
+* **Front/Scatter:** Dispose useless condition ([a53a415](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a53a41566e9f097f40b3e6032d6bf2f95016d923))
+* **Front/Scatter:** Prevent container from overflowing vertically ([4a968c1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4a968c134db937f039fad037e68a569ce1672051))
+* **Front/Worker:** Add hook edge case ([c7eb22d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c7eb22d50544a66cda8d5efd9e5cfd1bb60a1c81))
+* **Front:** Improve state loader ([cb56bbe](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb56bbe57f58b3afdcad5a4221b872ec59bdcf8d))
+* **Front:** Move proto 3d selection behind preview user setting ([1610a78](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1610a78c9d09e695a52ff428c10178bb1233e97b))
+* **Front:** Multiple fixes + Work on 3d selection ([88590cd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/88590cd08218e1b15c9d052143da4c79f6acfd05))
+* **Front:** Remove gl matrix for now ([38a7d55](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/38a7d5508a1e440f5214a833ea5b8361be65be98))
+* **Front:** Upgrade pnpm lock file ([c800d53](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c800d53d50346337d6123524d1c74a9749f4777e))
+
+
+### Features
+
+* **Front/Scatter2d:** Copy selected intervals as file indexes ([d37e5ef](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d37e5ef852608a9d6f501ee7bfa1bcd886645a02))
+* **Front/Settings:** Add scatter2d gl option ([be30236](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/be30236b609d8ab4fc0548c1d79879fdd48148ad))
+* **Front/Settings:** Add time shift user setting ([ab91ec4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ab91ec4a81b5a75089777661bb569728b8d847af))
+
+
+### Performance Improvements
+
+* **Front/AppNotification:** Use better hook name ([3d687b8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3d687b8a85d16fe6ba33a823f9ad46b9bc3fe006))
+* **Front/Scatter:** Move lifecycles instructions at SFC level ([c029c86](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c029c86afe2d1526e63edd70e41191f50de023e2))
+
 ## [13.2.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.4...v13.2.5) (2024-04-19)
 
 
