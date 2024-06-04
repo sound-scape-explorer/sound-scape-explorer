@@ -9,6 +9,7 @@ from processing.errors.MeanDistancesMatrixEmptyWarning import (
 from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.utils.invoke_menu import invoke_menu
+from processing.utils.is_mdm_empty import is_mdm_empty
 from processing.utils.print_action import print_action
 from processing.utils.print_autoclusters import print_autoclusters
 from processing.utils.validate_autoclusters import validate_autoclusters
@@ -40,7 +41,7 @@ def autocluster(
             ac.create_instance(band, integration)
             mdm = MeanDistancesMatrix.read_from_storage(storage, band, integration)
 
-            if len(mdm) == 0:
+            if is_mdm_empty(mdm):
                 MeanDistancesMatrixEmptyWarning(band, integration)
                 continue
 
