@@ -1,3 +1,13 @@
+## [13.3.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.3.0...v13.3.1) (2024-06-12)
+
+
+### Bug Fixes
+
+* **Processing/Digesters:** Catch missing MDM at SilhouetteDigester level ([8004074](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/800407460088d5c7ed85bf80532102d58841f252))
+* **Processing/MeanDistancesMatrix:** Catch out of memory error on calculate ([34950e9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/34950e977617269c84ebe0fe753f2958e39d60a4))
+* **Processing/Storage:** Add prefix to console feedbacks ([55d14a8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/55d14a806a04f16ae92b2035f96c1d86141e7765))
+* **Processing/Storage:** Remove redundant console outputs ([176f34b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/176f34b70ab8dc4829c0774ecce0036324dea8c3))
+
 # [13.3.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.2.5...v13.3.0) (2024-06-04)
 
 
