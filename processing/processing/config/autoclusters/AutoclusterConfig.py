@@ -5,7 +5,9 @@ from rich import print
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
-from processing.utils.print_action import print_action
+from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
+    MeanDistancesMatrixOutOfMemoryWarning,
+)
 
 
 class AutoclusterConfig:
@@ -130,12 +132,10 @@ class AutoclusterConfig:
             clustering = self.instance.fit(mean_distances_matrix[:])
             labels = clustering.labels_.tolist()
         except MemoryError:
-            print_action(
-                f"The mean distances matrix {mean_distances_matrix.shape} "
-                f"exceeds the available RAM.",
-                "warning",
+            MeanDistancesMatrixOutOfMemoryWarning(
+                f"{mean_distances_matrix.shape}",
+                "Filling storage with dummy results...",
             )
-            print("Filling with dummy results to continue processing...")
 
             labels = ["MemoryError"] * mean_distances_matrix.shape[0]
 

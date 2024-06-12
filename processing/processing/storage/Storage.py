@@ -27,12 +27,9 @@ class Storage:
                 self.path,
                 StorageMode.rw_or_create.value,
             )
-            print("success")
         except BlockingIOError:
-            print("blocking error")
             raise RuntimeError(f"Unable to load file {self.path}.")
         except TypeError:
-            print("type error")
             raise FileNotFoundError(f"Unable to find file {self.path}.")
         except OSError:
             raise TypeError(f"Unable to load file {self.path}.")

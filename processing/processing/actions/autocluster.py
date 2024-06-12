@@ -3,9 +3,13 @@ from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
+from processing.errors.MeanDistancesMatrixEmptyWarning import (
+    MeanDistancesMatrixEmptyWarning,
+)
 from processing.interfaces import MenuCallback
 from processing.storage.Storage import Storage
 from processing.utils.invoke_menu import invoke_menu
+from processing.utils.is_mdm_empty import is_mdm_empty
 from processing.utils.print_action import print_action
 from processing.utils.print_autoclusters import print_autoclusters
 from processing.utils.validate_autoclusters import validate_autoclusters
@@ -35,7 +39,12 @@ def autocluster(
     for band, integration in walk_bands_integrations(bands, integrations):
         for ac in autoclusters:
             ac.create_instance(band, integration)
-            mdm = storage.read(MeanDistancesMatrix.get_path(band, integration))
+            mdm = MeanDistancesMatrix.read_from_storage(storage, band, integration)
+
+            if is_mdm_empty(mdm):
+                MeanDistancesMatrixEmptyWarning(band, integration)
+                continue
+
             ac.calculate(mdm)
             AutoclusteredStorage.write(storage, band, integration, ac)
 

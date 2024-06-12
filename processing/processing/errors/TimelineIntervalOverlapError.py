@@ -1,5 +1,3 @@
-from rich import print
-
 from processing.common.Interval import Interval
 from processing.config.files.FileConfig import FileConfig
 from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date

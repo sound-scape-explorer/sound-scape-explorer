@@ -1,9 +1,10 @@
 import numpy as np
-from processing.utils.sort_dataframe import sort_dataframe
 from sklearn import metrics
 
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.digesters.Digester import Digester
+from processing.utils.is_mdm_empty import is_mdm_empty
+from processing.utils.sort_dataframe import sort_dataframe
 
 
 class SilhouetteDigester(Digester):
@@ -19,6 +20,9 @@ class SilhouetteDigester(Digester):
             integration=self.integration,
             trim_half=True,
         )
+
+        if is_mdm_empty(mdm):
+            return silhouette
 
         for i, cl1 in enumerate(values):
             for j, cl2 in enumerate(values):
