@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {NTag, NTooltip} from 'naive-ui';
+import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
-import {selectedGapSizeRef} from 'src/draggables/timeline/timeline-gap-size';
 import {
   pageSizeRef,
   pageVisibleBlocksRef,
@@ -10,12 +10,13 @@ import {
   useTimelinePagination,
   type VisibleBlock,
 } from 'src/draggables/timeline/timeline-pagination';
-import {useScatterClick} from 'src/components/scatter/scatter-click';
+import {useTimelineSizes} from 'src/draggables/timeline/timeline-sizes';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
 const containerRef = ref<HTMLDivElement | null>(null);
 const {convertTimestampToIsoDate} = useDate();
 const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
+const {size} = useTimelineSizes();
 
 useTimelinePagination();
 
@@ -47,7 +48,7 @@ onMounted(() => {
   draggableRef.value.onmousemove = (e: MouseEvent) => {
     e.preventDefault();
 
-    if (isDraggingRef.value === false || columnsRef.value === null) {
+    if (!isDraggingRef.value || columnsRef.value === null) {
       return;
     }
 
@@ -78,11 +79,11 @@ watchEffect(() => {
 });
 
 const colWidthRef = computed(() => {
-  if (selectedGapSizeRef.value === 'small') {
+  if (size.value === 'small') {
     return 30;
-  } else if (selectedGapSizeRef.value === 'medium') {
+  } else if (size.value === 'medium') {
     return 50;
-  } else if (selectedGapSizeRef.value === 'large') {
+  } else if (size.value === 'large') {
     return 80;
   }
 });
@@ -139,6 +140,7 @@ const handleBlockClick = (block: VisibleBlock) => {
             placement="top"
             trigger="hover"
           >
+            <!--suppress VueUnrecognizedSlot -->
             <template #trigger>{{ vB.file }}</template>
             <div>
               <div>
