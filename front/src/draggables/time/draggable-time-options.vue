@@ -16,37 +16,38 @@ import {
   NTooltip,
 } from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
+import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
+import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {useDate} from 'src/composables/date';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useStorageSettings} from 'src/composables/storage-settings';
-import {timeStore} from 'src/draggables/time/time-store';
-import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
-import {useScatterLoading} from 'src/components/scatter/scatter-loading';
+import {useDraggableTime} from 'src/draggables/time/draggable-time';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 
 const {settings} = useStorageSettings();
 const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
 const {filterByTime} = useScatterFilterTime();
 const {isLoading} = useScatterLoading();
+const {duration, current, isAllSelected, min} = useDraggableTime();
 
 // todo: refactor this gigantic file
 
 const uiDisabled: ComputedRef<boolean> = computed(
-  () => isLoading.value || timeStore.isAllSelected,
+  () => isLoading.value || isAllSelected.value,
 );
 
 const dateStartRef = computed<Dayjs>(() => {
-  let start = timeStore.value;
+  let t = current.value;
 
-  if (timeStore.isAllSelected) {
-    start = timeStore.min;
+  if (isAllSelected.value) {
+    t = min.value;
   }
 
-  return convertTimestampToDate(start * 1000);
+  return convertTimestampToDate(t * 1000);
 });
 
 const dateEndRef = computed<string>(() => {
-  const endDate = dateStartRef.value.unix() * 1000 + timeStore.duration * 1000;
+  const endDate = dateStartRef.value.unix() * 1000 + duration.value * 1000;
   return convertTimestampToIsoDate(endDate);
 });
 
@@ -65,8 +66,8 @@ const durations: Duration[] = [
 const isPlaying = ref<boolean>(false);
 let interval: null | number = null;
 
-const setWindowDuration = (duration: number) => {
-  timeStore.duration = duration;
+const setWindowDuration = (newDuration: number) => {
+  duration.value = newDuration;
   filterByTime();
 };
 
@@ -80,7 +81,7 @@ const blurButton = (event?: MouseEvent) => {
 };
 
 const togglePlaying = (event?: MouseEvent) => {
-  if (timeStore.isAllSelected) {
+  if (isAllSelected.value) {
     return;
   }
 
@@ -90,13 +91,13 @@ const togglePlaying = (event?: MouseEvent) => {
 };
 
 const skipTimeForward = (event?: MouseEvent) => {
-  timeStore.value += timeStore.duration;
+  current.value += duration.value;
   filterByTime();
   blurButton(event);
 };
 
 const skipTimeBackward = (event?: MouseEvent) => {
-  timeStore.value -= timeStore.duration;
+  current.value -= duration.value;
   filterByTime();
   blurButton(event);
 };
@@ -128,7 +129,7 @@ watch(isPlaying, () => {
 });
 
 const handleDateStartUpdate = (t: number) => {
-  timeStore.value = t / 1000;
+  current.value = t / 1000;
 };
 
 const {registerKey} = useKeyboard();
@@ -141,7 +142,7 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
   <div class="container">
     <div class="grid">
       <NSwitch
-        v-model:value="timeStore.isAllSelected"
+        v-model:value="isAllSelected"
         :disabled="isLoading"
         class="toggle"
       >
@@ -160,13 +161,14 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
       </NButtonGroup>
 
       <NInputNumber
-        v-model:value="timeStore.duration"
-        :disabled="timeStore.isAllSelected"
+        v-model:value="duration"
+        :disabled="isAllSelected"
         class="input"
         size="tiny"
       />
 
       <NTooltip trigger="hover">
+        <!--suppress VueUnrecognizedSlot -->
         <template #trigger>
           <NButton
             :disabled="uiDisabled"
@@ -186,6 +188,7 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
       </NTooltip>
 
       <NTooltip trigger="hover">
+        <!--suppress VueUnrecognizedSlot -->
         <template #trigger>
           <NButton
             :disabled="uiDisabled"
@@ -208,6 +211,7 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
       </NTooltip>
 
       <NTooltip trigger="hover">
+        <!--suppress VueUnrecognizedSlot -->
         <template #trigger>
           <NButton
             :disabled="uiDisabled"
@@ -231,6 +235,7 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
           placement="bottom"
           trigger="hover"
         >
+          <!--suppress VueUnrecognizedSlot -->
           <template #trigger>
             <!-- TODO: Replace naive ui date picker with custom to support timezones -->
             <NDatePicker

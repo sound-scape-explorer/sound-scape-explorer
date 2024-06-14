@@ -1,14 +1,15 @@
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
-import {timeStore} from 'src/draggables/time/time-store';
+import {useDraggableTime} from 'src/draggables/time/draggable-time';
 import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
 export function useScatterFilterTime() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {isAllSelected, current, duration} = useDraggableTime();
 
   const isVisible = (index: number): boolean => {
-    if (timeStore.isAllSelected) {
+    if (isAllSelected.value) {
       return true;
     }
 
@@ -19,9 +20,8 @@ export function useScatterFilterTime() {
     // Unix time in seconds
     const timestamp = aggregatedTimestamps.value[index] / 1000;
 
-    const start = timeStore.value;
-    const duration = timeStore.duration;
-    const end = start + duration;
+    const start = current.value;
+    const end = start + duration.value;
 
     return timestamp >= start && timestamp <= end;
   };

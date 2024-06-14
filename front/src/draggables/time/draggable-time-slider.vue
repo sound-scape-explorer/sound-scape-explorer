@@ -3,13 +3,13 @@ import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
+import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {useReducerSelection} from 'src/composables/reducer-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageRanges} from 'src/composables/storage-ranges';
 import {SLIDER_LIMITS} from 'src/constants';
-import {timeStore} from 'src/draggables/time/time-store';
-import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
-import {useScatterLoading} from 'src/components/scatter/scatter-loading';
+import {useDraggableTime} from 'src/draggables/time/draggable-time';
 import {mapRange} from 'src/utils/map-range';
 import {computed, ref, watch} from 'vue';
 
@@ -19,6 +19,7 @@ const {ranges} = useStorageRanges();
 const {reducer} = useReducerSelection();
 const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 const {isLoading} = useScatterLoading();
+const {isAllSelected, duration, current, min, max} = useDraggableTime();
 
 const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
@@ -46,12 +47,12 @@ const sliders = computed<Slider[]>(() => {
     const timeEnd = dayjs(range.end).unix();
     const timeBetween = Math.floor(timeStart + 0.5 * (timeEnd - timeStart));
 
-    if (timeStore.min === -1 || timeStart < timeStore.min) {
-      timeStore.min = timeStart;
+    if (min.value === -1 || timeStart < min.value) {
+      min.value = timeStart;
     }
 
-    if (timeStore.max === -1 || timeEnd > timeStore.max) {
-      timeStore.max = timeEnd;
+    if (max.value === -1 || timeEnd > max.value) {
+      max.value = timeEnd;
     }
 
     const slider = {
@@ -72,7 +73,7 @@ const sliders = computed<Slider[]>(() => {
   // Can be improved to avoid collisions
   sliders.sort((a, b) => a.min - b.max);
 
-  timeStore.value = timeStore.min;
+  current.value = min.value;
 
   cachedSlidersRef.value = sliders;
 
@@ -92,7 +93,7 @@ const interests = computed<Interest[]>(() => {
   const allTimestamps = aggregatedTimestamps.value.map((t) => t / 1000);
 
   const interests: Interest[] = [];
-  const ignoreDecimalsFactor = 1 / timeStore.duration;
+  const ignoreDecimalsFactor = 1 / duration.value;
   const ignoreDecimals = (value: number) =>
     Math.floor(ignoreDecimalsFactor * value);
 
@@ -152,7 +153,7 @@ interface Slider {
 }
 
 const {filterByTime} = useScatterFilterTime();
-watch(timeStore, () => filterByTime());
+watch([isAllSelected, duration, current], () => filterByTime());
 </script>
 
 <template>
@@ -164,8 +165,8 @@ watch(timeStore, () => filterByTime());
       <NSlider
         v-for="slider in sliders"
         :key="slider.key"
-        v-model:value="timeStore.value"
-        :disabled="timeStore.isAllSelected"
+        v-model:value="current"
+        :disabled="isAllSelected"
         :marks="slider.marks"
         :max="slider.max"
         :min="slider.min"
