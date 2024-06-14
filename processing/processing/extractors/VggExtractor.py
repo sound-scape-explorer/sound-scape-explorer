@@ -2,6 +2,7 @@ from typing import List, Literal
 
 import numpy as np
 import torch
+from rich import print
 from torch import Tensor, cuda, hub, nn
 
 from processing.extractors.Extractor import Extractor
