@@ -74,6 +74,6 @@ watch(
   width: 100vw;
   height: 100vh;
   pointer-events: var(--pointer-events);
-  overflow-x: hidden;
+  overflow: hidden;
 }
 </style>
