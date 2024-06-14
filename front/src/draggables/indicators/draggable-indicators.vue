@@ -4,20 +4,17 @@ import {NButton, NCascader, NIcon, NSelect, NSwitch} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
+import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
 import {useStorageSites} from 'src/composables/storage-sites';
-import {
-  indicatorDataRef,
-  useIndicators,
-} from 'src/draggables/indicators/indicators';
-import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
+import {useIndicators} from 'src/draggables/indicators/indicators';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, watch} from 'vue';
 
 const {cyclingScale} = useScatterColorScale();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
-const {selectIndicator, selectSites} = useIndicators();
+const {selectIndicator, data, selectSites} = useIndicators();
 const {convertTimestampToIsoDate} = useDate();
 
 const parseIndex = (optionString: string | null): number | null => {
@@ -73,15 +70,13 @@ const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
     };
   }
 
-  const values = indicatorDataRef.value.map((d) => d.values[0]);
-  const timestamps = indicatorDataRef.value.map((d) => d.timestamp);
-  const sitesValues = indicatorDataRef.value.map((d) => d.site);
+  const values = data.value.map((d) => d.values[0]);
+  const timestamps = data.value.map((d) => d.timestamp);
+  const sitesValues = data.value.map((d) => d.site);
   const sitesNames = sites.value.map((site) => site.name);
   const scale = cyclingScale.value.colors(sitesNames.length + 1);
 
-  const colors = indicatorDataRef.value.map(
-    (d) => scale[sitesNames.indexOf(d.site)],
-  );
+  const colors = data.value.map((d) => scale[sitesNames.indexOf(d.site)]);
 
   if (isByDateRef.value === false) {
     return {
@@ -123,7 +118,7 @@ const handleExportClick = () => {
   csv.addColumn('timestamp');
   csv.addColumn('values');
 
-  for (const d of indicatorDataRef.value) {
+  for (const d of data.value) {
     csv.createRow();
     csv.addToCurrentRow(d.index.toString());
     csv.addToCurrentRow(d.site);

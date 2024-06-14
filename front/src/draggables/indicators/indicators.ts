@@ -1,41 +1,21 @@
 import {
-  type AggregatedIndicator,
+  AggregatedIndicator,
   useStorageAggregatedIndicators,
 } from 'src/composables/storage-aggregated-indicators';
 import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
-import {reactive, watchEffect} from 'vue';
+import {ref} from 'vue';
 
-interface IndicatorRef {
-  value: AggregatedIndicator | null;
-}
-
-export const indicatorRef = reactive<IndicatorRef>({
-  value: null,
-});
-
-interface IndicatorSitesRef {
-  value: string[];
-}
-
-export const indicatorSitesRef = reactive<IndicatorSitesRef>({
-  value: [],
-});
-
-interface IndicatorData {
+interface Data {
   index: number;
   site: string;
   timestamp: number;
   values: number[];
 }
 
-interface IndicatorDataRef {
-  value: IndicatorData[];
-}
-
-export const indicatorDataRef = reactive<IndicatorDataRef>({
-  value: [],
-});
+const data = ref<Data[]>([]);
+const sites = ref<string[]>([]);
+const indicator = ref<AggregatedIndicator | null>(null);
 
 export function useIndicators() {
   const {aggregatedIndicators} = useStorageAggregatedIndicators();
@@ -44,7 +24,7 @@ export function useIndicators() {
 
   const selectIndicator = (index: number | null) => {
     if (index === null) {
-      indicatorRef.value = null;
+      indicator.value = null;
       return;
     }
 
@@ -52,52 +32,57 @@ export function useIndicators() {
       return;
     }
 
-    indicatorRef.value = aggregatedIndicators.value.filter(
+    const results = aggregatedIndicators.value.filter(
       (indicator) => indicator.extractor.index === index,
-    )[0];
+    );
+
+    indicator.value = results[0];
+    render();
   };
 
   const selectSites = (names: string[] | null) => {
     if (names === null) {
-      indicatorSitesRef.value = [];
+      sites.value = [];
       return;
     }
 
-    indicatorSitesRef.value = names;
+    sites.value = names;
+    render();
   };
 
-  const buildIndicatorData = () => {
+  const render = () => {
     if (
       aggregatedSites.value === null ||
       aggregatedTimestamps.value === null ||
-      indicatorRef.value === null
+      indicator.value === null
     ) {
       return;
     }
 
-    const datas: IndicatorData[] = [];
+    let all: Data[] = [];
 
-    for (const [index, aSite] of aggregatedSites.value.entries()) {
-      if (!indicatorSitesRef.value.includes(aSite.site)) {
+    for (const [aS, aggregatedSite] of aggregatedSites.value.entries()) {
+      if (!sites.value.includes(aggregatedSite.site)) {
         continue;
       }
 
-      const data: IndicatorData = {
-        index: index,
-        site: aSite.site,
-        timestamp: aggregatedTimestamps.value[index],
-        values: indicatorRef.value.values[index],
+      const d: Data = {
+        index: aS,
+        site: aggregatedSite.site,
+        timestamp: aggregatedTimestamps.value[aS],
+        values: indicator.value.values[aS],
       };
 
-      datas.push(data);
+      all = [...all, d];
     }
 
-    indicatorDataRef.value = datas;
+    data.value = all;
   };
 
-  watchEffect(buildIndicatorData);
-
   return {
+    indicator: indicator,
+    data: data,
+    sites: sites,
     selectIndicator: selectIndicator,
     selectSites: selectSites,
   };
