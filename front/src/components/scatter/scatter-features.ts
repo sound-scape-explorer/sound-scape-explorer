@@ -1,11 +1,10 @@
 import type {Data, PlotType} from 'plotly.js-dist-min';
 import {useScatterColorAlpha} from 'src/components/scatter/scatter-color-alpha';
 import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
-import {useScatterFilterLabel} from 'src/components/scatter/scatter-filter-label';
-import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
 import {useScreen} from 'src/components/screen/screen';
 import {useClientSettings} from 'src/composables/client-settings';
 import {useDate} from 'src/composables/date';
+import {useIntervalFilter} from 'src/composables/interval-filter';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/storage-labels';
@@ -22,31 +21,29 @@ export function useScatterFeatures() {
   const {convertTimestampToIsoDate} = useDate();
   const {low, high} = useScatterColorAlpha();
   const {scale} = useScatterColorScale();
-  const {filtered: labelFiltered} = useScatterFilterLabel();
-  const {filtered: timeFiltered} = useScatterFilterTime();
   const {selected} = useScreen();
   const {scatter2dGl} = useClientSettings();
+  const {filtered} = useIntervalFilter();
 
   const trace = (): Data[] => {
     if (
       labelProperties.value === null ||
       reducedFeatures.value === null ||
       aggregatedLabels.value === null ||
-      scale.value === null
+      scale.value === null ||
+      filtered.value === null
     ) {
       return [];
     }
 
     const colorScale = scale.value;
-    const pointsFilteredByMeta = labelFiltered.value;
-    const pointsFilteredByTime = timeFiltered.value;
     const pointsSelected = selected.value;
 
     // TODO: improve me
     const plotlyColorscale = colorScale.map((color, index) => {
       let filteredColor = color;
 
-      if (pointsFilteredByMeta[index] || pointsFilteredByTime[index]) {
+      if (filtered.value[index]) {
         filteredColor = `rgba(0, 0, 0, ${low.value})`;
       }
 

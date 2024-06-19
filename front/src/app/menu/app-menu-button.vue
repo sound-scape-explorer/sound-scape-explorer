@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
-import {useAppMenuItem} from 'src/app/menu/app-menu-item';
+import {useAppMenuButton} from 'src/app/menu/app-menu-button';
 import {type DraggablesStore} from 'src/composables/draggables';
 
 export interface AppMenuItemProps {
@@ -12,7 +12,7 @@ export interface AppMenuItemProps {
 }
 
 const props = defineProps<AppMenuItemProps>();
-const {button, handleClick, shortcut, classNames} = useAppMenuItem(props);
+const {button, handleClick, shortcut, classNames} = useAppMenuButton(props);
 </script>
 
 <template>
@@ -35,23 +35,25 @@ const {button, handleClick, shortcut, classNames} = useAppMenuItem(props);
       </NButton>
     </template>
     <span
-      >{{ props.text }} [<span class="bold">{{ shortcut }}</span
+      >{{ props.text }} [<span class="app-menu-button__bold">{{
+        shortcut
+      }}</span
       >]</span
     >
   </NTooltip>
 </template>
 
-<style lang="scss" scoped>
-.button {
+<style lang="scss">
+.app-menu-button {
   backdrop-filter: blur(5px);
   pointer-events: auto;
 }
 
-.active {
+.app-menu-button__active {
   background: rgba(23, 159, 87, 0.4);
 }
 
-.bold {
+.app-menu-button__bold {
   font-weight: bold;
 }
 </style>

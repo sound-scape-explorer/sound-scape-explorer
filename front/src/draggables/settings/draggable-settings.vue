@@ -102,7 +102,9 @@ const plotBackgroundOptionsRef = computed(() => {
     </DraggableSettingsItem>
 
     <DraggableSettingsItem
-      :title="`Apply timezone (${settings?.timezone ?? 'disabled'})`"
+      :title="`Apply timezone (${
+        settings?.timezone ? settings.timezone : 'disabled'
+      })`"
     >
       <NCheckbox
         v-model:checked="applyTimezone"

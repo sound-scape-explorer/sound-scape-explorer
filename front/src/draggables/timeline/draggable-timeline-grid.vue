@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {NTag, NTooltip} from 'naive-ui';
-import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
+import {useAudioOpen} from 'src/draggables/audio/audio-open';
 import {
   pageSizeRef,
   pageVisibleBlocksRef,
@@ -88,7 +88,7 @@ const colWidthRef = computed(() => {
   }
 });
 
-const {handleClick} = useScatterClick();
+const {openAudio} = useAudioOpen();
 
 const handleBlockClick = (block: VisibleBlock) => {
   if (aggregatedIntervalDetails.value === null) {
@@ -99,7 +99,7 @@ const handleBlockClick = (block: VisibleBlock) => {
   aggregatedIntervalDetails.value.map((intervals, index) => {
     intervals.map((interval) => {
       if (interval.start === block.start) {
-        handleClick(index);
+        openAudio(index);
       }
     });
   });

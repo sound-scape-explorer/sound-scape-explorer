@@ -11,8 +11,8 @@ import {useIntegrationSelection} from 'src/composables/integration-selection';
 import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {useAudioFile} from 'src/draggables/audio/audio-file';
+import {useAudioOpen} from 'src/draggables/audio/audio-open';
 import {useDetails} from 'src/draggables/details/details';
-import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {computed, watch} from 'vue';
 
 const {nonNnExtractors} = useExtractorStorage();
@@ -20,7 +20,7 @@ const {band} = useBandSelection();
 const {integration} = useIntegrationSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
 const {labelProperties} = useStorageLabels();
-const {clickedIndex, hasClicked} = useScatterClick();
+const {currentIntervalIndex, hasClicked} = useAudioOpen();
 
 const {date, labelValues, site, blocks} = useDetails();
 
@@ -57,7 +57,7 @@ watch(blocks, () => {
     >
       <div class="file container">
         <div class="title">Selected interval index</div>
-        <span class="file index">{{ clickedIndex ?? 'none' }}</span>
+        <span class="file index">{{ currentIntervalIndex ?? 'none' }}</span>
       </div>
 
       <div class="file container">
@@ -191,7 +191,7 @@ watch(blocks, () => {
               {{ ex.name }}
             </NTag>
 
-            {{ aggregatedIndicators[index].values[clickedIndex ?? 0] }}
+            {{ aggregatedIndicators[index].values[currentIntervalIndex ?? 0] }}
           </NGi>
         </NGrid>
       </div>

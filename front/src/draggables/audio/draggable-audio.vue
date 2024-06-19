@@ -12,7 +12,6 @@ import {
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AppCondition from 'src/app/app-condition.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {useDate} from 'src/composables/date';
 import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
 import {useStorageSettings} from 'src/composables/storage-settings';
@@ -21,6 +20,7 @@ import {useAudioFourier} from 'src/draggables/audio/audio-component';
 import {useAudioDownload} from 'src/draggables/audio/audio-download';
 import {useAudioFile} from 'src/draggables/audio/audio-file';
 import {useAudioLock} from 'src/draggables/audio/audio-lock';
+import {useAudioOpen} from 'src/draggables/audio/audio-open';
 import {useAudioRate} from 'src/draggables/audio/audio-rate';
 import {useAudioTransport} from 'src/draggables/audio/audio-transport';
 import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
@@ -35,7 +35,7 @@ const {settings} = useStorageSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
 const {date} = useDetails();
 const {convertDateToIsoDate} = useDate();
-const {clickedIndex, hasClicked} = useScatterClick();
+const {currentIntervalIndex, hasClicked} = useAudioOpen();
 const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {rate, readable} = useAudioRate();
@@ -126,7 +126,7 @@ useWavesurferMounter();
         </NGrid>
 
         <NGrid
-          v-if="aggregatedSites !== null && clickedIndex !== null"
+          v-if="aggregatedSites !== null && currentIntervalIndex !== null"
           :cols="1"
           class="grid"
           x-gap="12"
@@ -139,7 +139,7 @@ useWavesurferMounter();
               Site
             </NTag>
 
-            {{ aggregatedSites[clickedIndex].site }}
+            {{ aggregatedSites[currentIntervalIndex].site }}
           </NGi>
           <NGi>
             <NTag
@@ -166,7 +166,7 @@ useWavesurferMounter();
               Interval Index
             </NTag>
 
-            {{ clickedIndex }}
+            {{ currentIntervalIndex }}
           </NGi>
           <NGi>
             <NTag
