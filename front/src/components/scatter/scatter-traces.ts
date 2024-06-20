@@ -15,7 +15,6 @@ export function useScatterTraces() {
   const {cyclingScale, generateColorScale: generate} = useScatterColorScale();
 
   const render = () => {
-    console.log('render traces');
     let newTraces: Data[] = [];
 
     // add features
@@ -24,7 +23,7 @@ export function useScatterTraces() {
 
     // add trajectories
     if (traceds.value.length > 0) {
-      if (isFused.value === true) {
+      if (isFused.value) {
         const averageTrace = traceAverageTrajectory(
           traceds.value,
           cyclingScale.value,

@@ -1,4 +1,3 @@
-import {useAudioContext} from 'src/draggables/audio/audio-context';
 import {useAudioFile} from 'src/draggables/audio/audio-file';
 import {useWavesurfer} from 'src/draggables/audio/wavesurfer';
 import {triggerWavDownload} from 'src/utils/trigger-wav-download';
@@ -6,12 +5,10 @@ import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
 export function useAudioDownload() {
   const {ws} = useWavesurfer();
-  const {context} = useAudioContext();
   const {block} = useAudioFile();
 
   const downloadAudio = async () => {
-    // todo: why do i need to validate context
-    if (ws.value === null || context.value === null) {
+    if (ws.value === null) {
       return;
     }
 

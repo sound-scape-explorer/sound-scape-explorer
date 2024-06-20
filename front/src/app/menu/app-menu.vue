@@ -17,7 +17,7 @@ import {
   TimerOutline,
 } from '@vicons/ionicons5';
 import {useAppMenu} from 'src/app/menu/app-menu';
-import MenuItem from 'src/app/menu/app-menu-item.vue';
+import AppMenuButton from 'src/app/menu/app-menu-button.vue';
 import {useClientSettings} from 'src/composables/client-settings';
 import {useViewState} from 'src/composables/view-state';
 
@@ -30,30 +30,30 @@ const {preview} = useClientSettings();
   <div class="header">
     <div class="row">
       <div class="left">
-        <MenuItem
+        <AppMenuButton
           :toggle="toggle"
           draggable-key="import"
           text="Import"
         >
           <CloudUploadOutline />
-        </MenuItem>
+        </AppMenuButton>
 
-        <MenuItem
+        <AppMenuButton
           :disabled="!isReady"
           :toggle="toggle"
           draggable-key="settings"
           text="Settings"
         >
           <CogOutline />
-        </MenuItem>
+        </AppMenuButton>
 
-        <MenuItem
+        <AppMenuButton
           :toggle="toggle"
           draggable-key="help"
           text="Help"
         >
           <HelpOutline />
-        </MenuItem>
+        </AppMenuButton>
       </div>
 
       <div
@@ -68,24 +68,24 @@ const {preview} = useClientSettings();
       v-if="isReady"
       class="column"
     >
-      <MenuItem
+      <AppMenuButton
         :toggle="toggle"
         draggable-key="view"
         text="View"
       >
         <EyeOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="colors"
         text="Colors"
       >
         <ColorPaletteOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         v-if="preview"
         :disabled="!hasView"
         :toggle="toggle"
@@ -93,45 +93,45 @@ const {preview} = useClientSettings();
         text="Timeline"
       >
         <ReceiptOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="time"
         text="Time"
       >
         <CalendarOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="labels"
         text="Labels"
       >
         <LayersOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="details"
         text="Details"
       >
         <ListOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="audio"
         text="Audio"
       >
         <HeadsetOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         v-if="preview"
         :disabled="!hasView"
         :toggle="toggle"
@@ -139,43 +139,43 @@ const {preview} = useClientSettings();
         text="Selection"
       >
         <CropOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="trajectories"
         text="Trajectories"
       >
         <AnalyticsOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="relativeTrajectories"
         text="Relative Trajectories"
       >
         <TimerOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="indicators"
         text="Indicators"
       >
         <BarChartOutline />
-      </MenuItem>
+      </AppMenuButton>
 
-      <MenuItem
+      <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
         draggable-key="digested"
         text="Digested"
       >
         <GridOutline />
-      </MenuItem>
+      </AppMenuButton>
     </div>
   </div>
 </template>

@@ -1,3 +1,5 @@
+import type {SelectMixedOption} from 'naive-ui/es/select/src/interface';
+
 export interface NaiveSelectOption {
   label: string;
   value: string;
@@ -5,7 +7,7 @@ export interface NaiveSelectOption {
 
 export function convertToNaiveSelectOptions(
   options: string[],
-): NaiveSelectOption[] {
+): SelectMixedOption[] {
   return options.map((option) => {
     return {
       label: option,

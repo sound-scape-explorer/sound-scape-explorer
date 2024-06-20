@@ -1,12 +1,12 @@
 <script lang="ts" setup="">
 import {ColorFillOutline} from '@vicons/ionicons5';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {useColorSelection} from 'src/components/scatter/color-selection';
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {type ColorType} from 'src/draggables/colors/color-type';
 import {useDraggableLabel} from 'src/draggables/label/draggable-label';
 import DraggableLabelOptions from 'src/draggables/label/draggable-label-options.vue';
 import {useLabelSelection} from 'src/draggables/label/label-selection';
-import {useColorSelection} from 'src/components/scatter/color-selection';
 
 const {labels, labelProperties} = useStorageLabels();
 const {updateSelection, selection} = useLabelSelection();

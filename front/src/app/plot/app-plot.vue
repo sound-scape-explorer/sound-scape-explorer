@@ -11,22 +11,23 @@ export interface AppPlotProps {
   yTitle?: string;
   legend?: boolean;
   exportFilename: string;
+  clickEnabled?: boolean;
 }
 
 const props = defineProps<AppPlotProps>();
 
-const {divRef} = useAppPlot(props);
+const {container} = useAppPlot(props);
 </script>
 
 <template>
   <span
-    ref="divRef"
-    class="histogram"
+    ref="container"
+    class="app-plot"
   />
 </template>
 
 <style lang="scss" scoped>
-.histogram {
+.app-plot {
   display: flex;
   justify-content: center;
   align-items: center;

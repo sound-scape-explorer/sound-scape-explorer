@@ -3,16 +3,16 @@ import {useDraggables} from 'src/composables/draggables';
 import {useAudioFile} from 'src/draggables/audio/audio-file';
 import {computed, ref} from 'vue';
 
-const clickedIndex = ref<number | null>(null);
-const hasClicked = computed<boolean>(() => clickedIndex.value !== null);
+const currentIntervalIndex = ref<number | null>(null);
+const hasClicked = computed<boolean>(() => currentIntervalIndex.value !== null);
 
-export function useScatterClick() {
+export function useAudioOpen() {
   const {isLoading} = useAudioFile();
   const {store} = useDraggables();
   const {openDetailsOnScatterClick} = useClientSettings();
 
-  const handleClick = (index: number | null) => {
-    if (clickedIndex.value === index) {
+  const openAudio = (index: number | null) => {
+    if (currentIntervalIndex.value === index) {
       return;
     }
 
@@ -20,7 +20,7 @@ export function useScatterClick() {
       return;
     }
 
-    clickedIndex.value = index;
+    currentIntervalIndex.value = index;
 
     if (index === null) {
       return;
@@ -31,8 +31,8 @@ export function useScatterClick() {
     }
   };
   return {
-    clickedIndex: clickedIndex,
+    currentIntervalIndex: currentIntervalIndex,
     hasClicked: hasClicked,
-    handleClick: handleClick,
+    openAudio: openAudio,
   };
 }

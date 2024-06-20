@@ -13,7 +13,7 @@ import {
 import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageSettings} from 'src/composables/storage-settings';
-import {useScatterClick} from 'src/components/scatter/scatter-click';
+import {useAudioOpen} from 'src/draggables/audio/audio-open';
 import {ref, watch} from 'vue';
 
 const currentIndex = ref<number | null>(null);
@@ -31,24 +31,24 @@ export function useDetails() {
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {clickedIndex} = useScatterClick();
+  const {currentIntervalIndex} = useAudioOpen();
   const {timeShift} = useClientSettings();
 
   const readDetails = async () => {
     if (
-      clickedIndex.value === null ||
+      currentIntervalIndex.value === null ||
       files.value === null ||
       settings.value === null ||
       aggregatedSites.value === null ||
       aggregatedTimestamps.value === null ||
       aggregatedLabels.value === null ||
       aggregatedIntervalDetails.value === null ||
-      clickedIndex.value === currentIndex.value
+      currentIntervalIndex.value === currentIndex.value
     ) {
       return;
     }
 
-    const i = clickedIndex.value; // interval index
+    const i = currentIntervalIndex.value; // interval index
     const t = aggregatedTimestamps.value[i];
 
     date.value = convertTimestampToDate(t);
@@ -59,13 +59,16 @@ export function useDetails() {
     currentIndex.value = i;
   };
 
-  watch(clickedIndex, readDetails);
+  watch(currentIntervalIndex, readDetails);
   watch(timeShift, () => {
-    if (clickedIndex.value === null || aggregatedTimestamps.value === null) {
+    if (
+      currentIntervalIndex.value === null ||
+      aggregatedTimestamps.value === null
+    ) {
       return;
     }
 
-    const i = clickedIndex.value;
+    const i = currentIntervalIndex.value;
     const t = aggregatedTimestamps.value[i];
 
     date.value = convertTimestampToDate(t);

@@ -1,12 +1,12 @@
 import type {Config, Data, Layout, PlotlyHTMLElement} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
-import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
+import type {AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {useClientSettings} from 'src/composables/client-settings';
+import {useDate} from 'src/composables/date';
 import {usePlotConfig} from 'src/composables/plot-config';
-import {useAudioOpen} from 'src/draggables/audio/audio-open';
 import {ref, watch} from 'vue';
 
-export function useAppPlot(props: AppPlotProps) {
+export function useAppCandles(props: AppCandlesProps) {
   const container = ref<HTMLDivElement | null>(null);
   const dataRef = ref<Data[] | null>(null);
   const layoutRef = ref<Partial<Layout> | null>(null);
@@ -14,7 +14,7 @@ export function useAppPlot(props: AppPlotProps) {
   const plot = ref<PlotlyHTMLElement | null>(null);
   const {generateConfig} = usePlotConfig(props.exportFilename);
   const {plotBackground} = useClientSettings();
-  const {openAudio} = useAudioOpen();
+  const {convertTimestampToIsoDate} = useDate();
 
   async function render() {
     if (
@@ -32,48 +32,29 @@ export function useAppPlot(props: AppPlotProps) {
       layoutRef.value,
       configRef.value,
     );
-
-    if (props?.clickEnabled) {
-      plot.value.on('plotly_click', (e) => {
-        const plotIndex = e.points[0].pointIndex;
-        // @ts-expect-error: missing typescript definition
-        const legendString: string = e.points[0].fullData.x[plotIndex];
-        const intervalIndex = legendString.split('<br>Interval: ')[1];
-        openAudio(Number(intervalIndex));
-      });
-    }
   }
 
   function refresh() {
-    let data: Data[] = [];
+    const newData: Data = {
+      type: 'candlestick',
+      x: props.timestamps.map((t) => convertTimestampToIsoDate(t)),
+      high: props.high,
+      low: props.low,
+      open: props.open,
+      close: props.close,
+      increasing: {line: {color: '#179F5766'}},
+      decreasing: {line: {color: '#179F5766'}},
+    };
 
-    for (const index in props.values) {
-      const d: Data = {
-        type: 'scatter',
-        mode: 'lines',
-        name: props.names?.[index] ?? undefined,
-        x: props.labels[index],
-        y: props.values[index],
-        hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
-        marker: {
-          color: props.colors?.[index] ?? undefined,
-          size: props.colors?.[index] ? 6 : 2,
-        },
-      };
-
-      data = [...data, d];
-    }
-
-    dataRef.value = data;
+    dataRef.value = [newData];
 
     const p = 70;
     const layout: Partial<Layout> = {
-      title: props.title,
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
-      showlegend: !!props.legend,
-      clickmode: 'event',
+      showlegend: false,
       height: 400,
+      title: props?.title ?? '',
       margin: {
         l: p,
         r: p,
@@ -82,10 +63,13 @@ export function useAppPlot(props: AppPlotProps) {
         pad: 1,
       },
       xaxis: {
-        title: props.xTitle,
+        type: props.condensed ? 'category' : undefined,
+        rangeslider: {
+          visible: false,
+        },
       },
       yaxis: {
-        title: props.yTitle,
+        title: props.yTitle ?? '',
       },
       legend: {
         xanchor: 'right',

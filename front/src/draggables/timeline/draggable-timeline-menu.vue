@@ -1,16 +1,15 @@
 <script lang="ts" setup>
 import {NPagination, NSelect, NTag, NTooltip} from 'naive-ui';
 import {
-  gapSizesRef,
-  selectedGapSizeRef,
-} from 'src/draggables/timeline/timeline-gap-size';
-import {
   pageCountRef,
   pageIndexRef,
   pageSizeRef,
   pageSizes,
   pageVisibleBlocksRef,
 } from 'src/draggables/timeline/timeline-pagination';
+import {useTimelineSizes} from 'src/draggables/timeline/timeline-sizes';
+
+const {size, options} = useTimelineSizes();
 </script>
 
 <template>
@@ -41,9 +40,9 @@ import {
       >
         <template #trigger>
           <NSelect
-            v-model:value="selectedGapSizeRef.value"
-            :default-value="selectedGapSizeRef.value"
-            :options="gapSizesRef.value"
+            v-model:value="size"
+            :default-value="size"
+            :options="options"
             size="tiny"
           />
         </template>

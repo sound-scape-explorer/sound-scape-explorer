@@ -7,12 +7,12 @@ import Plotly, {
 import {useAppNotification} from 'src/app/notification/app-notification';
 import {getFilesFromIntervals} from 'src/components/scatter/get-files-from-intervals';
 import {useScatterCamera} from 'src/components/scatter/scatter-camera';
-import {useScatterClick} from 'src/components/scatter/scatter-click';
 import {useScatterConfig} from 'src/components/scatter/scatter-config';
 import {useScatterTraces} from 'src/components/scatter/scatter-traces';
 import {useClientSettings} from 'src/composables/client-settings';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
 import {useStorageFiles} from 'src/composables/storage-files';
+import {useAudioOpen} from 'src/draggables/audio/audio-open';
 import {copyToClipboard} from 'src/utils/copy-to-clipboard';
 import {generateFilePresenceArray} from 'src/utils/generate-file-presence-array';
 import {computed, ref, unref} from 'vue';
@@ -23,7 +23,7 @@ const isMounted = ref<boolean>(false);
 const isRendering = ref<boolean>(false);
 
 export function useScatter() {
-  const {handleClick} = useScatterClick();
+  const {openAudio} = useAudioOpen();
   const {config} = useScatterConfig();
   const {isLocked} = useScatterCamera();
   const {traces} = useScatterTraces();
@@ -35,7 +35,7 @@ export function useScatter() {
 
   const handlePlotlyClick = (e: PlotMouseEvent) => {
     const intervalIndex = e.points[0].pointNumber;
-    handleClick(intervalIndex);
+    openAudio(intervalIndex);
   };
 
   const layout = computed<Partial<Layout> | null>(() => {

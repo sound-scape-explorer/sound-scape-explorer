@@ -8,6 +8,8 @@ import {useViewState} from 'src/composables/view-state';
 import {countIterations} from 'src/utils/count-iterations';
 import {reactive, watchEffect} from 'vue';
 
+// TODO: Refactor this file
+
 export const pageSizes = [100, 250, 500, 750, 1000];
 
 interface PageCountRef {

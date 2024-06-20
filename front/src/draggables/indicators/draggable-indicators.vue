@@ -1,198 +1,69 @@
 <script lang="ts" setup>
-import {DownloadOutline} from '@vicons/ionicons5';
-import {NButton, NCascader, NIcon, NSelect, NSwitch} from 'naive-ui';
+import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
-import {Csv} from 'src/common/csv';
-import {useDate} from 'src/composables/date';
-import {useStorageAggregatedIndicators} from 'src/composables/storage-aggregated-indicators';
-import {useStorageSites} from 'src/composables/storage-sites';
-import {
-  indicatorDataRef,
-  useIndicators,
-} from 'src/draggables/indicators/indicators';
-import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {computed, ref, watch} from 'vue';
+import AppPlot from 'src/app/plot/app-plot.vue';
+import {useIntervalFilter} from 'src/composables/interval-filter';
+import {useDraggableIndicators} from 'src/draggables/indicators/draggable-indicators';
+import DraggableIndicatorsMenu from 'src/draggables/indicators/draggable-indicators-menu.vue';
+import {useIndicators} from 'src/draggables/indicators/indicators';
+import {useIndicatorsCandles} from 'src/draggables/indicators/indicators-candles';
+import {useIndicatorsChart} from 'src/draggables/indicators/indicators-chart';
+import {useIndicatorsSites} from 'src/draggables/indicators/indicators-sites';
+import {watch} from 'vue';
 
-const {cyclingScale} = useScatterColorScale();
-const {aggregatedIndicators} = useStorageAggregatedIndicators();
-const {selectIndicator, selectSites} = useIndicators();
-const {convertTimestampToIsoDate} = useDate();
+const {currentIndicator, isSelection, isContinuous, isCondensed} =
+  useDraggableIndicators();
+const {data: indicatorData} = useIndicators();
+const {candles, plot, render} = useIndicatorsChart();
+const {period} = useIndicatorsCandles();
+const {current: currentSites} = useIndicatorsSites();
+const {filtered} = useIntervalFilter();
 
-const parseIndex = (optionString: string | null): number | null => {
-  if (optionString === null) {
-    return null;
-  }
-
-  const stringElements = optionString.split(' ');
-  return Number(stringElements[0]);
-};
-
-const indicatorsOptionsRef = computed(() => {
-  if (aggregatedIndicators.value === null) {
-    return [];
-  }
-
-  const options = aggregatedIndicators.value.map(
-    (i) => `${i.extractor.index} - ${i.extractor.name}`,
-  );
-
-  return convertToNaiveSelectOptions(options);
-});
-
-const indicatorSelectedRef = ref<string>('');
-watch(indicatorSelectedRef, () =>
-  selectIndicator(parseIndex(indicatorSelectedRef.value)),
+watch(
+  [
+    // currentIndicator, // redundant with below entry
+    indicatorData,
+    currentSites,
+    isSelection,
+    isContinuous,
+    period,
+    filtered,
+  ],
+  render,
 );
 
-const {sites} = useStorageSites();
-
-const sitesSelectedRef = ref([]);
-const sitesOptionsRef = computed(() => {
-  if (sites.value === null) {
-    return [];
-  }
-
-  const names = sites.value.map((s) => s.name);
-  return convertToNaiveSelectOptions(names);
-});
-
-const updateSites = (sitesNames: string[]) => {
-  selectSites(sitesNames);
-};
-
-const isByDateRef = ref<boolean>(false);
-
-const chartDataRef = computed<Omit<AppPlotProps, 'exportFilename'>>(() => {
-  if (sites.value === null) {
-    return {
-      values: [],
-      labels: [],
-      colors: [],
-    };
-  }
-
-  const values = indicatorDataRef.value.map((d) => d.values[0]);
-  const timestamps = indicatorDataRef.value.map((d) => d.timestamp);
-  const sitesValues = indicatorDataRef.value.map((d) => d.site);
-  const sitesNames = sites.value.map((site) => site.name);
-  const scale = cyclingScale.value.colors(sitesNames.length + 1);
-
-  const colors = indicatorDataRef.value.map(
-    (d) => scale[sitesNames.indexOf(d.site)],
-  );
-
-  if (isByDateRef.value === false) {
-    return {
-      values: [values],
-      labels: [
-        timestamps.map(
-          (t, i) =>
-            `${convertTimestampToIsoDate(t)}<br>Site: ${
-              sitesValues[i]
-            }<br>Interval: ${i}`,
-        ),
-      ],
-      colors: [colors],
-    };
-  }
-
-  // sort
-  const indices = Array.from({length: timestamps.length}, (_, i) => i);
-  indices.sort((a, b) => timestamps[a] - timestamps[b]);
-
-  return {
-    values: [indices.map((i) => values[i])],
-    labels: [
-      indices.map(
-        (i) =>
-          `${convertTimestampToIsoDate(timestamps[i])}<br>Site: ${
-            sitesValues[i]
-          }<br>Interval: ${i}`,
-      ),
-    ],
-    colors: [indices.map((i) => colors[i])],
-  };
-});
-
-const handleExportClick = () => {
-  const csv = new Csv();
-  csv.addColumn('intervalIndex');
-  csv.addColumn('site');
-  csv.addColumn('timestamp');
-  csv.addColumn('values');
-
-  for (const d of indicatorDataRef.value) {
-    csv.createRow();
-    csv.addToCurrentRow(d.index.toString());
-    csv.addToCurrentRow(d.site);
-    csv.addToCurrentRow(convertTimestampToIsoDate(d.timestamp));
-    csv.addToCurrentRow(d.values.join('; '));
-  }
-
-  csv.download('indicators');
-};
+// todo: add colouring to candles and continuous
 </script>
 
 <template>
-  <AppDraggable draggable-key="indicators">
-    <div class="container">
-      <div class="row">
-        <NSelect
-          v-model:value="indicatorSelectedRef"
-          :options="indicatorsOptionsRef"
-          class="sites"
-          placeholder="Indicator..."
-          size="small"
-        />
+  <AppDraggable
+    class="draggable-indicators__container"
+    draggable-key="indicators"
+  >
+    <DraggableIndicatorsMenu />
 
-        <NCascader
-          v-model:value="sitesSelectedRef"
-          :cascade="false"
-          :clear-filter-after-select="false"
-          :filterable="true"
-          :options="sitesOptionsRef"
-          :show-path="false"
-          check-strategy="child"
-          class="cascader"
-          clearable
-          expand-trigger="click"
-          max-tag-count="responsive"
-          multiple
-          placeholder="Select sites"
-          size="small"
-          width="800"
-          @update:value="updateSites"
-        />
-      </div>
-
-      <div class="row">
-        <NSwitch
-          v-model:value="isByDateRef"
-          class="toggle"
-        >
-          <template #unchecked>Sorted by site</template>
-          <template #checked>Sorted by date</template>
-        </NSwitch>
-
-        <NButton
-          size="tiny"
-          @click="handleExportClick"
-        >
-          <template #icon>
-            <NIcon>
-              <DownloadOutline />
-            </NIcon>
-          </template>
-          Export .csv
-        </NButton>
-      </div>
-
+    <div class="draggable-indicators__plot">
       <AppPlot
-        :colors="chartDataRef.colors"
-        :labels="chartDataRef.labels"
-        :values="chartDataRef.values"
+        v-if="isContinuous && plot !== null"
+        :colors="plot.colors"
+        :labels="plot.labels"
+        :values="plot.values"
+        :y-title="currentIndicator"
+        click-enabled
+        export-filename="indicators"
+      />
+
+      <AppCandles
+        v-if="!isContinuous && candles !== null"
+        :close="candles.close"
+        :condensed="isCondensed"
+        :high="candles.high"
+        :labels="candles.labels"
+        :low="candles.low"
+        :open="candles.open"
+        :timestamps="candles.timestamps"
+        :title="period.name"
+        :y-title="currentIndicator"
         export-filename="indicators"
       />
     </div>
@@ -200,25 +71,16 @@ const handleExportClick = () => {
 </template>
 
 <style lang="scss" scoped>
-.container {
+.draggable-indicators__container {
+  width: 60em;
+}
+
+.draggable-indicators__plot {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
   gap: 0.5rem;
-
-  min-width: 40rem;
-}
-
-.row {
-  display: grid;
-  grid-template-columns: 10rem 1fr;
-  gap: 1rem;
-
-  width: 100%;
-}
-
-.cascader {
-  max-width: 33rem;
+  width: 60em;
 }
 </style>
