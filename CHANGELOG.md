@@ -1,3 +1,18 @@
+# [13.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.3.1...v13.4.0) (2024-06-20)
+
+
+### Bug Fixes
+
+* **Front/Audio:** Remove context validation ([5dc0295](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5dc02953b918c5a4d6c810af5c9e094a1c42e1a7))
+* **Front/Scatter:** Hide overflow on all axes ([3a39fa3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3a39fa3d5b2e36d89f7922099c03909f27b67a1f))
+* **Front/Settings:** Improve vue components ([96e2fc8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/96e2fc8ddcc060936f4049b726f645b61a56519e))
+* **Processing/VggExtractor:** Use rich print ([35a9b15](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/35a9b153703aabdd058675a5621e472ec778a382))
+
+
+### Features
+
+* **Front/Indicators:** Add candlesticks + Rework functionality ([703d63f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/703d63fb389044cb384a2714c14b4e27210e1ce3))
+
 ## [13.3.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.3.0...v13.3.1) (2024-06-12)
 
 
