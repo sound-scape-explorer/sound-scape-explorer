@@ -12,15 +12,9 @@ const {hasView} = useViewState();
   <AppButton
     :disabled="!hasView"
     :handle-click="unload"
-    class="button"
+    :style="hasView ? 'background-color: rgba(255, 0, 0, 0.2)' : undefined"
     text="Unload selection"
   >
     <ArrowUndoCircleOutline />
   </AppButton>
 </template>
-
-<style lang="scss" scoped>
-.button {
-  background: rgba(255, 0, 0, 0.2);
-}
-</style>
