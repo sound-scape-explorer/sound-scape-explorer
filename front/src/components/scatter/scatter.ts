@@ -70,7 +70,7 @@ export function useScatter() {
 
     isMounted.value = true;
     await Plotly.newPlot(container.value, [], layout.value, config.value);
-    console.log('first render');
+    console.log('Scatter: First render');
   };
 
   const attachListeners = () => {
@@ -130,7 +130,8 @@ export function useScatter() {
       layout.value,
       config.value,
     );
-    console.log('render');
+
+    console.log('Scatter: Render');
     isRendering.value = false;
   };
 

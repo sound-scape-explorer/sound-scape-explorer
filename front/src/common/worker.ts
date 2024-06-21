@@ -33,7 +33,7 @@ import {trimRectangular} from 'src/utils/trim-rectangular';
 let h5: H5File;
 const PATH = '/work';
 
-console.log('worker');
+console.log('Worker: Call');
 
 export async function load(file: File) {
   if (h5) {
