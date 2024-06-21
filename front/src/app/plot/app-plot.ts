@@ -56,7 +56,8 @@ export function useAppPlot(props: AppPlotProps) {
         y: props.values[index],
         hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
         marker: {
-          color: props.colors?.[index] ?? undefined,
+          // color: props.colors?.[index] ?? undefined,
+          color: 'rgba(0, 200, 100, 0.8)',
           size: props.colors?.[index] ? 6 : 2,
         },
       };
@@ -77,12 +78,16 @@ export function useAppPlot(props: AppPlotProps) {
       margin: {
         l: p,
         r: p,
-        b: p * 2,
+        b: props.hideXLegend ? p : p * 2,
         t: p,
         pad: 1,
       },
       xaxis: {
         title: props.xTitle,
+        showticklabels: !props.hideXLegend,
+        rangeslider: {
+          visible: true,
+        },
       },
       yaxis: {
         title: props.yTitle,

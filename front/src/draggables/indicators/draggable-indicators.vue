@@ -33,6 +33,8 @@ watch(
 );
 
 // todo: add colouring to candles and continuous
+// todo: improve performance
+// todo: fix when loading scatter selection before building data
 </script>
 
 <template>
@@ -51,6 +53,7 @@ watch(
         :y-title="currentIndicator"
         click-enabled
         export-filename="indicators"
+        hide-x-legend
       />
 
       <AppCandles
@@ -71,8 +74,10 @@ watch(
 </template>
 
 <style lang="scss" scoped>
+$width: 50em;
+
 .draggable-indicators__container {
-  width: 60em;
+  width: $width;
 }
 
 .draggable-indicators__plot {
@@ -81,6 +86,6 @@ watch(
   align-items: center;
   flex-direction: column;
   gap: 0.5rem;
-  width: 60em;
+  width: $width;
 }
 </style>

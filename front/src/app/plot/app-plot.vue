@@ -12,6 +12,7 @@ export interface AppPlotProps {
   legend?: boolean;
   exportFilename: string;
   clickEnabled?: boolean;
+  hideXLegend?: boolean;
 }
 
 const props = defineProps<AppPlotProps>();

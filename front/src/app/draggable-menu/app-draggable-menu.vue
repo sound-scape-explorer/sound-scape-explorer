@@ -21,7 +21,7 @@
 
 .app-draggable-menu__form {
   display: grid;
-  grid-template-columns: 4.5rem 1fr;
+  grid-template-columns: 3rem 1fr;
   gap: 0.5rem;
   width: 100%;
 }
