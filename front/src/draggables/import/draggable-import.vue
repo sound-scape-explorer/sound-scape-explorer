@@ -24,7 +24,10 @@ const handleChange = () => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="import">
+  <AppDraggable
+    class="wrapper"
+    draggable-key="import"
+  >
     <div class="container">
       <input
         ref="inputRef"
@@ -48,6 +51,10 @@ const handleChange = () => {
 </template>
 
 <style lang="scss" scoped>
+.wrapper {
+  width: 35em;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 8rem;
