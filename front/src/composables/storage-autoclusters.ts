@@ -15,6 +15,7 @@ const autoclusters = ref<Autocluster[]>([]);
 let isLoaded = false;
 
 // These are autoclusters configurations
+// todo: refactor this hook (watcher to be in SFC)
 export function useStorageAutoclusters() {
   const {read} = useStorageReader();
   const {isReady} = useStorageReady();
