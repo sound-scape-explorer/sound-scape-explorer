@@ -27,8 +27,6 @@ const {ranges} = useStorageRanges();
 const {autoclusters} = useStorageAutoclusters();
 const {trajectories} = useTrajectoriesStorage();
 
-const separator = ', ';
-
 const {convertTimestampToIsoDate} = useDate();
 
 const timelineOrigin = computed<string>(() => {
@@ -93,7 +91,7 @@ const timelineOrigin = computed<string>(() => {
   <h2 class="yellow">Specifications</h2>
 
   <AppGrid
-    :columns="1"
+    :columns="2"
     :items="[
       {
         tag: 'Files',
@@ -101,19 +99,19 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'Bands',
-        value: bands?.map((b) => b.name).join(separator) ?? '',
+        value: bands?.length.toString() ?? '',
       },
       {
         tag: 'Integrations',
-        value: integrations?.map((i) => i.name).join(separator) ?? '',
+        value: integrations?.length.toString() ?? '',
       },
       {
         tag: 'Ranges',
-        value: ranges?.map((r) => r.name).join(separator) ?? '',
+        value: ranges?.length.toString() ?? '',
       },
       {
         tag: 'Trajectories',
-        value: trajectories?.map((t) => t.name).join(separator) ?? '',
+        value: trajectories?.length.toString() ?? '',
       },
     ]"
   />
@@ -121,25 +119,23 @@ const timelineOrigin = computed<string>(() => {
   <h2 class="blue">Configurations</h2>
 
   <AppGrid
-    :columns="1"
+    :columns="2"
     :items="[
       {
         tag: 'extractors',
-        value: extractors?.map((ex) => ex.name).join(separator) ?? '',
+        value: extractors?.length.toString() ?? '',
       },
       {
         tag: 'digesters',
-        value: digesters?.map((d) => d.name).join(separator) ?? '',
+        value: digesters?.length.toString() ?? '',
       },
       {
         tag: 'reducers',
-        value:
-          reducers?.map((r) => `${r.name}${r.dimensions}`).join(separator) ??
-          '',
+        value: reducers?.length.toString() ?? '',
       },
       {
         tag: 'autoclusters',
-        value: autoclusters?.map((ac) => ac.name).join(separator) ?? '',
+        value: autoclusters?.length.toString() ?? '',
       },
     ]"
   />
