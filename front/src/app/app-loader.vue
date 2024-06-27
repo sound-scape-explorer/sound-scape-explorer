@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {useIntervalFilterWatcher} from 'src/composables/interval-filter-watcher';
+import {useStorageAutoclusters} from 'src/composables/storage-autoclusters';
 import {useStorageDigesters} from 'src/composables/storage-digesters';
 import {useStorageFiles} from 'src/composables/storage-files';
 import {useStorageRanges} from 'src/composables/storage-ranges';
@@ -15,6 +16,7 @@ useStorageFiles();
 useStorageSites();
 useStorageRanges();
 useStorageDigesters();
+useStorageAutoclusters();
 
 useTrajectoriesStorage();
 
