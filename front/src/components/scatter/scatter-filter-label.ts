@@ -47,7 +47,6 @@ export function useScatterFilterLabel() {
   };
 
   const filter = (newSelection: Ref<LabelSelection>) => {
-    console.log('filter by labels');
     if (aggregatedLabels.value === null) {
       return;
     }
