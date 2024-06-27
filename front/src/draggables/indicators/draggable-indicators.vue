@@ -74,7 +74,7 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-$width: 50em;
+$width: 54em;
 
 .draggable-indicators__container {
   width: $width;
@@ -82,10 +82,5 @@ $width: 50em;
 
 .draggable-indicators__plot {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: $width;
 }
 </style>

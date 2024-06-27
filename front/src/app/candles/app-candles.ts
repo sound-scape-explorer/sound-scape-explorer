@@ -4,37 +4,38 @@ import type {AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {useClientSettings} from 'src/composables/client-settings';
 import {useDate} from 'src/composables/date';
 import {usePlotConfig} from 'src/composables/plot-config';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
+
+const container = ref<HTMLDivElement | null>(null);
+const data = ref<Data[] | null>(null);
+const layout = ref<Partial<Layout> | null>(null);
+const config = ref<Partial<Config> | null>(null);
+const plot = ref<PlotlyHTMLElement | null>(null);
 
 export function useAppCandles(props: AppCandlesProps) {
-  const container = ref<HTMLDivElement | null>(null);
-  const dataRef = ref<Data[] | null>(null);
-  const layoutRef = ref<Partial<Layout> | null>(null);
-  const configRef = ref<Partial<Config> | null>(null);
-  const plot = ref<PlotlyHTMLElement | null>(null);
   const {generateConfig} = usePlotConfig(props.exportFilename);
   const {plotBackground} = useClientSettings();
   const {convertTimestampToIsoDate} = useDate();
 
-  async function render() {
+  const mount = async () => {
     if (
       container.value === null ||
-      dataRef.value === null ||
-      layoutRef.value === null ||
-      configRef.value === null
+      data.value === null ||
+      layout.value === null ||
+      config.value === null
     ) {
       return;
     }
 
     plot.value = await Plotly.newPlot(
       container.value,
-      dataRef.value,
-      layoutRef.value,
-      configRef.value,
+      data.value,
+      layout.value,
+      config.value,
     );
-  }
+  };
 
-  function refresh() {
+  const render = () => {
     const newData: Data = {
       type: 'candlestick',
       x: props.timestamps.map((t) => convertTimestampToIsoDate(t)),
@@ -46,10 +47,10 @@ export function useAppCandles(props: AppCandlesProps) {
       decreasing: {line: {color: '#179F5766'}},
     };
 
-    dataRef.value = [newData];
+    data.value = [newData];
 
     const p = 70;
-    const layout: Partial<Layout> = {
+    const newLayout: Partial<Layout> = {
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
       showlegend: false,
@@ -79,16 +80,16 @@ export function useAppCandles(props: AppCandlesProps) {
       },
     };
 
-    layoutRef.value = layout;
-
-    configRef.value = generateConfig();
-  }
-
-  refresh();
-  watch([container, dataRef, layoutRef], render);
-  watch([props, plotBackground], refresh);
+    layout.value = newLayout;
+    config.value = generateConfig();
+  };
 
   return {
     container: container,
+    data: data,
+    layout: layout,
+    plotBackground: plotBackground,
+    mount: mount,
+    render: render,
   };
 }
