@@ -1,9 +1,9 @@
-import type {DropdownOption} from 'src/common/dropdown-option';
+import type {SelectMixedOption} from 'naive-ui/es/select/src/interface';
 import type {Integration} from 'src/composables/integration-storage';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {ref} from 'vue';
 
-const options = ref<DropdownOption[]>([]);
+const options = ref<SelectMixedOption[]>([]);
 
 export function useIntegrationOptions() {
   const create = (integrations: Integration[]) => {
