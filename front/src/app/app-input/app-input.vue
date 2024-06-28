@@ -1,16 +1,20 @@
 <script lang="ts" setup>
 import {NInput, NInputNumber, NSpace, NTooltip} from 'naive-ui';
+import {type InjectionKey} from 'src/common/injection-key';
 import {useKeyboard} from 'src/composables/keyboard';
+import {useRefInject} from 'src/composables/ref-inject';
 import {computed, withDefaults} from 'vue';
 
 interface Props {
   placeholder?: string;
   step?: number;
   tooltip?: string;
-  type: 'number' | 'string';
+  type?: 'number' | 'string';
+  injectionKey: InjectionKey;
 }
 
-const props = withDefaults(defineProps<Props>(), {type: 'number'});
+const props = withDefaults(defineProps<Props>(), {type: 'string'});
+const model = useRefInject(props.injectionKey);
 
 const {lock, unlock} = useKeyboard();
 const hasTooltip = computed(() => typeof props.tooltip !== 'undefined');
@@ -27,6 +31,7 @@ const isNumber = computed(() => props.type === 'number');
       <template #trigger>
         <NInputNumber
           v-if="isNumber"
+          v-model:value="model"
           :placeholder="props.placeholder ?? ''"
           :step="props.step ?? 1"
           size="tiny"
@@ -35,6 +40,7 @@ const isNumber = computed(() => props.type === 'number');
         />
         <NInput
           v-if="!isNumber"
+          v-model:value="model"
           :placeholder="props.placeholder ?? ''"
           size="tiny"
           @blur="unlock"
@@ -46,6 +52,7 @@ const isNumber = computed(() => props.type === 'number');
 
     <NInputNumber
       v-if="!hasTooltip && isNumber"
+      v-model:value="model"
       :placeholder="props.placeholder ?? ''"
       :step="props.step ?? 1"
       size="tiny"
@@ -55,6 +62,7 @@ const isNumber = computed(() => props.type === 'number');
 
     <NInput
       v-if="!hasTooltip && !isNumber"
+      v-model:value="model"
       :placeholder="props.placeholder ?? ''"
       size="tiny"
       @blur="unlock"
