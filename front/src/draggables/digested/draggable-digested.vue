@@ -5,37 +5,33 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
 import AppHeatmap2d from 'src/app/heatmap/app-heatmap-2d.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
+import AppSelect from 'src/app/select/app-select.vue';
 import {Csv} from 'src/common/csv';
 import {DigesterLayout} from 'src/common/digester-layout';
 import {type HeatmapRange, heatmapRanges} from 'src/common/heatmap-range';
 import {HeatmapScale} from 'src/common/heatmap-scale';
+import {useRefProvide} from 'src/composables/ref-provide';
 import {
   type Digested,
   useStorageDigested,
 } from 'src/composables/storage-digested';
 import {useStorageDigesters} from 'src/composables/storage-digesters';
 import {useStorageLabels} from 'src/composables/storage-labels';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
 const {readDigested, digested} = useStorageDigested();
 const {digesters} = useStorageDigesters();
 const {labelProperties, labelSets} = useStorageLabels();
 
-const labelSelectedARef = ref<string | null>(null);
-const labelSelectedBRef = ref<string | null>(null);
-const digesterSelectedRef = ref();
+const labelA = ref<string | null>(null);
+const labelB = ref<string | null>(null);
+const digester = ref();
 const titleRef = ref<string>('');
 const xRef = ref<string[]>([]);
 const yRef = ref<string[]>([]);
 const valuesRef = ref<number[][]>([]);
-const colorScaleRef = ref<HeatmapScale>(HeatmapScale.RdBu);
-
-const colorScales: HeatmapScale[] = [HeatmapScale.RdBu, HeatmapScale.Blues];
-
-const colorScalesOptionsRef = computed(() => {
-  return convertToNaiveSelectOptions(colorScales);
-});
+const colorFlavor = ref<HeatmapScale>(HeatmapScale.RdBu);
+const colorFlavors: HeatmapScale[] = [HeatmapScale.RdBu, HeatmapScale.Blues];
 
 const ranges: HeatmapRange[] = [
   heatmapRanges.auto,
@@ -44,67 +40,60 @@ const ranges: HeatmapRange[] = [
   heatmapRanges.min0to100,
 ];
 
-const rangeIndexRef = ref<number>(ranges.indexOf(heatmapRanges.min1to1));
-const rangesOptionsRef = computed(() => {
-  return ranges.map((range, index) => {
-    const label = `[${range.min ?? 'auto'}, ${range.max ?? 'auto'}]`;
-    const value = index;
+useRefProvide('digested/digester', digester);
+useRefProvide('digested/labelA', labelA);
+useRefProvide('digested/labelB', labelB);
+useRefProvide('digested/colorFlavor', colorFlavor);
 
+const rangeIndex = ref<number>(ranges.indexOf(heatmapRanges.min1to1));
+const rangeOptions = computed(() => {
+  return ranges.map((range, index) => {
     return {
-      label: label,
-      value: value,
+      label: `[${range.min ?? 'auto'}, ${range.max ?? 'auto'}]`,
+      value: index,
     };
   });
 });
 
 const {resize1by1, resize4by3, resize16by10, resize16by9} = useAppHeatmapSize();
 
-const labelPropertiesOptionsRef = computed(() => {
-  if (labelProperties.value === null) {
-    return [];
-  }
-
-  return convertToNaiveSelectOptions(labelProperties.value);
-});
-
-const digestersOptionsRef = computed(() => {
+const digesterOptions = computed(() => {
   if (digesters.value === null) {
     return [];
   }
 
-  const names = digesters.value.map((d) => d.name);
-  return convertToNaiveSelectOptions(names);
+  return digesters.value.map((d) => d.name);
 });
 
 const swap = () => {
-  if (labelSelectedARef.value === null || labelSelectedBRef.value === null) {
+  if (labelA.value === null || labelB.value === null) {
     return;
   }
 
-  const a = unref(labelSelectedARef.value);
-  const b = unref(labelSelectedBRef.value);
+  const a = unref(labelA.value);
+  const b = unref(labelB.value);
 
-  labelSelectedARef.value = b;
-  labelSelectedBRef.value = a;
+  labelA.value = b;
+  labelB.value = a;
 };
 
 const updateRange = (digested: Digested) => {
   switch (digested.digester.name) {
     case DigesterLayout.silhouette:
-      colorScaleRef.value = HeatmapScale.RdBu;
-      rangeIndexRef.value = ranges.indexOf(heatmapRanges.min1to1);
+      colorFlavor.value = HeatmapScale.RdBu;
+      rangeIndex.value = ranges.indexOf(heatmapRanges.min1to1);
       break;
     case DigesterLayout.overlap:
-      colorScaleRef.value = HeatmapScale.Blues;
-      rangeIndexRef.value = ranges.indexOf(heatmapRanges.min0to1);
+      colorFlavor.value = HeatmapScale.Blues;
+      rangeIndex.value = ranges.indexOf(heatmapRanges.min0to1);
       break;
     case DigesterLayout.contingency:
-      colorScaleRef.value = HeatmapScale.Blues;
-      rangeIndexRef.value = ranges.indexOf(heatmapRanges.min0to100);
+      colorFlavor.value = HeatmapScale.Blues;
+      rangeIndex.value = ranges.indexOf(heatmapRanges.min0to100);
       break;
     default:
-      colorScaleRef.value = HeatmapScale.RdBu;
-      rangeIndexRef.value = ranges.indexOf(heatmapRanges.auto);
+      colorFlavor.value = HeatmapScale.RdBu;
+      rangeIndex.value = ranges.indexOf(heatmapRanges.auto);
       break;
   }
 };
@@ -114,21 +103,21 @@ const update = () => {
     labelProperties.value === null ||
     labelSets.value === null ||
     digested.value === null ||
-    labelSelectedARef.value === null
+    labelA.value === null
   ) {
     return;
   }
 
   updateRange(digested.value);
 
-  titleRef.value = `${digested.value.digester.name} - ${labelSelectedARef.value}`;
-  const aIndex = labelProperties.value.indexOf(labelSelectedARef.value);
+  titleRef.value = `${digested.value.digester.name} - ${labelA.value}`;
+  const aIndex = labelProperties.value.indexOf(labelA.value);
   xRef.value = labelSets.value[aIndex];
 
   // with 2 labels
-  if (digested.value.isPairing && labelSelectedBRef.value !== null) {
-    titleRef.value = `${titleRef.value} - ${labelSelectedBRef.value}`;
-    const bIndex = labelProperties.value.indexOf(labelSelectedBRef.value);
+  if (digested.value.isPairing && labelB.value !== null) {
+    titleRef.value = `${titleRef.value} - ${labelB.value}`;
+    const bIndex = labelProperties.value.indexOf(labelB.value);
     yRef.value = labelSets.value[bIndex];
 
     // @ts-expect-error: 7053
@@ -182,20 +171,18 @@ const handleExportClick = () => {
   csv.download('digested.csv');
 };
 
-watch(digesterSelectedRef, () => {
+watch(digester, () => {
   if (digesters.value === null) {
     return;
   }
 
-  const digester = digesters.value.find(
-    (d) => d.name === digesterSelectedRef.value,
-  );
+  const digesterObject = digesters.value.find((d) => d.name === digester.value);
 
-  if (digester === undefined) {
+  if (digesterObject === undefined) {
     return;
   }
 
-  readDigested(digester);
+  readDigested(digesterObject);
 });
 
 watchEffect(update);
@@ -207,21 +194,19 @@ watchEffect(update);
       <div class="form">
         <span>Select</span>
 
-        <NSelect
-          v-model:value="digesterSelectedRef"
-          :options="digestersOptionsRef"
+        <AppSelect
+          :options="digesterOptions"
+          injection-key="digested/digester"
           placeholder="Digester..."
-          size="tiny"
         />
 
         <span>Over</span>
 
         <div class="form-second-line">
-          <NSelect
-            v-model:value="labelSelectedARef"
-            :options="labelPropertiesOptionsRef"
+          <AppSelect
+            :options="labelProperties ?? []"
+            injection-key="digested/labelA"
             placeholder="Label A..."
-            size="tiny"
           />
 
           <NButton
@@ -235,29 +220,27 @@ watchEffect(update);
             </NIcon>
           </NButton>
 
-          <NSelect
-            v-model:value="labelSelectedBRef"
-            :disabled="!digested?.isPairing"
-            :options="labelPropertiesOptionsRef"
+          <AppSelect
+            :options="labelProperties ?? []"
+            injection-key="digested/labelB"
             placeholder="Label B..."
-            size="tiny"
           />
         </div>
 
         <span>Colorscale</span>
         <div class="form-additional-line">
-          <NSelect
-            v-model:value="colorScaleRef"
-            :options="colorScalesOptionsRef"
-            placeholder="Colorscale..."
-            size="tiny"
+          <AppSelect
+            :options="colorFlavors"
+            injection-key="digested/colorFlavor"
+            placeholder="Color flavor..."
           />
 
           <span>Range</span>
+
           <div>
             <NSelect
-              v-model:value="rangeIndexRef"
-              :options="rangesOptionsRef"
+              v-model:value="rangeIndex"
+              :options="rangeOptions"
               placeholder="Range..."
               size="tiny"
             />
@@ -332,29 +315,20 @@ watchEffect(update);
       </div>
 
       <AppHeatmap
-        v-if="
-          !digested?.isPairing &&
-          digesterSelectedRef &&
-          (labelSelectedARef || labelSelectedBRef)
-        "
-        :colorscale="colorScaleRef"
+        v-if="!digested?.isPairing && digester && (labelA || labelB)"
+        :colorscale="colorFlavor"
         :export-name="digested?.digester.name"
         :labels="xRef"
-        :range="ranges[rangeIndexRef]"
+        :range="ranges[rangeIndex]"
         :title="titleRef"
         :values="valuesRef"
       />
 
       <AppHeatmap2d
-        v-if="
-          digested?.isPairing &&
-          digesterSelectedRef &&
-          labelSelectedARef &&
-          labelSelectedBRef
-        "
-        :colorscale="colorScaleRef"
+        v-if="digested?.isPairing && digester && labelA && labelB"
+        :colorscale="colorFlavor"
         :export-name="digested?.digester.name"
-        :range="ranges[rangeIndexRef]"
+        :range="ranges[rangeIndex]"
         :title="titleRef"
         :values="valuesRef"
         :x="xRef"
