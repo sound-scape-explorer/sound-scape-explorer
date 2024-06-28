@@ -11,7 +11,7 @@ import {useIndicatorsChart} from 'src/draggables/indicators/indicators-chart';
 import {useIndicatorsSites} from 'src/draggables/indicators/indicators-sites';
 import {watch} from 'vue';
 
-const {currentIndicator, isSelection, isCandles, isCondensed} =
+const {currentIndicator, isLabels, isCandles, isCondensed} =
   useDraggableIndicators();
 const {data: indicatorData} = useIndicators();
 const {candles, plot, render} = useIndicatorsChart();
@@ -24,7 +24,7 @@ watch(
     // currentIndicator, // redundant with below entry
     indicatorData,
     currentSites,
-    isSelection,
+    isLabels,
     isCandles,
     period,
     filtered,

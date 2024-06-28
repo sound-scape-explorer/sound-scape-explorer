@@ -20,7 +20,7 @@ const {
   indicatorOptions,
   currentIndicator,
   isCandles,
-  isSelection,
+  isLabels,
   isCondensed,
   handleExportClick,
   parseIndex,
@@ -59,7 +59,7 @@ watch(currentIndicator, () => {
       <NTreeSelect
         v-model:value="currentSites"
         :clear-filter-after-select="false"
-        :disabled="isSelection"
+        :disabled="isLabels"
         :max-tag-count="1"
         :options="siteOptions"
         checkable
@@ -74,7 +74,7 @@ watch(currentIndicator, () => {
       />
 
       <NButton
-        :disabled="isSelection"
+        :disabled="isLabels"
         class="swap-button"
         size="tiny"
         @click="selectAllSites"
@@ -88,12 +88,12 @@ watch(currentIndicator, () => {
     <div class="draggable-indicators-menu__options-row">
       <div>
         <NSwitch
-          v-model:value="isSelection"
+          v-model:value="isLabels"
           class="toggle"
           size="small"
         >
           <template #unchecked>Sites</template>
-          <template #checked>Scatter</template>
+          <template #checked>Labels</template>
         </NSwitch>
 
         <NSwitch

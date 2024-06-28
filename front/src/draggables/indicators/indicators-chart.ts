@@ -18,7 +18,7 @@ const plot = ref<PlotData | null>(null);
 const candles = ref<CandlesData | null>(null);
 
 export function useIndicatorsChart() {
-  const {isCandles, isSelection} = useDraggableIndicators();
+  const {isCandles, isLabels} = useDraggableIndicators();
   const {sites} = useStorageSites();
   const {data} = useIndicators();
   const {cyclingScale} = useScatterColorScale();
@@ -32,7 +32,7 @@ export function useIndicatorsChart() {
     let siteValues: string[] = [];
 
     for (let i = 0; i < data.value.length; i += 1) {
-      if (isSelection.value && filtered.value[i]) {
+      if (isLabels.value && filtered.value[i]) {
         continue;
       }
 
