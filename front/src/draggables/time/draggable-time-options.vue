@@ -11,15 +11,16 @@ import {
   NButtonGroup,
   NDatePicker,
   NIcon,
-  NInputNumber,
   NSwitch,
   NTooltip,
 } from 'naive-ui';
+import AppInput from 'src/app/app-input/app-input.vue';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {useDate} from 'src/composables/date';
 import {useKeyboard} from 'src/composables/keyboard';
+import {useRefProvide} from 'src/composables/ref-provide';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {useDraggableTime} from 'src/draggables/time/draggable-time';
 import {computed, type ComputedRef, ref, watch} from 'vue';
@@ -29,6 +30,7 @@ const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
 const {filterByTime} = useScatterFilterTime();
 const {isLoading} = useScatterLoading();
 const {duration, current, isAllSelected, min} = useDraggableTime();
+useRefProvide('time/duration', duration);
 
 // todo: refactor this gigantic file
 
@@ -160,11 +162,11 @@ registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
         </NButton>
       </NButtonGroup>
 
-      <NInputNumber
-        v-model:value="duration"
+      <AppInput
         :disabled="isAllSelected"
-        class="input"
-        size="tiny"
+        align="left"
+        injection-key="time/duration"
+        type="number"
       />
 
       <NTooltip trigger="hover">

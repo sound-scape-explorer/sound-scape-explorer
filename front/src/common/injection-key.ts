@@ -10,4 +10,5 @@ export type InjectionKey =
   | 'colors/alphaExcluded'
   | 'colors/alphaIncluded'
   | 'colors/flavor'
-  | 'colors/type';
+  | 'colors/type'
+  | 'time/duration';
