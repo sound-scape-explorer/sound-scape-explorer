@@ -11,7 +11,7 @@ import {useIndicatorsChart} from 'src/draggables/indicators/indicators-chart';
 import {useIndicatorsSites} from 'src/draggables/indicators/indicators-sites';
 import {watch} from 'vue';
 
-const {currentIndicator, isSelection, isContinuous, isCondensed} =
+const {currentIndicator, isSelection, isCandles, isCondensed} =
   useDraggableIndicators();
 const {data: indicatorData} = useIndicators();
 const {candles, plot, render} = useIndicatorsChart();
@@ -25,7 +25,7 @@ watch(
     indicatorData,
     currentSites,
     isSelection,
-    isContinuous,
+    isCandles,
     period,
     filtered,
   ],
@@ -46,7 +46,7 @@ watch(
 
     <div class="draggable-indicators__plot">
       <AppPlot
-        v-if="isContinuous && plot !== null"
+        v-if="!isCandles && plot !== null"
         :colors="plot.colors"
         :labels="plot.labels"
         :values="plot.values"
@@ -57,7 +57,7 @@ watch(
       />
 
       <AppCandles
-        v-if="!isContinuous && candles !== null"
+        v-if="isCandles && candles !== null"
         :close="candles.close"
         :condensed="isCondensed"
         :high="candles.high"

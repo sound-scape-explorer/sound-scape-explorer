@@ -19,7 +19,7 @@ import {watch} from 'vue';
 const {
   indicatorOptions,
   currentIndicator,
-  isContinuous,
+  isCandles,
   isSelection,
   isCondensed,
   handleExportClick,
@@ -97,17 +97,17 @@ watch(currentIndicator, () => {
         </NSwitch>
 
         <NSwitch
-          v-model:value="isContinuous"
+          v-model:value="isCandles"
           class="toggle"
           size="small"
         >
-          <template #unchecked>Candles</template>
-          <template #checked>Continu.</template>
+          <template #unchecked>Continu.</template>
+          <template #checked>Candles</template>
         </NSwitch>
 
         <NSwitch
           v-model:value="isCondensed"
-          :disabled="isContinuous"
+          :disabled="!isCandles"
           class="toggle"
           size="small"
         >
@@ -118,7 +118,7 @@ watch(currentIndicator, () => {
         <NButtonGroup>
           <NButton
             v-for="p in periods"
-            :disabled="isContinuous"
+            :disabled="!isCandles"
             size="tiny"
             @click="updatePeriod(p)"
           >

@@ -18,7 +18,7 @@ const plot = ref<PlotData | null>(null);
 const candles = ref<CandlesData | null>(null);
 
 export function useIndicatorsChart() {
-  const {isContinuous, isSelection} = useDraggableIndicators();
+  const {isCandles, isSelection} = useDraggableIndicators();
   const {sites} = useStorageSites();
   const {data} = useIndicators();
   const {cyclingScale} = useScatterColorScale();
@@ -66,7 +66,7 @@ export function useIndicatorsChart() {
     const siteNames = sites.value.map((site) => site.name);
     const colors = getColors(siteNames);
 
-    if (isContinuous.value) {
+    if (!isCandles.value) {
       plot.value = generateContinuous(values, timestamps, siteValues, colors);
     }
 

@@ -6,8 +6,8 @@ import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-opt
 import {computed, ref} from 'vue';
 
 const currentIndicator = ref();
-const isContinuous = ref<boolean>(true);
 const isSelection = ref<boolean>(false);
+const isCandles = ref<boolean>(false);
 const isCondensed = ref<boolean>(true);
 
 export function useDraggableIndicators() {
@@ -55,7 +55,7 @@ export function useDraggableIndicators() {
   };
 
   return {
-    isContinuous: isContinuous,
+    isCandles: isCandles,
     isSelection: isSelection,
     isCondensed: isCondensed,
     currentIndicator: currentIndicator,
