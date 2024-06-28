@@ -17,7 +17,7 @@ export function useAppHeatmapLayout() {
       width: width.value,
       height: height.value,
       font: {
-        size: Number(fontSize.value),
+        size: fontSize.value,
       },
       margin: {
         l: 100,

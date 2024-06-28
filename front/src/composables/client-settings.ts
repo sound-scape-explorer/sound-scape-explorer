@@ -5,7 +5,7 @@ const openDetailsOnScatterClick = ref<boolean>(false);
 const plotBackground = ref<PLOT_BACKGROUND>(PLOT_BACKGROUND.transparent);
 const preview = ref<boolean>(false);
 const applyTimezone = ref<boolean>(false);
-const timeShift = ref<string>('0'); // hours as string
+const timeShift = ref<number>(0); // hours
 const copySelect2d = ref<boolean>(true);
 const scatter2dGl = ref<boolean>(true);
 

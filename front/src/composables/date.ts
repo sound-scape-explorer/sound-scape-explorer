@@ -15,7 +15,7 @@ export function useDate() {
   const {applyTimezone, timeShift} = useClientSettings();
 
   const convertTimestampToDate = (timestamp: number) => {
-    const shift = Number(timeShift.value);
+    const shift = timeShift.value;
 
     if (applyTimezone.value === false) {
       return dayjs(timestamp).add(shift, 'hours');

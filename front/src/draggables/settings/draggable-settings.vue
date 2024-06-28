@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {NCheckbox, NInput, NSelect} from 'naive-ui';
+import {NCheckbox, NInput, NInputNumber, NSelect} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {useClientSettings} from 'src/composables/client-settings';
@@ -92,12 +92,11 @@ const plotBackgroundOptionsRef = computed(() => {
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Plot font size">
-      <NInput
+      <NInputNumber
         v-model:value="fontSize"
         size="tiny"
-        type="number"
-        @inputBlur="() => unlock()"
-        @inputFocus="() => lock()"
+        @blur="unlock"
+        @focus="lock"
       />
     </DraggableSettingsItem>
 
@@ -114,12 +113,11 @@ const plotBackgroundOptionsRef = computed(() => {
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Time shift in hours">
-      <NInput
+      <NInputNumber
         v-model:value="timeShift"
         size="tiny"
-        type="number"
-        @inputBlur="() => unlock()"
-        @inputFocus="() => lock()"
+        @blur="unlock"
+        @focus="lock"
       />
     </DraggableSettingsItem>
 

@@ -1,7 +1,7 @@
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref} from 'vue';
 
-const fontSize = ref<string>('12');
+const fontSize = ref<number>(12);
 const width = ref<number>(PLOTLY_SIZE);
 const height = ref<number>(PLOTLY_SIZE);
 
