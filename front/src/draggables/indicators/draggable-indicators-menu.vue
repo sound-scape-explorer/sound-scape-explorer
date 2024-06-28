@@ -1,29 +1,27 @@
 <script lang="ts" setup="">
 import {DownloadOutline} from '@vicons/ionicons5';
-import {
-  NButton,
-  NButtonGroup,
-  NIcon,
-  NSelect,
-  NSwitch,
-  NTreeSelect,
-} from 'naive-ui';
+import {NButton, NButtonGroup, NIcon, NSwitch, NTreeSelect} from 'naive-ui';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import AppSelect from 'src/app/select/app-select.vue';
 import {useKeyboard} from 'src/composables/keyboard';
+import {useRefProvide} from 'src/composables/ref-provide';
 import {useDraggableIndicators} from 'src/draggables/indicators/draggable-indicators';
-import {useIndicators} from 'src/draggables/indicators/indicators';
 import {useIndicatorsCandles} from 'src/draggables/indicators/indicators-candles';
 import {useIndicatorsSites} from 'src/draggables/indicators/indicators-sites';
 import {watch} from 'vue';
 
 const {
-  indicatorOptions,
-  currentIndicator,
+  selection,
+  selections,
+  indicator,
+  indicators,
+  display,
+  displays,
+  isSites,
   isCandles,
-  isLabels,
   isCondensed,
   handleExportClick,
-  parseIndex,
+  update,
 } = useDraggableIndicators();
 
 const {
@@ -34,32 +32,40 @@ const {
 } = useIndicatorsSites();
 
 const {periods, update: updatePeriod} = useIndicatorsCandles();
-const {selectIndicator} = useIndicators();
 const {lock, unlock} = useKeyboard();
 
-watch(currentIndicator, () => {
-  selectIndicator(parseIndex(currentIndicator.value));
-});
+useRefProvide('indicators/list', indicator);
+useRefProvide('indicators/selection', selection);
+useRefProvide('indicators/display', display);
+
+watch(indicator, update);
 </script>
 
 <template>
   <AppDraggableMenu>
     <span>Select</span>
 
-    <NSelect
-      v-model:value="currentIndicator"
-      :options="indicatorOptions"
-      placeholder="Indicator..."
+    <div>
+      <AppSelect
+        :options="indicators"
+        injection-key="indicators/list"
+      />
+    </div>
+
+    <NButton
+      :disabled="!isSites"
+      class="swap-button"
       size="tiny"
-    />
+      @click="selectAllSites"
+    >
+      All
+    </NButton>
 
-    <span>For</span>
-
-    <div class="draggable-indicators-menu__sites-row">
+    <div class="row">
       <NTreeSelect
         v-model:value="currentSites"
         :clear-filter-after-select="false"
-        :disabled="isLabels"
+        :disabled="!isSites"
         :max-tag-count="1"
         :options="siteOptions"
         checkable
@@ -72,50 +78,25 @@ watch(currentIndicator, () => {
         @focus="lock"
         @update:value="updateSites"
       />
-
-      <NButton
-        :disabled="isLabels"
-        class="swap-button"
-        size="tiny"
-        @click="selectAllSites"
-      >
-        All
-      </NButton>
     </div>
 
-    <span />
+    <span>Display</span>
 
-    <div class="draggable-indicators-menu__options-row">
+    <div class="row">
       <div>
-        <NSwitch
-          v-model:value="isLabels"
-          class="toggle"
-          size="small"
-        >
-          <template #unchecked>Sites</template>
-          <template #checked>Labels</template>
-        </NSwitch>
+        <AppSelect
+          :options="selections"
+          injection-key="indicators/selection"
+          style="width: 9em"
+        />
 
-        <NSwitch
-          v-model:value="isCandles"
-          class="toggle"
-          size="small"
-        >
-          <template #unchecked>Continu.</template>
-          <template #checked>Candles</template>
-        </NSwitch>
+        <AppSelect
+          :options="displays"
+          injection-key="indicators/display"
+          style="width: 9em"
+        />
 
-        <NSwitch
-          v-model:value="isCondensed"
-          :disabled="!isCandles"
-          class="toggle"
-          size="small"
-        >
-          <template #unchecked>Full</template>
-          <template #checked>Trim</template>
-        </NSwitch>
-
-        <NButtonGroup>
+        <NButtonGroup v-if="isCandles">
           <NButton
             v-for="p in periods"
             :disabled="!isCandles"
@@ -125,50 +106,44 @@ watch(currentIndicator, () => {
             {{ p.name }}
           </NButton>
         </NButtonGroup>
+
+        <NSwitch
+          v-if="isCandles"
+          v-model:value="isCondensed"
+          :disabled="!isCandles"
+          class="toggle"
+          size="small"
+        >
+          <template #unchecked>Full</template>
+          <template #checked>Trim</template>
+        </NSwitch>
       </div>
 
-      <div>
-        <NButton
-          size="tiny"
-          @click="handleExportClick"
-        >
-          <template #icon>
-            <NIcon>
-              <DownloadOutline />
-            </NIcon>
-          </template>
-          Export raw .csv
-        </NButton>
-      </div>
+      <NButton
+        size="tiny"
+        @click="handleExportClick"
+      >
+        <template #icon>
+          <NIcon>
+            <DownloadOutline />
+          </NIcon>
+        </template>
+        Export raw .csv
+      </NButton>
     </div>
   </AppDraggableMenu>
 </template>
 
 <style lang="scss" scoped>
-.draggable-indicators-menu__sites-row {
+.row {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5em;
-}
-
-.draggable-indicators-menu__options-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5em;
 
   > div {
     display: flex;
     align-items: center;
     gap: 0.5em;
-  }
-
-  > div:first-child {
-    justify-content: flex-start;
-  }
-
-  > div:last-child {
-    justify-content: flex-end;
   }
 }
 </style>
