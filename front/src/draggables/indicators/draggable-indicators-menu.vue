@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NButtonGroup, NIcon, NSwitch, NTreeSelect} from 'naive-ui';
+import AppInput from 'src/app/app-input/app-input.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useKeyboard} from 'src/composables/keyboard';
@@ -54,7 +55,6 @@ watch(indicator, update);
 
     <NButton
       :disabled="!isSites"
-      class="swap-button"
       size="tiny"
       @click="selectAllSites"
     >
@@ -130,6 +130,39 @@ watch(indicator, update);
         </template>
         Export raw .csv
       </NButton>
+    </div>
+
+    <span>Filter</span>
+
+    <div class="row">
+      <div>
+        <AppInput
+          :step="0.1"
+          placeholder="Below"
+          style="width: 9em"
+          tooltip="Below"
+        />
+
+        <AppInput
+          placeholder="Above"
+          style="width: 9em"
+          tooltip="Above"
+        />
+
+        <NButton
+          size="tiny"
+          @click="() => console.log('apply')"
+        >
+          Apply
+        </NButton>
+
+        <NButton
+          size="tiny"
+          @click="() => console.log('reset')"
+        >
+          Reset
+        </NButton>
+      </div>
     </div>
   </AppDraggableMenu>
 </template>
