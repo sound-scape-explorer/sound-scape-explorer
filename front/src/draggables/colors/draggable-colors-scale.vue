@@ -1,32 +1,29 @@
 <script lang="ts" setup>
-import {NSelect, NTooltip} from 'naive-ui';
+import AppSelect from 'src/app/select/app-select.vue';
 import {useColorSelection} from 'src/components/scatter/color-selection';
 import {useScatterLoading} from 'src/components/scatter/scatter-loading';
+import {useRefProvide} from 'src/composables/ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {computed} from 'vue';
 
 const {flavor} = useColorSelection();
-const naiveOptions = computed(() => convertToNaiveSelectOptions(COLOR_FLAVORS));
 const {isLoading} = useScatterLoading();
+useRefProvide('colors/flavor', flavor);
 </script>
 
 <template>
-  <NTooltip
-    placement="right"
-    trigger="hover"
-  >
-    <!--suppress VueUnrecognizedSlot -->
-    <template #trigger>
-      <NSelect
-        v-model:value="flavor"
-        :default-value="flavor"
-        :disabled="isLoading"
-        :options="naiveOptions"
-        placeholder="Color scale..."
-        size="small"
-      />
-    </template>
-    <span>Color scale</span>
-  </NTooltip>
+  <AppSelect
+    :disabled="isLoading"
+    :options="COLOR_FLAVORS"
+    class="select"
+    injection-key="colors/flavor"
+    size="small"
+    tooltip="Color scale"
+    tooltip-placement="left"
+  />
 </template>
+
+<style lang="scss" scoped>
+.select {
+  width: 100%;
+}
+</style>

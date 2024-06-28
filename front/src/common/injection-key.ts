@@ -6,4 +6,8 @@ export type InjectionKey =
   | 'indicators/filterBelow'
   | 'settings/audioHost'
   | 'settings/fontSize'
-  | 'settings/timeShift';
+  | 'settings/timeShift'
+  | 'colors/alphaExcluded'
+  | 'colors/alphaIncluded'
+  | 'colors/flavor'
+  | 'colors/type';

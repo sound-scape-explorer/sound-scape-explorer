@@ -1,65 +1,44 @@
 <script lang="ts" setup="">
-import type {InputNumberProps} from 'naive-ui';
-import {NInputNumber, NTooltip} from 'naive-ui';
+import AppInput from 'src/app/app-input/app-input.vue';
 import {useScatterColorAlpha} from 'src/components/scatter/scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/scatter-loading';
-
-type InputNumberThemeOverrides = NonNullable<
-  InputNumberProps['themeOverrides']
->;
-
-const inputNumberThemeOverrides: InputNumberThemeOverrides = {
-  peers: {
-    Input: {
-      fontSizeTiny: '0.6rem',
-    },
-  },
-};
+import {useRefProvide} from 'src/composables/ref-provide';
 
 const {isLoading} = useScatterLoading();
 const {low, high} = useScatterColorAlpha();
+
+useRefProvide('colors/alphaExcluded', low);
+useRefProvide('colors/alphaIncluded', high);
 </script>
 
 <template>
-  <NTooltip
-    placement="right"
-    trigger="hover"
-  >
-    <!--suppress VueUnrecognizedSlot -->
-    <template #trigger>
-      <NInputNumber
-        v-model:value="low"
-        :disabled="isLoading"
-        :theme-overrides="inputNumberThemeOverrides"
-        class="input"
-        max="1"
-        min="0.005"
-        size="small"
-        step="0.005"
-      />
-    </template>
-    <span>Opacity for excluded points</span>
-  </NTooltip>
+  <AppInput
+    :disabled="isLoading"
+    :max="1"
+    :min="0.005"
+    :step="0.005"
+    align="left"
+    class="input"
+    injection-key="colors/alphaExcluded"
+    size="small"
+    tooltip="Opacity for excluded points"
+    tooltip-placement="left"
+    type="number"
+  />
 
-  <NTooltip
-    placement="right"
-    trigger="hover"
-  >
-    <!--suppress VueUnrecognizedSlot -->
-    <template #trigger>
-      <NInputNumber
-        v-model:value="high"
-        :disabled="isLoading"
-        :theme-overrides="inputNumberThemeOverrides"
-        class="input"
-        max="1"
-        min="0"
-        size="small"
-        step="0.05"
-      />
-    </template>
-    <span>Opacity for collected points</span>
-  </NTooltip>
+  <AppInput
+    :disabled="isLoading"
+    :max="1"
+    :min="0"
+    :step="0.05"
+    align="left"
+    class="input"
+    injection-key="colors/alphaIncluded"
+    size="small"
+    tooltip="Opacity for collected points"
+    tooltip-placement="left"
+    type="number"
+  />
 </template>
 
 <style lang="scss" scoped>

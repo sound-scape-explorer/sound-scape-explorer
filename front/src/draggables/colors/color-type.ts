@@ -1,6 +1,5 @@
 import {useStorageLabels} from 'src/composables/storage-labels';
 import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
 export type ColorType =
@@ -13,7 +12,7 @@ export type ColorType =
 export function useColorType() {
   const {labelProperties} = useStorageLabels();
 
-  const options = computed(() => {
+  const options = computed<string[]>(() => {
     const defaultOptions: ColorType[] = [
       'intervalIndex',
       'by1h',
@@ -23,15 +22,13 @@ export function useColorType() {
     ];
 
     if (labelProperties.value === null) {
-      return convertToNaiveSelectOptions(defaultOptions);
+      return defaultOptions;
     }
 
-    const payload = [
+    return [
       ...defaultOptions,
       ...convertSlugsToColorTypes(labelProperties.value),
     ];
-
-    return convertToNaiveSelectOptions(payload);
   });
 
   return {

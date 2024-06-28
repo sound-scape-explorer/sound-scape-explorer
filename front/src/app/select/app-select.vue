@@ -1,39 +1,60 @@
 <script lang="ts" setup>
-import {NSelect, NSpace} from 'naive-ui';
-import {type InjectionKey, useRefInject} from 'src/composables/ref-inject';
+import {NSelect, NSpace, NTooltip} from 'naive-ui';
+import type {InjectionKey} from 'src/common/injection-key';
+import {useRefInject} from 'src/composables/ref-inject';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {computed} from 'vue';
+import {computed, withDefaults} from 'vue';
 
 interface Props {
   injectionKey: InjectionKey;
   options: string[];
   defaultOptionIndex?: number;
+  size?: 'tiny' | 'small';
+  tooltip?: string;
+  tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
+  disabled?: boolean;
+  placeholder?: string;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  size: 'tiny',
+  disabled: false,
+});
+
 const model = useRefInject(props.injectionKey);
 const options = computed(() => convertToNaiveSelectOptions(props.options));
+const hasTooltip = computed<boolean>(() => typeof props.tooltip === 'string');
 </script>
 
 <template>
-  <NSpace
-    class="container"
-    vertical
-  >
+  <NSpace vertical>
+    <NTooltip
+      v-if="hasTooltip"
+      :placement="props.tooltipPlacement"
+      trigger="hover"
+    >
+      <!--suppress VueUnrecognizedSlot -->
+      <template #trigger>
+        <NSelect
+          v-model:value="model"
+          :default-value="props.options[defaultOptionIndex ?? 0]"
+          :disabled="props.disabled"
+          :options="options"
+          :placeholder="props.placeholder ?? undefined"
+          :size="props.size"
+        />
+      </template>
+      <span>{{ props.tooltip }}</span>
+    </NTooltip>
+
     <NSelect
+      v-if="!hasTooltip"
       v-model:value="model"
       :default-value="props.options[defaultOptionIndex ?? 0]"
+      :disabled="props.disabled"
       :options="options"
-      class="select"
-      size="tiny"
+      :placeholder="props.placeholder ?? undefined"
+      :size="props.size"
     />
   </NSpace>
 </template>
-
-<style lang="scss" scoped>
-.container {
-}
-
-.select {
-}
-</style>
