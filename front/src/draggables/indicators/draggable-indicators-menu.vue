@@ -9,7 +9,7 @@ import {useRefProvide} from 'src/composables/ref-provide';
 import {useDraggableIndicators} from 'src/draggables/indicators/draggable-indicators';
 import {useIndicatorsCandles} from 'src/draggables/indicators/indicators-candles';
 import {useIndicatorsSites} from 'src/draggables/indicators/indicators-sites';
-import {watch} from 'vue';
+import {ref, watch} from 'vue';
 
 const {
   selection,
@@ -34,10 +34,14 @@ const {
 
 const {periods, update: updatePeriod} = useIndicatorsCandles();
 const {lock, unlock} = useKeyboard();
+const above = ref<number>();
+const below = ref<number>();
 
 useRefProvide('indicators/list', indicator);
 useRefProvide('indicators/selection', selection);
 useRefProvide('indicators/display', display);
+useRefProvide('indicators/filterAbove', above);
+useRefProvide('indicators/filterBelow', below);
 
 watch(indicator, update);
 </script>
@@ -138,6 +142,7 @@ watch(indicator, update);
       <div>
         <AppInput
           :step="0.1"
+          injection-key="indicators/filterBelow"
           placeholder="Below"
           style="width: 9em"
           tooltip="Below"
@@ -145,6 +150,7 @@ watch(indicator, update);
         />
 
         <AppInput
+          injection-key="indicators/filterAbove"
           placeholder="Above"
           style="width: 9em"
           tooltip="Above"
