@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import {NCheckbox, NSelect} from 'naive-ui';
+import {NCheckbox} from 'naive-ui';
 import AppInput from 'src/app/app-input/app-input.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
+import AppSelect from 'src/app/select/app-select.vue';
 import {useClientSettings} from 'src/composables/client-settings';
 import {useRefProvide} from 'src/composables/ref-provide';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
@@ -11,8 +12,6 @@ import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {useSpectrogramColormap} from 'src/draggables/audio/spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/wavesurfer-settings';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {computed} from 'vue';
 
 const {
   openDetailsOnScatterClick,
@@ -29,17 +28,14 @@ const {colormap} = useSpectrogramColormap();
 const {settings, hasTimezone} = useStorageSettings();
 const {showDecibels, overflowLegends} = useWavesurferSettings();
 
-const spectrogramColorMapsOptionsRef = computed(() => {
-  return convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS);
-});
-
-const plotBackgroundOptionsRef = computed(() => {
-  return convertToNaiveSelectOptions(Object.values(PLOT_BACKGROUND));
-});
+const colormapOptions = SPECTROGRAM_COLOR_MAPS;
+const backgrounds = Object.values(PLOT_BACKGROUND);
 
 useRefProvide('settings/audioHost', audioHost);
 useRefProvide('settings/fontSize', fontSize);
 useRefProvide('settings/timeShift', timeShift);
+useRefProvide('settings/colormap', colormap);
+useRefProvide('settings/plotBackground', plotBackground);
 </script>
 
 <template>
@@ -52,11 +48,9 @@ useRefProvide('settings/timeShift', timeShift);
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Spectrogram: Color map">
-      <NSelect
-        v-model:value="colormap"
-        :default-value="colormap"
-        :options="spectrogramColorMapsOptionsRef"
-        size="tiny"
+      <AppSelect
+        :options="colormapOptions"
+        injection-key="settings/colormap"
       />
     </DraggableSettingsItem>
 
@@ -82,11 +76,9 @@ useRefProvide('settings/timeShift', timeShift);
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Plot background">
-      <NSelect
-        v-model:value="plotBackground"
-        :default-value="plotBackground"
-        :options="plotBackgroundOptionsRef"
-        size="tiny"
+      <AppSelect
+        :options="backgrounds"
+        injection-key="settings/plotBackground"
       />
     </DraggableSettingsItem>
 
