@@ -141,12 +141,14 @@ watch(indicator, update);
           placeholder="Below"
           style="width: 9em"
           tooltip="Below"
+          type="number"
         />
 
         <AppInput
           placeholder="Above"
           style="width: 9em"
           tooltip="Above"
+          type="number"
         />
 
         <NButton
