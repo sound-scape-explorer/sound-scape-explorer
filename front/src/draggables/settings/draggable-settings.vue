@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import {NCheckbox, NInput, NInputNumber, NSelect} from 'naive-ui';
+import {NCheckbox, NSelect} from 'naive-ui';
+import AppInput from 'src/app/app-input/app-input.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
 import {useClientSettings} from 'src/composables/client-settings';
-import {useKeyboard} from 'src/composables/keyboard';
+import {useRefProvide} from 'src/composables/ref-provide';
 import {useStorageAudioHost} from 'src/composables/storage-audio-host';
 import {useStorageSettings} from 'src/composables/storage-settings';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
@@ -22,7 +23,6 @@ const {
   copySelect2d,
   scatter2dGl,
 } = useClientSettings();
-const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
 const {colormap} = useSpectrogramColormap();
@@ -36,6 +36,10 @@ const spectrogramColorMapsOptionsRef = computed(() => {
 const plotBackgroundOptionsRef = computed(() => {
   return convertToNaiveSelectOptions(Object.values(PLOT_BACKGROUND));
 });
+
+useRefProvide('settings/audioHost', audioHost);
+useRefProvide('settings/fontSize', fontSize);
+useRefProvide('settings/timeShift', timeShift);
 </script>
 
 <template>
@@ -44,12 +48,7 @@ const plotBackgroundOptionsRef = computed(() => {
     draggable-key="settings"
   >
     <DraggableSettingsItem title="Audio host">
-      <NInput
-        v-model:value="audioHost"
-        size="tiny"
-        @inputBlur="() => unlock()"
-        @inputFocus="() => lock()"
-      />
+      <AppInput injection-key="settings/audioHost" />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Spectrogram: Color map">
@@ -92,11 +91,9 @@ const plotBackgroundOptionsRef = computed(() => {
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Plot font size">
-      <NInputNumber
-        v-model:value="fontSize"
-        size="tiny"
-        @blur="unlock"
-        @focus="lock"
+      <AppInput
+        injection-key="settings/fontSize"
+        type="number"
       />
     </DraggableSettingsItem>
 
@@ -113,11 +110,9 @@ const plotBackgroundOptionsRef = computed(() => {
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Time shift in hours">
-      <NInputNumber
-        v-model:value="timeShift"
-        size="tiny"
-        @blur="unlock"
-        @focus="lock"
+      <AppInput
+        injection-key="settings/timeShift"
+        type="number"
       />
     </DraggableSettingsItem>
 
