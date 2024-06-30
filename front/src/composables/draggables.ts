@@ -14,12 +14,13 @@ export interface DraggablesStore {
   trajectories: boolean;
   relativeTrajectories: boolean;
   temporal: boolean;
-  digested: boolean;
+  heatmaps: boolean;
   selection: boolean;
 }
 
 export type DraggableKey = keyof DraggablesStore;
 
+// draggable keys
 const store = reactive<DraggablesStore>({
   import: false,
   settings: false,
@@ -34,7 +35,7 @@ const store = reactive<DraggablesStore>({
   trajectories: false,
   relativeTrajectories: false,
   temporal: false,
-  digested: false,
+  heatmaps: false,
   selection: false,
 });
 

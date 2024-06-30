@@ -171,8 +171,8 @@ const {preview} = useClientSettings();
       <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
-        draggable-key="digested"
-        text="Digested"
+        draggable-key="heatmaps"
+        text="Heatmaps"
       >
         <GridOutline />
       </AppMenuButton>

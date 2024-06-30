@@ -4,7 +4,7 @@ import {useStorageReady} from 'src/composables/storage-ready';
 import DraggableAudio from 'src/draggables/audio/draggable-audio.vue';
 import DraggableColors from 'src/draggables/colors/draggable-colors.vue';
 import DraggableDetails from 'src/draggables/details/draggable-details.vue';
-import DraggableDigested from 'src/draggables/digested/draggable-digested.vue';
+import DraggableHeatmaps from 'src/draggables/heatmaps/draggable-heatmaps.vue';
 import DraggableHelp from 'src/draggables/help/draggable-help.vue';
 import DraggableImport from 'src/draggables/import/draggable-import.vue';
 import DraggableLabel from 'src/draggables/label/draggable-label.vue';
@@ -35,7 +35,7 @@ const {isReady} = useStorageReady();
   <DraggableTrajectories v-if="isReady" />
   <DraggableRelativeTrajectories v-if="isReady" />
   <DraggableTemporal v-if="isReady" />
-  <DraggableDigested v-if="isReady" />
+  <DraggableHeatmaps v-if="isReady" />
   <DraggableSelection v-if="isReady" />
 
   <DraggableTimeline v-if="isReady" />

@@ -189,7 +189,7 @@ watchEffect(update);
 </script>
 
 <template>
-  <AppDraggable draggable-key="digested">
+  <AppDraggable draggable-key="heatmaps">
     <div class="container">
       <div class="form">
         <span>Select</span>

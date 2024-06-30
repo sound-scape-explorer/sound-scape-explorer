@@ -9,8 +9,8 @@ import {
 import {NButton, NIcon} from 'naive-ui';
 import {useAppDraggable} from 'src/app/draggable/app-draggable';
 import {useAppDraggableStyles} from 'src/app/draggable/app-draggable-styles';
-import {type DraggableKey, useDraggables} from 'src/composables/draggables';
 import {useScatterCamera} from 'src/components/scatter/scatter-camera';
+import {type DraggableKey, useDraggables} from 'src/composables/draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 import {onMounted, watch} from 'vue';
 

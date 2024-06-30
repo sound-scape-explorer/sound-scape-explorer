@@ -11,7 +11,7 @@ export enum KeyboardShortcut {
   trajectories = 'x',
   relativeTrajectories = 'r',
   temporal = 'v',
-  digested = 'b',
+  heatmaps = 'b',
   time = 't',
   timeline = 'T',
   timePlayPause = ' ',
