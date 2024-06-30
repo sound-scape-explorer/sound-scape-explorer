@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import {ArrowUndoOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
+import AppButtonNew from 'src/app/app-button-new.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useKeyboard} from 'src/composables/use-keyboard';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import DraggableAudioButton from 'src/draggables/audio/draggable-audio-button.vue';
 import {
   convertToNaiveSelectOptions,
   type NaiveSelectOption,
@@ -50,18 +50,19 @@ watch(labelProperties, () => {
     draggable-key="selection"
   >
     <div class="draggable-selection--buttons">
-      <DraggableAudioButton
-        :callback="() => console.log('undo')"
-        alt="undo"
+      <AppButtonNew
+        :handle-click="() => console.log('undo')"
+        tooltip="undo"
       >
         <ArrowUndoOutline />
-      </DraggableAudioButton>
-      <DraggableAudioButton
-        :callback="() => console.log('repeat')"
-        alt="repeat"
+      </AppButtonNew>
+
+      <AppButtonNew
+        :handle-click="() => console.log('repeat')"
+        tooltip="repeat"
       >
         <RepeatOutline />
-      </DraggableAudioButton>
+      </AppButtonNew>
     </div>
 
     <span class="draggable-selection--tooltip">

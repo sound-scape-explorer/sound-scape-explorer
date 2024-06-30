@@ -19,12 +19,16 @@ const classes = computed<string>(() => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="labels">
+  <AppDraggable
+    draggable-key="labels"
+    hide-separator
+  >
+    <DraggableLabelsButtons />
+
     <div
       :class="classes"
       class="container"
     >
-      <DraggableLabelsButtons />
       <DraggableLabelsItems />
     </div>
   </AppDraggable>
