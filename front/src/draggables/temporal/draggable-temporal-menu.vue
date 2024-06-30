@@ -34,7 +34,7 @@ const {
   current: currentSites,
   options: siteOptions,
   update: updateSites,
-  selectAll: selectAllSites,
+  selectAll,
 } = useTemporalSites();
 
 const {count} = useTemporalInfo();
@@ -67,7 +67,7 @@ watch(indicator, update);
     <NButton
       :disabled="!isSites"
       size="tiny"
-      @click="selectAllSites"
+      @click="selectAll"
     >
       All
     </NButton>
