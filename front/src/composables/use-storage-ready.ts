@@ -1,5 +1,5 @@
 import {useStorageFile} from 'src/composables/use-storage-file';
-import {useWorker} from 'src/composables/worker';
+import {useWorker} from 'src/composables/use-worker';
 import {ref, watch} from 'vue';
 
 const isReady = ref<boolean>(false);

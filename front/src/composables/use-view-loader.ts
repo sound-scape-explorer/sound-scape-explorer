@@ -17,7 +17,7 @@ import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
-import {useViewState} from 'src/composables/view-state';
+import {useViewState} from 'src/composables/use-view-state';
 import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 
 export function useViewLoader() {

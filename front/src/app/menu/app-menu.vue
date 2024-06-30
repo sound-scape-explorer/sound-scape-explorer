@@ -19,7 +19,7 @@ import {
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
 import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useViewState} from 'src/composables/view-state';
+import {useViewState} from 'src/composables/use-view-state';
 
 const {isReady, toggle} = useAppMenu();
 const {hasView} = useViewState();

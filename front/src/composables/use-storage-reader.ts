@@ -1,6 +1,6 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {useStorageFile} from 'src/composables/use-storage-file';
-import {useWorker, type Worker} from 'src/composables/worker';
+import {useWorker, type Worker} from 'src/composables/use-worker';
 
 export function useStorageReader() {
   const {worker} = useWorker();

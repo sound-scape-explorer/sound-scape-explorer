@@ -4,7 +4,7 @@ import {
   useStorageAggregatedIntervalDetails,
 } from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useViewState} from 'src/composables/view-state';
+import {useViewState} from 'src/composables/use-view-state';
 import {countIterations} from 'src/utils/count-iterations';
 import {reactive, watchEffect} from 'vue';
 

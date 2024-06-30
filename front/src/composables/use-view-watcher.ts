@@ -1,6 +1,6 @@
-import {useViewLoader} from 'src/composables/view-loader';
-import {useViewState} from 'src/composables/view-state';
-import {useViewUnloader} from 'src/composables/view-unloader';
+import {useViewLoader} from 'src/composables/use-view-loader';
+import {useViewState} from 'src/composables/use-view-state';
+import {useViewUnloader} from 'src/composables/use-view-unloader';
 import {watch} from 'vue';
 
 export function useViewWatcher() {

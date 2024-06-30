@@ -8,7 +8,7 @@ import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {useStorageSites} from 'src/composables/use-storage-sites';
 import {useStorageVersion} from 'src/composables/use-storage-version';
 import {useTrajectoriesStorage} from 'src/composables/use-trajectories-storage';
-import {useViewWatcher} from 'src/composables/view-watcher';
+import {useViewWatcher} from 'src/composables/use-view-watcher';
 
 useStorageVersion();
 useStorageSettings();

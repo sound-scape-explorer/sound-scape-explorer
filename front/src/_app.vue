@@ -15,7 +15,7 @@ import Scatter from 'src/components/scatter/scatter.vue';
 import Screen from 'src/components/screen/screen.vue';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useStorageReady} from 'src/composables/use-storage-ready';
-import {useWorker} from 'src/composables/worker';
+import {useWorker} from 'src/composables/use-worker';
 import Draggables from 'src/draggables/draggables.vue';
 import {onMounted} from 'vue';
 

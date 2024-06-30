@@ -8,7 +8,7 @@ import {useIntegrationOptions} from 'src/composables/use-integration-options';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useReducerOptions} from 'src/composables/use-reducer-options';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
-import {useViewState} from 'src/composables/view-state';
+import {useViewState} from 'src/composables/use-view-state';
 
 const {hasView} = useViewState();
 

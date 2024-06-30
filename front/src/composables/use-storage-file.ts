@@ -1,6 +1,6 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {useDraggables} from 'src/composables/use-draggables';
-import {useWorker} from 'src/composables/worker';
+import {useWorker} from 'src/composables/use-worker';
 import {useImportLock} from 'src/draggables/import/use-import-lock';
 import {computed, ref} from 'vue';
 

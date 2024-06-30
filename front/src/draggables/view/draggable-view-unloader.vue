@@ -1,8 +1,8 @@
 <script lang="ts" setup="">
 import {ArrowUndoCircleOutline} from '@vicons/ionicons5';
 import AppButton from 'src/app/app-button.vue';
-import {useViewState} from 'src/composables/view-state';
-import {useViewUnloader} from 'src/composables/view-unloader';
+import {useViewState} from 'src/composables/use-view-state';
+import {useViewUnloader} from 'src/composables/use-view-unloader';
 
 const {unload} = useViewUnloader();
 const {hasView} = useViewState();
