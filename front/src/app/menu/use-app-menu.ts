@@ -4,6 +4,7 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useKeyboard} from 'src/composables/use-keyboard';
 import {useStorageReady} from 'src/composables/use-storage-ready';
+import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 export function useAppMenu() {
   const {registerKey} = useKeyboard();
@@ -11,6 +12,7 @@ export function useAppMenu() {
   const {toggle} = useDraggables();
   const {preview} = useClientSettings();
   const {enable} = useScreen();
+  const {toggleZoom} = useDraggableLabels();
 
   registerKey(KeyboardShortcut.import, () => toggle('import'));
   registerKey(
@@ -39,6 +41,8 @@ export function useAppMenu() {
     () => preview.value && toggle('selection'),
   );
   registerKey(KeyboardShortcut.selectHotkey, () => preview.value && enable());
+
+  registerKey(KeyboardShortcut.labelsZoom, toggleZoom);
 
   return {
     isReady: isReady,

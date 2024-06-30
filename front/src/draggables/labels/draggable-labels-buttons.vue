@@ -2,14 +2,9 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import AppButtonNew from 'src/app/app-button-new.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
-import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
-import {useKeyboard} from 'src/composables/use-keyboard';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
-const {registerKey} = useKeyboard();
 const {columns, toggleColumns, toggleZoom} = useDraggableLabels();
-
-registerKey(KeyboardShortcut.labelsZoom, toggleZoom);
 </script>
 
 <template>
