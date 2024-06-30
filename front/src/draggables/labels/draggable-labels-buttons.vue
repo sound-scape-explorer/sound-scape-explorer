@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {SearchOutline} from '@vicons/ionicons5';
+import {ExpandOutline} from '@vicons/ionicons5';
 import AppButtonNew from 'src/app/app-button-new.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
@@ -16,10 +16,10 @@ const {count} = useLabelsInfo();
       :handle-click="toggleZoom"
       icon
       size="tiny"
-      tooltip="Zoom"
+      tooltip="Expand"
       tooltip-placement="left"
     >
-      <SearchOutline />
+      <ExpandOutline />
     </AppButtonNew>
 
     <AppButtonNew
