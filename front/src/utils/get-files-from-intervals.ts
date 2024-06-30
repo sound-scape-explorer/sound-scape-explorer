@@ -6,8 +6,7 @@ export function getFilesFromIntervals(
 ) {
   let fileIndexes: number[] = [];
 
-  for (let s = 0; s < selectedIntervalIndexes.length; s += 1) {
-    const selectedIndex = selectedIntervalIndexes[s];
+  for (const selectedIndex of selectedIntervalIndexes) {
     const details = aggregatedIntervalDetails[selectedIndex];
 
     for (const d of details) {
