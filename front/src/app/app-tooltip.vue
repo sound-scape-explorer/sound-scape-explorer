@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<Props>(), {placement: 'left'});
 
 <template>
   <NTooltip
-    placement="left"
+    :placement="props.placement"
     trigger="hover"
   >
     <!--suppress VueUnrecognizedSlot -->
