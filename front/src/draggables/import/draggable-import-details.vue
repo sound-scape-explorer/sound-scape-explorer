@@ -91,7 +91,7 @@ const timelineOrigin = computed<string>(() => {
   <h2 class="yellow">Specifications</h2>
 
   <AppGrid
-    :columns="2"
+    :columns="3"
     :items="[
       {
         tag: 'Files',
@@ -119,7 +119,7 @@ const timelineOrigin = computed<string>(() => {
   <h2 class="blue">Configurations</h2>
 
   <AppGrid
-    :columns="2"
+    :columns="3"
     :items="[
       {
         tag: 'extractors',
