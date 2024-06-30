@@ -2,8 +2,8 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
-import {useKeyboard} from 'src/composables/keyboard';
-import {useDraggableLabel} from 'src/draggables/label/draggable-label';
+import {useKeyboard} from 'src/composables/use-keyboard';
+import {useDraggableLabel} from 'src/draggables/label/use-draggable-label';
 
 const {registerKey} = useKeyboard();
 const {columns, toggleColumns, toggleZoom} = useDraggableLabel();

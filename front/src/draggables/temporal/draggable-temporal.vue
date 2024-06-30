@@ -2,13 +2,13 @@
 import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
-import {useIntervalFilter} from 'src/composables/interval-filter';
-import {useDraggableTemporal} from 'src/draggables/temporal/draggable-temporal';
+import {useIntervalFilter} from 'src/composables/use-interval-filter';
 import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
-import {useTemporal} from 'src/draggables/temporal/temporal';
-import {useTemporalCandles} from 'src/draggables/temporal/temporal-candles';
-import {useTemporalChart} from 'src/draggables/temporal/temporal-chart';
-import {useTemporalSites} from 'src/draggables/temporal/temporal-sites';
+import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
+import {useTemporal} from 'src/draggables/temporal/use-temporal';
+import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
+import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
+import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
 import {watch} from 'vue';
 
 const {currentIndicator, isLabels, isCandles, isCondensed} =

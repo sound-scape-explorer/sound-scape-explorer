@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {useAppPlot} from 'src/app/plot/app-plot';
+import {useAppPlot} from 'src/app/plot/use-app-plot';
 
 export interface AppPlotProps {
   labels: string[][];

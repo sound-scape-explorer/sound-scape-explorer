@@ -1,12 +1,12 @@
 <script lang="ts" setup="">
 import type {Scale} from 'chroma-js';
 import {NCheckbox, NCheckboxGroup, NGi, NGrid} from 'naive-ui';
-import {useColorSelection} from 'src/components/scatter/color-selection';
-import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
-import {useStorageLabels} from 'src/composables/storage-labels';
+import {useColorSelection} from 'src/components/scatter/use-color-selection';
+import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
-import {useColorByLabel} from 'src/draggables/colors/color-by-label';
-import {useLabelSelection} from 'src/draggables/label/label-selection';
+import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
+import {useLabelSelection} from 'src/draggables/label/use-label-selection';
 import {computed, ref, watch, watchEffect} from 'vue';
 
 interface Props {

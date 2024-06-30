@@ -4,19 +4,19 @@ import {NButton, NIcon, NSelect} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
 import AppHeatmap2d from 'src/app/heatmap/app-heatmap-2d.vue';
-import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
+import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
 import {Csv} from 'src/common/csv';
 import {DigesterLayout} from 'src/common/digester-layout';
 import {type HeatmapRange, heatmapRanges} from 'src/common/heatmap-range';
 import {HeatmapScale} from 'src/common/heatmap-scale';
-import {useRefProvide} from 'src/composables/ref-provide';
+import {useRefProvide} from 'src/composables/use-ref-provide';
 import {
   type Digested,
   useStorageDigested,
-} from 'src/composables/storage-digested';
-import {useStorageDigesters} from 'src/composables/storage-digesters';
-import {useStorageLabels} from 'src/composables/storage-labels';
+} from 'src/composables/use-storage-digested';
+import {useStorageDigesters} from 'src/composables/use-storage-digesters';
+import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {computed, ref, unref, watch, watchEffect} from 'vue';
 
 const {readDigested, digested} = useStorageDigested();

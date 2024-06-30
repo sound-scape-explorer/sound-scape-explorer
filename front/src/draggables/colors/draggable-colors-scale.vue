@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import AppSelect from 'src/app/select/app-select.vue';
-import {useColorSelection} from 'src/components/scatter/color-selection';
-import {useScatterLoading} from 'src/components/scatter/scatter-loading';
-import {useRefProvide} from 'src/composables/ref-provide';
+import {useColorSelection} from 'src/components/scatter/use-color-selection';
+import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useRefProvide} from 'src/composables/use-ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
 
 const {flavor} = useColorSelection();

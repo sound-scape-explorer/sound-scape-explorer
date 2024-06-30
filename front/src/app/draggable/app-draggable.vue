@@ -7,10 +7,10 @@ import {
   useWindowSize,
 } from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
-import {useAppDraggable} from 'src/app/draggable/app-draggable';
-import {useAppDraggableStyles} from 'src/app/draggable/app-draggable-styles';
-import {useScatterCamera} from 'src/components/scatter/scatter-camera';
-import {type DraggableKey, useDraggables} from 'src/composables/draggables';
+import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
+import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
+import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
+import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 import {onMounted, watch} from 'vue';
 

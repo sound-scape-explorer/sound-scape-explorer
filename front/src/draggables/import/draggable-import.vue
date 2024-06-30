@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {NButton} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useStorageFile} from 'src/composables/storage-file';
-import {useStorageReady} from 'src/composables/storage-ready';
+import {useStorageFile} from 'src/composables/use-storage-file';
+import {useStorageReady} from 'src/composables/use-storage-ready';
 import ImportDetails from 'src/draggables/import/draggable-import-details.vue';
-import {useImportLock} from 'src/draggables/import/import-lock';
+import {useImportLock} from 'src/draggables/import/use-import-lock';
 import {ref} from 'vue';
 
 const inputRef = ref<HTMLInputElement | null>(null);

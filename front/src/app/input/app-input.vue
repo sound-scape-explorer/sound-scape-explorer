@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {NInput, NInputNumber, NSpace, NTooltip} from 'naive-ui';
 import {type InjectionKey} from 'src/common/injection-key';
-import {useKeyboard} from 'src/composables/keyboard';
-import {useRefInject} from 'src/composables/ref-inject';
+import {useKeyboard} from 'src/composables/use-keyboard';
+import {useRefInject} from 'src/composables/use-ref-inject';
 import {computed, withDefaults} from 'vue';
 
 interface Props {

@@ -2,9 +2,9 @@
 import {ArrowUndoOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useScreen} from 'src/components/screen/screen';
-import {useKeyboard} from 'src/composables/keyboard';
-import {useStorageLabels} from 'src/composables/storage-labels';
+import {useScreen} from 'src/components/screen/use-screen';
+import {useKeyboard} from 'src/composables/use-keyboard';
+import {useStorageLabels} from 'src/composables/use-storage-labels';
 import DraggableAudioButton from 'src/draggables/audio/draggable-audio-button.vue';
 import {
   convertToNaiveSelectOptions,

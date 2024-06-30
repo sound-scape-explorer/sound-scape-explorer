@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import AppSelect from 'src/app/select/app-select.vue';
-import {useColorSelection} from 'src/components/scatter/color-selection';
-import {useScatterLoading} from 'src/components/scatter/scatter-loading';
-import {useRefProvide} from 'src/composables/ref-provide';
-import {useColorType} from 'src/draggables/colors/color-type';
+import {useColorSelection} from 'src/components/scatter/use-color-selection';
+import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useColorType} from 'src/draggables/colors/use-color-type';
 
 const {isLoading} = useScatterLoading();
 const {type} = useColorSelection();

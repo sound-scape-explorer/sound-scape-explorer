@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type {NotificationType} from 'naive-ui';
 import {NButton, useMessage, useNotification} from 'naive-ui';
-import {useAppNotification} from 'src/app/notification/app-notification';
+import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {ALERT_TIMER} from 'src/constants';
 import {combineStringsWithBreaks} from 'src/utils/combine-strings-with-breaks';
 import {copyToClipboard} from 'src/utils/copy-to-clipboard';

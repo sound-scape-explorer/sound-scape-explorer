@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {useAppCandles} from 'src/app/candles/app-candles';
+import {useAppCandles} from 'src/app/candles/use-app-candles';
 import {watch} from 'vue';
 
 export interface AppCandlesProps {

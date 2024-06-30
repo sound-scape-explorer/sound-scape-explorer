@@ -1,7 +1,7 @@
-import {useBandSelection} from 'src/composables/band-selection';
-import {useSelectExtractor} from 'src/composables/extractor-selection';
-import {useIntegrationSelection} from 'src/composables/integration-selection';
-import {useReducerSelection} from 'src/composables/reducer-selection';
+import {useBandSelection} from 'src/composables/use-band-selection';
+import {useSelectExtractor} from 'src/composables/use-extractor-selection';
+import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {computed} from 'vue';
 
 export function useViewState() {

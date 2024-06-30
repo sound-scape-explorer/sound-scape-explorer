@@ -1,13 +1,13 @@
 <script lang="ts" setup="">
 import {NSelect} from 'naive-ui';
-import {useBandOptions} from 'src/composables/band-options';
-import {useBandSelection} from 'src/composables/band-selection';
-import {useExtractorOptions} from 'src/composables/extractor-options';
-import {useSelectExtractor} from 'src/composables/extractor-selection';
-import {useIntegrationOptions} from 'src/composables/integration-options';
-import {useIntegrationSelection} from 'src/composables/integration-selection';
-import {useReducerOptions} from 'src/composables/reducer-options';
-import {useReducerSelection} from 'src/composables/reducer-selection';
+import {useBandOptions} from 'src/composables/use-band-options';
+import {useBandSelection} from 'src/composables/use-band-selection';
+import {useExtractorOptions} from 'src/composables/use-extractor-options';
+import {useSelectExtractor} from 'src/composables/use-extractor-selection';
+import {useIntegrationOptions} from 'src/composables/use-integration-options';
+import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useReducerOptions} from 'src/composables/use-reducer-options';
+import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useViewState} from 'src/composables/view-state';
 
 const {hasView} = useViewState();

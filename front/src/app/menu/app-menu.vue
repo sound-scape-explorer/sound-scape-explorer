@@ -16,9 +16,9 @@ import {
   ReceiptOutline,
   TimerOutline,
 } from '@vicons/ionicons5';
-import {useAppMenu} from 'src/app/menu/app-menu';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
-import {useClientSettings} from 'src/composables/client-settings';
+import {useAppMenu} from 'src/app/menu/use-app-menu';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useViewState} from 'src/composables/view-state';
 
 const {isReady, toggle} = useAppMenu();

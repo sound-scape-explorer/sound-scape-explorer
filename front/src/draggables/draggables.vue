@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
-import {useDraggables} from 'src/composables/draggables';
-import {useStorageReady} from 'src/composables/storage-ready';
+import {useDraggables} from 'src/composables/use-draggables';
+import {useStorageReady} from 'src/composables/use-storage-ready';
 import DraggableAudio from 'src/draggables/audio/draggable-audio.vue';
 import DraggableColors from 'src/draggables/colors/draggable-colors.vue';
 import DraggableDetails from 'src/draggables/details/draggable-details.vue';

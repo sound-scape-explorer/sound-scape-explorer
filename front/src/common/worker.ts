@@ -3,31 +3,31 @@ import h5wasm from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
 import {StoragePath} from 'src/common/storage-path';
 import type {StorageSettings} from 'src/common/storage-settings';
-import type {Band} from 'src/composables/band-storage';
-import type {Extractor} from 'src/composables/extractor-storage';
-import type {Integration} from 'src/composables/integration-storage';
-import type {ReducerFromStorage} from 'src/composables/reducer-storage';
-import type {AggregatedIndicator} from 'src/composables/storage-aggregated-indicators';
+import type {Band} from 'src/composables/use-band-storage';
+import type {Extractor} from 'src/composables/use-extractor-storage';
+import type {Integration} from 'src/composables/use-integration-storage';
+import type {ReducerFromStorage} from 'src/composables/use-reducer-storage';
+import type {AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
 import type {
   BlockDetails,
   IntervalDetails,
-} from 'src/composables/storage-aggregated-interval-details';
-import type {AggregatedSite} from 'src/composables/storage-aggregated-sites';
-import type {Autocluster} from 'src/composables/storage-autoclusters';
-import type {Digested} from 'src/composables/storage-digested';
-import type {Digester} from 'src/composables/storage-digesters';
-import type {File as FileConfig} from 'src/composables/storage-files';
-import type {Labels} from 'src/composables/storage-labels';
-import type {Range} from 'src/composables/storage-ranges';
-import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
-import type {RelativeTrajectory} from 'src/composables/storage-relative-trajectories';
-import type {Site} from 'src/composables/storage-sites';
+} from 'src/composables/use-storage-aggregated-interval-details';
+import type {AggregatedSite} from 'src/composables/use-storage-aggregated-sites';
+import type {Autocluster} from 'src/composables/use-storage-autoclusters';
+import type {Digested} from 'src/composables/use-storage-digested';
+import type {Digester} from 'src/composables/use-storage-digesters';
+import type {File as FileConfig} from 'src/composables/use-storage-files';
+import type {Labels} from 'src/composables/use-storage-labels';
+import type {Range} from 'src/composables/use-storage-ranges';
+import type {ReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import type {RelativeTrajectory} from 'src/composables/use-storage-relative-trajectories';
+import type {Site} from 'src/composables/use-storage-sites';
 import type {
   TracedData,
   TracedRelativeTimestamps,
   TracedTimestamps,
-} from 'src/composables/trajectories-data';
-import type {Trajectory} from 'src/composables/trajectories-storage';
+} from 'src/composables/use-trajectories-data';
+import type {Trajectory} from 'src/composables/use-trajectories-storage';
 import {trimRectangular} from 'src/utils/trim-rectangular';
 
 let h5: H5File;

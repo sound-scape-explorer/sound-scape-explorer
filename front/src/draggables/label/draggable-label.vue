@@ -1,8 +1,8 @@
 <script lang="ts" setup="">
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useDraggableLabel} from 'src/draggables/label/draggable-label';
 import DraggableLabelButtons from 'src/draggables/label/draggable-label-buttons.vue';
 import DraggableLabelHeaders from 'src/draggables/label/draggable-label-headers.vue';
+import {useDraggableLabel} from 'src/draggables/label/use-draggable-label';
 import {computed} from 'vue';
 
 const {isZoomed} = useDraggableLabel();

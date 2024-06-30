@@ -4,11 +4,11 @@ import {NButton, NButtonGroup, NIcon, NSwitch, NTreeSelect} from 'naive-ui';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {useKeyboard} from 'src/composables/keyboard';
-import {useRefProvide} from 'src/composables/ref-provide';
-import {useDraggableTemporal} from 'src/draggables/temporal/draggable-temporal';
-import {useTemporalCandles} from 'src/draggables/temporal/temporal-candles';
-import {useTemporalSites} from 'src/draggables/temporal/temporal-sites';
+import {useKeyboard} from 'src/composables/use-keyboard';
+import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
+import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
+import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
 import {ref, watch} from 'vue';
 
 const {
