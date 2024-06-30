@@ -4,11 +4,16 @@ import {computed} from 'vue';
 export function useTemporalInfo() {
   const {filtered} = useScatterFilterTemporal();
 
-  const count = computed<string>(() =>
-    filtered.value.filter((f) => f).length.toString(),
+  const filteredCount = computed<number>(
+    () => filtered.value.filter((f) => f).length,
+  );
+
+  const collectedCount = computed<number>(
+    () => filtered.value.filter((f) => !f).length,
   );
 
   return {
-    count: count,
+    filteredCount: filteredCount,
+    collectedCount: collectedCount,
   };
 }

@@ -2,6 +2,7 @@
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NButtonGroup, NSwitch, NTreeSelect} from 'naive-ui';
 import AppButtonNew from 'src/app/app-button-new.vue';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -37,7 +38,7 @@ const {
   selectAll,
 } = useTemporalSites();
 
-const {count} = useTemporalInfo();
+const {filteredCount, collectedCount} = useTemporalInfo();
 
 const {periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useKeyboard();
@@ -182,8 +183,15 @@ watch(indicator, update);
           v-if="hasIndicator"
           class="info"
         >
-          <b>{{ count }}</b>
-          points filtered
+          <AppTooltip
+            :tooltip="`${collectedCount} points collected`"
+            placement="right"
+          >
+            <div>
+              <b>{{ filteredCount }}</b>
+              points filtered
+            </div>
+          </AppTooltip>
         </div>
       </div>
     </div>
@@ -206,7 +214,7 @@ watch(indicator, update);
 .info {
   font-size: 0.9em;
 
-  & > b {
+  b {
     color: rgba(23, 159, 87, 1);
   }
 }
