@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import {CloseOutline} from '@vicons/ionicons5';
-import {useDraggable, useMousePressed, useWindowSize} from '@vueuse/core';
+import {useDraggable} from '@vueuse/core';
 import {NButton, NIcon} from 'naive-ui';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
+import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
 import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
-import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
-import {onMounted, watch} from 'vue';
 
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
@@ -20,7 +19,7 @@ const props = withDefaults(defineProps<AppDraggableProps>(), {
 });
 
 const {container, storage, drag} = useAppDraggable(props);
-const {store, selected} = useDraggables();
+const {store} = useDraggables();
 const {x, y, style} = useDraggable(container, {
   initialValue: {x: storage.value.x, y: storage.value.y},
   handle: drag,
@@ -34,46 +33,20 @@ const {x, y, style} = useDraggable(container, {
   },
 });
 
-const {pressed} = useMousePressed({target: drag});
-const {lock, unlock} = useScatterCamera();
 const {classes} = useAppDraggableStyles(props);
-const {width, height} = useWindowSize();
 const {check} = useAppDraggableBounds(container);
 
 const close = () => {
   store[props.draggableKey] = false;
 };
 
-const open = () => {
-  // noinspection PointlessBooleanExpressionJS,JSIncompatibleTypesComparison
-  if (
-    selected.value !== props.draggableKey ||
-    store[props.draggableKey] === false ||
-    window.visualViewport === null
-  ) {
-    return;
-  }
-
-  check(x, y);
-};
-
-watch(pressed, () => {
-  // noinspection PointlessBooleanExpressionJS
-  if (pressed.value === false) {
-    unlock();
-    return;
-  }
-
-  lock();
-
-  if (selected.value !== props.draggableKey) {
-    selected.value = props.draggableKey;
-  }
+useAppDraggableLifecycles({
+  props: props,
+  container: container,
+  drag: drag,
+  x: x,
+  y: y,
 });
-
-onMounted(() => check(x, y));
-watch([width, height], () => check(x, y));
-watch(store, open);
 </script>
 
 <template>
