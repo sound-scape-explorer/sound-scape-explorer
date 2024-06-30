@@ -4,44 +4,38 @@ import type {Ref} from 'vue';
 const defaultPos = 100;
 
 export function useAppDraggableBounds(container: Ref<HTMLElement | null>) {
-  const check = (x: Ref<number>, y: Ref<number>, position?: Position) => {
-    if (window.visualViewport === null || container.value === null) {
-      x.value = defaultPos;
-      y.value = defaultPos;
-      return;
+  const getPrimitives = () => {
+    if (container.value === null) {
+      throw new Error('Container is null');
     }
 
-    const w = container.value.clientWidth;
-    const h = container.value.clientHeight;
+    const width = container.value.clientWidth;
+    const height = container.value.clientHeight;
     const maxWidth = window.visualViewport.width;
     const maxHeight = window.visualViewport.height;
 
-    if (position) {
-      if (position.x >= maxWidth || position.x + w >= maxWidth) {
-        x.value = maxWidth - w;
-      }
+    return {
+      width: width,
+      height: height,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight,
+    };
+  };
 
-      if (position.y >= maxHeight || position.y + h >= maxHeight) {
-        y.value = maxHeight - h;
-      }
+  const reset = (x: Ref<number>, y: Ref<number>) => {
+    x.value = defaultPos;
+    y.value = defaultPos;
+  };
 
-      if (position.x <= 0) {
-        x.value = 0;
-      }
+  const checkEmptyPosition = (x: Ref<number>, y: Ref<number>) => {
+    const {width, height, maxWidth, maxHeight} = getPrimitives();
 
-      if (position.y <= 0) {
-        y.value = 0;
-      }
-
-      return;
+    if (x.value >= maxWidth || x.value + width >= maxWidth) {
+      x.value = maxWidth - width;
     }
 
-    if (x.value >= maxWidth || x.value + w >= maxWidth) {
-      x.value = maxWidth - w;
-    }
-
-    if (y.value >= maxHeight || y.value + h >= maxHeight) {
-      y.value = maxHeight - h;
+    if (y.value >= maxHeight || y.value + height >= maxHeight) {
+      y.value = maxHeight - height;
     }
 
     if (x.value <= 0) {
@@ -51,6 +45,44 @@ export function useAppDraggableBounds(container: Ref<HTMLElement | null>) {
     if (y.value <= 0) {
       y.value = 0;
     }
+  };
+
+  const checkPosition = (
+    x: Ref<number>,
+    y: Ref<number>,
+    position: Position,
+  ) => {
+    const {width, height, maxWidth, maxHeight} = getPrimitives();
+
+    if (position.x >= maxWidth || position.x + width >= maxWidth) {
+      x.value = maxWidth - width;
+    }
+
+    if (position.y >= maxHeight || position.y + height >= maxHeight) {
+      y.value = maxHeight - height;
+    }
+
+    if (position.x <= 0) {
+      x.value = 0;
+    }
+
+    if (position.y <= 0) {
+      y.value = 0;
+    }
+  };
+
+  const check = (x: Ref<number>, y: Ref<number>, position?: Position) => {
+    if (window.visualViewport === null || container.value === null) {
+      reset(x, y);
+      return;
+    }
+
+    if (position) {
+      checkPosition(x, y, position);
+      return;
+    }
+
+    checkEmptyPosition(x, y);
   };
 
   return {
