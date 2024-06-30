@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {DownloadOutline} from '@vicons/ionicons5';
-import {NButton, NButtonGroup, NIcon, NSwitch, NTreeSelect} from 'naive-ui';
+import {NButton, NButtonGroup, NSwitch, NTreeSelect} from 'naive-ui';
 import AppButtonNew from 'src/app/app-button-new.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
@@ -64,13 +64,14 @@ watch(indicator, update);
       />
     </div>
 
-    <NButton
+    <AppButtonNew
       :disabled="!isSites"
-      size="tiny"
-      @click="selectAll"
+      :handle-click="selectAll"
+      tooltip="Select all"
+      tooltip-placement="left"
     >
       All
-    </NButton>
+    </AppButtonNew>
 
     <div class="row">
       <NTreeSelect
@@ -130,17 +131,14 @@ watch(indicator, update);
         </NSwitch>
       </div>
 
-      <NButton
-        size="tiny"
-        @click="handleExportClick"
+      <AppButtonNew
+        :handle-click="handleExportClick"
+        icon
+        tooltip="Export raw .csv"
+        tooltip-placement="right"
       >
-        <template #icon>
-          <NIcon>
-            <DownloadOutline />
-          </NIcon>
-        </template>
-        Export raw .csv
-      </NButton>
+        <DownloadOutline />
+      </AppButtonNew>
     </div>
 
     <span>Filter</span>
@@ -211,5 +209,10 @@ watch(indicator, update);
   & > b {
     color: rgba(23, 159, 87, 1);
   }
+}
+
+$s: 0.9;
+.toggle {
+  transform: scale3d($s, $s, $s);
 }
 </style>
