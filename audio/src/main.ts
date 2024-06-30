@@ -19,6 +19,7 @@ const ffprobePath = args[args.length - 2];
 const audioPath = args[args.length - 1];
 const origin = 'http://localhost:5530';
 
+app.disable('x-powered-by');
 app.use(cors({origin: origin}));
 
 // service
