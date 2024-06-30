@@ -17,9 +17,7 @@ export function useTemporalSites() {
     let os: TreeSelectOption[] = [];
     let registeredNames: string[] = [];
 
-    for (let i = 0; i < sites.value.length; i++) {
-      const site = sites.value[i];
-
+    for (const site of sites.value) {
       if (registeredNames.indexOf(site.name) !== -1) {
         continue;
       }
@@ -49,8 +47,8 @@ export function useTemporalSites() {
 
     let names: string[] = [];
 
-    for (let i = 0; i < sites.value.length; i++) {
-      const name = sites.value[i].name;
+    for (const site of sites.value) {
+      const name = site.name;
 
       if (names.indexOf(name) !== -1) {
         continue;
