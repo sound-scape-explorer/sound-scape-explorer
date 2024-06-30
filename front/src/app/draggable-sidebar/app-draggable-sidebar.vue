@@ -1,7 +1,25 @@
-<script lang="ts" setup=""></script>
+<script lang="ts" setup="">
+import {computed, defineProps, withDefaults} from 'vue';
+
+interface Props {
+  shift?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {shift: false});
+
+const classNames = computed<string>(() => {
+  let string = 'app-draggable-sidebar__container';
+
+  if (props.shift) {
+    string += ' app-draggable-sidebar__shift';
+  }
+
+  return string;
+});
+</script>
 
 <template>
-  <div class="app-draggable-sidebar__container">
+  <div :class="classNames">
     <slot />
   </div>
 </template>
@@ -18,5 +36,9 @@
   height: 0;
 
   margin-left: -2rem;
+}
+
+.app-draggable-sidebar__shift {
+  transform: translate3d(0, -1rem, 0);
 }
 </style>
