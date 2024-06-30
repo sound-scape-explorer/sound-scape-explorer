@@ -1,5 +1,6 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
@@ -33,6 +34,7 @@ export function useViewLoader() {
   const {buildSelection, selection: labelSelection} = useLabelsSelection();
   const {renderTraces, isEnabled} = useScatterTraces();
   const {filter: filterByLabel} = useScatterFilterLabel();
+  const {filter: filterByTemporal} = useScatterFilterTemporal();
   const {filterByTime} = useScatterFilterTime();
 
   const {band} = useBandSelection();
@@ -84,6 +86,7 @@ export function useViewLoader() {
 
     filterByLabel(labelSelection);
     filterByTime();
+    filterByTemporal();
 
     renderTraces();
 

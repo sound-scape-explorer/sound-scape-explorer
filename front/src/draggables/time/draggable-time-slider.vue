@@ -153,7 +153,7 @@ interface Slider {
 }
 
 const {filterByTime} = useScatterFilterTime();
-watch([isAllSelected, duration, current], () => filterByTime());
+watch([isAllSelected, duration, current], filterByTime);
 </script>
 
 <template>

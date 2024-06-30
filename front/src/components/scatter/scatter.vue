@@ -4,6 +4,7 @@ import {useScatter} from 'src/components/scatter/use-scatter';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useScreen} from 'src/components/screen/use-screen';
@@ -26,6 +27,7 @@ const {low, high} = useScatterColorAlpha();
 const {timeShift} = useClientSettings();
 const {filtered: labelFiltered} = useScatterFilterLabel();
 const {filtered: timeFiltered} = useScatterFilterTime();
+const {filtered: temporalFiltered} = useScatterFilterTemporal();
 const {selected} = useScreen();
 const {scatter2dGl} = useClientSettings();
 
@@ -45,6 +47,7 @@ watch(
     timeShift,
     labelFiltered,
     timeFiltered,
+    temporalFiltered,
     selected,
     scatter2dGl,
   ],

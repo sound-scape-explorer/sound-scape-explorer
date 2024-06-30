@@ -4,12 +4,14 @@ import {NButton, NButtonGroup, NIcon, NSwitch, NTreeSelect} from 'naive-ui';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useKeyboard} from 'src/composables/use-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
 import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
-import {ref, watch} from 'vue';
+import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
+import {watch} from 'vue';
 
 const {
   selection,
@@ -23,6 +25,7 @@ const {
   isCondensed,
   handleExportClick,
   update,
+  hasIndicator,
 } = useDraggableTemporal();
 
 const {
@@ -34,14 +37,14 @@ const {
 
 const {periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useKeyboard();
-const above = ref<number>();
-const below = ref<number>();
+const {from, to} = useTemporalThresholds();
+const {filter, reset} = useScatterFilterTemporal();
 
 useRefProvide('indicators/list', indicator);
 useRefProvide('indicators/selection', selection);
 useRefProvide('indicators/display', display);
-useRefProvide('indicators/filterAbove', above);
-useRefProvide('indicators/filterBelow', below);
+useRefProvide('indicators/filterFrom', from);
+useRefProvide('indicators/filterTo', to);
 
 watch(indicator, update);
 </script>
@@ -141,32 +144,36 @@ watch(indicator, update);
     <div class="row">
       <div>
         <AppInput
+          :disabled="!hasIndicator"
           :step="0.1"
-          injection-key="indicators/filterBelow"
-          placeholder="Below"
+          injection-key="indicators/filterFrom"
+          placeholder="From"
           style="width: 9em"
-          tooltip="Below"
+          tooltip="From"
           type="number"
         />
 
         <AppInput
-          injection-key="indicators/filterAbove"
-          placeholder="Above"
+          :disabled="!hasIndicator"
+          injection-key="indicators/filterTo"
+          placeholder="To"
           style="width: 9em"
-          tooltip="Above"
+          tooltip="To"
           type="number"
         />
 
         <NButton
+          :disabled="!hasIndicator"
           size="tiny"
-          @click="() => console.log('apply')"
+          @click="filter"
         >
           Apply
         </NButton>
 
         <NButton
+          :disabled="!hasIndicator"
           size="tiny"
-          @click="() => console.log('reset')"
+          @click="reset"
         >
           Reset
         </NButton>

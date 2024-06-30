@@ -1,4 +1,5 @@
 import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {ref} from 'vue';
 
@@ -8,13 +9,17 @@ const filtered = ref<boolean[]>([]);
 export function useIntervalFilter() {
   const {filtered: labelFiltered} = useScatterFilterLabel();
   const {filtered: timeFiltered} = useScatterFilterTime();
+  const {filtered: temporalFiltered} = useScatterFilterTemporal();
 
   const update = () => {
     const l = timeFiltered.value.length;
     const newFiltered = new Array(l);
 
     for (let i = 0; i < l; i += 1) {
-      newFiltered[i] = labelFiltered.value[i] || timeFiltered.value[i];
+      newFiltered[i] =
+        labelFiltered.value[i] ||
+        timeFiltered.value[i] ||
+        temporalFiltered.value[i];
     }
 
     filtered.value = newFiltered;

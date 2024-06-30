@@ -10,6 +10,7 @@ const selections: Selection[] = ['Sites', 'Labels'];
 const selection = ref<Selection>(selections[0]);
 
 const indicator = ref<string>('');
+const hasIndicator = computed<boolean>(() => indicator.value !== '');
 
 type Display = 'Continuous' | 'Candles';
 const displays: Display[] = ['Continuous', 'Candles'];
@@ -71,6 +72,7 @@ export function useDraggableTemporal() {
   return {
     selection: selection,
     selections: selections,
+    hasIndicator: hasIndicator,
     indicator: indicator,
     indicators: indicators,
     display: display,
