@@ -11,8 +11,7 @@ import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
 import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
 import {watch} from 'vue';
 
-const {currentIndicator, isLabels, isCandles, isCondensed} =
-  useDraggableTemporal();
+const {indicator, isLabels, isCandles, isCondensed} = useDraggableTemporal();
 const {data: indicatorData} = useTemporal();
 const {candles, plot, render} = useTemporalChart();
 const {period} = useTemporalCandles();
@@ -51,7 +50,7 @@ watch(
         :colors="plot.colors"
         :labels="plot.labels"
         :values="plot.values"
-        :y-title="currentIndicator"
+        :y-title="indicator"
         click-enabled
         export-filename="indicators"
         hide-x-legend
@@ -67,7 +66,7 @@ watch(
         :open="candles.open"
         :timestamps="candles.timestamps"
         :title="period.name"
-        :y-title="currentIndicator"
+        :y-title="indicator"
         export-filename="indicators"
       />
     </div>
