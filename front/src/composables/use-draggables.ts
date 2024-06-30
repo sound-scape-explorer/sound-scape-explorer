@@ -67,17 +67,19 @@ export function useDraggables() {
     }
   };
 
+  const close = (key: DraggableKey) => {
+    if (!store[key]) {
+      return;
+    }
+
+    store[key] = false;
+  };
+
   const closeAllDraggables = () => {
-    const keys = Object.keys(store);
+    const keys = Object.keys(store) as DraggableKey[];
 
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i] as DraggableKey;
-
-      if (!store[key]) {
-        continue;
-      }
-
-      store[key] = false;
+    for (const key of keys) {
+      close(key);
     }
   };
 
