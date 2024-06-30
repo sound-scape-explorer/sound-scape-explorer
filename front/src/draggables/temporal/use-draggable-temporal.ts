@@ -4,9 +4,9 @@ import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggreg
 import {useTemporal} from 'src/draggables/temporal/use-temporal';
 import {computed, ref} from 'vue';
 
-type Selection = 'Sites' | 'Labels';
+type Selection = 'Scatter' | 'Sites';
 
-const selections: Selection[] = ['Sites', 'Labels'];
+const selections: Selection[] = ['Scatter', 'Sites'];
 const selection = ref<Selection>(selections[0]);
 
 const indicator = ref<string>('');
@@ -17,7 +17,7 @@ const displays: Display[] = ['Continuous', 'Candles'];
 const display = ref<Display>(displays[0]);
 
 const isSites = computed<boolean>(() => selection.value === 'Sites');
-const isLabels = computed<boolean>(() => selection.value === 'Labels');
+const isScatter = computed<boolean>(() => selection.value === 'Scatter');
 const isContinuous = computed<boolean>(() => display.value === 'Continuous');
 const isCandles = computed<boolean>(() => display.value === 'Candles');
 const isCondensed = ref<boolean>(true);
@@ -78,7 +78,7 @@ export function useDraggableTemporal() {
     display: display,
     displays: displays,
     isSites: isSites,
-    isLabels: isLabels,
+    isScatter: isScatter,
     isContinuous: isContinuous,
     isCandles: isCandles,
     isCondensed: isCondensed,

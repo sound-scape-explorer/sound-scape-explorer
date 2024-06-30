@@ -11,7 +11,7 @@ import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
 import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
 import {watch} from 'vue';
 
-const {indicator, isLabels, isCandles, isCondensed} = useDraggableTemporal();
+const {indicator, isScatter, isCandles, isCondensed} = useDraggableTemporal();
 const {data: indicatorData} = useTemporal();
 const {candles, plot, render} = useTemporalChart();
 const {period} = useTemporalCandles();
@@ -23,7 +23,7 @@ watch(
     // currentIndicator, // redundant with below entry
     indicatorData,
     currentSites,
-    isLabels,
+    isScatter,
     isCandles,
     period,
     filtered,
@@ -34,7 +34,6 @@ watch(
 // todo: add colouring to candles and continuous
 // todo: improve performance
 // todo: fix when loading scatter selection before building data
-// todo: add filtering with threshold
 </script>
 
 <template>
