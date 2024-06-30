@@ -17,7 +17,7 @@ const data = ref<Data[]>([]);
 const sites = ref<string[]>([]);
 const indicator = ref<AggregatedIndicator | null>(null);
 
-export function useIndicators() {
+export function useTemporal() {
   const {aggregatedIndicators} = useStorageAggregatedIndicators();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();

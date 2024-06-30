@@ -1,12 +1,12 @@
 import type {TreeSelectOption} from 'naive-ui';
 import {useStorageSites} from 'src/composables/storage-sites';
-import {useIndicators} from 'src/draggables/indicators/indicators';
+import {useTemporal} from 'src/draggables/temporal/temporal';
 import {computed, ref} from 'vue';
 
 const current = ref<string[]>([]);
 
-export function useIndicatorsSites() {
-  const {selectSites} = useIndicators();
+export function useTemporalSites() {
+  const {selectSites} = useTemporal();
   const {sites} = useStorageSites();
 
   const options = computed<TreeSelectOption[]>(() => {

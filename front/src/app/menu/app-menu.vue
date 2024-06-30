@@ -162,8 +162,8 @@ const {preview} = useClientSettings();
       <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
-        draggable-key="indicators"
-        text="Indicators"
+        draggable-key="temporal"
+        text="Temporal"
       >
         <BarChartOutline />
       </AppMenuButton>

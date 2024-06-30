@@ -6,9 +6,9 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useRefProvide} from 'src/composables/ref-provide';
-import {useDraggableIndicators} from 'src/draggables/indicators/draggable-indicators';
-import {useIndicatorsCandles} from 'src/draggables/indicators/indicators-candles';
-import {useIndicatorsSites} from 'src/draggables/indicators/indicators-sites';
+import {useDraggableTemporal} from 'src/draggables/temporal/draggable-temporal';
+import {useTemporalCandles} from 'src/draggables/temporal/temporal-candles';
+import {useTemporalSites} from 'src/draggables/temporal/temporal-sites';
 import {ref, watch} from 'vue';
 
 const {
@@ -23,16 +23,16 @@ const {
   isCondensed,
   handleExportClick,
   update,
-} = useDraggableIndicators();
+} = useDraggableTemporal();
 
 const {
   current: currentSites,
   options: siteOptions,
   update: updateSites,
   selectAll: selectAllSites,
-} = useIndicatorsSites();
+} = useTemporalSites();
 
-const {periods, update: updatePeriod} = useIndicatorsCandles();
+const {periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useKeyboard();
 const above = ref<number>();
 const below = ref<number>();

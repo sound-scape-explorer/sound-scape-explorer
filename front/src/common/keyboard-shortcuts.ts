@@ -10,7 +10,7 @@ export enum KeyboardShortcut {
   details = 'd',
   trajectories = 'x',
   relativeTrajectories = 'r',
-  indicators = 'v',
+  temporal = 'v',
   digested = 'b',
   time = 't',
   timeline = 'T',

@@ -1,4 +1,4 @@
-import {useIndicatorsCandles} from 'src/draggables/indicators/indicators-candles';
+import {useTemporalCandles} from 'src/draggables/temporal/temporal-candles';
 
 type Hloc = {
   high: number;
@@ -8,8 +8,8 @@ type Hloc = {
   timestamp: number;
 };
 
-export function useIndicatorsHloc() {
-  const {period} = useIndicatorsCandles();
+export function useTemporalHloc() {
+  const {period} = useTemporalCandles();
 
   const calculate = (values: number[], timestamps: number[]): Hloc[] => {
     let hloc: Hloc[] = [];

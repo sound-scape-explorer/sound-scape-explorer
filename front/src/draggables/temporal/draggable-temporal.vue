@@ -3,20 +3,20 @@ import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
 import {useIntervalFilter} from 'src/composables/interval-filter';
-import {useDraggableIndicators} from 'src/draggables/indicators/draggable-indicators';
-import DraggableIndicatorsMenu from 'src/draggables/indicators/draggable-indicators-menu.vue';
-import {useIndicators} from 'src/draggables/indicators/indicators';
-import {useIndicatorsCandles} from 'src/draggables/indicators/indicators-candles';
-import {useIndicatorsChart} from 'src/draggables/indicators/indicators-chart';
-import {useIndicatorsSites} from 'src/draggables/indicators/indicators-sites';
+import {useDraggableTemporal} from 'src/draggables/temporal/draggable-temporal';
+import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
+import {useTemporal} from 'src/draggables/temporal/temporal';
+import {useTemporalCandles} from 'src/draggables/temporal/temporal-candles';
+import {useTemporalChart} from 'src/draggables/temporal/temporal-chart';
+import {useTemporalSites} from 'src/draggables/temporal/temporal-sites';
 import {watch} from 'vue';
 
 const {currentIndicator, isLabels, isCandles, isCondensed} =
-  useDraggableIndicators();
-const {data: indicatorData} = useIndicators();
-const {candles, plot, render} = useIndicatorsChart();
-const {period} = useIndicatorsCandles();
-const {current: currentSites} = useIndicatorsSites();
+  useDraggableTemporal();
+const {data: indicatorData} = useTemporal();
+const {candles, plot, render} = useTemporalChart();
+const {period} = useTemporalCandles();
+const {current: currentSites} = useTemporalSites();
 const {filtered} = useIntervalFilter();
 
 watch(
@@ -35,16 +35,17 @@ watch(
 // todo: add colouring to candles and continuous
 // todo: improve performance
 // todo: fix when loading scatter selection before building data
+// todo: add filtering with threshold
 </script>
 
 <template>
   <AppDraggable
-    class="draggable-indicators__container"
-    draggable-key="indicators"
+    class="draggable-temporal__container"
+    draggable-key="temporal"
   >
-    <DraggableIndicatorsMenu />
+    <DraggableTemporalMenu />
 
-    <div class="draggable-indicators__plot">
+    <div class="draggable-temporal__plot">
       <AppPlot
         v-if="!isCandles && plot !== null"
         :colors="plot.colors"
@@ -76,11 +77,11 @@ watch(
 <style lang="scss" scoped>
 $width: 54em;
 
-.draggable-indicators__container {
+.draggable-temporal__container {
   width: $width;
 }
 
-.draggable-indicators__plot {
+.draggable-temporal__plot {
   display: flex;
 }
 </style>

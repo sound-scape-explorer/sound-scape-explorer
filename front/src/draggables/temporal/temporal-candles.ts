@@ -34,7 +34,7 @@ const periods: Period[] = [
 
 const period = ref<Period>(periods[0]);
 
-export function useIndicatorsCandles() {
+export function useTemporalCandles() {
   const update = (newPeriod: Period) => {
     if (newPeriod.name === period.value.name) {
       return;

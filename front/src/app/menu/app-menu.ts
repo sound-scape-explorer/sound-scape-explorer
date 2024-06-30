@@ -32,7 +32,7 @@ export function useAppMenu() {
   registerKey(KeyboardShortcut.relativeTrajectories, () =>
     toggle('relativeTrajectories'),
   );
-  registerKey(KeyboardShortcut.indicators, () => toggle('indicators'));
+  registerKey(KeyboardShortcut.temporal, () => toggle('temporal'));
   registerKey(KeyboardShortcut.digested, () => toggle('digested'));
   registerKey(
     KeyboardShortcut.selection,

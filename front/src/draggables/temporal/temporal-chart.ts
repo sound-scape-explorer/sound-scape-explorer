@@ -4,9 +4,9 @@ import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
 import {useDate} from 'src/composables/date';
 import {useIntervalFilter} from 'src/composables/interval-filter';
 import {useStorageSites} from 'src/composables/storage-sites';
-import {useDraggableIndicators} from 'src/draggables/indicators/draggable-indicators';
-import {useIndicators} from 'src/draggables/indicators/indicators';
-import {useIndicatorsHloc} from 'src/draggables/indicators/indicators-hloc';
+import {useDraggableTemporal} from 'src/draggables/temporal/draggable-temporal';
+import {useTemporal} from 'src/draggables/temporal/temporal';
+import {useTemporalHloc} from 'src/draggables/temporal/temporal-hloc';
 import {ref} from 'vue';
 
 type OmitKeys = 'title' | 'exportFilename' | 'condensed';
@@ -17,14 +17,14 @@ export type PlotData = Omit<AppPlotProps, OmitKeys>;
 const plot = ref<PlotData | null>(null);
 const candles = ref<CandlesData | null>(null);
 
-export function useIndicatorsChart() {
-  const {isCandles, isLabels} = useDraggableIndicators();
+export function useTemporalChart() {
+  const {isCandles, isLabels} = useDraggableTemporal();
   const {sites} = useStorageSites();
-  const {data} = useIndicators();
+  const {data} = useTemporal();
   const {cyclingScale} = useScatterColorScale();
   const {convertTimestampToIsoDate} = useDate();
   const {filtered} = useIntervalFilter();
-  const {calculate} = useIndicatorsHloc();
+  const {calculate} = useTemporalHloc();
 
   const prepare = () => {
     let values: number[] = [];

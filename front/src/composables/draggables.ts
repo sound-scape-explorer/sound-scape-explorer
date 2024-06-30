@@ -13,7 +13,7 @@ export interface DraggablesStore {
   details: boolean;
   trajectories: boolean;
   relativeTrajectories: boolean;
-  indicators: boolean;
+  temporal: boolean;
   digested: boolean;
   selection: boolean;
 }
@@ -33,7 +33,7 @@ const store = reactive<DraggablesStore>({
   details: false,
   trajectories: false,
   relativeTrajectories: false,
-  indicators: false,
+  temporal: false,
   digested: false,
   selection: false,
 });
