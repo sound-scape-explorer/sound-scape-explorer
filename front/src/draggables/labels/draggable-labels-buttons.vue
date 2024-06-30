@@ -32,7 +32,7 @@ const {count} = useLabelsInfo();
       {{ columns }}
     </AppButtonNew>
 
-    <AppTooltip tooltip="points filtered">
+    <AppTooltip tooltip="Points filtered">
       <div class="info">
         {{ count }}
       </div>
