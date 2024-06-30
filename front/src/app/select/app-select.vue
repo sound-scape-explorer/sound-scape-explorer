@@ -3,7 +3,7 @@ import {NSelect, NSpace, NTooltip} from 'naive-ui';
 import type {InjectionKey} from 'src/common/injection-key';
 import {useRefInject} from 'src/composables/use-ref-inject';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {computed, withDefaults} from 'vue';
+import {computed} from 'vue';
 
 interface Props {
   injectionKey: InjectionKey;

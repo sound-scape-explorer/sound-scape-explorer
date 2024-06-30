@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {computed, defineProps, withDefaults} from 'vue';
+import {computed} from 'vue';
 
 interface Props {
   shift?: boolean;

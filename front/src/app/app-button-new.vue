@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
-import {computed, defineProps} from 'vue';
+import {computed} from 'vue';
 
 interface Props {
   size?: 'tiny' | 'small';
