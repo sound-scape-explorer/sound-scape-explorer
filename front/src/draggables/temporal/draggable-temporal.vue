@@ -4,6 +4,7 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
 import {useIntervalFilter} from 'src/composables/use-interval-filter';
 import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
+import DraggableTemporalSidebar from 'src/draggables/temporal/draggable-temporal-sidebar.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporal} from 'src/draggables/temporal/use-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
@@ -11,7 +12,8 @@ import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
 import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
 import {watch} from 'vue';
 
-const {indicator, isScatter, isCandles, isCondensed} = useDraggableTemporal();
+const {indicator, isScatter, isCandles, isCondensed, isDisplay} =
+  useDraggableTemporal();
 const {data: indicatorData} = useTemporal();
 const {candles, plot, render} = useTemporalChart();
 const {period} = useTemporalCandles();
@@ -41,9 +43,13 @@ watch(
     class="draggable-temporal__container"
     draggable-key="temporal"
   >
+    <DraggableTemporalSidebar />
     <DraggableTemporalMenu />
 
-    <div class="draggable-temporal__plot">
+    <div
+      v-if="isDisplay"
+      class="draggable-temporal__plot"
+    >
       <AppPlot
         v-if="!isCandles && plot !== null"
         :colors="plot.colors"
@@ -73,10 +79,8 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-$width: 54em;
-
 .draggable-temporal__container {
-  width: $width;
+  width: 54em;
 }
 
 .draggable-temporal__plot {

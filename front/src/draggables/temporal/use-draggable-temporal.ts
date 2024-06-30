@@ -21,6 +21,7 @@ const isScatter = computed<boolean>(() => selection.value === 'Scatter');
 const isContinuous = computed<boolean>(() => display.value === 'Continuous');
 const isCandles = computed<boolean>(() => display.value === 'Candles');
 const isCondensed = ref<boolean>(true);
+const isDisplay = ref<boolean>(true); // whether plot is shown or not
 
 export function useDraggableTemporal() {
   const {aggregatedIndicators} = useStorageAggregatedIndicators();
@@ -69,6 +70,8 @@ export function useDraggableTemporal() {
     csv.download('indicators');
   };
 
+  const toggleDisplay = () => (isDisplay.value = !isDisplay.value);
+
   return {
     selection: selection,
     selections: selections,
@@ -82,6 +85,8 @@ export function useDraggableTemporal() {
     isContinuous: isContinuous,
     isCandles: isCandles,
     isCondensed: isCondensed,
+    isDisplay: isDisplay,
+    toggleDisplay: toggleDisplay,
     handleExportClick: handleExportClick,
     update: update,
   };
