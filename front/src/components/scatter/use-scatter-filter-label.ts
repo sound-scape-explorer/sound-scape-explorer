@@ -1,6 +1,6 @@
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {type LabelSelection} from 'src/draggables/label/use-label-selection';
+import {type LabelSelection} from 'src/draggables/labels/use-labels-selection';
 import {type Ref, ref} from 'vue';
 
 // by interval indexes

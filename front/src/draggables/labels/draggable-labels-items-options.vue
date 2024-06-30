@@ -6,7 +6,7 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
-import {useLabelSelection} from 'src/draggables/label/use-label-selection';
+import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 import {computed, ref, watch, watchEffect} from 'vue';
 
 interface Props {
@@ -21,7 +21,7 @@ const {userScale} = useScatterColorScale();
 const {labels} = useStorageLabels();
 const {getColorByLabelIndex} = useColorByLabel();
 const checkboxes = ref<string[] | undefined>([]); // todo: don't know why this gets overwritten to undefined at component mount
-const {updateSelection, selection} = useLabelSelection();
+const {updateSelection, selection} = useLabelsSelection();
 
 const uniquesRef = computed<string[]>(() => {
   if (labels.value === null) {

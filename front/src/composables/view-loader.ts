@@ -17,7 +17,7 @@ import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggreg
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {useViewState} from 'src/composables/view-state';
-import {useLabelSelection} from 'src/draggables/label/use-label-selection';
+import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 
 export function useViewLoader() {
   const {store} = useDraggables();
@@ -30,7 +30,7 @@ export function useViewLoader() {
   const {readAggregatedLabels} = useStorageAggregatedLabels();
   const {readReducedFeatures} = useStorageReducedFeatures();
   const {generateColorScale} = useScatterColorScale();
-  const {buildSelection, selection: labelSelection} = useLabelSelection();
+  const {buildSelection, selection: labelSelection} = useLabelsSelection();
   const {renderTraces, isEnabled} = useScatterTraces();
   const {filter: filterByLabel} = useScatterFilterLabel();
   const {filterByTime} = useScatterFilterTime();

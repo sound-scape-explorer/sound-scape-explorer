@@ -3,10 +3,10 @@ import {SearchOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useKeyboard} from 'src/composables/use-keyboard';
-import {useDraggableLabel} from 'src/draggables/label/use-draggable-label';
+import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 const {registerKey} = useKeyboard();
-const {columns, toggleColumns, toggleZoom} = useDraggableLabel();
+const {columns, toggleColumns, toggleZoom} = useDraggableLabels();
 
 registerKey(KeyboardShortcut.labelsZoom, toggleZoom);
 </script>

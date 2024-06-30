@@ -3,7 +3,7 @@ import {ref} from 'vue';
 const isZoomed = ref<boolean>(false);
 const columns = ref<number>(1);
 
-export function useDraggableLabel() {
+export function useDraggableLabels() {
   const zoom = () => (isZoomed.value = true);
   const unzoom = () => (isZoomed.value = false);
   const toggleZoom = () => (isZoomed.value = !isZoomed.value);

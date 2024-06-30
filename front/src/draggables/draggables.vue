@@ -7,7 +7,7 @@ import DraggableDetails from 'src/draggables/details/draggable-details.vue';
 import DraggableHeatmaps from 'src/draggables/heatmaps/draggable-heatmaps.vue';
 import DraggableHelp from 'src/draggables/help/draggable-help.vue';
 import DraggableImport from 'src/draggables/import/draggable-import.vue';
-import DraggableLabel from 'src/draggables/label/draggable-label.vue';
+import DraggableLabel from 'src/draggables/labels/draggable-labels.vue';
 import DraggableRelativeTrajectories from 'src/draggables/relative-trajectories/draggable-relative-trajectories.vue';
 import DraggableSelection from 'src/draggables/selection/selection.vue';
 import DraggableSettings from 'src/draggables/settings/draggable-settings.vue';

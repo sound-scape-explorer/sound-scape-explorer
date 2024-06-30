@@ -4,14 +4,14 @@ import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {type ColorType} from 'src/draggables/colors/use-color-type';
-import DraggableLabelOptions from 'src/draggables/label/draggable-label-options.vue';
-import {useDraggableLabel} from 'src/draggables/label/use-draggable-label';
-import {useLabelSelection} from 'src/draggables/label/use-label-selection';
+import DraggableLabelsItemsOptions from 'src/draggables/labels/draggable-labels-items-options.vue';
+import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
+import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 
 const {labels, labelProperties} = useStorageLabels();
-const {updateSelection, selection} = useLabelSelection();
+const {updateSelection, selection} = useLabelsSelection();
 const {type} = useColorSelection();
-const {columns} = useDraggableLabel();
+const {columns} = useDraggableLabels();
 
 const handlePropertyClick = (property: string) => {
   if (labels.value === null) {
@@ -92,7 +92,7 @@ const handleBucketClick = (property: string) => {
         </NTooltip>
       </div>
 
-      <DraggableLabelOptions
+      <DraggableLabelsItemsOptions
         :property="property"
         class="checkboxes"
       />

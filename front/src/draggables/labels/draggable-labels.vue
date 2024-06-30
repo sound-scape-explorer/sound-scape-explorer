@@ -1,11 +1,11 @@
 <script lang="ts" setup="">
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import DraggableLabelButtons from 'src/draggables/label/draggable-label-buttons.vue';
-import DraggableLabelHeaders from 'src/draggables/label/draggable-label-headers.vue';
-import {useDraggableLabel} from 'src/draggables/label/use-draggable-label';
+import DraggableLabelsButtons from 'src/draggables/labels/draggable-labels-buttons.vue';
+import DraggableLabelsItems from 'src/draggables/labels/draggable-labels-items.vue';
+import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 import {computed} from 'vue';
 
-const {isZoomed} = useDraggableLabel();
+const {isZoomed} = useDraggableLabels();
 
 const classes = computed<string>(() => {
   let string = 'container';
@@ -24,8 +24,8 @@ const classes = computed<string>(() => {
       :class="classes"
       class="container"
     >
-      <DraggableLabelButtons />
-      <DraggableLabelHeaders />
+      <DraggableLabelsButtons />
+      <DraggableLabelsItems />
     </div>
   </AppDraggable>
 </template>

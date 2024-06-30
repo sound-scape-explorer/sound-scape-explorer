@@ -9,7 +9,7 @@ export interface LabelSelection {
 const selection = ref<LabelSelection>({});
 let hasBuilt = false;
 
-export function useLabelSelection() {
+export function useLabelsSelection() {
   const {labelProperties} = useStorageLabels();
   const {filter: filterByLabel} = useScatterFilterLabel();
 
