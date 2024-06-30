@@ -40,7 +40,7 @@ watch([indicator], () => {
 });
 
 // todo: add colouring to candles and continuous
-// todo: improve performance
+// todo: decide how to filter when display is sites
 </script>
 
 <template>
