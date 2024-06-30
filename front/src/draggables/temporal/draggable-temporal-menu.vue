@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NButtonGroup, NIcon, NSwitch, NTreeSelect} from 'naive-ui';
+import AppButtonNew from 'src/app/app-button-new.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -9,6 +10,7 @@ import {useKeyboard} from 'src/composables/use-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
+import {useTemporalInfo} from 'src/draggables/temporal/use-temporal-info';
 import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 import {watch} from 'vue';
@@ -34,6 +36,8 @@ const {
   update: updateSites,
   selectAll: selectAllSites,
 } = useTemporalSites();
+
+const {count} = useTemporalInfo();
 
 const {periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useKeyboard();
@@ -162,21 +166,27 @@ watch(indicator, update);
           type="number"
         />
 
-        <NButton
+        <AppButtonNew
           :disabled="!hasIndicator"
-          size="tiny"
-          @click="filter"
+          :handle-click="filter"
         >
           Apply
-        </NButton>
+        </AppButtonNew>
 
-        <NButton
+        <AppButtonNew
           :disabled="!hasIndicator"
-          size="tiny"
-          @click="reset"
+          :handle-click="reset"
         >
           Reset
-        </NButton>
+        </AppButtonNew>
+
+        <div
+          v-if="hasIndicator"
+          class="info"
+        >
+          <b>{{ count }}</b>
+          points filtered
+        </div>
       </div>
     </div>
   </AppDraggableMenu>
@@ -192,6 +202,14 @@ watch(indicator, update);
     display: flex;
     align-items: center;
     gap: 0.5em;
+  }
+}
+
+.info {
+  font-size: 0.9em;
+
+  & > b {
+    color: rgba(23, 159, 87, 1);
   }
 }
 </style>
