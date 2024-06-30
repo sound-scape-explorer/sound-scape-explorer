@@ -1,8 +1,8 @@
 <script lang="ts" setup="">
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NButtonGroup, NIcon, NSwitch, NTreeSelect} from 'naive-ui';
-import AppInput from 'src/app/app-input/app-input.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useKeyboard} from 'src/composables/keyboard';
 import {useRefProvide} from 'src/composables/ref-provide';

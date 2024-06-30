@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {NCheckbox} from 'naive-ui';
-import AppInput from 'src/app/app-input/app-input.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
+import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useClientSettings} from 'src/composables/client-settings';
 import {useRefProvide} from 'src/composables/ref-provide';

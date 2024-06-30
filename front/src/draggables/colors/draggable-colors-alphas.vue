@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import AppInput from 'src/app/app-input/app-input.vue';
+import AppInput from 'src/app/input/app-input.vue';
 import {useScatterColorAlpha} from 'src/components/scatter/scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {useRefProvide} from 'src/composables/ref-provide';

@@ -14,7 +14,7 @@ import {
   NSwitch,
   NTooltip,
 } from 'naive-ui';
-import AppInput from 'src/app/app-input/app-input.vue';
+import AppInput from 'src/app/input/app-input.vue';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/scatter-loading';
