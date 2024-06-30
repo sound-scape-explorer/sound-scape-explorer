@@ -54,5 +54,3 @@ const hasTooltip = computed(() => typeof props.tooltip === 'string');
     <slot v-if="!props.icon" />
   </NButton>
 </template>
-
-<style lang="scss" scoped></style>
