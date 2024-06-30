@@ -2,14 +2,15 @@ import {useBandOptions} from 'src/composables/use-band-options';
 import {useExtractorOptions} from 'src/composables/use-extractor-options';
 import {useIntegrationOptions} from 'src/composables/use-integration-options';
 import {useReducerOptions} from 'src/composables/use-reducer-options';
-import {type Reducer, useReducerStorage} from 'src/composables/use-reducer-storage';
+import {
+  type Reducer,
+  useReducerStorage,
+} from 'src/composables/use-reducer-storage';
+import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
 import {ref, watch} from 'vue';
-
-import {parseSelectionOption} from '../utils/parse-selection-option';
 
 const reducer = ref<Reducer | null>(null);
 const selected = ref<Reducer['name'] | null>(null);
-let hasAutoSelected = false;
 
 export function useReducerSelection() {
   const {reducers} = useReducerStorage();
@@ -17,6 +18,11 @@ export function useReducerSelection() {
   const {create: createBandOptions} = useBandOptions();
   const {create: createIntegrationOptions} = useIntegrationOptions();
   const {create: createExtractorOptions} = useExtractorOptions();
+  const {
+    reset: resetPrimitive,
+    handleChange: handlePrimitive,
+    autoselect: autoPrimitive,
+  } = useViewSelectionPrimitive();
 
   const select = (index: number) => {
     if (reducers.value === null || reducer.value !== null) {
@@ -29,37 +35,11 @@ export function useReducerSelection() {
     createExtractorOptions(reducer.value.nnExtractors);
   };
 
-  const reset = () => {
-    reducer.value = null;
-    selected.value = null;
-    hasAutoSelected = false;
-  };
-
-  const handleChange = () => {
-    if (selected.value === null) {
-      return;
-    }
-
-    const index = parseSelectionOption(selected.value);
-
-    if (index === null) {
-      return;
-    }
-
-    select(index);
-  };
+  const reset = () => resetPrimitive(reducer, selected);
+  const handleChange = () => handlePrimitive(selected.value, select);
+  const autoselect = () => autoPrimitive(selected, options);
 
   watch(selected, handleChange);
-
-  const autoselect = () => {
-    if (hasAutoSelected || options.value.length !== 1) {
-      return;
-    }
-
-    hasAutoSelected = true;
-    selected.value = options.value[0].value;
-  };
-
   watch(options, autoselect);
 
   return {
