@@ -27,6 +27,7 @@ const {downloadAudio} = useAudioDownload();
     <AppButtonNew
       :handle-click="togglePlayPause"
       :tooltip="isPlaying ? 'Pause' : 'Play'"
+      icon
       tooltip-placement="left"
     >
       <PauseOutline v-if="isPlaying" />
@@ -35,6 +36,7 @@ const {downloadAudio} = useAudioDownload();
 
     <AppButtonNew
       :handle-click="stop"
+      icon
       tooltip="Stop"
       tooltip-placement="left"
     >
@@ -43,6 +45,7 @@ const {downloadAudio} = useAudioDownload();
 
     <AppButtonNew
       :handle-click="increaseVolume"
+      icon
       tooltip="Volume Up"
       tooltip-placement="left"
     >
@@ -51,6 +54,7 @@ const {downloadAudio} = useAudioDownload();
 
     <AppButtonNew
       :handle-click="decreaseVolume"
+      icon
       tooltip="Volume Down"
       tooltip-placement="left"
     >
@@ -59,6 +63,7 @@ const {downloadAudio} = useAudioDownload();
 
     <AppButtonNew
       :handle-click="increase"
+      icon
       tooltip="FFT Size Up"
       tooltip-placement="left"
     >
@@ -67,6 +72,7 @@ const {downloadAudio} = useAudioDownload();
 
     <AppButtonNew
       :handle-click="decrease"
+      icon
       tooltip="FFT Size Down"
       tooltip-placement="left"
     >
@@ -75,6 +81,7 @@ const {downloadAudio} = useAudioDownload();
 
     <AppButtonNew
       :handle-click="downloadAudio"
+      icon
       tooltip="Download"
       tooltip-placement="left"
     >

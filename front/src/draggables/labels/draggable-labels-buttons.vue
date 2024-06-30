@@ -11,6 +11,7 @@ const {columns, toggleColumns, toggleZoom} = useDraggableLabels();
   <AppDraggableSidebar>
     <AppButtonNew
       :handle-click="toggleZoom"
+      icon
       size="tiny"
       tooltip="Zoom"
       tooltip-placement="left"
@@ -20,6 +21,7 @@ const {columns, toggleColumns, toggleZoom} = useDraggableLabels();
 
     <AppButtonNew
       :handle-click="toggleColumns"
+      icon
       size="tiny"
       tooltip="Columns"
       tooltip-placement="left"
