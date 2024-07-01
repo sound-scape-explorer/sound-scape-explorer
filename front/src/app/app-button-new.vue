@@ -9,15 +9,20 @@ interface Props {
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   disabled?: boolean;
   icon?: boolean;
+  error?: boolean;
+  background?: string | boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'tiny',
   disable: false,
   icon: false,
+  error: false,
+  background: false,
 });
 
 const hasTooltip = computed(() => typeof props.tooltip === 'string');
+const hasBackground = computed(() => typeof props.background === 'string');
 </script>
 
 <template>
@@ -31,6 +36,7 @@ const hasTooltip = computed(() => typeof props.tooltip === 'string');
       <NButton
         :disabled="props.disabled"
         :size="props.size"
+        :style="hasBackground && `background: ${props.background};`"
         @click="props.handleClick"
       >
         <NIcon v-if="props.icon">
