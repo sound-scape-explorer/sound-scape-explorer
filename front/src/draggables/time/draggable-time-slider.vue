@@ -2,7 +2,7 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import AppButton from 'src/app/app-button.vue';
+import AppButtonNew from 'src/app/app-button-new.vue';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
@@ -185,8 +185,8 @@ watch([isAllSelected, duration, current], filterByTime);
         class="interest"
       >
         <span
-          v-for="value of interest.values"
-          :style="{background: value ? 'red' : 'gainsboro'}"
+          v-for="interestValue of interest.values"
+          :style="{background: interestValue ? 'red' : 'gainsboro'}"
           class="interest__pixel"
         />
       </div>
@@ -196,12 +196,14 @@ watch([isAllSelected, duration, current], filterByTime);
       v-if="!isLoading"
       class="layer zoom"
     >
-      <AppButton
+      <AppButtonNew
         v-for="slider in sliders"
         :handle-click="() => toggleZoom(slider)"
+        grow
+        icon
       >
         <SearchOutline />
-      </AppButton>
+      </AppButtonNew>
     </div>
   </div>
 </template>
