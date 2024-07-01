@@ -1,0 +1,148 @@
+<script lang="ts" setup="">
+import {DownloadOutline, RepeatOutline, ResizeOutline} from '@vicons/ionicons5';
+import {NButtonGroup, NIcon, NSelect} from 'naive-ui';
+import AppButtonNew from 'src/app/app-button-new.vue';
+import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
+import AppSelect from 'src/app/select/app-select.vue';
+import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useStorageDigested} from 'src/composables/use-storage-digested';
+import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useDraggableHeatmapDigester} from 'src/draggables/heatmaps/use-draggable-heatmap-digester';
+import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
+import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
+import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
+import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
+import {computed, watch} from 'vue';
+
+const {digested} = useStorageDigested();
+const {labelProperties} = useStorageLabels();
+const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
+const {resize1by1, resize4by3, resize16by10, resize16by9} = useAppHeatmapSize();
+const {flavors: colorFlavors} = useDraggableHeatmapsColor();
+const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
+const {swap: swapLabels} = useDraggableHeatmapsLabels();
+const {
+  digester,
+  options: digesterOptions,
+  handleChange: handleDigesterChange,
+} = useDraggableHeatmapDigester();
+
+const isSingle = computed(() => !digested.value?.isPairing);
+
+useRefProvide('digested/digester', digester);
+
+watch(digester, handleDigesterChange);
+</script>
+
+<template>
+  <AppDraggableMenu>
+    <span class="text">Select</span>
+
+    <AppSelect
+      :options="digesterOptions"
+      injection-key="digested/digester"
+      placeholder="Digester..."
+    />
+
+    <span class="text">Over</span>
+
+    <div class="labels">
+      <AppSelect
+        :options="labelProperties ?? []"
+        injection-key="digested/labelA"
+        placeholder="Label A..."
+      />
+
+      <AppButtonNew
+        :disabled="isSingle"
+        :handle-click="swapLabels"
+        icon
+      >
+        <RepeatOutline />
+      </AppButtonNew>
+
+      <AppSelect
+        :disabled="isSingle"
+        :options="labelProperties ?? []"
+        injection-key="digested/labelB"
+        placeholder="Label B..."
+      />
+    </div>
+
+    <span class="text">Colors</span>
+
+    <div class="colors">
+      <AppSelect
+        :options="colorFlavors"
+        injection-key="digested/colorFlavor"
+        placeholder="Color flavor..."
+      />
+
+      <span class="text">Range</span>
+
+      <div>
+        <NSelect
+          v-model:value="rangeIndex"
+          :options="rangeOptions"
+          placeholder="Range..."
+          size="tiny"
+        />
+      </div>
+    </div>
+
+    <span class="text">Window</span>
+
+    <div class="window">
+      <div>
+        <NButtonGroup>
+          <AppButtonNew :handle-click="resize1by1">
+            <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
+          </AppButtonNew>
+          <AppButtonNew :handle-click="resize4by3">
+            <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
+          </AppButtonNew>
+          <AppButtonNew :handle-click="resize16by10">
+            <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
+          </AppButtonNew>
+          <AppButtonNew :handle-click="resize16by9">
+            <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+          </AppButtonNew>
+        </NButtonGroup>
+      </div>
+
+      <AppButtonNew
+        :handle-click="handleExportClick"
+        icon
+        tooltip="Export .csv"
+        tooltip-placement="bottom"
+      >
+        <DownloadOutline />
+      </AppButtonNew>
+    </div>
+  </AppDraggableMenu>
+</template>
+
+<style lang="scss" scoped>
+.labels {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+  gap: 0.5rem;
+}
+
+.colors {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+  gap: 0.5rem;
+}
+
+.window {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 0.9em;
+}
+</style>
