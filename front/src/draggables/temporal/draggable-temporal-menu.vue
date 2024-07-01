@@ -153,6 +153,7 @@ watch(indicator, update);
           placeholder="From"
           style="width: 9em"
           tooltip="From"
+          tooltip-placement="bottom"
           type="number"
         />
 
@@ -162,6 +163,7 @@ watch(indicator, update);
           placeholder="To"
           style="width: 9em"
           tooltip="To"
+          tooltip-placement="bottom"
           type="number"
         />
 
@@ -185,7 +187,7 @@ watch(indicator, update);
         >
           <AppTooltip
             :tooltip="`${collectedCount} points collected`"
-            placement="right"
+            placement="bottom"
           >
             <div>
               <b>{{ filteredCount }}</b>
