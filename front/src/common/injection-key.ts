@@ -1,4 +1,8 @@
 export type InjectionKey =
+  | 'view/reducer'
+  | 'view/band'
+  | 'view/integration'
+  | 'view/extractor'
   | 'settings/audioHost'
   | 'settings/fontSize'
   | 'settings/timeShift'
