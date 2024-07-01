@@ -10,7 +10,7 @@ interface Props {
   disabled?: boolean;
   icon?: boolean;
   error?: boolean;
-  background?: string | boolean;
+  grow?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -18,11 +18,23 @@ const props = withDefaults(defineProps<Props>(), {
   disable: false,
   icon: false,
   error: false,
-  background: false,
+  grow: false,
 });
 
 const hasTooltip = computed(() => typeof props.tooltip === 'string');
-const hasBackground = computed(() => typeof props.background === 'string');
+const classNames = computed<string>(() => {
+  let string = '';
+
+  if (props.grow) {
+    string += ' grow';
+  }
+
+  if (props.error) {
+    string += ' error';
+  }
+
+  return string;
+});
 </script>
 
 <template>
@@ -34,9 +46,9 @@ const hasBackground = computed(() => typeof props.background === 'string');
     <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
       <NButton
+        :class="classNames"
         :disabled="props.disabled"
         :size="props.size"
-        :style="hasBackground && `background: ${props.background};`"
         @click="props.handleClick"
       >
         <NIcon v-if="props.icon">
@@ -50,6 +62,7 @@ const hasBackground = computed(() => typeof props.background === 'string');
 
   <NButton
     v-if="!hasTooltip"
+    :class="classNames"
     :disabled="props.disabled"
     :size="props.size"
     @click="props.handleClick"
@@ -60,3 +73,13 @@ const hasBackground = computed(() => typeof props.background === 'string');
     <slot v-if="!props.icon" />
   </NButton>
 </template>
+
+<style lang="scss" scoped>
+.grow {
+  flex: 1;
+}
+
+.error {
+  background: rgba(255, 0, 0, 0.2);
+}
+</style>
