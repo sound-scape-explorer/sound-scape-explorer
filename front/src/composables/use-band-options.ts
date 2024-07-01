@@ -1,17 +1,13 @@
-import type {SelectMixedOption} from 'naive-ui/es/select/src/interface';
 import type {Band} from 'src/composables/use-band-storage';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {ref} from 'vue';
 
-const options = ref<SelectMixedOption[]>([]);
+const options = ref<string[]>([]);
 
 export function useBandOptions() {
   const create = (bands: Band[]) => {
-    const o = bands.map(
+    options.value = bands.map(
       (b) => `${b.index} - ${b.name} (${b.low} Hz - ${b.high} Hz)`,
     );
-
-    options.value = convertToNaiveSelectOptions(o);
   };
 
   return {

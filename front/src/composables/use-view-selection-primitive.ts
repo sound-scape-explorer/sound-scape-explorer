@@ -1,4 +1,3 @@
-import type {SelectMixedOption} from 'naive-ui/es/select/src/interface';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import type {Ref} from 'vue';
 
@@ -8,7 +7,7 @@ interface ViewItem {
 
 type Model = Ref<ViewItem | null>;
 type Selected = Ref<string | null>;
-type Options = Ref<SelectMixedOption[]>;
+type Options = Ref<string[]>;
 
 export function useViewSelectionPrimitive() {
   let hasAutoSelected = false;
@@ -43,7 +42,7 @@ export function useViewSelectionPrimitive() {
     }
 
     hasAutoSelected = true;
-    selected.value = options.value[0].value as string;
+    selected.value = options.value[0];
   };
 
   return {

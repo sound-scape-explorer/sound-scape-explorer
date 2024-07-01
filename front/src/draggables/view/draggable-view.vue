@@ -1,9 +1,10 @@
 <script lang="ts" setup="">
 import {ArrowUndoCircleOutline} from '@vicons/ionicons5';
-import {NIcon, NSelect} from 'naive-ui';
+import {NIcon} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import AppSelect from 'src/app/select/app-select.vue';
 import {useBandOptions} from 'src/composables/use-band-options';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useExtractorOptions} from 'src/composables/use-extractor-options';
@@ -30,43 +31,46 @@ const {selected: integrationSelected} = useIntegrationSelection();
 const {selected: extractorSelected} = useSelectExtractor();
 
 useRefProvide('view/reducer', reducerSelected);
+useRefProvide('view/band', bandSelected);
+useRefProvide('view/integration', integrationSelected);
+useRefProvide('view/extractor', extractorSelected);
 </script>
 
 <template>
   <AppDraggable draggable-key="view">
     <AppDraggableMenu size="medium">
       <span>Reducer</span>
-      <NSelect
-        v-model:value="reducerSelected"
+      <AppSelect
         :disabled="hasView"
         :options="reducerOptions"
+        injection-key="view/reducer"
         placeholder="Reducer..."
         size="small"
       />
 
       <span>Band</span>
-      <NSelect
-        v-model:value="bandSelected"
+      <AppSelect
         :disabled="reducer === null || hasView"
         :options="bandOptions"
+        injection-key="view/band"
         placeholder="Band..."
         size="small"
       />
 
       <span>Integration</span>
-      <NSelect
-        v-model:value="integrationSelected"
+      <AppSelect
         :disabled="reducer === null || hasView"
         :options="integrationOptions"
+        injection-key="view/integration"
         placeholder="Integration..."
         size="small"
       />
 
       <span>Extractor</span>
-      <NSelect
-        v-model:value="extractorSelected"
+      <AppSelect
         :disabled="reducer === null || hasView"
         :options="extractorOptions"
+        injection-key="view/extractor"
         placeholder="Extractor..."
         size="small"
       />
