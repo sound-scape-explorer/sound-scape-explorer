@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ArrowUndoOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useKeyboard} from 'src/composables/use-keyboard';
@@ -50,19 +50,19 @@ watch(labelProperties, () => {
     draggable-key="selection"
   >
     <div class="draggable-selection--buttons">
-      <AppButtonNew
+      <AppButton
         :handle-click="() => console.log('undo')"
         tooltip="undo"
       >
         <ArrowUndoOutline />
-      </AppButtonNew>
+      </AppButton>
 
-      <AppButtonNew
+      <AppButton
         :handle-click="() => console.log('repeat')"
         tooltip="repeat"
       >
         <RepeatOutline />
-      </AppButtonNew>
+      </AppButton>
     </div>
 
     <span class="draggable-selection--tooltip">

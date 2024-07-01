@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NButtonGroup, NSwitch, NTreeSelect} from 'naive-ui';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
@@ -65,14 +65,14 @@ watch(indicator, update);
       />
     </div>
 
-    <AppButtonNew
+    <AppButton
       :disabled="!isSites"
       :handle-click="selectAll"
       tooltip="Select all"
       tooltip-placement="left"
     >
       All
-    </AppButtonNew>
+    </AppButton>
 
     <div class="row">
       <NTreeSelect
@@ -132,14 +132,14 @@ watch(indicator, update);
         </NSwitch>
       </div>
 
-      <AppButtonNew
+      <AppButton
         :handle-click="handleExportClick"
         icon
         tooltip="Export raw .csv"
         tooltip-placement="right"
       >
         <DownloadOutline />
-      </AppButtonNew>
+      </AppButton>
     </div>
 
     <span>Filter</span>
@@ -167,19 +167,19 @@ watch(indicator, update);
           type="number"
         />
 
-        <AppButtonNew
+        <AppButton
           :disabled="!hasIndicator"
           :handle-click="filter"
         >
           Apply
-        </AppButtonNew>
+        </AppButton>
 
-        <AppButtonNew
+        <AppButton
           :disabled="!hasIndicator"
           :handle-click="reset"
         >
           Reset
-        </AppButtonNew>
+        </AppButton>
 
         <div
           v-if="hasIndicator"

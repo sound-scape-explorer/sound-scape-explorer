@@ -2,7 +2,7 @@
 import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
@@ -196,14 +196,14 @@ watch([isAllSelected, duration, current], filterByTime);
       v-if="!isLoading"
       class="layer zoom"
     >
-      <AppButtonNew
+      <AppButton
         v-for="slider in sliders"
         :handle-click="() => toggleZoom(slider)"
         grow
         icon
       >
         <SearchOutline />
-      </AppButtonNew>
+      </AppButton>
     </div>
   </div>
 </template>

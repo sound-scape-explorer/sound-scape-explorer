@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {EyeOffOutline, EyeOutline} from '@vicons/ionicons5';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 
@@ -9,7 +9,7 @@ const {isDisplay, toggleDisplay} = useDraggableTemporal();
 
 <template>
   <AppDraggableSidebar shift>
-    <AppButtonNew
+    <AppButton
       :handle-click="toggleDisplay"
       :tooltip="isDisplay ? 'Chart on' : 'Chart off'"
       icon
@@ -17,6 +17,6 @@ const {isDisplay, toggleDisplay} = useDraggableTemporal();
     >
       <EyeOffOutline v-if="!isDisplay" />
       <EyeOutline v-if="isDisplay" />
-    </AppButtonNew>
+    </AppButton>
   </AppDraggableSidebar>
 </template>

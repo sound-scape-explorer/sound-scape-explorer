@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {ExpandOutline} from '@vicons/ionicons5';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
@@ -12,7 +12,7 @@ const {count} = useLabelsInfo();
 
 <template>
   <AppDraggableSidebar>
-    <AppButtonNew
+    <AppButton
       :handle-click="toggleZoom"
       icon
       size="tiny"
@@ -20,9 +20,9 @@ const {count} = useLabelsInfo();
       tooltip-placement="left"
     >
       <ExpandOutline />
-    </AppButtonNew>
+    </AppButton>
 
-    <AppButtonNew
+    <AppButton
       :handle-click="toggleColumns"
       icon
       size="tiny"
@@ -30,7 +30,7 @@ const {count} = useLabelsInfo();
       tooltip-placement="left"
     >
       {{ columns }}
-    </AppButtonNew>
+    </AppButton>
 
     <AppTooltip tooltip="Points filtered">
       <div class="info">

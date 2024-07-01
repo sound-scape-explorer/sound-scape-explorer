@@ -1,58 +1,85 @@
 <script lang="ts" setup="">
-import {NButton, NIcon} from 'naive-ui';
-import {useSlots} from 'vue';
+import {NButton, NIcon, NTooltip} from 'naive-ui';
+import {computed} from 'vue';
 
 interface Props {
+  size?: 'tiny' | 'small';
   handleClick: () => void;
-  text?: string;
+  tooltip?: string;
+  tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   disabled?: boolean;
-  loading?: boolean;
+  icon?: boolean;
+  error?: boolean;
+  grow?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  text: '',
-  disabled: false,
-  loading: false,
+  size: 'tiny',
+  disable: false,
+  icon: false,
+  error: false,
+  grow: false,
 });
 
-const slots = useSlots();
-const hasChildren = typeof slots.default !== 'undefined';
-const hasText = typeof props.text !== 'undefined';
+const hasTooltip = computed(() => typeof props.tooltip === 'string');
+const classNames = computed<string>(() => {
+  let string = '';
+
+  if (props.grow) {
+    string += ' grow';
+  }
+
+  if (props.error) {
+    string += ' error';
+  }
+
+  return string;
+});
 </script>
 
 <template>
-  <div class="container">
-    <NButton
-      :disabled="props.disabled"
-      :loading="props.loading"
-      class="zoom"
-      size="small"
-      @click="props.handleClick"
-    >
-      <template
-        v-if="hasChildren"
-        #icon
+  <NTooltip
+    v-if="hasTooltip"
+    :placement="props.tooltipPlacement"
+    trigger="hover"
+  >
+    <!--suppress VueUnrecognizedSlot -->
+    <template #trigger>
+      <NButton
+        :class="classNames"
+        :disabled="props.disabled"
+        :size="props.size"
+        @click="props.handleClick"
       >
-        <NIcon>
+        <NIcon v-if="props.icon">
           <slot />
         </NIcon>
-      </template>
-      <template v-if="hasText">
-        {{ props.text }}
-      </template>
-    </NButton>
-  </div>
+        <slot v-if="!props.icon" />
+      </NButton>
+    </template>
+    <span>{{ props.tooltip }}</span>
+  </NTooltip>
+
+  <NButton
+    v-if="!hasTooltip"
+    :class="classNames"
+    :disabled="props.disabled"
+    :size="props.size"
+    @click="props.handleClick"
+  >
+    <NIcon v-if="props.icon">
+      <slot />
+    </NIcon>
+    <slot v-if="!props.icon" />
+  </NButton>
 </template>
 
 <style lang="scss" scoped>
-.container {
-  display: flex;
-  justify-content: center;
-
-  width: 100%;
+.grow {
+  flex: 1;
 }
 
-.zoom {
-  width: 100%;
+.error {
+  background: rgba(255, 0, 0, 0.2);
 }
 </style>

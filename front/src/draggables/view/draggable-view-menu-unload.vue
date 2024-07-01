@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {ArrowUndoCircleOutline} from '@vicons/ionicons5';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import {useViewState} from 'src/composables/use-view-state';
 import {useViewUnloader} from 'src/composables/use-view-unloader';
 
@@ -9,7 +9,7 @@ const {hasView} = useViewState();
 </script>
 
 <template>
-  <AppButtonNew
+  <AppButton
     :disabled="!hasView"
     :error="hasView"
     :handle-click="unload"
@@ -19,5 +19,5 @@ const {hasView} = useViewState();
     tooltip-placement="bottom"
   >
     <ArrowUndoCircleOutline />
-  </AppButtonNew>
+  </AppButton>
 </template>

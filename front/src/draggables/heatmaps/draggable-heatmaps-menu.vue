@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import {DownloadOutline, RepeatOutline, ResizeOutline} from '@vicons/ionicons5';
 import {NButtonGroup, NIcon, NSelect} from 'naive-ui';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -54,13 +54,13 @@ watch(digester, handleDigesterChange);
         placeholder="Label A..."
       />
 
-      <AppButtonNew
+      <AppButton
         :disabled="isSingle"
         :handle-click="swapLabels"
         icon
       >
         <RepeatOutline />
-      </AppButtonNew>
+      </AppButton>
 
       <AppSelect
         :disabled="isSingle"
@@ -96,29 +96,29 @@ watch(digester, handleDigesterChange);
     <div class="window">
       <div>
         <NButtonGroup>
-          <AppButtonNew :handle-click="resize1by1">
+          <AppButton :handle-click="resize1by1">
             <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
-          </AppButtonNew>
-          <AppButtonNew :handle-click="resize4by3">
+          </AppButton>
+          <AppButton :handle-click="resize4by3">
             <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
-          </AppButtonNew>
-          <AppButtonNew :handle-click="resize16by10">
+          </AppButton>
+          <AppButton :handle-click="resize16by10">
             <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
-          </AppButtonNew>
-          <AppButtonNew :handle-click="resize16by9">
+          </AppButton>
+          <AppButton :handle-click="resize16by9">
             <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
-          </AppButtonNew>
+          </AppButton>
         </NButtonGroup>
       </div>
 
-      <AppButtonNew
+      <AppButton
         :handle-click="handleExportClick"
         icon
         tooltip="Export .csv"
         tooltip-placement="bottom"
       >
         <DownloadOutline />
-      </AppButtonNew>
+      </AppButton>
     </div>
   </AppDraggableMenu>
 </template>

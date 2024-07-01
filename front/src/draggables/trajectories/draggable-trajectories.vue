@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
@@ -80,14 +80,14 @@ watch(isFused, renderTraces);
       <span />
 
       <div class="last-line">
-        <AppButtonNew
+        <AppButton
           :handle-click="handleClick"
           icon
           tooltip="Export"
           tooltip-placement="bottom"
         >
           <DownloadOutline />
-        </AppButtonNew>
+        </AppButton>
       </div>
     </AppDraggableMenu>
   </AppDraggable>

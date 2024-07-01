@@ -9,7 +9,7 @@ import {
   VolumeHighOutline,
   VolumeLowOutline,
 } from '@vicons/ionicons5';
-import AppButtonNew from 'src/app/app-button-new.vue';
+import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
@@ -24,7 +24,7 @@ const {downloadAudio} = useAudioDownload();
 
 <template>
   <AppDraggableSidebar>
-    <AppButtonNew
+    <AppButton
       :handle-click="togglePlayPause"
       :tooltip="isPlaying ? 'Pause' : 'Play'"
       icon
@@ -32,60 +32,60 @@ const {downloadAudio} = useAudioDownload();
     >
       <PauseOutline v-if="isPlaying" />
       <PlayOutline v-if="!isPlaying" />
-    </AppButtonNew>
+    </AppButton>
 
-    <AppButtonNew
+    <AppButton
       :handle-click="stop"
       icon
       tooltip="Stop"
       tooltip-placement="left"
     >
       <StopOutline />
-    </AppButtonNew>
+    </AppButton>
 
-    <AppButtonNew
+    <AppButton
       :handle-click="increaseVolume"
       icon
       tooltip="Volume Up"
       tooltip-placement="left"
     >
       <VolumeHighOutline />
-    </AppButtonNew>
+    </AppButton>
 
-    <AppButtonNew
+    <AppButton
       :handle-click="decreaseVolume"
       icon
       tooltip="Volume Down"
       tooltip-placement="left"
     >
       <VolumeLowOutline />
-    </AppButtonNew>
+    </AppButton>
 
-    <AppButtonNew
+    <AppButton
       :handle-click="increase"
       icon
       tooltip="FFT Size Up"
       tooltip-placement="left"
     >
       <AddOutline />
-    </AppButtonNew>
+    </AppButton>
 
-    <AppButtonNew
+    <AppButton
       :handle-click="decrease"
       icon
       tooltip="FFT Size Down"
       tooltip-placement="left"
     >
       <RemoveOutline />
-    </AppButtonNew>
+    </AppButton>
 
-    <AppButtonNew
+    <AppButton
       :handle-click="downloadAudio"
       icon
       tooltip="Download"
       tooltip-placement="left"
     >
       <ArrowDownOutline />
-    </AppButtonNew>
+    </AppButton>
   </AppDraggableSidebar>
 </template>
