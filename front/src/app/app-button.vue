@@ -3,7 +3,7 @@ import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {computed} from 'vue';
 
 interface Props {
-  size?: 'tiny' | 'small';
+  size?: 'tiny' | 'small' | 'medium' | 'large';
   handleClick: () => void;
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
