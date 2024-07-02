@@ -1,5 +1,5 @@
 import {
-  AggregatedIndicator,
+  type AggregatedIndicator,
   useStorageAggregatedIndicators,
 } from 'src/composables/use-storage-aggregated-indicators';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
@@ -38,9 +38,15 @@ export function useScatterFilterTemporal() {
       return;
     }
 
-    const indicator = aggregatedIndicators.value.filter(
+    const results = aggregatedIndicators.value.filter(
       ({extractor}) => extractor.index === indicatorIndex,
-    )[0];
+    );
+
+    if (results.length === 0) {
+      return;
+    }
+
+    const indicator = results[0];
 
     const l = aggregatedIndicators.value[0].values.length;
     const bottom = from.value === null ? -Infinity : from.value;
