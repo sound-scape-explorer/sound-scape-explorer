@@ -9,6 +9,7 @@ import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-ti
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
 import {onMounted, watch} from 'vue';
 
 const {traces, isEnabled, generate, renderTraces} = useScatterTraces();
@@ -22,14 +23,15 @@ const {
   attachListeners,
   render,
 } = useScatter();
-const {type, flavor} = useColorSelection();
-const {low, high} = useScatterColorAlpha();
+const {criteria, flavor} = useColorSelection();
+const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
 const {timeShift} = useClientSettings();
 const {filtered: labelFiltered} = useScatterFilterLabel();
 const {filtered: timeFiltered} = useScatterFilterTime();
 const {filtered: temporalFiltered} = useScatterFilterTemporal();
 const {selected} = useScreen();
 const {scatter2dGl} = useClientSettings();
+const {min: rangeMin, max: rangeMax} = useColorByIndicator();
 
 onMounted(mount);
 
@@ -40,10 +42,12 @@ let isRendering = false;
 
 watch(
   [
-    type,
+    criteria,
     flavor,
-    low,
-    high,
+    opacityLow,
+    opacityHigh,
+    rangeMin,
+    rangeMax,
     timeShift,
     labelFiltered,
     timeFiltered,

@@ -1,13 +1,84 @@
+import {useIndicators} from 'src/composables/use-indicators';
+import {useStorageLabels} from 'src/composables/use-storage-labels';
 import type {ColorFlavor} from 'src/constants';
-import type {ColorType} from 'src/draggables/colors/use-color-type';
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 
-const type = ref<ColorType>('cycleDay');
+type ColorCategory = 'Default' | 'Labels' | 'Indicators';
+type ColorCriteria =
+  | 'intervalIndex'
+  | 'by1h'
+  | 'by10min'
+  | 'isDay'
+  | 'cycleDay';
+
 const flavor = ref<ColorFlavor>('Spectral');
+const criteria = ref<ColorCriteria>('cycleDay');
+const category = ref<ColorCategory>('Default');
+
+const categories = ref<ColorCategory[]>(['Default', 'Labels', 'Indicators']);
 
 export function useColorSelection() {
+  const {labelProperties} = useStorageLabels();
+  const {names} = useIndicators();
+
+  const defaultCriterias = computed(
+    () =>
+      [
+        'cycleDay',
+        'isDay',
+        'intervalIndex',
+        'by1h',
+        'by10min',
+      ] as ColorCriteria[],
+  );
+
+  const labelCriterias = computed(
+    () => (labelProperties.value as ColorCriteria[]) ?? [],
+  );
+  const indicatorCriterias = computed(
+    () => (names.value as ColorCriteria[]) ?? [],
+  );
+
+  const criterias = computed<ColorCriteria[]>(() => {
+    switch (category.value) {
+      case 'Default': {
+        return defaultCriterias.value;
+      }
+      case 'Labels': {
+        return labelCriterias.value;
+      }
+      case 'Indicators': {
+        return indicatorCriterias.value;
+      }
+    }
+  });
+
+  const handleLabelClick = (property: string) => {
+    if (category.value !== 'Labels') {
+      category.value = 'Labels';
+    }
+
+    if (criteria.value !== property) {
+      criteria.value = property as ColorCriteria;
+    }
+  };
+
+  const criteriaIndex = computed(() => criterias.value.indexOf(criteria.value));
+
+  const isIndicators = computed(
+    () =>
+      category.value === 'Indicators' && names.value?.includes(criteria.value),
+  );
+
   return {
-    type: type,
     flavor: flavor,
+    criteria: criteria,
+    criterias: criterias,
+    criteriaIndex: criteriaIndex,
+    category: category,
+    categories: categories,
+    handleLabelClick: handleLabelClick,
+
+    isIndicators: isIndicators,
   };
 }

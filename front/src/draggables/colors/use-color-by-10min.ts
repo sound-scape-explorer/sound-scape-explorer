@@ -1,4 +1,4 @@
-import type {Scale} from 'chroma-js';
+import {useColorUser} from 'src/composables/use-color-user';
 import {useDate} from 'src/composables/use-date';
 import {useDraggableTime} from 'src/draggables/time/use-draggable-time';
 import {mapRange} from 'src/utils/map-range';
@@ -6,8 +6,9 @@ import {mapRange} from 'src/utils/map-range';
 export function useColorBy10min() {
   const {convertTimestampToDate} = useDate();
   const {min, max} = useDraggableTime();
+  const {scale} = useColorUser();
 
-  const getColorByTenMinutes = (timestamp: number, scale: Scale): string => {
+  const getColorByTenMinutes = (timestamp: number): string => {
     const date = convertTimestampToDate(timestamp);
     const rangeStart = convertTimestampToDate(min.value * 1000);
     const rangeEnd = convertTimestampToDate(max.value * 1000);
@@ -23,7 +24,7 @@ export function useColorBy10min() {
       1,
     );
 
-    return scale(rangedMinute).css();
+    return scale.value(rangedMinute).css();
   };
 
   return {

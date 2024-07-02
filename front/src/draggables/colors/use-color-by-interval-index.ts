@@ -1,10 +1,12 @@
-import type {Scale} from 'chroma-js';
+import {useColorUser} from 'src/composables/use-color-user';
 import {mapRange} from 'src/utils/map-range';
 
 export function useColorByIntervalIndex() {
-  const getColor = (index: number, count: number, scale: Scale): string => {
+  const {scale} = useColorUser();
+
+  const getColor = (index: number, count: number): string => {
     const rangedIndex = mapRange(index, 0, count, 0, 1);
-    return scale(rangedIndex).css();
+    return scale.value(rangedIndex).css();
   };
 
   return {

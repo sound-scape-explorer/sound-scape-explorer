@@ -14,7 +14,7 @@ let isLoaded = false;
 const labels = ref<Labels | null>(null);
 const labelProperties = ref<string[] | null>(null);
 const labelSets = ref<string[][] | null>(null);
-const labelPropertiesAsColorTypes = ref<string[] | null>(null);
+const labelPropertiesAsColorTypes = ref<string[] | null>(null); // todo: remove me
 
 export function useStorageLabels() {
   const {read} = useStorageReader();

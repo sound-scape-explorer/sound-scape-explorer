@@ -2,21 +2,23 @@
 import AppGradient from 'src/app/app-gradient.vue';
 import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useColorUser} from 'src/composables/use-color-user';
 import {createHourlyLabels} from 'src/utils/create-hourly-labels';
 import {computed} from 'vue';
 
-const {scale, userScale, cyclingScale} = useScatterColorScale();
-const {type} = useColorSelection();
+const {scale, cyclingScale} = useScatterColorScale();
+const {scale: userScale} = useColorUser();
+const {criteria} = useColorSelection();
 
 const size = 100;
 
-const isCycleDay = computed(() => type.value === 'cycleDay');
+const isCycleDay = computed(() => criteria.value === 'cycleDay');
 const isCycleDayColors = computed<string[]>(() =>
   cyclingScale.value.colors(size),
 );
 const isCycleDayLabels = computed<string[]>(() => createHourlyLabels(size));
 
-const isDay = computed(() => type.value === 'isDay');
+const isDay = computed(() => criteria.value === 'isDay');
 const isDayColors = computed(() => {
   if (!isDay.value) {
     return [];

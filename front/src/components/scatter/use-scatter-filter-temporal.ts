@@ -16,7 +16,7 @@ export function useScatterFilterTemporal() {
   const {indicator: indicatorSelected, hasIndicator} = useDraggableTemporal();
 
   const isFiltered = (
-    intervalIndex: number,
+    index: number,
     indicator: AggregatedIndicator,
     bottom: number,
     top: number,
@@ -25,10 +25,9 @@ export function useScatterFilterTemporal() {
       return false;
     }
 
-    const indicatorValues = indicator.values[intervalIndex];
-
-    const indicatorMean = calculateMean(indicatorValues);
-    const isWithin = bottom <= indicatorMean && indicatorMean < top;
+    const values = indicator.values[index];
+    const mean = calculateMean(values);
+    const isWithin = bottom <= mean && mean < top;
     return !isWithin;
   };
 

@@ -7,6 +7,7 @@ import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
 import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
 import {useColorByCyclingDay} from 'src/draggables/colors/use-color-by-cycling-day';
 import {useColorByDay} from 'src/draggables/colors/use-color-by-day';
+import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {computed, ref} from 'vue';
@@ -28,11 +29,8 @@ export function useScatterColorScale() {
   const {getColorByDay} = useColorByDay();
   const {getColorByCyclingDay} = useColorByCyclingDay();
   const {getColorByLabel} = useColorByLabel();
-  const {type, flavor} = useColorSelection();
-
-  const userScale = computed<Scale>(() => {
-    return chroma.scale(flavor.value).domain([0, 1]).mode('hsl');
-  });
+  const {get: getColorByIndicator} = useColorByIndicator();
+  const {category, criteria} = useColorSelection();
 
   const generate = async () => {
     return new Promise((resolve, reject) => {
@@ -47,26 +45,37 @@ export function useScatterColorScale() {
 
       // number of intervals
       const count = aggregatedTimestamps.value.length;
-      const newScale = new Array(count);
-      const isLabelProperty = labelPropertiesAsColorTypes.value.includes(
-        type.value,
-      );
+      const newScale: string[] = new Array(count);
 
       for (let i = 0; i < count; i += 1) {
         const timestamp = aggregatedTimestamps.value[i];
 
-        if (isLabelProperty) {
-          newScale[i] = getColorByLabel(i, type.value, userScale.value);
-        } else if (type.value === 'intervalIndex') {
-          newScale[i] = getColor(i, count, userScale.value);
-        } else if (type.value === 'by1h') {
-          newScale[i] = getColorByOneHour(timestamp, userScale.value);
-        } else if (type.value === 'by10min') {
-          newScale[i] = getColorByTenMinutes(timestamp, userScale.value);
-        } else if (type.value === 'isDay') {
-          newScale[i] = getColorByDay(timestamp);
-        } else if (type.value === 'cycleDay') {
-          newScale[i] = getColorByCyclingDay(timestamp, cyclingScale.value);
+        switch (category.value) {
+          case 'Labels':
+            newScale[i] = getColorByLabel(i);
+            break;
+          case 'Indicators':
+            newScale[i] = getColorByIndicator(i);
+            break;
+          case 'Default':
+            switch (criteria.value) {
+              case 'cycleDay':
+                newScale[i] = getColorByCyclingDay(timestamp);
+                break;
+              case 'intervalIndex':
+                newScale[i] = getColor(i, count);
+                break;
+              case 'isDay':
+                newScale[i] = getColorByDay(timestamp);
+                break;
+              case 'by1h':
+                newScale[i] = getColorByOneHour(timestamp);
+                break;
+              case 'by10min':
+                newScale[i] = getColorByTenMinutes(timestamp);
+                break;
+            }
+            break;
         }
       }
 
@@ -81,7 +90,6 @@ export function useScatterColorScale() {
 
   return {
     scale: scale,
-    userScale: userScale,
     cyclingScale: cyclingScale,
     generateColorScale: generate,
     resetColorScale: reset,
