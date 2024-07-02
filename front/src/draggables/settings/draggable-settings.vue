@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import {NCheckbox, NInput, NSelect} from 'naive-ui';
+import {NCheckbox} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
-import {useClientSettings} from 'src/composables/client-settings';
-import {useKeyboard} from 'src/composables/keyboard';
-import {useStorageAudioHost} from 'src/composables/storage-audio-host';
-import {useStorageSettings} from 'src/composables/storage-settings';
+import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
+import AppInput from 'src/app/input/app-input.vue';
+import AppSelect from 'src/app/select/app-select.vue';
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
+import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
-import {useSpectrogramColormap} from 'src/draggables/audio/spectrogram-colormap';
-import {useWavesurferSettings} from 'src/draggables/audio/wavesurfer-settings';
+import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
+import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {computed} from 'vue';
 
 const {
   openDetailsOnScatterClick,
@@ -22,20 +22,20 @@ const {
   copySelect2d,
   scatter2dGl,
 } = useClientSettings();
-const {lock, unlock} = useKeyboard();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
 const {colormap} = useSpectrogramColormap();
 const {settings, hasTimezone} = useStorageSettings();
 const {showDecibels, overflowLegends} = useWavesurferSettings();
 
-const spectrogramColorMapsOptionsRef = computed(() => {
-  return convertToNaiveSelectOptions(SPECTROGRAM_COLOR_MAPS);
-});
+const colormapOptions = SPECTROGRAM_COLOR_MAPS;
+const backgrounds = Object.values(PLOT_BACKGROUND);
 
-const plotBackgroundOptionsRef = computed(() => {
-  return convertToNaiveSelectOptions(Object.values(PLOT_BACKGROUND));
-});
+useRefProvide('settings/audioHost', audioHost);
+useRefProvide('settings/fontSize', fontSize);
+useRefProvide('settings/timeShift', timeShift);
+useRefProvide('settings/colormap', colormap);
+useRefProvide('settings/plotBackground', plotBackground);
 </script>
 
 <template>
@@ -44,20 +44,13 @@ const plotBackgroundOptionsRef = computed(() => {
     draggable-key="settings"
   >
     <DraggableSettingsItem title="Audio host">
-      <NInput
-        v-model:value="audioHost"
-        size="tiny"
-        @inputBlur="() => unlock()"
-        @inputFocus="() => lock()"
-      />
+      <AppInput injection-key="settings/audioHost" />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Spectrogram: Color map">
-      <NSelect
-        v-model:value="colormap"
-        :default-value="colormap"
-        :options="spectrogramColorMapsOptionsRef"
-        size="tiny"
+      <AppSelect
+        :options="colormapOptions"
+        injection-key="settings/colormap"
       />
     </DraggableSettingsItem>
 
@@ -83,21 +76,16 @@ const plotBackgroundOptionsRef = computed(() => {
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Plot background">
-      <NSelect
-        v-model:value="plotBackground"
-        :default-value="plotBackground"
-        :options="plotBackgroundOptionsRef"
-        size="tiny"
+      <AppSelect
+        :options="backgrounds"
+        injection-key="settings/plotBackground"
       />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Plot font size">
-      <NInput
-        v-model:value="fontSize"
-        size="tiny"
+      <AppInput
+        injection-key="settings/fontSize"
         type="number"
-        @inputBlur="() => unlock()"
-        @inputFocus="() => lock()"
       />
     </DraggableSettingsItem>
 
@@ -114,12 +102,9 @@ const plotBackgroundOptionsRef = computed(() => {
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Time shift in hours">
-      <NInput
-        v-model:value="timeShift"
-        size="tiny"
+      <AppInput
+        injection-key="settings/timeShift"
         type="number"
-        @inputBlur="() => unlock()"
-        @inputFocus="() => lock()"
       />
     </DraggableSettingsItem>
 

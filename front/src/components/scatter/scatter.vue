@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import {useColorSelection} from 'src/components/scatter/color-selection';
-import {useScatter} from 'src/components/scatter/scatter';
-import {useScatterColorAlpha} from 'src/components/scatter/scatter-color-alpha';
-import {useScatterConfig} from 'src/components/scatter/scatter-config';
-import {useScatterFilterLabel} from 'src/components/scatter/scatter-filter-label';
-import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
-import {useScatterTraces} from 'src/components/scatter/scatter-traces';
-import {useScreen} from 'src/components/screen/screen';
-import {useClientSettings} from 'src/composables/client-settings';
+import {useColorSelection} from 'src/components/scatter/use-color-selection';
+import {useScatter} from 'src/components/scatter/use-scatter';
+import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
+import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
+import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
+import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
+import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
+import {useScreen} from 'src/components/screen/use-screen';
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
 import {onMounted, watch} from 'vue';
 
 const {traces, isEnabled, generate, renderTraces} = useScatterTraces();
@@ -21,13 +23,15 @@ const {
   attachListeners,
   render,
 } = useScatter();
-const {type, flavor} = useColorSelection();
-const {low, high} = useScatterColorAlpha();
+const {criteria, flavor} = useColorSelection();
+const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
 const {timeShift} = useClientSettings();
 const {filtered: labelFiltered} = useScatterFilterLabel();
 const {filtered: timeFiltered} = useScatterFilterTime();
+const {filtered: temporalFiltered} = useScatterFilterTemporal();
 const {selected} = useScreen();
 const {scatter2dGl} = useClientSettings();
+const {min: rangeMin, max: rangeMax} = useColorByIndicator();
 
 onMounted(mount);
 
@@ -38,13 +42,16 @@ let isRendering = false;
 
 watch(
   [
-    type,
+    criteria,
     flavor,
-    low,
-    high,
+    opacityLow,
+    opacityHigh,
+    rangeMin,
+    rangeMax,
     timeShift,
     labelFiltered,
     timeFiltered,
+    temporalFiltered,
     selected,
     scatter2dGl,
   ],

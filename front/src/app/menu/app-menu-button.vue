@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
-import {useAppMenuButton} from 'src/app/menu/app-menu-button';
-import {type DraggablesStore} from 'src/composables/draggables';
+import {useAppMenuButton} from 'src/app/menu/use-app-menu-button';
+import {type DraggablesStore} from 'src/composables/use-draggables';
 
 export interface AppMenuItemProps {
   draggableKey: keyof DraggablesStore;

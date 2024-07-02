@@ -17,8 +17,10 @@ const port = 5531;
 const ffmpegPath = args[args.length - 3];
 const ffprobePath = args[args.length - 2];
 const audioPath = args[args.length - 1];
+const origin = 'http://localhost:5530';
 
-app.use(cors());
+app.disable('x-powered-by');
+app.use(cors({origin: origin}));
 
 // service
 app.listen(port, () => {

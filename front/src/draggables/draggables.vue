@@ -1,17 +1,17 @@
 <script lang="ts" setup="">
-import {useDraggables} from 'src/composables/draggables';
-import {useStorageReady} from 'src/composables/storage-ready';
+import {useDraggables} from 'src/composables/use-draggables';
+import {useStorageReady} from 'src/composables/use-storage-ready';
 import DraggableAudio from 'src/draggables/audio/draggable-audio.vue';
 import DraggableColors from 'src/draggables/colors/draggable-colors.vue';
 import DraggableDetails from 'src/draggables/details/draggable-details.vue';
-import DraggableDigested from 'src/draggables/digested/draggable-digested.vue';
+import DraggableHeatmaps from 'src/draggables/heatmaps/draggable-heatmaps.vue';
 import DraggableHelp from 'src/draggables/help/draggable-help.vue';
 import DraggableImport from 'src/draggables/import/draggable-import.vue';
-import DraggableIndicators from 'src/draggables/indicators/draggable-indicators.vue';
-import DraggableLabel from 'src/draggables/label/draggable-label.vue';
+import DraggableLabel from 'src/draggables/labels/draggable-labels.vue';
 import DraggableRelativeTrajectories from 'src/draggables/relative-trajectories/draggable-relative-trajectories.vue';
 import DraggableSelection from 'src/draggables/selection/selection.vue';
 import DraggableSettings from 'src/draggables/settings/draggable-settings.vue';
+import DraggableTemporal from 'src/draggables/temporal/draggable-temporal.vue';
 import DraggableTime from 'src/draggables/time/draggable-time.vue';
 import DraggableTimeline from 'src/draggables/timeline/draggable-timeline.vue';
 import DraggableTrajectories from 'src/draggables/trajectories/draggable-trajectories.vue';
@@ -34,8 +34,8 @@ const {isReady} = useStorageReady();
   <DraggableAudio v-if="isReady" />
   <DraggableTrajectories v-if="isReady" />
   <DraggableRelativeTrajectories v-if="isReady" />
-  <DraggableIndicators v-if="isReady" />
-  <DraggableDigested v-if="isReady" />
+  <DraggableTemporal v-if="isReady" />
+  <DraggableHeatmaps v-if="isReady" />
   <DraggableSelection v-if="isReady" />
 
   <DraggableTimeline v-if="isReady" />

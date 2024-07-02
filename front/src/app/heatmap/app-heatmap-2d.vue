@@ -3,11 +3,11 @@ import Plotly, {type Config, type Layout} from 'plotly.js-dist-min';
 import {
   type HeatmapData,
   useAppHeatmapData,
-} from 'src/app/heatmap/app-heatmap-data';
-import {useAppHeatmapLayout} from 'src/app/heatmap/app-heatmap-layout';
-import {useAppHeatmapSize} from 'src/app/heatmap/app-heatmap-size';
-import {useClientSettings} from 'src/composables/client-settings';
-import {usePlotConfig} from 'src/composables/plot-config';
+} from 'src/app/heatmap/use-app-heatmap-data';
+import {useAppHeatmapLayout} from 'src/app/heatmap/use-app-heatmap-layout';
+import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {usePlotConfig} from 'src/composables/use-plot-config';
 import {ref, watch} from 'vue';
 
 /**

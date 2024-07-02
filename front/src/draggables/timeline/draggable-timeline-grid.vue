@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import {NTag, NTooltip} from 'naive-ui';
-import {useDate} from 'src/composables/date';
-import {useStorageAggregatedIntervalDetails} from 'src/composables/storage-aggregated-interval-details';
-import {useAudioOpen} from 'src/draggables/audio/audio-open';
+import {useDate} from 'src/composables/use-date';
+import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
+import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
 import {
   pageSizeRef,
   pageVisibleBlocksRef,
   pageVisibleIntervalsRef,
   useTimelinePagination,
   type VisibleBlock,
-} from 'src/draggables/timeline/timeline-pagination';
-import {useTimelineSizes} from 'src/draggables/timeline/timeline-sizes';
+} from 'src/draggables/timeline/use-timeline-pagination';
+import {useTimelineSizes} from 'src/draggables/timeline/use-timeline-sizes';
 import {computed, onMounted, ref, watchEffect} from 'vue';
 
 const containerRef = ref<HTMLDivElement | null>(null);

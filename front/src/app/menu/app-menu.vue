@@ -16,10 +16,10 @@ import {
   ReceiptOutline,
   TimerOutline,
 } from '@vicons/ionicons5';
-import {useAppMenu} from 'src/app/menu/app-menu';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
-import {useClientSettings} from 'src/composables/client-settings';
-import {useViewState} from 'src/composables/view-state';
+import {useAppMenu} from 'src/app/menu/use-app-menu';
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {useViewState} from 'src/composables/use-view-state';
 
 const {isReady, toggle} = useAppMenu();
 const {hasView} = useViewState();
@@ -162,8 +162,8 @@ const {preview} = useClientSettings();
       <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
-        draggable-key="indicators"
-        text="Indicators"
+        draggable-key="temporal"
+        text="Temporal"
       >
         <BarChartOutline />
       </AppMenuButton>
@@ -171,8 +171,8 @@ const {preview} = useClientSettings();
       <AppMenuButton
         :disabled="!hasView"
         :toggle="toggle"
-        draggable-key="digested"
-        text="Digested"
+        draggable-key="heatmaps"
+        text="Heatmaps"
       >
         <GridOutline />
       </AppMenuButton>

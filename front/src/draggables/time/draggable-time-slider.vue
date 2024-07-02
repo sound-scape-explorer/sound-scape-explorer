@@ -3,13 +3,13 @@ import {SearchOutline} from '@vicons/ionicons5';
 import dayjs from 'dayjs';
 import {NSlider} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
-import {useScatterFilterTime} from 'src/components/scatter/scatter-filter-time';
-import {useScatterLoading} from 'src/components/scatter/scatter-loading';
-import {useReducerSelection} from 'src/composables/reducer-selection';
-import {useStorageAggregatedTimestamps} from 'src/composables/storage-aggregated-timestamps';
-import {useStorageRanges} from 'src/composables/storage-ranges';
+import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
+import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useReducerSelection} from 'src/composables/use-reducer-selection';
+import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
+import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {SLIDER_LIMITS} from 'src/constants';
-import {useDraggableTime} from 'src/draggables/time/draggable-time';
+import {useDraggableTime} from 'src/draggables/time/use-draggable-time';
 import {mapRange} from 'src/utils/map-range';
 import {computed, ref, watch} from 'vue';
 
@@ -153,7 +153,7 @@ interface Slider {
 }
 
 const {filterByTime} = useScatterFilterTime();
-watch([isAllSelected, duration, current], () => filterByTime());
+watch([isAllSelected, duration, current], filterByTime);
 </script>
 
 <template>
@@ -185,8 +185,8 @@ watch([isAllSelected, duration, current], () => filterByTime());
         class="interest"
       >
         <span
-          v-for="value of interest.values"
-          :style="{background: value ? 'red' : 'gainsboro'}"
+          v-for="interestValue of interest.values"
+          :style="{background: interestValue ? 'red' : 'gainsboro'}"
           class="interest__pixel"
         />
       </div>
@@ -199,6 +199,8 @@ watch([isAllSelected, duration, current], () => filterByTime());
       <AppButton
         v-for="slider in sliders"
         :handle-click="() => toggleZoom(slider)"
+        grow
+        icon
       >
         <SearchOutline />
       </AppButton>

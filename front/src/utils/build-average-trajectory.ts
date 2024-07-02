@@ -1,4 +1,4 @@
-import type {Traced} from 'src/composables/trajectories-data';
+import type {Traced} from 'src/composables/use-trajectories-data';
 
 import {interpolateArray} from './interpolate-array';
 import {isTracedThreeDimensional} from './is-traced-three-dimensional';
@@ -57,9 +57,9 @@ export function buildAverageTrajectory(traceds: Traced[]) {
     }),
     z: isThreeDimensional
       ? sumArraysIndexWise({
-        arrays: data.map((data) => data.z),
-        doAveraging: true,
-      })
+          arrays: data.map((data) => data.z),
+          doAveraging: true,
+        })
       : undefined,
   };
 

@@ -6,8 +6,8 @@ import {
   pageSizeRef,
   pageSizes,
   pageVisibleBlocksRef,
-} from 'src/draggables/timeline/timeline-pagination';
-import {useTimelineSizes} from 'src/draggables/timeline/timeline-sizes';
+} from 'src/draggables/timeline/use-timeline-pagination';
+import {useTimelineSizes} from 'src/draggables/timeline/use-timeline-sizes';
 
 const {size, options} = useTimelineSizes();
 </script>
