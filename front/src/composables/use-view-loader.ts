@@ -21,7 +21,7 @@ import {useViewState} from 'src/composables/use-view-state';
 import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 
 export function useViewLoader() {
-  const {store} = useDraggables();
+  const {close} = useDraggables();
   const {readLabels} = useStorageLabels();
   const {readAggregatedFeatures} = useStorageAggregatedFeatures();
   const {readAggregatedIndicators} = useStorageAggregatedIndicators();
@@ -91,7 +91,7 @@ export function useViewLoader() {
     renderTraces();
 
     isLoading.value = false;
-    store.view = false;
+    close('view');
     isEnabled.value = true;
   };
 

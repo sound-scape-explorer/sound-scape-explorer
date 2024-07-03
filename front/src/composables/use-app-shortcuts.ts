@@ -1,20 +1,23 @@
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useScreen} from 'src/components/screen/use-screen';
+import {useAppMetaKeys} from 'src/composables/use-app-meta-keys';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useKeyboard} from 'src/composables/use-keyboard';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
-export function useAppMenu() {
+export function useAppShortcuts() {
+  useAppMetaKeys();
+
   const {registerKey} = useKeyboard();
   const {isReady} = useStorageReady();
   const {toggle} = useDraggables();
   const {preview} = useClientSettings();
   const {enable} = useScreen();
-  const {toggleZoom} = useDraggableLabels();
+  const {toggleExpand} = useDraggableLabels();
 
-  registerKey(KeyboardShortcut.import, () => toggle('import'));
+  registerKey(KeyboardShortcut.open, () => toggle('open'));
   registerKey(
     KeyboardShortcut.settings,
     () => isReady.value && toggle('settings'),
@@ -42,10 +45,5 @@ export function useAppMenu() {
   );
   registerKey(KeyboardShortcut.selectHotkey, () => preview.value && enable());
 
-  registerKey(KeyboardShortcut.labelsZoom, toggleZoom);
-
-  return {
-    isReady: isReady,
-    toggle: toggle,
-  };
+  registerKey(KeyboardShortcut.labelsZoom, toggleExpand);
 }

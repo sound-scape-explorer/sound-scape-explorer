@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {ColorFillOutline} from '@vicons/ionicons5';
-import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {NGi, NGrid, NTag, NTooltip} from 'naive-ui';
+import AppButton from 'src/app/app-button.vue';
 import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import DraggableLabelsItemsOptions from 'src/draggables/labels/draggable-labels-items-options.vue';
@@ -47,17 +48,17 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
 <template>
   <NGrid :cols="columns">
     <NGi v-for="property in labelProperties">
-      <div class="col">
-        <NButton
-          size="tiny"
-          @click="() => handleLabelClick(property)"
+      <div class="cell ml mr mb">
+        <AppButton
+          :handle-click="() => handleLabelClick(property)"
+          icon
+          size="small"
+          tooltip="Use for coloring"
+          tooltip-placement="top"
         >
-          <template #icon>
-            <NIcon>
-              <ColorFillOutline />
-            </NIcon>
-          </template>
-        </NButton>
+          <ColorFillOutline />
+        </AppButton>
+
         <NTooltip
           :show-arrow="false"
           placement="top-start"
@@ -68,7 +69,6 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
             <NTag
               :bordered="false"
               class="tag"
-              size="small"
               @click="() => handlePropertyClick(property)"
               @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
             >
@@ -85,23 +85,41 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
 
       <DraggableLabelsItemsOptions
         :property="property"
-        class="checkboxes"
+        class="checkboxes mr ml"
       />
     </NGi>
   </NGrid>
 </template>
 
 <style lang="scss" scoped>
-.col {
+$m: 8px;
+
+.ml {
+  margin-left: $m;
+}
+
+.mr {
+  margin-right: $m;
+}
+
+.mt {
+  margin-top: $m;
+}
+
+.mb {
+  margin-bottom: $m;
+}
+
+.cell {
   display: flex;
   align-items: flex-start;
   height: auto;
-  padding-top: 8px;
-  gap: 2px;
+  gap: $m;
 }
 
 .tag {
   user-select: none;
+  flex: 1;
 
   &:hover {
     cursor: pointer;
@@ -109,6 +127,6 @@ const handlePropertyRightClick = (e: PointerEvent, property: string) => {
 }
 
 .checkboxes {
-  padding-top: 8px;
+  margin-bottom: 1em;
 }
 </style>

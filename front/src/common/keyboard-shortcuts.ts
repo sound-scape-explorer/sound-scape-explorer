@@ -1,5 +1,5 @@
 export enum KeyboardShortcut {
-  import = 'o',
+  open = 'o',
   settings = ',',
   help = 'h',
   view = 'i',

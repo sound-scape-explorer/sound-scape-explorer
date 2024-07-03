@@ -37,9 +37,16 @@ useRefProvide('view/extractor', extractorSelected);
 </script>
 
 <template>
-  <AppDraggable draggable-key="view">
-    <AppDraggableMenu size="medium">
-      <span>Reducer</span>
+  <AppDraggable
+    draggable-key="view"
+    hide-separator
+  >
+    <AppDraggableMenu
+      class="container"
+      size="medium"
+    >
+      <h2>Reducer</h2>
+
       <AppSelect
         :disabled="hasView"
         :options="reducerOptions"
@@ -48,7 +55,8 @@ useRefProvide('view/extractor', extractorSelected);
         size="small"
       />
 
-      <span>Band</span>
+      <h2>Band</h2>
+
       <AppSelect
         :disabled="reducer === null || hasView"
         :options="bandOptions"
@@ -57,7 +65,8 @@ useRefProvide('view/extractor', extractorSelected);
         size="small"
       />
 
-      <span>Integration</span>
+      <h2>Integration</h2>
+
       <AppSelect
         :disabled="reducer === null || hasView"
         :options="integrationOptions"
@@ -66,7 +75,8 @@ useRefProvide('view/extractor', extractorSelected);
         size="small"
       />
 
-      <span>Extractor</span>
+      <h2>Extractor</h2>
+
       <AppSelect
         :disabled="reducer === null || hasView"
         :options="extractorOptions"
@@ -98,6 +108,10 @@ useRefProvide('view/extractor', extractorSelected);
 </template>
 
 <style lang="scss" scoped>
+.container {
+  min-width: 30em;
+}
+
 .last-line {
   display: flex;
   justify-content: flex-end;
@@ -108,6 +122,6 @@ useRefProvide('view/extractor', extractorSelected);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.2em;
 }
 </style>

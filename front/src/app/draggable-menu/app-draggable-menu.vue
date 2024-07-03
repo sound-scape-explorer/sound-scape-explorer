@@ -38,23 +38,23 @@ const classNames = computed<string>(() => {
 </template>
 
 <style lang="scss">
-$s: 3rem;
-$m: 5rem;
-$l: 8rem;
+$s: 4em;
+$m: 6em;
+$l: 9em;
 
 .app-draggable-menu__container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 10px;
 
-  min-width: 20rem;
+  min-width: 20em;
 }
 
 .app-draggable-menu__form {
   display: grid;
-  gap: 0.5rem;
+  gap: 10px;
   width: 100%;
 }
 
@@ -72,18 +72,25 @@ $l: 8rem;
 
 .app-draggable-menu__row {
   display: grid;
-  grid-template-columns: 1fr 4rem 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 1fr 4em 1fr;
+  gap: 10px;
 }
 
 .app-draggable-menu__full {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
 }
 
 .app-draggable-menu__item {
   display: flex;
   justify-content: center;
+}
+
+h2 {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 98%;
 }
 </style>

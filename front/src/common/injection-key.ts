@@ -25,4 +25,5 @@ export type InjectionKey =
   | 'digested/digester'
   | 'digested/labelA'
   | 'digested/labelB'
-  | 'digested/colorFlavor';
+  | 'digested/colorFlavor'
+  | 'trajectories/fuse';

@@ -2,7 +2,7 @@ import {ref} from 'vue';
 
 const isLocked = ref<boolean>(false);
 
-export function useImportLock() {
+export function useOpenLock() {
   return {
     isLocked: isLocked,
   };

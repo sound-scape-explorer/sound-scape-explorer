@@ -50,7 +50,10 @@ watch(blocks, () => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="details">
+  <AppDraggable
+    draggable-key="details"
+    hide-separator
+  >
     <AppCondition
       :wait-if="!hasClicked"
       wait-message="please click a point"

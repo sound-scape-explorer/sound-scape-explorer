@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {CloseOutline} from '@vicons/ionicons5';
 import {useDraggable} from '@vueuse/core';
-import {NButton, NIcon} from 'naive-ui';
+import AppButton from 'src/app/app-button.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
@@ -9,17 +9,20 @@ import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles'
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 
+// TODO: This component is ugly.
+
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
   hideSeparator?: boolean;
 }
 
-const props = withDefaults(defineProps<AppDraggableProps>(), {
-  hideSeparator: false,
-});
+const props = defineProps<AppDraggableProps>();
 
 const {container, storage, drag} = useAppDraggable(props);
-const {store} = useDraggables();
+const {close} = useDraggables();
+const {classes} = useAppDraggableStyles(props);
+const {check} = useAppDraggableBounds(container);
+
 const {x, y, style} = useDraggable(container, {
   initialValue: {x: storage.value.x, y: storage.value.y},
   handle: drag,
@@ -33,13 +36,6 @@ const {x, y, style} = useDraggable(container, {
   },
 });
 
-const {classes} = useAppDraggableStyles(props);
-const {check} = useAppDraggableBounds(container);
-
-const close = () => {
-  store[props.draggableKey] = false;
-};
-
 useAppDraggableLifecycles({
   props: props,
   container: container,
@@ -50,39 +46,40 @@ useAppDraggableLifecycles({
 </script>
 
 <template>
-  <div
-    ref="container"
-    :class="classes"
-    :style="style"
-  >
-    <div class="button close">
-      <NButton
-        size="tiny"
-        @click="close"
-      >
-        <NIcon>
-          <CloseOutline />
-        </NIcon>
-      </NButton>
-    </div>
-
-    <div class="title content">
-      <div class="title container">
-        <span>
-          {{ capitalizeFirstLetter(props.draggableKey) }}
-        </span>
-        <div
-          ref="drag"
-          class="drag"
+  <div>
+    <div
+      ref="container"
+      :class="classes"
+      :style="style"
+    >
+      <div class="button close">
+        <AppButton
+          :handle-click="() => close(props.draggableKey)"
+          grow
+          icon
+          size="tiny"
         >
-          <span>👋</span>
+          <CloseOutline />
+        </AppButton>
+      </div>
+
+      <div class="title content">
+        <div class="title container">
+          <span>
+            {{ capitalizeFirstLetter(props.draggableKey) }}
+          </span>
+          <div
+            ref="drag"
+            class="drag"
+          >
+            <span>👋</span>
+          </div>
         </div>
       </div>
-      <hr v-if="!props.hideSeparator" />
-    </div>
 
-    <div class="content">
-      <slot />
+      <div class="content main">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
@@ -201,5 +198,13 @@ $indexSelected: 1001;
   &:active {
     cursor: grabbing;
   }
+}
+
+hr {
+  opacity: 20%;
+}
+
+.main {
+  margin-top: 10px;
 }
 </style>

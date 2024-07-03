@@ -48,6 +48,7 @@ watch([indicator], () => {
   <AppDraggable
     class="draggable-temporal__container"
     draggable-key="temporal"
+    hide-separator
   >
     <DraggableTemporalSidebar />
     <DraggableTemporalMenu />
@@ -91,5 +92,6 @@ watch([indicator], () => {
 
 .draggable-temporal__plot {
   display: flex;
+  margin-top: 10px;
 }
 </style>

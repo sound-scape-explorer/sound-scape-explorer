@@ -8,7 +8,7 @@ const {isDisplay, toggleDisplay} = useDraggableTemporal();
 </script>
 
 <template>
-  <AppDraggableSidebar shift>
+  <AppDraggableSidebar>
     <AppButton
       :handle-click="toggleDisplay"
       :tooltip="isDisplay ? 'Chart on' : 'Chart off'"

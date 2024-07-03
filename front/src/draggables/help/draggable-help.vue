@@ -4,6 +4,7 @@ import AppGrid from 'src/app/app-grid.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {LINK_BUG_REPORT, LINK_CHANGELOG, LINK_DOCS} from 'src/constants';
+// noinspection ES6UnusedImports
 import {VERSION} from 'src/version';
 
 interface Shortcut {
@@ -70,6 +71,28 @@ const openChangelog = () => window.open(LINK_CHANGELOG);
         x-gap="12"
         y-gap="4"
       >
+        <NGi class="grid">
+          <NTag
+            class="key"
+            size="small"
+          >
+            Tab
+          </NTag>
+
+          Scroll to next draggable
+        </NGi>
+
+        <NGi class="grid">
+          <NTag
+            class="key"
+            size="small"
+          >
+            Esc
+          </NTag>
+
+          Cloes active draggable
+        </NGi>
+
         <NGi
           v-for="shortcut of shortcuts"
           class="grid"

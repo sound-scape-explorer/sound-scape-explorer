@@ -55,24 +55,29 @@ watch(indicator, update);
 </script>
 
 <template>
-  <AppDraggableMenu>
-    <span>Select</span>
+  <AppDraggableMenu size="medium">
+    <h2>Select</h2>
 
     <div>
       <AppSelect
         :options="indicators"
         injection-key="indicators/list"
+        size="small"
       />
     </div>
 
-    <AppButton
-      :disabled="!isSites"
-      :handle-click="selectAll"
-      tooltip="Select all"
-      tooltip-placement="left"
-    >
-      All
-    </AppButton>
+    <h2>
+      <AppButton
+        :disabled="!isSites"
+        :handle-click="selectAll"
+        grow
+        size="small"
+        tooltip="Select all sites"
+        tooltip-placement="top"
+      >
+        All
+      </AppButton>
+    </h2>
 
     <div class="row">
       <NTreeSelect
@@ -86,34 +91,40 @@ watch(indicator, update);
         filterable
         multiple
         placeholder="Sites..."
-        size="tiny"
+        size="small"
         @blur="unlock"
         @focus="lock"
         @update:value="updateSites"
       />
     </div>
 
-    <span>Display</span>
+    <h2>Display</h2>
 
     <div class="row">
       <div>
         <AppSelect
           :options="selections"
           injection-key="indicators/selection"
+          size="small"
           style="width: 9em"
+          tooltip="Current selection"
+          tooltip-placement="top"
         />
 
         <AppSelect
           :options="displays"
           injection-key="indicators/display"
+          size="small"
           style="width: 9em"
+          tooltip="Rendering style"
+          tooltip-placement="top"
         />
 
         <NButtonGroup v-if="isCandles">
           <NButton
             v-for="p in periods"
             :disabled="!isCandles"
-            size="tiny"
+            size="small"
             @click="updatePeriod(p)"
           >
             {{ p.name }}
@@ -124,7 +135,6 @@ watch(indicator, update);
           v-if="isCandles"
           v-model:value="isCondensed"
           :disabled="!isCandles"
-          class="toggle"
           size="small"
         >
           <template #unchecked>Full</template>
@@ -135,14 +145,15 @@ watch(indicator, update);
       <AppButton
         :handle-click="handleExportClick"
         icon
+        size="small"
         tooltip="Export raw .csv"
-        tooltip-placement="right"
+        tooltip-placement="bottom"
       >
         <DownloadOutline />
       </AppButton>
     </div>
 
-    <span>Filter</span>
+    <h2>Filter</h2>
 
     <div class="row">
       <div>
@@ -151,6 +162,7 @@ watch(indicator, update);
           :step="0.1"
           injection-key="indicators/filterFrom"
           placeholder="From"
+          size="small"
           style="width: 9em"
           tooltip="From"
           tooltip-placement="bottom"
@@ -161,6 +173,7 @@ watch(indicator, update);
           :disabled="!hasIndicator"
           injection-key="indicators/filterTo"
           placeholder="To"
+          size="small"
           style="width: 9em"
           tooltip="To"
           tooltip-placement="bottom"
@@ -170,6 +183,7 @@ watch(indicator, update);
         <AppButton
           :disabled="!hasIndicator"
           :handle-click="filter"
+          size="small"
         >
           Apply
         </AppButton>
@@ -177,6 +191,7 @@ watch(indicator, update);
         <AppButton
           :disabled="!hasIndicator"
           :handle-click="reset"
+          size="small"
         >
           Reset
         </AppButton>
@@ -191,7 +206,7 @@ watch(indicator, update);
           >
             <div>
               <b>{{ filteredCount }}</b>
-              points filtered
+              points excluded
             </div>
           </AppTooltip>
         </div>

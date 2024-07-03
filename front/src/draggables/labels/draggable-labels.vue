@@ -1,17 +1,17 @@
 <script lang="ts" setup="">
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import DraggableLabelsButtons from 'src/draggables/labels/draggable-labels-buttons.vue';
 import DraggableLabelsItems from 'src/draggables/labels/draggable-labels-items.vue';
+import DraggableLabelsSidebar from 'src/draggables/labels/draggable-labels-sidebar.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 import {computed} from 'vue';
 
-const {isZoomed} = useDraggableLabels();
+const {isExpanded} = useDraggableLabels();
 
 const classes = computed<string>(() => {
   let string = 'container';
 
-  if (isZoomed.value === true) {
-    string += ' open';
+  if (isExpanded.value === true) {
+    string += ' expand';
   }
 
   return string;
@@ -23,12 +23,9 @@ const classes = computed<string>(() => {
     draggable-key="labels"
     hide-separator
   >
-    <DraggableLabelsButtons />
+    <DraggableLabelsSidebar />
 
-    <div
-      :class="classes"
-      class="container"
-    >
+    <div :class="classes">
       <DraggableLabelsItems />
     </div>
   </AppDraggable>
@@ -40,10 +37,9 @@ const classes = computed<string>(() => {
   flex-direction: column;
   height: 14rem;
   overflow-y: auto;
-  padding-right: 0.5rem;
 }
 
-.open {
+.expand {
   height: 100%;
   max-height: 70vh;
 }

@@ -4,6 +4,7 @@ import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
 import AppHeatmap2d from 'src/app/heatmap/app-heatmap-2d.vue';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useStorageDigested} from 'src/composables/use-storage-digested';
+import {PLOTLY_SIZE} from 'src/constants';
 import DraggableHeatmapsMenu from 'src/draggables/heatmaps/draggable-heatmaps-menu.vue';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
@@ -35,7 +36,10 @@ watchEffect(updateChart);
 
 <template>
   <AppDraggable draggable-key="heatmaps">
-    <DraggableHeatmapsMenu />
+    <DraggableHeatmapsMenu
+      :style="{minWidth: `${PLOTLY_SIZE}px`}"
+      class="menu"
+    />
     <AppHeatmap
       v-if="is1d"
       :colorscale="flavor"
@@ -57,3 +61,9 @@ watchEffect(updateChart);
     />
   </AppDraggable>
 </template>
+
+<style lang="scss" scoped>
+.menu {
+  width: var(--size);
+}
+</style>

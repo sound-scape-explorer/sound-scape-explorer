@@ -6,8 +6,6 @@ import {type DraggablesStore} from 'src/composables/use-draggables';
 export interface AppMenuItemProps {
   draggableKey: keyof DraggablesStore;
   text: string;
-  // eslint-disable-next-line no-unused-vars
-  toggle: (key: keyof DraggablesStore) => void;
   disabled?: boolean;
 }
 

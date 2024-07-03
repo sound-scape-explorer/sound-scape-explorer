@@ -39,18 +39,20 @@ useRefProvide('settings/plotBackground', plotBackground);
 </script>
 
 <template>
-  <AppDraggable
-    class="draggable-settings__container"
-    draggable-key="settings"
-  >
+  <AppDraggable draggable-key="settings">
     <DraggableSettingsItem title="Audio host">
-      <AppInput injection-key="settings/audioHost" />
+      <AppInput
+        align="left"
+        injection-key="settings/audioHost"
+        size="small"
+      />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Spectrogram: Color map">
       <AppSelect
         :options="colormapOptions"
         injection-key="settings/colormap"
+        size="small"
       />
     </DraggableSettingsItem>
 
@@ -79,12 +81,15 @@ useRefProvide('settings/plotBackground', plotBackground);
       <AppSelect
         :options="backgrounds"
         injection-key="settings/plotBackground"
+        size="small"
       />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Plot font size">
       <AppInput
+        align="left"
         injection-key="settings/fontSize"
+        size="small"
         type="number"
       />
     </DraggableSettingsItem>
@@ -103,7 +108,9 @@ useRefProvide('settings/plotBackground', plotBackground);
 
     <DraggableSettingsItem title="Time shift in hours">
       <AppInput
+        align="left"
         injection-key="settings/timeShift"
+        size="small"
         type="number"
       />
     </DraggableSettingsItem>
@@ -130,9 +137,3 @@ useRefProvide('settings/plotBackground', plotBackground);
     </DraggableSettingsItem>
   </AppDraggable>
 </template>
-
-<style lang="scss" scoped>
-.draggable-settings__container {
-  width: 32em;
-}
-</style>

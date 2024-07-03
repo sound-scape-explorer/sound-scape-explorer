@@ -1,7 +1,7 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useWorker} from 'src/composables/use-worker';
-import {useImportLock} from 'src/draggables/import/use-import-lock';
+import {useOpenLock} from 'src/draggables/open/use-open-lock';
 import {computed, ref} from 'vue';
 
 const file = ref<File | null>(null);
@@ -9,10 +9,10 @@ const hasFile = computed<boolean>(() => file.value !== null);
 
 // this is the H5 input file provided by the user
 export function useStorageFile() {
-  const {close} = useWorker();
+  const {close: closeFile} = useWorker();
   const {notify} = useAppNotification();
-  const {store} = useDraggables();
-  const {isLocked} = useImportLock();
+  const {open, close: closeDraggable} = useDraggables();
+  const {isLocked} = useOpenLock();
 
   const validateFile = (inputFile: File) => {
     const fileExtension = inputFile.name.split('.').pop();
@@ -29,13 +29,13 @@ export function useStorageFile() {
   const setFile = (inputFile: File) => {
     validateFile(inputFile);
     file.value = inputFile;
-    store.import = false;
-    store.view = true;
+    closeDraggable('open');
+    open('view');
     isLocked.value = true;
   };
 
   const resetFile = () => {
-    close();
+    closeFile();
     location.reload();
   };
 

@@ -81,6 +81,7 @@ const isActiveIdRef = computed<string>(() => {
           }"
           :value="item"
           class="checkbox"
+          size="small"
         >
           <span>{{ item }}</span>
         </NCheckbox>

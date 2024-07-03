@@ -166,11 +166,14 @@ useWavesurferMounter();
           />
         </div>
 
-        <div ref="waveform" />
+        <div
+          ref="waveform"
+          class="mt"
+        />
 
         <div
           ref="spectrogram"
-          class="spectrogram"
+          class="spectrogram mt"
         />
       </div>
     </AppCondition>
@@ -187,5 +190,9 @@ useWavesurferMounter();
 
 .spectrogram {
   pointer-events: none;
+}
+
+.mt {
+  margin-top: 10px;
 }
 </style>

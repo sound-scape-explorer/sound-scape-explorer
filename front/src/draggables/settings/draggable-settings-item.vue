@@ -24,8 +24,9 @@ const props = defineProps<Props>();
 <style lang="scss" scoped>
 .draggable-settings-item {
   display: grid;
-  grid-template-columns: auto 1fr 10em;
-  gap: 0.5em;
+  grid-template-columns: auto 1fr 20em;
+  align-items: center;
+  gap: 10px;
   width: 100%;
 
   margin-bottom: 0.5em;

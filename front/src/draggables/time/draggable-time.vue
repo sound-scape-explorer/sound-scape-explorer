@@ -5,7 +5,10 @@ import TimeSlider from 'src/draggables/time/draggable-time-slider.vue';
 </script>
 
 <template>
-  <AppDraggable draggable-key="time">
+  <AppDraggable
+    draggable-key="time"
+    hide-separator
+  >
     <TimeOptions />
     <TimeSlider />
   </AppDraggable>

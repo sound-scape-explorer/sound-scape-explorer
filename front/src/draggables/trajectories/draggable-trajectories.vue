@@ -6,8 +6,10 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
+import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
+import {PLOTLY_SIZE} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
 import {useDraggableTrajectories} from 'src/draggables/trajectories/use-draggable-trajectories';
 import {useDraggableTrajectoriesExport} from 'src/draggables/trajectories/use-draggable-trajectories-export';
@@ -26,12 +28,17 @@ const handleUpdateValue = async (names: string[]) => {
 const {renderTraces} = useScatterTraces();
 
 watch(isFused, renderTraces);
+
+useRefProvide('trajectories/fuse', isFused);
 </script>
 
 <template>
   <AppDraggable draggable-key="trajectories">
-    <AppDraggableMenu size="medium">
-      <span class="text">Trajectories</span>
+    <AppDraggableMenu
+      :style="{minWidth: `${PLOTLY_SIZE}px`}"
+      size="medium"
+    >
+      <h2>Trajectories</h2>
 
       <div class="selection">
         <NCascader
@@ -49,7 +56,7 @@ watch(isFused, renderTraces);
           max-tag-count="responsive"
           multiple
           placeholder="Select trajectories"
-          size="tiny"
+          size="small"
           @update:value="handleUpdateValue"
         />
 
@@ -73,7 +80,7 @@ watch(isFused, renderTraces);
         </NTooltip>
       </div>
 
-      <span class="text">Colormap</span>
+      <h2>Colormap</h2>
 
       <TrajectoriesColorScale />
 
@@ -94,10 +101,6 @@ watch(isFused, renderTraces);
 </template>
 
 <style lang="scss" scoped>
-.text {
-  font-size: 0.9em;
-}
-
 .selection {
   display: flex;
   justify-content: center;
@@ -118,5 +121,6 @@ watch(isFused, renderTraces);
 
 .cascader {
   width: 15em;
+  flex: 1;
 }
 </style>

@@ -1,7 +1,7 @@
-import {reactive, ref} from 'vue';
+import {computed, reactive, ref} from 'vue';
 
 export interface DraggablesStore {
-  import: boolean;
+  open: boolean;
   settings: boolean;
   help: boolean;
   view: boolean;
@@ -22,7 +22,7 @@ export type DraggableKey = keyof DraggablesStore;
 
 // draggable keys
 const store = reactive<DraggablesStore>({
-  import: false,
+  open: false,
   settings: false,
   help: false,
   view: false,
@@ -40,6 +40,17 @@ const store = reactive<DraggablesStore>({
 });
 
 const selected = ref<DraggableKey | null>(null);
+const active = computed<DraggableKey[]>(() => {
+  let acc: DraggableKey[] = [];
+
+  for (const [key, value] of Object.entries(store)) {
+    if (value) {
+      acc = [...acc, key as DraggableKey];
+    }
+  }
+
+  return acc;
+});
 
 export function useDraggables() {
   const toggle = (key: DraggableKey): void => {
@@ -47,35 +58,35 @@ export function useDraggables() {
     store[key] = !store[key];
   };
 
-  const openAudio = () => {
-    if (!store.audio) {
-      store.audio = true;
+  const close = (key: DraggableKey) => {
+    if (store[key]) {
+      store[key] = false;
     }
 
-    if (selected.value !== 'audio') {
-      selected.value = 'audio';
-    }
-  };
-
-  const closeAudio = () => {
-    if (store.audio) {
-      store.audio = false;
-    }
-
-    if (selected.value === 'audio') {
+    if (selected.value === key) {
       selected.value = null;
     }
   };
 
-  const close = (key: DraggableKey) => {
+  const open = (key: DraggableKey) => {
     if (!store[key]) {
+      store[key] = true;
+    }
+
+    if (selected.value !== key) {
+      selected.value = key;
+    }
+  };
+
+  const closeActive = () => {
+    if (selected.value === null) {
       return;
     }
 
-    store[key] = false;
+    close(selected.value);
   };
 
-  const closeAllDraggables = () => {
+  const closeAll = () => {
     const keys = Object.keys(store) as DraggableKey[];
 
     for (const key of keys) {
@@ -83,12 +94,39 @@ export function useDraggables() {
     }
   };
 
+  const scroll = () => {
+    if (active.value.length < 2 || selected.value === null) {
+      return;
+    }
+
+    const next = getNextKey(selected.value);
+    selected.value = next;
+  };
+
+  const getNextKey = (
+    key: keyof DraggablesStore,
+  ): keyof DraggablesStore | null => {
+    if (active.value.length === 0) {
+      return null;
+    }
+
+    const i = active.value.indexOf(key);
+
+    if (i + 1 >= active.value.length) {
+      return active.value[0];
+    }
+
+    return active.value[i + 1];
+  };
+
   return {
     selected: selected,
     store: store,
+    open: open,
     toggle: toggle,
-    openAudio: openAudio,
-    closeAudio: closeAudio,
-    closeAllDraggables: closeAllDraggables,
+    scroll: scroll,
+    close: close,
+    closeAll: closeAll,
+    closeActive: closeActive,
   };
 }

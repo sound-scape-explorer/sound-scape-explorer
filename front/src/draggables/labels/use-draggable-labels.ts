@@ -1,12 +1,12 @@
 import {ref} from 'vue';
 
-const isZoomed = ref<boolean>(false);
+const isExpanded = ref<boolean>(false);
 const columns = ref<number>(1);
 
 export function useDraggableLabels() {
-  const zoom = () => (isZoomed.value = true);
-  const unzoom = () => (isZoomed.value = false);
-  const toggleZoom = () => (isZoomed.value = !isZoomed.value);
+  const expand = () => (isExpanded.value = true);
+  const shrink = () => (isExpanded.value = false);
+  const toggleExpand = () => (isExpanded.value = !isExpanded.value);
 
   const toggleColumns = () => {
     if (columns.value === 1) {
@@ -17,10 +17,10 @@ export function useDraggableLabels() {
     columns.value = 1;
   };
   return {
-    isZoomed: isZoomed,
-    zoom: zoom,
-    unzoom: unzoom,
-    toggleZoom: toggleZoom,
+    isExpanded: isExpanded,
+    expand: expand,
+    shrink: shrink,
+    toggleExpand: toggleExpand,
     columns: columns,
     toggleColumns: toggleColumns,
   };

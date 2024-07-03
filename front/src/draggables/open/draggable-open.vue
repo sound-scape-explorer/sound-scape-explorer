@@ -3,14 +3,14 @@ import {NButton} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useStorageFile} from 'src/composables/use-storage-file';
 import {useStorageReady} from 'src/composables/use-storage-ready';
-import ImportDetails from 'src/draggables/import/draggable-import-details.vue';
-import {useImportLock} from 'src/draggables/import/use-import-lock';
+import DraggableOpenDetails from 'src/draggables/open/draggable-open-details.vue';
+import {useOpenLock} from 'src/draggables/open/use-open-lock';
 import {ref} from 'vue';
 
 const inputRef = ref<HTMLInputElement | null>(null);
 const {setFile, resetFile} = useStorageFile();
 const {isReady} = useStorageReady();
-const {isLocked} = useImportLock();
+const {isLocked} = useOpenLock();
 
 const handleChange = () => {
   const file = inputRef.value?.files?.[0];
@@ -24,10 +24,7 @@ const handleChange = () => {
 </script>
 
 <template>
-  <AppDraggable
-    class="wrapper"
-    draggable-key="import"
-  >
+  <AppDraggable draggable-key="open">
     <div class="container">
       <input
         ref="inputRef"
@@ -46,19 +43,16 @@ const handleChange = () => {
       </NButton>
     </div>
 
-    <ImportDetails v-if="isReady" />
+    <div class="details">
+      <DraggableOpenDetails v-if="isReady" />
+    </div>
   </AppDraggable>
 </template>
 
 <style lang="scss" scoped>
-.wrapper {
-  width: 35em;
-}
-
 .container {
   display: grid;
   grid-template-columns: 1fr 8rem;
-
   gap: 1rem;
 }
 
@@ -68,5 +62,10 @@ const handleChange = () => {
 
 .green {
   background: rgba(0, 255, 0, 0.2);
+}
+
+.details {
+  max-width: 40em;
+  text-wrap: nowrap;
 }
 </style>

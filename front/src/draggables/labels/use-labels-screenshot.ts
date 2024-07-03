@@ -3,7 +3,7 @@ import {useDraggables} from 'src/composables/use-draggables';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 
 export function useLabelsScreenshot() {
-  const {store} = useDraggables();
+  const {open} = useDraggables();
 
   const screenshotLabel = async (): Promise<HTMLCanvasElement | null> => {
     return new Promise((resolve) => {
@@ -17,7 +17,8 @@ export function useLabelsScreenshot() {
         return resolve(null);
       }
 
-      store.labels = true;
+      open('labels');
+
       setTimeout(async () => {
         const canvas = await html2canvas(parent);
         return resolve(canvas);

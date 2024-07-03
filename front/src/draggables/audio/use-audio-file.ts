@@ -18,7 +18,7 @@ export function useAudioFile() {
   const {notify} = useAppNotification();
   const {loadBlob} = useWavesurferLoader();
   const {audioHost} = useStorageAudioHost();
-  const {openAudio, closeAudio} = useDraggables();
+  const {open, close} = useDraggables();
   const {integration} = useIntegrationSelection();
   const {context} = useAudioContext();
 
@@ -32,7 +32,7 @@ export function useAudioFile() {
       return;
     }
 
-    openAudio();
+    open('audio');
 
     if (block.value === newBlock) {
       return;
@@ -108,7 +108,7 @@ export function useAudioFile() {
     } catch (error) {
       notify('error', 'audio-file', `${error}`);
 
-      closeAudio();
+      close('audio');
       isLoading.value = false;
     }
   };

@@ -6,14 +6,14 @@ import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 import {useLabelsInfo} from 'src/draggables/labels/use-labels-info';
 
-const {columns, toggleColumns, toggleZoom} = useDraggableLabels();
+const {columns, toggleColumns, toggleExpand} = useDraggableLabels();
 const {count} = useLabelsInfo();
 </script>
 
 <template>
   <AppDraggableSidebar>
     <AppButton
-      :handle-click="toggleZoom"
+      :handle-click="toggleExpand"
       icon
       size="tiny"
       tooltip="Expand"
@@ -32,7 +32,7 @@ const {count} = useLabelsInfo();
       {{ columns }}
     </AppButton>
 
-    <AppTooltip tooltip="Points filtered">
+    <AppTooltip tooltip="Points excluded">
       <div class="info">
         {{ count }}
       </div>

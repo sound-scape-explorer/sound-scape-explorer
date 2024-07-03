@@ -19,7 +19,7 @@ import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selecti
 import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 
 export function useViewUnloader() {
-  const {store} = useDraggables();
+  const {open} = useDraggables();
   const {resetAggregatedFeatures} = useStorageAggregatedFeatures();
   const {resetAggregatedIndicators} = useStorageAggregatedIndicators();
   const {resetAggregatedTimestamps} = useStorageAggregatedTimestamps();
@@ -34,7 +34,7 @@ export function useViewUnloader() {
   const {resetTraces, isEnabled} = useScatterTraces();
   const {reset: resetFilterByLabel} = useScatterFilterLabel();
   const {resetFilterByTime} = useScatterFilterTime();
-  const {closeAllDraggables} = useDraggables();
+  const {closeAll} = useDraggables();
 
   const {reset: resetBand} = useBandSelection();
   const {reset: resetIntegration} = useIntegrationSelection();
@@ -47,7 +47,7 @@ export function useViewUnloader() {
     isLoading.value = true;
     isEnabled.value = false;
 
-    closeAllDraggables();
+    closeAll();
     resetTrajectoriesSelection();
     resetSelection();
     resetColorScale();
@@ -69,7 +69,7 @@ export function useViewUnloader() {
     resetReducer();
 
     isLoading.value = false;
-    store.view = true;
+    open('view');
   };
 
   return {

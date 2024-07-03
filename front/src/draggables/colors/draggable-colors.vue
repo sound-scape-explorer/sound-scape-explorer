@@ -32,12 +32,15 @@ useRefProvide('colors/indicatorMax', max);
 </script>
 
 <template>
-  <AppDraggable draggable-key="colors">
+  <AppDraggable
+    draggable-key="colors"
+    hide-separator
+  >
     <AppDraggableMenu
       class="menu"
       size="medium"
     >
-      <span>With</span>
+      <h2>With</h2>
 
       <div class="two grow">
         <AppSelect
@@ -57,7 +60,7 @@ useRefProvide('colors/indicatorMax', max);
         />
       </div>
 
-      <span
+      <h2
         v-if="isIndicators"
         class="indicator-buttons"
       >
@@ -80,7 +83,7 @@ useRefProvide('colors/indicatorMax', max);
         >
           <RepeatOutline />
         </AppButton>
-      </span>
+      </h2>
 
       <div
         v-if="isIndicators"
@@ -101,7 +104,8 @@ useRefProvide('colors/indicatorMax', max);
         />
       </div>
 
-      <span>Opacity</span>
+      <h2>Opacity</h2>
+
       <div class="two">
         <AppInput
           :disabled="isLoading"
@@ -111,7 +115,7 @@ useRefProvide('colors/indicatorMax', max);
           align="left"
           injection-key="colors/alphaExcluded"
           size="small"
-          tooltip="Opacity for filtered points"
+          tooltip="Opacity for excluded points"
           tooltip-placement="bottom"
           type="number"
         />
@@ -130,10 +134,12 @@ useRefProvide('colors/indicatorMax', max);
         />
       </div>
 
-      <span>Map</span>
+      <h2>Map</h2>
+
       <ColorsGradients />
 
-      <span>Flavor</span>
+      <h2>Flavor</h2>
+
       <AppSelect
         :disabled="isLoading"
         :options="COLOR_FLAVORS"

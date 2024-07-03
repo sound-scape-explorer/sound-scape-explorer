@@ -134,6 +134,7 @@ const handleDateStartUpdate = (t: number) => {
   current.value = t / 1000;
 };
 
+// TODO: This has to move to use-app-shortcuts.ts but requires composable methods
 const {registerKey} = useKeyboard();
 registerKey(KeyboardShortcut.timeForward, () => skipTimeForward());
 registerKey(KeyboardShortcut.timeBackward, () => skipTimeBackward());

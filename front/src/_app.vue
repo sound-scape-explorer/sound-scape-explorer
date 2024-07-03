@@ -13,6 +13,7 @@ import AppMenu from 'src/app/menu/app-menu.vue';
 import AppNotification from 'src/app/notification/app-notification.vue';
 import Scatter from 'src/components/scatter/scatter.vue';
 import Screen from 'src/components/screen/screen.vue';
+import {useAppShortcuts} from 'src/composables/use-app-shortcuts';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useWorker} from 'src/composables/use-worker';
@@ -22,15 +23,16 @@ import {onMounted} from 'vue';
 // TODO: is the Suspense component actually needed?
 
 useWorker();
+useAppShortcuts();
 const {isReady} = useStorageReady();
-const {store} = useDraggables();
+const {open} = useDraggables();
 
 const showImport = () => {
   if (isReady.value) {
     return;
   }
 
-  store.import = true;
+  open('open');
 };
 
 onMounted(showImport);

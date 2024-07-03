@@ -5,7 +5,7 @@ import {useDraggables} from 'src/composables/use-draggables';
 import {computed, ref} from 'vue';
 
 export function useAppMenuButton(props: AppMenuItemProps) {
-  const {store} = useDraggables();
+  const {store, toggle} = useDraggables();
 
   const button = ref<typeof NButton | null>(null);
 
@@ -14,7 +14,7 @@ export function useAppMenuButton(props: AppMenuItemProps) {
       return;
     }
 
-    props.toggle(props.draggableKey);
+    toggle(props.draggableKey);
     button.value.$el.blur();
   };
 

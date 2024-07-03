@@ -37,27 +37,30 @@ watch(digester, handleDigesterChange);
 
 <template>
   <AppDraggableMenu>
-    <span class="text">Select</span>
+    <h2>Select</h2>
 
     <AppSelect
       :options="digesterOptions"
       injection-key="digested/digester"
       placeholder="Digester..."
+      size="small"
     />
 
-    <span class="text">Over</span>
+    <h2>Over</h2>
 
     <div class="labels">
       <AppSelect
         :options="labelProperties ?? []"
         injection-key="digested/labelA"
         placeholder="Label A..."
+        size="small"
       />
 
       <AppButton
         :disabled="isSingle"
         :handle-click="swapLabels"
         icon
+        size="small"
       >
         <RepeatOutline />
       </AppButton>
@@ -67,53 +70,54 @@ watch(digester, handleDigesterChange);
         :options="labelProperties ?? []"
         injection-key="digested/labelB"
         placeholder="Label B..."
+        size="small"
       />
     </div>
 
-    <span class="text">Colors</span>
+    <h2>Colors</h2>
 
     <div class="colors">
       <AppSelect
         :options="colorFlavors"
         injection-key="digested/colorFlavor"
         placeholder="Color flavor..."
+        size="small"
       />
 
-      <span class="text">Range</span>
+      <h2 style="justify-content: center">Range</h2>
 
       <div>
         <NSelect
           v-model:value="rangeIndex"
           :options="rangeOptions"
           placeholder="Range..."
-          size="tiny"
+          size="small"
         />
       </div>
     </div>
 
-    <span class="text">Window</span>
+    <h2>Window</h2>
 
     <div class="window">
-      <div>
-        <NButtonGroup>
-          <AppButton :handle-click="resize1by1">
-            <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
-          </AppButton>
-          <AppButton :handle-click="resize4by3">
-            <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
-          </AppButton>
-          <AppButton :handle-click="resize16by10">
-            <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
-          </AppButton>
-          <AppButton :handle-click="resize16by9">
-            <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
-          </AppButton>
-        </NButtonGroup>
-      </div>
+      <NButtonGroup>
+        <AppButton :handle-click="resize1by1">
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
+        </AppButton>
+        <AppButton :handle-click="resize4by3">
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
+        </AppButton>
+        <AppButton :handle-click="resize16by10">
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
+        </AppButton>
+        <AppButton :handle-click="resize16by9">
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+        </AppButton>
+      </NButtonGroup>
 
       <AppButton
         :handle-click="handleExportClick"
         icon
+        size="small"
         tooltip="Export .csv"
         tooltip-placement="bottom"
       >

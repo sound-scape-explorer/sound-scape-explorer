@@ -3,7 +3,7 @@ import type {AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {useDraggables} from 'src/composables/use-draggables';
-import {onMounted, Ref, watch} from 'vue';
+import {onMounted, type Ref, watch} from 'vue';
 
 interface Props {
   props: AppDraggableProps;

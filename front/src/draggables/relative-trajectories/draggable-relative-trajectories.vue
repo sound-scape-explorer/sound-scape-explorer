@@ -97,7 +97,10 @@ const handleExportClick = () => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="relativeTrajectories">
+  <AppDraggable
+    draggable-key="relativeTrajectories"
+    hide-separator
+  >
     <div class="container">
       <NCascader
         v-model:value="valueRef"

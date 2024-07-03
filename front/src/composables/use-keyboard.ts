@@ -34,5 +34,6 @@ export function useKeyboard() {
     registerKey: registerKey,
     lock: lock,
     unlock: unlock,
+    isLocked: isLocked,
   };
 }

@@ -5,7 +5,10 @@ import TimelineMenu from 'src/draggables/timeline/draggable-timeline-menu.vue';
 </script>
 
 <template>
-  <AppDraggable draggable-key="timeline">
+  <AppDraggable
+    draggable-key="timeline"
+    hide-separator
+  >
     <div class="container">
       <TimelineMenu />
       <TimelineGrid />

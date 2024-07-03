@@ -6,8 +6,8 @@ import DraggableColors from 'src/draggables/colors/draggable-colors.vue';
 import DraggableDetails from 'src/draggables/details/draggable-details.vue';
 import DraggableHeatmaps from 'src/draggables/heatmaps/draggable-heatmaps.vue';
 import DraggableHelp from 'src/draggables/help/draggable-help.vue';
-import DraggableImport from 'src/draggables/import/draggable-import.vue';
 import DraggableLabel from 'src/draggables/labels/draggable-labels.vue';
+import DraggableOpen from 'src/draggables/open/draggable-open.vue';
 import DraggableRelativeTrajectories from 'src/draggables/relative-trajectories/draggable-relative-trajectories.vue';
 import DraggableSelection from 'src/draggables/selection/selection.vue';
 import DraggableSettings from 'src/draggables/settings/draggable-settings.vue';
@@ -22,7 +22,7 @@ const {isReady} = useStorageReady();
 </script>
 
 <template>
-  <DraggableImport v-if="store.import" />
+  <DraggableOpen v-if="store.open" />
   <DraggableSettings v-if="store.settings" />
   <DraggableHelp v-if="store.help" />
 
