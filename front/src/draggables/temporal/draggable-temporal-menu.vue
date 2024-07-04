@@ -124,7 +124,7 @@ watch(indicator, update);
           <NButton
             v-for="p in periods"
             :disabled="!isCandles"
-            size="small"
+            size="tiny"
             @click="updatePeriod(p)"
           >
             {{ p.name }}

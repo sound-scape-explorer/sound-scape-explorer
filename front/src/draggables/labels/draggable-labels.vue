@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import DraggableLabelsItems from 'src/draggables/labels/draggable-labels-items.vue';
+import DraggableLabelsItems from 'src/draggables/labels/draggable-labels-item-container.vue';
 import DraggableLabelsSidebar from 'src/draggables/labels/draggable-labels-sidebar.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 import {computed} from 'vue';
