@@ -32,7 +32,9 @@ const props = defineProps<AppGridProps>();
       >
         {{ item.tag }}
       </NTag>
-      {{ item.value }}
+      <span class="value">
+        {{ item.value }}
+      </span>
     </NGi>
   </NGrid>
 </template>
@@ -42,5 +44,9 @@ const props = defineProps<AppGridProps>();
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
+}
+
+.value {
+  user-select: text;
 }
 </style>

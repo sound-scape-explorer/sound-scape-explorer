@@ -65,7 +65,8 @@ const handleChange = () => {
 }
 
 .details {
-  max-width: 40em;
-  text-wrap: nowrap;
+  max-width: 45em;
+  text-align: right;
+  text-wrap: stable;
 }
 </style>
