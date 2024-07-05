@@ -64,7 +64,8 @@ export function useDraggables() {
     }
 
     if (selected.value === key) {
-      selected.value = null;
+      const next = getNextKey(key);
+      selected.value = next;
     }
   };
 
@@ -94,7 +95,7 @@ export function useDraggables() {
     }
   };
 
-  const scroll = () => {
+  const cycle = () => {
     if (active.value.length < 2 || selected.value === null) {
       return;
     }
@@ -124,7 +125,7 @@ export function useDraggables() {
     store: store,
     open: open,
     toggle: toggle,
-    scroll: scroll,
+    cycle: cycle,
     close: close,
     closeAll: closeAll,
     closeActive: closeActive,

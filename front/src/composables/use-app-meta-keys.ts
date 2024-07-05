@@ -7,7 +7,7 @@ const blockedKeys: KeyboardEvent['key'][] = ['Tab'];
 
 export function useAppMetaKeys() {
   const {tab, escape} = useMagicKeys();
-  const {scroll, closeActive} = useDraggables();
+  const {cycle, closeActive} = useDraggables();
   const {isLocked} = useKeyboard();
 
   const blockHandler = (e: KeyboardEvent) => {
@@ -23,7 +23,7 @@ export function useAppMetaKeys() {
       return;
     }
 
-    scroll();
+    cycle();
   };
 
   const handleEscape = () => {
