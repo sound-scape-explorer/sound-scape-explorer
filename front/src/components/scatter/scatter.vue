@@ -25,7 +25,7 @@ const {
 } = useScatter();
 const {criteria, flavor} = useColorSelection();
 const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
-const {timeShift} = useClientSettings();
+const {timeShift, isColorMapSwapped} = useClientSettings();
 const {filtered: labelFiltered} = useScatterFilterLabel();
 const {filtered: timeFiltered} = useScatterFilterTime();
 const {filtered: temporalFiltered} = useScatterFilterTemporal();
@@ -54,6 +54,7 @@ watch(
     temporalFiltered,
     selected,
     isWebGlScatter2d,
+    isColorMapSwapped,
   ],
   async () => {
     if (isRendering || !isEnabled.value) {

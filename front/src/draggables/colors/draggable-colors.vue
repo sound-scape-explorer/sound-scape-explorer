@@ -8,6 +8,7 @@ import AppSelect from 'src/app/select/app-select.vue';
 import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useColorInvert} from 'src/composables/use-color-invert';
 import {useIndicatorLimits} from 'src/composables/use-indicator-limits';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
@@ -21,6 +22,7 @@ const {flavor} = useColorSelection();
 const {low, high} = useScatterColorAlpha();
 const {min, max} = useColorByIndicator();
 const {detect, swap} = useIndicatorLimits();
+const {invert} = useColorInvert();
 
 useRefProvide('colors/criteria', criteria);
 useRefProvide('colors/category', category);
@@ -134,9 +136,22 @@ useRefProvide('colors/indicatorMax', max);
         />
       </div>
 
-      <h2>Map</h2>
+      <h2 style="display: flex; gap: 8px">
+        <span>Map</span>
+        <AppButton
+          :handle-click="invert"
+          icon
+          size="tiny"
+          tooltip="Revert color map"
+          tooltip-placement="bottom"
+        >
+          <RepeatOutline />
+        </AppButton>
+      </h2>
 
-      <ColorsGradients />
+      <div class="gradients">
+        <ColorsGradients />
+      </div>
 
       <h2>Flavor</h2>
 
@@ -172,5 +187,9 @@ useRefProvide('colors/indicatorMax', max);
 .indicator-buttons {
   display: flex;
   gap: 0.5em;
+}
+
+.gradients {
+  transform: translateY(-2px);
 }
 </style>

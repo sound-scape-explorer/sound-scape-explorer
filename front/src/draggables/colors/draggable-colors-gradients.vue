@@ -2,58 +2,47 @@
 import AppGradient from 'src/app/app-gradient.vue';
 import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorUser} from 'src/composables/use-color-user';
-import {createHourlyLabels} from 'src/utils/create-hourly-labels';
+import {useColorGradients} from 'src/draggables/colors/use-color-gradients';
 import {computed} from 'vue';
 
 const {scale, cyclingScale} = useScatterColorScale();
 const {scale: userScale} = useColorUser();
 const {criteria} = useColorSelection();
+const {isColorMapSwapped} = useClientSettings();
 
 const size = 100;
 
-const isCycleDay = computed(() => criteria.value === 'cycleDay');
-const isCycleDayColors = computed<string[]>(() =>
-  cyclingScale.value.colors(size),
-);
-const isCycleDayLabels = computed<string[]>(() => createHourlyLabels(size));
+const {cycleDayLabels, cycleDayColors, userColors, dayColors} =
+  useColorGradients();
 
-const isDay = computed(() => criteria.value === 'isDay');
-const isDayColors = computed(() => {
-  if (!isDay.value) {
-    return [];
-  }
-
-  const uniques = [...new Set(scale.value)];
-  const sorted = uniques.sort((a, b) => a.localeCompare(b));
-  return sorted;
-});
-
-const isUser = computed(() => !isCycleDay.value && !isDay.value);
-const isUserColors = computed<string[]>(() => {
-  return userScale.value.colors(size);
+const isElse = computed(() => {
+  return criteria.value !== 'cycleDay' && criteria.value !== 'isDay';
 });
 </script>
 
 <template>
   <AppGradient
-    v-if="isCycleDay"
-    :colors="isCycleDayColors"
-    :labels="isCycleDayLabels"
+    v-if="criteria === 'cycleDay'"
+    :colors="cycleDayColors"
+    :labels="cycleDayLabels"
     legend-max="00:00"
     legend-med="12:00"
     legend-min="00:00"
   />
+
   <AppGradient
-    v-if="isDay"
-    :colors="isDayColors"
+    v-if="criteria === 'isDay'"
+    :colors="dayColors"
     :labels="['night', 'day']"
     :width="50"
     legend-max="day"
     legend-min="night"
   />
+
   <AppGradient
-    v-if="isUser"
-    :colors="isUserColors"
+    v-if="isElse"
+    :colors="userColors"
   />
 </template>

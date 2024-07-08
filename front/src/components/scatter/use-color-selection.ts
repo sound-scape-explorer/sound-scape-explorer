@@ -78,7 +78,6 @@ export function useColorSelection() {
     category: category,
     categories: categories,
     handleLabelClick: handleLabelClick,
-
     isIndicators: isIndicators,
   };
 }

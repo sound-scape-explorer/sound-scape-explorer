@@ -8,6 +8,7 @@ const isTimezoneActive = ref<boolean>(false);
 const timeShift = ref<number>(0); // hours
 const isCopyOnSelect2d = ref<boolean>(true);
 const isWebGlScatter2d = ref<boolean>(true);
+const isColorMapSwapped = ref<boolean>(false);
 
 export function useClientSettings() {
   return {
@@ -18,5 +19,6 @@ export function useClientSettings() {
     timeShift: timeShift,
     isCopyOnSelect2d: isCopyOnSelect2d,
     isWebGlScatter2d: isWebGlScatter2d,
+    isColorMapSwapped: isColorMapSwapped,
   };
 }

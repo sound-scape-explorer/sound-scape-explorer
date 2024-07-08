@@ -21,6 +21,7 @@ const {
   timeShift,
   isCopyOnSelect2d,
   isWebGlScatter2d,
+  isColorMapSwapped,
 } = useClientSettings();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
