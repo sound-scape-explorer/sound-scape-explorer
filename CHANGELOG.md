@@ -1,3 +1,10 @@
+## [13.4.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.1...v13.4.2) (2024-07-08)
+
+
+### Bug Fixes
+
+* **Visualisation:** Typo ([8c39fb4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8c39fb4170cd26a3879d1110c198b03b8a33bbe2))
+
 ## [13.4.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.0...v13.4.1) (2024-07-08)
 
 
