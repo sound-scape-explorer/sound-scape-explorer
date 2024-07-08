@@ -1,3 +1,10 @@
+## [13.4.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.0...v13.4.1) (2024-07-08)
+
+
+### Bug Fixes
+
+* **Visualisation:** Force cell object to string + Detect absolute values ([54bf9ff](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/54bf9fff3a367b93e4a3474e16f1720b82ed78d4))
+
 # [13.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.3.1...v13.4.0) (2024-06-20)
 
 
