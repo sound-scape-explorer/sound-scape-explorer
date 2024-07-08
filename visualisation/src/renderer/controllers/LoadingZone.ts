@@ -56,10 +56,29 @@ export class LoadingZone {
 
         input.value = null;
         const audioPath = await this.readAudioPathFromExcel(file);
+        console.log('LoadingZone/audioPath:', audioPath);
         await window.electronAPI.startAudioService(audioPath);
         await render();
       },
     );
+  }
+
+  private isAbsolute(path: string): boolean {
+    const isLinux = path[0] === '/';
+    const isWindows = path[2] === '/' || path[2] === '\\';
+    return isWindows || isLinux;
+  }
+
+  private getFinalPath(audioPath: string, directory: string): string {
+    if (this.isAbsolute(audioPath)) {
+      return audioPath;
+    }
+
+    return directory + '/' + audioPath;
+  }
+
+  private getDirectory(file: File): string {
+    return window.electronAPI.getFileDirectory(file).toString();
   }
 
   private readAudioPathFromExcel(file: File): Promise<string> {
@@ -71,10 +90,9 @@ export class LoadingZone {
         const workbook = new Excel.Workbook();
         await workbook.xlsx.load(data);
         const settings = workbook.getWorksheet('Settings');
-        const audioPathCell = settings.getCell('B3');
-        const directory = window.electronAPI.getFileDirectory(file);
-        const audioPath = directory + '/' + audioPathCell.value;
-        resolve(audioPath);
+        const audioPath = settings.getCell('B3').toString();
+        const directory = this.getDirectory(file);
+        resolve(this.getFinalPath(audioPath, directory));
       });
 
       reader.readAsArrayBuffer(file);
@@ -114,6 +132,8 @@ export class LoadingZone {
       reader.addEventListener('load', async (e) => {
         const f = new hdf5.File(e.target.result, file.name);
         const audioPath = f.get('settings').attrs['audio_path'];
+        const directory = this.getDirectory(file);
+        resolve(this.getFinalPath(audioPath, directory));
         resolve(audioPath);
       });
 
