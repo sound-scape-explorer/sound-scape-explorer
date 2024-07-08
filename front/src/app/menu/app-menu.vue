@@ -23,7 +23,7 @@ import {useViewState} from 'src/composables/use-view-state';
 
 const {isReady} = useStorageReady();
 const {hasView} = useViewState();
-const {preview} = useClientSettings();
+const {isPreview} = useClientSettings();
 </script>
 
 <template>
@@ -81,7 +81,7 @@ const {preview} = useClientSettings();
       </AppMenuButton>
 
       <AppMenuButton
-        v-if="preview"
+        v-if="isPreview"
         :disabled="!hasView"
         draggable-key="timeline"
         text="Timeline"
@@ -138,7 +138,7 @@ const {preview} = useClientSettings();
       </AppMenuButton>
 
       <AppMenuButton
-        v-if="preview"
+        v-if="isPreview"
         :disabled="!hasView"
         draggable-key="selection"
         text="Selection"

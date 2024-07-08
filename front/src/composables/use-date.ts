@@ -12,12 +12,12 @@ dayjs.extend(timezone);
 
 export function useDate() {
   const {settings} = useStorageSettings();
-  const {applyTimezone, timeShift} = useClientSettings();
+  const {isTimezoneActive, timeShift} = useClientSettings();
 
   const convertTimestampToDate = (timestamp: number) => {
     const shift = timeShift.value;
 
-    if (applyTimezone.value === false) {
+    if (isTimezoneActive.value === false) {
       return dayjs(timestamp).add(shift, 'hours');
     }
 

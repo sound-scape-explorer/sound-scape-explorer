@@ -80,9 +80,7 @@ watch([container, isEnabled], () => {
 
     let filtered: number[] = [];
 
-    for (let i = 0; i < selectedPoints.length; i += 1) {
-      const index = selectedPoints[i];
-
+    for (const index of selectedPoints) {
       if (index === null) {
         continue;
       }

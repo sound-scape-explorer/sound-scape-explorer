@@ -30,7 +30,7 @@ const {filtered: labelFiltered} = useScatterFilterLabel();
 const {filtered: timeFiltered} = useScatterFilterTime();
 const {filtered: temporalFiltered} = useScatterFilterTemporal();
 const {selected} = useScreen();
-const {scatter2dGl} = useClientSettings();
+const {isWebGlScatter2d} = useClientSettings();
 const {min: rangeMin, max: rangeMax} = useColorByIndicator();
 
 onMounted(mount);
@@ -53,7 +53,7 @@ watch(
     timeFiltered,
     temporalFiltered,
     selected,
-    scatter2dGl,
+    isWebGlScatter2d,
   ],
   async () => {
     if (isRendering || !isEnabled.value) {

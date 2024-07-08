@@ -14,6 +14,7 @@ import AppNotification from 'src/app/notification/app-notification.vue';
 import Scatter from 'src/components/scatter/scatter.vue';
 import Screen from 'src/components/screen/screen.vue';
 import {useAppShortcuts} from 'src/composables/use-app-shortcuts';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useWorker} from 'src/composables/use-worker';
@@ -26,6 +27,7 @@ useWorker();
 useAppShortcuts();
 const {isReady} = useStorageReady();
 const {open} = useDraggables();
+const {isPreview} = useClientSettings();
 
 const showImport = () => {
   if (isReady.value) {
@@ -61,7 +63,7 @@ onMounted(showImport);
             <AppMenu />
             <AppLoader />
             <Scatter v-if="isReady" />
-            <Screen v-if="isReady" />
+            <Screen v-if="isReady && isPreview" />
             <Draggables />
           </div>
         </Suspense>

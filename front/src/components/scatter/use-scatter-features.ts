@@ -22,9 +22,10 @@ export function useScatterFeatures() {
   const {low, high} = useScatterColorAlpha();
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
-  const {scatter2dGl} = useClientSettings();
+  const {isWebGlScatter2d} = useClientSettings();
   const {filtered} = useIntervalFilter();
 
+  // TODO: improve me
   const trace = (): Data[] => {
     if (
       labelProperties.value === null ||
@@ -39,7 +40,6 @@ export function useScatterFeatures() {
     const colorScale = scale.value;
     const pointsSelected = selected.value;
 
-    // TODO: improve me
     const plotlyColorscale = colorScale.map((color, index) => {
       let filteredColor = color;
 
@@ -59,7 +59,7 @@ export function useScatterFeatures() {
 
     if (isThreeDimensional) {
       scatterType = 'scatter3d';
-    } else if (!isThreeDimensional && scatter2dGl.value) {
+    } else if (!isThreeDimensional && isWebGlScatter2d.value) {
       scatterType = 'scattergl';
     } else {
       scatterType = 'scatter';

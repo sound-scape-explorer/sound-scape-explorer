@@ -13,7 +13,7 @@ export function useAppShortcuts() {
   const {registerKey} = useKeyboard();
   const {isReady} = useStorageReady();
   const {toggle} = useDraggables();
-  const {preview} = useClientSettings();
+  const {isPreview} = useClientSettings();
   const {enable} = useScreen();
   const {toggleExpand} = useDraggableLabels();
 
@@ -28,7 +28,7 @@ export function useAppShortcuts() {
   registerKey(KeyboardShortcut.time, () => toggle('time'));
   registerKey(
     KeyboardShortcut.timeline,
-    () => preview.value && toggle('timeline'),
+    () => isPreview.value && toggle('timeline'),
   );
   registerKey(KeyboardShortcut.labels, () => toggle('labels'));
   registerKey(KeyboardShortcut.details, () => toggle('details'));
@@ -41,9 +41,9 @@ export function useAppShortcuts() {
   registerKey(KeyboardShortcut.heatmaps, () => toggle('heatmaps'));
   registerKey(
     KeyboardShortcut.selection,
-    () => preview.value && toggle('selection'),
+    () => isPreview.value && toggle('selection'),
   );
-  registerKey(KeyboardShortcut.selectHotkey, () => preview.value && enable());
+  registerKey(KeyboardShortcut.selectHotkey, () => isPreview.value && enable());
 
   registerKey(KeyboardShortcut.labelsZoom, toggleExpand);
 }

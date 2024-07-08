@@ -1,22 +1,22 @@
 import {PLOT_BACKGROUND} from 'src/constants';
 import {ref} from 'vue';
 
-const openDetailsOnScatterClick = ref<boolean>(false);
+const isDetailsAutoOpen = ref<boolean>(false);
 const plotBackground = ref<PLOT_BACKGROUND>(PLOT_BACKGROUND.transparent);
-const preview = ref<boolean>(false);
-const applyTimezone = ref<boolean>(false);
+const isPreview = ref<boolean>(false);
+const isTimezoneActive = ref<boolean>(false);
 const timeShift = ref<number>(0); // hours
-const copySelect2d = ref<boolean>(true);
-const scatter2dGl = ref<boolean>(true);
+const isCopyOnSelect2d = ref<boolean>(true);
+const isWebGlScatter2d = ref<boolean>(true);
 
 export function useClientSettings() {
   return {
-    openDetailsOnScatterClick: openDetailsOnScatterClick,
+    isDetailsAutoOpen: isDetailsAutoOpen,
     plotBackground: plotBackground,
-    preview: preview,
-    applyTimezone: applyTimezone,
+    isPreview: isPreview,
+    isTimezoneActive: isTimezoneActive,
     timeShift: timeShift,
-    copySelect2d: copySelect2d,
-    scatter2dGl: scatter2dGl,
+    isCopyOnSelect2d: isCopyOnSelect2d,
+    isWebGlScatter2d: isWebGlScatter2d,
   };
 }

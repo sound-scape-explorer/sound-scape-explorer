@@ -9,7 +9,7 @@ const hasClicked = computed<boolean>(() => currentIntervalIndex.value !== null);
 export function useAudioOpen() {
   const {isLoading} = useAudioFile();
   const {open} = useDraggables();
-  const {openDetailsOnScatterClick} = useClientSettings();
+  const {isDetailsAutoOpen} = useClientSettings();
 
   const openAudio = (index: number | null) => {
     if (currentIntervalIndex.value === index) {
@@ -26,7 +26,7 @@ export function useAudioOpen() {
       return;
     }
 
-    if (openDetailsOnScatterClick.value) {
+    if (isDetailsAutoOpen.value) {
       open('details');
     }
   };

@@ -31,7 +31,7 @@ export function useScatter() {
   const {files} = useStorageFiles();
   const {notify} = useAppNotification();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
-  const {copySelect2d} = useClientSettings();
+  const {isCopyOnSelect2d} = useClientSettings();
 
   const handlePlotlyClick = (e: PlotMouseEvent) => {
     const intervalIndex = e.points[0].pointNumber;
@@ -89,7 +89,7 @@ export function useScatter() {
   };
 
   const handleSelection = async (e: PlotSelectionEvent | undefined) => {
-    if (!copySelect2d.value) {
+    if (!isCopyOnSelect2d.value) {
       return;
     }
 

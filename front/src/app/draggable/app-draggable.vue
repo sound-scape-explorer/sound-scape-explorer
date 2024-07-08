@@ -9,8 +9,6 @@ import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles'
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 
-// TODO: This component is ugly.
-
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
   hideSeparator?: boolean;

@@ -14,13 +14,13 @@ import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-setting
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 
 const {
-  openDetailsOnScatterClick,
+  isDetailsAutoOpen,
   plotBackground,
-  preview,
-  applyTimezone,
+  isPreview,
+  isTimezoneActive,
   timeShift,
-  copySelect2d,
-  scatter2dGl,
+  isCopyOnSelect2d,
+  isWebGlScatter2d,
 } = useClientSettings();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
@@ -72,7 +72,7 @@ useRefProvide('settings/plotBackground', plotBackground);
 
     <DraggableSettingsItem title="Auto open Details panel on scatter click">
       <NCheckbox
-        v-model:checked="openDetailsOnScatterClick"
+        v-model:checked="isDetailsAutoOpen"
         class="checkbox"
       />
     </DraggableSettingsItem>
@@ -100,7 +100,7 @@ useRefProvide('settings/plotBackground', plotBackground);
       })`"
     >
       <NCheckbox
-        v-model:checked="applyTimezone"
+        v-model:checked="isTimezoneActive"
         :disabled="!hasTimezone"
         class="checkbox"
       />
@@ -117,21 +117,21 @@ useRefProvide('settings/plotBackground', plotBackground);
 
     <DraggableSettingsItem title="Copy on 2d selection">
       <NCheckbox
-        v-model:checked="copySelect2d"
+        v-model:checked="isCopyOnSelect2d"
         class="checkbox"
       />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Use WebGL for 2d scatters">
       <NCheckbox
-        v-model:checked="scatter2dGl"
+        v-model:checked="isWebGlScatter2d"
         class="checkbox"
       />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Preview beta features">
       <NCheckbox
-        v-model:checked="preview"
+        v-model:checked="isPreview"
         class="checkbox"
       />
     </DraggableSettingsItem>

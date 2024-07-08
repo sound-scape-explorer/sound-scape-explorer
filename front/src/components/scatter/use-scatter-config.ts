@@ -20,7 +20,7 @@ export interface ScatterProps extends DownloadImgopts {
 export function useScatterConfig() {
   const {handleScatterExportClick} = useScatterExport();
   const {enable} = useScreen();
-  const {preview} = useClientSettings();
+  const {isPreview} = useClientSettings();
 
   const scatterWidth = PLOTLY_SIZE * (4 / 3);
   const scatterHeight = PLOTLY_SIZE;
@@ -39,7 +39,7 @@ export function useScatterConfig() {
   const config = computed<Partial<Config>>(() => {
     let barButtons: ModeBarButtonAny[] = [];
 
-    if (preview.value === true) {
+    if (isPreview.value === true) {
       barButtons = [
         {
           name: 'toggle-selection',
