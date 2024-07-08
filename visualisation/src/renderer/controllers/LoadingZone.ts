@@ -134,7 +134,6 @@ export class LoadingZone {
         const audioPath = f.get('settings').attrs['audio_path'];
         const directory = this.getDirectory(file);
         resolve(this.getFinalPath(audioPath, directory));
-        resolve(audioPath);
       });
 
       reader.readAsArrayBuffer(file);
