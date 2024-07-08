@@ -1,7 +1,13 @@
+import {useStorage} from '@vueuse/core';
+import {SettingDefault} from 'src/common/setting-default';
+import {SettingKey} from 'src/common/setting-key';
 import {useStorageSettings} from 'src/composables/use-storage-settings';
-import {ref, watch} from 'vue';
+import {watch} from 'vue';
 
-const audioHost = ref<string | null>(null);
+const audioHost = useStorage<string>(
+  SettingKey.audioHost,
+  SettingDefault.audioHost,
+);
 
 export function useStorageAudioHost() {
   const {settings} = useStorageSettings();
@@ -12,7 +18,6 @@ export function useStorageAudioHost() {
     }
 
     if (settings.value.audio_host === '') {
-      audioHost.value = 'http://localhost:5531/';
       return;
     }
 

@@ -17,7 +17,7 @@ export function useWavesurferSpectrogram() {
   const {size} = useAudioFourier();
   const {colormap} = useSpectrogramColormap();
   const {colors} = useWavesurferColors();
-  const {showDecibels, overflowLegends} = useWavesurferSettings();
+  const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
   const register = () => {
     if (
@@ -41,15 +41,18 @@ export function useWavesurferSpectrogram() {
       fftSamples: size.value,
       frequencyMin: band.value.low,
       frequencyMax: band.value.high,
-      decibels: showDecibels.value,
-      overflowLegends: overflowLegends.value,
+      decibels: isDecibelsDisplay.value,
+      overflowLegends: isLegendOverflow.value,
       bitDepth: bitDepth.value,
     });
 
     ws.value.registerPlugins([spectro]);
   };
 
-  watch([size, colormap, showDecibels, overflowLegends, bitDepth], register);
+  watch(
+    [size, colormap, isDecibelsDisplay, isLegendOverflow, bitDepth],
+    register,
+  );
 
   return {
     register: register,

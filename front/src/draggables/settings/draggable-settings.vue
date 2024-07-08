@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {NCheckbox} from 'naive-ui';
+import AppButton from 'src/app/app-button.vue';
+import AppCheckbox from 'src/app/app-checkbox.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppInput from 'src/app/input/app-input.vue';
@@ -14,33 +15,52 @@ import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-setting
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 
 const {
+  resetAll,
   isDetailsAutoOpen,
   plotBackground,
   isPreview,
   isTimezoneActive,
-  timeShift,
+  timeshift,
   isCopyOnSelect2d,
   isWebGlScatter2d,
-  isColorMapSwapped,
 } = useClientSettings();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
 const {colormap} = useSpectrogramColormap();
 const {settings, hasTimezone} = useStorageSettings();
-const {showDecibels, overflowLegends} = useWavesurferSettings();
+const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
 const colormapOptions = SPECTROGRAM_COLOR_MAPS;
 const backgrounds = Object.values(PLOT_BACKGROUND);
 
 useRefProvide('settings/audioHost', audioHost);
 useRefProvide('settings/fontSize', fontSize);
-useRefProvide('settings/timeShift', timeShift);
+useRefProvide('settings/timeShift', timeshift);
 useRefProvide('settings/colormap', colormap);
 useRefProvide('settings/plotBackground', plotBackground);
+useRefProvide('settings/detailsAutoOpen', isDetailsAutoOpen);
+useRefProvide('settings/decibelsDisplay', isDecibelsDisplay);
+useRefProvide('settings/legendOverflow', isLegendOverflow);
+useRefProvide('settings/isTimezoneActive', isTimezoneActive);
+useRefProvide('settings/isCopyOnSelect2d', isCopyOnSelect2d);
+useRefProvide('settings/isWebGlScatter2d', isWebGlScatter2d);
+useRefProvide('settings/isPreview', isPreview);
+
+// todo: add reset action
 </script>
 
 <template>
   <AppDraggable draggable-key="settings">
+    <div class="reset">
+      <AppButton
+        :handle-click="resetAll"
+        grow
+        size="small"
+      >
+        Restore defaults
+      </AppButton>
+    </div>
+
     <DraggableSettingsItem title="Audio host">
       <AppInput
         align="left"
@@ -58,23 +78,23 @@ useRefProvide('settings/plotBackground', plotBackground);
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Spectrogram: Show decibels">
-      <NCheckbox
-        v-model:checked="showDecibels"
-        class="checkbox"
+      <AppCheckbox
+        :default="isDecibelsDisplay"
+        injection-key="settings/decibelsDisplay"
       />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Spectrogram: Overflow legends">
-      <NCheckbox
-        v-model:checked="overflowLegends"
-        class="checkbox"
+      <AppCheckbox
+        :default="isLegendOverflow"
+        injection-key="settings/legendOverflow"
       />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Auto open Details panel on scatter click">
-      <NCheckbox
-        v-model:checked="isDetailsAutoOpen"
-        class="checkbox"
+      <AppCheckbox
+        :default="isDetailsAutoOpen"
+        injection-key="settings/detailsAutoOpen"
       />
     </DraggableSettingsItem>
 
@@ -100,10 +120,10 @@ useRefProvide('settings/plotBackground', plotBackground);
         settings?.timezone ? settings.timezone : 'disabled'
       })`"
     >
-      <NCheckbox
-        v-model:checked="isTimezoneActive"
+      <AppCheckbox
+        :default="isTimezoneActive"
         :disabled="!hasTimezone"
-        class="checkbox"
+        injection-key="settings/isTimezoneActive"
       />
     </DraggableSettingsItem>
 
@@ -117,24 +137,33 @@ useRefProvide('settings/plotBackground', plotBackground);
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Copy on 2d selection">
-      <NCheckbox
-        v-model:checked="isCopyOnSelect2d"
-        class="checkbox"
+      <AppCheckbox
+        :default="isCopyOnSelect2d"
+        injection-key="settings/isCopyOnSelect2d"
       />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Use WebGL for 2d scatters">
-      <NCheckbox
-        v-model:checked="isWebGlScatter2d"
-        class="checkbox"
+      <AppCheckbox
+        :default="isWebGlScatter2d"
+        injection-key="settings/isWebGlScatter2d"
       />
     </DraggableSettingsItem>
 
     <DraggableSettingsItem title="Preview beta features">
-      <NCheckbox
-        v-model:checked="isPreview"
-        class="checkbox"
+      <AppCheckbox
+        :default="isPreview"
+        injection-key="settings/isPreview"
       />
     </DraggableSettingsItem>
   </AppDraggable>
 </template>
+
+<style lang="scss" scoped>
+.reset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+</style>

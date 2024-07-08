@@ -1,11 +1,20 @@
-import {ref} from 'vue';
+import {useStorage} from '@vueuse/core';
+import {SettingDefault} from 'src/common/setting-default';
+import {SettingKey} from 'src/common/setting-key';
 
-const showDecibels = ref<boolean>(false);
-const overflowLegends = ref<boolean>(false);
+const isDecibelsDisplay = useStorage<boolean>(
+  SettingKey.decibelsDisplay,
+  SettingDefault.decibelsDisplay,
+);
+
+const isLegendOverflow = useStorage<boolean>(
+  SettingKey.legendOverflow,
+  SettingDefault.legendOverflow,
+);
 
 export function useWavesurferSettings() {
   return {
-    showDecibels: showDecibels,
-    overflowLegends: overflowLegends,
+    isDecibelsDisplay: isDecibelsDisplay,
+    isLegendOverflow: isLegendOverflow,
   };
 }

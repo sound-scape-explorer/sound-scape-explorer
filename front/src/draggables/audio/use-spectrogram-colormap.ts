@@ -1,8 +1,11 @@
-import {SPECTROGRAM_COLOR_MAPS} from 'src/constants';
-import {ref} from 'vue';
+import {useStorage} from '@vueuse/core';
+import {SettingDefault} from 'src/common/setting-default';
+import {SettingKey} from 'src/common/setting-key';
 
-const colormaps = SPECTROGRAM_COLOR_MAPS;
-const colormap = ref<string>(colormaps[0]);
+const colormap = useStorage<string>(
+  SettingKey.spectrogramColorMap,
+  SettingDefault.spectrogramColorMap,
+);
 
 export function useSpectrogramColormap() {
   return {

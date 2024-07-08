@@ -25,7 +25,7 @@ const {
 } = useScatter();
 const {criteria, flavor} = useColorSelection();
 const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
-const {timeShift, isColorMapSwapped} = useClientSettings();
+const {timeshift, isColorMapSwapped} = useClientSettings();
 const {filtered: labelFiltered} = useScatterFilterLabel();
 const {filtered: timeFiltered} = useScatterFilterTime();
 const {filtered: temporalFiltered} = useScatterFilterTemporal();
@@ -48,7 +48,7 @@ watch(
     opacityHigh,
     rangeMin,
     rangeMax,
-    timeShift,
+    timeshift,
     labelFiltered,
     timeFiltered,
     temporalFiltered,

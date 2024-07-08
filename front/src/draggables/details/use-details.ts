@@ -32,7 +32,7 @@ export function useDetails() {
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {currentIntervalIndex} = useAudioOpen();
-  const {timeShift} = useClientSettings();
+  const {timeshift} = useClientSettings();
 
   const readDetails = async () => {
     if (
@@ -60,7 +60,7 @@ export function useDetails() {
   };
 
   watch(currentIntervalIndex, readDetails);
-  watch(timeShift, () => {
+  watch(timeshift, () => {
     if (
       currentIntervalIndex.value === null ||
       aggregatedTimestamps.value === null
