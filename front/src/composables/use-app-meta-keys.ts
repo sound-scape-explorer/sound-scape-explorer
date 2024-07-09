@@ -1,6 +1,6 @@
 import {useMagicKeys} from '@vueuse/core';
 import {useDraggables} from 'src/composables/use-draggables';
-import {useKeyboard} from 'src/composables/use-keyboard';
+import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {onMounted, onUnmounted, watch} from 'vue';
 
 const blockedKeys: KeyboardEvent['key'][] = ['Tab'];
@@ -8,7 +8,7 @@ const blockedKeys: KeyboardEvent['key'][] = ['Tab'];
 export function useAppMetaKeys() {
   const {tab, escape} = useMagicKeys();
   const {cycle, closeActive} = useDraggables();
-  const {isLocked} = useKeyboard();
+  const {isLocked} = useGlobalKeyboard();
 
   const blockHandler = (e: KeyboardEvent) => {
     if (blockedKeys.indexOf(e.key) === -1) {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {NInput, NInputNumber, NSpace, NTooltip} from 'naive-ui';
 import {type InjectionKey} from 'src/common/injection-key';
-import {useKeyboard} from 'src/composables/use-keyboard';
+import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefInject} from 'src/composables/use-ref-inject';
 import {computed} from 'vue';
 
@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'tiny',
 });
 
-const {lock, unlock} = useKeyboard();
+const {lock, unlock} = useGlobalKeyboard();
 const hasTooltip = computed(() => typeof props.tooltip === 'string');
 const isNumber = computed(() => props.type === 'number');
 const isString = computed(() => props.type === 'string');

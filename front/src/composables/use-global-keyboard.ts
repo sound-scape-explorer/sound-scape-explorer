@@ -1,11 +1,11 @@
 import {onKeyStroke} from '@vueuse/core';
-import type {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
+import type {Shortcuts} from 'src/composables/use-shortcuts';
 import {ref} from 'vue';
 
 const isLocked = ref<boolean>(false);
 
-export function useKeyboard() {
-  const registerKey = (key: KeyboardShortcut, callback: () => void): void => {
+export function useGlobalKeyboard() {
+  const registerKey = (key: Shortcuts, callback: () => void): void => {
     onKeyStroke(
       key,
       () => {

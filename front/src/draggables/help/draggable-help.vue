@@ -2,25 +2,12 @@
 import {NButton, NGi, NGrid, NTag} from 'naive-ui';
 import AppGrid from 'src/app/app-grid.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
+import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
 import {LINK_BUG_REPORT, LINK_CHANGELOG, LINK_DOCS} from 'src/constants';
 // noinspection ES6UnusedImports
 import {VERSION} from 'src/version';
 
-interface Shortcut {
-  keycode: string;
-  name: string;
-}
-
-const shortcuts: Shortcut[] = Object.entries(KeyboardShortcut).map((entry) => {
-  const [name, keycode] = entry;
-
-  return {
-    keycode: keycode,
-    name: name,
-  };
-});
-
+const {shortcuts} = useKeyboardShortcuts();
 const openDocumentation = () => window.open(LINK_DOCS);
 const openBugReport = () => window.open(LINK_BUG_REPORT);
 const openChangelog = () => window.open(LINK_CHANGELOG);

@@ -4,7 +4,7 @@ import {NButton, NIcon, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
-import {useKeyboard} from 'src/composables/use-keyboard';
+import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {
   convertToNaiveSelectOptions,
@@ -13,7 +13,7 @@ import {
 import {ref, watch} from 'vue';
 
 const {selected} = useScreen();
-const {lock, unlock} = useKeyboard();
+const {lock, unlock} = useGlobalKeyboard();
 const customProperty = ref<string>('');
 const existingProperty = ref<string>('');
 const custom = ref<string>('');

@@ -1,6 +1,5 @@
 import {NButton} from 'naive-ui';
 import type {AppMenuItemProps} from 'src/app/menu/app-menu-button.vue';
-import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useDraggables} from 'src/composables/use-draggables';
 import {computed, ref} from 'vue';
 
@@ -18,10 +17,6 @@ export function useAppMenuButton(props: AppMenuItemProps) {
     button.value.$el.blur();
   };
 
-  const shortcut = computed<string>(() => {
-    return KeyboardShortcut[props.draggableKey];
-  });
-
   const classNames = computed<string>(() => {
     let string = 'app-menu-button';
 
@@ -35,7 +30,6 @@ export function useAppMenuButton(props: AppMenuItemProps) {
   return {
     button: button,
     handleClick: handleClick,
-    shortcut: shortcut,
     classNames: classNames,
   };
 }

@@ -7,7 +7,7 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useKeyboard} from 'src/composables/use-keyboard';
+import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
@@ -41,7 +41,7 @@ const {
 const {filteredCount, collectedCount} = useTemporalInfo();
 
 const {periods, update: updatePeriod} = useTemporalCandles();
-const {lock, unlock} = useKeyboard();
+const {lock, unlock} = useGlobalKeyboard();
 const {from, to} = useTemporalThresholds();
 const {filter, reset} = useScatterFilterTemporal();
 

@@ -15,12 +15,12 @@ import {
   NTooltip,
 } from 'naive-ui';
 import AppInput from 'src/app/input/app-input.vue';
-import {KeyboardShortcut} from 'src/common/keyboard-shortcuts';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useDate} from 'src/composables/use-date';
-import {useKeyboard} from 'src/composables/use-keyboard';
+import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
+import {Shortcuts} from 'src/composables/use-shortcuts';
 import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {useDraggableTime} from 'src/draggables/time/use-draggable-time';
 import {computed, type ComputedRef, ref, watch} from 'vue';
@@ -135,10 +135,10 @@ const handleDateStartUpdate = (t: number) => {
 };
 
 // TODO: This has to move to use-app-shortcuts.ts but requires composable methods
-const {registerKey} = useKeyboard();
-registerKey(KeyboardShortcut.timeForward, () => skipTimeForward());
-registerKey(KeyboardShortcut.timeBackward, () => skipTimeBackward());
-registerKey(KeyboardShortcut.timePlayPause, () => togglePlaying());
+const {registerKey} = useGlobalKeyboard();
+registerKey(Shortcuts.timeForward, () => skipTimeForward());
+registerKey(Shortcuts.timeBackward, () => skipTimeBackward());
+registerKey(Shortcuts.timePlayPause, () => togglePlaying());
 </script>
 
 <template>
