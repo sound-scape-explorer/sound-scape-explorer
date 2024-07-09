@@ -14,6 +14,7 @@ import {useRefProvide} from 'src/composables/use-ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
+import {computed} from 'vue';
 
 const {isLoading} = useScatterLoading();
 const {criteria, criterias, category, categories, isIndicators} =
@@ -31,6 +32,8 @@ useRefProvide('colors/alphaExcluded', low);
 useRefProvide('colors/alphaIncluded', high);
 useRefProvide('colors/indicatorMin', min);
 useRefProvide('colors/indicatorMax', max);
+
+const isLabels = computed(() => category.value === 'Labels');
 </script>
 
 <template>
@@ -136,7 +139,10 @@ useRefProvide('colors/indicatorMax', max);
         />
       </div>
 
-      <h2 style="display: flex; gap: 8px">
+      <h2
+        v-if="!isLabels"
+        style="display: flex; gap: 8px"
+      >
         <span>Map</span>
         <AppButton
           :handle-click="invert"
@@ -149,7 +155,10 @@ useRefProvide('colors/indicatorMax', max);
         </AppButton>
       </h2>
 
-      <div class="gradients">
+      <div
+        v-if="!isLabels"
+        class="gradients"
+      >
         <ColorsGradients />
       </div>
 
