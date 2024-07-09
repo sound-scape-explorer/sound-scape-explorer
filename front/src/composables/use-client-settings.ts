@@ -1,5 +1,6 @@
 import {useStorage} from '@vueuse/core';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
+import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {SettingDefault as d} from 'src/common/setting-default';
 import {SettingKey as k} from 'src/common/setting-key';
 import {useColorSelection} from 'src/components/scatter/use-color-selection';
@@ -48,6 +49,7 @@ export function useClientSettings() {
   const {reset: resetLabels} = useDraggableLabels();
   const {reset: resetAlphas} = useScatterColorAlpha();
   const {reset: resetFlavor} = useColorSelection();
+  const {notify} = useAppNotification();
 
   const resetAll = () => {
     plotBackground.value = d.plotBackground;
@@ -68,6 +70,8 @@ export function useClientSettings() {
     resetLabels();
     resetAlphas();
     resetFlavor();
+
+    notify('success', 'Settings', 'Defaults restored');
   };
 
   return {
