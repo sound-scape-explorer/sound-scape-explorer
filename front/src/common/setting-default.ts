@@ -4,6 +4,7 @@ export const SettingDefault = {
   plotBackground: PLOT_BACKGROUND.transparent,
   timeshift: 0, // hours
   isDetailsAutoOpen: false,
+  isAudioAutoOpen: true,
   isPreview: false,
   isTimezoneActive: false,
   isCopyOnSelect2d: true,

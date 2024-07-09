@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
+
 export enum SettingKey {
   plotBackground = 'sse-settings-plotBackground',
   timeshift = 'sse-settings-timeshift',
   isDetailsAutoOpen = 'sse-settings-isDetailsAutoOpen',
+  isAudioAutoOpen = 'sse-settings-isAudioAutoOpen',
   isPreview = 'sse-settings-isPreview',
   isTimezoneActive = 'sse-settings-isTimezoneActive',
   isCopyOnSelect2d = 'sse-settings-isCopyOnSelect2d',

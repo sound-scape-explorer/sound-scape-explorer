@@ -8,11 +8,18 @@ import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-setting
 
 const plotBackground = useStorage<string>(k.plotBackground, d.plotBackground);
 const timeshift = useStorage<number>(k.timeshift, d.timeshift);
+const isPreview = useStorage<boolean>(k.isPreview, d.isPreview);
+
 const isDetailsAutoOpen = useStorage<boolean>(
   k.isDetailsAutoOpen,
   d.isDetailsAutoOpen,
 );
-const isPreview = useStorage<boolean>(k.isPreview, d.isPreview);
+
+const isAudioAutoOpen = useStorage<boolean>(
+  k.isAudioAutoOpen,
+  d.isAudioAutoOpen,
+);
+
 const isTimezoneActive = useStorage<boolean>(
   k.isTimezoneActive,
   d.isTimezoneActive,
@@ -40,6 +47,7 @@ export function useClientSettings() {
     plotBackground.value = d.plotBackground;
     timeshift.value = d.timeshift;
     isDetailsAutoOpen.value = d.isDetailsAutoOpen;
+    isAudioAutoOpen.value = d.isAudioAutoOpen;
     isPreview.value = d.isPreview;
     isTimezoneActive.value = d.isTimezoneActive;
     isCopyOnSelect2d.value = d.isCopyOnSelect2d;
@@ -58,6 +66,7 @@ export function useClientSettings() {
     plotBackground: plotBackground,
     timeshift: timeshift,
     isDetailsAutoOpen: isDetailsAutoOpen,
+    isAudioAutoOpen: isAudioAutoOpen,
     isPreview: isPreview,
     isTimezoneActive: isTimezoneActive,
     isCopyOnSelect2d: isCopyOnSelect2d,

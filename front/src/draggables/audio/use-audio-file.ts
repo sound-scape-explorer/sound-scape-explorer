@@ -1,4 +1,5 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import type {BlockDetails} from 'src/composables/use-storage-aggregated-interval-details';
@@ -21,6 +22,7 @@ export function useAudioFile() {
   const {open, close} = useDraggables();
   const {integration} = useIntegrationSelection();
   const {context} = useAudioContext();
+  const {isAudioAutoOpen} = useClientSettings();
 
   const select = (newBlock: BlockDetails | null) => {
     if (isLoading.value) {
@@ -32,7 +34,9 @@ export function useAudioFile() {
       return;
     }
 
-    open('audio');
+    if (isAudioAutoOpen.value) {
+      open('audio');
+    }
 
     if (block.value === newBlock) {
       return;

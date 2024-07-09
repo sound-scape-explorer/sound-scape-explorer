@@ -17,6 +17,7 @@ import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-it
 const {
   resetAll,
   isDetailsAutoOpen,
+  isAudioAutoOpen,
   plotBackground,
   isPreview,
   isTimezoneActive,
@@ -38,7 +39,8 @@ useRefProvide('settings/fontSize', fontSize);
 useRefProvide('settings/timeShift', timeshift);
 useRefProvide('settings/colormap', colormap);
 useRefProvide('settings/plotBackground', plotBackground);
-useRefProvide('settings/detailsAutoOpen', isDetailsAutoOpen);
+useRefProvide('settings/isDetailsAutoOpen', isDetailsAutoOpen);
+useRefProvide('settings/isAudioAutoOpen', isAudioAutoOpen);
 useRefProvide('settings/decibelsDisplay', isDecibelsDisplay);
 useRefProvide('settings/legendOverflow', isLegendOverflow);
 useRefProvide('settings/isTimezoneActive', isTimezoneActive);
@@ -91,10 +93,17 @@ useRefProvide('settings/isPreview', isPreview);
       />
     </DraggableSettingsItem>
 
+    <DraggableSettingsItem title="Auto open Audio panel on scatter click">
+      <AppCheckbox
+        :default="isAudioAutoOpen"
+        injection-key="settings/isAudioAutoOpen"
+      />
+    </DraggableSettingsItem>
+
     <DraggableSettingsItem title="Auto open Details panel on scatter click">
       <AppCheckbox
         :default="isDetailsAutoOpen"
-        injection-key="settings/detailsAutoOpen"
+        injection-key="settings/isDetailsAutoOpen"
       />
     </DraggableSettingsItem>
 
