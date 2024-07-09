@@ -1,3 +1,10 @@
+## [13.4.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.2...v13.4.3) (2024-07-09)
+
+
+### Bug Fixes
+
+* **Front/Worker:** Sanitize relative file path when building interval details ([987b9e3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/987b9e3c4f59abe9cbc8115a72a5216fe3dddf14))
+
 ## [13.4.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.1...v13.4.2) (2024-07-08)
 
 
