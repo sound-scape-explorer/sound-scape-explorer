@@ -6,7 +6,7 @@ export interface DraggablesStore {
   help: boolean;
   view: boolean;
   colors: boolean;
-  time: boolean;
+  calendar: boolean;
   timeline: boolean;
   labels: boolean;
   audio: boolean;
@@ -27,7 +27,7 @@ const store = reactive<DraggablesStore>({
   help: false,
   view: false,
   colors: false,
-  time: false,
+  calendar: false,
   timeline: false,
   labels: false,
   audio: false,
@@ -51,6 +51,8 @@ const active = computed<DraggableKey[]>(() => {
 
   return acc;
 });
+
+const hidden = ref<boolean>(false);
 
 export function useDraggables() {
   const toggle = (key: DraggableKey): void => {
@@ -120,11 +122,15 @@ export function useDraggables() {
     return active.value[i + 1];
   };
 
+  const toggleAll = () => (hidden.value = !hidden.value);
+
   return {
     selected: selected,
     store: store,
+    hidden: hidden,
     open: open,
     toggle: toggle,
+    toggleAll: toggleAll,
     cycle: cycle,
     close: close,
     closeAll: closeAll,

@@ -91,8 +91,8 @@ const {isPreview} = useClientSettings();
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="time"
-        text="Time"
+        draggable-key="calendar"
+        text="Calendar"
       >
         <CalendarOutline />
       </AppMenuButton>

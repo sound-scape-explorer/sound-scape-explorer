@@ -22,7 +22,7 @@ import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {Shortcuts} from 'src/composables/use-shortcuts';
 import {useStorageSettings} from 'src/composables/use-storage-settings';
-import {useDraggableTime} from 'src/draggables/time/use-draggable-time';
+import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 
 const {settings} = useStorageSettings();
@@ -136,9 +136,9 @@ const handleDateStartUpdate = (t: number) => {
 
 // TODO: This has to move to use-app-shortcuts.ts but requires composable methods
 const {registerKey} = useGlobalKeyboard();
-registerKey(Shortcuts.timeForward, () => skipTimeForward());
-registerKey(Shortcuts.timeBackward, () => skipTimeBackward());
-registerKey(Shortcuts.timePlayPause, () => togglePlaying());
+registerKey(Shortcuts.calendarNext, () => skipTimeForward());
+registerKey(Shortcuts.calendarPrevious, () => skipTimeBackward());
+registerKey(Shortcuts.calendarToggle, () => togglePlaying());
 </script>
 
 <template>

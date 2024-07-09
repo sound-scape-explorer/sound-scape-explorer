@@ -56,4 +56,8 @@ const {getKey} = useKeyboardShortcuts();
 .app-menu-button__bold {
   font-weight: bold;
 }
+
+.hidden {
+  display: none;
+}
 </style>

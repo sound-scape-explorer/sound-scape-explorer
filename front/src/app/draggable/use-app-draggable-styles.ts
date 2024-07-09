@@ -3,7 +3,7 @@ import {useDraggables} from 'src/composables/use-draggables';
 import {computed, ref} from 'vue';
 
 export function useAppDraggableStyles(props: AppDraggableProps) {
-  const {store, selected} = useDraggables();
+  const {store, selected, hidden} = useDraggables();
   const isZoomed = ref<boolean>(false);
 
   const classes = computed<string>(() => {
@@ -19,6 +19,10 @@ export function useAppDraggableStyles(props: AppDraggableProps) {
 
     if (selected.value === props.draggableKey) {
       string += ' selected';
+    }
+
+    if (hidden.value) {
+      string += ' hidden';
     }
 
     return string;

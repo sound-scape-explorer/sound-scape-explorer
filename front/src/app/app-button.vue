@@ -11,6 +11,7 @@ interface Props {
   icon?: boolean;
   error?: boolean;
   grow?: boolean;
+  growCol?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,6 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
   icon: false,
   error: false,
   grow: false,
+  growCol: false,
 });
 
 const hasTooltip = computed(() => typeof props.tooltip === 'string');
@@ -27,6 +29,10 @@ const classNames = computed<string>(() => {
 
   if (props.grow) {
     string += ' grow';
+  }
+
+  if (props.growCol) {
+    string += ' growCol';
   }
 
   if (props.error) {
@@ -77,6 +83,10 @@ const classNames = computed<string>(() => {
 <style lang="scss" scoped>
 .grow {
   flex: 1;
+}
+
+.growCol {
+  width: 100%;
 }
 
 .error {

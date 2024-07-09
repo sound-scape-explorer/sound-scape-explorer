@@ -205,4 +205,8 @@ hr {
 .main {
   margin-top: 10px;
 }
+
+.hidden {
+  display: none;
+}
 </style>

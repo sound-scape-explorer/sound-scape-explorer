@@ -1,5 +1,5 @@
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useDraggableTime} from 'src/draggables/time/use-draggable-time';
+import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
 import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);

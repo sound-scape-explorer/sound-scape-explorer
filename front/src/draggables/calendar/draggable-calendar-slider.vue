@@ -9,7 +9,7 @@ import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {SLIDER_LIMITS} from 'src/constants';
-import {useDraggableTime} from 'src/draggables/time/use-draggable-time';
+import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
 import {mapRange} from 'src/utils/map-range';
 import {computed, ref, watch} from 'vue';
 

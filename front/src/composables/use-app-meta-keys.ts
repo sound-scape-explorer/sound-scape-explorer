@@ -1,14 +1,17 @@
 import {useMagicKeys} from '@vueuse/core';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
+import {Shortcuts} from 'src/composables/use-shortcuts';
 import {onMounted, onUnmounted, watch} from 'vue';
 
 const blockedKeys: KeyboardEvent['key'][] = ['Tab'];
 
 export function useAppMetaKeys() {
   const {tab, escape} = useMagicKeys();
-  const {cycle, closeActive} = useDraggables();
-  const {isLocked} = useGlobalKeyboard();
+  const {cycle, closeActive, toggleAll} = useDraggables();
+  const {isLocked, registerKey} = useGlobalKeyboard();
+
+  registerKey(Shortcuts.draggableClose, closeActive);
 
   const blockHandler = (e: KeyboardEvent) => {
     if (blockedKeys.indexOf(e.key) === -1) {
@@ -31,7 +34,8 @@ export function useAppMetaKeys() {
       return;
     }
 
-    closeActive();
+    // closeActive();
+    toggleAll();
   };
 
   onMounted(() => document.addEventListener('keydown', blockHandler));

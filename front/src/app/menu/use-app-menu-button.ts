@@ -4,7 +4,7 @@ import {useDraggables} from 'src/composables/use-draggables';
 import {computed, ref} from 'vue';
 
 export function useAppMenuButton(props: AppMenuItemProps) {
-  const {store, toggle} = useDraggables();
+  const {store, toggle, hidden} = useDraggables();
 
   const button = ref<typeof NButton | null>(null);
 
@@ -22,6 +22,10 @@ export function useAppMenuButton(props: AppMenuItemProps) {
 
     if (store[props.draggableKey]) {
       string += ' app-menu-button__active';
+    }
+
+    if (hidden.value) {
+      string += ' hidden';
     }
 
     return string;

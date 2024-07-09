@@ -22,7 +22,7 @@ export function useAppShortcuts() {
   registerKey(Shortcuts.help, () => toggle('help'));
   registerKey(Shortcuts.view, () => toggle('view'));
   registerKey(Shortcuts.colors, () => toggle('colors'));
-  registerKey(Shortcuts.time, () => toggle('time'));
+  registerKey(Shortcuts.calendar, () => toggle('calendar'));
   registerKey(Shortcuts.timeline, () => isPreview.value && toggle('timeline'));
   registerKey(Shortcuts.labels, () => toggle('labels'));
   registerKey(Shortcuts.details, () => toggle('details'));

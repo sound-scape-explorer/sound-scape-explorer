@@ -1,6 +1,6 @@
 import {useColorUser} from 'src/composables/use-color-user';
 import {useDate} from 'src/composables/use-date';
-import {useDraggableTime} from 'src/draggables/time/use-draggable-time';
+import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
 import {mapRange} from 'src/utils/map-range';
 
 export function useColorBy1h() {

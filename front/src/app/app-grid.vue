@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {NGi, NGrid, NTag} from 'naive-ui';
+import {computed} from 'vue';
 
 interface AppGridItem {
   tag: string;
@@ -10,9 +11,22 @@ interface AppGridItem {
 interface AppGridProps {
   columns: number;
   items: AppGridItem[];
+  grow?: boolean;
 }
 
-const props = defineProps<AppGridProps>();
+const props = withDefaults(defineProps<AppGridProps>(), {
+  grow: true,
+});
+
+const classNames = computed<string>(() => {
+  let string = 'gi';
+
+  if (!props.grow) {
+    string += ' no-grow';
+  }
+
+  return string;
+});
 </script>
 
 <template>
@@ -23,7 +37,7 @@ const props = defineProps<AppGridProps>();
   >
     <NGi
       v-for="item in props.items"
-      class="gi"
+      :class="classNames"
     >
       <NTag
         :bordered="false"
@@ -48,5 +62,9 @@ const props = defineProps<AppGridProps>();
 
 .value {
   user-select: text;
+}
+
+.no-grow {
+  width: fit-content;
 }
 </style>
