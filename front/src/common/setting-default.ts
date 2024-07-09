@@ -1,4 +1,8 @@
-import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
+import {
+  COLOR_FLAVORS,
+  PLOT_BACKGROUND,
+  SPECTROGRAM_COLOR_MAPS,
+} from 'src/constants';
 
 export const SettingDefault = {
   plotBackground: PLOT_BACKGROUND.transparent,
@@ -17,4 +21,7 @@ export const SettingDefault = {
   legendOverflow: false,
   labelsExpand: false,
   labelsColumns: 1,
+  colorsFlavor: COLOR_FLAVORS[0],
+  colorsAlphaLow: 0.005,
+  colorsAlphaHigh: 0.8,
 };

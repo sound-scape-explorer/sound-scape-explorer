@@ -2,9 +2,12 @@ import {useStorage} from '@vueuse/core';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {SettingDefault as d} from 'src/common/setting-default';
 import {SettingKey as k} from 'src/common/setting-key';
+import {useColorSelection} from 'src/components/scatter/use-color-selection';
+import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
+import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 const plotBackground = useStorage<string>(k.plotBackground, d.plotBackground);
 const timeshift = useStorage<number>(k.timeshift, d.timeshift);
@@ -42,6 +45,9 @@ export function useClientSettings() {
   const {fontSize} = useAppHeatmapSize();
   const {colormap} = useSpectrogramColormap();
   const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
+  const {reset: resetLabels} = useDraggableLabels();
+  const {reset: resetAlphas} = useScatterColorAlpha();
+  const {reset: resetFlavor} = useColorSelection();
 
   const resetAll = () => {
     plotBackground.value = d.plotBackground;
@@ -59,6 +65,9 @@ export function useClientSettings() {
     colormap.value = d.spectrogramColorMap;
     isDecibelsDisplay.value = d.decibelsDisplay;
     isLegendOverflow.value = d.legendOverflow;
+    resetLabels();
+    resetAlphas();
+    resetFlavor();
   };
 
   return {

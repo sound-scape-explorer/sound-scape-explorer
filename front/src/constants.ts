@@ -46,8 +46,8 @@ export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend';
 
 export const NN_EXTRACTORS = ['vgg', 'yamnet'];
 
-export type ColorFlavor = 'Accent' | 'Dark2' | 'Spectral';
-export const COLOR_FLAVORS: ColorFlavor[] = ['Accent', 'Dark2', 'Spectral'];
+export type ColorFlavor = 'Spectral' | 'Accent' | 'Dark2';
+export const COLOR_FLAVORS: ColorFlavor[] = ['Spectral', 'Accent', 'Dark2'];
 
 // Plotly instances for Indicators and Digesters.
 export const PLOTLY_SIZE = 600;

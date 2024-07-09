@@ -1,3 +1,6 @@
+import {useStorage} from '@vueuse/core';
+import {SettingDefault} from 'src/common/setting-default';
+import {SettingKey} from 'src/common/setting-key';
 import {useIndicators} from 'src/composables/use-indicators';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import type {ColorFlavor} from 'src/constants';
@@ -11,7 +14,11 @@ type ColorCriteria =
   | 'isDay'
   | 'cycleDay';
 
-const flavor = ref<ColorFlavor>('Spectral');
+const flavor = useStorage<ColorFlavor>(
+  SettingKey.colorsFlavor,
+  SettingDefault.colorsFlavor,
+);
+
 const criteria = ref<ColorCriteria>('cycleDay');
 const category = ref<ColorCategory>('Default');
 
@@ -20,6 +27,10 @@ const categories = ref<ColorCategory[]>(['Default', 'Labels', 'Indicators']);
 export function useColorSelection() {
   const {labelProperties} = useStorageLabels();
   const {names} = useIndicators();
+
+  const reset = () => {
+    flavor.value = SettingDefault.colorsFlavor;
+  };
 
   const defaultCriterias = computed(
     () =>
@@ -71,6 +82,7 @@ export function useColorSelection() {
   );
 
   return {
+    reset: reset,
     flavor: flavor,
     criteria: criteria,
     criterias: criterias,

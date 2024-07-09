@@ -25,7 +25,14 @@ export function useDraggableLabels() {
 
     columns.value = 1;
   };
+
+  const reset = () => {
+    isExpanded.value = SettingDefault.labelsExpand;
+    columns.value = SettingDefault.labelsColumns;
+  };
+
   return {
+    reset: reset,
     isExpanded: isExpanded,
     expand: expand,
     shrink: shrink,
