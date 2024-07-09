@@ -10,7 +10,7 @@ const {isExpanded} = useDraggableLabels();
 const classes = computed<string>(() => {
   let string = 'container';
 
-  if (isExpanded.value === true) {
+  if (isExpanded.value) {
     string += ' expand';
   }
 
