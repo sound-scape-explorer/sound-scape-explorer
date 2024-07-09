@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppCheckbox from 'src/app/app-checkbox.vue';
+import AppSection from 'src/app/app-section.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppInput from 'src/app/input/app-input.vue';
@@ -63,108 +64,110 @@ useRefProvide('settings/isPreview', isPreview);
       </AppButton>
     </div>
 
-    <DraggableSettingsItem title="Audio host">
-      <AppInput
-        align="left"
-        injection-key="settings/audioHost"
-        size="small"
-      />
-    </DraggableSettingsItem>
+    <AppSection>
+      <DraggableSettingsItem title="Audio host">
+        <AppInput
+          align="left"
+          injection-key="settings/audioHost"
+          size="small"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Spectrogram: Color map">
-      <AppSelect
-        :options="colormapOptions"
-        injection-key="settings/colormap"
-        size="small"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Spectrogram: Color map">
+        <AppSelect
+          :options="colormapOptions"
+          injection-key="settings/colormap"
+          size="small"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Spectrogram: Show decibels">
-      <AppCheckbox
-        :default="isDecibelsDisplay"
-        injection-key="settings/decibelsDisplay"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Spectrogram: Show decibels">
+        <AppCheckbox
+          :default="isDecibelsDisplay"
+          injection-key="settings/decibelsDisplay"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Spectrogram: Overflow legends">
-      <AppCheckbox
-        :default="isLegendOverflow"
-        injection-key="settings/legendOverflow"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Spectrogram: Overflow legends">
+        <AppCheckbox
+          :default="isLegendOverflow"
+          injection-key="settings/legendOverflow"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Auto open Audio panel on scatter click">
-      <AppCheckbox
-        :default="isAudioAutoOpen"
-        injection-key="settings/isAudioAutoOpen"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Auto open Audio panel on scatter click">
+        <AppCheckbox
+          :default="isAudioAutoOpen"
+          injection-key="settings/isAudioAutoOpen"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Auto open Details panel on scatter click">
-      <AppCheckbox
-        :default="isDetailsAutoOpen"
-        injection-key="settings/isDetailsAutoOpen"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Auto open Details panel on scatter click">
+        <AppCheckbox
+          :default="isDetailsAutoOpen"
+          injection-key="settings/isDetailsAutoOpen"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Plot background">
-      <AppSelect
-        :options="backgrounds"
-        injection-key="settings/plotBackground"
-        size="small"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Plot background">
+        <AppSelect
+          :options="backgrounds"
+          injection-key="settings/plotBackground"
+          size="small"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Plot font size">
-      <AppInput
-        align="left"
-        injection-key="settings/fontSize"
-        size="small"
-        type="number"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Plot font size">
+        <AppInput
+          align="left"
+          injection-key="settings/fontSize"
+          size="small"
+          type="number"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem
-      :title="`Apply timezone (${
-        settings?.timezone ? settings.timezone : 'disabled'
-      })`"
-    >
-      <AppCheckbox
-        :default="isTimezoneActive"
-        :disabled="!hasTimezone"
-        injection-key="settings/isTimezoneActive"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem
+        :title="`Apply timezone (${
+          settings?.timezone ? settings.timezone : 'disabled'
+        })`"
+      >
+        <AppCheckbox
+          :default="isTimezoneActive"
+          :disabled="!hasTimezone"
+          injection-key="settings/isTimezoneActive"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Time shift in hours">
-      <AppInput
-        align="left"
-        injection-key="settings/timeShift"
-        size="small"
-        type="number"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Time shift in hours">
+        <AppInput
+          align="left"
+          injection-key="settings/timeShift"
+          size="small"
+          type="number"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Copy on 2d selection">
-      <AppCheckbox
-        :default="isCopyOnSelect2d"
-        injection-key="settings/isCopyOnSelect2d"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Copy on 2d selection">
+        <AppCheckbox
+          :default="isCopyOnSelect2d"
+          injection-key="settings/isCopyOnSelect2d"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Use WebGL for 2d scatters">
-      <AppCheckbox
-        :default="isWebGlScatter2d"
-        injection-key="settings/isWebGlScatter2d"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Use WebGL for 2d scatters">
+        <AppCheckbox
+          :default="isWebGlScatter2d"
+          injection-key="settings/isWebGlScatter2d"
+        />
+      </DraggableSettingsItem>
 
-    <DraggableSettingsItem title="Preview beta features">
-      <AppCheckbox
-        :default="isPreview"
-        injection-key="settings/isPreview"
-      />
-    </DraggableSettingsItem>
+      <DraggableSettingsItem title="Preview beta features">
+        <AppCheckbox
+          :default="isPreview"
+          injection-key="settings/isPreview"
+        />
+      </DraggableSettingsItem>
+    </AppSection>
   </AppDraggable>
 </template>
 

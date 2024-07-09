@@ -12,7 +12,7 @@ const props = defineProps<Props>();
   <div class="draggable-settings-item">
     <NTag
       :bordered="false"
-      size="small"
+      size="medium"
     >
       {{ props.title }}
     </NTag>
