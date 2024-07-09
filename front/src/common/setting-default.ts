@@ -14,4 +14,6 @@ export const SettingDefault = {
   fontSize: 12,
   decibelsDisplay: false,
   legendOverflow: false,
+  labelsExpand: false,
+  labelsColumns: 1,
 };

@@ -12,4 +12,6 @@ export enum SettingKey {
   fontSize = 'sse-settings-fontSize',
   decibelsDisplay = 'sse-settings-decibelsDisplay',
   legendOverflow = 'sse-settings-legendOverflow',
+  labelsExpand = 'sse-settings-labelsExpand',
+  labelsColumns = 'sse-settings-labelsColumns',
 }

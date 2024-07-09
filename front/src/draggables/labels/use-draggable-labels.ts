@@ -1,7 +1,16 @@
-import {ref} from 'vue';
+import {useStorage} from '@vueuse/core';
+import {SettingDefault} from 'src/common/setting-default';
+import {SettingKey} from 'src/common/setting-key';
 
-const isExpanded = ref<boolean>(false);
-const columns = ref<number>(1);
+const isExpanded = useStorage<boolean>(
+  SettingKey.labelsExpand,
+  SettingDefault.labelsExpand,
+);
+
+const columns = useStorage<number>(
+  SettingKey.labelsColumns,
+  SettingDefault.labelsColumns,
+);
 
 export function useDraggableLabels() {
   const expand = () => (isExpanded.value = true);
