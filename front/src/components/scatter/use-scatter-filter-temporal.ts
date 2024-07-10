@@ -5,6 +5,7 @@ import {
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 import {calculateMean} from 'src/utils/calculate-mean';
+import {getInfiniteRange} from 'src/utils/get-infinite-range';
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
 import {ref} from 'vue';
 
@@ -48,8 +49,7 @@ export function useScatterFilterTemporal() {
     const indicator = results[0];
 
     const l = aggregatedIndicators.value[0].values.length;
-    const bottom = from.value === null ? -Infinity : from.value;
-    const top = to.value === null ? Infinity : to.value;
+    const {bottom, top} = getInfiniteRange(from.value, to.value);
 
     const newFiltered: boolean[] = new Array(l);
 
