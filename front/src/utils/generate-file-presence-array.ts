@@ -1,8 +1,9 @@
+type Presence = 'true' | 'false';
 export function generateFilePresenceArray(
   length: number,
   selectedIndex: number[],
-) {
-  let table: string[] = [];
+): Presence[] {
+  let table: Presence[] = [];
 
   for (let i = 0; i < length; i += 1) {
     if (selectedIndex.indexOf(i) === -1) {

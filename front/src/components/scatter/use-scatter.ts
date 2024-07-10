@@ -108,7 +108,9 @@ export function useScatter() {
 
     notify(
       'success',
-      `${intervalIndexes.length} intervals and ${table.length} files selected`,
+      `${intervalIndexes.length} intervals for ${
+        table.filter((v) => v === 'true').length
+      } files selected`,
       'Selection copied!',
     );
   };
