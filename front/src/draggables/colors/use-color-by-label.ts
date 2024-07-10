@@ -42,12 +42,15 @@ export function useColorByLabel() {
     };
   };
 
-  const getColorNumeric = (intervalIndex: number) => {
-    const {value} = getPrimitive(intervalIndex);
-    const numeric = Number(value);
+  const getColorNumeric = (numeric: number) => {
     const {bottom, top} = getInfiniteRange(min.value, max.value);
     const ranged = mapRange(numeric, bottom, top, 0, 1);
     return scale.value(ranged).css();
+  };
+
+  const getColorNumericAll = (intervalIndex: number) => {
+    const {value} = getPrimitive(intervalIndex);
+    return getColorNumeric(Number(value));
   };
 
   const getColorCategory = (intervalIndex: number) => {
@@ -60,15 +63,15 @@ export function useColorByLabel() {
 
   const get = (intervalIndex: number): string => {
     if (isEnabled.value) {
-      return getColorNumeric(intervalIndex);
+      return getColorNumericAll(intervalIndex);
     }
 
     return getColorCategory(intervalIndex);
   };
 
-  const getColorByLabelIndex = (index: number, length: number): string => {
+  const getColorByPropertyIndex = (p: number, length: number): string => {
     const colors = resize(scale.value, length);
-    const color = colors[index];
+    const color = colors[p];
     return convertRgbToString(color);
   };
 
@@ -89,6 +92,7 @@ export function useColorByLabel() {
     max: max,
     get: get,
     detect: detect,
-    getColorByLabelIndex: getColorByLabelIndex,
+    getColorByLabelIndex: getColorByPropertyIndex,
+    getColorNumeric: getColorNumeric,
   };
 }

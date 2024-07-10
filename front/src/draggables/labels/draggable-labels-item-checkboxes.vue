@@ -4,6 +4,7 @@ import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
 import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 import {computed, ref, watch, watchEffect} from 'vue';
 
@@ -17,25 +18,26 @@ const props = defineProps<Props>();
 
 const {criteria} = useColorSelection();
 const {labels} = useStorageLabels();
-const {getColorByLabelIndex} = useColorByLabel();
+const {getColorByLabelIndex, getColorNumeric} = useColorByLabel();
 const checkboxes = ref<string[] | undefined>([]); // todo: don't know why this gets overwritten to undefined at component mount
 const {updateSelection, selection} = useLabelsSelection();
+const {isEnabled} = useLabelsNumeric();
 
-const uniquesRef = computed<string[]>(() => {
-  if (labels.value === null) {
-    return [];
-  }
+const set = computed<string[]>(() =>
+  labels.value === null ? [] : labels.value[props.property],
+);
 
-  return labels.value[props.property];
-});
-
-function getColorByItem(index: number): string | undefined {
+const getColorItem = (p: number): string | undefined => {
   if (props.property !== criteria.value) {
     return undefined;
   }
 
-  return getColorByLabelIndex(index, uniquesRef.value.length);
-}
+  if (isEnabled.value) {
+    return getColorNumeric(Number(set.value[p]));
+  }
+
+  return getColorByLabelIndex(p, set.value.length);
+};
 
 watch(checkboxes, () => {
   if (typeof checkboxes.value === 'undefined') {
@@ -74,16 +76,16 @@ const isActiveIdRef = computed<string>(() => {
       :x-gap="4"
       :y-gap="4"
     >
-      <NGi v-for="(item, index) in uniquesRef">
+      <NGi v-for="(value, p) in set">
         <NCheckbox
           :style="{
-            backgroundColor: getColorByItem(index),
+            backgroundColor: getColorItem(p),
           }"
-          :value="item"
+          :value="value"
           class="checkbox"
           size="small"
         >
-          <span>{{ item }}</span>
+          <span>{{ value }}</span>
         </NCheckbox>
       </NGi>
     </NGrid>

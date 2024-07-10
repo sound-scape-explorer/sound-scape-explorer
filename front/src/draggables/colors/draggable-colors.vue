@@ -202,7 +202,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
       </div>
 
       <h2
-        v-if="!isLabels || isLabelNumeric"
+        v-if="!isLabels || isEnabled"
         style="display: flex; gap: 8px"
       >
         <span>Map</span>
@@ -218,7 +218,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
       </h2>
 
       <div
-        v-if="!isLabels || isLabelNumeric"
+        v-if="!isLabels || isEnabled"
         class="gradients"
       >
         <ColorsGradients />
