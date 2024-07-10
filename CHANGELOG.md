@@ -1,3 +1,24 @@
+## [13.4.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.2...v13.4.3) (2024-07-09)
+
+
+### Bug Fixes
+
+* **Front/Worker:** Sanitize relative file path when building interval details ([987b9e3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/987b9e3c4f59abe9cbc8115a72a5216fe3dddf14))
+
+## [13.4.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.1...v13.4.2) (2024-07-08)
+
+
+### Bug Fixes
+
+* **Visualisation:** Typo ([8c39fb4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8c39fb4170cd26a3879d1110c198b03b8a33bbe2))
+
+## [13.4.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.0...v13.4.1) (2024-07-08)
+
+
+### Bug Fixes
+
+* **Visualisation:** Force cell object to string + Detect absolute values ([54bf9ff](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/54bf9fff3a367b93e4a3474e16f1720b82ed78d4))
+
 # [13.4.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.3.1...v13.4.0) (2024-06-20)
 
 
