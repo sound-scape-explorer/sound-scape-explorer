@@ -1,3 +1,11 @@
+## [13.5.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.5.1...v13.5.2) (2024-07-10)
+
+
+### Bug Fixes
+
+* **Front/Colors:** Disable label range coloring on unmount ([26bb7f7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/26bb7f7dc50ef6a57c053f10ed0771e81ccb261c))
+* **Front/Colors:** Prevent inverting color map when coloring with categories ([c56d181](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c56d1815487c37048b4f1bb26c7dc5e1f38af6b3))
+
 ## [13.5.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.5.0...v13.5.1) (2024-07-10)
 
 
