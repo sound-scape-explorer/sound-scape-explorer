@@ -34,7 +34,7 @@ const {
   detect: detectLabelRange,
 } = useColorByLabel();
 const {detect: detectIndicatorRange, swap} = useIndicatorLimits();
-const {invert} = useColorInvert();
+const {invert, isReversible} = useColorInvert();
 const {isEnabled, toggle} = useLabelsNumeric();
 
 useRefProvide('colors/criteria', criteria);
@@ -205,6 +205,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
       >
         <span>Map</span>
         <AppButton
+          :disabled="!isReversible"
           :handle-click="invert"
           icon
           size="tiny"
