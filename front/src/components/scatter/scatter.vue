@@ -3,7 +3,7 @@ import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useScatter} from 'src/components/scatter/use-scatter';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
-import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
@@ -26,7 +26,7 @@ const {
 const {criteria, flavor} = useColorSelection();
 const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
 const {timeshift, isColorMapSwapped} = useClientSettings();
-const {filtered: labelFiltered} = useScatterFilterLabel();
+const {filtered: labelFiltered} = useScatterFilterLabels();
 const {filtered: timeFiltered} = useScatterFilterTime();
 const {filtered: temporalFiltered} = useScatterFilterTemporal();
 const {selected} = useScreen();

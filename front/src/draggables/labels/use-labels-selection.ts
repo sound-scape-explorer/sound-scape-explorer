@@ -1,4 +1,4 @@
-import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {ref} from 'vue';
 
@@ -11,7 +11,7 @@ let hasBuilt = false;
 
 export function useLabelsSelection() {
   const {labelProperties} = useStorageLabels();
-  const {filter: filterByLabel} = useScatterFilterLabel();
+  const {filter: filterByLabel} = useScatterFilterLabels();
 
   const build = () => {
     if (labelProperties.value === null) {

@@ -1,6 +1,6 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
-import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
@@ -35,7 +35,7 @@ export function useScatterExport() {
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {filtered: labelFiltered} = useScatterFilterLabel();
+  const {filtered: labelFiltered} = useScatterFilterLabels();
   const {filtered: timeFiltered} = useScatterFilterTime();
 
   const loadingRef = ref<boolean>(false);

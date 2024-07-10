@@ -1,5 +1,5 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
-import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
@@ -33,7 +33,7 @@ export function useViewLoader() {
   const {generateColorScale} = useScatterColorScale();
   const {buildSelection, selection: labelSelection} = useLabelsSelection();
   const {renderTraces, isEnabled} = useScatterTraces();
-  const {filter: filterByLabel} = useScatterFilterLabel();
+  const {filter: filterByLabel} = useScatterFilterLabels();
   const {filter: filterByTemporal} = useScatterFilterTemporal();
   const {filterByTime} = useScatterFilterTime();
 

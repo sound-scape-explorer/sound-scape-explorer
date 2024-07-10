@@ -1,4 +1,4 @@
-import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {ref} from 'vue';
@@ -7,7 +7,7 @@ const filtered = ref<boolean[]>([]);
 
 // global interval filter
 export function useIntervalFilter() {
-  const {filtered: labelFiltered} = useScatterFilterLabel();
+  const {filtered: labelFiltered} = useScatterFilterLabels();
   const {filtered: timeFiltered} = useScatterFilterTime();
   const {filtered: temporalFiltered} = useScatterFilterTemporal();
 

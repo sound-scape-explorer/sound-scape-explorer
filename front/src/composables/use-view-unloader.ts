@@ -1,5 +1,5 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
-import {useScatterFilterLabel} from 'src/components/scatter/use-scatter-filter-label';
+import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
@@ -32,7 +32,7 @@ export function useViewUnloader() {
   const {resetSelection} = useLabelsSelection();
   const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
   const {resetTraces, isEnabled} = useScatterTraces();
-  const {reset: resetFilterByLabel} = useScatterFilterLabel();
+  const {reset: resetFilterByLabel} = useScatterFilterLabels();
   const {resetFilterByTime} = useScatterFilterTime();
   const {closeAll} = useDraggables();
 
