@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import AppGradient from 'src/app/app-gradient.vue';
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useColorGradients} from 'src/draggables/colors/use-color-gradients';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {computed} from 'vue';
 
 const {criteria} = useColorSelection();

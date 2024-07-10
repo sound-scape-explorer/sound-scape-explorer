@@ -1,7 +1,8 @@
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {calculateMean} from 'src/utils/calculate-mean';
+import {truncateNumber} from 'src/utils/truncate-number';
 import {unref} from 'vue';
 
 export function useIndicatorLimits() {
@@ -11,15 +12,15 @@ export function useIndicatorLimits() {
 
   const detect = () => {
     if (aggregatedIndicators.value === null) {
-      return [-Infinity, Infinity];
+      return;
     }
 
     const values = aggregatedIndicators.value[criteriaIndex.value].values.map(
       (v) => calculateMean(v),
     );
 
-    min.value = Number(Math.min(...values).toFixed(2));
-    max.value = Number(Math.max(...values).toFixed(2));
+    min.value = truncateNumber(Math.min(...values));
+    max.value = truncateNumber(Math.max(...values));
   };
 
   const swap = () => {

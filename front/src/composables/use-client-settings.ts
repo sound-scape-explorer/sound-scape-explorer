@@ -3,11 +3,11 @@ import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {SettingDefault as d} from 'src/common/setting-default';
 import {SettingKey as k} from 'src/common/setting-key';
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 const plotBackground = useStorage<string>(k.plotBackground, d.plotBackground);

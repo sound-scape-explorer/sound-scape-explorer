@@ -1,59 +1,19 @@
 <script lang="ts" setup="">
-import {CalculatorOutline, ColorFillOutline} from '@vicons/ionicons5';
+import {ColorFillOutline} from '@vicons/ionicons5';
 import {NTag, NTooltip} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import DraggableLabelsItemsOptions from 'src/draggables/labels/draggable-labels-item-checkboxes.vue';
-import {useLabelsCalculation} from 'src/draggables/labels/use-labels-calculation';
-import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
-import {ref} from 'vue';
+import {useLabelsItem} from 'src/draggables/labels/use-labels-item';
 
-const {labels} = useStorageLabels();
-const {updateSelection, selection} = useLabelsSelection();
-const {handleLabelClick} = useColorSelection();
-const {isCalculable} = useLabelsCalculation();
-
-interface Props {
+export interface DraggableLabelsItemContentProps {
   property: string;
 }
 
-const props = defineProps<Props>();
+const props = defineProps<DraggableLabelsItemContentProps>();
 
-const handlePropertyClick = () => {
-  if (labels.value === null) {
-    return;
-  }
-
-  const oldSelection = selection.value[props.property];
-  const uniques = labels.value[props.property];
-
-  const reverseSelection = [];
-
-  for (const unique of uniques) {
-    if (oldSelection.includes(unique)) {
-      continue;
-    }
-
-    reverseSelection.push(unique);
-  }
-
-  updateSelection(props.property, reverseSelection);
-};
-
-const handlePropertyRightClick = (e: PointerEvent, property: string) => {
-  e.preventDefault();
-
-  if (selection.value[property].length === 0) {
-    return;
-  }
-
-  updateSelection(property, []);
-};
-
-const isExpanded = ref<boolean>(false);
-
-const toggle = () => (isExpanded.value = !isExpanded.value);
+const {handleLabelClick} = useColorSelection();
+const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
 </script>
 
 <template>
@@ -82,17 +42,6 @@ const toggle = () => (isExpanded.value = !isExpanded.value);
     </NTooltip>
 
     <AppButton
-      v-if="isCalculable(props.property)"
-      :handle-click="toggle"
-      icon
-      size="small"
-      tooltip="Toggle numerical panel"
-      tooltip-placement="top"
-    >
-      <CalculatorOutline />
-    </AppButton>
-
-    <AppButton
       :handle-click="() => handleLabelClick(props.property)"
       icon
       size="small"
@@ -100,16 +49,6 @@ const toggle = () => (isExpanded.value = !isExpanded.value);
       tooltip-placement="top"
     >
       <ColorFillOutline />
-    </AppButton>
-  </div>
-
-  <div class="cell ml mr mb">
-    <AppButton
-      v-if="isExpanded"
-      :handle-click="() => console.log(props.property)"
-      size="small"
-    >
-      test
     </AppButton>
   </div>
 

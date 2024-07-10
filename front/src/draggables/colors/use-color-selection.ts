@@ -75,12 +75,6 @@ export function useColorSelection() {
   };
 
   const criteriaIndex = computed(() => criterias.value.indexOf(criteria.value));
-
-  const isIndicators = computed(
-    () =>
-      category.value === 'Indicators' && names.value?.includes(criteria.value),
-  );
-
   return {
     reset: reset,
     flavor: flavor,
@@ -90,6 +84,5 @@ export function useColorSelection() {
     category: category,
     categories: categories,
     handleLabelClick: handleLabelClick,
-    isIndicators: isIndicators,
   };
 }

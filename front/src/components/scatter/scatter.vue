@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useScatter} from 'src/components/scatter/use-scatter';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
@@ -10,6 +9,9 @@ import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
+import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
 import {onMounted, watch} from 'vue';
 
 const {traces, isEnabled, generate, renderTraces} = useScatterTraces();
@@ -31,7 +33,9 @@ const {filtered: timeFiltered} = useScatterFilterTime();
 const {filtered: temporalFiltered} = useScatterFilterTemporal();
 const {selected} = useScreen();
 const {isWebGlScatter2d} = useClientSettings();
-const {min: rangeMin, max: rangeMax} = useColorByIndicator();
+const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();
+const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
+const {isEnabled: isColorByLabelsNumeric} = useLabelsNumeric();
 
 onMounted(mount);
 
@@ -46,8 +50,10 @@ watch(
     flavor,
     opacityLow,
     opacityHigh,
-    rangeMin,
-    rangeMax,
+    indicatorRangeMin,
+    indicatorRangeMax,
+    labelRangeMin,
+    labelRangeMax,
     timeshift,
     labelFiltered,
     timeFiltered,
@@ -55,6 +61,7 @@ watch(
     selected,
     isWebGlScatter2d,
     isColorMapSwapped,
+    isColorByLabelsNumeric,
   ],
   async () => {
     if (isRendering || !isEnabled.value) {

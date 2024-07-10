@@ -9,18 +9,20 @@ interface Props {
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   disabled?: boolean;
   icon?: boolean;
-  error?: boolean;
   grow?: boolean;
   growCol?: boolean;
+  active?: boolean;
+  error?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'tiny',
   disable: false,
   icon: false,
-  error: false,
   grow: false,
   growCol: false,
+  active: false,
+  error: false,
 });
 
 const hasTooltip = computed(() => typeof props.tooltip === 'string');
@@ -33,6 +35,10 @@ const classNames = computed<string>(() => {
 
   if (props.growCol) {
     string += ' growCol';
+  }
+
+  if (props.active) {
+    string += ' active';
   }
 
   if (props.error) {
@@ -91,5 +97,9 @@ const classNames = computed<string>(() => {
 
 .error {
   background: rgba(255, 0, 0, 0.2);
+}
+
+.active {
+  background: rgba(23, 159, 87, 0.4);
 }
 </style>

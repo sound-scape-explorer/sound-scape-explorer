@@ -1,5 +1,4 @@
 import chroma, {type Scale} from 'chroma-js';
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageFiles} from 'src/composables/use-storage-files';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
@@ -10,6 +9,7 @@ import {useColorByDay} from 'src/draggables/colors/use-color-by-day';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {computed, ref} from 'vue';
 
 const scale = ref<string[] | null>(null);
@@ -28,7 +28,7 @@ export function useScatterColorScale() {
   const {getColorByTenMinutes} = useColorBy10min();
   const {getColorByDay} = useColorByDay();
   const {getColorByCyclingDay} = useColorByCyclingDay();
-  const {getColorByLabel} = useColorByLabel();
+  const {get: getColorByLabel} = useColorByLabel();
   const {get: getColorByIndicator} = useColorByIndicator();
   const {category, criteria} = useColorSelection();
 

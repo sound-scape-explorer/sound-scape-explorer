@@ -29,6 +29,8 @@ export type InjectionKey =
   | 'colors/category'
   | 'colors/indicatorMin'
   | 'colors/indicatorMax'
+  | 'colors/labelRangeMin'
+  | 'colors/labelRangeMax'
   | 'time/duration'
   | 'digested/digester'
   | 'digested/labelA'

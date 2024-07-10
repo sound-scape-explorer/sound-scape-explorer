@@ -1,9 +1,9 @@
 <script lang="ts" setup="">
 import {NCheckbox, NCheckboxGroup, NGi, NGrid} from 'naive-ui';
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 import {computed, ref, watch, watchEffect} from 'vue';
 

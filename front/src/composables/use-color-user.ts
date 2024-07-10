@@ -1,6 +1,6 @@
 import chroma, {type Scale} from 'chroma-js';
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {computed} from 'vue';
 
 export function useColorUser() {

@@ -1,11 +1,14 @@
 <script lang="ts" setup="">
-import {FlashOutline, RepeatOutline} from '@vicons/ionicons5';
+import {
+  CalculatorOutline,
+  FlashOutline,
+  RepeatOutline,
+} from '@vicons/ionicons5';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {useColorSelection} from 'src/components/scatter/use-color-selection';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useColorInvert} from 'src/composables/use-color-invert';
@@ -14,26 +17,35 @@ import {useRefProvide} from 'src/composables/use-ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
-import {computed} from 'vue';
+import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useColorState} from 'src/draggables/colors/use-color-state';
+import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
 
 const {isLoading} = useScatterLoading();
-const {criteria, criterias, category, categories, isIndicators} =
-  useColorSelection();
-const {flavor} = useColorSelection();
+const {flavor, criteria, criterias, category, categories} = useColorSelection();
+const {isIndicators, isLabels, isLabelNumeric} = useColorState();
+
 const {low, high} = useScatterColorAlpha();
-const {min, max} = useColorByIndicator();
-const {detect, swap} = useIndicatorLimits();
+const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();
+const {
+  min: labelRangeMin,
+  max: labelRangeMax,
+  detect: detectLabelRange,
+} = useColorByLabel();
+const {detect: detectIndicatorRange, swap} = useIndicatorLimits();
 const {invert} = useColorInvert();
+const {isEnabled, toggle} = useLabelsNumeric();
 
 useRefProvide('colors/criteria', criteria);
 useRefProvide('colors/category', category);
 useRefProvide('colors/flavor', flavor);
 useRefProvide('colors/alphaExcluded', low);
 useRefProvide('colors/alphaIncluded', high);
-useRefProvide('colors/indicatorMin', min);
-useRefProvide('colors/indicatorMax', max);
-
-const isLabels = computed(() => category.value === 'Labels');
+useRefProvide('colors/indicatorMin', indicatorRangeMin);
+useRefProvide('colors/indicatorMax', indicatorRangeMax);
+useRefProvide('colors/labelRangeMin', labelRangeMin);
+useRefProvide('colors/labelRangeMax', labelRangeMax);
 </script>
 
 <template>
@@ -43,7 +55,7 @@ const isLabels = computed(() => category.value === 'Labels');
   >
     <AppDraggableMenu
       class="menu"
-      size="medium"
+      size="large"
     >
       <h2>With</h2>
 
@@ -70,7 +82,7 @@ const isLabels = computed(() => category.value === 'Labels');
         class="indicator-buttons"
       >
         <AppButton
-          :handle-click="detect"
+          :handle-click="detectIndicatorRange"
           icon
           size="small"
           tooltip="Detect range"
@@ -109,6 +121,56 @@ const isLabels = computed(() => category.value === 'Labels');
         />
       </div>
 
+      <h2
+        v-if="isLabelNumeric"
+        class="indicator-buttons"
+      >
+        Numeric
+
+        <AppButton
+          :active="isEnabled"
+          :handle-click="toggle"
+          :tooltip="`Coloring by range ${isEnabled ? 'on' : 'off'}`"
+          icon
+          size="tiny"
+          tooltip-placement="bottom"
+        >
+          <CalculatorOutline />
+        </AppButton>
+
+        <AppButton
+          :disabled="!isEnabled"
+          :handle-click="detectLabelRange"
+          icon
+          size="tiny"
+          tooltip="Detect range"
+          tooltip-placement="bottom"
+        >
+          <FlashOutline />
+        </AppButton>
+      </h2>
+
+      <div
+        v-if="isLabelNumeric"
+        class="two"
+      >
+        <AppInput
+          :disabled="!isEnabled"
+          injection-key="colors/labelRangeMin"
+          placeholder="Min..."
+          size="small"
+          type="number"
+        />
+
+        <AppInput
+          :disabled="!isEnabled"
+          injection-key="colors/labelRangeMax"
+          placeholder="Max..."
+          size="small"
+          type="number"
+        />
+      </div>
+
       <h2>Opacity</h2>
 
       <div class="two">
@@ -140,7 +202,7 @@ const isLabels = computed(() => category.value === 'Labels');
       </div>
 
       <h2
-        v-if="!isLabels"
+        v-if="!isLabels || isLabelNumeric"
         style="display: flex; gap: 8px"
       >
         <span>Map</span>
@@ -156,7 +218,7 @@ const isLabels = computed(() => category.value === 'Labels');
       </h2>
 
       <div
-        v-if="!isLabels"
+        v-if="!isLabels || isLabelNumeric"
         class="gradients"
       >
         <ColorsGradients />
