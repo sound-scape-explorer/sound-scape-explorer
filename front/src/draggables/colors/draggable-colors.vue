@@ -1,9 +1,5 @@
 <script lang="ts" setup="">
-import {
-  CalculatorOutline,
-  FlashOutline,
-  RepeatOutline,
-} from '@vicons/ionicons5';
+import {FlashOutline, RepeatOutline} from '@vicons/ionicons5';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
@@ -16,6 +12,7 @@ import {useIndicatorLimits} from 'src/composables/use-indicator-limits';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
+import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -28,14 +25,10 @@ const {isIndicators, isLabels, isLabelNumeric} = useColorState();
 
 const {low, high} = useScatterColorAlpha();
 const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();
-const {
-  min: labelRangeMin,
-  max: labelRangeMax,
-  detect: detectLabelRange,
-} = useColorByLabel();
+const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
 const {detect: detectIndicatorRange, swap} = useIndicatorLimits();
 const {invert, isReversible} = useColorInvert();
-const {isEnabled, toggle} = useLabelsNumeric();
+const {isEnabled} = useLabelsNumeric();
 
 useRefProvide('colors/criteria', criteria);
 useRefProvide('colors/category', category);
@@ -125,27 +118,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
         v-if="isLabelNumeric"
         class="indicator-buttons"
       >
-        <AppButton
-          :active="isEnabled"
-          :handle-click="toggle"
-          :tooltip="`Coloring by range ${isEnabled ? 'on' : 'off'}`"
-          icon
-          size="small"
-          tooltip-placement="bottom"
-        >
-          <CalculatorOutline />
-        </AppButton>
-
-        <AppButton
-          :disabled="!isEnabled"
-          :handle-click="detectLabelRange"
-          icon
-          size="small"
-          tooltip="Detect range"
-          tooltip-placement="bottom"
-        >
-          <FlashOutline />
-        </AppButton>
+        <DraggableColorsLabelNumeric />
       </h2>
 
       <div

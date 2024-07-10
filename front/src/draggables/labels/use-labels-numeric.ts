@@ -59,5 +59,6 @@ export function useLabelsNumeric() {
     isCalculable: isCalculable,
     isEnabled: isEnabled,
     toggle: toggle,
+    disable: disable,
   };
 }
