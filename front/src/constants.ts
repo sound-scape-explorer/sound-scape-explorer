@@ -62,3 +62,4 @@ export const LINK_BUG_REPORT =
   'https://github.com/sound-scape-explorer/sound-scape-explorer/issues/new?template=bug_report.yml';
 export const LINK_CHANGELOG =
   'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/CHANGELOG.md';
+export const LINK_DISCORD = 'https://discord.gg/eRsQPDBeXg';
