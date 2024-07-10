@@ -125,14 +125,12 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
         v-if="isLabelNumeric"
         class="indicator-buttons"
       >
-        Numeric
-
         <AppButton
           :active="isEnabled"
           :handle-click="toggle"
           :tooltip="`Coloring by range ${isEnabled ? 'on' : 'off'}`"
           icon
-          size="tiny"
+          size="small"
           tooltip-placement="bottom"
         >
           <CalculatorOutline />
@@ -142,7 +140,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
           :disabled="!isEnabled"
           :handle-click="detectLabelRange"
           icon
-          size="tiny"
+          size="small"
           tooltip="Detect range"
           tooltip-placement="bottom"
         >
