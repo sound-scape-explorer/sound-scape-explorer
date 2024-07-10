@@ -1,3 +1,10 @@
+## [13.5.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.5.0...v13.5.1) (2024-07-10)
+
+
+### Bug Fixes
+
+* **Front/Colors:** Streamline UI ([8e07ebe](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8e07ebed8527e1ea0ad93f5422e25b87e5bd1a02))
+
 # [13.5.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.4.3...v13.5.0) (2024-07-10)
 
 
