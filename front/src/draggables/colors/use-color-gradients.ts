@@ -18,7 +18,7 @@ export function useColorGradients() {
 
   const dayColors = computed(() => {
     const uniques = [...new Set(scale.value)];
-    const sorted = uniques.sort((a, b) => a.localeCompare(b));
+    const sorted = uniques.toSorted((a, b) => a.localeCompare(b));
     return sorted;
   });
 

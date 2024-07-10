@@ -34,7 +34,6 @@ export function useAppMetaKeys() {
       return;
     }
 
-    // closeActive();
     toggleAll();
   };
 
