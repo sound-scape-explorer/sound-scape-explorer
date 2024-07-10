@@ -1,45 +1,29 @@
 <script lang="ts" setup>
-import {
-  AddOutline,
-  ArrowDownOutline,
-  PauseOutline,
-  PlayOutline,
-  RemoveOutline,
-  StopOutline,
-  VolumeHighOutline,
-  VolumeLowOutline,
-} from '@vicons/ionicons5';
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AppCondition from 'src/app/app-condition.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useDate} from 'src/composables/date';
-import {useStorageAggregatedSites} from 'src/composables/storage-aggregated-sites';
-import {useStorageSettings} from 'src/composables/storage-settings';
+import {useDate} from 'src/composables/use-date';
+import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
+import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
-import {useAudioFourier} from 'src/draggables/audio/audio-component';
-import {useAudioDownload} from 'src/draggables/audio/audio-download';
-import {useAudioFile} from 'src/draggables/audio/audio-file';
-import {useAudioLock} from 'src/draggables/audio/audio-lock';
-import {useAudioOpen} from 'src/draggables/audio/audio-open';
-import {useAudioRate} from 'src/draggables/audio/audio-rate';
-import {useAudioTransport} from 'src/draggables/audio/audio-transport';
-import {useDraggableAudio} from 'src/draggables/audio/draggable-audio';
-import AudioButton from 'src/draggables/audio/draggable-audio-button.vue';
-import {useWavesurferHandlers} from 'src/draggables/audio/wavesurfer-handlers';
-import {useWavesurferMounter} from 'src/draggables/audio/wavesurfer-mounter';
-import {useDetails} from 'src/draggables/details/details';
+import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
+import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
+import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioLock} from 'src/draggables/audio/use-audio-lock';
+import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
+import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
+import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
+import {useWavesurferMounter} from 'src/draggables/audio/use-wavesurfer-mounter';
+import {useDetails} from 'src/draggables/details/use-details';
 
 const {waveform, spectrogram} = useDraggableAudio();
-const {increase, decrease, size} = useAudioFourier();
+const {size} = useAudioFourier();
 const {settings} = useStorageSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
 const {date} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {currentIntervalIndex, hasClicked} = useAudioOpen();
-const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
-const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {rate, readable} = useAudioRate();
-const {downloadAudio} = useAudioDownload();
 const {lock, unlock} = useAudioLock();
 const {block, duration} = useAudioFile();
 
@@ -48,65 +32,15 @@ useWavesurferMounter();
 
 <template>
   <AppDraggable
-    :hide-separator="true"
     draggable-key="audio"
+    hide-separator
   >
     <AppCondition
       :wait-if="!hasClicked"
       wait-message="please click a point"
     >
       <div class="player">
-        <div class="volume buttons">
-          <AudioButton
-            :alt="isPlaying ? 'Pause' : 'Play'"
-            :callback="togglePlayPause"
-          >
-            <PauseOutline v-if="isPlaying" />
-            <PlayOutline v-if="!isPlaying" />
-          </AudioButton>
-
-          <AudioButton
-            :callback="stop"
-            alt="Stop"
-          >
-            <StopOutline />
-          </AudioButton>
-
-          <AudioButton
-            :callback="increaseVolume"
-            alt="Volume Up"
-          >
-            <VolumeHighOutline />
-          </AudioButton>
-
-          <AudioButton
-            :callback="decreaseVolume"
-            alt="Volume Down"
-          >
-            <VolumeLowOutline />
-          </AudioButton>
-
-          <AudioButton
-            :callback="increase"
-            alt="FFT Size Up"
-          >
-            <AddOutline />
-          </AudioButton>
-
-          <AudioButton
-            :callback="decrease"
-            alt="FFT Size Down"
-          >
-            <RemoveOutline />
-          </AudioButton>
-
-          <AudioButton
-            :callback="downloadAudio"
-            alt="Download"
-          >
-            <ArrowDownOutline />
-          </AudioButton>
-        </div>
+        <DraggableAudioSidebar />
 
         <NGrid
           :cols="1"
@@ -232,11 +166,14 @@ useWavesurferMounter();
           />
         </div>
 
-        <div ref="waveform" />
+        <div
+          ref="waveform"
+          class="mt"
+        />
 
         <div
           ref="spectrogram"
-          class="spectrogram"
+          class="spectrogram mt"
         />
       </div>
     </AppCondition>
@@ -251,20 +188,11 @@ useWavesurferMounter();
   width: 40rem;
 }
 
-.buttons {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-direction: column;
-
-  gap: 2px;
-
-  height: 0;
-
-  margin-left: -2rem;
-}
-
 .spectrogram {
   pointer-events: none;
+}
+
+.mt {
+  margin-top: 10px;
 }
 </style>

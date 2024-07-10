@@ -30,7 +30,7 @@ export class FrontBridge {
   }
 
   private create() {
-    new FrontWindow();
+    return new FrontWindow();
   }
 
   private setHandlers() {

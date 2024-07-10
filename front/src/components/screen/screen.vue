@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {useScatter} from 'src/components/scatter/scatter';
+import {useScatter} from 'src/components/scatter/use-scatter';
 import {LassoSelector} from 'src/components/screen/lasso';
-import {useScreen} from 'src/components/screen/screen';
-import {useScreenCheck} from 'src/components/screen/screen-check';
-import {useStorageReducedFeatures} from 'src/composables/storage-reduced-features';
+import {useScreen} from 'src/components/screen/use-screen';
+import {useScreenCheck} from 'src/components/screen/use-screen-check';
+import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {ref, watch} from 'vue';
 
 import {project} from './project';
@@ -80,9 +80,7 @@ watch([container, isEnabled], () => {
 
     let filtered: number[] = [];
 
-    for (let i = 0; i < selectedPoints.length; i += 1) {
-      const index = selectedPoints[i];
-
+    for (const index of selectedPoints) {
       if (index === null) {
         continue;
       }

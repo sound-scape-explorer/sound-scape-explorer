@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import AppGradient from 'src/app/app-gradient.vue';
-import {useScatterColorScale} from 'src/components/scatter/scatter-color-scale';
+import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {createHourlyLabels} from 'src/utils/create-hourly-labels';
 import {computed} from 'vue';
 

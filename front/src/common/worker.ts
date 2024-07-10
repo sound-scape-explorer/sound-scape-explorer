@@ -3,37 +3,37 @@ import h5wasm from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
 import {StoragePath} from 'src/common/storage-path';
 import type {StorageSettings} from 'src/common/storage-settings';
-import type {Band} from 'src/composables/band-storage';
-import type {Extractor} from 'src/composables/extractor-storage';
-import type {Integration} from 'src/composables/integration-storage';
-import type {ReducerFromStorage} from 'src/composables/reducer-storage';
-import type {AggregatedIndicator} from 'src/composables/storage-aggregated-indicators';
+import type {Band} from 'src/composables/use-band-storage';
+import type {Extractor} from 'src/composables/use-extractor-storage';
+import type {Integration} from 'src/composables/use-integration-storage';
+import type {ReducerFromStorage} from 'src/composables/use-reducer-storage';
+import type {AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
 import type {
   BlockDetails,
   IntervalDetails,
-} from 'src/composables/storage-aggregated-interval-details';
-import type {AggregatedSite} from 'src/composables/storage-aggregated-sites';
-import type {Autocluster} from 'src/composables/storage-autoclusters';
-import type {Digested} from 'src/composables/storage-digested';
-import type {Digester} from 'src/composables/storage-digesters';
-import type {File as FileConfig} from 'src/composables/storage-files';
-import type {Labels} from 'src/composables/storage-labels';
-import type {Range} from 'src/composables/storage-ranges';
-import type {ReducedFeatures} from 'src/composables/storage-reduced-features';
-import type {RelativeTrajectory} from 'src/composables/storage-relative-trajectories';
-import type {Site} from 'src/composables/storage-sites';
+} from 'src/composables/use-storage-aggregated-interval-details';
+import type {AggregatedSite} from 'src/composables/use-storage-aggregated-sites';
+import type {Autocluster} from 'src/composables/use-storage-autoclusters';
+import type {Digested} from 'src/composables/use-storage-digested';
+import type {Digester} from 'src/composables/use-storage-digesters';
+import type {File as FileConfig} from 'src/composables/use-storage-files';
+import type {Labels} from 'src/composables/use-storage-labels';
+import type {Range} from 'src/composables/use-storage-ranges';
+import type {ReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import type {RelativeTrajectory} from 'src/composables/use-storage-relative-trajectories';
+import type {Site} from 'src/composables/use-storage-sites';
 import type {
   TracedData,
   TracedRelativeTimestamps,
   TracedTimestamps,
-} from 'src/composables/trajectories-data';
-import type {Trajectory} from 'src/composables/trajectories-storage';
+} from 'src/composables/use-trajectories-data';
+import type {Trajectory} from 'src/composables/use-trajectories-storage';
 import {trimRectangular} from 'src/utils/trim-rectangular';
 
 let h5: H5File;
 const PATH = '/work';
 
-console.log('worker');
+console.log('Worker: Call');
 
 export async function load(file: File) {
   if (h5) {
@@ -45,7 +45,7 @@ export async function load(file: File) {
   FS.mkdir(PATH);
 
   FS.mount(
-    // @ts-expect-error: TS2339
+    // @ts-expect-error actually exists
     FS.filesystems.WORKERFS,
     {
       files: [file],
@@ -106,7 +106,7 @@ export async function readVersion(file: File): Promise<string> {
   const path = StoragePath.config_file;
   const dataset = h5.get(path) as Dataset;
 
-  return dataset.attrs['version'].value.toString();
+  return dataset.attrs['version'].value?.toString() ?? '';
 }
 
 export async function readFiles(file: File): Promise<FileConfig[]> {
@@ -125,7 +125,7 @@ export async function readFiles(file: File): Promise<FileConfig[]> {
   const labels = labelsDataset.to_array() as string[][];
 
   const files: FileConfig[] = [];
-  const length = namesDataset.shape[0];
+  const length = namesDataset.shape?.[0] ?? 0;
 
   for (let index = 0; index < length; index += 1) {
     const file: FileConfig = {
@@ -243,7 +243,7 @@ export async function readBands(file: File): Promise<Band[]> {
   const highs = highsDataset.to_array() as number[];
 
   const bands = [];
-  const length = namesDataset.shape[0];
+  const length = namesDataset.shape?.[0] ?? 0;
 
   for (let index = 0; index < length; index += 1) {
     const band: Band = {
@@ -269,7 +269,7 @@ export async function readIntegrations(file: File): Promise<Integration[]> {
   const seconds = secondsDataset.to_array() as number[];
 
   const integrations: Integration[] = [];
-  const length = namesDataset.shape[0];
+  const length = namesDataset.shape?.[0] ?? 0;
 
   for (let index = 0; index < length; index += 1) {
     const integration: Integration = {
@@ -297,7 +297,7 @@ export async function readRanges(file: File): Promise<Range[]> {
   const ends = endsDataset.to_array() as number[];
 
   const ranges: Range[] = [];
-  const length = namesDataset.shape[0];
+  const length = namesDataset.shape?.[0] ?? 0;
 
   for (let index = 0; index < length; index += 1) {
     const range: Range = {
@@ -329,7 +329,7 @@ export async function readExtractors(file: File): Promise<Extractor[]> {
   const persists = persistsDataset.to_array() as number[];
 
   const extractors: Extractor[] = [];
-  const length = namesDataset.shape[0];
+  const length = namesDataset.shape?.[0] ?? 0;
 
   for (let index = 0; index < length; index += 1) {
     const extractor: Extractor = {
@@ -370,7 +370,7 @@ export async function readReducers(file: File): Promise<ReducerFromStorage[]> {
   const ranges = trimRectangular(rangesRectangular, '');
 
   const reducers: ReducerFromStorage[] = [];
-  const length = namesDataset.shape[0];
+  const length = namesDataset.shape?.[0] ?? 0;
 
   for (let index = 0; index < length; index += 1) {
     const reducer: ReducerFromStorage = {
@@ -501,7 +501,7 @@ export async function readTrajectories(file: File): Promise<Trajectory[]> {
   const stepsDataset = h5.get(StoragePath.trajectories_steps) as Dataset;
   const steps = stepsDataset.to_array() as number[];
 
-  const length = namesDataset.shape[0];
+  const length = namesDataset.shape?.[0] ?? 0;
 
   const trajectories = [];
 
@@ -548,11 +548,11 @@ export async function readRelativeTrajectories(
         relativeTimestampsPath,
       ) as Dataset;
       const trajectoryName =
-        relativeTracedDataset.attrs['trajectory_name'].value.toString();
+        relativeTracedDataset.attrs['trajectory_name'].value?.toString() ?? '';
       const labelProperty =
-        relativeTracedDataset.attrs['label_property'].value.toString();
+        relativeTracedDataset.attrs['label_property'].value?.toString() ?? '';
       const labelValue =
-        relativeTracedDataset.attrs['label_value'].value.toString();
+        relativeTracedDataset.attrs['label_value'].value?.toString() ?? '';
 
       const relativeTrajectory: RelativeTrajectory = {
         index: Number(key),

@@ -11,7 +11,8 @@ if (!isSingleInstance) {
   app.quit();
 } else {
   const audioBridge = new AudioBridge();
-  new FrontBridge();
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  const frontBridge = new FrontBridge();
 
   // Handle creating/removing shortcuts on Windows when installing/uninstalling.
   if (require('electron-squirrel-startup')) {
@@ -48,7 +49,7 @@ if (!isSingleInstance) {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) {
-      new MainWindow();
+      mainWindow = new MainWindow();
     }
   });
 

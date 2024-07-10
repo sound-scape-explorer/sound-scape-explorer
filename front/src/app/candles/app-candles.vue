@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {useAppCandles} from 'src/app/candles/app-candles';
+import {useAppCandles} from 'src/app/candles/use-app-candles';
+import {watch} from 'vue';
 
 export interface AppCandlesProps {
   exportFilename: string;
@@ -16,7 +17,12 @@ export interface AppCandlesProps {
 
 const props = defineProps<AppCandlesProps>();
 
-const {container} = useAppCandles(props);
+const {container, mount, render, data, layout, plotBackground} =
+  useAppCandles(props);
+
+render();
+watch([container, data, layout], mount);
+watch([props, plotBackground], render);
 </script>
 
 <template>

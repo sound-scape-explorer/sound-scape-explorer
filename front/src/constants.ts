@@ -46,8 +46,8 @@ export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend';
 
 export const NN_EXTRACTORS = ['vgg', 'yamnet'];
 
-export type ColorFlavor = 'Accent' | 'Dark2' | 'Spectral';
-export const COLOR_FLAVORS: ColorFlavor[] = ['Accent', 'Dark2', 'Spectral'];
+export type ColorFlavor = 'Spectral' | 'Accent' | 'Dark2';
+export const COLOR_FLAVORS: ColorFlavor[] = ['Spectral', 'Accent', 'Dark2'];
 
 // Plotly instances for Indicators and Digesters.
 export const PLOTLY_SIZE = 600;
@@ -62,3 +62,4 @@ export const LINK_BUG_REPORT =
   'https://github.com/sound-scape-explorer/sound-scape-explorer/issues/new?template=bug_report.yml';
 export const LINK_CHANGELOG =
   'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/CHANGELOG.md';
+export const LINK_DISCORD = 'https://discord.gg/eRsQPDBeXg';

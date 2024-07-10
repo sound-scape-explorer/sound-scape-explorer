@@ -4,9 +4,9 @@ import {NButton, NCascader, NIcon} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
-import {useStorageRelativeTrajectories} from 'src/composables/storage-relative-trajectories';
+import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useStorageRelativeTrajectories} from 'src/composables/use-storage-relative-trajectories';
 import {EXPORT_FILENAME} from 'src/constants';
-import {useScatterLoading} from 'src/components/scatter/scatter-loading';
 import {computed, ref} from 'vue';
 
 const {selectRelativeTrajectories, relativeTrajectories} =
@@ -97,7 +97,10 @@ const handleExportClick = () => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="relativeTrajectories">
+  <AppDraggable
+    draggable-key="relativeTrajectories"
+    hide-separator
+  >
     <div class="container">
       <NCascader
         v-model:value="valueRef"

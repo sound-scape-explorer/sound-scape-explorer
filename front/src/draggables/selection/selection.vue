@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import {ArrowUndoOutline, RepeatOutline} from '@vicons/ionicons5';
 import {NButton, NIcon, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
+import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useScreen} from 'src/components/screen/screen';
-import {useKeyboard} from 'src/composables/keyboard';
-import {useStorageLabels} from 'src/composables/storage-labels';
-import DraggableAudioButton from 'src/draggables/audio/draggable-audio-button.vue';
+import {useScreen} from 'src/components/screen/use-screen';
+import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
+import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {
   convertToNaiveSelectOptions,
   type NaiveSelectOption,
@@ -13,7 +13,7 @@ import {
 import {ref, watch} from 'vue';
 
 const {selected} = useScreen();
-const {lock, unlock} = useKeyboard();
+const {lock, unlock} = useGlobalKeyboard();
 const customProperty = ref<string>('');
 const existingProperty = ref<string>('');
 const custom = ref<string>('');
@@ -50,18 +50,19 @@ watch(labelProperties, () => {
     draggable-key="selection"
   >
     <div class="draggable-selection--buttons">
-      <DraggableAudioButton
-        :callback="() => console.log('undo')"
-        alt="undo"
+      <AppButton
+        :handle-click="() => console.log('undo')"
+        tooltip="undo"
       >
         <ArrowUndoOutline />
-      </DraggableAudioButton>
-      <DraggableAudioButton
-        :callback="() => console.log('repeat')"
-        alt="repeat"
+      </AppButton>
+
+      <AppButton
+        :handle-click="() => console.log('repeat')"
+        tooltip="repeat"
       >
         <RepeatOutline />
-      </DraggableAudioButton>
+      </AppButton>
     </div>
 
     <span class="draggable-selection--tooltip">

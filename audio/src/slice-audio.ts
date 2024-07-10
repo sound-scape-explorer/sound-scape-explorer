@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 import {readFileAsync} from './read-file-async';
+import {validateFfmpeg} from './validate-ffmpeg';
 
 const tempPath = path.join(os.tmpdir(), 'scratch.wav');
 console.log(`temp path: ${tempPath}`);
@@ -20,6 +21,7 @@ export function sliceAudio(
     }
 
     const duration = end - start;
+    validateFfmpeg(ffmpegPath);
 
     const ffmpeg = spawn(ffmpegPath, [
       '-i',

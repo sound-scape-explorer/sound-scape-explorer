@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {NAlert} from 'naive-ui';
 import AppModal from 'src/app/app-modal.vue';
-import {useScatterLoading} from 'src/components/scatter/scatter-loading';
+import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 
 const {isLoading, loadingText} = useScatterLoading();
 </script>

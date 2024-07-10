@@ -1,31 +1,26 @@
 <script lang="ts" setup>
 import {CloseOutline} from '@vicons/ionicons5';
-import {
-  type Position,
-  useDraggable,
-  useMousePressed,
-  useWindowSize,
-} from '@vueuse/core';
-import {NButton, NIcon} from 'naive-ui';
-import {useAppDraggable} from 'src/app/draggable/app-draggable';
-import {useAppDraggableStyles} from 'src/app/draggable/app-draggable-styles';
-import {type DraggableKey, useDraggables} from 'src/composables/draggables';
-import {useScatterCamera} from 'src/components/scatter/scatter-camera';
+import {useDraggable} from '@vueuse/core';
+import AppButton from 'src/app/app-button.vue';
+import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
+import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
+import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
+import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
+import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
-import {onMounted, watch} from 'vue';
 
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
   hideSeparator?: boolean;
 }
 
-const props = withDefaults(defineProps<AppDraggableProps>(), {
-  hideSeparator: false,
-});
+const props = defineProps<AppDraggableProps>();
 
-const defaultPos = 100;
 const {container, storage, drag} = useAppDraggable(props);
-const {store, selected} = useDraggables();
+const {close} = useDraggables();
+const {classes} = useAppDraggableStyles(props);
+const {check} = useAppDraggableBounds(container);
+
 const {x, y, style} = useDraggable(container, {
   initialValue: {x: storage.value.x, y: storage.value.y},
   handle: drag,
@@ -34,131 +29,55 @@ const {x, y, style} = useDraggable(container, {
     if (window.visualViewport === null) {
       return;
     }
-    checkBounds(position);
+    check(x, y, position);
     storage.value = {x: x.value, y: y.value};
   },
 });
-const {pressed} = useMousePressed({target: drag});
-const {lock, unlock} = useScatterCamera();
-const {classes} = useAppDraggableStyles(props);
-const {width, height} = useWindowSize();
 
-const close = () => {
-  store[props.draggableKey] = false;
-};
-const open = () => {
-  // noinspection PointlessBooleanExpressionJS,JSIncompatibleTypesComparison
-  if (
-    selected.value !== props.draggableKey ||
-    store[props.draggableKey] === false ||
-    window.visualViewport === null
-  ) {
-    return;
-  }
-
-  checkBounds();
-};
-const checkBounds = (position?: Position) => {
-  if (window.visualViewport === null || container.value === null) {
-    x.value = defaultPos;
-    y.value = defaultPos;
-    return;
-  }
-
-  const w = container.value.clientWidth;
-  const h = container.value.clientHeight;
-  const maxWidth = window.visualViewport.width;
-  const maxHeight = window.visualViewport.height;
-
-  if (position) {
-    if (position.x >= maxWidth || position.x + w >= maxWidth) {
-      x.value = maxWidth - w;
-    }
-
-    if (position.y >= maxHeight || position.y + h >= maxHeight) {
-      y.value = maxHeight - h;
-    }
-
-    if (position.x <= 0) {
-      x.value = 0;
-    }
-
-    if (position.y <= 0) {
-      y.value = 0;
-    }
-
-    return;
-  }
-
-  if (x.value >= maxWidth || x.value + w >= maxWidth) {
-    x.value = maxWidth - w;
-  }
-
-  if (y.value >= maxHeight || y.value + h >= maxHeight) {
-    y.value = maxHeight - h;
-  }
-
-  if (x.value <= 0) {
-    x.value = 0;
-  }
-
-  if (y.value <= 0) {
-    y.value = 0;
-  }
-};
-
-watch(store, open);
-watch(pressed, () => {
-  // noinspection PointlessBooleanExpressionJS
-  if (pressed.value === false) {
-    unlock();
-    return;
-  }
-
-  lock();
-
-  if (selected.value !== props.draggableKey) {
-    selected.value = props.draggableKey;
-  }
+useAppDraggableLifecycles({
+  props: props,
+  container: container,
+  drag: drag,
+  x: x,
+  y: y,
 });
-onMounted(() => checkBounds());
-watch([width, height], () => checkBounds());
 </script>
 
 <template>
-  <div
-    ref="container"
-    :class="classes"
-    :style="style"
-  >
-    <div class="button close">
-      <NButton
-        size="tiny"
-        @click="close"
-      >
-        <NIcon>
-          <CloseOutline />
-        </NIcon>
-      </NButton>
-    </div>
-
-    <div class="title content">
-      <div class="title container">
-        <span>
-          {{ capitalizeFirstLetter(props.draggableKey) }}
-        </span>
-        <div
-          ref="drag"
-          class="drag"
+  <div>
+    <div
+      ref="container"
+      :class="classes"
+      :style="style"
+    >
+      <div class="button close">
+        <AppButton
+          :handle-click="() => close(props.draggableKey)"
+          grow
+          icon
+          size="tiny"
         >
-          <span>👋</span>
+          <CloseOutline />
+        </AppButton>
+      </div>
+
+      <div class="title content">
+        <div class="title container">
+          <span>
+            {{ capitalizeFirstLetter(props.draggableKey) }}
+          </span>
+          <div
+            ref="drag"
+            class="drag"
+          >
+            <span>👋</span>
+          </div>
         </div>
       </div>
-      <hr v-if="!props.hideSeparator" />
-    </div>
 
-    <div class="content">
-      <slot />
+      <div class="content main">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
@@ -277,5 +196,17 @@ $indexSelected: 1001;
   &:active {
     cursor: grabbing;
   }
+}
+
+hr {
+  opacity: 20%;
+}
+
+.main {
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
 }
 </style>

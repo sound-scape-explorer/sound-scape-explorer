@@ -3,151 +3,124 @@ import {DownloadOutline} from '@vicons/ionicons5';
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {Csv} from 'src/common/csv';
-import {useScatterLoading} from 'src/components/scatter/scatter-loading';
-import {useScatterTraces} from 'src/components/scatter/scatter-traces';
-import {useDate} from 'src/composables/date';
-import {useTrajectoriesData} from 'src/composables/trajectories-data';
-import {useTrajectoriesSelection} from 'src/composables/trajectories-selection';
-import {useTrajectoriesStorage} from 'src/composables/trajectories-storage';
-import {EXPORT_FILENAME} from 'src/constants';
+import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
+import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
+import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
+import {PLOTLY_SIZE} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
-import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
-import {computed, ref, watch} from 'vue';
+import {useDraggableTrajectories} from 'src/draggables/trajectories/use-draggable-trajectories';
+import {useDraggableTrajectoriesExport} from 'src/draggables/trajectories/use-draggable-trajectories-export';
+import {watch} from 'vue';
 
-const {trajectories} = useTrajectoriesStorage();
 const {select} = useTrajectoriesSelection();
-const {convertTimestampToIsoDate} = useDate();
-const {traceds, isFused} = useTrajectoriesData();
+const {isFused} = useTrajectoriesData();
 const {isLoading} = useScatterLoading();
-
-const optionsRef = computed(() => {
-  if (trajectories.value === null) {
-    return [];
-  }
-
-  const names = trajectories.value.map((t) => t.name);
-  return convertToNaiveSelectOptions(names);
-});
-
-const valueRef = ref([]);
-const fuseReadyRef = computed<boolean>(() => {
-  if (isLoading.value === true) {
-    return false;
-  }
-
-  return valueRef.value.length > 1;
-});
+const {options, isFuseable, selection} = useDraggableTrajectories();
+const {handleClick} = useDraggableTrajectoriesExport();
 
 const handleUpdateValue = async (names: string[]) => {
   await select(names);
 };
 
 const {renderTraces} = useScatterTraces();
+
 watch(isFused, renderTraces);
 
-const handleExportClick = () => {
-  const csv = new Csv();
-  csv.addColumn('name');
-  csv.addColumn('timestamps');
-  csv.addColumn('relativeTimestamps');
-  csv.addColumn('x');
-  csv.addColumn('y');
-  csv.addColumn('z');
-
-  if (isFused.value) {
-    const {data, traced} = buildAverageTrajectory(traceds.value);
-
-    traced.data.forEach((_, index) => {
-      csv.createRow();
-      csv.addToCurrentRow('fused');
-      csv.addToCurrentRow(convertTimestampToIsoDate(traced.timestamps[index]));
-      csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
-      csv.addToCurrentRow(data.x[index].toString());
-      csv.addToCurrentRow(data.y[index].toString());
-      if (typeof data.z !== 'undefined') {
-        csv.addToCurrentRow(data.z[index].toString());
-      }
-    });
-  } else {
-    for (const traced of traceds.value) {
-      traced.data.forEach((coordinates, index) => {
-        csv.createRow();
-        csv.addToCurrentRow(traced.trajectory.name);
-        csv.addToCurrentRow(
-          convertTimestampToIsoDate(traced.timestamps[index]),
-        );
-        csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
-        csv.addToCurrentRow(coordinates[0].toString());
-        csv.addToCurrentRow(coordinates[1].toString());
-        csv.addToCurrentRow(coordinates[2].toString());
-      });
-    }
-  }
-
-  csv.download(`${EXPORT_FILENAME}-trajectories.csv`);
-};
+useRefProvide('trajectories/fuse', isFused);
 </script>
 
 <template>
   <AppDraggable draggable-key="trajectories">
-    <div class="container">
-      <NTooltip
-        :show-arrow="false"
-        placement="top-start"
-        trigger="hover"
-      >
-        <!--suppress VueUnrecognizedSlot -->
-        <template #trigger>
-          <NSwitch
-            v-model:value="isFused"
-            :disabled="!fuseReadyRef"
-            class="toggle"
-          >
-            <template #checked> fuse</template>
-          </NSwitch>
-        </template>
-        Average trajectories
-      </NTooltip>
+    <AppDraggableMenu
+      :style="{minWidth: `${PLOTLY_SIZE}px`}"
+      size="medium"
+    >
+      <h2>Trajectories</h2>
 
-      <NCascader
-        v-model:value="valueRef"
-        :cascade="false"
-        :clear-filter-after-select="false"
-        :disabled="isLoading || isFused"
-        :filterable="false"
-        :options="optionsRef"
-        :show-path="false"
-        check-strategy="child"
-        clearable
-        expand-trigger="click"
-        max-tag-count="responsive"
-        multiple
-        placeholder="Select trajectories"
-        size="small"
-        @update:value="handleUpdateValue"
-      />
+      <div class="selection">
+        <NCascader
+          v-model:value="selection"
+          :cascade="false"
+          :clear-filter-after-select="false"
+          :disabled="isLoading || isFused"
+          :filterable="false"
+          :options="options"
+          :show-path="false"
+          check-strategy="child"
+          class="cascader"
+          clearable
+          expand-trigger="click"
+          max-tag-count="responsive"
+          multiple
+          placeholder="Select trajectories"
+          size="small"
+          @update:value="handleUpdateValue"
+        />
+
+        <NTooltip
+          :show-arrow="false"
+          placement="top-start"
+          trigger="hover"
+        >
+          <!--suppress VueUnrecognizedSlot -->
+          <template #trigger>
+            <NSwitch
+              v-model:value="isFused"
+              :disabled="!isFuseable"
+              class="switch"
+              size="small"
+            >
+              <template #checked> fuse</template>
+            </NSwitch>
+          </template>
+          Fuse trajectories
+        </NTooltip>
+      </div>
+
+      <h2>Colormap</h2>
+
       <TrajectoriesColorScale />
 
-      <AppButton
-        :handle-click="handleExportClick"
-        text="Export"
-      >
-        <DownloadOutline />
-      </AppButton>
-    </div>
+      <span />
+
+      <div class="last-line">
+        <AppButton
+          :handle-click="handleClick"
+          icon
+          tooltip="Export"
+          tooltip-placement="bottom"
+        >
+          <DownloadOutline />
+        </AppButton>
+      </div>
+    </AppDraggableMenu>
   </AppDraggable>
 </template>
 
 <style lang="scss" scoped>
-.container {
+.selection {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.5em;
+}
 
-  min-width: 20rem;
+.switch {
+  width: 6em;
+  font-size: 0.9em;
+}
+
+.last-line {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.cascader {
+  width: 15em;
+  flex: 1;
 }
 </style>
