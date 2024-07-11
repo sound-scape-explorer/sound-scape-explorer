@@ -1,5 +1,5 @@
 import {useStorageSettings} from 'src/composables/use-storage-settings';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 let isCreated = false;
 const context = ref<AudioContext | null>(null);
@@ -23,9 +23,8 @@ export function useAudioContext() {
     });
   };
 
-  watch(settings, create);
-
   return {
     context: context,
+    create: create,
   };
 }

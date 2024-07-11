@@ -1,3 +1,4 @@
+import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {WAVE} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
@@ -10,8 +11,9 @@ import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
 export function useWavesurferMounter() {
   const {ws} = useWavesurfer();
-  const {context} = useAudioContext();
+  const {context, create} = useAudioContext();
   const {waveform} = useDraggableAudio();
+  const {settings} = useStorageSettings();
 
   useWavesurferCursor();
   useWavesurferSpectrogram();
@@ -38,4 +40,5 @@ export function useWavesurferMounter() {
   };
 
   watch([context, waveform], mount);
+  watch(settings, create);
 }
