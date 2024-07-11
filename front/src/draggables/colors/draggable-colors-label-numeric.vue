@@ -3,12 +3,12 @@ import {CalculatorOutline, FlashOutline} from '@vicons/ionicons5';
 import AppButton from 'src/app/app-button.vue';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
-import {onUnmounted} from 'vue';
+import {onBeforeUnmount} from 'vue';
 
 const {detect: detectLabelRange} = useColorByLabel();
 const {isEnabled, toggle, disable} = useLabelsNumeric();
 
-onUnmounted(disable);
+onBeforeUnmount(disable);
 </script>
 
 <template>
