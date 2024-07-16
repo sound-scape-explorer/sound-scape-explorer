@@ -66,7 +66,7 @@ useAppDraggableLifecycles({
 
       <div class="title content">
         <div class="title container">
-          <div class="hello">
+          <div class="title header">
             <AppIcon v-if="icon !== null">
               <icon />
             </AppIcon>
@@ -219,7 +219,7 @@ hr {
   display: none;
 }
 
-.hello {
+.title.header {
   display: flex;
   justify-content: center;
   align-items: center;

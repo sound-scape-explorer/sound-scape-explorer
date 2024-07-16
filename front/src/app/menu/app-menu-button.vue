@@ -1,11 +1,11 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
 import {useAppMenuButton} from 'src/app/menu/use-app-menu-button';
-import {type DraggablesStore} from 'src/composables/use-draggables';
+import {type DraggableKey} from 'src/composables/use-draggables';
 import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
 
 export interface AppMenuItemProps {
-  draggableKey: keyof DraggablesStore;
+  draggableKey: DraggableKey;
   text: string;
   disabled?: boolean;
 }
@@ -34,12 +34,12 @@ const {getKey} = useKeyboardShortcuts();
         </NIcon>
       </NButton>
     </template>
-    <span
-      >{{ props.text }} [<span class="app-menu-button__bold">{{
-        getKey(props.draggableKey)
-      }}</span
-      >]</span
-    >
+
+    <div>
+      {{ props.text }} [<span class="app-menu-button__bold">
+        {{ getKey(props.draggableKey) }}</span
+      >]
+    </div>
   </NTooltip>
 </template>
 
