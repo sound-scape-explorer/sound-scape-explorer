@@ -50,14 +50,18 @@ const {getKey} = useKeyboardShortcuts();
 }
 
 .app-menu-button__active {
-  background: rgba(23, 159, 87, 0.4);
+  background: rgba(23, 159, 87, 0.2);
 }
 
 .app-menu-button__bold {
   font-weight: bold;
 }
 
-.hidden {
+.app-menu-button__selected {
+  background: rgba(23, 159, 87, 0.4);
+}
+
+.app-menu-button__hidden {
   display: none;
 }
 </style>
