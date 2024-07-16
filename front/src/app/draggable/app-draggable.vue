@@ -2,10 +2,12 @@
 import {CloseOutline} from '@vicons/ionicons5';
 import {useDraggable} from '@vueuse/core';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
 import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
+import {menu} from 'src/common/menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 
@@ -20,6 +22,7 @@ const {container, storage, drag} = useAppDraggable(props);
 const {close} = useDraggables();
 const {classes} = useAppDraggableStyles(props);
 const {check} = useAppDraggableBounds(container);
+const icon = menu[props.draggableKey] ?? null;
 
 const {x, y, style} = useDraggable(container, {
   initialValue: {x: storage.value.x, y: storage.value.y},
@@ -63,9 +66,15 @@ useAppDraggableLifecycles({
 
       <div class="title content">
         <div class="title container">
-          <span>
-            {{ capitalizeFirstLetter(props.draggableKey) }}
-          </span>
+          <div class="hello">
+            <AppIcon v-if="icon !== null">
+              <icon />
+            </AppIcon>
+            <span>
+              {{ capitalizeFirstLetter(props.draggableKey) }}
+            </span>
+          </div>
+
           <div
             ref="drag"
             class="drag"
@@ -208,5 +217,12 @@ hr {
 
 .hidden {
   display: none;
+}
+
+.hello {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 </style>

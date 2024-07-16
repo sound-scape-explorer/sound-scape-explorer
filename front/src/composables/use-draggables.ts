@@ -15,7 +15,7 @@ export interface DraggablesStore {
   relativeTrajectories: boolean;
   temporal: boolean;
   heatmaps: boolean;
-  selection: boolean;
+  selection: boolean; // 3d beta
 }
 
 export type DraggableKey = keyof DraggablesStore;
