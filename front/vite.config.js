@@ -26,6 +26,9 @@ if (isElectron) {
  */
 export default defineConfig({
   base: base,
+  define: {
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
+  },
   build: {
     target: 'es2020',
     rollupOptions: {

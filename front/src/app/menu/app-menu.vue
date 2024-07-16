@@ -1,9 +1,7 @@
 <!--suppress HtmlUnknownTag -->
 <script lang="ts" setup="">
-import {BarChartOutline, GridOutline, LayersOutline} from '@vicons/ionicons5';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
-// noinspection ES6UnusedImports
-import {menu} from 'src/common/menu';
+import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewState} from 'src/composables/use-view-state';
@@ -11,6 +9,7 @@ import {useViewState} from 'src/composables/use-view-state';
 const {isReady} = useStorageReady();
 const {hasView} = useViewState();
 const {isPreview} = useClientSettings();
+const {menu} = useAppMenu();
 </script>
 
 <template>
@@ -89,7 +88,7 @@ const {isPreview} = useClientSettings();
         draggable-key="labels"
         text="Labels"
       >
-        <LayersOutline />
+        <menu.labels />
       </AppMenuButton>
 
       <AppMenuButton
@@ -97,7 +96,7 @@ const {isPreview} = useClientSettings();
         draggable-key="temporal"
         text="Temporal"
       >
-        <BarChartOutline />
+        <menu.temporal />
       </AppMenuButton>
 
       <AppMenuButton
@@ -105,7 +104,7 @@ const {isPreview} = useClientSettings();
         draggable-key="heatmaps"
         text="Heatmaps"
       >
-        <GridOutline />
+        <menu.heatmaps />
       </AppMenuButton>
 
       <AppMenuButton

@@ -7,7 +7,7 @@ import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
 import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
-import {menu} from 'src/common/menu';
+import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 
@@ -19,6 +19,7 @@ export interface AppDraggableProps {
 const props = defineProps<AppDraggableProps>();
 
 const {container, storage, drag} = useAppDraggable(props);
+const {menu} = useAppMenu();
 const {close} = useDraggables();
 const {classes} = useAppDraggableStyles(props);
 const {check} = useAppDraggableBounds(container);
