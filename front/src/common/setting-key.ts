@@ -20,4 +20,5 @@ export enum SettingKey {
   colorsFlavor = 'sse-settings-colorsFlavor',
   colorsAlphaLow = 'sse-settings-colorsAlphaLow',
   colorsAlphaHigh = 'sse-settings-colorsAlphaHigh',
+  isHidingMenuOnDraggableToggle = 'sse-settings-isHidingMenuOnDraggableToggle',
 }

@@ -16,6 +16,7 @@ export type InjectionKey =
   | 'settings/isCopyOnSelect2d'
   | 'settings/isWebGlScatter2d'
   | 'settings/isPreview'
+  | 'settings/isHidingMenuOnDraggableToggle'
   | 'indicators/list'
   | 'indicators/selection'
   | 'indicators/display'

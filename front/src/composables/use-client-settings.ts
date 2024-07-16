@@ -41,6 +41,11 @@ const isColorMapSwapped = useStorage<boolean>(
   d.isColorMapSwapped,
 );
 
+const isHidingMenuOnDraggableToggle = useStorage<boolean>(
+  k.isHidingMenuOnDraggableToggle,
+  d.isHidingMenuOnDraggableToggle,
+);
+
 export function useClientSettings() {
   const {audioHost} = useStorageAudioHost();
   const {fontSize} = useAppHeatmapSize();
@@ -85,5 +90,6 @@ export function useClientSettings() {
     isCopyOnSelect2d: isCopyOnSelect2d,
     isWebGlScatter2d: isWebGlScatter2d,
     isColorMapSwapped: isColorMapSwapped,
+    isHidingMenuOnDraggableToggle: isHidingMenuOnDraggableToggle,
   };
 }

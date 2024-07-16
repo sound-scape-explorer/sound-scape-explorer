@@ -25,6 +25,7 @@ const {
   timeshift,
   isCopyOnSelect2d,
   isWebGlScatter2d,
+  isHidingMenuOnDraggableToggle,
 } = useClientSettings();
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
@@ -48,8 +49,10 @@ useRefProvide('settings/isTimezoneActive', isTimezoneActive);
 useRefProvide('settings/isCopyOnSelect2d', isCopyOnSelect2d);
 useRefProvide('settings/isWebGlScatter2d', isWebGlScatter2d);
 useRefProvide('settings/isPreview', isPreview);
-
-// todo: add reset action
+useRefProvide(
+  'settings/isHidingMenuOnDraggableToggle',
+  isHidingMenuOnDraggableToggle,
+);
 </script>
 
 <template>
@@ -158,6 +161,13 @@ useRefProvide('settings/isPreview', isPreview);
         <AppCheckbox
           :default="isWebGlScatter2d"
           injection-key="settings/isWebGlScatter2d"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Hide menu on draggable toggle">
+        <AppCheckbox
+          :default="isHidingMenuOnDraggableToggle"
+          injection-key="settings/isHidingMenuOnDraggableToggle"
         />
       </DraggableSettingsItem>
 
