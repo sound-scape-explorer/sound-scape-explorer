@@ -7,7 +7,7 @@ import {
   useReducerStorage,
 } from 'src/composables/use-reducer-storage';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 const reducer = ref<Reducer | null>(null);
 const selected = ref<Reducer['name'] | null>(null);
@@ -39,13 +39,13 @@ export function useReducerSelection() {
   const handleChange = () => handlePrimitive(selected.value, select);
   const autoselect = () => autoPrimitive(selected, options);
 
-  watch(selected, handleChange);
-  watch(options, autoselect);
-
   return {
     reducer: reducer,
     selected: selected,
     select: select,
     reset: reset,
+    options: options,
+    autoselect: autoselect,
+    handleChange: handleChange,
   };
 }

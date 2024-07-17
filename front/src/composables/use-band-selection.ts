@@ -1,7 +1,7 @@
 import {useBandOptions} from 'src/composables/use-band-options';
 import {type Band, useBandStorage} from 'src/composables/use-band-storage';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 const band = ref<Band | null>(null);
 const selected = ref<Band['name'] | null>(null);
@@ -27,13 +27,13 @@ export function useBandSelection() {
   const handleChange = () => handlePrimitive(selected.value, select);
   const autoselect = () => autoPrimitive(selected, options);
 
-  watch(selected, handleChange);
-  watch(options, autoselect);
-
   return {
     band: band,
     selected: selected,
     select: select,
     reset: reset,
+    options: options,
+    autoselect: autoselect,
+    handleChange: handleChange,
   };
 }

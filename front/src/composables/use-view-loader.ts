@@ -6,7 +6,7 @@ import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDraggables} from 'src/composables/use-draggables';
-import {useSelectExtractor} from 'src/composables/use-extractor-selection';
+import {useExtractorSelection} from 'src/composables/use-extractor-selection';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
@@ -39,7 +39,7 @@ export function useViewLoader() {
 
   const {band} = useBandSelection();
   const {integration} = useIntegrationSelection();
-  const {extractor} = useSelectExtractor();
+  const {extractor} = useExtractorSelection();
   const {reducer} = useReducerSelection();
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();

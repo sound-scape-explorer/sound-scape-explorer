@@ -1,5 +1,5 @@
 import {useBandSelection} from 'src/composables/use-band-selection';
-import {useSelectExtractor} from 'src/composables/use-extractor-selection';
+import {useExtractorSelection} from 'src/composables/use-extractor-selection';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
@@ -35,7 +35,7 @@ export function useTrajectoriesData() {
 
     const {band} = useBandSelection();
     const {integration} = useIntegrationSelection();
-    const {extractor} = useSelectExtractor();
+    const {extractor} = useExtractorSelection();
     const {reducer} = useReducerSelection();
 
     await read(async (worker, file) => {
