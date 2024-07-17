@@ -7,6 +7,7 @@ import {
   NNotificationProvider,
   NSpace,
 } from 'naive-ui';
+import AppConsole from 'src/app/app-console.vue';
 import AppLoader from 'src/app/app-loader.vue';
 import AppLoading from 'src/app/app-loading.vue';
 import AppMenu from 'src/app/menu/app-menu.vue';
@@ -50,6 +51,7 @@ onMounted(showImport);
       sider-placement="left"
     >
       <AppLoading />
+      <AppConsole />
 
       <NLayout>
         <NNotificationProvider>
