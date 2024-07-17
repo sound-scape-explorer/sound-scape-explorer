@@ -110,12 +110,12 @@ $indexSelected: 1001;
 
   opacity: 1;
 
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid $grey;
 
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: $white;
   backdrop-filter: blur(10px);
 
-  box-shadow: 10px 10px 20px -3px rgba(0, 0, 0, 0.2);
+  box-shadow: 10px 10px 20px -3px $greyDeep;
   border-radius: 8px;
 
   transition: width 120ms ease-in-out, border 120ms ease-in-out,
@@ -150,10 +150,6 @@ $indexSelected: 1001;
   top: 0.5rem;
 }
 
-.selected {
-  z-index: $indexSelected;
-}
-
 .title {
   font-weight: bold;
 }
@@ -185,7 +181,7 @@ $indexSelected: 1001;
   width: 100%;
   min-width: 100px;
 
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: $greyLight;
   border-radius: 10px;
   cursor: grab;
 
@@ -220,10 +216,32 @@ hr {
   display: none;
 }
 
+$titleHeaderSize: 1.3em;
 .title.header {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
+
+  > i {
+    transition: background-color 200ms ease-in-out;
+    border-radius: 100%;
+
+    width: $titleHeaderSize;
+    height: $titleHeaderSize;
+
+    * {
+      width: $titleHeaderSize;
+      height: $titleHeaderSize;
+    }
+  }
+}
+
+.selected {
+  z-index: $indexSelected;
+
+  .title.header > i {
+    background-color: $oliveLight;
+  }
 }
 </style>
