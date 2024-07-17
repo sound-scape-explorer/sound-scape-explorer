@@ -36,7 +36,6 @@ watch(
 watch(indicator, handleFirstLoad);
 
 // todo: add colouring to candles and continuous
-// todo: add enter keyboard validation for filtering
 </script>
 
 <template>
