@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const {lock, unlock} = useGlobalKeyboard();
-const hasTooltip = computed(() => typeof props.tooltip === 'string');
+const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 const isNumber = computed(() => props.type === 'number');
 const isString = computed(() => props.type === 'string');
 const model = useRefInject(props.injectionKey);
