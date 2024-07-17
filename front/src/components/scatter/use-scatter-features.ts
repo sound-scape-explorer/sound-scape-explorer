@@ -9,6 +9,7 @@ import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-a
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {colors} from 'src/styles/colors';
 
 const size2d = 5;
 const size3d = 3;
@@ -44,11 +45,11 @@ export function useScatterFeatures() {
       let filteredColor = color;
 
       if (filtered.value[index]) {
-        filteredColor = `rgba(0, 0, 0, ${low.value})`;
+        filteredColor = colors.transparent(low.value);
       }
 
       if (pointsSelected.indexOf(index) !== -1) {
-        filteredColor = `rgba(255, 0, 0, ${high.value})`;
+        filteredColor = colors.selected(high.value);
       }
 
       return [index / (colorScale.length - 1), filteredColor];
@@ -125,7 +126,7 @@ export function useScatterFeatures() {
         colorscale: plotlyColorscale,
         colors: plotlyColorscale,
         line: {
-          color: 'rgba(0, 0, 0, 0.1)',
+          color: colors.border,
           width: 1,
         },
       },
