@@ -1,0 +1,18 @@
+$t: 120ms;
+
+@mixin transition-background {
+  transition: background-color $t ease-in-out;
+}
+
+@mixin transition-app-draggable {
+  transition: width $t ease-in-out, border $t ease-in-out,
+  max-height $t ease-in, background-color $t ease-in-out;
+}
+
+@mixin transition-app-draggable-handle {
+  transition: opacity $t ease-in, filter $t ease-in;
+}
+
+@mixin transition-checkboxes {
+  transition: background-color $t ease-in-out, opacity $t ease-in-out;
+}

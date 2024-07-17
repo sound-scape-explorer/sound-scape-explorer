@@ -118,8 +118,7 @@ $indexSelected: 1001;
   box-shadow: 10px 10px 20px -3px $greyDeep;
   border-radius: 8px;
 
-  transition: width 120ms ease-in-out, border 120ms ease-in-out,
-    max-height 120ms ease-in, background-color 120ms ease-in-out;
+  @include transition-app-draggable;
 }
 
 .content {
@@ -188,7 +187,7 @@ $indexSelected: 1001;
   opacity: 0.45;
   filter: grayscale(0.95);
 
-  transition: opacity 100ms ease-in, filter 100ms ease-in;
+  @include transition-app-draggable-handle;
 
   &:hover {
     opacity: 0.99;
@@ -224,7 +223,7 @@ $titleHeaderSize: 1.3em;
   gap: 5px;
 
   > i {
-    transition: background-color 200ms ease-in-out;
+    @include transition-background;
     border-radius: 100%;
 
     width: $titleHeaderSize;

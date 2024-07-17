@@ -285,7 +285,7 @@ $left: calc(var(--left) - 1);
 
   border: 1px dashed black;
 
-  transition: background-color ease-in-out 100ms;
+  @include transition-background;
 
   &:hover {
     z-index: 100;

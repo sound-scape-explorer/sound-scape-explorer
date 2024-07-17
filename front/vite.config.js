@@ -32,7 +32,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: '@import "src/styles/colors.scss";',
+        additionalData: `
+          @import "src/styles/colors.scss";
+          @import "src/styles/transitions.scss";
+        `,
       },
     },
   },
