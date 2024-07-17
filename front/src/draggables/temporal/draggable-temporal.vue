@@ -17,7 +17,7 @@ const {indicator, isScatter, isCandles, isCondensed, isDisplay} =
 const {data: indicatorData} = useTemporal();
 const {candles, plot, render} = useTemporalChart();
 const {period} = useTemporalCandles();
-const {current: currentSites, selectAll} = useTemporalSites();
+const {current: currentSites, handleFirstLoad} = useTemporalSites();
 const {filtered} = useIntervalFilter();
 
 watch(
@@ -33,14 +33,10 @@ watch(
   render,
 );
 
-watch([indicator], () => {
-  if (indicator.value !== null && currentSites.value.length === 0) {
-    selectAll();
-  }
-});
+watch(indicator, handleFirstLoad);
 
 // todo: add colouring to candles and continuous
-// todo: decide how to filter when display is sites
+// todo: decide how to filter when display is sites??
 // todo: add enter keyboard validation for filtering
 </script>
 

@@ -1,5 +1,6 @@
 import type {TreeSelectOption} from 'naive-ui';
 import {useStorageSites} from 'src/composables/use-storage-sites';
+import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporal} from 'src/draggables/temporal/use-temporal';
 import {computed, ref} from 'vue';
 
@@ -8,6 +9,7 @@ const current = ref<string[]>([]);
 export function useTemporalSites() {
   const {selectSites} = useTemporal();
   const {sites} = useStorageSites();
+  const {indicator} = useDraggableTemporal();
 
   const options = computed<TreeSelectOption[]>(() => {
     if (sites.value === null) {
@@ -60,10 +62,17 @@ export function useTemporalSites() {
     update(names);
   };
 
+  const handleFirstLoad = () => {
+    if (indicator.value !== null && current.value.length === 0) {
+      selectAll();
+    }
+  };
+
   return {
     current: current,
     options: options,
     update: update,
     selectAll: selectAll,
+    handleFirstLoad: handleFirstLoad,
   };
 }
