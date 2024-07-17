@@ -97,29 +97,56 @@ export function useDraggables() {
     }
   };
 
-  const cycle = () => {
+  const cycle = (isReverse = false) => {
     if (active.value.length < 2 || selected.value === null) {
       return;
     }
 
-    const next = getNextKey(selected.value);
-    selected.value = next;
+    let payload: DraggableKey | null;
+
+    if (!isReverse) {
+      payload = getNextKey(selected.value);
+    } else {
+      payload = getPreviousKey(selected.value);
+    }
+
+    selected.value = payload;
   };
 
   const getNextKey = (
     key: keyof DraggablesStore,
   ): keyof DraggablesStore | null => {
-    if (active.value.length === 0) {
+    const l = active.value.length;
+    if (l === 0) {
       return null;
     }
 
     const i = active.value.indexOf(key);
+    const next = i + 1;
 
-    if (i + 1 >= active.value.length) {
+    if (next >= l) {
       return active.value[0];
     }
 
-    return active.value[i + 1];
+    return active.value[next];
+  };
+
+  const getPreviousKey = (
+    key: keyof DraggablesStore,
+  ): keyof DraggablesStore | null => {
+    const l = active.value.length;
+    if (l === 0) {
+      return null;
+    }
+
+    const i = active.value.indexOf(key);
+    const previous = i - 1;
+
+    if (previous < 0) {
+      return active.value[l - 1];
+    }
+
+    return active.value[previous];
   };
 
   const toggleAll = () => (hidden.value = !hidden.value);

@@ -20,6 +20,9 @@ const {shortcuts} = useKeyboardShortcuts();
     >
       <NTag
         :bordered="false"
+        :style="{
+          fontSize: shortcut.name === 'draggableCycleRev' ? '70%' : 'auto',
+        }"
         class="key"
         size="small"
       >

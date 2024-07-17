@@ -7,7 +7,7 @@ import {onMounted, onUnmounted, watch} from 'vue';
 const blockedKeys: KeyboardEvent['key'][] = ['Tab'];
 
 export function useAppMetaKeys() {
-  const {tab, escape} = useMagicKeys();
+  const {tab, escape, shift} = useMagicKeys();
   const {cycle, closeActive, toggleAll} = useDraggables();
   const {isLocked, registerKey} = useGlobalKeyboard();
 
@@ -26,7 +26,7 @@ export function useAppMetaKeys() {
       return;
     }
 
-    cycle();
+    cycle(shift.value);
   };
 
   const handleEscape = () => {
