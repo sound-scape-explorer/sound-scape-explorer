@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
 import {NGi, NGrid, NTag} from 'naive-ui';
+import AppTitle from 'src/app/app-title.vue';
 import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 
@@ -7,7 +8,7 @@ const {shortcuts} = useKeyboardShortcuts();
 </script>
 
 <template>
-  <h2 class="full left">⌨ Keyboard Shortcuts</h2>
+  <AppTitle>⌨ Keyboard Shortcuts</AppTitle>
 
   <NGrid
     :cols="3"

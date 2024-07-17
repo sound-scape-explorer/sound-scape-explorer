@@ -2,6 +2,7 @@
 import {NSelect, NSpace, NTooltip} from 'naive-ui';
 import type {InjectionKey} from 'src/common/injection-key';
 import {useRefInject} from 'src/composables/use-ref-inject';
+import type {NaiveSize} from 'src/types';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
@@ -9,7 +10,7 @@ interface Props {
   injectionKey: InjectionKey;
   options: string[];
   defaultOptionIndex?: number;
-  size?: 'tiny' | 'small';
+  size?: NaiveSize;
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   disabled?: boolean;

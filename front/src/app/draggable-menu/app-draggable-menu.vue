@@ -1,8 +1,9 @@
 <script lang="ts" setup>
+import type {NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
 interface Props {
-  size?: 'small' | 'medium' | 'large';
+  size?: NaiveSize;
 }
 
 const props = withDefaults(defineProps<Props>(), {size: 'small'});

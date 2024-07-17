@@ -13,6 +13,7 @@ import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
+import DraggableSettingsDev from 'src/draggables/settings/draggable-settings-dev.vue';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 
 const {
@@ -26,7 +27,9 @@ const {
   isCopyOnSelect2d,
   isWebGlScatter2d,
   isHidingMenuOnDraggableToggle,
+  isDevEnabled,
 } = useClientSettings();
+
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
 const {colormap} = useSpectrogramColormap();
@@ -48,11 +51,12 @@ useRefProvide('settings/legendOverflow', isLegendOverflow);
 useRefProvide('settings/isTimezoneActive', isTimezoneActive);
 useRefProvide('settings/isCopyOnSelect2d', isCopyOnSelect2d);
 useRefProvide('settings/isWebGlScatter2d', isWebGlScatter2d);
-useRefProvide('settings/isPreview', isPreview);
 useRefProvide(
   'settings/isHidingMenuOnDraggableToggle',
   isHidingMenuOnDraggableToggle,
 );
+useRefProvide('settings/isPreview', isPreview);
+useRefProvide('settings/isDevEnabled', isDevEnabled);
 </script>
 
 <template>
@@ -177,6 +181,15 @@ useRefProvide(
           injection-key="settings/isPreview"
         />
       </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Enable dev settings">
+        <AppCheckbox
+          :default="isDevEnabled"
+          injection-key="settings/isDevEnabled"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsDev />
     </AppSection>
   </AppDraggable>
 </template>

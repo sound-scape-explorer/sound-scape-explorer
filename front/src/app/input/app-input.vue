@@ -3,6 +3,7 @@ import {NInput, NInputNumber, NSpace, NTooltip} from 'naive-ui';
 import {type InjectionKey} from 'src/common/injection-key';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefInject} from 'src/composables/use-ref-inject';
+import type {NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
   max?: number;
   step?: number;
   align?: 'center' | 'left' | 'right';
-  size?: 'tiny' | 'small';
+  size?: NaiveSize;
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   handleEnter?: () => void;

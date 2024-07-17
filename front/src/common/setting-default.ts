@@ -25,4 +25,6 @@ export const SettingDefault = {
   colorsAlphaLow: 0.005,
   colorsAlphaHigh: 0.8,
   isHidingMenuOnDraggableToggle: false,
+  isDevEnabled: false,
+  devAutoLoadView: false,
 };

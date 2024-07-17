@@ -4,6 +4,7 @@ import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {SettingDefault as d} from 'src/common/setting-default';
 import {SettingKey as k} from 'src/common/setting-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
+import {useClientSettingsDev} from 'src/composables/use-client-settings-dev';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
@@ -55,6 +56,11 @@ export function useClientSettings() {
   const {reset: resetAlphas} = useScatterColorAlpha();
   const {reset: resetFlavor} = useColorSelection();
   const {notify} = useAppNotification();
+  const {
+    isDevEnabled,
+    devAutoLoadView,
+    reset: resetDev,
+  } = useClientSettingsDev();
 
   const resetAll = () => {
     plotBackground.value = d.plotBackground;
@@ -75,6 +81,7 @@ export function useClientSettings() {
     resetLabels();
     resetAlphas();
     resetFlavor();
+    resetDev();
 
     notify('success', 'Settings', 'Defaults restored');
   };
@@ -91,5 +98,7 @@ export function useClientSettings() {
     isWebGlScatter2d: isWebGlScatter2d,
     isColorMapSwapped: isColorMapSwapped,
     isHidingMenuOnDraggableToggle: isHidingMenuOnDraggableToggle,
+    isDevEnabled: isDevEnabled,
+    devAutoLoadView: devAutoLoadView,
   };
 }
