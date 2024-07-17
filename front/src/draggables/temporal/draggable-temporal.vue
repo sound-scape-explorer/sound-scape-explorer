@@ -38,7 +38,6 @@ watch(
 watch(indicator, handleFirstLoad);
 
 // todo: add colouring to candles and continuous
-// todo: decide how to filter when display is sites??
 // todo: add enter keyboard validation for filtering
 </script>
 
