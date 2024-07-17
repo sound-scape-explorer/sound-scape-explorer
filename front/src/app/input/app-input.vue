@@ -17,13 +17,16 @@ interface Props {
   size?: 'tiny' | 'small';
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
+  handleEnter?: () => void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'string',
+  placeholder: '',
   disabled: false,
   align: 'center',
   size: 'tiny',
+  handleEnter: () => undefined,
 });
 
 const {lock, unlock} = useGlobalKeyboard();
@@ -31,6 +34,7 @@ const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 const isNumber = computed(() => props.type === 'number');
 const isString = computed(() => props.type === 'string');
 const model = useRefInject(props.injectionKey);
+
 const classNames = computed<string>(() => {
   switch (props.align) {
     case 'center': {
@@ -62,21 +66,23 @@ const classNames = computed<string>(() => {
           :disabled="props.disabled"
           :max="props.max"
           :min="props.min"
-          :placeholder="props.placeholder ?? ''"
+          :placeholder="props.placeholder"
           :size="props.size"
           :step="props.step"
           @blur="unlock"
           @focus="lock"
+          @keyup.enter="props.handleEnter"
         />
         <NInput
           v-if="isString"
           v-model:value="model"
           :class="classNames"
           :disabled="props.disabled"
-          :placeholder="props.placeholder ?? ''"
+          :placeholder="props.placeholder"
           :size="props.size"
           @blur="unlock"
           @focus="lock"
+          @keyup.enter="props.handleEnter"
         />
       </template>
       <span>{{ props.tooltip ?? '' }}</span>
@@ -89,11 +95,12 @@ const classNames = computed<string>(() => {
       :disabled="props.disabled"
       :max="props.max"
       :min="props.min"
-      :placeholder="props.placeholder ?? ''"
+      :placeholder="props.placeholder"
       :size="props.size"
       :step="props.step ?? 1"
       @blur="unlock"
       @focus="lock"
+      @keyup.enter="props.handleEnter"
     />
 
     <NInput
@@ -101,10 +108,11 @@ const classNames = computed<string>(() => {
       v-model:value="model"
       :class="classNames"
       :disabled="props.disabled"
-      :placeholder="props.placeholder ?? ''"
+      :placeholder="props.placeholder"
       :size="props.size"
       @blur="unlock"
       @focus="lock"
+      @keyup.enter="props.handleEnter"
     />
   </NSpace>
 </template>
