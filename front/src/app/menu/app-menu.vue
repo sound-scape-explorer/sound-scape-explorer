@@ -109,18 +109,18 @@ const {menu} = useAppMenu();
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="details"
-        text="Details"
-      >
-        <menu.view />
-      </AppMenuButton>
-
-      <AppMenuButton
-        :disabled="!hasView"
         draggable-key="audio"
         text="Audio"
       >
         <menu.audio />
+      </AppMenuButton>
+
+      <AppMenuButton
+        :disabled="!hasView"
+        draggable-key="details"
+        text="Details"
+      >
+        <menu.details />
       </AppMenuButton>
 
       <AppMenuButton
