@@ -232,7 +232,7 @@ watch(indicator, update);
   font-size: 0.9em;
 
   b {
-    color: rgba(23, 159, 87, 1);
+    color: $emerald;
   }
 }
 

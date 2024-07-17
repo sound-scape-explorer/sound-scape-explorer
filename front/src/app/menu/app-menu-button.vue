@@ -50,7 +50,7 @@ const {getKey} = useKeyboardShortcuts();
 }
 
 .app-menu-button__active {
-  background: rgba(23, 159, 87, 0.2);
+  background: $oliveLight;
 }
 
 .app-menu-button__bold {
@@ -58,7 +58,7 @@ const {getKey} = useKeyboardShortcuts();
 }
 
 .app-menu-button__selected {
-  background: rgba(23, 159, 87, 0.4);
+  background: $olive;
 }
 
 .app-menu-button__hidden {

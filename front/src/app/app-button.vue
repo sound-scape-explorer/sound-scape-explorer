@@ -96,10 +96,10 @@ const classNames = computed<string>(() => {
 }
 
 .error {
-  background: rgba(255, 0, 0, 0.2);
+  background: $red;
 }
 
 .active {
-  background: rgba(23, 159, 87, 0.4);
+  background: $olive;
 }
 </style>

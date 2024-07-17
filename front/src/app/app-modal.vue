@@ -42,7 +42,7 @@ const containerClasses = computed<string>(() => {
 
   z-index: 99999;
 
-  background: rgba(0, 0, 0, 0.7);
+  background: $black;
 
   user-select: none;
 

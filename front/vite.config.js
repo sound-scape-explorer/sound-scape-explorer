@@ -29,6 +29,13 @@ export default defineConfig({
   define: {
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "src/styles/colors.scss";',
+      },
+    },
+  },
   build: {
     target: 'es2020',
     rollupOptions: {

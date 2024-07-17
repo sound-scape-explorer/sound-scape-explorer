@@ -102,7 +102,7 @@ const isActiveIdRef = computed<string>(() => {
   transition: background-color 120ms ease-in-out, opacity 120ms ease-in-out;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: $grey;
     opacity: 0.9;
   }
 

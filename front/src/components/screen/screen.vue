@@ -120,7 +120,7 @@ watch([container, isEnabled], () => {
 
 <style lang="scss" scoped>
 .selectors-container {
-  background: rgba(0, 0, 255, 0.2);
+  background: $violet;
   width: 100vw;
   height: 100vh;
   position: fixed;
