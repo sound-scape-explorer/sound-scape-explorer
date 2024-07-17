@@ -21,6 +21,7 @@ interface Menu {
   [key: string]: Component;
 }
 
+// todo: maybe add conditions and text labels to Menu object
 export function useAppMenu() {
   const menu: Menu = {
     open: CloudUploadOutline,
