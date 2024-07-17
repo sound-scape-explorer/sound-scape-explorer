@@ -15,6 +15,7 @@ const {filteredCount, collectedCount} = useTemporalInfo();
   <div>
     <AppInput
       :disabled="!hasIndicator"
+      :handle-enter="filter"
       :step="0.1"
       injection-key="indicators/filterFrom"
       placeholder="From"
@@ -27,6 +28,7 @@ const {filteredCount, collectedCount} = useTemporalInfo();
 
     <AppInput
       :disabled="!hasIndicator"
+      :handle-enter="filter"
       injection-key="indicators/filterTo"
       placeholder="To"
       size="small"
