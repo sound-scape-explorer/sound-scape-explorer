@@ -2,16 +2,13 @@
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NButton, NButtonGroup, NSwitch, NTreeSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
-import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
-import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
+import DraggableTemporalMenuFilters from 'src/draggables/temporal/draggable-temporal-menu-filters.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
-import {useTemporalInfo} from 'src/draggables/temporal/use-temporal-info';
 import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 import {watch} from 'vue';
@@ -28,7 +25,6 @@ const {
   isCondensed,
   handleExportClick,
   update,
-  hasIndicator,
 } = useDraggableTemporal();
 
 const {
@@ -38,12 +34,9 @@ const {
   selectAll,
 } = useTemporalSites();
 
-const {filteredCount, collectedCount} = useTemporalInfo();
-
 const {periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useGlobalKeyboard();
 const {from, to} = useTemporalThresholds();
-const {filter, reset} = useScatterFilterTemporal();
 
 useRefProvide('indicators/list', indicator);
 useRefProvide('indicators/selection', selection);
@@ -156,61 +149,7 @@ watch(indicator, update);
     <h2>Filter</h2>
 
     <div class="row">
-      <div>
-        <AppInput
-          :disabled="!hasIndicator"
-          :step="0.1"
-          injection-key="indicators/filterFrom"
-          placeholder="From"
-          size="small"
-          style="width: 9em"
-          tooltip="From"
-          tooltip-placement="bottom"
-          type="number"
-        />
-
-        <AppInput
-          :disabled="!hasIndicator"
-          injection-key="indicators/filterTo"
-          placeholder="To"
-          size="small"
-          style="width: 9em"
-          tooltip="To"
-          tooltip-placement="bottom"
-          type="number"
-        />
-
-        <AppButton
-          :disabled="!hasIndicator"
-          :handle-click="filter"
-          size="small"
-        >
-          Apply
-        </AppButton>
-
-        <AppButton
-          :disabled="!hasIndicator"
-          :handle-click="reset"
-          size="small"
-        >
-          Reset
-        </AppButton>
-
-        <div
-          v-if="hasIndicator"
-          class="info"
-        >
-          <AppTooltip
-            :tooltip="`${collectedCount} points collected`"
-            placement="bottom"
-          >
-            <div>
-              <b>{{ filteredCount }}</b>
-              points excluded
-            </div>
-          </AppTooltip>
-        </div>
-      </div>
+      <DraggableTemporalMenuFilters />
     </div>
   </AppDraggableMenu>
 </template>
@@ -225,14 +164,6 @@ watch(indicator, update);
     display: flex;
     align-items: center;
     gap: 0.5em;
-  }
-}
-
-.info {
-  font-size: 0.9em;
-
-  b {
-    color: $emerald;
   }
 }
 
