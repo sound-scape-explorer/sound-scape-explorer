@@ -30,6 +30,7 @@ export function useAudioOpen() {
       open('details');
     }
   };
+
   return {
     currentIntervalIndex: currentIntervalIndex,
     hasClicked: hasClicked,

@@ -3,6 +3,7 @@ import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
 import {useIntervalFilter} from 'src/composables/use-interval-filter';
+import {useViewState} from 'src/composables/use-view-state';
 import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
 import DraggableTemporalSidebar from 'src/draggables/temporal/draggable-temporal-sidebar.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
@@ -19,6 +20,7 @@ const {candles, plot, render} = useTemporalChart();
 const {period} = useTemporalCandles();
 const {current: currentSites, handleFirstLoad} = useTemporalSites();
 const {filtered} = useIntervalFilter();
+const {hasView} = useViewState();
 
 watch(
   [
@@ -44,7 +46,7 @@ watch(indicator, handleFirstLoad);
   <AppDraggable
     class="draggable-temporal__container"
     draggable-key="temporal"
-    hide-separator
+    suspense="view"
   >
     <DraggableTemporalSidebar />
     <DraggableTemporalMenu />

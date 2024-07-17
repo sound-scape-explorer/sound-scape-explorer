@@ -2,28 +2,34 @@
 import {CloseOutline} from '@vicons/ionicons5';
 import {useDraggable} from '@vueuse/core';
 import AppButton from 'src/app/app-button.vue';
+import AppCondition from 'src/app/app-condition.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
 import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
+import {useAppDraggableSuspense} from 'src/app/draggable/use-app-draggable-suspense';
 import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
-  hideSeparator?: boolean;
+  suspense?: null | 'view' | 'scatterClick';
 }
 
-const props = defineProps<AppDraggableProps>();
+const props = withDefaults(defineProps<AppDraggableProps>(), {
+  suspense: null,
+});
 
 const {container, storage, drag} = useAppDraggable(props);
-const {menu} = useAppMenu();
-const {close} = useDraggables();
 const {classes} = useAppDraggableStyles(props);
+const {suspense} = useAppDraggableSuspense(props);
 const {check} = useAppDraggableBounds(container);
+
+const {menu} = useAppMenu();
 const icon = menu[props.draggableKey] ?? null;
+const {close} = useDraggables();
 
 const {x, y, style} = useDraggable(container, {
   initialValue: {x: storage.value.x, y: storage.value.y},
@@ -85,9 +91,14 @@ useAppDraggableLifecycles({
         </div>
       </div>
 
-      <div class="content main">
-        <slot />
-      </div>
+      <AppCondition
+        :wait-if="suspense.while"
+        :wait-message="suspense.message"
+      >
+        <div class="content main">
+          <slot />
+        </div>
+      </AppCondition>
     </div>
   </div>
 </template>

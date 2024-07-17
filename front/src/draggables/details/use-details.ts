@@ -1,6 +1,7 @@
 import type {Dayjs} from 'dayjs';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDate} from 'src/composables/use-date';
+import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {
   type IntervalDetails,
   useStorageAggregatedIntervalDetails,
@@ -14,7 +15,7 @@ import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggreg
 import {useStorageFiles} from 'src/composables/use-storage-files';
 import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
-import {ref, watch} from 'vue';
+import {computed, ref} from 'vue';
 
 const currentIndex = ref<number | null>(null);
 const date = ref<Dayjs | null>(null);
@@ -33,6 +34,7 @@ export function useDetails() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {currentIntervalIndex} = useAudioOpen();
   const {timeshift} = useClientSettings();
+  const {integration} = useIntegrationSelection();
 
   const readDetails = async () => {
     if (
@@ -59,8 +61,15 @@ export function useDetails() {
     currentIndex.value = i;
   };
 
-  watch(currentIntervalIndex, readDetails);
-  watch(timeshift, () => {
+  const dateEnd = computed<Dayjs | null>(() => {
+    if (date.value === null || integration.value === null) {
+      return null;
+    }
+
+    return date.value.add(integration.value.seconds, 'seconds');
+  });
+
+  const updateDates = () => {
     if (
       currentIntervalIndex.value === null ||
       aggregatedTimestamps.value === null
@@ -72,12 +81,16 @@ export function useDetails() {
     const t = aggregatedTimestamps.value[i];
 
     date.value = convertTimestampToDate(t);
-  });
+  };
 
   return {
     date: date,
     labelValues: labelValues,
     site: site,
     blocks: blocks,
+    dateEnd: dateEnd,
+    readDetails: readDetails,
+    timeshift: timeshift,
+    updateDates: updateDates,
   };
 }

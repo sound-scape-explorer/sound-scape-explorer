@@ -1,8 +1,6 @@
 <script lang="ts" setup="">
 import {HeadsetOutline} from '@vicons/ionicons5';
-import type {Dayjs} from 'dayjs';
 import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
-import AppCondition from 'src/app/app-condition.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
@@ -13,7 +11,8 @@ import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
 import {useDetails} from 'src/draggables/details/use-details';
-import {computed, watch} from 'vue';
+import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
+import {watch} from 'vue';
 
 const {nonNnExtractors} = useExtractorStorage();
 const {band} = useBandSelection();
@@ -21,184 +20,170 @@ const {integration} = useIntegrationSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
 const {labelProperties} = useStorageLabels();
 const {currentIntervalIndex, hasClicked} = useAudioOpen();
-
-const {date, labelValues, site, blocks} = useDetails();
-
 const {select} = useAudioFile();
 const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
+const {autoselect} = useDetailsAutoselectAudio();
+const {
+  date,
+  dateEnd,
+  labelValues,
+  site,
+  blocks,
+  readDetails,
+  timeshift,
+  updateDates,
+} = useDetails();
 
-const dateEndRef = computed<Dayjs | null>(() => {
-  if (date.value === null || integration.value === null) {
-    return null;
-  }
-
-  return date.value.add(integration.value.seconds, 'seconds');
-});
-
-watch(blocks, () => {
-  if (blocks.value === null) {
-    return;
-  }
-
-  if (blocks.value.length !== 1) {
-    return;
-  }
-
-  const blockDetails = blocks.value[0];
-  select(blockDetails);
-});
+watch(blocks, autoselect);
+watch(currentIntervalIndex, readDetails);
+watch(timeshift, updateDates);
 </script>
 
 <template>
   <AppDraggable
     draggable-key="details"
-    hide-separator
+    suspense="scatterClick"
   >
-    <AppCondition
-      :wait-if="!hasClicked"
-      wait-message="please click a point"
-    >
-      <div class="file container">
-        <div class="title">Selected interval index</div>
-        <span class="file index">{{ currentIntervalIndex ?? 'none' }}</span>
-      </div>
+    <div class="file container">
+      <div class="title">Selected interval index</div>
+      <span class="file index">{{ currentIntervalIndex ?? 'none' }}</span>
+    </div>
 
-      <div class="file container">
-        <div class="title">Site</div>
-        <span class="file index">{{ site?.site ?? '' }}</span>
-      </div>
+    <div class="file container">
+      <div class="title">Site</div>
+      <span class="file index">{{ site?.site ?? '' }}</span>
+    </div>
 
-      <div class="file container">
-        <div class="title">Audio blocks</div>
-        <span class="file index">
-          <NTooltip
-            v-for="blockDetails in blocks"
-            placement="bottom"
-            trigger="hover"
+    <div class="file container">
+      <div class="title">Audio blocks</div>
+      <span class="file index">
+        <NTooltip
+          v-for="blockDetails in blocks"
+          placement="bottom"
+          trigger="hover"
+        >
+          <!--suppress VueUnrecognizedSlot -->
+          <template #trigger>
+            <NButton
+              class="zoom"
+              size="small"
+              @click="() => select(blockDetails)"
+            >
+              <template #icon>
+                <NIcon>
+                  <HeadsetOutline />
+                </NIcon>
+              </template>
+            </NButton>
+          </template>
+
+          <NGrid
+            :cols="1"
+            x-gap="12"
           >
-            <!--suppress VueUnrecognizedSlot -->
-            <template #trigger>
-              <NButton
-                class="zoom"
+            <NGi>
+              <NTag
+                :bordered="false"
                 size="small"
-                @click="() => select(blockDetails)"
               >
-                <template #icon>
-                  <NIcon>
-                    <HeadsetOutline />
-                  </NIcon>
-                </template>
-              </NButton>
-            </template>
+                file
+              </NTag>
+              {{ blockDetails.file }}
+            </NGi>
+            <NGi>
+              <NTag
+                :bordered="false"
+                size="small"
+              >
+                file start
+              </NTag>
+              {{ blockDetails.fileStart }} ms
+            </NGi>
+            <NGi>
+              <NTag
+                :bordered="false"
+                size="small"
+              >
+                start
+              </NTag>
+              {{ convertTimestampToIsoDate(blockDetails.start) }}
+            </NGi>
+          </NGrid>
+        </NTooltip>
+      </span>
+    </div>
 
-            <NGrid
-              :cols="1"
-              x-gap="12"
-            >
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  file
-                </NTag>
-                {{ blockDetails.file }}
-              </NGi>
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  file start
-                </NTag>
-                {{ blockDetails.fileStart }} ms
-              </NGi>
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  start
-                </NTag>
-                {{ convertTimestampToIsoDate(blockDetails.start) }}
-              </NGi>
-            </NGrid>
-          </NTooltip>
-        </span>
-      </div>
+    <div class="separator" />
 
-      <div class="separator" />
+    <div class="file container">
+      <div class="title">Date Start</div>
+      <span class="file index">{{ date && convertDateToIsoDate(date) }}</span>
+    </div>
 
-      <div class="file container">
-        <div class="title">Date Start</div>
-        <span class="file index">{{ date && convertDateToIsoDate(date) }}</span>
-      </div>
+    <div class="file container">
+      <div class="title">Date End</div>
+      <span class="file index">{{
+        dateEnd && convertDateToIsoDate(dateEnd)
+      }}</span>
+    </div>
 
-      <div class="file container">
-        <div class="title">Date End</div>
-        <span class="file index">{{
-          dateEndRef && convertDateToIsoDate(dateEndRef)
-        }}</span>
-      </div>
+    <div class="file container">
+      <div class="title">Band</div>
+      <span class="file index">{{ band?.name ?? '' }}</span>
+    </div>
 
-      <div class="file container">
-        <div class="title">Band</div>
-        <span class="file index">{{ band?.name ?? '' }}</span>
-      </div>
+    <div class="file container">
+      <div class="title">Integration</div>
+      <span class="file index">{{ integration?.name ?? '' }}</span>
+    </div>
 
-      <div class="file container">
-        <div class="title">Integration</div>
-        <span class="file index">{{ integration?.name ?? '' }}</span>
-      </div>
+    <div class="separator" />
 
-      <div class="separator" />
+    <div class="title">Labels</div>
 
-      <div class="title">Labels</div>
-
-      <div
-        v-if="hasClicked"
-        class="file container details"
+    <div
+      v-if="hasClicked"
+      class="file container details"
+    >
+      <span />
+      <NGrid
+        :cols="2"
+        x-gap="12"
       >
-        <span />
-        <NGrid
-          :cols="2"
-          x-gap="12"
-        >
-          <!--suppress JSUnusedLocalSymbols -->
-          <NGi v-for="(_, index) in labelProperties">
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              {{ labelProperties?.[index] }}
-            </NTag>
+        <!--suppress JSUnusedLocalSymbols -->
+        <NGi v-for="(_, index) in labelProperties">
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            {{ labelProperties?.[index] }}
+          </NTag>
 
-            {{ labelValues?.[index] }}
-          </NGi>
-        </NGrid>
+          {{ labelValues?.[index] }}
+        </NGi>
+      </NGrid>
 
-        <div class="separator" />
+      <div class="separator" />
 
-        <div class="title">Indicators</div>
+      <div class="title">Indicators</div>
 
-        <NGrid
-          v-if="aggregatedIndicators !== null"
-          :cols="2"
-          x-gap="12"
-        >
-          <NGi v-for="(ex, index) in nonNnExtractors">
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              {{ ex.name }}
-            </NTag>
+      <NGrid
+        v-if="aggregatedIndicators !== null"
+        :cols="2"
+        x-gap="12"
+      >
+        <NGi v-for="(ex, index) in nonNnExtractors">
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            {{ ex.name }}
+          </NTag>
 
-            {{ aggregatedIndicators[index].values[currentIntervalIndex ?? 0] }}
-          </NGi>
-        </NGrid>
-      </div>
-    </AppCondition>
+          {{ aggregatedIndicators[index].values[currentIntervalIndex ?? 0] }}
+        </NGi>
+      </NGrid>
+    </div>
   </AppDraggable>
 </template>
 

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
-import AppCondition from 'src/app/app-condition.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useDate} from 'src/composables/use-date';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
@@ -33,150 +32,145 @@ useWavesurferMounter();
 <template>
   <AppDraggable
     draggable-key="audio"
-    hide-separator
+    suspense="scatterClick"
   >
-    <AppCondition
-      :wait-if="!hasClicked"
-      wait-message="please click a point"
-    >
-      <div class="player">
-        <DraggableAudioSidebar />
+    <div class="player">
+      <DraggableAudioSidebar />
 
-        <NGrid
-          :cols="1"
-          class="grid"
-          x-gap="12"
-        >
-          <NGi>
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              File
-            </NTag>
+      <NGrid
+        :cols="1"
+        class="grid"
+        x-gap="12"
+      >
+        <NGi>
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            File
+          </NTag>
 
-            {{ block?.file }}
-          </NGi>
-        </NGrid>
+          {{ block?.file }}
+        </NGi>
+      </NGrid>
 
-        <NGrid
-          v-if="aggregatedSites !== null && currentIntervalIndex !== null"
-          :cols="1"
-          class="grid"
-          x-gap="12"
-        >
-          <NGi>
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              Site
-            </NTag>
+      <NGrid
+        v-if="aggregatedSites !== null && currentIntervalIndex !== null"
+        :cols="1"
+        class="grid"
+        x-gap="12"
+      >
+        <NGi>
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            Site
+          </NTag>
 
-            {{ aggregatedSites[currentIntervalIndex].site }}
-          </NGi>
-          <NGi>
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              Interval Date
-            </NTag>
+          {{ aggregatedSites[currentIntervalIndex].site }}
+        </NGi>
+        <NGi>
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            Interval Date
+          </NTag>
 
-            {{ date && convertDateToIsoDate(date) }}
-          </NGi>
-        </NGrid>
+          {{ date && convertDateToIsoDate(date) }}
+        </NGi>
+      </NGrid>
 
-        <NGrid
-          :cols="3"
-          class="grid"
-          x-gap="12"
-        >
-          <NGi>
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              Interval Index
-            </NTag>
+      <NGrid
+        :cols="3"
+        class="grid"
+        x-gap="12"
+      >
+        <NGi>
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            Interval Index
+          </NTag>
 
-            {{ currentIntervalIndex }}
-          </NGi>
-          <NGi>
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              Audio duration
-            </NTag>
+          {{ currentIntervalIndex }}
+        </NGi>
+        <NGi>
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            Audio duration
+          </NTag>
 
-            {{ duration.toFixed(2) }} seconds
-          </NGi>
-          <NGi>
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              FFT Size
-            </NTag>
+          {{ duration.toFixed(2) }} seconds
+        </NGi>
+        <NGi>
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            FFT Size
+          </NTag>
 
-            {{ size }}
-          </NGi>
+          {{ size }}
+        </NGi>
 
-          <NGi>
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              Speed %
-            </NTag>
+        <NGi>
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            Speed %
+          </NTag>
 
-            {{ readable.percentage }}
-          </NGi>
-          <NGi>
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              Semitones
-            </NTag>
+          {{ readable.percentage }}
+        </NGi>
+        <NGi>
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            Semitones
+          </NTag>
 
-            {{ readable.semitones }}
-          </NGi>
-          <NGi v-if="settings !== null">
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              Hertz
-            </NTag>
+          {{ readable.semitones }}
+        </NGi>
+        <NGi v-if="settings !== null">
+          <NTag
+            :bordered="false"
+            size="small"
+          >
+            Hertz
+          </NTag>
 
-            {{ readable.hertz }}
-          </NGi>
-        </NGrid>
+          {{ readable.hertz }}
+        </NGi>
+      </NGrid>
 
-        <div>
-          <NSlider
-            v-model:value="rate"
-            :max="PLAYBACK_RATE.max"
-            :min="PLAYBACK_RATE.min"
-            :step="PLAYBACK_RATE.step"
-            @mousedown="lock"
-            @mouseup="unlock"
-          />
-        </div>
-
-        <div
-          ref="waveform"
-          class="mt"
-        />
-
-        <div
-          ref="spectrogram"
-          class="spectrogram mt"
+      <div>
+        <NSlider
+          v-model:value="rate"
+          :max="PLAYBACK_RATE.max"
+          :min="PLAYBACK_RATE.min"
+          :step="PLAYBACK_RATE.step"
+          @mousedown="lock"
+          @mouseup="unlock"
         />
       </div>
-    </AppCondition>
+
+      <div
+        ref="waveform"
+        class="mt"
+      />
+
+      <div
+        ref="spectrogram"
+        class="spectrogram mt"
+      />
+    </div>
   </AppDraggable>
 </template>
 

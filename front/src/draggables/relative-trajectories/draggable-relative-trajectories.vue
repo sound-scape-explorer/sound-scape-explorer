@@ -99,7 +99,7 @@ const handleExportClick = () => {
 <template>
   <AppDraggable
     draggable-key="relativeTrajectories"
-    hide-separator
+    suspense="view"
   >
     <div class="container">
       <NCascader

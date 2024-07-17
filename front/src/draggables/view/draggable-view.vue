@@ -37,10 +37,7 @@ useRefProvide('view/extractor', extractorSelected);
 </script>
 
 <template>
-  <AppDraggable
-    draggable-key="view"
-    hide-separator
-  >
+  <AppDraggable draggable-key="view">
     <AppDraggableMenu
       class="container"
       size="medium"
