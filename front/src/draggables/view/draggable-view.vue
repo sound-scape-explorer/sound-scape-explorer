@@ -20,9 +20,12 @@ import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useViewState} from 'src/composables/use-view-state';
 import {useViewUnloader} from 'src/composables/use-view-unloader';
+import {useDraggableView} from 'src/draggables/view/use-draggable-view';
+import {onMounted} from 'vue';
 
 const {hasView} = useViewState();
 const {unload} = useViewUnloader();
+const {autoselectDev} = useDraggableView();
 
 const {options: reducerOptions} = useReducerOptions();
 const {options: bandOptions} = useBandOptions();
@@ -43,6 +46,8 @@ useRefProvide('view/reducer', reducerSelected);
 useRefProvide('view/band', bandSelected);
 useRefProvide('view/integration', integrationSelected);
 useRefProvide('view/extractor', extractorSelected);
+
+onMounted(autoselectDev);
 </script>
 
 <template>

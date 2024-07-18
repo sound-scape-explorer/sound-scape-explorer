@@ -14,7 +14,7 @@ useRefProvide('settings/devAutoLoadView', devAutoLoadView);
   <div v-if="isDevEnabled">
     <AppTitle class="title">Development settings</AppTitle>
 
-    <DraggableSettingsItem title="Enable dev settings">
+    <DraggableSettingsItem title="Auto load view">
       <AppCheckbox
         :default="devAutoLoadView"
         injection-key="settings/devAutoLoadView"

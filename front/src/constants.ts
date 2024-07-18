@@ -63,3 +63,5 @@ export const LINK_BUG_REPORT =
 export const LINK_CHANGELOG =
   'https://github.com/sound-scape-explorer/sound-scape-explorer/blob/main/CHANGELOG.md';
 export const LINK_DISCORD = 'https://discord.gg/eRsQPDBeXg';
+
+export const TIMEOUT = 240;
