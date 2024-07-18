@@ -1,11 +1,8 @@
 <script lang="ts" setup>
-import {
-  ArrowRedoOutline,
-  ArrowUndoOutline,
-  DownloadOutline,
-} from '@vicons/ionicons5';
+import {DownloadOutline} from '@vicons/ionicons5';
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
@@ -37,21 +34,12 @@ useRefProvide('trajectories/fuse', isFused);
 <template>
   <AppDraggable draggable-key="trajectories">
     <AppDraggableSidebar>
-      <AppButton
-        :disabled="!canUndo || isFused"
-        :handle-click="undo"
-        icon
-      >
-        <ArrowUndoOutline />
-      </AppButton>
-
-      <AppButton
-        :disabled="!canRedo || isFused"
-        :handle-click="redo"
-        icon
-      >
-        <ArrowRedoOutline />
-      </AppButton>
+      <AppDraggableSidebarHistory
+        :can-redo="canRedo && !isFused"
+        :can-undo="canUndo && !isFused"
+        :redo="redo"
+        :undo="undo"
+      />
     </AppDraggableSidebar>
 
     <AppDraggableMenu
