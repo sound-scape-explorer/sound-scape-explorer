@@ -1,9 +1,11 @@
+import {useRefHistory} from '@vueuse/core';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {computed, ref} from 'vue';
 
 const currentIntervalIndex = ref<number | null>(null);
+const {undo, redo, canUndo, canRedo} = useRefHistory(currentIntervalIndex);
 const hasClicked = computed<boolean>(() => currentIntervalIndex.value !== null);
 
 export function useAudioOpen() {
@@ -35,5 +37,9 @@ export function useAudioOpen() {
     currentIntervalIndex: currentIntervalIndex,
     hasClicked: hasClicked,
     openAudio: openAudio,
+    undo: undo,
+    redo: redo,
+    canUndo: canUndo,
+    canRedo: canRedo,
   };
 }

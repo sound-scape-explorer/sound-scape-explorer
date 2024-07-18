@@ -10,9 +10,11 @@ import {
   VolumeLowOutline,
 } from '@vicons/ionicons5';
 import AppButton from 'src/app/app-button.vue';
+import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
+import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurferHandlers} from 'src/draggables/audio/use-wavesurfer-handlers';
 
@@ -20,6 +22,7 @@ const {increase, decrease} = useAudioFourier();
 const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
+const {undo, redo, canUndo, canRedo} = useAudioOpen();
 </script>
 
 <template>
@@ -87,5 +90,12 @@ const {downloadAudio} = useAudioDownload();
     >
       <ArrowDownOutline />
     </AppButton>
+
+    <AppDraggableSidebarHistory
+      :can-redo="canRedo"
+      :can-undo="canUndo"
+      :redo="redo"
+      :undo="undo"
+    />
   </AppDraggableSidebar>
 </template>
