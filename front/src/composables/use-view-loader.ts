@@ -7,6 +7,7 @@ import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useExtractorSelection} from 'src/composables/use-extractor-selection';
+import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
@@ -43,6 +44,7 @@ export function useViewLoader() {
   const {reducer} = useReducerSelection();
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
+  const {lock, unlock} = useGlobalKeyboard();
 
   const load = async () => {
     if (
@@ -55,6 +57,7 @@ export function useViewLoader() {
       return;
     }
     isLoading.value = true;
+    lock();
     console.log('View: Load');
 
     loadingText.value = 'Reading labels';
@@ -93,6 +96,7 @@ export function useViewLoader() {
     isLoading.value = false;
     close('view');
     isEnabled.value = true;
+    unlock();
   };
 
   return {
