@@ -39,6 +39,8 @@ useRefProvide('trajectories/fuse', isFused);
         :can-undo="canUndo && !isFused"
         :redo="redo"
         :undo="undo"
+        redo-tooltip="Next trajectory"
+        undo-tooltip="Previous trajectory"
       />
     </AppDraggableSidebar>
 

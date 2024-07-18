@@ -96,6 +96,8 @@ const {history, undo, redo, canUndo, canRedo} = useAudioSelector();
       :can-undo="canUndo && history.length > 2"
       :redo="redo"
       :undo="undo"
+      redo-tooltip="Next interval"
+      undo-tooltip="Previous interval"
     />
   </AppDraggableSidebar>
 </template>

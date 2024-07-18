@@ -7,16 +7,22 @@ interface Props {
   redo: () => void;
   canUndo: boolean;
   canRedo: boolean;
+  undoTooltip?: string;
+  redoTooltip?: string;
 }
 
 const props = defineProps<Props>();
+const hasUndoTooltip = typeof props?.undoTooltip === 'string';
+const hasRedoTooltip = typeof props?.redoTooltip === 'string';
 </script>
 
 <template>
   <AppButton
     :disabled="!props.canUndo"
     :handle-click="props.undo"
+    :tooltip="hasUndoTooltip && props.canUndo ? props.undoTooltip : undefined"
     icon
+    tooltip-placement="left"
   >
     <ArrowUndoOutline />
   </AppButton>
@@ -24,7 +30,9 @@ const props = defineProps<Props>();
   <AppButton
     :disabled="!props.canRedo"
     :handle-click="props.redo"
+    :tooltip="hasRedoTooltip && props.canRedo ? props.redoTooltip : undefined"
     icon
+    tooltip-placement="left"
   >
     <ArrowRedoOutline />
   </AppButton>
