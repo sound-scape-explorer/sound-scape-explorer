@@ -1,10 +1,10 @@
-import {useColorUser} from 'src/composables/use-color-user';
+import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
 import {mapRange} from 'src/utils/map-range';
 
 export function useColorByCyclingDay() {
   const {convertTimestampToDate} = useDate();
-  const {scale} = useColorUser();
+  const {scale} = useColorsCycling();
 
   const getColorByCyclingDay = (timestamp: number): string => {
     const date = convertTimestampToDate(timestamp);

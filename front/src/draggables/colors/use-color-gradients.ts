@@ -1,13 +1,15 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorUser} from 'src/composables/use-color-user';
+import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {createHourlyLabels} from 'src/utils/create-hourly-labels';
 import {computed} from 'vue';
 
 const size = 100;
 
 export function useColorGradients() {
-  const {scale, cyclingScale} = useScatterColorScale();
+  const {scale} = useScatterColorScale();
+  const {scale: cyclingScale} = useColorsCycling();
   const {scale: userScale} = useColorUser();
   const {isColorMapSwapped} = useClientSettings();
 

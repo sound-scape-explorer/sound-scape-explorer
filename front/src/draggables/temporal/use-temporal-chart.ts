@@ -1,6 +1,6 @@
 import type {AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
-import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
 import {useIntervalFilter} from 'src/composables/use-interval-filter';
 import {useSites} from 'src/composables/use-sites';
@@ -21,7 +21,7 @@ export function useTemporalChart() {
   const {isCandles, isScatter} = useDraggableTemporal();
   const {sites} = useSites();
   const {data} = useTemporal();
-  const {cyclingScale} = useScatterColorScale();
+  const {scale: cyclingScale} = useColorsCycling();
   const {convertTimestampToIsoDate} = useDate();
   const {filtered} = useIntervalFilter();
   const {calculate} = useTemporalHloc();

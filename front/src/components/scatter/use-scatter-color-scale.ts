@@ -1,4 +1,3 @@
-import chroma, {type Scale} from 'chroma-js';
 import {useFiles} from 'src/composables/use-files';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
@@ -10,14 +9,9 @@ import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator'
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {computed, ref} from 'vue';
+import {ref} from 'vue';
 
 const scale = ref<string[] | null>(null);
-const cyclingScale = computed<Scale>(() =>
-  chroma
-    .scale(['blue', 'cyan', 'green', 'yellow', 'orange', 'red', 'blue'])
-    .mode('hsl'),
-);
 
 export function useScatterColorScale() {
   const {files} = useFiles();
@@ -90,7 +84,6 @@ export function useScatterColorScale() {
 
   return {
     scale: scale,
-    cyclingScale: cyclingScale,
     generateColorScale: generate,
     resetColorScale: reset,
   };
