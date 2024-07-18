@@ -40,7 +40,7 @@ const containerClasses = computed<string>(() => {
   padding: 0 1rem;
   margin-bottom: 1rem;
 
-  z-index: 99999;
+  z-index: $appModalLayer;
 
   background: $black;
 

@@ -28,7 +28,7 @@ const payload = computed<string | null>(() => {
   position: fixed;
   left: 7px;
   bottom: 5px;
-  z-index: 100000;
+  z-index: $appConsoleLayer;
   font-style: italic;
   font-size: 90%;
 }

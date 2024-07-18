@@ -104,13 +104,9 @@ useAppDraggableLifecycles({
 </template>
 
 <style lang="scss" scoped>
-$indexDefault: 1000;
-$indexButtons: 1000;
-$indexSelected: 1001;
-
 .draggable {
   position: fixed;
-  z-index: $indexDefault;
+  z-index: $appDraggableIndexDefaultLayer;
 
   justify-content: flex-start;
 
@@ -153,7 +149,7 @@ $indexSelected: 1001;
   position: fixed;
   left: 0.5rem;
 
-  z-index: $indexButtons;
+  z-index: $appDraggableIndexButtonsLayer;
 }
 
 .button.close {
@@ -248,7 +244,7 @@ $titleHeaderSize: 1.3em;
 }
 
 .selected {
-  z-index: $indexSelected;
+  z-index: $appDraggableIndexSelectedLayer;
 
   .title.header > i {
     background-color: $oliveLight;

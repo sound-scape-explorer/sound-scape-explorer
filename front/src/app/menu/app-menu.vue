@@ -160,7 +160,7 @@ const {menu} = useAppMenu();
   gap: 0.5rem;
 
   position: fixed;
-  z-index: 1000;
+  z-index: $appMenuLayer;
 
   top: 0.5rem;
   left: 0.5rem;

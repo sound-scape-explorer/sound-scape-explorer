@@ -125,7 +125,7 @@ watch([container, isEnabled], () => {
   height: 100vh;
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: $screenLayer;
   cursor: crosshair;
 }
 </style>

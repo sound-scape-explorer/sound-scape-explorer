@@ -224,7 +224,7 @@ watch([isAllSelected, duration, current], filterByTime);
 }
 
 .slider {
-  z-index: 1;
+  z-index: $calendarSliderLayer;
 }
 
 .interest {
@@ -234,7 +234,7 @@ watch([isAllSelected, duration, current], filterByTime);
   height: 13px;
   padding: 0 8px;
 
-  z-index: 0;
+  z-index: $calendarInterestLayer;
   user-select: none;
   transform: translateY(-20px);
 }

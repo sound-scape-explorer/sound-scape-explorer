@@ -35,6 +35,7 @@ export default defineConfig({
         additionalData: `
           @import "src/styles/colors.scss";
           @import "src/styles/transitions.scss";
+          @import "src/styles/layers.scss";
         `,
       },
     },
