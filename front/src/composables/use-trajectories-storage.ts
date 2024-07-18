@@ -1,6 +1,5 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useStorageReady} from 'src/composables/use-storage-ready';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 export interface Trajectory {
   index: number;
@@ -12,32 +11,19 @@ export interface Trajectory {
   step: number;
 }
 
-let hasReadAll = false;
 const trajectories = ref<Trajectory[] | null>(null);
 
 export function useTrajectoriesStorage() {
-  const {read} = useStorageReader();
-  const {isReady} = useStorageReady();
+  const {read: readStorage} = useStorageReader();
 
-  const readAll = async () => {
-    if (!isReady.value) {
-      return;
-    }
-
-    if (hasReadAll) {
-      return;
-    }
-
-    hasReadAll = true;
-
-    await read(async (worker, file) => {
+  const read = async () => {
+    await readStorage(async (worker, file) => {
       trajectories.value = await worker.readTrajectories(file);
     });
   };
 
-  watch(isReady, readAll);
-
   return {
     trajectories: trajectories,
+    read: read,
   };
 }

@@ -1,6 +1,5 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useStorageReady} from 'src/composables/use-storage-ready';
-import {onMounted, ref} from 'vue';
+import {ref} from 'vue';
 
 export interface Digester {
   index: number;
@@ -8,31 +7,18 @@ export interface Digester {
 }
 
 const digesters = ref<Digester[] | null>(null);
-let isLoaded = false;
 
 export function useStorageDigesters() {
-  const {read} = useStorageReader();
-  const {isReady} = useStorageReady();
+  const {read: readStorage} = useStorageReader();
 
-  const readAll = async () => {
-    if (!isReady.value) {
-      return;
-    }
-
-    if (isLoaded) {
-      return;
-    }
-
-    isLoaded = true;
-
-    await read(async (worker, file) => {
+  const read = async () => {
+    await readStorage(async (worker, file) => {
       digesters.value = await worker.readDigesters(file);
     });
   };
 
-  onMounted(readAll);
-
   return {
     digesters: digesters,
+    read: read,
   };
 }

@@ -14,29 +14,21 @@ import AppMenu from 'src/app/menu/app-menu.vue';
 import AppNotification from 'src/app/notification/app-notification.vue';
 import Scatter from 'src/components/scatter/scatter.vue';
 import Screen from 'src/components/screen/screen.vue';
+import {useApp} from 'src/composables/use-app';
 import {useAppShortcuts} from 'src/composables/use-app-shortcuts';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useDraggables} from 'src/composables/use-draggables';
 import {useStorageReady} from 'src/composables/use-storage-ready';
+import {useStorageWatcher} from 'src/composables/use-storage-watcher';
 import {useWorker} from 'src/composables/use-worker';
 import Draggables from 'src/draggables/draggables.vue';
 import {onMounted} from 'vue';
 
-// TODO: is the Suspense component actually needed?
-
 useWorker();
 useAppShortcuts();
+useStorageWatcher();
 const {isReady} = useStorageReady();
-const {open} = useDraggables();
 const {isPreview} = useClientSettings();
-
-const showImport = () => {
-  if (isReady.value) {
-    return;
-  }
-
-  open('open');
-};
+const {showImport} = useApp();
 
 onMounted(showImport);
 </script>
@@ -60,15 +52,14 @@ onMounted(showImport);
           </NMessageProvider>
         </NNotificationProvider>
 
-        <Suspense>
-          <div>
-            <AppMenu />
-            <AppLoader />
-            <Scatter v-if="isReady" />
-            <Screen v-if="isReady && isPreview" />
-            <Draggables />
-          </div>
-        </Suspense>
+        <!--TODO: remove enclosing div?-->
+        <div>
+          <AppMenu />
+          <AppLoader />
+          <Scatter v-if="isReady" />
+          <Screen v-if="isReady && isPreview" />
+          <Draggables />
+        </div>
       </NLayout>
     </NLayout>
   </NSpace>

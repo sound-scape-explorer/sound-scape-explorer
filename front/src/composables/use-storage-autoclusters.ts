@@ -1,6 +1,5 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useStorageReady} from 'src/composables/use-storage-ready';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 export interface Autocluster {
   index: number;
@@ -12,33 +11,19 @@ export interface Autocluster {
 }
 
 const autoclusters = ref<Autocluster[]>([]);
-let isLoaded = false;
 
-// These are autoclusters configurations
-// todo: refactor this hook (watcher to be in SFC)
+// autocluster configs
 export function useStorageAutoclusters() {
-  const {read} = useStorageReader();
-  const {isReady} = useStorageReady();
+  const {read: readStorage} = useStorageReader();
 
-  const readAll = async () => {
-    if (!isReady.value) {
-      return;
-    }
-
-    if (isLoaded) {
-      return;
-    }
-
-    isLoaded = true;
-
-    await read(async (worker, file) => {
+  const read = async () => {
+    await readStorage(async (worker, file) => {
       autoclusters.value = await worker.readAutoclustersConfiguration(file);
     });
   };
 
-  watch(isReady, readAll);
-
   return {
     autoclusters: autoclusters,
+    read: read,
   };
 }
