@@ -5,7 +5,8 @@ import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {computed, ref} from 'vue';
 
 const currentIntervalIndex = ref<number | null>(null);
-const {undo, redo, canUndo, canRedo} = useRefHistory(currentIntervalIndex);
+const {history, undo, redo, canUndo, canRedo} =
+  useRefHistory(currentIntervalIndex);
 const hasClicked = computed<boolean>(() => currentIntervalIndex.value !== null);
 
 export function useAudioSelector() {
@@ -37,6 +38,7 @@ export function useAudioSelector() {
     currentIntervalIndex: currentIntervalIndex,
     hasClicked: hasClicked,
     selectAudio: select,
+    history: history,
     undo: undo,
     redo: redo,
     canUndo: canUndo,

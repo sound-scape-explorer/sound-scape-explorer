@@ -22,7 +22,7 @@ const {increase, decrease} = useAudioFourier();
 const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
-const {undo, redo, canUndo, canRedo} = useAudioSelector();
+const {history, undo, redo, canUndo, canRedo} = useAudioSelector();
 </script>
 
 <template>
@@ -93,7 +93,7 @@ const {undo, redo, canUndo, canRedo} = useAudioSelector();
 
     <AppDraggableSidebarHistory
       :can-redo="canRedo"
-      :can-undo="canUndo"
+      :can-undo="canUndo && history.length > 2"
       :redo="redo"
       :undo="undo"
     />
