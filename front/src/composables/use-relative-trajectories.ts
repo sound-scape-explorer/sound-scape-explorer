@@ -2,8 +2,7 @@ import {useBandSelection} from 'src/composables/use-band-selection';
 import {useExtractorSelection} from 'src/composables/use-extractor-selection';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useStorageReady} from 'src/composables/use-storage-ready';
-import {ref, watchEffect} from 'vue';
+import {ref} from 'vue';
 
 export interface RelativeTrajectory {
   index: number;
@@ -15,24 +14,12 @@ export interface RelativeTrajectory {
 }
 
 const relativeTrajectories = ref<RelativeTrajectory[] | null>(null);
-let isLoaded = false;
 
-export function useStorageRelativeTrajectories() {
-  const {read} = useStorageReader();
-  const {isReady} = useStorageReady();
+export function useRelativeTrajectories() {
+  const {read: r} = useStorageReader();
 
-  const readRelativeTrajectories = async () => {
-    if (!isReady.value) {
-      return;
-    }
-
-    if (isLoaded) {
-      return;
-    }
-
-    isLoaded = true;
-
-    await read(async (worker, file) => {
+  const read = async () => {
+    await r(async (worker, file) => {
       const {band} = useBandSelection();
       const {integration} = useIntegrationSelection();
       const {extractor} = useExtractorSelection();
@@ -54,8 +41,6 @@ export function useStorageRelativeTrajectories() {
     });
   };
 
-  watchEffect(readRelativeTrajectories);
-
   const selectRelativeTrajectories = (
     indexes: number[],
   ): RelativeTrajectory[] => {
@@ -71,5 +56,6 @@ export function useStorageRelativeTrajectories() {
   return {
     relativeTrajectories: relativeTrajectories,
     selectRelativeTrajectories: selectRelativeTrajectories,
+    read: read,
   };
 }

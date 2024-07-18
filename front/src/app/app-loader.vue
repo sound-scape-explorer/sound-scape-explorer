@@ -9,16 +9,19 @@ import {useIntervalFilterWatcher} from 'src/composables/use-interval-filter-watc
 import {useRanges} from 'src/composables/use-ranges';
 import {useReducers} from 'src/composables/use-reducers';
 import {useReducersReady} from 'src/composables/use-reducers-ready';
+import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {useSettings} from 'src/composables/use-settings';
 import {useSites} from 'src/composables/use-sites';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useTrajectories} from 'src/composables/use-trajectories';
 import {useVersion} from 'src/composables/use-version';
+import {useViewState} from 'src/composables/use-view-state';
 import {useViewWatcher} from 'src/composables/use-view-watcher';
 import {watch} from 'vue';
 
 const {isReady, notify} = useStorageReady();
+const {hasView} = useViewState();
 const {settings} = useSettings();
 const {read: readAudioHost} = useStorageAudioHost();
 
@@ -35,6 +38,7 @@ const {read: readBands} = useBands();
 const {read: readIntegrations} = useIntegrations();
 const {read: readExtractors} = useExtractors();
 const {isReady: isReadyForReducers} = useReducersReady();
+const {read: readRelativeTrajectories} = useRelativeTrajectories();
 
 useViewWatcher();
 useIntervalFilterWatcher();
@@ -54,6 +58,7 @@ watch(isReady, readBands);
 watch(isReady, readIntegrations);
 watch(isReady, readExtractors);
 watch(isReadyForReducers, readReducers);
+watch(hasView, readRelativeTrajectories);
 </script>
 
 <template></template>

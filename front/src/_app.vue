@@ -23,13 +23,15 @@ import {useWorker} from 'src/composables/use-worker';
 import Draggables from 'src/draggables/draggables.vue';
 import {onMounted} from 'vue';
 
-useWorker();
-useAppShortcuts();
-useStorageWatcher();
 const {isReady} = useStorageReady();
 const {isPreview} = useClientSettings();
+const {create: createWorker} = useWorker();
 const {showImport} = useApp();
 
+useAppShortcuts();
+useStorageWatcher();
+
+onMounted(createWorker);
 onMounted(showImport);
 </script>
 

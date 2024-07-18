@@ -5,12 +5,12 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useStorageRelativeTrajectories} from 'src/composables/use-storage-relative-trajectories';
+import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {EXPORT_FILENAME} from 'src/constants';
 import {computed, ref} from 'vue';
 
 const {selectRelativeTrajectories, relativeTrajectories} =
-  useStorageRelativeTrajectories();
+  useRelativeTrajectories();
 
 const valueRef = ref([]);
 const {isLoading} = useScatterLoading();

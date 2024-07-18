@@ -1,6 +1,4 @@
-import {computed, ref, watchEffect} from 'vue';
-
-let isLoaded = false;
+import {computed, ref} from 'vue';
 
 export type Worker = typeof import('src/common/worker');
 const worker = ref<Worker | null>(null);
@@ -11,23 +9,16 @@ export function useWorker() {
     worker.value?.close();
   };
 
-  const init = () => {
-    if (isLoaded) {
-      return;
-    }
-
-    isLoaded = true;
-
+  const create = () => {
     worker.value = new ComlinkWorker<Worker>(
       new URL('../common/worker', import.meta.url),
     );
   };
 
-  watchEffect(init);
-
   return {
     worker: worker,
     hasWorker: hasWorker,
     close: close,
+    create: create,
   };
 }
