@@ -11,7 +11,7 @@ import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useFiles} from 'src/composables/use-files';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
+import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
 import {copyToClipboard} from 'src/utils/copy-to-clipboard';
 import {generateFilePresenceArray} from 'src/utils/generate-file-presence-array';
 import {getFilesFromIntervals} from 'src/utils/get-files-from-intervals';
@@ -23,7 +23,7 @@ const isMounted = ref<boolean>(false);
 const isRendering = ref<boolean>(false);
 
 export function useScatter() {
-  const {openAudio} = useAudioOpen();
+  const {selectAudio} = useAudioSelector();
   const {config} = useScatterConfig();
   const {isLocked} = useScatterCamera();
   const {traces} = useScatterTraces();
@@ -35,7 +35,7 @@ export function useScatter() {
 
   const handlePlotlyClick = (e: PlotMouseEvent) => {
     const intervalIndex = e.points[0].pointNumber;
-    openAudio(intervalIndex);
+    selectAudio(intervalIndex);
   };
 
   const layout = computed<Partial<Layout> | null>(() => {

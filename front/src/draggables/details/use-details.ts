@@ -14,7 +14,7 @@ import {
   useStorageAggregatedSites,
 } from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
+import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
 import {computed, ref} from 'vue';
 
 const currentIndex = ref<number | null>(null);
@@ -32,7 +32,7 @@ export function useDetails() {
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {currentIntervalIndex} = useAudioOpen();
+  const {currentIntervalIndex} = useAudioSelector();
   const {timeshift} = useClientSettings();
   const {integration} = useIntegrationSelection();
 

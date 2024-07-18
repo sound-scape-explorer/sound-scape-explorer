@@ -14,7 +14,7 @@ import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vu
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
-import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
+import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurferHandlers} from 'src/draggables/audio/use-wavesurfer-handlers';
 
@@ -22,7 +22,7 @@ const {increase, decrease} = useAudioFourier();
 const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
-const {undo, redo, canUndo, canRedo} = useAudioOpen();
+const {undo, redo, canUndo, canRedo} = useAudioSelector();
 </script>
 
 <template>

@@ -9,7 +9,7 @@ import {useIntegrationSelection} from 'src/composables/use-integration-selection
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
-import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
+import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
 import {useDetails} from 'src/draggables/details/use-details';
 import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
 import {watch} from 'vue';
@@ -19,7 +19,7 @@ const {band} = useBandSelection();
 const {integration} = useIntegrationSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
 const {labelProperties} = useStorageLabels();
-const {currentIntervalIndex, hasClicked} = useAudioOpen();
+const {currentIntervalIndex, hasClicked} = useAudioSelector();
 const {select} = useAudioFile();
 const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
 const {autoselect} = useDetailsAutoselectAudio();

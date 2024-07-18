@@ -8,12 +8,12 @@ const currentIntervalIndex = ref<number | null>(null);
 const {undo, redo, canUndo, canRedo} = useRefHistory(currentIntervalIndex);
 const hasClicked = computed<boolean>(() => currentIntervalIndex.value !== null);
 
-export function useAudioOpen() {
+export function useAudioSelector() {
   const {isLoading} = useAudioFile();
   const {open} = useDraggables();
   const {isDetailsAutoOpen} = useClientSettings();
 
-  const openAudio = (index: number | null) => {
+  const select = (index: number | null) => {
     if (currentIntervalIndex.value === index) {
       return;
     }
@@ -36,7 +36,7 @@ export function useAudioOpen() {
   return {
     currentIntervalIndex: currentIntervalIndex,
     hasClicked: hasClicked,
-    openAudio: openAudio,
+    selectAudio: select,
     undo: undo,
     redo: redo,
     canUndo: canUndo,

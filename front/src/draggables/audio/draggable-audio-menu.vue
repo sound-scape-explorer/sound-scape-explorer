@@ -7,8 +7,8 @@ import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useAudioLock} from 'src/draggables/audio/use-audio-lock';
-import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
 import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
+import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
 import {useDetails} from 'src/draggables/details/use-details';
 
 const {size} = useAudioFourier();
@@ -16,7 +16,7 @@ const {settings} = useSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
 const {date} = useDetails();
 const {convertDateToIsoDate} = useDate();
-const {currentIntervalIndex} = useAudioOpen();
+const {currentIntervalIndex} = useAudioSelector();
 const {rate, readable} = useAudioRate();
 const {lock, unlock} = useAudioLock();
 const {block, duration} = useAudioFile();

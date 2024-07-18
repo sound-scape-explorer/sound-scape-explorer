@@ -3,7 +3,7 @@ import Plotly from 'plotly.js-dist-min';
 import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {usePlotConfig} from 'src/composables/use-plot-config';
-import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
+import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
 import {colors} from 'src/styles/colors';
 import {ref, watch} from 'vue';
 
@@ -16,7 +16,7 @@ export function useAppPlot(props: AppPlotProps) {
   const plot = ref<PlotlyHTMLElement | null>(null);
   const {generateConfig} = usePlotConfig(props.exportFilename);
   const {plotBackground} = useClientSettings();
-  const {openAudio} = useAudioOpen();
+  const {selectAudio} = useAudioSelector();
 
   async function render() {
     if (
@@ -41,7 +41,7 @@ export function useAppPlot(props: AppPlotProps) {
         // @ts-expect-error: missing typescript definition
         const legendString: string = e.points[0].fullData.x[plotIndex];
         const intervalIndex = legendString.split('<br>Interval: ')[1];
-        openAudio(Number(intervalIndex));
+        selectAudio(Number(intervalIndex));
       });
     }
   }
