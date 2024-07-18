@@ -45,7 +45,6 @@ export async function load(file: File) {
   FS.mkdir(PATH);
 
   FS.mount(
-    // @ts-expect-error actually exists
     FS.filesystems.WORKERFS,
     {
       files: [file],
