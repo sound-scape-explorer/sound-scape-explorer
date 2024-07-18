@@ -1,5 +1,4 @@
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
-import {watch} from 'vue';
 import CursorPlugin from 'wavesurfer.js/src/plugin/cursor';
 
 export function useWavesurferCursor() {
@@ -24,5 +23,7 @@ export function useWavesurferCursor() {
     ws.value.registerPlugins([cursor]);
   };
 
-  watch(ws, register);
+  return {
+    register: register,
+  };
 }

@@ -1,4 +1,4 @@
-import type {Reducer} from 'src/composables/use-reducer-storage';
+import type {Reducer} from 'src/composables/use-storage-reducers';
 import {ref} from 'vue';
 
 const options = ref<string[]>([]);

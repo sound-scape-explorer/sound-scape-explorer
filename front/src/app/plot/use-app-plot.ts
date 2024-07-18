@@ -7,6 +7,7 @@ import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
 import {colors} from 'src/styles/colors';
 import {ref, watch} from 'vue';
 
+// todo: refactor me
 export function useAppPlot(props: AppPlotProps) {
   const container = ref<HTMLDivElement | null>(null);
   const dataRef = ref<Data[] | null>(null);

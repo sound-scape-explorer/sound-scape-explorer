@@ -4,7 +4,7 @@ import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {Shortcuts} from 'src/composables/use-shortcuts';
 import {onMounted, onUnmounted, watch} from 'vue';
 
-const blockedKeys: KeyboardEvent['key'][] = ['Tab'];
+const blockedKeys: KeyboardEvent['key'][] = ['Tab']; // prevent default behaviours
 
 export function useAppMetaKeys() {
   const {tab, escape, shift} = useMagicKeys();

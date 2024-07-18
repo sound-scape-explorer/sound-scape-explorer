@@ -4,7 +4,7 @@ import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
-import {ref, watch, watchEffect} from 'vue';
+import {ref} from 'vue';
 
 interface Readable {
   hertz: string;
@@ -35,8 +35,6 @@ export function useAudioRate() {
     togglePlayPause();
   };
 
-  watch(rate, update);
-
   const updateReadable = () => {
     if (settings.value === null) {
       return;
@@ -54,10 +52,10 @@ export function useAudioRate() {
     };
   };
 
-  watchEffect(updateReadable);
-
   return {
     rate: rate,
     readable: readable,
+    update: update,
+    updateReadable: updateReadable,
   };
 }

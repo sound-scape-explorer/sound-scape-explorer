@@ -6,7 +6,6 @@ import type {StorageSettings} from 'src/common/storage-settings';
 import type {Band} from 'src/composables/use-band-storage';
 import type {Extractor} from 'src/composables/use-extractor-storage';
 import type {Integration} from 'src/composables/use-integration-storage';
-import type {ReducerFromStorage} from 'src/composables/use-reducer-storage';
 import type {AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
 import type {
   BlockDetails,
@@ -20,14 +19,15 @@ import type {File as FileConfig} from 'src/composables/use-storage-files';
 import type {Labels} from 'src/composables/use-storage-labels';
 import type {Range} from 'src/composables/use-storage-ranges';
 import type {ReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import type {ReducerFromStorage} from 'src/composables/use-storage-reducers';
 import type {RelativeTrajectory} from 'src/composables/use-storage-relative-trajectories';
 import type {Site} from 'src/composables/use-storage-sites';
+import type {Trajectory} from 'src/composables/use-storage-trajectories';
 import type {
   TracedData,
   TracedRelativeTimestamps,
   TracedTimestamps,
 } from 'src/composables/use-trajectories-data';
-import type {Trajectory} from 'src/composables/use-trajectories-storage';
 import {trimRectangular} from 'src/utils/trim-rectangular';
 
 let h5: H5File;

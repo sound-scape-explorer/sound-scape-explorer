@@ -4,8 +4,8 @@ import {useIntegrationSelection} from 'src/composables/use-integration-selection
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useStorageReady} from 'src/composables/use-storage-ready';
+import {type Trajectory} from 'src/composables/use-storage-trajectories';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
-import {type Trajectory} from 'src/composables/use-trajectories-storage';
 import {ref} from 'vue';
 
 export type TracedData = number[][];

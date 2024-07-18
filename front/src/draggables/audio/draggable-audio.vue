@@ -8,9 +8,11 @@ import {PLAYBACK_RATE} from 'src/constants';
 import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioFileWatcher} from 'src/draggables/audio/use-audio-file-watcher';
 import {useAudioLock} from 'src/draggables/audio/use-audio-lock';
 import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
 import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
+import {useAudioRateWatcher} from 'src/draggables/audio/use-audio-rate-watcher';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurferMounter} from 'src/draggables/audio/use-wavesurfer-mounter';
 import {useDetails} from 'src/draggables/details/use-details';
@@ -21,12 +23,14 @@ const {settings} = useStorageSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
 const {date} = useDetails();
 const {convertDateToIsoDate} = useDate();
-const {currentIntervalIndex, hasClicked} = useAudioOpen();
+const {currentIntervalIndex} = useAudioOpen();
 const {rate, readable} = useAudioRate();
 const {lock, unlock} = useAudioLock();
 const {block, duration} = useAudioFile();
 
 useWavesurferMounter();
+useAudioFileWatcher();
+useAudioRateWatcher();
 </script>
 
 <template>

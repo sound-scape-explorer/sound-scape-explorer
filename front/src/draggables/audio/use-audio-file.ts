@@ -7,7 +7,7 @@ import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useWavesurferLoader} from 'src/draggables/audio/use-wavesurfer-loader';
 import {getBitDepthFromWav} from 'src/utils/get-bit-depth-from-wav';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
 const block = ref<BlockDetails | null>(null);
@@ -117,13 +117,12 @@ export function useAudioFile() {
     }
   };
 
-  watch(block, load);
-
   return {
     block: block,
     duration: duration,
     bitDepth: bitDepth,
     select: select,
     isLoading: isLoading,
+    load: load,
   };
 }

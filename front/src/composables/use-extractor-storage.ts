@@ -1,7 +1,6 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useStorageReady} from 'src/composables/use-storage-ready';
 import {NN_EXTRACTORS} from 'src/constants';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 export interface Extractor {
   index: number;
@@ -11,27 +10,15 @@ export interface Extractor {
   persist: boolean;
 }
 
-let isLoaded = false;
 const extractors = ref<Extractor[] | null>(null);
 const nnExtractors = ref<Extractor[] | null>(null);
 const nonNnExtractors = ref<Extractor[] | null>(null);
 
 export function useExtractorStorage() {
-  const {read} = useStorageReader();
-  const {isReady} = useStorageReady();
+  const {read: r} = useStorageReader();
 
-  const readExtractors = async () => {
-    if (!isReady.value) {
-      return;
-    }
-
-    if (isLoaded) {
-      return;
-    }
-
-    isLoaded = true;
-
-    await read(async (worker, file) => {
+  const read = async () => {
+    await r(async (worker, file) => {
       extractors.value = await worker.readExtractors(file);
 
       nnExtractors.value = extractors.value.filter((extractor) =>
@@ -44,11 +31,10 @@ export function useExtractorStorage() {
     });
   };
 
-  watch(isReady, readExtractors);
-
   return {
     extractors: extractors,
     nnExtractors: nnExtractors,
     nonNnExtractors: nonNnExtractors,
+    read: read,
   };
 }

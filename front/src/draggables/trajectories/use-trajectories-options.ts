@@ -1,12 +1,12 @@
 import {type CascaderOption} from 'naive-ui';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useStorageTrajectories} from 'src/composables/use-storage-trajectories';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
-import {useTrajectoriesStorage} from 'src/composables/use-trajectories-storage';
 import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
 import {computed} from 'vue';
 
 export function useTrajectoriesOptions() {
-  const {trajectories} = useTrajectoriesStorage();
+  const {trajectories} = useStorageTrajectories();
   const {current} = useTrajectoriesSelection();
   const {isLoading} = useScatterLoading();
 

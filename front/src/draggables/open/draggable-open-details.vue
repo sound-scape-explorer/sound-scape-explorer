@@ -4,14 +4,14 @@ import {useBandStorage} from 'src/composables/use-band-storage';
 import {useDate} from 'src/composables/use-date';
 import {useExtractorStorage} from 'src/composables/use-extractor-storage';
 import {useIntegrationStorage} from 'src/composables/use-integration-storage';
-import {useReducerStorage} from 'src/composables/use-reducer-storage';
 import {useStorageAutoclusters} from 'src/composables/use-storage-autoclusters';
 import {useStorageDigesters} from 'src/composables/use-storage-digesters';
 import {useStorageFiles} from 'src/composables/use-storage-files';
 import {useStorageRanges} from 'src/composables/use-storage-ranges';
+import {useStorageReducers} from 'src/composables/use-storage-reducers';
 import {useStorageSettings} from 'src/composables/use-storage-settings';
+import {useStorageTrajectories} from 'src/composables/use-storage-trajectories';
 import {useStorageVersion} from 'src/composables/use-storage-version';
-import {useTrajectoriesStorage} from 'src/composables/use-trajectories-storage';
 import {computed} from 'vue';
 
 const {settings} = useStorageSettings();
@@ -22,10 +22,10 @@ const {digesters} = useStorageDigesters();
 const {bands} = useBandStorage();
 const {integrations} = useIntegrationStorage();
 const {extractors} = useExtractorStorage();
-const {reducers} = useReducerStorage();
+const {reducers} = useStorageReducers();
 const {ranges} = useStorageRanges();
 const {autoclusters} = useStorageAutoclusters();
-const {trajectories} = useTrajectoriesStorage();
+const {trajectories} = useStorageTrajectories();
 
 const {convertTimestampToIsoDate} = useDate();
 

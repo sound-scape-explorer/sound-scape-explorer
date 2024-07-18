@@ -13,7 +13,7 @@ export interface Trajectory {
 
 const trajectories = ref<Trajectory[] | null>(null);
 
-export function useTrajectoriesStorage() {
+export function useStorageTrajectories() {
   const {read: readStorage} = useStorageReader();
 
   const read = async () => {
