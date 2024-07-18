@@ -27,7 +27,9 @@ export function useWavesurferMounter() {
   const {register: registerSpectrogram} = useWavesurferSpectrogram();
 
   const mount = () => {
-    if (ws.value !== null) {
+    const isLoaded = ws.value !== null;
+
+    if (isLoaded) {
       return;
     }
 
