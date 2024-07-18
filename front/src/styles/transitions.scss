@@ -4,6 +4,10 @@ $t: 120ms;
   transition: background-color $t ease-in-out;
 }
 
+@mixin transition-color {
+  transition: color $t ease-in-out;
+}
+
 @mixin transition-app-draggable {
   transition: width $t ease-in-out, border $t ease-in-out,
   max-height $t ease-in, background-color $t ease-in-out;

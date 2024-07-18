@@ -228,11 +228,9 @@ $titleHeaderSize: 1.3em;
   justify-content: center;
   align-items: center;
   gap: 5px;
+  @include transition-color;
 
   > i {
-    @include transition-background;
-    border-radius: 100%;
-
     width: $titleHeaderSize;
     height: $titleHeaderSize;
 
@@ -247,7 +245,7 @@ $titleHeaderSize: 1.3em;
   z-index: $appDraggableIndexSelectedLayer;
 
   .title.header > i {
-    background-color: $oliveLight;
+    color: $emerald;
   }
 }
 </style>
