@@ -11,7 +11,7 @@ export interface Integration {
 const integrations = ref<Integration[] | null>(null);
 const options = ref<DropdownOption[]>([]);
 
-export function useIntegrationStorage() {
+export function useIntegrations() {
   const {read: r} = useStorageReader();
 
   const read = async () => {

@@ -3,26 +3,26 @@ import h5wasm from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
 import {StoragePath} from 'src/common/storage-path';
 import type {StorageSettings} from 'src/common/storage-settings';
-import type {Band} from 'src/composables/use-band-storage';
-import type {Extractor} from 'src/composables/use-extractor-storage';
-import type {Integration} from 'src/composables/use-integration-storage';
+import type {Autocluster} from 'src/composables/use-autoclusters';
+import type {Band} from 'src/composables/use-bands';
+import type {Digester} from 'src/composables/use-digesters';
+import type {Extractor} from 'src/composables/use-extractors';
+import type {File as FileConfig} from 'src/composables/use-files';
+import type {Integration} from 'src/composables/use-integrations';
+import type {Range} from 'src/composables/use-ranges';
+import type {ReducerFromStorage} from 'src/composables/use-reducers';
+import type {Site} from 'src/composables/use-sites';
 import type {AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
 import type {
   BlockDetails,
   IntervalDetails,
 } from 'src/composables/use-storage-aggregated-interval-details';
 import type {AggregatedSite} from 'src/composables/use-storage-aggregated-sites';
-import type {Autocluster} from 'src/composables/use-storage-autoclusters';
 import type {Digested} from 'src/composables/use-storage-digested';
-import type {Digester} from 'src/composables/use-storage-digesters';
-import type {File as FileConfig} from 'src/composables/use-storage-files';
 import type {Labels} from 'src/composables/use-storage-labels';
-import type {Range} from 'src/composables/use-storage-ranges';
 import type {ReducedFeatures} from 'src/composables/use-storage-reduced-features';
-import type {ReducerFromStorage} from 'src/composables/use-storage-reducers';
 import type {RelativeTrajectory} from 'src/composables/use-storage-relative-trajectories';
-import type {Site} from 'src/composables/use-storage-sites';
-import type {Trajectory} from 'src/composables/use-storage-trajectories';
+import type {Trajectory} from 'src/composables/use-trajectories';
 import type {
   TracedData,
   TracedRelativeTimestamps,

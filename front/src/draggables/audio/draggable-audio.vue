@@ -2,8 +2,8 @@
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useDate} from 'src/composables/use-date';
+import {useSettings} from 'src/composables/use-settings';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
@@ -19,7 +19,7 @@ import {useDetails} from 'src/draggables/details/use-details';
 
 const {waveform, spectrogram} = useDraggableAudio();
 const {size} = useAudioFourier();
-const {settings} = useStorageSettings();
+const {settings} = useSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
 const {date} = useDetails();
 const {convertDateToIsoDate} = useDate();

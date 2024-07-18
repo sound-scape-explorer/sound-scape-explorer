@@ -1,8 +1,5 @@
 import {useBandSelection} from 'src/composables/use-band-selection';
-import {
-  type Extractor,
-  useExtractorStorage,
-} from 'src/composables/use-extractor-storage';
+import {type Extractor, useExtractors} from 'src/composables/use-extractors';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useStorageReady} from 'src/composables/use-storage-ready';
@@ -34,7 +31,7 @@ export function useStorageAggregatedIndicators() {
     await read(async (worker, file) => {
       const {band} = useBandSelection();
       const {integration} = useIntegrationSelection();
-      const {nonNnExtractors} = useExtractorStorage();
+      const {nonNnExtractors} = useExtractors();
 
       if (
         band.value === null ||

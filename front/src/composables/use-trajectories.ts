@@ -1,26 +1,29 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {ref} from 'vue';
 
-export interface Range {
+export interface Trajectory {
   index: number;
   name: string;
   start: number;
   end: number;
+  labelProperty: string;
+  labelValue: string;
+  step: number;
 }
 
-const ranges = ref<Range[] | null>(null);
+const trajectories = ref<Trajectory[] | null>(null);
 
-export function useStorageRanges() {
+export function useTrajectories() {
   const {read: readStorage} = useStorageReader();
 
   const read = async () => {
     await readStorage(async (worker, file) => {
-      ranges.value = await worker.readRanges(file);
+      trajectories.value = await worker.readTrajectories(file);
     });
   };
 
   return {
-    ranges: ranges,
+    trajectories: trajectories,
     read: read,
   };
 }

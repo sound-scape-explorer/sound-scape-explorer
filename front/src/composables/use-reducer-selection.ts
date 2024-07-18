@@ -2,10 +2,7 @@ import {useBandOptions} from 'src/composables/use-band-options';
 import {useExtractorOptions} from 'src/composables/use-extractor-options';
 import {useIntegrationOptions} from 'src/composables/use-integration-options';
 import {useReducerOptions} from 'src/composables/use-reducer-options';
-import {
-  type Reducer,
-  useStorageReducers,
-} from 'src/composables/use-storage-reducers';
+import {type Reducer, useReducers} from 'src/composables/use-reducers';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
 import {ref} from 'vue';
 
@@ -13,7 +10,7 @@ const reducer = ref<Reducer | null>(null);
 const selected = ref<Reducer['name'] | null>(null);
 
 export function useReducerSelection() {
-  const {reducers} = useStorageReducers();
+  const {reducers} = useReducers();
   const {options} = useReducerOptions();
   const {create: createBandOptions} = useBandOptions();
   const {create: createIntegrationOptions} = useIntegrationOptions();

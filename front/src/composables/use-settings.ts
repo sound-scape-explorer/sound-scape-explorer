@@ -5,7 +5,7 @@ import {computed, ref} from 'vue';
 const settings = ref<StorageSettings | null>(null);
 const hasTimezone = computed(() => settings.value?.timezone !== '');
 
-export function useStorageSettings() {
+export function useSettings() {
   const {read: readStorage} = useStorageReader();
 
   const read = async () => {

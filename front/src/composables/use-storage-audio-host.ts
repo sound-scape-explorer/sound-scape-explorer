@@ -1,7 +1,7 @@
 import {useStorage} from '@vueuse/core';
 import {SettingDefault} from 'src/common/setting-default';
 import {SettingKey} from 'src/common/setting-key';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
+import {useSettings} from 'src/composables/use-settings';
 
 const audioHost = useStorage<string>(
   SettingKey.audioHost,
@@ -9,7 +9,7 @@ const audioHost = useStorage<string>(
 );
 
 export function useStorageAudioHost() {
-  const {settings} = useStorageSettings();
+  const {settings} = useSettings();
 
   const read = () => {
     if (settings.value === null) {

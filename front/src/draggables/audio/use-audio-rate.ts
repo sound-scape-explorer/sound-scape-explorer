@@ -1,6 +1,6 @@
 import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
+import {useSettings} from 'src/composables/use-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
@@ -21,7 +21,7 @@ const readable = ref<Readable>({
 
 // audio speed
 export function useAudioRate() {
-  const {settings} = useStorageSettings();
+  const {settings} = useSettings();
   const {togglePlayPause} = useAudioTransport();
   const {ws} = useWavesurfer();
 

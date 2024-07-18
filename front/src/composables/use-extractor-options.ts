@@ -1,4 +1,4 @@
-import type {Extractor} from 'src/composables/use-extractor-storage';
+import type {Extractor} from 'src/composables/use-extractors';
 import {ref} from 'vue';
 
 const options = ref<string[]>([]);

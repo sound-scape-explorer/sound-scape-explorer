@@ -1,12 +1,9 @@
-import {type Band, useBandStorage} from 'src/composables/use-band-storage';
-import {
-  type Extractor,
-  useExtractorStorage,
-} from 'src/composables/use-extractor-storage';
+import {type Band, useBands} from 'src/composables/use-bands';
+import {type Extractor, useExtractors} from 'src/composables/use-extractors';
 import {
   type Integration,
-  useIntegrationStorage,
-} from 'src/composables/use-integration-storage';
+  useIntegrations,
+} from 'src/composables/use-integrations';
 import {useReducerOptions} from 'src/composables/use-reducer-options';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {ref} from 'vue';
@@ -31,12 +28,12 @@ export interface Reducer {
 
 const reducers = ref<Reducer[] | null>(null);
 
-export function useStorageReducers() {
+export function useReducers() {
   const {read: readStorage} = useStorageReader();
   const {create} = useReducerOptions();
-  const {bands} = useBandStorage();
-  const {integrations} = useIntegrationStorage();
-  const {nnExtractors} = useExtractorStorage();
+  const {bands} = useBands();
+  const {integrations} = useIntegrations();
+  const {nnExtractors} = useExtractors();
 
   const read = async () => {
     await readStorage(async (worker, file) => {

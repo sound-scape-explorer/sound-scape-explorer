@@ -1,7 +1,9 @@
 import type {Dayjs} from 'dayjs';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDate} from 'src/composables/use-date';
+import {useFiles} from 'src/composables/use-files';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useSettings} from 'src/composables/use-settings';
 import {
   type IntervalDetails,
   useStorageAggregatedIntervalDetails,
@@ -12,8 +14,6 @@ import {
   useStorageAggregatedSites,
 } from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageFiles} from 'src/composables/use-storage-files';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
 import {computed, ref} from 'vue';
 
@@ -25,8 +25,8 @@ const blocks = ref<IntervalDetails | null>(null);
 
 // interval details
 export function useDetails() {
-  const {settings} = useStorageSettings();
-  const {files} = useStorageFiles();
+  const {settings} = useSettings();
+  const {files} = useFiles();
   const {convertTimestampToDate} = useDate();
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();

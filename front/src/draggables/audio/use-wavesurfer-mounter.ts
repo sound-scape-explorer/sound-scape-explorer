@@ -1,4 +1,4 @@
-import {useStorageSettings} from 'src/composables/use-storage-settings';
+import {useSettings} from 'src/composables/use-settings';
 import {WAVE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
@@ -17,7 +17,7 @@ export function useWavesurferMounter() {
   const {ws} = useWavesurfer();
   const {context, create} = useAudioContext();
   const {waveform} = useDraggableAudio();
-  const {settings} = useStorageSettings();
+  const {settings} = useSettings();
   const {colormap} = useSpectrogramColormap();
   const {bitDepth} = useAudioFile();
   const {size} = useAudioFourier();

@@ -8,8 +8,8 @@ import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useSettings} from 'src/composables/use-settings';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
@@ -33,7 +33,7 @@ const {
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
 const {colormap} = useSpectrogramColormap();
-const {settings, hasTimezone} = useStorageSettings();
+const {settings, hasTimezone} = useSettings();
 const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
 const colormapOptions = SPECTROGRAM_COLOR_MAPS;

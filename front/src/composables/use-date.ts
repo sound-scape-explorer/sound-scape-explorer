@@ -3,7 +3,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
+import {useSettings} from 'src/composables/use-settings';
 import {DATE_FORMAT} from 'src/constants';
 
 dayjs.extend(relativeTime);
@@ -11,7 +11,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export function useDate() {
-  const {settings} = useStorageSettings();
+  const {settings} = useSettings();
   const {isTimezoneActive, timeshift} = useClientSettings();
 
   const convertTimestampToDate = (timestamp: number) => {

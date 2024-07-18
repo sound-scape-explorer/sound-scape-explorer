@@ -13,7 +13,7 @@ export interface Autocluster {
 const autoclusters = ref<Autocluster[]>([]);
 
 // autocluster configs
-export function useStorageAutoclusters() {
+export function useAutoclusters() {
   const {read: readStorage} = useStorageReader();
 
   const read = async () => {

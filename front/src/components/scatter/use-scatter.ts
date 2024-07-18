@@ -9,8 +9,8 @@ import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {useFiles} from 'src/composables/use-files';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useStorageFiles} from 'src/composables/use-storage-files';
 import {useAudioOpen} from 'src/draggables/audio/use-audio-open';
 import {copyToClipboard} from 'src/utils/copy-to-clipboard';
 import {generateFilePresenceArray} from 'src/utils/generate-file-presence-array';
@@ -28,7 +28,7 @@ export function useScatter() {
   const {isLocked} = useScatterCamera();
   const {traces} = useScatterTraces();
   const {plotBackground} = useClientSettings();
-  const {files} = useStorageFiles();
+  const {files} = useFiles();
   const {notify} = useAppNotification();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {isCopyOnSelect2d} = useClientSettings();

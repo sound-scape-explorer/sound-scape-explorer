@@ -1,25 +1,26 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {ref} from 'vue';
 
-export interface Site {
+export interface Range {
   index: number;
   name: string;
-  fileIndexes: number[];
+  start: number;
+  end: number;
 }
 
-const sites = ref<Site[] | null>(null);
+const ranges = ref<Range[] | null>(null);
 
-export function useStorageSites() {
+export function useRanges() {
   const {read: readStorage} = useStorageReader();
 
   const read = async () => {
     await readStorage(async (worker, file) => {
-      sites.value = await worker.readSites(file);
+      ranges.value = await worker.readRanges(file);
     });
   };
 
   return {
-    sites: sites,
+    ranges: ranges,
     read: read,
   };
 }

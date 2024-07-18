@@ -1,11 +1,11 @@
+import {useDigesters} from 'src/composables/use-digesters';
 import {useStorageDigested} from 'src/composables/use-storage-digested';
-import {useStorageDigesters} from 'src/composables/use-storage-digesters';
 import {computed, ref} from 'vue';
 
 const digester = ref();
 
 export function useDraggableHeatmapDigester() {
-  const {digesters} = useStorageDigesters();
+  const {digesters} = useDigesters();
   const {readDigested} = useStorageDigested();
 
   const options = computed(() => {

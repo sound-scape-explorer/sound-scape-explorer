@@ -10,7 +10,7 @@ export interface Band {
 
 const bands = ref<Band[] | null>(null);
 
-export function useBandStorage() {
+export function useBands() {
   const {read: r} = useStorageReader();
 
   const read = async () => {

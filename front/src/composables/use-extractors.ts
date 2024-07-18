@@ -14,7 +14,7 @@ const extractors = ref<Extractor[] | null>(null);
 const nnExtractors = ref<Extractor[] | null>(null);
 const nonNnExtractors = ref<Extractor[] | null>(null);
 
-export function useExtractorStorage() {
+export function useExtractors() {
   const {read: r} = useStorageReader();
 
   const read = async () => {

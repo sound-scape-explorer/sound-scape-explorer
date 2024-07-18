@@ -8,7 +8,7 @@ export interface Digester {
 
 const digesters = ref<Digester[] | null>(null);
 
-export function useStorageDigesters() {
+export function useDigesters() {
   const {read: readStorage} = useStorageReader();
 
   const read = async () => {

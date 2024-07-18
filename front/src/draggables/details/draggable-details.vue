@@ -4,7 +4,7 @@ import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
-import {useExtractorStorage} from 'src/composables/use-extractor-storage';
+import {useExtractors} from 'src/composables/use-extractors';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
@@ -14,7 +14,7 @@ import {useDetails} from 'src/draggables/details/use-details';
 import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
 import {watch} from 'vue';
 
-const {nonNnExtractors} = useExtractorStorage();
+const {nonNnExtractors} = useExtractors();
 const {band} = useBandSelection();
 const {integration} = useIntegrationSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();

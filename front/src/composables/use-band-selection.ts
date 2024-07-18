@@ -1,5 +1,5 @@
 import {useBandOptions} from 'src/composables/use-band-options';
-import {type Band, useBandStorage} from 'src/composables/use-band-storage';
+import {type Band, useBands} from 'src/composables/use-bands';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
 import {ref} from 'vue';
 
@@ -7,7 +7,7 @@ const band = ref<Band | null>(null);
 const selected = ref<Band['name'] | null>(null);
 
 export function useBandSelection() {
-  const {bands} = useBandStorage();
+  const {bands} = useBands();
   const {options} = useBandOptions();
   const {
     reset: resetPrimitive,

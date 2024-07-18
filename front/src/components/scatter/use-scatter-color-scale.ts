@@ -1,6 +1,6 @@
 import chroma, {type Scale} from 'chroma-js';
+import {useFiles} from 'src/composables/use-files';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageFiles} from 'src/composables/use-storage-files';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
 import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
@@ -20,7 +20,7 @@ const cyclingScale = computed<Scale>(() =>
 );
 
 export function useScatterColorScale() {
-  const {files} = useStorageFiles();
+  const {files} = useFiles();
   const {labelPropertiesAsColorTypes} = useStorageLabels();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {getColor} = useColorByIntervalIndex();
