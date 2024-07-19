@@ -3,7 +3,7 @@ import {Csv} from 'src/common/csv';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useIntervalFilter} from 'src/composables/use-interval-filter';
+import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
@@ -34,7 +34,7 @@ export function useScatterExport() {
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {filtered} = useIntervalFilter();
+  const {filtered} = useScatterGlobalFilter();
 
   const loadingRef = ref<boolean>(false);
 

@@ -4,7 +4,7 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDate} from 'src/composables/use-date';
-import {useIntervalFilter} from 'src/composables/use-interval-filter';
+import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
@@ -24,7 +24,7 @@ export function useScatterFeatures() {
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
   const {isWebGlScatter2d} = useClientSettings();
-  const {filtered} = useIntervalFilter();
+  const {filtered} = useScatterGlobalFilter();
 
   // TODO: improve me
   const trace = (): Data[] => {

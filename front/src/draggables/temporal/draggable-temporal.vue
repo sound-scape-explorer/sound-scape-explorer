@@ -2,7 +2,7 @@
 import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
-import {useIntervalFilter} from 'src/composables/use-interval-filter';
+import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
 import DraggableTemporalSidebar from 'src/draggables/temporal/draggable-temporal-sidebar.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
@@ -18,7 +18,7 @@ const {data: indicatorData} = useTemporal();
 const {candles, plot, render} = useTemporalChart();
 const {period} = useTemporalCandles();
 const {current: currentSites, handleFirstLoad} = useTemporalSites();
-const {filtered} = useIntervalFilter();
+const {filtered} = useScatterGlobalFilter();
 
 watch(
   [
