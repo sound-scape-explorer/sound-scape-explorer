@@ -8,7 +8,7 @@ import {useIntegrationSelection} from 'src/composables/use-integration-selection
 import {useReducerOptions} from 'src/composables/use-reducer-options';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useViewState} from 'src/composables/use-view-state';
-import {TIMEOUT} from 'src/constants';
+import {DEV_AUTO_REDUCER, TIMEOUT} from 'src/constants';
 
 let isLooping = true;
 
@@ -34,7 +34,8 @@ export function useDraggableView() {
 
     if (reducerOptions.value.length !== 0) {
       const umap3d =
-        reducerOptions.value.filter((rO) => rO.includes('umap (3d'))[0] ?? null;
+        reducerOptions.value.filter((rO) => rO.includes(DEV_AUTO_REDUCER))[0] ??
+        null;
       reducerSelected.value = umap3d ?? reducerOptions.value[0];
     }
 
