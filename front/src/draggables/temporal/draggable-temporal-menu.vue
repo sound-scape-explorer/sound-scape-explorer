@@ -10,7 +10,6 @@ import DraggableTemporalMenuFilters from 'src/draggables/temporal/draggable-temp
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
 import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
-import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 import {watch} from 'vue';
 
 const {
@@ -36,13 +35,10 @@ const {
 
 const {periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useGlobalKeyboard();
-const {from, to} = useTemporalThresholds();
 
 useRefProvide('indicators/list', indicator);
 useRefProvide('indicators/selection', selection);
 useRefProvide('indicators/display', display);
-useRefProvide('indicators/filterFrom', from);
-useRefProvide('indicators/filterTo', to);
 
 watch(indicator, update);
 </script>

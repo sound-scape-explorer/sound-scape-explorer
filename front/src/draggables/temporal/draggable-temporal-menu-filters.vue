@@ -3,12 +3,18 @@ import AppButton from 'src/app/app-button.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
+import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalInfo} from 'src/draggables/temporal/use-temporal-info';
+import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 
 const {hasIndicator} = useDraggableTemporal();
 const {filter, reset} = useScatterFilterTemporal();
 const {filteredCount, collectedCount} = useTemporalInfo();
+const {from, to} = useTemporalThresholds();
+
+useRefProvide('indicators/filterFrom', from);
+useRefProvide('indicators/filterTo', to);
 </script>
 
 <template>
