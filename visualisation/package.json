@@ -34,7 +34,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "prettier": "^3.1.1",
-    "rimraf": "^5.0.5",
+    "rimraf": "^6.0.1",
     "sass-reset": "^1.0.4",
     "scss": "^0.2.4",
     "ts-node": "^10.9.2",
