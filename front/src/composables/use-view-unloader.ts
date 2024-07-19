@@ -17,9 +17,10 @@ import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggreg
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
 import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
+import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 
 export function useViewUnloader() {
-  const {open} = useDraggables();
+  const {open, closeAll} = useDraggables();
   const {resetAggregatedFeatures} = useStorageAggregatedFeatures();
   const {resetAggregatedIndicators} = useStorageAggregatedIndicators();
   const {resetAggregatedTimestamps} = useStorageAggregatedTimestamps();
@@ -34,13 +35,12 @@ export function useViewUnloader() {
   const {resetTraces, isEnabled} = useScatterTraces();
   const {reset: resetFilterByLabel} = useScatterFilterLabels();
   const {resetFilterByTime} = useScatterFilterTime();
-  const {closeAll} = useDraggables();
-
   const {reset: resetBand} = useBandSelection();
   const {reset: resetIntegration} = useIntegrationSelection();
   const {reset: resetExtractor} = useExtractorSelection();
   const {reset: resetReducer} = useReducerSelection();
   const {isLoading, loadingText} = useScatterLoading();
+  const {reset: resetTemporalThresholds} = useTemporalThresholds();
 
   const unload = () => {
     loadingText.value = 'Unloading selection...';
@@ -67,6 +67,7 @@ export function useViewUnloader() {
     resetIntegration();
     resetExtractor();
     resetReducer();
+    resetTemporalThresholds();
 
     isLoading.value = false;
     open('view');
