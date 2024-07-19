@@ -1,3 +1,48 @@
+# [13.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.5.2...v13.6.0) (2024-07-19)
+
+
+### Bug Fixes
+
+* **Front/AppInput:** Handle undefined tooltip prop ([9af8240](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9af8240bad8fcaaf893f3295925bc3bfabd10905))
+* **Front/Audio:** Invoke audio context watcher once ([4b3a5a6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4b3a5a60fcc1f8178ab38b0e87219be34e41f1dd))
+* **Front/Audio:** Prevent history going back to null ([31a6995](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/31a699518bfaab64149acea647f9ae55dae85c77))
+* **Front/Colors:** Disable label range coloring before mount ([e0e60dd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e0e60dd03137787e764942f1cc1ed6eabdcb7678))
+* **Front/Colors:** Use right cycling scale + Extract it to its own hook ([63680f3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/63680f3dbe25ada26c32f2f664edd51082f27f9f))
+* **Front/Draggables:** Improve selected header styling ([660e7eb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/660e7ebfee992c500ea06f8862b7dd57b7abef8b))
+* **Front/Menu:** Use correct details icon ([ccfd6f7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ccfd6f7a219f366067ee24f945561170fa5aef1a))
+* **Front/Notifications:** Remove unused code ([db77b39](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/db77b3988005c7c0b4201d553e85475164f0654c))
+* **Front/Scatter:** Use global interval filter for exports ([6fc3ca0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6fc3ca0984bf9d8e49422dcee53795c6c4c92281))
+* **Front/Styles:** Update z-indices ([a7da5ff](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a7da5ff0e2369df81a40efa4f7a7dd0c8d8cc066))
+* **Front/View:** Invoke lifecycles once ([ecd13b9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ecd13b986d45b258388e247941787139b036dcfe))
+* **Front/View:** Lock keyboard on view loading ([1b15525](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1b1552550ec3fb07d11445af671e1a3bf1e42283))
+* **Front/View:** Purge temporal thresholds on unload ([200ac25](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/200ac25035bcdb338abf65798920585d7228e5fc))
+* **Front:** Add tooltips to history actions ([daa13f1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/daa13f1cd90adc27d89b84ab4c2ed428abc50733))
+* **Processing/Storage:** Force string conversion ([09a3d7d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/09a3d7d38ec468187427d5c8fa49bb4a707adab0))
+* **Visualisation:** Rollback mixin in electron code ([388e030](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/388e03062ebd606a73de4fc3868c7fa201fe1c60))
+
+
+### Features
+
+* **Front/AppInput:** Add enter handler prop ([28d83fa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/28d83fa21fa264d2067e8ce549d636ef36f5eb27))
+* **Front/Audio:** Add history and actions ([55343c2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/55343c2ec62699f378e96cc27564d4c7e09f98d5))
+* **Front/Draggables:** Improve UI feedback for currently selected draggable ([eb43e9f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb43e9fb376c25d157486985964b5ff50abe7448))
+* **Front/Menu:** Add selected styling ([4e71b95](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4e71b9565ef85793ad3fe253615a11a06242f8d0))
+* **Front/Settings:** Add hide menu option on draggable toggle ([4ad1c9d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4ad1c9d7943668311665664ba433ae30896524ed))
+* **Front/Shortcuts:** Add Shift+Tab for reverse draggables cycling ([15247da](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/15247da50045108ab0a2ceb7f0d399b1ba3f3923))
+* **Front/Temporal:** Filter on submit with enter ([76fbc7d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/76fbc7df986ddddadb993d01c090b58dba52434b))
+* **Front/Trajectories:** Add user selection history and actions ([fdabfd6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fdabfd63ac0e9ee83f121ebe913a6bc670515c84))
+* **Front/View:** Add dev mode autoselection ([daee2fb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/daee2fb4eb69e61b7d671f9712f2f7a0d8a25662))
+* **Front:** Add app console for global UI state feedback ([215edaf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/215edaf38940ae11c9a835f79a1ec69c92212166))
+* **Front:** Add settings for dev ([f7339b0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f7339b05c1805a81757f6e1d93f715043eb5261f))
+* **Front:** Display icon for each draggable ([c46ef13](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c46ef137768790813073df6fdefc302f3502bf74))
+* **Front:** Upgrade to vue 3.4 ([c9a11b8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c9a11b894ce240a783b5975e7e5ed37e4cc1fef0))
+
+
+### Performance Improvements
+
+* **Front/Temporal:** Remove unused import ([60c6abc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/60c6abc42d1fcc5cc7256565229eaf6d38c23435))
+* **Front:** Refactor draggable suspense + Improve details watchers ([3f35f5b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3f35f5b1cdd81c93b100bc482d40051658253c21))
+
 ## [13.5.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.5.1...v13.5.2) (2024-07-10)
 
 
