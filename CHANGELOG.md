@@ -1,3 +1,10 @@
+## [13.6.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.6.0...v13.6.1) (2024-07-19)
+
+
+### Bug Fixes
+
+* **Front/Colors:** Use sanitized color state before generating scales ([d72ffc2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d72ffc2c3b88b0acc9af48f1db5783ff857414a0))
+
 # [13.6.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.5.2...v13.6.0) (2024-07-19)
 
 
