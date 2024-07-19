@@ -3,11 +3,9 @@ import {useBandSelection} from 'src/composables/use-band-selection';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
-import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 import {useWavesurferColors} from 'src/draggables/audio/use-wavesurfer-colors';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
-import {watch} from 'vue';
 
 export function useWavesurferSpectrogram() {
   const {ws} = useWavesurfer();
@@ -15,7 +13,6 @@ export function useWavesurferSpectrogram() {
   const {spectrogram} = useDraggableAudio();
   const {bitDepth} = useAudioFile();
   const {size} = useAudioFourier();
-  const {colormap} = useSpectrogramColormap();
   const {colors} = useWavesurferColors();
   const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
@@ -48,11 +45,6 @@ export function useWavesurferSpectrogram() {
 
     ws.value.registerPlugins([spectro]);
   };
-
-  watch(
-    [size, colormap, isDecibelsDisplay, isLegendOverflow, bitDepth],
-    register,
-  );
 
   return {
     register: register,

@@ -5,20 +5,27 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {useBandLifecycles} from 'src/composables/use-band-lifecycles';
 import {useBandOptions} from 'src/composables/use-band-options';
 import {useBandSelection} from 'src/composables/use-band-selection';
+import {useExtractorLifecycles} from 'src/composables/use-extractor-lifecycles';
 import {useExtractorOptions} from 'src/composables/use-extractor-options';
-import {useSelectExtractor} from 'src/composables/use-extractor-selection';
+import {useExtractorSelection} from 'src/composables/use-extractor-selection';
+import {useIntegrationLifecycles} from 'src/composables/use-integration-lifecycles';
 import {useIntegrationOptions} from 'src/composables/use-integration-options';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useReducerLifecycles} from 'src/composables/use-reducer-lifecycles';
 import {useReducerOptions} from 'src/composables/use-reducer-options';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useViewState} from 'src/composables/use-view-state';
 import {useViewUnloader} from 'src/composables/use-view-unloader';
+import {useDraggableView} from 'src/draggables/view/use-draggable-view';
+import {onMounted} from 'vue';
 
 const {hasView} = useViewState();
 const {unload} = useViewUnloader();
+const {autoselectDev} = useDraggableView();
 
 const {options: reducerOptions} = useReducerOptions();
 const {options: bandOptions} = useBandOptions();
@@ -28,19 +35,23 @@ const {options: extractorOptions} = useExtractorOptions();
 const {selected: reducerSelected, reducer} = useReducerSelection();
 const {selected: bandSelected} = useBandSelection();
 const {selected: integrationSelected} = useIntegrationSelection();
-const {selected: extractorSelected} = useSelectExtractor();
+const {selected: extractorSelected} = useExtractorSelection();
+
+useReducerLifecycles();
+useBandLifecycles();
+useIntegrationLifecycles();
+useExtractorLifecycles();
 
 useRefProvide('view/reducer', reducerSelected);
 useRefProvide('view/band', bandSelected);
 useRefProvide('view/integration', integrationSelected);
 useRefProvide('view/extractor', extractorSelected);
+
+onMounted(autoselectDev);
 </script>
 
 <template>
-  <AppDraggable
-    draggable-key="view"
-    hide-separator
-  >
+  <AppDraggable draggable-key="view">
     <AppDraggableMenu
       class="container"
       size="medium"

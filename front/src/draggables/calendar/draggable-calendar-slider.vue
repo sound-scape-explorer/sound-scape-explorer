@@ -5,9 +5,9 @@ import {NSlider} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useRanges} from 'src/composables/use-ranges';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {SLIDER_LIMITS} from 'src/constants';
 import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
 import {mapRange} from 'src/utils/map-range';
@@ -15,7 +15,7 @@ import {computed, ref, watch} from 'vue';
 
 // todo: refactor me
 
-const {ranges} = useStorageRanges();
+const {ranges} = useRanges();
 const {reducer} = useReducerSelection();
 const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 const {isLoading} = useScatterLoading();
@@ -224,7 +224,7 @@ watch([isAllSelected, duration, current], filterByTime);
 }
 
 .slider {
-  z-index: 1;
+  z-index: $calendarSliderLayer;
 }
 
 .interest {
@@ -234,7 +234,7 @@ watch([isAllSelected, duration, current], filterByTime);
   height: 13px;
   padding: 0 8px;
 
-  z-index: 0;
+  z-index: $calendarInterestLayer;
   user-select: none;
   transform: translateY(-20px);
 }

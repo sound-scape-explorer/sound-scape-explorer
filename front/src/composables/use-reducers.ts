@@ -1,15 +1,12 @@
-import {type Band, useBandStorage} from 'src/composables/use-band-storage';
-import {
-  type Extractor,
-  useExtractorStorage,
-} from 'src/composables/use-extractor-storage';
+import {type Band, useBands} from 'src/composables/use-bands';
+import {type Extractor, useExtractors} from 'src/composables/use-extractors';
 import {
   type Integration,
-  useIntegrationStorage,
-} from 'src/composables/use-integration-storage';
+  useIntegrations,
+} from 'src/composables/use-integrations';
 import {useReducerOptions} from 'src/composables/use-reducer-options';
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {computed, ref, watch} from 'vue';
+import {ref} from 'vue';
 
 export interface ReducerFromStorage {
   index: number;
@@ -29,31 +26,17 @@ export interface Reducer {
   nnExtractors: Extractor[];
 }
 
-let isLoaded = false;
 const reducers = ref<Reducer[] | null>(null);
 
-export function useReducerStorage() {
-  const {read} = useStorageReader();
+export function useReducers() {
+  const {read: readStorage} = useStorageReader();
   const {create} = useReducerOptions();
-  const {bands} = useBandStorage();
-  const {integrations} = useIntegrationStorage();
-  const {nnExtractors} = useExtractorStorage();
+  const {bands} = useBands();
+  const {integrations} = useIntegrations();
+  const {nnExtractors} = useExtractors();
 
-  const isReady = computed<boolean>(
-    () =>
-      bands.value !== null &&
-      integrations.value !== null &&
-      nnExtractors.value !== null,
-  );
-
-  const readReducers = async () => {
-    if (isLoaded) {
-      return;
-    }
-
-    isLoaded = true;
-
-    await read(async (worker, file) => {
+  const read = async () => {
+    await readStorage(async (worker, file) => {
       if (
         bands.value === null ||
         integrations.value === null ||
@@ -90,9 +73,8 @@ export function useReducerStorage() {
     }
   };
 
-  watch(isReady, readReducers);
-
   return {
     reducers: reducers,
+    read: read,
   };
 }

@@ -24,4 +24,7 @@ export const SettingDefault = {
   colorsFlavor: COLOR_FLAVORS[0],
   colorsAlphaLow: 0.005,
   colorsAlphaHigh: 0.8,
+  isHidingMenuOnDraggableToggle: false,
+  isDevEnabled: false,
+  devAutoLoadView: false,
 };

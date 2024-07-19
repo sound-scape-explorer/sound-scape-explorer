@@ -1,16 +1,13 @@
 import {useExtractorOptions} from 'src/composables/use-extractor-options';
-import {
-  type Extractor,
-  useExtractorStorage,
-} from 'src/composables/use-extractor-storage';
+import {type Extractor, useExtractors} from 'src/composables/use-extractors';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 const extractor = ref<Extractor | null>(null);
 const selected = ref<Extractor['name'] | null>(null);
 
-export function useSelectExtractor() {
-  const {extractors} = useExtractorStorage();
+export function useExtractorSelection() {
+  const {extractors} = useExtractors();
   const {options} = useExtractorOptions();
   const {
     reset: resetPrimitive,
@@ -30,13 +27,13 @@ export function useSelectExtractor() {
   const handleChange = () => handlePrimitive(selected.value, select);
   const autoselect = () => autoPrimitive(selected, options);
 
-  watch(selected, handleChange);
-  watch(options, autoselect);
-
   return {
     extractor: extractor,
     selected: selected,
     select: select,
     reset: reset,
+    options: options,
+    handleChange: handleChange,
+    autoselect: autoselect,
   };
 }

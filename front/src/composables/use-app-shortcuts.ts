@@ -5,6 +5,7 @@ import {useDraggables} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {Shortcuts} from 'src/composables/use-shortcuts';
 import {useStorageReady} from 'src/composables/use-storage-ready';
+import {useViewState} from 'src/composables/use-view-state';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 export function useAppShortcuts() {
@@ -16,28 +17,39 @@ export function useAppShortcuts() {
   const {isPreview} = useClientSettings();
   const {enable} = useScreen();
   const {toggleExpand} = useDraggableLabels();
+  const {hasView} = useViewState();
 
   registerKey(Shortcuts.open, () => toggle('open'));
   registerKey(Shortcuts.settings, () => isReady.value && toggle('settings'));
   registerKey(Shortcuts.help, () => toggle('help'));
   registerKey(Shortcuts.view, () => toggle('view'));
-  registerKey(Shortcuts.colors, () => toggle('colors'));
-  registerKey(Shortcuts.calendar, () => toggle('calendar'));
-  registerKey(Shortcuts.timeline, () => isPreview.value && toggle('timeline'));
-  registerKey(Shortcuts.labels, () => toggle('labels'));
-  registerKey(Shortcuts.details, () => toggle('details'));
-  registerKey(Shortcuts.audio, () => toggle('audio'));
-  registerKey(Shortcuts.trajectories, () => toggle('trajectories'));
-  registerKey(Shortcuts.relativeTrajectories, () =>
-    toggle('relativeTrajectories'),
+  registerKey(Shortcuts.colors, () => hasView.value && toggle('colors'));
+  registerKey(Shortcuts.calendar, () => hasView.value && toggle('calendar'));
+  registerKey(
+    Shortcuts.timeline,
+    () => hasView.value && isPreview.value && toggle('timeline'),
   );
-  registerKey(Shortcuts.temporal, () => toggle('temporal'));
-  registerKey(Shortcuts.heatmaps, () => toggle('heatmaps'));
+  registerKey(Shortcuts.labels, () => hasView.value && toggle('labels'));
+  registerKey(Shortcuts.details, () => hasView.value && toggle('details'));
+  registerKey(Shortcuts.audio, () => hasView.value && toggle('audio'));
+  registerKey(
+    Shortcuts.trajectories,
+    () => hasView.value && toggle('trajectories'),
+  );
+  registerKey(
+    Shortcuts.relativeTrajectories,
+    () => hasView.value && toggle('relativeTrajectories'),
+  );
+  registerKey(Shortcuts.temporal, () => hasView.value && toggle('temporal'));
+  registerKey(Shortcuts.heatmaps, () => hasView.value && toggle('heatmaps'));
   registerKey(
     Shortcuts.selection,
-    () => isPreview.value && toggle('selection'),
+    () => hasView.value && isPreview.value && toggle('selection'),
   );
-  registerKey(Shortcuts.selectHotkey, () => isPreview.value && enable());
+  registerKey(
+    Shortcuts.selectHotkey,
+    () => hasView.value && isPreview.value && enable(),
+  );
 
   registerKey(Shortcuts.labelsZoom, toggleExpand);
 }

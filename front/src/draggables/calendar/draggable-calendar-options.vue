@@ -20,12 +20,12 @@ import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useDate} from 'src/composables/use-date';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useSettings} from 'src/composables/use-settings';
 import {Shortcuts} from 'src/composables/use-shortcuts';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
 import {computed, type ComputedRef, ref, watch} from 'vue';
 
-const {settings} = useStorageSettings();
+const {settings} = useSettings();
 const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
 const {filterByTime} = useScatterFilterTime();
 const {isLoading} = useScatterLoading();

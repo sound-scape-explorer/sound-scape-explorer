@@ -14,7 +14,7 @@ export function useWavesurferLoader() {
     isPlaying.value = false;
   };
 
-  const prepareAudio = () => {
+  const prepareFilters = () => {
     if (ws.value === null || band.value === null || context.value === null) {
       return;
     }
@@ -41,7 +41,7 @@ export function useWavesurferLoader() {
     ws.value.loadBlob(blob);
     ws.value.on('seek', seek);
     ws.value.on('finish', handleAudioEnd);
-    ws.value.on('ready', prepareAudio);
+    ws.value.on('ready', prepareFilters);
   };
 
   return {

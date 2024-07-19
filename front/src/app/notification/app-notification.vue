@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type {NotificationType} from 'naive-ui';
-import {NButton, useMessage, useNotification} from 'naive-ui';
+import {NButton, useNotification} from 'naive-ui';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {ALERT_TIMER} from 'src/constants';
 import {combineStringsWithBreaks} from 'src/utils/combine-strings-with-breaks';
@@ -8,7 +8,6 @@ import {copyToClipboard} from 'src/utils/copy-to-clipboard';
 import {VERSION} from 'src/version';
 import {h, watch} from 'vue';
 
-const message = useMessage();
 const notification = useNotification();
 const {notifications} = useAppNotification();
 

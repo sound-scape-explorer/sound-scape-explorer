@@ -3,6 +3,7 @@ import type {DraggableKey} from 'src/composables/use-draggables';
 export enum Shortcuts {
   draggableToggle = 'Esc',
   draggableCycle = 'Tab',
+  draggableCycleRev = 'Shift+Tab',
   draggableClose = 'x',
   open = 'o',
   settings = ',',

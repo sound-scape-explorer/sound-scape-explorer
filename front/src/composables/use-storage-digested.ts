@@ -1,6 +1,6 @@
 import {useBandSelection} from 'src/composables/use-band-selection';
+import type {Digester} from 'src/composables/use-digesters';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import type {Digester} from 'src/composables/use-storage-digesters';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {ref} from 'vue';
 

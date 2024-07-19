@@ -4,11 +4,12 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDate} from 'src/composables/use-date';
-import {useIntervalFilter} from 'src/composables/use-interval-filter';
+import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {colors} from 'src/styles/colors';
 
 const size2d = 5;
 const size3d = 3;
@@ -23,7 +24,7 @@ export function useScatterFeatures() {
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
   const {isWebGlScatter2d} = useClientSettings();
-  const {filtered} = useIntervalFilter();
+  const {filtered} = useScatterGlobalFilter();
 
   // TODO: improve me
   const trace = (): Data[] => {
@@ -44,11 +45,11 @@ export function useScatterFeatures() {
       let filteredColor = color;
 
       if (filtered.value[index]) {
-        filteredColor = `rgba(0, 0, 0, ${low.value})`;
+        filteredColor = colors.transparent(low.value);
       }
 
       if (pointsSelected.indexOf(index) !== -1) {
-        filteredColor = `rgba(255, 0, 0, ${high.value})`;
+        filteredColor = colors.selected(high.value);
       }
 
       return [index / (colorScale.length - 1), filteredColor];
@@ -125,7 +126,7 @@ export function useScatterFeatures() {
         colorscale: plotlyColorscale,
         colors: plotlyColorscale,
         line: {
-          color: 'rgba(0, 0, 0, 0.1)',
+          color: colors.border,
           width: 1,
         },
       },

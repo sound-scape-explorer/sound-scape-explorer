@@ -1,9 +1,10 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
+import type {NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
 interface Props {
-  size?: 'tiny' | 'small' | 'medium' | 'large';
+  size?: NaiveSize;
   handleClick: () => void;
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
@@ -96,10 +97,10 @@ const classNames = computed<string>(() => {
 }
 
 .error {
-  background: rgba(255, 0, 0, 0.2);
+  background: $red;
 }
 
 .active {
-  background: rgba(23, 159, 87, 0.4);
+  background: $olive;
 }
 </style>

@@ -1,10 +1,9 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
-import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
@@ -35,8 +34,7 @@ export function useScatterExport() {
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {filtered: labelFiltered} = useScatterFilterLabels();
-  const {filtered: timeFiltered} = useScatterFilterTime();
+  const {filtered} = useScatterGlobalFilter();
 
   const loadingRef = ref<boolean>(false);
 
@@ -63,28 +61,20 @@ export function useScatterExport() {
     const aggregatedIndicatorsCopy = aggregatedIndicators.value;
     const payload: ExportData[] = [];
 
-    for (
-      let intervalIndex = 0;
-      intervalIndex < aggregatedTimestamps.value.length;
-      intervalIndex += 1
-    ) {
-      const isFilteredByMeta = labelFiltered.value[intervalIndex];
-      const isFilteredByTime = timeFiltered.value[intervalIndex];
-
-      if (isFilteredByMeta || isFilteredByTime) {
+    for (let i = 0; i < aggregatedTimestamps.value.length; i += 1) {
+      if (filtered.value[i]) {
         continue;
       }
 
-      const aggregatedFeaturesInterval =
-        aggregatedFeatures.value[intervalIndex];
-      const timestamp = aggregatedTimestamps.value[intervalIndex];
-      const site = aggregatedSites.value[intervalIndex];
-      const aggregatedLabelsInterval = aggregatedLabels.value[intervalIndex];
+      const aggregatedFeaturesInterval = aggregatedFeatures.value[i];
+      const timestamp = aggregatedTimestamps.value[i];
+      const site = aggregatedSites.value[i];
+      const aggregatedLabelsInterval = aggregatedLabels.value[i];
 
-      const reducedFeaturesInterval = reducedFeatures.value[intervalIndex];
+      const reducedFeaturesInterval = reducedFeatures.value[i];
 
       payload.push({
-        intervalIndex: intervalIndex,
+        intervalIndex: i,
         timestamp: timestamp,
         site: site.site,
         aggregatedLabels: aggregatedLabelsInterval,

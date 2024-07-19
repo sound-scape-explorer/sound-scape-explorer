@@ -1,6 +1,7 @@
+import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {useStorageFile} from 'src/composables/use-storage-file';
 import {useWorker} from 'src/composables/use-worker';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 const isReady = ref<boolean>(false);
 
@@ -8,8 +9,9 @@ const isReady = ref<boolean>(false);
 export function useStorageReady() {
   const {hasWorker} = useWorker();
   const {hasFile} = useStorageFile();
+  const {notify: notifyApp} = useAppNotification();
 
-  const updateReady = () => {
+  const update = () => {
     if (!hasWorker.value || !hasFile.value || isReady.value) {
       return;
     }
@@ -17,9 +19,18 @@ export function useStorageReady() {
     isReady.value = hasWorker.value && hasFile.value;
   };
 
-  watch([hasWorker, hasFile], updateReady);
+  const notify = () => {
+    if (isReady.value) {
+      notifyApp('success', 'storage', 'Storage is ready');
+      return;
+    }
+
+    notifyApp('warning', 'storage', 'Storage is not ready');
+  };
 
   return {
     isReady: isReady,
+    update: update,
+    notify: notify,
   };
 }

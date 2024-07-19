@@ -26,6 +26,20 @@ if (isElectron) {
  */
 export default defineConfig({
   base: base,
+  define: {
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+          @import "src/styles/colors.scss";
+          @import "src/styles/transitions.scss";
+          @import "src/styles/layers.scss";
+        `,
+      },
+    },
+  },
   build: {
     target: 'es2020',
     rollupOptions: {

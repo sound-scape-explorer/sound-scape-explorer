@@ -99,10 +99,10 @@ const isActiveIdRef = computed<string>(() => {
   padding-left: 4px;
   border-radius: 4px;
 
-  transition: background-color 120ms ease-in-out, opacity 120ms ease-in-out;
+  @include transition-checkboxes;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: $grey;
     opacity: 0.9;
   }
 

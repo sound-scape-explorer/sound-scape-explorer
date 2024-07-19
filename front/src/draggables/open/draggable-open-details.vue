@@ -1,31 +1,31 @@
 <script lang="ts" setup="">
 import AppGrid from 'src/app/app-grid.vue';
-import {useBandStorage} from 'src/composables/use-band-storage';
+import {useAutoclusters} from 'src/composables/use-autoclusters';
+import {useBands} from 'src/composables/use-bands';
 import {useDate} from 'src/composables/use-date';
-import {useExtractorStorage} from 'src/composables/use-extractor-storage';
-import {useIntegrationStorage} from 'src/composables/use-integration-storage';
-import {useReducerStorage} from 'src/composables/use-reducer-storage';
-import {useStorageAutoclusters} from 'src/composables/use-storage-autoclusters';
-import {useStorageDigesters} from 'src/composables/use-storage-digesters';
-import {useStorageFiles} from 'src/composables/use-storage-files';
-import {useStorageRanges} from 'src/composables/use-storage-ranges';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
-import {useStorageVersion} from 'src/composables/use-storage-version';
-import {useTrajectoriesStorage} from 'src/composables/use-trajectories-storage';
+import {useDigesters} from 'src/composables/use-digesters';
+import {useExtractors} from 'src/composables/use-extractors';
+import {useFiles} from 'src/composables/use-files';
+import {useIntegrations} from 'src/composables/use-integrations';
+import {useRanges} from 'src/composables/use-ranges';
+import {useReducers} from 'src/composables/use-reducers';
+import {useSettings} from 'src/composables/use-settings';
+import {useTrajectories} from 'src/composables/use-trajectories';
+import {useVersion} from 'src/composables/use-version';
 import {computed} from 'vue';
 
-const {settings} = useStorageSettings();
-const {version} = useStorageVersion();
-const {files} = useStorageFiles();
-const {digesters} = useStorageDigesters();
+const {settings} = useSettings();
+const {version} = useVersion();
+const {files} = useFiles();
+const {digesters} = useDigesters();
 
-const {bands} = useBandStorage();
-const {integrations} = useIntegrationStorage();
-const {extractors} = useExtractorStorage();
-const {reducers} = useReducerStorage();
-const {ranges} = useStorageRanges();
-const {autoclusters} = useStorageAutoclusters();
-const {trajectories} = useTrajectoriesStorage();
+const {bands} = useBands();
+const {integrations} = useIntegrations();
+const {extractors} = useExtractors();
+const {reducers} = useReducers();
+const {ranges} = useRanges();
+const {autoclusters} = useAutoclusters();
+const {trajectories} = useTrajectories();
 
 const {convertTimestampToIsoDate} = useDate();
 

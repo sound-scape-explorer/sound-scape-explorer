@@ -57,11 +57,7 @@ const handleChange = () => {
 }
 
 .red {
-  background: rgba(255, 0, 0, 0.2);
-}
-
-.green {
-  background: rgba(0, 255, 0, 0.2);
+  background: $red;
 }
 
 .details {

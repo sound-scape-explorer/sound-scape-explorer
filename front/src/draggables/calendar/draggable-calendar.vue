@@ -7,7 +7,7 @@ import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-
 <template>
   <AppDraggable
     draggable-key="calendar"
-    hide-separator
+    suspense="view"
   >
     <DraggableCalendarOptions />
     <DraggableCalendarSlider />

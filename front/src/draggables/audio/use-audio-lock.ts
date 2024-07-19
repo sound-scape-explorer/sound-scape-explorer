@@ -3,22 +3,22 @@ import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 export function useAudioLock() {
   const {lock: scatterLock, unlock: scatterUnlock} = useScatterCamera();
 
-  const watch = () => {
+  const attachListener = () => {
     document.addEventListener('mouseup', unlock);
   };
 
-  const purge = () => {
+  const removeListener = () => {
     document.removeEventListener('mouseup', unlock);
   };
 
   const lock = () => {
     scatterLock();
-    watch();
+    attachListener();
   };
 
   const unlock = () => {
     scatterUnlock();
-    purge();
+    removeListener();
   };
 
   return {

@@ -1,4 +1,4 @@
-import type {Band} from 'src/composables/use-band-storage';
+import type {Band} from 'src/composables/use-bands';
 import {ref} from 'vue';
 
 const options = ref<string[]>([]);

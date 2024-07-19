@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import AppGradient from 'src/app/app-gradient.vue';
-import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {createHourlyLabels} from 'src/utils/create-hourly-labels';
 import {computed} from 'vue';
 
-const {cyclingScale} = useScatterColorScale();
+const {scale: cyclingScale} = useColorsCycling();
 
 const size = 100;
 const scale = computed<string[]>(() => cyclingScale.value.colors(size));

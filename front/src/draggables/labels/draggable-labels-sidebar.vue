@@ -47,7 +47,7 @@ const {count} = useLabelsInfo();
 
   font-size: 0.9em;
 
-  color: rgba(23, 159, 87, 1);
+  color: $emerald;
   text-align: center;
 }
 </style>

@@ -1,22 +1,7 @@
+<!--suppress HtmlUnknownTag -->
 <script lang="ts" setup="">
-import {
-  AnalyticsOutline,
-  BarChartOutline,
-  CalendarOutline,
-  CloudUploadOutline,
-  CogOutline,
-  ColorPaletteOutline,
-  CropOutline,
-  EyeOutline,
-  GridOutline,
-  HeadsetOutline,
-  HelpOutline,
-  LayersOutline,
-  ListOutline,
-  ReceiptOutline,
-  TimerOutline,
-} from '@vicons/ionicons5';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
+import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewState} from 'src/composables/use-view-state';
@@ -24,6 +9,7 @@ import {useViewState} from 'src/composables/use-view-state';
 const {isReady} = useStorageReady();
 const {hasView} = useViewState();
 const {isPreview} = useClientSettings();
+const {menu} = useAppMenu();
 </script>
 
 <template>
@@ -34,7 +20,7 @@ const {isPreview} = useClientSettings();
           draggable-key="open"
           text="Open"
         >
-          <CloudUploadOutline />
+          <menu.open />
         </AppMenuButton>
 
         <AppMenuButton
@@ -42,14 +28,14 @@ const {isPreview} = useClientSettings();
           draggable-key="settings"
           text="Settings"
         >
-          <CogOutline />
+          <menu.settings />
         </AppMenuButton>
 
         <AppMenuButton
           draggable-key="help"
           text="Help"
         >
-          <HelpOutline />
+          <menu.help />
         </AppMenuButton>
       </div>
 
@@ -69,7 +55,7 @@ const {isPreview} = useClientSettings();
         draggable-key="view"
         text="View"
       >
-        <EyeOutline />
+        <menu.view />
       </AppMenuButton>
 
       <AppMenuButton
@@ -77,7 +63,7 @@ const {isPreview} = useClientSettings();
         draggable-key="colors"
         text="Colors"
       >
-        <ColorPaletteOutline />
+        <menu.colors />
       </AppMenuButton>
 
       <AppMenuButton
@@ -86,7 +72,7 @@ const {isPreview} = useClientSettings();
         draggable-key="timeline"
         text="Timeline"
       >
-        <ReceiptOutline />
+        <menu.timeline />
       </AppMenuButton>
 
       <AppMenuButton
@@ -94,7 +80,7 @@ const {isPreview} = useClientSettings();
         draggable-key="calendar"
         text="Calendar"
       >
-        <CalendarOutline />
+        <menu.calendar />
       </AppMenuButton>
 
       <AppMenuButton
@@ -102,7 +88,7 @@ const {isPreview} = useClientSettings();
         draggable-key="labels"
         text="Labels"
       >
-        <LayersOutline />
+        <menu.labels />
       </AppMenuButton>
 
       <AppMenuButton
@@ -110,7 +96,7 @@ const {isPreview} = useClientSettings();
         draggable-key="temporal"
         text="Temporal"
       >
-        <BarChartOutline />
+        <menu.temporal />
       </AppMenuButton>
 
       <AppMenuButton
@@ -118,15 +104,7 @@ const {isPreview} = useClientSettings();
         draggable-key="heatmaps"
         text="Heatmaps"
       >
-        <GridOutline />
-      </AppMenuButton>
-
-      <AppMenuButton
-        :disabled="!hasView"
-        draggable-key="details"
-        text="Details"
-      >
-        <ListOutline />
+        <menu.heatmaps />
       </AppMenuButton>
 
       <AppMenuButton
@@ -134,7 +112,15 @@ const {isPreview} = useClientSettings();
         draggable-key="audio"
         text="Audio"
       >
-        <HeadsetOutline />
+        <menu.audio />
+      </AppMenuButton>
+
+      <AppMenuButton
+        :disabled="!hasView"
+        draggable-key="details"
+        text="Details"
+      >
+        <menu.details />
       </AppMenuButton>
 
       <AppMenuButton
@@ -143,7 +129,7 @@ const {isPreview} = useClientSettings();
         draggable-key="selection"
         text="Selection"
       >
-        <CropOutline />
+        <menu.selection />
       </AppMenuButton>
 
       <AppMenuButton
@@ -151,7 +137,7 @@ const {isPreview} = useClientSettings();
         draggable-key="trajectories"
         text="Trajectories"
       >
-        <AnalyticsOutline />
+        <menu.trajectories />
       </AppMenuButton>
 
       <AppMenuButton
@@ -159,7 +145,7 @@ const {isPreview} = useClientSettings();
         draggable-key="relativeTrajectories"
         text="Relative Trajectories"
       >
-        <TimerOutline />
+        <menu.relativeTrajectories />
       </AppMenuButton>
     </div>
   </div>
@@ -174,7 +160,7 @@ const {isPreview} = useClientSettings();
   gap: 0.5rem;
 
   position: fixed;
-  z-index: 1000;
+  z-index: $appMenuLayer;
 
   top: 0.5rem;
   left: 0.5rem;

@@ -1,10 +1,10 @@
 import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
+import {useSettings} from 'src/composables/use-settings';
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
-import {ref, watch, watchEffect} from 'vue';
+import {ref} from 'vue';
 
 interface Readable {
   hertz: string;
@@ -21,7 +21,7 @@ const readable = ref<Readable>({
 
 // audio speed
 export function useAudioRate() {
-  const {settings} = useStorageSettings();
+  const {settings} = useSettings();
   const {togglePlayPause} = useAudioTransport();
   const {ws} = useWavesurfer();
 
@@ -34,8 +34,6 @@ export function useAudioRate() {
     ws.value.setPlaybackRate(rate.value);
     togglePlayPause();
   };
-
-  watch(rate, update);
 
   const updateReadable = () => {
     if (settings.value === null) {
@@ -54,10 +52,10 @@ export function useAudioRate() {
     };
   };
 
-  watchEffect(updateReadable);
-
   return {
     rate: rate,
     readable: readable,
+    update: update,
+    updateReadable: updateReadable,
   };
 }

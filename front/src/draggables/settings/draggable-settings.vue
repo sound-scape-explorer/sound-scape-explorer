@@ -8,11 +8,12 @@ import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useSettings} from 'src/composables/use-settings';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
-import {useStorageSettings} from 'src/composables/use-storage-settings';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
+import DraggableSettingsDev from 'src/draggables/settings/draggable-settings-dev.vue';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 
 const {
@@ -25,11 +26,14 @@ const {
   timeshift,
   isCopyOnSelect2d,
   isWebGlScatter2d,
+  isHidingMenuOnDraggableToggle,
+  isDevEnabled,
 } = useClientSettings();
+
 const {audioHost} = useStorageAudioHost();
 const {fontSize} = useAppHeatmapSize();
 const {colormap} = useSpectrogramColormap();
-const {settings, hasTimezone} = useStorageSettings();
+const {settings, hasTimezone} = useSettings();
 const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
 const colormapOptions = SPECTROGRAM_COLOR_MAPS;
@@ -47,9 +51,12 @@ useRefProvide('settings/legendOverflow', isLegendOverflow);
 useRefProvide('settings/isTimezoneActive', isTimezoneActive);
 useRefProvide('settings/isCopyOnSelect2d', isCopyOnSelect2d);
 useRefProvide('settings/isWebGlScatter2d', isWebGlScatter2d);
+useRefProvide(
+  'settings/isHidingMenuOnDraggableToggle',
+  isHidingMenuOnDraggableToggle,
+);
 useRefProvide('settings/isPreview', isPreview);
-
-// todo: add reset action
+useRefProvide('settings/isDevEnabled', isDevEnabled);
 </script>
 
 <template>
@@ -161,12 +168,28 @@ useRefProvide('settings/isPreview', isPreview);
         />
       </DraggableSettingsItem>
 
+      <DraggableSettingsItem title="Hide menu on draggable toggle">
+        <AppCheckbox
+          :default="isHidingMenuOnDraggableToggle"
+          injection-key="settings/isHidingMenuOnDraggableToggle"
+        />
+      </DraggableSettingsItem>
+
       <DraggableSettingsItem title="Preview beta features">
         <AppCheckbox
           :default="isPreview"
           injection-key="settings/isPreview"
         />
       </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Enable dev settings">
+        <AppCheckbox
+          :default="isDevEnabled"
+          injection-key="settings/isDevEnabled"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsDev />
     </AppSection>
   </AppDraggable>
 </template>

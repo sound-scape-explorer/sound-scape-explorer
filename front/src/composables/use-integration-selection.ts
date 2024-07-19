@@ -1,16 +1,16 @@
 import {useIntegrationOptions} from 'src/composables/use-integration-options';
 import {
   type Integration,
-  useIntegrationStorage,
-} from 'src/composables/use-integration-storage';
+  useIntegrations,
+} from 'src/composables/use-integrations';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
 const integration = ref<Integration | null>(null);
 const selected = ref<Integration['name'] | null>(null);
 
 export function useIntegrationSelection() {
-  const {integrations} = useIntegrationStorage();
+  const {integrations} = useIntegrations();
   const {options} = useIntegrationOptions();
   const {
     reset: resetPrimitive,
@@ -30,13 +30,13 @@ export function useIntegrationSelection() {
   const handleChange = () => handlePrimitive(selected.value, select);
   const autoselect = () => autoPrimitive(selected, options);
 
-  watch(selected, handleChange);
-  watch(options, autoselect);
-
   return {
     integration: integration,
     selected: selected,
     select: select,
     reset: reset,
+    options: options,
+    autoselect: autoselect,
+    handleChange: handleChange,
   };
 }

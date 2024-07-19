@@ -21,7 +21,7 @@ const classes = computed<string>(() => {
 <template>
   <AppDraggable
     draggable-key="labels"
-    hide-separator
+    suspense="view"
   >
     <DraggableLabelsSidebar />
 

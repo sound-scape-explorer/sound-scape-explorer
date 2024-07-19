@@ -2,8 +2,10 @@
 import {DownloadOutline} from '@vicons/ionicons5';
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useRefProvide} from 'src/composables/use-ref-provide';
@@ -11,29 +13,37 @@ import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
 import {PLOTLY_SIZE} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
-import {useDraggableTrajectories} from 'src/draggables/trajectories/use-draggable-trajectories';
 import {useDraggableTrajectoriesExport} from 'src/draggables/trajectories/use-draggable-trajectories-export';
+import {useTrajectoriesOptions} from 'src/draggables/trajectories/use-trajectories-options';
 import {watch} from 'vue';
 
-const {select} = useTrajectoriesSelection();
+const {current, undo, redo, canUndo, canRedo, update} =
+  useTrajectoriesSelection();
 const {isFused} = useTrajectoriesData();
 const {isLoading} = useScatterLoading();
-const {options, isFuseable, selection} = useDraggableTrajectories();
+const {options, isFuseable} = useTrajectoriesOptions();
 const {handleClick} = useDraggableTrajectoriesExport();
-
-const handleUpdateValue = async (names: string[]) => {
-  await select(names);
-};
-
 const {renderTraces} = useScatterTraces();
 
 watch(isFused, renderTraces);
+watch(current, update);
 
 useRefProvide('trajectories/fuse', isFused);
 </script>
 
 <template>
   <AppDraggable draggable-key="trajectories">
+    <AppDraggableSidebar>
+      <AppDraggableSidebarHistory
+        :can-redo="canRedo && !isFused"
+        :can-undo="canUndo && !isFused"
+        :redo="redo"
+        :undo="undo"
+        redo-tooltip="Next trajectory"
+        undo-tooltip="Previous trajectory"
+      />
+    </AppDraggableSidebar>
+
     <AppDraggableMenu
       :style="{minWidth: `${PLOTLY_SIZE}px`}"
       size="medium"
@@ -42,7 +52,7 @@ useRefProvide('trajectories/fuse', isFused);
 
       <div class="selection">
         <NCascader
-          v-model:value="selection"
+          v-model:value="current"
           :cascade="false"
           :clear-filter-after-select="false"
           :disabled="isLoading || isFused"
@@ -57,7 +67,6 @@ useRefProvide('trajectories/fuse', isFused);
           multiple
           placeholder="Select trajectories"
           size="small"
-          @update:value="handleUpdateValue"
         />
 
         <NTooltip

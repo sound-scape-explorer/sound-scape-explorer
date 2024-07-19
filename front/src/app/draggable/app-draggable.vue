@@ -2,24 +2,34 @@
 import {CloseOutline} from '@vicons/ionicons5';
 import {useDraggable} from '@vueuse/core';
 import AppButton from 'src/app/app-button.vue';
+import AppCondition from 'src/app/app-condition.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
 import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
+import {useAppDraggableSuspense} from 'src/app/draggable/use-app-draggable-suspense';
+import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
 
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
-  hideSeparator?: boolean;
+  suspense?: null | 'view' | 'scatterClick';
 }
 
-const props = defineProps<AppDraggableProps>();
+const props = withDefaults(defineProps<AppDraggableProps>(), {
+  suspense: null,
+});
 
 const {container, storage, drag} = useAppDraggable(props);
-const {close} = useDraggables();
 const {classes} = useAppDraggableStyles(props);
+const {suspense} = useAppDraggableSuspense(props);
 const {check} = useAppDraggableBounds(container);
+
+const {menu} = useAppMenu();
+const icon = menu[props.draggableKey] ?? null;
+const {close} = useDraggables();
 
 const {x, y, style} = useDraggable(container, {
   initialValue: {x: storage.value.x, y: storage.value.y},
@@ -63,9 +73,15 @@ useAppDraggableLifecycles({
 
       <div class="title content">
         <div class="title container">
-          <span>
-            {{ capitalizeFirstLetter(props.draggableKey) }}
-          </span>
+          <div class="title header">
+            <AppIcon v-if="icon !== null">
+              <icon />
+            </AppIcon>
+            <span>
+              {{ capitalizeFirstLetter(props.draggableKey) }}
+            </span>
+          </div>
+
           <div
             ref="drag"
             class="drag"
@@ -75,21 +91,22 @@ useAppDraggableLifecycles({
         </div>
       </div>
 
-      <div class="content main">
-        <slot />
-      </div>
+      <AppCondition
+        :wait-if="suspense.while"
+        :wait-message="suspense.message"
+      >
+        <div class="content main">
+          <slot />
+        </div>
+      </AppCondition>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-$indexDefault: 1000;
-$indexButtons: 1000;
-$indexSelected: 1001;
-
 .draggable {
   position: fixed;
-  z-index: $indexDefault;
+  z-index: $appDraggableIndexDefaultLayer;
 
   justify-content: flex-start;
 
@@ -100,16 +117,15 @@ $indexSelected: 1001;
 
   opacity: 1;
 
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid $grey;
 
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: $white;
   backdrop-filter: blur(10px);
 
-  box-shadow: 10px 10px 20px -3px rgba(0, 0, 0, 0.2);
+  box-shadow: 10px 10px 20px -3px $greyDeep;
   border-radius: 8px;
 
-  transition: width 120ms ease-in-out, border 120ms ease-in-out,
-    max-height 120ms ease-in, background-color 120ms ease-in-out;
+  @include transition-app-draggable;
 }
 
 .content {
@@ -133,15 +149,11 @@ $indexSelected: 1001;
   position: fixed;
   left: 0.5rem;
 
-  z-index: $indexButtons;
+  z-index: $appDraggableIndexButtonsLayer;
 }
 
 .button.close {
   top: 0.5rem;
-}
-
-.selected {
-  z-index: $indexSelected;
 }
 
 .title {
@@ -175,14 +187,14 @@ $indexSelected: 1001;
   width: 100%;
   min-width: 100px;
 
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: $greyLight;
   border-radius: 10px;
   cursor: grab;
 
   opacity: 0.45;
   filter: grayscale(0.95);
 
-  transition: opacity 100ms ease-in, filter 100ms ease-in;
+  @include transition-app-draggable-handle;
 
   &:hover {
     opacity: 0.99;
@@ -208,5 +220,32 @@ hr {
 
 .hidden {
   display: none;
+}
+
+$titleHeaderSize: 1.3em;
+.title.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  @include transition-color;
+
+  > i {
+    width: $titleHeaderSize;
+    height: $titleHeaderSize;
+
+    * {
+      width: $titleHeaderSize;
+      height: $titleHeaderSize;
+    }
+  }
+}
+
+.selected {
+  z-index: $appDraggableIndexSelectedLayer;
+
+  .title.header > i {
+    color: $emerald;
+  }
 }
 </style>
