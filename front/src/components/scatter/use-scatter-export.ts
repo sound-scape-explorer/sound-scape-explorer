@@ -1,10 +1,9 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
-import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useIntervalFilter} from 'src/composables/use-interval-filter';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
@@ -35,8 +34,7 @@ export function useScatterExport() {
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {filtered: labelFiltered} = useScatterFilterLabels();
-  const {filtered: timeFiltered} = useScatterFilterTime();
+  const {filtered} = useIntervalFilter();
 
   const loadingRef = ref<boolean>(false);
 
@@ -68,10 +66,7 @@ export function useScatterExport() {
       intervalIndex < aggregatedTimestamps.value.length;
       intervalIndex += 1
     ) {
-      const isFilteredByMeta = labelFiltered.value[intervalIndex];
-      const isFilteredByTime = timeFiltered.value[intervalIndex];
-
-      if (isFilteredByMeta || isFilteredByTime) {
+      if (filtered.value[intervalIndex]) {
         continue;
       }
 
