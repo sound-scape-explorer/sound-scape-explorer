@@ -61,25 +61,20 @@ export function useScatterExport() {
     const aggregatedIndicatorsCopy = aggregatedIndicators.value;
     const payload: ExportData[] = [];
 
-    for (
-      let intervalIndex = 0;
-      intervalIndex < aggregatedTimestamps.value.length;
-      intervalIndex += 1
-    ) {
-      if (filtered.value[intervalIndex]) {
+    for (let i = 0; i < aggregatedTimestamps.value.length; i += 1) {
+      if (filtered.value[i]) {
         continue;
       }
 
-      const aggregatedFeaturesInterval =
-        aggregatedFeatures.value[intervalIndex];
-      const timestamp = aggregatedTimestamps.value[intervalIndex];
-      const site = aggregatedSites.value[intervalIndex];
-      const aggregatedLabelsInterval = aggregatedLabels.value[intervalIndex];
+      const aggregatedFeaturesInterval = aggregatedFeatures.value[i];
+      const timestamp = aggregatedTimestamps.value[i];
+      const site = aggregatedSites.value[i];
+      const aggregatedLabelsInterval = aggregatedLabels.value[i];
 
-      const reducedFeaturesInterval = reducedFeatures.value[intervalIndex];
+      const reducedFeaturesInterval = reducedFeatures.value[i];
 
       payload.push({
-        intervalIndex: intervalIndex,
+        intervalIndex: i,
         timestamp: timestamp,
         site: site.site,
         aggregatedLabels: aggregatedLabelsInterval,
