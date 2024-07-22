@@ -23,7 +23,7 @@ dependencies = [
   "scikit-maad==1.4.1",
   "pydub==0.25.1",
   "openpyxl==3.1.2",
-  "mutagen==1.46.0",
+  "mutagen==1.47.0",
   "rich==13.5.2",
   "inquirerpy==0.3.4",
   "soundfile==0.12.1",
