@@ -18,7 +18,7 @@ export function useAppPlot(props: AppPlotProps) {
   const {plotBackground} = useClientSettings();
   const {selectAudio} = useAudioSelector();
 
-  async function render() {
+  const render = async () => {
     if (
       container.value === null ||
       dataRef.value === null ||
@@ -44,33 +44,10 @@ export function useAppPlot(props: AppPlotProps) {
         selectAudio(Number(intervalIndex));
       });
     }
-  }
+  };
 
-  function refresh() {
-    let data: Data[] = [];
-
-    for (const index in props.values) {
-      const d: Data = {
-        type: 'scatter',
-        mode: 'lines',
-        name: props.names?.[index] ?? undefined,
-        x: props.labels[index],
-        y: props.values[index],
-        hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
-        marker: {
-          // color: props.colors?.[index] ?? undefined,
-          color: colors.green,
-          size: props.colors?.[index] ? 6 : 2,
-        },
-      };
-
-      data = [...data, d];
-    }
-
-    dataRef.value = data;
-
-    const p = 70;
-    const layout: Partial<Layout> = {
+  const generateLayout = (padding = 70): Partial<Layout> => {
+    return {
       title: props.title,
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
@@ -78,10 +55,10 @@ export function useAppPlot(props: AppPlotProps) {
       clickmode: 'event',
       height: 400,
       margin: {
-        l: p,
-        r: p,
-        b: props.hideXLegend ? p : p * 2,
-        t: p,
+        l: padding,
+        r: padding,
+        b: props.hideXLegend ? padding : padding * 2,
+        t: padding,
         pad: 1,
       },
       xaxis: {
@@ -101,11 +78,36 @@ export function useAppPlot(props: AppPlotProps) {
         y: 1,
       },
     };
+  };
 
-    layoutRef.value = layout;
+  const generateData = (): Data[] => {
+    const l = props.values.length;
+    const data: Data[] = new Array(l);
 
+    for (let i = 0; i < l; i += 1) {
+      data[i] = {
+        type: 'scatter',
+        mode: 'lines',
+        name: props.names?.[i] ?? undefined,
+        x: props.labels[i],
+        y: props.values[i],
+        hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
+        marker: {
+          // color: props.colors?.[index] ?? undefined,
+          color: colors.green,
+          size: props.colors?.[i] ? 6 : 2,
+        },
+      };
+    }
+
+    return data;
+  };
+
+  const refresh = () => {
+    dataRef.value = generateData();
+    layoutRef.value = generateLayout();
     configRef.value = generateConfig();
-  }
+  };
 
   refresh();
   watch([container, dataRef, layoutRef], render);
