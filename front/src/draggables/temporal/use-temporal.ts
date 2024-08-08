@@ -1,5 +1,5 @@
 import {
-  AggregatedIndicator,
+  type AggregatedIndicator,
   useStorageAggregatedIndicators,
 } from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
@@ -59,24 +59,25 @@ export function useTemporal() {
       return;
     }
 
-    let all: Data[] = [];
+    const l = aggregatedSites.value.length;
+    const newData: Data[] = new Array(l);
 
-    for (const [aS, aggregatedSite] of aggregatedSites.value.entries()) {
-      if (!sites.value.includes(aggregatedSite.site)) {
+    for (let i = 0; i < l; i += 1) {
+      const {site} = aggregatedSites.value[i];
+
+      if (!sites.value.includes(site)) {
         continue;
       }
 
-      const d: Data = {
-        index: aS,
-        site: aggregatedSite.site,
-        timestamp: aggregatedTimestamps.value[aS],
-        values: indicator.value.values[aS],
+      newData[i] = {
+        index: i,
+        site: site,
+        timestamp: aggregatedTimestamps.value[i],
+        values: indicator.value.values[i],
       };
-
-      all = [...all, d];
     }
 
-    data.value = all;
+    data.value = newData;
   };
 
   return {
