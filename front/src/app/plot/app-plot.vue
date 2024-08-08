@@ -13,9 +13,15 @@ export interface AppPlotProps {
   exportFilename: string;
   clickEnabled?: boolean;
   hideXLegend?: boolean;
+  hideRange?: boolean;
 }
 
-const props = defineProps<AppPlotProps>();
+const props = withDefaults(defineProps<AppPlotProps>(), {
+  legend: false,
+  clickEnabled: false,
+  hideXLegend: false,
+  hideRange: false,
+});
 
 const {container} = useAppPlot(props);
 </script>

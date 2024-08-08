@@ -112,17 +112,13 @@ export function useTemporalChart() {
     };
   };
 
-  const generateLabelsNew = (
+  const generateLabelsContinuous = (
     indices: number[],
     timestamps: number[],
-    sites: string[],
   ): string[][] => {
     return [
       indices.map(
-        (i) =>
-          `${convertTimestampToIsoDate(timestamps[i])}<br>Site: ${
-            sites[i]
-          }<br>Interval: ${i}`,
+        (i) => `${convertTimestampToIsoDate(timestamps[i])} Interval: ${i}`,
       ),
     ];
   };
@@ -136,7 +132,7 @@ export function useTemporalChart() {
     const indices = Array.from({length: timestamps.length}, (_, i) => i);
     indices.sort((a, b) => timestamps[a] - timestamps[b]);
 
-    const labels = generateLabelsNew(indices, timestamps, siteValues);
+    const labels = generateLabelsContinuous(indices, timestamps);
 
     return {
       labels: labels,

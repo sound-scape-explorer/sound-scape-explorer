@@ -40,7 +40,7 @@ export function useAppPlot(props: AppPlotProps) {
         const plotIndex = e.points[0].pointIndex;
         // @ts-expect-error: missing typescript definition
         const legendString: string = e.points[0].fullData.x[plotIndex];
-        const intervalIndex = legendString.split('<br>Interval: ')[1];
+        const intervalIndex = legendString.split('Interval: ')[1];
         selectAudio(Number(intervalIndex));
       });
     }
@@ -65,7 +65,7 @@ export function useAppPlot(props: AppPlotProps) {
         title: props.xTitle,
         showticklabels: !props.hideXLegend,
         rangeslider: {
-          visible: true,
+          visible: !props.hideRange,
         },
       },
       yaxis: {

@@ -34,8 +34,6 @@ watch(
 );
 
 watch(indicator, handleFirstLoad);
-
-// todo: add colouring to candles and continuous
 </script>
 
 <template>
@@ -59,7 +57,7 @@ watch(indicator, handleFirstLoad);
         :y-title="indicator"
         click-enabled
         export-filename="indicators"
-        hide-x-legend
+        hide-range
       />
 
       <AppCandles
