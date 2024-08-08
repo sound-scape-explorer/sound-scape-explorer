@@ -37,6 +37,12 @@ export function useTemporalChart() {
       }
 
       const d = data.value[i];
+
+      // info: typing mislead as data can be empty at unselected site indices
+      if (typeof d === 'undefined') {
+        continue;
+      }
+
       values = [...values, d.values[0]];
       timestamps = [...timestamps, d.timestamp];
       siteValues = [...siteValues, d.site];
