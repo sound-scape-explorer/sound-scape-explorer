@@ -66,11 +66,12 @@ export function useTemporalChart() {
     const siteNames = sites.value.map((site) => site.name);
     const colors = getColors(siteNames);
 
-    if (!isCandles.value) {
-      plot.value = generateContinuous(values, timestamps, siteValues, colors);
+    if (isCandles.value) {
+      candles.value = generateFlat(values, timestamps, siteValues);
+      return;
     }
 
-    candles.value = generateFlat(values, timestamps, siteValues, colors);
+    plot.value = generateContinuous(values, timestamps, siteValues, colors);
   };
 
   const generateHolder = (): CandlesData => {
@@ -85,28 +86,45 @@ export function useTemporalChart() {
     };
   };
 
+  const generateLabels = (timestamps: number[], sites: string[]) => {
+    return timestamps.map(
+      (t, i) =>
+        `${convertTimestampToIsoDate(t)}<br>Site: ${
+          sites[i]
+        }<br>Interval: ${i}`,
+    );
+  };
+
   const generateFlat = (
     values: number[],
     timestamps: number[],
     siteValues: string[],
-    colors: string[],
   ): CandlesData => {
     const hloc = calculate(values, timestamps);
 
     return {
-      labels: timestamps.map(
-        (t, i) =>
-          `${convertTimestampToIsoDate(t)}<br>Site: ${
-            siteValues[i]
-          }<br>Interval: ${i}`,
-      ),
+      labels: generateLabels(timestamps, siteValues),
       timestamps: hloc.map((x) => x.timestamp),
       high: hloc.map((x) => x.high),
       low: hloc.map((x) => x.low),
       open: hloc.map((x) => x.open),
       close: hloc.map((x) => x.close),
-      // colors: [colors],
     };
+  };
+
+  const generateLabelsNew = (
+    indices: number[],
+    timestamps: number[],
+    sites: string[],
+  ): string[][] => {
+    return [
+      indices.map(
+        (i) =>
+          `${convertTimestampToIsoDate(timestamps[i])}<br>Site: ${
+            sites[i]
+          }<br>Interval: ${i}`,
+      ),
+    ];
   };
 
   const generateContinuous = (
@@ -118,15 +136,10 @@ export function useTemporalChart() {
     const indices = Array.from({length: timestamps.length}, (_, i) => i);
     indices.sort((a, b) => timestamps[a] - timestamps[b]);
 
+    const labels = generateLabelsNew(indices, timestamps, siteValues);
+
     return {
-      labels: [
-        indices.map(
-          (i) =>
-            `${convertTimestampToIsoDate(timestamps[i])}<br>Site: ${
-              siteValues[i]
-            }<br>Interval: ${i}`,
-        ),
-      ],
+      labels: labels,
       values: [indices.map((i) => values[i])],
       colors: [indices.map((i) => colors[i])],
     };
