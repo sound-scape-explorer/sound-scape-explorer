@@ -17,6 +17,7 @@ import Screen from 'src/components/screen/screen.vue';
 import {useApp} from 'src/composables/use-app';
 import {useAppShortcuts} from 'src/composables/use-app-shortcuts';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {useClientSettingsChecker} from 'src/composables/use-client-settings-checker';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useStorageWatcher} from 'src/composables/use-storage-watcher';
 import {useWorker} from 'src/composables/use-worker';
@@ -25,6 +26,7 @@ import {onMounted} from 'vue';
 
 const {isReady} = useStorageReady();
 const {isPreview} = useClientSettings();
+const {checkVersions} = useClientSettingsChecker();
 const {create: createWorker} = useWorker();
 const {showImport} = useApp();
 
@@ -33,6 +35,7 @@ useStorageWatcher();
 
 onMounted(createWorker);
 onMounted(showImport);
+onMounted(checkVersions);
 </script>
 
 <template>

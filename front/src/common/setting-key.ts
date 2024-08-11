@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 export enum SettingKey {
+  version = 'sse-version',
   plotBackground = 'sse-settings-plotBackground',
   timeshift = 'sse-settings-timeshift',
   isDetailsAutoOpen = 'sse-settings-isDetailsAutoOpen',
