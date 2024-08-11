@@ -65,6 +65,8 @@ useAudioRateWatcher();
   height: 100%;
   z-index: 100;
   position: fixed;
+  top: 0;
+  left: 0;
 
   display: flex;
   justify-content: center;
@@ -73,6 +75,7 @@ useAudioRateWatcher();
 
   background-color: $whiteOpaque;
   backdrop-filter: blur(5px);
+  @include borderRadius;
 }
 
 $o1: 50% - 0%;
