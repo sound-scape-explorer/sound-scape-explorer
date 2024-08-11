@@ -2,26 +2,28 @@
 import {NButton} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
-import {useDraggableAudioSidebarClip} from 'src/draggables/audio/use-draggable-audio-sidebar-clip';
+import {useDraggableAudioSidebarPeak} from 'src/draggables/audio/use-draggable-audio-sidebar-peak';
 import {watch} from 'vue';
 
-const {classNames} = useDraggableAudioSidebarClip();
+const {classNames} = useDraggableAudioSidebarPeak();
 const {isClipping, fade} = useAudioAnalyser();
 watch(isClipping, fade);
 </script>
 
 <template>
-  <AppTooltip tooltip="Clip detection">
+  <AppTooltip tooltip="Peak detection">
     <NButton
       :class="classNames"
       disabled
       size="tiny"
-    />
+    >
+      <span>PEAK</span>
+    </NButton>
   </AppTooltip>
 </template>
 
 <style lang="scss" scoped>
-.clip {
+.peak {
   position: absolute;
   bottom: -405px;
 
@@ -32,9 +34,21 @@ watch(isClipping, fade);
 
   cursor: default;
   opacity: 1;
+
+  span {
+    font-weight: bold;
+    position: relative;
+    transform: translate3d(-9px, -20px, 0);
+    z-index: 200;
+    display: none;
+  }
 }
 
-.clipping {
+.peaking {
   background: $redDeep;
+
+  span {
+    display: inline-block;
+  }
 }
 </style>

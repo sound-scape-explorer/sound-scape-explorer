@@ -1,14 +1,14 @@
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {computed} from 'vue';
 
-export function useDraggableAudioSidebarClip() {
+export function useDraggableAudioSidebarPeak() {
   const {isClipping} = useAudioAnalyser();
 
   const classNames = computed<string>(() => {
-    let string = 'clip';
+    let string = 'peak';
 
     if (isClipping.value) {
-      string += ' clipping';
+      string += ' peaking';
     }
 
     return string;
