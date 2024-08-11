@@ -37,6 +37,7 @@ export default defineConfig({
           @import "src/styles/transitions.scss";
           @import "src/styles/layers.scss";
           @import "src/styles/animations.scss";
+          @import "src/styles/borders.scss";
         `,
       },
     },
