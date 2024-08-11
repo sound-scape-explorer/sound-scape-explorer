@@ -51,8 +51,7 @@ export function useWavesurferLoader() {
     analyser.value.connect(context.value.destination);
   };
 
-  // todo: rename to loadChunk or loadSlice or loadAudioInterval?
-  const loadBlob = (blob: Blob) => {
+  const loadSlice = (blob: Blob) => {
     if (ws.value === null) {
       return;
     }
@@ -65,6 +64,6 @@ export function useWavesurferLoader() {
   };
 
   return {
-    loadBlob: loadBlob,
+    loadSlice: loadSlice,
   };
 }

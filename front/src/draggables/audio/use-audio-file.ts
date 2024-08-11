@@ -4,6 +4,7 @@ import {useDraggables} from 'src/composables/use-draggables';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import type {BlockDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
+import {TIMEOUT} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useWavesurferLoader} from 'src/draggables/audio/use-wavesurfer-loader';
 import {getBitDepthFromWav} from 'src/utils/get-bit-depth-from-wav';
@@ -17,7 +18,7 @@ const isLoading = ref<boolean>(false);
 
 export function useAudioFile() {
   const {notify} = useAppNotification();
-  const {loadBlob} = useWavesurferLoader();
+  const {loadSlice} = useWavesurferLoader();
   const {audioHost} = useStorageAudioHost();
   const {open, close} = useDraggables();
   const {integration} = useIntegrationSelection();
@@ -45,8 +46,7 @@ export function useAudioFile() {
     block.value = newBlock;
   };
 
-  // todo: rename to preload? or loadFile
-  const load = async () => {
+  const loadFile = async () => {
     if (isLoading.value) {
       return;
     }
@@ -104,12 +104,16 @@ export function useAudioFile() {
 
       const audioBuffer = await context.value.decodeAudioData(arrayBuffer);
 
-      isLoading.value = false;
       duration.value = audioBuffer.duration;
 
       const wav = encodeWavFileFromAudioBuffer(audioBuffer, 0);
       const blob = new Blob([wav]);
-      loadBlob(blob);
+      loadSlice(blob);
+
+      // INFO: dummy timeout for waiting waveform and spectrogram renders
+      setTimeout(() => {
+        isLoading.value = false;
+      }, TIMEOUT / 2);
     } catch (error) {
       notify('error', 'audio-file', `${error}`);
 
@@ -124,6 +128,6 @@ export function useAudioFile() {
     bitDepth: bitDepth,
     select: select,
     isLoading: isLoading,
-    load: load,
+    loadFile: loadFile,
   };
 }
