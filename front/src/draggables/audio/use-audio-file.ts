@@ -45,6 +45,7 @@ export function useAudioFile() {
     block.value = newBlock;
   };
 
+  // todo: rename to preload? or loadFile
   const load = async () => {
     if (isLoading.value) {
       return;

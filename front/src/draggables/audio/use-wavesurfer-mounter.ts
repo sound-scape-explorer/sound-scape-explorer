@@ -1,8 +1,10 @@
 import {useSettings} from 'src/composables/use-settings';
-import {WAVE} from 'src/constants';
+import {GAIN, WAVE} from 'src/constants';
+import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
@@ -15,7 +17,9 @@ import type {WaveSurferParams} from 'wavesurfer.js/types/params';
 
 export function useWavesurferMounter() {
   const {ws} = useWavesurfer();
-  const {context, create} = useAudioContext();
+  const {context, create: createContext} = useAudioContext();
+  const {create: createGain, apply: applyGain} = useAudioGain();
+  const {create: createAnalyser} = useAudioAnalyser();
   const {waveform} = useDraggableAudio();
   const {settings} = useSettings();
   const {colormap} = useSpectrogramColormap();
@@ -50,7 +54,13 @@ export function useWavesurferMounter() {
   };
 
   watch([context, waveform], mount);
-  watch(settings, create);
+
+  watch(settings, () => {
+    createContext();
+    createGain();
+    createAnalyser();
+    applyGain(GAIN.default);
+  });
 
   watch(ws, registerCursor);
 

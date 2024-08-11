@@ -11,11 +11,20 @@ export const SLIDER_LIMITS = {
 
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
+export const GAIN = {
+  default: 100.0,
+  step: 50.0,
+  max: 500.0,
+  min: 0.0,
+};
+
+const waveDampening = 2;
+
 export const WAVE = {
-  min: 1,
-  max: 100,
-  step: 10,
-  default: 10,
+  default: GAIN.default / waveDampening,
+  step: GAIN.step / waveDampening,
+  max: GAIN.max / waveDampening,
+  min: GAIN.min / waveDampening,
 };
 
 export const FFT_SIZE = {
