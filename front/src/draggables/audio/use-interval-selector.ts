@@ -9,7 +9,7 @@ const {history, undo, redo, canUndo, canRedo} =
   useRefHistory(currentIntervalIndex);
 const hasClicked = computed<boolean>(() => currentIntervalIndex.value !== null);
 
-export function useAudioSelector() {
+export function useIntervalSelector() {
   const {isLoading} = useAudioFile();
   const {open} = useDraggables();
   const {isDetailsAutoOpen} = useClientSettings();
@@ -37,7 +37,7 @@ export function useAudioSelector() {
   return {
     currentIntervalIndex: currentIntervalIndex,
     hasClicked: hasClicked,
-    selectAudio: select,
+    selectInterval: select,
     history: history,
     undo: undo,
     redo: redo,

@@ -9,6 +9,7 @@ import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-a
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {colors} from 'src/styles/colors';
 
 const size2d = 5;
@@ -25,6 +26,7 @@ export function useScatterFeatures() {
   const {selected} = useScreen();
   const {isWebGlScatter2d} = useClientSettings();
   const {filtered} = useScatterGlobalFilter();
+  const {currentIntervalIndex} = useIntervalSelector();
 
   // TODO: improve me
   const trace = (): Data[] => {
@@ -109,6 +111,12 @@ export function useScatterFeatures() {
       ? reducedFeatures.value.map((f) => f[2])
       : undefined;
 
+    const borders = new Array(xs.length).fill(colors.border);
+
+    if (currentIntervalIndex.value !== null) {
+      borders[currentIntervalIndex.value] = colors.selectedBorder;
+    }
+
     const trace: Data = {
       x: xs,
       y: ys,
@@ -126,8 +134,8 @@ export function useScatterFeatures() {
         colorscale: plotlyColorscale,
         colors: plotlyColorscale,
         line: {
-          color: colors.border,
-          width: 1,
+          color: borders,
+          width: 2,
         },
       },
     } as Data;

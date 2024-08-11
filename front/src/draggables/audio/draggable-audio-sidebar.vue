@@ -15,15 +15,15 @@ import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar
 import DraggableAudioSidebarClip from 'src/draggables/audio/draggable-audio-sidebar-clip.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
-import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {useWavesurferHandlers} from 'src/draggables/audio/use-wavesurfer-handlers';
 
 const {increase, decrease} = useAudioFourier();
 const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
-const {history, undo, redo, canUndo, canRedo} = useAudioSelector();
+const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
 </script>
 
 <template>
