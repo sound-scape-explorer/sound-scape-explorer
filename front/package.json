@@ -13,7 +13,7 @@
     "preview": "vite preview --port 5530 --host 0.0.0.0"
   },
   "dependencies": {
-    "@vueuse/components": "^10.3.0",
+    "@vueuse/components": "^10.11.1",
     "@vueuse/core": "^10.3.0",
     "chroma-js": "^2.4.2",
     "colormap": "^2.3.2",
