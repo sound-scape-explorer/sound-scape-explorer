@@ -11,7 +11,7 @@ authors = [{ name = "Bamdad Sabbagh", email = "hi@bamdad.fr" }]
 
 dependencies = [
   "wheel",
-  "numpy==1.23.5",
+  "numpy==2.1.0",
   "pandas==1.5.3",
   "h5py==3.8.0",
   "torch==2.0.0",
