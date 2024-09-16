@@ -48,6 +48,11 @@ const isHidingMenuOnDraggableToggle = useStorage<boolean>(
   d.isHidingMenuOnDraggableToggle,
 );
 
+const isSelectedPointHighlighted = useStorage<boolean>(
+  k.isSelectedPointHighlighted,
+  d.isSelectedPointHighlighted,
+);
+
 export function useClientSettings() {
   const {audioHost} = useStorageAudioHost();
   const {fontSize} = useAppHeatmapSize();
@@ -74,6 +79,7 @@ export function useClientSettings() {
     isCopyOnSelect2d.value = d.isCopyOnSelect2d;
     isWebGlScatter2d.value = d.isWebGlScatter2d;
     isColorMapSwapped.value = d.isColorMapSwapped;
+    isSelectedPointHighlighted.value = d.isSelectedPointHighlighted;
 
     audioHost.value = d.audioHost;
     fontSize.value = d.fontSize;
@@ -103,5 +109,6 @@ export function useClientSettings() {
     isHidingMenuOnDraggableToggle: isHidingMenuOnDraggableToggle,
     isDevEnabled: isDevEnabled,
     devAutoLoadView: devAutoLoadView,
+    isSelectedPointHighlighted: isSelectedPointHighlighted,
   };
 }

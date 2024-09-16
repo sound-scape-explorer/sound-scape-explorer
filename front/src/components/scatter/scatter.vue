@@ -28,7 +28,8 @@ const {
 } = useScatter();
 const {criteria, flavor} = useColorSelection();
 const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
-const {timeshift, isColorMapSwapped} = useClientSettings();
+const {timeshift, isColorMapSwapped, isSelectedPointHighlighted} =
+  useClientSettings();
 const {filtered: labelFiltered} = useScatterFilterLabels();
 const {filtered: timeFiltered} = useScatterFilterTime();
 const {filtered: temporalFiltered} = useScatterFilterTemporal();
@@ -65,6 +66,7 @@ watch(
     isColorMapSwapped,
     isColorByLabelsNumeric,
     currentIntervalIndex,
+    isSelectedPointHighlighted,
   ],
   async () => {
     if (isRendering || !isEnabled.value) {

@@ -24,7 +24,7 @@ export function useScatterFeatures() {
   const {low, high} = useScatterColorAlpha();
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
-  const {isWebGlScatter2d} = useClientSettings();
+  const {isWebGlScatter2d, isSelectedPointHighlighted} = useClientSettings();
   const {filtered} = useScatterGlobalFilter();
   const {currentIntervalIndex} = useIntervalSelector();
 
@@ -113,7 +113,10 @@ export function useScatterFeatures() {
 
     const borders = new Array(xs.length).fill(colors.border);
 
-    if (currentIntervalIndex.value !== null) {
+    if (
+      currentIntervalIndex.value !== null &&
+      isSelectedPointHighlighted.value
+    ) {
       borders[currentIntervalIndex.value] = colors.selectedBorder;
     }
 

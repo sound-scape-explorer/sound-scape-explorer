@@ -28,6 +28,7 @@ const {
   isWebGlScatter2d,
   isHidingMenuOnDraggableToggle,
   isDevEnabled,
+  isSelectedPointHighlighted,
 } = useClientSettings();
 
 const {audioHost} = useStorageAudioHost();
@@ -57,6 +58,10 @@ useRefProvide(
 );
 useRefProvide('settings/isPreview', isPreview);
 useRefProvide('settings/isDevEnabled', isDevEnabled);
+useRefProvide(
+  'settings/isSelectedPointHighlighted',
+  isSelectedPointHighlighted,
+);
 </script>
 
 <template>
@@ -172,6 +177,13 @@ useRefProvide('settings/isDevEnabled', isDevEnabled);
         <AppCheckbox
           :default="isHidingMenuOnDraggableToggle"
           injection-key="settings/isHidingMenuOnDraggableToggle"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Scatter: highlight selected point">
+        <AppCheckbox
+          :default="isSelectedPointHighlighted"
+          injection-key="settings/isSelectedPointHighlighted"
         />
       </DraggableSettingsItem>
 

@@ -29,4 +29,5 @@ export const SettingDefault = {
   isHidingMenuOnDraggableToggle: false,
   isDevEnabled: false,
   devAutoLoadView: false,
+  isSelectedPointHighlighted: true,
 };

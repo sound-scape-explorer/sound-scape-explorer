@@ -24,4 +24,5 @@ export enum SettingKey {
   isHidingMenuOnDraggableToggle = 'sse-settings-isHidingMenuOnDraggableToggle',
   isDevEnabled = 'sse-settings-isDevEnabled',
   devAutoLoadView = 'sse-settings-devAutoLoadView',
+  isSelectedPointHighlighted = 'sse-settings-isSelectedPointHighlighted',
 }
