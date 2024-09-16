@@ -1,3 +1,23 @@
+# [13.7.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.6.1...v13.7.0) (2024-09-16)
+
+
+### Bug Fixes
+
+* **Front/Audio:** Increase opacity of loading overlay ([61a5179](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/61a5179f2cbea07bd2353454670eefcbfb82a0df))
+* **Front/Audio:** Set correct loading overlay size and border radius ([e9a9f40](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e9a9f404538b66d28eed6c1c8b3cd9ee05346d97))
+* **Front/Temporal:** Fix error on site selection change ([d65bf1b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d65bf1bc8e84ac1d97a65762f997132956b7214e))
+* **Front/Temporal:** Improve continuous chart x axis legend ([d9a9a11](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d9a9a11a7636fd196e2997283d58fdb2bd348454))
+
+
+### Features
+
+* **Front/Audio:** Add audio loading state overlay ([c9dbd79](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c9dbd79b58d2d0d7de050493c6dbefd2b8ba722c))
+* **Front/Audio:** Add clip detection + Improve gain staging ([6a55bf5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6a55bf5ed29ea86356515fb3cfcb2dc98411fea9))
+* **Front/Audio:** Add PEAK tooltip on top of detection square ([265b5eb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/265b5eb59b4c1e269a87aced455fc21061e0aa36))
+* **Front/Scatter:** Add optional selected point highlighting ([7854b0e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7854b0ef581552581926f02e9174a7bda0cf248b))
+* **Front/Scatter:** Add red border for currently selected interval ([61794ed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/61794ed2264afb2648ed17322f38edf94c766100))
+* **Front:** Reset all settings if versions differ ([8136185](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8136185b0bd2f5a818f2bb8100f3baaecc619b4d))
+
 ## [13.6.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.6.0...v13.6.1) (2024-07-19)
 
 
