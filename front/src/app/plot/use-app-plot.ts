@@ -3,7 +3,7 @@ import Plotly from 'plotly.js-dist-min';
 import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {usePlotConfig} from 'src/composables/use-plot-config';
-import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {colors} from 'src/styles/colors';
 import {ref, watch} from 'vue';
 
@@ -16,9 +16,9 @@ export function useAppPlot(props: AppPlotProps) {
   const plot = ref<PlotlyHTMLElement | null>(null);
   const {generateConfig} = usePlotConfig(props.exportFilename);
   const {plotBackground} = useClientSettings();
-  const {selectAudio} = useAudioSelector();
+  const {selectInterval} = useIntervalSelector();
 
-  async function render() {
+  const render = async () => {
     if (
       container.value === null ||
       dataRef.value === null ||
@@ -40,37 +40,14 @@ export function useAppPlot(props: AppPlotProps) {
         const plotIndex = e.points[0].pointIndex;
         // @ts-expect-error: missing typescript definition
         const legendString: string = e.points[0].fullData.x[plotIndex];
-        const intervalIndex = legendString.split('<br>Interval: ')[1];
-        selectAudio(Number(intervalIndex));
+        const intervalIndex = legendString.split('Interval: ')[1];
+        selectInterval(Number(intervalIndex));
       });
     }
-  }
+  };
 
-  function refresh() {
-    let data: Data[] = [];
-
-    for (const index in props.values) {
-      const d: Data = {
-        type: 'scatter',
-        mode: 'lines',
-        name: props.names?.[index] ?? undefined,
-        x: props.labels[index],
-        y: props.values[index],
-        hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
-        marker: {
-          // color: props.colors?.[index] ?? undefined,
-          color: colors.green,
-          size: props.colors?.[index] ? 6 : 2,
-        },
-      };
-
-      data = [...data, d];
-    }
-
-    dataRef.value = data;
-
-    const p = 70;
-    const layout: Partial<Layout> = {
+  const generateLayout = (padding = 70): Partial<Layout> => {
+    return {
       title: props.title,
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
@@ -78,17 +55,17 @@ export function useAppPlot(props: AppPlotProps) {
       clickmode: 'event',
       height: 400,
       margin: {
-        l: p,
-        r: p,
-        b: props.hideXLegend ? p : p * 2,
-        t: p,
+        l: padding,
+        r: padding,
+        b: props.hideXLegend ? padding : padding * 2,
+        t: padding,
         pad: 1,
       },
       xaxis: {
         title: props.xTitle,
         showticklabels: !props.hideXLegend,
         rangeslider: {
-          visible: true,
+          visible: !props.hideRange,
         },
       },
       yaxis: {
@@ -101,11 +78,36 @@ export function useAppPlot(props: AppPlotProps) {
         y: 1,
       },
     };
+  };
 
-    layoutRef.value = layout;
+  const generateData = (): Data[] => {
+    const l = props.values.length;
+    const data: Data[] = new Array(l);
 
+    for (let i = 0; i < l; i += 1) {
+      data[i] = {
+        type: 'scatter',
+        mode: 'lines',
+        name: props.names?.[i] ?? undefined,
+        x: props.labels[i],
+        y: props.values[i],
+        hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
+        marker: {
+          // color: props.colors?.[index] ?? undefined,
+          color: colors.green,
+          size: props.colors?.[i] ? 6 : 2,
+        },
+      };
+    }
+
+    return data;
+  };
+
+  const refresh = () => {
+    dataRef.value = generateData();
+    layoutRef.value = generateLayout();
     configRef.value = generateConfig();
-  }
+  };
 
   refresh();
   watch([container, dataRef, layoutRef], render);

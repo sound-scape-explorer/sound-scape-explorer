@@ -1,12 +1,12 @@
 import type {PlotMouseEvent} from 'plotly.js-dist-min';
-import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 
 export function useScatterClick() {
-  const {selectAudio} = useAudioSelector();
+  const {selectInterval} = useIntervalSelector();
 
   const handleClick = (e: PlotMouseEvent) => {
     const intervalIndex = e.points[0].pointNumber;
-    selectAudio(intervalIndex);
+    selectInterval(intervalIndex);
   };
 
   return {

@@ -4,4 +4,5 @@ export const colors = {
   transparent: (a: number) => `rgba(0, 0, 0, ${a})`,
   selected: (a: number) => `rgba(255, 0, 0, ${a})`,
   border: 'rgba(0, 0, 0, 0.1)',
+  selectedBorder: 'red',
 };

@@ -1,6 +1,6 @@
 import type {AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
 import {useViewState} from 'src/composables/use-view-state';
-import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {computed} from 'vue';
 
 interface Suspense {
@@ -10,7 +10,7 @@ interface Suspense {
 
 export function useAppDraggableSuspense(props: AppDraggableProps) {
   const {hasView} = useViewState();
-  const {hasClicked} = useAudioSelector();
+  const {hasClicked} = useIntervalSelector();
 
   const suspense = computed<Suspense>(() => {
     switch (props.suspense) {

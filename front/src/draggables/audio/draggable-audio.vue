@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import {RefreshOutline} from '@vicons/ionicons5';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import DraggableAudioMenu from 'src/draggables/audio/draggable-audio-menu.vue';
 import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
@@ -7,7 +9,7 @@ import {useAudioRateWatcher} from 'src/draggables/audio/use-audio-rate-watcher';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurferMounter} from 'src/draggables/audio/use-wavesurfer-mounter';
 
-const {waveform, spectrogram} = useDraggableAudio();
+const {waveform, spectrogram, loadingClassNames} = useDraggableAudio();
 
 useWavesurferMounter();
 useAudioFileWatcher();
@@ -19,6 +21,12 @@ useAudioRateWatcher();
     draggable-key="audio"
     suspense="scatterClick"
   >
+    <div :class="loadingClassNames">
+      <AppIcon>
+        <RefreshOutline class="spin" />
+      </AppIcon>
+    </div>
+
     <div class="player">
       <DraggableAudioSidebar />
       <DraggableAudioMenu />
@@ -50,5 +58,35 @@ useAudioRateWatcher();
 
 .mt {
   margin-top: 10px;
+}
+
+.loading {
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+
+  background-color: $whiteOpaque;
+  backdrop-filter: blur(5px);
+  @include borderRadius;
+}
+
+$o1: 50% - 0%;
+$o2: 50% + 8%;
+
+.spin {
+  @include spin;
+  transform-origin: $o1 $o2;
+}
+
+.loading-hidden {
+  display: none;
 }
 </style>

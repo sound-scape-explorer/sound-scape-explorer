@@ -2,7 +2,7 @@
 import {NTag, NTooltip} from 'naive-ui';
 import {useDate} from 'src/composables/use-date';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {
   pageSizeRef,
   pageVisibleBlocksRef,
@@ -88,7 +88,7 @@ const colWidthRef = computed(() => {
   }
 });
 
-const {selectAudio} = useAudioSelector();
+const {selectInterval} = useIntervalSelector();
 
 const handleBlockClick = (block: VisibleBlock) => {
   if (aggregatedIntervalDetails.value === null) {
@@ -99,7 +99,7 @@ const handleBlockClick = (block: VisibleBlock) => {
   aggregatedIntervalDetails.value.map((intervals, index) => {
     intervals.map((interval) => {
       if (interval.start === block.start) {
-        selectAudio(index);
+        selectInterval(index);
       }
     });
   });

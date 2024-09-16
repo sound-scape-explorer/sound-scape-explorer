@@ -11,6 +11,7 @@ import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-setting
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
+const version = useStorage<string>(k.version, d.version);
 const plotBackground = useStorage<string>(k.plotBackground, d.plotBackground);
 const timeshift = useStorage<number>(k.timeshift, d.timeshift);
 const isPreview = useStorage<boolean>(k.isPreview, d.isPreview);
@@ -47,6 +48,11 @@ const isHidingMenuOnDraggableToggle = useStorage<boolean>(
   d.isHidingMenuOnDraggableToggle,
 );
 
+const isSelectedPointHighlighted = useStorage<boolean>(
+  k.isSelectedPointHighlighted,
+  d.isSelectedPointHighlighted,
+);
+
 export function useClientSettings() {
   const {audioHost} = useStorageAudioHost();
   const {fontSize} = useAppHeatmapSize();
@@ -63,6 +69,7 @@ export function useClientSettings() {
   } = useClientSettingsDev();
 
   const resetAll = () => {
+    version.value = d.version;
     plotBackground.value = d.plotBackground;
     timeshift.value = d.timeshift;
     isDetailsAutoOpen.value = d.isDetailsAutoOpen;
@@ -72,6 +79,7 @@ export function useClientSettings() {
     isCopyOnSelect2d.value = d.isCopyOnSelect2d;
     isWebGlScatter2d.value = d.isWebGlScatter2d;
     isColorMapSwapped.value = d.isColorMapSwapped;
+    isSelectedPointHighlighted.value = d.isSelectedPointHighlighted;
 
     audioHost.value = d.audioHost;
     fontSize.value = d.fontSize;
@@ -88,6 +96,7 @@ export function useClientSettings() {
 
   return {
     resetAll: resetAll,
+    version: version,
     plotBackground: plotBackground,
     timeshift: timeshift,
     isDetailsAutoOpen: isDetailsAutoOpen,
@@ -100,5 +109,6 @@ export function useClientSettings() {
     isHidingMenuOnDraggableToggle: isHidingMenuOnDraggableToggle,
     isDevEnabled: isDevEnabled,
     devAutoLoadView: devAutoLoadView,
+    isSelectedPointHighlighted: isSelectedPointHighlighted,
   };
 }

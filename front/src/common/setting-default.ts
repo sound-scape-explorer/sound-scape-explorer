@@ -3,8 +3,10 @@ import {
   PLOT_BACKGROUND,
   SPECTROGRAM_COLOR_MAPS,
 } from 'src/constants';
+import {VERSION} from 'src/version';
 
 export const SettingDefault = {
+  version: VERSION,
   plotBackground: PLOT_BACKGROUND.transparent,
   timeshift: 0, // hours
   isDetailsAutoOpen: false,
@@ -27,4 +29,5 @@ export const SettingDefault = {
   isHidingMenuOnDraggableToggle: false,
   isDevEnabled: false,
   devAutoLoadView: false,
+  isSelectedPointHighlighted: true,
 };

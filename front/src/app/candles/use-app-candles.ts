@@ -35,7 +35,7 @@ export function useAppCandles(props: AppCandlesProps) {
     );
   };
 
-  const render = () => {
+  const generateData = (): Data[] => {
     const newData: Data = {
       type: 'candlestick',
       x: props.timestamps.map((t) => convertTimestampToIsoDate(t)),
@@ -47,20 +47,21 @@ export function useAppCandles(props: AppCandlesProps) {
       decreasing: {line: {color: '#179F5766'}},
     };
 
-    data.value = [newData];
+    return [newData];
+  };
 
-    const p = 70;
-    const newLayout: Partial<Layout> = {
+  const generateLayout = (padding = 70): Partial<Layout> => {
+    return {
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
       showlegend: false,
       height: 400,
       title: props?.title ?? '',
       margin: {
-        l: p,
-        r: p,
-        b: p * 2,
-        t: p,
+        l: padding,
+        r: padding,
+        b: padding * 2,
+        t: padding,
         pad: 1,
       },
       xaxis: {
@@ -79,8 +80,11 @@ export function useAppCandles(props: AppCandlesProps) {
         y: 1,
       },
     };
+  };
 
-    layout.value = newLayout;
+  const render = () => {
+    data.value = generateData();
+    layout.value = generateLayout();
     config.value = generateConfig();
   };
 

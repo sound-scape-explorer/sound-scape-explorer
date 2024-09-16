@@ -123,8 +123,7 @@ useAppDraggableLifecycles({
   backdrop-filter: blur(10px);
 
   box-shadow: 10px 10px 20px -3px $greyDeep;
-  border-radius: 8px;
-
+  @include borderRadius;
   @include transition-app-draggable;
 }
 

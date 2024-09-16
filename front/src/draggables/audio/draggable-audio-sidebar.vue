@@ -12,17 +12,18 @@ import {
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import DraggableAudioSidebarPeak from 'src/draggables/audio/draggable-audio-sidebar-peak.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
-import {useAudioSelector} from 'src/draggables/audio/use-audio-selector';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {useWavesurferHandlers} from 'src/draggables/audio/use-wavesurfer-handlers';
 
 const {increase, decrease} = useAudioFourier();
 const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
-const {history, undo, redo, canUndo, canRedo} = useAudioSelector();
+const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
 </script>
 
 <template>
@@ -99,5 +100,7 @@ const {history, undo, redo, canUndo, canRedo} = useAudioSelector();
       redo-tooltip="Next interval"
       undo-tooltip="Previous interval"
     />
+
+    <DraggableAudioSidebarPeak />
   </AppDraggableSidebar>
 </template>

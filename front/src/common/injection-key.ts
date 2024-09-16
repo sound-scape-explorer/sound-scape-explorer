@@ -19,6 +19,7 @@ export type InjectionKey =
   | 'settings/isPreview'
   | 'settings/isDevEnabled'
   | 'settings/devAutoLoadView'
+  | 'settings/isSelectedPointHighlighted'
   | 'indicators/list'
   | 'indicators/selection'
   | 'indicators/display'

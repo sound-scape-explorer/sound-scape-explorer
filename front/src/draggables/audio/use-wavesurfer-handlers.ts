@@ -1,8 +1,10 @@
-import {WAVE} from 'src/constants';
+import {GAIN, WAVE} from 'src/constants';
+import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 
 export function useWavesurferHandlers() {
   const {ws} = useWavesurfer();
+  const {gain, apply} = useAudioGain();
 
   const renderWaveform = () => {
     if (ws.value === null) {
@@ -17,15 +19,15 @@ export function useWavesurferHandlers() {
       return;
     }
 
-    if (ws.value.params.barHeight + WAVE.step > WAVE.max) {
-      ws.value.params.barHeight = WAVE.max;
-    } else {
-      ws.value.params.barHeight += WAVE.step;
+    const nextValue = gain.value + GAIN.step;
 
-      const volume = ws.value.getVolume();
-      ws.value.setVolume(volume + WAVE.step);
+    if (nextValue >= GAIN.max) {
+      return;
     }
 
+    apply(nextValue);
+
+    ws.value.params.barHeight += WAVE.step;
     renderWaveform();
   };
 
@@ -34,16 +36,14 @@ export function useWavesurferHandlers() {
       return;
     }
 
-    if (ws.value.params.barHeight - WAVE.step < WAVE.min) {
-      ws.value.params.barHeight = WAVE.min;
-    } else {
-      ws.value.params.barHeight -= WAVE.step;
+    const nextValue = gain.value - GAIN.step;
 
-      const volume = ws.value.getVolume();
-      ws.value.setVolume(volume - WAVE.step);
+    if (nextValue <= GAIN.min) {
+      return;
     }
 
-    ws.value.drawBuffer();
+    apply(nextValue);
+    ws.value.params.barHeight -= WAVE.step;
     renderWaveform();
   };
 

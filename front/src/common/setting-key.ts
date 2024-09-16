@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 export enum SettingKey {
+  version = 'sse-version',
   plotBackground = 'sse-settings-plotBackground',
   timeshift = 'sse-settings-timeshift',
   isDetailsAutoOpen = 'sse-settings-isDetailsAutoOpen',
@@ -23,4 +24,5 @@ export enum SettingKey {
   isHidingMenuOnDraggableToggle = 'sse-settings-isHidingMenuOnDraggableToggle',
   isDevEnabled = 'sse-settings-isDevEnabled',
   devAutoLoadView = 'sse-settings-devAutoLoadView',
+  isSelectedPointHighlighted = 'sse-settings-isSelectedPointHighlighted',
 }

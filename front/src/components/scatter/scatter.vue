@@ -8,6 +8,7 @@ import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-ti
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -27,7 +28,8 @@ const {
 } = useScatter();
 const {criteria, flavor} = useColorSelection();
 const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
-const {timeshift, isColorMapSwapped} = useClientSettings();
+const {timeshift, isColorMapSwapped, isSelectedPointHighlighted} =
+  useClientSettings();
 const {filtered: labelFiltered} = useScatterFilterLabels();
 const {filtered: timeFiltered} = useScatterFilterTime();
 const {filtered: temporalFiltered} = useScatterFilterTemporal();
@@ -36,6 +38,7 @@ const {isWebGlScatter2d} = useClientSettings();
 const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();
 const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
 const {isEnabled: isColorByLabelsNumeric} = useLabelsNumeric();
+const {currentIntervalIndex} = useIntervalSelector();
 
 onMounted(mount);
 
@@ -62,6 +65,8 @@ watch(
     isWebGlScatter2d,
     isColorMapSwapped,
     isColorByLabelsNumeric,
+    currentIntervalIndex,
+    isSelectedPointHighlighted,
   ],
   async () => {
     if (isRendering || !isEnabled.value) {
