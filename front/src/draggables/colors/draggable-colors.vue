@@ -10,7 +10,6 @@ import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useColorInvert} from 'src/composables/use-color-invert';
 import {useIndicatorLimits} from 'src/composables/use-indicator-limits';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useViewState} from 'src/composables/use-view-state';
 import {COLOR_FLAVORS} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
@@ -30,7 +29,6 @@ const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
 const {detect: detectIndicatorRange, swap} = useIndicatorLimits();
 const {invert, isReversible} = useColorInvert();
 const {isEnabled} = useLabelsNumeric();
-const {hasView} = useViewState();
 
 useRefProvide('colors/criteria', criteria);
 useRefProvide('colors/category', category);

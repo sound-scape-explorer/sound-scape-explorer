@@ -43,6 +43,10 @@ export function useAppShortcuts() {
   registerKey(Shortcuts.temporal, () => hasView.value && toggle('temporal'));
   registerKey(Shortcuts.heatmaps, () => hasView.value && toggle('heatmaps'));
   registerKey(
+    Shortcuts.histograms,
+    () => hasView.value && toggle('histograms'),
+  );
+  registerKey(
     Shortcuts.selection,
     () => hasView.value && isPreview.value && toggle('selection'),
   );

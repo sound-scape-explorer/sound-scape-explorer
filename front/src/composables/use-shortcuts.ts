@@ -17,6 +17,7 @@ export enum Shortcuts {
   trajectories = 'y',
   relativeTrajectories = 'Y',
   temporal = 't',
+  histograms = 'H',
   heatmaps = 'h',
   calendar = 'C',
   timeline = 'T',

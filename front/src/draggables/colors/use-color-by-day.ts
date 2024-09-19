@@ -6,11 +6,10 @@ const dayColor = chroma('orange');
 const nightColor = chroma('blue');
 
 export function useColorByDay() {
-  const {convertTimestampToDate} = useDate();
+  const {getHourFromTimestamp} = useDate();
 
   const getColorByDay = (timestamp: number) => {
-    const date = convertTimestampToDate(timestamp);
-    const hour = date.get('hours');
+    const hour = getHourFromTimestamp(timestamp);
     const isDay = isHourDuringDay(hour);
 
     if (isDay) {

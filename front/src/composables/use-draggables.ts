@@ -16,6 +16,7 @@ export interface DraggablesStore {
   temporal: boolean;
   heatmaps: boolean;
   selection: boolean; // 3d beta
+  histograms: boolean;
 }
 
 export type DraggableKey = keyof DraggablesStore;
@@ -37,6 +38,7 @@ const store = reactive<DraggablesStore>({
   temporal: false,
   heatmaps: false,
   selection: false,
+  histograms: false,
 });
 
 const selected = ref<DraggableKey | null>(null);

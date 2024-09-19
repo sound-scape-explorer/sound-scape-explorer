@@ -101,6 +101,14 @@ const {menu} = useAppMenu();
 
       <AppMenuButton
         :disabled="!hasView"
+        draggable-key="histograms"
+        text="Histograms"
+      >
+        <menu.histograms />
+      </AppMenuButton>
+
+      <AppMenuButton
+        :disabled="!hasView"
         draggable-key="heatmaps"
         text="Heatmaps"
       >

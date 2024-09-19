@@ -40,4 +40,7 @@ export type InjectionKey =
   | 'digested/labelA'
   | 'digested/labelB'
   | 'digested/colorFlavor'
-  | 'trajectories/fuse';
+  | 'trajectories/fuse'
+  | 'histograms/indicatorName'
+  | 'histograms/over'
+  | 'histograms/function';

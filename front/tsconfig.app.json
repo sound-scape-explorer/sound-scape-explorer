@@ -16,6 +16,7 @@
     "lib": [
       "webworker",
       "ESNext",
+      "ESNext.Array",
       "DOM",
       "DOM.Iterable"
     ]
