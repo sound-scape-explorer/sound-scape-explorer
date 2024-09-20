@@ -1,9 +1,10 @@
 import type {Config, Data, Layout, PlotlyHTMLElement} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
 import type {AppCandlesProps} from 'src/app/candles/app-candles.vue';
+import {useAppCandlesLayout} from 'src/app/candles/use-app-candles-layout';
+import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDate} from 'src/composables/use-date';
-import {usePlotConfig} from 'src/composables/use-plot-config';
 import {ref} from 'vue';
 
 const container = ref<HTMLDivElement | null>(null);
@@ -13,7 +14,8 @@ const config = ref<Partial<Config> | null>(null);
 const plot = ref<PlotlyHTMLElement | null>(null);
 
 export function useAppCandles(props: AppCandlesProps) {
-  const {generateConfig} = usePlotConfig(props.exportFilename);
+  const {generateConfig} = useBasePlotConfig();
+  const {generateLayout} = useAppCandlesLayout();
   const {plotBackground} = useClientSettings();
   const {convertTimestampToIsoDate} = useDate();
 
@@ -50,42 +52,10 @@ export function useAppCandles(props: AppCandlesProps) {
     return [newData];
   };
 
-  const generateLayout = (padding = 70): Partial<Layout> => {
-    return {
-      plot_bgcolor: plotBackground.value,
-      paper_bgcolor: plotBackground.value,
-      showlegend: false,
-      height: 400,
-      title: props?.title ?? '',
-      margin: {
-        l: padding,
-        r: padding,
-        b: padding * 2,
-        t: padding,
-        pad: 1,
-      },
-      xaxis: {
-        type: props.condensed ? 'category' : undefined,
-        rangeslider: {
-          visible: false,
-        },
-      },
-      yaxis: {
-        title: props.yTitle ?? '',
-      },
-      legend: {
-        xanchor: 'right',
-        yanchor: 'top',
-        x: 1,
-        y: 1,
-      },
-    };
-  };
-
   const render = () => {
     data.value = generateData();
-    layout.value = generateLayout();
-    config.value = generateConfig();
+    layout.value = generateLayout(props);
+    config.value = generateConfig(props.exportFilename);
   };
 
   return {
