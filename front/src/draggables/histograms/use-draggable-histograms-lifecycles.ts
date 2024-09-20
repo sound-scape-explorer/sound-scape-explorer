@@ -1,4 +1,5 @@
 import Plotly, {type Data, type Layout} from 'plotly.js-dist-min';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
@@ -13,6 +14,7 @@ export function useDraggableHistogramsLifecycles() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {getHourFromTimestamp} = useDate();
   const {scale} = useColorsCycling();
+  const {plotBackground} = useClientSettings();
 
   watch([name, over, histogramFunction], async () => {
     if (
@@ -67,12 +69,16 @@ export function useDraggableHistogramsLifecycles() {
       },
     ];
 
+    const overLower = over.value.toLowerCase();
+
     const layout: Partial<Layout> = {
+      plot_bgcolor: plotBackground.value,
+      paper_bgcolor: plotBackground.value,
       bargap: 0.05,
       bargroupgap: 0.2,
-      xaxis: {title: 'Hours'},
+      xaxis: {title: overLower},
       yaxis: {title: histogramFunction.value},
-      title: name.value,
+      title: `${name.value} (${histogramFunction.value} distribution over ${overLower})`,
       width: 600,
     };
 
