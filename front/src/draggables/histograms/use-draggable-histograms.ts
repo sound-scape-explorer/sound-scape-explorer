@@ -1,11 +1,8 @@
 import {useIndicators} from 'src/composables/use-indicators';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import {ref} from 'vue';
 
 const divRef = ref<HTMLDivElement | null>(null);
-
 const name = ref<string | null>(null);
-useRefProvide('histograms/indicatorName', name);
 
 type Over = 'Hours';
 const overs: Over[] = ['Hours'];
