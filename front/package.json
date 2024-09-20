@@ -15,7 +15,7 @@
   "dependencies": {
     "@vueuse/components": "^10.3.0",
     "@vueuse/core": "^10.3.0",
-    "chroma-js": "^2.4.2",
+    "chroma-js": "^3.1.1",
     "colormap": "^2.3.2",
     "comlink": "^4.4.1",
     "dayjs": "^1.11.7",
