@@ -1,4 +1,5 @@
 import numpy as np
+from rich import print
 from sklearn import metrics
 
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
@@ -21,6 +22,9 @@ class SilhouetteDigester(Digester):
             trim_half=True,
         )
 
+        print("---")
+        print(f"{label.index} - {label.property}")
+
         if is_mdm_empty(mdm):
             return silhouette
 
@@ -32,19 +36,28 @@ class SilhouetteDigester(Digester):
                     labcl2 = np.where(dataframe.index == cl2)[0]
                     labcl2_len = len(labcl2)
                     df2 = np.zeros([labcl1_len + labcl2_len, labcl1_len + labcl2_len])
+
                     df2[:labcl1_len, :labcl1_len] = mdm[np.ix_(labcl1, labcl1)]
                     df2[:labcl1_len, labcl1_len:] = mdm[np.ix_(labcl1, labcl2)]
                     df2[labcl1_len:, labcl1_len:] = mdm[np.ix_(labcl2, labcl2)]
                     df2[labcl1_len:, :labcl1_len] = mdm[np.ix_(labcl2, labcl1)]
 
-                    # INFO: this can fail with ValueError
-                    # @see https://stackoverflow.com/questions/51382250/valueerror-number-of-labels-is-1-valid-values-are-2-to-n-samples-1-inclusiv
-                    # TODO: fix if this happens again
-                    silhouette[i, j] = metrics.silhouette_score(
-                        df2,
-                        np.hstack([dataframe.index[labcl1], dataframe.index[labcl2]]),
-                        metric="precomputed",
-                    )
+                    try:
+                        # INFO: this can fail with ValueError
+                        # @see https://stackoverflow.com/questions/51382250/valueerror-number-of-labels-is-1-valid-values-are-2-to-n-samples-1-inclusiv
+                        # TODO: fix if this happens again
+                        silhouette[i, j] = metrics.silhouette_score(
+                            df2,
+                            np.hstack(
+                                [dataframe.index[labcl1], dataframe.index[labcl2]]
+                            ),
+                            metric="precomputed",
+                        )
+                    except ValueError:
+                        silhouette[i, j] = np.nan
+                        print(f"cl1 {cl1}")
+                        print(f"cl2 {cl2}")
+                        print(f"df2 len {len(df2)} - sub len {len(df2[0])}")
 
         silhouette = silhouette + silhouette.T
         silhouette = sort_dataframe(dataframe=silhouette, label=label)
