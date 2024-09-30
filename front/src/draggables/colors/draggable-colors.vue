@@ -148,8 +148,8 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
         <AppInput
           :disabled="isLoading"
           :max="1"
-          :min="0.005"
-          :step="0.005"
+          :min="0.001"
+          :step="0.001"
           align="left"
           injection-key="colors/alphaExcluded"
           size="small"
