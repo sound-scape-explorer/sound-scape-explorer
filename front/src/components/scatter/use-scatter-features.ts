@@ -1,11 +1,10 @@
 import type {Data, PlotType} from 'plotly.js-dist-min';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useDate} from 'src/composables/use-date';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
-import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
@@ -20,14 +19,13 @@ export function useScatterFeatures() {
   const {labelProperties} = useStorageLabels();
   const {reducedFeatures} = useStorageReducedFeatures();
   const {aggregatedLabels} = useStorageAggregatedLabels();
-  const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
-  const {convertTimestampToIsoDate} = useDate();
   const {low, high} = useScatterColorAlpha();
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
   const {isWebGlScatter2d, isSelectedPointHighlighted} = useClientSettings();
   const {filtered} = useScatterGlobalFilter();
   const {currentIntervalIndex} = useIntervalSelector();
+  const {generateHovers} = useScatterHovers();
 
   const isThreeDimensional = computed<boolean>(
     () => reducedFeatures.value?.[0].length === 3 ?? false,
@@ -44,74 +42,6 @@ export function useScatterFeatures() {
 
     return 'scatter';
   });
-
-  const generateHovers = (length: number) => {
-    if (
-      aggregatedIntervalDetails.value === null ||
-      labelProperties.value === null ||
-      aggregatedLabels.value === null
-    ) {
-      throw new Error('Data unavailable');
-    }
-
-    const intervalDetailsPointer = aggregatedIntervalDetails.value;
-    const labelPropertiesPointer = labelProperties.value;
-    const labelValuesPointer = aggregatedLabels.value;
-
-    const hovers = new Array(length);
-    let textLengthMax = -1;
-
-    for (let i = 0; i < length; i += 1) {
-      const offset = 1;
-      const intervalDetails = intervalDetailsPointer[i];
-      const labelValues = labelValuesPointer[i];
-
-      const textLength =
-        offset + intervalDetails.length + labelPropertiesPointer.length;
-      if (textLength > textLengthMax) {
-        textLengthMax = textLength;
-      }
-
-      const texts: string[][] = new Array(textLength);
-
-      // interval index
-      texts[0] = ['Interval', i.toString()];
-
-      // dates
-      for (let iD = 0; iD < intervalDetails.length; iD += 1) {
-        const iDO = iD + offset;
-        const block = intervalDetails[iD];
-        texts[iDO] = ['Date', convertTimestampToIsoDate(block.start)];
-      }
-
-      // user labels
-      for (let p = 0; p < labelPropertiesPointer.length; p += 1) {
-        const pO = p + offset + intervalDetails.length;
-        const property = labelPropertiesPointer[p];
-        const label = labelValues[p];
-        texts[pO] = [property, label];
-      }
-
-      hovers[i] = texts;
-    }
-
-    const template = generateTemplate(textLengthMax);
-
-    return {
-      hovers: hovers,
-      template: template,
-    };
-  };
-
-  const generateTemplate = (length: number) => {
-    let template = '';
-
-    for (let i = 0; i < length; i += 1) {
-      template += `<br><b>%{text[${i}][0]}: </b>%{text[${i}][1]}`;
-    }
-
-    return template;
-  };
 
   const generateCoordinates = () => {
     if (reducedFeatures.value === null) {
