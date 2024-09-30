@@ -209,8 +209,6 @@ export function useScatterFeatures() {
       return [];
     }
 
-    console.log('TRACE FEATURES');
-
     const {colors} = generateColors();
     const {xs, ys, zs} = generateCoordinates();
     const {hovers, template} = generateHovers(xs.length);

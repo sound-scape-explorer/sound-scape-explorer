@@ -91,8 +91,6 @@ export function useViewLoader() {
     filterByTime();
     filterByTemporal();
 
-    renderTraces();
-
     isLoading.value = false;
     close('view');
     isEnabled.value = true;
