@@ -5,7 +5,7 @@ import {useAppPlotLayout} from 'src/app/plot/use-app-plot-layout';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
-import {colors} from 'src/styles/colors';
+import {colorMap} from 'src/styles/color-map';
 import {ref, watch} from 'vue';
 
 export function useAppPlot(props: AppPlotProps) {
@@ -61,7 +61,7 @@ export function useAppPlot(props: AppPlotProps) {
         hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
         marker: {
           // color: props.colors?.[index] ?? undefined,
-          color: colors.green,
+          color: colorMap.green,
           size: props.colors?.[i] ? 6 : 2,
         },
       };

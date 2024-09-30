@@ -10,7 +10,8 @@ import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
-import {colors} from 'src/styles/colors';
+import {colorMap} from 'src/styles/color-map';
+import {computed} from 'vue';
 
 const size2d = 5;
 const size3d = 3;
@@ -28,7 +29,175 @@ export function useScatterFeatures() {
   const {filtered} = useScatterGlobalFilter();
   const {currentIntervalIndex} = useIntervalSelector();
 
-  // TODO: improve me
+  const isThreeDimensional = computed<boolean>(
+    () => reducedFeatures.value?.[0].length === 3 ?? false,
+  );
+
+  const scatterType = computed<PlotType>(() => {
+    if (isThreeDimensional.value) {
+      return 'scatter3d';
+    }
+
+    if (isWebGlScatter2d.value) {
+      return 'scattergl';
+    }
+
+    return 'scatter';
+  });
+
+  const generateHovers = (length: number) => {
+    if (
+      aggregatedIntervalDetails.value === null ||
+      labelProperties.value === null ||
+      aggregatedLabels.value === null
+    ) {
+      throw new Error('Data unavailable');
+    }
+
+    const intervalDetailsPointer = aggregatedIntervalDetails.value;
+    const labelPropertiesPointer = labelProperties.value;
+    const labelValuesPointer = aggregatedLabels.value;
+
+    const hovers = new Array(length);
+    let textLengthMax = -1;
+
+    for (let i = 0; i < length; i += 1) {
+      const offset = 1;
+      const intervalDetails = intervalDetailsPointer[i];
+      const labelValues = labelValuesPointer[i];
+
+      const textLength =
+        offset + intervalDetails.length + labelPropertiesPointer.length;
+      if (textLength > textLengthMax) {
+        textLengthMax = textLength;
+      }
+
+      const texts: string[][] = new Array(textLength);
+
+      // interval index
+      texts[0] = ['Interval', i.toString()];
+
+      // dates
+      for (let iD = 0; iD < intervalDetails.length; iD += 1) {
+        const iDO = iD + offset;
+        const block = intervalDetails[iD];
+        texts[iDO] = ['Date', convertTimestampToIsoDate(block.start)];
+      }
+
+      // user labels
+      for (let p = 0; p < labelPropertiesPointer.length; p += 1) {
+        const pO = p + offset + intervalDetails.length;
+        const property = labelPropertiesPointer[p];
+        const label = labelValues[p];
+        texts[pO] = [property, label];
+      }
+
+      hovers[i] = texts;
+    }
+
+    const template = generateTemplate(textLengthMax);
+
+    return {
+      hovers: hovers,
+      template: template,
+    };
+  };
+
+  const generateTemplate = (length: number) => {
+    let template = '';
+
+    for (let i = 0; i < length; i += 1) {
+      template += `<br><b>%{text[${i}][0]}: </b>%{text[${i}][1]}`;
+    }
+
+    return template;
+  };
+
+  const generateCoordinates = () => {
+    if (reducedFeatures.value === null) {
+      throw new Error('Data unavailable');
+    }
+
+    const features = reducedFeatures.value;
+    const l = features.length;
+
+    const xs: number[] = new Array(l);
+    const ys: number[] = new Array(l);
+    const zs: number[] | null = isThreeDimensional.value ? new Array(l) : null;
+
+    for (let i = 0; i < l; i += 1) {
+      xs[i] = features[i][0];
+      ys[i] = features[i][1];
+
+      if (zs !== null) {
+        zs[i] = features[i][2];
+      }
+    }
+
+    return {
+      xs: xs,
+      ys: ys,
+      zs: zs,
+    };
+  };
+
+  const generateBorders = (length: number) => {
+    const borders: string[] = new Array(length);
+
+    // fill
+    for (let i = 0; i < length; i += 1) {
+      const isExcluded = filtered.value[i] === true;
+      borders[i] = colorMap.border(isExcluded ? low.value : undefined);
+    }
+
+    // is selected and enabled
+    if (
+      currentIntervalIndex.value !== null &&
+      isSelectedPointHighlighted.value
+    ) {
+      borders[currentIntervalIndex.value] = colorMap.selectedBorder;
+    }
+
+    return {
+      borders: borders,
+    };
+  };
+
+  const generateColors = () => {
+    if (scale.value === null) {
+      throw new Error('Data unavailable');
+    }
+
+    const scalePointer = scale.value;
+    const selectedPointer = selected.value;
+    const colors: [number, string][] = new Array(scale.value.length);
+
+    for (let i = 0; i < scale.value.length; i += 1) {
+      colors[i] = [] as unknown as [number, string];
+
+      const rangedIndex = i / (scalePointer.length - 1);
+      colors[i][0] = rangedIndex;
+
+      const isSelected = selectedPointer.indexOf(i) !== -1;
+      if (isSelected) {
+        colors[i][1] = colorMap.selected(high.value);
+        continue;
+      }
+
+      const isExcluded = filtered.value[i] === true;
+      if (isExcluded) {
+        colors[i][1] = colorMap.transparent(low.value);
+        continue;
+      }
+
+      colors[i][1] = scalePointer[i];
+    }
+
+    return {
+      colors: colors,
+    };
+  };
+
   const trace = (): Data[] => {
     if (
       labelProperties.value === null ||
@@ -40,102 +209,31 @@ export function useScatterFeatures() {
       return [];
     }
 
-    const colorScale = scale.value;
-    const pointsSelected = selected.value;
+    console.log('TRACE FEATURES');
 
-    const plotlyColorscale = colorScale.map((color, index) => {
-      let filteredColor = color;
+    const {colors} = generateColors();
+    const {xs, ys, zs} = generateCoordinates();
+    const {hovers, template} = generateHovers(xs.length);
+    const {borders} = generateBorders(xs.length);
 
-      if (filtered.value[index]) {
-        filteredColor = colors.transparent(low.value);
-      }
-
-      if (pointsSelected.indexOf(index) !== -1) {
-        filteredColor = colors.selected(high.value);
-      }
-
-      return [index / (colorScale.length - 1), filteredColor];
-    });
-
-    const isThreeDimensional = reducedFeatures.value[0].length === 3;
-    let scatterType: PlotType;
-
-    if (isThreeDimensional) {
-      scatterType = 'scatter3d';
-    } else if (!isThreeDimensional && isWebGlScatter2d.value) {
-      scatterType = 'scattergl';
-    } else {
-      scatterType = 'scatter';
-    }
-
-    const properties = labelProperties.value;
-
-    const indices = reducedFeatures.value.map((_, i) => i);
-    const texts = indices.map((i) => {
-      if (
-        aggregatedLabels.value === null ||
-        aggregatedIntervalDetails.value === null
-      ) {
-        return 'N/A';
-      }
-
-      const labels = aggregatedLabels.value[i];
-
-      const payload: [string, string][] = [];
-      payload.push(['Interval', i.toString()]);
-
-      const intervalDetails = aggregatedIntervalDetails.value[i];
-      for (const block of intervalDetails) {
-        const blockStartDate = convertTimestampToIsoDate(block.start);
-        payload.push(['Date', blockStartDate.toString()]);
-      }
-
-      for (let p = 0; p < properties.length; p += 1) {
-        const property = properties[p];
-        const label = labels[p];
-
-        payload.push([property, label]);
-      }
-
-      return payload;
-    });
-
-    let hoverTemplate = '';
-    for (let p = 0; p < properties.length; p += 1) {
-      hoverTemplate += `<br><b>%{text[${p}][0]}: </b>%{text[${p}][1]}`;
-    }
-
-    const xs = reducedFeatures.value.map((f) => f[0]);
-    const ys = reducedFeatures.value.map((f) => f[1]);
-    const zs = isThreeDimensional
-      ? reducedFeatures.value.map((f) => f[2])
-      : undefined;
-
-    const borders = new Array(xs.length).fill(colors.border);
-
-    if (
-      currentIntervalIndex.value !== null &&
-      isSelectedPointHighlighted.value
-    ) {
-      borders[currentIntervalIndex.value] = colors.selectedBorder;
-    }
+    const indices = Array.from({length: xs.length}, (_, i) => i);
 
     const trace: Data = {
       x: xs,
       y: ys,
       z: zs,
       name: '',
-      type: scatterType,
+      type: scatterType.value,
       mode: 'markers',
-      text: texts,
-      hovertemplate: hoverTemplate,
+      text: hovers,
+      hovertemplate: template,
       marker: {
-        size: isThreeDimensional ? size3d : size2d,
+        size: isThreeDimensional.value ? size3d : size2d,
         symbol: 'circle',
         opacity: high.value,
         color: indices,
-        colorscale: plotlyColorscale,
-        colors: plotlyColorscale,
+        colorscale: colors,
+        colors: colors,
         line: {
           color: borders,
           width: 2,
