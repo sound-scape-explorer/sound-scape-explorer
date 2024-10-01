@@ -29,6 +29,7 @@ const {
   isHidingMenuOnDraggableToggle,
   isDevEnabled,
   isSelectedPointHighlighted,
+  isPlotAutoMargin,
 } = useClientSettings();
 
 const {audioHost} = useStorageAudioHost();
@@ -62,6 +63,7 @@ useRefProvide(
   'settings/isSelectedPointHighlighted',
   isSelectedPointHighlighted,
 );
+useRefProvide('settings/isPlotAutoMargin', isPlotAutoMargin);
 </script>
 
 <template>
@@ -77,7 +79,7 @@ useRefProvide(
     </div>
 
     <AppSection>
-      <DraggableSettingsItem title="Audio host">
+      <DraggableSettingsItem title="Audio: set audio host">
         <AppInput
           align="left"
           injection-key="settings/audioHost"
@@ -85,7 +87,96 @@ useRefProvide(
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Spectrogram: Color map">
+      <DraggableSettingsItem title="Draggables: Hide menu on display toggle">
+        <AppCheckbox
+          :default="isHidingMenuOnDraggableToggle"
+          injection-key="settings/isHidingMenuOnDraggableToggle"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem
+        :title="`Time: Apply timezone (${
+          settings?.timezone ? settings.timezone : 'disabled'
+        })`"
+      >
+        <AppCheckbox
+          :default="isTimezoneActive"
+          :disabled="!settings?.timezone || !hasTimezone"
+          injection-key="settings/isTimezoneActive"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Time: Apply custom shift (in hours)">
+        <AppInput
+          align="left"
+          injection-key="settings/timeShift"
+          size="small"
+          type="number"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Plots: Set background color">
+        <AppSelect
+          :options="backgrounds"
+          injection-key="settings/plotBackground"
+          size="small"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Plots: Set font size">
+        <AppInput
+          align="left"
+          injection-key="settings/fontSize"
+          size="small"
+          type="number"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Plots: use auto margins">
+        <AppCheckbox
+          :default="isPlotAutoMargin"
+          injection-key="settings/isPlotAutoMargin"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Scatter: Highlight selected point">
+        <AppCheckbox
+          :default="isSelectedPointHighlighted"
+          injection-key="settings/isSelectedPointHighlighted"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Scatter: Open Audio draggable on click">
+        <AppCheckbox
+          :default="isAudioAutoOpen"
+          injection-key="settings/isAudioAutoOpen"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Scatter: Open Details draggable on click">
+        <AppCheckbox
+          :default="isDetailsAutoOpen"
+          injection-key="settings/isDetailsAutoOpen"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Scatter: Use WebGL (2d)">
+        <AppCheckbox
+          :default="isWebGlScatter2d"
+          injection-key="settings/isWebGlScatter2d"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem
+        title="Scatter: Copy to clipboard on selection (2d)"
+      >
+        <AppCheckbox
+          :default="isCopyOnSelect2d"
+          injection-key="settings/isCopyOnSelect2d"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Spectrogram: Set color map">
         <AppSelect
           :options="colormapOptions"
           injection-key="settings/colormap"
@@ -107,94 +198,14 @@ useRefProvide(
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Auto open Audio panel on scatter click">
-        <AppCheckbox
-          :default="isAudioAutoOpen"
-          injection-key="settings/isAudioAutoOpen"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Auto open Details panel on scatter click">
-        <AppCheckbox
-          :default="isDetailsAutoOpen"
-          injection-key="settings/isDetailsAutoOpen"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Plot background">
-        <AppSelect
-          :options="backgrounds"
-          injection-key="settings/plotBackground"
-          size="small"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Plot font size">
-        <AppInput
-          align="left"
-          injection-key="settings/fontSize"
-          size="small"
-          type="number"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem
-        :title="`Apply timezone (${
-          settings?.timezone ? settings.timezone : 'disabled'
-        })`"
-      >
-        <AppCheckbox
-          :default="isTimezoneActive"
-          :disabled="!hasTimezone"
-          injection-key="settings/isTimezoneActive"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Time shift in hours">
-        <AppInput
-          align="left"
-          injection-key="settings/timeShift"
-          size="small"
-          type="number"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Copy on 2d selection">
-        <AppCheckbox
-          :default="isCopyOnSelect2d"
-          injection-key="settings/isCopyOnSelect2d"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Use WebGL for 2d scatters">
-        <AppCheckbox
-          :default="isWebGlScatter2d"
-          injection-key="settings/isWebGlScatter2d"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Hide menu on draggable toggle">
-        <AppCheckbox
-          :default="isHidingMenuOnDraggableToggle"
-          injection-key="settings/isHidingMenuOnDraggableToggle"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Scatter: highlight selected point">
-        <AppCheckbox
-          :default="isSelectedPointHighlighted"
-          injection-key="settings/isSelectedPointHighlighted"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Preview beta features">
+      <DraggableSettingsItem title="Misc: Preview beta features">
         <AppCheckbox
           :default="isPreview"
           injection-key="settings/isPreview"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Enable dev settings">
+      <DraggableSettingsItem title="Misc: Enable dev settings">
         <AppCheckbox
           :default="isDevEnabled"
           injection-key="settings/isDevEnabled"

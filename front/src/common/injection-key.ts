@@ -20,6 +20,7 @@ export type InjectionKey =
   | 'settings/isDevEnabled'
   | 'settings/devAutoLoadView'
   | 'settings/isSelectedPointHighlighted'
+  | 'settings/isPlotAutoMargin'
   | 'indicators/list'
   | 'indicators/selection'
   | 'indicators/display'

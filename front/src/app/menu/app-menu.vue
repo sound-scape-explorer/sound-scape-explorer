@@ -24,7 +24,6 @@ const {menu} = useAppMenu();
         </AppMenuButton>
 
         <AppMenuButton
-          :disabled="!isReady"
           draggable-key="settings"
           text="Settings"
         >

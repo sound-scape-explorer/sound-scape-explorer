@@ -4,7 +4,7 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 
 export function useAppHeatmapLayout() {
   const {width, height, fontSize} = useAppHeatmapSize();
-  const {plotBackground} = useClientSettings();
+  const {plotBackground, isPlotAutoMargin} = useClientSettings();
 
   const createLayout = (title: string): Partial<Layout> => {
     // noinspection SpellCheckingInspection
@@ -33,6 +33,7 @@ export function useAppHeatmapLayout() {
         ticks: '',
         type: 'category',
         tickmode: 'linear',
+        automargin: isPlotAutoMargin.value,
       },
       yaxis: {
         zeroline: false,
@@ -42,6 +43,7 @@ export function useAppHeatmapLayout() {
         ticks: '',
         type: 'category',
         tickmode: 'linear',
+        automargin: isPlotAutoMargin.value,
       },
     };
     return layout;

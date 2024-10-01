@@ -32,7 +32,7 @@ const props = defineProps<Props>();
  * State
  */
 
-const {plotBackground} = useClientSettings();
+const {plotBackground, isPlotAutoMargin} = useClientSettings();
 const {width, height} = useAppHeatmapSize();
 const {createLayout} = useAppHeatmapLayout();
 const {buildData} = useAppHeatmapData();
@@ -86,7 +86,7 @@ const refresh = () => {
 refresh();
 watch([divRef, dataRef, layoutRef], render);
 watch(props, refresh);
-watch([width, height, plotBackground], refresh);
+watch([width, height, plotBackground, isPlotAutoMargin], refresh);
 </script>
 
 <template>
