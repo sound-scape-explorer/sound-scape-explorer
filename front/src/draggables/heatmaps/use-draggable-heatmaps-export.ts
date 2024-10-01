@@ -4,13 +4,13 @@ import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-h
 
 export function useDraggableHeatmapsExport() {
   const {digested} = useStorageDigested();
-  const {x, y, values} = useDraggableHeatmapsChart();
+  const {x, y, series} = useDraggableHeatmapsChart();
 
   const handleClick = () => {
     if (
       digested.value === null ||
       x.value.length === 0 ||
-      values.value.length === 0
+      series.value.length === 0
     ) {
       return;
     }
@@ -23,9 +23,9 @@ export function useDraggableHeatmapsExport() {
       csv.addColumn(x);
     });
 
-    values.value.forEach((vs, index) => {
+    series.value.forEach((vs, index) => {
       csv.createRow();
-      if (values.value.length === 1) {
+      if (series.value.length === 1) {
         csv.addToCurrentRow('value');
       } else if (isPairing) {
         csv.addToCurrentRow(y.value[index]);

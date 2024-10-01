@@ -8,17 +8,19 @@ export interface Digested {
   digester: Digester;
   isPairing: boolean;
   // keys are label properties indexes
+  // TODO: this needs to be improved
   values: {
     [key: string]:
-      | number[][]
+      | number[][] // for 1d digesters
       | {
-          [subKey: string]: number[][];
+          [subKey: string]: number[][]; // for 2d digesters
         };
   };
 }
 
 const digested = ref<Digested | null>(null);
 
+// INFO: digested is a clumsy name for digester data
 export function useStorageDigested() {
   const {read} = useStorageReader();
   const {band} = useBandSelection();

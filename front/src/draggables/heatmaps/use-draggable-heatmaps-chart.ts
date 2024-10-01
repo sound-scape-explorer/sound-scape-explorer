@@ -1,75 +1,100 @@
-import {useStorageDigested} from 'src/composables/use-storage-digested';
+import {
+  type Digested,
+  useStorageDigested,
+} from 'src/composables/use-storage-digested';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useDraggableHeatmapDigester} from 'src/draggables/heatmaps/use-draggable-heatmap-digester';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
-import {computed, ref} from 'vue';
+import {ref} from 'vue';
 
 const title = ref<string>('');
 const x = ref<string[]>([]);
 const y = ref<string[]>([]);
-const values = ref<number[][]>([]);
+const series = ref<number[][]>([]);
 
 export function useDraggableHeatmapsChart() {
-  const {a: labelA, b: labelB} = useDraggableHeatmapsLabels();
+  const {a, b} = useDraggableHeatmapsLabels();
   const {labelProperties, labelSets} = useStorageLabels();
   const {digested} = useStorageDigested();
-  const {digester} = useDraggableHeatmapDigester();
   const {update: updateRange} = useDraggableHeatmapsRange();
 
-  const is1d = computed(
-    () => !digested.value?.isPairing && digester.value && (labelA || labelB),
-  );
-
-  const is2d = computed(
-    () => digested.value?.isPairing && digester.value && labelA && labelB,
-  );
-
-  const update = () => {
-    if (
-      labelProperties.value === null ||
-      labelSets.value === null ||
-      digested.value === null ||
-      labelA.value === null
-    ) {
+  const updateTitle = (
+    digested: Digested,
+    a: string,
+    b: string | null = null,
+  ) => {
+    if (digested.isPairing) {
+      title.value = `${digested.digester.name} - ${a} - ${b}`;
       return;
     }
 
+    title.value = `${digested.digester.name} - ${a}`;
+  };
+
+  const getLabelData = (label: string) => {
+    if (labelProperties.value === null || labelSets.value === null) {
+      throw new Error('Labels unavailable');
+    }
+
+    const index = labelProperties.value.indexOf(label);
+
+    if (index === -1) {
+      throw new Error(`Could not find label property ${label}`);
+    }
+
+    const possibleValues = labelSets.value[index];
+
+    return {
+      index: index,
+      possibleValues: possibleValues,
+    };
+  };
+
+  const updateHeatmapData = () => {
+    if (digested.value === null || a.value === null) {
+      return;
+    }
+
+    updateTitle(digested.value, a.value);
     updateRange(digested.value);
 
-    title.value = `${digested.value.digester.name} - ${labelA.value}`;
-    const aIndex = labelProperties.value.indexOf(labelA.value);
-    x.value = labelSets.value[aIndex];
+    const {index, possibleValues} = getLabelData(a.value);
 
-    // with 2 labels
-    if (digested.value.isPairing && labelB.value !== null) {
-      title.value = `${title.value} - ${labelB.value}`;
-      const bIndex = labelProperties.value.indexOf(labelB.value);
-      y.value = labelSets.value[bIndex];
+    x.value = possibleValues;
+    y.value = [];
 
-      // @ts-expect-error: 7053
-      values.value = digested.value.values[aIndex][bIndex] as number[][];
+    // @ts-expect-error: clumsy typing
+    series.value = digested.value.values[index];
+  };
+
+  const updateHeatmapDataPairing = () => {
+    if (digested.value === null || a.value === null || b.value === null) {
       return;
     }
 
-    // with 1 label
-    const data = digested.value.values[aIndex] as number[][];
-    const is1d = Array.isArray(data[0]) === false;
+    updateTitle(digested.value, a.value, b.value);
+    updateRange(digested.value);
 
-    if (is1d) {
-      values.value = [data as unknown as number[]];
-    } else {
-      values.value = data;
-    }
+    const {index: aIndex, possibleValues: aPossibleValues} = getLabelData(
+      a.value,
+    );
+    const {index: bIndex, possibleValues: bPossibleValues} = getLabelData(
+      b.value,
+    );
+
+    x.value = aPossibleValues;
+    y.value = bPossibleValues;
+
+    // @ts-expect-error: clumsy typing
+    series.value = digested.value.values[aIndex][bIndex];
   };
 
   return {
     title: title,
     x: x,
     y: y,
-    values: values,
-    update: update,
-    is1d: is1d,
-    is2d: is2d,
+    series: series,
+    updateHeatmapData: updateHeatmapData,
+    updateHeatmapDataPairing: updateHeatmapDataPairing,
   };
 }

@@ -6,33 +6,33 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useStorageDigested} from 'src/composables/use-storage-digested';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useDraggableHeatmapDigester} from 'src/draggables/heatmaps/use-draggable-heatmap-digester';
+import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
-import {computed, watch} from 'vue';
 
-const {digested} = useStorageDigested();
-const {labelProperties} = useStorageLabels();
+const {
+  digesterName,
+  options: digesterOptions,
+  isReadyForSelection,
+  isReadyAndSelected,
+  isPairing,
+} = useDraggableHeatmaps();
+
+const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
 const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
 const {resize1by1, resize4by3, resize16by10, resize16by9} = useAppHeatmapSize();
-const {flavors: colorFlavors} = useDraggableHeatmapsColor();
+const {flavor, flavors} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
-const {swap: swapLabels} = useDraggableHeatmapsLabels();
-const {
-  digester,
-  options: digesterOptions,
-  handleChange: handleDigesterChange,
-} = useDraggableHeatmapDigester();
 
-const isSingle = computed(() => !digested.value?.isPairing);
+const {labelProperties} = useStorageLabels();
 
-useRefProvide('digested/digester', digester);
-
-watch(digester, handleDigesterChange);
+useRefProvide('digested/digester', digesterName);
+useRefProvide('digested/labelA', a);
+useRefProvide('digested/labelB', b);
+useRefProvide('digested/colorFlavor', flavor);
 </script>
 
 <template>
@@ -57,7 +57,7 @@ watch(digester, handleDigesterChange);
       />
 
       <AppButton
-        :disabled="isSingle"
+        :disabled="!isReadyForSelection || !isPairing"
         :handle-click="swapLabels"
         icon
         size="small"
@@ -66,7 +66,7 @@ watch(digester, handleDigesterChange);
       </AppButton>
 
       <AppSelect
-        :disabled="isSingle"
+        :disabled="!isReadyForSelection || !isPairing"
         :options="labelProperties ?? []"
         injection-key="digested/labelB"
         placeholder="Label B..."
@@ -78,7 +78,8 @@ watch(digester, handleDigesterChange);
 
     <div class="colors">
       <AppSelect
-        :options="colorFlavors"
+        :disabled="!isReadyAndSelected"
+        :options="flavors"
         injection-key="digested/colorFlavor"
         placeholder="Color flavor..."
         size="small"
@@ -89,6 +90,7 @@ watch(digester, handleDigesterChange);
       <div>
         <NSelect
           v-model:value="rangeIndex"
+          :disabled="!isReadyAndSelected"
           :options="rangeOptions"
           placeholder="Range..."
           size="small"
@@ -100,21 +102,34 @@ watch(digester, handleDigesterChange);
 
     <div class="window">
       <NButtonGroup>
-        <AppButton :handle-click="resize1by1">
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize1by1"
+        >
           <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
         </AppButton>
-        <AppButton :handle-click="resize4by3">
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize4by3"
+        >
           <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
         </AppButton>
-        <AppButton :handle-click="resize16by10">
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize16by10"
+        >
           <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
         </AppButton>
-        <AppButton :handle-click="resize16by9">
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize16by9"
+        >
           <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
         </AppButton>
       </NButtonGroup>
 
       <AppButton
+        :disabled="!isReadyAndSelected"
         :handle-click="handleExportClick"
         icon
         size="small"
