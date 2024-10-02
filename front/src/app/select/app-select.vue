@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const model = useRefInject(props.injectionKey);
 const options = computed(() => convertToNaiveSelectOptions(props.options));
-const hasTooltip = computed<boolean>(() => typeof props.tooltip === 'string');
+const hasTooltip = computed<boolean>(() => typeof props?.tooltip === 'string');
 </script>
 
 <template>
