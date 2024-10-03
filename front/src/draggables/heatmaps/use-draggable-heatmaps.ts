@@ -2,6 +2,7 @@ import {type DigesterName} from 'src/common/digester-name';
 import {useDigesters} from 'src/composables/use-digesters';
 import {useStorageDigested} from 'src/composables/use-storage-digested';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
+import {generateUniqueDigesterSlug} from 'src/utils/generate-unique-digester-slug';
 import {computed, ref} from 'vue';
 
 const digesterName = ref<DigesterName | null>(null);
@@ -38,7 +39,9 @@ export function useDraggableHeatmaps() {
       return [];
     }
 
-    return digesters.value.filter((d) => d.type !== '1d').map((d) => d.name);
+    return digesters.value
+      .filter((d) => d.type !== '1d')
+      .map((d) => generateUniqueDigesterSlug(d));
   });
 
   const handleChange = async () => {
@@ -47,7 +50,7 @@ export function useDraggableHeatmaps() {
     }
 
     const digesterObject = digesters.value.find(
-      (d) => d.name === digesterName.value,
+      (d) => generateUniqueDigesterSlug(d) === digesterName.value,
     );
 
     if (digesterObject === undefined) {
