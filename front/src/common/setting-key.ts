@@ -26,4 +26,5 @@ export enum SettingKey {
   devAutoLoadView = 'sse-settings-devAutoLoadView',
   isSelectedPointHighlighted = 'sse-settings-isSelectedPointHighlighted',
   isPlotAutoMargin = 'sse-settings-isPlotAutoMargin',
+  isDetailedExportName = 'sse-settings-isDetailedExportName',
 }

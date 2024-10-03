@@ -58,6 +58,11 @@ const isPlotAutoMargin = useStorage<boolean>(
   d.isPlotAutoMargin,
 );
 
+const isDetailedExportName = useStorage<boolean>(
+  k.isDetailedExportName,
+  d.isDetailedExportName,
+);
+
 export function useClientSettings() {
   const {audioHost} = useStorageAudioHost();
   const {fontSize} = useAppHeatmapSize();
@@ -86,6 +91,7 @@ export function useClientSettings() {
     isColorMapSwapped.value = d.isColorMapSwapped;
     isSelectedPointHighlighted.value = d.isSelectedPointHighlighted;
     isPlotAutoMargin.value = d.isPlotAutoMargin;
+    isDetailedExportName.value = d.isDetailedExportName;
 
     audioHost.value = d.audioHost;
     fontSize.value = d.fontSize;
@@ -117,5 +123,6 @@ export function useClientSettings() {
     devAutoLoadView: devAutoLoadView,
     isSelectedPointHighlighted: isSelectedPointHighlighted,
     isPlotAutoMargin: isPlotAutoMargin,
+    isDetailedExportName: isDetailedExportName,
   };
 }

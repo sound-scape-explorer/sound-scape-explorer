@@ -2,6 +2,7 @@
 import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
+import {useExportName} from 'src/composables/use-export-name';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
 import DraggableTemporalSidebar from 'src/draggables/temporal/draggable-temporal-sidebar.vue';
@@ -19,6 +20,7 @@ const {candles, plot, render} = useTemporalChart();
 const {period} = useTemporalCandles();
 const {current: currentSites, handleFirstLoad} = useTemporalSites();
 const {filtered} = useScatterGlobalFilter();
+const {generate} = useExportName();
 
 watch(
   [
@@ -52,11 +54,11 @@ watch(indicator, handleFirstLoad);
       <AppPlot
         v-if="!isCandles && plot !== null"
         :colors="plot.colors"
+        :export-filename="generate('indicators', indicator)"
         :labels="plot.labels"
         :values="plot.values"
         :y-title="indicator"
         click-enabled
-        export-filename="indicators"
         hide-range
       />
 
@@ -64,6 +66,7 @@ watch(indicator, handleFirstLoad);
         v-if="isCandles && candles !== null"
         :close="candles.close"
         :condensed="isCondensed"
+        :export-filename="generate('indicators', indicator)"
         :high="candles.high"
         :labels="candles.labels"
         :low="candles.low"
@@ -71,7 +74,6 @@ watch(indicator, handleFirstLoad);
         :timestamps="candles.timestamps"
         :title="period.name"
         :y-title="indicator"
-        export-filename="indicators"
       />
     </div>
   </AppDraggable>

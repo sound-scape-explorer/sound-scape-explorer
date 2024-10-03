@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
+import {useExportName} from 'src/composables/use-export-name';
 import {PLOTLY_SIZE} from 'src/constants';
 import DraggableHeatmapsMenu from 'src/draggables/heatmaps/draggable-heatmaps-menu.vue';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
@@ -13,6 +14,7 @@ const {digesterName, isReadyAndSelected, isPairing} = useDraggableHeatmaps();
 const {flavor} = useDraggableHeatmapsColor();
 const {range} = useDraggableHeatmapsRange();
 const {title, x, y, series} = useDraggableHeatmapsChart();
+const {generate} = useExportName();
 
 useDraggableHeatmapsLifecycles();
 </script>
@@ -27,7 +29,7 @@ useDraggableHeatmapsLifecycles();
     <AppHeatmap
       v-if="isReadyAndSelected"
       :colorscale="flavor"
-      :export-name="digesterName ?? ''"
+      :export-name="generate('heatmap', digesterName ?? '')"
       :range="range"
       :title="title"
       :values="series"

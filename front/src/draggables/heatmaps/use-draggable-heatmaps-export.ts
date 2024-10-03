@@ -1,10 +1,12 @@
 import {Csv} from 'src/common/csv';
+import {useExportName} from 'src/composables/use-export-name';
 import {useStorageDigested} from 'src/composables/use-storage-digested';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
 
 export function useDraggableHeatmapsExport() {
   const {digested} = useStorageDigested();
   const {x, y, series} = useDraggableHeatmapsChart();
+  const {generate} = useExportName();
 
   const handleClick = () => {
     if (
@@ -39,7 +41,8 @@ export function useDraggableHeatmapsExport() {
       });
     });
 
-    csv.download('digested.csv');
+    const name = generate('heatmap');
+    csv.download(name);
   };
 
   return {

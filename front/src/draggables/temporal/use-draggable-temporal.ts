@@ -1,5 +1,6 @@
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/use-date';
+import {useExportName} from 'src/composables/use-export-name';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useTemporal} from 'src/draggables/temporal/use-temporal';
 import {computed, ref} from 'vue';
@@ -28,6 +29,7 @@ export function useDraggableTemporal() {
   const {data} = useTemporal();
   const {convertTimestampToIsoDate} = useDate();
   const {selectIndicator} = useTemporal();
+  const {generate} = useExportName();
 
   const parseIndex = (optionString: string | null): number | null => {
     if (optionString === null) {
@@ -67,7 +69,8 @@ export function useDraggableTemporal() {
       csv.addToCurrentRow(d.values.join('; '));
     }
 
-    csv.download('indicators');
+    const name = generate('indicators');
+    csv.download(name);
   };
 
   const toggleDisplay = () => (isDisplay.value = !isDisplay.value);

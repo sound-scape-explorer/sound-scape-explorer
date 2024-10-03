@@ -30,6 +30,7 @@ const {
   isDevEnabled,
   isSelectedPointHighlighted,
   isPlotAutoMargin,
+  isDetailedExportName,
 } = useClientSettings();
 
 const {audioHost} = useStorageAudioHost();
@@ -64,6 +65,7 @@ useRefProvide(
   isSelectedPointHighlighted,
 );
 useRefProvide('settings/isPlotAutoMargin', isPlotAutoMargin);
+useRefProvide('settings/isDetailedExportName', isDetailedExportName);
 </script>
 
 <template>
@@ -195,6 +197,15 @@ useRefProvide('settings/isPlotAutoMargin', isPlotAutoMargin);
         <AppCheckbox
           :default="isLegendOverflow"
           injection-key="settings/legendOverflow"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem
+        title="Export name: Add band and integration details"
+      >
+        <AppCheckbox
+          :default="isDetailedExportName"
+          injection-key="settings/isDetailedExportName"
         />
       </DraggableSettingsItem>
 

@@ -31,4 +31,5 @@ export const SettingDefault = {
   devAutoLoadView: false,
   isSelectedPointHighlighted: true,
   isPlotAutoMargin: false,
+  isDetailedExportName: true,
 };
