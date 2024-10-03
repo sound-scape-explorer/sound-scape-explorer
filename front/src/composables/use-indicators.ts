@@ -1,5 +1,5 @@
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
-import {buildUniqueIndicatorIdentifier} from 'src/utils/build-unique-indicator-identifier';
+import {generateUniqueExtractorSlug} from 'src/utils/generate-unique-extractor-slug';
 import {computed} from 'vue';
 
 export function useIndicators() {
@@ -10,7 +10,9 @@ export function useIndicators() {
       return null;
     }
 
-    return aggregatedIndicators.value.map(buildUniqueIndicatorIdentifier);
+    return aggregatedIndicators.value.map(({extractor}) =>
+      generateUniqueExtractorSlug(extractor),
+    );
   });
 
   return {

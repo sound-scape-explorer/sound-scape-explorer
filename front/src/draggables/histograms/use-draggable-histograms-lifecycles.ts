@@ -5,7 +5,7 @@ import {useDate} from 'src/composables/use-date';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-histograms';
-import {buildUniqueIndicatorIdentifier} from 'src/utils/build-unique-indicator-identifier';
+import {generateUniqueExtractorSlug} from 'src/utils/generate-unique-extractor-slug';
 import {watch} from 'vue';
 
 export function useDraggableHistogramsLifecycles() {
@@ -28,7 +28,7 @@ export function useDraggableHistogramsLifecycles() {
     }
 
     const results = aggregatedIndicators.value.filter(
-      (aI) => buildUniqueIndicatorIdentifier(aI) === name.value,
+      ({extractor}) => generateUniqueExtractorSlug(extractor) === name.value,
     );
 
     if (results.length !== 1) {
