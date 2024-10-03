@@ -6,7 +6,6 @@ import {ref} from 'vue';
 
 export interface Digested {
   digester: Digester;
-  isPairing: boolean;
   // keys are label properties indexes
   // TODO: this needs to be improved
   values: {
@@ -39,11 +38,8 @@ export function useStorageDigested() {
         digester.index,
       );
 
-      const isPairing = !Array.isArray(values[0]);
-
       digested.value = {
         digester: digester,
-        isPairing: isPairing,
         values: values,
       };
     });

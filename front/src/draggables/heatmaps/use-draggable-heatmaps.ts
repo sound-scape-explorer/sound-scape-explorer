@@ -10,7 +10,9 @@ export function useDraggableHeatmaps() {
   const {digested, readDigested} = useStorageDigested();
   const {a, b} = useDraggableHeatmapsLabels();
 
-  const isPairing = computed<boolean>(() => digested.value?.isPairing ?? false);
+  const isPairing = computed<boolean>(
+    () => digested.value?.digester.type === '2d-pairing' ?? false,
+  );
 
   const isReadyForSelection = computed<boolean>(
     () => digesterName.value !== null,

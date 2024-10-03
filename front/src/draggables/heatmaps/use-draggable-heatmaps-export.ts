@@ -15,8 +15,9 @@ export function useDraggableHeatmapsExport() {
       return;
     }
 
+    const isPairing = digested.value.digester.type === '2d-pairing';
+
     const csv = new Csv();
-    const isPairing = digested.value.isPairing;
     csv.addColumn('y');
 
     x.value.forEach((x) => {
