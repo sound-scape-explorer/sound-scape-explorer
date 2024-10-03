@@ -1,6 +1,11 @@
-import type {Config, Data, Layout, PlotlyHTMLElement} from 'plotly.js-dist-min';
+import {
+  type Config,
+  type Data,
+  type Layout,
+  type PlotlyHTMLElement,
+} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
-import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
+import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useAppPlotLayout} from 'src/app/plot/use-app-plot-layout';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';

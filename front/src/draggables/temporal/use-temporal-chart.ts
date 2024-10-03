@@ -1,5 +1,5 @@
-import type {AppCandlesProps} from 'src/app/candles/app-candles.vue';
-import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
+import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
+import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';

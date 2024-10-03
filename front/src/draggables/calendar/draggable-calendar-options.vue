@@ -5,7 +5,7 @@ import {
   PlaySkipBackOutline,
   PlaySkipForwardOutline,
 } from '@vicons/ionicons5';
-import type {Dayjs} from 'dayjs';
+import {type Dayjs} from 'dayjs';
 import {
   NButton,
   NButtonGroup,

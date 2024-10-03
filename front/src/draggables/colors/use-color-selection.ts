@@ -3,7 +3,7 @@ import {SettingDefault} from 'src/common/setting-default';
 import {SettingKey} from 'src/common/setting-key';
 import {useIndicators} from 'src/composables/use-indicators';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import type {ColorFlavor} from 'src/constants';
+import {type ColorFlavor} from 'src/constants';
 import {computed, ref} from 'vue';
 
 type ColorCategory = 'Default' | 'Labels' | 'Indicators';

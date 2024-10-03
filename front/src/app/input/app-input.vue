@@ -3,7 +3,7 @@ import {NInput, NInputNumber, NSpace, NTooltip} from 'naive-ui';
 import {type InjectionKey} from 'src/common/injection-key';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefInject} from 'src/composables/use-ref-inject';
-import type {NaiveSize} from 'src/types';
+import {type NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
 interface Props {

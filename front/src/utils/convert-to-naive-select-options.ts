@@ -1,4 +1,4 @@
-import type {SelectMixedOption} from 'naive-ui/es/select/src/interface';
+import {type SelectMixedOption} from 'naive-ui/es/select/src/interface';
 
 export interface NaiveSelectOption {
   label: string;

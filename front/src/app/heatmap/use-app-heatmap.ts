@@ -1,5 +1,5 @@
-import type {Config, Layout} from 'plotly.js-dist-min';
-import type {HeatmapData} from 'src/app/heatmap/use-app-heatmap-data';
+import {type Config, type Layout} from 'plotly.js-dist-min';
+import {type HeatmapData} from 'src/app/heatmap/use-app-heatmap-data';
 import {ref} from 'vue';
 
 const div = ref<HTMLDivElement | null>(null);

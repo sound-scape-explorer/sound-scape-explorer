@@ -1,4 +1,4 @@
-import type {PlotMouseEvent} from 'plotly.js-dist-min';
+import {type PlotMouseEvent} from 'plotly.js-dist-min';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 
 export function useScatterClick() {

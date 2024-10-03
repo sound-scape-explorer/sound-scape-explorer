@@ -1,5 +1,5 @@
 import {type Position} from '@vueuse/core';
-import type {Ref} from 'vue';
+import {type Ref} from 'vue';
 
 const defaultPos = 100;
 
@@ -7,6 +7,10 @@ export function useAppDraggableBounds(container: Ref<HTMLElement | null>) {
   const getPrimitives = () => {
     if (container.value === null) {
       throw new Error('Container is null');
+    }
+
+    if (window.visualViewport === null) {
+      throw new Error('Window viewport is unavailable');
     }
 
     const width = container.value.clientWidth;

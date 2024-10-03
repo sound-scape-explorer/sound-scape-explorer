@@ -1,5 +1,5 @@
 import {parseSelectionOption} from 'src/utils/parse-selection-option';
-import type {Ref} from 'vue';
+import {type Ref} from 'vue';
 
 interface ViewItem {
   index: number;

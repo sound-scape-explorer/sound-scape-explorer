@@ -1,4 +1,4 @@
-import type {Data} from 'plotly.js-dist-min';
+import {type Data} from 'plotly.js-dist-min';
 import {TRACE_WIDTH_2D, TRACE_WIDTH_3D} from 'src/constants';
 
 type GenerateTraceDefaultDataOptions = Pick<

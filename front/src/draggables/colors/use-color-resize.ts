@@ -1,4 +1,4 @@
-import type {Scale} from 'chroma-js';
+import {type Scale} from 'chroma-js';
 
 export function useColorResize() {
   const resize = (scale: Scale, size: number): [number, number, number][] => {

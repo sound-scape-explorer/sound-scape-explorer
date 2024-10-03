@@ -1,4 +1,4 @@
-import type {Data, PlotType} from 'plotly.js-dist-min';
+import {type Data, type PlotType} from 'plotly.js-dist-min';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';

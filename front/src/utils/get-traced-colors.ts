@@ -1,5 +1,5 @@
-import type {Scale} from 'chroma-js';
-import type {TracedRelativeTimestamps} from 'src/composables/use-trajectories-data';
+import {type Scale} from 'chroma-js';
+import {type TracedRelativeTimestamps} from 'src/composables/use-trajectories-data';
 
 import {getTrajectoryRelativeOptions} from './get-trajectory-relative-options';
 

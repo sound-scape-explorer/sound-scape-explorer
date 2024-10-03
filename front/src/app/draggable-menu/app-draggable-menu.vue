@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type {NaiveSize} from 'src/types';
+import {type NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
 interface Props {

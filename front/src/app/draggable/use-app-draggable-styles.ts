@@ -1,4 +1,4 @@
-import type {AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
+import {type AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
 import {useDraggables} from 'src/composables/use-draggables';
 import {computed, ref} from 'vue';
 

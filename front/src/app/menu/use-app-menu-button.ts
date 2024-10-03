@@ -1,5 +1,5 @@
 import {NButton} from 'naive-ui';
-import type {AppMenuItemProps} from 'src/app/menu/app-menu-button.vue';
+import {type AppMenuItemProps} from 'src/app/menu/app-menu-button.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
 import {computed, ref} from 'vue';

@@ -1,5 +1,5 @@
 import {useLocalStorage} from '@vueuse/core';
-import type {AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
+import {type AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
 import {ref} from 'vue';
 
 export function useAppDraggable(props: AppDraggableProps) {

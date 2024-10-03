@@ -16,7 +16,7 @@ import {
   StatsChartOutline,
   TimerOutline,
 } from '@vicons/ionicons5';
-import type {Component} from 'vue';
+import {type Component} from 'vue';
 
 interface Menu {
   [key: string]: Component;

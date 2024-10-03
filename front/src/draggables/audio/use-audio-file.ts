@@ -2,7 +2,7 @@ import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import type {BlockDetails} from 'src/composables/use-storage-aggregated-interval-details';
+import {type BlockDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {TIMEOUT} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';

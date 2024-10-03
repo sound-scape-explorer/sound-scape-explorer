@@ -1,4 +1,4 @@
-import type {DraggableKey} from 'src/composables/use-draggables';
+import {type DraggableKey} from 'src/composables/use-draggables';
 
 export enum Shortcuts {
   draggableToggle = 'Esc',

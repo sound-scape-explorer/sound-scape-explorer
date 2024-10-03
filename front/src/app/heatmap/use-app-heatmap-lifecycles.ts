@@ -1,4 +1,4 @@
-import type {AppHeatmapProps} from 'src/app/heatmap/app-heatmap.vue';
+import {type AppHeatmapProps} from 'src/app/heatmap/app-heatmap.vue';
 import {useAppHeatmap} from 'src/app/heatmap/use-app-heatmap';
 import {useAppHeatmapRenderer} from 'src/app/heatmap/use-app-heatmap-renderer';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';

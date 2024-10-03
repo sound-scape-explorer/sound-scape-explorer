@@ -1,4 +1,4 @@
-import type {Data} from 'plotly.js-dist-min';
+import {type Data} from 'plotly.js-dist-min';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterFeatures} from 'src/components/scatter/use-scatter-features';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';

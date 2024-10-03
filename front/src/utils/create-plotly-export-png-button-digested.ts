@@ -1,7 +1,6 @@
-import {type ModeBarButtonAny} from 'plotly.js-dist-min';
-import Plotly from 'plotly.js-dist-min';
+import Plotly, {type ModeBarButtonAny} from 'plotly.js-dist-min';
 
-import type {PlotlyExportOptions} from './create-plotly-export-svg-button';
+import {type PlotlyExportOptions} from './create-plotly-export-svg-button';
 
 export function createPlotlyExportPngButtonDigested(
   options: PlotlyExportOptions,

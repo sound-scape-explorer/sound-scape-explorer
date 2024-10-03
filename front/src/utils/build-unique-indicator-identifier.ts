@@ -1,4 +1,4 @@
-import type {AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
+import {type AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
 
 export function buildUniqueIndicatorIdentifier(
   aI: AggregatedIndicator,
