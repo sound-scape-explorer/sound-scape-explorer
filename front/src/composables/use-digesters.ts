@@ -1,9 +1,12 @@
+import {type DigesterName} from 'src/common/digester-name';
+import {type DigesterType} from 'src/common/digester-type-map';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {ref} from 'vue';
 
 export interface Digester {
   index: number;
-  name: string;
+  name: DigesterName;
+  type: DigesterType;
 }
 
 const digesters = ref<Digester[] | null>(null);

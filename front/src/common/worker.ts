@@ -1,5 +1,7 @@
 import {type Dataset, type File as H5File, type Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
+import {type DigesterName} from 'src/common/digester-name';
+import {digesterTypeMap} from 'src/common/digester-type-map';
 import {StorageMode} from 'src/common/storage-mode';
 import {StoragePath} from 'src/common/storage-path';
 import {type StorageSettings} from 'src/common/storage-settings';
@@ -777,15 +779,18 @@ export async function readDigesters(file: File): Promise<Digester[]> {
   const dataset = h5.get(path) as Dataset;
   const names = dataset.to_array() as string[];
 
-  const digesters: Digester[] = [];
+  const digesters: Digester[] = new Array(names.length);
 
-  for (let index = 0; index < names.length; index += 1) {
+  for (let i = 0; i < names.length; i += 1) {
+    const name = names[i] as DigesterName;
+
     const digester: Digester = {
-      index: index,
-      name: names[index],
+      index: i,
+      name: name,
+      type: digesterTypeMap[name],
     };
 
-    digesters.push(digester);
+    digesters[i] = digester;
   }
 
   return digesters;
