@@ -3,6 +3,7 @@ import {
   useStorageDigested,
 } from 'src/composables/use-storage-digested';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
 import {ref} from 'vue';
@@ -17,13 +18,14 @@ export function useDraggableHeatmapsChart() {
   const {labelProperties, labelSets} = useStorageLabels();
   const {digested} = useStorageDigested();
   const {update: updateRange} = useDraggableHeatmapsRange();
+  const {isPairing} = useDraggableHeatmaps();
 
   const updateTitle = (
     digested: Digested,
     a: string,
     b: string | null = null,
   ) => {
-    if (digested.isPairing) {
+    if (isPairing.value) {
       title.value = `${digested.digester.name} - ${a} - ${b}`;
       return;
     }
