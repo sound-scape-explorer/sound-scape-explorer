@@ -9,6 +9,8 @@ import {useExportName} from 'src/composables/use-export-name';
 import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {computed, ref} from 'vue';
 
+// TODO: split me
+
 const {selectRelativeTrajectories, relativeTrajectories} =
   useRelativeTrajectories();
 const {generate} = useExportName();
@@ -156,8 +158,6 @@ const handleExportClick = () => {
   align-items: flex-start;
   flex-direction: column;
   gap: 0.5rem;
-
-  min-width: 20rem;
 }
 
 .export {

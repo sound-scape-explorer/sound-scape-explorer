@@ -1,33 +1,25 @@
 import {type Layout} from 'plotly.js-dist-min';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
 
 export function useAppPlotLayout() {
   const {plotBackground} = useClientSettings();
+  const {generatePlotlyMargins} = usePlotlyMargins();
 
-  const generateLayout = (
-    props: AppPlotProps,
-    padding = 70,
-  ): Partial<Layout> => {
+  const generateLayout = (props: AppPlotProps): Partial<Layout> => {
     return {
       title: props.title,
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
       showlegend: !!props.legend,
       clickmode: 'event',
-      height: 400,
-      margin: {
-        l: padding,
-        r: padding,
-        b: props.hideXLegend ? padding : padding * 2,
-        t: padding,
-        pad: 1,
-      },
+      margin: generatePlotlyMargins(),
       xaxis: {
         title: props.xTitle,
         showticklabels: !props.hideXLegend,
         rangeslider: {
-          visible: !props.hideRange,
+          visible: props.showRange,
         },
       },
       yaxis: {

@@ -1,27 +1,19 @@
 import {type Layout} from 'plotly.js-dist-min';
 import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
 
 export function useAppCandlesLayout() {
   const {plotBackground} = useClientSettings();
+  const {generatePlotlyMargins} = usePlotlyMargins();
 
-  const generateLayout = (
-    props: AppCandlesProps,
-    padding = 70,
-  ): Partial<Layout> => {
+  const generateLayout = (props: AppCandlesProps): Partial<Layout> => {
     return {
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
       showlegend: false,
-      height: 400,
-      title: props?.title ?? '',
-      margin: {
-        l: padding,
-        r: padding,
-        b: padding * 2,
-        t: padding,
-        pad: 1,
-      },
+      title: props.title,
+      margin: generatePlotlyMargins(),
       xaxis: {
         type: props.condensed ? 'category' : undefined,
         rangeslider: {
@@ -30,12 +22,6 @@ export function useAppCandlesLayout() {
       },
       yaxis: {
         title: props.yTitle ?? '',
-      },
-      legend: {
-        xanchor: 'right',
-        yanchor: 'top',
-        x: 1,
-        y: 1,
       },
     };
   };

@@ -44,7 +44,10 @@ watch(indicator, update);
 </script>
 
 <template>
-  <AppDraggableMenu size="medium">
+  <AppDraggableMenu
+    class="draggableTemporalMenuContainer"
+    size="medium"
+  >
     <h2>Select</h2>
 
     <div>
@@ -151,6 +154,10 @@ watch(indicator, update);
 </template>
 
 <style lang="scss" scoped>
+.draggableTemporalMenuContainer {
+  width: 48em;
+}
+
 .row {
   display: flex;
   justify-content: space-between;
