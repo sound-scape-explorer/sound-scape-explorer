@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   error: false,
 });
 
-const hasTooltip = computed(() => typeof props.tooltip === 'string');
+const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 const classNames = computed<string>(() => {
   let string = '';
 
