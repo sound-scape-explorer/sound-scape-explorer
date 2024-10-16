@@ -35,7 +35,7 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
     });
 
     data.value = [trace];
-    layout.value = createLayout(props.title ?? '');
+    layout.value = createLayout(props.title);
     config.value = generateConfig(props.exportName);
   };
 

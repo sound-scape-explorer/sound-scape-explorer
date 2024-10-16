@@ -19,9 +19,11 @@ export function useAppCandlesLayout() {
         rangeslider: {
           visible: false,
         },
+        automargin: true,
       },
       yaxis: {
         title: props.yTitle ?? '',
+        automargin: true,
       },
     };
   };

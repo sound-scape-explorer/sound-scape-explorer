@@ -1,3 +1,4 @@
+// TODO: enum?
 export type InjectionKey =
   | 'view/reducer'
   | 'view/band'
@@ -20,7 +21,6 @@ export type InjectionKey =
   | 'settings/isDevEnabled'
   | 'settings/devAutoLoadView'
   | 'settings/isSelectedPointHighlighted'
-  | 'settings/isPlotAutoMargin'
   | 'settings/isDetailedExportName'
   | 'indicators/list'
   | 'indicators/selection'

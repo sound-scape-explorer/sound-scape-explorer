@@ -29,7 +29,6 @@ const {
   isHidingMenuOnDraggableToggle,
   isDevEnabled,
   isSelectedPointHighlighted,
-  isPlotAutoMargin,
   isDetailedExportName,
 } = useClientSettings();
 
@@ -64,7 +63,6 @@ useRefProvide(
   'settings/isSelectedPointHighlighted',
   isSelectedPointHighlighted,
 );
-useRefProvide('settings/isPlotAutoMargin', isPlotAutoMargin);
 useRefProvide('settings/isDetailedExportName', isDetailedExportName);
 </script>
 
@@ -131,13 +129,6 @@ useRefProvide('settings/isDetailedExportName', isDetailedExportName);
           injection-key="settings/fontSize"
           size="small"
           type="number"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Plots: use auto margins">
-        <AppCheckbox
-          :default="isPlotAutoMargin"
-          injection-key="settings/isPlotAutoMargin"
         />
       </DraggableSettingsItem>
 

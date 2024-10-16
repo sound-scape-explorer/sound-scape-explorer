@@ -21,9 +21,11 @@ export function useAppPlotLayout() {
         rangeslider: {
           visible: props.showRange,
         },
+        automargin: true,
       },
       yaxis: {
         title: props.yTitle,
+        automargin: true,
       },
       legend: {
         xanchor: 'right',

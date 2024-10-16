@@ -9,14 +9,11 @@ export function useAppHeatmapLifecycles(props: AppHeatmapProps) {
   const {div, data, layout} = useAppHeatmap();
   const {create, render} = useAppHeatmapRenderer(props);
   const {fontSize, width, height} = useAppHeatmapSize();
-  const {plotBackground, isPlotAutoMargin} = useClientSettings();
+  const {plotBackground} = useClientSettings();
 
   // on init
   watch([div, data, layout], create);
 
   // on update
-  watch(
-    [props, fontSize, width, height, plotBackground, isPlotAutoMargin],
-    render,
-  );
+  watch([props, fontSize, width, height, plotBackground], render);
 }

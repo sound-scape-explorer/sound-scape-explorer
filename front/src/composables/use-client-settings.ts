@@ -53,11 +53,6 @@ const isSelectedPointHighlighted = useStorage<boolean>(
   d.isSelectedPointHighlighted,
 );
 
-const isPlotAutoMargin = useStorage<boolean>(
-  k.isPlotAutoMargin,
-  d.isPlotAutoMargin,
-);
-
 const isDetailedExportName = useStorage<boolean>(
   k.isDetailedExportName,
   d.isDetailedExportName,
@@ -90,7 +85,6 @@ export function useClientSettings() {
     isWebGlScatter2d.value = d.isWebGlScatter2d;
     isColorMapSwapped.value = d.isColorMapSwapped;
     isSelectedPointHighlighted.value = d.isSelectedPointHighlighted;
-    isPlotAutoMargin.value = d.isPlotAutoMargin;
     isDetailedExportName.value = d.isDetailedExportName;
 
     audioHost.value = d.audioHost;
@@ -122,7 +116,6 @@ export function useClientSettings() {
     isDevEnabled: isDevEnabled,
     devAutoLoadView: devAutoLoadView,
     isSelectedPointHighlighted: isSelectedPointHighlighted,
-    isPlotAutoMargin: isPlotAutoMargin,
     isDetailedExportName: isDetailedExportName,
   };
 }

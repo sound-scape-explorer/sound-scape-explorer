@@ -1,13 +1,14 @@
 import {type Layout} from 'plotly.js-dist-min';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
 
 export function useAppHeatmapLayout() {
   const {width, height, fontSize} = useAppHeatmapSize();
-  const {plotBackground, isPlotAutoMargin} = useClientSettings();
+  const {plotBackground} = useClientSettings();
+  const {generatePlotlyMargins} = usePlotlyMargins();
 
-  const createLayout = (title: string): Partial<Layout> => {
-    // noinspection SpellCheckingInspection
+  const createLayout = (title?: string): Partial<Layout> => {
     const layout: Partial<Layout> = {
       title: title,
       paper_bgcolor: plotBackground.value,
@@ -16,15 +17,9 @@ export function useAppHeatmapLayout() {
       showlegend: false,
       width: width.value,
       height: height.value,
+      margin: generatePlotlyMargins(),
       font: {
         size: fontSize.value,
-      },
-      margin: {
-        l: 100,
-        r: 100,
-        b: 100,
-        t: 100,
-        pad: 1,
       },
       xaxis: {
         zeroline: false,
@@ -33,7 +28,7 @@ export function useAppHeatmapLayout() {
         ticks: '',
         type: 'category',
         tickmode: 'linear',
-        automargin: isPlotAutoMargin.value,
+        automargin: true,
       },
       yaxis: {
         zeroline: false,
@@ -43,7 +38,7 @@ export function useAppHeatmapLayout() {
         ticks: '',
         type: 'category',
         tickmode: 'linear',
-        automargin: isPlotAutoMargin.value,
+        automargin: true,
       },
     };
     return layout;

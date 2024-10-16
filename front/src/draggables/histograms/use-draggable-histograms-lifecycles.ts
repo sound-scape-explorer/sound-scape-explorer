@@ -2,6 +2,7 @@ import Plotly, {type Data, type Layout} from 'plotly.js-dist-min';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
+import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-histograms';
@@ -15,6 +16,7 @@ export function useDraggableHistogramsLifecycles() {
   const {getHourFromTimestamp} = useDate();
   const {scale} = useColorsCycling();
   const {plotBackground} = useClientSettings();
+  const {generatePlotlyMargins} = usePlotlyMargins();
 
   watch([name, over, histogramFunction], async () => {
     if (
@@ -76,8 +78,9 @@ export function useDraggableHistogramsLifecycles() {
       paper_bgcolor: plotBackground.value,
       bargap: 0.05,
       bargroupgap: 0.2,
-      xaxis: {title: overLower},
-      yaxis: {title: histogramFunction.value},
+      margin: generatePlotlyMargins(),
+      xaxis: {title: overLower, automargin: true},
+      yaxis: {title: histogramFunction.value, automargin: true},
       title: `${name.value} (${histogramFunction.value} distribution over ${overLower})`,
       width: 600,
     };
