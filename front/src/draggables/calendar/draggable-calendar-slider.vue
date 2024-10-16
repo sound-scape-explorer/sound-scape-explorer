@@ -9,7 +9,7 @@ import {useRanges} from 'src/composables/use-ranges';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {SLIDER_LIMITS} from 'src/constants';
-import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
+import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {mapRange} from 'src/utils/map-range';
 import {computed, ref, watch} from 'vue';
 
@@ -19,7 +19,7 @@ const {ranges} = useRanges();
 const {reducer} = useReducerSelection();
 const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 const {isLoading} = useScatterLoading();
-const {isAllSelected, duration, current, min, max} = useDraggableTime();
+const {isAllSelected, duration, current, min, max} = useDraggableCalendar();
 
 const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();

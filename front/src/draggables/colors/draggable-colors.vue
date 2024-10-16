@@ -46,10 +46,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
     draggable-key="colors"
     suspense="view"
   >
-    <AppDraggableMenu
-      class="menu"
-      size="large"
-    >
+    <AppDraggableMenu>
       <h2>With</h2>
 
       <div class="two grow">
@@ -172,6 +169,15 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
         />
       </div>
 
+      <h2>Flavor</h2>
+
+      <AppSelect
+        :disabled="isLoading"
+        :options="COLOR_FLAVORS"
+        injection-key="colors/flavor"
+        size="small"
+      />
+
       <h2
         v-if="!isLabels || isEnabled"
         style="display: flex; gap: 8px"
@@ -195,30 +201,21 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
       >
         <ColorsGradients />
       </div>
-
-      <h2>Flavor</h2>
-
-      <AppSelect
-        :disabled="isLoading"
-        :options="COLOR_FLAVORS"
-        injection-key="colors/flavor"
-        size="small"
-      />
     </AppDraggableMenu>
   </AppDraggable>
 </template>
 
 <style lang="scss" scoped>
-.menu {
-  width: 34em;
-}
-
 .two {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  width: 100%;
+  gap: $p0;
+  width: $s0;
+
+  & > * {
+    width: 100%;
+  }
 }
 
 .grow {
@@ -229,7 +226,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
 
 .indicator-buttons {
   display: flex;
-  gap: 0.5em;
+  gap: $p0;
 }
 
 .gradients {

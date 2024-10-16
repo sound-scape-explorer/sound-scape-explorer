@@ -5,7 +5,6 @@ import {
   PlaySkipBackOutline,
   PlaySkipForwardOutline,
 } from '@vicons/ionicons5';
-import {type Dayjs} from 'dayjs';
 import {
   NButton,
   NButtonGroup,
@@ -15,130 +14,38 @@ import {
   NTooltip,
 } from 'naive-ui';
 import AppInput from 'src/app/input/app-input.vue';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useDate} from 'src/composables/use-date';
-import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useSettings} from 'src/composables/use-settings';
-import {Shortcuts} from 'src/composables/use-shortcuts';
-import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
-import {computed, type ComputedRef, ref, watch} from 'vue';
+import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
+import {useDraggableCalendarLifecycles} from 'src/draggables/calendar/use-draggable-calendar-lifecycles';
+import {useDraggableCalendarShortcuts} from 'src/draggables/calendar/use-draggable-calendar-shortcuts';
+import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
 
 const {settings} = useSettings();
-const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
-const {filterByTime} = useScatterFilterTime();
 const {isLoading} = useScatterLoading();
-const {duration, current, isAllSelected, min} = useDraggableTime();
+const {
+  dateStartRef,
+  dateEndRef,
+  duration,
+  isAllSelected,
+  uiDisabled,
+  durations,
+  isPlaying,
+} = useDraggableCalendar();
+
+const {
+  skipTimeForward,
+  skipTimeBackward,
+  togglePlaying,
+  setWindowDuration,
+  handleDateStartUpdate,
+} = useDraggableCalendarTransport();
+
 useRefProvide('time/duration', duration);
 
-// todo: refactor this gigantic file
-
-const uiDisabled: ComputedRef<boolean> = computed(
-  () => isLoading.value || isAllSelected.value,
-);
-
-const dateStartRef = computed<Dayjs>(() => {
-  let t = current.value;
-
-  if (isAllSelected.value) {
-    t = min.value;
-  }
-
-  return convertTimestampToDate(t * 1000);
-});
-
-const dateEndRef = computed<string>(() => {
-  const endDate = dateStartRef.value.unix() * 1000 + duration.value * 1000;
-  return convertTimestampToIsoDate(endDate);
-});
-
-interface Duration {
-  name: string;
-  duration: number;
-}
-
-const durations: Duration[] = [
-  {name: '10min', duration: 600},
-  {name: '1h', duration: 3600},
-  {name: '24h', duration: 3600 * 24},
-  {name: '1w', duration: 3600 * 24 * 7},
-];
-
-const isPlaying = ref<boolean>(false);
-let interval: null | number = null;
-
-const setWindowDuration = (newDuration: number) => {
-  duration.value = newDuration;
-  filterByTime();
-};
-
-const blurButton = (event?: MouseEvent) => {
-  if (typeof event === 'undefined') {
-    return;
-  }
-
-  const button = event.target as HTMLButtonElement;
-  button.blur();
-};
-
-const togglePlaying = (event?: MouseEvent) => {
-  if (isAllSelected.value) {
-    return;
-  }
-
-  isPlaying.value = !isPlaying.value;
-  filterByTime();
-  blurButton(event);
-};
-
-const skipTimeForward = (event?: MouseEvent) => {
-  current.value += duration.value;
-  filterByTime();
-  blurButton(event);
-};
-
-const skipTimeBackward = (event?: MouseEvent) => {
-  current.value -= duration.value;
-  filterByTime();
-  blurButton(event);
-};
-
-const start = () => {
-  if (interval) {
-    return;
-  }
-
-  interval = setInterval(skipTimeForward, 500);
-};
-
-const stop = () => {
-  if (interval === null) {
-    return;
-  }
-
-  clearInterval(interval);
-  interval = null;
-};
-
-watch(isPlaying, () => {
-  if (isPlaying.value) {
-    start();
-    return;
-  }
-
-  stop();
-});
-
-const handleDateStartUpdate = (t: number) => {
-  current.value = t / 1000;
-};
-
-// TODO: This has to move to use-app-shortcuts.ts but requires composable methods
-const {registerKey} = useGlobalKeyboard();
-registerKey(Shortcuts.calendarNext, () => skipTimeForward());
-registerKey(Shortcuts.calendarPrevious, () => skipTimeBackward());
-registerKey(Shortcuts.calendarToggle, () => togglePlaying());
+useDraggableCalendarLifecycles();
+useDraggableCalendarShortcuts();
 </script>
 
 <template>
@@ -240,7 +147,6 @@ registerKey(Shortcuts.calendarToggle, () => togglePlaying());
         >
           <!--suppress VueUnrecognizedSlot -->
           <template #trigger>
-            <!-- TODO: Replace naive ui date picker with custom to support timezones -->
             <NDatePicker
               :disabled="uiDisabled"
               :on-update:value="handleDateStartUpdate"

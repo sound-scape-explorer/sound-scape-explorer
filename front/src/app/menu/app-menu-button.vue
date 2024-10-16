@@ -11,7 +11,8 @@ export interface AppMenuItemProps {
 }
 
 const props = defineProps<AppMenuItemProps>();
-const {button, handleClick, classNames} = useAppMenuButton(props);
+const {button, handleClick, isActive, isSelected, isHidden} =
+  useAppMenuButton(props);
 const {getKey} = useKeyboardShortcuts();
 </script>
 
@@ -24,8 +25,13 @@ const {getKey} = useKeyboardShortcuts();
     <template #trigger>
       <NButton
         ref="button"
-        :class="classNames"
+        :class="{
+          'app-menu-button__active': isActive,
+          'app-menu-button__selected': isSelected,
+          'app-menu-button__hidden': isHidden,
+        }"
         :disabled="props.disabled"
+        class="app-menu-button"
         size="small"
         @click="handleClick"
       >

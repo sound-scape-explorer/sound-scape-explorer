@@ -144,5 +144,3 @@ const {block, duration} = useAudioFile();
     />
   </div>
 </template>
-
-<style lang="scss" scoped></style>

@@ -155,7 +155,7 @@ watch(indicator, update);
 
 <style lang="scss" scoped>
 .draggableTemporalMenuContainer {
-  width: 48em;
+  width: $s2;
 }
 
 .row {
@@ -166,12 +166,7 @@ watch(indicator, update);
   > div {
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: $p0;
   }
-}
-
-$s: 0.9;
-.toggle {
-  transform: scale3d($s, $s, $s);
 }
 </style>

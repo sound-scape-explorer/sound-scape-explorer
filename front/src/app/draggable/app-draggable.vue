@@ -7,7 +7,6 @@ import AppIcon from 'src/app/app-icon.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
-import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
 import {useAppDraggableSuspense} from 'src/app/draggable/use-app-draggable-suspense';
 import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
@@ -22,8 +21,8 @@ const props = withDefaults(defineProps<AppDraggableProps>(), {
   suspense: null,
 });
 
-const {container, storage, drag} = useAppDraggable(props);
-const {classes} = useAppDraggableStyles(props);
+const {container, storage, drag, isZoomed, isSelected, isClosed, hidden} =
+  useAppDraggable(props);
 const {suspense} = useAppDraggableSuspense(props);
 const {check} = useAppDraggableBounds(container);
 
@@ -54,116 +53,106 @@ useAppDraggableLifecycles({
 </script>
 
 <template>
-  <div>
-    <div
-      ref="container"
-      :class="classes"
-      :style="style"
-    >
-      <div class="button close">
-        <AppButton
-          :handle-click="() => close(props.draggableKey)"
-          grow
-          icon
-          size="tiny"
-        >
-          <CloseOutline />
-        </AppButton>
-      </div>
-
-      <div class="title content">
-        <div class="title container">
-          <div class="title header">
-            <AppIcon v-if="icon !== null">
-              <icon />
-            </AppIcon>
-            <span>
-              {{ capitalizeFirstLetter(props.draggableKey) }}
-            </span>
-          </div>
-
-          <div
-            ref="drag"
-            class="drag"
-          >
-            <span>👋</span>
-          </div>
-        </div>
-      </div>
-
-      <AppCondition
-        :wait-if="suspense.while"
-        :wait-message="suspense.message"
+  <div
+    ref="container"
+    :class="{
+      appDraggableZoomed: isZoomed,
+      appDraggableClosed: isClosed,
+      appDraggableSelected: isSelected,
+      appDraggableHidden: hidden,
+    }"
+    :style="style"
+    class="appDraggableContainer"
+  >
+    <div class="appDraggableCloseButton">
+      <AppButton
+        :handle-click="() => close(props.draggableKey)"
+        grow
+        icon
+        size="tiny"
       >
-        <div class="content main">
-          <slot />
-        </div>
-      </AppCondition>
+        <CloseOutline />
+      </AppButton>
     </div>
+
+    <div class="appDraggableHeader">
+      <div class="appDraggableHeaderTitle">
+        <AppIcon v-if="icon !== null">
+          <icon />
+        </AppIcon>
+        <span>
+          {{ capitalizeFirstLetter(props.draggableKey) }}
+        </span>
+      </div>
+
+      <div
+        ref="drag"
+        class="appDraggableHeaderHandle"
+      >
+        <span>👋</span>
+      </div>
+    </div>
+
+    <AppCondition
+      :wait-if="suspense.while"
+      :wait-message="suspense.message"
+    >
+      <div class="appDraggableContent">
+        <slot />
+      </div>
+    </AppCondition>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.draggable {
+.appDraggableContainer {
   position: fixed;
   z-index: $appDraggableIndexDefaultLayer;
-
   justify-content: flex-start;
-
-  padding: 0.6rem 0.9rem 0.6rem 2.5rem;
-  min-width: 20em;
+  padding: $p0 $p0 $p0 $p0 * 5;
 
   user-select: none;
 
   opacity: 1;
-
+  box-shadow: $p0 $p0 $p0 * 2 $g0 * -1 $greyDeep;
   border: 1px solid $grey;
-
   background-color: $white;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur($p0 + $g0);
 
-  box-shadow: 10px 10px 20px -3px $greyDeep;
   @include borderRadius;
   @include transition-app-draggable;
 }
 
-.content {
+.appDraggableContent {
   cursor: default;
+  margin: $p0 0 0 0;
 }
 
-.zoomable {
+.appDraggableZoomable {
   max-height: 20%;
 }
 
-.zoomed {
+.appDraggableZoomed {
   max-height: 30%;
 }
 
-.closed {
-  //animation: FadeOut 120ms ease-in-out forwards;
+.appDraggableClosed {
   display: none;
 }
 
-.button {
+.appDraggableCloseButton {
   position: fixed;
-  left: 0.5rem;
+  left: $p0;
+  top: $p0;
 
   z-index: $appDraggableIndexButtonsLayer;
 }
 
-.button.close {
-  top: 0.5rem;
-}
-
-.title {
-  font-weight: bold;
-}
-
-.title.container {
+.appDraggableHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 25%;
+  gap: $p0 * 12;
 }
 
 @keyframes oscillate {
@@ -178,13 +167,13 @@ useAppDraggableLifecycles({
   }
 }
 
-.drag {
+.appDraggableHeaderHandle {
   display: flex;
   justify-content: center;
   align-items: center;
 
   width: 100%;
-  min-width: 100px;
+  min-width: $p0 * 12;
 
   background-color: $greyLight;
   border-radius: 10px;
@@ -213,37 +202,34 @@ hr {
   opacity: 20%;
 }
 
-.main {
-  margin-top: 10px;
-}
-
-.hidden {
+.appDraggableHidden {
   display: none;
 }
 
-$titleHeaderSize: 1.3em;
-.title.header {
+.appDraggableHeaderTitle {
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: $p0;
   @include transition-color;
 
   > i {
-    width: $titleHeaderSize;
-    height: $titleHeaderSize;
+    width: 100%;
+    height: 100%;
+    transform: translate3d(1px, 1px, 0);
 
-    * {
-      width: $titleHeaderSize;
-      height: $titleHeaderSize;
+    svg {
+      width: $p0 * 2;
+      height: $p0 * 2;
     }
   }
 }
 
-.selected {
+.appDraggableSelected {
   z-index: $appDraggableIndexSelectedLayer;
 
-  .title.header > i {
+  .appDraggableHeaderTitle > i {
     color: $emerald;
   }
 }

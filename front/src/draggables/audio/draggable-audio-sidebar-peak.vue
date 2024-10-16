@@ -2,10 +2,8 @@
 import {NButton} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
-import {useDraggableAudioSidebarPeak} from 'src/draggables/audio/use-draggable-audio-sidebar-peak';
 import {watch} from 'vue';
 
-const {classNames} = useDraggableAudioSidebarPeak();
 const {isClipping, fade} = useAudioAnalyser();
 watch(isClipping, fade);
 </script>
@@ -13,7 +11,8 @@ watch(isClipping, fade);
 <template>
   <AppTooltip tooltip="Peak detection">
     <NButton
-      :class="classNames"
+      :class="{peaking: isClipping}"
+      class="peak"
       disabled
       size="tiny"
     >
@@ -25,9 +24,9 @@ watch(isClipping, fade);
 <style lang="scss" scoped>
 .peak {
   position: absolute;
-  bottom: -405px;
+  bottom: -394px;
 
-  width: 2em;
+  width: $p0 * 3;
 
   background: $green;
   transition: none;

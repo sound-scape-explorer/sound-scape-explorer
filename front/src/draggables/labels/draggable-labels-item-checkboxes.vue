@@ -96,8 +96,8 @@ const isActiveIdRef = computed<string>(() => {
 .checkbox {
   width: 100%;
 
-  padding-left: 4px;
-  border-radius: 4px;
+  padding-left: $g0;
+  border-radius: $g0;
 
   @include transition-checkboxes;
 

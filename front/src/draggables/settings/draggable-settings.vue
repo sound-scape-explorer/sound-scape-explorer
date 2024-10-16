@@ -1,29 +1,23 @@
 <script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppCheckbox from 'src/app/app-checkbox.vue';
-import AppSection from 'src/app/app-section.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useSettings} from 'src/composables/use-settings';
-import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
-import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
 import DraggableSettingsDev from 'src/draggables/settings/draggable-settings-dev.vue';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
+import {useDraggableSettingsProviders} from 'src/draggables/settings/use-draggable-settings-providers';
 
 const {
   resetAll,
   isDetailsAutoOpen,
   isAudioAutoOpen,
-  plotBackground,
   isPreview,
   isTimezoneActive,
-  timeshift,
   isCopyOnSelect2d,
   isWebGlScatter2d,
   isHidingMenuOnDraggableToggle,
@@ -32,43 +26,18 @@ const {
   isDetailedExportName,
 } = useClientSettings();
 
-const {audioHost} = useStorageAudioHost();
-const {fontSize} = useAppHeatmapSize();
-const {colormap} = useSpectrogramColormap();
 const {settings, hasTimezone} = useSettings();
 const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
 const colormapOptions = SPECTROGRAM_COLOR_MAPS;
 const backgrounds = Object.values(PLOT_BACKGROUND);
 
-useRefProvide('settings/audioHost', audioHost);
-useRefProvide('settings/fontSize', fontSize);
-useRefProvide('settings/timeShift', timeshift);
-useRefProvide('settings/colormap', colormap);
-useRefProvide('settings/plotBackground', plotBackground);
-useRefProvide('settings/isDetailsAutoOpen', isDetailsAutoOpen);
-useRefProvide('settings/isAudioAutoOpen', isAudioAutoOpen);
-useRefProvide('settings/decibelsDisplay', isDecibelsDisplay);
-useRefProvide('settings/legendOverflow', isLegendOverflow);
-useRefProvide('settings/isTimezoneActive', isTimezoneActive);
-useRefProvide('settings/isCopyOnSelect2d', isCopyOnSelect2d);
-useRefProvide('settings/isWebGlScatter2d', isWebGlScatter2d);
-useRefProvide(
-  'settings/isHidingMenuOnDraggableToggle',
-  isHidingMenuOnDraggableToggle,
-);
-useRefProvide('settings/isPreview', isPreview);
-useRefProvide('settings/isDevEnabled', isDevEnabled);
-useRefProvide(
-  'settings/isSelectedPointHighlighted',
-  isSelectedPointHighlighted,
-);
-useRefProvide('settings/isDetailedExportName', isDetailedExportName);
+useDraggableSettingsProviders();
 </script>
 
 <template>
   <AppDraggable draggable-key="settings">
-    <div class="reset">
+    <div class="draggableSettingsReload">
       <AppButton
         :handle-click="resetAll"
         grow
@@ -78,7 +47,7 @@ useRefProvide('settings/isDetailedExportName', isDetailedExportName);
       </AppButton>
     </div>
 
-    <AppSection>
+    <div class="draggableSettingsContainer">
       <DraggableSettingsItem title="Audio: set audio host">
         <AppInput
           align="left"
@@ -172,6 +141,7 @@ useRefProvide('settings/isDetailedExportName', isDetailedExportName);
       <DraggableSettingsItem title="Spectrogram: Set color map">
         <AppSelect
           :options="colormapOptions"
+          class="draggableSettingsSpectroColors"
           injection-key="settings/colormap"
           size="small"
         />
@@ -215,15 +185,26 @@ useRefProvide('settings/isDetailedExportName', isDetailedExportName);
       </DraggableSettingsItem>
 
       <DraggableSettingsDev />
-    </AppSection>
+    </div>
   </AppDraggable>
 </template>
 
 <style lang="scss" scoped>
-.reset {
+.draggableSettingsReload {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
+}
+
+.draggableSettingsContainer {
+  width: $s0;
+  height: $s0;
+  padding-top: $p0;
+  overflow: auto;
+  @include noScroll;
+}
+
+.draggableSettingsSpectroColors {
+  width: $p0 * 12;
 }
 </style>

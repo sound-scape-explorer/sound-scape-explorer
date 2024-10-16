@@ -35,20 +35,6 @@ const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 const isNumber = computed(() => props.type === 'number');
 const isString = computed(() => props.type === 'string');
 const model = useRefInject(props.injectionKey);
-
-const classNames = computed<string>(() => {
-  switch (props.align) {
-    case 'center': {
-      return 'app-input__center';
-    }
-    case 'left': {
-      return 'app-input__left';
-    }
-    case 'right': {
-      return 'app-input__right';
-    }
-  }
-});
 </script>
 
 <template>
@@ -63,7 +49,11 @@ const classNames = computed<string>(() => {
         <NInputNumber
           v-if="isNumber"
           v-model:value="model"
-          :class="classNames"
+          :class="{
+            'app-input__center': props.align === 'center',
+            'app-input__left': props.align === 'left',
+            'app-input__right': props.align === 'right',
+          }"
           :disabled="props.disabled"
           :max="props.max"
           :min="props.min"
@@ -77,7 +67,11 @@ const classNames = computed<string>(() => {
         <NInput
           v-if="isString"
           v-model:value="model"
-          :class="classNames"
+          :class="{
+            'app-input__center': props.align === 'center',
+            'app-input__left': props.align === 'left',
+            'app-input__right': props.align === 'right',
+          }"
           :disabled="props.disabled"
           :placeholder="props.placeholder"
           :size="props.size"
@@ -92,7 +86,11 @@ const classNames = computed<string>(() => {
     <NInputNumber
       v-if="!hasTooltip && isNumber"
       v-model:value="model"
-      :class="classNames"
+      :class="{
+        'app-input__center': props.align === 'center',
+        'app-input__left': props.align === 'left',
+        'app-input__right': props.align === 'right',
+      }"
       :disabled="props.disabled"
       :max="props.max"
       :min="props.min"
@@ -107,7 +105,11 @@ const classNames = computed<string>(() => {
     <NInput
       v-if="!hasTooltip && isString"
       v-model:value="model"
-      :class="classNames"
+      :class="{
+        'app-input__center': props.align === 'center',
+        'app-input__left': props.align === 'left',
+        'app-input__right': props.align === 'right',
+      }"
       :disabled="props.disabled"
       :placeholder="props.placeholder"
       :size="props.size"

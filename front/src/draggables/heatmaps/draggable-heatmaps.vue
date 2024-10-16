@@ -20,11 +20,11 @@ useDraggableHeatmapsLifecycles();
 </script>
 
 <template>
-  <AppDraggable draggable-key="heatmaps">
-    <DraggableHeatmapsMenu
-      :style="{minWidth: `${PLOTLY_SIZE}px`}"
-      class="menu"
-    />
+  <AppDraggable
+    class="container"
+    draggable-key="heatmaps"
+  >
+    <DraggableHeatmapsMenu />
 
     <AppHeatmap
       v-if="isReadyAndSelected"
@@ -38,3 +38,9 @@ useDraggableHeatmapsLifecycles();
     />
   </AppDraggable>
 </template>
+
+<style lang="scss" scoped>
+.container {
+  width: $s2;
+}
+</style>

@@ -59,7 +59,7 @@ export type ColorFlavor = 'Spectral' | 'Accent' | 'Dark2';
 export const COLOR_FLAVORS: ColorFlavor[] = ['Spectral', 'Accent', 'Dark2'];
 
 // Plotly instances for Indicators and Digesters.
-export const PLOTLY_SIZE = 600;
+export const PLOTLY_SIZE = 520;
 
 export enum PLOT_BACKGROUND {
   transparent = 'transparent',

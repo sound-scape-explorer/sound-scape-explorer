@@ -6,6 +6,7 @@ import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-
 
 <template>
   <AppDraggable
+    class="draggableCalendarContainer"
     draggable-key="calendar"
     suspense="view"
   >
@@ -13,3 +14,9 @@ import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-
     <DraggableCalendarSlider />
   </AppDraggable>
 </template>
+
+<style lang="scss" scoped>
+.draggableCalendarContainer {
+  width: $s2;
+}
+</style>

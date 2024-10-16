@@ -25,7 +25,7 @@ const handleChange = () => {
 
 <template>
   <AppDraggable draggable-key="open">
-    <div class="container">
+    <div class="draggableOpenContainer">
       <input
         ref="inputRef"
         :disabled="isLocked"
@@ -50,10 +50,11 @@ const handleChange = () => {
 </template>
 
 <style lang="scss" scoped>
-.container {
-  display: grid;
-  grid-template-columns: 1fr 8rem;
-  gap: 1rem;
+.draggableOpenContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: $s0;
 }
 
 .red {
@@ -61,8 +62,13 @@ const handleChange = () => {
 }
 
 .details {
-  max-width: 45em;
+  width: $s0;
+  max-height: $h0;
+
   text-align: right;
   text-wrap: stable;
+
+  overflow: auto;
+  @include noScroll;
 }
 </style>

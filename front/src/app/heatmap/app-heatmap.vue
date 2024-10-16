@@ -1,8 +1,6 @@
 <script lang="ts" setup="">
-import {useElementSize} from '@vueuse/core';
 import {useAppHeatmap} from 'src/app/heatmap/use-app-heatmap';
 import {useAppHeatmapLifecycles} from 'src/app/heatmap/use-app-heatmap-lifecycles';
-import {watch} from 'vue';
 
 export interface AppHeatmapProps {
   title?: string;

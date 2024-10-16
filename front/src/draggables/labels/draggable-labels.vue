@@ -3,19 +3,8 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import DraggableLabelsItems from 'src/draggables/labels/draggable-labels-item-container.vue';
 import DraggableLabelsSidebar from 'src/draggables/labels/draggable-labels-sidebar.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
-import {computed} from 'vue';
 
 const {isExpanded} = useDraggableLabels();
-
-const classes = computed<string>(() => {
-  let string = 'container';
-
-  if (isExpanded.value) {
-    string += ' expand';
-  }
-
-  return string;
-});
 </script>
 
 <template>
@@ -25,22 +14,25 @@ const classes = computed<string>(() => {
   >
     <DraggableLabelsSidebar />
 
-    <div :class="classes">
+    <div
+      :class="{draggableLabelsExpanded: isExpanded}"
+      class="draggableLabelsContainer"
+    >
       <DraggableLabelsItems />
     </div>
   </AppDraggable>
 </template>
 
 <style lang="scss" scoped>
-.container {
+.draggableLabelsContainer {
   display: flex;
   flex-direction: column;
-  height: 14rem;
   overflow-y: auto;
+  height: $h0;
+  @include noScroll;
 }
 
-.expand {
-  height: 100%;
-  max-height: 70vh;
+.draggableLabelsExpanded {
+  height: min($hMax, $h2);
 }
 </style>

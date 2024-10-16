@@ -106,25 +106,33 @@ useRefProvide('digested/colorFlavor', flavor);
           :disabled="!isReadyAndSelected"
           :handle-click="resize1by1"
         >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
+          <NIcon>
+            <ResizeOutline /> </NIcon
+          >&nbsp;1:1
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize4by3"
         >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
+          <NIcon>
+            <ResizeOutline /> </NIcon
+          >&nbsp;4:3
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize16by10"
         >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
+          <NIcon>
+            <ResizeOutline /> </NIcon
+          >&nbsp;16:10
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize16by9"
         >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+          <NIcon>
+            <ResizeOutline /> </NIcon
+          >&nbsp;16:9
         </AppButton>
       </NButtonGroup>
 
@@ -145,14 +153,14 @@ useRefProvide('digested/colorFlavor', flavor);
 <style lang="scss" scoped>
 .labels {
   display: grid;
-  grid-template-columns: 1fr 4rem 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 1fr $p0 * 7 1fr;
+  gap: $p0;
 }
 
 .colors {
   display: grid;
-  grid-template-columns: 1fr 4rem 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 1fr $p0 * 7 1fr;
+  gap: $p0;
 }
 
 .window {

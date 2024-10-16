@@ -58,8 +58,12 @@ const hidden = ref<boolean>(false);
 
 export function useDraggables() {
   const toggle = (key: DraggableKey): void => {
-    selected.value = key;
-    store[key] = !store[key];
+    if (store[key]) {
+      close(key);
+      return;
+    }
+
+    open(key);
   };
 
   const close = (key: DraggableKey) => {

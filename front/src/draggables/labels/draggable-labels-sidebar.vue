@@ -42,8 +42,8 @@ const {count} = useLabelsInfo();
 
 <style lang="scss" scoped>
 .info {
-  width: 2em;
-  height: 2em;
+  width: $p0 * 3;
+  height: $p0 * 3;
 
   font-size: 0.9em;
 

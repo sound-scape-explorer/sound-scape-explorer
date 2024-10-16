@@ -9,7 +9,7 @@ import {useAudioRateWatcher} from 'src/draggables/audio/use-audio-rate-watcher';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurferMounter} from 'src/draggables/audio/use-wavesurfer-mounter';
 
-const {waveform, spectrogram, loadingClassNames} = useDraggableAudio();
+const {waveform, spectrogram, isLoading} = useDraggableAudio();
 
 useWavesurferMounter();
 useAudioFileWatcher();
@@ -21,7 +21,10 @@ useAudioRateWatcher();
     draggable-key="audio"
     suspense="scatterClick"
   >
-    <div :class="loadingClassNames">
+    <div
+      :class="{'loading-hidden': !isLoading}"
+      class="loading"
+    >
       <AppIcon>
         <RefreshOutline class="spin" />
       </AppIcon>
@@ -48,8 +51,7 @@ useAudioRateWatcher();
 .player {
   display: flex;
   flex-direction: column;
-
-  width: 40rem;
+  width: $s2;
 }
 
 .spectrogram {
@@ -57,7 +59,7 @@ useAudioRateWatcher();
 }
 
 .mt {
-  margin-top: 10px;
+  margin-top: $p0;
 }
 
 .loading {
@@ -74,7 +76,7 @@ useAudioRateWatcher();
   font-size: 100px;
 
   background-color: $whiteOpaque;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur($p0);
   @include borderRadius;
 }
 

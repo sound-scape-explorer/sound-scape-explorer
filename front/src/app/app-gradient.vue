@@ -17,14 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
   width: 1,
 });
 
-const paddingBottomRef = computed(() => {
-  if (!props.legendMin && !props.legendMed && !props.legendMax) {
-    return '0';
-  } else {
-    return '15px';
-  }
-});
-
 const tooltipTextDefaultValue = '';
 const tooltipText = ref<string>(tooltipTextDefaultValue);
 
@@ -63,7 +55,7 @@ function leaveStep() {
 </script>
 
 <template>
-  <div class="gradient">
+  <div class="gradientShift">
     <span
       v-for="(element, index) in props.colors"
       :style="{'backgroundColor': element, '--width': `${width}%`}"
@@ -84,17 +76,14 @@ function leaveStep() {
 </template>
 
 <style lang="scss" scoped>
-.gradient {
+.gradientShift {
   position: relative;
-  padding-bottom: v-bind(paddingBottomRef);
-  transform: translateY(5px);
-
-  width: 100%;
+  margin-top: $p0;
 }
 
 .step {
   display: inline-block;
-  height: 20px;
+  height: $p0 * 3;
   width: var(--width);
 
   cursor: crosshair;
@@ -108,13 +97,14 @@ function leaveStep() {
   display: flex;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
+  font-size: $p0 + 1px;
+  bottom: -$p0 - 1px;
 }
 
 .domain.min {
   position: absolute;
   left: 0;
-  font-size: 11px;
-  bottom: 3px;
 }
 
 .domain.med {
@@ -122,27 +112,23 @@ function leaveStep() {
   right: 25%;
   left: 25%;
   text-align: center;
-  font-size: 11px;
-  bottom: 3px;
 }
 
 .domain.max {
   position: absolute;
   right: 0;
-  font-size: 11px;
-  bottom: 3px;
 }
 
 .tooltip {
   position: absolute;
 
-  width: 3rem;
-  height: 2rem;
+  width: $p0 * 6;
+  height: $p0 * 3;
 
   background-color: white;
   border: 1px solid black;
 
-  top: calc(-2rem - 3px);
+  top: -$p0 * 3;
 
   display: flex;
   justify-content: center;

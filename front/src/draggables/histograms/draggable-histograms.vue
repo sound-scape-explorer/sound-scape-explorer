@@ -28,7 +28,7 @@ useDraggableHistogramsLifecycles();
     class="container"
     draggable-key="histograms"
   >
-    <AppDraggableMenu size="large">
+    <AppDraggableMenu>
       <h2>With</h2>
       <AppSelect
         :options="names ?? []"

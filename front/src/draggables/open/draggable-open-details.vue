@@ -143,18 +143,17 @@ const timelineOrigin = computed<string>(() => {
 
 <style lang="scss" scoped>
 h2 {
-  margin: 0.5em 0;
-  width: fit-content;
-  padding: 0.1em 0.4em;
-  border-radius: 3px;
+  margin: $p0 0;
+  padding: $g0 $p0;
+  border-radius: $g0;
   font-weight: bold;
 }
 
 .yellow {
-  background: #ffffa6;
+  background: $olive;
 }
 
 .blue {
-  background: #b4c7dc;
+  background: $violet;
 }
 </style>

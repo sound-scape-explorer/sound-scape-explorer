@@ -27,27 +27,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const hasTooltip = computed(() => typeof props?.tooltip === 'string');
-const classNames = computed<string>(() => {
-  let string = '';
-
-  if (props.grow) {
-    string += ' grow';
-  }
-
-  if (props.growCol) {
-    string += ' growCol';
-  }
-
-  if (props.active) {
-    string += ' active';
-  }
-
-  if (props.error) {
-    string += ' error';
-  }
-
-  return string;
-});
 </script>
 
 <template>
@@ -59,7 +38,12 @@ const classNames = computed<string>(() => {
     <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
       <NButton
-        :class="classNames"
+        :class="{
+          grow: props.grow,
+          growCol: props.growCol,
+          active: props.active,
+          error: props.error,
+        }"
         :disabled="props.disabled"
         :size="props.size"
         @click="props.handleClick"
@@ -75,7 +59,12 @@ const classNames = computed<string>(() => {
 
   <NButton
     v-if="!hasTooltip"
-    :class="classNames"
+    :class="{
+      grow: props.grow,
+      growCol: props.growCol,
+      active: props.active,
+      error: props.error,
+    }"
     :disabled="props.disabled"
     :size="props.size"
     @click="props.handleClick"

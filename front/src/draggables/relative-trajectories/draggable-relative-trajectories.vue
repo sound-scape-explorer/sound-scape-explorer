@@ -157,7 +157,8 @@ const handleExportClick = () => {
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: $p0;
+  width: $s2;
 }
 
 .export {

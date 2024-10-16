@@ -53,7 +53,7 @@ onMounted(autoselectDev);
 <template>
   <AppDraggable draggable-key="view">
     <AppDraggableMenu
-      class="container"
+      class="draggableViewContainer"
       size="medium"
     >
       <h2>Reducer</h2>
@@ -119,8 +119,8 @@ onMounted(autoselectDev);
 </template>
 
 <style lang="scss" scoped>
-.container {
-  min-width: 30em;
+.draggableViewContainer {
+  width: $s0;
 }
 
 .last-line {
@@ -133,6 +133,10 @@ onMounted(autoselectDev);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.2em;
+  gap: $g0;
+
+  svg {
+    transform: translate3d(0, 1px, 0);
+  }
 }
 </style>
