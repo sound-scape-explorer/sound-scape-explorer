@@ -152,7 +152,7 @@ useAppDraggableLifecycles({
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $p0 * 12;
+  gap: $p0 * 4;
 }
 
 @keyframes oscillate {
@@ -173,7 +173,7 @@ useAppDraggableLifecycles({
   align-items: center;
 
   width: 100%;
-  min-width: $p0 * 12;
+  max-width: $p0 * 40;
 
   background-color: $greyLight;
   border-radius: 10px;
