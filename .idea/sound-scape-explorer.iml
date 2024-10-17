@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/visualisation/out" />
       <excludeFolder url="file://$MODULE_DIR$/visualisation/audio" />
       <excludeFolder url="file://$MODULE_DIR$/visualisation/front" />
+      <excludeFolder url="file://$MODULE_DIR$/front/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
