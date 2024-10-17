@@ -9,11 +9,17 @@ import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-tempor
 import {useDraggableTemporalLifecycles} from 'src/draggables/temporal/use-draggable-temporal-lifecycles';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
 import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
+import {computed} from 'vue';
 
-const {indicator, isCandles, isCondensed, isDisplay} = useDraggableTemporal();
+const {indicator, isCandles, isCondensed, isDisplay, display} =
+  useDraggableTemporal();
 const {candles, plot} = useTemporalChart();
 const {period} = useTemporalCandles();
 const {generate} = useExportName();
+
+const plotTitle = computed<string>(
+  () => `${indicator.value} - ${display.value.toLowerCase()}`,
+);
 
 useDraggableTemporalLifecycles();
 </script>
@@ -36,7 +42,7 @@ useDraggableTemporalLifecycles();
         :colors="plot.colors"
         :export-filename="generate('indicators', indicator)"
         :labels="plot.labels"
-        :title="period.name"
+        :title="plotTitle"
         :values="plot.values"
         :y-title="indicator"
         click-enabled
@@ -52,7 +58,7 @@ useDraggableTemporalLifecycles();
         :low="candles.low"
         :open="candles.open"
         :timestamps="candles.timestamps"
-        :title="period.name"
+        :title="`${plotTitle} - ${period.name}`"
         :y-title="indicator"
       />
     </div>

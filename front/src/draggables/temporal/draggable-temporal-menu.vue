@@ -163,6 +163,6 @@ watch(indicator, update);
 }
 
 .draggableTemporalMenuDisplaySelection {
-  width: $p0 * 11;
+  width: $p0 * 13;
 }
 </style>

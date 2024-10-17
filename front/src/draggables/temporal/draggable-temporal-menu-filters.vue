@@ -69,8 +69,7 @@ useRefProvide('indicators/filterTo', to);
         placement="bottom"
       >
         <div>
-          <b>{{ filteredCount }}</b>
-          points excluded
+          <b>{{ filteredCount }}</b> excluded
         </div>
       </AppTooltip>
     </div>
@@ -79,7 +78,9 @@ useRefProvide('indicators/filterTo', to);
 
 <style lang="scss" scoped>
 .info {
-  font-size: 0.9em;
+  font-size: 0.78em;
+  width: $p0 * 4;
+  text-wrap: nowrap;
 
   b {
     color: $emerald;
