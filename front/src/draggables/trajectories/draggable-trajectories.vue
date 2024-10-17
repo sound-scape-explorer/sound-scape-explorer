@@ -6,6 +6,7 @@ import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vu
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useRefProvide} from 'src/composables/use-ref-provide';
@@ -27,7 +28,7 @@ const {renderTraces} = useScatterTraces();
 watch(isFused, renderTraces);
 watch(current, update);
 
-useRefProvide('trajectories/fuse', isFused);
+useRefProvide(InjectionKey.trajectoriesFuse, isFused);
 </script>
 
 <template>

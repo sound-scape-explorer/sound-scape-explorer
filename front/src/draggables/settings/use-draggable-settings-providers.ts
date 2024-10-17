@@ -1,4 +1,5 @@
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
+import {InjectionKey} from 'src/common/injection-key';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
@@ -26,29 +27,32 @@ export function useDraggableSettingsProviders() {
   const {colormap} = useSpectrogramColormap();
   const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
-  useRefProvide('settings/audioHost', audioHost);
-  useRefProvide('settings/fontSize', fontSize);
-  useRefProvide('settings/timeShift', timeshift);
-  useRefProvide('settings/colormap', colormap);
-  useRefProvide('settings/plotBackground', plotBackground);
-  useRefProvide('settings/isDetailsAutoOpen', isDetailsAutoOpen);
-  useRefProvide('settings/isAudioAutoOpen', isAudioAutoOpen);
-  useRefProvide('settings/decibelsDisplay', isDecibelsDisplay);
-  useRefProvide('settings/legendOverflow', isLegendOverflow);
-  useRefProvide('settings/isTimezoneActive', isTimezoneActive);
-  useRefProvide('settings/isCopyOnSelect2d', isCopyOnSelect2d);
-  useRefProvide('settings/isWebGlScatter2d', isWebGlScatter2d);
-  useRefProvide('settings/isPreview', isPreview);
-  useRefProvide('settings/isDevEnabled', isDevEnabled);
-  useRefProvide('settings/isDetailedExportName', isDetailedExportName);
+  useRefProvide(InjectionKey.settingsAudioHost, audioHost);
+  useRefProvide(InjectionKey.settingsFontSize, fontSize);
+  useRefProvide(InjectionKey.settingsTimeShift, timeshift);
+  useRefProvide(InjectionKey.settingsColormap, colormap);
+  useRefProvide(InjectionKey.settingsPlotBackground, plotBackground);
+  useRefProvide(InjectionKey.settingsIsDetailsAutoOpen, isDetailsAutoOpen);
+  useRefProvide(InjectionKey.settingsIsAudioAutoOpen, isAudioAutoOpen);
+  useRefProvide(InjectionKey.settingsDecibelsDisplay, isDecibelsDisplay);
+  useRefProvide(InjectionKey.settingsLegendOverflow, isLegendOverflow);
+  useRefProvide(InjectionKey.settingsIsTimezoneActive, isTimezoneActive);
+  useRefProvide(InjectionKey.settingsIsCopyOnSelect2d, isCopyOnSelect2d);
+  useRefProvide(InjectionKey.settingsIsWebGlScatter2d, isWebGlScatter2d);
+  useRefProvide(InjectionKey.settingsIsPreview, isPreview);
+  useRefProvide(InjectionKey.settingsIsDevEnabled, isDevEnabled);
+  useRefProvide(
+    InjectionKey.settingsIsDetailedExportName,
+    isDetailedExportName,
+  );
 
   useRefProvide(
-    'settings/isSelectedPointHighlighted',
+    InjectionKey.settingsIsSelectedPointHighlighted,
     isSelectedPointHighlighted,
   );
 
   useRefProvide(
-    'settings/isHidingMenuOnDraggableToggle',
+    InjectionKey.settingsIsHidingMenuOnDraggableToggle,
     isHidingMenuOnDraggableToggle,
   );
 }

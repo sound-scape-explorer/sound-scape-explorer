@@ -4,6 +4,7 @@ import AppCheckbox from 'src/app/app-checkbox.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useSettings} from 'src/composables/use-settings';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
@@ -50,8 +51,8 @@ useDraggableSettingsProviders();
     <div class="draggableSettingsContainer">
       <DraggableSettingsItem title="Audio: set audio host">
         <AppInput
+          :injection-key="InjectionKey.settingsAudioHost"
           align="left"
-          injection-key="settings/audioHost"
           size="small"
         />
       </DraggableSettingsItem>
@@ -59,7 +60,7 @@ useDraggableSettingsProviders();
       <DraggableSettingsItem title="Draggables: Hide menu on display toggle">
         <AppCheckbox
           :default="isHidingMenuOnDraggableToggle"
-          injection-key="settings/isHidingMenuOnDraggableToggle"
+          :injection-key="InjectionKey.settingsIsHidingMenuOnDraggableToggle"
         />
       </DraggableSettingsItem>
 
@@ -71,14 +72,14 @@ useDraggableSettingsProviders();
         <AppCheckbox
           :default="isTimezoneActive"
           :disabled="!settings?.timezone || !hasTimezone"
-          injection-key="settings/isTimezoneActive"
+          :injection-key="InjectionKey.settingsIsTimezoneActive"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Time: Apply custom shift (in hours)">
         <AppInput
+          :injection-key="InjectionKey.settingsTimeShift"
           align="left"
-          injection-key="settings/timeShift"
           size="small"
           type="number"
         />
@@ -86,16 +87,16 @@ useDraggableSettingsProviders();
 
       <DraggableSettingsItem title="Plots: Set background color">
         <AppSelect
+          :injection-key="InjectionKey.settingsPlotBackground"
           :options="backgrounds"
-          injection-key="settings/plotBackground"
           size="small"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Plots: Set font size">
         <AppInput
+          :injection-key="InjectionKey.settingsFontSize"
           align="left"
-          injection-key="settings/fontSize"
           size="small"
           type="number"
         />
@@ -104,28 +105,28 @@ useDraggableSettingsProviders();
       <DraggableSettingsItem title="Scatter: Highlight selected point">
         <AppCheckbox
           :default="isSelectedPointHighlighted"
-          injection-key="settings/isSelectedPointHighlighted"
+          :injection-key="InjectionKey.settingsIsSelectedPointHighlighted"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Scatter: Open Audio draggable on click">
         <AppCheckbox
           :default="isAudioAutoOpen"
-          injection-key="settings/isAudioAutoOpen"
+          :injection-key="InjectionKey.settingsIsAudioAutoOpen"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Scatter: Open Details draggable on click">
         <AppCheckbox
           :default="isDetailsAutoOpen"
-          injection-key="settings/isDetailsAutoOpen"
+          :injection-key="InjectionKey.settingsIsDetailsAutoOpen"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Scatter: Use WebGL (2d)">
         <AppCheckbox
           :default="isWebGlScatter2d"
-          injection-key="settings/isWebGlScatter2d"
+          :injection-key="InjectionKey.settingsIsWebGlScatter2d"
         />
       </DraggableSettingsItem>
 
@@ -134,15 +135,15 @@ useDraggableSettingsProviders();
       >
         <AppCheckbox
           :default="isCopyOnSelect2d"
-          injection-key="settings/isCopyOnSelect2d"
+          :injection-key="InjectionKey.settingsIsCopyOnSelect2d"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Spectrogram: Set color map">
         <AppSelect
+          :injection-key="InjectionKey.settingsColormap"
           :options="colormapOptions"
           class="draggableSettingsSpectroColors"
-          injection-key="settings/colormap"
           size="small"
         />
       </DraggableSettingsItem>
@@ -150,14 +151,14 @@ useDraggableSettingsProviders();
       <DraggableSettingsItem title="Spectrogram: Show decibels">
         <AppCheckbox
           :default="isDecibelsDisplay"
-          injection-key="settings/decibelsDisplay"
+          :injection-key="InjectionKey.settingsDecibelsDisplay"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Spectrogram: Overflow legends">
         <AppCheckbox
           :default="isLegendOverflow"
-          injection-key="settings/legendOverflow"
+          :injection-key="InjectionKey.settingsLegendOverflow"
         />
       </DraggableSettingsItem>
 
@@ -166,21 +167,21 @@ useDraggableSettingsProviders();
       >
         <AppCheckbox
           :default="isDetailedExportName"
-          injection-key="settings/isDetailedExportName"
+          :injection-key="InjectionKey.settingsIsDetailedExportName"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Misc: Preview beta features">
         <AppCheckbox
           :default="isPreview"
-          injection-key="settings/isPreview"
+          :injection-key="InjectionKey.settingsIsPreview"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Misc: Enable dev settings">
         <AppCheckbox
           :default="isDevEnabled"
-          injection-key="settings/isDevEnabled"
+          :injection-key="InjectionKey.settingsIsDevEnabled"
         />
       </DraggableSettingsItem>
 

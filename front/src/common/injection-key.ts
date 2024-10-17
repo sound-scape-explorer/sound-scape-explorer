@@ -1,50 +1,50 @@
-// TODO: enum?
-export type InjectionKey =
-  | 'view/reducer'
-  | 'view/band'
-  | 'view/integration'
-  | 'view/extractor'
-  | 'settings/audioHost'
-  | 'settings/fontSize'
-  | 'settings/timeShift'
-  | 'settings/colormap'
-  | 'settings/plotBackground'
-  | 'settings/isDetailsAutoOpen'
-  | 'settings/isAudioAutoOpen'
-  | 'settings/decibelsDisplay'
-  | 'settings/legendOverflow'
-  | 'settings/isTimezoneActive'
-  | 'settings/isCopyOnSelect2d'
-  | 'settings/isWebGlScatter2d'
-  | 'settings/isHidingMenuOnDraggableToggle'
-  | 'settings/isPreview'
-  | 'settings/isDevEnabled'
-  | 'settings/devAutoLoadView'
-  | 'settings/isSelectedPointHighlighted'
-  | 'settings/isDetailedExportName'
-  | 'indicators/list'
-  | 'indicators/selection'
-  | 'indicators/display'
-  | 'indicators/filterFrom'
-  | 'indicators/filterTo'
-  | 'colors/alphaExcluded'
-  | 'colors/alphaIncluded'
-  | 'colors/flavor'
-  | 'colors/type'
-  | 'colors/criteria'
-  | 'colors/category'
-  | 'colors/indicatorMin'
-  | 'colors/indicatorMax'
-  | 'colors/labelRangeMin'
-  | 'colors/labelRangeMax'
-  | 'time/duration'
-  | 'digested/digester'
-  | 'digested/labelA'
-  | 'digested/labelB'
-  | 'digested/colorFlavor'
-  | 'trajectories/fuse'
-  | 'histograms/indicatorName'
-  | 'histograms/over'
-  | 'histograms/function'
-  | 'temporal/trim'
-  | 'calendar/active';
+export enum InjectionKey {
+  viewReducer = 'view/reducer',
+  viewBand = 'view/band',
+  viewIntegration = 'view/integration',
+  viewExtractor = 'view/extractor',
+  settingsAudioHost = 'settings/audioHost',
+  settingsFontSize = 'settings/fontSize',
+  settingsTimeShift = 'settings/timeShift',
+  settingsColormap = 'settings/colormap',
+  settingsPlotBackground = 'settings/plotBackground',
+  settingsIsDetailsAutoOpen = 'settings/isDetailsAutoOpen',
+  settingsIsAudioAutoOpen = 'settings/isAudioAutoOpen',
+  settingsDecibelsDisplay = 'settings/decibelsDisplay',
+  settingsLegendOverflow = 'settings/legendOverflow',
+  settingsIsTimezoneActive = 'settings/isTimezoneActive',
+  settingsIsCopyOnSelect2d = 'settings/isCopyOnSelect2d',
+  settingsIsWebGlScatter2d = 'settings/isWebGlScatter2d',
+  settingsIsHidingMenuOnDraggableToggle = 'settings/isHidingMenuOnDraggableToggle',
+  settingsIsPreview = 'settings/isPreview',
+  settingsIsDevEnabled = 'settings/isDevEnabled',
+  settingsDevAutoLoadView = 'settings/devAutoLoadView',
+  settingsIsSelectedPointHighlighted = 'settings/isSelectedPointHighlighted',
+  settingsIsDetailedExportName = 'settings/isDetailedExportName',
+  indicatorsList = 'indicators/list',
+  indicatorsSelection = 'indicators/selection',
+  indicatorsDisplay = 'indicators/display',
+  indicatorsFilterFrom = 'indicators/filterFrom',
+  indicatorsFilterTo = 'indicators/filterTo',
+  colorsAlphaExcluded = 'colors/alphaExcluded',
+  colorsAlphaIncluded = 'colors/alphaIncluded',
+  colorsFlavor = 'colors/flavor',
+  colorsType = 'colors/type',
+  colorsCriteria = 'colors/criteria',
+  colorsCategory = 'colors/category',
+  colorsIndicatorMin = 'colors/indicatorMin',
+  colorsIndicatorMax = 'colors/indicatorMax',
+  colorsLabelRangeMin = 'colors/labelRangeMin',
+  colorsLabelRangeMax = 'colors/labelRangeMax',
+  timeDuration = 'time/duration',
+  digestedDigester = 'digested/digester',
+  digestedLabelA = 'digested/labelA',
+  digestedLabelB = 'digested/labelB',
+  digestedColorFlavor = 'digested/colorFlavor',
+  trajectoriesFuse = 'trajectories/fuse',
+  histogramsIndicatorName = 'histograms/indicatorName',
+  histogramsOver = 'histograms/over',
+  histogramsFunction = 'histograms/function',
+  temporalTrim = 'temporal/trim',
+  calendarActive = 'calendar/active',
+}

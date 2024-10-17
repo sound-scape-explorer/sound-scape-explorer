@@ -2,6 +2,7 @@
 import AppButton from 'src/app/app-button.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppInput from 'src/app/input/app-input.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
@@ -13,8 +14,8 @@ const {filter, reset} = useScatterFilterTemporal();
 const {filteredCount, collectedCount} = useTemporalInfo();
 const {from, to} = useTemporalThresholds();
 
-useRefProvide('indicators/filterFrom', from);
-useRefProvide('indicators/filterTo', to);
+useRefProvide(InjectionKey.indicatorsFilterFrom, from);
+useRefProvide(InjectionKey.indicatorsFilterTo, to);
 </script>
 
 <template>
@@ -22,8 +23,8 @@ useRefProvide('indicators/filterTo', to);
     <AppInput
       :disabled="!hasIndicator"
       :handle-enter="filter"
+      :injection-key="InjectionKey.indicatorsFilterFrom"
       :step="0.1"
-      injection-key="indicators/filterFrom"
       placeholder="From"
       size="small"
       style="width: 9em"
@@ -35,7 +36,7 @@ useRefProvide('indicators/filterTo', to);
     <AppInput
       :disabled="!hasIndicator"
       :handle-enter="filter"
-      injection-key="indicators/filterTo"
+      :injection-key="InjectionKey.indicatorsFilterTo"
       placeholder="To"
       size="small"
       style="width: 9em"

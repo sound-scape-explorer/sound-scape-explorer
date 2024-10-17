@@ -12,6 +12,7 @@ import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-slider.vue';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
@@ -34,8 +35,8 @@ const {
   handleDateStartUpdate,
 } = useDraggableCalendarTransport();
 
-useRefProvide('calendar/active', isActive);
-useRefProvide('time/duration', duration);
+useRefProvide(InjectionKey.calendarActive, isActive);
+useRefProvide(InjectionKey.timeDuration, duration);
 </script>
 
 <template>
@@ -48,8 +49,8 @@ useRefProvide('time/duration', duration);
       <span>Filtering</span>
       <div>
         <AppSwitch
+          :injection-key="InjectionKey.calendarActive"
           checked="Yes"
-          injection-key="calendar/active"
           unchecked="No"
         />
 
@@ -66,9 +67,9 @@ useRefProvide('time/duration', duration);
 
         <AppInput
           :disabled="!isActive"
+          :injection-key="InjectionKey.timeDuration"
           align="left"
           class="seconds"
-          injection-key="time/duration"
           tooltip="Set window duration in seconds"
           type="number"
         />

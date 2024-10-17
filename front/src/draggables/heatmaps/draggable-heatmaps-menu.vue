@@ -5,6 +5,7 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
@@ -29,10 +30,10 @@ const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
 
 const {labelProperties} = useStorageLabels();
 
-useRefProvide('digested/digester', digesterName);
-useRefProvide('digested/labelA', a);
-useRefProvide('digested/labelB', b);
-useRefProvide('digested/colorFlavor', flavor);
+useRefProvide(InjectionKey.digestedDigester, digesterName);
+useRefProvide(InjectionKey.digestedLabelA, a);
+useRefProvide(InjectionKey.digestedLabelB, b);
+useRefProvide(InjectionKey.digestedColorFlavor, flavor);
 </script>
 
 <template>
@@ -40,8 +41,8 @@ useRefProvide('digested/colorFlavor', flavor);
     <h2>Select</h2>
 
     <AppSelect
+      :injection-key="InjectionKey.digestedDigester"
       :options="digesterOptions"
-      injection-key="digested/digester"
       placeholder="Digester..."
       size="small"
     />
@@ -50,8 +51,8 @@ useRefProvide('digested/colorFlavor', flavor);
 
     <div class="labels">
       <AppSelect
+        :injection-key="InjectionKey.digestedLabelA"
         :options="labelProperties ?? []"
-        injection-key="digested/labelA"
         placeholder="Label A..."
         size="small"
       />
@@ -67,8 +68,8 @@ useRefProvide('digested/colorFlavor', flavor);
 
       <AppSelect
         :disabled="!isReadyForSelection || !isPairing"
+        :injection-key="InjectionKey.digestedLabelB"
         :options="labelProperties ?? []"
-        injection-key="digested/labelB"
         placeholder="Label B..."
         size="small"
       />
@@ -79,8 +80,8 @@ useRefProvide('digested/colorFlavor', flavor);
     <div class="colors">
       <AppSelect
         :disabled="!isReadyAndSelected"
+        :injection-key="InjectionKey.digestedColorFlavor"
         :options="flavors"
-        injection-key="digested/colorFlavor"
         placeholder="Color flavor..."
         size="small"
       />
