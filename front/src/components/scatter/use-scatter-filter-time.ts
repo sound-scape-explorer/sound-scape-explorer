@@ -7,10 +7,10 @@ const filtered = ref<boolean[]>([]);
 // todo: rename time to calendar?
 export function useScatterFilterTime() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {isAllSelected, current, duration} = useDraggableCalendar();
+  const {isActive, current, duration} = useDraggableCalendar();
 
   const isVisible = (index: number): boolean => {
-    if (isAllSelected.value) {
+    if (!isActive.value) {
       return true;
     }
 

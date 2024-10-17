@@ -15,7 +15,7 @@ const durations: Duration[] = [
   {name: '1w', duration: 3600 * 24 * 7},
 ];
 
-const isAllSelected = ref<boolean>(true);
+const isActive = ref<boolean>(false);
 const duration = ref<number>(3600);
 const current = ref<number>(-1);
 const min = ref<number>(-1);
@@ -27,13 +27,13 @@ export function useDraggableCalendar() {
   const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
 
   const uiDisabled = computed<boolean>(
-    () => isLoading.value || isAllSelected.value,
+    () => isLoading.value || !isActive.value,
   );
 
   const dateStartRef = computed<Dayjs>(() => {
     let t = current.value;
 
-    if (isAllSelected.value) {
+    if (!isActive.value) {
       t = min.value;
     }
 
@@ -46,7 +46,7 @@ export function useDraggableCalendar() {
   });
 
   return {
-    isAllSelected: isAllSelected,
+    isActive: isActive,
     duration: duration,
     current: current,
     min: min,

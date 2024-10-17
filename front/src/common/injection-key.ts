@@ -46,4 +46,5 @@ export type InjectionKey =
   | 'histograms/indicatorName'
   | 'histograms/over'
   | 'histograms/function'
-  | 'temporal/trim';
+  | 'temporal/trim'
+  | 'calendar/active';

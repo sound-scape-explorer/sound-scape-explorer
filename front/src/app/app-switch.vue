@@ -32,6 +32,7 @@ const model = useRefInject(props.injectionKey);
 <style lang="scss" scoped>
 $t: 0.76;
 .switch {
-  transform: translate3d(-$p0, 0, 0) scale3d($t, $t, $t);
+  transform: translate3d(-$p0 + 2px, 0, 0) scale3d($t, $t, $t);
+  margin-right: -$g0 - $p0;
 }
 </style>

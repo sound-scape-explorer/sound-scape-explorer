@@ -1,7 +1,41 @@
 <script lang="ts" setup="">
+import {
+  PauseOutline,
+  PlayOutline,
+  PlaySkipBackOutline,
+  PlaySkipForwardOutline,
+} from '@vicons/ionicons5';
+import {NButtonGroup, NDatePicker} from 'naive-ui';
+import AppButton from 'src/app/app-button.vue';
+import AppSwitch from 'src/app/app-switch.vue';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import DraggableCalendarOptions from 'src/draggables/calendar/draggable-calendar-options.vue';
+import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import AppInput from 'src/app/input/app-input.vue';
+import {useRefProvide} from 'src/composables/use-ref-provide';
 import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-slider.vue';
+import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
+import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
+
+const {
+  isActive,
+  duration,
+  durations,
+  uiDisabled,
+  isPlaying,
+  dateStartRef,
+  dateEndRef,
+} = useDraggableCalendar();
+const {
+  setWindowDuration,
+  skipTimeForward,
+  skipTimeBackward,
+  togglePlaying,
+  handleDateStartUpdate,
+} = useDraggableCalendarTransport();
+
+useRefProvide('calendar/active', isActive);
+useRefProvide('time/duration', duration);
 </script>
 
 <template>
@@ -10,7 +44,87 @@ import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-
     draggable-key="calendar"
     suspense="view"
   >
-    <DraggableCalendarOptions />
+    <AppDraggableMenu class="draggableCalendarMenu">
+      <span>Filtering</span>
+      <div>
+        <AppSwitch
+          checked="Yes"
+          injection-key="calendar/active"
+          unchecked="No"
+        />
+
+        <NButtonGroup>
+          <AppButton
+            v-for="d in durations"
+            :disabled="uiDisabled"
+            :handle-click="() => setWindowDuration(d.duration)"
+            size="tiny"
+          >
+            {{ d.name }}
+          </AppButton>
+        </NButtonGroup>
+
+        <AppInput
+          :disabled="!isActive"
+          align="left"
+          class="seconds"
+          injection-key="time/duration"
+          tooltip="Set window duration in seconds"
+          type="number"
+        />
+      </div>
+      <span>Transport</span>
+      <div>
+        <div class="gaps">
+          <AppButton
+            :disabled="uiDisabled"
+            :handle-click="skipTimeBackward"
+            icon
+            tooltip="Backward [p]"
+          >
+            <PlaySkipBackOutline />
+          </AppButton>
+
+          <AppButton
+            :disabled="uiDisabled"
+            :handle-click="togglePlaying"
+            icon
+            tooltip="Play / Pause [space]"
+          >
+            <PlayOutline v-show="!isPlaying" />
+            <PauseOutline v-show="isPlaying" />
+          </AppButton>
+
+          <AppButton
+            :disabled="uiDisabled"
+            :handle-click="skipTimeForward"
+            icon
+            tooltip="Forward [n]"
+          >
+            <PlaySkipForwardOutline />
+          </AppButton>
+        </div>
+
+        <div class="gaps">
+          <AppTooltip
+            placement="top"
+            tooltip="Set start date"
+          >
+            <NDatePicker
+              :disabled="uiDisabled"
+              :on-update:value="handleDateStartUpdate"
+              :value="dateStartRef.unix() * 1000"
+              class="picker"
+              size="tiny"
+              type="datetime"
+            />
+          </AppTooltip>
+
+          <div>to {{ dateEndRef }}</div>
+        </div>
+      </div>
+    </AppDraggableMenu>
+
     <DraggableCalendarSlider />
   </AppDraggable>
 </template>
@@ -18,5 +132,29 @@ import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-
 <style lang="scss" scoped>
 .draggableCalendarContainer {
   width: $s2;
+}
+
+.draggableCalendarMenu {
+  & > div {
+    display: flex;
+    //justify-content: space-between;
+    align-items: center;
+    gap: $p0;
+  }
+}
+
+.gaps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $p0;
+}
+
+.seconds {
+  width: $p0 * 13;
+}
+
+.picker {
+  width: $p0 * 19;
 }
 </style>

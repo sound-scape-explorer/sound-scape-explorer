@@ -3,8 +3,8 @@ import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggab
 import {watch} from 'vue';
 
 export function useDraggableCalendarLifecycles() {
-  const {isPlaying} = useDraggableCalendar();
-  const {start} = useDraggableCalendarTransport();
+  const {isPlaying, isActive} = useDraggableCalendar();
+  const {start, stop} = useDraggableCalendarTransport();
 
   const handleToggleButton = () => {
     if (isPlaying.value) {
@@ -15,5 +15,12 @@ export function useDraggableCalendarLifecycles() {
     stop();
   };
 
+  const onInactive = () => {
+    if (isPlaying.value && !isActive.value) {
+      isPlaying.value = false;
+    }
+  };
+
   watch(isPlaying, handleToggleButton);
+  watch([isPlaying, isActive], onInactive);
 }

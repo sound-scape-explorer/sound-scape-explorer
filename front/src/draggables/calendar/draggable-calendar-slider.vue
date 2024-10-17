@@ -19,7 +19,7 @@ const {ranges} = useRanges();
 const {reducer} = useReducerSelection();
 const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 const {isLoading} = useScatterLoading();
-const {isAllSelected, duration, current, min, max} = useDraggableCalendar();
+const {isActive, duration, current, min, max} = useDraggableCalendar();
 
 const zoomedSliderRef = ref<Slider | null>(null);
 const cachedSlidersRef = ref<Slider[]>();
@@ -153,7 +153,7 @@ interface Slider {
 }
 
 const {filterByTime} = useScatterFilterTime();
-watch([isAllSelected, duration, current], filterByTime);
+watch([isActive, duration, current], filterByTime);
 </script>
 
 <template>
@@ -166,7 +166,7 @@ watch([isAllSelected, duration, current], filterByTime);
         v-for="slider in sliders"
         :key="slider.key"
         v-model:value="current"
-        :disabled="isAllSelected"
+        :disabled="!isActive"
         :marks="slider.marks"
         :max="slider.max"
         :min="slider.min"

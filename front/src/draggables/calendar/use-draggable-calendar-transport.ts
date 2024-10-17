@@ -4,7 +4,7 @@ import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calend
 let interval: null | number = null;
 
 export function useDraggableCalendarTransport() {
-  const {duration, current, isAllSelected, isPlaying} = useDraggableCalendar();
+  const {duration, current, isActive, isPlaying} = useDraggableCalendar();
   const {filterByTime} = useScatterFilterTime();
 
   const setWindowDuration = (newDuration: number) => {
@@ -22,11 +22,13 @@ export function useDraggableCalendarTransport() {
   };
 
   const togglePlaying = (event?: MouseEvent) => {
-    if (isAllSelected.value) {
+    console.log('toggle');
+    if (!isActive.value) {
       return;
     }
 
     isPlaying.value = !isPlaying.value;
+    console.log(isPlaying.value);
     filterByTime();
     blurButton(event);
   };
@@ -43,6 +45,7 @@ export function useDraggableCalendarTransport() {
     blurButton(event);
   };
 
+  // TODO: these transport actions should manipulate isPlaying.value instead of the toggler...
   const start = () => {
     if (interval) {
       return;
