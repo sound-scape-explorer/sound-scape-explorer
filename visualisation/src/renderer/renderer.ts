@@ -1,4 +1,4 @@
-import 'sass-reset';
+import 'sass-reset/src/reset.scss';
 import './styles/main.scss';
 
 import {LoadedZone} from './controllers/LoadedZone';
