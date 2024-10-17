@@ -4,7 +4,6 @@ import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
-// todo: rename time to calendar?
 export function useScatterFilterTime() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {isActive, current, duration} = useDraggableCalendar();
