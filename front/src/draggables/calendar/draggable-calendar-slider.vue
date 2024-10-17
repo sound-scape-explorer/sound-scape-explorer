@@ -232,7 +232,7 @@ watch([isActive, duration, current], filterByTime);
 
   width: 100%;
   height: 13px;
-  padding: 0 8px;
+  padding: 0 $p0;
 
   z-index: $calendarInterestLayer;
   user-select: none;
