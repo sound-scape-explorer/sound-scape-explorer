@@ -15,6 +15,7 @@
     "moduleResolution": "Node",
     "lib": [
       "webworker",
+      "ES2022",
       "ESNext",
       "ESNext.Array",
       "DOM",
