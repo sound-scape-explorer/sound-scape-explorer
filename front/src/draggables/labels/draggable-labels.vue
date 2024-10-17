@@ -15,7 +15,9 @@ const {isExpanded} = useDraggableLabels();
     <DraggableLabelsSidebar />
 
     <div
-      :class="{draggableLabelsExpanded: isExpanded}"
+      :class="{
+        draggableLabelsExpanded: isExpanded,
+      }"
       class="draggableLabelsContainer"
     >
       <DraggableLabelsItems />
@@ -28,11 +30,12 @@ const {isExpanded} = useDraggableLabels();
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: $h0;
+  height: $h1;
   @include noScroll;
 }
 
 .draggableLabelsExpanded {
-  height: min($hMax, $h2);
+  width: $s2;
+  height: $h2;
 }
 </style>

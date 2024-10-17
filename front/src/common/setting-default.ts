@@ -22,7 +22,6 @@ export const SettingDefault = {
   decibelsDisplay: false,
   legendOverflow: false,
   labelsExpand: false,
-  labelsColumns: 1,
   colorsFlavor: COLOR_FLAVORS[0],
   colorsAlphaLow: 0.005,
   colorsAlphaHigh: 0.8,

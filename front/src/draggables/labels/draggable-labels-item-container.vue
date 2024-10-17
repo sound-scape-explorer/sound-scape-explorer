@@ -5,11 +5,11 @@ import DraggableLabelsItemContent from 'src/draggables/labels/draggable-labels-i
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 const {labelProperties} = useStorageLabels();
-const {columns} = useDraggableLabels();
+const {isExpanded} = useDraggableLabels();
 </script>
 
 <template>
-  <NGrid :cols="columns">
+  <NGrid :cols="isExpanded ? 2 : 1">
     <NGi v-for="property in labelProperties">
       <DraggableLabelsItemContent :property="property" />
     </NGi>
