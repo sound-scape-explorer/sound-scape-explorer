@@ -1,23 +1,31 @@
-import {FFT_SIZE} from 'src/constants';
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 
-const size = ref<number>(FFT_SIZE.default);
+type Size = 128 | 256 | 512 | 1024 | 2048 | 4096;
+
+const sizes: Size[] = [128, 256, 512, 1024, 2048, 4096];
+const size = ref<Size>(4096);
 
 export function useAudioFourier() {
+  const i = computed(() => sizes.indexOf(size.value));
+
   const increase = () => {
-    if (size.value * 2 > FFT_SIZE.max) {
+    const n = i.value + 1;
+
+    if (i.value === -1 || n >= sizes.length) {
       return;
     }
 
-    size.value *= 2;
+    size.value = sizes[n];
   };
 
   const decrease = () => {
-    if (size.value / 2 < FFT_SIZE.min) {
+    const p = i.value - 1;
+
+    if (i.value === -1 || p <= 0) {
       return;
     }
 
-    size.value /= 2;
+    size.value = sizes[p];
   };
 
   return {
