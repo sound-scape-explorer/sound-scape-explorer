@@ -9,6 +9,7 @@ import {InjectionKey} from 'src/common/injection-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useColorInvert} from 'src/composables/use-color-invert';
+import {useColorUser} from 'src/composables/use-color-user';
 import {useIndicatorLimits} from 'src/composables/use-indicator-limits';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
@@ -23,6 +24,7 @@ import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
 const {isLoading} = useScatterLoading();
 const {flavor, criteria, criterias, category, categories} = useColorSelection();
 const {isIndicators, isLabels, isLabelNumeric} = useColorState();
+const {domain, generateScale} = useColorUser();
 
 const {low, high} = useScatterColorAlpha();
 const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();

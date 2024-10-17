@@ -1,20 +1,30 @@
 import chroma, {type Scale} from 'chroma-js';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {computed} from 'vue';
+import {computed, ref} from 'vue';
+
+const scale = ref<Scale>(chroma.scale());
 
 export function useColorUser() {
   const {flavor} = useColorSelection();
   const {isColorMapSwapped} = useClientSettings();
 
-  // todo: transform this to generator + watcher to instantiate once in SFC
-  const scale = computed<Scale>(() => {
-    const scale = chroma.scale(flavor.value);
-    const domain = isColorMapSwapped.value ? [1, 0] : [0, 1];
-    return scale.domain(domain).mode('hsl');
+  const domain = computed(() => {
+    if (isColorMapSwapped.value) {
+      return [1, 0];
+    }
+
+    return [0, 1];
   });
 
+  const generateScale = () => {
+    const newScale = chroma.scale(flavor.value);
+    scale.value = newScale.domain(domain.value).mode('hsl');
+  };
+
   return {
+    domain: domain,
     scale: scale,
+    generateScale: generateScale,
   };
 }
