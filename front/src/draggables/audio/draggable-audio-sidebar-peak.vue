@@ -37,7 +37,7 @@ watch(isClipping, fade);
   span {
     font-weight: bold;
     position: relative;
-    transform: translate3d(-9px, -20px, 0);
+    transform: translate3d(-$p0 - 1px, -$g0 * 5 + 1px, 0);
     z-index: 200;
     display: none;
   }
