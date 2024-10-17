@@ -20,6 +20,7 @@ useDraggableTemporalLifecycles();
 
 <template>
   <AppDraggable
+    class="draggableTemporalContainer"
     draggable-key="temporal"
     suspense="view"
   >
@@ -59,6 +60,10 @@ useDraggableTemporalLifecycles();
 </template>
 
 <style lang="scss" scoped>
+.draggableTemporalContainer {
+  width: $s2;
+}
+
 .plotContainer {
   width: 100%;
   height: 100%;

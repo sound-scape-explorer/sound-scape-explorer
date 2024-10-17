@@ -45,4 +45,5 @@ export type InjectionKey =
   | 'trajectories/fuse'
   | 'histograms/indicatorName'
   | 'histograms/over'
-  | 'histograms/function';
+  | 'histograms/function'
+  | 'temporal/trim';

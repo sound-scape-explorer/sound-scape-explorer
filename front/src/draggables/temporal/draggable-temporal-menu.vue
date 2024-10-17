@@ -1,7 +1,8 @@
 <script lang="ts" setup="">
 import {DownloadOutline} from '@vicons/ionicons5';
-import {NButton, NButtonGroup, NSwitch, NTreeSelect} from 'naive-ui';
+import {NButton, NButtonGroup, NTreeSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
@@ -39,15 +40,13 @@ const {lock, unlock} = useGlobalKeyboard();
 useRefProvide('indicators/list', indicator);
 useRefProvide('indicators/selection', selection);
 useRefProvide('indicators/display', display);
+useRefProvide('temporal/trim', isCondensed);
 
 watch(indicator, update);
 </script>
 
 <template>
-  <AppDraggableMenu
-    class="draggableTemporalMenuContainer"
-    size="medium"
-  >
+  <AppDraggableMenu>
     <h2>Select</h2>
 
     <div>
@@ -96,9 +95,9 @@ watch(indicator, update);
       <div>
         <AppSelect
           :options="selections"
+          class="draggableTemporalMenuDisplaySelection"
           injection-key="indicators/selection"
           size="small"
-          style="width: 9em"
           tooltip="Current selection"
           tooltip-placement="top"
         />
@@ -107,7 +106,6 @@ watch(indicator, update);
           :options="displays"
           injection-key="indicators/display"
           size="small"
-          style="width: 9em"
           tooltip="Rendering style"
           tooltip-placement="top"
         />
@@ -123,15 +121,13 @@ watch(indicator, update);
           </NButton>
         </NButtonGroup>
 
-        <NSwitch
+        <AppSwitch
           v-if="isCandles"
-          v-model:value="isCondensed"
           :disabled="!isCandles"
-          size="small"
-        >
-          <template #unchecked>Full</template>
-          <template #checked>Trim</template>
-        </NSwitch>
+          checked="Trim"
+          injection-key="temporal/trim"
+          unchecked="Full"
+        />
       </div>
 
       <AppButton
@@ -154,10 +150,6 @@ watch(indicator, update);
 </template>
 
 <style lang="scss" scoped>
-.draggableTemporalMenuContainer {
-  width: $s2;
-}
-
 .row {
   display: flex;
   justify-content: space-between;
@@ -168,5 +160,9 @@ watch(indicator, update);
     align-items: center;
     gap: $p0;
   }
+}
+
+.draggableTemporalMenuDisplaySelection {
+  width: $p0 * 11;
 }
 </style>
