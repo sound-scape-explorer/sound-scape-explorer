@@ -3,13 +3,13 @@ import {AudioStopButton} from './AudioStopButton';
 import {VisualiseButton} from './VisualiseButton';
 
 export class LoadedZone {
-  private node = document.getElementById('loaded-zone');
+  private readonly node = document.getElementById('loaded-zone');
 
-  private audioStopButton: AudioStopButton;
+  private readonly audioStopButton: AudioStopButton;
 
-  private visualiseButton: VisualiseButton;
+  private readonly visualiseButton: VisualiseButton;
 
-  private audioPath: AudioPath;
+  private readonly audioPath: AudioPath;
 
   public constructor() {
     this.audioStopButton = new AudioStopButton();
