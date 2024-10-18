@@ -5,12 +5,13 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useColorInvert} from 'src/composables/use-color-invert';
+import {useColorUser} from 'src/composables/use-color-user';
 import {useIndicatorLimits} from 'src/composables/use-indicator-limits';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useViewState} from 'src/composables/use-view-state';
 import {COLOR_FLAVORS} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
@@ -23,6 +24,7 @@ import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
 const {isLoading} = useScatterLoading();
 const {flavor, criteria, criterias, category, categories} = useColorSelection();
 const {isIndicators, isLabels, isLabelNumeric} = useColorState();
+const {domain, generateScale} = useColorUser();
 
 const {low, high} = useScatterColorAlpha();
 const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();
@@ -30,17 +32,16 @@ const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
 const {detect: detectIndicatorRange, swap} = useIndicatorLimits();
 const {invert, isReversible} = useColorInvert();
 const {isEnabled} = useLabelsNumeric();
-const {hasView} = useViewState();
 
-useRefProvide('colors/criteria', criteria);
-useRefProvide('colors/category', category);
-useRefProvide('colors/flavor', flavor);
-useRefProvide('colors/alphaExcluded', low);
-useRefProvide('colors/alphaIncluded', high);
-useRefProvide('colors/indicatorMin', indicatorRangeMin);
-useRefProvide('colors/indicatorMax', indicatorRangeMax);
-useRefProvide('colors/labelRangeMin', labelRangeMin);
-useRefProvide('colors/labelRangeMax', labelRangeMax);
+useRefProvide(InjectionKey.colorsCriteria, criteria);
+useRefProvide(InjectionKey.colorsCategory, category);
+useRefProvide(InjectionKey.colorsFlavor, flavor);
+useRefProvide(InjectionKey.colorsAlphaExcluded, low);
+useRefProvide(InjectionKey.colorsAlphaIncluded, high);
+useRefProvide(InjectionKey.colorsIndicatorMin, indicatorRangeMin);
+useRefProvide(InjectionKey.colorsIndicatorMax, indicatorRangeMax);
+useRefProvide(InjectionKey.colorsLabelRangeMin, labelRangeMin);
+useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 </script>
 
 <template>
@@ -48,25 +49,22 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
     draggable-key="colors"
     suspense="view"
   >
-    <AppDraggableMenu
-      class="menu"
-      size="large"
-    >
+    <AppDraggableMenu>
       <h2>With</h2>
 
       <div class="two grow">
         <AppSelect
           :disabled="isLoading"
+          :injection-key="InjectionKey.colorsCategory"
           :options="categories"
-          injection-key="colors/category"
           placeholder="Category..."
           size="small"
         />
 
         <AppSelect
           :disabled="isLoading"
+          :injection-key="InjectionKey.colorsCriteria"
           :options="criterias"
-          injection-key="colors/criteria"
           placeholder="Criteria..."
           size="small"
         />
@@ -102,14 +100,14 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
         class="two"
       >
         <AppInput
-          injection-key="colors/indicatorMin"
+          :injection-key="InjectionKey.colorsIndicatorMin"
           placeholder="Min..."
           size="small"
           type="number"
         />
 
         <AppInput
-          injection-key="colors/indicatorMax"
+          :injection-key="InjectionKey.colorsIndicatorMax"
           placeholder="Max..."
           size="small"
           type="number"
@@ -129,7 +127,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
       >
         <AppInput
           :disabled="!isEnabled"
-          injection-key="colors/labelRangeMin"
+          :injection-key="InjectionKey.colorsLabelRangeMin"
           placeholder="Min..."
           size="small"
           type="number"
@@ -137,7 +135,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
 
         <AppInput
           :disabled="!isEnabled"
-          injection-key="colors/labelRangeMax"
+          :injection-key="InjectionKey.colorsLabelRangeMax"
           placeholder="Max..."
           size="small"
           type="number"
@@ -149,11 +147,11 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
       <div class="two">
         <AppInput
           :disabled="isLoading"
+          :injection-key="InjectionKey.colorsAlphaExcluded"
           :max="1"
-          :min="0.005"
-          :step="0.005"
+          :min="0.001"
+          :step="0.001"
           align="left"
-          injection-key="colors/alphaExcluded"
           size="small"
           tooltip="Opacity for excluded points"
           tooltip-placement="bottom"
@@ -162,17 +160,26 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
 
         <AppInput
           :disabled="isLoading"
+          :injection-key="InjectionKey.colorsAlphaIncluded"
           :max="1"
           :min="0"
           :step="0.05"
           align="left"
-          injection-key="colors/alphaIncluded"
           size="small"
           tooltip="Opacity for collected points"
           tooltip-placement="bottom"
           type="number"
         />
       </div>
+
+      <h2>Flavor</h2>
+
+      <AppSelect
+        :disabled="isLoading"
+        :injection-key="InjectionKey.colorsFlavor"
+        :options="COLOR_FLAVORS"
+        size="small"
+      />
 
       <h2
         v-if="!isLabels || isEnabled"
@@ -197,30 +204,21 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
       >
         <ColorsGradients />
       </div>
-
-      <h2>Flavor</h2>
-
-      <AppSelect
-        :disabled="isLoading"
-        :options="COLOR_FLAVORS"
-        injection-key="colors/flavor"
-        size="small"
-      />
     </AppDraggableMenu>
   </AppDraggable>
 </template>
 
 <style lang="scss" scoped>
-.menu {
-  width: 34em;
-}
-
 .two {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  width: 100%;
+  gap: $p0;
+  width: $s0;
+
+  & > * {
+    width: 100%;
+  }
 }
 
 .grow {
@@ -231,7 +229,7 @@ useRefProvide('colors/labelRangeMax', labelRangeMax);
 
 .indicator-buttons {
   display: flex;
-  gap: 0.5em;
+  gap: $p0;
 }
 
 .gradients {

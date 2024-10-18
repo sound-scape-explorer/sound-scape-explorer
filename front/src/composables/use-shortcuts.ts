@@ -1,4 +1,4 @@
-import type {DraggableKey} from 'src/composables/use-draggables';
+import {type DraggableKey} from 'src/composables/use-draggables';
 
 export enum Shortcuts {
   draggableToggle = 'Esc',
@@ -17,14 +17,13 @@ export enum Shortcuts {
   trajectories = 'y',
   relativeTrajectories = 'Y',
   temporal = 't',
+  histograms = 'j',
   heatmaps = 'h',
   calendar = 'C',
   timeline = 'T',
-  calendarToggle = ' ',
-  calendarPrevious = 'p',
-  calendarNext = 'n',
   selection = 's',
-  selectHotkey = 'j',
+  selectHotkey = 'J',
+  audioPlayPause = ' ',
 }
 
 interface ShortcutSerialized {

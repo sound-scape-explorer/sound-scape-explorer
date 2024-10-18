@@ -17,7 +17,6 @@ export enum SettingKey {
   decibelsDisplay = 'sse-settings-decibelsDisplay',
   legendOverflow = 'sse-settings-legendOverflow',
   labelsExpand = 'sse-settings-labelsExpand',
-  labelsColumns = 'sse-settings-labelsColumns',
   colorsFlavor = 'sse-settings-colorsFlavor',
   colorsAlphaLow = 'sse-settings-colorsAlphaLow',
   colorsAlphaHigh = 'sse-settings-colorsAlphaHigh',
@@ -25,4 +24,5 @@ export enum SettingKey {
   isDevEnabled = 'sse-settings-isDevEnabled',
   devAutoLoadView = 'sse-settings-devAutoLoadView',
   isSelectedPointHighlighted = 'sse-settings-isSelectedPointHighlighted',
+  isDetailedExportName = 'sse-settings-isDetailedExportName',
 }

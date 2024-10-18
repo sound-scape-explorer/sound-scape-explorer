@@ -13,30 +13,19 @@ export interface AppPlotProps {
   exportFilename: string;
   clickEnabled?: boolean;
   hideXLegend?: boolean;
-  hideRange?: boolean;
+  showRange?: boolean;
 }
 
 const props = withDefaults(defineProps<AppPlotProps>(), {
   legend: false,
   clickEnabled: false,
   hideXLegend: false,
-  hideRange: false,
+  showRange: false,
 });
 
 const {container} = useAppPlot(props);
 </script>
 
 <template>
-  <span
-    ref="container"
-    class="app-plot"
-  />
+  <div ref="container" />
 </template>
-
-<style lang="scss" scoped>
-.app-plot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

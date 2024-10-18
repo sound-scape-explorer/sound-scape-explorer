@@ -13,14 +13,25 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import DraggableAudioSidebarPeak from 'src/draggables/audio/draggable-audio-sidebar-peak.vue';
+import DraggableAudioSidebarVumeter from 'src/draggables/audio/draggable-audio-sidebar-vumeter.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {useWavesurferHandlers} from 'src/draggables/audio/use-wavesurfer-handlers';
 
-const {increase, decrease} = useAudioFourier();
-const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
+const {
+  increase: increaseFourier,
+  decrease: decreaseFourier,
+  canIncrease: canIncreaseFourier,
+  canDecrease: canDecreaseFourier,
+} = useAudioFourier();
+const {
+  increase: increaseVolume,
+  decrease: decreaseVolume,
+  canIncrease: canIncreaseVolume,
+  canDecrease: canDecreaseVolume,
+} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
 const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
@@ -30,7 +41,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
   <AppDraggableSidebar>
     <AppButton
       :handle-click="togglePlayPause"
-      :tooltip="isPlaying ? 'Pause' : 'Play'"
+      :tooltip="isPlaying ? 'Pause [space]' : 'Play [space]'"
       icon
       tooltip-placement="left"
     >
@@ -48,6 +59,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     </AppButton>
 
     <AppButton
+      :disabled="!canIncreaseVolume"
       :handle-click="increaseVolume"
       icon
       tooltip="Volume Up"
@@ -57,6 +69,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     </AppButton>
 
     <AppButton
+      :disabled="!canDecreaseVolume"
       :handle-click="decreaseVolume"
       icon
       tooltip="Volume Down"
@@ -66,7 +79,8 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     </AppButton>
 
     <AppButton
-      :handle-click="increase"
+      :disabled="!canIncreaseFourier"
+      :handle-click="increaseFourier"
       icon
       tooltip="FFT Size Up"
       tooltip-placement="left"
@@ -75,7 +89,8 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     </AppButton>
 
     <AppButton
-      :handle-click="decrease"
+      :disabled="!canDecreaseFourier"
+      :handle-click="decreaseFourier"
       icon
       tooltip="FFT Size Down"
       tooltip-placement="left"
@@ -101,6 +116,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
       undo-tooltip="Previous interval"
     />
 
+    <DraggableAudioSidebarVumeter />
     <DraggableAudioSidebarPeak />
   </AppDraggableSidebar>
 </template>

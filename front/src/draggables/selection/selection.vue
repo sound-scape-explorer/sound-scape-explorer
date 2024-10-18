@@ -37,6 +37,7 @@ const toggle = () => {
   mode.value = 'existing';
 };
 
+// TODO: fix me
 watch(labelProperties, () => {
   options.value = convertToNaiveSelectOptions(labelProperties.value ?? []);
 });

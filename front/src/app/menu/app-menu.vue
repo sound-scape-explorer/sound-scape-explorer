@@ -24,7 +24,6 @@ const {menu} = useAppMenu();
         </AppMenuButton>
 
         <AppMenuButton
-          :disabled="!isReady"
           draggable-key="settings"
           text="Settings"
         >
@@ -109,6 +108,14 @@ const {menu} = useAppMenu();
 
       <AppMenuButton
         :disabled="!hasView"
+        draggable-key="histograms"
+        text="Histograms"
+      >
+        <menu.histograms />
+      </AppMenuButton>
+
+      <AppMenuButton
+        :disabled="!hasView"
         draggable-key="audio"
         text="Audio"
       >
@@ -152,18 +159,20 @@ const {menu} = useAppMenu();
 </template>
 
 <style lang="scss" scoped>
+$g: $p0;
+
 .header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
-  gap: 0.5rem;
+  gap: $g;
 
   position: fixed;
   z-index: $appMenuLayer;
 
-  top: 0.5rem;
-  left: 0.5rem;
+  top: $g;
+  left: $g;
 
   width: 100%;
 
@@ -171,7 +180,7 @@ const {menu} = useAppMenu();
 }
 
 .button {
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur($p0);
   pointer-events: auto;
 }
 
@@ -179,23 +188,23 @@ const {menu} = useAppMenu();
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding-right: 1rem;
+  padding-right: $g;
 }
 
 .row .left {
   display: flex;
-  gap: 0.5rem;
+  gap: $g;
 }
 
 .row .right {
   display: flex;
-  gap: 0.5rem;
+  gap: $g;
 }
 
 .column {
   display: flex;
-  gap: 0.5rem;
   flex-direction: column;
+  gap: $g;
 }
 
 .bold {

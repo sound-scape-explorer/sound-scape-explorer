@@ -1,4 +1,4 @@
-import type {NotificationType} from 'naive-ui';
+import {type NotificationType} from 'naive-ui';
 import {ref} from 'vue';
 
 interface Notification {

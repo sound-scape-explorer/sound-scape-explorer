@@ -12,13 +12,9 @@
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-
-  gap: 2px;
-
+  gap: $g0;
   height: 0;
-
-  margin-left: -2rem;
-
-  transform: translate3d(0, -10px, 0);
+  margin-left: -$p0 * 4;
+  transform: translate3d(0, -$g0, 0);
 }
 </style>

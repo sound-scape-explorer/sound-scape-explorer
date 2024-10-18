@@ -5,30 +5,26 @@ import {
   createPlotlyExportSvgButton,
   type PlotlyExportOptions,
 } from 'src/utils/create-plotly-export-svg-button';
-import {computed} from 'vue';
-
-import {EXPORT_FILENAME} from '../constants';
 
 const scale = 4;
 
-export function usePlotConfig(name: string) {
+export function useBasePlotConfig() {
   const {width, height} = useAppHeatmapSize();
-  const exportName = computed<string>(() => `${EXPORT_FILENAME}-${name}`);
 
-  const options = computed<PlotlyExportOptions>(() => ({
-    filename: exportName.value,
-    width: width.value,
-    height: height.value,
-    scale: scale,
-  }));
+  const generateConfig = (name: string): Partial<Config> => {
+    const options: PlotlyExportOptions = {
+      filename: name,
+      width: width.value,
+      height: height.value,
+      scale: scale,
+    };
 
-  const generateConfig = (): Partial<Config> => {
     const config: Partial<Config> = {
       displaylogo: false,
       responsive: true,
       modeBarButtonsToAdd: [
-        createPlotlyExportPngButtonDigested(options.value),
-        createPlotlyExportSvgButton(options.value),
+        createPlotlyExportPngButtonDigested(options),
+        createPlotlyExportSvgButton(options),
       ],
       modeBarButtonsToRemove: ['toImage'],
     };

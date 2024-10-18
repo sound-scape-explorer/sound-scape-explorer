@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type {NotificationType} from 'naive-ui';
+import {type NotificationType} from 'naive-ui';
 import {NButton, useNotification} from 'naive-ui';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {ALERT_TIMER} from 'src/constants';

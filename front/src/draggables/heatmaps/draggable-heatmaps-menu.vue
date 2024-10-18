@@ -5,34 +5,35 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useStorageDigested} from 'src/composables/use-storage-digested';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useDraggableHeatmapDigester} from 'src/draggables/heatmaps/use-draggable-heatmap-digester';
+import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
-import {computed, watch} from 'vue';
 
-const {digested} = useStorageDigested();
-const {labelProperties} = useStorageLabels();
+const {
+  digesterName,
+  options: digesterOptions,
+  isReadyForSelection,
+  isReadyAndSelected,
+  isPairing,
+} = useDraggableHeatmaps();
+
+const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
 const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
 const {resize1by1, resize4by3, resize16by10, resize16by9} = useAppHeatmapSize();
-const {flavors: colorFlavors} = useDraggableHeatmapsColor();
+const {flavor, flavors} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
-const {swap: swapLabels} = useDraggableHeatmapsLabels();
-const {
-  digester,
-  options: digesterOptions,
-  handleChange: handleDigesterChange,
-} = useDraggableHeatmapDigester();
 
-const isSingle = computed(() => !digested.value?.isPairing);
+const {labelProperties} = useStorageLabels();
 
-useRefProvide('digested/digester', digester);
-
-watch(digester, handleDigesterChange);
+useRefProvide(InjectionKey.digestedDigester, digesterName);
+useRefProvide(InjectionKey.digestedLabelA, a);
+useRefProvide(InjectionKey.digestedLabelB, b);
+useRefProvide(InjectionKey.digestedColorFlavor, flavor);
 </script>
 
 <template>
@@ -40,8 +41,8 @@ watch(digester, handleDigesterChange);
     <h2>Select</h2>
 
     <AppSelect
+      :injection-key="InjectionKey.digestedDigester"
       :options="digesterOptions"
-      injection-key="digested/digester"
       placeholder="Digester..."
       size="small"
     />
@@ -50,14 +51,14 @@ watch(digester, handleDigesterChange);
 
     <div class="labels">
       <AppSelect
+        :injection-key="InjectionKey.digestedLabelA"
         :options="labelProperties ?? []"
-        injection-key="digested/labelA"
         placeholder="Label A..."
         size="small"
       />
 
       <AppButton
-        :disabled="isSingle"
+        :disabled="!isReadyForSelection || !isPairing"
         :handle-click="swapLabels"
         icon
         size="small"
@@ -66,9 +67,9 @@ watch(digester, handleDigesterChange);
       </AppButton>
 
       <AppSelect
-        :disabled="isSingle"
+        :disabled="!isReadyForSelection || !isPairing"
+        :injection-key="InjectionKey.digestedLabelB"
         :options="labelProperties ?? []"
-        injection-key="digested/labelB"
         placeholder="Label B..."
         size="small"
       />
@@ -78,8 +79,9 @@ watch(digester, handleDigesterChange);
 
     <div class="colors">
       <AppSelect
-        :options="colorFlavors"
-        injection-key="digested/colorFlavor"
+        :disabled="!isReadyAndSelected"
+        :injection-key="InjectionKey.digestedColorFlavor"
+        :options="flavors"
         placeholder="Color flavor..."
         size="small"
       />
@@ -89,6 +91,7 @@ watch(digester, handleDigesterChange);
       <div>
         <NSelect
           v-model:value="rangeIndex"
+          :disabled="!isReadyAndSelected"
           :options="rangeOptions"
           placeholder="Range..."
           size="small"
@@ -96,25 +99,46 @@ watch(digester, handleDigesterChange);
       </div>
     </div>
 
-    <h2>Window</h2>
+    <h2>Plot</h2>
 
-    <div class="window">
+    <div class="plot">
       <NButtonGroup>
-        <AppButton :handle-click="resize1by1">
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize1by1"
+        >
+          <NIcon>
+            <ResizeOutline /> </NIcon
+          >&nbsp;1:1
         </AppButton>
-        <AppButton :handle-click="resize4by3">
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize4by3"
+        >
+          <NIcon>
+            <ResizeOutline /> </NIcon
+          >&nbsp;4:3
         </AppButton>
-        <AppButton :handle-click="resize16by10">
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize16by10"
+        >
+          <NIcon>
+            <ResizeOutline /> </NIcon
+          >&nbsp;16:10
         </AppButton>
-        <AppButton :handle-click="resize16by9">
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize16by9"
+        >
+          <NIcon>
+            <ResizeOutline /> </NIcon
+          >&nbsp;16:9
         </AppButton>
       </NButtonGroup>
 
       <AppButton
+        :disabled="!isReadyAndSelected"
         :handle-click="handleExportClick"
         icon
         size="small"
@@ -130,17 +154,17 @@ watch(digester, handleDigesterChange);
 <style lang="scss" scoped>
 .labels {
   display: grid;
-  grid-template-columns: 1fr 4rem 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 1fr $p0 * 7 1fr;
+  gap: $p0;
 }
 
 .colors {
   display: grid;
-  grid-template-columns: 1fr 4rem 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 1fr $p0 * 7 1fr;
+  gap: $p0;
 }
 
-.window {
+.plot {
   display: flex;
   justify-content: space-between;
   align-items: center;

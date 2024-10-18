@@ -7,6 +7,7 @@ import DraggableColors from 'src/draggables/colors/draggable-colors.vue';
 import DraggableDetails from 'src/draggables/details/draggable-details.vue';
 import DraggableHeatmaps from 'src/draggables/heatmaps/draggable-heatmaps.vue';
 import DraggableHelp from 'src/draggables/help/draggable-help.vue';
+import DraggableHistograms from 'src/draggables/histograms/draggable-histograms.vue';
 import DraggableLabel from 'src/draggables/labels/draggable-labels.vue';
 import DraggableOpen from 'src/draggables/open/draggable-open.vue';
 import DraggableRelativeTrajectories from 'src/draggables/relative-trajectories/draggable-relative-trajectories.vue';
@@ -36,6 +37,7 @@ const {isReady} = useStorageReady();
   <DraggableRelativeTrajectories v-if="isReady" />
   <DraggableTemporal v-if="isReady" />
   <DraggableHeatmaps v-if="isReady" />
+  <DraggableHistograms v-if="isReady" />
   <DraggableSelection v-if="isReady" />
 
   <DraggableTimeline v-if="isReady" />

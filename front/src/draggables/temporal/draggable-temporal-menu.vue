@@ -1,9 +1,11 @@
 <script lang="ts" setup="">
 import {DownloadOutline} from '@vicons/ionicons5';
-import {NButton, NButtonGroup, NSwitch, NTreeSelect} from 'naive-ui';
+import {NButton, NButtonGroup, NTreeSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import DraggableTemporalMenuFilters from 'src/draggables/temporal/draggable-temporal-menu-filters.vue';
@@ -36,21 +38,22 @@ const {
 const {periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useGlobalKeyboard();
 
-useRefProvide('indicators/list', indicator);
-useRefProvide('indicators/selection', selection);
-useRefProvide('indicators/display', display);
+useRefProvide(InjectionKey.indicatorsList, indicator);
+useRefProvide(InjectionKey.indicatorsSelection, selection);
+useRefProvide(InjectionKey.indicatorsDisplay, display);
+useRefProvide(InjectionKey.temporalTrim, isCondensed);
 
 watch(indicator, update);
 </script>
 
 <template>
-  <AppDraggableMenu size="medium">
+  <AppDraggableMenu>
     <h2>Select</h2>
 
     <div>
       <AppSelect
+        :injection-key="InjectionKey.indicatorsList"
         :options="indicators"
-        injection-key="indicators/list"
         size="small"
       />
     </div>
@@ -92,19 +95,18 @@ watch(indicator, update);
     <div class="row">
       <div>
         <AppSelect
+          :injection-key="InjectionKey.indicatorsSelection"
           :options="selections"
-          injection-key="indicators/selection"
+          class="draggableTemporalMenuDisplaySelection"
           size="small"
-          style="width: 9em"
           tooltip="Current selection"
           tooltip-placement="top"
         />
 
         <AppSelect
+          :injection-key="InjectionKey.indicatorsDisplay"
           :options="displays"
-          injection-key="indicators/display"
           size="small"
-          style="width: 9em"
           tooltip="Rendering style"
           tooltip-placement="top"
         />
@@ -120,15 +122,13 @@ watch(indicator, update);
           </NButton>
         </NButtonGroup>
 
-        <NSwitch
+        <AppSwitch
           v-if="isCandles"
-          v-model:value="isCondensed"
           :disabled="!isCandles"
-          size="small"
-        >
-          <template #unchecked>Full</template>
-          <template #checked>Trim</template>
-        </NSwitch>
+          :injection-key="InjectionKey.temporalTrim"
+          checked="Trim"
+          unchecked="Full"
+        />
       </div>
 
       <AppButton
@@ -159,12 +159,11 @@ watch(indicator, update);
   > div {
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: $p0;
   }
 }
 
-$s: 0.9;
-.toggle {
-  transform: scale3d($s, $s, $s);
+.draggableTemporalMenuDisplaySelection {
+  width: $p0 * 13;
 }
 </style>

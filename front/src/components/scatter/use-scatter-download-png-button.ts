@@ -1,5 +1,5 @@
 import Plotly, {type ToImgopts} from 'plotly.js-dist-min';
-import type {ScatterProps} from 'src/components/scatter/use-scatter-config';
+import {type ScatterProps} from 'src/components/scatter/use-scatter-config';
 import {useLabelsScreenshot} from 'src/draggables/labels/use-labels-screenshot';
 import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
 

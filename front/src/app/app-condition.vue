@@ -28,5 +28,6 @@ const hasChildren = typeof slots.default !== 'undefined';
 <style lang="scss" scoped>
 .suspense {
   font-style: italic;
+  padding-top: $p0;
 }
 </style>

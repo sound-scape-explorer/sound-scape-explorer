@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import 'sass-reset';
+import 'sass-reset/src/reset.scss';
 
 import {
   NLayout,

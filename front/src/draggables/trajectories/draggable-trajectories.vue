@@ -6,12 +6,12 @@ import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vu
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
-import {PLOTLY_SIZE} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
 import {useDraggableTrajectoriesExport} from 'src/draggables/trajectories/use-draggable-trajectories-export';
 import {useTrajectoriesOptions} from 'src/draggables/trajectories/use-trajectories-options';
@@ -28,7 +28,7 @@ const {renderTraces} = useScatterTraces();
 watch(isFused, renderTraces);
 watch(current, update);
 
-useRefProvide('trajectories/fuse', isFused);
+useRefProvide(InjectionKey.trajectoriesFuse, isFused);
 </script>
 
 <template>
@@ -44,10 +44,7 @@ useRefProvide('trajectories/fuse', isFused);
       />
     </AppDraggableSidebar>
 
-    <AppDraggableMenu
-      :style="{minWidth: `${PLOTLY_SIZE}px`}"
-      size="medium"
-    >
+    <AppDraggableMenu class="draggableTrajectoriesMenu">
       <h2>Trajectories</h2>
 
       <div class="selection">
@@ -99,6 +96,7 @@ useRefProvide('trajectories/fuse', isFused);
         <AppButton
           :handle-click="handleClick"
           icon
+          size="small"
           tooltip="Export"
           tooltip-placement="bottom"
         >
@@ -110,15 +108,19 @@ useRefProvide('trajectories/fuse', isFused);
 </template>
 
 <style lang="scss" scoped>
+.draggableTrajectoriesMenu {
+  width: $s0;
+}
+
 .selection {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5em;
+  gap: $p0;
 }
 
 .switch {
-  width: 6em;
+  width: $p0 * 8;
   font-size: 0.9em;
 }
 
@@ -126,6 +128,7 @@ useRefProvide('trajectories/fuse', isFused);
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding-top: $p0;
 }
 
 .cascader {

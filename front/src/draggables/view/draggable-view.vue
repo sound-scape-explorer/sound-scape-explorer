@@ -5,6 +5,7 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useBandLifecycles} from 'src/composables/use-band-lifecycles';
 import {useBandOptions} from 'src/composables/use-band-options';
 import {useBandSelection} from 'src/composables/use-band-selection';
@@ -42,10 +43,10 @@ useBandLifecycles();
 useIntegrationLifecycles();
 useExtractorLifecycles();
 
-useRefProvide('view/reducer', reducerSelected);
-useRefProvide('view/band', bandSelected);
-useRefProvide('view/integration', integrationSelected);
-useRefProvide('view/extractor', extractorSelected);
+useRefProvide(InjectionKey.viewReducer, reducerSelected);
+useRefProvide(InjectionKey.viewBand, bandSelected);
+useRefProvide(InjectionKey.viewIntegration, integrationSelected);
+useRefProvide(InjectionKey.viewExtractor, extractorSelected);
 
 onMounted(autoselectDev);
 </script>
@@ -53,15 +54,15 @@ onMounted(autoselectDev);
 <template>
   <AppDraggable draggable-key="view">
     <AppDraggableMenu
-      class="container"
+      class="draggableViewContainer"
       size="medium"
     >
       <h2>Reducer</h2>
 
       <AppSelect
         :disabled="hasView"
+        :injection-key="InjectionKey.viewReducer"
         :options="reducerOptions"
-        injection-key="view/reducer"
         placeholder="Reducer..."
         size="small"
       />
@@ -70,8 +71,8 @@ onMounted(autoselectDev);
 
       <AppSelect
         :disabled="reducer === null || hasView"
+        :injection-key="InjectionKey.viewBand"
         :options="bandOptions"
-        injection-key="view/band"
         placeholder="Band..."
         size="small"
       />
@@ -80,8 +81,8 @@ onMounted(autoselectDev);
 
       <AppSelect
         :disabled="reducer === null || hasView"
+        :injection-key="InjectionKey.viewIntegration"
         :options="integrationOptions"
-        injection-key="view/integration"
         placeholder="Integration..."
         size="small"
       />
@@ -90,8 +91,8 @@ onMounted(autoselectDev);
 
       <AppSelect
         :disabled="reducer === null || hasView"
+        :injection-key="InjectionKey.viewExtractor"
         :options="extractorOptions"
-        injection-key="view/extractor"
         placeholder="Extractor..."
         size="small"
       />
@@ -119,8 +120,8 @@ onMounted(autoselectDev);
 </template>
 
 <style lang="scss" scoped>
-.container {
-  min-width: 30em;
+.draggableViewContainer {
+  width: $s0;
 }
 
 .last-line {
@@ -133,6 +134,10 @@ onMounted(autoselectDev);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.2em;
+  gap: $g0;
+
+  svg {
+    transform: translate3d(0, 1px, 0);
+  }
 }
 </style>

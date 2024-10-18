@@ -13,9 +13,10 @@ import {
   ListOutline,
   NavigateOutline,
   ReceiptOutline,
+  StatsChartOutline,
   TimerOutline,
 } from '@vicons/ionicons5';
-import type {Component} from 'vue';
+import {type Component} from 'vue';
 
 interface Menu {
   [key: string]: Component;
@@ -33,6 +34,7 @@ export function useAppMenu() {
     calendar: CalendarOutline,
     labels: LayersOutline,
     temporal: BarChartOutline,
+    histograms: StatsChartOutline,
     heatmaps: GridOutline,
     details: ListOutline,
     audio: HeadsetOutline,

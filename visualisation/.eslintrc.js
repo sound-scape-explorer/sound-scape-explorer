@@ -1,10 +1,10 @@
 module.exports = {
-  'env': {
-    'browser': true,
-    'es6': true,
-    'node': true,
+  env: {
+    browser: true,
+    es6: true,
+    node: true,
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -12,9 +12,9 @@ module.exports = {
     'plugin:import/electron',
     'plugin:import/typescript',
   ],
-  'parser': '@typescript-eslint/parser',
-  'plugins': ['simple-import-sort'],
-  'rules': {
+  parser: '@typescript-eslint/parser',
+  plugins: ['simple-import-sort'],
+  rules: {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -69,7 +69,7 @@ module.exports = {
       'warn',
       {
         argsIgnorePattern:
-        '^(symbol|price|tag|since|limit|params|market|timeframe|api|path|code|currency|response|requestHeaders|requestBody|bidsKey|asksKey)',
+          '^(symbol|price|tag|since|limit|params|market|timeframe|api|path|code|currency|response|requestHeaders|requestBody|bidsKey|asksKey)',
       },
     ],
     'new-parens': 'error',
@@ -142,5 +142,6 @@ module.exports = {
       },
     ],
     '@typescript-eslint/object-curly-spacing': ['error', 'never'],
+    'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
   },
 };

@@ -1,4 +1,4 @@
-import type {Traced} from 'src/composables/use-trajectories-data';
+import {type Traced} from 'src/composables/use-trajectories-data';
 
 import {interpolateArray} from './interpolate-array';
 import {isTracedThreeDimensional} from './is-traced-three-dimensional';

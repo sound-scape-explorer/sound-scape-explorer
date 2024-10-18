@@ -1,4 +1,4 @@
-import type {Scale} from 'chroma-js';
+import {type Scale} from 'chroma-js';
 import chroma from 'chroma-js';
 import {computed} from 'vue';
 

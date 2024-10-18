@@ -6,7 +6,7 @@ import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 import {useLabelsInfo} from 'src/draggables/labels/use-labels-info';
 
-const {columns, toggleColumns, toggleExpand} = useDraggableLabels();
+const {toggleExpand} = useDraggableLabels();
 const {count} = useLabelsInfo();
 </script>
 
@@ -22,16 +22,6 @@ const {count} = useLabelsInfo();
       <ExpandOutline />
     </AppButton>
 
-    <AppButton
-      :handle-click="toggleColumns"
-      icon
-      size="tiny"
-      tooltip="Columns"
-      tooltip-placement="left"
-    >
-      {{ columns }}
-    </AppButton>
-
     <AppTooltip tooltip="Points excluded">
       <div class="info">
         {{ count }}
@@ -42,8 +32,8 @@ const {count} = useLabelsInfo();
 
 <style lang="scss" scoped>
 .info {
-  width: 2em;
-  height: 2em;
+  width: $p0 * 3;
+  height: $p0 * 3;
 
   font-size: 0.9em;
 

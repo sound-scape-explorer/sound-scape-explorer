@@ -35,6 +35,11 @@ app.get('/', (_req, res) => {
   res.send({
     message: 'SoundScapeExplorer Audio Service',
     version: VERSION,
+    paths: {
+      audio: audioPath,
+      ffmpeg: ffmpegPath,
+      ffprobe: ffprobePath,
+    },
   });
 });
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {NButton, NIcon, NTooltip} from 'naive-ui';
-import type {NaiveSize} from 'src/types';
+import {type NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
 interface Props {
@@ -26,28 +26,12 @@ const props = withDefaults(defineProps<Props>(), {
   error: false,
 });
 
-const hasTooltip = computed(() => typeof props.tooltip === 'string');
-const classNames = computed<string>(() => {
-  let string = '';
+const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 
-  if (props.grow) {
-    string += ' grow';
-  }
-
-  if (props.growCol) {
-    string += ' growCol';
-  }
-
-  if (props.active) {
-    string += ' active';
-  }
-
-  if (props.error) {
-    string += ' error';
-  }
-
-  return string;
-});
+const handleFocus = (e: FocusEvent) => {
+  const target = e.target as HTMLButtonElement;
+  target.blur();
+};
 </script>
 
 <template>
@@ -59,10 +43,16 @@ const classNames = computed<string>(() => {
     <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
       <NButton
-        :class="classNames"
+        :class="{
+          grow: props.grow,
+          growCol: props.growCol,
+          active: props.active,
+          error: props.error,
+        }"
         :disabled="props.disabled"
         :size="props.size"
         @click="props.handleClick"
+        @focus="handleFocus"
       >
         <NIcon v-if="props.icon">
           <slot />
@@ -75,10 +65,16 @@ const classNames = computed<string>(() => {
 
   <NButton
     v-if="!hasTooltip"
-    :class="classNames"
+    :class="{
+      grow: props.grow,
+      growCol: props.growCol,
+      active: props.active,
+      error: props.error,
+    }"
     :disabled="props.disabled"
     :size="props.size"
     @click="props.handleClick"
+    @focus="handleFocus"
   >
     <NIcon v-if="props.icon">
       <slot />

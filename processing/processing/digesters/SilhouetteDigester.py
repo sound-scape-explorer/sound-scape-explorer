@@ -36,6 +36,10 @@ class SilhouetteDigester(Digester):
                     df2[:labcl1_len, labcl1_len:] = mdm[np.ix_(labcl1, labcl2)]
                     df2[labcl1_len:, labcl1_len:] = mdm[np.ix_(labcl2, labcl2)]
                     df2[labcl1_len:, :labcl1_len] = mdm[np.ix_(labcl2, labcl1)]
+
+                    # INFO: this can fail with ValueError
+                    # @see https://stackoverflow.com/questions/51382250/valueerror-number-of-labels-is-1-valid-values-are-2-to-n-samples-1-inclusiv
+                    # TODO: fix if this happens again
                     silhouette[i, j] = metrics.silhouette_score(
                         df2,
                         np.hstack([dataframe.index[labcl1], dataframe.index[labcl2]]),

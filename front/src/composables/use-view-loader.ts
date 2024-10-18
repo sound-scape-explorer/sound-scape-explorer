@@ -33,7 +33,7 @@ export function useViewLoader() {
   const {readReducedFeatures} = useStorageReducedFeatures();
   const {generateColorScale} = useScatterColorScale();
   const {buildSelection, selection: labelSelection} = useLabelsSelection();
-  const {renderTraces, isEnabled} = useScatterTraces();
+  const {isEnabled} = useScatterTraces();
   const {filter: filterByLabel} = useScatterFilterLabels();
   const {filter: filterByTemporal} = useScatterFilterTemporal();
   const {filterByTime} = useScatterFilterTime();
@@ -90,8 +90,6 @@ export function useViewLoader() {
     filterByLabel(labelSelection);
     filterByTime();
     filterByTemporal();
-
-    renderTraces();
 
     isLoading.value = false;
     close('view');

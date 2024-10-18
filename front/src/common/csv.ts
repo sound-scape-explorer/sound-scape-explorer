@@ -37,15 +37,14 @@ export class Csv {
   }
 
   public download(name: string) {
-    const anchor = document.createElement('a');
-    anchor.download = name;
-
     const data = convertArrayToCsv(
       this.rows.map((row) => row.join(this.separator)),
       this.columns.join(this.separator),
     );
-    anchor.href = data;
 
+    const anchor = document.createElement('a');
+    anchor.download = `${name}.csv`;
+    anchor.href = data;
     anchor.click();
     anchor.remove();
   }

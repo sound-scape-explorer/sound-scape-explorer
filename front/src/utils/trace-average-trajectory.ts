@@ -1,6 +1,6 @@
-import type {Scale} from 'chroma-js';
-import type {Data} from 'plotly.js-dist-min';
-import type {Traced} from 'src/composables/use-trajectories-data';
+import {type Scale} from 'chroma-js';
+import {type Data} from 'plotly.js-dist-min';
+import {type Traced} from 'src/composables/use-trajectories-data';
 
 import {buildAverageTrajectory} from './build-average-trajectory';
 import {generateTraceDefaultDataOptions} from './generate-trace-default-data-options';

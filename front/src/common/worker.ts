@@ -1,32 +1,34 @@
-import type {Dataset, File as H5File, Group} from 'h5wasm';
+import {type Dataset, type File as H5File, type Group} from 'h5wasm';
 import h5wasm from 'h5wasm';
+import {type DigesterName} from 'src/common/digester-name';
+import {digesterTypeMap} from 'src/common/digester-type-map';
 import {StorageMode} from 'src/common/storage-mode';
 import {StoragePath} from 'src/common/storage-path';
-import type {StorageSettings} from 'src/common/storage-settings';
-import type {Autocluster} from 'src/composables/use-autoclusters';
-import type {Band} from 'src/composables/use-bands';
-import type {Digester} from 'src/composables/use-digesters';
-import type {Extractor} from 'src/composables/use-extractors';
-import type {File as FileConfig} from 'src/composables/use-files';
-import type {Integration} from 'src/composables/use-integrations';
-import type {Range} from 'src/composables/use-ranges';
-import type {ReducerFromStorage} from 'src/composables/use-reducers';
-import type {RelativeTrajectory} from 'src/composables/use-relative-trajectories';
-import type {Site} from 'src/composables/use-sites';
-import type {AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
-import type {
-  BlockDetails,
-  IntervalDetails,
+import {type StorageSettings} from 'src/common/storage-settings';
+import {type Autocluster} from 'src/composables/use-autoclusters';
+import {type Band} from 'src/composables/use-bands';
+import {type Digester} from 'src/composables/use-digesters';
+import {type Extractor} from 'src/composables/use-extractors';
+import {type File as FileConfig} from 'src/composables/use-files';
+import {type Integration} from 'src/composables/use-integrations';
+import {type Range} from 'src/composables/use-ranges';
+import {type ReducerFromStorage} from 'src/composables/use-reducers';
+import {type RelativeTrajectory} from 'src/composables/use-relative-trajectories';
+import {type Site} from 'src/composables/use-sites';
+import {type AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
+import {
+  type BlockDetails,
+  type IntervalDetails,
 } from 'src/composables/use-storage-aggregated-interval-details';
-import type {AggregatedSite} from 'src/composables/use-storage-aggregated-sites';
-import type {Digested} from 'src/composables/use-storage-digested';
-import type {Labels} from 'src/composables/use-storage-labels';
-import type {ReducedFeatures} from 'src/composables/use-storage-reduced-features';
-import type {Trajectory} from 'src/composables/use-trajectories';
-import type {
-  TracedData,
-  TracedRelativeTimestamps,
-  TracedTimestamps,
+import {type AggregatedSite} from 'src/composables/use-storage-aggregated-sites';
+import {type Digested} from 'src/composables/use-storage-digested';
+import {type Labels} from 'src/composables/use-storage-labels';
+import {type ReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {type Trajectory} from 'src/composables/use-trajectories';
+import {
+  type TracedData,
+  type TracedRelativeTimestamps,
+  type TracedTimestamps,
 } from 'src/composables/use-trajectories-data';
 import {trimRectangular} from 'src/utils/trim-rectangular';
 
@@ -777,15 +779,18 @@ export async function readDigesters(file: File): Promise<Digester[]> {
   const dataset = h5.get(path) as Dataset;
   const names = dataset.to_array() as string[];
 
-  const digesters: Digester[] = [];
+  const digesters: Digester[] = new Array(names.length);
 
-  for (let index = 0; index < names.length; index += 1) {
+  for (let i = 0; i < names.length; i += 1) {
+    const name = names[i] as DigesterName;
+
     const digester: Digester = {
-      index: index,
-      name: names[index],
+      index: i,
+      name: name,
+      type: digesterTypeMap[name],
     };
 
-    digesters.push(digester);
+    digesters[i] = digester;
   }
 
   return digesters;
