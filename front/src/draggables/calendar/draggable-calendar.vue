@@ -17,7 +17,6 @@ import {useRefProvide} from 'src/composables/use-ref-provide';
 import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-slider.vue';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {useDraggableCalendarLifecycles} from 'src/draggables/calendar/use-draggable-calendar-lifecycles';
-import {useDraggableCalendarShortcuts} from 'src/draggables/calendar/use-draggable-calendar-shortcuts';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
 
 const {
@@ -38,7 +37,6 @@ const {
 } = useDraggableCalendarTransport();
 
 useDraggableCalendarLifecycles();
-useDraggableCalendarShortcuts();
 
 // todo: remove the group button it makes the dom very slow (try moving draggable)
 
@@ -88,7 +86,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
             :disabled="uiDisabled"
             :handle-click="skipTimeBackward"
             icon
-            tooltip="Backward [p]"
+            tooltip="Backward"
           >
             <PlaySkipBackOutline />
           </AppButton>
@@ -97,7 +95,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
             :disabled="uiDisabled"
             :handle-click="togglePlaying"
             icon
-            tooltip="Play / Pause [space]"
+            tooltip="Play / Pause"
           >
             <PlayOutline v-show="!isPlaying" />
             <PauseOutline v-show="isPlaying" />
@@ -107,7 +105,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
             :disabled="uiDisabled"
             :handle-click="skipTimeForward"
             icon
-            tooltip="Forward [n]"
+            tooltip="Forward"
           >
             <PlaySkipForwardOutline />
           </AppButton>

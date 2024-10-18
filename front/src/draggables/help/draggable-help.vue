@@ -28,5 +28,6 @@ import {VERSION} from 'src/version';
   align-items: flex-start;
   flex-direction: column;
   gap: $p0;
+  width: $s2;
 }
 </style>

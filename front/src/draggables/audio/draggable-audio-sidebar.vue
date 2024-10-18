@@ -41,7 +41,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
   <AppDraggableSidebar>
     <AppButton
       :handle-click="togglePlayPause"
-      :tooltip="isPlaying ? 'Pause' : 'Play'"
+      :tooltip="isPlaying ? 'Pause [space]' : 'Play [space]'"
       icon
       tooltip-placement="left"
     >
