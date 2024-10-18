@@ -30,10 +30,10 @@ useAudioRateWatcher();
       </AppIcon>
     </div>
 
-    <div class="player">
-      <DraggableAudioSidebar />
-      <DraggableAudioMenu />
+    <DraggableAudioSidebar />
+    <DraggableAudioMenu />
 
+    <div class="player">
       <div
         ref="waveform"
         class="mt"

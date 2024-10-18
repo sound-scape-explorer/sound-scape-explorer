@@ -13,6 +13,7 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import DraggableAudioSidebarPeak from 'src/draggables/audio/draggable-audio-sidebar-peak.vue';
+import DraggableAudioSidebarVumeter from 'src/draggables/audio/draggable-audio-sidebar-vumeter.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
@@ -101,6 +102,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
       undo-tooltip="Previous interval"
     />
 
+    <DraggableAudioSidebarVumeter />
     <DraggableAudioSidebarPeak />
   </AppDraggableSidebar>
 </template>
