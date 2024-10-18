@@ -16,6 +16,8 @@ import {InjectionKey} from 'src/common/injection-key';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-slider.vue';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
+import {useDraggableCalendarLifecycles} from 'src/draggables/calendar/use-draggable-calendar-lifecycles';
+import {useDraggableCalendarShortcuts} from 'src/draggables/calendar/use-draggable-calendar-shortcuts';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
 
 const {
@@ -34,6 +36,9 @@ const {
   togglePlaying,
   handleDateStartUpdate,
 } = useDraggableCalendarTransport();
+
+useDraggableCalendarLifecycles();
+useDraggableCalendarShortcuts();
 
 useRefProvide(InjectionKey.calendarActive, isActive);
 useRefProvide(InjectionKey.timeDuration, duration);

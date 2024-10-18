@@ -22,13 +22,11 @@ export function useDraggableCalendarTransport() {
   };
 
   const togglePlaying = (event?: MouseEvent) => {
-    console.log('toggle');
     if (!isActive.value) {
       return;
     }
 
     isPlaying.value = !isPlaying.value;
-    console.log(isPlaying.value);
     filterByTime();
     blurButton(event);
   };
