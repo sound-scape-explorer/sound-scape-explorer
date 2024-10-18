@@ -15,7 +15,7 @@ export const GAIN = {
   default: 100.0,
   step: 50.0,
   max: 500.0,
-  min: 0.0,
+  min: 50.0,
 };
 
 const waveDampening = 2;

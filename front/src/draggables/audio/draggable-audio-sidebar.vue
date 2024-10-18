@@ -20,8 +20,18 @@ import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {useWavesurferHandlers} from 'src/draggables/audio/use-wavesurfer-handlers';
 
-const {increase, decrease} = useAudioFourier();
-const {increaseVolume, decreaseVolume} = useWavesurferHandlers();
+const {
+  increase: increaseFourier,
+  decrease: decreaseFourier,
+  canIncrease: canIncreaseFourier,
+  canDecrease: canDecreaseFourier,
+} = useAudioFourier();
+const {
+  increase: increaseVolume,
+  decrease: decreaseVolume,
+  canIncrease: canIncreaseVolume,
+  canDecrease: canDecreaseVolume,
+} = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
 const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
@@ -49,6 +59,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     </AppButton>
 
     <AppButton
+      :disabled="!canIncreaseVolume"
       :handle-click="increaseVolume"
       icon
       tooltip="Volume Up"
@@ -58,6 +69,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     </AppButton>
 
     <AppButton
+      :disabled="!canDecreaseVolume"
       :handle-click="decreaseVolume"
       icon
       tooltip="Volume Down"
@@ -67,7 +79,8 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     </AppButton>
 
     <AppButton
-      :handle-click="increase"
+      :disabled="!canIncreaseFourier"
+      :handle-click="increaseFourier"
       icon
       tooltip="FFT Size Up"
       tooltip-placement="left"
@@ -76,7 +89,8 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     </AppButton>
 
     <AppButton
-      :handle-click="decrease"
+      :disabled="!canDecreaseFourier"
+      :handle-click="decreaseFourier"
       icon
       tooltip="FFT Size Down"
       tooltip-placement="left"
