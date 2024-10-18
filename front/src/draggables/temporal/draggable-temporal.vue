@@ -3,7 +3,6 @@ import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
 import {useExportName} from 'src/composables/use-export-name';
-import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
 import DraggableTemporalSidebar from 'src/draggables/temporal/draggable-temporal-sidebar.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
