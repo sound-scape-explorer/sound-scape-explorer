@@ -143,7 +143,6 @@ useRefProvide(InjectionKey.timeDuration, duration);
 .draggableCalendarMenu {
   & > div {
     display: flex;
-    //justify-content: space-between;
     align-items: center;
     gap: $p0;
   }

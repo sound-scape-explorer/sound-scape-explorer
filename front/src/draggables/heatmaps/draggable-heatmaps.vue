@@ -2,7 +2,6 @@
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
 import {useExportName} from 'src/composables/use-export-name';
-import {PLOTLY_SIZE} from 'src/constants';
 import DraggableHeatmapsMenu from 'src/draggables/heatmaps/draggable-heatmaps-menu.vue';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
