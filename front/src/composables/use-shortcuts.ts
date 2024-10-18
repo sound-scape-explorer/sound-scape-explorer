@@ -22,7 +22,7 @@ export enum Shortcuts {
   calendar = 'C',
   timeline = 'T',
   selection = 's',
-  selectHotkey = 'j',
+  selectHotkey = 'J',
   audioPlayPause = ' ',
 }
 
