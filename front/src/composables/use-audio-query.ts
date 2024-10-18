@@ -14,7 +14,8 @@ const q = async (url: string): Promise<Q> => {
     let err: Q['err'] = null;
 
     if (response.status !== 200) {
-      err = new Error(url);
+      const data = await response.text();
+      err = new Error(data);
     }
 
     return {
