@@ -18,8 +18,10 @@ export const render = async () => {
     return;
   }
 
+  const audioPath = loadingZone.audioPath;
+
   loadingZone.hide();
-  loadedZone.show();
+  loadedZone.show(audioPath);
 };
 
 render().then();
