@@ -3,7 +3,6 @@ import AppGrid from 'src/app/app-grid.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import DraggableHelpLinks from 'src/draggables/help/draggable-help-links.vue';
 import DraggableHelpShortcuts from 'src/draggables/help/draggable-help-shortcuts.vue';
-// noinspection ES6UnusedImports
 import {VERSION} from 'src/version';
 </script>
 
