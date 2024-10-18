@@ -5,11 +5,11 @@ import {render} from '../renderer';
 export class LoadingZone {
   public audioPath: string | null;
 
-  private node: HTMLDivElement;
+  private readonly node: HTMLDivElement;
 
-  private configurationElement: HTMLInputElement;
+  private readonly configurationElement: HTMLInputElement;
 
-  private storageElement: HTMLInputElement;
+  private readonly storageElement: HTMLInputElement;
 
   public constructor() {
     this.audioPath = null;
