@@ -6,6 +6,7 @@ import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {Shortcuts} from 'src/composables/use-shortcuts';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewState} from 'src/composables/use-view-state';
+import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 export function useAppShortcuts() {
@@ -18,6 +19,7 @@ export function useAppShortcuts() {
   const {enable} = useScreen();
   const {toggleExpand} = useDraggableLabels();
   const {hasView} = useViewState();
+  const {togglePlayPause} = useAudioTransport();
 
   registerKey(Shortcuts.open, () => toggle('open'));
   registerKey(Shortcuts.settings, () => isReady.value && toggle('settings'));
@@ -56,4 +58,5 @@ export function useAppShortcuts() {
   );
 
   registerKey(Shortcuts.labelsZoom, toggleExpand);
+  registerKey(Shortcuts.audioPlayPause, togglePlayPause);
 }

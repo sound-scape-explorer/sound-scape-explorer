@@ -17,15 +17,13 @@ export enum Shortcuts {
   trajectories = 'y',
   relativeTrajectories = 'Y',
   temporal = 't',
-  histograms = 'H',
+  histograms = 'j',
   heatmaps = 'h',
   calendar = 'C',
   timeline = 'T',
-  calendarToggle = ' ',
-  calendarPrevious = 'p',
-  calendarNext = 'n',
   selection = 's',
   selectHotkey = 'j',
+  audioPlayPause = ' ',
 }
 
 interface ShortcutSerialized {

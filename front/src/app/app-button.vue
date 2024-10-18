@@ -27,6 +27,11 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const hasTooltip = computed(() => typeof props?.tooltip === 'string');
+
+const handleFocus = (e: FocusEvent) => {
+  const target = e.target as HTMLButtonElement;
+  target.blur();
+};
 </script>
 
 <template>
@@ -47,6 +52,7 @@ const hasTooltip = computed(() => typeof props?.tooltip === 'string');
         :disabled="props.disabled"
         :size="props.size"
         @click="props.handleClick"
+        @focus="handleFocus"
       >
         <NIcon v-if="props.icon">
           <slot />
@@ -68,6 +74,7 @@ const hasTooltip = computed(() => typeof props?.tooltip === 'string');
     :disabled="props.disabled"
     :size="props.size"
     @click="props.handleClick"
+    @focus="handleFocus"
   >
     <NIcon v-if="props.icon">
       <slot />
