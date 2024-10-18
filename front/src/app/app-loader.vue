@@ -2,7 +2,6 @@
 import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useBands} from 'src/composables/use-bands';
 import {useColorLifecycles} from 'src/composables/use-color-lifecycles';
-import {useColorUser} from 'src/composables/use-color-user';
 import {useDigesters} from 'src/composables/use-digesters';
 import {useExtractors} from 'src/composables/use-extractors';
 import {useFiles} from 'src/composables/use-files';
@@ -20,8 +19,7 @@ import {useTrajectories} from 'src/composables/use-trajectories';
 import {useVersion} from 'src/composables/use-version';
 import {useViewState} from 'src/composables/use-view-state';
 import {useViewWatcher} from 'src/composables/use-view-watcher';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {onMounted, watch} from 'vue';
+import {watch} from 'vue';
 
 const {isReady, notify} = useStorageReady();
 const {hasView} = useViewState();

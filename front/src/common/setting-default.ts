@@ -17,7 +17,7 @@ export const SettingDefault = {
   isWebGlScatter2d: true,
   isColorMapSwapped: false,
   spectrogramColorMap: SPECTROGRAM_COLOR_MAPS[0],
-  audioHost: 'http://localhost:5531/',
+  audioHost: 'http://localhost:5531',
   fontSize: 12,
   decibelsDisplay: false,
   legendOverflow: false,
