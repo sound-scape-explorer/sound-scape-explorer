@@ -3,7 +3,7 @@ import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {ref} from 'vue';
 
 const analyser = ref<AnalyserNode | null>(null);
-const data = ref<Uint8Array | null>(null);
+const bytes = ref<Uint8Array | null>(null);
 const floats = ref<Float32Array | null>(null);
 const isClipping = ref<boolean>(false);
 const timer = ref<number | null>(null);
@@ -20,20 +20,20 @@ export function useAudioAnalyser() {
 
     analyser.value = context.value.createAnalyser();
     analyser.value.fftSize = size;
-    data.value = new Uint8Array(size);
+    bytes.value = new Uint8Array(size);
     floats.value = new Float32Array(size);
   };
 
   const update = () => {
     if (
       analyser.value === null ||
-      data.value === null ||
+      bytes.value === null ||
       floats.value === null
     ) {
       return;
     }
 
-    analyser.value.getByteTimeDomainData(data.value);
+    analyser.value.getByteTimeDomainData(bytes.value);
     analyser.value.getFloatTimeDomainData(floats.value);
 
     let squares = 0;
@@ -42,13 +42,13 @@ export function useAudioAnalyser() {
       const v = floats.value[i];
       squares += v * v;
 
-      if (data.value[i] >= 255 || data.value[i] <= 0) {
+      if (bytes.value[i] >= 255 || bytes.value[i] <= 0) {
         isClipping.value = true;
         break;
       }
     }
 
-    const mean = squares / data.value.length;
+    const mean = squares / bytes.value.length;
     rms.value = Math.sqrt(mean) * 10;
 
     requestAnimationFrame(update);

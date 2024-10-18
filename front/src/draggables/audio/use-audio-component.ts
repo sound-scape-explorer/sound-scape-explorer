@@ -6,31 +6,34 @@ const sizes: Size[] = [128, 256, 512, 1024, 2048, 4096];
 const size = ref<Size>(4096);
 
 export function useAudioFourier() {
+  // todo: maybe extract these
   const i = computed(() => sizes.indexOf(size.value));
+  const n = computed(() => i.value + 1);
+  const p = computed(() => i.value - 1);
+  const canIncrease = computed(() => n.value < sizes.length);
+  const canDecrease = computed(() => p.value > 0);
 
   const increase = () => {
-    const n = i.value + 1;
-
-    if (i.value === -1 || n >= sizes.length) {
+    if (!canIncrease.value) {
       return;
     }
 
-    size.value = sizes[n];
+    size.value = sizes[n.value];
   };
 
   const decrease = () => {
-    const p = i.value - 1;
-
-    if (i.value === -1 || p <= 0) {
+    if (!canDecrease.value) {
       return;
     }
 
-    size.value = sizes[p];
+    size.value = sizes[p.value];
   };
 
   return {
     size: size,
     increase: increase,
     decrease: decrease,
+    canIncrease: canIncrease,
+    canDecrease: canDecrease,
   };
 }

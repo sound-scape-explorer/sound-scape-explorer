@@ -6,6 +6,7 @@ import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioLock} from 'src/draggables/audio/use-audio-lock';
 import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
@@ -20,6 +21,7 @@ const {currentIntervalIndex} = useIntervalSelector();
 const {rate, readable} = useAudioRate();
 const {lock, unlock} = useAudioLock();
 const {block, duration} = useAudioFile();
+const {gain} = useAudioGain();
 </script>
 
 <template>
@@ -54,6 +56,23 @@ const {block, duration} = useAudioFile();
 
       {{ aggregatedSites[currentIntervalIndex].site }}
     </NGi>
+  </NGrid>
+
+  <NGrid
+    v-if="aggregatedSites !== null && currentIntervalIndex !== null"
+    :cols="2"
+    x-gap="12"
+  >
+    <NGi>
+      <NTag
+        :bordered="false"
+        size="small"
+      >
+        Interval Index
+      </NTag>
+
+      {{ currentIntervalIndex }}
+    </NGi>
     <NGi>
       <NTag
         :bordered="false"
@@ -75,10 +94,10 @@ const {block, duration} = useAudioFile();
         :bordered="false"
         size="small"
       >
-        Interval Index
+        Gain
       </NTag>
 
-      {{ currentIntervalIndex }}
+      {{ gain }}
     </NGi>
     <NGi>
       <NTag
