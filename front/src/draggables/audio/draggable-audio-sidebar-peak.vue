@@ -34,6 +34,8 @@ watch(isClipping, fade);
   cursor: default;
   opacity: 1;
 
+  border-radius: $g0;
+
   span {
     font-weight: bold;
     position: relative;

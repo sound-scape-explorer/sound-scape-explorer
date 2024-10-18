@@ -61,7 +61,9 @@ const draw = () => {
     ctx.fillStyle = peak / 76 + 1 >= 1 ? 'red' : 'greenyellow';
     ctx.fillRect(0, Math.round(h - hInRange * (peak / 76 + 1)), w, 1);
   }
-  ctx.fillStyle = 'white';
+
+  // 0 dB
+  ctx.fillStyle = 'gainsboro';
   ctx.fillRect(0, clipSize, w, 1);
 };
 
@@ -76,11 +78,9 @@ watch(
 </script>
 
 <template>
-  <span class="vu-meter">
-    <canvas
-      ref="canvas"
-      :height="height"
-      :width="width"
-    />
-  </span>
+  <canvas
+    ref="canvas"
+    :height="height"
+    :width="width"
+  />
 </template>

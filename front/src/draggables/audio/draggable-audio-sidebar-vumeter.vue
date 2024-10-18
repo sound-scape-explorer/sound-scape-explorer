@@ -19,6 +19,6 @@ const {rms} = useAudioAnalyser();
 <style lang="scss" scoped>
 .container {
   background: transparent;
-  transform: translate3d(8px, 4px, 0);
+  transform: translate3d(9px, 4px, 0);
 }
 </style>
