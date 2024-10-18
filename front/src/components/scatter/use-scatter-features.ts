@@ -27,9 +27,13 @@ export function useScatterFeatures() {
   const {currentIntervalIndex} = useIntervalSelector();
   const {generateHovers} = useScatterHovers();
 
-  const isThreeDimensional = computed<boolean>(
-    () => reducedFeatures.value?.[0].length === 3 ?? false,
-  );
+  const isThreeDimensional = computed<boolean>(() => {
+    if (reducedFeatures.value === null) {
+      return false;
+    }
+
+    return reducedFeatures.value[0].length === 3;
+  });
 
   const scatterType = computed<PlotType>(() => {
     if (isThreeDimensional.value) {
