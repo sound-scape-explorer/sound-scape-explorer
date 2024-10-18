@@ -26,16 +26,10 @@ export function useDraggableHeatmaps() {
 
   const isReadyAndSelected = computed<boolean>(() => {
     if (isPairing.value) {
-      if (a.value === null || b.value === null) {
-        return false;
-      }
-    } else {
-      if (a.value === null) {
-        return false;
-      }
+      return a.value !== null && b.value !== null;
     }
 
-    return true;
+    return a.value !== null;
   });
 
   const options = computed(() => {
