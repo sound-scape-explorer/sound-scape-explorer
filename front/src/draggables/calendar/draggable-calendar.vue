@@ -40,6 +40,8 @@ const {
 useDraggableCalendarLifecycles();
 useDraggableCalendarShortcuts();
 
+// todo: remove the group button it makes the dom very slow (try moving draggable)
+
 useRefProvide(InjectionKey.calendarActive, isActive);
 useRefProvide(InjectionKey.timeDuration, duration);
 </script>
