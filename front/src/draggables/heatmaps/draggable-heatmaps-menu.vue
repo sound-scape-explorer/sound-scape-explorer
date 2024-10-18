@@ -99,9 +99,9 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
       </div>
     </div>
 
-    <h2>Window</h2>
+    <h2>Plot</h2>
 
-    <div class="window">
+    <div class="plot">
       <NButtonGroup>
         <AppButton
           :disabled="!isReadyAndSelected"
@@ -164,7 +164,7 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
   gap: $p0;
 }
 
-.window {
+.plot {
   display: flex;
   justify-content: space-between;
   align-items: center;
