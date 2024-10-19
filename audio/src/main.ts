@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import cors from 'cors';
 import express from 'express';
 import {getAudioDurationInSeconds} from 'get-audio-duration';
@@ -48,10 +50,10 @@ app.get('/', (_req, res) => {
 app.get('/get', async (req, res) => {
   try {
     const {file, start, end} = validateQuery(req.query);
-    const path = `${audioPath}${file}`;
-    validatePath(path);
+    const filePath = path.join(audioPath, file);
+    validatePath(filePath);
 
-    const fileDuration = await getAudioDurationInSeconds(path, ffprobePath);
+    const fileDuration = await getAudioDurationInSeconds(filePath, ffprobePath);
     const startSeconds = Number(start) / 1000;
 
     let endSeconds = Number(end) / 1000;
@@ -80,14 +82,19 @@ app.get('/get', async (req, res) => {
     }
 
     if (startSeconds === 0 && endSeconds === fileDuration) {
-      const data = await readFileAsync(path);
+      const data = await readFileAsync(filePath);
       res.writeHead(200, {'Content-Type': 'audio/wav'});
       res.end(data);
       return;
     }
 
     // slice
-    const slice = await sliceAudio(ffmpegPath, path, startSeconds, endSeconds);
+    const slice = await sliceAudio(
+      ffmpegPath,
+      filePath,
+      startSeconds,
+      endSeconds,
+    );
     res.writeHead(200, {'Content-Type': 'audio/wav'});
     res.end(slice);
   } catch (error) {
