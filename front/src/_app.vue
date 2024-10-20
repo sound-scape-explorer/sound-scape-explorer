@@ -57,14 +57,11 @@ onMounted(checkVersions);
           </NMessageProvider>
         </NNotificationProvider>
 
-        <!--TODO: remove enclosing div?-->
-        <div>
-          <AppMenu />
-          <AppLoader />
-          <Scatter v-if="isReady" />
-          <Screen v-if="isReady && isPreview" />
-          <Draggables />
-        </div>
+        <AppMenu />
+        <AppLoader />
+        <Scatter v-if="isReady" />
+        <Screen v-if="isReady && isPreview" />
+        <Draggables />
       </NLayout>
     </NLayout>
   </NSpace>
