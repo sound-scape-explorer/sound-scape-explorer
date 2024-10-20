@@ -1,12 +1,7 @@
 <script lang="ts" setup>
 import 'sass-reset/src/reset.scss';
 
-import {
-  NLayout,
-  NMessageProvider,
-  NNotificationProvider,
-  NSpace,
-} from 'naive-ui';
+import {NLayout, NSpace} from 'naive-ui';
 import AppConsole from 'src/app/app-console.vue';
 import AppLoader from 'src/app/app-loader.vue';
 import AppLoading from 'src/app/app-loading.vue';
@@ -51,12 +46,7 @@ onMounted(checkVersions);
       <AppConsole />
 
       <NLayout>
-        <NNotificationProvider>
-          <NMessageProvider>
-            <AppNotification />
-          </NMessageProvider>
-        </NNotificationProvider>
-
+        <AppNotification />
         <AppMenu />
         <AppLoader />
         <Scatter v-if="isReady" />
