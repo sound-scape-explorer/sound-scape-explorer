@@ -53,6 +53,7 @@ const {getKey} = useKeyboardShortcuts();
 .app-menu-button {
   backdrop-filter: blur(5px);
   pointer-events: auto;
+  @include s0;
 }
 
 .app-menu-button__active {

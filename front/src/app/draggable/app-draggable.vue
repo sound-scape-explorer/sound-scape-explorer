@@ -114,11 +114,11 @@ useAppDraggableLifecycles({
   user-select: none;
 
   opacity: 1;
-  box-shadow: $p0 $p0 $p0 * 2 $g0 * -1 $greyDeep;
   border: 1px solid $grey;
   background-color: $white;
   backdrop-filter: blur($p0 + $g0);
 
+  @include s1;
   @include borderRadius;
   @include transition-app-draggable;
 }

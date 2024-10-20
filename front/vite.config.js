@@ -40,6 +40,7 @@ export default defineConfig({
           @import "src/styles/borders.scss";
           @import "src/styles/sizes.scss";
           @import "src/styles/scrolls.scss";
+          @import "src/styles/shadows.scss";
         `,
       },
     },
