@@ -1,5 +1,6 @@
 import {TIMEOUT} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
+import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {ref} from 'vue';
 
 const analyser = ref<AnalyserNode | null>(null);
@@ -12,6 +13,7 @@ const rms = ref<number>(0);
 
 export function useAudioAnalyser() {
   const {context} = useAudioContext();
+  const {isPlaying} = useAudioTransport();
 
   const create = () => {
     if (context.value === null) {
@@ -28,7 +30,8 @@ export function useAudioAnalyser() {
     if (
       analyser.value === null ||
       bytes.value === null ||
-      floats.value === null
+      floats.value === null ||
+      isPlaying.value === false
     ) {
       return;
     }
@@ -42,6 +45,7 @@ export function useAudioAnalyser() {
       const v = floats.value[i];
       squares += v * v;
 
+      // tradeoffs to detect clipping with floats?
       if (bytes.value[i] >= 255 || bytes.value[i] <= 0) {
         isClipping.value = true;
         break;
@@ -49,7 +53,8 @@ export function useAudioAnalyser() {
     }
 
     const mean = squares / bytes.value.length;
-    rms.value = Math.sqrt(mean) * 10;
+    const arbitraryAmp = 7; // why?
+    rms.value = Math.sqrt(mean) * arbitraryAmp;
 
     requestAnimationFrame(update);
   };
@@ -68,7 +73,7 @@ export function useAudioAnalyser() {
   return {
     create: create,
     analyser: analyser,
-    detect: update,
+    update: update,
     isClipping: isClipping,
     fade: fade,
     rms: rms,

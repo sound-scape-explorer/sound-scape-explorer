@@ -12,7 +12,7 @@ export function useWavesurferLoader() {
   const {isPlaying} = useAudioTransport();
   const {ws} = useWavesurfer();
   const {node: gainNode} = useAudioGain();
-  const {detect, analyser} = useAudioAnalyser();
+  const {analyser} = useAudioAnalyser();
 
   const handleAudioEnd = () => {
     isPlaying.value = false;
@@ -44,10 +44,7 @@ export function useWavesurferLoader() {
     highShelf.connect(gainNode.value);
     gainNode.value.connect(analyser.value);
 
-    detect();
-
     ws.value.backend.setFilters([lowShelf, highShelf]);
-
     analyser.value.connect(context.value.destination);
   };
 

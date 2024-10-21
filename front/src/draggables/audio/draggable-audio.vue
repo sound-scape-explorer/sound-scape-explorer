@@ -5,6 +5,7 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import DraggableAudioMenu from 'src/draggables/audio/draggable-audio-menu.vue';
 import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
 import {useAudioFileWatcher} from 'src/draggables/audio/use-audio-file-watcher';
+import {useAudioLifecycles} from 'src/draggables/audio/use-audio-lifecycles';
 import {useAudioRateWatcher} from 'src/draggables/audio/use-audio-rate-watcher';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurferMounter} from 'src/draggables/audio/use-wavesurfer-mounter';
@@ -14,6 +15,7 @@ const {waveform, spectrogram, isLoading} = useDraggableAudio();
 useWavesurferMounter();
 useAudioFileWatcher();
 useAudioRateWatcher();
+useAudioLifecycles();
 </script>
 
 <template>
