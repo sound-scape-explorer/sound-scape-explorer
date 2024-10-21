@@ -53,13 +53,16 @@ const draw = () => {
 
   const hInRange = h - clipSize;
   const gradient = ctx.createLinearGradient(0, 0, 0, h);
+
   gradient.addColorStop(0, 'red');
   gradient.addColorStop(clipSize / h, 'orange');
   gradient.addColorStop(clipSize / h, 'greenyellow');
   gradient.addColorStop(1, 'lime');
+
   ctx.clearRect(0, 0, w, h);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, h - hInRange * (amp / 76 + 1), w, hInRange * (amp / 76 + 1));
+
   if (showPeaks) {
     ctx.fillStyle = peak / 76 + 1 >= 1 ? 'red' : 'greenyellow';
     ctx.fillRect(0, Math.round(h - hInRange * (peak / 76 + 1)), w, 1);
