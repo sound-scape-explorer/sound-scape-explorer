@@ -16,18 +16,21 @@ const peakVal = ref(props.peakValue);
 const dbValue = computed(() => 20 * Math.log10(props.value));
 const dbPeakValue = computed(() => 20 * Math.log10(peakVal.value));
 const canvas = ref<HTMLCanvasElement | null>(null);
+const smoothingFactor = 50;
 
 const smoothPeak = (newVal: number) => {
-  if (props.showPeaks) {
-    const smoothingFactor = 50;
-    if (newVal > peakVal.value) {
-      peakVal.value = newVal;
-    } else {
-      peakVal.value =
-        newVal * (1 / smoothingFactor) +
-        peakVal.value * ((smoothingFactor - 1) / smoothingFactor);
-    }
+  if (!props.showPeaks) {
+    return;
   }
+
+  if (newVal > peakVal.value) {
+    peakVal.value = newVal;
+    return;
+  }
+
+  peakVal.value =
+    newVal * (1 / smoothingFactor) +
+    peakVal.value * ((smoothingFactor - 1) / smoothingFactor);
 };
 
 const draw = () => {
@@ -68,6 +71,7 @@ const draw = () => {
 };
 
 onMounted(draw);
+
 watch(
   () => props.value,
   (newValue: number) => {
