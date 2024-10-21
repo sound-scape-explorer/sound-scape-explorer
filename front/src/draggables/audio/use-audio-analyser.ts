@@ -46,6 +46,7 @@ export function useAudioAnalyser() {
       squares += v * v;
 
       // tradeoffs to detect clipping with floats?
+      // TODO: breaking the loop prevents squares to be correctly computed
       if (bytes.value[i] >= 255 || bytes.value[i] <= 0) {
         isClipping.value = true;
         break;
