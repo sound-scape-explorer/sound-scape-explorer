@@ -5,12 +5,15 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useExportName} from 'src/composables/use-export-name';
 import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
-import {EXPORT_FILENAME} from 'src/constants';
 import {computed, ref} from 'vue';
+
+// TODO: split me
 
 const {selectRelativeTrajectories, relativeTrajectories} =
   useRelativeTrajectories();
+const {generate} = useExportName();
 
 const valueRef = ref([]);
 const {isLoading} = useScatterLoading();
@@ -92,7 +95,8 @@ const handleExportClick = () => {
     csv.addToCurrentRow(row.join(csv.separator));
   }
 
-  csv.download(`${EXPORT_FILENAME}-relative-trajectories`);
+  const name = generate('relative-trajectories');
+  csv.download(name);
 };
 </script>
 
@@ -153,9 +157,8 @@ const handleExportClick = () => {
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  gap: 0.5rem;
-
-  min-width: 20rem;
+  gap: $p0;
+  width: $s2;
 }
 
 .export {

@@ -1,5 +1,5 @@
 import {onKeyStroke} from '@vueuse/core';
-import type {Shortcuts} from 'src/composables/use-shortcuts';
+import {type Shortcuts} from 'src/composables/use-shortcuts';
 import {ref} from 'vue';
 
 const isLocked = ref<boolean>(false);

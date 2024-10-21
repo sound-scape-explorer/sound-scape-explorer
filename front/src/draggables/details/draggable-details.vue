@@ -195,23 +195,24 @@ watch(timeshift, updateDates);
 .container {
   display: flex;
   justify-content: space-between;
-  gap: 2rem;
+  width: $s2;
+  padding-right: $g0;
 }
 
 .title {
   font-weight: bold;
   display: flex;
   align-items: center;
+  padding-left: 1px;
 }
 
 .file.container.details {
   flex-direction: column;
-  gap: 2px;
+  gap: $g0;
 
   div {
     display: flex;
     justify-content: space-between;
-    gap: 0.5rem;
   }
 }
 
@@ -224,7 +225,6 @@ watch(timeshift, updateDates);
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: 1fr 1fr;
-  gap: 0 0.5rem;
 }
 
 .src {
@@ -232,6 +232,6 @@ watch(timeshift, updateDates);
 }
 
 .separator {
-  height: 1rem;
+  height: $p0;
 }
 </style>

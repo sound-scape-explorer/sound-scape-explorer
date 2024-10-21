@@ -1,4 +1,4 @@
-import type {Dayjs} from 'dayjs';
+import {type Dayjs} from 'dayjs';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDate} from 'src/composables/use-date';
 import {useFiles} from 'src/composables/use-files';

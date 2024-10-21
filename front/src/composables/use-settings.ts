@@ -1,4 +1,4 @@
-import type {StorageSettings} from 'src/common/storage-settings';
+import {type StorageSettings} from 'src/common/storage-settings';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {computed, ref} from 'vue';
 

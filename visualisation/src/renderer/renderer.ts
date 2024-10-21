@@ -1,4 +1,4 @@
-import 'sass-reset';
+import 'sass-reset/src/reset.scss';
 import './styles/main.scss';
 
 import {LoadedZone} from './controllers/LoadedZone';
@@ -18,8 +18,10 @@ export const render = async () => {
     return;
   }
 
+  const audioPath = loadingZone.audioPath;
+
   loadingZone.hide();
-  loadedZone.show();
+  loadedZone.show(audioPath);
 };
 
 render().then();

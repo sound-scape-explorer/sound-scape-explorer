@@ -1,5 +1,5 @@
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import type {DraggableLabelsItemContentProps} from 'src/draggables/labels/draggable-labels-item-content.vue';
+import {type DraggableLabelsItemContentProps} from 'src/draggables/labels/draggable-labels-item-content.vue';
 import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
 
 export function useLabelsItem(props: DraggableLabelsItemContentProps) {

@@ -13,7 +13,7 @@ import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-setting
 import {useWavesurferSpectrogram} from 'src/draggables/audio/use-wavesurfer-spectrogram';
 import {watch} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
-import type {WaveSurferParams} from 'wavesurfer.js/types/params';
+import {type WaveSurferParams} from 'wavesurfer.js/types/params';
 
 export function useWavesurferMounter() {
   const {ws} = useWavesurfer();

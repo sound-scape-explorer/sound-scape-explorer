@@ -11,6 +11,14 @@ const audioHost = useStorage<string>(
 export function useStorageAudioHost() {
   const {settings} = useSettings();
 
+  const sanitizeHost = (host: string): string => {
+    if (host.endsWith('/')) {
+      return sanitizeHost(host.slice(0, host.length - 1));
+    }
+
+    return host;
+  };
+
   const read = () => {
     if (settings.value === null) {
       return;
@@ -20,7 +28,8 @@ export function useStorageAudioHost() {
       return;
     }
 
-    audioHost.value = settings.value.audio_host;
+    const host = settings.value.audio_host;
+    audioHost.value = sanitizeHost(host);
   };
 
   return {

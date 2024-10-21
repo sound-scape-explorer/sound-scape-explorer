@@ -17,7 +17,7 @@ export function useDate() {
   const convertTimestampToDate = (timestamp: number) => {
     const shift = timeshift.value;
 
-    if (isTimezoneActive.value === false) {
+    if (!isTimezoneActive.value) {
       return dayjs(timestamp).add(shift, 'hours');
     }
 
@@ -41,9 +41,15 @@ export function useDate() {
     return date.format(DATE_FORMAT);
   };
 
+  const getHourFromTimestamp = (timestamp: number) => {
+    const date = convertTimestampToDate(timestamp);
+    return date.get('hours');
+  };
+
   return {
     convertTimestampToDate: convertTimestampToDate,
     convertTimestampToIsoDate: convertTimestampToIsoDate,
     convertDateToIsoDate: convertDateToIsoDate,
+    getHourFromTimestamp: getHourFromTimestamp,
   };
 }

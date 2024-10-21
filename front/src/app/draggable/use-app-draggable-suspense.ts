@@ -1,4 +1,4 @@
-import type {AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
+import {type AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
 import {useViewState} from 'src/composables/use-view-state';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {computed} from 'vue';

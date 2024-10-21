@@ -1,16 +1,15 @@
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
+import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
-// todo: rename time to calendar?
 export function useScatterFilterTime() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {isAllSelected, current, duration} = useDraggableTime();
+  const {isActive, current, duration} = useDraggableCalendar();
 
   const isVisible = (index: number): boolean => {
-    if (isAllSelected.value) {
+    if (!isActive.value) {
       return true;
     }
 

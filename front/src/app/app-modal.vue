@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import {computed} from 'vue';
-
 interface Props {
   isWait?: boolean;
 }
@@ -8,20 +6,13 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   isWait: false,
 });
-
-const containerClasses = computed<string>(() => {
-  let payload = 'container';
-
-  if (props.isWait) {
-    payload += ' wait';
-  }
-
-  return payload;
-});
 </script>
 
 <template>
-  <div :class="containerClasses">
+  <div
+    :class="{wait: props.isWait}"
+    class="container"
+  >
     <slot />
   </div>
 </template>
@@ -37,8 +28,8 @@ const containerClasses = computed<string>(() => {
   width: 100%;
   height: 100%;
 
-  padding: 0 1rem;
-  margin-bottom: 1rem;
+  padding: 0 $p0;
+  margin-bottom: $p0;
 
   z-index: $appModalLayer;
 

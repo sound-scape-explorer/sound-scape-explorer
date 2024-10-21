@@ -1,0 +1,12 @@
+@mixin noScroll {
+  // IE and edge
+  -ms-overflow-style: none;
+
+  // firefox
+  scrollbar-width: none;
+
+  // chrome
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

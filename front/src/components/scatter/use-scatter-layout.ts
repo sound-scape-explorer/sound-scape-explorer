@@ -16,6 +16,7 @@ export function useScatterLayout() {
         l: 0,
       },
       plot_bgcolor: plotBackground.value,
+      paper_bgcolor: plotBackground.value,
       yaxis: {
         scaleanchor: 'x',
         scaleratio: 1,

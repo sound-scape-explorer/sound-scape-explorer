@@ -59,29 +59,27 @@ const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
 </template>
 
 <style lang="scss" scoped>
-$m: 8px;
-
 .ml {
-  margin-left: $m;
+  margin-left: $p0;
 }
 
 .mr {
-  margin-right: $m;
+  margin-right: $p0;
 }
 
 .mt {
-  margin-top: $m;
+  margin-top: $p0;
 }
 
 .mb {
-  margin-bottom: $m;
+  margin-bottom: $p0;
 }
 
 .cell {
   display: flex;
   align-items: flex-start;
   height: auto;
-  gap: $m;
+  gap: $p0;
 }
 
 .tag {
@@ -94,6 +92,6 @@ $m: 8px;
 }
 
 .checkboxes {
-  margin-bottom: 1em;
+  margin-bottom: $p0;
 }
 </style>

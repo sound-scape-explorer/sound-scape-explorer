@@ -1,8 +1,8 @@
 import {DigesterLayout} from 'src/common/digester-layout';
-import type {HeatmapRange} from 'src/common/heatmap-range';
+import {type HeatmapRange} from 'src/common/heatmap-range';
 import {heatmapRanges} from 'src/common/heatmap-range';
 import {HeatmapScale} from 'src/common/heatmap-scale';
-import type {Digested} from 'src/composables/use-storage-digested';
+import {type Digested} from 'src/composables/use-storage-digested';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {computed, ref} from 'vue';
 
