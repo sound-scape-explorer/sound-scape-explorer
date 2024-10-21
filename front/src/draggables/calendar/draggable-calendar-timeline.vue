@@ -40,12 +40,12 @@ watch(containerWidth, () => refresh(containerWidth.value));
 <template>
   <div
     ref="container"
-    class="container"
+    :class="$style.container"
   >
     <canvas
       v-if="containerWidth > 0"
       ref="canvas"
-      :class="{hovering: isHovering}"
+      :class="{[$style.hovering]: isHovering}"
       :height="height"
       :width="containerWidth"
       @click="handleClick"
@@ -55,13 +55,13 @@ watch(containerWidth, () => refresh(containerWidth.value));
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
-  padding-top: $p0;
-  width: calc($s2 - $p0 * 7);
   display: flex;
-  justify-content: flex-start;
   align-items: flex-start;
+  justify-content: flex-start;
+  width: calc($s2 - $p0 * 7);
+  padding-top: $p0;
 }
 
 .hovering {

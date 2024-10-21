@@ -39,7 +39,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
 </script>
 
 <template>
-  <AppDraggableMenu class="draggableCalendarMenu">
+  <AppDraggableMenu :class="$style.menu">
     <span>Filtering</span>
     <div>
       <AppSwitch
@@ -60,17 +60,17 @@ useRefProvide(InjectionKey.timeDuration, duration);
       </NButtonGroup>
 
       <AppInput
+        :class="$style.seconds"
         :disabled="!isActive"
         :injection-key="InjectionKey.timeDuration"
         align="left"
-        class="seconds"
         tooltip="Set window duration in seconds"
         type="number"
       />
     </div>
     <span>Transport</span>
     <div>
-      <div class="gaps">
+      <div :class="$style.gaps">
         <AppButton
           :disabled="uiDisabled"
           :handle-click="skipTimeBackward"
@@ -100,16 +100,16 @@ useRefProvide(InjectionKey.timeDuration, duration);
         </AppButton>
       </div>
 
-      <div class="gaps">
+      <div :class="$style.gaps">
         <AppTooltip
           placement="top"
           tooltip="Set start date"
         >
           <NDatePicker
+            :class="$style.picker"
             :disabled="uiDisabled"
             :on-update:value="handleDateStartUpdate"
             :value="dateStartRef.unix() * 1000"
-            class="picker"
             size="tiny"
             type="datetime"
           />
@@ -121,8 +121,8 @@ useRefProvide(InjectionKey.timeDuration, duration);
   </AppDraggableMenu>
 </template>
 
-<style lang="scss" scoped>
-.draggableCalendarMenu {
+<style lang="scss" module>
+.menu {
   & > div {
     display: flex;
     align-items: center;
@@ -132,8 +132,8 @@ useRefProvide(InjectionKey.timeDuration, duration);
 
 .gaps {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: $p0;
 }
 

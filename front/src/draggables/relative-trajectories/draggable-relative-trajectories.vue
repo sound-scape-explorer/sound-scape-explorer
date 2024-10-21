@@ -105,7 +105,7 @@ const handleExportClick = () => {
     draggable-key="relativeTrajectories"
     suspense="view"
   >
-    <div class="container">
+    <div :class="$style.container">
       <NCascader
         v-model:value="valueRef"
         :cascade="false"
@@ -125,7 +125,7 @@ const handleExportClick = () => {
       />
 
       <NButton
-        class="export"
+        :class="$style.export"
         size="tiny"
         @click="handleExportClick"
       >
@@ -151,14 +151,14 @@ const handleExportClick = () => {
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
   display: flex;
-  justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  gap: $p0;
+  justify-content: center;
   width: $s2;
+  gap: $p0;
 }
 
 .export {

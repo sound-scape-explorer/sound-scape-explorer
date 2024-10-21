@@ -54,7 +54,7 @@ onMounted(autoselectDev);
 <template>
   <AppDraggable draggable-key="view">
     <AppDraggableMenu
-      class="draggableViewContainer"
+      :class="$style.menu"
       size="medium"
     >
       <h2>Reducer</h2>
@@ -99,7 +99,7 @@ onMounted(autoselectDev);
 
       <span />
 
-      <div class="last-line">
+      <div :class="$style['last-line']">
         <AppButton
           :disabled="!hasView"
           :error="hasView"
@@ -107,7 +107,7 @@ onMounted(autoselectDev);
           grow
           size="medium"
         >
-          <div class="button">
+          <div :class="$style.button">
             <NIcon size="18">
               <ArrowUndoCircleOutline />
             </NIcon>
@@ -119,21 +119,21 @@ onMounted(autoselectDev);
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggableViewContainer {
+<style lang="scss" module>
+.menu {
   width: $s0;
 }
 
 .last-line {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .button {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: $g0;
 
   svg {

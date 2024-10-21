@@ -9,60 +9,54 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div
-    :class="{wait: props.isWait}"
-    class="container"
-  >
+  <div :class="[$style.container, {[$style.wait]: props.isWait}]">
     <slot />
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   position: fixed;
-
+  z-index: $app-modal-layer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-
-  padding: 0 $p0;
   margin-bottom: $p0;
-
-  z-index: $appModalLayer;
-
-  background: $black;
-
+  padding: 0 $p0;
   user-select: none;
-
-  animation: FadeIn 0.6s ease-in-out;
+  animation: fade-in 0.6s ease-in-out;
+  background: $black;
 }
 
 .wait {
   cursor: wait;
 }
 
-@keyframes FadeIn {
+@keyframes fade-in {
   0% {
     opacity: 0;
   }
+
   50% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
 
-@keyframes FadeOut {
+@keyframes fade-out {
   0% {
     opacity: 1;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }

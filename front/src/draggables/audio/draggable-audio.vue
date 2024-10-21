@@ -23,33 +23,30 @@ useAudioLifecycles();
     draggable-key="audio"
     suspense="scatterClick"
   >
-    <div
-      :class="{'loading-hidden': !isLoading}"
-      class="loading"
-    >
+    <div :class="[$style.loading, {[$style['loading-hidden']]: !isLoading}]">
       <AppIcon>
-        <RefreshOutline class="spin" />
+        <RefreshOutline :class="$style.spin" />
       </AppIcon>
     </div>
 
     <DraggableAudioSidebar />
     <DraggableAudioMenu />
 
-    <div class="player">
+    <div :class="$style.player">
       <div
         ref="waveform"
-        class="mt"
+        :class="$style.mt"
       />
 
       <div
         ref="spectrogram"
-        class="spectrogram mt"
+        :class="[$style.spectrogram, $style.mt]"
       />
     </div>
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .player {
   display: flex;
   flex-direction: column;
@@ -65,21 +62,20 @@ useAudioLifecycles();
 }
 
 .loading {
-  width: 100%;
-  height: 100%;
-  z-index: 100;
+  font-size: 100px;
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
-
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 100px;
-
-  background-color: $whiteOpaque;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: $white-opaque;
   backdrop-filter: blur($p0);
-  @include borderRadius;
+
+  @include border-radius;
 }
 
 $o1: 50% - 0%;
@@ -87,6 +83,7 @@ $o2: 50% + 8%;
 
 .spin {
   @include spin;
+
   transform-origin: $o1 $o2;
 }
 

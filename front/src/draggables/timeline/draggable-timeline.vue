@@ -9,20 +9,18 @@ import TimelineMenu from 'src/draggables/timeline/draggable-timeline-menu.vue';
     draggable-key="timeline"
     suspense="view"
   >
-    <div class="container">
+    <div :class="$style.container">
       <TimelineMenu />
       <TimelineGrid />
     </div>
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
   display: grid;
-  grid-template-rows: 40px 1fr;
-  //grid-template-rows: 1fr;
-
-  height: 200px;
   width: 900px;
+  height: 200px;
+  grid-template-rows: 40px 1fr;
 }
 </style>

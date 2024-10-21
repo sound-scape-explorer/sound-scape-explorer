@@ -84,16 +84,16 @@ watch(
 <template>
   <div
     ref="container"
+    :class="$style.container"
     :style="{'--pointer-events': isLocked ? 'none' : 'all'}"
-    class="container"
   />
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
+  overflow: hidden;
   width: 100vw;
   height: 100vh;
   pointer-events: var(--pointer-events);
-  overflow: hidden;
 }
 </style>

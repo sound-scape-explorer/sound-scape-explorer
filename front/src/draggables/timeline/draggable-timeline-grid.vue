@@ -109,31 +109,31 @@ const handleBlockClick = (block: VisibleBlock) => {
 <template>
   <div
     ref="containerRef"
-    class="timeline-grid__container"
+    :class="$style.container"
   >
     <div
       ref="columnsRef"
-      :style="`--iterations: ${pageSizeRef.value}; --shift: -${shiftRef}px; --colWidth: ${colWidthRef}px`"
-      class="timeline-grid__columns"
+      :class="$style.columns"
+      :style="`--iterations: ${pageSizeRef.value}; --shift: -${shiftRef}px; --col-width: ${colWidthRef}px`"
     >
       <div
         ref="draggableRef"
-        class="timeline-grid__draggable"
+        :class="$style.draggable"
       />
 
-      <div class="timeline-grid__header timeline-grid__grid">
+      <div :class="[$style.header, $style.grid]">
         <span v-for="vI in pageVisibleIntervalsRef.value">
           {{ convertTimestampToIsoDate(vI.timestamp) }}
         </span>
       </div>
 
-      <div class="timeline-grid__background" />
+      <div :class="$style.background" />
 
-      <div class="blocks">
+      <div :class="$style.blocks">
         <div
           v-for="vB in pageVisibleBlocksRef.value"
+          :class="$style.block"
           :style="`--left: ${vB.position}; --span: 1`"
-          class="timeline-grid__block"
           @click="() => handleBlockClick(vB)"
         >
           <NTooltip
@@ -178,34 +178,31 @@ const handleBlockClick = (block: VisibleBlock) => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-$colWidth: var(--colWidth);
-$headerHeight: 40px;
-$gridColor: 120;
+<style lang="scss" module>
+$col-width: var(--col-width);
+$header-height: 40px;
+$grid-color: 120;
 $shift: var(--shift);
 $iterations: var(--iterations);
 $span: var(--span);
 $left: calc(var(--left) - 1);
 
-.timeline-grid__grid {
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, $colWidth);
+  grid-template-columns: repeat(auto-fill, $col-width);
 }
 
-.timeline-grid__container {
+.container {
+  position: relative;
   display: flex;
   overflow: hidden;
-  position: relative;
 }
 
-.timeline-grid__draggable {
-  height: $headerHeight;
-  width: 100%;
-
+.draggable {
   position: absolute;
-
   z-index: 100;
-
+  width: 100%;
+  height: $header-height;
   cursor: grab;
 
   &:active {
@@ -213,77 +210,58 @@ $left: calc(var(--left) - 1);
   }
 }
 
-.timeline-grid__background {
-  width: calc($iterations * $colWidth);
-  height: 100%;
-  z-index: -10;
+.background {
   position: absolute;
-  left: $shift;
+  z-index: -10;
   top: 0;
+  left: $shift;
+  width: calc($iterations * $col-width);
+  height: 100%;
   background: repeating-linear-gradient(
     90deg,
-    rgba($gridColor, $gridColor, $gridColor, 0.1) 0 $colWidth,
-    rgba($gridColor, $gridColor, $gridColor, 0.2) $colWidth calc($colWidth * 2)
+    rgba($grid-color, $grid-color, $grid-color, 10%) 0 $col-width,
+    rgba($grid-color, $grid-color, $grid-color, 20%) $col-width
+      calc($col-width * 2)
   );
 }
 
-.timeline-grid__header {
-  height: $headerHeight;
-  width: calc($iterations * $colWidth);
+.header {
+  width: calc($iterations * $col-width);
+  height: $header-height;
 
   > span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    //border: 1px dashed black;
-    //border-radius: 5px;
-    width: calc($colWidth * 0.5);
-    margin: 1px;
-
-    z-index: 10;
     font-size: 70%;
-
-    // rotate font
-    transform: translate3d(calc($colWidth * 0.25), 10px, 0) rotate(-0deg);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc($col-width * 0.5);
+    margin: 1px;
+    transform: translate3d(calc($col-width * 0.25), 10px, 0) rotate(-0deg);
   }
 }
 
-.timeline-grid__columns {
+.columns {
   overflow-x: scroll;
-}
-
-.timeline-grid__hide_scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.timeline-grid__hide_scrollbar::-webkit-scrollbar {
-  display: none;
 }
 
 .blocks {
   background: red;
 }
 
-.timeline-grid__block {
-  height: $headerHeight * 2;
-  width: calc($colWidth * $span - 1px);
-  margin-top: $headerHeight * 0.5;
-
+.block {
   position: absolute;
-  left: calc($left * $colWidth + $shift);
-
-  border-radius: 5px;
-
-  background-color: lightgreen;
-
+  left: calc($left * $col-width + $shift);
   display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
-
+  align-items: center;
+  justify-content: center;
+  width: calc($col-width * $span - 1px);
+  height: $header-height * 2;
+  margin-top: $header-height * 0.5;
   border: 1px dashed black;
+  border-radius: 5px;
+  background-color: lightgreen;
 
   @include transition-background;
 

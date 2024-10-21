@@ -26,66 +26,65 @@ const tooltipPositionString = computed<string>(
   () => `${tooltipPosition.value}%`,
 );
 
-function updateTooltipText(text: string) {
+const updateTooltipText = (text: string) => {
   if (text === tooltipText.value) {
     return;
   }
 
   tooltipText.value = text;
-}
+};
 
-function updateTooltipPosition(position: number) {
+const updateTooltipPosition = (position: number) => {
   if (position === tooltipPosition.value) {
     return;
   }
 
   tooltipPosition.value = position;
-}
+};
 
-function enterStep(index: number) {
+const enterStep = (index: number) => {
   const text = props.labels?.[index] ?? '';
   updateTooltipText(text);
   updateTooltipPosition(index);
-}
+};
 
-function leaveStep() {
+const leaveStep = () => {
   tooltipPosition.value = tooltipPositionDefaultValue;
   tooltipText.value = tooltipTextDefaultValue;
-}
+};
 </script>
 
 <template>
-  <div class="gradientShift">
+  <div :class="$style['gradient-shift']">
     <span
       v-for="(element, index) in props.colors"
+      :class="$style.step"
       :style="{'backgroundColor': element, '--width': `${width}%`}"
-      class="step"
       @mouseleave="leaveStep"
       @mouseover="() => enterStep(index)"
     />
-    <span class="domain min">{{ props.legendMin }}</span>
-    <span class="domain med">{{ props.legendMed }}</span>
-    <span class="domain max">{{ props.legendMax }}</span>
+    <span :class="[$style.domain, $style.min]">{{ props.legendMin }}</span>
+    <span :class="[$style.domain, $style.med]">{{ props.legendMed }}</span>
+    <span :class="[$style.domain, $style.max]">{{ props.legendMax }}</span>
     <span
       v-if="tooltipText !== ''"
+      :class="$style.tooltip"
       :style="{left: tooltipPositionString}"
-      class="tooltip"
       >{{ tooltipText }}</span
     >
   </div>
 </template>
 
-<style lang="scss" scoped>
-.gradientShift {
+<style lang="scss" module>
+.gradient-shift {
   position: relative;
   margin-top: $p0;
 }
 
 .step {
   display: inline-block;
-  height: $p0 * 3;
   width: var(--width);
-
+  height: $p0 * 3;
   cursor: crosshair;
 
   &:hover {
@@ -94,12 +93,12 @@ function leaveStep() {
 }
 
 .domain {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
   font-size: $p0 + 1px;
   bottom: -$p0 - 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 .domain.min {
@@ -120,20 +119,15 @@ function leaveStep() {
 }
 
 .tooltip {
+  font-size: x-small;
   position: absolute;
-
+  top: -$p0 * 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: $p0 * 6;
   height: $p0 * 3;
-
-  background-color: white;
   border: 1px solid black;
-
-  top: -$p0 * 3;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: x-small;
+  background-color: white;
 }
 </style>

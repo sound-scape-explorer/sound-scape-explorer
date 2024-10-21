@@ -114,18 +114,18 @@ watch([container, isEnabled], () => {
   <div
     v-if="isEnabled"
     ref="container"
-    class="selectors-container"
+    :class="container"
   />
 </template>
 
-<style lang="scss" scoped>
-.selectors-container {
-  background: $violet;
+<style lang="scss" module>
+.container {
+  position: fixed;
+  z-index: $screen-layer;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  position: fixed;
-  top: 0;
-  z-index: $screenLayer;
   cursor: crosshair;
+  background: $violet;
 }
 </style>

@@ -63,7 +63,7 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
 
     <div
       v-if="hasIndicator"
-      class="info"
+      :class="$style.info"
     >
       <AppTooltip
         :tooltip="`${collectedCount} points collected`"
@@ -77,7 +77,7 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .info {
   font-size: 0.78em;
   width: $p0 * 4;

@@ -44,20 +44,20 @@ useRefProvide(InjectionKey.trajectoriesFuse, isFused);
       />
     </AppDraggableSidebar>
 
-    <AppDraggableMenu class="draggableTrajectoriesMenu">
+    <AppDraggableMenu :class="$style.menu">
       <h2>Trajectories</h2>
 
-      <div class="selection">
+      <div :class="$style.selection">
         <NCascader
           v-model:value="current"
           :cascade="false"
+          :class="$style.cascader"
           :clear-filter-after-select="false"
           :disabled="isLoading || isFused"
           :filterable="false"
           :options="options"
           :show-path="false"
           check-strategy="child"
-          class="cascader"
           clearable
           expand-trigger="click"
           max-tag-count="responsive"
@@ -75,8 +75,8 @@ useRefProvide(InjectionKey.trajectoriesFuse, isFused);
           <template #trigger>
             <NSwitch
               v-model:value="isFused"
+              :class="$style.switch"
               :disabled="!isFuseable"
-              class="switch"
               size="small"
             >
               <template #checked> fuse</template>
@@ -92,7 +92,7 @@ useRefProvide(InjectionKey.trajectoriesFuse, isFused);
 
       <span />
 
-      <div class="last-line">
+      <div :class="$style['last-line']">
         <AppButton
           :handle-click="handleClick"
           icon
@@ -107,32 +107,32 @@ useRefProvide(InjectionKey.trajectoriesFuse, isFused);
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggableTrajectoriesMenu {
+<style lang="scss" module>
+.menu {
   width: $s0;
 }
 
 .selection {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: $p0;
 }
 
 .switch {
-  width: $p0 * 8;
   font-size: 0.9em;
+  width: $p0 * 8;
 }
 
 .last-line {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-end;
   padding-top: $p0;
 }
 
 .cascader {
-  width: 15em;
   flex: 1;
+  width: 15em;
 }
 </style>

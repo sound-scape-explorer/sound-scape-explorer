@@ -20,7 +20,7 @@ useDraggableHeatmapsLifecycles();
 
 <template>
   <AppDraggable
-    class="container"
+    :class="$style.container"
     draggable-key="heatmaps"
   >
     <DraggableHeatmapsMenu />
@@ -38,7 +38,7 @@ useDraggableHeatmapsLifecycles();
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
   width: $s2;
 }

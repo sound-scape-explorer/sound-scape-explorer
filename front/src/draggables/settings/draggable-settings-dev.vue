@@ -13,7 +13,7 @@ useRefProvide(InjectionKey.settingsDevAutoLoadView, devAutoLoadView);
 
 <template>
   <div v-if="isDevEnabled">
-    <AppTitle class="title">Development settings</AppTitle>
+    <AppTitle :class="$style.title">Development settings</AppTitle>
 
     <DraggableSettingsItem title="Auto load view">
       <AppCheckbox
@@ -24,7 +24,7 @@ useRefProvide(InjectionKey.settingsDevAutoLoadView, devAutoLoadView);
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .title {
   margin-bottom: 7px;
 }

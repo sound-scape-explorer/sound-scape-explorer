@@ -50,9 +50,9 @@ const model = useRefInject(props.injectionKey);
           v-if="isNumber"
           v-model:value="model"
           :class="{
-            'app-input__center': props.align === 'center',
-            'app-input__left': props.align === 'left',
-            'app-input__right': props.align === 'right',
+            [$style.center]: props.align === 'center',
+            [$style.left]: props.align === 'left',
+            [$style.right]: props.align === 'right',
           }"
           :disabled="props.disabled"
           :max="props.max"
@@ -68,9 +68,9 @@ const model = useRefInject(props.injectionKey);
           v-if="isString"
           v-model:value="model"
           :class="{
-            'app-input__center': props.align === 'center',
-            'app-input__left': props.align === 'left',
-            'app-input__right': props.align === 'right',
+            [$style.center]: props.align === 'center',
+            [$style.left]: props.align === 'left',
+            [$style.right]: props.align === 'right',
           }"
           :disabled="props.disabled"
           :placeholder="props.placeholder"
@@ -87,9 +87,9 @@ const model = useRefInject(props.injectionKey);
       v-if="!hasTooltip && isNumber"
       v-model:value="model"
       :class="{
-        'app-input__center': props.align === 'center',
-        'app-input__left': props.align === 'left',
-        'app-input__right': props.align === 'right',
+        [$style.center]: props.align === 'center',
+        [$style.left]: props.align === 'left',
+        [$style.right]: props.align === 'right',
       }"
       :disabled="props.disabled"
       :max="props.max"
@@ -106,9 +106,9 @@ const model = useRefInject(props.injectionKey);
       v-if="!hasTooltip && isString"
       v-model:value="model"
       :class="{
-        'app-input__center': props.align === 'center',
-        'app-input__left': props.align === 'left',
-        'app-input__right': props.align === 'right',
+        [$style.center]: props.align === 'center',
+        [$style.left]: props.align === 'left',
+        [$style.right]: props.align === 'right',
       }"
       :disabled="props.disabled"
       :placeholder="props.placeholder"
@@ -120,16 +120,16 @@ const model = useRefInject(props.injectionKey);
   </NSpace>
 </template>
 
-<style lang="scss" scoped>
-.app-input__center {
+<style lang="scss" module>
+.center {
   text-align: center;
 }
 
-.app-input__left {
+.left {
   text-align: left;
 }
 
-.app-input__right {
+.right {
   text-align: right;
 }
 </style>

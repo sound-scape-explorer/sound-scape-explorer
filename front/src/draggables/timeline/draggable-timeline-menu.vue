@@ -13,8 +13,8 @@ const {size, options} = useTimelineSizes();
 </script>
 
 <template>
-  <div class="timeline-menu__container">
-    <div class="timeline-menu__block-count">
+  <div :class="$style.container">
+    <div :class="$style['block-count']">
       <NTag
         :bordered="false"
         size="small"
@@ -33,7 +33,7 @@ const {size, options} = useTimelineSizes();
       size="small"
     />
 
-    <div class="timeline-menu__gap-size">
+    <div :class="$style['gap-size']">
       <NTooltip
         placement="top"
         trigger="hover"
@@ -52,24 +52,23 @@ const {size, options} = useTimelineSizes();
   </div>
 </template>
 
-<style lang="scss" scoped>
-.timeline-menu__container {
+<style lang="scss" module>
+.container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 1em;
 }
 
-.timeline-menu__block-count {
+.block-count {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  gap: 10px;
-
+  justify-content: flex-start;
   width: 10rem;
+  gap: 10px;
 }
 
-.timeline-menu__gap-size {
+.gap-size {
   width: 10em;
 }
 </style>

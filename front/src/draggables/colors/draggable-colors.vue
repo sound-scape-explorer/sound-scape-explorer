@@ -9,7 +9,6 @@ import {InjectionKey} from 'src/common/injection-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useColorInvert} from 'src/composables/use-color-invert';
-import {useColorUser} from 'src/composables/use-color-user';
 import {useIndicatorLimits} from 'src/composables/use-indicator-limits';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
@@ -24,7 +23,6 @@ import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
 const {isLoading} = useScatterLoading();
 const {flavor, criteria, criterias, category, categories} = useColorSelection();
 const {isIndicators, isLabels, isLabelNumeric} = useColorState();
-const {domain, generateScale} = useColorUser();
 
 const {low, high} = useScatterColorAlpha();
 const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();
@@ -52,7 +50,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
     <AppDraggableMenu>
       <h2>With</h2>
 
-      <div class="two grow">
+      <div :class="[$style.two, $style.grow]">
         <AppSelect
           :disabled="isLoading"
           :injection-key="InjectionKey.colorsCategory"
@@ -72,7 +70,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
       <h2
         v-if="isIndicators"
-        class="indicator-buttons"
+        :class="$style['indicator-buttons']"
       >
         <AppButton
           :handle-click="detectIndicatorRange"
@@ -97,7 +95,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
       <div
         v-if="isIndicators"
-        class="two"
+        :class="$style.two"
       >
         <AppInput
           :injection-key="InjectionKey.colorsIndicatorMin"
@@ -116,14 +114,14 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
       <h2
         v-if="isLabelNumeric"
-        class="indicator-buttons"
+        :class="$style['indicator-buttons']"
       >
         <DraggableColorsLabelNumeric />
       </h2>
 
       <div
         v-if="isLabelNumeric"
-        class="two"
+        :class="$style.two"
       >
         <AppInput
           :disabled="!isEnabled"
@@ -144,7 +142,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
       <h2>Opacity</h2>
 
-      <div class="two">
+      <div :class="$style.two">
         <AppInput
           :disabled="isLoading"
           :injection-key="InjectionKey.colorsAlphaExcluded"
@@ -200,7 +198,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
       <div
         v-if="!isLabels || isEnabled"
-        class="gradients"
+        :class="$style.gradients"
       >
         <ColorsGradients />
       </div>
@@ -208,13 +206,13 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .two {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: $p0;
+  justify-content: center;
   width: $s0;
+  gap: $p0;
 
   & > * {
     width: 100%;

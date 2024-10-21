@@ -25,13 +25,15 @@ const {getKey} = useKeyboardShortcuts();
     <template #trigger>
       <NButton
         ref="button"
-        :class="{
-          'app-menu-button__active': isActive,
-          'app-menu-button__selected': isSelected,
-          'app-menu-button__hidden': isHidden,
-        }"
+        :class="[
+          $style.button,
+          {
+            [$style.active]: isActive,
+            [$style.selected]: isSelected,
+            [$style.hidden]: isHidden,
+          },
+        ]"
         :disabled="props.disabled"
-        class="app-menu-button"
         size="small"
         @click="handleClick"
       >
@@ -42,33 +44,34 @@ const {getKey} = useKeyboardShortcuts();
     </template>
 
     <div>
-      {{ props.text }} [<span class="app-menu-button__bold">
+      {{ props.text }} [<span :class="$style.bold">
         {{ getKey(props.draggableKey) }}</span
       >]
     </div>
   </NTooltip>
 </template>
 
-<style lang="scss">
-.app-menu-button {
-  backdrop-filter: blur(5px);
+<style lang="scss" module>
+.button {
   pointer-events: auto;
+  backdrop-filter: blur(5px);
+
   @include s0;
 }
 
-.app-menu-button__active {
-  background: $oliveLight;
+.active {
+  background: $olive-light;
 }
 
-.app-menu-button__bold {
+.bold {
   font-weight: bold;
 }
 
-.app-menu-button__selected {
+.selected {
   background: $olive;
 }
 
-.app-menu-button__hidden {
+.hidden {
   display: none;
 }
 </style>

@@ -71,7 +71,7 @@ watch(indicator, update);
       </AppButton>
     </h2>
 
-    <div class="row">
+    <div :class="$style.row">
       <NTreeSelect
         v-model:value="currentSites"
         :clear-filter-after-select="false"
@@ -92,12 +92,12 @@ watch(indicator, update);
 
     <h2>Display</h2>
 
-    <div class="row">
+    <div :class="$style.row">
       <div>
         <AppSelect
+          :class="$style.selection"
           :injection-key="InjectionKey.indicatorsSelection"
           :options="selections"
-          class="draggableTemporalMenuDisplaySelection"
           size="small"
           tooltip="Current selection"
           tooltip-placement="top"
@@ -144,17 +144,17 @@ watch(indicator, update);
 
     <h2>Filter</h2>
 
-    <div class="row">
+    <div :class="$style.row">
       <DraggableTemporalMenuFilters />
     </div>
   </AppDraggableMenu>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
   > div {
     display: flex;
@@ -163,7 +163,7 @@ watch(indicator, update);
   }
 }
 
-.draggableTemporalMenuDisplaySelection {
+.selection {
   width: $p0 * 13;
 }
 </style>

@@ -19,44 +19,44 @@ watch([isActive, duration, current], filterByTime);
 </script>
 
 <template>
-  <div class="container">
+  <div :class="$style.container">
     <div
       v-if="!isLoading"
-      class="layer"
+      :class="$style.layer"
     >
       <NSlider
         v-for="slider in sliders"
         :key="slider.key"
         v-model:value="current"
+        :class="$style.slider"
         :disabled="!isActive"
         :marks="slider.marks"
         :max="slider.max"
         :min="slider.min"
         :style="{width: 100 / sliders.length + '%'}"
         :tooltip="false"
-        class="slider"
       />
     </div>
 
     <div
       v-if="!isLoading"
-      class="layer"
+      :class="$style.layer"
     >
       <div
         v-for="interest in interests"
-        class="interest"
+        :class="$style.interest"
       >
         <span
           v-for="interestValue of interest.values"
+          :class="$style['interest-pixel']"
           :style="{background: interestValue ? 'red' : 'gainsboro'}"
-          class="interest__pixel"
         />
       </div>
     </div>
 
     <div
       v-if="!isLoading"
-      class="layer zoom"
+      :class="[$style.layer, $style.zoom]"
     >
       <AppButton
         v-for="slider in sliders"
@@ -70,7 +70,7 @@ watch([isActive, duration, current], filterByTime);
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
   display: flex;
   flex-direction: column;
@@ -79,41 +79,36 @@ watch([isActive, duration, current], filterByTime);
 
 .layer {
   display: flex;
-  justify-content: space-around;
   align-items: center;
-
+  justify-content: space-around;
   width: 100%;
 }
 
 .slider {
-  z-index: $calendarSliderLayer;
+  z-index: $calendar-slider-layer;
 }
 
 .interest {
+  z-index: $calendar-interest-layer;
   display: flex;
-
   width: 100%;
   height: 13px;
   padding: 0 $p0;
-
-  z-index: $calendarInterestLayer;
   user-select: none;
   transform: translateY(-20px);
 }
 
-.interest__pixel {
+.interest-pixel {
   width: 1%;
 }
 
 .zoom {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 1rem;
-
-  padding: 0 8px;
-
-  transform: translateY(-6px);
+  justify-content: center;
   height: 10px;
+  padding: 0 8px;
+  transform: translateY(-6px);
+  gap: 1rem;
 }
 </style>

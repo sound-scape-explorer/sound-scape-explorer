@@ -12,7 +12,7 @@ const {isLoading, loadingText} = useScatterLoading();
     :is-wait="true"
   >
     <NAlert
-      class="loading"
+      :class="$style.loading"
       type="info"
     >
       <div>Loading...</div>
@@ -21,12 +21,11 @@ const {isLoading, loadingText} = useScatterLoading();
   </AppModal>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .loading {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-
+  justify-content: flex-start;
   width: 16rem;
 }
 </style>

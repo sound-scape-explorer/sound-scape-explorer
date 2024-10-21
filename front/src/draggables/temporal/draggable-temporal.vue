@@ -26,7 +26,7 @@ useDraggableTemporalLifecycles();
 
 <template>
   <AppDraggable
-    class="draggableTemporalContainer"
+    :class="$style.container"
     draggable-key="temporal"
     suspense="view"
   >
@@ -35,7 +35,7 @@ useDraggableTemporalLifecycles();
 
     <div
       v-if="isDisplay"
-      class="plotContainer"
+      :class="$style.plot"
     >
       <AppPlot
         v-if="!isCandles && plot !== null"
@@ -65,14 +65,14 @@ useDraggableTemporalLifecycles();
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggableTemporalContainer {
+<style lang="scss" module>
+.container {
   width: $s2;
 }
 
-.plotContainer {
+.plot {
+  overflow: visible;
   width: 100%;
   height: 100%;
-  overflow: visible;
 }
 </style>

@@ -44,10 +44,10 @@ const handleFocus = (e: FocusEvent) => {
     <template #trigger>
       <NButton
         :class="{
-          grow: props.grow,
-          growCol: props.growCol,
-          active: props.active,
-          error: props.error,
+          [$style.grow]: props.grow,
+          [$style['grow-col']]: props.growCol,
+          [$style.active]: props.active,
+          [$style.error]: props.error,
         }"
         :disabled="props.disabled"
         :size="props.size"
@@ -66,10 +66,10 @@ const handleFocus = (e: FocusEvent) => {
   <NButton
     v-if="!hasTooltip"
     :class="{
-      grow: props.grow,
-      growCol: props.growCol,
-      active: props.active,
-      error: props.error,
+      [$style.grow]: props.grow,
+      [$style['grow-col']]: props.growCol,
+      [$style.active]: props.active,
+      [$style.error]: props.error,
     }"
     :disabled="props.disabled"
     :size="props.size"
@@ -83,12 +83,12 @@ const handleFocus = (e: FocusEvent) => {
   </NButton>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .grow {
   flex: 1;
 }
 
-.growCol {
+.grow-col {
   width: 100%;
 }
 

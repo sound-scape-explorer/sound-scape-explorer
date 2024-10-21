@@ -14,7 +14,7 @@ useDraggableCalendarLifecycles();
 
 <template>
   <AppDraggable
-    class="draggableCalendarContainer"
+    :class="$style.container"
     draggable-key="calendar"
     suspense="view"
   >
@@ -25,8 +25,8 @@ useDraggableCalendarLifecycles();
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggableCalendarContainer {
+<style lang="scss" module>
+.container {
   width: $s2;
 }
 </style>

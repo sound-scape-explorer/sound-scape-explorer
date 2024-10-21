@@ -78,11 +78,11 @@ const isActiveIdRef = computed<string>(() => {
     >
       <NGi v-for="(value, p) in set">
         <NCheckbox
+          :class="$style.checkbox"
           :style="{
             backgroundColor: getColorItem(p),
           }"
           :value="value"
-          class="checkbox"
           size="small"
         >
           <span>{{ value }}</span>
@@ -92,18 +92,17 @@ const isActiveIdRef = computed<string>(() => {
   </NCheckboxGroup>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .checkbox {
   width: 100%;
-
   padding-left: $g0;
   border-radius: $g0;
 
   @include transition-checkboxes;
 
   &:hover {
-    background-color: $grey;
     opacity: 0.9;
+    background-color: $grey;
   }
 
   span {

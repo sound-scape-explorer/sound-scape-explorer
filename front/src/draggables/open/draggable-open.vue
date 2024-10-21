@@ -25,7 +25,7 @@ const handleChange = () => {
 
 <template>
   <AppDraggable draggable-key="open">
-    <div class="draggableOpenContainer">
+    <div :class="$style.container">
       <input
         ref="inputRef"
         :disabled="isLocked"
@@ -34,8 +34,8 @@ const handleChange = () => {
         @change="handleChange"
       />
       <NButton
+        :class="$style.red"
         :disabled="!isLocked"
-        class="red"
         size="small"
         @click="resetFile"
       >
@@ -43,17 +43,17 @@ const handleChange = () => {
       </NButton>
     </div>
 
-    <div class="details">
+    <div :class="$style.details">
       <DraggableOpenDetails v-if="isReady" />
     </div>
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggableOpenContainer {
+<style lang="scss" module>
+.container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   width: $s0;
 }
 
@@ -62,13 +62,12 @@ const handleChange = () => {
 }
 
 .details {
+  overflow: auto;
   width: $s0;
   max-height: $h0;
-
   text-align: right;
   text-wrap: stable;
 
-  overflow: auto;
-  @include noScroll;
+  @include hide-scrollbar;
 }
 </style>

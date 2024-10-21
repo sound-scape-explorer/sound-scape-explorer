@@ -26,8 +26,7 @@ const props = withDefaults(defineProps<AppGridProps>(), {
   >
     <NGi
       v-for="item in props.items"
-      :class="{'no-grow': !props.grow}"
-      class="gi"
+      :class="[$style.gi, {[$style['no-grow']]: !props.grow}]"
     >
       <NTag
         :bordered="false"
@@ -36,14 +35,14 @@ const props = withDefaults(defineProps<AppGridProps>(), {
       >
         {{ item.tag }}
       </NTag>
-      <span class="value">
+      <span :class="$style.value">
         {{ item.value }}
       </span>
     </NGi>
   </NGrid>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .gi {
   display: flex;
   justify-content: space-between;

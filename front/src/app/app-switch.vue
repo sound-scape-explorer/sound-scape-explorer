@@ -20,8 +20,8 @@ const model = useRefInject(props.injectionKey);
 <template>
   <NSwitch
     v-model:value="model"
+    :class="$style.switch"
     :disabled="props.disabled"
-    class="switch"
     size="small"
   >
     <template #checked>{{ checked }}</template>
@@ -29,10 +29,11 @@ const model = useRefInject(props.injectionKey);
   </NSwitch>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 $t: 0.76;
+
 .switch {
-  transform: translate3d(-$p0 + 2px, 0, 0) scale3d($t, $t, $t);
   margin-right: -$g0 - $p0;
+  transform: translate3d(-$p0 + 2px, 0, 0) scale3d($t, $t, $t);
 }
 </style>

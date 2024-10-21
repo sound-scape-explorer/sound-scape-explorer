@@ -13,9 +13,9 @@ const {menu} = useAppMenu();
 </script>
 
 <template>
-  <div class="header">
-    <div class="row">
-      <div class="left">
+  <div :class="$style.header">
+    <div :class="$style.row">
+      <div :class="$style.left">
         <AppMenuButton
           draggable-key="open"
           text="Open"
@@ -40,7 +40,7 @@ const {menu} = useAppMenu();
 
       <div
         v-if="isReady"
-        class="right"
+        :class="$style.right"
       >
         <!-- placeholder -->
       </div>
@@ -48,7 +48,7 @@ const {menu} = useAppMenu();
 
     <div
       v-if="isReady"
-      class="column"
+      :class="$style.column"
     >
       <AppMenuButton
         draggable-key="view"
@@ -158,30 +158,25 @@ const {menu} = useAppMenu();
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 $g: $p0;
 
 .header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  gap: $g;
-
   position: fixed;
-  z-index: $appMenuLayer;
-
+  z-index: $app-menu-layer;
   top: $g;
   left: $g;
-
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
   width: 100%;
-
   pointer-events: none;
+  gap: $g;
 }
 
 .button {
-  backdrop-filter: blur($p0);
   pointer-events: auto;
+  backdrop-filter: blur($p0);
 }
 
 .row {

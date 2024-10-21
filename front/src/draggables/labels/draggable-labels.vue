@@ -15,26 +15,29 @@ const {isExpanded} = useDraggableLabels();
     <DraggableLabelsSidebar />
 
     <div
-      :class="{
-        draggableLabelsExpanded: isExpanded,
-      }"
-      class="draggableLabelsContainer"
+      :class="[
+        $style.container,
+        {
+          [$style.expanded]: isExpanded,
+        },
+      ]"
     >
       <DraggableLabelsItems />
     </div>
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggableLabelsContainer {
+<style lang="scss" module>
+.container {
   display: flex;
-  flex-direction: column;
   overflow-y: auto;
+  flex-direction: column;
   height: $h1;
-  @include noScroll;
+
+  @include hide-scrollbar;
 }
 
-.draggableLabelsExpanded {
+.expanded {
   width: $s2;
   height: $h2;
 }

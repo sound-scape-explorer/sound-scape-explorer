@@ -17,7 +17,7 @@ const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
 </script>
 
 <template>
-  <div class="cell ml mr mb">
+  <div :class="[$style.cell, $style.ml, $style.mr, $style.mb]">
     <NTooltip
       :show-arrow="false"
       placement="top-start"
@@ -27,7 +27,7 @@ const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
       <template #trigger>
         <NTag
           :bordered="false"
-          class="tag"
+          :class="$style.tag"
           @click="handlePropertyClick"
           @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
         >
@@ -53,12 +53,12 @@ const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
   </div>
 
   <DraggableLabelsItemsOptions
+    :class="[$style.checkboxes, $style.mr, $style.ml]"
     :property="props.property"
-    class="checkboxes mr ml"
   />
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .ml {
   margin-left: $p0;
 }
@@ -83,8 +83,8 @@ const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
 }
 
 .tag {
-  user-select: none;
   flex: 1;
+  user-select: none;
 
   &:hover {
     cursor: pointer;

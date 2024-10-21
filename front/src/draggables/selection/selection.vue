@@ -47,10 +47,10 @@ watch(labelProperties, () => {
 
 <template>
   <AppDraggable
-    class="draggable-selection"
+    :class="$style['draggable-selection']"
     draggable-key="selection"
   >
-    <div class="draggable-selection--buttons">
+    <div :class="$style.buttons">
       <AppButton
         :handle-click="() => console.log('undo')"
         tooltip="undo"
@@ -66,13 +66,13 @@ watch(labelProperties, () => {
       </AppButton>
     </div>
 
-    <span class="draggable-selection--tooltip">
+    <span :class="$style.tooltip">
       Current number of points selected: {{ selected.length }}
     </span>
 
     <NTabs
+      :class="$style.tabs"
       animated
-      class="draggable-selection--tabs"
       type="line"
     >
       <NTabPane
@@ -98,7 +98,7 @@ watch(labelProperties, () => {
       </NIcon>
     </NButton>
 
-    <div class="draggable-selection--container">
+    <div :class="$style.container">
       <NButton
         ref="button"
         size="small"
@@ -136,39 +136,38 @@ watch(labelProperties, () => {
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .draggable-selection {
   width: 40em;
 }
 
-.draggable-selection--container {
+.container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 1em;
 }
 
-.draggable-selection--buttons {
+.buttons {
   position: fixed;
   display: flex;
-  justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-
-  gap: 2px;
+  justify-content: flex-start;
   height: 0;
   margin-left: -2rem;
+  gap: 2px;
 }
 
-.draggable-selection--tabs {
+.tabs {
   margin-top: -1em;
   padding-top: 0.5em;
 }
 
-.draggable-selection--tooltip {
+.tooltip {
   position: fixed;
+  right: 0;
   margin-top: 1em;
   margin-right: 1em;
-  right: 0;
 }
 </style>

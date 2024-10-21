@@ -23,21 +23,19 @@ const {count} = useLabelsInfo();
     </AppButton>
 
     <AppTooltip tooltip="Points excluded">
-      <div class="info">
+      <div :class="$style.info">
         {{ count }}
       </div>
     </AppTooltip>
   </AppDraggableSidebar>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .info {
+  font-size: 0.9em;
   width: $p0 * 3;
   height: $p0 * 3;
-
-  font-size: 0.9em;
-
-  color: $emerald;
   text-align: center;
+  color: $emerald;
 }
 </style>

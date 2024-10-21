@@ -55,16 +55,18 @@ useAppDraggableLifecycles({
 <template>
   <div
     ref="container"
-    :class="{
-      appDraggableZoomed: isZoomed,
-      appDraggableClosed: isClosed,
-      appDraggableSelected: isSelected,
-      appDraggableHidden: hidden,
-    }"
+    :class="[
+      $style.container,
+      {
+        [$style.zoomed]: isZoomed,
+        [$style.closed]: isClosed,
+        [$style.selected]: isSelected,
+        [$style.hidden]: hidden,
+      },
+    ]"
     :style="style"
-    class="appDraggableContainer"
   >
-    <div class="appDraggableCloseButton">
+    <div :class="$style['close-button']">
       <AppButton
         :handle-click="() => close(props.draggableKey)"
         grow
@@ -75,8 +77,8 @@ useAppDraggableLifecycles({
       </AppButton>
     </div>
 
-    <div class="appDraggableHeader">
-      <div class="appDraggableHeaderTitle">
+    <div :class="$style.header">
+      <div :class="$style.title">
         <AppIcon v-if="icon !== null">
           <icon />
         </AppIcon>
@@ -87,7 +89,7 @@ useAppDraggableLifecycles({
 
       <div
         ref="drag"
-        class="appDraggableHeaderHandle"
+        :class="$style.handle"
       >
         <span>👋</span>
       </div>
@@ -97,58 +99,51 @@ useAppDraggableLifecycles({
       :wait-if="suspense.while"
       :wait-message="suspense.message"
     >
-      <div class="appDraggableContent">
+      <div :class="$style.content">
         <slot />
       </div>
     </AppCondition>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.appDraggableContainer {
+<style lang="scss" module>
+.container {
   position: fixed;
-  z-index: $appDraggableIndexDefaultLayer;
+  z-index: $app-draggable-index-default-layer;
   justify-content: flex-start;
   padding: $p0 $p0 $p0 $p0 * 5;
-
   user-select: none;
-
   opacity: 1;
   border: 1px solid $grey;
   background-color: $white;
   backdrop-filter: blur($p0 + $g0);
 
   @include s1;
-  @include borderRadius;
+  @include border-radius;
   @include transition-app-draggable;
 }
 
-.appDraggableContent {
-  cursor: default;
+.content {
   margin: $p0 0 0 0;
+  cursor: default;
 }
 
-.appDraggableZoomable {
-  max-height: 20%;
-}
-
-.appDraggableZoomed {
+.zoomed {
   max-height: 30%;
 }
 
-.appDraggableClosed {
+.closed {
   display: none;
 }
 
-.appDraggableCloseButton {
+.close-button {
   position: fixed;
-  left: $p0;
+  z-index: $app-draggable-index-buttons-layer;
   top: $p0;
-
-  z-index: $appDraggableIndexButtonsLayer;
+  left: $p0;
 }
 
-.appDraggableHeader {
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -159,27 +154,26 @@ useAppDraggableLifecycles({
   0% {
     transform: translate3d(0, 0, 0);
   }
+
   50% {
     transform: translate3d(0, -2px, 0);
   }
+
   100% {
     transform: translate3d(0, 0, 0);
   }
 }
 
-.appDraggableHeaderHandle {
+.handle {
   display: flex;
-  justify-content: center;
   align-items: center;
-
+  justify-content: center;
   width: 100%;
   max-width: $p0 * 40;
-
-  background-color: $greyLight;
-  border-radius: 10px;
   cursor: grab;
-
   opacity: 0.45;
+  border-radius: 10px;
+  background-color: $grey-light;
   filter: grayscale(0.95);
 
   @include transition-app-draggable-handle;
@@ -199,19 +193,20 @@ useAppDraggableLifecycles({
 }
 
 hr {
-  opacity: 20%;
+  opacity: 0.2;
 }
 
-.appDraggableHidden {
+.hidden {
   display: none;
 }
 
-.appDraggableHeaderTitle {
+.title {
   font-weight: bold;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: $p0;
+
   @include transition-color;
 
   > i {
@@ -226,10 +221,10 @@ hr {
   }
 }
 
-.appDraggableSelected {
-  z-index: $appDraggableIndexSelectedLayer;
+.selected {
+  z-index: $app-draggable-index-selected-layer;
 
-  .appDraggableHeaderTitle > i {
+  .title > i {
     color: $emerald;
   }
 }

@@ -38,7 +38,7 @@ useDraggableSettingsProviders();
 
 <template>
   <AppDraggable draggable-key="settings">
-    <div class="draggableSettingsReload">
+    <div :class="$style.reload">
       <AppButton
         :handle-click="resetAll"
         grow
@@ -48,7 +48,7 @@ useDraggableSettingsProviders();
       </AppButton>
     </div>
 
-    <div class="draggableSettingsContainer">
+    <div :class="$style.container">
       <DraggableSettingsItem title="Audio: set audio host">
         <AppInput
           :injection-key="InjectionKey.settingsAudioHost"
@@ -141,9 +141,9 @@ useDraggableSettingsProviders();
 
       <DraggableSettingsItem title="Spectrogram: Set color map">
         <AppSelect
+          :class="$style['spectro-colors']"
           :injection-key="InjectionKey.settingsColormap"
           :options="colormapOptions"
-          class="draggableSettingsSpectroColors"
           size="small"
         />
       </DraggableSettingsItem>
@@ -190,22 +190,23 @@ useDraggableSettingsProviders();
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggableSettingsReload {
+<style lang="scss" module>
+.reload {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
-.draggableSettingsContainer {
+.container {
+  overflow: auto;
   width: $s0;
   height: $s0;
   padding-top: $p0;
-  overflow: auto;
-  @include noScroll;
+
+  @include hide-scrollbar;
 }
 
-.draggableSettingsSpectroColors {
+.spectro-colors {
   width: $p0 * 12;
 }
 </style>

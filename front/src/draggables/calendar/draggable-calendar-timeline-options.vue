@@ -6,7 +6,7 @@ const end = ref<HTMLInputElement>();
 </script>
 
 <template>
-  <div class="draggableCalendarTimelineOptionsContainer">
+  <div :class="$style.container">
     <input
       ref="start"
       placeholder="start"
@@ -18,19 +18,19 @@ const end = ref<HTMLInputElement>();
   </div>
 </template>
 
-<style lang="scss" scoped>
-.draggableCalendarTimelineOptionsContainer {
-  margin-top: $p0;
+<style lang="scss" module>
+.container {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  justify-content: flex-start;
+  margin-top: $p0;
   gap: $g0;
 
   & > input {
-    text-align: center;
     width: $p0 * 14;
-    background: $whiteOpaque;
+    text-align: center;
     border: 1px solid $olive;
+    background: $white-opaque;
   }
 }
 </style>

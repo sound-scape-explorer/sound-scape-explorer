@@ -14,7 +14,7 @@ const openDiscord = () => window.open(LINK_DISCORD);
 </script>
 
 <template>
-  <div class="draggableHelpLinks">
+  <div :class="$style.container">
     <div>
       <AppButton
         :handle-click="openDocumentation"
@@ -38,7 +38,7 @@ const openDiscord = () => window.open(LINK_DISCORD);
         size="small"
       >
         Open bug report
-        <span class="draggableHelpLinksLight">requires GitHub</span>
+        <span :class="$style.light">requires GitHub</span>
       </AppButton>
 
       <AppButton
@@ -52,34 +52,34 @@ const openDiscord = () => window.open(LINK_DISCORD);
 
     <div>
       <img
+        :class="$style.image"
         alt="logo"
-        class="draggableHelpLinksImage"
         src="/favicon.ico"
       />
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.draggableHelpLinks {
+<style lang="scss" module>
+.container {
   display: flex;
   width: 100%;
 
   & > div {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
-    gap: $p0;
     width: 100%;
+    gap: $p0;
   }
 }
 
-.draggableHelpLinksImage {
+.image {
   width: $p0 * 12;
 }
 
-.draggableHelpLinksLight {
+.light {
   font-size: 0.8em;
   font-style: italic;
   padding-left: $g0;

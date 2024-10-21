@@ -49,7 +49,7 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
 
     <h2>Over</h2>
 
-    <div class="labels">
+    <div :class="$style.labels">
       <AppSelect
         :injection-key="InjectionKey.digestedLabelA"
         :options="labelProperties ?? []"
@@ -77,7 +77,7 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
 
     <h2>Colors</h2>
 
-    <div class="colors">
+    <div :class="$style.colors">
       <AppSelect
         :disabled="!isReadyAndSelected"
         :injection-key="InjectionKey.digestedColorFlavor"
@@ -101,7 +101,7 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
 
     <h2>Plot</h2>
 
-    <div class="plot">
+    <div :class="$style.plot">
       <NButtonGroup>
         <AppButton
           :disabled="!isReadyAndSelected"
@@ -151,7 +151,7 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
   </AppDraggableMenu>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .labels {
   display: grid;
   grid-template-columns: 1fr $p0 * 7 1fr;
@@ -166,8 +166,8 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
 
 .plot {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .text {

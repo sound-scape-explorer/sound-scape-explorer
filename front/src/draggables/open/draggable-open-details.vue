@@ -40,7 +40,7 @@ const timelineOrigin = computed<string>(() => {
 </script>
 
 <template>
-  <h2 class="yellow">Settings</h2>
+  <h2 :class="[$style.title, $style.yellow]">Settings</h2>
 
   <AppGrid
     :columns="1"
@@ -88,7 +88,7 @@ const timelineOrigin = computed<string>(() => {
     ]"
   />
 
-  <h2 class="yellow">Specifications</h2>
+  <h2 :class="[$style.title, $style.yellow]">Specifications</h2>
 
   <AppGrid
     :columns="3"
@@ -116,7 +116,7 @@ const timelineOrigin = computed<string>(() => {
     ]"
   />
 
-  <h2 class="blue">Configurations</h2>
+  <h2 :class="[$style.title, $style.blue]">Configurations</h2>
 
   <AppGrid
     :columns="3"
@@ -141,12 +141,12 @@ const timelineOrigin = computed<string>(() => {
   />
 </template>
 
-<style lang="scss" scoped>
-h2 {
+<style lang="scss" module>
+.title {
+  font-weight: bold;
   margin: $p0 0;
   padding: $g0 $p0;
   border-radius: $g0;
-  font-weight: bold;
 }
 
 .yellow {

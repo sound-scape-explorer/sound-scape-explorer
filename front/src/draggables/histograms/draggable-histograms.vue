@@ -26,7 +26,7 @@ useDraggableHistogramsLifecycles();
 
 <template>
   <AppDraggable
-    class="container"
+    :class="$style.container"
     draggable-key="histograms"
   >
     <AppDraggableMenu>
@@ -57,7 +57,7 @@ useDraggableHistogramsLifecycles();
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
   width: 40em;
 }

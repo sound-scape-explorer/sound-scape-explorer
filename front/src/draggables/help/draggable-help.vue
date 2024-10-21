@@ -8,7 +8,7 @@ import {VERSION} from 'src/version';
 
 <template>
   <AppDraggable draggable-key="help">
-    <div class="draggableHelpContainer">
+    <div :class="$style.container">
       <AppGrid
         :columns="1"
         :grow="false"
@@ -20,13 +20,13 @@ import {VERSION} from 'src/version';
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggableHelpContainer {
+<style lang="scss" module>
+.container {
   display: flex;
-  justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  gap: $p0;
+  justify-content: center;
   width: $s2;
+  gap: $p0;
 }
 </style>

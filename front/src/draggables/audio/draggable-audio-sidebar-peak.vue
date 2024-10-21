@@ -11,8 +11,7 @@ watch(isClipping, fade);
 <template>
   <AppTooltip tooltip="Peak detection">
     <NButton
-      :class="{peaking: isClipping}"
-      class="peak"
+      :class="[$style.peak, {[$style.peaking]: isClipping}]"
       disabled
       size="tiny"
     >
@@ -21,34 +20,35 @@ watch(isClipping, fade);
   </AppTooltip>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .peak {
   position: absolute;
   bottom: -394px;
-
   width: $p0 * 3;
-
-  background: $green;
-  transition: none;
-
   cursor: default;
-  opacity: 1;
-
+  transition: none;
+  opacity: 1 !important;
   border-radius: $g0;
 
-  span {
+  & > :nth-child(2) {
+    background: $green;
+  }
+
+  & > :nth-child(1) {
     font-weight: bold;
     position: relative;
-    transform: translate3d(-$p0 - 1px, -$g0 * 5 + 1px, 0);
     z-index: 200;
     display: none;
+    transform: translate3d(-$p0 - 1px, -$g0 * 5 + 1px, 0);
   }
 }
 
 .peaking {
-  background: $redDeep;
+  & > :nth-child(2) {
+    background: $red-deep;
+  }
 
-  span {
+  & > :nth-child(1) {
     display: inline-block;
   }
 }

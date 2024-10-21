@@ -6,7 +6,7 @@ const {rms} = useAudioAnalyser();
 </script>
 
 <template>
-  <div class="container">
+  <div :class="$style.container">
     <VuMeter
       :height="127"
       :value="rms"
@@ -16,9 +16,9 @@ const {rms} = useAudioAnalyser();
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
-  background: transparent;
   transform: translate3d(9px, 4px, 0);
+  background: transparent;
 }
 </style>

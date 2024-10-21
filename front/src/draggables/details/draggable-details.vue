@@ -44,19 +44,21 @@ watch(timeshift, updateDates);
     draggable-key="details"
     suspense="scatterClick"
   >
-    <div class="file container">
-      <div class="title">Selected interval index</div>
-      <span class="file index">{{ currentIntervalIndex ?? 'none' }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Selected interval index</div>
+      <span :class="[$style.file, $style.index]">{{
+        currentIntervalIndex ?? 'none'
+      }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Site</div>
-      <span class="file index">{{ site?.site ?? '' }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Site</div>
+      <span :class="[$style.file, $style.index]">{{ site?.site ?? '' }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Audio blocks</div>
-      <span class="file index">
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Audio blocks</div>
+      <span :class="[$style.file, $style.index]">
         <NTooltip
           v-for="blockDetails in blocks"
           placement="bottom"
@@ -65,7 +67,7 @@ watch(timeshift, updateDates);
           <!--suppress VueUnrecognizedSlot -->
           <template #trigger>
             <NButton
-              class="zoom"
+              :class="$style.zoom"
               size="small"
               @click="() => select(blockDetails)"
             >
@@ -113,37 +115,41 @@ watch(timeshift, updateDates);
       </span>
     </div>
 
-    <div class="separator" />
+    <div :class="$style.separator" />
 
-    <div class="file container">
-      <div class="title">Date Start</div>
-      <span class="file index">{{ date && convertDateToIsoDate(date) }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Date Start</div>
+      <span :class="[$style.file, $style.index]">{{
+        date && convertDateToIsoDate(date)
+      }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Date End</div>
-      <span class="file index">{{
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Date End</div>
+      <span :class="[$style.file, $style.index]">{{
         dateEnd && convertDateToIsoDate(dateEnd)
       }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Band</div>
-      <span class="file index">{{ band?.name ?? '' }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Band</div>
+      <span :class="[$style.file, $style.index]">{{ band?.name ?? '' }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Integration</div>
-      <span class="file index">{{ integration?.name ?? '' }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Integration</div>
+      <span :class="[$style.file, $style.index]">{{
+        integration?.name ?? ''
+      }}</span>
     </div>
 
-    <div class="separator" />
+    <div :class="$style.separator" />
 
-    <div class="title">Labels</div>
+    <div :class="$style.title">Labels</div>
 
     <div
       v-if="hasClicked"
-      class="file container details"
+      :class="[$style.file, $style.container, $style.details]"
     >
       <span />
       <NGrid
@@ -163,9 +169,9 @@ watch(timeshift, updateDates);
         </NGi>
       </NGrid>
 
-      <div class="separator" />
+      <div :class="$style.separator" />
 
-      <div class="title">Indicators</div>
+      <div :class="$style.title">Indicators</div>
 
       <NGrid
         v-if="aggregatedIndicators !== null"
@@ -187,7 +193,7 @@ watch(timeshift, updateDates);
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .index {
   font-style: italic;
 }
