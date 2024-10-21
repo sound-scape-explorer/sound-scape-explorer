@@ -17,6 +17,8 @@ const props = withDefaults(defineProps<Props>(), {
   width: 1,
 });
 
+const widthAsPercentage = computed(() => `${props.width}%`);
+
 const tooltipTextDefaultValue = '';
 const tooltipText = ref<string>(tooltipTextDefaultValue);
 
@@ -59,7 +61,7 @@ const leaveStep = () => {
     <span
       v-for="(element, index) in props.colors"
       :class="$style.step"
-      :style="{'backgroundColor': element, '--width': `${width}%`}"
+      :style="{backgroundColor: element}"
       @mouseleave="leaveStep"
       @mouseover="() => enterStep(index)"
     />
@@ -83,7 +85,7 @@ const leaveStep = () => {
 
 .step {
   display: inline-block;
-  width: var(--width);
+  width: v-bind(widthAsPercentage);
   height: $p0 * 3;
   cursor: crosshair;
 

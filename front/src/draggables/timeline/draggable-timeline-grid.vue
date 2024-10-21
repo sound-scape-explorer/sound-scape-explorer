@@ -26,6 +26,9 @@ const shiftRef = ref<number>(0);
 const dragStartPositionRef = ref<number>(0);
 const isDraggingRef = ref<boolean>(false);
 
+const shiftAsPixels = computed(() => `${shiftRef.value}px`);
+const iterations = computed(() => pageSizeRef.value);
+
 onMounted(() => {
   if (columnsRef.value === null || draggableRef.value === null) {
     return;
@@ -80,11 +83,11 @@ watchEffect(() => {
 
 const colWidthRef = computed(() => {
   if (size.value === 'small') {
-    return 30;
+    return '30px';
   } else if (size.value === 'medium') {
-    return 50;
+    return '50px';
   } else if (size.value === 'large') {
-    return 80;
+    return '80px';
   }
 });
 
@@ -114,7 +117,6 @@ const handleBlockClick = (block: VisibleBlock) => {
     <div
       ref="columnsRef"
       :class="$style.columns"
-      :style="`--iterations: ${pageSizeRef.value}; --shift: -${shiftRef}px; --col-width: ${colWidthRef}px`"
     >
       <div
         ref="draggableRef"
@@ -133,7 +135,7 @@ const handleBlockClick = (block: VisibleBlock) => {
         <div
           v-for="vB in pageVisibleBlocksRef.value"
           :class="$style.block"
-          :style="`--left: ${vB.position}; --span: 1`"
+          :style="`--left: ${vB.position}`"
           @click="() => handleBlockClick(vB)"
         >
           <NTooltip
@@ -179,12 +181,12 @@ const handleBlockClick = (block: VisibleBlock) => {
 </template>
 
 <style lang="scss" module>
-$col-width: var(--col-width);
+$col-width: v-bind(colWidthRef);
 $header-height: 40px;
 $grid-color: 120;
-$shift: var(--shift);
-$iterations: var(--iterations);
-$span: var(--span);
+$shift: v-bind(shiftAsPixels);
+$iterations: v-bind(iterations);
+$span: 1;
 $left: calc(var(--left) - 1);
 
 .grid {
