@@ -11,10 +11,12 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
 </script>
 
 <template>
-  <div :class="$style.container">
+  <div
+    v-if="isPlaying"
+    :class="$style.container"
+  >
     <span>PEAK</span>
     <VuMeter
-      v-if="isPlaying"
       :height="127"
       :value="rms"
       :width="width"
