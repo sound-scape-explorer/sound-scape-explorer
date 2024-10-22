@@ -24,7 +24,8 @@ const {
 
 const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
 const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
-const {resize1by1, resize4by3, resize16by10, resize16by9} = useAppHeatmapSize();
+const {resize1by1, resize4by3, resize16by10, resize16by9, double, half} =
+  useAppHeatmapSize();
 const {flavor, flavors} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
 
@@ -107,33 +108,49 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
           :disabled="!isReadyAndSelected"
           :handle-click="resize1by1"
         >
-          <NIcon>
-            <ResizeOutline /> </NIcon
-          >&nbsp;1:1
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize4by3"
         >
-          <NIcon>
-            <ResizeOutline /> </NIcon
-          >&nbsp;4:3
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize16by10"
         >
-          <NIcon>
-            <ResizeOutline /> </NIcon
-          >&nbsp;16:10
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize16by9"
         >
-          <NIcon>
-            <ResizeOutline /> </NIcon
-          >&nbsp;16:9
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+        </AppButton>
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize16by9"
+        >
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+        </AppButton>
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize16by9"
+        >
+          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+        </AppButton>
+        <AppButton
+          :handle-click="half"
+          type="number"
+        >
+          /2
+        </AppButton>
+        <AppButton
+          :handle-click="double"
+          type="number"
+        >
+          *2
         </AppButton>
       </NButtonGroup>
 
