@@ -1,5 +1,4 @@
-import {type Dataset, type File as H5File, type Group} from 'h5wasm';
-import h5wasm from 'h5wasm';
+import h5wasm, {type Dataset, type File as H5File, type Group} from 'h5wasm';
 import {type DigesterName} from 'src/common/digester-name';
 import {digesterTypeMap} from 'src/common/digester-type-map';
 import {StorageMode} from 'src/common/storage-mode';
@@ -31,6 +30,8 @@ import {
   type TracedTimestamps,
 } from 'src/composables/use-trajectories-data';
 import {trimRectangular} from 'src/utils/trim-rectangular';
+
+// TODO: Replace .pushes with fixed arrays
 
 let h5: H5File;
 const PATH = '/work';
@@ -625,7 +626,13 @@ export async function readAggregatedTimestamps(
   const path = `${StoragePath.aggregated_timestamps}/${bandName}/${integrationSeconds}/${extractorIndex}`;
   const timestampsDataset = h5.get(path) as Dataset;
   const timestamps = timestampsDataset.to_array() as number[][];
-  return timestamps.map((t) => t[0]);
+  const unpacked = new Array(timestamps.length);
+
+  for (let i = 0; i < timestamps.length; i += 1) {
+    unpacked[i] = timestamps[i][0];
+  }
+
+  return unpacked;
 }
 
 export async function readAggregatedSites(
@@ -637,16 +644,16 @@ export async function readAggregatedSites(
   const h5 = await load(file);
   const path = `${StoragePath.aggregated_sites}/${bandName}/${integrationSeconds}/${extractorIndex}`;
   const dataset = h5.get(path) as Dataset;
-  const siteFileIndexes = dataset.to_array() as string[][];
+  const sites_list = dataset.to_array() as string[][];
 
-  const sites: AggregatedSite[] = [];
+  const sites = new Array<AggregatedSite>(sites_list.length);
 
-  for (const item of siteFileIndexes) {
+  for (let i = 0; i < sites_list.length; i += 1) {
     const site: AggregatedSite = {
-      site: item[0],
+      site: sites_list[i][0],
     };
 
-    sites.push(site);
+    sites[i] = site;
   }
 
   return sites;
@@ -666,13 +673,14 @@ export async function readAggregatedIntervalDetails(
   const dataset = h5.get(path) as Dataset;
   // TODO: This can be non rectangular,
   const strings_list = dataset.to_array() as string[][];
+  const intervals = new Array<IntervalDetails>(strings_list.length);
 
-  const intervalDetails: IntervalDetails[] = [];
+  for (let i = 0; i < strings_list.length; i += 1) {
+    const strings = strings_list[i];
+    const blocks = new Array<BlockDetails>(strings.length);
 
-  for (const strings of strings_list) {
-    const blocksDetails: BlockDetails[] = [];
-
-    for (const string of strings) {
+    for (let j = 0; j < strings.length; j += 1) {
+      const string = strings[j];
       const elements = string.split('/');
 
       let fullPath = `/${elements.slice(2).join('/')}`;
@@ -686,22 +694,23 @@ export async function readAggregatedIntervalDetails(
         relativePath = relativePath.substring(1);
       }
 
-      const blockDetails: BlockDetails = {
+      const block: BlockDetails = {
         start: Number(elements[0]),
         fileStart: Number(elements[1]),
         file: relativePath,
         fileIndex: fileNames.indexOf(relativePath),
       };
 
-      blocksDetails.push(blockDetails);
+      blocks[j] = block;
     }
 
-    intervalDetails.push(blocksDetails);
+    intervals[i] = blocks;
   }
 
-  return intervalDetails;
+  return intervals;
 }
 
+// TODO: refactor me
 export async function readAggregatedLabels(
   file: File,
   bandName: string,
@@ -748,29 +757,30 @@ export async function readAggregatedLabels(
 
 export async function readAggregatedIndicators(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
-  extractorsIndexes: number[], // non nn extractors indexes
+  band: string, // name
+  integration: number, // seconds
+  extractorIndices: number[], // non nn extractors indices
 ): Promise<AggregatedIndicator[]> {
   const h5 = await load(file);
   const extractors = await readExtractors(file);
 
-  const aggregateds: AggregatedIndicator[] = [];
+  const indicators = new Array<AggregatedIndicator>(extractorIndices.length);
 
-  for (const extractorIndex of extractorsIndexes) {
-    const path = `${StoragePath.aggregated}/${bandName}/${integrationSeconds}/${extractorIndex}`;
+  for (let i = 0; i < extractorIndices.length; i += 1) {
+    const e = extractorIndices[i];
+    const path = `${StoragePath.aggregated}/${band}/${integration}/${e}`;
     const dataset = h5.get(path) as Dataset;
     const values = dataset.to_array() as number[][];
 
-    const aggregated: AggregatedIndicator = {
-      extractor: extractors[extractorIndex],
+    const indicator: AggregatedIndicator = {
+      extractor: extractors[e],
       values: values,
     };
 
-    aggregateds.push(aggregated);
+    indicators[i] = indicator;
   }
 
-  return aggregateds;
+  return indicators;
 }
 
 export async function readDigesters(file: File): Promise<Digester[]> {
