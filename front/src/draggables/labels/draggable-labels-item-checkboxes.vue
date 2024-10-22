@@ -95,6 +95,7 @@ const isActiveIdRef = computed<string>(() => {
 <style lang="scss" module>
 .checkbox {
   width: 100%;
+  height: 100%;
   padding-left: $g0;
   border-radius: $g0;
 

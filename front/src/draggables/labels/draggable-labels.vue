@@ -32,13 +32,14 @@ const {isExpanded} = useDraggableLabels();
   display: flex;
   overflow-y: auto;
   flex-direction: column;
-  height: $h1;
+  width: $w0;
+  height: $h0;
 
   @include hide-scrollbar;
 }
 
 .expanded {
-  width: $s2;
+  width: $w2;
   height: $h2;
 }
 </style>
