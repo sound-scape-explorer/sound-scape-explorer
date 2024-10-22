@@ -85,6 +85,10 @@ export function useDraggables() {
     if (selected.value !== key) {
       selected.value = key;
     }
+
+    if (hidden.value) {
+      toggleAll();
+    }
   };
 
   const closeActive = () => {
