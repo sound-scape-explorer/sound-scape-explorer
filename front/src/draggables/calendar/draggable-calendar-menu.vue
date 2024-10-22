@@ -15,6 +15,7 @@ import {InjectionKey} from 'src/common/injection-key';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
+import {printPrettySeconds} from 'src/utils/print-pretty-seconds';
 
 const {
   isActive,
@@ -41,13 +42,34 @@ useRefProvide(InjectionKey.timeDuration, duration);
 <template>
   <AppDraggableMenu :class="$style.menu">
     <span>Filtering</span>
-    <div>
+    <div :class="$style['first-row']">
       <AppSwitch
         :injection-key="InjectionKey.calendarActive"
         checked="Yes"
+        native
         unchecked="No"
       />
 
+      <div :class="$style.gaps">
+        <AppTooltip
+          placement="top"
+          tooltip="Set start date"
+        >
+          <NDatePicker
+            :class="$style.picker"
+            :disabled="uiDisabled"
+            :on-update:value="handleDateStartUpdate"
+            :value="dateStartRef.unix() * 1000"
+            size="tiny"
+            type="datetime"
+          />
+        </AppTooltip>
+
+        <div>to {{ dateEndRef }}</div>
+      </div>
+    </div>
+    <span>Window</span>
+    <div>
       <NButtonGroup>
         <AppButton
           v-for="d in durations"
@@ -67,6 +89,8 @@ useRefProvide(InjectionKey.timeDuration, duration);
         tooltip="Set window duration in seconds"
         type="number"
       />
+
+      <div>{{ printPrettySeconds(duration) }}</div>
     </div>
     <span>Transport</span>
     <div>
@@ -75,6 +99,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
           :disabled="uiDisabled"
           :handle-click="skipTimeBackward"
           icon
+          small-tooltip
           tooltip="Backward"
         >
           <PlaySkipBackOutline />
@@ -84,6 +109,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
           :disabled="uiDisabled"
           :handle-click="togglePlaying"
           icon
+          small-tooltip
           tooltip="Play / Pause"
         >
           <PlayOutline v-show="!isPlaying" />
@@ -94,28 +120,11 @@ useRefProvide(InjectionKey.timeDuration, duration);
           :disabled="uiDisabled"
           :handle-click="skipTimeForward"
           icon
+          small-tooltip
           tooltip="Forward"
         >
           <PlaySkipForwardOutline />
         </AppButton>
-      </div>
-
-      <div :class="$style.gaps">
-        <AppTooltip
-          placement="top"
-          tooltip="Set start date"
-        >
-          <NDatePicker
-            :class="$style.picker"
-            :disabled="uiDisabled"
-            :on-update:value="handleDateStartUpdate"
-            :value="dateStartRef.unix() * 1000"
-            size="tiny"
-            type="datetime"
-          />
-        </AppTooltip>
-
-        <div>to {{ dateEndRef }}</div>
       </div>
     </div>
   </AppDraggableMenu>
@@ -143,5 +152,11 @@ useRefProvide(InjectionKey.timeDuration, duration);
 
 .picker {
   width: $p0 * 19;
+}
+
+.first-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

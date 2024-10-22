@@ -8,10 +8,12 @@ interface Props {
   checked: string;
   unchecked: string;
   disabled?: boolean;
+  native?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
+  native: false,
 });
 
 const model = useRefInject(props.injectionKey);
@@ -20,7 +22,7 @@ const model = useRefInject(props.injectionKey);
 <template>
   <NSwitch
     v-model:value="model"
-    :class="$style.switch"
+    :class="{[$style.custom]: !props.native}"
     :disabled="props.disabled"
     size="small"
   >
@@ -32,7 +34,7 @@ const model = useRefInject(props.injectionKey);
 <style lang="scss" module>
 $t: 0.76;
 
-.switch {
+.custom {
   margin-right: -$g0 - $p0;
   transform: translate3d(-$p0 + 2px, 0, 0) scale3d($t, $t, $t);
 }
