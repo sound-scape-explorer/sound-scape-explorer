@@ -14,6 +14,7 @@ interface Props {
   growCol?: boolean;
   active?: boolean;
   error?: boolean;
+  smallTooltip?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -24,6 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   growCol: false,
   active: false,
   error: false,
+  smallTooltip: false,
 });
 
 const hasTooltip = computed(() => typeof props?.tooltip === 'string');
@@ -37,6 +39,7 @@ const handleFocus = (e: FocusEvent) => {
 <template>
   <NTooltip
     v-if="hasTooltip"
+    :class="{[$style.tooltip]: props.smallTooltip}"
     :placement="props.tooltipPlacement"
     trigger="hover"
   >
@@ -60,7 +63,9 @@ const handleFocus = (e: FocusEvent) => {
         <slot v-if="!props.icon" />
       </NButton>
     </template>
-    <span>{{ props.tooltip }}</span>
+    <span :class="{[$style.small]: props.smallTooltip}">{{
+      props.tooltip
+    }}</span>
   </NTooltip>
 
   <NButton
@@ -98,5 +103,13 @@ const handleFocus = (e: FocusEvent) => {
 
 .active {
   background: $olive;
+}
+
+.tooltip {
+  padding: $p0 !important;
+}
+
+.small {
+  font-size: 0.9em;
 }
 </style>

@@ -42,6 +42,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
       :handle-click="togglePlayPause"
       :tooltip="isPlaying ? 'Pause [space]' : 'Play [space]'"
       icon
+      small-tooltip
       tooltip-placement="left"
     >
       <PauseOutline v-if="isPlaying" />
@@ -51,6 +52,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     <AppButton
       :handle-click="stop"
       icon
+      small-tooltip
       tooltip="Stop"
       tooltip-placement="left"
     >
@@ -61,6 +63,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
       :disabled="!canIncreaseVolume"
       :handle-click="increaseVolume"
       icon
+      small-tooltip
       tooltip="Volume Up"
       tooltip-placement="left"
     >
@@ -71,6 +74,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
       :disabled="!canDecreaseVolume"
       :handle-click="decreaseVolume"
       icon
+      small-tooltip
       tooltip="Volume Down"
       tooltip-placement="left"
     >
@@ -81,6 +85,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
       :disabled="!canIncreaseFourier"
       :handle-click="increaseFourier"
       icon
+      small-tooltip
       tooltip="FFT Size Up"
       tooltip-placement="left"
     >
@@ -91,6 +96,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
       :disabled="!canDecreaseFourier"
       :handle-click="decreaseFourier"
       icon
+      small-tooltip
       tooltip="FFT Size Down"
       tooltip-placement="left"
     >
