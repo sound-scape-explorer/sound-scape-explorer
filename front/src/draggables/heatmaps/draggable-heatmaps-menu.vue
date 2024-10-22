@@ -140,18 +140,8 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
         >
           <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
         </AppButton>
-        <AppButton
-          :handle-click="half"
-          type="number"
-        >
-          /2
-        </AppButton>
-        <AppButton
-          :handle-click="double"
-          type="number"
-        >
-          *2
-        </AppButton>
+        <AppButton :handle-click="half">/2</AppButton>
+        <AppButton :handle-click="double">*2</AppButton>
       </NButtonGroup>
 
       <AppButton
