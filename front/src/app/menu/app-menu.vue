@@ -1,5 +1,5 @@
-<!--suppress HtmlUnknownTag -->
 <script lang="ts" setup="">
+import {IonIcon} from '@ionic/vue';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
 import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {useClientSettings} from 'src/composables/use-client-settings';
@@ -20,21 +20,21 @@ const {menu} = useAppMenu();
           draggable-key="open"
           text="Open"
         >
-          <menu.open />
+          <IonIcon :icon="menu.open" />
         </AppMenuButton>
 
         <AppMenuButton
           draggable-key="settings"
           text="Settings"
         >
-          <menu.settings />
+          <IonIcon :icon="menu.settings" />
         </AppMenuButton>
 
         <AppMenuButton
           draggable-key="help"
           text="Help"
         >
-          <menu.help />
+          <IonIcon :icon="menu.help" />
         </AppMenuButton>
       </div>
 
@@ -54,7 +54,7 @@ const {menu} = useAppMenu();
         draggable-key="view"
         text="View"
       >
-        <menu.view />
+        <IonIcon :icon="menu.view" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -62,7 +62,7 @@ const {menu} = useAppMenu();
         draggable-key="colors"
         text="Colors"
       >
-        <menu.colors />
+        <IonIcon :icon="menu.colors" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -71,7 +71,7 @@ const {menu} = useAppMenu();
         draggable-key="timeline"
         text="Timeline"
       >
-        <menu.timeline />
+        <IonIcon :icon="menu.timeline" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -79,7 +79,7 @@ const {menu} = useAppMenu();
         draggable-key="calendar"
         text="Calendar"
       >
-        <menu.calendar />
+        <IonIcon :icon="menu.calendar" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -87,7 +87,7 @@ const {menu} = useAppMenu();
         draggable-key="labels"
         text="Labels"
       >
-        <menu.labels />
+        <IonIcon :icon="menu.labels" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -95,7 +95,7 @@ const {menu} = useAppMenu();
         draggable-key="temporal"
         text="Temporal"
       >
-        <menu.temporal />
+        <IonIcon :icon="menu.temporal" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -103,7 +103,7 @@ const {menu} = useAppMenu();
         draggable-key="heatmaps"
         text="Heatmaps"
       >
-        <menu.heatmaps />
+        <IonIcon :icon="menu.heatmaps" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -111,7 +111,7 @@ const {menu} = useAppMenu();
         draggable-key="histograms"
         text="Histograms"
       >
-        <menu.histograms />
+        <IonIcon :icon="menu.histograms" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -119,7 +119,7 @@ const {menu} = useAppMenu();
         draggable-key="audio"
         text="Audio"
       >
-        <menu.audio />
+        <IonIcon :icon="menu.audio" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -127,7 +127,7 @@ const {menu} = useAppMenu();
         draggable-key="details"
         text="Details"
       >
-        <menu.details />
+        <IonIcon :icon="menu.details" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -136,7 +136,7 @@ const {menu} = useAppMenu();
         draggable-key="selection"
         text="Selection"
       >
-        <menu.selection />
+        <IonIcon :icon="menu.selection" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -144,7 +144,7 @@ const {menu} = useAppMenu();
         draggable-key="trajectories"
         text="Trajectories"
       >
-        <menu.trajectories />
+        <IonIcon :icon="menu.trajectories" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -152,7 +152,7 @@ const {menu} = useAppMenu();
         draggable-key="relativeTrajectories"
         text="Relative Trajectories"
       >
-        <menu.relativeTrajectories />
+        <IonIcon :icon="menu.relativeTrajectories" />
       </AppMenuButton>
     </div>
   </div>

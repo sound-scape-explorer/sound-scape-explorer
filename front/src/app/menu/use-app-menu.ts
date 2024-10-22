@@ -1,46 +1,44 @@
 import {
-  BarChartOutline,
-  CalendarOutline,
-  CloudUploadOutline,
-  CogOutline,
-  ColorPaletteOutline,
-  CropOutline,
-  EyeOutline,
-  GridOutline,
-  HeadsetOutline,
-  HelpOutline,
-  LayersOutline,
-  ListOutline,
-  NavigateOutline,
-  ReceiptOutline,
-  StatsChartOutline,
-  TimerOutline,
-} from '@vicons/ionicons5';
-import {type Component} from 'vue';
+  barChartOutline,
+  calendarOutline,
+  cloudUploadOutline,
+  cogOutline,
+  colorPaletteOutline,
+  cropOutline,
+  eyeOutline,
+  gridOutline,
+  headsetOutline,
+  helpOutline,
+  layersOutline,
+  listOutline,
+  navigateOutline,
+  receiptOutline,
+  statsChartOutline,
+  timerOutline,
+} from 'ionicons/icons';
 
 interface Menu {
-  [key: string]: Component;
+  [key: string]: string;
 }
 
-// todo: maybe add conditions and text labels to Menu object
 export function useAppMenu() {
   const menu: Menu = {
-    open: CloudUploadOutline,
-    settings: CogOutline,
-    help: HelpOutline,
-    view: EyeOutline,
-    colors: ColorPaletteOutline,
-    timeline: ReceiptOutline,
-    calendar: CalendarOutline,
-    labels: LayersOutline,
-    temporal: BarChartOutline,
-    histograms: StatsChartOutline,
-    heatmaps: GridOutline,
-    details: ListOutline,
-    audio: HeadsetOutline,
-    selection: CropOutline,
-    trajectories: NavigateOutline,
-    relativeTrajectories: TimerOutline,
+    open: cloudUploadOutline,
+    settings: cogOutline,
+    help: helpOutline,
+    view: eyeOutline,
+    colors: colorPaletteOutline,
+    timeline: receiptOutline,
+    calendar: calendarOutline,
+    labels: layersOutline,
+    temporal: barChartOutline,
+    histograms: statsChartOutline,
+    heatmaps: gridOutline,
+    details: listOutline,
+    audio: headsetOutline,
+    selection: cropOutline,
+    trajectories: navigateOutline,
+    relativeTrajectories: timerOutline,
   };
 
   return {

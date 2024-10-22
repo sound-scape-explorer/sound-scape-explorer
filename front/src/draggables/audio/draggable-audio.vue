@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import {RefreshOutline} from '@vicons/ionicons5';
-import AppIcon from 'src/app/app-icon.vue';
+import {IonIcon} from '@ionic/vue';
+import {refreshOutline} from 'ionicons/icons';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import DraggableAudioMenu from 'src/draggables/audio/draggable-audio-menu.vue';
 import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
@@ -24,9 +24,10 @@ useAudioLifecycles();
     suspense="scatterClick"
   >
     <div :class="[$style.loading, {[$style['loading-hidden']]: !isLoading}]">
-      <AppIcon>
-        <RefreshOutline :class="$style.spin" />
-      </AppIcon>
+      <IonIcon
+        :class="$style.spin"
+        :icon="refreshOutline"
+      />
     </div>
 
     <DraggableAudioSidebar />

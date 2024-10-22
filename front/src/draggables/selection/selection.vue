@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import {ArrowUndoOutline, RepeatOutline} from '@vicons/ionicons5';
-import {NButton, NIcon, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {arrowUndoOutline, repeatOutline} from 'ionicons/icons';
+import {NButton, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
@@ -55,14 +56,14 @@ watch(labelProperties, () => {
         :handle-click="() => console.log('undo')"
         tooltip="undo"
       >
-        <ArrowUndoOutline />
+        <IonIcon :icon="arrowUndoOutline" />
       </AppButton>
 
       <AppButton
         :handle-click="() => console.log('repeat')"
         tooltip="repeat"
       >
-        <RepeatOutline />
+        <IonIcon :icon="repeatOutline" />
       </AppButton>
     </div>
 
@@ -93,9 +94,7 @@ watch(labelProperties, () => {
       size="small"
       @click="undo"
     >
-      <NIcon>
-        <ArrowUndoOutline />
-      </NIcon>
+      <IonIcon :icon="arrowUndoOutline" />
     </NButton>
 
     <div :class="$style.container">
@@ -104,9 +103,7 @@ watch(labelProperties, () => {
         size="small"
         @click="toggle"
       >
-        <NIcon>
-          <RepeatOutline />
-        </NIcon>
+        <IonIcon :icon="repeatOutline" />
       </NButton>
 
       <NSelect

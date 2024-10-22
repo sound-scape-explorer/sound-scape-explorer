@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {ColorFillOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
+import {colorFillOutline} from 'ionicons/icons';
 import {NTag, NTooltip} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -43,12 +44,11 @@ const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
 
     <AppButton
       :handle-click="() => handleLabelClick(props.property)"
-      icon
       size="small"
       tooltip="Use for coloring"
       tooltip-placement="top"
     >
-      <ColorFillOutline />
+      <IonIcon :icon="colorFillOutline" />
     </AppButton>
   </div>
 

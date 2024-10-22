@@ -1,5 +1,5 @@
 <script lang="ts" setup="">
-import {NButton, NIcon, NTooltip} from 'naive-ui';
+import {NButton, NTooltip} from 'naive-ui';
 import {type NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
@@ -9,7 +9,6 @@ interface Props {
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   disabled?: boolean;
-  icon?: boolean;
   grow?: boolean;
   growCol?: boolean;
   active?: boolean;
@@ -20,7 +19,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   size: 'tiny',
   disable: false,
-  icon: false,
   grow: false,
   growCol: false,
   active: false,
@@ -57,10 +55,7 @@ const handleFocus = (e: FocusEvent) => {
         @click="props.handleClick"
         @focus="handleFocus"
       >
-        <NIcon v-if="props.icon">
-          <slot />
-        </NIcon>
-        <slot v-if="!props.icon" />
+        <slot />
       </NButton>
     </template>
     <span :class="{[$style.small]: props.smallTooltip}">{{
@@ -81,10 +76,7 @@ const handleFocus = (e: FocusEvent) => {
     @click="props.handleClick"
     @focus="handleFocus"
   >
-    <NIcon v-if="props.icon">
-      <slot />
-    </NIcon>
-    <slot v-if="!props.icon" />
+    <slot />
   </NButton>
 </template>
 

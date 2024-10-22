@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {DownloadOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
+import {downloadOutline} from 'ionicons/icons';
 import {NButton, NButtonGroup, NTreeSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppSwitch from 'src/app/app-switch.vue';
@@ -133,12 +134,11 @@ watch(indicator, update);
 
       <AppButton
         :handle-click="handleExportClick"
-        icon
         size="small"
         tooltip="Export raw .csv"
         tooltip-placement="bottom"
       >
-        <DownloadOutline />
+        <IonIcon :icon="downloadOutline" />
       </AppButton>
     </div>
 

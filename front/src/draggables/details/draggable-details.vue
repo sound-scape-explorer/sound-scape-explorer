@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
-import {HeadsetOutline} from '@vicons/ionicons5';
-import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {headsetOutline} from 'ionicons/icons';
+import {NButton, NGi, NGrid, NTag, NTooltip} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
@@ -71,11 +72,7 @@ watch(timeshift, updateDates);
               size="small"
               @click="() => select(blockDetails)"
             >
-              <template #icon>
-                <NIcon>
-                  <HeadsetOutline />
-                </NIcon>
-              </template>
+              <IonIcon :icon="headsetOutline" />
             </NButton>
           </template>
 

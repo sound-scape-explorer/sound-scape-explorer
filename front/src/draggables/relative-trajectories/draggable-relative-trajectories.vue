@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import {DownloadOutline} from '@vicons/ionicons5';
-import {NButton, NCascader, NIcon} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {downloadOutline} from 'ionicons/icons';
+import {NButton, NCascader} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
@@ -129,11 +130,7 @@ const handleExportClick = () => {
         size="tiny"
         @click="handleExportClick"
       >
-        <template #icon>
-          <NIcon>
-            <DownloadOutline />
-          </NIcon>
-        </template>
+        <IonIcon :icon="downloadOutline" />
         Export .csv
       </NButton>
 

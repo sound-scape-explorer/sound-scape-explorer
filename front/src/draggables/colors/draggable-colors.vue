@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {FlashOutline, RepeatOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
+import {flashOutline, repeatOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
@@ -74,22 +75,20 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
       >
         <AppButton
           :handle-click="detectIndicatorRange"
-          icon
           size="small"
           tooltip="Detect range"
           tooltip-placement="bottom"
         >
-          <FlashOutline />
+          <IonIcon :icon="flashOutline" />
         </AppButton>
 
         <AppButton
           :handle-click="swap"
-          icon
           size="small"
           tooltip="Swap range"
           tooltip-placement="bottom"
         >
-          <RepeatOutline />
+          <IonIcon :icon="repeatOutline" />
         </AppButton>
       </h2>
 
@@ -187,12 +186,11 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
         <AppButton
           :disabled="!isReversible"
           :handle-click="invert"
-          icon
           size="tiny"
           tooltip="Revert color map"
           tooltip-placement="bottom"
         >
-          <RepeatOutline />
+          <IonIcon :icon="repeatOutline" />
         </AppButton>
       </h2>
 

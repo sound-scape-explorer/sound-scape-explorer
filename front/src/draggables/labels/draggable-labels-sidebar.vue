@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {ExpandOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
+import {chevronExpand, expand} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
@@ -14,12 +15,20 @@ const {count} = useLabelsInfo();
   <AppDraggableSidebar>
     <AppButton
       :handle-click="toggleExpand"
-      icon
       size="tiny"
       tooltip="Expand"
       tooltip-placement="left"
     >
-      <ExpandOutline />
+      <IonIcon :icon="chevronExpand" />
+    </AppButton>
+
+    <AppButton
+      :handle-click="toggleExpand"
+      size="tiny"
+      tooltip="Expand"
+      tooltip-placement="left"
+    >
+      <IonIcon :icon="expand" />
     </AppButton>
 
     <AppTooltip tooltip="Points excluded">

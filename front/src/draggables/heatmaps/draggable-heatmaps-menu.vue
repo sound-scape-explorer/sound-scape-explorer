@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
-import {DownloadOutline, RepeatOutline, ResizeOutline} from '@vicons/ionicons5';
-import {NButtonGroup, NIcon, NSelect} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {downloadOutline, repeatOutline, resizeOutline} from 'ionicons/icons';
+import {NButtonGroup, NSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
@@ -61,10 +62,9 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
       <AppButton
         :disabled="!isReadyForSelection || !isPairing"
         :handle-click="swapLabels"
-        icon
         size="small"
       >
-        <RepeatOutline />
+        <IonIcon :icon="repeatOutline" />
       </AppButton>
 
       <AppSelect
@@ -108,37 +108,25 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
           :disabled="!isReadyAndSelected"
           :handle-click="resize1by1"
         >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
+          <IonIcon :icon="resizeOutline" />&nbsp;1:1
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize4by3"
         >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
+          <IonIcon :icon="resizeOutline" />&nbsp;4:3
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize16by10"
         >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
+          <IonIcon :icon="resizeOutline" />&nbsp;16:10
         </AppButton>
         <AppButton
           :disabled="!isReadyAndSelected"
           :handle-click="resize16by9"
         >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
-        </AppButton>
-        <AppButton
-          :disabled="!isReadyAndSelected"
-          :handle-click="resize16by9"
-        >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
-        </AppButton>
-        <AppButton
-          :disabled="!isReadyAndSelected"
-          :handle-click="resize16by9"
-        >
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+          <IonIcon :icon="resizeOutline" />&nbsp;16:9
         </AppButton>
         <AppButton :handle-click="half">/2</AppButton>
         <AppButton :handle-click="double">*2</AppButton>
@@ -147,12 +135,11 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
       <AppButton
         :disabled="!isReadyAndSelected"
         :handle-click="handleExportClick"
-        icon
         size="small"
         tooltip="Export .csv"
         tooltip-placement="bottom"
       >
-        <DownloadOutline />
+        <IonIcon :icon="downloadOutline" />
       </AppButton>
     </div>
   </AppDraggableMenu>

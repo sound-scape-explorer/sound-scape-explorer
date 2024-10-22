@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {ExpandOutline, EyeOffOutline, EyeOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
+import {expand, eyeOffOutline, eyeOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
@@ -12,21 +13,25 @@ const {isDisplay, toggleDisplay, toggleExpanded} = useDraggableTemporal();
     <AppButton
       :handle-click="toggleDisplay"
       :tooltip="isDisplay ? 'Chart on' : 'Chart off'"
-      icon
       tooltip-placement="left"
     >
-      <EyeOffOutline v-if="!isDisplay" />
-      <EyeOutline v-if="isDisplay" />
+      <IonIcon
+        v-if="!isDisplay"
+        :icon="eyeOffOutline"
+      />
+      <IonIcon
+        v-if="isDisplay"
+        :icon="eyeOutline"
+      />
     </AppButton>
 
     <AppButton
       :handle-click="toggleExpanded"
-      icon
       size="tiny"
       tooltip="Expand"
       tooltip-placement="left"
     >
-      <ExpandOutline />
+      <IonIcon :icon="expand" />
     </AppButton>
   </AppDraggableSidebar>
 </template>

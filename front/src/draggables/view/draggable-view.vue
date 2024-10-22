@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
-import {ArrowUndoCircleOutline} from '@vicons/ionicons5';
-import {NIcon} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {arrowUndoCircleOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
@@ -108,9 +108,7 @@ onMounted(autoselectDev);
           size="medium"
         >
           <div :class="$style.button">
-            <NIcon size="18">
-              <ArrowUndoCircleOutline />
-            </NIcon>
+            <IonIcon :icon="arrowUndoCircleOutline" />
             Unload view
           </div>
         </AppButton>

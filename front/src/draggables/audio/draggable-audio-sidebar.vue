@@ -1,14 +1,15 @@
 <script lang="ts" setup="">
+import {IonIcon} from '@ionic/vue';
 import {
-  AddOutline,
-  ArrowDownOutline,
-  PauseOutline,
-  PlayOutline,
-  RemoveOutline,
-  StopOutline,
-  VolumeHighOutline,
-  VolumeLowOutline,
-} from '@vicons/ionicons5';
+  addOutline,
+  arrowDownOutline,
+  pauseOutline,
+  playOutline,
+  removeOutline,
+  stopOutline,
+  volumeHighOutline,
+  volumeLowOutline,
+} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
@@ -41,75 +42,74 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
     <AppButton
       :handle-click="togglePlayPause"
       :tooltip="isPlaying ? 'Pause [space]' : 'Play [space]'"
-      icon
       small-tooltip
       tooltip-placement="left"
     >
-      <PauseOutline v-if="isPlaying" />
-      <PlayOutline v-if="!isPlaying" />
+      <IonIcon
+        v-if="isPlaying"
+        :icon="pauseOutline"
+      />
+      <IonIcon
+        v-if="!isPlaying"
+        :icon="playOutline"
+      />
     </AppButton>
 
     <AppButton
       :handle-click="stop"
-      icon
       small-tooltip
       tooltip="Stop"
       tooltip-placement="left"
     >
-      <StopOutline />
+      <IonIcon :icon="stopOutline" />
     </AppButton>
 
     <AppButton
       :disabled="!canIncreaseVolume"
       :handle-click="increaseVolume"
-      icon
       small-tooltip
       tooltip="Volume Up"
       tooltip-placement="left"
     >
-      <VolumeHighOutline />
+      <IonIcon :icon="volumeHighOutline" />
     </AppButton>
 
     <AppButton
       :disabled="!canDecreaseVolume"
       :handle-click="decreaseVolume"
-      icon
       small-tooltip
       tooltip="Volume Down"
       tooltip-placement="left"
     >
-      <VolumeLowOutline />
+      <IonIcon :icon="volumeLowOutline" />
     </AppButton>
 
     <AppButton
       :disabled="!canIncreaseFourier"
       :handle-click="increaseFourier"
-      icon
       small-tooltip
       tooltip="FFT Size Up"
       tooltip-placement="left"
     >
-      <AddOutline />
+      <IonIcon :icon="addOutline" />
     </AppButton>
 
     <AppButton
       :disabled="!canDecreaseFourier"
       :handle-click="decreaseFourier"
-      icon
       small-tooltip
       tooltip="FFT Size Down"
       tooltip-placement="left"
     >
-      <RemoveOutline />
+      <IonIcon :icon="removeOutline" />
     </AppButton>
 
     <AppButton
       :handle-click="downloadAudio"
-      icon
       tooltip="Download"
       tooltip-placement="left"
     >
-      <ArrowDownOutline />
+      <IonIcon :icon="arrowDownOutline" />
     </AppButton>
 
     <AppDraggableSidebarHistory

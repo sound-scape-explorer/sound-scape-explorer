@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {CloseOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
 import {useDraggable} from '@vueuse/core';
+import {close as closeIcon} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppCondition from 'src/app/app-condition.vue';
-import AppIcon from 'src/app/app-icon.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
@@ -70,18 +70,18 @@ useAppDraggableLifecycles({
       <AppButton
         :handle-click="() => close(props.draggableKey)"
         grow
-        icon
         size="tiny"
       >
-        <CloseOutline />
+        <IonIcon :icon="closeIcon" />
       </AppButton>
     </div>
 
     <div :class="$style.header">
       <div :class="$style.title">
-        <AppIcon v-if="icon !== null">
-          <icon />
-        </AppIcon>
+        <IonIcon
+          :class="{[$style.active]: isSelected}"
+          :icon="icon"
+        />
         <span>
           {{ capitalizeFirstLetter(props.draggableKey) }}
         </span>
@@ -223,9 +223,9 @@ hr {
 
 .selected {
   z-index: $app-draggable-index-selected-layer;
+}
 
-  .title > i {
-    color: $emerald;
-  }
+.active {
+  color: $emerald;
 }
 </style>

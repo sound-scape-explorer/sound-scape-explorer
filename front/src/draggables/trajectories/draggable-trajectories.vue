@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {DownloadOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
+import {downloadOutline} from 'ionicons/icons';
 import {NCascader, NSwitch, NTooltip} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
@@ -95,12 +96,11 @@ useRefProvide(InjectionKey.trajectoriesFuse, isFused);
       <div :class="$style['last-line']">
         <AppButton
           :handle-click="handleClick"
-          icon
           size="small"
           tooltip="Export"
           tooltip-placement="bottom"
         >
-          <DownloadOutline />
+          <IonIcon :icon="downloadOutline" />
         </AppButton>
       </div>
     </AppDraggableMenu>

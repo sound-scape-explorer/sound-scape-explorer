@@ -1,10 +1,11 @@
 <script lang="ts" setup="">
+import {IonIcon} from '@ionic/vue';
 import {
-  PauseOutline,
-  PlayOutline,
-  PlaySkipBackOutline,
-  PlaySkipForwardOutline,
-} from '@vicons/ionicons5';
+  pauseOutline,
+  playOutline,
+  playSkipBackOutline,
+  playSkipForwardOutline,
+} from 'ionicons/icons';
 import {NButtonGroup, NDatePicker} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppSwitch from 'src/app/app-switch.vue';
@@ -99,32 +100,35 @@ useRefProvide(InjectionKey.timeDuration, duration);
         <AppButton
           :disabled="uiDisabled"
           :handle-click="skipTimeBackward"
-          icon
           small-tooltip
           tooltip="Backward"
         >
-          <PlaySkipBackOutline />
+          <IonIcon :icon="playSkipBackOutline" />
         </AppButton>
 
         <AppButton
           :disabled="uiDisabled"
           :handle-click="togglePlaying"
-          icon
           small-tooltip
           tooltip="Play / Pause"
         >
-          <PlayOutline v-show="!isPlaying" />
-          <PauseOutline v-show="isPlaying" />
+          <IonIcon
+            v-show="isPlaying"
+            :icon="pauseOutline"
+          />
+          <IonIcon
+            v-show="!isPlaying"
+            :icon="playOutline"
+          />
         </AppButton>
 
         <AppButton
           :disabled="uiDisabled"
           :handle-click="skipTimeForward"
-          icon
           small-tooltip
           tooltip="Forward"
         >
-          <PlaySkipForwardOutline />
+          <IonIcon :icon="playSkipForwardOutline" />
         </AppButton>
       </div>
     </div>

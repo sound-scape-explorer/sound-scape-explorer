@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {CalculatorOutline, FlashOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
+import {calculatorOutline, flashOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
@@ -16,21 +17,19 @@ onBeforeUnmount(disable);
     :active="isEnabled"
     :handle-click="toggle"
     :tooltip="`Coloring by range ${isEnabled ? 'on' : 'off'}`"
-    icon
     size="small"
     tooltip-placement="bottom"
   >
-    <CalculatorOutline />
+    <IonIcon :icon="calculatorOutline" />
   </AppButton>
 
   <AppButton
     :disabled="!isEnabled"
     :handle-click="detectLabelRange"
-    icon
     size="small"
     tooltip="Detect range"
     tooltip-placement="bottom"
   >
-    <FlashOutline />
+    <IonIcon :icon="flashOutline" />
   </AppButton>
 </template>

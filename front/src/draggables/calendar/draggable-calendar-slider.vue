@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {SearchOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
+import {searchOutline} from 'ionicons/icons';
 import {NSlider} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
@@ -62,9 +63,8 @@ watch([isActive, duration, current], filterByTime);
         v-for="slider in sliders"
         :handle-click="() => toggleZoom(slider)"
         grow
-        icon
       >
-        <SearchOutline />
+        <IonIcon :icon="searchOutline" />
       </AppButton>
     </div>
   </div>
