@@ -39,7 +39,7 @@ const {isExpanded} = useDraggableLabels();
 }
 
 .expanded {
-  width: $w2;
-  height: $h2;
+  width: $w-max;
+  height: $h-max;
 }
 </style>

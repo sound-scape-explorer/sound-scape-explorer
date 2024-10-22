@@ -10,7 +10,7 @@ $h0: calc($s0 * 3 / 4);
 $h1: calc($s1 * 3 / 4);
 $h2: calc($s2 * 3 / 4);
 $w-max: calc(80dvw + $p0 * 2);
-$h-max: calc(60dvh + $p0 * 2);
+$h-max: calc(80dvh + $p0 * 2);
 
 @mixin size-draggable {
   width: min($s2, $w-max);
