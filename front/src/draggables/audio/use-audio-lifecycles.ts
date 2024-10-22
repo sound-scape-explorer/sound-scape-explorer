@@ -4,7 +4,7 @@ import {watch} from 'vue';
 
 export function useAudioLifecycles() {
   const {isPlaying} = useAudioTransport();
-  const {update} = useAudioAnalyser();
+  const {update, isClipping, fade} = useAudioAnalyser();
 
   watch(isPlaying, () => {
     if (isPlaying.value === false) {
@@ -13,4 +13,6 @@ export function useAudioLifecycles() {
 
     update();
   });
+
+  watch(isClipping, fade);
 }
