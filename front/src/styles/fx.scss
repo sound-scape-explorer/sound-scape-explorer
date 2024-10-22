@@ -1,0 +1,3 @@
+@mixin background-blur {
+  backdrop-filter: blur($p0);
+}

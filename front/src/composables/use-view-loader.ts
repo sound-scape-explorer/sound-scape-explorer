@@ -20,6 +20,10 @@ import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {useViewState} from 'src/composables/use-view-state';
 import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
+import {ref} from 'vue';
+
+const step = ref<number>(0); // percents
+const total = 7;
 
 export function useViewLoader() {
   const {close} = useDraggables();
@@ -46,6 +50,14 @@ export function useViewLoader() {
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
 
+  const updateStep = (current: number) => {
+    step.value = parseInt(((current / total) * 100).toString());
+  };
+
+  const updateReading = (current: string) => {
+    loadingText.value = `Reading ${current}...`;
+  };
+
   const load = async () => {
     if (
       !hasView.value ||
@@ -60,29 +72,37 @@ export function useViewLoader() {
     lock();
     console.log('View: Load');
 
-    loadingText.value = 'Reading labels';
+    updateReading('labels');
     await readLabels();
+    updateStep(0);
 
-    loadingText.value = 'Reading features';
+    updateReading('features');
     await readAggregatedFeatures();
+    updateStep(1);
 
-    loadingText.value = 'Reading indicators';
+    updateReading('indicators');
     await readAggregatedIndicators();
+    updateStep(2);
 
-    loadingText.value = 'Reading timestamps';
+    updateReading('timestamps');
     await readAggregatedTimestamps();
+    updateStep(3);
 
-    loadingText.value = 'Reading sites';
+    updateReading('sites');
     await readAggregatedSites();
+    updateStep(4);
 
-    loadingText.value = 'Reading intervals';
+    updateReading('intervals');
     await readAggregatedIntervalDetails();
+    updateStep(5);
 
-    loadingText.value = 'Reading labels';
+    updateReading('labels');
     await readAggregatedLabels();
+    updateStep(6);
 
-    loadingText.value = 'Reading reduced features';
+    updateReading('reduced features');
     await readReducedFeatures();
+    updateStep(7);
 
     await generateColorScale();
     buildSelection();
@@ -99,5 +119,6 @@ export function useViewLoader() {
 
   return {
     load: load,
+    step: step,
   };
 }

@@ -41,6 +41,7 @@ export default defineConfig({
           @import "src/styles/sizes.scss";
           @import "src/styles/scrolls.scss";
           @import "src/styles/shadows.scss";
+          @import "src/styles/fx.scss";
         `,
       },
     },
