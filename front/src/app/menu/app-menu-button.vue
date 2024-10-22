@@ -54,8 +54,8 @@ const {getKey} = useKeyboardShortcuts();
 <style lang="scss" module>
 .button {
   pointer-events: auto;
-  backdrop-filter: blur(5px);
 
+  @include background-blur-0;
   @include s0;
 }
 

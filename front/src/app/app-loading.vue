@@ -11,11 +11,12 @@ const {step} = useViewLoader();
 <template>
   <AppModal
     v-if="isLoading"
+    :class="$style.container"
     :is-wait="true"
   >
     <div :class="$style.loading">
       <div>Please wait</div>
-      <span :class="$style.current">{{ loadingText }}</span>
+      <div :class="$style.current">{{ loadingText }}</div>
       <NProgress
         :percentage="step"
         indicator-placement="inside"
@@ -27,6 +28,10 @@ const {step} = useViewLoader();
 </template>
 
 <style lang="scss" module>
+.container {
+  @include background-blur-0;
+}
+
 .loading {
   display: flex;
   align-items: flex-start;
@@ -36,14 +41,24 @@ const {step} = useViewLoader();
   padding: $p0 $p0 * 2 $p0 * 2 $p0 * 2;
   border: 1px solid $grey;
   background: $white;
-  gap: $p0 * 1;
+  gap: $p0;
 
   @include border-radius;
-  @include background-blur;
+
+  & > * {
+    height: 1em;
+  }
+
+  & > :first-child {
+    font-weight: bold;
+  }
 
   & > :last-child {
     width: 100%;
     min-width: 100%;
+    height: 1em;
+    margin-bottom: $p0;
+    padding-top: $p0;
   }
 }
 
