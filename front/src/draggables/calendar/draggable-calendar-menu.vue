@@ -86,6 +86,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
         :disabled="!isActive"
         :injection-key="InjectionKey.timeDuration"
         align="left"
+        throttle
         tooltip="Set window duration in seconds"
         type="number"
       />

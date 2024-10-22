@@ -3,8 +3,9 @@ import {NInput, NInputNumber, NSpace, NTooltip} from 'naive-ui';
 import {type InjectionKey} from 'src/common/injection-key';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefInject} from 'src/composables/use-ref-inject';
+import {TIMEOUT} from 'src/constants';
 import {type NaiveSize} from 'src/types';
-import {computed} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 
 interface Props {
   placeholder?: string;
@@ -19,6 +20,7 @@ interface Props {
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   handleEnter?: () => void;
+  throttle?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,6 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
   align: 'center',
   size: 'tiny',
   handleEnter: () => undefined,
+  throttle: false,
 });
 
 const {lock, unlock} = useGlobalKeyboard();
@@ -35,6 +38,37 @@ const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 const isNumber = computed(() => props.type === 'number');
 const isString = computed(() => props.type === 'string');
 const model = useRefInject(props.injectionKey);
+const copy = ref();
+
+let t: null | number = null;
+
+const handleChange = (newInput: number | null) => {
+  if (t) {
+    clearTimeout(t);
+    t = null;
+  }
+
+  if (newInput === null) {
+    return;
+  }
+
+  const timeout = props.throttle ? TIMEOUT : 0;
+
+  t = setTimeout(() => {
+    model.value = newInput;
+  }, timeout);
+};
+
+const sync = () => {
+  if (model.value === copy.value) {
+    return;
+  }
+
+  copy.value = model.value;
+};
+
+onMounted(sync);
+watch(model, sync);
 </script>
 
 <template>
@@ -48,7 +82,7 @@ const model = useRefInject(props.injectionKey);
       <template #trigger>
         <NInputNumber
           v-if="isNumber"
-          v-model:value="model"
+          v-model:value="copy"
           :class="{
             [$style.center]: props.align === 'center',
             [$style.left]: props.align === 'left',
@@ -62,11 +96,12 @@ const model = useRefInject(props.injectionKey);
           :step="props.step"
           @blur="unlock"
           @focus="lock"
+          @update:value="handleChange as unknown"
           @keyup.enter="props.handleEnter"
         />
         <NInput
           v-if="isString"
-          v-model:value="model"
+          v-model:value="copy"
           :class="{
             [$style.center]: props.align === 'center',
             [$style.left]: props.align === 'left',
@@ -77,6 +112,7 @@ const model = useRefInject(props.injectionKey);
           :size="props.size"
           @blur="unlock"
           @focus="lock"
+          @update:value="handleChange as unknown"
           @keyup.enter="props.handleEnter"
         />
       </template>
@@ -85,7 +121,7 @@ const model = useRefInject(props.injectionKey);
 
     <NInputNumber
       v-if="!hasTooltip && isNumber"
-      v-model:value="model"
+      v-model:value="copy"
       :class="{
         [$style.center]: props.align === 'center',
         [$style.left]: props.align === 'left',
@@ -99,12 +135,13 @@ const model = useRefInject(props.injectionKey);
       :step="props.step ?? 1"
       @blur="unlock"
       @focus="lock"
+      @update:value="handleChange as unknown"
       @keyup.enter="props.handleEnter"
     />
 
     <NInput
       v-if="!hasTooltip && isString"
-      v-model:value="model"
+      v-model:value="copy"
       :class="{
         [$style.center]: props.align === 'center',
         [$style.left]: props.align === 'left',
@@ -115,6 +152,7 @@ const model = useRefInject(props.injectionKey);
       :size="props.size"
       @blur="unlock"
       @focus="lock"
+      @update:value="handleChange as unknown"
       @keyup.enter="props.handleEnter"
     />
   </NSpace>
