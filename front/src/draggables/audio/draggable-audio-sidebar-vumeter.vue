@@ -11,10 +11,7 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
 </script>
 
 <template>
-  <div
-    v-if="isPlaying"
-    :class="$style.container"
-  >
+  <div :class="[$style.container, {[$style.hide]: !isPlaying}]">
     <span>PEAK</span>
     <VuMeter
       :height="127"
@@ -30,7 +27,10 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
   position: absolute;
   bottom: -394px;
   transform: translate3d(9px, 4px, 0);
+  opacity: 1;
   background: transparent;
+
+  @include transition-vumeter;
 
   & > span {
     font-size: 80%;
@@ -45,5 +45,9 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
     text-align: center;
     color: $black;
   }
+}
+
+.hide {
+  opacity: 0;
 }
 </style>
