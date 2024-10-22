@@ -201,7 +201,7 @@ watch(timeshift, updateDates);
 .container {
   display: flex;
   justify-content: space-between;
-  width: $s2;
+  width: $w1;
   padding-right: $g0;
 }
 
