@@ -153,6 +153,7 @@ watch(indicator, update);
 <style lang="scss" module>
 .row {
   display: flex;
+  overflow: hidden;
   align-items: center;
   justify-content: space-between;
 

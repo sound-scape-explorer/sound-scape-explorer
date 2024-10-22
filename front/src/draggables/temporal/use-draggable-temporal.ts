@@ -23,6 +23,7 @@ const isContinuous = computed<boolean>(() => display.value === 'Continuous');
 const isCandles = computed<boolean>(() => display.value === 'Candles');
 const isCondensed = ref<boolean>(true);
 const isDisplay = ref<boolean>(true); // whether plot is shown or not
+const isExpanded = ref<boolean>(true);
 
 export function useDraggableTemporal() {
   const {aggregatedIndicators} = useStorageAggregatedIndicators();
@@ -74,6 +75,7 @@ export function useDraggableTemporal() {
   };
 
   const toggleDisplay = () => (isDisplay.value = !isDisplay.value);
+  const toggleExpanded = () => (isExpanded.value = !isExpanded.value);
 
   return {
     selection: selection,
@@ -92,5 +94,7 @@ export function useDraggableTemporal() {
     toggleDisplay: toggleDisplay,
     handleExportClick: handleExportClick,
     update: update,
+    isExpanded: isExpanded,
+    toggleExpanded: toggleExpanded,
   };
 }

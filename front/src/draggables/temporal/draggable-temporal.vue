@@ -11,7 +11,7 @@ import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
 import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
 import {computed} from 'vue';
 
-const {indicator, isCandles, isCondensed, isDisplay, display} =
+const {indicator, isCandles, isCondensed, isDisplay, display, isExpanded} =
   useDraggableTemporal();
 const {candles, plot} = useTemporalChart();
 const {period} = useTemporalCandles();
@@ -26,12 +26,12 @@ useDraggableTemporalLifecycles();
 
 <template>
   <AppDraggable
-    :class="$style.container"
+    :class="[$style.container, {[$style.expand]: isExpanded}]"
     draggable-key="temporal"
     suspense="view"
   >
     <DraggableTemporalSidebar />
-    <DraggableTemporalMenu />
+    <DraggableTemporalMenu :class="$style.menu" />
 
     <div
       v-if="isDisplay"
@@ -68,6 +68,10 @@ useDraggableTemporalLifecycles();
 <style lang="scss" module>
 .container {
   width: $s2;
+}
+
+.expand {
+  width: $w-max;
 }
 
 .plot {
