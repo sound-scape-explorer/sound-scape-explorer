@@ -25,21 +25,30 @@ useDraggableHeatmapsLifecycles();
   >
     <DraggableHeatmapsMenu />
 
-    <AppHeatmap
-      v-if="isReadyAndSelected"
-      :colorscale="flavor"
-      :export-name="generate('heatmap', digesterName ?? '')"
-      :range="range"
-      :title="title"
-      :values="series"
-      :x="x"
-      :y="isPairing ? y : x"
-    />
+    <div :class="$style.wrapper">
+      <AppHeatmap
+        v-if="isReadyAndSelected"
+        :colorscale="flavor"
+        :export-name="generate('heatmap', digesterName ?? '')"
+        :range="range"
+        :title="title"
+        :values="series"
+        :x="x"
+        :y="isPairing ? y : x"
+      />
+    </div>
   </AppDraggable>
 </template>
 
 <style lang="scss" module>
 .container {
   width: $s2;
+}
+
+.wrapper {
+  overflow: auto;
+  max-height: $s2;
+
+  @include hide-scrollbar;
 }
 </style>
