@@ -55,7 +55,7 @@ const {getKey} = useKeyboardShortcuts();
 .button {
   pointer-events: auto;
 
-  @include background-blur-0;
+  @include background-blur-1;
   @include s0;
 }
 
