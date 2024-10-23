@@ -2,6 +2,7 @@
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import DraggableCalendarMenu from 'src/draggables/calendar/draggable-calendar-menu.vue';
+import DraggableCalendarSidebar from 'src/draggables/calendar/draggable-calendar-sidebar.vue';
 import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-slider.vue';
 import DraggableCalendarTimeline from 'src/draggables/calendar/draggable-calendar-timeline.vue';
 import {useDraggableCalendarLifecycles} from 'src/draggables/calendar/use-draggable-calendar-lifecycles';
@@ -17,7 +18,9 @@ useDraggableCalendarLifecycles();
     draggable-key="calendar"
     suspense="view"
   >
+    <DraggableCalendarSidebar />
     <DraggableCalendarMenu />
+
     <DraggableCalendarSlider />
     <DraggableCalendarTimeline v-if="isBetaPreview" />
   </AppDraggable>

@@ -2,7 +2,7 @@
 import {IonIcon} from '@ionic/vue';
 import {chevronExpand} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
-import AppTooltip from 'src/app/app-tooltip.vue';
+import AppInfo from 'src/app/app-info.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 import {useDraggableLabelsInfo} from 'src/draggables/labels/use-draggable-labels-info';
@@ -36,11 +36,9 @@ const {count} = useDraggableLabelsInfo();
       <IonIcon :icon="chevronExpand" />
     </AppButton>
 
-    <AppTooltip tooltip="Points excluded">
-      <div :class="$style.info">
-        {{ count }}
-      </div>
-    </AppTooltip>
+    <AppInfo tooltip="Points excluded">
+      {{ count }}
+    </AppInfo>
   </AppDraggableSidebar>
 </template>
 
