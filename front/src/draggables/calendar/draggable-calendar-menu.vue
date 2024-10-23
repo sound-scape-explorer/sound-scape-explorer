@@ -69,7 +69,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
           />
         </AppTooltip>
 
-        <div>to {{ convertTimestampToIsoDate(dateEnd) }}</div>
+        <div>to {{ convertTimestampToIsoDate(dateEnd.unix() * 1000) }}</div>
       </div>
     </div>
     <span>Window</span>
