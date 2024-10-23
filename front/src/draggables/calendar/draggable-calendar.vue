@@ -4,7 +4,6 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import DraggableCalendarMenu from 'src/draggables/calendar/draggable-calendar-menu.vue';
 import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-slider.vue';
 import DraggableCalendarTimeline from 'src/draggables/calendar/draggable-calendar-timeline.vue';
-import DraggableCalendarTimelineOptions from 'src/draggables/calendar/draggable-calendar-timeline-options.vue';
 import {useDraggableCalendarLifecycles} from 'src/draggables/calendar/use-draggable-calendar-lifecycles';
 
 const {isBetaPreview} = useClientSettings();
@@ -20,7 +19,6 @@ useDraggableCalendarLifecycles();
   >
     <DraggableCalendarMenu />
     <DraggableCalendarSlider />
-    <DraggableCalendarTimelineOptions v-if="isBetaPreview" />
     <DraggableCalendarTimeline v-if="isBetaPreview" />
   </AppDraggable>
 </template>

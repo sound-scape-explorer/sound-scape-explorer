@@ -5,7 +5,7 @@ import {computed, ref} from 'vue';
 
 interface Duration {
   name: string;
-  duration: number;
+  duration: number; // seconds
 }
 
 const durations: Duration[] = [

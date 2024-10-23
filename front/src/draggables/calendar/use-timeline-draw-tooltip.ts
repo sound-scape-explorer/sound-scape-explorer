@@ -9,9 +9,46 @@ const offsetX = 13;
 const offsetY = -7;
 
 export function useTimelineDrawTooltip() {
-  const {context, hovered} = useTimelineContext();
+  const {container, context, hovered} = useTimelineContext();
   const {position} = useTimelineHandlers();
   const {primary} = useTimelineColors();
+
+  const getStartingPositions = (
+    contentWidth: number,
+    contentHeight: number,
+  ): [number, number] => {
+    if (!container.value) {
+      return [0, 0];
+    }
+
+    const {x, y} = position.value;
+    let xFinal = x + offsetX;
+    let yFinal = y + offsetY;
+
+    const isRight =
+      position.value.x + contentWidth > container.value.clientWidth;
+
+    const isBottom =
+      position.value.y + contentHeight > container.value.clientHeight;
+
+    if (isBottom) {
+      yFinal -= contentHeight + offsetY + paddingVertical;
+    }
+
+    if (isRight) {
+      xFinal -= contentWidth + offsetX + paddingHorizontal;
+    }
+
+    if (xFinal < 0) {
+      xFinal = 0;
+    }
+
+    if (yFinal < 0) {
+      yFinal = 0;
+    }
+
+    return [xFinal, yFinal];
+  };
 
   const drawTooltip = () => {
     if (context.value === null || hovered.value === null) {
@@ -21,15 +58,14 @@ export function useTimelineDrawTooltip() {
     const ctx: CanvasRenderingContext2D = context.value;
     const texts = hovered.value.tooltip;
 
-    const {x, y} = position.value;
-    const xFinal = x + offsetX;
-    const yFinal = y + offsetY;
     const h = textSize * texts.length + paddingVertical * 0.5 + 1;
     const w = Math.max(
       ...texts.map(
-        (text) => (ctx.measureText(text).width + paddingHorizontal * 2) * 1.33,
+        (text) => ctx.measureText(text).width + paddingHorizontal * 2,
       ),
     );
+
+    const [xFinal, yFinal] = getStartingPositions(w, h);
 
     ctx.fillStyle = hovered.value.color;
     ctx.fillRect(xFinal, yFinal, w, h);

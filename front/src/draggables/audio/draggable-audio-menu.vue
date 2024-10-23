@@ -15,7 +15,7 @@ import {useDetails} from 'src/draggables/details/use-details';
 const {size} = useAudioFourier();
 const {settings} = useSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
-const {date} = useDetails();
+const {date, dateEnd} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {currentIntervalIndex} = useIntervalSelector();
 const {rate, readable} = useAudioRate();
@@ -60,7 +60,7 @@ const {gain} = useAudioGain();
 
   <NGrid
     v-if="aggregatedSites !== null && currentIntervalIndex !== null"
-    :cols="2"
+    :cols="3"
     x-gap="12"
   >
     <NGi>
@@ -78,10 +78,20 @@ const {gain} = useAudioGain();
         :bordered="false"
         size="small"
       >
-        Interval Date
+        Start
       </NTag>
 
       {{ date && convertDateToIsoDate(date) }}
+    </NGi>
+    <NGi>
+      <NTag
+        :bordered="false"
+        size="small"
+      >
+        End
+      </NTag>
+
+      {{ dateEnd && convertDateToIsoDate(dateEnd) }}
     </NGi>
   </NGrid>
 

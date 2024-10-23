@@ -22,7 +22,7 @@ export function useTimelineRenderer() {
 
     drawBackground();
     drawRows();
-    drawTicks();
+    // drawTicks();
     drawElements();
     drawTooltip();
   };

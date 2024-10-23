@@ -1,3 +1,4 @@
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
 import {useTimelineElements} from 'src/draggables/calendar/use-timeline-elements';
 import {useTimelineUtils} from 'src/draggables/calendar/use-timeline-utils';
@@ -15,6 +16,7 @@ export function useTimelineHandlers() {
   const {hovered} = useTimelineContext();
   const {elements} = useTimelineElements();
   const {isPointInElement, getMouseCoordinates} = useTimelineUtils();
+  const {selectInterval} = useIntervalSelector();
 
   const handleMouseMove = (e: MouseEvent) => {
     const {x, y} = getMouseCoordinates(e);
@@ -23,7 +25,9 @@ export function useTimelineHandlers() {
       y: y,
     };
 
-    const result = elements.find((element) => isPointInElement(x, y, element));
+    const result = elements.value.find((element) =>
+      isPointInElement(x, y, element),
+    );
 
     if (!result) {
       hovered.value = null;
@@ -45,7 +49,7 @@ export function useTimelineHandlers() {
       return;
     }
 
-    console.log(hovered.value);
+    selectInterval(hovered.value.index);
   };
 
   return {

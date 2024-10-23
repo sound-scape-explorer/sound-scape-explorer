@@ -18,7 +18,8 @@ export function useTimelineDrawElements() {
 
     const ctx = context.value;
 
-    elements.forEach((element) => {
+    for (let i = 0; i < elements.value.length; i += 1) {
+      const element = elements.value[i];
       const y = config.value.startY + element.row * config.value.rowHeight + 5;
 
       const x = timeToCanvasX(
@@ -64,7 +65,7 @@ export function useTimelineDrawElements() {
       // reset shadows
       ctx.shadowColor = 'transparent';
       ctx.shadowBlur = 0;
-    });
+    }
   };
 
   return {

@@ -1,4 +1,5 @@
-import {computed, ref} from 'vue';
+import {type TimelineElement} from 'src/draggables/calendar/use-timeline-elements';
+import {computed, type Ref, ref} from 'vue';
 
 const config = ref({
   startX: 0,
@@ -10,18 +11,34 @@ const config = ref({
 
 const time = ref({
   minTime: 0,
-  maxTime: 48,
-  divisions: 24,
-  every: 12,
+  maxTime: 1,
+  divisions: 10000,
+  every: 10000,
 });
 
 export function useTimelineConfig() {
   const height = computed(() => config.value.rows * config.value.rowHeight);
 
-  const refresh = (width: number) => {
+  const refreshWidth = (width: number) => {
     config.value = {
       ...config.value,
       width: width,
+    };
+  };
+
+  const refreshTime = (elements: Ref<TimelineElement[]>) => {
+    const min = Math.min(...elements.value.map((e) => e.start));
+    const max = Math.max(...elements.value.map((e) => e.end));
+
+    time.value = {
+      ...time.value,
+      minTime: min,
+      maxTime: max,
+    };
+
+    config.value = {
+      ...config.value,
+      rows: elements.value.length,
     };
   };
 
@@ -29,6 +46,7 @@ export function useTimelineConfig() {
     config: config,
     time: time,
     height: height,
-    refresh: refresh,
+    refreshWidth: refreshWidth,
+    refreshTime: refreshTime,
   };
 }
