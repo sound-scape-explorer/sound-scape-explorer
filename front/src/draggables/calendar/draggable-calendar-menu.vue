@@ -13,6 +13,7 @@ import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import {InjectionKey} from 'src/common/injection-key';
+import {useDate} from 'src/composables/use-date';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
@@ -24,8 +25,8 @@ const {
   durations,
   uiDisabled,
   isPlaying,
-  dateStartRef,
-  dateEndRef,
+  dateStart,
+  dateEnd,
 } = useDraggableCalendar();
 
 const {
@@ -35,6 +36,8 @@ const {
   togglePlaying,
   handleDateStartUpdate,
 } = useDraggableCalendarTransport();
+
+const {convertTimestampToIsoDate} = useDate();
 
 useRefProvide(InjectionKey.calendarActive, isActive);
 useRefProvide(InjectionKey.timeDuration, duration);
@@ -60,13 +63,13 @@ useRefProvide(InjectionKey.timeDuration, duration);
             :class="$style.picker"
             :disabled="uiDisabled"
             :on-update:value="handleDateStartUpdate"
-            :value="dateStartRef.unix() * 1000"
+            :value="dateStart.unix() * 1000"
             size="tiny"
             type="datetime"
           />
         </AppTooltip>
 
-        <div>to {{ dateEndRef }}</div>
+        <div>to {{ convertTimestampToIsoDate(dateEnd) }}</div>
       </div>
     </div>
     <span>Window</span>

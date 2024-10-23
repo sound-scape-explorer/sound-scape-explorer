@@ -24,13 +24,13 @@ const isPlaying = ref<boolean>(false);
 
 export function useDraggableCalendar() {
   const {isLoading} = useScatterLoading();
-  const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
+  const {convertTimestampToDate} = useDate();
 
   const uiDisabled = computed<boolean>(
     () => isLoading.value || !isActive.value,
   );
 
-  const dateStartRef = computed<Dayjs>(() => {
+  const dateStart = computed<Dayjs>(() => {
     let t = current.value;
 
     if (!isActive.value) {
@@ -40,9 +40,9 @@ export function useDraggableCalendar() {
     return convertTimestampToDate(t * 1000);
   });
 
-  const dateEndRef = computed<string>(() => {
-    const endDate = dateStartRef.value.unix() * 1000 + duration.value * 1000;
-    return convertTimestampToIsoDate(endDate);
+  const dateEnd = computed<Dayjs>(() => {
+    const endTimestamp = dateStart.value.unix() * 1000 + duration.value * 1000;
+    return convertTimestampToDate(endTimestamp);
   });
 
   return {
@@ -54,7 +54,7 @@ export function useDraggableCalendar() {
     isPlaying: isPlaying,
     durations: durations,
     uiDisabled: uiDisabled,
-    dateStartRef: dateStartRef,
-    dateEndRef: dateEndRef,
+    dateStart: dateStart,
+    dateEnd: dateEnd,
   };
 }
