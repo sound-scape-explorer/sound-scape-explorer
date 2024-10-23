@@ -9,6 +9,7 @@ import {
 const scale = 4;
 
 export function useBasePlotConfig() {
+  // TODO: make this dynamic from all plotly.js instances
   const {width, height} = useAppHeatmapSize();
 
   const generateConfig = (name: string): Partial<Config> => {

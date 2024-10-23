@@ -16,7 +16,8 @@ const {count} = useLabelsInfo();
     <AppButton
       :handle-click="cycleHorizontal"
       size="tiny"
-      tooltip="Expand"
+      small-tooltip
+      tooltip="Expand horizontally"
       tooltip-placement="left"
     >
       <IonIcon
@@ -28,7 +29,8 @@ const {count} = useLabelsInfo();
     <AppButton
       :handle-click="cycleVertical"
       size="tiny"
-      tooltip="Expand"
+      small-tooltip
+      tooltip="Expand vertically"
       tooltip-placement="left"
     >
       <IonIcon :icon="chevronExpand" />
@@ -52,6 +54,6 @@ const {count} = useLabelsInfo();
 }
 
 .rotate {
-  transform: rotate3d(0, 0, 1, 90deg);
+  @include rotate-90;
 }
 </style>

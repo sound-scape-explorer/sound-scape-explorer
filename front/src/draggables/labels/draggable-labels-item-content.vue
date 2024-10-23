@@ -45,6 +45,7 @@ const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
     <AppButton
       :handle-click="() => handleLabelClick(props.property)"
       size="small"
+      small-tooltip
       tooltip="Use for coloring"
       tooltip-placement="top"
     >

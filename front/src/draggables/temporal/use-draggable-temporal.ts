@@ -23,7 +23,7 @@ const isContinuous = computed<boolean>(() => display.value === 'Continuous');
 const isCandles = computed<boolean>(() => display.value === 'Candles');
 const isCondensed = ref<boolean>(true);
 const isDisplay = ref<boolean>(true); // whether plot is shown or not
-const isExpanded = ref<boolean>(true);
+const isExpanded = ref<boolean>(false);
 
 export function useDraggableTemporal() {
   const {aggregatedIndicators} = useStorageAggregatedIndicators();
