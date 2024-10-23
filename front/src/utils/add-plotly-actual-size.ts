@@ -10,7 +10,7 @@ export function addPlotlyActualSize(
 ): PlotlyExportOptions {
   return {
     ...options,
-    width: gd.clientWidth,
-    height: gd.clientHeight,
+    width: gd.scrollWidth,
+    height: gd.scrollHeight,
   };
 }
