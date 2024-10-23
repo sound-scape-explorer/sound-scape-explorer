@@ -1,8 +1,10 @@
-import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
-import {type TimelineElement} from 'src/draggables/calendar/use-timeline-elements';
+import {useBodyConfig} from 'src/components/timeline/body/use-body-config';
+import {type TimelineElement} from 'src/components/timeline/body/use-body-elements';
+import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 
-export function useTimelineUtils() {
-  const {config, time} = useTimelineConfig();
+export function useBodyUtils() {
+  const {width} = useTimelineDom().body;
+  const {config, time, elementGaps} = useBodyConfig();
 
   const timeToCanvasX = (
     time: number,
@@ -21,18 +23,20 @@ export function useTimelineUtils() {
       time.value.minTime,
       time.value.maxTime,
       config.value.startX,
-      config.value.startX + config.value.width,
+      config.value.startX + width.value,
     );
     const elementEndX = timeToCanvasX(
       element.end,
       time.value.minTime,
       time.value.maxTime,
       config.value.startX,
-      config.value.startX + config.value.width,
+      config.value.startX + width.value,
     );
     const elementY =
-      config.value.startY + element.row * config.value.rowHeight + 5;
-    const elementHeight = config.value.rowHeight - 10;
+      config.value.startY +
+      element.row * config.value.rowHeight +
+      elementGaps.top;
+    const elementHeight = config.value.rowHeight - elementGaps.bottom;
 
     return (
       x >= elementX &&

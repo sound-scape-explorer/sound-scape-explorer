@@ -1,10 +1,10 @@
+import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
 import {useDate} from 'src/composables/use-date';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
-import {useTimelineScale} from 'src/draggables/calendar/use-timeline-scale';
 import {ref} from 'vue';
 
 export interface TimelineElement {
@@ -19,14 +19,14 @@ export interface TimelineElement {
 const indices = ref<number[]>([]);
 const elements = ref<TimelineElement[]>([]);
 
-export function useTimelineElements() {
+export function useBodyElements() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {dateStart, dateEnd} = useDraggableCalendar();
   const {integration} = useIntegrationSelection();
   const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
-  const {scale} = useTimelineScale();
+  const {scale} = useBodyColors();
 
   const createElement = (
     row: number,
@@ -34,7 +34,7 @@ export function useTimelineElements() {
     start: number,
     end: number,
     color: string,
-    tooltip?: string[],
+    tooltip: string[],
   ): TimelineElement => {
     return {
       row: row,
@@ -42,7 +42,7 @@ export function useTimelineElements() {
       start: start,
       end: end,
       color: color,
-      tooltip: tooltip ? tooltip : [],
+      tooltip: tooltip,
     };
   };
 

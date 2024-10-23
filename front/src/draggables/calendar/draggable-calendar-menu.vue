@@ -97,6 +97,7 @@ useRefProvide(InjectionKey.timeDuration, duration);
 
       <div>{{ printPrettySeconds(duration) }}</div>
     </div>
+
     <span>Transport</span>
     <div>
       <div :class="$style.gaps">
@@ -132,6 +133,9 @@ useRefProvide(InjectionKey.timeDuration, duration);
         </AppButton>
       </div>
     </div>
+
+    <span>Range</span>
+    <div>Either full or user ranges</div>
   </AppDraggableMenu>
 </template>
 

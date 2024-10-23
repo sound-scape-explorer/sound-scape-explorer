@@ -1,6 +1,8 @@
-import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
-import {useTimelineHandlers} from 'src/draggables/calendar/use-timeline-handlers';
-import {useTimelineTheme} from 'src/draggables/calendar/use-timeline-theme';
+import {useBodyHandlers} from 'src/components/timeline/body/use-body-handlers';
+import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
+import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
+import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
+import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
 
 const textSize = 12;
 const paddingHorizontal = 3;
@@ -8,9 +10,11 @@ const paddingVertical = 9;
 const offsetX = 13;
 const offsetY = -7;
 
-export function useTimelineDrawTooltip() {
-  const {container, context, hovered} = useTimelineContext();
-  const {position} = useTimelineHandlers();
+export function useBodyDrawTooltip() {
+  const {container} = useTimelineDom().body;
+  const {context} = useTimelineContext().body;
+  const {hovered} = useBodyHover();
+  const {position} = useBodyHandlers();
   const {primary} = useTimelineTheme();
 
   const getStartingPositions = (

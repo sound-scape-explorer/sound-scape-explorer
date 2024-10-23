@@ -1,14 +1,18 @@
-import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
-import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
-import {useTimelineElements} from 'src/draggables/calendar/use-timeline-elements';
-import {useTimelineTheme} from 'src/draggables/calendar/use-timeline-theme';
-import {useTimelineUtils} from 'src/draggables/calendar/use-timeline-utils';
+import {useBodyConfig} from 'src/components/timeline/body/use-body-config';
+import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
+import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
+import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
+import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
+import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
+import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
 
-export function useTimelineDrawElements() {
-  const {context, hovered} = useTimelineContext();
-  const {config, time} = useTimelineConfig();
-  const {timeToCanvasX} = useTimelineUtils();
-  const {elements} = useTimelineElements();
+export function useBodyDrawElements() {
+  const {width} = useTimelineDom().body;
+  const {context} = useTimelineContext().body;
+  const {hovered} = useBodyHover();
+  const {config, time, elementGaps} = useBodyConfig();
+  const {timeToCanvasX} = useBodyUtils();
+  const {elements} = useBodyElements();
   const {highlight} = useTimelineTheme();
 
   const drawElements = () => {
@@ -18,16 +22,18 @@ export function useTimelineDrawElements() {
 
     const ctx = context.value;
 
-    for (let i = 0; i < elements.value.length; i += 1) {
-      const element = elements.value[i];
-      const y = config.value.startY + element.row * config.value.rowHeight + 5;
+    for (const element of elements.value) {
+      const y =
+        config.value.startY +
+        element.row * config.value.rowHeight +
+        elementGaps.top;
 
       const x = timeToCanvasX(
         element.start,
         time.value.minTime,
         time.value.maxTime,
         config.value.startX,
-        config.value.startX + config.value.width,
+        config.value.startX + width.value,
       );
 
       const endX = timeToCanvasX(
@@ -35,7 +41,7 @@ export function useTimelineDrawElements() {
         time.value.minTime,
         time.value.maxTime,
         config.value.startX,
-        config.value.startX + config.value.width,
+        config.value.startX + width.value,
       );
 
       const w = endX - x;
@@ -60,7 +66,7 @@ export function useTimelineDrawElements() {
         ctx.shadowBlur = 0;
       }
 
-      ctx.fillRect(x, y, w, config.value.rowHeight - 10);
+      ctx.fillRect(x, y, w, config.value.rowHeight - elementGaps.bottom);
 
       // reset shadows
       ctx.shadowColor = 'transparent';
