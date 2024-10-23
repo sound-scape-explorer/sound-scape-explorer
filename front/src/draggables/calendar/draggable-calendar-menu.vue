@@ -104,7 +104,6 @@ useRefProvide(InjectionKey.timeDuration, duration);
           :disabled="uiDisabled"
           :handle-click="skipTimeBackward"
           small-tooltip
-          tooltip="Backward"
         >
           <IonIcon :icon="playSkipBackOutline" />
         </AppButton>
@@ -113,7 +112,6 @@ useRefProvide(InjectionKey.timeDuration, duration);
           :disabled="uiDisabled"
           :handle-click="togglePlaying"
           small-tooltip
-          tooltip="Play / Pause"
         >
           <IonIcon
             v-show="isPlaying"
@@ -129,7 +127,6 @@ useRefProvide(InjectionKey.timeDuration, duration);
           :disabled="uiDisabled"
           :handle-click="skipTimeForward"
           small-tooltip
-          tooltip="Forward"
         >
           <IonIcon :icon="playSkipForwardOutline" />
         </AppButton>

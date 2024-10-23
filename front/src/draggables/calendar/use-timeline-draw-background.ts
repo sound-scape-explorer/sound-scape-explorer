@@ -1,11 +1,11 @@
-import {useTimelineColors} from 'src/draggables/calendar/use-timeline-colors';
 import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
 import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
+import {useTimelineTheme} from 'src/draggables/calendar/use-timeline-theme';
 
 export function useTimelineDrawBackground() {
   const {context} = useTimelineContext();
   const {config, height} = useTimelineConfig();
-  const {background} = useTimelineColors();
+  const {background} = useTimelineTheme();
 
   const drawBackground = () => {
     if (!context.value) {

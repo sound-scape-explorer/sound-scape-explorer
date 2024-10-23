@@ -1,13 +1,13 @@
-import {useTimelineColors} from 'src/draggables/calendar/use-timeline-colors';
 import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
 import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
+import {useTimelineTheme} from 'src/draggables/calendar/use-timeline-theme';
 import {useTimelineUtils} from 'src/draggables/calendar/use-timeline-utils';
 
 export function useTimelineDrawTicks() {
   const {context} = useTimelineContext();
   const {config, time} = useTimelineConfig();
   const {timeToCanvasX} = useTimelineUtils();
-  const {stroke, fill} = useTimelineColors();
+  const {stroke, fill} = useTimelineTheme();
 
   const drawTicks = () => {
     if (!context.value) {

@@ -1,7 +1,7 @@
-import {useTimelineColors} from 'src/draggables/calendar/use-timeline-colors';
 import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
 import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
 import {useTimelineElements} from 'src/draggables/calendar/use-timeline-elements';
+import {useTimelineTheme} from 'src/draggables/calendar/use-timeline-theme';
 import {useTimelineUtils} from 'src/draggables/calendar/use-timeline-utils';
 
 export function useTimelineDrawElements() {
@@ -9,7 +9,7 @@ export function useTimelineDrawElements() {
   const {config, time} = useTimelineConfig();
   const {timeToCanvasX} = useTimelineUtils();
   const {elements} = useTimelineElements();
-  const {highlight} = useTimelineColors();
+  const {highlight} = useTimelineTheme();
 
   const drawElements = () => {
     if (!context.value) {

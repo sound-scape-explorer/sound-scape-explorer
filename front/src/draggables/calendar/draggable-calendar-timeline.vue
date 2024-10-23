@@ -35,11 +35,9 @@ useTimelineLifecycles();
   overflow: auto;
   align-items: flex-start;
   justify-content: flex-start;
-  width: calc($s2 - $p0 * 7);
+  width: 100%;
   max-height: $h0;
   margin-top: $p0;
-
-  @include hide-scrollbar;
 }
 
 .hovering {

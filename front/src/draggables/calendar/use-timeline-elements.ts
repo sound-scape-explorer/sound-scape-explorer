@@ -4,7 +4,7 @@ import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-a
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
-import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
+import {useTimelineScale} from 'src/draggables/calendar/use-timeline-scale';
 import {ref} from 'vue';
 
 export interface TimelineElement {
@@ -26,7 +26,7 @@ export function useTimelineElements() {
   const {integration} = useIntegrationSelection();
   const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
-  const {refreshTime} = useTimelineConfig();
+  const {scale} = useTimelineScale();
 
   const createElement = (
     row: number,
@@ -93,12 +93,20 @@ export function useTimelineElements() {
       for (const d of detail) {
         const s = start.unix() * 1000;
         const e = end.unix() * 1000;
-        const element = createElement(i, index, s, e, 'orange', [
-          `site: ${site}`,
-          `interval index: ${index}`,
-          `start: ${convertTimestampToIsoDate(s)}`,
-          `end: ${convertTimestampToIsoDate(e)}`,
-        ]);
+        const element = createElement(
+          i,
+          index,
+          s,
+          e,
+          scale.value[d.fileIndex],
+          [
+            `site: ${site}`,
+            `interval index: ${index}`,
+            `file index: ${d.fileIndex}`,
+            `start: ${convertTimestampToIsoDate(s)}`,
+            `end: ${convertTimestampToIsoDate(e)}`,
+          ],
+        );
         newElements.push(element);
       }
     }

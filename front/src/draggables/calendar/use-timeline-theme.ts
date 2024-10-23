@@ -8,7 +8,7 @@ const strokeLight = '#ccc';
 const fill = '#666';
 const fillLight = '#DDD';
 
-export function useTimelineColors() {
+export function useTimelineTheme() {
   const highlight = (color: string) => chroma(color).darken().css();
 
   return {

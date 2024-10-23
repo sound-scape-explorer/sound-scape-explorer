@@ -5,16 +5,18 @@ import DraggableCalendarMenu from 'src/draggables/calendar/draggable-calendar-me
 import DraggableCalendarSidebar from 'src/draggables/calendar/draggable-calendar-sidebar.vue';
 import DraggableCalendarSlider from 'src/draggables/calendar/draggable-calendar-slider.vue';
 import DraggableCalendarTimeline from 'src/draggables/calendar/draggable-calendar-timeline.vue';
+import {useDraggableCalendarExpand} from 'src/draggables/calendar/use-draggable-calendar-expand';
 import {useDraggableCalendarLifecycles} from 'src/draggables/calendar/use-draggable-calendar-lifecycles';
 
 const {isBetaPreview} = useClientSettings();
+const {isExpanded} = useDraggableCalendarExpand();
 
 useDraggableCalendarLifecycles();
 </script>
 
 <template>
   <AppDraggable
-    :class="$style.container"
+    :class="[$style.container, {[$style.expanded]: isExpanded}]"
     draggable-key="calendar"
     suspense="view"
   >
@@ -29,5 +31,9 @@ useDraggableCalendarLifecycles();
 <style lang="scss" module>
 .container {
   width: $s2;
+}
+
+.expanded {
+  width: $w-max;
 }
 </style>

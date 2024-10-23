@@ -4,6 +4,7 @@ import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
 import {useTimelineElements} from 'src/draggables/calendar/use-timeline-elements';
 import {useTimelineHandlers} from 'src/draggables/calendar/use-timeline-handlers';
 import {useTimelineRenderer} from 'src/draggables/calendar/use-timeline-renderer';
+import {useTimelineScale} from 'src/draggables/calendar/use-timeline-scale';
 import {watch} from 'vue';
 
 export function useTimelineLifecycles() {
@@ -13,11 +14,16 @@ export function useTimelineLifecycles() {
   const {render} = useTimelineRenderer();
   const {dateStart, dateEnd} = useDraggableCalendar();
   const {elements, update} = useTimelineElements();
+  const {generate: generateScale} = useTimelineScale();
 
-  watch(canvas, mountContext);
+  watch(canvas, () => {
+    mountContext();
+    generateScale();
+  });
+
   watch(containerWidth, () => refreshWidth(containerWidth.value));
 
-  watch([position], () => requestAnimationFrame(render));
+  watch([containerWidth, position], () => requestAnimationFrame(render));
   watch([dateStart, dateEnd], update);
 
   watch(elements, () => {
