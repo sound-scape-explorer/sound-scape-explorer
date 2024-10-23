@@ -31,15 +31,12 @@ export function useScatterFilterTime() {
       return;
     }
 
-    const pointsFilteredByTime = [];
+    const length = aggregatedTimestamps.value.length;
+    const pointsFilteredByTime = new Array<boolean>(length);
 
-    for (
-      let intervalIndex = 0;
-      intervalIndex < aggregatedTimestamps.value.length;
-      intervalIndex += 1
-    ) {
-      const isFiltered = !isVisible(intervalIndex);
-      pointsFilteredByTime.push(isFiltered);
+    for (let i = 0; i < length; i += 1) {
+      const isFiltered = !isVisible(i);
+      pointsFilteredByTime[i] = isFiltered;
     }
 
     filtered.value = pointsFilteredByTime;
