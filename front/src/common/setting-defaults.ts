@@ -1,5 +1,6 @@
 import {
   COLOR_FLAVORS,
+  type ColorFlavor,
   PLOT_BACKGROUND,
   SPECTROGRAM_COLOR_MAPS,
 } from 'src/constants';
@@ -24,7 +25,7 @@ interface SettingDefaults {
   legendOverflow: boolean;
   labelsSizeHorizontal: DraggableLabelSize;
   labelsSizeVertical: DraggableLabelSize;
-  colorsFlavor: string;
+  colorsFlavor: ColorFlavor;
   colorsAlphaLow: number;
   colorsAlphaHigh: number;
   isHidingMenuOnDraggableToggle: boolean;
