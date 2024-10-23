@@ -33,7 +33,11 @@ export function useLabelSelection() {
       return;
     }
 
-    selection.value[property] = values;
+    selection.value = {
+      ...selection.value,
+      [property]: values,
+    };
+
     filterByLabel(selection);
   };
 
