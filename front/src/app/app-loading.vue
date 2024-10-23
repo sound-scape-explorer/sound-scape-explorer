@@ -19,6 +19,7 @@ const {step} = useViewLoader();
       <div :class="$style.current">{{ loadingText }}</div>
       <NProgress
         :percentage="step"
+        color="rgb(23 159 87 / 100%)"
         indicator-placement="inside"
         processing
         type="line"
