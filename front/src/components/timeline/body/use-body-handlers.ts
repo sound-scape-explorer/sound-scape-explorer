@@ -1,7 +1,7 @@
+import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
+import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
+import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
-import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
-import {useTimelineElements} from 'src/draggables/calendar/use-timeline-elements';
-import {useTimelineUtils} from 'src/draggables/calendar/use-timeline-utils';
 import {ref} from 'vue';
 
 interface Position {
@@ -12,10 +12,10 @@ interface Position {
 const isHovering = ref<boolean>(false);
 const position = ref<Position>({x: 0, y: 0});
 
-export function useTimelineHandlers() {
-  const {hovered} = useTimelineContext();
-  const {elements} = useTimelineElements();
-  const {isPointInElement, getMouseCoordinates} = useTimelineUtils();
+export function useBodyHandlers() {
+  const {hovered} = useBodyHover();
+  const {elements} = useBodyElements();
+  const {isPointInElement, getMouseCoordinates} = useBodyUtils();
   const {selectInterval} = useIntervalSelector();
 
   const handleMouseMove = (e: MouseEvent) => {

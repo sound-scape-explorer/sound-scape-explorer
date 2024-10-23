@@ -5,7 +5,7 @@ import {ref} from 'vue';
 
 const scale = ref();
 
-export function useTimelineScale() {
+export function useBodyColors() {
   const {flavor} = useColorSelection();
   const {files} = useFiles();
 

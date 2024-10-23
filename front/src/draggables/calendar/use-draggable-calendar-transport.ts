@@ -1,15 +1,18 @@
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
+import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
+import {ref} from 'vue';
 
 let interval: null | number = null;
 
+const duration = ref<number>(0);
+
 export function useDraggableCalendarTransport() {
-  const {duration, current, isActive, isPlaying} = useDraggableCalendar();
-  const {filterByTime} = useScatterFilterTime();
+  const {isActive, isPlaying} = useDraggableCalendar();
+  const {left, right} = useCalendarRange();
 
   const setWindowDuration = (newDuration: number) => {
-    duration.value = newDuration;
-    filterByTime();
+    duration.value = newDuration * 1000;
+    right.value = left.value + duration.value;
   };
 
   const blurButton = (event?: MouseEvent) => {
@@ -27,19 +30,18 @@ export function useDraggableCalendarTransport() {
     }
 
     isPlaying.value = !isPlaying.value;
-    filterByTime();
     blurButton(event);
   };
 
   const skipTimeForward = (event?: MouseEvent) => {
-    current.value += duration.value;
-    filterByTime();
+    left.value += duration.value;
+    right.value += duration.value;
     blurButton(event);
   };
 
   const skipTimeBackward = (event?: MouseEvent) => {
-    current.value -= duration.value;
-    filterByTime();
+    left.value -= duration.value;
+    right.value -= duration.value;
     blurButton(event);
   };
 
@@ -62,7 +64,7 @@ export function useDraggableCalendarTransport() {
   };
 
   const handleDateStartUpdate = (t: number) => {
-    current.value = t / 1000;
+    left.value = t;
   };
 
   return {

@@ -1,14 +1,14 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {ref} from 'vue';
 
-export interface Range {
+export interface AppRange {
   index: number;
   name: string;
   start: number;
   end: number;
 }
 
-const ranges = ref<Range[] | null>(null);
+const ranges = ref<AppRange[] | null>(null);
 
 export function useRanges() {
   const {read: readStorage} = useStorageReader();

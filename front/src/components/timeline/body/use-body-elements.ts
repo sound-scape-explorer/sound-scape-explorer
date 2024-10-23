@@ -1,10 +1,10 @@
+import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
+import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useDate} from 'src/composables/use-date';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
-import {useTimelineScale} from 'src/draggables/calendar/use-timeline-scale';
 import {ref} from 'vue';
 
 export interface TimelineElement {
@@ -19,14 +19,14 @@ export interface TimelineElement {
 const indices = ref<number[]>([]);
 const elements = ref<TimelineElement[]>([]);
 
-export function useTimelineElements() {
+export function useBodyElements() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {aggregatedSites} = useStorageAggregatedSites();
-  const {dateStart, dateEnd} = useDraggableCalendar();
+  const {left, right} = useCalendarRange();
   const {integration} = useIntegrationSelection();
   const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
   const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
-  const {scale} = useTimelineScale();
+  const {scale} = useBodyColors();
 
   const createElement = (
     row: number,
@@ -34,7 +34,7 @@ export function useTimelineElements() {
     start: number,
     end: number,
     color: string,
-    tooltip?: string[],
+    tooltip: string[],
   ): TimelineElement => {
     return {
       row: row,
@@ -42,7 +42,7 @@ export function useTimelineElements() {
       start: start,
       end: end,
       color: color,
-      tooltip: tooltip ? tooltip : [],
+      tooltip: tooltip,
     };
   };
 
@@ -52,20 +52,20 @@ export function useTimelineElements() {
     }
 
     const timestamps = aggregatedTimestamps.value;
-    const newIndices: number[] = [];
+    const collected: number[] = [];
 
     for (let i = 0; i < timestamps.length; i += 1) {
       const t = timestamps[i];
-      const date = convertTimestampToDate(t);
+      const isInside = t >= left.value && t <= right.value;
 
-      if (date.isAfter(dateEnd.value) || date.isBefore(dateStart.value)) {
+      if (!isInside) {
         continue;
       }
 
-      newIndices.push(i);
+      collected.push(i);
     }
 
-    indices.value = newIndices;
+    indices.value = collected;
     createElements();
   };
 
@@ -80,12 +80,19 @@ export function useTimelineElements() {
     }
 
     const newElements: TimelineElement[] = [];
+    const knownSites: string[] = [];
+    let kS = -1; // copy of row
 
     for (let i = 0; i < indices.value.length; i += 1) {
       const index = indices.value[i];
       const timestamp = aggregatedTimestamps.value[index];
       const detail = aggregatedIntervalDetails.value[index];
       const {site} = aggregatedSites.value[index];
+
+      if (!knownSites.includes(site)) {
+        knownSites.push(site);
+        kS += 1;
+      }
 
       const start = convertTimestampToDate(timestamp);
       const end = start.add(integration.value.seconds, 'seconds');
@@ -94,7 +101,7 @@ export function useTimelineElements() {
         const s = start.unix() * 1000;
         const e = end.unix() * 1000;
         const element = createElement(
-          i,
+          kS,
           index,
           s,
           e,
@@ -107,6 +114,7 @@ export function useTimelineElements() {
             `end: ${convertTimestampToIsoDate(e)}`,
           ],
         );
+
         newElements.push(element);
       }
     }

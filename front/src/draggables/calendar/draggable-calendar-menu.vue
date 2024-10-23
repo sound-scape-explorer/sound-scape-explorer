@@ -6,41 +6,30 @@ import {
   playSkipBackOutline,
   playSkipForwardOutline,
 } from 'ionicons/icons';
-import {NButtonGroup, NDatePicker} from 'naive-ui';
+import {NButtonGroup} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppSwitch from 'src/app/app-switch.vue';
-import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
-import AppInput from 'src/app/input/app-input.vue';
 import {InjectionKey} from 'src/common/injection-key';
-import {useDate} from 'src/composables/use-date';
+import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
 import {printPrettySeconds} from 'src/utils/print-pretty-seconds';
+import {computed} from 'vue';
 
-const {
-  isActive,
-  duration,
-  durations,
-  uiDisabled,
-  isPlaying,
-  dateStart,
-  dateEnd,
-} = useDraggableCalendar();
+const {isActive, durations, isPlaying} = useDraggableCalendar();
 
-const {
-  setWindowDuration,
-  skipTimeForward,
-  skipTimeBackward,
-  togglePlaying,
-  handleDateStartUpdate,
-} = useDraggableCalendarTransport();
+const {left, right} = useCalendarRange();
 
-const {convertTimestampToIsoDate} = useDate();
+const {setWindowDuration, skipTimeForward, skipTimeBackward, togglePlaying} =
+  useDraggableCalendarTransport();
 
 useRefProvide(InjectionKey.calendarActive, isActive);
-useRefProvide(InjectionKey.timeDuration, duration);
+
+const seconds = computed(() => {
+  return Number((right.value / 1000 - left.value / 1000).toFixed());
+});
 </script>
 
 <template>
@@ -53,31 +42,12 @@ useRefProvide(InjectionKey.timeDuration, duration);
         native
         unchecked="No"
       />
-
-      <div :class="$style.gaps">
-        <AppTooltip
-          placement="top"
-          tooltip="Set start date"
-        >
-          <NDatePicker
-            :class="$style.picker"
-            :disabled="uiDisabled"
-            :on-update:value="handleDateStartUpdate"
-            :value="dateStart.unix() * 1000"
-            size="tiny"
-            type="datetime"
-          />
-        </AppTooltip>
-
-        <div>to {{ convertTimestampToIsoDate(dateEnd.unix() * 1000) }}</div>
-      </div>
     </div>
     <span>Window</span>
     <div>
       <NButtonGroup>
         <AppButton
           v-for="d in durations"
-          :disabled="uiDisabled"
           :handle-click="() => setWindowDuration(d.duration)"
           size="tiny"
         >
@@ -85,23 +55,13 @@ useRefProvide(InjectionKey.timeDuration, duration);
         </AppButton>
       </NButtonGroup>
 
-      <AppInput
-        :class="$style.seconds"
-        :disabled="!isActive"
-        :injection-key="InjectionKey.timeDuration"
-        align="left"
-        throttle
-        tooltip="Set window duration in seconds"
-        type="number"
-      />
-
-      <div>{{ printPrettySeconds(duration) }}</div>
+      <div :class="$style.duration">{{ printPrettySeconds(seconds) }}</div>
     </div>
+
     <span>Transport</span>
     <div>
       <div :class="$style.gaps">
         <AppButton
-          :disabled="uiDisabled"
           :handle-click="skipTimeBackward"
           small-tooltip
         >
@@ -109,7 +69,6 @@ useRefProvide(InjectionKey.timeDuration, duration);
         </AppButton>
 
         <AppButton
-          :disabled="uiDisabled"
           :handle-click="togglePlaying"
           small-tooltip
         >
@@ -124,7 +83,6 @@ useRefProvide(InjectionKey.timeDuration, duration);
         </AppButton>
 
         <AppButton
-          :disabled="uiDisabled"
           :handle-click="skipTimeForward"
           small-tooltip
         >
@@ -163,5 +121,10 @@ useRefProvide(InjectionKey.timeDuration, duration);
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.duration {
+  font-size: 0.9em;
+  text-wrap: nowrap;
 }
 </style>

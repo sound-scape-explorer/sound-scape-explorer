@@ -1,12 +1,14 @@
-import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
-import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
-import {useTimelineTheme} from 'src/draggables/calendar/use-timeline-theme';
-import {useTimelineUtils} from 'src/draggables/calendar/use-timeline-utils';
+import {useBodyConfig} from 'src/components/timeline/body/use-body-config';
+import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
+import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
+import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
+import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
 
-export function useTimelineDrawTicks() {
-  const {context} = useTimelineContext();
-  const {config, time} = useTimelineConfig();
-  const {timeToCanvasX} = useTimelineUtils();
+export function useBodyDrawTicks() {
+  const {width} = useTimelineDom().body;
+  const {context} = useTimelineContext().body;
+  const {config, time} = useBodyConfig();
+  const {timeToCanvasX} = useBodyUtils();
   const {stroke, fill} = useTimelineTheme();
 
   const drawTicks = () => {
@@ -32,7 +34,7 @@ export function useTimelineDrawTicks() {
         time.value.minTime,
         time.value.maxTime,
         config.value.startX,
-        config.value.startX + config.value.width,
+        config.value.startX + width.value,
       );
 
       const isMajorTick = s % time.value.every === 0;

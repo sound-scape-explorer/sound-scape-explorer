@@ -1,15 +1,15 @@
 <script lang="ts" setup="">
-import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
-import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
-import {useTimelineHandlers} from 'src/draggables/calendar/use-timeline-handlers';
-import {useTimelineLifecycles} from 'src/draggables/calendar/use-timeline-lifecycles';
+import {useElementSize} from '@vueuse/core';
+import {useBodyHandlers} from 'src/components/timeline/body/use-body-handlers';
+import {useBodyLifecycles} from 'src/components/timeline/body/use-body-lifecycles';
+import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 
-const {container, canvas} = useTimelineContext();
-const {height, config} = useTimelineConfig();
+const {container, canvas, height} = useTimelineDom().body;
+const {width} = useElementSize(container);
 const {handleMouseLeave, handleMouseMove, isHovering, handleClick} =
-  useTimelineHandlers();
+  useBodyHandlers();
 
-useTimelineLifecycles();
+useBodyLifecycles({width: width});
 </script>
 
 <template>
@@ -21,7 +21,7 @@ useTimelineLifecycles();
       ref="canvas"
       :class="{[$style.hovering]: isHovering}"
       :height="height"
-      :width="config.width"
+      :width="width"
       @click="handleClick"
       @mouseleave="handleMouseLeave"
       @mousemove="handleMouseMove"
@@ -37,7 +37,9 @@ useTimelineLifecycles();
   justify-content: flex-start;
   width: 100%;
   max-height: $h0;
-  margin-top: $p0;
+
+  @include border-0;
+  @include tiny-scrollbar;
 }
 
 .hovering {

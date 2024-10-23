@@ -38,7 +38,6 @@ export enum InjectionKey {
   colorsIndicatorMax = 'colors/indicatorMax',
   colorsLabelRangeMin = 'colors/labelRangeMin',
   colorsLabelRangeMax = 'colors/labelRangeMax',
-  timeDuration = 'time/duration',
   digestedDigester = 'digested/digester',
   digestedLabelA = 'digested/labelA',
   digestedLabelB = 'digested/labelB',
@@ -49,4 +48,5 @@ export enum InjectionKey {
   histogramsFunction = 'histograms/function',
   temporalTrim = 'temporal/trim',
   calendarActive = 'calendar/active',
+  calendarRange = 'calendar/range',
 }
