@@ -19,7 +19,10 @@ export function useTimelineConfig() {
   const height = computed(() => config.value.rows * config.value.rowHeight);
 
   const refresh = (width: number) => {
-    config.value.width = width;
+    config.value = {
+      ...config.value,
+      width: width,
+    };
   };
 
   return {

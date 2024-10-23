@@ -1,40 +1,15 @@
 <script lang="ts" setup="">
 import {useTimelineConfig} from 'src/draggables/calendar/use-timeline-config';
 import {useTimelineContext} from 'src/draggables/calendar/use-timeline-context';
-import {useTimelineDrawBackground} from 'src/draggables/calendar/use-timeline-draw-background';
-import {useTimelineDrawElements} from 'src/draggables/calendar/use-timeline-draw-elements';
-import {useTimelineDrawRows} from 'src/draggables/calendar/use-timeline-draw-rows';
-import {useTimelineDrawTicks} from 'src/draggables/calendar/use-timeline-draw-ticks';
-import {useTimelineDrawTooltip} from 'src/draggables/calendar/use-timeline-draw-tooltip';
 import {useTimelineHandlers} from 'src/draggables/calendar/use-timeline-handlers';
-import {watch} from 'vue';
+import {useTimelineLifecycles} from 'src/draggables/calendar/use-timeline-lifecycles';
 
-const {container, containerWidth, canvas, context, mountContext, hovered} =
-  useTimelineContext();
-const {config, height, refresh} = useTimelineConfig();
-const {drawBackground} = useTimelineDrawBackground();
-const {drawTicks} = useTimelineDrawTicks();
-const {drawRows} = useTimelineDrawRows();
-const {drawElements} = useTimelineDrawElements();
-const {drawTooltip} = useTimelineDrawTooltip();
-const {handleMouseLeave, handleMouseMove, isHovering, handleClick, position} =
+const {container, containerWidth, canvas} = useTimelineContext();
+const {height} = useTimelineConfig();
+const {handleMouseLeave, handleMouseMove, isHovering, handleClick} =
   useTimelineHandlers();
 
-const render = () => {
-  if (!context.value || config.value.width === 0) {
-    return;
-  }
-
-  drawBackground();
-  drawRows();
-  drawTicks();
-  drawElements();
-  drawTooltip();
-};
-
-watch(canvas, mountContext);
-watch([container, canvas, context, containerWidth, hovered, position], render);
-watch(containerWidth, () => refresh(containerWidth.value));
+useTimelineLifecycles();
 </script>
 
 <template>
