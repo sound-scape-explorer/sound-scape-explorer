@@ -11,7 +11,6 @@ export enum Shortcuts {
   view = 'v',
   colors = 'c',
   labels = 'l',
-  labelsZoom = 'L',
   audio = 'a',
   details = 'd',
   trajectories = 'y',

@@ -20,7 +20,7 @@ import Draggables from 'src/draggables/draggables.vue';
 import {onMounted} from 'vue';
 
 const {isReady} = useStorageReady();
-const {isPreview} = useClientSettings();
+const {isAlphaPreview, isBetaPreview} = useClientSettings();
 const {checkVersions} = useClientSettingsChecker();
 const {create: createWorker} = useWorker();
 const {showImport} = useApp();
@@ -50,7 +50,7 @@ onMounted(checkVersions);
         <AppMenu />
         <AppLoader />
         <Scatter v-if="isReady" />
-        <Screen v-if="isReady && isPreview" />
+        <Screen v-if="isReady && isAlphaPreview" />
         <Draggables />
       </NLayout>
     </NLayout>

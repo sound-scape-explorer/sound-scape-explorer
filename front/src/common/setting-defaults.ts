@@ -13,7 +13,8 @@ interface SettingDefaults {
   timeshift: number;
   isDetailsAutoOpen: boolean;
   isAudioAutoOpen: boolean;
-  isPreview: boolean;
+  isAlphaPreview: boolean;
+  isBetaPreview: boolean;
   isTimezoneActive: boolean;
   isCopyOnSelect2d: boolean;
   isWebGlScatter2d: boolean;
@@ -41,7 +42,8 @@ export const settingDefaults: SettingDefaults = {
   timeshift: 0, // hours
   isDetailsAutoOpen: false,
   isAudioAutoOpen: true,
-  isPreview: false,
+  isAlphaPreview: false,
+  isBetaPreview: false,
   isTimezoneActive: false,
   isCopyOnSelect2d: true,
   isWebGlScatter2d: true,

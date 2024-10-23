@@ -11,7 +11,6 @@ export function useDraggableSettingsProviders() {
     isDetailsAutoOpen,
     isAudioAutoOpen,
     plotBackground,
-    isPreview,
     isTimezoneActive,
     timeshift,
     isCopyOnSelect2d,
@@ -20,6 +19,8 @@ export function useDraggableSettingsProviders() {
     isDevEnabled,
     isSelectedPointHighlighted,
     isDetailedExportName,
+    isAlphaPreview,
+    isBetaPreview,
   } = useClientSettings();
 
   const {audioHost} = useStorageAudioHost();
@@ -39,7 +40,8 @@ export function useDraggableSettingsProviders() {
   useRefProvide(InjectionKey.settingsIsTimezoneActive, isTimezoneActive);
   useRefProvide(InjectionKey.settingsIsCopyOnSelect2d, isCopyOnSelect2d);
   useRefProvide(InjectionKey.settingsIsWebGlScatter2d, isWebGlScatter2d);
-  useRefProvide(InjectionKey.settingsIsPreview, isPreview);
+  useRefProvide(InjectionKey.settingsIsAlphaPreview, isAlphaPreview);
+  useRefProvide(InjectionKey.settingsIsBetaPreview, isBetaPreview);
   useRefProvide(InjectionKey.settingsIsDevEnabled, isDevEnabled);
   useRefProvide(
     InjectionKey.settingsIsDetailedExportName,

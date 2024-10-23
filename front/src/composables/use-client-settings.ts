@@ -14,7 +14,8 @@ import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 const version = useStorage<string>(k.version, d.version);
 const plotBackground = useStorage<string>(k.plotBackground, d.plotBackground);
 const timeshift = useStorage<number>(k.timeshift, d.timeshift);
-const isPreview = useStorage<boolean>(k.isPreview, d.isPreview);
+const isAlphaPreview = useStorage<boolean>(k.isAlphaPreview, d.isAlphaPreview);
+const isBetaPreview = useStorage<boolean>(k.isBetaPreview, d.isBetaPreview);
 
 const isDetailsAutoOpen = useStorage<boolean>(
   k.isDetailsAutoOpen,
@@ -79,13 +80,14 @@ export function useClientSettings() {
     timeshift.value = d.timeshift;
     isDetailsAutoOpen.value = d.isDetailsAutoOpen;
     isAudioAutoOpen.value = d.isAudioAutoOpen;
-    isPreview.value = d.isPreview;
     isTimezoneActive.value = d.isTimezoneActive;
     isCopyOnSelect2d.value = d.isCopyOnSelect2d;
     isWebGlScatter2d.value = d.isWebGlScatter2d;
     isColorMapSwapped.value = d.isColorMapSwapped;
     isSelectedPointHighlighted.value = d.isSelectedPointHighlighted;
     isDetailedExportName.value = d.isDetailedExportName;
+    isAlphaPreview.value = d.isAlphaPreview;
+    isBetaPreview.value = d.isBetaPreview;
 
     audioHost.value = d.audioHost;
     fontSize.value = d.fontSize;
@@ -107,7 +109,6 @@ export function useClientSettings() {
     timeshift: timeshift,
     isDetailsAutoOpen: isDetailsAutoOpen,
     isAudioAutoOpen: isAudioAutoOpen,
-    isPreview: isPreview,
     isTimezoneActive: isTimezoneActive,
     isCopyOnSelect2d: isCopyOnSelect2d,
     isWebGlScatter2d: isWebGlScatter2d,
@@ -117,5 +118,7 @@ export function useClientSettings() {
     devAutoLoadView: devAutoLoadView,
     isSelectedPointHighlighted: isSelectedPointHighlighted,
     isDetailedExportName: isDetailedExportName,
+    isAlphaPreview: isAlphaPreview,
+    isBetaPreview: isBetaPreview,
   };
 }

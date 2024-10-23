@@ -17,7 +17,8 @@ const {
   resetAll,
   isDetailsAutoOpen,
   isAudioAutoOpen,
-  isPreview,
+  isAlphaPreview,
+  isBetaPreview,
   isTimezoneActive,
   isCopyOnSelect2d,
   isWebGlScatter2d,
@@ -171,10 +172,17 @@ useDraggableSettingsProviders();
         />
       </DraggableSettingsItem>
 
+      <DraggableSettingsItem title="Misc: Preview alpha features">
+        <AppCheckbox
+          :default="isAlphaPreview"
+          :injection-key="InjectionKey.settingsIsAlphaPreview"
+        />
+      </DraggableSettingsItem>
+
       <DraggableSettingsItem title="Misc: Preview beta features">
         <AppCheckbox
-          :default="isPreview"
-          :injection-key="InjectionKey.settingsIsPreview"
+          :default="isBetaPreview"
+          :injection-key="InjectionKey.settingsIsBetaPreview"
         />
       </DraggableSettingsItem>
 
