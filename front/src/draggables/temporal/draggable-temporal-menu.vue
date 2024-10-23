@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
 import {IonIcon} from '@ionic/vue';
 import {downloadOutline} from 'ionicons/icons';
-import {NButton, NButtonGroup, NTreeSelect} from 'naive-ui';
+import {NButtonGroup, NTreeSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
@@ -36,7 +36,7 @@ const {
   selectAll,
 } = useTemporalSites();
 
-const {periods, update: updatePeriod} = useTemporalCandles();
+const {period, periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useGlobalKeyboard();
 
 useRefProvide(InjectionKey.indicatorsList, indicator);
@@ -113,14 +113,15 @@ watch(indicator, update);
         />
 
         <NButtonGroup v-if="isCandles">
-          <NButton
+          <AppButton
             v-for="p in periods"
+            :active="p.seconds === period.seconds"
             :disabled="!isCandles"
+            :handle-click="() => updatePeriod(p)"
             size="tiny"
-            @click="updatePeriod(p)"
           >
             {{ p.name }}
-          </NButton>
+          </AppButton>
         </NButtonGroup>
 
         <AppSwitch
