@@ -29,6 +29,7 @@ import {
   type TracedRelativeTimestamps,
   type TracedTimestamps,
 } from 'src/composables/use-trajectories-data';
+import {sortStringsNumerically} from 'src/utils/sort-strings-numerically';
 import {trimRectangular} from 'src/utils/trim-rectangular';
 
 // TODO: Replace .pushes with fixed arrays
@@ -213,9 +214,7 @@ export async function readLabels(
 
     for (const autocluster of autoclusters) {
       const autoclusterSet = new Set(
-        autocluster
-          .map((n) => n.toString())
-          .sort((a, b) => a.localeCompare(b, undefined, {numeric: true})),
+        sortStringsNumerically(autocluster.map((n) => n.toString())),
       );
 
       labels[`AUTOCLUSTER_${a}`] = [...autoclusterSet];
@@ -227,6 +226,7 @@ export async function readLabels(
   for (let i = 0; i < properties.length; i += 1) {
     const property = properties[i];
     labels[property] = sets[i].filter((element) => element !== '');
+    labels[property] = sortStringsNumerically(labels[property]);
   }
 
   return labels;
