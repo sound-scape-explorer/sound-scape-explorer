@@ -1,22 +1,16 @@
 import {type Config} from 'plotly.js-dist-min';
-import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {createPlotlyExportPngButtonDigested} from 'src/utils/create-plotly-export-png-button-digested';
 import {
   createPlotlyExportSvgButton,
-  type PlotlyExportOptions,
+  type PlotlyExportOptionsWithoutSize,
 } from 'src/utils/create-plotly-export-svg-button';
 
 const scale = 4;
 
 export function useBasePlotConfig() {
-  // TODO: make this dynamic from all plotly.js instances
-  const {width, height} = useAppHeatmapSize();
-
   const generateConfig = (name: string): Partial<Config> => {
-    const options: PlotlyExportOptions = {
+    const options: PlotlyExportOptionsWithoutSize = {
       filename: name,
-      width: width.value,
-      height: height.value,
       scale: scale,
     };
 
