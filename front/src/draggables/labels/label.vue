@@ -4,17 +4,17 @@ import {colorFillOutline} from 'ionicons/icons';
 import {NTag, NTooltip} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import DraggableLabelsItemsOptions from 'src/draggables/labels/draggable-labels-item-checkboxes.vue';
-import {useLabelsItem} from 'src/draggables/labels/use-labels-item';
+import LabelCheckboxes from 'src/draggables/labels/label-checkboxes.vue';
+import {useLabel} from 'src/draggables/labels/use-label';
 
-export interface DraggableLabelsItemContentProps {
+export interface LabelProps {
   property: string;
 }
 
-const props = defineProps<DraggableLabelsItemContentProps>();
+const props = defineProps<LabelProps>();
 
+const {handlePropertyClick, handlePropertyRightClick} = useLabel(props);
 const {handleLabelClick} = useColorSelection();
-const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
 </script>
 
 <template>
@@ -53,7 +53,7 @@ const {handlePropertyClick, handlePropertyRightClick} = useLabelsItem(props);
     </AppButton>
   </div>
 
-  <DraggableLabelsItemsOptions
+  <LabelCheckboxes
     :class="[$style.checkboxes, $style.mr, $style.ml]"
     :property="props.property"
   />

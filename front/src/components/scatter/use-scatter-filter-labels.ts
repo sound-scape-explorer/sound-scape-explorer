@@ -3,7 +3,7 @@ import {
   type Labels,
   useStorageLabels,
 } from 'src/composables/use-storage-labels';
-import {type LabelSelection} from 'src/draggables/labels/use-labels-selection';
+import {type LabelSelection} from 'src/draggables/labels/use-label-selection';
 import {type Ref, ref} from 'vue';
 
 // by interval indexes

@@ -19,7 +19,7 @@ import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator'
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useColorState} from 'src/draggables/colors/use-color-state';
-import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
+import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
 
 const {isLoading} = useScatterLoading();
 const {flavor, criteria, criterias, category, categories} = useColorSelection();
@@ -30,7 +30,7 @@ const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();
 const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
 const {detect: detectIndicatorRange, swap} = useIndicatorLimits();
 const {invert, isReversible} = useColorInvert();
-const {isEnabled} = useLabelsNumeric();
+const {isEnabled} = useLabelNumeric();
 
 useRefProvide(InjectionKey.colorsCriteria, criteria);
 useRefProvide(InjectionKey.colorsCategory, category);

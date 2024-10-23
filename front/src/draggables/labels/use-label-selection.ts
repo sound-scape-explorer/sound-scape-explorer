@@ -7,9 +7,9 @@ export interface LabelSelection {
 }
 
 const selection = ref<LabelSelection>({});
-let hasBuilt = false;
+let isLoaded = false;
 
-export function useLabelsSelection() {
+export function useLabelSelection() {
   const {labelProperties} = useStorageLabels();
   const {filter: filterByLabel} = useScatterFilterLabels();
 
@@ -25,11 +25,11 @@ export function useLabelsSelection() {
     }
 
     selection.value = newSelection;
-    hasBuilt = true;
+    isLoaded = true;
   };
 
   const update = (property: string, values: string[]) => {
-    if (!hasBuilt || selection.value[property] === values) {
+    if (!isLoaded || selection.value[property] === values) {
       return;
     }
 

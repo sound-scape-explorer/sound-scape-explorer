@@ -3,11 +3,11 @@ import {IonIcon} from '@ionic/vue';
 import {calculatorOutline, flashOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
-import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
+import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
 import {onBeforeUnmount} from 'vue';
 
 const {detect: detectLabelRange} = useColorByLabel();
-const {isEnabled, toggle, disable} = useLabelsNumeric();
+const {isEnabled, toggle, disable} = useLabelNumeric();
 
 onBeforeUnmount(disable);
 </script>

@@ -4,7 +4,7 @@ import {ref} from 'vue';
 
 const isEnabled = ref<boolean>(false);
 
-export function useLabelsNumeric() {
+export function useLabelNumeric() {
   const {labelProperties, labelSets} = useStorageLabels();
   const {criteria} = useColorSelection();
 

@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import {useDraggables} from 'src/composables/use-draggables';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 
-export function useLabelsScreenshot() {
+export function useDraggableLabelsScreenshot() {
   const {open} = useDraggables();
 
   const screenshotLabel = async (): Promise<HTMLCanvasElement | null> => {

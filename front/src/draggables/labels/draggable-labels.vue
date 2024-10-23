@@ -1,10 +1,15 @@
 <script lang="ts" setup="">
+import {NGi, NGrid} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import DraggableLabelsItems from 'src/draggables/labels/draggable-labels-item-container.vue';
+import {useStorageLabels} from 'src/composables/use-storage-labels';
 import DraggableLabelsSidebar from 'src/draggables/labels/draggable-labels-sidebar.vue';
+import Label from 'src/draggables/labels/label.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
+import {useDraggableLabelsDom} from 'src/draggables/labels/use-draggable-labels-dom';
 
 const {sizeHorizontal, sizeVertical} = useDraggableLabels();
+const {cols} = useDraggableLabelsDom();
+const {labelProperties} = useStorageLabels();
 </script>
 
 <template>
@@ -27,7 +32,11 @@ const {sizeHorizontal, sizeVertical} = useDraggableLabels();
         },
       ]"
     >
-      <DraggableLabelsItems />
+      <NGrid :cols="cols">
+        <NGi v-for="property in labelProperties">
+          <Label :property="property" />
+        </NGi>
+      </NGrid>
     </div>
   </AppDraggable>
 </template>

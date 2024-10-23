@@ -5,10 +5,10 @@ import AppButton from 'src/app/app-button.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
-import {useLabelsInfo} from 'src/draggables/labels/use-labels-info';
+import {useDraggableLabelsInfo} from 'src/draggables/labels/use-draggable-labels-info';
 
 const {cycleHorizontal, cycleVertical} = useDraggableLabels();
-const {count} = useLabelsInfo();
+const {count} = useDraggableLabelsInfo();
 </script>
 
 <template>

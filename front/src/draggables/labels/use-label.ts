@@ -1,10 +1,10 @@
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {type DraggableLabelsItemContentProps} from 'src/draggables/labels/draggable-labels-item-content.vue';
-import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
+import {type LabelProps} from 'src/draggables/labels/label.vue';
+import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
 
-export function useLabelsItem(props: DraggableLabelsItemContentProps) {
+export function useLabel(props: LabelProps) {
   const {labels} = useStorageLabels();
-  const {updateSelection, selection} = useLabelsSelection();
+  const {updateSelection, selection} = useLabelSelection();
 
   const handlePropertyClick = () => {
     if (labels.value === null) {

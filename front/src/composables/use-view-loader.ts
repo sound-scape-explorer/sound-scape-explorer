@@ -19,7 +19,7 @@ import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggreg
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {useViewState} from 'src/composables/use-view-state';
-import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
+import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
 import {ref} from 'vue';
 
 const step = ref<number>(0); // percents
@@ -36,7 +36,7 @@ export function useViewLoader() {
   const {readAggregatedLabels} = useStorageAggregatedLabels();
   const {readReducedFeatures} = useStorageReducedFeatures();
   const {generateColorScale} = useScatterColorScale();
-  const {buildSelection, selection: labelSelection} = useLabelsSelection();
+  const {buildSelection, selection: labelSelection} = useLabelSelection();
   const {isEnabled} = useScatterTraces();
   const {filter: filterByLabel} = useScatterFilterLabels();
   const {filter: filterByTemporal} = useScatterFilterTemporal();
