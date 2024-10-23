@@ -4,7 +4,7 @@ import DraggableLabelsItems from 'src/draggables/labels/draggable-labels-item-co
 import DraggableLabelsSidebar from 'src/draggables/labels/draggable-labels-sidebar.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
-const {isExpanded} = useDraggableLabels();
+const {sizeHorizontal, sizeVertical} = useDraggableLabels();
 </script>
 
 <template>
@@ -18,7 +18,12 @@ const {isExpanded} = useDraggableLabels();
       :class="[
         $style.container,
         {
-          [$style.expanded]: isExpanded,
+          [$style['horizontal-default']]: sizeHorizontal === 'default',
+          [$style['horizontal-big']]: sizeHorizontal === 'big',
+          [$style['horizontal-max']]: sizeHorizontal === 'max',
+          [$style['vertical-default']]: sizeVertical === 'default',
+          [$style['vertical-big']]: sizeVertical === 'big',
+          [$style['vertical-max']]: sizeVertical === 'max',
         },
       ]"
     >
@@ -32,14 +37,31 @@ const {isExpanded} = useDraggableLabels();
   display: flex;
   overflow-y: auto;
   flex-direction: column;
-  width: $w0;
-  height: $h0;
 
   @include hide-scrollbar;
 }
 
-.expanded {
+.horizontal-default {
+  width: $w0;
+}
+
+.vertical-default {
+  height: $h0;
+}
+
+.horizontal-big {
+  width: $w2;
+}
+
+.vertical-big {
+  height: $h2;
+}
+
+.horizontal-max {
   width: $w-max;
+}
+
+.vertical-max {
   height: $h-max;
 }
 </style>

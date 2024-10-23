@@ -1,7 +1,7 @@
 import {useStorage} from '@vueuse/core';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
-import {SettingDefault as d} from 'src/common/setting-default';
+import {settingDefaults as d} from 'src/common/setting-defaults';
 import {SettingKey as k} from 'src/common/setting-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useClientSettingsDev} from 'src/composables/use-client-settings-dev';

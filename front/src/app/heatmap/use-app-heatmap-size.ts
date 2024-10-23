@@ -1,12 +1,12 @@
 import {useStorage} from '@vueuse/core';
-import {SettingDefault} from 'src/common/setting-default';
+import {settingDefaults} from 'src/common/setting-defaults';
 import {SettingKey} from 'src/common/setting-key';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref} from 'vue';
 
 const fontSize = useStorage<number>(
   SettingKey.fontSize,
-  SettingDefault.fontSize,
+  settingDefaults.fontSize,
 );
 const width = ref<number>(PLOTLY_SIZE);
 const height = ref<number>(PLOTLY_SIZE);

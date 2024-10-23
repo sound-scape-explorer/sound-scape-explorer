@@ -1,34 +1,37 @@
 <script lang="ts" setup="">
 import {IonIcon} from '@ionic/vue';
-import {chevronExpand, expand} from 'ionicons/icons';
+import {chevronExpand} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 import {useLabelsInfo} from 'src/draggables/labels/use-labels-info';
 
-const {toggleExpand} = useDraggableLabels();
+const {cycleHorizontal, cycleVertical} = useDraggableLabels();
 const {count} = useLabelsInfo();
 </script>
 
 <template>
   <AppDraggableSidebar>
     <AppButton
-      :handle-click="toggleExpand"
+      :handle-click="cycleHorizontal"
+      size="tiny"
+      tooltip="Expand"
+      tooltip-placement="left"
+    >
+      <IonIcon
+        :class="$style.rotate"
+        :icon="chevronExpand"
+      />
+    </AppButton>
+
+    <AppButton
+      :handle-click="cycleVertical"
       size="tiny"
       tooltip="Expand"
       tooltip-placement="left"
     >
       <IonIcon :icon="chevronExpand" />
-    </AppButton>
-
-    <AppButton
-      :handle-click="toggleExpand"
-      size="tiny"
-      tooltip="Expand"
-      tooltip-placement="left"
-    >
-      <IonIcon :icon="expand" />
     </AppButton>
 
     <AppTooltip tooltip="Points excluded">
@@ -46,5 +49,9 @@ const {count} = useLabelsInfo();
   height: $p0 * 3;
   text-align: center;
   color: $emerald;
+}
+
+.rotate {
+  transform: rotate3d(0, 0, 1, 90deg);
 }
 </style>

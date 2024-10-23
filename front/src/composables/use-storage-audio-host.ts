@@ -1,11 +1,11 @@
 import {useStorage} from '@vueuse/core';
-import {SettingDefault} from 'src/common/setting-default';
+import {settingDefaults} from 'src/common/setting-defaults';
 import {SettingKey} from 'src/common/setting-key';
 import {useSettings} from 'src/composables/use-settings';
 
 const audioHost = useStorage<string>(
   SettingKey.audioHost,
-  SettingDefault.audioHost,
+  settingDefaults.audioHost,
 );
 
 export function useStorageAudioHost() {
