@@ -3,7 +3,7 @@ import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useColorResize} from 'src/draggables/colors/use-color-resize';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
+import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
 import {convertRgbToString} from 'src/utils/convert-rgb-to-string';
 import {getInfiniteRange} from 'src/utils/get-infinite-range';
 import {mapRange} from 'src/utils/map-range';
@@ -19,7 +19,7 @@ export function useColorByLabel() {
   const {labelSets} = useStorageLabels();
   const {criteria} = useColorSelection();
   const {scale} = useColorUser();
-  const {isEnabled} = useLabelsNumeric();
+  const {isEnabled} = useLabelNumeric();
 
   const getPrimitive = (intervalIndex: number) => {
     if (

@@ -6,6 +6,7 @@ import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioLock} from 'src/draggables/audio/use-audio-lock';
 import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
@@ -14,12 +15,13 @@ import {useDetails} from 'src/draggables/details/use-details';
 const {size} = useAudioFourier();
 const {settings} = useSettings();
 const {aggregatedSites} = useStorageAggregatedSites();
-const {date} = useDetails();
+const {date, dateEnd} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {currentIntervalIndex} = useIntervalSelector();
 const {rate, readable} = useAudioRate();
 const {lock, unlock} = useAudioLock();
 const {block, duration} = useAudioFile();
+const {gain} = useAudioGain();
 </script>
 
 <template>
@@ -54,19 +56,10 @@ const {block, duration} = useAudioFile();
 
       {{ aggregatedSites[currentIntervalIndex].site }}
     </NGi>
-    <NGi>
-      <NTag
-        :bordered="false"
-        size="small"
-      >
-        Interval Date
-      </NTag>
-
-      {{ date && convertDateToIsoDate(date) }}
-    </NGi>
   </NGrid>
 
   <NGrid
+    v-if="aggregatedSites !== null && currentIntervalIndex !== null"
     :cols="3"
     x-gap="12"
   >
@@ -79,6 +72,42 @@ const {block, duration} = useAudioFile();
       </NTag>
 
       {{ currentIntervalIndex }}
+    </NGi>
+    <NGi>
+      <NTag
+        :bordered="false"
+        size="small"
+      >
+        Start
+      </NTag>
+
+      {{ date && convertDateToIsoDate(date) }}
+    </NGi>
+    <NGi>
+      <NTag
+        :bordered="false"
+        size="small"
+      >
+        End
+      </NTag>
+
+      {{ dateEnd && convertDateToIsoDate(dateEnd) }}
+    </NGi>
+  </NGrid>
+
+  <NGrid
+    :cols="3"
+    x-gap="12"
+  >
+    <NGi>
+      <NTag
+        :bordered="false"
+        size="small"
+      >
+        Gain
+      </NTag>
+
+      {{ gain }}
     </NGi>
     <NGi>
       <NTag
@@ -144,5 +173,3 @@ const {block, duration} = useAudioFile();
     />
   </div>
 </template>
-
-<style lang="scss" scoped></style>

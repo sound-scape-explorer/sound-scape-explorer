@@ -1,9 +1,12 @@
 <script lang="ts" setup="">
-import {DownloadOutline} from '@vicons/ionicons5';
-import {NButton, NButtonGroup, NSwitch, NTreeSelect} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {downloadOutline} from 'ionicons/icons';
+import {NButtonGroup, NTreeSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import DraggableTemporalMenuFilters from 'src/draggables/temporal/draggable-temporal-menu-filters.vue';
@@ -33,24 +36,25 @@ const {
   selectAll,
 } = useTemporalSites();
 
-const {periods, update: updatePeriod} = useTemporalCandles();
+const {period, periods, update: updatePeriod} = useTemporalCandles();
 const {lock, unlock} = useGlobalKeyboard();
 
-useRefProvide('indicators/list', indicator);
-useRefProvide('indicators/selection', selection);
-useRefProvide('indicators/display', display);
+useRefProvide(InjectionKey.indicatorsList, indicator);
+useRefProvide(InjectionKey.indicatorsSelection, selection);
+useRefProvide(InjectionKey.indicatorsDisplay, display);
+useRefProvide(InjectionKey.temporalTrim, isCondensed);
 
 watch(indicator, update);
 </script>
 
 <template>
-  <AppDraggableMenu size="medium">
+  <AppDraggableMenu>
     <h2>Select</h2>
 
     <div>
       <AppSelect
+        :injection-key="InjectionKey.indicatorsList"
         :options="indicators"
-        injection-key="indicators/list"
         size="small"
       />
     </div>
@@ -68,7 +72,7 @@ watch(indicator, update);
       </AppButton>
     </h2>
 
-    <div class="row">
+    <div :class="$style.row">
       <NTreeSelect
         v-model:value="currentSites"
         :clear-filter-after-select="false"
@@ -89,82 +93,79 @@ watch(indicator, update);
 
     <h2>Display</h2>
 
-    <div class="row">
+    <div :class="$style.row">
       <div>
         <AppSelect
+          :class="$style.selection"
+          :injection-key="InjectionKey.indicatorsSelection"
           :options="selections"
-          injection-key="indicators/selection"
           size="small"
-          style="width: 9em"
           tooltip="Current selection"
           tooltip-placement="top"
         />
 
         <AppSelect
+          :injection-key="InjectionKey.indicatorsDisplay"
           :options="displays"
-          injection-key="indicators/display"
           size="small"
-          style="width: 9em"
           tooltip="Rendering style"
           tooltip-placement="top"
         />
 
         <NButtonGroup v-if="isCandles">
-          <NButton
+          <AppButton
             v-for="p in periods"
+            :active="p.seconds === period.seconds"
             :disabled="!isCandles"
+            :handle-click="() => updatePeriod(p)"
             size="tiny"
-            @click="updatePeriod(p)"
           >
             {{ p.name }}
-          </NButton>
+          </AppButton>
         </NButtonGroup>
 
-        <NSwitch
+        <AppSwitch
           v-if="isCandles"
-          v-model:value="isCondensed"
           :disabled="!isCandles"
-          size="small"
-        >
-          <template #unchecked>Full</template>
-          <template #checked>Trim</template>
-        </NSwitch>
+          :injection-key="InjectionKey.temporalTrim"
+          checked="Trim"
+          unchecked="Full"
+        />
       </div>
 
       <AppButton
         :handle-click="handleExportClick"
-        icon
         size="small"
         tooltip="Export raw .csv"
         tooltip-placement="bottom"
       >
-        <DownloadOutline />
+        <IonIcon :icon="downloadOutline" />
       </AppButton>
     </div>
 
     <h2>Filter</h2>
 
-    <div class="row">
+    <div :class="$style.row">
       <DraggableTemporalMenuFilters />
     </div>
   </AppDraggableMenu>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .row {
   display: flex;
-  justify-content: space-between;
+  overflow: hidden;
   align-items: center;
+  justify-content: space-between;
 
   > div {
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: $p0;
   }
 }
 
-$s: 0.9;
-.toggle {
-  transform: scale3d($s, $s, $s);
+.selection {
+  width: $p0 * 13;
 }
 </style>

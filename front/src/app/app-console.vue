@@ -18,18 +18,18 @@ const payload = computed<string | null>(() => {
 <template>
   <div
     v-if="payload"
-    class="app-console__container"
+    :class="$style.container"
     v-html="payload"
   />
 </template>
 
-<style lang="scss" scoped>
-.app-console__container {
-  position: fixed;
-  left: 7px;
-  bottom: 5px;
-  z-index: $appConsoleLayer;
-  font-style: italic;
+<style lang="scss" module>
+.container {
   font-size: 90%;
+  font-style: italic;
+  position: fixed;
+  z-index: $app-console-layer;
+  bottom: 5px;
+  left: 7px;
 }
 </style>

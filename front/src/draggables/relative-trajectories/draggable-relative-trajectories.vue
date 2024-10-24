@@ -1,16 +1,20 @@
 <script lang="ts" setup>
-import {DownloadOutline} from '@vicons/ionicons5';
-import {NButton, NCascader, NIcon} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {downloadOutline} from 'ionicons/icons';
+import {NButton, NCascader} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {Csv} from 'src/common/csv';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useExportName} from 'src/composables/use-export-name';
 import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
-import {EXPORT_FILENAME} from 'src/constants';
 import {computed, ref} from 'vue';
+
+// TODO: split me
 
 const {selectRelativeTrajectories, relativeTrajectories} =
   useRelativeTrajectories();
+const {generate} = useExportName();
 
 const valueRef = ref([]);
 const {isLoading} = useScatterLoading();
@@ -92,7 +96,8 @@ const handleExportClick = () => {
     csv.addToCurrentRow(row.join(csv.separator));
   }
 
-  csv.download(`${EXPORT_FILENAME}-relative-trajectories`);
+  const name = generate('relative-trajectories');
+  csv.download(name);
 };
 </script>
 
@@ -101,7 +106,7 @@ const handleExportClick = () => {
     draggable-key="relativeTrajectories"
     suspense="view"
   >
-    <div class="container">
+    <div :class="$style.container">
       <NCascader
         v-model:value="valueRef"
         :cascade="false"
@@ -121,15 +126,11 @@ const handleExportClick = () => {
       />
 
       <NButton
-        class="export"
+        :class="$style.export"
         size="tiny"
         @click="handleExportClick"
       >
-        <template #icon>
-          <NIcon>
-            <DownloadOutline />
-          </NIcon>
-        </template>
+        <IonIcon :icon="downloadOutline" />
         Export .csv
       </NButton>
 
@@ -147,15 +148,14 @@ const handleExportClick = () => {
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .container {
   display: flex;
-  justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  gap: 0.5rem;
-
-  min-width: 20rem;
+  justify-content: center;
+  width: $s2;
+  gap: $p0;
 }
 
 .export {

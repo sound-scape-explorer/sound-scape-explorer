@@ -2,6 +2,7 @@ import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
+import {useExportName} from 'src/composables/use-export-name';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
@@ -35,6 +36,7 @@ export function useScatterExport() {
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {filtered} = useScatterGlobalFilter();
+  const {generate} = useExportName();
 
   const loadingRef = ref<boolean>(false);
 
@@ -126,8 +128,8 @@ export function useScatterExport() {
       });
     });
 
-    const csvFilename = `SSE_${band.value.name}_${integration.value.name}.csv`;
-    csv.download(csvFilename);
+    const name = generate('scatter');
+    csv.download(name);
     loadingRef.value = false;
   };
 

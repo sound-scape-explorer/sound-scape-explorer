@@ -1,3 +1,8 @@
-@mixin borderRadius {
-  border-radius: 8px;
+@mixin border-radius {
+  border-radius: $p0;
+}
+
+@mixin border-0 {
+  border: 1px solid #ccc;
+  border-radius: $g0;
 }

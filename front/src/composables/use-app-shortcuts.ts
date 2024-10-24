@@ -6,7 +6,7 @@ import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {Shortcuts} from 'src/composables/use-shortcuts';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewState} from 'src/composables/use-view-state';
-import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
+import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 
 export function useAppShortcuts() {
   useAppMetaKeys();
@@ -14,10 +14,10 @@ export function useAppShortcuts() {
   const {registerKey} = useGlobalKeyboard();
   const {isReady} = useStorageReady();
   const {toggle} = useDraggables();
-  const {isPreview} = useClientSettings();
-  const {enable} = useScreen();
-  const {toggleExpand} = useDraggableLabels();
+  const {isAlphaPreview} = useClientSettings();
+  const {enable: showScatterSelection} = useScreen();
   const {hasView} = useViewState();
+  const {togglePlayPause} = useAudioTransport();
 
   registerKey(Shortcuts.open, () => toggle('open'));
   registerKey(Shortcuts.settings, () => isReady.value && toggle('settings'));
@@ -27,7 +27,7 @@ export function useAppShortcuts() {
   registerKey(Shortcuts.calendar, () => hasView.value && toggle('calendar'));
   registerKey(
     Shortcuts.timeline,
-    () => hasView.value && isPreview.value && toggle('timeline'),
+    () => hasView.value && isAlphaPreview.value && toggle('timeline'),
   );
   registerKey(Shortcuts.labels, () => hasView.value && toggle('labels'));
   registerKey(Shortcuts.details, () => hasView.value && toggle('details'));
@@ -43,13 +43,17 @@ export function useAppShortcuts() {
   registerKey(Shortcuts.temporal, () => hasView.value && toggle('temporal'));
   registerKey(Shortcuts.heatmaps, () => hasView.value && toggle('heatmaps'));
   registerKey(
+    Shortcuts.histograms,
+    () => hasView.value && toggle('histograms'),
+  );
+  registerKey(
     Shortcuts.selection,
-    () => hasView.value && isPreview.value && toggle('selection'),
+    () => hasView.value && isAlphaPreview.value && toggle('selection'),
   );
   registerKey(
     Shortcuts.selectHotkey,
-    () => hasView.value && isPreview.value && enable(),
+    () => hasView.value && isAlphaPreview.value && showScatterSelection(),
   );
 
-  registerKey(Shortcuts.labelsZoom, toggleExpand);
+  registerKey(Shortcuts.audioPlayPause, togglePlayPause);
 }

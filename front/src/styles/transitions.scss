@@ -20,3 +20,7 @@ $t: 120ms;
 @mixin transition-checkboxes {
   transition: background-color $t ease-in-out, opacity $t ease-in-out;
 }
+
+@mixin transition-vumeter {
+  transition: opacity $t ease-in-out;
+}

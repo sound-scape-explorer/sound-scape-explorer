@@ -12,19 +12,19 @@ const {shortcuts} = useKeyboardShortcuts();
 
   <NGrid
     :cols="3"
-    x-gap="32"
-    y-gap="6"
+    x-gap="12"
+    y-gap="4"
   >
     <NGi
       v-for="shortcut of shortcuts"
-      class="grid"
+      :class="$style.grid"
     >
       <NTag
         :bordered="false"
+        :class="$style.key"
         :style="{
-          fontSize: shortcut.name === 'draggableCycleRev' ? '70%' : 'auto',
+          fontSize: shortcut.name === 'draggableCycleRev' ? '0.66em' : 'auto',
         }"
-        class="key"
         size="small"
       >
         {{ shortcut.keycode }}
@@ -35,32 +35,17 @@ const {shortcuts} = useKeyboardShortcuts();
   </NGrid>
 </template>
 
-<style lang="scss" scoped>
-.full {
-  display: flex;
-  width: 100%;
-}
-
-.left {
-  justify-content: flex-start;
-}
-
+<style lang="scss" module>
 .grid {
   display: grid;
-  grid-template-columns: 3em 1fr;
-  align-items: center;
-  gap: 8px;
+  grid-template-columns: $p0 * 5 + $g0 1fr;
+  gap: $p0;
 }
 
 .key {
+  font-weight: bold;
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  font-weight: bold;
-}
-
-h2 {
-  font-weight: bold;
+  justify-content: center;
 }
 </style>

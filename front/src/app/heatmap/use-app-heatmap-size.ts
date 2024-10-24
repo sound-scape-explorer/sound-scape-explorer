@@ -1,12 +1,12 @@
 import {useStorage} from '@vueuse/core';
-import {SettingDefault} from 'src/common/setting-default';
+import {settingDefaults} from 'src/common/setting-defaults';
 import {SettingKey} from 'src/common/setting-key';
 import {PLOTLY_SIZE} from 'src/constants';
 import {ref} from 'vue';
 
 const fontSize = useStorage<number>(
   SettingKey.fontSize,
-  SettingDefault.fontSize,
+  settingDefaults.fontSize,
 );
 const width = ref<number>(PLOTLY_SIZE);
 const height = ref<number>(PLOTLY_SIZE);
@@ -32,6 +32,16 @@ export function useAppHeatmapSize() {
     height.value = PLOTLY_SIZE;
   };
 
+  const double = () => {
+    width.value = width.value * 2;
+    height.value = height.value * 2;
+  };
+
+  const half = () => {
+    width.value = width.value * 0.5;
+    height.value = height.value * 0.5;
+  };
+
   return {
     fontSize: fontSize,
     width: width,
@@ -40,5 +50,7 @@ export function useAppHeatmapSize() {
     resize4by3: resize4by3,
     resize16by10: resize16by10,
     resize16by9: resize16by9,
+    double: double,
+    half: half,
   };
 }

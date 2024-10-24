@@ -17,13 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
   width: 1,
 });
 
-const paddingBottomRef = computed(() => {
-  if (!props.legendMin && !props.legendMed && !props.legendMax) {
-    return '0';
-  } else {
-    return '15px';
-  }
-});
+const widthAsPercentage = computed(() => `${props.width}%`);
 
 const tooltipTextDefaultValue = '';
 const tooltipText = ref<string>(tooltipTextDefaultValue);
@@ -34,69 +28,65 @@ const tooltipPositionString = computed<string>(
   () => `${tooltipPosition.value}%`,
 );
 
-function updateTooltipText(text: string) {
+const updateTooltipText = (text: string) => {
   if (text === tooltipText.value) {
     return;
   }
 
   tooltipText.value = text;
-}
+};
 
-function updateTooltipPosition(position: number) {
+const updateTooltipPosition = (position: number) => {
   if (position === tooltipPosition.value) {
     return;
   }
 
   tooltipPosition.value = position;
-}
+};
 
-function enterStep(index: number) {
+const enterStep = (index: number) => {
   const text = props.labels?.[index] ?? '';
   updateTooltipText(text);
   updateTooltipPosition(index);
-}
+};
 
-function leaveStep() {
+const leaveStep = () => {
   tooltipPosition.value = tooltipPositionDefaultValue;
   tooltipText.value = tooltipTextDefaultValue;
-}
+};
 </script>
 
 <template>
-  <div class="gradient">
+  <div :class="$style['gradient-shift']">
     <span
       v-for="(element, index) in props.colors"
-      :style="{'backgroundColor': element, '--width': `${width}%`}"
-      class="step"
+      :class="$style.step"
+      :style="{backgroundColor: element}"
       @mouseleave="leaveStep"
       @mouseover="() => enterStep(index)"
     />
-    <span class="domain min">{{ props.legendMin }}</span>
-    <span class="domain med">{{ props.legendMed }}</span>
-    <span class="domain max">{{ props.legendMax }}</span>
+    <span :class="[$style.domain, $style.min]">{{ props.legendMin }}</span>
+    <span :class="[$style.domain, $style.med]">{{ props.legendMed }}</span>
+    <span :class="[$style.domain, $style.max]">{{ props.legendMax }}</span>
     <span
       v-if="tooltipText !== ''"
+      :class="$style.tooltip"
       :style="{left: tooltipPositionString}"
-      class="tooltip"
       >{{ tooltipText }}</span
     >
   </div>
 </template>
 
-<style lang="scss" scoped>
-.gradient {
+<style lang="scss" module>
+.gradient-shift {
   position: relative;
-  padding-bottom: v-bind(paddingBottomRef);
-  transform: translateY(5px);
-
-  width: 100%;
+  margin-top: $p0;
 }
 
 .step {
   display: inline-block;
-  height: 20px;
-  width: var(--width);
-
+  width: v-bind(widthAsPercentage);
+  height: $p0 * 3;
   cursor: crosshair;
 
   &:hover {
@@ -105,16 +95,17 @@ function leaveStep() {
 }
 
 .domain {
+  font-size: $p0 + 1px;
+  bottom: -$p0 - 1px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 .domain.min {
   position: absolute;
   left: 0;
-  font-size: 11px;
-  bottom: 3px;
 }
 
 .domain.med {
@@ -122,32 +113,23 @@ function leaveStep() {
   right: 25%;
   left: 25%;
   text-align: center;
-  font-size: 11px;
-  bottom: 3px;
 }
 
 .domain.max {
   position: absolute;
   right: 0;
-  font-size: 11px;
-  bottom: 3px;
 }
 
 .tooltip {
-  position: absolute;
-
-  width: 3rem;
-  height: 2rem;
-
-  background-color: white;
-  border: 1px solid black;
-
-  top: calc(-2rem - 3px);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   font-size: x-small;
+  position: absolute;
+  top: -$p0 * 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $p0 * 6;
+  height: $p0 * 3;
+  border: 1px solid black;
+  background-color: white;
 }
 </style>

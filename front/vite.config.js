@@ -38,6 +38,10 @@ export default defineConfig({
           @import "src/styles/layers.scss";
           @import "src/styles/animations.scss";
           @import "src/styles/borders.scss";
+          @import "src/styles/sizes.scss";
+          @import "src/styles/scrolls.scss";
+          @import "src/styles/shadows.scss";
+          @import "src/styles/fx.scss";
         `,
       },
     },
@@ -59,8 +63,11 @@ export default defineConfig({
           'speed-to-percentage': ['speed-to-percentage'],
           'speed-to-semitones': ['speed-to-semitones'],
           'vue': ['vue'],
+          'vue-router': ['vue-router'],
           'wav-file-encoder': ['wav-file-encoder'],
           'wavesurfer.js': ['wavesurfer.js'],
+          'ionicons/icons': ['ionicons/icons'],
+          '@ionic/vue': ['@ionic/vue'],
         },
       },
     },

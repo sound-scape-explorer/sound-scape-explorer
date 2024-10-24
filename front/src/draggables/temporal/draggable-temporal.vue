@@ -2,88 +2,81 @@
 import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
+import {useExportName} from 'src/composables/use-export-name';
 import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
 import DraggableTemporalSidebar from 'src/draggables/temporal/draggable-temporal-sidebar.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
-import {useTemporal} from 'src/draggables/temporal/use-temporal';
+import {useDraggableTemporalLifecycles} from 'src/draggables/temporal/use-draggable-temporal-lifecycles';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
 import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
-import {useTemporalSites} from 'src/draggables/temporal/use-temporal-sites';
-import {watch} from 'vue';
+import {computed} from 'vue';
 
-const {indicator, isScatter, isCandles, isCondensed, isDisplay} =
+const {indicator, isCandles, isCondensed, isDisplay, display, isExpanded} =
   useDraggableTemporal();
-const {data: indicatorData} = useTemporal();
-const {candles, plot, render} = useTemporalChart();
+const {candles, plot} = useTemporalChart();
 const {period} = useTemporalCandles();
-const {current: currentSites, handleFirstLoad} = useTemporalSites();
-const {filtered} = useScatterGlobalFilter();
+const {generate} = useExportName();
 
-watch(
-  [
-    // currentIndicator, // redundant with below entry
-    indicatorData,
-    currentSites,
-    isScatter,
-    isCandles,
-    period,
-    filtered,
-  ],
-  render,
+const plotTitle = computed<string>(
+  () => `${indicator.value} - ${display.value.toLowerCase()}`,
 );
 
-watch(indicator, handleFirstLoad);
+useDraggableTemporalLifecycles();
 </script>
 
 <template>
   <AppDraggable
-    class="draggable-temporal__container"
+    :class="[$style.container, {[$style.expand]: isExpanded}]"
     draggable-key="temporal"
     suspense="view"
   >
     <DraggableTemporalSidebar />
-    <DraggableTemporalMenu />
+    <DraggableTemporalMenu :class="$style.menu" />
 
     <div
       v-if="isDisplay"
-      class="draggable-temporal__plot"
+      :class="$style.plot"
     >
       <AppPlot
         v-if="!isCandles && plot !== null"
         :colors="plot.colors"
+        :export-filename="generate('indicators', indicator)"
         :labels="plot.labels"
+        :title="plotTitle"
         :values="plot.values"
         :y-title="indicator"
         click-enabled
-        export-filename="indicators"
-        hide-range
       />
 
       <AppCandles
         v-if="isCandles && candles !== null"
         :close="candles.close"
         :condensed="isCondensed"
+        :export-filename="generate('indicators', indicator)"
         :high="candles.high"
         :labels="candles.labels"
         :low="candles.low"
         :open="candles.open"
         :timestamps="candles.timestamps"
-        :title="period.name"
+        :title="`${plotTitle} - ${period.name}`"
         :y-title="indicator"
-        export-filename="indicators"
       />
     </div>
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
-.draggable-temporal__container {
-  width: 54em;
+<style lang="scss" module>
+.container {
+  width: $s2;
 }
 
-.draggable-temporal__plot {
-  display: flex;
-  margin-top: 10px;
+.expand {
+  width: $w-max;
+}
+
+.plot {
+  overflow: visible;
+  width: 100%;
+  height: 100%;
 }
 </style>

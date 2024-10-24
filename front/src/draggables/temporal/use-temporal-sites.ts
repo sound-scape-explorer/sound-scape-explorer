@@ -1,4 +1,4 @@
-import type {TreeSelectOption} from 'naive-ui';
+import {type TreeSelectOption} from 'naive-ui';
 import {useSites} from 'src/composables/use-sites';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporal} from 'src/draggables/temporal/use-temporal';

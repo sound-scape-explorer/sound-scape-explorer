@@ -1,21 +1,21 @@
 import {useStorage} from '@vueuse/core';
-import {SettingDefault} from 'src/common/setting-default';
+import {settingDefaults} from 'src/common/setting-defaults';
 import {SettingKey} from 'src/common/setting-key';
 
 const low = useStorage<number>(
   SettingKey.colorsAlphaLow,
-  SettingDefault.colorsAlphaLow,
+  settingDefaults.colorsAlphaLow,
 );
 
 const high = useStorage<number>(
   SettingKey.colorsAlphaHigh,
-  SettingDefault.colorsAlphaHigh,
+  settingDefaults.colorsAlphaHigh,
 );
 
 export function useScatterColorAlpha() {
   const reset = () => {
-    low.value = SettingDefault.colorsAlphaLow;
-    high.value = SettingDefault.colorsAlphaHigh;
+    low.value = settingDefaults.colorsAlphaLow;
+    high.value = settingDefaults.colorsAlphaHigh;
   };
 
   return {

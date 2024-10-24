@@ -14,7 +14,7 @@ export function useIntervalSelector() {
   const {open} = useDraggables();
   const {isDetailsAutoOpen} = useClientSettings();
 
-  const select = (index: number | null) => {
+  const selectInterval = (index: number | null) => {
     if (currentIntervalIndex.value === index) {
       return;
     }
@@ -37,7 +37,7 @@ export function useIntervalSelector() {
   return {
     currentIntervalIndex: currentIntervalIndex,
     hasClicked: hasClicked,
-    selectInterval: select,
+    selectInterval: selectInterval,
     history: history,
     undo: undo,
     redo: redo,

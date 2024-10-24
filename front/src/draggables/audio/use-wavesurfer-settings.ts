@@ -1,15 +1,15 @@
 import {useStorage} from '@vueuse/core';
-import {SettingDefault} from 'src/common/setting-default';
+import {settingDefaults} from 'src/common/setting-defaults';
 import {SettingKey} from 'src/common/setting-key';
 
 const isDecibelsDisplay = useStorage<boolean>(
   SettingKey.decibelsDisplay,
-  SettingDefault.decibelsDisplay,
+  settingDefaults.decibelsDisplay,
 );
 
 const isLegendOverflow = useStorage<boolean>(
   SettingKey.legendOverflow,
-  SettingDefault.legendOverflow,
+  settingDefaults.legendOverflow,
 );
 
 export function useWavesurferSettings() {

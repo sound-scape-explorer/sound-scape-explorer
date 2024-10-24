@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useBands} from 'src/composables/use-bands';
+import {useColorLifecycles} from 'src/composables/use-color-lifecycles';
 import {useDigesters} from 'src/composables/use-digesters';
 import {useExtractors} from 'src/composables/use-extractors';
 import {useFiles} from 'src/composables/use-files';
@@ -42,6 +43,7 @@ const {read: readRelativeTrajectories} = useRelativeTrajectories();
 
 useViewWatcher();
 useIntervalFilterWatcher();
+useColorLifecycles();
 
 watch(isReady, notify);
 watch(settings, readAudioHost);

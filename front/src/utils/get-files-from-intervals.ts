@@ -1,4 +1,4 @@
-import type {IntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
+import {type IntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 
 export function getFilesFromIntervals(
   aggregatedIntervalDetails: IntervalDetails[],

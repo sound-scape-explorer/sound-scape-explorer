@@ -26,16 +26,5 @@ watch([props, plotBackground], render);
 </script>
 
 <template>
-  <span
-    ref="container"
-    class="app-candles"
-  />
+  <div ref="container" />
 </template>
-
-<style lang="scss" scoped>
-.app-candles {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

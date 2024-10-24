@@ -15,7 +15,7 @@ export const GAIN = {
   default: 100.0,
   step: 50.0,
   max: 500.0,
-  min: 0.0,
+  min: 50.0,
 };
 
 const waveDampening = 2;
@@ -51,7 +51,7 @@ export const SPECTROGRAM_COLOR_MAPS = [
 export const TRACE_WIDTH_3D = 6;
 export const TRACE_WIDTH_2D = 2;
 
-export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend';
+export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend'; // this is used as a selector to render the legend to canvas on scatter png export
 
 export const NN_EXTRACTORS = ['vgg', 'yamnet'];
 
@@ -59,7 +59,7 @@ export type ColorFlavor = 'Spectral' | 'Accent' | 'Dark2';
 export const COLOR_FLAVORS: ColorFlavor[] = ['Spectral', 'Accent', 'Dark2'];
 
 // Plotly instances for Indicators and Digesters.
-export const PLOTLY_SIZE = 600;
+export const PLOTLY_SIZE = 520;
 
 export enum PLOT_BACKGROUND {
   transparent = 'transparent',

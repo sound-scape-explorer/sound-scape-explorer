@@ -1,11 +1,11 @@
 import {useColorUser} from 'src/composables/use-color-user';
 import {useDate} from 'src/composables/use-date';
-import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
+import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {mapRange} from 'src/utils/map-range';
 
 export function useColorBy1h() {
   const {convertTimestampToDate} = useDate();
-  const {min, max} = useDraggableTime();
+  const {min, max} = useDraggableCalendar();
   const {scale} = useColorUser();
 
   const getColorByOneHour = (timestamp: number): string => {

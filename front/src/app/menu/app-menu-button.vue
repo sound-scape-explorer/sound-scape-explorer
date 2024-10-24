@@ -11,7 +11,8 @@ export interface AppMenuItemProps {
 }
 
 const props = defineProps<AppMenuItemProps>();
-const {button, handleClick, classNames} = useAppMenuButton(props);
+const {button, handleClick, isActive, isSelected, isHidden} =
+  useAppMenuButton(props);
 const {getKey} = useKeyboardShortcuts();
 </script>
 
@@ -24,7 +25,14 @@ const {getKey} = useKeyboardShortcuts();
     <template #trigger>
       <NButton
         ref="button"
-        :class="classNames"
+        :class="[
+          $style.button,
+          {
+            [$style.active]: isActive,
+            [$style.selected]: isSelected,
+            [$style.hidden]: isHidden,
+          },
+        ]"
         :disabled="props.disabled"
         size="small"
         @click="handleClick"
@@ -36,32 +44,34 @@ const {getKey} = useKeyboardShortcuts();
     </template>
 
     <div>
-      {{ props.text }} [<span class="app-menu-button__bold">
+      {{ props.text }} [<span :class="$style.bold">
         {{ getKey(props.draggableKey) }}</span
       >]
     </div>
   </NTooltip>
 </template>
 
-<style lang="scss">
-.app-menu-button {
-  backdrop-filter: blur(5px);
+<style lang="scss" module>
+.button {
   pointer-events: auto;
+
+  @include background-blur-1;
+  @include s0;
 }
 
-.app-menu-button__active {
-  background: $oliveLight;
+.active {
+  background: $olive-light;
 }
 
-.app-menu-button__bold {
+.bold {
   font-weight: bold;
 }
 
-.app-menu-button__selected {
+.selected {
   background: $olive;
 }
 
-.app-menu-button__hidden {
+.hidden {
   display: none;
 }
 </style>
