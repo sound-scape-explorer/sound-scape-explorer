@@ -47,7 +47,7 @@ const {labelProperties} = useStorageLabels();
   overflow-y: auto;
   flex-direction: column;
 
-  @include hide-scrollbar;
+  @include tiny-scrollbar;
 }
 
 .horizontal-default {

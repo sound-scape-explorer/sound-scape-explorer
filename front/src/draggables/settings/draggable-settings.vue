@@ -209,9 +209,10 @@ useDraggableSettingsProviders();
   overflow: auto;
   width: $s0;
   height: $s0;
-  padding-top: $p0;
+  margin-top: $p0;
+  padding-right: $p0;
 
-  @include hide-scrollbar;
+  @include tiny-scrollbar;
 }
 
 .spectro-colors {

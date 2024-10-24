@@ -49,6 +49,6 @@ useDraggableHeatmapsLifecycles();
   overflow: auto;
   max-height: $s2;
 
-  @include hide-scrollbar;
+  @include tiny-scrollbar;
 }
 </style>
