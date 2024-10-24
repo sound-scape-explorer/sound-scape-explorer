@@ -88,6 +88,7 @@ useDraggableSettingsProviders();
 
       <DraggableSettingsItem title="Plots: Set background color">
         <AppSelect
+          :class="$style['background-color']"
           :injection-key="InjectionKey.settingsPlotBackground"
           :options="backgrounds"
           size="small"
@@ -100,6 +101,15 @@ useDraggableSettingsProviders();
           align="left"
           size="small"
           type="number"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Scatter: Select interval border width">
+        <AppSelect
+          :class="$style['scatter-border-width']"
+          :injection-key="InjectionKey.settingsScatterBorderWidth"
+          :options="[0, 1, 2].map((n) => n.toString())"
+          size="small"
         />
       </DraggableSettingsItem>
 
@@ -217,5 +227,13 @@ useDraggableSettingsProviders();
 
 .spectro-colors {
   width: $p0 * 12;
+}
+
+.scatter-border-width {
+  width: $p0 * 8;
+}
+
+.background-color {
+  width: $p0 * 16;
 }
 </style>

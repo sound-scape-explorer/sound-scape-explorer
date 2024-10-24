@@ -27,4 +27,5 @@ export enum SettingKey {
   devAutoLoadView = 'sse-settings-devAutoLoadView',
   isSelectedPointHighlighted = 'sse-settings-isSelectedPointHighlighted',
   isDetailedExportName = 'sse-settings-isDetailedExportName',
+  scatterBorderWidth = 'sse-settings-scatterBorderWidth',
 }

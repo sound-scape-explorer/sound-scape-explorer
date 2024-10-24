@@ -7,6 +7,8 @@ import {
 import {type DraggableLabelSize} from 'src/draggables/labels/use-draggable-labels';
 import {VERSION} from 'src/version';
 
+export type ScatterBorderWidth = '0' | '1' | '2';
+
 interface SettingDefaults {
   version: string;
   plotBackground: string;
@@ -34,6 +36,7 @@ interface SettingDefaults {
   devAutoLoadView: boolean;
   isSelectedPointHighlighted: boolean;
   isDetailedExportName: boolean;
+  scatterBorderWidth: ScatterBorderWidth;
 }
 
 export const settingDefaults: SettingDefaults = {
@@ -63,4 +66,5 @@ export const settingDefaults: SettingDefaults = {
   devAutoLoadView: false,
   isSelectedPointHighlighted: true,
   isDetailedExportName: true,
+  scatterBorderWidth: '1',
 };

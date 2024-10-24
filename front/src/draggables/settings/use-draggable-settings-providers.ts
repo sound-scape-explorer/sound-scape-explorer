@@ -21,6 +21,7 @@ export function useDraggableSettingsProviders() {
     isDetailedExportName,
     isAlphaPreview,
     isBetaPreview,
+    scatterBorderWidth,
   } = useClientSettings();
 
   const {audioHost} = useStorageAudioHost();
@@ -43,6 +44,7 @@ export function useDraggableSettingsProviders() {
   useRefProvide(InjectionKey.settingsIsAlphaPreview, isAlphaPreview);
   useRefProvide(InjectionKey.settingsIsBetaPreview, isBetaPreview);
   useRefProvide(InjectionKey.settingsIsDevEnabled, isDevEnabled);
+  useRefProvide(InjectionKey.settingsScatterBorderWidth, scatterBorderWidth);
   useRefProvide(
     InjectionKey.settingsIsDetailedExportName,
     isDetailedExportName,

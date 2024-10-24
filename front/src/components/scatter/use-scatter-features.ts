@@ -22,7 +22,8 @@ export function useScatterFeatures() {
   const {low, high} = useScatterColorAlpha();
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
-  const {isWebGlScatter2d, isSelectedPointHighlighted} = useClientSettings();
+  const {isWebGlScatter2d, isSelectedPointHighlighted, scatterBorderWidth} =
+    useClientSettings();
   const {filtered} = useScatterGlobalFilter();
   const {currentIntervalIndex} = useIntervalSelector();
   const {generateHovers} = useScatterHovers();
@@ -168,7 +169,7 @@ export function useScatterFeatures() {
         colors: colors,
         line: {
           color: borders,
-          width: 2,
+          width: Number(scatterBorderWidth.value),
         },
       },
     } as Data;

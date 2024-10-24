@@ -23,8 +23,12 @@ export function useScatterLifecycles() {
     useScatter();
   const {criteria, flavor} = useColorSelection();
   const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
-  const {timeshift, isColorMapSwapped, isSelectedPointHighlighted} =
-    useClientSettings();
+  const {
+    timeshift,
+    isColorMapSwapped,
+    isSelectedPointHighlighted,
+    scatterBorderWidth,
+  } = useClientSettings();
   const {filtered: labelFiltered} = useScatterFilterLabels();
   const {filtered: timeFiltered} = useScatterFilterTime();
   const {filtered: temporalFiltered} = useScatterFilterTemporal();
@@ -61,6 +65,7 @@ export function useScatterLifecycles() {
       isColorByLabelsNumeric,
       currentIntervalIndex,
       isSelectedPointHighlighted,
+      scatterBorderWidth,
     ],
     async () => {
       if (isRendering || !isEnabled.value) {

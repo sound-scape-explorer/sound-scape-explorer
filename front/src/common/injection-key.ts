@@ -22,6 +22,7 @@ export enum InjectionKey {
   settingsDevAutoLoadView = 'settings/devAutoLoadView',
   settingsIsSelectedPointHighlighted = 'settings/isSelectedPointHighlighted',
   settingsIsDetailedExportName = 'settings/isDetailedExportName',
+  settingsScatterBorderWidth = 'settings/scatterBorderWidth',
   indicatorsList = 'indicators/list',
   indicatorsSelection = 'indicators/selection',
   indicatorsDisplay = 'indicators/display',
