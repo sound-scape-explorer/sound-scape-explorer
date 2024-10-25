@@ -11,8 +11,8 @@ export function useAppMetaKeys() {
   const {cycle, closeSelected, closeExceptCurrent, toggleAll} = useDraggables();
   const {isLocked, registerKey} = useGlobalKeyboard();
 
-  registerKey(Shortcuts.draggableClose, closeSelected);
-  registerKey(Shortcuts.draggableCloseExceptCurrent, closeExceptCurrent);
+  registerKey(Shortcuts._draggableClose, closeSelected);
+  registerKey(Shortcuts._draggableCloseExceptCurrent, closeExceptCurrent);
 
   const blockHandler = (e: KeyboardEvent) => {
     if (blockedKeys.indexOf(e.key) === -1) {

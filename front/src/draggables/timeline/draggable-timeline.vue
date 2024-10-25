@@ -6,7 +6,7 @@ import TimelineMenu from 'src/draggables/timeline/draggable-timeline-menu.vue';
 
 <template>
   <AppDraggable
-    draggable-key="timeline"
+    draggable-key="_alphaTimeline"
     suspense="view"
   >
     <div :class="$style.container">

@@ -49,7 +49,7 @@ watch(labelProperties, () => {
 <template>
   <AppDraggable
     :class="$style['draggable-selection']"
-    draggable-key="selection"
+    draggable-key="_alphaSelection3d"
   >
     <div :class="$style.buttons">
       <AppButton

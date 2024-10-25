@@ -68,7 +68,7 @@ const {menu} = useAppMenu();
       <AppMenuButton
         v-if="isAlphaPreview"
         :disabled="!hasView"
-        draggable-key="timeline"
+        draggable-key="_alphaTimeline"
         text="Timeline"
       >
         <IonIcon :icon="menu.timeline" />
@@ -133,7 +133,7 @@ const {menu} = useAppMenu();
       <AppMenuButton
         v-if="isAlphaPreview"
         :disabled="!hasView"
-        draggable-key="selection"
+        draggable-key="_alphaSelection3d"
         text="Selection"
       >
         <IonIcon :icon="menu.selection" />

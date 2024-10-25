@@ -1,13 +1,14 @@
 import {reactive, ref} from 'vue';
 
 export interface DraggablesStore {
+  _alphaSelection3d: boolean;
+  _alphaTimeline: boolean;
   open: boolean;
   settings: boolean;
   help: boolean;
   view: boolean;
   colors: boolean;
   calendar: boolean;
-  timeline: boolean;
   labels: boolean;
   audio: boolean;
   details: boolean;
@@ -15,7 +16,6 @@ export interface DraggablesStore {
   relativeTrajectories: boolean;
   temporal: boolean;
   heatmaps: boolean;
-  selection: boolean; // 3d beta
   histograms: boolean;
 }
 
@@ -29,7 +29,7 @@ const store = reactive<DraggablesStore>({
   view: false,
   colors: false,
   calendar: false,
-  timeline: false,
+  _alphaTimeline: false,
   labels: false,
   audio: false,
   details: false,
@@ -37,7 +37,7 @@ const store = reactive<DraggablesStore>({
   relativeTrajectories: false,
   temporal: false,
   heatmaps: false,
-  selection: false,
+  _alphaSelection3d: false,
   histograms: false,
 });
 

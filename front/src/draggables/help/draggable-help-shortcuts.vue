@@ -1,51 +1,27 @@
 <script lang="ts" setup="">
-import {NGi, NGrid, NTag} from 'naive-ui';
 import AppTitle from 'src/app/app-title.vue';
 import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
-import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
+import Shortcuts from 'src/draggables/help/shortcuts.vue';
+import {computed} from 'vue';
 
-const {shortcuts} = useKeyboardShortcuts();
+const {shortcuts, draggables, alphas, betas} = useKeyboardShortcuts();
+const hasAlphas = computed(() => alphas.length > 0);
+const hasBetas = computed(() => betas.length > 0);
 </script>
 
 <template>
+  <AppTitle>🪟 Draggable Shortcuts</AppTitle>
+  <Shortcuts :shortcuts="draggables" />
   <AppTitle>⌨ Keyboard Shortcuts</AppTitle>
-
-  <NGrid
-    :cols="3"
-    x-gap="12"
-    y-gap="4"
-  >
-    <NGi
-      v-for="shortcut of shortcuts"
-      :class="$style.grid"
-    >
-      <NTag
-        :bordered="false"
-        :class="$style.key"
-        :style="{
-          fontSize: shortcut.name === 'draggableCycleRev' ? '0.66em' : 'auto',
-        }"
-        size="small"
-      >
-        {{ shortcut.keycode }}
-      </NTag>
-
-      {{ capitalizeFirstLetter(shortcut.name) }}
-    </NGi>
-  </NGrid>
+  <Shortcuts :shortcuts="shortcuts" />
+  <AppTitle v-if="hasAlphas">🐤 Alpha Shortcuts</AppTitle>
+  <Shortcuts
+    v-if="hasAlphas"
+    :shortcuts="alphas"
+  />
+  <AppTitle v-if="hasBetas">🐦 Beta Shortcuts</AppTitle>
+  <Shortcuts
+    v-if="hasBetas"
+    :shortcuts="betas"
+  />
 </template>
-
-<style lang="scss" module>
-.grid {
-  display: grid;
-  grid-template-columns: $p0 * 5 + $g0 1fr;
-  gap: $p0;
-}
-
-.key {
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

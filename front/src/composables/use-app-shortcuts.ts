@@ -26,8 +26,8 @@ export function useAppShortcuts() {
   registerKey(Shortcuts.colors, () => hasView.value && toggle('colors'));
   registerKey(Shortcuts.calendar, () => hasView.value && toggle('calendar'));
   registerKey(
-    Shortcuts.timeline,
-    () => hasView.value && isAlphaPreview.value && toggle('timeline'),
+    Shortcuts._alphaTimeline,
+    () => hasView.value && isAlphaPreview.value && toggle('_alphaTimeline'),
   );
   registerKey(Shortcuts.labels, () => hasView.value && toggle('labels'));
   registerKey(Shortcuts.details, () => hasView.value && toggle('details'));
@@ -47,11 +47,11 @@ export function useAppShortcuts() {
     () => hasView.value && toggle('histograms'),
   );
   registerKey(
-    Shortcuts.selection,
-    () => hasView.value && isAlphaPreview.value && toggle('selection'),
+    Shortcuts._alphaSelection2d,
+    () => hasView.value && isAlphaPreview.value && toggle('_alphaSelection3d'),
   );
   registerKey(
-    Shortcuts.selectHotkey,
+    Shortcuts._alphaSelection3d,
     () => hasView.value && isAlphaPreview.value && showScatterSelection(),
   );
 
