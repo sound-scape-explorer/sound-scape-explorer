@@ -42,6 +42,8 @@ const store = reactive<DraggablesStore>({
 });
 
 const selected = ref<DraggableKey | null>(null);
+const selectedPrevious = ref<DraggableKey | null>(null);
+
 const active = computed<DraggableKey[]>(() => {
   let acc: DraggableKey[] = [];
 
@@ -80,8 +82,7 @@ export function useDraggables() {
     }
 
     if (selected.value === key) {
-      const next = getNextKey(key);
-      selected.value = next;
+      select(selectedPrevious.value);
     }
   };
 
@@ -91,7 +92,7 @@ export function useDraggables() {
     }
 
     if (selected.value !== key) {
-      selected.value = key;
+      select(key);
     }
 
     if (hidden.value) {
@@ -99,7 +100,16 @@ export function useDraggables() {
     }
   };
 
-  const closeActive = () => {
+  const select = (key: Nullable<DraggableKey>) => {
+    if (key === null) {
+      return;
+    }
+
+    selectedPrevious.value = selected.value;
+    selected.value = key;
+  };
+
+  const closeSelected = () => {
     if (selected.value === null) {
       return;
     }
@@ -128,7 +138,7 @@ export function useDraggables() {
       payload = getPreviousKey(selected.value);
     }
 
-    selected.value = payload;
+    select(payload);
   };
 
   const getNextKey = (
@@ -179,6 +189,6 @@ export function useDraggables() {
     cycle: cycle,
     close: close,
     closeAll: closeAll,
-    closeActive: closeActive,
+    closeSelected: closeSelected,
   };
 }
