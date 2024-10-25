@@ -20,7 +20,7 @@ import Draggables from 'src/draggables/draggables.vue';
 import {onMounted} from 'vue';
 
 const {isReady} = useStorageReady();
-const {isAlphaPreview, isBetaPreview} = useClientSettings();
+const {isAlphaPreview} = useClientSettings();
 const {checkVersions} = useClientSettingsChecker();
 const {create: createWorker} = useWorker();
 const {showImport} = useApp();
