@@ -1,4 +1,4 @@
-import {computed, reactive, ref} from 'vue';
+import {reactive, ref} from 'vue';
 
 export interface DraggablesStore {
   open: boolean;
@@ -41,29 +41,14 @@ const store = reactive<DraggablesStore>({
   histograms: false,
 });
 
-const selected = ref<DraggableKey | null>(null);
-const selectedPrevious = ref<DraggableKey | null>(null);
-
-const active = computed<DraggableKey[]>(() => {
-  let acc: DraggableKey[] = [];
-
-  for (const [key, value] of Object.entries(store)) {
-    if (value) {
-      acc = [...acc, key as DraggableKey];
-    }
-  }
-
-  return acc;
-});
-
 const hidden = ref<boolean>(false);
+const stack = ref<DraggableKey[]>([]);
 
 export function useDraggables() {
   const toggle = (key: DraggableKey): void => {
-    const isActiveButBackground =
-      active.value.includes(key) && selected.value !== key;
+    const isBackground = stack.value.indexOf(key) !== 0;
 
-    if (isActiveButBackground) {
+    if (isBackground) {
       open(key);
       return;
     }
@@ -81,9 +66,7 @@ export function useDraggables() {
       store[key] = false;
     }
 
-    if (selected.value === key) {
-      select(selectedPrevious.value);
-    }
+    removeStack(key);
   };
 
   const open = (key: DraggableKey) => {
@@ -91,30 +74,27 @@ export function useDraggables() {
       store[key] = true;
     }
 
-    if (selected.value !== key) {
-      select(key);
-    }
-
     if (hidden.value) {
       toggleAll();
     }
+
+    addStack(key);
   };
 
-  const select = (key: Nullable<DraggableKey>) => {
-    if (key === null) {
-      return;
+  const addStack = (key: DraggableKey) => {
+    const i = stack.value.indexOf(key);
+    if (i !== -1) {
+      stack.value.splice(i, 1);
     }
-
-    selectedPrevious.value = selected.value;
-    selected.value = key;
+    stack.value.unshift(key);
   };
 
-  const closeSelected = () => {
-    if (selected.value === null) {
-      return;
-    }
+  const removeStack = (key: DraggableKey) => {
+    const i = stack.value.indexOf(key);
 
-    close(selected.value);
+    if (i !== -1) {
+      stack.value.splice(i, 1);
+    }
   };
 
   const closeAll = () => {
@@ -126,61 +106,30 @@ export function useDraggables() {
   };
 
   const cycle = (isReverse = false) => {
-    if (active.value.length < 2 || selected.value === null) {
+    const l = stack.value.length;
+
+    if (l < 2) {
       return;
     }
 
-    let payload: DraggableKey | null;
+    let newIndex: number;
 
-    if (!isReverse) {
-      payload = getNextKey(selected.value);
+    if (isReverse) {
+      newIndex =
+        (stack.value.length - 1 + stack.value.indexOf(stack.value[0])) %
+        stack.value.length;
     } else {
-      payload = getPreviousKey(selected.value);
+      newIndex = (stack.value.indexOf(stack.value[0]) + 1) % stack.value.length;
     }
 
-    select(payload);
-  };
-
-  const getNextKey = (
-    key: keyof DraggablesStore,
-  ): keyof DraggablesStore | null => {
-    const l = active.value.length;
-    if (l === 0) {
-      return null;
-    }
-
-    const i = active.value.indexOf(key);
-    const next = i + 1;
-
-    if (next >= l) {
-      return active.value[0];
-    }
-
-    return active.value[next];
-  };
-
-  const getPreviousKey = (
-    key: keyof DraggablesStore,
-  ): keyof DraggablesStore | null => {
-    const l = active.value.length;
-    if (l === 0) {
-      return null;
-    }
-
-    const i = active.value.indexOf(key);
-    const previous = i - 1;
-
-    if (previous < 0) {
-      return active.value[l - 1];
-    }
-
-    return active.value[previous];
+    const nextKey = stack.value[newIndex];
+    open(nextKey);
   };
 
   const toggleAll = () => (hidden.value = !hidden.value);
+  const closeSelected = () => close(stack.value[0]);
 
   return {
-    selected: selected,
     store: store,
     hidden: hidden,
     open: open,
@@ -190,5 +139,6 @@ export function useDraggables() {
     close: close,
     closeAll: closeAll,
     closeSelected: closeSelected,
+    stack: stack,
   };
 }

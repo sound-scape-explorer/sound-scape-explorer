@@ -10,10 +10,10 @@ export function useAppDraggable(props: AppDraggableProps) {
   const storage = useLocalStorage(storageKey, {x: 100, y: 100});
   const drag = ref<HTMLElement | null>(null);
 
-  const {store, selected, hidden} = useDraggables();
+  const {store, stack, hidden} = useDraggables();
   const isZoomed = ref<boolean>(false);
   const isClosed = computed(() => !store[props.draggableKey]);
-  const isSelected = computed(() => selected.value === props.draggableKey);
+  const isSelected = computed(() => stack.value[0] === props.draggableKey);
 
   return {
     container: container,

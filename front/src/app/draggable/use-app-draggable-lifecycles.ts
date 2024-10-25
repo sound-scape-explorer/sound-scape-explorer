@@ -13,7 +13,6 @@ interface Props {
   y: Ref<number>;
 }
 
-// should be instantiated once!
 export function useAppDraggableLifecycles({
   props,
   container,
@@ -21,19 +20,14 @@ export function useAppDraggableLifecycles({
   x,
   y,
 }: Props) {
-  const {store, selected} = useDraggables();
+  const {store, open: openDraggable} = useDraggables();
   const {width, height} = useWindowSize();
   const {check} = useAppDraggableBounds(container);
   const {pressed} = useMousePressed({target: drag});
   const {lock, unlock} = useScatterCamera();
 
   const open = () => {
-    // noinspection PointlessBooleanExpressionJS,JSIncompatibleTypesComparison
-    if (
-      selected.value !== props.draggableKey ||
-      store[props.draggableKey] === false ||
-      window.visualViewport === null
-    ) {
+    if (store[props.draggableKey] === false || window.visualViewport === null) {
       return;
     }
 
@@ -47,10 +41,7 @@ export function useAppDraggableLifecycles({
     }
 
     lock();
-
-    if (selected.value !== props.draggableKey) {
-      selected.value = props.draggableKey;
-    }
+    openDraggable(props.draggableKey);
   };
 
   const resize = () => check(x, y);

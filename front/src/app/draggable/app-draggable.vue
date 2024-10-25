@@ -11,6 +11,7 @@ import {useAppDraggableSuspense} from 'src/app/draggable/use-app-draggable-suspe
 import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
+import {computed} from 'vue';
 
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
@@ -28,7 +29,7 @@ const {check} = useAppDraggableBounds(container);
 
 const {menu} = useAppMenu();
 const icon = menu[props.draggableKey] ?? null;
-const {close} = useDraggables();
+const {close, stack} = useDraggables();
 
 const {x, y, style} = useDraggable(container, {
   initialValue: {x: storage.value.x, y: storage.value.y},
@@ -50,6 +51,12 @@ useAppDraggableLifecycles({
   x: x,
   y: y,
 });
+
+const zIndex = computed(() => {
+  const i = stack.value.indexOf(props.draggableKey);
+  const z = 40;
+  return z - i;
+});
 </script>
 
 <template>
@@ -60,7 +67,6 @@ useAppDraggableLifecycles({
       {
         [$style.zoomed]: isZoomed,
         [$style.closed]: isClosed,
-        [$style.selected]: isSelected,
         [$style.hidden]: hidden,
       },
     ]"
@@ -109,7 +115,7 @@ useAppDraggableLifecycles({
 <style lang="scss" module>
 .container {
   position: fixed;
-  z-index: $app-draggable-index-default-layer;
+  z-index: v-bind(zIndex);
   justify-content: flex-start;
   padding: $p0 $p0 $p0 $p0 * 5;
   user-select: none;
@@ -138,7 +144,6 @@ useAppDraggableLifecycles({
 
 .close-button {
   position: fixed;
-  z-index: $app-draggable-index-buttons-layer;
   top: $p0;
   left: $p0;
 }
@@ -219,10 +224,6 @@ hr {
       height: $p0 * 2;
     }
   }
-}
-
-.selected {
-  z-index: $app-draggable-index-selected-layer;
 }
 
 .active {
