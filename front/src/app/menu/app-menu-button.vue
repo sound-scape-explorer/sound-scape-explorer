@@ -55,12 +55,15 @@ const {getKey} = useKeyboardShortcuts();
 .button {
   pointer-events: auto;
 
+  @include transition-app-menu-button;
   @include background-blur-1;
   @include s0;
 }
 
 .active {
   background: $olive-light;
+
+  @include s0d;
 }
 
 .bold {

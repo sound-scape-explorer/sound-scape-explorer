@@ -24,3 +24,7 @@ $t: 120ms;
 @mixin transition-vumeter {
   transition: opacity $t ease-in-out;
 }
+
+@mixin transition-app-menu-button {
+  transition: background-color $t ease, box-shadow $t ease;
+}
