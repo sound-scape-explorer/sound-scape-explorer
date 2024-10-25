@@ -10,7 +10,6 @@ import {type Digester} from 'src/composables/use-digesters';
 import {type Extractor} from 'src/composables/use-extractors';
 import {type File as FileConfig} from 'src/composables/use-files';
 import {type Integration} from 'src/composables/use-integrations';
-import {type AppRange} from 'src/composables/use-ranges';
 import {type ReducerFromStorage} from 'src/composables/use-reducers';
 import {type RelativeTrajectory} from 'src/composables/use-relative-trajectories';
 import {type Site} from 'src/composables/use-sites';
@@ -22,6 +21,7 @@ import {
 import {type AggregatedSite} from 'src/composables/use-storage-aggregated-sites';
 import {type Digested} from 'src/composables/use-storage-digested';
 import {type Labels} from 'src/composables/use-storage-labels';
+import {type AppRange} from 'src/composables/use-storage-ranges';
 import {type ReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {type Trajectory} from 'src/composables/use-trajectories';
 import {

@@ -17,13 +17,14 @@ import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {useViewState} from 'src/composables/use-view-state';
 import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
 import {ref} from 'vue';
 
 const step = ref<number>(0); // percents
-const total = 7;
+const total = 8;
 
 export function useViewLoader() {
   const {close} = useDraggables();
@@ -35,6 +36,7 @@ export function useViewLoader() {
   const {readAggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {readAggregatedLabels} = useStorageAggregatedLabels();
   const {readReducedFeatures} = useStorageReducedFeatures();
+  const {readRanges} = useStorageRanges();
   const {generateColorScale} = useScatterColorScale();
   const {buildSelection, selection: labelSelection} = useLabelSelection();
   const {isEnabled} = useScatterTraces();
@@ -88,21 +90,25 @@ export function useViewLoader() {
     await readAggregatedTimestamps();
     updateStep(3);
 
+    updateReading('ranges');
+    await readRanges();
+    updateStep(4);
+
     updateReading('sites');
     await readAggregatedSites();
-    updateStep(4);
+    updateStep(5);
 
     updateReading('intervals');
     await readAggregatedIntervalDetails();
-    updateStep(5);
+    updateStep(6);
 
     updateReading('labels');
     await readAggregatedLabels();
-    updateStep(6);
+    updateStep(7);
 
     updateReading('reduced features');
     await readReducedFeatures();
-    updateStep(7);
+    updateStep(8);
 
     await generateColorScale();
     buildSelection();

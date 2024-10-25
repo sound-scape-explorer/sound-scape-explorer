@@ -3,13 +3,13 @@ import {NDatePicker} from 'naive-ui';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
-import {useRanges} from 'src/composables/use-ranges';
 import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {generateUniqueRangeSlug} from 'src/utils/generate-unique-range-slug';
 import {computed, onMounted, ref, watch} from 'vue';
 
 const {start, end, left, right} = useCalendarRange();
-const {ranges} = useRanges();
+const {ranges} = useStorageRanges();
 const names = computed(
   () => ranges.value?.map((r) => generateUniqueRangeSlug(r)) ?? [],
 );
