@@ -24,7 +24,10 @@ import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
 import {ref} from 'vue';
 
 const step = ref<number>(0); // percents
-const total = 8;
+
+type StepText = string;
+type StepReader = () => Promise<void>;
+type Step = [StepText, StepReader];
 
 export function useViewLoader() {
   const {close} = useDraggables();
@@ -52,8 +55,20 @@ export function useViewLoader() {
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
 
+  const steps: Step[] = [
+    ['labels', readLabels],
+    ['features', readAggregatedFeatures],
+    ['indicators', readAggregatedIndicators],
+    ['timestamps', readAggregatedTimestamps],
+    ['ranges', readRanges],
+    ['sites', readAggregatedSites],
+    ['intervals', readAggregatedIntervalDetails],
+    ['interval labels', readAggregatedLabels],
+    ['reduced features', readReducedFeatures],
+  ];
+
   const updateStep = (current: number) => {
-    step.value = parseInt(((current / total) * 100).toString());
+    step.value = parseInt(((current / steps.length) * 100).toString());
   };
 
   const updateReading = (current: string) => {
@@ -74,41 +89,13 @@ export function useViewLoader() {
     lock();
     console.log('View: Load');
 
-    updateReading('labels');
-    await readLabels();
-    updateStep(0);
+    for (let s = 0; s < steps.length; s += 1) {
+      const [text, reader] = steps[s];
 
-    updateReading('features');
-    await readAggregatedFeatures();
-    updateStep(1);
-
-    updateReading('indicators');
-    await readAggregatedIndicators();
-    updateStep(2);
-
-    updateReading('timestamps');
-    await readAggregatedTimestamps();
-    updateStep(3);
-
-    updateReading('ranges');
-    await readRanges();
-    updateStep(4);
-
-    updateReading('sites');
-    await readAggregatedSites();
-    updateStep(5);
-
-    updateReading('intervals');
-    await readAggregatedIntervalDetails();
-    updateStep(6);
-
-    updateReading('labels');
-    await readAggregatedLabels();
-    updateStep(7);
-
-    updateReading('reduced features');
-    await readReducedFeatures();
-    updateStep(8);
+      updateReading(text);
+      await reader();
+      updateStep(s);
+    }
 
     await generateColorScale();
     buildSelection();
