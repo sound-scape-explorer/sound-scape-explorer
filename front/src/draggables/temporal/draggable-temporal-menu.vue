@@ -91,7 +91,7 @@ watch(indicator, update);
       />
     </div>
 
-    <h2>Display</h2>
+    <h2>To remove</h2>
 
     <div :class="$style.row">
       <div>
@@ -100,16 +100,25 @@ watch(indicator, update);
           :injection-key="InjectionKey.indicatorsSelection"
           :options="selections"
           size="small"
-          tooltip="Current selection"
-          tooltip-placement="top"
         />
+      </div>
+    </div>
 
+    <h2>Filter</h2>
+
+    <div :class="$style.row">
+      <DraggableTemporalMenuFilters />
+    </div>
+
+    <h2>Display</h2>
+
+    <div :class="$style.row">
+      <div>
         <AppSelect
+          :class="$style.display"
           :injection-key="InjectionKey.indicatorsDisplay"
           :options="displays"
           size="small"
-          tooltip="Rendering style"
-          tooltip-placement="top"
         />
 
         <NButtonGroup v-if="isCandles">
@@ -145,12 +154,6 @@ watch(indicator, update);
         />
       </AppButton>
     </div>
-
-    <h2>Filter</h2>
-
-    <div :class="$style.row">
-      <DraggableTemporalMenuFilters />
-    </div>
   </AppDraggableMenu>
 </template>
 
@@ -174,5 +177,9 @@ watch(indicator, update);
 
 .export {
   width: $p0 * 3;
+}
+
+.display {
+  width: $p0 * 16;
 }
 </style>

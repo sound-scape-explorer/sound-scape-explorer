@@ -25,8 +25,6 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
       placeholder="From"
       size="small"
       style="width: 9em"
-      tooltip="From"
-      tooltip-placement="bottom"
       type="number"
     />
 
@@ -37,8 +35,6 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
       placeholder="To"
       size="small"
       style="width: 9em"
-      tooltip="To"
-      tooltip-placement="bottom"
       type="number"
     />
 
