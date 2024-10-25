@@ -58,6 +58,14 @@ const hidden = ref<boolean>(false);
 
 export function useDraggables() {
   const toggle = (key: DraggableKey): void => {
+    const isActiveButBackground =
+      active.value.includes(key) && selected.value !== key;
+
+    if (isActiveButBackground) {
+      open(key);
+      return;
+    }
+
     if (store[key]) {
       close(key);
       return;
