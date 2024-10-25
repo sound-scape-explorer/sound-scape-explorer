@@ -24,8 +24,8 @@ export function useOverviewDrawer() {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, width.value, height.value);
 
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 1;
+    ctx.fillStyle = 'red';
+    const g = 1;
 
     // interests
     for (const element of elements.value) {
@@ -45,10 +45,12 @@ export function useOverviewDrawer() {
         width.value,
       );
 
-      ctx.beginPath();
-      ctx.moveTo(windowStart, 0);
-      ctx.lineTo(windowEnd, height.value);
-      ctx.stroke();
+      ctx.fillRect(
+        windowStart - g,
+        0,
+        windowEnd - windowStart - g,
+        height.value,
+      );
     }
   };
 
