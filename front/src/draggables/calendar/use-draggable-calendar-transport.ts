@@ -1,5 +1,9 @@
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
-import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
+import {TIMEOUT} from 'src/constants';
+import {
+  type CalendarDuration,
+  useDraggableCalendar,
+} from 'src/draggables/calendar/use-draggable-calendar';
 import {ref} from 'vue';
 
 let interval: null | number = null;
@@ -7,11 +11,24 @@ let interval: null | number = null;
 const duration = ref<number>(0);
 
 export function useDraggableCalendarTransport() {
-  const {isActive, isPlaying} = useDraggableCalendar();
+  const {isPlaying} = useDraggableCalendar();
   const {left, right} = useCalendarRange();
 
-  const setWindowDuration = (newDuration: number) => {
-    duration.value = newDuration * 1000;
+  const setWindowDuration = (d: CalendarDuration) => {
+    switch (d.duration) {
+      case 'double': {
+        duration.value *= 2;
+        break;
+      }
+      case 'half': {
+        duration.value /= 2;
+        break;
+      }
+      default: {
+        duration.value = d.duration * 1000;
+      }
+    }
+
     right.value = left.value + duration.value;
   };
 
@@ -24,25 +41,25 @@ export function useDraggableCalendarTransport() {
     button.blur();
   };
 
-  const togglePlaying = (event?: MouseEvent) => {
-    if (!isActive.value) {
+  const handleToggle = () => {
+    if (isPlaying.value) {
+      stop();
+      isPlaying.value = false;
       return;
     }
 
-    isPlaying.value = !isPlaying.value;
-    blurButton(event);
+    start();
+    isPlaying.value = true;
   };
 
-  const skipTimeForward = (event?: MouseEvent) => {
+  const skipTimeForward = () => {
     left.value += duration.value;
     right.value += duration.value;
-    blurButton(event);
   };
 
-  const skipTimeBackward = (event?: MouseEvent) => {
+  const skipTimeBackward = () => {
     left.value -= duration.value;
     right.value -= duration.value;
-    blurButton(event);
   };
 
   // TODO: these transport actions should manipulate isPlaying.value instead of the toggler...
@@ -51,7 +68,7 @@ export function useDraggableCalendarTransport() {
       return;
     }
 
-    interval = setInterval(skipTimeForward, 500);
+    interval = setInterval(skipTimeForward, TIMEOUT * 2);
   };
 
   const stop = () => {
@@ -70,11 +87,9 @@ export function useDraggableCalendarTransport() {
   return {
     setWindowDuration: setWindowDuration,
     blurButton: blurButton,
-    togglePlaying: togglePlaying,
+    handleToggle: handleToggle,
     skipTimeForward: skipTimeForward,
     skipTimeBackward: skipTimeBackward,
-    start: start,
-    stop: stop,
     handleDateStartUpdate: handleDateStartUpdate,
   };
 }

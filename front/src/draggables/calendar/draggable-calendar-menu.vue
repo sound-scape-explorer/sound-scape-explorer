@@ -22,7 +22,7 @@ const {isActive, durations, isPlaying} = useDraggableCalendar();
 
 const {left, right} = useCalendarRange();
 
-const {setWindowDuration, skipTimeForward, skipTimeBackward, togglePlaying} =
+const {setWindowDuration, skipTimeForward, skipTimeBackward, handleToggle} =
   useDraggableCalendarTransport();
 
 useRefProvide(InjectionKey.calendarActive, isActive);
@@ -48,7 +48,7 @@ const seconds = computed(() => {
       <NButtonGroup>
         <AppButton
           v-for="d in durations"
-          :handle-click="() => setWindowDuration(d.duration)"
+          :handle-click="() => setWindowDuration(d)"
           size="tiny"
         >
           {{ d.name }}
@@ -69,7 +69,7 @@ const seconds = computed(() => {
         </AppButton>
 
         <AppButton
-          :handle-click="togglePlaying"
+          :handle-click="handleToggle"
           small-tooltip
         >
           <IonIcon

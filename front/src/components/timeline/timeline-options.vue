@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {NDatePicker} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
@@ -71,31 +72,37 @@ watch(names, () => {
 </script>
 
 <template>
-  <div :class="$style.container">
-    <AppSelect
-      :class="$style.select"
-      :injection-key="InjectionKey.calendarRange"
-      :options="names"
-    />
+  <AppDraggableMenu>
+    <span>Range</span>
+    <div :class="$style.container">
+      <AppSelect
+        :class="$style.select"
+        :injection-key="InjectionKey.calendarRange"
+        :options="names"
+      />
 
-    <NDatePicker
-      :class="$style.date"
-      :on-update:value="setLeft"
-      :value="left"
-      size="tiny"
-      type="datetime"
-    />
+      <AppButton :handle-click="handleOverdrive">overdrive</AppButton>
+    </div>
 
-    <NDatePicker
-      :class="$style.date"
-      :on-update:value="setRight"
-      :value="right"
-      size="tiny"
-      type="datetime"
-    />
+    <span>Dates</span>
+    <div :class="$style.container">
+      <NDatePicker
+        :class="$style.date"
+        :on-update:value="setLeft"
+        :value="left"
+        size="tiny"
+        type="datetime"
+      />
 
-    <AppButton :handle-click="handleOverdrive">overdrive</AppButton>
-  </div>
+      <NDatePicker
+        :class="$style.date"
+        :on-update:value="setRight"
+        :value="right"
+        size="tiny"
+        type="datetime"
+      />
+    </div>
+  </AppDraggableMenu>
 </template>
 
 <style lang="scss" module>

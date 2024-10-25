@@ -4,11 +4,8 @@ import Timeline from 'src/components/timeline/timeline.vue';
 import DraggableCalendarMenu from 'src/draggables/calendar/draggable-calendar-menu.vue';
 import DraggableCalendarSidebar from 'src/draggables/calendar/draggable-calendar-sidebar.vue';
 import {useDraggableCalendarExpand} from 'src/draggables/calendar/use-draggable-calendar-expand';
-import {useDraggableCalendarLifecycles} from 'src/draggables/calendar/use-draggable-calendar-lifecycles';
 
 const {isExpanded} = useDraggableCalendarExpand();
-
-useDraggableCalendarLifecycles();
 </script>
 
 <template>
