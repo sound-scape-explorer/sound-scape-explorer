@@ -1,4 +1,5 @@
 import {useOverviewConstants} from 'src/components/timeline/overview/use-overview-constants';
+import {useOverviewElements} from 'src/components/timeline/overview/use-overview-elements';
 import {useOverviewMouse} from 'src/components/timeline/overview/use-overview-mouse';
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
@@ -11,6 +12,7 @@ export function useOverviewDrawer() {
   const {left, right, start, end} = useCalendarRange();
   const {hover, drag, isHovering} = useOverviewMouse().overview;
   const {handleWidth} = useOverviewConstants();
+  const {elements} = useOverviewElements();
 
   const drawOverviewBackground = () => {
     if (context.value === null) {
@@ -22,22 +24,30 @@ export function useOverviewDrawer() {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, width.value, height.value);
 
-    ctx.strokeStyle = '#f0f0f0';
+    ctx.strokeStyle = 'red';
     ctx.lineWidth = 1;
 
-    // vertical lines
-    for (let x = 0; x < width.value; x += 50) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height.value);
-      ctx.stroke();
-    }
+    // interests
+    for (const element of elements.value) {
+      const windowStart = mapRange(
+        element.start,
+        start.value,
+        end.value,
+        0,
+        width.value,
+      );
 
-    // horizontal line
-    for (let y = 0; y < height.value; y += 20) {
+      const windowEnd = mapRange(
+        element.end,
+        start.value,
+        end.value,
+        0,
+        width.value,
+      );
+
       ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width.value, y);
+      ctx.moveTo(windowStart, 0);
+      ctx.lineTo(windowEnd, height.value);
       ctx.stroke();
     }
   };

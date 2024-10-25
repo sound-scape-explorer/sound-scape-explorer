@@ -5,15 +5,15 @@ import {
 } from 'src/components/timeline/use-timeline-elements';
 import {ref} from 'vue';
 
-const indices = ref<number[]>([]);
 const elements = ref<TimelineElement[]>([]);
+const indices = ref<number[]>([]);
 
-export function useBodyElements() {
-  const {left, right} = useCalendarRange();
+export function useOverviewElements() {
   const {getCollectedIndices, createElements} = useTimelineElements();
+  const {start, end} = useCalendarRange();
 
   const update = () => {
-    indices.value = getCollectedIndices(left, right);
+    indices.value = getCollectedIndices(start, end);
     elements.value = createElements(indices);
   };
 
