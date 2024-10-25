@@ -46,7 +46,7 @@ const openDiscord = () => window.open(LINK_DISCORD);
         grow-col
         size="small"
       >
-        Open Discord
+        Join Discord
       </AppButton>
     </div>
 
