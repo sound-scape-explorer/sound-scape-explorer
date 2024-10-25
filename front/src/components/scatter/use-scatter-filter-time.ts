@@ -21,7 +21,7 @@ export function useScatterFilterTime() {
 
     // Unix time in seconds
     const t = aggregatedTimestamps.value[index];
-    return t >= left.value && t <= right.value;
+    return t >= left.value && t < right.value;
   };
 
   const filter = (): void => {
