@@ -2,23 +2,11 @@
 import {IonIcon} from '@ionic/vue';
 import {chevronExpand} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
-import AppInfo from 'src/app/app-info.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import {useDraggableCalendarExpand} from 'src/draggables/calendar/use-draggable-calendar-expand';
-import {useDraggableCalendarInfo} from 'src/draggables/calendar/use-draggable-calendar-info';
-import {computed, ref} from 'vue';
 
-const {excluded, collected} = useDraggableCalendarInfo();
 const {toggle} = useDraggableCalendarExpand();
-const isFlipped = ref<boolean>(false);
-
-const tooltip = computed(() =>
-  isFlipped.value ? 'Points excluded' : 'Points collected',
-);
-const color = computed(() => (isFlipped.value ? 'default' : 'active'));
-const payload = computed(() => (isFlipped.value ? excluded : collected));
-
-const flip = () => (isFlipped.value = !isFlipped.value);
 </script>
 
 <template>
@@ -29,13 +17,8 @@ const flip = () => (isFlipped.value = !isFlipped.value);
         :icon="chevronExpand"
       />
     </AppButton>
-    <AppInfo
-      :color="color"
-      :handle-click="flip"
-      :tooltip="tooltip"
-    >
-      {{ payload }}
-    </AppInfo>
+
+    <FilteringInfo />
   </AppDraggableSidebar>
 </template>
 

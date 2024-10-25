@@ -3,6 +3,7 @@ import {IonIcon} from '@ionic/vue';
 import {chevronExpand, eyeOffOutline, eyeOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 
 const {hasIndicator, isDisplay, toggleDisplay, toggleExpanded} =
@@ -11,6 +12,20 @@ const {hasIndicator, isDisplay, toggleDisplay, toggleExpanded} =
 
 <template>
   <AppDraggableSidebar>
+    <AppButton
+      :disabled="!hasIndicator"
+      :handle-click="toggleExpanded"
+      size="tiny"
+      small-tooltip
+      tooltip="Expand horizontally"
+      tooltip-placement="left"
+    >
+      <IonIcon
+        :class="$style.rotate"
+        :icon="chevronExpand"
+      />
+    </AppButton>
+
     <AppButton
       :disabled="!hasIndicator"
       :handle-click="toggleDisplay"
@@ -28,19 +43,7 @@ const {hasIndicator, isDisplay, toggleDisplay, toggleExpanded} =
       />
     </AppButton>
 
-    <AppButton
-      :disabled="!hasIndicator"
-      :handle-click="toggleExpanded"
-      size="tiny"
-      small-tooltip
-      tooltip="Expand horizontally"
-      tooltip-placement="left"
-    >
-      <IonIcon
-        :class="$style.rotate"
-        :icon="chevronExpand"
-      />
-    </AppButton>
+    <FilteringInfo />
   </AppDraggableSidebar>
 </template>
 

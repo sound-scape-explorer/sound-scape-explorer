@@ -139,7 +139,10 @@ watch(indicator, update);
         tooltip="Export raw .csv"
         tooltip-placement="bottom"
       >
-        <IonIcon :icon="downloadOutline" />
+        <IonIcon
+          :class="$style.export"
+          :icon="downloadOutline"
+        />
       </AppButton>
     </div>
 
@@ -167,5 +170,9 @@ watch(indicator, update);
 
 .selection {
   width: $p0 * 13;
+}
+
+.export {
+  width: $p0 * 3;
 }
 </style>

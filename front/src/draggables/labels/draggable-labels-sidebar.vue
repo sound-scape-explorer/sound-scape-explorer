@@ -2,13 +2,11 @@
 import {IonIcon} from '@ionic/vue';
 import {chevronExpand} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
-import AppInfo from 'src/app/app-info.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
-import {useDraggableLabelsInfo} from 'src/draggables/labels/use-draggable-labels-info';
 
 const {cycleHorizontal, cycleVertical} = useDraggableLabels();
-const {count} = useDraggableLabelsInfo();
 </script>
 
 <template>
@@ -36,9 +34,7 @@ const {count} = useDraggableLabelsInfo();
       <IonIcon :icon="chevronExpand" />
     </AppButton>
 
-    <AppInfo tooltip="Points excluded">
-      {{ count }}
-    </AppInfo>
+    <FilteringInfo />
   </AppDraggableSidebar>
 </template>
 
