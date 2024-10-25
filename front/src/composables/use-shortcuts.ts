@@ -5,6 +5,7 @@ export enum Shortcuts {
   draggableCycleRecent = 'Tab',
   draggableCycleRev = 'Shift+Tab',
   draggableClose = 'x',
+  draggableCloseExceptCurrent = 'X',
   open = 'o',
   settings = ',',
   help = '?',

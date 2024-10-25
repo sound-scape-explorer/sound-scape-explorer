@@ -105,25 +105,34 @@ export function useDraggables() {
     }
   };
 
+  const closeExceptCurrent = () => {
+    if (stack.value.length < 2) {
+      return;
+    }
+
+    const pool = stack.value.slice(1, stack.value.length);
+
+    for (const key of pool) {
+      close(key);
+    }
+  };
+
   const cycle = (isReverse = false) => {
     const l = stack.value.length;
-
     if (l < 2) {
       return;
     }
 
-    let newIndex: number;
+    let n: number;
 
     if (isReverse) {
-      newIndex =
-        (stack.value.length - 1 + stack.value.indexOf(stack.value[0])) %
-        stack.value.length;
+      n = (l - 1 + stack.value.indexOf(stack.value[0])) % l;
     } else {
-      newIndex = (stack.value.indexOf(stack.value[0]) + 1) % stack.value.length;
+      n = (stack.value.indexOf(stack.value[0]) + 1) % l;
     }
 
-    const nextKey = stack.value[newIndex];
-    open(nextKey);
+    const next = stack.value[n];
+    open(next);
   };
 
   const toggleAll = () => (hidden.value = !hidden.value);
@@ -139,6 +148,7 @@ export function useDraggables() {
     close: close,
     closeAll: closeAll,
     closeSelected: closeSelected,
+    closeExceptCurrent: closeExceptCurrent,
     stack: stack,
   };
 }

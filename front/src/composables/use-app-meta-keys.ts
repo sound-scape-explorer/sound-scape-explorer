@@ -8,10 +8,11 @@ const blockedKeys: KeyboardEvent['key'][] = ['Tab']; // prevent default behaviou
 
 export function useAppMetaKeys() {
   const {tab, escape, shift} = useMagicKeys();
-  const {cycle, closeSelected, toggleAll} = useDraggables();
+  const {cycle, closeSelected, closeExceptCurrent, toggleAll} = useDraggables();
   const {isLocked, registerKey} = useGlobalKeyboard();
 
   registerKey(Shortcuts.draggableClose, closeSelected);
+  registerKey(Shortcuts.draggableCloseExceptCurrent, closeExceptCurrent);
 
   const blockHandler = (e: KeyboardEvent) => {
     if (blockedKeys.indexOf(e.key) === -1) {
