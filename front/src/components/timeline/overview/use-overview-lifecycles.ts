@@ -20,7 +20,15 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
   onMounted(render);
   watch([container, canvas], mount);
   watch([width, height], () => updateSize({width: width, height: height}));
-  watch([left, right, isActive], filterByTime);
+  watch([left, right, isActive], () => {
+    if (!isActive.value) {
+      return;
+    }
+
+    filterByTime();
+  });
+
+  watch(isActive, filterByTime);
 
   // watch(width, render);
   // watch([windowStart, windowEnd], render);
