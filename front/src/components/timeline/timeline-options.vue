@@ -33,7 +33,7 @@ const handleRangeUpdate = () => {
   );
 
   if (results.length !== 1) {
-    throw new Error('Could not find range');
+    return;
   }
 
   const result = results[0];
@@ -74,7 +74,7 @@ watch(names, () => {
 <template>
   <AppDraggableMenu>
     <span>Range</span>
-    <div :class="$style.container">
+    <div :class="$style.row">
       <AppSelect
         :class="$style.select"
         :injection-key="InjectionKey.calendarRange"
@@ -85,7 +85,7 @@ watch(names, () => {
     </div>
 
     <span>Dates</span>
-    <div :class="$style.container">
+    <div :class="$style.row">
       <NDatePicker
         :class="$style.date"
         :on-update:value="setLeft"
@@ -106,7 +106,7 @@ watch(names, () => {
 </template>
 
 <style lang="scss" module>
-.container {
+.row {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,6 +119,6 @@ watch(names, () => {
 }
 
 .date {
-  width: max($p0 * 48, 40%);
+  width: 100%;
 }
 </style>
