@@ -14,8 +14,8 @@ const durations: CalendarDuration[] = [
   {name: '4h', duration: 60 * 60 * 4},
   {name: '1d', duration: 60 * 60 * 24},
   {name: '1w', duration: 60 * 60 * 24 * 7},
-  {name: '*2', duration: 'double'},
   {name: '/2', duration: 'half'},
+  {name: '*2', duration: 'double'},
 ];
 
 const duration = ref<CalendarDuration['duration']>(durations[0].duration);
