@@ -1,3 +1,4 @@
+import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {useOverviewMouse} from 'src/components/timeline/overview/use-overview-mouse';
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
@@ -7,6 +8,7 @@ export function useOverviewHandlers() {
   const {isDragging, drag, hover, isHovering, dragStartX, detect} =
     useOverviewMouse().overview;
   const {start, end, moveCursor, moveStart, moveEnd} = useCalendarRange();
+  const {lock, unlock} = useScatterCamera();
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!canvas.value) {
@@ -48,7 +50,7 @@ export function useOverviewHandlers() {
   const handleMouseUp = () => {
     isDragging.value = false;
     drag.value = null;
-    // update timeline-content from here
+    unlock();
   };
 
   const handleMouseLeave = () => {
@@ -56,6 +58,7 @@ export function useOverviewHandlers() {
     hover.value = null;
     isDragging.value = false;
     drag.value = null;
+    unlock();
   };
 
   const handleMouseDown = (e: MouseEvent) => {
@@ -73,6 +76,7 @@ export function useOverviewHandlers() {
     }
 
     startDragging(x);
+    lock();
   };
 
   const startDragging = (x: number) => {
