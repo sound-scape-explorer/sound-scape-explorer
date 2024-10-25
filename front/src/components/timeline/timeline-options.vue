@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
 import {NDatePicker} from 'naive-ui';
+import AppButton from 'src/app/app-button.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
@@ -14,9 +15,14 @@ const names = computed(
   () => ranges.value?.map((r) => generateUniqueRangeSlug(r)) ?? [],
 );
 
-const name = ref<string>(names.value[0]);
+const name = ref<string>();
+const RANGE_SKIP = '**CUSTOM**';
 
 const handleRangeUpdate = () => {
+  if (name.value === RANGE_SKIP) {
+    return;
+  }
+
   if (ranges.value === null) {
     return;
   }
@@ -45,10 +51,23 @@ const setRight = (e) => {
   right.value = e;
 };
 
+const handleOverdrive = () => {
+  start.value = left.value;
+  end.value = right.value;
+  name.value = RANGE_SKIP;
+};
+
 useRefProvide(InjectionKey.calendarRange, name);
 
 onMounted(handleRangeUpdate);
 watch(name, handleRangeUpdate);
+watch(names, () => {
+  if (!names.value || name.value) {
+    return;
+  }
+
+  name.value = names.value[0];
+});
 </script>
 
 <template>
@@ -74,6 +93,8 @@ watch(name, handleRangeUpdate);
       size="tiny"
       type="datetime"
     />
+
+    <AppButton :handle-click="handleOverdrive">overdrive</AppButton>
   </div>
 </template>
 
