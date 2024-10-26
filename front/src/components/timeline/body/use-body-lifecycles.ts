@@ -13,11 +13,12 @@ import {onMounted, watch} from 'vue';
 export function useBodyLifecycles({width}: BodySize) {
   const {canvas, updateSize} = useTimelineDom().body;
   const {mount: mountContext} = useTimelineContext().body;
-  const {rows} = useBodyConfig();
+  const {rows, refreshRows} = useBodyConfig();
   const {render} = useBodyDrawer();
   const {left, right} = useTimelineRange();
   const {update} = useBodyElements();
   const {generate: generateScale} = useBodyColors();
+  const {elements} = useBodyElements();
 
   onMounted(render);
 
@@ -28,4 +29,5 @@ export function useBodyLifecycles({width}: BodySize) {
 
   watch([left, right], update);
   watch([width, rows], () => updateSize({width: width}));
+  watch(elements, () => refreshRows(elements));
 }
