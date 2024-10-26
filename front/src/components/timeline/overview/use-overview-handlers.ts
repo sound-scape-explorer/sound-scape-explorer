@@ -8,7 +8,7 @@ export function useOverviewHandlers() {
   const {canvas, width} = useTimelineDom().overview;
   const {isDragging, drag, hover, isHovering, dragStartX, detect} =
     useOverviewMouse().overview;
-  const {start, end, left, right, moveCursor, moveStart, moveEnd} =
+  const {start, end, left, right, moveCursor, moveLeft, moveRight} =
     useTimelineRange();
   const {lock, unlock} = useScatterCamera();
   const {canvasToRangeX} = useOverviewUtils();
@@ -34,11 +34,11 @@ export function useOverviewHandlers() {
 
     switch (drag.value) {
       case 'left': {
-        moveStart(deltaPercent);
+        moveLeft(deltaPercent);
         break;
       }
       case 'right': {
-        moveEnd(deltaPercent);
+        moveRight(deltaPercent);
         break;
       }
       case 'move': {

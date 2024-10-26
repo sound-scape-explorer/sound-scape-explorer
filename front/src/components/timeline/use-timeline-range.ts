@@ -6,24 +6,23 @@ const end = ref<number>(0);
 
 const left = ref<number>(0);
 const right = ref<number>(0);
+const duration = ref<number>(0);
 
 export function useTimelineRange() {
   const moveCursor = (deltaPercent: number) => {
-    const cursor = right.value - left.value;
+    let newLeft = left.value + deltaPercent;
+    let newRight = newLeft + duration.value;
 
-    let newStart = left.value + deltaPercent;
-    let newEnd = newStart + cursor;
-
-    if (newStart < start.value) {
-      newStart = start.value;
+    if (newLeft < start.value) {
+      newLeft = start.value;
     }
 
-    if (newEnd > end.value) {
-      newEnd = end.value;
+    if (newRight > end.value) {
+      newRight = end.value;
     }
 
-    left.value = newStart;
-    right.value = newEnd;
+    updateLeft(newLeft);
+    updateRight(newRight);
   };
 
   const moveRight = (deltaPercent: number) => {
@@ -33,7 +32,7 @@ export function useTimelineRange() {
       return;
     }
 
-    right.value = next;
+    updateRight(next);
   };
 
   const moveLeft = (deltaPercent: number) => {
@@ -43,15 +42,21 @@ export function useTimelineRange() {
       return;
     }
 
-    left.value = next;
+    updateLeft(next);
   };
 
-  const updateStart = (newStart: number) => {
-    left.value = newStart;
+  const updateLeft = (newLeft: number) => {
+    left.value = newLeft;
+    updateDuration();
   };
 
-  const updateEnd = (newEnd: number) => {
-    right.value = newEnd;
+  const updateRight = (newRight: number) => {
+    right.value = newRight;
+    updateDuration();
+  };
+
+  const updateDuration = () => {
+    duration.value = right.value - left.value;
   };
 
   const serialize = (
@@ -67,11 +72,10 @@ export function useTimelineRange() {
     end: end,
     left: left,
     right: right,
+    duration: duration,
     moveCursor: moveCursor,
-    moveEnd: moveRight,
-    moveStart: moveLeft,
-    updateStart: updateStart,
-    updateEnd: updateEnd,
+    moveLeft: moveLeft,
+    moveRight: moveRight,
     serialize: serialize,
   };
 }

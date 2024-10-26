@@ -18,8 +18,6 @@ const durations: CalendarDuration[] = [
   {name: '*2', duration: 'double'},
 ];
 
-const duration = ref<CalendarDuration['duration']>(durations[0].duration);
-
 const isActive = ref<boolean>(false);
 const isPlaying = ref<boolean>(false);
 
@@ -32,7 +30,6 @@ export function useDraggableCalendar() {
 
   return {
     isActive: isActive,
-    duration: duration,
     isPlaying: isPlaying,
     durations: durations,
     uiDisabled: uiDisabled,

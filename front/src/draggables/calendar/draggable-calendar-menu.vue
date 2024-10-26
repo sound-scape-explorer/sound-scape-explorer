@@ -20,16 +20,14 @@ import {computed} from 'vue';
 
 const {isActive, durations, isPlaying} = useDraggableCalendar();
 
-const {left, right} = useTimelineRange();
+const {duration} = useTimelineRange();
 
 const {setWindowDuration, skipTimeForward, skipTimeBackward, handleToggle} =
   useDraggableCalendarTransport();
 
 useRefProvide(InjectionKey.calendarActive, isActive);
 
-const seconds = computed(() => {
-  return Number((right.value / 1000 - left.value / 1000).toFixed());
-});
+const seconds = computed(() => Number((duration.value / 1000).toFixed()));
 </script>
 
 <template>

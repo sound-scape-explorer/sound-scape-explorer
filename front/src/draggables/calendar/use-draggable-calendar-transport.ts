@@ -4,15 +4,12 @@ import {
   type CalendarDuration,
   useDraggableCalendar,
 } from 'src/draggables/calendar/use-draggable-calendar';
-import {ref} from 'vue';
 
 let interval: null | number = null;
 
-const duration = ref<number>(0);
-
 export function useDraggableCalendarTransport() {
   const {isPlaying} = useDraggableCalendar();
-  const {left, right} = useTimelineRange();
+  const {left, right, duration} = useTimelineRange();
 
   const setWindowDuration = (d: CalendarDuration) => {
     switch (d.duration) {

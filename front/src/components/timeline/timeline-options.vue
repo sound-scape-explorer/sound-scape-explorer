@@ -10,7 +10,7 @@ import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {generateUniqueRangeSlug} from 'src/utils/config';
 import {computed, onMounted, ref, watch} from 'vue';
 
-const {start, end, left, right} = useTimelineRange();
+const {start, end, left, right, moveLeft, moveRight} = useTimelineRange();
 const {ranges} = useStorageRanges();
 const names = computed(
   () => ranges.value?.map((r) => generateUniqueRangeSlug(r)) ?? [],
@@ -40,8 +40,8 @@ const handleRangeUpdate = () => {
 
   start.value = result.start;
   end.value = result.end;
-  left.value = start.value;
-  right.value = end.value;
+  moveLeft(start.value);
+  moveRight(end.value);
 };
 
 const setLeft = (e) => {
