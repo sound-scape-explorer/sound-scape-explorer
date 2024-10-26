@@ -1,7 +1,7 @@
 import {useOverviewConstants} from 'src/components/timeline/overview/use-overview-constants';
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
-import {mapRange} from 'src/utils/map-range';
+import {mapRange} from 'src/utils/math';
 import {ref} from 'vue';
 
 export type OverviewTarget = 'left' | 'right' | 'move' | null;

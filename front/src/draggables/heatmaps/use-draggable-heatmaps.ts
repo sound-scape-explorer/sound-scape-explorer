@@ -2,7 +2,7 @@ import {type DigesterName} from 'src/common/digester-name';
 import {useDigesters} from 'src/composables/use-digesters';
 import {useStorageDigested} from 'src/composables/use-storage-digested';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
-import {generateUniqueDigesterSlug} from 'src/utils/generate-unique-digester-slug';
+import {generateUniqueDigesterSlug} from 'src/utils/config';
 import {computed, ref} from 'vue';
 
 const digesterName = ref<DigesterName | null>(null);

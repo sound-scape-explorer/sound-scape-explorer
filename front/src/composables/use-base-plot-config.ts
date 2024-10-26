@@ -1,9 +1,9 @@
 import {type Config} from 'plotly.js-dist-min';
-import {createPlotlyExportPngButtonDigested} from 'src/utils/create-plotly-export-png-button-digested';
 import {
+  createPlotlyExportPngButtonDigested,
   createPlotlyExportSvgButton,
   type PlotlyExportOptionsWithoutSize,
-} from 'src/utils/create-plotly-export-svg-button';
+} from 'src/utils/plotly';
 
 const scale = 4;
 

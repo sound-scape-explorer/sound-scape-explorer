@@ -6,7 +6,7 @@ import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-histograms';
-import {generateUniqueExtractorSlug} from 'src/utils/generate-unique-extractor-slug';
+import {generateUniqueExtractorSlug} from 'src/utils/config';
 import {watch} from 'vue';
 
 export function useDraggableHistogramsLifecycles() {

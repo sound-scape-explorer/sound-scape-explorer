@@ -1,4 +1,4 @@
-import {convertArrayToCsv} from 'src/utils/convert-array-to-csv';
+import {convertArrayToCsv} from 'src/utils/arrays';
 
 export class Csv {
   columns: string[];

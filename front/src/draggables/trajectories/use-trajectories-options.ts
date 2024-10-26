@@ -2,7 +2,7 @@ import {type CascaderOption} from 'naive-ui';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useTrajectories} from 'src/composables/use-trajectories';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
+import {convertToNaiveSelectOptions} from 'src/utils/naive';
 import {computed} from 'vue';
 
 export function useTrajectoriesOptions() {

@@ -3,9 +3,9 @@ import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useFiles} from 'src/composables/use-files';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {copyToClipboard} from 'src/utils/copy-to-clipboard';
-import {generateFilePresenceArray} from 'src/utils/generate-file-presence-array';
-import {getFilesFromIntervals} from 'src/utils/get-files-from-intervals';
+import {copyToClipboard} from 'src/utils/browser';
+import {getFilesFromIntervals} from 'src/utils/config';
+import {generateFilePresenceArray} from 'src/utils/csv';
 import {unref} from 'vue';
 
 export function useScatterSelection() {

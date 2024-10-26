@@ -15,7 +15,7 @@ import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
-import {printPrettySeconds} from 'src/utils/print-pretty-seconds';
+import {printPrettySeconds} from 'src/utils/time';
 import {computed} from 'vue';
 
 const {isActive, durations, isPlaying} = useDraggableCalendar();

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {NGi, NGrid, NTag} from 'naive-ui';
 import {type ShortcutSerialized} from 'src/composables/use-shortcuts';
-import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
+import {capitalizeFirstLetter} from 'src/utils/strings';
 
 interface Props {
   shortcuts: ShortcutSerialized[];

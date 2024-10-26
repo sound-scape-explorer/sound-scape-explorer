@@ -1,5 +1,5 @@
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
-import {generateUniqueExtractorSlug} from 'src/utils/generate-unique-extractor-slug';
+import {generateUniqueExtractorSlug} from 'src/utils/config';
 import {computed} from 'vue';
 
 export function useIndicators() {

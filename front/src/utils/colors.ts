@@ -1,3 +1,14 @@
+export function convertRgbToString([r, g, b]: [
+  number,
+  number,
+  number,
+]): string {
+  return `rgb(${r},${g},${b})`;
+}
+
+export function convertSlugsToColorTypes(columns: string[]): string[] {
+  return columns.map((column) => 'by' + column);
+} // todo: refactor me
 export function createHourlyLabels(size: number): string[] {
   const dates = [];
   const totalDuration = 24 * 60 * 60 * 1000; // The number of milliseconds during a day

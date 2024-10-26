@@ -10,7 +10,7 @@ import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {
   convertToNaiveSelectOptions,
   type NaiveSelectOption,
-} from 'src/utils/convert-to-naive-select-options';
+} from 'src/utils/naive';
 import {ref, watch} from 'vue';
 
 const {selected} = useScreen();

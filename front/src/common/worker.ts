@@ -29,8 +29,8 @@ import {
   type TracedRelativeTimestamps,
   type TracedTimestamps,
 } from 'src/composables/use-trajectories-data';
-import {sortStringsNumerically} from 'src/utils/sort-strings-numerically';
-import {trimRectangular} from 'src/utils/trim-rectangular';
+import {trimRectangular} from 'src/utils/arrays';
+import {sortStringsNumerically} from 'src/utils/strings';
 
 // TODO: Replace .pushes with fixed arrays
 

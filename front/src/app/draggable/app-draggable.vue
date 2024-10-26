@@ -10,7 +10,7 @@ import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lif
 import {useAppDraggableSuspense} from 'src/app/draggable/use-app-draggable-suspense';
 import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
-import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
+import {capitalizeFirstLetter} from 'src/utils/strings';
 import {computed} from 'vue';
 
 export interface AppDraggableProps {

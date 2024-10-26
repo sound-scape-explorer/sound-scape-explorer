@@ -2,7 +2,7 @@ import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
-import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
+import {buildAverageTrajectory} from 'src/utils/trajectories';
 
 export function useDraggableTrajectoriesExport() {
   const {convertTimestampToIsoDate} = useDate();

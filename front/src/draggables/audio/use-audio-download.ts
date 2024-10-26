@@ -1,6 +1,6 @@
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
-import {triggerWavDownload} from 'src/utils/trigger-wav-download';
+import {triggerWavDownload} from 'src/utils/audio';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
 export function useAudioDownload() {

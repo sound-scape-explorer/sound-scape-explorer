@@ -2,8 +2,8 @@
 import {NButton, type NotificationType, useNotification} from 'naive-ui';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {ALERT_TIMER} from 'src/constants';
-import {combineStringsWithBreaks} from 'src/utils/combine-strings-with-breaks';
-import {copyToClipboard} from 'src/utils/copy-to-clipboard';
+import {copyToClipboard} from 'src/utils/browser';
+import {combineStringsWithBreaks} from 'src/utils/strings';
 import {VERSION} from 'src/version';
 import {h, watch} from 'vue';
 

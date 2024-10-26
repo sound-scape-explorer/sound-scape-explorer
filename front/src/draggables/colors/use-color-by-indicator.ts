@@ -1,9 +1,8 @@
 import {useColorUser} from 'src/composables/use-color-user';
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {calculateMean} from 'src/utils/calculate-mean';
-import {getInfiniteRange} from 'src/utils/get-infinite-range';
-import {mapRange} from 'src/utils/map-range';
+import {calculateMean, mapRange} from 'src/utils/math';
+import {getInfiniteRange} from 'src/utils/utils';
 import {ref} from 'vue';
 
 const min = ref<number | null>(null);

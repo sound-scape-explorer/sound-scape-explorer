@@ -1,6 +1,6 @@
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
-import {mapRange} from 'src/utils/map-range';
+import {mapRange} from 'src/utils/math';
 
 export function useColorByCyclingDay() {
   const {getHourFromTimestamp} = useDate();

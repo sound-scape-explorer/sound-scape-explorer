@@ -4,7 +4,7 @@ import {useOverviewMouse} from 'src/components/timeline/overview/use-overview-mo
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
-import {mapRange} from 'src/utils/map-range';
+import {mapRange} from 'src/utils/math';
 
 export function useOverviewDrawer() {
   const {canvas, width, height} = useTimelineDom().overview;

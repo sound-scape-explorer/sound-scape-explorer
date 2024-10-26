@@ -1,3 +1,7 @@
+export async function copyToClipboard(message: string) {
+  await navigator.clipboard.writeText(message);
+}
+
 export async function createFileFromPath(
   path: string,
   filename: string,

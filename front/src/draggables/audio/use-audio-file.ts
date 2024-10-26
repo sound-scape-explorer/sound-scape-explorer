@@ -6,7 +6,7 @@ import {type BlockDetails} from 'src/composables/use-storage-aggregated-interval
 import {TIMEOUT} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useWavesurferLoader} from 'src/draggables/audio/use-wavesurfer-loader';
-import {getBitDepthFromWav} from 'src/utils/get-bit-depth-from-wav';
+import {getBitDepthFromWav} from 'src/utils/audio';
 import {ref} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 

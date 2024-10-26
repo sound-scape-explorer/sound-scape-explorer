@@ -3,8 +3,10 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useScatterFeatures} from 'src/components/scatter/use-scatter-features';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
-import {traceAverageTrajectory} from 'src/utils/trace-average-trajectory';
-import {traceTrajectories} from 'src/utils/trace-trajectories';
+import {
+  traceAverageTrajectory,
+  traceTrajectories,
+} from 'src/utils/trajectories';
 import {ref} from 'vue';
 
 const traces = ref<Data[]>([]);

@@ -1,4 +1,24 @@
-import {constrainValue} from './constrain-value';
+export function calculateMean(array: number[]): number {
+  let sum = 0;
+
+  for (const value of array) {
+    sum += value;
+  }
+
+  return sum / array.length;
+}
+
+export function constrainValue(
+  value: number,
+  min: number,
+  max: number,
+): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+export function truncateNumber(number: number, decimals = 2): number {
+  return Number(number.toFixed(decimals));
+}
 
 /**
  * Transpose a value with its current scale to a new scale

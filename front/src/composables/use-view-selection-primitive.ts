@@ -1,4 +1,4 @@
-import {parseSelectionOption} from 'src/utils/parse-selection-option';
+import {parseSelectionOption} from 'src/utils/old';
 import {type Ref} from 'vue';
 
 interface ViewItem {

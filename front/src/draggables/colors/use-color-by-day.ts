@@ -1,6 +1,6 @@
 import chroma from 'chroma-js';
 import {useDate} from 'src/composables/use-date';
-import {isHourDuringDay} from 'src/utils/is-hour-during-day';
+import {isHourDuringDay} from 'src/utils/time';
 
 const dayColor = chroma('orange');
 const nightColor = chroma('blue');

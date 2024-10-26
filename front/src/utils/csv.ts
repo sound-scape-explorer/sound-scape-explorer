@@ -1,4 +1,6 @@
 type Presence = 'true' | 'false';
+
+// todo: refactor me
 export function generateFilePresenceArray(
   length: number,
   selectedIndex: number[],

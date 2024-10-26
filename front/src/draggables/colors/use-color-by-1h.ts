@@ -1,7 +1,7 @@
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useColorUser} from 'src/composables/use-color-user';
 import {useDate} from 'src/composables/use-date';
-import {mapRange} from 'src/utils/map-range';
+import {mapRange} from 'src/utils/math';
 
 export function useColorBy1h() {
   const {convertTimestampToDate} = useDate();

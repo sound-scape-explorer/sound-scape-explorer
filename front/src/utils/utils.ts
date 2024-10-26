@@ -8,3 +8,13 @@ export function countIterations(
   const remaining = range % iterator;
   return iterations + (remaining > 0 ? 1 : 0);
 }
+
+export function getInfiniteRange(from: number | null, to: number | null) {
+  const bottom = from ?? -Infinity;
+  const top = to ?? Infinity;
+
+  return {
+    bottom: bottom,
+    top: top,
+  };
+}

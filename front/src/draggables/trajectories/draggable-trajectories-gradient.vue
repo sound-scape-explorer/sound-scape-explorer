@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import AppGradient from 'src/app/app-gradient.vue';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
-import {createHourlyLabels} from 'src/utils/create-hourly-labels';
+import {createHourlyLabels} from 'src/utils/colors';
 import {computed} from 'vue';
 
 const {scale: cyclingScale} = useColorsCycling();

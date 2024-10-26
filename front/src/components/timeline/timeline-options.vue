@@ -7,7 +7,7 @@ import {InjectionKey} from 'src/common/injection-key';
 import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useStorageRanges} from 'src/composables/use-storage-ranges';
-import {generateUniqueRangeSlug} from 'src/utils/generate-unique-range-slug';
+import {generateUniqueRangeSlug} from 'src/utils/config';
 import {computed, onMounted, ref, watch} from 'vue';
 
 const {start, end, left, right} = useCalendarRange();

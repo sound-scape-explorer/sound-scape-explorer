@@ -1,3 +1,11 @@
+export function triggerWavDownload(data: Blob, filename: string) {
+  const anchor = document.createElement('a');
+  anchor.href = URL.createObjectURL(data);
+  anchor.download = filename;
+  anchor.click();
+  anchor.remove();
+}
+
 export function getBitDepthFromWav(arrayBuffer: ArrayBuffer): number {
   try {
     // TODO: This can fail, I don't know why

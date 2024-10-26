@@ -2,7 +2,7 @@ import {useBandSelection} from 'src/composables/use-band-selection';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useStorageReady} from 'src/composables/use-storage-ready';
-import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
+import {convertSlugsToColorTypes} from 'src/utils/colors';
 import {ref} from 'vue';
 
 // Label properties and sets

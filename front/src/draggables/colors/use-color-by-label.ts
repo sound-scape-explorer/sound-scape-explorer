@@ -4,9 +4,9 @@ import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useColorResize} from 'src/draggables/colors/use-color-resize';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
-import {convertRgbToString} from 'src/utils/convert-rgb-to-string';
-import {getInfiniteRange} from 'src/utils/get-infinite-range';
-import {mapRange} from 'src/utils/map-range';
+import {convertRgbToString} from 'src/utils/colors';
+import {mapRange} from 'src/utils/math';
+import {getInfiniteRange} from 'src/utils/utils';
 import {ref} from 'vue';
 
 const min = ref<number | null>(null);
