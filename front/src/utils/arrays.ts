@@ -94,10 +94,6 @@ export function createIndicesArray(length: number) {
   return array;
 }
 
-export function getArraysIntersection(arrays: string[][]) {
-  return arrays.reduce((a, b) => a.filter((c) => b.includes(c)));
-}
-
 const linearInterpolate = (
   before: number,
   after: number,
