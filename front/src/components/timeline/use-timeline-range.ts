@@ -76,6 +76,8 @@ export function useTimelineRange() {
     moveCursor: moveCursor,
     moveLeft: moveLeft,
     moveRight: moveRight,
+    updateLeft: updateLeft,
+    updateRight: updateRight,
     serialize: serialize,
   };
 }

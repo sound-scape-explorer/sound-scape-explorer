@@ -10,7 +10,7 @@ import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {generateUniqueRangeSlug} from 'src/utils/config';
 import {computed, onMounted, ref, watch} from 'vue';
 
-const {start, end, left, right, moveLeft, moveRight} = useTimelineRange();
+const {start, end, left, right, updateLeft, updateRight} = useTimelineRange();
 const {ranges} = useStorageRanges();
 const names = computed(
   () => ranges.value?.map((r) => generateUniqueRangeSlug(r)) ?? [],
@@ -40,16 +40,8 @@ const handleRangeUpdate = () => {
 
   start.value = result.start;
   end.value = result.end;
-  moveLeft(start.value);
-  moveRight(end.value);
-};
-
-const setLeft = (e) => {
-  left.value = e;
-};
-
-const setRight = (e) => {
-  right.value = e;
+  updateLeft(start.value);
+  updateRight(end.value);
 };
 
 const handleOverdrive = () => {
@@ -88,7 +80,7 @@ watch(names, () => {
     <div :class="$style.row">
       <NDatePicker
         :class="$style.date"
-        :on-update:value="setLeft"
+        :on-update:value="updateLeft"
         :value="left"
         size="tiny"
         type="datetime"
@@ -96,7 +88,7 @@ watch(names, () => {
 
       <NDatePicker
         :class="$style.date"
-        :on-update:value="setRight"
+        :on-update:value="updateRight"
         :value="right"
         size="tiny"
         type="datetime"
