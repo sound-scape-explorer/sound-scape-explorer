@@ -68,7 +68,8 @@ export function useViewLoader() {
   ];
 
   const updateStep = (current: number) => {
-    step.value = parseInt(((current / steps.length) * 100).toString());
+    const l = steps.length - 1;
+    step.value = parseInt(((current / l) * 100).toString());
   };
 
   const updateReading = (current: string) => {
