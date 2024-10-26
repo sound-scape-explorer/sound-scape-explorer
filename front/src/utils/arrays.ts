@@ -103,12 +103,12 @@ function linearInterpolate(
 }
 
 export function interpolateArray(data: number[], fitCount: number) {
-  const newData = [];
+  const newData = new Array<number>(fitCount);
   const springFactor = Number((data.length - 1) / (fitCount - 1));
 
   newData[0] = data[0]; // for new allocation
 
-  for (let i = 1; i < fitCount - 1; i++) {
+  for (let i = 1; i < fitCount - 1; i += 1) {
     const tmp = i * springFactor.valueOf();
     const before = Number(Math.floor(tmp)).toFixed();
     const after = Number(Math.ceil(tmp)).toFixed();
