@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
 import {useDraggables} from 'src/composables/use-draggables';
+import {Shortcuts} from 'src/composables/use-shortcuts';
 import {computed} from 'vue';
 
 const {hidden} = useDraggables();
@@ -8,7 +9,9 @@ const payload = computed<string | null>(() => {
   const payload: string[] = [];
 
   if (hidden.value) {
-    payload.push('Escape mode enabled');
+    payload.push(
+      `Toggle mode enabled. Press ${Shortcuts._draggableToggle} to quit.`,
+    );
   }
 
   return payload.length === 0 ? null : payload.join('<br />');
