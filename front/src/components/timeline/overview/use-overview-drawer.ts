@@ -6,8 +6,6 @@ import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 
-const gap = 1;
-
 export function useOverviewDrawer() {
   const {canvas, width, height} = useTimelineDom().overview;
   const {context} = useTimelineContext().overview;
@@ -31,8 +29,8 @@ export function useOverviewDrawer() {
     // interests
     ctx.fillStyle = 'red';
     for (const element of elements.value) {
-      const newStart = rangeToCanvasX(element.start) - gap;
-      const newEnd = rangeToCanvasX(element.end) - gap;
+      const newStart = rangeToCanvasX(element.start);
+      const newEnd = rangeToCanvasX(element.end);
       const newWidth = newEnd - newStart;
 
       ctx.fillRect(newStart, 0, newWidth, height.value);
