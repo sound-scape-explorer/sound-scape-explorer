@@ -1,3 +1,4 @@
+import chroma from 'chroma-js';
 import {useBodyHandlers} from 'src/components/timeline/body/use-body-handlers';
 import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
@@ -15,7 +16,7 @@ export function useBodyDrawTooltip() {
   const {context} = useTimelineContext().body;
   const {hovered} = useBodyHover();
   const {position} = useBodyHandlers();
-  const {primary} = useTimelineTheme();
+  const {primary, background} = useTimelineTheme();
 
   const getStartingPositions = (
     contentWidth: number,
@@ -60,7 +61,7 @@ export function useBodyDrawTooltip() {
     }
 
     const ctx: CanvasRenderingContext2D = context.value;
-    const texts = hovered.value.tooltip;
+    const texts: string[] = hovered.value.tooltip;
 
     const h = textSize * texts.length + paddingVertical * 0.5 + 1;
     const w = Math.max(
@@ -74,7 +75,10 @@ export function useBodyDrawTooltip() {
     ctx.fillStyle = hovered.value.color;
     ctx.fillRect(xFinal, yFinal, w, h);
 
-    ctx.fillStyle = primary;
+    ctx.fillStyle =
+      chroma.contrast(primary, hovered.value.color) > 4.5
+        ? primary
+        : background;
     ctx.textAlign = 'start';
     ctx.textBaseline = 'middle';
 
