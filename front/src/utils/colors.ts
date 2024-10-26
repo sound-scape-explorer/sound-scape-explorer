@@ -1,3 +1,5 @@
+import chroma from 'chroma-js';
+
 export function convertRgbToString([r, g, b]: [
   number,
   number,
@@ -8,7 +10,9 @@ export function convertRgbToString([r, g, b]: [
 
 export function convertSlugsToColorTypes(columns: string[]): string[] {
   return columns.map((column) => 'by' + column);
-} // todo: refactor me
+}
+
+// todo: refactor me
 export function createHourlyLabels(size: number): string[] {
   const dates = [];
   const totalDuration = 24 * 60 * 60 * 1000; // The number of milliseconds during a day
@@ -25,4 +29,8 @@ export function createHourlyLabels(size: number): string[] {
   }
 
   return dates;
+}
+
+export function isEnoughContrast(color1: string, color2: string): boolean {
+  return chroma.contrast(color1, color2) > 4.5;
 }

@@ -1,9 +1,9 @@
-import chroma from 'chroma-js';
 import {useBodyHandlers} from 'src/components/timeline/body/use-body-handlers';
 import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
+import {isEnoughContrast} from 'src/utils/colors';
 
 const textSize = 12;
 const paddingHorizontal = 3;
@@ -75,10 +75,9 @@ export function useBodyDrawTooltip() {
     ctx.fillStyle = hovered.value.color;
     ctx.fillRect(xFinal, yFinal, w, h);
 
-    ctx.fillStyle =
-      chroma.contrast(primary, hovered.value.color) > 4.5
-        ? primary
-        : background;
+    ctx.fillStyle = isEnoughContrast(primary, hovered.value.color)
+      ? primary
+      : background;
     ctx.textAlign = 'start';
     ctx.textBaseline = 'middle';
 
