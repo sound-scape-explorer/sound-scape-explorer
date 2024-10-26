@@ -13,7 +13,7 @@ export function useAppMenuButton(props: AppMenuItemProps) {
     () => isActive && stack.value[0] === props.draggableKey,
   );
   const isHidden = computed(
-    () => hidden.value && isHidingMenuOnDraggableToggle,
+    () => hidden.value && isHidingMenuOnDraggableToggle.value,
   );
 
   const handleClick = () => {
