@@ -2,6 +2,7 @@ import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
 import {useBodyConfig} from 'src/components/timeline/body/use-body-config';
 import {useBodyDrawer} from 'src/components/timeline/body/use-body-drawer';
 import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
+import {useBodyHandlers} from 'src/components/timeline/body/use-body-handlers';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {
   type BodySize,
@@ -19,14 +20,16 @@ export function useBodyLifecycles({width}: BodySize) {
   const {update} = useBodyElements();
   const {generate: generateScale} = useBodyColors();
   const {elements} = useBodyElements();
+  const {position} = useBodyHandlers();
 
-  onMounted(render);
-
-  watch(canvas, () => {
+  const init = () => {
     mountContext();
     generateScale();
-  });
+  };
 
+  onMounted(render);
+  watch([elements, position, width], render);
+  watch(canvas, init);
   watch([left, right], update);
   watch([width, rows], () => updateSize({width: width}));
   watch(elements, () => refreshRows(elements));

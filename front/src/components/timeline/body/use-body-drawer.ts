@@ -13,10 +13,8 @@ export function useBodyDrawer() {
     requestAnimationFrame(() => {
       drawBackground();
       drawRows();
-      // drawTicks();
       drawElements();
       drawTooltip();
-      render();
     });
 
   return {

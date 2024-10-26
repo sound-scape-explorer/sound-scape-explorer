@@ -13,7 +13,7 @@ const overviewHoverTarget = ref<OverviewTarget>(null);
 const overviewDragTarget = ref<OverviewTarget>(null);
 const overviewDragStartX = ref<number>(0);
 
-export function useOverviewMouse() {
+export function useTimelineHandlers() {
   const {left, right} = useTimelineRange();
   const {handleWidth} = useOverviewConstants();
   const {rangeToCanvasX} = useOverviewUtils();

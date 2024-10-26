@@ -1,7 +1,7 @@
 import {useOverviewConstants} from 'src/components/timeline/overview/use-overview-constants';
 import {useOverviewElements} from 'src/components/timeline/overview/use-overview-elements';
-import {useOverviewMouse} from 'src/components/timeline/overview/use-overview-mouse';
 import {useOverviewUtils} from 'src/components/timeline/overview/use-overview-utils';
+import {useTimelineHandlers} from 'src/components/timeline/overview/use-timeline-handlers';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
@@ -10,7 +10,7 @@ export function useOverviewDrawer() {
   const {canvas, width, height} = useTimelineDom().overview;
   const {context} = useTimelineContext().overview;
   const {left, right} = useTimelineRange();
-  const {hover, drag, isHovering} = useOverviewMouse().overview;
+  const {hover, drag, isHovering} = useTimelineHandlers().overview;
   const {handleWidth} = useOverviewConstants();
   const {elements} = useOverviewElements();
   const {rangeToCanvasX} = useOverviewUtils();

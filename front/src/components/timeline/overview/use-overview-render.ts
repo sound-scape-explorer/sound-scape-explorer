@@ -7,7 +7,6 @@ export function useOverviewRender() {
     requestAnimationFrame(() => {
       drawer.background();
       drawer.window();
-      render();
     });
 
   return {
