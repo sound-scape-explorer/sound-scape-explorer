@@ -7,7 +7,7 @@ const end = ref<number>(0);
 const left = ref<number>(0);
 const right = ref<number>(0);
 
-export function useCalendarRange() {
+export function useTimelineRange() {
   const moveCursor = (deltaPercent: number) => {
     const cursor = right.value - left.value;
 

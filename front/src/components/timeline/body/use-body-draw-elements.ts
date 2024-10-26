@@ -3,15 +3,13 @@ import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
 import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
-import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
 
 export function useBodyDrawElements() {
-  const {width} = useTimelineDom().body;
   const {context} = useTimelineContext().body;
   const {hovered} = useBodyHover();
-  const {config, time, elementGaps} = useBodyConfig();
-  const {timeToCanvasX} = useBodyUtils();
+  const {rowHeight, elementGaps} = useBodyConfig();
+  const {rangeToCanvasX} = useBodyUtils();
   const {elements} = useBodyElements();
   const {highlight} = useTimelineTheme();
 
@@ -23,28 +21,12 @@ export function useBodyDrawElements() {
     const ctx = context.value;
 
     for (const element of elements.value) {
-      const y =
-        config.value.startY +
-        element.row * config.value.rowHeight +
-        elementGaps.top;
+      const y = element.row * rowHeight + elementGaps.top;
 
-      const x = timeToCanvasX(
-        element.start,
-        time.value.minTime,
-        time.value.maxTime,
-        config.value.startX,
-        config.value.startX + width.value,
-      );
+      const xStart = rangeToCanvasX(element.start);
+      const xEnd = rangeToCanvasX(element.end);
 
-      const endX = timeToCanvasX(
-        element.end,
-        time.value.minTime,
-        time.value.maxTime,
-        config.value.startX,
-        config.value.startX + width.value,
-      );
-
-      const w = endX - x;
+      const xWidth = xEnd - xStart;
 
       const isCurrentHover =
         hovered.value?.row === element.row &&
@@ -66,7 +48,7 @@ export function useBodyDrawElements() {
         ctx.shadowBlur = 0;
       }
 
-      ctx.fillRect(x, y, w, config.value.rowHeight - elementGaps.bottom);
+      ctx.fillRect(xStart, y, xWidth, rowHeight - elementGaps.bottom);
 
       // reset shadows
       ctx.shadowColor = 'transparent';

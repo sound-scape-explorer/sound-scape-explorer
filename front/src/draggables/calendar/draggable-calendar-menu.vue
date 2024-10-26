@@ -11,7 +11,7 @@ import AppButton from 'src/app/app-button.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {InjectionKey} from 'src/common/injection-key';
-import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
+import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
@@ -20,7 +20,7 @@ import {computed} from 'vue';
 
 const {isActive, durations, isPlaying} = useDraggableCalendar();
 
-const {left, right} = useCalendarRange();
+const {left, right} = useTimelineRange();
 
 const {setWindowDuration, skipTimeForward, skipTimeBackward, handleToggle} =
   useDraggableCalendarTransport();

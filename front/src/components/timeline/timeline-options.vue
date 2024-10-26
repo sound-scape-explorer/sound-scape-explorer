@@ -4,13 +4,13 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
-import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
+import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {generateUniqueRangeSlug} from 'src/utils/config';
 import {computed, onMounted, ref, watch} from 'vue';
 
-const {start, end, left, right} = useCalendarRange();
+const {start, end, left, right} = useTimelineRange();
 const {ranges} = useStorageRanges();
 const names = computed(
   () => ranges.value?.map((r) => generateUniqueRangeSlug(r)) ?? [],

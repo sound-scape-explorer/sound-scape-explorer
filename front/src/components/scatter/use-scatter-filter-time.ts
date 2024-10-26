@@ -1,4 +1,4 @@
-import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
+import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {ref} from 'vue';
@@ -8,7 +8,7 @@ const filtered = ref<boolean[]>([]);
 export function useScatterFilterTime() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {isActive} = useDraggableCalendar();
-  const {left, right} = useCalendarRange();
+  const {left, right} = useTimelineRange();
 
   const isVisible = (index: number): boolean => {
     if (!isActive.value) {

@@ -25,13 +25,6 @@ export function truncateNumber(number: number, decimals = 2): number {
  * Inspired from processing/p5.js source code.
  *
  * @see https://github.com/processing/p5.js/blob/master/src/math/calculation.js#L450
- * @param {number} n - The value to transpose
- * @param {number} start1 - The start of the current scale
- * @param {number} stop1 - The end of the current scale
- * @param {number} start2 - The start of the new scale
- * @param {number} stop2 - The end of the new scale
- * @param {boolean} [isClamp] - If true, the value will be clamped between start2 and stop2
- * @returns {number} The value transposed to the new scale
  */
 export function mapRange(
   n: number,

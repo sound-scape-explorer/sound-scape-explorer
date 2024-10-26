@@ -1,4 +1,4 @@
-import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
+import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {TIMEOUT} from 'src/constants';
 import {
   type CalendarDuration,
@@ -12,7 +12,7 @@ const duration = ref<number>(0);
 
 export function useDraggableCalendarTransport() {
   const {isPlaying} = useDraggableCalendar();
-  const {left, right} = useCalendarRange();
+  const {left, right} = useTimelineRange();
 
   const setWindowDuration = (d: CalendarDuration) => {
     switch (d.duration) {

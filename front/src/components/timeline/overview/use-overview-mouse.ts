@@ -1,7 +1,6 @@
 import {useOverviewConstants} from 'src/components/timeline/overview/use-overview-constants';
-import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
-import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
-import {mapRange} from 'src/utils/math';
+import {useOverviewUtils} from 'src/components/timeline/overview/use-overview-utils';
+import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {ref} from 'vue';
 
 export type OverviewTarget = 'left' | 'right' | 'move' | null;
@@ -15,24 +14,17 @@ const overviewDragTarget = ref<OverviewTarget>(null);
 const overviewDragStartX = ref<number>(0);
 
 export function useOverviewMouse() {
-  const {left, right, start, end} = useCalendarRange();
-  const {width} = useTimelineDom().overview;
+  const {left, right} = useTimelineRange();
   const {handleWidth} = useOverviewConstants();
+  const {rangeToCanvasX} = useOverviewUtils();
 
   const getWindowWidth = () => {
-    const windowEnd = mapRange(
-      right.value,
-      start.value,
-      end.value,
-      0,
-      width.value,
-    );
-
-    return windowEnd - getWindowStart();
+    const wEnd = rangeToCanvasX(right.value);
+    return wEnd - getWindowStart();
   };
 
   const getWindowStart = () => {
-    return mapRange(left.value, start.value, end.value, 0, width.value);
+    return rangeToCanvasX(left.value);
   };
 
   const detectOverview = (x: number): OverviewTarget => {

@@ -6,7 +6,7 @@ import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
 export function useBodyDrawRows() {
   const {width} = useTimelineDom().body;
   const {context} = useTimelineContext().body;
-  const {config, rows} = useBodyConfig();
+  const {rowHeight, rows} = useBodyConfig();
   const {strokeLight} = useTimelineTheme();
 
   const drawRows = () => {
@@ -19,10 +19,10 @@ export function useBodyDrawRows() {
     ctx.strokeStyle = strokeLight;
     ctx.lineWidth = 1;
     for (let i = 0; i <= rows.value; i += 1) {
-      const y = config.value.startY + i * config.value.rowHeight;
+      const y = i * rowHeight;
       ctx.beginPath();
-      ctx.moveTo(config.value.startX, y);
-      ctx.lineTo(config.value.startX + width.value, y);
+      ctx.moveTo(0, y);
+      ctx.lineTo(width.value, y);
       ctx.stroke();
     }
   };

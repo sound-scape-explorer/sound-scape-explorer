@@ -19,7 +19,7 @@ const bodyWidth = ref<number>(0);
 const bodyHeight = ref<number>(0);
 
 export function useTimelineDom() {
-  const {rows, config} = useBodyConfig();
+  const {rows, rowHeight} = useBodyConfig();
 
   const updateOverviewSize = ({width, height}: OverviewSize) => {
     overviewWidth.value = width.value;
@@ -28,7 +28,7 @@ export function useTimelineDom() {
 
   const updateBodySize = ({width}: BodySize) => {
     bodyWidth.value = width.value;
-    bodyHeight.value = rows.value * config.value.rowHeight;
+    bodyHeight.value = rows.value * rowHeight;
   };
 
   return {

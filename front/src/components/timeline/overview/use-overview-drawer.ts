@@ -1,18 +1,21 @@
 import {useOverviewConstants} from 'src/components/timeline/overview/use-overview-constants';
 import {useOverviewElements} from 'src/components/timeline/overview/use-overview-elements';
 import {useOverviewMouse} from 'src/components/timeline/overview/use-overview-mouse';
-import {useCalendarRange} from 'src/components/timeline/use-calendar-range';
+import {useOverviewUtils} from 'src/components/timeline/overview/use-overview-utils';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
-import {mapRange} from 'src/utils/math';
+import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
+
+const gap = 1;
 
 export function useOverviewDrawer() {
   const {canvas, width, height} = useTimelineDom().overview;
   const {context} = useTimelineContext().overview;
-  const {left, right, start, end} = useCalendarRange();
+  const {left, right} = useTimelineRange();
   const {hover, drag, isHovering} = useOverviewMouse().overview;
   const {handleWidth} = useOverviewConstants();
   const {elements} = useOverviewElements();
+  const {rangeToCanvasX} = useOverviewUtils();
 
   const drawOverviewBackground = () => {
     if (context.value === null) {
@@ -21,36 +24,18 @@ export function useOverviewDrawer() {
 
     const ctx = context.value;
 
+    // background
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, width.value, height.value);
 
-    ctx.fillStyle = 'red';
-    const g = 1;
-
     // interests
+    ctx.fillStyle = 'red';
     for (const element of elements.value) {
-      const windowStart = mapRange(
-        element.start,
-        start.value,
-        end.value,
-        0,
-        width.value,
-      );
+      const newStart = rangeToCanvasX(element.start) - gap;
+      const newEnd = rangeToCanvasX(element.end) - gap;
+      const newWidth = newEnd - newStart;
 
-      const windowEnd = mapRange(
-        element.end,
-        start.value,
-        end.value,
-        0,
-        width.value,
-      );
-
-      ctx.fillRect(
-        windowStart - g,
-        0,
-        windowEnd - windowStart - g,
-        height.value,
-      );
+      ctx.fillRect(newStart, 0, newWidth, height.value);
     }
   };
 
@@ -61,36 +46,20 @@ export function useOverviewDrawer() {
 
     const ctx = context.value;
 
-    const windowStart = mapRange(
-      left.value,
-      start.value,
-      end.value,
-      0,
-      width.value,
-    );
-
-    const windowEnd = mapRange(
-      right.value,
-      start.value,
-      end.value,
-      0,
-      width.value,
-    );
-
-    const windowWidth = windowEnd - windowStart;
+    const wStart = rangeToCanvasX(left.value);
+    const wEnd = rangeToCanvasX(right.value);
+    const wWidth = wEnd - wStart;
 
     // Draw window rectangle with different colors based on hover state
     ctx.fillStyle = isHovering.value
       ? 'rgba(0, 0, 0, 0.3)'
       : 'rgba(0, 0, 0, 0.2)';
-    ctx.fillRect(windowStart, 0, windowWidth, height.value);
+    ctx.fillRect(wStart, 0, wWidth, height.value);
 
     // Draw window borders
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
-    ctx.strokeRect(windowStart, 0, windowWidth, height.value);
-
-    const handleHeight = height.value;
+    ctx.strokeRect(wStart, 0, wWidth, height.value);
 
     // Draw handles with hover effect
     const leftHandleColor = hover.value === 'left' ? '#555' : 'black';
@@ -98,15 +67,15 @@ export function useOverviewDrawer() {
 
     // Left handle
     ctx.fillStyle = leftHandleColor;
-    ctx.fillRect(windowStart - handleWidth / 2, 0, handleWidth, handleHeight);
+    ctx.fillRect(wStart - handleWidth / 2, 0, handleWidth, height.value);
 
     // Right handle
     ctx.fillStyle = rightHandleColor;
     ctx.fillRect(
-      windowStart + windowWidth - handleWidth / 2,
+      wStart + wWidth - handleWidth / 2,
       0,
       handleWidth,
-      handleHeight,
+      height.value,
     );
 
     updateOverviewCursor();
@@ -131,7 +100,7 @@ export function useOverviewDrawer() {
         canvas.value.style.cursor = 'grab';
         break;
       default:
-        canvas.value.style.cursor = 'default';
+        canvas.value.style.cursor = 'pointer';
     }
   };
 
