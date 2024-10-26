@@ -94,13 +94,13 @@ export function createIndicesArray(length: number) {
   return array;
 }
 
-const linearInterpolate = (
+function linearInterpolate(
   before: number,
   after: number,
   atPoint: number,
-): number => {
+): number {
   return before + (after - before) * atPoint;
-};
+}
 
 export function interpolateArray(data: number[], fitCount: number) {
   const newData = [];
