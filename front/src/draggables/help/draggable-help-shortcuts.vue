@@ -10,9 +10,9 @@ const hasBetas = computed(() => betas.length > 0);
 </script>
 
 <template>
-  <AppTitle>🪟 Draggable Shortcuts</AppTitle>
+  <AppTitle>🧭 Navigation Shortcuts</AppTitle>
   <Shortcuts :shortcuts="draggables" />
-  <AppTitle>⌨ Keyboard Shortcuts</AppTitle>
+  <AppTitle>🪟 Draggables Shortcuts</AppTitle>
   <Shortcuts :shortcuts="shortcuts" />
   <AppTitle v-if="hasAlphas">🐤 Alpha Shortcuts</AppTitle>
   <Shortcuts
