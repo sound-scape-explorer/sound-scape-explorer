@@ -19,26 +19,25 @@ export function useScatterTraces() {
   const {scale: cyclingScale} = useColorsCycling();
 
   const render = () => {
-    let newTraces: Data[] = [];
+    // features
+    const newTraces = traceFeatures();
 
-    // add features
-    const featuresTraces = traceFeatures();
-    newTraces = [...newTraces, ...featuresTraces];
-
-    // add trajectories
+    // trajectories
     if (traceds.value.length > 0) {
       if (isFused.value) {
         const averageTrace = traceAverageTrajectory(
           traceds.value,
           cyclingScale.value,
         );
-        newTraces = [...newTraces, averageTrace];
+
+        newTraces.push(averageTrace);
       } else {
         const trajectories = traceTrajectories(
           traceds.value,
           cyclingScale.value,
         );
-        newTraces = [...newTraces, ...trajectories];
+
+        newTraces.push(...trajectories);
       }
     }
 
