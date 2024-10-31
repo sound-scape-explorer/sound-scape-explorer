@@ -53,7 +53,8 @@ export const TRACE_WIDTH_2D = 2;
 
 export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend'; // this is used as a selector to render the legend to canvas on scatter png export
 
-export const NN_EXTRACTORS = ['vgg', 'yamnet'];
+// @see processing/config/extractors/ExtractorConfig.py
+export const NN_EXTRACTORS = ['vgg', 'melogram', 'melspectrum'];
 
 export type ColorFlavor = 'Spectral' | 'Accent' | 'Dark2';
 export const COLOR_FLAVORS: ColorFlavor[] = ['Spectral', 'Accent', 'Dark2'];
