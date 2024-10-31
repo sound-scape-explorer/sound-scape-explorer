@@ -65,29 +65,6 @@ export async function close() {
   h5.close();
 }
 
-export async function readSecondsFromIntegration(
-  file: File,
-  integrationName: string,
-) {
-  const h5 = await load(file);
-
-  const integrations = (
-    h5.get(StoragePath.integrations_names) as Dataset
-  ).to_array() as string[];
-
-  const seconds = (
-    h5.get(StoragePath.integrations_seconds) as Dataset
-  ).to_array() as number[];
-
-  const index = integrations.indexOf(integrationName);
-
-  if (index === -1) {
-    throw new Error(`Integration not found: ${integrationName}`);
-  }
-
-  return seconds[index];
-}
-
 export async function readSettings(file: File) {
   const h5 = await load(file);
 
