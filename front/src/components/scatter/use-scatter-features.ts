@@ -1,4 +1,5 @@
 import {type Data, type PlotType} from 'plotly.js-dist-min';
+import {ScatterFeaturesError} from 'src/common/Errors';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
@@ -50,7 +51,7 @@ export function useScatterFeatures() {
 
   const generateCoordinates = () => {
     if (reducedFeatures.value === null) {
-      throw new Error('Data unavailable');
+      throw new ScatterFeaturesError('data not available');
     }
 
     const features = reducedFeatures.value;
@@ -100,7 +101,7 @@ export function useScatterFeatures() {
 
   const generateColors = () => {
     if (scale.value === null) {
-      throw new Error('Data unavailable');
+      throw new ScatterFeaturesError('color scale missing');
     }
 
     const scalePointer = scale.value;

@@ -48,7 +48,7 @@ export function useAudioQuery() {
     const {response, err} = await q(host.value);
 
     if (!response || err) {
-      throw new Error('queryRoot');
+      throw new AudioQueryError('no response or error');
     }
 
     const data: AudioRootDto = await response.json();

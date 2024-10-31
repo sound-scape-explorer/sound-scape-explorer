@@ -1,3 +1,4 @@
+import {StorageRangesError} from 'src/common/Errors';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {ref} from 'vue';
@@ -18,7 +19,7 @@ export function useStorageRanges() {
   const read = async () => {
     await readStorage(async (worker, file) => {
       if (aggregatedTimestamps.value === null) {
-        throw new Error('could not get aggregated timestamps');
+        throw new StorageRangesError('could not get aggregated timestamps');
       }
 
       const userRanges = await worker.readRanges(file);

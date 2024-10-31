@@ -1,3 +1,4 @@
+import {AudioContextError} from 'src/common/Errors';
 import {GAIN} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {ref} from 'vue';
@@ -10,7 +11,7 @@ export function useAudioGain() {
 
   const create = () => {
     if (context.value === null) {
-      throw new Error('context is not ready');
+      throw new AudioContextError('context is not ready');
     }
 
     node.value = context.value.createGain();

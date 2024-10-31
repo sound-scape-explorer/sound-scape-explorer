@@ -1,4 +1,5 @@
 import Plotly, {type Data, type Layout} from 'plotly.js-dist-min';
+import {DraggableHistogramsError} from 'src/common/Errors';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
@@ -34,7 +35,9 @@ export function useDraggableHistogramsLifecycles() {
     );
 
     if (results.length !== 1) {
-      throw new Error('Could not select specified indicator');
+      throw new DraggableHistogramsError(
+        'could not select specified indicator',
+      );
     }
 
     const indicator = results[0];

@@ -1,3 +1,4 @@
+import {DraggableHeatmapsError} from 'src/common/Errors';
 import {
   type Digested,
   useStorageDigested,
@@ -35,13 +36,14 @@ export function useDraggableHeatmapsChart() {
 
   const getLabelData = (label: string) => {
     if (labelProperties.value === null || labelSets.value === null) {
-      throw new Error('Labels unavailable');
+      throw new DraggableHeatmapsError('labels not available');
     }
 
     const index = labelProperties.value.indexOf(label);
 
     if (index === -1) {
-      throw new Error(`Could not find label property ${label}`);
+      const msg = `could not find label property ${label}`;
+      throw new DraggableHeatmapsError(msg);
     }
 
     const possibleValues = labelSets.value[index];

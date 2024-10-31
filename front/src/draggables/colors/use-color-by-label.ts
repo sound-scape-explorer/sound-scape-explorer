@@ -1,3 +1,4 @@
+import {ColorByLabelError} from 'src/common/Errors';
 import {useColorUser} from 'src/composables/use-color-user';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
@@ -27,7 +28,7 @@ export function useColorByLabel() {
       labelProperties.value === null ||
       labelSets.value === null
     ) {
-      throw new Error('useColorByLabel: missing props');
+      throw new ColorByLabelError('props missing');
     }
 
     const p = labelProperties.value.indexOf(criteria.value);

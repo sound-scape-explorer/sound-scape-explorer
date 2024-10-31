@@ -1,3 +1,4 @@
+import {ScatterHoversError} from 'src/common/Errors';
 import {useDate} from 'src/composables/use-date';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
@@ -25,7 +26,7 @@ export function useScatterHovers() {
       labelProperties.value === null ||
       aggregatedLabels.value === null
     ) {
-      throw new Error('Data unavailable');
+      throw new ScatterHoversError('data unavailable');
     }
 
     const intervalDetailsPointer = aggregatedIntervalDetails.value;

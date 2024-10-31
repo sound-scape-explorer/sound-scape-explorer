@@ -1,3 +1,4 @@
+import {CsvError} from 'src/common/Errors';
 import {convertArrayToCsv} from 'src/utils/arrays';
 
 export class Csv {
@@ -18,7 +19,8 @@ export class Csv {
 
   public addColumn(column: string) {
     if (this.columns.includes(column)) {
-      throw new Error(`Column ${column} already exists`);
+      const msg = `Column ${column} already exists`;
+      throw new CsvError(msg);
     }
 
     this.columns.push(column);
