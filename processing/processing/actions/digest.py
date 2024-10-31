@@ -58,6 +58,7 @@ def digest(
             d.integration = ar.integration
 
             for data, label_a, label_b in d.walk_labels():
+                # TODO: add extractor index
                 path = (
                     f"{StoragePath.digested.value}"
                     f"/{ar.band.name}"
