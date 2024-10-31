@@ -62,25 +62,26 @@ export function useTemporalChart() {
     return strings;
   };
 
-  const render = () => {
-    if (sites.value === null || data.value.length === 0) {
-      candles.value = generateHolder();
-      return;
-    }
+  const render = () =>
+    requestAnimationFrame(() => {
+      if (sites.value === null || data.value.length === 0) {
+        candles.value = generateSkeleton();
+        return;
+      }
 
-    const {values, timestamps, siteValues} = prepare();
-    const siteNames = sites.value.map((site) => site.name);
-    const colors = getColors(siteNames);
+      const {values, timestamps, siteValues} = prepare();
+      const siteNames = sites.value.map((site) => site.name);
+      const colors = getColors(siteNames);
 
-    if (isCandles.value) {
-      candles.value = generateFlat(values, timestamps, siteValues);
-      return;
-    }
+      if (isCandles.value) {
+        candles.value = generateCandles(values, timestamps, siteValues);
+        return;
+      }
 
-    plot.value = generateContinuous(values, timestamps, siteValues, colors);
-  };
+      plot.value = generateContinuous(values, timestamps, colors);
+    });
 
-  const generateHolder = (): CandlesData => {
+  const generateSkeleton = (): CandlesData => {
     return {
       timestamps: [],
       labels: [],
@@ -88,7 +89,6 @@ export function useTemporalChart() {
       low: [],
       open: [],
       close: [],
-      // colors: [],
     };
   };
 
@@ -101,7 +101,7 @@ export function useTemporalChart() {
     );
   };
 
-  const generateFlat = (
+  const generateCandles = (
     values: number[],
     timestamps: number[],
     siteValues: string[],
@@ -132,7 +132,6 @@ export function useTemporalChart() {
   const generateContinuous = (
     values: number[],
     timestamps: number[],
-    siteValues: string[],
     colors: string[],
   ): PlotData => {
     const indices = Array.from({length: timestamps.length}, (_, i) => i);

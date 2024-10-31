@@ -18,23 +18,23 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
 <template>
   <div>
     <AppInput
+      :class="$style.input"
       :disabled="!hasIndicator"
       :handle-enter="filter"
       :injection-key="InjectionKey.indicatorsFilterFrom"
       :step="0.1"
       placeholder="From"
       size="small"
-      style="width: 9em"
       type="number"
     />
 
     <AppInput
+      :class="$style.input"
       :disabled="!hasIndicator"
       :handle-enter="filter"
       :injection-key="InjectionKey.indicatorsFilterTo"
       placeholder="To"
       size="small"
-      style="width: 9em"
       type="number"
     />
 
@@ -55,3 +55,9 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
     </AppButton>
   </div>
 </template>
+
+<style lang="scss" module>
+.input {
+  width: 9em;
+}
+</style>
