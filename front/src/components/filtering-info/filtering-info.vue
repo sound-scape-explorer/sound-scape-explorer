@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import {NTooltip} from 'naive-ui';
-import {InjectionKey} from 'src/common/injection-key';
 import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
-import {useRefInject} from 'src/composables/use-ref-inject';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {computed, ref} from 'vue';
 
@@ -41,11 +39,9 @@ const labelsIn = computed(() => labels.value.length - labelsOut.value);
 const temporalIn = computed(() => temporal.value.length - temporalOut.value);
 const temporalOut = computed(() => temporal.value.filter((f) => f).length);
 
-const isTimeRef = useRefInject(InjectionKey.calendarActive);
 const isTime = computed<boolean>(() => timeOut.value > 0);
 const isLabels = computed<boolean>(() => labelsOut.value > 0);
 const isTemporal = computed<boolean>(() => temporalOut.value > 0);
-const hasAnyOut = computed(() => totalOut.value > 0);
 const population = computed(() => time.value.length);
 </script>
 
