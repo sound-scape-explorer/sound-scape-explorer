@@ -1,10 +1,9 @@
-import {
+import Plotly, {
   type Config,
   type Data,
   type Layout,
   type PlotlyHTMLElement,
 } from 'plotly.js-dist-min';
-import Plotly from 'plotly.js-dist-min';
 import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {useAppCandlesLayout} from 'src/app/candles/use-app-candles-layout';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';

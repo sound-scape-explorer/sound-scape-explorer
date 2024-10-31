@@ -3,7 +3,7 @@ import {NButton, type NotificationType, useNotification} from 'naive-ui';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {ALERT_TIMER} from 'src/constants';
 import {copyToClipboard} from 'src/utils/browser';
-import {combineStringsWithBreaks} from 'src/utils/strings';
+import {joinStringsWithBreaks} from 'src/utils/strings';
 import {VERSION} from 'src/version';
 import {h, watch} from 'vue';
 
@@ -26,7 +26,7 @@ const render = (type: NotificationType, title: string, description: string) => {
             text: true,
             type: 'primary',
             onClick: () => {
-              const message = combineStringsWithBreaks([
+              const message = joinStringsWithBreaks([
                 `version=${VERSION}`,
                 `type=${type}`,
                 '---',
