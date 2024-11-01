@@ -15,7 +15,7 @@ const render = (type: NotificationType, title: string, description: string) => {
   const n = notification[type]({
     content: description,
     meta: title,
-    duration: !isError ? ALERT_TIMER : undefined,
+    duration: isError ? ALERT_TIMER * 2 : ALERT_TIMER,
     keepAliveOnHover: true,
     action: !isError
       ? undefined
