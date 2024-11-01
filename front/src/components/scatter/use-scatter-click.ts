@@ -3,6 +3,8 @@ import {
   type PlotDatum,
   type PlotMouseEvent,
 } from 'plotly.js-dist-min';
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {useDraggables} from 'src/composables/use-draggables';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 
 // @warn auto-completion does not work on intellij 2024.2.3
@@ -14,6 +16,8 @@ interface MyPlotDatum extends Omit<PlotDatum, 'data'> {
 
 export function useScatterClick() {
   const {selectInterval} = useIntervalSelector();
+  const {open} = useDraggables();
+  const {isDetailsAutoOpen, isAudioAutoOpen} = useClientSettings();
 
   const handleClick = (e: PlotMouseEvent) => {
     const point: MyPlotDatum = e.points[0] as unknown as MyPlotDatum;
@@ -24,6 +28,14 @@ export function useScatterClick() {
     }
 
     selectInterval(point.pointNumber); // interval index
+
+    if (isDetailsAutoOpen.value) {
+      open('details');
+    }
+
+    if (isAudioAutoOpen.value) {
+      open('audio');
+    }
   };
 
   return {

@@ -1,7 +1,5 @@
 import {AudioBufferError} from 'src/common/Errors';
 import {useAudioQuery} from 'src/composables/use-audio-query';
-import {useClientSettings} from 'src/composables/use-client-settings';
-import {useDraggables} from 'src/composables/use-draggables';
 import {type BlockDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {TIMEOUT} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
@@ -17,9 +15,7 @@ const isLoading = ref<boolean>(false);
 
 export function useAudioFile() {
   const {loadSlice} = useWavesurferLoader();
-  const {open} = useDraggables();
   const {context} = useAudioContext();
-  const {isAudioAutoOpen} = useClientSettings();
   const {queryFile} = useAudioQuery();
 
   const select = (newBlock: BlockDetails | null) => {
@@ -30,10 +26,6 @@ export function useAudioFile() {
     if (newBlock === null) {
       block.value = null;
       return;
-    }
-
-    if (isAudioAutoOpen.value) {
-      open('audio');
     }
 
     if (block.value === newBlock) {

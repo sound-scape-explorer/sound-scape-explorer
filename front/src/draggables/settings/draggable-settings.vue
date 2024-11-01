@@ -120,14 +120,14 @@ useDraggableSettingsProviders();
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Scatter: Open Audio draggable on click">
+      <DraggableSettingsItem title="Scatter: Open Audio on click">
         <AppCheckbox
           :default="isAudioAutoOpen"
           :injection-key="InjectionKey.settingsIsAudioAutoOpen"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Scatter: Open Details draggable on click">
+      <DraggableSettingsItem title="Scatter: Open Details on click">
         <AppCheckbox
           :default="isDetailsAutoOpen"
           :injection-key="InjectionKey.settingsIsDetailsAutoOpen"
