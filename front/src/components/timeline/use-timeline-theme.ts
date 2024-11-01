@@ -10,6 +10,7 @@ const fillLight = '#DDD';
 
 export function useTimelineTheme() {
   const highlight = (color: string) => chroma(color).darken().css();
+  const active = (color: string) => chroma(color).brighten().css();
 
   return {
     primary: primary,
@@ -19,5 +20,6 @@ export function useTimelineTheme() {
     fill: fill,
     fillLight: fillLight,
     highlight: highlight,
+    active: active,
   };
 }

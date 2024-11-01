@@ -4,6 +4,7 @@ import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
+import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 
 export function useBodyDrawElements() {
   const {context} = useTimelineContext().body;
@@ -11,7 +12,8 @@ export function useBodyDrawElements() {
   const {rowHeight, elementGaps} = useBodyConfig();
   const {rangeToCanvasX} = useBodyUtils();
   const {elements} = useBodyElements();
-  const {highlight} = useTimelineTheme();
+  const {highlight, active} = useTimelineTheme();
+  const {currentIntervalIndex} = useIntervalSelector();
 
   const drawElements = () => {
     if (!context.value) {
@@ -34,9 +36,17 @@ export function useBodyDrawElements() {
         hovered.value?.start === element.start &&
         hovered.value?.end === element.end;
 
+      const isCurrentSelection = currentIntervalIndex.value === element.index;
+
       ctx.fillStyle = element.color;
 
-      if (isCurrentHover) {
+      if (isCurrentSelection) {
+        ctx.fillStyle = active(element.color);
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.33)';
+        ctx.shadowBlur = 3;
+        ctx.shadowOffsetX = -1;
+        ctx.shadowOffsetY = 1;
+      } else if (isCurrentHover) {
         ctx.fillStyle = highlight(element.color);
         ctx.shadowColor = 'rgba(0, 0, 0, 0.33)';
         ctx.shadowBlur = 3;
