@@ -1,11 +1,16 @@
 <script lang="ts" setup="">
 import {IonIcon} from '@ionic/vue';
-import {colorFillOutline} from 'ionicons/icons';
-import {NTag, NTooltip} from 'naive-ui';
+import {
+  colorFillOutline,
+  invertModeOutline,
+  refreshOutline,
+} from 'ionicons/icons';
+import {NTag} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import LabelCheckboxes from 'src/draggables/labels/label-checkboxes.vue';
 import {useLabel} from 'src/draggables/labels/use-label';
+import {watch} from 'vue';
 
 export interface LabelProps {
   property: string;
@@ -13,48 +18,71 @@ export interface LabelProps {
 
 const props = defineProps<LabelProps>();
 
-const {handlePropertyClick, handlePropertyRightClick} = useLabel(props);
+const {
+  hasNoSelection,
+  invertSelection,
+  resetSelection,
+  isShowing,
+  toggleShowing,
+  isCurrent,
+  openCurrent,
+} = useLabel(props);
 const {handleLabelClick} = useColorSelection();
+
+watch(isCurrent, openCurrent);
 </script>
 
 <template>
   <div :class="[$style.cell, $style.ml, $style.mr, $style.mb]">
-    <NTooltip
-      :show-arrow="false"
-      placement="top-start"
-      trigger="hover"
+    <NTag
+      :bordered="false"
+      :class="$style.tag"
+      @click="toggleShowing"
     >
-      <!--suppress VueUnrecognizedSlot -->
-      <template #trigger>
-        <NTag
-          :bordered="false"
-          :class="$style.tag"
-          @click="handlePropertyClick"
-          @contextmenu="(e: PointerEvent) => handlePropertyRightClick(e, property)"
-        >
-          {{ props.property }}
-        </NTag>
-      </template>
-      <div>
-        <span>Left click: Invert selection</span>
-        <br />
-        <span>Right click: Clear selection</span>
-      </div>
-    </NTooltip>
+      {{ props.property }}
+    </NTag>
 
-    <AppButton
-      :handle-click="() => handleLabelClick(props.property)"
-      size="small"
-      small-tooltip
-      tooltip="Use for coloring"
-      tooltip-placement="top"
-    >
-      <IonIcon :icon="colorFillOutline" />
-    </AppButton>
+    <div :class="$style.buttons">
+      <AppButton
+        :disabled="hasNoSelection"
+        :handle-click="invertSelection"
+        size="tiny"
+        small-tooltip
+        tooltip="Invert selection"
+        tooltip-placement="top"
+      >
+        <IonIcon :icon="invertModeOutline" />
+      </AppButton>
+      <AppButton
+        :disabled="hasNoSelection"
+        :handle-click="() => resetSelection(props.property)"
+        size="tiny"
+        small-tooltip
+        tooltip="Clear selection"
+        tooltip-placement="top"
+      >
+        <IonIcon :icon="refreshOutline" />
+      </AppButton>
+      <AppButton
+        :active="isCurrent"
+        :handle-click="() => handleLabelClick(props.property)"
+        size="tiny"
+        small-tooltip
+        tooltip="Use for coloring"
+        tooltip-placement="top"
+      >
+        <IonIcon :icon="colorFillOutline" />
+      </AppButton>
+    </div>
   </div>
 
   <LabelCheckboxes
-    :class="[$style.checkboxes, $style.mr, $style.ml]"
+    :class="[
+      $style.checkboxes,
+      $style.mr,
+      $style.ml,
+      {[$style.show]: isShowing},
+    ]"
     :property="props.property"
   />
 </template>
@@ -78,7 +106,8 @@ const {handleLabelClick} = useColorSelection();
 
 .cell {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   height: auto;
   gap: $p0;
 }
@@ -92,7 +121,19 @@ const {handleLabelClick} = useColorSelection();
   }
 }
 
+.buttons {
+  display: flex;
+  gap: $p0;
+}
+
 .checkboxes {
+  display: none;
   margin-bottom: $p0;
+  opacity: 0;
+}
+
+.show {
+  display: flex;
+  opacity: 1;
 }
 </style>

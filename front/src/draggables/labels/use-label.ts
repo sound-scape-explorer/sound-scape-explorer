@@ -1,12 +1,33 @@
 import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {type LabelProps} from 'src/draggables/labels/label.vue';
 import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
+import {computed, ref} from 'vue';
 
 export function useLabel(props: LabelProps) {
   const {labels} = useStorageLabels();
   const {updateSelection, selection} = useLabelSelection();
+  const {criteria} = useColorSelection();
 
-  const handlePropertyClick = () => {
+  const isShowing = ref<boolean>(false);
+  const isCurrent = computed<boolean>(() => criteria.value === props.property);
+
+  const hasNoSelection = computed<boolean>(() => {
+    if (!selection.value[props.property]) {
+      return true;
+    }
+
+    return selection.value[props.property].length === 0;
+  });
+
+  const toggleShowing = () => (isShowing.value = !isShowing.value);
+  const openCurrent = () => {
+    if (isCurrent.value && !isShowing.value) {
+      isShowing.value = true;
+    }
+  };
+
+  const invertSelection = () => {
     if (labels.value === null) {
       return;
     }
@@ -27,9 +48,7 @@ export function useLabel(props: LabelProps) {
     updateSelection(props.property, reverseSelection);
   };
 
-  const handlePropertyRightClick = (e: PointerEvent, property: string) => {
-    e.preventDefault();
-
+  const resetSelection = (property: string) => {
     if (selection.value[property].length === 0) {
       return;
     }
@@ -38,7 +57,12 @@ export function useLabel(props: LabelProps) {
   };
 
   return {
-    handlePropertyClick: handlePropertyClick,
-    handlePropertyRightClick: handlePropertyRightClick,
+    invertSelection: invertSelection,
+    resetSelection: resetSelection,
+    hasNoSelection: hasNoSelection,
+    isShowing: isShowing,
+    toggleShowing: toggleShowing,
+    isCurrent: isCurrent,
+    openCurrent: openCurrent,
   };
 }
