@@ -28,6 +28,9 @@ export function useColorSelection() {
   const {labelProperties} = useStorageLabels();
   const {names} = useIndicators();
 
+  // todo: maybe extract me?
+  const criteriaIndex = computed(() => criterias.value.indexOf(criteria.value));
+
   const reset = () => {
     flavor.value = settingDefaults.colorsFlavor;
   };
@@ -74,7 +77,6 @@ export function useColorSelection() {
     }
   };
 
-  const criteriaIndex = computed(() => criterias.value.indexOf(criteria.value));
   return {
     reset: reset,
     flavor: flavor,
