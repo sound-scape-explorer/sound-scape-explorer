@@ -3,6 +3,7 @@ import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
 import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
+import {type TimelineElement} from 'src/components/timeline/use-timeline-elements';
 import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 
@@ -14,6 +15,31 @@ export function useBodyDrawElements() {
   const {elements} = useBodyElements();
   const {highlight, active} = useTimelineTheme();
   const {currentIntervalIndex} = useIntervalSelector();
+
+  const getElementHovered = (element: TimelineElement) => {
+    return (
+      hovered.value?.row === element.row &&
+      hovered.value?.color === element.color &&
+      hovered.value?.start === element.start &&
+      hovered.value?.end === element.end
+    );
+  };
+
+  const getElementSelected = (element: TimelineElement) => {
+    return currentIntervalIndex.value === element.index;
+  };
+
+  const setBlur = (ctx: CanvasRenderingContext2D) => {
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.33)';
+    ctx.shadowBlur = 3;
+    ctx.shadowOffsetX = -1;
+    ctx.shadowOffsetY = 1;
+  };
+
+  const resetBlur = (ctx: CanvasRenderingContext2D) => {
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+  };
 
   const drawElements = () => {
     if (!context.value) {
@@ -30,39 +56,24 @@ export function useBodyDrawElements() {
 
       const xWidth = xEnd - xStart;
 
-      const isCurrentHover =
-        hovered.value?.row === element.row &&
-        hovered.value?.color === element.color &&
-        hovered.value?.start === element.start &&
-        hovered.value?.end === element.end;
-
-      const isCurrentSelection = currentIntervalIndex.value === element.index;
+      const isElementHovered = getElementHovered(element);
+      const isElementSelected = getElementSelected(element);
 
       ctx.fillStyle = element.color;
 
-      if (isCurrentSelection) {
+      if (isElementSelected) {
         ctx.fillStyle = active(element.color);
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.33)';
-        ctx.shadowBlur = 3;
-        ctx.shadowOffsetX = -1;
-        ctx.shadowOffsetY = 1;
-      } else if (isCurrentHover) {
+        setBlur(ctx);
+      } else if (isElementHovered) {
         ctx.fillStyle = highlight(element.color);
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.33)';
-        ctx.shadowBlur = 3;
-        ctx.shadowOffsetX = -1;
-        ctx.shadowOffsetY = 1;
+        setBlur(ctx);
       } else {
         ctx.fillStyle = element.color;
-        ctx.shadowColor = 'transparent';
-        ctx.shadowBlur = 0;
+        resetBlur(ctx);
       }
 
       ctx.fillRect(xStart, y, xWidth, rowHeight - elementGaps.bottom);
-
-      // reset shadows
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
+      resetBlur(ctx);
     }
   };
 
