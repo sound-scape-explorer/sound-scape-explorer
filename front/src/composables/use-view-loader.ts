@@ -25,9 +25,7 @@ import {ref} from 'vue';
 
 const step = ref<number>(0); // percents
 
-type StepText = string;
-type StepReader = () => Promise<void>;
-type Step = [StepText, StepReader];
+type Step = [string, () => Promise<void>]; // [text, reader]
 
 export function useViewLoader() {
   const {close} = useDraggables();
