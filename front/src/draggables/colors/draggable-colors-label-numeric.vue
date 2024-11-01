@@ -16,7 +16,7 @@ onBeforeUnmount(disable);
   <AppButton
     :active="isEnabled"
     :handle-click="toggle"
-    :tooltip="`Coloring by range ${isEnabled ? 'on' : 'off'}`"
+    :tooltip="`Act as numeric range ${isEnabled ? 'on' : 'off'}`"
     size="small"
     tooltip-placement="bottom"
   >
