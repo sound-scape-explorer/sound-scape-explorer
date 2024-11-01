@@ -1,6 +1,7 @@
 import {useRefHistory} from '@vueuse/core';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
+import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {computed, ref} from 'vue';
 
@@ -13,6 +14,7 @@ export function useIntervalSelector() {
   const {isLoading} = useAudioFile();
   const {open} = useDraggables();
   const {isDetailsAutoOpen} = useClientSettings();
+  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
   const selectInterval = (index: number | null) => {
     if (currentIntervalIndex.value === index) {
@@ -34,6 +36,40 @@ export function useIntervalSelector() {
     }
   };
 
+  const forward = () => {
+    if (
+      currentIntervalIndex.value === null ||
+      aggregatedTimestamps.value === null
+    ) {
+      return;
+    }
+
+    const n = currentIntervalIndex.value + 1;
+
+    if (n > aggregatedTimestamps.value.length) {
+      return;
+    }
+
+    currentIntervalIndex.value = n;
+  };
+
+  const back = () => {
+    if (
+      currentIntervalIndex.value === null ||
+      aggregatedTimestamps.value === null
+    ) {
+      return;
+    }
+
+    const p = currentIntervalIndex.value - 1;
+
+    if (p < 0) {
+      return;
+    }
+
+    currentIntervalIndex.value = p;
+  };
+
   return {
     currentIntervalIndex: currentIntervalIndex,
     hasClicked: hasClicked,
@@ -43,5 +79,7 @@ export function useIntervalSelector() {
     redo: redo,
     canUndo: canUndo,
     canRedo: canRedo,
+    forward: forward,
+    back: back,
   };
 }
