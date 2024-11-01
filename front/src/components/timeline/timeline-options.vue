@@ -10,6 +10,7 @@ import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {generateUniqueRangeSlug} from 'src/utils/config';
 import {computed, onMounted, ref, watch} from 'vue';
 
+// todo: refactor me
 const {start, end, left, right, updateLeft, updateRight} = useTimelineRange();
 const {ranges} = useStorageRanges();
 const names = computed(
