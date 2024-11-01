@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {NInput, NInputNumber, NSpace, NTooltip} from 'naive-ui';
+import {NInput, NInputNumber, NSpace} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {type InjectionKey} from 'src/common/injection-key';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefInject} from 'src/composables/use-ref-inject';
@@ -73,13 +74,11 @@ watch(model, sync);
 
 <template>
   <NSpace vertical>
-    <NTooltip
+    <AppTooltip
       v-if="hasTooltip"
       :placement="props.tooltipPlacement"
-      trigger="hover"
     >
-      <!--suppress VueUnrecognizedSlot -->
-      <template #trigger>
+      <template #body>
         <NInputNumber
           v-if="isNumber"
           v-model:value="copy"
@@ -116,8 +115,11 @@ watch(model, sync);
           @keyup.enter="props.handleEnter"
         />
       </template>
-      <span>{{ props.tooltip ?? '' }}</span>
-    </NTooltip>
+
+      <template #tooltip>
+        <span>{{ props.tooltip ?? '' }}</span>
+      </template>
+    </AppTooltip>
 
     <NInputNumber
       v-if="!hasTooltip && isNumber"

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {NPagination, NSelect, NTag, NTooltip} from 'naive-ui';
+import {NPagination, NSelect, NTag} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {
   pageCountRef,
   pageIndexRef,
@@ -34,11 +35,8 @@ const {size, options} = useTimelineSizes();
     />
 
     <div :class="$style['gap-size']">
-      <NTooltip
-        placement="top"
-        trigger="hover"
-      >
-        <template #trigger>
+      <AppTooltip placement="top">
+        <template #body>
           <NSelect
             v-model:value="size"
             :default-value="size"
@@ -46,8 +44,8 @@ const {size, options} = useTimelineSizes();
             size="tiny"
           />
         </template>
-        <span>Gap size</span>
-      </NTooltip>
+        <template #tooltip>Gap size</template>
+      </AppTooltip>
     </div>
   </div>
 </template>

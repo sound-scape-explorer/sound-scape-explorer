@@ -1,7 +1,8 @@
 <script lang="ts" setup="">
 import {IonIcon} from '@ionic/vue';
 import {headsetOutline} from 'ionicons/icons';
-import {NButton, NGi, NGrid, NTag, NTooltip} from 'naive-ui';
+import {NButton, NGi, NGrid, NTag} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
@@ -60,13 +61,11 @@ watch(timeshift, updateDates);
     <div :class="[$style.file, $style.container]">
       <div :class="$style.title">Audio blocks</div>
       <span :class="[$style.file, $style.index]">
-        <NTooltip
+        <AppTooltip
           v-for="blockDetails in blocks"
           placement="bottom"
-          trigger="hover"
         >
-          <!--suppress VueUnrecognizedSlot -->
-          <template #trigger>
+          <template #body>
             <NButton
               :class="$style.zoom"
               size="small"
@@ -76,39 +75,41 @@ watch(timeshift, updateDates);
             </NButton>
           </template>
 
-          <NGrid
-            :cols="1"
-            x-gap="12"
-          >
-            <NGi>
-              <NTag
-                :bordered="false"
-                size="small"
-              >
-                file
-              </NTag>
-              {{ blockDetails.file }}
-            </NGi>
-            <NGi>
-              <NTag
-                :bordered="false"
-                size="small"
-              >
-                file start
-              </NTag>
-              {{ blockDetails.fileStart }} ms
-            </NGi>
-            <NGi>
-              <NTag
-                :bordered="false"
-                size="small"
-              >
-                start
-              </NTag>
-              {{ convertTimestampToIsoDate(blockDetails.start) }}
-            </NGi>
-          </NGrid>
-        </NTooltip>
+          <template #tooltip>
+            <NGrid
+              :cols="1"
+              x-gap="12"
+            >
+              <NGi>
+                <NTag
+                  :bordered="false"
+                  size="small"
+                >
+                  file
+                </NTag>
+                {{ blockDetails.file }}
+              </NGi>
+              <NGi>
+                <NTag
+                  :bordered="false"
+                  size="small"
+                >
+                  file start
+                </NTag>
+                {{ blockDetails.fileStart }} ms
+              </NGi>
+              <NGi>
+                <NTag
+                  :bordered="false"
+                  size="small"
+                >
+                  start
+                </NTag>
+                {{ convertTimestampToIsoDate(blockDetails.start) }}
+              </NGi>
+            </NGrid>
+          </template>
+        </AppTooltip>
       </span>
     </div>
 

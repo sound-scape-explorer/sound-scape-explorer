@@ -1,9 +1,11 @@
 <script lang="ts" setup="">
 import {NTooltip} from 'naive-ui';
+// @ts-expect-error underlying dependency of naive-ui
+// noinspection TypeScriptCheckImport
+import {type Placement} from 'vueuc/lib/binder/src/interface';
 
 interface Props {
-  tooltip: string;
-  placement?: 'right' | 'left' | 'top' | 'bottom';
+  placement?: Placement;
 }
 
 const props = withDefaults(defineProps<Props>(), {placement: 'left'});
@@ -16,8 +18,9 @@ const props = withDefaults(defineProps<Props>(), {placement: 'left'});
   >
     <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
-      <slot />
+      <slot name="body" />
     </template>
-    {{ props.tooltip }}
+
+    <slot name="tooltip" />
   </NTooltip>
 </template>

@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {NButton, NIcon, NTooltip} from 'naive-ui';
+import {NButton, NIcon} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {useAppMenuButton} from 'src/app/menu/use-app-menu-button';
 import {type DraggableKey} from 'src/composables/use-draggables';
 import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
@@ -17,12 +18,8 @@ const {getKey} = useKeyboardShortcuts();
 </script>
 
 <template>
-  <NTooltip
-    placement="right"
-    trigger="hover"
-  >
-    <!--suppress VueUnrecognizedSlot -->
-    <template #trigger>
+  <AppTooltip>
+    <template #body>
       <NButton
         ref="button"
         :class="[
@@ -43,12 +40,12 @@ const {getKey} = useKeyboardShortcuts();
       </NButton>
     </template>
 
-    <div>
+    <template #tooltip>
       {{ props.text }} [<span :class="$style.bold">
         {{ getKey(props.draggableKey) }}</span
       >]
-    </div>
-  </NTooltip>
+    </template>
+  </AppTooltip>
 </template>
 
 <style lang="scss" module>

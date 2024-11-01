@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {NTooltip} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
@@ -46,83 +46,8 @@ const population = computed(() => time.value.length);
 </script>
 
 <template>
-  <NTooltip
-    placement="left"
-    trigger="hover"
-  >
-    <div :class="$style.tooltip">
-      <div :class="$style.list">
-        <div :class="$style.row">
-          <div>Interval population</div>
-          <span>{{ population }}</span>
-        </div>
-        <div :class="$style.row">
-          <div :class="{[$style.bold]: isCollectMode}">Total collected</div>
-          <span :class="$style.active">{{ totalIn }}</span>
-        </div>
-        <div :class="$style.row">
-          <div :class="{[$style.bold]: isFilterMode}">Total filtered</div>
-          <span>{{ totalOut }}</span>
-        </div>
-      </div>
-
-      <p />
-
-      <h4>Active filters</h4>
-
-      <div :class="$style.list">
-        <div :class="$style.row">
-          <span>Calendar</span>
-          <span
-            v-if="isCollectMode && isTime"
-            :class="$style.active"
-            >{{ timeIn }} collected</span
-          >
-          <span v-if="isFilterMode && isTime">{{ timeOut }} filtered</span>
-          <span
-            v-if="!isTime"
-            :class="$style.inactive"
-            >inactive</span
-          >
-        </div>
-        <div :class="$style.row">
-          <span>Labels</span>
-          <span
-            v-if="isCollectMode && isLabels"
-            :class="$style.active"
-            >{{ labelsIn }} collected</span
-          >
-
-          <span v-if="isFilterMode && isLabels">{{ labelsOut }} filtered</span>
-
-          <span
-            v-if="!isLabels"
-            :class="$style.inactive"
-            >inactive</span
-          >
-        </div>
-        <div :class="$style.row">
-          <span>Temporal</span>
-          <span
-            v-if="isCollectMode && isTemporal"
-            :class="$style.active"
-            >{{ temporalIn }} collected</span
-          >
-
-          <span v-if="isFilterMode && isTemporal"
-            >{{ temporalOut }} filtered</span
-          >
-
-          <span
-            v-if="!isTemporal"
-            :class="$style.inactive"
-            >inactive</span
-          >
-        </div>
-      </div>
-    </div>
-
-    <template #trigger>
+  <AppTooltip placement="left">
+    <template #body>
       <div
         :class="$style.body"
         @click="toggleMode"
@@ -139,7 +64,83 @@ const population = computed(() => time.value.length);
         </span>
       </div>
     </template>
-  </NTooltip>
+
+    <template #tooltip>
+      <div :class="$style.tooltip">
+        <div :class="$style.list">
+          <div :class="$style.row">
+            <div>Interval population</div>
+            <span>{{ population }}</span>
+          </div>
+          <div :class="$style.row">
+            <div :class="{[$style.bold]: isCollectMode}">Total collected</div>
+            <span :class="$style.active">{{ totalIn }}</span>
+          </div>
+          <div :class="$style.row">
+            <div :class="{[$style.bold]: isFilterMode}">Total filtered</div>
+            <span>{{ totalOut }}</span>
+          </div>
+        </div>
+
+        <p />
+
+        <h4>Active filters</h4>
+
+        <div :class="$style.list">
+          <div :class="$style.row">
+            <span>Calendar</span>
+            <span
+              v-if="isCollectMode && isTime"
+              :class="$style.active"
+              >{{ timeIn }} collected</span
+            >
+            <span v-if="isFilterMode && isTime">{{ timeOut }} filtered</span>
+            <span
+              v-if="!isTime"
+              :class="$style.inactive"
+              >inactive</span
+            >
+          </div>
+          <div :class="$style.row">
+            <span>Labels</span>
+            <span
+              v-if="isCollectMode && isLabels"
+              :class="$style.active"
+              >{{ labelsIn }} collected</span
+            >
+
+            <span v-if="isFilterMode && isLabels"
+              >{{ labelsOut }} filtered</span
+            >
+
+            <span
+              v-if="!isLabels"
+              :class="$style.inactive"
+              >inactive</span
+            >
+          </div>
+          <div :class="$style.row">
+            <span>Temporal</span>
+            <span
+              v-if="isCollectMode && isTemporal"
+              :class="$style.active"
+              >{{ temporalIn }} collected</span
+            >
+
+            <span v-if="isFilterMode && isTemporal"
+              >{{ temporalOut }} filtered</span
+            >
+
+            <span
+              v-if="!isTemporal"
+              :class="$style.inactive"
+              >inactive</span
+            >
+          </div>
+        </div>
+      </div>
+    </template>
+  </AppTooltip>
 </template>
 
 <style lang="scss" module>

@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {NButton, NTooltip} from 'naive-ui';
+import {NButton} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {type NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
@@ -35,14 +36,12 @@ const handleFocus = (e: FocusEvent) => {
 </script>
 
 <template>
-  <NTooltip
+  <AppTooltip
     v-if="hasTooltip"
     :class="{[$style.tooltip]: props.smallTooltip}"
     :placement="props.tooltipPlacement"
-    trigger="hover"
   >
-    <!--suppress VueUnrecognizedSlot -->
-    <template #trigger>
+    <template #body>
       <NButton
         :class="{
           [$style.grow]: props.grow,
@@ -58,10 +57,13 @@ const handleFocus = (e: FocusEvent) => {
         <slot />
       </NButton>
     </template>
-    <span :class="{[$style.small]: props.smallTooltip}">{{
-      props.tooltip
-    }}</span>
-  </NTooltip>
+
+    <template #tooltip>
+      <span :class="{[$style.small]: props.smallTooltip}">{{
+        props.tooltip
+      }}</span>
+    </template>
+  </AppTooltip>
 
   <NButton
     v-if="!hasTooltip"

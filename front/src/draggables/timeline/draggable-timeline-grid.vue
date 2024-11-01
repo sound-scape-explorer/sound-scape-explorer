@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {NTag, NTooltip} from 'naive-ui';
+import {NTag} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {useDate} from 'src/composables/use-date';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
@@ -138,13 +139,10 @@ const handleBlockClick = (block: VisibleBlock) => {
           :style="`--left: ${vB.position}`"
           @click="() => handleBlockClick(vB)"
         >
-          <NTooltip
-            placement="top"
-            trigger="hover"
-          >
-            <!--suppress VueUnrecognizedSlot -->
-            <template #trigger>{{ vB.file }}</template>
-            <div>
+          <AppTooltip placement="top">
+            <template #body>{{ vB.file }}</template>
+
+            <template #tooltip>
               <div>
                 <NTag
                   :bordered="false"
@@ -172,8 +170,8 @@ const handleBlockClick = (block: VisibleBlock) => {
                 </NTag>
                 {{ convertTimestampToIsoDate(vB.start) }}
               </div>
-            </div>
-          </NTooltip>
+            </template>
+          </AppTooltip>
         </div>
       </div>
     </div>

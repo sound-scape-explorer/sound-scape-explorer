@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {downloadOutline} from 'ionicons/icons';
-import {NCascader, NSwitch, NTooltip} from 'naive-ui';
+import {NCascader, NSwitch} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
@@ -67,24 +68,24 @@ useRefProvide(InjectionKey.trajectoriesFuse, isFused);
           size="small"
         />
 
-        <NTooltip
+        <AppTooltip
           :show-arrow="false"
           placement="top-start"
           trigger="hover"
         >
-          <!--suppress VueUnrecognizedSlot -->
-          <template #trigger>
+          <template #body>
             <NSwitch
               v-model:value="isFused"
               :class="$style.switch"
               :disabled="!isFuseable"
               size="small"
             >
-              <template #checked> fuse</template>
+              <template #checked>fuse</template>
             </NSwitch>
           </template>
-          Fuse trajectories
-        </NTooltip>
+
+          <template #tooltip>Fuse trajectories</template>
+        </AppTooltip>
       </div>
 
       <h2>Colormap</h2>
