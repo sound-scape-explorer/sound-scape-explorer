@@ -69,6 +69,7 @@ export function useOverviewHandlers() {
     hover.value = null;
     isDragging.value = false;
     drag.value = null;
+    // todo: fix me
     unlock();
   };
 
