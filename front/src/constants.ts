@@ -77,3 +77,5 @@ export const LINK_DISCORD = 'https://discord.gg/eRsQPDBeXg';
 export const TIMEOUT = 240;
 
 export const DEV_AUTO_REDUCER = 'umap (3d)';
+
+export const LABEL_SITE = '__SITE';

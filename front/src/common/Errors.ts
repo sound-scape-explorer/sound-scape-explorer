@@ -42,3 +42,7 @@ export class ScatterHoversError extends BaseError {}
 export class ScatterFeaturesError extends BaseError {}
 
 export class ColorByLabelError extends BaseError {}
+
+export class StorageAggregatedLabelsErrors extends BaseError {}
+
+export class StorageLabelsError extends BaseError {}

@@ -29,6 +29,7 @@ import {
   type TracedRelativeTimestamps,
   type TracedTimestamps,
 } from 'src/composables/use-trajectories-data';
+import {LABEL_SITE} from 'src/constants';
 import {trimRectangular} from 'src/utils/arrays';
 import {sortStringsNumerically} from 'src/utils/strings';
 
@@ -153,11 +154,13 @@ export async function readFilenames(file: File) {
   return dataset.to_array() as string[];
 }
 
+// todo: remove me?
 export async function readFilename(file: File, fileIndex: number) {
   const filenames = await readFilenames(file);
   return filenames[fileIndex];
 }
 
+// todo: remove me?
 export async function readFilesMetas(file: File) {
   const h5 = await load(file);
   const path = StoragePath.files_labels;
@@ -165,10 +168,12 @@ export async function readFilesMetas(file: File) {
   return metas.to_array() as string[][];
 }
 
+// todo: refactor me
 export async function readLabels(
   file: File,
   bandName: string,
   integrationSeconds: number,
+  extractorIndex: number,
 ): Promise<Labels> {
   const h5 = await load(file);
 
@@ -180,6 +185,17 @@ export async function readLabels(
 
   const labels: Labels = {};
 
+  // add sites
+  const sites = await readAggregatedSites(
+    file,
+    bandName,
+    integrationSeconds,
+    extractorIndex,
+  );
+  const sitesUniques = new Set(sites.map(({site}) => site));
+  labels[LABEL_SITE] = sortStringsNumerically([...sitesUniques]);
+
+  // add autoclusters
   const autoclusters = await readAutoclusters(
     file,
     bandName,
@@ -200,6 +216,7 @@ export async function readLabels(
     }
   }
 
+  // add user labels
   for (let i = 0; i < properties.length; i += 1) {
     const property = properties[i];
     labels[property] = sets[i].filter((element) => element !== '');
