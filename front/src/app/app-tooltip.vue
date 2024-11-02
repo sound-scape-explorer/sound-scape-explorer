@@ -8,11 +8,15 @@ import {type Placement} from 'vueuc/lib/binder/src/interface';
 
 interface Props {
   placement?: Placement;
+  native?: boolean;
 }
 
 let t: number | null = null;
 
-const props = withDefaults(defineProps<Props>(), {placement: 'left'});
+const props = withDefaults(defineProps<Props>(), {
+  placement: 'left',
+  native: false,
+});
 
 const show = ref<boolean>(false);
 
@@ -40,12 +44,17 @@ const clear = () => {
 <template>
   <NTooltip
     :placement="props.placement"
-    :show="show"
-    trigger="manual"
+    :show="props.native ? undefined : show"
+    :trigger="props.native ? 'hover' : 'manual'"
   >
     <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
+      <div v-if="props.native">
+        <slot name="body" />
+      </div>
+
       <div
+        v-if="!props.native"
         @mouseenter="handleMouseEnter"
         @mouseleave="handleMouseLeave"
       >

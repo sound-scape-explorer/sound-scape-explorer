@@ -11,8 +11,8 @@ import {
   volumeLowOutline,
 } from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
-import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import DraggableAudioSidebarVumeter from 'src/draggables/audio/draggable-audio-sidebar-vumeter.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
@@ -112,14 +112,7 @@ const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
       <IonIcon :icon="arrowDownOutline" />
     </AppButton>
 
-    <AppDraggableSidebarHistory
-      :can-redo="canRedo"
-      :can-undo="canUndo && history.length > 2"
-      :redo="redo"
-      :undo="undo"
-      redo-tooltip="Next interval"
-      undo-tooltip="Previous interval"
-    />
+    <FilteringInfo />
 
     <DraggableAudioSidebarVumeter />
   </AppDraggableSidebar>
