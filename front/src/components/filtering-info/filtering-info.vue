@@ -1,61 +1,28 @@
 <script lang="ts" setup>
 import AppTooltip from 'src/app/app-tooltip.vue';
 import FilteringInfoButtons from 'src/components/filtering-info/filtering-info-buttons.vue';
-import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
+import {useFilteringInfoData} from 'src/components/filtering-info/use-filtering-info-data';
+import {useFilteringInfoMode} from 'src/components/filtering-info/use-filtering-info-mode';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
-import {computed, ref} from 'vue';
 
 const {currentIntervalIndex, hasClicked} = useIntervalSelector();
+const {cycleMode, isIntervalMode, isCollectMode, isFilterMode} =
+  useFilteringInfoMode();
 
-type Mode = 'collected' | 'filtered' | 'interval';
-
-const modes: Mode[] = ['collected', 'filtered', 'interval'];
-const mode = ref<Mode>('collected');
-
-const cycleMode = () => {
-  let m = modes.indexOf(mode.value);
-  m += 1;
-
-  if (m >= modes.length || m <= 0) {
-    m = 0;
-  }
-
-  let newMode = modes[m];
-  if (newMode === 'interval' && !hasClicked.value) {
-    newMode = 'collected';
-  }
-
-  mode.value = newMode;
-};
-
-const isIntervalMode = computed(() => mode.value === 'interval');
-const isCollectMode = computed(() => mode.value === 'collected');
-const isFilterMode = computed(() => mode.value === 'filtered');
-
-const {filtered: global} = useScatterGlobalFilter();
-const {filtered: time} = useScatterFilterTime();
-const {filtered: labels} = useScatterFilterLabels();
-const {filtered: temporal} = useScatterFilterTemporal();
-
-const totalOut = computed(() => global.value.filter((f) => f).length);
-const totalIn = computed(() => global.value.length - totalOut.value);
-
-const timeOut = computed(() => time.value.filter((f) => f).length);
-const timeIn = computed(() => time.value.length - timeOut.value);
-
-const labelsOut = computed(() => labels.value.filter((f) => f).length);
-const labelsIn = computed(() => labels.value.length - labelsOut.value);
-
-const temporalIn = computed(() => temporal.value.length - temporalOut.value);
-const temporalOut = computed(() => temporal.value.filter((f) => f).length);
-
-const isTimeActive = computed<boolean>(() => timeOut.value > 0);
-const isLabelsActive = computed<boolean>(() => labelsOut.value > 0);
-const isTemporalActive = computed<boolean>(() => temporalOut.value > 0);
-const population = computed(() => time.value.length);
+const {
+  totalOut,
+  totalIn,
+  population,
+  isTimeActive,
+  timeIn,
+  timeOut,
+  isLabelsActive,
+  labelsIn,
+  labelsOut,
+  isTemporalActive,
+  temporalIn,
+  temporalOut,
+} = useFilteringInfoData();
 </script>
 
 <template>
@@ -94,10 +61,6 @@ const population = computed(() => time.value.length);
         <p />
 
         <div :class="$style.list">
-          <div :class="$style.row">
-            <div>Interval population</div>
-            <span>{{ population }}</span>
-          </div>
           <div
             v-if="hasClicked"
             :class="$style.row"
@@ -118,6 +81,10 @@ const population = computed(() => time.value.length);
           <div :class="$style.row">
             <div :class="{[$style.bold]: isFilterMode}">Total filtered</div>
             <span :class="{[$style.bold]: isFilterMode}">{{ totalOut }}</span>
+          </div>
+          <div :class="$style.row">
+            <div>Interval population</div>
+            <span>{{ population }}</span>
           </div>
         </div>
 
