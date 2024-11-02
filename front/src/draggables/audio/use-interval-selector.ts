@@ -36,10 +36,10 @@ export function useIntervalSelector() {
       return;
     }
 
-    const n = currentIntervalIndex.value + 1;
+    let n = currentIntervalIndex.value + 1;
 
-    if (n > aggregatedTimestamps.value.length) {
-      return;
+    if (n >= aggregatedTimestamps.value.length) {
+      n = 0;
     }
 
     currentIntervalIndex.value = n;
@@ -53,10 +53,10 @@ export function useIntervalSelector() {
       return;
     }
 
-    const p = currentIntervalIndex.value - 1;
+    let p = currentIntervalIndex.value - 1;
 
-    if (p < 0) {
-      return;
+    if (p <= 0) {
+      p = aggregatedTimestamps.value.length - 1;
     }
 
     currentIntervalIndex.value = p;
