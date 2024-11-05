@@ -55,9 +55,9 @@ export function useWavesurferLoader() {
 
     stop();
     ws.value.loadBlob(blob);
-    ws.value.on('seek', seek);
-    ws.value.on('finish', handleAudioEnd);
-    ws.value.on('ready', prepare);
+    ws.value.once('seek', seek);
+    ws.value.once('finish', handleAudioEnd);
+    ws.value.once('ready', prepare);
   };
 
   return {
