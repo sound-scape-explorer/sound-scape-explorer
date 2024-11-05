@@ -23,6 +23,7 @@ useLabelCheckboxesLifecycles(props.property, checkboxes);
     v-model:value="checkboxes"
   >
     <NGrid
+      :class="$style.container"
       :cols="2"
       :x-gap="4"
       :y-gap="4"
@@ -44,6 +45,11 @@ useLabelCheckboxesLifecycles(props.property, checkboxes);
 </template>
 
 <style lang="scss" module>
+.container {
+  margin-top: $p0;
+  margin-right: $p0;
+}
+
 .checkbox {
   width: 100%;
   height: 100%;

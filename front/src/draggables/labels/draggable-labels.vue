@@ -32,7 +32,10 @@ const {labelProperties} = useStorageLabels();
         },
       ]"
     >
-      <NGrid :cols="cols">
+      <NGrid
+        :cols="cols"
+        y-gap="8"
+      >
         <NGi v-for="property in labelProperties">
           <Label :property="property" />
         </NGi>

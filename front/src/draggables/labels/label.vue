@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {IonIcon} from '@ionic/vue';
 import {
+  chevronForwardOutline,
   colorFillOutline,
   invertModeOutline,
   refreshOutline,
@@ -33,13 +34,19 @@ watch(isCurrent, openCurrent);
 </script>
 
 <template>
-  <div :class="[$style.cell, $style.ml, $style.mr, $style.mb]">
+  <div :class="[$style.cell]">
     <NTag
       :bordered="false"
       :class="$style.tag"
       @click="toggleShowing"
     >
-      {{ props.property }}
+      <div :class="$style['tag-content']">
+        <IonIcon
+          :class="[$style['chevron'], {[$style['chevron-rotate']]: isShowing}]"
+          :icon="chevronForwardOutline"
+        />
+        <span>{{ props.property }}</span>
+      </div>
     </NTag>
 
     <div :class="$style.buttons">
@@ -77,38 +84,18 @@ watch(isCurrent, openCurrent);
   </div>
 
   <LabelCheckboxes
-    :class="[
-      $style.checkboxes,
-      $style.mr,
-      $style.ml,
-      {[$style.show]: isShowing},
-    ]"
+    :class="[$style.checkboxes, {[$style['checkboxes-show']]: isShowing}]"
     :property="props.property"
   />
 </template>
 
 <style lang="scss" module>
-.ml {
-  margin-left: $p0;
-}
-
-.mr {
-  margin-right: $p0;
-}
-
-.mt {
-  margin-top: $p0;
-}
-
-.mb {
-  margin-bottom: $p0;
-}
-
 .cell {
   display: flex;
   align-items: center;
   justify-content: center;
   height: auto;
+  margin-right: $p0;
   gap: $p0;
 }
 
@@ -121,6 +108,20 @@ watch(isCurrent, openCurrent);
   }
 }
 
+.tag-content {
+  display: flex;
+  align-items: center;
+  gap: $p0;
+}
+
+.chevron {
+  @include transition-rotate;
+}
+
+.chevron-rotate {
+  @include rotate-90;
+}
+
 .buttons {
   display: flex;
   gap: $p0;
@@ -128,12 +129,9 @@ watch(isCurrent, openCurrent);
 
 .checkboxes {
   display: none;
-  margin-bottom: $p0;
-  opacity: 0;
 }
 
-.show {
+.checkboxes-show {
   display: flex;
-  opacity: 1;
 }
 </style>
