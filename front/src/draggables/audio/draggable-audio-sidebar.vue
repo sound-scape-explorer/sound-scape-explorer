@@ -17,7 +17,6 @@ import DraggableAudioSidebarVumeter from 'src/draggables/audio/draggable-audio-s
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {useWavesurferHandlers} from 'src/draggables/audio/use-wavesurfer-handlers';
 
 const {
@@ -34,7 +33,6 @@ const {
 } = useWavesurferHandlers();
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
-const {history, undo, redo, canUndo, canRedo} = useIntervalSelector();
 </script>
 
 <template>
