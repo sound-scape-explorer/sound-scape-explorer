@@ -1,13 +1,11 @@
 <script lang="ts" setup="">
 import {NTooltip} from 'naive-ui';
 import {TIMEOUT} from 'src/constants';
+import {type NaiveTooltipPlacement} from 'src/types';
 import {ref} from 'vue';
-// @ts-expect-error underlying dependency of naive-ui
-// noinspection TypeScriptCheckImport
-import {type Placement} from 'vueuc/lib/binder/src/interface';
 
 interface Props {
-  placement?: Placement;
+  placement?: NaiveTooltipPlacement;
   native?: boolean;
 }
 
