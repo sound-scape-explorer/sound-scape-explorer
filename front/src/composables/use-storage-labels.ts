@@ -13,9 +13,17 @@ export interface Labels {
 }
 
 let isLoaded = false;
+
 const labels = ref<Labels | null>(null);
+
 const labelProperties = ref<string[] | null>(null);
 const labelSets = ref<string[][] | null>(null);
+
+// `Actual` for existing in storage, (slice manually injected labels)
+const injectedCount = 1;
+const labelPropertiesActual = ref<string[] | null>(null);
+const labelSetsActual = ref<string[][] | null>(null);
+
 const labelPropertiesAsColorTypes = ref<string[] | null>(null); // todo: remove me
 
 export function useStorageLabels() {
@@ -53,10 +61,13 @@ export function useStorageLabels() {
         extractor.value.index,
       );
 
-      labelSets.value = Object.values(labels.value);
-
       const properties = Object.keys(labels.value);
+
+      labelSets.value = Object.values(labels.value);
       labelProperties.value = properties;
+
+      labelSetsActual.value = labelSets.value.slice(injectedCount);
+      labelPropertiesActual.value = labelProperties.value.slice(injectedCount);
 
       labelPropertiesAsColorTypes.value = convertSlugsToColorTypes(properties);
     });
@@ -65,9 +76,10 @@ export function useStorageLabels() {
   return {
     labels: labels,
     labelProperties: labelProperties,
+    labelPropertiesActual: labelPropertiesActual,
     labelSets: labelSets,
+    labelSetsActual: labelSetsActual,
     labelPropertiesAsColorTypes: labelPropertiesAsColorTypes,
     readLabels: readLabels,
-    // resetLabels: resetLabels,
   };
 }

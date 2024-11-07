@@ -16,7 +16,7 @@ const series = ref<number[][]>([]);
 
 export function useDraggableHeatmapsChart() {
   const {a, b} = useDraggableHeatmapsLabels();
-  const {labelProperties, labelSets} = useStorageLabels();
+  const {labelPropertiesActual, labelSetsActual} = useStorageLabels();
   const {digested} = useStorageDigested();
   const {update: updateRange} = useDraggableHeatmapsRange();
   const {isPairing} = useDraggableHeatmaps();
@@ -35,18 +35,21 @@ export function useDraggableHeatmapsChart() {
   };
 
   const getLabelData = (label: string) => {
-    if (labelProperties.value === null || labelSets.value === null) {
+    if (
+      labelPropertiesActual.value === null ||
+      labelSetsActual.value === null
+    ) {
       throw new DraggableHeatmapsError('labels not available');
     }
 
-    const index = labelProperties.value.indexOf(label);
+    const index = labelPropertiesActual.value.indexOf(label);
 
     if (index === -1) {
       const msg = `could not find label property ${label}`;
       throw new DraggableHeatmapsError(msg);
     }
 
-    const possibleValues = labelSets.value[index];
+    const possibleValues = labelSetsActual.value[index];
 
     return {
       index: index,

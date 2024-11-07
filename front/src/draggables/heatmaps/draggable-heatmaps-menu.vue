@@ -30,7 +30,7 @@ const {resize1by1, resize4by3, resize16by10, resize16by9, double, half} =
 const {flavor, flavors} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
 
-const {labelProperties} = useStorageLabels();
+const {labelPropertiesActual} = useStorageLabels();
 
 useRefProvide(InjectionKey.digestedDigester, digesterName);
 useRefProvide(InjectionKey.digestedLabelA, a);
@@ -54,7 +54,7 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
     <div :class="$style.labels">
       <AppSelect
         :injection-key="InjectionKey.digestedLabelA"
-        :options="labelProperties ?? []"
+        :options="labelPropertiesActual ?? []"
         placeholder="Label A..."
         size="small"
       />
@@ -70,7 +70,7 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
       <AppSelect
         :disabled="!isReadyForSelection || !isPairing"
         :injection-key="InjectionKey.digestedLabelB"
-        :options="labelProperties ?? []"
+        :options="labelPropertiesActual ?? []"
         placeholder="Label B..."
         size="small"
       />
