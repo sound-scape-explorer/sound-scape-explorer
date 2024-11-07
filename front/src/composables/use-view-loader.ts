@@ -91,9 +91,9 @@ export function useViewLoader() {
     for (let s = 0; s < steps.length; s += 1) {
       const [text, reader] = steps[s];
 
+      updateStep(s);
       updateReading(text);
       await reader();
-      updateStep(s);
     }
 
     await generateColorScale();
