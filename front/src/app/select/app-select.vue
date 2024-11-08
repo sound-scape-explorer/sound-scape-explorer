@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import {NSelect, NSpace, NTooltip} from 'naive-ui';
-import type {InjectionKey} from 'src/common/injection-key';
+import {NSelect, NSpace} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useRefInject} from 'src/composables/use-ref-inject';
-import type {NaiveSize} from 'src/types';
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
+import {type NaiveSize} from 'src/types';
+import {convertToNaiveSelectOptions} from 'src/utils/naive';
 import {computed} from 'vue';
 
 interface Props {
@@ -24,18 +25,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 const model = useRefInject(props.injectionKey);
 const options = computed(() => convertToNaiveSelectOptions(props.options));
-const hasTooltip = computed<boolean>(() => typeof props.tooltip === 'string');
+const hasTooltip = computed<boolean>(() => typeof props?.tooltip === 'string');
 </script>
 
 <template>
   <NSpace vertical>
-    <NTooltip
+    <AppTooltip
       v-if="hasTooltip"
       :placement="props.tooltipPlacement"
-      trigger="hover"
     >
-      <!--suppress VueUnrecognizedSlot -->
-      <template #trigger>
+      <template #body>
         <NSelect
           v-model:value="model"
           :default-value="props.options[defaultOptionIndex ?? 0]"
@@ -45,8 +44,8 @@ const hasTooltip = computed<boolean>(() => typeof props.tooltip === 'string');
           :size="props.size"
         />
       </template>
-      <span>{{ props.tooltip }}</span>
-    </NTooltip>
+      <template #tooltip>{{ props.tooltip }}</template>
+    </AppTooltip>
 
     <NSelect
       v-if="!hasTooltip"

@@ -1,10 +1,12 @@
-import type {Data} from 'plotly.js-dist-min';
+import {type Data} from 'plotly.js-dist-min';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterFeatures} from 'src/components/scatter/use-scatter-features';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
-import {traceAverageTrajectory} from 'src/utils/trace-average-trajectory';
-import {traceTrajectories} from 'src/utils/trace-trajectories';
+import {
+  traceAverageTrajectory,
+  traceTrajectories,
+} from 'src/utils/trajectories';
 import {ref} from 'vue';
 
 const traces = ref<Data[]>([]);
@@ -17,26 +19,25 @@ export function useScatterTraces() {
   const {scale: cyclingScale} = useColorsCycling();
 
   const render = () => {
-    let newTraces: Data[] = [];
+    // features
+    const newTraces = traceFeatures();
 
-    // add features
-    const featuresTraces = traceFeatures();
-    newTraces = [...newTraces, ...featuresTraces];
-
-    // add trajectories
+    // trajectories
     if (traceds.value.length > 0) {
       if (isFused.value) {
         const averageTrace = traceAverageTrajectory(
           traceds.value,
           cyclingScale.value,
         );
-        newTraces = [...newTraces, averageTrace];
+
+        newTraces.push(averageTrace);
       } else {
         const trajectories = traceTrajectories(
           traceds.value,
           cyclingScale.value,
         );
-        newTraces = [...newTraces, ...trajectories];
+
+        newTraces.push(...trajectories);
       }
     }
 

@@ -1,17 +1,18 @@
+import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useColorUser} from 'src/composables/use-color-user';
 import {useDate} from 'src/composables/use-date';
-import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
-import {mapRange} from 'src/utils/map-range';
+import {mapRange} from 'src/utils/math';
 
 export function useColorBy10min() {
   const {convertTimestampToDate} = useDate();
-  const {min, max} = useDraggableTime();
+  const {start, end} = useTimelineRange();
   const {scale} = useColorUser();
 
+  // todo: test me
   const getColorByTenMinutes = (timestamp: number): string => {
     const date = convertTimestampToDate(timestamp);
-    const rangeStart = convertTimestampToDate(min.value * 1000);
-    const rangeEnd = convertTimestampToDate(max.value * 1000);
+    const rangeStart = convertTimestampToDate(start.value * 1000);
+    const rangeEnd = convertTimestampToDate(end.value * 1000);
 
     const rangeInMinutes = rangeEnd.diff(rangeStart, 'minutes');
     const currentMinuteFromStart = date.diff(rangeStart, 'minutes');

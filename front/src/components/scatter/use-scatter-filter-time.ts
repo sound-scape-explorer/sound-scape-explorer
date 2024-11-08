@@ -1,16 +1,17 @@
+import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useDraggableTime} from 'src/draggables/calendar/use-draggable-time';
+import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
-// todo: rename time to calendar?
 export function useScatterFilterTime() {
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {isAllSelected, current, duration} = useDraggableTime();
+  const {isActive} = useDraggableCalendar();
+  const {left, right} = useTimelineRange();
 
   const isVisible = (index: number): boolean => {
-    if (isAllSelected.value) {
+    if (!isActive.value) {
       return true;
     }
 
@@ -19,12 +20,8 @@ export function useScatterFilterTime() {
     }
 
     // Unix time in seconds
-    const timestamp = aggregatedTimestamps.value[index] / 1000;
-
-    const start = current.value;
-    const end = start + duration.value;
-
-    return timestamp >= start && timestamp <= end;
+    const t = aggregatedTimestamps.value[index];
+    return t >= left.value && t < right.value;
   };
 
   const filter = (): void => {
@@ -32,15 +29,12 @@ export function useScatterFilterTime() {
       return;
     }
 
-    const pointsFilteredByTime = [];
+    const length = aggregatedTimestamps.value.length;
+    const pointsFilteredByTime = new Array<boolean>(length);
 
-    for (
-      let intervalIndex = 0;
-      intervalIndex < aggregatedTimestamps.value.length;
-      intervalIndex += 1
-    ) {
-      const isFiltered = !isVisible(intervalIndex);
-      pointsFilteredByTime.push(isFiltered);
+    for (let i = 0; i < length; i += 1) {
+      const isFiltered = !isVisible(i);
+      pointsFilteredByTime[i] = isFiltered;
     }
 
     filtered.value = pointsFilteredByTime;

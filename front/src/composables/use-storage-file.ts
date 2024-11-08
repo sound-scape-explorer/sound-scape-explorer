@@ -1,4 +1,4 @@
-import {useAppNotification} from 'src/app/notification/use-app-notification';
+import {StorageFileError} from 'src/common/Errors';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useWorker} from 'src/composables/use-worker';
 import {useOpenLock} from 'src/draggables/open/use-open-lock';
@@ -10,7 +10,6 @@ const hasFile = computed<boolean>(() => file.value !== null);
 // this is the H5 input file provided by the user
 export function useStorageFile() {
   const {close: closeFile} = useWorker();
-  const {notify} = useAppNotification();
   const {open, close: closeDraggable} = useDraggables();
   const {isLocked} = useOpenLock();
 
@@ -19,11 +18,12 @@ export function useStorageFile() {
     const isHDF = fileExtension === 'hdf';
     const isH5 = fileExtension === 'h5';
 
-    if (!isHDF && !isH5) {
-      const msg = `File extension ${fileExtension} is not supported`;
-      notify('error', 'storage-file', msg);
-      throw new Error(msg);
+    if (isHDF || isH5) {
+      return;
     }
+
+    const msg = `File extension ${fileExtension} is not supported`;
+    throw new StorageFileError(msg);
   };
 
   const setFile = (inputFile: File) => {

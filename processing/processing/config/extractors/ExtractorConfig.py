@@ -11,6 +11,8 @@ from processing.extractors.BioacousticsIndexExtractor import BioacousticsIndexEx
 from processing.extractors.Extractor import Extractor
 from processing.extractors.FrequencyEntropyIndicator import FrequencyEntropyExtractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
+from processing.extractors.LogMelSpectrumExtractor import LogMelSpectrumExtractor
+from processing.extractors.LogMelogramExtractor import LogMelogramExtractor
 from processing.extractors.SoundscapeIndexExtractor import SoundscapeIndexExtractor
 from processing.extractors.TemporalEntropyExtractor import TemporalEntropyExtractor
 from processing.extractors.TemporalMedianExtractor import TemporalMedianExtractor
@@ -29,10 +31,12 @@ class ExtractorConfig:
         "adi": AcousticDiversityIndexExtractor,
         "bi": BioacousticsIndexExtractor,
         "hf": FrequencyEntropyExtractor,
+        "melogram": LogMelogramExtractor,
+        "melspectrum": LogMelSpectrumExtractor,
         # TODO: Adapt leq enes output before adding here
     }
 
-    nn_extractors = ["vgg"]
+    nn_extractors = ["vgg", "melogram", "melspectrum"]
     """The list of extractors using neural networks.
 
     Add extractor key to this list in order to enable reduction and export features.

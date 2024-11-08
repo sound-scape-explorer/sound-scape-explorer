@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import {NInput, NInputNumber, NSpace, NTooltip} from 'naive-ui';
+import {NInput, NInputNumber, NSpace} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {type InjectionKey} from 'src/common/injection-key';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useRefInject} from 'src/composables/use-ref-inject';
-import type {NaiveSize} from 'src/types';
-import {computed} from 'vue';
+import {TIMEOUT} from 'src/constants';
+import {type NaiveSize} from 'src/types';
+import {computed, onMounted, ref, watch} from 'vue';
 
 interface Props {
   placeholder?: string;
@@ -19,6 +21,7 @@ interface Props {
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   handleEnter?: () => void;
+  throttle?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,6 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
   align: 'center',
   size: 'tiny',
   handleEnter: () => undefined,
+  throttle: false,
 });
 
 const {lock, unlock} = useGlobalKeyboard();
@@ -35,35 +39,54 @@ const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 const isNumber = computed(() => props.type === 'number');
 const isString = computed(() => props.type === 'string');
 const model = useRefInject(props.injectionKey);
+const copy = ref();
 
-const classNames = computed<string>(() => {
-  switch (props.align) {
-    case 'center': {
-      return 'app-input__center';
-    }
-    case 'left': {
-      return 'app-input__left';
-    }
-    case 'right': {
-      return 'app-input__right';
-    }
+let t: null | number = null;
+
+const handleChange = (newInput: number | null) => {
+  if (t) {
+    clearTimeout(t);
+    t = null;
   }
-});
+
+  if (newInput === null) {
+    return;
+  }
+
+  const timeout = props.throttle ? TIMEOUT : 0;
+
+  t = setTimeout(() => {
+    model.value = newInput;
+  }, timeout);
+};
+
+const sync = () => {
+  if (model.value === copy.value) {
+    return;
+  }
+
+  copy.value = model.value;
+};
+
+onMounted(sync);
+watch(model, sync);
 </script>
 
 <template>
   <NSpace vertical>
-    <NTooltip
+    <AppTooltip
       v-if="hasTooltip"
       :placement="props.tooltipPlacement"
-      trigger="hover"
     >
-      <!--suppress VueUnrecognizedSlot -->
-      <template #trigger>
+      <template #body>
         <NInputNumber
           v-if="isNumber"
-          v-model:value="model"
-          :class="classNames"
+          v-model:value="copy"
+          :class="{
+            [$style.center]: props.align === 'center',
+            [$style.left]: props.align === 'left',
+            [$style.right]: props.align === 'right',
+          }"
           :disabled="props.disabled"
           :max="props.max"
           :min="props.min"
@@ -72,27 +95,40 @@ const classNames = computed<string>(() => {
           :step="props.step"
           @blur="unlock"
           @focus="lock"
+          @update:value="handleChange as unknown"
           @keyup.enter="props.handleEnter"
         />
         <NInput
           v-if="isString"
-          v-model:value="model"
-          :class="classNames"
+          v-model:value="copy"
+          :class="{
+            [$style.center]: props.align === 'center',
+            [$style.left]: props.align === 'left',
+            [$style.right]: props.align === 'right',
+          }"
           :disabled="props.disabled"
           :placeholder="props.placeholder"
           :size="props.size"
           @blur="unlock"
           @focus="lock"
+          @update:value="handleChange as unknown"
           @keyup.enter="props.handleEnter"
         />
       </template>
-      <span>{{ props.tooltip ?? '' }}</span>
-    </NTooltip>
+
+      <template #tooltip>
+        <span>{{ props.tooltip ?? '' }}</span>
+      </template>
+    </AppTooltip>
 
     <NInputNumber
       v-if="!hasTooltip && isNumber"
-      v-model:value="model"
-      :class="classNames"
+      v-model:value="copy"
+      :class="{
+        [$style.center]: props.align === 'center',
+        [$style.left]: props.align === 'left',
+        [$style.right]: props.align === 'right',
+      }"
       :disabled="props.disabled"
       :max="props.max"
       :min="props.min"
@@ -101,33 +137,39 @@ const classNames = computed<string>(() => {
       :step="props.step ?? 1"
       @blur="unlock"
       @focus="lock"
+      @update:value="handleChange as unknown"
       @keyup.enter="props.handleEnter"
     />
 
     <NInput
       v-if="!hasTooltip && isString"
-      v-model:value="model"
-      :class="classNames"
+      v-model:value="copy"
+      :class="{
+        [$style.center]: props.align === 'center',
+        [$style.left]: props.align === 'left',
+        [$style.right]: props.align === 'right',
+      }"
       :disabled="props.disabled"
       :placeholder="props.placeholder"
       :size="props.size"
       @blur="unlock"
       @focus="lock"
+      @update:value="handleChange as unknown"
       @keyup.enter="props.handleEnter"
     />
   </NSpace>
 </template>
 
-<style lang="scss" scoped>
-.app-input__center {
+<style lang="scss" module>
+.center {
   text-align: center;
 }
 
-.app-input__left {
+.left {
   text-align: left;
 }
 
-.app-input__right {
+.right {
   text-align: right;
 }
 </style>

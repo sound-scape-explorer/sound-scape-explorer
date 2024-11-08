@@ -1,8 +1,7 @@
 import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {calculateMean} from 'src/utils/calculate-mean';
-import {truncateNumber} from 'src/utils/truncate-number';
+import {calculateMean, truncateNumber} from 'src/utils/math';
 import {unref} from 'vue';
 
 export function useIndicatorLimits() {

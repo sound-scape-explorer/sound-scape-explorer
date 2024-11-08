@@ -1,0 +1,19 @@
+$p0: 8px;
+$g0: 4px;
+$s0: calc(30em + $p0);
+$s1: calc(37em + $p0);
+$s2: calc(43em + $p0);
+$w0: $s0;
+$w1: $s1;
+$w2: $s2;
+$h0: calc($s0 * 3 / 4);
+$h1: calc($s1 * 3 / 4);
+$h2: calc($s2 * 3 / 4);
+$w-max: calc(80dvw + $p0 * 2);
+$h-max: calc(80dvh + $p0 * 2);
+
+@mixin size-draggable {
+  width: min($s2, $w-max);
+  height: min($s1, $h-max);
+}
+

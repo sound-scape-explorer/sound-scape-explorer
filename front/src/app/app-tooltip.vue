@@ -1,23 +1,65 @@
 <script lang="ts" setup="">
 import {NTooltip} from 'naive-ui';
+import {TIMEOUT} from 'src/constants';
+import {type NaiveTooltipPlacement} from 'src/types';
+import {ref} from 'vue';
 
 interface Props {
-  tooltip: string;
-  placement?: 'right' | 'left' | 'top' | 'bottom';
+  placement?: NaiveTooltipPlacement;
+  native?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {placement: 'left'});
+let t: number | null = null;
+
+const props = withDefaults(defineProps<Props>(), {
+  placement: 'left',
+  native: false,
+});
+
+const show = ref<boolean>(false);
+
+const handleMouseEnter = () => {
+  clear();
+
+  t = setTimeout(() => {
+    show.value = true;
+  }, TIMEOUT * 2);
+};
+
+const handleMouseLeave = () => {
+  clear();
+  show.value = false;
+};
+
+const clear = () => {
+  if (t) {
+    clearTimeout(t);
+    t = null;
+  }
+};
 </script>
 
 <template>
   <NTooltip
     :placement="props.placement"
-    trigger="hover"
+    :show="props.native ? undefined : show"
+    :trigger="props.native ? 'hover' : 'manual'"
   >
     <!--suppress VueUnrecognizedSlot -->
     <template #trigger>
-      <slot />
+      <div v-if="props.native">
+        <slot name="body" />
+      </div>
+
+      <div
+        v-if="!props.native"
+        @mouseenter="handleMouseEnter"
+        @mouseleave="handleMouseLeave"
+      >
+        <slot name="body" />
+      </div>
     </template>
-    {{ props.tooltip }}
+
+    <slot name="tooltip" />
   </NTooltip>
 </template>

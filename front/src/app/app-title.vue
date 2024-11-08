@@ -1,11 +1,11 @@
 <template>
-  <h2 class="title">
+  <h2 :class="$style.title">
     <slot />
   </h2>
 </template>
 
-<style lang="scss" scoped>
-h2 {
+<style lang="scss" module>
+.title {
   font-weight: bold;
 }
 </style>

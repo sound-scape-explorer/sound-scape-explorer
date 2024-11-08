@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
-import {NButton, NIcon, NTooltip} from 'naive-ui';
-import type {NaiveSize} from 'src/types';
+import {NButton} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
+import {type NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
 interface Props {
@@ -9,90 +10,84 @@ interface Props {
   tooltip?: string;
   tooltipPlacement?: 'right' | 'left' | 'top' | 'bottom';
   disabled?: boolean;
-  icon?: boolean;
   grow?: boolean;
   growCol?: boolean;
   active?: boolean;
   error?: boolean;
+  smallTooltip?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'tiny',
   disable: false,
-  icon: false,
   grow: false,
   growCol: false,
   active: false,
   error: false,
+  smallTooltip: false,
 });
 
-const hasTooltip = computed(() => typeof props.tooltip === 'string');
-const classNames = computed<string>(() => {
-  let string = '';
+const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 
-  if (props.grow) {
-    string += ' grow';
-  }
-
-  if (props.growCol) {
-    string += ' growCol';
-  }
-
-  if (props.active) {
-    string += ' active';
-  }
-
-  if (props.error) {
-    string += ' error';
-  }
-
-  return string;
-});
+const handleFocus = (e: FocusEvent) => {
+  const target = e.target as HTMLButtonElement;
+  target.blur();
+};
 </script>
 
 <template>
-  <NTooltip
+  <AppTooltip
     v-if="hasTooltip"
+    :class="{[$style.tooltip]: props.smallTooltip}"
     :placement="props.tooltipPlacement"
-    trigger="hover"
   >
-    <!--suppress VueUnrecognizedSlot -->
-    <template #trigger>
+    <template #body>
       <NButton
-        :class="classNames"
+        :class="{
+          [$style.grow]: props.grow,
+          [$style['grow-col']]: props.growCol,
+          [$style.active]: props.active,
+          [$style.error]: props.error,
+        }"
         :disabled="props.disabled"
         :size="props.size"
         @click="props.handleClick"
+        @focus="handleFocus"
       >
-        <NIcon v-if="props.icon">
-          <slot />
-        </NIcon>
-        <slot v-if="!props.icon" />
+        <slot />
       </NButton>
     </template>
-    <span>{{ props.tooltip }}</span>
-  </NTooltip>
+
+    <template #tooltip>
+      <span :class="{[$style.small]: props.smallTooltip}">{{
+        props.tooltip
+      }}</span>
+    </template>
+  </AppTooltip>
 
   <NButton
     v-if="!hasTooltip"
-    :class="classNames"
+    :class="{
+      [$style.grow]: props.grow,
+      [$style['grow-col']]: props.growCol,
+      [$style.active]: props.active,
+      [$style.error]: props.error,
+    }"
     :disabled="props.disabled"
     :size="props.size"
     @click="props.handleClick"
+    @focus="handleFocus"
   >
-    <NIcon v-if="props.icon">
-      <slot />
-    </NIcon>
-    <slot v-if="!props.icon" />
+    <slot />
   </NButton>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .grow {
   flex: 1;
 }
 
-.growCol {
+.grow-col {
   width: 100%;
 }
 
@@ -102,5 +97,13 @@ const classNames = computed<string>(() => {
 
 .active {
   background: $olive;
+}
+
+.tooltip {
+  padding: $p0 !important;
+}
+
+.small {
+  font-size: 0.9em;
 }
 </style>

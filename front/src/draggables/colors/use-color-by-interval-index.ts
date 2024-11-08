@@ -1,5 +1,5 @@
 import {useColorUser} from 'src/composables/use-color-user';
-import {mapRange} from 'src/utils/map-range';
+import {mapRange} from 'src/utils/math';
 
 export function useColorByIntervalIndex() {
   const {scale} = useColorUser();

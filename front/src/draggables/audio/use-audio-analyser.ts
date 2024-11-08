@@ -1,15 +1,18 @@
 import {TIMEOUT} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
+import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {ref} from 'vue';
 
 const analyser = ref<AnalyserNode | null>(null);
-const data = ref<Uint8Array | null>(null);
+const floats = ref<Float32Array | null>(null);
 const isClipping = ref<boolean>(false);
 const timer = ref<number | null>(null);
-const size = 2048; // arbitrary
+const size = 1024; // arbitrary
+const rms = ref<number>(0);
 
 export function useAudioAnalyser() {
   const {context} = useAudioContext();
+  const {isPlaying} = useAudioTransport();
 
   const create = () => {
     if (context.value === null) {
@@ -18,24 +21,36 @@ export function useAudioAnalyser() {
 
     analyser.value = context.value.createAnalyser();
     analyser.value.fftSize = size;
-    data.value = new Uint8Array(size);
+    floats.value = new Float32Array(size);
   };
 
-  const detect = () => {
-    if (analyser.value === null || data.value === null) {
+  const update = () => {
+    if (
+      analyser.value === null ||
+      floats.value === null ||
+      isPlaying.value === false
+    ) {
       return;
     }
 
-    analyser.value.getByteTimeDomainData(data.value);
+    analyser.value.getFloatTimeDomainData(floats.value);
+
+    let squares = 0;
 
     for (let i = 0; i < size; i += 1) {
-      if (data.value[i] >= 255 || data.value[i] <= 0) {
+      const f = floats.value[i];
+
+      if (f >= 1.0 || f <= -1.0) {
         isClipping.value = true;
-        break;
       }
+
+      squares += f * f;
     }
 
-    requestAnimationFrame(detect);
+    const mean = squares / size;
+    rms.value = Math.sqrt(mean) * 4; // TODO: why artificially adding gain to RMS?
+
+    requestAnimationFrame(update);
   };
 
   const fade = () => {
@@ -52,8 +67,9 @@ export function useAudioAnalyser() {
   return {
     create: create,
     analyser: analyser,
-    detect: detect,
+    update: update,
     isClipping: isClipping,
     fade: fade,
+    rms: rms,
   };
 }

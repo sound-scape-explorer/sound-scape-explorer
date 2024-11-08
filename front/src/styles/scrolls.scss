@@ -1,0 +1,32 @@
+@mixin hide-scrollbar {
+  // IE and edge
+  -ms-overflow-style: none;
+
+  // firefox
+  scrollbar-width: none;
+
+  // chrome
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin tiny-scrollbar {
+  &::-webkit-scrollbar {
+    width: $g0;
+    height: $g0;
+  }
+
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: $p0;
+    background-color: #999;
+
+    &:hover {
+      background: #777;
+    }
+  }
+}

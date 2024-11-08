@@ -1,6 +1,6 @@
 <div align="center">
 
-<img alt="logo" width="200px" src="https://i.imgur.com/ZFnumtY.png">
+<img alt="logo" width="200px" src="https://sound-scape-explorer.github.io/img/logo.svg">
 
 # [_SoundScapeExplorer_](https://sound-scape-explorer.github.io/sound-scape-explorer/)
 
@@ -8,7 +8,7 @@
 
 ![Version](https://img.shields.io/github/package-json/v/sound-scape-explorer/sound-scape-explorer)
 
-![](https://sound-scape-explorer.github.io/img/demo.png)
+![](https://sound-scape-explorer.github.io/img/demo-13.8.0.png)
 
 </div>
 

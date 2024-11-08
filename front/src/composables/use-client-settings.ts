@@ -1,7 +1,10 @@
 import {useStorage} from '@vueuse/core';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
-import {SettingDefault as d} from 'src/common/setting-default';
+import {
+  type ScatterBorderWidth,
+  settingDefaults as d,
+} from 'src/common/setting-defaults';
 import {SettingKey as k} from 'src/common/setting-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useClientSettingsDev} from 'src/composables/use-client-settings-dev';
@@ -14,7 +17,8 @@ import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 const version = useStorage<string>(k.version, d.version);
 const plotBackground = useStorage<string>(k.plotBackground, d.plotBackground);
 const timeshift = useStorage<number>(k.timeshift, d.timeshift);
-const isPreview = useStorage<boolean>(k.isPreview, d.isPreview);
+const isAlphaPreview = useStorage<boolean>(k.isAlphaPreview, d.isAlphaPreview);
+const isBetaPreview = useStorage<boolean>(k.isBetaPreview, d.isBetaPreview);
 
 const isDetailsAutoOpen = useStorage<boolean>(
   k.isDetailsAutoOpen,
@@ -53,6 +57,16 @@ const isSelectedPointHighlighted = useStorage<boolean>(
   d.isSelectedPointHighlighted,
 );
 
+const isDetailedExportName = useStorage<boolean>(
+  k.isDetailedExportName,
+  d.isDetailedExportName,
+);
+
+const scatterBorderWidth = useStorage<ScatterBorderWidth>(
+  k.scatterBorderWidth,
+  d.scatterBorderWidth,
+);
+
 export function useClientSettings() {
   const {audioHost} = useStorageAudioHost();
   const {fontSize} = useAppHeatmapSize();
@@ -74,12 +88,15 @@ export function useClientSettings() {
     timeshift.value = d.timeshift;
     isDetailsAutoOpen.value = d.isDetailsAutoOpen;
     isAudioAutoOpen.value = d.isAudioAutoOpen;
-    isPreview.value = d.isPreview;
     isTimezoneActive.value = d.isTimezoneActive;
     isCopyOnSelect2d.value = d.isCopyOnSelect2d;
     isWebGlScatter2d.value = d.isWebGlScatter2d;
     isColorMapSwapped.value = d.isColorMapSwapped;
     isSelectedPointHighlighted.value = d.isSelectedPointHighlighted;
+    isDetailedExportName.value = d.isDetailedExportName;
+    isAlphaPreview.value = d.isAlphaPreview;
+    isBetaPreview.value = d.isBetaPreview;
+    scatterBorderWidth.value = d.scatterBorderWidth;
 
     audioHost.value = d.audioHost;
     fontSize.value = d.fontSize;
@@ -101,7 +118,6 @@ export function useClientSettings() {
     timeshift: timeshift,
     isDetailsAutoOpen: isDetailsAutoOpen,
     isAudioAutoOpen: isAudioAutoOpen,
-    isPreview: isPreview,
     isTimezoneActive: isTimezoneActive,
     isCopyOnSelect2d: isCopyOnSelect2d,
     isWebGlScatter2d: isWebGlScatter2d,
@@ -110,5 +126,9 @@ export function useClientSettings() {
     isDevEnabled: isDevEnabled,
     devAutoLoadView: devAutoLoadView,
     isSelectedPointHighlighted: isSelectedPointHighlighted,
+    isDetailedExportName: isDetailedExportName,
+    isAlphaPreview: isAlphaPreview,
+    isBetaPreview: isBetaPreview,
+    scatterBorderWidth: scatterBorderWidth,
   };
 }

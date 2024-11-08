@@ -14,7 +14,6 @@ interface Data {
 }
 
 const data = ref<Data[]>([]);
-const sites = ref<string[]>([]);
 const indicator = ref<AggregatedIndicator | null>(null);
 
 export function useTemporal() {
@@ -40,16 +39,6 @@ export function useTemporal() {
     render();
   };
 
-  const selectSites = (names: string[] | null) => {
-    if (names === null) {
-      sites.value = [];
-      return;
-    }
-
-    sites.value = names;
-    render();
-  };
-
   const render = () => {
     if (
       aggregatedSites.value === null ||
@@ -65,10 +54,6 @@ export function useTemporal() {
     for (let i = 0; i < l; i += 1) {
       const {site} = aggregatedSites.value[i];
 
-      if (!sites.value.includes(site)) {
-        continue;
-      }
-
       newData[i] = {
         index: i,
         site: site,
@@ -83,8 +68,6 @@ export function useTemporal() {
   return {
     indicator: indicator,
     data: data,
-    sites: sites,
     selectIndicator: selectIndicator,
-    selectSites: selectSites,
   };
 }

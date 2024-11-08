@@ -1,16 +1,15 @@
 import chroma from 'chroma-js';
 import {useDate} from 'src/composables/use-date';
-import {isHourDuringDay} from 'src/utils/is-hour-during-day';
+import {isHourDuringDay} from 'src/utils/time';
 
 const dayColor = chroma('orange');
 const nightColor = chroma('blue');
 
 export function useColorByDay() {
-  const {convertTimestampToDate} = useDate();
+  const {getHourFromTimestamp} = useDate();
 
   const getColorByDay = (timestamp: number) => {
-    const date = convertTimestampToDate(timestamp);
-    const hour = date.get('hours');
+    const hour = getHourFromTimestamp(timestamp);
     const isDay = isHourDuringDay(hour);
 
     if (isDay) {

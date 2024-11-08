@@ -1,10 +1,10 @@
 import Plotly, {type ToImgopts} from 'plotly.js-dist-min';
-import type {ScatterProps} from 'src/components/scatter/use-scatter-config';
-import {useLabelsScreenshot} from 'src/draggables/labels/use-labels-screenshot';
-import {triggerCanvasDownload} from 'src/utils/trigger-canvas-download';
+import {type ScatterProps} from 'src/components/scatter/use-scatter-config';
+import {useDraggableLabelsScreenshot} from 'src/draggables/labels/use-draggable-labels-screenshot';
+import {triggerCanvasDownload} from 'src/utils/canvas';
 
 export function useScatterDownloadPngButton(props: ScatterProps) {
-  const {screenshotLabel} = useLabelsScreenshot();
+  const {screenshotLabel} = useDraggableLabelsScreenshot();
 
   const button = {
     name: 'download-png',

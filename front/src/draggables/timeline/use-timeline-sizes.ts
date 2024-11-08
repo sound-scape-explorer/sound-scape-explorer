@@ -1,4 +1,4 @@
-import {convertToNaiveSelectOptions} from 'src/utils/convert-to-naive-select-options';
+import {convertToNaiveSelectOptions} from 'src/utils/naive';
 import {ref} from 'vue';
 
 type Size = 'small' | 'medium' | 'large';

@@ -1,20 +1,26 @@
-import type {Config, Data, Layout, PlotlyHTMLElement} from 'plotly.js-dist-min';
+import {
+  type Config,
+  type Data,
+  type Layout,
+  type PlotlyHTMLElement,
+} from 'plotly.js-dist-min';
 import Plotly from 'plotly.js-dist-min';
-import type {AppPlotProps} from 'src/app/plot/app-plot.vue';
+import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
+import {useAppPlotLayout} from 'src/app/plot/use-app-plot-layout';
+import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {usePlotConfig} from 'src/composables/use-plot-config';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
-import {colors} from 'src/styles/colors';
+import {colorMap} from 'src/styles/color-map';
 import {ref, watch} from 'vue';
 
-// todo: refactor me
 export function useAppPlot(props: AppPlotProps) {
   const container = ref<HTMLDivElement | null>(null);
   const dataRef = ref<Data[] | null>(null);
   const layoutRef = ref<Partial<Layout> | null>(null);
   const configRef = ref<Partial<Config> | null>(null);
   const plot = ref<PlotlyHTMLElement | null>(null);
-  const {generateConfig} = usePlotConfig(props.exportFilename);
+  const {generateConfig} = useBasePlotConfig();
+  const {generateLayout} = useAppPlotLayout();
   const {plotBackground} = useClientSettings();
   const {selectInterval} = useIntervalSelector();
 
@@ -46,40 +52,6 @@ export function useAppPlot(props: AppPlotProps) {
     }
   };
 
-  const generateLayout = (padding = 70): Partial<Layout> => {
-    return {
-      title: props.title,
-      plot_bgcolor: plotBackground.value,
-      paper_bgcolor: plotBackground.value,
-      showlegend: !!props.legend,
-      clickmode: 'event',
-      height: 400,
-      margin: {
-        l: padding,
-        r: padding,
-        b: props.hideXLegend ? padding : padding * 2,
-        t: padding,
-        pad: 1,
-      },
-      xaxis: {
-        title: props.xTitle,
-        showticklabels: !props.hideXLegend,
-        rangeslider: {
-          visible: !props.hideRange,
-        },
-      },
-      yaxis: {
-        title: props.yTitle,
-      },
-      legend: {
-        xanchor: 'right',
-        yanchor: 'top',
-        x: 1,
-        y: 1,
-      },
-    };
-  };
-
   const generateData = (): Data[] => {
     const l = props.values.length;
     const data: Data[] = new Array(l);
@@ -94,7 +66,7 @@ export function useAppPlot(props: AppPlotProps) {
         hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
         marker: {
           // color: props.colors?.[index] ?? undefined,
-          color: colors.green,
+          color: colorMap.green,
           size: props.colors?.[i] ? 6 : 2,
         },
       };
@@ -105,8 +77,8 @@ export function useAppPlot(props: AppPlotProps) {
 
   const refresh = () => {
     dataRef.value = generateData();
-    layoutRef.value = generateLayout();
-    configRef.value = generateConfig();
+    layoutRef.value = generateLayout(props);
+    configRef.value = generateConfig(props.exportFilename);
   };
 
   refresh();

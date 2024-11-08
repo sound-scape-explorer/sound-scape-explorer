@@ -7,9 +7,9 @@ import {useDigesters} from 'src/composables/use-digesters';
 import {useExtractors} from 'src/composables/use-extractors';
 import {useFiles} from 'src/composables/use-files';
 import {useIntegrations} from 'src/composables/use-integrations';
-import {useRanges} from 'src/composables/use-ranges';
 import {useReducers} from 'src/composables/use-reducers';
 import {useSettings} from 'src/composables/use-settings';
+import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {useTrajectories} from 'src/composables/use-trajectories';
 import {useVersion} from 'src/composables/use-version';
 import {computed} from 'vue';
@@ -23,7 +23,7 @@ const {bands} = useBands();
 const {integrations} = useIntegrations();
 const {extractors} = useExtractors();
 const {reducers} = useReducers();
-const {ranges} = useRanges();
+const {ranges} = useStorageRanges();
 const {autoclusters} = useAutoclusters();
 const {trajectories} = useTrajectories();
 
@@ -40,7 +40,7 @@ const timelineOrigin = computed<string>(() => {
 </script>
 
 <template>
-  <h2 class="yellow">Settings</h2>
+  <h2 :class="[$style.title, $style.yellow]">Settings</h2>
 
   <AppGrid
     :columns="1"
@@ -88,7 +88,7 @@ const timelineOrigin = computed<string>(() => {
     ]"
   />
 
-  <h2 class="yellow">Specifications</h2>
+  <h2 :class="[$style.title, $style.yellow]">Specifications</h2>
 
   <AppGrid
     :columns="3"
@@ -116,7 +116,7 @@ const timelineOrigin = computed<string>(() => {
     ]"
   />
 
-  <h2 class="blue">Configurations</h2>
+  <h2 :class="[$style.title, $style.blue]">Configurations</h2>
 
   <AppGrid
     :columns="3"
@@ -141,20 +141,19 @@ const timelineOrigin = computed<string>(() => {
   />
 </template>
 
-<style lang="scss" scoped>
-h2 {
-  margin: 0.5em 0;
-  width: fit-content;
-  padding: 0.1em 0.4em;
-  border-radius: 3px;
+<style lang="scss" module>
+.title {
   font-weight: bold;
+  margin: $p0 0;
+  padding: $g0 $p0;
+  border-radius: $g0;
 }
 
 .yellow {
-  background: #ffffa6;
+  background: $olive;
 }
 
 .blue {
-  background: #b4c7dc;
+  background: $violet;
 }
 </style>

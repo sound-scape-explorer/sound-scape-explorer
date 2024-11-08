@@ -1,19 +1,21 @@
 <script lang="ts" setup>
-import {RefreshOutline} from '@vicons/ionicons5';
-import AppIcon from 'src/app/app-icon.vue';
+import {IonIcon} from '@ionic/vue';
+import {refreshOutline} from 'ionicons/icons';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import DraggableAudioMenu from 'src/draggables/audio/draggable-audio-menu.vue';
 import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
 import {useAudioFileWatcher} from 'src/draggables/audio/use-audio-file-watcher';
+import {useAudioLifecycles} from 'src/draggables/audio/use-audio-lifecycles';
 import {useAudioRateWatcher} from 'src/draggables/audio/use-audio-rate-watcher';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurferMounter} from 'src/draggables/audio/use-wavesurfer-mounter';
 
-const {waveform, spectrogram, loadingClassNames} = useDraggableAudio();
+const {waveform, spectrogram, isLoading} = useDraggableAudio();
 
 useWavesurferMounter();
 useAudioFileWatcher();
 useAudioRateWatcher();
+useAudioLifecycles();
 </script>
 
 <template>
@@ -21,35 +23,35 @@ useAudioRateWatcher();
     draggable-key="audio"
     suspense="scatterClick"
   >
-    <div :class="loadingClassNames">
-      <AppIcon>
-        <RefreshOutline class="spin" />
-      </AppIcon>
+    <div :class="[$style.loading, {[$style['loading-hidden']]: !isLoading}]">
+      <IonIcon
+        :class="$style.spin"
+        :icon="refreshOutline"
+      />
     </div>
 
-    <div class="player">
-      <DraggableAudioSidebar />
-      <DraggableAudioMenu />
+    <DraggableAudioSidebar />
+    <DraggableAudioMenu />
 
+    <div :class="$style.player">
       <div
         ref="waveform"
-        class="mt"
+        :class="$style.mt"
       />
 
       <div
         ref="spectrogram"
-        class="spectrogram mt"
+        :class="[$style.spectrogram, $style.mt]"
       />
     </div>
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .player {
   display: flex;
   flex-direction: column;
-
-  width: 40rem;
+  width: $s2;
 }
 
 .spectrogram {
@@ -57,25 +59,24 @@ useAudioRateWatcher();
 }
 
 .mt {
-  margin-top: 10px;
+  margin-top: $p0;
 }
 
 .loading {
-  width: 100%;
-  height: 100%;
-  z-index: 100;
+  font-size: 100px;
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
-
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 100px;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: $white-opaque;
+  backdrop-filter: blur($p0);
 
-  background-color: $whiteOpaque;
-  backdrop-filter: blur(5px);
-  @include borderRadius;
+  @include border-radius;
 }
 
 $o1: 50% - 0%;
@@ -83,6 +84,7 @@ $o2: 50% + 8%;
 
 .spin {
   @include spin;
+
   transform-origin: $o1 $o2;
 }
 

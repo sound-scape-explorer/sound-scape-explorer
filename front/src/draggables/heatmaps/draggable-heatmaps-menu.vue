@@ -1,38 +1,41 @@
 <script lang="ts" setup="">
-import {DownloadOutline, RepeatOutline, ResizeOutline} from '@vicons/ionicons5';
-import {NButtonGroup, NIcon, NSelect} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {downloadOutline, repeatOutline, resizeOutline} from 'ionicons/icons';
+import {NButtonGroup, NSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useStorageDigested} from 'src/composables/use-storage-digested';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useDraggableHeatmapDigester} from 'src/draggables/heatmaps/use-draggable-heatmap-digester';
+import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
-import {computed, watch} from 'vue';
 
-const {digested} = useStorageDigested();
-const {labelProperties} = useStorageLabels();
-const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
-const {resize1by1, resize4by3, resize16by10, resize16by9} = useAppHeatmapSize();
-const {flavors: colorFlavors} = useDraggableHeatmapsColor();
-const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
-const {swap: swapLabels} = useDraggableHeatmapsLabels();
 const {
-  digester,
+  digesterName,
   options: digesterOptions,
-  handleChange: handleDigesterChange,
-} = useDraggableHeatmapDigester();
+  isReadyForSelection,
+  isReadyAndSelected,
+  isPairing,
+} = useDraggableHeatmaps();
 
-const isSingle = computed(() => !digested.value?.isPairing);
+const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
+const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
+const {resize1by1, resize4by3, resize16by10, resize16by9, double, half} =
+  useAppHeatmapSize();
+const {flavor, flavors} = useDraggableHeatmapsColor();
+const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
 
-useRefProvide('digested/digester', digester);
+const {labelPropertiesActual} = useStorageLabels();
 
-watch(digester, handleDigesterChange);
+useRefProvide(InjectionKey.digestedDigester, digesterName);
+useRefProvide(InjectionKey.digestedLabelA, a);
+useRefProvide(InjectionKey.digestedLabelB, b);
+useRefProvide(InjectionKey.digestedColorFlavor, flavor);
 </script>
 
 <template>
@@ -40,35 +43,34 @@ watch(digester, handleDigesterChange);
     <h2>Select</h2>
 
     <AppSelect
+      :injection-key="InjectionKey.digestedDigester"
       :options="digesterOptions"
-      injection-key="digested/digester"
       placeholder="Digester..."
       size="small"
     />
 
     <h2>Over</h2>
 
-    <div class="labels">
+    <div :class="$style.labels">
       <AppSelect
-        :options="labelProperties ?? []"
-        injection-key="digested/labelA"
+        :injection-key="InjectionKey.digestedLabelA"
+        :options="labelPropertiesActual ?? []"
         placeholder="Label A..."
         size="small"
       />
 
       <AppButton
-        :disabled="isSingle"
+        :disabled="!isReadyForSelection || !isPairing"
         :handle-click="swapLabels"
-        icon
         size="small"
       >
-        <RepeatOutline />
+        <IonIcon :icon="repeatOutline" />
       </AppButton>
 
       <AppSelect
-        :disabled="isSingle"
-        :options="labelProperties ?? []"
-        injection-key="digested/labelB"
+        :disabled="!isReadyForSelection || !isPairing"
+        :injection-key="InjectionKey.digestedLabelB"
+        :options="labelPropertiesActual ?? []"
         placeholder="Label B..."
         size="small"
       />
@@ -76,10 +78,11 @@ watch(digester, handleDigesterChange);
 
     <h2>Colors</h2>
 
-    <div class="colors">
+    <div :class="$style.colors">
       <AppSelect
-        :options="colorFlavors"
-        injection-key="digested/colorFlavor"
+        :disabled="!isReadyAndSelected"
+        :injection-key="InjectionKey.digestedColorFlavor"
+        :options="flavors"
         placeholder="Color flavor..."
         size="small"
       />
@@ -89,6 +92,7 @@ watch(digester, handleDigesterChange);
       <div>
         <NSelect
           v-model:value="rangeIndex"
+          :disabled="!isReadyAndSelected"
           :options="rangeOptions"
           placeholder="Range..."
           size="small"
@@ -96,54 +100,68 @@ watch(digester, handleDigesterChange);
       </div>
     </div>
 
-    <h2>Window</h2>
+    <h2>Plot</h2>
 
-    <div class="window">
+    <div :class="$style.plot">
       <NButtonGroup>
-        <AppButton :handle-click="resize1by1">
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;1:1
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize1by1"
+        >
+          <IonIcon :icon="resizeOutline" />&nbsp;1:1
         </AppButton>
-        <AppButton :handle-click="resize4by3">
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;4:3
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize4by3"
+        >
+          <IonIcon :icon="resizeOutline" />&nbsp;4:3
         </AppButton>
-        <AppButton :handle-click="resize16by10">
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:10
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize16by10"
+        >
+          <IonIcon :icon="resizeOutline" />&nbsp;16:10
         </AppButton>
-        <AppButton :handle-click="resize16by9">
-          <NIcon> <ResizeOutline /> </NIcon>&nbsp;16:9
+        <AppButton
+          :disabled="!isReadyAndSelected"
+          :handle-click="resize16by9"
+        >
+          <IonIcon :icon="resizeOutline" />&nbsp;16:9
         </AppButton>
+        <AppButton :handle-click="half">/2</AppButton>
+        <AppButton :handle-click="double">*2</AppButton>
       </NButtonGroup>
 
       <AppButton
+        :disabled="!isReadyAndSelected"
         :handle-click="handleExportClick"
-        icon
         size="small"
         tooltip="Export .csv"
         tooltip-placement="bottom"
       >
-        <DownloadOutline />
+        <IonIcon :icon="downloadOutline" />
       </AppButton>
     </div>
   </AppDraggableMenu>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .labels {
   display: grid;
-  grid-template-columns: 1fr 4rem 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 1fr $p0 * 7 1fr;
+  gap: $p0;
 }
 
 .colors {
   display: grid;
-  grid-template-columns: 1fr 4rem 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 1fr $p0 * 7 1fr;
+  gap: $p0;
 }
 
-.window {
+.plot {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .text {

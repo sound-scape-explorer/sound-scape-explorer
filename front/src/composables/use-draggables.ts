@@ -1,13 +1,14 @@
-import {computed, reactive, ref} from 'vue';
+import {reactive, ref} from 'vue';
 
 export interface DraggablesStore {
+  _alphaSelection3d: boolean;
+  _alphaTimeline: boolean;
   open: boolean;
   settings: boolean;
   help: boolean;
   view: boolean;
   colors: boolean;
   calendar: boolean;
-  timeline: boolean;
   labels: boolean;
   audio: boolean;
   details: boolean;
@@ -15,7 +16,7 @@ export interface DraggablesStore {
   relativeTrajectories: boolean;
   temporal: boolean;
   heatmaps: boolean;
-  selection: boolean; // 3d beta
+  histograms: boolean;
 }
 
 export type DraggableKey = keyof DraggablesStore;
@@ -28,7 +29,7 @@ const store = reactive<DraggablesStore>({
   view: false,
   colors: false,
   calendar: false,
-  timeline: false,
+  _alphaTimeline: false,
   labels: false,
   audio: false,
   details: false,
@@ -36,28 +37,28 @@ const store = reactive<DraggablesStore>({
   relativeTrajectories: false,
   temporal: false,
   heatmaps: false,
-  selection: false,
-});
-
-const selected = ref<DraggableKey | null>(null);
-const active = computed<DraggableKey[]>(() => {
-  let acc: DraggableKey[] = [];
-
-  for (const [key, value] of Object.entries(store)) {
-    if (value) {
-      acc = [...acc, key as DraggableKey];
-    }
-  }
-
-  return acc;
+  _alphaSelection3d: false,
+  histograms: false,
 });
 
 const hidden = ref<boolean>(false);
+const stack = ref<DraggableKey[]>([]);
 
 export function useDraggables() {
   const toggle = (key: DraggableKey): void => {
-    selected.value = key;
-    store[key] = !store[key];
+    const isBackground = stack.value.indexOf(key) !== 0;
+
+    if (isBackground) {
+      open(key);
+      return;
+    }
+
+    if (store[key]) {
+      close(key);
+      return;
+    }
+
+    open(key);
   };
 
   const close = (key: DraggableKey) => {
@@ -65,10 +66,7 @@ export function useDraggables() {
       store[key] = false;
     }
 
-    if (selected.value === key) {
-      const next = getNextKey(key);
-      selected.value = next;
-    }
+    removeStack(key);
   };
 
   const open = (key: DraggableKey) => {
@@ -76,17 +74,27 @@ export function useDraggables() {
       store[key] = true;
     }
 
-    if (selected.value !== key) {
-      selected.value = key;
+    if (hidden.value) {
+      toggleAll();
     }
+
+    addStack(key);
   };
 
-  const closeActive = () => {
-    if (selected.value === null) {
-      return;
+  const addStack = (key: DraggableKey) => {
+    const i = stack.value.indexOf(key);
+    if (i !== -1) {
+      stack.value.splice(i, 1);
     }
+    stack.value.unshift(key);
+  };
 
-    close(selected.value);
+  const removeStack = (key: DraggableKey) => {
+    const i = stack.value.indexOf(key);
+
+    if (i !== -1) {
+      stack.value.splice(i, 1);
+    }
   };
 
   const closeAll = () => {
@@ -97,62 +105,40 @@ export function useDraggables() {
     }
   };
 
-  const cycle = (isReverse = false) => {
-    if (active.value.length < 2 || selected.value === null) {
+  const closeExceptCurrent = () => {
+    if (stack.value.length < 2) {
       return;
     }
 
-    let payload: DraggableKey | null;
+    const pool = stack.value.slice(1, stack.value.length);
 
-    if (!isReverse) {
-      payload = getNextKey(selected.value);
+    for (const key of pool) {
+      close(key);
+    }
+  };
+
+  const cycle = (isReverse = false) => {
+    const l = stack.value.length;
+    if (l < 2) {
+      return;
+    }
+
+    let n: number;
+
+    if (isReverse) {
+      n = (l - 1 + stack.value.indexOf(stack.value[0])) % l;
     } else {
-      payload = getPreviousKey(selected.value);
+      n = (stack.value.indexOf(stack.value[0]) + 1) % l;
     }
 
-    selected.value = payload;
-  };
-
-  const getNextKey = (
-    key: keyof DraggablesStore,
-  ): keyof DraggablesStore | null => {
-    const l = active.value.length;
-    if (l === 0) {
-      return null;
-    }
-
-    const i = active.value.indexOf(key);
-    const next = i + 1;
-
-    if (next >= l) {
-      return active.value[0];
-    }
-
-    return active.value[next];
-  };
-
-  const getPreviousKey = (
-    key: keyof DraggablesStore,
-  ): keyof DraggablesStore | null => {
-    const l = active.value.length;
-    if (l === 0) {
-      return null;
-    }
-
-    const i = active.value.indexOf(key);
-    const previous = i - 1;
-
-    if (previous < 0) {
-      return active.value[l - 1];
-    }
-
-    return active.value[previous];
+    const next = stack.value[n];
+    open(next);
   };
 
   const toggleAll = () => (hidden.value = !hidden.value);
+  const closeSelected = () => close(stack.value[0]);
 
   return {
-    selected: selected,
     store: store,
     hidden: hidden,
     open: open,
@@ -161,6 +147,8 @@ export function useDraggables() {
     cycle: cycle,
     close: close,
     closeAll: closeAll,
-    closeActive: closeActive,
+    closeSelected: closeSelected,
+    closeExceptCurrent: closeExceptCurrent,
+    stack: stack,
   };
 }

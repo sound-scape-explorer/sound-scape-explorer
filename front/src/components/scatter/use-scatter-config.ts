@@ -7,7 +7,8 @@ import {useScatterDownloadPngButton} from 'src/components/scatter/use-scatter-do
 import {useScatterExport} from 'src/components/scatter/use-scatter-export';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {EXPORT_FILENAME, PLOTLY_SIZE} from 'src/constants';
+import {useExportName} from 'src/composables/use-export-name';
+import {PLOTLY_SIZE} from 'src/constants';
 import {computed} from 'vue';
 
 export interface ScatterProps extends DownloadImgopts {
@@ -20,26 +21,30 @@ export interface ScatterProps extends DownloadImgopts {
 export function useScatterConfig() {
   const {handleScatterExportClick} = useScatterExport();
   const {enable} = useScreen();
-  const {isPreview} = useClientSettings();
+  const {isAlphaPreview} = useClientSettings();
+  const {generate} = useExportName();
 
   const scatterWidth = PLOTLY_SIZE * (4 / 3);
   const scatterHeight = PLOTLY_SIZE;
   const scatterScale = 4;
-  const scatterName = `${EXPORT_FILENAME}-scatter-export`;
 
-  const props: ScatterProps = {
-    filename: scatterName,
-    width: scatterWidth,
-    height: scatterHeight,
-    format: 'svg',
-    scale: scatterScale,
-    name: scatterName,
-  };
+  const propsRef = computed<ScatterProps>(() => {
+    const name = generate('scatter');
+
+    return {
+      name: name,
+      filename: name,
+      width: scatterWidth,
+      height: scatterHeight,
+      format: 'svg',
+      scale: scatterScale,
+    };
+  });
 
   const config = computed<Partial<Config>>(() => {
     let barButtons: ModeBarButtonAny[] = [];
 
-    if (isPreview.value === true) {
+    if (isAlphaPreview.value) {
       barButtons = [
         {
           name: 'toggle-selection',
@@ -52,8 +57,8 @@ export function useScatterConfig() {
       ];
     }
 
-    const {button: downloadPngButton} = useScatterDownloadPngButton(props);
-    barButtons = [...barButtons, downloadPngButton];
+    const {button: pngButton} = useScatterDownloadPngButton(propsRef.value);
+    barButtons = [...barButtons, pngButton];
 
     barButtons = [
       ...barButtons,
@@ -62,7 +67,7 @@ export function useScatterConfig() {
         title: 'Download as SVG without legend',
         icon: Plotly.Icons['camera-retro'],
         click: async (gd) => {
-          await Plotly.downloadImage(gd, props);
+          await Plotly.downloadImage(gd, propsRef.value);
         },
       },
     ];

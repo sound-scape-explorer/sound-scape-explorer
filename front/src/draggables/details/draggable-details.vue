@@ -1,6 +1,8 @@
 <script lang="ts" setup="">
-import {HeadsetOutline} from '@vicons/ionicons5';
-import {NButton, NGi, NGrid, NIcon, NTag, NTooltip} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {headsetOutline} from 'ionicons/icons';
+import {NButton, NGi, NGrid, NTag} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
@@ -44,106 +46,108 @@ watch(timeshift, updateDates);
     draggable-key="details"
     suspense="scatterClick"
   >
-    <div class="file container">
-      <div class="title">Selected interval index</div>
-      <span class="file index">{{ currentIntervalIndex ?? 'none' }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Selected interval index</div>
+      <span :class="[$style.file, $style.index]">{{
+        currentIntervalIndex ?? 'none'
+      }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Site</div>
-      <span class="file index">{{ site?.site ?? '' }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Site</div>
+      <span :class="[$style.file, $style.index]">{{ site?.site ?? '' }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Audio blocks</div>
-      <span class="file index">
-        <NTooltip
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Audio blocks</div>
+      <span :class="[$style.file, $style.index]">
+        <AppTooltip
           v-for="blockDetails in blocks"
           placement="bottom"
-          trigger="hover"
         >
-          <!--suppress VueUnrecognizedSlot -->
-          <template #trigger>
+          <template #body>
             <NButton
-              class="zoom"
+              :class="$style.zoom"
               size="small"
               @click="() => select(blockDetails)"
             >
-              <template #icon>
-                <NIcon>
-                  <HeadsetOutline />
-                </NIcon>
-              </template>
+              <IonIcon :icon="headsetOutline" />
             </NButton>
           </template>
 
-          <NGrid
-            :cols="1"
-            x-gap="12"
-          >
-            <NGi>
-              <NTag
-                :bordered="false"
-                size="small"
-              >
-                file
-              </NTag>
-              {{ blockDetails.file }}
-            </NGi>
-            <NGi>
-              <NTag
-                :bordered="false"
-                size="small"
-              >
-                file start
-              </NTag>
-              {{ blockDetails.fileStart }} ms
-            </NGi>
-            <NGi>
-              <NTag
-                :bordered="false"
-                size="small"
-              >
-                start
-              </NTag>
-              {{ convertTimestampToIsoDate(blockDetails.start) }}
-            </NGi>
-          </NGrid>
-        </NTooltip>
+          <template #tooltip>
+            <NGrid
+              :cols="1"
+              x-gap="12"
+            >
+              <NGi>
+                <NTag
+                  :bordered="false"
+                  size="small"
+                >
+                  file
+                </NTag>
+                {{ blockDetails.file }}
+              </NGi>
+              <NGi>
+                <NTag
+                  :bordered="false"
+                  size="small"
+                >
+                  file start
+                </NTag>
+                {{ blockDetails.fileStart }} ms
+              </NGi>
+              <NGi>
+                <NTag
+                  :bordered="false"
+                  size="small"
+                >
+                  start
+                </NTag>
+                {{ convertTimestampToIsoDate(blockDetails.start) }}
+              </NGi>
+            </NGrid>
+          </template>
+        </AppTooltip>
       </span>
     </div>
 
-    <div class="separator" />
+    <div :class="$style.separator" />
 
-    <div class="file container">
-      <div class="title">Date Start</div>
-      <span class="file index">{{ date && convertDateToIsoDate(date) }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Date Start</div>
+      <span :class="[$style.file, $style.index]">{{
+        date && convertDateToIsoDate(date)
+      }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Date End</div>
-      <span class="file index">{{
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Date End</div>
+      <span :class="[$style.file, $style.index]">{{
         dateEnd && convertDateToIsoDate(dateEnd)
       }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Band</div>
-      <span class="file index">{{ band?.name ?? '' }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Band</div>
+      <span :class="[$style.file, $style.index]">{{ band?.name ?? '' }}</span>
     </div>
 
-    <div class="file container">
-      <div class="title">Integration</div>
-      <span class="file index">{{ integration?.name ?? '' }}</span>
+    <div :class="[$style.file, $style.container]">
+      <div :class="$style.title">Integration</div>
+      <span :class="[$style.file, $style.index]">{{
+        integration?.name ?? ''
+      }}</span>
     </div>
 
-    <div class="separator" />
+    <div :class="$style.separator" />
 
-    <div class="title">Labels</div>
+    <div :class="$style.title">Labels</div>
 
     <div
       v-if="hasClicked"
-      class="file container details"
+      :class="[$style.file, $style.container, $style.details]"
     >
       <span />
       <NGrid
@@ -163,9 +167,9 @@ watch(timeshift, updateDates);
         </NGi>
       </NGrid>
 
-      <div class="separator" />
+      <div :class="$style.separator" />
 
-      <div class="title">Indicators</div>
+      <div :class="$style.title">Indicators</div>
 
       <NGrid
         v-if="aggregatedIndicators !== null"
@@ -187,7 +191,7 @@ watch(timeshift, updateDates);
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .index {
   font-style: italic;
 }
@@ -195,23 +199,24 @@ watch(timeshift, updateDates);
 .container {
   display: flex;
   justify-content: space-between;
-  gap: 2rem;
+  width: $w1;
+  padding-right: $g0;
 }
 
 .title {
   font-weight: bold;
   display: flex;
   align-items: center;
+  padding-left: 1px;
 }
 
 .file.container.details {
   flex-direction: column;
-  gap: 2px;
+  gap: $g0;
 
   div {
     display: flex;
     justify-content: space-between;
-    gap: 0.5rem;
   }
 }
 
@@ -224,7 +229,6 @@ watch(timeshift, updateDates);
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: 1fr 1fr;
-  gap: 0 0.5rem;
 }
 
 .src {
@@ -232,6 +236,6 @@ watch(timeshift, updateDates);
 }
 
 .separator {
-  height: 1rem;
+  height: $p0;
 }
 </style>

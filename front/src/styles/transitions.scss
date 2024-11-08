@@ -20,3 +20,19 @@ $t: 120ms;
 @mixin transition-checkboxes {
   transition: background-color $t ease-in-out, opacity $t ease-in-out;
 }
+
+@mixin transition-vumeter {
+  transition: opacity $t ease-in-out;
+}
+
+@mixin transition-app-menu-button {
+  transition: background-color $t ease, box-shadow $t ease;
+}
+
+@mixin transition-rotate {
+  transition: transform $t ease;
+}
+
+@mixin transition-labels {
+  transition: opacity $t ease, max-height $t ease;
+}

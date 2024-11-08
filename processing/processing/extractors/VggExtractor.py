@@ -8,14 +8,16 @@ from torch import Tensor, cuda, hub, nn
 from processing.extractors.Extractor import Extractor
 from processing.loaders.Loader import Loader
 
+NnDevice = Literal["cuda", "cpu"]
+
 
 class VggExtractor(nn.Module, Extractor):
+    features: nn.Sequential
+    embeddings: nn.Sequential
+    device: NnDevice
+
     def __init__(self) -> None:
         super(VggExtractor, self).__init__()
-
-        self.features: nn.Sequential
-        self.embeddings: nn.Sequential
-        self.device: Literal["cuda", "cpu"]
 
         # Hardcoding vgg behaviour
         # This is a reflection of the current implementation.
@@ -76,7 +78,7 @@ class VggExtractor(nn.Module, Extractor):
         )
 
     @staticmethod
-    def load_device():
+    def load_device() -> NnDevice:
         if cuda.is_available():
             print("Using GPU")
             return "cuda"
@@ -84,6 +86,7 @@ class VggExtractor(nn.Module, Extractor):
             print("Using CPU")
             return "cpu"
 
+    # noinspection DuplicatedCode
     def forward(
         self,
         x: Tensor,
@@ -98,6 +101,7 @@ class VggExtractor(nn.Module, Extractor):
             x = x.view(x.size(0), -1)
             return self.embeddings(x)
 
+    # noinspection DuplicatedCode
     @staticmethod
     def to_frames(data: Tensor) -> Tensor:
         window_length = hop_length = 100
@@ -110,6 +114,7 @@ class VggExtractor(nn.Module, Extractor):
 
         return torch.as_strided(data, shape, strides)
 
+    # noinspection DuplicatedCode
     def convert_to_mel(
         self,
         wav: Tensor,
@@ -143,6 +148,7 @@ class VggExtractor(nn.Module, Extractor):
         mel_frames = mel_frames[:, None, :, :].float()
         return mel_frames
 
+    # noinspection DuplicatedCode
     def extract(self, loader: Loader):
         wav = loader.torch.audio
         sample_rate = loader.torch.sample_rate

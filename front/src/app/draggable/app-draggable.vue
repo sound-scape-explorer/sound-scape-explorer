@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import {CloseOutline} from '@vicons/ionicons5';
+import {IonIcon} from '@ionic/vue';
 import {useDraggable} from '@vueuse/core';
+import {close as closeIcon} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppCondition from 'src/app/app-condition.vue';
-import AppIcon from 'src/app/app-icon.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
-import {useAppDraggableStyles} from 'src/app/draggable/use-app-draggable-styles';
 import {useAppDraggableSuspense} from 'src/app/draggable/use-app-draggable-suspense';
 import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
-import {capitalizeFirstLetter} from 'src/utils/capitalize-first-letter';
+import {capitalizeFirstLetter} from 'src/utils/strings';
+import {computed} from 'vue';
 
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
@@ -22,14 +22,14 @@ const props = withDefaults(defineProps<AppDraggableProps>(), {
   suspense: null,
 });
 
-const {container, storage, drag} = useAppDraggable(props);
-const {classes} = useAppDraggableStyles(props);
+const {container, storage, drag, isZoomed, isSelected, isClosed, hidden} =
+  useAppDraggable(props);
 const {suspense} = useAppDraggableSuspense(props);
 const {check} = useAppDraggableBounds(container);
 
 const {menu} = useAppMenu();
 const icon = menu[props.draggableKey] ?? null;
-const {close} = useDraggables();
+const {close, stack} = useDraggables();
 
 const {x, y, style} = useDraggable(container, {
   initialValue: {x: storage.value.x, y: storage.value.y},
@@ -51,88 +51,87 @@ useAppDraggableLifecycles({
   x: x,
   y: y,
 });
+
+const zIndex = computed(() => {
+  const i = stack.value.indexOf(props.draggableKey);
+  const z = 40;
+  return z - i;
+});
 </script>
 
 <template>
-  <div>
-    <div
-      ref="container"
-      :class="classes"
-      :style="style"
-    >
-      <div class="button close">
-        <AppButton
-          :handle-click="() => close(props.draggableKey)"
-          grow
-          icon
-          size="tiny"
-        >
-          <CloseOutline />
-        </AppButton>
-      </div>
-
-      <div class="title content">
-        <div class="title container">
-          <div class="title header">
-            <AppIcon v-if="icon !== null">
-              <icon />
-            </AppIcon>
-            <span>
-              {{ capitalizeFirstLetter(props.draggableKey) }}
-            </span>
-          </div>
-
-          <div
-            ref="drag"
-            class="drag"
-          >
-            <span>👋</span>
-          </div>
-        </div>
-      </div>
-
-      <AppCondition
-        :wait-if="suspense.while"
-        :wait-message="suspense.message"
+  <div
+    ref="container"
+    :class="[
+      $style.container,
+      {
+        [$style.zoomed]: isZoomed,
+        [$style.closed]: isClosed,
+        [$style.hidden]: hidden,
+      },
+    ]"
+    :style="style"
+  >
+    <div :class="$style['close-button']">
+      <AppButton
+        :handle-click="() => close(props.draggableKey)"
+        grow
+        size="tiny"
       >
-        <div class="content main">
-          <slot />
-        </div>
-      </AppCondition>
+        <IonIcon :icon="closeIcon" />
+      </AppButton>
     </div>
+
+    <div :class="$style.header">
+      <div :class="$style.title">
+        <IonIcon
+          :class="{[$style.active]: isSelected}"
+          :icon="icon"
+        />
+        <span>
+          {{ capitalizeFirstLetter(props.draggableKey) }}
+        </span>
+      </div>
+
+      <div
+        ref="drag"
+        :class="$style.handle"
+      >
+        <span>👋</span>
+      </div>
+    </div>
+
+    <AppCondition
+      :wait-if="suspense.while"
+      :wait-message="suspense.message"
+    >
+      <div :class="$style.content">
+        <slot />
+      </div>
+    </AppCondition>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.draggable {
+<style lang="scss" module>
+.container {
   position: fixed;
-  z-index: $appDraggableIndexDefaultLayer;
-
+  z-index: v-bind(zIndex);
   justify-content: flex-start;
-
-  padding: 0.6rem 0.9rem 0.6rem 2.5rem;
-  min-width: 20em;
-
+  padding: $p0 $p0 $p0 $p0 * 5;
   user-select: none;
-
   opacity: 1;
-
   border: 1px solid $grey;
-
   background-color: $white;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur($p0 + $g0);
 
-  box-shadow: 10px 10px 20px -3px $greyDeep;
-  @include borderRadius;
+  @include s1;
+  @include border-radius;
   @include transition-app-draggable;
 }
 
 .content {
+  margin: $p0 0 0 0;
   cursor: default;
-}
-
-.zoomable {
-  max-height: 20%;
 }
 
 .zoomed {
@@ -140,57 +139,46 @@ useAppDraggableLifecycles({
 }
 
 .closed {
-  //animation: FadeOut 120ms ease-in-out forwards;
   display: none;
 }
 
-.button {
+.close-button {
   position: fixed;
-  left: 0.5rem;
-
-  z-index: $appDraggableIndexButtonsLayer;
+  top: $p0;
+  left: $p0;
 }
 
-.button.close {
-  top: 0.5rem;
-}
-
-.title {
-  font-weight: bold;
-}
-
-.title.container {
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 25%;
+  gap: $p0 * 4;
 }
 
 @keyframes oscillate {
   0% {
     transform: translate3d(0, 0, 0);
   }
+
   50% {
     transform: translate3d(0, -2px, 0);
   }
+
   100% {
     transform: translate3d(0, 0, 0);
   }
 }
 
-.drag {
+.handle {
   display: flex;
-  justify-content: center;
   align-items: center;
-
+  justify-content: center;
   width: 100%;
-  min-width: 100px;
-
-  background-color: $greyLight;
-  border-radius: 10px;
+  max-width: $p0 * 40;
   cursor: grab;
-
   opacity: 0.45;
+  border-radius: 10px;
+  background-color: $grey-light;
   filter: grayscale(0.95);
 
   @include transition-app-draggable-handle;
@@ -210,41 +198,35 @@ useAppDraggableLifecycles({
 }
 
 hr {
-  opacity: 20%;
-}
-
-.main {
-  margin-top: 10px;
+  opacity: 0.2;
 }
 
 .hidden {
   display: none;
 }
 
-$titleHeaderSize: 1.3em;
-.title.header {
+.title {
+  font-weight: bold;
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  gap: $p0;
+
   @include transition-color;
 
   > i {
-    width: $titleHeaderSize;
-    height: $titleHeaderSize;
+    width: 100%;
+    height: 100%;
+    transform: translate3d(1px, 1px, 0);
 
-    * {
-      width: $titleHeaderSize;
-      height: $titleHeaderSize;
+    svg {
+      width: $p0 * 2;
+      height: $p0 * 2;
     }
   }
 }
 
-.selected {
-  z-index: $appDraggableIndexSelectedLayer;
-
-  .title.header > i {
-    color: $emerald;
-  }
+.active {
+  color: $emerald;
 }
 </style>

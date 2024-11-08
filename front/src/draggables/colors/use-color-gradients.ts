@@ -2,7 +2,7 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorUser} from 'src/composables/use-color-user';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
-import {createHourlyLabels} from 'src/utils/create-hourly-labels';
+import {createHourlyLabels} from 'src/utils/colors';
 import {computed} from 'vue';
 
 const size = 100;

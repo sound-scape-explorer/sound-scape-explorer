@@ -1,17 +1,19 @@
 <script lang="ts" setup>
-import {DownloadOutline} from '@vicons/ionicons5';
-import {NCascader, NSwitch, NTooltip} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {downloadOutline} from 'ionicons/icons';
+import {NCascader, NSwitch} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import {InjectionKey} from 'src/common/injection-key';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
-import {PLOTLY_SIZE} from 'src/constants';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
 import {useDraggableTrajectoriesExport} from 'src/draggables/trajectories/use-draggable-trajectories-export';
 import {useTrajectoriesOptions} from 'src/draggables/trajectories/use-trajectories-options';
@@ -28,7 +30,7 @@ const {renderTraces} = useScatterTraces();
 watch(isFused, renderTraces);
 watch(current, update);
 
-useRefProvide('trajectories/fuse', isFused);
+useRefProvide(InjectionKey.trajectoriesFuse, isFused);
 </script>
 
 <template>
@@ -44,23 +46,20 @@ useRefProvide('trajectories/fuse', isFused);
       />
     </AppDraggableSidebar>
 
-    <AppDraggableMenu
-      :style="{minWidth: `${PLOTLY_SIZE}px`}"
-      size="medium"
-    >
+    <AppDraggableMenu :class="$style.menu">
       <h2>Trajectories</h2>
 
-      <div class="selection">
+      <div :class="$style.selection">
         <NCascader
           v-model:value="current"
           :cascade="false"
+          :class="$style.cascader"
           :clear-filter-after-select="false"
           :disabled="isLoading || isFused"
           :filterable="false"
           :options="options"
           :show-path="false"
           check-strategy="child"
-          class="cascader"
           clearable
           expand-trigger="click"
           max-tag-count="responsive"
@@ -69,24 +68,24 @@ useRefProvide('trajectories/fuse', isFused);
           size="small"
         />
 
-        <NTooltip
+        <AppTooltip
           :show-arrow="false"
           placement="top-start"
           trigger="hover"
         >
-          <!--suppress VueUnrecognizedSlot -->
-          <template #trigger>
+          <template #body>
             <NSwitch
               v-model:value="isFused"
+              :class="$style.switch"
               :disabled="!isFuseable"
-              class="switch"
               size="small"
             >
-              <template #checked> fuse</template>
+              <template #checked>fuse</template>
             </NSwitch>
           </template>
-          Fuse trajectories
-        </NTooltip>
+
+          <template #tooltip>Fuse trajectories</template>
+        </AppTooltip>
       </div>
 
       <h2>Colormap</h2>
@@ -95,41 +94,46 @@ useRefProvide('trajectories/fuse', isFused);
 
       <span />
 
-      <div class="last-line">
+      <div :class="$style['last-line']">
         <AppButton
           :handle-click="handleClick"
-          icon
+          size="small"
           tooltip="Export"
           tooltip-placement="bottom"
         >
-          <DownloadOutline />
+          <IonIcon :icon="downloadOutline" />
         </AppButton>
       </div>
     </AppDraggableMenu>
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
+.menu {
+  width: $s0;
+}
+
 .selection {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 0.5em;
+  justify-content: center;
+  gap: $p0;
 }
 
 .switch {
-  width: 6em;
   font-size: 0.9em;
+  width: $p0 * 8;
 }
 
 .last-line {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-end;
+  padding-top: $p0;
 }
 
 .cascader {
-  width: 15em;
   flex: 1;
+  width: 15em;
 }
 </style>

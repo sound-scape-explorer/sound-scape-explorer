@@ -1,12 +1,13 @@
+import {ColorByLabelError} from 'src/common/Errors';
 import {useColorUser} from 'src/composables/use-color-user';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useColorResize} from 'src/draggables/colors/use-color-resize';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useLabelsNumeric} from 'src/draggables/labels/use-labels-numeric';
-import {convertRgbToString} from 'src/utils/convert-rgb-to-string';
-import {getInfiniteRange} from 'src/utils/get-infinite-range';
-import {mapRange} from 'src/utils/map-range';
+import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
+import {convertRgbToString} from 'src/utils/colors';
+import {mapRange} from 'src/utils/math';
+import {getInfiniteRange} from 'src/utils/utils';
 import {ref} from 'vue';
 
 const min = ref<number | null>(null);
@@ -19,7 +20,7 @@ export function useColorByLabel() {
   const {labelSets} = useStorageLabels();
   const {criteria} = useColorSelection();
   const {scale} = useColorUser();
-  const {isEnabled} = useLabelsNumeric();
+  const {isEnabled} = useLabelNumeric();
 
   const getPrimitive = (intervalIndex: number) => {
     if (
@@ -27,7 +28,7 @@ export function useColorByLabel() {
       labelProperties.value === null ||
       labelSets.value === null
     ) {
-      throw new Error('useColorByLabel: missing props');
+      throw new ColorByLabelError('props missing');
     }
 
     const p = labelProperties.value.indexOf(criteria.value);

@@ -1,4 +1,4 @@
-import type {Integration} from 'src/composables/use-integrations';
+import {type Integration} from 'src/composables/use-integrations';
 import {ref} from 'vue';
 
 const options = ref<string[]>([]);

@@ -1,6 +1,7 @@
 import {useLocalStorage} from '@vueuse/core';
-import type {AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
-import {ref} from 'vue';
+import {type AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
+import {useDraggables} from 'src/composables/use-draggables';
+import {computed, ref} from 'vue';
 
 export function useAppDraggable(props: AppDraggableProps) {
   const storageKey = `sse-draggable-${props.draggableKey}`;
@@ -9,9 +10,18 @@ export function useAppDraggable(props: AppDraggableProps) {
   const storage = useLocalStorage(storageKey, {x: 100, y: 100});
   const drag = ref<HTMLElement | null>(null);
 
+  const {store, stack, hidden} = useDraggables();
+  const isZoomed = ref<boolean>(false);
+  const isClosed = computed(() => !store[props.draggableKey]);
+  const isSelected = computed(() => stack.value[0] === props.draggableKey);
+
   return {
     container: container,
     storage: storage,
     drag: drag,
+    isZoomed: isZoomed,
+    isClosed: isClosed,
+    isSelected: isSelected,
+    hidden: hidden,
   };
 }

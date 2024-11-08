@@ -1,8 +1,10 @@
+import {StorageLabelsError} from 'src/common/Errors';
 import {useBandSelection} from 'src/composables/use-band-selection';
+import {useExtractorSelection} from 'src/composables/use-extractor-selection';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useStorageReady} from 'src/composables/use-storage-ready';
-import {convertSlugsToColorTypes} from 'src/utils/convert-slugs-to-color-types';
+import {convertSlugsToColorTypes} from 'src/utils/colors';
 import {ref} from 'vue';
 
 // Label properties and sets
@@ -11,9 +13,17 @@ export interface Labels {
 }
 
 let isLoaded = false;
+
 const labels = ref<Labels | null>(null);
+
 const labelProperties = ref<string[] | null>(null);
 const labelSets = ref<string[][] | null>(null);
+
+// `Actual` for existing in storage, (slice manually injected labels)
+const injectedCount = 1;
+const labelPropertiesActual = ref<string[] | null>(null);
+const labelSetsActual = ref<string[][] | null>(null);
+
 const labelPropertiesAsColorTypes = ref<string[] | null>(null); // todo: remove me
 
 export function useStorageLabels() {
@@ -34,19 +44,31 @@ export function useStorageLabels() {
     await read(async (worker, file) => {
       const {band} = useBandSelection();
       const {integration} = useIntegrationSelection();
-      if (band.value === null || integration.value === null) {
-        return;
+      const {extractor} = useExtractorSelection();
+
+      if (
+        band.value === null ||
+        integration.value === null ||
+        extractor.value === null
+      ) {
+        throw new StorageLabelsError('selection is missing');
       }
 
       labels.value = await worker.readLabels(
         file,
         band.value.name,
         integration.value.seconds,
+        extractor.value.index,
       );
 
-      labelSets.value = Object.values(labels.value);
       const properties = Object.keys(labels.value);
+
+      labelSets.value = Object.values(labels.value);
       labelProperties.value = properties;
+
+      labelSetsActual.value = labelSets.value.slice(injectedCount);
+      labelPropertiesActual.value = labelProperties.value.slice(injectedCount);
+
       labelPropertiesAsColorTypes.value = convertSlugsToColorTypes(properties);
     });
   };
@@ -54,9 +76,10 @@ export function useStorageLabels() {
   return {
     labels: labels,
     labelProperties: labelProperties,
+    labelPropertiesActual: labelPropertiesActual,
     labelSets: labelSets,
+    labelSetsActual: labelSetsActual,
     labelPropertiesAsColorTypes: labelPropertiesAsColorTypes,
     readLabels: readLabels,
-    // resetLabels: resetLabels,
   };
 }

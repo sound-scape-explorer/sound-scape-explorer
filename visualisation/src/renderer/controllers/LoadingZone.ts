@@ -3,13 +3,17 @@ import Excel from 'exceljs';
 import {render} from '../renderer';
 
 export class LoadingZone {
-  private node: HTMLDivElement;
+  public audioPath: string | null;
 
-  private configurationElement: HTMLInputElement;
+  private readonly node: HTMLDivElement;
 
-  private storageElement: HTMLInputElement;
+  private readonly configurationElement: HTMLInputElement;
+
+  private readonly storageElement: HTMLInputElement;
 
   public constructor() {
+    this.audioPath = null;
+
     this.node = document.getElementById('loading-zone') as HTMLDivElement;
     this.configurationElement = document.getElementById(
       'configuration-input',
@@ -54,29 +58,19 @@ export class LoadingZone {
 
         input.value = null;
         const audioPath = await this.readAudioPathFromExcel(file);
-        console.log('LoadingZone/audioPath:', audioPath);
+        this.audioPath = audioPath;
         await window.electronAPI.startAudioService(audioPath);
         await render();
       },
     );
   }
 
-  private isAbsolute(path: string): boolean {
-    const isLinux = path[0] === '/';
-    const isWindows = path[2] === '/' || path[2] === '\\';
-    return isWindows || isLinux;
-  }
-
-  private getFinalPath(audioPath: string, directory: string): string {
-    if (this.isAbsolute(audioPath)) {
-      return audioPath;
-    }
-
-    return directory + '/' + audioPath;
-  }
-
   private getDirectory(file: File): string {
-    return window.electronAPI.getFileDirectory(file).toString();
+    return window.electronAPI.getFileDirectory(file);
+  }
+
+  private joinPath(dirPath: string, audioPath: string) {
+    return window.electronAPI.joinPath(dirPath, audioPath);
   }
 
   private readAudioPathFromExcel(file: File): Promise<string> {
@@ -90,7 +84,8 @@ export class LoadingZone {
         const settings = workbook.getWorksheet('Settings');
         const audioPath = settings.getCell('B3').toString();
         const directory = this.getDirectory(file);
-        resolve(this.getFinalPath(audioPath, directory));
+        const finalPath = this.joinPath(directory, audioPath);
+        resolve(finalPath);
       });
 
       reader.readAsArrayBuffer(file);

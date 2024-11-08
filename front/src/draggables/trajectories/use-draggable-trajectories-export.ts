@@ -1,12 +1,13 @@
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/use-date';
+import {useExportName} from 'src/composables/use-export-name';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
-import {EXPORT_FILENAME} from 'src/constants';
-import {buildAverageTrajectory} from 'src/utils/build-average-trajectory';
+import {buildAverageTrajectory} from 'src/utils/trajectories';
 
 export function useDraggableTrajectoriesExport() {
   const {convertTimestampToIsoDate} = useDate();
   const {traceds, isFused} = useTrajectoriesData();
+  const {generate} = useExportName();
 
   const handleClick = () => {
     const csv = new Csv();
@@ -49,7 +50,8 @@ export function useDraggableTrajectoriesExport() {
       }
     }
 
-    csv.download(`${EXPORT_FILENAME}-trajectories.csv`);
+    const name = generate('trajectories');
+    csv.download(name);
   };
 
   return {

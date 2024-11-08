@@ -1,10 +1,16 @@
 import {GAIN, WAVE} from 'src/constants';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
+import {computed} from 'vue';
 
 export function useWavesurferHandlers() {
   const {ws} = useWavesurfer();
   const {gain, apply} = useAudioGain();
+
+  const increaseValue = computed(() => gain.value + GAIN.step);
+  const decreaseValue = computed(() => gain.value - GAIN.step);
+  const canIncrease = computed(() => increaseValue.value <= GAIN.max);
+  const canDecrease = computed(() => decreaseValue.value >= GAIN.min);
 
   const renderWaveform = () => {
     if (ws.value === null) {
@@ -14,41 +20,30 @@ export function useWavesurferHandlers() {
     ws.value.drawBuffer();
   };
 
-  const increaseVolume = () => {
-    if (ws.value === null) {
+  const increase = () => {
+    if (ws.value === null || !canIncrease.value) {
       return;
     }
 
-    const nextValue = gain.value + GAIN.step;
-
-    if (nextValue >= GAIN.max) {
-      return;
-    }
-
-    apply(nextValue);
-
+    apply(increaseValue.value);
     ws.value.params.barHeight += WAVE.step;
     renderWaveform();
   };
 
-  const decreaseVolume = () => {
-    if (ws.value === null) {
+  const decrease = () => {
+    if (ws.value === null || !canDecrease.value) {
       return;
     }
 
-    const nextValue = gain.value - GAIN.step;
-
-    if (nextValue <= GAIN.min) {
-      return;
-    }
-
-    apply(nextValue);
+    apply(decreaseValue.value);
     ws.value.params.barHeight -= WAVE.step;
     renderWaveform();
   };
 
   return {
-    increaseVolume: increaseVolume,
-    decreaseVolume: decreaseVolume,
+    increase: increase,
+    decrease: decrease,
+    canIncrease: canIncrease,
+    canDecrease: canDecrease,
   };
 }

@@ -15,7 +15,7 @@ const hasChildren = typeof slots.default !== 'undefined';
 <template>
   <div
     v-if="props.waitIf"
-    class="suspense"
+    :class="$style.suspense"
   >
     {{ props.waitMessage }}
   </div>
@@ -25,8 +25,9 @@ const hasChildren = typeof slots.default !== 'undefined';
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .suspense {
   font-style: italic;
+  padding-top: $p0;
 }
 </style>

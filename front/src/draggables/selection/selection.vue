@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import {ArrowUndoOutline, RepeatOutline} from '@vicons/ionicons5';
-import {NButton, NIcon, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
+import {IonIcon} from '@ionic/vue';
+import {arrowUndoOutline, repeatOutline} from 'ionicons/icons';
+import {NButton, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
@@ -9,7 +10,7 @@ import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {
   convertToNaiveSelectOptions,
   type NaiveSelectOption,
-} from 'src/utils/convert-to-naive-select-options';
+} from 'src/utils/naive';
 import {ref, watch} from 'vue';
 
 const {selected} = useScreen();
@@ -37,6 +38,7 @@ const toggle = () => {
   mode.value = 'existing';
 };
 
+// TODO: fix me
 watch(labelProperties, () => {
   options.value = convertToNaiveSelectOptions(labelProperties.value ?? []);
 });
@@ -46,32 +48,32 @@ watch(labelProperties, () => {
 
 <template>
   <AppDraggable
-    class="draggable-selection"
-    draggable-key="selection"
+    :class="$style['draggable-selection']"
+    draggable-key="_alphaSelection3d"
   >
-    <div class="draggable-selection--buttons">
+    <div :class="$style.buttons">
       <AppButton
         :handle-click="() => console.log('undo')"
         tooltip="undo"
       >
-        <ArrowUndoOutline />
+        <IonIcon :icon="arrowUndoOutline" />
       </AppButton>
 
       <AppButton
         :handle-click="() => console.log('repeat')"
         tooltip="repeat"
       >
-        <RepeatOutline />
+        <IonIcon :icon="repeatOutline" />
       </AppButton>
     </div>
 
-    <span class="draggable-selection--tooltip">
+    <span :class="$style.tooltip">
       Current number of points selected: {{ selected.length }}
     </span>
 
     <NTabs
+      :class="$style.tabs"
       animated
-      class="draggable-selection--tabs"
       type="line"
     >
       <NTabPane
@@ -92,20 +94,16 @@ watch(labelProperties, () => {
       size="small"
       @click="undo"
     >
-      <NIcon>
-        <ArrowUndoOutline />
-      </NIcon>
+      <IonIcon :icon="arrowUndoOutline" />
     </NButton>
 
-    <div class="draggable-selection--container">
+    <div :class="$style.container">
       <NButton
         ref="button"
         size="small"
         @click="toggle"
       >
-        <NIcon>
-          <RepeatOutline />
-        </NIcon>
+        <IonIcon :icon="repeatOutline" />
       </NButton>
 
       <NSelect
@@ -135,39 +133,38 @@ watch(labelProperties, () => {
   </AppDraggable>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .draggable-selection {
   width: 40em;
 }
 
-.draggable-selection--container {
+.container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 1em;
 }
 
-.draggable-selection--buttons {
+.buttons {
   position: fixed;
   display: flex;
-  justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-
-  gap: 2px;
+  justify-content: flex-start;
   height: 0;
   margin-left: -2rem;
+  gap: 2px;
 }
 
-.draggable-selection--tabs {
+.tabs {
   margin-top: -1em;
   padding-top: 0.5em;
 }
 
-.draggable-selection--tooltip {
+.tooltip {
   position: fixed;
+  right: 0;
   margin-top: 1em;
   margin-right: 1em;
-  right: 0;
 }
 </style>

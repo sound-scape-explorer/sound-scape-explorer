@@ -12,11 +12,15 @@ interface Readable {
   semitones: string;
 }
 
+const getHertz = (sampleRate: number) => {
+  return (sampleRate * rate.value).toFixed();
+};
+
 const rate = ref<number>(PLAYBACK_RATE.default);
 const readable = ref<Readable>({
-  hertz: '',
-  percentage: '',
-  semitones: '',
+  hertz: getHertz(44100),
+  percentage: speedToPercentage(PLAYBACK_RATE.default, 2),
+  semitones: speedToSemitones(PLAYBACK_RATE.default, 2),
 });
 
 // audio speed

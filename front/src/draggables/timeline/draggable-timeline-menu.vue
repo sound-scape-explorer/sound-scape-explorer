@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {NPagination, NSelect, NTag, NTooltip} from 'naive-ui';
+import {NPagination, NSelect, NTag} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {
   pageCountRef,
   pageIndexRef,
@@ -13,8 +14,8 @@ const {size, options} = useTimelineSizes();
 </script>
 
 <template>
-  <div class="timeline-menu__container">
-    <div class="timeline-menu__block-count">
+  <div :class="$style.container">
+    <div :class="$style['block-count']">
       <NTag
         :bordered="false"
         size="small"
@@ -33,12 +34,9 @@ const {size, options} = useTimelineSizes();
       size="small"
     />
 
-    <div class="timeline-menu__gap-size">
-      <NTooltip
-        placement="top"
-        trigger="hover"
-      >
-        <template #trigger>
+    <div :class="$style['gap-size']">
+      <AppTooltip placement="top">
+        <template #body>
           <NSelect
             v-model:value="size"
             :default-value="size"
@@ -46,30 +44,29 @@ const {size, options} = useTimelineSizes();
             size="tiny"
           />
         </template>
-        <span>Gap size</span>
-      </NTooltip>
+        <template #tooltip>Gap size</template>
+      </AppTooltip>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.timeline-menu__container {
+<style lang="scss" module>
+.container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 1em;
 }
 
-.timeline-menu__block-count {
+.block-count {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  gap: 10px;
-
+  justify-content: flex-start;
   width: 10rem;
+  gap: 10px;
 }
 
-.timeline-menu__gap-size {
+.gap-size {
   width: 10em;
 }
 </style>

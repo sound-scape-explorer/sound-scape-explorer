@@ -1,31 +1,34 @@
 import {Csv} from 'src/common/csv';
+import {useExportName} from 'src/composables/use-export-name';
 import {useStorageDigested} from 'src/composables/use-storage-digested';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
 
 export function useDraggableHeatmapsExport() {
   const {digested} = useStorageDigested();
-  const {x, y, values} = useDraggableHeatmapsChart();
+  const {x, y, series} = useDraggableHeatmapsChart();
+  const {generate} = useExportName();
 
   const handleClick = () => {
     if (
       digested.value === null ||
       x.value.length === 0 ||
-      values.value.length === 0
+      series.value.length === 0
     ) {
       return;
     }
 
+    const isPairing = digested.value.digester.type === '2d-pairing';
+
     const csv = new Csv();
-    const isPairing = digested.value.isPairing;
     csv.addColumn('y');
 
     x.value.forEach((x) => {
       csv.addColumn(x);
     });
 
-    values.value.forEach((vs, index) => {
+    series.value.forEach((vs, index) => {
       csv.createRow();
-      if (values.value.length === 1) {
+      if (series.value.length === 1) {
         csv.addToCurrentRow('value');
       } else if (isPairing) {
         csv.addToCurrentRow(y.value[index]);
@@ -38,7 +41,8 @@ export function useDraggableHeatmapsExport() {
       });
     });
 
-    csv.download('digested.csv');
+    const name = generate('heatmap');
+    csv.download(name);
   };
 
   return {

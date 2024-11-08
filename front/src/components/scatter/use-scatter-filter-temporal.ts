@@ -4,9 +4,9 @@ import {
 } from 'src/composables/use-storage-aggregated-indicators';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
-import {calculateMean} from 'src/utils/calculate-mean';
-import {getInfiniteRange} from 'src/utils/get-infinite-range';
-import {parseSelectionOption} from 'src/utils/parse-selection-option';
+import {calculateMean} from 'src/utils/math';
+import {parseSelectionOption} from 'src/utils/old';
+import {getInfiniteRange} from 'src/utils/utils';
 import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);

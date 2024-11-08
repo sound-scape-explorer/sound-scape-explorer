@@ -17,9 +17,15 @@ import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
 import {useViewState} from 'src/composables/use-view-state';
-import {useLabelsSelection} from 'src/draggables/labels/use-labels-selection';
+import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
+import {ref} from 'vue';
+
+const step = ref<number>(0); // percents
+
+type Step = [string, () => Promise<void>]; // [text, reader]
 
 export function useViewLoader() {
   const {close} = useDraggables();
@@ -31,9 +37,10 @@ export function useViewLoader() {
   const {readAggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
   const {readAggregatedLabels} = useStorageAggregatedLabels();
   const {readReducedFeatures} = useStorageReducedFeatures();
+  const {readRanges} = useStorageRanges();
   const {generateColorScale} = useScatterColorScale();
-  const {buildSelection, selection: labelSelection} = useLabelsSelection();
-  const {renderTraces, isEnabled} = useScatterTraces();
+  const {buildSelection, selection: labelSelection} = useLabelSelection();
+  const {isEnabled} = useScatterTraces();
   const {filter: filterByLabel} = useScatterFilterLabels();
   const {filter: filterByTemporal} = useScatterFilterTemporal();
   const {filterByTime} = useScatterFilterTime();
@@ -45,6 +52,27 @@ export function useViewLoader() {
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
+
+  const steps: Step[] = [
+    ['labels', readLabels],
+    ['features', readAggregatedFeatures],
+    ['indicators', readAggregatedIndicators],
+    ['timestamps', readAggregatedTimestamps],
+    ['ranges', readRanges],
+    ['sites', readAggregatedSites],
+    ['intervals', readAggregatedIntervalDetails],
+    ['interval labels', readAggregatedLabels],
+    ['reduced features', readReducedFeatures],
+  ];
+
+  const updateStep = (current: number) => {
+    const l = steps.length - 1;
+    step.value = parseInt(((current / l) * 100).toString());
+  };
+
+  const updateReading = (current: string) => {
+    loadingText.value = `Reading ${current}...`;
+  };
 
   const load = async () => {
     if (
@@ -60,29 +88,13 @@ export function useViewLoader() {
     lock();
     console.log('View: Load');
 
-    loadingText.value = 'Reading labels';
-    await readLabels();
+    for (let s = 0; s < steps.length; s += 1) {
+      const [text, reader] = steps[s];
 
-    loadingText.value = 'Reading features';
-    await readAggregatedFeatures();
-
-    loadingText.value = 'Reading indicators';
-    await readAggregatedIndicators();
-
-    loadingText.value = 'Reading timestamps';
-    await readAggregatedTimestamps();
-
-    loadingText.value = 'Reading sites';
-    await readAggregatedSites();
-
-    loadingText.value = 'Reading intervals';
-    await readAggregatedIntervalDetails();
-
-    loadingText.value = 'Reading labels';
-    await readAggregatedLabels();
-
-    loadingText.value = 'Reading reduced features';
-    await readReducedFeatures();
+      updateStep(s);
+      updateReading(text);
+      await reader();
+    }
 
     await generateColorScale();
     buildSelection();
@@ -90,8 +102,6 @@ export function useViewLoader() {
     filterByLabel(labelSelection);
     filterByTime();
     filterByTemporal();
-
-    renderTraces();
 
     isLoading.value = false;
     close('view');
@@ -101,5 +111,6 @@ export function useViewLoader() {
 
   return {
     load: load,
+    step: step,
   };
 }

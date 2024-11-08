@@ -9,7 +9,7 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-  <div class="draggable-settings-item">
+  <div :class="$style.item">
     <NTag
       :bordered="false"
       size="medium"
@@ -21,14 +21,12 @@ const props = defineProps<Props>();
   </div>
 </template>
 
-<style lang="scss" scoped>
-.draggable-settings-item {
+<style lang="scss" module>
+.item {
   display: grid;
-  grid-template-columns: auto 1fr 20em;
   align-items: center;
-  gap: 10px;
-  width: 100%;
-
-  margin-bottom: 0.5em;
+  padding: $g0 0;
+  grid-template-columns: auto 1fr auto;
+  gap: $p0;
 }
 </style>

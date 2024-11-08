@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
-import {NButton, NIcon, NTooltip} from 'naive-ui';
+import {NButton, NIcon} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {useAppMenuButton} from 'src/app/menu/use-app-menu-button';
 import {type DraggableKey} from 'src/composables/use-draggables';
 import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
@@ -11,20 +12,24 @@ export interface AppMenuItemProps {
 }
 
 const props = defineProps<AppMenuItemProps>();
-const {button, handleClick, classNames} = useAppMenuButton(props);
+const {button, handleClick, isActive, isSelected, isHidden} =
+  useAppMenuButton(props);
 const {getKey} = useKeyboardShortcuts();
 </script>
 
 <template>
-  <NTooltip
-    placement="right"
-    trigger="hover"
-  >
-    <!--suppress VueUnrecognizedSlot -->
-    <template #trigger>
+  <AppTooltip>
+    <template #body>
       <NButton
         ref="button"
-        :class="classNames"
+        :class="[
+          $style.button,
+          {
+            [$style.active]: isActive,
+            [$style.selected]: isSelected,
+            [$style.hidden]: isHidden,
+          },
+        ]"
         :disabled="props.disabled"
         size="small"
         @click="handleClick"
@@ -35,33 +40,38 @@ const {getKey} = useKeyboardShortcuts();
       </NButton>
     </template>
 
-    <div>
-      {{ props.text }} [<span class="app-menu-button__bold">
+    <template #tooltip>
+      {{ props.text }} [<span :class="$style.bold">
         {{ getKey(props.draggableKey) }}</span
       >]
-    </div>
-  </NTooltip>
+    </template>
+  </AppTooltip>
 </template>
 
-<style lang="scss">
-.app-menu-button {
-  backdrop-filter: blur(5px);
+<style lang="scss" module>
+.button {
   pointer-events: auto;
+
+  @include transition-app-menu-button;
+  @include background-blur-1;
+  @include s0;
 }
 
-.app-menu-button__active {
-  background: $oliveLight;
+.active {
+  background: $olive-light;
+
+  @include s0d;
 }
 
-.app-menu-button__bold {
+.bold {
   font-weight: bold;
 }
 
-.app-menu-button__selected {
+.selected {
   background: $olive;
 }
 
-.app-menu-button__hidden {
+.hidden {
   display: none;
 }
 </style>

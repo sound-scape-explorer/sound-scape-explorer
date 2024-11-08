@@ -1,12 +1,7 @@
 <script lang="ts" setup>
-import 'sass-reset';
+import 'sass-reset/src/reset.scss';
 
-import {
-  NLayout,
-  NMessageProvider,
-  NNotificationProvider,
-  NSpace,
-} from 'naive-ui';
+import {NLayout, NSpace} from 'naive-ui';
 import AppConsole from 'src/app/app-console.vue';
 import AppLoader from 'src/app/app-loader.vue';
 import AppLoading from 'src/app/app-loading.vue';
@@ -25,7 +20,7 @@ import Draggables from 'src/draggables/draggables.vue';
 import {onMounted} from 'vue';
 
 const {isReady} = useStorageReady();
-const {isPreview} = useClientSettings();
+const {isAlphaPreview} = useClientSettings();
 const {checkVersions} = useClientSettingsChecker();
 const {create: createWorker} = useWorker();
 const {showImport} = useApp();
@@ -51,20 +46,12 @@ onMounted(checkVersions);
       <AppConsole />
 
       <NLayout>
-        <NNotificationProvider>
-          <NMessageProvider>
-            <AppNotification />
-          </NMessageProvider>
-        </NNotificationProvider>
-
-        <!--TODO: remove enclosing div?-->
-        <div>
-          <AppMenu />
-          <AppLoader />
-          <Scatter v-if="isReady" />
-          <Screen v-if="isReady && isPreview" />
-          <Draggables />
-        </div>
+        <AppNotification />
+        <AppMenu />
+        <AppLoader />
+        <Scatter v-if="isReady" />
+        <Screen v-if="isReady && isAlphaPreview" />
+        <Draggables />
       </NLayout>
     </NLayout>
   </NSpace>
