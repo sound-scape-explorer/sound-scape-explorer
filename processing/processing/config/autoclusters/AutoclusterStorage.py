@@ -1,9 +1,11 @@
 from typing import List
 
-from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
-from processing.config.autoclusters.AutoclusterExcel import AutoclusterExcel
+from numpy import int64
+
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
+from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
+from processing.config.autoclusters.AutoclusterExcel import AutoclusterExcel
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 
@@ -38,18 +40,20 @@ class AutoclusterStorage:
         names_dataset = storage.read(AutoclusterStorage.names)
 
         names = storage.convert_dataset_to_string_list(names_dataset)
-        min_cluster_sizes = storage.read(AutoclusterStorage.min_cluster_sizes)
+        mns: List[int64] = storage.read(AutoclusterStorage.min_cluster_sizes)[:]
+        mns: List[int] = [int(v) for v in mns]
+
         min_samples_dataset = storage.read(AutoclusterStorage.min_samples)
         min_samples = storage.convert_dataset_to_string_list(min_samples_dataset)
-        alphas = storage.read(AutoclusterStorage.alphas)
-        epsilons = storage.read(AutoclusterStorage.epsilons)
+        alphas = storage.read(AutoclusterStorage.alphas)[:]
+        epsilons = storage.read(AutoclusterStorage.epsilons)[:]
 
         autoclusters = AutoclusterConfig.reconstruct(
             names=names,
-            min_cluster_sizes=min_cluster_sizes[:],
-            min_samples=min_samples[:],
-            alphas=alphas[:],
-            epsilons=epsilons[:],
+            min_cluster_sizes=mns,
+            min_samples=min_samples,
+            alphas=alphas,
+            epsilons=epsilons,
         )
 
         return autoclusters
