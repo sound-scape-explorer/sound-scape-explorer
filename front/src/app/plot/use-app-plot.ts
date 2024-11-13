@@ -1,16 +1,17 @@
-import {
+import chroma from 'chroma-js';
+import Plotly, {
   type Config,
   type Data,
   type Layout,
   type PlotlyHTMLElement,
 } from 'plotly.js-dist-min';
-import Plotly from 'plotly.js-dist-min';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useAppPlotLayout} from 'src/app/plot/use-app-plot-layout';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {LOWER_QUARTILE_SUFFIX, UPPER_QUARTILE_SUFFIX} from 'src/constants';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
-import {colorMap} from 'src/styles/color-map';
+import {type PlotlyFill} from 'src/types';
 import {ref, watch} from 'vue';
 
 export function useAppPlot(props: AppPlotProps) {
@@ -57,17 +58,53 @@ export function useAppPlot(props: AppPlotProps) {
     const data: Data[] = new Array(l);
 
     for (let i = 0; i < l; i += 1) {
+      const name = props.names?.[i] || '';
+      const isLowerQuartile = name.endsWith(LOWER_QUARTILE_SUFFIX);
+      const isUpperQuartile = name.endsWith(UPPER_QUARTILE_SUFFIX);
+
+      let fill: PlotlyFill = undefined;
+      let color: string = props.colors[i];
+      let hoverinfo: 'all' | 'none' = 'all';
+      let hovertemplate: string | undefined = undefined;
+      let showlegend = true;
+
+      if (props.hoverTemplate === 'default') {
+        hovertemplate = '%{y:.3f}<extra>%{x}</extra>';
+      } else if (props.hoverTemplate === 'relative-trajectories') {
+        hovertemplate = `%{y:.3f}<extra>${name}<br>at %{x:.3f}</extra>`;
+      }
+
+      if (isLowerQuartile) {
+        color = 'transparent';
+        hovertemplate = undefined;
+        hoverinfo = 'none';
+        showlegend = false;
+      } else if (isUpperQuartile) {
+        color = 'transparent';
+        fill = 'tonexty';
+        hovertemplate = undefined;
+        hoverinfo = 'none';
+        showlegend = false;
+      }
+
       data[i] = {
         type: 'scatter',
         mode: 'lines',
-        name: props.names?.[i] ?? undefined,
+        name: name,
         x: props.labels[i],
         y: props.values[i],
-        hovertemplate: '%{y:.3f}<extra>%{x}</extra>',
+        hovertemplate: hovertemplate,
+        hoverinfo: hoverinfo,
+        fill: fill,
+        showlegend: showlegend,
+        fillcolor: `rgba(${chroma(props.colors[i])
+          .brighten()
+          .alpha(0.33)
+          .rgba()
+          .join(',')})`,
         marker: {
-          // color: props.colors?.[index] ?? undefined,
-          color: colorMap.green,
-          size: props.colors?.[i] ? 6 : 2,
+          color: color,
+          size: 6,
         },
       };
     }

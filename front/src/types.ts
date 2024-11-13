@@ -13,3 +13,13 @@ export type NaiveTooltipPlacement =
   | 'right-end'
   | 'bottom-start'
   | 'bottom-end';
+
+export type PlotlyFill =
+  | 'none'
+  | 'tozeroy'
+  | 'tozerox'
+  | 'tonexty'
+  | 'tonextx'
+  | 'toself'
+  | 'tonext'
+  | undefined;

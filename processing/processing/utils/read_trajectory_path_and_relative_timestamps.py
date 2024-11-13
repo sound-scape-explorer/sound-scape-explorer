@@ -32,6 +32,7 @@ def read_trajectory_path_and_relative_timestamps(
         trajectory_label_value=label_value,
     )
 
+    # TODO: Add typings
     path = pandas.DataFrame(ctt.values)
     relative_timestamps = pandas.DataFrame(ctt.relative_timestamps)
 

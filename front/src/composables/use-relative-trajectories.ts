@@ -11,6 +11,7 @@ export interface RelativeTrajectory {
   labelValue: string;
   values: number[];
   timestamps: number[];
+  quartiles: Nullable<[number, number][]>; // TODO: Make non nullable version 14
 }
 
 const relativeTrajectories = ref<RelativeTrajectory[] | null>(null);

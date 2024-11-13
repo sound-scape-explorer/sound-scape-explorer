@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
+import chroma from 'chroma-js';
 import {downloadOutline} from 'ionicons/icons';
 import {NButton, NCascader} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
@@ -8,13 +9,21 @@ import {Csv} from 'src/common/csv';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useExportName} from 'src/composables/use-export-name';
 import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
+import {
+  LOWER_QUARTILE_SUFFIX,
+  RELATIVE_TRAJECTORIES_FLAVOR,
+  UPPER_QUARTILE_SUFFIX,
+} from 'src/constants';
 import {computed, ref} from 'vue';
 
 // TODO: split me
+// TODO: make zoom unzoom for hd raster exports
+// TODO: split app plot for dedicated relative trajectories
 
 const {selectRelativeTrajectories, relativeTrajectories} =
   useRelativeTrajectories();
 const {generate} = useExportName();
+const exportName = generate('relative-trajectories');
 
 const valueRef = ref([]);
 const {isLoading} = useScatterLoading();
@@ -33,26 +42,54 @@ const optionsRef = computed(() => {
 const histogramValuesRef = ref<AppPlotProps['values']>([]);
 const histogramLabelsRef = ref<AppPlotProps['labels']>([]);
 const histogramNamesRef = ref<string[]>([]);
+const histogramColors = ref<string[]>([]);
 
 const handleUpdateValue = (indexes: number[]) => {
-  const selectedRelativeTrajectories = selectRelativeTrajectories(indexes);
+  const selected = selectRelativeTrajectories(indexes);
 
-  if (selectedRelativeTrajectories.length === 0) {
+  if (selected.length === 0) {
     histogramValuesRef.value = [];
     histogramLabelsRef.value = [];
     histogramNamesRef.value = [];
+    histogramColors.value = [];
     return;
   }
 
-  histogramValuesRef.value = selectedRelativeTrajectories.map(
-    (rT) => rT.values,
-  );
+  const names: string[] = [];
+  const labels: string[][] = []; // timestamps
+  const values: number[][] = []; // series
+  const colors: string[] = [];
+  const s = chroma.scale(RELATIVE_TRAJECTORIES_FLAVOR).colors(selected.length);
 
-  histogramLabelsRef.value = selectedRelativeTrajectories.map((rT) =>
-    rT.timestamps.map((t) => t.toString()),
-  );
+  for (let i = 0; i < selected.length; i += 1) {
+    const {name, timestamps, quartiles, values: v} = selected[i];
+    const color = s[i];
+    const ts = timestamps.map((t) => t.toString());
 
-  histogramNamesRef.value = selectedRelativeTrajectories.map((rT) => rT.name);
+    names.push(name);
+    labels.push(ts);
+    values.push(v);
+    colors.push(color);
+
+    if (quartiles === null) {
+      continue;
+    }
+
+    names.push(`${name}${LOWER_QUARTILE_SUFFIX}`);
+    labels.push(ts);
+    values.push(quartiles.map((q) => q[0]));
+    colors.push(color);
+
+    names.push(`${name}${UPPER_QUARTILE_SUFFIX}`);
+    labels.push(ts);
+    values.push(quartiles.map((q) => q[1]));
+    colors.push(color);
+  }
+
+  histogramNamesRef.value = names;
+  histogramLabelsRef.value = labels;
+  histogramValuesRef.value = values;
+  histogramColors.value = colors;
 };
 
 const handleExportClick = () => {
@@ -96,8 +133,7 @@ const handleExportClick = () => {
     csv.addToCurrentRow(row.join(csv.separator));
   }
 
-  const name = generate('relative-trajectories');
-  csv.download(name);
+  csv.download(exportName);
 };
 </script>
 
@@ -115,6 +151,7 @@ const handleExportClick = () => {
         :filterable="false"
         :options="optionsRef"
         :show-path="false"
+        :virtual-scroll="false"
         check-strategy="child"
         clearable
         expand-trigger="click"
@@ -134,16 +171,20 @@ const handleExportClick = () => {
         Export .csv
       </NButton>
 
-      <AppPlot
-        :labels="histogramLabelsRef"
-        :names="histogramNamesRef"
-        :values="histogramValuesRef"
-        export-filename="relative-trajectories"
-        legend
-        title="Relative Trajectories"
-        xTitle="Relative daytime"
-        yTitle="Relative distance from average starting point"
-      />
+      <div :class="$style.plot">
+        <AppPlot
+          :colors="histogramColors"
+          :export-filename="exportName"
+          :labels="histogramLabelsRef"
+          :names="histogramNamesRef"
+          :values="histogramValuesRef"
+          hover-template="relative-trajectories"
+          legend
+          title="Relative Trajectories"
+          xTitle="Relative daytime"
+          yTitle="Relative distance from average starting point"
+        />
+      </div>
     </div>
   </AppDraggable>
 </template>
@@ -160,5 +201,10 @@ const handleExportClick = () => {
 
 .export {
   width: 100%;
+}
+
+.plot {
+  width: 100%;
+  height: 100%;
 }
 </style>

@@ -1,5 +1,7 @@
 from typing import List
 
+import numpy as np
+
 from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
 from processing.storage.Storage import Storage
@@ -11,12 +13,15 @@ class RelativeTracedStorage:
     def delete(storage: Storage) -> None:
         storage.delete(StoragePath.relative_traced)
         storage.delete(StoragePath.relative_traced_relative_timestamps)
+        storage.delete(StoragePath.relative_traced_quartiles)
 
     @staticmethod
     def exists(storage: Storage) -> bool:
-        return storage.exists_dataset(
-            StoragePath.relative_traced
-        ) and storage.exists_dataset(StoragePath.relative_traced_relative_timestamps)
+        return (
+            storage.exists_dataset(StoragePath.relative_traced)
+            and storage.exists_dataset(StoragePath.relative_traced_relative_timestamps)
+            and storage.exists_dataset(StoragePath.relative_traced_quartiles)
+        )
 
     @staticmethod
     def get_distance_path(
@@ -38,6 +43,19 @@ class RelativeTracedStorage:
     ) -> str:
         return (
             f"{StoragePath.relative_traced_relative_timestamps.value}"
+            f"/{ar.band.name}"
+            f"/{ar.integration.seconds}"
+            f"/{ar.extractor.index}"
+            f"/{trajectory.index}"
+        )
+
+    @staticmethod
+    def get_quartiles_path(
+        trajectory: TrajectoryConfig,
+        ar: AggregatedReduceable,
+    ) -> str:
+        return (
+            f"{StoragePath.relative_traced_quartiles.value}"
             f"/{ar.band.name}"
             f"/{ar.integration.seconds}"
             f"/{ar.extractor.index}"
@@ -91,4 +109,21 @@ class RelativeTracedStorage:
                 "extractor_index": str(ar.extractor.index),
                 "trajectory_index": str(trajectory.index),
             },
+        )
+
+    @staticmethod
+    def write_quartiles(
+        storage: Storage,
+        trajectory: TrajectoryConfig,
+        ar: AggregatedReduceable,
+        upper_quartiles: List[float],
+        lower_quartiles: List[float],
+    ):
+        path = RelativeTracedStorage.get_quartiles_path(trajectory=trajectory, ar=ar)
+        data = np.column_stack([lower_quartiles, upper_quartiles])
+
+        storage.write(
+            path=path,
+            data=data,
+            compression=True,
         )

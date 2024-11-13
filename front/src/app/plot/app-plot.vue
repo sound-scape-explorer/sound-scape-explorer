@@ -4,8 +4,8 @@ import {useAppPlot} from 'src/app/plot/use-app-plot';
 export interface AppPlotProps {
   labels: string[][];
   values: number[][];
+  colors: string[];
   names?: string[];
-  colors?: string[][];
   title?: string;
   xTitle?: string;
   yTitle?: string;
@@ -14,6 +14,7 @@ export interface AppPlotProps {
   clickEnabled?: boolean;
   hideXLegend?: boolean;
   showRange?: boolean;
+  hoverTemplate?: 'default' | 'relative-trajectories';
 }
 
 const props = withDefaults(defineProps<AppPlotProps>(), {
@@ -21,6 +22,7 @@ const props = withDefaults(defineProps<AppPlotProps>(), {
   clickEnabled: false,
   hideXLegend: false,
   showRange: false,
+  hoverTemplate: 'default',
 });
 
 const {container} = useAppPlot(props);

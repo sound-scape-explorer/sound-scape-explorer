@@ -58,6 +58,7 @@ export const NN_EXTRACTORS = ['vgg', 'melogram', 'melspectrum'];
 
 export type ColorFlavor = 'Spectral' | 'Accent' | 'Dark2';
 export const COLOR_FLAVORS: ColorFlavor[] = ['Spectral', 'Accent', 'Dark2'];
+export const RELATIVE_TRAJECTORIES_FLAVOR: ColorFlavor = 'Dark2';
 
 // Plotly instances for Indicators and Digesters.
 export const PLOTLY_SIZE = 520;
@@ -79,3 +80,6 @@ export const TIMEOUT = 240;
 export const DEV_AUTO_REDUCER = 'umap (3d)';
 
 export const LABEL_SITE = '__SITE';
+
+export const LOWER_QUARTILE_SUFFIX = '_lower_quartile';
+export const UPPER_QUARTILE_SUFFIX = '_upper_quartile';

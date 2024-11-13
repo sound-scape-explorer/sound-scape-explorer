@@ -543,6 +543,12 @@ export async function readRelativeTrajectories(
       const relativeTimestampsDataset = h5.get(
         relativeTimestampsPath,
       ) as Dataset;
+
+      const quartilesPath = `${StoragePath.relative_traced_quartiles}${pathSuffix}/${key}`;
+      const quartilesDataset = h5.get(quartilesPath) as Nullable<Dataset>; // TODO: Make non nullable in version 14
+      const quartiles =
+        (quartilesDataset?.to_array() as [number, number][]) || null;
+
       const trajectoryName =
         relativeTracedDataset.attrs['trajectory_name'].value?.toString() ?? '';
       const labelProperty =
@@ -559,6 +565,7 @@ export async function readRelativeTrajectories(
         timestamps: (relativeTimestampsDataset.to_array() as number[][]).map(
           (v) => v[0],
         ),
+        quartiles: quartiles,
       };
 
       relativeTrajectories.push(relativeTrajectory);
