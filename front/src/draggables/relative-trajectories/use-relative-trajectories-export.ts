@@ -1,6 +1,7 @@
 import {Csv} from 'src/common/csv';
 import {useRelativeTrajectoriesData} from 'src/draggables/relative-trajectories/use-relative-trajectories-data';
 
+// TODO: Write only timestamps once
 export function useRelativeTrajectoriesExport() {
   const {names, labels, values, exportName} = useRelativeTrajectoriesData();
 
@@ -9,6 +10,7 @@ export function useRelativeTrajectoriesExport() {
       values.value.length === 0 ||
       labels.value.length === 0 ||
       names.value.length === 0 ||
+      // TODO: Fix me, is this mandatory?
       typeof names?.value === 'undefined'
     ) {
       return;
