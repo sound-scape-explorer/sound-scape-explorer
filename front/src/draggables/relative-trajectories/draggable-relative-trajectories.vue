@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
-import {downloadOutline} from 'ionicons/icons';
+import {chevronExpand, downloadOutline} from 'ionicons/icons';
 import {NButton, NCascader} from 'naive-ui';
+import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useDraggableRelativeTrajectories} from 'src/draggables/relative-trajectories/use-draggable-relative-trajectories';
 import {useRelativeTrajectoriesData} from 'src/draggables/relative-trajectories/use-relative-trajectories-data';
 import {useRelativeTrajectoriesExport} from 'src/draggables/relative-trajectories/use-relative-trajectories-export';
+import {ref} from 'vue';
 
-// TODO: make zoom unzoom for hd raster exports
 // TODO: split app plot for dedicated relative trajectories
 
 const {names, labels, values, colors, exportName, handleUpdate} =
@@ -17,6 +19,9 @@ const {names, labels, values, colors, exportName, handleUpdate} =
 const {handleExportClick} = useRelativeTrajectoriesExport();
 const {value, options} = useDraggableRelativeTrajectories();
 const {isLoading} = useScatterLoading();
+
+const isExpanded = ref<boolean>(false);
+const toggleExpand = () => (isExpanded.value = !isExpanded.value);
 </script>
 
 <template>
@@ -24,7 +29,22 @@ const {isLoading} = useScatterLoading();
     draggable-key="relativeTrajectories"
     suspense="view"
   >
-    <div :class="$style.container">
+    <AppDraggableSidebar>
+      <AppButton
+        :handle-click="toggleExpand"
+        size="tiny"
+        small-tooltip
+        tooltip="Expand horizontally"
+        tooltip-placement="left"
+      >
+        <IonIcon
+          :class="$style.rotate"
+          :icon="chevronExpand"
+        />
+      </AppButton>
+    </AppDraggableSidebar>
+
+    <div :class="[$style.container, {[$style.expanded]: isExpanded}]">
       <NCascader
         v-model:value="value"
         :cascade="false"
@@ -57,6 +77,7 @@ const {isLoading} = useScatterLoading();
         <AppPlot
           :colors="colors"
           :export-filename="exportName"
+          :is-expanded="isExpanded"
           :labels="labels"
           :names="names"
           :values="values"
@@ -81,6 +102,10 @@ const {isLoading} = useScatterLoading();
   gap: $p0;
 }
 
+.expanded {
+  width: $w-max;
+}
+
 .export {
   width: 100%;
 }
@@ -88,5 +113,9 @@ const {isLoading} = useScatterLoading();
 .plot {
   width: 100%;
   height: 100%;
+}
+
+.rotate {
+  @include rotate-90;
 }
 </style>
