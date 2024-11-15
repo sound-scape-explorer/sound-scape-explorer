@@ -136,25 +136,25 @@ def trace_relative_trajectories(
                     relative_timestamps=relative_timestamps_median,
                 )
 
-                # compute deviation quartiles
-                lower_quartiles: np.ndarray[np.float64] = np.percentile(
+                # compute deciles for deviation display
+                lower_deciles: np.ndarray[np.float64] = np.percentile(
                     relative_distances_pack[t],
                     10,
                     axis=0,
                 )
 
-                upper_quartiles: np.ndarray[np.float64] = np.percentile(
+                upper_deciles: np.ndarray[np.float64] = np.percentile(
                     relative_distances_pack[t],
                     90,
                     axis=0,
                 )
 
-                RelativeTracedStorage.write_quartiles(
+                RelativeTracedStorage.write_deciles(
                     storage=storage,
                     trajectory=trajectory,
                     ar=ar,
-                    lower_quartiles=lower_quartiles,
-                    upper_quartiles=upper_quartiles,
+                    lower_deciles=lower_deciles,
+                    upper_deciles=upper_deciles,
                 )
 
     print_action("Tracing relative trajectories completed!", "end")

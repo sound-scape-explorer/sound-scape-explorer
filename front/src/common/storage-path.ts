@@ -96,5 +96,5 @@ export enum StoragePath {
   // Relative Trajectories
   relative_traced = '/relative_traced',
   relative_traced_relative_timetamps = '/relative_traced_relative_timestamps',
-  relative_traced_quartiles = '/relative_traced_quartiles',
+  relative_traced_deciles = '/relative_traced_deciles',
 }

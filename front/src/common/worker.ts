@@ -544,10 +544,10 @@ export async function readRelativeTrajectories(
         relativeTimestampsPath,
       ) as Dataset;
 
-      const quartilesPath = `${StoragePath.relative_traced_quartiles}${pathSuffix}/${key}`;
-      const quartilesDataset = h5.get(quartilesPath) as Nullable<Dataset>; // TODO: Make non nullable in version 14
-      const quartiles =
-        (quartilesDataset?.to_array() as [number, number][]) || null;
+      const decilesPath = `${StoragePath.relative_traced_deciles}${pathSuffix}/${key}`;
+      const decilesDataset = h5.get(decilesPath) as Nullable<Dataset>; // TODO: Make non nullable in version 14
+      const deciles =
+        (decilesDataset?.to_array() as [number, number][]) || null;
 
       const trajectoryName =
         relativeTracedDataset.attrs['trajectory_name'].value?.toString() ?? '';
@@ -565,7 +565,7 @@ export async function readRelativeTrajectories(
         timestamps: (relativeTimestampsDataset.to_array() as number[][]).map(
           (v) => v[0],
         ),
-        quartiles: quartiles,
+        deciles: deciles,
       };
 
       relativeTrajectories.push(relativeTrajectory);

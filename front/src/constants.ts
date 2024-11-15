@@ -4,11 +4,6 @@ export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
 
-export const SLIDER_LIMITS = {
-  start: '⟦',
-  end: '⟧',
-};
-
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 export const GAIN = {
@@ -25,12 +20,6 @@ export const WAVE = {
   step: GAIN.step / waveDampening,
   max: GAIN.max / waveDampening,
   min: GAIN.min / waveDampening,
-};
-
-export const FFT_SIZE = {
-  default: 1024,
-  max: 4096,
-  min: 128,
 };
 
 export const PLAYBACK_RATE = {
@@ -81,5 +70,5 @@ export const DEV_AUTO_REDUCER = 'umap (3d)';
 
 export const LABEL_SITE = '__SITE';
 
-export const LOWER_QUARTILE_SUFFIX = '_lower_quartile';
-export const UPPER_QUARTILE_SUFFIX = '_upper_quartile';
+export const LOWER_DECILE_SUFFIX = '_lower_decile';
+export const UPPER_DECILE_SUFFIX = '_upper_decile';

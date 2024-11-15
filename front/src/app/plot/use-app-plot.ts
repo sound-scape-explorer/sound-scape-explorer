@@ -9,7 +9,7 @@ import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useAppPlotLayout} from 'src/app/plot/use-app-plot-layout';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {LOWER_QUARTILE_SUFFIX, UPPER_QUARTILE_SUFFIX} from 'src/constants';
+import {LOWER_DECILE_SUFFIX, UPPER_DECILE_SUFFIX} from 'src/constants';
 import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {type PlotlyFill} from 'src/types';
 import {ref, watch} from 'vue';
@@ -59,8 +59,8 @@ export function useAppPlot(props: AppPlotProps) {
 
     for (let i = 0; i < l; i += 1) {
       const name = props.names?.[i] || '';
-      const isLowerQuartile = name.endsWith(LOWER_QUARTILE_SUFFIX);
-      const isUpperQuartile = name.endsWith(UPPER_QUARTILE_SUFFIX);
+      const isLowerDecile = name.endsWith(LOWER_DECILE_SUFFIX);
+      const isUpperDecile = name.endsWith(UPPER_DECILE_SUFFIX);
 
       let fill: PlotlyFill = undefined;
       let color: string = props.colors[i];
@@ -74,12 +74,12 @@ export function useAppPlot(props: AppPlotProps) {
         hovertemplate = `%{y:.3f}<extra>${name}<br>at %{x:.3f}</extra>`;
       }
 
-      if (isLowerQuartile) {
+      if (isLowerDecile) {
         color = 'transparent';
         hovertemplate = undefined;
         hoverinfo = 'none';
         showlegend = false;
-      } else if (isUpperQuartile) {
+      } else if (isUpperDecile) {
         color = 'transparent';
         fill = 'tonexty';
         hovertemplate = undefined;

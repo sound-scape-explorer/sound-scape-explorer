@@ -3,9 +3,9 @@ import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useExportName} from 'src/composables/use-export-name';
 import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {
-  LOWER_QUARTILE_SUFFIX,
+  LOWER_DECILE_SUFFIX,
   RELATIVE_TRAJECTORIES_FLAVOR,
-  UPPER_QUARTILE_SUFFIX,
+  UPPER_DECILE_SUFFIX,
 } from 'src/constants';
 import {ref} from 'vue';
 
@@ -44,7 +44,7 @@ export function useRelativeTrajectoriesData() {
       .colors(selected.length);
 
     for (let i = 0; i < selected.length; i += 1) {
-      const {name, timestamps, quartiles, values: v} = selected[i];
+      const {name, timestamps, deciles, values: v} = selected[i];
       const color = s[i];
       const ts = timestamps.map((t) => t.toString());
 
@@ -53,18 +53,18 @@ export function useRelativeTrajectoriesData() {
       newValues.push(v);
       newColors.push(color);
 
-      if (quartiles === null) {
+      if (deciles === null) {
         continue;
       }
 
-      newNames.push(`${name}${LOWER_QUARTILE_SUFFIX}`);
+      newNames.push(`${name}${LOWER_DECILE_SUFFIX}`);
       newLabels.push(ts);
-      newValues.push(quartiles.map((q) => q[0]));
+      newValues.push(deciles.map((q) => q[0]));
       newColors.push(color);
 
-      newNames.push(`${name}${UPPER_QUARTILE_SUFFIX}`);
+      newNames.push(`${name}${UPPER_DECILE_SUFFIX}`);
       newLabels.push(ts);
-      newValues.push(quartiles.map((q) => q[1]));
+      newValues.push(deciles.map((q) => q[1]));
       newColors.push(color);
     }
 

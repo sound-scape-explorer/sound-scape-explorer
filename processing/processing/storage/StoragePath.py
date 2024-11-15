@@ -476,4 +476,4 @@ class StoragePath(Enum):
     config_file = "/config_file"
     relative_traced = "/relative_traced"
     relative_traced_relative_timestamps = "/relative_traced_relative_timestamps"
-    relative_traced_quartiles = "/relative_traced_quartiles"
+    relative_traced_deciles = "/relative_traced_deciles"
