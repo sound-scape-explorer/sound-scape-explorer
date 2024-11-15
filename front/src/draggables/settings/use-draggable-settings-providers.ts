@@ -1,4 +1,3 @@
-import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {InjectionKey} from 'src/common/injection-key';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useRefProvide} from 'src/composables/use-ref-provide';
@@ -25,15 +24,15 @@ export function useDraggableSettingsProviders() {
   } = useClientSettings();
 
   const {audioHost} = useStorageAudioHost();
-  const {fontSize} = useAppHeatmapSize();
+  const {plotFontSize} = useClientSettings();
   const {colormap} = useSpectrogramColormap();
   const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
   useRefProvide(InjectionKey.settingsAudioHost, audioHost);
-  useRefProvide(InjectionKey.settingsFontSize, fontSize);
   useRefProvide(InjectionKey.settingsTimeShift, timeshift);
   useRefProvide(InjectionKey.settingsColormap, colormap);
   useRefProvide(InjectionKey.settingsPlotBackground, plotBackground);
+  useRefProvide(InjectionKey.settingsPlotFontSize, plotFontSize);
   useRefProvide(InjectionKey.settingsIsDetailsAutoOpen, isDetailsAutoOpen);
   useRefProvide(InjectionKey.settingsIsAudioAutoOpen, isAudioAutoOpen);
   useRefProvide(InjectionKey.settingsDecibelsDisplay, isDecibelsDisplay);

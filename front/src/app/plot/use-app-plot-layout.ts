@@ -8,7 +8,7 @@ export function useAppPlotLayout() {
   const {generatePlotlyMargins} = usePlotlyMargins();
 
   const generateLayout = (props: AppPlotProps): Partial<Layout> => {
-    return {
+    const layout: Partial<Layout> = {
       title: props.title,
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
@@ -33,7 +33,11 @@ export function useAppPlotLayout() {
         x: 1,
         y: 1,
       },
+      width: props.width !== null ? props.width : undefined,
+      height: props.height !== null ? props.height : undefined,
     };
+
+    return layout;
   };
 
   return {

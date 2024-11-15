@@ -97,7 +97,7 @@ useDraggableSettingsProviders();
 
       <DraggableSettingsItem title="Plots: Set font size">
         <AppInput
-          :injection-key="InjectionKey.settingsFontSize"
+          :injection-key="InjectionKey.settingsPlotFontSize"
           align="left"
           size="small"
           type="number"

@@ -8,12 +8,12 @@ import {watch} from 'vue';
 export function useAppHeatmapLifecycles(props: AppHeatmapProps) {
   const {div, data, layout} = useAppHeatmap();
   const {create, render} = useAppHeatmapRenderer(props);
-  const {fontSize, width, height} = useAppHeatmapSize();
-  const {plotBackground} = useClientSettings();
+  const {width, height} = useAppHeatmapSize();
+  const {plotFontSize, plotBackground} = useClientSettings();
 
   // on init
   watch([div, data, layout], create);
 
   // on update
-  watch([props, fontSize, width, height, plotBackground], render);
+  watch([props, width, height, plotFontSize, plotBackground], render);
 }
