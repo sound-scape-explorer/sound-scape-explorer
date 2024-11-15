@@ -1,7 +1,6 @@
 import {Csv} from 'src/common/csv';
 import {useRelativeTrajectoriesData} from 'src/draggables/relative-trajectories/use-relative-trajectories-data';
 
-// TODO: Write only timestamps once
 export function useRelativeTrajectoriesExport() {
   const {names, labels, values, exportName} = useRelativeTrajectoriesData();
 
@@ -22,25 +21,28 @@ export function useRelativeTrajectoriesExport() {
       .map((values) => values.length)
       .reduce((a, b) => Math.max(a, b), 0);
 
+    // create time column
+    csv.addColumn('relative time');
+
     // create columns
     for (const name of names.value) {
-      csv.addColumn(`${name} - relative time`);
-      csv.addColumn(`${name} - relative distance`);
+      csv.addColumn(name);
     }
 
+    // create rows
     for (let i = 0; i < maxLength; i += 1) {
-      let row: string[] = [];
+      const time = labels.value[0][i];
+      let row: string[] = [time];
 
       for (const j in names.value) {
-        const time = labels.value[j][i];
-        const distance = values.value[j][i];
+        const distance = values.value[j][i] as unknown as string | undefined;
+        let payload = '';
 
-        if (typeof time === 'undefined' || typeof distance === 'undefined') {
-          row = [...row, '', ''];
-          continue;
+        if (distance !== undefined) {
+          payload = distance.toString();
         }
 
-        row = [...row, time, distance.toString()];
+        row = [...row, payload];
       }
 
       csv.createRow();
