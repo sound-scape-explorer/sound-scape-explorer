@@ -1,3 +1,19 @@
+# [13.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.8.0...v13.9.0) (2024-11-15)
+
+
+### Bug Fixes
+
+* **Front/RelativeTrajectories:** Write timestamps column only once in csv exports ([ff01487](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ff01487f4b3f7e69847a45929e80eeaa65607744))
+* Rename quartiles to deciles ([7f81834](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7f8183428b8ef8fa982f88d5db82603925e3ae6e))
+
+
+### Features
+
+* Add relative trajectories deviation ([1a4eb2a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1a4eb2a9968607d273b012bf0a9b575199e255ad))
+* **Examples:** Add relative trajectories deviation ([2796d0b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2796d0b68590754d1692c3e41f67e935b3b26df7))
+* **Front/RelativeTrajectories:** Add dynamic plot sizes ([c972276](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c972276af6e7d740a4c193709ac1105835f9e8c2))
+* **Front/RelativeTrajectories:** Allow horizontal expansion ([25a5b11](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/25a5b11705327848e697221a0bcfd9f074e16a62))
+
 # [13.8.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.7.0...v13.8.0) (2024-11-08)
 
 
