@@ -46,9 +46,6 @@ useDraggableHeatmapsLifecycles();
 }
 
 .wrapper {
-  overflow: auto;
-  max-height: $s2;
-
-  @include tiny-scrollbar;
+  @include plot-wrapper;
 }
 </style>

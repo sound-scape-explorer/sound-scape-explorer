@@ -142,7 +142,7 @@ export function useTemporalChart() {
     return {
       labels: labels,
       values: [indices.map((i) => values[i])],
-      colors: [indices.map((i) => colors[i])],
+      colors: indices.map((i) => colors[i]),
     };
   };
 

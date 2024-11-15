@@ -4,8 +4,8 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
 
 export function useAppHeatmapLayout() {
-  const {width, height, fontSize} = useAppHeatmapSize();
-  const {plotBackground} = useClientSettings();
+  const {width, height} = useAppHeatmapSize();
+  const {plotFontSize, plotBackground} = useClientSettings();
   const {generatePlotlyMargins} = usePlotlyMargins();
 
   const createLayout = (title?: string): Partial<Layout> => {
@@ -19,7 +19,7 @@ export function useAppHeatmapLayout() {
       height: height.value,
       margin: generatePlotlyMargins(),
       font: {
-        size: fontSize.value,
+        size: plotFontSize.value,
       },
       xaxis: {
         zeroline: false,

@@ -4,11 +4,6 @@ export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
 
-export const SLIDER_LIMITS = {
-  start: '⟦',
-  end: '⟧',
-};
-
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 export const GAIN = {
@@ -25,12 +20,6 @@ export const WAVE = {
   step: GAIN.step / waveDampening,
   max: GAIN.max / waveDampening,
   min: GAIN.min / waveDampening,
-};
-
-export const FFT_SIZE = {
-  default: 1024,
-  max: 4096,
-  min: 128,
 };
 
 export const PLAYBACK_RATE = {
@@ -58,6 +47,7 @@ export const NN_EXTRACTORS = ['vgg', 'melogram', 'melspectrum'];
 
 export type ColorFlavor = 'Spectral' | 'Accent' | 'Dark2';
 export const COLOR_FLAVORS: ColorFlavor[] = ['Spectral', 'Accent', 'Dark2'];
+export const RELATIVE_TRAJECTORIES_FLAVOR: ColorFlavor = 'Dark2';
 
 // Plotly instances for Indicators and Digesters.
 export const PLOTLY_SIZE = 520;
@@ -79,3 +69,6 @@ export const TIMEOUT = 240;
 export const DEV_AUTO_REDUCER = 'umap (3d)';
 
 export const LABEL_SITE = '__SITE';
+
+export const LOWER_DECILE_SUFFIX = '_lower_decile';
+export const UPPER_DECILE_SUFFIX = '_upper_decile';

@@ -1,5 +1,4 @@
 import {useStorage} from '@vueuse/core';
-import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {
   type ScatterBorderWidth,
@@ -67,9 +66,10 @@ const scatterBorderWidth = useStorage<ScatterBorderWidth>(
   d.scatterBorderWidth,
 );
 
+const plotFontSize = useStorage<number>(k.plotFontSize, d.plotFontSize);
+
 export function useClientSettings() {
   const {audioHost} = useStorageAudioHost();
-  const {fontSize} = useAppHeatmapSize();
   const {colormap} = useSpectrogramColormap();
   const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
   const {reset: resetLabels} = useDraggableLabels();
@@ -97,9 +97,10 @@ export function useClientSettings() {
     isAlphaPreview.value = d.isAlphaPreview;
     isBetaPreview.value = d.isBetaPreview;
     scatterBorderWidth.value = d.scatterBorderWidth;
+    plotFontSize.value = d.plotFontSize;
 
     audioHost.value = d.audioHost;
-    fontSize.value = d.fontSize;
+    plotFontSize.value = d.plotFontSize;
     colormap.value = d.spectrogramColorMap;
     isDecibelsDisplay.value = d.decibelsDisplay;
     isLegendOverflow.value = d.legendOverflow;
@@ -130,5 +131,6 @@ export function useClientSettings() {
     isAlphaPreview: isAlphaPreview,
     isBetaPreview: isBetaPreview,
     scatterBorderWidth: scatterBorderWidth,
+    plotFontSize: plotFontSize,
   };
 }

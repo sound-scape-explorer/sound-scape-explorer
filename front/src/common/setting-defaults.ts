@@ -23,7 +23,7 @@ interface SettingDefaults {
   isColorMapSwapped: boolean;
   spectrogramColorMap: string;
   audioHost: string;
-  fontSize: number;
+  plotFontSize: number;
   decibelsDisplay: boolean;
   legendOverflow: boolean;
   labelsSizeHorizontal: DraggableLabelSize;
@@ -53,7 +53,7 @@ export const settingDefaults: SettingDefaults = {
   isColorMapSwapped: false,
   spectrogramColorMap: SPECTROGRAM_COLOR_MAPS[0],
   audioHost: 'http://localhost:5531',
-  fontSize: 12,
+  plotFontSize: 12,
   decibelsDisplay: false,
   legendOverflow: false,
   labelsSizeHorizontal: 'default',

@@ -1,8 +1,9 @@
 <script lang="ts" setup="">
 import {IonIcon} from '@ionic/vue';
-import {downloadOutline, repeatOutline, resizeOutline} from 'ionicons/icons';
-import {NButtonGroup, NSelect} from 'naive-ui';
+import {downloadOutline, repeatOutline} from 'ionicons/icons';
+import {NSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -25,17 +26,17 @@ const {
 
 const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
 const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
-const {resize1by1, resize4by3, resize16by10, resize16by9, double, half} =
-  useAppHeatmapSize();
+const {width, height} = useAppHeatmapSize();
 const {flavor, flavors} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
-
 const {labelPropertiesActual} = useStorageLabels();
 
 useRefProvide(InjectionKey.digestedDigester, digesterName);
 useRefProvide(InjectionKey.digestedLabelA, a);
 useRefProvide(InjectionKey.digestedLabelB, b);
 useRefProvide(InjectionKey.digestedColorFlavor, flavor);
+useRefProvide(InjectionKey.heatmapsPlotWidth, width);
+useRefProvide(InjectionKey.heatmapsPlotHeight, height);
 </script>
 
 <template>
@@ -103,34 +104,11 @@ useRefProvide(InjectionKey.digestedColorFlavor, flavor);
     <h2>Plot</h2>
 
     <div :class="$style.plot">
-      <NButtonGroup>
-        <AppButton
-          :disabled="!isReadyAndSelected"
-          :handle-click="resize1by1"
-        >
-          <IonIcon :icon="resizeOutline" />&nbsp;1:1
-        </AppButton>
-        <AppButton
-          :disabled="!isReadyAndSelected"
-          :handle-click="resize4by3"
-        >
-          <IonIcon :icon="resizeOutline" />&nbsp;4:3
-        </AppButton>
-        <AppButton
-          :disabled="!isReadyAndSelected"
-          :handle-click="resize16by10"
-        >
-          <IonIcon :icon="resizeOutline" />&nbsp;16:10
-        </AppButton>
-        <AppButton
-          :disabled="!isReadyAndSelected"
-          :handle-click="resize16by9"
-        >
-          <IonIcon :icon="resizeOutline" />&nbsp;16:9
-        </AppButton>
-        <AppButton :handle-click="half">/2</AppButton>
-        <AppButton :handle-click="double">*2</AppButton>
-      </NButtonGroup>
+      <AppDraggableMenuPlotSizes
+        :disabled="!isReadyAndSelected"
+        :height="InjectionKey.heatmapsPlotHeight"
+        :width="InjectionKey.heatmapsPlotWidth"
+      />
 
       <AppButton
         :disabled="!isReadyAndSelected"

@@ -1,144 +1,39 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {downloadOutline} from 'ionicons/icons';
-import {NButton, NCascader} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import AppPlot, {type AppPlotProps} from 'src/app/plot/app-plot.vue';
-import {Csv} from 'src/common/csv';
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useExportName} from 'src/composables/use-export-name';
-import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
-import {computed, ref} from 'vue';
+import AppPlot from 'src/app/plot/app-plot.vue';
+import DraggableRelativeTrajectoriesMenu from 'src/draggables/relative-trajectories/draggable-relative-trajectories-menu.vue';
+import DraggableRelativeTrajectoriesSidebar from 'src/draggables/relative-trajectories/draggable-relative-trajectories-sidebar.vue';
+import {useDraggableRelativeTrajectoriesExpand} from 'src/draggables/relative-trajectories/use-draggable-relative-trajectories-expand';
+import {useRelativeTrajectoriesData} from 'src/draggables/relative-trajectories/use-relative-trajectories-data';
+import {useRelativeTrajectoriesPlotSize} from 'src/draggables/relative-trajectories/use-relative-trajectories-plot-size';
 
-// TODO: split me
+// TODO: split app plot for dedicated relative trajectories
 
-const {selectRelativeTrajectories, relativeTrajectories} =
-  useRelativeTrajectories();
-const {generate} = useExportName();
-
-const valueRef = ref([]);
-const {isLoading} = useScatterLoading();
-
-const optionsRef = computed(() => {
-  if (relativeTrajectories.value === null) {
-    return [];
-  }
-
-  return relativeTrajectories.value.map((rT) => ({
-    label: rT.name,
-    value: rT.index,
-  }));
-});
-
-const histogramValuesRef = ref<AppPlotProps['values']>([]);
-const histogramLabelsRef = ref<AppPlotProps['labels']>([]);
-const histogramNamesRef = ref<string[]>([]);
-
-const handleUpdateValue = (indexes: number[]) => {
-  const selectedRelativeTrajectories = selectRelativeTrajectories(indexes);
-
-  if (selectedRelativeTrajectories.length === 0) {
-    histogramValuesRef.value = [];
-    histogramLabelsRef.value = [];
-    histogramNamesRef.value = [];
-    return;
-  }
-
-  histogramValuesRef.value = selectedRelativeTrajectories.map(
-    (rT) => rT.values,
-  );
-
-  histogramLabelsRef.value = selectedRelativeTrajectories.map((rT) =>
-    rT.timestamps.map((t) => t.toString()),
-  );
-
-  histogramNamesRef.value = selectedRelativeTrajectories.map((rT) => rT.name);
-};
-
-const handleExportClick = () => {
-  if (
-    histogramValuesRef.value.length === 0 ||
-    histogramLabelsRef.value.length === 0 ||
-    histogramNamesRef.value.length === 0 ||
-    typeof histogramNamesRef?.value === 'undefined'
-  ) {
-    return;
-  }
-
-  const csv = new Csv();
-
-  const maxLength = histogramValuesRef.value
-    .map((values) => values.length)
-    .reduce((a, b) => Math.max(a, b), 0);
-
-  // create columns
-  for (const name of histogramNamesRef.value) {
-    csv.addColumn(`${name} - relative time`);
-    csv.addColumn(`${name} - relative distance`);
-  }
-
-  for (let i = 0; i < maxLength; i += 1) {
-    let row: string[] = [];
-
-    for (const j in histogramNamesRef.value) {
-      const time = histogramLabelsRef.value[j][i];
-      const distance = histogramValuesRef.value[j][i];
-
-      if (typeof time === 'undefined' || typeof distance === 'undefined') {
-        row = [...row, '', ''];
-        continue;
-      }
-
-      row = [...row, time, distance.toString()];
-    }
-
-    csv.createRow();
-    csv.addToCurrentRow(row.join(csv.separator));
-  }
-
-  const name = generate('relative-trajectories');
-  csv.download(name);
-};
+const {names, labels, values, colors, exportName} =
+  useRelativeTrajectoriesData();
+const {isExpanded} = useDraggableRelativeTrajectoriesExpand();
+const {width, height} = useRelativeTrajectoriesPlotSize();
 </script>
 
 <template>
   <AppDraggable
+    :class="[$style.container, {[$style.expanded]: isExpanded}]"
     draggable-key="relativeTrajectories"
     suspense="view"
   >
-    <div :class="$style.container">
-      <NCascader
-        v-model:value="valueRef"
-        :cascade="false"
-        :clear-filter-after-select="false"
-        :disabled="isLoading"
-        :filterable="false"
-        :options="optionsRef"
-        :show-path="false"
-        check-strategy="child"
-        clearable
-        expand-trigger="click"
-        max-tag-count="responsive"
-        multiple
-        placeholder="Select relative trajectories"
-        size="small"
-        @update:value="handleUpdateValue"
-      />
+    <DraggableRelativeTrajectoriesSidebar />
+    <DraggableRelativeTrajectoriesMenu />
 
-      <NButton
-        :class="$style.export"
-        size="tiny"
-        @click="handleExportClick"
-      >
-        <IonIcon :icon="downloadOutline" />
-        Export .csv
-      </NButton>
-
+    <div :class="$style.plot">
       <AppPlot
-        :labels="histogramLabelsRef"
-        :names="histogramNamesRef"
-        :values="histogramValuesRef"
-        export-filename="relative-trajectories"
+        :colors="colors"
+        :export-filename="exportName"
+        :height="height"
+        :labels="labels"
+        :names="names"
+        :values="values"
+        :width="width"
+        hover-template="relative-trajectories"
         legend
         title="Relative Trajectories"
         xTitle="Relative daytime"
@@ -150,15 +45,17 @@ const handleExportClick = () => {
 
 <style lang="scss" module>
 .container {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  justify-content: center;
-  width: $s2;
-  gap: $p0;
+  width: $w2;
 }
 
-.export {
+.expanded {
+  width: $w-max;
+}
+
+.plot {
   width: 100%;
+  height: 100%;
+
+  @include plot-wrapper;
 }
 </style>

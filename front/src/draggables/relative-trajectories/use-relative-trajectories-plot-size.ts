@@ -4,7 +4,7 @@ import {ref} from 'vue';
 const width = ref<number>(PLOTLY_SIZE);
 const height = ref<number>(PLOTLY_SIZE);
 
-export function useAppHeatmapSize() {
+export function useRelativeTrajectoriesPlotSize() {
   return {
     width: width,
     height: height,

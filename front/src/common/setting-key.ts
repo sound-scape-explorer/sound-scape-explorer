@@ -14,7 +14,7 @@ export enum SettingKey {
   isColorMapSwapped = 'sse-settings-isColorMapSwapped',
   spectrogramColorMap = 'sse-settings-spectrogramColorMap',
   audioHost = 'sse-settings-audioHost',
-  fontSize = 'sse-settings-fontSize',
+  plotFontSize = 'sse-settings-plotFontSize',
   decibelsDisplay = 'sse-settings-decibelsDisplay',
   legendOverflow = 'sse-settings-legendOverflow',
   labelsSizeHorizontal = 'sse-settings-labelsSizeHorizontal',

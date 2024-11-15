@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 from rich.progress import track
 from sklearn.neighbors import NearestNeighbors
 
@@ -58,19 +58,21 @@ def trace_relative_trajectories(
         for label_property, label_value, trajectories in walk_packed_trajectories(
             packs
         ):
-            pack_relative_distances = []
-            pack_relative_timestamps = []
+            # TODO: Add typings
+            relative_distances_pack = []
+            relative_timestamps_pack = []
 
             # building arrays to populate
             for _ in enumerate(trajectories):
-                pack_relative_distances.append([])
-                pack_relative_timestamps.append([])
+                relative_distances_pack.append([])
+                relative_timestamps_pack.append([])
 
             # iterating through computation UMAPs
             for computation_umap in track(
                 computation_umaps,
                 description=f"Tracing {label_property}: {label_value}",
             ):
+                # TODO: Add typings
                 paths = []
 
                 # reading path for each trajectory because all are needed to compute
@@ -90,13 +92,13 @@ def trace_relative_trajectories(
                     )
 
                     paths.append(path)
-                    pack_relative_timestamps[t].append(relative_timestamps)
+                    relative_timestamps_pack[t].append(relative_timestamps)
 
                 starting_point = compute_starting_point(paths)
 
                 knner.fit(computation_umap)
                 dknn, _ = knner.kneighbors(starting_point)
-                mean_distance = numpy.mean(dknn)
+                mean_distance = np.mean(dknn)
 
                 for t, _ in enumerate(trajectories):
                     relative_distances = compute_relative_distances(
@@ -105,18 +107,24 @@ def trace_relative_trajectories(
                         mean_distance=mean_distance,
                     )
 
-                    pack_relative_distances[t].append(relative_distances)
+                    relative_distances_pack[t].append(relative_distances)
 
             # median arrays and write to storage
             for t, trajectory in enumerate(trajectories):
-                to_store = numpy.median(pack_relative_distances[t], axis=0)
-                to_store2 = numpy.median(pack_relative_timestamps[t], axis=0)
+                relative_distances_median = np.median(
+                    relative_distances_pack[t],
+                    axis=0,
+                )
+                relative_timestamps_median = np.median(
+                    relative_timestamps_pack[t],
+                    axis=0,
+                )
 
                 RelativeTracedStorage.write_distances(
                     storage=storage,
                     trajectory=trajectory,
                     ar=ar,
-                    relative_distances=to_store,
+                    relative_distances=relative_distances_median,
                     label_property=label_property,
                     label_value=label_value,
                 )
@@ -125,7 +133,28 @@ def trace_relative_trajectories(
                     storage=storage,
                     trajectory=trajectory,
                     ar=ar,
-                    relative_timestamps=to_store2,
+                    relative_timestamps=relative_timestamps_median,
+                )
+
+                # compute deciles for deviation display
+                lower_deciles: np.ndarray[np.float64] = np.percentile(
+                    relative_distances_pack[t],
+                    10,
+                    axis=0,
+                )
+
+                upper_deciles: np.ndarray[np.float64] = np.percentile(
+                    relative_distances_pack[t],
+                    90,
+                    axis=0,
+                )
+
+                RelativeTracedStorage.write_deciles(
+                    storage=storage,
+                    trajectory=trajectory,
+                    ar=ar,
+                    lower_deciles=lower_deciles,
+                    upper_deciles=upper_deciles,
                 )
 
     print_action("Tracing relative trajectories completed!", "end")

@@ -543,6 +543,12 @@ export async function readRelativeTrajectories(
       const relativeTimestampsDataset = h5.get(
         relativeTimestampsPath,
       ) as Dataset;
+
+      const decilesPath = `${StoragePath.relative_traced_deciles}${pathSuffix}/${key}`;
+      const decilesDataset = h5.get(decilesPath) as Nullable<Dataset>; // TODO: Make non nullable in version 14
+      const deciles =
+        (decilesDataset?.to_array() as [number, number][]) || null;
+
       const trajectoryName =
         relativeTracedDataset.attrs['trajectory_name'].value?.toString() ?? '';
       const labelProperty =
@@ -559,6 +565,7 @@ export async function readRelativeTrajectories(
         timestamps: (relativeTimestampsDataset.to_array() as number[][]).map(
           (v) => v[0],
         ),
+        deciles: deciles,
       };
 
       relativeTrajectories.push(relativeTrajectory);

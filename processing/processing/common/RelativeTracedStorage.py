@@ -1,5 +1,7 @@
 from typing import List
 
+import numpy as np
+
 from processing.common.AggregatedReduceable import AggregatedReduceable
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
 from processing.storage.Storage import Storage
@@ -11,12 +13,15 @@ class RelativeTracedStorage:
     def delete(storage: Storage) -> None:
         storage.delete(StoragePath.relative_traced)
         storage.delete(StoragePath.relative_traced_relative_timestamps)
+        storage.delete(StoragePath.relative_traced_deciles)
 
     @staticmethod
     def exists(storage: Storage) -> bool:
-        return storage.exists_dataset(
-            StoragePath.relative_traced
-        ) and storage.exists_dataset(StoragePath.relative_traced_relative_timestamps)
+        return (
+            storage.exists_dataset(StoragePath.relative_traced)
+            and storage.exists_dataset(StoragePath.relative_traced_relative_timestamps)
+            and storage.exists_dataset(StoragePath.relative_traced_deciles)
+        )
 
     @staticmethod
     def get_distance_path(
@@ -38,6 +43,19 @@ class RelativeTracedStorage:
     ) -> str:
         return (
             f"{StoragePath.relative_traced_relative_timestamps.value}"
+            f"/{ar.band.name}"
+            f"/{ar.integration.seconds}"
+            f"/{ar.extractor.index}"
+            f"/{trajectory.index}"
+        )
+
+    @staticmethod
+    def get_deciles_path(
+        trajectory: TrajectoryConfig,
+        ar: AggregatedReduceable,
+    ) -> str:
+        return (
+            f"{StoragePath.relative_traced_deciles.value}"
             f"/{ar.band.name}"
             f"/{ar.integration.seconds}"
             f"/{ar.extractor.index}"
@@ -91,4 +109,21 @@ class RelativeTracedStorage:
                 "extractor_index": str(ar.extractor.index),
                 "trajectory_index": str(trajectory.index),
             },
+        )
+
+    @staticmethod
+    def write_deciles(
+        storage: Storage,
+        trajectory: TrajectoryConfig,
+        ar: AggregatedReduceable,
+        lower_deciles: List[float],
+        upper_deciles: List[float],
+    ):
+        path = RelativeTracedStorage.get_deciles_path(trajectory=trajectory, ar=ar)
+        data = np.column_stack([lower_deciles, upper_deciles])
+
+        storage.write(
+            path=path,
+            data=data,
+            compression=True,
         )
