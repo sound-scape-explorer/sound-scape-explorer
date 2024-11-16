@@ -97,14 +97,14 @@ def test_ranges():
 
 def __test_file_objects(files: List[FileConfig]):
     for index, file in enumerate(files):
-        assert file.index == index, f"indices should match"
+        assert file.index == index, "indices should match"
         assert type(file.index) is int, "file index should be integer"
         assert type(file.name) is str, "file name should be string"
-        assert type(file.path) is str, f"file path should be string"
-        assert type(file.audio_path) is str, f"file audio path should be string"
+        assert type(file.path) is str, "file path should be string"
+        assert type(file.audio_path) is str, "file audio path should be string"
         assert type(file.timestamp) is int, "file timestamp should be integer"
         assert type(file.duration) is int, "file duration should be integer"
-        assert type(file.site) is str, f"file site should be string"
+        assert type(file.site) is str, "file site should be string"
 
         for label in file.labels:
             assert type(label) is str, "label should be string"
@@ -138,7 +138,7 @@ def __test_digester_objects(digesters: List[DigesterConfig]):
     for index, digester in enumerate(digesters):
         assert digester.index == index, "indices should match"
         assert type(digester.index) is int, "digester index should be integer"
-        assert type(digester.name) is str, f"digester name should be string"
+        assert type(digester.name) is str, "digester name should be string"
         assert (
             type(digester.is_pairing) is bool
         ), "digester is_pairing should be boolean"
@@ -200,10 +200,10 @@ def __test_trajectory_objects(trajectories: List[TrajectoryConfig]):
         assert type(trajectory.end) is int, "trajectory end should be integer"
         assert (
             type(trajectory.label_property) is str
-        ), f"trajectory label_property should be string"
+        ), "trajectory label_property should be string"
         assert (
             type(trajectory.label_value) is str
-        ), f"trajectory label_value should be string"
+        ), "trajectory label_value should be string"
 
         assert type(trajectory.step) is int, "trajectory step should be integer"
 
