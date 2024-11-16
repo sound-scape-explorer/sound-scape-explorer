@@ -13,13 +13,24 @@ module.exports = {
     'plugin:import/electron',
     'plugin:import/typescript',
   ],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        // "project": "path/to/folder",
+      },
+    },
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: ['./tsconfig.json'],
     // project: true,
     // tsconfigRootDir: __dirname,
   },
-  plugins: ['simple-import-sort'],
+  plugins: ['simple-import-sort', 'import'],
   rules: {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
@@ -149,6 +160,7 @@ module.exports = {
     ],
     '@typescript-eslint/object-curly-spacing': ['error', 'never'],
     'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
+    'import/no-unresolved': 'error',
     '@typescript-eslint/prefer-readonly': 'error',
   },
 };
