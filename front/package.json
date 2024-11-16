@@ -18,7 +18,7 @@
     "chroma-js": "^3.1.1",
     "colormap": "^2.3.2",
     "comlink": "^4.4.1",
-    "dayjs": "^1.11.7",
+    "dayjs": "^1.11.13",
     "h5wasm": "^0.7.5",
     "html2canvas": "^1.4.1",
     "plotly.js-dist-min": "^2.35.2",
