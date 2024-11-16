@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import {useAppCandles} from 'src/app/candles/use-app-candles';
-import {watch} from 'vue';
+import {onMounted, watch} from 'vue';
 
 export interface AppCandlesProps {
   exportFilename: string;
@@ -13,16 +13,19 @@ export interface AppCandlesProps {
   close: number[];
   yTitle?: string;
   title?: string;
+  isExpanded?: boolean;
 }
 
-const props = defineProps<AppCandlesProps>();
+const props = withDefaults(defineProps<AppCandlesProps>(), {
+  isExpanded: false,
+});
 
 const {container, mount, render, data, layout, plotBackground} =
   useAppCandles(props);
 
-render();
+onMounted(render);
 watch([container, data, layout], mount);
-watch([props, plotBackground], render);
+watch([plotBackground, () => props.condensed, () => props.isExpanded], render);
 </script>
 
 <template>

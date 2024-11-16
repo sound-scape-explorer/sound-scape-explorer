@@ -1,35 +1,64 @@
 import {PLOTLY_SIZE} from 'src/constants';
 import {type Ref} from 'vue';
 
-export function useAppPlotSize(width: Ref<number>, height: Ref<number>) {
+export function useAppPlotSize(
+  width: Nullable<Ref<number>>,
+  height: Nullable<Ref<number>>,
+) {
+  const updateWidth = (newWidth: number = PLOTLY_SIZE) => {
+    if (width === null) {
+      return;
+    }
+
+    width.value = newWidth;
+  };
+
+  const updateHeight = (newHeight: number = PLOTLY_SIZE) => {
+    if (height === null) {
+      return;
+    }
+
+    height.value = newHeight;
+  };
+
   const resize1by1 = () => {
-    width.value = PLOTLY_SIZE;
-    height.value = PLOTLY_SIZE;
+    updateWidth();
+    updateHeight();
   };
 
   const resize4by3 = () => {
-    width.value = PLOTLY_SIZE * (4 / 3);
-    height.value = PLOTLY_SIZE;
+    updateWidth(PLOTLY_SIZE * (4 / 3));
+    updateHeight();
   };
 
   const resize16by10 = () => {
-    width.value = PLOTLY_SIZE * (16 / 10);
-    height.value = PLOTLY_SIZE;
+    updateWidth(PLOTLY_SIZE * (16 / 10));
+    updateHeight();
   };
 
   const resize16by9 = () => {
-    width.value = PLOTLY_SIZE * (16 / 9);
-    height.value = PLOTLY_SIZE;
+    updateWidth(PLOTLY_SIZE * (16 / 9));
+    updateHeight();
   };
 
   const double = () => {
-    width.value = width.value * 2;
-    height.value = height.value * 2;
+    if (width !== null) {
+      updateWidth(width.value * 2);
+    }
+
+    if (height !== null) {
+      updateHeight(height.value * 2);
+    }
   };
 
   const half = () => {
-    width.value = width.value * 0.5;
-    height.value = height.value * 0.5;
+    if (width !== null) {
+      width.value = width.value * 0.5;
+    }
+
+    if (height !== null) {
+      height.value = height.value * 0.5;
+    }
   };
 
   return {

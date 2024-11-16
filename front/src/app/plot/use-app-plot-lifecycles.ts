@@ -4,6 +4,7 @@ import {useAppPlotLayout} from 'src/app/plot/use-app-plot-layout';
 import {useAppPlotRenderer} from 'src/app/plot/use-app-plot-renderer';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {TIMEOUT} from 'src/constants';
 import {onMounted, watch} from 'vue';
 
 export function useAppPlotLifecycles(props: AppPlotProps, refs: AppPlotRefs) {
@@ -13,13 +14,25 @@ export function useAppPlotLifecycles(props: AppPlotProps, refs: AppPlotRefs) {
   const {generateData} = useAppPlotData(props);
   const {render} = useAppPlotRenderer(props, refs);
 
-  const refresh = () => {
-    refs.data.value = generateData();
-    refs.layout.value = generateLayout(props);
-    refs.config.value = generateConfig(props.exportFilename);
-  };
+  const refresh = () =>
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        refs.data.value = generateData();
+        refs.layout.value = generateLayout(props);
+        refs.config.value = generateConfig(props.exportFilename);
+      }, TIMEOUT);
+    });
 
   onMounted(refresh);
   watch([refs.container, refs.data, refs.layout], render);
-  watch([props, plotBackground], refresh);
+  watch(
+    [
+      plotBackground,
+      () => props.isExpanded,
+      () => props.values,
+      () => props.width,
+      () => props.height,
+    ],
+    refresh,
+  );
 }

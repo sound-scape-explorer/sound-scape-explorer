@@ -50,6 +50,5 @@ export enum InjectionKey {
   calendarRange = 'calendar/range',
   heatmapsPlotWidth = 'heatmaps/plotWidth',
   heatmapsPlotHeight = 'heatmaps/plotHeight',
-  relativeTrajectoriesPlotWidth = 'relativeTrajectories/plotWidth',
   relativeTrajectoriesPlotHeight = 'relativeTrajectories/plotHeight',
 }
