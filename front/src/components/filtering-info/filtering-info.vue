@@ -3,7 +3,7 @@ import AppTooltip from 'src/app/app-tooltip.vue';
 import FilteringInfoButtons from 'src/components/filtering-info/filtering-info-buttons.vue';
 import {useFilteringInfoData} from 'src/components/filtering-info/use-filtering-info-data';
 import {useFilteringInfoMode} from 'src/components/filtering-info/use-filtering-info-mode';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 
 const {currentIntervalIndex, hasClicked} = useIntervalSelector();
 const {cycleMode, isIntervalMode, isCollectMode, isFilterMode} =

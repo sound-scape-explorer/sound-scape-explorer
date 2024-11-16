@@ -7,7 +7,7 @@ import {
   arrowUndoOutline,
 } from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 
 const {back, forward, canUndo, canRedo, redo, undo, hasClicked} =
   useIntervalSelector();

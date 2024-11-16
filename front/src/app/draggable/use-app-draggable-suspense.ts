@@ -1,6 +1,6 @@
 import {type AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useViewState} from 'src/composables/use-view-state';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {computed} from 'vue';
 
 interface Suspense {

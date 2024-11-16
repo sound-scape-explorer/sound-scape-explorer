@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import {useDate} from 'src/composables/use-date';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useSettings} from 'src/composables/use-settings';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {PLAYBACK_RATE} from 'src/constants';
@@ -9,7 +10,6 @@ import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioLock} from 'src/draggables/audio/use-audio-lock';
 import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {useDetails} from 'src/draggables/details/use-details';
 
 const {size} = useAudioFourier();

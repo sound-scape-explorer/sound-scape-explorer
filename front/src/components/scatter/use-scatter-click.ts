@@ -5,7 +5,7 @@ import {
 } from 'plotly.js-dist-min';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 
 // @warn auto-completion does not work on intellij 2024.2.3
 // @see https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/plotly.js/index.d.ts

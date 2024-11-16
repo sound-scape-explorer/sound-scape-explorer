@@ -55,7 +55,7 @@ export function useIntervalSelector() {
 
     let p = currentIntervalIndex.value - 1;
 
-    if (p <= 0) {
+    if (p < 0) {
       p = aggregatedTimestamps.value.length - 1;
     }
 
