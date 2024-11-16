@@ -1,5 +1,5 @@
 export class VisualiseButton {
-  private node = document.getElementById('visualise-button');
+  private readonly node = document.getElementById('visualise-button');
 
   public constructor() {
     this.attachClick();

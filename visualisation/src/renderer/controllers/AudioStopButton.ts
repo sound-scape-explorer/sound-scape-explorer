@@ -1,7 +1,7 @@
 import {render} from '../renderer';
 
 export class AudioStopButton {
-  private node = document.getElementById('audio-stop-button');
+  private readonly node = document.getElementById('audio-stop-button');
 
   public constructor() {
     this.attachClick();
