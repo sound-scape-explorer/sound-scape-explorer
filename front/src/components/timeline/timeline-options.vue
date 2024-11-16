@@ -5,6 +5,8 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
+import {useTimelineRecenter} from 'src/components/timeline/use-timeline-recenter';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {generateUniqueRangeSlug} from 'src/utils/config';
@@ -16,6 +18,8 @@ const {ranges} = useStorageRanges();
 const names = computed(
   () => ranges.value?.map((r) => generateUniqueRangeSlug(r)) ?? [],
 );
+const {handleRecenter} = useTimelineRecenter();
+const {currentIntervalIndex} = useIntervalSelector();
 
 const name = ref<string>();
 const RANGE_SKIP = '**CUSTOM**';
@@ -74,7 +78,22 @@ watch(names, () => {
         :options="names"
       />
 
-      <AppButton :handle-click="handleOverdrive">overdrive</AppButton>
+      <AppButton
+        :handle-click="handleOverdrive"
+        tooltip="set window limits as range"
+        tooltip-placement="top"
+      >
+        overdrive
+      </AppButton>
+
+      <AppButton
+        :disabled="currentIntervalIndex === null"
+        :handle-click="handleRecenter"
+        tooltip="to selected interval"
+        tooltip-placement="top"
+      >
+        recenter
+      </AppButton>
     </div>
 
     <span>Dates</span>
