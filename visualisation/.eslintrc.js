@@ -4,6 +4,7 @@ module.exports = {
     es6: true,
     node: true,
   },
+  ignorePatterns: ['.eslintrc.js'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
@@ -13,6 +14,11 @@ module.exports = {
     'plugin:import/typescript',
   ],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: ['./tsconfig.json'],
+    // project: true,
+    // tsconfigRootDir: __dirname,
+  },
   plugins: ['simple-import-sort'],
   rules: {
     'simple-import-sort/imports': 'error',
@@ -143,5 +149,6 @@ module.exports = {
     ],
     '@typescript-eslint/object-curly-spacing': ['error', 'never'],
     'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
+    '@typescript-eslint/prefer-readonly': 'error',
   },
 };
