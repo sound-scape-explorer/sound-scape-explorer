@@ -16,12 +16,16 @@ export abstract class ElectronWindow {
       webPreferences: {...preferences},
     });
 
+    this.handleLoad();
+  }
+
+  private handleLoad() {
     this.load().then(() => {
+      this.appendTitle();
+
       if (this.isDev) {
         this.openDevTools();
       }
-
-      this.appendTitle();
     });
   }
 
