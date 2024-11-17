@@ -6,17 +6,15 @@ import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
 import {useTimelineHandlers} from 'src/components/timeline/use-timeline-handlers';
 import {useTimelineLifecycles} from 'src/components/timeline/use-timeline-lifecycles';
-import {useTimelineOptions} from 'src/components/timeline/use-timeline-options';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
-import {useTimelineRecenter} from 'src/components/timeline/use-timeline-recenter';
+import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-names';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 
 const {left, right, updateLeft, updateRight} = useTimelineRange();
-const {recenter} = useTimelineRecenter();
 const {currentIntervalIndex} = useIntervalSelector();
-const {overdrive} = useTimelineHandlers();
-const {name, names} = useTimelineOptions();
+const {overdrive, recenter} = useTimelineHandlers();
+const {name, names} = useTimelineRangeNames();
 
 useRefProvide(InjectionKey.calendarRange, name);
 useRefProvide(InjectionKey.timelineLeft, left);

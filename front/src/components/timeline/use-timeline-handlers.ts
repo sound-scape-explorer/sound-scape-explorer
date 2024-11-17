@@ -1,5 +1,7 @@
-import {useTimelineOptions} from 'src/components/timeline/use-timeline-options';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
+import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-names';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageRanges} from 'src/composables/use-storage-ranges';
 import {RANGE_SKIP} from 'src/constants';
 import {generateUniqueRangeSlug} from 'src/utils/config';
@@ -7,15 +9,9 @@ import {generateUniqueRangeSlug} from 'src/utils/config';
 export function useTimelineHandlers() {
   const {start, end, left, right, updateLeft, updateRight} = useTimelineRange();
   const {ranges} = useStorageRanges();
-  const {names, name} = useTimelineOptions();
-
-  const updateName = () => {
-    if (!names.value || name.value) {
-      return;
-    }
-
-    name.value = names.value[0];
-  };
+  const {name, setCustomName} = useTimelineRangeNames();
+  const {currentIntervalIndex} = useIntervalSelector();
+  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
   const updateRange = () => {
     if (name.value === RANGE_SKIP) {
@@ -45,12 +41,30 @@ export function useTimelineHandlers() {
   const overdrive = () => {
     start.value = left.value;
     end.value = right.value;
-    name.value = RANGE_SKIP;
+    setCustomName();
+  };
+
+  const recenter = () => {
+    if (
+      currentIntervalIndex.value === null ||
+      aggregatedTimestamps.value === null
+    ) {
+      return;
+    }
+
+    const timestamp = aggregatedTimestamps.value[currentIntervalIndex.value];
+    const hour = 3600 * 1000;
+
+    start.value = timestamp - hour / 2;
+    end.value = timestamp + hour / 2;
+    updateLeft(timestamp - hour / 8);
+    updateRight(timestamp + hour / 8);
+    setCustomName();
   };
 
   return {
-    updateName: updateName,
     updateRange: updateRange,
     overdrive: overdrive,
+    recenter: recenter,
   };
 }

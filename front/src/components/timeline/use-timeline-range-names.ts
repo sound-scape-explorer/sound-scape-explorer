@@ -1,11 +1,12 @@
 import {useStorageRanges} from 'src/composables/use-storage-ranges';
+import {RANGE_SKIP} from 'src/constants';
 import {generateUniqueRangeSlug} from 'src/utils/config';
 import {ref} from 'vue';
 
-const name = ref<string>();
 const names = ref<string[]>([]);
+const name = ref<string>();
 
-export function useTimelineOptions() {
+export function useTimelineRangeNames() {
   const {ranges} = useStorageRanges();
 
   const updateNames = () => {
@@ -16,9 +17,27 @@ export function useTimelineOptions() {
     names.value = ranges.value.map((r) => generateUniqueRangeSlug(r));
   };
 
+  const updateName = () => {
+    if (!names.value || name.value) {
+      return;
+    }
+
+    name.value = names.value[0];
+  };
+
+  const setCustomName = () => {
+    if (name.value === RANGE_SKIP) {
+      return;
+    }
+
+    name.value = RANGE_SKIP;
+  };
+
   return {
-    name: name,
     names: names,
     updateNames: updateNames,
+    name: name,
+    updateName: updateName,
+    setCustomName: setCustomName,
   };
 }
