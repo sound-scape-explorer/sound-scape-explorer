@@ -30,7 +30,6 @@ export enum InjectionKey {
   colorsAlphaExcluded = 'colors/alphaExcluded',
   colorsAlphaIncluded = 'colors/alphaIncluded',
   colorsFlavor = 'colors/flavor',
-  colorsType = 'colors/type',
   colorsCriteria = 'colors/criteria',
   colorsCategory = 'colors/category',
   colorsIndicatorMin = 'colors/indicatorMin',
