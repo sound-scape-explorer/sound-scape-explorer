@@ -7,7 +7,7 @@ export function useTimelineRecenter() {
   const {currentIntervalIndex} = useIntervalSelector();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
-  const handleRecenter = () => {
+  const recenter = () => {
     if (
       currentIntervalIndex.value === null ||
       aggregatedTimestamps.value === null
@@ -25,6 +25,6 @@ export function useTimelineRecenter() {
   };
 
   return {
-    handleRecenter: handleRecenter,
+    recenter: recenter,
   };
 }
