@@ -51,4 +51,6 @@ export enum InjectionKey {
   heatmapsPlotWidth = 'heatmaps/plotWidth',
   heatmapsPlotHeight = 'heatmaps/plotHeight',
   relativeTrajectoriesPlotHeight = 'relativeTrajectories/plotHeight',
+  timelineLeft = 'timeline/left',
+  timelineRight = 'timeline/right',
 }

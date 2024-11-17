@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
-import {NDatePicker} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppDatePicker from 'src/app/app-date-picker.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
@@ -19,6 +19,8 @@ const {overdrive} = useTimelineHandlers();
 const {name, names} = useTimelineOptions();
 
 useRefProvide(InjectionKey.calendarRange, name);
+useRefProvide(InjectionKey.timelineLeft, left);
+useRefProvide(InjectionKey.timelineRight, right);
 
 useTimelineLifecycles();
 </script>
@@ -53,20 +55,14 @@ useTimelineLifecycles();
 
     <span>Dates</span>
     <div :class="$style.row">
-      <NDatePicker
-        :class="$style.date"
-        :on-update:value="updateLeft"
-        :value="left"
-        size="tiny"
-        type="datetime"
+      <AppDatePicker
+        :handle-click="updateLeft"
+        :injection-key="InjectionKey.timelineLeft"
       />
 
-      <NDatePicker
-        :class="$style.date"
-        :on-update:value="updateRight"
-        :value="right"
-        size="tiny"
-        type="datetime"
+      <AppDatePicker
+        :handle-click="updateRight"
+        :injection-key="InjectionKey.timelineRight"
       />
     </div>
   </AppDraggableMenu>
