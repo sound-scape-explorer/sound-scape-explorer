@@ -8,9 +8,9 @@ import {SettingKey as k} from 'src/common/setting-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useClientSettingsDev} from 'src/composables/use-client-settings-dev';
 import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
+import {type ColorFlavor} from 'src/constants';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 const version = useStorage<string>(k.version, d.version);
@@ -67,6 +67,7 @@ const scatterBorderWidth = useStorage<ScatterBorderWidth>(
 );
 
 const plotFontSize = useStorage<number>(k.plotFontSize, d.plotFontSize);
+const colorsFlavor = useStorage<ColorFlavor>(k.colorsFlavor, d.colorsFlavor);
 
 export function useClientSettings() {
   const {audioHost} = useStorageAudioHost();
@@ -74,7 +75,6 @@ export function useClientSettings() {
   const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
   const {reset: resetLabels} = useDraggableLabels();
   const {reset: resetAlphas} = useScatterColorAlpha();
-  const {reset: resetFlavor} = useColorSelection();
   const {notify} = useAppNotification();
   const {
     isDevEnabled,
@@ -98,6 +98,7 @@ export function useClientSettings() {
     isBetaPreview.value = d.isBetaPreview;
     scatterBorderWidth.value = d.scatterBorderWidth;
     plotFontSize.value = d.plotFontSize;
+    colorsFlavor.value = d.colorsFlavor;
 
     audioHost.value = d.audioHost;
     plotFontSize.value = d.plotFontSize;
@@ -106,7 +107,6 @@ export function useClientSettings() {
     isLegendOverflow.value = d.legendOverflow;
     resetLabels();
     resetAlphas();
-    resetFlavor();
     resetDev();
 
     notify('success', 'Settings', 'Defaults restored');
@@ -132,5 +132,6 @@ export function useClientSettings() {
     isBetaPreview: isBetaPreview,
     scatterBorderWidth: scatterBorderWidth,
     plotFontSize: plotFontSize,
+    colorsFlavor: colorsFlavor,
   };
 }

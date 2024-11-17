@@ -1,5 +1,6 @@
 from typing import List
 
+from numpy import int64
 from pandas import Timestamp
 
 from processing.config.ConfigParser import ConfigParser
@@ -46,23 +47,29 @@ class TrajectoryStorage:
     def read_from_storage(storage: Storage) -> List[TrajectoryConfig]:
         names_dataset = storage.read(TrajectoryStorage.names)
         names = storage.convert_dataset_to_string_list(names_dataset)
-        starts = storage.read(TrajectoryStorage.starts)
-        ends = storage.read(TrajectoryStorage.ends)
+        starts: List[int64] = storage.read(TrajectoryStorage.starts)[:]
+        starts: List[int] = [int(v) for v in starts]
+
+        ends: List[int64] = storage.read(TrajectoryStorage.ends)[:]
+        ends: List[int] = [int(v) for v in ends]
+
         label_properties_dataset = storage.read(TrajectoryStorage.label_properties)
         label_properties = storage.convert_dataset_to_string_list(
             label_properties_dataset
         )
         label_values_dataset = storage.read(TrajectoryStorage.label_values)
         label_values = storage.convert_dataset_to_string_list(label_values_dataset)
-        steps = storage.read(TrajectoryStorage.steps)
+
+        steps: List[int64] = storage.read(TrajectoryStorage.steps)[:]
+        steps: List[int] = [int(v) for v in steps]
 
         trajectories = TrajectoryConfig.reconstruct(
             names=names,
-            starts=starts[:],
-            ends=ends[:],
+            starts=starts,
+            ends=ends,
             label_properties=label_properties,
             label_values=label_values,
-            steps=steps[:],
+            steps=steps,
         )
 
         return trajectories

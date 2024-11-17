@@ -1,4 +1,6 @@
 import {useRefHistory} from '@vueuse/core';
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {useDraggables} from 'src/composables/use-draggables';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {computed, ref} from 'vue';
@@ -9,22 +11,24 @@ const {history, undo, redo, canUndo, canRedo} =
 const hasClicked = computed<boolean>(() => currentIntervalIndex.value !== null);
 
 export function useIntervalSelector() {
+  const {isAudioAutoOpen, isDetailsAutoOpen} = useClientSettings();
+  const {open} = useDraggables();
   const {isLoading} = useAudioFile();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
   const selectInterval = (index: number | null) => {
-    if (currentIntervalIndex.value === index) {
-      return;
-    }
-
-    if (isLoading.value) {
+    if (isLoading.value || currentIntervalIndex.value === index) {
       return;
     }
 
     currentIntervalIndex.value = index;
 
-    if (index === null) {
-      return;
+    if (isAudioAutoOpen.value) {
+      open('audio');
+    }
+
+    if (isDetailsAutoOpen.value) {
+      open('details');
     }
   };
 
@@ -36,13 +40,13 @@ export function useIntervalSelector() {
       return;
     }
 
-    let n = currentIntervalIndex.value + 1;
+    let nextIndex = currentIntervalIndex.value + 1;
 
-    if (n >= aggregatedTimestamps.value.length) {
-      n = 0;
+    if (nextIndex >= aggregatedTimestamps.value.length) {
+      nextIndex = 0;
     }
 
-    currentIntervalIndex.value = n;
+    selectInterval(nextIndex);
   };
 
   const back = () => {
@@ -53,13 +57,13 @@ export function useIntervalSelector() {
       return;
     }
 
-    let p = currentIntervalIndex.value - 1;
+    let previousIndex = currentIntervalIndex.value - 1;
 
-    if (p <= 0) {
-      p = aggregatedTimestamps.value.length - 1;
+    if (previousIndex < 0) {
+      previousIndex = aggregatedTimestamps.value.length - 1;
     }
 
-    currentIntervalIndex.value = p;
+    selectInterval(previousIndex);
   };
 
   return {

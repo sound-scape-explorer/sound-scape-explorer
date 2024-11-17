@@ -3,6 +3,7 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDate} from 'src/composables/use-date';
 import {useFiles} from 'src/composables/use-files';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useSettings} from 'src/composables/use-settings';
 import {
   type IntervalDetails,
@@ -14,7 +15,6 @@ import {
   useStorageAggregatedSites,
 } from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {computed, ref} from 'vue';
 
 const currentIndex = ref<number | null>(null);

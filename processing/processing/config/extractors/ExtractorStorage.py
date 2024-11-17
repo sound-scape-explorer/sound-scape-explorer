@@ -1,5 +1,6 @@
 from typing import List
 
+from numpy import int64
 from pandas import pandas
 
 from processing.config.ConfigParser import ConfigParser
@@ -40,16 +41,20 @@ class ExtractorStorage:
         names_dataset = storage.read(ExtractorStorage.names)
         names = storage.convert_dataset_to_string_list(names_dataset)
 
-        offsets = storage.read(ExtractorStorage.offsets)
-        steps = storage.read(ExtractorStorage.steps)
-        persists_ints = storage.read(ExtractorStorage.persists)
+        offsets: List[int64] = storage.read(ExtractorStorage.offsets)[:]
+        steps: List[int64] = storage.read(ExtractorStorage.steps)[:]
+
+        offsets: List[int] = [int(o) for o in offsets]
+        steps: List[int] = [int(s) for s in steps]
+
+        persists_ints: List[int64] = storage.read(ExtractorStorage.persists)[:]
         persists = [True if p == 1 else False for p in persists_ints]
 
         extractors = ExtractorConfig.reconstruct(
             names=names,
-            offsets=offsets[:],
-            steps=steps[:],
-            persists=persists[:],
+            offsets=offsets,
+            steps=steps,
+            persists=persists,
         )
 
         return extractors

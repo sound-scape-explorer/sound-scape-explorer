@@ -1,5 +1,6 @@
 from typing import List
 
+from numpy import int64
 from pandas import Timestamp
 
 from processing.config.ConfigParser import ConfigParser
@@ -36,13 +37,16 @@ class RangeStorage:
         names_dataset = storage.read(RangeStorage.names)
 
         names = storage.convert_dataset_to_string_list(names_dataset)
-        starts = storage.read(RangeStorage.starts)
-        ends = storage.read(RangeStorage.ends)
+        starts: List[int64] = storage.read(RangeStorage.starts)[:]
+        ends: List[int64] = storage.read(RangeStorage.ends)[:]
+
+        starts: List[int] = [int(start) for start in starts]
+        ends: List[int] = [int(end) for end in ends]
 
         ranges = RangeConfig.reconstruct(
             names=names,
-            starts=starts[:],
-            ends=ends[:],
+            starts=starts,
+            ends=ends,
         )
 
         return ranges

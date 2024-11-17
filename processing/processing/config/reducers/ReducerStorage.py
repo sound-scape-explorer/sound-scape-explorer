@@ -1,5 +1,7 @@
 from typing import List
 
+from numpy import int64
+
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.bands.BandConfig import BandConfig
@@ -48,7 +50,8 @@ class ReducerStorage:
         names_dataset = storage.read(ReducerStorage.names)
 
         names = storage.convert_dataset_to_string_list(names_dataset)
-        dimensions = storage.read(ReducerStorage.dimensions)[:]
+        dimensions: List[int64] = storage.read(ReducerStorage.dimensions)[:]
+        dimensions: List[int] = [int(d) for d in dimensions]
 
         bands_names = storage.read(ReducerStorage.bands).asstr()
         integrations_names = storage.read(ReducerStorage.integrations).asstr()

@@ -7,7 +7,7 @@ import {Channels} from '../channels';
 import {FrontWindow} from '../windows/FrontWindow';
 
 export class FrontBridge {
-  public static servicePath = path.join(
+  public static readonly servicePath = path.join(
     path.dirname(__dirname),
     '..',
     'front',

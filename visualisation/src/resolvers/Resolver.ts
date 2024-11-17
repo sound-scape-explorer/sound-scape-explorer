@@ -1,7 +1,7 @@
 import path from 'node:path';
 
 export abstract class Resolver {
-  private isWin = process.platform === 'win32';
+  private readonly isWin = process.platform === 'win32';
 
   private readonly command: string;
 

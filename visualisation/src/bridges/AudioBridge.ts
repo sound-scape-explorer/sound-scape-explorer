@@ -11,7 +11,7 @@ import {FfprobeResolver} from '../resolvers/FfprobeResolver';
 import {NodeResolver} from '../resolvers/NodeResolver';
 
 export class AudioBridge {
-  private static servicePath = path.join(
+  private static readonly servicePath = path.join(
     path.dirname(__dirname),
     '..',
     'audio',
@@ -20,11 +20,11 @@ export class AudioBridge {
 
   private service: ChildProcessWithoutNullStreams | null;
 
-  private nodeResolver = new NodeResolver();
+  private readonly nodeResolver = new NodeResolver();
 
-  private ffmpegResolver = new FfmpegResolver();
+  private readonly ffmpegResolver = new FfmpegResolver();
 
-  private ffprobeResolver = new FfprobeResolver();
+  private readonly ffprobeResolver = new FfprobeResolver();
 
   constructor() {
     this.validateServicePath();

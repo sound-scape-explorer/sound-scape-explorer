@@ -72,3 +72,5 @@ export const LABEL_SITE = '__SITE';
 
 export const LOWER_DECILE_SUFFIX = '_lower_decile';
 export const UPPER_DECILE_SUFFIX = '_upper_decile';
+
+export const RANGE_SKIP = '**CUSTOM**';

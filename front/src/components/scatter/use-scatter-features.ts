@@ -5,11 +5,11 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {colorMap} from 'src/styles/color-map';
 import {computed} from 'vue';
 

@@ -711,7 +711,33 @@ export async function readAggregatedIntervalDetails(
   return intervals;
 }
 
-// TODO: refactor me
+type AutoclusterIterator = (i: number, autoclusterResults: string[]) => void;
+
+const iterateAutoclusters = (
+  autoclusters: string[][],
+  callback: AutoclusterIterator,
+): void => {
+  const reversed = autoclusters.toReversed();
+
+  for (const autocluster of reversed) {
+    for (let i = 0; i < autocluster.length; i += 1) {
+      callback(i, autocluster);
+    }
+  }
+};
+
+const createRowIfNotDefined = <T>(array: T[][], i: number): T[][] => {
+  const exists = typeof array[i] !== 'undefined';
+
+  if (exists) {
+    return array;
+  }
+
+  array[i] = [];
+
+  return array;
+};
+
 export async function readAggregatedLabels(
   file: File,
   bandName: string,
@@ -729,29 +755,16 @@ export async function readAggregatedLabels(
     integrationSeconds,
   );
 
-  if (autoclusters.length > 0) {
-    if (labels.length === 0) {
-      // files labels are empty
-      for (const autocluster of autoclusters.reverse()) {
-        for (let index = 0; index < autocluster.length; index += 1) {
-          const value = autocluster[index];
+  const hasAutoclusters = autoclusters.length > 0;
 
-          if (typeof labels[index] === 'undefined') {
-            labels[index] = [];
-          }
-
-          labels[index] = [value, ...labels[index]];
-        }
-      }
-    } else if (labels.length > 0) {
-      // files labels are populated
-      for (const autocluster of autoclusters.reverse()) {
-        for (let index = 0; index < labels.length; index += 1) {
-          labels[index] = [autocluster[index], ...labels[index]];
-        }
-      }
-    }
+  if (!hasAutoclusters) {
+    return labels;
   }
+
+  iterateAutoclusters(autoclusters, (i, autocluster) => {
+    createRowIfNotDefined(labels, i);
+    labels[i].unshift(autocluster[i]);
+  });
 
   return labels;
 }

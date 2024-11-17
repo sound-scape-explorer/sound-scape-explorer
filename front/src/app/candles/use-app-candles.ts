@@ -9,6 +9,7 @@ import {useAppCandlesLayout} from 'src/app/candles/use-app-candles-layout';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDate} from 'src/composables/use-date';
+import {TIMEOUT} from 'src/constants';
 import {ref} from 'vue';
 
 const container = ref<HTMLDivElement | null>(null);
@@ -23,23 +24,24 @@ export function useAppCandles(props: AppCandlesProps) {
   const {plotBackground} = useClientSettings();
   const {convertTimestampToIsoDate} = useDate();
 
-  const mount = async () => {
-    if (
-      container.value === null ||
-      data.value === null ||
-      layout.value === null ||
-      config.value === null
-    ) {
-      return;
-    }
+  const mount = () =>
+    requestAnimationFrame(async () => {
+      if (
+        container.value === null ||
+        data.value === null ||
+        layout.value === null ||
+        config.value === null
+      ) {
+        return;
+      }
 
-    plot.value = await Plotly.newPlot(
-      container.value,
-      data.value,
-      layout.value,
-      config.value,
-    );
-  };
+      plot.value = await Plotly.newPlot(
+        container.value,
+        data.value,
+        layout.value,
+        config.value,
+      );
+    });
 
   const generateData = (): Data[] => {
     const newData: Data = {
@@ -56,11 +58,14 @@ export function useAppCandles(props: AppCandlesProps) {
     return [newData];
   };
 
-  const render = () => {
-    data.value = generateData();
-    layout.value = generateLayout(props);
-    config.value = generateConfig(props.exportFilename);
-  };
+  const render = () =>
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        data.value = generateData();
+        layout.value = generateLayout(props);
+        config.value = generateConfig(props.exportFilename);
+      }, TIMEOUT);
+    });
 
   return {
     container: container,

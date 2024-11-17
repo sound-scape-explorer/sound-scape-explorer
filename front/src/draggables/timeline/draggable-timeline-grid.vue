@@ -2,8 +2,8 @@
 import {NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useDate} from 'src/composables/use-date';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
 import {
   pageSizeRef,
   pageVisibleBlocksRef,

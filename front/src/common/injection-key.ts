@@ -30,7 +30,6 @@ export enum InjectionKey {
   colorsAlphaExcluded = 'colors/alphaExcluded',
   colorsAlphaIncluded = 'colors/alphaIncluded',
   colorsFlavor = 'colors/flavor',
-  colorsType = 'colors/type',
   colorsCriteria = 'colors/criteria',
   colorsCategory = 'colors/category',
   colorsIndicatorMin = 'colors/indicatorMin',
@@ -50,6 +49,7 @@ export enum InjectionKey {
   calendarRange = 'calendar/range',
   heatmapsPlotWidth = 'heatmaps/plotWidth',
   heatmapsPlotHeight = 'heatmaps/plotHeight',
-  relativeTrajectoriesPlotWidth = 'relativeTrajectories/plotWidth',
   relativeTrajectoriesPlotHeight = 'relativeTrajectories/plotHeight',
+  timelineLeft = 'timeline/left',
+  timelineRight = 'timeline/right',
 }

@@ -6,11 +6,11 @@ import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
 import {watch} from 'vue';
 
 export function useDraggableTemporalLifecycles() {
-  const {isCandles, isExpanded} = useDraggableTemporal();
+  const {isCandles} = useDraggableTemporal();
   const {data} = useTemporal();
   const {render} = useTemporalChart();
   const {period} = useTemporalCandles();
   const {filtered} = useScatterGlobalFilter();
 
-  watch([data, isCandles, period, filtered, isExpanded], render);
+  watch([data, isCandles, period, filtered], render);
 }

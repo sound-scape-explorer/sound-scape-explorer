@@ -1,9 +1,11 @@
 from typing import List
 
-from processing.config.bands.BandConfig import BandConfig
-from processing.config.bands.BandExcel import BandExcel
+from numpy import int64
+
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
+from processing.config.bands.BandConfig import BandConfig
+from processing.config.bands.BandExcel import BandExcel
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 from processing.utils.validate_excel_names import validate_excel_names
@@ -33,8 +35,11 @@ class BandStorage:
         names_dataset = storage.read(BandStorage.names)
 
         names = storage.convert_dataset_to_string_list(names_dataset)
-        lows = storage.read(BandStorage.lows)[:]
-        highs = storage.read(BandStorage.highs)[:]
+        lows: List[int64] = storage.read(BandStorage.lows)[:]
+        highs: List[int64] = storage.read(BandStorage.highs)[:]
+
+        lows: List[int] = [int(low) for low in lows]
+        highs: List[int] = [int(high) for high in highs]
 
         bands = BandConfig.reconstruct(
             names=names,

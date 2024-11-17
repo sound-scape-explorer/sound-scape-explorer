@@ -11,6 +11,7 @@ from processing.config.settings.SettingsSheet import SettingsSheet
 from processing.constants import STRING_NONE
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
+from processing.utils.get_absolute_path import get_absolute_path
 from processing.utils.is_nan import is_nan
 
 
@@ -84,7 +85,8 @@ class SettingsStorage:
         audio_path = obj[SettingsRow.audio_path.value]
 
         if not os.path.isabs(audio_path):
-            audio_path = os.path.join(parser.folder, audio_path)
+            joined = os.path.join(parser.folder, audio_path)
+            audio_path = get_absolute_path(joined)
 
         audio_host = obj[SettingsRow.audio_host.value]
 

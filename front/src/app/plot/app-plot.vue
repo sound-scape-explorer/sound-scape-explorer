@@ -24,6 +24,7 @@ export interface AppPlotProps {
   hoverTemplate?: 'default' | 'relative-trajectories';
   width?: number | null;
   height?: number | null;
+  isExpanded?: boolean;
 }
 
 const props = withDefaults(defineProps<AppPlotProps>(), {
@@ -34,6 +35,7 @@ const props = withDefaults(defineProps<AppPlotProps>(), {
   hoverTemplate: 'default',
   width: null,
   height: null,
+  isExpanded: false,
 });
 
 export interface AppPlotRefs {
