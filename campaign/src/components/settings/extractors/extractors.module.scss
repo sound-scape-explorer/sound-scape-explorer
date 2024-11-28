@@ -1,0 +1,32 @@
+$grid: 6em 4em repeat(6, 8em);
+
+.form {
+  display: grid;
+  grid-template-columns: $grid;
+}
+
+.persist {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.extractors {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.extractor {
+  display: grid;
+  margin-bottom: 4px;
+  gap: 4px;
+  grid-template-columns: $grid;
+
+  & > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

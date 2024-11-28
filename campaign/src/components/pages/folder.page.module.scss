@@ -1,0 +1,10 @@
+.drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  user-select: none;
+  transition: background-color 100ms ease;
+  background: gainsboro;
+}
+

@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 8em 1fr 30em;
+  gap: 8px;
+
+  & > :first-child {
+    font-weight: bold;
+  }
+
+  & > :last-child {
+    font-style: italic;
+  }
+}
