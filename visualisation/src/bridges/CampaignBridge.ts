@@ -1,0 +1,43 @@
+import {existsSync} from 'node:fs';
+import path from 'node:path';
+
+import {ipcMain, ipcRenderer} from 'electron';
+import {CampaignWindow} from 'src/windows/CampaignWindow';
+
+import {Channels} from '../channels';
+
+export class CampaignBridge {
+  public static readonly servicePath = path.join(
+    path.dirname(__dirname),
+    '..',
+    'campaign',
+    'index.html',
+  );
+
+  public constructor() {
+    this.validateServicePath();
+    this.setHandlers();
+  }
+
+  public static async createFromRenderer() {
+    await ipcRenderer.invoke(Channels.CampaignCreate);
+  }
+
+  private validateServicePath() {
+    if (!existsSync(CampaignBridge.servicePath)) {
+      throw new Error('Campaign service build could not be found');
+    }
+  }
+
+  private create() {
+    return new CampaignWindow();
+  }
+
+  private setHandlers() {
+    this.setCreateHandler();
+  }
+
+  private setCreateHandler() {
+    ipcMain.handle(Channels.CampaignCreate, this.create.bind(this));
+  }
+}

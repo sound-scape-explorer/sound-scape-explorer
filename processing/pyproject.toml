@@ -2,6 +2,12 @@
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[project.scripts]
+sse = "processing.cli:start_processing"
+sse_extract = "processing.cli:extract_config"
+sse_fill = "processing.cli:fill_config"
+sse_download = "processing.cli:download"
+
 [project]
 # INFO: When changing `name`, also change in `utils/get_version_from_setup.py`
 name = "sound-scape-explorer"
@@ -29,8 +35,8 @@ dependencies = [
   "soundfile==0.12.1",
 ]
 
-[project.scripts]
-sse = "processing.cli:start_processing"
-sse_extract = "processing.cli:extract_config"
-sse_fill = "processing.cli:fill_config"
-sse_download = "processing.cli:download"
+[project.optional-dependencies]
+dev = [
+  "black==23.12.1",
+  "pytest==7.2.1",
+]

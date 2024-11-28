@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="GENERAL_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/campaign">
+      <sourceFolder url="file://$MODULE_DIR$/campaign/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/campaign/src/styles" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/campaign/node_modules" type="java-resource" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

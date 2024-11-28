@@ -20,7 +20,7 @@ module.exports = {
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
-        // "project": "path/to/folder",
+        project: './tsconfig.json',
       },
     },
   },
@@ -162,5 +162,6 @@ module.exports = {
     'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
     'import/no-unresolved': 'error',
     '@typescript-eslint/prefer-readonly': 'error',
+    // 'react-hooks/exhaustive-deps': 'error',
   },
 };

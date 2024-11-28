@@ -1,10 +1,10 @@
 /.idea/sonarlint
+.idea/workspace.xml
 
 __pycache__/
 /.project
 /.settings/
 /.pydevproject
-/venv
 /processing/build
 
 /node_modules

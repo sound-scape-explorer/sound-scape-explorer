@@ -1,0 +1,92 @@
+@use "src/styles/layout";
+@use "sass:math";
+
+.flex {
+  display: flex;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.grow {
+  flex: 1;
+}
+
+.gap {
+  gap: layout.$p;
+}
+
+.mt {
+  margin-top: layout.$p;
+}
+
+.p {
+  padding: layout.$p;
+}
+
+.pv {
+  padding: layout.$p 0;
+}
+
+.ph {
+  padding: 0 layout.$p;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.align {
+  align-items: center;
+}
+
+.justify {
+  justify-content: center;
+}
+
+.w0 {
+  width: math.div(layout.$button-size, 4);
+}
+
+.w1 {
+  width: math.div(layout.$button-size, 2);
+}
+
+.w2 {
+  width: layout.$button-size;
+}
+
+.w3 {
+  width: layout.$button-size * 2;
+}
+
+.help {
+  height: 100%;
+  cursor: help;
+
+  &:hover {
+    background: gainsboro;
+  }
+}
+
+.i {
+  font-style: italic;
+}
+
+.b {
+  font-weight: bold;
+}
+
+.checkbox {
+  span {
+    margin-inline-start: -13px !important;
+  }
+}
+
+.hover {
+  &:hover {
+    cursor: pointer;
+  }
+}

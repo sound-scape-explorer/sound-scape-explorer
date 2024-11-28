@@ -1,4 +1,4 @@
-import Excel from 'exceljs';
+import * as Excel from 'exceljs';
 
 import {render} from '../renderer';
 
@@ -66,7 +66,7 @@ export class LoadingZone {
   }
 
   private getDirectory(file: File): string {
-    return window.electronAPI.getFileDirectory(file);
+    return window.electronAPI.getDirectoryPath(file);
   }
 
   private joinPath(dirPath: string, audioPath: string) {

@@ -12,8 +12,8 @@ from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
 
 class AutoclusterConfig:
     methods_by_name: Dict[str, str] = {
-        "hdbscan-eom": "eom",
-        "hdbscan-leaf": "leaf",
+        "hdbscan_eom": "eom",
+        "hdbscan_leaf": "leaf",
     }
 
     none_string = "None"

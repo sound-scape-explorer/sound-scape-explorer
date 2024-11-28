@@ -19,17 +19,7 @@ export abstract class ElectronWindow {
     this.handleLoad();
   }
 
-  private handleLoad() {
-    this.load().then(() => {
-      this.appendTitle();
-
-      if (this.isDev) {
-        this.openDevTools();
-      }
-    });
-  }
-
-  private get isDev() {
+  protected get isDev() {
     return process.env?.NODE_ENV === 'development';
   }
 
@@ -41,6 +31,16 @@ export abstract class ElectronWindow {
     }
 
     this.window.focus();
+  }
+
+  private handleLoad() {
+    this.load().then(() => {
+      this.appendTitle();
+
+      if (this.isDev) {
+        this.openDevTools();
+      }
+    });
   }
 
   private openDevTools() {

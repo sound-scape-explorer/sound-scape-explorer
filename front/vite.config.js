@@ -19,6 +19,9 @@ if (isElectron) {
   base = '/sound-scape-explorer/';
 }
 
+console.log('isProduction:', isProduction);
+console.log('isElectron:', isElectron);
+
 /**
  * Do not add following dependencies to code splitting as it will result in corrupted runtime code execution:
  *  `@vueuse/components`

@@ -1,4 +1,5 @@
 import {app, BrowserWindow} from 'electron';
+import {CampaignBridge} from 'src/bridges/CampaignBridge';
 
 import {AudioBridge} from './bridges/AudioBridge';
 import {FrontBridge} from './bridges/FrontBridge';
@@ -13,6 +14,8 @@ if (!isSingleInstance) {
   const audioBridge = new AudioBridge();
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const frontBridge = new FrontBridge();
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  const campaignBridge = new CampaignBridge();
 
   // Handle creating/removing shortcuts on Windows when installing/uninstalling.
   if (require('electron-squirrel-startup')) {

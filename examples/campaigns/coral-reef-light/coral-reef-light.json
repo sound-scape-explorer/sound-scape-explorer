@@ -1,0 +1,388 @@
+{
+  "version": "14.0.0",
+  "settings": {
+    "storagePath": "storage",
+    "audioPath": "/home/bamdad/git/sound-scape-explorer/examples/campaigns/coral-reef-light/audio",
+    "expectedSampleRate": 44100,
+    "timelineOrigin": "2001-01-01 00:00:01",
+    "audioHost": "",
+    "timezone": "",
+    "computationDimensions": 3,
+    "computationIterations": 10,
+    "displaySeed": 42000
+  },
+  "files": [
+    {
+      "Index": "0",
+      "Path": "/2022_passe_2/data_filtree/20221122T122000_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_2/data_filtree/20221122T122000_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "1",
+      "Path": "/2022_passe_2/data_filtree/20221122T120000_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_2/data_filtree/20221122T120000_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "2",
+      "Path": "/2022_passe_2/data_filtree/20221122T121000_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_2/data_filtree/20221122T121000_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "3",
+      "Path": "/2021_passe_2/data_filtree/20210316T120400_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_2/data_filtree/20210316T120400_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "4",
+      "Path": "/2021_passe_2/data_filtree/20210316T122600_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_2/data_filtree/20210316T122600_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "5",
+      "Path": "/2021_passe_2/data_filtree/20210316T121500_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_2/data_filtree/20210316T121500_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "6",
+      "Path": "/2022_touriste_3/data_filtree/20221212T122500_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:20",
+      "Site": "/2022_touriste_3/data_filtree/20221212T122500_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "7",
+      "Path": "/2022_touriste_3/data_filtree/20221212T120500_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_touriste_3/data_filtree/20221212T120500_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "8",
+      "Path": "/2022_touriste_3/data_filtree/20221212T121500_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_touriste_3/data_filtree/20221212T121500_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "9",
+      "Path": "/2022_naturel_2/data_filtree/20221122T122500_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_2/data_filtree/20221122T122500_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "10",
+      "Path": "/2022_naturel_2/data_filtree/20221122T121500_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_2/data_filtree/20221122T121500_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "11",
+      "Path": "/2022_naturel_2/data_filtree/20221122T120500_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_2/data_filtree/20221122T120500_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "12",
+      "Path": "/2021_passe_3/data_filtree/20210419T121500_2614231112834446_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_3/data_filtree/20210419T121500_2614231112834446_2.0.wav"
+    },
+    {
+      "Index": "13",
+      "Path": "/2021_passe_3/data_filtree/20210419T120400_2614231112834446_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_3/data_filtree/20210419T120400_2614231112834446_2.0.wav"
+    },
+    {
+      "Index": "14",
+      "Path": "/2021_passe_3/data_filtree/20210419T122600_2614231112834446_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_3/data_filtree/20210419T122600_2614231112834446_2.0.wav"
+    },
+    {
+      "Index": "15",
+      "Path": "/2022_touriste_1/data_filtree/20221116T122000_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_touriste_1/data_filtree/20221116T122000_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "16",
+      "Path": "/2022_touriste_1/data_filtree/20221116T120000_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_touriste_1/data_filtree/20221116T120000_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "17",
+      "Path": "/2022_touriste_1/data_filtree/20221116T121000_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_touriste_1/data_filtree/20221116T121000_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "18",
+      "Path": "/2021_passe_1/data_filtree/20210218T121700_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_1/data_filtree/20210218T121700_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "19",
+      "Path": "/2021_passe_1/data_filtree/20210218T122800_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_1/data_filtree/20210218T122800_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "20",
+      "Path": "/2021_passe_1/data_filtree/20210218T120600_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_passe_1/data_filtree/20210218T120600_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "21",
+      "Path": "/2022_naturel_3/data_filtree/20221212T121000_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_3/data_filtree/20221212T121000_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "22",
+      "Path": "/2022_naturel_3/data_filtree/20221212T122000_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_3/data_filtree/20221212T122000_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "23",
+      "Path": "/2022_naturel_3/data_filtree/20221212T120000_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_3/data_filtree/20221212T120000_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "24",
+      "Path": "/2021_naturel_3/data_filtree/20210414T122700_2614231112834446_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_3/data_filtree/20210414T122700_2614231112834446_2.0.wav"
+    },
+    {
+      "Index": "25",
+      "Path": "/2021_naturel_3/data_filtree/20210414T120500_2614231112834446_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_3/data_filtree/20210414T120500_2614231112834446_2.0.wav"
+    },
+    {
+      "Index": "26",
+      "Path": "/2021_naturel_3/data_filtree/20210414T121600_2614231112834446_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_3/data_filtree/20210414T121600_2614231112834446_2.0.wav"
+    },
+    {
+      "Index": "27",
+      "Path": "/2021_naturel_2/data_filtree/20210318T121600_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_2/data_filtree/20210318T121600_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "28",
+      "Path": "/2021_naturel_2/data_filtree/20210318T120500_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_2/data_filtree/20210318T120500_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "29",
+      "Path": "/2021_naturel_2/data_filtree/20210318T122700_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_2/data_filtree/20210318T122700_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "30",
+      "Path": "/2022_passe_1/data_filtree/20221116T121500_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_1/data_filtree/20221116T121500_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "31",
+      "Path": "/2022_passe_1/data_filtree/20221116T120500_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_1/data_filtree/20221116T120500_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "32",
+      "Path": "/2022_passe_1/data_filtree/20221116T122500_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_1/data_filtree/20221116T122500_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "33",
+      "Path": "/2022_naturel_1/data_filtree/20221116T120500_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_1/data_filtree/20221116T120500_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "34",
+      "Path": "/2022_naturel_1/data_filtree/20221116T121500_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_1/data_filtree/20221116T121500_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "35",
+      "Path": "/2022_naturel_1/data_filtree/20221116T122500_4407951432584596_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_naturel_1/data_filtree/20221116T122500_4407951432584596_2.0.wav"
+    },
+    {
+      "Index": "36",
+      "Path": "/2021_naturel_1/data_filtree/20210216T120200_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_1/data_filtree/20210216T120200_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "37",
+      "Path": "/2021_naturel_1/data_filtree/20210216T121300_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_1/data_filtree/20210216T121300_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "38",
+      "Path": "/2021_naturel_1/data_filtree/20210216T122400_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_naturel_1/data_filtree/20210216T122400_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "39",
+      "Path": "/2022_passe_3/data_filtree/20221212T122500_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_3/data_filtree/20221212T122500_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "40",
+      "Path": "/2022_passe_3/data_filtree/20221212T121500_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_3/data_filtree/20221212T121500_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "41",
+      "Path": "/2022_passe_3/data_filtree/20221212T120500_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_passe_3/data_filtree/20221212T120500_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "42",
+      "Path": "/2021_touriste_2/data_filtree/20210318T120000_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_2/data_filtree/20210318T120000_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "43",
+      "Path": "/2021_touriste_2/data_filtree/20210318T121100_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_2/data_filtree/20210318T121100_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "44",
+      "Path": "/2021_touriste_2/data_filtree/20210318T122200_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_2/data_filtree/20210318T122200_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "45",
+      "Path": "/2021_touriste_1/data_filtree/20210216T121900_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_1/data_filtree/20210216T121900_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "46",
+      "Path": "/2021_touriste_1/data_filtree/20210216T123000_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_1/data_filtree/20210216T123000_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "47",
+      "Path": "/2021_touriste_1/data_filtree/20210216T120800_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_1/data_filtree/20210216T120800_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "48",
+      "Path": "/2022_touriste_2/data_filtree/20221122T121500_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_touriste_2/data_filtree/20221122T121500_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "49",
+      "Path": "/2022_touriste_2/data_filtree/20221122T120500_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_touriste_2/data_filtree/20221122T120500_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "50",
+      "Path": "/2022_touriste_2/data_filtree/20221122T122500_2614231121130510_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2022_touriste_2/data_filtree/20221122T122500_2614231121130510_2.0.wav"
+    },
+    {
+      "Index": "51",
+      "Path": "/2021_touriste_3/data_filtree/20210413T121000_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_3/data_filtree/20210413T121000_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "52",
+      "Path": "/2021_touriste_3/data_filtree/20210413T123200_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_3/data_filtree/20210413T123200_2614231302179085_2.0.wav"
+    },
+    {
+      "Index": "53",
+      "Path": "/2021_touriste_3/data_filtree/20210413T122100_2614231302179085_2.0.wav",
+      "Date": "2024-04-24 11:40:19",
+      "Site": "/2021_touriste_3/data_filtree/20210413T122100_2614231302179085_2.0.wav"
+    }
+  ],
+  "bands": [
+    {
+      "index": 0,
+      "name": "fish",
+      "low": 70,
+      "high": 2000
+    }
+  ],
+  "integrations": [
+    {
+      "index": 0,
+      "name": "i15",
+      "duration": 15
+    }
+  ],
+  "extractors": [
+    {
+      "index": 0,
+      "name": "vgg",
+      "type": "vgg",
+      "offset": 0,
+      "step": 1000,
+      "isPersist": false
+    }
+  ],
+  "reducers": [
+    {
+      "index": 0,
+      "type": "umap",
+      "dimensions": 2,
+      "bands": [],
+      "integrations": [],
+      "extractors": []
+    },
+    {
+      "index": 1,
+      "type": "umap",
+      "dimensions": 3,
+      "bands": [],
+      "integrations": [],
+      "extractors": []
+    }
+  ],
+  "ranges": [],
+  "autoclusters": [],
+  "digesters": [],
+  "trajectories": [],
+  "indices": []
+}

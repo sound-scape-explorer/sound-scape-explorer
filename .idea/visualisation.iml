@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="GENERAL_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/visualisation">
+      <sourceFolder url="file://$MODULE_DIR$/visualisation/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/audio" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/campaign" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/front" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/out" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/.vite" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
