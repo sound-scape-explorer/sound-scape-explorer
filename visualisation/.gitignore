@@ -91,7 +91,8 @@ typings/
 # Electron-Forge
 out/
 
-# Visualisation services (front and audio)
+# Visualisation services (front, audio, campaign)
 front
 audio
 scratch.wav
+campaign

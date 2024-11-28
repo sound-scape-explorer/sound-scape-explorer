@@ -16,8 +16,10 @@ from processing.actions.repack_storage import repack_storage
 from processing.actions.trace_relative_trajectories import trace_relative_trajectories
 from processing.actions.trace_trajectories import trace_trajectories
 from processing.config.Config import Config
+from processing.config.JsonConfig import JsonConfig
 from processing.storage.Storage import Storage
 from processing.utils.ask_menu import MenuChoice, ask_menu
+from processing.utils.get_file_type import get_file_type
 from processing.utils.prettify_exceptions import prettify_exceptions
 from processing.utils.print_welcome import print_welcome
 from processing.utils.quit_sse import quit_sse
@@ -37,7 +39,14 @@ def main(
     global last_choice
 
     if config_path is not None:
-        config = Config(path=config_path)
+        file_type = get_file_type(config_path)
+
+        if file_type == "JSON":
+            config = JsonConfig(path=config_path)
+            print(config)
+        else:
+            config = Config(path=config_path)
+
         stored_config = config
     else:
         config = stored_config

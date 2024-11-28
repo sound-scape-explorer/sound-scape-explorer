@@ -1,0 +1,8 @@
+@use "sass:math";
+@use "src/styles/layout";
+
+.small {
+  & > input {
+    font-size: 80%;
+  }
+}

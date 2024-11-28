@@ -1,0 +1,26 @@
+@use "src/styles/colors";
+
+.submit {
+  padding: 0 4px;
+  border: 1px solid black;
+  border-radius: 4px;
+
+  & > span {
+    font-size: 80%;
+  }
+
+}
+
+.enabled {
+  &:hover {
+    background: colors.$active-color;
+  }
+}
+
+.disabled {
+  background: gainsboro;
+
+  &:hover {
+    cursor: not-allowed;
+  }
+}

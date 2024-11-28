@@ -1,4 +1,4 @@
-import Excel from 'exceljs';
+import * as Excel from 'exceljs';
 
 import {render} from '../renderer';
 
