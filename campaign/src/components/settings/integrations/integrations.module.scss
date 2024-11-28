@@ -1,0 +1,29 @@
+$grid: 6em 4em repeat(2, 10em);
+
+.form {
+  display: grid;
+  grid-template-columns: $grid;
+}
+
+.integrations {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.integration {
+  display: grid;
+  margin-bottom: 4px;
+  gap: 4px;
+  grid-template-columns: $grid;
+
+  & > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  & > h2 {
+    justify-self: center;
+  }
+}

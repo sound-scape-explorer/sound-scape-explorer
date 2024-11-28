@@ -1,0 +1,30 @@
+$grid: 6em 4em repeat(3, 8em);
+
+.form {
+  display: grid;
+  grid-template-columns: $grid;
+}
+
+.bands {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.band {
+  display: grid;
+  margin-bottom: 4px;
+  gap: 4px;
+  grid-template-columns: $grid;
+
+  & > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  & > h2 {
+    justify-self: center;
+  }
+}
+

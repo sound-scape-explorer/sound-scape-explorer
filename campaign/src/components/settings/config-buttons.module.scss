@@ -1,0 +1,15 @@
+.buttons {
+  display: flex;
+  gap: 4px;
+  justify-self: center;
+
+  & > button {
+    width: 24px;
+    border: 1px solid black;
+    border-radius: 4px;
+
+    &:hover {
+      background: red;
+    }
+  }
+}
