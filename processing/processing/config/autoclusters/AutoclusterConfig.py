@@ -133,8 +133,7 @@ class AutoclusterConfig:
             labels = clustering.labels_.tolist()
         except MemoryError:
             MeanDistancesMatrixOutOfMemoryWarning(
-                f"{mean_distances_matrix.shape}",
-                "Filling storage with dummy results...",
+                "Filling storage with dummy results..."
             )
 
             labels = ["MemoryError"] * mean_distances_matrix.shape[0]
