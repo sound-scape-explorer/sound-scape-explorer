@@ -1,5 +1,7 @@
 from typing import List
 
+from numpy import int64
+
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
@@ -29,11 +31,12 @@ class IntegrationStorage:
         names_dataset = storage.read(IntegrationStorage.names)
 
         names = storage.convert_dataset_to_string_list(names_dataset)
-        durations = storage.read(IntegrationStorage.seconds)
+        durations: List[int64] = storage.read(IntegrationStorage.seconds)[:]
+        durations: List[int] = [int(duration) for duration in durations]
 
         integrations = IntegrationConfig.reconstruct(
             names=names,
-            durations=durations[:],
+            durations=durations,
         )
 
         return integrations

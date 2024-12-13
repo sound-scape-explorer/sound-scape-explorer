@@ -7,7 +7,7 @@ import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-ti
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';

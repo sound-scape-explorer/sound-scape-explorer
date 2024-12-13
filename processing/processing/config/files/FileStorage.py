@@ -1,5 +1,6 @@
 from typing import List, Union
 
+from numpy import int64
 from pandas import Timestamp
 
 from processing.config.ConfigParser import ConfigParser
@@ -47,7 +48,8 @@ class FileStorage:
         names_dataset = storage.read(FileStorage.names)
         names = storage.convert_dataset_to_string_list(names_dataset)
 
-        timestamps = storage.read(FileStorage.timestamps)
+        timestamps: List[int64] = storage.read(FileStorage.timestamps)[:]
+        timestamps: List[int] = [int(t) for t in timestamps]
 
         sites_dataset = storage.read(FileStorage.sites)
         sites = storage.convert_dataset_to_string_list(sites_dataset)
@@ -60,14 +62,15 @@ class FileStorage:
         else:
             labels = list(list(sublist) for sublist in labels_dataset.asstr()[:])
 
-        durations = storage.read(FileStorage.durations)
+        durations: List[int64] = storage.read(FileStorage.durations)[:]
+        durations: List[int] = [int(d) for d in durations]
 
         files = FileConfig.reconstruct(
             names=names,
-            timestamps=timestamps[:],
+            timestamps=timestamps,
             sites=sites,
             labels=labels,
-            durations=durations[:],
+            durations=durations,
             audio_path=settings.audio_path,
         )
 

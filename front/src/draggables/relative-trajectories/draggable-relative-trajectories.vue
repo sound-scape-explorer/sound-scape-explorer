@@ -7,12 +7,10 @@ import {useDraggableRelativeTrajectoriesExpand} from 'src/draggables/relative-tr
 import {useRelativeTrajectoriesData} from 'src/draggables/relative-trajectories/use-relative-trajectories-data';
 import {useRelativeTrajectoriesPlotSize} from 'src/draggables/relative-trajectories/use-relative-trajectories-plot-size';
 
-// TODO: split app plot for dedicated relative trajectories
-
 const {names, labels, values, colors, exportName} =
   useRelativeTrajectoriesData();
 const {isExpanded} = useDraggableRelativeTrajectoriesExpand();
-const {width, height} = useRelativeTrajectoriesPlotSize();
+const {height} = useRelativeTrajectoriesPlotSize();
 </script>
 
 <template>
@@ -29,10 +27,10 @@ const {width, height} = useRelativeTrajectoriesPlotSize();
         :colors="colors"
         :export-filename="exportName"
         :height="height"
+        :is-expanded="isExpanded"
         :labels="labels"
         :names="names"
         :values="values"
-        :width="width"
         hover-template="relative-trajectories"
         legend
         title="Relative Trajectories"

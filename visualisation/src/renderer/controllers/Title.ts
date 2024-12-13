@@ -1,8 +1,8 @@
-import {APP_LONG, APP_SHORT} from '../../constants';
-import {VERSION} from '../../version';
+import {APP_LONG, APP_SHORT} from 'src/constants';
+import {VERSION} from 'src/version';
 
 export class Title {
-  private node = document.getElementById('title');
+  private readonly node = document.getElementById('title');
 
   public constructor() {
     this.populate();

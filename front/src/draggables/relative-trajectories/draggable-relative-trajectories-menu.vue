@@ -17,9 +17,8 @@ const {value, options} = useDraggableRelativeTrajectories();
 const {handleUpdate} = useRelativeTrajectoriesData();
 const {isLoading} = useScatterLoading();
 const {handleExportClick} = useRelativeTrajectoriesExport();
-const {width, height} = useRelativeTrajectoriesPlotSize();
+const {height} = useRelativeTrajectoriesPlotSize();
 
-useRefProvide(InjectionKey.relativeTrajectoriesPlotWidth, width);
 useRefProvide(InjectionKey.relativeTrajectoriesPlotHeight, height);
 </script>
 
@@ -48,13 +47,13 @@ useRefProvide(InjectionKey.relativeTrajectoriesPlotHeight, height);
       />
     </div>
 
-    <h2>Plot</h2>
+    <h2>Plot height</h2>
 
     <div :class="$style['last-row']">
       <AppDraggableMenuPlotSizes
         :disabled="false"
         :height="InjectionKey.relativeTrajectoriesPlotHeight"
-        :width="InjectionKey.relativeTrajectoriesPlotWidth"
+        only-factors
       />
 
       <AppButton

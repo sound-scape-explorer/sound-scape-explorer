@@ -5,7 +5,7 @@ import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {type TimelineElement} from 'src/components/timeline/use-timeline-elements';
 import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 
 export function useBodyDrawElements() {
   const {context} = useTimelineContext().body;

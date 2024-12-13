@@ -3,7 +3,7 @@ import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
 import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {type TimelineElement} from 'src/components/timeline/use-timeline-elements';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {getMouseCoordinatesFromCanvas} from 'src/utils/browser';
 import {ref} from 'vue';
 

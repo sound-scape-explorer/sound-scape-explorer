@@ -8,15 +8,18 @@ import {useAppPlotSize} from 'src/composables/use-app-plot-size';
 import {useRefInject} from 'src/composables/use-ref-inject';
 
 interface Props {
-  width: InjectionKey;
-  height: InjectionKey;
+  width?: InjectionKey;
+  height?: InjectionKey;
   disabled: boolean;
+  onlyFactors?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  onlyFactors: false,
+});
 
-const width = useRefInject<number>(props.width);
-const height = useRefInject<number>(props.height);
+const width = props.width ? useRefInject<number>(props.width) : null;
+const height = props.height ? useRefInject<number>(props.height) : null;
 
 const {resize1by1, resize16by10, resize16by9, half, double, resize4by3} =
   useAppPlotSize(width, height);
@@ -25,24 +28,28 @@ const {resize1by1, resize16by10, resize16by9, half, double, resize4by3} =
 <template>
   <NButtonGroup>
     <AppButton
+      v-if="!onlyFactors"
       :disabled="props.disabled"
       :handle-click="resize1by1"
     >
       <IonIcon :icon="resizeOutline" />&nbsp;1:1
     </AppButton>
     <AppButton
+      v-if="!onlyFactors"
       :disabled="props.disabled"
       :handle-click="resize4by3"
     >
       <IonIcon :icon="resizeOutline" />&nbsp;4:3
     </AppButton>
     <AppButton
+      v-if="!onlyFactors"
       :disabled="props.disabled"
       :handle-click="resize16by10"
     >
       <IonIcon :icon="resizeOutline" />&nbsp;16:10
     </AppButton>
     <AppButton
+      v-if="!onlyFactors"
       :disabled="props.disabled"
       :handle-click="resize16by9"
     >

@@ -5,7 +5,7 @@ from h5py import Dataset
 
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
-from processing.constants import MDM_DEFAULT
+from processing.constants import MDM_DEFAULT, MDM_SHAPE_LIMIT
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
@@ -18,33 +18,28 @@ class MeanDistancesMatrix:
     def calculate(
         features: List[Dataset],
     ) -> List[List[float]]:
-        try:
-            from sklearn import metrics
+        shape = len(features[0])
 
-            samples_count = features[0].shape[0]
-            mean_distances_matrix = np.zeros([samples_count, samples_count])
+        if shape > MDM_SHAPE_LIMIT:
+            MeanDistancesMatrixOutOfMemoryWarning("Filling storage with empty array...")
+            return MDM_DEFAULT
 
-            for i in range(len(features)):
-                previous_mean_distances_matrix = mean_distances_matrix
+        from sklearn import metrics
 
-                umap = features[i]
+        mean_distances_matrix = np.zeros([shape, shape])
 
-                current_mean_distances_matrix = metrics.pairwise_distances(umap)
+        for i in range(len(features)):
+            previous_mean_distances_matrix = mean_distances_matrix
 
-                mean_distances_matrix = (
-                    (previous_mean_distances_matrix * i) + current_mean_distances_matrix
-                ) / (i + 1)
+            umap = features[i]
 
-                values = mean_distances_matrix.tolist()
+            current_mean_distances_matrix = metrics.pairwise_distances(umap)
 
-        except MemoryError:
-            MeanDistancesMatrixOutOfMemoryWarning(
-                "null",
-                "Filling storage with empty array...",
-            )
-            values = MDM_DEFAULT
+            mean_distances_matrix = (
+                (previous_mean_distances_matrix * i) + current_mean_distances_matrix
+            ) / (i + 1)
 
-        return values
+            return mean_distances_matrix.tolist()
 
     @staticmethod
     def read_from_storage(

@@ -16,12 +16,6 @@ export interface ElectronAPI {
   joinPath: typeof joinPath;
 }
 
-declare global {
-  interface Window {
-    electronAPI: ElectronAPI;
-  }
-}
-
 contextBridge.exposeInMainWorld('electronAPI', {
   getFileDirectory: getFileDirectory,
   startAudioService: startAudioService,

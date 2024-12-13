@@ -9,7 +9,7 @@ import {
   useTimelineDom,
 } from 'src/components/timeline/use-timeline-dom';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
-import {useIntervalSelector} from 'src/draggables/audio/use-interval-selector';
+import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {onMounted, watch} from 'vue';
 
 export function useBodyLifecycles({width}: BodySize) {
