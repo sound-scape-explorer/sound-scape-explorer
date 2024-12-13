@@ -1,3 +1,28 @@
+# [13.10.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.9.0...v13.10.0) (2024-12-13)
+
+
+### Bug Fixes
+
+* **Front/Timeline:** Improve recenter behaviour ([3aae15d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3aae15de85292a92bdc4abededfe07710b80cab2))
+* **Front:** Fix lower boundary behaviour going backwards + Relocate hook ([25158b4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/25158b4599358c907bf253ac0c2d7dbeb8753751))
+* **Front:** Resize plots automatically ([cb1e16e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb1e16ed5bccad96ced26566b6a8c07e628632ea))
+* **Front:** Watch for auto open on interval selection ([251a361](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/251a361e01492ba69809b331cd868e44ef1ba9e6))
+* **Processing/ComputeRequirements:** Add 4GB hard limit to MDM size ([56f2f6d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/56f2f6d1351d34ba9bab578176d59a24c443dd46))
+* **Processing/Config:** Enforce int typings when reading from storage ([f7ecf4c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f7ecf4caa5c03a2052cc445433a6b1c05d0130f8))
+* **Processing/Config:** Sanitize audio path ([9d7d02f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9d7d02f7e892732be5ace3b42a4b79c104c4d3c1))
+* **Visualisation:** Add path alias resolution ([83f4814](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/83f481424ba3b5ed03d6bd990d0349c2ed7e0aaa))
+
+
+### Features
+
+* **Front/Timeline:** Add recenter option for easy access to selected interval ([32d4533](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/32d4533f1a9218a7de3f114f076a6929fe804833))
+* **Processing/ComputeRequirements:** Add strategies for using embeddings or pca reducer ([e8aec1c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e8aec1c1d85df86eebc9788514d665b390aff095))
+
+
+### Performance Improvements
+
+* **Front/Colors:** Convert computeds to refs for better compasability ([1e5b777](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1e5b7774766cd0c8e904581efdfa97592873a537))
+
 # [13.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.8.0...v13.9.0) (2024-11-15)
 
 
