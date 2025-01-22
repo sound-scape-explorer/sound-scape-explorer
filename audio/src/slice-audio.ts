@@ -29,9 +29,9 @@ export function sliceAudio(
       '-acodec',
       'copy',
       '-ss',
-      `00:00:${start}`,
+      start.toString(),
       '-t',
-      `00:00:${duration}`,
+      duration.toString(),
       tempPath,
     ]);
 
