@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/front" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/processing" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/visualisation" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/campaign" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/processing/build" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/visualisation/.vite" />
