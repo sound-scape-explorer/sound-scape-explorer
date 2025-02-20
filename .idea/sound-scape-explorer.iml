@@ -3,11 +3,13 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/audio" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/front" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/processing" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/visualisation" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/campaign" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/audio/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/campaign/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/front/public" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/front/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/processing/processing" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/processing/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/visualisation/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/processing/build" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/visualisation/.vite" />
