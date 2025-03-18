@@ -22,6 +22,7 @@ export const COMPUTATION_STRATEGY_DEFAULT = ComputationStrategy.Umap;
 export const COMPUTATION_DIMENSIONS_DEFAULT = 3;
 export const COMPUTATION_ITERATIONS_DEFAULT = 10;
 export const DISPLAY_SEED_DEFAULT = 42000;
+export const MEMORY_LIMIT_DEFAULT = 4;
 
 // extractors/indices defaults
 export const OFFSET_DEFAULT = 0;

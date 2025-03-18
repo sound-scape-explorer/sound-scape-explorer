@@ -7,12 +7,13 @@ import {
   COMPUTATION_ITERATIONS_DEFAULT,
   COMPUTATION_STRATEGY_DEFAULT,
   DISPLAY_SEED_DEFAULT,
+  MEMORY_LIMIT_DEFAULT,
   SAMPLE_RATE_DEFAULT,
   STORAGE_PATH_DEFAULT,
   TIMELINE_ORIGIN_DEFAULT,
   TIMEZONE_DEFAULT,
 } from 'src/constants.ts';
-import  {type ComputationStrategy} from 'src/enums.ts';
+import {type ComputationStrategy} from 'src/enums.ts';
 import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
 
 const settingsAtom = atom<Settings>({
@@ -26,6 +27,7 @@ const settingsAtom = atom<Settings>({
   computationDimensions: COMPUTATION_DIMENSIONS_DEFAULT,
   computationIterations: COMPUTATION_ITERATIONS_DEFAULT,
   displaySeed: DISPLAY_SEED_DEFAULT,
+  memoryLimit: MEMORY_LIMIT_DEFAULT, // gigabytes
 });
 
 export interface Settings {
@@ -39,6 +41,7 @@ export interface Settings {
   computationDimensions: number;
   computationIterations: number;
   displaySeed: number;
+  memoryLimit: number;
 }
 
 export function useSettingsState() {

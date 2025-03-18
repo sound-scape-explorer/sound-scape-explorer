@@ -10,7 +10,8 @@
     "computationStrategy": "umap",
     "computationDimensions": 3,
     "computationIterations": 10,
-    "displaySeed": 42000
+    "displaySeed": 42000,
+    "memoryLimit": 4
   },
   "files": [
     {

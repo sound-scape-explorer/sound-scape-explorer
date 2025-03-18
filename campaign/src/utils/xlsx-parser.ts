@@ -12,6 +12,7 @@ import {
   DISPLAY_SEED_DEFAULT,
   IS_PERSIST_DEFAULT,
   LABEL_PREFIX,
+  MEMORY_LIMIT_DEFAULT,
   OFFSET_DEFAULT,
   REDUCER_DIMENSIONS_DEFAULT,
   SAMPLE_RATE_DEFAULT,
@@ -227,6 +228,7 @@ export class XlsxParser {
       displaySeed: Number(
         this.readCell(sheet, cells.displaySeed) ?? DISPLAY_SEED_DEFAULT,
       ),
+      memoryLimit: MEMORY_LIMIT_DEFAULT,
     };
 
     // TODO: check me

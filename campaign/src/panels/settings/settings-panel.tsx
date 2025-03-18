@@ -6,6 +6,7 @@ import {SettingsPanelComputationDimensions} from 'src/panels/settings/settings-p
 import {SettingsPanelComputationIterations} from 'src/panels/settings/settings-panel-computation-iterations.tsx';
 import {SettingsPanelComputationStrategy} from 'src/panels/settings/settings-panel-computation-strategy.tsx';
 import {SettingsPanelDisplaySeed} from 'src/panels/settings/settings-panel-display-seed.tsx';
+import {SettingsPanelMemoryLimit} from 'src/panels/settings/settings-panel-memory-limit.tsx';
 import {SettingsPanelSampleRate} from 'src/panels/settings/settings-panel-sample-rate.tsx';
 import {SettingsPanelStoragePath} from 'src/panels/settings/settings-panel-storage-path.tsx';
 import {SettingsPanelTimelineOrigin} from 'src/panels/settings/settings-panel-timeline-origin.tsx';
@@ -25,6 +26,7 @@ export function SettingsPanel() {
       <SettingsPanelComputationDimensions />
       <SettingsPanelComputationIterations />
       <SettingsPanelDisplaySeed />
+      <SettingsPanelMemoryLimit />
     </Card>
   );
 }
