@@ -23,11 +23,11 @@ export function SettingsPanelAudioPath() {
               compact
               title="How to update?"
             >
-              <div>Drag a folder over the input field to change its value.</div>
+              <div>Drag a folder onto the input field to change its value.</div>
             </Callout>
             <Callout
               compact
-              title="Validation status"
+              title="Validation"
             >
               <div>
                 Status is valid when the full paths from audio folder and audio
