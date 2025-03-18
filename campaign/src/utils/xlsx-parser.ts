@@ -231,13 +231,10 @@ export class XlsxParser {
       memoryLimit: MEMORY_LIMIT_DEFAULT,
     };
 
-    // TODO: check me
     const fullPath = window.electronAPI.joinPath(
       this.directory,
       settings.audioPath,
     );
-
-    console.log(this.directory, settings.audioPath);
 
     return {
       ...settings,
