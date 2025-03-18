@@ -5,12 +5,14 @@ import {
   AUDIO_PATH_DEFAULT,
   COMPUTATION_DIMENSIONS_DEFAULT,
   COMPUTATION_ITERATIONS_DEFAULT,
+  COMPUTATION_STRATEGY_DEFAULT,
   DISPLAY_SEED_DEFAULT,
   SAMPLE_RATE_DEFAULT,
   STORAGE_PATH_DEFAULT,
   TIMELINE_ORIGIN_DEFAULT,
   TIMEZONE_DEFAULT,
 } from 'src/constants.ts';
+import  {type ComputationStrategy} from 'src/enums.ts';
 import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
 
 const settingsAtom = atom<Settings>({
@@ -20,6 +22,7 @@ const settingsAtom = atom<Settings>({
   timelineOrigin: TIMELINE_ORIGIN_DEFAULT,
   audioHost: AUDIO_HOST_DEFAULT,
   timezone: TIMEZONE_DEFAULT,
+  computationStrategy: COMPUTATION_STRATEGY_DEFAULT,
   computationDimensions: COMPUTATION_DIMENSIONS_DEFAULT,
   computationIterations: COMPUTATION_ITERATIONS_DEFAULT,
   displaySeed: DISPLAY_SEED_DEFAULT,
@@ -32,6 +35,7 @@ export interface Settings {
   timelineOrigin: string;
   audioHost: string;
   timezone: string;
+  computationStrategy: ComputationStrategy;
   computationDimensions: number;
   computationIterations: number;
   displaySeed: number;

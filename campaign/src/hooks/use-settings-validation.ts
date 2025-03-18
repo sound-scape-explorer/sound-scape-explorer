@@ -1,6 +1,7 @@
 import {isAfter} from 'date-fns';
 import {useCallback, useMemo} from 'react';
 import {TIMELINE_ORIGIN_MIN} from 'src/constants.ts';
+import {ComputationStrategy} from 'src/enums.ts';
 import {useFileValidation} from 'src/hooks/use-file-validation.ts';
 import {useSettingsState} from 'src/hooks/use-settings-state.ts';
 
@@ -45,6 +46,16 @@ export function useSettingsValidation() {
     return settings.displaySeed > 0;
   }, [settings]);
 
+  const isComputationStrategyUmap = useMemo(
+    () => settings.computationStrategy === ComputationStrategy.Umap,
+    [settings.computationStrategy],
+  );
+
+  const isComputationStrategyPca = useMemo(
+    () => settings.computationStrategy === ComputationStrategy.Pca,
+    [settings.computationStrategy],
+  );
+
   const isValid = useMemo(() => {
     return (
       isStoragePathValid() &&
@@ -79,6 +90,8 @@ export function useSettingsValidation() {
     isComputationDimensionsValid,
     isComputationIterationsValid,
     isDisplaySeedValid,
+    isComputationStrategyUmap,
+    isComputationStrategyPca,
     isValid,
   };
 }

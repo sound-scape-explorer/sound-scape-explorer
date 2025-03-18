@@ -4,6 +4,7 @@ import {SettingsPanelAudioHost} from 'src/panels/settings/settings-panel-audio-h
 import {SettingsPanelAudioPath} from 'src/panels/settings/settings-panel-audio-path.tsx';
 import {SettingsPanelComputationDimensions} from 'src/panels/settings/settings-panel-computation-dimensions.tsx';
 import {SettingsPanelComputationIterations} from 'src/panels/settings/settings-panel-computation-iterations.tsx';
+import {SettingsPanelComputationStrategy} from 'src/panels/settings/settings-panel-computation-strategy.tsx';
 import {SettingsPanelDisplaySeed} from 'src/panels/settings/settings-panel-display-seed.tsx';
 import {SettingsPanelSampleRate} from 'src/panels/settings/settings-panel-sample-rate.tsx';
 import {SettingsPanelStoragePath} from 'src/panels/settings/settings-panel-storage-path.tsx';
@@ -20,6 +21,7 @@ export function SettingsPanel() {
       <SettingsPanelTimelineOrigin />
       <SettingsPanelAudioHost />
       <SettingsPanelTimezone />
+      <SettingsPanelComputationStrategy />
       <SettingsPanelComputationDimensions />
       <SettingsPanelComputationIterations />
       <SettingsPanelDisplaySeed />

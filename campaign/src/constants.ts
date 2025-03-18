@@ -1,3 +1,5 @@
+import {ComputationStrategy} from 'src/enums.ts';
+
 export const JSON_TYPE = 'application/json';
 export const XLSX_TYPE =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -16,6 +18,7 @@ export const SAMPLE_RATE_DEFAULT = 44100;
 export const TIMELINE_ORIGIN_DEFAULT = '2001-01-01 00:00:01';
 export const AUDIO_HOST_DEFAULT = '';
 export const TIMEZONE_DEFAULT = '';
+export const COMPUTATION_STRATEGY_DEFAULT = ComputationStrategy.Umap;
 export const COMPUTATION_DIMENSIONS_DEFAULT = 3;
 export const COMPUTATION_ITERATIONS_DEFAULT = 10;
 export const DISPLAY_SEED_DEFAULT = 42000;

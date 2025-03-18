@@ -8,6 +8,7 @@ import {
   AUTOCLUSTER_MIN_SAMPLES_DEFAULT,
   COMPUTATION_DIMENSIONS_DEFAULT,
   COMPUTATION_ITERATIONS_DEFAULT,
+  COMPUTATION_STRATEGY_DEFAULT,
   DISPLAY_SEED_DEFAULT,
   IS_PERSIST_DEFAULT,
   LABEL_PREFIX,
@@ -214,6 +215,7 @@ export class XlsxParser {
       timezone: String(
         this.readCell(sheet, cells.timezone) ?? TIMEZONE_DEFAULT,
       ),
+      computationStrategy: COMPUTATION_STRATEGY_DEFAULT,
       computationDimensions: Number(
         this.readCell(sheet, cells.computationDimensions) ??
           COMPUTATION_DIMENSIONS_DEFAULT,

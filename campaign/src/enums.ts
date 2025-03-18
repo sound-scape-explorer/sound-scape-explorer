@@ -1,3 +1,9 @@
+export enum ComputationStrategy {
+  Umap = 'umap',
+  Pca = 'pca',
+  Embeddings = 'embeddings',
+}
+
 export enum XlsxSheet {
   Settings = 'Settings',
   Files = 'Files',

@@ -6,7 +6,11 @@ import {NumberInput} from 'src/primitives/number-input';
 
 export function SettingsPanelComputationDimensions() {
   const {settings, update} = useSettingsState();
-  const {isComputationDimensionsValid} = useSettingsValidation();
+  const {
+    isComputationDimensionsValid,
+    isComputationStrategyUmap,
+    isComputationStrategyPca,
+  } = useSettingsValidation();
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
@@ -15,6 +19,7 @@ export function SettingsPanelComputationDimensions() {
         defaultValue={settings.computationDimensions}
         onBlur={(n) => update('computationDimensions', n)}
         intent={isComputationDimensionsValid() ? 'success' : 'danger'}
+        disabled={!isComputationStrategyUmap && !isComputationStrategyPca}
       />
     </div>
   );

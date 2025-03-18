@@ -7,7 +7,11 @@ import {NumberInput} from 'src/primitives/number-input';
 
 export function SettingsPanelComputationIterations() {
   const {settings, update} = useSettingsState();
-  const {isComputationIterationsValid} = useSettingsValidation();
+  const {
+    isComputationIterationsValid,
+    isComputationStrategyUmap,
+    isComputationStrategyPca,
+  } = useSettingsValidation();
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
@@ -17,6 +21,7 @@ export function SettingsPanelComputationIterations() {
           defaultValue={settings.computationIterations}
           onBlur={(n) => update('computationIterations', n)}
           intent={isComputationIterationsValid() ? 'success' : 'danger'}
+          disabled={!isComputationStrategyUmap && !isComputationStrategyPca}
         />
       </Tooltip>
     </div>
