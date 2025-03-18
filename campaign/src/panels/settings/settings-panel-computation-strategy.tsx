@@ -14,10 +14,7 @@ export function SettingsPanelComputationStrategy() {
       <Drawer
         content={
           <div className="flex column gap mt">
-            <Callout
-              compact
-              title="Help"
-            >
+            <Callout compact>
               <div>
                 The computation step is needed to feed data for auto-clustering
                 and acoustic indices algorithms.
