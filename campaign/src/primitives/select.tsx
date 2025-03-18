@@ -69,7 +69,7 @@ export function Select<T>({
       activeItem={current}
       itemRenderer={(...props) => renderItem(...props, forwardKey, selector)}
       onItemSelect={onSelect}
-      filterable={false} // TODO: add
+      filterable={false}
       popoverProps={{minimal: true}}
     >
       <Button
