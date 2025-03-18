@@ -27,10 +27,10 @@ export function SettingsPanelStoragePath() {
                 <code>storage</code>
               </div>
               <div>
-                <code>/home/user/sse/campaign/storage.h5</code>
+                <code>/home/user/sse/my_campaign/storage.h5</code>
               </div>
               <div>
-                <code>D:\sse\campaign\storage.h5</code>
+                <code>D:\sse\my_campaign\storage.h5</code>
               </div>
             </Callout>
           </div>
