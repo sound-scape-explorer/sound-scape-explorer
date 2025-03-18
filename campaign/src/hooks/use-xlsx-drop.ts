@@ -69,7 +69,7 @@ export function useXlsxDrop() {
           const trajectories = parser.parseTrajectories(properties);
           setTrajectories(trajectories);
 
-          navigate('files');
+          navigate('settings');
         } catch (error) {
           notify(`${error}`, 'danger');
         }

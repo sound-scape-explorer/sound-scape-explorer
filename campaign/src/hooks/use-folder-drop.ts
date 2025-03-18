@@ -34,7 +34,7 @@ export function useFolderDrop() {
       });
 
       loadFromFolder(aliases);
-      navigate('files');
+      navigate('settings');
     },
     [loadFromFolder, navigate, update],
   );

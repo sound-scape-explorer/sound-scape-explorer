@@ -56,13 +56,13 @@ export function DefaultLayout() {
                 disabled={isLoaded}
               />
               <Tab
-                id="files"
-                title="Files"
+                id="settings"
+                title="Settings"
                 disabled={!isLoaded}
               />
               <Tab
-                id="settings"
-                title="Settings"
+                id="files"
+                title="Files"
                 disabled={!isLoaded}
               />
               <Tab

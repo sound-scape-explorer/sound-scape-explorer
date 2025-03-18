@@ -65,7 +65,7 @@ export function useJsonDrop() {
 
       loadFromJson(json.files);
 
-      navigate('files');
+      navigate('settings');
     },
     [
       navigate,
