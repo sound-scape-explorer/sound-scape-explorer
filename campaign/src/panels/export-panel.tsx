@@ -18,7 +18,9 @@ export function ExportPanel() {
       <ConfigCallout />
       <MetricsCallout />
 
-      <Text>Export your campaign project to JSON</Text>
+      <Text>
+        Export your campaign project to <code>.json</code>
+      </Text>
 
       <Button
         onClick={exportToJson}
@@ -29,8 +31,8 @@ export function ExportPanel() {
       </Button>
 
       <Text>
-        Import the download file into the{' '}
-        <span className="i b">Processing</span> module to generate your data
+        Import the downloaded file into the{' '}
+        <span className="i b">Processing</span> module to generate your data.
       </Text>
     </Card>
   );
