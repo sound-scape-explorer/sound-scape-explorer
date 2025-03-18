@@ -1,3 +1,4 @@
+import {isAfter, isBefore} from 'date-fns';
 import {useCallback} from 'react';
 import {
   type ConfigTrajectory,
@@ -25,6 +26,16 @@ export function useTrajectoryValidation() {
     return t.labelProperty !== undefined;
   }, []);
 
+  const isStartValid = useCallback(
+    (t: ConfigTrajectory) => isBefore(new Date(t.start), new Date(t.end)),
+    [],
+  );
+
+  const isEndValid = useCallback(
+    (t: ConfigTrajectory) => isAfter(new Date(t.end), new Date(t.start)),
+    [],
+  );
+
   const validate = useCallback(() => {
     const l = trajectories.length;
 
@@ -44,14 +55,29 @@ export function useTrajectoryValidation() {
         v.content = 'invalid label properties';
         break;
       }
+
+      if (!isStartValid(t) || !isEndValid(t)) {
+        v.intent = 'danger';
+        v.content = 'invalid dates';
+        break;
+      }
     }
 
     return v;
-  }, [trajectories, createValidation, isNameValid, isLabelPropertyValid]);
+  }, [
+    trajectories,
+    createValidation,
+    isNameValid,
+    isLabelPropertyValid,
+    isStartValid,
+    isEndValid,
+  ]);
 
   return {
     validate,
     isNameValid,
     isLabelPropertyValid,
+    isStartValid,
+    isEndValid,
   };
 }

@@ -16,8 +16,13 @@ import styles from './metrics-trajectories.module.scss';
 export function MetricsTrajectories() {
   const {trajectories, add, update} = useTrajectoryState();
   const {getSlug} = useTrajectorySlug();
-  const {validate, isNameValid, isLabelPropertyValid} =
-    useTrajectoryValidation();
+  const {
+    validate,
+    isNameValid,
+    isLabelPropertyValid,
+    isStartValid,
+    isEndValid,
+  } = useTrajectoryValidation();
   const validation = useMemo(() => validate(), [validate]);
   const {properties} = useFilesLabels();
 
@@ -42,12 +47,14 @@ export function MetricsTrajectories() {
           <DatePicker
             value={t.start}
             onChange={(d) => d !== null && update(t, 'start', d)}
+            intent={isStartValid(t) ? 'success' : 'danger'}
             small
           />
 
           <DatePicker
             value={t.end}
             onChange={(d) => d !== null && update(t, 'end', d)}
+            intent={isEndValid(t) ? 'success' : 'danger'}
             small
           />
 
