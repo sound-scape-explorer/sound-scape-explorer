@@ -79,9 +79,7 @@ export function FilesLabels() {
                   <Text className="p">
                     <H5>Confirm deletion</H5>
                     <p>
-                      You are about to delete <b>{selected ?? ''}</b>.
-                      <br />
-                      This can&apos;t be undone.
+                      You are about to delete <b>{selected ?? ''}</b>
                     </p>
                     <div
                       style={{
