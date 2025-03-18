@@ -40,7 +40,10 @@ export function DefaultLayout() {
               <Icon icon={isDark ? <Moon /> : <Flash />} />
             </NavbarHeading>
           </NavbarGroup>
-          <NavbarGroup align={Alignment.END}>
+          <NavbarGroup
+            className={styles.navbar}
+            align={Alignment.END}
+          >
             <Tabs
               id="tabs"
               selectedTabId={index}
