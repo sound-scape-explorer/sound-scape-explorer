@@ -28,7 +28,7 @@ interface Props<T> {
   items: T[];
   current: T | null;
   onSelect: (item: T) => void;
-  placeholder: string;
+  placeholder?: string;
   forwardKey?: keyof T | null;
   selector?: keyof T | null;
   disabled?: boolean;
@@ -74,6 +74,7 @@ export function Select<T>({
     >
       <Button
         fill
+        alignText="left"
         text={getText()}
         endIcon="double-caret-vertical"
         disabled={disabled}
