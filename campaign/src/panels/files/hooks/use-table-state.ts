@@ -1,6 +1,6 @@
 import {type Intent} from '@blueprintjs/core';
 import {atom, useAtom} from 'jotai';
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 import {useNotify} from 'src/hooks/use-notify.ts';
 import {addPrefixToLabelProperty} from 'src/utils/files.ts';
 import {filterOutKey} from 'src/utils/objects.ts';
@@ -326,8 +326,16 @@ export function useTableState() {
         };
       });
     },
-    [getColNames, findColumnByName, setState, state],
+    [getColNames, setState, state, getTableLength],
   );
+
+  const isUndoStackEmpty = useMemo(() => {
+    return state.past.length === 0;
+  }, [state]);
+
+  const isRedoStackEmpty = useMemo(() => {
+    return state.future.length === 0;
+  }, [state]);
 
   const undo = useCallback(() => {
     setState((prev) => {
@@ -376,5 +384,7 @@ export function useTableState() {
     clearHistory,
     getTableLength,
     updatePathIntents,
+    isUndoStackEmpty,
+    isRedoStackEmpty,
   };
 }
