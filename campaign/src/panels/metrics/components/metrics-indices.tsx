@@ -18,14 +18,14 @@ import {Select} from 'src/primitives/select.tsx';
 import styles from './metrics-indices.module.scss';
 
 const drawer: DrawerContentProps['content'] = [
-  [MetricsIndexType.leq_maad, 'The Leq using maad library'],
-  [MetricsIndexType.ht, 'The temporal entropy'],
-  [MetricsIndexType.hf, 'The frequency entropy'],
-  [MetricsIndexType.med, 'The temporal median'],
-  [MetricsIndexType.ndsi, 'The normalized difference soundscape index'],
-  [MetricsIndexType.aci, 'The acoustic complexity index'],
-  [MetricsIndexType.adi, 'The acoustic diversity index'],
-  [MetricsIndexType.bi, 'The bioacoustics index'],
+  [MetricsIndexType.leq_maad, 'The Leq using maad library.'],
+  [MetricsIndexType.ht, 'The temporal entropy.'],
+  [MetricsIndexType.hf, 'The frequency entropy.'],
+  [MetricsIndexType.med, 'The temporal median.'],
+  [MetricsIndexType.ndsi, 'The normalized difference soundscape index.'],
+  [MetricsIndexType.aci, 'The acoustic complexity index.'],
+  [MetricsIndexType.adi, 'The acoustic diversity index.'],
+  [MetricsIndexType.bi, 'The bioacoustics index.'],
 ];
 
 export function MetricsIndices() {

@@ -21,10 +21,10 @@ import styles from './config-neural-extractors.module.scss';
 
 const drawer: DrawerContentProps['content'] = [
   [ConfigExtractorType.vgg, 'The VGGish neural network.'],
-  [ConfigExtractorType.melogram, 'The melogram (VGGish input)'],
+  [ConfigExtractorType.melogram, 'The melogram (VGGish input).'],
   [
     ConfigExtractorType.melspectrum,
-    'The melspectrum (over 1s with same other parameters than melogram)',
+    'The melspectrum (over 1s with same other parameters than melogram).',
   ],
 ];
 
