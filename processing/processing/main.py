@@ -24,6 +24,7 @@ from processing.utils.prettify_exceptions import prettify_exceptions
 from processing.utils.print_welcome import print_welcome
 from processing.utils.quit_sse import quit_sse
 
+
 stored_config: Config
 last_choice: Optional[MenuChoice] = None
 
