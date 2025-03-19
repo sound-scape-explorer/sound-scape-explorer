@@ -16,8 +16,17 @@ import {Select} from 'src/primitives/select.tsx';
 import styles from './metrics-digesters.module.scss';
 
 const drawer: DrawerContentProps['content'] = [
-  ['Silhouette', 'The silhouette between subtypes of a given cluster.'],
-  ['Contingency', 'Contingency between two clusters.'],
+  [
+    DigesterType.silhouette,
+    'The silhouette between subtypes of a given cluster.',
+  ],
+  [DigesterType.contingency, 'Contingency between two clusters.'],
+  [DigesterType.sum_var, 'The sum variance.'],
+  [DigesterType.sum_std, 'The sum standard deviation.'],
+  [DigesterType.mean_std, 'The mean standard deviation.'],
+  [DigesterType.mean_spreading, 'The mean spreading.'],
+  [DigesterType.distance, 'The distance between subtypes of a given cluster.'],
+  [DigesterType.overlap, 'The overlap between subtypes of a given cluster.'],
 ];
 
 export function MetricsDigesters() {
