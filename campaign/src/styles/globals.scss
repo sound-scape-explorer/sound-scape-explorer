@@ -1,6 +1,8 @@
 @use "src/styles/layout";
 @use "sass:math";
 
+// TODO: add global scrolling overflow y
+
 .flex {
   display: flex;
 }

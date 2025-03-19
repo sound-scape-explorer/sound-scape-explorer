@@ -44,6 +44,7 @@ import {version} from 'src/version.ts';
 
 export interface ExportJson {
   version: string;
+  isValid: boolean; // TODO: Add flag for processing easiness
   settings: Settings;
   files: ConfigFile[];
   bands: ConfigBand[];

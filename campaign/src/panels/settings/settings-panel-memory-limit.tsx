@@ -19,10 +19,11 @@ export function SettingsPanelMemoryLimit() {
     <div className={clsx(styles.row, 'align gap')}>
       <Drawer content={<DrawerContent content={drawer} />}>
         <b className={clsx(styles.rowTitle, 'flex grow help')}>
-          Memory limit (GB)
+          MDM max memory (GB)
         </b>
       </Drawer>
 
+      {/* TODO: add NumberInput instead */}
       <Slider
         min={4}
         max={64}
