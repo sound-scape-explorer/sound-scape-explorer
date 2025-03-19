@@ -1,4 +1,3 @@
-import {Callout} from '@blueprintjs/core';
 import {useMemo} from 'react';
 import {useDigesterSlug} from 'src/panels/metrics/hooks/use-digester-slug.ts';
 import {
@@ -7,10 +6,19 @@ import {
 } from 'src/panels/metrics/hooks/use-digester-state.ts';
 import {useDigesterValidation} from 'src/panels/metrics/hooks/use-digester-validation.ts';
 import {Drawer} from 'src/primitives/drawer.tsx';
+import {
+  DrawerContent,
+  type DrawerContentProps,
+} from 'src/primitives/drawer-content.tsx';
 import {GenericSection} from 'src/primitives/generic-section/generic-section.tsx';
 import {Select} from 'src/primitives/select.tsx';
 
 import styles from './metrics-digesters.module.scss';
+
+const drawer: DrawerContentProps['content'] = [
+  ['Silhouette', 'The silhouette between subtypes of a given cluster.'],
+  ['Contingency', 'Contingency between two clusters.'],
+];
 
 export function MetricsDigesters() {
   const {digesters, add, update} = useDigesterState();
@@ -39,25 +47,7 @@ export function MetricsDigesters() {
         </>
       )}
     >
-      <Drawer
-        content={
-          <div className="flex column gap mt">
-            <Callout
-              compact
-              title="Silhouette"
-            >
-              The silhouette between subtypes of a given cluster.
-            </Callout>
-
-            <Callout
-              compact
-              title="Contingency"
-            >
-              Contingency between two clusters.
-            </Callout>
-          </div>
-        }
-      >
+      <Drawer content={<DrawerContent content={drawer} />}>
         <div className="help flex grow center">type</div>
       </Drawer>
     </GenericSection>

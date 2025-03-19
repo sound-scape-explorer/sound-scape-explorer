@@ -1,4 +1,4 @@
-import {Callout, Checkbox} from '@blueprintjs/core';
+import {Checkbox} from '@blueprintjs/core';
 import {useMemo} from 'react';
 import {useIndexSlug} from 'src/panels/metrics/hooks/use-index-slug.ts';
 import {
@@ -7,13 +7,17 @@ import {
 } from 'src/panels/metrics/hooks/use-index-state.ts';
 import {useIndexValidation} from 'src/panels/metrics/hooks/use-index-validation.ts';
 import {Drawer} from 'src/primitives/drawer.tsx';
+import {
+  DrawerContent,
+  type DrawerContentProps,
+} from 'src/primitives/drawer-content.tsx';
 import {GenericSection} from 'src/primitives/generic-section/generic-section.tsx';
 import {NumberInput} from 'src/primitives/number-input.tsx';
 import {Select} from 'src/primitives/select.tsx';
 
 import styles from './metrics-indices.module.scss';
 
-const drawer: [MetricsIndexType, string][] = [
+const drawer: DrawerContentProps['content'] = [
   [MetricsIndexType.leq_maad, 'The Leq using maad library'],
   [MetricsIndexType.ht, 'The temporal entropy'],
   [MetricsIndexType.hf, 'The frequency entropy'],
@@ -70,21 +74,7 @@ export function MetricsIndices() {
         </>
       )}
     >
-      <Drawer
-        content={
-          <div className="flex column gap mt">
-            {drawer.map((item) => (
-              <Callout
-                key={item[0]}
-                compact
-                title={item[0]}
-              >
-                {item[1]}
-              </Callout>
-            ))}
-          </div>
-        }
-      >
+      <Drawer content={<DrawerContent content={drawer} />}>
         <div className="help flex grow center">type</div>
       </Drawer>
 

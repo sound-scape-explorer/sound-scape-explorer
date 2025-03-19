@@ -1,4 +1,4 @@
-import {Callout, Checkbox} from '@blueprintjs/core';
+import {Checkbox} from '@blueprintjs/core';
 import {useMemo} from 'react';
 import {useConfigTemplates} from 'src/panels/config/hooks/use-config-templates.ts';
 import {useExtractorSlug} from 'src/panels/config/hooks/use-extractor-slug.ts';
@@ -8,12 +8,25 @@ import {
 } from 'src/panels/config/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/config/hooks/use-extractor-validation.ts';
 import {Drawer} from 'src/primitives/drawer.tsx';
+import {
+  DrawerContent,
+  type DrawerContentProps,
+} from 'src/primitives/drawer-content.tsx';
 import {GenericSection} from 'src/primitives/generic-section/generic-section.tsx';
 import {NumberInput} from 'src/primitives/number-input';
 import {Select} from 'src/primitives/select';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './config-neural-extractors.module.scss';
+
+const drawer: DrawerContentProps['content'] = [
+  [ConfigExtractorType.vgg, 'The VGGish neural network.'],
+  [ConfigExtractorType.melogram, 'The melogram (VGGish input)'],
+  [
+    ConfigExtractorType.melspectrum,
+    'The melspectrum (over 1s with same other parameters than melogram)',
+  ],
+];
 
 export function ConfigExtractors() {
   const {hasTemplate} = useConfigTemplates();
@@ -75,32 +88,7 @@ export function ConfigExtractors() {
       )}
     >
       <div>name</div>
-      <Drawer
-        content={
-          <div className="flex column gap mt">
-            <Callout
-              compact
-              title="VGGish"
-            >
-              The VGGish neural network.
-            </Callout>
-
-            <Callout
-              compact
-              title="Melogram"
-            >
-              The melogram (VGGish input)
-            </Callout>
-
-            <Callout
-              compact
-              title="Melspectrum"
-            >
-              The melspectrum (over 1s with same other parameters than melogram)
-            </Callout>
-          </div>
-        }
-      >
+      <Drawer content={<DrawerContent content={drawer} />}>
         <div className="help flex grow center">type</div>
       </Drawer>
       <div>offset (ms)</div>
