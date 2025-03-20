@@ -26,6 +26,10 @@ export function useTrajectoryValidation() {
     return t.labelProperty !== undefined;
   }, []);
 
+  const isLabelValueValid = useCallback((t: ConfigTrajectory) => {
+    return t.labelValue !== '';
+  }, []);
+
   const isStartValid = useCallback(
     (t: ConfigTrajectory) => isBefore(new Date(t.start), new Date(t.end)),
     [],
@@ -56,6 +60,12 @@ export function useTrajectoryValidation() {
         break;
       }
 
+      if (!isLabelValueValid(t)) {
+        v.intent = 'danger';
+        v.content = 'invalid label values';
+        break;
+      }
+
       if (!isStartValid(t) || !isEndValid(t)) {
         v.intent = 'danger';
         v.content = 'invalid dates';
@@ -69,6 +79,7 @@ export function useTrajectoryValidation() {
     createValidation,
     isNameValid,
     isLabelPropertyValid,
+    isLabelValueValid,
     isStartValid,
     isEndValid,
   ]);
@@ -77,6 +88,7 @@ export function useTrajectoryValidation() {
     validate,
     isNameValid,
     isLabelPropertyValid,
+    isLabelValueValid,
     isStartValid,
     isEndValid,
   };

@@ -20,6 +20,7 @@ export function MetricsTrajectories() {
     validate,
     isNameValid,
     isLabelPropertyValid,
+    isLabelValueValid,
     isStartValid,
     isEndValid,
   } = useTrajectoryValidation();
@@ -69,6 +70,7 @@ export function MetricsTrajectories() {
           <TextInput
             defaultValue={t.labelValue}
             onBlur={(v) => update(t, 'labelValue', v)}
+            intent={isLabelValueValid(t) ? 'success': 'danger'}
           />
 
           <Select
