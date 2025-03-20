@@ -97,7 +97,6 @@ export function useExport() {
       version,
       isValid,
       settings,
-      files,
       bands,
       integrations,
       extractors,
@@ -107,6 +106,7 @@ export function useExport() {
       digesters,
       trajectories,
       indices,
+      files,
     };
 
     return json;
