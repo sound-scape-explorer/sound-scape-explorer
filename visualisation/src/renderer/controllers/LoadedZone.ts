@@ -1,7 +1,6 @@
-import {CampaignButton} from 'src/renderer/controllers/CampaignButton';
-
 import {AudioPath} from './AudioPath';
 import {AudioStopButton} from './AudioStopButton';
+import {CampaignButton} from './CampaignButton';
 import {VisualiseButton} from './VisualiseButton';
 
 export class LoadedZone {

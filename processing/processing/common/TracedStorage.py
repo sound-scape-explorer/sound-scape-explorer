@@ -1,4 +1,4 @@
-from processing.common.AggregatedReduceable import AggregatedReduceable
+from processing.common.AggregatedReducible import AggregatedReducible
 from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
 from processing.storage.Storage import Storage
@@ -22,7 +22,7 @@ class TracedStorage:
 
     @staticmethod
     def get_data_path(
-        ar: AggregatedReduceable,
+        ar: AggregatedReducible,
         reducer: ReducerConfig,
         trajectory: TrajectoryConfig,
     ) -> str:
@@ -40,7 +40,7 @@ class TracedStorage:
         storage: Storage,
         trajectory: TrajectoryConfig,
         reducer: ReducerConfig,
-        ar: AggregatedReduceable,
+        ar: AggregatedReducible,
     ) -> None:
         path = TracedStorage.get_data_path(ar, reducer, trajectory)
 
@@ -57,7 +57,7 @@ class TracedStorage:
 
     @staticmethod
     def get_timestamps_path(
-        ar: AggregatedReduceable,
+        ar: AggregatedReducible,
         reducer: ReducerConfig,
         trajectory: TrajectoryConfig,
     ) -> str:
@@ -72,7 +72,7 @@ class TracedStorage:
 
     @staticmethod
     def get_relative_timestamps_path(
-        ar: AggregatedReduceable,
+        ar: AggregatedReducible,
         reducer: ReducerConfig,
         trajectory: TrajectoryConfig,
     ) -> str:
@@ -90,7 +90,7 @@ class TracedStorage:
         storage: Storage,
         trajectory: TrajectoryConfig,
         reducer: ReducerConfig,
-        ar: AggregatedReduceable,
+        ar: AggregatedReducible,
     ) -> None:
         path = TracedStorage.get_timestamps_path(ar, reducer, trajectory)
 
@@ -110,7 +110,7 @@ class TracedStorage:
         storage: Storage,
         trajectory: TrajectoryConfig,
         reducer: ReducerConfig,
-        ar: AggregatedReduceable,
+        ar: AggregatedReducible,
     ) -> None:
         path = TracedStorage.get_relative_timestamps_path(ar, reducer, trajectory)
 

@@ -1,4 +1,4 @@
-import {ElectronAPI} from '../../visualisation/src/preload/preload.ts';
+import {ElectronAPI} from '@shared/electron.ts';
 
 declare global {
   interface Window {

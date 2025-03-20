@@ -1,5 +1,5 @@
-import {APP_LONG, APP_SHORT} from 'src/constants';
-import {VERSION} from 'src/version';
+import {APP_LONG, APP_SHORT} from '../../constants';
+import {VERSION} from '../../version';
 
 export class Title {
   private readonly node = document.getElementById('title');

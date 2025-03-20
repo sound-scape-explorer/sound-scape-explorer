@@ -1,10 +1,10 @@
 import numpy as np
 
-from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.config.Config import Config
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.interfaces import MenuCallback
+from processing.new.MeanDistancesMatrixManager import MeanDistancesMatrixManager
 from processing.storage.Storage import Storage
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_integration import ask_integration
@@ -30,7 +30,7 @@ def export_mdm(
     band = ask_band(bands)
     integration = ask_integration(integrations)
 
-    mdm = MeanDistancesMatrix.read_from_storage(storage, band, integration)
+    mdm = MeanDistancesMatrixManager.read_from_storage(storage, band, integration)
     npy_path = ask_npy_path(config)
     np.save(npy_path, mdm)
 

@@ -16,7 +16,7 @@ import {useDetails} from 'src/draggables/details/use-details';
 import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
 import {watch} from 'vue';
 
-const {nonNnExtractors} = useExtractors();
+const {indices} = useExtractors();
 const {band} = useBandSelection();
 const {integration} = useIntegrationSelection();
 const {aggregatedIndicators} = useStorageAggregatedIndicators();
@@ -176,15 +176,15 @@ watch(timeshift, updateDates);
         :cols="2"
         x-gap="12"
       >
-        <NGi v-for="(ex, index) in nonNnExtractors">
+        <NGi v-for="(index, i) in indices">
           <NTag
             :bordered="false"
             size="small"
           >
-            {{ ex.name }}
+            {{ index.impl }}
           </NTag>
 
-          {{ aggregatedIndicators[index].values[currentIntervalIndex ?? 0] }}
+          {{ aggregatedIndicators[i].values[currentIntervalIndex ?? 0] }}
         </NGi>
       </NGrid>
     </div>

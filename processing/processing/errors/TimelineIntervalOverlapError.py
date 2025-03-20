@@ -1,5 +1,5 @@
 from processing.common.Interval import Interval
-from processing.config.files.FileConfig import FileConfig
+from processing.new.FileConfigNew import FileConfigNew
 from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
 
 
@@ -7,8 +7,8 @@ class TimelineIntervalOverlapError(Exception):
     def __init__(
         self,
         existing_interval: Interval,
-        new_file: FileConfig,
-        existing_file: FileConfig,
+        new_file: FileConfigNew,
+        existing_file: FileConfigNew,
     ) -> None:
         super().__init__(
             f"\n"

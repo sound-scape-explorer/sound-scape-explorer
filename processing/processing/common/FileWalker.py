@@ -1,11 +1,15 @@
-from processing.config.files.FileConfig import FileConfig
 from processing.common.Interval import Block, Interval
+from processing.new.FileConfigNew import FileConfigNew
 
 
 class FileWalker:
+    before: int
+    after: int
+    span: int
+
     def __init__(
         self,
-        file: FileConfig,
+        file: FileConfigNew,
         origin: int,
         step: int,
         debug: bool = False,

@@ -1,10 +1,8 @@
-import {Checkbox} from '@blueprintjs/core';
+import {Checkbox, Tooltip} from '@blueprintjs/core';
+import {IndexImpl} from '@shared/enums.ts';
 import {useMemo} from 'react';
 import {useIndexSlug} from 'src/panels/metrics/hooks/use-index-slug.ts';
-import {
-  MetricsIndexType,
-  useIndexState,
-} from 'src/panels/metrics/hooks/use-index-state.ts';
+import {useIndexState} from 'src/panels/metrics/hooks/use-index-state.ts';
 import {useIndexValidation} from 'src/panels/metrics/hooks/use-index-validation.ts';
 import {Drawer} from 'src/primitives/drawer.tsx';
 import {
@@ -18,14 +16,14 @@ import {Select} from 'src/primitives/select.tsx';
 import styles from './metrics-indices.module.scss';
 
 const drawer: DrawerContentProps['content'] = [
-  [MetricsIndexType.leq_maad, 'The Leq using maad library.'],
-  [MetricsIndexType.ht, 'The temporal entropy.'],
-  [MetricsIndexType.hf, 'The frequency entropy.'],
-  [MetricsIndexType.med, 'The temporal median.'],
-  [MetricsIndexType.ndsi, 'The normalized difference soundscape index.'],
-  [MetricsIndexType.aci, 'The acoustic complexity index.'],
-  [MetricsIndexType.adi, 'The acoustic diversity index.'],
-  [MetricsIndexType.bi, 'The bioacoustics index.'],
+  [IndexImpl.leq_maad, 'The Leq using maad library.'],
+  [IndexImpl.ht, 'The temporal entropy.'],
+  [IndexImpl.hf, 'The frequency entropy.'],
+  [IndexImpl.med, 'The temporal median.'],
+  [IndexImpl.ndsi, 'The normalized difference soundscape index.'],
+  [IndexImpl.aci, 'The acoustic complexity index.'],
+  [IndexImpl.adi, 'The acoustic diversity index.'],
+  [IndexImpl.bi, 'The bioacoustics index.'],
 ];
 
 export function MetricsIndices() {
@@ -47,10 +45,10 @@ export function MetricsIndices() {
       renderItem={(ind) => (
         <>
           <Select
-            items={Object.values(MetricsIndexType)}
-            onSelect={(type) => update(ind, 'type', type)}
-            current={ind.type}
-            placeholder="Select types"
+            items={Object.values(IndexImpl)}
+            onSelect={(v) => update(ind, 'impl', v)}
+            current={ind.impl}
+            placeholder="Select implementation"
             intent={isTypeValid(ind) ? 'success' : 'danger'}
           />
 
@@ -75,7 +73,12 @@ export function MetricsIndices() {
       )}
     >
       <Drawer content={<DrawerContent content={drawer} />}>
-        <div className="help flex grow center">type</div>
+        <Tooltip
+          content="Implementation"
+          className="help grow"
+        >
+          <div className="flex grow center growh">impl</div>
+        </Tooltip>
       </Drawer>
 
       <div>offset (ms)</div>

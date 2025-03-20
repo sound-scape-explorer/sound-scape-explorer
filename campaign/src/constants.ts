@@ -1,4 +1,4 @@
-import {ComputationStrategy} from 'src/enums.ts';
+import {ComputationStrategy} from '@shared/enums.ts';
 
 export const JSON_TYPE = 'application/json';
 export const XLSX_TYPE =

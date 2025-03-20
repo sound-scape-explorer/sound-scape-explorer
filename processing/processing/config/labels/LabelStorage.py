@@ -2,9 +2,10 @@ from typing import List
 
 from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
-from processing.config.files.FileConfig import FileConfig
 from processing.config.files.FileSheet import FileSheet
 from processing.config.labels.LabelConfig import LabelConfig
+from processing.context import Context
+from processing.new.LabelManager import LabelManager
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 
@@ -24,31 +25,21 @@ class LabelStorage:
             LabelStorage.properties
         ) and storage.exists_dataset(LabelStorage.sets)
 
+    # TODO: refactor me
     @staticmethod
-    def read_from_storage(
-        storage: Storage,
-        files: List[FileConfig],
-    ) -> List[LabelConfig]:
-        properties_dataset = storage.read(LabelStorage.properties)
-        properties = storage.convert_dataset_to_string_list(properties_dataset)
+    def read_from_storage(context: Context) -> List[LabelConfig]:
+        files = context.config.files
+        properties = LabelManager.get_properties(context)
 
         labels: List[LabelConfig] = []
 
         for index, property_ in enumerate(properties):
             label: LabelConfig = LabelConfig(index, property_)
-            values = [file.labels[index] for file in files]
+            values = [file.labels[property_] for file in files]
             label.load_values(values)
             labels.append(label)
 
         return labels
-
-    @staticmethod
-    def read_properties_from_storage(
-        storage: Storage,
-    ) -> List[str]:
-        properties_dataset = storage.read(LabelStorage.properties)
-        properties = storage.convert_dataset_to_string_list(properties_dataset)
-        return properties
 
     @staticmethod
     def read_from_config(parser: ConfigParser) -> List[LabelConfig]:

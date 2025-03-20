@@ -1,7 +1,7 @@
 from pandas import DataFrame
 
 from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
-from processing.common.AggregatedReduceable import AggregatedReduceable
+from processing.common.AggregatedReducible import AggregatedReducible
 from processing.config.Config import Config
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.extractors.ExtractorStorage import ExtractorStorage
@@ -84,7 +84,7 @@ def export_dataframe(
     ranges = RangeStorage.read_from_storage(storage)
     reducers = ReducerStorage.read_from_storage(storage, bands, integrations, ranges)
 
-    aggregated_reduceables = AggregatedReduceable.reconstruct(
+    aggregated_reduceables = AggregatedReducible.reconstruct(
         bands=bands,
         integrations=integrations,
         nn_extractors=nn_extractors,

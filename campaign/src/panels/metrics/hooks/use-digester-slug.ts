@@ -3,7 +3,7 @@ import  {type ConfigDigester} from 'src/panels/metrics/hooks/use-digester-state.
 
 export function useDigesterSlug() {
   const getSlug = useCallback((d: ConfigDigester) => {
-    return `${d.index}-${d.type}`;
+    return `${d.index}-${d.impl}`;
   }, []);
 
   return {

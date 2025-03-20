@@ -1,3 +1,4 @@
+import {ReducerImpl} from '@shared/enums.ts';
 import {atom} from 'jotai/index';
 import {useCallback} from 'react';
 import {REDUCER_DIMENSIONS_DEFAULT} from 'src/constants.ts';
@@ -8,14 +9,9 @@ import {useGenericSectionState} from 'src/primitives/generic-section/use-generic
 
 const configReducersAtom = atom<ConfigReducer[]>([]);
 
-export enum ConfigReducerType {
-  umap = 'umap',
-  pca = 'pca',
-}
-
 export interface ConfigReducer {
   index: number;
-  type: ConfigReducerType;
+  impl: ReducerImpl;
   dimensions: number;
   bands: ConfigBand[];
   integrations: ConfigIntegration[];
@@ -32,7 +28,7 @@ export function useReducerState() {
     atom: configReducersAtom,
     createItem: (index) => ({
       index,
-      type: ConfigReducerType.umap,
+      impl: ReducerImpl.umap,
       dimensions: REDUCER_DIMENSIONS_DEFAULT,
       bands: [],
       integrations: [],

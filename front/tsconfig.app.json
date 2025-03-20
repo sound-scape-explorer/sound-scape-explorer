@@ -20,7 +20,12 @@
       "ESNext.Array",
       "DOM",
       "DOM.Iterable"
-    ]
+    ],
+    "paths": {
+      "@shared/*": [
+        "../shared/*"
+      ]
+    }
   },
   "references": [
     {

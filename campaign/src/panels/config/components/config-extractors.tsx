@@ -1,11 +1,9 @@
-import {Checkbox} from '@blueprintjs/core';
+import {Checkbox, Tooltip} from '@blueprintjs/core';
+import {ExtractorImpl} from '@shared/enums.ts';
 import {useMemo} from 'react';
 import {useConfigTemplates} from 'src/panels/config/hooks/use-config-templates.ts';
 import {useExtractorSlug} from 'src/panels/config/hooks/use-extractor-slug.ts';
-import {
-  ConfigExtractorType,
-  useExtractorState,
-} from 'src/panels/config/hooks/use-extractor-state.ts';
+import {useExtractorState} from 'src/panels/config/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/config/hooks/use-extractor-validation.ts';
 import {Drawer} from 'src/primitives/drawer.tsx';
 import {
@@ -20,10 +18,10 @@ import {TextInput} from 'src/primitives/text-input.tsx';
 import styles from './config-neural-extractors.module.scss';
 
 const drawer: DrawerContentProps['content'] = [
-  [ConfigExtractorType.vgg, 'The VGGish neural network.'],
-  [ConfigExtractorType.melogram, 'The melogram (VGGish input).'],
+  [ExtractorImpl.vgg, 'The VGGish neural network.'],
+  [ExtractorImpl.melogram, 'The melogram (VGGish input).'],
   [
-    ConfigExtractorType.melspectrum,
+    ExtractorImpl.melspectrum,
     'The melspectrum (over 1s with same other parameters than melogram).',
   ],
 ];
@@ -56,10 +54,10 @@ export function ConfigExtractors() {
           />
 
           <Select
-            items={Object.values(ConfigExtractorType)}
-            onSelect={(n) => update(extractor, 'type', n)}
-            current={extractor.type}
-            placeholder="Select type"
+            items={Object.values(ExtractorImpl)}
+            onSelect={(n) => update(extractor, 'impl', n)}
+            current={extractor.impl}
+            placeholder="Select impl"
             disabled={hasTemplate}
           />
 
@@ -89,7 +87,12 @@ export function ConfigExtractors() {
     >
       <div>name</div>
       <Drawer content={<DrawerContent content={drawer} />}>
-        <div className="help flex grow center">type</div>
+        <Tooltip
+          content="Implementation"
+          className="help grow"
+        >
+          <div className="flex grow center growh">impl</div>
+        </Tooltip>
       </Drawer>
       <div>offset (ms)</div>
       <div>step (ms)</div>

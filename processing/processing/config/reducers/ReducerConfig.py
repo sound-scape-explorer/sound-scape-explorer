@@ -1,6 +1,8 @@
+from enum import Enum
 from typing import Dict, List, Tuple, Type
 
 from processing.config.bands.BandConfig import BandConfig
+from processing.config.extractors.ExtractorConfig import ExtractorConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.ranges.RangeConfig import RangeConfig
 from processing.reducers.AbstractReducer import AbstractReducer
@@ -9,6 +11,13 @@ from processing.reducers.SparsePcaReducer import SparsePcaReducer
 from processing.reducers.UmapReducer import UmapReducer
 from processing.reducers.VaeReducer import VaeReducer
 from processing.utils.is_nan import is_nan
+
+
+class ReducerType(Enum):
+    umap = UmapReducer
+    vae = VaeReducer
+    pca = PcaReducer
+    sparse_pca = SparsePcaReducer
 
 
 class ReducerConfig:
@@ -20,11 +29,13 @@ class ReducerConfig:
     }
 
     index: int
-    name: str
+    reducer_type: ReducerType
     dimensions: int
     bands: List[BandConfig]
     integrations: List[IntegrationConfig]
     ranges: List[RangeConfig]
+    extractors: list[ExtractorConfig]
+
     band: BandConfig
     integration: IntegrationConfig
     instance: AbstractReducer
@@ -32,21 +43,23 @@ class ReducerConfig:
     def __init__(
         self,
         index: int,
-        name: str,
+        reducer_type: ReducerType,
         dimensions: int,
         bands: List[BandConfig],
         integrations: List[IntegrationConfig],
         ranges: List[RangeConfig],
+        extractors: list[ExtractorConfig],
     ) -> None:
         self._validate_name(name)
 
         self.index = index
-        self.name = name
+        self.reducer_type = reducer_type
         self.dimensions = dimensions
 
         self.bands = bands
         self.integrations = integrations
         self.ranges = ranges
+        self.extractors = extractors
 
     @staticmethod
     def _validate_name(name: str) -> None:

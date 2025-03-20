@@ -1,7 +1,9 @@
-import {type Digester} from 'src/composables/use-digesters';
-import {type Extractor} from 'src/composables/use-extractors';
 import {type IntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {type AppRange} from 'src/composables/use-storage-ranges';
+import {
+  type DigesterDtoWithType,
+  type ExtractorDto,
+  type RangeDto,
+} from 'src/dtos';
 
 export function getFilesFromIntervals(
   aggregatedIntervalDetails: IntervalDetails[],
@@ -24,14 +26,14 @@ export function getFilesFromIntervals(
   return fileIndexes;
 }
 
-export function generateUniqueRangeSlug(range: AppRange): string {
+export function generateUniqueRangeSlug(range: RangeDto) {
   return `${range.index} - ${range.name}`;
 }
 
-export function generateUniqueDigesterSlug(digester: Digester): string {
-  return `${digester.index} - ${digester.name}`;
+export function generateUniqueDigesterSlug(digester: DigesterDtoWithType) {
+  return `${digester.index} - ${digester.impl}`;
 }
 
-export function generateUniqueExtractorSlug(extractor: Extractor): string {
-  return `${extractor.index} - ${extractor.name}`;
+export function generateUniqueExtractorSlug(ex: ExtractorDto) {
+  return `${ex.index} - ${ex.name}`;
 }

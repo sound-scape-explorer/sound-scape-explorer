@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, List, Tuple, Type
 
 from processing.config.settings.SettingsConfig import SettingsConfig
@@ -11,12 +12,31 @@ from processing.extractors.BioacousticsIndexExtractor import BioacousticsIndexEx
 from processing.extractors.Extractor import Extractor
 from processing.extractors.FrequencyEntropyIndicator import FrequencyEntropyExtractor
 from processing.extractors.LeqMaadExtractor import LeqMaadExtractor
-from processing.extractors.LogMelSpectrumExtractor import LogMelSpectrumExtractor
 from processing.extractors.LogMelogramExtractor import LogMelogramExtractor
+from processing.extractors.LogMelSpectrumExtractor import LogMelSpectrumExtractor
 from processing.extractors.SoundscapeIndexExtractor import SoundscapeIndexExtractor
 from processing.extractors.TemporalEntropyExtractor import TemporalEntropyExtractor
 from processing.extractors.TemporalMedianExtractor import TemporalMedianExtractor
 from processing.extractors.VggExtractor import VggExtractor
+
+
+# TODO: Move me
+class ExtractorType(Enum):
+    vgg = VggExtractor
+    melogram = LogMelogramExtractor
+    melspectrum = LogMelSpectrumExtractor
+
+
+# TODO: Move me
+class IndexType(Enum):
+    leq_maad = LeqMaadExtractor
+    ht = TemporalEntropyExtractor
+    med = TemporalMedianExtractor
+    ndsi = SoundscapeIndexExtractor
+    aci = AcousticComplexityExtractor
+    adi = AcousticDiversityIndexExtractor
+    bi = BioacousticsIndexExtractor
+    hf = FrequencyEntropyExtractor
 
 
 # TODO: Add `yamnet` and `YamnetExtractor`
@@ -46,6 +66,7 @@ class ExtractorConfig:
         self,
         index: int,
         name: str,
+        extractor_type: ExtractorType,
         offset: int,
         step: int,
         persist: bool,
@@ -54,6 +75,7 @@ class ExtractorConfig:
 
         self.index = index
         self.name = name
+        self.extractor_type = extractor_type
         self.offset = offset
         self.step = step
         self.persist = persist
@@ -94,10 +116,12 @@ class ExtractorConfig:
     ) -> List["ExtractorConfig"]:
         extractors: List["ExtractorConfig"] = []
 
+        # TODO: make me elegant i beg you
         for index, name in enumerate(names):
             extractor = ExtractorConfig(
                 index=index,
                 name=name,
+                extractor_type=ExtractorType[name],
                 offset=offsets[index],
                 step=steps[index],
                 persist=persists[index],

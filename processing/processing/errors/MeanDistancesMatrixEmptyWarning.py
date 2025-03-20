@@ -1,13 +1,13 @@
-from processing.config.bands.BandConfig import BandConfig
-from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.utils.print_action import print_action
 
 
 class MeanDistancesMatrixEmptyWarning(Exception):
     def __init__(
         self,
-        band: BandConfig,
-        integration: IntegrationConfig,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
     ) -> None:
         message = (
             f"Band {band.name}, integration {integration.name}: "

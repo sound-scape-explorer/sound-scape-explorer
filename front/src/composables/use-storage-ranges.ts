@@ -1,16 +1,10 @@
 import {StorageRangesError} from 'src/common/Errors';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type RangeDto} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface AppRange {
-  index: number;
-  name: string;
-  start: number;
-  end: number;
-}
-
-const ranges = ref<AppRange[] | null>(null);
+const ranges = ref<RangeDto[] | null>(null);
 
 export function useStorageRanges() {
   const {read: readStorage} = useStorageReader();
@@ -22,15 +16,14 @@ export function useStorageRanges() {
         throw new StorageRangesError('could not get aggregated timestamps');
       }
 
-      const userRanges = await worker.readRanges(file);
-
-      const fullRange: AppRange = {
+      const fullRange: RangeDto = {
         index: -1,
         name: '_fullRange',
         start: Math.min(...aggregatedTimestamps.value),
         end: Math.max(...aggregatedTimestamps.value),
       };
 
+      const userRanges = await worker.readRanges(file);
       ranges.value = [fullRange, ...userRanges];
     });
   };

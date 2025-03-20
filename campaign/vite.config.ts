@@ -16,7 +16,8 @@ export default defineConfig({
   base: base,
   resolve: {
     alias: {
-      src: path.resolve(__dirname, './src'),
+      'src': path.resolve(__dirname, './src'),
+      '@shared': path.resolve(__dirname, '../shared'),
     },
   },
   plugins: [react()],

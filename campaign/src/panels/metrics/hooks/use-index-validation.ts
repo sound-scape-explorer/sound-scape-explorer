@@ -11,8 +11,8 @@ export function useIndexValidation() {
 
   const isTypeValid = useCallback(
     (ex: MetricsIndex) => {
-      const types = collectValues(indices, ex, 'type');
-      return !types.includes(ex.type);
+      const types = collectValues(indices, ex, 'impl');
+      return !types.includes(ex.impl);
     },
     [indices, collectValues],
   );

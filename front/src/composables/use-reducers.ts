@@ -1,71 +1,66 @@
-import {type Band, useBands} from 'src/composables/use-bands';
-import {type Extractor, useExtractors} from 'src/composables/use-extractors';
-import {
-  type Integration,
-  useIntegrations,
-} from 'src/composables/use-integrations';
+import {useBands} from 'src/composables/use-bands';
+import {useExtractors} from 'src/composables/use-extractors';
+import {useIntegrations} from 'src/composables/use-integrations';
 import {useReducerOptions} from 'src/composables/use-reducer-options';
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type ReducerDtoWithObjects} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface ReducerFromStorage {
-  index: number;
-  name: string;
-  dimensions: number;
-  bandsNames: Band['name'][];
-  integrationsNames: Integration['name'][];
-  rangesNames: string[];
-}
-
-export interface Reducer {
-  index: number;
-  name: string;
-  dimensions: number;
-  bands: Band[];
-  integrations: Integration[];
-  nnExtractors: Extractor[];
-}
-
-const reducers = ref<Reducer[] | null>(null);
+const reducers = ref<ReducerDtoWithObjects[] | null>(null);
 
 export function useReducers() {
   const {read: readStorage} = useStorageReader();
   const {create} = useReducerOptions();
   const {bands} = useBands();
   const {integrations} = useIntegrations();
-  const {nnExtractors} = useExtractors();
+  const {extractors} = useExtractors();
 
   const read = async () => {
     await readStorage(async (worker, file) => {
       if (
         bands.value === null ||
         integrations.value === null ||
-        nnExtractors.value === null
+        extractors.value === null
       ) {
         return;
       }
 
-      const reducersFromStorage = await worker.readReducers(file);
-      const rs: Reducer[] = [];
+      const storageReducers = await worker.readReducers(file);
+      const objectReducers = new Array<ReducerDtoWithObjects>(
+        storageReducers.length,
+      );
 
-      for (const rFS of reducersFromStorage) {
-        const r: Reducer = {
-          index: rFS.index,
-          name: rFS.name,
-          dimensions: rFS.dimensions,
-          bands: bands.value.filter((band) =>
-            rFS.bandsNames.includes(band.name),
-          ),
-          integrations: integrations.value.filter((integration) =>
-            rFS.integrationsNames.includes(integration.name),
-          ),
-          nnExtractors: nnExtractors.value,
+      for (const storageReducer of storageReducers) {
+        const objectBands =
+          storageReducer.bands.length === 0
+            ? bands.value
+            : bands.value.filter((b) => storageReducer.bands.includes(b.index));
+
+        const objectIntegrations =
+          storageReducer.integrations.length === 0
+            ? integrations.value
+            : integrations.value.filter((i) =>
+              storageReducer.integrations.includes(i.index),
+            );
+
+        const objectExtractors =
+          storageReducer.extractors.length === 0
+            ? extractors.value
+            : extractors.value.filter((e) =>
+              storageReducer.extractors.includes(e.index),
+            );
+
+        const objectReducer: ReducerDtoWithObjects = {
+          ...storageReducer,
+          bands: objectBands,
+          integrations: objectIntegrations,
+          extractors: objectExtractors,
         };
 
-        rs.push(r);
+        objectReducers[storageReducer.index] = objectReducer;
       }
 
-      reducers.value = rs;
+      reducers.value = objectReducers;
     });
 
     if (reducers.value) {

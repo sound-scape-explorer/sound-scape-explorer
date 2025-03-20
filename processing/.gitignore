@@ -2,3 +2,5 @@
 __pycache__
 venv
 .coverage
+*.h5
+dist

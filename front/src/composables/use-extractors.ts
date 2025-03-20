@@ -1,18 +1,9 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {NN_EXTRACTORS} from 'src/constants';
+import {type ExtractorDto, type IndexDto} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface Extractor {
-  index: number;
-  name: string;
-  offset: number;
-  step: number;
-  persist: boolean;
-}
-
-const extractors = ref<Extractor[] | null>(null);
-const nnExtractors = ref<Extractor[] | null>(null);
-const nonNnExtractors = ref<Extractor[] | null>(null);
+const extractors = ref<ExtractorDto[] | null>(null);
+const indices = ref<IndexDto[] | null>(null);
 
 export function useExtractors() {
   const {read: r} = useStorageReader();
@@ -20,21 +11,13 @@ export function useExtractors() {
   const read = async () => {
     await r(async (worker, file) => {
       extractors.value = await worker.readExtractors(file);
-
-      nnExtractors.value = extractors.value.filter((extractor) =>
-        NN_EXTRACTORS.includes(extractor.name),
-      );
-
-      nonNnExtractors.value = extractors.value.filter(
-        (extractors) => !NN_EXTRACTORS.includes(extractors.name),
-      );
+      indices.value = await worker.readIndices(file);
     });
   };
 
   return {
     extractors: extractors,
-    nnExtractors: nnExtractors,
-    nonNnExtractors: nonNnExtractors,
+    indices: indices,
     read: read,
   };
 }

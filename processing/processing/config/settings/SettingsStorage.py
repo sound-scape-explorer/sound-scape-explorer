@@ -27,45 +27,6 @@ class SettingsStorage:
         return storage.exists_dataset(SettingsStorage.settings)
 
     @staticmethod
-    def read_from_storage(storage: Storage) -> SettingsConfig:
-        dataset = storage.read(SettingsStorage.settings)
-        attributes = dataset.attrs
-
-        storage_path: str = attributes[SettingsRow.storage_path.value]  # type: ignore
-        audio_path: str = attributes[SettingsRow.audio_path.value]  # type: ignore
-        audio_host: str = attributes[SettingsRow.audio_host.value]  # type: ignore
-        expected_sample_rate: int = attributes[
-            SettingsRow.expected_sample_rate.value
-        ]  # type: ignore
-        timeline_origin: int = attributes[
-            SettingsRow.timeline_origin.value
-        ]  # type: ignore
-        timezone: str = attributes[SettingsRow.timezone.value]  # type: ignore
-        c_umap_dimensions: int = attributes[
-            SettingsRow.c_umap_dimensions.value
-        ]  # type: ignore
-        c_umap_iterations: int = attributes[
-            SettingsRow.c_umap_iterations.value
-        ]  # type: ignore
-        display_umap_seed: int = attributes[
-            SettingsRow.display_umap_seed.value
-        ]  # type: ignore
-
-        settings = SettingsConfig(
-            storage_path=storage_path,
-            audio_path=audio_path,
-            audio_host=audio_host,
-            expected_sample_rate=expected_sample_rate,
-            timeline_origin=timeline_origin,
-            timezone=timezone,
-            computation_umap_dimensions=c_umap_dimensions,
-            computation_umap_iterations=c_umap_iterations,
-            display_umap_seed=display_umap_seed,
-        )
-
-        return settings
-
-    @staticmethod
     def read_from_config(parser: ConfigParser) -> SettingsConfig:
         sheet = ExcelSheet.settings
 

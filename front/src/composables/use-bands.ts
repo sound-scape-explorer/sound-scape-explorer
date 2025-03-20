@@ -1,14 +1,8 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type BandDto} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface Band {
-  index: number;
-  name: string;
-  low: number;
-  high: number;
-}
-
-const bands = ref<Band[] | null>(null);
+const bands = ref<BandDto[] | null>(null);
 
 export function useBands() {
   const {read: r} = useStorageReader();

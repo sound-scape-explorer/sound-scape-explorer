@@ -2,9 +2,9 @@ import {existsSync} from 'node:fs';
 import path from 'node:path';
 
 import {ipcMain, ipcRenderer} from 'electron';
-import {CampaignWindow} from 'src/windows/CampaignWindow';
 
 import {Channels} from '../channels';
+import {CampaignWindow} from '../windows/CampaignWindow';
 
 export class CampaignBridge {
   public static readonly servicePath = path.join(

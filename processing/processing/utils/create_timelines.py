@@ -1,17 +1,17 @@
 from typing import List
 
 from processing.common.Timeline import Timeline
-from processing.config.integrations.IntegrationConfig import IntegrationConfig
-from processing.config.settings.SettingsConfig import SettingsConfig
-from processing.config.sites.SiteConfig import SiteConfig
-from processing.storage.Storage import Storage
+from processing.config.sites.SiteConfigNew import SiteConfigNew
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
+from processing.new.SettingsConfigNew import SettingsConfigNew
+from processing.new.StorageNew import StorageNew
 
 
 def create_timelines(
-    sites: List[SiteConfig],
-    integrations: List[IntegrationConfig],
-    settings: SettingsConfig,
-    storage: Storage,
+    sites: List[SiteConfigNew],
+    integrations: List[IntegrationConfigNew],
+    settings: SettingsConfigNew,
+    storage: StorageNew,
 ) -> List[Timeline]:
     timelines: List[Timeline] = []
 

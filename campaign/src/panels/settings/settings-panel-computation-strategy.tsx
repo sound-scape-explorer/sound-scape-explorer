@@ -1,5 +1,5 @@
+import {ComputationStrategy} from '@shared/enums.ts';
 import clsx from 'clsx';
-import {ComputationStrategy} from 'src/enums.ts';
 import {useSettingsState} from 'src/hooks/use-settings-state.ts';
 import styles from 'src/panels/settings/settings-panel.module.scss';
 import {Drawer} from 'src/primitives/drawer.tsx';

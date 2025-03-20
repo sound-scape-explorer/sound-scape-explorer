@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools==76.1.0"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
@@ -14,7 +14,8 @@ name = "sound-scape-explorer"
 version = "13.9.0"
 description = "SoundScapeExplorer"
 authors = [{ name = "Bamdad Sabbagh", email = "hi@bamdad.fr" }]
-requires-python = "==3.10"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = "~=3.10"
 
 dependencies = [
   "wheel",
@@ -41,5 +42,6 @@ dependencies = [
 dev = [
   "black==23.12.1",
   "pytest==7.2.1",
-  "pyright=1.1.397",
+  "pyright==1.1.397",
+  "build==1.2.1",
 ]

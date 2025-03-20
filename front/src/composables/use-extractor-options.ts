@@ -1,10 +1,10 @@
-import {type Extractor} from 'src/composables/use-extractors';
+import {type ExtractorDto} from 'src/dtos';
 import {ref} from 'vue';
 
 const options = ref<string[]>([]);
 
 export function useExtractorOptions() {
-  const create = (extractors: Extractor[]) => {
+  const create = (extractors: ExtractorDto[]) => {
     options.value = extractors.map((ex) => `${ex.index} - ${ex.name}`);
   };
 

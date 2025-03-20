@@ -1,12 +1,12 @@
-from typing import List
-
 from rich.console import Console
 from rich.table import Table
 
-from processing.config.extractors.ExtractorConfig import ExtractorConfig
+from processing.context import Context
 
 
-def print_extractors(extractors: List[ExtractorConfig]):
+def print_extractors(context: Context):
+    extractors = context.config.extractors
+
     console = Console()
 
     table = Table(show_header=True, header_style="bold magenta")
@@ -14,16 +14,16 @@ def print_extractors(extractors: List[ExtractorConfig]):
     table.add_column("Extractor")
     table.add_column("Offset (ms)")
     table.add_column("Step (ms)")
-    table.add_column("Persist (extracted data)")
+    table.add_column("Persist (raw step data)")
 
     for extractor in extractors:
         table.add_row(
             extractor.name,
-            ExtractorConfig.extractors[extractor.name].__name__,
+            extractor.impl.name,
             str(extractor.offset),
             str(extractor.step),
             "[green]:heavy_check_mark:[/green]"
-            if extractor.persist
+            if extractor.is_persist
             else "[red]:x:[/red]",
         )
 

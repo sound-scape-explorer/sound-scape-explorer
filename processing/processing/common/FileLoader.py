@@ -1,11 +1,11 @@
-from processing.config.files.FileConfig import FileConfig
 from processing.loaders.Loader import Loader
+from processing.new.FileConfigNew import FileConfigNew
 
 
 class FileLoader:
     def __init__(
         self,
-        file: FileConfig,
+        file: FileConfigNew,
     ) -> None:
         self.file = file
         self.loader = Loader()

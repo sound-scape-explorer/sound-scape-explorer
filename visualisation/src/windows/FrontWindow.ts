@@ -1,6 +1,5 @@
-import {DEV_FRONT_URL} from 'src/constants';
-
 import {FrontBridge} from '../bridges/FrontBridge';
+import {DEV_FRONT_URL} from '../constants';
 import {ElectronWindow} from './ElectronWindow';
 
 export class FrontWindow extends ElectronWindow {

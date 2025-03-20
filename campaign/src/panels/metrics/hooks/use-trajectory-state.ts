@@ -1,3 +1,4 @@
+import {TrajectoryStep} from '@shared/enums.ts';
 import {addHours} from 'date-fns';
 import {atom} from 'jotai';
 import {useCallback} from 'react';
@@ -6,12 +7,6 @@ import {formatDateToString, getToday} from 'src/utils/dates.ts';
 
 const state = atom<ConfigTrajectory[]>([]);
 
-export enum ConfigTrajectoryStep {
-  Hour = 'hour',
-  Day = 'day',
-  Month = 'month',
-}
-
 export interface ConfigTrajectory {
   index: number;
   name: string; // unique
@@ -19,7 +14,7 @@ export interface ConfigTrajectory {
   end: string; // date string
   labelProperty: string | undefined;
   labelValue: string | undefined;
-  step: ConfigTrajectoryStep;
+  step: TrajectoryStep;
 }
 
 export function useTrajectoryState() {
@@ -37,7 +32,7 @@ export function useTrajectoryState() {
       end: formatDateToString(addHours(getToday(), 1)),
       labelProperty: undefined,
       labelValue: undefined,
-      step: ConfigTrajectoryStep.Hour,
+      step: TrajectoryStep.Hour,
     }),
   });
 

@@ -3,6 +3,7 @@ import {ref} from 'vue';
 
 const version = ref<string | null>(null);
 
+// TODO: Fix me
 export function useVersion() {
   const {read: readStorage} = useStorageReader();
 

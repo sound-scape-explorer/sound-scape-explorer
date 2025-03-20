@@ -1,7 +1,7 @@
 import {app, BrowserWindow} from 'electron';
-import {CampaignBridge} from 'src/bridges/CampaignBridge';
 
 import {AudioBridge} from './bridges/AudioBridge';
+import {CampaignBridge} from './bridges/CampaignBridge';
 import {FrontBridge} from './bridges/FrontBridge';
 import {MainWindow} from './windows/MainWindow';
 

@@ -1,12 +1,12 @@
-import {type Integration} from 'src/composables/use-integrations';
+import {type IntegrationDto} from 'src/dtos';
 import {ref} from 'vue';
 
 const options = ref<string[]>([]);
 
 export function useIntegrationOptions() {
-  const create = (integrations: Integration[]) => {
+  const create = (integrations: IntegrationDto[]) => {
     options.value = integrations.map(
-      (i) => `${i.index} - ${i.name} (${i.seconds} s)`,
+      (i) => `${i.index} - ${i.name} (${i.duration} ms)`,
     );
   };
 

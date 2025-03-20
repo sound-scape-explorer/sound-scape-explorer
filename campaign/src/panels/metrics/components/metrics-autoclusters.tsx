@@ -1,9 +1,7 @@
+import {AutoclusterImpl} from '@shared/enums.ts';
 import {useMemo} from 'react';
 import {useAutoclusterSlug} from 'src/panels/metrics/hooks/use-autocluster-slug.ts';
-import {
-  AutoclusterType,
-  useAutoclusterState,
-} from 'src/panels/metrics/hooks/use-autocluster-state.ts';
+import {useAutoclusterState} from 'src/panels/metrics/hooks/use-autocluster-state.ts';
 import {useAutoclusterValidation} from 'src/panels/metrics/hooks/use-autocluster-validation.ts';
 import {GenericSection} from 'src/primitives/generic-section/generic-section.tsx';
 import {NumberInput} from 'src/primitives/number-input.tsx';
@@ -35,10 +33,10 @@ export function MetricsAutoclusters() {
       renderItem={(autocluster) => (
         <>
           <Select
-            items={Object.values(AutoclusterType)}
-            onSelect={(n) => update(autocluster, 'type', n)}
-            current={autocluster.type}
-            placeholder="Select type"
+            items={Object.values(AutoclusterImpl)}
+            onSelect={(v) => update(autocluster, 'impl', v)}
+            current={autocluster.impl}
+            placeholder="Select implementation"
           />
 
           <NumberInput
@@ -67,7 +65,7 @@ export function MetricsAutoclusters() {
         </>
       )}
     >
-      <div>type</div>
+      <div>impl</div>
       <div>min cluster size</div>
       <div>min samples</div>
       <div>alpha</div>

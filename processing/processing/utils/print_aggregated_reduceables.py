@@ -3,13 +3,13 @@ from typing import List
 from rich.console import Console
 from rich.table import Table
 
-from processing.common.AggregatedReduceable import AggregatedReduceable
-from processing.storage.Storage import Storage
+from processing.common.AggregatedReducible import AggregatedReducible
+from processing.new.StorageNew import StorageNew
 
 
-def print_aggregated_reduceables(
-    ars: List[AggregatedReduceable],
-    storage: Storage,
+def print_reducibles(
+    ars: List[AggregatedReducible],
+    storage: StorageNew,
 ):
     console = Console()
 
@@ -23,7 +23,7 @@ def print_aggregated_reduceables(
         table.add_row(
             ar.extractor.name,
             ar.band.name,
-            str(ar.integration.seconds),
+            str(ar.integration.name),
             "[green]:heavy_check_mark:[/green]"
             if ar.exists_in_storage(storage)
             else "[red]:x:[/red]",

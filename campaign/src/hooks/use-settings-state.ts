@@ -1,3 +1,4 @@
+import {type ComputationStrategy} from '@shared/enums.ts';
 import {atom, useAtom} from 'jotai';
 import {type DragEvent, useCallback} from 'react';
 import {
@@ -13,7 +14,6 @@ import {
   TIMELINE_ORIGIN_DEFAULT,
   TIMEZONE_DEFAULT,
 } from 'src/constants.ts';
-import {type ComputationStrategy} from 'src/enums.ts';
 import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
 
 const settingsAtom = atom<Settings>({

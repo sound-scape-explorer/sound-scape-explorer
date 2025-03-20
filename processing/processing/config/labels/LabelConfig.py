@@ -6,6 +6,7 @@ from processing.utils.get_uniques_unsorted import get_uniques_unsorted
 from processing.utils.reverse_array import reverse_array
 
 
+# TODO: Refactor me (important class)
 class LabelConfig:
     index: int
     property: str

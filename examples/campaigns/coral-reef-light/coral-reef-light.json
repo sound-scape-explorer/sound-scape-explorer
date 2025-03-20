@@ -1,8 +1,9 @@
 {
-  "version": "14.0.0",
+  "version": "13.9.0",
+  "isValid": true,
   "settings": {
     "storagePath": "coral-reef-light.h5",
-    "audioPath": "/home/user/sse/examples/campaigns/coral-reef-light/audio",
+    "audioPath": "/home/bamdad/git/sound-scape-explorer/examples/campaigns/coral-reef-light/audio",
     "expectedSampleRate": 44100,
     "timelineOrigin": "2021-01-01 00:00:00",
     "audioHost": "",
@@ -13,6 +14,133 @@
     "displaySeed": 42000,
     "memoryLimit": 4
   },
+  "bands": [
+    {
+      "index": 0,
+      "name": "poissons",
+      "low": 70,
+      "high": 2000
+    }
+  ],
+  "integrations": [
+    {
+      "index": 0,
+      "name": "u_15sec",
+      "duration": 15
+    }
+  ],
+  "extractors": [
+    {
+      "index": 0,
+      "name": "vgg",
+      "impl": "vgg",
+      "offset": 0,
+      "step": 1000,
+      "isPersist": false
+    }
+  ],
+  "reducers": [
+    {
+      "index": 0,
+      "impl": "umap",
+      "dimensions": 2,
+      "bands": [],
+      "integrations": [],
+      "extractors": []
+    },
+    {
+      "index": 1,
+      "impl": "umap",
+      "dimensions": 3,
+      "bands": [],
+      "integrations": [],
+      "extractors": []
+    }
+  ],
+  "ranges": [
+    {
+      "index": 0,
+      "name": "r_2022",
+      "start": "2022-01-01 12:00:00",
+      "end": "2022-12-31 12:00:00"
+    },
+    {
+      "index": 1,
+      "name": "r_nov1_2022",
+      "start": "2022-11-16 12:00:00",
+      "end": "2022-11-17 12:00:00"
+    },
+    {
+      "index": 2,
+      "name": "r_nov2_2022",
+      "start": "2022-11-22 12:00:00",
+      "end": "2022-11-23 12:00:00"
+    },
+    {
+      "index": 3,
+      "name": "r_dec_2022",
+      "start": "2022-12-12 12:00:00",
+      "end": "2022-12-13 12:00:00"
+    }
+  ],
+  "autoclusters": [
+    {
+      "index": 0,
+      "impl": "hdbscan_eom",
+      "minClusterSize": 15,
+      "minSamples": 15,
+      "alpha": 1,
+      "epsilon": 0.1
+    },
+    {
+      "index": 1,
+      "impl": "hdbscan_leaf",
+      "minClusterSize": 15,
+      "minSamples": 15,
+      "alpha": 1,
+      "epsilon": 0.1
+    }
+  ],
+  "digesters": [
+    {
+      "index": 0,
+      "impl": "silhouette"
+    },
+    {
+      "index": 1,
+      "impl": "contingency"
+    }
+  ],
+  "trajectories": [
+    {
+      "index": 0,
+      "name": "day1",
+      "start": "2022-11-16 12:00:00",
+      "end": "2022-11-17 12:05:00",
+      "labelProperty": "LOCATION",
+      "labelValue": "undegraded",
+      "step": "hour"
+    },
+    {
+      "index": 1,
+      "name": "day2",
+      "start": "2022-11-22 12:00:00",
+      "end": "2022-11-23 12:05:00",
+      "labelProperty": "LOCATION",
+      "labelValue": "undegraded",
+      "step": "hour"
+    },
+    {
+      "index": 2,
+      "name": "day3",
+      "start": "2022-12-12 12:00:00",
+      "end": "2022-12-13 12:05:00",
+      "labelProperty": "LOCATION",
+      "labelValue": "undegraded",
+      "step": "hour"
+    }
+  ],
+  "indices": [],
   "files": [
     {
       "Index": "0",
@@ -1202,132 +1330,5 @@
       "LABEL_RVOCAL": "86",
       "LABEL_LOCATION+YEAR+REPLICA": "tourist/2021/3"
     }
-  ],
-  "bands": [
-    {
-      "index": 0,
-      "name": "poissons",
-      "low": 70,
-      "high": 2000
-    }
-  ],
-  "integrations": [
-    {
-      "index": 0,
-      "name": "u_15sec",
-      "duration": 15
-    }
-  ],
-  "extractors": [
-    {
-      "index": 0,
-      "name": "vgg",
-      "type": "vgg",
-      "offset": 0,
-      "step": 1000,
-      "isPersist": false
-    }
-  ],
-  "reducers": [
-    {
-      "index": 0,
-      "type": "umap",
-      "dimensions": 2,
-      "bands": [],
-      "integrations": [],
-      "extractors": []
-    },
-    {
-      "index": 1,
-      "type": "umap",
-      "dimensions": 3,
-      "bands": [],
-      "integrations": [],
-      "extractors": []
-    }
-  ],
-  "ranges": [
-    {
-      "index": 0,
-      "name": "r_2022",
-      "start": "2022-01-01 12:00:00",
-      "end": "2022-12-31 12:00:00"
-    },
-    {
-      "index": 1,
-      "name": "r_nov1_2022",
-      "start": "2022-11-16 12:00:00",
-      "end": "2022-11-17 12:00:00"
-    },
-    {
-      "index": 2,
-      "name": "r_nov2_2022",
-      "start": "2022-11-22 12:00:00",
-      "end": "2022-11-23 12:00:00"
-    },
-    {
-      "index": 3,
-      "name": "r_dec_2022",
-      "start": "2022-12-12 12:00:00",
-      "end": "2022-12-13 12:00:00"
-    }
-  ],
-  "autoclusters": [
-    {
-      "index": 0,
-      "type": "hdbscan_eom",
-      "minClusterSize": 15,
-      "minSamples": 15,
-      "alpha": 1,
-      "epsilon": 0.1
-    },
-    {
-      "index": 1,
-      "type": "hdbscan_leaf",
-      "minClusterSize": 15,
-      "minSamples": 15,
-      "alpha": 1,
-      "epsilon": 0.1
-    }
-  ],
-  "digesters": [
-    {
-      "index": 0,
-      "type": "silhouette"
-    },
-    {
-      "index": 1,
-      "type": "contingency"
-    }
-  ],
-  "trajectories": [
-    {
-      "index": 0,
-      "name": "day1",
-      "start": "2022-11-16 12:00:00",
-      "end": "2022-11-17 12:05:00",
-      "labelProperty": "LOCATION",
-      "labelValue": "undegraded",
-      "step": "hour"
-    },
-    {
-      "index": 1,
-      "name": "day2",
-      "start": "2022-11-22 12:00:00",
-      "end": "2022-11-23 12:05:00",
-      "labelProperty": "LOCATION",
-      "labelValue": "undegraded",
-      "step": "hour"
-    },
-    {
-      "index": 2,
-      "name": "day3",
-      "start": "2022-12-12 12:00:00",
-      "end": "2022-12-13 12:05:00",
-      "labelProperty": "LOCATION",
-      "labelValue": "undegraded",
-      "step": "hour"
-    }
-  ],
-  "indices": []
+  ]
 }

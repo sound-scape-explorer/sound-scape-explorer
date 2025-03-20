@@ -75,15 +75,19 @@ const timelineOrigin = computed<string>(() => {
       },
       {
         tag: 'computation_umap_dimensions',
-        value: settings?.computation_umap_dimensions.toString() ?? '',
+        value: settings?.computation_dimensions.toString() ?? '',
       },
       {
         tag: 'computation_umap_iterations',
-        value: settings?.computation_umap_iterations.toString() ?? '',
+        value: settings?.computation_iterations.toString() ?? '',
       },
       {
         tag: 'display_umap_seed',
-        value: settings?.display_umap_seed.toString() ?? '',
+        value: settings?.display_seed.toString() ?? '',
+      },
+      {
+        tag: 'memory_limit',
+        value: settings?.memory_limit.toString() ?? '',
       },
     ]"
   />

@@ -1,13 +1,13 @@
-from typing import List
-
 from rich.console import Console
 from rich.table import Table
 
-from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
+from processing.context import Context
 from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
 
 
-def print_trajectories(trajectories: List[TrajectoryConfig]):
+def print_trajectories(context: Context):
+    trajectories = context.config.trajectories
+
     console = Console()
 
     table = Table(show_header=True, header_style="bold magenta")
