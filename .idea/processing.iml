@@ -3,8 +3,8 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/processing">
-      <sourceFolder url="file://$MODULE_DIR$/processing/processing" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/processing/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/processing" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/processing/sound_scape_explorer.egg-info" />
       <excludeFolder url="file://$MODULE_DIR$/processing/venv" />
     </content>
