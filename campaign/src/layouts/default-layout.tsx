@@ -31,7 +31,7 @@ export function DefaultLayout() {
       <Toaster />
 
       <Card>
-        <Navbar>
+        <Navbar className={styles.navbar}>
           <NavbarGroup>
             <NavbarHeading
               className="hover"
@@ -40,10 +40,7 @@ export function DefaultLayout() {
               <Icon icon={isDark ? <Moon /> : <Flash />} />
             </NavbarHeading>
           </NavbarGroup>
-          <NavbarGroup
-            className={styles.navbar}
-            align={Alignment.END}
-          >
+          <NavbarGroup align={Alignment.END}>
             <Tabs
               id="tabs"
               selectedTabId={index}

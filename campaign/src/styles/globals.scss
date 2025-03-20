@@ -1,8 +1,6 @@
 @use "src/styles/layout";
 @use "sass:math";
 
-// TODO: add global scrolling overflow y
-
 .flex {
   display: flex;
 }
@@ -23,6 +21,17 @@
   margin-top: layout.$p;
 }
 
+// noinspection Stylelint
+.i {
+  font-style: italic;
+}
+
+// noinspection Stylelint
+.b {
+  font-weight: bold;
+}
+
+// noinspection Stylelint
 .p {
   padding: layout.$p;
 }
@@ -71,14 +80,6 @@
   &:hover {
     background: gainsboro;
   }
-}
-
-.i {
-  font-style: italic;
-}
-
-.b {
-  font-weight: bold;
 }
 
 .checkbox {
