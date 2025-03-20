@@ -56,6 +56,10 @@ export function useSettingsValidation() {
     [settings.computationStrategy],
   );
 
+  const isMemoryLimitValid = useCallback(() => {
+    return settings.memoryLimit > 0;
+  }, [settings.memoryLimit]);
+
   const isValid = useMemo(() => {
     return (
       isStoragePathValid() &&
@@ -66,7 +70,8 @@ export function useSettingsValidation() {
       isTimezoneValid() &&
       isComputationDimensionsValid() &&
       isComputationIterationsValid() &&
-      isDisplaySeedValid()
+      isDisplaySeedValid() &&
+      isMemoryLimitValid()
     );
   }, [
     isStoragePathValid,
@@ -78,9 +83,11 @@ export function useSettingsValidation() {
     isComputationDimensionsValid,
     isComputationIterationsValid,
     isDisplaySeedValid,
+    isMemoryLimitValid(),
   ]);
 
   return {
+    isValid,
     isStoragePathValid,
     isAudioPathValid,
     isSampleRateValid,
@@ -92,6 +99,6 @@ export function useSettingsValidation() {
     isDisplaySeedValid,
     isComputationStrategyUmap,
     isComputationStrategyPca,
-    isValid,
+    isMemoryLimitValid,
   };
 }
