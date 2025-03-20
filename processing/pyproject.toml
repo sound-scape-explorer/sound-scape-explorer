@@ -33,6 +33,7 @@ dependencies = [
   "rich==13.5.2",
   "inquirerpy==0.3.4",
   "soundfile==0.12.1",
+  "pydantic==2.10.6",
 ]
 
 [project.optional-dependencies]
