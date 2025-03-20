@@ -1,41 +1,39 @@
 import numpy as np
 
-from processing.common.AggregatedStorage import AggregatedStorage
 from processing.common.TimelineWalker import TimelineWalker
-from processing.config.bands.BandStorage import BandStorage
-from processing.config.extractors.ExtractorStorage import ExtractorStorage
-from processing.config.integrations.IntegrationStorage import IntegrationStorage
-from processing.config.settings.SettingsStorage import SettingsStorage
-from processing.config.sites.SiteStorage import SiteStorage
-from processing.interfaces import MenuCallback
-from processing.storage.Storage import Storage
-from processing.storage.StoragePath import StoragePath
+from processing.context import Context
+from processing.new.AggregatedManager import AggregatedManager
+from processing.new.ExtractedManager import ExtractedManager
+from processing.new.SiteManager import SiteManager
 from processing.utils.create_timelines import create_timelines
-from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 from processing.utils.print_extractors import print_extractors
-from processing.utils.validate_configuration import validate_configuration
+from processing.utils.print_indices import print_indices
 
 
-@validate_configuration
-def extract_and_aggregate(
-    storage: Storage,
-    callback: MenuCallback,
-):
+# TODO: refactor me after JR meeting
+def extract_and_aggregate(context: Context):
     print_action("Extractions and aggregations started!", "start")
 
-    storage.delete(StoragePath.extracted)
-    AggregatedStorage.delete(storage)
+    storage = context.storage
 
-    # retrieve configuration
-    settings = SettingsStorage.read_from_storage(storage)
-    bands = BandStorage.read_from_storage(storage)
-    integrations = IntegrationStorage.read_from_storage(storage)
-    sites = SiteStorage.read_from_storage(storage, settings)
-    extractors = ExtractorStorage.read_from_storage(storage)
-    extractors_instances = [ex.instanciate(settings) for ex in extractors]
+    ExtractedManager.delete(context)
+    AggregatedManager.delete(context)
 
-    print_extractors(extractors)
+    settings = context.config.settings
+    bands = context.config.bands
+    integrations = context.config.integrations
+    extractors = context.config.extractors
+    extractors_instances = [ex.start(settings) for ex in extractors]
+    indices = context.config.indices
+    indices_instances = [i.start(settings) for i in indices]
+
+    all_instances = [*extractors_instances, *indices_instances]
+
+    sites = SiteManager.sort_files_by_site_adapt(context)
+
+    print_extractors(context)
+    print_indices(context)
 
     # build timelines
     timelines = create_timelines(
@@ -50,7 +48,7 @@ def extract_and_aggregate(
     tw.bands = bands
     tw.integrations = integrations
     tw.timelines = timelines
-    tw.extractors = extractors_instances
+    tw.extractors = all_instances
 
     # walk intervals in timelines
     for (
@@ -65,49 +63,17 @@ def extract_and_aggregate(
         if len(interval_data) == 0:
             continue
 
-        # Aggregate
         aggregated_data = list(np.mean(interval_data, axis=0))
 
-        AggregatedStorage.append_data(
-            storage=storage,
+        AggregatedManager.to_storage(
+            context=context,
+            band=band,
+            extractor=extractor,
             data=aggregated_data,
-            band=band,
-            integration=timeline.integration,
-            extractor=extractor,
-        )
-
-        AggregatedStorage.append_site(
-            storage=storage,
-            site=timeline.site.name,
-            band=band,
-            integration=timeline.integration,
-            extractor=extractor,
-        )
-
-        AggregatedStorage.append_interval_details(
-            storage=storage,
+            timeline=timeline,
             interval_details=interval_details,
-            band=band,
-            integration=timeline.integration,
-            extractor=extractor,
-        )
-
-        AggregatedStorage.append_timestamp(
-            storage=storage,
-            timestamp=interval.start,
-            band=band,
-            integration=timeline.integration,
-            extractor=extractor,
-        )
-
-        AggregatedStorage.append_labels(
-            storage=storage,
+            interval=interval,
             labels=labels,
-            band=band,
-            integration=timeline.integration,
-            extractor=extractor,
         )
 
-    # tw.print_leftovers()
     print_action("Extractions and aggregations completed!", "end")
-    invoke_menu(storage, callback)

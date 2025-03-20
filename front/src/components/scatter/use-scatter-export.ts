@@ -6,7 +6,7 @@ import {useExportName} from 'src/composables/use-export-name';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
+import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
@@ -31,7 +31,7 @@ export function useScatterExport() {
   const {convertTimestampToIsoDate} = useDate();
   const {reducedFeatures} = useStorageReducedFeatures();
   const {aggregatedFeatures} = useStorageAggregatedFeatures();
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedIndices} = useStorageAggregatedIndices();
   const {aggregatedLabels} = useStorageAggregatedLabels();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
@@ -50,7 +50,7 @@ export function useScatterExport() {
       labelProperties.value === null ||
       reducedFeatures.value === null ||
       aggregatedSites.value === null ||
-      aggregatedIndicators.value === null
+      aggregatedIndices.value === null
     ) {
       return;
     }
@@ -60,7 +60,7 @@ export function useScatterExport() {
     loadingRef.value = true;
 
     const csv = new Csv();
-    const aggregatedIndicatorsCopy = aggregatedIndicators.value;
+    const aggregatedIndicesCopy = aggregatedIndices.value;
     const payload: ExportData[] = [];
 
     for (let i = 0; i < aggregatedTimestamps.value.length; i += 1) {
@@ -78,7 +78,7 @@ export function useScatterExport() {
       payload.push({
         intervalIndex: i,
         timestamp: timestamp,
-        site: site.site,
+        site: site,
         aggregatedLabels: aggregatedLabelsInterval,
         reducedFeatures: reducedFeaturesInterval,
         aggregatedFeatures: aggregatedFeaturesInterval,
@@ -93,8 +93,8 @@ export function useScatterExport() {
       csv.addColumn(`label_${property}`);
     });
 
-    aggregatedIndicatorsCopy.forEach(({extractor}) => {
-      csv.addColumn(`i_${extractor.index}_${extractor.name}`);
+    aggregatedIndicesCopy.forEach(({index}) => {
+      csv.addColumn(`i_${index.index}_${index.impl}`);
     });
 
     payload[0].reducedFeatures.forEach((_, r) => {
@@ -115,7 +115,7 @@ export function useScatterExport() {
         csv.addToCurrentRow(aL);
       });
 
-      aggregatedIndicatorsCopy.forEach((aI) => {
+      aggregatedIndicesCopy.forEach((aI) => {
         csv.addToCurrentRow(`${aI.values[data.intervalIndex]}`);
       });
 

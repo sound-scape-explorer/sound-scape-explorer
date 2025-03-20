@@ -1,22 +1,16 @@
-from processing.common.AggregatedStorage import AggregatedStorage
-from processing.interfaces import MenuCallback
-from processing.storage.Storage import Storage
-from processing.utils.invoke_menu import invoke_menu
+from processing.context import Context
+from processing.new.AggregatedManager import AggregatedManager
 from processing.utils.print_no_aggregated import print_no_aggregated
 
 
 def validate_aggregated(action):
     """The aggregated data validator."""
 
-    def decorator(
-        storage: Storage,
-        callback: MenuCallback,
-    ):
-        if not AggregatedStorage.exists(storage):
+    def decorator(context: Context):
+        if not AggregatedManager.exists(context):
             print_no_aggregated()
-            invoke_menu(storage, callback)
             return
 
-        action(storage, callback)
+        action(context)
 
     return decorator

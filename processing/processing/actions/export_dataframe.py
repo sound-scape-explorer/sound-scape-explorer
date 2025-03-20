@@ -1,136 +1,102 @@
 from pandas import DataFrame
 
 from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
-from processing.common.AggregatedReduceable import AggregatedReduceable
-from processing.config.Config import Config
-from processing.config.bands.BandStorage import BandStorage
-from processing.config.extractors.ExtractorStorage import ExtractorStorage
+from processing.common.AggregatedReducible import AggregatedReducible
 from processing.config.files.FileSheet import FileSheet
-from processing.config.integrations.IntegrationStorage import IntegrationStorage
-from processing.config.ranges.RangeStorage import RangeStorage
-from processing.config.reducers.ReducerStorage import ReducerStorage
-from processing.interfaces import MenuCallback
-from processing.storage.Storage import Storage
-from processing.storage.StoragePath import StoragePath
+from processing.context import Context
+from processing.new.AggregatedManager import AggregatedManager
+from processing.new.ReducedManager import ReducedManager
 from processing.utils.ask_band import ask_band
 from processing.utils.ask_csv_path import ask_csv_path
 from processing.utils.ask_integration import ask_integration
-from processing.utils.filter_nn_extractors import filter_nn_extractors
-from processing.utils.invoke_menu import invoke_menu
+from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
 from processing.utils.print_action import print_action
-from processing.utils.validate_configuration_with_config import (
-    validate_configuration_with_config,
-)
+from processing.utils.validate_configuration import validate_configuration
 
 
-@validate_configuration_with_config
-def export_dataframe(
-    config: Config,
-    storage: Storage,
-    callback: MenuCallback,
-):
+@validate_configuration
+def export_dataframe(context: Context):
     print_action("Export started", "start")
 
-    payload = {}
+    raw: dict[str, list[str]] = {}
 
-    bands = BandStorage.read_from_storage(storage)
-    integrations = IntegrationStorage.read_from_storage(storage)
-    extractors = ExtractorStorage.read_from_storage(storage)
-    nn_extractors = filter_nn_extractors(extractors)
+    bands = context.config.bands
+    integrations = context.config.integrations
+    extractors = context.config.extractors
+    first_extractor = extractors[0]
 
-    band = ask_band(bands)
-    integration = ask_integration(integrations)
-    csv_path = ask_csv_path(config)
+    band = ask_band(context)
+    integration = ask_integration(context)
+    csv_path = ask_csv_path(context)
 
-    timestamps_path = (
-        f"{StoragePath.aggregated_timestamps.value}"
-        f"/{band.name}"
-        f"/{integration.seconds}"
-        f"/{extractors[0].index}"
+    datasets = AggregatedManager.from_storage(
+        context,
+        band,
+        integration,
+        first_extractor,
     )
-    aggregated_timestamps = storage.read(timestamps_path)
 
-    # Interval indexes
-    payload["interval_index"] = []
-    interval_index = 0
-    for _ in aggregated_timestamps:
-        payload["interval_index"].append(str(interval_index))
-        interval_index += 1
+    # indices
+    raw["indices"] = []
+    for i, _ in enumerate(datasets["timestamps"]):
+        raw["indices"].append(str(i))
 
-    aggregated_sites_path = (
-        f"{StoragePath.aggregated_sites.value}"
-        f"/{band.name}"
-        f"/{integration.seconds}"
-        f"/{extractors[0].index}"
-    )
-    aggregated_sites = storage.read(aggregated_sites_path)
-    payload["site"] = [s[0].decode("utf-8") for s in aggregated_sites]
+    # sites
+    raw["sites"] = [s[0] for s in datasets["sites"]]
 
-    # Timestamps
-    payload["timestamp"] = [at[0] for at in aggregated_timestamps]
+    # timestamps
+    raw["timestamps"] = [
+        convert_timestamp_to_date(t[0]) for t in datasets["timestamps"]
+    ]
 
-    # Labels
-    aggregated_labels = AggregatedLabelStorage.read_from_storage(
-        storage=storage,
-        band=band,
-        integration=integration,
-        extractor=extractors[0],
-    )
-    for al in aggregated_labels:
+    # labels
+    reducible = AggregatedReducible(band, integration, first_extractor)
+    labels = AggregatedLabelStorage.read_from_storage(context, reducible)
+
+    for al in labels:
         key = f"{FileSheet.label_prefix.value}{al.property}"
-        payload[key] = al.values
+        raw[key] = al.values
 
-    # Reduced features
-    ranges = RangeStorage.read_from_storage(storage)
-    reducers = ReducerStorage.read_from_storage(storage, bands, integrations, ranges)
+    # reduced features
+    reducers = context.config.reducers
 
-    aggregated_reduceables = AggregatedReduceable.reconstruct(
+    reducibles = AggregatedReducible.reconstruct(
         bands=bands,
         integrations=integrations,
-        nn_extractors=nn_extractors,
+        extractors=extractors,
     )
 
-    ars = list(
+    filtered_reducibles = list(
         filter(
             lambda ar_: ar_.band == band and ar_.integration == integration,
-            aggregated_reduceables,
+            reducibles,
         )
     )
 
     for reducer in reducers:
-        reducer.load(band, integration)
-
-        if not reducer.should_calculate():
-            continue
-
-        for ar in ars:
-            reduced_path = ar.get_reduced_path(reducer)
-            reduced_path_exists = storage.exists_dataset(reduced_path)
-
-            if not reduced_path_exists:
-                continue
-
-            aggregated_features = storage.read(reduced_path)
+        for reducible in filtered_reducibles:
+            features = ReducedManager.from_storage(context, reducible, reducer)
 
             for d in range(reducer.dimensions):
-                key = f"{reducer.index}_{reducer.name}_{reducer.dimensions}d_{d + 1}"
-                payload[key] = [af[d] for af in aggregated_features]
+                elements = [
+                    str(reducer.index),
+                    reducer.impl.name,
+                    f"{reducer.dimensions}d",
+                    f"{d+1}",
+                ]
+                key = "_".join(elements)
+                raw[key] = [f[d] for f in features]
 
-    # Aggregated data
+    # aggregated data
     for extractor in extractors:
-        path = (
-            f"{StoragePath.aggregated.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
-            f"/{extractor.index}"
-        )
-        data = storage.read(path)
-        for index in range(data.shape[1]):
-            key = f"{extractor.index}_{extractor.name}_{index + 1}"
-            payload[key] = [d[index] for d in data]
+        data = AggregatedManager.from_storage(context, band, integration, extractor)
 
-    df = DataFrame(payload)
+        for index in range(data["data"].shape[1]):
+            elements = [str(extractor.index), extractor.name, f"{index+1}"]
+            key = "_".join(elements)
+            raw[key] = [d[index] for d in data["data"]]
+
+    df = DataFrame(raw)
     df.to_csv(csv_path, index=False)
 
     print_action("Export completed!", "end")
-    invoke_menu(storage, callback)

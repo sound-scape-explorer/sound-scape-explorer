@@ -1,10 +1,8 @@
+import {TrajectoryStep} from '@shared/enums.ts';
 import {useMemo} from 'react';
 import {useFilesLabels} from 'src/panels/files/hooks/use-files-labels.ts';
 import {useTrajectorySlug} from 'src/panels/metrics/hooks/use-trajectory-slug.ts';
-import {
-  ConfigTrajectoryStep,
-  useTrajectoryState,
-} from 'src/panels/metrics/hooks/use-trajectory-state.ts';
+import {useTrajectoryState} from 'src/panels/metrics/hooks/use-trajectory-state.ts';
 import {useTrajectoryValidation} from 'src/panels/metrics/hooks/use-trajectory-validation.ts';
 import {DatePicker} from 'src/primitives/date-picker.tsx';
 import {GenericSection} from 'src/primitives/generic-section/generic-section.tsx';
@@ -70,11 +68,11 @@ export function MetricsTrajectories() {
           <TextInput
             defaultValue={t.labelValue}
             onBlur={(v) => update(t, 'labelValue', v)}
-            intent={isLabelValueValid(t) ? 'success': 'danger'}
+            intent={isLabelValueValid(t) ? 'success' : 'danger'}
           />
 
           <Select
-            items={Object.values(ConfigTrajectoryStep)}
+            items={Object.values(TrajectoryStep)}
             current={t.step}
             onSelect={(s) => update(t, 'step', s)}
             placeholder="step"

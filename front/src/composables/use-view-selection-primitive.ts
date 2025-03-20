@@ -9,6 +9,7 @@ type Model = Ref<ViewItem | null>;
 type Selected = Ref<string | null>;
 type Options = Ref<string[]>;
 
+// unreadable vue composable
 export function useViewSelectionPrimitive() {
   let hasAutoSelected = false;
 

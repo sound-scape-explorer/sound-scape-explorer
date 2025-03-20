@@ -3,14 +3,14 @@ from typing import List
 from processing.config.bands.BandStorage import BandStorage
 from processing.config.integrations.IntegrationStorage import IntegrationStorage
 from processing.config.ranges.RangeStorage import RangeStorage
-from processing.config.reducers.ReducerConfig import ReducerConfig
 from processing.config.reducers.ReducerStorage import ReducerStorage
-from processing.storage.Storage import Storage
+from processing.new.ReducerConfigNew import ReducerConfigNew
+from processing.new.StorageNew import StorageNew
 
 
 def read_reducers(
-    storage: Storage,
-) -> List[ReducerConfig]:
+    storage: StorageNew,
+) -> List[ReducerConfigNew]:
     bands = BandStorage.read_from_storage(storage)
     integrations = IntegrationStorage.read_from_storage(storage)
     ranges = RangeStorage.read_from_storage(storage)

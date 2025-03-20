@@ -1,22 +1,12 @@
+import {DigesterImpl} from '@shared/enums.ts';
 import {atom} from 'jotai/index';
 import {useGenericSectionState} from 'src/primitives/generic-section/use-generic-section-state.ts';
 
 const configDigestersAtom = atom<ConfigDigester[]>([]);
 
-export enum DigesterType {
-  silhouette = 'silhouette',
-  contingency = 'contingency',
-  sum_var = 'sum_var',
-  sum_std = 'sum_std',
-  mean_std = 'mean_std',
-  mean_spreading = 'mean_spreading',
-  distance = 'distance',
-  overlap = 'overlap',
-}
-
 export interface ConfigDigester {
   index: number;
-  type: DigesterType;
+  impl: DigesterImpl;
 }
 
 export function useDigesterState() {
@@ -29,7 +19,7 @@ export function useDigesterState() {
     atom: configDigestersAtom,
     createItem: (index) => ({
       index,
-      type: DigesterType.silhouette,
+      impl: DigesterImpl.silhouette,
     }),
   });
 

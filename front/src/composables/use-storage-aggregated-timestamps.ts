@@ -40,8 +40,8 @@ export function useStorageAggregatedTimestamps() {
 
       aggregatedTimestamps.value = await worker.readAggregatedTimestamps(
         file,
-        band.value.name,
-        integration.value.seconds,
+        band.value.index,
+        integration.value.index,
         extractor.value.index,
       );
     });

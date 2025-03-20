@@ -4,12 +4,13 @@ import numpy as np
 import pydub
 from pydub import AudioSegment
 
-from processing.config.bands.BandConfig import BandConfig
-from processing.config.files.FileConfig import FileConfig
 from processing.loaders.SoundSlice import SoundSlice
 from processing.loaders.Spectrogram import Spectrogram
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.FileConfigNew import FileConfigNew
 
-FilteredKey = str
+
+FilteredKey = tuple[int, int]
 SoundSliceStartEnd = str
 SpectrogramMode = Literal["psd", "amplitude"]
 Spectrograms = Dict[SpectrogramMode, Dict[SoundSliceStartEnd, Spectrogram]]
@@ -66,9 +67,9 @@ class SoundLoader:
             "amplitude": {},
         }
 
-    def load(self, file: FileConfig):
+    def load(self, file: FileConfigNew):
         # print(f"SoundLoader: file index {file.index}")
-        sound: pydub.AudioSegment = AudioSegment.from_file(file.path)
+        sound: pydub.AudioSegment = AudioSegment.from_file(file.absolute_path)
         sample_rate: int = sound.frame_rate  # type: ignore
 
         self.audio = sound
@@ -88,12 +89,12 @@ class SoundLoader:
         slice_: AudioSegment = self.audio[start:end]  # type: ignore
         return slice_
 
-    def get_filtered(self, band: BandConfig):
+    def get_filtered(self, band: BandConfigNew):
         from maad import sound
 
-        kf = f"{band.low}-{band.high}"
+        kf = band.low, band.high
 
-        if kf in self.__filtered.keys():
+        if kf in self.__filtered:
             return self.__filtered[kf]
 
         samples = self.audio.get_array_of_samples()

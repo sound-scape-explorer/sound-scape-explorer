@@ -3,7 +3,7 @@ import os
 import platform
 import sys
 
-from processing.main import main
+from processing.menu import menu
 from processing.utils.append_to_config import append_to_config
 from processing.utils.extract_config_from_storage import extract_config_from_storage
 from processing.utils.prettify_exceptions import prettify_exceptions
@@ -24,30 +24,37 @@ def update_python_path():
         sys.path.append(processing_path)
 
 
-def parse_arguments() -> str:
+def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("config_path")
+    parser.add_argument("config_path", help="Path to configuration file")
+    parser.add_argument("--debug", action="store_true", help="Enable debug mode")
     args = parser.parse_args()
-    return args.config_path
+
+    config_path: str = args.config_path
+    is_debug: bool = args.debug
+
+    return config_path, is_debug
 
 
 def start_processing():
     update_python_path()
-    config_path = parse_arguments()
-    main(config_path=config_path)
+    config_path, is_debug = parse_arguments()
+    menu(config_path, is_debug)
 
 
+# TODO: to remove
 @prettify_exceptions
 def extract_config():
     update_python_path()
-    storage_path = parse_arguments()
+    storage_path, _ = parse_arguments()
     extract_config_from_storage(storage_path)
 
 
+# TODO: to remove
 @prettify_exceptions
 def fill_config():
     update_python_path()
-    config_path = parse_arguments()
+    config_path, _ = parse_arguments()
     audio_path = read_audio_path_from_config(config_path)
     paths = walk_directory(audio_path)
     append_to_config(config_path, paths)

@@ -1,10 +1,11 @@
 import {useExtractorOptions} from 'src/composables/use-extractor-options';
-import {type Extractor, useExtractors} from 'src/composables/use-extractors';
+import {useExtractors} from 'src/composables/use-extractors';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
+import {type ExtractorDto} from 'src/dtos';
 import {ref} from 'vue';
 
-const extractor = ref<Extractor | null>(null);
-const selected = ref<Extractor['name'] | null>(null);
+const extractor = ref<ExtractorDto | null>(null);
+const selected = ref<ExtractorDto['name'] | null>(null);
 
 export function useExtractorSelection() {
   const {extractors} = useExtractors();

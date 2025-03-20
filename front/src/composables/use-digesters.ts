@@ -1,15 +1,8 @@
-import {type DigesterName} from 'src/common/digester-name';
-import {type DigesterType} from 'src/common/digester-type-map';
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type DigesterDtoWithType} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface Digester {
-  index: number;
-  name: DigesterName;
-  type: DigesterType;
-}
-
-const digesters = ref<Digester[] | null>(null);
+const digesters = ref<DigesterDtoWithType[] | null>(null);
 
 export function useDigesters() {
   const {read: readStorage} = useStorageReader();

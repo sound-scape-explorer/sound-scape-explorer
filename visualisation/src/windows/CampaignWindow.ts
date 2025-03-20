@@ -1,7 +1,7 @@
 import path from 'path';
-import {CampaignBridge} from 'src/bridges/CampaignBridge';
-import {DEV_CAMPAIGN_URL} from 'src/constants';
 
+import {CampaignBridge} from '../bridges/CampaignBridge';
+import {DEV_CAMPAIGN_URL} from '../constants';
 import {ElectronWindow} from './ElectronWindow';
 
 export class CampaignWindow extends ElectronWindow {

@@ -9,7 +9,7 @@ import {useExtractorSelection} from 'src/composables/use-extractor-selection';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
+import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
@@ -22,7 +22,7 @@ import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresh
 export function useViewUnloader() {
   const {open, closeAll} = useDraggables();
   const {resetAggregatedFeatures} = useStorageAggregatedFeatures();
-  const {resetAggregatedIndicators} = useStorageAggregatedIndicators();
+  const {resetAggregatedIndices} = useStorageAggregatedIndices();
   const {resetAggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {resetAggregatedSites} = useStorageAggregatedSites();
   const {resetAggregatedIntervalDetails} =
@@ -56,7 +56,7 @@ export function useViewUnloader() {
     resetFilterByTime();
 
     resetAggregatedFeatures();
-    resetAggregatedIndicators();
+    resetAggregatedIndices();
     resetAggregatedTimestamps();
     resetAggregatedSites();
     resetAggregatedIntervalDetails();

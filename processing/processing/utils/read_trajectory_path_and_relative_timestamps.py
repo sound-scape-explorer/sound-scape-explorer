@@ -4,11 +4,11 @@ import pandas
 from torch.utils.data import Dataset
 
 from processing.common.ContinuousTimeTrajectory import ContinuousTimeTrajectory
-from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
+from processing.new.TrajectoryConfigNew import TrajectoryConfigNew
 
 
 def read_trajectory_path_and_relative_timestamps(
-    trajectory: TrajectoryConfig,
+    trajectory: TrajectoryConfigNew,
     features: Dataset,
     timestamps: Dataset,
     labels_properties: List[str],

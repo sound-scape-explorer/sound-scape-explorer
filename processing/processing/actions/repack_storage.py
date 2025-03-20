@@ -9,6 +9,7 @@ from processing.utils.invoke_menu import invoke_menu
 from processing.utils.print_action import print_action
 
 
+# TODO: refactor and manually rebuild the h5 storage
 def repack_storage(
     storage: Storage,
     callback: MenuCallback,

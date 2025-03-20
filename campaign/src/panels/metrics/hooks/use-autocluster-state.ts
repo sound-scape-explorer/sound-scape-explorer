@@ -1,3 +1,4 @@
+import {AutoclusterImpl} from '@shared/enums.ts';
 import {atom} from 'jotai/index';
 import {
   AUTOCLUSTER_ALPHA_DEFAULT,
@@ -9,14 +10,9 @@ import {useGenericSectionState} from 'src/primitives/generic-section/use-generic
 
 const configAutoclustersAtom = atom<ConfigAutocluster[]>([]);
 
-export enum AutoclusterType {
-  hdbscan_eom = 'hdbscan_eom',
-  hdbscan_leaf = 'hdbscan_leaf',
-}
-
 export interface ConfigAutocluster {
   index: number;
-  type: AutoclusterType;
+  impl: AutoclusterImpl;
   minClusterSize: number;
   minSamples: number;
   alpha: number;
@@ -33,7 +29,7 @@ export function useAutoclusterState() {
     atom: configAutoclustersAtom,
     createItem: (index) => ({
       index,
-      type: AutoclusterType.hdbscan_eom,
+      impl: AutoclusterImpl.hdbscan_eom,
       minClusterSize: AUTOCLUSTER_MIN_CLUSTER_SIZE_DEFAULT,
       minSamples: AUTOCLUSTER_MIN_SAMPLES_DEFAULT,
       alpha: AUTOCLUSTER_ALPHA_DEFAULT,

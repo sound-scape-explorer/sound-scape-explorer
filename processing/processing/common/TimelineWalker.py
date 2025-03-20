@@ -9,10 +9,13 @@ from processing.common.Timeline import Timeline
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.files.FileConfig import FileConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
-from processing.extractors.Extractor import Extracted, Extractor
-from processing.storage.Storage import Storage
+from processing.constants import DELIMITER
+from processing.extractors.Extractor import RawData, Extractor
+from processing.new.FileConfigNew import FileConfigNew
+from processing.new.StorageNew import StorageNew
 from processing.utils.print_new_line import print_new_line
 from processing.utils.print_timeline_progress import print_timeline_progress
+
 
 FileIndex = int
 BandIndex = int
@@ -20,6 +23,7 @@ ExtractorIndex = int
 BlockIndex = int
 
 
+# TODO: bro, can you reduce my complexity?
 class TimelineWalker:
     """The walker for timelines
 
@@ -35,11 +39,11 @@ class TimelineWalker:
         self.__bands: Optional[List[BandConfig]] = None
         self.__integrations: Optional[List[IntegrationConfig]] = None
         self.__extractors: Optional[List[Extractor]] = None
-        self.__storage: Optional[Storage] = None
+        self.__storage: Optional[StorageNew] = None
 
         self.loaders: Dict[FileIndex, FileLoader] = {}
         self.extracted: Dict[
-            FileIndex, Dict[BandIndex, Dict[ExtractorIndex, Extracted]]
+            FileIndex, Dict[BandIndex, Dict[ExtractorIndex, RawData]]
         ] = {}
 
         # Current file index
@@ -82,12 +86,12 @@ class TimelineWalker:
         self.__extractors = extractors
 
     @property
-    def storage(self) -> Storage:
+    def storage(self) -> StorageNew:
         assert self.__storage is not None, "Please attach storage"
         return self.__storage
 
     @storage.setter
-    def storage(self, storage: Storage):
+    def storage(self, storage: StorageNew):
         self.__storage = storage
 
     def print_leftovers(self):
@@ -118,7 +122,7 @@ class TimelineWalker:
                             extractor,
                         )
 
-    def load_file(self, file: FileConfig) -> FileLoader:
+    def load_file(self, file: FileConfigNew) -> FileLoader:
         if file.index in self.loaders.keys():
             return self.loaders[file.index]
 
@@ -157,6 +161,7 @@ class TimelineWalker:
             loader.loader
         )
 
+        # TODO: refactor me
         if extractor.is_persist:
             # Store only for first integration
             # this could be above
@@ -194,8 +199,14 @@ class TimelineWalker:
         block: Block,
     ) -> str:
         file_relative_start = block.start - block.file.start
-        block_details = f"{block.start}/{file_relative_start}/{block.file.path}"
-        return block_details
+
+        return DELIMITER.join(
+            [
+                str(block.start),
+                str(file_relative_start),
+                block.file.relative_path,
+            ]
+        )
 
     def purge(
         self,
@@ -251,7 +262,7 @@ class TimelineWalker:
                 )
 
                 interval_data = [*interval_data, *block_data]
-                labels = [*labels, *block.file.labels]
+                labels = [*labels, *block.file.labels.values()]
 
                 block_details = self.get_block_details(block=block)
                 if block_details not in interval_details:

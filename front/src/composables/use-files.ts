@@ -1,15 +1,8 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type FileDto} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface File {
-  index: number;
-  name: string;
-  timestamp: number;
-  site: string;
-  labels: string[];
-}
-
-const files = ref<File[] | null>(null);
+const files = ref<FileDto[] | null>(null);
 
 export function useFiles() {
   const {read: readStorage} = useStorageReader();

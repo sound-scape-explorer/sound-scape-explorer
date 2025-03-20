@@ -4,11 +4,13 @@ import numpy
 from h5py import Dataset
 from pandas import pandas
 
+from processing.new.TrajectoryStep import TrajectoryStep
 from processing.utils.filter_features_by_label_and_time import (
     filter_features_by_label_and_time,
 )
 
 
+# TODO: refactor me
 class ContinuousTimeTrajectory:
     def __init__(self) -> None:
         self.__features = None
@@ -45,14 +47,14 @@ class ContinuousTimeTrajectory:
         self.values = values
         return self.values
 
-    def set_timestamps(self, timestamps: List[int]) -> List[int]:
+    def set_timestamps(self, timestamps: list[int]) -> list[int]:
         self.timestamps = timestamps
         return self.timestamps
 
     def set_relative_timestamps(
         self,
-        relative_timestamps: List[float],
-    ) -> List[int]:
+        relative_timestamps: list[int],
+    ) -> list[int]:
         self.relative_timestamps = relative_timestamps
         return self.relative_timestamps
 
@@ -64,7 +66,7 @@ class ContinuousTimeTrajectory:
         timestamp_end: int,
         labels_properties: List[str],
         labels_values: Dataset,
-        step: int,
+        step: TrajectoryStep,
     ):
         self.__features = features
         self.__timestamps = timestamps
@@ -72,7 +74,7 @@ class ContinuousTimeTrajectory:
         self.__timestamp_end = timestamp_end
         self.__labels_properties = labels_properties
         self.__labels_values = labels_values
-        self.__step = step
+        self.__step = step.value
 
     def calculate(
         self,

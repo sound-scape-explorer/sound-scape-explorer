@@ -1,11 +1,11 @@
 import {useBandSelection} from 'src/composables/use-band-selection';
-import {type Digester} from 'src/composables/use-digesters';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type DigesterDtoWithType} from 'src/dtos';
 import {ref} from 'vue';
 
 export interface Digested {
-  digester: Digester;
+  digester: DigesterDtoWithType;
   // keys are label properties indexes
   // TODO: this needs to be improved
   values: {
@@ -25,7 +25,7 @@ export function useStorageDigested() {
   const {band} = useBandSelection();
   const {integration} = useIntegrationSelection();
 
-  const readDigested = (digester: Digester) =>
+  const readDigested = (digester: DigesterDtoWithType) =>
     read(async (worker, file) => {
       if (band.value === null || integration.value === null) {
         return;
@@ -33,8 +33,8 @@ export function useStorageDigested() {
 
       const values = await worker.readDigested(
         file,
-        band.value.name,
-        integration.value.seconds,
+        band.value.index,
+        integration.value.index,
         digester.index,
       );
 

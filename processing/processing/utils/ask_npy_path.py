@@ -1,10 +1,12 @@
+import os
+
 from InquirerPy.resolver import prompt
 from rich import print
 
-from processing.config.Config import Config
+from processing.context import Context
 
 
-def ask_npy_path(config: Config) -> str:
+def ask_npy_path(context: Context):
     questions = [
         {
             "type": "input",
@@ -18,10 +20,14 @@ def ask_npy_path(config: Config) -> str:
     answers = prompt(questions)
     filename: str = str(answers["filename"])
 
-    storage_filename = config.settings.storage_path.split("/")[-1]
+    storage_filename = context.config.settings.storage_path.split(os.sep)[-1]
 
     if filename == "":
         filename = storage_filename
 
-    path = config.settings.storage_path.replace(storage_filename, f"{filename}.npy")
+    path = context.config.settings.storage_path.replace(
+        storage_filename,
+        f"{filename}.npy",
+    )
+
     return path

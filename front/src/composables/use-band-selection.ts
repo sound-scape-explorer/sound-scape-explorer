@@ -1,10 +1,11 @@
 import {useBandOptions} from 'src/composables/use-band-options';
-import {type Band, useBands} from 'src/composables/use-bands';
+import {useBands} from 'src/composables/use-bands';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
+import {type BandDto} from 'src/dtos';
 import {ref} from 'vue';
 
-const band = ref<Band | null>(null);
-const selected = ref<Band['name'] | null>(null);
+const band = ref<BandDto | null>(null);
+const selected = ref<BandDto['name'] | null>(null);
 
 export function useBandSelection() {
   const {bands} = useBands();

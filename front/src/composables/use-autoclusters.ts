@@ -1,16 +1,8 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type AutoclusterDto} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface Autocluster {
-  index: number;
-  name: string;
-  min_cluster_size: number;
-  min_samples: number;
-  alpha: number;
-  epsilon: number;
-}
-
-const autoclusters = ref<Autocluster[]>([]);
+const autoclusters = ref<AutoclusterDto[]>([]);
 
 // autocluster configs
 export function useAutoclusters() {
@@ -18,7 +10,7 @@ export function useAutoclusters() {
 
   const read = async () => {
     await readStorage(async (worker, file) => {
-      autoclusters.value = await worker.readAutoclustersConfiguration(file);
+      autoclusters.value = await worker.readAutoclusters(file);
     });
   };
 

@@ -1,7 +1,7 @@
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
+import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
 import {useTemporal} from 'src/draggables/temporal/use-temporal';
 import {computed, ref} from 'vue';
 
@@ -18,7 +18,7 @@ const isDisplay = ref<boolean>(true); // whether plot is shown or not
 const isExpanded = ref<boolean>(false);
 
 export function useDraggableTemporal() {
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedIndices} = useStorageAggregatedIndices();
   const {data} = useTemporal();
   const {convertTimestampToIsoDate} = useDate();
   const {selectIndicator} = useTemporal();
@@ -38,12 +38,12 @@ export function useDraggableTemporal() {
   };
 
   const indicators = computed(() => {
-    if (aggregatedIndicators.value === null) {
+    if (aggregatedIndices.value === null) {
       return [];
     }
 
-    return aggregatedIndicators.value.map(
-      (i) => `${i.extractor.index} - ${i.extractor.name}`,
+    return aggregatedIndices.value.map(
+      ({index}) => `${index.index} - ${index.impl}`,
     );
   });
 

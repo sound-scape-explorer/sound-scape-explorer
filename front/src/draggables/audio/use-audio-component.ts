@@ -6,7 +6,7 @@ const sizes: Size[] = [128, 256, 512, 1024, 2048, 4096];
 const size = ref<Size>(4096);
 
 export function useAudioFourier() {
-  // todo: maybe extract these
+  // TODO: maybe extract these
   const i = computed(() => sizes.indexOf(size.value));
   const n = computed(() => i.value + 1);
   const p = computed(() => i.value - 1);

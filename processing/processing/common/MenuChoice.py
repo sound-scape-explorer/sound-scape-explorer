@@ -16,7 +16,7 @@ class MenuChoice(Enum):
     Digest = "Run digests"
     RunAll = "Run all"
     ExportDataframe = "Export dataframe as .csv"
-    ExportComputationUmaps = "Export computation UMAPs as .npy"
+    ExportComputed = "Export computed as .npy"
     ExportMeanDistancesMatrix = "Export mean distances matrix as .npy"
     Repack = "Repack storage with `h5repack` (UNIX only)"
     FixAudioWindows10_7_2 = "Fix audio on Windows for versions <=10.7.2"

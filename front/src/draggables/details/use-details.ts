@@ -10,17 +10,14 @@ import {
   useStorageAggregatedIntervalDetails,
 } from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {
-  type AggregatedSite,
-  useStorageAggregatedSites,
-} from 'src/composables/use-storage-aggregated-sites';
+import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {computed, ref} from 'vue';
 
 const currentIndex = ref<number | null>(null);
 const date = ref<Dayjs | null>(null);
 const labelValues = ref<string[] | null>(null);
-const site = ref<AggregatedSite | null>(null);
+const site = ref<string | null>(null);
 const blocks = ref<IntervalDetails | null>(null);
 
 // interval details
@@ -66,7 +63,7 @@ export function useDetails() {
       return null;
     }
 
-    return date.value.add(integration.value.seconds, 'seconds');
+    return date.value.add(integration.value.duration, 'milliseconds');
   });
 
   const updateDates = () => {

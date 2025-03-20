@@ -8,7 +8,7 @@ import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
+import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
@@ -34,8 +34,7 @@ export function useScatterLifecycles() {
   const {filtered: temporalFiltered} = useScatterFilterTemporal();
   const {selected} = useScreen();
   const {isWebGlScatter2d} = useClientSettings();
-  const {min: indicatorRangeMin, max: indicatorRangeMax} =
-    useColorByIndicator();
+  const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
   const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
   const {isEnabled: isColorByLabelsNumeric} = useLabelNumeric();
   const {currentIntervalIndex} = useIntervalSelector();

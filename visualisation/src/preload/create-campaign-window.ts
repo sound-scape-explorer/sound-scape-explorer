@@ -1,4 +1,4 @@
-import {CampaignBridge} from 'src/bridges/CampaignBridge';
+import {CampaignBridge} from '../bridges/CampaignBridge';
 
 export async function createCampaignWindow() {
   await CampaignBridge.createFromRenderer();

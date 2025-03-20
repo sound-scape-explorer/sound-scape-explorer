@@ -1,17 +1,17 @@
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
-import {generateUniqueExtractorSlug} from 'src/utils/config';
+import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
+import {generateUniqueIndexSlug} from 'src/utils/config';
 import {computed} from 'vue';
 
 export function useIndicators() {
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedIndices} = useStorageAggregatedIndices();
 
   const names = computed(() => {
-    if (aggregatedIndicators.value === null) {
+    if (aggregatedIndices.value === null) {
       return null;
     }
 
-    return aggregatedIndicators.value.map(({extractor}) =>
-      generateUniqueExtractorSlug(extractor),
+    return aggregatedIndices.value.map(({index}) =>
+      generateUniqueIndexSlug(index),
     );
   });
 

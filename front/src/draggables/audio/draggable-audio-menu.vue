@@ -54,7 +54,7 @@ const {gain} = useAudioGain();
         Site
       </NTag>
 
-      {{ aggregatedSites[currentIntervalIndex].site }}
+      {{ aggregatedSites[currentIntervalIndex] }}
     </NGi>
   </NGrid>
 

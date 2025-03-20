@@ -1,25 +1,20 @@
-import {useStorageReader} from 'src/composables/use-storage-reader';
-import {ref} from 'vue';
+import {useFiles} from 'src/composables/use-files';
+import {ref, watch} from 'vue';
 
-export interface Site {
-  index: number;
-  name: string;
-  fileIndexes: number[];
-}
-
-const sites = ref<Site[] | null>(null);
+const sites = ref<string[] | null>(null);
 
 export function useSites() {
-  const {read: readStorage} = useStorageReader();
+  const {files} = useFiles();
 
-  const read = async () => {
-    await readStorage(async (worker, file) => {
-      sites.value = await worker.readSites(file);
-    });
-  };
+  watch(files, () => {
+    if (sites.value !== null || files.value === null) {
+      return;
+    }
+
+    sites.value = [...new Set(files.value.map((f) => f.site))];
+  });
 
   return {
     sites: sites,
-    read: read,
   };
 }

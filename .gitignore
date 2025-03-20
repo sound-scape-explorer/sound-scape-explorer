@@ -23,6 +23,7 @@ config.xlsx
 
 examples/*.zip
 
+venv
 sse-venv-*
 !sse-venv-*.bat
 !sse-venv-*.sh

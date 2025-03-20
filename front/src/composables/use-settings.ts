@@ -1,8 +1,8 @@
-import {type StorageSettings} from 'src/common/storage-settings';
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type SettingsDto} from 'src/dtos';
 import {computed, ref} from 'vue';
 
-const settings = ref<StorageSettings | null>(null);
+const settings = ref<SettingsDto | null>(null);
 const hasTimezone = computed(() => settings.value?.timezone !== '');
 
 export function useSettings() {

@@ -1,17 +1,8 @@
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type TrajectoryDto} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface Trajectory {
-  index: number;
-  name: string;
-  start: number;
-  end: number;
-  labelProperty: string;
-  labelValue: string;
-  step: number;
-}
-
-const trajectories = ref<Trajectory[] | null>(null);
+const trajectories = ref<TrajectoryDto[] | null>(null);
 
 export function useTrajectories() {
   const {read: readStorage} = useStorageReader();

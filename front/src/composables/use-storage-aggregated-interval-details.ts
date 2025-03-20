@@ -7,7 +7,7 @@ import {ref} from 'vue';
 
 // INFO: A block corresponds to one audio
 export interface BlockDetails {
-  start: number;
+  start: number; // ms
   fileStart: number;
   file: string;
   fileIndex: number;
@@ -50,8 +50,8 @@ export function useStorageAggregatedIntervalDetails() {
       aggregatedIntervalDetails.value =
         await worker.readAggregatedIntervalDetails(
           file,
-          band.value.name,
-          integration.value.seconds,
+          band.value.index,
+          integration.value.index,
           extractor.value.index,
         );
     });

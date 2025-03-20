@@ -7,6 +7,7 @@ from mutagen.wave import WAVE
 
 from processing.utils.get_file_full_path import get_file_full_path
 
+
 MyFile = Union[WAVE, MP3, FLAC, None]
 
 

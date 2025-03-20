@@ -3,10 +3,13 @@ from typing import List
 from InquirerPy.resolver import prompt
 from rich import print
 
-from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.context import Context
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
 
 
-def ask_integration(integrations: List[IntegrationConfig]) -> IntegrationConfig:
+def ask_integration(context: Context):
+    integrations = context.config.integrations
+
     questions = [
         {
             "type": "list",
@@ -20,7 +23,7 @@ def ask_integration(integrations: List[IntegrationConfig]) -> IntegrationConfig:
     answers = prompt(questions)
     name: str = str(answers["choices"])
 
-    results: List[IntegrationConfig] = list(
+    results: List[IntegrationConfigNew] = list(
         filter(lambda i: i.name == name, integrations)
     )
 

@@ -1,16 +1,15 @@
-import {type DigesterName} from 'src/common/digester-name';
+import {DigesterImpl} from '@shared/enums';
+import {type DigesterDtoWithType} from 'src/dtos';
 
-export type DigesterType = '1d' | '2d' | '2d-pairing';
-
-type DigesterTypeMap = Record<DigesterName, DigesterType>;
+type DigesterTypeMap = Record<DigesterImpl, DigesterDtoWithType['type']>;
 
 export const digesterTypeMap: DigesterTypeMap = {
-  sum_var: '1d',
-  sum_std: '1d',
-  mean_std: '1d',
-  mean_spreading: '1d',
-  distance: '2d',
-  overlap: '2d',
-  silhouette: '2d',
-  contingency: '2d-pairing',
+  [DigesterImpl.sum_var]: '1d',
+  [DigesterImpl.sum_std]: '1d',
+  [DigesterImpl.mean_std]: '1d',
+  [DigesterImpl.mean_spreading]: '1d',
+  [DigesterImpl.distance]: '2d',
+  [DigesterImpl.overlap]: '2d',
+  [DigesterImpl.silhouette]: '2d',
+  [DigesterImpl.contingency]: '2d-pairing',
 };

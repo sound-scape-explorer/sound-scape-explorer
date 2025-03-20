@@ -14,6 +14,6 @@ def print_timeline_progress(
     date_format = "%Y-%m-%d %H:%M:%S"
     human_date = datetime.fromtimestamp(start_seconds).strftime(date_format)
     site_name = timeline.site.name
-    integration_text = f"{timeline.integration.seconds}s"
+    integration_text = f"{timeline.integration.duration}ms"
 
     print(human_date, site_name, integration_text)

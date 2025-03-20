@@ -1,14 +1,12 @@
 import {useRefHistory} from '@vueuse/core';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
-import {
-  type Trajectory,
-  useTrajectories,
-} from 'src/composables/use-trajectories';
+import {useTrajectories} from 'src/composables/use-trajectories';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
+import {type TrajectoryDto} from 'src/dtos';
 import {ref} from 'vue';
 
-const selected = ref<Trajectory[]>([]);
-const current = ref<string[]>([]); // ui option
+const selected = ref<TrajectoryDto[]>([]);
+const current = ref<TrajectoryDto['name'][]>([]);
 const {undo, redo, canUndo, canRedo} = useRefHistory(current);
 
 export function useTrajectoriesSelection() {

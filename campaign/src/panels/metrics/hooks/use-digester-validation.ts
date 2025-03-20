@@ -9,10 +9,10 @@ export function useDigesterValidation() {
   const {digesters} = useDigesterState();
   const {collectValues, createValidation} = useGenericSectionValidation();
 
-  const isTypeValid = useCallback(
+  const isImplValid = useCallback(
     (d: ConfigDigester) => {
-      const types = collectValues(digesters, d, 'type');
-      return !types.includes(d.type);
+      const impls = collectValues(digesters, d, 'impl');
+      return !impls.includes(d.impl);
     },
     [digesters, collectValues],
   );
@@ -25,18 +25,18 @@ export function useDigesterValidation() {
     v.content = `${l} ${l > 1 ? 'digesters' : 'digester'}`;
 
     for (const d of digesters) {
-      if (!isTypeValid(d)) {
+      if (!isImplValid(d)) {
         v.intent = 'danger';
-        v.content = 'invalid types';
+        v.content = 'invalid impls';
         break;
       }
     }
 
     return v;
-  }, [digesters, createValidation, collectValues]);
+  }, [digesters, createValidation, isImplValid]);
 
   return {
-    isTypeValid,
+    isImplValid,
     validate,
   };
 }

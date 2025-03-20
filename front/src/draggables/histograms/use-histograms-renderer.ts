@@ -4,14 +4,14 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
 import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
+import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-histograms';
-import {generateUniqueExtractorSlug} from 'src/utils/config';
+import {generateUniqueIndexSlug} from 'src/utils/config';
 
 export function useHistogramsRenderer() {
   const {divRef, name, over, histogramFunction} = useDraggableHistograms();
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedIndices} = useStorageAggregatedIndices();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {getHourFromTimestamp} = useDate();
   const {scale} = useColorsCycling();
@@ -20,7 +20,7 @@ export function useHistogramsRenderer() {
 
   const render = async () => {
     if (
-      aggregatedIndicators.value === null ||
+      aggregatedIndices.value === null ||
       aggregatedTimestamps.value === null ||
       divRef.value === null ||
       name.value === null ||
@@ -29,8 +29,8 @@ export function useHistogramsRenderer() {
       return;
     }
 
-    const results = aggregatedIndicators.value.filter(
-      ({extractor}) => generateUniqueExtractorSlug(extractor) === name.value,
+    const results = aggregatedIndices.value.filter(
+      ({index}) => generateUniqueIndexSlug(index) === name.value,
     );
 
     if (results.length !== 1) {

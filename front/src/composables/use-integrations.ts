@@ -1,14 +1,9 @@
 import {type DropdownOption} from 'src/common/dropdown-option';
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type IntegrationDto} from 'src/dtos';
 import {ref} from 'vue';
 
-export interface Integration {
-  index: number;
-  name: string;
-  seconds: number;
-}
-
-const integrations = ref<Integration[] | null>(null);
+const integrations = ref<IntegrationDto[] | null>(null);
 const options = ref<DropdownOption[]>([]);
 
 export function useIntegrations() {

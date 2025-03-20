@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn import metrics
 
-from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.digesters.Digester import Digester
+from processing.new.MeanDistancesMatrixManager import MeanDistancesMatrixManager
 from processing.utils.is_mdm_empty import is_mdm_empty
 from processing.utils.sort_dataframe import sort_dataframe
 
@@ -14,7 +14,7 @@ class SilhouetteDigester(Digester):
 
         silhouette = np.zeros((len(values), len(values)))
 
-        mdm = MeanDistancesMatrix.read_from_storage(
+        mdm = MeanDistancesMatrixManager.read_from_storage(
             storage=self.storage,
             band=self.band,
             integration=self.integration,

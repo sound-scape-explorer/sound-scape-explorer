@@ -9,17 +9,17 @@ import {useDate} from 'src/composables/use-date';
 import {useExtractors} from 'src/composables/use-extractors';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
+import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
 import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useDetails} from 'src/draggables/details/use-details';
 import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
 import {watch} from 'vue';
 
-const {nonNnExtractors} = useExtractors();
+const {indices} = useExtractors();
 const {band} = useBandSelection();
 const {integration} = useIntegrationSelection();
-const {aggregatedIndicators} = useStorageAggregatedIndicators();
+const {aggregatedIndices} = useStorageAggregatedIndices();
 const {labelProperties} = useStorageLabels();
 const {currentIntervalIndex, hasClicked} = useIntervalSelector();
 const {select} = useAudioFile();
@@ -55,7 +55,7 @@ watch(timeshift, updateDates);
 
     <div :class="[$style.file, $style.container]">
       <div :class="$style.title">Site</div>
-      <span :class="[$style.file, $style.index]">{{ site?.site ?? '' }}</span>
+      <span :class="[$style.file, $style.index]">{{ site ?? '' }}</span>
     </div>
 
     <div :class="[$style.file, $style.container]">
@@ -172,19 +172,19 @@ watch(timeshift, updateDates);
       <div :class="$style.title">Indicators</div>
 
       <NGrid
-        v-if="aggregatedIndicators !== null"
+        v-if="aggregatedIndices !== null"
         :cols="2"
         x-gap="12"
       >
-        <NGi v-for="(ex, index) in nonNnExtractors">
+        <NGi v-for="(index, i) in indices">
           <NTag
             :bordered="false"
             size="small"
           >
-            {{ ex.name }}
+            {{ index.impl }}
           </NTag>
 
-          {{ aggregatedIndicators[index].values[currentIntervalIndex ?? 0] }}
+          {{ aggregatedIndices[i].values[currentIntervalIndex ?? 0] }}
         </NGi>
       </NGrid>
     </div>

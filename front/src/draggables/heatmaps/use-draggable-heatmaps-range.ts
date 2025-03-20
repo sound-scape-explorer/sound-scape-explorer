@@ -1,6 +1,5 @@
-import {DigesterLayout} from 'src/common/digester-layout';
-import {type HeatmapRange} from 'src/common/heatmap-range';
-import {heatmapRanges} from 'src/common/heatmap-range';
+import {DigesterImpl} from '@shared/enums';
+import {type HeatmapRange, heatmapRanges} from 'src/common/heatmap-range';
 import {HeatmapScale} from 'src/common/heatmap-scale';
 import {type Digested} from 'src/composables/use-storage-digested';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
@@ -29,16 +28,16 @@ export function useDraggableHeatmapsRange() {
   });
 
   const update = (digested: Digested) => {
-    switch (digested.digester.name) {
-      case DigesterLayout.silhouette:
+    switch (digested.digester.impl) {
+      case DigesterImpl.silhouette:
         flavor.value = HeatmapScale.RdBu;
         index.value = ranges.indexOf(heatmapRanges.min1to1);
         break;
-      case DigesterLayout.overlap:
+      case DigesterImpl.overlap:
         flavor.value = HeatmapScale.Blues;
         index.value = ranges.indexOf(heatmapRanges.min0to1);
         break;
-      case DigesterLayout.contingency:
+      case DigesterImpl.contingency:
         flavor.value = HeatmapScale.Blues;
         index.value = ranges.indexOf(heatmapRanges.min0to100);
         break;

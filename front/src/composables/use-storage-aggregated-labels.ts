@@ -48,16 +48,16 @@ export function useStorageAggregatedLabels() {
 
       const newLabels = await worker.readAggregatedLabels(
         file,
-        band.value.name,
-        integration.value.seconds,
+        band.value.index,
+        integration.value.index,
         extractor.value.index,
       );
 
-      // mutate existing labels to merge sites in at first position
+      // mutate labels to embed sites at first position
       const l = newLabels.length;
       for (let i = 0; i < l; i += 1) {
         const labels = newLabels[i];
-        const {site} = sites[i];
+        const site = sites[i];
         labels.unshift(site);
       }
 

@@ -3,49 +3,52 @@ from typing import Any, List
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.extractors.Extractor import Extractor
-from processing.storage.Storage import Storage
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractorConfigNew import ExtractorConfigNew
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
+from processing.new.StorageNew import StorageNew
 from processing.storage.StoragePath import StoragePath
 
 
 class AggregatedStorage:
     @staticmethod
-    def delete(storage: Storage) -> None:
-        storage.delete(StoragePath.aggregated)
-        storage.delete(StoragePath.aggregated_sites)
-        storage.delete(StoragePath.aggregated_interval_details)
-        storage.delete(StoragePath.aggregated_timestamps)
-        storage.delete(StoragePath.aggregated_labels)
+    def delete(storage: StorageNew) -> None:
+        storage.delete(StoragePath.aggregated.value)
+        storage.delete(StoragePath.aggregated_sites.value)
+        storage.delete(StoragePath.aggregated_interval_details.value)
+        storage.delete(StoragePath.aggregated_timestamps.value)
+        storage.delete(StoragePath.aggregated_labels.value)
 
     @staticmethod
-    def exists(storage: Storage) -> bool:
+    def exists(storage: StorageNew) -> bool:
         return (
-            storage.exists_dataset(StoragePath.aggregated)
-            and storage.exists_dataset(StoragePath.aggregated_sites)
-            and storage.exists_dataset(StoragePath.aggregated_interval_details)
-            and storage.exists_dataset(StoragePath.aggregated_timestamps)
-            and storage.exists_dataset(StoragePath.aggregated_labels)
+            storage.exists(StoragePath.aggregated.value)
+            and storage.exists(StoragePath.aggregated_sites.value)
+            and storage.exists(StoragePath.aggregated_interval_details.value)
+            and storage.exists(StoragePath.aggregated_timestamps.value)
+            and storage.exists(StoragePath.aggregated_labels.value)
         )
 
     @staticmethod
     def get_data_path(
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> str:
         return (
             f"/{StoragePath.aggregated.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
+            f"/{band.index}"
+            f"/{integration.index}"
             f"/{extractor.index}"
         )
 
     @staticmethod
     def append_data(
-        storage: Storage,
+        storage: StorageNew,
         data: List[Any],
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> None:
         path = AggregatedStorage.get_data_path(
             band=band,
@@ -56,7 +59,6 @@ class AggregatedStorage:
         storage.append(
             path=path,
             data=[data],
-            compression=True,
             attributes={
                 "extractor": extractor.__class__.__name__,
                 "offset": str(extractor.offset),
@@ -67,24 +69,24 @@ class AggregatedStorage:
 
     @staticmethod
     def get_site_path(
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> str:
         return (
             f"/{StoragePath.aggregated_sites.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
+            f"/{band.index}"
+            f"/{integration.index}"
             f"/{extractor.index}"
         )
 
     @staticmethod
     def append_site(
-        storage: Storage,
+        storage: StorageNew,
         site: str,
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> None:
         path = AggregatedStorage.get_site_path(
             band=band,
@@ -99,24 +101,24 @@ class AggregatedStorage:
 
     @staticmethod
     def get_interval_details_path(
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> str:
         return (
             f"/{StoragePath.aggregated_interval_details.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
+            f"/{band.index}"
+            f"/{integration.index}"
             f"/{extractor.index}"
         )
 
     @staticmethod
     def append_interval_details(
-        storage: Storage,
+        storage: StorageNew,
         interval_details: List[str],
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> None:
         path = AggregatedStorage.get_interval_details_path(
             band=band,
@@ -135,14 +137,14 @@ class AggregatedStorage:
 
     @staticmethod
     def get_timestamp_path(
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> str:
         return (
             f"/{StoragePath.aggregated_timestamps.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
+            f"/{band.index}"
+            f"/{integration.index}"
             f"/{extractor.index}"
         )
 
@@ -150,11 +152,11 @@ class AggregatedStorage:
     # band and extractor given a single integration
     @staticmethod
     def append_timestamp(
-        storage: Storage,
+        storage: StorageNew,
         timestamp: int,
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> None:
         path = AggregatedStorage.get_timestamp_path(
             band=band,
@@ -169,20 +171,20 @@ class AggregatedStorage:
 
     @staticmethod
     def get_labels_path(
-        band: BandConfig,
-        integration: IntegrationConfig,
-        extractor: Extractor,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ) -> str:
         return (
             f"/{StoragePath.aggregated_labels.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
+            f"/{band.index}"
+            f"/{integration.index}"
             f"/{extractor.index}"
         )
 
     @staticmethod
     def append_labels(
-        storage: Storage,
+        storage: StorageNew,
         labels: List[str],
         band: BandConfig,
         integration: IntegrationConfig,

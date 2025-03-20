@@ -1,10 +1,14 @@
+import os
+
 from InquirerPy.resolver import prompt
 from rich import print
 
-from processing.config.Config import Config
+from processing.context import Context
 
 
-def ask_csv_path(config: Config) -> str:
+def ask_csv_path(context: Context):
+    config = context.config
+
     questions = [
         {
             "type": "input",
@@ -18,7 +22,7 @@ def ask_csv_path(config: Config) -> str:
     answers = prompt(questions)
     filename: str = str(answers["filename"])
 
-    storage_filename = config.settings.storage_path.split("/")[-1]
+    storage_filename = config.settings.storage_path.split(os.sep)[-1]
 
     if filename == "":
         filename = storage_filename

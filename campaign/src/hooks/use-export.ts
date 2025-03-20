@@ -45,7 +45,6 @@ import {version} from 'src/version.ts';
 
 export interface ExportJson {
   version: string;
-  isValid: boolean;
   settings: Settings;
   files: ConfigFile[];
   bands: ConfigBand[];
@@ -65,12 +64,12 @@ export function useExport() {
   const {bands} = useBandState();
   const {integrations} = useIntegrationState();
   const {extractors} = useExtractorState();
+  const {indices} = useIndexState();
   const {reducers} = useReducerState();
   const {ranges} = useRangeState();
   const {autoclusters} = useAutoclusterState();
   const {digesters} = useDigesterState();
   const {trajectories} = useTrajectoryState();
-  const {indices} = useIndexState();
   const {getFiles} = useTableStateConverter();
 
   const download = useCallback(<T>(data: T, filename = 'campaign'): void => {
@@ -95,17 +94,16 @@ export function useExport() {
 
     const json: ExportJson = {
       version,
-      isValid,
       settings,
       bands,
       integrations,
       extractors,
+      indices,
       reducers,
       ranges,
       autoclusters,
       digesters,
       trajectories,
-      indices,
       files,
     };
 

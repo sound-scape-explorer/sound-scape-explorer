@@ -8,6 +8,7 @@ from torch import Tensor, cuda, hub, nn
 from processing.extractors.Extractor import Extractor
 from processing.loaders.Loader import Loader
 
+
 NnDevice = Literal["cuda", "cpu"]
 
 

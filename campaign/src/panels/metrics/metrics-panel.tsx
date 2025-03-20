@@ -10,11 +10,12 @@ export function MetricsPanel() {
   return (
     <Card className="flex column gap">
       <MetricsCallout />
-      <MetricsRanges />
-      <MetricsAutoclusters />
-      <MetricsDigesters />
-      <MetricsTrajectories />
+
       <MetricsIndices />
+      <MetricsDigesters />
+      <MetricsAutoclusters />
+      <MetricsTrajectories />
+      <MetricsRanges />
     </Card>
   );
 }

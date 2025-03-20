@@ -1,13 +1,11 @@
 import {useIntegrationOptions} from 'src/composables/use-integration-options';
-import {
-  type Integration,
-  useIntegrations,
-} from 'src/composables/use-integrations';
+import {useIntegrations} from 'src/composables/use-integrations';
 import {useViewSelectionPrimitive} from 'src/composables/use-view-selection-primitive';
+import {type IntegrationDto} from 'src/dtos';
 import {ref} from 'vue';
 
-const integration = ref<Integration | null>(null);
-const selected = ref<Integration['name'] | null>(null);
+const integration = ref<IntegrationDto | null>(null);
+const selected = ref<IntegrationDto['name'] | null>(null);
 
 export function useIntegrationSelection() {
   const {integrations} = useIntegrations();

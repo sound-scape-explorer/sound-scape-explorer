@@ -1,39 +1,54 @@
 import h5wasm, {type Dataset, type File as H5File, type Group} from 'h5wasm';
-import {type DigesterName} from 'src/common/digester-name';
 import {digesterTypeMap} from 'src/common/digester-type-map';
 import {StorageMode} from 'src/common/storage-mode';
-import {StoragePath} from 'src/common/storage-path';
-import {type StorageSettings} from 'src/common/storage-settings';
-import {type Autocluster} from 'src/composables/use-autoclusters';
-import {type Band} from 'src/composables/use-bands';
-import {type Digester} from 'src/composables/use-digesters';
-import {type Extractor} from 'src/composables/use-extractors';
-import {type File as FileConfig} from 'src/composables/use-files';
-import {type Integration} from 'src/composables/use-integrations';
-import {type ReducerFromStorage} from 'src/composables/use-reducers';
 import {type RelativeTrajectory} from 'src/composables/use-relative-trajectories';
-import {type Site} from 'src/composables/use-sites';
-import {type AggregatedIndicator} from 'src/composables/use-storage-aggregated-indicators';
+import {type AggregatedIndex} from 'src/composables/use-storage-aggregated-indices';
 import {
   type BlockDetails,
   type IntervalDetails,
 } from 'src/composables/use-storage-aggregated-interval-details';
-import {type AggregatedSite} from 'src/composables/use-storage-aggregated-sites';
 import {type Digested} from 'src/composables/use-storage-digested';
 import {type Labels} from 'src/composables/use-storage-labels';
-import {type AppRange} from 'src/composables/use-storage-ranges';
-import {type ReducedFeatures} from 'src/composables/use-storage-reduced-features';
-import {type Trajectory} from 'src/composables/use-trajectories';
 import {
   type TracedData,
   type TracedRelativeTimestamps,
   type TracedTimestamps,
 } from 'src/composables/use-trajectories-data';
-import {LABEL_SITE} from 'src/constants';
-import {trimRectangular} from 'src/utils/arrays';
+import {DELIMITER, LABEL_SITE} from 'src/constants';
+import {
+  type AutoclusterDto,
+  type BandDto,
+  type DigesterDtoWithType,
+  type ExtractorDto,
+  type FileDto,
+  type IndexDto,
+  type IntegrationDto,
+  type RangeDto,
+  type ReducerDto,
+  type SettingsDto,
+  type TrajectoryDto,
+} from 'src/dtos';
+import {
+  AggregatedInstancePath,
+  AutoclusteredInstancePath,
+  AutoclusterPath,
+  BandPath,
+  DigestedInstancePath,
+  DigesterPath,
+  ExtractorPath,
+  FilePath,
+  IndexPath,
+  IntegrationPath,
+  RangePath,
+  ReducedInstancePath,
+  ReducerPath,
+  RelativeTracedInstancePath,
+  SettingsPath,
+  TracedInstancePath,
+  TrajectoryPath,
+  VersionPath,
+} from 'src/paths';
 import {sortStringsNumerically} from 'src/utils/strings';
-
-// TODO: Replace .pushes with fixed arrays
 
 let h5: H5File;
 const PATH = '/work';
@@ -69,9 +84,9 @@ export async function close() {
 export async function readSettings(file: File) {
   const h5 = await load(file);
 
-  const path = StoragePath.settings;
+  const path = SettingsPath.settings;
   const configuration = h5.get(path) as Group;
-  const settings = {} as StorageSettings;
+  const settings = {} as SettingsDto;
 
   for (const setting in configuration.attrs) {
     // @ts-expect-error: TS2322
@@ -83,302 +98,313 @@ export async function readSettings(file: File) {
 
 export async function readVersion(file: File): Promise<string> {
   const h5 = await load(file);
-
-  const path = StoragePath.config_file;
-  const dataset = h5.get(path) as Dataset;
-
-  return dataset.attrs['version'].value?.toString() ?? '';
+  const version = _readArray<string>(h5, VersionPath.version);
+  return version[0];
 }
 
-export async function readFiles(file: File): Promise<FileConfig[]> {
+// read dataset as array
+export function _readArray<T>(h5: H5File, path: string) {
+  const dataset = h5.get(path) as Dataset;
+  const array = dataset.to_array() as T[];
+  return array;
+}
+
+export async function readFiles(file: File) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.files_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+  type Dto = FileDto;
+  const p = FilePath;
 
-  const timestampsDataset = h5.get(StoragePath.files_timestamps) as Dataset;
-  const timestamps = timestampsDataset.to_array() as number[];
+  const indices = _readArray<Dto['index']>(h5, p.indices);
+  const relativePaths = _readArray<Dto['relativePath']>(h5, p.relative_paths);
+  const absolutePaths = _readArray<Dto['absolutePath']>(h5, p.absolute_paths);
+  const timestamps = _readArray<Dto['timestamp']>(h5, p.timestamps);
+  const sites = _readArray<Dto['site']>(h5, p.sites);
+  const durations = _readArray<Dto['duration']>(h5, p.durations);
+  const labelProperties = _readArray<Dto['labelProperties']>(
+    h5,
+    p.label_properties,
+  );
+  const labelValues = _readArray<Dto['labelValues']>(h5, p.label_values);
 
-  const sitesDataset = h5.get(StoragePath.files_sites) as Dataset;
-  const sites = sitesDataset.to_array() as string[];
+  const files = new Array<Dto>(indices.length);
 
-  const labelsDataset = h5.get(StoragePath.files_labels) as Dataset;
-  const labels = labelsDataset.to_array() as string[][];
-
-  const files: FileConfig[] = [];
-  const length = namesDataset.shape?.[0] ?? 0;
-
-  for (let index = 0; index < length; index += 1) {
-    const file: FileConfig = {
+  for (const index of indices) {
+    const file: Dto = {
       index: index,
-      name: names[index],
+      relativePath: relativePaths[index],
+      absolutePath: absolutePaths[index],
       timestamp: timestamps[index],
+      duration: durations[index],
       site: sites[index],
-      labels: labels[index],
+      labelProperties: labelProperties[index],
+      labelValues: labelValues[index],
     };
 
-    files.push(file);
+    files[index] = file;
   }
 
   return files;
 }
 
-export async function readSites(file: File): Promise<Site[]> {
-  const h5 = await load(file);
-
-  const namesDataset = h5.get(StoragePath.sites_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
-
-  const fileIndexesDataset = h5.get(StoragePath.sites_file_indexes) as Dataset;
-  const fileIndexes = fileIndexesDataset.to_array() as number[][];
-
-  const sites: Site[] = [];
-
-  for (let index = 0; index < names.length; index += 1) {
-    const site: Site = {
-      index: index,
-      name: names[index],
-      fileIndexes: fileIndexes[index],
-    };
-
-    sites.push(site);
-  }
-
-  return sites;
+interface DomainLabel {
+  index: number;
+  property: string;
+  uniques: string[];
 }
 
-export async function readFilenames(file: File) {
-  const h5 = await load(file);
-  const path = StoragePath.files_names;
-  const dataset = h5.get(path) as Dataset;
-  return dataset.to_array() as string[];
-}
-
-// todo: remove me?
-export async function readFilename(file: File, fileIndex: number) {
-  const filenames = await readFilenames(file);
-  return filenames[fileIndex];
-}
-
-// todo: remove me?
-export async function readFilesMetas(file: File) {
-  const h5 = await load(file);
-  const path = StoragePath.files_labels;
-  const metas = h5.get(path) as Dataset;
-  return metas.to_array() as string[][];
-}
-
-// todo: refactor me
 export async function readLabels(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
 ): Promise<Labels> {
   const h5 = await load(file);
 
-  const propertiesDataset = h5.get(StoragePath.labels_properties) as Dataset;
-  const properties = propertiesDataset.to_array() as string[];
+  // build domain labels
+  const files_label_properties = _readArray<FileDto['labelProperties']>(
+    h5,
+    FilePath.label_properties,
+  );
 
-  const setsDataset = h5.get(StoragePath.labels_sets) as Dataset;
-  const sets = setsDataset.to_array() as string[][];
+  const properties = files_label_properties[0];
+
+  const files_label_values = _readArray<FileDto['labelValues']>(
+    h5,
+    FilePath.label_values,
+  );
+
+  const domainLabels = new Array<DomainLabel>(properties.length);
+
+  for (let index = 0; index < properties.length; index += 1) {
+    const property = properties[index];
+
+    const uniques: string[] = [];
+
+    for (const values of files_label_values) {
+      const value = values[index];
+
+      if (uniques.includes(value)) {
+        continue;
+      }
+
+      uniques.push(value);
+    }
+
+    const label: DomainLabel = {
+      index: index,
+      property: property,
+      uniques: uniques,
+    };
+
+    domainLabels[index] = label;
+  }
 
   const labels: Labels = {};
 
   // add sites
   const sites = await readAggregatedSites(
     file,
-    bandName,
-    integrationSeconds,
+    bandIndex,
+    integrationIndex,
     extractorIndex,
   );
-  const sitesUniques = new Set(sites.map(({site}) => site));
-  labels[LABEL_SITE] = sortStringsNumerically([...sitesUniques]);
+
+  const sitesUniques = [...new Set(sites)];
+  labels[LABEL_SITE] = sortStringsNumerically(sitesUniques);
 
   // add autoclusters
-  const autoclusters = await readAutoclusters(
+  const autoclustereds = await readAutoclustered(
     file,
-    bandName,
-    integrationSeconds,
+    bandIndex,
+    integrationIndex,
   );
 
-  if (autoclusters.length > 0) {
-    let a = 0;
+  if (autoclustereds.length > 0) {
+    let index = 0;
 
-    for (const autocluster of autoclusters) {
-      const autoclusterSet = new Set(
-        sortStringsNumerically(autocluster.map((n) => n.toString())),
-      );
-
-      labels[`AUTOCLUSTER_${a}`] = [...autoclusterSet];
-
-      a += 1;
+    for (const autoclustered of autoclustereds) {
+      const uniques = [...new Set(sortStringsNumerically(autoclustered))];
+      labels[`AUTOCLUSTER_${index}`] = uniques;
+      index += 1;
     }
   }
 
   // add user labels
-  for (let i = 0; i < properties.length; i += 1) {
-    const property = properties[i];
-    labels[property] = sets[i].filter((element) => element !== '');
+  for (const label of domainLabels) {
+    const property = label.property;
+    labels[property] = label.uniques.filter((element) => element !== '');
     labels[property] = sortStringsNumerically(labels[property]);
   }
 
   return labels;
 }
 
-export async function readBands(file: File): Promise<Band[]> {
+export async function readBands(file: File) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.bands_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+  type dto = BandDto;
+  const p = BandPath;
 
-  const lowsDataset = h5.get(StoragePath.bands_lows) as Dataset;
-  const lows = lowsDataset.to_array() as number[];
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const names = _readArray<dto['name']>(h5, p.names);
+  const lows = _readArray<dto['low']>(h5, p.lows);
+  const highs = _readArray<dto['high']>(h5, p.highs);
 
-  const highsDataset = h5.get(StoragePath.bands_highs) as Dataset;
-  const highs = highsDataset.to_array() as number[];
+  const bands = new Array<dto>(indices.length);
 
-  const bands = [];
-  const length = namesDataset.shape?.[0] ?? 0;
-
-  for (let index = 0; index < length; index += 1) {
-    const band: Band = {
+  for (const index of indices) {
+    const band: dto = {
       index: index,
       name: names[index],
       low: lows[index],
       high: highs[index],
     };
 
-    bands.push(band);
+    bands[index] = band;
   }
 
   return bands;
 }
 
-export async function readIntegrations(file: File): Promise<Integration[]> {
+export async function readIntegrations(file: File) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.integrations_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+  type dto = IntegrationDto;
+  const p = IntegrationPath;
 
-  const secondsDataset = h5.get(StoragePath.integrations_seconds) as Dataset;
-  const seconds = secondsDataset.to_array() as number[];
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const names = _readArray<dto['name']>(h5, p.names);
+  const durations = _readArray<dto['duration']>(h5, p.durations);
 
-  const integrations: Integration[] = [];
-  const length = namesDataset.shape?.[0] ?? 0;
+  const integrations = new Array<dto>(indices.length);
 
-  for (let index = 0; index < length; index += 1) {
-    const integration: Integration = {
+  for (const index of indices) {
+    const integration: dto = {
       index: index,
       name: names[index],
-      seconds: seconds[index],
+      duration: durations[index],
     };
 
-    integrations.push(integration);
+    integrations[index] = integration;
   }
 
   return integrations;
 }
 
-export async function readRanges(file: File): Promise<AppRange[]> {
+export async function readRanges(file: File) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.ranges_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+  type dto = RangeDto;
+  const p = RangePath;
 
-  const startsDataset = h5.get(StoragePath.ranges_starts) as Dataset;
-  const starts = startsDataset.to_array() as number[];
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const names = _readArray<dto['name']>(h5, p.names);
+  const starts = _readArray<dto['start']>(h5, p.starts);
+  const ends = _readArray<dto['end']>(h5, p.ends);
 
-  const endsDataset = h5.get(StoragePath.ranges_ends) as Dataset;
-  const ends = endsDataset.to_array() as number[];
+  const ranges = new Array<dto>(indices.length);
 
-  const ranges: AppRange[] = [];
-  const length = namesDataset.shape?.[0] ?? 0;
-
-  for (let index = 0; index < length; index += 1) {
-    const range: AppRange = {
+  for (const index of indices) {
+    const range: dto = {
       index: index,
       name: names[index],
       start: starts[index],
       end: ends[index],
     };
 
-    ranges.push(range);
+    ranges[index] = range;
   }
 
   return ranges;
 }
 
-export async function readExtractors(file: File): Promise<Extractor[]> {
+export async function readExtractors(file: File) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.extractors_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+  type dto = ExtractorDto;
+  const p = ExtractorPath;
 
-  const offsetsDataset = h5.get(StoragePath.extractors_offsets) as Dataset;
-  const offsets = offsetsDataset.to_array() as number[];
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const names = _readArray<dto['name']>(h5, p.names);
+  const impls = _readArray<dto['impl']>(h5, p.impls);
+  const offsets = _readArray<dto['offset']>(h5, p.offsets);
+  const steps = _readArray<dto['step']>(h5, p.steps);
+  const isPersists = _readArray<dto['isPersist']>(h5, p.is_persists);
 
-  const stepsDataset = h5.get(StoragePath.extractors_steps) as Dataset;
-  const steps = stepsDataset.to_array() as number[];
+  const extractors = new Array<dto>(indices.length);
 
-  const persistsDataset = h5.get(StoragePath.extractors_persists) as Dataset;
-  const persists = persistsDataset.to_array() as number[];
-
-  const extractors: Extractor[] = [];
-  const length = namesDataset.shape?.[0] ?? 0;
-
-  for (let index = 0; index < length; index += 1) {
-    const extractor: Extractor = {
+  for (const index of indices) {
+    const extractor: dto = {
       index: index,
       name: names[index],
+      impl: impls[index],
       offset: offsets[index],
       step: steps[index],
-      persist: persists[index] === 1,
+      isPersist: isPersists[index],
     };
 
-    extractors.push(extractor);
+    extractors[index] = extractor;
   }
 
   return extractors;
 }
 
-export async function readReducers(file: File): Promise<ReducerFromStorage[]> {
+export async function readIndices(file: File) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.reducers_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+  type dto = IndexDto;
+  const p = IndexPath;
 
-  const dimensionsDataset = h5.get(StoragePath.reducers_dimensions) as Dataset;
-  const dimensions = dimensionsDataset.to_array() as number[];
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const impls = _readArray<dto['impl']>(h5, p.impls);
+  const offsets = _readArray<dto['offset']>(h5, p.offsets);
+  const steps = _readArray<dto['step']>(h5, p.steps);
+  const isPersists = _readArray<dto['isPersist']>(h5, p.is_persists);
 
-  const bandsDataset = h5.get(StoragePath.reducers_bands) as Dataset;
-  const bandsRectangular = bandsDataset.to_array() as string[][];
-  const bands = trimRectangular(bandsRectangular, '');
+  const indicesObjects: dto[] = [];
 
-  const integrationsDataset = h5.get(
-    StoragePath.reducers_integrations,
-  ) as Dataset;
-  const integrationsRectangular = integrationsDataset.to_array() as string[][];
-  const integrations = trimRectangular(integrationsRectangular, '');
-
-  const rangesDataset = h5.get(StoragePath.reducers_ranges) as Dataset;
-  const rangesRectangular = rangesDataset.to_array() as string[][];
-  const ranges = trimRectangular(rangesRectangular, '');
-
-  const reducers: ReducerFromStorage[] = [];
-  const length = namesDataset.shape?.[0] ?? 0;
-
-  for (let index = 0; index < length; index += 1) {
-    const reducer: ReducerFromStorage = {
-      index: index,
-      name: names[index],
-      dimensions: dimensions[index],
-      bandsNames: bands[index],
-      integrationsNames: integrations[index],
-      rangesNames: ranges[index],
+  for (let i = 0; i < indices.length; i += 1) {
+    const index: dto = {
+      index: indices[i],
+      impl: impls[i],
+      offset: offsets[i],
+      step: steps[i],
+      isPersist: isPersists[i],
     };
 
-    reducers.push(reducer);
+    indicesObjects.push(index);
+  }
+
+  return indicesObjects;
+}
+
+export async function readReducers(file: File) {
+  const h5 = await load(file);
+
+  type dto = ReducerDto;
+  const p = ReducerPath;
+
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const impls = _readArray<dto['impl']>(h5, p.impls);
+  const dimensions = _readArray<dto['dimensions']>(h5, p.dimensions);
+  const bands = _readArray<dto['bands']>(h5, p.bands);
+  const integrations = _readArray<dto['integrations']>(h5, p.integrations);
+  const extractors = _readArray<dto['extractors']>(h5, p.extractors);
+
+  const reducers = new Array<dto>(indices.length);
+
+  for (const index of indices) {
+    const reducer: dto = {
+      index: index,
+      impl: impls[index],
+      dimensions: dimensions[index],
+      bands: bands[index] ?? [],
+      integrations: integrations[index] ?? [],
+      extractors: extractors[index] ?? [],
+    };
+
+    reducers[index] = reducer;
   }
 
   return reducers;
@@ -386,123 +412,110 @@ export async function readReducers(file: File): Promise<ReducerFromStorage[]> {
 
 export async function readReducedFeatures(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
   reducerIndex: number,
-): Promise<ReducedFeatures> {
+) {
   const h5 = await load(file);
-  const path = `${StoragePath.reduced}/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}`;
-  const dataset = h5.get(path) as Dataset;
-  const features = dataset.to_array() as number[][];
+
+  const path = ReducedInstancePath.reduced(
+    bandIndex,
+    integrationIndex,
+    extractorIndex,
+    reducerIndex,
+  );
+  const features = _readArray<number[]>(h5, path);
   return features;
 }
 
-// This is called `autoclustered` in Processing module
-// See `AutoclusteredStorage.py`
-export async function readAutoclusters(
+export async function readAutoclustered(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
-): Promise<string[][]> {
-  try {
-    const h5 = await load(file);
+  bandIndex: number,
+  integrationIndex: number,
+) {
+  const h5 = await load(file);
+  const autoclusters = await readAutoclusters(file);
 
-    const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
-    const namesList = namesDataset.to_array() as string[];
-    const namesCount = namesList.length;
-
-    if (namesCount === 0) {
-      return [];
-    }
-
-    const autoclusters = [];
-
-    for (let i = 0; i < namesCount; i += 1) {
-      const path = `${StoragePath.autoclustered}/${bandName}/${integrationSeconds}/${i}`;
-      const dataset = h5.get(path) as Dataset;
-      const values = dataset.to_array() as number[];
-      autoclusters.push(values.map((v) => v.toString()));
-    }
-
-    return autoclusters;
-  } catch (error) {
-    console.error('Worker: readAutoclusters', error);
+  if (autoclusters.length === 0) {
     return [];
   }
+
+  const autoclustered = new Array<string[]>(autoclusters.length);
+
+  for (let i = 0; i < autoclusters.length; i += 1) {
+    const autocluster = autoclusters[i];
+
+    const values = _readArray<number>(
+      h5,
+      AutoclusteredInstancePath.autoclustered(
+        bandIndex,
+        integrationIndex,
+        autocluster.index,
+      ),
+    );
+
+    autoclustered[i] = values.map((v) => v.toString());
+  }
+
+  return autoclustered;
 }
 
-export async function readAutoclustersConfiguration(
-  file: File,
-): Promise<Autocluster[]> {
+export async function readAutoclusters(file: File) {
   const h5 = await load(file);
 
-  const autoclusters: Autocluster[] = [];
+  type dto = AutoclusterDto;
+  const p = AutoclusterPath;
 
-  const namesDataset = h5.get(StoragePath.autoclusters_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const impls = _readArray<dto['impl']>(h5, p.impls);
+  const minClusterSizes = _readArray<dto['minClusterSize']>(
+    h5,
+    p.min_cluster_sizes,
+  );
+  const minSamples = _readArray<dto['minSamples']>(h5, p.min_samples);
+  const alphas = _readArray<dto['alpha']>(h5, p.alphas);
+  const epsilons = _readArray<dto['epsilon']>(h5, p.epsilons);
 
-  const minClusterSizesDataset = h5.get(
-    StoragePath.autoclusters_min_cluster_sizes,
-  ) as Dataset;
-  const minClusterSizes = minClusterSizesDataset.to_array() as number[];
+  const autoclusters = new Array<dto>(indices.length);
 
-  const minSamplesDataset = h5.get(
-    StoragePath.autoclusters_min_samples,
-  ) as Dataset;
-  const minSamples = minSamplesDataset.to_array() as number[];
+  for (const index of indices) {
+    const autocluster: dto = {
+      index: index,
+      impl: impls[index],
+      minClusterSize: minClusterSizes[index],
+      minSamples: minSamples[index],
+      alpha: alphas[index],
+      epsilon: epsilons[index],
+    };
 
-  const alphasDataset = h5.get(StoragePath.autoclusters_alphas) as Dataset;
-  const alphas = alphasDataset.to_array() as number[];
-
-  const epsilonsDataset = h5.get(StoragePath.autoclusters_epsilons) as Dataset;
-  const epsilons = epsilonsDataset.to_array() as number[];
-
-  for (let i = 0; i < names.length; i += 1) {
-    autoclusters.push({
-      index: i,
-      name: names[i],
-      min_cluster_size: minClusterSizes[i],
-      min_samples: minSamples[i],
-      alpha: alphas[i],
-      epsilon: epsilons[i],
-    });
+    autoclusters[index] = autocluster;
   }
 
   return autoclusters;
 }
 
-export async function readTrajectories(file: File): Promise<Trajectory[]> {
+export async function readTrajectories(file: File) {
   const h5 = await load(file);
 
-  const namesDataset = h5.get(StoragePath.trajectories_names) as Dataset;
-  const names = namesDataset.to_array() as string[];
+  type dto = TrajectoryDto;
+  const p = TrajectoryPath;
 
-  const startsDataset = h5.get(StoragePath.trajectories_starts) as Dataset;
-  const starts = startsDataset.to_array() as number[];
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const names = _readArray<dto['name']>(h5, p.names);
+  const starts = _readArray<dto['start']>(h5, p.starts);
+  const ends = _readArray<dto['end']>(h5, p.ends);
+  const labelProperties = _readArray<dto['labelProperty']>(
+    h5,
+    p.label_properties,
+  );
+  const labelValues = _readArray<dto['labelValue']>(h5, p.label_values);
+  const steps = _readArray<dto['step']>(h5, p.steps);
 
-  const endsDataset = h5.get(StoragePath.trajectories_ends) as Dataset;
-  const ends = endsDataset.to_array() as number[];
+  const trajectories = new Array<dto>(indices.length);
 
-  const labelPropertiesDataset = h5.get(
-    StoragePath.trajectories_label_properties,
-  ) as Dataset;
-  const labelProperties = labelPropertiesDataset.to_array() as string[];
-
-  const labelValuesDataset = h5.get(
-    StoragePath.trajectories_label_values,
-  ) as Dataset;
-  const labelValues = labelValuesDataset.to_array() as string[];
-
-  const stepsDataset = h5.get(StoragePath.trajectories_steps) as Dataset;
-  const steps = stepsDataset.to_array() as number[];
-
-  const length = namesDataset.shape?.[0] ?? 0;
-
-  const trajectories = [];
-
-  for (let index = 0; index < length; index += 1) {
-    const trajectory: Trajectory = {
+  for (const index of indices) {
+    const trajectory: dto = {
       index: index,
       name: names[index],
       start: starts[index],
@@ -512,7 +525,7 @@ export async function readTrajectories(file: File): Promise<Trajectory[]> {
       step: steps[index],
     };
 
-    trajectories.push(trajectory);
+    trajectories[index] = trajectory;
   }
 
   return trajectories;
@@ -520,14 +533,18 @@ export async function readTrajectories(file: File): Promise<Trajectory[]> {
 
 export async function readRelativeTrajectories(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
 ): Promise<RelativeTrajectory[]> {
   try {
     const h5 = await load(file);
-    const pathSuffix = `/${bandName}/${integrationSeconds}/${extractorIndex}`;
-    const path = `${StoragePath.relative_traced}${pathSuffix}`;
+
+    const path = RelativeTracedInstancePath.group(
+      bandIndex,
+      integrationIndex,
+      extractorIndex,
+    );
     const group = h5.get(path) as Group | null;
 
     if (group === null) {
@@ -537,14 +554,32 @@ export async function readRelativeTrajectories(
     const relativeTrajectories: RelativeTrajectory[] = [];
 
     for (const key of group.keys()) {
-      const relativeTracedPath = `${StoragePath.relative_traced}${pathSuffix}/${key}`;
+      const relativeTracedPath = RelativeTracedInstancePath.data(
+        bandIndex,
+        integrationIndex,
+        extractorIndex,
+        key,
+      );
       const relativeTracedDataset = h5.get(relativeTracedPath) as Dataset;
-      const relativeTimestampsPath = `${StoragePath.relative_traced_relative_timetamps}${pathSuffix}/${key}`;
+
+      const relativeTimestampsPath = RelativeTracedInstancePath.timestamps(
+        bandIndex,
+        integrationIndex,
+        extractorIndex,
+        key,
+      );
+
       const relativeTimestampsDataset = h5.get(
         relativeTimestampsPath,
       ) as Dataset;
 
-      const decilesPath = `${StoragePath.relative_traced_deciles}${pathSuffix}/${key}`;
+      const decilesPath = RelativeTracedInstancePath.deciles(
+        bandIndex,
+        integrationIndex,
+        extractorIndex,
+        key,
+      );
+
       const decilesDataset = h5.get(decilesPath) as Nullable<Dataset>; // TODO: Make non nullable in version 14
       const deciles =
         (decilesDataset?.to_array() as [number, number][]) || null;
@@ -580,151 +615,141 @@ export async function readRelativeTrajectories(
 
 export async function readTraced(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
   reducerIndex: number,
   trajectoryIndex: number,
 ): Promise<[TracedData, TracedTimestamps, TracedRelativeTimestamps]> {
   const h5 = await load(file);
-  const suffixPath = `/${bandName}/${integrationSeconds}/${extractorIndex}/${reducerIndex}/${trajectoryIndex}`;
 
-  const dataPath = `${StoragePath.traced}${suffixPath}`;
-  const dataDataset = h5.get(dataPath) as Dataset;
-  const data = dataDataset.to_array() as number[][];
+  const dataPath = TracedInstancePath.data(
+    bandIndex,
+    integrationIndex,
+    extractorIndex,
+    reducerIndex,
+    trajectoryIndex,
+  );
+  const data = _readArray<number[]>(h5, dataPath);
 
-  const timestampsPath = `${StoragePath.traced_timestamps}${suffixPath}`;
-  const timestampsDataset = h5.get(timestampsPath) as Dataset;
-  const timestamps = timestampsDataset.to_array() as number[];
+  const timestampsPath = TracedInstancePath.timestamps(
+    bandIndex,
+    integrationIndex,
+    extractorIndex,
+    reducerIndex,
+    trajectoryIndex,
+  );
+  const timestamps = _readArray<number>(h5, timestampsPath);
 
-  const relativeTimestampsPath = `${StoragePath.traced_relative_timestamps}${suffixPath}`;
-  const relativeTimestampsDataset = h5.get(relativeTimestampsPath) as Dataset;
-  const relativeTimestamps = relativeTimestampsDataset.to_array() as number[];
+  const relativeTimestampsPath = TracedInstancePath.relative_timestamps(
+    bandIndex,
+    integrationIndex,
+    extractorIndex,
+    reducerIndex,
+    trajectoryIndex,
+  );
+
+  const relativeTimestamps = _readArray<number>(h5, relativeTimestampsPath);
 
   return [data, timestamps, relativeTimestamps];
 }
 
 export async function readAggregatedFeatures(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
 ) {
   const h5 = await load(file);
-  const path = `${StoragePath.aggregated}/${bandName}/${integrationSeconds}/${extractorIndex}`;
-  const dataset = h5.get(path) as Dataset;
-  const features = dataset.to_array() as number[][];
+  const path = AggregatedInstancePath.data(
+    bandIndex,
+    integrationIndex,
+    extractorIndex,
+  );
+  const features = _readArray<number[]>(h5, path);
   return features;
 }
 
 export async function readAggregatedTimestamps(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
-): Promise<number[]> {
+) {
   const h5 = await load(file);
-  const path = `${StoragePath.aggregated_timestamps}/${bandName}/${integrationSeconds}/${extractorIndex}`;
-  const timestampsDataset = h5.get(path) as Dataset;
-  const timestamps = timestampsDataset.to_array() as number[][];
-  const unpacked = new Array(timestamps.length);
 
-  for (let i = 0; i < timestamps.length; i += 1) {
-    unpacked[i] = timestamps[i][0];
-  }
-
-  return unpacked;
+  const path = AggregatedInstancePath.timestamps(
+    bandIndex,
+    integrationIndex,
+    extractorIndex,
+  );
+  const timestamps = _readArray<number[]>(h5, path);
+  return timestamps.map((t) => t[0]);
 }
 
 export async function readAggregatedSites(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
-): Promise<AggregatedSite[]> {
+) {
   const h5 = await load(file);
-  const path = `${StoragePath.aggregated_sites}/${bandName}/${integrationSeconds}/${extractorIndex}`;
-  const dataset = h5.get(path) as Dataset;
-  const sites_list = dataset.to_array() as string[][];
 
-  const sites = new Array<AggregatedSite>(sites_list.length);
+  const sites = _readArray<string[]>(
+    h5,
+    AggregatedInstancePath.sites(bandIndex, integrationIndex, extractorIndex),
+  );
 
-  for (let i = 0; i < sites_list.length; i += 1) {
-    const site: AggregatedSite = {
-      site: sites_list[i][0],
-    };
-
-    sites[i] = site;
-  }
-
-  return sites;
+  return sites.map((siteArray) => siteArray[0]);
 }
 
 export async function readAggregatedIntervalDetails(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
 ): Promise<IntervalDetails[]> {
   const h5 = await load(file);
-  const settings = await readSettings(file);
-  const fileNames = await readFilenames(file);
+  const files = await readFiles(file);
+  const relativePaths = files.map((f) => f.relativePath);
 
-  const path = `${StoragePath.aggregated_interval_details}/${bandName}/${integrationSeconds}/${extractorIndex}`;
-  const dataset = h5.get(path) as Dataset;
-  // TODO: This can be non rectangular,
-  const strings_list = dataset.to_array() as string[][];
-  const intervals = new Array<IntervalDetails>(strings_list.length);
+  const pathN = AggregatedInstancePath.interval_details(
+    bandIndex,
+    integrationIndex,
+    extractorIndex,
+  );
 
-  for (let i = 0; i < strings_list.length; i += 1) {
-    const strings = strings_list[i];
+  const details = _readArray<string[]>(h5, pathN);
+
+  const payload: IntervalDetails[] = [];
+
+  for (let i = 0; i < details.length; i += 1) {
+    const strings = details[i];
     const blocks = new Array<BlockDetails>(strings.length);
 
     for (let j = 0; j < strings.length; j += 1) {
       const string = strings[j];
-      const elements = string.split('/');
+      const elements = string.split(DELIMITER);
 
-      let fullPath = `/${elements.slice(2).join('/')}`;
-      if (fullPath.startsWith('//')) {
-        fullPath = fullPath.substring(1);
-      }
-
-      let relativePath = fullPath.replace(settings.audio_path, '');
-
-      if (relativePath.startsWith('//')) {
-        relativePath = relativePath.substring(1);
-      }
+      const blockStart = Number(elements[0]);
+      const relativeStart = Number(elements[1]);
+      const relativePath = elements[2];
 
       const block: BlockDetails = {
-        start: Number(elements[0]),
-        fileStart: Number(elements[1]),
+        start: blockStart,
+        fileStart: relativeStart,
         file: relativePath,
-        fileIndex: fileNames.indexOf(relativePath),
+        fileIndex: relativePaths.indexOf(relativePath),
       };
 
       blocks[j] = block;
     }
 
-    intervals[i] = blocks;
+    payload[i] = blocks;
   }
 
-  return intervals;
+  return payload;
 }
-
-type AutoclusterIterator = (i: number, autoclusterResults: string[]) => void;
-
-const iterateAutoclusters = (
-  autoclusters: string[][],
-  callback: AutoclusterIterator,
-): void => {
-  const reversed = autoclusters.toReversed();
-
-  for (const autocluster of reversed) {
-    for (let i = 0; i < autocluster.length; i += 1) {
-      callback(i, autocluster);
-    }
-  }
-};
 
 const createRowIfNotDefined = <T>(array: T[][], i: number): T[][] => {
   const exists = typeof array[i] !== 'undefined';
@@ -740,94 +765,112 @@ const createRowIfNotDefined = <T>(array: T[][], i: number): T[][] => {
 
 export async function readAggregatedLabels(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   extractorIndex: number,
-): Promise<string[][]> {
+) {
   const h5 = await load(file);
-  const path = `${StoragePath.aggregated_labels}/${bandName}/${integrationSeconds}/${extractorIndex}`;
-  const labelsDataset = h5.get(path) as Dataset;
-  const labels = labelsDataset.to_array() as string[][];
-
-  const autoclusters = await readAutoclusters(
+  const autoclustered = await readAutoclustered(
     file,
-    bandName,
-    integrationSeconds,
+    bandIndex,
+    integrationIndex,
   );
 
-  const hasAutoclusters = autoclusters.length > 0;
+  const path = AggregatedInstancePath.labels(
+    bandIndex,
+    integrationIndex,
+    extractorIndex,
+  );
+  const labels = _readArray<string[]>(h5, path);
 
-  if (!hasAutoclusters) {
+  if (autoclustered.length === 0) {
     return labels;
   }
 
-  iterateAutoclusters(autoclusters, (i, autocluster) => {
-    createRowIfNotDefined(labels, i);
-    labels[i].unshift(autocluster[i]);
-  });
+  const reversed = autoclustered.toReversed();
+
+  for (const autocluster of reversed) {
+    for (let i = 0; i < autocluster.length; i += 1) {
+      createRowIfNotDefined(labels, i);
+      labels[i].unshift(autocluster[i]);
+    }
+  }
 
   return labels;
 }
 
-export async function readAggregatedIndicators(
+export async function readAggregatedIndices(
   file: File,
-  band: string, // name
-  integration: number, // seconds
-  extractorIndices: number[], // non nn extractors indices
-): Promise<AggregatedIndicator[]> {
+  bandIndex: number,
+  integrationIndex: number,
+): Promise<AggregatedIndex[]> {
   const h5 = await load(file);
-  const extractors = await readExtractors(file);
+  const indices = await readIndices(file);
 
-  const indicators = new Array<AggregatedIndicator>(extractorIndices.length);
+  const aggregateds: AggregatedIndex[] = [];
 
-  for (let i = 0; i < extractorIndices.length; i += 1) {
-    const e = extractorIndices[i];
-    const path = `${StoragePath.aggregated}/${band}/${integration}/${e}`;
-    const dataset = h5.get(path) as Dataset;
-    const values = dataset.to_array() as number[][];
+  for (const index of indices) {
+    const path = AggregatedInstancePath.data(
+      bandIndex,
+      integrationIndex,
+      index.index,
+    );
+    const values = _readArray<number[]>(h5, path);
 
-    const indicator: AggregatedIndicator = {
-      extractor: extractors[e],
+    const aggregated: AggregatedIndex = {
+      index: index,
       values: values,
     };
 
-    indicators[i] = indicator;
+    aggregateds.push(aggregated);
   }
 
-  return indicators;
+  return aggregateds;
 }
 
-export async function readDigesters(file: File): Promise<Digester[]> {
+export async function readDigesters(file: File) {
   const h5 = await load(file);
-  const path = `${StoragePath.digesters_names}`;
-  const dataset = h5.get(path) as Dataset;
-  const names = dataset.to_array() as string[];
 
-  const digesters: Digester[] = new Array(names.length);
+  type dto = DigesterDtoWithType;
+  const p = DigesterPath;
 
-  for (let i = 0; i < names.length; i += 1) {
-    const name = names[i] as DigesterName;
+  const indices = _readArray<dto['index']>(h5, p.indices);
+  const impls = _readArray<dto['impl']>(h5, p.impls);
+  const isPairings = _readArray<dto['isPairing']>(h5, p.is_pairings);
 
-    const digester: Digester = {
-      index: i,
-      name: name,
-      type: digesterTypeMap[name],
+  const digesters = new Array<dto>(indices.length);
+
+  for (const index of indices) {
+    const impl = impls[index];
+
+    const digester: dto = {
+      index: index,
+      impl: impl,
+      isPairing: isPairings[index],
+      type: digesterTypeMap[impl],
     };
 
-    digesters[i] = digester;
+    digesters[index] = digester;
   }
 
   return digesters;
 }
 
+// TODO: refactor me
 export async function readDigested(
   file: File,
-  bandName: string,
-  integrationSeconds: number,
+  bandIndex: number,
+  integrationIndex: number,
   digesterIndex: number,
 ): Promise<Digested['values']> {
   const h5 = await load(file);
-  const groupPath = `${StoragePath.digested}/${bandName}/${integrationSeconds}/${digesterIndex}`;
+
+  const groupPath = DigestedInstancePath.data(
+    bandIndex,
+    integrationIndex,
+    digesterIndex,
+  );
+
   const group = h5.get(groupPath) as Group;
 
   const digestedValues: Digested['values'] = {};

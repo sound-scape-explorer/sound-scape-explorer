@@ -8,7 +8,7 @@ import {useViewState} from 'src/composables/use-view-state';
 import {countIterations} from 'src/utils/utils';
 import {reactive, watchEffect} from 'vue';
 
-// TODO: Refactor this file
+// TODO: split this file
 
 export const pageSizes = [100, 250, 500, 750, 1000];
 
@@ -116,7 +116,7 @@ export function useTimelinePagination() {
       return;
     }
 
-    const milliseconds = integration.value.seconds * 1000;
+    const milliseconds = integration.value.duration;
     pageTimestampMinRef.value = Math.min(...aggregatedTimestamps.value);
     pageTimestampMaxRef.value = Math.max(...aggregatedTimestamps.value);
 
@@ -164,7 +164,7 @@ export function useTimelinePagination() {
       return;
     }
 
-    const milliseconds = integration.value.seconds * 1000;
+    const milliseconds = integration.value.duration;
     const min = pageCurrentBoundariesRef.value.min - 1;
     const timestampOrigin = pageTimestampMinRef.value;
     const timestampMin = timestampOrigin + min * milliseconds;

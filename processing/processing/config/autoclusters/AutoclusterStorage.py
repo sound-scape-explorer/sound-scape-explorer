@@ -6,6 +6,8 @@ from processing.config.ConfigParser import ConfigParser
 from processing.config.ExcelSheet import ExcelSheet
 from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterExcel import AutoclusterExcel
+from processing.new.AutoclusterConfigNew import AutoclusterConfigNew
+from processing.new.StorageNew import StorageNew
 from processing.storage.Storage import Storage
 from processing.storage.StoragePath import StoragePath
 
@@ -36,7 +38,7 @@ class AutoclusterStorage:
         )
 
     @staticmethod
-    def read_from_storage(storage: Storage) -> List[AutoclusterConfig]:
+    def read_from_storage(storage: StorageNew) -> List[AutoclusterConfigNew]:
         names_dataset = storage.read(AutoclusterStorage.names)
 
         names = storage.convert_dataset_to_string_list(names_dataset)

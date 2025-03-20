@@ -3,7 +3,7 @@ import {type ConfigAutocluster} from 'src/panels/metrics/hooks/use-autocluster-s
 
 export function useAutoclusterSlug() {
   const getSlug = useCallback((autocluster: ConfigAutocluster) => {
-    return `${autocluster.index}-${autocluster.type}`;
+    return `${autocluster.index}-${autocluster.impl}`;
   }, []);
 
   return {

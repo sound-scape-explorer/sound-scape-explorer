@@ -1,12 +1,12 @@
-from typing import List
-
 from rich.console import Console
 from rich.table import Table
 
-from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
+from processing.context import Context
 
 
-def print_autoclusters(autoclusters: List[AutoclusterConfig]):
+def print_autoclusters(context: Context):
+    autoclusters = context.config.autoclusters
+
     console = Console()
 
     table = Table(show_header=True, header_style="bold magenta")
@@ -18,7 +18,7 @@ def print_autoclusters(autoclusters: List[AutoclusterConfig]):
 
     for autocluster in autoclusters:
         table.add_row(
-            autocluster.name,
+            autocluster.impl.name,
             str(autocluster.min_cluster_size),
             str(autocluster.min_samples),
             str(autocluster.alpha),

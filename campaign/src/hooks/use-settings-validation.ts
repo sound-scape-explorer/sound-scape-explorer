@@ -1,7 +1,7 @@
+import {ComputationStrategy} from '@shared/enums.ts';
 import {isAfter} from 'date-fns';
 import {useCallback, useMemo} from 'react';
 import {STORAGE_PATH_SUFFIX, TIMELINE_ORIGIN_MIN} from 'src/constants.ts';
-import {ComputationStrategy} from 'src/enums.ts';
 import {useFileValidation} from 'src/hooks/use-file-validation.ts';
 import {useSettingsState} from 'src/hooks/use-settings-state.ts';
 import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';

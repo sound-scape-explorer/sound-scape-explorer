@@ -1,99 +1,124 @@
 from enum import Enum
-from typing import TypedDict, Optional
+from typing import Union
+
+from pydantic import BaseModel, model_validator
+
+from processing.constants import LABEL_PREFIX
 
 
-class ComputationStrategyEnum(Enum):
+class ComputationStrategyDto(Enum):
     Umap = "umap"
     Pca = "pca"
     Embeddings = "embeddings"
 
 
-class SettingsDto(TypedDict):
+class SettingsDto(BaseModel):
     storagePath: str
     audioPath: str
     expectedSampleRate: int
     timelineOrigin: str
     audioHost: str
     timezone: str
-    computationStrategy: ComputationStrategyEnum
+    computationStrategy: ComputationStrategyDto
     computationDimensions: int
     computationIterations: int
     displaySeed: int
-    memoryLimit: int
+    memoryLimit: Union[int, float]
 
 
-class FileDto(TypedDict):
+class FileDto(BaseModel):
     Index: str
     Path: str
     Date: str
     Site: str
-    # LABEL_xxx: str
+    labels: dict[str, str]
+
+    class Config:
+        extra = "allow"
+
+    # noinspection PyNestedDecorators
+    @model_validator(mode="before")
+    @classmethod
+    def __extract_labels(cls, data):
+        if isinstance(data, dict):
+            labels = {}
+
+            for key in list(data.keys()):
+                if key.startswith(LABEL_PREFIX):
+                    prefix_len = len(LABEL_PREFIX)
+                    label_name = key[prefix_len:]
+                    labels[label_name] = data[key]
+                    del data[key]
+
+            data["labels"] = labels
+
+        return data
 
 
-class BandDto(TypedDict):
+class BandDto(BaseModel):
     index: int
     name: str
     low: int
     high: int
 
 
-class IntegrationDto(TypedDict):
+class IntegrationDto(BaseModel):
     index: int
     name: str
     duration: int
 
 
-class ExtractorTypeEnum(Enum):
+class ExtractorImplDto(Enum):
     vgg = "vgg"
     melogram = "melogram"
     melspectrum = "melspectrum"
 
 
-class ExtractorDto(TypedDict):
+class ExtractorDto(BaseModel):
     index: int
     name: str
-    type: ExtractorTypeEnum
+    impl: ExtractorImplDto
     offset: int
     step: int
     isPersist: bool
 
 
-class ReducerTypeEnum(Enum):
+class ReducerImplDto(Enum):
     umap = "umap"
     pca = "pca"
 
 
-class ReducerDto(TypedDict):
+class ReducerDto(BaseModel):
     index: int
-    type: ReducerTypeEnum
+    impl: ReducerImplDto
     dimensions: int
     bands: list[BandDto]
     integrations: list[IntegrationDto]
     extractors: list[ExtractorDto]
 
 
-class RangeDto(TypedDict):
+class RangeDto(BaseModel):
     index: int
     name: str
     start: str
     end: str
 
 
-class AutoclusterTypeEnum(Enum):
+class AutoclusterImplDto(Enum):
     hdbscan_eom = "hdbscan_eom"
     hdbscan_leaf = "hdbscan_leaf"
 
 
-class AutoclusterDto(TypedDict):
+class AutoclusterDto(BaseModel):
     index: int
-    type: AutoclusterTypeEnum
+    impl: AutoclusterImplDto
     minClusterSize: int
     minSamples: int
     alpha: float
     epsilon: float
 
 
-class DigesterTypeEnum(Enum):
+class DigesterImplDto(Enum):
     silhouette = "silhouette"
     contingency = "contingency"
     sum_var = "sum_var"
@@ -104,28 +129,28 @@ class DigesterTypeEnum(Enum):
     overlap = "overlap"
 
 
-class DigesterDto(TypedDict):
+class DigesterDto(BaseModel):
     index: int
-    type: DigesterTypeEnum
+    impl: DigesterImplDto
 
 
-class TrajectoryStepEnum(Enum):
+class TrajectoryStepDto(Enum):
     Hour = "hour"
     Day = "day"
     Month = "month"
 
 
-class TrajectoryDto(TypedDict):
+class TrajectoryDto(BaseModel):
     index: int
     name: str
     start: str
     end: str
-    labelProperty: Optional[str]
-    labelValue: Optional[str]
-    step: TrajectoryStepEnum
+    labelProperty: str
+    labelValue: str
+    step: TrajectoryStepDto
 
 
-class IndexTypeEnum(Enum):
+class IndexImplDto(Enum):
     leq_maad = "leq_maad"
     ht = "ht"
     hf = "hf"
@@ -136,17 +161,16 @@ class IndexTypeEnum(Enum):
     bi = "bi"
 
 
-class IndexDto(TypedDict):
+class IndexDto(BaseModel):
     index: int
-    type: IndexTypeEnum
+    impl: IndexImplDto
     offset: int
     step: int
     isPersist: bool
 
 
-class JsonDto(TypedDict):
+class JsonDto(BaseModel):
     version: str
-    isValid: bool
     settings: SettingsDto
     files: list[FileDto]
     bands: list[BandDto]

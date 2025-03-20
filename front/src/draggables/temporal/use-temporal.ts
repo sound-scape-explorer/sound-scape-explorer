@@ -1,7 +1,7 @@
 import {
-  type AggregatedIndicator,
-  useStorageAggregatedIndicators,
-} from 'src/composables/use-storage-aggregated-indicators';
+  type AggregatedIndex,
+  useStorageAggregatedIndices,
+} from 'src/composables/use-storage-aggregated-indices';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {ref} from 'vue';
@@ -14,10 +14,10 @@ interface Data {
 }
 
 const data = ref<Data[]>([]);
-const indicator = ref<AggregatedIndicator | null>(null);
+const indicator = ref<AggregatedIndex | null>(null);
 
 export function useTemporal() {
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedIndices} = useStorageAggregatedIndices();
   const {aggregatedSites} = useStorageAggregatedSites();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
 
@@ -27,15 +27,19 @@ export function useTemporal() {
       return;
     }
 
-    if (aggregatedIndicators.value === null) {
+    if (aggregatedIndices.value === null) {
       return;
     }
 
-    const results = aggregatedIndicators.value.filter(
-      (indicator) => indicator.extractor.index === index,
+    const domainIndex = aggregatedIndices.value.find(
+      (aI) => aI.index.index === index,
     );
 
-    indicator.value = results[0];
+    if (!domainIndex) {
+      return;
+    }
+
+    indicator.value = domainIndex;
     render();
   };
 
@@ -52,7 +56,7 @@ export function useTemporal() {
     const newData: Data[] = new Array(l);
 
     for (let i = 0; i < l; i += 1) {
-      const {site} = aggregatedSites.value[i];
+      const site = aggregatedSites.value[i];
 
       newData[i] = {
         index: i,

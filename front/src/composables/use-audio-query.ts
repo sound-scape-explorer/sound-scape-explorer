@@ -61,7 +61,7 @@ export function useAudioQuery() {
     }
 
     const start = block.fileStart;
-    const end = start + integration.value.seconds * 1000;
+    const end = start + integration.value.duration;
     const route = new URL(`${host.value}/get`);
     route.searchParams.append('file', block.file);
     route.searchParams.append('start', start.toString());

@@ -1,5 +1,5 @@
 import {useColorUser} from 'src/composables/use-color-user';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
+import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {calculateMean, mapRange} from 'src/utils/math';
 import {getInfiniteRange} from 'src/utils/utils';
@@ -8,19 +8,18 @@ import {ref} from 'vue';
 const min = ref<number | null>(null);
 const max = ref<number | null>(null);
 
-export function useColorByIndicator() {
+export function useColorByIndex() {
   const {scale} = useColorUser();
   const {criteriaIndex} = useColorSelection();
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedIndices} = useStorageAggregatedIndices();
 
   const get = (intervalIndex: number): string => {
-    if (aggregatedIndicators.value === null) {
+    if (aggregatedIndices.value === null) {
       return '';
     }
 
-    const indicatorIndex = criteriaIndex.value;
-    const values =
-      aggregatedIndicators.value[indicatorIndex].values[intervalIndex];
+    const indexIndex = criteriaIndex.value;
+    const values = aggregatedIndices.value[indexIndex].values[intervalIndex];
     const mean = calculateMean(values);
 
     const {bottom, top} = getInfiniteRange(min.value, max.value);

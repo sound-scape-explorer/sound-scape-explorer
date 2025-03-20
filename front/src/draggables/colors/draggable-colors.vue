@@ -10,12 +10,12 @@ import {InjectionKey} from 'src/common/injection-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useColorInvert} from 'src/composables/use-color-invert';
-import {useIndicatorLimits} from 'src/composables/use-indicator-limits';
+import {useIndexLimits} from 'src/composables/use-index-limits';
 import {useRefProvide} from 'src/composables/use-ref-provide';
 import {COLOR_FLAVORS} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
-import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
+import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useColorState} from 'src/draggables/colors/use-color-state';
@@ -26,9 +26,9 @@ const {flavor, criteria, criterias, category, categories} = useColorSelection();
 const {isIndicators, isLabels, isLabelNumeric} = useColorState();
 
 const {low, high} = useScatterColorAlpha();
-const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndicator();
+const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
 const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
-const {detect: detectIndicatorRange, swap} = useIndicatorLimits();
+const {detect: detectIndicatorRange, swap} = useIndexLimits();
 const {invert, isReversible} = useColorInvert();
 const {isEnabled} = useLabelNumeric();
 

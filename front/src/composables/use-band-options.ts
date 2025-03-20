@@ -1,10 +1,10 @@
-import {type Band} from 'src/composables/use-bands';
+import {type BandDto} from 'src/dtos';
 import {ref} from 'vue';
 
 const options = ref<string[]>([]);
 
 export function useBandOptions() {
-  const create = (bands: Band[]) => {
+  const create = (bands: BandDto[]) => {
     options.value = bands.map(
       (b) => `${b.index} - ${b.name} (${b.low} Hz - ${b.high} Hz)`,
     );

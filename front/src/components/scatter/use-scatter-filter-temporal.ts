@@ -1,7 +1,7 @@
 import {
-  type AggregatedIndicator,
-  useStorageAggregatedIndicators,
-} from 'src/composables/use-storage-aggregated-indicators';
+  type AggregatedIndex,
+  useStorageAggregatedIndices,
+} from 'src/composables/use-storage-aggregated-indices';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 import {calculateMean} from 'src/utils/math';
@@ -12,17 +12,17 @@ import {ref} from 'vue';
 const filtered = ref<boolean[]>([]);
 
 export function useScatterFilterTemporal() {
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
+  const {aggregatedIndices} = useStorageAggregatedIndices();
   const {from, to, reset: resetThresholds} = useTemporalThresholds();
   const {indicator: indicatorSelected, hasIndicator} = useDraggableTemporal();
 
   const isFiltered = (
     index: number,
-    indicator: AggregatedIndicator,
+    indicator: AggregatedIndex,
     bottom: number,
     top: number,
   ): boolean => {
-    if (aggregatedIndicators.value === null || !hasIndicator.value) {
+    if (aggregatedIndices.value === null || !hasIndicator.value) {
       return false;
     }
 
@@ -33,13 +33,14 @@ export function useScatterFilterTemporal() {
   };
 
   const filter = (): void => {
-    const indicatorIndex = parseSelectionOption(indicatorSelected.value);
-    if (aggregatedIndicators.value === null || indicatorIndex === null) {
+    const indexIndex = parseSelectionOption(indicatorSelected.value);
+
+    if (aggregatedIndices.value === null || indexIndex === null) {
       return;
     }
 
-    const results = aggregatedIndicators.value.filter(
-      ({extractor}) => extractor.index === indicatorIndex,
+    const results = aggregatedIndices.value.filter(
+      ({index}) => index.index === indexIndex,
     );
 
     if (results.length === 0) {
@@ -48,7 +49,7 @@ export function useScatterFilterTemporal() {
 
     const indicator = results[0];
 
-    const l = aggregatedIndicators.value[0].values.length;
+    const l = aggregatedIndices.value[0].values.length;
     const {bottom, top} = getInfiniteRange(from.value, to.value);
 
     const newFiltered: boolean[] = new Array(l);

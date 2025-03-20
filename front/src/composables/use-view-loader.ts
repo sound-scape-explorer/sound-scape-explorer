@@ -11,7 +11,7 @@ import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
+import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
 import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
 import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
 import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
@@ -31,7 +31,7 @@ export function useViewLoader() {
   const {close} = useDraggables();
   const {readLabels} = useStorageLabels();
   const {readAggregatedFeatures} = useStorageAggregatedFeatures();
-  const {readAggregatedIndicators} = useStorageAggregatedIndicators();
+  const {readAggregatedIndices} = useStorageAggregatedIndices();
   const {readAggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {readAggregatedSites} = useStorageAggregatedSites();
   const {readAggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
@@ -56,7 +56,7 @@ export function useViewLoader() {
   const steps: Step[] = [
     ['labels', readLabels],
     ['features', readAggregatedFeatures],
-    ['indicators', readAggregatedIndicators],
+    ['indices', readAggregatedIndices],
     ['timestamps', readAggregatedTimestamps],
     ['ranges', readRanges],
     ['sites', readAggregatedSites],

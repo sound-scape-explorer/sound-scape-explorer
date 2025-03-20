@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, List, Tuple
 
 from h5py import Dataset
@@ -8,6 +9,11 @@ from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
+
+
+class AutoclusterType(Enum):
+    hdbscan_eom = "eom"
+    hdbscan_leaf = "leaf"
 
 
 class AutoclusterConfig:
@@ -21,16 +27,16 @@ class AutoclusterConfig:
     def __init__(
         self,
         index: int,
-        name: str,
+        autocluster_type: AutoclusterType,
         min_cluster_size: int,
-        min_samples: str,
+        min_samples: int,
         alpha: float,
         epsilon: float,
     ) -> None:
         AutoclusterConfig.validate_name(name)
 
         self.index = index
-        self.name = name
+        self.autocluster_type = autocluster_type
         self.min_cluster_size = min_cluster_size
         self.min_samples = min_samples
         self.alpha = float(alpha)

@@ -35,8 +35,8 @@ export function useRelativeTrajectories() {
 
       relativeTrajectories.value = await worker.readRelativeTrajectories(
         file,
-        band.value.name,
-        integration.value.seconds,
+        band.value.index,
+        integration.value.index,
         extractor.value.index,
       );
     });

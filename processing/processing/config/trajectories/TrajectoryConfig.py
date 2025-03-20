@@ -1,9 +1,16 @@
+from enum import Enum
 from typing import List
 
 from processing.common.ContinuousTimeTrajectory import ContinuousTimeTrajectory
 from processing.config.bands.BandConfig import BandConfig
 from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.config.reducers.ReducerConfig import ReducerConfig
+
+
+class TrajectoryStep(Enum):
+    hour = 60 * 60
+    day = 60 * 60 * 24
+    month = 60 * 60 * 24 * 30
 
 
 class TrajectoryConfig:
@@ -21,6 +28,7 @@ class TrajectoryConfig:
         end: int,
         label_property: str,
         label_value: str,
+        trajectory_step: TrajectoryStep,
         step: int,  # seconds
     ) -> None:
         self.index = index
@@ -29,6 +37,7 @@ class TrajectoryConfig:
         self.end = end
         self.label_property = label_property
         self.label_value = label_value
+        self.trajectory_step = trajectory_step
         self.step = step
 
     @staticmethod

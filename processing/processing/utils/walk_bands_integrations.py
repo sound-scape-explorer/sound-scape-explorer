@@ -1,13 +1,14 @@
-from typing import Iterable, List, Tuple
+from typing import Iterable
 
-from processing.config.bands.BandConfig import BandConfig
-from processing.config.integrations.IntegrationConfig import IntegrationConfig
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
 
 
+# TODO: refactor me
 def walk_bands_integrations(
-    bands: List[BandConfig],
-    integrations: List[IntegrationConfig],
-) -> Iterable[Tuple[BandConfig, IntegrationConfig]]:
+    bands: list[BandConfigNew],
+    integrations: list[IntegrationConfigNew],
+) -> Iterable[tuple[BandConfigNew, IntegrationConfigNew]]:
     for band in bands:
         for integration in integrations:
             yield band, integration

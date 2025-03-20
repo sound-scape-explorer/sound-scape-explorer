@@ -42,8 +42,8 @@ export function useStorageReducedFeatures() {
 
       reducedFeatures.value = await worker.readReducedFeatures(
         file,
-        band.value.name,
-        integration.value.seconds,
+        band.value.index,
+        integration.value.index,
         extractor.value.index,
         reducer.value.index,
       );

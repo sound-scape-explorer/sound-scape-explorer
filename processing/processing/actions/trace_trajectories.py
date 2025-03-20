@@ -1,13 +1,9 @@
 from rich.progress import track
 
-from processing.common.TracedStorage import TracedStorage
-from processing.config.labels.LabelStorage import LabelStorage
-from processing.config.trajectories.TrajectoryStorage import TrajectoryStorage
-from processing.interfaces import MenuCallback
-from processing.storage.Storage import Storage
-from processing.utils.build_aggregated_reduceables import build_aggregated_reduceables
-from processing.utils.build_reducers import read_reducers
-from processing.utils.invoke_menu import invoke_menu
+from processing.common.AggregatedReducible import AggregatedReducible
+from processing.context import Context
+from processing.new.LabelManager import LabelManager
+from processing.new.TracedManager import TracedManager
 from processing.utils.print_action import print_action
 from processing.utils.print_trajectories import print_trajectories
 from processing.utils.validate_aggregated import validate_aggregated
@@ -18,44 +14,50 @@ from processing.utils.validate_reduced import validate_reduced
 @validate_configuration
 @validate_aggregated
 @validate_reduced
-def trace_trajectories(
-    storage: Storage,
-    callback: MenuCallback,
-):
+def trace_trajectories(context: Context):
     print_action("Tracing trajectories started!", "start")
+    print_trajectories(context)
 
-    TracedStorage.delete(storage)
+    TracedManager.delete(context)
 
-    trajectories = TrajectoryStorage.read_from_storage(storage)
-    print_trajectories(trajectories)
+    storage = context.storage
+    trajectories = context.config.trajectories
+    reducers = context.config.reducers
+    bands = context.config.bands
+    integrations = context.config.integrations
+    extractors = context.config.extractors
 
-    reducers = read_reducers(storage)
-    ars = build_aggregated_reduceables(storage)
-    labels_properties = LabelStorage.read_properties_from_storage(storage)
+    reducibles = AggregatedReducible.reconstruct(
+        bands=bands,
+        integrations=integrations,
+        extractors=extractors,
+    )
 
-    for ar in ars:
-        aggregated_timestamps = ar.read_timestamps_from_storage(storage)
-        aggregated_labels = ar.read_labels_from_storage(storage)
+    labels_properties = LabelManager.get_properties(context)
+
+    for reducible in reducibles:
+        aggregated_timestamps = reducible.read_timestamps_from_storage(storage)
+        aggregated_labels = reducible.read_labels_from_storage(storage)
 
         for reducer in reducers:
-            reducer.load(ar.band, ar.integration)
+            reducer.start(reducible.band, reducible.integration)
 
-            if not reducer.should_calculate():
-                continue
+            # if not reducer.should_calculate():
+            #     continue
 
-            reduced_features = ar.read_reduced_from_storage(storage, reducer)
+            reduced_features = reducible.read_reduced_from_storage(storage, reducer)
 
             for trajectory in track(
                 trajectories,
                 description=(
-                    f"Band {ar.band.name}"
-                    f", integration {ar.integration.name}"
-                    f", reducer {reducer.name}{reducer.dimensions}"
+                    f"Band {reducible.band.name}"
+                    f", integration {reducible.integration.name}"
+                    f", reducer {reducer.impl.name}{reducer.dimensions}"
                 ),
             ):
                 trajectory.create_instance(
-                    band=ar.band,
-                    integration=ar.integration,
+                    band=reducible.band,
+                    integration=reducible.integration,
                     reducer=reducer,
                 )
 
@@ -74,14 +76,11 @@ def trace_trajectories(
                     trajectory_label_value=trajectory.label_value,
                 )
 
-                TracedStorage.write_data(storage, trajectory, reducer, ar)
-                TracedStorage.write_timestamps(storage, trajectory, reducer, ar)
-                TracedStorage.write_relative_timestamps(
-                    storage,
-                    trajectory,
-                    reducer,
-                    ar,
+                TracedManager.to_storage(
+                    context=context,
+                    trajectory=trajectory,
+                    reducer=reducer,
+                    ar=reducible,
                 )
 
     print_action("Tracing trajectories completed!", "end")
-    invoke_menu(storage, callback)

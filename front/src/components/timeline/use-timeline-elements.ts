@@ -83,7 +83,7 @@ export function useTimelineElements() {
     for (const index of indices.value) {
       const timestamp = aggregatedTimestamps.value[index];
       const detail = aggregatedIntervalDetails.value[index];
-      const {site} = aggregatedSites.value[index];
+      const site = aggregatedSites.value[index];
 
       if (!knownSites.includes(site)) {
         knownSites.push(site);
@@ -91,7 +91,7 @@ export function useTimelineElements() {
       }
 
       const start = convertTimestampToDate(timestamp);
-      const end = start.add(integration.value.seconds, 'seconds');
+      const end = start.add(integration.value.duration, 'milliseconds');
 
       for (const d of detail) {
         const s = start.unix() * 1000;

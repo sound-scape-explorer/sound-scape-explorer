@@ -70,8 +70,7 @@ export function useTemporalChart() {
       }
 
       const {values, timestamps, siteValues} = prepare();
-      const siteNames = sites.value.map((site) => site.name);
-      const colors = getColors(siteNames);
+      const colors = getColors(sites.value);
 
       if (isCandles.value) {
         candles.value = generateCandles(values, timestamps, siteValues);

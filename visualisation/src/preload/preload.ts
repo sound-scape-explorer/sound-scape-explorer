@@ -12,20 +12,6 @@ import {listFiles} from './list-files';
 import {startAudioService} from './start-audio-service';
 import {stopAudioService} from './stop-audio-service';
 
-export interface ElectronAPI {
-  getDirectoryPath: typeof getDirectoryPath;
-  getPathExistence: typeof getPathExistence;
-  startAudioService: typeof startAudioService;
-  getAudioStatus: typeof getAudioStatus;
-  stopAudioService: typeof stopAudioService;
-  createFrontWindow: typeof createFrontWindow;
-  createCampaignWindow: typeof createCampaignWindow;
-  joinPath: typeof joinPath;
-  findCommonFolder: typeof findCommonFolder;
-  checkPath: typeof checkPath;
-  listFiles: typeof listFiles;
-}
-
 contextBridge.exposeInMainWorld('electronAPI', {
   getDirectoryPath: getDirectoryPath,
   getPathExistence: getPathExistence,

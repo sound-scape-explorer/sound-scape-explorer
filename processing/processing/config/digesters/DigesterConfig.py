@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, List, Type
 
 from processing.digesters.ContingencyDigester import ContingencyDigester
@@ -13,6 +14,19 @@ from processing.digesters.SumStandardDeviationDigester import (
     SumStandardDeviationDigester,
 )
 from processing.digesters.SumVarianceDigester import SumVarianceDigester
+
+
+class DigesterType(Enum):
+    sum_var = SumVarianceDigester
+    sum_std = SumStandardDeviationDigester
+    mean_std = MeanStandardDeviationDigester
+    mean_spreading = MeanSpreadingDigester
+    distance = DistanceDigester
+    overlap = OverlapDigester
+    silhouette = SilhouetteDigester
+    contingency = ContingencyDigester
+
+DigesterPairing = [DigesterType.contingency]
 
 
 class DigesterConfig:
@@ -32,12 +46,10 @@ class DigesterConfig:
     def __init__(
         self,
         index: int,
-        name: str,
+        digester_type: DigesterType,
     ) -> None:
-        self.validate_name(name=name)
-
         self.index = index
-        self.name = name
+        self.digester_type = digester_type
 
         self.is_pairing = True if self.name in self.pairings else False
 

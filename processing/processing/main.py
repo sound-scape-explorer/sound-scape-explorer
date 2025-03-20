@@ -4,7 +4,7 @@ from typing import Optional
 from processing.actions.autocluster import autocluster
 from processing.actions.compute_requirements import compute_requirements
 from processing.actions.digest import digest
-from processing.actions.export_computation_umaps import export_computation_umaps
+from processing.actions.export_computation_umaps import export_computed
 from processing.actions.export_dataframe import export_dataframe
 from processing.actions.export_mdm import export_mdm
 from processing.actions.extract_and_aggregate import extract_and_aggregate
@@ -22,7 +22,7 @@ from processing.utils.ask_menu import MenuChoice, ask_menu
 from processing.utils.get_file_type import get_file_type
 from processing.utils.prettify_exceptions import prettify_exceptions
 from processing.utils.print_welcome import print_welcome
-from processing.utils.quit_sse import quit_sse
+from processing.utils.quit_application import quit_application
 
 
 stored_config: Config
@@ -34,8 +34,6 @@ def main(
     loaded_storage: Optional[Storage] = None,
     config_path: Optional[str] = None,
 ):
-    """CLI entry point"""
-
     global stored_config
     global last_choice
 
@@ -58,7 +56,7 @@ def main(
     else:
         storage = loaded_storage
 
-    signal(SIGINT, lambda _signum, _frame: quit_sse(storage))
+    signal(SIGINT, lambda _signum, _frame: quit_application(storage))
 
     answer = ask_menu(storage, last_choice)
     last_choice = answer
@@ -100,8 +98,8 @@ def main(
         digest(storage, main)
     if answer == MenuChoice.ExportDataframe.value:
         export_dataframe(config, storage, main)
-    if answer == MenuChoice.ExportComputationUmaps.value:
-        export_computation_umaps(config, storage, main)
+    if answer == MenuChoice.ExportComputed.value:
+        export_computed(config, storage, main)
     if answer == MenuChoice.ExportMeanDistancesMatrix.value:
         export_mdm(config, storage, main)
     if answer == MenuChoice.Repack.value:
@@ -110,4 +108,4 @@ def main(
         refresh_configuration(config, storage)
         fix_audio_windows_10_7_2(storage, main)
     else:
-        quit_sse(storage)
+        quit_application(storage)

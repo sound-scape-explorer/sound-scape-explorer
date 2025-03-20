@@ -39,8 +39,8 @@ export function useStorageAggregatedFeatures() {
 
       aggregatedFeatures.value = await worker.readAggregatedFeatures(
         file,
-        band.value.name,
-        integration.value.seconds,
+        band.value.index,
+        integration.value.index,
         extractor.value.index,
       );
     });

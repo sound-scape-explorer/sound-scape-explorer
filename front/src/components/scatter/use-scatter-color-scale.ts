@@ -1,11 +1,10 @@
 import {useFiles} from 'src/composables/use-files';
 import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
 import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
 import {useColorByCyclingDay} from 'src/draggables/colors/use-color-by-cycling-day';
 import {useColorByDay} from 'src/draggables/colors/use-color-by-day';
-import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
+import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -16,7 +15,6 @@ const scale = ref<string[] | null>(null);
 
 export function useScatterColorScale() {
   const {files} = useFiles();
-  const {labelPropertiesAsColorTypes} = useStorageLabels();
   const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {isIndicators, isLabels} = useColorState();
   const {getColor} = useColorByIntervalIndex();
@@ -25,16 +23,12 @@ export function useScatterColorScale() {
   const {getColorByDay} = useColorByDay();
   const {getColorByCyclingDay} = useColorByCyclingDay();
   const {get: getColorByLabel} = useColorByLabel();
-  const {get: getColorByIndicator} = useColorByIndicator();
+  const {get: getColorByIndicator} = useColorByIndex();
   const {criteria} = useColorSelection();
 
   const generate = async () => {
     return new Promise((resolve, reject) => {
-      if (
-        labelPropertiesAsColorTypes.value === null ||
-        files.value === null ||
-        aggregatedTimestamps.value === null
-      ) {
+      if (files.value === null || aggregatedTimestamps.value === null) {
         reject(new Error('generateColorScale: missing props'));
         return;
       }

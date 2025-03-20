@@ -1,6 +1,6 @@
 from typing import Optional, Tuple
 
-from processing.config.files.FileConfig import FileConfig
+from processing.new.FileConfigNew import FileConfigNew
 
 
 class TorchLoader:
@@ -19,13 +19,13 @@ class TorchLoader:
         self.audio = None
         self.sample_rate = None
 
-    def load(self, file: FileConfig):
+    def load(self, file: FileConfigNew):
         import torchaudio
         from torch import Tensor
 
         if self.audio is not None and self.sample_rate is not None:
             return self.audio, self.sample_rate
 
-        loaded: Tuple[Tensor, int] = torchaudio.load(file.path)  # type: ignore
+        loaded: Tuple[Tensor, int] = torchaudio.load(file.absolute_path)
         self.audio, self.sample_rate = loaded
         return self.audio, self.sample_rate

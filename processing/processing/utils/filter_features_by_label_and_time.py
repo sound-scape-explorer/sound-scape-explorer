@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 from h5py import Dataset
 
 
@@ -8,18 +6,18 @@ def filter_features_by_label_and_time(
     timestamps: Dataset,
     timestamp_start: int,  # UNIX timestamp in milliseconds
     timestamp_end: int,  # UNIX timestamp in milliseconds
-    labels_properties: List[str],
-    labels_values: Dataset,
+    labels_properties: list[str],
+    labels_values: list[str],
     trajectory_label_property: str,
     trajectory_label_value: str,
-) -> Tuple[List[List[float]], List[int]]:
+) -> tuple[list[list[float]], list[int]]:
     filtered_features = []
-    filtered_timestamps: List[int] = []
+    filtered_timestamps: list[int] = []
     label_property_index = labels_properties.index(trajectory_label_property)
 
     for index, timestamp in enumerate(timestamps):
         label_values = labels_values[index]
-        label_value = label_values[label_property_index].decode("utf-8")
+        label_value = label_values[label_property_index]
 
         if (
             timestamp[0] <= timestamp_start

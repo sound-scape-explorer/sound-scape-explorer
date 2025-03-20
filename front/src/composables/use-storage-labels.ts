@@ -4,7 +4,6 @@ import {useExtractorSelection} from 'src/composables/use-extractor-selection';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useStorageReady} from 'src/composables/use-storage-ready';
-import {convertSlugsToColorTypes} from 'src/utils/colors';
 import {ref} from 'vue';
 
 // Label properties and sets
@@ -23,8 +22,6 @@ const labelSets = ref<string[][] | null>(null);
 const injectedCount = 1;
 const labelPropertiesActual = ref<string[] | null>(null);
 const labelSetsActual = ref<string[][] | null>(null);
-
-const labelPropertiesAsColorTypes = ref<string[] | null>(null); // todo: remove me
 
 export function useStorageLabels() {
   const {read} = useStorageReader();
@@ -56,8 +53,8 @@ export function useStorageLabels() {
 
       labels.value = await worker.readLabels(
         file,
-        band.value.name,
-        integration.value.seconds,
+        band.value.index,
+        integration.value.index,
         extractor.value.index,
       );
 
@@ -68,8 +65,6 @@ export function useStorageLabels() {
 
       labelSetsActual.value = labelSets.value.slice(injectedCount);
       labelPropertiesActual.value = labelProperties.value.slice(injectedCount);
-
-      labelPropertiesAsColorTypes.value = convertSlugsToColorTypes(properties);
     });
   };
 
@@ -79,7 +74,6 @@ export function useStorageLabels() {
     labelPropertiesActual: labelPropertiesActual,
     labelSets: labelSets,
     labelSetsActual: labelSetsActual,
-    labelPropertiesAsColorTypes: labelPropertiesAsColorTypes,
     readLabels: readLabels,
   };
 }

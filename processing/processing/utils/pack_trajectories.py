@@ -1,13 +1,13 @@
 from typing import Dict, List
 
-from processing.config.trajectories.TrajectoryConfig import TrajectoryConfig
-
-PackedTrajectories = Dict[str, Dict[str, List[TrajectoryConfig]]]
+from processing.new.TrajectoryConfigNew import TrajectoryConfigNew
 
 
-def pack_trajectories(
-    trajectories: List[TrajectoryConfig],
-) -> PackedTrajectories:
+PackedTrajectories = Dict[str, Dict[str, List[TrajectoryConfigNew]]]
+
+
+# TODO: refactor me
+def pack_trajectories(trajectories: List[TrajectoryConfigNew]) -> PackedTrajectories:
     packed_trajectories: PackedTrajectories = {}
 
     for trajectory in trajectories:

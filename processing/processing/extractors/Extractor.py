@@ -1,19 +1,29 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterable, List, Optional
+from typing import Iterable, Optional
 
-from processing.config.bands.BandConfig import BandConfig
 from processing.loaders.Loader import Loader
 from processing.loaders.SoundSlice import SoundSlice
-from processing.storage.Storage import Storage
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.StorageNew import StorageNew
 from processing.storage.StoragePath import StoragePath
 
-Extracted = List[List[Any]]
+
+RawData = list[list[float]]
 
 
 class Extractor(ABC):
+    """An abstract Extractor class representing either a neural network extractor or
+    an acoustic index extractor.
+
+    Beware that these raw objects are then consumed differently thus the domain
+    separation after the actual extraction.
+
+    They are stored in the same way. All referenced by their index.
+    """
+
     index: int
     __expected_sample_rate: Optional[int] = None
-    __band: Optional[BandConfig] = None
+    __band: Optional[BandConfigNew] = None
     __offset: Optional[int] = None
     __step: Optional[int] = None
     is_persist: bool = False
@@ -35,12 +45,12 @@ class Extractor(ABC):
         self.__expected_sample_rate = expected_sample_rate
 
     @property
-    def band(self) -> BandConfig:
+    def band(self) -> BandConfigNew:
         assert self.__band is not None, "Please define band"
         return self.__band
 
     @band.setter
-    def band(self, band: BandConfig):
+    def band(self, band: BandConfigNew):
         self.__band = band
 
     @property
@@ -62,17 +72,17 @@ class Extractor(ABC):
         self.__step = step
 
     @abstractmethod
-    def extract(self, loader: Loader) -> Extracted:
+    def extract(self, loader: Loader) -> RawData:
         pass
 
     def persist(self):
         self.is_persist = True
 
-    def store(self, data: Extracted, storage: Storage):
+    # TODO: refactor me
+    def store(self, data: RawData, storage: StorageNew):
         storage.append(
             path=self.path,
             data=data,
-            compression=True,
             attributes={
                 "extractor": self.__class__.__name__,
                 "offset": str(self.offset),

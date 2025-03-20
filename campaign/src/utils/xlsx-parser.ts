@@ -1,3 +1,11 @@
+import {
+  AutoclusterImpl,
+  DigesterImpl,
+  ExtractorImpl,
+  IndexImpl,
+  ReducerImpl,
+  TrajectoryStep,
+} from '@shared/enums.ts';
 import * as Excel from 'exceljs';
 import {
   AUDIO_HOST_DEFAULT,
@@ -35,32 +43,14 @@ import {
 } from 'src/enums.ts';
 import {type Settings} from 'src/hooks/use-settings-state.ts';
 import {type ConfigBand} from 'src/panels/config/hooks/use-band-state.ts';
-import {
-  type ConfigExtractor,
-  ConfigExtractorType,
-} from 'src/panels/config/hooks/use-extractor-state.ts';
+import {type ConfigExtractor} from 'src/panels/config/hooks/use-extractor-state.ts';
 import {type ConfigIntegration} from 'src/panels/config/hooks/use-integration-state.ts';
-import {
-  type ConfigReducer,
-  ConfigReducerType,
-} from 'src/panels/config/hooks/use-reducer-state.ts';
-import {
-  AutoclusterType,
-  type ConfigAutocluster,
-} from 'src/panels/metrics/hooks/use-autocluster-state.ts';
-import {
-  type ConfigDigester,
-  DigesterType,
-} from 'src/panels/metrics/hooks/use-digester-state.ts';
-import {
-  type MetricsIndex,
-  MetricsIndexType,
-} from 'src/panels/metrics/hooks/use-index-state.ts';
+import {type ConfigReducer} from 'src/panels/config/hooks/use-reducer-state.ts';
+import {type ConfigAutocluster} from 'src/panels/metrics/hooks/use-autocluster-state.ts';
+import {type ConfigDigester} from 'src/panels/metrics/hooks/use-digester-state.ts';
+import {type MetricsIndex} from 'src/panels/metrics/hooks/use-index-state.ts';
 import {type ConfigRange} from 'src/panels/metrics/hooks/use-range-state.ts';
-import {
-  type ConfigTrajectory,
-  ConfigTrajectoryStep,
-} from 'src/panels/metrics/hooks/use-trajectory-state.ts';
+import {type ConfigTrajectory} from 'src/panels/metrics/hooks/use-trajectory-state.ts';
 import {formatDateToString} from 'src/utils/dates.ts';
 import {invertRowsAndColumns} from 'src/utils/objects.ts';
 
@@ -87,42 +77,42 @@ function isKeyOfXlsxFile(key: string): key is keyof XlsxFile {
 
 const IS_PERSIST_TRUE = 'yes';
 
-const XLSX_EXTRACTORS: Record<string, ConfigExtractorType> = {
-  vgg: ConfigExtractorType.vgg,
-  melogram: ConfigExtractorType.melogram,
-  melspectrum: ConfigExtractorType.melspectrum,
+const XLSX_EXTRACTORS: Record<string, ExtractorImpl> = {
+  vgg: ExtractorImpl.vgg,
+  melogram: ExtractorImpl.melogram,
+  melspectrum: ExtractorImpl.melspectrum,
 };
 
-const XLSX_INDICES: Record<string, MetricsIndexType> = {
-  leq_maad: MetricsIndexType.leq_maad,
-  med: MetricsIndexType.med,
-  ht: MetricsIndexType.ht,
-  hf: MetricsIndexType.hf,
-  aci: MetricsIndexType.aci,
-  adi: MetricsIndexType.adi,
-  bi: MetricsIndexType.bi,
-  ndsi: MetricsIndexType.ndsi,
+const XLSX_INDICES: Record<string, IndexImpl> = {
+  leq_maad: IndexImpl.leq_maad,
+  med: IndexImpl.med,
+  ht: IndexImpl.ht,
+  hf: IndexImpl.hf,
+  aci: IndexImpl.aci,
+  adi: IndexImpl.adi,
+  bi: IndexImpl.bi,
+  ndsi: IndexImpl.ndsi,
 };
 
-const XLSX_REDUCERS: Record<string, ConfigReducerType> = {
-  umap: ConfigReducerType.umap,
-  pca: ConfigReducerType.pca,
+const XLSX_REDUCERS: Record<string, ReducerImpl> = {
+  umap: ReducerImpl.umap,
+  pca: ReducerImpl.pca,
 };
 
-const XLSX_DIGESTERS: Record<string, DigesterType> = {
-  silhouette: DigesterType.silhouette,
-  contingency: DigesterType.contingency,
-  sum_var: DigesterType.sum_var,
-  sum_std: DigesterType.sum_std,
-  mean_std: DigesterType.mean_std,
-  mean_spreading: DigesterType.mean_spreading,
-  distance: DigesterType.distance,
-  overlap: DigesterType.overlap,
+const XLSX_DIGESTERS: Record<string, DigesterImpl> = {
+  silhouette: DigesterImpl.silhouette,
+  contingency: DigesterImpl.contingency,
+  sum_var: DigesterImpl.sum_var,
+  sum_std: DigesterImpl.sum_std,
+  mean_std: DigesterImpl.mean_std,
+  mean_spreading: DigesterImpl.mean_spreading,
+  distance: DigesterImpl.distance,
+  overlap: DigesterImpl.overlap,
 };
 
-const XLSX_AUTOCLUSTERS: Record<string, AutoclusterType> = {
-  'hdbscan-eom': AutoclusterType.hdbscan_eom,
-  'hdbscan-leaf': AutoclusterType.hdbscan_leaf,
+const XLSX_AUTOCLUSTERS: Record<string, AutoclusterImpl> = {
+  'hdbscan-eom': AutoclusterImpl.hdbscan_eom,
+  'hdbscan-leaf': AutoclusterImpl.hdbscan_leaf,
 };
 
 interface ReadColumnsProps {
@@ -181,7 +171,6 @@ export class XlsxParser {
       for (const key of keys) {
         const k = headers.indexOf(key);
         const value = values[k][i];
-        // TODO: sanitize, string, number, date, null, undefined
         (file as XlsxFile)[key as keyof XlsxFile] = String(value);
       }
 
@@ -304,15 +293,15 @@ export class XlsxParser {
         IS_PERSIST_TRUE;
 
       // typeString can be extractor or index
-      const typeString = String(row[ExtractorsColumn.extractor]);
+      const implString = String(row[ExtractorsColumn.extractor]);
 
-      if (Object.keys(XLSX_EXTRACTORS).includes(typeString)) {
-        const type = XLSX_EXTRACTORS[typeString] as ConfigExtractorType;
+      if (Object.keys(XLSX_EXTRACTORS).includes(implString)) {
+        const impl = XLSX_EXTRACTORS[implString] as ExtractorImpl;
 
         const extractor: ConfigExtractor = {
           index: i,
-          name: type,
-          type,
+          name: impl,
+          impl,
           offset,
           step,
           isPersist,
@@ -321,12 +310,12 @@ export class XlsxParser {
         extractors.push(extractor);
       }
 
-      if (Object.keys(XLSX_INDICES).includes(typeString)) {
-        const type = XLSX_INDICES[typeString] as MetricsIndexType;
+      if (Object.keys(XLSX_INDICES).includes(implString)) {
+        const impl = XLSX_INDICES[implString] as IndexImpl;
 
         const index: MetricsIndex = {
           index: i,
-          type,
+          impl,
           offset,
           step,
           isPersist,
@@ -377,8 +366,8 @@ export class XlsxParser {
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
-      const typeString = String(row[ReducersColumn.reducer]);
-      const type = XLSX_REDUCERS[typeString] as ConfigReducerType;
+      const implString = String(row[ReducersColumn.reducer]);
+      const impl = XLSX_REDUCERS[implString] as ReducerImpl;
       const dimensions = Number(
         row[ReducersColumn.dimensions] ?? REDUCER_DIMENSIONS_DEFAULT,
       );
@@ -397,7 +386,7 @@ export class XlsxParser {
 
       const reducer: ConfigReducer = {
         index: i,
-        type,
+        impl,
         dimensions,
         bands: bands.filter((b) => bandNames.includes(b.name)),
         integrations: integrations.filter((i) =>
@@ -418,8 +407,8 @@ export class XlsxParser {
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
-      const typeString = String(row[AutoclustersColumn.autocluster]);
-      const type = XLSX_AUTOCLUSTERS[typeString] as AutoclusterType;
+      const implString = String(row[AutoclustersColumn.autocluster]);
+      const impl = XLSX_AUTOCLUSTERS[implString] as AutoclusterImpl;
       const minClusterSize = Number(
         row[AutoclustersColumn.minClusterSize] ??
           AUTOCLUSTER_MIN_CLUSTER_SIZE_DEFAULT,
@@ -436,7 +425,7 @@ export class XlsxParser {
 
       const autocluster: ConfigAutocluster = {
         index: i,
-        type,
+        impl,
         minClusterSize,
         minSamples,
         alpha,
@@ -455,12 +444,12 @@ export class XlsxParser {
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
-      const typeString = String(row[DigestersColumn.digester]);
-      const type = XLSX_DIGESTERS[typeString] as DigesterType;
+      const implString = String(row[DigestersColumn.digester]);
+      const impl = XLSX_DIGESTERS[implString] as DigesterImpl;
 
       const digester: ConfigDigester = {
         index: i,
-        type,
+        impl,
       };
 
       digesters.push(digester);
@@ -482,9 +471,7 @@ export class XlsxParser {
         (row[TrajectoriesColumn.end] as Date | undefined) ?? new Date();
       const labelProperty = String(row[TrajectoriesColumn.labelProperty] ?? '');
       const labelValue = String(row[TrajectoriesColumn.labelValue] ?? '');
-      const step = String(
-        row[TrajectoriesColumn.step] ?? '',
-      ) as ConfigTrajectoryStep;
+      const step = String(row[TrajectoriesColumn.step] ?? '') as TrajectoryStep;
 
       const trajectory: ConfigTrajectory = {
         index: i,
@@ -553,7 +540,6 @@ export class XlsxParser {
       // @ts-expect-error actually exists
       const values = column.values.map((v) => v?.result || v);
 
-      // TODO: simplify me
       if (values && values.length > 1) {
         const letter = sheet.getColumn(n).letter;
         const actualValues = values.slice(rowStart);

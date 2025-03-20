@@ -1,14 +1,12 @@
 import {Tooltip} from '@blueprintjs/core';
+import {ReducerImpl} from '@shared/enums.ts';
 import {useMemo} from 'react';
 import {useBandState} from 'src/panels/config/hooks/use-band-state.ts';
 import {useConfigTemplates} from 'src/panels/config/hooks/use-config-templates.ts';
 import {useExtractorState} from 'src/panels/config/hooks/use-extractor-state.ts';
 import {useIntegrationState} from 'src/panels/config/hooks/use-integration-state.ts';
 import {useReducerSlug} from 'src/panels/config/hooks/use-reducer-slug.ts';
-import {
-  ConfigReducerType,
-  useReducerState,
-} from 'src/panels/config/hooks/use-reducer-state.ts';
+import {useReducerState} from 'src/panels/config/hooks/use-reducer-state.ts';
 import {useReducerValidation} from 'src/panels/config/hooks/use-reducer-validation.ts';
 import {GenericSection} from 'src/primitives/generic-section/generic-section.tsx';
 import {MultipleSelect} from 'src/primitives/multiple-select.tsx';
@@ -40,10 +38,10 @@ export function ConfigReducers() {
       renderItem={(reducer) => (
         <>
           <Select
-            items={Object.values(ConfigReducerType)}
-            onSelect={(n) => update(reducer, 'type', n)}
-            current={reducer.type}
-            placeholder="Select type"
+            items={Object.values(ReducerImpl)}
+            onSelect={(v) => update(reducer, 'impl', v)}
+            current={reducer.impl}
+            placeholder="Select implementation"
             disabled={hasTemplate}
           />
 
@@ -119,7 +117,7 @@ export function ConfigReducers() {
       )}
       validation={validation}
     >
-      <div>type</div>
+      <div>impl</div>
       <Tooltip content="Dimensions">
         <div>dim.</div>
       </Tooltip>

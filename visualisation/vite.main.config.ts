@@ -9,7 +9,8 @@ export default defineConfig({
     browserField: false,
     mainFields: ['module', 'jsnext:main', 'jsnext'],
     alias: {
-      src: path.resolve(__dirname, './src'),
+      'src': path.resolve(__dirname, './src'),
+      '@shared': path.resolve(__dirname, '../shared'),
     },
   },
 });

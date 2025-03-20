@@ -1,3 +1,4 @@
+import {ExtractorImpl, ReducerImpl} from '@shared/enums.ts';
 import {atom, useAtom} from 'jotai';
 import {useCallback, useMemo, useState} from 'react';
 import {
@@ -6,7 +7,6 @@ import {
 } from 'src/panels/config/hooks/use-band-state.ts';
 import {
   type ConfigExtractor,
-  ConfigExtractorType,
   useExtractorState,
 } from 'src/panels/config/hooks/use-extractor-state.ts';
 import {
@@ -15,7 +15,6 @@ import {
 } from 'src/panels/config/hooks/use-integration-state.ts';
 import {
   type ConfigReducer,
-  ConfigReducerType,
   useReducerState,
 } from 'src/panels/config/hooks/use-reducer-state.ts';
 
@@ -56,7 +55,7 @@ export function useConfigTemplates() {
             {
               index: 0,
               name: 'vgg',
-              type: ConfigExtractorType.vgg,
+              impl: ExtractorImpl.vgg,
               offset: 0,
               step: 1000,
               isPersist: false,
@@ -67,7 +66,7 @@ export function useConfigTemplates() {
           setReducers([
             {
               index: 0,
-              type: ConfigReducerType.umap,
+              impl: ReducerImpl.umap,
               dimensions: 2,
               bands: [],
               integrations: [],
@@ -75,7 +74,7 @@ export function useConfigTemplates() {
             },
             {
               index: 1,
-              type: ConfigReducerType.umap,
+              impl: ReducerImpl.umap,
               dimensions: 3,
               bands: [],
               integrations: [],

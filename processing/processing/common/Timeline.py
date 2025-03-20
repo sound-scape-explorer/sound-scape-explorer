@@ -4,10 +4,11 @@ from processing.common.FileLoader import FileLoader
 from processing.common.FileWalker import FileWalker
 from processing.common.Interval import Block, Interval
 from processing.config.files.FileConfig import FileConfig
-from processing.config.integrations.IntegrationConfig import IntegrationConfig
-from processing.config.sites.SiteConfig import SiteConfig
+from processing.config.sites.SiteConfigNew import SiteConfigNew
 from processing.errors.TimelineIntervalOverlapError import TimelineIntervalOverlapError
-from processing.storage.Storage import Storage
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
+from processing.new.StorageNew import StorageNew
+
 
 TimelineMap = Dict[int, Interval]
 FileIndex = int
@@ -17,9 +18,9 @@ FileIndex = int
 class Timeline:
     def __init__(
         self,
-        site: SiteConfig,
-        integration: IntegrationConfig,
-        storage: Storage,
+        site: SiteConfigNew,
+        integration: IntegrationConfigNew,
+        storage: StorageNew,
         origin: int,
         debug: bool = False,
     ) -> None:
@@ -30,7 +31,7 @@ class Timeline:
         self.debug = debug
 
         self.map: TimelineMap = {}
-        self.step = integration.milliseconds
+        self.step = integration.duration
         self.loaded_files: List[FileConfig] = []
         self.efs: Dict[FileIndex, FileLoader] = {}
 

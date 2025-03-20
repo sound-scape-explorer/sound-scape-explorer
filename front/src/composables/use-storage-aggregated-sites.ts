@@ -9,7 +9,7 @@ export interface AggregatedSite {
   site: string;
 }
 
-const aggregatedSites = ref<AggregatedSite[] | null>(null);
+const aggregatedSites = ref<string[] | null>(null);
 let isLoaded = false;
 
 export function useStorageAggregatedSites() {
@@ -42,8 +42,8 @@ export function useStorageAggregatedSites() {
 
       aggregatedSites.value = await worker.readAggregatedSites(
         file,
-        band.value.name,
-        integration.value.seconds,
+        band.value.index,
+        integration.value.index,
         extractor.value.index,
       );
     });
