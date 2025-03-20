@@ -146,6 +146,7 @@ class IndexDto(TypedDict):
 
 class JsonDto(TypedDict):
     version: str
+    isValid: bool
     settings: SettingsDto
     files: list[FileDto]
     bands: list[BandDto]

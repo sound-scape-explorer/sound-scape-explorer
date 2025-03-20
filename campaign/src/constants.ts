@@ -12,6 +12,7 @@ export const ICON_SIZE = 12;
 export const TIMELINE_ORIGIN_MIN = new Date('2000-01-01 00:00:00');
 
 // settings defaults
+export const IS_VALID_DEFAULT = false;
 export const STORAGE_PATH_DEFAULT = 'storage';
 export const AUDIO_PATH_DEFAULT = '';
 export const SAMPLE_RATE_DEFAULT = 44100;

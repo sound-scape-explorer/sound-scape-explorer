@@ -25,7 +25,7 @@ export function ExportPanel() {
       <Button
         onClick={exportToJson}
         icon={<Download />}
-        disabled={!isValid}
+        intent={isValid ? 'success' : 'warning'}
       >
         Download campaign JSON
       </Button>

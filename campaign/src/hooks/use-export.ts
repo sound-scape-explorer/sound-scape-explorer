@@ -1,4 +1,5 @@
 import {useCallback} from 'react';
+import {useGlobalValidation} from 'src/hooks/use-global-validation.ts';
 import {type Settings, useSettingsState} from 'src/hooks/use-settings-state.ts';
 import {
   type ConfigFile,
@@ -44,7 +45,7 @@ import {version} from 'src/version.ts';
 
 export interface ExportJson {
   version: string;
-  isValid: boolean; // TODO: Add flag for processing easiness
+  isValid: boolean;
   settings: Settings;
   files: ConfigFile[];
   bands: ConfigBand[];
@@ -60,6 +61,7 @@ export interface ExportJson {
 
 export function useExport() {
   const {settings} = useSettingsState();
+  const {isValid} = useGlobalValidation();
   const {bands} = useBandState();
   const {integrations} = useIntegrationState();
   const {extractors} = useExtractorState();
@@ -93,6 +95,7 @@ export function useExport() {
 
     const json: ExportJson = {
       version,
+      isValid,
       settings,
       files,
       bands,
@@ -108,6 +111,7 @@ export function useExport() {
 
     return json;
   }, [
+    isValid,
     settings,
     bands,
     integrations,
