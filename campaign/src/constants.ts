@@ -5,6 +5,7 @@ export const XLSX_TYPE =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 export const FILE_TYPES = ['audio/wav'];
+export const STORAGE_PATH_SUFFIX = '.h5';
 export const LABEL_PREFIX = 'LABEL_';
 export const DATE_FORMAT = 'yyyy-MM-dd HH:mm:ss';
 

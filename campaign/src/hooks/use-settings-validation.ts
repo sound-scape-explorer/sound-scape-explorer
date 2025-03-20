@@ -1,6 +1,6 @@
 import {isAfter} from 'date-fns';
 import {useCallback, useMemo} from 'react';
-import {TIMELINE_ORIGIN_MIN} from 'src/constants.ts';
+import {STORAGE_PATH_SUFFIX, TIMELINE_ORIGIN_MIN} from 'src/constants.ts';
 import {ComputationStrategy} from 'src/enums.ts';
 import {useFileValidation} from 'src/hooks/use-file-validation.ts';
 import {useSettingsState} from 'src/hooks/use-settings-state.ts';
@@ -10,7 +10,11 @@ export function useSettingsValidation() {
   const {arePathsValid} = useFileValidation();
 
   const isStoragePathValid = useCallback(() => {
-    return settings.storagePath !== '';
+    if (settings.storagePath === '') {
+      return false;
+    }
+
+    return settings.storagePath.endsWith(STORAGE_PATH_SUFFIX);
   }, [settings]);
 
   const isAudioPathValid = useCallback(() => {
@@ -83,7 +87,7 @@ export function useSettingsValidation() {
     isComputationDimensionsValid,
     isComputationIterationsValid,
     isDisplaySeedValid,
-    isMemoryLimitValid(),
+    isMemoryLimitValid,
   ]);
 
   return {

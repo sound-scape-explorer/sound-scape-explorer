@@ -14,12 +14,12 @@ import styles from './settings-panel.module.scss';
 const drawer: DrawerContentProps['content'] = [
   [
     'Examples',
-    <>
+    <div
+      key="examples"
+      className="flex column gap"
+    >
       <div>
         <code>storage.h5</code>
-      </div>
-      <div>
-        <code>storage</code>
       </div>
       <div>
         <code>/home/user/sse/my_campaign/storage.h5</code>
@@ -27,7 +27,7 @@ const drawer: DrawerContentProps['content'] = [
       <div>
         <code>D:\sse\my_campaign\storage.h5</code>
       </div>
-    </>,
+    </div>,
   ],
 ];
 
