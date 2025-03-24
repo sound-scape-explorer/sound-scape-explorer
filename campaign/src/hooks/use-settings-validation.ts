@@ -4,10 +4,13 @@ import {STORAGE_PATH_SUFFIX, TIMELINE_ORIGIN_MIN} from 'src/constants.ts';
 import {ComputationStrategy} from 'src/enums.ts';
 import {useFileValidation} from 'src/hooks/use-file-validation.ts';
 import {useSettingsState} from 'src/hooks/use-settings-state.ts';
+import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
+import {findEarliestDate} from 'src/utils/dates.ts';
 
 export function useSettingsValidation() {
   const {settings} = useSettingsState();
   const {arePathsValid} = useFileValidation();
+  const {state} = useTableState();
 
   const isStoragePathValid = useCallback(() => {
     if (settings.storagePath === '') {
@@ -28,11 +31,21 @@ export function useSettingsValidation() {
   }, [settings]);
 
   const isTimelineOriginValid = useCallback(() => {
-    return isAfter(
+    const isAfterAbsoluteMinimum = isAfter(
       new Date(settings.timelineOrigin),
       new Date(TIMELINE_ORIGIN_MIN),
     );
-  }, [settings]);
+
+    const dates = state.rows['col_date'];
+    const earliestDate = findEarliestDate(dates);
+
+    const isBeforeEarliestFile = isAfter(
+      earliestDate,
+      new Date(settings.timelineOrigin),
+    );
+
+    return isAfterAbsoluteMinimum && isBeforeEarliestFile;
+  }, [settings, state]);
 
   // ...
   const isAudioHostValid = useCallback(() => true, []);

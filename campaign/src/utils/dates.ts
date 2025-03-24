@@ -30,3 +30,17 @@ function convertLocalTime(date: Date) {
   newDate.setTime(newDate.getTime() + offset);
   return newDate;
 }
+
+export function findEarliestDate(dateStrings: string[]): Date {
+  if (dateStrings.length === 0) {
+    throw new RangeError('dateStrings must be greater than 0');
+  }
+
+  const dates = dateStrings.map((dateStr) => new Date(dateStr));
+
+  const earliestDate = dates.reduce((earliest, current) => {
+    return current < earliest ? current : earliest;
+  }, dates[0]);
+
+  return earliestDate;
+}
