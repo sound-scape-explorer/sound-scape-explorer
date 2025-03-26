@@ -1,3 +1,12 @@
+## [13.10.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.10.1...v13.10.2) (2025-03-26)
+
+
+### Bug Fixes
+
+* **CI:** Ensure previous build steps succeeds before release ([2c43e95](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2c43e951c7ad3d406e47fcf48552441ec2748dc6))
+* **Processing:** Inject ffprobe.exe for windows platforms ([b24b9ac](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b24b9ac2bba49fd67fec61edbfd82cb11d80f51d))
+* **Processing:** Update pyproject for correct packaging and publishing ([91222d4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/91222d472ab9aa7ecba2ca87e0d3f62c45be6f19))
+
 ## [13.10.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.10.0...v13.10.1) (2025-03-26)
 
 
