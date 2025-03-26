@@ -1,3 +1,10 @@
+## [13.10.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.10.2...v13.10.3) (2025-03-26)
+
+
+### Bug Fixes
+
+* **Processing:** Add forward slash convention handling for filenames ([a148782](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a1487828e2468f2258b8df112240773c85425e44))
+
 ## [13.10.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.10.1...v13.10.2) (2025-03-26)
 
 
