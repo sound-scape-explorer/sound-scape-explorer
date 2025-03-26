@@ -1,6 +1,7 @@
 import json
 import mimetypes
 import subprocess
+import sys
 from typing import List, Union
 
 from mutagen.flac import FLAC
@@ -39,8 +40,10 @@ def _get_mime_type(full_path: str):
 def _read_duration_from_ffprobe(path: str):
     print(f"Reading directly audio length with ffprobe for path: {path}")
 
+    ffprobe_cmd = "ffprobe.exe" if sys.platform.startswith("win") else "ffprobe"
+
     cmd = [
-        "ffprobe",
+        ffprobe_cmd,
         "-v",
         "error",
         "-show_entries",
