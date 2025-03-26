@@ -1,3 +1,11 @@
+## [13.10.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.10.0...v13.10.1) (2025-03-26)
+
+
+### Bug Fixes
+
+* **Processing:** Fix path joining issue [#242](https://github.com/sound-scape-explorer/sound-scape-explorer/issues/242) ([6894903](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/68949034ae2f638637668c42ab8964a287460c90))
+* **Processing:** Trying to ffprobe audio file when mutagen returns 0 duration (wave only) ([0d791aa](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0d791aa1976a907bf06feb899a55c474de59889e))
+
 # [13.10.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.9.0...v13.10.0) (2024-12-13)
 
 
