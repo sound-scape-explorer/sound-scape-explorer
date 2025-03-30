@@ -1,7 +1,11 @@
 from processing.common.AggregatedReducible import AggregatedReducible
 from processing.context import Context
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractorConfigNew import ExtractorConfigNew
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.ReducedPath import ReducedPath
 from processing.new.ReducerConfigNew import ReducerConfigNew
+from processing.new.paths import build_path
 
 
 class ReducedManager:
@@ -16,17 +20,25 @@ class ReducedManager:
     @staticmethod
     def to_storage(
         context: Context,
-        reducible: AggregatedReducible,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
         reducer: ReducerConfigNew,
     ):
-        storage = context.storage
+        path = build_path(
+            ReducedPath.reduced.value,
+            band.index,
+            integration.index,
+            extractor.index,
+            reducer.index,
+        )
 
-        storage.append(
-            path=reducible.get_reduced_path(reducer),
+        context.storage.append(
+            path=path,
             data=reducer.instance.values,
             attributes={
-                "extractor": reducible.extractor.name,
-                "extractor_index": str(reducible.extractor.index),
+                "extractor": extractor.impl.name,
+                "extractor_index": str(extractor.index),
                 "reducer": reducer.impl.name,
                 "reducer_index": str(reducer.index),
                 "reducer_dimensions": str(reducer.dimensions),

@@ -11,7 +11,6 @@ from processing.utils.compute_relative_distances import compute_relative_distanc
 from processing.utils.compute_starting_point import compute_starting_point
 from processing.utils.pack_trajectories import pack_trajectories
 from processing.utils.print_action import print_action
-from processing.utils.print_aggregated_reduceables import print_reducibles
 from processing.utils.print_packed_trajectories import print_packed_trajectories
 from processing.utils.read_trajectory_path_and_relative_timestamps import (
     read_trajectory_path_and_relative_timestamps,
@@ -42,8 +41,6 @@ def trace_relative_trajectories(context: Context):
         integrations=integrations,
         extractors=extractors,
     )
-
-    print_reducibles(reducibles, storage)
 
     labels_properties = LabelManager.get_properties(context)
     knner = NearestNeighbors(n_neighbors=100)

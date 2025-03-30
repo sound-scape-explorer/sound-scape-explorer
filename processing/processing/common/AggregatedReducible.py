@@ -74,7 +74,7 @@ class AggregatedReducible:
             *self._path_suffix,
         )
 
-    # TODO: refactor me
+    # TODO: get rid of me
     def get_reduced_path(self, reducer: ReducerConfigNew) -> str:
         return build_path(
             ReducedPath.reduced.value,

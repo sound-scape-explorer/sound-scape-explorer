@@ -44,13 +44,29 @@ class ReducerConfigNew:
         integrations: list[IntegrationConfigNew],
         extractors: list[ExtractorConfigNew],
     ):
-        bands = cls._filter_by_name(dto.bands, bands)
-        integrations = cls._filter_by_name(dto.integrations, integrations)
-        extractors = cls._filter_by_name(dto.extractors, extractors)
+        impl = ReducerImpl[dto.impl.value]
+
+        has_bands = len(dto.bands) > 0
+        has_integrations = len(dto.integrations) > 0
+        has_extractors = len(dto.extractors) > 0
+
+        bands = cls._filter_by_name(dto.bands, bands) if has_bands else bands
+
+        integrations = (
+            cls._filter_by_name(dto.integrations, integrations)
+            if has_integrations
+            else integrations
+        )
+
+        extractors = (
+            cls._filter_by_name(dto.extractors, extractors)
+            if has_extractors
+            else extractors
+        )
 
         return cls(
             index=dto.index,
-            impl=ReducerImpl[dto.impl.value],
+            impl=impl,
             dimensions=dto.dimensions,
             bands=bands,
             integrations=integrations,

@@ -1,16 +1,30 @@
+from rich import print
 from rich.progress import track
 
-from processing.common.AggregatedReducible import AggregatedReducible
 from processing.context import Context
+from processing.new.AggregatedManager import AggregatedManager
 from processing.new.ReducedManager import ReducedManager
+from processing.new.ReducerConfigNew import ReducerConfigNew
 from processing.utils.print_action import print_action
-from processing.utils.print_aggregated_reduceables import print_reducibles
-from processing.utils.print_no_aggregated_reduceables import (
-    print_no_aggregated_reduceables,
-)
 from processing.utils.print_reducers import print_reducers
 from processing.utils.validate_aggregated import validate_aggregated
 from processing.utils.validate_configuration import validate_configuration
+
+
+def _iterate_reducers(reducers: list[ReducerConfigNew]):
+    for reducer in reducers:
+        for band in reducer.bands:
+            for integration in reducer.integrations:
+                for extractor in reducer.extractors:
+                    yield reducer, band, integration, extractor
+
+
+def _count_iterations(reducers: list[ReducerConfigNew]):
+    count = 0
+    for _ in _iterate_reducers(reducers):
+        count += 1
+
+    return count
 
 
 @validate_configuration
@@ -20,47 +34,40 @@ def reduce(context: Context):
 
     ReducedManager.delete(context)
 
-    storage = context.storage
     settings = context.config.settings
-    bands = context.config.bands
-    integrations = context.config.integrations
     reducers = context.config.reducers
-    extractors = context.config.extractors
+    iterations = _count_iterations(reducers)
 
-    reducibles = AggregatedReducible.reconstruct(
-        bands=bands,
-        integrations=integrations,
-        extractors=extractors,
-    )
+    print(f"Total reductions {iterations}")
+    print_reducers(context)
 
-    if len(reducibles) == 0:
-        print_no_aggregated_reduceables()
-        return
+    for reducer, band, integration, extractor in track(
+        _iterate_reducers(reducers),
+        "Reducing...",
+        total=iterations,
+    ):
+        aggregated = AggregatedManager.from_storage(
+            context,
+            band,
+            integration,
+            extractor,
+        )
 
-    print_reducers(reducers)
-    print_reducibles(reducibles, storage)
+        reducer.start(band, integration)
+        reducer.instance.load(
+            dimensions=reducer.dimensions,
+            seed=settings.display_seed,
+            features=aggregated["data"][:],
+        )
 
-    for ar in track(reducibles, description="Reducing..."):
-        if not ar.exists_in_storage(storage):
-            continue
+        reducer.instance.calculate()
 
-        features = ar.read_features_from_storage(storage)
-
-        for reducer in reducers:
-            reducer.start(ar.band, ar.integration)
-
-            reducer.instance.load(
-                dimensions=reducer.dimensions,
-                seed=settings.display_seed,
-                features=features[:],
-            )
-
-            reducer.instance.calculate()
-
-            ReducedManager.to_storage(
-                context=context,
-                reducible=ar,
-                reducer=reducer,
-            )
+        ReducedManager.to_storage(
+            context=context,
+            band=band,
+            integration=integration,
+            extractor=extractor,
+            reducer=reducer,
+        )
 
     print_action("Reductions completed!", "end")
