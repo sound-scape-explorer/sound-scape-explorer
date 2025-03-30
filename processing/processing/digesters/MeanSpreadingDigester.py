@@ -1,13 +1,10 @@
-from typing import List
-
 import numpy as np
 
-from processing.config.labels.LabelConfig import LabelConfig
 from processing.digesters.Digester import Digester
 
 
 class MeanSpreadingDigester(Digester):
-    def digest(self, labels: List[LabelConfig]):
+    def digest(self, labels):
         label = labels[0]
         data = []
 

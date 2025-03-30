@@ -3,6 +3,7 @@ from enum import Enum
 from processing.context import Context
 from processing.new.AutoclusterConfigNew import AutoclusterConfigNew
 from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractorConfigNew import ExtractorConfigNew
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.paths import register_path, build_path
 
@@ -21,31 +22,53 @@ class AutoclusteredManager:
         return context.storage.exists(AutoclusteredPath.autoclustered.value)
 
     @staticmethod
+    def _get_path(
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
+        autocluster: AutoclusterConfigNew,
+    ):
+        return build_path(
+            AutoclusteredPath.autoclustered.value,
+            band.index,
+            integration.index,
+            extractor.index,
+            autocluster.index,
+        )
+
+    @staticmethod
     def to_storage(
         context: Context,
         band: BandConfigNew,
         integration: IntegrationConfigNew,
-        ac: AutoclusterConfigNew,
+        extractor: ExtractorConfigNew,
+        autocluster: AutoclusterConfigNew,
     ) -> None:
-        path = build_path(
-            AutoclusteredPath.autoclustered.value,
-            band.index,
-            integration.index,
-            ac.index,
-        )
+        path = AutoclusteredManager._get_path(band, integration, extractor, autocluster)
 
         attributes = {
-            "min_cluster_size": ac.min_cluster_size,
-            "min_samples": ac.min_samples,
-            "alpha": ac.alpha,
-            "epsilon": ac.epsilon,
-            "impl": ac.impl.name,
-            "index": ac.index,
+            "min_cluster_size": autocluster.min_cluster_size,
+            "min_samples": autocluster.min_samples,
+            "alpha": autocluster.alpha,
+            "epsilon": autocluster.epsilon,
+            "impl": autocluster.impl.name,
+            "index": autocluster.index,
         }
 
         context.storage.write(
             path=path,
-            data=ac.values,
+            data=autocluster.values,
             attributes=attributes,
-            # compression=True,
         )
+
+    @staticmethod
+    def from_storage(
+        context: Context,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
+        autocluster: AutoclusterConfigNew,
+    ):
+        path = AutoclusteredManager._get_path(band, integration, extractor, autocluster)
+        labels: list[int] = context.storage.read(path)
+        return labels

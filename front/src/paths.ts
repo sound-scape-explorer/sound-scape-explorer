@@ -94,16 +94,22 @@ export namespace AutoclusterPath {
   export const epsilons = register_path('autoclusters', 'epsilons');
 }
 
+export namespace AutoclusteredPath {
+  export const autoclustered = register_path('autoclustered');
+}
+
 export namespace AutoclusteredInstancePath {
   export const autoclustered = (
     bandIndex: number,
     integrationIndex: number,
+    extractorIndex: number,
     autoclusterIndex: number,
   ) =>
     build_path(
       AutoclusteredPath.autoclustered,
       bandIndex,
       integrationIndex,
+      extractorIndex,
       autoclusterIndex,
     );
 }
@@ -256,9 +262,16 @@ export namespace DigestedInstancePath {
   export const data = (
     bandIndex: number,
     integrationIndex: number,
+    extractorIndex: number,
     digesterIndex: number,
   ) =>
-    build_path(DigestedPath.data, bandIndex, integrationIndex, digesterIndex);
+    build_path(
+      DigestedPath.data,
+      bandIndex,
+      integrationIndex,
+      extractorIndex,
+      digesterIndex,
+    );
 }
 
 export namespace ReducerPath {
@@ -361,8 +374,4 @@ export namespace AggregatedInstancePath {
       integrationIndex,
       extractorIndex,
     );
-}
-
-export namespace AutoclusteredPath {
-  export const autoclustered = register_path('autoclustered');
 }

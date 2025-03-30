@@ -8,6 +8,7 @@ from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
 from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractorConfigNew import ExtractorConfigNew
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.SettingsConfigNew import SettingsConfigNew
 from processing.new.StorageNew import StorageNew
@@ -31,14 +32,16 @@ class MeanDistancesMatrixManager:
         return storage.exists(MeanDistancesMatrixPath.mean_distances_matrix.value)
 
     @staticmethod
-    def get_path(
+    def _get_path(
         band: BandConfigNew,
         integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
     ):
         return build_path(
             MeanDistancesMatrixPath.mean_distances_matrix.value,
             band.index,
             integration.index,
+            extractor.index,
         )
 
     @staticmethod
@@ -72,13 +75,29 @@ class MeanDistancesMatrixManager:
         return values
 
     @staticmethod
-    def read_from_storage(
+    def to_storage(
         storage: StorageNew,
         band: BandConfigNew,
         integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
+        data: list[list[float]],
+    ):
+        path = MeanDistancesMatrixManager._get_path(band, integration, extractor)
+
+        storage.write(
+            path=path,
+            data=data,
+        )
+
+    @staticmethod
+    def from_storage(
+        storage: StorageNew,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
         trim_half: bool = False,
     ):
-        path = MeanDistancesMatrixManager.get_path(band, integration)
+        path = MeanDistancesMatrixManager._get_path(band, integration, extractor)
         dataset = storage.read(path)
         matrix = np.array(dataset)
 
@@ -86,18 +105,3 @@ class MeanDistancesMatrixManager:
             np.fill_diagonal(matrix, 0)
 
         return matrix
-
-    @staticmethod
-    def to_storage(
-        storage: StorageNew,
-        data: list[list[float]],
-        band: BandConfigNew,
-        integration: IntegrationConfigNew,
-    ):
-        path = MeanDistancesMatrixManager.get_path(band, integration)
-
-        storage.write(
-            path=path,
-            data=data,
-            # compression=True,
-        )

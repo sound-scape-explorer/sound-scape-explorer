@@ -1,4 +1,5 @@
 import {useBandSelection} from 'src/composables/use-band-selection';
+import {useExtractorSelection} from 'src/composables/use-extractor-selection';
 import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {type DigesterDtoWithType} from 'src/dtos';
@@ -24,10 +25,15 @@ export function useStorageDigested() {
   const {read} = useStorageReader();
   const {band} = useBandSelection();
   const {integration} = useIntegrationSelection();
+  const {extractor} = useExtractorSelection();
 
   const readDigested = (digester: DigesterDtoWithType) =>
     read(async (worker, file) => {
-      if (band.value === null || integration.value === null) {
+      if (
+        band.value === null ||
+        integration.value === null ||
+        extractor.value === null
+      ) {
         return;
       }
 
@@ -35,6 +41,7 @@ export function useStorageDigested() {
         file,
         band.value.index,
         integration.value.index,
+        extractor.value.index,
         digester.index,
       );
 

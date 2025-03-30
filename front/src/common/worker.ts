@@ -218,6 +218,7 @@ export async function readLabels(
     file,
     bandIndex,
     integrationIndex,
+    extractorIndex,
   );
 
   if (autoclustereds.length > 0) {
@@ -240,7 +241,7 @@ export async function readLabels(
   return labels;
 }
 
-export async function readBands(file: File) {
+export async function readBands(file: File): Promise<BandDto[]> {
   const h5 = await load(file);
 
   type dto = BandDto;
@@ -267,7 +268,7 @@ export async function readBands(file: File) {
   return bands;
 }
 
-export async function readIntegrations(file: File) {
+export async function readIntegrations(file: File): Promise<IntegrationDto[]> {
   const h5 = await load(file);
 
   type dto = IntegrationDto;
@@ -292,7 +293,7 @@ export async function readIntegrations(file: File) {
   return integrations;
 }
 
-export async function readRanges(file: File) {
+export async function readRanges(file: File): Promise<RangeDto[]> {
   const h5 = await load(file);
 
   type dto = RangeDto;
@@ -319,7 +320,7 @@ export async function readRanges(file: File) {
   return ranges;
 }
 
-export async function readExtractors(file: File) {
+export async function readExtractors(file: File): Promise<ExtractorDto[]> {
   const h5 = await load(file);
 
   type dto = ExtractorDto;
@@ -350,7 +351,7 @@ export async function readExtractors(file: File) {
   return extractors;
 }
 
-export async function readIndices(file: File) {
+export async function readIndices(file: File): Promise<IndexDto[]> {
   const h5 = await load(file);
 
   type dto = IndexDto;
@@ -379,7 +380,7 @@ export async function readIndices(file: File) {
   return indicesObjects;
 }
 
-export async function readReducers(file: File) {
+export async function readReducers(file: File): Promise<ReducerDto[]> {
   const h5 = await load(file);
 
   type dto = ReducerDto;
@@ -433,6 +434,7 @@ export async function readAutoclustered(
   file: File,
   bandIndex: number,
   integrationIndex: number,
+  extractorIndex: number,
 ) {
   const h5 = await load(file);
   const autoclusters = await readAutoclusters(file);
@@ -451,6 +453,7 @@ export async function readAutoclustered(
       AutoclusteredInstancePath.autoclustered(
         bandIndex,
         integrationIndex,
+        extractorIndex,
         autocluster.index,
       ),
     );
@@ -545,6 +548,7 @@ export async function readRelativeTrajectories(
       integrationIndex,
       extractorIndex,
     );
+
     const group = h5.get(path) as Group | null;
 
     if (group === null) {
@@ -554,24 +558,22 @@ export async function readRelativeTrajectories(
     const relativeTrajectories: RelativeTrajectory[] = [];
 
     for (const key of group.keys()) {
-      const relativeTracedPath = RelativeTracedInstancePath.data(
+      const dataPath = RelativeTracedInstancePath.data(
         bandIndex,
         integrationIndex,
         extractorIndex,
         key,
       );
-      const relativeTracedDataset = h5.get(relativeTracedPath) as Dataset;
+      const data = _readArray<number[]>(h5, dataPath);
 
-      const relativeTimestampsPath = RelativeTracedInstancePath.timestamps(
+      const timestampsPath = RelativeTracedInstancePath.timestamps(
         bandIndex,
         integrationIndex,
         extractorIndex,
         key,
       );
 
-      const relativeTimestampsDataset = h5.get(
-        relativeTimestampsPath,
-      ) as Dataset;
+      const timestamps = _readArray<number[]>(h5, timestampsPath);
 
       const decilesPath = RelativeTracedInstancePath.deciles(
         bandIndex,
@@ -580,26 +582,22 @@ export async function readRelativeTrajectories(
         key,
       );
 
-      const decilesDataset = h5.get(decilesPath) as Nullable<Dataset>; // TODO: Make non nullable in version 14
-      const deciles =
-        (decilesDataset?.to_array() as [number, number][]) || null;
+      const deciles = _readArray<[number, number]>(h5, decilesPath);
 
+      const dataset = h5.get(dataPath) as Dataset;
       const trajectoryName =
-        relativeTracedDataset.attrs['trajectory_name'].value?.toString() ?? '';
+        dataset.attrs['trajectory_name'].value?.toString() ?? '';
       const labelProperty =
-        relativeTracedDataset.attrs['label_property'].value?.toString() ?? '';
-      const labelValue =
-        relativeTracedDataset.attrs['label_value'].value?.toString() ?? '';
+        dataset.attrs['label_property'].value?.toString() ?? '';
+      const labelValue = dataset.attrs['label_value'].value?.toString() ?? '';
 
       const relativeTrajectory: RelativeTrajectory = {
         index: Number(key),
         name: `${labelProperty} - ${labelValue} - ${trajectoryName}`,
         labelProperty: labelProperty,
         labelValue: labelValue,
-        values: relativeTracedDataset.to_array() as number[],
-        timestamps: (relativeTimestampsDataset.to_array() as number[][]).map(
-          (v) => v[0],
-        ),
+        values: data[0],
+        timestamps: timestamps.map((t) => t[0]),
         deciles: deciles,
       };
 
@@ -774,6 +772,7 @@ export async function readAggregatedLabels(
     file,
     bandIndex,
     integrationIndex,
+    extractorIndex,
   );
 
   const path = AggregatedInstancePath.labels(
@@ -861,6 +860,7 @@ export async function readDigested(
   file: File,
   bandIndex: number,
   integrationIndex: number,
+  extractorIndex: number,
   digesterIndex: number,
 ): Promise<Digested['values']> {
   const h5 = await load(file);
@@ -868,6 +868,7 @@ export async function readDigested(
   const groupPath = DigestedInstancePath.data(
     bandIndex,
     integrationIndex,
+    extractorIndex,
     digesterIndex,
   );
 

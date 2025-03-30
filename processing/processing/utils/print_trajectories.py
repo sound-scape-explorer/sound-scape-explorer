@@ -25,7 +25,7 @@ def print_trajectories(context: Context):
             convert_timestamp_to_date(trajectory.end),
             trajectory.label_property,
             trajectory.label_value,
-            str(trajectory.step),
+            trajectory.step.name,
         )
 
     console.print(table)

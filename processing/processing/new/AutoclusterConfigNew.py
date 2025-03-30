@@ -9,8 +9,6 @@ from processing.dtos import AutoclusterDto
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
-from processing.new.BandConfigNew import BandConfigNew
-from processing.new.IntegrationConfigNew import IntegrationConfigNew
 
 
 class AutoclusterImpl(Enum):
@@ -28,15 +26,8 @@ class AutoclusterConfigNew:
     alpha: float
     epsilon: float
 
-    methods_by_name = {
-        "hdbscan_eom": "eom",
-        "hdbscan_leaf": "leaf",
-    }
-
     none_string = "None"
 
-    band: BandConfigNew = None
-    integration: IntegrationConfigNew = None
     instance: HDBSCAN = None
     values: list[str] = list
 
@@ -55,17 +46,10 @@ class AutoclusterConfigNew:
             epsilon=dto.epsilon,
         )
 
-    def create_instance(
+    def start(
         self,
-        band: BandConfigNew,
-        integration: IntegrationConfigNew,
     ):
         from hdbscan import HDBSCAN
-
-        self.band = band
-        self.integration = integration
-
-        method = self.methods_by_name[self.impl.name]
 
         min_samples = (
             None if self.min_samples == self.none_string else int(self.min_samples)
@@ -76,7 +60,7 @@ class AutoclusterConfigNew:
             min_samples=min_samples,
             alpha=self.alpha,
             cluster_selection_epsilon=self.epsilon,
-            cluster_selection_method=method,
+            cluster_selection_method=self.impl.value,
             metric="precomputed",
             p=None,
             algorithm="best",

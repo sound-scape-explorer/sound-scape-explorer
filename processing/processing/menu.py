@@ -1,17 +1,17 @@
 from signal import SIGINT, signal
 
-from processing.actions.autocluster import autocluster
-from processing.actions.compute_requirements import compute_requirements
-from processing.actions.digest import digest
-from processing.actions.export_computation_umaps import export_computed
-from processing.actions.export_dataframe import export_dataframe
-from processing.actions.export_mdm import export_mdm
-from processing.actions.extract_and_aggregate import extract_and_aggregate
-from processing.actions.purge_requirements import purge_requirements
-from processing.actions.reduce import reduce
-from processing.actions.refresh_configuration import refresh_configuration
-from processing.actions.trace_relative_trajectories import trace_relative_trajectories
-from processing.actions.trace_trajectories import trace_trajectories
+from processing.actions.run_autoclusters import run_autoclusters
+from processing.actions.run_computations import run_computations
+from processing.actions.run_computations_export import run_computations_export
+from processing.actions.run_computations_purge import run_computations_purge
+from processing.actions.run_configuration_refresh import run_configuration_refresh
+from processing.actions.run_dataframe_export import run_dataframe_export
+from processing.actions.run_digestions import run_digestions
+from processing.actions.run_extractions_aggregations import run_extractions_aggregations
+from processing.actions.run_mdm_export import run_mdm_export
+from processing.actions.run_reductions import run_reductions
+from processing.actions.run_relative_trajectories import run_relative_trajectories
+from processing.actions.run_trajectories import run_trajectories
 from processing.common.MenuChoice import MenuChoice
 from processing.context import Context
 from processing.new.logger import configure_logger
@@ -41,51 +41,57 @@ def menu(config_path: str, is_debug=False):
 
             action_map = {
                 MenuChoice.RunAll.value: lambda: (
-                    refresh_configuration(context),
-                    extract_and_aggregate(context),
-                    reduce(context),
-                    compute_requirements(context),
-                    autocluster(context),
-                    trace_trajectories(context),
-                    trace_relative_trajectories(context),
-                    digest(context),
+                    run_configuration_refresh(context),
+                    run_extractions_aggregations(context),
+                    run_reductions(context),
+                    run_computations(context),
+                    run_autoclusters(context),
+                    run_trajectories(context),
+                    run_relative_trajectories(context),
+                    run_digestions(context),
                 ),
-                MenuChoice.RefreshConfig.value: lambda: refresh_configuration(context),
-                MenuChoice.ExtractAggregate.value: lambda: (
-                    refresh_configuration(context),
-                    extract_and_aggregate(context),
+                MenuChoice.RunConfigurationRefresh.value: lambda: run_configuration_refresh(
+                    context
                 ),
-                MenuChoice.Reduce.value: lambda: (
-                    refresh_configuration(context),
-                    reduce(context),
+                MenuChoice.RunExtractionsAggregations.value: lambda: (
+                    run_configuration_refresh(context),
+                    run_extractions_aggregations(context),
                 ),
-                MenuChoice.ComputeRequirements.value: lambda: (
-                    refresh_configuration(context),
-                    compute_requirements(context),
+                MenuChoice.RunReductions.value: lambda: (
+                    run_configuration_refresh(context),
+                    run_reductions(context),
                 ),
-                MenuChoice.PurgeRequirements.value: lambda: (
-                    refresh_configuration(context),
-                    purge_requirements(context),
+                MenuChoice.RunComputations.value: lambda: (
+                    run_configuration_refresh(context),
+                    run_computations(context),
                 ),
-                MenuChoice.Autocluster.value: lambda: (
-                    refresh_configuration(context),
-                    autocluster(context),
+                MenuChoice.RunComputationsPurge.value: lambda: (
+                    run_configuration_refresh(context),
+                    run_computations_purge(context),
                 ),
-                MenuChoice.Trace.value: lambda: (
-                    refresh_configuration(context),
-                    trace_trajectories(context),
+                MenuChoice.RunAutoclusters.value: lambda: (
+                    run_configuration_refresh(context),
+                    run_autoclusters(context),
                 ),
-                MenuChoice.RelativeTrace.value: lambda: (
-                    refresh_configuration(context),
-                    trace_relative_trajectories(context),
+                MenuChoice.RunTrajectories.value: lambda: (
+                    run_configuration_refresh(context),
+                    run_trajectories(context),
                 ),
-                MenuChoice.Digest.value: lambda: (
-                    refresh_configuration(context),
-                    digest(context),
+                MenuChoice.RunRelativeTrajectories.value: lambda: (
+                    run_configuration_refresh(context),
+                    run_relative_trajectories(context),
                 ),
-                MenuChoice.ExportDataframe.value: lambda: export_dataframe(context),
-                MenuChoice.ExportComputed.value: lambda: export_computed(context),
-                MenuChoice.ExportMeanDistancesMatrix.value: lambda: export_mdm(context),
+                MenuChoice.RunDigestions.value: lambda: (
+                    run_configuration_refresh(context),
+                    run_digestions(context),
+                ),
+                MenuChoice.RunDataframeExport.value: lambda: run_dataframe_export(
+                    context
+                ),
+                MenuChoice.RunComputationsExport.value: lambda: run_computations_export(
+                    context
+                ),
+                MenuChoice.RunMdmExport.value: lambda: run_mdm_export(context),
             }
 
             action = action_map.get(answer)

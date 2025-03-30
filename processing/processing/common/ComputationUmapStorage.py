@@ -9,7 +9,7 @@ from processing.new.StorageNew import StorageNew
 from processing.new.paths import build_path
 
 
-# TODO: refactor me
+# TODO: remove me
 class ComputationUmapStorage:
     @staticmethod
     def read_from_storage(

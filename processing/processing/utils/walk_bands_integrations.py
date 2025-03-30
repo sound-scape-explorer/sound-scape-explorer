@@ -4,7 +4,7 @@ from processing.new.BandConfigNew import BandConfigNew
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
 
 
-# TODO: refactor me
+# TODO: remove me
 def walk_bands_integrations(
     bands: list[BandConfigNew],
     integrations: list[IntegrationConfigNew],

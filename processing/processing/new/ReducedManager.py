@@ -1,4 +1,3 @@
-from processing.common.AggregatedReducible import AggregatedReducible
 from processing.context import Context
 from processing.new.BandConfigNew import BandConfigNew
 from processing.new.ExtractorConfigNew import ExtractorConfigNew
@@ -18,6 +17,21 @@ class ReducedManager:
         return context.storage.exists(ReducedPath.reduced.value)
 
     @staticmethod
+    def _get_path(
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
+        reducer: ReducerConfigNew,
+    ):
+        return build_path(
+            ReducedPath.reduced.value,
+            band.index,
+            integration.index,
+            extractor.index,
+            reducer.index,
+        )
+
+    @staticmethod
     def to_storage(
         context: Context,
         band: BandConfigNew,
@@ -25,13 +39,7 @@ class ReducedManager:
         extractor: ExtractorConfigNew,
         reducer: ReducerConfigNew,
     ):
-        path = build_path(
-            ReducedPath.reduced.value,
-            band.index,
-            integration.index,
-            extractor.index,
-            reducer.index,
-        )
+        path = ReducedManager._get_path(band, integration, extractor, reducer)
 
         context.storage.append(
             path=path,
@@ -48,9 +56,10 @@ class ReducedManager:
     @staticmethod
     def from_storage(
         context: Context,
-        reducible: AggregatedReducible,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
         reducer: ReducerConfigNew,
     ):
-        return context.storage.read(
-            path=reducible.get_reduced_path(reducer),
-        )
+        path = ReducedManager._get_path(band, integration, extractor, reducer)
+        return context.storage.read(path)

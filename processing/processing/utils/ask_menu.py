@@ -19,14 +19,18 @@ from processing.utils.print_menu_legend import print_menu_legend
 
 def _wrap(choice: MenuChoice, context: Context):
     check_map: dict[MenuChoice, Callable[[Context], bool]] = {
-        MenuChoice.RefreshConfig: lambda ctx: ConfigManager.exists(ctx),
-        MenuChoice.ExtractAggregate: lambda ctx: AggregatedManager.exists(ctx),
-        MenuChoice.Reduce: lambda ctx: ReducedManager.exists(ctx),
-        MenuChoice.ComputeRequirements: lambda ctx: ComputedManager.exists(ctx),
-        MenuChoice.Autocluster: lambda ctx: AutoclusteredManager.exists(ctx),
-        MenuChoice.Trace: lambda ctx: TracedManager.exists(ctx),
-        MenuChoice.RelativeTrace: lambda ctx: RelativeTracedManager.exists(ctx),
-        MenuChoice.Digest: lambda ctx: DigestedManager.exists(ctx),
+        MenuChoice.RunConfigurationRefresh: lambda ctx: ConfigManager.exists(ctx),
+        MenuChoice.RunExtractionsAggregations: lambda ctx: AggregatedManager.exists(
+            ctx
+        ),
+        MenuChoice.RunReductions: lambda ctx: ReducedManager.exists(ctx),
+        MenuChoice.RunComputations: lambda ctx: ComputedManager.exists(ctx),
+        MenuChoice.RunAutoclusters: lambda ctx: AutoclusteredManager.exists(ctx),
+        MenuChoice.RunTrajectories: lambda ctx: TracedManager.exists(ctx),
+        MenuChoice.RunRelativeTrajectories: lambda ctx: RelativeTracedManager.exists(
+            ctx
+        ),
+        MenuChoice.RunDigestions: lambda ctx: DigestedManager.exists(ctx),
     }
 
     check = check_map.get(choice, lambda _: False)
@@ -45,21 +49,21 @@ def ask_menu(context: Context) -> MenuChoice:
             "choices": [
                 MenuChoice.RunAll.value,
                 Separator(),
-                _wrap(MenuChoice.RefreshConfig, context),
-                _wrap(MenuChoice.ExtractAggregate, context),
-                _wrap(MenuChoice.Reduce, context),
+                _wrap(MenuChoice.RunConfigurationRefresh, context),
+                _wrap(MenuChoice.RunExtractionsAggregations, context),
+                _wrap(MenuChoice.RunReductions, context),
                 Separator(),
-                _wrap(MenuChoice.ComputeRequirements, context),
+                _wrap(MenuChoice.RunComputations, context),
                 Separator(),
-                _wrap(MenuChoice.Autocluster, context),
-                _wrap(MenuChoice.Trace, context),
-                _wrap(MenuChoice.RelativeTrace, context),
-                _wrap(MenuChoice.Digest, context),
+                _wrap(MenuChoice.RunAutoclusters, context),
+                _wrap(MenuChoice.RunTrajectories, context),
+                _wrap(MenuChoice.RunRelativeTrajectories, context),
+                _wrap(MenuChoice.RunDigestions, context),
                 Separator(),
-                MenuChoice.PurgeRequirements.value,
-                MenuChoice.ExportDataframe.value,
-                MenuChoice.ExportComputed.value,
-                MenuChoice.ExportMeanDistancesMatrix.value,
+                MenuChoice.RunComputationsPurge.value,
+                MenuChoice.RunDataframeExport.value,
+                MenuChoice.RunComputationsExport.value,
+                MenuChoice.RunMdmExport.value,
                 Separator(),
                 MenuChoice.Quit.value,
             ],

@@ -1,7 +1,9 @@
 from enum import Enum
 
-from processing.common.AggregatedReducible import AggregatedReducible
 from processing.context import Context
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractorConfigNew import ExtractorConfigNew
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.ReducerConfigNew import ReducerConfigNew
 from processing.new.TrajectoryConfigNew import TrajectoryConfigNew
 from processing.new.paths import register_path, build_path
@@ -31,14 +33,16 @@ class TracedManager:
     @staticmethod
     def to_storage(
         context: Context,
-        trajectory: TrajectoryConfigNew,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
         reducer: ReducerConfigNew,
-        ar: AggregatedReducible,
+        trajectory: TrajectoryConfigNew,
     ):
         path_suffix = [
-            ar.band.index,
-            ar.integration.index,
-            ar.extractor.index,
+            band.index,
+            integration.index,
+            extractor.index,
             reducer.index,
             trajectory.index,
         ]
@@ -52,9 +56,8 @@ class TracedManager:
         context.storage.write(
             path=data_path,
             data=trajectory.instance.values,
-            # compression=True,
             attributes={
-                "extractor_index": str(ar.extractor.index),
+                "extractor_index": str(extractor.index),
                 "reducer_index": str(reducer.index),
                 "trajectory_index": str(trajectory.index),
             },
@@ -66,9 +69,8 @@ class TracedManager:
         context.storage.write(
             path=timestamps_path,
             data=[trajectory.instance.timestamps],
-            # compression=True,
             attributes={
-                "extractor_index": str(ar.extractor.index),
+                "extractor_index": str(extractor.index),
                 "reducer_index": str(reducer.index),
                 "trajectory_index": str(trajectory.index),
             },
@@ -83,9 +85,8 @@ class TracedManager:
         context.storage.write(
             path=relative_timestamps_path,
             data=trajectory.instance.relative_timestamps,
-            # compression=True,
             attributes={
-                "extractor_index": str(ar.extractor.index),
+                "extractor_index": str(extractor.index),
                 "reducer_index": str(reducer.index),
                 "trajectory_index": str(trajectory.index),
             },

@@ -2,7 +2,7 @@ from typing import List
 
 from hdbscan import HDBSCAN
 
-from processing.actions.refresh_configuration import refresh_configuration
+from processing.actions.run_configuration_refresh import run_configuration_refresh
 from processing.config.autoclusters.AutoclusterConfig import AutoclusterConfig
 from processing.config.autoclusters.AutoclusterStorage import AutoclusterStorage
 from processing.config.bands.BandConfig import BandConfig
@@ -24,8 +24,9 @@ from processing.config.trajectories.TrajectoryStorage import TrajectoryStorage
 from processing.storage.StoragePath import StoragePath
 from ._utils import get_inputs
 
+
 config, storage = get_inputs()
-refresh_configuration(config, storage)
+run_configuration_refresh(config, storage)
 
 
 def test_binary():
@@ -187,7 +188,7 @@ def test_autoclusters():
     for band in config.bands:
         for integration in config.integrations:
             for autocluster in autoclusters:
-                autocluster.create_instance(band, integration)
+                autocluster.start(band, integration)
                 __test_autocluster_instance(autocluster)
 
 

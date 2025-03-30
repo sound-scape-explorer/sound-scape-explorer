@@ -1,20 +1,20 @@
 from signal import SIGINT, signal
 from typing import Optional
 
-from processing.actions.autocluster import autocluster
-from processing.actions.compute_requirements import compute_requirements
-from processing.actions.digest import digest
-from processing.actions.export_computation_umaps import export_computed
-from processing.actions.export_dataframe import export_dataframe
-from processing.actions.export_mdm import export_mdm
-from processing.actions.extract_and_aggregate import extract_and_aggregate
 from processing.actions.fix_audio_windows_10_7_2 import fix_audio_windows_10_7_2
-from processing.actions.purge_requirements import purge_requirements
-from processing.actions.reduce import reduce
-from processing.actions.refresh_configuration import refresh_configuration
 from processing.actions.repack_storage import repack_storage
-from processing.actions.trace_relative_trajectories import trace_relative_trajectories
-from processing.actions.trace_trajectories import trace_trajectories
+from processing.actions.run_autoclusters import autocluster
+from processing.actions.run_computations import run_computations
+from processing.actions.run_computations_export import run_computations_export
+from processing.actions.run_computations_purge import run_computations_purge
+from processing.actions.run_configuration_refresh import run_configuration_refresh
+from processing.actions.run_dataframe_export import run_dataframe_export
+from processing.actions.run_digestions import run_digestions
+from processing.actions.run_extractions_aggregations import run_extractions_aggregations
+from processing.actions.run_mdm_export import run_mdm_export
+from processing.actions.run_reductions import run_reductions
+from processing.actions.run_relative_trajectories import run_relative_trajectories
+from processing.actions.run_trajectories import run_trajectories
 from processing.config.Config import Config
 from processing.config.JsonConfig import JsonConfig
 from processing.storage.Storage import Storage
@@ -61,51 +61,51 @@ def main(
     answer = ask_menu(storage, last_choice)
     last_choice = answer
 
-    if answer == MenuChoice.RefreshConfig.value:
-        refresh_configuration(config, storage, main)
-    if answer == MenuChoice.ExtractAggregate.value:
-        refresh_configuration(config, storage)
-        extract_and_aggregate(storage, main)
-    if answer == MenuChoice.Reduce.value:
-        refresh_configuration(config, storage)
-        reduce(storage, main)
-    if answer == MenuChoice.ComputeRequirements.value:
-        refresh_configuration(config, storage)
-        compute_requirements(storage, main)
-    if answer == MenuChoice.PurgeRequirements.value:
-        refresh_configuration(config, storage)
-        purge_requirements(storage, main)
-    if answer == MenuChoice.Autocluster.value:
-        refresh_configuration(config, storage)
+    if answer == MenuChoice.RunConfigurationRefresh.value:
+        run_configuration_refresh(config, storage, main)
+    if answer == MenuChoice.RunExtractionsAggregations.value:
+        run_configuration_refresh(config, storage)
+        run_extractions_aggregations(storage, main)
+    if answer == MenuChoice.RunReductions.value:
+        run_configuration_refresh(config, storage)
+        run_reductions(storage, main)
+    if answer == MenuChoice.RunComputations.value:
+        run_configuration_refresh(config, storage)
+        run_computations(storage, main)
+    if answer == MenuChoice.RunComputationsPurge.value:
+        run_configuration_refresh(config, storage)
+        run_computations_purge(storage, main)
+    if answer == MenuChoice.RunAutoclusters.value:
+        run_configuration_refresh(config, storage)
         autocluster(storage, main)
-    if answer == MenuChoice.Trace.value:
-        refresh_configuration(config, storage)
-        trace_trajectories(storage, main)
-    if answer == MenuChoice.RelativeTrace.value:
-        refresh_configuration(config, storage)
-        trace_relative_trajectories(storage, main)
-    if answer == MenuChoice.Digest.value:
-        refresh_configuration(config, storage)
-        digest(storage, main)
+    if answer == MenuChoice.RunTrajectories.value:
+        run_configuration_refresh(config, storage)
+        run_trajectories(storage, main)
+    if answer == MenuChoice.RunRelativeTrajectories.value:
+        run_configuration_refresh(config, storage)
+        run_relative_trajectories(storage, main)
+    if answer == MenuChoice.RunDigestions.value:
+        run_configuration_refresh(config, storage)
+        run_digestions(storage, main)
     if answer == MenuChoice.RunAll.value:
-        refresh_configuration(config, storage)
-        extract_and_aggregate(storage)
-        reduce(storage)
-        compute_requirements(storage)
+        run_configuration_refresh(config, storage)
+        run_extractions_aggregations(storage)
+        run_reductions(storage)
+        run_computations(storage)
         autocluster(storage)
-        trace_trajectories(storage)
-        trace_relative_trajectories(storage)
-        digest(storage, main)
-    if answer == MenuChoice.ExportDataframe.value:
-        export_dataframe(config, storage, main)
-    if answer == MenuChoice.ExportComputed.value:
-        export_computed(config, storage, main)
-    if answer == MenuChoice.ExportMeanDistancesMatrix.value:
-        export_mdm(config, storage, main)
+        run_trajectories(storage)
+        run_relative_trajectories(storage)
+        run_digestions(storage, main)
+    if answer == MenuChoice.RunDataframeExport.value:
+        run_dataframe_export(config, storage, main)
+    if answer == MenuChoice.RunComputationsExport.value:
+        run_computations_export(config, storage, main)
+    if answer == MenuChoice.RunMdmExport.value:
+        run_mdm_export(config, storage, main)
     if answer == MenuChoice.Repack.value:
         repack_storage(storage, main)
     if answer == MenuChoice.FixAudioWindows10_7_2.value:
-        refresh_configuration(config, storage)
+        run_configuration_refresh(config, storage)
         fix_audio_windows_10_7_2(storage, main)
     else:
         quit_application(storage)

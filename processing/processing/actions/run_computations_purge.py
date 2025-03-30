@@ -6,7 +6,7 @@ from processing.new.MeanDistancesMatrixManager import MeanDistancesMatrixManager
 from processing.utils.print_action import print_action
 
 
-def purge_requirements(context: Context):
+def run_computations_purge(context: Context):
     print_action("Requirements computation purge started!", "start")
 
     for _ in track(range(1)):

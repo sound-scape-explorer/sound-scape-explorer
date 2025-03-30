@@ -44,13 +44,23 @@ class ReducerManager:
         indices = [r.index for r in reducers]
         impls = [r.impl.name for r in reducers]
         dimensions = [r.dimensions for r in reducers]
-        bands = [b.index for r in reducers for b in r.bands]
-        integrations = [i.index for r in reducers for i in r.integrations]
-        extractors = [e.index for r in reducers for e in r.extractors]
+
+        all_bands = []
+        all_integrations = []
+        all_extractors = []
+
+        for reducer in reducers:
+            bands = [b.index for b in reducer.bands]
+            integrations = [i.index for i in reducer.integrations]
+            extractors = [e.index for e in reducer.extractors]
+
+            all_bands.append(bands)
+            all_integrations.append(integrations)
+            all_extractors.append(extractors)
 
         storage.write(path=ReducerPath.indices.value, data=indices)
         storage.write(path=ReducerPath.impls.value, data=impls)
         storage.write(path=ReducerPath.dimensions.value, data=dimensions)
-        storage.write(path=ReducerPath.bands.value, data=bands)
-        storage.write(path=ReducerPath.integrations.value, data=integrations)
-        storage.write(path=ReducerPath.extractors.value, data=extractors)
+        storage.write(path=ReducerPath.bands.value, data=all_bands)
+        storage.write(path=ReducerPath.integrations.value, data=all_integrations)
+        storage.write(path=ReducerPath.extractors.value, data=all_extractors)

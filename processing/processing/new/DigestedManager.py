@@ -1,10 +1,12 @@
 from enum import Enum
 from typing import Union
 
-from processing.common.AggregatedReducible import AggregatedReducible
-from processing.config.labels.LabelConfig import LabelConfig
 from processing.context import Context
 from processing.digesters.Digester import Digester
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractorConfigNew import ExtractorConfigNew
+from processing.new.FusedLabel import FusedLabel
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.paths import register_path, build_path
 
 
@@ -24,15 +26,18 @@ class DigestedManager:
     @staticmethod
     def to_storage(
         context: Context,
-        reducible: AggregatedReducible,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
         digester: Digester,
         data: list[float],
-        label_a: LabelConfig,
-        label_b: Union[LabelConfig, None],
+        label_a: FusedLabel,
+        label_b: Union[FusedLabel, None],
     ):
         path_suffix = [
-            reducible.band.index,
-            reducible.integration.index,
+            band.index,
+            integration.index,
+            extractor.index,
             digester.index,
             label_a.index,
         ]

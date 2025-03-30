@@ -7,6 +7,7 @@ from processing.utils.is_mdm_empty import is_mdm_empty
 from processing.utils.sort_dataframe import sort_dataframe
 
 
+# TODO: find a better way to inject MDM
 class SilhouetteDigester(Digester):
     def digest(self, labels):
         label = labels[0]
@@ -14,10 +15,11 @@ class SilhouetteDigester(Digester):
 
         silhouette = np.zeros((len(values), len(values)))
 
-        mdm = MeanDistancesMatrixManager.read_from_storage(
+        mdm = MeanDistancesMatrixManager.from_storage(
             storage=self.storage,
             band=self.band,
             integration=self.integration,
+            extractor=self.extractor,
             trim_half=True,
         )
 

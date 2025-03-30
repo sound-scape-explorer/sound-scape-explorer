@@ -11,7 +11,7 @@ export interface RelativeTrajectory {
   labelValue: string;
   values: number[];
   timestamps: number[];
-  deciles: Nullable<[number, number][]>; // TODO: Make non nullable version 14
+  deciles: [number, number][];
 }
 
 const relativeTrajectories = ref<RelativeTrajectory[] | null>(null);

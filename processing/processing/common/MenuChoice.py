@@ -2,22 +2,22 @@ from enum import Enum
 
 
 class MenuChoice(Enum):
-    RefreshConfig = "Refresh configuration"
-    ExtractAggregate = "Run extractions and aggregations"
-    Reduce = "Run reductions"
-    ComputeRequirements = (
-        "Run computation UMAPs and mean distances matrix"
+    RunConfigurationRefresh = "Refresh configuration"
+    RunExtractionsAggregations = "Run extractions and aggregations"
+    RunReductions = "Run reductions"
+    RunComputations = (
+        "Run computations for mean distances matrix"
         " (needed for autocluster and relative trajectories)"
     )
-    PurgeRequirements = "Purge computation UMAPs and mean distances matrix"
-    Autocluster = "Run autoclusters"
-    Trace = "Run trajectories"
-    RelativeTrace = "Run relative trajectories"
-    Digest = "Run digests"
+    RunComputationsPurge = "Purge computation UMAPs and mean distances matrix"
+    RunAutoclusters = "Run autoclusters"
+    RunTrajectories = "Run trajectories"
+    RunRelativeTrajectories = "Run relative trajectories"
+    RunDigestions = "Run digestions"
     RunAll = "Run all"
-    ExportDataframe = "Export dataframe as .csv"
-    ExportComputed = "Export computed as .npy"
-    ExportMeanDistancesMatrix = "Export mean distances matrix as .npy"
+    RunDataframeExport = "Export dataframe as .csv"
+    RunComputationsExport = "Export computations as .npy"
+    RunMdmExport = "Export mean distances matrix as .npy"
     Repack = "Repack storage with `h5repack` (UNIX only)"
     FixAudioWindows10_7_2 = "Fix audio on Windows for versions <=10.7.2"
     Quit = "Quit"

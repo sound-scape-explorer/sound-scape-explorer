@@ -3,6 +3,7 @@ from processing.new.AggregatedManager import AggregatedManager
 from processing.utils.print_no_aggregated import print_no_aggregated
 
 
+# TODO: This could have more depth
 def validate_aggregated(action):
     """The aggregated data validator."""
 

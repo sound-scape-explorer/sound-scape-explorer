@@ -43,7 +43,7 @@ class StorageNew:
         dataset: Dataset = self.__file[path]
 
         if as_strings:
-            return dataset.asstr()[:]
+            return dataset.asstr()[:].tolist()
 
         return dataset
 

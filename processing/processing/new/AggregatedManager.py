@@ -1,7 +1,7 @@
 from enum import Enum
 
 from h5py import Dataset
-from typing_extensions import TypedDict, Union
+from typing_extensions import NamedTuple, Union
 
 from processing.common.Interval import Interval
 from processing.common.Timeline import Timeline
@@ -21,7 +21,7 @@ class AggregatedPath(Enum):
     labels = register_path("aggregated", "labels")
 
 
-class _AggregatedInstancePaths(TypedDict):
+class _AggregatedInstancePaths(NamedTuple):
     data: str
     sites: str
     interval_details: str
@@ -29,12 +29,12 @@ class _AggregatedInstancePaths(TypedDict):
     labels: str
 
 
-class _AggregatedInstanceDatasets(TypedDict):
+class _AggregatedInstanceDatasets(NamedTuple):
     data: Dataset
-    sites: Dataset
+    sites: list[str]
     interval_details: Dataset
     timestamps: Dataset
-    labels: Dataset
+    labels: list[list[str]]
 
 
 class AggregatedManager:
@@ -93,7 +93,7 @@ class AggregatedManager:
 
         # data
         storage.append(
-            path=paths["data"],
+            path=paths.data,
             data=[data],
             attributes={
                 "extractor": extractor.__class__.__name__,
@@ -103,16 +103,16 @@ class AggregatedManager:
         )
 
         # site
-        storage.append(paths["sites"], [[timeline.site.name]])
+        storage.append(paths.sites, [[timeline.site.name]])
 
         # interval_details
-        storage.append(paths["interval_details"], [interval_details])
+        storage.append(paths.interval_details, [interval_details])
 
         # timestamp
-        storage.append(paths["timestamps"], [[interval.start]])
+        storage.append(paths.timestamps, [[interval.start]])
 
         # labels
-        storage.append(paths["labels"], [labels])
+        storage.append(paths.labels, [labels])
 
     @staticmethod
     def from_storage(
@@ -125,9 +125,9 @@ class AggregatedManager:
         paths = AggregatedManager._get_paths(band, integration, extractor)
 
         return _AggregatedInstanceDatasets(
-            data=storage.read(paths["data"]),
-            sites=storage.read(paths["sites"], as_strings=True),
-            interval_details=storage.read(paths["interval_details"]),
-            timestamps=storage.read(paths["timestamps"]),
-            labels=storage.read(paths["labels"]),
+            data=storage.read(paths.data),
+            sites=storage.read(paths.sites, as_strings=True),
+            interval_details=storage.read(paths.interval_details),
+            timestamps=storage.read(paths.timestamps),
+            labels=storage.read(paths.labels, as_strings=True),
         )

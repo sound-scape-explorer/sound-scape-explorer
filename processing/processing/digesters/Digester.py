@@ -5,8 +5,9 @@ from h5py import Dataset
 from numpy import ndarray
 from pandas import DataFrame, Index
 
-from processing.config.labels.LabelConfig import LabelConfig
 from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractorConfigNew import ExtractorConfigNew
+from processing.new.FusedLabel import FusedLabel
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.StorageNew import StorageNew
 
@@ -15,14 +16,16 @@ Features = list[list[float]]
 Digested = list[Any]
 
 
+# TODO: add self.extractor
 class Digester(ABC):
     index: int
     is_pairing: bool
     __features: Optional[DataFrame] = None
-    __labels: Optional[list[LabelConfig]] = None
+    __labels: Optional[list[FusedLabel]] = None
     __storage: Optional[StorageNew] = None
     __band: Optional[BandConfigNew] = None
     __integration: Optional[IntegrationConfigNew] = None
+    __extractor: Optional[ExtractorConfigNew] = None
 
     @property
     def features(self) -> DataFrame:
@@ -34,12 +37,12 @@ class Digester(ABC):
         self.__features = DataFrame(features)
 
     @property
-    def labels(self) -> list[LabelConfig]:
+    def labels(self) -> list[FusedLabel]:
         assert self.__labels is not None, "Please define labels"
         return self.__labels
 
     @labels.setter
-    def labels(self, labels: list[LabelConfig]) -> None:
+    def labels(self, labels: list[FusedLabel]) -> None:
         self.__labels = labels
 
     @property
@@ -69,14 +72,24 @@ class Digester(ABC):
     def integration(self, integration: IntegrationConfigNew) -> None:
         self.__integration = integration
 
-    def get_label_data(self, label: LabelConfig) -> tuple[DataFrame, Index]:
+    @property
+    def extractor(self) -> ExtractorConfigNew:
+        assert self.__extractor is not None, "Please define extractor"
+        return self.__extractor
+
+    @extractor.setter
+    def extractor(self, extractor: ExtractorConfigNew) -> None:
+        self.__extractor = extractor
+
+    # TODO: BRO
+    def get_label_data(self, label: FusedLabel) -> tuple[DataFrame, Index]:
         df = self.features
         df.index = label.values
         values: Index = df.index.unique()  # type: ignore
 
         return df, values
 
-    def walk_within_label(self, label: LabelConfig):
+    def walk_within_label(self, label: FusedLabel):
         df, values = self.get_label_data(label)
 
         for index, value in enumerate(values):
@@ -95,5 +108,5 @@ class Digester(ABC):
                 yield data, label, None
 
     @abstractmethod
-    def digest(self, labels: list[LabelConfig]) -> Digested:
+    def digest(self, labels: list[FusedLabel]) -> Digested:
         pass

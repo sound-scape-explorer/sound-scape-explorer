@@ -2,8 +2,10 @@ from enum import Enum
 
 import numpy as np
 
-from processing.common.AggregatedReducible import AggregatedReducible
 from processing.context import Context
+from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractorConfigNew import ExtractorConfigNew
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.TrajectoryConfigNew import TrajectoryConfigNew
 from processing.new.paths import register_path, build_path
 
@@ -32,8 +34,10 @@ class RelativeTracedManager:
     @staticmethod
     def to_storage(
         context: Context,
+        band: BandConfigNew,
+        integration: IntegrationConfigNew,
+        extractor: ExtractorConfigNew,
         trajectory: TrajectoryConfigNew,
-        reducible: AggregatedReducible,
         label_property: str,
         label_value: str,
         distance_medians: list[float],
@@ -42,9 +46,9 @@ class RelativeTracedManager:
         upper_deciles: list[float],
     ):
         path_suffix = [
-            reducible.band.index,
-            reducible.integration.index,
-            reducible.extractor.index,
+            band.index,
+            integration.index,
+            extractor.index,
             trajectory.index,
         ]
 
@@ -53,11 +57,9 @@ class RelativeTracedManager:
             path=distances_path,
             data=[distance_medians],
             attributes={
-                "extractor_index": str(reducible.extractor.index),
-                "trajectory_index": str(trajectory.index),
-                "trajectory_name": trajectory.name,
                 "label_property": label_property,
                 "label_value": label_value,
+                "trajectory_name": trajectory.name,
             },
         )
 
@@ -65,10 +67,6 @@ class RelativeTracedManager:
         context.storage.write(
             path=timestamps_path,
             data=timestamp_medians,
-            attributes={
-                "extractor_index": str(reducible.extractor.index),
-                "trajectory_index": str(trajectory.index),
-            },
         )
 
         deciles_path = build_path(RelativeTracedPath.deciles.value, *path_suffix)

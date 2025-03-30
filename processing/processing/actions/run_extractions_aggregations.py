@@ -12,7 +12,7 @@ from processing.utils.print_indices import print_indices
 
 
 # TODO: refactor me after JR meeting
-def extract_and_aggregate(context: Context):
+def run_extractions_aggregations(context: Context):
     print_action("Extractions and aggregations started!", "start")
 
     storage = context.storage
