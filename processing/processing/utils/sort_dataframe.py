@@ -1,10 +1,10 @@
 import numpy as np
 from pandas import DataFrame
 
-from processing.config.labels import LabelConfig
+from processing.new.FusedLabel import FusedLabel
 
 
-def sort_dataframe(dataframe: DataFrame, label: LabelConfig) -> DataFrame:
+def sort_dataframe(dataframe: DataFrame, label: FusedLabel) -> DataFrame:
     order = np.argsort(label.uniques_unsorted)
     dataframe = dataframe[:, order]
     dataframe = dataframe[order, :]

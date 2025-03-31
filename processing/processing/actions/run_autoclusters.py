@@ -5,12 +5,12 @@ from processing.errors.MeanDistancesMatrixEmptyWarning import (
 from processing.new.AutoclusteredManager import AutoclusteredManager
 from processing.new.MeanDistancesMatrixManager import MeanDistancesMatrixManager
 from processing.new.iterate_extractors import iterate_extractors
+from processing.printers.print_action import print_action
+from processing.printers.print_autoclusters import print_autoclusters
 from processing.utils.is_mdm_empty import is_mdm_empty
-from processing.utils.print_action import print_action
-from processing.utils.print_autoclusters import print_autoclusters
-from processing.utils.validate_autoclusters import validate_autoclusters
-from processing.utils.validate_configuration import validate_configuration
-from processing.utils.validate_mean_distances_matrix import (
+from processing.validators.validate_autoclusters import validate_autoclusters
+from processing.validators.validate_configuration import validate_configuration
+from processing.validators.validate_mean_distances_matrix import (
     validate_mean_distances_matrix,
 )
 

@@ -1,6 +1,6 @@
 from processing.context import Context
 from processing.new.ConfigManager import ConfigManager
-from processing.utils.print_action import print_action
+from processing.printers.print_action import print_action
 
 
 def run_configuration_refresh(context: Context):

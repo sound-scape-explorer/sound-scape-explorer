@@ -1,8 +1,8 @@
 from collections import defaultdict
 
-from processing.config.sites.SiteConfigNew import SiteConfigNew
 from processing.context import Context
 from processing.new.FileConfigNew import FileConfigNew
+from processing.new.SiteConfigNew import SiteConfigNew
 
 
 class SiteManager:

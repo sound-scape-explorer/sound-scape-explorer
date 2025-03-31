@@ -3,7 +3,6 @@ from enum import Enum
 from rich.console import Console
 from rich.table import Table
 
-from processing.config.settings.SettingsRow import SettingsRow
 from processing.context import Context
 from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
 
@@ -16,7 +15,7 @@ def print_settings(context: Context):
     table.add_column("Value")
 
     for k, v in vars(context.config.settings).items():
-        if k == SettingsRow.timeline_origin.value:
+        if k == "timeline_origin":
             v = convert_timestamp_to_date(v)
 
         if isinstance(v, Enum):

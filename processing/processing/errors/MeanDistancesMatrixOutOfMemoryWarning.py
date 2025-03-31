@@ -1,4 +1,4 @@
-from processing.utils.print_action import print_action
+from processing.printers.print_action import print_action
 
 
 class MeanDistancesMatrixOutOfMemoryWarning(Exception):

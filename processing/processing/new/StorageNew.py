@@ -2,7 +2,7 @@ from typing import Union
 
 from h5py import File, Dataset
 
-from processing.storage.StorageMode import StorageMode
+from processing.new.StorageMode import StorageMode
 
 
 _Floats = Union[float, list[float]]

@@ -16,7 +16,7 @@ from processing.common.MenuChoice import MenuChoice
 from processing.context import Context
 from processing.new.logger import configure_logger
 from processing.new.print_settings import print_settings
-from processing.utils.ask_menu import ask_menu
+from processing.askers.ask_menu import ask_menu
 from processing.utils.prettify_exceptions import prettify_exceptions
 from processing.utils.quit_application import quit_application
 

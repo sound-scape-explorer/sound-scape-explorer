@@ -7,12 +7,12 @@ from processing.new.ComputedManager import ComputedManager
 from processing.new.MeanDistancesMatrixManager import MeanDistancesMatrixManager
 from processing.new.SettingsConfigNew import ComputationStrategy
 from processing.new.iterate_extractors import iterate_extractors
+from processing.printers.print_action import print_action
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.UmapReducer import UmapReducer
-from processing.utils.print_action import print_action
-from processing.utils.validate_aggregated import validate_aggregated
-from processing.utils.validate_autoclusters import validate_autoclusters
-from processing.utils.validate_configuration import validate_configuration
+from processing.validators.validate_aggregated import validate_aggregated
+from processing.validators.validate_autoclusters import validate_autoclusters
+from processing.validators.validate_configuration import validate_configuration
 
 
 def _compute_umap(context: Context):

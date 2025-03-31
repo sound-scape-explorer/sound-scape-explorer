@@ -1,14 +1,10 @@
-from typing import List
-
 from sklearn.decomposition import SparsePCA
 
 from processing.reducers.AbstractReducer import AbstractReducer
 
 
 class SparsePcaReducer(AbstractReducer):
-    def calculate(
-        self,
-    ) -> List[List[float]]:
+    def calculate(self) -> list[list[float]]:
         features = self._validate_load()
 
         sparse_pca = SparsePCA(

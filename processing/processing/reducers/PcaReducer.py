@@ -1,5 +1,3 @@
-from typing import List
-
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
 
@@ -7,7 +5,7 @@ from processing.reducers.AbstractReducer import AbstractReducer
 
 
 class PcaReducer(AbstractReducer):
-    def calculate(self) -> List[List[float]]:
+    def calculate(self) -> list[list[float]]:
         features = self._validate_load()
 
         scaled_features = scale(features)

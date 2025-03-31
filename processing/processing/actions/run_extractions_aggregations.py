@@ -6,9 +6,9 @@ from processing.new.AggregatedManager import AggregatedManager
 from processing.new.ExtractedManager import ExtractedManager
 from processing.new.SiteManager import SiteManager
 from processing.utils.create_timelines import create_timelines
-from processing.utils.print_action import print_action
-from processing.utils.print_extractors import print_extractors
-from processing.utils.print_indices import print_indices
+from processing.printers.print_action import print_action
+from processing.printers.print_extractors import print_extractors
+from processing.printers.print_indices import print_indices
 
 
 # TODO: refactor me after JR meeting

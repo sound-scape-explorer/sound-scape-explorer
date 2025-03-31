@@ -4,8 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 sse = "processing.cli:start_processing"
-sse_extract = "processing.cli:extract_config"
-sse_fill = "processing.cli:fill_config"
 sse_download = "processing.cli:download"
 
 [project]

@@ -4,13 +4,15 @@ from typing import Iterable, Optional
 from processing.loaders.Loader import Loader
 from processing.loaders.SoundSlice import SoundSlice
 from processing.new.BandConfigNew import BandConfigNew
+from processing.new.ExtractedPath import ExtractedPath
 from processing.new.StorageNew import StorageNew
-from processing.storage.StoragePath import StoragePath
+from processing.new.paths import build_path
 
 
 RawData = list[list[float]]
 
 
+# TODO: refactor me
 class Extractor(ABC):
     """An abstract Extractor class representing either a neural network extractor or
     an acoustic index extractor.
@@ -31,7 +33,8 @@ class Extractor(ABC):
     @property
     def path(self):
         assert self.index is not None, "Please add an extractor index"
-        return f"{StoragePath.extracted.value}/{self.band.name}/{self.index}"
+        # TODO: register me
+        return build_path(ExtractedPath.extracted.value, self.band.index, self.index)
 
     @property
     def expected_sample_rate(self) -> int:

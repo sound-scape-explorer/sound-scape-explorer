@@ -3,7 +3,6 @@ from typing import Dict, List
 from processing.common.FileLoader import FileLoader
 from processing.common.FileWalker import FileWalker
 from processing.common.Interval import Block, Interval
-from processing.config.files.FileConfig import FileConfig
 from processing.errors.TimelineIntervalOverlapError import TimelineIntervalOverlapError
 from processing.new.FileConfigNew import FileConfigNew
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
@@ -35,13 +34,13 @@ class Timeline:
 
         self.map: TimelineMap = {}
         self.step = integration.duration
-        self.loaded_files: List[FileConfig] = []
+        self.loaded_files: List[FileConfigNew] = []
         self.efs: Dict[FileIndex, FileLoader] = {}
 
         self.load()
         self.print_debug()
 
-    def get_interval_count_in_file(self, file: FileConfig) -> int:
+    def get_interval_count_in_file(self, file: FileConfigNew) -> int:
         count = (file.end - file.start) // self.step
 
         if file.duration < self.step:

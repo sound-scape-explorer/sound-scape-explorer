@@ -1,5 +1,3 @@
-from typing import List
-
 from sklearn.preprocessing import robust_scale
 
 from processing.reducers.AbstractReducer import AbstractReducer
@@ -14,9 +12,7 @@ class UmapReducer(AbstractReducer):
     ):
         self.min_dist = min_dist
 
-    def calculate(
-        self,
-    ) -> List[List[float]]:
+    def calculate(self) -> list[list[float]]:
         features = self._validate_load()
         scaled_features = robust_scale(features)
 

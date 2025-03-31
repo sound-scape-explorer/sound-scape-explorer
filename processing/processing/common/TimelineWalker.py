@@ -6,15 +6,14 @@ from rich.progress import track
 from processing.common.FileLoader import FileLoader
 from processing.common.Interval import Block, Interval
 from processing.common.Timeline import Timeline
-from processing.config.bands.BandConfig import BandConfig
-from processing.config.files.FileConfig import FileConfig
-from processing.config.integrations.IntegrationConfig import IntegrationConfig
 from processing.constants import DELIMITER
 from processing.extractors.Extractor import RawData, Extractor
+from processing.new.BandConfigNew import BandConfigNew
 from processing.new.FileConfigNew import FileConfigNew
+from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.StorageNew import StorageNew
-from processing.utils.print_new_line import print_new_line
-from processing.utils.print_timeline_progress import print_timeline_progress
+from processing.printers.print_new_line import print_new_line
+from processing.printers.print_timeline_progress import print_timeline_progress
 
 
 FileIndex = int
@@ -36,8 +35,8 @@ class TimelineWalker:
 
     def __init__(self) -> None:
         self.__timelines: Optional[List[Timeline]] = None
-        self.__bands: Optional[List[BandConfig]] = None
-        self.__integrations: Optional[List[IntegrationConfig]] = None
+        self.__bands: Optional[List[BandConfigNew]] = None
+        self.__integrations: Optional[List[IntegrationConfigNew]] = None
         self.__extractors: Optional[List[Extractor]] = None
         self.__storage: Optional[StorageNew] = None
 
@@ -59,21 +58,21 @@ class TimelineWalker:
         self.__timelines = timelines
 
     @property
-    def bands(self) -> List[BandConfig]:
+    def bands(self) -> List[BandConfigNew]:
         assert self.__bands is not None, "Please attach bands"
         return self.__bands
 
     @bands.setter
-    def bands(self, bands: List[BandConfig]):
+    def bands(self, bands: List[BandConfigNew]):
         self.__bands = bands
 
     @property
-    def integrations(self) -> List[IntegrationConfig]:
+    def integrations(self) -> List[IntegrationConfigNew]:
         assert self.__integrations is not None, "Please attach integrations"
         return self.__integrations
 
     @integrations.setter
-    def integrations(self, integrations: List[IntegrationConfig]):
+    def integrations(self, integrations: List[IntegrationConfigNew]):
         self.__integrations = integrations
 
     @property
@@ -131,13 +130,13 @@ class TimelineWalker:
         self.loaders[file.index] = loader
         return self.loaders[file.index]
 
-    def prepare_extracted(self, file: FileConfig) -> None:
+    def prepare_extracted(self, file: FileConfigNew) -> None:
         if file.index in self.extracted.keys():
             return
 
         self.extracted[file.index] = {}
 
-    def load_band(self, band: BandConfig, file: FileConfig):
+    def load_band(self, band: BandConfigNew, file: FileConfigNew):
         if band.index in self.extracted[file.index].keys():
             return
 
@@ -146,8 +145,8 @@ class TimelineWalker:
     def run_extraction(
         self,
         extractor: Extractor,
-        band: BandConfig,
-        file: FileConfig,
+        band: BandConfigNew,
+        file: FileConfigNew,
         timeline: Timeline,
     ):
         if extractor.index in self.extracted[file.index][band.index].keys():
@@ -174,7 +173,7 @@ class TimelineWalker:
     def get_block_data(
         self,
         block: Block,
-        band: BandConfig,
+        band: BandConfigNew,
         extractor: Extractor,
     ):
         offset = extractor.offset / 1000  # seconds floats

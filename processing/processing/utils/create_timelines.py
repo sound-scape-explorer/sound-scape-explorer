@@ -1,9 +1,9 @@
 from typing import List
 
 from processing.common.Timeline import Timeline
-from processing.config.sites.SiteConfigNew import SiteConfigNew
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.SettingsConfigNew import SettingsConfigNew
+from processing.new.SiteConfigNew import SiteConfigNew
 from processing.new.StorageNew import StorageNew
 
 

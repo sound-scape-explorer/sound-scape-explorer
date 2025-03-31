@@ -6,11 +6,11 @@ from processing.new.LabelManager import LabelManager
 from processing.new.ReducedManager import ReducedManager
 from processing.new.TracedManager import TracedManager
 from processing.new.iterate_reducers import iterate_reducers
-from processing.utils.print_action import print_action
-from processing.utils.print_trajectories import print_trajectories
-from processing.utils.validate_aggregated import validate_aggregated
-from processing.utils.validate_configuration import validate_configuration
-from processing.utils.validate_reduced import validate_reduced
+from processing.printers.print_action import print_action
+from processing.printers.print_trajectories import print_trajectories
+from processing.validators.validate_aggregated import validate_aggregated
+from processing.validators.validate_configuration import validate_configuration
+from processing.validators.validate_reduced import validate_reduced
 
 
 @validate_configuration

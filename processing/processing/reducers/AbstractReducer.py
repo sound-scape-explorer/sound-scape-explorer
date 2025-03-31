@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Union
+from typing import Union
 
 from h5py import Dataset
 
@@ -8,15 +8,13 @@ class AbstractReducer(ABC):
     _dimensions: int
     _seed: Union[None, int]
     _features: Union[None, Dataset]
-    values: List[List[float]]
+    values: list[list[float]]
 
-    def __init__(
-        self,
-    ) -> None:
+    def __init__(self):
         self._features = None
 
     @abstractmethod
-    def calculate(self) -> List[List[float]]:
+    def calculate(self) -> list[list[float]]:
         pass
 
     def _validate_load(self) -> Dataset:
@@ -37,7 +35,7 @@ class AbstractReducer(ABC):
 
     def set_values(
         self,
-        features: List[List[float]],
-    ) -> List[List[float]]:
+        features: list[list[float]],
+    ) -> list[list[float]]:
         self.values = features
         return self.values

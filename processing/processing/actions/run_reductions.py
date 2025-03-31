@@ -5,10 +5,10 @@ from processing.context import Context
 from processing.new.AggregatedManager import AggregatedManager
 from processing.new.ReducedManager import ReducedManager
 from processing.new.iterate_reducers import iterate_reducers
-from processing.utils.print_action import print_action
-from processing.utils.print_reducers import print_reducers
-from processing.utils.validate_aggregated import validate_aggregated
-from processing.utils.validate_configuration import validate_configuration
+from processing.printers.print_action import print_action
+from processing.printers.print_reducers import print_reducers
+from processing.validators.validate_aggregated import validate_aggregated
+from processing.validators.validate_configuration import validate_configuration
 
 
 def _count_iterations(context: Context):

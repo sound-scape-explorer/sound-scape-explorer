@@ -8,17 +8,17 @@ from processing.new.ComputedManager import ComputedManager
 from processing.new.LabelManager import LabelManager
 from processing.new.RelativeTracedManager import RelativeTracedManager
 from processing.new.iterate_extractors import iterate_extractors
+from processing.printers.print_action import print_action
+from processing.printers.print_packed_trajectories import print_packed_trajectories
 from processing.utils.compute_relative_distances import compute_relative_distances
 from processing.utils.compute_starting_point import compute_starting_point
 from processing.utils.pack_trajectories import pack_trajectories
-from processing.utils.print_action import print_action
-from processing.utils.print_packed_trajectories import print_packed_trajectories
 from processing.utils.read_trajectory_path_and_relative_timestamps import (
     read_trajectory_path_and_relative_timestamps,
 )
-from processing.utils.validate_computations import validate_computations
-from processing.utils.validate_configuration import validate_configuration
 from processing.utils.walk_packed_trajectories import walk_packed_trajectories
+from processing.validators.validate_computations import validate_computations
+from processing.validators.validate_configuration import validate_configuration
 
 
 @validate_configuration

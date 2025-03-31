@@ -1,7 +1,7 @@
 from processing.new.BandConfigNew import BandConfigNew
 from processing.new.ExtractorConfigNew import ExtractorConfigNew
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
-from processing.utils.print_action import print_action
+from processing.printers.print_action import print_action
 
 
 class MeanDistancesMatrixEmptyWarning(Exception):

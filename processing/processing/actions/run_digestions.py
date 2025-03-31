@@ -5,10 +5,10 @@ from processing.new.AggregatedManager import AggregatedManager
 from processing.new.DigestedManager import DigestedManager
 from processing.new.LabelFusionAdapter import LabelFusionAdapter
 from processing.new.iterate_extractors import iterate_extractors
-from processing.utils.print_action import print_action
-from processing.utils.print_digesters import print_digesters
-from processing.utils.validate_configuration import validate_configuration
-from processing.utils.validate_digesters import validate_digesters
+from processing.printers.print_action import print_action
+from processing.printers.print_digesters import print_digesters
+from processing.validators.validate_configuration import validate_configuration
+from processing.validators.validate_digesters import validate_digesters
 
 
 @validate_configuration
