@@ -127,8 +127,8 @@ class AggregatedManager:
 
         return _AggregatedInstanceDatasets(
             data=storage.read(paths.data),
-            sites=storage.read(paths.sites, as_strings=True),
+            sites=storage.read_strings(paths.sites),
             interval_details=storage.read(paths.interval_details),
             timestamps=storage.read(paths.timestamps),
-            labels=storage.read(paths.labels, as_strings=True),
+            labels=storage.read_strings(paths.labels),
         )
