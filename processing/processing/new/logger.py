@@ -18,7 +18,7 @@ def configure_logger(is_debug: bool):
     logger = get_logger()
     logger.disabled = True
 
-    for module in ["torchaudio", "h5py", "asyncio", "matplotlib", "numba"]:
+    for module in ["torchaudio", "h5py", "asyncio", "matplotlib", "numba", "torio"]:
         logging.getLogger(module).setLevel(logging.ERROR)
 
 
