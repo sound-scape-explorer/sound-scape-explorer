@@ -7,7 +7,7 @@ def filter_features_by_label_and_time(
     timestamp_start: int,  # UNIX timestamp in milliseconds
     timestamp_end: int,  # UNIX timestamp in milliseconds
     labels_properties: list[str],
-    labels_values: list[str],
+    labels_values: list[list[str]],
     trajectory_label_property: str,
     trajectory_label_value: str,
 ) -> tuple[list[list[float]], list[int]]:

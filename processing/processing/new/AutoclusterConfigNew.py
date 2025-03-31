@@ -2,13 +2,13 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Union
 
-from h5py import Dataset
 from hdbscan import HDBSCAN
 
 from processing.dtos import AutoclusterDto
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
+from processing.types import Mdm
 
 
 class AutoclusterImpl(Enum):
@@ -76,7 +76,7 @@ class AutoclusterConfigNew:
 
     def calculate(
         self,
-        mean_distances_matrix: Dataset,
+        mean_distances_matrix: Mdm,
     ) -> list[str]:
         assert self.instance is not None, "instance not started"
 

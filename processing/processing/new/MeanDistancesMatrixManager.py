@@ -13,6 +13,7 @@ from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.SettingsConfigNew import SettingsConfigNew
 from processing.new.StorageNew import StorageNew
 from processing.new.paths import register_path, build_path
+from processing.types import Mdm
 from processing.utils.calculate_mdm_shape_limit import calculate_mdm_shape_limit
 
 
@@ -95,15 +96,15 @@ class MeanDistancesMatrixManager:
         integration: IntegrationConfigNew,
         extractor: ExtractorConfigNew,
         trim_half: bool = False,
-    ):
+    ) -> Mdm:
         path = MeanDistancesMatrixManager._get_path(band, integration, extractor)
         exists = storage.exists(path)
 
         if not exists:
-            return MDM_EMPTY
+            return np.array(MDM_EMPTY)
 
         dataset = storage.read(path)
-        matrix = np.array(dataset)
+        matrix: Mdm = np.array(dataset)
 
         if trim_half is True:
             np.fill_diagonal(matrix, 0)
