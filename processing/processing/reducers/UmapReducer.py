@@ -10,6 +10,7 @@ class UmapReducer(AbstractReducer):
         self,
         min_dist: float = 0.1,
     ):
+        super().__init__()
         self.min_dist = min_dist
 
     def calculate(self) -> list[list[float]]:
@@ -17,7 +18,7 @@ class UmapReducer(AbstractReducer):
         scaled_features = robust_scale(features)
 
         # using dynamic import to prevent numba's AOT
-        from umap.umap_ import UMAP
+        from umap import UMAP
 
         umap = UMAP(
             n_components=self._dimensions,
