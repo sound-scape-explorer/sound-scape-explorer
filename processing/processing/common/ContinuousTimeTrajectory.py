@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy
 from h5py import Dataset
 from pandas import pandas
@@ -43,7 +41,7 @@ class ContinuousTimeTrajectory:
             self.__step,
         )
 
-    def _set_values(self, values: List[List[float]]) -> List[List[float]]:
+    def _set_values(self, values: list[list[float]]) -> list[list[float]]:
         self.values = values
         return self.values
 
@@ -64,8 +62,8 @@ class ContinuousTimeTrajectory:
         timestamps: Dataset,
         timestamp_start: int,
         timestamp_end: int,
-        labels_properties: List[str],
-        labels_values: Dataset,
+        labels_properties: list[str],
+        labels_values: list[list[str]],
         step: TrajectoryStep,
     ):
         self.__features = features
@@ -80,7 +78,7 @@ class ContinuousTimeTrajectory:
         self,
         trajectory_label_property: str,
         trajectory_label_value: str,
-    ) -> List[List[float]]:
+    ) -> list[list[float]]:
         (
             features,
             timestamps,
