@@ -26,10 +26,13 @@ class ExtractorConfigNew:
 
     @classmethod
     def from_dto(cls, dto: ExtractorDto):
+        # noinspection PyTypeChecker
+        impl: ExtractorImpl = ExtractorImpl[dto.impl.value]
+
         return cls(
             index=dto.index,
             name=dto.name,
-            impl=ExtractorImpl[dto.impl.value],
+            impl=impl,
             offset=dto.offset,
             step=dto.step,
             is_persist=dto.isPersist,

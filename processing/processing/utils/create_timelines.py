@@ -3,12 +3,12 @@ from typing import List
 from processing.common.Timeline import Timeline
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
 from processing.new.SettingsConfigNew import SettingsConfigNew
-from processing.new.SiteConfigNew import SiteConfigNew
+from processing.new.SiteConfigOld import SiteConfigOld
 from processing.new.StorageNew import StorageNew
 
 
 def create_timelines(
-    sites: List[SiteConfigNew],
+    sites: List[SiteConfigOld],
     integrations: List[IntegrationConfigNew],
     settings: SettingsConfigNew,
     storage: StorageNew,

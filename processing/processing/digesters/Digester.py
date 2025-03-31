@@ -16,7 +16,7 @@ Features = list[list[float]]
 Digested = list[Any]
 
 
-# TODO: add self.extractor
+# TODO: refactor me
 class Digester(ABC):
     index: int
     is_pairing: bool

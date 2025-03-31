@@ -6,7 +6,7 @@ from processing.common.Interval import Block, Interval
 from processing.errors.TimelineIntervalOverlapError import TimelineIntervalOverlapError
 from processing.new.FileConfigNew import FileConfigNew
 from processing.new.IntegrationConfigNew import IntegrationConfigNew
-from processing.new.SiteConfigNew import SiteConfigNew
+from processing.new.SiteConfigOld import SiteConfigOld
 from processing.new.StorageNew import StorageNew
 
 
@@ -18,7 +18,7 @@ FileIndex = int
 class Timeline:
     def __init__(
         self,
-        site: SiteConfigNew,
+        site: SiteConfigOld,
         integration: IntegrationConfigNew,
         storage: StorageNew,
         origin: int,

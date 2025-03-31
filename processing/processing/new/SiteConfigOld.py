@@ -4,8 +4,9 @@ from typing import List
 from processing.new.FileConfigNew import FileConfigNew
 
 
+# TODO: remove me
 @dataclass
-class SiteConfigNew:
+class SiteConfigOld:
     index: int
     name: str
     files: List[FileConfigNew]

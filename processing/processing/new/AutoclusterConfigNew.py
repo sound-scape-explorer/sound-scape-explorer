@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import Union
 
 from h5py import Dataset
 from hdbscan import HDBSCAN
@@ -27,12 +28,13 @@ class AutoclusterConfigNew:
 
     none_string = "None"
 
-    instance: HDBSCAN = None
-    values: list[str] = list
+    instance: Union[HDBSCAN, None] = None
+    values: list[str] = list  # todo: fix me
 
     @classmethod
     def from_dto(cls, dto: AutoclusterDto):
-        impl = AutoclusterImpl[dto.impl.value]
+        # noinspection PyTypeChecker
+        impl: AutoclusterImpl = AutoclusterImpl[dto.impl.value]
         name = f"{dto.index}_{impl.name}"
 
         return cls(
@@ -76,6 +78,8 @@ class AutoclusterConfigNew:
         self,
         mean_distances_matrix: Dataset,
     ) -> list[str]:
+        assert self.instance is not None, "instance not started"
+
         try:
             clustering = self.instance.fit(mean_distances_matrix[:])
             # noinspection PyUnresolvedReferences

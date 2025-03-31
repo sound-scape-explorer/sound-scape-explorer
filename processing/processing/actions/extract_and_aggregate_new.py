@@ -23,7 +23,7 @@ def extract_and_aggregate(context: Context):
     print_extractors(context)
     print_indices(context)
 
-    sites = SiteManager.sort_files_by_site(context)
+    sites = SiteManager.get_sites(context)
 
     for site_name in sites:
         processor = SiteFileProcessor(

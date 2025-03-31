@@ -20,13 +20,12 @@ class MeanDistancesMatrixPath(Enum):
     mean_distances_matrix = register_path("mean_distances_matrix")
 
 
+# TODO: refactor me
 class MeanDistancesMatrixManager:
-    # TODO: refactor me, pass the context only but circular imports for now
     @staticmethod
     def delete(storage: StorageNew):
         storage.delete(MeanDistancesMatrixPath.mean_distances_matrix.value)
 
-    # TODO: refactor me, pass the context only but circular imports for now
     @staticmethod
     def exists(storage: StorageNew):
         return storage.exists(MeanDistancesMatrixPath.mean_distances_matrix.value)
