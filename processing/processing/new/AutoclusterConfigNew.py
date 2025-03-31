@@ -3,7 +3,6 @@ from enum import Enum
 
 from h5py import Dataset
 from hdbscan import HDBSCAN
-from rich import print
 
 from processing.dtos import AutoclusterDto
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
@@ -89,6 +88,5 @@ class AutoclusterConfigNew:
 
             labels = ["MemoryError"] * mean_distances_matrix.shape[0]
 
-        print(set(labels))
         self.values = labels
         return self.values
