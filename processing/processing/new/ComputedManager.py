@@ -47,7 +47,6 @@ class ComputedManager:
         data: list[list[float]],
     ):
         path = ComputedManager._get_path(band, integration, extractor, iteration)
-        print("path", path)
 
         context.storage.write(
             path=path,
