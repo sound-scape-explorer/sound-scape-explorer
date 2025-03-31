@@ -29,7 +29,7 @@ def run_digestions(context: Context):
             e.extractor,
         )
 
-        fused_labels = LabelFusionAdapter.from_storage_by_property(
+        fused_labels = LabelFusionAdapter.from_storage(
             context,
             e.band,
             e.integration,

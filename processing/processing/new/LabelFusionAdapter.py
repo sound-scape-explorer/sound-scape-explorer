@@ -13,13 +13,12 @@ from processing.utils.get_uniques_unsorted import get_uniques_unsorted
 
 class LabelFusionAdapter:
     @staticmethod
-    def from_storage_by_interval(
+    def _read_flat(
         context: Context,
         band: BandConfigNew,
         integration: IntegrationConfigNew,
         extractor: ExtractorConfigNew,
     ):
-        """flat parallels lists of properties and labels (with autoclustered data)"""
         properties: list[str] = LabelManager.get_properties(context)
 
         aggregated = AggregatedManager.from_storage(
@@ -49,13 +48,13 @@ class LabelFusionAdapter:
         return properties, values
 
     @staticmethod
-    def from_storage_by_property(
+    def from_storage(
         context: Context,
         band: BandConfigNew,
         integration: IntegrationConfigNew,
         extractor: ExtractorConfigNew,
     ):
-        properties, values = LabelFusionAdapter.from_storage_by_interval(
+        properties, values = LabelFusionAdapter._read_flat(
             context,
             band,
             integration,
