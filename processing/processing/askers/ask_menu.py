@@ -39,7 +39,7 @@ def _wrap(choice: MenuChoice, context: Context):
     return Choice(value=choice.value, name=f"{icon} {choice.value}")
 
 
-def ask_menu(context: Context) -> MenuChoice:
+def ask_menu(context: Context):
     print_menu_legend()
 
     questions = [
@@ -73,5 +73,5 @@ def ask_menu(context: Context) -> MenuChoice:
     ]
 
     answers = prompt(questions=questions, vi_mode=True)
-    answer: MenuChoice = str(answers["choices"])  # type: ignore
+    answer: str = str(answers["choices"])
     return answer

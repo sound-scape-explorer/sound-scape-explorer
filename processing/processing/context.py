@@ -1,6 +1,5 @@
 from typing import Union
 
-from processing.common.MenuChoice import MenuChoice
 from processing.new.ConfigNew import ConfigNew
 from processing.new.StorageNew import StorageNew
 
@@ -8,7 +7,7 @@ from processing.new.StorageNew import StorageNew
 class Context:
     config: ConfigNew
     storage: StorageNew
-    last_choice: Union[MenuChoice, None]
+    last_choice: Union[str, None]
 
     def __init__(self, config_path: str):
         self.config = ConfigNew(config_path)
