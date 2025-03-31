@@ -1,16 +1,15 @@
 {
   "version": "13.9.0",
-  "isValid": true,
   "settings": {
-    "storagePath": "coral-reef-light.h5",
-    "audioPath": "/home/bamdad/git/sound-scape-explorer/examples/campaigns/coral-reef-light/audio",
+    "storagePath": "autoclusters-none.h5",
+    "audioPath": "/home/bamdad/git/sound-scape-explorer/examples/audio",
     "expectedSampleRate": 44100,
     "timelineOrigin": "2021-01-01 00:00:00",
     "audioHost": "",
     "timezone": "Pacific/Tahiti",
-    "computationStrategy": "umap",
+    "computationStrategy": "pca",
     "computationDimensions": 3,
-    "computationIterations": 10,
+    "computationIterations": 2,
     "displaySeed": 42000,
     "memoryLimit": 4
   },
@@ -83,24 +82,7 @@
       "end": "2022-12-13 12:00:00"
     }
   ],
-  "autoclusters": [
-    {
-      "index": 0,
-      "impl": "hdbscan_eom",
-      "minClusterSize": 15,
-      "minSamples": 15,
-      "alpha": 1,
-      "epsilon": 0.1
-    },
-    {
-      "index": 1,
-      "impl": "hdbscan_leaf",
-      "minClusterSize": 15,
-      "minSamples": 15,
-      "alpha": 1,
-      "epsilon": 0.1
-    }
-  ],
+  "autoclusters": [],
   "digesters": [
     {
       "index": 0,

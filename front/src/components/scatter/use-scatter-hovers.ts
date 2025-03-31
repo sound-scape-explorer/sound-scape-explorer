@@ -20,6 +20,7 @@ export function useScatterHovers() {
     return template;
   };
 
+  // TODO: refactor me this is broken when user puts no labels
   const generateHovers = (length: number) => {
     if (
       aggregatedIntervalDetails.value === null ||
@@ -39,7 +40,7 @@ export function useScatterHovers() {
     for (let i = 0; i < length; i += 1) {
       const offset = 1;
       const intervalDetails = intervalDetailsPointer[i];
-      const labelValues = labelValuesPointer[i];
+      const labelValues = labelValuesPointer[i] ?? [];
 
       const textLength =
         offset + intervalDetails.length + labelPropertiesPointer.length;

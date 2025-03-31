@@ -5,10 +5,10 @@ from processing.context import Context
 from processing.new.AggregatedManager import AggregatedManager
 from processing.new.ExtractedManager import ExtractedManager
 from processing.new.SiteManager import SiteManager
-from processing.utils.create_timelines import create_timelines
 from processing.printers.print_action import print_action
 from processing.printers.print_extractors import print_extractors
 from processing.printers.print_indices import print_indices
+from processing.utils.create_timelines import create_timelines
 
 
 # TODO: refactor me after JR meeting
@@ -68,6 +68,7 @@ def run_extractions_aggregations(context: Context):
         AggregatedManager.to_storage(
             context=context,
             band=band,
+            integration=timeline.integration,
             extractor=extractor,
             data=aggregated_data,
             timeline=timeline,

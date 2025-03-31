@@ -36,9 +36,12 @@ class StorageNew:
         as_strings: bool = False,
     ):
         exists = self.exists(path)
-
         if not exists:
             raise KeyError(f"Storage: path {path} not found")
+
+        is_empty = self._is_empty(path)
+        if is_empty:
+            return []
 
         dataset: Dataset = self.__file[path]
 
@@ -53,6 +56,10 @@ class StorageNew:
             return True
         except KeyError:
             return False
+
+    def _is_empty(self, path: str):
+        shape = self.__file[path].shape
+        return 0 in shape
 
     def delete(self, path: str):
         exists = self.exists(path)

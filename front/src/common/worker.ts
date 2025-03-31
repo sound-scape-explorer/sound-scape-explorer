@@ -167,7 +167,7 @@ export async function readLabels(
     FilePath.label_properties,
   );
 
-  const properties = files_label_properties[0];
+  const properties = files_label_properties[0] ?? [];
 
   const files_label_values = _readArray<FileDto['labelValues']>(
     h5,
@@ -178,7 +178,6 @@ export async function readLabels(
 
   for (let index = 0; index < properties.length; index += 1) {
     const property = properties[index];
-
     const uniques: string[] = [];
 
     for (const values of files_label_values) {

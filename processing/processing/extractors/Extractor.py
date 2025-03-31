@@ -34,7 +34,7 @@ class Extractor(ABC):
     def path(self):
         assert self.index is not None, "Please add an extractor index"
         # TODO: register me
-        return build_path(ExtractedPath.extracted.value, self.band.index, self.index)
+        return build_path(ExtractedPath.extractor.value, self.band.index, self.index)
 
     @property
     def expected_sample_rate(self) -> int:

@@ -3,7 +3,7 @@ from enum import Enum
 import numpy as np
 from h5py import Dataset
 
-from processing.constants import MDM_DEFAULT
+from processing.constants import MDM_EMPTY
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
@@ -57,7 +57,7 @@ class MeanDistancesMatrixManager:
                 "Filling storage with empty array...",
                 f"RAM limit: {settings.memory_limit} GB",
             )
-            return MDM_DEFAULT
+            return MDM_EMPTY
 
         from sklearn import metrics
 
@@ -98,6 +98,11 @@ class MeanDistancesMatrixManager:
         trim_half: bool = False,
     ):
         path = MeanDistancesMatrixManager._get_path(band, integration, extractor)
+        exists = storage.exists(path)
+
+        if not exists:
+            return MDM_EMPTY
+
         dataset = storage.read(path)
         matrix = np.array(dataset)
 

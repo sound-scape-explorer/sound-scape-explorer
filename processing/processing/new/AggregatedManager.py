@@ -81,6 +81,7 @@ class AggregatedManager:
     def to_storage(
         context: Context,
         band: BandConfigNew,
+        integration: IntegrationConfigNew,
         extractor: Extractor,
         data: list[float],
         timeline: Timeline,
@@ -89,7 +90,7 @@ class AggregatedManager:
         labels: list[str],
     ):
         storage = context.storage
-        paths = AggregatedManager._get_paths(band, timeline.integration, extractor)
+        paths = AggregatedManager._get_paths(band, integration, extractor)
 
         # data
         storage.append(

@@ -1,5 +1,4 @@
 import {useCallback} from 'react';
-import {useGlobalValidation} from 'src/hooks/use-global-validation.ts';
 import {type Settings, useSettingsState} from 'src/hooks/use-settings-state.ts';
 import {
   type ConfigFile,
@@ -60,7 +59,6 @@ export interface ExportJson {
 
 export function useExport() {
   const {settings} = useSettingsState();
-  const {isValid} = useGlobalValidation();
   const {bands} = useBandState();
   const {integrations} = useIntegrationState();
   const {extractors} = useExtractorState();
@@ -72,22 +70,25 @@ export function useExport() {
   const {trajectories} = useTrajectoryState();
   const {getFiles} = useTableStateConverter();
 
-  const download = useCallback(<T>(data: T, filename = 'campaign'): void => {
-    try {
-      const string = JSON.stringify(data, null, 2);
-      const blob = new Blob([string], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.download = `${filename}.json`;
-      link.href = url;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Error downloading JSON:', error);
-    }
-  }, []);
+  const download = useCallback(
+    <T>(data: T, filename = 'campaign.json'): void => {
+      try {
+        const string = JSON.stringify(data, null, 2);
+        const blob = new Blob([string], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Error downloading JSON:', error);
+      }
+    },
+    [],
+  );
 
   const generate = useCallback(() => {
     const files = getFiles();
@@ -109,7 +110,6 @@ export function useExport() {
 
     return json;
   }, [
-    isValid,
     settings,
     bands,
     integrations,
@@ -125,8 +125,9 @@ export function useExport() {
 
   const exportToJson = useCallback(() => {
     const json = generate();
-    download(json);
-  }, [generate, download]);
+    const filename = settings.storagePath.replace('.h5', '.json');
+    download(json, filename);
+  }, [generate, download, settings]);
 
   return {
     exportToJson,
