@@ -36,7 +36,7 @@ export function useTableSiteLoader() {
 
   const loadFromJson = useCallback(
     (files: ConfigFile[]) => {
-      const paths = files.map((f) => f.Path);
+      const paths = files.map((f) => f.Site);
       load(paths);
     },
     [load],
