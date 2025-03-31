@@ -1,10 +1,9 @@
 from pandas import DataFrame
 
-from processing.common.AggregatedLabelStorage import AggregatedLabelStorage
-from processing.common.AggregatedReducible import AggregatedReducible
-from processing.config.files.FileSheet import FileSheet
+from processing.constants import LABEL_PREFIX
 from processing.context import Context
 from processing.new.AggregatedManager import AggregatedManager
+from processing.new.LabelFusionAdapter import LabelFusionAdapter
 from processing.new.ReducedManager import ReducedManager
 from processing.new.ReducerConfigNew import ReducerConfigNew
 from processing.new.iterate_reducers import iterate_reducers
@@ -47,12 +46,16 @@ def run_dataframe_export(context: Context):
     raw["timestamps"] = [convert_timestamp_to_date(t[0]) for t in aggregated.timestamps]
 
     # labels
-    reducible = AggregatedReducible(band, integration, extractor)
-    labels = AggregatedLabelStorage.read_from_storage(context, reducible)
+    fused_labels = LabelFusionAdapter.from_storage(
+        context,
+        band,
+        integration,
+        extractor,
+    )
 
-    for al in labels:
-        key = f"{FileSheet.label_prefix.value}{al.property}"
-        raw[key] = al.values
+    for fl in fused_labels:
+        key = f"{LABEL_PREFIX}{fl.property}"
+        raw[key] = fl.values
 
     # reduced
     reducers = context.config.reducers
@@ -85,10 +88,10 @@ def run_dataframe_export(context: Context):
             raw[key] = [f[d] for f in reduced]
 
     # aggregated
-    for index in range(aggregated["data"].shape[1]):
-        elements = [str(extractor.index), extractor.name, f"{index+1}"]
+    for index in range(aggregated.data.shape[1]):
+        elements = [str(extractor.index), extractor.name, f"{index}"]
         key = "_".join(elements)
-        raw[key] = [d[index] for d in aggregated["data"]]
+        raw[key] = [d[index] for d in aggregated.data]
 
     df = DataFrame(raw)
     df.to_csv(csv_path, index=False)
