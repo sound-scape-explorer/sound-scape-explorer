@@ -1,16 +1,23 @@
 from typing import Union
 
-from h5py import File, Dataset
+import numpy as np
+from h5py import File, Dataset, Group, Datatype
 
 from processing.new.StorageMode import StorageMode
 
 
-_Floats = Union[float, list[float]]
-_Strings = Union[str, list[str]]
-_Booleans = Union[bool, list[bool]]
+Endpoint = Union[Dataset, Group, Datatype]
 
 
-StorageDataWrite = Union[list[_Floats], list[_Strings], list[_Booleans]]
+StorageDataWrite = Union[
+    list[float],
+    list[list[float]],
+    list[str],
+    list[list[str]],
+    list[bool],
+    list[list[bool]],
+]
+
 StorageDataAppend = Union[list[list[float]], list[list[str]], list[list[bool]]]
 StorageAttributes = Union[dict[str, str], None]
 StorageCompression = "gzip"
@@ -39,14 +46,21 @@ class StorageNew:
         if not exists:
             raise KeyError(f"Storage: path {path} not found")
 
-        is_empty = self._is_empty(path)
+        endpoint: Endpoint = self.__file[path]
+
+        if not isinstance(endpoint, Dataset):
+            raise KeyError(f"Storage: path {path} does not contain a dataset")
+
+        dataset: Dataset = endpoint
+
+        is_empty = 0 in dataset.shape
         if is_empty:
             return []
 
-        dataset: Dataset = self.__file[path]
-
         if as_strings:
-            return dataset.asstr()[:].tolist()
+            strings = dataset.asstr()[:]
+            assert isinstance(strings, np.ndarray)
+            return strings.tolist()
 
         return dataset
 
@@ -56,10 +70,6 @@ class StorageNew:
             return True
         except KeyError:
             return False
-
-    def _is_empty(self, path: str):
-        shape = self.__file[path].shape
-        return 0 in shape
 
     def delete(self, path: str):
         exists = self.exists(path)
@@ -142,7 +152,9 @@ class StorageNew:
             )
         else:
             # actual appending
-            dataset: Dataset = self.__file[path]
+            endpoint: Endpoint = self.__file[path]
+            assert isinstance(endpoint, Dataset), "Please append to a dataset"
+            dataset: Dataset = endpoint
             new_shape = dataset.shape[0] + length
             dataset.resize(new_shape, axis=0)
             dataset[-length:] = data
