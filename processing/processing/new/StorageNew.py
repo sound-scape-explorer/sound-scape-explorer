@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Any
 
 import numpy as np
 from h5py import File, Dataset, Group, Datatype
@@ -9,17 +9,7 @@ from processing.new.StorageMode import StorageMode
 Endpoint = Union[Dataset, Group, Datatype]
 
 
-StorageDataWrite = Union[
-    list[float],
-    list[list[float]],
-    list[str],
-    list[list[str]],
-    list[bool],
-    list[list[bool]],
-]
-
-StorageDataAppend = Union[list[list[float]], list[list[str]], list[list[bool]]]
-StorageAttributes = Union[dict[str, str], None]
+StorageAttributes = dict[str, str]
 StorageCompression = "gzip"
 
 
@@ -37,11 +27,13 @@ class StorageNew:
     def __open(self):
         return File(self.path, StorageMode.rw_or_create.value)
 
-    def read(
-        self,
-        path: str,
-        as_strings: bool = False,
-    ):
+    def read_strings(self, path: str) -> list[Any]:
+        dataset = self.read(path)
+        strings = dataset.asstr()[:]
+        assert isinstance(strings, np.ndarray)
+        return strings.tolist()
+
+    def read(self, path: str) -> Dataset:
         exists = self.exists(path)
         if not exists:
             raise KeyError(f"Storage: path {path} not found")
@@ -55,12 +47,8 @@ class StorageNew:
 
         is_empty = 0 in dataset.shape
         if is_empty:
-            return []
-
-        if as_strings:
-            strings = dataset.asstr()[:]
-            assert isinstance(strings, np.ndarray)
-            return strings.tolist()
+            raise KeyError(f"Storage: empty dataset")
+            # return []
 
         return dataset
 
@@ -82,7 +70,7 @@ class StorageNew:
     def _write_attributes(
         self,
         path: str,
-        attributes: StorageAttributes = None,
+        attributes: Union[StorageAttributes, None] = None,
     ):
         if attributes is None:
             return
@@ -99,8 +87,8 @@ class StorageNew:
     def write(
         self,
         path: str,
-        data: StorageDataWrite,
-        attributes: StorageAttributes = None,
+        data: list[Any],
+        attributes: Union[StorageAttributes, None] = None,
     ):
         exists = self.exists(path)
 
@@ -133,8 +121,8 @@ class StorageNew:
     def append(
         self,
         path: str,
-        data: StorageDataAppend,
-        attributes: StorageAttributes = None,
+        data: list[list[Any]],
+        attributes: Union[StorageAttributes, None] = None,
     ):
         length = len(data)
         dimensions = len(data[0])
