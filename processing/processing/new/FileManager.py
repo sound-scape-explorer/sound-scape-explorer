@@ -1,7 +1,6 @@
 from enum import Enum
 
 from processing.context import Context
-from processing.new.FileConfigNew import FileConfigNew
 from processing.new.paths import register_path
 
 
@@ -73,44 +72,3 @@ class FileManager:
         storage.write(path=FilePath.durations.value, data=durations)
         storage.write(path=FilePath.label_properties.value, data=label_properties)
         storage.write(path=FilePath.label_values.value, data=label_values)
-
-    @staticmethod
-    def from_storage(context: Context):
-        # this supposes file indices are mandatory sequential
-        indices: list[int] = context.storage.read(FilePath.indices.value)
-        relative_paths: list[str] = context.storage.read(FilePath.relative_paths.value)
-        absolute_paths: list[str] = context.storage.read(FilePath.absolute_paths.value)
-        timestamps: list[int] = context.storage.read(FilePath.timestamps.value)
-        sites: list[str] = context.storage.read(FilePath.sites.value)
-        durations: list[int] = context.storage.read(FilePath.durations.value)
-        label_properties: list[list[str]] = context.storage.read(
-            FilePath.label_properties.value,
-            as_strings=True,
-        )
-        label_values: list[list[str]] = context.storage.read(
-            FilePath.label_values.value,
-            as_strings=True,
-        )
-
-        files: list[FileConfigNew] = []
-
-        for index in indices:
-            properties = label_properties[index]
-            labels: dict[str, str] = {}
-
-            for p, property_ in enumerate(properties):
-                labels[property_] = label_values[index][p]
-
-            file: FileConfigNew = FileConfigNew(
-                index=index,
-                relative_path=relative_paths[index],
-                absolute_path=absolute_paths[index],
-                timestamp=timestamps[index],
-                site=sites[index],
-                duration=durations[index],
-                labels=labels,
-            )
-
-            files.append(file)
-
-        return files
