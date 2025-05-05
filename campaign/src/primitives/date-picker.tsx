@@ -1,9 +1,10 @@
 import {type Intent} from '@blueprintjs/core';
 import {DateInput3} from '@blueprintjs/datetime2';
+import {DATE_FORMAT, TIMELINE_ORIGIN_MIN} from '@shared/constants';
 import clsx from 'clsx';
 import enUS from 'date-fns/locale/en-US';
 import {useMemo} from 'react';
-import {DATE_FORMAT, TIMELINE_ORIGIN_MIN} from 'src/constants.ts';
+import {formatDateToString} from 'src/utils/dates';
 
 import styles from './date-picker.module.scss';
 
@@ -34,7 +35,14 @@ export function DatePicker({
     <DateInput3
       className={clsx(className, small && styles.small)}
       minDate={TIMELINE_ORIGIN_MIN}
-      onChange={onChange}
+      onChange={(v) => {
+        if (v === null) {
+          return onChange(null);
+        }
+
+        const formatted = formatDateToString(new Date(v));
+        onChange(formatted);
+      }}
       locale={enUS}
       value={value}
       dateFnsFormat={DATE_FORMAT}

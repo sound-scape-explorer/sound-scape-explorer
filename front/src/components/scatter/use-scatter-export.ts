@@ -1,17 +1,12 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
-import {useBandSelection} from 'src/composables/use-band-selection';
+import {useAggregated} from 'src/composables/use-aggregated';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
-import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
-import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
 interface ExportData {
@@ -23,18 +18,19 @@ interface ExportData {
   aggregatedFeatures: number[];
 }
 
+// todo: update me
 export function useScatterExport() {
-  const {band} = useBandSelection();
-  const {integration} = useIntegrationSelection();
-  const {labelProperties} = useStorageLabels();
+  const {band, integration} = useViewSelectionNew();
+  const {sets} = useLabelSets();
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
-  const {reducedFeatures} = useStorageReducedFeatures();
-  const {aggregatedFeatures} = useStorageAggregatedFeatures();
-  const {aggregatedIndices} = useStorageAggregatedIndices();
-  const {aggregatedLabels} = useStorageAggregatedLabels();
-  const {aggregatedSites} = useStorageAggregatedSites();
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {reducedEmbeddings} = useStorageReducedEmbeddings();
+  const {aggregated} = useAggregated();
+  // const {aggregatedEmbeddings} = useStorageAggregatedEmbeddings();
+  // const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
+  // const {aggregatedLabels} = useStorageAggregatedLabels();
+  // const {aggregatedSites} = useStorageAggregatedSites();
+  // const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
   const {filtered} = useScatterGlobalFilter();
   const {generate} = useExportName();
 
@@ -44,13 +40,8 @@ export function useScatterExport() {
     if (
       band.value === null ||
       integration.value === null ||
-      aggregatedTimestamps.value === null ||
-      aggregatedFeatures.value === null ||
-      aggregatedLabels.value === null ||
-      labelProperties.value === null ||
-      reducedFeatures.value === null ||
-      aggregatedSites.value === null ||
-      aggregatedIndices.value === null
+      aggregated.value === null ||
+      reducedEmbeddings.value === null
     ) {
       return;
     }
@@ -60,28 +51,31 @@ export function useScatterExport() {
     loadingRef.value = true;
 
     const csv = new Csv();
-    const aggregatedIndicesCopy = aggregatedIndices.value;
+    // const aggregatedIndicesCopy = aggregatedIndices.value;
     const payload: ExportData[] = [];
 
-    for (let i = 0; i < aggregatedTimestamps.value.length; i += 1) {
+    for (let i = 0; i < aggregated.value.timestamps.length; i += 1) {
       if (filtered.value[i]) {
         continue;
       }
 
-      const aggregatedFeaturesInterval = aggregatedFeatures.value[i];
-      const timestamp = aggregatedTimestamps.value[i];
-      const site = aggregatedSites.value[i];
-      const aggregatedLabelsInterval = aggregatedLabels.value[i];
+      const aggregatedEmbeddings = aggregated.value.embeddings[i];
+      const timestamp = aggregated.value.timestamps[i];
+      // const site = aggregatedSites.value[i];
+      // const aggregatedLabelsInterval = aggregatedLabels.value[i];
 
-      const reducedFeaturesInterval = reducedFeatures.value[i];
+      const reducedFeaturesInterval = reducedEmbeddings.value[i];
 
       payload.push({
         intervalIndex: i,
-        timestamp: timestamp,
-        site: site,
-        aggregatedLabels: aggregatedLabelsInterval,
-        reducedFeatures: reducedFeaturesInterval,
-        aggregatedFeatures: aggregatedFeaturesInterval,
+        timestamp,
+        site: 'relol',
+        // aggregatedLabels: aggregatedLabelsInterval,
+        aggregatedLabels: ['lol'],
+        // reducedFeatures: reducedFeaturesInterval,
+        reducedFeatures: [1],
+        // aggregatedEmbeddings: aggregatedEmbeddings,
+        aggregatedFeatures: [1],
       });
     }
 
@@ -89,13 +83,13 @@ export function useScatterExport() {
     csv.addColumn('timestamp');
     csv.addColumn('site');
 
-    labelProperties.value.forEach((property) => {
+    Object.keys(sets.value).forEach((property) => {
       csv.addColumn(`label_${property}`);
     });
 
-    aggregatedIndicesCopy.forEach(({index}) => {
-      csv.addColumn(`i_${index.index}_${index.impl}`);
-    });
+    // aggregatedIndicesCopy.forEach(({index}) => {
+    //   csv.addColumn(`i_${index.index}_${index.impl}`);
+    // });
 
     payload[0].reducedFeatures.forEach((_, r) => {
       csv.addColumn(`r_${r}`);
@@ -115,9 +109,9 @@ export function useScatterExport() {
         csv.addToCurrentRow(aL);
       });
 
-      aggregatedIndicesCopy.forEach((aI) => {
-        csv.addToCurrentRow(`${aI.values[data.intervalIndex]}`);
-      });
+      // aggregatedIndicesCopy.forEach((aI) => {
+      //   csv.addToCurrentRow(`${aI.values[data.intervalIndex]}`);
+      // });
 
       data.reducedFeatures.forEach((rF) => {
         csv.addToCurrentRow(`${rF}`);
@@ -134,6 +128,6 @@ export function useScatterExport() {
   };
 
   return {
-    handleScatterExportClick: handleScatterExportClick,
+    handleScatterExportClick,
   };
 }

@@ -27,3 +27,6 @@ venv
 sse-venv-*
 !sse-venv-*.bat
 !sse-venv-*.sh
+
+shared/generate-enums.cjs
+shared/convert-labels-to-tags.cjs

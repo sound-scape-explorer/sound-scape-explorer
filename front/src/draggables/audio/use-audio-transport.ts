@@ -38,9 +38,9 @@ export function useAudioTransport() {
   };
 
   return {
-    isPlaying: isPlaying,
-    togglePlayPause: togglePlayPause,
-    seek: seek,
-    stop: stop,
+    isPlaying,
+    togglePlayPause,
+    seek,
+    stop,
   };
 }

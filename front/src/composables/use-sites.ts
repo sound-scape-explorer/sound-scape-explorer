@@ -1,20 +1,21 @@
-import {useFiles} from 'src/composables/use-files';
+import {useConfig} from 'src/composables/use-config';
 import {ref, watch} from 'vue';
 
 const sites = ref<string[] | null>(null);
 
+// todo: remove me
 export function useSites() {
-  const {files} = useFiles();
+  const {config} = useConfig();
 
-  watch(files, () => {
-    if (sites.value !== null || files.value === null) {
+  watch(config, () => {
+    if (sites.value !== null || config.value === null) {
       return;
     }
 
-    sites.value = [...new Set(files.value.map((f) => f.site))];
+    sites.value = [...new Set(config.value.files.map((f) => f.Site))];
   });
 
   return {
-    sites: sites,
+    sites,
   };
 }

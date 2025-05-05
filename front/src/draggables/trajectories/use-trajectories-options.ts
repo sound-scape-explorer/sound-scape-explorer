@@ -1,21 +1,17 @@
 import {type CascaderOption} from 'naive-ui';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useTrajectories} from 'src/composables/use-trajectories';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {convertToNaiveSelectOptions} from 'src/utils/naive';
 import {computed} from 'vue';
 
 export function useTrajectoriesOptions() {
-  const {trajectories} = useTrajectories();
+  const {extraction} = useViewSelectionNew();
   const {current} = useTrajectoriesSelection();
   const {isLoading} = useScatterLoading();
 
   const options = computed(() => {
-    if (trajectories.value === null) {
-      return [];
-    }
-
-    const names = trajectories.value.map((t) => t.name);
+    const names = extraction.value?.trajectories.map((t) => t.name) ?? [];
     return convertToNaiveSelectOptions(names) as CascaderOption[];
   });
 
@@ -28,7 +24,7 @@ export function useTrajectoriesOptions() {
   });
 
   return {
-    options: options,
-    isFuseable: isFuseable,
+    options,
+    isFuseable,
   };
 }

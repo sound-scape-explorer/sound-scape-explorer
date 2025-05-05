@@ -13,7 +13,7 @@
   flex: 1;
 }
 
-.growh {
+.grow-h {
   height: 100%;
 }
 
@@ -98,6 +98,10 @@
   }
 }
 
+.no-user-select {
+  user-select: none;
+}
+
 code {
   font-family: monospace;
   font-size: 90%;
@@ -105,4 +109,8 @@ code {
   color: #333;
   border-radius: 3px;
   background-color: #f4f4f4;
+}
+
+.scrollable {
+  overflow: auto;
 }

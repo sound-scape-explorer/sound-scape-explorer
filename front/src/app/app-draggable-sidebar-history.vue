@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {arrowRedoOutline, arrowUndoOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';

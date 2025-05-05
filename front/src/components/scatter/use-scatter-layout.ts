@@ -28,6 +28,6 @@ export function useScatterLayout() {
   });
 
   return {
-    layout: layout,
+    layout,
   };
 }

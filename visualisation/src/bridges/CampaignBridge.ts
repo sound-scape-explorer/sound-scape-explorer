@@ -20,7 +20,7 @@ export class CampaignBridge {
   }
 
   public static async createFromRenderer() {
-    await ipcRenderer.invoke(Channels.CampaignCreate);
+    await ipcRenderer.invoke(Channels.CAMPAIGN_CREATE);
   }
 
   private validateServicePath() {
@@ -38,6 +38,6 @@ export class CampaignBridge {
   }
 
   private setCreateHandler() {
-    ipcMain.handle(Channels.CampaignCreate, this.create.bind(this));
+    ipcMain.handle(Channels.CAMPAIGN_CREATE, this.create.bind(this));
   }
 }

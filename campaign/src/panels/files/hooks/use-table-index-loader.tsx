@@ -1,8 +1,7 @@
+import {type FileDto} from '@shared/dtos';
 import {useCallback} from 'react';
-import {type ConfigFile} from 'src/hooks/use-table-state-converter.ts';
-import  {type FileAlias} from 'src/panels/files/hooks/use-table-loader.ts';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
-import {type IndexedXlsxFile} from 'src/utils/xlsx-parser.ts';
+import {type FileAlias} from 'src/panels/files/hooks/use-table-loader';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
 export function useTableIndexLoader() {
   const {createColumn} = useTableState();
@@ -26,16 +25,8 @@ export function useTableIndexLoader() {
     [load],
   );
 
-  const loadFromXlsx = useCallback(
-    (files: IndexedXlsxFile[]) => {
-      const indices = files.map((f) => f.index.toString());
-      load(indices);
-    },
-    [load],
-  );
-
-  const loadFromJson = useCallback(
-    (files: ConfigFile[]) => {
+  const loadFromDto = useCallback(
+    (files: FileDto[]) => {
       const indices = files.map((f) => f.Index);
       load(indices);
     },
@@ -44,7 +35,6 @@ export function useTableIndexLoader() {
 
   return {
     loadFromFolder,
-    loadFromXlsx,
-    loadFromJson,
+    loadFromDto,
   };
 }

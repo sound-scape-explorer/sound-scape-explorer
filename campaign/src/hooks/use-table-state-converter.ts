@@ -1,24 +1,24 @@
 import {useCallback} from 'react';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
-export interface ConfigFile {
+export interface TableFile {
   Index: string;
   Path: string;
   Date: string;
   Site: string;
 
-  [p: string]: string; // LABEL_xxx
+  [prefixedTagName: string]: string;
 }
 
 export function useTableStateConverter() {
   const {state, getTableLength} = useTableState();
 
-  const getFiles = useCallback((): ConfigFile[] => {
+  const getFiles = useCallback((): TableFile[] => {
     const length = getTableLength();
-    const files = new Array<ConfigFile>(length);
+    const files = new Array<TableFile>(length);
 
     for (let i = 0; i < length; i += 1) {
-      const file = {} as ConfigFile;
+      const file = {} as TableFile;
 
       for (const {key, name} of state.columns) {
         file[name] = state.rows[key][i];

@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {
   arrowBackOutline,
@@ -8,9 +8,12 @@ import {
 } from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 
 const {back, forward, canUndo, canRedo, redo, undo, hasClicked} =
   useIntervalSelector();
+
+const {colors} = useThemeColors();
 </script>
 
 <template>
@@ -57,14 +60,16 @@ const {back, forward, canUndo, canRedo, redo, undo, hasClicked} =
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .container {
   display: flex;
   justify-content: flex-start;
-  margin-top: $g0;
-  gap: $p0;
+  margin-top: sizes.$g0;
+  gap: sizes.$p0;
 
   * {
-    color: $white;
+    color: v-bind('colors.primaryColor');
   }
 }
 </style>

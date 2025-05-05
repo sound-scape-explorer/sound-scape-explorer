@@ -1,7 +1,7 @@
 import {
   type AggregatedIndex,
-  useStorageAggregatedIndices,
-} from 'src/composables/use-storage-aggregated-indices';
+  useStorageAggregatedAcousticIndices,
+} from 'src/composables/use-storage-aggregated-acoustic-indices';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 import {calculateMean} from 'src/utils/math';
@@ -12,7 +12,7 @@ import {ref} from 'vue';
 const filtered = ref<boolean[]>([]);
 
 export function useScatterFilterTemporal() {
-  const {aggregatedIndices} = useStorageAggregatedIndices();
+  const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
   const {from, to, reset: resetThresholds} = useTemporalThresholds();
   const {indicator: indicatorSelected, hasIndicator} = useDraggableTemporal();
 
@@ -67,8 +67,8 @@ export function useScatterFilterTemporal() {
   };
 
   return {
-    filtered: filtered,
-    filter: filter,
-    reset: reset,
+    filtered,
+    filter,
+    reset,
   };
 }

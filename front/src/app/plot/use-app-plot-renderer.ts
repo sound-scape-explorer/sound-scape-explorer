@@ -34,6 +34,6 @@ export function useAppPlotRenderer(props: AppPlotProps, refs: AppPlotRefs) {
   };
 
   return {
-    render: render,
+    render,
   };
 }

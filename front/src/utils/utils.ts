@@ -1,3 +1,4 @@
+// todo: useful?
 export function countIterations(
   min: number,
   max: number,
@@ -14,7 +15,7 @@ export function getInfiniteRange(from: number | null, to: number | null) {
   const top = to ?? Infinity;
 
   return {
-    bottom: bottom,
-    top: top,
+    bottom,
+    top,
   };
 }

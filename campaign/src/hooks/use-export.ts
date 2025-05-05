@@ -1,73 +1,16 @@
+import {ConfigDto, type FileDto} from '@shared/dtos';
 import {useCallback} from 'react';
-import {type Settings, useSettingsState} from 'src/hooks/use-settings-state.ts';
-import {
-  type ConfigFile,
-  useTableStateConverter,
-} from 'src/hooks/use-table-state-converter.ts';
-import {
-  type ConfigBand,
-  useBandState,
-} from 'src/panels/config/hooks/use-band-state.ts';
-import {
-  type ConfigExtractor,
-  useExtractorState,
-} from 'src/panels/config/hooks/use-extractor-state.ts';
-import {
-  type ConfigIntegration,
-  useIntegrationState,
-} from 'src/panels/config/hooks/use-integration-state.ts';
-import {
-  type ConfigReducer,
-  useReducerState,
-} from 'src/panels/config/hooks/use-reducer-state.ts';
-import {
-  type ConfigAutocluster,
-  useAutoclusterState,
-} from 'src/panels/metrics/hooks/use-autocluster-state.ts';
-import {
-  type ConfigDigester,
-  useDigesterState,
-} from 'src/panels/metrics/hooks/use-digester-state.ts';
-import {
-  type MetricsIndex,
-  useIndexState,
-} from 'src/panels/metrics/hooks/use-index-state.ts';
-import {
-  type ConfigRange,
-  useRangeState,
-} from 'src/panels/metrics/hooks/use-range-state.ts';
-import {
-  type ConfigTrajectory,
-  useTrajectoryState,
-} from 'src/panels/metrics/hooks/use-trajectory-state.ts';
-import {version} from 'src/version.ts';
-
-export interface ExportJson {
-  version: string;
-  settings: Settings;
-  files: ConfigFile[];
-  bands: ConfigBand[];
-  integrations: ConfigIntegration[];
-  extractors: ConfigExtractor[];
-  reducers: ConfigReducer[];
-  ranges: ConfigRange[];
-  autoclusters: ConfigAutocluster[];
-  digesters: ConfigDigester[];
-  trajectories: ConfigTrajectory[];
-  indices: MetricsIndex[];
-}
+import {TAG_PREFIX_FOR_TABLE} from 'src/constants';
+import {useSettingsState} from 'src/hooks/use-settings-state';
+import {useTableStateConverter} from 'src/hooks/use-table-state-converter';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {useRangeState} from 'src/panels/extractions/hooks/use-range-state.ts';
+import {VERSION} from 'src/version';
 
 export function useExport() {
   const {settings} = useSettingsState();
-  const {bands} = useBandState();
-  const {integrations} = useIntegrationState();
-  const {extractors} = useExtractorState();
-  const {indices} = useIndexState();
-  const {reducers} = useReducerState();
+  const {extractions} = useExtractionState();
   const {ranges} = useRangeState();
-  const {autoclusters} = useAutoclusterState();
-  const {digesters} = useDigesterState();
-  const {trajectories} = useTrajectoryState();
   const {getFiles} = useTableStateConverter();
 
   const download = useCallback(
@@ -92,36 +35,40 @@ export function useExport() {
 
   const generate = useCallback(() => {
     const files = getFiles();
+    const filesDto: FileDto[] = [];
 
-    const json: ExportJson = {
-      version,
+    for (const file of files) {
+      const fileDto: FileDto = {
+        Index: file.Index,
+        Path: file.Path,
+        Date: file.Date,
+        Site: file.Site,
+        tags: {},
+      };
+
+      const tagNames = Object.keys(file).filter((k) =>
+        k.startsWith(TAG_PREFIX_FOR_TABLE),
+      );
+
+      for (const tagName of tagNames) {
+        const removed = tagName.replace(TAG_PREFIX_FOR_TABLE, '');
+        fileDto.tags[removed] = file[tagName];
+      }
+
+      filesDto.push(fileDto);
+    }
+
+    const json: ConfigDto = {
+      version: VERSION,
       settings,
-      bands,
-      integrations,
-      extractors,
-      indices,
-      reducers,
+      extractions,
       ranges,
-      autoclusters,
-      digesters,
-      trajectories,
-      files,
+      files: filesDto,
     };
 
-    return json;
-  }, [
-    settings,
-    bands,
-    integrations,
-    extractors,
-    reducers,
-    ranges,
-    autoclusters,
-    digesters,
-    trajectories,
-    indices,
-    getFiles,
-  ]);
+    const config = ConfigDto.parse(json);
+    return config;
+  }, [settings, extractions, ranges, getFiles]);
 
   const exportToJson = useCallback(() => {
     const json = generate();

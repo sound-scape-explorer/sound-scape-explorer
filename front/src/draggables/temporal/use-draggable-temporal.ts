@@ -1,7 +1,7 @@
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
-import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
+import {useStorageAggregatedAcousticIndices} from 'src/composables/use-storage-aggregated-acoustic-indices';
 import {useTemporal} from 'src/draggables/temporal/use-temporal';
 import {computed, ref} from 'vue';
 
@@ -18,7 +18,7 @@ const isDisplay = ref<boolean>(true); // whether plot is shown or not
 const isExpanded = ref<boolean>(false);
 
 export function useDraggableTemporal() {
-  const {aggregatedIndices} = useStorageAggregatedIndices();
+  const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
   const {data} = useTemporal();
   const {convertTimestampToIsoDate} = useDate();
   const {selectIndicator} = useTemporal();
@@ -70,18 +70,18 @@ export function useDraggableTemporal() {
   const toggleExpanded = () => (isExpanded.value = !isExpanded.value);
 
   return {
-    hasIndicator: hasIndicator,
-    indicator: indicator,
-    indicators: indicators,
-    display: display,
-    displays: displays,
-    isCandles: isCandles,
-    isCondensed: isCondensed,
-    isDisplay: isDisplay,
-    toggleDisplay: toggleDisplay,
-    handleExportClick: handleExportClick,
-    update: update,
-    isExpanded: isExpanded,
-    toggleExpanded: toggleExpanded,
+    hasIndicator,
+    indicator,
+    indicators,
+    display,
+    displays,
+    isCandles,
+    isCondensed,
+    isDisplay,
+    toggleDisplay,
+    handleExportClick,
+    update,
+    isExpanded,
+    toggleExpanded,
   };
 }

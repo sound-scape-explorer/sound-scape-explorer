@@ -52,10 +52,10 @@ export function sumArraysIndexWise({
   }
 
   return sumArraysIndexWise({
-    arrays: arrays,
+    arrays,
     index: index + 1,
-    result: result,
-    doAveraging: doAveraging,
+    result,
+    doAveraging,
   });
 }
 

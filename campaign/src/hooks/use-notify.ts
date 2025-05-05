@@ -1,6 +1,6 @@
 import {type Intent} from '@blueprintjs/core';
 import {useCallback} from 'react';
-import {useToaster} from 'src/hooks/use-toaster.ts';
+import {useToaster} from 'src/hooks/use-toaster';
 
 export function useNotify() {
   const {toaster} = useToaster();

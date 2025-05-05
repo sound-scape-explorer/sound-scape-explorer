@@ -6,10 +6,10 @@ import {type ForgeConfig} from '@electron-forge/shared-types';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import packageJson from './package.json';
+import packageJson from '../package.json';
 import {ElectronWindow} from './src/windows/ElectronWindow';
 
-const name = packageJson.description;
+const name = packageJson.name;
 const version = process.env?.NEXT_VERSION ?? '0.0.0';
 
 const config: ForgeConfig = {
@@ -23,20 +23,20 @@ const config: ForgeConfig = {
   makers: [
     new MakerDeb({
       options: {
-        name: name,
+        name,
         productName: name,
         genericName: name,
-        version: version,
+        version,
         icon: `${ElectronWindow.iconPath}.png`,
       },
     }),
     new MakerDMG({
-      name: name,
+      name,
       icon: `${ElectronWindow.iconPath}.icns`,
     }),
     new MakerSquirrel({
-      name: name,
-      version: version,
+      name,
+      version,
       title: name,
       setupIcon: `${ElectronWindow.iconPath}.ico`,
     }),

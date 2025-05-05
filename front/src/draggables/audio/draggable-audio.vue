@@ -2,6 +2,7 @@
 import {IonIcon} from '@ionic/vue';
 import {refreshOutline} from 'ionicons/icons';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import DraggableAudioMenu from 'src/draggables/audio/draggable-audio-menu.vue';
 import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
 import {useAudioFileWatcher} from 'src/draggables/audio/use-audio-file-watcher';
@@ -11,6 +12,7 @@ import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurferMounter} from 'src/draggables/audio/use-wavesurfer-mounter';
 
 const {waveform, spectrogram, isLoading} = useDraggableAudio();
+const {colors} = useThemeColors();
 
 useWavesurferMounter();
 useAudioFileWatcher();
@@ -48,10 +50,14 @@ useAudioLifecycles();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+@use 'src/styles/borders';
+@use 'src/styles/animations';
+
 .player {
   display: flex;
   flex-direction: column;
-  width: $s2;
+  width: sizes.$s2;
 }
 
 .spectrogram {
@@ -59,7 +65,7 @@ useAudioLifecycles();
 }
 
 .mt {
-  margin-top: $p0;
+  margin-top: sizes.$p0;
 }
 
 .loading {
@@ -73,19 +79,20 @@ useAudioLifecycles();
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: $white-opaque;
-  backdrop-filter: blur($p0);
+  background-color: v-bind('colors.modalColor');
+  backdrop-filter: blur(sizes.$p0);
 
-  @include border-radius;
+  @include borders.border-radius;
 }
 
 $o1: 50% - 0%;
 $o2: 50% + 8%;
 
+// todo: check me if still OK
 .spin {
-  @include spin;
-
   transform-origin: $o1 $o2;
+
+  @include animations.spin;
 }
 
 .loading-hidden {

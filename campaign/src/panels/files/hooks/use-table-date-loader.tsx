@@ -1,9 +1,8 @@
+import {type FileDto} from '@shared/dtos';
 import {useCallback} from 'react';
-import {type ConfigFile} from 'src/hooks/use-table-state-converter.ts';
-import {type FileAlias} from 'src/panels/files/hooks/use-table-loader.ts';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
-import {formatDateToString, isDateValid} from 'src/utils/dates.ts';
-import {type IndexedXlsxFile} from 'src/utils/xlsx-parser.ts';
+import {type FileAlias} from 'src/panels/files/hooks/use-table-loader';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
+import {formatDateToString, isDateValid} from 'src/utils/dates';
 
 export function useTableDateLoader() {
   const {createColumn} = useTableState();
@@ -28,16 +27,8 @@ export function useTableDateLoader() {
     [load],
   );
 
-  const loadFromXlsx = useCallback(
-    (files: IndexedXlsxFile[]) => {
-      const dates = files.map((f) => formatDateToString(new Date(f.DATE)));
-      load(dates);
-    },
-    [load],
-  );
-
-  const loadFromJson = useCallback(
-    (files: ConfigFile[]) => {
+  const loadFromDto = useCallback(
+    (files: FileDto[]) => {
       const dates = files.map((f) => f.Date);
       load(dates);
     },
@@ -46,7 +37,6 @@ export function useTableDateLoader() {
 
   return {
     loadFromFolder,
-    loadFromXlsx,
-    loadFromJson,
+    loadFromDto,
   };
 }

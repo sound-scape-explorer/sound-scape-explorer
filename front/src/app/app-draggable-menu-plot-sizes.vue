@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {resizeOutline} from 'ionicons/icons';
 import {NButtonGroup} from 'naive-ui';

@@ -6,14 +6,15 @@ import {
 } from 'src/common/setting-defaults';
 import {SettingKey as k} from 'src/common/setting-key';
 import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
+import {useAudioHost} from 'src/composables/use-audio-host';
 import {useClientSettingsDev} from 'src/composables/use-client-settings-dev';
-import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {type ColorFlavor} from 'src/constants';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 const version = useStorage<string>(k.version, d.version);
+const darkMode = useStorage<boolean>(k.darkMode, d.darkMode);
 const plotBackground = useStorage<string>(k.plotBackground, d.plotBackground);
 const timeshift = useStorage<number>(k.timeshift, d.timeshift);
 const isAlphaPreview = useStorage<boolean>(k.isAlphaPreview, d.isAlphaPreview);
@@ -70,7 +71,7 @@ const plotFontSize = useStorage<number>(k.plotFontSize, d.plotFontSize);
 const colorsFlavor = useStorage<ColorFlavor>(k.colorsFlavor, d.colorsFlavor);
 
 export function useClientSettings() {
-  const {audioHost} = useStorageAudioHost();
+  const {audioHost} = useAudioHost();
   const {colormap} = useSpectrogramColormap();
   const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
   const {reset: resetLabels} = useDraggableLabels();
@@ -84,6 +85,7 @@ export function useClientSettings() {
 
   const resetAll = () => {
     version.value = d.version;
+    darkMode.value = d.darkMode;
     plotBackground.value = d.plotBackground;
     timeshift.value = d.timeshift;
     isDetailsAutoOpen.value = d.isDetailsAutoOpen;
@@ -113,25 +115,26 @@ export function useClientSettings() {
   };
 
   return {
-    resetAll: resetAll,
-    version: version,
-    plotBackground: plotBackground,
-    timeshift: timeshift,
-    isDetailsAutoOpen: isDetailsAutoOpen,
-    isAudioAutoOpen: isAudioAutoOpen,
-    isTimezoneActive: isTimezoneActive,
-    isCopyOnSelect2d: isCopyOnSelect2d,
-    isWebGlScatter2d: isWebGlScatter2d,
-    isColorMapSwapped: isColorMapSwapped,
-    isHidingMenuOnDraggableToggle: isHidingMenuOnDraggableToggle,
-    isDevEnabled: isDevEnabled,
-    devAutoLoadView: devAutoLoadView,
-    isSelectedPointHighlighted: isSelectedPointHighlighted,
-    isDetailedExportName: isDetailedExportName,
-    isAlphaPreview: isAlphaPreview,
-    isBetaPreview: isBetaPreview,
-    scatterBorderWidth: scatterBorderWidth,
-    plotFontSize: plotFontSize,
-    colorsFlavor: colorsFlavor,
+    resetAll,
+    version,
+    darkMode,
+    plotBackground,
+    timeshift,
+    isDetailsAutoOpen,
+    isAudioAutoOpen,
+    isTimezoneActive,
+    isCopyOnSelect2d,
+    isWebGlScatter2d,
+    isColorMapSwapped,
+    isHidingMenuOnDraggableToggle,
+    isDevEnabled,
+    devAutoLoadView,
+    isSelectedPointHighlighted,
+    isDetailedExportName,
+    isAlphaPreview,
+    isBetaPreview,
+    scatterBorderWidth,
+    plotFontSize,
+    colorsFlavor,
   };
 }

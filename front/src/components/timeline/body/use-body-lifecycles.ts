@@ -33,6 +33,6 @@ export function useBodyLifecycles({width}: BodySize) {
   watch([elements, position, width, currentIntervalIndex], render);
   watch(canvas, init);
   watch([left, right], update);
-  watch([width, rows], () => updateSize({width: width}));
+  watch([width, rows], () => updateSize({width}));
   watch(elements, () => refreshRows(elements));
 }

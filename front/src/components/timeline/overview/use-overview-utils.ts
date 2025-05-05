@@ -15,7 +15,7 @@ export function useOverviewUtils() {
   };
 
   return {
-    rangeToCanvasX: rangeToCanvasX,
-    canvasToRangeX: canvasToRangeX,
+    rangeToCanvasX,
+    canvasToRangeX,
   };
 }

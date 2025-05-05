@@ -19,9 +19,9 @@ export function useBodyConfig() {
   };
 
   return {
-    rows: rows,
-    rowHeight: rowHeight,
-    refreshRows: refreshRows,
-    elementGaps: elementGaps,
+    rows,
+    rowHeight,
+    refreshRows,
+    elementGaps,
   };
 }

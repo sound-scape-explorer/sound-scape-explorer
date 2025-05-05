@@ -9,9 +9,9 @@ const config = ref<Partial<Config> | null>(null);
 
 export function useAppHeatmap() {
   return {
-    div: div,
-    data: data,
-    layout: layout,
-    config: config,
+    div,
+    data,
+    layout,
+    config,
   };
 }

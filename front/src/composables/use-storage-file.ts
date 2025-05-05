@@ -40,9 +40,9 @@ export function useStorageFile() {
   };
 
   return {
-    file: file,
-    hasFile: hasFile,
-    setFile: setFile,
-    resetFile: resetFile,
+    file,
+    hasFile,
+    setFile,
+    resetFile,
   };
 }

@@ -1,22 +1,21 @@
+import {type RangeDto} from '@shared/dtos';
 import {isAfter, isBefore} from 'date-fns';
 import {useCallback} from 'react';
-import {
-  type ConfigRange,
-  useRangeState,
-} from 'src/panels/metrics/hooks/use-range-state.ts';
-import {useGenericSectionValidation} from 'src/primitives/generic-section/use-generic-section-validation.ts';
+import {useRangeState} from 'src/panels/extractions/hooks/use-range-state.ts';
+import {createDefaultValidation} from 'src/utils/validation';
 
 export function useRangeValidation() {
-  const {createValidation, collectValues} = useGenericSectionValidation();
   const {ranges} = useRangeState();
 
   const isNameValid = useCallback(
-    (range: ConfigRange) => {
+    (range: RangeDto) => {
       if (range.name === '') {
         return false;
       }
 
-      const names = collectValues(ranges, range, 'name');
+      const names = ranges
+        .filter((r) => r.index !== range.index)
+        .map((r) => r.name);
 
       // noinspection RedundantIfStatementJS
       if (names.includes(range.name)) {
@@ -25,22 +24,21 @@ export function useRangeValidation() {
 
       return true;
     },
-    [ranges, collectValues],
+    [ranges],
   );
 
   const isStartValid = useCallback(
-    (range: ConfigRange) =>
-      isBefore(new Date(range.start), new Date(range.end)),
+    (range: RangeDto) => isBefore(new Date(range.start), new Date(range.end)),
     [],
   );
 
   const isEndValid = useCallback(
-    (range: ConfigRange) => isAfter(new Date(range.end), new Date(range.start)),
+    (range: RangeDto) => isAfter(new Date(range.end), new Date(range.start)),
     [],
   );
 
   const validate = useCallback(() => {
-    const v = createValidation();
+    const v = createDefaultValidation();
 
     v.intent = 'primary';
     v.content = `${ranges.length} ${ranges.length > 1 ? 'ranges' : 'range'}`;
@@ -62,7 +60,7 @@ export function useRangeValidation() {
     }
 
     return v;
-  }, [ranges, isStartValid, isEndValid, isNameValid, createValidation]);
+  }, [ranges, isStartValid, isEndValid, isNameValid]);
 
   return {
     isNameValid,

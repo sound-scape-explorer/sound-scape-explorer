@@ -1,7 +1,7 @@
 import {AudioQueryError} from 'src/common/Errors';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {type BlockDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
+import {useAudioHost} from 'src/composables/use-audio-host';
+import {type AggregatedWindow} from 'src/composables/use-intervals';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 
 interface Q {
   response: Response | null;
@@ -19,10 +19,14 @@ const q = async (url: string): Promise<Q> => {
     }
 
     return {
-      response: response,
-      err: err,
+      response,
+      err,
     };
   } catch (err) {
+    if (err instanceof Error) {
+      console.error(err);
+    }
+
     return {
       response: null,
       err: new AudioQueryError(`could not fetch ${url}`),
@@ -41,8 +45,8 @@ interface AudioRootDto {
 }
 
 export function useAudioQuery() {
-  const {audioHost: host} = useStorageAudioHost();
-  const {integration} = useIntegrationSelection();
+  const {integration} = useViewSelectionNew();
+  const {audioHost: host} = useAudioHost();
 
   const queryRoot = async () => {
     const {response, err} = await q(host.value);
@@ -55,15 +59,15 @@ export function useAudioQuery() {
     return data;
   };
 
-  const queryFile = async (block: BlockDetails): Promise<ArrayBuffer> => {
-    if (block === null || integration.value === null) {
+  const queryFile = async (window: AggregatedWindow): Promise<ArrayBuffer> => {
+    if (window === null || integration.value === null) {
       throw new AudioQueryError('not ready');
     }
 
-    const start = block.fileStart;
-    const end = start + integration.value.duration;
+    const start = window.relative.start;
+    const end = window.relative.end;
     const route = new URL(`${host.value}/get`);
-    route.searchParams.append('file', block.file);
+    route.searchParams.append('file', window.file.Path);
     route.searchParams.append('start', start.toString());
     route.searchParams.append('end', end.toString());
 
@@ -78,7 +82,7 @@ export function useAudioQuery() {
   };
 
   return {
-    queryFile: queryFile,
-    queryRoot: queryRoot,
+    queryFile,
+    queryRoot,
   };
 }

@@ -1,0 +1,89 @@
+import {Button, Section} from '@blueprintjs/core';
+import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {FilterList, Help, Plus} from '@blueprintjs/icons';
+import {ICON_SIZE} from '@shared/constants';
+import clsx from 'clsx';
+import {useMemo, useState} from 'react';
+import styles from 'src/panels/extractions/components/config-extractors.module.scss';
+import {ExtractionExtractorCard} from 'src/panels/extractions/components/extraction-extractor-card.tsx';
+import {ExtractionExtractorsDrawerContent} from 'src/panels/extractions/components/extraction-extractors-drawer-content.tsx';
+import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
+import {useExtractorSlug} from 'src/panels/extractions/hooks/use-extractor-slug';
+import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
+import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
+import {Drawer} from 'src/primitives/drawer.tsx';
+import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
+import {SmallCallout} from 'src/primitives/small-callout.tsx';
+
+interface Props {
+  extraction: ExtractionConfigWithId;
+}
+
+export function ExtractionExtractors({extraction}: Props) {
+  const {extractors, addExtractor} = useExtractorState(extraction);
+  const {hasTemplate} = useExtractionTemplates(extraction);
+  const {getSlug} = useExtractorSlug();
+  const {validate} = useExtractorValidation();
+  const validation = useMemo(
+    () => validate(extraction),
+    [extraction, validate],
+  );
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Section
+      title="Extractors"
+      icon={<FilterList size={ICON_SIZE} />}
+      compact
+      collapsible
+      collapseProps={{
+        isOpen: open,
+        onToggle: () => setOpen((o) => !o),
+      }}
+      rightElement={
+        validation && (
+          <>
+            <Drawer content={<ExtractionExtractorsDrawerContent />}>
+              <Button icon={<Help size={ICON_SIZE} />} />
+            </Drawer>
+            <SmallCallout intent={validation.intent}>
+              {validation.content}
+            </SmallCallout>
+          </>
+        )
+      }
+    >
+      <SectionCard
+        className={clsx(genericStyles.row, genericStyles.narrow, styles.row)}
+      >
+        <div>
+          <Button
+            size="small"
+            icon={<Plus size={ICON_SIZE} />}
+            fill
+            style={{margin: 2}}
+            onClick={addExtractor}
+            disabled={hasTemplate}
+          />
+        </div>
+        <span>idx</span>
+        <span>name</span>
+        <span>impl</span>
+        <span>window (ms)</span>
+        <span>hop (ms)</span>
+        <span>adv.</span>
+      </SectionCard>
+
+      {extractors
+        .sort((a, b) => a.index - b.index)
+        .map((extractor) => (
+          <ExtractionExtractorCard
+            key={getSlug(extractor)}
+            extraction={extraction}
+            extractor={extractor}
+          />
+        ))}
+    </Section>
+  );
+}

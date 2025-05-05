@@ -1,6 +1,3 @@
-import {type ComputationStrategy} from '@shared/enums.ts';
-import {atom, useAtom} from 'jotai';
-import {type DragEvent, useCallback} from 'react';
 import {
   AUDIO_HOST_DEFAULT,
   AUDIO_PATH_DEFAULT,
@@ -13,10 +10,13 @@ import {
   STORAGE_PATH_DEFAULT,
   TIMELINE_ORIGIN_DEFAULT,
   TIMEZONE_DEFAULT,
-} from 'src/constants.ts';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
+} from '@shared/constants';
+import {type SettingsDto} from '@shared/dtos';
+import {atom, useAtom} from 'jotai';
+import {type DragEvent, useCallback} from 'react';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
-const settingsAtom = atom<Settings>({
+const settingsAtom = atom<SettingsDto>({
   storagePath: STORAGE_PATH_DEFAULT,
   audioPath: AUDIO_PATH_DEFAULT,
   expectedSampleRate: SAMPLE_RATE_DEFAULT,
@@ -30,26 +30,12 @@ const settingsAtom = atom<Settings>({
   memoryLimit: MEMORY_LIMIT_DEFAULT, // gigabytes
 });
 
-export interface Settings {
-  storagePath: string;
-  audioPath: string;
-  expectedSampleRate: number;
-  timelineOrigin: string;
-  audioHost: string;
-  timezone: string;
-  computationStrategy: ComputationStrategy;
-  computationDimensions: number;
-  computationIterations: number;
-  displaySeed: number;
-  memoryLimit: number;
-}
-
 export function useSettingsState() {
-  const [settings, setSettings] = useAtom<Settings>(settingsAtom);
+  const [settings, setSettings] = useAtom<SettingsDto>(settingsAtom);
   const {updatePathIntents} = useTableState();
 
   const update = useCallback(
-    <K extends keyof Settings>(key: K, value: Settings[K]) => {
+    <K extends keyof SettingsDto>(key: K, value: SettingsDto[K]) => {
       if (key === 'audioPath') {
         updatePathIntents(value as string);
       }

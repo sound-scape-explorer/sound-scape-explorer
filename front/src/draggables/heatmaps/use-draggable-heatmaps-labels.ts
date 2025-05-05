@@ -16,9 +16,15 @@ export function useDraggableHeatmapsLabels() {
     b.value = savedA;
   };
 
+  const reset = () => {
+    a.value = null;
+    b.value = null;
+  };
+
   return {
-    a: a,
-    b: b,
-    swap: swap,
+    a,
+    b,
+    swap,
+    reset,
   };
 }

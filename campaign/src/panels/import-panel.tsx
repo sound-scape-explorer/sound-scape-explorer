@@ -1,5 +1,5 @@
 import {Card, ProgressBar, Section} from '@blueprintjs/core';
-import {useDropzone} from 'src/hooks/use-dropzone.ts';
+import {useDropzone} from 'src/hooks/use-dropzone';
 import {Dropzone} from 'src/primitives/dropzone.tsx';
 
 import styles from './import-panel.module.scss';

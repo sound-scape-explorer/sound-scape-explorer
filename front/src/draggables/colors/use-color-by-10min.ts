@@ -29,6 +29,6 @@ export function useColorBy10min() {
   };
 
   return {
-    getColorByTenMinutes: getColorByTenMinutes,
+    getColorByTenMinutes,
   };
 }

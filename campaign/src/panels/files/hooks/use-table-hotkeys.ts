@@ -1,7 +1,7 @@
 import {type HotkeyConfig} from '@blueprintjs/core';
-import {useTableDelete} from 'src/panels/files/hooks/use-table-delete.ts';
-import {useTablePaste} from 'src/panels/files/hooks/use-table-paste.ts';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
+import {useTableDelete} from 'src/panels/files/hooks/use-table-delete';
+import {useTablePaste} from 'src/panels/files/hooks/use-table-paste';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
 export function useTableHotkeys() {
   const {handlePaste} = useTablePaste();

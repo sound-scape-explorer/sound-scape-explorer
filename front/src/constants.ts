@@ -1,3 +1,5 @@
+export const STRING_DELIMITER = '|||';
+
 export const LINEBREAK = '%0D%0A';
 
 export const ALERT_TIMER = 3000;
@@ -7,10 +9,10 @@ export const EXPORT_FILENAME = 'SSE';
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 export const GAIN = {
-  default: 100.0,
-  step: 50.0,
+  default: 1.0,
+  step: 10.0,
   max: 500.0,
-  min: 50.0,
+  min: 1.0,
 };
 
 const waveDampening = 2;
@@ -66,13 +68,10 @@ export const LINK_DISCORD = 'https://discord.gg/eRsQPDBeXg';
 
 export const TIMEOUT = 240;
 
-export const DEV_AUTO_REDUCER = 'umap (3d)';
-
-export const LABEL_SITE = '__SITE';
+export const SITE_AS_LABEL = '__SITE';
+export const AUTOCLUSTER_AS_LABEL = 'AUTOCLUSTER';
 
 export const LOWER_DECILE_SUFFIX = '_lower_decile';
 export const UPPER_DECILE_SUFFIX = '_upper_decile';
 
-export const RANGE_SKIP = '**CUSTOM**';
-
-export const DELIMITER = '|||';
+export const RANGE_CUSTOM = '**CUSTOM**';

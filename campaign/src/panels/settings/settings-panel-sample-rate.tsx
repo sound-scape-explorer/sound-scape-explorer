@@ -1,7 +1,7 @@
 import {Tooltip} from '@blueprintjs/core';
 import clsx from 'clsx';
-import {useSettingsState} from 'src/hooks/use-settings-state.ts';
-import {useSettingsValidation} from 'src/hooks/use-settings-validation.ts';
+import {useSettingsState} from 'src/hooks/use-settings-state';
+import {useSettingsValidation} from 'src/hooks/use-settings-validation';
 import styles from 'src/panels/settings/settings-panel.module.scss';
 import {NumberInput} from 'src/primitives/number-input';
 

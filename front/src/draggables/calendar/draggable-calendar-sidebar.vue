@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {chevronExpand} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
@@ -23,7 +23,9 @@ const {toggle} = useDraggableCalendarExpand();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/fx';
+
 .rotate {
-  @include rotate-90;
+  @include fx.rotate-90;
 }
 </style>

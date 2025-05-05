@@ -1,2 +1,0 @@
-class TrajectoryConfigError(Exception):
-    pass

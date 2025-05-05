@@ -1,11 +1,11 @@
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {type LabelProps} from 'src/draggables/labels/label.vue';
 import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
 import {computed, ref} from 'vue';
 
 export function useLabel(props: LabelProps) {
-  const {labels} = useStorageLabels();
+  const {sets} = useLabelSets();
   const {updateSelection, selection} = useLabelSelection();
   const {criteria} = useColorSelection();
 
@@ -28,12 +28,8 @@ export function useLabel(props: LabelProps) {
   };
 
   const invertSelection = () => {
-    if (labels.value === null) {
-      return;
-    }
-
     const oldSelection = selection.value[props.property];
-    const uniques = labels.value[props.property];
+    const uniques = sets.value[props.property];
 
     const reverseSelection = [];
 
@@ -57,12 +53,12 @@ export function useLabel(props: LabelProps) {
   };
 
   return {
-    invertSelection: invertSelection,
-    resetSelection: resetSelection,
-    hasNoSelection: hasNoSelection,
-    isShowing: isShowing,
-    toggleShowing: toggleShowing,
-    isCurrent: isCurrent,
-    openCurrent: openCurrent,
+    invertSelection,
+    resetSelection,
+    hasNoSelection,
+    isShowing,
+    toggleShowing,
+    isCurrent,
+    openCurrent,
   };
 }

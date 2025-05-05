@@ -65,11 +65,11 @@ export function useAudioAnalyser() {
   };
 
   return {
-    create: create,
-    analyser: analyser,
-    update: update,
-    isClipping: isClipping,
-    fade: fade,
-    rms: rms,
+    create,
+    analyser,
+    update,
+    isClipping,
+    fade,
+    rms,
   };
 }

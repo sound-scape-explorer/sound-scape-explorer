@@ -1,15 +1,18 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {useElementSize} from '@vueuse/core';
 import {useBodyHandlers} from 'src/components/timeline/body/use-body-handlers';
 import {useBodyLifecycles} from 'src/components/timeline/body/use-body-lifecycles';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 
 const {container, canvas, height} = useTimelineDom().body;
 const {width} = useElementSize(container);
 const {handleMouseLeave, handleMouseMove, isHovering, handleClick} =
   useBodyHandlers();
 
-useBodyLifecycles({width: width});
+const {colors} = useThemeColors();
+
+useBodyLifecycles({width});
 </script>
 
 <template>
@@ -30,16 +33,20 @@ useBodyLifecycles({width: width});
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/borders';
+@use 'src/styles/scrolls';
+@use 'src/styles/sizes';
+
 .container {
   display: flex;
   overflow: auto;
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  max-height: $h0;
+  max-height: sizes.$h0;
 
-  @include border-0;
-  @include tiny-scrollbar;
+  @include borders.border-0(v-bind('colors.borderColor'));
+  @include scrolls.tiny-scrollbar;
 }
 
 .hovering {

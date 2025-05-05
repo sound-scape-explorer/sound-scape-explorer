@@ -68,11 +68,11 @@ export function useAppCandles(props: AppCandlesProps) {
     });
 
   return {
-    container: container,
-    data: data,
-    layout: layout,
-    plotBackground: plotBackground,
-    mount: mount,
-    render: render,
+    container,
+    data,
+    layout,
+    plotBackground,
+    mount,
+    render,
   };
 }

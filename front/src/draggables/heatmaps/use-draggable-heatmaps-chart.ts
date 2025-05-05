@@ -1,9 +1,6 @@
 import {DraggableHeatmapsError} from 'src/common/Errors';
-import {
-  type Digested,
-  useStorageDigested,
-} from 'src/composables/use-storage-digested';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
+import {type MetricData, useMetricData} from 'src/composables/use-metric-data';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
@@ -16,92 +13,85 @@ const series = ref<number[][]>([]);
 
 export function useDraggableHeatmapsChart() {
   const {a, b} = useDraggableHeatmapsLabels();
-  const {labelPropertiesActual, labelSetsActual} = useStorageLabels();
-  const {digested} = useStorageDigested();
+  const {actual} = useLabelSets();
+  const {metricData} = useMetricData();
   const {update: updateRange} = useDraggableHeatmapsRange();
   const {isPairing} = useDraggableHeatmaps();
 
   const updateTitle = (
-    digested: Digested,
+    data: MetricData,
     a: string,
     b: string | null = null,
   ) => {
     if (isPairing.value) {
-      title.value = `${digested.digester.name} - ${a} - ${b}`;
+      title.value = `${data.metric.impl} - ${a} - ${b}`;
       return;
     }
 
-    title.value = `${digested.digester.name} - ${a}`;
+    title.value = `${data.metric.impl} - ${a}`;
   };
 
   const getLabelData = (label: string) => {
-    if (
-      labelPropertiesActual.value === null ||
-      labelSetsActual.value === null
-    ) {
+    if (actual.value === null) {
       throw new DraggableHeatmapsError('labels not available');
     }
 
-    const index = labelPropertiesActual.value.indexOf(label);
+    const labelProperties = Object.keys(actual.value);
+    const labelValues = Object.values(actual.value);
+
+    const index = labelProperties.indexOf(label);
 
     if (index === -1) {
       const msg = `could not find label property ${label}`;
       throw new DraggableHeatmapsError(msg);
     }
 
-    const possibleValues = labelSetsActual.value[index];
+    const possibleValues = labelValues[index];
 
     return {
-      index: index,
-      possibleValues: possibleValues,
+      index,
+      possibleValues,
     };
   };
 
   const updateHeatmapData = () => {
-    if (digested.value === null || a.value === null) {
+    if (metricData.value === null || a.value === null) {
       return;
     }
 
-    updateTitle(digested.value, a.value);
-    updateRange(digested.value);
+    updateTitle(metricData.value, a.value);
+    updateRange(metricData.value);
 
-    const {index, possibleValues} = getLabelData(a.value);
+    const {possibleValues} = getLabelData(a.value);
 
     x.value = possibleValues;
     y.value = [];
 
-    // @ts-expect-error: clumsy typing
-    series.value = digested.value.values[index];
+    series.value = metricData.value.values;
   };
 
   const updateHeatmapDataPairing = () => {
-    if (digested.value === null || a.value === null || b.value === null) {
+    if (metricData.value === null || a.value === null || b.value === null) {
       return;
     }
 
-    updateTitle(digested.value, a.value, b.value);
-    updateRange(digested.value);
+    updateTitle(metricData.value, a.value, b.value);
+    updateRange(metricData.value);
 
-    const {index: aIndex, possibleValues: aPossibleValues} = getLabelData(
-      a.value,
-    );
-    const {index: bIndex, possibleValues: bPossibleValues} = getLabelData(
-      b.value,
-    );
+    const {possibleValues: aPossibleValues} = getLabelData(a.value);
+    const {possibleValues: bPossibleValues} = getLabelData(b.value);
 
     x.value = aPossibleValues;
     y.value = bPossibleValues;
-
-    // @ts-expect-error: clumsy typing
-    series.value = digested.value.values[aIndex][bIndex];
+    series.value = metricData.value.values;
   };
 
   return {
-    title: title,
-    x: x,
-    y: y,
-    series: series,
-    updateHeatmapData: updateHeatmapData,
-    updateHeatmapDataPairing: updateHeatmapDataPairing,
+    title,
+    x,
+    y,
+    series,
+    updateHeatmapData,
+    updateHeatmapDataPairing,
   };
 }

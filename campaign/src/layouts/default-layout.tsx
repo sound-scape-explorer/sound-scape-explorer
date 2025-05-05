@@ -14,9 +14,9 @@ import {Flash, Moon} from '@blueprintjs/icons';
 import clsx from 'clsx';
 import {Toaster} from 'src/components/toaster.tsx';
 import {usePanels} from 'src/hooks/use-panels.tsx';
-import {type TabIndex, useTabNavigation} from 'src/hooks/use-tab-navigation.ts';
-import {useTheme} from 'src/hooks/use-theme.ts';
-import {useTableLoader} from 'src/panels/files/hooks/use-table-loader.ts';
+import {type TabIndex, useTabNavigation} from 'src/hooks/use-tab-navigation';
+import {useTheme} from 'src/hooks/use-theme';
+import {useTableLoader} from 'src/panels/files/hooks/use-table-loader';
 
 import styles from './default-layout.module.scss';
 
@@ -63,13 +63,8 @@ export function DefaultLayout() {
                 disabled={!isLoaded}
               />
               <Tab
-                id="config"
-                title="Config"
-                disabled={!isLoaded}
-              />
-              <Tab
-                id="metrics"
-                title="Metrics"
+                id="extractions"
+                title="Extractions"
                 disabled={!isLoaded}
               />
               <Tab

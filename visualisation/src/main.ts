@@ -1,4 +1,5 @@
 import {app, BrowserWindow} from 'electron';
+import {StorageBridge} from 'src/bridges/StorageBridge';
 
 import {AudioBridge} from './bridges/AudioBridge';
 import {CampaignBridge} from './bridges/CampaignBridge';
@@ -12,12 +13,15 @@ if (!isSingleInstance) {
   app.quit();
 } else {
   const audioBridge = new AudioBridge();
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const frontBridge = new FrontBridge();
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const campaignBridge = new CampaignBridge();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const storageBridge = new StorageBridge();
 
   // Handle creating/removing shortcuts on Windows when installing/uninstalling.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   if (require('electron-squirrel-startup')) {
     app.quit();
   }

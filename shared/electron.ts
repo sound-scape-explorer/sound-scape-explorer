@@ -1,30 +1,32 @@
 // noinspection ES6PreferShortImport
 
-import {
-  getDirectoryPath,
-} from '../visualisation/src/preload/get-directory-path'
-import {
-  getPathExistence,
-} from '../visualisation/src/preload/get-path-existence'
-import {
-  startAudioService,
-} from '../visualisation/src/preload/start-audio-service'
-import {getAudioStatus} from '../visualisation/src/preload/get-audio-status'
-import {
-  stopAudioService,
-} from '../visualisation/src/preload/stop-audio-service'
-import {
-  createFrontWindow,
-} from '../visualisation/src/preload/create-front-window'
+import {checkPath} from '../visualisation/src/preload/check-path';
 import {
   createCampaignWindow,
-} from '../visualisation/src/preload/create-campaign-window'
-import {joinPath} from '../visualisation/src/preload/join-path'
+} from '../visualisation/src/preload/create-campaign-window';
+import {
+  createFrontWindow,
+} from '../visualisation/src/preload/create-front-window';
 import {
   findCommonFolder,
-} from '../visualisation/src/preload/find-common-folder'
-import {checkPath} from '../visualisation/src/preload/check-path'
-import {listFiles} from '../visualisation/src/preload/list-files'
+} from '../visualisation/src/preload/find-common-folder';
+import {getAudioStatus} from '../visualisation/src/preload/get-audio-status';
+import {
+  getDirectoryPath,
+} from '../visualisation/src/preload/get-directory-path';
+import {
+  getPathExistence,
+} from '../visualisation/src/preload/get-path-existence';
+import {getStoragePath} from '../visualisation/src/preload/get-storage-path';
+import {joinPath} from '../visualisation/src/preload/join-path';
+import {listFiles} from '../visualisation/src/preload/list-files';
+import {setStoragePath} from '../visualisation/src/preload/set-storage-path';
+import {
+  startAudioService,
+} from '../visualisation/src/preload/start-audio-service';
+import {
+  stopAudioService,
+} from '../visualisation/src/preload/stop-audio-service';
 
 export interface ElectronAPI {
   getDirectoryPath: typeof getDirectoryPath;
@@ -38,5 +40,7 @@ export interface ElectronAPI {
   findCommonFolder: typeof findCommonFolder;
   checkPath: typeof checkPath;
   listFiles: typeof listFiles;
+  getStoragePath: typeof getStoragePath;
+  setStoragePath: typeof setStoragePath;
 }
 

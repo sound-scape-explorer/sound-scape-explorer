@@ -1,17 +1,33 @@
 {
   "name": "sound-scape-explorer",
+  "version": "13.9.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "author": {
+    "name": "Bamdad Sabbagh",
+    "email": "hi@bamdad.fr",
+    "url": "https://www.bamdad.fr/"
+  },
   "scripts": {
     "audio": "cd audio && pnpm dev",
-    "audio:build:electron": "cd audio && pnpm build",
+    "build:electron": "pnpm build:electron:audio && pnpm build:electron:campaign && pnpm build:electron:front",
+    "build:electron:audio": "cd audio && pnpm build && cd ..",
+    "build:electron:campaign": "cd campaign && pnpm build:electron && cd ..",
+    "build:electron:front": "cd front && pnpm build:electron && cd ..",
     "campaign": "cd campaign && pnpm dev && cd ..",
     "campaign:build": "cd campaign && pnpm build && ..",
-    "campaign:build:electron": "cd campaign && pnpm build:electron && cd ..",
+    "convert:labels": "node --loader ts-node/esm shared/convert-labels-to-tags.ts",
     "dev": "pnpm front",
     "dev:audio": "pnpm front:audio",
     "front": "cd front && pnpm dev",
-    "front:build:electron": "cd front && pnpm build:electron",
+    "generate": "pnpm generate:enums",
+    "generate:enums": "node --loader ts-node/esm shared/generate-enums.ts",
+    "install:all": "pnpm install:root && pnpm install:audio && pnpm install:front && pnpm install:campaign",
+    "install:root": "pnpm i",
     "install:audio": "cd audio && pnpm i && cd ..",
     "install:front": "cd front && pnpm i && cd ..",
+    "install:campaign": "cd campaign && pnpm i && cd ..",
     "install:processing": "python3.10 -m venv venv && . venv/bin/activate && cd processing && pip install . && sse_download",
     "start": "pnpm dev",
     "test:git:unix": "bin/test-git.sh",
@@ -32,7 +48,7 @@
     "vis:prepare-bins": "pnpm visualisation:prepare-bins",
     "visualisation": "cd visualisation && npm run start",
     "visualisation:build": "cd visualisation && npm run make",
-    "visualisation:prebuild": "pnpm visualisation:prebuild:clean && pnpm front:build:electron && pnpm audio:build:electron && pnpm campaign:build:electron && pnpm visualisation:prebuild:move",
+    "visualisation:prebuild": "pnpm visualisation:prebuild:clean && pnpm build:electron && pnpm visualisation:prebuild:move",
     "visualisation:prepare-bins": "cp /usr/bin/node visualisation/bin && cp /usr/bin/ffmpeg visualisation/bin && cp /usr/bin/ffprobe visualisation/bin",
     "visualisation:prebuild:windows": "pnpm visualisation:prebuild:clean && pnpm front:build:electron && pnpm audio:build:electron && pnpm visualisation:prebuild:move:windows",
     "visualisation:prebuild:clean": "rimraf visualisation/audio && rimraf visualisation/front && rimraf visualisation/campaign",
@@ -40,8 +56,31 @@
     "visualisation:prebuild:move:windows": "move .\\audio\\dist .\\visualisation\\audio & move .\\front\\dist .\\visualisation\\front & move .\\\\campaign\\\\dist .\\\\visualisation\\\\campaign"
   },
   "devDependencies": {
+    "@eslint/js": "^9.26.0",
+    "@eslint/json": "^0.12.0",
+    "@stylistic/eslint-plugin": "^4.2.0",
+    "@types/node": "^22.15.17",
+    "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "eslint": "^9.26.0",
+    "eslint-plugin-de-morgan": "^1.2.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.1.0",
+    "prettier": "^3.5.3",
     "rimraf": "^5.0.1",
-    "typescript": "^5.8.2"
+    "sass": "^1.87.0",
+    "sass-reset": "^1.0.4",
+    "stylelint": "^16.19.1",
+    "stylelint-config-standard-scss": "^14.0.0",
+    "stylelint-config-standard-vue": "^1.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.32.0"
   },
-  "version": "13.9.0"
+  "dependencies": {
+    "zod": "^3.24.4"
+  }
 }

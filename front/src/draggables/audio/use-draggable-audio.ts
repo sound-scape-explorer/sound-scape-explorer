@@ -8,8 +8,8 @@ export function useDraggableAudio() {
   const {isLoading} = useAudioFile();
 
   return {
-    waveform: waveform,
-    spectrogram: spectrogram,
-    isLoading: isLoading,
+    waveform,
+    spectrogram,
+    isLoading,
   };
 }

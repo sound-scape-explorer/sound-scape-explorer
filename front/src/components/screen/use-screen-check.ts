@@ -30,6 +30,6 @@ export function useScreenCheck() {
   };
 
   return {
-    isPointInPolygon: isPointInPolygon,
+    isPointInPolygon,
   };
 }

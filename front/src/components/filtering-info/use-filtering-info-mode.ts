@@ -30,10 +30,10 @@ export function useFilteringInfoMode() {
   };
 
   return {
-    mode: mode,
-    cycleMode: cycleMode,
-    isIntervalMode: isIntervalMode,
-    isCollectMode: isCollectMode,
-    isFilterMode: isFilterMode,
+    mode,
+    cycleMode,
+    isIntervalMode,
+    isCollectMode,
+    isFilterMode,
   };
 }

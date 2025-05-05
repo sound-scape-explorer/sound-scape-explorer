@@ -1,11 +1,10 @@
 import numpy as np
-from pandas import DataFrame
 
-from processing.new.FusedLabel import FusedLabel
+from processing.common.AggregatedTag import AggregatedTag
 
 
-def sort_dataframe(dataframe: DataFrame, label: FusedLabel) -> DataFrame:
-    order = np.argsort(label.uniques_unsorted)
-    dataframe = dataframe[:, order]
-    dataframe = dataframe[order, :]
-    return dataframe
+def sort_dataframe(df: np.ndarray, label: AggregatedTag):
+    order = np.argsort(label.uniques_occurrence)
+    df = df[:, order]
+    df = df[order, :]
+    return df

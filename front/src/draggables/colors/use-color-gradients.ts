@@ -35,9 +35,9 @@ export function useColorGradients() {
   });
 
   return {
-    cycleDayColors: cycleDayColors,
-    cycleDayLabels: cycleDayLabels,
-    dayColors: dayColors,
-    userColors: userColors,
+    cycleDayColors,
+    cycleDayLabels,
+    dayColors,
+    userColors,
   };
 }

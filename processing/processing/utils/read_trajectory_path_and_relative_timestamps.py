@@ -1,35 +1,33 @@
-from typing import List
-
 import pandas
-from torch.utils.data import Dataset
+from h5py import Dataset
 
 from processing.common.ContinuousTimeTrajectory import ContinuousTimeTrajectory
-from processing.new.TrajectoryConfigNew import TrajectoryConfigNew
+from processing.config.TrajectoryConfig import TrajectoryConfig
 
 
 def read_trajectory_path_and_relative_timestamps(
-    trajectory: TrajectoryConfigNew,
+    trajectory: TrajectoryConfig,
     features: Dataset,
-    timestamps: Dataset,
-    labels_properties: List[str],
-    labels_values: Dataset,
-    label_property: str,
-    label_value: str,
+    timestamps: list[int],
+    all_tag_names: list[str],
+    all_tag_values: list[list[str]],
+    tag_name: str,
+    tag_value: str,
 ):
     ctt = ContinuousTimeTrajectory()
     ctt.load(
-        features=features,
+        embeddings=features,
         timestamps=timestamps,
         timestamp_start=trajectory.start,
         timestamp_end=trajectory.end,
-        labels_properties=labels_properties,
-        labels_values=labels_values,
+        all_tag_names=all_tag_names,
+        all_tag_values=all_tag_values,
         step=trajectory.step,
     )
 
     ctt.calculate(
-        trajectory_label_property=label_property,
-        trajectory_label_value=label_value,
+        trajectory_tag_name=tag_name,
+        trajectory_tag_value=tag_value,
     )
 
     # TODO: Add typings

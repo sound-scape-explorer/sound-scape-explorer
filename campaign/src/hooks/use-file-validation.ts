@@ -2,7 +2,7 @@ import {useCallback, useMemo} from 'react';
 import {
   type ColumnKey,
   useTableState,
-} from 'src/panels/files/hooks/use-table-state.ts';
+} from 'src/panels/files/hooks/use-table-state';
 
 export function useFileValidation() {
   const {state} = useTableState();

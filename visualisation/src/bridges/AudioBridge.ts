@@ -2,7 +2,7 @@ import {type ChildProcessWithoutNullStreams, spawn} from 'node:child_process';
 import {existsSync} from 'node:fs';
 import path from 'node:path';
 
-import commandExists from 'command-exists';
+import {sync} from 'command-exists';
 import {ipcMain, ipcRenderer} from 'electron';
 
 import {Channels} from '../channels';
@@ -36,18 +36,18 @@ export class AudioBridge {
   }
 
   public static async startFromRenderer(audioPath: string) {
-    await ipcRenderer.invoke(Channels.AudioStart, [
+    await ipcRenderer.invoke(Channels.AUDIO_START, [
       AudioBridge.servicePath,
       audioPath,
     ]);
   }
 
   public static async stopFromRenderer() {
-    await ipcRenderer.invoke(Channels.AudioStop);
+    await ipcRenderer.invoke(Channels.AUDIO_STOP);
   }
 
   public static async getStatusFromRenderer() {
-    return (await ipcRenderer.invoke(Channels.AudioStatus)) as boolean;
+    return (await ipcRenderer.invoke(Channels.AUDIO_STATUS)) as boolean;
   }
 
   public stop() {
@@ -66,7 +66,7 @@ export class AudioBridge {
   }
 
   private validateFfmpeg() {
-    const ffmpegExists = commandExists.sync(this.ffmpegResolver.path);
+    const ffmpegExists = sync(this.ffmpegResolver.path);
 
     if (!ffmpegExists) {
       throw new Error('ffmpeg could not be found');
@@ -74,7 +74,7 @@ export class AudioBridge {
   }
 
   private validateFfprobe() {
-    const ffprobeExists = commandExists.sync(this.ffprobeResolver.path);
+    const ffprobeExists = sync(this.ffprobeResolver.path);
 
     if (!ffprobeExists) {
       throw new Error('ffprobe could not be found');
@@ -126,7 +126,7 @@ export class AudioBridge {
 
   private setStartHandler() {
     ipcMain.handle(
-      Channels.AudioStart,
+      Channels.AUDIO_START,
       (_, [modulePath, audioPath]: [string, string]) => {
         this.start(modulePath, audioPath);
       },
@@ -134,10 +134,10 @@ export class AudioBridge {
   }
 
   private setStopHandler() {
-    ipcMain.handle(Channels.AudioStop, this.stop.bind(this));
+    ipcMain.handle(Channels.AUDIO_STOP, this.stop.bind(this));
   }
 
   private setStatusHandler() {
-    ipcMain.handle(Channels.AudioStatus, this.getStatus.bind(this));
+    ipcMain.handle(Channels.AUDIO_STATUS, this.getStatus.bind(this));
   }
 }

@@ -1,13 +1,12 @@
+import {type FileDto} from '@shared/dtos';
 import {atom, useAtom} from 'jotai';
 import {useCallback} from 'react';
-import {type ConfigFile} from 'src/hooks/use-table-state-converter.ts';
 import {useTableDateLoader} from 'src/panels/files/hooks/use-table-date-loader.tsx';
 import {useTableIndexLoader} from 'src/panels/files/hooks/use-table-index-loader.tsx';
-import {useTableLabelLoader} from 'src/panels/files/hooks/use-table-label-loader.ts';
 import {useTablePathLoader} from 'src/panels/files/hooks/use-table-path-loader.tsx';
 import {useTableSiteLoader} from 'src/panels/files/hooks/use-table-site-loader.tsx';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
-import {type IndexedXlsxFile} from 'src/utils/xlsx-parser.ts';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
+import {useTableTagsLoader} from 'src/panels/files/hooks/use-table-tags-loader';
 
 const isLoadedAtom = atom<boolean>(false);
 
@@ -23,7 +22,7 @@ export function useTableLoader() {
   const paths = useTablePathLoader();
   const dates = useTableDateLoader();
   const sites = useTableSiteLoader();
-  const labels = useTableLabelLoader();
+  const tags = useTableTagsLoader();
   const {clearHistory} = useTableState();
 
   const finishLoad = useCallback(() => {
@@ -42,34 +41,21 @@ export function useTableLoader() {
     [finishLoad, indices, paths, dates, sites],
   );
 
-  const loadFromXlsx = useCallback(
-    (files: IndexedXlsxFile[]) => {
-      indices.loadFromXlsx(files);
-      paths.loadFromXlsx(files);
-      dates.loadFromXlsx(files);
-      sites.loadFromXlsx(files);
-      labels.loadFromXlsx(files);
+  const loadFromDto = useCallback(
+    (files: FileDto[]) => {
+      indices.loadFromDto(files);
+      paths.loadFromDto(files);
+      dates.loadFromDto(files);
+      sites.loadFromDto(files);
+      tags.loadFromDto(files);
       finishLoad();
     },
-    [finishLoad, indices, paths, dates, sites, labels],
-  );
-
-  const loadFromJson = useCallback(
-    (files: ConfigFile[]) => {
-      indices.loadFromJson(files);
-      paths.loadFromJson(files);
-      dates.loadFromJson(files);
-      sites.loadFromJson(files);
-      labels.loadFromJson(files);
-      finishLoad();
-    },
-    [finishLoad, indices, paths, dates, sites, labels],
+    [finishLoad, indices, paths, dates, sites, tags],
   );
 
   return {
     isLoaded,
     loadFromFolder,
-    loadFromXlsx,
-    loadFromJson,
+    loadFromDto,
   };
 }

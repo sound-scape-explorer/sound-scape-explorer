@@ -1,7 +1,7 @@
-from typing import Any, List
+from typing import Any
 
 
-def get_uniques_unsorted(array: List[Any]) -> List[str]:
+def get_uniques_unsorted(array: list[Any]) -> list[str]:
     uniques = []
 
     for element in array:

@@ -4,7 +4,7 @@ export function checkPath(path: string) {
   const stats = fs.statSync(path);
 
   return {
-    path: path,
+    path,
     isDirectory: stats.isDirectory(),
     isFile: stats.isFile(),
   };

@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
 import {useAppMenu} from 'src/app/menu/use-app-menu';
@@ -63,15 +63,6 @@ const {menu} = useAppMenu();
         text="Colors"
       >
         <IonIcon :icon="menu.colors" />
-      </AppMenuButton>
-
-      <AppMenuButton
-        v-if="isAlphaPreview"
-        :disabled="!hasView"
-        draggable-key="_alphaTimeline"
-        text="Timeline"
-      >
-        <IonIcon :icon="menu.timeline" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -159,11 +150,14 @@ const {menu} = useAppMenu();
 </template>
 
 <style lang="scss" module>
-$g: $p0;
+@use 'src/styles/sizes';
+@use 'src/styles/layers';
+
+$g: sizes.$p0;
 
 .header {
   position: fixed;
-  z-index: $app-menu-layer;
+  z-index: layers.$app-menu-layer;
   top: $g;
   left: $g;
   display: flex;
@@ -176,7 +170,7 @@ $g: $p0;
 
 .button {
   pointer-events: auto;
-  backdrop-filter: blur($p0);
+  backdrop-filter: blur(sizes.$p0);
 }
 
 .row {

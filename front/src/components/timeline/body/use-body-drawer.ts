@@ -18,6 +18,6 @@ export function useBodyDrawer() {
     });
 
   return {
-    render: render,
+    render,
   };
 }

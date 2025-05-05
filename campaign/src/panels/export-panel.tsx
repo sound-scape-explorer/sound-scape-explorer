@@ -1,11 +1,10 @@
 import {Button, Card, Text} from '@blueprintjs/core';
 import {Download} from '@blueprintjs/icons';
-import {ConfigCallout} from 'src/components/config-callout.tsx';
+import {ExtractionsCallout} from 'src/components/extractions-callout.tsx';
 import {FilesCallout} from 'src/components/files-callout.tsx';
-import {MetricsCallout} from 'src/components/metrics-callout.tsx';
 import {SettingsCallout} from 'src/components/settings-callout.tsx';
-import {useExport} from 'src/hooks/use-export.ts';
-import {useGlobalValidation} from 'src/hooks/use-global-validation.ts';
+import {useExport} from 'src/hooks/use-export';
+import {useGlobalValidation} from 'src/hooks/use-global-validation';
 
 export function ExportPanel() {
   const {exportToJson} = useExport();
@@ -15,8 +14,7 @@ export function ExportPanel() {
     <Card className="flex gap column">
       <FilesCallout />
       <SettingsCallout />
-      <ConfigCallout />
-      <MetricsCallout />
+      <ExtractionsCallout />
 
       <Text>
         Export your campaign project to <code>.json</code>

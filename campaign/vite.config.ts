@@ -13,7 +13,7 @@ if (isElectron) {
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: base,
+  base,
   resolve: {
     alias: {
       'src': path.resolve(__dirname, './src'),

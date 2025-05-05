@@ -7,9 +7,7 @@ import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
 import {colorMap} from 'src/styles/color-map';
 import {computed} from 'vue';
 
@@ -17,9 +15,9 @@ const size2d = 5;
 const size3d = 3;
 
 export function useScatterFeatures() {
-  const {labelProperties} = useStorageLabels();
-  const {reducedFeatures} = useStorageReducedFeatures();
-  const {aggregatedLabels} = useStorageAggregatedLabels();
+  const {reducedEmbeddings} = useStorageReducedEmbeddings();
+  // const {labelProperties} = useStorageLabels();
+  // const {aggregatedLabels} = useStorageAggregatedLabels();
   const {low, high} = useScatterColorAlpha();
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
@@ -30,11 +28,11 @@ export function useScatterFeatures() {
   const {generateHovers} = useScatterHovers();
 
   const isThreeDimensional = computed<boolean>(() => {
-    if (reducedFeatures.value === null) {
+    if (reducedEmbeddings.value === null) {
       return false;
     }
 
-    return reducedFeatures.value[0].length === 3;
+    return reducedEmbeddings.value[0].length === 3;
   });
 
   const scatterType = computed<PlotType>(() => {
@@ -50,11 +48,11 @@ export function useScatterFeatures() {
   });
 
   const generateCoordinates = () => {
-    if (reducedFeatures.value === null) {
+    if (reducedEmbeddings.value === null) {
       throw new ScatterFeaturesError('data not available');
     }
 
-    const features = reducedFeatures.value;
+    const features = reducedEmbeddings.value;
     const l = features.length;
 
     const xs: number[] = new Array(l);
@@ -71,9 +69,9 @@ export function useScatterFeatures() {
     }
 
     return {
-      xs: xs,
-      ys: ys,
-      zs: zs,
+      xs,
+      ys,
+      zs,
     };
   };
 
@@ -95,7 +93,7 @@ export function useScatterFeatures() {
     }
 
     return {
-      borders: borders,
+      borders,
     };
   };
 
@@ -130,15 +128,16 @@ export function useScatterFeatures() {
     }
 
     return {
-      colors: colors,
+      colors,
     };
   };
 
+  // todo: update me
   const trace = (): Data[] => {
     if (
-      labelProperties.value === null ||
-      reducedFeatures.value === null ||
-      aggregatedLabels.value === null ||
+      // labelProperties.value === null ||
+      reducedEmbeddings.value === null ||
+      // aggregatedLabels.value === null ||
       scale.value === null ||
       filtered.value === null
     ) {
@@ -147,7 +146,7 @@ export function useScatterFeatures() {
 
     const {colors} = generateColors();
     const {xs, ys, zs} = generateCoordinates();
-    const {hovers, template} = generateHovers(xs.length);
+    const {hovers, template} = generateHovers();
     const {borders} = generateBorders(xs.length);
 
     const indices = Array.from({length: xs.length}, (_, i) => i);
@@ -167,7 +166,7 @@ export function useScatterFeatures() {
         opacity: high.value,
         color: indices,
         colorscale: colors,
-        colors: colors,
+        colors,
         line: {
           color: borders,
           width: Number(scatterBorderWidth.value),

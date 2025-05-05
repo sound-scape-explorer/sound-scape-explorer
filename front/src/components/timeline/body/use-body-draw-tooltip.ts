@@ -93,6 +93,6 @@ export function useBodyDrawTooltip() {
   };
 
   return {
-    drawTooltip: drawTooltip,
+    drawTooltip,
   };
 }

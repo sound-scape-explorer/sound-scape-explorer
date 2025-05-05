@@ -10,7 +10,7 @@ export function useAppHeatmapLayout() {
 
   const createLayout = (title?: string): Partial<Layout> => {
     const layout: Partial<Layout> = {
-      title: title,
+      title,
       paper_bgcolor: plotBackground.value,
       plot_bgcolor: plotBackground.value,
       clickmode: 'none',
@@ -45,6 +45,6 @@ export function useAppHeatmapLayout() {
   };
 
   return {
-    createLayout: createLayout,
+    createLayout,
   };
 }

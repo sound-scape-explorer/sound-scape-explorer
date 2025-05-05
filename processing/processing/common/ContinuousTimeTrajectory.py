@@ -2,43 +2,44 @@ import numpy
 from h5py import Dataset
 from pandas import pandas
 
-from processing.new.TrajectoryStep import TrajectoryStep
-from processing.utils.filter_features_by_label_and_time import (
-    filter_features_by_label_and_time,
+from processing.utils.filter_features_by_tag_and_time import (
+    filter_features_by_tag_and_time,
 )
 
 
 # TODO: refactor me
 class ContinuousTimeTrajectory:
     def __init__(self) -> None:
-        self.__features = None
-        self.__timestamps = None
-        self.__timestamp_start = None
-        self.__timestamp_end = None
-        self.__labels_properties = None
-        self.__labels_values = None
-        self.__step = None
+        self._embeddings = None
+        self._timestamps = None
+        self._timestamp_start = None
+        self._timestamp_end = None
+        self._all_tag_names = None
+        self._all_tag_values = None
+        self._step = None
+        self.relative_timestamps = None
+        self.timestamps = None
 
     def _validate_load(self):
         if (
-            self.__features is None
-            or self.__timestamps is None
-            or self.__timestamp_start is None
-            or self.__timestamp_end is None
-            or self.__labels_properties is None
-            or self.__labels_values is None
-            or self.__step is None
+            self._embeddings is None
+            or self._timestamps is None
+            or self._timestamp_start is None
+            or self._timestamp_end is None
+            or self._all_tag_names is None
+            or self._all_tag_values is None
+            or self._step is None
         ):
             raise RuntimeError("Unable to find data for trajectory. Please load first.")
 
         return (
-            self.__features,
-            self.__timestamps,
-            self.__timestamp_start,
-            self.__timestamp_end,
-            self.__labels_properties,
-            self.__labels_values,
-            self.__step,
+            self._embeddings,
+            self._timestamps,
+            self._timestamp_start,
+            self._timestamp_end,
+            self._all_tag_names,
+            self._all_tag_values,
+            self._step,
         )
 
     def _set_values(self, values: list[list[float]]) -> list[list[float]]:
@@ -58,48 +59,48 @@ class ContinuousTimeTrajectory:
 
     def load(
         self,
-        features: Dataset,
-        timestamps: Dataset,
+        embeddings: Dataset,
+        timestamps: list[int],
         timestamp_start: int,
         timestamp_end: int,
-        labels_properties: list[str],
-        labels_values: list[list[str]],
-        step: TrajectoryStep,
+        all_tag_names: list[str],
+        all_tag_values: list[list[str]],
+        step: int,
     ):
-        self.__features = features
-        self.__timestamps = timestamps
-        self.__timestamp_start = timestamp_start
-        self.__timestamp_end = timestamp_end
-        self.__labels_properties = labels_properties
-        self.__labels_values = labels_values
-        self.__step = step.value
+        self._embeddings = embeddings
+        self._timestamps = timestamps
+        self._timestamp_start = timestamp_start
+        self._timestamp_end = timestamp_end
+        self._all_tag_names = all_tag_names
+        self._all_tag_values = all_tag_values
+        self._step = step
 
     def calculate(
         self,
-        trajectory_label_property: str,
-        trajectory_label_value: str,
+        trajectory_tag_name: str,
+        trajectory_tag_value: str,
     ) -> list[list[float]]:
         (
             features,
             timestamps,
             timestamp_start,
             timestamp_end,
-            labels_properties,
-            labels_values,
+            all_tag_names,
+            all_tag_values,
             rolling_step,
         ) = self._validate_load()
 
         step = 1
 
-        filtered_features, filtered_timestamps = filter_features_by_label_and_time(
+        filtered_features, filtered_timestamps = filter_features_by_tag_and_time(
             features=features,
             timestamps=timestamps,
             timestamp_start=timestamp_start,
             timestamp_end=timestamp_end,
-            labels_properties=labels_properties,
-            labels_values=labels_values,
-            trajectory_label_property=trajectory_label_property,
-            trajectory_label_value=trajectory_label_value,
+            all_tag_names=all_tag_names,
+            all_tag_values=all_tag_values,
+            trajectory_tag_name=trajectory_tag_name,
+            trajectory_tag_value=trajectory_tag_value,
         )
 
         self.set_timestamps(filtered_timestamps)

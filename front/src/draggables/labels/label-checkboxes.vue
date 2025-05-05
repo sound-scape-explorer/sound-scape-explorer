@@ -1,5 +1,6 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NCheckbox, NCheckboxGroup, NGi, NGrid} from 'naive-ui';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useLabelCheckboxesColors} from 'src/draggables/labels/use-label-checkboxes-colors';
 import {useLabelCheckboxesLifecycles} from 'src/draggables/labels/use-label-checkboxes-lifecycles';
 import {useLabelCheckboxesSelector} from 'src/draggables/labels/use-label-checkboxes-selector';
@@ -11,6 +12,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const {colors} = useThemeColors();
 const checkboxes = ref<string[]>([]);
 const {getColor, uniques} = useLabelCheckboxesColors(props.property);
 const {selector} = useLabelCheckboxesSelector(props.property);
@@ -45,22 +47,25 @@ useLabelCheckboxesLifecycles(props.property, checkboxes);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+@use 'src/styles/transitions';
+
 .container {
-  margin-top: $p0;
-  margin-right: $p0;
+  margin-top: sizes.$p0;
+  margin-right: sizes.$p0;
 }
 
 .checkbox {
   width: 100%;
   height: 100%;
-  padding-left: $g0;
-  border-radius: $g0;
+  padding-left: sizes.$g0;
+  border-radius: sizes.$g0;
 
-  @include transition-checkboxes;
+  @include transitions.transition-checkboxes;
 
   &:hover {
     opacity: 0.9;
-    background-color: $grey;
+    background-color: v-bind('colors.boxShadow3');
   }
 
   span {

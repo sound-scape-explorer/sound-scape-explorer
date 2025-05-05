@@ -16,12 +16,12 @@ export function useAppDraggable(props: AppDraggableProps) {
   const isSelected = computed(() => stack.value[0] === props.draggableKey);
 
   return {
-    container: container,
-    storage: storage,
-    drag: drag,
-    isZoomed: isZoomed,
-    isClosed: isClosed,
-    isSelected: isSelected,
-    hidden: hidden,
+    container,
+    storage,
+    drag,
+    isZoomed,
+    isClosed,
+    isSelected,
+    hidden,
   };
 }

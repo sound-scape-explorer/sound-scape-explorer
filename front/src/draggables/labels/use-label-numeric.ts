@@ -1,20 +1,19 @@
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {ref} from 'vue';
 
 const isEnabled = ref<boolean>(false);
 
 export function useLabelNumeric() {
-  const {labelProperties, labelSets} = useStorageLabels();
+  const {sets} = useLabelSets();
   const {criteria} = useColorSelection();
 
   const isCalculable = (property: string) => {
-    if (labelProperties.value === null || labelSets.value === null) {
-      return false;
-    }
+    const labelProperties = Object.keys(sets.value);
+    const labelSets = Object.values(sets.value);
 
-    const index = labelProperties.value.indexOf(property);
-    const set = labelSets.value[index];
+    const index = labelProperties.indexOf(property);
+    const set = labelSets[index];
 
     let payload = true; // is calculable?
 
@@ -56,9 +55,9 @@ export function useLabelNumeric() {
   };
 
   return {
-    isCalculable: isCalculable,
-    isEnabled: isEnabled,
-    toggle: toggle,
-    disable: disable,
+    isCalculable,
+    isEnabled,
+    toggle,
+    disable,
   };
 }

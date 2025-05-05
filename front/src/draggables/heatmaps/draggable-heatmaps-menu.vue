@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {downloadOutline, repeatOutline} from 'ionicons/icons';
 import {NSelect} from 'naive-ui';
@@ -8,8 +8,8 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
@@ -17,7 +17,7 @@ import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
 
 const {
-  digesterName,
+  metricSlug,
   options: digesterOptions,
   isReadyForSelection,
   isReadyAndSelected,
@@ -29,14 +29,14 @@ const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
 const {width, height} = useAppHeatmapSize();
 const {flavor, flavors} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
-const {labelPropertiesActual} = useStorageLabels();
+const {actual} = useLabelSets();
 
-useRefProvide(InjectionKey.digestedDigester, digesterName);
-useRefProvide(InjectionKey.digestedLabelA, a);
-useRefProvide(InjectionKey.digestedLabelB, b);
-useRefProvide(InjectionKey.digestedColorFlavor, flavor);
-useRefProvide(InjectionKey.heatmapsPlotWidth, width);
-useRefProvide(InjectionKey.heatmapsPlotHeight, height);
+useRefProvide(InjectionKey.METRIC_NAME, metricSlug);
+useRefProvide(InjectionKey.METRIC_LABEL_A, a);
+useRefProvide(InjectionKey.METRIC_LABEL_B, b);
+useRefProvide(InjectionKey.METRIC_COLOR_FLAVOR, flavor);
+useRefProvide(InjectionKey.HEATMAPS_PLOT_WIDTH, width);
+useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
 </script>
 
 <template>
@@ -44,9 +44,9 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
     <h2>Select</h2>
 
     <AppSelect
-      :injection-key="InjectionKey.digestedDigester"
+      :injection-key="InjectionKey.METRIC_NAME"
       :options="digesterOptions"
-      placeholder="Digester..."
+      placeholder="Metric..."
       size="small"
     />
 
@@ -54,8 +54,8 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
 
     <div :class="$style.labels">
       <AppSelect
-        :injection-key="InjectionKey.digestedLabelA"
-        :options="labelPropertiesActual ?? []"
+        :injection-key="InjectionKey.METRIC_LABEL_A"
+        :options="Object.keys(actual) ?? []"
         placeholder="Label A..."
         size="small"
       />
@@ -70,8 +70,8 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
 
       <AppSelect
         :disabled="!isReadyForSelection || !isPairing"
-        :injection-key="InjectionKey.digestedLabelB"
-        :options="labelPropertiesActual ?? []"
+        :injection-key="InjectionKey.METRIC_LABEL_B"
+        :options="Object.keys(actual) ?? []"
         placeholder="Label B..."
         size="small"
       />
@@ -82,7 +82,7 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
     <div :class="$style.colors">
       <AppSelect
         :disabled="!isReadyAndSelected"
-        :injection-key="InjectionKey.digestedColorFlavor"
+        :injection-key="InjectionKey.METRIC_COLOR_FLAVOR"
         :options="flavors"
         placeholder="Color flavor..."
         size="small"
@@ -106,8 +106,8 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
     <div :class="$style.plot">
       <AppDraggableMenuPlotSizes
         :disabled="!isReadyAndSelected"
-        :height="InjectionKey.heatmapsPlotHeight"
-        :width="InjectionKey.heatmapsPlotWidth"
+        :height="InjectionKey.HEATMAPS_PLOT_HEIGHT"
+        :width="InjectionKey.HEATMAPS_PLOT_WIDTH"
       />
 
       <AppButton
@@ -124,16 +124,18 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .labels {
   display: grid;
-  grid-template-columns: 1fr $p0 * 7 1fr;
-  gap: $p0;
+  grid-template-columns: 1fr sizes.$p0 * 7 1fr;
+  gap: sizes.$p0;
 }
 
 .colors {
   display: grid;
-  grid-template-columns: 1fr $p0 * 7 1fr;
-  gap: $p0;
+  grid-template-columns: 1fr sizes.$p0 * 7 1fr;
+  gap: sizes.$p0;
 }
 
 .plot {

@@ -1,7 +1,7 @@
-import {DigesterImpl} from '@shared/enums';
+import {MetricImplEnum} from '@shared/enums';
 import {type HeatmapRange, heatmapRanges} from 'src/common/heatmap-range';
 import {HeatmapScale} from 'src/common/heatmap-scale';
-import {type Digested} from 'src/composables/use-storage-digested';
+import {type MetricData} from 'src/composables/use-metric-data';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {computed, ref} from 'vue';
 
@@ -27,17 +27,17 @@ export function useDraggableHeatmapsRange() {
     });
   });
 
-  const update = (digested: Digested) => {
-    switch (digested.digester.impl) {
-      case DigesterImpl.silhouette:
+  const update = (data: MetricData) => {
+    switch (data.metric.impl) {
+      case MetricImplEnum.enum.SILHOUETTE:
         flavor.value = HeatmapScale.RdBu;
         index.value = ranges.indexOf(heatmapRanges.min1to1);
         break;
-      case DigesterImpl.overlap:
+      case MetricImplEnum.enum.OVERLAP:
         flavor.value = HeatmapScale.Blues;
         index.value = ranges.indexOf(heatmapRanges.min0to1);
         break;
-      case DigesterImpl.contingency:
+      case MetricImplEnum.enum.CONTINGENCY:
         flavor.value = HeatmapScale.Blues;
         index.value = ranges.indexOf(heatmapRanges.min0to100);
         break;
@@ -49,10 +49,10 @@ export function useDraggableHeatmapsRange() {
   };
 
   return {
-    range: range,
-    index: index,
-    ranges: ranges,
-    options: options,
-    update: update,
+    range,
+    index,
+    ranges,
+    options,
+    update,
   };
 }

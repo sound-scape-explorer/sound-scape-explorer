@@ -74,7 +74,7 @@ export function buildAverageTrajectory(traceds: Traced[]) {
   return {
     data: payload,
     traced: longestTraced,
-    isThreeDimensional: isThreeDimensional,
+    isThreeDimensional,
   };
 }
 
@@ -141,6 +141,7 @@ function generateTraceDefaultDataOptions(
 export function traceAverageTrajectory(traceds: Traced[], scale: Scale) {
   const {data, traced, isThreeDimensional} = buildAverageTrajectory(traceds);
 
+  // todo: fix me
   // Colors
   const colors = getTracedColors(
     traced.relativeTimestamps,

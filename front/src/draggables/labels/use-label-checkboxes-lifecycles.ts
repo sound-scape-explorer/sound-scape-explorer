@@ -10,6 +10,7 @@ export function useLabelCheckboxesLifecycles(
     property,
     checkboxes,
   );
+
   const {selection} = useLabelSelection();
 
   watch(checkboxes, handleUpdate);

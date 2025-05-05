@@ -1,0 +1,71 @@
+@use "@blueprintjs/core/lib/scss/variables";
+
+.row {
+  grid-template-columns: 6em 3em 1fr repeat(3, 1fr) 3em;
+}
+
+.additionalParamsContainer {
+  display: none;
+  justify-content: flex-start !important;
+  background: variables.$light-gray3;
+  box-shadow: none !important;
+  grid-column: 1 / -1;
+
+  & > div {
+    width: 100%;
+  }
+}
+
+.additionalParamsContainerDark {
+  background: variables.$dark-gray3 !important;
+
+}
+
+.additionalParamsContent {
+  display: grid;
+  width: 100% !important;
+  padding-top: 0.5em !important;
+  padding-bottom: 0.5em !important;
+  place-items: center;
+  gap: 0.5em;
+}
+
+.additionalParamsSpectrum {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.additionalParamsSpectrogram {
+  grid-template-columns: 6em 4em 10em 1fr 1fr;
+}
+
+.additionalParamsMps {
+  grid-template-columns: 6em 4em 1fr 1fr 1fr 1fr;
+}
+
+.additionalParamsMfcc {
+  grid-template-columns: 1fr;
+}
+
+.additionalParamsNdsi {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.additionalParamsAdi {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.additionalParamsHt {
+  grid-template-columns: 1fr;
+}
+
+.additionalParamsMed {
+  grid-template-columns: 1fr;
+}
+
+.additionalParamsLeqPercentile {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.additionalParamsLeqDiff {
+  grid-template-columns: repeat(3, 1fr);
+}

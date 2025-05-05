@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {useAppHeatmap} from 'src/app/heatmap/use-app-heatmap';
 import {useAppHeatmapLifecycles} from 'src/app/heatmap/use-app-heatmap-lifecycles';
 

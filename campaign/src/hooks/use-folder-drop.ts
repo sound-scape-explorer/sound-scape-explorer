@@ -1,11 +1,11 @@
+import {FILE_TYPES} from '@shared/constants';
 import {useCallback} from 'react';
-import {FILE_TYPES} from 'src/constants.ts';
-import {useSettingsState} from 'src/hooks/use-settings-state.ts';
-import {useTabNavigation} from 'src/hooks/use-tab-navigation.ts';
+import {useSettingsState} from 'src/hooks/use-settings-state';
+import {useTabNavigation} from 'src/hooks/use-tab-navigation';
 import {
   type FileAlias,
   useTableLoader,
-} from 'src/panels/files/hooks/use-table-loader.ts';
+} from 'src/panels/files/hooks/use-table-loader';
 
 export function useFolderDrop() {
   const {loadFromFolder} = useTableLoader();

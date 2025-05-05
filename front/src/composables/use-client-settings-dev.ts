@@ -15,8 +15,8 @@ export function useClientSettingsDev() {
   };
 
   return {
-    reset: reset,
-    isDevEnabled: isDevEnabled,
-    devAutoLoadView: devAutoLoadView,
+    reset,
+    isDevEnabled,
+    devAutoLoadView,
   };
 }

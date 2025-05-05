@@ -1,25 +1,25 @@
-from typing import Dict, List
-
-from processing.new.TrajectoryConfigNew import TrajectoryConfigNew
+from processing.config.TrajectoryConfig import TrajectoryConfig
 
 
-PackedTrajectories = Dict[str, Dict[str, List[TrajectoryConfigNew]]]
+PackedTrajectories = dict[str, dict[str, list[TrajectoryConfig]]]
 
 
 # TODO: refactor me
-def pack_trajectories(trajectories: List[TrajectoryConfigNew]) -> PackedTrajectories:
+def pack_trajectories(
+    trajectories: list[TrajectoryConfig],
+) -> PackedTrajectories:
     packed_trajectories: PackedTrajectories = {}
 
     for trajectory in trajectories:
-        label_property = trajectory.label_property
-        label_value = trajectory.label_value
+        tag_name = trajectory.tag_name
+        tag_value = trajectory.tag_value
 
-        if label_property not in packed_trajectories:
-            packed_trajectories[label_property] = {}
+        if tag_name not in packed_trajectories:
+            packed_trajectories[tag_name] = {}
 
-        if label_value not in packed_trajectories[label_property]:
-            packed_trajectories[label_property][label_value] = []
+        if tag_value not in packed_trajectories[tag_name]:
+            packed_trajectories[tag_name][tag_value] = []
 
-        packed_trajectories[label_property][label_value].append(trajectory)
+        packed_trajectories[tag_name][tag_value].append(trajectory)
 
     return packed_trajectories

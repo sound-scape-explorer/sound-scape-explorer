@@ -3,8 +3,7 @@
   "include": [
     "vite.config.*",
     "vitest.config.*",
-    "cypress.config.*",
-    ".eslintrc.js"
+    "cypress.config.*"
   ],
   "compilerOptions": {
     "composite": true,

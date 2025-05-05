@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppDatePicker from 'src/app/app-date-picker.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
@@ -67,12 +67,14 @@ useTimelineLifecycles();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .row {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  gap: $p0;
+  gap: sizes.$p0;
 }
 
 .select {

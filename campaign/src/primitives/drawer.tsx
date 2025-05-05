@@ -1,9 +1,9 @@
-import {Button, Drawer as BDrawer} from '@blueprintjs/core';
+import {Button, Drawer as BaseDrawer} from '@blueprintjs/core';
 import {Cross} from '@blueprintjs/icons';
+import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {JSX, useState} from 'react';
-import {ICON_SIZE} from 'src/constants.ts';
-import {useTheme} from 'src/hooks/use-theme.ts';
+import {useTheme} from 'src/hooks/use-theme';
 
 interface Props {
   content: JSX.Element;
@@ -18,9 +18,17 @@ export function Drawer({content, children}: Props) {
 
   return (
     <>
-      <div onClick={handleOpen}>{children}</div>
-      <BDrawer
-        className={clsx(isDark && 'bp5-dark')}
+      <div
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleOpen();
+        }}
+      >
+        {children}
+      </div>
+      <BaseDrawer
+        className={clsx(isDark && 'bp5-dark', 'scrollable')}
         isOpen={isOpen}
         onClose={handleClose}
         canEscapeKeyClose
@@ -34,7 +42,7 @@ export function Drawer({content, children}: Props) {
           />
           {content}
         </div>
-      </BDrawer>
+      </BaseDrawer>
     </>
   );
 }

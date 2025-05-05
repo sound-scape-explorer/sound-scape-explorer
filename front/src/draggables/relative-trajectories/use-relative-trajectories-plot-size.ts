@@ -5,6 +5,6 @@ const height = ref<number>(PLOTLY_SIZE);
 
 export function useRelativeTrajectoriesPlotSize() {
   return {
-    height: height,
+    height,
   };
 }

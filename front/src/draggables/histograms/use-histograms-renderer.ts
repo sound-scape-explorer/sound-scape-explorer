@@ -1,18 +1,18 @@
 import Plotly, {type Data, type Layout} from 'plotly.js-dist-min';
 import {DraggableHistogramsError} from 'src/common/Errors';
+import {useAggregated} from 'src/composables/use-aggregated';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
 import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
-import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-histograms';
-import {generateUniqueIndexSlug} from 'src/utils/config';
 
+// todo: redo me
 export function useHistogramsRenderer() {
   const {divRef, name, over, histogramFunction} = useDraggableHistograms();
-  const {aggregatedIndices} = useStorageAggregatedIndices();
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  // const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
+  // const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {aggregated} = useAggregated();
   const {getHourFromTimestamp} = useDate();
   const {scale} = useColorsCycling();
   const {plotBackground} = useClientSettings();
@@ -20,8 +20,7 @@ export function useHistogramsRenderer() {
 
   const render = async () => {
     if (
-      aggregatedIndices.value === null ||
-      aggregatedTimestamps.value === null ||
+      aggregated.value === null ||
       divRef.value === null ||
       name.value === null ||
       over.value === null
@@ -29,9 +28,10 @@ export function useHistogramsRenderer() {
       return;
     }
 
-    const results = aggregatedIndices.value.filter(
-      ({index}) => generateUniqueIndexSlug(index) === name.value,
-    );
+    // const results = aggregatedIndices.value.filter(
+    //   ({index}) => generateUniqueIndexSlug(index) === name.value,
+    // );
+    const results: string[] = []; // todo: redo me
 
     if (results.length !== 1) {
       throw new DraggableHistogramsError(
@@ -90,6 +90,6 @@ export function useHistogramsRenderer() {
   };
 
   return {
-    render: render,
+    render,
   };
 }

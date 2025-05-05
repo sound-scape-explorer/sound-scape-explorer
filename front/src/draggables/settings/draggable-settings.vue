@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import {TIMEZONE_DEFAULT} from '@shared/constants';
 import AppButton from 'src/app/app-button.vue';
 import AppCheckbox from 'src/app/app-checkbox.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
@@ -6,7 +7,7 @@ import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useSettings} from 'src/composables/use-settings';
+import {useConfig} from 'src/composables/use-config';
 import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
 import DraggableSettingsDev from 'src/draggables/settings/draggable-settings-dev.vue';
@@ -15,6 +16,7 @@ import {useDraggableSettingsProviders} from 'src/draggables/settings/use-draggab
 
 const {
   resetAll,
+  darkMode,
   isDetailsAutoOpen,
   isAudioAutoOpen,
   isAlphaPreview,
@@ -28,11 +30,13 @@ const {
   isDetailedExportName,
 } = useClientSettings();
 
-const {settings, hasTimezone} = useSettings();
+const {config} = useConfig();
 const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
 const colormapOptions = SPECTROGRAM_COLOR_MAPS;
 const backgrounds = Object.values(PLOT_BACKGROUND);
+
+const reload = () => location.reload();
 
 useDraggableSettingsProviders();
 </script>
@@ -50,6 +54,14 @@ useDraggableSettingsProviders();
     </div>
 
     <div :class="$style.container">
+      <DraggableSettingsItem title="Dark mode (will toggle page refresh)">
+        <AppCheckbox
+          :default="darkMode"
+          :handle-click="reload"
+          :injection-key="InjectionKey.SETTINGS_DARK_MODE"
+        />
+      </DraggableSettingsItem>
+
       <DraggableSettingsItem title="Audio: set audio host">
         <AppInput
           :injection-key="InjectionKey.settingsAudioHost"
@@ -67,12 +79,15 @@ useDraggableSettingsProviders();
 
       <DraggableSettingsItem
         :title="`Time: Apply timezone (${
-          settings?.timezone ? settings.timezone : 'disabled'
+          config?.settings.timezone ? config.settings.timezone : 'disabled'
         })`"
       >
         <AppCheckbox
           :default="isTimezoneActive"
-          :disabled="!settings?.timezone || !hasTimezone"
+          :disabled="
+            !config?.settings.timezone ||
+            config?.settings.timezone !== TIMEZONE_DEFAULT
+          "
           :injection-key="InjectionKey.settingsIsTimezoneActive"
         />
       </DraggableSettingsItem>
@@ -209,6 +224,9 @@ useDraggableSettingsProviders();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+@use 'src/styles/scrolls';
+
 .reload {
   display: flex;
   align-items: center;
@@ -217,23 +235,23 @@ useDraggableSettingsProviders();
 
 .container {
   overflow: auto;
-  width: $s0;
-  height: $s0;
-  margin-top: $p0;
-  padding-right: $p0;
+  width: sizes.$s0;
+  height: sizes.$s0;
+  margin-top: sizes.$p0;
+  padding-right: sizes.$p0;
 
-  @include tiny-scrollbar;
+  @include scrolls.tiny-scrollbar;
 }
 
 .spectro-colors {
-  width: $p0 * 12;
+  width: sizes.$p0 * 12;
 }
 
 .scatter-border-width {
-  width: $p0 * 8;
+  width: sizes.$p0 * 8;
 }
 
 .background-color {
-  width: $p0 * 16;
+  width: sizes.$p0 * 16;
 }
 </style>

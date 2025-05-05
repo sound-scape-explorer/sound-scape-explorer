@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {
   chevronForwardOutline,
@@ -90,13 +90,17 @@ watch(isCurrent, openCurrent);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/fx';
+@use 'src/styles/sizes';
+@use 'src/styles/transitions';
+
 .cell {
   display: flex;
   align-items: center;
   justify-content: center;
   height: auto;
-  margin-right: $p0;
-  gap: $p0;
+  margin-right: sizes.$p0;
+  gap: sizes.$p0;
 }
 
 .tag {
@@ -111,20 +115,20 @@ watch(isCurrent, openCurrent);
 .tag-content {
   display: flex;
   align-items: center;
-  gap: $p0;
+  gap: sizes.$p0;
 }
 
 .chevron {
-  @include transition-rotate;
+  @include transitions.transition-rotate;
 }
 
 .chevron-rotate {
-  @include rotate-90;
+  @include fx.rotate-90;
 }
 
 .buttons {
   display: flex;
-  gap: $p0;
+  gap: sizes.$p0;
 }
 
 .checkboxes {

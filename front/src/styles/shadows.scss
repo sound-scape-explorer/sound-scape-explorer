@@ -1,14 +1,9 @@
-@import "./colors";
-@import "./sizes";
+@use "./sizes";
 
-@mixin s0 {
-  box-shadow: $g0 $g0 $g0 $g0 * -1 $grey-light;
+@mixin s0($c: red) {
+  box-shadow: sizes.$g0 sizes.$g0 sizes.$g0 sizes.$g0 * -1 $c;
 }
 
-@mixin s0d {
-  box-shadow: $g0 $g0 $g0 $g0 * -1 $grey-deep;
-}
-
-@mixin s1 {
-  box-shadow: $p0 $p0 $p0 * 2 $g0 * -1 $grey-deep;
+@mixin s1($c: red) {
+  box-shadow: sizes.$p0 sizes.$p0 sizes.$p0 * 2 sizes.$g0 * -1 $c;
 }

@@ -20,6 +20,6 @@ export function useColorByDay() {
   };
 
   return {
-    getColorByDay: getColorByDay,
+    getColorByDay,
   };
 }

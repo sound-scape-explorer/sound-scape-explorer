@@ -1,9 +1,9 @@
 import {type Intent} from '@blueprintjs/core';
 import {atom, useAtom} from 'jotai';
 import {useCallback, useMemo} from 'react';
-import {useNotify} from 'src/hooks/use-notify.ts';
-import {addPrefixToLabelProperty} from 'src/utils/files.ts';
-import {filterOutKey} from 'src/utils/objects.ts';
+import {useNotify} from 'src/hooks/use-notify';
+import {addPrefixToTagName} from 'src/utils/files';
+import {filterOutKey} from 'src/utils/objects';
 
 export type ColumnKey = `col_${string}`;
 type ColumnName = 'Index' | 'Path' | 'Date' | 'Site' | string;
@@ -201,7 +201,7 @@ export function useTableState() {
         return;
       }
 
-      const prefixed = addPrefixToLabelProperty(name);
+      const prefixed = addPrefixToTagName(name);
 
       setState((prev) => {
         return {
@@ -253,6 +253,7 @@ export function useTableState() {
         return;
       }
 
+      // todo: are logical ORs needed, why would you coerce as well?
       const rowCopy = [...(state.current.rows[key] || [])];
       const intentsCopy = [...(state.current.intents[key] || [])];
 

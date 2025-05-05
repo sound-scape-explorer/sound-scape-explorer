@@ -1,7 +1,6 @@
-import {ColorByLabelError} from 'src/common/Errors';
 import {useColorUser} from 'src/composables/use-color-user';
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useIntervals} from 'src/composables/use-intervals';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {useColorResize} from 'src/draggables/colors/use-color-resize';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
@@ -15,31 +14,25 @@ const max = ref<number | null>(null);
 
 export function useColorByLabel() {
   const {resize} = useColorResize();
-  const {aggregatedLabels} = useStorageAggregatedLabels();
-  const {labelProperties} = useStorageLabels();
-  const {labelSets} = useStorageLabels();
+  const {intervals} = useIntervals();
+  const {sets} = useLabelSets();
   const {criteria} = useColorSelection();
   const {scale} = useColorUser();
   const {isEnabled} = useLabelNumeric();
 
   const getPrimitive = (intervalIndex: number) => {
-    if (
-      aggregatedLabels.value === null ||
-      labelProperties.value === null ||
-      labelSets.value === null
-    ) {
-      throw new ColorByLabelError('props missing');
-    }
+    const labelProperties = Object.keys(sets.value);
+    const labelSets = Object.values(sets.value);
+    const interval = intervals.value[intervalIndex];
 
-    const p = labelProperties.value.indexOf(criteria.value);
-    const values = aggregatedLabels.value[intervalIndex];
-    const value = values[p];
-    const set = labelSets.value[p];
+    const propertyIndex = labelProperties.indexOf(criteria.value);
+    const values = interval.labels[criteria.value] as string[];
+    const set = labelSets[propertyIndex];
+    const value = values[0]; // todo: taking first for now, need fuse
 
     return {
-      p: p,
-      value: value,
-      set: set,
+      set,
+      value,
     };
   };
 
@@ -77,10 +70,6 @@ export function useColorByLabel() {
   };
 
   const detect = () => {
-    if (aggregatedLabels.value === null) {
-      return;
-    }
-
     const {set} = getPrimitive(0);
     const values = set.map((v) => Number(v));
 
@@ -89,11 +78,11 @@ export function useColorByLabel() {
   };
 
   return {
-    min: min,
-    max: max,
-    get: get,
-    detect: detect,
+    min,
+    max,
+    get,
+    detect,
     getColorByLabelIndex: getColorByPropertyIndex,
-    getColorNumeric: getColorNumeric,
+    getColorNumeric,
   };
 }

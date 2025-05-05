@@ -6,9 +6,10 @@ if ($null -eq $NEXT_VERSION)
     exit 1
 }
 
+(Get-Content -Path "campaign/src/version.ts") -replace 'VERSION = (.+)', "VERSION = '$NEXT_VERSION';" | Set-Content -Path "campaign/src/version.ts"
 (Get-Content -Path "front/src/version.ts") -replace 'VERSION = (.+)', "VERSION = '$NEXT_VERSION';" | Set-Content -Path "front/src/version.ts"
 (Get-Content -Path "audio/src/version.ts") -replace 'VERSION = (.+)', "VERSION = '$NEXT_VERSION';" | Set-Content -Path "audio/src/version.ts"
-(Get-Content -Path "audio/src/version.ts") -replace 'VERSION = (.+)', "VERSION = '$NEXT_VERSION';" | Set-Content -Path "visualisation/src/version.ts"
+(Get-Content -Path "visualisation/src/version.ts") -replace 'VERSION = (.+)', "VERSION = '$NEXT_VERSION';" | Set-Content -Path "visualisation/src/version.ts"
 (Get-Content -Path "processing/pyproject.toml") -replace 'version = (.+)', "version = `"$NEXT_VERSION`"" | Set-Content -Path "processing/pyproject.toml"
 
 # INFO: no need to update venv scripts

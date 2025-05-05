@@ -1,7 +1,7 @@
 import {useRefHistory} from '@vueuse/core';
+import {useAggregated} from 'src/composables/use-aggregated';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDraggables} from 'src/composables/use-draggables';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {computed, ref} from 'vue';
 
@@ -14,7 +14,7 @@ export function useIntervalSelector() {
   const {isAudioAutoOpen, isDetailsAutoOpen} = useClientSettings();
   const {open} = useDraggables();
   const {isLoading} = useAudioFile();
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {aggregated} = useAggregated();
 
   const selectInterval = (index: number | null) => {
     if (isLoading.value || currentIntervalIndex.value === index) {
@@ -33,16 +33,13 @@ export function useIntervalSelector() {
   };
 
   const forward = () => {
-    if (
-      currentIntervalIndex.value === null ||
-      aggregatedTimestamps.value === null
-    ) {
+    if (currentIntervalIndex.value === null || aggregated.value === null) {
       return;
     }
 
     let nextIndex = currentIntervalIndex.value + 1;
 
-    if (nextIndex >= aggregatedTimestamps.value.length) {
+    if (nextIndex >= aggregated.value.timestamps.length) {
       nextIndex = 0;
     }
 
@@ -50,32 +47,29 @@ export function useIntervalSelector() {
   };
 
   const back = () => {
-    if (
-      currentIntervalIndex.value === null ||
-      aggregatedTimestamps.value === null
-    ) {
+    if (currentIntervalIndex.value === null || aggregated.value === null) {
       return;
     }
 
     let previousIndex = currentIntervalIndex.value - 1;
 
     if (previousIndex < 0) {
-      previousIndex = aggregatedTimestamps.value.length - 1;
+      previousIndex = aggregated.value.timestamps.length - 1;
     }
 
     selectInterval(previousIndex);
   };
 
   return {
-    currentIntervalIndex: currentIntervalIndex,
-    hasClicked: hasClicked,
-    selectInterval: selectInterval,
-    history: history,
-    undo: undo,
-    redo: redo,
-    canUndo: canUndo,
-    canRedo: canRedo,
-    forward: forward,
-    back: back,
+    currentIntervalIndex,
+    hasClicked,
+    selectInterval,
+    history,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    forward,
+    back,
   };
 }

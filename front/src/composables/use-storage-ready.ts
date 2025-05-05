@@ -5,6 +5,7 @@ import {ref} from 'vue';
 
 const isReady = ref<boolean>(false);
 
+// todo: too much? is config readiness enough?
 // storage ready if worker and file ready
 export function useStorageReady() {
   const {hasWorker} = useWorker();
@@ -29,8 +30,8 @@ export function useStorageReady() {
   };
 
   return {
-    isReady: isReady,
-    update: update,
-    notify: notify,
+    isReady,
+    update,
+    notify,
   };
 }

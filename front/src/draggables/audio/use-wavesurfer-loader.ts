@@ -1,4 +1,4 @@
-import {useBandSelection} from 'src/composables/use-band-selection';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
@@ -6,7 +6,7 @@ import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 
 export function useWavesurferLoader() {
-  const {band} = useBandSelection();
+  const {band} = useViewSelectionNew();
   const {seek, stop} = useAudioTransport();
   const {context} = useAudioContext();
   const {isPlaying} = useAudioTransport();
@@ -61,6 +61,6 @@ export function useWavesurferLoader() {
   };
 
   return {
-    loadSlice: loadSlice,
+    loadSlice,
   };
 }

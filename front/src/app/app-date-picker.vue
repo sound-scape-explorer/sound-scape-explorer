@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NDatePicker} from 'naive-ui';
 import {type InjectionKey} from 'src/common/injection-key';
 import {useRefInject} from 'src/composables/use-ref-inject';

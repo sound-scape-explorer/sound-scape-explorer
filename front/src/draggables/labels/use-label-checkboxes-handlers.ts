@@ -24,7 +24,7 @@ export function useLabelCheckboxesHandlers(
   };
 
   return {
-    handleUpdate: handleUpdate,
-    syncBack: syncBack,
+    handleUpdate,
+    syncBack,
   };
 }

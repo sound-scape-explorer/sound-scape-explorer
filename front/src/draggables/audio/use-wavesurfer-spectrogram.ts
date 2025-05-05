@@ -1,5 +1,5 @@
 import SpectrogramPlugin from 'src/common/spectrogram';
-import {useBandSelection} from 'src/composables/use-band-selection';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
@@ -9,7 +9,7 @@ import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-setting
 
 export function useWavesurferSpectrogram() {
   const {ws} = useWavesurfer();
-  const {band} = useBandSelection();
+  const {band} = useViewSelectionNew();
   const {spectrogram} = useDraggableAudio();
   const {bitDepth} = useAudioFile();
   const {size} = useAudioFourier();
@@ -47,6 +47,6 @@ export function useWavesurferSpectrogram() {
   };
 
   return {
-    register: register,
+    register,
   };
 }

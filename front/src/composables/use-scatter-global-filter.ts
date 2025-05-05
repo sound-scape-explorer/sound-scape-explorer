@@ -39,8 +39,8 @@ export function useScatterGlobalFilter() {
   };
 
   return {
-    filtered: filtered,
-    update: update,
-    getActiveIntervalIndices: getActiveIntervalIndices,
+    filtered,
+    update,
+    getActiveIntervalIndices,
   };
 }

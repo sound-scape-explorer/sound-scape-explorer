@@ -1,7 +1,7 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NGi, NGrid} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import DraggableLabelsSidebar from 'src/draggables/labels/draggable-labels-sidebar.vue';
 import Label from 'src/draggables/labels/label.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
@@ -9,7 +9,7 @@ import {useDraggableLabelsDom} from 'src/draggables/labels/use-draggable-labels-
 
 const {sizeHorizontal, sizeVertical} = useDraggableLabels();
 const {cols} = useDraggableLabelsDom();
-const {labelProperties} = useStorageLabels();
+const {sets} = useLabelSets();
 </script>
 
 <template>
@@ -36,7 +36,7 @@ const {labelProperties} = useStorageLabels();
         :cols="cols"
         y-gap="8"
       >
-        <NGi v-for="property in labelProperties">
+        <NGi v-for="property in Object.keys(sets)">
           <Label :property="property" />
         </NGi>
       </NGrid>
@@ -45,35 +45,38 @@ const {labelProperties} = useStorageLabels();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/scrolls';
+@use 'src/styles/sizes';
+
 .container {
   display: flex;
   overflow-y: auto;
   flex-direction: column;
 
-  @include tiny-scrollbar;
+  @include scrolls.tiny-scrollbar;
 }
 
 .horizontal-default {
-  width: $w0;
+  width: sizes.$w0;
 }
 
 .vertical-default {
-  height: $h0;
+  height: sizes.$h0;
 }
 
 .horizontal-big {
-  width: $w2;
+  width: sizes.$w2;
 }
 
 .vertical-big {
-  height: $h2;
+  height: sizes.$h2;
 }
 
 .horizontal-max {
-  width: $w-max;
+  width: sizes.$w-max;
 }
 
 .vertical-max {
-  height: $h-max;
+  height: sizes.$h-max;
 }
 </style>

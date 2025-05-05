@@ -1,6 +1,6 @@
 import {Cell, EditableCell2} from '@blueprintjs/table';
 import {useCallback} from 'react';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
 export function useTableCellRenderer() {
   const {state, findColumnByIndex, updateRows} = useTableState();

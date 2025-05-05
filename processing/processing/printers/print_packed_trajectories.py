@@ -16,14 +16,12 @@ def print_packed_trajectories(packed_trajectories: PackedTrajectories):
 
     index = 1
 
-    for label_property, label_value, pack in walk_packed_trajectories(
-        packed_trajectories
-    ):
+    for tag_name, tag_value, pack in walk_packed_trajectories(packed_trajectories):
         table.add_row(
             str(index),
-            str(label_property),
-            str(label_value),
-            str(len(packed_trajectories[label_property][label_value])),
+            str(tag_name),
+            str(tag_value),
+            str(len(packed_trajectories[tag_name][tag_value])),
         )
 
         index += 1

@@ -1,5 +1,4 @@
-import {type Scale} from 'chroma-js';
-import chroma from 'chroma-js';
+import chroma, {type Scale} from 'chroma-js';
 import {computed} from 'vue';
 
 const scale = computed<Scale>(() =>
@@ -10,6 +9,6 @@ const scale = computed<Scale>(() =>
 
 export function useColorsCycling() {
   return {
-    scale: scale,
+    scale,
   };
 }

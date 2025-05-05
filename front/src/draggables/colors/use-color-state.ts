@@ -1,11 +1,11 @@
 import {useIndicators} from 'src/composables/use-indicators';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
 import {computed} from 'vue';
 
 export function useColorState() {
-  const {labelProperties} = useStorageLabels();
+  const {sets} = useLabelSets();
   const {criteria, category} = useColorSelection();
   const {names} = useIndicators();
   const {isCalculable} = useLabelNumeric();
@@ -16,14 +16,8 @@ export function useColorState() {
   );
 
   const isLabels = computed<boolean>(() => {
-    if (labelProperties.value === null) {
-      return false;
-    }
-
-    return (
-      category.value === 'Labels' &&
-      labelProperties.value.includes(criteria.value)
-    );
+    const properties = Object.keys(sets.value);
+    return category.value === 'Labels' && properties.includes(criteria.value);
   });
 
   const isLabelNumeric = computed<boolean>(() => {
@@ -31,8 +25,8 @@ export function useColorState() {
   });
 
   return {
-    isIndicators: isIndicators,
-    isLabels: isLabels,
-    isLabelNumeric: isLabelNumeric,
+    isIndicators,
+    isLabels,
+    isLabelNumeric,
   };
 }

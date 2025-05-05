@@ -1,4 +1,4 @@
-import {useSettings} from 'src/composables/use-settings';
+import {useConfig} from 'src/composables/use-config';
 import {GAIN, WAVE} from 'src/constants';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
@@ -11,7 +11,7 @@ import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 import {useWavesurferCursor} from 'src/draggables/audio/use-wavesurfer-cursor';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
 import {useWavesurferSpectrogram} from 'src/draggables/audio/use-wavesurfer-spectrogram';
-import {watch} from 'vue';
+import {onMounted, watch} from 'vue';
 import WaveSurfer from 'wavesurfer.js';
 import {type WaveSurferParams} from 'wavesurfer.js/types/params';
 
@@ -21,7 +21,7 @@ export function useWavesurferMounter() {
   const {create: createGain, apply: applyGain} = useAudioGain();
   const {create: createAnalyser} = useAudioAnalyser();
   const {waveform} = useDraggableAudio();
-  const {settings} = useSettings();
+  const {config} = useConfig();
   const {colormap} = useSpectrogramColormap();
   const {bitDepth} = useAudioFile();
   const {size} = useAudioFourier();
@@ -53,17 +53,20 @@ export function useWavesurferMounter() {
     ws.value = WaveSurfer.create(params);
   };
 
+  // todo: too much?
   watch([context, waveform], mount);
 
-  watch(settings, () => {
+  onMounted(() => {
     createContext();
     createGain();
     createAnalyser();
     applyGain(GAIN.default);
   });
 
+  // todo: too much?
   watch(ws, registerCursor);
 
+  // todo: too much?
   watch(
     [size, colormap, isDecibelsDisplay, isLegendOverflow, bitDepth],
     registerSpectrogram,

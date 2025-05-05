@@ -2,53 +2,43 @@ from processing.context import Context
 from processing.errors.MeanDistancesMatrixEmptyWarning import (
     MeanDistancesMatrixEmptyWarning,
 )
-from processing.new.AutoclusteredManager import AutoclusteredManager
-from processing.new.MeanDistancesMatrixManager import MeanDistancesMatrixManager
-from processing.new.iterate_extractors import iterate_extractors
+from processing.managers.AggregationManager import AggregationManager
+from processing.repositories.AutoclusteredRepository import AutoclusteredRepository
+from processing.repositories.MeanDistancesMatrixRepository import MeanDistancesMatrixRepository
 from processing.printers.print_action import print_action
 from processing.printers.print_autoclusters import print_autoclusters
 from processing.utils.is_mdm_empty import is_mdm_empty
-from processing.validators.validate_autoclusters import validate_autoclusters
-from processing.validators.validate_configuration import validate_configuration
-from processing.validators.validate_mean_distances_matrix import (
-    validate_mean_distances_matrix,
-)
 
 
-@validate_configuration
-@validate_mean_distances_matrix
-@validate_autoclusters
 def run_autoclusters(context: Context):
     print_action("Autoclustering started!", "start")
 
-    AutoclusteredManager.delete(context)
+    AutoclusteredRepository.delete(context)
 
-    print_autoclusters(context)
+    for ai in AggregationManager.iterate(context):
+        print_autoclusters(ai.extraction.autoclusters)
 
-    autoclusters = context.config.autoclusters
-
-    for e in iterate_extractors(context):
-        mdm = MeanDistancesMatrixManager.from_storage(
-            context.storage,
-            e.band,
-            e.integration,
-            e.extractor,
+        mdm = MeanDistancesMatrixRepository.from_storage(
+            context=context,
+            extraction=ai.extraction,
+            band=ai.band,
+            integration=ai.integration,
         )
 
         if is_mdm_empty(mdm):
-            MeanDistancesMatrixEmptyWarning(e.band, e.integration, e.extractor)
+            MeanDistancesMatrixEmptyWarning(ai.extraction, ai.band, ai.integration)
             continue
 
-        for autocluster in autoclusters:
-            autocluster.start()
-            autocluster.calculate(mdm)
+        for autocluster in ai.extraction.autoclusters:
+            autoclustered = autocluster.run(mdm)
 
-            AutoclusteredManager.to_storage(
+            AutoclusteredRepository.to_storage(
                 context=context,
-                band=e.band,
-                integration=e.integration,
-                extractor=e.extractor,
+                extraction=ai.extraction,
+                band=ai.band,
+                integration=ai.integration,
                 autocluster=autocluster,
+                autoclustered=autoclustered,
             )
 
     print_action("Autoclustering completed!", "end")

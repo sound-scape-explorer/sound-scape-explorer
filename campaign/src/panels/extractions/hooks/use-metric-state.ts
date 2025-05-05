@@ -1,0 +1,74 @@
+import {type MetricDto} from '@shared/dtos.ts';
+import {MetricImplEnum} from '@shared/enums.ts';
+import {useCallback, useMemo} from 'react';
+import {
+  type ExtractionConfigWithId,
+  useExtractionState,
+} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+
+export function useMetricState(extraction: ExtractionConfigWithId) {
+  const {updateExtraction} = useExtractionState();
+
+  const metrics = useMemo(() => extraction.metrics, [extraction.metrics]);
+
+  const addMetric = useCallback(() => {
+    extraction.metrics.push({
+      index: extraction.metrics.length,
+      impl: MetricImplEnum.enum.SILHOUETTE,
+    });
+
+    updateExtraction(extraction);
+  }, [extraction, updateExtraction]);
+
+  const deleteMetric = useCallback(
+    (metric: MetricDto) => {
+      const newMetrics = extraction.metrics.filter(
+        (m) => m.index !== metric.index,
+      );
+      newMetrics.forEach((m, index) => {
+        m.index = index;
+      });
+      extraction.metrics = newMetrics;
+      updateExtraction(extraction);
+    },
+    [extraction, updateExtraction],
+  );
+
+  const updateIndex = useCallback(
+    (metric: MetricDto, index: number) => {
+      const newMetrics = [...extraction.metrics];
+      const newIndex = metric.index + index;
+
+      if (newIndex < 0 || newIndex >= extraction.metrics.length) {
+        return;
+      }
+
+      const existing = newMetrics.find((m) => m.index === newIndex);
+      const updated = newMetrics.find((m) => m.index === metric.index);
+      if (existing && updated) {
+        existing.index = metric.index;
+        updated.index = newIndex;
+      }
+
+      extraction.metrics = newMetrics;
+      updateExtraction(extraction);
+    },
+    [extraction, updateExtraction],
+  );
+
+  const updateImpl = useCallback(
+    (metric: MetricDto, impl: MetricImplEnum) => {
+      metric.impl = impl;
+      updateExtraction(extraction);
+    },
+    [extraction, updateExtraction],
+  );
+
+  return {
+    metrics,
+    addMetric,
+    deleteMetric,
+    updateIndex,
+    updateImpl,
+  };
+}

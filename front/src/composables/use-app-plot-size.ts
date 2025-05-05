@@ -2,8 +2,8 @@ import {PLOTLY_SIZE} from 'src/constants';
 import {type Ref} from 'vue';
 
 export function useAppPlotSize(
-  width: Nullable<Ref<number>>,
-  height: Nullable<Ref<number>>,
+  width: Ref<number> | null,
+  height: Ref<number> | null,
 ) {
   const updateWidth = (newWidth: number = PLOTLY_SIZE) => {
     if (width === null) {
@@ -62,13 +62,13 @@ export function useAppPlotSize(
   };
 
   return {
-    width: width,
-    height: height,
-    resize1by1: resize1by1,
-    resize4by3: resize4by3,
-    resize16by10: resize16by10,
-    resize16by9: resize16by9,
-    double: double,
-    half: half,
+    width,
+    height,
+    resize1by1,
+    resize4by3,
+    resize16by10,
+    resize16by9,
+    double,
+    half,
   };
 }

@@ -21,12 +21,14 @@ import {VERSION} from 'src/version';
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .container {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
   justify-content: center;
-  width: $s2;
-  gap: $p0;
+  width: sizes.$s2;
+  gap: sizes.$p0;
 }
 </style>

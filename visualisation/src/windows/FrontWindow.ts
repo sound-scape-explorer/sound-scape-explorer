@@ -1,10 +1,15 @@
+import path from 'path';
+
 import {FrontBridge} from '../bridges/FrontBridge';
 import {DEV_FRONT_URL} from '../constants';
 import {ElectronWindow} from './ElectronWindow';
 
 export class FrontWindow extends ElectronWindow {
   public constructor() {
-    super({});
+    super({
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+    });
   }
 
   public async load() {

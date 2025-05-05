@@ -49,9 +49,9 @@ export function useTemporalChart() {
     }
 
     return {
-      values: values,
-      timestamps: timestamps,
-      siteValues: siteValues,
+      values,
+      timestamps,
+      siteValues,
     };
   };
 
@@ -139,15 +139,15 @@ export function useTemporalChart() {
     const labels = generateLabelsContinuous(indices, timestamps);
 
     return {
-      labels: labels,
+      labels,
       values: [indices.map((i) => values[i])],
       colors: indices.map((i) => colors[i]),
     };
   };
 
   return {
-    candles: candles,
-    plot: plot,
-    render: render,
+    candles,
+    plot,
+    render,
   };
 }

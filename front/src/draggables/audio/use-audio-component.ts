@@ -30,10 +30,10 @@ export function useAudioFourier() {
   };
 
   return {
-    size: size,
-    increase: increase,
-    decrease: decrease,
-    canIncrease: canIncrease,
-    canDecrease: canDecrease,
+    size,
+    increase,
+    decrease,
+    canIncrease,
+    canDecrease,
   };
 }

@@ -1,4 +1,6 @@
-import * as Excel from 'exceljs';
+import {ConfigDto} from '@shared/dtos';
+import {ConfigPath} from '@shared/paths';
+import * as h5 from 'jsfive';
 
 import {render} from '../renderer';
 
@@ -7,22 +9,17 @@ export class LoadingZone {
 
   private readonly node: HTMLDivElement;
 
-  private readonly configurationElement: HTMLInputElement;
-
   private readonly storageElement: HTMLInputElement;
 
   public constructor() {
     this.audioPath = null;
 
     this.node = document.getElementById('loading-zone') as HTMLDivElement;
-    this.configurationElement = document.getElementById(
-      'configuration-input',
-    ) as HTMLInputElement;
     this.storageElement = document.getElementById(
       'storage-input',
     ) as HTMLInputElement;
 
-    this.attachConfigurationEvent();
+    this.attachEvent();
   }
 
   public hide() {
@@ -33,59 +30,49 @@ export class LoadingZone {
     this.node.style.display = 'inherit';
   }
 
-  private attachConfigurationEvent() {
-    this.configurationElement.addEventListener(
-      'change',
-      async (e: InputEvent) => {
-        e.preventDefault();
+  private attachEvent() {
+    this.storageElement.addEventListener('change', async (e: InputEvent) => {
+      e.preventDefault();
 
-        const input = e.target as HTMLInputElement;
-        const files = input.files;
+      const input = e.target as HTMLInputElement;
+      const files = input.files;
 
-        if (files.length !== 1) {
-          alert('Please add only one file');
-          return;
-        }
+      if (files.length !== 1) {
+        alert('Please add only one file');
+        return;
+      }
 
-        const file = files[0];
-        const type =
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const file = files[0];
+      const type = 'application/x-hdf';
 
-        if (file.type !== type) {
-          alert('Please add only excel file');
-          return;
-        }
+      if (file.type !== type) {
+        alert('Please add only HDF file');
+        return;
+      }
 
-        input.value = null;
-        const audioPath = await this.readAudioPathFromExcel(file);
-        this.audioPath = audioPath;
-        await window.electronAPI.startAudioService(audioPath);
-        await render();
-      },
-    );
+      input.value = null;
+      const audioPath = await this.readAudioPathFromExcel(file);
+      this.audioPath = audioPath;
+      await window.electronAPI.startAudioService(audioPath);
+      await render();
+    });
   }
 
-  private getDirectory(file: File): string {
-    return window.electronAPI.getDirectoryPath(file);
-  }
+  private async readAudioPathFromExcel(file: File): Promise<string> {
+    await window.electronAPI.setStoragePath(file.path);
 
-  private joinPath(dirPath: string, audioPath: string) {
-    return window.electronAPI.joinPath(dirPath, audioPath);
-  }
-
-  private readAudioPathFromExcel(file: File): Promise<string> {
     return new Promise((resolve) => {
       const reader = new FileReader();
 
       reader.addEventListener('load', async (e) => {
         const data = e.target.result as ArrayBuffer;
-        const workbook = new Excel.Workbook();
-        await workbook.xlsx.load(data);
-        const settings = workbook.getWorksheet('Settings');
-        const audioPath = settings.getCell('B3').toString();
-        const directory = this.getDirectory(file);
-        const finalPath = this.joinPath(directory, audioPath);
-        resolve(finalPath);
+        const f = new h5.File(data, 'r');
+        const path = ConfigPath.configs;
+        const dataset = f.get(path);
+        const configString = dataset.value[0] as string;
+        const json = JSON.parse(configString);
+        const config = ConfigDto.parse(json);
+        resolve(config.settings.audioPath);
       });
 
       reader.readAsArrayBuffer(file);

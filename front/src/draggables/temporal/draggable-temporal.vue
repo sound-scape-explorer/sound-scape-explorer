@@ -68,12 +68,14 @@ useDraggableTemporalLifecycles();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .container {
-  width: $s2;
+  width: sizes.$s2;
 }
 
 .expand {
-  width: $w-max;
+  width: sizes.$w-max;
 }
 
 .plot {

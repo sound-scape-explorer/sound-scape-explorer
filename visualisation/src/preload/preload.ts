@@ -1,4 +1,6 @@
 import {contextBridge} from 'electron';
+import {getStoragePath} from 'src/preload/get-storage-path';
+import {setStoragePath} from 'src/preload/set-storage-path';
 
 import {checkPath} from './check-path';
 import {createCampaignWindow} from './create-campaign-window';
@@ -13,15 +15,17 @@ import {startAudioService} from './start-audio-service';
 import {stopAudioService} from './stop-audio-service';
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  getDirectoryPath: getDirectoryPath,
-  getPathExistence: getPathExistence,
-  startAudioService: startAudioService,
-  getAudioStatus: getAudioStatus,
-  stopAudioService: stopAudioService,
-  createFrontWindow: createFrontWindow,
-  createCampaignWindow: createCampaignWindow,
-  joinPath: joinPath,
-  findCommonFolder: findCommonFolder,
-  checkPath: checkPath,
-  listFiles: listFiles,
+  getDirectoryPath,
+  getPathExistence,
+  startAudioService,
+  getAudioStatus,
+  stopAudioService,
+  createFrontWindow,
+  createCampaignWindow,
+  joinPath,
+  findCommonFolder,
+  checkPath,
+  listFiles,
+  getStoragePath,
+  setStoragePath,
 });

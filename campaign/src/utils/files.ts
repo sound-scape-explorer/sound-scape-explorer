@@ -1,9 +1,9 @@
-import {LABEL_PREFIX} from 'src/constants.ts';
+import {TAG_PREFIX_FOR_TABLE} from 'src/constants';
 
-export function addPrefixToLabelProperty(property: string) {
-  return `${LABEL_PREFIX}${property.toUpperCase()}`;
+export function addPrefixToTagName(property: string) {
+  return `${TAG_PREFIX_FOR_TABLE}${property.toUpperCase()}`;
 }
 
-export function removePrefixFromLabelProperty(property: string) {
-  return property.replace(LABEL_PREFIX, '');
+export function removePrefixFromTagName(property: string) {
+  return property.replace(TAG_PREFIX_FOR_TABLE, '');
 }

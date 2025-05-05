@@ -1,8 +1,8 @@
+import {type RangeDto} from '@shared/dtos';
 import {useCallback} from 'react';
-import {type ConfigRange} from 'src/panels/metrics/hooks/use-range-state.ts';
 
 export function useRangeSlug() {
-  const getSlug = useCallback((range: ConfigRange) => {
+  const getSlug = useCallback((range: RangeDto) => {
     return `${range.index}-${range.name}`;
   }, []);
 

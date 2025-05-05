@@ -4,21 +4,14 @@ import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
-import {useBandSelection} from 'src/composables/use-band-selection';
+import {useAggregated} from 'src/composables/use-aggregated';
+import {useAutoclustered} from 'src/composables/use-autoclustered';
 import {useDraggables} from 'src/composables/use-draggables';
-import {useExtractorSelection} from 'src/composables/use-extractor-selection';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useReducerSelection} from 'src/composables/use-reducer-selection';
-import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
-import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
-import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useStorageRanges} from 'src/composables/use-storage-ranges';
-import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {useIntervals} from 'src/composables/use-intervals';
+import {useLabelSets} from 'src/composables/use-label-sets';
+import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
 import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
 import {ref} from 'vue';
@@ -27,17 +20,15 @@ const step = ref<number>(0); // percents
 
 type Step = [string, () => Promise<void>]; // [text, reader]
 
+// todo: update me
 export function useViewLoader() {
   const {close} = useDraggables();
-  const {readLabels} = useStorageLabels();
-  const {readAggregatedFeatures} = useStorageAggregatedFeatures();
-  const {readAggregatedIndices} = useStorageAggregatedIndices();
-  const {readAggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {readAggregatedSites} = useStorageAggregatedSites();
-  const {readAggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
-  const {readAggregatedLabels} = useStorageAggregatedLabels();
-  const {readReducedFeatures} = useStorageReducedFeatures();
-  const {readRanges} = useStorageRanges();
+  const {read: readAggregated} = useAggregated();
+  const {readReducedEmbeddings: readReduced} = useStorageReducedEmbeddings();
+  const {read: readAutoclustered} = useAutoclustered();
+  const {generate: generateIntervals} = useIntervals();
+  const {generate: generateLabelSets} = useLabelSets();
+
   const {generateColorScale} = useScatterColorScale();
   const {buildSelection, selection: labelSelection} = useLabelSelection();
   const {isEnabled} = useScatterTraces();
@@ -45,24 +36,17 @@ export function useViewLoader() {
   const {filter: filterByTemporal} = useScatterFilterTemporal();
   const {filterByTime} = useScatterFilterTime();
 
-  const {band} = useBandSelection();
-  const {integration} = useIntegrationSelection();
-  const {extractor} = useExtractorSelection();
-  const {reducer} = useReducerSelection();
+  const {extraction, band, integration, reducer} = useViewSelectionNew();
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
 
   const steps: Step[] = [
-    ['labels', readLabels],
-    ['features', readAggregatedFeatures],
-    ['indices', readAggregatedIndices],
-    ['timestamps', readAggregatedTimestamps],
-    ['ranges', readRanges],
-    ['sites', readAggregatedSites],
-    ['intervals', readAggregatedIntervalDetails],
-    ['interval labels', readAggregatedLabels],
-    ['reduced features', readReducedFeatures],
+    ['aggregated', readAggregated],
+    ['reduced', readReduced],
+    ['autoclustered', readAutoclustered],
+    ['intervals', async () => generateIntervals()],
+    ['label sets', async () => generateLabelSets()],
   ];
 
   const updateStep = (current: number) => {
@@ -77,9 +61,9 @@ export function useViewLoader() {
   const load = async () => {
     if (
       !hasView.value ||
+      extraction.value === null ||
       band.value === null ||
       integration.value === null ||
-      extractor.value === null ||
       reducer.value === null
     ) {
       return;
@@ -110,7 +94,7 @@ export function useViewLoader() {
   };
 
   return {
-    load: load,
-    step: step,
+    load,
+    step,
   };
 }

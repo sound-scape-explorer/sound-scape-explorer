@@ -6,7 +6,7 @@ const flavor = ref<HeatmapScale>(HeatmapScale.RdBu);
 
 export function useDraggableHeatmapsColor() {
   return {
-    flavor: flavor,
-    flavors: flavors,
+    flavor,
+    flavors,
   };
 }

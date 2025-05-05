@@ -27,6 +27,6 @@ export function useDraggableLabelsScreenshot() {
   };
 
   return {
-    screenshotLabel: screenshotLabel,
+    screenshotLabel,
   };
 }

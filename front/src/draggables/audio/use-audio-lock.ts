@@ -22,7 +22,7 @@ export function useAudioLock() {
   };
 
   return {
-    lock: lock,
-    unlock: unlock,
+    lock,
+    unlock,
   };
 }

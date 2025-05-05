@@ -109,27 +109,29 @@ useRefProvide(InjectionKey.trajectoriesFuse, isFused);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .menu {
-  width: $s0;
+  width: sizes.$s0;
 }
 
 .selection {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $p0;
+  gap: sizes.$p0;
 }
 
 .switch {
   font-size: 0.9em;
-  width: $p0 * 8;
+  width: sizes.$p0 * 8;
 }
 
 .last-line {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-top: $p0;
+  padding-top: sizes.$p0;
 }
 
 .cascader {

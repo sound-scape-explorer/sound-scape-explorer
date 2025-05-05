@@ -24,23 +24,23 @@ export function useAppHeatmapData() {
   }: GenerateDataProps): HeatmapData => {
     const data: HeatmapData = {
       type: 'heatmap',
-      colorscale: colorscale,
+      colorscale,
       reversescale: true,
-      x: x,
-      y: y,
-      z: z,
+      x,
+      y,
+      z,
       hovertemplate: '%{z:.3f}<extra>%{y}/%{x}</extra>',
       hoverongaps: false,
       xgap: 1,
       ygap: 1,
-      zmin: zmin,
-      zmax: zmax,
+      zmin,
+      zmax,
     };
 
     return data;
   };
 
   return {
-    buildData: buildData,
+    buildData,
   };
 }

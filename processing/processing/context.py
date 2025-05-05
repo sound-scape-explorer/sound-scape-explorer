@@ -1,15 +1,13 @@
-from typing import Union
-
-from processing.new.ConfigNew import ConfigNew
-from processing.new.StorageNew import StorageNew
+from processing.config.Config import Config
+from processing.storage.Storage import Storage
 
 
 class Context:
-    config: ConfigNew
-    storage: StorageNew
-    last_choice: Union[str, None]
+    config: Config
+    storage: Storage
+    last_choice: str | None
 
     def __init__(self, config_path: str):
-        self.config = ConfigNew(config_path)
-        self.storage = StorageNew(self.config.settings.storage_path)
+        self.config = Config(config_path)
+        self.storage = Storage(self.config.settings.storage_path)
         self.last_choice = None

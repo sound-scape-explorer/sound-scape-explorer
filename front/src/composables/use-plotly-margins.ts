@@ -12,6 +12,6 @@ export function usePlotlyMargins() {
   };
 
   return {
-    generatePlotlyMargins: generatePlotlyMargins,
+    generatePlotlyMargins,
   };
 }

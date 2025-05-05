@@ -22,12 +22,12 @@ export function useDraggableHistograms() {
   const {names} = useIndicators();
 
   return {
-    divRef: divRef,
-    names: names,
-    name: name,
-    overs: overs,
-    over: over,
-    histogramFunctions: histogramFunctions,
-    histogramFunction: histogramFunction,
+    divRef,
+    names,
+    name,
+    overs,
+    over,
+    histogramFunctions,
+    histogramFunction,
   };
 }

@@ -1,18 +1,16 @@
 import {useMemo} from 'react';
-import {useFileValidation} from 'src/hooks/use-file-validation.ts';
-import {useSettingsValidation} from 'src/hooks/use-settings-validation.ts';
-import {useConfigValidation} from 'src/panels/config/hooks/use-config-validation.ts';
-import {useMetricsValidation} from 'src/panels/config/hooks/use-metrics-validation.ts';
+import {useFileValidation} from 'src/hooks/use-file-validation';
+import {useSettingsValidation} from 'src/hooks/use-settings-validation';
+import {useExtractionGlobalValidation} from 'src/panels/extractions/hooks/use-extraction-global-validation.ts';
 
 export function useGlobalValidation() {
   const {isValid: isFileValid} = useFileValidation();
   const {isValid: isSettingsValid} = useSettingsValidation();
-  const {isValid: isConfigValid} = useConfigValidation();
-  const {isValid: isMetricsValid} = useMetricsValidation();
+  const {isValid: areExtractionsValid} = useExtractionGlobalValidation();
 
   const isValid = useMemo(
-    () => isFileValid && isSettingsValid && isConfigValid && isMetricsValid,
-    [isFileValid, isSettingsValid, isConfigValid, isMetricsValid],
+    () => isFileValid && isSettingsValid && areExtractionsValid,
+    [isFileValid, isSettingsValid, areExtractionsValid],
   );
 
   return {

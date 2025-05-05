@@ -9,6 +9,7 @@ type Model = Ref<ViewItem | null>;
 type Selected = Ref<string | null>;
 type Options = Ref<string[]>;
 
+// todo: to remove
 // unreadable vue composable
 export function useViewSelectionPrimitive() {
   let hasAutoSelected = false;
@@ -21,7 +22,7 @@ export function useViewSelectionPrimitive() {
 
   const handleChange = (
     selected: string | null,
-    // eslint-disable-next-line no-unused-vars
+     
     callback: (index: number) => void,
   ) => {
     if (selected === null) {
@@ -47,8 +48,8 @@ export function useViewSelectionPrimitive() {
   };
 
   return {
-    reset: reset,
-    handleChange: handleChange,
-    autoselect: autoselect,
+    reset,
+    handleChange,
+    autoselect,
   };
 }

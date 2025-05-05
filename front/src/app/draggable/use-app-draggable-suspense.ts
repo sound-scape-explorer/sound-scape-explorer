@@ -33,6 +33,6 @@ export function useAppDraggableSuspense(props: AppDraggableProps) {
   });
 
   return {
-    suspense: suspense,
+    suspense,
   };
 }

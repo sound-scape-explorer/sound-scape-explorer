@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {flashOutline, repeatOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
@@ -205,12 +205,14 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .two {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $s0;
-  gap: $p0;
+  width: sizes.$s0;
+  gap: sizes.$p0;
 
   & > * {
     width: 100%;
@@ -225,7 +227,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
 .indicator-buttons {
   display: flex;
-  gap: $p0;
+  gap: sizes.$p0;
 }
 
 .gradients {

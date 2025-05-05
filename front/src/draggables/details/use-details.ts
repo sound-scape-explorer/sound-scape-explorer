@@ -1,59 +1,52 @@
 import {type Dayjs} from 'dayjs';
+import {useAggregated} from 'src/composables/use-aggregated';
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {useConfig} from 'src/composables/use-config';
 import {useDate} from 'src/composables/use-date';
-import {useFiles} from 'src/composables/use-files';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useSettings} from 'src/composables/use-settings';
 import {
-  type IntervalDetails,
-  useStorageAggregatedIntervalDetails,
-} from 'src/composables/use-storage-aggregated-interval-details';
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
+  type AggregatedWindow,
+  useIntervals,
+} from 'src/composables/use-intervals';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {STRING_DELIMITER} from 'src/constants';
 import {computed, ref} from 'vue';
 
 const currentIndex = ref<number | null>(null);
 const date = ref<Dayjs | null>(null);
 const labelValues = ref<string[] | null>(null);
 const site = ref<string | null>(null);
-const blocks = ref<IntervalDetails | null>(null);
+const windows = ref<AggregatedWindow[] | null>(null);
 
 // interval details
+// todo: can you be more uselessly redundant please?
 export function useDetails() {
-  const {settings} = useSettings();
-  const {files} = useFiles();
+  const {config} = useConfig();
+  const {integration} = useViewSelectionNew();
   const {convertTimestampToDate} = useDate();
-  const {aggregatedLabels} = useStorageAggregatedLabels();
-  const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
-  const {aggregatedSites} = useStorageAggregatedSites();
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {aggregated} = useAggregated();
   const {currentIntervalIndex} = useIntervalSelector();
   const {timeshift} = useClientSettings();
-  const {integration} = useIntegrationSelection();
+  const {intervals} = useIntervals();
 
   const readDetails = async () => {
     if (
       currentIntervalIndex.value === null ||
-      files.value === null ||
-      settings.value === null ||
-      aggregatedSites.value === null ||
-      aggregatedTimestamps.value === null ||
-      aggregatedLabels.value === null ||
-      aggregatedIntervalDetails.value === null ||
+      config.value === null ||
+      aggregated.value === null ||
       currentIntervalIndex.value === currentIndex.value
     ) {
       return;
     }
 
     const i = currentIntervalIndex.value; // interval index
-    const t = aggregatedTimestamps.value[i];
+    const t = aggregated.value.timestamps[i];
+    const interval = intervals.value[i];
 
     date.value = convertTimestampToDate(t);
-    labelValues.value = aggregatedLabels.value[i];
-    site.value = aggregatedSites.value[i];
-    blocks.value = aggregatedIntervalDetails.value[i];
+    labelValues.value = Object.values(interval.labels).flat(); // todo: ???
+    site.value = interval.sites.join(STRING_DELIMITER);
+    windows.value = interval.windows;
 
     currentIndex.value = i;
   };
@@ -67,27 +60,24 @@ export function useDetails() {
   });
 
   const updateDates = () => {
-    if (
-      currentIntervalIndex.value === null ||
-      aggregatedTimestamps.value === null
-    ) {
+    if (currentIntervalIndex.value === null || aggregated.value === null) {
       return;
     }
 
     const i = currentIntervalIndex.value;
-    const t = aggregatedTimestamps.value[i];
+    const t = aggregated.value.timestamps[i];
 
     date.value = convertTimestampToDate(t);
   };
 
   return {
-    date: date,
-    labelValues: labelValues,
-    site: site,
-    blocks: blocks,
-    dateEnd: dateEnd,
-    readDetails: readDetails,
-    timeshift: timeshift,
-    updateDates: updateDates,
+    date,
+    labelValues,
+    site,
+    windows,
+    dateEnd,
+    readDetails,
+    timeshift,
+    updateDates,
   };
 }

@@ -1,8 +1,8 @@
+import {SITE_DEFAULT} from '@shared/constants';
+import {type FileDto} from '@shared/dtos';
 import {useCallback} from 'react';
-import {type ConfigFile} from 'src/hooks/use-table-state-converter.ts';
-import {type FileAlias} from 'src/panels/files/hooks/use-table-loader.ts';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
-import {type IndexedXlsxFile} from 'src/utils/xlsx-parser.ts';
+import {type FileAlias} from 'src/panels/files/hooks/use-table-loader';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
 export function useTableSiteLoader() {
   const {createColumn} = useTableState();
@@ -20,22 +20,13 @@ export function useTableSiteLoader() {
 
   const loadFromFolder = useCallback(
     (files: FileAlias[]) => {
-      const paths = files.map((f) => f.path);
+      const paths = files.map(() => SITE_DEFAULT);
       load(paths);
     },
     [load],
   );
-
-  const loadFromXlsx = useCallback(
-    (files: IndexedXlsxFile[]) => {
-      const paths = files.map((f) => f.SITE);
-      load(paths);
-    },
-    [load],
-  );
-
-  const loadFromJson = useCallback(
-    (files: ConfigFile[]) => {
+  const loadFromDto = useCallback(
+    (files: FileDto[]) => {
       const paths = files.map((f) => f.Site);
       load(paths);
     },
@@ -44,7 +35,6 @@ export function useTableSiteLoader() {
 
   return {
     loadFromFolder,
-    loadFromXlsx,
-    loadFromJson,
+    loadFromDto,
   };
 }

@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import {InjectionKey} from 'src/common/injection-key';

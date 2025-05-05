@@ -82,11 +82,11 @@ export function useDraggableCalendarTransport() {
   };
 
   return {
-    setWindowDuration: setWindowDuration,
-    blurButton: blurButton,
-    handleToggle: handleToggle,
-    skipTimeForward: skipTimeForward,
-    skipTimeBackward: skipTimeBackward,
-    handleDateStartUpdate: handleDateStartUpdate,
+    setWindowDuration,
+    blurButton,
+    handleToggle,
+    skipTimeForward,
+    skipTimeBackward,
+    handleDateStartUpdate,
   };
 }

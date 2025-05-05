@@ -35,7 +35,7 @@
     }
   },
   "include": [
-    "src",
-    "eslint.config.js"
+    "src"
+    //    "eslint.config.js"
   ]
 }

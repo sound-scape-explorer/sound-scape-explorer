@@ -1,6 +1,6 @@
+import {isDarkModeEnabled} from '@shared/browser';
 import {atom, useAtom} from 'jotai';
 import {useCallback} from 'react';
-import {isDarkModeEnabled} from 'src/utils/browser.ts';
 
 const isDarkAtom = atom<boolean>(isDarkModeEnabled());
 

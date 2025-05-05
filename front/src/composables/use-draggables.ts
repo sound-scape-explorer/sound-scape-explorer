@@ -2,7 +2,6 @@ import {reactive, ref} from 'vue';
 
 export interface DraggablesStore {
   _alphaSelection3d: boolean;
-  _alphaTimeline: boolean;
   open: boolean;
   settings: boolean;
   help: boolean;
@@ -29,7 +28,6 @@ const store = reactive<DraggablesStore>({
   view: false,
   colors: false,
   calendar: false,
-  _alphaTimeline: false,
   labels: false,
   audio: false,
   details: false,
@@ -139,16 +137,16 @@ export function useDraggables() {
   const closeSelected = () => close(stack.value[0]);
 
   return {
-    store: store,
-    hidden: hidden,
-    open: open,
-    toggle: toggle,
-    toggleAll: toggleAll,
-    cycle: cycle,
-    close: close,
-    closeAll: closeAll,
-    closeSelected: closeSelected,
-    closeExceptCurrent: closeExceptCurrent,
-    stack: stack,
+    store,
+    hidden,
+    open,
+    toggle,
+    toggleAll,
+    cycle,
+    close,
+    closeAll,
+    closeSelected,
+    closeExceptCurrent,
+    stack,
   };
 }

@@ -24,6 +24,6 @@ export function useScatterClick() {
   };
 
   return {
-    handleClick: handleClick,
+    handleClick,
   };
 }

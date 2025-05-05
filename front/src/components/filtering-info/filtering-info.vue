@@ -4,10 +4,12 @@ import FilteringInfoButtons from 'src/components/filtering-info/filtering-info-b
 import {useFilteringInfoData} from 'src/components/filtering-info/use-filtering-info-data';
 import {useFilteringInfoMode} from 'src/components/filtering-info/use-filtering-info-mode';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 
 const {currentIntervalIndex, hasClicked} = useIntervalSelector();
 const {cycleMode, isIntervalMode, isCollectMode, isFilterMode} =
   useFilteringInfoMode();
+const {colors} = useThemeColors();
 
 const {
   totalOut,
@@ -154,9 +156,11 @@ const {
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .tooltip {
   font-size: 0.8em;
-  width: $p0 * 24;
+  width: sizes.$p0 * 24;
 
   h4 {
     font-weight: bold;
@@ -175,7 +179,7 @@ const {
 }
 
 .active {
-  color: $emerald;
+  color: v-bind('colors.pressedColor');
 }
 
 .bold {
@@ -187,7 +191,7 @@ const {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $p0 * 3;
+  width: sizes.$p0 * 3;
 
   &:hover {
     cursor: pointer;

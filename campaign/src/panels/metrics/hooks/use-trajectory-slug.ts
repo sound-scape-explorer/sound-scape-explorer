@@ -1,8 +1,8 @@
+import {type TrajectoryDto} from '@shared/dtos';
 import {useCallback} from 'react';
-import  {type ConfigTrajectory} from 'src/panels/metrics/hooks/use-trajectory-state.ts';
 
 export function useTrajectorySlug() {
-  const getSlug = useCallback((t: ConfigTrajectory) => {
+  const getSlug = useCallback((t: TrajectoryDto) => {
     return `${t.index}-${t.name}`;
   }, []);
 

@@ -10,8 +10,8 @@ export function useTemporalThresholds() {
   };
 
   return {
-    from: from,
-    to: to,
-    reset: reset,
+    from,
+    to,
+    reset,
   };
 }

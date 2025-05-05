@@ -1,13 +1,4 @@
 import {
-  AutoclusterImpl,
-  DigesterImpl,
-  ExtractorImpl,
-  IndexImpl,
-  ReducerImpl,
-  TrajectoryStep,
-} from '@shared/enums.ts';
-import * as Excel from 'exceljs';
-import {
   AUDIO_HOST_DEFAULT,
   AUDIO_PATH_DEFAULT,
   AUTOCLUSTER_ALPHA_DEFAULT,
@@ -18,17 +9,38 @@ import {
   COMPUTATION_ITERATIONS_DEFAULT,
   COMPUTATION_STRATEGY_DEFAULT,
   DISPLAY_SEED_DEFAULT,
-  IS_PERSIST_DEFAULT,
-  LABEL_PREFIX,
+  HOP_MS_DEFAULT,
   MEMORY_LIMIT_DEFAULT,
-  OFFSET_DEFAULT,
   REDUCER_DIMENSIONS_DEFAULT,
   SAMPLE_RATE_DEFAULT,
-  STEP_DEFAULT,
   STORAGE_PATH_DEFAULT,
   TIMELINE_ORIGIN_DEFAULT,
   TIMEZONE_DEFAULT,
-} from 'src/constants.ts';
+  WINDOW_MS_DEFAULT,
+} from '@shared/constants';
+import {
+  type AutoclusterDto,
+  type BandDto,
+  type ExtractorDto,
+  type FileDto,
+  type IntegrationDto,
+  type MetricDto,
+  type RangeDto,
+  type ReducerDto,
+  type SettingsDto,
+  type TrajectoryDto,
+} from '@shared/dtos';
+import {
+  AutoclusterImplEnum,
+  ExtractorImplEnum,
+  MetricImplEnum,
+  ReducerImplEnum,
+  TrajectoryStepEnum,
+} from '@shared/enums';
+import * as Excel from 'exceljs';
+import {LABEL_PREFIX_XLSX_13} from 'src/constants';
+import {formatDateToString} from 'src/utils/dates';
+import {invertRowsAndColumns} from 'src/utils/objects';
 import {
   AutoclustersColumn,
   BandsColumn,
@@ -40,30 +52,13 @@ import {
   SettingsCell,
   TrajectoriesColumn,
   XlsxSheet,
-} from 'src/enums.ts';
-import {type Settings} from 'src/hooks/use-settings-state.ts';
-import {type ConfigBand} from 'src/panels/config/hooks/use-band-state.ts';
-import {type ConfigExtractor} from 'src/panels/config/hooks/use-extractor-state.ts';
-import {type ConfigIntegration} from 'src/panels/config/hooks/use-integration-state.ts';
-import {type ConfigReducer} from 'src/panels/config/hooks/use-reducer-state.ts';
-import {type ConfigAutocluster} from 'src/panels/metrics/hooks/use-autocluster-state.ts';
-import {type ConfigDigester} from 'src/panels/metrics/hooks/use-digester-state.ts';
-import {type MetricsIndex} from 'src/panels/metrics/hooks/use-index-state.ts';
-import {type ConfigRange} from 'src/panels/metrics/hooks/use-range-state.ts';
-import {type ConfigTrajectory} from 'src/panels/metrics/hooks/use-trajectory-state.ts';
-import {formatDateToString} from 'src/utils/dates.ts';
-import {invertRowsAndColumns} from 'src/utils/objects.ts';
+} from 'src/xlsx-columns';
 
 export interface XlsxFile {
   FILE: string;
   SITE: string;
   DATE: string;
-
-  [label: `${typeof LABEL_PREFIX}${string}`]: string;
-}
-
-export interface IndexedXlsxFile extends XlsxFile {
-  index: number;
+  tags: Record<string, string>;
 }
 
 function isKeyOfXlsxFile(key: string): key is keyof XlsxFile {
@@ -71,48 +66,49 @@ function isKeyOfXlsxFile(key: string): key is keyof XlsxFile {
     key === 'FILE' ||
     key === 'SITE' ||
     key === 'DATE' ||
-    key.startsWith(LABEL_PREFIX)
+    key.startsWith(LABEL_PREFIX_XLSX_13)
   );
 }
 
-const IS_PERSIST_TRUE = 'yes';
-
-const XLSX_EXTRACTORS: Record<string, ExtractorImpl> = {
-  vgg: ExtractorImpl.vgg,
-  melogram: ExtractorImpl.melogram,
-  melspectrum: ExtractorImpl.melspectrum,
+const XLSX_EXTRACTORS: Record<string, ExtractorImplEnum> = {
+  vgg: ExtractorImplEnum.enum.VGGISH,
+  melspectrum: ExtractorImplEnum.enum.SPECTROGRAM,
+  melogram: ExtractorImplEnum.enum.SPECTROGRAM,
 };
 
-const XLSX_INDICES: Record<string, IndexImpl> = {
-  leq_maad: IndexImpl.leq_maad,
-  med: IndexImpl.med,
-  ht: IndexImpl.ht,
-  hf: IndexImpl.hf,
-  aci: IndexImpl.aci,
-  adi: IndexImpl.adi,
-  bi: IndexImpl.bi,
-  ndsi: IndexImpl.ndsi,
+const XLSX_INDICES: Record<string, ExtractorImplEnum> = {
+  leq_maad: ExtractorImplEnum.enum.LEQ,
+  med: ExtractorImplEnum.enum.MED,
+  ht: ExtractorImplEnum.enum.HT,
+  hf: ExtractorImplEnum.enum.HF,
+  aci: ExtractorImplEnum.enum.ACI,
+  adi: ExtractorImplEnum.enum.ADI,
+  bi: ExtractorImplEnum.enum.BI,
+  ndsi: ExtractorImplEnum.enum.NDSI,
 };
 
-const XLSX_REDUCERS: Record<string, ReducerImpl> = {
-  umap: ReducerImpl.umap,
-  pca: ReducerImpl.pca,
+const XLSX_REDUCERS: Record<string, ReducerImplEnum> = {
+  umap: ReducerImplEnum.enum.UMAP,
+  pca: ReducerImplEnum.enum.PCA,
 };
 
-const XLSX_DIGESTERS: Record<string, DigesterImpl> = {
-  silhouette: DigesterImpl.silhouette,
-  contingency: DigesterImpl.contingency,
-  sum_var: DigesterImpl.sum_var,
-  sum_std: DigesterImpl.sum_std,
-  mean_std: DigesterImpl.mean_std,
-  mean_spreading: DigesterImpl.mean_spreading,
-  distance: DigesterImpl.distance,
-  overlap: DigesterImpl.overlap,
+const XLSX_DIGESTERS: Record<string, MetricImplEnum> = {
+  mean_std: MetricImplEnum.enum.MEAN_STD,
+  mean_spreading: MetricImplEnum.enum.MEAN_SPREADING,
+  silhouette: MetricImplEnum.enum.SILHOUETTE,
+  contingency: MetricImplEnum.enum.CONTINGENCY,
+  overlap: MetricImplEnum.enum.CONTINGENCY,
 };
 
-const XLSX_AUTOCLUSTERS: Record<string, AutoclusterImpl> = {
-  'hdbscan-eom': AutoclusterImpl.hdbscan_eom,
-  'hdbscan-leaf': AutoclusterImpl.hdbscan_leaf,
+const XLSX_AUTOCLUSTERS: Record<string, AutoclusterImplEnum> = {
+  'hdbscan-eom': AutoclusterImplEnum.enum.HDBSCAN_EOM,
+  'hdbscan-leaf': AutoclusterImplEnum.enum.HDBSCAN_LEAF,
+};
+
+const TRAJECTORY_STEPS: Record<string, TrajectoryStepEnum> = {
+  hour: TrajectoryStepEnum.enum.HOUR,
+  day: TrajectoryStepEnum.enum.DAY,
+  month: TrajectoryStepEnum.enum.MONTH,
 };
 
 interface ReadColumnsProps {
@@ -126,6 +122,7 @@ const rowOffset = 1;
 
 export class XlsxParser {
   private workbook: Excel.Workbook;
+
   private readonly directory: string;
 
   private constructor(workbook: Excel.Workbook, directory: string) {
@@ -155,23 +152,45 @@ export class XlsxParser {
     });
   }
 
-  public parseFiles(): IndexedXlsxFile[] {
+  public parseFiles(): FileDto[] {
     const {keys, headers} = this.parseFilesHeader();
 
     const sheet = this.getSheet(XlsxSheet.Files);
     const columns = this.readColumns({sheet});
     const values = Object.values(columns);
     const length = values[0].length;
-    const files = new Array<IndexedXlsxFile>(length);
+    const files = new Array<FileDto>(length);
 
     for (let i = 0; i < length; i += 1) {
-      const file = {} as IndexedXlsxFile;
-      file.index = i;
+      const file = {
+        tags: {},
+      } as FileDto;
+
+      file.Index = String(i);
 
       for (const key of keys) {
         const k = headers.indexOf(key);
         const value = values[k][i];
-        (file as XlsxFile)[key as keyof XlsxFile] = String(value);
+
+        if (key === 'FILE') {
+          file.Path = String(value);
+          continue;
+        }
+
+        if (key === 'DATE') {
+          file.Date = formatDateToString(new Date(String(value)));
+          continue;
+        }
+
+        if (key === 'SITE') {
+          file.Site = String(value);
+          continue;
+        }
+
+        if (key.startsWith(LABEL_PREFIX_XLSX_13)) {
+          const removed = key.replace(LABEL_PREFIX_XLSX_13, '');
+          file.tags[removed] = String(value);
+        }
       }
 
       files[i] = file;
@@ -180,11 +199,11 @@ export class XlsxParser {
     return files;
   }
 
-  public parseSettings(): Settings {
+  public parseSettings(): SettingsDto {
     const sheet = this.getSheet(XlsxSheet.Settings);
     const cells = SettingsCell;
 
-    const settings: Settings = {
+    const settings: SettingsDto = {
       storagePath: String(
         this.readCell(sheet, cells.storagePath) ?? STORAGE_PATH_DEFAULT,
       ),
@@ -231,9 +250,9 @@ export class XlsxParser {
     };
   }
 
-  public parseBands(): ConfigBand[] {
+  public parseBands(): BandDto[] {
     const rows = this.readAsRows(XlsxSheet.Bands);
-    const bands: ConfigBand[] = [];
+    const bands: BandDto[] = [];
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
@@ -241,7 +260,7 @@ export class XlsxParser {
       const low = Number(row[BandsColumn.low] ?? '');
       const high = Number(row[BandsColumn.high] ?? '');
 
-      const band: ConfigBand = {
+      const band: BandDto = {
         index: i,
         name,
         low,
@@ -254,19 +273,19 @@ export class XlsxParser {
     return bands;
   }
 
-  public parseIntegrations(): ConfigIntegration[] {
+  public parseIntegrations(): IntegrationDto[] {
     const rows = this.readAsRows(XlsxSheet.Integrations);
-    const integrations: ConfigIntegration[] = [];
+    const integrations: IntegrationDto[] = [];
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
       const name = String(row[IntegrationsColumn.integration] ?? '');
       const duration = Number(row[IntegrationsColumn.seconds] ?? 0);
 
-      const integration: ConfigIntegration = {
+      const integration: IntegrationDto = {
         index: i,
         name,
-        duration,
+        duration: duration * 1000,
       };
 
       integrations.push(integration);
@@ -275,65 +294,52 @@ export class XlsxParser {
     return integrations;
   }
 
-  public parseExtractorsAndIndices(): {
-    extractors: ConfigExtractor[];
-    indices: MetricsIndex[];
-  } {
+  public parseExtractorsAndIndices(): ExtractorDto[] {
     const rows = this.readAsRows(XlsxSheet.Extractors);
-    const extractors: ConfigExtractor[] = [];
-    const indices: MetricsIndex[] = [];
+    const extractors: ExtractorDto[] = [];
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
 
-      const offset = Number(row[ExtractorsColumn.offset] ?? OFFSET_DEFAULT);
-      const step = Number(row[ExtractorsColumn.step] ?? STEP_DEFAULT);
-      const isPersist =
-        (row[ExtractorsColumn.persist] ?? IS_PERSIST_DEFAULT) ===
-        IS_PERSIST_TRUE;
-
-      // typeString can be extractor or index
+      // can be extractor or acoustic index (v13 definitions)
       const implString = String(row[ExtractorsColumn.extractor]);
 
       if (Object.keys(XLSX_EXTRACTORS).includes(implString)) {
-        const impl = XLSX_EXTRACTORS[implString] as ExtractorImpl;
+        const impl = XLSX_EXTRACTORS[implString] as ExtractorImplEnum;
 
-        const extractor: ConfigExtractor = {
+        const extractor: ExtractorDto = {
           index: i,
           name: impl,
           impl,
-          offset,
-          step,
-          isPersist,
+          window: WINDOW_MS_DEFAULT,
+          hop: HOP_MS_DEFAULT,
         };
 
         extractors.push(extractor);
       }
 
+      // acoustic indices that are now considered as extractors
       if (Object.keys(XLSX_INDICES).includes(implString)) {
-        const impl = XLSX_INDICES[implString] as IndexImpl;
+        const impl = XLSX_INDICES[implString] as ExtractorImplEnum;
 
-        const index: MetricsIndex = {
+        const extractor: ExtractorDto = {
           index: i,
+          name: impl,
           impl,
-          offset,
-          step,
-          isPersist,
+          window: WINDOW_MS_DEFAULT,
+          hop: HOP_MS_DEFAULT,
         };
 
-        indices.push(index);
+        extractors.push(extractor);
       }
     }
 
-    return {
-      extractors,
-      indices,
-    };
+    return extractors;
   }
 
-  public parseRanges(): ConfigRange[] {
+  public parseRanges(): RangeDto[] {
     const rows = this.readAsRows(XlsxSheet.Ranges);
-    const ranges: ConfigRange[] = [];
+    const ranges: RangeDto[] = [];
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
@@ -341,7 +347,7 @@ export class XlsxParser {
       const start = (row[RangesColumn.start] as Date | undefined) ?? new Date();
       const end = (row[RangesColumn.end] as Date | undefined) ?? new Date();
 
-      const range: ConfigRange = {
+      const range: RangeDto = {
         index: i,
         name,
         start: formatDateToString(start, true),
@@ -354,45 +360,22 @@ export class XlsxParser {
     return ranges;
   }
 
-  public parseReducers({
-    bands,
-    integrations,
-  }: {
-    bands: ConfigBand[];
-    integrations: ConfigIntegration[];
-  }): ConfigReducer[] {
+  public parseReducers(): ReducerDto[] {
     const rows = this.readAsRows(XlsxSheet.Reducers);
-    const reducers: ConfigReducer[] = [];
+    const reducers: ReducerDto[] = [];
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
       const implString = String(row[ReducersColumn.reducer]);
-      const impl = XLSX_REDUCERS[implString] as ReducerImpl;
+      const impl = XLSX_REDUCERS[implString] as ReducerImplEnum;
       const dimensions = Number(
         row[ReducersColumn.dimensions] ?? REDUCER_DIMENSIONS_DEFAULT,
       );
 
-      const bandNames: ConfigBand['name'][] = (
-        (row[ReducersColumn.bands] as string) ?? ''
-      )
-        .split(',')
-        .map((i) => i.trim());
-
-      const integrationNames: ConfigIntegration['name'][] = (
-        (row[ReducersColumn.integrations] as string) ?? ''
-      )
-        .split(',')
-        .map((i) => i.trim());
-
-      const reducer: ConfigReducer = {
+      const reducer: ReducerDto = {
         index: i,
         impl,
         dimensions,
-        bands: bands.filter((b) => bandNames.includes(b.name)),
-        integrations: integrations.filter((i) =>
-          integrationNames.includes(i.name),
-        ),
-        extractors: [],
       };
 
       reducers.push(reducer);
@@ -401,14 +384,14 @@ export class XlsxParser {
     return reducers;
   }
 
-  public parseAutoclusters(): ConfigAutocluster[] {
+  public parseAutoclusters(): AutoclusterDto[] {
     const rows = this.readAsRows(XlsxSheet.Autoclusters);
-    const autoclusters: ConfigAutocluster[] = [];
+    const autoclusters: AutoclusterDto[] = [];
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
       const implString = String(row[AutoclustersColumn.autocluster]);
-      const impl = XLSX_AUTOCLUSTERS[implString] as AutoclusterImpl;
+      const impl = XLSX_AUTOCLUSTERS[implString] as AutoclusterImplEnum;
       const minClusterSize = Number(
         row[AutoclustersColumn.minClusterSize] ??
           AUTOCLUSTER_MIN_CLUSTER_SIZE_DEFAULT,
@@ -423,7 +406,7 @@ export class XlsxParser {
         row[AutoclustersColumn.epsilon] ?? AUTOCLUSTER_EPSILON_DEFAULT,
       );
 
-      const autocluster: ConfigAutocluster = {
+      const autocluster: AutoclusterDto = {
         index: i,
         impl,
         minClusterSize,
@@ -438,16 +421,16 @@ export class XlsxParser {
     return autoclusters;
   }
 
-  public parseDigesters(): ConfigDigester[] {
+  public parseDigesters(): MetricDto[] {
     const rows = this.readAsRows(XlsxSheet.Digesters);
-    const digesters: ConfigDigester[] = [];
+    const digesters: MetricDto[] = [];
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
       const implString = String(row[DigestersColumn.digester]);
-      const impl = XLSX_DIGESTERS[implString] as DigesterImpl;
+      const impl = XLSX_DIGESTERS[implString] as MetricImplEnum;
 
-      const digester: ConfigDigester = {
+      const digester: MetricDto = {
         index: i,
         impl,
       };
@@ -458,9 +441,9 @@ export class XlsxParser {
     return digesters;
   }
 
-  public parseTrajectories(properties: string[]): ConfigTrajectory[] {
+  public parseTrajectories(tagNames: string[]): TrajectoryDto[] {
     const rows = this.readAsRows(XlsxSheet.Trajectories);
-    const trajectories: ConfigTrajectory[] = [];
+    const trajectories: TrajectoryDto[] = [];
 
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
@@ -469,17 +452,18 @@ export class XlsxParser {
         (row[TrajectoriesColumn.start] as Date | undefined) ?? new Date();
       const end =
         (row[TrajectoriesColumn.end] as Date | undefined) ?? new Date();
-      const labelProperty = String(row[TrajectoriesColumn.labelProperty] ?? '');
-      const labelValue = String(row[TrajectoriesColumn.labelValue] ?? '');
-      const step = String(row[TrajectoriesColumn.step] ?? '') as TrajectoryStep;
+      const tagName = String(row[TrajectoriesColumn.labelProperty] ?? '');
+      const tagValue = String(row[TrajectoriesColumn.labelValue] ?? '');
+      const stepString = String(row[TrajectoriesColumn.step] ?? '');
+      const step = TRAJECTORY_STEPS[stepString] ?? TrajectoryStepEnum.enum.HOUR;
 
-      const trajectory: ConfigTrajectory = {
+      const trajectory: TrajectoryDto = {
         index: i,
         name,
         start: formatDateToString(start, true),
         end: formatDateToString(end, true),
-        labelProperty: properties.find((p) => p === labelProperty),
-        labelValue,
+        tagName: tagNames.find((n) => n === tagName) ?? '',
+        tagValue,
         step,
       };
 

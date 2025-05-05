@@ -1,4 +1,4 @@
-import {removeEmptyStringsFromEnd} from 'src/utils/array.ts';
+import {removeEmptyStringsFromEnd} from 'src/utils/array';
 
 export function parseClipboard(clipboard: string) {
   let rows = clipboard.split('\n');

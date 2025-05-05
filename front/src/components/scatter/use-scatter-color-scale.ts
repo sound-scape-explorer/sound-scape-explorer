@@ -1,5 +1,5 @@
-import {useFiles} from 'src/composables/use-files';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
+import {useAggregated} from 'src/composables/use-aggregated';
+import {useConfig} from 'src/composables/use-config';
 import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
 import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
 import {useColorByCyclingDay} from 'src/draggables/colors/use-color-by-cycling-day';
@@ -14,8 +14,8 @@ import {ref} from 'vue';
 const scale = ref<string[] | null>(null);
 
 export function useScatterColorScale() {
-  const {files} = useFiles();
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {config} = useConfig();
+  const {aggregated} = useAggregated();
   const {isIndicators, isLabels} = useColorState();
   const {getColor} = useColorByIntervalIndex();
   const {getColorByOneHour} = useColorBy1h();
@@ -28,17 +28,17 @@ export function useScatterColorScale() {
 
   const generate = async () => {
     return new Promise((resolve, reject) => {
-      if (files.value === null || aggregatedTimestamps.value === null) {
+      if (config.value === null || aggregated.value === null) {
         reject(new Error('generateColorScale: missing props'));
         return;
       }
 
       // number of intervals
-      const count = aggregatedTimestamps.value.length;
+      const count = aggregated.value.timestamps.length;
       const newScale: string[] = new Array(count);
 
       for (let i = 0; i < count; i += 1) {
-        const timestamp = aggregatedTimestamps.value[i];
+        const timestamp = aggregated.value.timestamps[i];
 
         if (isLabels.value) {
           newScale[i] = getColorByLabel(i);
@@ -75,7 +75,7 @@ export function useScatterColorScale() {
   };
 
   return {
-    scale: scale,
+    scale,
     generateColorScale: generate,
     resetColorScale: reset,
   };

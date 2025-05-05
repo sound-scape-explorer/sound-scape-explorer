@@ -1,7 +1,7 @@
 import chroma from 'chroma-js';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useExportName} from 'src/composables/use-export-name';
-import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
+import {useRelativeTraced} from 'src/composables/use-relative-traced';
 import {
   LOWER_DECILE_SUFFIX,
   RELATIVE_TRAJECTORIES_FLAVOR,
@@ -15,7 +15,7 @@ const names = ref<string[]>([]);
 const colors = ref<string[]>([]);
 
 export function useRelativeTrajectoriesData() {
-  const {selectRelativeTrajectories} = useRelativeTrajectories();
+  const {selectRelativeTrajectories} = useRelativeTraced();
   const {generate} = useExportName();
   const exportName = generate('relative-trajectories');
 
@@ -75,11 +75,11 @@ export function useRelativeTrajectoriesData() {
   };
 
   return {
-    values: values,
-    labels: labels,
-    names: names,
-    colors: colors,
-    handleUpdate: handleUpdate,
-    exportName: exportName,
+    values,
+    labels,
+    names,
+    colors,
+    handleUpdate,
+    exportName,
   };
 }

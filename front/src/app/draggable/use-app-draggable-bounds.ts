@@ -16,10 +16,10 @@ export function useAppDraggableBounds(container: Ref<HTMLElement | null>) {
     const maxHeight = window.visualViewport.height;
 
     return {
-      width: width,
-      height: height,
-      maxWidth: maxWidth,
-      maxHeight: maxHeight,
+      width,
+      height,
+      maxWidth,
+      maxHeight,
     };
   };
 
@@ -58,6 +58,6 @@ export function useAppDraggableBounds(container: Ref<HTMLElement | null>) {
   };
 
   return {
-    check: check,
+    check,
   };
 }

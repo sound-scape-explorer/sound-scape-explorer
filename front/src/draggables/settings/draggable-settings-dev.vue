@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppCheckbox from 'src/app/app-checkbox.vue';
 import AppTitle from 'src/app/app-title.vue';
 import {InjectionKey} from 'src/common/injection-key';

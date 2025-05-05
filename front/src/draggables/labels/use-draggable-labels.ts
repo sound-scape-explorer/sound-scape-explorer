@@ -47,10 +47,10 @@ export function useDraggableLabels() {
   };
 
   return {
-    reset: reset,
-    sizeHorizontal: sizeHorizontal,
-    sizeVertical: sizeVertical,
-    cycleHorizontal: cycleHorizontal,
-    cycleVertical: cycleVertical,
+    reset,
+    sizeHorizontal,
+    sizeVertical,
+    cycleHorizontal,
+    cycleVertical,
   };
 }

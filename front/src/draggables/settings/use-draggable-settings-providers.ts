@@ -1,12 +1,13 @@
 import {InjectionKey} from 'src/common/injection-key';
+import {useAudioHost} from 'src/composables/use-audio-host';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useStorageAudioHost} from 'src/composables/use-storage-audio-host';
 import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
 import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
 
 export function useDraggableSettingsProviders() {
   const {
+    darkMode,
     isDetailsAutoOpen,
     isAudioAutoOpen,
     plotBackground,
@@ -23,11 +24,12 @@ export function useDraggableSettingsProviders() {
     scatterBorderWidth,
   } = useClientSettings();
 
-  const {audioHost} = useStorageAudioHost();
+  const {audioHost} = useAudioHost();
   const {plotFontSize} = useClientSettings();
   const {colormap} = useSpectrogramColormap();
   const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
+  useRefProvide(InjectionKey.SETTINGS_DARK_MODE, darkMode);
   useRefProvide(InjectionKey.settingsAudioHost, audioHost);
   useRefProvide(InjectionKey.settingsTimeShift, timeshift);
   useRefProvide(InjectionKey.settingsColormap, colormap);

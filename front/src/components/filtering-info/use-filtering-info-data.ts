@@ -28,17 +28,17 @@ export function useFilteringInfoData() {
   const population = computed(() => time.value.length);
 
   return {
-    totalOut: totalOut,
-    totalIn: totalIn,
-    timeOut: timeOut,
-    timeIn: timeIn,
-    labelsOut: labelsOut,
-    labelsIn: labelsIn,
-    temporalOut: temporalOut,
-    temporalIn: temporalIn,
-    isTimeActive: isTimeActive,
-    isLabelsActive: isLabelsActive,
-    isTemporalActive: isTemporalActive,
-    population: population,
+    totalOut,
+    totalIn,
+    timeOut,
+    timeIn,
+    labelsOut,
+    labelsIn,
+    temporalOut,
+    temporalIn,
+    isTimeActive,
+    isLabelsActive,
+    isTemporalActive,
+    population,
   };
 }

@@ -12,7 +12,6 @@ import {
   layersOutline,
   listOutline,
   navigateOutline,
-  receiptOutline,
   statsChartOutline,
   timerOutline,
 } from 'ionicons/icons';
@@ -28,7 +27,6 @@ export function useAppMenu() {
     help: helpOutline,
     view: eyeOutline,
     colors: colorPaletteOutline,
-    timeline: receiptOutline,
     calendar: calendarOutline,
     labels: layersOutline,
     temporal: barChartOutline,
@@ -42,6 +40,6 @@ export function useAppMenu() {
   };
 
   return {
-    menu: menu,
+    menu,
   };
 }

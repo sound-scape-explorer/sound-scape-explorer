@@ -20,6 +20,6 @@ export function useColorBy1h() {
   };
 
   return {
-    getColorByOneHour: getColorByOneHour,
+    getColorByOneHour,
   };
 }

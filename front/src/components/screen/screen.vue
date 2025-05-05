@@ -3,7 +3,7 @@ import {useScatter} from 'src/components/scatter/use-scatter';
 import {LassoSelector} from 'src/components/screen/lasso';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useScreenCheck} from 'src/components/screen/use-screen-check';
-import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
 import {ref, watch} from 'vue';
 
 import {project} from './project';
@@ -19,7 +19,7 @@ const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-const {reducedFeatures} = useStorageReducedFeatures();
+const {reducedEmbeddings} = useStorageReducedEmbeddings();
 
 const selector = new LassoSelector(canvas);
 
@@ -39,7 +39,7 @@ watch([container, isEnabled], () => {
   };
 
   container.value.onmouseup = () => {
-    if (scatterContainer.value === null || reducedFeatures.value === null) {
+    if (scatterContainer.value === null || reducedEmbeddings.value === null) {
       return;
     }
 
@@ -51,7 +51,6 @@ watch([container, isEnabled], () => {
     isDown.value = false;
     disable();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: undocumented api
     const scene = scatterContainer.value._fullLayout.scene;
     const gl = scene._scene.glplot;
@@ -89,11 +88,11 @@ watch([container, isEnabled], () => {
     }
 
     console.log({
-      width: width,
-      height: height,
-      projectedPoints: projectedPoints,
-      lassoPath: lassoPath,
-      filtered: filtered,
+      width,
+      height,
+      projectedPoints,
+      lassoPath,
+      filtered,
     });
 
     selected.value = filtered;
@@ -119,13 +118,15 @@ watch([container, isEnabled], () => {
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/layers';
+
 .container {
   position: fixed;
-  z-index: $screen-layer;
+  z-index: layers.$screen-layer;
   top: 0;
   width: 100vw;
   height: 100vh;
   cursor: crosshair;
-  background: $violet;
+  background: red;
 }
 </style>

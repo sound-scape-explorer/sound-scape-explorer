@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {computed, ref} from 'vue';
 
 interface Props {
@@ -78,15 +78,17 @@ const leaveStep = () => {
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .gradient-shift {
   position: relative;
-  margin-top: $p0;
+  margin-top: sizes.$p0;
 }
 
 .step {
   display: inline-block;
   width: v-bind(widthAsPercentage);
-  height: $p0 * 3;
+  height: sizes.$p0 * 3;
   cursor: crosshair;
 
   &:hover {
@@ -95,8 +97,8 @@ const leaveStep = () => {
 }
 
 .domain {
-  font-size: $p0 + 1px;
-  bottom: -$p0 - 1px;
+  font-size: sizes.$p0 + 1px;
+  bottom: -(sizes.$p0) - 1px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,12 +125,12 @@ const leaveStep = () => {
 .tooltip {
   font-size: x-small;
   position: absolute;
-  top: -$p0 * 3;
+  top: -(sizes.$p0) * 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $p0 * 6;
-  height: $p0 * 3;
+  width: sizes.$p0 * 6;
+  height: sizes.$p0 * 3;
   border: 1px solid black;
   background-color: white;
 }

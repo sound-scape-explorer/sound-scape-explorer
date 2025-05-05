@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
-import {useTableCurrentSelection} from 'src/panels/files/hooks/use-table-current-selection.ts';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
+import {useTableCurrentSelection} from 'src/panels/files/hooks/use-table-current-selection';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
 export function useTableDelete() {
   const {updateRows} = useTableState();

@@ -53,6 +53,6 @@ export function useRelativeTrajectoriesExport() {
   };
 
   return {
-    handleExportClick: handleExportClick,
+    handleExportClick,
   };
 }

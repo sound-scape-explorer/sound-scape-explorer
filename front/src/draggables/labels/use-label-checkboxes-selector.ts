@@ -14,6 +14,6 @@ export function useLabelCheckboxesSelector(property: string) {
   });
 
   return {
-    selector: selector,
+    selector,
   };
 }

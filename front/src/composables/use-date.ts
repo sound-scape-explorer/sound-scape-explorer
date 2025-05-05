@@ -1,9 +1,10 @@
+import {TIMEZONE_DEFAULT} from '@shared/constants';
 import dayjs, {type Dayjs} from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useSettings} from 'src/composables/use-settings';
+import {useConfig} from 'src/composables/use-config';
 import {DATE_FORMAT} from 'src/constants';
 
 dayjs.extend(relativeTime);
@@ -11,7 +12,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export function useDate() {
-  const {settings} = useSettings();
+  const {config} = useConfig();
   const {isTimezoneActive, timeshift} = useClientSettings();
 
   const convertTimestampToDate = (timestamp: number) => {
@@ -21,15 +22,17 @@ export function useDate() {
       return dayjs(timestamp).add(shift, 'hours');
     }
 
-    if (settings.value === null) {
+    if (config.value === null) {
       return dayjs(timestamp).add(shift, 'hours');
     }
 
-    if (settings.value.timezone === '') {
+    if (config.value.settings.timezone === TIMEZONE_DEFAULT) {
       return dayjs(timestamp).add(shift, 'hours');
     }
 
-    return dayjs(timestamp).tz(settings.value.timezone).add(shift, 'hours');
+    return dayjs(timestamp)
+      .tz(config.value.settings.timezone)
+      .add(shift, 'hours');
   };
 
   const convertTimestampToIsoDate = (timestamp: number): string => {
@@ -46,10 +49,15 @@ export function useDate() {
     return date.get('hours');
   };
 
+  const convertDateStringToDate = (dateString: string): Dayjs => {
+    return dayjs(dateString);
+  };
+
   return {
-    convertTimestampToDate: convertTimestampToDate,
-    convertTimestampToIsoDate: convertTimestampToIsoDate,
-    convertDateToIsoDate: convertDateToIsoDate,
-    getHourFromTimestamp: getHourFromTimestamp,
+    convertTimestampToDate,
+    convertTimestampToIsoDate,
+    convertDateToIsoDate,
+    getHourFromTimestamp,
+    convertDateStringToDate,
   };
 }

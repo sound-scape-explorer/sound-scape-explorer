@@ -41,6 +41,6 @@ export function useAppPlotLayout() {
   };
 
   return {
-    generateLayout: generateLayout,
+    generateLayout,
   };
 }

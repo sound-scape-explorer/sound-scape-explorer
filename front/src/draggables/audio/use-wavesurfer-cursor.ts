@@ -24,6 +24,6 @@ export function useWavesurferCursor() {
   };
 
   return {
-    register: register,
+    register,
   };
 }

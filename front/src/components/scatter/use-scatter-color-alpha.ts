@@ -19,8 +19,8 @@ export function useScatterColorAlpha() {
   };
 
   return {
-    reset: reset,
-    low: low,
-    high: high,
+    reset,
+    low,
+    high,
   };
 }

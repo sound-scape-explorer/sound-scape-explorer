@@ -1,15 +1,52 @@
-from enum import Enum
-from typing import Union
+from typing import Optional
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel
 
-from processing.constants import LABEL_PREFIX
+from processing.constants import (
+    NDSI_BAND_BIO,
+    NDSI_BAND_ANTHRO,
+    ADI_BIN_STEP,
+    ADI_DB_THRESHOLD,
+    ADI_IMPL,
+    SPECTRO_STFT_OVERLAP_RATIO,
+    SPECTRO_STFT_WINDOW_MS,
+    SPECTRO_STFT_WINDOW_TYPE,
+    SPECTRO_N_BANDS,
+    SPECTRO_DBFS_REF,
+    HT_FRAME_SIZE,
+    MED_FRAME_SIZE,
+    MFCC_N_MFCC,
+    LEQ_PERCENTILE_VALUE,
+    LEQ_DIFF_PERCENTILE_A,
+    LEQ_DIFF_PERCENTILE_B,
+    LEQ_SHORT_DT,
+    MPS_STFT_1_WINDOW_MS,
+    MPS_STFT_1_OVERLAP_RATIO,
+    MPS_STFT_2_WINDOW_MS,
+    MPS_STFT_2_OVERLAP_RATIO,
+    MPS_N_BANDS,
+    SPECTRO_SCALE,
+    MPS_SCALE,
+)
+from processing.enums import (
+    ExtractorImplEnum,
+    ReducerImplEnum,
+    AutoclusterImplEnum,
+    MetricImplEnum,
+    TrajectoryStepEnum,
+    AdiImplEnum,
+    FrequencyScaleEnum,
+    StftWindowTypeEnum,
+    ComputationStrategyEnum,
+)
 
 
-class ComputationStrategyDto(Enum):
-    Umap = "umap"
-    Pca = "pca"
-    Embeddings = "embeddings"
+class FileDto(BaseModel):
+    Index: str
+    Path: str
+    Date: str
+    Site: str
+    tags: dict[str, str]
 
 
 class SettingsDto(BaseModel):
@@ -19,40 +56,11 @@ class SettingsDto(BaseModel):
     timelineOrigin: str
     audioHost: str
     timezone: str
-    computationStrategy: ComputationStrategyDto
+    computationStrategy: ComputationStrategyEnum
     computationDimensions: int
     computationIterations: int
     displaySeed: int
-    memoryLimit: Union[int, float]
-
-
-class FileDto(BaseModel):
-    Index: str
-    Path: str
-    Date: str
-    Site: str
-    labels: dict[str, str]
-
-    class Config:
-        extra = "allow"
-
-    # noinspection PyNestedDecorators
-    @model_validator(mode="before")
-    @classmethod
-    def __extract_labels(cls, data):
-        if isinstance(data, dict):
-            labels = {}
-
-            for key in list(data.keys()):
-                if key.startswith(LABEL_PREFIX):
-                    prefix_len = len(LABEL_PREFIX)
-                    label_name = key[prefix_len:]
-                    labels[label_name] = data[key]
-                    del data[key]
-
-            data["labels"] = labels
-
-        return data
+    memoryLimit: int | float
 
 
 class BandDto(BaseModel):
@@ -68,33 +76,52 @@ class IntegrationDto(BaseModel):
     duration: int
 
 
-class ExtractorImplDto(Enum):
-    vgg = "vgg"
-    melogram = "melogram"
-    melspectrum = "melspectrum"
-
-
 class ExtractorDto(BaseModel):
     index: int
     name: str
-    impl: ExtractorImplDto
-    offset: int
-    step: int
-    isPersist: bool
+    impl: ExtractorImplEnum
 
+    window: int
+    hop: int
 
-class ReducerImplDto(Enum):
-    umap = "umap"
-    pca = "pca"
+    spectro_n_bands: int = SPECTRO_N_BANDS
+    spectro_scale: FrequencyScaleEnum = SPECTRO_SCALE
+    spectro_stft_window_type: StftWindowTypeEnum = SPECTRO_STFT_WINDOW_TYPE
+    spectro_stft_window_ms: Optional[int] = SPECTRO_STFT_WINDOW_MS
+    spectro_stft_overlap_ratio: float = SPECTRO_STFT_OVERLAP_RATIO
+    spectro_dbfs_ref: float = SPECTRO_DBFS_REF
+
+    mps_n_bands: int = MPS_N_BANDS
+    mps_scale: FrequencyScaleEnum = MPS_SCALE
+    mps_stft_1_window_ms: Optional[int] = MPS_STFT_1_WINDOW_MS
+    mps_stft_1_overlap_ratio: float = MPS_STFT_1_OVERLAP_RATIO
+    mps_stft_2_window_ms: Optional[int] = MPS_STFT_2_WINDOW_MS
+    mps_stft_2_overlap_ratio: float = MPS_STFT_2_OVERLAP_RATIO
+
+    mfcc_n_mfcc: int = MFCC_N_MFCC
+
+    ndsi_band_bio: tuple[int, int] = NDSI_BAND_BIO
+    ndsi_band_anthro: tuple[int, int] = NDSI_BAND_ANTHRO
+
+    adi_bin_step: int = ADI_BIN_STEP
+    adi_db_threshold: int = ADI_DB_THRESHOLD
+    adi_impl: AdiImplEnum = ADI_IMPL
+
+    ht_frame_size: int = HT_FRAME_SIZE
+    med_frame_size: int = MED_FRAME_SIZE
+
+    leq_percentile_dt: float = LEQ_SHORT_DT
+    leq_percentile_value: int = LEQ_PERCENTILE_VALUE
+
+    leq_diff_dt: float = LEQ_SHORT_DT
+    leq_diff_percentile_a: int = LEQ_DIFF_PERCENTILE_A
+    leq_diff_percentile_b: int = LEQ_DIFF_PERCENTILE_B
 
 
 class ReducerDto(BaseModel):
     index: int
-    impl: ReducerImplDto
+    impl: ReducerImplEnum
     dimensions: int
-    bands: list[BandDto]
-    integrations: list[IntegrationDto]
-    extractors: list[ExtractorDto]
 
 
 class RangeDto(BaseModel):
@@ -104,40 +131,18 @@ class RangeDto(BaseModel):
     end: str
 
 
-class AutoclusterImplDto(Enum):
-    hdbscan_eom = "hdbscan_eom"
-    hdbscan_leaf = "hdbscan_leaf"
-
-
 class AutoclusterDto(BaseModel):
     index: int
-    impl: AutoclusterImplDto
+    impl: AutoclusterImplEnum
     minClusterSize: int
     minSamples: int
     alpha: float
     epsilon: float
 
 
-class DigesterImplDto(Enum):
-    silhouette = "silhouette"
-    contingency = "contingency"
-    sum_var = "sum_var"
-    sum_std = "sum_std"
-    mean_std = "mean_std"
-    mean_spreading = "mean_spreading"
-    distance = "distance"
-    overlap = "overlap"
-
-
-class DigesterDto(BaseModel):
+class MetricDto(BaseModel):
     index: int
-    impl: DigesterImplDto
-
-
-class TrajectoryStepDto(Enum):
-    Hour = "hour"
-    Day = "day"
-    Month = "month"
+    impl: MetricImplEnum
 
 
 class TrajectoryDto(BaseModel):
@@ -145,40 +150,26 @@ class TrajectoryDto(BaseModel):
     name: str
     start: str
     end: str
-    labelProperty: str
-    labelValue: str
-    step: TrajectoryStepDto
+    tagName: str
+    tagValue: str
+    step: TrajectoryStepEnum
 
 
-class IndexImplDto(Enum):
-    leq_maad = "leq_maad"
-    ht = "ht"
-    hf = "hf"
-    med = "med"
-    ndsi = "ndsi"
-    aci = "aci"
-    adi = "adi"
-    bi = "bi"
-
-
-class IndexDto(BaseModel):
+class ExtractionDto(BaseModel):
     index: int
-    impl: IndexImplDto
-    offset: int
-    step: int
-    isPersist: bool
+    name: str
+    bands: list[BandDto]
+    integrations: list[IntegrationDto]
+    extractors: list[ExtractorDto]
+    reducers: list[ReducerDto]
+    autoclusters: list[AutoclusterDto]
+    metrics: list[MetricDto]
+    trajectories: list[TrajectoryDto]
 
 
 class JsonDto(BaseModel):
     version: str
     settings: SettingsDto
-    files: list[FileDto]
-    bands: list[BandDto]
-    integrations: list[IntegrationDto]
-    extractors: list[ExtractorDto]
-    reducers: list[ReducerDto]
+    extractions: list[ExtractionDto]
     ranges: list[RangeDto]
-    autoclusters: list[AutoclusterDto]
-    digesters: list[DigesterDto]
-    trajectories: list[TrajectoryDto]
-    indices: list[IndexDto]
+    files: list[FileDto]

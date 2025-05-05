@@ -1,5 +1,5 @@
 import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {ref} from 'vue';
 
 export interface LabelSelection {
@@ -10,17 +10,13 @@ const selection = ref<LabelSelection>({});
 let isLoaded = false;
 
 export function useLabelSelection() {
-  const {labelProperties} = useStorageLabels();
+  const {sets} = useLabelSets();
   const {filter: filterByLabel} = useScatterFilterLabels();
 
   const build = () => {
-    if (labelProperties.value === null) {
-      return;
-    }
-
     const newSelection: LabelSelection = {};
 
-    for (const property of labelProperties.value) {
+    for (const property of Object.keys(sets.value)) {
       newSelection[property] = [];
     }
 
@@ -46,7 +42,7 @@ export function useLabelSelection() {
   };
 
   return {
-    selection: selection,
+    selection,
     buildSelection: build,
     updateSelection: update,
     resetSelection: reset,

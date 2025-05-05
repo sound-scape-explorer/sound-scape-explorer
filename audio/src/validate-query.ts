@@ -28,7 +28,7 @@ export function validateQuery(query: ParsedQuery): Query {
   }
 
   return {
-    file: file,
+    file,
     start: Number(start),
     end: Number(end),
   };

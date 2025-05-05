@@ -1,39 +1,40 @@
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-names';
+import {useAggregated} from 'src/composables/use-aggregated';
+import {useConfig} from 'src/composables/use-config';
+import {useDate} from 'src/composables/use-date';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageRanges} from 'src/composables/use-storage-ranges';
-import {RANGE_SKIP} from 'src/constants';
+import {RANGE_CUSTOM} from 'src/constants';
 import {generateUniqueRangeSlug} from 'src/utils/config';
 
 export function useTimelineHandlers() {
+  const {config} = useConfig();
   const {start, end, left, right, updateLeft, updateRight} = useTimelineRange();
-  const {ranges} = useStorageRanges();
   const {name, setCustomName} = useTimelineRangeNames();
   const {currentIntervalIndex} = useIntervalSelector();
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
+  const {aggregated} = useAggregated();
+  const {convertDateStringToDate} = useDate();
 
   const updateRange = () => {
-    if (name.value === RANGE_SKIP) {
+    if (name.value === RANGE_CUSTOM) {
       return;
     }
 
-    if (ranges.value === null) {
+    if (config.value === null) {
       return;
     }
 
-    const results = ranges.value.filter(
+    const range = config.value.ranges.find(
       (r) => generateUniqueRangeSlug(r) === name.value,
     );
 
-    if (results.length !== 1) {
+    if (!range) {
       return;
     }
 
-    const result = results[0];
+    start.value = convertDateStringToDate(range.start).unix() * 1000;
+    end.value = convertDateStringToDate(range.end).unix() * 1000;
 
-    start.value = result.start;
-    end.value = result.end;
     updateLeft(start.value);
     updateRight(end.value);
   };
@@ -45,14 +46,11 @@ export function useTimelineHandlers() {
   };
 
   const recenter = () => {
-    if (
-      currentIntervalIndex.value === null ||
-      aggregatedTimestamps.value === null
-    ) {
+    if (currentIntervalIndex.value === null || aggregated.value === null) {
       return;
     }
 
-    const timestamp = aggregatedTimestamps.value[currentIntervalIndex.value];
+    const timestamp = aggregated.value.timestamps[currentIntervalIndex.value];
     const hour = 3600 * 1000;
 
     start.value = timestamp - hour / 2;
@@ -63,8 +61,8 @@ export function useTimelineHandlers() {
   };
 
   return {
-    updateRange: updateRange,
-    overdrive: overdrive,
-    recenter: recenter,
+    updateRange,
+    overdrive,
+    recenter,
   };
 }

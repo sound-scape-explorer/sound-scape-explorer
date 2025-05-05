@@ -3,13 +3,13 @@ from rich.progress import track
 from sklearn.neighbors import NearestNeighbors
 
 from processing.context import Context
-from processing.new.AggregatedManager import AggregatedManager
-from processing.new.ComputedManager import ComputedManager
-from processing.new.LabelManager import LabelManager
-from processing.new.RelativeTracedManager import RelativeTracedManager
-from processing.new.iterate_extractors import iterate_extractors
+from processing.lib.legacy import convert_aggregated_to_legacy_flat
+from processing.managers.ReductionManager import ReductionManager
 from processing.printers.print_action import print_action
 from processing.printers.print_packed_trajectories import print_packed_trajectories
+from processing.repositories.AggregatedRepository import AggregatedRepository
+from processing.repositories.ComputedRepository import ComputedRepository
+from processing.repositories.RelativeTracedRepository import RelativeTracedRepository
 from processing.utils.compute_relative_distances import compute_relative_distances
 from processing.utils.compute_starting_point import compute_starting_point
 from processing.utils.pack_trajectories import pack_trajectories
@@ -18,42 +18,39 @@ from processing.utils.read_trajectory_path_and_relative_timestamps import (
 )
 from processing.utils.walk_packed_trajectories import walk_packed_trajectories
 from processing.validators.validate_computations import validate_computations
-from processing.validators.validate_configuration import validate_configuration
 
 
-@validate_configuration
 @validate_computations
 def run_relative_trajectories(context: Context):
     print_action("Tracing relative trajectories started!", "start")
 
-    RelativeTracedManager.delete(context)
+    RelativeTracedRepository.delete(context)
 
-    trajectories = context.config.trajectories
-    packs = pack_trajectories(trajectories)
-    print_packed_trajectories(packs)
-
-    labels_properties = LabelManager.get_properties(context)
     knner = NearestNeighbors(n_neighbors=100)
 
-    for e in iterate_extractors(context):
-        aggregated = AggregatedManager.from_storage(
-            context,
-            e.band,
-            e.integration,
-            e.extractor,
+    for ri in ReductionManager.iterate_all(context):
+        trajectories = ri.extraction.trajectories
+        packs = pack_trajectories(trajectories)
+        print_packed_trajectories(packs)
+
+        all_aggregated = AggregatedRepository.from_storage(
+            context=context,
+            extraction=ri.extraction,
+            band=ri.band,
+            integration=ri.integration,
         )
 
-        computeds = ComputedManager.from_storage(
-            context,
-            e.band,
-            e.integration,
-            e.extractor,
+        all_computed = ComputedRepository.from_storage(
+            context=context,
+            extraction=ri.extraction,
+            band=ri.band,
+            integration=ri.integration,
         )
+
+        legacy = convert_aggregated_to_legacy_flat(context, all_aggregated)
 
         # a pack is a list of trajectories linked by the same label
-        for label_property, label_value, trajectories in walk_packed_trajectories(
-            packs
-        ):
+        for tag_name, tag_value, trajectories in walk_packed_trajectories(packs):
             # TODO: Add typings
             relative_distances_pack = []
             relative_timestamps_pack = []
@@ -65,8 +62,8 @@ def run_relative_trajectories(context: Context):
 
             # iterating through computation UMAPs
             for computed in track(
-                computeds,
-                description=f"Tracing {label_property}: {label_value}",
+                all_computed,
+                description=f"Tracing {tag_name}: {tag_value}",
             ):
                 # TODO: Add typings
                 paths = []
@@ -80,11 +77,11 @@ def run_relative_trajectories(context: Context):
                     ) = read_trajectory_path_and_relative_timestamps(
                         trajectory=trajectory,
                         features=computed,
-                        timestamps=aggregated.timestamps,
-                        labels_properties=labels_properties,
-                        labels_values=aggregated.labels,
-                        label_property=label_property,
-                        label_value=label_value,
+                        timestamps=legacy.timestamps,
+                        all_tag_names=legacy.tag_names,
+                        all_tag_values=legacy.tag_values,
+                        tag_name=tag_name,
+                        tag_value=tag_value,
                     )
 
                     paths.append(path)
@@ -94,7 +91,7 @@ def run_relative_trajectories(context: Context):
 
                 knner.fit(computed)
                 dknn, _ = knner.kneighbors(starting_point)
-                mean_distance = np.mean(dknn)
+                mean_distance = float(np.mean(dknn))
 
                 for t, _ in enumerate(trajectories):
                     relative_distances = compute_relative_distances(
@@ -130,14 +127,15 @@ def run_relative_trajectories(context: Context):
                     axis=0,
                 )
 
-                RelativeTracedManager.to_storage(
+                RelativeTracedRepository.to_storage(
                     context=context,
-                    band=e.band,
-                    integration=e.integration,
-                    extractor=e.extractor,
+                    extraction=ri.extraction,
+                    band=ri.band,
+                    integration=ri.integration,
+                    reducer=ri.reducer,
                     trajectory=trajectory,
-                    label_property=label_property,
-                    label_value=label_value,
+                    tag_name=tag_name,
+                    tag_value=tag_value,
                     distance_medians=relative_distances_median,
                     timestamp_medians=relative_timestamps_median,
                     lower_deciles=lower_deciles,

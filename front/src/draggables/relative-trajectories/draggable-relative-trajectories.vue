@@ -42,18 +42,21 @@ const {height} = useRelativeTrajectoriesPlotSize();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+@use 'src/styles/scrolls';
+
 .container {
-  width: $w2;
+  width: sizes.$w2;
 }
 
 .expanded {
-  width: $w-max;
+  width: sizes.$w-max;
 }
 
 .plot {
   width: 100%;
   height: 100%;
 
-  @include plot-wrapper;
+  @include scrolls.plot-wrapper;
 }
 </style>

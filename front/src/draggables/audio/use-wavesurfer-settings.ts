@@ -14,7 +14,7 @@ const isLegendOverflow = useStorage<boolean>(
 
 export function useWavesurferSettings() {
   return {
-    isDecibelsDisplay: isDecibelsDisplay,
-    isLegendOverflow: isLegendOverflow,
+    isDecibelsDisplay,
+    isLegendOverflow,
   };
 }

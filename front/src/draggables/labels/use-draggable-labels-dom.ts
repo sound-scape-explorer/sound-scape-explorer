@@ -13,6 +13,6 @@ export function useDraggableLabelsDom() {
   });
 
   return {
-    cols: cols,
+    cols,
   };
 }

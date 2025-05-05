@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {
   pauseOutline,
@@ -92,11 +92,13 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .menu {
   & > div {
     display: flex;
     align-items: center;
-    gap: $p0;
+    gap: sizes.$p0;
   }
 }
 
@@ -104,15 +106,15 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $p0;
+  gap: sizes.$p0;
 }
 
 .seconds {
-  width: $p0 * 13;
+  width: sizes.$p0 * 13;
 }
 
 .picker {
-  width: $p0 * 19;
+  width: sizes.$p0 * 19;
 }
 
 .first-row {

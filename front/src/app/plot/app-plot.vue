@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {
   type Config,
   type Data,
@@ -49,7 +49,7 @@ export interface AppPlotRefs {
 const container = ref<AppPlotRefs['container']>(null);
 
 const refs: AppPlotRefs = {
-  container: container,
+  container,
   data: ref(null),
   layout: ref(null),
   config: ref(null),

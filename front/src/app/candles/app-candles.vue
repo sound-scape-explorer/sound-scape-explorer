@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {useAppCandles} from 'src/app/candles/use-app-candles';
 import {onMounted, watch} from 'vue';
 

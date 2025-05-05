@@ -14,6 +14,6 @@ export function useClientSettingsChecker() {
   };
 
   return {
-    checkVersions: checkVersions,
+    checkVersions,
   };
 }

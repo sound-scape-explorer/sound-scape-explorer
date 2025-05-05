@@ -32,7 +32,7 @@ export function useScatterConfig() {
     const name = generate('scatter');
 
     return {
-      name: name,
+      name,
       filename: name,
       width: scatterWidth,
       height: scatterHeight,
@@ -94,6 +94,6 @@ export function useScatterConfig() {
   });
 
   return {
-    config: config,
+    config,
   };
 }

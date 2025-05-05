@@ -1,10 +1,10 @@
+import {getMouseCoordinatesFromCanvas} from '@shared/browser';
 import {useBodyConfig} from 'src/components/timeline/body/use-body-config';
 import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
 import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {type TimelineElement} from 'src/components/timeline/use-timeline-elements';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {getMouseCoordinatesFromCanvas} from 'src/utils/browser';
 import {ref} from 'vue';
 
 export interface MousePosition {
@@ -34,8 +34,8 @@ export function useBodyHandlers() {
   const handleMouseMove = (e: MouseEvent) => {
     const {x, y} = getMouseCoordinatesFromCanvas(e);
     position.value = {
-      x: x,
-      y: y,
+      x,
+      y,
     };
 
     const result = elements.value.find((element) =>
@@ -66,10 +66,10 @@ export function useBodyHandlers() {
   };
 
   return {
-    handleMouseMove: handleMouseMove,
-    handleMouseLeave: handleMouseLeave,
-    isHovering: isHovering,
-    handleClick: handleClick,
-    position: position,
+    handleMouseMove,
+    handleMouseLeave,
+    isHovering,
+    handleClick,
+    position,
   };
 }

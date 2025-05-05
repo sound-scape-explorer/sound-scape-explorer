@@ -1,10 +1,10 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
+import {useConfig} from 'src/composables/use-config';
 import {useDate} from 'src/composables/use-date';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useSettings} from 'src/composables/use-settings';
-import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
-import {PLAYBACK_RATE} from 'src/constants';
+import {useIntervals} from 'src/composables/use-intervals';
+import {PLAYBACK_RATE, STRING_DELIMITER} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
@@ -13,14 +13,14 @@ import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
 import {useDetails} from 'src/draggables/details/use-details';
 
 const {size} = useAudioFourier();
-const {settings} = useSettings();
-const {aggregatedSites} = useStorageAggregatedSites();
+const {config} = useConfig();
+const {intervals} = useIntervals();
 const {date, dateEnd} = useDetails();
 const {convertDateToIsoDate} = useDate();
 const {currentIntervalIndex} = useIntervalSelector();
 const {rate, readable} = useAudioRate();
 const {lock, unlock} = useAudioLock();
-const {block, duration} = useAudioFile();
+const {window, duration} = useAudioFile();
 const {gain} = useAudioGain();
 </script>
 
@@ -37,12 +37,12 @@ const {gain} = useAudioGain();
         File
       </NTag>
 
-      {{ block?.file }}
+      {{ window?.file.Path }}
     </NGi>
   </NGrid>
 
   <NGrid
-    v-if="aggregatedSites !== null && currentIntervalIndex !== null"
+    v-if="currentIntervalIndex !== null"
     :cols="1"
     x-gap="12"
   >
@@ -54,12 +54,12 @@ const {gain} = useAudioGain();
         Site
       </NTag>
 
-      {{ aggregatedSites[currentIntervalIndex] }}
+      {{ intervals[currentIntervalIndex].sites.join(STRING_DELIMITER) }}
     </NGi>
   </NGrid>
 
   <NGrid
-    v-if="aggregatedSites !== null && currentIntervalIndex !== null"
+    v-if="currentIntervalIndex !== null"
     :cols="3"
     x-gap="12"
   >
@@ -150,7 +150,7 @@ const {gain} = useAudioGain();
 
       {{ readable.semitones }}
     </NGi>
-    <NGi v-if="settings !== null">
+    <NGi v-if="config !== null">
       <NTag
         :bordered="false"
         size="small"

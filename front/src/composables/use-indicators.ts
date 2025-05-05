@@ -1,9 +1,9 @@
-import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
+import {useStorageAggregatedAcousticIndices} from 'src/composables/use-storage-aggregated-acoustic-indices';
 import {generateUniqueIndexSlug} from 'src/utils/config';
 import {computed} from 'vue';
 
 export function useIndicators() {
-  const {aggregatedIndices} = useStorageAggregatedIndices();
+  const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
 
   const names = computed(() => {
     if (aggregatedIndices.value === null) {
@@ -16,6 +16,6 @@ export function useIndicators() {
   });
 
   return {
-    names: names,
+    names,
   };
 }

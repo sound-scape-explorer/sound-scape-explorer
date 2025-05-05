@@ -11,6 +11,6 @@ export function useBodyUtils() {
   };
 
   return {
-    rangeToCanvasX: rangeToCanvasX,
+    rangeToCanvasX,
   };
 }

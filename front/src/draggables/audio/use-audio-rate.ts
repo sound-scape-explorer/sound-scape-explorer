@@ -1,6 +1,6 @@
 import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
-import {useSettings} from 'src/composables/use-settings';
+import {useConfig} from 'src/composables/use-config';
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
@@ -25,7 +25,7 @@ const readable = ref<Readable>({
 
 // audio speed
 export function useAudioRate() {
-  const {settings} = useSettings();
+  const {config} = useConfig();
   const {togglePlayPause} = useAudioTransport();
   const {ws} = useWavesurfer();
 
@@ -40,26 +40,26 @@ export function useAudioRate() {
   };
 
   const updateReadable = () => {
-    if (settings.value === null) {
+    if (config.value === null) {
       return;
     }
 
-    const sampleRate = settings.value['expected_sample_rate'];
+    const sampleRate = config.value.settings.expected_sample_rate;
     const hertz = (sampleRate * rate.value).toFixed();
     const percentage = speedToPercentage(rate.value, 2);
     const semitones = speedToSemitones(rate.value, 2);
 
     readable.value = {
-      hertz: hertz,
-      percentage: percentage,
-      semitones: semitones,
+      hertz,
+      percentage,
+      semitones,
     };
   };
 
   return {
-    rate: rate,
-    readable: readable,
-    update: update,
-    updateReadable: updateReadable,
+    rate,
+    readable,
+    update,
+    updateReadable,
   };
 }

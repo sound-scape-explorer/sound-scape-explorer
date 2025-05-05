@@ -78,6 +78,6 @@ export function useBodyDrawElements() {
   };
 
   return {
-    drawElements: drawElements,
+    drawElements,
   };
 }

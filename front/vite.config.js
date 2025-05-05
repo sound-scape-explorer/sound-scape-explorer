@@ -2,6 +2,7 @@ import {fileURLToPath, URL} from 'node:url';
 
 import vue from '@vitejs/plugin-vue';
 import analyzer from 'rollup-plugin-analyzer';
+import {NodePackageImporter} from 'sass-embedded';
 import {defineConfig} from 'vite';
 import {comlink} from 'vite-plugin-comlink';
 import {VitePWA as vitePwa} from 'vite-plugin-pwa';
@@ -28,29 +29,21 @@ console.log('isElectron:', isElectron);
  * @see https://vitejs.dev/config/
  */
 export default defineConfig({
-  base: base,
+  base,
   define: {
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
   },
+  // todo: attempt to fix sass legacy warning
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `
-          @import "src/styles/colors.scss";
-          @import "src/styles/transitions.scss";
-          @import "src/styles/layers.scss";
-          @import "src/styles/animations.scss";
-          @import "src/styles/borders.scss";
-          @import "src/styles/sizes.scss";
-          @import "src/styles/scrolls.scss";
-          @import "src/styles/shadows.scss";
-          @import "src/styles/fx.scss";
-        `,
+        api: 'modern-compiler',
+        importers: [new NodePackageImporter()],
       },
     },
   },
   build: {
-    target: 'es2020',
+    target: 'es2020', // todo: move to es2021?
     rollupOptions: {
       output: {
         manualChunks: {

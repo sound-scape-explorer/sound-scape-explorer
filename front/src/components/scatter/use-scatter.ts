@@ -72,12 +72,12 @@ export function useScatter() {
   };
 
   return {
-    container: container,
-    isLocked: isLocked,
-    isMounted: isMounted,
-    isAttached: isAttached,
-    mount: mount,
-    attachListeners: attachListeners,
-    render: render,
+    container,
+    isLocked,
+    isMounted,
+    isAttached,
+    mount,
+    attachListeners,
+    render,
   };
 }

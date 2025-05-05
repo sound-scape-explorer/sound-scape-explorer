@@ -11,7 +11,7 @@ export function useBasePlotConfig() {
   const generateConfig = (name: string): Partial<Config> => {
     const options: PlotlyExportOptionsWithoutSize = {
       filename: name,
-      scale: scale,
+      scale,
     };
 
     const config: Partial<Config> = {
@@ -28,6 +28,6 @@ export function useBasePlotConfig() {
   };
 
   return {
-    generateConfig: generateConfig,
+    generateConfig,
   };
 }

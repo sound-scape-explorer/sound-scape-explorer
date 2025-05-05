@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {useDraggables} from 'src/composables/use-draggables';
 import {Shortcuts} from 'src/composables/use-shortcuts';
 import {computed} from 'vue';
@@ -27,11 +27,13 @@ const payload = computed<string | null>(() => {
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/layers';
+
 .container {
   font-size: 90%;
   font-style: italic;
   position: fixed;
-  z-index: $app-console-layer;
+  z-index: layers.$app-console-layer;
   bottom: 5px;
   left: 7px;
 }

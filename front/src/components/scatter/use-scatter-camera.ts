@@ -16,8 +16,8 @@ export function useScatterCamera() {
   };
 
   return {
-    isLocked: isLocked,
-    lock: lock,
-    unlock: unlock,
+    isLocked,
+    lock,
+    unlock,
   };
 }

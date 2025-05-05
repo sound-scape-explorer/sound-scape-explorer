@@ -17,7 +17,7 @@ export function useColorInvert() {
   });
 
   return {
-    invert: invert,
-    isReversible: isReversible,
+    invert,
+    isReversible,
   };
 }

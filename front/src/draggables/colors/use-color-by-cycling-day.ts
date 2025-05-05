@@ -13,6 +13,6 @@ export function useColorByCyclingDay() {
   };
 
   return {
-    getColorByCyclingDay: getColorByCyclingDay,
+    getColorByCyclingDay,
   };
 }

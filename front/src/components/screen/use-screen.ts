@@ -21,9 +21,9 @@ export function useScreen() {
   };
 
   return {
-    isEnabled: isEnabled,
-    disable: disable,
-    enable: enable,
-    selected: selected,
+    isEnabled,
+    disable,
+    enable,
+    selected,
   };
 }

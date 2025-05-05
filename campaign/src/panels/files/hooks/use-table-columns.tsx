@@ -1,7 +1,7 @@
 import {Column} from '@blueprintjs/table';
 import {useMemo} from 'react';
 import {useTableCellRenderer} from 'src/panels/files/hooks/use-table-cell-renderer.tsx';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
 export function useTableColumns() {
   const {renderer} = useTableCellRenderer();

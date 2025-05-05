@@ -10,14 +10,14 @@ import {Table2} from '@blueprintjs/table';
 import {useMemo} from 'react';
 import styles from 'src/panels/files/files-table.module.scss';
 import {useTableColumns} from 'src/panels/files/hooks/use-table-columns.tsx';
-import {useTableCopy} from 'src/panels/files/hooks/use-table-copy.ts';
-import {useTableCurrentCell} from 'src/panels/files/hooks/use-table-current-cell.ts';
-import {useTableCurrentSelection} from 'src/panels/files/hooks/use-table-current-selection.ts';
-import {useTableDelete} from 'src/panels/files/hooks/use-table-delete.ts';
-import {useTableHotkeys} from 'src/panels/files/hooks/use-table-hotkeys.ts';
-import {useTablePaste} from 'src/panels/files/hooks/use-table-paste.ts';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
-import {useTableWidths} from 'src/panels/files/hooks/use-table-widths.ts';
+import {useTableCopy} from 'src/panels/files/hooks/use-table-copy';
+import {useTableCurrentCell} from 'src/panels/files/hooks/use-table-current-cell';
+import {useTableCurrentSelection} from 'src/panels/files/hooks/use-table-current-selection';
+import {useTableDelete} from 'src/panels/files/hooks/use-table-delete';
+import {useTableHotkeys} from 'src/panels/files/hooks/use-table-hotkeys';
+import {useTablePaste} from 'src/panels/files/hooks/use-table-paste';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
+import {useTableWidths} from 'src/panels/files/hooks/use-table-widths';
 
 export function FilesTable() {
   const {columns} = useTableColumns();

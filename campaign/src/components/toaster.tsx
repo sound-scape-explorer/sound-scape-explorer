@@ -1,6 +1,6 @@
 import {OverlayToaster} from '@blueprintjs/core';
 import {useLayoutEffect, useRef} from 'react';
-import {useToaster} from 'src/hooks/use-toaster.ts';
+import {useToaster} from 'src/hooks/use-toaster';
 
 export function Toaster() {
   const ref = useRef<OverlayToaster | null>(null);

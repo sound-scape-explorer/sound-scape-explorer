@@ -1,12 +1,10 @@
 from rich.console import Console
 from rich.table import Table
 
-from processing.context import Context
+from processing.config.AutoclusterConfig import AutoclusterConfig
 
 
-def print_autoclusters(context: Context):
-    autoclusters = context.config.autoclusters
-
+def print_autoclusters(autoclusters: list[AutoclusterConfig]):
     console = Console()
 
     table = Table(show_header=True, header_style="bold magenta")

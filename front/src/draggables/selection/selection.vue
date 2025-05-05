@@ -6,7 +6,7 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {
   convertToNaiveSelectOptions,
   type NaiveSelectOption,
@@ -18,7 +18,7 @@ const {lock, unlock} = useGlobalKeyboard();
 const customProperty = ref<string>('');
 const existingProperty = ref<string>('');
 const custom = ref<string>('');
-const {labelProperties} = useStorageLabels();
+const {sets} = useLabelSets();
 const options = ref<NaiveSelectOption[]>([]);
 
 type Mode = 'existing' | 'custom';
@@ -39,8 +39,8 @@ const toggle = () => {
 };
 
 // TODO: fix me
-watch(labelProperties, () => {
-  options.value = convertToNaiveSelectOptions(labelProperties.value ?? []);
+watch(sets, () => {
+  options.value = convertToNaiveSelectOptions(Object.keys(sets.value));
 });
 
 // TODO: build editable copy of labels

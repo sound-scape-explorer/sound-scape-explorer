@@ -1,26 +1,22 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {headsetOutline} from 'ionicons/icons';
 import {NButton, NGi, NGrid, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useBandSelection} from 'src/composables/use-band-selection';
 import {useDate} from 'src/composables/use-date';
-import {useExtractors} from 'src/composables/use-extractors';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useDetails} from 'src/draggables/details/use-details';
 import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
 import {watch} from 'vue';
 
-const {indices} = useExtractors();
-const {band} = useBandSelection();
-const {integration} = useIntegrationSelection();
-const {aggregatedIndices} = useStorageAggregatedIndices();
-const {labelProperties} = useStorageLabels();
+const {band, integration} = useViewSelectionNew();
+// const {indices} = useExtractors();
+// const {aggregatedIndices} = useStorageAggregatedIndices();
+const {sets} = useLabelSets();
 const {currentIntervalIndex, hasClicked} = useIntervalSelector();
 const {select} = useAudioFile();
 const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
@@ -30,13 +26,13 @@ const {
   dateEnd,
   labelValues,
   site,
-  blocks,
+  windows,
   readDetails,
   timeshift,
   updateDates,
 } = useDetails();
 
-watch(blocks, autoselect);
+watch(windows, autoselect);
 watch(currentIntervalIndex, readDetails);
 watch(timeshift, updateDates);
 </script>
@@ -62,14 +58,14 @@ watch(timeshift, updateDates);
       <div :class="$style.title">Audio blocks</div>
       <span :class="[$style.file, $style.index]">
         <AppTooltip
-          v-for="blockDetails in blocks"
+          v-for="window in windows"
           placement="bottom"
         >
           <template #body>
             <NButton
               :class="$style.zoom"
               size="small"
-              @click="() => select(blockDetails)"
+              @click="() => select(window)"
             >
               <IonIcon :icon="headsetOutline" />
             </NButton>
@@ -87,25 +83,25 @@ watch(timeshift, updateDates);
                 >
                   file
                 </NTag>
-                {{ blockDetails.file }}
+                {{ window.file.Path }}
               </NGi>
               <NGi>
                 <NTag
                   :bordered="false"
                   size="small"
                 >
-                  file start
+                  file relative start
                 </NTag>
-                {{ blockDetails.fileStart }} ms
+                {{ window.relative.start }} ms
               </NGi>
               <NGi>
                 <NTag
                   :bordered="false"
                   size="small"
                 >
-                  start
+                  date start
                 </NTag>
-                {{ convertTimestampToIsoDate(blockDetails.start) }}
+                {{ convertTimestampToIsoDate(window.absolute.start) }}
               </NGi>
             </NGrid>
           </template>
@@ -155,43 +151,46 @@ watch(timeshift, updateDates);
         x-gap="12"
       >
         <!--suppress JSUnusedLocalSymbols -->
-        <NGi v-for="(_, index) in labelProperties">
+        <NGi v-for="(_, index) in Object.keys(sets)">
           <NTag
             :bordered="false"
             size="small"
           >
-            {{ labelProperties?.[index] }}
+            {{ Object.keys(sets)[index] }}
           </NTag>
 
-          {{ labelValues?.[index] }}
+          <!-- todo: fix me -->
+          {{ labelValues[index] }}
         </NGi>
       </NGrid>
 
       <div :class="$style.separator" />
 
-      <div :class="$style.title">Indicators</div>
+      <!--      <div :class="$style.title">Indicators</div>-->
 
-      <NGrid
-        v-if="aggregatedIndices !== null"
-        :cols="2"
-        x-gap="12"
-      >
-        <NGi v-for="(index, i) in indices">
-          <NTag
-            :bordered="false"
-            size="small"
-          >
-            {{ index.impl }}
-          </NTag>
-
-          {{ aggregatedIndices[i].values[currentIntervalIndex ?? 0] }}
-        </NGi>
-      </NGrid>
+      <!-- TODO: update me -->
+      <!--      <NGrid-->
+      <!--        v-if="aggregatedIndices !== null"-->
+      <!--        :cols="2"-->
+      <!--        x-gap="12"-->
+      <!--      >-->
+      <!--        <NGi v-for="(index, i) in indices">-->
+      <!--          <NTag-->
+      <!--            :bordered="false"-->
+      <!--            size="small"-->
+      <!--          >-->
+      <!--            {{ index.impl }}-->
+      <!--          </NTag>-->
+      <!--          {{ aggregatedIndices[i].values[currentIntervalIndex ?? 0] }}-->
+      <!--        </NGi>-->
+      <!--      </NGrid>-->
     </div>
   </AppDraggable>
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .index {
   font-style: italic;
 }
@@ -199,8 +198,8 @@ watch(timeshift, updateDates);
 .container {
   display: flex;
   justify-content: space-between;
-  width: $w1;
-  padding-right: $g0;
+  width: sizes.$w1;
+  padding-right: sizes.$g0;
 }
 
 .title {
@@ -212,7 +211,7 @@ watch(timeshift, updateDates);
 
 .file.container.details {
   flex-direction: column;
-  gap: $g0;
+  gap: sizes.$g0;
 
   div {
     display: flex;
@@ -236,6 +235,6 @@ watch(timeshift, updateDates);
 }
 
 .separator {
-  height: $p0;
+  height: sizes.$p0;
 }
 </style>

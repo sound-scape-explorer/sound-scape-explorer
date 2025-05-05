@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {downloadOutline} from 'ionicons/icons';
 import {NCascader} from 'naive-ui';

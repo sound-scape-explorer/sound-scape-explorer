@@ -1,35 +1,12 @@
 import {Tooltip} from '@blueprintjs/core';
 import clsx from 'clsx';
-import {useSettingsState} from 'src/hooks/use-settings-state.ts';
-import {useSettingsValidation} from 'src/hooks/use-settings-validation.ts';
+import {useSettingsState} from 'src/hooks/use-settings-state';
+import {useSettingsValidation} from 'src/hooks/use-settings-validation';
+import {SettingsPanelStoragePathDrawerContent} from 'src/panels/settings/settings-panel-storage-path-drawer-content.tsx';
 import {Drawer} from 'src/primitives/drawer.tsx';
-import {
-  DrawerContent,
-  type DrawerContentProps,
-} from 'src/primitives/drawer-content.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './settings-panel.module.scss';
-
-const drawer: DrawerContentProps['content'] = [
-  [
-    'Examples',
-    <div
-      key="examples"
-      className="flex column gap"
-    >
-      <div>
-        <code>storage.h5</code>
-      </div>
-      <div>
-        <code>/home/user/sse/my_campaign/storage.h5</code>
-      </div>
-      <div>
-        <code>D:\sse\my_campaign\storage.h5</code>
-      </div>
-    </div>,
-  ],
-];
 
 export function SettingsPanelStoragePath() {
   const {settings, update} = useSettingsState();
@@ -37,7 +14,7 @@ export function SettingsPanelStoragePath() {
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
-      <Drawer content={<DrawerContent content={drawer} />}>
+      <Drawer content={<SettingsPanelStoragePathDrawerContent />}>
         <b className={clsx(styles.rowTitle, 'flex grow help')}>Storage Path</b>
       </Drawer>
 

@@ -1,11 +1,8 @@
-import {useBandSelection} from 'src/composables/use-band-selection';
-import {useExtractorSelection} from 'src/composables/use-extractor-selection';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useReducerSelection} from 'src/composables/use-reducer-selection';
+import {type TrajectoryDto} from '@shared/dtos';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
-import {type TrajectoryDto} from 'src/dtos';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
 export type TracedData = number[][];
@@ -33,16 +30,13 @@ export function useTrajectoriesData() {
       return;
     }
 
-    const {band} = useBandSelection();
-    const {integration} = useIntegrationSelection();
-    const {extractor} = useExtractorSelection();
-    const {reducer} = useReducerSelection();
+    const {extraction, band, integration, reducer} = useViewSelectionNew();
 
     await read(async (worker, file) => {
       if (
+        extraction.value === null ||
         band.value === null ||
         integration.value === null ||
-        extractor.value === null ||
         reducer.value === null ||
         selected.value === null
       ) {
@@ -54,18 +48,18 @@ export function useTrajectoriesData() {
       for (const sT of selected.value) {
         const [data, timestamps, relativeTimestamps] = await worker.readTraced(
           file,
+          extraction.value.index,
           band.value.index,
           integration.value.index,
-          extractor.value.index,
           reducer.value.index,
           sT.index,
         );
 
         const t: Traced = {
           trajectory: sT,
-          data: data,
-          timestamps: timestamps,
-          relativeTimestamps: relativeTimestamps,
+          data,
+          timestamps,
+          relativeTimestamps,
         };
 
         ts.push(t);
@@ -76,8 +70,8 @@ export function useTrajectoriesData() {
   };
 
   return {
-    traceds: traceds,
-    isFused: isFused,
-    readTraced: readTraced,
+    traceds,
+    isFused,
+    readTraced,
   };
 }

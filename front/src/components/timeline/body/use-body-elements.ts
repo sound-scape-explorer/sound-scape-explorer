@@ -18,7 +18,7 @@ export function useBodyElements() {
   };
 
   return {
-    elements: elements,
-    update: update,
+    elements,
+    update,
   };
 }

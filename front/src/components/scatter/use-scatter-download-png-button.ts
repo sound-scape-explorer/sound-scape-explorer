@@ -67,6 +67,6 @@ export function useScatterDownloadPngButton(props: ScatterProps) {
   };
 
   return {
-    button: button,
+    button,
   };
 }

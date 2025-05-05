@@ -1,86 +1,79 @@
 from rich.progress import track
 
+from processing.common.ContinuousTimeTrajectory import ContinuousTimeTrajectory
 from processing.context import Context
-from processing.new.AggregatedManager import AggregatedManager
-from processing.new.LabelManager import LabelManager
-from processing.new.ReducedManager import ReducedManager
-from processing.new.TracedManager import TracedManager
-from processing.new.iterate_reducers import iterate_reducers
+from processing.lib.legacy import convert_aggregated_to_legacy_flat
+from processing.managers.ReductionManager import ReductionManager
 from processing.printers.print_action import print_action
 from processing.printers.print_trajectories import print_trajectories
+from processing.repositories.AggregatedRepository import AggregatedRepository
+from processing.repositories.ReducedRepository import ReducedRepository
+from processing.repositories.TracedRepository import TracedRepository
 from processing.validators.validate_aggregated import validate_aggregated
-from processing.validators.validate_configuration import validate_configuration
 from processing.validators.validate_reduced import validate_reduced
 
 
-@validate_configuration
 @validate_aggregated
 @validate_reduced
 def run_trajectories(context: Context):
     print_action("Tracing trajectories started!", "start")
-    print_trajectories(context)
 
-    TracedManager.delete(context)
+    TracedRepository.delete(context)
 
-    trajectories = context.config.trajectories
-    labels_properties = LabelManager.get_properties(context)
+    for ri in ReductionManager.iterate_all(context):
+        print_trajectories(ri.extraction.trajectories)
 
-    reducers = context.config.reducers
-    for r in iterate_reducers(reducers):
-        aggregated = AggregatedManager.from_storage(
-            context,
-            r.band,
-            r.integration,
-            r.extractor,
+        all_aggregated = AggregatedRepository.from_storage(
+            context=context,
+            extraction=ri.extraction,
+            band=ri.band,
+            integration=ri.integration,
         )
 
-        reduced = ReducedManager.from_storage(
-            context,
-            r.band,
-            r.integration,
-            r.extractor,
-            r.reducer,
+        reduced = ReducedRepository.from_storage(
+            context=context,
+            extraction=ri.extraction,
+            band=ri.band,
+            integration=ri.integration,
+            reducer=ri.reducer,
         )
 
-        r.reducer.start(r.band, r.integration)
+        legacy = convert_aggregated_to_legacy_flat(context, all_aggregated)
 
         for trajectory in track(
-            trajectories,
+            ri.extraction.trajectories,
             description=(
-                f"Band {r.band.name}"
-                f", integration {r.integration.name}"
-                f", extractor {r.extractor.name}"
-                f", reducer {r.reducer.impl.name}{r.reducer.dimensions}"
+                f"Extraction {ri.extraction.name}"
+                f", band {ri.band.name}"
+                f", integration {ri.integration.name}"
+                f", reducer {ri.reducer.impl.name}{ri.reducer.dimensions}"
             ),
         ):
-            trajectory.create_instance(
-                band=r.band,
-                integration=r.integration,
-                reducer=r.reducer,
-            )
+            t = ContinuousTimeTrajectory()
 
-            trajectory.instance.load(
-                features=reduced,
-                timestamps=aggregated.timestamps,
+            t.load(
+                embeddings=reduced,
+                timestamps=legacy.timestamps,
                 timestamp_start=trajectory.start,
                 timestamp_end=trajectory.end,
-                labels_properties=labels_properties,
-                labels_values=aggregated.labels,
+                all_tag_names=legacy.tag_names,
+                all_tag_values=legacy.tag_values,
                 step=trajectory.step,
             )
 
-            trajectory.instance.calculate(
-                trajectory_label_property=trajectory.label_property,
-                trajectory_label_value=trajectory.label_value,
+            t.calculate(
+                trajectory_tag_name=trajectory.tag_name,
+                trajectory_tag_value=trajectory.tag_value,
             )
 
-            TracedManager.to_storage(
+            TracedRepository.to_storage(
                 context=context,
-                band=r.band,
-                integration=r.integration,
-                extractor=r.extractor,
-                reducer=r.reducer,
+                extraction=ri.extraction,
+                band=ri.band,
+                integration=ri.integration,
+                reducer=ri.reducer,
                 trajectory=trajectory,
+                traced=t,
             )
 
     print_action("Tracing trajectories completed!", "end")

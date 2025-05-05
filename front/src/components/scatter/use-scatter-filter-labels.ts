@@ -1,8 +1,6 @@
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {
-  type Labels,
-  useStorageLabels,
-} from 'src/composables/use-storage-labels';
+import {useIntervals} from 'src/composables/use-intervals';
+import {type LabelSets, useLabelSets} from 'src/composables/use-label-sets';
+import {STRING_DELIMITER} from 'src/constants';
 import {type LabelSelection} from 'src/draggables/labels/use-label-selection';
 import {type Ref, ref} from 'vue';
 
@@ -10,19 +8,19 @@ import {type Ref, ref} from 'vue';
 const filtered = ref<boolean[]>([]);
 
 export function useScatterFilterLabels() {
-  const {labels} = useStorageLabels();
-  const {aggregatedLabels} = useStorageAggregatedLabels();
+  const {sets} = useLabelSets();
+  const {intervals} = useIntervals();
 
   /**
    * return true to continue
    * return false to break
    */
   const iterateLabels = (
-    labels: Labels,
-    // eslint-disable-next-line no-unused-vars
+    sets: LabelSets,
+     
     callback: (p: number, property: string) => boolean,
   ) => {
-    const properties = Object.keys(labels);
+    const properties = Object.keys(sets);
     const indices = properties.map((v, i) => i.toString());
 
     for (let p = 0; p < indices.length; p += 1) {
@@ -41,15 +39,11 @@ export function useScatterFilterLabels() {
   ): boolean => {
     let isFiltered = false;
 
-    if (aggregatedLabels.value === null || labels.value === null) {
-      return false;
-    }
+    const interval = intervals.value[intervalIndex];
 
-    const aggregated = aggregatedLabels.value[intervalIndex];
-
-    iterateLabels(labels.value, (p, property) => {
+    iterateLabels(sets.value, (p, property) => {
       const selected = selection.value[property];
-      const values = aggregated[p];
+      const values = interval.labels[property].join(STRING_DELIMITER);
 
       // no user selection
       if (selected.length === 0) {
@@ -69,11 +63,7 @@ export function useScatterFilterLabels() {
   };
 
   const filter = (newSelection: Ref<LabelSelection>) => {
-    if (aggregatedLabels.value === null) {
-      return;
-    }
-
-    const l = aggregatedLabels.value.length;
+    const l = intervals.value.length;
     const newFiltered: boolean[] = new Array(l);
 
     for (let i = 0; i < l; i += 1) {
@@ -88,8 +78,8 @@ export function useScatterFilterLabels() {
   };
 
   return {
-    filtered: filtered,
-    filter: filter,
-    reset: reset,
+    filtered,
+    filter,
+    reset,
   };
 }

@@ -31,9 +31,9 @@ export function useGlobalKeyboard() {
   };
 
   return {
-    registerKey: registerKey,
-    lock: lock,
-    unlock: unlock,
-    isLocked: isLocked,
+    registerKey,
+    lock,
+    unlock,
+    isLocked,
   };
 }

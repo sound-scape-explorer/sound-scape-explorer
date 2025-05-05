@@ -1,8 +1,9 @@
-import {type Intent, NumericInput} from '@blueprintjs/core';
+import {type Intent, NumericInput, Size} from '@blueprintjs/core';
 
 interface Props {
   defaultValue: number;
   onBlur: (n: number) => void;
+  size?: Size;
   intent?: Intent;
   disabled?: boolean;
 }
@@ -10,12 +11,14 @@ interface Props {
 export function NumberInput({
   defaultValue,
   onBlur,
+  size = Size.MEDIUM,
   intent = 'none',
   disabled = false,
 }: Props) {
   return (
     <NumericInput
       fill
+      size={size}
       defaultValue={defaultValue}
       intent={intent}
       buttonPosition="none"

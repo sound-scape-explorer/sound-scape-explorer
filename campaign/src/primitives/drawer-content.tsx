@@ -7,7 +7,7 @@ export interface DrawerContentProps {
 
 export function DrawerContent({content}: DrawerContentProps) {
   return (
-    <div className="flex column gap mt">
+    <div className="flex column gap mt scrollable">
       {content.map(([title, body], i) => {
         if (typeof title === 'string') {
           return (

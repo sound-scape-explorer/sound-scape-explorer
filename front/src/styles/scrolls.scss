@@ -1,3 +1,5 @@
+@use "./sizes";
+
 @mixin hide-scrollbar {
   // IE and edge
   -ms-overflow-style: none;
@@ -13,8 +15,8 @@
 
 @mixin tiny-scrollbar {
   &::-webkit-scrollbar {
-    width: $g0;
-    height: $g0;
+    width: sizes.$g0;
+    height: sizes.$g0;
   }
 
   &::-webkit-scrollbar-track {
@@ -22,7 +24,7 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    border-radius: $p0;
+    border-radius: sizes.$p0;
     background-color: #999;
 
     &:hover {
@@ -33,7 +35,7 @@
 
 @mixin plot-wrapper {
   overflow: auto;
-  max-height: $s2;
+  max-height: sizes.$s2;
 
   @include tiny-scrollbar;
 }

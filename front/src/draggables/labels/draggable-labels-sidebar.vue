@@ -1,12 +1,14 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {chevronExpand} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 const {cycleHorizontal, cycleVertical} = useDraggableLabels();
+const {colors} = useThemeColors();
 </script>
 
 <template>
@@ -39,15 +41,9 @@ const {cycleHorizontal, cycleVertical} = useDraggableLabels();
 </template>
 
 <style lang="scss" module>
-.info {
-  font-size: 0.9em;
-  width: $p0 * 3;
-  height: $p0 * 3;
-  text-align: center;
-  color: $emerald;
-}
+@use 'src/styles/fx';
 
 .rotate {
-  @include rotate-90;
+  @include fx.rotate-90;
 }
 </style>

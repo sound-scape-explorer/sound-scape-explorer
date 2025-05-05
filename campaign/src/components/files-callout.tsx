@@ -1,5 +1,5 @@
 import {Callout} from '@blueprintjs/core';
-import {useFileValidation} from 'src/hooks/use-file-validation.ts';
+import {useFileValidation} from 'src/hooks/use-file-validation';
 
 export function FilesCallout() {
   const {isValid} = useFileValidation();

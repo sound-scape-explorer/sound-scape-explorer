@@ -1,9 +1,11 @@
+@use "./sizes";
+
 @mixin background-blur-0 {
   backdrop-filter: blur(5px);
 }
 
 @mixin background-blur-1 {
-  backdrop-filter: blur($p0);
+  backdrop-filter: blur(sizes.$p0);
 }
 
 @mixin rotate-90 {

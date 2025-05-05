@@ -1,35 +1,22 @@
+import {type ExtractionDto} from '@shared/dtos';
 import {useCallback} from 'react';
-import {useNotify} from 'src/hooks/use-notify.ts';
-import {useSettingsState} from 'src/hooks/use-settings-state.ts';
-import {useTabNavigation} from 'src/hooks/use-tab-navigation.ts';
-import {useBandState} from 'src/panels/config/hooks/use-band-state.ts';
-import {useExtractorState} from 'src/panels/config/hooks/use-extractor-state.ts';
-import {useIntegrationState} from 'src/panels/config/hooks/use-integration-state.ts';
-import {useReducerState} from 'src/panels/config/hooks/use-reducer-state.ts';
-import {useTableLoader} from 'src/panels/files/hooks/use-table-loader.ts';
-import {useTablePropertyFilterUtil} from 'src/panels/files/hooks/use-table-property-filter-util.ts';
-import {useAutoclusterState} from 'src/panels/metrics/hooks/use-autocluster-state.ts';
-import {useDigesterState} from 'src/panels/metrics/hooks/use-digester-state.ts';
-import {useIndexState} from 'src/panels/metrics/hooks/use-index-state.ts';
-import {useRangeState} from 'src/panels/metrics/hooks/use-range-state.ts';
-import {useTrajectoryState} from 'src/panels/metrics/hooks/use-trajectory-state.ts';
-import {XlsxParser} from 'src/utils/xlsx-parser.ts';
+import {useNotify} from 'src/hooks/use-notify';
+import {useSettingsState} from 'src/hooks/use-settings-state';
+import {useTabNavigation} from 'src/hooks/use-tab-navigation';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {useExtractorDefaults} from 'src/panels/extractions/hooks/use-extractor-defaults.ts';
+import {useRangeState} from 'src/panels/extractions/hooks/use-range-state.ts';
+import {useTableLoader} from 'src/panels/files/hooks/use-table-loader';
+import {XlsxParser} from 'src/utils/xlsx-parser';
 
 export function useXlsxDrop() {
   const {notify} = useNotify();
   const {navigate} = useTabNavigation();
-  const {loadFromXlsx} = useTableLoader();
+  const {loadFromDto} = useTableLoader();
   const {setSettings} = useSettingsState();
-  const {setBands} = useBandState();
-  const {setIntegrations} = useIntegrationState();
-  const {setExtractors} = useExtractorState();
-  const {setIndices} = useIndexState();
   const {setRanges} = useRangeState();
-  const {setReducers} = useReducerState();
-  const {setAutoclusters} = useAutoclusterState();
-  const {setDigesters} = useDigesterState();
-  const {setTrajectories} = useTrajectoryState();
-  const {filterPropertiesWithoutPrefix} = useTablePropertyFilterUtil();
+  const {createExtractorWithDefaults} = useExtractorDefaults();
+  const {loadExtractions} = useExtractionState();
 
   const handleXlsx = useCallback(
     (file: File) => {
@@ -38,36 +25,40 @@ export function useXlsxDrop() {
           const parser = await XlsxParser.fromFile(file);
 
           const files = parser.parseFiles();
-          loadFromXlsx(files);
+          loadFromDto(files);
 
           const settings = parser.parseSettings();
           setSettings(settings);
 
           const bands = parser.parseBands();
-          setBands(bands);
-
           const integrations = parser.parseIntegrations();
-          setIntegrations(integrations);
+          const extractors = parser.parseExtractorsAndIndices();
+          const reducers = parser.parseReducers();
+          const autoclusters = parser.parseAutoclusters();
+          const metrics = parser.parseDigesters();
+          const tagNames = Object.keys(files[0].tags);
+          const trajectories = parser.parseTrajectories(tagNames);
 
-          const {extractors, indices} = parser.parseExtractorsAndIndices();
-          setExtractors(extractors);
-          setIndices(indices);
+          const extractions: ExtractionDto[] = [
+            {
+              index: 0,
+              name: 'Extraction',
+              bands,
+              integrations,
+              extractors: extractors.map((ex) =>
+                createExtractorWithDefaults(ex),
+              ),
+              reducers,
+              autoclusters,
+              metrics,
+              trajectories,
+            },
+          ];
+
+          loadExtractions(extractions);
 
           const ranges = parser.parseRanges();
           setRanges(ranges);
-
-          const reducers = parser.parseReducers({bands, integrations});
-          setReducers(reducers);
-
-          const autoclusters = parser.parseAutoclusters();
-          setAutoclusters(autoclusters);
-
-          const digesters = parser.parseDigesters();
-          setDigesters(digesters);
-
-          const properties = filterPropertiesWithoutPrefix(files);
-          const trajectories = parser.parseTrajectories(properties);
-          setTrajectories(trajectories);
 
           navigate('settings');
         } catch (error) {
@@ -78,18 +69,11 @@ export function useXlsxDrop() {
     [
       notify,
       navigate,
-      loadFromXlsx,
+      loadFromDto,
       setSettings,
-      setBands,
-      setIntegrations,
-      setExtractors,
-      setIndices,
       setRanges,
-      setReducers,
-      setAutoclusters,
-      setDigesters,
-      setTrajectories,
-      filterPropertiesWithoutPrefix,
+      createExtractorWithDefaults,
+      loadExtractions,
     ],
   );
 

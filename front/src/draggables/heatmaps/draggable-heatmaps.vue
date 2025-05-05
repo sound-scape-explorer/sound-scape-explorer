@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
 import {useExportName} from 'src/composables/use-export-name';
@@ -9,7 +9,7 @@ import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-h
 import {useDraggableHeatmapsLifecycles} from 'src/draggables/heatmaps/use-draggable-heatmaps-lifecycles';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
 
-const {digesterName, isReadyAndSelected, isPairing} = useDraggableHeatmaps();
+const {metricSlug, isReadyAndSelected, isPairing} = useDraggableHeatmaps();
 const {flavor} = useDraggableHeatmapsColor();
 const {range} = useDraggableHeatmapsRange();
 const {title, x, y, series} = useDraggableHeatmapsChart();
@@ -29,7 +29,7 @@ useDraggableHeatmapsLifecycles();
       <AppHeatmap
         v-if="isReadyAndSelected"
         :colorscale="flavor"
-        :export-name="generate('heatmap', digesterName ?? '')"
+        :export-name="generate('heatmap', metricSlug ?? '')"
         :range="range"
         :title="title"
         :values="series"
@@ -41,11 +41,14 @@ useDraggableHeatmapsLifecycles();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+@use 'src/styles/scrolls';
+
 .container {
-  width: $s2;
+  width: sizes.$s2;
 }
 
 .wrapper {
-  @include plot-wrapper;
+  @include scrolls.plot-wrapper;
 }
 </style>

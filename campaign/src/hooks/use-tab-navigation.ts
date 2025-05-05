@@ -5,7 +5,7 @@ export type TabIndex =
   | 'import'
   | 'files'
   | 'settings'
-  | 'config'
+  | 'extractions'
   | 'metrics'
   | 'export';
 

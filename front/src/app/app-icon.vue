@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NIcon} from 'naive-ui';
 </script>
 

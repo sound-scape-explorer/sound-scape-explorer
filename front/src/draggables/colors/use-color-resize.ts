@@ -6,6 +6,6 @@ export function useColorResize() {
   };
 
   return {
-    resize: resize,
+    resize,
   };
 }

@@ -6,7 +6,7 @@ export function useDraggableCalendarExpand() {
   const toggle = () => (isExpanded.value = !isExpanded.value);
 
   return {
-    isExpanded: isExpanded,
-    toggle: toggle,
+    isExpanded,
+    toggle,
   };
 }

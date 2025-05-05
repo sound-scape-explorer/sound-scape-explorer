@@ -1,97 +1,86 @@
+from collections import defaultdict
+
 from pandas import DataFrame
 
-from processing.askers.ask_band import ask_band
-from processing.askers.ask_extractor import ask_extractor
-from processing.askers.ask_integration import ask_integration
-from processing.askers.ask_path_csv import ask_path_csv
-from processing.constants import LABEL_PREFIX
+from processing.constants import STRING_DELIMITER
 from processing.context import Context
-from processing.new.AggregatedManager import AggregatedManager
-from processing.new.LabelFusionAdapter import LabelFusionAdapter
-from processing.new.ReducedManager import ReducedManager
-from processing.new.ReducerConfigNew import ReducerConfigNew
-from processing.new.iterate_reducers import iterate_reducers
+from processing.managers.ReductionManager import ReductionManager
 from processing.printers.print_action import print_action
+from processing.prompts.prompt_band import prompt_band
+from processing.prompts.prompt_csv_path import prompt_csv_path
+from processing.prompts.prompt_extraction import prompt_extraction
+from processing.prompts.prompt_integration import prompt_integration
+from processing.repositories.AggregatedRepository import AggregatedRepository
+from processing.repositories.ReducedRepository import ReducedRepository
+from processing.services.AggregatedTagService import AggregatedTagService
 from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
-from processing.validators.validate_configuration import validate_configuration
 
 
-@validate_configuration
 def run_dataframe_export(context: Context):
     print_action("Export started", "start")
 
-    raw: dict[str, list[str]] = {}
+    raw: dict[str, list[str]] = defaultdict(list)
 
-    band = ask_band(context)
-    integration = ask_integration(context)
-    extractor = ask_extractor(context)
-    csv_path = ask_path_csv(context)
+    extraction = prompt_extraction(context)
+    band = prompt_band(extraction)
+    integration = prompt_integration(extraction)
+    csv_path = prompt_csv_path(context)
 
-    aggregated = AggregatedManager.from_storage(
-        context,
-        band,
-        integration,
-        extractor,
+    all_aggregated = AggregatedRepository.from_storage(
+        context=context,
+        extraction=extraction,
+        band=band,
+        integration=integration,
     )
 
-    # indices
-    raw["indices"] = []
-    for i, _ in enumerate(aggregated.timestamps):
+    all_tags = AggregatedTagService.from_storage(
+        context=context,
+        extraction=extraction,
+        band=band,
+        integration=integration,
+    )
+
+    # intervals
+    for i, agg in enumerate(all_aggregated):
         raw["indices"].append(str(i))
+        raw["timestamps"].append(convert_timestamp_to_date(agg.start))
 
-    # sites
-    raw["sites"] = [s[0] for s in aggregated.sites]
+        site = []
+        for file in agg.files:
+            site.append(file.site)
 
-    # timestamps
-    raw["timestamps"] = [convert_timestamp_to_date(t[0]) for t in aggregated.timestamps]
+        raw["sites"].append(STRING_DELIMITER.join(site))
 
-    # labels
-    fused_labels = LabelFusionAdapter.from_storage(
-        context,
-        band,
-        integration,
-        extractor,
-    )
+    # tags
+    for tag in all_tags:
+        raw[tag.name] = tag.values
 
-    for fl in fused_labels:
-        key = f"{LABEL_PREFIX}{fl.property}"
-        raw[key] = fl.values
-
-    # reduced
-    reducers = context.config.reducers
-    reducers_filtered: list[ReducerConfigNew] = list(
-        filter(
-            lambda lambda_reducer: lambda_reducer.band == band
-            and lambda_reducer.integration == integration
-            and lambda_reducer.extractor == extractor,
-            reducers,
-        )
-    )
-
-    for r in iterate_reducers(reducers_filtered):
-        reduced = ReducedManager.from_storage(
+    # reduced embeddings
+    for ri in ReductionManager.iterate(extraction):
+        reduced = ReducedRepository.from_storage(
             context=context,
-            band=r.band,
-            integration=r.integration,
-            extractor=r.extractor,
-            reducer=r.reducer,
+            extraction=ri.extraction,
+            band=ri.band,
+            integration=ri.integration,
+            reducer=ri.reducer,
         )
 
-        for d in range(r.reducer.dimensions):
-            elements = [
-                str(r.reducer.index),
-                r.reducer.impl.name,
-                f"{r.reducer.dimensions}d",
+        for d in range(ri.reducer.dimensions):
+            parts = [
+                str(ri.reducer.index),
+                ri.reducer.impl.name,
+                f"{ri.reducer.dimensions}d",
                 f"{d+1}",
             ]
-            key = "_".join(elements)
-            raw[key] = [f[d] for f in reduced]
 
-    # aggregated
-    for index in range(aggregated.data.shape[1]):
-        elements = [str(extractor.index), extractor.name, f"{index}"]
-        key = "_".join(elements)
-        raw[key] = [d[index] for d in aggregated.data]
+            key = "_".join(parts)
+            raw[key] = [embedding[d] for embedding in reduced]
+
+    # interval embeddings
+    for d in range(all_aggregated[0].embeddings.shape[0]):
+        parts = [str(extraction.index), extraction.name, f"{d}"]
+        key = "_".join(parts)
+        raw[key] = [agg.embeddings[d] for agg in all_aggregated]
 
     df = DataFrame(raw)
     df.to_csv(csv_path, index=False)

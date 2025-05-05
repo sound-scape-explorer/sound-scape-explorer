@@ -1,3 +1,4 @@
+import {isDarkModeEnabled} from '@shared/browser';
 import {
   COLOR_FLAVORS,
   type ColorFlavor,
@@ -11,6 +12,7 @@ export type ScatterBorderWidth = '0' | '1' | '2';
 
 interface SettingDefaults {
   version: string;
+  darkMode: boolean;
   plotBackground: string;
   timeshift: number;
   isDetailsAutoOpen: boolean;
@@ -41,6 +43,7 @@ interface SettingDefaults {
 
 export const settingDefaults: SettingDefaults = {
   version: VERSION,
+  darkMode: isDarkModeEnabled(),
   plotBackground: PLOT_BACKGROUND.transparent,
   timeshift: 0, // hours
   isDetailsAutoOpen: false,

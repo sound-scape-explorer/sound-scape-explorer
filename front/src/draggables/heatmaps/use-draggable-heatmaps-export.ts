@@ -1,23 +1,25 @@
 import {Csv} from 'src/common/csv';
+import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useExportName} from 'src/composables/use-export-name';
-import {useStorageDigested} from 'src/composables/use-storage-digested';
+import {useMetricData} from 'src/composables/use-metric-data';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
 
 export function useDraggableHeatmapsExport() {
-  const {digested} = useStorageDigested();
+  const {metricData} = useMetricData();
   const {x, y, series} = useDraggableHeatmapsChart();
   const {generate} = useExportName();
 
   const handleClick = () => {
     if (
-      digested.value === null ||
+      metricData.value === null ||
       x.value.length === 0 ||
       series.value.length === 0
     ) {
       return;
     }
 
-    const isPairing = digested.value.digester.type === '2d-pairing';
+    const metric = metricData.value.metric;
+    const isPairing = metricTypeByImpl[metric.impl] === '2d-pairing';
 
     const csv = new Csv();
     csv.addColumn('y');
@@ -46,6 +48,6 @@ export function useDraggableHeatmapsExport() {
   };
 
   return {
-    handleClick: handleClick,
+    handleClick,
   };
 }

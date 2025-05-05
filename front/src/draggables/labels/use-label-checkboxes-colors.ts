@@ -1,4 +1,4 @@
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
@@ -7,9 +7,9 @@ import {computed} from 'vue';
 export function useLabelCheckboxesColors(property: string) {
   const {criteria} = useColorSelection();
   const {getColorByLabelIndex, getColorNumeric} = useColorByLabel();
-  const {labels} = useStorageLabels();
+  const {sets} = useLabelSets();
   const {isEnabled} = useLabelNumeric();
-  const uniques = computed(() => labels.value?.[property] ?? []);
+  const uniques = computed(() => sets.value[property] ?? []);
 
   const getColor = (p: number): string | undefined => {
     if (property !== criteria.value) {
@@ -24,7 +24,7 @@ export function useLabelCheckboxesColors(property: string) {
   };
 
   return {
-    getColor: getColor,
-    uniques: uniques,
+    getColor,
+    uniques,
   };
 }

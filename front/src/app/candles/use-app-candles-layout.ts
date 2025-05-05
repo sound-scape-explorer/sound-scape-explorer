@@ -29,6 +29,6 @@ export function useAppCandlesLayout() {
   };
 
   return {
-    generateLayout: generateLayout,
+    generateLayout,
   };
 }

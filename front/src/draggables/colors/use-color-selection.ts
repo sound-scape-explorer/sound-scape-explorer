@@ -1,6 +1,6 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIndicators} from 'src/composables/use-indicators';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useLabelSets} from 'src/composables/use-label-sets';
 import {ref} from 'vue';
 
 type ColorCategory = 'Default' | 'Labels' | 'Indicators';
@@ -29,7 +29,7 @@ const criteriaIndex = ref<number>(-1);
 const categories = ref<ColorCategory[]>(['Default', 'Labels', 'Indicators']);
 
 export function useColorSelection() {
-  const {labelProperties} = useStorageLabels();
+  const {sets} = useLabelSets();
   const {names} = useIndicators();
   const {colorsFlavor} = useClientSettings();
 
@@ -54,11 +54,7 @@ export function useColorSelection() {
   };
 
   const updateLabelCriterias = () => {
-    if (labelProperties.value === null) {
-      return;
-    }
-
-    labelCriterias.value = labelProperties.value as ColorCriteria[];
+    labelCriterias.value = Object.keys(sets.value) as ColorCriteria[];
   };
 
   const updateIndicatorCriterias = () => {
@@ -81,15 +77,15 @@ export function useColorSelection() {
 
   return {
     flavor: colorsFlavor,
-    criteria: criteria,
-    criterias: criterias,
-    updateCriterias: updateCriterias,
-    criteriaIndex: criteriaIndex,
-    updateCriteriaIndex: updateCriteriaIndex,
-    category: category,
-    categories: categories,
-    handleLabelClick: handleLabelClick,
-    updateLabelCriterias: updateLabelCriterias,
-    updateIndicatorCriterias: updateIndicatorCriterias,
+    criteria,
+    criterias,
+    updateCriterias,
+    criteriaIndex,
+    updateCriteriaIndex,
+    category,
+    categories,
+    handleLabelClick,
+    updateLabelCriterias,
+    updateIndicatorCriterias,
   };
 }

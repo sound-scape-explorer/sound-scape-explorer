@@ -1,11 +1,11 @@
-import {ComputationStrategy} from '@shared/enums.ts';
-import {isAfter} from 'date-fns';
+import {STORAGE_PATH_SUFFIX, TIMELINE_ORIGIN_MIN} from '@shared/constants';
+import {ComputationStrategyEnum} from '@shared/enums';
+import {isAfter, isEqual} from 'date-fns';
 import {useCallback, useMemo} from 'react';
-import {STORAGE_PATH_SUFFIX, TIMELINE_ORIGIN_MIN} from 'src/constants.ts';
-import {useFileValidation} from 'src/hooks/use-file-validation.ts';
-import {useSettingsState} from 'src/hooks/use-settings-state.ts';
-import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
-import {findEarliestDate} from 'src/utils/dates.ts';
+import {useFileValidation} from 'src/hooks/use-file-validation';
+import {useSettingsState} from 'src/hooks/use-settings-state';
+import {useTableState} from 'src/panels/files/hooks/use-table-state';
+import {findEarliestDate} from 'src/utils/dates';
 
 export function useSettingsValidation() {
   const {settings} = useSettingsState();
@@ -31,7 +31,12 @@ export function useSettingsValidation() {
   }, [settings]);
 
   const isTimelineOriginValid = useCallback(() => {
-    const isAfterAbsoluteMinimum = isAfter(
+    const isAfterMinimum = isAfter(
+      new Date(settings.timelineOrigin),
+      new Date(TIMELINE_ORIGIN_MIN),
+    );
+
+    const isEqualMinimum = isEqual(
       new Date(settings.timelineOrigin),
       new Date(TIMELINE_ORIGIN_MIN),
     );
@@ -44,7 +49,7 @@ export function useSettingsValidation() {
       new Date(settings.timelineOrigin),
     );
 
-    return isAfterAbsoluteMinimum && isBeforeEarliestFile;
+    return (isAfterMinimum || isEqualMinimum) && isBeforeEarliestFile;
   }, [settings, state]);
 
   // ...
@@ -64,12 +69,12 @@ export function useSettingsValidation() {
   }, [settings]);
 
   const isComputationStrategyUmap = useMemo(
-    () => settings.computationStrategy === ComputationStrategy.Umap,
+    () => settings.computationStrategy === ComputationStrategyEnum.enum.UMAP,
     [settings.computationStrategy],
   );
 
   const isComputationStrategyPca = useMemo(
-    () => settings.computationStrategy === ComputationStrategy.Pca,
+    () => settings.computationStrategy === ComputationStrategyEnum.enum.PCA,
     [settings.computationStrategy],
   );
 

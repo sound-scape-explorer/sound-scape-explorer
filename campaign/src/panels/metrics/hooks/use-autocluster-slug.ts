@@ -1,8 +1,8 @@
+import {type AutoclusterDto} from '@shared/dtos';
 import {useCallback} from 'react';
-import {type ConfigAutocluster} from 'src/panels/metrics/hooks/use-autocluster-state.ts';
 
 export function useAutoclusterSlug() {
-  const getSlug = useCallback((autocluster: ConfigAutocluster) => {
+  const getSlug = useCallback((autocluster: AutoclusterDto) => {
     return `${autocluster.index}-${autocluster.impl}`;
   }, []);
 

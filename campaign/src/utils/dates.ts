@@ -1,5 +1,5 @@
+import {DATE_FORMAT} from '@shared/constants';
 import {format, setHours, setMinutes, setSeconds} from 'date-fns';
-import {DATE_FORMAT} from 'src/constants.ts';
 
 export function getToday() {
   const now = new Date();

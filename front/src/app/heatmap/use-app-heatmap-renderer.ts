@@ -27,8 +27,8 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
   const render = () => {
     const trace = buildData({
       colorscale: props.colorscale,
-      x: props.x.map((x) => x.trim()),
-      y: props.y.map((y) => y.trim()),
+      x: props.x,
+      y: props.y,
       z: props.values,
       zmin: props.range.min,
       zmax: props.range.max,
@@ -40,7 +40,7 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
   };
 
   return {
-    create: create,
-    render: render,
+    create,
+    render,
   };
 }

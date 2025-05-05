@@ -1,5 +1,5 @@
 import {useColorUser} from 'src/composables/use-color-user';
-import {useStorageAggregatedIndices} from 'src/composables/use-storage-aggregated-indices';
+import {useStorageAggregatedAcousticIndices} from 'src/composables/use-storage-aggregated-acoustic-indices';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {calculateMean, mapRange} from 'src/utils/math';
 import {getInfiniteRange} from 'src/utils/utils';
@@ -11,7 +11,7 @@ const max = ref<number | null>(null);
 export function useColorByIndex() {
   const {scale} = useColorUser();
   const {criteriaIndex} = useColorSelection();
-  const {aggregatedIndices} = useStorageAggregatedIndices();
+  const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
 
   const get = (intervalIndex: number): string => {
     if (aggregatedIndices.value === null) {
@@ -28,8 +28,8 @@ export function useColorByIndex() {
   };
 
   return {
-    min: min,
-    max: max,
-    get: get,
+    min,
+    max,
+    get,
   };
 }

@@ -1,6 +1,5 @@
-import {useBandSelection} from 'src/composables/use-band-selection';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {EXPORT_FILENAME} from 'src/constants';
 
 export type ExportType =
@@ -13,9 +12,8 @@ export type ExportType =
 const separator = ' - ';
 
 export function useExportName() {
+  const {band, integration} = useViewSelectionNew();
   const {isDetailedExportName} = useClientSettings();
-  const {band} = useBandSelection();
-  const {integration} = useIntegrationSelection();
 
   const appendDetails = (blocks: string[]): string[] => {
     if (!isDetailedExportName.value) {
@@ -76,6 +74,6 @@ export function useExportName() {
   };
 
   return {
-    generate: generate,
+    generate,
   };
 }

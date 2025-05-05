@@ -1,0 +1,69 @@
+{
+  "ComputationStrategy": [
+    "UMAP",
+    "PCA",
+    "EMBEDDINGS"
+  ],
+  "ExtractorImpl": [
+    "BIRDNET",
+    "PERCH",
+    "SURF_PERCH",
+    "VGGISH",
+    "YAMNET",
+    "MUSIC_CLASS",
+    "SPECTRUM",
+    "SPECTROGRAM",
+    "MPS",
+    "MFCC",
+    "NDSI",
+    "BI",
+    "ADI",
+    "HF",
+    "HT",
+    "MED",
+    "ACI",
+    "LEQ",
+    "LEQ_PERCENTILE",
+    "LEQ_DIFF"
+  ],
+  "AutoclusterImpl": [
+    "HDBSCAN_EOM",
+    "HDBSCAN_LEAF"
+  ],
+  "ReducerImpl": [
+    "UMAP",
+    "PCA"
+  ],
+  "MetricImpl": [
+    "MEAN_STD",
+    "MEAN_SPREADING",
+    "SILHOUETTE",
+    "CONTINGENCY",
+    "OVERLAP"
+  ],
+  "MetricType": [
+    "ONE_D",
+    "TWO_D",
+    "TWO_D_PAIRING"
+  ],
+  "TrajectoryStep": [
+    "HOUR",
+    "DAY",
+    "MONTH"
+  ],
+  "StftWindowType": [
+    "HANN",
+    "HAMMING",
+    "BLACKMANHARRIS"
+  ],
+  "FrequencyScale": [
+    "LIN",
+    "LOG",
+    "MEL"
+  ],
+  "AdiImpl": [
+    "SHANNON",
+    "SIMPSON",
+    "INVSIMPSON"
+  ]
+}

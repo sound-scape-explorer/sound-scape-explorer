@@ -5,6 +5,6 @@ const ws = ref<WaveSurfer | null>(null);
 
 export function useWavesurfer() {
   return {
-    ws: ws,
+    ws,
   };
 }

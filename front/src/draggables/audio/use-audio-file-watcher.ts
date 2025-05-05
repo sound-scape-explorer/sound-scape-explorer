@@ -4,7 +4,7 @@ import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {watch} from 'vue';
 
 export function useAudioFileWatcher() {
-  const {block, loadFile, isLoading} = useAudioFile();
+  const {window, loadFile, isLoading} = useAudioFile();
   const {close} = useDraggables();
 
   const wrapLoader = async () => {
@@ -20,5 +20,5 @@ export function useAudioFileWatcher() {
     }
   };
 
-  watch(block, wrapLoader);
+  watch(window, wrapLoader);
 }

@@ -51,9 +51,9 @@ export function useScatterTraces() {
   };
 
   return {
-    isEnabled: isEnabled,
-    traces: traces,
-    generate: generate,
+    isEnabled,
+    traces,
+    generate,
     renderTraces: render,
     resetTraces: reset,
   };

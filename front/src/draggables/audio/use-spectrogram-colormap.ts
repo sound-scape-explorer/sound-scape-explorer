@@ -9,6 +9,6 @@ const colormap = useStorage<string>(
 
 export function useSpectrogramColormap() {
   return {
-    colormap: colormap,
+    colormap,
   };
 }

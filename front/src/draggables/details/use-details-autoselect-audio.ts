@@ -2,23 +2,23 @@ import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useDetails} from 'src/draggables/details/use-details';
 
 export function useDetailsAutoselectAudio() {
-  const {blocks} = useDetails();
+  const {windows} = useDetails();
   const {select} = useAudioFile();
 
   const autoselect = () => {
-    if (blocks.value === null) {
+    if (windows.value === null) {
       return;
     }
 
-    if (blocks.value.length !== 1) {
+    if (windows.value.length !== 1) {
       return;
     }
 
-    const blockDetails = blocks.value[0];
-    select(blockDetails);
+    const window = windows.value[0];
+    select(window);
   };
 
   return {
-    autoselect: autoselect,
+    autoselect,
   };
 }

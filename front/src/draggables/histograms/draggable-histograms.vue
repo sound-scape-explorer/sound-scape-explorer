@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';

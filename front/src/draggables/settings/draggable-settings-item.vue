@@ -22,11 +22,13 @@ const props = defineProps<Props>();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .item {
   display: grid;
   align-items: center;
-  padding: $g0 0;
+  padding: sizes.$g0 0;
   grid-template-columns: auto 1fr auto;
-  gap: $p0;
+  gap: sizes.$p0;
 }
 </style>

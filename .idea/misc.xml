@@ -3,9 +3,9 @@
   <component name="Black">
     <option name="enabledOnReformat" value="true" />
     <option name="enabledOnSave" value="true" />
-    <option name="sdkName" value="Python 3.10 (sound-scape-explorer)" />
+    <option name="sdkName" value="Python 3.11 (sound-scape-explorer)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (sound-scape-explorer)" project-jdk-type="Python SDK">
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (sound-scape-explorer)" project-jdk-type="Python SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

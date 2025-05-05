@@ -1,4 +1,4 @@
-import {Button, type Intent, MenuItem} from '@blueprintjs/core';
+import {Button, type Intent, MenuItem, Size} from '@blueprintjs/core';
 import {type ItemRendererProps, Select as BSelect} from '@blueprintjs/select';
 import {type Key, useCallback, useMemo} from 'react';
 
@@ -29,6 +29,7 @@ interface Props<T> {
   current: T | null;
   onSelect: (item: T) => void;
   placeholder?: string;
+  size?: Size;
   forwardKey?: keyof T | null;
   selector?: keyof T | null;
   disabled?: boolean;
@@ -40,6 +41,7 @@ export function Select<T>({
   current,
   onSelect,
   placeholder,
+  size = Size.MEDIUM,
   forwardKey = null,
   selector = null,
   disabled = false,
@@ -74,6 +76,7 @@ export function Select<T>({
     >
       <Button
         fill
+        size={size}
         alignText="left"
         text={getText()}
         endIcon="double-caret-vertical"

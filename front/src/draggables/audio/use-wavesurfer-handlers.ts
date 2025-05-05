@@ -41,9 +41,9 @@ export function useWavesurferHandlers() {
   };
 
   return {
-    increase: increase,
-    decrease: decrease,
-    canIncrease: canIncrease,
-    canDecrease: canDecrease,
+    increase,
+    decrease,
+    canIncrease,
+    canDecrease,
   };
 }

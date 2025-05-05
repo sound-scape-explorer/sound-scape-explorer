@@ -26,10 +26,10 @@ export function useAppMenuButton(props: AppMenuItemProps) {
   };
 
   return {
-    button: button,
-    handleClick: handleClick,
-    isActive: isActive,
-    isSelected: isSelected,
-    isHidden: isHidden,
+    button,
+    handleClick,
+    isActive,
+    isSelected,
+    isHidden,
   };
 }

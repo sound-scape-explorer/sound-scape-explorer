@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {arrowUndoCircleOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
@@ -6,47 +6,46 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
-import {useBandLifecycles} from 'src/composables/use-band-lifecycles';
-import {useBandOptions} from 'src/composables/use-band-options';
-import {useBandSelection} from 'src/composables/use-band-selection';
-import {useExtractorLifecycles} from 'src/composables/use-extractor-lifecycles';
-import {useExtractorOptions} from 'src/composables/use-extractor-options';
-import {useExtractorSelection} from 'src/composables/use-extractor-selection';
-import {useIntegrationLifecycles} from 'src/composables/use-integration-lifecycles';
-import {useIntegrationOptions} from 'src/composables/use-integration-options';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useReducerLifecycles} from 'src/composables/use-reducer-lifecycles';
-import {useReducerOptions} from 'src/composables/use-reducer-options';
-import {useReducerSelection} from 'src/composables/use-reducer-selection';
 import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useSelectionLifecycles} from 'src/composables/use-selection-lifecycles';
+import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
 import {useViewUnloader} from 'src/composables/use-view-unloader';
 import {useDraggableView} from 'src/draggables/view/use-draggable-view';
-import {onMounted} from 'vue';
+import {computed, onMounted} from 'vue';
 
 const {hasView} = useViewState();
 const {unload} = useViewUnloader();
 const {autoselectDev} = useDraggableView();
 
-const {options: reducerOptions} = useReducerOptions();
-const {options: bandOptions} = useBandOptions();
-const {options: integrationOptions} = useIntegrationOptions();
-const {options: extractorOptions} = useExtractorOptions();
+const {
+  extraction,
+  extractions,
+  extractionSlug,
+  extractionToSlug,
+  bandSlug,
+  bandToSlug,
+  integrationSlug,
+  integrationToSlug,
+  reducerSlug,
+  reducerToSlug,
+} = useViewSelectionNew();
 
-const {selected: reducerSelected, reducer} = useReducerSelection();
-const {selected: bandSelected} = useBandSelection();
-const {selected: integrationSelected} = useIntegrationSelection();
-const {selected: extractorSelected} = useExtractorSelection();
+const extractionNames = computed(() => extractions.map(extractionToSlug));
+const bandNames = computed(() => extraction.value?.bands.map(bandToSlug) ?? []);
+const integrationNames = computed(
+  () => extraction.value?.integrations.map(integrationToSlug) ?? [],
+);
+const reducerNames = computed(
+  () => extraction.value?.reducers.map(reducerToSlug) ?? [],
+);
 
-useReducerLifecycles();
-useBandLifecycles();
-useIntegrationLifecycles();
-useExtractorLifecycles();
+useSelectionLifecycles();
 
-useRefProvide(InjectionKey.viewReducer, reducerSelected);
-useRefProvide(InjectionKey.viewBand, bandSelected);
-useRefProvide(InjectionKey.viewIntegration, integrationSelected);
-useRefProvide(InjectionKey.viewExtractor, extractorSelected);
+useRefProvide(InjectionKey.viewExtraction, extractionSlug);
+useRefProvide(InjectionKey.viewBand, bandSlug);
+useRefProvide(InjectionKey.viewIntegration, integrationSlug);
+useRefProvide(InjectionKey.viewReducer, reducerSlug);
 
 onMounted(autoselectDev);
 </script>
@@ -57,22 +56,22 @@ onMounted(autoselectDev);
       :class="$style.menu"
       size="medium"
     >
-      <h2>Reducer</h2>
+      <h2>Extraction</h2>
 
       <AppSelect
         :disabled="hasView"
-        :injection-key="InjectionKey.viewReducer"
-        :options="reducerOptions"
-        placeholder="Reducer..."
+        :injection-key="InjectionKey.viewExtraction"
+        :options="extractionNames"
+        placeholder="Extraction..."
         size="small"
       />
 
       <h2>Band</h2>
 
       <AppSelect
-        :disabled="reducer === null || hasView"
+        :disabled="hasView || extraction === null"
         :injection-key="InjectionKey.viewBand"
-        :options="bandOptions"
+        :options="bandNames"
         placeholder="Band..."
         size="small"
       />
@@ -80,20 +79,20 @@ onMounted(autoselectDev);
       <h2>Integration</h2>
 
       <AppSelect
-        :disabled="reducer === null || hasView"
+        :disabled="hasView || extraction === null"
         :injection-key="InjectionKey.viewIntegration"
-        :options="integrationOptions"
+        :options="integrationNames"
         placeholder="Integration..."
         size="small"
       />
 
-      <h2>Extractor</h2>
+      <h2>Reducer</h2>
 
       <AppSelect
-        :disabled="reducer === null || hasView"
-        :injection-key="InjectionKey.viewExtractor"
-        :options="extractorOptions"
-        placeholder="Extractor..."
+        :disabled="hasView || extraction === null"
+        :injection-key="InjectionKey.viewReducer"
+        :options="reducerNames"
+        placeholder="Reducer..."
         size="small"
       />
 
@@ -118,8 +117,10 @@ onMounted(autoselectDev);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .menu {
-  width: $s0;
+  width: sizes.$s0;
 }
 
 .last-line {
@@ -132,7 +133,7 @@ onMounted(autoselectDev);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $g0;
+  gap: sizes.$g0;
 
   svg {
     transform: translate3d(0, 1px, 0);

@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {IonIcon} from '@ionic/vue';
 import {downloadOutline} from 'ionicons/icons';
 import {NButtonGroup} from 'naive-ui';
@@ -99,6 +99,8 @@ watch(indicator, update);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .row {
   display: flex;
   overflow: hidden;
@@ -108,19 +110,19 @@ watch(indicator, update);
   > div {
     display: flex;
     align-items: center;
-    gap: $p0;
+    gap: sizes.$p0;
   }
 }
 
 .selection {
-  width: $p0 * 13;
+  width: sizes.$p0 * 13;
 }
 
 .export {
-  width: $p0 * 3;
+  width: sizes.$p0 * 3;
 }
 
 .display {
-  width: $p0 * 16;
+  width: sizes.$p0 * 16;
 }
 </style>

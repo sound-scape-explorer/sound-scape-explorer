@@ -14,6 +14,6 @@ export function useApp() {
   };
 
   return {
-    showImport: showImport,
+    showImport,
   };
 }

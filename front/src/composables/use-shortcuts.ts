@@ -44,8 +44,8 @@ Object.entries(Shortcuts).forEach((entry) => {
   const [name, keycode] = entry;
 
   const shortcut: ShortcutSerialized = {
-    keycode: keycode,
-    name: name,
+    keycode,
+    name,
   };
 
   const isDraggable = name.startsWith(draggablePrefix);
@@ -78,10 +78,10 @@ export function useKeyboardShortcuts() {
   const getKey = (key: DraggableKey) => Shortcuts[key];
 
   return {
-    shortcuts: shortcuts,
-    draggables: draggables,
-    alphas: alphas,
-    betas: betas,
-    getKey: getKey,
+    shortcuts,
+    draggables,
+    alphas,
+    betas,
+    getKey,
   };
 }

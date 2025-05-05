@@ -23,8 +23,8 @@ export function useColorUser() {
   };
 
   return {
-    domain: domain,
-    scale: scale,
-    generateScale: generateScale,
+    domain,
+    scale,
+    generateScale,
   };
 }

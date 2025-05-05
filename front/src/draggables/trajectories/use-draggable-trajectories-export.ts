@@ -55,6 +55,6 @@ export function useDraggableTrajectoriesExport() {
   };
 
   return {
-    handleClick: handleClick,
+    handleClick,
   };
 }

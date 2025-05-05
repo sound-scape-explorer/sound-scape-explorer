@@ -1,5 +1,6 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import VuMeter from 'src/components/vu-meter/vu-meter.vue';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {computed} from 'vue';
@@ -8,6 +9,7 @@ const {rms, isClipping} = useAudioAnalyser();
 const {isPlaying} = useAudioTransport();
 const width = 8;
 const span = computed(() => (isClipping.value ? 'flex' : 'none'));
+const {colors} = useThemeColors();
 </script>
 
 <template>
@@ -23,6 +25,8 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/transitions';
+
 .container {
   position: absolute;
   bottom: -394px;
@@ -30,7 +34,7 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
   opacity: 1;
   background: transparent;
 
-  @include transition-vumeter;
+  @include transitions.transition-vumeter;
 
   & > span {
     font-size: 80%;
@@ -43,7 +47,7 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
     height: 40px;
     transform: translate3d(0, -8px, 0);
     text-align: center;
-    color: $black;
+    color: v-bind('colors.pressedColor');
   }
 }
 

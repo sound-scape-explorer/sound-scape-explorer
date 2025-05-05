@@ -10,6 +10,6 @@ export function useColorByIntervalIndex() {
   };
 
   return {
-    getColor: getColor,
+    getColor,
   };
 }

@@ -5,11 +5,13 @@
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .container {
   display: grid;
   width: 100%;
-  gap: $p0;
-  grid-template-columns: $p0 * 11 1fr;
+  gap: sizes.$p0;
+  grid-template-columns: sizes.$p0 * 11 1fr;
 }
 
 h2 {

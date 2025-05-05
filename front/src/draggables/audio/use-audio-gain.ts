@@ -27,9 +27,9 @@ export function useAudioGain() {
   };
 
   return {
-    node: node,
-    gain: gain,
-    create: create,
-    apply: apply,
+    node,
+    gain,
+    create,
+    apply,
   };
 }
