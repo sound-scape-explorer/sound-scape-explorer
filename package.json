@@ -29,7 +29,7 @@
     "install:audio": "cd audio && pnpm i && cd ..",
     "install:front": "cd front && pnpm i && cd ..",
     "install:campaign": "cd campaign && pnpm i && cd ..",
-    "install:processing": "python3.10 -m venv venv && . venv/bin/activate && cd processing && pip install . && sse_download",
+    "install:processing": "python3.11 -m venv venv && . venv/bin/activate && cd processing && pip install . && sse_download",
     "start": "pnpm dev",
     "test:git:unix": "bin/test-git.sh",
     "test:git:windows": "bin/test-git.ps1",

@@ -10,7 +10,7 @@ function activate() {
 
 if [ ! -f "$script" ]; then
 	echo "Creating virtual environment..."
-	python3.10 -m venv $venv
+	python3.11 -m venv $venv
 
 	echo "Activating virtual environment..."
 	source $script
