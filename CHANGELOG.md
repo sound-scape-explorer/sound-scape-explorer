@@ -1,3 +1,11 @@
+# [14.0.0-beta.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.1...v14.0.0-beta.2) (2025-05-13)
+
+
+### Bug Fixes
+
+* **Front:** Prefer installing rimraf as dev dep ([d093f8b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d093f8ba60d0b2072ee75a3025896b0186b7be2f))
+* Update installation scripts to use python 3.11 ([ffcfbbf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ffcfbbf3fee28a6e2434302a2f6569100dbf4f6c))
+
 # [14.0.0-beta.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.9.0...v14.0.0-beta.1) (2025-05-13)
 
 
