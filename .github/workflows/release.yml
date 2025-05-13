@@ -30,6 +30,8 @@ jobs:
       ##################################
       - name: install modules dependencies
         run: pnpm install:all
+      - name: install electron dependencies
+        run: cd visualisation && npm i && cd ..
       - name: prebuild modules
         run: pnpm build:electron
 
@@ -110,6 +112,8 @@ jobs:
       ##################################
       - name: install modules dependencies
         run: pnpm install:all
+      - name: install electron dependencies
+        run: cd visualisation && npm i && cd ..
       - name: prebuild modules
         run: pnpm build:electron
 
@@ -188,6 +192,8 @@ jobs:
       ##################################
       - name: install modules dependencies
         run: pnpm install:all
+      - name: install electron dependencies
+        run: cd visualisation && npm i && cd ..
       - name: prebuild modules
         run: pnpm build:electron
 
