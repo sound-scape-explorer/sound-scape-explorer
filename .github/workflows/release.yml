@@ -135,9 +135,9 @@ jobs:
       - name: store next version to env
         run: echo "NEXT_VERSION=$(cat .VERSION)" >> $GITHUB_ENV
 
-      #########################################
+      #######################################
       # update modules versions and rebuild #
-      #########################################
+      #######################################
       - name: update versions
         run: bin/update-versions-macos.sh
       - name: build actual services
@@ -183,9 +183,9 @@ jobs:
       - name: install project dependencies
         run: pnpm i
 
-      ###################################
-      # building visualisation modules  #
-      ###################################
+      ##################################
+      # building visualisation modules #
+      ##################################
       - name: install modules dependencies
         run: pnpm install:all
       - name: prebuild modules

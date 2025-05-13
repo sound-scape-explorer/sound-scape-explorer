@@ -1,5 +1,6 @@
 {
   "name": "sound-scape-explorer",
+  "description": "Visualisation and quantification of soundscapes using SSE software",
   "version": "13.9.0",
   "private": true,
   "type": "module",

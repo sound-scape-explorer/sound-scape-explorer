@@ -6,7 +6,8 @@ import {type ForgeConfig} from '@electron-forge/shared-types';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import packageJson from '../package.json';
+import packageJson from './package.json';
+// noinspection ES6PreferShortImport
 import {ElectronWindow} from './src/windows/ElectronWindow';
 
 const name = packageJson.name;
