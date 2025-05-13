@@ -64,6 +64,7 @@ module.exports = {
           'front/src/version.ts',
           'audio/src/version.ts',
           'visualisation/src/version.ts',
+          'visualisation/package.json',
           'bin/sse-processing-*.bat',
           'bin/sse-processing-*.sh',
         ],
