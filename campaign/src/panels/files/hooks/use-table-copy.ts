@@ -17,7 +17,7 @@ export function useTableCopy() {
 
       const props = results.props as ExtendedCellProps;
 
-      let value = props?.value || props?.children || '';
+      let value = props?.value ?? props?.children ?? '';
 
       // TODO: maybe make this right?
       if (typeof value === 'object') {
