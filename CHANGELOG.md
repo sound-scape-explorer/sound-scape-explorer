@@ -1,3 +1,12 @@
+# [14.0.0-beta.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.3...v14.0.0-beta.4) (2025-05-13)
+
+
+### Bug Fixes
+
+* **Campaign/TableCopy:** Prefer non coercive comparison operators ([59cde6f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/59cde6f6a2f1c2dae068d857f4785c4e43002f9e))
+* **CI:** Include visualisation package.json to commited files ([5b1a351](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5b1a3510a71a4fb58b0b932b8ec37006dcf5cf4f))
+* **CI:** Retrieve root package.json for electron ([b51eb8c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b51eb8c32c396402543a3ed977cc1f9df03f94de))
+
 # [14.0.0-beta.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.2...v14.0.0-beta.3) (2025-05-13)
 
 
