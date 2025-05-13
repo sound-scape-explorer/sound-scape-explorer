@@ -316,7 +316,7 @@ jobs:
       - name: print content of visualisation binaries
         run: ls -lh visualisation-binaries
       - name: release
-        run: semantic-release -b main
+        run: semantic-release
         env:
           GH_TOKEN: ${{ secrets.PAT }}
           PYPI_TOKEN: ${{secrets.PYPI_TOKEN}}
