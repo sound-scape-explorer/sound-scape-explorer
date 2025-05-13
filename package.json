@@ -51,7 +51,7 @@
     "visualisation:build": "cd visualisation && npm run make",
     "visualisation:prebuild": "pnpm visualisation:prebuild:clean && pnpm build:electron && pnpm visualisation:prebuild:move",
     "visualisation:prepare-bins": "cp /usr/bin/node visualisation/bin && cp /usr/bin/ffmpeg visualisation/bin && cp /usr/bin/ffprobe visualisation/bin",
-    "visualisation:prebuild:windows": "pnpm visualisation:prebuild:clean && pnpm front:build:electron && pnpm audio:build:electron && pnpm visualisation:prebuild:move:windows",
+    "visualisation:prebuild:windows": "pnpm visualisation:prebuild:clean && pnpm build:electron && pnpm audio:build:electron && pnpm visualisation:prebuild:move:windows",
     "visualisation:prebuild:clean": "rimraf visualisation/audio && rimraf visualisation/front && rimraf visualisation/campaign",
     "visualisation:prebuild:move": "mv audio/dist visualisation/audio && mv front/dist visualisation/front && mv campaign/dist visualisation/campaign",
     "visualisation:prebuild:move:windows": "move .\\audio\\dist .\\visualisation\\audio & move .\\front\\dist .\\visualisation\\front & move .\\\\campaign\\\\dist .\\\\visualisation\\\\campaign"
