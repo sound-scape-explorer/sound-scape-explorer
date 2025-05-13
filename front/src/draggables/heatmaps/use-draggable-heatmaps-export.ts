@@ -1,3 +1,4 @@
+import {MetricTypeEnum} from '@shared/enums';
 import {Csv} from 'src/common/csv';
 import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useExportName} from 'src/composables/use-export-name';
@@ -19,7 +20,8 @@ export function useDraggableHeatmapsExport() {
     }
 
     const metric = metricData.value.metric;
-    const isPairing = metricTypeByImpl[metric.impl] === '2d-pairing';
+    const isPairing =
+      metricTypeByImpl[metric.impl] === MetricTypeEnum.enum.TWO_D_PAIRING;
 
     const csv = new Csv();
     csv.addColumn('y');
