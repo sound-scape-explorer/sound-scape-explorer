@@ -1,3 +1,11 @@
+# [14.0.0-beta.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.4...v14.0.0-beta.5) (2025-05-13)
+
+
+### Bug Fixes
+
+* **Campaign:** update package lock ([8fca3a5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8fca3a54bdea0eb9486388f5436684084aa913ff))
+* **Front:** Detect correctly 2D pairing metric with new enum ([0cb4924](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0cb4924aed56c7d29ffb1981ce5950439ebe874c))
+
 # [14.0.0-beta.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.3...v14.0.0-beta.4) (2025-05-13)
 
 
