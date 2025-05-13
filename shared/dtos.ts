@@ -68,7 +68,7 @@ export const ExtractorDto = z.object({
   spectro_n_bands: z.number().int().optional(),
   spectro_scale: FrequencyScaleEnum.optional(),
   spectro_stft_window_type: StftWindowTypeEnum.optional(),
-  spectro_stft_window_ms: z.number().int().optional(),
+  spectro_stft_window_ms: z.number().int().nullable().optional(),
   spectro_stft_overlap_ratio: z.number().optional(),
   spectro_dbfs_ref: z.number().optional(),
 
