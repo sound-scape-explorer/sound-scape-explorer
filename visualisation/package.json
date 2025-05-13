@@ -1,8 +1,14 @@
 {
+  "private": true,
   "name": "sound-scape-explorer",
   "description": "Visualisation and quantification of soundscapes using SSE software",
   "version": "13.9.0",
-  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Bamdad Sabbagh",
+    "email": "hi@bamdad.fr",
+    "url": "https://www.bamdad.fr/"
+  },
   "main": ".vite/build/main.js",
   "scripts": {
     "build": "npm run make",
