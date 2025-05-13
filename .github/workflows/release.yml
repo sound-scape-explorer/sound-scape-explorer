@@ -264,7 +264,7 @@ jobs:
       - name: install project dependencies
         run: pnpm i
       - name: install front dependencies
-        run: cd front && pnpm i --ignore-scripts --frozen-lockfile
+        run: cd front && pnpm i --ignore-scripts --frozen-lockfile && pnpm add -D rimraf
       - name: generate dummy front build
         run: cd front && pnpm build:prod
 
