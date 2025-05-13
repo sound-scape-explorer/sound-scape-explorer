@@ -1,3 +1,104 @@
+# [14.0.0-beta.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.9.0...v14.0.0-beta.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* add authors and license for squirrel windows build ([3a5567b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3a5567bc2d9213c578f8a721f7ef98fe70c4dbce))
+* add rimraf for front build on last release step ([7ea1dce](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7ea1dcef3550d2294f77d859a42a1088b76d53fa))
+* allow beta publishing ([cb60c10](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb60c10dd7806f1e16e12ecaa6e5fde370158ddb))
+* **Audio:** Inject absolute time to the slicer and prevent errors when above 60 seconds ([9ffc160](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9ffc160acf79d9936d6e44daa792ed9924abe11b))
+* **Campaign/Export:** Improve text explicitness ([e6b8da9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e6b8da9b01d80f886ab5350c8141bece83f28d9b))
+* **Campaign/Files:** Improve tooltip content on label property deletion ([d757c23](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d757c231e570d4731ded7362d851c4309820bab7))
+* **Campaign/Primitives:** Force left alignment to select component ([d89b0e0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d89b0e03f8137663240bf9a620d98291f675442b))
+* **Campaign/Settings:** Improve help for audio path ([83fc2d8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/83fc2d837ccab44eb50e751f6d6e22e9ea7f9851))
+* **Campaign:** Add check for timeline origin to be before earliest file ([e8c7ed0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e8c7ed003b056ae5ef1eac50e5dc918ffa2874f6))
+* **Campaign:** Add dark mode to drawers ([3c8a106](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3c8a106991481247ffd803a9747861d10f4e0f61))
+* **Campaign:** Allow main container to overflow vertically ([c45ae50](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c45ae50675a27a3c2fcab3d923731081533d4116))
+* **Campaign:** Apply global styling for code markups ([04395f5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/04395f57439994c32bacaab2653a55ae2b644773))
+* **Campaign:** Change user flow after import to land on settings page before files grid ([93af906](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/93af906fff667c8934e51e1213db44ea62a824d5))
+* **Campaign:** Correctly load sites from json drop ([fd5ab1f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fd5ab1fedc522811da9799ba9c3262e50aac6473))
+* **Campaign:** Disable navbar user selection ([45bfb64](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/45bfb64f20be1113df214a411ccbc805d6896eb0))
+* **Campaign:** Enforce label value for trajectories ([76a9d54](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/76a9d5452b25221fe24e4781861a71b78a206dce))
+* **Campaign:** Fix typos in help for extractors and indices ([f055aec](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f055aec08458c0001dd7e0839e1d5d0bceb6fbd1))
+* **Campaign:** Force .h5 extension in storage path ([8c8d635](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8c8d6356530bdf0c6308a99204a408839b6eb305))
+* **Campaign:** Move files to the end of the export files just for the sake of being lazy ([21a271a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/21a271a317aa32550560a71a80bd6b98a51ff7b0))
+* **Campaign:** Remove debug statements from xlsx parser ([0b8c457](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0b8c457d953fb303677346a9cc7667180f9c7fc0))
+* **Campaign:** Use number input instead of slider for MDM memory limit ([0c702d8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0c702d8f1c1c5f9735f260bab81a0df84fac456c))
+* **Examples:** Update coral reef example ([f3ad4df](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f3ad4df8b2469224a78c95236c2e80ea74b5c9ab))
+* **Examples:** Use actual site values ([c98998d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c98998d12dbd0d78a78c179cbabf850017907547))
+* **Front/Timeline:** Improve recenter behaviour ([3aae15d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3aae15de85292a92bdc4abededfe07710b80cab2))
+* **Front:** Fix lower boundary behaviour going backwards + Relocate hook ([25158b4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/25158b4599358c907bf253ac0c2d7dbeb8753751))
+* **Front:** Resize plots automatically ([cb1e16e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb1e16ed5bccad96ced26566b6a8c07e628632ea))
+* **Front:** Watch for auto open on interval selection ([251a361](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/251a361e01492ba69809b331cd868e44ef1ba9e6))
+* ignore visualisation npm only directive when installing from root pnpm script ([8c76dc6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8c76dc6e6ea781dd30cfd1a08f3f536dc35d3183))
+* install vis/electron dependencies with global installer script ([0a59b2a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0a59b2a4cbdaa45a19f97983cde3a4c69a8b453b))
+* manually install electron dependencies ([5da8e92](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5da8e92cd5cd909fb7e16c43bbb11757653913a7))
+* **Processing/Config:** Enforce int typings when reading from storage ([f7ecf4c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f7ecf4caa5c03a2052cc445433a6b1c05d0130f8))
+* **Processing/Config:** Sanitize audio path ([9d7d02f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9d7d02f7e892732be5ace3b42a4b79c104c4d3c1))
+* **Processing:** Add strict numpy type alias for mdm ([58a3563](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/58a3563eb08bd078b2b084f4a427fe17e233dabc))
+* **Processing:** Enforce dataset typing when reading and appending to storage ([17ba423](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/17ba4239976ebe7d7c71180ff23910cc9ddc7943))
+* **Processing:** Freeze python version to 3.10 in pyproject conf file and add pyright as dev dep ([938516d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/938516d0d2e4befc457fef680ad889704b03b4f7))
+* **Processing:** Ignore logger warnings from `torio` ([c9134b4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c9134b4598e90eaae998418d98659612bfb24ddf))
+* **Processing:** Improve empty mdm typing ([6306b19](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6306b19d3c389cf35442d98cb27bebd51e09ff78))
+* **Processing:** Improve label fusion adapter interface ([1b46bab](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1b46babac487751439a1e050bf8bed4ba64dd3c2))
+* **Processing:** Improve menu typings ([c3fb3b6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c3fb3b6b8ac6d3ece78bd55171f4bba15e061064))
+* **Processing:** Improve storage method signatures ([2f752cb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2f752cbf5a7c5f163946884ec58aa02f40a28968))
+* **Processing:** Iterate correctly over reducer options ([35dcec3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/35dcec3e6d0aa495601ea6b17885ab780eea9846))
+* **Processing:** Loosen python version requirement ([8e5381d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8e5381d35bc798f1af0e82f582ce0e40dc0c7b15))
+* **Processing:** Remove debug print ([1777146](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1777146eb3dd4c5c7c0bee4ec1342f73f669f7e2))
+* **Processing:** Remove unused hdbscan output ([8272c01](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8272c014cfe9e5274b17697aca2142a9d35b20b7))
+* **Processing:** Use new storage signatures for aggregated data ([e703a6b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e703a6b3153299feabf6dc4d942cdc1efab89cff))
+* provide description for electron and root package.json + chores ([b3a076a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b3a076a8b3ca36a1d23e210417767901598025d9))
+* remove dead build scripts for windows ([73d1483](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/73d1483c33a59ab9e8c58af2f1fd5d6a3ed561a6))
+* update vis prebuild script for windows ([3633fe7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3633fe73e850bf97da7779235baad70ef5b9c483))
+
+
+### Features
+
+* add new `Processing` module major version + A LOT (desc) ([bc49ea5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bc49ea5fe69f5d09c8fd75c8d6642d8339fb8d2f))
+* Add new Campaign module ([644e83c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/644e83ca16f7a115aa34963722c88120c64420f6))
+* **Campaign/Files:** Add right click menu over grid ([77745f0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/77745f0a7aaae90d6654abad3cb580841fbb1433))
+* **Campaign/Metrics:** Add date validation for trajectories ([b990957](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b99095752364614980f0bed8e1ed9773fcc29f83))
+* **Campaign/Settings:** Add help for audio folder path ([c996a6b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c996a6b81627b237cbd7faddc90a2d6437d7cf20))
+* **Campaign/Settings:** Add new computation strategy setting ([ab39446](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ab3944691e1fad0979f28f5fe598cf9d3cc55bba))
+* **Campaign/Settings:** Add new memory limit in gigabytes for computations + Update coral-reef-light example ([eb83093](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eb8309332190a5c7bbae6078590fdc2e91f67453))
+* **Campaign/Settings:** Improve computation strategy help ([5dbfc25](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5dbfc25fe211925ef081b2522589dd373da2eb91))
+* **Campaign/Settings:** Improve storage path help ([754313b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/754313bea557b6dd54b151994cbf5458cf21f740))
+* **Campaign:** Add help for all digesters ([d50ca17](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d50ca17d621b9ac7f7b04c5090627e56990701e4))
+* **Campaign:** Allow download invalid json configuration ([ef3b9f1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ef3b9f13a3c4045cc712703fbdbffc92d5c75dd1))
+* **Examples:** Relocate examples + Add E2E json test files + Handle edge cases ([6ff2db8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6ff2db83e439738f74075e99a4b3aebae28a8404))
+* **Examples:** Update coral reef light json campaign file ([48f3f27](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/48f3f27240d07ad0754593f53f8dee8cd6608712))
+* **Front/Timeline:** Add recenter option for easy access to selected interval ([32d4533](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/32d4533f1a9218a7de3f114f076a6929fe804833))
+* **Processing/Utils:** Add mdm shape limit calculator ([cf2d933](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cf2d9332cbd0cba1b95e33982ccbc2f054acd75b))
+* **Processing:** Adapt to new JSON format ([74f80a1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/74f80a1a27b5fd4fee971ee4c08b695995a57db2))
+* **Processing:** Add extractor dependency to storage paths for related data ([822a280](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/822a28095e8f32481fb3e4e4f2045b5dd0990137))
+* **Processing:** Add pydantic package as dependency ([b0c465c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b0c465c24d421edb8fb21ef01e35fef82f0f4527))
+* **Processing:** Add silent config refresh for other actions ([ed10b74](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ed10b746791d97e4cde501bc2d9a75db03a59ca2))
+* **Processing:** Migrate to python 3.11 ([bd23ed2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bd23ed23bf8a176c35323662aefa7b0d3b261443))
+* **Processing:** Upgrade dependencies to latest ([c25214c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c25214c8fe00cc517730982e675ca154c0ed29be))
+* **Processing:** Upgrade dev dependencies ([287259a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/287259ab6f63b94b3a07d1fc9fd22f44ab84fa16))
+
+
+### Performance Improvements
+
+* **Front/Colors:** Convert computeds to refs for better compasability ([1e5b777](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1e5b7774766cd0c8e904581efdfa97592873a537))
+* **Processing:** Remove dead code + Move files around ([f2a2683](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f2a2683c09a5cc1260553c82f44f7edb6cc42c87))
+* **Processing:** Remove unused method ([d34ada1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d34ada16c4d2b9f9a6d73dd600667a156ae47d39))
+* **Processing:** Use new label fusion adapter for dataframe exports ([ff73b61](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ff73b61476908fedf2b74b203fe94bff97974eb0))
+
+
+### BREAKING CHANGES
+
+* Storage have completely new paths and underlying data.
+Processing dependencies have been agressively changed and upgraded.
+* **Processing:** Upgraded dependencies with major releases updates.
+Removed obsolete `umap` for up to date `umap-learn`
+* **Processing:** Migrate to python 3.11.2
+* **Processing:** Storage paths have been updated
+* **Processing:** domain objects and storage paths have changed
+* `.xlsx` configurations are now abandonned but still can
+be imported in the new campaign module
+
 # [13.9.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.8.0...v13.9.0) (2024-11-15)
 
 
