@@ -28,7 +28,7 @@
     "install:audio": "cd audio && pnpm i && cd ..",
     "install:front": "cd front && pnpm i && cd ..",
     "install:campaign": "cd campaign && pnpm i && cd ..",
-    "install:visualisation": "cd visualisation && npm i && cd ..",
+    "install:visualisation": "cd visualisation && npm i --ignore-scripts && cd ..",
     "install:processing": "python3.10 -m venv venv && . venv/bin/activate && cd processing && pip install . && sse_download",
     "start": "pnpm dev",
     "test:git:unix": "bin/test-git.sh",
