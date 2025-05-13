@@ -42,6 +42,7 @@
     "ionicons": "^7.4.0",
     "js-sdsl": "4.4.0",
     "naive-ui": "^2.34.4",
+    "rimraf": "^6.0.1",
     "rollup-plugin-analyzer": "^4.0.0",
     "sass-embedded": "^1.88.0",
     "semver": "7.5.0",
