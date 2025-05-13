@@ -50,7 +50,10 @@ export function useExtractorValidation() {
   }, []);
 
   const isSpectroStftWindowMsValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.spectro_stft_window_ms === 'undefined') {
+    if (
+      typeof extractor.spectro_stft_window_ms === 'undefined' ||
+      extractor.spectro_stft_window_ms === null
+    ) {
       return true;
     }
 
