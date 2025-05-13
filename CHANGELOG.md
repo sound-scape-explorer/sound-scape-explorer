@@ -1,3 +1,11 @@
+# [14.0.0-beta.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.2...v14.0.0-beta.3) (2025-05-13)
+
+
+### Bug Fixes
+
+* **Campaign:** Handle null exception ([792d65a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/792d65a0bca1f50dc72db872c62cf95f0280c8a7))
+* **DTOs:** allow `spectro_stft_window_ms` to be null ([6e0755c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6e0755c6f02f27f29864a6fbf61e3d7ac288744a))
+
 # [14.0.0-beta.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.1...v14.0.0-beta.2) (2025-05-13)
 
 
