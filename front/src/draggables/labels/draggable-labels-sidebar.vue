@@ -4,11 +4,9 @@ import {chevronExpand} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
-import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
 
 const {cycleHorizontal, cycleVertical} = useDraggableLabels();
-const {colors} = useThemeColors();
 </script>
 
 <template>

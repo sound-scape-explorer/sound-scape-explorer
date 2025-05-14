@@ -65,7 +65,7 @@ useLabelCheckboxesLifecycles(props.property, checkboxes);
 
   &:hover {
     opacity: 0.9;
-    background-color: v-bind('colors.boxShadow3');
+    background-color: v-bind('colors.actionColor');
   }
 
   span {

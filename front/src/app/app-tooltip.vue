@@ -63,9 +63,3 @@ const clear = () => {
     <slot name="tooltip" />
   </NTooltip>
 </template>
-
-<style lang="scss" module>
-.container {
-  background: red;
-}
-</style>

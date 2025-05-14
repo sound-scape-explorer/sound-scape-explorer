@@ -41,7 +41,6 @@ useOverviewLifecycles({width, height});
   width: 100%;
   height: sizes.$p0 * 4;
   user-select: none;
-  background: white;
 
   @include borders.border-0(v-bind('colors.borderColor'));
 }
