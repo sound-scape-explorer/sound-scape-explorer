@@ -3,7 +3,7 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 
 const gen = (min: number, max: number, isDark: boolean = false) => {
   const base = `rgba(${max},${max},${max},0.7)`;
-  const modal = `rgba(${max},${max},${max}, 0.9)`;
+  const modal = `rgba(${max},${max},${max}, 0.98)`;
 
   return {
     common: {
@@ -14,8 +14,8 @@ const gen = (min: number, max: number, isDark: boolean = false) => {
       baseColor: isDark ? modal : base,
       modalColor: isDark ? base : modal,
       borderColor: `rgba(${min},${min},${min},0.33)`,
-      boxShadow1: `rgba(${min},${min},${min},0.1)`,
-      boxShadow2: `rgba(${min},${min},${min},0.2)`,
+      boxShadow1: `rgba(${min},${min},${min},0.05)`,
+      boxShadow2: `rgba(${min},${min},${min},0.1)`,
     },
     Tooltip: {
       color: `rgb(${max},${max},${max})`,
