@@ -1,6 +1,9 @@
 import {useIndicators} from 'src/composables/use-indicators';
 import {useLabelSets} from 'src/composables/use-label-sets';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {
+  ColorCategoryEnum,
+  useColorSelection,
+} from 'src/draggables/colors/use-color-selection';
 import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
 import {computed} from 'vue';
 
@@ -12,12 +15,16 @@ export function useColorState() {
 
   const isIndicators = computed(
     () =>
-      category.value === 'Indicators' && names.value?.includes(criteria.value),
+      category.value === ColorCategoryEnum.enum.METRICS &&
+      names.value?.includes(criteria.value),
   );
 
   const isLabels = computed<boolean>(() => {
     const properties = Object.keys(sets.value);
-    return category.value === 'Labels' && properties.includes(criteria.value);
+    return (
+      category.value === ColorCategoryEnum.enum.TAGS &&
+      properties.includes(criteria.value)
+    );
   });
 
   const isLabelNumeric = computed<boolean>(() => {

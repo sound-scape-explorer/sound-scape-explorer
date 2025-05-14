@@ -17,12 +17,15 @@ import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vu
 import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
 import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {
+  ColorCategoryEnum,
+  useColorSelection,
+} from 'src/draggables/colors/use-color-selection';
 import {useColorState} from 'src/draggables/colors/use-color-state';
 import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
 
 const {isLoading} = useScatterLoading();
-const {flavor, criteria, criterias, category, categories} = useColorSelection();
+const {flavor, criteria, criterias, category} = useColorSelection();
 const {isIndicators, isLabels, isLabelNumeric} = useColorState();
 
 const {low, high} = useScatterColorAlpha();
@@ -55,7 +58,7 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
         <AppSelect
           :disabled="isLoading"
           :injection-key="InjectionKey.enum.COLORS_CATEGORY"
-          :options="categories"
+          :options="ColorCategoryEnum.options"
           placeholder="Category..."
           size="small"
         />

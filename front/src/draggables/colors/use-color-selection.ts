@@ -2,8 +2,13 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIndicators} from 'src/composables/use-indicators';
 import {useLabelSets} from 'src/composables/use-label-sets';
 import {ref} from 'vue';
+import {z} from 'zod';
 
-type ColorCategory = 'Default' | 'Labels' | 'Indicators';
+export const ColorCategoryEnum = z.enum(['DEFAULT', 'TAGS', 'METRICS']);
+// eslint-disable-next-line no-redeclare
+export type ColorCategoryEnum = z.infer<typeof ColorCategoryEnum>;
+
+// todo: move this to zod enumeration
 type ColorCriteria =
   | 'intervalIndex'
   | 'by1h'
@@ -21,13 +26,12 @@ const defaultCriterias: ColorCriteria[] = [
 
 const labelCriterias = ref<ColorCriteria[]>([]);
 const indicatorCriterias = ref<ColorCriteria[]>([]);
-const criteria = ref<ColorCriteria>('cycleDay');
-const category = ref<ColorCategory>('Default');
+
 const criterias = ref<ColorCriteria[]>(defaultCriterias);
+const criteria = ref<ColorCriteria>('cycleDay');
 const criteriaIndex = ref<number>(-1);
 
-// todo: use enum and rename labels to tags, rename indicators to metrics
-const categories = ref<ColorCategory[]>(['Default', 'Labels', 'Indicators']);
+const category = ref<ColorCategoryEnum>(ColorCategoryEnum.enum.DEFAULT);
 
 export function useColorSelection() {
   const {sets} = useLabelSets();
@@ -36,15 +40,15 @@ export function useColorSelection() {
 
   const updateCriterias = () => {
     switch (category.value) {
-      case 'Default':
+      case ColorCategoryEnum.enum.DEFAULT:
         criterias.value = defaultCriterias;
         break;
 
-      case 'Labels':
+      case ColorCategoryEnum.enum.TAGS:
         criterias.value = labelCriterias.value;
         break;
 
-      case 'Indicators':
+      case ColorCategoryEnum.enum.METRICS:
         criterias.value = indicatorCriterias.value;
         break;
     }
@@ -67,8 +71,8 @@ export function useColorSelection() {
   };
 
   const handleLabelClick = (property: string) => {
-    if (category.value !== 'Labels') {
-      category.value = 'Labels';
+    if (category.value !== ColorCategoryEnum.enum.TAGS) {
+      category.value = ColorCategoryEnum.enum.TAGS;
     }
 
     if (criteria.value !== property) {
@@ -84,7 +88,6 @@ export function useColorSelection() {
     criteriaIndex,
     updateCriteriaIndex,
     category,
-    categories,
     handleLabelClick,
     updateLabelCriterias,
     updateIndicatorCriterias,
