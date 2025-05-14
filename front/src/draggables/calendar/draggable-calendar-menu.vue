@@ -25,7 +25,7 @@ const {duration} = useTimelineRange();
 const {setWindowDuration, skipTimeForward, skipTimeBackward, handleToggle} =
   useDraggableCalendarTransport();
 
-useRefProvide(InjectionKey.calendarActive, isActive);
+useRefProvide(InjectionKey.enum.CALENDAR_ACTIVE, isActive);
 
 const seconds = computed(() => Number((duration.value / 1000).toFixed()));
 </script>
@@ -35,7 +35,7 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
     <span>Filtering</span>
     <div :class="$style['first-row']">
       <AppSwitch
-        :injection-key="InjectionKey.calendarActive"
+        :injection-key="InjectionKey.enum.CALENDAR_ACTIVE"
         checked="Yes"
         native
         unchecked="No"

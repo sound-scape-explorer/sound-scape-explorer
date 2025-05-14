@@ -16,9 +16,9 @@ const {currentIntervalIndex} = useIntervalSelector();
 const {overdrive, recenter} = useTimelineHandlers();
 const {name, names} = useTimelineRangeNames();
 
-useRefProvide(InjectionKey.calendarRange, name);
-useRefProvide(InjectionKey.timelineLeft, left);
-useRefProvide(InjectionKey.timelineRight, right);
+useRefProvide(InjectionKey.enum.CALENDAR_RANGE, name);
+useRefProvide(InjectionKey.enum.TIMELINE_LEFT, left);
+useRefProvide(InjectionKey.enum.TIMELINE_RIGHT, right);
 
 useTimelineLifecycles();
 </script>
@@ -29,7 +29,7 @@ useTimelineLifecycles();
     <div :class="$style.row">
       <AppSelect
         :class="$style.select"
-        :injection-key="InjectionKey.calendarRange"
+        :injection-key="InjectionKey.enum.CALENDAR_RANGE"
         :options="names"
       />
 
@@ -55,12 +55,12 @@ useTimelineLifecycles();
     <div :class="$style.row">
       <AppDatePicker
         :handle-click="updateLeft"
-        :injection-key="InjectionKey.timelineLeft"
+        :injection-key="InjectionKey.enum.TIMELINE_LEFT"
       />
 
       <AppDatePicker
         :handle-click="updateRight"
-        :injection-key="InjectionKey.timelineRight"
+        :injection-key="InjectionKey.enum.TIMELINE_RIGHT"
       />
     </div>
   </AppDraggableMenu>

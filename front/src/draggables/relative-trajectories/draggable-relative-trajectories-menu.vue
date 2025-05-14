@@ -19,7 +19,7 @@ const {isLoading} = useScatterLoading();
 const {handleExportClick} = useRelativeTrajectoriesExport();
 const {height} = useRelativeTrajectoriesPlotSize();
 
-useRefProvide(InjectionKey.relativeTrajectoriesPlotHeight, height);
+useRefProvide(InjectionKey.enum.RELATIVE_TRAJECTORIES_PLOT_HEIGHT, height);
 </script>
 
 <template>
@@ -52,7 +52,7 @@ useRefProvide(InjectionKey.relativeTrajectoriesPlotHeight, height);
     <div :class="$style['last-row']">
       <AppDraggableMenuPlotSizes
         :disabled="false"
-        :height="InjectionKey.relativeTrajectoriesPlotHeight"
+        :height="InjectionKey.enum.RELATIVE_TRAJECTORIES_PLOT_HEIGHT"
         only-factors
       />
 

@@ -31,12 +31,12 @@ const {flavor, flavors} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
 const {actual} = useLabelSets();
 
-useRefProvide(InjectionKey.METRIC_NAME, metricSlug);
-useRefProvide(InjectionKey.METRIC_LABEL_A, a);
-useRefProvide(InjectionKey.METRIC_LABEL_B, b);
-useRefProvide(InjectionKey.METRIC_COLOR_FLAVOR, flavor);
-useRefProvide(InjectionKey.HEATMAPS_PLOT_WIDTH, width);
-useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
+useRefProvide(InjectionKey.enum.METRIC_NAME, metricSlug);
+useRefProvide(InjectionKey.enum.METRIC_LABEL_A, a);
+useRefProvide(InjectionKey.enum.METRIC_LABEL_B, b);
+useRefProvide(InjectionKey.enum.METRIC_COLOR_FLAVOR, flavor);
+useRefProvide(InjectionKey.enum.HEATMAPS_PLOT_WIDTH, width);
+useRefProvide(InjectionKey.enum.HEATMAPS_PLOT_HEIGHT, height);
 </script>
 
 <template>
@@ -44,7 +44,7 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
     <h2>Select</h2>
 
     <AppSelect
-      :injection-key="InjectionKey.METRIC_NAME"
+      :injection-key="InjectionKey.enum.METRIC_NAME"
       :options="digesterOptions"
       placeholder="Metric..."
       size="small"
@@ -54,7 +54,7 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
 
     <div :class="$style.labels">
       <AppSelect
-        :injection-key="InjectionKey.METRIC_LABEL_A"
+        :injection-key="InjectionKey.enum.METRIC_LABEL_A"
         :options="Object.keys(actual) ?? []"
         placeholder="Label A..."
         size="small"
@@ -70,7 +70,7 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
 
       <AppSelect
         :disabled="!isReadyForSelection || !isPairing"
-        :injection-key="InjectionKey.METRIC_LABEL_B"
+        :injection-key="InjectionKey.enum.METRIC_LABEL_B"
         :options="Object.keys(actual) ?? []"
         placeholder="Label B..."
         size="small"
@@ -82,7 +82,7 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
     <div :class="$style.colors">
       <AppSelect
         :disabled="!isReadyAndSelected"
-        :injection-key="InjectionKey.METRIC_COLOR_FLAVOR"
+        :injection-key="InjectionKey.enum.METRIC_COLOR_FLAVOR"
         :options="flavors"
         placeholder="Color flavor..."
         size="small"
@@ -106,8 +106,8 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
     <div :class="$style.plot">
       <AppDraggableMenuPlotSizes
         :disabled="!isReadyAndSelected"
-        :height="InjectionKey.HEATMAPS_PLOT_HEIGHT"
-        :width="InjectionKey.HEATMAPS_PLOT_WIDTH"
+        :height="InjectionKey.enum.HEATMAPS_PLOT_HEIGHT"
+        :width="InjectionKey.enum.HEATMAPS_PLOT_WIDTH"
       />
 
       <AppButton

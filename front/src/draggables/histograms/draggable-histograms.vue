@@ -17,9 +17,9 @@ const {
   histogramFunction,
 } = useDraggableHistograms();
 
-useRefProvide(InjectionKey.histogramsIndicatorName, name);
-useRefProvide(InjectionKey.histogramsOver, over);
-useRefProvide(InjectionKey.histogramsFunction, histogramFunction);
+useRefProvide(InjectionKey.enum.HISTOGRAMS_INDICATOR_NAME, name);
+useRefProvide(InjectionKey.enum.HISTOGRAMS_OVER, over);
+useRefProvide(InjectionKey.enum.HISTOGRAMS_FUNCTION, histogramFunction);
 
 useDraggableHistogramsLifecycles();
 </script>
@@ -32,7 +32,7 @@ useDraggableHistogramsLifecycles();
     <AppDraggableMenu>
       <h2>With</h2>
       <AppSelect
-        :injection-key="InjectionKey.histogramsIndicatorName"
+        :injection-key="InjectionKey.enum.HISTOGRAMS_INDICATOR_NAME"
         :options="names ?? []"
         placeholder="Indicator..."
         size="small"
@@ -40,14 +40,14 @@ useDraggableHistogramsLifecycles();
 
       <h2>Over</h2>
       <AppSelect
-        :injection-key="InjectionKey.histogramsOver"
+        :injection-key="InjectionKey.enum.HISTOGRAMS_OVER"
         :options="overs"
         size="small"
       />
 
       <h2>Function</h2>
       <AppSelect
-        :injection-key="InjectionKey.histogramsFunction"
+        :injection-key="InjectionKey.enum.HISTOGRAMS_FUNCTION"
         :options="histogramFunctions"
         size="small"
       />

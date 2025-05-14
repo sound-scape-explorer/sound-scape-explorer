@@ -8,7 +8,7 @@ import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-it
 
 const {isDevEnabled, devAutoLoadView} = useClientSettings();
 
-useRefProvide(InjectionKey.settingsDevAutoLoadView, devAutoLoadView);
+useRefProvide(InjectionKey.enum.SETTINGS_DEV_AUTO_LOAD_VIEW, devAutoLoadView);
 </script>
 
 <template>
@@ -18,7 +18,7 @@ useRefProvide(InjectionKey.settingsDevAutoLoadView, devAutoLoadView);
     <DraggableSettingsItem title="Auto load view">
       <AppCheckbox
         :default="devAutoLoadView"
-        :injection-key="InjectionKey.settingsDevAutoLoadView"
+        :injection-key="InjectionKey.enum.SETTINGS_DEV_AUTO_LOAD_VIEW"
       />
     </DraggableSettingsItem>
   </div>

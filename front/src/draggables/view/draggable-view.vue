@@ -42,10 +42,10 @@ const reducerNames = computed(
 
 useSelectionLifecycles();
 
-useRefProvide(InjectionKey.viewExtraction, extractionSlug);
-useRefProvide(InjectionKey.viewBand, bandSlug);
-useRefProvide(InjectionKey.viewIntegration, integrationSlug);
-useRefProvide(InjectionKey.viewReducer, reducerSlug);
+useRefProvide(InjectionKey.enum.VIEW_EXTRACTION, extractionSlug);
+useRefProvide(InjectionKey.enum.VIEW_BAND, bandSlug);
+useRefProvide(InjectionKey.enum.VIEW_INTEGRATION, integrationSlug);
+useRefProvide(InjectionKey.enum.VIEW_REDUCER, reducerSlug);
 
 onMounted(autoselectDev);
 </script>
@@ -60,7 +60,7 @@ onMounted(autoselectDev);
 
       <AppSelect
         :disabled="hasView"
-        :injection-key="InjectionKey.viewExtraction"
+        :injection-key="InjectionKey.enum.VIEW_EXTRACTION"
         :options="extractionNames"
         placeholder="Extraction..."
         size="small"
@@ -70,7 +70,7 @@ onMounted(autoselectDev);
 
       <AppSelect
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.viewBand"
+        :injection-key="InjectionKey.enum.VIEW_BAND"
         :options="bandNames"
         placeholder="Band..."
         size="small"
@@ -80,7 +80,7 @@ onMounted(autoselectDev);
 
       <AppSelect
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.viewIntegration"
+        :injection-key="InjectionKey.enum.VIEW_INTEGRATION"
         :options="integrationNames"
         placeholder="Integration..."
         size="small"
@@ -90,7 +90,7 @@ onMounted(autoselectDev);
 
       <AppSelect
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.viewReducer"
+        :injection-key="InjectionKey.enum.VIEW_REDUCER"
         :options="reducerNames"
         placeholder="Reducer..."
         size="small"

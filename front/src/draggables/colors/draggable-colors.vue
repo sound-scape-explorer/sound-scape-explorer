@@ -32,15 +32,15 @@ const {detect: detectIndicatorRange, swap} = useIndexLimits();
 const {invert, isReversible} = useColorInvert();
 const {isEnabled} = useLabelNumeric();
 
-useRefProvide(InjectionKey.colorsCriteria, criteria);
-useRefProvide(InjectionKey.colorsCategory, category);
-useRefProvide(InjectionKey.colorsFlavor, flavor);
-useRefProvide(InjectionKey.colorsAlphaExcluded, low);
-useRefProvide(InjectionKey.colorsAlphaIncluded, high);
-useRefProvide(InjectionKey.colorsIndicatorMin, indicatorRangeMin);
-useRefProvide(InjectionKey.colorsIndicatorMax, indicatorRangeMax);
-useRefProvide(InjectionKey.colorsLabelRangeMin, labelRangeMin);
-useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
+useRefProvide(InjectionKey.enum.COLORS_CATEGORY, category);
+useRefProvide(InjectionKey.enum.COLORS_CRITERIA, criteria);
+useRefProvide(InjectionKey.enum.COLORS_FLAVOR, flavor);
+useRefProvide(InjectionKey.enum.COLORS_ALPHA_EXCLUDED, low);
+useRefProvide(InjectionKey.enum.COLORS_ALPHA_INCLUDED, high);
+useRefProvide(InjectionKey.enum.COLORS_METRIC_RANGE_MIN, indicatorRangeMin);
+useRefProvide(InjectionKey.enum.COLORS_METRIC_RANGE_MAX, indicatorRangeMax);
+useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MIN, labelRangeMin);
+useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
 </script>
 
 <template>
@@ -54,7 +54,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
       <div :class="[$style.two, $style.grow]">
         <AppSelect
           :disabled="isLoading"
-          :injection-key="InjectionKey.colorsCategory"
+          :injection-key="InjectionKey.enum.COLORS_CATEGORY"
           :options="categories"
           placeholder="Category..."
           size="small"
@@ -62,7 +62,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
         <AppSelect
           :disabled="isLoading"
-          :injection-key="InjectionKey.colorsCriteria"
+          :injection-key="InjectionKey.enum.COLORS_CRITERIA"
           :options="criterias"
           placeholder="Criteria..."
           size="small"
@@ -97,14 +97,14 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
         :class="$style.two"
       >
         <AppInput
-          :injection-key="InjectionKey.colorsIndicatorMin"
+          :injection-key="InjectionKey.enum.COLORS_METRIC_RANGE_MIN"
           placeholder="Min..."
           size="small"
           type="number"
         />
 
         <AppInput
-          :injection-key="InjectionKey.colorsIndicatorMax"
+          :injection-key="InjectionKey.enum.COLORS_METRIC_RANGE_MAX"
           placeholder="Max..."
           size="small"
           type="number"
@@ -124,7 +124,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
       >
         <AppInput
           :disabled="!isEnabled"
-          :injection-key="InjectionKey.colorsLabelRangeMin"
+          :injection-key="InjectionKey.enum.COLORS_TAG_RANGE_MIN"
           placeholder="Min..."
           size="small"
           type="number"
@@ -132,7 +132,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
         <AppInput
           :disabled="!isEnabled"
-          :injection-key="InjectionKey.colorsLabelRangeMax"
+          :injection-key="InjectionKey.enum.COLORS_TAG_RANGE_MAX"
           placeholder="Max..."
           size="small"
           type="number"
@@ -144,7 +144,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
       <div :class="$style.two">
         <AppInput
           :disabled="isLoading"
-          :injection-key="InjectionKey.colorsAlphaExcluded"
+          :injection-key="InjectionKey.enum.COLORS_ALPHA_EXCLUDED"
           :max="1"
           :min="0.001"
           :step="0.001"
@@ -157,7 +157,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
         <AppInput
           :disabled="isLoading"
-          :injection-key="InjectionKey.colorsAlphaIncluded"
+          :injection-key="InjectionKey.enum.COLORS_ALPHA_INCLUDED"
           :max="1"
           :min="0"
           :step="0.05"
@@ -173,7 +173,7 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
       <AppSelect
         :disabled="isLoading"
-        :injection-key="InjectionKey.colorsFlavor"
+        :injection-key="InjectionKey.enum.COLORS_FLAVOR"
         :options="COLOR_FLAVORS"
         size="small"
       />

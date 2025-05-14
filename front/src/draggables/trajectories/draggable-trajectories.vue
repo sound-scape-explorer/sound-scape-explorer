@@ -30,7 +30,7 @@ const {renderTraces} = useScatterTraces();
 watch(isFused, renderTraces);
 watch(current, update);
 
-useRefProvide(InjectionKey.trajectoriesFuse, isFused);
+useRefProvide(InjectionKey.enum.TRAJECTORIES_FUSE, isFused);
 </script>
 
 <template>

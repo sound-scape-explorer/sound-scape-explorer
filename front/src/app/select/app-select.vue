@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {NSelect, NSpace} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
-import {InjectionKey} from 'src/common/injection-key';
+import {type InjectionKey} from 'src/common/injection-key';
 import {useRefInject} from 'src/composables/use-ref-inject';
 import {type NaiveSize} from 'src/types';
 import {convertToNaiveSelectOptions} from 'src/utils/naive';

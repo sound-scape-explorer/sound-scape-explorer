@@ -58,13 +58,13 @@ useDraggableSettingsProviders();
         <AppCheckbox
           :default="darkMode"
           :handle-click="reload"
-          :injection-key="InjectionKey.SETTINGS_DARK_MODE"
+          :injection-key="InjectionKey.enum.SETTINGS_DARK_MODE"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Audio: set audio host">
         <AppInput
-          :injection-key="InjectionKey.settingsAudioHost"
+          :injection-key="InjectionKey.enum.SETTINGS_AUDIO_HOST"
           align="left"
           size="small"
         />
@@ -73,7 +73,9 @@ useDraggableSettingsProviders();
       <DraggableSettingsItem title="Draggables: Hide menu on display toggle">
         <AppCheckbox
           :default="isHidingMenuOnDraggableToggle"
-          :injection-key="InjectionKey.settingsIsHidingMenuOnDraggableToggle"
+          :injection-key="
+            InjectionKey.enum.SETTINGS_IS_HIDING_MENU_ON_DRAGGABLE_TOGGLE
+          "
         />
       </DraggableSettingsItem>
 
@@ -88,13 +90,13 @@ useDraggableSettingsProviders();
             !config?.settings.timezone ||
             config?.settings.timezone !== TIMEZONE_DEFAULT
           "
-          :injection-key="InjectionKey.settingsIsTimezoneActive"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_TIMEZONE_ACTIVE"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Time: Apply custom shift (in hours)">
         <AppInput
-          :injection-key="InjectionKey.settingsTimeShift"
+          :injection-key="InjectionKey.enum.SETTINGS_TIME_SHIFT"
           align="left"
           size="small"
           type="number"
@@ -104,7 +106,7 @@ useDraggableSettingsProviders();
       <DraggableSettingsItem title="Plots: Set background color">
         <AppSelect
           :class="$style['background-color']"
-          :injection-key="InjectionKey.settingsPlotBackground"
+          :injection-key="InjectionKey.enum.SETTINGS_PLOT_BACKGROUND"
           :options="backgrounds"
           size="small"
         />
@@ -112,7 +114,7 @@ useDraggableSettingsProviders();
 
       <DraggableSettingsItem title="Plots: Set font size">
         <AppInput
-          :injection-key="InjectionKey.settingsPlotFontSize"
+          :injection-key="InjectionKey.enum.SETTINGS_PLOT_FONT_SIZE"
           align="left"
           size="small"
           type="number"
@@ -122,7 +124,7 @@ useDraggableSettingsProviders();
       <DraggableSettingsItem title="Scatter: Select interval border width">
         <AppSelect
           :class="$style['scatter-border-width']"
-          :injection-key="InjectionKey.settingsScatterBorderWidth"
+          :injection-key="InjectionKey.enum.SETTINGS_SCATTER_BORDER_WIDTH"
           :options="[0, 1, 2].map((n) => n.toString())"
           size="small"
         />
@@ -131,28 +133,30 @@ useDraggableSettingsProviders();
       <DraggableSettingsItem title="Scatter: Highlight selected point">
         <AppCheckbox
           :default="isSelectedPointHighlighted"
-          :injection-key="InjectionKey.settingsIsSelectedPointHighlighted"
+          :injection-key="
+            InjectionKey.enum.SETTINGS_IS_SELECTED_POINT_HIGHLIGHTED
+          "
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Scatter: Open Audio on click">
         <AppCheckbox
           :default="isAudioAutoOpen"
-          :injection-key="InjectionKey.settingsIsAudioAutoOpen"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_AUDIO_AUTO_OPEN"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Scatter: Open Details on click">
         <AppCheckbox
           :default="isDetailsAutoOpen"
-          :injection-key="InjectionKey.settingsIsDetailsAutoOpen"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_DETAILS_AUTO_OPEN"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Scatter: Use WebGL (2d)">
         <AppCheckbox
           :default="isWebGlScatter2d"
-          :injection-key="InjectionKey.settingsIsWebGlScatter2d"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_WEBGL_SCATTER_2D"
         />
       </DraggableSettingsItem>
 
@@ -161,14 +165,14 @@ useDraggableSettingsProviders();
       >
         <AppCheckbox
           :default="isCopyOnSelect2d"
-          :injection-key="InjectionKey.settingsIsCopyOnSelect2d"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_COPY_ON_SELECT_2D"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Spectrogram: Set color map">
         <AppSelect
           :class="$style['spectro-colors']"
-          :injection-key="InjectionKey.settingsColormap"
+          :injection-key="InjectionKey.enum.SETTINGS_COLOR_MAP"
           :options="colormapOptions"
           size="small"
         />
@@ -177,14 +181,14 @@ useDraggableSettingsProviders();
       <DraggableSettingsItem title="Spectrogram: Show decibels">
         <AppCheckbox
           :default="isDecibelsDisplay"
-          :injection-key="InjectionKey.settingsDecibelsDisplay"
+          :injection-key="InjectionKey.enum.SETTINGS_DECIBELS_DISPLAY"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Spectrogram: Overflow legends">
         <AppCheckbox
           :default="isLegendOverflow"
-          :injection-key="InjectionKey.settingsLegendOverflow"
+          :injection-key="InjectionKey.enum.SETTINGS_LEGEND_OVERFLOW"
         />
       </DraggableSettingsItem>
 
@@ -193,28 +197,28 @@ useDraggableSettingsProviders();
       >
         <AppCheckbox
           :default="isDetailedExportName"
-          :injection-key="InjectionKey.settingsIsDetailedExportName"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_DETAILED_EXPORT_NAME"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Misc: Preview alpha features">
         <AppCheckbox
           :default="isAlphaPreview"
-          :injection-key="InjectionKey.settingsIsAlphaPreview"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_ALPHA_PREVIEW"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Misc: Preview beta features">
         <AppCheckbox
           :default="isBetaPreview"
-          :injection-key="InjectionKey.settingsIsBetaPreview"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_BETA_PREVIEW"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Misc: Enable dev settings">
         <AppCheckbox
           :default="isDevEnabled"
-          :injection-key="InjectionKey.settingsIsDevEnabled"
+          :injection-key="InjectionKey.enum.SETTINGS_IS_DEV_ENABLED"
         />
       </DraggableSettingsItem>
 

@@ -11,8 +11,8 @@ const {hasIndicator} = useDraggableTemporal();
 const {filter, reset} = useScatterFilterTemporal();
 const {from, to} = useTemporalThresholds();
 
-useRefProvide(InjectionKey.indicatorsFilterFrom, from);
-useRefProvide(InjectionKey.indicatorsFilterTo, to);
+useRefProvide(InjectionKey.enum.METRICS_FILTER_FROM, from);
+useRefProvide(InjectionKey.enum.METRICS_FILTER_TO, to);
 </script>
 
 <template>
@@ -21,7 +21,7 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
       :class="$style.input"
       :disabled="!hasIndicator"
       :handle-enter="filter"
-      :injection-key="InjectionKey.indicatorsFilterFrom"
+      :injection-key="InjectionKey.enum.METRICS_FILTER_FROM"
       :step="0.1"
       placeholder="From"
       size="small"
@@ -32,7 +32,7 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
       :class="$style.input"
       :disabled="!hasIndicator"
       :handle-enter="filter"
-      :injection-key="InjectionKey.indicatorsFilterTo"
+      :injection-key="InjectionKey.enum.METRICS_FILTER_TO"
       placeholder="To"
       size="small"
       type="number"

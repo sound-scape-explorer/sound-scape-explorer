@@ -26,9 +26,9 @@ const {
 
 const {period, periods, update: updatePeriod} = useTemporalCandles();
 
-useRefProvide(InjectionKey.indicatorsList, indicator);
-useRefProvide(InjectionKey.indicatorsDisplay, display);
-useRefProvide(InjectionKey.temporalTrim, isCondensed);
+useRefProvide(InjectionKey.enum.METRICS_LIST, indicator);
+useRefProvide(InjectionKey.enum.METRICS_DISPLAY, display);
+useRefProvide(InjectionKey.enum.TEMPORAL_TRIM, isCondensed);
 
 watch(indicator, update);
 </script>
@@ -39,7 +39,7 @@ watch(indicator, update);
 
     <div>
       <AppSelect
-        :injection-key="InjectionKey.indicatorsList"
+        :injection-key="InjectionKey.enum.METRICS_LIST"
         :options="indicators"
         size="small"
       />
@@ -57,7 +57,7 @@ watch(indicator, update);
       <div>
         <AppSelect
           :class="$style.display"
-          :injection-key="InjectionKey.indicatorsDisplay"
+          :injection-key="InjectionKey.enum.METRICS_DISPLAY"
           :options="displays"
           size="small"
         />
@@ -77,7 +77,7 @@ watch(indicator, update);
         <AppSwitch
           v-if="isCandles"
           :disabled="!isCandles"
-          :injection-key="InjectionKey.temporalTrim"
+          :injection-key="InjectionKey.enum.TEMPORAL_TRIM"
           checked="Trim"
           unchecked="Full"
         />
