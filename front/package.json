@@ -34,7 +34,6 @@
     "@types/colormap": "^2.3.1",
     "@types/plotly.js-dist-min": "^2.3.4",
     "@types/wavesurfer.js": "^6.0.6",
-    "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/tsconfig": "^0.4.0",
     "cross-env": "^7.0.3",

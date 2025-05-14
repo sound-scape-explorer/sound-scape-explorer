@@ -62,6 +62,7 @@
     "@stylistic/eslint-plugin": "^4.2.0",
     "@types/node": "^22.15.17",
     "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "@typescript-eslint/parser": "^8.32.1",
     "eslint": "^9.26.0",
     "eslint-plugin-de-morgan": "^1.2.1",
     "eslint-plugin-import": "^2.31.0",
