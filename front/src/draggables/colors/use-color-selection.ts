@@ -26,6 +26,7 @@ const category = ref<ColorCategory>('Default');
 const criterias = ref<ColorCriteria[]>(defaultCriterias);
 const criteriaIndex = ref<number>(-1);
 
+// todo: use enum and rename labels to tags, rename indicators to metrics
 const categories = ref<ColorCategory[]>(['Default', 'Labels', 'Indicators']);
 
 export function useColorSelection() {
