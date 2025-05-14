@@ -1,6 +1,5 @@
 import {type Data, type PlotType} from 'plotly.js-dist-min';
 import {ScatterFeaturesError} from 'src/common/Errors';
-import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
 import {useScreen} from 'src/components/screen/use-screen';
@@ -14,11 +13,12 @@ import {computed} from 'vue';
 const size2d = 5;
 const size3d = 3;
 
+// todo: update me
 export function useScatterFeatures() {
   const {reducedEmbeddings} = useStorageReducedEmbeddings();
   // const {labelProperties} = useStorageLabels();
   // const {aggregatedLabels} = useStorageAggregatedLabels();
-  const {low, high} = useScatterColorAlpha();
+  const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
   const {isWebGlScatter2d, isSelectedPointHighlighted, scatterBorderWidth} =

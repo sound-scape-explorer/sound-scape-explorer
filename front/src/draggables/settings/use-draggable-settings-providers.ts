@@ -1,13 +1,11 @@
 import {InjectionKey} from 'src/common/injection-key';
-import {useAudioHost} from 'src/composables/use-audio-host';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
-import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
 
 export function useDraggableSettingsProviders() {
   const {
     darkMode,
+    audioHost,
     isDetailsAutoOpen,
     isAudioAutoOpen,
     plotBackground,
@@ -22,17 +20,16 @@ export function useDraggableSettingsProviders() {
     isAlphaPreview,
     isBetaPreview,
     scatterBorderWidth,
+    plotFontSize,
+    spectrogramColorMap,
+    decibelsDisplay,
+    legendOverflow,
   } = useClientSettings();
-
-  const {audioHost} = useAudioHost();
-  const {plotFontSize} = useClientSettings();
-  const {colormap} = useSpectrogramColormap();
-  const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
 
   useRefProvide(InjectionKey.enum.SETTINGS_DARK_MODE, darkMode);
   useRefProvide(InjectionKey.enum.SETTINGS_AUDIO_HOST, audioHost);
   useRefProvide(InjectionKey.enum.SETTINGS_TIME_SHIFT, timeshift);
-  useRefProvide(InjectionKey.enum.SETTINGS_COLOR_MAP, colormap);
+  useRefProvide(InjectionKey.enum.SETTINGS_COLOR_MAP, spectrogramColorMap);
   useRefProvide(InjectionKey.enum.SETTINGS_PLOT_BACKGROUND, plotBackground);
   useRefProvide(InjectionKey.enum.SETTINGS_PLOT_FONT_SIZE, plotFontSize);
   useRefProvide(
@@ -40,8 +37,8 @@ export function useDraggableSettingsProviders() {
     isDetailsAutoOpen,
   );
   useRefProvide(InjectionKey.enum.SETTINGS_IS_AUDIO_AUTO_OPEN, isAudioAutoOpen);
-  useRefProvide(InjectionKey.enum.SETTINGS_DECIBELS_DISPLAY, isDecibelsDisplay);
-  useRefProvide(InjectionKey.enum.SETTINGS_LEGEND_OVERFLOW, isLegendOverflow);
+  useRefProvide(InjectionKey.enum.SETTINGS_DECIBELS_DISPLAY, decibelsDisplay);
+  useRefProvide(InjectionKey.enum.SETTINGS_LEGEND_OVERFLOW, legendOverflow);
   useRefProvide(
     InjectionKey.enum.SETTINGS_IS_TIMEZONE_ACTIVE,
     isTimezoneActive,

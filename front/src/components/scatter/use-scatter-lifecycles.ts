@@ -1,5 +1,4 @@
 import {useScatter} from 'src/components/scatter/use-scatter';
-import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
@@ -22,7 +21,8 @@ export function useScatterLifecycles() {
   const {container, isMounted, isAttached, attachListeners, render, mount} =
     useScatter();
   const {criteria, flavor} = useColorSelection();
-  const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
+  const {colorsAlphaLow: opacityLow, colorsAlphaHigh: opacityHigh} =
+    useClientSettings();
   const {
     timeshift,
     isColorMapSwapped,

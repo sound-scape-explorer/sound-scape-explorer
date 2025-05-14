@@ -8,8 +8,11 @@ import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useConfig} from 'src/composables/use-config';
-import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
-import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
+import {
+  PlotBackground,
+  ScatterBorderWidth,
+  SpectrogramColorMap,
+} from 'src/constants';
 import DraggableSettingsDev from 'src/draggables/settings/draggable-settings-dev.vue';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 import {useDraggableSettingsProviders} from 'src/draggables/settings/use-draggable-settings-providers';
@@ -28,13 +31,11 @@ const {
   isDevEnabled,
   isSelectedPointHighlighted,
   isDetailedExportName,
+  decibelsDisplay: isDecibelsDisplay,
+  legendOverflow: isLegendOverflow,
 } = useClientSettings();
 
 const {config} = useConfig();
-const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
-
-const colormapOptions = SPECTROGRAM_COLOR_MAPS;
-const backgrounds = Object.values(PLOT_BACKGROUND);
 
 const reload = () => location.reload();
 
@@ -107,7 +108,7 @@ useDraggableSettingsProviders();
         <AppSelect
           :class="$style['background-color']"
           :injection-key="InjectionKey.enum.SETTINGS_PLOT_BACKGROUND"
-          :options="backgrounds"
+          :options="PlotBackground.options"
           size="small"
         />
       </DraggableSettingsItem>
@@ -121,11 +122,11 @@ useDraggableSettingsProviders();
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Scatter: Select interval border width">
+      <DraggableSettingsItem title="Scatter: Selected interval border width">
         <AppSelect
           :class="$style['scatter-border-width']"
           :injection-key="InjectionKey.enum.SETTINGS_SCATTER_BORDER_WIDTH"
-          :options="[0, 1, 2].map((n) => n.toString())"
+          :options="ScatterBorderWidth.options"
           size="small"
         />
       </DraggableSettingsItem>
@@ -173,7 +174,7 @@ useDraggableSettingsProviders();
         <AppSelect
           :class="$style['spectro-colors']"
           :injection-key="InjectionKey.enum.SETTINGS_COLOR_MAP"
-          :options="colormapOptions"
+          :options="SpectrogramColorMap.options"
           size="small"
         />
       </DraggableSettingsItem>

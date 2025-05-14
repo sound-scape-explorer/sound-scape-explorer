@@ -1,55 +1,40 @@
-import {useStorage} from '@vueuse/core';
-import {settingDefaults} from 'src/common/setting-defaults';
-import {SettingKey} from 'src/common/setting-key';
-
-export type DraggableLabelSize = 'default' | 'big' | 'max';
-
-const sizeHorizontal = useStorage<DraggableLabelSize>(
-  SettingKey.labelsSizeHorizontal,
-  settingDefaults.labelsSizeHorizontal,
-);
-
-const sizeVertical = useStorage<DraggableLabelSize>(
-  SettingKey.labelsSizeVertical,
-  settingDefaults.labelsSizeVertical,
-);
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {TagsDraggableSize} from 'src/constants';
+import {type Ref} from 'vue';
 
 export function useDraggableLabels() {
-  const cyclePrimitive = (p: typeof sizeHorizontal | typeof sizeVertical) => {
+  const {tagsDraggableSizeVertical: v, tagsDraggableSizeHorizontal: h} =
+    useClientSettings();
+
+  const cyclePrimitive = (p: Ref<TagsDraggableSize>) => {
     switch (p.value) {
-      case 'default': {
-        p.value = 'big';
+      case TagsDraggableSize.enum.small: {
+        p.value = TagsDraggableSize.enum.medium;
         break;
       }
 
-      case 'big': {
-        p.value = 'max';
+      case TagsDraggableSize.enum.medium: {
+        p.value = TagsDraggableSize.enum.large;
         break;
       }
 
-      case 'max': {
-        p.value = 'default';
+      case TagsDraggableSize.enum.large: {
+        p.value = TagsDraggableSize.enum.small;
         break;
       }
 
       default: {
-        p.value = 'default';
+        p.value = TagsDraggableSize.enum.small;
       }
     }
   };
 
-  const cycleHorizontal = () => cyclePrimitive(sizeHorizontal);
-  const cycleVertical = () => cyclePrimitive(sizeVertical);
-
-  const reset = () => {
-    sizeHorizontal.value = settingDefaults.labelsSizeHorizontal;
-    sizeVertical.value = settingDefaults.labelsSizeVertical;
-  };
+  const cycleHorizontal = () => cyclePrimitive(h);
+  const cycleVertical = () => cyclePrimitive(v);
 
   return {
-    reset,
-    sizeHorizontal,
-    sizeVertical,
+    sizeHorizontal: h,
+    sizeVertical: v,
     cycleHorizontal,
     cycleVertical,
   };

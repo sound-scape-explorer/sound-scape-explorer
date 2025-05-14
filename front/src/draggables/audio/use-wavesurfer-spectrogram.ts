@@ -1,11 +1,11 @@
 import SpectrogramPlugin from 'src/common/spectrogram';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 import {useWavesurferColors} from 'src/draggables/audio/use-wavesurfer-colors';
-import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
 
 export function useWavesurferSpectrogram() {
   const {ws} = useWavesurfer();
@@ -14,7 +14,8 @@ export function useWavesurferSpectrogram() {
   const {bitDepth} = useAudioFile();
   const {size} = useAudioFourier();
   const {colors} = useWavesurferColors();
-  const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
+  const {decibelsDisplay: isDecibelsDisplay, legendOverflow: isLegendOverflow} =
+    useClientSettings();
 
   const register = () => {
     if (

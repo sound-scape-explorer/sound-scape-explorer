@@ -1,140 +1,18 @@
-import {useStorage} from '@vueuse/core';
-import {useAppNotification} from 'src/app/notification/use-app-notification';
-import {
-  type ScatterBorderWidth,
-  settingDefaults as d,
-} from 'src/common/setting-defaults';
-import {SettingKey as k} from 'src/common/setting-key';
-import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
-import {useAudioHost} from 'src/composables/use-audio-host';
-import {useClientSettingsDev} from 'src/composables/use-client-settings-dev';
-import {type ColorFlavor} from 'src/constants';
-import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
-import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
-import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
+import {createSettingsRefs, Settings} from 'src/common/settings';
 
-const version = useStorage<string>(k.version, d.version);
-const darkMode = useStorage<boolean>(k.darkMode, d.darkMode);
-const plotBackground = useStorage<string>(k.plotBackground, d.plotBackground);
-const timeshift = useStorage<number>(k.timeshift, d.timeshift);
-const isAlphaPreview = useStorage<boolean>(k.isAlphaPreview, d.isAlphaPreview);
-const isBetaPreview = useStorage<boolean>(k.isBetaPreview, d.isBetaPreview);
-
-const isDetailsAutoOpen = useStorage<boolean>(
-  k.isDetailsAutoOpen,
-  d.isDetailsAutoOpen,
-);
-
-const isAudioAutoOpen = useStorage<boolean>(
-  k.isAudioAutoOpen,
-  d.isAudioAutoOpen,
-);
-
-const isTimezoneActive = useStorage<boolean>(
-  k.isTimezoneActive,
-  d.isTimezoneActive,
-);
-const isCopyOnSelect2d = useStorage<boolean>(
-  k.isCopyOnSelect2d,
-  d.isCopyOnSelect2d,
-);
-const isWebGlScatter2d = useStorage<boolean>(
-  k.isWebGlScatter2d,
-  d.isWebGlScatter2d,
-);
-const isColorMapSwapped = useStorage<boolean>(
-  k.isColorMapSwapped,
-  d.isColorMapSwapped,
-);
-
-const isHidingMenuOnDraggableToggle = useStorage<boolean>(
-  k.isHidingMenuOnDraggableToggle,
-  d.isHidingMenuOnDraggableToggle,
-);
-
-const isSelectedPointHighlighted = useStorage<boolean>(
-  k.isSelectedPointHighlighted,
-  d.isSelectedPointHighlighted,
-);
-
-const isDetailedExportName = useStorage<boolean>(
-  k.isDetailedExportName,
-  d.isDetailedExportName,
-);
-
-const scatterBorderWidth = useStorage<ScatterBorderWidth>(
-  k.scatterBorderWidth,
-  d.scatterBorderWidth,
-);
-
-const plotFontSize = useStorage<number>(k.plotFontSize, d.plotFontSize);
-const colorsFlavor = useStorage<ColorFlavor>(k.colorsFlavor, d.colorsFlavor);
+const refs = createSettingsRefs();
 
 export function useClientSettings() {
-  const {audioHost} = useAudioHost();
-  const {colormap} = useSpectrogramColormap();
-  const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
-  const {reset: resetLabels} = useDraggableLabels();
-  const {reset: resetAlphas} = useScatterColorAlpha();
-  const {notify} = useAppNotification();
-  const {
-    isDevEnabled,
-    devAutoLoadView,
-    reset: resetDev,
-  } = useClientSettingsDev();
-
   const resetAll = () => {
-    version.value = d.version;
-    darkMode.value = d.darkMode;
-    plotBackground.value = d.plotBackground;
-    timeshift.value = d.timeshift;
-    isDetailsAutoOpen.value = d.isDetailsAutoOpen;
-    isAudioAutoOpen.value = d.isAudioAutoOpen;
-    isTimezoneActive.value = d.isTimezoneActive;
-    isCopyOnSelect2d.value = d.isCopyOnSelect2d;
-    isWebGlScatter2d.value = d.isWebGlScatter2d;
-    isColorMapSwapped.value = d.isColorMapSwapped;
-    isSelectedPointHighlighted.value = d.isSelectedPointHighlighted;
-    isDetailedExportName.value = d.isDetailedExportName;
-    isAlphaPreview.value = d.isAlphaPreview;
-    isBetaPreview.value = d.isBetaPreview;
-    scatterBorderWidth.value = d.scatterBorderWidth;
-    plotFontSize.value = d.plotFontSize;
-    colorsFlavor.value = d.colorsFlavor;
+    const shape = Settings.shape;
 
-    audioHost.value = d.audioHost;
-    plotFontSize.value = d.plotFontSize;
-    colormap.value = d.spectrogramColorMap;
-    isDecibelsDisplay.value = d.decibelsDisplay;
-    isLegendOverflow.value = d.legendOverflow;
-    resetLabels();
-    resetAlphas();
-    resetDev();
-
-    notify('success', 'Settings', 'Defaults restored');
+    Object.entries(shape).forEach(([key, schema]) => {
+      refs[key as keyof typeof refs].value = schema.parse(undefined);
+    });
   };
 
   return {
+    ...refs,
     resetAll,
-    version,
-    darkMode,
-    plotBackground,
-    timeshift,
-    isDetailsAutoOpen,
-    isAudioAutoOpen,
-    isTimezoneActive,
-    isCopyOnSelect2d,
-    isWebGlScatter2d,
-    isColorMapSwapped,
-    isHidingMenuOnDraggableToggle,
-    isDevEnabled,
-    devAutoLoadView,
-    isSelectedPointHighlighted,
-    isDetailedExportName,
-    isAlphaPreview,
-    isBetaPreview,
-    scatterBorderWidth,
-    plotFontSize,
-    colorsFlavor,
   };
 }

@@ -2,6 +2,7 @@
 import {NGi, NGrid} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useLabelSets} from 'src/composables/use-label-sets';
+import {TagsDraggableSize} from 'src/constants';
 import DraggableLabelsSidebar from 'src/draggables/labels/draggable-labels-sidebar.vue';
 import Label from 'src/draggables/labels/label.vue';
 import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
@@ -23,12 +24,18 @@ const {sets} = useLabelSets();
       :class="[
         $style.container,
         {
-          [$style['horizontal-default']]: sizeHorizontal === 'default',
-          [$style['horizontal-big']]: sizeHorizontal === 'big',
-          [$style['horizontal-max']]: sizeHorizontal === 'max',
-          [$style['vertical-default']]: sizeVertical === 'default',
-          [$style['vertical-big']]: sizeVertical === 'big',
-          [$style['vertical-max']]: sizeVertical === 'max',
+          [$style['horizontal-small']]:
+            sizeHorizontal === TagsDraggableSize.enum.small,
+          [$style['horizontal-medium']]:
+            sizeHorizontal === TagsDraggableSize.enum.medium,
+          [$style['horizontal-large']]:
+            sizeHorizontal === TagsDraggableSize.enum.large,
+          [$style['vertical-small']]:
+            sizeVertical === TagsDraggableSize.enum.small,
+          [$style['vertical-medium']]:
+            sizeVertical === TagsDraggableSize.enum.medium,
+          [$style['vertical-large']]:
+            sizeVertical === TagsDraggableSize.enum.large,
         },
       ]"
     >
@@ -56,27 +63,27 @@ const {sets} = useLabelSets();
   @include scrolls.tiny-scrollbar;
 }
 
-.horizontal-default {
+.horizontal-small {
   width: sizes.$w0;
 }
 
-.vertical-default {
+.vertical-small {
   height: sizes.$h0;
 }
 
-.horizontal-big {
+.horizontal-medium {
   width: sizes.$w2;
 }
 
-.vertical-big {
+.vertical-medium {
   height: sizes.$h2;
 }
 
-.horizontal-max {
+.horizontal-large {
   width: sizes.$w-max;
 }
 
-.vertical-max {
+.vertical-large {
   height: sizes.$h-max;
 }
 </style>

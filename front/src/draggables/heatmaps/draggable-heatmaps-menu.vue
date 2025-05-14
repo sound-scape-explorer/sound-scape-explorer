@@ -10,6 +10,7 @@ import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
 import {useLabelSets} from 'src/composables/use-label-sets';
 import {useRefProvide} from 'src/composables/use-ref-provide';
+import {HeatmapScale} from 'src/constants';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
@@ -27,7 +28,7 @@ const {
 const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
 const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
 const {width, height} = useAppHeatmapSize();
-const {flavor, flavors} = useDraggableHeatmapsColor();
+const {flavor} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
 const {actual} = useLabelSets();
 
@@ -83,7 +84,7 @@ useRefProvide(InjectionKey.enum.HEATMAPS_PLOT_HEIGHT, height);
       <AppSelect
         :disabled="!isReadyAndSelected"
         :injection-key="InjectionKey.enum.METRIC_COLOR_FLAVOR"
-        :options="flavors"
+        :options="HeatmapScale.options"
         placeholder="Color flavor..."
         size="small"
       />

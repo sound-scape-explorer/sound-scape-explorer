@@ -7,20 +7,17 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {InjectionKey} from 'src/common/injection-key';
-import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorInvert} from 'src/composables/use-color-invert';
 import {useIndexLimits} from 'src/composables/use-index-limits';
 import {useRefProvide} from 'src/composables/use-ref-provide';
-import {COLOR_FLAVORS} from 'src/constants';
+import {ColorCategory, ColorFlavor} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
 import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
-import {
-  ColorCategoryEnum,
-  useColorSelection,
-} from 'src/draggables/colors/use-color-selection';
+import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useColorState} from 'src/draggables/colors/use-color-state';
 import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
 
@@ -28,7 +25,7 @@ const {isLoading} = useScatterLoading();
 const {flavor, criteria, criterias, category} = useColorSelection();
 const {isIndicators, isLabels, isLabelNumeric} = useColorState();
 
-const {low, high} = useScatterColorAlpha();
+const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
 const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
 const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
 const {detect: detectIndicatorRange, swap} = useIndexLimits();
@@ -58,7 +55,7 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
         <AppSelect
           :disabled="isLoading"
           :injection-key="InjectionKey.enum.COLORS_CATEGORY"
-          :options="ColorCategoryEnum.options"
+          :options="ColorCategory.options"
           placeholder="Category..."
           size="small"
         />
@@ -177,7 +174,7 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
       <AppSelect
         :disabled="isLoading"
         :injection-key="InjectionKey.enum.COLORS_FLAVOR"
-        :options="COLOR_FLAVORS"
+        :options="ColorFlavor.options"
         size="small"
       />
 

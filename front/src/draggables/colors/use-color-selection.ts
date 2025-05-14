@@ -1,37 +1,17 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIndicators} from 'src/composables/use-indicators';
 import {useLabelSets} from 'src/composables/use-label-sets';
+import {ColorCategory, ColorCriteria} from 'src/constants';
 import {ref} from 'vue';
-import {z} from 'zod';
 
-export const ColorCategoryEnum = z.enum(['DEFAULT', 'TAGS', 'METRICS']);
-// eslint-disable-next-line no-redeclare
-export type ColorCategoryEnum = z.infer<typeof ColorCategoryEnum>;
+const labelCriterias = ref<string[]>([]);
+const indicatorCriterias = ref<string[]>([]);
 
-// todo: move this to zod enumeration
-type ColorCriteria =
-  | 'intervalIndex'
-  | 'by1h'
-  | 'by10min'
-  | 'isDay'
-  | 'cycleDay';
-
-const defaultCriterias: ColorCriteria[] = [
-  'cycleDay',
-  'isDay',
-  'intervalIndex',
-  'by1h',
-  'by10min',
-];
-
-const labelCriterias = ref<ColorCriteria[]>([]);
-const indicatorCriterias = ref<ColorCriteria[]>([]);
-
-const criterias = ref<ColorCriteria[]>(defaultCriterias);
-const criteria = ref<ColorCriteria>('cycleDay');
+const criterias = ref<string[]>(ColorCriteria.options);
+const criteria = ref<string>(ColorCriteria.enum.cycleDay);
 const criteriaIndex = ref<number>(-1);
 
-const category = ref<ColorCategoryEnum>(ColorCategoryEnum.enum.DEFAULT);
+const category = ref<ColorCategory>(ColorCategory.enum.DEFAULT);
 
 export function useColorSelection() {
   const {sets} = useLabelSets();
@@ -40,15 +20,15 @@ export function useColorSelection() {
 
   const updateCriterias = () => {
     switch (category.value) {
-      case ColorCategoryEnum.enum.DEFAULT:
-        criterias.value = defaultCriterias;
+      case ColorCategory.enum.DEFAULT:
+        criterias.value = ColorCriteria.options;
         break;
 
-      case ColorCategoryEnum.enum.TAGS:
+      case ColorCategory.enum.TAGS:
         criterias.value = labelCriterias.value;
         break;
 
-      case ColorCategoryEnum.enum.METRICS:
+      case ColorCategory.enum.METRICS:
         criterias.value = indicatorCriterias.value;
         break;
     }
@@ -59,7 +39,7 @@ export function useColorSelection() {
   };
 
   const updateLabelCriterias = () => {
-    labelCriterias.value = Object.keys(sets.value) as ColorCriteria[];
+    labelCriterias.value = Object.keys(sets.value);
   };
 
   const updateIndicatorCriterias = () => {
@@ -67,16 +47,16 @@ export function useColorSelection() {
       return;
     }
 
-    indicatorCriterias.value = names.value as ColorCriteria[];
+    indicatorCriterias.value = names.value;
   };
 
-  const handleLabelClick = (property: string) => {
-    if (category.value !== ColorCategoryEnum.enum.TAGS) {
-      category.value = ColorCategoryEnum.enum.TAGS;
+  const handleLabelClick = (tagName: string) => {
+    if (category.value !== ColorCategory.enum.TAGS) {
+      category.value = ColorCategory.enum.TAGS;
     }
 
-    if (criteria.value !== property) {
-      criteria.value = property as ColorCriteria;
+    if (criteria.value !== tagName) {
+      criteria.value = tagName;
     }
   };
 
