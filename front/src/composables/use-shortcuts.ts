@@ -7,7 +7,6 @@ const betaPrefix = '_beta';
 export enum Shortcuts {
   _alphaSelection2d = 's',
   _alphaSelection3d = 'J',
-  _alphaTimeline = 'T',
   _draggableToggle = 'Esc',
   _draggableCycleRecent = 'Tab',
   _draggableCycleBack = 'Shift+Tab',
