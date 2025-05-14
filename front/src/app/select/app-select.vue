@@ -1,14 +1,11 @@
 <script lang="ts" setup>
 import {NSelect, NSpace} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
-import {type InjectionKey} from 'src/common/injection-key';
-import {useRefInject} from 'src/composables/use-ref-inject';
 import {type NaiveSize} from 'src/types';
 import {convertToNaiveSelectOptions} from 'src/utils/naive';
 import {computed} from 'vue';
 
 interface Props {
-  injectionKey: InjectionKey;
   options: string[];
   defaultOptionIndex?: number;
   size?: NaiveSize;
@@ -23,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
 });
 
-const model = useRefInject(props.injectionKey);
+const model = defineModel<string | null>();
 const options = computed(() => convertToNaiveSelectOptions(props.options));
 const hasTooltip = computed<boolean>(() => typeof props?.tooltip === 'string');
 </script>

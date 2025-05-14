@@ -2,11 +2,11 @@ import {PLOTLY_SIZE} from 'src/constants';
 import {type Ref} from 'vue';
 
 export function useAppPlotSize(
-  width: Ref<number> | null,
-  height: Ref<number> | null,
+  width: Ref<number | undefined>,
+  height: Ref<number | undefined>,
 ) {
   const updateWidth = (newWidth: number = PLOTLY_SIZE) => {
-    if (width === null) {
+    if (width.value === undefined) {
       return;
     }
 
@@ -14,7 +14,7 @@ export function useAppPlotSize(
   };
 
   const updateHeight = (newHeight: number = PLOTLY_SIZE) => {
-    if (height === null) {
+    if (height.value === undefined) {
       return;
     }
 
@@ -42,21 +42,21 @@ export function useAppPlotSize(
   };
 
   const double = () => {
-    if (width !== null) {
+    if (width.value !== undefined) {
       updateWidth(width.value * 2);
     }
 
-    if (height !== null) {
+    if (height.value !== undefined) {
       updateHeight(height.value * 2);
     }
   };
 
   const half = () => {
-    if (width !== null) {
+    if (width.value !== undefined) {
       width.value = width.value * 0.5;
     }
 
-    if (height !== null) {
+    if (height.value !== undefined) {
       height.value = height.value * 0.5;
     }
   };

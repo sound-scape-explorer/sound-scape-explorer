@@ -1,14 +1,10 @@
 <script lang="ts" setup>
 import AppCheckbox from 'src/app/app-checkbox.vue';
 import AppTitle from 'src/app/app-title.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 
 const {isDevEnabled, devAutoLoadView} = useClientSettings();
-
-useRefProvide(InjectionKey.enum.SETTINGS_DEV_AUTO_LOAD_VIEW, devAutoLoadView);
 </script>
 
 <template>
@@ -16,10 +12,7 @@ useRefProvide(InjectionKey.enum.SETTINGS_DEV_AUTO_LOAD_VIEW, devAutoLoadView);
     <AppTitle :class="$style.title">Development settings</AppTitle>
 
     <DraggableSettingsItem title="Auto load view">
-      <AppCheckbox
-        :default="devAutoLoadView"
-        :injection-key="InjectionKey.enum.SETTINGS_DEV_AUTO_LOAD_VIEW"
-      />
+      <AppCheckbox v-model="devAutoLoadView" />
     </DraggableSettingsItem>
   </div>
 </template>

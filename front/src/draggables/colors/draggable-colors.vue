@@ -6,12 +6,10 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorInvert} from 'src/composables/use-color-invert';
 import {useIndexLimits} from 'src/composables/use-index-limits';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import {ColorCategory, ColorFlavor} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
@@ -31,16 +29,6 @@ const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
 const {detect: detectIndicatorRange, swap} = useIndexLimits();
 const {invert, isReversible} = useColorInvert();
 const {isEnabled} = useLabelNumeric();
-
-useRefProvide(InjectionKey.enum.COLORS_CATEGORY, category);
-useRefProvide(InjectionKey.enum.COLORS_CRITERIA, criteria);
-useRefProvide(InjectionKey.enum.COLORS_FLAVOR, flavor);
-useRefProvide(InjectionKey.enum.COLORS_ALPHA_EXCLUDED, low);
-useRefProvide(InjectionKey.enum.COLORS_ALPHA_INCLUDED, high);
-useRefProvide(InjectionKey.enum.COLORS_METRIC_RANGE_MIN, indicatorRangeMin);
-useRefProvide(InjectionKey.enum.COLORS_METRIC_RANGE_MAX, indicatorRangeMax);
-useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MIN, labelRangeMin);
-useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
 </script>
 
 <template>
@@ -53,16 +41,16 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
 
       <div :class="[$style.two, $style.grow]">
         <AppSelect
+          v-model="category"
           :disabled="isLoading"
-          :injection-key="InjectionKey.enum.COLORS_CATEGORY"
           :options="ColorCategory.options"
           placeholder="Category..."
           size="small"
         />
 
         <AppSelect
+          v-model="criteria"
           :disabled="isLoading"
-          :injection-key="InjectionKey.enum.COLORS_CRITERIA"
           :options="criterias"
           placeholder="Criteria..."
           size="small"
@@ -97,14 +85,14 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
         :class="$style.two"
       >
         <AppInput
-          :injection-key="InjectionKey.enum.COLORS_METRIC_RANGE_MIN"
+          v-model="indicatorRangeMin"
           placeholder="Min..."
           size="small"
           type="number"
         />
 
         <AppInput
-          :injection-key="InjectionKey.enum.COLORS_METRIC_RANGE_MAX"
+          v-model="indicatorRangeMax"
           placeholder="Max..."
           size="small"
           type="number"
@@ -123,16 +111,16 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
         :class="$style.two"
       >
         <AppInput
+          v-model="labelRangeMin"
           :disabled="!isEnabled"
-          :injection-key="InjectionKey.enum.COLORS_TAG_RANGE_MIN"
           placeholder="Min..."
           size="small"
           type="number"
         />
 
         <AppInput
+          v-model="labelRangeMax"
           :disabled="!isEnabled"
-          :injection-key="InjectionKey.enum.COLORS_TAG_RANGE_MAX"
           placeholder="Max..."
           size="small"
           type="number"
@@ -143,8 +131,8 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
 
       <div :class="$style.two">
         <AppInput
+          v-model="low"
           :disabled="isLoading"
-          :injection-key="InjectionKey.enum.COLORS_ALPHA_EXCLUDED"
           :max="1"
           :min="0.001"
           :step="0.001"
@@ -156,8 +144,8 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
         />
 
         <AppInput
+          v-model="high"
           :disabled="isLoading"
-          :injection-key="InjectionKey.enum.COLORS_ALPHA_INCLUDED"
           :max="1"
           :min="0"
           :step="0.05"
@@ -172,8 +160,8 @@ useRefProvide(InjectionKey.enum.COLORS_TAG_RANGE_MAX, labelRangeMax);
       <h2>Flavor</h2>
 
       <AppSelect
+        v-model="flavor"
         :disabled="isLoading"
-        :injection-key="InjectionKey.enum.COLORS_FLAVOR"
         :options="ColorFlavor.options"
         size="small"
       />

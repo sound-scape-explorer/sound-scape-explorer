@@ -8,10 +8,8 @@ import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
@@ -29,8 +27,6 @@ const {renderTraces} = useScatterTraces();
 
 watch(isFused, renderTraces);
 watch(current, update);
-
-useRefProvide(InjectionKey.enum.TRAJECTORIES_FUSE, isFused);
 </script>
 
 <template>

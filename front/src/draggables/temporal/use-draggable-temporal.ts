@@ -4,17 +4,20 @@ import {useExportName} from 'src/composables/use-export-name';
 import {useStorageAggregatedAcousticIndices} from 'src/composables/use-storage-aggregated-acoustic-indices';
 import {useTemporal} from 'src/draggables/temporal/use-temporal';
 import {computed, ref} from 'vue';
+import {z} from 'zod';
 
 const indicator = ref<string>('');
 const hasIndicator = computed<boolean>(() => indicator.value !== '');
 
-type Display = 'Continuous' | 'Candles';
-const displays: Display[] = ['Continuous', 'Candles'];
-const display = ref<Display>(displays[0]);
+export const TemporalDisplay = z.enum(['Continuous', 'Candles']);
+// eslint-disable-next-line no-redeclare
+export type TemporalDisplay = z.infer<typeof TemporalDisplay>;
+
+const display = ref<TemporalDisplay>(TemporalDisplay.enum.Continuous);
 
 const isCandles = computed<boolean>(() => display.value === 'Candles');
 const isCondensed = ref<boolean>(true);
-const isDisplay = ref<boolean>(true); // whether plot is shown or not
+const isDisplay = ref<boolean>(true); // whether the plot is shown or not
 const isExpanded = ref<boolean>(false);
 
 export function useDraggableTemporal() {
@@ -74,7 +77,6 @@ export function useDraggableTemporal() {
     indicator,
     indicators,
     display,
-    displays,
     isCandles,
     isCondensed,
     isDisplay,

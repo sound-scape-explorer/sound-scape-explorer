@@ -74,7 +74,12 @@ export function createSettingsRefs(): SettingsRefs {
             try {
               return schema.parse(JSON.parse(value));
             } catch {
-              console.warn(`Invalid stored value for ${key}, using default`);
+              // todo: improve handling because this is not ref state
+              console.warn(
+                `Invalid stored value for ${key}, using default`,
+                key,
+                value,
+              );
               return schema.parse(undefined);
             }
           },

@@ -1,22 +1,20 @@
 import {useIndicators} from 'src/composables/use-indicators';
 import {ref} from 'vue';
+import {z} from 'zod';
 
 const divRef = ref<HTMLDivElement | null>(null);
 const name = ref<string | null>(null);
 
-type Over = 'Hours';
-const overs: Over[] = ['Hours'];
-const over = ref<Over | null>('Hours');
+export const HistogramOver = z.enum(['Hours']);
+// eslint-disable-next-line no-redeclare
+export type HistogramOver = z.infer<typeof HistogramOver>;
 
-type HistogramFunction = 'count' | 'sum' | 'avg' | 'min' | 'max';
-const histogramFunctions: HistogramFunction[] = [
-  'count',
-  'sum',
-  'avg',
-  'min',
-  'max',
-];
-const histogramFunction = ref<HistogramFunction>('avg');
+export const HistogramFunction = z.enum(['count', 'sum', 'avg', 'min', 'max']);
+// eslint-disable-next-line no-redeclare
+export type HistogramFunction = z.infer<typeof HistogramFunction>;
+
+const fn = ref<HistogramFunction>(HistogramFunction.enum.avg);
+const over = ref<HistogramOver>(HistogramOver.enum.Hours);
 
 export function useDraggableHistograms() {
   const {names} = useIndicators();
@@ -25,9 +23,7 @@ export function useDraggableHistograms() {
     divRef,
     names,
     name,
-    overs,
     over,
-    histogramFunctions,
-    histogramFunction,
+    fn,
   };
 }

@@ -5,8 +5,6 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useSelectionLifecycles} from 'src/composables/use-selection-lifecycles';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
@@ -41,12 +39,6 @@ const reducerNames = computed(
 );
 
 useSelectionLifecycles();
-
-useRefProvide(InjectionKey.enum.VIEW_EXTRACTION, extractionSlug);
-useRefProvide(InjectionKey.enum.VIEW_BAND, bandSlug);
-useRefProvide(InjectionKey.enum.VIEW_INTEGRATION, integrationSlug);
-useRefProvide(InjectionKey.enum.VIEW_REDUCER, reducerSlug);
-
 onMounted(autoselectDev);
 </script>
 
@@ -59,8 +51,8 @@ onMounted(autoselectDev);
       <h2>Extraction</h2>
 
       <AppSelect
+        v-model="extractionSlug"
         :disabled="hasView"
-        :injection-key="InjectionKey.enum.VIEW_EXTRACTION"
         :options="extractionNames"
         placeholder="Extraction..."
         size="small"
@@ -69,8 +61,8 @@ onMounted(autoselectDev);
       <h2>Band</h2>
 
       <AppSelect
+        v-model="bandSlug"
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.enum.VIEW_BAND"
         :options="bandNames"
         placeholder="Band..."
         size="small"
@@ -79,8 +71,8 @@ onMounted(autoselectDev);
       <h2>Integration</h2>
 
       <AppSelect
+        v-model="integrationSlug"
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.enum.VIEW_INTEGRATION"
         :options="integrationNames"
         placeholder="Integration..."
         size="small"
@@ -89,8 +81,8 @@ onMounted(autoselectDev);
       <h2>Reducer</h2>
 
       <AppSelect
+        v-model="reducerSlug"
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.enum.VIEW_REDUCER"
         :options="reducerNames"
         placeholder="Reducer..."
         size="small"

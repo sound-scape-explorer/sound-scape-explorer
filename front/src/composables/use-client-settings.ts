@@ -9,6 +9,9 @@ export function useClientSettings() {
     Object.entries(shape).forEach(([key, schema]) => {
       refs[key as keyof typeof refs].value = schema.parse(undefined);
     });
+
+    // todo: add notification
+    console.log('reset all');
   };
 
   return {

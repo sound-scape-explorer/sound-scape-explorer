@@ -1,16 +1,12 @@
 <script lang="ts" setup>
 import {NDatePicker} from 'naive-ui';
-import {type InjectionKey} from 'src/common/injection-key';
-import {useRefInject} from 'src/composables/use-ref-inject';
 
 interface Props {
-  injectionKey: InjectionKey;
   handleClick: (newValue: number) => void;
 }
 
 const props = defineProps<Props>();
-
-const model = useRefInject<number>(props.injectionKey);
+const model = defineModel<number>();
 </script>
 
 <template>

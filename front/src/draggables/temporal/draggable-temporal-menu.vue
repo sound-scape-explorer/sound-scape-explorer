@@ -6,10 +6,11 @@ import AppButton from 'src/app/app-button.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import DraggableTemporalMenuFilters from 'src/draggables/temporal/draggable-temporal-menu-filters.vue';
-import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
+import {
+  TemporalDisplay,
+  useDraggableTemporal,
+} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
 import {watch} from 'vue';
 
@@ -17,7 +18,6 @@ const {
   indicator,
   indicators,
   display,
-  displays,
   isCandles,
   isCondensed,
   handleExportClick,
@@ -25,11 +25,6 @@ const {
 } = useDraggableTemporal();
 
 const {period, periods, update: updatePeriod} = useTemporalCandles();
-
-useRefProvide(InjectionKey.enum.METRICS_LIST, indicator);
-useRefProvide(InjectionKey.enum.METRICS_DISPLAY, display);
-useRefProvide(InjectionKey.enum.TEMPORAL_TRIM, isCondensed);
-
 watch(indicator, update);
 </script>
 
@@ -39,7 +34,7 @@ watch(indicator, update);
 
     <div>
       <AppSelect
-        :injection-key="InjectionKey.enum.METRICS_LIST"
+        v-model="indicator"
         :options="indicators"
         size="small"
       />
@@ -56,9 +51,9 @@ watch(indicator, update);
     <div :class="$style.row">
       <div>
         <AppSelect
+          v-model="display"
           :class="$style.display"
-          :injection-key="InjectionKey.enum.METRICS_DISPLAY"
-          :options="displays"
+          :options="TemporalDisplay.options"
           size="small"
         />
 
@@ -76,8 +71,8 @@ watch(indicator, update);
 
         <AppSwitch
           v-if="isCandles"
+          v-model="isCondensed"
           :disabled="!isCandles"
-          :injection-key="InjectionKey.enum.TEMPORAL_TRIM"
           checked="Trim"
           unchecked="Full"
         />

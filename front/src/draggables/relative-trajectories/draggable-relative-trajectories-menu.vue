@@ -5,9 +5,7 @@ import {NCascader} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableRelativeTrajectories} from 'src/draggables/relative-trajectories/use-draggable-relative-trajectories';
 import {useRelativeTrajectoriesData} from 'src/draggables/relative-trajectories/use-relative-trajectories-data';
 import {useRelativeTrajectoriesExport} from 'src/draggables/relative-trajectories/use-relative-trajectories-export';
@@ -18,8 +16,6 @@ const {handleUpdate} = useRelativeTrajectoriesData();
 const {isLoading} = useScatterLoading();
 const {handleExportClick} = useRelativeTrajectoriesExport();
 const {height} = useRelativeTrajectoriesPlotSize();
-
-useRefProvide(InjectionKey.enum.RELATIVE_TRAJECTORIES_PLOT_HEIGHT, height);
 </script>
 
 <template>
@@ -51,8 +47,8 @@ useRefProvide(InjectionKey.enum.RELATIVE_TRAJECTORIES_PLOT_HEIGHT, height);
 
     <div :class="$style['last-row']">
       <AppDraggableMenuPlotSizes
+        v-model:height="height"
         :disabled="false"
-        :height="InjectionKey.enum.RELATIVE_TRAJECTORIES_PLOT_HEIGHT"
         only-factors
       />
 

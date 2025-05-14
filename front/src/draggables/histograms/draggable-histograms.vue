@@ -2,24 +2,14 @@
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-histograms';
+import {
+  HistogramFunction,
+  HistogramOver,
+  useDraggableHistograms,
+} from 'src/draggables/histograms/use-draggable-histograms';
 import {useDraggableHistogramsLifecycles} from 'src/draggables/histograms/use-draggable-histograms-lifecycles';
 
-const {
-  divRef,
-  names,
-  name,
-  overs,
-  over,
-  histogramFunctions,
-  histogramFunction,
-} = useDraggableHistograms();
-
-useRefProvide(InjectionKey.enum.HISTOGRAMS_INDICATOR_NAME, name);
-useRefProvide(InjectionKey.enum.HISTOGRAMS_OVER, over);
-useRefProvide(InjectionKey.enum.HISTOGRAMS_FUNCTION, histogramFunction);
+const {divRef, names, name, over, fn} = useDraggableHistograms();
 
 useDraggableHistogramsLifecycles();
 </script>
@@ -32,7 +22,7 @@ useDraggableHistogramsLifecycles();
     <AppDraggableMenu>
       <h2>With</h2>
       <AppSelect
-        :injection-key="InjectionKey.enum.HISTOGRAMS_INDICATOR_NAME"
+        v-model="name"
         :options="names ?? []"
         placeholder="Indicator..."
         size="small"
@@ -40,15 +30,15 @@ useDraggableHistogramsLifecycles();
 
       <h2>Over</h2>
       <AppSelect
-        :injection-key="InjectionKey.enum.HISTOGRAMS_OVER"
-        :options="overs"
+        v-model="over"
+        :options="HistogramOver.options"
         size="small"
       />
 
       <h2>Function</h2>
       <AppSelect
-        :injection-key="InjectionKey.enum.HISTOGRAMS_FUNCTION"
-        :options="histogramFunctions"
+        v-model="fn"
+        :options="HistogramFunction.options"
         size="small"
       />
     </AppDraggableMenu>
