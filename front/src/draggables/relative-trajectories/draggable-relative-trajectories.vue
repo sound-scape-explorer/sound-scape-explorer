@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import DraggableRelativeTrajectoriesMenu from 'src/draggables/relative-trajectories/draggable-relative-trajectories-menu.vue';
 import DraggableRelativeTrajectoriesSidebar from 'src/draggables/relative-trajectories/draggable-relative-trajectories-sidebar.vue';
 import {useDraggableRelativeTrajectoriesExpand} from 'src/draggables/relative-trajectories/use-draggable-relative-trajectories-expand';
