@@ -2,6 +2,7 @@
 import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useExportName} from 'src/composables/use-export-name';
 import DraggableTemporalMenu from 'src/draggables/temporal/draggable-temporal-menu.vue';
 import DraggableTemporalSidebar from 'src/draggables/temporal/draggable-temporal-sidebar.vue';
@@ -27,7 +28,7 @@ useDraggableTemporalLifecycles();
 <template>
   <AppDraggable
     :class="[$style.container, {[$style.expand]: isExpanded}]"
-    draggable-key="temporal"
+    :draggable-key="DraggableKey.enum.temporal"
     suspense="view"
   >
     <DraggableTemporalSidebar />

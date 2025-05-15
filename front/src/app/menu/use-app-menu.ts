@@ -15,28 +15,29 @@ import {
   statsChartOutline,
   timerOutline,
 } from 'ionicons/icons';
+import {DraggableKey} from 'src/composables/use-draggables';
 
-interface Menu {
-  [key: string]: string;
-}
+type MenuIconByKey = {
+  [K in DraggableKey]: string;
+};
 
 export function useAppMenu() {
-  const menu: Menu = {
+  const menu: MenuIconByKey = {
     open: cloudUploadOutline,
     settings: cogOutline,
     help: helpOutline,
     view: eyeOutline,
     colors: colorPaletteOutline,
     calendar: calendarOutline,
-    labels: layersOutline,
+    tags: layersOutline,
     temporal: barChartOutline,
     histograms: statsChartOutline,
     heatmaps: gridOutline,
     details: listOutline,
     audio: headsetOutline,
-    selection: cropOutline,
     trajectories: navigateOutline,
     relativeTrajectories: timerOutline,
+    _alphaSelection3d: cropOutline,
   };
 
   return {

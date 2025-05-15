@@ -7,6 +7,7 @@ import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useConfig} from 'src/composables/use-config';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {
   PlotBackground,
   ScatterBorderWidth,
@@ -45,7 +46,7 @@ const reload = () => location.reload();
 </script>
 
 <template>
-  <AppDraggable draggable-key="settings">
+  <AppDraggable :draggable-key="DraggableKey.enum.settings">
     <div :class="$style.reload">
       <AppButton
         :handle-click="resetAll"

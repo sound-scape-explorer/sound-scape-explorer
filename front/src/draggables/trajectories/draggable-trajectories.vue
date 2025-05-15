@@ -10,6 +10,7 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
@@ -30,7 +31,7 @@ watch(current, update);
 </script>
 
 <template>
-  <AppDraggable draggable-key="trajectories">
+  <AppDraggable :draggable-key="DraggableKey.enum.trajectories">
     <AppDraggableSidebar>
       <AppDraggableSidebarHistory
         :can-redo="canRedo && !isFused"

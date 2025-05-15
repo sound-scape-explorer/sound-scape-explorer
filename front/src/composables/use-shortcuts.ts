@@ -17,7 +17,7 @@ export enum Shortcuts {
   help = '?',
   view = 'w',
   colors = 'c',
-  labels = 'l',
+  tags = 'l',
   audio = 'a',
   details = 'd',
   trajectories = 'y',

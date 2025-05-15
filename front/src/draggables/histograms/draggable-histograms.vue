@@ -2,6 +2,7 @@
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {
   HistogramFunction,
   HistogramOver,
@@ -17,7 +18,7 @@ useDraggableHistogramsLifecycles();
 <template>
   <AppDraggable
     :class="$style.container"
-    draggable-key="histograms"
+    :draggable-key="DraggableKey.enum.histograms"
   >
     <AppDraggableMenu>
       <h2>With</h2>

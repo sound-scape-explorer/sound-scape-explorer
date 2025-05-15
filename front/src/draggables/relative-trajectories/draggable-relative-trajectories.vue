@@ -16,7 +16,7 @@ const {height} = useRelativeTrajectoriesPlotSize();
 <template>
   <AppDraggable
     :class="[$style.container, {[$style.expanded]: isExpanded}]"
-    draggable-key="relativeTrajectories"
+    :draggable-key="DraggableKey.enum.relativeTrajectories"
     suspense="view"
   >
     <DraggableRelativeTrajectoriesSidebar />

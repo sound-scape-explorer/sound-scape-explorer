@@ -38,6 +38,8 @@ export const rules = {
         '^(symbol|price|tag|since|limit|params|market|timeframe|api|path|code|currency|response|requestHeaders|requestBody|bidsKey|asksKey)',
     },
   ],
+  // 'no-redeclare': 'off',
+  // '@typescript-eslint/no-redeclare': 'error',
   // stylistic js plugin
   '@stylistic/semi': ['error', 'always'],
   '@stylistic/quote-props': ['error', 'consistent'],

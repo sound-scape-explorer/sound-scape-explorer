@@ -1,5 +1,5 @@
 import html2canvas from 'html2canvas';
-import {useDraggables} from 'src/composables/use-draggables';
+import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 
 export function useDraggableTagsScreenshot() {
@@ -18,8 +18,7 @@ export function useDraggableTagsScreenshot() {
         return resolve(null);
       }
 
-      // todo: udpate me
-      open('labels');
+      open(DraggableKey.enum.tags);
 
       setTimeout(async () => {
         const canvas = await html2canvas(parent);

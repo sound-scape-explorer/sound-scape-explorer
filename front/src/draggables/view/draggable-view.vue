@@ -5,6 +5,7 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useSelectionLifecycles} from 'src/composables/use-selection-lifecycles';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
@@ -43,7 +44,7 @@ onMounted(autoselectDev);
 </script>
 
 <template>
-  <AppDraggable draggable-key="view">
+  <AppDraggable :draggable-key="DraggableKey.enum.view">
     <AppDraggableMenu
       :class="$style.menu"
       size="medium"

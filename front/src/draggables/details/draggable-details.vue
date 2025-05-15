@@ -5,6 +5,7 @@ import {NButton, NGi, NGrid, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useDate} from 'src/composables/use-date';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
@@ -39,7 +40,7 @@ watch(timeshift, updateDates);
 
 <template>
   <AppDraggable
-    draggable-key="details"
+    :draggable-key="DraggableKey.enum.details"
     suspense="scatterClick"
   >
     <div :class="[$style.file, $style.container]">

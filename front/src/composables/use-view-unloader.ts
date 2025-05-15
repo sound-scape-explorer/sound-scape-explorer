@@ -4,7 +4,7 @@ import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-ti
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {useAggregated} from 'src/composables/use-aggregated';
-import {useDraggables} from 'src/composables/use-draggables';
+import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
@@ -45,7 +45,7 @@ export function useViewUnloader() {
     resetTemporalThresholds();
 
     isLoading.value = false;
-    open('view');
+    open(DraggableKey.enum.view);
   };
 
   return {

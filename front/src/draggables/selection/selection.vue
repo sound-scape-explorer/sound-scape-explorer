@@ -5,6 +5,7 @@ import {NButton, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {
@@ -49,7 +50,7 @@ watch(allUniques, () => {
 <template>
   <AppDraggable
     :class="$style['draggable-selection']"
-    draggable-key="_alphaSelection3d"
+    :draggable-key="DraggableKey.enum._alphaSelection3d"
   >
     <div :class="$style.buttons">
       <AppButton

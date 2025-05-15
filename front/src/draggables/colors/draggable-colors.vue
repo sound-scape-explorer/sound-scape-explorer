@@ -9,6 +9,7 @@ import AppSelect from 'src/app/select/app-select.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorInvert} from 'src/composables/use-color-invert';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useIndexLimits} from 'src/composables/use-index-limits';
 import {ColorCategory, ColorFlavor} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
@@ -33,7 +34,7 @@ const {isEnabled} = useTagNumeric();
 
 <template>
   <AppDraggable
-    draggable-key="colors"
+    :draggable-key="DraggableKey.enum.colors"
     suspense="view"
   >
     <AppDraggableMenu>
