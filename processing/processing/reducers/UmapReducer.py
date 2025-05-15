@@ -21,8 +21,6 @@ class UmapReducer(AbstractReducer):
         # using dynamic import to prevent numba's AOT
         from umap import UMAP
 
-        print(seed)
-
         umap = UMAP(
             n_components=dimensions,
             random_state=seed,
