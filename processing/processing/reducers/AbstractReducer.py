@@ -6,7 +6,7 @@ from rich import print
 from processing.lib.shapes import assert_shape
 
 
-class AbstractReducerNew(ABC):
+class AbstractReducer(ABC):
     def reduce(
         self,
         embeddings: np.ndarray,

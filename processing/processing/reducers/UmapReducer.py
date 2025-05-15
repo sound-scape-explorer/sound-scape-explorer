@@ -2,10 +2,10 @@ import numpy as np
 from sklearn.preprocessing import robust_scale
 
 from processing.constants import UMAP_MIN_DIST
-from processing.reducers.AbstractReducerNew import AbstractReducerNew
+from processing.reducers.AbstractReducer import AbstractReducer
 
 
-class UmapReducerNew(AbstractReducerNew):
+class UmapReducer(AbstractReducer):
     def __init__(
         self,
         min_dist: float = UMAP_MIN_DIST,
@@ -20,6 +20,8 @@ class UmapReducerNew(AbstractReducerNew):
     ):
         # using dynamic import to prevent numba's AOT
         from umap import UMAP
+
+        print(seed)
 
         umap = UMAP(
             n_components=dimensions,

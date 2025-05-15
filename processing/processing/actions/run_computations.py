@@ -9,8 +9,8 @@ from processing.repositories.ComputedRepository import ComputedRepository
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.repositories.MeanDistancesMatrixRepository import MeanDistancesMatrixRepository
 from processing.printers.print_action import print_action
-from processing.reducers.PcaReducerNew import PcaReducerNew
-from processing.reducers.UmapReducerNew import UmapReducerNew
+from processing.reducers.PcaReducer import PcaReducer
+from processing.reducers.UmapReducer import UmapReducer
 from processing.validators.validate_aggregated import validate_aggregated
 
 
@@ -39,7 +39,7 @@ def _run_computation_reductions(context: Context):
                 context.config.settings.computation_strategy
                 is ComputationStrategyEnum.UMAP
             ):
-                umap = UmapReducerNew(min_dist=0)
+                umap = UmapReducer(min_dist=0)
                 reduced = umap.reduce(
                     embeddings=embeddings,
                     dimensions=context.config.settings.computation_dimensions,
@@ -49,7 +49,7 @@ def _run_computation_reductions(context: Context):
                 context.config.settings.computation_strategy
                 is ComputationStrategyEnum.PCA
             ):
-                pca = PcaReducerNew()
+                pca = PcaReducer()
                 reduced = pca.reduce(
                     embeddings=embeddings,
                     dimensions=context.config.settings.computation_dimensions,

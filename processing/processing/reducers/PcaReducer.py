@@ -1,10 +1,10 @@
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
 
-from processing.reducers.AbstractReducerNew import AbstractReducerNew
+from processing.reducers.AbstractReducer import AbstractReducer
 
 
-class PcaReducerNew(AbstractReducerNew):
+class PcaReducer(AbstractReducer):
     def _reduce(
         self,
         embeddings,
