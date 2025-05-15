@@ -1,32 +1,28 @@
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {ref} from 'vue';
 
 const isEnabled = ref<boolean>(false);
 
-export function useLabelNumeric() {
-  const {sets} = useLabelSets();
+export function useTagNumeric() {
+  const {allUniques} = useTagUniques();
   const {criteria} = useColorSelection();
 
-  const isCalculable = (property: string) => {
-    const labelProperties = Object.keys(sets.value);
-    const labelSets = Object.values(sets.value);
+  const isCalculable = (tagName: string) => {
+    const tagUniques = allUniques.value[tagName];
 
-    const index = labelProperties.indexOf(property);
-    const set = labelSets[index];
+    let assumeIsCalculable = true;
 
-    let payload = true; // is calculable?
-
-    for (const value of set) {
-      const numeric = Number(value);
+    for (const unique of tagUniques) {
+      const numeric = Number(unique);
 
       if (isNaN(numeric)) {
-        payload = false;
+        assumeIsCalculable = false;
         break;
       }
     }
 
-    return payload;
+    return assumeIsCalculable;
   };
 
   const enable = () => {

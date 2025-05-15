@@ -1,9 +1,9 @@
 import {TagsDraggableSize} from 'src/constants';
-import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
+import {useDraggableTags} from 'src/draggables/tags/use-draggable-tags';
 import {computed} from 'vue';
 
-export function useDraggableLabelsDom() {
-  const {sizeHorizontal} = useDraggableLabels();
+export function useDraggableTagsDom() {
+  const {sizeHorizontal} = useDraggableTags();
 
   const cols = computed(() => {
     if (sizeHorizontal.value === TagsDraggableSize.enum.small) {

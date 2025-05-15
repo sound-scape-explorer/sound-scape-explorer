@@ -2,12 +2,13 @@ import html2canvas from 'html2canvas';
 import {useDraggables} from 'src/composables/use-draggables';
 import {CURRENT_SCATTER_LEGEND_ID} from 'src/constants';
 
-export function useDraggableLabelsScreenshot() {
+export function useDraggableTagsScreenshot() {
   const {open} = useDraggables();
 
-  const screenshotLabel = async (): Promise<HTMLCanvasElement | null> => {
+  const screenshotTags = async (): Promise<HTMLCanvasElement | null> => {
     return new Promise((resolve) => {
       const target = document.getElementById(CURRENT_SCATTER_LEGEND_ID);
+
       if (target === null) {
         return resolve(null);
       }
@@ -17,6 +18,7 @@ export function useDraggableLabelsScreenshot() {
         return resolve(null);
       }
 
+      // todo: udpate me
       open('labels');
 
       setTimeout(async () => {
@@ -27,6 +29,6 @@ export function useDraggableLabelsScreenshot() {
   };
 
   return {
-    screenshotLabel,
+    screenshotTags,
   };
 }

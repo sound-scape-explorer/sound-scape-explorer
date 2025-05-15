@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import {NGi, NGrid} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {TagsDraggableSize} from 'src/constants';
-import DraggableLabelsSidebar from 'src/draggables/labels/draggable-labels-sidebar.vue';
-import Label from 'src/draggables/labels/label.vue';
-import {useDraggableLabels} from 'src/draggables/labels/use-draggable-labels';
-import {useDraggableLabelsDom} from 'src/draggables/labels/use-draggable-labels-dom';
+import DraggableTagsSidebar from 'src/draggables/tags/DraggableTagsSidebar.vue';
+import Tag from 'src/draggables/tags/Tag.vue';
+import {useDraggableTags} from 'src/draggables/tags/use-draggable-tags';
+import {useDraggableTagsDom} from 'src/draggables/tags/use-draggable-tags-dom';
 
-const {sizeHorizontal, sizeVertical} = useDraggableLabels();
-const {cols} = useDraggableLabelsDom();
-const {sets} = useLabelSets();
+const {sizeHorizontal, sizeVertical} = useDraggableTags();
+const {cols} = useDraggableTagsDom();
+const {allUniques} = useTagUniques();
 </script>
 
 <template>
@@ -18,7 +18,7 @@ const {sets} = useLabelSets();
     draggable-key="labels"
     suspense="view"
   >
-    <DraggableLabelsSidebar />
+    <DraggableTagsSidebar />
 
     <div
       :class="[
@@ -43,8 +43,8 @@ const {sets} = useLabelSets();
         :cols="cols"
         y-gap="8"
       >
-        <NGi v-for="property in Object.keys(sets)">
-          <Label :property="property" />
+        <NGi v-for="property in Object.keys(allUniques)">
+          <Tag :name="property" />
         </NGi>
       </NGrid>
     </div>

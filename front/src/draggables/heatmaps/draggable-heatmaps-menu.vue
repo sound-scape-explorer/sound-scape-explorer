@@ -7,7 +7,7 @@ import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {HeatmapScale} from 'src/constants';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
@@ -28,7 +28,7 @@ const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
 const {width, height} = useAppHeatmapSize();
 const {flavor} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
-const {actual} = useLabelSets();
+const {coreUniques} = useTagUniques();
 </script>
 
 <template>
@@ -47,7 +47,7 @@ const {actual} = useLabelSets();
     <div :class="$style.labels">
       <AppSelect
         v-model="a"
-        :options="Object.keys(actual) ?? []"
+        :options="Object.keys(coreUniques) ?? []"
         placeholder="Label A..."
         size="small"
       />
@@ -63,7 +63,7 @@ const {actual} = useLabelSets();
       <AppSelect
         v-model="b"
         :disabled="!isReadyForSelection || !isPairing"
-        :options="Object.keys(actual) ?? []"
+        :options="Object.keys(coreUniques) ?? []"
         placeholder="Label B..."
         size="small"
       />

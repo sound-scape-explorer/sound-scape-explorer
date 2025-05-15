@@ -1,6 +1,6 @@
 import {DraggableHeatmapsError} from 'src/common/Errors';
-import {useLabelSets} from 'src/composables/use-label-sets';
 import {type MetricData, useMetricData} from 'src/composables/use-metric-data';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
@@ -13,7 +13,7 @@ const series = ref<number[][]>([]);
 
 export function useDraggableHeatmapsChart() {
   const {a, b} = useDraggableHeatmapsLabels();
-  const {actual} = useLabelSets();
+  const {coreUniques} = useTagUniques();
   const {metricData} = useMetricData();
   const {update: updateRange} = useDraggableHeatmapsRange();
   const {isPairing} = useDraggableHeatmaps();
@@ -32,12 +32,12 @@ export function useDraggableHeatmapsChart() {
   };
 
   const getLabelData = (label: string) => {
-    if (actual.value === null) {
+    if (coreUniques.value === null) {
       throw new DraggableHeatmapsError('labels not available');
     }
 
-    const labelProperties = Object.keys(actual.value);
-    const labelValues = Object.values(actual.value);
+    const labelProperties = Object.keys(coreUniques.value);
+    const labelValues = Object.values(coreUniques.value);
 
     const index = labelProperties.indexOf(label);
 

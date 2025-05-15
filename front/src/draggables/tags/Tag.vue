@@ -9,15 +9,15 @@ import {
 import {NTag} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import LabelCheckboxes from 'src/draggables/labels/label-checkboxes.vue';
-import {useLabel} from 'src/draggables/labels/use-label';
+import TagCheckbox from 'src/draggables/tags/TagCheckbox.vue';
+import {useTag} from 'src/draggables/tags/use-tag';
 import {watch} from 'vue';
 
-export interface LabelProps {
-  property: string;
+export interface TagProps {
+  name: string;
 }
 
-const props = defineProps<LabelProps>();
+const props = defineProps<TagProps>();
 
 const {
   hasNoSelection,
@@ -27,7 +27,7 @@ const {
   toggleShowing,
   isCurrent,
   openCurrent,
-} = useLabel(props);
+} = useTag(props);
 const {handleLabelClick} = useColorSelection();
 
 watch(isCurrent, openCurrent);
@@ -45,7 +45,7 @@ watch(isCurrent, openCurrent);
           :class="[$style['chevron'], {[$style['chevron-rotate']]: isShowing}]"
           :icon="chevronForwardOutline"
         />
-        <span>{{ props.property }}</span>
+        <span>{{ props.name }}</span>
       </div>
     </NTag>
 
@@ -62,7 +62,7 @@ watch(isCurrent, openCurrent);
       </AppButton>
       <AppButton
         :disabled="hasNoSelection"
-        :handle-click="() => resetSelection(props.property)"
+        :handle-click="() => resetSelection(props.name)"
         size="tiny"
         small-tooltip
         tooltip="Clear selection"
@@ -72,7 +72,7 @@ watch(isCurrent, openCurrent);
       </AppButton>
       <AppButton
         :active="isCurrent"
-        :handle-click="() => handleLabelClick(props.property)"
+        :handle-click="() => handleLabelClick(props.name)"
         size="tiny"
         small-tooltip
         tooltip="Use for coloring"
@@ -83,9 +83,9 @@ watch(isCurrent, openCurrent);
     </div>
   </div>
 
-  <LabelCheckboxes
+  <TagCheckbox
     :class="[$style.checkboxes, {[$style['checkboxes-show']]: isShowing}]"
-    :property="props.property"
+    :property="props.name"
   />
 </template>
 

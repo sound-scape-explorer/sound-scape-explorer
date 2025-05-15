@@ -1,5 +1,5 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
-import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
+import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
@@ -9,11 +9,11 @@ import {useAutoclustered} from 'src/composables/use-autoclustered';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useIntervals} from 'src/composables/use-intervals';
-import {useLabelSets} from 'src/composables/use-label-sets';
 import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
-import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
+import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {ref} from 'vue';
 
 const step = ref<number>(0); // percents
@@ -27,12 +27,12 @@ export function useViewLoader() {
   const {readReducedEmbeddings: readReduced} = useStorageReducedEmbeddings();
   const {read: readAutoclustered} = useAutoclustered();
   const {generate: generateIntervals} = useIntervals();
-  const {generate: generateLabelSets} = useLabelSets();
+  const {generate: generateLabelSets} = useTagUniques();
 
   const {generateColorScale} = useScatterColorScale();
-  const {buildSelection, selection: labelSelection} = useLabelSelection();
+  const {buildSelection, selection: labelSelection} = useTagSelection();
   const {isEnabled} = useScatterTraces();
-  const {filter: filterByLabel} = useScatterFilterLabels();
+  const {filter: filterByLabel} = useScatterFilterTag();
   const {filter: filterByTemporal} = useScatterFilterTemporal();
   const {filterByTime} = useScatterFilterTime();
 

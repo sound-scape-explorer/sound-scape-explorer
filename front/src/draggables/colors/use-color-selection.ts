@@ -1,20 +1,22 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIndicators} from 'src/composables/use-indicators';
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {ColorCategory, ColorCriteria} from 'src/constants';
 import {ref} from 'vue';
 
+// todo: rename me to tag and metric
 const labelCriterias = ref<string[]>([]);
 const indicatorCriterias = ref<string[]>([]);
 
 const criterias = ref<string[]>(ColorCriteria.options);
+// a criteria can be either a builtin coloring key or a tag name (all kind)
 const criteria = ref<string>(ColorCriteria.enum.cycleDay);
 const criteriaIndex = ref<number>(-1);
 
 const category = ref<ColorCategory>(ColorCategory.enum.DEFAULT);
 
 export function useColorSelection() {
-  const {sets} = useLabelSets();
+  const {allUniques} = useTagUniques();
   const {names} = useIndicators();
   const {colorsFlavor} = useClientSettings();
 
@@ -39,7 +41,7 @@ export function useColorSelection() {
   };
 
   const updateLabelCriterias = () => {
-    labelCriterias.value = Object.keys(sets.value);
+    labelCriterias.value = Object.keys(allUniques.value);
   };
 
   const updateIndicatorCriterias = () => {

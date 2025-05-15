@@ -1,31 +1,33 @@
 import {useIntervals} from 'src/composables/use-intervals';
-import {type LabelSets, useLabelSets} from 'src/composables/use-label-sets';
+import {
+  type AllTagUniques,
+  useTagUniques,
+} from 'src/composables/use-tag-uniques';
 import {STRING_DELIMITER} from 'src/constants';
-import {type LabelSelection} from 'src/draggables/labels/use-label-selection';
+import {type TagSelection} from 'src/draggables/tags/use-tag-selection';
 import {type Ref, ref} from 'vue';
 
-// by interval indexes
+// by interval indices
 const filtered = ref<boolean[]>([]);
 
-export function useScatterFilterLabels() {
-  const {sets} = useLabelSets();
+export function useScatterFilterTag() {
+  const {allUniques} = useTagUniques();
   const {intervals} = useIntervals();
 
   /**
    * return true to continue
    * return false to break
    */
-  const iterateLabels = (
-    sets: LabelSets,
-     
-    callback: (p: number, property: string) => boolean,
+  const iterateTags = (
+    allUniques: AllTagUniques,
+    callback: (tN: number, tagName: string) => boolean,
   ) => {
-    const properties = Object.keys(sets);
-    const indices = properties.map((v, i) => i.toString());
+    const tagNames = Object.keys(allUniques);
+    const indices = tagNames.map((_, i) => i.toString());
 
-    for (let p = 0; p < indices.length; p += 1) {
-      const property = properties[p];
-      const isContinue = callback(p, property);
+    for (let tN = 0; tN < indices.length; tN += 1) {
+      const tagName = tagNames[tN];
+      const isContinue = callback(tN, tagName);
 
       if (!isContinue) {
         break;
@@ -35,15 +37,15 @@ export function useScatterFilterLabels() {
 
   const isFilteredBySelection = (
     intervalIndex: number,
-    selection: Ref<LabelSelection>,
+    selection: Ref<TagSelection>,
   ): boolean => {
     let isFiltered = false;
 
     const interval = intervals.value[intervalIndex];
 
-    iterateLabels(sets.value, (p, property) => {
-      const selected = selection.value[property];
-      const values = interval.labels[property].join(STRING_DELIMITER);
+    iterateTags(allUniques.value, (_, tagName) => {
+      const selected = selection.value[tagName];
+      const tagValues = interval.tags[tagName].join(STRING_DELIMITER);
 
       // no user selection
       if (selected.length === 0) {
@@ -51,7 +53,7 @@ export function useScatterFilterLabels() {
       }
 
       // selected by user
-      if (selected.includes(values)) {
+      if (selected.includes(tagValues)) {
         return true;
       }
 
@@ -62,7 +64,7 @@ export function useScatterFilterLabels() {
     return isFiltered;
   };
 
-  const filter = (newSelection: Ref<LabelSelection>) => {
+  const filter = (newSelection: Ref<TagSelection>) => {
     const l = intervals.value.length;
     const newFiltered: boolean[] = new Array(l);
 

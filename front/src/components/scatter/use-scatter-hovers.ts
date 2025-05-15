@@ -28,7 +28,7 @@ export function useScatterHovers() {
       const offset = 1;
       const interval = intervals.value[i];
 
-      const textLength = offset + Object.keys(interval.labels).length;
+      const textLength = offset + Object.keys(interval.tags).length;
 
       if (textLength > textLengthMax) {
         textLengthMax = textLength;
@@ -47,10 +47,10 @@ export function useScatterHovers() {
       // }
 
       // user labels
-      for (let p = 0; p < Object.keys(interval.labels).length; p += 1) {
+      for (let p = 0; p < Object.keys(interval.tags).length; p += 1) {
         const pO = p + offset;
-        const property = Object.keys(interval.labels)[p];
-        const label = Object.values(interval.labels)[p];
+        const property = Object.keys(interval.tags)[p];
+        const label = Object.values(interval.tags)[p];
         texts[pO] = [property, label.join(STRING_DELIMITER)];
       }
 

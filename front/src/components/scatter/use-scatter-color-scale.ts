@@ -6,7 +6,7 @@ import {useColorByCyclingDay} from 'src/draggables/colors/use-color-by-cycling-d
 import {useColorByDay} from 'src/draggables/colors/use-color-by-day';
 import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
-import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
+import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useColorState} from 'src/draggables/colors/use-color-state';
 import {ref} from 'vue';
@@ -22,7 +22,7 @@ export function useScatterColorScale() {
   const {getColorByTenMinutes} = useColorBy10min();
   const {getColorByDay} = useColorByDay();
   const {getColorByCyclingDay} = useColorByCyclingDay();
-  const {get: getColorByLabel} = useColorByLabel();
+  const {get: getColorByLabel} = useColorByTag();
   const {get: getColorByIndicator} = useColorByIndex();
   const {criteria} = useColorSelection();
 

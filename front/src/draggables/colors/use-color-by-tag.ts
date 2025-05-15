@@ -1,9 +1,10 @@
 import {useColorUser} from 'src/composables/use-color-user';
 import {useIntervals} from 'src/composables/use-intervals';
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
+import {STRING_DELIMITER} from 'src/constants';
 import {useColorResize} from 'src/draggables/colors/use-color-resize';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
+import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {convertRgbToString} from 'src/utils/colors';
 import {mapRange} from 'src/utils/math';
 import {getInfiniteRange} from 'src/utils/utils';
@@ -12,27 +13,22 @@ import {ref} from 'vue';
 const min = ref<number | null>(null);
 const max = ref<number | null>(null);
 
-export function useColorByLabel() {
+export function useColorByTag() {
   const {resize} = useColorResize();
   const {intervals} = useIntervals();
-  const {sets} = useLabelSets();
+  const {allUniques} = useTagUniques();
   const {criteria} = useColorSelection();
   const {scale} = useColorUser();
-  const {isEnabled} = useLabelNumeric();
+  const {isEnabled} = useTagNumeric();
 
   const getPrimitive = (intervalIndex: number) => {
-    const labelProperties = Object.keys(sets.value);
-    const labelSets = Object.values(sets.value);
     const interval = intervals.value[intervalIndex];
-
-    const propertyIndex = labelProperties.indexOf(criteria.value);
-    const values = interval.labels[criteria.value] as string[];
-    const set = labelSets[propertyIndex];
-    const value = values[0]; // todo: taking first for now, need fuse
+    const tagValue = interval.tags[criteria.value].join(STRING_DELIMITER);
+    const tagUniques = allUniques.value[criteria.value];
 
     return {
-      set,
-      value,
+      tagUniques,
+      tagValue,
     };
   };
 
@@ -43,14 +39,14 @@ export function useColorByLabel() {
   };
 
   const getColorNumericAll = (intervalIndex: number) => {
-    const {value} = getPrimitive(intervalIndex);
-    return getColorNumeric(Number(value));
+    const {tagValue} = getPrimitive(intervalIndex);
+    return getColorNumeric(Number(tagValue));
   };
 
   const getColorCategory = (intervalIndex: number) => {
-    const {value, set} = getPrimitive(intervalIndex);
-    const colors = resize(scale.value, set.length);
-    const index = set.indexOf(value);
+    const {tagValue, tagUniques} = getPrimitive(intervalIndex);
+    const colors = resize(scale.value, tagUniques.length);
+    const index = tagUniques.indexOf(tagValue);
     const color = colors[index];
     return convertRgbToString(color);
   };
@@ -63,15 +59,15 @@ export function useColorByLabel() {
     return getColorCategory(intervalIndex);
   };
 
-  const getColorByPropertyIndex = (p: number, length: number): string => {
+  const getColorByTagIndex = (p: number, length: number): string => {
     const colors = resize(scale.value, length);
     const color = colors[p];
     return convertRgbToString(color);
   };
 
   const detect = () => {
-    const {set} = getPrimitive(0);
-    const values = set.map((v) => Number(v));
+    const {tagUniques} = getPrimitive(0);
+    const values = tagUniques.map((v) => Number(v));
 
     min.value = Math.min(...values);
     max.value = Math.max(...values);
@@ -82,7 +78,7 @@ export function useColorByLabel() {
     max,
     get,
     detect,
-    getColorByLabelIndex: getColorByPropertyIndex,
+    getColorByTagIndex,
     getColorNumeric,
   };
 }

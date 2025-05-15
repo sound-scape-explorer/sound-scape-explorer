@@ -79,8 +79,8 @@ export const LINK_DISCORD = 'https://discord.gg/eRsQPDBeXg';
 
 export const TIMEOUT = 240;
 
-export const SITE_AS_LABEL = '__SITE';
-export const AUTOCLUSTER_AS_LABEL = 'AUTOCLUSTER';
+export const SITE_AS_TAG_NAME = '__SITE';
+export const AUTOCLUSTER_AS_TAG_NAME = 'AUTOCLUSTER';
 
 export const LOWER_DECILE_SUFFIX = '_lower_decile';
 export const UPPER_DECILE_SUFFIX = '_upper_decile';

@@ -14,10 +14,10 @@ import {ColorCategory, ColorFlavor} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
 import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
-import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
+import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useColorState} from 'src/draggables/colors/use-color-state';
-import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
+import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 
 const {isLoading} = useScatterLoading();
 const {flavor, criteria, criterias, category} = useColorSelection();
@@ -25,10 +25,10 @@ const {isIndicators, isLabels, isLabelNumeric} = useColorState();
 
 const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
 const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
-const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
+const {min: labelRangeMin, max: labelRangeMax} = useColorByTag();
 const {detect: detectIndicatorRange, swap} = useIndexLimits();
 const {invert, isReversible} = useColorInvert();
-const {isEnabled} = useLabelNumeric();
+const {isEnabled} = useTagNumeric();
 </script>
 
 <template>

@@ -2,7 +2,7 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {TagsDraggableSize} from 'src/constants';
 import {type Ref} from 'vue';
 
-export function useDraggableLabels() {
+export function useDraggableTags() {
   const {tagsDraggableSizeVertical: v, tagsDraggableSizeHorizontal: h} =
     useClientSettings();
 

@@ -15,25 +15,25 @@ const items = computed(() => {
   const payload: AppGridItem[] = [
     {
       tag: 'version',
-      value: config.value.version,
+      tagValue: config.value.version,
     },
   ];
 
   for (const [k, v] of Object.entries(config.value.settings)) {
     payload.push({
       tag: k,
-      value: v.toString(),
+      tagValue: v.toString(),
     });
   }
 
   payload.push({
     tag: 'file count',
-    value: config.value.files.length.toString(),
+    tagValue: config.value.files.length.toString(),
   });
 
   payload.push({
     tag: 'extraction count',
-    value: config.value.extractions.length.toString(),
+    tagValue: config.value.extractions.length.toString(),
   });
 
   return payload;

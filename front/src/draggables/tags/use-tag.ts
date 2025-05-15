@@ -1,23 +1,23 @@
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {type LabelProps} from 'src/draggables/labels/label.vue';
-import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
+import {type TagProps} from 'src/draggables/tags/Tag.vue';
+import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {computed, ref} from 'vue';
 
-export function useLabel(props: LabelProps) {
-  const {sets} = useLabelSets();
-  const {updateSelection, selection} = useLabelSelection();
+export function useTag(props: TagProps) {
+  const {allUniques} = useTagUniques();
+  const {updateSelection, selection} = useTagSelection();
   const {criteria} = useColorSelection();
 
   const isShowing = ref<boolean>(false);
-  const isCurrent = computed<boolean>(() => criteria.value === props.property);
+  const isCurrent = computed<boolean>(() => criteria.value === props.name);
 
   const hasNoSelection = computed<boolean>(() => {
-    if (!selection.value[props.property]) {
+    if (!selection.value[props.name]) {
       return true;
     }
 
-    return selection.value[props.property].length === 0;
+    return selection.value[props.name].length === 0;
   });
 
   const toggleShowing = () => (isShowing.value = !isShowing.value);
@@ -28,8 +28,8 @@ export function useLabel(props: LabelProps) {
   };
 
   const invertSelection = () => {
-    const oldSelection = selection.value[props.property];
-    const uniques = sets.value[props.property];
+    const oldSelection = selection.value[props.name];
+    const uniques = allUniques.value[props.name];
 
     const reverseSelection = [];
 
@@ -41,15 +41,15 @@ export function useLabel(props: LabelProps) {
       reverseSelection.push(unique);
     }
 
-    updateSelection(props.property, reverseSelection);
+    updateSelection(props.name, reverseSelection);
   };
 
-  const resetSelection = (property: string) => {
-    if (selection.value[property].length === 0) {
+  const resetSelection = (tagName: string) => {
+    if (selection.value[tagName].length === 0) {
       return;
     }
 
-    updateSelection(property, []);
+    updateSelection(tagName, []);
   };
 
   return {
