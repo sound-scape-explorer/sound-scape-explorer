@@ -1,9 +1,9 @@
-import librosa
 import numpy as np
 from maad import sound, features
 
 from processing.constants import WINDOW_MS, HOP_MS
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.lib import audio
 from processing.lib.shapes import assert_shape
 
 
@@ -22,12 +22,7 @@ class AciExtractor(Extractor):
         self.freq_high = freq_high
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
-
+        samples, sample_rate = audio.load(path)
         band = (self.freq_low, self.freq_high)
 
         acis = []

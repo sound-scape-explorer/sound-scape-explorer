@@ -16,6 +16,7 @@ from processing.constants import (
 from processing.constants import WINDOW_MS, HOP_MS
 from processing.enums import FrequencyScaleEnum
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.lib import audio
 from processing.lib.frequency import get_band_edges
 from processing.lib.numbers import clamp_number
 from processing.lib.utils import use_or_default
@@ -134,11 +135,7 @@ class MpsExtractor(Extractor):
         return params
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
+        samples, sample_rate = audio.load(path)
 
         filtered = self._filter(
             samples=samples,

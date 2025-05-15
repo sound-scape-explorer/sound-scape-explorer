@@ -1,4 +1,3 @@
-import librosa
 import numpy as np
 from librosa import feature
 
@@ -11,6 +10,7 @@ from processing.constants import (
 )
 from processing.enums import StftWindowTypeEnum
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.lib import audio
 from processing.lib.shapes import assert_shape
 
 
@@ -47,12 +47,7 @@ class MfccExtractor(Extractor):
             self.stft_overlap_ratio = stft_overlap_ratio
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
-
+        samples, sample_rate = audio.load(path)
         stft_window_samples = int(self.stft_window_ms / 1000 * sample_rate)
         stft_hop_samples = int(stft_window_samples * (1 - self.stft_overlap_ratio))
         n_fft = stft_window_samples + 1

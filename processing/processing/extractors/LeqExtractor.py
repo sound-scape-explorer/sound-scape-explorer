@@ -1,8 +1,8 @@
-import librosa
 import numpy as np
 
 from processing.constants import WINDOW_MS, HOP_MS
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.lib import audio
 from processing.lib.leq import compute_leq_long
 from processing.lib.shapes import assert_shape
 
@@ -21,11 +21,7 @@ class LeqExtractor(Extractor):
         self.freq_high = freq_high
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
+        samples, sample_rate = audio.load(path)
 
         filtered = self._filter(
             samples,

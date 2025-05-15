@@ -17,6 +17,7 @@ from processing.constants import (
 )
 from processing.enums import FrequencyScaleEnum, StftWindowTypeEnum
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.lib import audio
 from processing.lib.frequency import get_band_edges
 from processing.lib.numbers import clamp_number
 from processing.lib.shapes import assert_shape
@@ -60,12 +61,7 @@ class SpectrogramExtractor(Extractor):
         )
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
-
+        samples, sample_rate = audio.load(path)
         stft_window_samples = int(self.stft_window_ms / 1000 * sample_rate)
         stft_hop_samples = int(stft_window_samples * (1 - self.stft_overlap_ratio))
         n_fft = stft_window_samples

@@ -1,9 +1,9 @@
-import librosa
 import numpy as np
 from maad import features
 
 from processing.constants import WINDOW_MS, HOP_MS, HT_FRAME_SIZE
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.lib import audio
 from processing.lib.shapes import assert_shape
 
 
@@ -25,11 +25,7 @@ class HtExtractor(Extractor):
         self.frame_size = frame_size
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
+        samples, sample_rate = audio.load(path)
 
         filtered = self._filter(
             samples,
