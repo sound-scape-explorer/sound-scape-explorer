@@ -41,7 +41,7 @@ useTimelineLifecycles();
         tooltip="to selected interval"
         tooltip-placement="top"
       >
-        recenter
+        focus
       </AppButton>
     </div>
 
