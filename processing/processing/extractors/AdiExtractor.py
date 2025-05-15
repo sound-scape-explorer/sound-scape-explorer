@@ -2,7 +2,7 @@ import numpy as np
 from maad import sound, features
 
 from processing.constants import ADI_IMPL
-from processing.enums import AdiImplEnum
+from processing.enums import AdiImpl
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
 from processing.lib import audio
 from processing.lib.shapes import assert_shape
@@ -18,7 +18,7 @@ class AdiExtractor(Extractor):
         hop_ms: int | None = None,
         bin_step: int = 500,
         db_threshold: int = -50,
-        index: AdiImplEnum = ADI_IMPL,
+        index: AdiImpl = ADI_IMPL,
     ):
         super().__init__(window_ms=window_ms, hop_ms=hop_ms)
 

@@ -8,7 +8,7 @@ import {
   Plus,
 } from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
-import {AutoclusterImplEnum} from '@shared/enums';
+import {AutoclusterImpl} from '@shared/enums';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import styles from 'src/panels/extractions/components/extraction-autoclusters.module.scss';
@@ -123,7 +123,7 @@ export function ExtractionAutoclusters({extraction}: Props) {
             <span>{autocluster.index}</span>
 
             <Select
-              items={AutoclusterImplEnum.options}
+              items={AutoclusterImpl.options}
               onSelect={(v) => updateImpl(autocluster, v)}
               current={autocluster.impl}
               placeholder="Select implementation"

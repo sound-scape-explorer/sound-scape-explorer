@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from processing.dtos import AutoclusterDto
-from processing.enums import AutoclusterImplEnum
+from processing.enums import AutoclusterImpl
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
@@ -12,7 +12,7 @@ from processing.types import Mdm, Autoclustered
 class AutoclusterConfig:
     index: int
     name: str
-    impl: AutoclusterImplEnum
+    impl: AutoclusterImpl
     min_cluster_size: int
     min_samples: int
     alpha: float
@@ -37,9 +37,9 @@ class AutoclusterConfig:
     def _start(self):
         from sklearn.cluster import HDBSCAN
 
-        if self.impl is AutoclusterImplEnum.HDBSCAN_EOM:
+        if self.impl is AutoclusterImpl.HDBSCAN_EOM:
             method = "eom"
-        elif self.impl is AutoclusterImplEnum.HDBSCAN_LEAF:
+        elif self.impl is AutoclusterImpl.HDBSCAN_LEAF:
             method = "leaf"
         else:
             raise Exception(f"Unknown autocluster implementation: {self.impl}")

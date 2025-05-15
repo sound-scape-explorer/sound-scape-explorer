@@ -1,6 +1,6 @@
 import {REDUCER_DIMENSIONS_DEFAULT} from '@shared/constants.ts';
 import {type ReducerDto} from '@shared/dtos.ts';
-import {ReducerImplEnum} from '@shared/enums.ts';
+import {ReducerImpl} from '@shared/enums.ts';
 import {useCallback, useMemo} from 'react';
 import {
   type ExtractionConfigWithId,
@@ -15,7 +15,7 @@ export function useReducerState(extraction: ExtractionConfigWithId) {
   const addReducer = useCallback(() => {
     extraction.reducers.push({
       index: extraction.reducers.length,
-      impl: ReducerImplEnum.enum.UMAP,
+      impl: ReducerImpl.enum.UMAP,
       dimensions: REDUCER_DIMENSIONS_DEFAULT,
     });
 
@@ -59,7 +59,7 @@ export function useReducerState(extraction: ExtractionConfigWithId) {
   );
 
   const updateImpl = useCallback(
-    (reducer: ReducerDto, impl: ReducerImplEnum) => {
+    (reducer: ReducerDto, impl: ReducerImpl) => {
       reducer.impl = impl;
       updateExtraction(extraction);
     },

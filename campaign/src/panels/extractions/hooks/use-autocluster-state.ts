@@ -5,7 +5,7 @@ import {
   AUTOCLUSTER_MIN_SAMPLES_DEFAULT,
 } from '@shared/constants.ts';
 import {type AutoclusterDto} from '@shared/dtos.ts';
-import {AutoclusterImplEnum} from '@shared/enums.ts';
+import {AutoclusterImpl} from '@shared/enums.ts';
 import {useCallback, useMemo} from 'react';
 import {
   type ExtractionConfigWithId,
@@ -23,7 +23,7 @@ export function useAutoclusterState(extraction: ExtractionConfigWithId) {
   const addAutocluster = useCallback(() => {
     extraction.autoclusters.push({
       index: extraction.autoclusters.length,
-      impl: AutoclusterImplEnum.enum.HDBSCAN_EOM,
+      impl: AutoclusterImpl.enum.HDBSCAN_EOM,
       minClusterSize: AUTOCLUSTER_MIN_CLUSTER_SIZE_DEFAULT,
       minSamples: AUTOCLUSTER_MIN_SAMPLES_DEFAULT,
       alpha: AUTOCLUSTER_ALPHA_DEFAULT,
@@ -72,7 +72,7 @@ export function useAutoclusterState(extraction: ExtractionConfigWithId) {
   );
 
   const updateImpl = useCallback(
-    (autocluster: AutoclusterDto, impl: AutoclusterImplEnum) => {
+    (autocluster: AutoclusterDto, impl: AutoclusterImpl) => {
       autocluster.impl = impl;
       updateExtraction(extraction);
     },

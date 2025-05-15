@@ -1,16 +1,18 @@
 from rich import print
 from rich.progress import track
 
-from processing.context import Context
-from processing.enums import ComputationStrategyEnum
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.managers.AggregationManager import AggregationManager
-from processing.repositories.ComputedRepository import ComputedRepository
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
-from processing.repositories.MeanDistancesMatrixRepository import MeanDistancesMatrixRepository
+from processing.context import Context
+from processing.enums import ComputationStrategy
+from processing.managers.AggregationManager import AggregationManager
 from processing.printers.print_action import print_action
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.UmapReducer import UmapReducer
+from processing.repositories.AggregatedRepository import AggregatedRepository
+from processing.repositories.ComputedRepository import ComputedRepository
+from processing.repositories.MeanDistancesMatrixRepository import (
+    MeanDistancesMatrixRepository,
+)
 from processing.validators.validate_aggregated import validate_aggregated
 
 
@@ -35,10 +37,7 @@ def _run_computation_reductions(context: Context):
             range(context.config.settings.computation_iterations),
             description=f"Band {ai.band.name}, integration {ai.integration.name}",
         ):
-            if (
-                context.config.settings.computation_strategy
-                is ComputationStrategyEnum.UMAP
-            ):
+            if context.config.settings.computation_strategy is ComputationStrategy.UMAP:
                 umap = UmapReducer(min_dist=0)
                 reduced = umap.reduce(
                     embeddings=embeddings,
@@ -46,8 +45,7 @@ def _run_computation_reductions(context: Context):
                     seed=None,
                 )
             elif (
-                context.config.settings.computation_strategy
-                is ComputationStrategyEnum.PCA
+                context.config.settings.computation_strategy is ComputationStrategy.PCA
             ):
                 pca = PcaReducer()
                 reduced = pca.reduce(
@@ -57,7 +55,7 @@ def _run_computation_reductions(context: Context):
                 )
             elif (
                 context.config.settings.computation_strategy
-                is ComputationStrategyEnum.EMBEDDINGS
+                is ComputationStrategy.EMBEDDINGS
             ):
                 reduced = embeddings
             else:

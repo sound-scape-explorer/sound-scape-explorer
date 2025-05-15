@@ -1,23 +1,41 @@
-/* eslint-disable */
 import {z} from 'zod';
 
-export const ComputationStrategyEnum = z.enum(["UMAP","PCA","EMBEDDINGS"] as const);
-export type ComputationStrategyEnum = z.infer<typeof ComputationStrategyEnum>;
-export const ExtractorImplEnum = z.enum(["BIRDNET","PERCH","SURF_PERCH","VGGISH","YAMNET","MUSIC_CLASS","SPECTRUM","SPECTROGRAM","MPS","MFCC","NDSI","BI","ADI","HF","HT","MED","ACI","LEQ","LEQ_PERCENTILE","LEQ_DIFF"] as const);
-export type ExtractorImplEnum = z.infer<typeof ExtractorImplEnum>;
-export const AutoclusterImplEnum = z.enum(["HDBSCAN_EOM","HDBSCAN_LEAF"] as const);
-export type AutoclusterImplEnum = z.infer<typeof AutoclusterImplEnum>;
-export const ReducerImplEnum = z.enum(["UMAP","PCA"] as const);
-export type ReducerImplEnum = z.infer<typeof ReducerImplEnum>;
-export const MetricImplEnum = z.enum(["MEAN_STD","MEAN_SPREADING","SILHOUETTE","CONTINGENCY","OVERLAP"] as const);
-export type MetricImplEnum = z.infer<typeof MetricImplEnum>;
-export const MetricTypeEnum = z.enum(["ONE_D","TWO_D","TWO_D_PAIRING"] as const);
-export type MetricTypeEnum = z.infer<typeof MetricTypeEnum>;
-export const TrajectoryStepEnum = z.enum(["HOUR","DAY","MONTH"] as const);
-export type TrajectoryStepEnum = z.infer<typeof TrajectoryStepEnum>;
-export const StftWindowTypeEnum = z.enum(["HANN","HAMMING","BLACKMANHARRIS"] as const);
-export type StftWindowTypeEnum = z.infer<typeof StftWindowTypeEnum>;
-export const FrequencyScaleEnum = z.enum(["LIN","LOG","MEL"] as const);
-export type FrequencyScaleEnum = z.infer<typeof FrequencyScaleEnum>;
-export const AdiImplEnum = z.enum(["SHANNON","SIMPSON","INVSIMPSON"] as const);
-export type AdiImplEnum = z.infer<typeof AdiImplEnum>;
+export const ComputationStrategy = z.enum(["UMAP","PCA","EMBEDDINGS"]);
+// eslint-disable-next-line no-redeclare
+export type ComputationStrategy = z.infer<typeof ComputationStrategy>;
+
+export const ExtractorImpl = z.enum(["BIRDNET","PERCH","SURF_PERCH","VGGISH","YAMNET","MUSIC_CLASS","SPECTRUM","SPECTROGRAM","MPS","MFCC","NDSI","BI","ADI","HF","HT","MED","ACI","LEQ","LEQ_PERCENTILE","LEQ_DIFF"]);
+// eslint-disable-next-line no-redeclare
+export type ExtractorImpl = z.infer<typeof ExtractorImpl>;
+
+export const AutoclusterImpl = z.enum(["HDBSCAN_EOM","HDBSCAN_LEAF"]);
+// eslint-disable-next-line no-redeclare
+export type AutoclusterImpl = z.infer<typeof AutoclusterImpl>;
+
+export const ReducerImpl = z.enum(["UMAP","PCA"]);
+// eslint-disable-next-line no-redeclare
+export type ReducerImpl = z.infer<typeof ReducerImpl>;
+
+export const MetricImpl = z.enum(["MEAN_STD","MEAN_SPREADING","SILHOUETTE","CONTINGENCY","OVERLAP"]);
+// eslint-disable-next-line no-redeclare
+export type MetricImpl = z.infer<typeof MetricImpl>;
+
+export const MetricType = z.enum(["ONE_D","TWO_D","TWO_D_PAIRING"]);
+// eslint-disable-next-line no-redeclare
+export type MetricType = z.infer<typeof MetricType>;
+
+export const TrajectoryStep = z.enum(["HOUR","DAY","MONTH"]);
+// eslint-disable-next-line no-redeclare
+export type TrajectoryStep = z.infer<typeof TrajectoryStep>;
+
+export const StftWindowType = z.enum(["HANN","HAMMING","BLACKMANHARRIS"]);
+// eslint-disable-next-line no-redeclare
+export type StftWindowType = z.infer<typeof StftWindowType>;
+
+export const FrequencyScale = z.enum(["LIN","LOG","MEL"]);
+// eslint-disable-next-line no-redeclare
+export type FrequencyScale = z.infer<typeof FrequencyScale>;
+
+export const AdiImpl = z.enum(["SHANNON","SIMPSON","INVSIMPSON"]);
+// eslint-disable-next-line no-redeclare
+export type AdiImpl = z.infer<typeof AdiImpl>;

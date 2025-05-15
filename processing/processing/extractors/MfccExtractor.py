@@ -8,7 +8,7 @@ from processing.constants import (
     WINDOW_MS,
     HOP_MS,
 )
-from processing.enums import StftWindowTypeEnum
+from processing.enums import StftWindowType
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
 from processing.lib import audio
 from processing.lib.shapes import assert_shape
@@ -23,7 +23,7 @@ class MfccExtractor(Extractor):
         n_mfcc: int,
         window_ms: int = WINDOW_MS,
         hop_ms: int = HOP_MS,
-        stft_window_type: StftWindowTypeEnum = SPECTRO_STFT_WINDOW_TYPE,
+        stft_window_type: StftWindowType = SPECTRO_STFT_WINDOW_TYPE,
         stft_window_ms: int | None = SPECTRO_STFT_WINDOW_MS,
         stft_overlap_ratio: float = SPECTRO_STFT_OVERLAP_RATIO,
     ):

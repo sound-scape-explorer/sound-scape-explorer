@@ -1,5 +1,5 @@
 import {type TrajectoryDto} from '@shared/dtos.ts';
-import {TrajectoryStepEnum} from '@shared/enums.ts';
+import {TrajectoryStep} from '@shared/enums.ts';
 import {addHours} from 'date-fns';
 import {useCallback, useMemo} from 'react';
 import {
@@ -24,7 +24,7 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
       end: formatDateToString(addHours(getToday(), 1)),
       tagName: '',
       tagValue: '',
-      step: TrajectoryStepEnum.enum.HOUR,
+      step: TrajectoryStep.enum.HOUR,
     });
 
     updateExtraction(extraction);
@@ -107,7 +107,7 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
   );
 
   const updateStep = useCallback(
-    (trajectory: TrajectoryDto, step: TrajectoryStepEnum) => {
+    (trajectory: TrajectoryDto, step: TrajectoryStep) => {
       trajectory.step = step;
       updateExtraction(extraction);
     },

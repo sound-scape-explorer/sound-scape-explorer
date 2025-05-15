@@ -32,7 +32,7 @@ import {
   YAMNET_WINDOW_MS,
 } from '@shared/constants.ts';
 import {type ExtractorDto} from '@shared/dtos.ts';
-import {ExtractorImplEnum} from '@shared/enums.ts';
+import {ExtractorImpl} from '@shared/enums.ts';
 import {useCallback} from 'react';
 
 export function useExtractorDefaults() {
@@ -46,44 +46,44 @@ export function useExtractorDefaults() {
     };
 
     switch (ex.impl) {
-      case ExtractorImplEnum.enum.BIRDNET: {
+      case ExtractorImpl.enum.BIRDNET: {
         newEx.window = BIRDNET_WINDOW_MS;
         newEx.hop = BIRDNET_WINDOW_MS;
         break;
       }
-      case ExtractorImplEnum.enum.PERCH: {
+      case ExtractorImpl.enum.PERCH: {
         newEx.window = PERCH_WINDOW_MS;
         newEx.hop = PERCH_WINDOW_MS;
         break;
       }
-      case ExtractorImplEnum.enum.SURF_PERCH: {
+      case ExtractorImpl.enum.SURF_PERCH: {
         newEx.window = SURFPERCH_WINDOW_MS;
         newEx.hop = SURFPERCH_WINDOW_MS;
         break;
       }
-      case ExtractorImplEnum.enum.VGGISH: {
+      case ExtractorImpl.enum.VGGISH: {
         newEx.window = VGGISH_WINDOW_MS;
         newEx.hop = VGGISH_WINDOW_MS;
         break;
       }
-      case ExtractorImplEnum.enum.YAMNET: {
+      case ExtractorImpl.enum.YAMNET: {
         newEx.window = YAMNET_WINDOW_MS;
         newEx.hop = YAMNET_WINDOW_MS;
         break;
       }
-      case ExtractorImplEnum.enum.MUSIC_CLASS: {
+      case ExtractorImpl.enum.MUSIC_CLASS: {
         newEx.window = MUSICCLASS_WINDOW_MS;
         newEx.hop = MUSICCLASS_WINDOW_MS;
         break;
       }
-      case ExtractorImplEnum.enum.SPECTRUM: {
+      case ExtractorImpl.enum.SPECTRUM: {
         newEx.spectro_n_bands = ex.spectro_n_bands ?? SPECTRO_N_BANDS;
         newEx.spectro_scale = ex.spectro_scale ?? SPECTRO_SCALE;
         newEx.spectro_stft_window_type =
           ex.spectro_stft_window_type ?? SPECTRO_STFT_WINDOW_TYPE;
         break;
       }
-      case ExtractorImplEnum.enum.SPECTROGRAM: {
+      case ExtractorImpl.enum.SPECTROGRAM: {
         newEx.spectro_n_bands = ex.spectro_n_bands ?? SPECTRO_N_BANDS;
         newEx.spectro_scale = ex.spectro_scale ?? SPECTRO_SCALE;
         newEx.spectro_stft_window_type =
@@ -94,7 +94,7 @@ export function useExtractorDefaults() {
           ex.spectro_stft_overlap_ratio ?? SPECTRO_STFT_OVERLAP_RATIO;
         break;
       }
-      case ExtractorImplEnum.enum.MPS: {
+      case ExtractorImpl.enum.MPS: {
         newEx.mps_n_bands = ex.mps_n_bands ?? MPS_N_BANDS;
         newEx.mps_scale = ex.mps_scale ?? MPS_SCALE;
         newEx.mps_stft_1_window_ms =
@@ -107,36 +107,36 @@ export function useExtractorDefaults() {
           ex.mps_stft_2_overlap_ratio ?? MPS_STFT_2_OVERLAP_RATIO;
         break;
       }
-      case ExtractorImplEnum.enum.MFCC: {
+      case ExtractorImpl.enum.MFCC: {
         newEx.mfcc_n_mfcc = ex.mfcc_n_mfcc ?? MFCC_N_MFCC;
         break;
       }
-      case ExtractorImplEnum.enum.NDSI: {
+      case ExtractorImpl.enum.NDSI: {
         newEx.ndsi_band_bio = ex.ndsi_band_bio ?? NDSI_BAND_BIO;
         newEx.ndsi_band_anthro = ex.ndsi_band_anthro ?? NDSI_BAND_ANTHRO;
         break;
       }
-      case ExtractorImplEnum.enum.ADI: {
+      case ExtractorImpl.enum.ADI: {
         newEx.adi_bin_step = ex.adi_bin_step ?? ADI_BIN_STEP;
         newEx.adi_impl = ex.adi_impl ?? ADI_IMPL;
         newEx.adi_db_threshold = ex.adi_db_threshold ?? ADI_DB_THRESHOLD;
         break;
       }
-      case ExtractorImplEnum.enum.HT: {
+      case ExtractorImpl.enum.HT: {
         newEx.ht_frame_size = ex.ht_frame_size ?? HT_FRAME_SIZE;
         break;
       }
-      case ExtractorImplEnum.enum.MED: {
+      case ExtractorImpl.enum.MED: {
         newEx.med_frame_size = ex.med_frame_size ?? MED_FRAME_SIZE;
         break;
       }
-      case ExtractorImplEnum.enum.LEQ_PERCENTILE: {
+      case ExtractorImpl.enum.LEQ_PERCENTILE: {
         newEx.leq_percentile_dt = ex.leq_percentile_dt ?? LEQ_SHORT_DT;
         newEx.leq_percentile_value =
           ex.leq_percentile_value ?? LEQ_PERCENTILE_VALUE;
         break;
       }
-      case ExtractorImplEnum.enum.LEQ_DIFF: {
+      case ExtractorImpl.enum.LEQ_DIFF: {
         newEx.leq_diff_dt = ex.leq_diff_dt ?? LEQ_SHORT_DT;
         newEx.leq_diff_percentile_a =
           ex.leq_diff_percentile_a ?? LEQ_DIFF_PERCENTILE_A;

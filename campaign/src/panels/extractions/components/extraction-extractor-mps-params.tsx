@@ -8,7 +8,7 @@ import {
   MPS_STFT_2_WINDOW_MS,
 } from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
-import {FrequencyScaleEnum} from '@shared/enums';
+import {FrequencyScale} from '@shared/enums';
 import clsx from 'clsx';
 import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
@@ -70,7 +70,7 @@ export function ExtractionExtractorMpsParams({extraction, extractor}: Props) {
         />
 
         <Select
-          items={FrequencyScaleEnum.options}
+          items={FrequencyScale.options}
           current={extractor.mps_scale ?? MPS_SCALE}
           onSelect={(v) => updateMpsScale(extractor, v)}
           size="small"

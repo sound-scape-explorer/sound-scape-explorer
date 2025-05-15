@@ -8,7 +8,7 @@ import {
   Plus,
 } from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
-import {TrajectoryStepEnum} from '@shared/enums';
+import {TrajectoryStep} from '@shared/enums';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import styles from 'src/panels/extractions/components/extraction-trajectories.module.scss';
@@ -165,7 +165,7 @@ export function ExtractionTrajectories({extraction}: Props) {
             />
 
             <Select
-              items={TrajectoryStepEnum.options}
+              items={TrajectoryStep.options}
               current={trajectory.step}
               onSelect={(s) => updateStep(trajectory, s)}
               placeholder="step"

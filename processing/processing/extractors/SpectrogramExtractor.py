@@ -15,7 +15,7 @@ from processing.constants import (
     WINDOW_MS,
     HOP_MS,
 )
-from processing.enums import FrequencyScaleEnum, StftWindowTypeEnum
+from processing.enums import FrequencyScale, StftWindowType
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
 from processing.lib import audio
 from processing.lib.frequency import get_band_edges
@@ -34,8 +34,8 @@ class SpectrogramExtractor(Extractor):
         n_bands: int,
         window_ms: int = WINDOW_MS,
         hop_ms: int = HOP_MS,
-        scale: FrequencyScaleEnum = SPECTRO_SCALE,
-        stft_window_type: StftWindowTypeEnum = SPECTRO_STFT_WINDOW_TYPE,
+        scale: FrequencyScale = SPECTRO_SCALE,
+        stft_window_type: StftWindowType = SPECTRO_STFT_WINDOW_TYPE,
         stft_window_ms: Optional[int] = SPECTRO_STFT_WINDOW_MS,
         stft_overlap_ratio: float = SPECTRO_STFT_OVERLAP_RATIO,
         dbfs_ref: float = SPECTRO_DBFS_REF,

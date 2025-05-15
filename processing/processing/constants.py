@@ -1,6 +1,6 @@
 import numpy as np
 
-from processing.enums import FrequencyScaleEnum, StftWindowTypeEnum, AdiImplEnum
+from processing.enums import FrequencyScale, StftWindowType, AdiImpl
 
 
 APP_NAME = "SoundScapeExplorer"
@@ -25,17 +25,17 @@ MUSICCLASS_WINDOW_MS = 3000
 WINDOW_MS = 1000
 HOP_MS = 1000
 
-FREQUENCY_SCALE: FrequencyScaleEnum = FrequencyScaleEnum.LIN
+FREQUENCY_SCALE: FrequencyScale = FrequencyScale.LIN
 
 SPECTRO_N_BANDS = 64
-SPECTRO_SCALE: FrequencyScaleEnum = FrequencyScaleEnum.LIN
-SPECTRO_STFT_WINDOW_TYPE: StftWindowTypeEnum = StftWindowTypeEnum.HANN
+SPECTRO_SCALE: FrequencyScale = FrequencyScale.LIN
+SPECTRO_STFT_WINDOW_TYPE: StftWindowType = StftWindowType.HANN
 SPECTRO_STFT_WINDOW_MS = None
 SPECTRO_STFT_OVERLAP_RATIO = 0.0
 SPECTRO_DBFS_REF = 1.0
 
 MPS_N_BANDS = 64
-MPS_SCALE: FrequencyScaleEnum = FrequencyScaleEnum.LIN
+MPS_SCALE: FrequencyScale = FrequencyScale.LIN
 MPS_STFT_1_WINDOW_MS = 20
 MPS_STFT_1_OVERLAP_RATIO = 0.95
 MPS_STFT_2_WINDOW_MS = 100
@@ -48,7 +48,7 @@ NDSI_BAND_ANTHRO = (0, 1000)
 
 ADI_BIN_STEP = 500
 ADI_DB_THRESHOLD = -50
-ADI_IMPL: AdiImplEnum = AdiImplEnum.SHANNON
+ADI_IMPL: AdiImpl = AdiImpl.SHANNON
 
 HT_FRAME_SIZE = 512
 MED_FRAME_SIZE = 512

@@ -1,13 +1,13 @@
 from enum import Enum
 
 
-class ComputationStrategyEnum(Enum):
+class ComputationStrategy(Enum):
     UMAP = "UMAP"
     PCA = "PCA"
     EMBEDDINGS = "EMBEDDINGS"
 
 
-class ExtractorImplEnum(Enum):
+class ExtractorImpl(Enum):
     BIRDNET = "BIRDNET"
     PERCH = "PERCH"
     SURF_PERCH = "SURF_PERCH"
@@ -30,17 +30,17 @@ class ExtractorImplEnum(Enum):
     LEQ_DIFF = "LEQ_DIFF"
 
 
-class AutoclusterImplEnum(Enum):
+class AutoclusterImpl(Enum):
     HDBSCAN_EOM = "HDBSCAN_EOM"
     HDBSCAN_LEAF = "HDBSCAN_LEAF"
 
 
-class ReducerImplEnum(Enum):
+class ReducerImpl(Enum):
     UMAP = "UMAP"
     PCA = "PCA"
 
 
-class MetricImplEnum(Enum):
+class MetricImpl(Enum):
     MEAN_STD = "MEAN_STD"
     MEAN_SPREADING = "MEAN_SPREADING"
     SILHOUETTE = "SILHOUETTE"
@@ -48,31 +48,31 @@ class MetricImplEnum(Enum):
     OVERLAP = "OVERLAP"
 
 
-class MetricTypeEnum(Enum):
+class MetricType(Enum):
     ONE_D = "ONE_D"
     TWO_D = "TWO_D"
     TWO_D_PAIRING = "TWO_D_PAIRING"
 
 
-class TrajectoryStepEnum(Enum):
+class TrajectoryStep(Enum):
     HOUR = "HOUR"
     DAY = "DAY"
     MONTH = "MONTH"
 
 
-class StftWindowTypeEnum(Enum):
+class StftWindowType(Enum):
     HANN = "HANN"
     HAMMING = "HAMMING"
     BLACKMANHARRIS = "BLACKMANHARRIS"
 
 
-class FrequencyScaleEnum(Enum):
+class FrequencyScale(Enum):
     LIN = "LIN"
     LOG = "LOG"
     MEL = "MEL"
 
 
-class AdiImplEnum(Enum):
+class AdiImpl(Enum):
     SHANNON = "SHANNON"
     SIMPSON = "SIMPSON"
     INVSIMPSON = "INVSIMPSON"

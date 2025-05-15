@@ -1,16 +1,16 @@
 from dataclasses import dataclass
 
 from processing.dtos import MetricDto
-from processing.enums import MetricImplEnum
+from processing.enums import MetricImpl
 
 
-MetricPairing = [MetricImplEnum.CONTINGENCY, MetricImplEnum.SILHOUETTE]
+MetricPairing = [MetricImpl.CONTINGENCY, MetricImpl.SILHOUETTE]
 
 
 @dataclass
 class MetricConfig:
     index: int
-    impl: MetricImplEnum
+    impl: MetricImpl
     is_pairwise: bool
 
     @classmethod

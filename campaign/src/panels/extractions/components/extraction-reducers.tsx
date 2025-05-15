@@ -2,7 +2,7 @@ import {Button, Section, Tooltip} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
 import {ArrowDown, ArrowUp, Cross, Minimize, Plus} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
-import {ReducerImplEnum} from '@shared/enums';
+import {ReducerImpl} from '@shared/enums';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
@@ -110,7 +110,7 @@ export function ExtractionReducers({extraction}: Props) {
             <span>{reducer.index}</span>
 
             <Select
-              items={ReducerImplEnum.options}
+              items={ReducerImpl.options}
               onSelect={(v) => updateImpl(reducer, v)}
               current={reducer.impl}
               placeholder="Select implementation"

@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
 from processing.dtos import ReducerDto
-from processing.enums import ReducerImplEnum
+from processing.enums import ReducerImpl
 
 
 @dataclass
 class ReducerConfig:
     index: int
-    impl: ReducerImplEnum
+    impl: ReducerImpl
     dimensions: int
 
     @classmethod

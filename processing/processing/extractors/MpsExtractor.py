@@ -14,7 +14,7 @@ from processing.constants import (
     MPS_SCALE,
 )
 from processing.constants import WINDOW_MS, HOP_MS
-from processing.enums import FrequencyScaleEnum
+from processing.enums import FrequencyScale
 from processing.extractors.Extractor import Extractor, ExtractedDataRaw
 from processing.lib import audio
 from processing.lib.frequency import get_band_edges
@@ -42,7 +42,7 @@ class MpsExtractor(Extractor):
         n_bands: int,
         window_ms: int = WINDOW_MS,
         hop_ms: int = HOP_MS,
-        scale: FrequencyScaleEnum = MPS_SCALE,
+        scale: FrequencyScale = MPS_SCALE,
         stft_1_window_ms: Optional[int] = MPS_STFT_1_WINDOW_MS,
         stft_1_overlap_ratio: float = MPS_STFT_1_OVERLAP_RATIO,
         stft_2_window_ms: Optional[int] = MPS_STFT_2_WINDOW_MS,
