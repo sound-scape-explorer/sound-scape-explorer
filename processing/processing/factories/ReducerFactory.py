@@ -9,10 +9,8 @@ class ReducerFactory:
     @staticmethod
     def create(reducer: ReducerConfig) -> AbstractReducer:
         if reducer.impl is ReducerImplEnum.UMAP:
-            instance = UmapReducer()
+            return UmapReducer()
         elif reducer.impl is ReducerImplEnum.PCA:
-            instance = PcaReducer()
+            return PcaReducer()
         else:
-            raise Exception(f"Unknown reducer implementation: {reducer.impl}")
-
-        return instance
+            raise ValueError(f"Unknown reducer implementation: {reducer.impl}")
