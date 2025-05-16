@@ -36,7 +36,7 @@ const {height} = useRelativeTrajectoriesPlotSize();
         legend
         title="Relative Trajectories"
         xTitle="Time of day"
-        yTitle="Relative distances"
+        yTitle="Relative distance"
       />
     </div>
   </AppDraggable>
