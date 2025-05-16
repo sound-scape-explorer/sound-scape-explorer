@@ -71,7 +71,6 @@ def prompt_menu(context: Context):
                 _wrap(MenuChoice.RUN_TRAJECTORIES, context),
                 _wrap(MenuChoice.RUN_RELATIVE_TRAJECTORIES, context),
                 Separator(),
-                MenuChoice.RUN_COMPUTATIONS_PURGE.value,
                 MenuChoice.RUN_DATAFRAME_EXPORT.value,
                 MenuChoice.RUN_COMPUTATIONS_EXPORT.value,
                 MenuChoice.RUN_MDM_EXPORT.value,
