@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {computed, ref} from 'vue';
 
 interface Props {
@@ -16,6 +17,8 @@ const props = withDefaults(defineProps<Props>(), {
   legendMax: '',
   width: 1,
 });
+
+const {colors} = useThemeColors();
 
 const widthAsPercentage = computed(() => `${props.width}%`);
 
@@ -131,7 +134,8 @@ const leaveStep = () => {
   justify-content: center;
   width: sizes.$p0 * 6;
   height: sizes.$p0 * 3;
-  border: 1px solid black;
-  background-color: white;
+  color: v-bind('colors.textColorBase');
+  border: 1px solid v-bind('colors.borderColor');
+  background-color: v-bind('colors.baseColor');
 }
 </style>

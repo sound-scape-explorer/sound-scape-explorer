@@ -11,6 +11,7 @@ const gen = (min: number, max: number, isDark: boolean = false) => {
       actionColor: 'rgba(23,159,87,0.4)', // olive
       pressedColor: 'rgb(23,159,87)', // emerald
       errorColor: 'rgba(255,0,0,0.2)', // red
+      textColorBase: `rgb(${min},${min},${min})`,
       baseColor: isDark ? modal : base,
       modalColor: isDark ? base : modal,
       borderColor: `rgba(${min},${min},${min},0.33)`,
