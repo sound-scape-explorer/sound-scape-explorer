@@ -94,7 +94,7 @@ export function ExtractionTrajectories({extraction}: Props) {
         <div>end</div>
         <div>tag name</div>
         <div>tag value</div>
-        <div>step</div>
+        <div>window</div>
       </SectionCard>
 
       {trajectories

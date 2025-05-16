@@ -54,27 +54,25 @@ export function useExtractionState() {
             extractors: extraction.extractors.map((ex) =>
               createExtractorWithDefaults(ex),
             ),
-            trajectories: {
-              ...extraction.trajectories.map((t) => {
-                let preset: SmoothingWindowPreset = 'HOUR';
+            trajectories: extraction.trajectories.map((t) => {
+              let preset: SmoothingWindowPreset = 'HOUR';
 
-                for (const p of SmoothingWindowPresets) {
-                  const value = SMOOTHING_WINDOW_PRESETS[p];
+              for (const p of SmoothingWindowPresets) {
+                const value = SMOOTHING_WINDOW_PRESETS[p];
 
-                  if (value === t.smoothingWindow) {
-                    preset = p;
-                    break;
-                  }
+                if (value === t.smoothingWindow) {
+                  preset = p;
+                  break;
                 }
+              }
 
-                const config: TrajectoryConfig = {
-                  ...t,
-                  smoothingWindowPreset: preset,
-                };
+              const config: TrajectoryConfig = {
+                ...t,
+                smoothingWindowPreset: preset,
+              };
 
-                return config;
-              }),
-            },
+              return config;
+            }),
           };
         },
       );
