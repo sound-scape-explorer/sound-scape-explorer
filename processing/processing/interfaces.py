@@ -77,3 +77,10 @@ class Interval(NamedTuple):
 class TrajectoryData(NamedTuple):
     path: np.ndarray
     timestamps: np.ndarray
+
+
+class TrajectoryStatistics(NamedTuple):
+    median_distances: np.ndarray
+    median_timestamps: np.ndarray
+    lower_deciles: np.ndarray
+    upper_deciles: np.ndarray

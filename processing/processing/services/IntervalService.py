@@ -6,12 +6,10 @@ from processing.interfaces import AggregatedData, Interval
 
 class IntervalService:
     @staticmethod
-    def build_intervals(
-        all_aggregated: list[AggregatedData],
-    ):
+    def build_intervals(aggregations: list[AggregatedData]):
         intervals: list[Interval] = []
 
-        for a, agg in enumerate(all_aggregated):
+        for a, agg in enumerate(aggregations):
             sites: list[str] = []
             tags: dict[str, list[str]] = defaultdict(list)
 

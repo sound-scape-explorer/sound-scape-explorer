@@ -23,14 +23,14 @@ def run_trajectories(context: Context):
     for ri in ReductionManager.iterate_all(context):
         print_trajectories(ri.extraction.trajectories)
 
-        all_aggregated = AggregationRepository.from_storage(
+        aggregations = AggregationRepository.from_storage(
             context=context,
             extraction=ri.extraction,
             band=ri.band,
             integration=ri.integration,
         )
 
-        reduced = ReductionRepository.from_storage(
+        reductions = ReductionRepository.from_storage(
             context=context,
             extraction=ri.extraction,
             band=ri.band,
@@ -38,7 +38,7 @@ def run_trajectories(context: Context):
             reducer=ri.reducer,
         )
 
-        intervals = IntervalService.build_intervals(all_aggregated)
+        intervals = IntervalService.build_intervals(aggregations)
 
         for trajectory in track(
             ri.extraction.trajectories,
@@ -51,7 +51,7 @@ def run_trajectories(context: Context):
         ):
             t = SingleTrajectory(
                 trajectory=trajectory,
-                embeddings=reduced,
+                embeddings=reductions,
                 intervals=intervals,
             )
 

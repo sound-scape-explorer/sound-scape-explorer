@@ -9,6 +9,7 @@ from processing.config.ReducerConfig import ReducerConfig
 from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.context import Context
 from processing.enums import StorageDomain
+from processing.interfaces import TrajectoryStatistics
 from processing.paths.path_registry import register_path, build_path
 
 
@@ -44,12 +45,7 @@ class RelativeTrajectoryRepository:
         integration: IntegrationConfig,
         reducer: ReducerConfig,
         trajectory: TrajectoryConfig,
-        tag_name: str,
-        tag_value: str,
-        distance_medians: list[float],
-        timestamp_medians: list[list[float]],
-        lower_deciles: list[float],
-        upper_deciles: list[float],
+        statistics: TrajectoryStatistics,
     ):
         path_suffix = [
             extraction.index,
@@ -60,26 +56,29 @@ class RelativeTrajectoryRepository:
         ]
 
         distances_path = build_path(RelativeTrajectoryPath.DATA.value, *path_suffix)
+
         context.storage.write(
             path=distances_path,
-            data=np.stack([distance_medians]),
-            attributes={
-                "trajectory_name": trajectory.name,
-                "tag_name": tag_name,
-                "tag_value": tag_value,
-            },
+            data=statistics.median_distances,
         )
 
         timestamps_path = build_path(
-            RelativeTrajectoryPath.TIMESTAMPS.value, *path_suffix
+            RelativeTrajectoryPath.TIMESTAMPS.value,
+            *path_suffix,
         )
+
         context.storage.write(
             path=timestamps_path,
-            data=np.stack(timestamp_medians),
+            data=statistics.median_timestamps,
         )
 
         deciles_path = build_path(RelativeTrajectoryPath.DECILES.value, *path_suffix)
-        deciles_data = np.column_stack([lower_deciles, upper_deciles])
+        deciles_data = np.column_stack(
+            [
+                statistics.lower_deciles,
+                statistics.upper_deciles,
+            ]
+        )
 
         context.storage.write(
             path=deciles_path,
