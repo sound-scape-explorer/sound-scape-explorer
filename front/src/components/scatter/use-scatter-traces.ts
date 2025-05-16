@@ -32,12 +32,12 @@ export function useScatterTraces() {
 
         newTraces.push(averageTrace);
       } else {
-        const trajectories = traceTrajectories(
+        const trajectoryTraces = traceTrajectories(
           trajectories.value,
           cyclingScale.value,
         );
 
-        newTraces.push(...trajectories);
+        newTraces.push(...trajectoryTraces);
       }
     }
 
