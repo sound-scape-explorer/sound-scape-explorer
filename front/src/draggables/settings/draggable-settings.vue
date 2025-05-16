@@ -58,7 +58,7 @@ const reload = () => location.reload();
     </div>
 
     <div :class="$style.container">
-      <DraggableSettingsItem title="Dark mode (will toggle page refresh)">
+      <DraggableSettingsItem title="Dark mode (will trigger app reload)">
         <AppCheckbox
           v-model="darkMode"
           :handle-click="reload"
