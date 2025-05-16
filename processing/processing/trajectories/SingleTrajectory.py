@@ -49,16 +49,14 @@ class SingleTrajectory:
 
         return filtered
 
-    def run(
-        self,
-    ):
-        filtered = self._filter()
+    def run(self):
+        filtered_intervals = self._filter()
 
-        assert len(filtered) > 0, "No intervals left after filtering."
+        assert len(filtered_intervals) > 0, "No intervals left after filtering."
 
-        indices = [interval.i for interval in filtered]
+        indices = [interval.i for interval in filtered_intervals]
         selected_embeddings = self.embeddings[indices]
-        selected_timestamps = np.stack([i.aggregated.start for i in filtered])
+        selected_timestamps = np.stack([i.aggregated.start for i in filtered_intervals])
 
         # building dataframe
         dimensions = selected_embeddings.shape[1]
@@ -80,12 +78,10 @@ class SingleTrajectory:
         df[key_rt] = df[key_t] - min_timestamp
 
         # Determine window size based on time density
-        rolling_count = len(df[df[key_rt] <= self.trajectory.smoothing_window])
+        window_size = len(df[df[key_rt] <= self.trajectory.smoothing_window])
 
         # logic check
-        assert (
-            rolling_count >= 1
-        ), f"Rolling count must be at least 1. Got {rolling_count}."
+        assert window_size >= 1, f"Window size must be at least 1. Got {window_size}."
 
         # Initialize result array
         coordinates = np.empty([dimensions, len(df)])
@@ -93,9 +89,7 @@ class SingleTrajectory:
         # Apply rolling window average for each dimension
         for d in range(dimensions):
             coordinates[d, :] = (
-                df[d]
-                .rolling(rolling_count, min_periods=1)
-                .apply(lambda x: np.nanmean(x))
+                df[d].rolling(window_size, min_periods=1).apply(lambda x: np.nanmean(x))
             )
 
         path = coordinates.T
