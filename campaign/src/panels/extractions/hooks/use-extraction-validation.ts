@@ -1,5 +1,5 @@
-import {type ExtractionDto} from '@shared/dtos';
 import {useCallback} from 'react';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useBandValidation} from 'src/panels/extractions/hooks/use-band-validation';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
 import {useIntegrationValidation} from 'src/panels/extractions/hooks/use-integration-validation.ts';
@@ -18,7 +18,7 @@ export function useExtractionValidation() {
   const {validate: validateTrajectories} = useTrajectoriesValidation();
 
   const validate = useCallback(
-    (extraction: ExtractionDto) => {
+    (extraction: ExtractionConfig) => {
       const bands = validateBands(extraction);
       const areBandsValid = bands.intent === 'success';
 

@@ -1,11 +1,11 @@
-import {type ExtractionDto, type TrajectoryDto} from '@shared/dtos';
 import {isAfter, isBefore} from 'date-fns';
 import {useCallback} from 'react';
+import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces';
 import {createDefaultValidation} from 'src/utils/validation';
 
 export function useTrajectoriesValidation() {
   const isNameValid = useCallback(
-    (trajectory: TrajectoryDto, extraction: ExtractionDto) => {
+    (trajectory: TrajectoryConfig, extraction: ExtractionConfig) => {
       if (trajectory.name === '') {
         return false;
       }
@@ -19,28 +19,28 @@ export function useTrajectoriesValidation() {
     [],
   );
 
-  const isTagNameValid = useCallback((trajectory: TrajectoryDto) => {
+  const isTagNameValid = useCallback((trajectory: TrajectoryConfig) => {
     return trajectory.tagName !== undefined;
   }, []);
 
-  const isTagValueValid = useCallback((trajectory: TrajectoryDto) => {
+  const isTagValueValid = useCallback((trajectory: TrajectoryConfig) => {
     return trajectory.tagValue !== '';
   }, []);
 
   const isStartValid = useCallback(
-    (trajectory: TrajectoryDto) =>
+    (trajectory: TrajectoryConfig) =>
       isBefore(new Date(trajectory.start), new Date(trajectory.end)),
     [],
   );
 
   const isEndValid = useCallback(
-    (trajectory: TrajectoryDto) =>
+    (trajectory: TrajectoryConfig) =>
       isAfter(new Date(trajectory.end), new Date(trajectory.start)),
     [],
   );
 
   const validate = useCallback(
-    (extraction: ExtractionDto) => {
+    (extraction: ExtractionConfig) => {
       const l = extraction.trajectories.length;
 
       const v = createDefaultValidation();
