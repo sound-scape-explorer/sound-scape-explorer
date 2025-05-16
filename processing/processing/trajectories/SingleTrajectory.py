@@ -30,8 +30,8 @@ class SingleTrajectory:
 
         for i in self.intervals:
             # time filtering
-            is_too_early = i.aggregated.start <= self.trajectory.start
-            is_too_late = i.aggregated.end >= self.trajectory.end
+            is_too_early = i.aggregated.start < self.trajectory.start
+            is_too_late = i.aggregated.end > self.trajectory.end
 
             if is_too_early or is_too_late:
                 continue
