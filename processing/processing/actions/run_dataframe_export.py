@@ -4,6 +4,7 @@ from pandas import DataFrame
 
 from processing.constants import STRING_DELIMITER
 from processing.context import Context
+from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ReductionManager import ReductionManager
 from processing.printers.print_action import print_action
 from processing.prompts.prompt_band import prompt_band
@@ -13,7 +14,6 @@ from processing.prompts.prompt_integration import prompt_integration
 from processing.repositories.AggregatedRepository import AggregatedRepository
 from processing.repositories.ReducedRepository import ReducedRepository
 from processing.services.AggregatedTagService import AggregatedTagService
-from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
 
 
 def run_dataframe_export(context: Context):
@@ -43,7 +43,7 @@ def run_dataframe_export(context: Context):
     # intervals
     for i, agg in enumerate(all_aggregated):
         raw["indices"].append(str(i))
-        raw["timestamps"].append(convert_timestamp_to_date(agg.start))
+        raw["timestamps"].append(convert_timestamp_to_date_string(agg.start))
 
         site = []
         for file in agg.files:

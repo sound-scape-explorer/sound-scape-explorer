@@ -56,7 +56,9 @@ def menu(config_path: str):
                 MenuChoice.RUN_COMPUTATIONS.value: lambda: run_computations(context),
                 MenuChoice.RUN_AUTOCLUSTERS.value: lambda: run_autoclusters(context),
                 MenuChoice.RUN_METRICS.value: lambda: run_metrics(context),
-                MenuChoice.RUN_TRAJECTORIES.value: lambda: run_trajectories(context),
+                MenuChoice.RUN_TRAJECTORIES.value: lambda: (
+                    run_trajectories(context),
+                ),
                 MenuChoice.RUN_RELATIVE_TRAJECTORIES.value: lambda: (
                     run_relative_trajectories(context),
                 ),

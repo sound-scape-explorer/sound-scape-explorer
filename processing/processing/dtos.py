@@ -33,7 +33,6 @@ from processing.enums import (
     ReducerImpl,
     AutoclusterImpl,
     MetricImpl,
-    TrajectoryStep,
     AdiImpl,
     FrequencyScale,
     StftWindowType,
@@ -152,7 +151,7 @@ class TrajectoryDto(BaseModel):
     end: str
     tagName: str
     tagValue: str
-    step: TrajectoryStep
+    smoothingWindow: int
 
 
 class ExtractionDto(BaseModel):

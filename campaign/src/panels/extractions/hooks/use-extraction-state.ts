@@ -1,21 +1,20 @@
-import {ExtractionDto} from '@shared/dtos.ts';
+import {
+  SMOOTHING_WINDOW_PRESETS,
+  type SmoothingWindowPreset,
+  SmoothingWindowPresets,
+} from '@shared/constants.ts';
+import {type ExtractionDto} from '@shared/dtos.ts';
 import {atom, useAtom} from 'jotai';
 import {useCallback} from 'react';
+import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces.ts';
 import {useExtractorDefaults} from 'src/panels/extractions/hooks/use-extractor-defaults.ts';
-import {z} from 'zod';
 
 export type ExtractionCurrentId = string | undefined;
 
 const generateId = () =>
   `extraction_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
-export const ExtractionConfigWithId = ExtractionDto.extend({
-  _id: z.string(),
-});
-
-export type ExtractionConfigWithId = z.infer<typeof ExtractionConfigWithId>;
-
-const extractionsAtom = atom<ExtractionConfigWithId[]>([]);
+const extractionsAtom = atom<ExtractionConfig[]>([]);
 const currentIdAtom = atom<ExtractionCurrentId>();
 
 export function useExtractionState() {
@@ -28,7 +27,7 @@ export function useExtractionState() {
       extractions.length > 0 ? extractions.map((e) => e.index) : [-1];
     const next = Math.max(...indices) + 1;
 
-    const extraction: ExtractionConfigWithId = {
+    const extraction: ExtractionConfig = {
       _id: generateId(),
       index: next,
       name: 'Extraction',
@@ -47,7 +46,7 @@ export function useExtractionState() {
 
   const loadExtractions = useCallback(
     (extractions: ExtractionDto[]) => {
-      const newExtractions: ExtractionConfigWithId[] = extractions.map(
+      const newExtractions: ExtractionConfig[] = extractions.map(
         (extraction) => {
           return {
             ...extraction,
@@ -55,6 +54,27 @@ export function useExtractionState() {
             extractors: extraction.extractors.map((ex) =>
               createExtractorWithDefaults(ex),
             ),
+            trajectories: {
+              ...extraction.trajectories.map((t) => {
+                let preset: SmoothingWindowPreset = 'HOUR';
+
+                for (const p of SmoothingWindowPresets) {
+                  const value = SMOOTHING_WINDOW_PRESETS[p];
+
+                  if (value === t.smoothingWindow) {
+                    preset = p;
+                    break;
+                  }
+                }
+
+                const config: TrajectoryConfig = {
+                  ...t,
+                  smoothingWindowPreset: preset,
+                };
+
+                return config;
+              }),
+            },
           };
         },
       );
@@ -169,7 +189,7 @@ export function useExtractionState() {
   );
 
   const updateName = useCallback(
-    (extraction: ExtractionConfigWithId, name: string) => {
+    (extraction: ExtractionConfig, name: string) => {
       setExtractions((prev) => {
         const newExtractions = [...prev];
         newExtractions[extraction.index] = {
@@ -183,7 +203,7 @@ export function useExtractionState() {
   );
 
   const updateExtraction = useCallback(
-    (extraction: ExtractionConfigWithId) => {
+    (extraction: ExtractionConfig) => {
       setExtractions((prev) => {
         const newExtractions = [...prev];
         newExtractions[extraction.index] = {

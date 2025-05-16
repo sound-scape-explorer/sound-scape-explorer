@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 from processing.dtos import TrajectoryDto
-from processing.enums import TrajectoryStep
 from processing.lib.time import convert_date_string_to_timestamp
 
 
@@ -9,23 +8,14 @@ from processing.lib.time import convert_date_string_to_timestamp
 class TrajectoryConfig:
     index: int
     name: str
-    start: int  # unix
-    end: int  # unix
+    start: int  # unix ms
+    end: int  # unix ms
     tag_name: str
     tag_value: str
-    step: int
+    smoothing_window: int  # ms
 
     @classmethod
     def from_dto(cls, dto: TrajectoryDto):
-        if dto.step is TrajectoryStep.HOUR:
-            step = 60 * 60
-        elif dto.step is TrajectoryStep.DAY:
-            step = 60 * 60 * 24
-        elif dto.step is TrajectoryStep.MONTH:
-            step = 60 * 60 * 24 * 30
-        else:
-            raise Exception(f"Unknown step: {dto.step}")
-
         return cls(
             index=dto.index,
             name=dto.name,
@@ -33,5 +23,5 @@ class TrajectoryConfig:
             end=convert_date_string_to_timestamp(dto.end),
             tag_name=dto.tagName,
             tag_value=dto.tagValue,
-            step=step,
+            smoothing_window=dto.smoothingWindow,
         )

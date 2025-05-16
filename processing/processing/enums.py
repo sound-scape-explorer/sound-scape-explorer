@@ -54,12 +54,6 @@ class MetricType(Enum):
     TWO_D_PAIRING = "TWO_D_PAIRING"
 
 
-class TrajectoryStep(Enum):
-    HOUR = "HOUR"
-    DAY = "DAY"
-    MONTH = "MONTH"
-
-
 class StftWindowType(Enum):
     HANN = "HANN"
     HAMMING = "HAMMING"

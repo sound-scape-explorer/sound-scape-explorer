@@ -24,10 +24,6 @@ export const MetricType = z.enum(["ONE_D","TWO_D","TWO_D_PAIRING"]);
 // eslint-disable-next-line no-redeclare
 export type MetricType = z.infer<typeof MetricType>;
 
-export const TrajectoryStep = z.enum(["HOUR","DAY","MONTH"]);
-// eslint-disable-next-line no-redeclare
-export type TrajectoryStep = z.infer<typeof TrajectoryStep>;
-
 export const StftWindowType = z.enum(["HANN","HAMMING","BLACKMANHARRIS"]);
 // eslint-disable-next-line no-redeclare
 export type StftWindowType = z.infer<typeof StftWindowType>;

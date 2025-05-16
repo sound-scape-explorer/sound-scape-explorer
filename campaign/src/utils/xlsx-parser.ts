@@ -13,6 +13,7 @@ import {
   MEMORY_LIMIT_DEFAULT,
   REDUCER_DIMENSIONS_DEFAULT,
   SAMPLE_RATE_DEFAULT,
+  SMOOTHING_WINDOW_PRESETS,
   STORAGE_PATH_DEFAULT,
   TIMELINE_ORIGIN_DEFAULT,
   TIMEZONE_DEFAULT,
@@ -31,11 +32,10 @@ import {
   type TrajectoryDto,
 } from '@shared/dtos';
 import {
-  AutoclusterImplEnum,
-  ExtractorImplEnum,
-  MetricImplEnum,
-  ReducerImplEnum,
-  TrajectoryStepEnum,
+  AutoclusterImpl,
+  ExtractorImpl,
+  MetricImpl,
+  ReducerImpl,
 } from '@shared/enums';
 import * as Excel from 'exceljs';
 import {LABEL_PREFIX_XLSX_13} from 'src/constants';
@@ -70,45 +70,45 @@ function isKeyOfXlsxFile(key: string): key is keyof XlsxFile {
   );
 }
 
-const XLSX_EXTRACTORS: Record<string, ExtractorImplEnum> = {
-  vgg: ExtractorImplEnum.enum.VGGISH,
-  melspectrum: ExtractorImplEnum.enum.SPECTROGRAM,
-  melogram: ExtractorImplEnum.enum.SPECTROGRAM,
+const XLSX_EXTRACTORS: Record<string, ExtractorImpl> = {
+  vgg: ExtractorImpl.enum.VGGISH,
+  melspectrum: ExtractorImpl.enum.SPECTROGRAM,
+  melogram: ExtractorImpl.enum.SPECTROGRAM,
 };
 
-const XLSX_INDICES: Record<string, ExtractorImplEnum> = {
-  leq_maad: ExtractorImplEnum.enum.LEQ,
-  med: ExtractorImplEnum.enum.MED,
-  ht: ExtractorImplEnum.enum.HT,
-  hf: ExtractorImplEnum.enum.HF,
-  aci: ExtractorImplEnum.enum.ACI,
-  adi: ExtractorImplEnum.enum.ADI,
-  bi: ExtractorImplEnum.enum.BI,
-  ndsi: ExtractorImplEnum.enum.NDSI,
+const XLSX_INDICES: Record<string, ExtractorImpl> = {
+  leq_maad: ExtractorImpl.enum.LEQ,
+  med: ExtractorImpl.enum.MED,
+  ht: ExtractorImpl.enum.HT,
+  hf: ExtractorImpl.enum.HF,
+  aci: ExtractorImpl.enum.ACI,
+  adi: ExtractorImpl.enum.ADI,
+  bi: ExtractorImpl.enum.BI,
+  ndsi: ExtractorImpl.enum.NDSI,
 };
 
-const XLSX_REDUCERS: Record<string, ReducerImplEnum> = {
-  umap: ReducerImplEnum.enum.UMAP,
-  pca: ReducerImplEnum.enum.PCA,
+const XLSX_REDUCERS: Record<string, ReducerImpl> = {
+  umap: ReducerImpl.enum.UMAP,
+  pca: ReducerImpl.enum.PCA,
 };
 
-const XLSX_DIGESTERS: Record<string, MetricImplEnum> = {
-  mean_std: MetricImplEnum.enum.MEAN_STD,
-  mean_spreading: MetricImplEnum.enum.MEAN_SPREADING,
-  silhouette: MetricImplEnum.enum.SILHOUETTE,
-  contingency: MetricImplEnum.enum.CONTINGENCY,
-  overlap: MetricImplEnum.enum.CONTINGENCY,
+const XLSX_DIGESTERS: Record<string, MetricImpl> = {
+  mean_std: MetricImpl.enum.MEAN_STD,
+  mean_spreading: MetricImpl.enum.MEAN_SPREADING,
+  silhouette: MetricImpl.enum.SILHOUETTE,
+  contingency: MetricImpl.enum.CONTINGENCY,
+  overlap: MetricImpl.enum.CONTINGENCY,
 };
 
-const XLSX_AUTOCLUSTERS: Record<string, AutoclusterImplEnum> = {
-  'hdbscan-eom': AutoclusterImplEnum.enum.HDBSCAN_EOM,
-  'hdbscan-leaf': AutoclusterImplEnum.enum.HDBSCAN_LEAF,
+const XLSX_AUTOCLUSTERS: Record<string, AutoclusterImpl> = {
+  'hdbscan-eom': AutoclusterImpl.enum.HDBSCAN_EOM,
+  'hdbscan-leaf': AutoclusterImpl.enum.HDBSCAN_LEAF,
 };
 
-const TRAJECTORY_STEPS: Record<string, TrajectoryStepEnum> = {
-  hour: TrajectoryStepEnum.enum.HOUR,
-  day: TrajectoryStepEnum.enum.DAY,
-  month: TrajectoryStepEnum.enum.MONTH,
+const TRAJECTORY_STEPS: Record<string, number> = {
+  hour: SMOOTHING_WINDOW_PRESETS.HOUR,
+  day: SMOOTHING_WINDOW_PRESETS.DAY,
+  month: SMOOTHING_WINDOW_PRESETS.MONTH,
 };
 
 interface ReadColumnsProps {
@@ -305,7 +305,7 @@ export class XlsxParser {
       const implString = String(row[ExtractorsColumn.extractor]);
 
       if (Object.keys(XLSX_EXTRACTORS).includes(implString)) {
-        const impl = XLSX_EXTRACTORS[implString] as ExtractorImplEnum;
+        const impl = XLSX_EXTRACTORS[implString] as ExtractorImpl;
 
         const extractor: ExtractorDto = {
           index: i,
@@ -320,7 +320,7 @@ export class XlsxParser {
 
       // acoustic indices that are now considered as extractors
       if (Object.keys(XLSX_INDICES).includes(implString)) {
-        const impl = XLSX_INDICES[implString] as ExtractorImplEnum;
+        const impl = XLSX_INDICES[implString] as ExtractorImpl;
 
         const extractor: ExtractorDto = {
           index: i,
@@ -367,7 +367,7 @@ export class XlsxParser {
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
       const implString = String(row[ReducersColumn.reducer]);
-      const impl = XLSX_REDUCERS[implString] as ReducerImplEnum;
+      const impl = XLSX_REDUCERS[implString] as ReducerImpl;
       const dimensions = Number(
         row[ReducersColumn.dimensions] ?? REDUCER_DIMENSIONS_DEFAULT,
       );
@@ -391,7 +391,7 @@ export class XlsxParser {
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
       const implString = String(row[AutoclustersColumn.autocluster]);
-      const impl = XLSX_AUTOCLUSTERS[implString] as AutoclusterImplEnum;
+      const impl = XLSX_AUTOCLUSTERS[implString] as AutoclusterImpl;
       const minClusterSize = Number(
         row[AutoclustersColumn.minClusterSize] ??
           AUTOCLUSTER_MIN_CLUSTER_SIZE_DEFAULT,
@@ -428,7 +428,7 @@ export class XlsxParser {
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
       const implString = String(row[DigestersColumn.digester]);
-      const impl = XLSX_DIGESTERS[implString] as MetricImplEnum;
+      const impl = XLSX_DIGESTERS[implString] as MetricImpl;
 
       const digester: MetricDto = {
         index: i,
@@ -455,7 +455,8 @@ export class XlsxParser {
       const tagName = String(row[TrajectoriesColumn.labelProperty] ?? '');
       const tagValue = String(row[TrajectoriesColumn.labelValue] ?? '');
       const stepString = String(row[TrajectoriesColumn.step] ?? '');
-      const step = TRAJECTORY_STEPS[stepString] ?? TrajectoryStepEnum.enum.HOUR;
+      const smoothingWindow =
+        TRAJECTORY_STEPS[stepString] ?? SMOOTHING_WINDOW_PRESETS.HOUR;
 
       const trajectory: TrajectoryDto = {
         index: i,
@@ -464,7 +465,7 @@ export class XlsxParser {
         end: formatDateToString(end, true),
         tagName: tagNames.find((n) => n === tagName) ?? '',
         tagValue,
-        step,
+        smoothingWindow,
       };
 
       trajectories.push(trajectory);

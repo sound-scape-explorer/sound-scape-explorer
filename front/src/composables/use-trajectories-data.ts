@@ -5,19 +5,17 @@ import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selecti
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
-export type TracedData = number[][];
-export type TracedTimestamps = number[];
-export type TracedRelativeTimestamps = number[];
+export type TrajectoryPath = number[][];
+export type TrajectoryTimestamps = number[];
 
-// this is trajectory data
-export interface Traced {
+// todo: extend or merge
+export interface TrajectoryData {
   trajectory: TrajectoryDto;
-  data: TracedData;
-  timestamps: TracedTimestamps;
-  relativeTimestamps: TracedRelativeTimestamps;
+  path: TrajectoryPath;
+  timestamps: TrajectoryTimestamps;
 }
 
-const traceds = ref<Traced[]>([]);
+const traceds = ref<TrajectoryData[]>([]);
 const isFused = ref<boolean>(false);
 
 export function useTrajectoriesData() {
@@ -43,10 +41,10 @@ export function useTrajectoriesData() {
         return;
       }
 
-      const ts: Traced[] = [];
+      const ts: TrajectoryData[] = [];
 
       for (const sT of selected.value) {
-        const [data, timestamps, relativeTimestamps] = await worker.readTraced(
+        const [path, timestamps] = await worker.readTraced(
           file,
           extraction.value.index,
           band.value.index,
@@ -55,11 +53,10 @@ export function useTrajectoriesData() {
           sT.index,
         );
 
-        const t: Traced = {
+        const t: TrajectoryData = {
           trajectory: sT,
-          data,
+          path,
           timestamps,
-          relativeTimestamps,
         };
 
         ts.push(t);

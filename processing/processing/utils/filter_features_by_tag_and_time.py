@@ -1,7 +1,7 @@
 from h5py import Dataset
 
 
-# todo: refactor me
+# todo: remove me
 def filter_features_by_tag_and_time(
     features: Dataset,
     timestamps: list[int],

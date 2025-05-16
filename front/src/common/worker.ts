@@ -16,9 +16,8 @@ import {type MetricData} from 'src/composables/use-metric-data';
 import {type RelativeTraced} from 'src/composables/use-relative-traced';
 import {type AggregatedIndex} from 'src/composables/use-storage-aggregated-acoustic-indices';
 import {
-  type TracedData,
-  type TracedRelativeTimestamps,
-  type TracedTimestamps,
+  type TrajectoryPath,
+  type TrajectoryTimestamps,
 } from 'src/composables/use-trajectories-data';
 import {STRING_DELIMITER} from 'src/constants';
 
@@ -179,7 +178,7 @@ export async function readTraced(
   integrationIndex: number,
   reducerIndex: number,
   trajectoryIndex: number,
-): Promise<[TracedData, TracedTimestamps, TracedRelativeTimestamps]> {
+): Promise<[TrajectoryPath, TrajectoryTimestamps]> {
   const h5 = await load(file);
 
   const suffix = [
@@ -190,16 +189,13 @@ export async function readTraced(
     trajectoryIndex,
   ];
 
-  const dataPath = TracedInstancePath.data(...suffix);
-  const data = _readArray<number[]>(h5, dataPath);
+  const pathPath = TracedInstancePath.path(...suffix);
+  const path = _readArray<number[]>(h5, pathPath);
 
   const timestampsPath = TracedInstancePath.timestamps(...suffix);
   const timestamps = _readArray<number>(h5, timestampsPath);
 
-  const rTimestampsPath = TracedInstancePath.relative_timestamps(...suffix);
-  const relativeTimestamps = _readArray<number>(h5, rTimestampsPath);
-
-  return [data, timestamps, relativeTimestamps];
+  return [path, timestamps];
 }
 
 export async function readAggregated(

@@ -46,11 +46,6 @@
     "TWO_D",
     "TWO_D_PAIRING"
   ],
-  "TrajectoryStep": [
-    "HOUR",
-    "DAY",
-    "MONTH"
-  ],
   "StftWindowType": [
     "HANN",
     "HAMMING",

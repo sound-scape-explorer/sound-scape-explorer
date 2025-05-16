@@ -12,6 +12,7 @@ from processing.utils.get_uniques_sorted import get_uniques_sorted
 from processing.utils.get_uniques_unsorted import get_uniques_unsorted
 
 
+# todo: maybe remove me when `IntervalService` will be up and running
 class AggregatedTagService:
     @staticmethod
     def _read_flat(

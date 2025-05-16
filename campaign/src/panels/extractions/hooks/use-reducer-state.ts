@@ -2,12 +2,10 @@ import {REDUCER_DIMENSIONS_DEFAULT} from '@shared/constants.ts';
 import {type ReducerDto} from '@shared/dtos.ts';
 import {ReducerImpl} from '@shared/enums.ts';
 import {useCallback, useMemo} from 'react';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
-export function useReducerState(extraction: ExtractionConfigWithId) {
+export function useReducerState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
 
   const reducers = useMemo(() => extraction.reducers, [extraction.reducers]);

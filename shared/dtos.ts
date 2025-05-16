@@ -9,7 +9,6 @@ import {
   MetricImpl,
   ReducerImpl,
   StftWindowType,
-  TrajectoryStep,
 } from './enums';
 
 const dateString = z.string().refine((str) => !isNaN(Date.parse(str)), {
@@ -134,7 +133,7 @@ export const TrajectoryDto = z.object({
   end: dateString,
   tagName: z.string(),
   tagValue: z.string(),
-  step: TrajectoryStep,
+  smoothingWindow: z.number().int().positive(),
 });
 
 export type TrajectoryDto = z.infer<typeof TrajectoryDto>;

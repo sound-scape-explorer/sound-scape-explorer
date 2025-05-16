@@ -7,12 +7,10 @@ import {
 import {type AutoclusterDto} from '@shared/dtos.ts';
 import {AutoclusterImpl} from '@shared/enums.ts';
 import {useCallback, useMemo} from 'react';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
-export function useAutoclusterState(extraction: ExtractionConfigWithId) {
+export function useAutoclusterState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
 
   const autoclusters = useMemo(

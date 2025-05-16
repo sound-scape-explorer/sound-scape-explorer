@@ -1,14 +1,14 @@
 from rich.progress import track
 
-from processing.common.ContinuousTimeTrajectory import ContinuousTimeTrajectory
 from processing.context import Context
-from processing.lib.legacy import convert_aggregated_to_legacy_flat
 from processing.managers.ReductionManager import ReductionManager
 from processing.printers.print_action import print_action
 from processing.printers.print_trajectories import print_trajectories
 from processing.repositories.AggregatedRepository import AggregatedRepository
 from processing.repositories.ReducedRepository import ReducedRepository
 from processing.repositories.TracedRepository import TracedRepository
+from processing.services.IntervalService import IntervalService
+from processing.trajectories.SingleTrajectory import SingleTrajectory
 from processing.validators.validate_aggregated import validate_aggregated
 from processing.validators.validate_reduced import validate_reduced
 
@@ -38,7 +38,7 @@ def run_trajectories(context: Context):
             reducer=ri.reducer,
         )
 
-        legacy = convert_aggregated_to_legacy_flat(context, all_aggregated)
+        intervals = IntervalService.build_intervals(all_aggregated)
 
         for trajectory in track(
             ri.extraction.trajectories,
@@ -49,22 +49,13 @@ def run_trajectories(context: Context):
                 f", reducer {ri.reducer.impl.name}{ri.reducer.dimensions}"
             ),
         ):
-            t = ContinuousTimeTrajectory()
-
-            t.load(
+            t = SingleTrajectory(
+                trajectory=trajectory,
                 embeddings=reduced,
-                timestamps=legacy.timestamps,
-                timestamp_start=trajectory.start,
-                timestamp_end=trajectory.end,
-                all_tag_names=legacy.tag_names,
-                all_tag_values=legacy.tag_values,
-                step=trajectory.step,
+                intervals=intervals,
             )
 
-            t.calculate(
-                trajectory_tag_name=trajectory.tag_name,
-                trajectory_tag_value=trajectory.tag_value,
-            )
+            data = t.run()
 
             TracedRepository.to_storage(
                 context=context,
@@ -73,7 +64,7 @@ def run_trajectories(context: Context):
                 integration=ri.integration,
                 reducer=ri.reducer,
                 trajectory=trajectory,
-                traced=t,
+                data=data,
             )
 
     print_action("Tracing trajectories completed!", "end")

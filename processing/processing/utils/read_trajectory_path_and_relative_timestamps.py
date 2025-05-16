@@ -5,6 +5,7 @@ from processing.common.ContinuousTimeTrajectory import ContinuousTimeTrajectory
 from processing.config.TrajectoryConfig import TrajectoryConfig
 
 
+# todo: remove me
 def read_trajectory_path_and_relative_timestamps(
     trajectory: TrajectoryConfig,
     features: Dataset,

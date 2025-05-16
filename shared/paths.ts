@@ -38,7 +38,7 @@ export namespace IndexPath {
   export const is_persists = register_path('indices', 'is_persists');
 }
 
-export namespace AutoclusteredPath {
+namespace AutoclusteredPath {
   export const autoclustered = register_path('autoclustered');
 }
 
@@ -47,27 +47,20 @@ export namespace AutoclusteredInstancePath {
     build_path(AutoclusteredPath.autoclustered, ...suffix);
 }
 
-export namespace TracedPath {
-  export const data = register_path('traced', 'data');
+namespace TracedPath {
+  export const path = register_path('traced', 'path');
   export const timestamps = register_path('traced', 'timestamps');
-  export const relative_timestamps = register_path(
-    'traced',
-    'relative_timestamps',
-  );
 }
 
 export namespace TracedInstancePath {
-  export const data = (...suffix: number[]) =>
-    build_path(TracedPath.data, ...suffix);
+  export const path = (...suffix: number[]) =>
+    build_path(TracedPath.path, ...suffix);
 
   export const timestamps = (...suffix: number[]) =>
     build_path(TracedPath.timestamps, ...suffix);
-
-  export const relative_timestamps = (...suffix: number[]) =>
-    build_path(TracedPath.relative_timestamps, ...suffix);
 }
 
-export namespace RelativeTracedPath {
+namespace RelativeTracedPath {
   export const data = register_path('relative_traced', 'data');
   export const timestamps = register_path('relative_traced', 'timestamps');
   export const deciles = register_path('relative_traced', 'deciles');
@@ -84,7 +77,7 @@ export namespace RelativeTracedInstancePath {
     build_path(RelativeTracedPath.deciles, ...suffix);
 }
 
-export namespace MetricPath {
+namespace MetricPath {
   export const data = register_path('metric', 'data');
 }
 
@@ -93,7 +86,7 @@ export namespace MetricInstancePath {
     build_path(MetricPath.data, ...suffix);
 }
 
-export namespace ReducedPath {
+namespace ReducedPath {
   export const reduced = register_path('reduced');
 }
 
@@ -102,7 +95,7 @@ export namespace ReducedInstancePath {
     build_path(ReducedPath.reduced, ...suffix);
 }
 
-export namespace AggregatedPath {
+namespace AggregatedPath {
   export const embeddings = register_path('aggregated', 'embeddings');
   export const timestamps = register_path('aggregated', 'timestamps');
   export const file_indices = register_path('aggregated', 'file_indices');

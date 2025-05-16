@@ -1,16 +1,14 @@
 import {VGGISH_WINDOW_MS} from '@shared/constants';
 import {
-  AutoclusterImplEnum,
-  ExtractorImplEnum,
-  MetricImplEnum,
-  ReducerImplEnum,
+  AutoclusterImpl,
+  ExtractorImpl,
+  MetricImpl,
+  ReducerImpl,
 } from '@shared/enums';
 import {atom, useAtom} from 'jotai';
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
 export enum TemplateKey {
   NONE = 'No template',
@@ -21,12 +19,12 @@ type KeyById = Record<string, TemplateKey>;
 
 const keyByIdAtom = atom<KeyById>({});
 
-export function useExtractionTemplates(extraction: ExtractionConfigWithId) {
+export function useExtractionTemplates(extraction: ExtractionConfig) {
   const [keyById, setKeyById] = useAtom(keyByIdAtom);
   const {updateExtraction} = useExtractionState();
 
   const [customExtractions, setCustomExtractions] = useState<
-    ExtractionConfigWithId[]
+    ExtractionConfig[]
   >([]);
 
   // on mount
@@ -73,7 +71,7 @@ export function useExtractionTemplates(extraction: ExtractionConfigWithId) {
               {
                 index: 0,
                 name: 'vggish',
-                impl: ExtractorImplEnum.enum.VGGISH,
+                impl: ExtractorImpl.enum.VGGISH,
                 window: VGGISH_WINDOW_MS,
                 hop: VGGISH_WINDOW_MS,
               },
@@ -81,23 +79,23 @@ export function useExtractionTemplates(extraction: ExtractionConfigWithId) {
             reducers: [
               {
                 index: 0,
-                impl: ReducerImplEnum.enum.UMAP,
+                impl: ReducerImpl.enum.UMAP,
                 dimensions: 3,
               },
               {
                 index: 1,
-                impl: ReducerImplEnum.enum.UMAP,
+                impl: ReducerImpl.enum.UMAP,
                 dimensions: 2,
               },
             ],
             metrics: [
-              {index: 0, impl: MetricImplEnum.enum.SILHOUETTE},
-              {index: 1, impl: MetricImplEnum.enum.CONTINGENCY},
+              {index: 0, impl: MetricImpl.enum.SILHOUETTE},
+              {index: 1, impl: MetricImpl.enum.CONTINGENCY},
             ],
             autoclusters: [
               {
                 index: 0,
-                impl: AutoclusterImplEnum.enum.HDBSCAN_EOM,
+                impl: AutoclusterImpl.enum.HDBSCAN_EOM,
                 minClusterSize: 15,
                 minSamples: 15,
                 alpha: 1,
@@ -105,7 +103,7 @@ export function useExtractionTemplates(extraction: ExtractionConfigWithId) {
               },
               {
                 index: 1,
-                impl: AutoclusterImplEnum.enum.HDBSCAN_LEAF,
+                impl: AutoclusterImpl.enum.HDBSCAN_LEAF,
                 minClusterSize: 15,
                 minSamples: 15,
                 alpha: 1,

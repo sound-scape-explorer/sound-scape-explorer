@@ -13,7 +13,6 @@ export function useDraggableTrajectoriesExport() {
     const csv = new Csv();
     csv.addColumn('name');
     csv.addColumn('timestamps');
-    csv.addColumn('relativeTimestamps');
     csv.addColumn('x');
     csv.addColumn('y');
     csv.addColumn('z');
@@ -21,13 +20,12 @@ export function useDraggableTrajectoriesExport() {
     if (isFused.value) {
       const {data, traced} = buildAverageTrajectory(traceds.value);
 
-      traced.data.forEach((_, index) => {
+      traced.path.forEach((_, index) => {
         csv.createRow();
         csv.addToCurrentRow('fused');
         csv.addToCurrentRow(
           convertTimestampToIsoDate(traced.timestamps[index]),
         );
-        csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
         csv.addToCurrentRow(data.x[index].toString());
         csv.addToCurrentRow(data.y[index].toString());
         if (typeof data.z !== 'undefined') {
@@ -36,13 +34,12 @@ export function useDraggableTrajectoriesExport() {
       });
     } else {
       for (const traced of traceds.value) {
-        traced.data.forEach((coordinates, index) => {
+        traced.path.forEach((coordinates, index) => {
           csv.createRow();
           csv.addToCurrentRow(traced.trajectory.name);
           csv.addToCurrentRow(
             convertTimestampToIsoDate(traced.timestamps[index]),
           );
-          csv.addToCurrentRow(traced.relativeTimestamps[index].toString());
           csv.addToCurrentRow(coordinates[0].toString());
           csv.addToCurrentRow(coordinates[1].toString());
           csv.addToCurrentRow(coordinates[2].toString());

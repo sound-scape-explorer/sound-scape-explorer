@@ -7,6 +7,7 @@ import {ExtractorImpl} from '@shared/enums';
 import clsx from 'clsx';
 import {useEffect, useMemo, useState} from 'react';
 import {useTheme} from 'src/hooks/use-theme';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {ExtractionExtractorAdiParams} from 'src/panels/extractions/components/extraction-extractor-adi-params.tsx';
 import {ExtractionExtractorHtParams} from 'src/panels/extractions/components/extraction-extractor-ht-params.tsx';
 import {ExtractionExtractorLeqDiffParams} from 'src/panels/extractions/components/extraction-extractor-leq-diff-params.tsx';
@@ -17,7 +18,6 @@ import {ExtractionExtractorMpsParams} from 'src/panels/extractions/components/ex
 import {ExtractionExtractorNdsiParams} from 'src/panels/extractions/components/extraction-extractor-ndsi-params.tsx';
 import {ExtractionExtractorSpectrogramParams} from 'src/panels/extractions/components/extraction-extractor-spectrogram-params.tsx';
 import {ExtractionExtractorSpectrumParams} from 'src/panels/extractions/components/extraction-extractor-spectrum-params.tsx';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
@@ -29,7 +29,7 @@ import {TextInput} from 'src/primitives/text-input.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
   extractor: ExtractorDto;
 }
 

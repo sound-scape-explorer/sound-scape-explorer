@@ -56,3 +56,24 @@ class AggregatedData(NamedTuple):
 
 _MetricDataKey = str | tuple[str, str]
 MetricData = dict[_MetricDataKey, npt.NDArray[np.float32]]
+
+
+class Interval(NamedTuple):
+    i: int
+    aggregated: AggregatedData
+
+    joined_site: str  # joined sites if multiple files
+    sites: list[str]
+
+    # joined tags are a bit different than tags
+    # object keys are tag names
+    # object values are the tag uniques
+    # the tag uniques are concatenated tag values
+    # (this joined string occurs when multiple files populate the same interval)
+    joined_tags: dict[str, str]
+    tags: dict[str, list[str]]
+
+
+class TrajectoryData(NamedTuple):
+    path: np.ndarray
+    timestamps: np.ndarray

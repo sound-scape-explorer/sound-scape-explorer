@@ -1,11 +1,9 @@
 import {type BandDto} from '@shared/dtos.ts';
 import {useCallback, useMemo} from 'react';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
-export function useBandState(extraction: ExtractionConfigWithId) {
+export function useBandState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
 
   const bands = useMemo(() => extraction.bands, [extraction.bands]);

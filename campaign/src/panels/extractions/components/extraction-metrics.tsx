@@ -2,12 +2,12 @@ import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
 import {ArrowDown, ArrowUp, Cross, HeatGrid, Plus} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
-import {MetricImplEnum} from '@shared/enums';
+import {MetricImpl} from '@shared/enums';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-metrics.module.scss';
 import {ExtractionMetricsDrawerContent} from 'src/panels/extractions/components/extraction-metrics-drawer-content.tsx';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useMetricState} from 'src/panels/extractions/hooks/use-metric-state.ts';
 import {useMetricSlug} from 'src/panels/metrics/hooks/use-metric-slug';
@@ -18,7 +18,7 @@ import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
 }
 
 export function ExtractionMetrics({extraction}: Props) {
@@ -101,7 +101,7 @@ export function ExtractionMetrics({extraction}: Props) {
             <span>{metric.index}</span>
 
             <Select
-              items={MetricImplEnum.options}
+              items={MetricImpl.options}
               current={metric.impl}
               onSelect={(v) => updateImpl(metric, v)}
               placeholder="Select impl"

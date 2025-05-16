@@ -4,7 +4,7 @@ from processing.config.TrajectoryConfig import TrajectoryConfig
 PackedTrajectories = dict[str, dict[str, list[TrajectoryConfig]]]
 
 
-# TODO: refactor me
+# TODO: remove me
 def pack_trajectories(
     trajectories: list[TrajectoryConfig],
 ) -> PackedTrajectories:

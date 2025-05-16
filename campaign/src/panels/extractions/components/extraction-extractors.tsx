@@ -4,10 +4,10 @@ import {FilterList, Help, Plus} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/config-extractors.module.scss';
 import {ExtractionExtractorCard} from 'src/panels/extractions/components/extraction-extractor-card.tsx';
 import {ExtractionExtractorsDrawerContent} from 'src/panels/extractions/components/extraction-extractors-drawer-content.tsx';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useExtractorSlug} from 'src/panels/extractions/hooks/use-extractor-slug';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
@@ -17,7 +17,7 @@ import genericStyles from 'src/primitives/generic-section/generic-section.module
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
 }
 
 export function ExtractionExtractors({extraction}: Props) {
