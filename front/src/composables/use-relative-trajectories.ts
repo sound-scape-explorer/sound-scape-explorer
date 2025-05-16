@@ -3,16 +3,16 @@ import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
-export interface RelativeTraced {
+export interface RelativeTrajectory {
   trajectory: TrajectoryDto;
-  data: number[];
+  distances: number[];
   timestamps: number[];
   deciles: [number, number][];
 }
 
-const relativeTraced = ref<RelativeTraced[] | null>(null);
+const relativeTrajectories = ref<RelativeTrajectory[] | null>(null);
 
-export function useRelativeTraced() {
+export function useRelativeTrajectories() {
   const {read: r} = useStorageReader();
 
   const read = async () => {
@@ -30,10 +30,10 @@ export function useRelativeTraced() {
 
       const trajectories = extraction.value.trajectories;
 
-      const newRelativeTraced: RelativeTraced[] = [];
+      const newRelativeTrajectories: RelativeTrajectory[] = [];
 
       for (const trajectory of trajectories) {
-        const {data, timestamps, deciles} =
+        const {distances, timestamps, deciles} =
           await worker.readRelativeTrajectories(
             file,
             extraction.value.index,
@@ -43,33 +43,33 @@ export function useRelativeTraced() {
             trajectory.index,
           );
 
-        const newRT: RelativeTraced = {
+        const newRelativeTrajectory: RelativeTrajectory = {
           trajectory,
-          data,
+          distances,
           timestamps,
           deciles,
         };
 
-        newRelativeTraced.push(newRT);
+        newRelativeTrajectories.push(newRelativeTrajectory);
       }
 
-      relativeTraced.value = newRelativeTraced;
+      relativeTrajectories.value = newRelativeTrajectories;
     });
   };
 
-  const selectRelativeTrajectories = (indices: number[]): RelativeTraced[] => {
-    if (relativeTraced.value === null) {
+  const filter = (indices: number[]): RelativeTrajectory[] => {
+    if (relativeTrajectories.value === null) {
       return [];
     }
 
-    return relativeTraced.value.filter((rT) =>
+    return relativeTrajectories.value.filter((rT) =>
       indices.includes(rT.trajectory.index),
     );
   };
 
   return {
-    relativeTrajectories: relativeTraced,
-    selectRelativeTrajectories,
+    relativeTrajectories,
+    filter,
     read,
   };
 }

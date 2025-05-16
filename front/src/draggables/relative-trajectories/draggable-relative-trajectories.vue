@@ -35,8 +35,8 @@ const {height} = useRelativeTrajectoriesPlotSize();
         hover-template="relative-trajectories"
         legend
         title="Relative Trajectories"
-        xTitle="Relative daytime"
-        yTitle="Relative distance from average starting point"
+        xTitle="Time of day"
+        yTitle="Relative distances"
       />
     </div>
   </AppDraggable>

@@ -2,7 +2,7 @@
 import {useColorLifecycles} from 'src/composables/use-color-lifecycles';
 import {useConfig} from 'src/composables/use-config';
 import {useIntervalFilterWatcher} from 'src/composables/use-interval-filter-watcher';
-import {useRelativeTraced} from 'src/composables/use-relative-traced';
+import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {useSitesNew} from 'src/composables/use-sites-new';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewState} from 'src/composables/use-view-state';
@@ -13,7 +13,7 @@ const {isReady, notify} = useStorageReady();
 const {hasView} = useViewState();
 
 const {read: readConfig, isLoaded} = useConfig();
-const {read: readRelativeTrajectories} = useRelativeTraced();
+const {read: readRelativeTrajectories} = useRelativeTrajectories();
 const {generate: generateSites} = useSitesNew();
 
 useViewWatcher();

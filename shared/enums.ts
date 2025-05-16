@@ -4,6 +4,10 @@ export const StorageDomain = z.enum(["config","extractions","aggregations","redu
 // eslint-disable-next-line no-redeclare
 export type StorageDomain = z.infer<typeof StorageDomain>;
 
+export const RelativeTrajectoryStoragePath = z.enum(["distances","timestamps","deciles"]);
+// eslint-disable-next-line no-redeclare
+export type RelativeTrajectoryStoragePath = z.infer<typeof RelativeTrajectoryStoragePath>;
+
 export const ComputationStrategy = z.enum(["UMAP","PCA","EMBEDDINGS"]);
 // eslint-disable-next-line no-redeclare
 export type ComputationStrategy = z.infer<typeof ComputationStrategy>;

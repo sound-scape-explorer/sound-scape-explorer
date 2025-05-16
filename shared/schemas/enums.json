@@ -11,6 +11,11 @@
     "trajectories",
     "relative_trajectories"
   ],
+  "RelativeTrajectoryStoragePath": [
+    "distances",
+    "timestamps",
+    "deciles"
+  ],
   "ComputationStrategy": [
     "UMAP",
     "PCA",

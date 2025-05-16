@@ -8,18 +8,19 @@ from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.ReducerConfig import ReducerConfig
 from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.context import Context
-from processing.enums import StorageDomain
+from processing.enums import StorageDomain, RelativeTrajectoryStoragePath
 from processing.interfaces import TrajectoryStatistics
 from processing.paths.path_registry import register_path, build_path
 
 
 _domain = StorageDomain.relative_trajectories
+_paths = RelativeTrajectoryStoragePath
 
 
 class RelativeTrajectoryPath(Enum):
-    DATA = register_path(_domain, "data")
-    TIMESTAMPS = register_path(_domain, "timestamps")
-    DECILES = register_path(_domain, "deciles")
+    DATA = register_path(_domain, _paths.distances.value)
+    TIMESTAMPS = register_path(_domain, _paths.timestamps.value)
+    DECILES = register_path(_domain, _paths.deciles.value)
 
 
 class RelativeTrajectoryRepository:

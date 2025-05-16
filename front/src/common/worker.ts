@@ -13,7 +13,7 @@ import h5wasm, {type Dataset, type File as H5File} from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
 import {type Aggregated} from 'src/composables/use-aggregated';
 import {type MetricData} from 'src/composables/use-metric-data';
-import {type RelativeTraced} from 'src/composables/use-relative-traced';
+import {type RelativeTrajectory} from 'src/composables/use-relative-trajectories';
 import {type AggregatedIndex} from 'src/composables/use-storage-aggregated-acoustic-indices';
 import {
   type TrajectoryPath,
@@ -63,7 +63,7 @@ export async function readConfigString(file: File) {
 // read dataset as array
 export function _readArray<T>(h5: H5File, path: string) {
   const dataset = h5.get(path) as Dataset;
-  const array = dataset.to_array() as T[];
+  const array = dataset.to_array() as T[]; // todo: TYPE IS CONFUSING
   return array;
 }
 
@@ -144,7 +144,7 @@ export async function readRelativeTrajectories(
   integrationIndex: number,
   reducerIndex: number,
   trajectoryIndex: number,
-): Promise<Omit<RelativeTraced, 'trajectory'>> {
+): Promise<Omit<RelativeTrajectory, 'trajectory'>> {
   const h5 = await load(file);
 
   const suffix = [
@@ -155,18 +155,18 @@ export async function readRelativeTrajectories(
     trajectoryIndex,
   ];
 
-  const dataPath = RelativeTrajectoryPathInstance.data(...suffix);
-  const data = _readArray<number[]>(h5, dataPath);
+  const distancesPath = RelativeTrajectoryPathInstance.distances(...suffix);
+  const distances = _readArray<number>(h5, distancesPath);
 
   const timestampsPath = RelativeTrajectoryPathInstance.timestamps(...suffix);
-  const timestamps = _readArray<number[]>(h5, timestampsPath);
+  const timestamps = _readArray<number>(h5, timestampsPath);
 
   const decilesPath = RelativeTrajectoryPathInstance.deciles(...suffix);
   const deciles = _readArray<[number, number]>(h5, decilesPath);
 
   return {
-    data: data[0],
-    timestamps: timestamps.map((t) => t[0]),
+    distances,
+    timestamps,
     deciles,
   };
 }

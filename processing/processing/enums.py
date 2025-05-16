@@ -14,6 +14,12 @@ class StorageDomain(Enum):
     relative_trajectories = "relative_trajectories"
 
 
+class RelativeTrajectoryStoragePath(Enum):
+    distances = "distances"
+    timestamps = "timestamps"
+    deciles = "deciles"
+
+
 class ComputationStrategy(Enum):
     UMAP = "UMAP"
     PCA = "PCA"

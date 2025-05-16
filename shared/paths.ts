@@ -2,7 +2,7 @@
 
 // todo: rename me to PathRegistry.ts or something
 
-import {StorageDomain} from '@shared/enums';
+import {RelativeTrajectoryStoragePath, StorageDomain} from '@shared/enums';
 
 const registeredPaths = new Set<string>();
 
@@ -69,23 +69,23 @@ export namespace TrajectoryPathInstance {
 }
 
 namespace RelativeTrajectoryPath {
-  export const data = register_path(
+  export const distances = register_path(
     StorageDomain.enum.relative_trajectories,
-    'data',
+    RelativeTrajectoryStoragePath.enum.distances,
   );
   export const timestamps = register_path(
     StorageDomain.enum.relative_trajectories,
-    'timestamps',
+    RelativeTrajectoryStoragePath.enum.timestamps,
   );
   export const deciles = register_path(
     StorageDomain.enum.relative_trajectories,
-    'deciles',
+    RelativeTrajectoryStoragePath.enum.deciles,
   );
 }
 
 export namespace RelativeTrajectoryPathInstance {
-  export const data = (...suffix: (string | number)[]) =>
-    build_path(RelativeTrajectoryPath.data, ...suffix);
+  export const distances = (...suffix: (string | number)[]) =>
+    build_path(RelativeTrajectoryPath.distances, ...suffix);
 
   export const timestamps = (...suffix: (string | number)[]) =>
     build_path(RelativeTrajectoryPath.timestamps, ...suffix);

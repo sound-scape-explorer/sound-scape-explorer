@@ -1,10 +1,10 @@
-import {useRelativeTraced} from 'src/composables/use-relative-traced';
+import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {computed, ref} from 'vue';
 
 const value = ref([]);
 
 export function useDraggableRelativeTrajectories() {
-  const {relativeTrajectories} = useRelativeTraced();
+  const {relativeTrajectories} = useRelativeTrajectories();
 
   const options = computed(() => {
     if (relativeTrajectories.value === null) {
