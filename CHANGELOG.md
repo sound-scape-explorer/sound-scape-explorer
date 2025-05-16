@@ -1,3 +1,38 @@
+# [14.0.0-beta.6](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.5...v14.0.0-beta.6) (2025-05-16)
+
+
+### Bug Fixes
+
+* **campaign:** improve wording for config export steps ([b898c23](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b898c234f4863d00d9d8be647a2c9f63fffbcb0d))
+* **front/timeline:** use more explicit button name when focusing on current interval ([2b36236](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2b362361b6894460644b3132ec927f80276c763e))
+* **front:** factor client settings + replace unions and enums with zod enums ([170d3f9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/170d3f968ced8bc7aa8aa8bb0e9f2d1500971c18))
+* **front:** forgot import ([6ec2979](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6ec2979d330cea9f14eaea1bf82b3ae5bcc08a4c))
+* **front:** get rid of injection pattern ([29dffe1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/29dffe1c679b47a1b64276d7745afc678c68dd0e))
+* **front:** improve color contrast and remove dead code ([ff2cadc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ff2cadce27333e2873e219cdfbb460467570d714))
+* **front:** improve colors ([44aac20](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/44aac20484cfff262816a9aea5b8eff61e07bc85))
+* **front:** improve legend for relative trajectories ([063189d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/063189d321f27f59e3e05056e8862e08ad5128f5))
+* **front:** prevent name collision ([5d31401](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5d314017a1d5d52ad795b634e055fcb89bfbca8a))
+* **front:** remove dead code for old timeline impl ([cb72cf0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/cb72cf0d4443229242efd1f00aa7cfdc33098478))
+* **front:** use consistent namings for tags instead of labels + merge multiple windows intervals when creating tag uniques ([5216492](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/521649256248ddd1df5b9086b569e8d8c20272fa))
+* **front:** use enum for color categories ([4c36cf3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4c36cf3f3ad0dfe922d7a400ad95368a5e252f46))
+* **front:** use proper color contrast in dark mode for gradient tooltip ([ac41308](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ac41308249719b848486124000deb82108a0d3c5))
+* **front:** use proper enumeration for draggable keys ([9ae105a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9ae105ad849f5cece307bb640fc2574c6cbe46a3))
+* **front:** use proper key for grid item (refactoring tools went too far) ([70c1c76](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/70c1c76db43d67d7dd86e944ff224bb1599a3c10))
+* move ts parser as root dev dependency ([c859f0d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c859f0d5322ea74ceba6707e2f6dc31ae9065d28))
+* **processing/reducers:** remove dead print ([b5c27d5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b5c27d55064ba97caab345f0caa6e2b80ba1bc4e))
+* **processing:** better wording for trajectory variables ([ae98627](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ae9862701ff49a8d7de9ca61e07061be8eed09d2))
+* **processing:** remove run computations purge menu action ([1e8150f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1e8150fe797baaedbd64729cd2c78ff3b302fe8d))
+* **processing:** rewrite relative trajectories ([78b2a88](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/78b2a88ea1e47dc586e12cc87d915127cc2163f5))
+* **processing:** use common audio loader ([f5aaddd](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f5aadddc4eaf57c967551aeb113da5d61160408d))
+* **processing:** use factory for reducers + update file names ([8b6eb8a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8b6eb8acb9438cb9efe2235c2b5055fefe2ecd21))
+* **processing:** use strict time exclusions for trajectories interval filtering ([3ff3cb4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3ff3cb4b645eabfcf53b9db63e80f7f9bd9de6c0))
+* properly enumerate storage path domains ([991ffb8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/991ffb8168c916e7c20bf08c1cd91c3f6b505af0))
+* rewrite trajectories globally ([022c9ed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/022c9ed640582e586ae2fbce54223e10e0bd81cb))
+* streamline enum generation and naming ([b28ddfe](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b28ddfebe365a21773d2baa57701302e588187dc))
+* update relative trajectories consumers + enumerate relative trajectories storage paths ([92c41ee](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/92c41ee6151c6366917a1668ac411ae17f302c29))
+* use consistent enumerations for storage path registration ([f310e2d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f310e2d27eb37092d0cc9df11915398f4160a8bb))
+* various renamings ([e7272b4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e7272b49a543cbd2337be6d9c04237476cbbbe9f))
+
 # [14.0.0-beta.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.4...v14.0.0-beta.5) (2025-05-13)
 
 
