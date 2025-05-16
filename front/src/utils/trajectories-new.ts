@@ -1,5 +1,5 @@
 import {type Scale} from 'chroma-js';
-import {type TrajectoryData} from 'src/composables/use-trajectories-data';
+import {type TrajectoryData} from 'src/composables/use-trajectories';
 
 type CyclingPeriod = 'HOUR' | 'DAY' | 'MONTH' | 'COMPLETE';
 

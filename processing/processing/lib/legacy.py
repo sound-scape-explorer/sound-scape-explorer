@@ -1,7 +1,7 @@
 from typing import NamedTuple
 
 from processing.context import Context
-from processing.interfaces import AggregatedData
+from processing.interfaces import AggregationData
 from processing.common.FileTags import FileTags
 
 
@@ -16,7 +16,7 @@ class AggregatedDataLegacy(NamedTuple):
 #  after trajectory refactor
 def convert_aggregated_to_legacy_flat(
     context: Context,
-    all_aggregated: list[AggregatedData],
+    all_aggregated: list[AggregationData],
 ):
     timestamps: list[int] = []
     tag_names = FileTags.get_names(context)

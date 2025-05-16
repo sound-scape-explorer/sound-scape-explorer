@@ -18,7 +18,7 @@ import {type AggregatedIndex} from 'src/composables/use-storage-aggregated-acous
 import {
   type TrajectoryPath,
   type TrajectoryTimestamps,
-} from 'src/composables/use-trajectories-data';
+} from 'src/composables/use-trajectories';
 import {STRING_DELIMITER} from 'src/constants';
 
 let h5: H5File;

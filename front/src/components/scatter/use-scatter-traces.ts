@@ -2,7 +2,7 @@ import {type Data} from 'plotly.js-dist-min';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterFeatures} from 'src/components/scatter/use-scatter-features';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
-import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
+import {useTrajectories} from 'src/composables/use-trajectories';
 import {
   traceAverageTrajectory,
   traceTrajectories,
@@ -14,7 +14,7 @@ const isEnabled = ref<boolean>(false);
 
 export function useScatterTraces() {
   const {traceFeatures} = useScatterFeatures();
-  const {traceds, isFused} = useTrajectoriesData();
+  const {trajectories, isFused} = useTrajectories();
   const {generateColorScale: generate} = useScatterColorScale();
   const {scale: cyclingScale} = useColorsCycling();
 
@@ -23,17 +23,17 @@ export function useScatterTraces() {
     const newTraces = traceFeatures();
 
     // trajectories
-    if (traceds.value.length > 0) {
+    if (trajectories.value.length > 0) {
       if (isFused.value) {
         const averageTrace = traceAverageTrajectory(
-          traceds.value,
+          trajectories.value,
           cyclingScale.value,
         );
 
         newTraces.push(averageTrace);
       } else {
         const trajectories = traceTrajectories(
-          traceds.value,
+          trajectories.value,
           cyclingScale.value,
         );
 
@@ -47,7 +47,7 @@ export function useScatterTraces() {
   const reset = () => {
     traces.value = [];
     isFused.value = false;
-    traceds.value = [];
+    trajectories.value = [];
   };
 
   return {

@@ -1,12 +1,12 @@
 from collections import defaultdict
 
 from processing.constants import STRING_DELIMITER
-from processing.interfaces import AggregatedData, Interval
+from processing.interfaces import AggregationData, Interval
 
 
 class IntervalService:
     @staticmethod
-    def build_intervals(aggregations: list[AggregatedData]):
+    def build_intervals(aggregations: list[AggregationData]):
         intervals: list[Interval] = []
 
         for a, agg in enumerate(aggregations):

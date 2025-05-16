@@ -39,7 +39,7 @@ def _run_computation_reductions(context: Context):
         ):
             if context.config.settings.computation_strategy is ComputationStrategy.UMAP:
                 umap = UmapReducer(min_dist=0)
-                reduced = umap.reduce(
+                reductions = umap.reduce(
                     embeddings=embeddings,
                     dimensions=context.config.settings.computation_dimensions,
                     seed=None,
@@ -48,7 +48,7 @@ def _run_computation_reductions(context: Context):
                 context.config.settings.computation_strategy is ComputationStrategy.PCA
             ):
                 pca = PcaReducer()
-                reduced = pca.reduce(
+                reductions = pca.reduce(
                     embeddings=embeddings,
                     dimensions=context.config.settings.computation_dimensions,
                     seed=None,
@@ -57,7 +57,7 @@ def _run_computation_reductions(context: Context):
                 context.config.settings.computation_strategy
                 is ComputationStrategy.EMBEDDINGS
             ):
-                reduced = embeddings
+                reductions = embeddings
             else:
                 raise Exception("Invalid computation strategy")
 
@@ -67,7 +67,7 @@ def _run_computation_reductions(context: Context):
                 band=ai.band,
                 integration=ai.integration,
                 iteration=iteration,
-                data=reduced,
+                data=reductions,
             )
 
 
@@ -77,7 +77,7 @@ def _run_mean_distance_matrices(context: Context):
     MeanDistancesMatrixRepository.delete(context.storage)
 
     for ai in AggregationManager.iterate(context):
-        computed = ComputationRepository.from_storage(
+        computations = ComputationRepository.from_storage(
             context=context,
             extraction=ai.extraction,
             band=ai.band,
@@ -85,7 +85,7 @@ def _run_mean_distance_matrices(context: Context):
         )
 
         mdm = MeanDistancesMatrix.calculate(
-            features=computed,
+            embeddings=computations,
             settings=context.config.settings,
         )
 

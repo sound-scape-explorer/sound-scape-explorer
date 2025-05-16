@@ -17,14 +17,14 @@ def run_computations_export(context: Context):
     integration = prompt_integration(extraction)
     path = prompt_npy_path(context)
 
-    computed = ComputationRepository.from_storage(
+    computations = ComputationRepository.from_storage(
         context=context,
         extraction=extraction,
         band=band,
         integration=integration,
     )
 
-    unpacked = [np.array(d[:]) for d in computed]
+    unpacked = [np.array(d[:]) for d in computations]
     np.save(path, np.array(unpacked))
 
     print_action("Computations export completed!", "end")

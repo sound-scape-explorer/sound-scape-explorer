@@ -15,18 +15,18 @@ from processing.repositories.MeanDistancesMatrixRepository import (
 
 
 class ComputationPath(Enum):
-    COMPUTED = register_path(StorageDomain.computations)
+    COMPUTATIONS = register_path(StorageDomain.computations)
 
 
 class ComputationRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(ComputationPath.COMPUTED.value)
+        context.storage.delete(ComputationPath.COMPUTATIONS.value)
 
     @staticmethod
     def exists(context: Context):
         return context.storage.exists(
-            ComputationPath.COMPUTED.value
+            ComputationPath.COMPUTATIONS.value
         ) and context.storage.exists(MeanDistancesMatrixPath.MDM.value)
 
     @staticmethod
@@ -37,7 +37,7 @@ class ComputationRepository:
         iteration: int,
     ):
         return build_path(
-            ComputationPath.COMPUTED.value,
+            ComputationPath.COMPUTATIONS.value,
             extraction.index,
             band.index,
             integration.index,
@@ -67,13 +67,13 @@ class ComputationRepository:
         band: BandConfig,
         integration: IntegrationConfig,
     ):
-        all_computed: list[Dataset] = []
+        computations: list[Dataset] = []
 
         for iteration in range(context.config.settings.computation_iterations):
             path = ComputationRepository._get_path(
                 extraction, band, integration, iteration
             )
-            computed = context.storage.read(path)
-            all_computed.append(computed)
+            computation = context.storage.read(path)
+            computations.append(computation)
 
-        return all_computed
+        return computations

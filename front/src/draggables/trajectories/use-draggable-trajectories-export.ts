@@ -1,12 +1,12 @@
 import {Csv} from 'src/common/csv';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
-import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
+import {useTrajectories} from 'src/composables/use-trajectories';
 import {buildAverageTrajectory} from 'src/utils/trajectories';
 
 export function useDraggableTrajectoriesExport() {
   const {convertTimestampToIsoDate} = useDate();
-  const {traceds, isFused} = useTrajectoriesData();
+  const {trajectories, isFused} = useTrajectories();
   const {generate} = useExportName();
 
   const handleClick = () => {
@@ -18,13 +18,13 @@ export function useDraggableTrajectoriesExport() {
     csv.addColumn('z');
 
     if (isFused.value) {
-      const {data, traced} = buildAverageTrajectory(traceds.value);
+      const {data, trajectory} = buildAverageTrajectory(trajectories.value);
 
-      traced.path.forEach((_, index) => {
+      trajectory.path.forEach((_, index) => {
         csv.createRow();
         csv.addToCurrentRow('fused');
         csv.addToCurrentRow(
-          convertTimestampToIsoDate(traced.timestamps[index]),
+          convertTimestampToIsoDate(trajectory.timestamps[index]),
         );
         csv.addToCurrentRow(data.x[index].toString());
         csv.addToCurrentRow(data.y[index].toString());
@@ -33,12 +33,12 @@ export function useDraggableTrajectoriesExport() {
         }
       });
     } else {
-      for (const traced of traceds.value) {
-        traced.path.forEach((coordinates, index) => {
+      for (const trajectory of trajectories.value) {
+        trajectory.path.forEach((coordinates, index) => {
           csv.createRow();
-          csv.addToCurrentRow(traced.trajectory.name);
+          csv.addToCurrentRow(trajectory.trajectory.name);
           csv.addToCurrentRow(
-            convertTimestampToIsoDate(traced.timestamps[index]),
+            convertTimestampToIsoDate(trajectory.timestamps[index]),
           );
           csv.addToCurrentRow(coordinates[0].toString());
           csv.addToCurrentRow(coordinates[1].toString());

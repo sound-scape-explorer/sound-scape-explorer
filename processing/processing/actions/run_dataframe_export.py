@@ -26,7 +26,7 @@ def run_dataframe_export(context: Context):
     integration = prompt_integration(extraction)
     csv_path = prompt_csv_path(context)
 
-    all_aggregated = AggregationRepository.from_storage(
+    aggregations = AggregationRepository.from_storage(
         context=context,
         extraction=extraction,
         band=band,
@@ -41,7 +41,7 @@ def run_dataframe_export(context: Context):
     )
 
     # intervals
-    for i, agg in enumerate(all_aggregated):
+    for i, agg in enumerate(aggregations):
         raw["indices"].append(str(i))
         raw["timestamps"].append(convert_timestamp_to_date_string(agg.start))
 
@@ -55,9 +55,9 @@ def run_dataframe_export(context: Context):
     for tag in all_tags:
         raw[tag.name] = tag.values
 
-    # reduced embeddings
+    # reductions
     for ri in ReductionManager.iterate(extraction):
-        reduced = ReductionRepository.from_storage(
+        reductions = ReductionRepository.from_storage(
             context=context,
             extraction=ri.extraction,
             band=ri.band,
@@ -74,13 +74,13 @@ def run_dataframe_export(context: Context):
             ]
 
             key = "_".join(parts)
-            raw[key] = [embedding[d] for embedding in reduced]
+            raw[key] = [embeddings[d] for embeddings in reductions]
 
     # interval embeddings
-    for d in range(all_aggregated[0].embeddings.shape[0]):
+    for d in range(aggregations[0].embeddings.shape[0]):
         parts = [str(extraction.index), extraction.name, f"{d}"]
         key = "_".join(parts)
-        raw[key] = [agg.embeddings[d] for agg in all_aggregated]
+        raw[key] = [agg.embeddings[d] for agg in aggregations]
 
     df = DataFrame(raw)
     df.to_csv(csv_path, index=False)

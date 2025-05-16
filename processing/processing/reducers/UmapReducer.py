@@ -29,5 +29,5 @@ class UmapReducer(AbstractReducer):
         )
 
         scaled = robust_scale(embeddings)
-        reduced: np.ndarray = umap.fit_transform(scaled)  # type: ignore
-        return reduced
+        reductions: np.ndarray = umap.fit_transform(scaled)  # type: ignore
+        return reductions

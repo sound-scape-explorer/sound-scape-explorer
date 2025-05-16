@@ -11,7 +11,7 @@ import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {DraggableKey} from 'src/composables/use-draggables';
-import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
+import {useTrajectories} from 'src/composables/use-trajectories';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
 import {useDraggableTrajectoriesExport} from 'src/draggables/trajectories/use-draggable-trajectories-export';
@@ -20,7 +20,7 @@ import {watch} from 'vue';
 
 const {current, undo, redo, canUndo, canRedo, update} =
   useTrajectoriesSelection();
-const {isFused} = useTrajectoriesData();
+const {isFused} = useTrajectories();
 const {isLoading} = useScatterLoading();
 const {options, isFuseable} = useTrajectoriesOptions();
 const {handleClick} = useDraggableTrajectoriesExport();

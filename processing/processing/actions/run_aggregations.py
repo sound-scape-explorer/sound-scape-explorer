@@ -50,7 +50,7 @@ def run_aggregations(context: Context):
                         print_warning("skipping")
                         continue
 
-                    all_aggregated = timeline.aggregate(integration.duration)
+                    aggregates = timeline.aggregate(integration.duration)
 
                     AggregationRepository.to_storage(
                         context=context,
@@ -58,7 +58,7 @@ def run_aggregations(context: Context):
                         band=band,
                         integration=integration,
                         site=site,
-                        all_aggregated=all_aggregated,
+                        aggregates=aggregates,
                     )
 
     print_action("Aggregations completed!", "end")

@@ -24,14 +24,14 @@ def run_metrics(context: Context):
     for ai in AggregationManager.iterate(context):
         print_metrics(ai.extraction.metrics)
 
-        all_aggregated = AggregationRepository.from_storage(
+        aggregations = AggregationRepository.from_storage(
             context=context,
             extraction=ai.extraction,
             band=ai.band,
             integration=ai.integration,
         )
 
-        embeddings = np.stack([a.embeddings for a in all_aggregated])
+        embeddings = np.stack([a.embeddings for a in aggregations])
 
         aggregated_tags = AggregatedTagService.from_storage(
             context=context,

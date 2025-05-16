@@ -9,7 +9,7 @@ from processing.config.IntegrationConfig import IntegrationConfig
 from processing.constants import STRING_DELIMITER
 from processing.context import Context
 from processing.enums import StorageDomain
-from processing.interfaces import TimelineAggregated, AggregatedData
+from processing.interfaces import TimelineAggregate, AggregationData
 from processing.paths.path_registry import register_path, build_path
 from processing.services.SiteService import SiteWithFiles, SiteService
 
@@ -87,7 +87,7 @@ class AggregationRepository:
         band: BandConfig,
         integration: IntegrationConfig,
         site: SiteWithFiles,
-        all_aggregated: list[TimelineAggregated],
+        aggregates: list[TimelineAggregate],
     ):
         paths = AggregationRepository._get_paths(extraction, band, integration, site)
 
@@ -97,7 +97,7 @@ class AggregationRepository:
         all_file_relative_starts: list[str] = []
         all_extractor_indices: list[str] = []
 
-        for aggregated in all_aggregated:
+        for aggregated in aggregates:
             all_embeddings.append(aggregated.embeddings)
             all_timestamps.append(aggregated.start)
 
@@ -171,11 +171,11 @@ class AggregationRepository:
         band: BandConfig,
         integration: IntegrationConfig,
     ):
-        """Retrieves and rebuild aggregated data"""
+        """Retrieves and rebuild aggregation data objects"""
 
         storage = context.storage
         sites = SiteService.get_sites(context)
-        all_aggregated: list[AggregatedData] = []
+        aggregations: list[AggregationData] = []
 
         for site in sites:
             paths = AggregationRepository._get_paths(
@@ -204,7 +204,7 @@ class AggregationRepository:
                     extraction.extractors,
                 )
 
-                aggregated = AggregatedData(
+                aggregation = AggregationData(
                     embeddings=embeddings[i],
                     start=timestamps[i],
                     end=timestamps[i] + integration.duration,
@@ -212,6 +212,6 @@ class AggregationRepository:
                     extractors=list(extractors),
                 )
 
-                all_aggregated.append(aggregated)
+                aggregations.append(aggregation)
 
-        return all_aggregated
+        return aggregations

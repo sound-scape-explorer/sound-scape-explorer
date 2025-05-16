@@ -15,15 +15,15 @@ export interface TrajectoryData {
   timestamps: TrajectoryTimestamps;
 }
 
-const traceds = ref<TrajectoryData[]>([]);
+const trajectories = ref<TrajectoryData[]>([]);
 const isFused = ref<boolean>(false);
 
-export function useTrajectoriesData() {
+export function useTrajectories() {
   const {read} = useStorageReader();
   const {isReady} = useStorageReady();
   const {selected} = useTrajectoriesSelection();
 
-  const readTraced = async () => {
+  const readTrajectories = async () => {
     if (!isReady.value) {
       return;
     }
@@ -62,13 +62,13 @@ export function useTrajectoriesData() {
         ts.push(t);
       }
 
-      traceds.value = ts;
+      trajectories.value = ts;
     });
   };
 
   return {
-    traceds,
+    trajectories,
     isFused,
-    readTraced,
+    readTrajectories,
   };
 }

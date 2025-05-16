@@ -6,7 +6,7 @@ from rich.progress import Progress
 
 from processing.constants import STRING_DELIMITER
 from processing.context import Context
-from processing.interfaces import TimelineSlice, TimelineAggregated
+from processing.interfaces import TimelineSlice, TimelineAggregate
 from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ExtractionManager import ExtractedByExtractorIndex
 from processing.repositories.ExtractionRepository import ExtractionData
@@ -142,7 +142,7 @@ class Timeline:
     def aggregate(
         self,
         integration_ms: int,
-    ) -> list[TimelineAggregated]:
+    ) -> list[TimelineAggregate]:
         """
         Aggregate timeline data over specified time intervals.
 
@@ -162,7 +162,7 @@ class Timeline:
         )
 
         total_steps = (end_position - start_position) // integration_ms
-        all_aggregated: list[TimelineAggregated] = []
+        aggregates: list[TimelineAggregate] = []
 
         with Progress() as progress:
             task = progress.add_task(
@@ -187,20 +187,20 @@ class Timeline:
                         grouped_by_extractor
                     )
 
-                    aggregated = TimelineAggregated(
+                    aggregate = TimelineAggregate(
                         embeddings=embeddings,
                         slices=overlaps,
                         start=position,
                         end=interval_end,
                     )
 
-                    all_aggregated.append(aggregated)
+                    aggregates.append(aggregate)
 
                 position += integration_ms
                 step += 1
                 progress.update(task, completed=step)
 
-        return all_aggregated
+        return aggregates
 
     def _build_time_index(
         self,

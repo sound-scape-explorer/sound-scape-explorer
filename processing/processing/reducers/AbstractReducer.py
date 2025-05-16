@@ -18,14 +18,14 @@ class AbstractReducer(ABC):
             f" to {dimensions} dimensions."
         )
 
-        reduced = self._reduce(
+        reductions = self._reduce(
             embeddings,
             dimensions,
             seed,
         )
 
-        assert_shape(reduced, (embeddings.shape[0], dimensions))
-        return reduced
+        assert_shape(reductions, (embeddings.shape[0], dimensions))
+        return reductions
 
     @abstractmethod
     def _reduce(

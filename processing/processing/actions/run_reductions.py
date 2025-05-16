@@ -34,7 +34,7 @@ def run_reductions(context: Context):
                 for reducer in track(extraction.reducers):
                     r = ReducerFactory.create(reducer)
 
-                    reduced = r.reduce(
+                    reductions = r.reduce(
                         embeddings=embeddings,
                         dimensions=reducer.dimensions,
                         seed=context.config.settings.display_seed,
@@ -46,7 +46,7 @@ def run_reductions(context: Context):
                         band=band,
                         integration=integration,
                         reducer=reducer,
-                        reduced=reduced,
+                        reduced=reductions,
                     )
 
     print_action("Reductions completed!", "end")

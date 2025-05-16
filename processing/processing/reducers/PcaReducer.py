@@ -17,6 +17,5 @@ class PcaReducer(AbstractReducer):
         )
 
         scaled = scale(embeddings)
-        reduced = pca.fit_transform(scaled)
-
-        return reduced
+        reductions = pca.fit_transform(scaled)
+        return reductions

@@ -76,7 +76,6 @@ export function useRelativeTrajectoriesData() {
 
     const allTimestamps = selected.flatMap((rT) => rT.timestamps);
     const minTimestampAll = Math.min(...allTimestamps);
-    console.log(strategy.value);
 
     for (let i = 0; i < selected.length; i += 1) {
       const {trajectory, distances, timestamps, deciles} = selected[i];

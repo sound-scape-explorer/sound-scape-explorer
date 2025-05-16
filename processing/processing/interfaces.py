@@ -39,14 +39,14 @@ class TimelineSlice(NamedTuple):
     rend: int  # relative timestamp in ms (to file)
 
 
-class TimelineAggregated(NamedTuple):
+class TimelineAggregate(NamedTuple):
     embeddings: np.ndarray
     slices: list[TimelineSlice]
     start: int  # absolute timestamp in ms
     end: int  # absolute timestamp in ms
 
 
-class AggregatedData(NamedTuple):
+class AggregationData(NamedTuple):
     embeddings: np.ndarray
     start: int  # absolute timestamp in ms
     end: int  # absolute timestamp in ms
@@ -60,7 +60,7 @@ MetricData = dict[_MetricDataKey, npt.NDArray[np.float32]]
 
 class Interval(NamedTuple):
     i: int
-    aggregated: AggregatedData
+    aggregated: AggregationData
 
     joined_site: str  # joined sites if multiple files
     sites: list[str]
