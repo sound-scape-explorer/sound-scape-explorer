@@ -44,7 +44,7 @@ export function useDetails() {
     const interval = intervals.value[i];
 
     date.value = convertTimestampToDate(t);
-    labelValues.value = Object.values(interval.labels).flat(); // todo: ???
+    labelValues.value = Object.values(interval.tags).flat(); // todo: ???
     site.value = interval.sites.join(STRING_DELIMITER);
     windows.value = interval.windows;
 

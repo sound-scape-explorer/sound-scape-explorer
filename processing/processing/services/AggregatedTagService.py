@@ -6,12 +6,13 @@ from processing.config.IntegrationConfig import IntegrationConfig
 from processing.constants import AUTOCLUSTER_PREFIX
 from processing.context import Context
 from processing.lib.legacy import convert_aggregated_to_legacy_flat
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.repositories.AutoclusteredRepository import AutoclusteredRepository
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.AutoclusterRepository import AutoclusterRepository
 from processing.utils.get_uniques_sorted import get_uniques_sorted
 from processing.utils.get_uniques_unsorted import get_uniques_unsorted
 
 
+# todo: maybe remove me when `IntervalService` will be up and running
 class AggregatedTagService:
     @staticmethod
     def _read_flat(
@@ -22,7 +23,7 @@ class AggregatedTagService:
     ):
         names: list[str] = FileTags.get_names(context)
 
-        aggregated = AggregatedRepository.from_storage(
+        aggregated = AggregationRepository.from_storage(
             context=context,
             extraction=extraction,
             band=band,
@@ -33,7 +34,7 @@ class AggregatedTagService:
         values = legacy.tag_values
 
         for autocluster in reversed(extraction.autoclusters):
-            autoclustered = AutoclusteredRepository.from_storage(
+            autoclustered = AutoclusterRepository.from_storage(
                 context=context,
                 extraction=extraction,
                 band=band,

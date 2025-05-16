@@ -1,16 +1,18 @@
 from rich import print
 from rich.progress import track
 
-from processing.context import Context
-from processing.enums import ComputationStrategyEnum
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.managers.AggregationManager import AggregationManager
-from processing.repositories.ComputedRepository import ComputedRepository
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
-from processing.repositories.MeanDistancesMatrixRepository import MeanDistancesMatrixRepository
+from processing.context import Context
+from processing.enums import ComputationStrategy
+from processing.managers.AggregationManager import AggregationManager
 from processing.printers.print_action import print_action
-from processing.reducers.PcaReducerNew import PcaReducerNew
-from processing.reducers.UmapReducerNew import UmapReducerNew
+from processing.reducers.PcaReducer import PcaReducer
+from processing.reducers.UmapReducer import UmapReducer
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.ComputationRepository import ComputationRepository
+from processing.repositories.MeanDistancesMatrixRepository import (
+    MeanDistancesMatrixRepository,
+)
 from processing.validators.validate_aggregated import validate_aggregated
 
 
@@ -21,10 +23,10 @@ def _run_computation_reductions(context: Context):
         f" dimensions: {context.config.settings.computation_dimensions})"
     )
 
-    ComputedRepository.delete(context)
+    ComputationRepository.delete(context)
 
     for ai in AggregationManager.iterate(context):
-        embeddings = AggregatedRepository.from_storage_embeddings(
+        embeddings = AggregationRepository.from_storage_embeddings(
             context=context,
             extraction=ai.extraction,
             band=ai.band,
@@ -35,41 +37,37 @@ def _run_computation_reductions(context: Context):
             range(context.config.settings.computation_iterations),
             description=f"Band {ai.band.name}, integration {ai.integration.name}",
         ):
-            if (
-                context.config.settings.computation_strategy
-                is ComputationStrategyEnum.UMAP
+            if context.config.settings.computation_strategy is ComputationStrategy.UMAP:
+                umap = UmapReducer(min_dist=0)
+                reductions = umap.reduce(
+                    embeddings=embeddings,
+                    dimensions=context.config.settings.computation_dimensions,
+                    seed=None,
+                )
+            elif (
+                context.config.settings.computation_strategy is ComputationStrategy.PCA
             ):
-                umap = UmapReducerNew(min_dist=0)
-                reduced = umap.reduce(
+                pca = PcaReducer()
+                reductions = pca.reduce(
                     embeddings=embeddings,
                     dimensions=context.config.settings.computation_dimensions,
                     seed=None,
                 )
             elif (
                 context.config.settings.computation_strategy
-                is ComputationStrategyEnum.PCA
+                is ComputationStrategy.EMBEDDINGS
             ):
-                pca = PcaReducerNew()
-                reduced = pca.reduce(
-                    embeddings=embeddings,
-                    dimensions=context.config.settings.computation_dimensions,
-                    seed=None,
-                )
-            elif (
-                context.config.settings.computation_strategy
-                is ComputationStrategyEnum.EMBEDDINGS
-            ):
-                reduced = embeddings
+                reductions = embeddings
             else:
                 raise Exception("Invalid computation strategy")
 
-            ComputedRepository.to_storage(
+            ComputationRepository.to_storage(
                 context=context,
                 extraction=ai.extraction,
                 band=ai.band,
                 integration=ai.integration,
                 iteration=iteration,
-                data=reduced,
+                data=reductions,
             )
 
 
@@ -79,7 +77,7 @@ def _run_mean_distance_matrices(context: Context):
     MeanDistancesMatrixRepository.delete(context.storage)
 
     for ai in AggregationManager.iterate(context):
-        computed = ComputedRepository.from_storage(
+        computations = ComputationRepository.from_storage(
             context=context,
             extraction=ai.extraction,
             band=ai.band,
@@ -87,7 +85,7 @@ def _run_mean_distance_matrices(context: Context):
         )
 
         mdm = MeanDistancesMatrix.calculate(
-            features=computed,
+            embeddings=computations,
             settings=context.config.settings,
         )
 

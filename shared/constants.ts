@@ -1,8 +1,8 @@
 import {
-  AdiImplEnum,
-  ComputationStrategyEnum,
-  FrequencyScaleEnum,
-  StftWindowTypeEnum,
+  AdiImpl,
+  ComputationStrategy,
+  FrequencyScale,
+  StftWindowType,
 } from '@shared/enums';
 
 export const SITE_DEFAULT = '__ALL';
@@ -24,7 +24,7 @@ export const SAMPLE_RATE_DEFAULT = 44100;
 export const TIMELINE_ORIGIN_DEFAULT = '2001-01-01 00:00:01';
 export const AUDIO_HOST_DEFAULT = '';
 export const TIMEZONE_DEFAULT = '';
-export const COMPUTATION_STRATEGY_DEFAULT = ComputationStrategyEnum.enum.UMAP;
+export const COMPUTATION_STRATEGY_DEFAULT = ComputationStrategy.enum.UMAP;
 export const COMPUTATION_DIMENSIONS_DEFAULT = 3;
 export const COMPUTATION_ITERATIONS_DEFAULT = 10;
 export const DISPLAY_SEED_DEFAULT = 42000;
@@ -53,15 +53,15 @@ export const YAMNET_WINDOW_MS = 1000;
 export const MUSICCLASS_WINDOW_MS = 3000;
 
 export const SPECTRO_N_BANDS = 64;
-export const SPECTRO_SCALE: FrequencyScaleEnum = FrequencyScaleEnum.enum.LIN;
-export const SPECTRO_STFT_WINDOW_TYPE: StftWindowTypeEnum =
-  StftWindowTypeEnum.enum.HANN;
+export const SPECTRO_SCALE: FrequencyScale = FrequencyScale.enum.LIN;
+export const SPECTRO_STFT_WINDOW_TYPE: StftWindowType =
+  StftWindowType.enum.HANN;
 export const SPECTRO_STFT_WINDOW_MS = WINDOW_MS_DEFAULT;
 export const SPECTRO_STFT_OVERLAP_RATIO = 0.0;
 export const SPECTRO_DBFS_REF = 1.0;
 
 export const MPS_N_BANDS = 64;
-export const MPS_SCALE: FrequencyScaleEnum = FrequencyScaleEnum.enum.LIN;
+export const MPS_SCALE: FrequencyScale = FrequencyScale.enum.LIN;
 export const MPS_STFT_1_WINDOW_MS = 20;
 export const MPS_STFT_1_OVERLAP_RATIO = 0.95;
 export const MPS_STFT_2_WINDOW_MS = 100;
@@ -74,7 +74,7 @@ export const NDSI_BAND_ANTHRO: [number, number] = [0, 1000];
 
 export const ADI_BIN_STEP = 500;
 export const ADI_DB_THRESHOLD = -50;
-export const ADI_IMPL: AdiImplEnum = AdiImplEnum.enum.SHANNON;
+export const ADI_IMPL: AdiImpl = AdiImpl.enum.SHANNON;
 
 export const HT_FRAME_SIZE = 512;
 export const MED_FRAME_SIZE = 512;
@@ -87,3 +87,24 @@ export const LEQ_DIFF_PERCENTILE_A = 90;
 export const LEQ_DIFF_PERCENTILE_B = 10;
 
 export const UMAP_MIN_DIST = 0.1;
+
+export const SMOOTHING_WINDOW_PRESETS = {
+  '15_MIN': 15 * 60 * 1000, // 15 minutes
+  '30_MIN': 30 * 60 * 1000, // 30 minutes
+  'HOUR': 60 * 60 * 1000, // 1 hour
+  '3_HOURS': 3 * 60 * 60 * 1000, // 3 hours
+  '6_HOURS': 6 * 60 * 60 * 1000, // 6 hours
+  '12_HOURS': 12 * 60 * 60 * 1000, // 12 hours
+  'DAY': 24 * 60 * 60 * 1000, // 1 day
+  'WEEK': 7 * 24 * 60 * 60 * 1000, // 1 week
+  '2_WEEKS': 14 * 24 * 60 * 60 * 1000, // 2 weeks
+  'MONTH': 30 * 24 * 60 * 60 * 1000, // ~1 month (30 days)
+  'QUARTER': 91 * 24 * 60 * 60 * 1000, // ~3 months (91 days)
+  'YEAR': 365 * 24 * 60 * 60 * 1000, // ~1 year (365 days)
+};
+
+// For TypeScript safety, you can create a type
+export type SmoothingWindowPreset = keyof typeof SMOOTHING_WINDOW_PRESETS;
+export const SmoothingWindowPresets = Object.keys(
+  SMOOTHING_WINDOW_PRESETS,
+) as SmoothingWindowPreset[];

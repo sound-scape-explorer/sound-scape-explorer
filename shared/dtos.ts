@@ -1,15 +1,14 @@
 import {z} from 'zod';
 
 import {
-  AdiImplEnum,
-  AutoclusterImplEnum,
-  ComputationStrategyEnum,
-  ExtractorImplEnum,
-  FrequencyScaleEnum,
-  MetricImplEnum,
-  ReducerImplEnum,
-  StftWindowTypeEnum,
-  TrajectoryStepEnum,
+  AdiImpl,
+  AutoclusterImpl,
+  ComputationStrategy,
+  ExtractorImpl,
+  FrequencyScale,
+  MetricImpl,
+  ReducerImpl,
+  StftWindowType,
 } from './enums';
 
 const dateString = z.string().refine((str) => !isNaN(Date.parse(str)), {
@@ -33,7 +32,7 @@ export const SettingsDto = z.object({
   timelineOrigin: dateString,
   audioHost: z.string(),
   timezone: z.string(),
-  computationStrategy: ComputationStrategyEnum,
+  computationStrategy: ComputationStrategy,
   computationDimensions: z.number().int(),
   computationIterations: z.number().int(),
   displaySeed: z.number().int(),
@@ -61,19 +60,19 @@ export type IntegrationDto = z.infer<typeof IntegrationDto>;
 export const ExtractorDto = z.object({
   index: z.number().int(),
   name: z.string(), // unique
-  impl: ExtractorImplEnum,
+  impl: ExtractorImpl,
   window: z.number().int(), // ms
   hop: z.number().int(), // ms
 
   spectro_n_bands: z.number().int().optional(),
-  spectro_scale: FrequencyScaleEnum.optional(),
-  spectro_stft_window_type: StftWindowTypeEnum.optional(),
+  spectro_scale: FrequencyScale.optional(),
+  spectro_stft_window_type: StftWindowType.optional(),
   spectro_stft_window_ms: z.number().int().nullable().optional(),
   spectro_stft_overlap_ratio: z.number().optional(),
   spectro_dbfs_ref: z.number().optional(),
 
   mps_n_bands: z.number().int().optional(),
-  mps_scale: FrequencyScaleEnum.optional(),
+  mps_scale: FrequencyScale.optional(),
   mps_stft_1_window_ms: z.number().int().optional(),
   mps_stft_1_overlap_ratio: z.number().optional(),
   mps_stft_2_window_ms: z.number().int().optional(),
@@ -86,7 +85,7 @@ export const ExtractorDto = z.object({
 
   adi_bin_step: z.number().int().optional(),
   adi_db_threshold: z.number().int().optional(),
-  adi_impl: AdiImplEnum.optional(),
+  adi_impl: AdiImpl.optional(),
 
   ht_frame_size: z.number().int().optional(),
   med_frame_size: z.number().int().optional(),
@@ -103,7 +102,7 @@ export type ExtractorDto = z.infer<typeof ExtractorDto>;
 
 export const ReducerDto = z.object({
   index: z.number().int(),
-  impl: ReducerImplEnum,
+  impl: ReducerImpl,
   dimensions: z.number().int(),
 });
 
@@ -111,7 +110,7 @@ export type ReducerDto = z.infer<typeof ReducerDto>;
 
 export const AutoclusterDto = z.object({
   index: z.number().int(),
-  impl: AutoclusterImplEnum,
+  impl: AutoclusterImpl,
   minClusterSize: z.number(),
   minSamples: z.number(),
   alpha: z.number(),
@@ -122,7 +121,7 @@ export type AutoclusterDto = z.infer<typeof AutoclusterDto>;
 
 export const MetricDto = z.object({
   index: z.number().int(),
-  impl: MetricImplEnum,
+  impl: MetricImpl,
 });
 
 export type MetricDto = z.infer<typeof MetricDto>;
@@ -134,7 +133,7 @@ export const TrajectoryDto = z.object({
   end: dateString,
   tagName: z.string(),
   tagValue: z.string(),
-  step: TrajectoryStepEnum,
+  smoothingWindow: z.number().int().positive(),
 });
 
 export type TrajectoryDto = z.infer<typeof TrajectoryDto>;

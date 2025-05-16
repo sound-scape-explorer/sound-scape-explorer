@@ -1,145 +1,111 @@
-import numpy as np
-from rich.progress import track
-from sklearn.neighbors import NearestNeighbors
-
 from processing.context import Context
-from processing.lib.legacy import convert_aggregated_to_legacy_flat
+from processing.interfaces import TrajectoryData
 from processing.managers.ReductionManager import ReductionManager
 from processing.printers.print_action import print_action
-from processing.printers.print_packed_trajectories import print_packed_trajectories
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.repositories.ComputedRepository import ComputedRepository
-from processing.repositories.RelativeTracedRepository import RelativeTracedRepository
-from processing.utils.compute_relative_distances import compute_relative_distances
-from processing.utils.compute_starting_point import compute_starting_point
-from processing.utils.pack_trajectories import pack_trajectories
-from processing.utils.read_trajectory_path_and_relative_timestamps import (
-    read_trajectory_path_and_relative_timestamps,
+from processing.printers.print_trajectory_groups import print_trajectory_groups
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.ComputationRepository import ComputationRepository
+from processing.repositories.RelativeTrajectoryRepository import (
+    RelativeTrajectoryRepository,
 )
-from processing.utils.walk_packed_trajectories import walk_packed_trajectories
+from processing.services.IntervalService import IntervalService
+from processing.services.RelativeTrajectoryService import RelativeTrajectoryService
+from processing.services.TrajectoryService import TrajectoryService
+from processing.trajectories.SingleTrajectory import SingleTrajectory
 from processing.validators.validate_computations import validate_computations
 
 
 @validate_computations
 def run_relative_trajectories(context: Context):
-    print_action("Tracing relative trajectories started!", "start")
+    print_action("Relative trajectories started!", "start")
 
-    RelativeTracedRepository.delete(context)
-
-    knner = NearestNeighbors(n_neighbors=100)
+    RelativeTrajectoryRepository.delete(context)
 
     for ri in ReductionManager.iterate_all(context):
         trajectories = ri.extraction.trajectories
-        packs = pack_trajectories(trajectories)
-        print_packed_trajectories(packs)
+        groups = TrajectoryService.group_by_tags(trajectories)
+        print_trajectory_groups(groups)
 
-        all_aggregated = AggregatedRepository.from_storage(
+        aggregations = AggregationRepository.from_storage(
             context=context,
             extraction=ri.extraction,
             band=ri.band,
             integration=ri.integration,
         )
 
-        all_computed = ComputedRepository.from_storage(
+        intervals = IntervalService.build_intervals(aggregations)
+
+        computations = ComputationRepository.from_storage(
             context=context,
             extraction=ri.extraction,
             band=ri.band,
             integration=ri.integration,
         )
 
-        legacy = convert_aggregated_to_legacy_flat(context, all_aggregated)
+        for ti in TrajectoryService.iterate_groups(groups):
+            # all trajectories inside the iteration are now relating
+            # to the same pair of tag name and value
 
-        # a pack is a list of trajectories linked by the same label
-        for tag_name, tag_value, trajectories in walk_packed_trajectories(packs):
-            # TODO: Add typings
-            relative_distances_pack = []
-            relative_timestamps_pack = []
+            # prepare collections by trajectory to gather data from all computations
+            distances_by_trajectory = [[] for _ in ti.trajectories]
+            timestamps_by_trajectory = [[] for _ in ti.trajectories]
 
-            # building arrays to populate
-            for _ in enumerate(trajectories):
-                relative_distances_pack.append([])
-                relative_timestamps_pack.append([])
+            # loop over computations to get the end relative distances and timestamps
+            for computation in computations:
+                trajectory_data: list[TrajectoryData] = []
 
-            # iterating through computation UMAPs
-            for computed in track(
-                all_computed,
-                description=f"Tracing {tag_name}: {tag_value}",
-            ):
-                # TODO: Add typings
-                paths = []
-
-                # reading path for each trajectory because all are needed to compute
-                # the starting point
-                for t, trajectory in enumerate(trajectories):
-                    (
-                        path,
-                        relative_timestamps,
-                    ) = read_trajectory_path_and_relative_timestamps(
+                # iterate over trajectories within for that group
+                for trajectory in ti.trajectories:
+                    t = SingleTrajectory(
                         trajectory=trajectory,
-                        features=computed,
-                        timestamps=legacy.timestamps,
-                        all_tag_names=legacy.tag_names,
-                        all_tag_values=legacy.tag_values,
-                        tag_name=tag_name,
-                        tag_value=tag_value,
+                        embeddings=computation,
+                        intervals=intervals,
                     )
 
-                    paths.append(path)
-                    relative_timestamps_pack[t].append(relative_timestamps)
+                    data = t.run()
+                    trajectory_data.append(data)
 
-                starting_point = compute_starting_point(paths)
+                reference_point = RelativeTrajectoryService.compute_reference_point(
+                    trajectory_data=trajectory_data,
+                )
 
-                knner.fit(computed)
-                dknn, _ = knner.kneighbors(starting_point)
-                mean_distance = float(np.mean(dknn))
+                normalization_factor = (
+                    RelativeTrajectoryService.compute_normalization_factor(
+                        embeddings=computation,
+                        reference_point=reference_point,
+                    )
+                )
 
-                for t, _ in enumerate(trajectories):
-                    relative_distances = compute_relative_distances(
-                        path=paths[t],
-                        starting_point=starting_point,
-                        mean_distance=mean_distance,
+                for t, _ in enumerate(ti.trajectories):
+                    distances = RelativeTrajectoryService.compute_relative_distances(
+                        path=trajectory_data[t].path,
+                        reference_point=reference_point,
+                        normalization_factor=normalization_factor,
                     )
 
-                    relative_distances_pack[t].append(relative_distances)
+                    distances_by_trajectory[t].append(distances)
+                    timestamps_by_trajectory[t].append(trajectory_data[t].timestamps)
 
-            # median arrays and write to storage
-            for t, trajectory in enumerate(trajectories):
-                relative_distances_median: list[float] = np.median(
-                    relative_distances_pack[t],
-                    axis=0,
+            # we have now our collections filled for this particular group
+            # run the statistics for each trajectory
+            for t, trajectory in enumerate(ti.trajectories):
+                distances = distances_by_trajectory[t]
+                timestamps = timestamps_by_trajectory[t]
+
+                statistics = RelativeTrajectoryService.compute_statistics(
+                    distances=distances,
+                    timestamps=timestamps,
                 )
 
-                relative_timestamps_median: list[list[float]] = np.median(
-                    relative_timestamps_pack[t],
-                    axis=0,
-                )
-
-                # compute deciles for deviation display
-                lower_deciles: list[float] = np.percentile(
-                    relative_distances_pack[t],
-                    10,
-                    axis=0,
-                )
-
-                upper_deciles: list[float] = np.percentile(
-                    relative_distances_pack[t],
-                    90,
-                    axis=0,
-                )
-
-                RelativeTracedRepository.to_storage(
+                # store
+                RelativeTrajectoryRepository.to_storage(
                     context=context,
                     extraction=ri.extraction,
                     band=ri.band,
                     integration=ri.integration,
                     reducer=ri.reducer,
                     trajectory=trajectory,
-                    tag_name=tag_name,
-                    tag_value=tag_value,
-                    distance_medians=relative_distances_median,
-                    timestamp_medians=relative_timestamps_median,
-                    lower_deciles=lower_deciles,
-                    upper_deciles=upper_deciles,
+                    statistics=statistics,
                 )
 
-    print_action("Tracing relative trajectories completed!", "end")
+    print_action("Relative trajectories completed!", "end")

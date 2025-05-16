@@ -9,6 +9,16 @@ def read_duration(path: str) -> int:
     return milliseconds
 
 
+def load(path: str, sample_rate: int | None = None):
+    samples, sr = librosa.load(
+        path,
+        sr=sample_rate,
+        res_type="polyphase",
+    )
+
+    return samples, sr
+
+
 # TODO: could this leverage the builtin onload resampling of librosa?
 def load_resample_and_transpose(
     path: str,

@@ -15,8 +15,9 @@ from processing.constants import (
     WINDOW_MS,
     HOP_MS,
 )
-from processing.enums import FrequencyScaleEnum, StftWindowTypeEnum
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.enums import FrequencyScale, StftWindowType
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
+from processing.lib import audio
 from processing.lib.frequency import get_band_edges
 from processing.lib.numbers import clamp_number
 from processing.lib.shapes import assert_shape
@@ -33,8 +34,8 @@ class SpectrogramExtractor(Extractor):
         n_bands: int,
         window_ms: int = WINDOW_MS,
         hop_ms: int = HOP_MS,
-        scale: FrequencyScaleEnum = SPECTRO_SCALE,
-        stft_window_type: StftWindowTypeEnum = SPECTRO_STFT_WINDOW_TYPE,
+        scale: FrequencyScale = SPECTRO_SCALE,
+        stft_window_type: StftWindowType = SPECTRO_STFT_WINDOW_TYPE,
         stft_window_ms: Optional[int] = SPECTRO_STFT_WINDOW_MS,
         stft_overlap_ratio: float = SPECTRO_STFT_OVERLAP_RATIO,
         dbfs_ref: float = SPECTRO_DBFS_REF,
@@ -60,12 +61,7 @@ class SpectrogramExtractor(Extractor):
         )
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
-
+        samples, sample_rate = audio.load(path)
         stft_window_samples = int(self.stft_window_ms / 1000 * sample_rate)
         stft_hop_samples = int(stft_window_samples * (1 - self.stft_overlap_ratio))
         n_fft = stft_window_samples
@@ -123,7 +119,7 @@ class SpectrogramExtractor(Extractor):
         stack = np.stack(spectrums).astype(np.float32)
         assert_shape(stack, (len(starts), self.n_bands))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

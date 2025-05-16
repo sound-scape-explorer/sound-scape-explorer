@@ -3,12 +3,12 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.factories.ExtractorFactory import ExtractorFactory
 from processing.context import Context
 from processing.interfaces import ExtractionIteration
-from processing.repositories.ExtractedRepository import ExtractedRepository, ExtractedData
+from processing.repositories.ExtractionRepository import ExtractionRepository, ExtractionData
 from processing.services.SiteService import SiteWithFiles, SiteService
 
 
 _ExtractorIndex = int
-ExtractedByExtractorIndex = dict[_ExtractorIndex, list[ExtractedData]]
+ExtractedByExtractorIndex = dict[_ExtractorIndex, list[ExtractionData]]
 
 
 class ExtractionManager:
@@ -41,10 +41,10 @@ class ExtractionManager:
 
         for extractor in extraction.extractors:
 
-            all_extracted: list[ExtractedData] = []
+            all_extracted: list[ExtractionData] = []
 
             for file in site.files:
-                extracted = ExtractedRepository.from_storage(
+                extracted = ExtractionRepository.from_storage(
                     context=context,
                     extraction=extraction,
                     extractor=extractor,

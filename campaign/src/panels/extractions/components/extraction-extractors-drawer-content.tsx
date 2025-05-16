@@ -1,4 +1,4 @@
-import {ExtractorImplEnum} from '@shared/enums';
+import {ExtractorImpl} from '@shared/enums';
 import {DrawerContent} from 'src/primitives/drawer-content.tsx';
 import {Link} from 'src/primitives/link';
 
@@ -7,10 +7,10 @@ export function ExtractionExtractorsDrawerContent() {
     <DrawerContent
       content={[
         [
-          ExtractorImplEnum.enum.BIRDNET,
+          ExtractorImpl.enum.BIRDNET,
           <div
             className="flex column"
-            key={ExtractorImplEnum.enum.BIRDNET}
+            key={ExtractorImpl.enum.BIRDNET}
           >
             <span>AI-Powered Bird Sound Recognition.</span>
             <Link href="https://birdnet.cornell.edu/">Website</Link>
@@ -20,10 +20,10 @@ export function ExtractionExtractorsDrawerContent() {
           </div>,
         ],
         [
-          ExtractorImplEnum.enum.PERCH,
+          ExtractorImpl.enum.PERCH,
           <div
             className="flex column"
-            key={ExtractorImplEnum.enum.PERCH}
+            key={ExtractorImpl.enum.PERCH}
           >
             <span>
               Google Bird Vocalization Classifier: A global bird embedding and
@@ -35,10 +35,10 @@ export function ExtractionExtractorsDrawerContent() {
           </div>,
         ],
         [
-          ExtractorImplEnum.enum.SURF_PERCH,
+          ExtractorImpl.enum.SURF_PERCH,
           <div
             className="flex column"
-            key={ExtractorImplEnum.enum.SURF_PERCH}
+            key={ExtractorImpl.enum.SURF_PERCH}
           >
             <span>
               SurfPerch is a domain-adapted model for classification of sounds
@@ -50,10 +50,10 @@ export function ExtractionExtractorsDrawerContent() {
           </div>,
         ],
         [
-          ExtractorImplEnum.enum.VGGISH,
+          ExtractorImpl.enum.VGGISH,
           <div
             className="flex column"
-            key={ExtractorImplEnum.enum.VGGISH}
+            key={ExtractorImpl.enum.VGGISH}
           >
             <span>
               An audio event embedding model trained on the YouTube-8M dataset.
@@ -64,10 +64,10 @@ export function ExtractionExtractorsDrawerContent() {
           </div>,
         ],
         [
-          ExtractorImplEnum.enum.YAMNET,
+          ExtractorImpl.enum.YAMNET,
           <div
             className="flex column"
-            key={ExtractorImplEnum.enum.YAMNET}
+            key={ExtractorImpl.enum.YAMNET}
           >
             <span>
               An audio event classifier trained on the AudioSet dataset to
@@ -79,10 +79,10 @@ export function ExtractionExtractorsDrawerContent() {
           </div>,
         ],
         [
-          ExtractorImplEnum.enum.MUSIC_CLASS,
+          ExtractorImpl.enum.MUSIC_CLASS,
           <div
             className="flex column"
-            key={ExtractorImplEnum.enum.MUSIC_CLASS}
+            key={ExtractorImpl.enum.MUSIC_CLASS}
           >
             <span>
               Music genre classification system built on a convolutional neural
@@ -93,45 +93,36 @@ export function ExtractionExtractorsDrawerContent() {
             </Link>
           </div>,
         ],
-        [ExtractorImplEnum.enum.SPECTRUM, 'Spectrum'],
-        [ExtractorImplEnum.enum.SPECTROGRAM, 'Spectrograms'],
-        [ExtractorImplEnum.enum.MPS, 'Modulation Power Spectrums'],
+        [ExtractorImpl.enum.SPECTRUM, 'Spectrum'],
+        [ExtractorImpl.enum.SPECTROGRAM, 'Spectrograms'],
+        [ExtractorImpl.enum.MPS, 'Modulation Power Spectrums'],
         [
-          ExtractorImplEnum.enum.MFCC,
+          ExtractorImpl.enum.MFCC,
           'Mel-frequency cepstral coefficients (MFCCs)',
         ],
         [
-          ExtractorImplEnum.enum.NDSI,
+          ExtractorImpl.enum.NDSI,
           'Normalized Difference Soundscape Index from a power spectrogram',
         ],
-        [ExtractorImplEnum.enum.BI, 'Bioacoustics Index from a spectrogram'],
+        [ExtractorImpl.enum.BI, 'Bioacoustics Index from a spectrogram'],
+        [ExtractorImpl.enum.ADI, 'Acoustic Diversity Index from a spectrogram'],
         [
-          ExtractorImplEnum.enum.ADI,
-          'Acoustic Diversity Index from a spectrogram',
-        ],
-        [
-          ExtractorImplEnum.enum.HF,
+          ExtractorImpl.enum.HF,
           'Spectral entropy of a power spectral density (1d) or power spectrogram density (2d)',
         ],
+        [ExtractorImpl.enum.HT, 'Entropy of the envelope of an audio signal'],
+        [ExtractorImpl.enum.MED, 'Median of the envelope of an audio signal'],
         [
-          ExtractorImplEnum.enum.HT,
-          'Entropy of the envelope of an audio signal',
-        ],
-        [
-          ExtractorImplEnum.enum.MED,
-          'Median of the envelope of an audio signal',
-        ],
-        [
-          ExtractorImplEnum.enum.ACI,
+          ExtractorImpl.enum.ACI,
           'Acoustic Complexity Index from a spectrogram',
         ],
-        [ExtractorImplEnum.enum.LEQ, 'Equivalent Continuous Sound Level'],
+        [ExtractorImpl.enum.LEQ, 'Equivalent Continuous Sound Level'],
         [
-          ExtractorImplEnum.enum.LEQ_PERCENTILE,
+          ExtractorImpl.enum.LEQ_PERCENTILE,
           'Sound level exceeding a specified percentage',
         ],
         [
-          ExtractorImplEnum.enum.LEQ_DIFF,
+          ExtractorImpl.enum.LEQ_DIFF,
           'Calculation of the difference between Leq percentiles',
         ],
       ]}

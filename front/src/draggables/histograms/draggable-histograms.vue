@@ -2,24 +2,15 @@
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-histograms';
+import {DraggableKey} from 'src/composables/use-draggables';
+import {
+  HistogramFunction,
+  HistogramOver,
+  useDraggableHistograms,
+} from 'src/draggables/histograms/use-draggable-histograms';
 import {useDraggableHistogramsLifecycles} from 'src/draggables/histograms/use-draggable-histograms-lifecycles';
 
-const {
-  divRef,
-  names,
-  name,
-  overs,
-  over,
-  histogramFunctions,
-  histogramFunction,
-} = useDraggableHistograms();
-
-useRefProvide(InjectionKey.histogramsIndicatorName, name);
-useRefProvide(InjectionKey.histogramsOver, over);
-useRefProvide(InjectionKey.histogramsFunction, histogramFunction);
+const {divRef, names, name, over, fn} = useDraggableHistograms();
 
 useDraggableHistogramsLifecycles();
 </script>
@@ -27,12 +18,12 @@ useDraggableHistogramsLifecycles();
 <template>
   <AppDraggable
     :class="$style.container"
-    draggable-key="histograms"
+    :draggable-key="DraggableKey.enum.histograms"
   >
     <AppDraggableMenu>
       <h2>With</h2>
       <AppSelect
-        :injection-key="InjectionKey.histogramsIndicatorName"
+        v-model="name"
         :options="names ?? []"
         placeholder="Indicator..."
         size="small"
@@ -40,15 +31,15 @@ useDraggableHistogramsLifecycles();
 
       <h2>Over</h2>
       <AppSelect
-        :injection-key="InjectionKey.histogramsOver"
-        :options="overs"
+        v-model="over"
+        :options="HistogramOver.options"
         size="small"
       />
 
       <h2>Function</h2>
       <AppSelect
-        :injection-key="InjectionKey.histogramsFunction"
-        :options="histogramFunctions"
+        v-model="fn"
+        :options="HistogramFunction.options"
         size="small"
       />
     </AppDraggableMenu>

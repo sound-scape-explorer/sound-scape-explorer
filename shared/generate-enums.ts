@@ -8,7 +8,6 @@ type Enums = Record<string, string[]>;
 const enums: Enums = JSON.parse(readFileSync(ENUMS_FILE, 'utf8'));
 
 const ts: string[] = [];
-ts.push('/* eslint-disable */');
 ts.push("import {z} from 'zod';");
 ts.push('');
 
@@ -18,16 +17,14 @@ py.push('');
 py.push('');
 
 for (const [key, value] of Object.entries(enums)) {
-  const prefixed = `${key}Enum`;
-
   // typescript
-  ts.push(
-    `export const ${prefixed} = z.enum(${JSON.stringify(value)} as const);`,
-  );
-  ts.push(`export type ${prefixed} = z.infer<typeof ${prefixed}>;`);
+  ts.push(`export const ${key} = z.enum(${JSON.stringify(value)});`);
+  ts.push('// eslint-disable-next-line no-redeclare');
+  ts.push(`export type ${key} = z.infer<typeof ${key}>;`);
+  ts.push('');
 
   // python
-  py.push(`class ${prefixed}(Enum):`);
+  py.push(`class ${key}(Enum):`);
 
   for (const v of value) {
     py.push(`    ${v} = "${v}"`);

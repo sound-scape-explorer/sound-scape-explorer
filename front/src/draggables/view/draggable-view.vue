@@ -5,8 +5,7 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useRefProvide} from 'src/composables/use-ref-provide';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useSelectionLifecycles} from 'src/composables/use-selection-lifecycles';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
@@ -41,17 +40,11 @@ const reducerNames = computed(
 );
 
 useSelectionLifecycles();
-
-useRefProvide(InjectionKey.viewExtraction, extractionSlug);
-useRefProvide(InjectionKey.viewBand, bandSlug);
-useRefProvide(InjectionKey.viewIntegration, integrationSlug);
-useRefProvide(InjectionKey.viewReducer, reducerSlug);
-
 onMounted(autoselectDev);
 </script>
 
 <template>
-  <AppDraggable draggable-key="view">
+  <AppDraggable :draggable-key="DraggableKey.enum.view">
     <AppDraggableMenu
       :class="$style.menu"
       size="medium"
@@ -59,8 +52,8 @@ onMounted(autoselectDev);
       <h2>Extraction</h2>
 
       <AppSelect
+        v-model="extractionSlug"
         :disabled="hasView"
-        :injection-key="InjectionKey.viewExtraction"
         :options="extractionNames"
         placeholder="Extraction..."
         size="small"
@@ -69,8 +62,8 @@ onMounted(autoselectDev);
       <h2>Band</h2>
 
       <AppSelect
+        v-model="bandSlug"
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.viewBand"
         :options="bandNames"
         placeholder="Band..."
         size="small"
@@ -79,8 +72,8 @@ onMounted(autoselectDev);
       <h2>Integration</h2>
 
       <AppSelect
+        v-model="integrationSlug"
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.viewIntegration"
         :options="integrationNames"
         placeholder="Integration..."
         size="small"
@@ -89,8 +82,8 @@ onMounted(autoselectDev);
       <h2>Reducer</h2>
 
       <AppSelect
+        v-model="reducerSlug"
         :disabled="hasView || extraction === null"
-        :injection-key="InjectionKey.viewReducer"
         :options="reducerNames"
         placeholder="Reducer..."
         size="small"

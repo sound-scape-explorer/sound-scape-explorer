@@ -1,7 +1,7 @@
 import {type TrajectoryDto} from '@shared/dtos';
 import {useRefHistory} from '@vueuse/core';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
-import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
+import {useTrajectories} from 'src/composables/use-trajectories';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
@@ -17,10 +17,10 @@ export function useTrajectoriesSelection() {
   };
 
   const render = async () => {
-    const {readTraced} = useTrajectoriesData();
+    const {readTrajectories} = useTrajectories();
     const {renderTraces} = useScatterTraces();
 
-    await readTraced();
+    await readTrajectories();
     renderTraces();
   };
 

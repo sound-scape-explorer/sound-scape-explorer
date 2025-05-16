@@ -3,7 +3,7 @@ from keras import models, Model
 from librosa import feature
 
 from processing.constants import MUSICCLASS_WINDOW_MS
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
 from processing.lib.console import mute_console_output
 from processing.lib.shapes import assert_shape
@@ -71,7 +71,7 @@ class MusicClassifierExtractor(Extractor):
         embeddings = self.model.predict(stack)
         assert_shape(embeddings, (len(starts), 960))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=embeddings,
             starts=starts,
             ends=ends,

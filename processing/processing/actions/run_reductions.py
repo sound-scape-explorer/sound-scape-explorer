@@ -2,9 +2,10 @@ from rich import print
 from rich.progress import track
 
 from processing.context import Context
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.repositories.ReducedRepository import ReducedRepository
+from processing.factories.ReducerFactory import ReducerFactory
 from processing.printers.print_action import print_action
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.ReductionRepository import ReductionRepository
 from processing.validators.validate_aggregated import validate_aggregated
 
 
@@ -12,7 +13,7 @@ from processing.validators.validate_aggregated import validate_aggregated
 def run_reductions(context: Context):
     print_action("Reductions started!", "start")
 
-    ReducedRepository.delete(context)
+    ReductionRepository.delete(context)
 
     for extraction in context.config.extractions:
         for band in extraction.bands:
@@ -23,7 +24,7 @@ def run_reductions(context: Context):
                     f" Integration: [b]#{integration.index} {integration.name}[/b]."
                 )
 
-                embeddings = AggregatedRepository.from_storage_embeddings(
+                embeddings = AggregationRepository.from_storage_embeddings(
                     context,
                     extraction,
                     band,
@@ -31,21 +32,21 @@ def run_reductions(context: Context):
                 )
 
                 for reducer in track(extraction.reducers):
-                    r = reducer.create()
+                    r = ReducerFactory.create(reducer)
 
-                    reduced = r.reduce(
+                    reductions = r.reduce(
                         embeddings=embeddings,
                         dimensions=reducer.dimensions,
                         seed=context.config.settings.display_seed,
                     )
 
-                    ReducedRepository.to_storage(
+                    ReductionRepository.to_storage(
                         context=context,
                         extraction=extraction,
                         band=band,
                         integration=integration,
                         reducer=reducer,
-                        reduced=reduced,
+                        reduced=reductions,
                     )
 
     print_action("Reductions completed!", "end")

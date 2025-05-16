@@ -28,7 +28,7 @@ export function useAutoclustered() {
       const newAutoclustered: Autoclustered[] = [];
 
       for (const autocluster of autoclusters) {
-        const data = await worker.readAutoclustered(
+        const data = await worker.readAutoclusters(
           file,
           extraction.value.index,
           band.value.index,

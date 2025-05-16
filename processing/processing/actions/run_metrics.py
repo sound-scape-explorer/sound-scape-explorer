@@ -2,14 +2,16 @@ import numpy as np
 from rich.progress import track
 
 from processing.context import Context
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.services.AggregatedTagService import AggregatedTagService
-from processing.managers.AggregationManager import AggregationManager
-from processing.repositories.MeanDistancesMatrixRepository import MeanDistancesMatrixRepository
 from processing.factories.MetricFactory import MetricFactory
-from processing.repositories.MetricRepository import MetricRepository
+from processing.managers.AggregationManager import AggregationManager
 from processing.printers.print_action import print_action
 from processing.printers.print_metrics import print_metrics
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.MeanDistancesMatrixRepository import (
+    MeanDistancesMatrixRepository,
+)
+from processing.repositories.MetricRepository import MetricRepository
+from processing.services.AggregatedTagService import AggregatedTagService
 from processing.validators.validate_aggregated import validate_aggregated
 
 
@@ -22,14 +24,14 @@ def run_metrics(context: Context):
     for ai in AggregationManager.iterate(context):
         print_metrics(ai.extraction.metrics)
 
-        all_aggregated = AggregatedRepository.from_storage(
+        aggregations = AggregationRepository.from_storage(
             context=context,
             extraction=ai.extraction,
             band=ai.band,
             integration=ai.integration,
         )
 
-        embeddings = np.stack([a.embeddings for a in all_aggregated])
+        embeddings = np.stack([a.embeddings for a in aggregations])
 
         aggregated_tags = AggregatedTagService.from_storage(
             context=context,

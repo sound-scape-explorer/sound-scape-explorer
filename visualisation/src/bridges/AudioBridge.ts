@@ -11,6 +11,7 @@ import {FfprobeResolver} from '../resolvers/FfprobeResolver';
 import {NodeResolver} from '../resolvers/NodeResolver';
 
 export class AudioBridge {
+  // todo: rename to module path
   private static readonly servicePath = path.join(
     path.dirname(__dirname),
     '..',

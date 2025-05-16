@@ -28,7 +28,7 @@ export function useAggregated() {
         return;
       }
 
-      aggregated.value = await worker.readAggregated(
+      aggregated.value = await worker.readAggregations(
         file,
         extraction.value.index,
         band.value.index,

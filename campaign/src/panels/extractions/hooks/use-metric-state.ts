@@ -1,12 +1,10 @@
 import {type MetricDto} from '@shared/dtos.ts';
-import {MetricImplEnum} from '@shared/enums.ts';
+import {MetricImpl} from '@shared/enums.ts';
 import {useCallback, useMemo} from 'react';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
-export function useMetricState(extraction: ExtractionConfigWithId) {
+export function useMetricState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
 
   const metrics = useMemo(() => extraction.metrics, [extraction.metrics]);
@@ -14,7 +12,7 @@ export function useMetricState(extraction: ExtractionConfigWithId) {
   const addMetric = useCallback(() => {
     extraction.metrics.push({
       index: extraction.metrics.length,
-      impl: MetricImplEnum.enum.SILHOUETTE,
+      impl: MetricImpl.enum.SILHOUETTE,
     });
 
     updateExtraction(extraction);
@@ -57,7 +55,7 @@ export function useMetricState(extraction: ExtractionConfigWithId) {
   );
 
   const updateImpl = useCallback(
-    (metric: MetricDto, impl: MetricImplEnum) => {
+    (metric: MetricDto, impl: MetricImpl) => {
       metric.impl = impl;
       updateExtraction(extraction);
     },

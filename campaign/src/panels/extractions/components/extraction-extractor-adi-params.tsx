@@ -1,9 +1,9 @@
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
 import {ADI_BIN_STEP, ADI_DB_THRESHOLD, ADI_IMPL} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
-import {AdiImplEnum} from '@shared/enums';
+import {AdiImpl} from '@shared/enums';
 import clsx from 'clsx';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
 import {NumberInput} from 'src/primitives/number-input.tsx';
@@ -12,7 +12,7 @@ import {Select} from 'src/primitives/select.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
   extractor: ExtractorDto;
 }
 
@@ -48,7 +48,7 @@ export function ExtractionExtractorAdiParams({extraction, extractor}: Props) {
         />
 
         <Select
-          items={AdiImplEnum.options}
+          items={AdiImpl.options}
           current={extractor.adi_impl ?? ADI_IMPL}
           onSelect={(v) => updateAdiImpl(extractor, v)}
         />

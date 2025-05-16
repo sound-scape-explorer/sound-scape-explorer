@@ -34,7 +34,7 @@ export function useStorageReducedEmbeddings() {
         return;
       }
 
-      reducedEmbeddings.value = await worker.readReducedEmbeddings(
+      reducedEmbeddings.value = await worker.readReductions(
         file,
         extraction.value.index,
         reducer.value.index,

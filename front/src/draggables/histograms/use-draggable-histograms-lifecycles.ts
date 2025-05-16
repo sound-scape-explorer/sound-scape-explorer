@@ -3,8 +3,8 @@ import {useHistogramsRenderer} from 'src/draggables/histograms/use-histograms-re
 import {watch} from 'vue';
 
 export function useDraggableHistogramsLifecycles() {
-  const {name, over, histogramFunction} = useDraggableHistograms();
+  const {name, over, fn} = useDraggableHistograms();
   const {render} = useHistogramsRenderer();
 
-  watch([name, over, histogramFunction], render);
+  watch([name, over, fn], render);
 }

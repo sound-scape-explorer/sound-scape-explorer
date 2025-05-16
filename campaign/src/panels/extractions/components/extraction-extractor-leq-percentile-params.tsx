@@ -2,7 +2,7 @@ import {SectionCard} from '@blueprintjs/core/lib/esnext';
 import {LEQ_PERCENTILE_VALUE, LEQ_SHORT_DT} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import clsx from 'clsx';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
 import {NumberInput} from 'src/primitives/number-input.tsx';
@@ -10,7 +10,7 @@ import {NumberInput} from 'src/primitives/number-input.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
   extractor: ExtractorDto;
 }
 

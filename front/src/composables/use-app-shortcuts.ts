@@ -23,10 +23,6 @@ export function useAppShortcuts() {
   registerKey(Shortcuts.view, () => toggle('view'));
   registerKey(Shortcuts.colors, () => hasView.value && toggle('colors'));
   registerKey(Shortcuts.calendar, () => hasView.value && toggle('calendar'));
-  registerKey(
-    Shortcuts._alphaTimeline,
-    () => hasView.value && isAlphaPreview.value && toggle('_alphaTimeline'),
-  );
   registerKey(Shortcuts.labels, () => hasView.value && toggle('labels'));
   registerKey(Shortcuts.details, () => hasView.value && toggle('details'));
   registerKey(Shortcuts.audio, () => hasView.value && toggle('audio'));

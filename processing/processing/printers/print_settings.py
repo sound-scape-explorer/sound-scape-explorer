@@ -4,7 +4,7 @@ from rich.console import Console
 from rich.table import Table
 
 from processing.context import Context
-from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
+from processing.lib.time import convert_timestamp_to_date_string
 
 
 def print_settings(context: Context):
@@ -16,7 +16,7 @@ def print_settings(context: Context):
 
     for k, v in vars(context.config.settings).items():
         if k == "timeline_origin":
-            v = convert_timestamp_to_date(v)
+            v = convert_timestamp_to_date_string(v)
 
         if isinstance(v, Enum):
             v = v.name

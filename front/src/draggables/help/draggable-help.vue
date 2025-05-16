@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import AppGrid from 'src/app/app-grid.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import DraggableHelpLinks from 'src/draggables/help/draggable-help-links.vue';
 import DraggableHelpShortcuts from 'src/draggables/help/draggable-help-shortcuts.vue';
 import {VERSION} from 'src/version';
 </script>
 
 <template>
-  <AppDraggable draggable-key="help">
+  <AppDraggable :draggable-key="DraggableKey.enum.help">
     <div :class="$style.container">
       <AppGrid
         :columns="1"

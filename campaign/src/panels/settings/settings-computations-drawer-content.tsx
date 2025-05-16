@@ -1,4 +1,4 @@
-import {ComputationStrategyEnum} from '@shared/enums';
+import {ComputationStrategy} from '@shared/enums';
 import {DrawerContent} from 'src/primitives/drawer-content.tsx';
 
 export function SettingsComputationsDrawerContent() {
@@ -25,19 +25,19 @@ export function SettingsComputationsDrawerContent() {
         ],
         [
           <div key="umap">
-            <b>{ComputationStrategyEnum.enum.UMAP}</b> strategy
+            <b>{ComputationStrategy.enum.UMAP}</b> strategy
           </div>,
           'Reduce dimensions using UMAP.',
         ],
         [
           <div key="pca">
-            <b>{ComputationStrategyEnum.enum.PCA}</b> strategy
+            <b>{ComputationStrategy.enum.PCA}</b> strategy
           </div>,
           'Reduce dimensions using PCA.',
         ],
         [
           <div key="embeddings">
-            <b>{ComputationStrategyEnum.enum.EMBEDDINGS}</b> strategy
+            <b>{ComputationStrategy.enum.EMBEDDINGS}</b> strategy
           </div>,
           'Do not reduce dimensions and use embeddings from the extraction directly.',
         ],

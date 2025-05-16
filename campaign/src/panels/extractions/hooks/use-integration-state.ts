@@ -1,12 +1,10 @@
 import {INTEGRATION_DURATION} from '@shared/constants.ts';
 import {type IntegrationDto} from '@shared/dtos.ts';
 import {useCallback, useMemo} from 'react';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
-export function useIntegrationState(extraction: ExtractionConfigWithId) {
+export function useIntegrationState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
 
   const integrations = useMemo(

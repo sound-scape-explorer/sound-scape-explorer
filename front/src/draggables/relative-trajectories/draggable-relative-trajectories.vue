@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppPlot from 'src/app/plot/app-plot.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import DraggableRelativeTrajectoriesMenu from 'src/draggables/relative-trajectories/draggable-relative-trajectories-menu.vue';
 import DraggableRelativeTrajectoriesSidebar from 'src/draggables/relative-trajectories/draggable-relative-trajectories-sidebar.vue';
 import {useDraggableRelativeTrajectoriesExpand} from 'src/draggables/relative-trajectories/use-draggable-relative-trajectories-expand';
@@ -16,7 +17,7 @@ const {height} = useRelativeTrajectoriesPlotSize();
 <template>
   <AppDraggable
     :class="[$style.container, {[$style.expanded]: isExpanded}]"
-    draggable-key="relativeTrajectories"
+    :draggable-key="DraggableKey.enum.relativeTrajectories"
     suspense="view"
   >
     <DraggableRelativeTrajectoriesSidebar />
@@ -34,8 +35,8 @@ const {height} = useRelativeTrajectoriesPlotSize();
         hover-template="relative-trajectories"
         legend
         title="Relative Trajectories"
-        xTitle="Relative daytime"
-        yTitle="Relative distance from average starting point"
+        xTitle="Time of day"
+        yTitle="Relative distance"
       />
     </div>
   </AppDraggable>

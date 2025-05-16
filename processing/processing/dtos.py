@@ -29,15 +29,14 @@ from processing.constants import (
     MPS_SCALE,
 )
 from processing.enums import (
-    ExtractorImplEnum,
-    ReducerImplEnum,
-    AutoclusterImplEnum,
-    MetricImplEnum,
-    TrajectoryStepEnum,
-    AdiImplEnum,
-    FrequencyScaleEnum,
-    StftWindowTypeEnum,
-    ComputationStrategyEnum,
+    ExtractorImpl,
+    ReducerImpl,
+    AutoclusterImpl,
+    MetricImpl,
+    AdiImpl,
+    FrequencyScale,
+    StftWindowType,
+    ComputationStrategy,
 )
 
 
@@ -56,7 +55,7 @@ class SettingsDto(BaseModel):
     timelineOrigin: str
     audioHost: str
     timezone: str
-    computationStrategy: ComputationStrategyEnum
+    computationStrategy: ComputationStrategy
     computationDimensions: int
     computationIterations: int
     displaySeed: int
@@ -79,20 +78,20 @@ class IntegrationDto(BaseModel):
 class ExtractorDto(BaseModel):
     index: int
     name: str
-    impl: ExtractorImplEnum
+    impl: ExtractorImpl
 
     window: int
     hop: int
 
     spectro_n_bands: int = SPECTRO_N_BANDS
-    spectro_scale: FrequencyScaleEnum = SPECTRO_SCALE
-    spectro_stft_window_type: StftWindowTypeEnum = SPECTRO_STFT_WINDOW_TYPE
+    spectro_scale: FrequencyScale = SPECTRO_SCALE
+    spectro_stft_window_type: StftWindowType = SPECTRO_STFT_WINDOW_TYPE
     spectro_stft_window_ms: Optional[int] = SPECTRO_STFT_WINDOW_MS
     spectro_stft_overlap_ratio: float = SPECTRO_STFT_OVERLAP_RATIO
     spectro_dbfs_ref: float = SPECTRO_DBFS_REF
 
     mps_n_bands: int = MPS_N_BANDS
-    mps_scale: FrequencyScaleEnum = MPS_SCALE
+    mps_scale: FrequencyScale = MPS_SCALE
     mps_stft_1_window_ms: Optional[int] = MPS_STFT_1_WINDOW_MS
     mps_stft_1_overlap_ratio: float = MPS_STFT_1_OVERLAP_RATIO
     mps_stft_2_window_ms: Optional[int] = MPS_STFT_2_WINDOW_MS
@@ -105,7 +104,7 @@ class ExtractorDto(BaseModel):
 
     adi_bin_step: int = ADI_BIN_STEP
     adi_db_threshold: int = ADI_DB_THRESHOLD
-    adi_impl: AdiImplEnum = ADI_IMPL
+    adi_impl: AdiImpl = ADI_IMPL
 
     ht_frame_size: int = HT_FRAME_SIZE
     med_frame_size: int = MED_FRAME_SIZE
@@ -120,7 +119,7 @@ class ExtractorDto(BaseModel):
 
 class ReducerDto(BaseModel):
     index: int
-    impl: ReducerImplEnum
+    impl: ReducerImpl
     dimensions: int
 
 
@@ -133,7 +132,7 @@ class RangeDto(BaseModel):
 
 class AutoclusterDto(BaseModel):
     index: int
-    impl: AutoclusterImplEnum
+    impl: AutoclusterImpl
     minClusterSize: int
     minSamples: int
     alpha: float
@@ -142,7 +141,7 @@ class AutoclusterDto(BaseModel):
 
 class MetricDto(BaseModel):
     index: int
-    impl: MetricImplEnum
+    impl: MetricImpl
 
 
 class TrajectoryDto(BaseModel):
@@ -152,7 +151,7 @@ class TrajectoryDto(BaseModel):
     end: str
     tagName: str
     tagValue: str
-    step: TrajectoryStepEnum
+    smoothingWindow: int
 
 
 class ExtractionDto(BaseModel):

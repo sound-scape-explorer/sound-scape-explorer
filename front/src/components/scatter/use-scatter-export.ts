@@ -3,9 +3,9 @@ import {Csv} from 'src/common/csv';
 import {useAggregated} from 'src/composables/use-aggregated';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
-import {useLabelSets} from 'src/composables/use-label-sets';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
@@ -18,10 +18,10 @@ interface ExportData {
   aggregatedFeatures: number[];
 }
 
-// todo: update me
+// todo: update me!!!
 export function useScatterExport() {
   const {band, integration} = useViewSelectionNew();
-  const {sets} = useLabelSets();
+  const {allUniques} = useTagUniques();
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
   const {reducedEmbeddings} = useStorageReducedEmbeddings();
@@ -83,7 +83,7 @@ export function useScatterExport() {
     csv.addColumn('timestamp');
     csv.addColumn('site');
 
-    Object.keys(sets.value).forEach((property) => {
+    Object.keys(allUniques.value).forEach((property) => {
       csv.addColumn(`label_${property}`);
     });
 

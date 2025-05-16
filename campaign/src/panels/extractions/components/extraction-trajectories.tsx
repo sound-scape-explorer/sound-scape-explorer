@@ -7,12 +7,11 @@ import {
   CurvedRangeChart,
   Plus,
 } from '@blueprintjs/icons';
-import {ICON_SIZE} from '@shared/constants';
-import {TrajectoryStepEnum} from '@shared/enums';
+import {ICON_SIZE, SmoothingWindowPresets} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-trajectories.module.scss';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useTrajectoryState} from 'src/panels/extractions/hooks/use-trajectory-state.ts';
 import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging';
@@ -25,7 +24,7 @@ import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
 }
 
 export function ExtractionTrajectories({extraction}: Props) {
@@ -39,7 +38,7 @@ export function ExtractionTrajectories({extraction}: Props) {
     updateEnd,
     updateProperty,
     updateValue,
-    updateStep,
+    updateSmoothingWindowPreset,
   } = useTrajectoryState(extraction);
   const {getSlug} = useTrajectorySlug();
   const {
@@ -165,9 +164,9 @@ export function ExtractionTrajectories({extraction}: Props) {
             />
 
             <Select
-              items={TrajectoryStepEnum.options}
-              current={trajectory.step}
-              onSelect={(s) => updateStep(trajectory, s)}
+              items={SmoothingWindowPresets}
+              current={trajectory.smoothingWindowPreset}
+              onSelect={(s) => updateSmoothingWindowPreset(trajectory, s)}
               placeholder="step"
             />
           </SectionCard>

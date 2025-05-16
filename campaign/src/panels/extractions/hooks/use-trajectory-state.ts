@@ -1,14 +1,30 @@
-import {type TrajectoryDto} from '@shared/dtos.ts';
-import {TrajectoryStepEnum} from '@shared/enums.ts';
+import {
+  SMOOTHING_WINDOW_PRESETS,
+  type SmoothingWindowPreset,
+} from '@shared/constants.ts';
 import {addHours} from 'date-fns';
 import {useCallback, useMemo} from 'react';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {formatDateToString, getToday} from 'src/utils/dates.ts';
 
-export function useTrajectoryState(extraction: ExtractionConfigWithId) {
+// todo: reimplement me
+// const purgeLabelFromTrajectories = useCallback(
+//   (property: string) => {
+//     setTrajectories((prev) => {
+//       return prev.map((trajectory) => ({
+//         ...trajectory,
+//         labelProperty:
+//           trajectory.labelProperty === property
+//             ? undefined
+//             : trajectory.labelProperty,
+//       }));
+//     });
+//   },
+//   [setTrajectories],
+// );
+
+export function useTrajectoryState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
 
   const trajectories = useMemo(
@@ -24,14 +40,15 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
       end: formatDateToString(addHours(getToday(), 1)),
       tagName: '',
       tagValue: '',
-      step: TrajectoryStepEnum.enum.HOUR,
+      smoothingWindowPreset: 'HOUR',
+      smoothingWindow: SMOOTHING_WINDOW_PRESETS.HOUR,
     });
 
     updateExtraction(extraction);
   }, [extraction, updateExtraction]);
 
   const deleteTrajectory = useCallback(
-    (trajectory: TrajectoryDto) => {
+    (trajectory: TrajectoryConfig) => {
       const newTrajectories = extraction.trajectories.filter(
         (t) => t.index !== trajectory.index,
       );
@@ -45,7 +62,7 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
   );
 
   const updateIndex = useCallback(
-    (trajectory: TrajectoryDto, index: number) => {
+    (trajectory: TrajectoryConfig, index: number) => {
       const newTrajectories = [...extraction.trajectories];
       const newIndex = trajectory.index + index;
 
@@ -67,7 +84,7 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
   );
 
   const updateName = useCallback(
-    (trajectory: TrajectoryDto, name: string) => {
+    (trajectory: TrajectoryConfig, name: string) => {
       trajectory.name = name;
       updateExtraction(extraction);
     },
@@ -75,7 +92,7 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
   );
 
   const updateStart = useCallback(
-    (trajectory: TrajectoryDto, start: string) => {
+    (trajectory: TrajectoryConfig, start: string) => {
       trajectory.start = start;
       updateExtraction(extraction);
     },
@@ -83,7 +100,7 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
   );
 
   const updateEnd = useCallback(
-    (trajectory: TrajectoryDto, end: string) => {
+    (trajectory: TrajectoryConfig, end: string) => {
       trajectory.end = end;
       updateExtraction(extraction);
     },
@@ -91,7 +108,7 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
   );
 
   const updateProperty = useCallback(
-    (trajectory: TrajectoryDto, property: string) => {
+    (trajectory: TrajectoryConfig, property: string) => {
       trajectory.tagName = property;
       updateExtraction(extraction);
     },
@@ -99,16 +116,17 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
   );
 
   const updateValue = useCallback(
-    (trajectory: TrajectoryDto, value: string) => {
+    (trajectory: TrajectoryConfig, value: string) => {
       trajectory.tagValue = value;
       updateExtraction(extraction);
     },
     [extraction, updateExtraction],
   );
 
-  const updateStep = useCallback(
-    (trajectory: TrajectoryDto, step: TrajectoryStepEnum) => {
-      trajectory.step = step;
+  const updateSmoothingWindowPreset = useCallback(
+    (trajectory: TrajectoryConfig, preset: SmoothingWindowPreset) => {
+      trajectory.smoothingWindowPreset = preset;
+      trajectory.smoothingWindow = SMOOTHING_WINDOW_PRESETS[preset];
       updateExtraction(extraction);
     },
     [extraction, updateExtraction],
@@ -124,6 +142,6 @@ export function useTrajectoryState(extraction: ExtractionConfigWithId) {
     updateEnd,
     updateProperty,
     updateValue,
-    updateStep,
+    updateSmoothingWindowPreset,
   };
 }

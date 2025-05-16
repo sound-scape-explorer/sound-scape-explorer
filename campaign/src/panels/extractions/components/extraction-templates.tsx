@@ -1,4 +1,4 @@
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {
   TemplateKey,
   useExtractionTemplates,
@@ -6,7 +6,7 @@ import {
 import {Select} from 'src/primitives/select.tsx';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
 }
 
 export function ExtractionTemplates({extraction}: Props) {

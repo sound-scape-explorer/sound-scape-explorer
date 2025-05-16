@@ -37,6 +37,7 @@ export function useExport() {
     const files = getFiles();
     const filesDto: FileDto[] = [];
 
+    // build DTO files with tags dict
     for (const file of files) {
       const fileDto: FileDto = {
         Index: file.Index,
@@ -58,7 +59,7 @@ export function useExport() {
       filesDto.push(fileDto);
     }
 
-    const json: ConfigDto = {
+    const unvalidatedDto = {
       version: VERSION,
       settings,
       extractions,
@@ -66,14 +67,14 @@ export function useExport() {
       files: filesDto,
     };
 
-    const config = ConfigDto.parse(json);
-    return config;
+    const dto = ConfigDto.parse(unvalidatedDto);
+    return dto;
   }, [settings, extractions, ranges, getFiles]);
 
   const exportToJson = useCallback(() => {
-    const json = generate();
+    const dto = generate();
     const filename = settings.storagePath.replace('.h5', '.json');
-    download(json, filename);
+    download(dto, filename);
   }, [generate, download, settings]);
 
   return {

@@ -1,8 +1,8 @@
-import librosa
 import numpy as np
 from maad import sound, features
 
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
+from processing.lib import audio
 from processing.lib.shapes import assert_shape
 
 
@@ -21,12 +21,7 @@ class BiExtractor(Extractor):
         self.freq_high = freq_high
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
-
+        samples, sample_rate = audio.load(path)
         band = (self.freq_low, self.freq_high)
 
         bis = []
@@ -58,7 +53,7 @@ class BiExtractor(Extractor):
         stack = np.stack(bis).astype(np.float32)
         assert_shape(stack, (len(starts), 1))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

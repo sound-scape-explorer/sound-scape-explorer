@@ -3,7 +3,7 @@ import {useAggregated} from 'src/composables/use-aggregated';
 import {useAutoclustered} from 'src/composables/use-autoclustered';
 import {useConfig} from 'src/composables/use-config';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
-import {AUTOCLUSTER_AS_LABEL, SITE_AS_LABEL} from 'src/constants';
+import {AUTOCLUSTER_AS_TAG_NAME, SITE_AS_TAG_NAME} from 'src/constants';
 import {ref} from 'vue';
 
 interface Window {
@@ -28,9 +28,9 @@ interface Interval {
   sites: string[];
   files: FileDto[];
   windows: AggregatedWindow[]; // aggregated by files useful for reading the audio portion of the file
-  labels: {
-    // site + autocluster + tags
-    [key: string]: string[];
+  tags: {
+    // file site + autoclustering labels + file tags
+    [tagName: string]: string[];
   };
 }
 
@@ -115,7 +115,7 @@ export function useIntervals() {
         files: [...new Set(windows.map((w) => w.file))],
         sites: [...new Set(windows.map((w) => w.file.Site))],
         windows: [], // will populate after
-        labels: {}, // will populate after
+        tags: {}, // will populate after
       };
 
       // add windows while fusing by file to have the exact audio portion for each
@@ -137,47 +137,47 @@ export function useIntervals() {
         interval.windows.push(fileWindow);
       }
 
-      // add sites as interval labels
+      // add file sites as interval tags
       for (const file of interval.files) {
-        if (interval.labels[SITE_AS_LABEL] === undefined) {
-          interval.labels[SITE_AS_LABEL] = [];
+        if (interval.tags[SITE_AS_TAG_NAME] === undefined) {
+          interval.tags[SITE_AS_TAG_NAME] = [];
         }
 
-        if (interval.labels[SITE_AS_LABEL].includes(file.Site)) {
+        if (interval.tags[SITE_AS_TAG_NAME].includes(file.Site)) {
           continue;
         }
 
-        interval.labels[SITE_AS_LABEL].push(file.Site);
+        interval.tags[SITE_AS_TAG_NAME].push(file.Site);
       }
 
-      // add autocluster data as interval labels
+      // add autoclustering labels as interval tags
       for (const ac of autoclustered.value) {
-        const name = `${AUTOCLUSTER_AS_LABEL}_${ac.autocluster.index}`;
+        const name = `${AUTOCLUSTER_AS_TAG_NAME}_${ac.autocluster.index}`;
         const value = ac.data[i].toString();
 
-        if (interval.labels[name] === undefined) {
-          interval.labels[name] = [];
+        if (interval.tags[name] === undefined) {
+          interval.tags[name] = [];
         }
 
-        if (interval.labels[name].includes(value)) {
+        if (interval.tags[name].includes(value)) {
           continue;
         }
 
-        interval.labels[name].push(value);
+        interval.tags[name].push(value);
       }
 
-      // add file labels to interval labels
+      // add file tags to interval tags
       for (const file of interval.files) {
         for (const [tagName, tagValue] of Object.entries(file.tags)) {
-          if (interval.labels[tagName] === undefined) {
-            interval.labels[tagName] = [];
+          if (interval.tags[tagName] === undefined) {
+            interval.tags[tagName] = [];
           }
 
-          if (interval.labels[tagName].includes(tagValue)) {
+          if (interval.tags[tagName].includes(tagValue)) {
             continue;
           }
 
-          interval.labels[tagName].push(tagValue);
+          interval.tags[tagName].push(tagValue);
         }
       }
 

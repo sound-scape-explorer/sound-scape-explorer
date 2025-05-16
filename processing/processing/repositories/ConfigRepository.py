@@ -1,11 +1,12 @@
 from enum import Enum
 
 from processing.context import Context
-from processing.paths.path_registry import register_path
+from processing.enums import StorageDomain
+from processing.paths.PathRegistry import PathRegistry
 
 
 class ConfigPath(Enum):
-    DATA = register_path("configs")
+    DATA = PathRegistry.register(StorageDomain.config)
 
 
 class ConfigRepository:

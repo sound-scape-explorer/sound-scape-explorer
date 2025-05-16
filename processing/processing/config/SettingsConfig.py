@@ -1,7 +1,7 @@
 import os
 
 from processing.dtos import SettingsDto
-from processing.enums import ComputationStrategyEnum
+from processing.enums import ComputationStrategy
 from processing.lib.time import convert_date_string_to_timestamp
 
 
@@ -12,7 +12,7 @@ class SettingsConfig:
     timeline_origin: int  # unix
     audio_host: str
     timezone: str
-    computation_strategy: ComputationStrategyEnum
+    computation_strategy: ComputationStrategy
     computation_dimensions: int
     computation_iterations: int
     display_seed: int

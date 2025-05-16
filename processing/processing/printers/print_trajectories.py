@@ -2,7 +2,7 @@ from rich.console import Console
 from rich.table import Table
 
 from processing.config.TrajectoryConfig import TrajectoryConfig
-from processing.utils.convert_timestamp_to_date import convert_timestamp_to_date
+from processing.lib.time import convert_timestamp_to_date_string, format_milliseconds
 
 
 def print_trajectories(trajectories: list[TrajectoryConfig]):
@@ -14,16 +14,16 @@ def print_trajectories(trajectories: list[TrajectoryConfig]):
     table.add_column("end")
     table.add_column("tag name")
     table.add_column("tag value")
-    table.add_column("step (s)")
+    table.add_column("smoothing window")
 
     for trajectory in trajectories:
         table.add_row(
             trajectory.name,
-            convert_timestamp_to_date(trajectory.start),
-            convert_timestamp_to_date(trajectory.end),
+            convert_timestamp_to_date_string(trajectory.start),
+            convert_timestamp_to_date_string(trajectory.end),
             trajectory.tag_name,
             trajectory.tag_value,
-            str(trajectory.step),
+            format_milliseconds(trajectory.smoothing_window),
         )
 
     console.print(table)

@@ -8,7 +8,7 @@ from processing.lib.validation import (
 from processing.managers.ExtractionManager import ExtractionManager
 from processing.printers.print_action import print_action
 from processing.printers.print_warning import print_warning
-from processing.repositories.AggregatedRepository import AggregatedRepository
+from processing.repositories.AggregationRepository import AggregationRepository
 from processing.services.SiteService import SiteService
 from processing.validators.validate_extracted import validate_extracted
 
@@ -17,7 +17,7 @@ from processing.validators.validate_extracted import validate_extracted
 def run_aggregations(context: Context):
     print_action("Aggregations started!", "start")
 
-    AggregatedRepository.delete(context)
+    AggregationRepository.delete(context)
 
     sites = SiteService.get_sites(context)
     extractions = context.config.extractions
@@ -50,15 +50,15 @@ def run_aggregations(context: Context):
                         print_warning("skipping")
                         continue
 
-                    all_aggregated = timeline.aggregate(integration.duration)
+                    aggregates = timeline.aggregate(integration.duration)
 
-                    AggregatedRepository.to_storage(
+                    AggregationRepository.to_storage(
                         context=context,
                         extraction=extraction,
                         band=band,
                         integration=integration,
                         site=site,
-                        all_aggregated=all_aggregated,
+                        aggregates=aggregates,
                     )
 
     print_action("Aggregations completed!", "end")

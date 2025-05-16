@@ -2,6 +2,7 @@
 import {IonIcon} from '@ionic/vue';
 import {refreshOutline} from 'ionicons/icons';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 import DraggableAudioMenu from 'src/draggables/audio/draggable-audio-menu.vue';
 import DraggableAudioSidebar from 'src/draggables/audio/draggable-audio-sidebar.vue';
@@ -22,7 +23,7 @@ useAudioLifecycles();
 
 <template>
   <AppDraggable
-    draggable-key="audio"
+    :draggable-key="DraggableKey.enum.audio"
     suspense="scatterClick"
   >
     <div :class="[$style.loading, {[$style['loading-hidden']]: !isLoading}]">

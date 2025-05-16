@@ -8,7 +8,7 @@ from processing.lib.console import (
     print_footer,
 )
 from processing.managers.ExtractionManager import ExtractionManager
-from processing.repositories.ExtractedRepository import ExtractedRepository
+from processing.repositories.ExtractionRepository import ExtractionRepository
 
 
 def print_extractions(ei: ExtractionIteration, extraction_count: int):
@@ -31,7 +31,7 @@ def print_extractions(ei: ExtractionIteration, extraction_count: int):
 def run_extractions(context: Context):
     print_header("Extractions started")
 
-    ExtractedRepository.delete(context)
+    ExtractionRepository.delete(context)
 
     extraction_count = 0
     file_count = 0
@@ -47,8 +47,8 @@ def run_extractions(context: Context):
         ):
             file_count += 1
             raw = ei.ex.extract(file.absolute_path)
-            extracted = ExtractedRepository.from_raw(raw, file, ei.extractor)
-            ExtractedRepository.to_storage(
+            extracted = ExtractionRepository.from_raw(raw, file, ei.extractor)
+            ExtractionRepository.to_storage(
                 context=context,
                 extraction=ei.extraction,
                 extractor=ei.extractor,

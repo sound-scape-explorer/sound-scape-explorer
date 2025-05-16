@@ -4,7 +4,7 @@ import {ArrowDown, ArrowUp, Cross, NewLink, Plus} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useIntegrationSlug} from 'src/panels/extractions/hooks/use-integration-slug';
 import {useIntegrationState} from 'src/panels/extractions/hooks/use-integration-state.ts';
@@ -17,7 +17,7 @@ import {TextInput} from 'src/primitives/text-input.tsx';
 import styles from './config-integrations.module.scss';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
 }
 
 export function ExtractionIntegrations({extraction}: Props) {

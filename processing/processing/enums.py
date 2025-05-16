@@ -1,13 +1,51 @@
 from enum import Enum
 
 
-class ComputationStrategyEnum(Enum):
+class StorageDomain(Enum):
+    config = "config"
+    extractions = "extractions"
+    aggregations = "aggregations"
+    reductions = "reductions"
+    computations = "computations"
+    mean_distance_matrix = "mean_distance_matrix"
+    autoclusters = "autoclusters"
+    metrics = "metrics"
+    trajectories = "trajectories"
+    relative_trajectories = "relative_trajectories"
+
+
+class ExtractionStoragePath(Enum):
+    embeddings = "embeddings"
+    starts = "starts"
+    ends = "ends"
+
+
+class AggregationStoragePath(Enum):
+    embeddings = "embeddings"
+    timestamps = "timestamps"
+    file_indices = "file_indices"
+    file_relative_starts = "file_relative_starts"
+    extractor_indices = "extractor_indices"
+
+
+class TrajectoryStoragePath(Enum):
+    path = "path"
+    timestamps = "timestamps"
+
+
+class RelativeTrajectoryStoragePath(Enum):
+    distances = "distances"
+    timestamps = "timestamps"
+    deciles = "deciles"
+
+
+class ComputationStrategy(Enum):
     UMAP = "UMAP"
     PCA = "PCA"
     EMBEDDINGS = "EMBEDDINGS"
 
 
-class ExtractorImplEnum(Enum):
+class ExtractorImpl(Enum):
     BIRDNET = "BIRDNET"
     PERCH = "PERCH"
     SURF_PERCH = "SURF_PERCH"
@@ -30,17 +68,17 @@ class ExtractorImplEnum(Enum):
     LEQ_DIFF = "LEQ_DIFF"
 
 
-class AutoclusterImplEnum(Enum):
+class AutoclusterImpl(Enum):
     HDBSCAN_EOM = "HDBSCAN_EOM"
     HDBSCAN_LEAF = "HDBSCAN_LEAF"
 
 
-class ReducerImplEnum(Enum):
+class ReducerImpl(Enum):
     UMAP = "UMAP"
     PCA = "PCA"
 
 
-class MetricImplEnum(Enum):
+class MetricImpl(Enum):
     MEAN_STD = "MEAN_STD"
     MEAN_SPREADING = "MEAN_SPREADING"
     SILHOUETTE = "SILHOUETTE"
@@ -48,31 +86,25 @@ class MetricImplEnum(Enum):
     OVERLAP = "OVERLAP"
 
 
-class MetricTypeEnum(Enum):
+class MetricType(Enum):
     ONE_D = "ONE_D"
     TWO_D = "TWO_D"
     TWO_D_PAIRING = "TWO_D_PAIRING"
 
 
-class TrajectoryStepEnum(Enum):
-    HOUR = "HOUR"
-    DAY = "DAY"
-    MONTH = "MONTH"
-
-
-class StftWindowTypeEnum(Enum):
+class StftWindowType(Enum):
     HANN = "HANN"
     HAMMING = "HAMMING"
     BLACKMANHARRIS = "BLACKMANHARRIS"
 
 
-class FrequencyScaleEnum(Enum):
+class FrequencyScale(Enum):
     LIN = "LIN"
     LOG = "LOG"
     MEL = "MEL"
 
 
-class AdiImplEnum(Enum):
+class AdiImpl(Enum):
     SHANNON = "SHANNON"
     SIMPSON = "SIMPSON"
     INVSIMPSON = "INVSIMPSON"

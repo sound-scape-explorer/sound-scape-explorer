@@ -1,6 +1,6 @@
 from processing.config.BandConfig import BandConfig
 from processing.config.ExtractorConfig import ExtractorConfig
-from processing.enums import ExtractorImplEnum
+from processing.enums import ExtractorImpl
 from processing.extractors.AciExtractor import AciExtractor
 from processing.extractors.AdiExtractor import AdiExtractor
 from processing.extractors.BiExtractor import BiExtractor
@@ -28,43 +28,43 @@ class ExtractorFactory:
         extractor: ExtractorConfig,
         band: BandConfig,
     ):
-        if extractor.impl is ExtractorImplEnum.BIRDNET:
+        if extractor.impl is ExtractorImpl.BIRDNET:
             instance = BirdNetExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.PERCH:
+        elif extractor.impl is ExtractorImpl.PERCH:
             instance = PerchExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.SURF_PERCH:
+        elif extractor.impl is ExtractorImpl.SURF_PERCH:
             instance = SurfPerchExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.VGGISH:
+        elif extractor.impl is ExtractorImpl.VGGISH:
             instance = VggishExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.YAMNET:
+        elif extractor.impl is ExtractorImpl.YAMNET:
             instance = YamNetExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.MUSIC_CLASS:
+        elif extractor.impl is ExtractorImpl.MUSIC_CLASS:
             instance = MusicClassifierExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.SPECTRUM:
+        elif extractor.impl is ExtractorImpl.SPECTRUM:
             instance = SpectrogramExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -74,7 +74,7 @@ class ExtractorFactory:
                 scale=extractor.spectro_scale,
                 dbfs_ref=extractor.spectro_dbfs_ref,
             )
-        elif extractor.impl is ExtractorImplEnum.SPECTROGRAM:
+        elif extractor.impl is ExtractorImpl.SPECTROGRAM:
             instance = SpectrogramExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -87,7 +87,7 @@ class ExtractorFactory:
                 stft_window_ms=extractor.spectro_stft_window_ms,
                 stft_overlap_ratio=extractor.spectro_stft_overlap_ratio,
             )
-        elif extractor.impl is ExtractorImplEnum.MPS:
+        elif extractor.impl is ExtractorImpl.MPS:
             instance = MpsExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -100,7 +100,7 @@ class ExtractorFactory:
                 stft_2_window_ms=extractor.mps_stft_2_window_ms,
                 stft_2_overlap_ratio=extractor.mps_stft_2_overlap_ratio,
             )
-        elif extractor.impl is ExtractorImplEnum.MFCC:
+        elif extractor.impl is ExtractorImpl.MFCC:
             instance = MfccExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -112,7 +112,7 @@ class ExtractorFactory:
                 stft_window_ms=extractor.spectro_stft_window_ms,
                 stft_overlap_ratio=extractor.spectro_stft_overlap_ratio,
             )
-        elif extractor.impl is ExtractorImplEnum.NDSI:
+        elif extractor.impl is ExtractorImpl.NDSI:
             instance = NdsiExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -121,14 +121,14 @@ class ExtractorFactory:
                 band_bio=extractor.ndsi_band_bio,
                 band_anthro=extractor.ndsi_band_anthro,
             )
-        elif extractor.impl is ExtractorImplEnum.BI:
+        elif extractor.impl is ExtractorImpl.BI:
             instance = BiExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 window_ms=extractor.window,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.ADI:
+        elif extractor.impl is ExtractorImpl.ADI:
             instance = AdiExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -138,14 +138,14 @@ class ExtractorFactory:
                 db_threshold=extractor.adi_db_threshold,
                 index=extractor.adi_impl,
             )
-        elif extractor.impl is ExtractorImplEnum.HF:
+        elif extractor.impl is ExtractorImpl.HF:
             instance = HfExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 window_ms=extractor.window,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.HT:
+        elif extractor.impl is ExtractorImpl.HT:
             instance = HtExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -153,7 +153,7 @@ class ExtractorFactory:
                 hop_ms=extractor.hop,
                 frame_size=extractor.ht_frame_size,
             )
-        elif extractor.impl is ExtractorImplEnum.MED:
+        elif extractor.impl is ExtractorImpl.MED:
             instance = MedExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -161,21 +161,21 @@ class ExtractorFactory:
                 hop_ms=extractor.hop,
                 frame_size=extractor.med_frame_size,
             )
-        elif extractor.impl is ExtractorImplEnum.ACI:
+        elif extractor.impl is ExtractorImpl.ACI:
             instance = AciExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 window_ms=extractor.window,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.LEQ:
+        elif extractor.impl is ExtractorImpl.LEQ:
             instance = LeqExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
                 window_ms=extractor.window,
                 hop_ms=extractor.hop,
             )
-        elif extractor.impl is ExtractorImplEnum.LEQ_PERCENTILE:
+        elif extractor.impl is ExtractorImpl.LEQ_PERCENTILE:
             instance = LeqPercentileExtractor(
                 freq_low=band.low,
                 freq_high=band.high,
@@ -184,7 +184,7 @@ class ExtractorFactory:
                 dt=extractor.leq_percentile_dt,
                 percentile=extractor.leq_percentile_value,
             )
-        elif extractor.impl is ExtractorImplEnum.LEQ_DIFF:
+        elif extractor.impl is ExtractorImpl.LEQ_DIFF:
             instance = LeqDiffExtractor(
                 freq_low=band.low,
                 freq_high=band.high,

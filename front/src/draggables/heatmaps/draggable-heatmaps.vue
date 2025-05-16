@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useExportName} from 'src/composables/use-export-name';
 import DraggableHeatmapsMenu from 'src/draggables/heatmaps/draggable-heatmaps-menu.vue';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
@@ -21,7 +22,7 @@ useDraggableHeatmapsLifecycles();
 <template>
   <AppDraggable
     :class="$style.container"
-    draggable-key="heatmaps"
+    :draggable-key="DraggableKey.enum.heatmaps"
   >
     <DraggableHeatmapsMenu />
 

@@ -4,7 +4,7 @@ import numpy as np
 
 from processing.config.MetricConfig import MetricConfig
 from processing.constants import MDM_EMPTY
-from processing.enums import MetricImplEnum
+from processing.enums import MetricImpl
 from processing.metrics.ContingencyMetric import ContingencyMetric
 from processing.metrics.MeanDeviationMetric import MeanDeviationMetric
 from processing.metrics.MeanSpreadingMetric import MeanSpreadingMetric
@@ -23,22 +23,22 @@ class MetricFactory:
         tags: list[AggregatedTag],
         mdm: Optional[Mdm] = MDM_EMPTY,
     ) -> Metric:
-        if metric.impl is MetricImplEnum.MEAN_STD:
+        if metric.impl is MetricImpl.MEAN_STD:
             instance = MeanDeviationMetric(
                 embeddings=embeddings,
                 tags=tags,
             )
-        elif metric.impl is MetricImplEnum.MEAN_SPREADING:
+        elif metric.impl is MetricImpl.MEAN_SPREADING:
             instance = MeanSpreadingMetric(
                 embeddings=embeddings,
                 tags=tags,
             )
-        elif metric.impl is MetricImplEnum.CONTINGENCY:
+        elif metric.impl is MetricImpl.CONTINGENCY:
             instance = ContingencyMetric(
                 embeddings=embeddings,
                 tags=tags,
             )
-        elif metric.impl is MetricImplEnum.SILHOUETTE:
+        elif metric.impl is MetricImpl.SILHOUETTE:
             if mdm is None:
                 raise RuntimeError("Silhouette metric requires a distance matrix")
 
@@ -47,7 +47,7 @@ class MetricFactory:
                 tags=tags,
                 mdm=mdm,
             )
-        elif metric.impl is MetricImplEnum.OVERLAP:
+        elif metric.impl is MetricImpl.OVERLAP:
             instance = OverlapMetric(
                 embeddings=embeddings,
                 tags=tags,

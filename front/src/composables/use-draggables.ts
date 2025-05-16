@@ -1,43 +1,36 @@
 import {reactive, ref} from 'vue';
+import {z} from 'zod';
 
-export interface DraggablesStore {
-  _alphaSelection3d: boolean;
-  open: boolean;
-  settings: boolean;
-  help: boolean;
-  view: boolean;
-  colors: boolean;
-  calendar: boolean;
-  labels: boolean;
-  audio: boolean;
-  details: boolean;
-  trajectories: boolean;
-  relativeTrajectories: boolean;
-  temporal: boolean;
-  heatmaps: boolean;
-  histograms: boolean;
-}
+export const DraggableKey = z.enum([
+  'open',
+  'settings',
+  'help',
+  'view',
+  'colors',
+  'calendar',
+  'tags',
+  'audio',
+  'details',
+  'trajectories',
+  'relativeTrajectories',
+  'temporal',
+  'heatmaps',
+  'histograms',
+  '_alphaSelection3d',
+]);
 
-export type DraggableKey = keyof DraggablesStore;
+// eslint-disable-next-line no-redeclare
+export type DraggableKey = z.infer<typeof DraggableKey>;
 
-// draggable keys
-const store = reactive<DraggablesStore>({
-  open: false,
-  settings: false,
-  help: false,
-  view: false,
-  colors: false,
-  calendar: false,
-  labels: false,
-  audio: false,
-  details: false,
-  trajectories: false,
-  relativeTrajectories: false,
-  temporal: false,
-  heatmaps: false,
-  _alphaSelection3d: false,
-  histograms: false,
-});
+type DraggablesStore = {
+  [K in DraggableKey]: boolean;
+};
+
+const store = reactive<DraggablesStore>(
+  Object.fromEntries(
+    DraggableKey.options.map((key) => [key, false]),
+  ) as DraggablesStore,
+);
 
 const hidden = ref<boolean>(false);
 const stack = ref<DraggableKey[]>([]);

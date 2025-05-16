@@ -1,3 +1,4 @@
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {ExtractionAutoclusters} from 'src/panels/extractions/components/extraction-autoclusters.tsx';
 import {ExtractionBands} from 'src/panels/extractions/components/extraction-bands.tsx';
 import {ExtractionExtractors} from 'src/panels/extractions/components/extraction-extractors.tsx';
@@ -6,16 +7,13 @@ import {ExtractionMetrics} from 'src/panels/extractions/components/extraction-me
 import {ExtractionReducers} from 'src/panels/extractions/components/extraction-reducers.tsx';
 import {ExtractionTemplates} from 'src/panels/extractions/components/extraction-templates.tsx';
 import {ExtractionTrajectories} from 'src/panels/extractions/components/extraction-trajectories.tsx';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './extractions-tab.module.scss';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
 }
 
 export function ExtractionTab({extraction}: Props) {

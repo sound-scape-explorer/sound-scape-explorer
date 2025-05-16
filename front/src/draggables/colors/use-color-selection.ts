@@ -1,49 +1,36 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIndicators} from 'src/composables/use-indicators';
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
+import {ColorCategory, ColorCriteria} from 'src/constants';
 import {ref} from 'vue';
 
-type ColorCategory = 'Default' | 'Labels' | 'Indicators';
-type ColorCriteria =
-  | 'intervalIndex'
-  | 'by1h'
-  | 'by10min'
-  | 'isDay'
-  | 'cycleDay';
+// todo: rename me to tag and metric
+const labelCriterias = ref<string[]>([]);
+const indicatorCriterias = ref<string[]>([]);
 
-const defaultCriterias: ColorCriteria[] = [
-  'cycleDay',
-  'isDay',
-  'intervalIndex',
-  'by1h',
-  'by10min',
-];
-
-const labelCriterias = ref<ColorCriteria[]>([]);
-const indicatorCriterias = ref<ColorCriteria[]>([]);
-const criteria = ref<ColorCriteria>('cycleDay');
-const category = ref<ColorCategory>('Default');
-const criterias = ref<ColorCriteria[]>(defaultCriterias);
+const criterias = ref<string[]>(ColorCriteria.options);
+// a criteria can be either a builtin coloring key or a tag name (all kind)
+const criteria = ref<string>(ColorCriteria.enum.cycleDay);
 const criteriaIndex = ref<number>(-1);
 
-const categories = ref<ColorCategory[]>(['Default', 'Labels', 'Indicators']);
+const category = ref<ColorCategory>(ColorCategory.enum.DEFAULT);
 
 export function useColorSelection() {
-  const {sets} = useLabelSets();
+  const {allUniques} = useTagUniques();
   const {names} = useIndicators();
   const {colorsFlavor} = useClientSettings();
 
   const updateCriterias = () => {
     switch (category.value) {
-      case 'Default':
-        criterias.value = defaultCriterias;
+      case ColorCategory.enum.DEFAULT:
+        criterias.value = ColorCriteria.options;
         break;
 
-      case 'Labels':
+      case ColorCategory.enum.TAGS:
         criterias.value = labelCriterias.value;
         break;
 
-      case 'Indicators':
+      case ColorCategory.enum.METRICS:
         criterias.value = indicatorCriterias.value;
         break;
     }
@@ -54,7 +41,7 @@ export function useColorSelection() {
   };
 
   const updateLabelCriterias = () => {
-    labelCriterias.value = Object.keys(sets.value) as ColorCriteria[];
+    labelCriterias.value = Object.keys(allUniques.value);
   };
 
   const updateIndicatorCriterias = () => {
@@ -62,16 +49,16 @@ export function useColorSelection() {
       return;
     }
 
-    indicatorCriterias.value = names.value as ColorCriteria[];
+    indicatorCriterias.value = names.value;
   };
 
-  const handleLabelClick = (property: string) => {
-    if (category.value !== 'Labels') {
-      category.value = 'Labels';
+  const handleLabelClick = (tagName: string) => {
+    if (category.value !== ColorCategory.enum.TAGS) {
+      category.value = ColorCategory.enum.TAGS;
     }
 
-    if (criteria.value !== property) {
-      criteria.value = property as ColorCriteria;
+    if (criteria.value !== tagName) {
+      criteria.value = tagName;
     }
   };
 
@@ -83,7 +70,6 @@ export function useColorSelection() {
     criteriaIndex,
     updateCriteriaIndex,
     category,
-    categories,
     handleLabelClick,
     updateLabelCriterias,
     updateIndicatorCriterias,

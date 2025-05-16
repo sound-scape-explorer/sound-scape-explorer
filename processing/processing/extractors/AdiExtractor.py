@@ -1,10 +1,10 @@
-import librosa
 import numpy as np
 from maad import sound, features
 
 from processing.constants import ADI_IMPL
-from processing.enums import AdiImplEnum
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.enums import AdiImpl
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
+from processing.lib import audio
 from processing.lib.shapes import assert_shape
 
 
@@ -18,7 +18,7 @@ class AdiExtractor(Extractor):
         hop_ms: int | None = None,
         bin_step: int = 500,
         db_threshold: int = -50,
-        index: AdiImplEnum = ADI_IMPL,
+        index: AdiImpl = ADI_IMPL,
     ):
         super().__init__(window_ms=window_ms, hop_ms=hop_ms)
 
@@ -30,12 +30,7 @@ class AdiExtractor(Extractor):
         self.index = index
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
-
+        samples, sample_rate = audio.load(path)
         band = (self.freq_low, self.freq_high)
 
         adis = []
@@ -73,7 +68,7 @@ class AdiExtractor(Extractor):
         stack = np.stack(adis).astype(np.float32)
         assert_shape(stack, (len(starts), 1))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

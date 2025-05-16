@@ -8,12 +8,12 @@ import {
   Plus,
 } from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
-import {AutoclusterImplEnum} from '@shared/enums';
+import {AutoclusterImpl} from '@shared/enums';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-autoclusters.module.scss';
 import {useAutoclusterState} from 'src/panels/extractions/hooks/use-autocluster-state.ts';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useAutoclusterSlug} from 'src/panels/metrics/hooks/use-autocluster-slug';
 import {useAutoclustersValidation} from 'src/panels/metrics/hooks/use-autoclusters-validation';
@@ -23,7 +23,7 @@ import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
 }
 
 export function ExtractionAutoclusters({extraction}: Props) {
@@ -123,7 +123,7 @@ export function ExtractionAutoclusters({extraction}: Props) {
             <span>{autocluster.index}</span>
 
             <Select
-              items={AutoclusterImplEnum.options}
+              items={AutoclusterImpl.options}
               onSelect={(v) => updateImpl(autocluster, v)}
               current={autocluster.impl}
               placeholder="Select implementation"

@@ -1,4 +1,37 @@
 {
+  "StorageDomain": [
+    "config",
+    "extractions",
+    "aggregations",
+    "reductions",
+    "computations",
+    "mean_distance_matrix",
+    "autoclusters",
+    "metrics",
+    "trajectories",
+    "relative_trajectories"
+  ],
+  "ExtractionStoragePath": [
+    "embeddings",
+    "starts",
+    "ends"
+  ],
+  "AggregationStoragePath": [
+    "embeddings",
+    "timestamps",
+    "file_indices",
+    "file_relative_starts",
+    "extractor_indices"
+  ],
+  "TrajectoryStoragePath": [
+    "path",
+    "timestamps"
+  ],
+  "RelativeTrajectoryStoragePath": [
+    "distances",
+    "timestamps",
+    "deciles"
+  ],
   "ComputationStrategy": [
     "UMAP",
     "PCA",
@@ -45,11 +78,6 @@
     "ONE_D",
     "TWO_D",
     "TWO_D_PAIRING"
-  ],
-  "TrajectoryStep": [
-    "HOUR",
-    "DAY",
-    "MONTH"
   ],
   "StftWindowType": [
     "HANN",

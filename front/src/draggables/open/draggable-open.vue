@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {NButton} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useStorageFile} from 'src/composables/use-storage-file';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useThemeColors} from 'src/composables/use-theme-colors';
@@ -26,7 +27,7 @@ const handleChange = () => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="open">
+  <AppDraggable :draggable-key="DraggableKey.enum.open">
     <div :class="$style.container">
       <input
         ref="inputRef"

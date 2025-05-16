@@ -1,4 +1,3 @@
-import librosa
 import numpy as np
 from librosa import feature
 
@@ -9,8 +8,9 @@ from processing.constants import (
     WINDOW_MS,
     HOP_MS,
 )
-from processing.enums import StftWindowTypeEnum
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.enums import StftWindowType
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
+from processing.lib import audio
 from processing.lib.shapes import assert_shape
 
 
@@ -23,7 +23,7 @@ class MfccExtractor(Extractor):
         n_mfcc: int,
         window_ms: int = WINDOW_MS,
         hop_ms: int = HOP_MS,
-        stft_window_type: StftWindowTypeEnum = SPECTRO_STFT_WINDOW_TYPE,
+        stft_window_type: StftWindowType = SPECTRO_STFT_WINDOW_TYPE,
         stft_window_ms: int | None = SPECTRO_STFT_WINDOW_MS,
         stft_overlap_ratio: float = SPECTRO_STFT_OVERLAP_RATIO,
     ):
@@ -47,12 +47,7 @@ class MfccExtractor(Extractor):
             self.stft_overlap_ratio = stft_overlap_ratio
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
-
+        samples, sample_rate = audio.load(path)
         stft_window_samples = int(self.stft_window_ms / 1000 * sample_rate)
         stft_hop_samples = int(stft_window_samples * (1 - self.stft_overlap_ratio))
         n_fft = stft_window_samples + 1
@@ -87,7 +82,7 @@ class MfccExtractor(Extractor):
         stack = np.stack(mfccs).astype(np.float32)
         assert_shape(stack, (len(starts), self.n_mfcc * frames_per_block))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

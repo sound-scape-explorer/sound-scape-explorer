@@ -5,8 +5,9 @@ import {NButton, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {
   convertToNaiveSelectOptions,
   type NaiveSelectOption,
@@ -18,7 +19,7 @@ const {lock, unlock} = useGlobalKeyboard();
 const customProperty = ref<string>('');
 const existingProperty = ref<string>('');
 const custom = ref<string>('');
-const {sets} = useLabelSets();
+const {allUniques} = useTagUniques();
 const options = ref<NaiveSelectOption[]>([]);
 
 type Mode = 'existing' | 'custom';
@@ -39,8 +40,8 @@ const toggle = () => {
 };
 
 // TODO: fix me
-watch(sets, () => {
-  options.value = convertToNaiveSelectOptions(Object.keys(sets.value));
+watch(allUniques, () => {
+  options.value = convertToNaiveSelectOptions(Object.keys(allUniques.value));
 });
 
 // TODO: build editable copy of labels
@@ -49,7 +50,7 @@ watch(sets, () => {
 <template>
   <AppDraggable
     :class="$style['draggable-selection']"
-    draggable-key="_alphaSelection3d"
+    :draggable-key="DraggableKey.enum._alphaSelection3d"
   >
     <div :class="$style.buttons">
       <AppButton

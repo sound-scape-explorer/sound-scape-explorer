@@ -14,8 +14,9 @@ from processing.constants import (
     MPS_SCALE,
 )
 from processing.constants import WINDOW_MS, HOP_MS
-from processing.enums import FrequencyScaleEnum
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.enums import FrequencyScale
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
+from processing.lib import audio
 from processing.lib.frequency import get_band_edges
 from processing.lib.numbers import clamp_number
 from processing.lib.utils import use_or_default
@@ -41,7 +42,7 @@ class MpsExtractor(Extractor):
         n_bands: int,
         window_ms: int = WINDOW_MS,
         hop_ms: int = HOP_MS,
-        scale: FrequencyScaleEnum = MPS_SCALE,
+        scale: FrequencyScale = MPS_SCALE,
         stft_1_window_ms: Optional[int] = MPS_STFT_1_WINDOW_MS,
         stft_1_overlap_ratio: float = MPS_STFT_1_OVERLAP_RATIO,
         stft_2_window_ms: Optional[int] = MPS_STFT_2_WINDOW_MS,
@@ -134,11 +135,7 @@ class MpsExtractor(Extractor):
         return params
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
+        samples, sample_rate = audio.load(path)
 
         filtered = self._filter(
             samples=samples,
@@ -264,7 +261,7 @@ class MpsExtractor(Extractor):
 
         # todo: add shape assertion later
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

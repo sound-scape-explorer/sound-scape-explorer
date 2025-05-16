@@ -5,22 +5,23 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.MetricConfig import MetricConfig
 from processing.context import Context
+from processing.enums import StorageDomain
 from processing.metrics.Metric import MetricData
-from processing.paths.path_registry import register_path, build_path
+from processing.paths.PathRegistry import PathRegistry
 
 
 class MetricPath(Enum):
-    DATA = register_path("metric", "data")
+    METRICS = PathRegistry.register(StorageDomain.metrics)
 
 
 class MetricRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(MetricPath.DATA.value)
+        context.storage.delete(MetricPath.METRICS.value)
 
     @staticmethod
     def exists(context: Context):
-        return context.storage.exists(MetricPath.DATA.value)
+        return context.storage.exists(MetricPath.METRICS.value)
 
     @staticmethod
     def to_storage(
@@ -42,9 +43,17 @@ class MetricRepository:
             values = data[label_index]
 
             if isinstance(label_index, tuple):  # pairwise
-                path = build_path(MetricPath.DATA.value, *path_suffix, *label_index)
+                path = PathRegistry.build(
+                    MetricPath.METRICS.value,
+                    *path_suffix,
+                    *label_index,
+                )
             else:
-                path = build_path(MetricPath.DATA.value, *path_suffix, label_index)
+                path = PathRegistry.build(
+                    MetricPath.METRICS.value,
+                    *path_suffix,
+                    label_index,
+                )
 
             context.storage.write(
                 path=path,

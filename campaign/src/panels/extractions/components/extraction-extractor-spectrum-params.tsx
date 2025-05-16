@@ -5,9 +5,9 @@ import {
   SPECTRO_STFT_WINDOW_TYPE,
 } from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
-import {FrequencyScaleEnum, StftWindowTypeEnum} from '@shared/enums';
+import {FrequencyScale, StftWindowType} from '@shared/enums';
 import clsx from 'clsx';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
 import {NumberInput} from 'src/primitives/number-input.tsx';
@@ -16,7 +16,7 @@ import {Select} from 'src/primitives/select.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
   extractor: ExtractorDto;
 }
 
@@ -55,14 +55,14 @@ export function ExtractionExtractorSpectrumParams({
         />
 
         <Select
-          items={FrequencyScaleEnum.options}
+          items={FrequencyScale.options}
           current={extractor.spectro_scale ?? SPECTRO_SCALE}
           onSelect={(v) => updateSpectroScale(extractor, v)}
           size="small"
         />
 
         <Select
-          items={StftWindowTypeEnum.options}
+          items={StftWindowType.options}
           current={
             extractor.spectro_stft_window_type ?? SPECTRO_STFT_WINDOW_TYPE
           }

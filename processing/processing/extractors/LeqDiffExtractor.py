@@ -1,8 +1,8 @@
-import librosa
 import numpy as np
 
 from processing.constants import WINDOW_MS, HOP_MS
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
+from processing.lib import audio
 from processing.lib.leq import compute_leq_percentile
 from processing.lib.shapes import assert_shape
 
@@ -27,11 +27,7 @@ class LeqDiffExtractor(Extractor):
         self.dt = dt
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
+        samples, sample_rate = audio.load(path)
 
         filtered = self._filter(
             samples,
@@ -69,7 +65,7 @@ class LeqDiffExtractor(Extractor):
         stack = np.stack(leqs).astype(np.float32)
         assert_shape(stack, (len(starts), 1))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

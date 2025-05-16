@@ -1,9 +1,9 @@
-import librosa
 import numpy as np
 from maad import features
 
 from processing.constants import MED_FRAME_SIZE, HOP_MS, WINDOW_MS
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
+from processing.lib import audio
 from processing.lib.shapes import assert_shape
 
 
@@ -25,11 +25,7 @@ class MedExtractor(Extractor):
         self.frame_size = frame_size
 
     def extract(self, path):
-        samples, sample_rate = librosa.load(
-            path,
-            sr=None,
-            res_type="polyphase",
-        )
+        samples, sample_rate = audio.load(path)
 
         filtered = self._filter(
             samples,
@@ -56,7 +52,7 @@ class MedExtractor(Extractor):
         stack = np.stack(medians)
         assert_shape(stack, (len(starts), 1))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

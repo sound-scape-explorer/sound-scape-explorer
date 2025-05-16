@@ -3,8 +3,24 @@ import js from '@eslint/js';
 import vuePlugin from 'eslint-plugin-vue';
 import deMorgan from 'eslint-plugin-de-morgan';
 import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 import globals from 'globals';
 import {plugins, rules} from '../eslint.config.mjs';
+
+const tsRules = {
+  // typescript plugin
+  ...tsPlugin.rules.recommended,
+  'no-unused-vars': 'off',
+  '@typescript-eslint/no-unused-vars': [
+    'warn',
+    {
+      argsIgnorePattern:
+        '^(symbol|price|tag|since|limit|params|market|timeframe|api|path|code|currency|response|requestHeaders|requestBody|bidsKey|asksKey)',
+    },
+  ],
+  // 'no-redeclare': 'off',
+  // '@typescript-eslint/no-redeclare': 'error',
+};
 
 const vueRules = {
   'vue/component-name-in-template-casing': [
@@ -27,7 +43,8 @@ export default [
     files: ['**/*.{vue,ts,js}'],
     plugins: {
       ...plugins,
-      vue: vuePlugin,
+      '@typescript-eslint': tsPlugin,
+      'vue': vuePlugin,
     },
     languageOptions: {
       globals: {
@@ -43,6 +60,7 @@ export default [
     },
     rules: {
       ...rules,
+      ...tsRules,
       ...vueRules,
     },
   },

@@ -4,7 +4,6 @@ from processing.actions.run_aggregations import run_aggregations
 from processing.actions.run_autoclusters import run_autoclusters
 from processing.actions.run_computations import run_computations
 from processing.actions.run_computations_export import run_computations_export
-from processing.actions.run_computations_purge import run_computations_purge
 from processing.actions.run_dataframe_export import run_dataframe_export
 from processing.actions.run_extractions import (
     run_extractions,
@@ -12,7 +11,9 @@ from processing.actions.run_extractions import (
 from processing.actions.run_mdm_export import run_mdm_export
 from processing.actions.run_metrics import run_metrics
 from processing.actions.run_reductions import run_reductions
-from processing.actions.run_relative_trajectories import run_relative_trajectories
+from processing.actions.run_relative_trajectories import (
+    run_relative_trajectories,
+)
 from processing.actions.run_trajectories import run_trajectories
 from processing.common.MenuChoice import MenuChoice
 from processing.context import Context
@@ -59,9 +60,6 @@ def menu(config_path: str):
                 MenuChoice.RUN_TRAJECTORIES.value: lambda: run_trajectories(context),
                 MenuChoice.RUN_RELATIVE_TRAJECTORIES.value: lambda: (
                     run_relative_trajectories(context),
-                ),
-                MenuChoice.RUN_COMPUTATIONS_PURGE.value: lambda: (
-                    run_computations_purge(context),
                 ),
                 MenuChoice.RUN_DATAFRAME_EXPORT.value: lambda: (
                     run_dataframe_export(context),

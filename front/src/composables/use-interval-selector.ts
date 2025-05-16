@@ -1,7 +1,7 @@
 import {useRefHistory} from '@vueuse/core';
 import {useAggregated} from 'src/composables/use-aggregated';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useDraggables} from 'src/composables/use-draggables';
+import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {computed, ref} from 'vue';
 
@@ -24,11 +24,11 @@ export function useIntervalSelector() {
     currentIntervalIndex.value = index;
 
     if (isAudioAutoOpen.value) {
-      open('audio');
+      open(DraggableKey.enum.audio);
     }
 
     if (isDetailsAutoOpen.value) {
-      open('details');
+      open(DraggableKey.enum.details);
     }
   };
 

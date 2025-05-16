@@ -1,7 +1,6 @@
 import eslint from '@eslint/js';
 import json from '@eslint/json';
 import stylisticPlugin from '@stylistic/eslint-plugin';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
 import deMorgan from 'eslint-plugin-de-morgan';
 import importPlugin from 'eslint-plugin-import';
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
@@ -11,7 +10,6 @@ import tslint from 'typescript-eslint';
 export const plugins = {
   'import': importPlugin,
   'simple-import-sort': simpleImportSortPlugin,
-  '@typescript-eslint': tsPlugin,
   '@stylistic': stylisticPlugin,
 };
 
@@ -28,16 +26,6 @@ export const rules = {
   // simple-import-sort plugin
   'simple-import-sort/imports': 'error',
   'simple-import-sort/exports': 'error',
-  // typescript plugin
-  ...tsPlugin.rules.recommended,
-  'no-unused-vars': 'off',
-  '@typescript-eslint/no-unused-vars': [
-    'warn',
-    {
-      argsIgnorePattern:
-        '^(symbol|price|tag|since|limit|params|market|timeframe|api|path|code|currency|response|requestHeaders|requestBody|bidsKey|asksKey)',
-    },
-  ],
   // stylistic js plugin
   '@stylistic/semi': ['error', 'always'],
   '@stylistic/quote-props': ['error', 'consistent'],

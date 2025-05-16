@@ -11,7 +11,7 @@ from processing.extractors.Extractor import Extractor
 from processing.services.SiteService import SiteWithFiles
 
 
-class ExtractedData(NamedTuple):
+class ExtractionData(NamedTuple):
     file: FileConfig
     extractor: ExtractorConfig
     embeddings: np.ndarray
@@ -39,14 +39,14 @@ class TimelineSlice(NamedTuple):
     rend: int  # relative timestamp in ms (to file)
 
 
-class TimelineAggregated(NamedTuple):
+class TimelineAggregate(NamedTuple):
     embeddings: np.ndarray
     slices: list[TimelineSlice]
     start: int  # absolute timestamp in ms
     end: int  # absolute timestamp in ms
 
 
-class AggregatedData(NamedTuple):
+class AggregationData(NamedTuple):
     embeddings: np.ndarray
     start: int  # absolute timestamp in ms
     end: int  # absolute timestamp in ms
@@ -56,3 +56,31 @@ class AggregatedData(NamedTuple):
 
 _MetricDataKey = str | tuple[str, str]
 MetricData = dict[_MetricDataKey, npt.NDArray[np.float32]]
+
+
+class Interval(NamedTuple):
+    i: int
+    aggregated: AggregationData
+
+    joined_site: str  # joined sites if multiple files
+    sites: list[str]
+
+    # joined tags are a bit different than tags
+    # object keys are tag names
+    # object values are the tag uniques
+    # the tag uniques are concatenated tag values
+    # (this joined string occurs when multiple files populate the same interval)
+    joined_tags: dict[str, str]
+    tags: dict[str, list[str]]
+
+
+class TrajectoryData(NamedTuple):
+    path: np.ndarray
+    timestamps: np.ndarray
+
+
+class TrajectoryStatistics(NamedTuple):
+    median_distances: np.ndarray
+    median_timestamps: np.ndarray
+    lower_deciles: np.ndarray
+    upper_deciles: np.ndarray

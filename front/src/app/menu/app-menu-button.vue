@@ -5,10 +5,11 @@ import {useAppMenuButton} from 'src/app/menu/use-app-menu-button';
 import {type DraggableKey} from 'src/composables/use-draggables';
 import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
 import {useThemeColors} from 'src/composables/use-theme-colors';
+import {capitalizeFirstLetter} from 'src/utils/strings';
 
 export interface AppMenuItemProps {
   draggableKey: DraggableKey;
-  text: string;
+  text?: string;
   disabled?: boolean;
 }
 
@@ -17,6 +18,7 @@ const {button, handleClick, isActive, isSelected, isHidden} =
   useAppMenuButton(props);
 const {getKey} = useKeyboardShortcuts();
 const {colors} = useThemeColors();
+const text = props.text ?? capitalizeFirstLetter(props.draggableKey);
 </script>
 
 <template>
@@ -43,7 +45,7 @@ const {colors} = useThemeColors();
     </template>
 
     <template #tooltip>
-      {{ props.text }} [<span :class="$style.bold">
+      {{ text }} [<span :class="$style.bold">
         {{ getKey(props.draggableKey) }}</span
       >]
     </template>

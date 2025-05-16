@@ -1,12 +1,10 @@
-import {HeatmapScale} from 'src/common/heatmap-scale';
+import {HeatmapScale} from 'src/constants';
 import {ref} from 'vue';
 
-const flavors: HeatmapScale[] = [HeatmapScale.RdBu, HeatmapScale.Blues];
-const flavor = ref<HeatmapScale>(HeatmapScale.RdBu);
+const flavor = ref<HeatmapScale>(HeatmapScale.enum.RdBu);
 
 export function useDraggableHeatmapsColor() {
   return {
     flavor,
-    flavors,
   };
 }

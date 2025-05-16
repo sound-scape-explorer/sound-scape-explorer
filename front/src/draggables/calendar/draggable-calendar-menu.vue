@@ -10,9 +10,7 @@ import {NButtonGroup} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
 import {printPrettySeconds} from 'src/utils/time';
@@ -25,8 +23,6 @@ const {duration} = useTimelineRange();
 const {setWindowDuration, skipTimeForward, skipTimeBackward, handleToggle} =
   useDraggableCalendarTransport();
 
-useRefProvide(InjectionKey.calendarActive, isActive);
-
 const seconds = computed(() => Number((duration.value / 1000).toFixed()));
 </script>
 
@@ -35,7 +31,7 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
     <span>Filtering</span>
     <div :class="$style['first-row']">
       <AppSwitch
-        :injection-key="InjectionKey.calendarActive"
+        v-model="isActive"
         checked="Yes"
         native
         unchecked="No"

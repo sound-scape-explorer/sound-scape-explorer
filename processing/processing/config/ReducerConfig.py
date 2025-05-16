@@ -1,16 +1,13 @@
 from dataclasses import dataclass
 
 from processing.dtos import ReducerDto
-from processing.enums import ReducerImplEnum
-from processing.reducers.AbstractReducerNew import AbstractReducerNew
-from processing.reducers.PcaReducerNew import PcaReducerNew
-from processing.reducers.UmapReducerNew import UmapReducerNew
+from processing.enums import ReducerImpl
 
 
 @dataclass
 class ReducerConfig:
     index: int
-    impl: ReducerImplEnum
+    impl: ReducerImpl
     dimensions: int
 
     @classmethod
@@ -23,11 +20,3 @@ class ReducerConfig:
             impl=dto.impl,
             dimensions=dto.dimensions,
         )
-
-    def create(self) -> AbstractReducerNew:
-        if self.impl is ReducerImplEnum.UMAP:
-            return UmapReducerNew()
-        elif self.impl is ReducerImplEnum.PCA:
-            return PcaReducerNew()
-        else:
-            raise Exception(f"Unknown reducer implementation: {self.impl}")

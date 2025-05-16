@@ -3,10 +3,11 @@ import {SectionCard} from '@blueprintjs/core/lib/esnext';
 import {ArrowDown, ArrowUp, Cog, Cross} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
-import {ExtractorImplEnum} from '@shared/enums';
+import {ExtractorImpl} from '@shared/enums';
 import clsx from 'clsx';
 import {useEffect, useMemo, useState} from 'react';
 import {useTheme} from 'src/hooks/use-theme';
+import {type ExtractionConfig} from 'src/interfaces.ts';
 import {ExtractionExtractorAdiParams} from 'src/panels/extractions/components/extraction-extractor-adi-params.tsx';
 import {ExtractionExtractorHtParams} from 'src/panels/extractions/components/extraction-extractor-ht-params.tsx';
 import {ExtractionExtractorLeqDiffParams} from 'src/panels/extractions/components/extraction-extractor-leq-diff-params.tsx';
@@ -17,7 +18,6 @@ import {ExtractionExtractorMpsParams} from 'src/panels/extractions/components/ex
 import {ExtractionExtractorNdsiParams} from 'src/panels/extractions/components/extraction-extractor-ndsi-params.tsx';
 import {ExtractionExtractorSpectrogramParams} from 'src/panels/extractions/components/extraction-extractor-spectrogram-params.tsx';
 import {ExtractionExtractorSpectrumParams} from 'src/panels/extractions/components/extraction-extractor-spectrum-params.tsx';
-import {type ExtractionConfigWithId} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
@@ -29,30 +29,30 @@ import {TextInput} from 'src/primitives/text-input.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfigWithId;
+  extraction: ExtractionConfig;
   extractor: ExtractorDto;
 }
 
-const EXTRACTORS_LOCKED: ExtractorImplEnum[] = [
-  ExtractorImplEnum.enum.BIRDNET,
-  ExtractorImplEnum.enum.PERCH,
-  ExtractorImplEnum.enum.SURF_PERCH,
-  ExtractorImplEnum.enum.VGGISH,
-  ExtractorImplEnum.enum.YAMNET,
-  ExtractorImplEnum.enum.MUSIC_CLASS,
+const EXTRACTORS_LOCKED: ExtractorImpl[] = [
+  ExtractorImpl.enum.BIRDNET,
+  ExtractorImpl.enum.PERCH,
+  ExtractorImpl.enum.SURF_PERCH,
+  ExtractorImpl.enum.VGGISH,
+  ExtractorImpl.enum.YAMNET,
+  ExtractorImpl.enum.MUSIC_CLASS,
 ];
 
-const EXTRACTOR_ADDITIONAL_PARAMS: ExtractorImplEnum[] = [
-  ExtractorImplEnum.enum.SPECTRUM,
-  ExtractorImplEnum.enum.SPECTROGRAM,
-  ExtractorImplEnum.enum.MPS,
-  ExtractorImplEnum.enum.MFCC,
-  ExtractorImplEnum.enum.NDSI,
-  ExtractorImplEnum.enum.ADI,
-  ExtractorImplEnum.enum.HT,
-  ExtractorImplEnum.enum.MED,
-  ExtractorImplEnum.enum.LEQ_PERCENTILE,
-  ExtractorImplEnum.enum.LEQ_DIFF,
+const EXTRACTOR_ADDITIONAL_PARAMS: ExtractorImpl[] = [
+  ExtractorImpl.enum.SPECTRUM,
+  ExtractorImpl.enum.SPECTROGRAM,
+  ExtractorImpl.enum.MPS,
+  ExtractorImpl.enum.MFCC,
+  ExtractorImpl.enum.NDSI,
+  ExtractorImpl.enum.ADI,
+  ExtractorImpl.enum.HT,
+  ExtractorImpl.enum.MED,
+  ExtractorImpl.enum.LEQ_PERCENTILE,
+  ExtractorImpl.enum.LEQ_DIFF,
 ];
 
 export function ExtractionExtractorCard({extraction, extractor}: Props) {
@@ -119,7 +119,7 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
       />
 
       <Select
-        items={ExtractorImplEnum.options}
+        items={ExtractorImpl.options}
         onSelect={(n) => updateImpl(extractor, n)}
         current={extractor.impl}
         placeholder="Select impl"
@@ -159,61 +159,61 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
           isDark && styles.additionalParamsContainerDark,
         )}
       >
-        {extractor.impl === ExtractorImplEnum.enum.SPECTRUM && (
+        {extractor.impl === ExtractorImpl.enum.SPECTRUM && (
           <ExtractionExtractorSpectrumParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.SPECTROGRAM && (
+        {extractor.impl === ExtractorImpl.enum.SPECTROGRAM && (
           <ExtractionExtractorSpectrogramParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.MPS && (
+        {extractor.impl === ExtractorImpl.enum.MPS && (
           <ExtractionExtractorMpsParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.MFCC && (
+        {extractor.impl === ExtractorImpl.enum.MFCC && (
           <ExtractionExtractorMfccParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.NDSI && (
+        {extractor.impl === ExtractorImpl.enum.NDSI && (
           <ExtractionExtractorNdsiParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.ADI && (
+        {extractor.impl === ExtractorImpl.enum.ADI && (
           <ExtractionExtractorAdiParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.HT && (
+        {extractor.impl === ExtractorImpl.enum.HT && (
           <ExtractionExtractorHtParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.MED && (
+        {extractor.impl === ExtractorImpl.enum.MED && (
           <ExtractionExtractorMedParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.LEQ_PERCENTILE && (
+        {extractor.impl === ExtractorImpl.enum.LEQ_PERCENTILE && (
           <ExtractionExtractorLeqPercentileParams
             extraction={extraction}
             extractor={extractor}
           />
         )}
-        {extractor.impl === ExtractorImplEnum.enum.LEQ_DIFF && (
+        {extractor.impl === ExtractorImpl.enum.LEQ_DIFF && (
           <ExtractionExtractorLeqDiffParams
             extraction={extraction}
             extractor={extractor}

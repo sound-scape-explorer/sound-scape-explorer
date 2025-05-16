@@ -1,4 +1,4 @@
-import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
+import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
@@ -7,7 +7,7 @@ import {computed} from 'vue';
 export function useFilteringInfoData() {
   const {filtered: global} = useScatterGlobalFilter();
   const {filtered: time} = useScatterFilterTime();
-  const {filtered: labels} = useScatterFilterLabels();
+  const {filtered: labels} = useScatterFilterTag();
   const {filtered: temporal} = useScatterFilterTemporal();
 
   const totalOut = computed(() => global.value.filter((f) => f).length);

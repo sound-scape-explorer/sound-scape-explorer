@@ -1,83 +1,82 @@
 import {type Scale} from 'chroma-js';
 import {type Data} from 'plotly.js-dist-min';
-import {
-  type Traced,
-  type TracedRelativeTimestamps,
-} from 'src/composables/use-trajectories-data';
+import {type TrajectoryData} from 'src/composables/use-trajectories';
 import {TRACE_WIDTH_2D, TRACE_WIDTH_3D} from 'src/constants';
 import {interpolateArray, sumArraysIndexWise} from 'src/utils/arrays';
 import {getDayOfYear} from 'src/utils/time';
+import {getTrajectoryColors} from 'src/utils/trajectories-new';
 
-export function isTracedThreeDimensional(traced: Traced): boolean {
-  return traced.data[0].length === 3;
+export function isTrajectory3d(trajectory: TrajectoryData): boolean {
+  return trajectory.path[0].length === 3;
 }
 
-export function buildAverageTrajectory(traceds: Traced[]) {
-  const isThreeDimensional = isTracedThreeDimensional(traceds[0]);
+export function buildAverageTrajectory(trajectories: TrajectoryData[]) {
+  const is3d = isTrajectory3d(trajectories[0]);
 
-  interface IData {
+  interface Coordinates {
     x: number[];
     y: number[];
     z: number[];
   }
 
-  let longestTraced: Traced = traceds[0];
+  let longestTrajectory: TrajectoryData = trajectories[0];
 
-  const data: IData[] = [];
+  const coordinates: Coordinates[] = [];
 
   // Pick the longest trajectory
-  for (const traced of traceds) {
-    if (traced.data.length > longestTraced.data.length) {
-      longestTraced = traced;
+  for (const trajectory of trajectories) {
+    if (trajectory.path.length > longestTrajectory.path.length) {
+      longestTrajectory = trajectory;
     }
   }
 
-  const length = longestTraced.data.length;
+  const length = longestTrajectory.path.length;
 
   // Interpolating
-  for (const traced of traceds) {
-    const d = {} as IData;
-    d.x = traced.data.map((coords) => coords[0]);
-    d.y = traced.data.map((coords) => coords[1]);
-    if (isThreeDimensional) {
-      d.z = traced.data.map((coords) => coords[2]);
+  for (const trajectory of trajectories) {
+    const coords = {} as Coordinates;
+    coords.x = trajectory.path.map((coords) => coords[0]);
+    coords.y = trajectory.path.map((coords) => coords[1]);
+    if (is3d) {
+      coords.z = trajectory.path.map((coords) => coords[2]);
     }
 
-    if (d.x.length < length) {
-      d.x = interpolateArray(d.x, length);
-      d.y = interpolateArray(d.y, length);
-      if (isThreeDimensional) {
-        d.z = interpolateArray(d.z, length);
+    if (coords.x.length < length) {
+      coords.x = interpolateArray(coords.x, length);
+      coords.y = interpolateArray(coords.y, length);
+      if (is3d) {
+        coords.z = interpolateArray(coords.z, length);
       }
     }
 
-    data.push(d);
+    coordinates.push(coords);
   }
 
-  const payload = {
+  const data = {
     x: sumArraysIndexWise({
-      arrays: data.map((data) => data.x),
+      arrays: coordinates.map((data) => data.x),
       doAveraging: true,
     }),
     y: sumArraysIndexWise({
-      arrays: data.map((data) => data.y),
+      arrays: coordinates.map((data) => data.y),
       doAveraging: true,
     }),
-    z: isThreeDimensional
+    z: is3d
       ? sumArraysIndexWise({
-        arrays: data.map((data) => data.z),
+        arrays: coordinates.map((data) => data.z),
         doAveraging: true,
       })
       : undefined,
   };
 
   return {
-    data: payload,
-    traced: longestTraced,
-    isThreeDimensional,
+    data,
+    trajectory: longestTrajectory,
+    is3d,
   };
 }
 
+// todo: remove me?
 export function getTrajectoryRelativeOptions(
   start: number, // timestamps in unix milliseconds
   step: number, // seconds
@@ -97,23 +96,6 @@ export function getTrajectoryRelativeOptions(
   }
 
   return [radix, offset];
-}
-
-export function getTracedColors(
-  relativeTimestamps: TracedRelativeTimestamps,
-  start: number,
-  step: number,
-  scale: Scale,
-): string[] {
-  const [radix, offset] = getTrajectoryRelativeOptions(start, step);
-
-  const colors = relativeTimestamps.map((rT) => {
-    const relative = (rT + offset) % radix;
-    const color = scale(relative / radix).hex();
-    return color;
-  });
-
-  return colors;
 }
 
 type GenerateTraceDefaultDataOptions = Pick<
@@ -138,21 +120,17 @@ function generateTraceDefaultDataOptions(
   };
 }
 
-export function traceAverageTrajectory(traceds: Traced[], scale: Scale) {
-  const {data, traced, isThreeDimensional} = buildAverageTrajectory(traceds);
+export function traceAverageTrajectory(
+  trajectories: TrajectoryData[],
+  scale: Scale,
+) {
+  const {data, trajectory, is3d} = buildAverageTrajectory(trajectories);
 
-  // todo: fix me
-  // Colors
-  const colors = getTracedColors(
-    traced.relativeTimestamps,
-    traced.trajectory.start,
-    traced.trajectory.step,
-    scale,
-  );
+  const colors = getTrajectoryColors(trajectory, scale);
 
   // Trace
   const averageTrace: Data = {
-    ...generateTraceDefaultDataOptions(isThreeDimensional, colors),
+    ...generateTraceDefaultDataOptions(is3d, colors),
     name: 'Averaged Trace',
     x: data.x,
     y: data.y,
@@ -162,29 +140,24 @@ export function traceAverageTrajectory(traceds: Traced[], scale: Scale) {
   return averageTrace;
 }
 
-export function traceTrajectories(traceds: Traced[], scale: Scale) {
-  const isThreeDimensional = isTracedThreeDimensional(traceds[0]);
-
+export function traceTrajectories(
+  trajectories: TrajectoryData[],
+  scale: Scale,
+) {
+  const is3d = isTrajectory3d(trajectories[0]);
   const traces = [];
 
-  for (const traced of traceds) {
-    const colors = getTracedColors(
-      traced.relativeTimestamps,
-      traced.trajectory.start,
-      traced.trajectory.step,
-      scale,
-    );
-
+  for (const trajectory of trajectories) {
+    const colors = getTrajectoryColors(trajectory, scale);
     const trace: Data = {
-      ...generateTraceDefaultDataOptions(isThreeDimensional, colors),
-      name: traced.trajectory.name,
-      x: traced.data.map((coordinates) => coordinates[0]),
-      y: traced.data.map((coordinates) => coordinates[1]),
-      z: isThreeDimensional
-        ? traced.data.map((coordinates) => coordinates[2])
+      ...generateTraceDefaultDataOptions(is3d, colors),
+      name: trajectory.trajectory.name,
+      x: trajectory.path.map((coordinates) => coordinates[0]),
+      y: trajectory.path.map((coordinates) => coordinates[1]),
+      z: is3d
+        ? trajectory.path.map((coordinates) => coordinates[2])
         : undefined,
     };
-
     traces.push(trace);
   }
 

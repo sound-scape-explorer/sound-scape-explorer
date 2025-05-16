@@ -1,20 +1,19 @@
 import libColormap from 'colormap';
 import {type RGBA} from 'src/common/spectrogram';
-import {useSpectrogramColormap} from 'src/draggables/audio/use-spectrogram-colormap';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {computed} from 'vue';
 
 export function useWavesurferColors() {
-  const {colormap} = useSpectrogramColormap();
+  const {spectrogramColorMap} = useClientSettings();
 
   const colors = computed(() => {
-    // noinspection SpellCheckingInspection
-    const colors = libColormap({
-      colormap: colormap.value,
+    const newColors = libColormap({
+      colormap: spectrogramColorMap.value,
       nshades: 256,
       format: 'float',
     });
 
-    return colors as RGBA[] & {length: 256};
+    return newColors as RGBA[] & {length: 256};
   });
 
   return {

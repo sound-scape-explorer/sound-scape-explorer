@@ -6,46 +6,35 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorInvert} from 'src/composables/use-color-invert';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useIndexLimits} from 'src/composables/use-index-limits';
-import {useRefProvide} from 'src/composables/use-ref-provide';
-import {COLOR_FLAVORS} from 'src/constants';
+import {ColorCategory, ColorFlavor} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
 import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
 import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
-import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
+import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useColorState} from 'src/draggables/colors/use-color-state';
-import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
+import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 
 const {isLoading} = useScatterLoading();
-const {flavor, criteria, criterias, category, categories} = useColorSelection();
+const {flavor, criteria, criterias, category} = useColorSelection();
 const {isIndicators, isLabels, isLabelNumeric} = useColorState();
 
-const {low, high} = useScatterColorAlpha();
+const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
 const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
-const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
+const {min: labelRangeMin, max: labelRangeMax} = useColorByTag();
 const {detect: detectIndicatorRange, swap} = useIndexLimits();
 const {invert, isReversible} = useColorInvert();
-const {isEnabled} = useLabelNumeric();
-
-useRefProvide(InjectionKey.colorsCriteria, criteria);
-useRefProvide(InjectionKey.colorsCategory, category);
-useRefProvide(InjectionKey.colorsFlavor, flavor);
-useRefProvide(InjectionKey.colorsAlphaExcluded, low);
-useRefProvide(InjectionKey.colorsAlphaIncluded, high);
-useRefProvide(InjectionKey.colorsIndicatorMin, indicatorRangeMin);
-useRefProvide(InjectionKey.colorsIndicatorMax, indicatorRangeMax);
-useRefProvide(InjectionKey.colorsLabelRangeMin, labelRangeMin);
-useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
+const {isEnabled} = useTagNumeric();
 </script>
 
 <template>
   <AppDraggable
-    draggable-key="colors"
+    :draggable-key="DraggableKey.enum.colors"
     suspense="view"
   >
     <AppDraggableMenu>
@@ -53,16 +42,16 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
       <div :class="[$style.two, $style.grow]">
         <AppSelect
+          v-model="category"
           :disabled="isLoading"
-          :injection-key="InjectionKey.colorsCategory"
-          :options="categories"
+          :options="ColorCategory.options"
           placeholder="Category..."
           size="small"
         />
 
         <AppSelect
+          v-model="criteria"
           :disabled="isLoading"
-          :injection-key="InjectionKey.colorsCriteria"
           :options="criterias"
           placeholder="Criteria..."
           size="small"
@@ -97,14 +86,14 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
         :class="$style.two"
       >
         <AppInput
-          :injection-key="InjectionKey.colorsIndicatorMin"
+          v-model="indicatorRangeMin"
           placeholder="Min..."
           size="small"
           type="number"
         />
 
         <AppInput
-          :injection-key="InjectionKey.colorsIndicatorMax"
+          v-model="indicatorRangeMax"
           placeholder="Max..."
           size="small"
           type="number"
@@ -123,16 +112,16 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
         :class="$style.two"
       >
         <AppInput
+          v-model="labelRangeMin"
           :disabled="!isEnabled"
-          :injection-key="InjectionKey.colorsLabelRangeMin"
           placeholder="Min..."
           size="small"
           type="number"
         />
 
         <AppInput
+          v-model="labelRangeMax"
           :disabled="!isEnabled"
-          :injection-key="InjectionKey.colorsLabelRangeMax"
           placeholder="Max..."
           size="small"
           type="number"
@@ -143,8 +132,8 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
 
       <div :class="$style.two">
         <AppInput
+          v-model="low"
           :disabled="isLoading"
-          :injection-key="InjectionKey.colorsAlphaExcluded"
           :max="1"
           :min="0.001"
           :step="0.001"
@@ -156,8 +145,8 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
         />
 
         <AppInput
+          v-model="high"
           :disabled="isLoading"
-          :injection-key="InjectionKey.colorsAlphaIncluded"
           :max="1"
           :min="0"
           :step="0.05"
@@ -172,9 +161,9 @@ useRefProvide(InjectionKey.colorsLabelRangeMax, labelRangeMax);
       <h2>Flavor</h2>
 
       <AppSelect
+        v-model="flavor"
         :disabled="isLoading"
-        :injection-key="InjectionKey.colorsFlavor"
-        :options="COLOR_FLAVORS"
+        :options="ColorFlavor.options"
         size="small"
       />
 

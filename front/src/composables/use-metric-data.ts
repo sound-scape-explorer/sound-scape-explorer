@@ -1,5 +1,5 @@
 import {type MetricDto} from '@shared/dtos';
-import {MetricTypeEnum} from '@shared/enums';
+import {MetricType} from '@shared/enums';
 import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
@@ -23,7 +23,7 @@ export function useMetricData() {
   ) =>
     r(async (worker, file) => {
       const isPairing =
-        metricTypeByImpl[metric.impl] === MetricTypeEnum.enum.TWO_D_PAIRING;
+        metricTypeByImpl[metric.impl] === MetricType.enum.TWO_D_PAIRING;
       const isPairingAndNotSecondLabel =
         isPairing && labelPropertyB.value === null;
 

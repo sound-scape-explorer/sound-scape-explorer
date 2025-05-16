@@ -3,10 +3,10 @@ from typing import Optional
 
 from processing.dtos import ExtractorDto
 from processing.enums import (
-    ExtractorImplEnum,
-    AdiImplEnum,
-    FrequencyScaleEnum,
-    StftWindowTypeEnum,
+    ExtractorImpl,
+    AdiImpl,
+    FrequencyScale,
+    StftWindowType,
 )
 
 
@@ -14,20 +14,20 @@ from processing.enums import (
 class ExtractorConfig:
     index: int
     name: str
-    impl: ExtractorImplEnum
+    impl: ExtractorImpl
 
     window: int
     hop: int
 
     spectro_n_bands: int
-    spectro_scale: FrequencyScaleEnum
-    spectro_stft_window_type: StftWindowTypeEnum
+    spectro_scale: FrequencyScale
+    spectro_stft_window_type: StftWindowType
     spectro_stft_window_ms: Optional[int]
     spectro_stft_overlap_ratio: float
     spectro_dbfs_ref: float
 
     mps_n_bands: int
-    mps_scale: FrequencyScaleEnum
+    mps_scale: FrequencyScale
     mps_stft_1_window_ms: Optional[int]
     mps_stft_1_overlap_ratio: float
     mps_stft_2_window_ms: Optional[int]
@@ -40,7 +40,7 @@ class ExtractorConfig:
 
     adi_bin_step: int
     adi_db_threshold: int
-    adi_impl: AdiImplEnum
+    adi_impl: AdiImpl
 
     ht_frame_size: int
     med_frame_size: int

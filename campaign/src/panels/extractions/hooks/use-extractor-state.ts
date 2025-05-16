@@ -6,19 +6,17 @@ import {
 } from '@shared/constants.ts';
 import {type ExtractorDto} from '@shared/dtos.ts';
 import {
-  type AdiImplEnum,
-  ExtractorImplEnum,
-  type FrequencyScaleEnum,
-  type StftWindowTypeEnum,
+  type AdiImpl,
+  ExtractorImpl,
+  type FrequencyScale,
+  type StftWindowType,
 } from '@shared/enums.ts';
 import {useCallback, useMemo} from 'react';
-import {
-  type ExtractionConfigWithId,
-  useExtractionState,
-} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {type ExtractionConfig} from 'src/interfaces.ts';
+import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractorDefaults} from 'src/panels/extractions/hooks/use-extractor-defaults.ts';
 
-export function useExtractorState(extraction: ExtractionConfigWithId) {
+export function useExtractorState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
   const {createExtractorWithDefaults} = useExtractorDefaults();
 
@@ -31,7 +29,7 @@ export function useExtractorState(extraction: ExtractionConfigWithId) {
     extraction.extractors.push({
       index: extraction.extractors.length,
       name: '',
-      impl: ExtractorImplEnum.enum.VGGISH,
+      impl: ExtractorImpl.enum.VGGISH,
       window: WINDOW_MS_DEFAULT,
       hop: HOP_MS_DEFAULT,
     });
@@ -92,7 +90,7 @@ export function useExtractorState(extraction: ExtractionConfigWithId) {
   );
 
   const updateImpl = useCallback(
-    (extractor: ExtractorDto, impl: ExtractorImplEnum) => {
+    (extractor: ExtractorDto, impl: ExtractorImpl) => {
       const newExtractor: ExtractorDto = {
         index: extractor.index,
         name: extractor.name,
@@ -127,7 +125,7 @@ export function useExtractorState(extraction: ExtractionConfigWithId) {
   );
 
   const updateSpectroScale = useCallback(
-    (extractor: ExtractorDto, scale: FrequencyScaleEnum) => {
+    (extractor: ExtractorDto, scale: FrequencyScale) => {
       extractor.spectro_scale = scale;
       updateExtraction(extraction);
     },
@@ -135,7 +133,7 @@ export function useExtractorState(extraction: ExtractionConfigWithId) {
   );
 
   const updateSpectroStftWindowType = useCallback(
-    (extractor: ExtractorDto, window_type: StftWindowTypeEnum) => {
+    (extractor: ExtractorDto, window_type: StftWindowType) => {
       extractor.spectro_stft_window_type = window_type;
       updateExtraction(extraction);
     },
@@ -169,7 +167,7 @@ export function useExtractorState(extraction: ExtractionConfigWithId) {
   );
 
   const updateMpsScale = useCallback(
-    (extractor: ExtractorDto, scale: FrequencyScaleEnum) => {
+    (extractor: ExtractorDto, scale: FrequencyScale) => {
       extractor.mps_scale = scale;
       updateExtraction(extraction);
     },
@@ -271,7 +269,7 @@ export function useExtractorState(extraction: ExtractionConfigWithId) {
   );
 
   const updateAdiImpl = useCallback(
-    (extractor: ExtractorDto, impl: AdiImplEnum) => {
+    (extractor: ExtractorDto, impl: AdiImpl) => {
       extractor.adi_impl = impl;
       updateExtraction(extraction);
     },

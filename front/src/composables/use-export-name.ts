@@ -1,13 +1,6 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
-import {EXPORT_FILENAME} from 'src/constants';
-
-export type ExportType =
-  | 'scatter'
-  | 'indicators'
-  | 'heatmap'
-  | 'trajectories'
-  | 'relative-trajectories';
+import {EXPORT_FILENAME, ExportType} from 'src/constants';
 
 const separator = ' - ';
 
@@ -44,23 +37,23 @@ export function useExportName() {
     appendDetails(blocks);
 
     switch (type) {
-      case 'scatter': {
+      case ExportType.enum.scatter: {
         blocks.push('scatter');
         break;
       }
-      case 'indicators': {
+      case ExportType.enum.indicators: {
         blocks.push('indicators');
         break;
       }
-      case 'heatmap': {
+      case ExportType.enum.heatmap: {
         blocks.push('heatmap');
         break;
       }
-      case 'trajectories': {
+      case ExportType.enum.trajectories: {
         blocks.push('trajectories');
         break;
       }
-      case 'relative-trajectories': {
+      case ExportType.enum.relativeTrajectories: {
         blocks.push('relative-trajectories');
         break;
       }

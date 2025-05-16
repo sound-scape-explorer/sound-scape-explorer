@@ -1,4 +1,4 @@
-import {ComputationStrategyEnum} from '@shared/enums';
+import {ComputationStrategy} from '@shared/enums';
 import clsx from 'clsx';
 import {useSettingsState} from 'src/hooks/use-settings-state';
 import styles from 'src/panels/settings/settings-panel.module.scss';
@@ -11,9 +11,9 @@ export function SettingsPanelComputationStrategy() {
     <div className={clsx(styles.row, 'align gap')}>
       <b className={styles.rowTitle}>Strategy</b>
 
-      <Select<ComputationStrategyEnum>
+      <Select<ComputationStrategy>
         current={settings.computationStrategy}
-        items={ComputationStrategyEnum.options}
+        items={ComputationStrategy.options}
         onSelect={(v) => update('computationStrategy', v)}
       />
     </div>

@@ -7,9 +7,8 @@ import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useLabelSets} from 'src/composables/use-label-sets';
-import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
+import {HeatmapScale} from 'src/constants';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
@@ -27,16 +26,9 @@ const {
 const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
 const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
 const {width, height} = useAppHeatmapSize();
-const {flavor, flavors} = useDraggableHeatmapsColor();
+const {flavor} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
-const {actual} = useLabelSets();
-
-useRefProvide(InjectionKey.METRIC_NAME, metricSlug);
-useRefProvide(InjectionKey.METRIC_LABEL_A, a);
-useRefProvide(InjectionKey.METRIC_LABEL_B, b);
-useRefProvide(InjectionKey.METRIC_COLOR_FLAVOR, flavor);
-useRefProvide(InjectionKey.HEATMAPS_PLOT_WIDTH, width);
-useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
+const {coreUniques} = useTagUniques();
 </script>
 
 <template>
@@ -44,7 +36,7 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
     <h2>Select</h2>
 
     <AppSelect
-      :injection-key="InjectionKey.METRIC_NAME"
+      v-model="metricSlug"
       :options="digesterOptions"
       placeholder="Metric..."
       size="small"
@@ -54,8 +46,8 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
 
     <div :class="$style.labels">
       <AppSelect
-        :injection-key="InjectionKey.METRIC_LABEL_A"
-        :options="Object.keys(actual) ?? []"
+        v-model="a"
+        :options="Object.keys(coreUniques) ?? []"
         placeholder="Label A..."
         size="small"
       />
@@ -69,9 +61,9 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
       </AppButton>
 
       <AppSelect
+        v-model="b"
         :disabled="!isReadyForSelection || !isPairing"
-        :injection-key="InjectionKey.METRIC_LABEL_B"
-        :options="Object.keys(actual) ?? []"
+        :options="Object.keys(coreUniques) ?? []"
         placeholder="Label B..."
         size="small"
       />
@@ -81,9 +73,9 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
 
     <div :class="$style.colors">
       <AppSelect
+        v-model="flavor"
         :disabled="!isReadyAndSelected"
-        :injection-key="InjectionKey.METRIC_COLOR_FLAVOR"
-        :options="flavors"
+        :options="HeatmapScale.options"
         placeholder="Color flavor..."
         size="small"
       />
@@ -105,9 +97,9 @@ useRefProvide(InjectionKey.HEATMAPS_PLOT_HEIGHT, height);
 
     <div :class="$style.plot">
       <AppDraggableMenuPlotSizes
+        v-model:height="height"
+        v-model:width="width"
         :disabled="!isReadyAndSelected"
-        :height="InjectionKey.HEATMAPS_PLOT_HEIGHT"
-        :width="InjectionKey.HEATMAPS_PLOT_WIDTH"
       />
 
       <AppButton

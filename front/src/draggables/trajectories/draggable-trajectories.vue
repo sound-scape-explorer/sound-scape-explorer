@@ -8,11 +8,10 @@ import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
-import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useTrajectoriesData} from 'src/composables/use-trajectories-data';
+import {DraggableKey} from 'src/composables/use-draggables';
+import {useTrajectories} from 'src/composables/use-trajectories';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
 import TrajectoriesColorScale from 'src/draggables/trajectories/draggable-trajectories-gradient.vue';
 import {useDraggableTrajectoriesExport} from 'src/draggables/trajectories/use-draggable-trajectories-export';
@@ -21,7 +20,7 @@ import {watch} from 'vue';
 
 const {current, undo, redo, canUndo, canRedo, update} =
   useTrajectoriesSelection();
-const {isFused} = useTrajectoriesData();
+const {isFused} = useTrajectories();
 const {isLoading} = useScatterLoading();
 const {options, isFuseable} = useTrajectoriesOptions();
 const {handleClick} = useDraggableTrajectoriesExport();
@@ -29,12 +28,10 @@ const {renderTraces} = useScatterTraces();
 
 watch(isFused, renderTraces);
 watch(current, update);
-
-useRefProvide(InjectionKey.trajectoriesFuse, isFused);
 </script>
 
 <template>
-  <AppDraggable draggable-key="trajectories">
+  <AppDraggable :draggable-key="DraggableKey.enum.trajectories">
     <AppDraggableSidebar>
       <AppDraggableSidebarHistory
         :can-redo="canRedo && !isFused"

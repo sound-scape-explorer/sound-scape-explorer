@@ -6,7 +6,6 @@ class MenuChoice(Enum):
     RUN_AGGREGATIONS = "Run aggregations"
     RUN_REDUCTIONS = "Run reductions"
     RUN_COMPUTATIONS = "Run computations"
-    RUN_COMPUTATIONS_PURGE = "Purge computations"
     RUN_AUTOCLUSTERS = "Run autoclusters"
     RUN_TRAJECTORIES = "Run trajectories"
     RUN_RELATIVE_TRAJECTORIES = "Run relative trajectories"

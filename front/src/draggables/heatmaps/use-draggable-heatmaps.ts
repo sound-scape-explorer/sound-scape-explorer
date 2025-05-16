@@ -1,5 +1,5 @@
 import {type MetricDto} from '@shared/dtos'; // todo: redundant
-import {MetricTypeEnum} from '@shared/enums';
+import {MetricType} from '@shared/enums';
 import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useMetricData} from 'src/composables/use-metric-data';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
@@ -32,7 +32,7 @@ export function useDraggableHeatmaps() {
       return false;
     }
     const type = metricTypeByImpl[metric.impl];
-    const isPairing = type === MetricTypeEnum.enum.TWO_D_PAIRING;
+    const isPairing = type === MetricType.enum.TWO_D_PAIRING;
     return isPairing;
   });
 
@@ -51,7 +51,7 @@ export function useDraggableHeatmaps() {
   const options = computed(() => {
     return (
       extraction.value?.metrics
-        .filter((d) => metricTypeByImpl[d.impl] !== MetricTypeEnum.enum.ONE_D)
+        .filter((d) => metricTypeByImpl[d.impl] !== MetricType.enum.ONE_D)
         .map((d) => generateUniqueMetricSlug(d)) ?? []
     );
   });

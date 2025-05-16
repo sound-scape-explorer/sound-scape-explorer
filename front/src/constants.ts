@@ -1,3 +1,5 @@
+import {z} from 'zod';
+
 export const STRING_DELIMITER = '|||';
 
 export const LINEBREAK = '%0D%0A';
@@ -31,13 +33,20 @@ export const PLAYBACK_RATE = {
   step: 0.01,
 };
 
-export const SPECTROGRAM_COLOR_MAPS = [
+export const TagsDraggableSize = z.enum(['small', 'medium', 'large']);
+// eslint-disable-next-line no-redeclare
+export type TagsDraggableSize = z.infer<typeof TagsDraggableSize>;
+
+export const SpectrogramColorMap = z.enum([
   'hot',
   'inferno',
   'jet',
   'greys',
   'viridis',
-];
+]);
+
+// eslint-disable-next-line no-redeclare
+export type SpectrogramColorMap = z.infer<typeof SpectrogramColorMap>;
 
 export const TRACE_WIDTH_3D = 6;
 export const TRACE_WIDTH_2D = 2;
@@ -45,19 +54,21 @@ export const TRACE_WIDTH_2D = 2;
 export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend'; // this is used as a selector to render the legend to canvas on scatter png export
 
 // @see processing/config/extractors/ExtractorConfig.py
+// todo: remove me
 export const NN_EXTRACTORS = ['vgg', 'melogram', 'melspectrum'];
 
-export type ColorFlavor = 'Spectral' | 'Accent' | 'Dark2';
-export const COLOR_FLAVORS: ColorFlavor[] = ['Spectral', 'Accent', 'Dark2'];
-export const RELATIVE_TRAJECTORIES_FLAVOR: ColorFlavor = 'Dark2';
+export const ColorFlavor = z.enum(['Spectral', 'Accent', 'Dark2']);
+// eslint-disable-next-line no-redeclare
+export type ColorFlavor = z.infer<typeof ColorFlavor>;
+
+export const RELATIVE_TRAJECTORIES_FLAVOR = ColorFlavor.enum.Dark2;
 
 // Plotly instances for Indicators and Digesters.
 export const PLOTLY_SIZE = 520;
 
-export enum PLOT_BACKGROUND {
-  transparent = 'transparent',
-  white = 'white',
-}
+export const PlotBackground = z.enum(['transparent', 'white']);
+// eslint-disable-next-line no-redeclare
+export type PlotBackground = z.infer<typeof PlotBackground>;
 
 export const LINK_DOCS = 'https://sound-scape-explorer.github.io/docs';
 export const LINK_BUG_REPORT =
@@ -68,10 +79,44 @@ export const LINK_DISCORD = 'https://discord.gg/eRsQPDBeXg';
 
 export const TIMEOUT = 240;
 
-export const SITE_AS_LABEL = '__SITE';
-export const AUTOCLUSTER_AS_LABEL = 'AUTOCLUSTER';
+export const SITE_AS_TAG_NAME = '__SITE';
+export const AUTOCLUSTER_AS_TAG_NAME = 'AUTOCLUSTER';
 
 export const LOWER_DECILE_SUFFIX = '_lower_decile';
 export const UPPER_DECILE_SUFFIX = '_upper_decile';
 
 export const RANGE_CUSTOM = '**CUSTOM**';
+
+export const ScatterBorderWidth = z.enum(['0', '1', '2']);
+// eslint-disable-next-line no-redeclare
+export type ScatterBorderWidth = z.infer<typeof ScatterBorderWidth>;
+
+export const ColorCategory = z.enum(['DEFAULT', 'TAGS', 'METRICS']);
+// eslint-disable-next-line no-redeclare
+export type ColorCategory = z.infer<typeof ColorCategory>;
+
+export const ColorCriteria = z.enum([
+  'cycleDay',
+  'isDay',
+  'intervalIndex',
+  'by1h',
+  'by10min',
+]);
+
+// eslint-disable-next-line no-redeclare
+export type ColorCriteria = z.infer<typeof ColorCriteria>;
+
+export const HeatmapScale = z.enum(['RdBu', 'Blues']);
+// eslint-disable-next-line no-redeclare
+export type HeatmapScale = z.infer<typeof HeatmapScale>;
+
+export const ExportType = z.enum([
+  'scatter',
+  'indicators',
+  'heatmap',
+  'trajectories',
+  'relativeTrajectories',
+]);
+
+// eslint-disable-next-line no-redeclare
+export type ExportType = z.infer<typeof ExportType>;

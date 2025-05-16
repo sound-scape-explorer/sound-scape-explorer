@@ -1,10 +1,7 @@
 <script lang="ts" setup>
 import {NSwitch} from 'naive-ui';
-import {type InjectionKey} from 'src/common/injection-key';
-import {useRefInject} from 'src/composables/use-ref-inject';
 
 interface Props {
-  injectionKey: InjectionKey;
   checked: string;
   unchecked: string;
   disabled?: boolean;
@@ -16,7 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
   native: false,
 });
 
-const model = useRefInject(props.injectionKey);
+const model = defineModel<boolean>();
 </script>
 
 <template>

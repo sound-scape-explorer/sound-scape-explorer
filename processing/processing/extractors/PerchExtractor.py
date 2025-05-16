@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow_hub as hub
 
 from processing.constants import PERCH_WINDOW_MS
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
 from processing.lib.console import mute_console_output
 from processing.resources.PerchResource import PerchResource
@@ -51,7 +51,7 @@ class PerchExtractor(Extractor):
         embeddings = self.model.infer_tf(stack)["embedding"]  # type: ignore
         embeddings.shape.assert_is_compatible_with([len(starts), 1280])
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=embeddings.numpy(),
             starts=starts,
             ends=ends,

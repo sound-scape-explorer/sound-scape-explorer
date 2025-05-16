@@ -5,8 +5,9 @@ import {NButton, NGi, NGrid, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useDate} from 'src/composables/use-date';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useLabelSets} from 'src/composables/use-label-sets';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useDetails} from 'src/draggables/details/use-details';
@@ -16,7 +17,7 @@ import {watch} from 'vue';
 const {band, integration} = useViewSelectionNew();
 // const {indices} = useExtractors();
 // const {aggregatedIndices} = useStorageAggregatedIndices();
-const {sets} = useLabelSets();
+const {allUniques} = useTagUniques();
 const {currentIntervalIndex, hasClicked} = useIntervalSelector();
 const {select} = useAudioFile();
 const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
@@ -39,7 +40,7 @@ watch(timeshift, updateDates);
 
 <template>
   <AppDraggable
-    draggable-key="details"
+    :draggable-key="DraggableKey.enum.details"
     suspense="scatterClick"
   >
     <div :class="[$style.file, $style.container]">
@@ -151,12 +152,12 @@ watch(timeshift, updateDates);
         x-gap="12"
       >
         <!--suppress JSUnusedLocalSymbols -->
-        <NGi v-for="(_, index) in Object.keys(sets)">
+        <NGi v-for="(_, index) in Object.keys(allUniques)">
           <NTag
             :bordered="false"
             size="small"
           >
-            {{ Object.keys(sets)[index] }}
+            {{ Object.keys(allUniques)[index] }}
           </NTag>
 
           <!-- todo: fix me -->

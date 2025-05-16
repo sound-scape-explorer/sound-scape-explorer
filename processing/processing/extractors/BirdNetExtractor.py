@@ -2,7 +2,7 @@ import numpy as np
 from keras import layers
 
 from processing.constants import BIRDNET_WINDOW_MS
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
 from processing.lib.console import mute_console_output
 from processing.resources.BirdNetResource import BirdNetResource
@@ -51,7 +51,7 @@ class BirdNetExtractor(Extractor):
         embeddings = self.model(stack)["embeddings"]
         embeddings.shape.assert_is_compatible_with([len(starts), 1024])
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=embeddings.numpy(),
             starts=starts,
             ends=ends,

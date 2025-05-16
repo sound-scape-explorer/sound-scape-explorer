@@ -1,5 +1,5 @@
 import {STORAGE_PATH_SUFFIX, TIMELINE_ORIGIN_MIN} from '@shared/constants';
-import {ComputationStrategyEnum} from '@shared/enums';
+import {ComputationStrategy} from '@shared/enums';
 import {isAfter, isEqual} from 'date-fns';
 import {useCallback, useMemo} from 'react';
 import {useFileValidation} from 'src/hooks/use-file-validation';
@@ -69,12 +69,12 @@ export function useSettingsValidation() {
   }, [settings]);
 
   const isComputationStrategyUmap = useMemo(
-    () => settings.computationStrategy === ComputationStrategyEnum.enum.UMAP,
+    () => settings.computationStrategy === ComputationStrategy.enum.UMAP,
     [settings.computationStrategy],
   );
 
   const isComputationStrategyPca = useMemo(
-    () => settings.computationStrategy === ComputationStrategyEnum.enum.PCA,
+    () => settings.computationStrategy === ComputationStrategy.enum.PCA,
     [settings.computationStrategy],
   );
 

@@ -13,11 +13,11 @@ from processing.utils.calculate_mdm_shape_limit import calculate_mdm_shape_limit
 class MeanDistancesMatrix:
     @staticmethod
     def calculate(
-        features: list[Dataset],
+        embeddings: list[Dataset],
         settings: SettingsConfig,
     ):
         # Check memory requirements
-        shape_req = len(features[0])
+        shape_req = len(embeddings[0])
         shape_max = calculate_mdm_shape_limit(settings.memory_limit)
         if shape_req > shape_max:
             MeanDistancesMatrixOutOfMemoryWarning(
@@ -27,10 +27,10 @@ class MeanDistancesMatrix:
             return MDM_EMPTY
 
         # Calculate pairwise distances and average them
-        samples_count = features[0].shape[0]
+        samples_count = embeddings[0].shape[0]
         mdm = np.zeros([samples_count, samples_count], dtype=np.float32)
 
-        for i, feature_set in enumerate(features):
+        for i, feature_set in enumerate(embeddings):
             # Calculate pairwise distances for this feature set
             current_mdm = metrics.pairwise_distances(feature_set)
 
