@@ -1,3 +1,13 @@
+# [14.0.0-beta.7](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.6...v14.0.0-beta.7) (2025-05-16)
+
+
+### Bug Fixes
+
+* **campaign:** correctly building extended trajectory configs ([fc58fca](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fc58fcad6680daf2b24af7f592fad8949cd7a252))
+* **campaign:** rename trajectory step to window ([2bae537](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2bae5372acd98961137a06fd62119b199e04304e))
+* **campaign:** update validation to use extended configs ([4038e1f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4038e1f5c57888564677125f8783f63b7a133109))
+* **front:** improve dark mode help text ([41fd0f2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/41fd0f2cc7f4d0763f33ed1245e457799c1623c8))
+
 # [14.0.0-beta.6](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.5...v14.0.0-beta.6) (2025-05-16)
 
 
