@@ -9,7 +9,7 @@ from processing.context import Context
 from processing.interfaces import TimelineSlice, TimelineAggregated
 from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ExtractionManager import ExtractedByExtractorIndex
-from processing.repositories.ExtractedRepository import ExtractedData
+from processing.repositories.ExtractionRepository import ExtractionData
 
 
 _ExtractorIndex = int
@@ -24,7 +24,7 @@ class Timeline:
         self._latest_timestamp: Optional[int] = None
 
     @staticmethod
-    def _slice(extracted: ExtractedData) -> list[TimelineSlice]:
+    def _slice(extracted: ExtractionData) -> list[TimelineSlice]:
         """Convert ExtractedData into a list of TimelineSliceData objects."""
         slices: list[TimelineSlice] = []
 
@@ -42,7 +42,7 @@ class Timeline:
         return slices
 
     @staticmethod
-    def _validate_chrono(all_extracted: list[ExtractedData]) -> None:
+    def _validate_chrono(all_extracted: list[ExtractionData]) -> None:
         """Validate that extracted data is in chronological order."""
         if len(all_extracted) <= 1:
             return

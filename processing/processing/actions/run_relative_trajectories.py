@@ -7,9 +7,11 @@ from processing.lib.legacy import convert_aggregated_to_legacy_flat
 from processing.managers.ReductionManager import ReductionManager
 from processing.printers.print_action import print_action
 from processing.printers.print_packed_trajectories import print_packed_trajectories
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.repositories.ComputedRepository import ComputedRepository
-from processing.repositories.RelativeTracedRepository import RelativeTracedRepository
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.ComputationRepository import ComputationRepository
+from processing.repositories.RelativeTrajectoryRepository import (
+    RelativeTrajectoryRepository,
+)
 from processing.utils.compute_relative_distances import compute_relative_distances
 from processing.utils.compute_starting_point import compute_starting_point
 from processing.utils.pack_trajectories import pack_trajectories
@@ -24,7 +26,7 @@ from processing.validators.validate_computations import validate_computations
 def run_relative_trajectories(context: Context):
     print_action("Tracing relative trajectories started!", "start")
 
-    RelativeTracedRepository.delete(context)
+    RelativeTrajectoryRepository.delete(context)
 
     knner = NearestNeighbors(n_neighbors=100)
 
@@ -33,14 +35,14 @@ def run_relative_trajectories(context: Context):
         packs = pack_trajectories(trajectories)
         print_packed_trajectories(packs)
 
-        all_aggregated = AggregatedRepository.from_storage(
+        all_aggregated = AggregationRepository.from_storage(
             context=context,
             extraction=ri.extraction,
             band=ri.band,
             integration=ri.integration,
         )
 
-        all_computed = ComputedRepository.from_storage(
+        all_computed = ComputationRepository.from_storage(
             context=context,
             extraction=ri.extraction,
             band=ri.band,
@@ -127,7 +129,7 @@ def run_relative_trajectories(context: Context):
                     axis=0,
                 )
 
-                RelativeTracedRepository.to_storage(
+                RelativeTrajectoryRepository.to_storage(
                     context=context,
                     extraction=ri.extraction,
                     band=ri.band,

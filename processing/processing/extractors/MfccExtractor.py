@@ -9,7 +9,7 @@ from processing.constants import (
     HOP_MS,
 )
 from processing.enums import StftWindowType
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib import audio
 from processing.lib.shapes import assert_shape
 
@@ -82,7 +82,7 @@ class MfccExtractor(Extractor):
         stack = np.stack(mfccs).astype(np.float32)
         assert_shape(stack, (len(starts), self.n_mfcc * frames_per_block))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

@@ -67,7 +67,7 @@ export class LoadingZone {
       reader.addEventListener('load', async (e) => {
         const data = e.target.result as ArrayBuffer;
         const f = new h5.File(data, 'r');
-        const path = ConfigPath.configs;
+        const path = ConfigPath.config;
         const dataset = f.get(path);
         const configString = dataset.value[0] as string;
         const json = JSON.parse(configString);

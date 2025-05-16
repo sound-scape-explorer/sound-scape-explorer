@@ -1,11 +1,11 @@
 from processing.context import Context
-from processing.repositories.ComputedRepository import ComputedRepository
 from processing.printers.print_action import print_action
+from processing.repositories.ComputationRepository import ComputationRepository
 
 
 def validate_computations(action):
     def decorator(context: Context):
-        if not ComputedRepository.exists(context):
+        if not ComputationRepository.exists(context):
             print_action("No computations found!", "error")
             return
 

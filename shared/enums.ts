@@ -1,5 +1,9 @@
 import {z} from 'zod';
 
+export const StorageDomain = z.enum(["config","extractions","aggregations","reductions","computations","mean_distance_matrix","autoclusters","metrics","trajectories","relative_trajectories"]);
+// eslint-disable-next-line no-redeclare
+export type StorageDomain = z.infer<typeof StorageDomain>;
+
 export const ComputationStrategy = z.enum(["UMAP","PCA","EMBEDDINGS"]);
 // eslint-disable-next-line no-redeclare
 export type ComputationStrategy = z.infer<typeof ComputationStrategy>;

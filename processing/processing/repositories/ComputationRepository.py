@@ -7,23 +7,26 @@ from processing.config.BandConfig import BandConfig
 from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.context import Context
-from processing.repositories.MeanDistancesMatrixRepository import MeanDistancesMatrixPath
+from processing.enums import StorageDomain
 from processing.paths.path_registry import register_path, build_path
+from processing.repositories.MeanDistancesMatrixRepository import (
+    MeanDistancesMatrixPath,
+)
 
 
-class ComputedPath(Enum):
-    COMPUTED = register_path("computed")
+class ComputationPath(Enum):
+    COMPUTED = register_path(StorageDomain.computations)
 
 
-class ComputedRepository:
+class ComputationRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(ComputedPath.COMPUTED.value)
+        context.storage.delete(ComputationPath.COMPUTED.value)
 
     @staticmethod
     def exists(context: Context):
         return context.storage.exists(
-            ComputedPath.COMPUTED.value
+            ComputationPath.COMPUTED.value
         ) and context.storage.exists(MeanDistancesMatrixPath.MDM.value)
 
     @staticmethod
@@ -34,7 +37,7 @@ class ComputedRepository:
         iteration: int,
     ):
         return build_path(
-            ComputedPath.COMPUTED.value,
+            ComputationPath.COMPUTED.value,
             extraction.index,
             band.index,
             integration.index,
@@ -50,7 +53,7 @@ class ComputedRepository:
         iteration: int,
         data: np.ndarray,
     ):
-        path = ComputedRepository._get_path(extraction, band, integration, iteration)
+        path = ComputationRepository._get_path(extraction, band, integration, iteration)
 
         context.storage.write(
             path=path,
@@ -67,7 +70,7 @@ class ComputedRepository:
         all_computed: list[Dataset] = []
 
         for iteration in range(context.config.settings.computation_iterations):
-            path = ComputedRepository._get_path(
+            path = ComputationRepository._get_path(
                 extraction, band, integration, iteration
             )
             computed = context.storage.read(path)

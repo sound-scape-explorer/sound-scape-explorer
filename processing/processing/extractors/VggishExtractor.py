@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow_hub as hub
 
 from processing.constants import VGGISH_WINDOW_MS
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
 from processing.lib.console import mute_console_output
 from processing.resources.VggishResource import VggishResource
@@ -55,7 +55,7 @@ class VggishExtractor(Extractor):
         embeddings = self.model(stack)  # type: ignore
         embeddings.shape.assert_is_compatible_with((len(starts), 128))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=embeddings.numpy(),
             starts=starts,
             ends=ends,

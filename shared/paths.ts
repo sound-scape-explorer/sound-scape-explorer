@@ -2,10 +2,12 @@
 
 // todo: rename me to PathRegistry.ts or something
 
+import {StorageDomain} from '@shared/enums';
+
 const registeredPaths = new Set<string>();
 
 function register_path(
-  domain: string,
+  domain: StorageDomain,
   ...attributes: (string | number)[]
 ): string {
   const path = `/${domain}` + attributes.map((attr) => `/${attr}`).join('');
@@ -27,101 +29,125 @@ function build_path(path: string, ...attributes: (string | number)[]): string {
 }
 
 export namespace ConfigPath {
-  export const configs = register_path('configs');
+  export const config = register_path(StorageDomain.enum.config);
 }
 
+const indexDomain = 'indices' as StorageDomain;
+
+// todo: update me when histograms are ready
 export namespace IndexPath {
-  export const indices = register_path('indices', 'indices');
-  export const impls = register_path('indices', 'impls');
-  export const offsets = register_path('indices', 'offsets');
-  export const steps = register_path('indices', 'steps');
-  export const is_persists = register_path('indices', 'is_persists');
+  export const indices = register_path(indexDomain, 'indices');
+  export const impls = register_path(indexDomain, 'impls');
+  export const offsets = register_path(indexDomain, 'offsets');
+  export const steps = register_path(indexDomain, 'steps');
+  export const is_persists = register_path(indexDomain, 'is_persists');
 }
 
-namespace AutoclusteredPath {
-  export const autoclustered = register_path('autoclustered');
+namespace AutoclusterPath {
+  export const autoclusters = register_path(StorageDomain.enum.autoclusters);
 }
 
-export namespace AutoclusteredInstancePath {
-  export const autoclustered = (...suffix: number[]) =>
-    build_path(AutoclusteredPath.autoclustered, ...suffix);
+export namespace AutoclusterPathInstance {
+  export const autoclusters = (...suffix: number[]) =>
+    build_path(AutoclusterPath.autoclusters, ...suffix);
 }
 
-namespace TracedPath {
-  export const path = register_path('traced', 'path');
-  export const timestamps = register_path('traced', 'timestamps');
+namespace TrajectoryPath {
+  export const path = register_path(StorageDomain.enum.trajectories, 'path');
+  export const timestamps = register_path(
+    StorageDomain.enum.trajectories,
+    'timestamps',
+  );
 }
 
-export namespace TracedInstancePath {
+export namespace TrajectoryPathInstance {
   export const path = (...suffix: number[]) =>
-    build_path(TracedPath.path, ...suffix);
+    build_path(TrajectoryPath.path, ...suffix);
 
   export const timestamps = (...suffix: number[]) =>
-    build_path(TracedPath.timestamps, ...suffix);
+    build_path(TrajectoryPath.timestamps, ...suffix);
 }
 
-namespace RelativeTracedPath {
-  export const data = register_path('relative_traced', 'data');
-  export const timestamps = register_path('relative_traced', 'timestamps');
-  export const deciles = register_path('relative_traced', 'deciles');
+namespace RelativeTrajectoryPath {
+  export const data = register_path(
+    StorageDomain.enum.relative_trajectories,
+    'data',
+  );
+  export const timestamps = register_path(
+    StorageDomain.enum.relative_trajectories,
+    'timestamps',
+  );
+  export const deciles = register_path(
+    StorageDomain.enum.relative_trajectories,
+    'deciles',
+  );
 }
 
-export namespace RelativeTracedInstancePath {
+export namespace RelativeTrajectoryPathInstance {
   export const data = (...suffix: (string | number)[]) =>
-    build_path(RelativeTracedPath.data, ...suffix);
+    build_path(RelativeTrajectoryPath.data, ...suffix);
 
   export const timestamps = (...suffix: (string | number)[]) =>
-    build_path(RelativeTracedPath.timestamps, ...suffix);
+    build_path(RelativeTrajectoryPath.timestamps, ...suffix);
 
   export const deciles = (...suffix: (string | number)[]) =>
-    build_path(RelativeTracedPath.deciles, ...suffix);
+    build_path(RelativeTrajectoryPath.deciles, ...suffix);
 }
 
 namespace MetricPath {
-  export const data = register_path('metric', 'data');
+  export const data = register_path(StorageDomain.enum.metrics, 'data');
 }
 
-export namespace MetricInstancePath {
+export namespace MetricPathInstance {
   export const data = (...suffix: (string | number)[]) =>
     build_path(MetricPath.data, ...suffix);
 }
 
-namespace ReducedPath {
-  export const reduced = register_path('reduced');
+namespace ReductionPath {
+  export const reductions = register_path(StorageDomain.enum.reductions);
 }
 
-export namespace ReducedInstancePath {
-  export const reduced = (...suffix: number[]) =>
-    build_path(ReducedPath.reduced, ...suffix);
+export namespace ReductionPathInstance {
+  export const reductions = (...suffix: number[]) =>
+    build_path(ReductionPath.reductions, ...suffix);
 }
 
-namespace AggregatedPath {
-  export const embeddings = register_path('aggregated', 'embeddings');
-  export const timestamps = register_path('aggregated', 'timestamps');
-  export const file_indices = register_path('aggregated', 'file_indices');
+namespace AggregationPath {
+  export const embeddings = register_path(
+    StorageDomain.enum.aggregations,
+    'embeddings',
+  );
+  export const timestamps = register_path(
+    StorageDomain.enum.aggregations,
+    'timestamps',
+  );
+  export const file_indices = register_path(
+    StorageDomain.enum.aggregations,
+    'file_indices',
+  );
   export const file_relative_starts = register_path(
-    'aggregated',
+    StorageDomain.enum.aggregations,
     'file_relative_starts',
   );
   export const extractor_indices = register_path(
-    'aggregated',
+    StorageDomain.enum.aggregations,
     'extractor_indices',
   );
 }
 
-export namespace AggregatedInstancePath {
+export namespace AggregationPathInstance {
   export const embeddings = (...suffix: (string | number)[]) =>
-    build_path(AggregatedPath.embeddings, ...suffix);
+    build_path(AggregationPath.embeddings, ...suffix);
 
   export const timestamps = (...suffix: (string | number)[]) =>
-    build_path(AggregatedPath.timestamps, ...suffix);
+    build_path(AggregationPath.timestamps, ...suffix);
 
   export const file_indices = (...suffix: (string | number)[]) =>
-    build_path(AggregatedPath.file_indices, ...suffix);
+    build_path(AggregationPath.file_indices, ...suffix);
 
   export const file_relative_starts = (...suffix: (string | number)[]) =>
-    build_path(AggregatedPath.file_relative_starts, ...suffix);
+    build_path(AggregationPath.file_relative_starts, ...suffix);
 
   export const extractor_indices = (...suffix: (string | number)[]) =>
-    build_path(AggregatedPath.extractor_indices, ...suffix);
+    build_path(AggregationPath.extractor_indices, ...suffix);
 }

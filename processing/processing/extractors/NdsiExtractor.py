@@ -2,7 +2,7 @@ import numpy as np
 from maad import sound, features
 
 from processing.constants import WINDOW_MS, HOP_MS, NDSI_BAND_BIO, NDSI_BAND_ANTHRO
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib import audio
 from processing.lib.shapes import assert_shape
 from processing.types import NdsiBand
@@ -61,7 +61,7 @@ class NdsiExtractor(Extractor):
         stack = np.stack(ndsis).astype(np.float32)
         assert_shape(stack, (len(starts), 1))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

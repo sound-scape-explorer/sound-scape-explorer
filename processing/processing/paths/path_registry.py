@@ -1,8 +1,11 @@
+from processing.enums import StorageDomain
+
+
 _registered_paths = set()
 
 
-def register_path(domain: str, *attributes: str | int):
-    path = f"/{domain}" + "".join(f"/{attr}" for attr in attributes)
+def register_path(domain: StorageDomain, *attributes: str | int):
+    path = f"/{domain.value}" + "".join(f"/{attr}" for attr in attributes)
 
     if path in _registered_paths:
         raise Exception(f"Path {path} already registered")

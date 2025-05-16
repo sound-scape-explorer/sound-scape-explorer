@@ -1,6 +1,19 @@
 from enum import Enum
 
 
+class StorageDomain(Enum):
+    config = "config"
+    extractions = "extractions"
+    aggregations = "aggregations"
+    reductions = "reductions"
+    computations = "computations"
+    mean_distance_matrix = "mean_distance_matrix"
+    autoclusters = "autoclusters"
+    metrics = "metrics"
+    trajectories = "trajectories"
+    relative_trajectories = "relative_trajectories"
+
+
 class ComputationStrategy(Enum):
     UMAP = "UMAP"
     PCA = "PCA"

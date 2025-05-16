@@ -44,7 +44,7 @@ export function useTrajectoriesData() {
       const ts: TrajectoryData[] = [];
 
       for (const sT of selected.value) {
-        const [path, timestamps] = await worker.readTraced(
+        const [path, timestamps] = await worker.readTrajectories(
           file,
           extraction.value.index,
           band.value.index,

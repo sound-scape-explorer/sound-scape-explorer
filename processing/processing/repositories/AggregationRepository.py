@@ -8,17 +8,21 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.constants import STRING_DELIMITER
 from processing.context import Context
+from processing.enums import StorageDomain
 from processing.interfaces import TimelineAggregated, AggregatedData
-from processing.services.SiteService import SiteWithFiles, SiteService
 from processing.paths.path_registry import register_path, build_path
+from processing.services.SiteService import SiteWithFiles, SiteService
 
 
-class AggregatedPath(Enum):
-    EMBEDDINGS = register_path("aggregated", "embeddings")
-    TIMESTAMPS = register_path("aggregated", "timestamps")
-    FILE_INDICES = register_path("aggregated", "file_indices")
-    FILE_RELATIVE_PATHS = register_path("aggregated", "file_relative_starts")
-    EXTRACTOR_INDICES = register_path("aggregated", "extractor_indices")
+_domain = StorageDomain.aggregations
+
+
+class AggregationPath(Enum):
+    EMBEDDINGS = register_path(_domain, "embeddings")
+    TIMESTAMPS = register_path(_domain, "timestamps")
+    FILE_INDICES = register_path(_domain, "file_indices")
+    FILE_RELATIVE_PATHS = register_path(_domain, "file_relative_starts")
+    EXTRACTOR_INDICES = register_path(_domain, "extractor_indices")
 
 
 class _Paths(NamedTuple):
@@ -29,23 +33,23 @@ class _Paths(NamedTuple):
     extractor_indices: str
 
 
-class AggregatedRepository:
+class AggregationRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(AggregatedPath.EMBEDDINGS.value)
-        context.storage.delete(AggregatedPath.TIMESTAMPS.value)
-        context.storage.delete(AggregatedPath.FILE_INDICES.value)
-        context.storage.delete(AggregatedPath.FILE_RELATIVE_PATHS.value)
-        context.storage.delete(AggregatedPath.EXTRACTOR_INDICES.value)
+        context.storage.delete(AggregationPath.EMBEDDINGS.value)
+        context.storage.delete(AggregationPath.TIMESTAMPS.value)
+        context.storage.delete(AggregationPath.FILE_INDICES.value)
+        context.storage.delete(AggregationPath.FILE_RELATIVE_PATHS.value)
+        context.storage.delete(AggregationPath.EXTRACTOR_INDICES.value)
 
     @staticmethod
     def exists(context: Context):
         return (
-            context.storage.exists(AggregatedPath.EMBEDDINGS.value)
-            and context.storage.exists(AggregatedPath.TIMESTAMPS.value)
-            and context.storage.exists(AggregatedPath.FILE_INDICES.value)
-            and context.storage.exists(AggregatedPath.FILE_RELATIVE_PATHS.value)
-            and context.storage.exists(AggregatedPath.EXTRACTOR_INDICES.value)
+            context.storage.exists(AggregationPath.EMBEDDINGS.value)
+            and context.storage.exists(AggregationPath.TIMESTAMPS.value)
+            and context.storage.exists(AggregationPath.FILE_INDICES.value)
+            and context.storage.exists(AggregationPath.FILE_RELATIVE_PATHS.value)
+            and context.storage.exists(AggregationPath.EXTRACTOR_INDICES.value)
         )
 
     @staticmethod
@@ -63,15 +67,15 @@ class AggregatedRepository:
         ]
 
         return _Paths(
-            embeddings=build_path(AggregatedPath.EMBEDDINGS.value, *path_suffix),
-            timestamps=build_path(AggregatedPath.TIMESTAMPS.value, *path_suffix),
-            file_indices=build_path(AggregatedPath.FILE_INDICES.value, *path_suffix),
+            embeddings=build_path(AggregationPath.EMBEDDINGS.value, *path_suffix),
+            timestamps=build_path(AggregationPath.TIMESTAMPS.value, *path_suffix),
+            file_indices=build_path(AggregationPath.FILE_INDICES.value, *path_suffix),
             file_relative_starts=build_path(
-                AggregatedPath.FILE_RELATIVE_PATHS.value,
+                AggregationPath.FILE_RELATIVE_PATHS.value,
                 *path_suffix,
             ),
             extractor_indices=build_path(
-                AggregatedPath.EXTRACTOR_INDICES.value,
+                AggregationPath.EXTRACTOR_INDICES.value,
                 *path_suffix,
             ),
         )
@@ -85,7 +89,7 @@ class AggregatedRepository:
         site: SiteWithFiles,
         all_aggregated: list[TimelineAggregated],
     ):
-        paths = AggregatedRepository._get_paths(extraction, band, integration, site)
+        paths = AggregationRepository._get_paths(extraction, band, integration, site)
 
         all_embeddings: list[np.ndarray] = []
         all_timestamps: list[int] = []
@@ -148,7 +152,7 @@ class AggregatedRepository:
         all_embeddings = []
 
         for site in sites:
-            paths = AggregatedRepository._get_paths(
+            paths = AggregationRepository._get_paths(
                 extraction,
                 band,
                 integration,
@@ -174,7 +178,7 @@ class AggregatedRepository:
         all_aggregated: list[AggregatedData] = []
 
         for site in sites:
-            paths = AggregatedRepository._get_paths(
+            paths = AggregationRepository._get_paths(
                 extraction=extraction,
                 band=band,
                 integration=integration,

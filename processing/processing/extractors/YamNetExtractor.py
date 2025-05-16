@@ -3,7 +3,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 from processing.constants import YAMNET_WINDOW_MS
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
 from processing.lib.console import mute_console_output
 from processing.lib.shapes import assert_shape
@@ -58,7 +58,7 @@ class YamNetExtractor(Extractor):
         all_embeddings = np.stack(all_embeddings)
         assert_shape(all_embeddings, (len(starts), 1024))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=all_embeddings,
             starts=starts,
             ends=ends,

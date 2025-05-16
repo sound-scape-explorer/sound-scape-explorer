@@ -33,14 +33,15 @@ export function useRelativeTraced() {
       const newRelativeTraced: RelativeTraced[] = [];
 
       for (const trajectory of trajectories) {
-        const {data, timestamps, deciles} = await worker.readRelativeTraced(
-          file,
-          extraction.value.index,
-          band.value.index,
-          integration.value.index,
-          reducer.value.index,
-          trajectory.index,
-        );
+        const {data, timestamps, deciles} =
+          await worker.readRelativeTrajectories(
+            file,
+            extraction.value.index,
+            band.value.index,
+            integration.value.index,
+            reducer.value.index,
+            trajectory.index,
+          );
 
         const newRT: RelativeTraced = {
           trajectory,

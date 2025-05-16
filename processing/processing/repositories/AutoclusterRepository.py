@@ -2,27 +2,28 @@ from enum import Enum
 
 import numpy as np
 
-from processing.context import Context
 from processing.config.AutoclusterConfig import AutoclusterConfig
 from processing.config.BandConfig import BandConfig
 from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
+from processing.context import Context
+from processing.enums import StorageDomain
 from processing.paths.path_registry import register_path, build_path
 from processing.types import Autoclustered
 
 
-class AutoclusteredPath(Enum):
-    AUTOCLUSTERED = register_path("autoclustered")
+class AutoclusterPath(Enum):
+    DATA = register_path(StorageDomain.autoclusters)
 
 
-class AutoclusteredRepository:
+class AutoclusterRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(AutoclusteredPath.AUTOCLUSTERED.value)
+        context.storage.delete(AutoclusterPath.DATA.value)
 
     @staticmethod
     def exists(context: Context):
-        return context.storage.exists(AutoclusteredPath.AUTOCLUSTERED.value)
+        return context.storage.exists(AutoclusterPath.DATA.value)
 
     @staticmethod
     def _get_path(
@@ -32,7 +33,7 @@ class AutoclusteredRepository:
         autocluster: AutoclusterConfig,
     ):
         return build_path(
-            AutoclusteredPath.AUTOCLUSTERED.value,
+            AutoclusterPath.DATA.value,
             extraction.index,
             band.index,
             integration.index,
@@ -48,7 +49,7 @@ class AutoclusteredRepository:
         autocluster: AutoclusterConfig,
         autoclustered: Autoclustered,
     ):
-        path = AutoclusteredRepository._get_path(
+        path = AutoclusterRepository._get_path(
             extraction,
             band,
             integration,
@@ -78,7 +79,7 @@ class AutoclusteredRepository:
         integration: IntegrationConfig,
         autocluster: AutoclusterConfig,
     ):
-        path = AutoclusteredRepository._get_path(
+        path = AutoclusterRepository._get_path(
             extraction,
             band,
             integration,

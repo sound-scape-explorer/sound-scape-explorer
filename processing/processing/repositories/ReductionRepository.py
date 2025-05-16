@@ -1,22 +1,22 @@
 import numpy as np
 
-from processing.context import Context
 from processing.config.BandConfig import BandConfig
 from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
-from processing.paths.ReducedPath import ReducedPath
 from processing.config.ReducerConfig import ReducerConfig
+from processing.context import Context
+from processing.paths.ReductionPath import ReductionPath
 from processing.paths.path_registry import build_path
 
 
-class ReducedRepository:
+class ReductionRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(ReducedPath.REDUCED.value)
+        context.storage.delete(ReductionPath.REDUCTIONS.value)
 
     @staticmethod
     def exists(context: Context):
-        return context.storage.exists(ReducedPath.REDUCED.value)
+        return context.storage.exists(ReductionPath.REDUCTIONS.value)
 
     @staticmethod
     def _get_path(
@@ -26,7 +26,7 @@ class ReducedRepository:
         integration: IntegrationConfig,
     ):
         return build_path(
-            ReducedPath.REDUCED.value,
+            ReductionPath.REDUCTIONS.value,
             extraction.index,
             reducer.index,
             band.index,
@@ -42,7 +42,7 @@ class ReducedRepository:
         reducer: ReducerConfig,
         reduced: np.ndarray,
     ):
-        path = ReducedRepository._get_path(extraction, reducer, band, integration)
+        path = ReductionRepository._get_path(extraction, reducer, band, integration)
 
         context.storage.write(
             path=path,
@@ -57,5 +57,5 @@ class ReducedRepository:
         integration: IntegrationConfig,
         reducer: ReducerConfig,
     ):
-        path = ReducedRepository._get_path(extraction, reducer, band, integration)
+        path = ReductionRepository._get_path(extraction, reducer, band, integration)
         return context.storage.read(path)

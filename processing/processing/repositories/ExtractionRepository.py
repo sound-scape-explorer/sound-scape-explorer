@@ -7,9 +7,9 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.ExtractorConfig import ExtractorConfig
 from processing.config.FileConfig import FileConfig
 from processing.context import Context
-from processing.extractors.Extractor import ExtractedDataRaw
-from processing.interfaces import ExtractedData
-from processing.paths.ExtractedPath import ExtractedPath
+from processing.extractors.Extractor import ExtractionDataRaw
+from processing.interfaces import ExtractionData
+from processing.paths.ExtractionPath import ExtractionPath
 from processing.paths.path_registry import build_path
 
 
@@ -19,19 +19,19 @@ class _Paths(NamedTuple):
     ends: str
 
 
-class ExtractedRepository:
+class ExtractionRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(ExtractedPath.EMBEDDINGS.value)
-        context.storage.delete(ExtractedPath.STARTS.value)
-        context.storage.delete(ExtractedPath.ENDS.value)
+        context.storage.delete(ExtractionPath.EMBEDDINGS.value)
+        context.storage.delete(ExtractionPath.STARTS.value)
+        context.storage.delete(ExtractionPath.ENDS.value)
 
     @staticmethod
     def exists(context: Context):
         return (
-            context.storage.exists(ExtractedPath.EMBEDDINGS.value)
-            and context.storage.exists(ExtractedPath.STARTS.value)
-            and context.storage.exists(ExtractedPath.ENDS.value)
+            context.storage.exists(ExtractionPath.EMBEDDINGS.value)
+            and context.storage.exists(ExtractionPath.STARTS.value)
+            and context.storage.exists(ExtractionPath.ENDS.value)
         )
 
     @staticmethod
@@ -50,9 +50,9 @@ class ExtractedRepository:
         ]
 
         return _Paths(
-            embeddings=build_path(ExtractedPath.EMBEDDINGS.value, *path_suffix),
-            starts=build_path(ExtractedPath.STARTS.value, *path_suffix),
-            ends=build_path(ExtractedPath.ENDS.value, *path_suffix),
+            embeddings=build_path(ExtractionPath.EMBEDDINGS.value, *path_suffix),
+            starts=build_path(ExtractionPath.STARTS.value, *path_suffix),
+            ends=build_path(ExtractionPath.ENDS.value, *path_suffix),
         )
 
     @staticmethod
@@ -63,29 +63,29 @@ class ExtractedRepository:
         band: BandConfig,
         file: FileConfig,
     ):
-        paths = ExtractedRepository._get_paths(extraction, extractor, band, file)
+        paths = ExtractionRepository._get_paths(extraction, extractor, band, file)
 
         embeddings = context.storage.read(paths.embeddings)
         starts = context.storage.read(paths.starts)
         ends = context.storage.read(paths.ends)
 
-        raw = ExtractedDataRaw(
+        raw = ExtractionDataRaw(
             embeddings=np.array(embeddings),
             starts=np.array(starts).flatten().tolist(),
             ends=np.array(ends).flatten().tolist(),
         )
 
-        return ExtractedRepository.from_raw(raw, file, extractor)
+        return ExtractionRepository.from_raw(raw, file, extractor)
 
     @staticmethod
     def to_storage(
         context: Context,
         extraction: ExtractionConfig,
         extractor: ExtractorConfig,
-        extracted: ExtractedData,
+        extracted: ExtractionData,
         band: BandConfig,
     ):
-        paths = ExtractedRepository._get_paths(
+        paths = ExtractionRepository._get_paths(
             extraction, extractor, band, extracted.file
         )
 
@@ -106,19 +106,19 @@ class ExtractedRepository:
 
     @staticmethod
     def from_raw(
-        raw: ExtractedDataRaw,
+        raw: ExtractionDataRaw,
         file: FileConfig,
         extractor: ExtractorConfig,
     ):
-        astarts = [s + file.timestamp for s in raw.starts]
-        aends = [e + file.timestamp for e in raw.ends]
+        absolute_starts = [s + file.timestamp for s in raw.starts]
+        absolute_ends = [e + file.timestamp for e in raw.ends]
 
-        return ExtractedData(
+        return ExtractionData(
             file=file,
             extractor=extractor,
             embeddings=raw.embeddings,
             starts=raw.starts,
             ends=raw.ends,
-            astarts=astarts,
-            aends=aends,
+            astarts=absolute_starts,
+            aends=absolute_ends,
         )

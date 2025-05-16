@@ -1,4 +1,16 @@
 {
+  "StorageDomain": [
+    "config",
+    "extractions",
+    "aggregations",
+    "reductions",
+    "computations",
+    "mean_distance_matrix",
+    "autoclusters",
+    "metrics",
+    "trajectories",
+    "relative_trajectories"
+  ],
   "ComputationStrategy": [
     "UMAP",
     "PCA",

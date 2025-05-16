@@ -16,7 +16,7 @@ from processing.constants import (
     HOP_MS,
 )
 from processing.enums import FrequencyScale, StftWindowType
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib import audio
 from processing.lib.frequency import get_band_edges
 from processing.lib.numbers import clamp_number
@@ -119,7 +119,7 @@ class SpectrogramExtractor(Extractor):
         stack = np.stack(spectrums).astype(np.float32)
         assert_shape(stack, (len(starts), self.n_bands))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

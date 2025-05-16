@@ -1,13 +1,13 @@
 import {type IndexDto} from '@shared/dtosOLD';
 import {
-  AggregatedInstancePath,
-  AutoclusteredInstancePath,
+  AggregationPathInstance,
+  AutoclusterPathInstance,
   ConfigPath,
   IndexPath,
-  MetricInstancePath,
-  ReducedInstancePath,
-  RelativeTracedInstancePath,
-  TracedInstancePath,
+  MetricPathInstance,
+  ReductionPathInstance,
+  RelativeTrajectoryPathInstance,
+  TrajectoryPathInstance,
 } from '@shared/paths';
 import h5wasm, {type Dataset, type File as H5File} from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
@@ -54,7 +54,7 @@ export async function close() {
 
 export async function readConfigString(file: File) {
   const h5 = await load(file);
-  const path = ConfigPath.configs;
+  const path = ConfigPath.config;
   const dataset = h5.get(path) as Dataset;
   const array = dataset.to_array() as string[];
   return array[0];
@@ -97,7 +97,7 @@ export async function readIndices(file: File): Promise<IndexDto[]> {
   return indicesObjects;
 }
 
-export async function readReducedEmbeddings(
+export async function readReductions(
   file: File,
   extractionIndex: number,
   reducerIndex: number,
@@ -106,7 +106,7 @@ export async function readReducedEmbeddings(
 ) {
   const h5 = await load(file);
 
-  const path = ReducedInstancePath.reduced(
+  const path = ReductionPathInstance.reductions(
     extractionIndex,
     reducerIndex,
     bandIndex,
@@ -117,7 +117,7 @@ export async function readReducedEmbeddings(
   return embeddings;
 }
 
-export async function readAutoclustered(
+export async function readAutoclusters(
   file: File,
   extractionIndex: number,
   bandIndex: number,
@@ -126,7 +126,7 @@ export async function readAutoclustered(
 ) {
   const h5 = await load(file);
 
-  const path = AutoclusteredInstancePath.autoclustered(
+  const path = AutoclusterPathInstance.autoclusters(
     extractionIndex,
     bandIndex,
     integrationIndex,
@@ -137,7 +137,7 @@ export async function readAutoclustered(
   return values;
 }
 
-export async function readRelativeTraced(
+export async function readRelativeTrajectories(
   file: File,
   extractionIndex: number,
   bandIndex: number,
@@ -155,13 +155,13 @@ export async function readRelativeTraced(
     trajectoryIndex,
   ];
 
-  const dataPath = RelativeTracedInstancePath.data(...suffix);
+  const dataPath = RelativeTrajectoryPathInstance.data(...suffix);
   const data = _readArray<number[]>(h5, dataPath);
 
-  const timestampsPath = RelativeTracedInstancePath.timestamps(...suffix);
+  const timestampsPath = RelativeTrajectoryPathInstance.timestamps(...suffix);
   const timestamps = _readArray<number[]>(h5, timestampsPath);
 
-  const decilesPath = RelativeTracedInstancePath.deciles(...suffix);
+  const decilesPath = RelativeTrajectoryPathInstance.deciles(...suffix);
   const deciles = _readArray<[number, number]>(h5, decilesPath);
 
   return {
@@ -171,7 +171,7 @@ export async function readRelativeTraced(
   };
 }
 
-export async function readTraced(
+export async function readTrajectories(
   file: File,
   extractionIndex: number,
   bandIndex: number,
@@ -189,16 +189,16 @@ export async function readTraced(
     trajectoryIndex,
   ];
 
-  const pathPath = TracedInstancePath.path(...suffix);
+  const pathPath = TrajectoryPathInstance.path(...suffix);
   const path = _readArray<number[]>(h5, pathPath);
 
-  const timestampsPath = TracedInstancePath.timestamps(...suffix);
+  const timestampsPath = TrajectoryPathInstance.timestamps(...suffix);
   const timestamps = _readArray<number>(h5, timestampsPath);
 
   return [path, timestamps];
 }
 
-export async function readAggregated(
+export async function readAggregations(
   file: File,
   extractionIndex: number,
   bandIndex: number,
@@ -219,17 +219,17 @@ export async function readAggregated(
     const suffix = [extractionIndex, bandIndex, integrationIndex, siteName];
 
     // embeddings
-    const embeddingsPath = AggregatedInstancePath.embeddings(...suffix);
+    const embeddingsPath = AggregationPathInstance.embeddings(...suffix);
     const embeddings = _readArray<number[]>(h5, embeddingsPath);
     aggregated.embeddings.push(...embeddings);
 
     // timestamps
-    const timestampsPath = AggregatedInstancePath.timestamps(...suffix);
+    const timestampsPath = AggregationPathInstance.timestamps(...suffix);
     const timestamps = _readArray<number>(h5, timestampsPath);
     aggregated.timestamps.push(...timestamps);
 
     // file indices
-    const fileIndicesPath = AggregatedInstancePath.file_indices(...suffix);
+    const fileIndicesPath = AggregationPathInstance.file_indices(...suffix);
     const fileIndicesStrings = _readArray<string>(h5, fileIndicesPath);
     const fileIndices = fileIndicesStrings.map((strings) =>
       strings.split(STRING_DELIMITER).map(Number),
@@ -237,7 +237,7 @@ export async function readAggregated(
     aggregated.fileIndices.push(...fileIndices);
 
     // file relative starts
-    const fileRelativeStarts = AggregatedInstancePath.file_relative_starts(
+    const fileRelativeStarts = AggregationPathInstance.file_relative_starts(
       ...suffix,
     );
     const fileRelativeStartsStrings = _readArray<string>(
@@ -250,7 +250,7 @@ export async function readAggregated(
     aggregated.fileRelativeStarts.push(...fileRelativeStartsNumbers);
 
     // extractor indices
-    const extractorIndicesPath = AggregatedInstancePath.extractor_indices(
+    const extractorIndicesPath = AggregationPathInstance.extractor_indices(
       ...suffix,
     );
     const extractorIndicesStrings = _readArray<string>(
@@ -322,12 +322,12 @@ export async function readMetric(
 
   if (!isPairing) {
     const suffix = [...baseSuffix, labelPropertyA];
-    const path = MetricInstancePath.data(...suffix);
+    const path = MetricPathInstance.data(...suffix);
     const data = _readArray<number[]>(h5, path);
     values.push(...data);
   } else {
     const suffix = [...baseSuffix, labelPropertyB, labelPropertyA];
-    const path = MetricInstancePath.data(...suffix);
+    const path = MetricPathInstance.data(...suffix);
     const data = _readArray<number[]>(h5, path);
     values.push(...data);
   }

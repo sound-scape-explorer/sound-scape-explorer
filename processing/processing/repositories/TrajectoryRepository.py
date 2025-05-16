@@ -7,13 +7,17 @@ from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.ReducerConfig import ReducerConfig
 from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.context import Context
+from processing.enums import StorageDomain
 from processing.interfaces import TrajectoryData
 from processing.paths.path_registry import register_path, build_path
 
 
-class TracedPath(Enum):
-    PATH = register_path("traced", "path")
-    TIMESTAMPS = register_path("traced", "timestamps")
+_domain = StorageDomain.trajectories
+
+
+class TrajectoryPath(Enum):
+    PATH = register_path(_domain, "path")
+    TIMESTAMPS = register_path(_domain, "timestamps")
 
 
 class _Paths(NamedTuple):
@@ -21,17 +25,17 @@ class _Paths(NamedTuple):
     timestamps: str
 
 
-class TracedRepository:
+class TrajectoryRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(TracedPath.PATH.value)
-        context.storage.delete(TracedPath.TIMESTAMPS.value)
+        context.storage.delete(TrajectoryPath.PATH.value)
+        context.storage.delete(TrajectoryPath.TIMESTAMPS.value)
 
     @staticmethod
     def exists(context: Context):
-        return context.storage.exists(TracedPath.PATH.value) and context.storage.exists(
-            TracedPath.TIMESTAMPS.value
-        )
+        return context.storage.exists(
+            TrajectoryPath.PATH.value
+        ) and context.storage.exists(TrajectoryPath.TIMESTAMPS.value)
 
     @staticmethod
     def _get_paths(
@@ -51,11 +55,11 @@ class TracedRepository:
         ]
 
         path = build_path(
-            TracedPath.PATH.value,
+            TrajectoryPath.PATH.value,
             *path_suffix,
         )
 
-        timestamps = build_path(TracedPath.TIMESTAMPS.value, *path_suffix)
+        timestamps = build_path(TrajectoryPath.TIMESTAMPS.value, *path_suffix)
 
         return _Paths(
             path=path,
@@ -72,7 +76,7 @@ class TracedRepository:
         trajectory: TrajectoryConfig,
         data: TrajectoryData,
     ):
-        paths = TracedRepository._get_paths(
+        paths = TrajectoryRepository._get_paths(
             extraction,
             band,
             integration,

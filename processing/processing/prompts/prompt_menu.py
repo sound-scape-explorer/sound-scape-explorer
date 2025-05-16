@@ -5,27 +5,31 @@ from InquirerPy.separator import Separator
 from processing.common.MenuChoice import MenuChoice
 from processing.constants import STATE_PRESENT, STATE_UNDEFINED, STATE_MISSING
 from processing.context import Context
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.repositories.AutoclusteredRepository import AutoclusteredRepository
-from processing.repositories.ComputedRepository import ComputedRepository
-from processing.repositories.ExtractedRepository import ExtractedRepository
-from processing.repositories.MetricRepository import MetricRepository
-from processing.repositories.ReducedRepository import ReducedRepository
-from processing.repositories.RelativeTracedRepository import RelativeTracedRepository
-from processing.repositories.TracedRepository import TracedRepository
 from processing.printers.print_menu_legend import print_menu_legend
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.AutoclusterRepository import AutoclusterRepository
+from processing.repositories.ComputationRepository import ComputationRepository
+from processing.repositories.ExtractionRepository import ExtractionRepository
+from processing.repositories.MetricRepository import MetricRepository
+from processing.repositories.ReductionRepository import ReductionRepository
+from processing.repositories.RelativeTrajectoryRepository import (
+    RelativeTrajectoryRepository,
+)
+from processing.repositories.TrajectoryRepository import TrajectoryRepository
 
 
 def _wrap(choice: MenuChoice, context: Context):
     presence_map: dict[MenuChoice, bool] = {
-        MenuChoice.RUN_EXTRACTIONS: ExtractedRepository.exists(context),
-        MenuChoice.RUN_AGGREGATIONS: AggregatedRepository.exists(context),
-        MenuChoice.RUN_REDUCTIONS: ReducedRepository.exists(context),
-        MenuChoice.RUN_COMPUTATIONS: ComputedRepository.exists(context),
-        MenuChoice.RUN_AUTOCLUSTERS: AutoclusteredRepository.exists(context),
+        MenuChoice.RUN_EXTRACTIONS: ExtractionRepository.exists(context),
+        MenuChoice.RUN_AGGREGATIONS: AggregationRepository.exists(context),
+        MenuChoice.RUN_REDUCTIONS: ReductionRepository.exists(context),
+        MenuChoice.RUN_COMPUTATIONS: ComputationRepository.exists(context),
+        MenuChoice.RUN_AUTOCLUSTERS: AutoclusterRepository.exists(context),
         MenuChoice.RUN_METRICS: MetricRepository.exists(context),
-        MenuChoice.RUN_TRAJECTORIES: TracedRepository.exists(context),
-        MenuChoice.RUN_RELATIVE_TRAJECTORIES: RelativeTracedRepository.exists(context),
+        MenuChoice.RUN_TRAJECTORIES: TrajectoryRepository.exists(context),
+        MenuChoice.RUN_RELATIVE_TRAJECTORIES: RelativeTrajectoryRepository.exists(
+            context
+        ),
     }
 
     undefined_map: dict[MenuChoice, bool] = {

@@ -5,12 +5,13 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.MetricConfig import MetricConfig
 from processing.context import Context
+from processing.enums import StorageDomain
 from processing.metrics.Metric import MetricData
 from processing.paths.path_registry import register_path, build_path
 
 
 class MetricPath(Enum):
-    DATA = register_path("metric", "data")
+    DATA = register_path(StorageDomain.metrics, "data")
 
 
 class MetricRepository:

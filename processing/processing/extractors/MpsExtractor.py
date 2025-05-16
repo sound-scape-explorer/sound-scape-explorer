@@ -15,7 +15,7 @@ from processing.constants import (
 )
 from processing.constants import WINDOW_MS, HOP_MS
 from processing.enums import FrequencyScale
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib import audio
 from processing.lib.frequency import get_band_edges
 from processing.lib.numbers import clamp_number
@@ -261,7 +261,7 @@ class MpsExtractor(Extractor):
 
         # todo: add shape assertion later
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,

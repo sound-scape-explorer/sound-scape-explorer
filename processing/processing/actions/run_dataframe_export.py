@@ -11,8 +11,8 @@ from processing.prompts.prompt_band import prompt_band
 from processing.prompts.prompt_csv_path import prompt_csv_path
 from processing.prompts.prompt_extraction import prompt_extraction
 from processing.prompts.prompt_integration import prompt_integration
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.repositories.ReducedRepository import ReducedRepository
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.ReductionRepository import ReductionRepository
 from processing.services.AggregatedTagService import AggregatedTagService
 
 
@@ -26,7 +26,7 @@ def run_dataframe_export(context: Context):
     integration = prompt_integration(extraction)
     csv_path = prompt_csv_path(context)
 
-    all_aggregated = AggregatedRepository.from_storage(
+    all_aggregated = AggregationRepository.from_storage(
         context=context,
         extraction=extraction,
         band=band,
@@ -57,7 +57,7 @@ def run_dataframe_export(context: Context):
 
     # reduced embeddings
     for ri in ReductionManager.iterate(extraction):
-        reduced = ReducedRepository.from_storage(
+        reduced = ReductionRepository.from_storage(
             context=context,
             extraction=ri.extraction,
             band=ri.band,

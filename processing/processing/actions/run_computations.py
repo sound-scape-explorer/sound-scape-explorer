@@ -8,8 +8,8 @@ from processing.managers.AggregationManager import AggregationManager
 from processing.printers.print_action import print_action
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.UmapReducer import UmapReducer
-from processing.repositories.AggregatedRepository import AggregatedRepository
-from processing.repositories.ComputedRepository import ComputedRepository
+from processing.repositories.AggregationRepository import AggregationRepository
+from processing.repositories.ComputationRepository import ComputationRepository
 from processing.repositories.MeanDistancesMatrixRepository import (
     MeanDistancesMatrixRepository,
 )
@@ -23,10 +23,10 @@ def _run_computation_reductions(context: Context):
         f" dimensions: {context.config.settings.computation_dimensions})"
     )
 
-    ComputedRepository.delete(context)
+    ComputationRepository.delete(context)
 
     for ai in AggregationManager.iterate(context):
-        embeddings = AggregatedRepository.from_storage_embeddings(
+        embeddings = AggregationRepository.from_storage_embeddings(
             context=context,
             extraction=ai.extraction,
             band=ai.band,
@@ -61,7 +61,7 @@ def _run_computation_reductions(context: Context):
             else:
                 raise Exception("Invalid computation strategy")
 
-            ComputedRepository.to_storage(
+            ComputationRepository.to_storage(
                 context=context,
                 extraction=ai.extraction,
                 band=ai.band,
@@ -77,7 +77,7 @@ def _run_mean_distance_matrices(context: Context):
     MeanDistancesMatrixRepository.delete(context.storage)
 
     for ai in AggregationManager.iterate(context):
-        computed = ComputedRepository.from_storage(
+        computed = ComputationRepository.from_storage(
             context=context,
             extraction=ai.extraction,
             band=ai.band,

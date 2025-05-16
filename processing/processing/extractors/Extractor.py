@@ -6,7 +6,7 @@ import numpy as np
 from processing.lib.utils import use_or_default
 
 
-class ExtractedDataRaw(NamedTuple):
+class ExtractionDataRaw(NamedTuple):
     embeddings: np.ndarray
     starts: list[int]  # relative timestamps in ms
     ends: list[int]  # relative timestamps in ms
@@ -32,11 +32,11 @@ class Extractor(ABC):
     def extract(
         self,
         path: str,
-    ) -> ExtractedDataRaw:
+    ) -> ExtractionDataRaw:
         pass
 
     @staticmethod
-    def _validate_extracted(extracted: ExtractedDataRaw):
+    def _validate_extracted(extracted: ExtractionDataRaw):
         if len(extracted.embeddings) == len(extracted.starts) == len(extracted.ends):
             return
 

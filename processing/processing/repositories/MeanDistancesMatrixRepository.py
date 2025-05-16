@@ -7,13 +7,14 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.constants import MDM_EMPTY
 from processing.context import Context
+from processing.enums import StorageDomain
 from processing.paths.path_registry import register_path, build_path
 from processing.storage.Storage import Storage
 from processing.types import Mdm
 
 
 class MeanDistancesMatrixPath(Enum):
-    MDM = register_path("mean_distances_matrix")
+    MDM = register_path(StorageDomain.mean_distance_matrix)
 
 
 class MeanDistancesMatrixRepository:

@@ -11,7 +11,7 @@ from processing.extractors.Extractor import Extractor
 from processing.services.SiteService import SiteWithFiles
 
 
-class ExtractedData(NamedTuple):
+class ExtractionData(NamedTuple):
     file: FileConfig
     extractor: ExtractorConfig
     embeddings: np.ndarray

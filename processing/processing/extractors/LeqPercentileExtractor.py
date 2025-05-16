@@ -1,8 +1,7 @@
-import librosa
 import numpy as np
 
 from processing.constants import WINDOW_MS, HOP_MS
-from processing.extractors.Extractor import Extractor, ExtractedDataRaw
+from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib import audio
 from processing.lib.leq import compute_leq_percentile
 from processing.lib.shapes import assert_shape
@@ -53,7 +52,7 @@ class LeqPercentileExtractor(Extractor):
         stack = np.stack(leqs).astype(np.float32)
         assert_shape(stack, (len(starts), 1))
 
-        return ExtractedDataRaw(
+        return ExtractionDataRaw(
             embeddings=stack,
             starts=starts,
             ends=ends,
