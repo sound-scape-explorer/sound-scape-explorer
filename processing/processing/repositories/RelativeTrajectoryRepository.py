@@ -10,7 +10,7 @@ from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.context import Context
 from processing.enums import StorageDomain, RelativeTrajectoryStoragePath
 from processing.interfaces import TrajectoryStatistics
-from processing.paths.path_registry import register_path, build_path
+from processing.paths.PathRegistry import PathRegistry
 
 
 _domain = StorageDomain.relative_trajectories
@@ -18,22 +18,22 @@ _paths = RelativeTrajectoryStoragePath
 
 
 class RelativeTrajectoryPath(Enum):
-    DATA = register_path(_domain, _paths.distances.value)
-    TIMESTAMPS = register_path(_domain, _paths.timestamps.value)
-    DECILES = register_path(_domain, _paths.deciles.value)
+    DISTANCES = PathRegistry.register(_domain, _paths.distances)
+    TIMESTAMPS = PathRegistry.register(_domain, _paths.timestamps)
+    DECILES = PathRegistry.register(_domain, _paths.deciles)
 
 
 class RelativeTrajectoryRepository:
     @staticmethod
     def delete(context: Context):
-        context.storage.delete(RelativeTrajectoryPath.DATA.value)
+        context.storage.delete(RelativeTrajectoryPath.DISTANCES.value)
         context.storage.delete(RelativeTrajectoryPath.TIMESTAMPS.value)
         context.storage.delete(RelativeTrajectoryPath.DECILES.value)
 
     @staticmethod
     def exists(context: Context):
         return (
-            context.storage.exists(RelativeTrajectoryPath.DATA.value)
+            context.storage.exists(RelativeTrajectoryPath.DISTANCES.value)
             and context.storage.exists(RelativeTrajectoryPath.TIMESTAMPS.value)
             and context.storage.exists(RelativeTrajectoryPath.DECILES.value)
         )
@@ -56,14 +56,17 @@ class RelativeTrajectoryRepository:
             trajectory.index,
         ]
 
-        distances_path = build_path(RelativeTrajectoryPath.DATA.value, *path_suffix)
+        distances_path = PathRegistry.build(
+            RelativeTrajectoryPath.DISTANCES.value,
+            *path_suffix,
+        )
 
         context.storage.write(
             path=distances_path,
             data=statistics.median_distances,
         )
 
-        timestamps_path = build_path(
+        timestamps_path = PathRegistry.build(
             RelativeTrajectoryPath.TIMESTAMPS.value,
             *path_suffix,
         )
@@ -73,7 +76,11 @@ class RelativeTrajectoryRepository:
             data=statistics.median_timestamps,
         )
 
-        deciles_path = build_path(RelativeTrajectoryPath.DECILES.value, *path_suffix)
+        deciles_path = PathRegistry.build(
+            RelativeTrajectoryPath.DECILES.value,
+            *path_suffix,
+        )
+
         deciles_data = np.column_stack(
             [
                 statistics.lower_deciles,

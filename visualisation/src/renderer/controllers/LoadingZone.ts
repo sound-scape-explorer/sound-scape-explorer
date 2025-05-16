@@ -1,5 +1,5 @@
 import {ConfigDto} from '@shared/dtos';
-import {ConfigPath} from '@shared/paths';
+import {ConfigPath} from '@shared/pathRegistry';
 import * as h5 from 'jsfive';
 
 import {render} from '../renderer';

@@ -5,8 +5,8 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.ReducerConfig import ReducerConfig
 from processing.context import Context
+from processing.paths.PathRegistry import PathRegistry
 from processing.paths.ReductionPath import ReductionPath
-from processing.paths.path_registry import build_path
 
 
 class ReductionRepository:
@@ -25,7 +25,7 @@ class ReductionRepository:
         band: BandConfig,
         integration: IntegrationConfig,
     ):
-        return build_path(
+        return PathRegistry.build(
             ReductionPath.REDUCTIONS.value,
             extraction.index,
             reducer.index,

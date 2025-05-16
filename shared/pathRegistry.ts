@@ -1,16 +1,20 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
-// todo: rename me to PathRegistry.ts or something
-
-import {RelativeTrajectoryStoragePath, StorageDomain} from '@shared/enums';
+import {
+  AggregationStoragePath,
+  RelativeTrajectoryStoragePath,
+  StorageDomain,
+  TrajectoryStoragePath,
+} from '@shared/enums';
 
 const registeredPaths = new Set<string>();
 
-function register_path(
-  domain: StorageDomain,
-  ...attributes: (string | number)[]
-): string {
-  const path = `/${domain}` + attributes.map((attr) => `/${attr}`).join('');
+function register(domain: StorageDomain, additional?: string): string {
+  let path = `/${domain}`;
+
+  if (typeof additional !== 'undefined') {
+    path += `/${additional}`;
+  }
 
   if (registeredPaths.has(path)) {
     throw new Error(`Path ${path} already registered`);
@@ -20,7 +24,7 @@ function register_path(
   return path;
 }
 
-function build_path(path: string, ...attributes: (string | number)[]): string {
+function build(path: string, ...attributes: (string | number)[]): string {
   if (!registeredPaths.has(path)) {
     throw new Error(`Path ${path} not registered`);
   }
@@ -29,55 +33,58 @@ function build_path(path: string, ...attributes: (string | number)[]): string {
 }
 
 export namespace ConfigPath {
-  export const config = register_path(StorageDomain.enum.config);
+  export const config = register(StorageDomain.enum.config);
 }
 
 const indexDomain = 'indices' as StorageDomain;
 
 // todo: update me when histograms are ready
 export namespace IndexPath {
-  export const indices = register_path(indexDomain, 'indices');
-  export const impls = register_path(indexDomain, 'impls');
-  export const offsets = register_path(indexDomain, 'offsets');
-  export const steps = register_path(indexDomain, 'steps');
-  export const is_persists = register_path(indexDomain, 'is_persists');
+  export const indices = register(indexDomain, 'indices');
+  export const impls = register(indexDomain, 'impls');
+  export const offsets = register(indexDomain, 'offsets');
+  export const steps = register(indexDomain, 'steps');
+  export const is_persists = register(indexDomain, 'is_persists');
 }
 
 namespace AutoclusterPath {
-  export const autoclusters = register_path(StorageDomain.enum.autoclusters);
+  export const autoclusters = register(StorageDomain.enum.autoclusters);
 }
 
 export namespace AutoclusterPathInstance {
   export const autoclusters = (...suffix: number[]) =>
-    build_path(AutoclusterPath.autoclusters, ...suffix);
+    build(AutoclusterPath.autoclusters, ...suffix);
 }
 
 namespace TrajectoryPath {
-  export const path = register_path(StorageDomain.enum.trajectories, 'path');
-  export const timestamps = register_path(
+  export const path = register(
     StorageDomain.enum.trajectories,
-    'timestamps',
+    TrajectoryStoragePath.enum.path,
+  );
+  export const timestamps = register(
+    StorageDomain.enum.trajectories,
+    TrajectoryStoragePath.enum.timestamps,
   );
 }
 
 export namespace TrajectoryPathInstance {
   export const path = (...suffix: number[]) =>
-    build_path(TrajectoryPath.path, ...suffix);
+    build(TrajectoryPath.path, ...suffix);
 
   export const timestamps = (...suffix: number[]) =>
-    build_path(TrajectoryPath.timestamps, ...suffix);
+    build(TrajectoryPath.timestamps, ...suffix);
 }
 
 namespace RelativeTrajectoryPath {
-  export const distances = register_path(
+  export const distances = register(
     StorageDomain.enum.relative_trajectories,
     RelativeTrajectoryStoragePath.enum.distances,
   );
-  export const timestamps = register_path(
+  export const timestamps = register(
     StorageDomain.enum.relative_trajectories,
     RelativeTrajectoryStoragePath.enum.timestamps,
   );
-  export const deciles = register_path(
+  export const deciles = register(
     StorageDomain.enum.relative_trajectories,
     RelativeTrajectoryStoragePath.enum.deciles,
   );
@@ -85,69 +92,69 @@ namespace RelativeTrajectoryPath {
 
 export namespace RelativeTrajectoryPathInstance {
   export const distances = (...suffix: (string | number)[]) =>
-    build_path(RelativeTrajectoryPath.distances, ...suffix);
+    build(RelativeTrajectoryPath.distances, ...suffix);
 
   export const timestamps = (...suffix: (string | number)[]) =>
-    build_path(RelativeTrajectoryPath.timestamps, ...suffix);
+    build(RelativeTrajectoryPath.timestamps, ...suffix);
 
   export const deciles = (...suffix: (string | number)[]) =>
-    build_path(RelativeTrajectoryPath.deciles, ...suffix);
+    build(RelativeTrajectoryPath.deciles, ...suffix);
 }
 
 namespace MetricPath {
-  export const data = register_path(StorageDomain.enum.metrics, 'data');
+  export const metrics = register(StorageDomain.enum.metrics);
 }
 
 export namespace MetricPathInstance {
   export const data = (...suffix: (string | number)[]) =>
-    build_path(MetricPath.data, ...suffix);
+    build(MetricPath.metrics, ...suffix);
 }
 
 namespace ReductionPath {
-  export const reductions = register_path(StorageDomain.enum.reductions);
+  export const reductions = register(StorageDomain.enum.reductions);
 }
 
 export namespace ReductionPathInstance {
   export const reductions = (...suffix: number[]) =>
-    build_path(ReductionPath.reductions, ...suffix);
+    build(ReductionPath.reductions, ...suffix);
 }
 
 namespace AggregationPath {
-  export const embeddings = register_path(
+  export const embeddings = register(
     StorageDomain.enum.aggregations,
-    'embeddings',
+    AggregationStoragePath.enum.embeddings,
   );
-  export const timestamps = register_path(
+  export const timestamps = register(
     StorageDomain.enum.aggregations,
-    'timestamps',
+    AggregationStoragePath.enum.timestamps,
   );
-  export const file_indices = register_path(
+  export const file_indices = register(
     StorageDomain.enum.aggregations,
-    'file_indices',
+    AggregationStoragePath.enum.file_indices,
   );
-  export const file_relative_starts = register_path(
+  export const file_relative_starts = register(
     StorageDomain.enum.aggregations,
-    'file_relative_starts',
+    AggregationStoragePath.enum.file_relative_starts,
   );
-  export const extractor_indices = register_path(
+  export const extractor_indices = register(
     StorageDomain.enum.aggregations,
-    'extractor_indices',
+    AggregationStoragePath.enum.extractor_indices,
   );
 }
 
 export namespace AggregationPathInstance {
   export const embeddings = (...suffix: (string | number)[]) =>
-    build_path(AggregationPath.embeddings, ...suffix);
+    build(AggregationPath.embeddings, ...suffix);
 
   export const timestamps = (...suffix: (string | number)[]) =>
-    build_path(AggregationPath.timestamps, ...suffix);
+    build(AggregationPath.timestamps, ...suffix);
 
   export const file_indices = (...suffix: (string | number)[]) =>
-    build_path(AggregationPath.file_indices, ...suffix);
+    build(AggregationPath.file_indices, ...suffix);
 
   export const file_relative_starts = (...suffix: (string | number)[]) =>
-    build_path(AggregationPath.file_relative_starts, ...suffix);
+    build(AggregationPath.file_relative_starts, ...suffix);
 
   export const extractor_indices = (...suffix: (string | number)[]) =>
-    build_path(AggregationPath.extractor_indices, ...suffix);
+    build(AggregationPath.extractor_indices, ...suffix);
 }

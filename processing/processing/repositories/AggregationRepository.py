@@ -8,21 +8,22 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.constants import STRING_DELIMITER
 from processing.context import Context
-from processing.enums import StorageDomain
+from processing.enums import StorageDomain, AggregationStoragePath
 from processing.interfaces import TimelineAggregate, AggregationData
-from processing.paths.path_registry import register_path, build_path
+from processing.paths.PathRegistry import PathRegistry
 from processing.services.SiteService import SiteWithFiles, SiteService
 
 
 _domain = StorageDomain.aggregations
+_paths = AggregationStoragePath
 
 
 class AggregationPath(Enum):
-    EMBEDDINGS = register_path(_domain, "embeddings")
-    TIMESTAMPS = register_path(_domain, "timestamps")
-    FILE_INDICES = register_path(_domain, "file_indices")
-    FILE_RELATIVE_PATHS = register_path(_domain, "file_relative_starts")
-    EXTRACTOR_INDICES = register_path(_domain, "extractor_indices")
+    EMBEDDINGS = PathRegistry.register(_domain, _paths.embeddings)
+    TIMESTAMPS = PathRegistry.register(_domain, _paths.timestamps)
+    FILE_INDICES = PathRegistry.register(_domain, _paths.file_indices)
+    FILE_RELATIVE_STARTS = PathRegistry.register(_domain, _paths.file_relative_starts)
+    EXTRACTOR_INDICES = PathRegistry.register(_domain, _paths.extractor_indices)
 
 
 class _Paths(NamedTuple):
@@ -39,7 +40,7 @@ class AggregationRepository:
         context.storage.delete(AggregationPath.EMBEDDINGS.value)
         context.storage.delete(AggregationPath.TIMESTAMPS.value)
         context.storage.delete(AggregationPath.FILE_INDICES.value)
-        context.storage.delete(AggregationPath.FILE_RELATIVE_PATHS.value)
+        context.storage.delete(AggregationPath.FILE_RELATIVE_STARTS.value)
         context.storage.delete(AggregationPath.EXTRACTOR_INDICES.value)
 
     @staticmethod
@@ -48,7 +49,7 @@ class AggregationRepository:
             context.storage.exists(AggregationPath.EMBEDDINGS.value)
             and context.storage.exists(AggregationPath.TIMESTAMPS.value)
             and context.storage.exists(AggregationPath.FILE_INDICES.value)
-            and context.storage.exists(AggregationPath.FILE_RELATIVE_PATHS.value)
+            and context.storage.exists(AggregationPath.FILE_RELATIVE_STARTS.value)
             and context.storage.exists(AggregationPath.EXTRACTOR_INDICES.value)
         )
 
@@ -67,14 +68,23 @@ class AggregationRepository:
         ]
 
         return _Paths(
-            embeddings=build_path(AggregationPath.EMBEDDINGS.value, *path_suffix),
-            timestamps=build_path(AggregationPath.TIMESTAMPS.value, *path_suffix),
-            file_indices=build_path(AggregationPath.FILE_INDICES.value, *path_suffix),
-            file_relative_starts=build_path(
-                AggregationPath.FILE_RELATIVE_PATHS.value,
+            embeddings=PathRegistry.build(
+                AggregationPath.EMBEDDINGS.value,
                 *path_suffix,
             ),
-            extractor_indices=build_path(
+            timestamps=PathRegistry.build(
+                AggregationPath.TIMESTAMPS.value,
+                *path_suffix,
+            ),
+            file_indices=PathRegistry.build(
+                AggregationPath.FILE_INDICES.value,
+                *path_suffix,
+            ),
+            file_relative_starts=PathRegistry.build(
+                AggregationPath.FILE_RELATIVE_STARTS.value,
+                *path_suffix,
+            ),
+            extractor_indices=PathRegistry.build(
                 AggregationPath.EXTRACTOR_INDICES.value,
                 *path_suffix,
             ),

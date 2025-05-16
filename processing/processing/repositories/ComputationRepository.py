@@ -8,14 +8,14 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.context import Context
 from processing.enums import StorageDomain
-from processing.paths.path_registry import register_path, build_path
+from processing.paths.PathRegistry import PathRegistry
 from processing.repositories.MeanDistancesMatrixRepository import (
     MeanDistancesMatrixPath,
 )
 
 
 class ComputationPath(Enum):
-    COMPUTATIONS = register_path(StorageDomain.computations)
+    COMPUTATIONS = PathRegistry.register(StorageDomain.computations)
 
 
 class ComputationRepository:
@@ -36,7 +36,7 @@ class ComputationRepository:
         integration: IntegrationConfig,
         iteration: int,
     ):
-        return build_path(
+        return PathRegistry.build(
             ComputationPath.COMPUTATIONS.value,
             extraction.index,
             band.index,

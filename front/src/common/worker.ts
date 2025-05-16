@@ -8,7 +8,7 @@ import {
   ReductionPathInstance,
   RelativeTrajectoryPathInstance,
   TrajectoryPathInstance,
-} from '@shared/paths';
+} from '@shared/pathRegistry';
 import h5wasm, {type Dataset, type File as H5File} from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
 import {type Aggregated} from 'src/composables/use-aggregated';
@@ -60,7 +60,7 @@ export async function readConfigString(file: File) {
   return array[0];
 }
 
-// read dataset as array
+// read dataset as an array
 export function _readArray<T>(h5: H5File, path: string) {
   const dataset = h5.get(path) as Dataset;
   const array = dataset.to_array() as T[]; // todo: TYPE IS CONFUSING

@@ -8,12 +8,12 @@ from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.context import Context
 from processing.enums import StorageDomain
-from processing.paths.path_registry import register_path, build_path
+from processing.paths.PathRegistry import PathRegistry
 from processing.types import Autoclustered
 
 
 class AutoclusterPath(Enum):
-    DATA = register_path(StorageDomain.autoclusters)
+    DATA = PathRegistry.register(StorageDomain.autoclusters)
 
 
 class AutoclusterRepository:
@@ -32,7 +32,7 @@ class AutoclusterRepository:
         integration: IntegrationConfig,
         autocluster: AutoclusterConfig,
     ):
-        return build_path(
+        return PathRegistry.build(
             AutoclusterPath.DATA.value,
             extraction.index,
             band.index,

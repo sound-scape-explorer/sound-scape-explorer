@@ -1,8 +1,8 @@
 from enum import Enum
 
 from processing.enums import StorageDomain
-from processing.paths.path_registry import register_path
+from processing.paths.PathRegistry import PathRegistry
 
 
 class ReductionPath(Enum):
-    REDUCTIONS = register_path(StorageDomain.reductions)
+    REDUCTIONS = PathRegistry.register(StorageDomain.reductions)

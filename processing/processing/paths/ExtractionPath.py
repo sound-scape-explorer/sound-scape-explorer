@@ -1,13 +1,14 @@
 from enum import Enum
 
-from processing.enums import StorageDomain
-from processing.paths.path_registry import register_path
+from processing.enums import StorageDomain, ExtractionStoragePath
+from processing.paths.PathRegistry import PathRegistry
 
 
 _domain = StorageDomain.extractions
+_paths = ExtractionStoragePath
 
 
 class ExtractionPath(Enum):
-    EMBEDDINGS = register_path(_domain, "embeddings")
-    STARTS = register_path(_domain, "starts")
-    ENDS = register_path(_domain, "ends")
+    EMBEDDINGS = PathRegistry.register(_domain, _paths.embeddings)
+    STARTS = PathRegistry.register(_domain, _paths.starts)
+    ENDS = PathRegistry.register(_domain, _paths.ends)

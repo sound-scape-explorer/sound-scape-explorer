@@ -4,6 +4,18 @@ export const StorageDomain = z.enum(["config","extractions","aggregations","redu
 // eslint-disable-next-line no-redeclare
 export type StorageDomain = z.infer<typeof StorageDomain>;
 
+export const ExtractionStoragePath = z.enum(["embeddings","starts","ends"]);
+// eslint-disable-next-line no-redeclare
+export type ExtractionStoragePath = z.infer<typeof ExtractionStoragePath>;
+
+export const AggregationStoragePath = z.enum(["embeddings","timestamps","file_indices","file_relative_starts","extractor_indices"]);
+// eslint-disable-next-line no-redeclare
+export type AggregationStoragePath = z.infer<typeof AggregationStoragePath>;
+
+export const TrajectoryStoragePath = z.enum(["path","timestamps"]);
+// eslint-disable-next-line no-redeclare
+export type TrajectoryStoragePath = z.infer<typeof TrajectoryStoragePath>;
+
 export const RelativeTrajectoryStoragePath = z.enum(["distances","timestamps","deciles"]);
 // eslint-disable-next-line no-redeclare
 export type RelativeTrajectoryStoragePath = z.infer<typeof RelativeTrajectoryStoragePath>;

@@ -10,7 +10,7 @@ from processing.context import Context
 from processing.extractors.Extractor import ExtractionDataRaw
 from processing.interfaces import ExtractionData
 from processing.paths.ExtractionPath import ExtractionPath
-from processing.paths.path_registry import build_path
+from processing.paths.PathRegistry import PathRegistry
 
 
 class _Paths(NamedTuple):
@@ -50,9 +50,18 @@ class ExtractionRepository:
         ]
 
         return _Paths(
-            embeddings=build_path(ExtractionPath.EMBEDDINGS.value, *path_suffix),
-            starts=build_path(ExtractionPath.STARTS.value, *path_suffix),
-            ends=build_path(ExtractionPath.ENDS.value, *path_suffix),
+            embeddings=PathRegistry.build(
+                ExtractionPath.EMBEDDINGS.value,
+                *path_suffix,
+            ),
+            starts=PathRegistry.build(
+                ExtractionPath.STARTS.value,
+                *path_suffix,
+            ),
+            ends=PathRegistry.build(
+                ExtractionPath.ENDS.value,
+                *path_suffix,
+            ),
         )
 
     @staticmethod

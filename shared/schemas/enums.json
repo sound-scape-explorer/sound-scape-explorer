@@ -11,6 +11,22 @@
     "trajectories",
     "relative_trajectories"
   ],
+  "ExtractionStoragePath": [
+    "embeddings",
+    "starts",
+    "ends"
+  ],
+  "AggregationStoragePath": [
+    "embeddings",
+    "timestamps",
+    "file_indices",
+    "file_relative_starts",
+    "extractor_indices"
+  ],
+  "TrajectoryStoragePath": [
+    "path",
+    "timestamps"
+  ],
   "RelativeTrajectoryStoragePath": [
     "distances",
     "timestamps",

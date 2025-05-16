@@ -7,17 +7,18 @@ from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.ReducerConfig import ReducerConfig
 from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.context import Context
-from processing.enums import StorageDomain
+from processing.enums import StorageDomain, TrajectoryStoragePath
 from processing.interfaces import TrajectoryData
-from processing.paths.path_registry import register_path, build_path
+from processing.paths.PathRegistry import PathRegistry
 
 
 _domain = StorageDomain.trajectories
+_paths = TrajectoryStoragePath
 
 
 class TrajectoryPath(Enum):
-    PATH = register_path(_domain, "path")
-    TIMESTAMPS = register_path(_domain, "timestamps")
+    PATH = PathRegistry.register(_domain, _paths.path)
+    TIMESTAMPS = PathRegistry.register(_domain, _paths.timestamps)
 
 
 class _Paths(NamedTuple):
@@ -54,16 +55,15 @@ class TrajectoryRepository:
             trajectory.index,
         ]
 
-        path = build_path(
-            TrajectoryPath.PATH.value,
-            *path_suffix,
-        )
-
-        timestamps = build_path(TrajectoryPath.TIMESTAMPS.value, *path_suffix)
-
         return _Paths(
-            path=path,
-            timestamps=timestamps,
+            path=PathRegistry.build(
+                TrajectoryPath.PATH.value,
+                *path_suffix,
+            ),
+            timestamps=PathRegistry.build(
+                TrajectoryPath.TIMESTAMPS.value,
+                *path_suffix,
+            ),
         )
 
     @staticmethod

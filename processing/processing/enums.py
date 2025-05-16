@@ -14,6 +14,25 @@ class StorageDomain(Enum):
     relative_trajectories = "relative_trajectories"
 
 
+class ExtractionStoragePath(Enum):
+    embeddings = "embeddings"
+    starts = "starts"
+    ends = "ends"
+
+
+class AggregationStoragePath(Enum):
+    embeddings = "embeddings"
+    timestamps = "timestamps"
+    file_indices = "file_indices"
+    file_relative_starts = "file_relative_starts"
+    extractor_indices = "extractor_indices"
+
+
+class TrajectoryStoragePath(Enum):
+    path = "path"
+    timestamps = "timestamps"
+
+
 class RelativeTrajectoryStoragePath(Enum):
     distances = "distances"
     timestamps = "timestamps"
