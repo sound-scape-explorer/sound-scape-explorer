@@ -89,7 +89,7 @@
           "end": "2022-11-17 12:05:00",
           "tagName": "LOCATION",
           "tagValue": "undegraded",
-          "step": "HOUR"
+          "smoothingWindow": 3600000
         },
         {
           "index": 1,
@@ -98,7 +98,7 @@
           "end": "2022-11-23 12:05:00",
           "tagName": "LOCATION",
           "tagValue": "undegraded",
-          "step": "HOUR"
+          "smoothingWindow": 3600000
         },
         {
           "index": 2,
@@ -107,7 +107,7 @@
           "end": "2022-12-13 12:05:00",
           "tagName": "LOCATION",
           "tagValue": "undegraded",
-          "step": "HOUR"
+          "smoothingWindow": 3600000
         }
       ]
     }
