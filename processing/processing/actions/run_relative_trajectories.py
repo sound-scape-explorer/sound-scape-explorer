@@ -1,8 +1,7 @@
 from processing.context import Context
 from processing.interfaces import TrajectoryData
+from processing.lib.console import Console
 from processing.managers.ReductionManager import ReductionManager
-from processing.printers.print_action import print_action
-from processing.printers.print_trajectory_groups import print_trajectory_groups
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.ComputationRepository import ComputationRepository
 from processing.repositories.RelativeTrajectoryRepository import (
@@ -17,14 +16,14 @@ from processing.validators.validate_computations import validate_computations
 
 @validate_computations
 def run_relative_trajectories(context: Context):
-    print_action("Relative trajectories started!", "start")
+    Console.print_header("Relative trajectories started")
 
     RelativeTrajectoryRepository.delete(context)
 
     for ri in ReductionManager.iterate_all(context):
         trajectories = ri.extraction.trajectories
         groups = TrajectoryService.group_by_tags(trajectories)
-        print_trajectory_groups(groups)
+        Console.print_trajectory_groups(groups)
 
         aggregations = AggregationRepository.from_storage(
             context=context,
@@ -108,4 +107,4 @@ def run_relative_trajectories(context: Context):
                     statistics=statistics,
                 )
 
-    print_action("Relative trajectories completed!", "end")
+    Console.print_footer("Relative trajectories completed")

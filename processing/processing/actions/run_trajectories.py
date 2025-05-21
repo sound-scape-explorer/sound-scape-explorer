@@ -1,9 +1,8 @@
 from rich.progress import track
 
 from processing.context import Context
+from processing.lib.console import Console
 from processing.managers.ReductionManager import ReductionManager
-from processing.printers.print_action import print_action
-from processing.printers.print_trajectories import print_trajectories
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.ReductionRepository import ReductionRepository
 from processing.repositories.TrajectoryRepository import TrajectoryRepository
@@ -16,12 +15,12 @@ from processing.validators.validate_reductions import validate_reductions
 @validate_aggregations
 @validate_reductions
 def run_trajectories(context: Context):
-    print_action("Tracing trajectories started!", "start")
+    Console.print_header("Tracing trajectories started")
 
     TrajectoryRepository.delete(context)
 
     for ri in ReductionManager.iterate_all(context):
-        print_trajectories(ri.extraction.trajectories)
+        Console.print_trajectories(ri.extraction.trajectories)
 
         aggregations = AggregationRepository.from_storage(
             context=context,
@@ -67,4 +66,4 @@ def run_trajectories(context: Context):
                 data=data,
             )
 
-    print_action("Tracing trajectories completed!", "end")
+    Console.print_footer("Tracing trajectories completed")

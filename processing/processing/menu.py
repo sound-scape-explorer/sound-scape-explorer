@@ -18,7 +18,7 @@ from processing.actions.run_trajectories import run_trajectories
 from processing.common.MenuChoice import MenuChoice
 from processing.context import Context
 from processing.lib.app import App
-from processing.printers.print_settings import print_settings
+from processing.lib.console import Console
 from processing.prompts.prompt_menu import prompt_menu
 from processing.repositories.ConfigRepository import ConfigRepository
 from processing.utils.prettify_exceptions import prettify_exceptions
@@ -27,7 +27,8 @@ from processing.utils.prettify_exceptions import prettify_exceptions
 @prettify_exceptions
 def menu(config_path: str):
     context = Context(config_path)
-    print_settings(context)
+    Console.print_splash()
+    Console.print_settings(context)
     ConfigRepository.to_storage(context)
 
     def handle_sigint(_signum, _frame):

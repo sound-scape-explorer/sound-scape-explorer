@@ -3,7 +3,7 @@ from rich.progress import track
 
 from processing.context import Context
 from processing.factories.ReducerFactory import ReducerFactory
-from processing.printers.print_action import print_action
+from processing.lib.console import Console
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.ReductionRepository import ReductionRepository
 from processing.validators.validate_aggregations import validate_aggregations
@@ -11,7 +11,7 @@ from processing.validators.validate_aggregations import validate_aggregations
 
 @validate_aggregations
 def run_reductions(context: Context):
-    print_action("Reductions started!", "start")
+    Console.print_header("Reductions started")
 
     ReductionRepository.delete(context)
 
@@ -49,4 +49,4 @@ def run_reductions(context: Context):
                         reductions=reductions,
                     )
 
-    print_action("Reductions completed!", "end")
+    Console.print_footer("Reductions completed")

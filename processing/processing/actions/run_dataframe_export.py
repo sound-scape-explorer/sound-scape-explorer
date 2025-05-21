@@ -4,10 +4,10 @@ from pandas import DataFrame
 
 from processing.constants import STRING_DELIMITER
 from processing.context import Context
+from processing.lib.console import Console
 from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ReductionManager import ReductionManager
 from processing.managers.TagManager import TagManager
-from processing.printers.print_action import print_action
 from processing.prompts.prompt_band import prompt_band
 from processing.prompts.prompt_csv_path import prompt_csv_path
 from processing.prompts.prompt_extraction import prompt_extraction
@@ -17,7 +17,7 @@ from processing.repositories.ReductionRepository import ReductionRepository
 
 
 def run_dataframe_export(context: Context):
-    print_action("Export started", "start")
+    Console.print_header("Export started")
 
     raw: dict[str, list[str]] = defaultdict(list)
 
@@ -86,4 +86,4 @@ def run_dataframe_export(context: Context):
     df = DataFrame(raw)
     df.to_csv(csv_path, index=False)
 
-    print_action("Export completed!", "end")
+    Console.print_footer("Export completed")

@@ -1,7 +1,7 @@
 import numpy as np
 
 from processing.context import Context
-from processing.printers.print_action import print_action
+from processing.lib.console import Console
 from processing.prompts.prompt_band import prompt_band
 from processing.prompts.prompt_extraction import prompt_extraction
 from processing.prompts.prompt_integration import prompt_integration
@@ -10,7 +10,7 @@ from processing.repositories.ComputationRepository import ComputationRepository
 
 
 def run_computations_export(context: Context):
-    print_action("Computations export started!", "start")
+    Console.print_header("Computations export started")
 
     extraction = prompt_extraction(context)
     band = prompt_band(extraction)
@@ -27,4 +27,4 @@ def run_computations_export(context: Context):
     unpacked = [np.array(d[:]) for d in computations]
     np.save(path, np.array(unpacked))
 
-    print_action("Computations export completed!", "end")
+    Console.print_footer("Computations export completed")

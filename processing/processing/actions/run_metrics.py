@@ -3,10 +3,9 @@ from rich.progress import track
 
 from processing.context import Context
 from processing.factories.MetricFactory import MetricFactory
+from processing.lib.console import Console
 from processing.managers.AggregationManager import AggregationManager
 from processing.managers.TagManager import TagManager
-from processing.printers.print_action import print_action
-from processing.printers.print_metrics import print_metrics
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.MeanDistancesMatrixRepository import (
     MeanDistancesMatrixRepository,
@@ -17,12 +16,12 @@ from processing.validators.validate_aggregations import validate_aggregations
 
 @validate_aggregations
 def run_metrics(context: Context):
-    print_action("Metrics started!", "start")
+    Console.print_header("Metrics started")
 
     MetricRepository.delete(context)
 
     for ai in AggregationManager.iterate(context):
-        print_metrics(ai.extraction.metrics)
+        Console.print_metrics(ai.extraction.metrics)
 
         aggregations = AggregationRepository.from_storage(
             context=context,
@@ -68,4 +67,4 @@ def run_metrics(context: Context):
                 data=data,
             )
 
-    print_action("Metrics completed!", "end")
+    Console.print_footer("Metrics completed")

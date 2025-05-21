@@ -1,5 +1,5 @@
 from processing.context import Context
-from processing.printers.print_action import print_action
+from processing.lib.console import Console
 from processing.repositories.AggregationRepository import AggregationRepository
 
 
@@ -7,7 +7,7 @@ from processing.repositories.AggregationRepository import AggregationRepository
 def validate_aggregations(action):
     def decorator(context: Context):
         if not AggregationRepository.exists(context):
-            print_action("No aggregations found in storage!", "error")
+            Console.print_error("No aggregations found in storage")
             return
 
         action(context)

@@ -4,9 +4,7 @@ from sklearn import metrics
 
 from processing.config.SettingsConfig import SettingsConfig
 from processing.constants import MDM_EMPTY
-from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
-    MeanDistancesMatrixOutOfMemoryWarning,
-)
+from processing.lib.console import Console
 from processing.utils.calculate_mdm_shape_limit import calculate_mdm_shape_limit
 
 
@@ -20,10 +18,7 @@ class MeanDistancesMatrix:
         shape_req = len(embeddings[0])
         shape_max = calculate_mdm_shape_limit(settings.memory_limit)
         if shape_req > shape_max:
-            MeanDistancesMatrixOutOfMemoryWarning(
-                "Filling storage with empty array...",
-                f"RAM limit: {settings.memory_limit} GB",
-            )
+            Console.print_mdm_oom_warning(f"RAM limit: {settings.memory_limit} GB")
             return MDM_EMPTY
 
         # Calculate pairwise distances and average them

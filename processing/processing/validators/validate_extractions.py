@@ -1,12 +1,12 @@
 from processing.context import Context
+from processing.lib.console import Console
 from processing.repositories.ExtractionRepository import ExtractionRepository
-from processing.printers.print_action import print_action
 
 
 def validate_extractions(action):
     def decorator(context: Context):
         if not ExtractionRepository.exists(context):
-            print_action("No extracted data found in storage!", "error")
+            Console.print_error("No extracted data found in storage")
             return
 
         action(context)
