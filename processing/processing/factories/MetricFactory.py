@@ -5,13 +5,13 @@ import numpy as np
 from processing.config.MetricConfig import MetricConfig
 from processing.constants import MDM_EMPTY
 from processing.enums import MetricImpl
+from processing.interfaces import SerializedTag
 from processing.metrics.ContingencyMetric import ContingencyMetric
 from processing.metrics.MeanDeviationMetric import MeanDeviationMetric
 from processing.metrics.MeanSpreadingMetric import MeanSpreadingMetric
 from processing.metrics.Metric import Metric
 from processing.metrics.OverlapMetric import OverlapMetric
 from processing.metrics.SilhouetteMetric import SilhouetteMetric
-from processing.common.AggregatedTag import AggregatedTag
 from processing.types import Mdm
 
 
@@ -20,7 +20,7 @@ class MetricFactory:
     def create(
         metric: MetricConfig,
         embeddings: np.ndarray,
-        tags: list[AggregatedTag],
+        tags: list[SerializedTag],
         mdm: Optional[Mdm] = MDM_EMPTY,
     ) -> Metric:
         if metric.impl is MetricImpl.MEAN_STD:

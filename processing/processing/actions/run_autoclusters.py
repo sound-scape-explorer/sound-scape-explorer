@@ -40,7 +40,7 @@ def run_autoclusters(context: Context):
                 band=ai.band,
                 integration=ai.integration,
                 autocluster=autocluster,
-                data=data,
+                labels=data,
             )
 
     print_action("Autoclustering completed!", "end")

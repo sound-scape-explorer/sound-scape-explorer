@@ -5,7 +5,7 @@ from processing.enums import AutoclusterImpl
 from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
     MeanDistancesMatrixOutOfMemoryWarning,
 )
-from processing.types import Mdm, AutoclusterData
+from processing.types import Mdm, AutoclusterLabels
 
 
 @dataclass
@@ -66,7 +66,7 @@ class AutoclusterConfig:
             # match_reference_implementation=False,
         )
 
-    def run(self, mean_distances_matrix: Mdm) -> AutoclusterData:
+    def run(self, mean_distances_matrix: Mdm) -> AutoclusterLabels:
         try:
             ac = self._start()
             clustering = ac.fit(mean_distances_matrix[:])

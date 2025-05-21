@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from processing.interfaces import MetricData
-from processing.common.AggregatedTag import AggregatedTag
+from processing.interfaces import MetricData, SerializedTag
 
 
 class Metric(ABC):
@@ -18,7 +17,7 @@ class Metric(ABC):
     def __init__(
         self,
         embeddings: np.ndarray,
-        tags: list[AggregatedTag],
+        tags: list[SerializedTag],
     ):
         """
         Initialize the metric with embeddings and labels.

@@ -10,14 +10,14 @@ class MeanSpreadingMetric(Metric):
     def run(self):
         results: MetricData = {}
 
-        for label in self.tags:
+        for tag in self.tags:
             class_indices = defaultdict(list)
-            for i, class_value in enumerate(label.values):
+            for i, class_value in enumerate(tag.values):
                 class_indices[class_value].append(i)
 
-            class_results = np.zeros(len(label.uniques_occurrence)).astype(np.float32)
+            class_results = np.zeros(len(tag.uniques)).astype(np.float32)
 
-            for i, class_value in enumerate(label.uniques_occurrence):
+            for i, class_value in enumerate(tag.uniques):
                 indices = class_indices[class_value]
                 class_embeddings = self.embeddings[indices]
 
@@ -27,6 +27,6 @@ class MeanSpreadingMetric(Metric):
 
                 class_results[i] = mean_spread
 
-            results[label.name] = class_results
+            results[tag.name] = class_results
 
         return results

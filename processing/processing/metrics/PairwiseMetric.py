@@ -2,9 +2,8 @@ from abc import abstractmethod
 
 import numpy as np
 
-from processing.interfaces import MetricData
+from processing.interfaces import MetricData, SerializedTag
 from processing.metrics.Metric import Metric
-from processing.common.AggregatedTag import AggregatedTag
 
 
 class PairwiseMetric(Metric):
@@ -39,8 +38,8 @@ class PairwiseMetric(Metric):
     @abstractmethod
     def _compute_pair(
         self,
-        tag_a: AggregatedTag,
-        tag_b: AggregatedTag,
+        tag_a: SerializedTag,
+        tag_b: SerializedTag,
     ) -> tuple[np.ndarray, np.ndarray]:
         """
         Internal method to compute the metric between two specific labels.

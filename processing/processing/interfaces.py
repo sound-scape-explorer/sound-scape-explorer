@@ -62,16 +62,23 @@ class Interval(NamedTuple):
     i: int
     aggregations: AggregationData
 
-    joined_site: str  # joined sites if multiple files
     sites: list[str]
+    joined_site: str  # join sites if multiple files
 
-    # joined tags are a bit different than tags
+    # joined tags are a bit different from tags
     # object keys are tag names
     # object values are the tag uniques
     # the tag uniques are concatenated tag values
     # (this joined string occurs when multiple files populate the same interval)
-    joined_tags: dict[str, str]
     tags: dict[str, list[str]]
+    joined_tags: dict[str, str]
+
+
+class SerializedTag(NamedTuple):
+    i: int  # tag index
+    name: str
+    values: list[str]  # flat, array position is the aggregation index
+    uniques: list[str]  # by order of occurrence
 
 
 class TrajectoryData(NamedTuple):
