@@ -14,6 +14,7 @@ import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
+import {capitalizeFirstLetter} from 'src/utils/strings';
 import {ref} from 'vue';
 
 const step = ref<number>(0); // percents
@@ -55,7 +56,7 @@ export function useViewLoader() {
   };
 
   const updateReading = (current: string) => {
-    loadingText.value = `Reading ${current}...`;
+    loadingText.value = `${capitalizeFirstLetter(current)}...`;
   };
 
   const load = async () => {
