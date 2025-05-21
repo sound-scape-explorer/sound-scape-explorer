@@ -32,7 +32,7 @@ def run_autoclusters(context: Context):
             continue
 
         for autocluster in ai.extraction.autoclusters:
-            autoclustered = autocluster.run(mdm)
+            data = autocluster.run(mdm)
 
             AutoclusterRepository.to_storage(
                 context=context,
@@ -40,7 +40,7 @@ def run_autoclusters(context: Context):
                 band=ai.band,
                 integration=ai.integration,
                 autocluster=autocluster,
-                autoclustered=autoclustered,
+                data=data,
             )
 
     print_action("Autoclustering completed!", "end")

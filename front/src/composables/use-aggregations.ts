@@ -3,7 +3,7 @@ import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
-export interface Aggregated {
+export interface Aggregations {
   embeddings: number[][];
   timestamps: number[];
   fileIndices: number[][];
@@ -11,9 +11,9 @@ export interface Aggregated {
   extractorIndices: number[][];
 }
 
-const aggregated = ref<Aggregated | null>(null);
+const aggregations = ref<Aggregations | null>(null);
 
-export function useAggregated() {
+export function useAggregations() {
   const {read: r} = useStorageReader();
   const {sites} = useSitesNew();
   const {extraction, band, integration} = useViewSelectionNew();
@@ -28,7 +28,7 @@ export function useAggregated() {
         return;
       }
 
-      aggregated.value = await worker.readAggregations(
+      aggregations.value = await worker.readAggregations(
         file,
         extraction.value.index,
         band.value.index,
@@ -39,11 +39,11 @@ export function useAggregated() {
   };
 
   const reset = () => {
-    aggregated.value = null;
+    aggregations.value = null;
   };
 
   return {
-    aggregated,
+    aggregations,
     read,
     reset,
   };

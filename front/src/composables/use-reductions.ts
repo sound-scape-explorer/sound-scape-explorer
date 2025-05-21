@@ -3,15 +3,15 @@ import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
-export type ReducedEmbeddings = number[][];
-const reducedEmbeddings = ref<ReducedEmbeddings | null>(null);
+export type Reductions = number[][];
+const reductions = ref<Reductions | null>(null);
 let isLoaded = false;
 
-export function useStorageReducedEmbeddings() {
-  const {read} = useStorageReader();
+export function useReductions() {
+  const {read: r} = useStorageReader();
   const {isReady} = useStorageReady();
 
-  const readReducedFeatures = async () => {
+  const read = async () => {
     if (!isReady.value) {
       return;
     }
@@ -22,7 +22,7 @@ export function useStorageReducedEmbeddings() {
 
     isLoaded = true;
 
-    await read(async (worker, file) => {
+    await r(async (worker, file) => {
       const {extraction, band, integration, reducer} = useViewSelectionNew();
 
       if (
@@ -34,7 +34,7 @@ export function useStorageReducedEmbeddings() {
         return;
       }
 
-      reducedEmbeddings.value = await worker.readReductions(
+      reductions.value = await worker.readReductions(
         file,
         extraction.value.index,
         reducer.value.index,
@@ -44,14 +44,14 @@ export function useStorageReducedEmbeddings() {
     });
   };
 
-  const resetReducedFeatures = () => {
-    reducedEmbeddings.value = null;
+  const reset = () => {
+    reductions.value = null;
     isLoaded = false;
   };
 
   return {
-    reducedEmbeddings,
-    readReducedEmbeddings: readReducedFeatures,
-    resetReducedEmbeddings: resetReducedFeatures,
+    reductions,
+    read,
+    reset,
   };
 }

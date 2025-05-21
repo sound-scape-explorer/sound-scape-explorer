@@ -11,7 +11,8 @@ import {
 } from '@shared/pathRegistry';
 import h5wasm, {type Dataset, type File as H5File} from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
-import {type Aggregated} from 'src/composables/use-aggregated';
+import {type Aggregations} from 'src/composables/use-aggregations';
+import {type Autocluster} from 'src/composables/use-autoclusters';
 import {type MetricData} from 'src/composables/use-metric-data';
 import {type RelativeTrajectory} from 'src/composables/use-relative-trajectories';
 import {type AggregatedIndex} from 'src/composables/use-storage-aggregated-acoustic-indices';
@@ -123,7 +124,7 @@ export async function readAutoclusters(
   bandIndex: number,
   integrationIndex: number,
   autoclusterIndex: number,
-) {
+): Promise<Autocluster['data']> {
   const h5 = await load(file);
 
   const path = AutoclusterPathInstance.autoclusters(
@@ -204,10 +205,10 @@ export async function readAggregations(
   bandIndex: number,
   integrationIndex: number,
   siteNames: string[],
-): Promise<Aggregated> {
+): Promise<Aggregations> {
   const h5 = await load(file);
 
-  const aggregated: Aggregated = {
+  const aggregations: Aggregations = {
     embeddings: [],
     timestamps: [],
     fileIndices: [],
@@ -221,12 +222,12 @@ export async function readAggregations(
     // embeddings
     const embeddingsPath = AggregationPathInstance.embeddings(...suffix);
     const embeddings = _readArray<number[]>(h5, embeddingsPath);
-    aggregated.embeddings.push(...embeddings);
+    aggregations.embeddings.push(...embeddings);
 
     // timestamps
     const timestampsPath = AggregationPathInstance.timestamps(...suffix);
     const timestamps = _readArray<number>(h5, timestampsPath);
-    aggregated.timestamps.push(...timestamps);
+    aggregations.timestamps.push(...timestamps);
 
     // file indices
     const fileIndicesPath = AggregationPathInstance.file_indices(...suffix);
@@ -234,7 +235,7 @@ export async function readAggregations(
     const fileIndices = fileIndicesStrings.map((strings) =>
       strings.split(STRING_DELIMITER).map(Number),
     );
-    aggregated.fileIndices.push(...fileIndices);
+    aggregations.fileIndices.push(...fileIndices);
 
     // file relative starts
     const fileRelativeStarts = AggregationPathInstance.file_relative_starts(
@@ -247,7 +248,7 @@ export async function readAggregations(
     const fileRelativeStartsNumbers = fileRelativeStartsStrings.map((strings) =>
       strings.split(STRING_DELIMITER).map(Number),
     );
-    aggregated.fileRelativeStarts.push(...fileRelativeStartsNumbers);
+    aggregations.fileRelativeStarts.push(...fileRelativeStartsNumbers);
 
     // extractor indices
     const extractorIndicesPath = AggregationPathInstance.extractor_indices(
@@ -260,10 +261,10 @@ export async function readAggregations(
     const extractorIndices = extractorIndicesStrings.map((strings) =>
       strings.split(STRING_DELIMITER).map(Number),
     );
-    aggregated.extractorIndices.push(...extractorIndices);
+    aggregations.extractorIndices.push(...extractorIndices);
   }
 
-  return aggregated;
+  return aggregations;
 }
 
 // todo: update me

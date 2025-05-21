@@ -13,7 +13,7 @@ from processing.repositories.ComputationRepository import ComputationRepository
 from processing.repositories.MeanDistancesMatrixRepository import (
     MeanDistancesMatrixRepository,
 )
-from processing.validators.validate_aggregated import validate_aggregated
+from processing.validators.validate_aggregations import validate_aggregations
 
 
 def _run_computation_reductions(context: Context):
@@ -98,7 +98,7 @@ def _run_mean_distance_matrices(context: Context):
         )
 
 
-@validate_aggregated
+@validate_aggregations
 def run_computations(context: Context):
     print_action("Requirements computation started!", "start")
 

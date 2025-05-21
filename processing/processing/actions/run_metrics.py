@@ -12,10 +12,10 @@ from processing.repositories.MeanDistancesMatrixRepository import (
 )
 from processing.repositories.MetricRepository import MetricRepository
 from processing.services.AggregatedTagService import AggregatedTagService
-from processing.validators.validate_aggregated import validate_aggregated
+from processing.validators.validate_aggregations import validate_aggregations
 
 
-@validate_aggregated
+@validate_aggregations
 def run_metrics(context: Context):
     print_action("Metrics started!", "start")
 

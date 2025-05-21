@@ -60,7 +60,7 @@ MetricData = dict[_MetricDataKey, npt.NDArray[np.float32]]
 
 class Interval(NamedTuple):
     i: int
-    aggregated: AggregationData
+    aggregations: AggregationData
 
     joined_site: str  # joined sites if multiple files
     sites: list[str]

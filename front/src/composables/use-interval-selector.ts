@@ -1,5 +1,5 @@
 import {useRefHistory} from '@vueuse/core';
-import {useAggregated} from 'src/composables/use-aggregated';
+import {useAggregations} from 'src/composables/use-aggregations';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
@@ -14,7 +14,7 @@ export function useIntervalSelector() {
   const {isAudioAutoOpen, isDetailsAutoOpen} = useClientSettings();
   const {open} = useDraggables();
   const {isLoading} = useAudioFile();
-  const {aggregated} = useAggregated();
+  const {aggregations} = useAggregations();
 
   const selectInterval = (index: number | null) => {
     if (isLoading.value || currentIntervalIndex.value === index) {
@@ -33,13 +33,13 @@ export function useIntervalSelector() {
   };
 
   const forward = () => {
-    if (currentIntervalIndex.value === null || aggregated.value === null) {
+    if (currentIntervalIndex.value === null || aggregations.value === null) {
       return;
     }
 
     let nextIndex = currentIntervalIndex.value + 1;
 
-    if (nextIndex >= aggregated.value.timestamps.length) {
+    if (nextIndex >= aggregations.value.timestamps.length) {
       nextIndex = 0;
     }
 
@@ -47,14 +47,14 @@ export function useIntervalSelector() {
   };
 
   const back = () => {
-    if (currentIntervalIndex.value === null || aggregated.value === null) {
+    if (currentIntervalIndex.value === null || aggregations.value === null) {
       return;
     }
 
     let previousIndex = currentIntervalIndex.value - 1;
 
     if (previousIndex < 0) {
-      previousIndex = aggregated.value.timestamps.length - 1;
+      previousIndex = aggregations.value.timestamps.length - 1;
     }
 
     selectInterval(previousIndex);

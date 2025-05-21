@@ -34,7 +34,7 @@ class AggregatedTagService:
         values = legacy.tag_values
 
         for autocluster in reversed(extraction.autoclusters):
-            autoclustered = AutoclusterRepository.from_storage(
+            data = AutoclusterRepository.from_storage(
                 context=context,
                 extraction=extraction,
                 band=band,
@@ -45,7 +45,7 @@ class AggregatedTagService:
             names.insert(0, f"{AUTOCLUSTER_PREFIX}{autocluster.index}")
 
             for i in range(len(values)):
-                values[i] = [str(autoclustered[i]), *values[i]]
+                values[i] = [str(data[i]), *values[i]]
 
         return names, values
 

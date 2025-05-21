@@ -1,6 +1,6 @@
 import {type ExtractorDto, type FileDto} from '@shared/dtos';
-import {useAggregated} from 'src/composables/use-aggregated';
-import {useAutoclustered} from 'src/composables/use-autoclustered';
+import {useAggregations} from 'src/composables/use-aggregations';
+import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useConfig} from 'src/composables/use-config';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {AUTOCLUSTER_AS_TAG_NAME, SITE_AS_TAG_NAME} from 'src/constants';
@@ -19,7 +19,7 @@ interface Window {
   };
 }
 
-export type AggregatedWindow = Omit<Window, 'extractor'>;
+export type AggregationWindow = Omit<Window, 'extractor'>;
 
 interface Interval {
   index: number;
@@ -27,7 +27,7 @@ interface Interval {
   end: number;
   sites: string[];
   files: FileDto[];
-  windows: AggregatedWindow[]; // aggregated by files useful for reading the audio portion of the file
+  windows: AggregationWindow[]; // aggregated by files useful for reading the audio portion of the file
   tags: {
     // file site + autoclustering labels + file tags
     [tagName: string]: string[];
@@ -38,9 +38,9 @@ const intervals = ref<Interval[]>([]);
 
 export function useIntervals() {
   const {config} = useConfig();
-  const {aggregated} = useAggregated();
+  const {aggregations} = useAggregations();
   const {extraction, integration} = useViewSelectionNew();
-  const {autoclustered} = useAutoclustered();
+  const {autoclusters} = useAutoclusters();
 
   const findExtractor = (extractorIndex: number): ExtractorDto => {
     if (config.value === null || extraction.value === null) {
@@ -73,20 +73,20 @@ export function useIntervals() {
   };
 
   const generate = () => {
-    if (aggregated.value === null || integration.value === null) {
+    if (aggregations.value === null || integration.value === null) {
       return;
     }
 
-    for (let i = 0; i < aggregated.value.timestamps.length; i += 1) {
-      const start = aggregated.value.timestamps[i];
+    for (let i = 0; i < aggregations.value.timestamps.length; i += 1) {
+      const start = aggregations.value.timestamps[i];
       const end = start + integration.value.duration;
 
       // read windows
       const windows: Window[] = [];
-      for (let j = 0; j < aggregated.value.fileIndices[i].length; j += 1) {
-        const extractorIndex = aggregated.value.extractorIndices[i][j];
-        const fileIndex = aggregated.value.fileIndices[i][j];
-        const fileRelativeStart = aggregated.value.fileRelativeStarts[i][j];
+      for (let j = 0; j < aggregations.value.fileIndices[i].length; j += 1) {
+        const extractorIndex = aggregations.value.extractorIndices[i][j];
+        const fileIndex = aggregations.value.fileIndices[i][j];
+        const fileRelativeStart = aggregations.value.fileRelativeStarts[i][j];
 
         const extractor = findExtractor(extractorIndex);
         const file = findFile(fileIndex);
@@ -122,7 +122,7 @@ export function useIntervals() {
       for (const file of interval.files) {
         const fileWindows = windows.filter((w) => w.file.Index === file.Index);
 
-        const fileWindow: AggregatedWindow = {
+        const fileWindow: AggregationWindow = {
           file,
           absolute: {
             start: Math.min(...fileWindows.map((w) => w.absolute.start)),
@@ -151,7 +151,7 @@ export function useIntervals() {
       }
 
       // add autoclustering labels as interval tags
-      for (const ac of autoclustered.value) {
+      for (const ac of autoclusters.value) {
         const name = `${AUTOCLUSTER_AS_TAG_NAME}_${ac.autocluster.index}`;
         const value = ac.data[i].toString();
 

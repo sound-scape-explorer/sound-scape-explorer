@@ -1,10 +1,10 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
-import {useAggregated} from 'src/composables/use-aggregated';
+import {useAggregations} from 'src/composables/use-aggregations';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
+import {useReductions} from 'src/composables/use-reductions';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
-import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
@@ -13,9 +13,9 @@ interface ExportData {
   intervalIndex: number;
   timestamp: number;
   site: string;
-  aggregatedLabels: string[];
-  reducedFeatures: number[];
-  aggregatedFeatures: number[];
+  tags: string[];
+  reductions: number[];
+  aggregations: number[];
 }
 
 // todo: update me!!!
@@ -24,8 +24,8 @@ export function useScatterExport() {
   const {allUniques} = useTagUniques();
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();
-  const {reducedEmbeddings} = useStorageReducedEmbeddings();
-  const {aggregated} = useAggregated();
+  const {reductions} = useReductions();
+  const {aggregations} = useAggregations();
   // const {aggregatedEmbeddings} = useStorageAggregatedEmbeddings();
   // const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
   // const {aggregatedLabels} = useStorageAggregatedLabels();
@@ -40,8 +40,8 @@ export function useScatterExport() {
     if (
       band.value === null ||
       integration.value === null ||
-      aggregated.value === null ||
-      reducedEmbeddings.value === null
+      aggregations.value === null ||
+      reductions.value === null
     ) {
       return;
     }
@@ -54,28 +54,28 @@ export function useScatterExport() {
     // const aggregatedIndicesCopy = aggregatedIndices.value;
     const payload: ExportData[] = [];
 
-    for (let i = 0; i < aggregated.value.timestamps.length; i += 1) {
+    for (let i = 0; i < aggregations.value.timestamps.length; i += 1) {
       if (filtered.value[i]) {
         continue;
       }
 
-      const aggregatedEmbeddings = aggregated.value.embeddings[i];
-      const timestamp = aggregated.value.timestamps[i];
       // const site = aggregatedSites.value[i];
       // const aggregatedLabelsInterval = aggregatedLabels.value[i];
 
-      const reducedFeaturesInterval = reducedEmbeddings.value[i];
+      const timestamp = aggregations.value.timestamps[i];
+      const aggregation = aggregations.value.embeddings[i];
+      const reduction = reductions.value[i];
 
       payload.push({
         intervalIndex: i,
         timestamp,
         site: 'relol',
         // aggregatedLabels: aggregatedLabelsInterval,
-        aggregatedLabels: ['lol'],
+        tags: ['lol'],
         // reducedFeatures: reducedFeaturesInterval,
-        reducedFeatures: [1],
+        reductions: [1],
         // aggregatedEmbeddings: aggregatedEmbeddings,
-        aggregatedFeatures: [1],
+        aggregations: [1],
       });
     }
 
@@ -91,11 +91,11 @@ export function useScatterExport() {
     //   csv.addColumn(`i_${index.index}_${index.impl}`);
     // });
 
-    payload[0].reducedFeatures.forEach((_, r) => {
+    payload[0].reductions.forEach((_, r) => {
       csv.addColumn(`r_${r}`);
     });
 
-    payload[0].aggregatedFeatures.forEach((_, f) => {
+    payload[0].aggregations.forEach((_, f) => {
       csv.addColumn(`f_${f}`);
     });
 
@@ -105,7 +105,7 @@ export function useScatterExport() {
       csv.addToCurrentRow(convertTimestampToIsoDate(data.timestamp));
       csv.addToCurrentRow(data.site);
 
-      data.aggregatedLabels.forEach((aL) => {
+      data.tags.forEach((aL) => {
         csv.addToCurrentRow(aL);
       });
 
@@ -113,11 +113,11 @@ export function useScatterExport() {
       //   csv.addToCurrentRow(`${aI.values[data.intervalIndex]}`);
       // });
 
-      data.reducedFeatures.forEach((rF) => {
+      data.reductions.forEach((rF) => {
         csv.addToCurrentRow(`${rF}`);
       });
 
-      data.aggregatedFeatures.forEach((aF) => {
+      data.aggregations.forEach((aF) => {
         csv.addToCurrentRow(`${aF}`);
       });
     });

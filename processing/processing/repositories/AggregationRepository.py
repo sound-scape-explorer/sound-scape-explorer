@@ -107,15 +107,15 @@ class AggregationRepository:
         all_file_relative_starts: list[str] = []
         all_extractor_indices: list[str] = []
 
-        for aggregated in aggregates:
-            all_embeddings.append(aggregated.embeddings)
-            all_timestamps.append(aggregated.start)
+        for agg in aggregates:
+            all_embeddings.append(agg.embeddings)
+            all_timestamps.append(agg.start)
 
             file_indices: list[str] = []
             file_relative_starts: list[str] = []
             extractor_indices: list[str] = []
 
-            for s in aggregated.slices:
+            for s in agg.slices:
                 file_indices.append(str(s.file.index))
                 file_relative_starts.append(str(s.rstart))
                 extractor_indices.append(str(s.extractor.index))

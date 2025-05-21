@@ -1,12 +1,12 @@
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
-import {useAggregated} from 'src/composables/use-aggregated';
+import {useAggregations} from 'src/composables/use-aggregations';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
 export function useScatterFilterTime() {
-  const {aggregated} = useAggregated();
+  const {aggregations} = useAggregations();
   const {isActive} = useDraggableCalendar();
   const {left, right} = useTimelineRange();
 
@@ -15,21 +15,21 @@ export function useScatterFilterTime() {
       return true;
     }
 
-    if (aggregated.value === null) {
+    if (aggregations.value === null) {
       return false;
     }
 
     // Unix time in seconds
-    const t = aggregated.value.timestamps[index];
+    const t = aggregations.value.timestamps[index];
     return t >= left.value && t < right.value;
   };
 
   const filter = (): void => {
-    if (aggregated.value === null) {
+    if (aggregations.value === null) {
       return;
     }
 
-    const length = aggregated.value.timestamps.length;
+    const length = aggregations.value.timestamps.length;
     const pointsFilteredByTime = new Array<boolean>(length);
 
     for (let i = 0; i < length; i += 1) {

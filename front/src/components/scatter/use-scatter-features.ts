@@ -5,8 +5,8 @@ import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useReductions} from 'src/composables/use-reductions';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
-import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
 import {colorMap} from 'src/styles/color-map';
 import {computed} from 'vue';
 
@@ -15,7 +15,7 @@ const size3d = 3;
 
 // todo: update me
 export function useScatterFeatures() {
-  const {reducedEmbeddings} = useStorageReducedEmbeddings();
+  const {reductions} = useReductions();
   // const {labelProperties} = useStorageLabels();
   // const {aggregatedLabels} = useStorageAggregatedLabels();
   const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
@@ -28,11 +28,11 @@ export function useScatterFeatures() {
   const {generateHovers} = useScatterHovers();
 
   const isThreeDimensional = computed<boolean>(() => {
-    if (reducedEmbeddings.value === null) {
+    if (reductions.value === null) {
       return false;
     }
 
-    return reducedEmbeddings.value[0].length === 3;
+    return reductions.value[0].length === 3;
   });
 
   const scatterType = computed<PlotType>(() => {
@@ -48,11 +48,11 @@ export function useScatterFeatures() {
   });
 
   const generateCoordinates = () => {
-    if (reducedEmbeddings.value === null) {
+    if (reductions.value === null) {
       throw new ScatterFeaturesError('data not available');
     }
 
-    const features = reducedEmbeddings.value;
+    const features = reductions.value;
     const l = features.length;
 
     const xs: number[] = new Array(l);
@@ -136,7 +136,7 @@ export function useScatterFeatures() {
   const trace = (): Data[] => {
     if (
       // labelProperties.value === null ||
-      reducedEmbeddings.value === null ||
+      reductions.value === null ||
       // aggregatedLabels.value === null ||
       scale.value === null ||
       filtered.value === null

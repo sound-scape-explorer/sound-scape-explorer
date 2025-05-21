@@ -1,11 +1,11 @@
 import {type Dayjs} from 'dayjs';
-import {useAggregated} from 'src/composables/use-aggregated';
+import {useAggregations} from 'src/composables/use-aggregations';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useConfig} from 'src/composables/use-config';
 import {useDate} from 'src/composables/use-date';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {
-  type AggregatedWindow,
+  type AggregationWindow,
   useIntervals,
 } from 'src/composables/use-intervals';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
@@ -16,7 +16,7 @@ const currentIndex = ref<number | null>(null);
 const date = ref<Dayjs | null>(null);
 const labelValues = ref<string[] | null>(null);
 const site = ref<string | null>(null);
-const windows = ref<AggregatedWindow[] | null>(null);
+const windows = ref<AggregationWindow[] | null>(null);
 
 // interval details
 // todo: can you be more uselessly redundant please?
@@ -24,7 +24,7 @@ export function useDetails() {
   const {config} = useConfig();
   const {integration} = useViewSelectionNew();
   const {convertTimestampToDate} = useDate();
-  const {aggregated} = useAggregated();
+  const {aggregations} = useAggregations();
   const {currentIntervalIndex} = useIntervalSelector();
   const {timeshift} = useClientSettings();
   const {intervals} = useIntervals();
@@ -33,14 +33,14 @@ export function useDetails() {
     if (
       currentIntervalIndex.value === null ||
       config.value === null ||
-      aggregated.value === null ||
+      aggregations.value === null ||
       currentIntervalIndex.value === currentIndex.value
     ) {
       return;
     }
 
     const i = currentIntervalIndex.value; // interval index
-    const t = aggregated.value.timestamps[i];
+    const t = aggregations.value.timestamps[i];
     const interval = intervals.value[i];
 
     date.value = convertTimestampToDate(t);
@@ -60,12 +60,12 @@ export function useDetails() {
   });
 
   const updateDates = () => {
-    if (currentIntervalIndex.value === null || aggregated.value === null) {
+    if (currentIntervalIndex.value === null || aggregations.value === null) {
       return;
     }
 
     const i = currentIntervalIndex.value;
-    const t = aggregated.value.timestamps[i];
+    const t = aggregations.value.timestamps[i];
 
     date.value = convertTimestampToDate(t);
   };
