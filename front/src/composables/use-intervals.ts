@@ -42,42 +42,39 @@ export function useIntervals() {
   const {extraction, integration} = useViewSelectionNew();
   const {autoclusters} = useAutoclusters();
 
-  const findExtractor = (extractorIndex: number): ExtractorDto => {
-    if (config.value === null || extraction.value === null) {
-      throw new Error('config or extraction not available');
-    }
-
-    const extractor = extraction.value.extractors.find(
-      (e) => e.index === extractorIndex,
-    );
-
-    if (!extractor) {
-      throw new Error('extractor not found');
-    }
-
-    return extractor;
-  };
-
-  const findFile = (fileIndex: number): FileDto => {
-    if (config.value === null) {
-      throw new Error('config not available');
-    }
-
-    const file = config.value.files.find((f) => f.Index === String(fileIndex));
-
-    if (!file) {
-      throw new Error('file not found');
-    }
-
-    return file;
-  };
-
+  // performance note: critical lookup operations have been optimized.
+  // if further performance is needed, consider these:
+  // - Replace [...new Set()] with direct Sets to reduce temporary arrays
+  // - Optimize Math.min/max(...array) spreads with manual min/max tracking
   const generate = () => {
-    if (aggregations.value === null || integration.value === null) {
+    if (
+      aggregations.value === null ||
+      integration.value === null ||
+      config.value === null ||
+      extraction.value === null
+    ) {
       return;
     }
 
-    for (let i = 0; i < aggregations.value.timestamps.length; i += 1) {
+    // create lookup maps for faster access
+    const extractorMap = new Map<number, ExtractorDto>(); // by extractor index
+    const fileMap = new Map<number, FileDto>(); // by file index as number
+
+    // populate extractor map
+    for (const extractor of extraction.value.extractors) {
+      extractorMap.set(extractor.index, extractor);
+    }
+
+    // populate file map
+    for (const file of config.value.files) {
+      fileMap.set(Number(file.Index), file);
+    }
+
+    // create new intervals fixed array
+    const intervalLength = aggregations.value.timestamps.length;
+    const newIntervals = new Array<Interval>(intervalLength);
+
+    for (let i = 0; i < intervalLength; i += 1) {
       const start = aggregations.value.timestamps[i];
       const end = start + integration.value.duration;
 
@@ -88,8 +85,8 @@ export function useIntervals() {
         const fileIndex = aggregations.value.fileIndices[i][j];
         const fileRelativeStart = aggregations.value.fileRelativeStarts[i][j];
 
-        const extractor = findExtractor(extractorIndex);
-        const file = findFile(fileIndex);
+        const extractor = extractorMap.get(extractorIndex)!;
+        const file = fileMap.get(fileIndex)!;
 
         const window: Window = {
           extractor,
@@ -181,8 +178,10 @@ export function useIntervals() {
         }
       }
 
-      intervals.value.push(interval);
+      newIntervals[i] = interval;
     }
+
+    intervals.value = newIntervals;
   };
 
   return {
