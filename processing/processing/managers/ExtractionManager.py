@@ -1,9 +1,12 @@
 from processing.config.BandConfig import BandConfig
 from processing.config.ExtractionConfig import ExtractionConfig
-from processing.factories.ExtractorFactory import ExtractorFactory
 from processing.context import Context
+from processing.factories.ExtractorFactory import ExtractorFactory
 from processing.interfaces import ExtractionIteration
-from processing.repositories.ExtractionRepository import ExtractionRepository, ExtractionData
+from processing.repositories.ExtractionRepository import (
+    ExtractionRepository,
+    ExtractionData,
+)
 from processing.services.SiteService import SiteWithFiles, SiteService
 
 
@@ -15,6 +18,7 @@ class ExtractionManager:
     @staticmethod
     def iterate(context: Context):
         sites = SiteService.get_sites(context)
+        i = 0
 
         for site in sites:
             for extraction in context.config.extractions:
@@ -23,12 +27,15 @@ class ExtractionManager:
                         ex = ExtractorFactory.create(extractor, band)
 
                         yield ExtractionIteration(
+                            i=i,
                             site=site,
                             band=band,
                             extraction=extraction,
                             extractor=extractor,
                             ex=ex,
                         )
+
+                        i += 1
 
     @staticmethod
     def read(

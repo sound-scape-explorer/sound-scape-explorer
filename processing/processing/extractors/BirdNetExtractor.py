@@ -4,7 +4,7 @@ from keras import layers
 from processing.constants import BIRDNET_WINDOW_MS
 from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
-from processing.lib.console import mute_console_output
+from processing.lib.console import Console
 from processing.resources.BirdNetResource import BirdNetResource
 
 
@@ -27,7 +27,7 @@ class BirdNetExtractor(Extractor):
         model_path = BirdNetResource.get_path()
         self.model = layers.TFSMLayer(model_path, call_endpoint="embeddings")
 
-    @mute_console_output
+    @Console.mute_outputs
     def extract(self, path):
         samples = load_resample_and_transpose(
             path,

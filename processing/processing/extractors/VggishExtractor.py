@@ -4,7 +4,7 @@ import tensorflow_hub as hub
 from processing.constants import VGGISH_WINDOW_MS
 from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
-from processing.lib.console import mute_console_output
+from processing.lib.console import Console
 from processing.resources.VggishResource import VggishResource
 
 
@@ -27,7 +27,7 @@ class VggishExtractor(Extractor):
         model_path = VggishResource.get_path()
         self.model = hub.load(model_path)
 
-    @mute_console_output
+    @Console.mute_outputs
     def extract(self, path):
         samples = load_resample_and_transpose(
             path,

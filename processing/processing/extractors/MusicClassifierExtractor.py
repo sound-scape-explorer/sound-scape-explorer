@@ -5,7 +5,7 @@ from librosa import feature
 from processing.constants import MUSICCLASS_WINDOW_MS
 from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
-from processing.lib.console import mute_console_output
+from processing.lib.console import Console
 from processing.lib.shapes import assert_shape
 from processing.resources.MusicClassifierResource import MusicClassifierResource
 
@@ -38,7 +38,7 @@ class MusicClassifierExtractor(Extractor):
         intermediate_model.trainable = False
         return intermediate_model
 
-    @mute_console_output
+    @Console.mute_outputs
     def extract(self, path):
         samples = load_resample_and_transpose(
             path,

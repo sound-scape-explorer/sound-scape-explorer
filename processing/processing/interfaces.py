@@ -22,6 +22,7 @@ class ExtractionData(NamedTuple):
 
 
 class ExtractionIteration(NamedTuple):
+    i: int
     site: SiteWithFiles
     band: BandConfig
     extraction: ExtractionConfig
