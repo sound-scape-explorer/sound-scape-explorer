@@ -6,10 +6,10 @@ from processing.managers.ExtractionManager import ExtractionManager
 from processing.managers.SiteManager import SiteManager
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.services.SiteService import SiteService
-from processing.validators.validate_extracted import validate_extracted
+from processing.validators.validate_extractions import validate_extractions
 
 
-@validate_extracted
+@validate_extractions
 def run_aggregations(context: Context):
     Console.print_header("Aggregations started")
 
