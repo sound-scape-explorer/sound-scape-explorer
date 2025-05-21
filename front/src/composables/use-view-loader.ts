@@ -14,12 +14,13 @@ import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
-import {capitalizeFirstLetter} from 'src/utils/strings';
-import {ref} from 'vue';
+import {nextTick, ref} from 'vue';
+
+const RENDER_TIMEOUT = 100;
 
 const step = ref<number>(0); // percents
 
-type Step = [string, () => Promise<void>]; // [text, reader]
+type Step = [string, () => void | Promise<void>]; // [text, reader]
 
 // todo: update me
 export function useViewLoader() {
@@ -43,11 +44,11 @@ export function useViewLoader() {
   const {lock, unlock} = useGlobalKeyboard();
 
   const steps: Step[] = [
-    ['reading aggregations', readAggregations],
-    ['reading reductions', readReductions],
-    ['reading autoclusters', readAutoclusters],
-    ['building intervals', async () => generateIntervals()],
-    ['building tag uniques', async () => generateTagUniques()],
+    ['Reading aggregations', readAggregations],
+    ['Reading reductions', readReductions],
+    ['Reading autoclusters', readAutoclusters],
+    ['Building intervals', generateIntervals],
+    ['Building tags', generateTagUniques],
   ];
 
   const updateStep = (current: number) => {
@@ -56,7 +57,7 @@ export function useViewLoader() {
   };
 
   const updateReading = (current: string) => {
-    loadingText.value = `${capitalizeFirstLetter(current)}...`;
+    loadingText.value = `${current}...`;
   };
 
   const load = async () => {
@@ -78,6 +79,13 @@ export function useViewLoader() {
 
       updateStep(s);
       updateReading(text);
+
+      // Force a UI update before starting the heavy work
+      await nextTick();
+
+      // Allow the browser to update the UI
+      await new Promise((resolve) => setTimeout(resolve, RENDER_TIMEOUT));
+
       await reader();
     }
 
