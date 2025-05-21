@@ -64,7 +64,7 @@ export async function readConfigString(file: File) {
 // read dataset as an array
 export function _readArray<T>(h5: H5File, path: string) {
   const dataset = h5.get(path) as Dataset;
-  const array = dataset.to_array() as T[]; // todo: TYPE IS CONFUSING
+  const array = dataset.to_array() as T;
   return array;
 }
 
@@ -75,11 +75,11 @@ export async function readIndices(file: File): Promise<IndexDto[]> {
   type dto = IndexDto;
   const p = IndexPath;
 
-  const indices = _readArray<dto['index']>(h5, p.indices);
-  const impls = _readArray<dto['impl']>(h5, p.impls);
-  const offsets = _readArray<dto['offset']>(h5, p.offsets);
-  const steps = _readArray<dto['step']>(h5, p.steps);
-  const isPersists = _readArray<dto['isPersist']>(h5, p.is_persists);
+  const indices = _readArray<dto['index'][]>(h5, p.indices);
+  const impls = _readArray<dto['impl'][]>(h5, p.impls);
+  const offsets = _readArray<dto['offset'][]>(h5, p.offsets);
+  const steps = _readArray<dto['step'][]>(h5, p.steps);
+  const isPersists = _readArray<dto['isPersist'][]>(h5, p.is_persists);
 
   const indicesObjects: dto[] = [];
 
@@ -134,7 +134,7 @@ export async function readAutoclusters(
     autoclusterIndex,
   );
 
-  const values = _readArray<number>(h5, path);
+  const values = _readArray<Autocluster['data']>(h5, path);
   return values;
 }
 
@@ -157,13 +157,19 @@ export async function readRelativeTrajectories(
   ];
 
   const distancesPath = RelativeTrajectoryPathInstance.distances(...suffix);
-  const distances = _readArray<number>(h5, distancesPath);
+  const distances = _readArray<RelativeTrajectory['distances']>(
+    h5,
+    distancesPath,
+  );
 
   const timestampsPath = RelativeTrajectoryPathInstance.timestamps(...suffix);
-  const timestamps = _readArray<number>(h5, timestampsPath);
+  const timestamps = _readArray<RelativeTrajectory['timestamps']>(
+    h5,
+    timestampsPath,
+  );
 
   const decilesPath = RelativeTrajectoryPathInstance.deciles(...suffix);
-  const deciles = _readArray<[number, number]>(h5, decilesPath);
+  const deciles = _readArray<RelativeTrajectory['deciles']>(h5, decilesPath);
 
   return {
     distances,
@@ -191,10 +197,10 @@ export async function readTrajectories(
   ];
 
   const pathPath = TrajectoryPathInstance.path(...suffix);
-  const path = _readArray<number[]>(h5, pathPath);
+  const path = _readArray<TrajectoryPath>(h5, pathPath);
 
   const timestampsPath = TrajectoryPathInstance.timestamps(...suffix);
-  const timestamps = _readArray<number>(h5, timestampsPath);
+  const timestamps = _readArray<TrajectoryTimestamps>(h5, timestampsPath);
 
   return [path, timestamps];
 }
@@ -221,17 +227,23 @@ export async function readAggregations(
 
     // embeddings
     const embeddingsPath = AggregationPathInstance.embeddings(...suffix);
-    const embeddings = _readArray<number[]>(h5, embeddingsPath);
+    const embeddings = _readArray<Aggregations['embeddings']>(
+      h5,
+      embeddingsPath,
+    );
     aggregations.embeddings.push(...embeddings);
 
     // timestamps
     const timestampsPath = AggregationPathInstance.timestamps(...suffix);
-    const timestamps = _readArray<number>(h5, timestampsPath);
+    const timestamps = _readArray<Aggregations['timestamps']>(
+      h5,
+      timestampsPath,
+    );
     aggregations.timestamps.push(...timestamps);
 
     // file indices
     const fileIndicesPath = AggregationPathInstance.file_indices(...suffix);
-    const fileIndicesStrings = _readArray<string>(h5, fileIndicesPath);
+    const fileIndicesStrings = _readArray<string[]>(h5, fileIndicesPath);
     const fileIndices = fileIndicesStrings.map((strings) =>
       strings.split(STRING_DELIMITER).map(Number),
     );
@@ -241,7 +253,7 @@ export async function readAggregations(
     const fileRelativeStarts = AggregationPathInstance.file_relative_starts(
       ...suffix,
     );
-    const fileRelativeStartsStrings = _readArray<string>(
+    const fileRelativeStartsStrings = _readArray<string[]>(
       h5,
       fileRelativeStarts,
     );
@@ -254,7 +266,7 @@ export async function readAggregations(
     const extractorIndicesPath = AggregationPathInstance.extractor_indices(
       ...suffix,
     );
-    const extractorIndicesStrings = _readArray<string>(
+    const extractorIndicesStrings = _readArray<string[]>(
       h5,
       extractorIndicesPath,
     );
@@ -324,12 +336,12 @@ export async function readMetric(
   if (!isPairing) {
     const suffix = [...baseSuffix, labelPropertyA];
     const path = MetricPathInstance.data(...suffix);
-    const data = _readArray<number[]>(h5, path);
+    const data = _readArray<MetricData['values']>(h5, path);
     values.push(...data);
   } else {
     const suffix = [...baseSuffix, labelPropertyB, labelPropertyA];
     const path = MetricPathInstance.data(...suffix);
-    const data = _readArray<number[]>(h5, path);
+    const data = _readArray<MetricData['values']>(h5, path);
     values.push(...data);
   }
 
