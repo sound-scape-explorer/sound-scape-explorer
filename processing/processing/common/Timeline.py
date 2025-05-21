@@ -7,6 +7,7 @@ from rich.progress import Progress
 from processing.constants import STRING_DELIMITER
 from processing.context import Context
 from processing.interfaces import TimelineSlice, TimelineAggregate
+from processing.lib.console import Console
 from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ExtractionManager import ExtractedByExtractorIndex
 from processing.repositories.ExtractionRepository import ExtractionData
@@ -164,9 +165,9 @@ class Timeline:
         total_steps = (end_position - start_position) // integration_ms
         aggregates: list[TimelineAggregate] = []
 
-        with Progress() as progress:
+        with Progress(console=Console.console) as progress:
             task = progress.add_task(
-                f"Aggregating with {integration_ms//1000}s...",
+                f"Aggregating at {integration_ms//1000}s...",
                 total=total_steps,
             )
 

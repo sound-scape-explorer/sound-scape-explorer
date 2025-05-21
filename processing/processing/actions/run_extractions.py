@@ -33,6 +33,6 @@ def run_extractions(context: Context):
             )
 
     Console.print_footer(
-        f"Extractions completed!",
+        f"Extractions completed",
         f"{file_count} files processed",
     )

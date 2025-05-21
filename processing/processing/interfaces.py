@@ -30,6 +30,13 @@ class ExtractionIteration(NamedTuple):
     ex: Extractor
 
 
+class SiteIteration(NamedTuple):
+    i: int
+    site: SiteWithFiles
+    extraction: ExtractionConfig
+    band: BandConfig
+
+
 class TimelineSlice(NamedTuple):
     extractor: ExtractorConfig
     file: FileConfig
