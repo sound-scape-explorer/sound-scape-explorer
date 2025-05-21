@@ -1,11 +1,12 @@
 from rich import print
 
 from processing.constants import APP_NAME
-from processing.utils.get_version_from_setup import get_version_from_setup
+from processing.lib.app import App
 
 
 def print_welcome() -> None:
-    version = get_version_from_setup()
+    version = App.get_version()
+
     print(
         f"[green]"
         f":waving_hand: Welcome to [bold]{APP_NAME}[/bold]"
