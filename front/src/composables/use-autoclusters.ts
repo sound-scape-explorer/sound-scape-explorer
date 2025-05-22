@@ -3,14 +3,14 @@ import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {ref} from 'vue';
 
-export interface Autoclustered {
+export interface Autocluster {
   autocluster: AutoclusterDto;
   data: number[];
 }
 
-const autoclustered = ref<Autoclustered[]>([]);
+const autoclusters = ref<Autocluster[]>([]);
 
-export function useAutoclustered() {
+export function useAutoclusters() {
   const {read: r} = useStorageReader();
   const {extraction, band, integration} = useViewSelectionNew();
 
@@ -24,36 +24,36 @@ export function useAutoclustered() {
         return;
       }
 
-      const autoclusters = extraction.value.autoclusters;
-      const newAutoclustered: Autoclustered[] = [];
+      const dtos = extraction.value.autoclusters;
+      const newAutoclusters: Autocluster[] = [];
 
-      for (const autocluster of autoclusters) {
+      for (const dto of dtos) {
         const data = await worker.readAutoclusters(
           file,
           extraction.value.index,
           band.value.index,
           integration.value.index,
-          autocluster.index,
+          dto.index,
         );
 
-        const ac: Autoclustered = {
-          autocluster,
+        const ac: Autocluster = {
+          autocluster: dto,
           data,
         };
 
-        newAutoclustered.push(ac);
+        newAutoclusters.push(ac);
       }
 
-      autoclustered.value = newAutoclustered;
+      autoclusters.value = newAutoclusters;
     });
   };
 
   const reset = () => {
-    autoclustered.value = [];
+    autoclusters.value = [];
   };
 
   return {
-    autoclustered,
+    autoclusters,
     read,
     reset,
   };

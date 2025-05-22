@@ -4,20 +4,20 @@ from pandas import DataFrame
 
 from processing.constants import STRING_DELIMITER
 from processing.context import Context
+from processing.lib.console import Console
 from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ReductionManager import ReductionManager
-from processing.printers.print_action import print_action
+from processing.managers.TagManager import TagManager
 from processing.prompts.prompt_band import prompt_band
 from processing.prompts.prompt_csv_path import prompt_csv_path
 from processing.prompts.prompt_extraction import prompt_extraction
 from processing.prompts.prompt_integration import prompt_integration
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.ReductionRepository import ReductionRepository
-from processing.services.AggregatedTagService import AggregatedTagService
 
 
 def run_dataframe_export(context: Context):
-    print_action("Export started", "start")
+    Console.print_header("Export started")
 
     raw: dict[str, list[str]] = defaultdict(list)
 
@@ -33,11 +33,12 @@ def run_dataframe_export(context: Context):
         integration=integration,
     )
 
-    all_tags = AggregatedTagService.from_storage(
+    tags = TagManager.build_serialized_tags(
         context=context,
         extraction=extraction,
         band=band,
         integration=integration,
+        aggregations=aggregations,
     )
 
     # intervals
@@ -52,7 +53,7 @@ def run_dataframe_export(context: Context):
         raw["sites"].append(STRING_DELIMITER.join(site))
 
     # tags
-    for tag in all_tags:
+    for tag in tags:
         raw[tag.name] = tag.values
 
     # reductions
@@ -85,4 +86,4 @@ def run_dataframe_export(context: Context):
     df = DataFrame(raw)
     df.to_csv(csv_path, index=False)
 
-    print_action("Export completed!", "end")
+    Console.print_footer("Export completed")

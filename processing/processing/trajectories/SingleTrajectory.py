@@ -30,8 +30,8 @@ class SingleTrajectory:
 
         for i in self.intervals:
             # time filtering
-            is_too_early = i.aggregated.start < self.trajectory.start
-            is_too_late = i.aggregated.end > self.trajectory.end
+            is_too_early = i.aggregations.start < self.trajectory.start
+            is_too_late = i.aggregations.end > self.trajectory.end
 
             if is_too_early or is_too_late:
                 continue
@@ -56,7 +56,7 @@ class SingleTrajectory:
 
         indices = [interval.i for interval in filtered_intervals]
         selected_embeddings = self.embeddings[indices]
-        selected_timestamps = np.stack([i.aggregated.start for i in filtered_intervals])
+        selected_timestamps = np.stack([i.aggregations.start for i in filtered_intervals])
 
         # building dataframe
         dimensions = selected_embeddings.shape[1]

@@ -40,13 +40,13 @@ class ReductionRepository:
         band: BandConfig,
         integration: IntegrationConfig,
         reducer: ReducerConfig,
-        reduced: np.ndarray,
+        reductions: np.ndarray,
     ):
         path = ReductionRepository._get_path(extraction, reducer, band, integration)
 
         context.storage.write(
             path=path,
-            data=reduced,  # type: ignore
+            data=reductions,  # type: ignore
         )
 
     @staticmethod

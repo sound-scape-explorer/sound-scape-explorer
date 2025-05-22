@@ -1,5 +1,5 @@
 import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
-import {useAggregated} from 'src/composables/use-aggregated';
+import {useAggregations} from 'src/composables/use-aggregations';
 import {useDate} from 'src/composables/use-date';
 import {useIntervals} from 'src/composables/use-intervals';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
@@ -17,7 +17,7 @@ export interface TimelineElement {
 
 export function useTimelineElements() {
   const {integration} = useViewSelectionNew();
-  const {aggregated} = useAggregated();
+  const {aggregations} = useAggregations();
   const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
   const {scale} = useBodyColors();
   const {intervals} = useIntervals();
@@ -54,7 +54,7 @@ export function useTimelineElements() {
   };
 
   const createElements = (indices: Ref<number[]>) => {
-    if (integration.value === null || aggregated.value === null) {
+    if (integration.value === null || aggregations.value === null) {
       return [];
     }
 
@@ -63,8 +63,8 @@ export function useTimelineElements() {
     let rowNumber = -1;
 
     for (const index of indices.value) {
-      const timestamp = aggregated.value.timestamps[index];
-      const fileIndices = aggregated.value.fileIndices[index];
+      const timestamp = aggregations.value.timestamps[index];
+      const fileIndices = aggregations.value.fileIndices[index];
       const site = intervals.value[index].sites.join(STRING_DELIMITER);
 
       if (!knownSites.includes(site)) {

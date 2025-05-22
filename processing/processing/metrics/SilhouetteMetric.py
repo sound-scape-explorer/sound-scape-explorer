@@ -3,9 +3,8 @@ from collections import defaultdict
 import numpy as np
 from sklearn import metrics
 
-from processing.interfaces import MetricData
+from processing.interfaces import MetricData, SerializedTag
 from processing.metrics.Metric import Metric
-from processing.common.AggregatedTag import AggregatedTag
 from processing.types import Mdm
 from processing.utils.sort_dataframe import sort_dataframe
 
@@ -14,7 +13,7 @@ class SilhouetteMetric(Metric):
     def __init__(
         self,
         embeddings: np.ndarray,
-        tags: list[AggregatedTag],
+        tags: list[SerializedTag],
         mdm: Mdm,
     ):
         super().__init__(embeddings, tags)
@@ -23,13 +22,13 @@ class SilhouetteMetric(Metric):
     def run(self):
         results: MetricData = {}
 
-        for label in self.tags:
+        for tag in self.tags:
             # Create mapping from class value to indices
             class_indices = defaultdict(list)
-            for i, class_value in enumerate(label.values):
+            for i, class_value in enumerate(tag.values):
                 class_indices[class_value].append(i)
 
-            unique_values = label.uniques_occurrence
+            unique_values = tag.uniques
             n_classes = len(unique_values)
             silhouette = np.zeros((n_classes, n_classes)).astype(np.float32)
 
@@ -73,7 +72,7 @@ class SilhouetteMetric(Metric):
             # Fill in upper triangle (symmetric matrix)
             silhouette = silhouette + silhouette.T
             # necessary?
-            silhouette = sort_dataframe(df=silhouette, label=label)
-            results[label.name] = silhouette
+            silhouette = sort_dataframe(df=silhouette, tag=tag)
+            results[tag.name] = silhouette
 
         return results

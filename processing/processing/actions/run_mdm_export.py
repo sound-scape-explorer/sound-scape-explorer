@@ -1,7 +1,7 @@
 import numpy as np
 
 from processing.context import Context
-from processing.printers.print_action import print_action
+from processing.lib.console import Console
 from processing.prompts.prompt_band import prompt_band
 from processing.prompts.prompt_extraction import prompt_extraction
 from processing.prompts.prompt_integration import prompt_integration
@@ -12,7 +12,7 @@ from processing.repositories.MeanDistancesMatrixRepository import (
 
 
 def run_mdm_export(context: Context):
-    print_action("Mean distances matrix export started!", "start")
+    Console.print_header("Mean distances matrix export started")
 
     extraction = prompt_extraction(context)
     band = prompt_band(extraction)
@@ -28,4 +28,4 @@ def run_mdm_export(context: Context):
     npy_path = prompt_npy_path(context)
     np.save(npy_path, mdm)
 
-    print_action("Mean distances matrix export completed!", "end")
+    Console.print_footer("Mean distances matrix export completed")

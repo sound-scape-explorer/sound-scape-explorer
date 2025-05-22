@@ -5,7 +5,7 @@ from InquirerPy.separator import Separator
 from processing.common.MenuChoice import MenuChoice
 from processing.constants import STATE_PRESENT, STATE_UNDEFINED, STATE_MISSING
 from processing.context import Context
-from processing.printers.print_menu_legend import print_menu_legend
+from processing.lib.console import Console
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.AutoclusterRepository import AutoclusterRepository
 from processing.repositories.ComputationRepository import ComputationRepository
@@ -53,7 +53,7 @@ def _wrap(choice: MenuChoice, context: Context):
 
 
 def prompt_menu(context: Context):
-    print_menu_legend()
+    Console.print_menu_legend()
 
     questions = [
         {

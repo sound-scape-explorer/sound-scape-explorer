@@ -1,6 +1,6 @@
 import {type ExtractorDto, type FileDto} from '@shared/dtos';
-import {useAggregated} from 'src/composables/use-aggregated';
-import {useAutoclustered} from 'src/composables/use-autoclustered';
+import {useAggregations} from 'src/composables/use-aggregations';
+import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useConfig} from 'src/composables/use-config';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {AUTOCLUSTER_AS_TAG_NAME, SITE_AS_TAG_NAME} from 'src/constants';
@@ -19,7 +19,7 @@ interface Window {
   };
 }
 
-export type AggregatedWindow = Omit<Window, 'extractor'>;
+export type AggregationWindow = Omit<Window, 'extractor'>;
 
 interface Interval {
   index: number;
@@ -27,7 +27,7 @@ interface Interval {
   end: number;
   sites: string[];
   files: FileDto[];
-  windows: AggregatedWindow[]; // aggregated by files useful for reading the audio portion of the file
+  windows: AggregationWindow[]; // aggregated by files useful for reading the audio portion of the file
   tags: {
     // file site + autoclustering labels + file tags
     [tagName: string]: string[];
@@ -38,58 +38,55 @@ const intervals = ref<Interval[]>([]);
 
 export function useIntervals() {
   const {config} = useConfig();
-  const {aggregated} = useAggregated();
+  const {aggregations} = useAggregations();
   const {extraction, integration} = useViewSelectionNew();
-  const {autoclustered} = useAutoclustered();
+  const {autoclusters} = useAutoclusters();
 
-  const findExtractor = (extractorIndex: number): ExtractorDto => {
-    if (config.value === null || extraction.value === null) {
-      throw new Error('config or extraction not available');
-    }
-
-    const extractor = extraction.value.extractors.find(
-      (e) => e.index === extractorIndex,
-    );
-
-    if (!extractor) {
-      throw new Error('extractor not found');
-    }
-
-    return extractor;
-  };
-
-  const findFile = (fileIndex: number): FileDto => {
-    if (config.value === null) {
-      throw new Error('config not available');
-    }
-
-    const file = config.value.files.find((f) => f.Index === String(fileIndex));
-
-    if (!file) {
-      throw new Error('file not found');
-    }
-
-    return file;
-  };
-
+  // performance note: critical lookup operations have been optimized.
+  // if further performance is needed, consider these:
+  // - Replace [...new Set()] with direct Sets to reduce temporary arrays
+  // - Optimize Math.min/max(...array) spreads with manual min/max tracking
   const generate = () => {
-    if (aggregated.value === null || integration.value === null) {
+    if (
+      aggregations.value === null ||
+      integration.value === null ||
+      config.value === null ||
+      extraction.value === null
+    ) {
       return;
     }
 
-    for (let i = 0; i < aggregated.value.timestamps.length; i += 1) {
-      const start = aggregated.value.timestamps[i];
+    // create lookup maps for faster access
+    const extractorMap = new Map<number, ExtractorDto>(); // by extractor index
+    const fileMap = new Map<number, FileDto>(); // by file index as number
+
+    // populate extractor map
+    for (const extractor of extraction.value.extractors) {
+      extractorMap.set(extractor.index, extractor);
+    }
+
+    // populate file map
+    for (const file of config.value.files) {
+      fileMap.set(Number(file.Index), file);
+    }
+
+    // create new intervals fixed array
+    const intervalLength = aggregations.value.timestamps.length;
+    const newIntervals = new Array<Interval>(intervalLength);
+
+    for (let i = 0; i < intervalLength; i += 1) {
+      const start = aggregations.value.timestamps[i];
       const end = start + integration.value.duration;
 
       // read windows
       const windows: Window[] = [];
-      for (let j = 0; j < aggregated.value.fileIndices[i].length; j += 1) {
-        const extractorIndex = aggregated.value.extractorIndices[i][j];
-        const fileIndex = aggregated.value.fileIndices[i][j];
-        const fileRelativeStart = aggregated.value.fileRelativeStarts[i][j];
+      for (let j = 0; j < aggregations.value.fileIndices[i].length; j += 1) {
+        const extractorIndex = aggregations.value.extractorIndices[i][j];
+        const fileIndex = aggregations.value.fileIndices[i][j];
+        const fileRelativeStart = aggregations.value.fileRelativeStarts[i][j];
 
-        const extractor = findExtractor(extractorIndex);
-        const file = findFile(fileIndex);
+        const extractor = extractorMap.get(extractorIndex)!;
+        const file = fileMap.get(fileIndex)!;
 
         const window: Window = {
           extractor,
@@ -122,7 +119,7 @@ export function useIntervals() {
       for (const file of interval.files) {
         const fileWindows = windows.filter((w) => w.file.Index === file.Index);
 
-        const fileWindow: AggregatedWindow = {
+        const fileWindow: AggregationWindow = {
           file,
           absolute: {
             start: Math.min(...fileWindows.map((w) => w.absolute.start)),
@@ -151,7 +148,7 @@ export function useIntervals() {
       }
 
       // add autoclustering labels as interval tags
-      for (const ac of autoclustered.value) {
+      for (const ac of autoclusters.value) {
         const name = `${AUTOCLUSTER_AS_TAG_NAME}_${ac.autocluster.index}`;
         const value = ac.data[i].toString();
 
@@ -181,8 +178,10 @@ export function useIntervals() {
         }
       }
 
-      intervals.value.push(interval);
+      newIntervals[i] = interval;
     }
+
+    intervals.value = newIntervals;
   };
 
   return {

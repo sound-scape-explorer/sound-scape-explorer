@@ -1,4 +1,4 @@
-import {useAggregated} from 'src/composables/use-aggregated';
+import {useAggregations} from 'src/composables/use-aggregations';
 import {useConfig} from 'src/composables/use-config';
 import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
 import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
@@ -15,7 +15,7 @@ const scale = ref<string[] | null>(null);
 
 export function useScatterColorScale() {
   const {config} = useConfig();
-  const {aggregated} = useAggregated();
+  const {aggregations} = useAggregations();
   const {isIndicators, isLabels} = useColorState();
   const {getColor} = useColorByIntervalIndex();
   const {getColorByOneHour} = useColorBy1h();
@@ -28,17 +28,17 @@ export function useScatterColorScale() {
 
   const generate = async () => {
     return new Promise((resolve, reject) => {
-      if (config.value === null || aggregated.value === null) {
+      if (config.value === null || aggregations.value === null) {
         reject(new Error('generateColorScale: missing props'));
         return;
       }
 
       // number of intervals
-      const count = aggregated.value.timestamps.length;
+      const count = aggregations.value.timestamps.length;
       const newScale: string[] = new Array(count);
 
       for (let i = 0; i < count; i += 1) {
-        const timestamp = aggregated.value.timestamps[i];
+        const timestamp = aggregations.value.timestamps[i];
 
         if (isLabels.value) {
           newScale[i] = getColorByLabel(i);

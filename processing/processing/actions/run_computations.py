@@ -4,8 +4,8 @@ from rich.progress import track
 from processing.common.MeanDistancesMatrix import MeanDistancesMatrix
 from processing.context import Context
 from processing.enums import ComputationStrategy
+from processing.lib.console import Console
 from processing.managers.AggregationManager import AggregationManager
-from processing.printers.print_action import print_action
 from processing.reducers.PcaReducer import PcaReducer
 from processing.reducers.UmapReducer import UmapReducer
 from processing.repositories.AggregationRepository import AggregationRepository
@@ -13,11 +13,11 @@ from processing.repositories.ComputationRepository import ComputationRepository
 from processing.repositories.MeanDistancesMatrixRepository import (
     MeanDistancesMatrixRepository,
 )
-from processing.validators.validate_aggregated import validate_aggregated
+from processing.validators.validate_aggregations import validate_aggregations
 
 
 def _run_computation_reductions(context: Context):
-    print(
+    Console.print(
         f"Running computation reductions with [b]{context.config.settings.computation_strategy.value}[/b]..."
         f" (iterations: {context.config.settings.computation_iterations},"
         f" dimensions: {context.config.settings.computation_dimensions})"
@@ -72,7 +72,7 @@ def _run_computation_reductions(context: Context):
 
 
 def _run_mean_distance_matrices(context: Context):
-    print("Computing mean distances matrix...")
+    Console.print("Computing mean distances matrix...")
 
     MeanDistancesMatrixRepository.delete(context.storage)
 
@@ -98,9 +98,9 @@ def _run_mean_distance_matrices(context: Context):
         )
 
 
-@validate_aggregated
+@validate_aggregations
 def run_computations(context: Context):
-    print_action("Requirements computation started!", "start")
+    Console.print_header("Requirements computation started")
 
     _run_computation_reductions(context)
 
@@ -108,4 +108,4 @@ def run_computations(context: Context):
 
     _run_mean_distance_matrices(context)
 
-    print_action("Requirements computation completed!", "end")
+    Console.print_footer("Requirements computation completed")

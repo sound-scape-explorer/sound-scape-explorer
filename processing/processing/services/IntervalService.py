@@ -29,7 +29,7 @@ class IntervalService:
 
             interval = Interval(
                 i=a,
-                aggregated=agg,
+                aggregations=agg,
                 joined_site=joined_site,
                 sites=sites,
                 joined_tags=joined_tags,

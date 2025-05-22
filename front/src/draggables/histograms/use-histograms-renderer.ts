@@ -1,6 +1,6 @@
 import Plotly, {type Data, type Layout} from 'plotly.js-dist-min';
 import {DraggableHistogramsError} from 'src/common/Errors';
-import {useAggregated} from 'src/composables/use-aggregated';
+import {useAggregations} from 'src/composables/use-aggregations';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
@@ -9,10 +9,10 @@ import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-hi
 
 // todo: redo me
 export function useHistogramsRenderer() {
-  const {divRef, name, over, histogramFunction} = useDraggableHistograms();
+  const {divRef, name, over, fn} = useDraggableHistograms();
   // const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
   // const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {aggregated} = useAggregated();
+  const {aggregations} = useAggregations();
   const {getHourFromTimestamp} = useDate();
   const {scale} = useColorsCycling();
   const {plotBackground} = useClientSettings();
@@ -20,7 +20,7 @@ export function useHistogramsRenderer() {
 
   const render = async () => {
     if (
-      aggregated.value === null ||
+      aggregations.value === null ||
       divRef.value === null ||
       name.value === null ||
       over.value === null

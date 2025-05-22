@@ -4,30 +4,32 @@ import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
-import {useAggregated} from 'src/composables/use-aggregated';
-import {useAutoclustered} from 'src/composables/use-autoclustered';
+import {useAggregations} from 'src/composables/use-aggregations';
+import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useIntervals} from 'src/composables/use-intervals';
-import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
+import {useReductions} from 'src/composables/use-reductions';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 import {useViewState} from 'src/composables/use-view-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
-import {ref} from 'vue';
+import {nextTick, ref} from 'vue';
+
+const RENDER_TIMEOUT = 100;
 
 const step = ref<number>(0); // percents
 
-type Step = [string, () => Promise<void>]; // [text, reader]
+type Step = [string, () => void | Promise<void>]; // [text, reader]
 
 // todo: update me
 export function useViewLoader() {
   const {close} = useDraggables();
-  const {read: readAggregated} = useAggregated();
-  const {readReducedEmbeddings: readReduced} = useStorageReducedEmbeddings();
-  const {read: readAutoclustered} = useAutoclustered();
+  const {read: readAggregations} = useAggregations();
+  const {read: readReductions} = useReductions();
+  const {read: readAutoclusters} = useAutoclusters();
   const {generate: generateIntervals} = useIntervals();
-  const {generate: generateLabelSets} = useTagUniques();
+  const {generate: generateTagUniques} = useTagUniques();
 
   const {generateColorScale} = useScatterColorScale();
   const {buildSelection, selection: labelSelection} = useTagSelection();
@@ -42,11 +44,11 @@ export function useViewLoader() {
   const {lock, unlock} = useGlobalKeyboard();
 
   const steps: Step[] = [
-    ['aggregated', readAggregated],
-    ['reduced', readReduced],
-    ['autoclustered', readAutoclustered],
-    ['intervals', async () => generateIntervals()],
-    ['label sets', async () => generateLabelSets()],
+    ['Reading aggregations', readAggregations],
+    ['Reading reductions', readReductions],
+    ['Reading autoclusters', readAutoclusters],
+    ['Building intervals', generateIntervals],
+    ['Building tags', generateTagUniques],
   ];
 
   const updateStep = (current: number) => {
@@ -55,7 +57,7 @@ export function useViewLoader() {
   };
 
   const updateReading = (current: string) => {
-    loadingText.value = `Reading ${current}...`;
+    loadingText.value = `${current}...`;
   };
 
   const load = async () => {
@@ -77,6 +79,13 @@ export function useViewLoader() {
 
       updateStep(s);
       updateReading(text);
+
+      // Force a UI update before starting the heavy work
+      await nextTick();
+
+      // Allow the browser to update the UI
+      await new Promise((resolve) => setTimeout(resolve, RENDER_TIMEOUT));
+
       await reader();
     }
 

@@ -3,26 +3,25 @@ from rich.progress import track
 
 from processing.context import Context
 from processing.factories.MetricFactory import MetricFactory
+from processing.lib.console import Console
 from processing.managers.AggregationManager import AggregationManager
-from processing.printers.print_action import print_action
-from processing.printers.print_metrics import print_metrics
+from processing.managers.TagManager import TagManager
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.MeanDistancesMatrixRepository import (
     MeanDistancesMatrixRepository,
 )
 from processing.repositories.MetricRepository import MetricRepository
-from processing.services.AggregatedTagService import AggregatedTagService
-from processing.validators.validate_aggregated import validate_aggregated
+from processing.validators.validate_aggregations import validate_aggregations
 
 
-@validate_aggregated
+@validate_aggregations
 def run_metrics(context: Context):
-    print_action("Metrics started!", "start")
+    Console.print_header("Metrics started")
 
     MetricRepository.delete(context)
 
     for ai in AggregationManager.iterate(context):
-        print_metrics(ai.extraction.metrics)
+        Console.print_metrics(ai.extraction.metrics)
 
         aggregations = AggregationRepository.from_storage(
             context=context,
@@ -33,11 +32,12 @@ def run_metrics(context: Context):
 
         embeddings = np.stack([a.embeddings for a in aggregations])
 
-        aggregated_tags = AggregatedTagService.from_storage(
+        tags = TagManager.build_serialized_tags(
             context=context,
             extraction=ai.extraction,
             band=ai.band,
             integration=ai.integration,
+            aggregations=aggregations,
         )
 
         mdm = MeanDistancesMatrixRepository.from_storage(
@@ -52,7 +52,7 @@ def run_metrics(context: Context):
             m = MetricFactory.create(
                 metric=metric,
                 embeddings=embeddings,
-                tags=aggregated_tags,
+                tags=tags,
                 mdm=mdm,
             )
 
@@ -67,4 +67,4 @@ def run_metrics(context: Context):
                 data=data,
             )
 
-    print_action("Metrics completed!", "end")
+    Console.print_footer("Metrics completed")

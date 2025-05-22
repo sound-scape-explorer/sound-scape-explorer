@@ -3,7 +3,7 @@ import {useScatter} from 'src/components/scatter/use-scatter';
 import {LassoSelector} from 'src/components/screen/lasso';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useScreenCheck} from 'src/components/screen/use-screen-check';
-import {useStorageReducedEmbeddings} from 'src/composables/use-storage-reduced-embeddings';
+import {useReductions} from 'src/composables/use-reductions';
 import {ref, watch} from 'vue';
 
 import {project} from './project';
@@ -19,7 +19,7 @@ const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-const {reducedEmbeddings} = useStorageReducedEmbeddings();
+const {reductions} = useReductions();
 
 const selector = new LassoSelector(canvas);
 
@@ -39,7 +39,7 @@ watch([container, isEnabled], () => {
   };
 
   container.value.onmouseup = () => {
-    if (scatterContainer.value === null || reducedEmbeddings.value === null) {
+    if (scatterContainer.value === null || reductions.value === null) {
       return;
     }
 

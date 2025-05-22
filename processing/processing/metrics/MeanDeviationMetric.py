@@ -10,20 +10,20 @@ class MeanDeviationMetric(Metric):
     """Calculates mean standard deviation for classes within each label."""
 
     def run(self):
-        """Calculate mean standard deviation for each class within each label."""
+        """Calculate the mean standard deviation for each class within each label."""
 
         results: MetricData = {}
 
-        for label in self.tags:
+        for tag in self.tags:
             # Create mapping from class value to indices
             class_indices = defaultdict(list)
-            for i, class_value in enumerate(label.values):
+            for i, class_value in enumerate(tag.values):
                 class_indices[class_value].append(i)
 
-            class_results = np.zeros(len(label.uniques_occurrence)).astype(np.float32)
+            class_results = np.zeros(len(tag.uniques)).astype(np.float32)
 
             # Process each unique class in the order they first appeared
-            for i, class_value in enumerate(label.uniques_occurrence):
+            for i, class_value in enumerate(tag.uniques):
                 # Get indices for this class
                 indices = class_indices[class_value]
 
@@ -36,6 +36,6 @@ class MeanDeviationMetric(Metric):
 
                 class_results[i] = mean_std
 
-            results[label.name] = class_results
+            results[tag.name] = class_results
 
         return results

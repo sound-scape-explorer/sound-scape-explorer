@@ -1,6 +1,6 @@
 import {AudioBufferError} from 'src/common/Errors';
 import {useAudioQuery} from 'src/composables/use-audio-query';
-import {type AggregatedWindow} from 'src/composables/use-intervals';
+import {type AggregationWindow} from 'src/composables/use-intervals';
 import {TIMEOUT} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useWavesurferLoader} from 'src/draggables/audio/use-wavesurfer-loader';
@@ -8,7 +8,7 @@ import {getBitDepthFromWav} from 'src/utils/audio';
 import {ref} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
-const window = ref<AggregatedWindow | null>(null);
+const window = ref<AggregationWindow | null>(null);
 const duration = ref<number>(0); // seconds
 const bitDepth = ref<number | null>(null);
 const isLoading = ref<boolean>(false);
@@ -18,7 +18,7 @@ export function useAudioFile() {
   const {context} = useAudioContext();
   const {queryFile} = useAudioQuery();
 
-  const select = (newWindow: AggregatedWindow | null) => {
+  const select = (newWindow: AggregationWindow | null) => {
     if (isLoading.value) {
       return;
     }

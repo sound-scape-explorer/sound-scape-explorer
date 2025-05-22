@@ -1,6 +1,6 @@
 import {AudioQueryError} from 'src/common/Errors';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {type AggregatedWindow} from 'src/composables/use-intervals';
+import {type AggregationWindow} from 'src/composables/use-intervals';
 import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
 
 interface Q {
@@ -59,7 +59,7 @@ export function useAudioQuery() {
     return data;
   };
 
-  const queryFile = async (window: AggregatedWindow): Promise<ArrayBuffer> => {
+  const queryFile = async (window: AggregationWindow): Promise<ArrayBuffer> => {
     if (window === null || integration.value === null) {
       throw new AudioQueryError('not ready');
     }

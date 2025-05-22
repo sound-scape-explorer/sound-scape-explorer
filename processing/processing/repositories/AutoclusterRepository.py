@@ -1,3 +1,4 @@
+from collections import defaultdict
 from enum import Enum
 
 import numpy as np
@@ -6,10 +7,11 @@ from processing.config.AutoclusterConfig import AutoclusterConfig
 from processing.config.BandConfig import BandConfig
 from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
+from processing.constants import AUTOCLUSTER_PREFIX
 from processing.context import Context
 from processing.enums import StorageDomain
 from processing.paths.PathRegistry import PathRegistry
-from processing.types import Autoclustered
+from processing.types import AutoclusterLabels, AutoclusterTagMapping
 
 
 class AutoclusterPath(Enum):
@@ -47,7 +49,7 @@ class AutoclusterRepository:
         band: BandConfig,
         integration: IntegrationConfig,
         autocluster: AutoclusterConfig,
-        autoclustered: Autoclustered,
+        labels: AutoclusterLabels,
     ):
         path = AutoclusterRepository._get_path(
             extraction,
@@ -56,6 +58,7 @@ class AutoclusterRepository:
             autocluster,
         )
 
+        # todo: remove me
         attributes = {
             "min_cluster_size": autocluster.min_cluster_size,
             "min_samples": autocluster.min_samples,
@@ -67,7 +70,7 @@ class AutoclusterRepository:
 
         context.storage.write(
             path=path,
-            data=np.stack(autoclustered),
+            data=np.stack(labels),
             attributes=attributes,
         )
 
@@ -78,7 +81,7 @@ class AutoclusterRepository:
         band: BandConfig,
         integration: IntegrationConfig,
         autocluster: AutoclusterConfig,
-    ):
+    ) -> AutoclusterLabels:
         path = AutoclusterRepository._get_path(
             extraction,
             band,
@@ -86,6 +89,28 @@ class AutoclusterRepository:
             autocluster,
         )
 
-        labels: list[int] = context.storage.read(path)[:]
-
+        labels: AutoclusterLabels = context.storage.read(path)[:]
         return labels
+
+    @staticmethod
+    def read_all_as_tags(
+        context: Context,
+        extraction: ExtractionConfig,
+        band: BandConfig,
+        integration: IntegrationConfig,
+    ) -> AutoclusterTagMapping:
+        tag_mapping: AutoclusterTagMapping = defaultdict(list)
+
+        for autocluster in extraction.autoclusters:
+            data = AutoclusterRepository.from_storage(
+                context=context,
+                extraction=extraction,
+                band=band,
+                integration=integration,
+                autocluster=autocluster,
+            )
+
+            tag_name = f"{AUTOCLUSTER_PREFIX}{autocluster.index}"
+            tag_mapping[tag_name] = [str(v) for v in data]
+
+        return tag_mapping
