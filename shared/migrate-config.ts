@@ -12,6 +12,7 @@
 import {ConfigDto} from '@shared/dtos';
 import {readFileSync, writeFileSync} from 'fs';
 
+import {VERSION} from '../campaign/src/version';
 import {
   SMOOTHING_WINDOW_PRESETS,
   type SmoothingWindowPreset,
@@ -77,6 +78,7 @@ interface OldOrNewConfig {
 }
 
 interface NewConfig {
+  version: string;
   extractions: NewExtraction[];
   files: NewFile[];
 }
@@ -146,6 +148,7 @@ for (const extraction of config.extractions) {
 
 const newConfig: NewConfig = {
   ...config,
+  version: VERSION,
   extractions,
   files,
 };

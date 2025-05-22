@@ -1,5 +1,5 @@
 {
-  "version": "14-beta.0",
+  "version": "14.0.0-beta.8",
   "settings": {
     "storagePath": "coral-reef-light-all-metrics.h5",
     "audioPath": "/home/bamdad/git/sound-scape-explorer/examples/audio",
