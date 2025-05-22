@@ -1,3 +1,23 @@
+# [14.0.0-beta.8](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.7...v14.0.0-beta.8) (2025-05-22)
+
+
+### Bug Fixes
+
+* **app:** update beta config migration tool + use tsx instead of ts-node to run it ([5e78f13](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5e78f1314c35216c969e99625bd2d7d6a06e8221))
+* **examples:** update coral reef light with new traj smoothing window setting ([2edd7fb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2edd7fb29fa1aee848e52488862225f59b9d0ad9))
+* **front:** improve interval building performance ([60a4254](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/60a4254b11d69f2e0ccdfe46642f697e9cc5b70c))
+* **front:** improve ui reactivity on view load ([acc9363](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/acc93632d4a8ee14c51e0dd04de4d6e0fa1c8944))
+* **front:** improve view loading text ([dd04a0f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dd04a0fcde6a06e85af0c56b04aeb3f283c48320))
+* **front:** improve worker base array reading type annotation ([4ce3c89](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4ce3c8943aba0307d18cb6fb2e4b0bc4a80f821a))
+* **processing:** improve console ouputs for extractions ([258ce47](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/258ce476fe0b8ffbd2452ffe5a7b704145f0eefd))
+* **processing:** improve console output for aggregations ([0d736c6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0d736c68bbb6d5083a6aa58e81c8f2453f34c1c5))
+* **processing:** remove dead code ([dd88124](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dd88124e0bec8abb616bfa6a49ec24e8ad73d9e3))
+* **processing:** rename validation decorator ([2af7e4b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2af7e4b3ea9298d21d4f52a588f13b21f4068699))
+* **processing:** rewrite tag aggregation logic and get rid of rest of legacy ([781c489](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/781c489706ee8821334f1ad1a53d9727934b56be))
+* **processing:** use app namespace for related util methods ([559033d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/559033d862221072fa073b039adac869dde18fa6))
+* **processing:** work on console (WIP) ([ae9ee2e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ae9ee2e0a389aed17d09d163e6117552a7d43a96))
+* rename `ed` variables to domain objects ([d05a085](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d05a085ece9f3d34227e88611abf66dadd840d31))
+
 # [14.0.0-beta.7](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.6...v14.0.0-beta.7) (2025-05-16)
 
 
