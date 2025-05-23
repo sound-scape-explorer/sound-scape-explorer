@@ -11,6 +11,7 @@ export function useReducerValidation() {
 
       const others = extraction.reducers
         .filter((r) => r.index !== reducer.index)
+        .filter((r) => r.impl === reducer.impl)
         .filter((r) => r.dimensions === reducer.dimensions);
 
       return others.length === 0;
