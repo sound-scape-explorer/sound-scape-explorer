@@ -11,7 +11,7 @@ from processing.services.IntervalSerializationService import (
 from processing.services.IntervalService import IntervalService
 
 
-class TagManager:
+class TagService:
     @staticmethod
     def build_serialized_tags(
         context: Context,
