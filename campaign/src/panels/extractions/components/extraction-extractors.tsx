@@ -42,16 +42,16 @@ export function ExtractionExtractors({extraction}: Props) {
         onToggle: () => setOpen((o) => !o),
       }}
       rightElement={
-        validation && (
-          <>
-            <Drawer content={<ExtractionExtractorsDrawerContent />}>
-              <Button icon={<Help size={ICON_SIZE} />} />
-            </Drawer>
+        <>
+          <Drawer content={<ExtractionExtractorsDrawerContent />}>
+            <Button icon={<Help size={ICON_SIZE} />} />
+          </Drawer>
+          {validation && (
             <SmallCallout intent={validation.intent}>
               {validation.content}
             </SmallCallout>
-          </>
-        )
+          )}
+        </>
       }
     >
       <SectionCard
