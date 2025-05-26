@@ -26,22 +26,29 @@ export function HelpDrawer({children}: Props) {
       >
         <Button icon={<Help size={ICON_SIZE} />} />
       </div>
-      <BaseDrawer
-        className={clsx(isDark && 'bp5-dark', 'scrollable')}
-        isOpen={isOpen}
-        onClose={handleClose}
-        canEscapeKeyClose
-        canOutsideClickClose
+
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
-        <div className="p">
-          <Button
-            className="w0"
-            onClick={handleClose}
-            icon={<Cross size={ICON_SIZE} />}
-          />
-          {children}
-        </div>
-      </BaseDrawer>
+        <BaseDrawer
+          className={clsx(isDark && 'bp5-dark', 'scrollable')}
+          isOpen={isOpen}
+          onClose={handleClose}
+          canEscapeKeyClose
+          canOutsideClickClose
+        >
+          <div className="p">
+            <Button
+              className="w0"
+              onClick={handleClose}
+              icon={<Cross size={ICON_SIZE} />}
+            />
+            {children}
+          </div>
+        </BaseDrawer>
+      </div>
     </>
   );
 }
