@@ -22,14 +22,14 @@ export function ExtractionsPanelMenu() {
       <Button
         className="flex grow"
         onClick={() => moveExtraction(currentId, -1)}
-        disabled={extractions.length === 0}
+        disabled={extractions.length <= 1}
       >
         Move left
       </Button>
       <Button
         className="flex grow"
         onClick={() => moveExtraction(currentId, 1)}
-        disabled={extractions.length === 0}
+        disabled={extractions.length <= 1}
       >
         Move right
       </Button>
