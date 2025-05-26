@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import {type ExtractionConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-trajectories.module.scss';
+import {ExtractionTrajectoriesDrawerContent} from 'src/panels/extractions/components/extraction-trajectories-drawer-content.tsx';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useTrajectoryState} from 'src/panels/extractions/hooks/use-trajectory-state.ts';
 import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging';
@@ -19,6 +20,7 @@ import {useTrajectoriesValidation} from 'src/panels/metrics/hooks/use-trajectori
 import {useTrajectorySlug} from 'src/panels/metrics/hooks/use-trajectory-slug';
 import {DatePicker} from 'src/primitives/date-picker.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
@@ -68,11 +70,16 @@ export function ExtractionTrajectories({extraction}: Props) {
         onToggle: () => setOpen((o) => !o),
       }}
       rightElement={
-        validation && (
-          <SmallCallout intent={validation.intent}>
-            {validation.content}
-          </SmallCallout>
-        )
+        <>
+          <HelpDrawer>
+            <ExtractionTrajectoriesDrawerContent />
+          </HelpDrawer>
+          {validation && (
+            <SmallCallout intent={validation.intent}>
+              {validation.content}
+            </SmallCallout>
+          )}
+        </>
       }
     >
       <SectionCard
