@@ -1,6 +1,13 @@
 import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {ArrowDown, ArrowUp, Cross, HeatGrid, Plus} from '@blueprintjs/icons';
+import {
+  ArrowDown,
+  ArrowUp,
+  Cross,
+  HeatGrid,
+  Plus,
+  Snowflake,
+} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {MetricImpl} from '@shared/enums';
 import clsx from 'clsx';
@@ -45,6 +52,8 @@ export function ExtractionMetrics({extraction}: Props) {
       }}
       rightElement={
         <>
+          {hasTemplate && <Snowflake size={ICON_SIZE} />}
+
           <HelpDrawer>
             <ExtractionMetricsDrawerContent />
           </HelpDrawer>

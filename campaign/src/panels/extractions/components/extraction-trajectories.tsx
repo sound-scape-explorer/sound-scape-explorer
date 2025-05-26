@@ -13,7 +13,6 @@ import {useMemo, useState} from 'react';
 import {type ExtractionConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-trajectories.module.scss';
 import {ExtractionTrajectoriesDrawerContent} from 'src/panels/extractions/components/extraction-trajectories-drawer-content.tsx';
-import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useTrajectoryState} from 'src/panels/extractions/hooks/use-trajectory-state.ts';
 import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging';
 import {useTrajectoriesValidation} from 'src/panels/metrics/hooks/use-trajectories-validation';
@@ -57,7 +56,6 @@ export function ExtractionTrajectories({extraction}: Props) {
   );
   const {names} = useFilesTagging();
   const [open, setOpen] = useState(false);
-  const {hasTemplate} = useExtractionTemplates(extraction);
 
   return (
     <Section
@@ -92,7 +90,6 @@ export function ExtractionTrajectories({extraction}: Props) {
             fill
             style={{margin: 2}}
             onClick={addTrajectory}
-            disabled={hasTemplate}
           />
         </div>
         <div>idx</div>
@@ -116,19 +113,16 @@ export function ExtractionTrajectories({extraction}: Props) {
                 size="small"
                 icon={<Cross size={ICON_SIZE} />}
                 onClick={() => deleteTrajectory(trajectory)}
-                disabled={hasTemplate}
               />
               <Button
                 size="small"
                 icon={<ArrowDown size={ICON_SIZE} />}
                 onClick={() => updateIndex(trajectory, +1)}
-                disabled={hasTemplate}
               />
               <Button
                 size="small"
                 icon={<ArrowUp size={ICON_SIZE} />}
                 onClick={() => updateIndex(trajectory, -1)}
-                disabled={hasTemplate}
               />
             </div>
 

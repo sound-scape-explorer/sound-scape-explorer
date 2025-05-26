@@ -1,6 +1,6 @@
 import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {FilterList, Plus} from '@blueprintjs/icons';
+import {FilterList, Plus, Snowflake} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
@@ -43,6 +43,8 @@ export function ExtractionExtractors({extraction}: Props) {
       }}
       rightElement={
         <>
+          {hasTemplate && <Snowflake size={ICON_SIZE} />}
+
           <HelpDrawer>
             <ExtractionExtractorsDrawerContent />
           </HelpDrawer>
