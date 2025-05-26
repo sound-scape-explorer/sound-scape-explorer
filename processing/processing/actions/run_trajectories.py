@@ -15,7 +15,7 @@ from processing.validators.validate_reductions import validate_reductions
 @validate_aggregations
 @validate_reductions
 def run_trajectories(context: Context):
-    Console.print_header("Tracing trajectories started")
+    Console.print_header("Trajectories started")
 
     TrajectoryRepository.delete(context)
 
@@ -66,4 +66,4 @@ def run_trajectories(context: Context):
                 data=data,
             )
 
-    Console.print_footer("Tracing trajectories completed")
+    Console.print_footer("Trajectories completed")
