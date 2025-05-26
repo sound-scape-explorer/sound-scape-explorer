@@ -1,12 +1,10 @@
-import {Button, Section} from '@blueprintjs/core';
+import {Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {Help} from '@blueprintjs/icons';
-import {ICON_SIZE} from '@shared/constants';
 import {SettingsComputationsDrawerContent} from 'src/panels/settings/settings-computations-drawer-content.tsx';
 import {SettingsPanelComputationDimensions} from 'src/panels/settings/settings-panel-computation-dimensions.tsx';
 import {SettingsPanelComputationIterations} from 'src/panels/settings/settings-panel-computation-iterations.tsx';
 import {SettingsPanelComputationStrategy} from 'src/panels/settings/settings-panel-computation-strategy.tsx';
-import {Drawer} from 'src/primitives/drawer.tsx';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 
 export function SettingsComputations() {
   return (
@@ -16,9 +14,9 @@ export function SettingsComputations() {
       collapsible
       collapseProps={{defaultIsOpen: false}}
       rightElement={
-        <Drawer content={<SettingsComputationsDrawerContent />}>
-          <Button icon={<Help size={ICON_SIZE} />} />
-        </Drawer>
+        <HelpDrawer>
+          <SettingsComputationsDrawerContent />
+        </HelpDrawer>
       }
     >
       <SectionCard className="flex column gap">

@@ -1,16 +1,15 @@
 import {Button, Drawer as BaseDrawer} from '@blueprintjs/core';
-import {Cross} from '@blueprintjs/icons';
+import {Cross, Help} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {JSX, useState} from 'react';
 import {useTheme} from 'src/hooks/use-theme';
 
 interface Props {
-  content: JSX.Element;
   children: JSX.Element;
 }
 
-export function Drawer({content, children}: Props) {
+export function HelpDrawer({children}: Props) {
   const [isOpen, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -25,7 +24,7 @@ export function Drawer({content, children}: Props) {
           handleOpen();
         }}
       >
-        {children}
+        <Button icon={<Help size={ICON_SIZE} />} />
       </div>
       <BaseDrawer
         className={clsx(isDark && 'bp5-dark', 'scrollable')}
@@ -40,7 +39,7 @@ export function Drawer({content, children}: Props) {
             onClick={handleClose}
             icon={<Cross size={ICON_SIZE} />}
           />
-          {content}
+          {children}
         </div>
       </BaseDrawer>
     </>

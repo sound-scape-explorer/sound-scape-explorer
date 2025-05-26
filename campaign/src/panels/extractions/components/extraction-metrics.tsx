@@ -1,13 +1,6 @@
 import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {
-  ArrowDown,
-  ArrowUp,
-  Cross,
-  HeatGrid,
-  Help,
-  Plus,
-} from '@blueprintjs/icons';
+import {ArrowDown, ArrowUp, Cross, HeatGrid, Plus} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {MetricImpl} from '@shared/enums';
 import clsx from 'clsx';
@@ -19,8 +12,8 @@ import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extractio
 import {useMetricState} from 'src/panels/extractions/hooks/use-metric-state.ts';
 import {useMetricSlug} from 'src/panels/metrics/hooks/use-metric-slug';
 import {useMetricValidation} from 'src/panels/metrics/hooks/use-metric-validation.ts';
-import {Drawer} from 'src/primitives/drawer.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
@@ -52,9 +45,10 @@ export function ExtractionMetrics({extraction}: Props) {
       }}
       rightElement={
         <>
-          <Drawer content={<ExtractionMetricsDrawerContent />}>
-            <Button icon={<Help size={ICON_SIZE} />} />
-          </Drawer>
+          <HelpDrawer>
+            <ExtractionMetricsDrawerContent />
+          </HelpDrawer>
+
           {validation && (
             <SmallCallout intent={validation.intent}>
               {validation.content}

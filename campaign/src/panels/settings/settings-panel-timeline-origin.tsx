@@ -4,11 +4,11 @@ import {useSettingsState} from 'src/hooks/use-settings-state';
 import {useSettingsValidation} from 'src/hooks/use-settings-validation';
 import styles from 'src/panels/settings/settings-panel.module.scss';
 import {DatePicker} from 'src/primitives/date-picker';
-import {Drawer} from 'src/primitives/drawer.tsx';
 import {
   DrawerContent,
   type DrawerContentProps,
 } from 'src/primitives/drawer-content.tsx';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 
 const drawerContent: DrawerContentProps['content'] = [
   ['Validation', 'Date should be before earliest file.'],
@@ -20,11 +20,11 @@ export function SettingsPanelTimelineOrigin() {
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
-      <Drawer content={<DrawerContent content={drawerContent} />}>
-        <b className={clsx(styles.rowTitle, 'help grow flex')}>
-          Timeline origin
-        </b>
-      </Drawer>
+      <b className={clsx(styles.rowTitle, 'help grow flex')}>Timeline origin</b>
+
+      <HelpDrawer>
+        <DrawerContent content={drawerContent} />
+      </HelpDrawer>
 
       <Tooltip content="The timeline origin, date to start the integration from">
         <DatePicker

@@ -1,6 +1,6 @@
 import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {FilterList, Help, Plus} from '@blueprintjs/icons';
+import {FilterList, Plus} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
@@ -12,8 +12,8 @@ import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extractio
 import {useExtractorSlug} from 'src/panels/extractions/hooks/use-extractor-slug';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
-import {Drawer} from 'src/primitives/drawer.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
 interface Props {
@@ -43,9 +43,10 @@ export function ExtractionExtractors({extraction}: Props) {
       }}
       rightElement={
         <>
-          <Drawer content={<ExtractionExtractorsDrawerContent />}>
-            <Button icon={<Help size={ICON_SIZE} />} />
-          </Drawer>
+          <HelpDrawer>
+            <ExtractionExtractorsDrawerContent />
+          </HelpDrawer>
+
           {validation && (
             <SmallCallout intent={validation.intent}>
               {validation.content}
