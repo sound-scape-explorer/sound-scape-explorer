@@ -1,6 +1,13 @@
 import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {ArrowDown, ArrowUp, Cross, HeatGrid, Plus} from '@blueprintjs/icons';
+import {
+  ArrowDown,
+  ArrowUp,
+  Cross,
+  HeatGrid,
+  Help,
+  Plus,
+} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {MetricImpl} from '@shared/enums';
 import clsx from 'clsx';
@@ -44,11 +51,16 @@ export function ExtractionMetrics({extraction}: Props) {
         onToggle: () => setOpen((o) => !o),
       }}
       rightElement={
-        validation && (
-          <SmallCallout intent={validation.intent}>
-            {validation.content}
-          </SmallCallout>
-        )
+        <>
+          <Drawer content={<ExtractionMetricsDrawerContent />}>
+            <Button icon={<Help size={ICON_SIZE} />} />
+          </Drawer>
+          {validation && (
+            <SmallCallout intent={validation.intent}>
+              {validation.content}
+            </SmallCallout>
+          )}
+        </>
       }
     >
       <SectionCard
@@ -65,9 +77,7 @@ export function ExtractionMetrics({extraction}: Props) {
           />
         </div>
         <div>idx</div>
-        <Drawer content={<ExtractionMetricsDrawerContent />}>
-          <div className="help flex grow center">impl</div>
-        </Drawer>
+        <div>impl</div>
       </SectionCard>
 
       {metrics
