@@ -1,6 +1,7 @@
 import {type Scale} from 'chroma-js';
 import {type Data} from 'plotly.js-dist-min';
 import {useScatterTrajectoryColors} from 'src/components/scatter/use-scatter-trajectory-colors';
+import {useScatterTrajectoryHovers} from 'src/components/scatter/use-scatter-trajectory-hovers';
 import {useScatterTrajectoryUtils} from 'src/components/scatter/use-scatter-trajectory-utils';
 import {type TrajectoryDtoWithData} from 'src/composables/use-trajectories';
 import {interpolateArray, sumArraysIndexWise} from 'src/utils/arrays';
@@ -9,6 +10,7 @@ export function useScatterTrajectoryAverage() {
   const {getDefaultScatterOptions, isTrajectory3d} =
     useScatterTrajectoryUtils();
   const {getColors} = useScatterTrajectoryColors();
+  const {generate: generateHovers} = useScatterTrajectoryHovers();
 
   const build = (trajectories: TrajectoryDtoWithData[]) => {
     const is3d = isTrajectory3d(trajectories[0]);
@@ -79,11 +81,24 @@ export function useScatterTrajectoryAverage() {
   const render = (trajectories: TrajectoryDtoWithData[], scale: Scale) => {
     const {data, trajectory, is3d} = build(trajectories);
 
-    const colors = getColors(trajectory, scale);
+    const renamedTrajectory: TrajectoryDtoWithData = {
+      ...trajectory,
+      trajectory: {
+        ...trajectory.trajectory,
+        name: 'Trajectory average',
+        tagName: 'N/A',
+        tagValue: 'N/A',
+      },
+    };
+
+    const colors = getColors(renamedTrajectory, scale);
+    const hovers = generateHovers(renamedTrajectory);
 
     const rendered: Data = {
       ...getDefaultScatterOptions(is3d, colors),
-      name: 'Averaged Trace',
+      name: '',
+      text: hovers.text as unknown as string[],
+      hovertemplate: hovers.template,
       x: data.x,
       y: data.y,
       z: data.z,
