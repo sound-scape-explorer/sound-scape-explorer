@@ -1,3 +1,35 @@
+# [14.0.0-beta.9](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.8...v14.0.0-beta.9) (2025-05-27)
+
+
+### Bug Fixes
+
+* **app:** update version as well with config migration tool ([866f16a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/866f16a767461c6203f8b50711e084f60f62fbdb))
+* **campaign:** add template use visual feedback + lock autocluster fields ([4e2d72f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4e2d72f3c929403c2c5df0c56ab6514ef1cf553e))
+* **campaign:** compare only the same implementations when validating dimensions ([76d727b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/76d727b234901970e9d7a501c4bf462c05551b41))
+* **campaign:** improve jsx rendering for validation data ([84d41bc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/84d41bcf3b9e82e84de5b7b7f17f23334d22e13b))
+* **campaign:** lock extraction reorder buttons when extraction list not long enough ([9413da5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9413da5282ca3ac56f6e2b5e05d8be05269c583b))
+* **campaign:** move help for metrics to dedicated button ([8b79f70](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8b79f704808d77b6d08d1e83d3179728cb498b72))
+* **campaign:** prevent click propagation from drawer ([33aec7c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/33aec7cb7990a43cce6634c504abe7059f3dcc21))
+* **campaign:** update help drawers throughout the module ([8d1668f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8d1668f69c848cf18b04593ebac247d6a9b16847))
+* **front/relativeTrajectories:** Improve x axis time of day generation as x axis labels ([a22c4a8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a22c4a808759d5c11b77483083f0f7f21cfbd571))
+* **front:** rename relative trajectory export column ([c338719](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c338719e0c0f66f88c2e5c65851fc8b4375cc620))
+* **processing:** improve console wording for trajectories ([f327acc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f327acc27bbda7c839ce1538e0770e181c44847d))
+* **processing:** name correctly tag service ([e6eecaf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e6eecafeb8852a78c810f02d6a80bee4fd8714ce))
+* **shared:** update path registry ts filename ([7531fc8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7531fc869578a0ca17920f270ded4307e099236e))
+
+
+### Features
+
+* **campaign:** add inline help doc drawer for trajectories ([506c1bb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/506c1bb5e35c4ed7a4abce63aa08b64b9a679277))
+* **campaign:** add link to scikit doc for metrics ([35dd408](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/35dd4086979ba416917bb44c1b3df185f6096adb))
+* enrich relative trajectories hover display information + share date-fns manipulation ([4b19373](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4b19373d39d71648aeb03849d4f9c75b11706dcf))
+* **front/relativeTrajectories:** add display strategy picker (overlay, continuous) ([eec2a3a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eec2a3a6108d8cff7435941e09377a29a8a61032))
+* **front/trajectories:** add cycling period picker + refactor utils to hooks ([ef3df8b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ef3df8bf6dbbbb2eedbb91dad23dd12c6e824e80))
+* **front:** add start and end dates to trajectory hover data ([f8c1a42](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f8c1a421a691a36e0011de919029a0bd2d94492c))
+* **front:** enrich and improve hover data for reduced embeddings ([f67521e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f67521e464e2178791d2198ffceac18397700fc9))
+* **front:** extend cycling color maps for new time periods (days of month, months of year, and complete range) ([991b1be](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/991b1be88c3910e412c9de9d14add87ebc263158))
+* **front:** handle hover tooltips for average trajectory ([ba530b9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ba530b9bc4151130059e3c0bd5843baec519e372))
+
 # [14.0.0-beta.8](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.7...v14.0.0-beta.8) (2025-05-22)
 
 
