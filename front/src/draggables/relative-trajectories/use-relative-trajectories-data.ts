@@ -8,17 +8,16 @@ import {
   RELATIVE_TRAJECTORIES_FLAVOR,
   UPPER_DECILE_SUFFIX,
 } from 'src/constants';
+import {
+  RelativeTrajectoryStrategy,
+  useRelativeTrajectoriesStrategy,
+} from 'src/draggables/relative-trajectories/use-relative-trajectories-strategy';
 import {ref} from 'vue';
-import {z} from 'zod';
 
-const distances = ref<AppPlotProps['values']>([]);
+const values = ref<AppPlotProps['values']>([]);
 const labels = ref<AppPlotProps['labels']>([]);
 const names = ref<string[]>([]);
 const colors = ref<string[]>([]);
-
-const RelativeTrajectoryStrategy = z.enum(['overlay', 'continuous']);
-// eslint-disable-next-line no-redeclare
-type RelativeTrajectoryStrategy = z.infer<typeof RelativeTrajectoryStrategy>;
 
 // todo: move me
 const formatTimestamp = (seconds: number) => {
@@ -40,25 +39,21 @@ const getTimeOfDay = (timestamp: number) => {
   );
 };
 
-// todo: move me
-const strategy = ref<RelativeTrajectoryStrategy>(
-  RelativeTrajectoryStrategy.enum.overlay,
-);
-
 export function useRelativeTrajectoriesData() {
   const {filter} = useRelativeTrajectories();
   const {generate} = useExportName();
+  const {strategy} = useRelativeTrajectoriesStrategy();
   const exportName = generate(ExportType.enum.relativeTrajectories);
 
   const reset = () => {
-    distances.value = [];
+    values.value = [];
     labels.value = [];
     names.value = [];
     colors.value = [];
   };
 
-  const handleUpdate = (indices: number[]) => {
-    const selected = filter(indices);
+  const handleUpdate = (relativeTrajectoryIndices: number[]) => {
+    const selected = filter(relativeTrajectoryIndices);
 
     if (selected.length === 0) {
       reset();
@@ -116,12 +111,12 @@ export function useRelativeTrajectoriesData() {
 
     names.value = newNames;
     labels.value = newLabels;
-    distances.value = newValues;
+    values.value = newValues;
     colors.value = newColors;
   };
 
   return {
-    values: distances,
+    values,
     labels,
     names,
     colors,
