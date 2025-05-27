@@ -1,19 +1,11 @@
 import {ScatterHoversError} from 'src/common/Errors';
+import {usePlotlyHoverTemplate} from 'src/components/scatter/use-plotly-hover-template';
 import {useIntervals} from 'src/composables/use-intervals';
 import {STRING_DELIMITER} from 'src/constants';
 
 export function useScatterHovers() {
   const {intervals} = useIntervals();
-
-  const generateTemplate = (length: number) => {
-    let template = '';
-
-    for (let i = 0; i < length; i += 1) {
-      template += `<br><b>%{text[${i}][0]}: </b>%{text[${i}][1]}`;
-    }
-
-    return template;
-  };
+  const {generate: generateTemplate} = usePlotlyHoverTemplate();
 
   // TODO: refactor me this is broken when user puts no labels
   const generateHovers = () => {
@@ -21,7 +13,7 @@ export function useScatterHovers() {
       throw new ScatterHoversError('data unavailable');
     }
 
-    const hovers = new Array(intervals.value.length);
+    const hovers: string[][][] = new Array(intervals.value.length);
     let textLengthMax = -1;
 
     for (let i = 0; i < intervals.value.length; i += 1) {
