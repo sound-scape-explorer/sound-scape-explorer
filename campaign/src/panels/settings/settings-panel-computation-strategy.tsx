@@ -10,7 +10,7 @@ export function SettingsPanelComputationStrategy() {
   return (
     <div className={clsx(styles.row, 'align gap')}>
       <b className={styles.rowTitle}>Strategy</b>
-
+      <span />
       <Select<ComputationStrategy>
         current={settings.computationStrategy}
         items={ComputationStrategy.options}

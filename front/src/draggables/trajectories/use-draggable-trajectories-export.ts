@@ -1,13 +1,14 @@
 import {Csv} from 'src/common/csv';
+import {useScatterTrajectoryAverage} from 'src/components/scatter/use-scatter-trajectory-average';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
 import {useTrajectories} from 'src/composables/use-trajectories';
-import {buildAverageTrajectory} from 'src/utils/trajectories';
 
 export function useDraggableTrajectoriesExport() {
   const {convertTimestampToIsoDate} = useDate();
   const {trajectories, isFused} = useTrajectories();
   const {generate} = useExportName();
+  const {build} = useScatterTrajectoryAverage();
 
   const handleClick = () => {
     const csv = new Csv();
@@ -18,7 +19,7 @@ export function useDraggableTrajectoriesExport() {
     csv.addColumn('z');
 
     if (isFused.value) {
-      const {data, trajectory} = buildAverageTrajectory(trajectories.value);
+      const {data, trajectory} = build(trajectories.value);
 
       trajectory.path.forEach((_, index) => {
         csv.createRow();

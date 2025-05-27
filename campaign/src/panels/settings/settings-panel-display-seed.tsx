@@ -12,6 +12,7 @@ export function SettingsPanelDisplaySeed() {
   return (
     <div className={clsx(styles.row, 'align gap')}>
       <b className={styles.rowTitle}>Display seed</b>
+      <span />
       <Tooltip content="The seed for fixed randomness used for display UMAPs & PCAs">
         <NumberInput
           defaultValue={settings.displaySeed}

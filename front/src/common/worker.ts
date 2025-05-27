@@ -8,7 +8,7 @@ import {
   ReductionPathInstance,
   RelativeTrajectoryPathInstance,
   TrajectoryPathInstance,
-} from '@shared/pathRegistry';
+} from '@shared/path-registry';
 import h5wasm, {type Dataset, type File as H5File} from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
 import {type Aggregations} from 'src/composables/use-aggregations';

@@ -6,7 +6,7 @@ import {useExportName} from 'src/composables/use-export-name';
 import {useReductions} from 'src/composables/use-reductions';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
 interface ExportData {
@@ -20,7 +20,7 @@ interface ExportData {
 
 // todo: update me!!!
 export function useScatterExport() {
-  const {band, integration} = useViewSelectionNew();
+  const {band, integration} = useViewSelection();
   const {allUniques} = useTagUniques();
   const {notify} = useAppNotification();
   const {convertTimestampToIsoDate} = useDate();

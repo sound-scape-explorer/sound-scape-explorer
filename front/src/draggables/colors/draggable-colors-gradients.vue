@@ -6,7 +6,7 @@ import {computed} from 'vue';
 
 const {criteria} = useColorSelection();
 
-const {cycleDayLabels, cycleDayColors, userColors, dayColors} =
+const {cycleDayLabels, cycleDayColors, userColors, dayColors, cycleDayLegend} =
   useColorGradients();
 
 const isElse = computed(() => {
@@ -19,9 +19,9 @@ const isElse = computed(() => {
     v-if="criteria === 'cycleDay'"
     :colors="cycleDayColors"
     :labels="cycleDayLabels"
-    legend-max="00:00"
-    legend-med="12:00"
-    legend-min="00:00"
+    :legend-max="cycleDayLegend.max"
+    :legend-med="cycleDayLegend.med"
+    :legend-min="cycleDayLegend.min"
   />
 
   <AppGradient

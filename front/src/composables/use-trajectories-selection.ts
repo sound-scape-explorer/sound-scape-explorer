@@ -1,8 +1,8 @@
 import {type TrajectoryDto} from '@shared/dtos';
 import {useRefHistory} from '@vueuse/core';
-import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
+import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useTrajectories} from 'src/composables/use-trajectories';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
 const selected = ref<TrajectoryDto[]>([]);
@@ -10,7 +10,7 @@ const current = ref<TrajectoryDto['name'][]>([]);
 const {undo, redo, canUndo, canRedo} = useRefHistory(current);
 
 export function useTrajectoriesSelection() {
-  const {extraction} = useViewSelectionNew();
+  const {extraction} = useViewSelection();
 
   const reset = () => {
     selected.value = [];
@@ -18,10 +18,10 @@ export function useTrajectoriesSelection() {
 
   const render = async () => {
     const {readTrajectories} = useTrajectories();
-    const {renderTraces} = useScatterTraces();
+    const {render} = useScatterRender();
 
     await readTrajectories();
-    renderTraces();
+    render();
   };
 
   const update = async () => {

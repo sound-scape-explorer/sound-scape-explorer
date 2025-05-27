@@ -2,7 +2,7 @@ import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useDate} from 'src/composables/use-date';
 import {useIntervals} from 'src/composables/use-intervals';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {STRING_DELIMITER} from 'src/constants';
 import {type Ref} from 'vue';
 
@@ -16,7 +16,7 @@ export interface TimelineElement {
 }
 
 export function useTimelineElements() {
-  const {integration} = useViewSelectionNew();
+  const {integration} = useViewSelection();
   const {aggregations} = useAggregations();
   const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
   const {scale} = useBodyColors();

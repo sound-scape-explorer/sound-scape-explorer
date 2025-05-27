@@ -1,60 +1,55 @@
 import {type Data} from 'plotly.js-dist-min';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
-import {useScatterFeatures} from 'src/components/scatter/use-scatter-features';
+import {useScatterEmbeddings} from 'src/components/scatter/use-scatter-embeddings';
+import {useScatterTrajectories} from 'src/components/scatter/use-scatter-trajectories';
+import {useScatterTrajectoryAverage} from 'src/components/scatter/use-scatter-trajectory-average';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useTrajectories} from 'src/composables/use-trajectories';
-import {
-  traceAverageTrajectory,
-  traceTrajectories,
-} from 'src/utils/trajectories';
 import {ref} from 'vue';
 
-const traces = ref<Data[]>([]);
+const data = ref<Data[]>([]);
 const isEnabled = ref<boolean>(false);
 
-export function useScatterTraces() {
-  const {traceFeatures} = useScatterFeatures();
+export function useScatterRender() {
+  const {render: renderEmbeddings} = useScatterEmbeddings();
   const {trajectories, isFused} = useTrajectories();
   const {generateColorScale: generate} = useScatterColorScale();
   const {scale: cyclingScale} = useColorsCycling();
+  const {render: renderTrajectories} = useScatterTrajectories();
+  const {render: renderTrajectoryAverage} = useScatterTrajectoryAverage();
 
   const render = () => {
-    // features
-    const newTraces = traceFeatures();
+    const embeddings = renderEmbeddings();
 
     // trajectories
     if (trajectories.value.length > 0) {
       if (isFused.value) {
-        const averageTrace = traceAverageTrajectory(
+        const data = renderTrajectoryAverage(
           trajectories.value,
           cyclingScale.value,
         );
 
-        newTraces.push(averageTrace);
+        embeddings.push(data);
       } else {
-        const trajectoryTraces = traceTrajectories(
-          trajectories.value,
-          cyclingScale.value,
-        );
-
-        newTraces.push(...trajectoryTraces);
+        const data = renderTrajectories(trajectories.value, cyclingScale.value);
+        embeddings.push(...data);
       }
     }
 
-    traces.value = newTraces;
+    data.value = embeddings;
   };
 
   const reset = () => {
-    traces.value = [];
+    data.value = [];
     isFused.value = false;
     trajectories.value = [];
   };
 
   return {
     isEnabled,
-    traces,
+    data,
     generate,
-    renderTraces: render,
-    resetTraces: reset,
+    render,
+    reset,
   };
 }

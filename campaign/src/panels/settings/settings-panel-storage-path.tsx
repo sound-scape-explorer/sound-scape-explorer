@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import {useSettingsState} from 'src/hooks/use-settings-state';
 import {useSettingsValidation} from 'src/hooks/use-settings-validation';
 import {SettingsPanelStoragePathDrawerContent} from 'src/panels/settings/settings-panel-storage-path-drawer-content.tsx';
-import {Drawer} from 'src/primitives/drawer.tsx';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './settings-panel.module.scss';
@@ -14,9 +14,11 @@ export function SettingsPanelStoragePath() {
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
-      <Drawer content={<SettingsPanelStoragePathDrawerContent />}>
-        <b className={clsx(styles.rowTitle, 'flex grow help')}>Storage Path</b>
-      </Drawer>
+      <b className={clsx(styles.rowTitle, 'flex grow help')}>Storage Path</b>
+
+      <HelpDrawer>
+        <SettingsPanelStoragePathDrawerContent />
+      </HelpDrawer>
 
       <Tooltip content="The name or path (relative or absolute) to your h5 storage file">
         <TextInput

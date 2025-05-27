@@ -12,6 +12,7 @@ export function SettingsPanelAudioHost() {
   return (
     <div className={clsx(styles.row, 'align gap')}>
       <b className={styles.rowTitle}>Audio host</b>
+      <span />
       <Tooltip content="The audio host, used to provide audio playback later on">
         <TextInput
           defaultValue={settings.audioHost}

@@ -1,8 +1,8 @@
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {computed} from 'vue';
 
 export function useViewState() {
-  const {extraction, band, integration, reducer} = useViewSelectionNew();
+  const {extraction, band, integration, reducer} = useViewSelection();
 
   // TODO: maybe extract this computed
   const hasView = computed<boolean>(

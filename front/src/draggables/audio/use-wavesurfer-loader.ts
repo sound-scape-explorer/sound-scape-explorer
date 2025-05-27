@@ -1,4 +1,4 @@
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
@@ -6,7 +6,7 @@ import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 
 export function useWavesurferLoader() {
-  const {band} = useViewSelectionNew();
+  const {band} = useViewSelection();
   const {seek, stop} = useAudioTransport();
   const {context} = useAudioContext();
   const {isPlaying} = useAudioTransport();

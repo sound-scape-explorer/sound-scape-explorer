@@ -12,6 +12,7 @@ export function SettingsPanelSampleRate() {
   return (
     <div className={clsx(styles.row, 'align gap')}>
       <b className={styles.rowTitle}>Sample rate</b>
+      <span />
       <Tooltip content="The sample rate of your audio samples in Hertz">
         <NumberInput
           defaultValue={settings.expectedSampleRate}

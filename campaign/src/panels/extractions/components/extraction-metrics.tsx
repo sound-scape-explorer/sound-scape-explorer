@@ -1,6 +1,13 @@
 import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {ArrowDown, ArrowUp, Cross, HeatGrid, Plus} from '@blueprintjs/icons';
+import {
+  ArrowDown,
+  ArrowUp,
+  Cross,
+  HeatGrid,
+  Plus,
+  Snowflake,
+} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {MetricImpl} from '@shared/enums';
 import clsx from 'clsx';
@@ -12,8 +19,8 @@ import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extractio
 import {useMetricState} from 'src/panels/extractions/hooks/use-metric-state.ts';
 import {useMetricSlug} from 'src/panels/metrics/hooks/use-metric-slug';
 import {useMetricValidation} from 'src/panels/metrics/hooks/use-metric-validation.ts';
-import {Drawer} from 'src/primitives/drawer.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
@@ -44,11 +51,19 @@ export function ExtractionMetrics({extraction}: Props) {
         onToggle: () => setOpen((o) => !o),
       }}
       rightElement={
-        validation && (
-          <SmallCallout intent={validation.intent}>
-            {validation.content}
-          </SmallCallout>
-        )
+        <>
+          {hasTemplate && <Snowflake size={ICON_SIZE} />}
+
+          <HelpDrawer>
+            <ExtractionMetricsDrawerContent />
+          </HelpDrawer>
+
+          {validation && (
+            <SmallCallout intent={validation.intent}>
+              {validation.content}
+            </SmallCallout>
+          )}
+        </>
       }
     >
       <SectionCard
@@ -65,9 +80,7 @@ export function ExtractionMetrics({extraction}: Props) {
           />
         </div>
         <div>idx</div>
-        <Drawer content={<ExtractionMetricsDrawerContent />}>
-          <div className="help flex grow center">impl</div>
-        </Drawer>
+        <div>impl</div>
       </SectionCard>
 
       {metrics

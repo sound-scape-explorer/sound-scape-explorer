@@ -15,6 +15,7 @@ export function SettingsPanelComputationDimensions() {
   return (
     <div className={clsx(styles.row, 'align gap')}>
       <b className={styles.rowTitle}>Dimensions</b>
+      <span />
       <NumberInput
         defaultValue={settings.computationDimensions}
         onBlur={(n) => update('computationDimensions', n)}

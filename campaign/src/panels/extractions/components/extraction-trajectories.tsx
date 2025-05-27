@@ -12,13 +12,14 @@ import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import {type ExtractionConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-trajectories.module.scss';
-import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
+import {ExtractionTrajectoriesDrawerContent} from 'src/panels/extractions/components/extraction-trajectories-drawer-content.tsx';
 import {useTrajectoryState} from 'src/panels/extractions/hooks/use-trajectory-state.ts';
 import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging';
 import {useTrajectoriesValidation} from 'src/panels/metrics/hooks/use-trajectories-validation';
 import {useTrajectorySlug} from 'src/panels/metrics/hooks/use-trajectory-slug';
 import {DatePicker} from 'src/primitives/date-picker.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
@@ -55,7 +56,6 @@ export function ExtractionTrajectories({extraction}: Props) {
   );
   const {names} = useFilesTagging();
   const [open, setOpen] = useState(false);
-  const {hasTemplate} = useExtractionTemplates(extraction);
 
   return (
     <Section
@@ -68,11 +68,16 @@ export function ExtractionTrajectories({extraction}: Props) {
         onToggle: () => setOpen((o) => !o),
       }}
       rightElement={
-        validation && (
-          <SmallCallout intent={validation.intent}>
-            {validation.content}
-          </SmallCallout>
-        )
+        <>
+          <HelpDrawer>
+            <ExtractionTrajectoriesDrawerContent />
+          </HelpDrawer>
+          {validation && (
+            <SmallCallout intent={validation.intent}>
+              {validation.content}
+            </SmallCallout>
+          )}
+        </>
       }
     >
       <SectionCard
@@ -85,7 +90,6 @@ export function ExtractionTrajectories({extraction}: Props) {
             fill
             style={{margin: 2}}
             onClick={addTrajectory}
-            disabled={hasTemplate}
           />
         </div>
         <div>idx</div>
@@ -109,19 +113,16 @@ export function ExtractionTrajectories({extraction}: Props) {
                 size="small"
                 icon={<Cross size={ICON_SIZE} />}
                 onClick={() => deleteTrajectory(trajectory)}
-                disabled={hasTemplate}
               />
               <Button
                 size="small"
                 icon={<ArrowDown size={ICON_SIZE} />}
                 onClick={() => updateIndex(trajectory, +1)}
-                disabled={hasTemplate}
               />
               <Button
                 size="small"
                 icon={<ArrowUp size={ICON_SIZE} />}
                 onClick={() => updateIndex(trajectory, -1)}
-                disabled={hasTemplate}
               />
             </div>
 

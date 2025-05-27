@@ -4,12 +4,16 @@ import {downloadOutline} from 'ionicons/icons';
 import {NCascader, NSwitch} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
-import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
+import AppSelect from 'src/app/select/app-select.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
+import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {
+  CyclingPeriod,
+  useScatterTrajectoryCyclingPeriod,
+} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useTrajectories} from 'src/composables/use-trajectories';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
@@ -24,9 +28,10 @@ const {isFused} = useTrajectories();
 const {isLoading} = useScatterLoading();
 const {options, isFuseable} = useTrajectoriesOptions();
 const {handleClick} = useDraggableTrajectoriesExport();
-const {renderTraces} = useScatterTraces();
+const {render} = useScatterRender();
+const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
-watch(isFused, renderTraces);
+watch(isFused, render);
 watch(current, update);
 </script>
 
@@ -64,25 +69,30 @@ watch(current, update);
           placeholder="Select trajectories"
           size="small"
         />
+      </div>
 
-        <AppTooltip
-          :show-arrow="false"
-          placement="top-start"
-          trigger="hover"
-        >
-          <template #body>
-            <NSwitch
-              v-model:value="isFused"
-              :class="$style.switch"
-              :disabled="!isFuseable"
-              size="small"
-            >
-              <template #checked>fuse</template>
-            </NSwitch>
-          </template>
+      <h2>Average</h2>
 
-          <template #tooltip>Fuse trajectories</template>
-        </AppTooltip>
+      <div :class="$style['average-and-period']">
+        <div>
+          <NSwitch
+            v-model:value="isFused"
+            :class="$style.switch"
+            :disabled="!isFuseable"
+            size="small"
+          >
+            <template #checked>yes</template>
+          </NSwitch>
+        </div>
+
+        <h2 style="justify-content: center">Cycling period</h2>
+
+        <AppSelect
+          v-model="cyclingPeriod"
+          :options="CyclingPeriod.options"
+          placeholder="Period..."
+          size="small"
+        />
       </div>
 
       <h2>Colormap</h2>
@@ -119,11 +129,6 @@ watch(current, update);
   gap: sizes.$p0;
 }
 
-.switch {
-  font-size: 0.9em;
-  width: sizes.$p0 * 8;
-}
-
 .last-line {
   display: flex;
   align-items: center;
@@ -134,5 +139,11 @@ watch(current, update);
 .cascader {
   flex: 1;
   width: 15em;
+}
+
+.average-and-period {
+  display: grid;
+  grid-template-columns: 1fr sizes.$p0 * 12 1fr;
+  gap: sizes.$p0;
 }
 </style>

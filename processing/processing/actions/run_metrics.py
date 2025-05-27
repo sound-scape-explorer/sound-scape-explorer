@@ -5,7 +5,7 @@ from processing.context import Context
 from processing.factories.MetricFactory import MetricFactory
 from processing.lib.console import Console
 from processing.managers.AggregationManager import AggregationManager
-from processing.managers.TagManager import TagManager
+from processing.services.TagService import TagService
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.MeanDistancesMatrixRepository import (
     MeanDistancesMatrixRepository,
@@ -32,7 +32,7 @@ def run_metrics(context: Context):
 
         embeddings = np.stack([a.embeddings for a in aggregations])
 
-        tags = TagManager.build_serialized_tags(
+        tags = TagService.build_serialized_tags(
             context=context,
             extraction=ai.extraction,
             band=ai.band,

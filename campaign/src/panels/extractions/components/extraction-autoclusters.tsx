@@ -6,6 +6,7 @@ import {
   Cross,
   LayoutSortedClusters,
   Plus,
+  Snowflake,
 } from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {AutoclusterImpl} from '@shared/enums';
@@ -64,11 +65,14 @@ export function ExtractionAutoclusters({extraction}: Props) {
         onToggle: () => setOpen((o) => !o),
       }}
       rightElement={
-        validation && (
-          <SmallCallout intent={validation.intent}>
-            {validation.content}
-          </SmallCallout>
-        )
+        <>
+          {hasTemplate && <Snowflake size={ICON_SIZE} />}
+          {validation && (
+            <SmallCallout intent={validation.intent}>
+              {validation.content}
+            </SmallCallout>
+          )}
+        </>
       }
     >
       <SectionCard
@@ -127,30 +131,35 @@ export function ExtractionAutoclusters({extraction}: Props) {
               onSelect={(v) => updateImpl(autocluster, v)}
               current={autocluster.impl}
               placeholder="Select implementation"
+              disabled={hasTemplate}
             />
 
             <NumberInput
               defaultValue={autocluster.minClusterSize}
               onBlur={(n) => updateMinClusterSize(autocluster, n)}
               intent={isMinClusterSizeValid(autocluster) ? 'success' : 'danger'}
+              disabled={hasTemplate}
             />
 
             <NumberInput
               defaultValue={autocluster.minSamples}
               onBlur={(n) => updateMinSamples(autocluster, n)}
               intent={isMinSamplesValid(autocluster) ? 'success' : 'danger'}
+              disabled={hasTemplate}
             />
 
             <NumberInput
               defaultValue={autocluster.alpha}
               onBlur={(n) => updateAlpha(autocluster, n)}
               intent={isAlphaValid(autocluster) ? 'success' : 'danger'}
+              disabled={hasTemplate}
             />
 
             <NumberInput
               defaultValue={autocluster.epsilon}
               onBlur={(n) => updateEpsilon(autocluster, n)}
               intent={isEpsilonValid(autocluster) ? 'success' : 'danger'}
+              disabled={hasTemplate}
             />
           </SectionCard>
         ))}

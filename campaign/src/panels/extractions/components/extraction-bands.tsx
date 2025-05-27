@@ -1,6 +1,13 @@
 import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {ArrowDown, ArrowUp, Cross, Plus, Waves} from '@blueprintjs/icons';
+import {
+  ArrowDown,
+  ArrowUp,
+  Cross,
+  Plus,
+  Snowflake,
+  Waves,
+} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
@@ -50,11 +57,14 @@ export function ExtractionBands({extraction}: Props) {
         onToggle: () => setOpen((o) => !o),
       }}
       rightElement={
-        validation && (
-          <SmallCallout intent={validation.intent}>
-            {validation.content}
-          </SmallCallout>
-        )
+        <>
+          {hasTemplate && <Snowflake size={ICON_SIZE} />}
+          {validation && (
+            <SmallCallout intent={validation.intent}>
+              {validation.content}
+            </SmallCallout>
+          )}
+        </>
       }
     >
       <SectionCard

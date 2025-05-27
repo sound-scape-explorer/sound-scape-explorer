@@ -1,6 +1,6 @@
 import {useSitesNew} from 'src/composables/use-sites-new';
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
 export interface Aggregations {
@@ -16,7 +16,7 @@ const aggregations = ref<Aggregations | null>(null);
 export function useAggregations() {
   const {read: r} = useStorageReader();
   const {sites} = useSitesNew();
-  const {extraction, band, integration} = useViewSelectionNew();
+  const {extraction, band, integration} = useViewSelection();
 
   const read = async () => {
     await r(async (worker, file) => {

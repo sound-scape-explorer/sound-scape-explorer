@@ -2,7 +2,7 @@ import {type MetricDto} from '@shared/dtos'; // todo: redundant
 import {MetricType} from '@shared/enums';
 import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useMetricData} from 'src/composables/use-metric-data';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {generateUniqueMetricSlug} from 'src/utils/config';
 import {computed, ref} from 'vue';
@@ -10,7 +10,7 @@ import {computed, ref} from 'vue';
 const metricSlug = ref<string | null>(null);
 
 export function useDraggableHeatmaps() {
-  const {extraction} = useViewSelectionNew();
+  const {extraction} = useViewSelection();
   const {read} = useMetricData();
   const {a, b} = useDraggableHeatmapsLabels();
 

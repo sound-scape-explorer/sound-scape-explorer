@@ -1,5 +1,5 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {useViewState} from 'src/composables/use-view-state';
 import {TIMEOUT} from 'src/constants';
 
@@ -22,7 +22,7 @@ export function useDraggableView() {
     bandToSlug,
     integrationToSlug,
     reducerToSlug,
-  } = useViewSelectionNew();
+  } = useViewSelection();
 
   const autoselectDev = () => {
     if (!devAutoLoadView.value || !isLooping) {

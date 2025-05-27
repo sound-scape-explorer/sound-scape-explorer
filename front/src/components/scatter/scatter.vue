@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {useScatter} from 'src/components/scatter/use-scatter';
+import {useScatterContainer} from 'src/components/scatter/use-scatter-container';
 import {useScatterLifecycles} from 'src/components/scatter/use-scatter-lifecycles';
 import {computed} from 'vue';
 
-const {container, isLocked} = useScatter();
+const {container, isLocked} = useScatterContainer();
 const pointerEvents = computed(() => (isLocked.value ? 'none' : 'all'));
 useScatterLifecycles();
 </script>

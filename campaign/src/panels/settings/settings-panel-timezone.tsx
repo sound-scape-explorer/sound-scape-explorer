@@ -13,6 +13,7 @@ export function SettingsPanelTimezone() {
   return (
     <div className={clsx(styles.row, 'align gap')}>
       <b className={styles.rowTitle}>Timezone</b>
+      <span />
       <Select
         items={timezones}
         onSelect={(tz) => update('timezone', tz)}

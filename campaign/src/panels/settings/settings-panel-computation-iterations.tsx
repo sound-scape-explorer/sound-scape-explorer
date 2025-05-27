@@ -16,6 +16,7 @@ export function SettingsPanelComputationIterations() {
   return (
     <div className={clsx(styles.row, 'align gap')}>
       <b className={styles.rowTitle}>Iterations</b>
+      <span />
       <Tooltip content="The number of iterations for intermediary computations">
         <NumberInput
           defaultValue={settings.computationIterations}

@@ -19,6 +19,7 @@ import {
   TIMEZONE_DEFAULT,
   WINDOW_MS_DEFAULT,
 } from '@shared/constants';
+import {formatDateToString} from '@shared/dates';
 import {
   type AutoclusterDto,
   type BandDto,
@@ -39,7 +40,6 @@ import {
 } from '@shared/enums';
 import * as Excel from 'exceljs';
 import {LABEL_PREFIX_XLSX_13} from 'src/constants';
-import {formatDateToString} from 'src/utils/dates';
 import {invertRowsAndColumns} from 'src/utils/objects';
 import {
   AutoclustersColumn,

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import {useSettingsState} from 'src/hooks/use-settings-state';
 import {useSettingsValidation} from 'src/hooks/use-settings-validation';
 import {SettingsPanelAudioPathDrawerContent} from 'src/panels/settings/settings-panel-audio-path-drawer-content.tsx';
-import {Drawer} from 'src/primitives/drawer.tsx';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './settings-panel.module.scss';
@@ -17,9 +17,12 @@ export function SettingsPanelAudioPath() {
       className={clsx(styles.row, 'align gap')}
       onDrop={handleAudioDrop}
     >
-      <Drawer content={<SettingsPanelAudioPathDrawerContent />}>
-        <b className={clsx(styles.rowTitle, 'flex grow help')}>Audio Path</b>
-      </Drawer>
+      <b className={clsx(styles.rowTitle, 'flex grow help')}>Audio Path</b>
+
+      <HelpDrawer>
+        <SettingsPanelAudioPathDrawerContent />
+      </HelpDrawer>
+
       <Tooltip content="The path to your audio folder">
         <TextInput
           value={settings.audioPath}

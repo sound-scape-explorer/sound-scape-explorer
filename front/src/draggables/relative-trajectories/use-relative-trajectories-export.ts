@@ -22,7 +22,7 @@ export function useRelativeTrajectoriesExport() {
       .reduce((a, b) => Math.max(a, b), 0);
 
     // create time column
-    csv.addColumn('relative time');
+    csv.addColumn('time of day');
 
     // create columns
     for (const name of names.value) {

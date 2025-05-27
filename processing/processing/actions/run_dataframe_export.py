@@ -7,7 +7,7 @@ from processing.context import Context
 from processing.lib.console import Console
 from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ReductionManager import ReductionManager
-from processing.managers.TagManager import TagManager
+from processing.services.TagService import TagService
 from processing.prompts.prompt_band import prompt_band
 from processing.prompts.prompt_csv_path import prompt_csv_path
 from processing.prompts.prompt_extraction import prompt_extraction
@@ -33,7 +33,7 @@ def run_dataframe_export(context: Context):
         integration=integration,
     )
 
-    tags = TagManager.build_serialized_tags(
+    tags = TagService.build_serialized_tags(
         context=context,
         extraction=extraction,
         band=band,
