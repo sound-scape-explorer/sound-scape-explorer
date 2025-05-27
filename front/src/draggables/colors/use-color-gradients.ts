@@ -1,8 +1,8 @@
+import {useAppGradient} from 'src/components/scatter/use-app-gradient';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorUser} from 'src/composables/use-color-user';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
-import {createHourlyLabels} from 'src/utils/colors';
 import {computed} from 'vue';
 
 const size = 100;
@@ -12,11 +12,13 @@ export function useColorGradients() {
   const {scale: cyclingScale} = useColorsCycling();
   const {scale: userScale} = useColorUser();
   const {isColorMapSwapped} = useClientSettings();
+  const {getLabels, getLegendLabels} = useAppGradient();
 
   const cycleDayColors = computed<string[]>(() =>
     cyclingScale.value.colors(size),
   );
-  const cycleDayLabels = computed<string[]>(() => createHourlyLabels(size));
+  const cycleDayLabels = computed<string[]>(() => getLabels(size));
+  const cycleDayLegend = computed(() => getLegendLabels());
 
   const dayColors = computed(() => {
     const uniques = [...new Set(scale.value)];
@@ -37,6 +39,7 @@ export function useColorGradients() {
   return {
     cycleDayColors,
     cycleDayLabels,
+    cycleDayLegend,
     dayColors,
     userColors,
   };

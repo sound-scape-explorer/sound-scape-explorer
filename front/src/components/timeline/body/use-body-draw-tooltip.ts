@@ -3,7 +3,7 @@ import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
-import {isEnoughContrast} from 'src/utils/colors';
+import {hasEnoughContrast} from 'src/utils/colors';
 
 const textSize = 12;
 const paddingHorizontal = 3;
@@ -75,7 +75,7 @@ export function useBodyDrawTooltip() {
     ctx.fillStyle = hovered.value.color;
     ctx.fillRect(xFinal, yFinal, w, h);
 
-    ctx.fillStyle = isEnoughContrast(primary, hovered.value.color)
+    ctx.fillStyle = hasEnoughContrast(primary, hovered.value.color)
       ? primary
       : background;
     ctx.textAlign = 'start';
