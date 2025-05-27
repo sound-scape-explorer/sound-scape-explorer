@@ -14,7 +14,7 @@ export function useScatterHovers() {
     }
 
     const hovers: string[][][] = new Array(intervals.value.length);
-    let hoverMax = -1;
+    let hoverLength = -1;
 
     for (let i = 0; i < intervals.value.length; i += 1) {
       const interval = intervals.value[i];
@@ -37,12 +37,12 @@ export function useScatterHovers() {
 
       hovers[i] = hover;
 
-      if (hover.length > hoverMax) {
-        hoverMax = hover.length;
+      if (hover.length > hoverLength) {
+        hoverLength = hover.length;
       }
     }
 
-    const template = generateTemplate(hoverMax);
+    const template = generateTemplate(hoverLength);
 
     return {
       hovers,
