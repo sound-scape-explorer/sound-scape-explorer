@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {useScatter} from 'src/components/scatter/use-scatter';
+import {useScatterContainer} from 'src/components/scatter/use-scatter-container';
 import {LassoSelector} from 'src/components/screen/lasso';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useScreenCheck} from 'src/components/screen/use-screen-check';
@@ -10,7 +10,7 @@ import {project} from './project';
 
 const {isEnabled, disable, selected} = useScreen();
 const {isPointInPolygon} = useScreenCheck();
-const {container: scatterContainer} = useScatter();
+const {container: scatterContainer} = useScatterContainer();
 
 const container = ref<HTMLDivElement | null>(null);
 const isDown = ref<boolean>(false);

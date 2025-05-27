@@ -8,7 +8,7 @@ import {
   type AggregationWindow,
   useIntervals,
 } from 'src/composables/use-intervals';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {STRING_DELIMITER} from 'src/constants';
 import {computed, ref} from 'vue';
 
@@ -22,7 +22,7 @@ const windows = ref<AggregationWindow[] | null>(null);
 // todo: can you be more uselessly redundant please?
 export function useDetails() {
   const {config} = useConfig();
-  const {integration} = useViewSelectionNew();
+  const {integration} = useViewSelection();
   const {convertTimestampToDate} = useDate();
   const {aggregations} = useAggregations();
   const {currentIntervalIndex} = useIntervalSelector();

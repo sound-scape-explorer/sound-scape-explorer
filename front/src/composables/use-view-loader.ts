@@ -3,7 +3,7 @@ import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
+import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useDraggables} from 'src/composables/use-draggables';
@@ -11,7 +11,7 @@ import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useIntervals} from 'src/composables/use-intervals';
 import {useReductions} from 'src/composables/use-reductions';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {useViewState} from 'src/composables/use-view-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {nextTick, ref} from 'vue';
@@ -33,12 +33,12 @@ export function useViewLoader() {
 
   const {generateColorScale} = useScatterColorScale();
   const {buildSelection, selection: labelSelection} = useTagSelection();
-  const {isEnabled} = useScatterTraces();
+  const {isEnabled} = useScatterRender();
   const {filter: filterByLabel} = useScatterFilterTag();
   const {filter: filterByTemporal} = useScatterFilterTemporal();
   const {filterByTime} = useScatterFilterTime();
 
-  const {extraction, band, integration, reducer} = useViewSelectionNew();
+  const {extraction, band, integration, reducer} = useViewSelection();
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();

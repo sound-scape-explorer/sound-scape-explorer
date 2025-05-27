@@ -1,12 +1,12 @@
 import {type CascaderOption} from 'naive-ui';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {convertToNaiveSelectOptions} from 'src/utils/naive';
 import {computed} from 'vue';
 
 export function useTrajectoriesOptions() {
-  const {extraction} = useViewSelectionNew();
+  const {extraction} = useViewSelection();
   const {current} = useTrajectoriesSelection();
   const {isLoading} = useScatterLoading();
 

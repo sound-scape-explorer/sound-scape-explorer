@@ -3,8 +3,8 @@ import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {useScatterClick} from 'src/components/scatter/use-scatter-click';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterLayout} from 'src/components/scatter/use-scatter-layout';
+import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useScatterSelection} from 'src/components/scatter/use-scatter-selection';
-import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
 import {ref} from 'vue';
 
 const container = ref<PlotlyHTMLElement | null>(null);
@@ -12,11 +12,11 @@ const isAttached = ref<boolean>(false);
 const isMounted = ref<boolean>(false);
 const isRendering = ref<boolean>(false);
 
-export function useScatter() {
+export function useScatterContainer() {
   const {config} = useScatterConfig();
   const {layout} = useScatterLayout();
   const {isLocked} = useScatterCamera();
-  const {traces} = useScatterTraces();
+  const {data} = useScatterRender();
   const {handleClick} = useScatterClick();
   const {handleSelected} = useScatterSelection();
 
@@ -60,12 +60,7 @@ export function useScatter() {
     }
 
     isRendering.value = true;
-    await Plotly.react(
-      container.value,
-      traces.value,
-      layout.value,
-      config.value,
-    );
+    await Plotly.react(container.value, data.value, layout.value, config.value);
 
     console.log('Scatter: Render');
     isRendering.value = false;

@@ -1,11 +1,11 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {EXPORT_FILENAME, ExportType} from 'src/constants';
 
 const separator = ' - ';
 
 export function useExportName() {
-  const {band, integration} = useViewSelectionNew();
+  const {band, integration} = useViewSelection();
   const {isDetailedExportName} = useClientSettings();
 
   const appendDetails = (blocks: string[]): string[] => {

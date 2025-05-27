@@ -7,7 +7,7 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useSelectionLifecycles} from 'src/composables/use-selection-lifecycles';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {useViewState} from 'src/composables/use-view-state';
 import {useViewUnloader} from 'src/composables/use-view-unloader';
 import {useDraggableView} from 'src/draggables/view/use-draggable-view';
@@ -28,7 +28,7 @@ const {
   integrationToSlug,
   reducerSlug,
   reducerToSlug,
-} = useViewSelectionNew();
+} = useViewSelection();
 
 const extractionNames = computed(() => extractions.map(extractionToSlug));
 const bandNames = computed(() => extraction.value?.bands.map(bandToSlug) ?? []);

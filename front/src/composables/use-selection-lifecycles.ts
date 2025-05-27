@@ -1,4 +1,4 @@
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {watch} from 'vue';
 
 export function useSelectionLifecycles() {
@@ -15,7 +15,7 @@ export function useSelectionLifecycles() {
     reducer,
     reducerSlug,
     slugToReducer,
-  } = useViewSelectionNew();
+  } = useViewSelection();
 
   watch(extractionSlug, () => {
     if (extractionSlug.value === null) {

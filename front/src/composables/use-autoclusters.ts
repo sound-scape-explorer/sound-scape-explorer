@@ -1,6 +1,6 @@
 import {type AutoclusterDto} from '@shared/dtos';
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
 export interface Autocluster {
@@ -12,7 +12,7 @@ const autoclusters = ref<Autocluster[]>([]);
 
 export function useAutoclusters() {
   const {read: r} = useStorageReader();
-  const {extraction, band, integration} = useViewSelectionNew();
+  const {extraction, band, integration} = useViewSelection();
 
   const read = async () => {
     await r(async (worker, file) => {

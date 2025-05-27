@@ -1,6 +1,6 @@
 import {type TrajectoryDto} from '@shared/dtos';
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
 export interface RelativeTrajectory {
@@ -17,7 +17,7 @@ export function useRelativeTrajectories() {
 
   const read = async () => {
     await r(async (worker, file) => {
-      const {extraction, band, integration, reducer} = useViewSelectionNew();
+      const {extraction, band, integration, reducer} = useViewSelection();
 
       if (
         extraction.value === null ||

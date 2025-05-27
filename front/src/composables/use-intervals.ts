@@ -2,7 +2,7 @@ import {type ExtractorDto, type FileDto} from '@shared/dtos';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useConfig} from 'src/composables/use-config';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {AUTOCLUSTER_AS_TAG_NAME, SITE_AS_TAG_NAME} from 'src/constants';
 import {ref} from 'vue';
 
@@ -39,7 +39,7 @@ const intervals = ref<Interval[]>([]);
 export function useIntervals() {
   const {config} = useConfig();
   const {aggregations} = useAggregations();
-  const {extraction, integration} = useViewSelectionNew();
+  const {extraction, integration} = useViewSelection();
   const {autoclusters} = useAutoclusters();
 
   // performance note: critical lookup operations have been optimized.

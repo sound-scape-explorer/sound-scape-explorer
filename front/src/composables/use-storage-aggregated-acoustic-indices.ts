@@ -2,7 +2,7 @@ import {type IndexDto} from '@shared/dtosOLD';
 import {useSitesNew} from 'src/composables/use-sites-new';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useStorageReady} from 'src/composables/use-storage-ready';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
 export interface AggregatedIndex {
@@ -31,7 +31,7 @@ export function useStorageAggregatedAcousticIndices() {
     isLoaded = true;
 
     await read(async (worker, file) => {
-      const {band, integration} = useViewSelectionNew();
+      const {band, integration} = useViewSelection();
 
       if (band.value === null || integration.value === null) {
         return;

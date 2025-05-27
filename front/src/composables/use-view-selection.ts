@@ -19,8 +19,7 @@ const integration = ref<IntegrationDto | null>(null);
 const reducerSlug = ref<string | null>(null);
 const reducer = ref<ReducerDto | null>(null);
 
-// todoo: rename me
-export function useViewSelectionNew() {
+export function useViewSelection() {
   const {config} = useConfig();
   const extractions = config.value?.extractions ?? [];
 

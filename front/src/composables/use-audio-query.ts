@@ -1,7 +1,7 @@
 import {AudioQueryError} from 'src/common/Errors';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {type AggregationWindow} from 'src/composables/use-intervals';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 
 interface Q {
   response: Response | null;
@@ -45,7 +45,7 @@ interface AudioRootDto {
 }
 
 export function useAudioQuery() {
-  const {integration} = useViewSelectionNew();
+  const {integration} = useViewSelection();
   const {audioHost: host} = useClientSettings();
 
   const queryRoot = async () => {

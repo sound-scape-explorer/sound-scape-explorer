@@ -13,11 +13,8 @@ import {computed} from 'vue';
 const size2d = 5;
 const size3d = 3;
 
-// todo: update me
-export function useScatterFeatures() {
+export function useScatterEmbeddings() {
   const {reductions} = useReductions();
-  // const {labelProperties} = useStorageLabels();
-  // const {aggregatedLabels} = useStorageAggregatedLabels();
   const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
   const {scale} = useScatterColorScale();
   const {selected} = useScreen();
@@ -132,12 +129,9 @@ export function useScatterFeatures() {
     };
   };
 
-  // todo: update me
-  const trace = (): Data[] => {
+  const render = (): Data[] => {
     if (
-      // labelProperties.value === null ||
       reductions.value === null ||
-      // aggregatedLabels.value === null ||
       scale.value === null ||
       filtered.value === null
     ) {
@@ -178,6 +172,6 @@ export function useScatterFeatures() {
   };
 
   return {
-    traceFeatures: trace,
+    render,
   };
 }

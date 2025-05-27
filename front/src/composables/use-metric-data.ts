@@ -2,7 +2,7 @@ import {type MetricDto} from '@shared/dtos';
 import {MetricType} from '@shared/enums';
 import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useStorageReader} from 'src/composables/use-storage-reader';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {type Ref, ref} from 'vue';
 
 export interface MetricData {
@@ -14,7 +14,7 @@ const metricData = ref<MetricData | null>(null);
 
 export function useMetricData() {
   const {read: r} = useStorageReader();
-  const {extraction, band, integration} = useViewSelectionNew();
+  const {extraction, band, integration} = useViewSelection();
 
   const read = (
     metric: MetricDto,

@@ -1,9 +1,10 @@
-import {useScatter} from 'src/components/scatter/use-scatter';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
+import {useScatterContainer} from 'src/components/scatter/use-scatter-container';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
-import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
+import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
@@ -16,10 +17,16 @@ import {onMounted, watch} from 'vue';
 let isRendering = false;
 
 export function useScatterLifecycles() {
-  const {traces, isEnabled, generate, renderTraces} = useScatterTraces();
+  const {data, isEnabled, generate, render: renderScatter} = useScatterRender();
   const {config} = useScatterConfig();
-  const {container, isMounted, isAttached, attachListeners, render, mount} =
-    useScatter();
+  const {
+    container,
+    isMounted,
+    isAttached,
+    attachListeners,
+    render: renderContainer,
+    mount: mountContainer,
+  } = useScatterContainer();
   const {criteria, flavor} = useColorSelection();
   const {colorsAlphaLow: opacityLow, colorsAlphaHigh: opacityHigh} =
     useClientSettings();
@@ -38,11 +45,12 @@ export function useScatterLifecycles() {
   const {min: labelRangeMin, max: labelRangeMax} = useColorByTag();
   const {isEnabled: isColorByLabelsNumeric} = useTagNumeric();
   const {currentIntervalIndex} = useIntervalSelector();
+  const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
-  onMounted(mount);
+  onMounted(mountContainer);
 
   watch([container, isMounted, isAttached], attachListeners);
-  watch([container, traces, isMounted, isAttached, config], render);
+  watch([container, data, isMounted, isAttached, config], renderContainer);
 
   watch(
     [
@@ -65,6 +73,7 @@ export function useScatterLifecycles() {
       currentIntervalIndex,
       isSelectedPointHighlighted,
       scatterBorderWidth,
+      cyclingPeriod,
     ],
     async () => {
       if (isRendering || !isEnabled.value) {
@@ -73,7 +82,7 @@ export function useScatterLifecycles() {
 
       isRendering = true;
       await generate();
-      renderTraces();
+      renderScatter();
       isRendering = false;
     },
   );

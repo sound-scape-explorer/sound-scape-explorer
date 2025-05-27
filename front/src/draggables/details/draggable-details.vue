@@ -8,13 +8,13 @@ import {useDate} from 'src/composables/use-date';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
-import {useViewSelectionNew} from 'src/composables/use-view-selection-new';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useDetails} from 'src/draggables/details/use-details';
 import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
 import {watch} from 'vue';
 
-const {band, integration} = useViewSelectionNew();
+const {band, integration} = useViewSelection();
 // const {indices} = useExtractors();
 // const {aggregatedIndices} = useStorageAggregatedIndices();
 const {allUniques} = useTagUniques();

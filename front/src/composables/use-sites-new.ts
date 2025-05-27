@@ -5,6 +5,7 @@ import {ref} from 'vue';
 type Sites = Record<string, FileDto[]>;
 const sites = ref<Sites>({});
 
+// todo: update me
 export function useSitesNew() {
   const {config} = useConfig();
 
