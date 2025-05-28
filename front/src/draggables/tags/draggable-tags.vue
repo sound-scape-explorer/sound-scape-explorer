@@ -5,8 +5,8 @@ import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {TagsDraggableSize} from 'src/constants';
-import DraggableTagsSidebar from 'src/draggables/tags/DraggableTagsSidebar.vue';
-import Tag from 'src/draggables/tags/Tag.vue';
+import DraggableTagsSidebar from 'src/draggables/tags/draggable-tags-sidebar.vue';
+import Tag from 'src/draggables/tags/tag.vue';
 import {useDraggableTags} from 'src/draggables/tags/use-draggable-tags';
 import {useDraggableTagsDom} from 'src/draggables/tags/use-draggable-tags-dom';
 

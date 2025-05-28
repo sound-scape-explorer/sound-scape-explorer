@@ -13,7 +13,7 @@ import DraggableOpen from 'src/draggables/open/draggable-open.vue';
 import DraggableRelativeTrajectories from 'src/draggables/relative-trajectories/draggable-relative-trajectories.vue';
 import DraggableSelection from 'src/draggables/selection/selection.vue';
 import DraggableSettings from 'src/draggables/settings/draggable-settings.vue';
-import DraggableTags from 'src/draggables/tags/DraggableTags.vue';
+import DraggableTags from 'src/draggables/tags/draggable-tags.vue';
 import DraggableTemporal from 'src/draggables/temporal/draggable-temporal.vue';
 import DraggableTrajectories from 'src/draggables/trajectories/draggable-trajectories.vue';
 import DraggableView from 'src/draggables/view/draggable-view.vue';
