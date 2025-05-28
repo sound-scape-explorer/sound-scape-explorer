@@ -1,21 +1,18 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {headsetOutline} from 'ionicons/icons';
-import {NButton, NGi, NGrid, NTag} from 'naive-ui';
-import AppTooltip from 'src/app/app-tooltip.vue';
+import {NGi, NGrid, NTag} from 'naive-ui';
+import AppHeader from 'src/app/app-header.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import {useDate} from 'src/composables/use-date';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useInterval} from 'src/composables/use-interval';
-import {useViewSelection} from 'src/composables/use-view-selection';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {STRING_DELIMITER} from 'src/constants';
-import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import DraggableDetailsAudioWindows from 'src/draggables/details/draggable-details-audio-windows.vue';
 
-const {band, integration} = useViewSelection();
 const {currentIndex, currentInterval} = useInterval();
-const {select} = useAudioFile();
-const {convertTimestampToDate} = useDate();
+const {convertTimestampToIsoDate} = useDate();
+const {colors} = useThemeColors();
 </script>
 
 <template>
@@ -23,145 +20,64 @@ const {convertTimestampToDate} = useDate();
     :draggable-key="DraggableKey.enum.details"
     :suspense="SuspenseCase.enum.SCATTER_CLICK"
   >
-    <div v-if="currentInterval && currentIndex && band && integration">
-      <div :class="[$style.file, $style.container]">
-        <div :class="$style.title">Selected interval index</div>
-        <span :class="[$style.file, $style.index]">{{ currentIndex }}</span>
+    <div
+      v-if="currentInterval && currentIndex"
+      :class="$style.container"
+    >
+      <AppHeader>Interval data</AppHeader>
+
+      <div>
+        <div>Index</div>
+        <div>{{ currentIndex }}</div>
       </div>
 
-      <div :class="[$style.file, $style.container]">
-        <div :class="$style.title">Site</div>
-        <span :class="[$style.file, $style.index]">{{
-          currentInterval.sites.join(STRING_DELIMITER)
-        }}</span>
+      <div>
+        <div>Site</div>
+        <div>{{ currentInterval.sites.join(STRING_DELIMITER) }}</div>
       </div>
 
-      <div :class="[$style.file, $style.container]">
-        <div :class="$style.title">Audio blocks</div>
-        <span :class="[$style.file, $style.index]">
-          <AppTooltip
-            v-for="window in currentInterval.windows"
-            placement="bottom"
-          >
-            <template #body>
-              <NButton
-                :class="$style.zoom"
-                size="small"
-                @click="() => select(window)"
-              >
-                <IonIcon :icon="headsetOutline" />
-              </NButton>
-            </template>
-
-            <template #tooltip>
-              <NGrid
-                :cols="1"
-                x-gap="12"
-              >
-                <NGi>
-                  <NTag
-                    :bordered="false"
-                    size="small"
-                  >
-                    file
-                  </NTag>
-                  {{ window.file.Path }}
-                </NGi>
-                <NGi>
-                  <NTag
-                    :bordered="false"
-                    size="small"
-                  >
-                    file relative start
-                  </NTag>
-                  {{ window.relative.start }} ms
-                </NGi>
-                <NGi>
-                  <NTag
-                    :bordered="false"
-                    size="small"
-                  >
-                    date start
-                  </NTag>
-                  {{ convertTimestampToDate(window.absolute.start) }}
-                </NGi>
-              </NGrid>
-            </template>
-          </AppTooltip>
-        </span>
+      <div>
+        <div>Audio windows</div>
+        <div>
+          <DraggableDetailsAudioWindows :interval="currentInterval" />
+        </div>
       </div>
 
-      <div :class="$style.separator" />
+      <AppHeader>Date & time</AppHeader>
 
-      <div :class="[$style.file, $style.container]">
-        <div :class="$style.title">Date Start</div>
-        <span :class="[$style.file, $style.index]">{{
-          convertTimestampToDate(currentInterval.start)
-        }}</span>
+      <div>
+        <div>Start</div>
+        <div>{{ convertTimestampToIsoDate(currentInterval.start) }}</div>
       </div>
 
-      <div :class="[$style.file, $style.container]">
-        <div :class="$style.title">Date End</div>
-        <span :class="[$style.file, $style.index]">{{
-          convertTimestampToDate(currentInterval.end)
-        }}</span>
+      <div>
+        <div>End</div>
+        <div>{{ convertTimestampToIsoDate(currentInterval.end) }}</div>
       </div>
 
-      <div :class="[$style.file, $style.container]">
-        <div :class="$style.title">Band</div>
-        <span :class="[$style.file, $style.index]">{{ band.name }}</span>
-      </div>
+      <AppHeader>Tags</AppHeader>
 
-      <div :class="[$style.file, $style.container]">
-        <div :class="$style.title">Integration</div>
-        <span :class="[$style.file, $style.index]">{{ integration.name }}</span>
-      </div>
-
-      <div :class="$style.separator" />
-
-      <div :class="$style.title">Tags</div>
-
-      <div :class="[$style.file, $style.container, $style.details]">
-        <span />
-        <NGrid
-          :cols="2"
-          x-gap="12"
+      <NGrid
+        cols="2"
+        x-gap="4"
+        y-gap="4"
+      >
+        <NGi
+          v-for="[tagName, tagValues] in Object.entries(currentInterval.tags)"
+          :class="$style.item"
         >
-          <NGi
-            v-for="[tagName, tagValues] in Object.entries(currentInterval.tags)"
+          <NTag
+            :bordered="false"
+            size="small"
           >
-            <NTag
-              :bordered="false"
-              size="small"
-            >
-              {{ tagName }}
-            </NTag>
+            {{ tagName }}
+          </NTag>
 
+          <span>
             {{ tagValues.join(STRING_DELIMITER) }}
-          </NGi>
-        </NGrid>
-
-        <div :class="$style.separator" />
-
-        <!--      <div :class="$style.title">Indicators</div>-->
-
-        <!-- TODO: update me -->
-        <!--      <NGrid-->
-        <!--        v-if="aggregatedIndices !== null"-->
-        <!--        :cols="2"-->
-        <!--        x-gap="12"-->
-        <!--      >-->
-        <!--        <NGi v-for="(index, i) in indices">-->
-        <!--          <NTag-->
-        <!--            :bordered="false"-->
-        <!--            size="small"-->
-        <!--          >-->
-        <!--            {{ index.impl }}-->
-        <!--          </NTag>-->
-        <!--          {{ aggregatedIndices[i].values[currentIntervalIndex ?? 0] }}-->
-        <!--        </NGi>-->
-        <!--      </NGrid>-->
-      </div>
+          </span>
+        </NGi>
+      </NGrid>
     </div>
   </AppDraggable>
 </template>
@@ -169,50 +85,28 @@ const {convertTimestampToDate} = useDate();
 <style lang="scss" module>
 @use 'src/styles/sizes';
 
-.index {
-  font-style: italic;
-}
-
 .container {
   display: flex;
-  justify-content: space-between;
-  width: sizes.$w1;
-  padding-right: sizes.$g0;
-}
-
-.title {
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  padding-left: 1px;
-}
-
-.file.container.details {
   flex-direction: column;
+  width: sizes.$w1;
   gap: sizes.$g0;
 
-  div {
+  & > div {
     display: flex;
+    align-items: center;
     justify-content: space-between;
   }
 }
 
-.meta.container {
-  display: grid;
-  flex-direction: column;
-}
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: sizes.$p0;
+  border-radius: sizes.$g0;
 
-.file-details {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: 1fr 1fr;
-}
-
-.src {
-  overflow: hidden;
-}
-
-.separator {
-  height: sizes.$p0;
+  &:hover {
+    background: v-bind('colors.boxShadow1');
+  }
 }
 </style>
