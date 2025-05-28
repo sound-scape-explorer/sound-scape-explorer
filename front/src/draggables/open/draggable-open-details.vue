@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+import {IonIcon} from '@ionic/vue';
+import {downloadJson} from '@shared/browser';
+import {inferFilename} from '@shared/config';
+import {downloadOutline} from 'ionicons/icons';
+import AppButton from 'src/app/app-button.vue';
 import AppGrid, {type AppGridItem} from 'src/app/app-grid.vue';
 import {useConfig} from 'src/composables/use-config';
 import {useThemeColors} from 'src/composables/use-theme-colors';
@@ -38,10 +43,29 @@ const items = computed(() => {
 
   return payload;
 });
+
+const download = () => {
+  if (config.value === null) {
+    return;
+  }
+
+  const filename = inferFilename(config.value);
+  downloadJson(config.value, filename);
+};
 </script>
 
 <template>
-  <h2 :class="[$style.title]">Config</h2>
+  <div :class="$style.header">
+    <h2>Config</h2>
+    <AppButton
+      :handle-click="download"
+      size="small"
+      tooltip="Download .json"
+      tooltip-placement="bottom"
+    >
+      <IonIcon :icon="downloadOutline" />
+    </AppButton>
+  </div>
 
   <AppGrid
     :columns="1"
@@ -52,8 +76,10 @@ const items = computed(() => {
 <style lang="scss" module>
 @use 'src/styles/sizes';
 
-.title {
+.header {
   font-weight: bold;
+  display: flex;
+  justify-content: space-between;
   margin: sizes.$p0 0;
   padding: sizes.$g0 sizes.$p0;
   border-radius: sizes.$g0;
