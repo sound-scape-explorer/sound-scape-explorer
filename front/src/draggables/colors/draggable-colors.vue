@@ -3,6 +3,7 @@ import {IonIcon} from '@ionic/vue';
 import {flashOutline, repeatOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -35,7 +36,7 @@ const {isEnabled} = useTagNumeric();
 <template>
   <AppDraggable
     :draggable-key="DraggableKey.enum.colors"
-    suspense="view"
+    :suspense="SuspenseCase.enum.VIEW"
   >
     <AppDraggableMenu>
       <h2>With</h2>

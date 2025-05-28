@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useExportName} from 'src/composables/use-export-name';
@@ -23,6 +24,7 @@ useDraggableHeatmapsLifecycles();
   <AppDraggable
     :class="$style.container"
     :draggable-key="DraggableKey.enum.heatmaps"
+    :suspense="SuspenseCase.enum.NO_METRICS"
   >
     <DraggableHeatmapsMenu />
 

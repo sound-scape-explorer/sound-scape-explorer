@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {NGi, NGrid} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {TagsDraggableSize} from 'src/constants';
@@ -17,7 +18,7 @@ const {allUniques} = useTagUniques();
 <template>
   <AppDraggable
     :draggable-key="DraggableKey.enum.tags"
-    suspense="view"
+    :suspense="SuspenseCase.enum.VIEW"
   >
     <DraggableTagsSidebar />
 

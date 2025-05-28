@@ -4,6 +4,7 @@ import {headsetOutline} from 'ionicons/icons';
 import {NButton, NGi, NGrid, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import {useDate} from 'src/composables/use-date';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useIntervalSelector} from 'src/composables/use-interval-selector';
@@ -41,7 +42,7 @@ watch(timeshift, updateDates);
 <template>
   <AppDraggable
     :draggable-key="DraggableKey.enum.details"
-    suspense="scatterClick"
+    :suspense="SuspenseCase.enum.SCATTER_CLICK"
   >
     <div :class="[$style.file, $style.container]">
       <div :class="$style.title">Selected interval index</div>

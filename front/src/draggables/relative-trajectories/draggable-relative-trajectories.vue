@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import AppPlot from 'src/app/plot/app-plot.vue';
 import {DraggableKey} from 'src/composables/use-draggables';
 import DraggableRelativeTrajectoriesMenu from 'src/draggables/relative-trajectories/draggable-relative-trajectories-menu.vue';
@@ -18,7 +19,7 @@ const {height} = useRelativeTrajectoriesPlotSize();
   <AppDraggable
     :class="[$style.container, {[$style.expanded]: isExpanded}]"
     :draggable-key="DraggableKey.enum.relativeTrajectories"
-    suspense="view"
+    :suspense="SuspenseCase.enum.NO_TRAJECTORIES"
   >
     <DraggableRelativeTrajectoriesSidebar />
     <DraggableRelativeTrajectoriesMenu />
