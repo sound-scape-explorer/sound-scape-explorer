@@ -44,7 +44,7 @@ export function useAudioRate() {
       return;
     }
 
-    const sampleRate = config.value.settings.expected_sample_rate;
+    const sampleRate = config.value.settings.expectedSampleRate;
     const hertz = (sampleRate * rate.value).toFixed();
     const percentage = speedToPercentage(rate.value, 2);
     const semitones = speedToSemitones(rate.value, 2);
