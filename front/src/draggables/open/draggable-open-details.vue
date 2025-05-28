@@ -5,12 +5,11 @@ import {inferFilename} from '@shared/config';
 import {downloadOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppGrid, {type AppGridItem} from 'src/app/app-grid.vue';
+import AppHeader from 'src/app/app-header.vue';
 import {useConfig} from 'src/composables/use-config';
-import {useThemeColors} from 'src/composables/use-theme-colors';
 import {computed} from 'vue';
 
 const {config} = useConfig();
-const {colors} = useThemeColors();
 
 const items = computed(() => {
   if (config.value === null) {
@@ -56,18 +55,18 @@ const download = () => {
 
 <template>
   <div :class="$style.container">
-    <div :class="$style.header">
+    <AppHeader>
       <h2>Config</h2>
 
       <AppButton
         :handle-click="download"
-        size="small"
+        size="tiny"
         tooltip="Download .json"
         tooltip-placement="bottom"
       >
         <IonIcon :icon="downloadOutline" />
       </AppButton>
-    </div>
+    </AppHeader>
 
     <AppGrid
       :columns="1"
@@ -90,15 +89,5 @@ const download = () => {
   text-wrap: stable;
 
   @include scrolls.tiny-scrollbar;
-}
-
-.header {
-  font-weight: bold;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: sizes.$p0;
-  padding: sizes.$g0 sizes.$p0;
-  border-radius: sizes.$g0;
-  background: v-bind('colors.actionColor');
 }
 </style>
