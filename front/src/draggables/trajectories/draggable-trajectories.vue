@@ -53,7 +53,7 @@ watch(current, update);
       />
     </AppDraggableSidebar>
 
-    <AppDraggableMenu :class="$style.menu">
+    <AppDraggableMenu>
       <h2>Trajectories</h2>
 
       <div :class="$style.selection">
@@ -125,10 +125,6 @@ watch(current, update);
 
 .container {
   width: sizes.$s2;
-}
-
-.menu {
-  width: sizes.$s0;
 }
 
 .selection {
