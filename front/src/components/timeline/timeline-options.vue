@@ -7,10 +7,10 @@ import {useTimelineHandlers} from 'src/components/timeline/use-timeline-handlers
 import {useTimelineLifecycles} from 'src/components/timeline/use-timeline-lifecycles';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-names';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 
 const {left, right, updateLeft, updateRight} = useTimelineRange();
-const {currentIntervalIndex} = useIntervalSelector();
+const {currentIndex} = useInterval();
 const {overdrive, recenter} = useTimelineHandlers();
 const {name, names} = useTimelineRangeNames();
 
@@ -36,7 +36,7 @@ useTimelineLifecycles();
       </AppButton>
 
       <AppButton
-        :disabled="currentIntervalIndex === null"
+        :disabled="currentIndex === null"
         :handle-click="recenter"
         tooltip="to selected interval"
         tooltip-placement="top"

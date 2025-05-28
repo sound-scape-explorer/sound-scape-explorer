@@ -1,5 +1,5 @@
 import {type AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useViewState} from 'src/composables/use-view-state';
 import {computed} from 'vue';
@@ -22,7 +22,7 @@ interface Suspense {
 
 export function useAppDraggableSuspense(props: AppDraggableProps) {
   const {hasView} = useViewState();
-  const {hasClicked} = useIntervalSelector();
+  const {hasInterval} = useInterval();
   const {extraction} = useViewSelection();
 
   // block draggable display on while condition
@@ -36,8 +36,8 @@ export function useAppDraggableSuspense(props: AppDraggableProps) {
       }
       case SuspenseCase.enum.SCATTER_CLICK: {
         return {
-          while: !hasClicked.value,
-          message: 'Please select a point first',
+          while: !hasInterval.value,
+          message: 'Please select an interval first',
         };
       }
       case SuspenseCase.enum.NO_METRICS: {

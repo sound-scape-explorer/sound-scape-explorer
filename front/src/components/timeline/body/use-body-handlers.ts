@@ -4,7 +4,7 @@ import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
 import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {type TimelineElement} from 'src/components/timeline/use-timeline-elements';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 import {ref} from 'vue';
 
 export interface MousePosition {
@@ -19,7 +19,7 @@ export function useBodyHandlers() {
   const {hovered} = useBodyHover();
   const {elements} = useBodyElements();
   const {rangeToCanvasX} = useBodyUtils();
-  const {selectInterval} = useIntervalSelector();
+  const {selectInterval} = useInterval();
   const {rowHeight, elementGaps} = useBodyConfig();
 
   const isPointInElement = (x: number, y: number, element: TimelineElement) => {

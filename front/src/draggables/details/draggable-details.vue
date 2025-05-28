@@ -7,36 +7,15 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import {useDate} from 'src/composables/use-date';
 import {DraggableKey} from 'src/composables/use-draggables';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useTagUniques} from 'src/composables/use-tag-uniques';
+import {useInterval} from 'src/composables/use-interval';
 import {useViewSelection} from 'src/composables/use-view-selection';
+import {STRING_DELIMITER} from 'src/constants';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
-import {useDetails} from 'src/draggables/details/use-details';
-import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
-import {watch} from 'vue';
 
 const {band, integration} = useViewSelection();
-// const {indices} = useExtractors();
-// const {aggregatedIndices} = useStorageAggregatedIndices();
-const {allUniques} = useTagUniques();
-const {currentIntervalIndex, hasClicked} = useIntervalSelector();
+const {currentIndex, currentInterval} = useInterval();
 const {select} = useAudioFile();
-const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
-const {autoselect} = useDetailsAutoselectAudio();
-const {
-  date,
-  dateEnd,
-  labelValues,
-  site,
-  windows,
-  readDetails,
-  timeshift,
-  updateDates,
-} = useDetails();
-
-watch(windows, autoselect);
-watch(currentIntervalIndex, readDetails);
-watch(timeshift, updateDates);
+const {convertTimestampToDate} = useDate();
 </script>
 
 <template>
@@ -44,148 +23,145 @@ watch(timeshift, updateDates);
     :draggable-key="DraggableKey.enum.details"
     :suspense="SuspenseCase.enum.SCATTER_CLICK"
   >
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Selected interval index</div>
-      <span :class="[$style.file, $style.index]">{{
-        currentIntervalIndex ?? 'none'
-      }}</span>
-    </div>
+    <div v-if="currentInterval && currentIndex && band && integration">
+      <div :class="[$style.file, $style.container]">
+        <div :class="$style.title">Selected interval index</div>
+        <span :class="[$style.file, $style.index]">{{ currentIndex }}</span>
+      </div>
 
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Site</div>
-      <span :class="[$style.file, $style.index]">{{ site ?? '' }}</span>
-    </div>
+      <div :class="[$style.file, $style.container]">
+        <div :class="$style.title">Site</div>
+        <span :class="[$style.file, $style.index]">{{
+          currentInterval.sites.join(STRING_DELIMITER)
+        }}</span>
+      </div>
 
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Audio blocks</div>
-      <span :class="[$style.file, $style.index]">
-        <AppTooltip
-          v-for="window in windows"
-          placement="bottom"
-        >
-          <template #body>
-            <NButton
-              :class="$style.zoom"
-              size="small"
-              @click="() => select(window)"
-            >
-              <IonIcon :icon="headsetOutline" />
-            </NButton>
-          </template>
-
-          <template #tooltip>
-            <NGrid
-              :cols="1"
-              x-gap="12"
-            >
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  file
-                </NTag>
-                {{ window.file.Path }}
-              </NGi>
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  file relative start
-                </NTag>
-                {{ window.relative.start }} ms
-              </NGi>
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  date start
-                </NTag>
-                {{ convertTimestampToIsoDate(window.absolute.start) }}
-              </NGi>
-            </NGrid>
-          </template>
-        </AppTooltip>
-      </span>
-    </div>
-
-    <div :class="$style.separator" />
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Date Start</div>
-      <span :class="[$style.file, $style.index]">{{
-        date && convertDateToIsoDate(date)
-      }}</span>
-    </div>
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Date End</div>
-      <span :class="[$style.file, $style.index]">{{
-        dateEnd && convertDateToIsoDate(dateEnd)
-      }}</span>
-    </div>
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Band</div>
-      <span :class="[$style.file, $style.index]">{{ band?.name ?? '' }}</span>
-    </div>
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Integration</div>
-      <span :class="[$style.file, $style.index]">{{
-        integration?.name ?? ''
-      }}</span>
-    </div>
-
-    <div :class="$style.separator" />
-
-    <div :class="$style.title">Labels</div>
-
-    <div
-      v-if="hasClicked"
-      :class="[$style.file, $style.container, $style.details]"
-    >
-      <span />
-      <NGrid
-        :cols="2"
-        x-gap="12"
-      >
-        <!--suppress JSUnusedLocalSymbols -->
-        <NGi v-for="(_, index) in Object.keys(allUniques)">
-          <NTag
-            :bordered="false"
-            size="small"
+      <div :class="[$style.file, $style.container]">
+        <div :class="$style.title">Audio blocks</div>
+        <span :class="[$style.file, $style.index]">
+          <AppTooltip
+            v-for="window in currentInterval.windows"
+            placement="bottom"
           >
-            {{ Object.keys(allUniques)[index] }}
-          </NTag>
+            <template #body>
+              <NButton
+                :class="$style.zoom"
+                size="small"
+                @click="() => select(window)"
+              >
+                <IonIcon :icon="headsetOutline" />
+              </NButton>
+            </template>
 
-          <!-- todo: fix me -->
-          {{ labelValues[index] }}
-        </NGi>
-      </NGrid>
+            <template #tooltip>
+              <NGrid
+                :cols="1"
+                x-gap="12"
+              >
+                <NGi>
+                  <NTag
+                    :bordered="false"
+                    size="small"
+                  >
+                    file
+                  </NTag>
+                  {{ window.file.Path }}
+                </NGi>
+                <NGi>
+                  <NTag
+                    :bordered="false"
+                    size="small"
+                  >
+                    file relative start
+                  </NTag>
+                  {{ window.relative.start }} ms
+                </NGi>
+                <NGi>
+                  <NTag
+                    :bordered="false"
+                    size="small"
+                  >
+                    date start
+                  </NTag>
+                  {{ convertTimestampToDate(window.absolute.start) }}
+                </NGi>
+              </NGrid>
+            </template>
+          </AppTooltip>
+        </span>
+      </div>
 
       <div :class="$style.separator" />
 
-      <!--      <div :class="$style.title">Indicators</div>-->
+      <div :class="[$style.file, $style.container]">
+        <div :class="$style.title">Date Start</div>
+        <span :class="[$style.file, $style.index]">{{
+          convertTimestampToDate(currentInterval.start)
+        }}</span>
+      </div>
 
-      <!-- TODO: update me -->
-      <!--      <NGrid-->
-      <!--        v-if="aggregatedIndices !== null"-->
-      <!--        :cols="2"-->
-      <!--        x-gap="12"-->
-      <!--      >-->
-      <!--        <NGi v-for="(index, i) in indices">-->
-      <!--          <NTag-->
-      <!--            :bordered="false"-->
-      <!--            size="small"-->
-      <!--          >-->
-      <!--            {{ index.impl }}-->
-      <!--          </NTag>-->
-      <!--          {{ aggregatedIndices[i].values[currentIntervalIndex ?? 0] }}-->
-      <!--        </NGi>-->
-      <!--      </NGrid>-->
+      <div :class="[$style.file, $style.container]">
+        <div :class="$style.title">Date End</div>
+        <span :class="[$style.file, $style.index]">{{
+          convertTimestampToDate(currentInterval.end)
+        }}</span>
+      </div>
+
+      <div :class="[$style.file, $style.container]">
+        <div :class="$style.title">Band</div>
+        <span :class="[$style.file, $style.index]">{{ band.name }}</span>
+      </div>
+
+      <div :class="[$style.file, $style.container]">
+        <div :class="$style.title">Integration</div>
+        <span :class="[$style.file, $style.index]">{{ integration.name }}</span>
+      </div>
+
+      <div :class="$style.separator" />
+
+      <div :class="$style.title">Tags</div>
+
+      <div :class="[$style.file, $style.container, $style.details]">
+        <span />
+        <NGrid
+          :cols="2"
+          x-gap="12"
+        >
+          <NGi
+            v-for="[tagName, tagValues] in Object.entries(currentInterval.tags)"
+          >
+            <NTag
+              :bordered="false"
+              size="small"
+            >
+              {{ tagName }}
+            </NTag>
+
+            {{ tagValues.join(STRING_DELIMITER) }}
+          </NGi>
+        </NGrid>
+
+        <div :class="$style.separator" />
+
+        <!--      <div :class="$style.title">Indicators</div>-->
+
+        <!-- TODO: update me -->
+        <!--      <NGrid-->
+        <!--        v-if="aggregatedIndices !== null"-->
+        <!--        :cols="2"-->
+        <!--        x-gap="12"-->
+        <!--      >-->
+        <!--        <NGi v-for="(index, i) in indices">-->
+        <!--          <NTag-->
+        <!--            :bordered="false"-->
+        <!--            size="small"-->
+        <!--          >-->
+        <!--            {{ index.impl }}-->
+        <!--          </NTag>-->
+        <!--          {{ aggregatedIndices[i].values[currentIntervalIndex ?? 0] }}-->
+        <!--        </NGi>-->
+        <!--      </NGrid>-->
+      </div>
     </div>
   </AppDraggable>
 </template>

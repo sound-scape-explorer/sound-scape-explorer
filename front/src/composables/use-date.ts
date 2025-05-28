@@ -15,6 +15,7 @@ export function useDate() {
   const {config} = useConfig();
   const {isTimezoneActive, timeshift} = useClientSettings();
 
+  // todo: migrate to date-fns and ditch dayjs
   const convertTimestampToDate = (timestamp: number) => {
     const shift = timeshift.value;
 

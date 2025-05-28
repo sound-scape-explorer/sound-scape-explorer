@@ -21,7 +21,7 @@ interface Window {
 
 export type AggregationWindow = Omit<Window, 'extractor'>;
 
-interface Interval {
+export interface Interval {
   index: number;
   start: number;
   end: number;

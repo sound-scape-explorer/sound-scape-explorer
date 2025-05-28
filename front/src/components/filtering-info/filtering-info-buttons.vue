@@ -7,11 +7,11 @@ import {
   arrowUndoOutline,
 } from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 
-const {back, forward, canUndo, canRedo, redo, undo, hasClicked} =
-  useIntervalSelector();
+const {back, forward, canUndo, canRedo, redo, undo, hasInterval} =
+  useInterval();
 
 const {colors} = useThemeColors();
 </script>
@@ -19,7 +19,7 @@ const {colors} = useThemeColors();
 <template>
   <div :class="$style.container">
     <AppButton
-      :disabled="!hasClicked"
+      :disabled="!hasInterval"
       :handle-click="back"
       tooltip="Back"
       tooltip-placement="top"
@@ -28,7 +28,7 @@ const {colors} = useThemeColors();
     </AppButton>
 
     <AppButton
-      :disabled="!hasClicked"
+      :disabled="!hasInterval"
       :handle-click="forward"
       tooltip="Forward"
       tooltip-placement="top"
@@ -40,7 +40,7 @@ const {colors} = useThemeColors();
     </AppButton>
 
     <AppButton
-      :disabled="!canUndo || !hasClicked"
+      :disabled="!canUndo || !hasInterval"
       :handle-click="undo"
       tooltip="Undo"
       tooltip-placement="top"
@@ -49,7 +49,7 @@ const {colors} = useThemeColors();
     </AppButton>
 
     <AppButton
-      :disabled="!canRedo || !hasClicked"
+      :disabled="!canRedo || !hasInterval"
       :handle-click="redo"
       tooltip="Redo"
       tooltip-placement="top"
