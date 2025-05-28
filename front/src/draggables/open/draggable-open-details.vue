@@ -80,13 +80,16 @@ const download = () => {
 @use 'src/styles/scrolls';
 
 .container {
+  display: flex;
   overflow: auto;
+  flex-direction: column;
   width: sizes.$s0;
   max-height: sizes.$h0;
   margin-top: sizes.$p0;
   padding-right: sizes.$p0;
   text-align: right;
   text-wrap: stable;
+  gap: sizes.$g0;
 
   @include scrolls.tiny-scrollbar;
 }

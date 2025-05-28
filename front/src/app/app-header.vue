@@ -28,7 +28,6 @@ const color = computed(() => `${colors.value[props.color]}`);
   font-weight: bold;
   display: flex;
   justify-content: space-between;
-  margin-bottom: sizes.$p0;
   padding: sizes.$g0 sizes.$p0;
   border-radius: sizes.$g0;
   background: v-bind('color');

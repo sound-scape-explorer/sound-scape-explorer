@@ -34,7 +34,7 @@ export const Settings = z.object({
     .transform((url) => url.replace(/\/$/, ''))
     .default('http://localhost:5531'),
   plotFontSize: z.number().default(12),
-  decibelsDisplay: z.boolean().default(false),
+  decibelsDisplay: z.boolean().default(true),
   legendOverflow: z.boolean().default(false),
   tagsDraggableSizeHorizontal: TagsDraggableSize.default(
     TagsDraggableSize.enum.small,
