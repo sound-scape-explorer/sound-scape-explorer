@@ -55,32 +55,48 @@ const download = () => {
 </script>
 
 <template>
-  <div :class="$style.header">
-    <h2>Config</h2>
-    <AppButton
-      :handle-click="download"
-      size="small"
-      tooltip="Download .json"
-      tooltip-placement="bottom"
-    >
-      <IonIcon :icon="downloadOutline" />
-    </AppButton>
-  </div>
+  <div :class="$style.container">
+    <div :class="$style.header">
+      <h2>Config</h2>
 
-  <AppGrid
-    :columns="1"
-    :items="items"
-  />
+      <AppButton
+        :handle-click="download"
+        size="small"
+        tooltip="Download .json"
+        tooltip-placement="bottom"
+      >
+        <IonIcon :icon="downloadOutline" />
+      </AppButton>
+    </div>
+
+    <AppGrid
+      :columns="1"
+      :items="items"
+    />
+  </div>
 </template>
 
 <style lang="scss" module>
 @use 'src/styles/sizes';
+@use 'src/styles/scrolls';
+
+.container {
+  overflow: auto;
+  width: sizes.$s0;
+  max-height: sizes.$h0;
+  margin-top: sizes.$p0;
+  padding-right: sizes.$p0;
+  text-align: right;
+  text-wrap: stable;
+
+  @include scrolls.tiny-scrollbar;
+}
 
 .header {
   font-weight: bold;
   display: flex;
   justify-content: space-between;
-  margin: sizes.$p0 0;
+  margin-bottom: sizes.$p0;
   padding: sizes.$g0 sizes.$p0;
   border-radius: sizes.$g0;
   background: v-bind('colors.actionColor');

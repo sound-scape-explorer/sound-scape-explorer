@@ -46,9 +46,7 @@ const handleChange = () => {
       </NButton>
     </div>
 
-    <div :class="$style.details">
-      <DraggableOpenDetails v-if="isReady" />
-    </div>
+    <DraggableOpenDetails v-if="isReady" />
   </AppDraggable>
 </template>
 
@@ -65,15 +63,5 @@ const handleChange = () => {
 
 .red {
   background: v-bind('colors.errorColor');
-}
-
-.details {
-  overflow: auto;
-  width: sizes.$s0;
-  max-height: sizes.$h0;
-  text-align: right;
-  text-wrap: stable;
-
-  @include scrolls.hide-scrollbar;
 }
 </style>
