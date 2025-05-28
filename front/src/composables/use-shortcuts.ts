@@ -4,12 +4,11 @@ const draggablePrefix = '_draggable';
 const alphaPrefix = '_alpha';
 const betaPrefix = '_beta';
 
-export enum Shortcuts {
-  _alphaSelection2d = 's',
+export enum Shortcut {
   _alphaSelection3d = 'J',
-  _draggableToggle = 'Esc',
-  _draggableCycleRecent = 'Tab',
-  _draggableCycleBack = 'Shift+Tab',
+  _draggableHideShow = 'Esc',
+  _draggableCycleNext = 'Tab', // just for doc
+  _draggableCyclePrevious = 'Shift+Tab', // just for doc
   _draggableClose = 'x',
   _draggableCloseExceptCurrent = 'X',
   open = 'o',
@@ -17,12 +16,12 @@ export enum Shortcuts {
   help = '?',
   view = 'w',
   colors = 'c',
-  tags = 'l',
+  tags = 't',
   audio = 'a',
   details = 'd',
   trajectories = 'y',
   relativeTrajectories = 'Y',
-  temporal = 't',
+  temporal = 'T',
   histograms = 'j',
   heatmaps = 'h',
   calendar = 'v',
@@ -39,7 +38,7 @@ const draggables: ShortcutSerialized[] = [];
 const alphas: ShortcutSerialized[] = [];
 const betas: ShortcutSerialized[] = [];
 
-Object.entries(Shortcuts).forEach((entry) => {
+Object.entries(Shortcut).forEach((entry) => {
   const [name, keycode] = entry;
 
   const shortcut: ShortcutSerialized = {
@@ -48,6 +47,7 @@ Object.entries(Shortcuts).forEach((entry) => {
   };
 
   const isDraggable = name.startsWith(draggablePrefix);
+
   if (isDraggable) {
     shortcut.name = name.replace(draggablePrefix, '');
     draggables.push(shortcut);
@@ -55,6 +55,7 @@ Object.entries(Shortcuts).forEach((entry) => {
   }
 
   const isAlpha = name.startsWith(alphaPrefix);
+
   if (isAlpha) {
     shortcut.name = name.replace(alphaPrefix, '');
     alphas.push(shortcut);
@@ -62,6 +63,7 @@ Object.entries(Shortcuts).forEach((entry) => {
   }
 
   const isBeta = name.startsWith(betaPrefix);
+
   if (isBeta) {
     shortcut.name = name.replace(betaPrefix, '');
     betas.push(shortcut);
@@ -74,7 +76,7 @@ Object.entries(Shortcuts).forEach((entry) => {
 shortcuts.sort((a, b) => a.name.localeCompare(b.name));
 
 export function useKeyboardShortcuts() {
-  const getKey = (key: DraggableKey) => Shortcuts[key];
+  const getKey = (key: DraggableKey) => Shortcut[key];
 
   return {
     shortcuts,
