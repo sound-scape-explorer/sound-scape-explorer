@@ -47,7 +47,7 @@ const {colors} = useThemeColors();
     height: 40px;
     transform: translate3d(0, -8px, 0);
     text-align: center;
-    color: v-bind('colors.pressedColor');
+    color: v-bind('colors.errorColor');
   }
 }
 
