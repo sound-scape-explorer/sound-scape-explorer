@@ -1,3 +1,28 @@
+# [14.0.0-beta.10](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.9...v14.0.0-beta.10) (2025-06-11)
+
+
+### Bug Fixes
+
+* **campaign:** encapsulate drawer in div ([d67fbfb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d67fbfba388459ea997ff8d63cc4018764d63036))
+* **campaign:** remove help styling for global settings ([a324cdc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a324cdcb22f8fd63103f7b4d2c7149c39e48c52d))
+* **front/open:** add scrollbar and improve margins ([b285a6d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b285a6d3e730c1d223a665b33a12336a69a05f62))
+* **front:** fix keyboard shortcut handler ([267319f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/267319f8108f4e7564bd41bf40f9cef79d5782ba))
+* **front:** fix trajectory draggable width ([019a208](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/019a208604d0b5f11c016ffb967d7eaa931ef0fa))
+* **front:** remove details abstraction layer + use new interval selection ([1c49c82](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1c49c8238c154610bbc53bcf461e694cbaa1e11c))
+* **front:** update sample rate computation ([d2e043f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d2e043f6b250f6ba1133eda973eeec529c40a352))
+* **front:** use consistent kebab case for SFCs ([eeaebe2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/eeaebe2b8bee3aefec4093bbd8ac5daa25254025))
+* **front:** use error color for audio peaks ([7c26e72](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7c26e722436cc6684c485a629ef9826eeb49d700))
+
+
+### Features
+
+* **examples:** add bare minimum example ([6eba56a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6eba56ad781d5d22ca186f2102aa8c3ccc01ecc2))
+* **front/details:** add categories and improve layout ([0900eab](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0900eab5700473c1fdf7df4ee7b25cf141f57f56))
+* **front/open:** allow config download as json ([0d670f4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0d670f45b2e767aad965bc01b270ef74b3b560c1))
+* **front/settings:** add categories + improve layout ([7d7cef5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7d7cef54b09eef83a78dae89710d4f5a34909d2e))
+* **front:** add new suspense case for empty metrics and trajectories + refactor suspense enumeration ([162acc0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/162acc0102f53a8af34e2cd31dd73ec22ebbb006))
+* **front:** add primitive app header component ([517835d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/517835d6ae2f41d830cc98d9ac9b1855cdad2bcf))
+
 # [14.0.0-beta.9](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.8...v14.0.0-beta.9) (2025-05-27)
 
 
