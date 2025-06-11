@@ -1,11 +1,15 @@
 <script lang="ts" setup>
+import {IonIcon} from '@ionic/vue';
+import {downloadJson} from '@shared/browser';
+import {inferFilename} from '@shared/config';
+import {downloadOutline} from 'ionicons/icons';
+import AppButton from 'src/app/app-button.vue';
 import AppGrid, {type AppGridItem} from 'src/app/app-grid.vue';
+import AppHeader from 'src/app/app-header.vue';
 import {useConfig} from 'src/composables/use-config';
-import {useThemeColors} from 'src/composables/use-theme-colors';
 import {computed} from 'vue';
 
 const {config} = useConfig();
-const {colors} = useThemeColors();
 
 const items = computed(() => {
   if (config.value === null) {
@@ -38,25 +42,55 @@ const items = computed(() => {
 
   return payload;
 });
+
+const download = () => {
+  if (config.value === null) {
+    return;
+  }
+
+  const filename = inferFilename(config.value);
+  downloadJson(config.value, filename);
+};
 </script>
 
 <template>
-  <h2 :class="[$style.title]">Config</h2>
+  <div :class="$style.container">
+    <AppHeader>
+      <h2>Config</h2>
 
-  <AppGrid
-    :columns="1"
-    :items="items"
-  />
+      <AppButton
+        :handle-click="download"
+        size="tiny"
+        tooltip="Download .json"
+        tooltip-placement="bottom"
+      >
+        <IonIcon :icon="downloadOutline" />
+      </AppButton>
+    </AppHeader>
+
+    <AppGrid
+      :columns="1"
+      :items="items"
+    />
+  </div>
 </template>
 
 <style lang="scss" module>
 @use 'src/styles/sizes';
+@use 'src/styles/scrolls';
 
-.title {
-  font-weight: bold;
-  margin: sizes.$p0 0;
-  padding: sizes.$g0 sizes.$p0;
-  border-radius: sizes.$g0;
-  background: v-bind('colors.actionColor');
+.container {
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+  width: sizes.$s0;
+  max-height: sizes.$h0;
+  margin-top: sizes.$p0;
+  padding-right: sizes.$p0;
+  text-align: right;
+  text-wrap: stable;
+  gap: sizes.$g0;
+
+  @include scrolls.tiny-scrollbar;
 }
 </style>

@@ -4,7 +4,7 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 import {useReductions} from 'src/composables/use-reductions';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {colorMap} from 'src/styles/color-map';
@@ -21,7 +21,7 @@ export function useScatterEmbeddings() {
   const {isWebGlScatter2d, isSelectedPointHighlighted, scatterBorderWidth} =
     useClientSettings();
   const {filtered} = useScatterGlobalFilter();
-  const {currentIntervalIndex} = useIntervalSelector();
+  const {currentIndex} = useInterval();
   const {generateHovers} = useScatterHovers();
 
   const isThreeDimensional = computed<boolean>(() => {
@@ -82,11 +82,8 @@ export function useScatterEmbeddings() {
     }
 
     // is selected and enabled
-    if (
-      currentIntervalIndex.value !== null &&
-      isSelectedPointHighlighted.value
-    ) {
-      borders[currentIntervalIndex.value] = colorMap.selectedBorder;
+    if (currentIndex.value !== null && isSelectedPointHighlighted.value) {
+      borders[currentIndex.value] = colorMap.selectedBorder;
     }
 
     return {

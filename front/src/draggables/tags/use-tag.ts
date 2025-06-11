@@ -1,6 +1,6 @@
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {type TagProps} from 'src/draggables/tags/Tag.vue';
+import {type TagProps} from 'src/draggables/tags/tag.vue';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {computed, ref} from 'vue';
 

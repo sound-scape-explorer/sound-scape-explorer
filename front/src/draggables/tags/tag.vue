@@ -9,7 +9,7 @@ import {
 import {NTag} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import TagCheckbox from 'src/draggables/tags/TagCheckbox.vue';
+import TagCheckbox from 'src/draggables/tags/tag-checkbox.vue';
 import {useTag} from 'src/draggables/tags/use-tag';
 import {watch} from 'vue';
 

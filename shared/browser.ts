@@ -20,3 +20,20 @@ export function getMouseCoordinatesFromCanvas(e: MouseEvent) {
     y,
   };
 }
+
+export function downloadJson<T>(data: T, filename = 'campaign.json'): void {
+  try {
+    const string = JSON.stringify(data, null, 2);
+    const blob = new Blob([string], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error downloading JSON:', error);
+  }
+}

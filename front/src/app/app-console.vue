@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {useDraggables} from 'src/composables/use-draggables';
-import {Shortcuts} from 'src/composables/use-shortcuts';
+import {Shortcut} from 'src/composables/use-shortcuts';
 import {computed} from 'vue';
 
 const {hidden} = useDraggables();
@@ -10,7 +10,7 @@ const payload = computed<string | null>(() => {
 
   if (hidden.value) {
     payload.push(
-      `Toggle mode enabled. Press ${Shortcuts._draggableToggle} to quit.`,
+      `Hidden mode enabled. Press ${Shortcut._draggableHideShow} to quit.`,
     );
   }
 

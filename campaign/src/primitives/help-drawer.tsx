@@ -16,7 +16,7 @@ export function HelpDrawer({children}: Props) {
   const {isDark} = useTheme();
 
   return (
-    <>
+    <div>
       <div
         onClick={(e) => {
           e.preventDefault();
@@ -49,6 +49,6 @@ export function HelpDrawer({children}: Props) {
           </div>
         </BaseDrawer>
       </div>
-    </>
+    </div>
   );
 }

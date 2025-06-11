@@ -5,6 +5,7 @@ import {NCascader, NSwitch} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -36,7 +37,11 @@ watch(current, update);
 </script>
 
 <template>
-  <AppDraggable :draggable-key="DraggableKey.enum.trajectories">
+  <AppDraggable
+    :class="$style.container"
+    :draggable-key="DraggableKey.enum.trajectories"
+    :suspense="SuspenseCase.enum.NO_TRAJECTORIES"
+  >
     <AppDraggableSidebar>
       <AppDraggableSidebarHistory
         :can-redo="canRedo && !isFused"
@@ -48,7 +53,7 @@ watch(current, update);
       />
     </AppDraggableSidebar>
 
-    <AppDraggableMenu :class="$style.menu">
+    <AppDraggableMenu>
       <h2>Trajectories</h2>
 
       <div :class="$style.selection">
@@ -118,8 +123,8 @@ watch(current, update);
 <style lang="scss" module>
 @use 'src/styles/sizes';
 
-.menu {
-  width: sizes.$s0;
+.container {
+  width: sizes.$s2;
 }
 
 .selection {

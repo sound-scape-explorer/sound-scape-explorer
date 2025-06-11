@@ -7,7 +7,7 @@ import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -44,7 +44,7 @@ export function useScatterLifecycles() {
   const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
   const {min: labelRangeMin, max: labelRangeMax} = useColorByTag();
   const {isEnabled: isColorByLabelsNumeric} = useTagNumeric();
-  const {currentIntervalIndex} = useIntervalSelector();
+  const {currentIndex} = useInterval();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
   onMounted(mountContainer);
@@ -70,7 +70,7 @@ export function useScatterLifecycles() {
       isWebGlScatter2d,
       isColorMapSwapped,
       isColorByLabelsNumeric,
-      currentIntervalIndex,
+      currentIndex,
       isSelectedPointHighlighted,
       scatterBorderWidth,
       cyclingPeriod,

@@ -3,7 +3,7 @@ import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useConfig} from 'src/composables/use-config';
 import {useDate} from 'src/composables/use-date';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 import {RANGE_CUSTOM} from 'src/constants';
 import {generateUniqueRangeSlug} from 'src/utils/config';
 
@@ -11,7 +11,7 @@ export function useTimelineHandlers() {
   const {config} = useConfig();
   const {start, end, left, right, updateLeft, updateRight} = useTimelineRange();
   const {name, setCustomName} = useTimelineRangeNames();
-  const {currentIntervalIndex} = useIntervalSelector();
+  const {currentIndex} = useInterval();
   const {aggregations} = useAggregations();
   const {convertDateStringToDate} = useDate();
 
@@ -46,11 +46,11 @@ export function useTimelineHandlers() {
   };
 
   const recenter = () => {
-    if (currentIntervalIndex.value === null || aggregations.value === null) {
+    if (currentIndex.value === null || aggregations.value === null) {
       return;
     }
 
-    const timestamp = aggregations.value.timestamps[currentIntervalIndex.value];
+    const timestamp = aggregations.value.timestamps[currentIndex.value];
     const hour = 3600 * 1000;
 
     start.value = timestamp - hour / 2;

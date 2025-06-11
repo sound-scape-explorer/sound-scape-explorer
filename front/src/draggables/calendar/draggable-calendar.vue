@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import Timeline from 'src/components/timeline/timeline.vue';
 import {DraggableKey} from 'src/composables/use-draggables';
 import DraggableCalendarMenu from 'src/draggables/calendar/draggable-calendar-menu.vue';
@@ -13,7 +14,7 @@ const {isExpanded} = useDraggableCalendarExpand();
   <AppDraggable
     :class="[$style.container, {[$style.expanded]: isExpanded}]"
     :draggable-key="DraggableKey.enum.calendar"
-    suspense="view"
+    :suspense="SuspenseCase.enum.VIEW"
   >
     <DraggableCalendarSidebar />
     <DraggableCalendarMenu />

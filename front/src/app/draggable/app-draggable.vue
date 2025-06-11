@@ -7,7 +7,10 @@ import AppCondition from 'src/app/app-condition.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
-import {useAppDraggableSuspense} from 'src/app/draggable/use-app-draggable-suspense';
+import {
+  SuspenseCase,
+  useAppDraggableSuspense,
+} from 'src/app/draggable/use-app-draggable-suspense';
 import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useThemeColors} from 'src/composables/use-theme-colors';
@@ -16,11 +19,11 @@ import {computed} from 'vue';
 
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
-  suspense?: null | 'view' | 'scatterClick';
+  suspense?: SuspenseCase;
 }
 
 const props = withDefaults(defineProps<AppDraggableProps>(), {
-  suspense: null,
+  suspense: SuspenseCase.enum.NONE,
 });
 
 const {container, storage, drag, isZoomed, isSelected, isClosed, hidden} =

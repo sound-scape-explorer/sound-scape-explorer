@@ -1,7 +1,7 @@
 import {useMagicKeys} from '@vueuse/core';
 import {useDraggables} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
-import {Shortcuts} from 'src/composables/use-shortcuts';
+import {Shortcut} from 'src/composables/use-shortcuts';
 import {onMounted, onUnmounted, watch} from 'vue';
 
 const blockedKeys: KeyboardEvent['key'][] = ['Tab']; // prevent default behaviours
@@ -11,8 +11,8 @@ export function useAppMetaKeys() {
   const {cycle, closeSelected, closeExceptCurrent, toggleAll} = useDraggables();
   const {isLocked, registerKey} = useGlobalKeyboard();
 
-  registerKey(Shortcuts._draggableClose, closeSelected);
-  registerKey(Shortcuts._draggableCloseExceptCurrent, closeExceptCurrent);
+  registerKey(Shortcut._draggableClose, closeSelected);
+  registerKey(Shortcut._draggableCloseExceptCurrent, closeExceptCurrent);
 
   const blockHandler = (e: KeyboardEvent) => {
     if (blockedKeys.indexOf(e.key) === -1) {

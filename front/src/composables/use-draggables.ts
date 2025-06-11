@@ -37,9 +37,9 @@ const stack = ref<DraggableKey[]>([]);
 
 export function useDraggables() {
   const toggle = (key: DraggableKey): void => {
-    const isBackground = stack.value.indexOf(key) !== 0;
+    const isNotFirst = stack.value.indexOf(key) !== 0;
 
-    if (isBackground) {
+    if (isNotFirst) {
       open(key);
       return;
     }

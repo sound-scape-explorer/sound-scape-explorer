@@ -20,7 +20,7 @@ export function SettingsPanelTimelineOrigin() {
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
-      <b className={clsx(styles.rowTitle, 'help grow flex')}>Timeline origin</b>
+      <b className={clsx(styles.rowTitle, 'flex grow')}>Timeline origin</b>
 
       <HelpDrawer>
         <DrawerContent content={drawerContent} />

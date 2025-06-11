@@ -1,3 +1,5 @@
+import {downloadJson} from '@shared/browser.ts';
+import {inferFilename} from '@shared/config';
 import {ConfigDto, type FileDto} from '@shared/dtos';
 import {useCallback} from 'react';
 import {TAG_PREFIX_FOR_TABLE} from 'src/constants';
@@ -12,26 +14,6 @@ export function useExport() {
   const {extractions} = useExtractionState();
   const {ranges} = useRangeState();
   const {getFiles} = useTableStateConverter();
-
-  const download = useCallback(
-    <T>(data: T, filename = 'campaign.json'): void => {
-      try {
-        const string = JSON.stringify(data, null, 2);
-        const blob = new Blob([string], {type: 'application/json'});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.download = filename;
-        link.href = url;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error('Error downloading JSON:', error);
-      }
-    },
-    [],
-  );
 
   const generate = useCallback(() => {
     const files = getFiles();
@@ -73,9 +55,9 @@ export function useExport() {
 
   const exportToJson = useCallback(() => {
     const dto = generate();
-    const filename = settings.storagePath.replace('.h5', '.json');
-    download(dto, filename);
-  }, [generate, download, settings]);
+    const filename = inferFilename(dto);
+    downloadJson(dto, filename);
+  }, [generate]);
 
   return {
     exportToJson,

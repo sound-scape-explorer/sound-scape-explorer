@@ -9,14 +9,16 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-  <div :class="$style.item">
+  <div :class="$style.container">
     <NTag
       :bordered="false"
       size="medium"
     >
       {{ props.title }}
     </NTag>
-    <span />
+
+    <span :class="$style.divider" />
+
     <slot />
   </div>
 </template>
@@ -24,11 +26,10 @@ const props = defineProps<Props>();
 <style lang="scss" module>
 @use 'src/styles/sizes';
 
-.item {
-  display: grid;
+.container {
+  display: flex;
   align-items: center;
-  padding: sizes.$g0 0;
-  grid-template-columns: auto 1fr auto;
+  justify-content: space-between;
   gap: sizes.$p0;
 }
 </style>

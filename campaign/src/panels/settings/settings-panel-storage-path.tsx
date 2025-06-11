@@ -14,7 +14,7 @@ export function SettingsPanelStoragePath() {
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
-      <b className={clsx(styles.rowTitle, 'flex grow help')}>Storage Path</b>
+      <b className={clsx(styles.rowTitle, 'flex grow')}>Storage Path</b>
 
       <HelpDrawer>
         <SettingsPanelStoragePathDrawerContent />

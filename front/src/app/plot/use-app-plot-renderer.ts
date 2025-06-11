@@ -1,9 +1,9 @@
 import Plotly from 'plotly.js-dist-min';
 import {type AppPlotProps, type AppPlotRefs} from 'src/app/plot/app-plot.vue';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 
 export function useAppPlotRenderer(props: AppPlotProps, refs: AppPlotRefs) {
-  const {selectInterval} = useIntervalSelector();
+  const {selectInterval} = useInterval();
 
   const render = async () => {
     if (

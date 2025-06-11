@@ -3,10 +3,10 @@ import AppTooltip from 'src/app/app-tooltip.vue';
 import FilteringInfoButtons from 'src/components/filtering-info/filtering-info-buttons.vue';
 import {useFilteringInfoData} from 'src/components/filtering-info/use-filtering-info-data';
 import {useFilteringInfoMode} from 'src/components/filtering-info/use-filtering-info-mode';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useInterval} from 'src/composables/use-interval';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 
-const {currentIntervalIndex, hasClicked} = useIntervalSelector();
+const {currentIndex, hasInterval} = useInterval();
 const {cycleMode, isIntervalMode, isCollectMode, isFilterMode} =
   useFilteringInfoMode();
 const {colors} = useThemeColors();
@@ -49,7 +49,7 @@ const {
         </span>
 
         <span v-if="isIntervalMode">
-          {{ currentIntervalIndex }}
+          {{ currentIndex }}
         </span>
       </div>
     </template>
@@ -64,14 +64,14 @@ const {
 
         <div :class="$style.list">
           <div
-            v-if="hasClicked"
+            v-if="hasInterval"
             :class="$style.row"
           >
             <div :class="{[$style.bold]: isIntervalMode}">
               Current interval index
             </div>
             <span :class="{[$style.bold]: isIntervalMode}">{{
-              currentIntervalIndex
+              currentIndex
             }}</span>
           </div>
           <div :class="$style.row">

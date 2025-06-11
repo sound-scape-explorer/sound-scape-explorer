@@ -1,9 +1,9 @@
 import {useScreen} from 'src/components/screen/use-screen';
 import {useAppMetaKeys} from 'src/composables/use-app-meta-keys';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useDraggables} from 'src/composables/use-draggables';
+import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
-import {Shortcuts} from 'src/composables/use-shortcuts';
+import {Shortcut} from 'src/composables/use-shortcuts';
 import {useViewState} from 'src/composables/use-view-state';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 
@@ -17,37 +17,54 @@ export function useAppShortcuts() {
   const {hasView} = useViewState();
   const {togglePlayPause} = useAudioTransport();
 
-  registerKey(Shortcuts.open, () => toggle('open'));
-  registerKey(Shortcuts.settings, () => toggle('settings'));
-  registerKey(Shortcuts.help, () => toggle('help'));
-  registerKey(Shortcuts.view, () => toggle('view'));
-  registerKey(Shortcuts.colors, () => hasView.value && toggle('colors'));
-  registerKey(Shortcuts.calendar, () => hasView.value && toggle('calendar'));
-  registerKey(Shortcuts.labels, () => hasView.value && toggle('labels'));
-  registerKey(Shortcuts.details, () => hasView.value && toggle('details'));
-  registerKey(Shortcuts.audio, () => hasView.value && toggle('audio'));
+  registerKey(Shortcut.open, () => toggle(DraggableKey.enum.open));
+  registerKey(Shortcut.settings, () => toggle(DraggableKey.enum.settings));
+  registerKey(Shortcut.help, () => toggle(DraggableKey.enum.help));
+  registerKey(Shortcut.view, () => toggle(DraggableKey.enum.view));
   registerKey(
-    Shortcuts.trajectories,
-    () => hasView.value && toggle('trajectories'),
+    Shortcut.colors,
+    () => hasView.value && toggle(DraggableKey.enum.colors),
   );
   registerKey(
-    Shortcuts.relativeTrajectories,
-    () => hasView.value && toggle('relativeTrajectories'),
-  );
-  registerKey(Shortcuts.temporal, () => hasView.value && toggle('temporal'));
-  registerKey(Shortcuts.heatmaps, () => hasView.value && toggle('heatmaps'));
-  registerKey(
-    Shortcuts.histograms,
-    () => hasView.value && toggle('histograms'),
+    Shortcut.calendar,
+    () => hasView.value && toggle(DraggableKey.enum.calendar),
   );
   registerKey(
-    Shortcuts._alphaSelection2d,
-    () => hasView.value && isAlphaPreview.value && toggle('_alphaSelection3d'),
+    Shortcut.tags,
+    () => hasView.value && toggle(DraggableKey.enum.tags),
   );
   registerKey(
-    Shortcuts._alphaSelection3d,
+    Shortcut.details,
+    () => hasView.value && toggle(DraggableKey.enum.details),
+  );
+  registerKey(
+    Shortcut.audio,
+    () => hasView.value && toggle(DraggableKey.enum.audio),
+  );
+  registerKey(
+    Shortcut.trajectories,
+    () => hasView.value && toggle(DraggableKey.enum.trajectories),
+  );
+  registerKey(
+    Shortcut.relativeTrajectories,
+    () => hasView.value && toggle(DraggableKey.enum.relativeTrajectories),
+  );
+  registerKey(
+    Shortcut.temporal,
+    () => hasView.value && toggle(DraggableKey.enum.temporal),
+  );
+  registerKey(
+    Shortcut.heatmaps,
+    () => hasView.value && toggle(DraggableKey.enum.heatmaps),
+  );
+  registerKey(
+    Shortcut.histograms,
+    () => hasView.value && toggle(DraggableKey.enum.histograms),
+  );
+  registerKey(
+    Shortcut._alphaSelection3d,
     () => hasView.value && isAlphaPreview.value && showScatterSelection(),
   );
 
-  registerKey(Shortcuts.audioPlayPause, togglePlayPause);
+  registerKey(Shortcut.audioPlayPause, togglePlayPause);
 }

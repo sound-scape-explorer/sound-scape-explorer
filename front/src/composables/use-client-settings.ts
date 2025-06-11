@@ -1,8 +1,11 @@
+import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {createSettingsRefs, Settings} from 'src/common/settings';
 
 const refs = createSettingsRefs();
 
 export function useClientSettings() {
+  const {notify} = useAppNotification();
+
   const resetAll = () => {
     const shape = Settings.shape;
 
@@ -10,8 +13,7 @@ export function useClientSettings() {
       refs[key as keyof typeof refs].value = schema.parse(undefined);
     });
 
-    // todo: add notification
-    console.log('reset all');
+    notify('success', 'settings', 'Settings reset');
   };
 
   return {

@@ -2,28 +2,39 @@ import {useRefHistory} from '@vueuse/core';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
+import {useIntervalAudioAutoload} from 'src/composables/use-interval-audio-autoload';
+import {type Interval, useIntervals} from 'src/composables/use-intervals';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {computed, ref} from 'vue';
 
-const currentIntervalIndex = ref<number | null>(null);
-const {history, undo, redo, canUndo, canRedo} =
-  useRefHistory(currentIntervalIndex);
-const hasClicked = computed<boolean>(() => currentIntervalIndex.value !== null);
+const currentIndex = ref<number | null>(null);
+const {history, undo, redo, canUndo, canRedo} = useRefHistory(currentIndex);
 
-export function useIntervalSelector() {
+const currentInterval = ref<Interval | null>(null);
+const hasInterval = computed<boolean>(() => currentInterval.value !== null);
+
+export function useInterval() {
   const {isAudioAutoOpen, isDetailsAutoOpen} = useClientSettings();
   const {open} = useDraggables();
   const {isLoading} = useAudioFile();
   const {aggregations} = useAggregations();
+  const {intervals} = useIntervals();
+  const {autoload} = useIntervalAudioAutoload();
 
   const selectInterval = (index: number | null) => {
-    if (isLoading.value || currentIntervalIndex.value === index) {
+    if (
+      isLoading.value ||
+      currentIndex.value === index ||
+      intervals.value === null
+    ) {
       return;
     }
 
-    currentIntervalIndex.value = index;
+    currentIndex.value = index;
+    currentInterval.value = index === null ? index : intervals.value[index];
 
-    if (isAudioAutoOpen.value) {
+    if (isAudioAutoOpen.value && currentInterval.value !== null) {
+      autoload(currentInterval.value);
       open(DraggableKey.enum.audio);
     }
 
@@ -33,11 +44,11 @@ export function useIntervalSelector() {
   };
 
   const forward = () => {
-    if (currentIntervalIndex.value === null || aggregations.value === null) {
+    if (currentIndex.value === null || aggregations.value === null) {
       return;
     }
 
-    let nextIndex = currentIntervalIndex.value + 1;
+    let nextIndex = currentIndex.value + 1;
 
     if (nextIndex >= aggregations.value.timestamps.length) {
       nextIndex = 0;
@@ -47,11 +58,11 @@ export function useIntervalSelector() {
   };
 
   const back = () => {
-    if (currentIntervalIndex.value === null || aggregations.value === null) {
+    if (currentIndex.value === null || aggregations.value === null) {
       return;
     }
 
-    let previousIndex = currentIntervalIndex.value - 1;
+    let previousIndex = currentIndex.value - 1;
 
     if (previousIndex < 0) {
       previousIndex = aggregations.value.timestamps.length - 1;
@@ -61,8 +72,9 @@ export function useIntervalSelector() {
   };
 
   return {
-    currentIntervalIndex,
-    hasClicked,
+    currentIndex,
+    currentInterval,
+    hasInterval,
     selectInterval,
     history,
     undo,
