@@ -17,7 +17,7 @@ export function SettingsPanelAudioPath() {
       className={clsx(styles.row, 'align gap')}
       onDrop={handleAudioDrop}
     >
-      <b className={clsx(styles.rowTitle, 'flex grow help')}>Audio Path</b>
+      <b className={clsx(styles.rowTitle, 'flex grow')}>Audio Path</b>
 
       <HelpDrawer>
         <SettingsPanelAudioPathDrawerContent />
