@@ -1,9 +1,9 @@
 import {Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {SettingsComputationsDimensions} from 'src/panels/settings/settings-computations-dimensions.tsx';
 import {SettingsComputationsDrawerContent} from 'src/panels/settings/settings-computations-drawer-content.tsx';
-import {SettingsPanelComputationDimensions} from 'src/panels/settings/settings-panel-computation-dimensions.tsx';
-import {SettingsPanelComputationIterations} from 'src/panels/settings/settings-panel-computation-iterations.tsx';
-import {SettingsPanelComputationStrategy} from 'src/panels/settings/settings-panel-computation-strategy.tsx';
+import {SettingsComputationsIterations} from 'src/panels/settings/settings-computations-iterations.tsx';
+import {SettingsComputationsStrategy} from 'src/panels/settings/settings-computations-strategy.tsx';
 import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 
 export function SettingsComputations() {
@@ -20,9 +20,9 @@ export function SettingsComputations() {
       }
     >
       <SectionCard className="flex column gap">
-        <SettingsPanelComputationStrategy />
-        <SettingsPanelComputationDimensions />
-        <SettingsPanelComputationIterations />
+        <SettingsComputationsStrategy />
+        <SettingsComputationsDimensions />
+        <SettingsComputationsIterations />
       </SectionCard>
     </Section>
   );

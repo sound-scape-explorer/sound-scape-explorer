@@ -5,13 +5,10 @@ import {useSettingsValidation} from 'src/hooks/use-settings-validation';
 import styles from 'src/panels/settings/settings-panel.module.scss';
 import {NumberInput} from 'src/primitives/number-input';
 
-export function SettingsPanelComputationIterations() {
+export function SettingsComputationsIterations() {
   const {settings, update} = useSettingsState();
-  const {
-    isComputationIterationsValid,
-    isComputationStrategyUmap,
-    isComputationStrategyPca,
-  } = useSettingsValidation();
+  const {isComputationIterationsValid, isComputationStrategyUmap} =
+    useSettingsValidation();
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
@@ -22,7 +19,7 @@ export function SettingsPanelComputationIterations() {
           defaultValue={settings.computationIterations}
           onBlur={(n) => update('computationIterations', n)}
           intent={isComputationIterationsValid() ? 'success' : 'danger'}
-          disabled={!isComputationStrategyUmap && !isComputationStrategyPca}
+          disabled={!isComputationStrategyUmap}
         />
       </Tooltip>
     </div>
