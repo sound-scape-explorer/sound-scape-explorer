@@ -68,8 +68,9 @@ class ComputationRepository:
         integration: IntegrationConfig,
     ):
         computations: list[Dataset] = []
+        iterations = context.config.get_computation_iterations()
 
-        for iteration in range(context.config.settings.computation_iterations):
+        for iteration in range(iterations):
             path = ComputationRepository._get_path(
                 extraction, band, integration, iteration
             )

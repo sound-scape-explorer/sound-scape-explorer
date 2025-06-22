@@ -7,6 +7,7 @@ from processing.config.FileConfig import FileConfig
 from processing.config.RangeConfig import RangeConfig
 from processing.config.SettingsConfig import SettingsConfig
 from processing.dtos import JsonDto
+from processing.enums import ComputationStrategy
 
 
 class Config:
@@ -70,3 +71,9 @@ class Config:
                 break
 
         return has_trajectories
+
+    def get_computation_iterations(self):
+        if self.settings.computation_strategy is ComputationStrategy.UMAP:
+            return self.settings.computation_iterations
+
+        return 1
