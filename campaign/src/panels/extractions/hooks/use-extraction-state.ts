@@ -173,11 +173,9 @@ export function useExtractionState() {
         return;
       }
 
-      const newExtraction = {
-        ...extraction,
-        _id: generateId(),
-        index: extractions.length,
-      };
+      const newExtraction = structuredClone(extraction);
+      newExtraction._id = generateId();
+      newExtraction.index = extractions.length;
 
       const newExtractions = [...extractions, newExtraction];
       setExtractions(newExtractions);
