@@ -7,6 +7,7 @@ export function useAppCandlesLayout() {
   const {plotBackground} = useClientSettings();
   const {generatePlotlyMargins} = usePlotlyMargins();
 
+  // todo: add font size setting?
   const generateLayout = (props: AppCandlesProps): Partial<Layout> => {
     return {
       plot_bgcolor: plotBackground.value,
