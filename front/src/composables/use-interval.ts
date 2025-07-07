@@ -13,6 +13,7 @@ const {history, undo, redo, canUndo, canRedo} = useRefHistory(currentIndex);
 const currentInterval = ref<Interval | null>(null);
 const hasInterval = computed<boolean>(() => currentInterval.value !== null);
 
+// todo: rename to use-interval-transport
 export function useInterval() {
   const {isAudioAutoOpen, isDetailsAutoOpen} = useClientSettings();
   const {open} = useDraggables();
