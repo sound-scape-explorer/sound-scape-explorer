@@ -93,12 +93,75 @@ export function ExtractionExtractorsDrawerContent() {
             </Link>
           </div>,
         ],
-        [ExtractorImpl.enum.SPECTRUM, 'Spectrum'],
-        [ExtractorImpl.enum.SPECTROGRAM, 'Spectrograms'],
-        [ExtractorImpl.enum.MPS, 'Modulation Power Spectrums'],
+        [
+          ExtractorImpl.enum.SPECTRUM,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.SPECTRUM}
+          >
+            <span>
+              <code>n_bands</code> number of frequency bands
+            </span>
+            <span>
+              <code>scale</code> frequency scale
+            </span>
+            <Link href="https://librosa.org/doc/0.11.0/generated/librosa.stft.html">
+              librosa.stft
+            </Link>
+          </div>,
+        ],
+        [
+          ExtractorImpl.enum.SPECTROGRAM,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.SPECTROGRAM}
+          >
+            <span>
+              <code>n_bands</code> number of frequency bands
+            </span>
+            <span>
+              <code>scale</code> frequency scale
+            </span>
+            <Link href="https://librosa.org/doc/0.11.0/generated/librosa.stft.html">
+              librosa.stft
+            </Link>
+          </div>,
+        ],
+        [
+          ExtractorImpl.enum.MPS,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.MPS}
+          >
+            <span>Modulation Power Spectrum analysis using two-stage STFT</span>
+            <span>
+              <code>n_bands</code> number of frequency bands
+            </span>
+            <span>
+              <code>scale</code> frequency scale
+            </span>
+            <span>
+              <code>STFT overlap ratios</code> from 0.0 to 1.0
+            </span>
+            <Link href="https://librosa.org/doc/0.11.0/generated/librosa.stft.html">
+              librosa.stft
+            </Link>
+            <Link href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.fftpack.fft2.html">
+              scipy.fftpack.fft2
+            </Link>
+          </div>,
+        ],
         [
           ExtractorImpl.enum.MFCC,
-          'Mel-frequency cepstral coefficients (MFCCs)',
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.MPS}
+          >
+            <span>Mel-frequency cepstral coefficients (MFCCs)</span>
+            <Link href="https://librosa.org/doc/0.11.0/generated/librosa.feature.mfcc.html">
+              librosa.feature.mfcc
+            </Link>
+          </div>,
         ],
         [
           ExtractorImpl.enum.NDSI,
