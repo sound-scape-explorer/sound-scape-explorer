@@ -31,7 +31,7 @@ export function SettingsRanges() {
 
   return (
     <Section
-      title="Ranges"
+      title="Time Ranges"
       compact
       collapsible
       collapseProps={{defaultIsOpen: false}}
