@@ -34,4 +34,4 @@ def compute_leq_percentile(
         raise ValueError("percentile must be between 0 and 100")
 
     leq_short = _compute_leq_short(samples, sample_rate, dt)
-    return np.percentile(leq_short, percentile)
+    return np.percentile(leq_short, 100 - percentile)
