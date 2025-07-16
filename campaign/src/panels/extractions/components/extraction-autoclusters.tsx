@@ -14,11 +14,13 @@ import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import {type ExtractionConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-autoclusters.module.scss';
+import {ExtractionAutoclustersDrawerContent} from 'src/panels/extractions/components/extraction-autoclusters-drawer-content.tsx';
 import {useAutoclusterState} from 'src/panels/extractions/hooks/use-autocluster-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useAutoclusterSlug} from 'src/panels/metrics/hooks/use-autocluster-slug';
 import {useAutoclustersValidation} from 'src/panels/metrics/hooks/use-autoclusters-validation';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {NumberInput} from 'src/primitives/number-input.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
@@ -67,6 +69,11 @@ export function ExtractionAutoclusters({extraction}: Props) {
       rightElement={
         <>
           {hasTemplate && <Snowflake size={ICON_SIZE} />}
+
+          <HelpDrawer>
+            <ExtractionAutoclustersDrawerContent />
+          </HelpDrawer>
+
           {validation && (
             <SmallCallout intent={validation.intent}>
               {validation.content}

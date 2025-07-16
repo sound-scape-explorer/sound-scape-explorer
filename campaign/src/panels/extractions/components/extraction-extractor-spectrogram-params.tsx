@@ -52,7 +52,7 @@ export function ExtractionExtractorSpectrogramParams({
         <code className="bp5-text-small">scale</code>
         <code className="bp5-text-small">STFT window</code>
         <code className="bp5-text-small">STFT window length (ms)</code>
-        <code className="bp5-text-small">STFT overlap ratio</code>
+        <code className="bp5-text-small">STFT overlap ratio (0 to 1)</code>
       </SectionCard>
       <SectionCard
         className={clsx(

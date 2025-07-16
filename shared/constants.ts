@@ -89,6 +89,7 @@ export const LEQ_DIFF_PERCENTILE_B = 10;
 export const UMAP_MIN_DIST = 0.1;
 
 export const SMOOTHING_WINDOW_PRESETS = {
+  '1_MIN': 60 * 1000, // 1 minute
   '15_MIN': 15 * 60 * 1000, // 15 minutes
   '30_MIN': 30 * 60 * 1000, // 30 minutes
   'HOUR': 60 * 60 * 1000, // 1 hour

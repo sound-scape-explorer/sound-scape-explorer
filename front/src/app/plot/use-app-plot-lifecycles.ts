@@ -10,7 +10,7 @@ import {onMounted, watch} from 'vue';
 export function useAppPlotLifecycles(props: AppPlotProps, refs: AppPlotRefs) {
   const {generateConfig} = useBasePlotConfig();
   const {generateLayout} = useAppPlotLayout();
-  const {plotBackground} = useClientSettings();
+  const {plotBackground, plotFontSize} = useClientSettings();
   const {generateData} = useAppPlotData(props);
   const {render} = useAppPlotRenderer(props, refs);
 
@@ -25,9 +25,11 @@ export function useAppPlotLifecycles(props: AppPlotProps, refs: AppPlotRefs) {
 
   onMounted(refresh);
   watch([refs.container, refs.data, refs.layout], render);
+
   watch(
     [
       plotBackground,
+      plotFontSize,
       () => props.isExpanded,
       () => props.values,
       () => props.width,

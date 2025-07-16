@@ -93,28 +93,164 @@ export function ExtractionExtractorsDrawerContent() {
             </Link>
           </div>,
         ],
-        [ExtractorImpl.enum.SPECTRUM, 'Spectrum'],
-        [ExtractorImpl.enum.SPECTROGRAM, 'Spectrograms'],
-        [ExtractorImpl.enum.MPS, 'Modulation Power Spectrums'],
+        [
+          ExtractorImpl.enum.SPECTRUM,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.SPECTRUM}
+          >
+            <span>
+              <code>n_bands</code> number of frequency bands
+            </span>
+            <span>
+              <code>scale</code> frequency scale
+            </span>
+            <Link href="https://librosa.org/doc/0.11.0/generated/librosa.stft.html">
+              librosa.stft
+            </Link>
+          </div>,
+        ],
+        [
+          ExtractorImpl.enum.SPECTROGRAM,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.SPECTROGRAM}
+          >
+            <span>
+              <code>n_bands</code> number of frequency bands
+            </span>
+            <span>
+              <code>scale</code> frequency scale
+            </span>
+            <Link href="https://librosa.org/doc/0.11.0/generated/librosa.stft.html">
+              librosa.stft
+            </Link>
+          </div>,
+        ],
+        [
+          ExtractorImpl.enum.MPS,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.MPS}
+          >
+            <span>Modulation Power Spectrum analysis using two-stage STFT</span>
+            <span>
+              <code>n_bands</code> number of frequency bands
+            </span>
+            <span>
+              <code>scale</code> frequency scale
+            </span>
+            <span>
+              <code>STFT overlap ratios</code> from 0.0 to 1.0
+            </span>
+            <Link href="https://librosa.org/doc/0.11.0/generated/librosa.stft.html">
+              librosa.stft
+            </Link>
+            <Link href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.fftpack.fft2.html">
+              scipy.fftpack.fft2
+            </Link>
+          </div>,
+        ],
         [
           ExtractorImpl.enum.MFCC,
-          'Mel-frequency cepstral coefficients (MFCCs)',
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.MPS}
+          >
+            <span>Mel-frequency cepstral coefficients (MFCCs)</span>
+            <Link href="https://librosa.org/doc/0.11.0/generated/librosa.feature.mfcc.html">
+              librosa.feature.mfcc
+            </Link>
+          </div>,
         ],
         [
           ExtractorImpl.enum.NDSI,
-          'Normalized Difference Soundscape Index from a power spectrogram',
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.NDSI}
+          >
+            <span>
+              Normalized Difference Soundscape Index from a power spectrogram.
+            </span>
+            <Link href="https://scikit-maad.github.io/generated/maad.features.soundscape_index.html">
+              scikit-maad doc
+            </Link>
+          </div>,
         ],
-        [ExtractorImpl.enum.BI, 'Bioacoustics Index from a spectrogram'],
-        [ExtractorImpl.enum.ADI, 'Acoustic Diversity Index from a spectrogram'],
+        [
+          ExtractorImpl.enum.BI,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.BI}
+          >
+            <span>Bioacoustics Index from a spectrogram.</span>
+            <Link href="https://scikit-maad.github.io/generated/maad.features.bioacoustics_index.html">
+              scikit-maad doc
+            </Link>
+          </div>,
+        ],
+        [
+          ExtractorImpl.enum.ADI,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.ADI}
+          >
+            <span>Acoustic Diversity Index from a spectrogram</span>
+            <Link href="https://scikit-maad.github.io/generated/maad.features.acoustic_diversity_index.html">
+              scikit-maad doc
+            </Link>
+          </div>,
+        ],
         [
           ExtractorImpl.enum.HF,
-          'Spectral entropy of a power spectral density (1d) or power spectrogram density (2d)',
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.HF}
+          >
+            <span>
+              Spectral entropy of a power spectral density (1d) or power
+              spectrogram density (2d)
+            </span>
+            <Link href="https://scikit-maad.github.io/generated/maad.features.frequency_entropy.html">
+              scikit-maad doc
+            </Link>
+          </div>,
         ],
-        [ExtractorImpl.enum.HT, 'Entropy of the envelope of an audio signal'],
-        [ExtractorImpl.enum.MED, 'Median of the envelope of an audio signal'],
+        [
+          ExtractorImpl.enum.HT,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.HT}
+          >
+            <span>Entropy of the envelope of an audio signal</span>
+            <Link href="https://scikit-maad.github.io/generated/maad.features.temporal_entropy.html">
+              scikit-maad doc
+            </Link>
+          </div>,
+        ],
+        [
+          ExtractorImpl.enum.MED,
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.MED}
+          >
+            <span>Median of the envelope of an audio signal</span>
+            <Link href="https://scikit-maad.github.io/generated/maad.features.temporal_median.html">
+              scikit-maad doc
+            </Link>
+          </div>,
+        ],
         [
           ExtractorImpl.enum.ACI,
-          'Acoustic Complexity Index from a spectrogram',
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.ACI}
+          >
+            <span>Acoustic Complexity Index from a spectrogram</span>
+            <Link href="https://scikit-maad.github.io/generated/maad.features.acoustic_complexity_index.html">
+              scikit-maad doc
+            </Link>
+          </div>,
         ],
         [ExtractorImpl.enum.LEQ, 'Equivalent Continuous Sound Level'],
         [

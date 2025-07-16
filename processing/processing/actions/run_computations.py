@@ -17,10 +17,17 @@ from processing.validators.validate_aggregations import validate_aggregations
 
 
 def _run_computation_reductions(context: Context):
+    strategy = context.config.settings.computation_strategy
+    iterations = context.config.get_computation_iterations()
+    dimensions = context.config.settings.computation_dimensions
+
+    if strategy is ComputationStrategy.UMAP:
+        print_details = f"(iterations: {iterations}, dimensions: {dimensions})"
+    else:
+        print_details = f"(iterations: {iterations})"
+
     Console.print(
-        f"Running computation reductions with [b]{context.config.settings.computation_strategy.value}[/b]..."
-        f" (iterations: {context.config.settings.computation_iterations},"
-        f" dimensions: {context.config.settings.computation_dimensions})"
+        f"Running computation reductions with [b]{strategy.value}[/b]... {print_details}"
     )
 
     ComputationRepository.delete(context)
@@ -34,29 +41,24 @@ def _run_computation_reductions(context: Context):
         )
 
         for iteration in track(
-            range(context.config.settings.computation_iterations),
+            range(iterations),
             description=f"Band {ai.band.name}, integration {ai.integration.name}",
         ):
-            if context.config.settings.computation_strategy is ComputationStrategy.UMAP:
+            if strategy is ComputationStrategy.UMAP:
                 umap = UmapReducer(min_dist=0)
                 reductions = umap.reduce(
                     embeddings=embeddings,
                     dimensions=context.config.settings.computation_dimensions,
                     seed=None,
                 )
-            elif (
-                context.config.settings.computation_strategy is ComputationStrategy.PCA
-            ):
+            elif strategy is ComputationStrategy.PCA:
                 pca = PcaReducer()
                 reductions = pca.reduce(
                     embeddings=embeddings,
                     dimensions=context.config.settings.computation_dimensions,
                     seed=None,
                 )
-            elif (
-                context.config.settings.computation_strategy
-                is ComputationStrategy.EMBEDDINGS
-            ):
+            elif strategy is ComputationStrategy.EMBEDDINGS:
                 reductions = embeddings
             else:
                 raise Exception("Invalid computation strategy")

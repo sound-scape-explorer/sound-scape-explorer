@@ -5,10 +5,12 @@ import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo} from 'react';
 import {useRangeState} from 'src/panels/extractions/hooks/use-range-state.ts';
+import {SettingsRangesHelpContent} from 'src/panels/metrics/components/settings-ranges-help-content.tsx';
 import {useRangeSlug} from 'src/panels/metrics/hooks/use-range-slug';
 import {useRangeValidation} from 'src/panels/metrics/hooks/use-range-validation';
 import {DatePicker} from 'src/primitives/date-picker.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
@@ -31,16 +33,22 @@ export function SettingsRanges() {
 
   return (
     <Section
-      title="Ranges"
+      title="Time Ranges"
       compact
       collapsible
       collapseProps={{defaultIsOpen: false}}
       rightElement={
-        validation && (
-          <SmallCallout intent={validation.intent}>
-            {validation.content}
-          </SmallCallout>
-        )
+        <>
+          {validation && (
+            <SmallCallout intent={validation.intent}>
+              {validation.content}
+            </SmallCallout>
+          )}
+
+          <HelpDrawer>
+            <SettingsRangesHelpContent />
+          </HelpDrawer>
+        </>
       }
     >
       <SectionCard

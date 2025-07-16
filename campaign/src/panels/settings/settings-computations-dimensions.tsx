@@ -4,7 +4,7 @@ import {useSettingsValidation} from 'src/hooks/use-settings-validation';
 import styles from 'src/panels/settings/settings-panel.module.scss';
 import {NumberInput} from 'src/primitives/number-input';
 
-export function SettingsPanelComputationDimensions() {
+export function SettingsComputationsDimensions() {
   const {settings, update} = useSettingsState();
   const {
     isComputationDimensionsValid,
