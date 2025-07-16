@@ -1,3 +1,27 @@
+# [14.0.0-beta.11](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.10...v14.0.0-beta.11) (2025-07-16)
+
+
+### Bug Fixes
+
+* **campaign:** add documentation for acoustic extractors ([5ec893e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5ec893ef5ca36858f2f627dcaf948050efca40d8))
+* **campaign:** add help for hdbscan ([9701ad4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9701ad4137b5aa34cf522c7c1a746735cfbf6d78))
+* **campaign:** add help for scikit maad acoustic extractors ([3291299](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3291299e36b3b12debe46e10e832ab50cd30b782))
+* **campaign:** add help for site ([669ba58](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/669ba5840f8f413b9fb586d3f47e3941c973add3))
+* **campaign:** add help for time ranges ([36bb121](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/36bb1212a680dc4d76f46fa883346b391ac83ca5))
+* **campaign:** deeply clone duplicated extraction ([39efd78](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/39efd786cf7da98a522da4eadb6aa227b3fff068))
+* **campaign:** lock computation iterations for PCA ([5eb664c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5eb664cb0b0db83d1f8b5edb41ee2701a8dc348a))
+* **campaign:** rename ranges to time ranges ([2df2223](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2df22232ef5864378fe729c99ece89bfc4fe551a))
+* **front:** add dynamic font size for app plots ([b256bde](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b256bde882469235793fb37655c855667b38bed9))
+* **front:** apply timeshift in scatter hovers ([8d6ed7c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8d6ed7cb0d6c73a558407cd8305033ed5d0b7f9b))
+* **processing:** force 1 iteration of computation if not UMAP strategy ([f7220e7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f7220e7821f3dd8f8bc81752a43a9e0cc6f02ba2))
+* **processing:** use new resample and transpose audio loader ([c990790](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c9907901ddf3f658b93d5a978202befa5aa388da))
+* **processing:** use percentiles for exceeding acoustic values ([c2461e3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c2461e375bcec8824388c93f577fa3c3a9cbfdc2))
+
+
+### Features
+
+* **shared:** add 1 min trajectory window ([f1e75fb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f1e75fb319b5a0a8bbb3a931ec8b3320c0465e34))
+
 # [14.0.0-beta.10](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.9...v14.0.0-beta.10) (2025-06-11)
 
 
