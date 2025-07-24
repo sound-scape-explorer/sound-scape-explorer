@@ -6,7 +6,7 @@ export function SettingsPanelAudioPathDrawerContent() {
       content={[
         [
           'How to update?',
-          'Drag a folder onto the input field to change its value.',
+          'Drag a folder onto the input field to change its value. You can also edit the text field manually.',
         ],
         [
           'Validation',
