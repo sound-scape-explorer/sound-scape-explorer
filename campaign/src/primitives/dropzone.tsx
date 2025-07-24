@@ -1,4 +1,4 @@
-import {type DragEvent, JSX, useCallback, useRef} from 'react';
+import {JSX} from 'react';
 import {type FileWithPath, useDropzone} from 'react-dropzone';
 
 export interface DropzoneInfo {
@@ -14,34 +14,27 @@ interface Props {
 }
 
 export function Dropzone({className, onDrop, children}: Props) {
-  const infoRef = useRef<DropzoneInfo>({} as DropzoneInfo);
-  const filesRef = useRef<FileWithPath[]>([]);
-
   const {getRootProps, getInputProps} = useDropzone({
-    noClick: true,
-    onDrop: (files) => {
-      filesRef.current = files;
-      onDrop(files, infoRef.current);
+    noClick: false,
+    useFsAccessApi: false,
+    onDrop: (files: File[]) => {
+      const paths = files.map((f) => f.path);
+      const commonFolder = window.electronAPI.findCommonFolder(paths);
+      const info = window.electronAPI.checkPath(commonFolder);
+      onDrop(files, info);
     },
   });
 
-  const handleNativeDrop = useCallback((e: DragEvent) => {
-    if (e.dataTransfer.files.length !== 1) {
-      return;
-    }
-
-    const file = e.dataTransfer.files[0];
-    const info = window.electronAPI.checkPath(file.path);
-    infoRef.current = info;
-  }, []);
+  // @ts-expect-error: https://github.com/react-dropzone/react-dropzone/discussions/1157
+  const getNewInputProps = () => getInputProps({webkitdirectory: 'true'});
 
   return (
-    <section onDrop={handleNativeDrop}>
+    <section>
       <div
         className={className}
         {...getRootProps()}
       >
-        <input {...getInputProps()} />
+        <input {...getNewInputProps()} />
         {children}
       </div>
     </section>
