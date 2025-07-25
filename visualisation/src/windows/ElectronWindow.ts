@@ -16,7 +16,7 @@ export abstract class ElectronWindow {
       webPreferences: {...preferences},
     });
 
-    this.handleLoad();
+    this.onLoad();
   }
 
   protected get isDev() {
@@ -33,7 +33,7 @@ export abstract class ElectronWindow {
     this.window.focus();
   }
 
-  private handleLoad() {
+  private onLoad() {
     this.load().then(() => {
       this.appendTitle();
 

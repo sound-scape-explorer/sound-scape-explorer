@@ -9,7 +9,7 @@ import {TextInput} from 'src/primitives/text-input.tsx';
 import styles from './settings-panel.module.scss';
 
 export function SettingsPanelAudioPath() {
-  const {settings, handleAudioDrop} = useSettingsState();
+  const {settings, handleAudioDrop, update} = useSettingsState();
   const {isAudioPathValid} = useSettingsValidation();
 
   return (
@@ -26,6 +26,7 @@ export function SettingsPanelAudioPath() {
       <Tooltip content="The path to your audio folder">
         <TextInput
           value={settings.audioPath}
+          onChange={(v) => update('audioPath', v)}
           intent={isAudioPathValid() ? 'success' : 'danger'}
         />
       </Tooltip>

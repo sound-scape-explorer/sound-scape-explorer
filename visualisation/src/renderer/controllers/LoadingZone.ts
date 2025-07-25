@@ -11,15 +11,22 @@ export class LoadingZone {
 
   private readonly storageElement: HTMLInputElement;
 
+  private readonly jsonElement: HTMLInputElement;
+
   public constructor() {
     this.audioPath = null;
 
     this.node = document.getElementById('loading-zone') as HTMLDivElement;
+
     this.storageElement = document.getElementById(
       'storage-input',
     ) as HTMLInputElement;
 
-    this.attachEvent();
+    this.jsonElement = document.getElementById(
+      'json-input',
+    ) as HTMLInputElement;
+
+    this.attachEvents();
   }
 
   public hide() {
@@ -30,7 +37,12 @@ export class LoadingZone {
     this.node.style.display = 'inherit';
   }
 
-  private attachEvent() {
+  private attachEvents() {
+    this.attachStorageEvent();
+    this.attachJsonEvent();
+  }
+
+  private attachStorageEvent() {
     this.storageElement.addEventListener('change', async (e: InputEvent) => {
       e.preventDefault();
 
@@ -55,6 +67,49 @@ export class LoadingZone {
       this.audioPath = audioPath;
       await window.electronAPI.startAudioService(audioPath);
       await render();
+    });
+  }
+
+  private attachJsonEvent() {
+    this.jsonElement.addEventListener('change', async (e: InputEvent) => {
+      e.preventDefault();
+
+      const input = e.target as HTMLInputElement;
+      const files = input.files;
+
+      if (files.length !== 1) {
+        alert('Please add only one file');
+        return;
+      }
+
+      const file = files[0];
+      const type = 'application/json';
+
+      if (file.type !== type) {
+        alert('Please add only JSON file');
+        return;
+      }
+
+      input.value = null;
+      const audioPath = await this.readAudioPathFromJson(file);
+      this.audioPath = audioPath;
+      await window.electronAPI.startAudioService(audioPath);
+      await render();
+    });
+  }
+
+  private async readAudioPathFromJson(file: File): Promise<string> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', async (e) => {
+        const text = e.target.result as string;
+        const parsed = JSON.parse(text);
+        const dto = ConfigDto.parse(parsed);
+        resolve(dto.settings.audioPath);
+      });
+
+      reader.readAsText(file);
     });
   }
 

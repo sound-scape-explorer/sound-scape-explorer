@@ -17,7 +17,12 @@
   <h1 class="title" id="title">&nbsp;</h1>
 
   <div class="flex flex-col" id="loading-zone">
-    <button class="label border" id="campaign-button">Create campaign</button>
+    <h2>Campaign</h2>
+
+    <button class="label border" id="campaign-button">Open</button>
+
+    <h2>Visualisation</h2>
+
     <div>
       <input
         accept=".h5"
@@ -26,12 +31,31 @@
         style="display: none;"
         type="file"
       />
+
       <label
         class="label border"
         for="storage-input"
         id="storage-label"
       >
-        Load storage file
+        Load .h5
+      </label>
+
+      <br/>
+
+      <input
+        accept=".json"
+        id="json-input"
+        name="json-input"
+        style="display: none;"
+        type="file"
+      />
+
+      <label
+        class="label border"
+        for="json-input"
+        id="json-label"
+      >
+        Load .json
       </label>
     </div>
   </div>
