@@ -1,3 +1,16 @@
+# [14.0.0-beta.12](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.11...v14.0.0-beta.12) (2025-07-25)
+
+
+### Bug Fixes
+
+* **campaign:** allow manual editing for audio path ([b05bde8](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b05bde89d64b7b0b94c39c4497e7a0483dd3b1aa))
+* **campaign:** use better dropping behaviour and allow directory loading on click ([6d2a8d5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6d2a8d51c9112da9b841e3aeacf20188afe74b4e))
+
+
+### Features
+
+* **visualisation:** allow starting audio service from json ([280f2c2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/280f2c29652fb21138f40e84990dedec91d21a53))
+
 # [14.0.0-beta.11](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.10...v14.0.0-beta.11) (2025-07-16)
 
 
