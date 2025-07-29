@@ -1,3 +1,10 @@
+# [14.0.0-beta.13](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.12...v14.0.0-beta.13) (2025-07-29)
+
+
+### Bug Fixes
+
+* **campaign:** split dropzone ([127802d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/127802d4831e6747159abcb1f0e96310bf4949dd))
+
 # [14.0.0-beta.12](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.11...v14.0.0-beta.12) (2025-07-25)
 
 
