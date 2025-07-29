@@ -1,5 +1,5 @@
 import {JSON_TYPE, XLSX_TYPE} from '@shared/constants';
-import {useCallback, useState} from 'react';
+import {type FormEvent, useCallback, useState} from 'react';
 import {type FileWithPath} from 'react-dropzone';
 import {useFolderDrop} from 'src/hooks/use-folder-drop';
 import {useJsonDrop} from 'src/hooks/use-json-drop';
@@ -18,6 +18,24 @@ export function useDropzone() {
 
       if (info.isDirectory) {
         handleFolder(files as File[]);
+        setLocked(false);
+        return;
+      }
+
+      setLocked(false);
+    },
+    [handleFolder],
+  );
+
+  const handleLoad = useCallback(
+    async (e: FormEvent<HTMLInputElement>) => {
+      e.preventDefault();
+
+      setLocked(true);
+
+      const files = e.currentTarget.files;
+
+      if (!files) {
         setLocked(false);
         return;
       }
@@ -41,11 +59,12 @@ export function useDropzone() {
 
       setLocked(false);
     },
-    [handleFolder, handleJson, handleXlsx],
+    [handleXlsx, handleJson],
   );
 
   return {
-    handleDrop,
     locked,
+    handleDrop,
+    handleLoad,
   };
 }
