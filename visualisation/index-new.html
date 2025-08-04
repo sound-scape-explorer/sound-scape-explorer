@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>App Control Panel</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css" rel="stylesheet">
+</head>
+<body>
+<section class="hero is-fullheight">
+  <div class="hero-body">
+    <div class="container">
+      
+      <!-- Header -->
+      <div class="has-text-centered mb-6">
+        <h1 class="title is-2">Control Panel</h1>
+        <p class="subtitle is-6">v1.2.3</p>
+      </div>
+      
+      <!-- Content Columns -->
+      <div class="columns">
+        <!-- Left Column - Controls -->
+        <div class="column">
+          <!-- Campaign Section -->
+          <div class="box mb-5">
+            <h2 class="title is-5 mb-3">CAMPAIGN MODULE</h2>
+            <div class="buttons">
+              <button class="button is-dark is-small">OPEN</button>
+            </div>
+          </div>
+          
+          <!-- Audio Section -->
+          <div class="box mb-5">
+            <h2 class="title is-5 mb-3">AUDIO ENGINE</h2>
+            <div class="field">
+              <label class="label is-small">Configuration File</label>
+              <div class="file has-name is-small">
+                <label class="file-label">
+                  <input accept=".json,.h5" class="file-input" type="file">
+                  <span class="file-cta">
+                                            <span class="file-label">Select .json/.h5</span>
+                                        </span>
+                  <span class="file-name">No file selected</span>
+                </label>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label is-small">Manual Path</label>
+              <div class="control">
+                <input class="input is-small" placeholder="/path/to/config" type="text">
+              </div>
+            </div>
+            <div class="buttons">
+              <button class="button is-success is-small">START</button>
+              <button class="button is-danger is-outlined is-small">STOP</button>
+              <button class="button is-info is-outlined is-small">STATUS</button>
+            </div>
+          </div>
+          
+          <!-- Visualisation Section -->
+          <div class="box">
+            <h2 class="title is-5 mb-3">VISUALISATION</h2>
+            <div class="buttons">
+              <button class="button is-dark is-small">OPEN</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Column - Status/Info -->
+        <div class="column">
+          <div class="box">
+            <h2 class="title is-4">System Status</h2>
+            
+            <div class="field">
+              <label class="label">Campaign</label>
+              <span class="tag is-light">Not loaded</span>
+            </div>
+            
+            <div class="field">
+              <label class="label">Audio Service</label>
+              <span class="tag is-danger">Stopped</span>
+            </div>
+            
+            <div class="field">
+              <label class="label">Visualisation</label>
+              <span class="tag is-light">Closed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+</section>
+</body>
+</html>

@@ -21,6 +21,8 @@ export class AudioBridge {
 
   private service: ChildProcessWithoutNullStreams | null;
 
+  private audioPath: string | null;
+
   private readonly nodeResolver = new NodeResolver();
 
   private readonly ffmpegResolver = new FfmpegResolver();
@@ -29,18 +31,24 @@ export class AudioBridge {
 
   constructor() {
     this.validateServicePath();
+    this.validateNode();
     this.validateFfmpeg();
     this.validateFfprobe();
 
     this.service = null;
+    this.audioPath = null;
     this.setHandlers();
   }
 
   public static async startFromRenderer(audioPath: string) {
-    await ipcRenderer.invoke(Channels.AUDIO_START, [
-      AudioBridge.servicePath,
-      audioPath,
-    ]);
+    try {
+      await ipcRenderer.invoke(Channels.AUDIO_START, [
+        AudioBridge.servicePath,
+        audioPath,
+      ]);
+    } catch (err) {
+      alert(err);
+    }
   }
 
   public static async stopFromRenderer() {
@@ -51,6 +59,10 @@ export class AudioBridge {
     return (await ipcRenderer.invoke(Channels.AUDIO_STATUS)) as boolean;
   }
 
+  public static async getPathFromRenderer() {
+    return (await ipcRenderer.invoke(Channels.AUDIO_PATH)) as string | null;
+  }
+
   public stop() {
     if (this.service === null) {
       return;
@@ -58,11 +70,20 @@ export class AudioBridge {
 
     this.service.kill();
     this.service = null;
+    this.audioPath = null;
   }
 
   private validateServicePath() {
     if (!existsSync(AudioBridge.servicePath)) {
       throw new Error('Audio service build could not be found');
+    }
+  }
+
+  private validateNode() {
+    const exists = sync(this.nodeResolver.path);
+
+    if (!exists) {
+      throw new Error('node could not be found');
     }
   }
 
@@ -82,36 +103,59 @@ export class AudioBridge {
     }
   }
 
-  private start(modulePath: string, audioPath: string) {
-    if (this.service !== null) {
-      return;
-    }
+  private start(modulePath: string, audioPath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.service !== null) {
+        return;
+      }
 
-    const child = spawn(
-      this.nodeResolver.path,
-      [
-        modulePath,
-        this.ffmpegResolver.path,
-        this.ffprobeResolver.path,
-        audioPath,
-      ],
-      {
-        env: {ELECTRON_RUN_AS_NODE: '1'},
-      },
-    );
+      const child = spawn(
+        this.nodeResolver.path,
+        [
+          modulePath,
+          this.ffmpegResolver.path,
+          this.ffprobeResolver.path,
+          audioPath,
+        ],
+        {
+          env: {ELECTRON_RUN_AS_NODE: '1'},
+        },
+      );
 
-    this.service = child;
+      this.service = child;
+      this.audioPath = audioPath;
 
-    child.stdout.on('data', (data) => {
-      console.log(`stdout:\n${data}`);
-    });
+      const startupTimeout = setTimeout(() => {
+        resolve(); // Assume success if no exit within reasonable time
+      }, 100);
 
-    child.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
-    });
+      child.stdout.on('data', (data) => {
+        console.log(`stdout:\n${data}`);
+      });
 
-    child.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
+      child.stderr.on('data', (data) => {
+        console.error(`stderr:\n${data}`);
+      });
+
+      child.on('exit', (code, signal) => {
+        clearTimeout(startupTimeout);
+        this.service = null;
+        this.audioPath = null;
+
+        if (code !== 0 || signal) {
+          const errorMessage = signal
+            ? `Audio service was terminated (${signal})`
+            : `Audio service failed to start (exit code: ${code})`;
+          reject(new Error(errorMessage));
+        }
+      });
+
+      child.on('error', (err) => {
+        clearTimeout(startupTimeout);
+        this.service = null;
+        this.audioPath = null;
+        reject(err);
+      });
     });
   }
 
@@ -119,17 +163,26 @@ export class AudioBridge {
     return this.service !== null;
   }
 
+  private getPath() {
+    return this.audioPath;
+  }
+
   private setHandlers() {
     this.setStartHandler();
     this.setStopHandler();
     this.setStatusHandler();
+    this.setPathHandler();
   }
 
   private setStartHandler() {
     ipcMain.handle(
       Channels.AUDIO_START,
-      (_, [modulePath, audioPath]: [string, string]) => {
-        this.start(modulePath, audioPath);
+      async (_, [modulePath, audioPath]: [string, string]) => {
+        try {
+          await this.start(modulePath, audioPath);
+        } catch (error) {
+          throw error;
+        }
       },
     );
   }
@@ -140,5 +193,9 @@ export class AudioBridge {
 
   private setStatusHandler() {
     ipcMain.handle(Channels.AUDIO_STATUS, this.getStatus.bind(this));
+  }
+
+  private setPathHandler() {
+    ipcMain.handle(Channels.AUDIO_PATH, this.getPath.bind(this));
   }
 }

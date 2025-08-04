@@ -19,7 +19,8 @@
     "package": "npm run clean && electron-forge package",
     "preinstall": "npx only-allow npm",
     "publish": "electron-forge publish",
-    "start": "electron-forge start"
+    "start": "electron-forge start",
+    "copy-bulma": "cp node_modules/bulma/css/bulma.min.css assets"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
@@ -32,6 +33,8 @@
     "@electron-forge/plugin-vite": "^7.2.0",
     "@rabbitholesyndrome/electron-forge-maker-portable": "^0.2.0",
     "@types/command-exists": "^1.2.3",
+    "@types/semver": "^7.7.0",
+    "bulma": "^1.0.4",
     "electron": "28.1.3",
     "scss": "^0.2.4",
     "ts-node": "^10.9.2"
@@ -39,6 +42,8 @@
   "dependencies": {
     "command-exists": "^1.2.9",
     "electron-squirrel-startup": "^1.0.0",
-    "jsfive": "^0.4.0"
+    "jsfive": "^0.4.0",
+    "lucide": "^0.537.0",
+    "semver": "^7.7.2"
   }
 }

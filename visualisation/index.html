@@ -1,78 +1,201 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <title></title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0"
+      name="viewport"
+    />
+    <title>SSE</title>
+    <link
+      href="./assets/bulma.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section class="hero is-fullheight">
+      <div class="hero-body">
+        <div class="container">
+          <!-- Header -->
+          <div class="has-text-centered mb-6">
+            <h1
+              class="title is-2"
+              id="sse-title"
+            >
+              SSE
+            </h1>
+            <p
+              class="subtitle is-6"
+              id="sse-version"
+            >
+              vx.x.x
+            </p>
+          </div>
 
-  <style>
-    body {
-      background: rgba(0, 0, 0, 0.3);
-    }
-  </style>
-</head>
+          <!-- Content Columns -->
+          <div class="columns">
+            <!-- Left Column - Controls -->
+            <div class="column">
+              <!-- Campaign Section -->
+              <div
+                class="box mb-5"
+                id="sse-campaign-container"
+              >
+                <h2 class="title is-5 mb-3">CAMPAIGN</h2>
+                <div class="buttons">
+                  <button
+                    class="button is-dark is-small"
+                    id="sse-campaign-button"
+                  >
+                    CONFIGURE
+                  </button>
+                </div>
+              </div>
 
-<body>
+              <!-- Audio Section -->
+              <div
+                class="box mb-5"
+                id="sse-audio-container"
+              >
+                <h2 class="title is-5 mb-3">AUDIO</h2>
+                <div class="field">
+                  <label class="label is-small">Configuration File</label>
+                  <div class="file has-name is-small">
+                    <label
+                      class="file-label"
+                      id="sse-audio-file-container"
+                    >
+                      <input
+                        accept=".json,.h5"
+                        class="file-input"
+                        id="sse-audio-file-input"
+                        type="file"
+                      />
+                      <span class="file-cta">
+                        <span
+                          class="file-label"
+                          id="sse-audio-file-span"
+                        >
+                          Select .json/.h5
+                        </span>
+                      </span>
+                      <span class="file-name">No file selected</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label is-small">Audio Path</label>
+                  <div class="control has-icons-right">
+                    <!--suppress HtmlFormInputWithoutLabel -->
+                    <input
+                      class="input is-small"
+                      id="sse-audio-text-input"
+                      placeholder="/path/to/audio/folder"
+                      type="text"
+                    />
+                    <!-- For success state, use: -->
+                    <span
+                      class="icon is-small is-right"
+                      id="sse-audio-text-input-success"
+                      style="display: none"
+                    >
+                      <i
+                        class="has-text-success"
+                        data-lucide="check"
+                      ></i>
+                    </span>
+                    <!-- For error state, use: -->
+                    <span
+                      class="icon is-small is-right"
+                      id="sse-audio-text-input-error"
+                    >
+                      <i
+                        class="has-text-danger"
+                        data-lucide="triangle-alert"
+                      ></i>
+                    </span>
+                  </div>
+                  <!-- Optional: Add help text for errors -->
+                  <p
+                    class="help is-danger"
+                    id="sse-audio-path-error"
+                    style="display: none"
+                  >
+                    Invalid path
+                  </p>
+                </div>
+                <div class="buttons">
+                  <button
+                    class="button is-success is-small"
+                    disabled
+                    id="sse-audio-start-button"
+                  >
+                    START
+                  </button>
+                  <button
+                    class="button is-danger is-outlined is-small"
+                    disabled
+                    id="sse-audio-stop-button"
+                  >
+                    STOP
+                  </button>
+                </div>
+              </div>
 
-<div class="container flex flex-col">
-  <h1 class="title" id="title">&nbsp;</h1>
+              <!-- Visualisation Section -->
+              <div
+                class="box"
+                id="sse-visualisation-container"
+              >
+                <h2 class="title is-5 mb-3">VISUALISATION</h2>
+                <div class="buttons">
+                  <button
+                    class="button is-dark is-small"
+                    disabled
+                    id="sse-visualisation-button"
+                  >
+                    EXPLORE
+                  </button>
+                </div>
+              </div>
+            </div>
 
-  <div class="flex flex-col" id="loading-zone">
-    <h2>Campaign</h2>
+            <!-- Right Column - Status/Info -->
+            <div class="column">
+              <div
+                class="box"
+                id="sse-status-container"
+              >
+                <h2 class="title is-4">STATUS</h2>
 
-    <button class="label border" id="campaign-button">Open</button>
+                <div class="field">
+                  <label class="label">Version</label>
+                  <span
+                    class="tag is-light is-success"
+                    id="sse-version-status"
+                  >
+                    Up to date
+                  </span>
+                </div>
 
-    <h2>Visualisation</h2>
-
-    <div>
-      <input
-        accept=".h5"
-        id="storage-input"
-        name="storage-input"
-        style="display: none;"
-        type="file"
-      />
-
-      <label
-        class="label border"
-        for="storage-input"
-        id="storage-label"
-      >
-        Load .h5
-      </label>
-
-      <br/>
-
-      <input
-        accept=".json"
-        id="json-input"
-        name="json-input"
-        style="display: none;"
-        type="file"
-      />
-
-      <label
-        class="label border"
-        for="json-input"
-        id="json-label"
-      >
-        Load .json
-      </label>
-    </div>
-  </div>
-
-  <div id="loaded-zone" style="display: none;">
-    <button class="button border" id="visualise-button">Visualise</button>
-    <button class="button border" id="audio-stop-button">
-      Stop Audio service
-    </button>
-    <div id="audio-path">
-      <h3>Audio Path</h3>
-      <span>value</span>
-    </div>
-  </div>
-</div>
-
-<script src="./src/renderer/renderer.ts" type="module"></script>
-
-</body>
+                <div class="field">
+                  <label class="label">Audio Service</label>
+                  <span
+                    class="tag is-danger"
+                    id="sse-audio-status"
+                  >
+                    Stopped
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script
+      src="./src/renderer/renderer.ts"
+      type="module"
+    ></script>
+  </body>
 </html>
