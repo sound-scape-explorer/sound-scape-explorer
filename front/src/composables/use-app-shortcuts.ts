@@ -1,6 +1,4 @@
-import {useScreen} from 'src/components/screen/use-screen';
 import {useAppMetaKeys} from 'src/composables/use-app-meta-keys';
-import {useClientSettings} from 'src/composables/use-client-settings';
 import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {Shortcut} from 'src/composables/use-shortcuts';
@@ -12,8 +10,6 @@ export function useAppShortcuts() {
 
   const {registerKey} = useGlobalKeyboard();
   const {toggle} = useDraggables();
-  const {isAlphaPreview} = useClientSettings();
-  const {enable: showScatterSelection} = useScreen();
   const {hasView} = useViewState();
   const {togglePlayPause} = useAudioTransport();
 
@@ -32,6 +28,10 @@ export function useAppShortcuts() {
   registerKey(
     Shortcut.tags,
     () => hasView.value && toggle(DraggableKey.enum.tags),
+  );
+  registerKey(
+    Shortcut.selection,
+    () => hasView.value && toggle(DraggableKey.enum.selection),
   );
   registerKey(
     Shortcut.details,
@@ -60,10 +60,6 @@ export function useAppShortcuts() {
   registerKey(
     Shortcut.histograms,
     () => hasView.value && toggle(DraggableKey.enum.histograms),
-  );
-  registerKey(
-    Shortcut._alphaSelection3d,
-    () => hasView.value && isAlphaPreview.value && showScatterSelection(),
   );
 
   registerKey(Shortcut.audioPlayPause, togglePlayPause);

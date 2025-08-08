@@ -10,11 +10,7 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {useConfig} from 'src/composables/use-config';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {Shortcut} from 'src/composables/use-shortcuts';
-import {
-  PlotBackground,
-  ScatterBorderWidth,
-  SpectrogramColorMap,
-} from 'src/constants';
+import {PlotBackground, ScatterBorderWidth, SpectrogramColorMap} from 'src/constants';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 
 const {
@@ -28,8 +24,6 @@ const {
   spectrogramColorMap,
   isDetailsAutoOpen,
   isAudioAutoOpen,
-  isAlphaPreview,
-  isBetaPreview,
   isTimezoneActive,
   isCopyOnSelect2d,
   isWebGlScatter2d,
@@ -205,14 +199,6 @@ const reload = () => location.reload();
         <h2>Misc.</h2>
       </AppHeader>
 
-      <DraggableSettingsItem title="Preview alpha features">
-        <AppCheckbox v-model="isAlphaPreview" />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Preview beta features">
-        <AppCheckbox v-model="isBetaPreview" />
-      </DraggableSettingsItem>
-
       <DraggableSettingsItem title="Enable developer settings">
         <AppCheckbox v-model="isDevEnabled" />
       </DraggableSettingsItem>
@@ -236,20 +222,20 @@ const reload = () => location.reload();
 @use 'src/styles/scrolls';
 
 .reload {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 
 .container {
   display: flex;
-  overflow: auto;
   flex-direction: column;
-  width: sizes.$s0;
+  gap: sizes.$g0;
   height: sizes.$s0;
   margin-top: sizes.$p0;
+  overflow: auto;
   padding-right: sizes.$p0;
-  gap: sizes.$g0;
+  width: sizes.$s0;
 
   @include scrolls.tiny-scrollbar;
 }

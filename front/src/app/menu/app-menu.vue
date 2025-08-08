@@ -1,14 +1,12 @@
 <script lang="ts" setup>
 import AppIcon from 'src/app/app-icon.vue';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
-import {useClientSettings} from 'src/composables/use-client-settings';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewState} from 'src/composables/use-view-state';
 
 const {isReady} = useStorageReady();
 const {hasView} = useViewState();
-const {isAlphaPreview} = useClientSettings();
 </script>
 
 <template>
@@ -67,6 +65,13 @@ const {isAlphaPreview} = useClientSettings();
 
       <AppMenuButton
         :disabled="!hasView"
+        :draggable-key="DraggableKey.enum.selection"
+      >
+        <AppIcon icon="selection" />
+      </AppMenuButton>
+
+      <AppMenuButton
+        :disabled="!hasView"
         :draggable-key="DraggableKey.enum.temporal"
       >
         <AppIcon icon="temporal" />
@@ -98,14 +103,6 @@ const {isAlphaPreview} = useClientSettings();
         :draggable-key="DraggableKey.enum.details"
       >
         <AppIcon icon="details" />
-      </AppMenuButton>
-
-      <AppMenuButton
-        v-if="isAlphaPreview"
-        :disabled="!hasView"
-        :draggable-key="DraggableKey.enum._alphaSelection3d"
-      >
-        <AppIcon icon="_alphaSelection3d" />
       </AppMenuButton>
 
       <AppMenuButton

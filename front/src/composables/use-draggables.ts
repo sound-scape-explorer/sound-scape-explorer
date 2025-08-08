@@ -16,7 +16,7 @@ export const DraggableKey = z.enum([
   'temporal',
   'heatmaps',
   'histograms',
-  '_alphaSelection3d',
+  'selection',
 ]);
 
 // eslint-disable-next-line no-redeclare

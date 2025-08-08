@@ -98,7 +98,7 @@ const paths: Record<PathKey, string[]> = {
   details: Array,
   trajectories: Layout,
   relativeTrajectories: LayoutBalloon,
-  _alphaSelection3d: Select,
+  selection: Select,
   // custom
   band: Waves,
   integration: NewLink,

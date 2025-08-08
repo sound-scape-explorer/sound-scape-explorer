@@ -5,7 +5,6 @@ import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
-import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useInterval} from 'src/composables/use-interval';
 import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
@@ -39,7 +38,6 @@ export function useScatterLifecycles() {
   const {filtered: labelFiltered} = useScatterFilterTag();
   const {filtered: timeFiltered} = useScatterFilterTime();
   const {filtered: temporalFiltered} = useScatterFilterTemporal();
-  const {selected} = useScreen();
   const {isWebGlScatter2d} = useClientSettings();
   const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
   const {min: labelRangeMin, max: labelRangeMax} = useColorByTag();
@@ -66,7 +64,6 @@ export function useScatterLifecycles() {
       labelFiltered,
       timeFiltered,
       temporalFiltered,
-      selected,
       isWebGlScatter2d,
       isColorMapSwapped,
       isColorByLabelsNumeric,
