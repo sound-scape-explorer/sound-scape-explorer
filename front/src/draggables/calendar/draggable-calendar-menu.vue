@@ -11,9 +11,7 @@ import {printPrettySeconds} from 'src/utils/time';
 import {computed} from 'vue';
 
 const {isActive, durations, isPlaying} = useDraggableCalendar();
-
 const {duration} = useTimelineRange();
-
 const {setWindowDuration, skipTimeForward, skipTimeBackward, handleToggle} =
   useDraggableCalendarTransport();
 

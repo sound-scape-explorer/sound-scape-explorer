@@ -1,5 +1,6 @@
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterContainer} from 'src/components/scatter/use-scatter-container';
+import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
@@ -10,6 +11,8 @@ import {useInterval} from 'src/composables/use-interval';
 import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
+import {useSelectionProps} from 'src/draggables/selection/use-selection-props';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {onMounted, watch} from 'vue';
 
@@ -38,12 +41,18 @@ export function useScatterLifecycles() {
   const {filtered: labelFiltered} = useScatterFilterTag();
   const {filtered: timeFiltered} = useScatterFilterTime();
   const {filtered: temporalFiltered} = useScatterFilterTemporal();
+  const {filtered: spatialFiltered} = useScatterFilterSpatial();
   const {isWebGlScatter2d} = useClientSettings();
   const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
   const {min: labelRangeMin, max: labelRangeMax} = useColorByTag();
   const {isEnabled: isColorByLabelsNumeric} = useTagNumeric();
   const {currentIndex} = useInterval();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
+
+  const {isActive: isSelectionActive, isWireframe: isSelectionWireframe} =
+    useDraggableSelection();
+  const {xRange, yRange, zRange, tiltAngleX, tiltAngleY, tiltAngleZ} =
+    useSelectionProps();
 
   onMounted(mountContainer);
 
@@ -64,6 +73,7 @@ export function useScatterLifecycles() {
       labelFiltered,
       timeFiltered,
       temporalFiltered,
+      spatialFiltered,
       isWebGlScatter2d,
       isColorMapSwapped,
       isColorByLabelsNumeric,
@@ -71,6 +81,15 @@ export function useScatterLifecycles() {
       isSelectedPointHighlighted,
       scatterBorderWidth,
       cyclingPeriod,
+      // selection
+      isSelectionActive,
+      isSelectionWireframe,
+      xRange,
+      yRange,
+      zRange,
+      tiltAngleX,
+      tiltAngleY,
+      tiltAngleZ,
     ],
     async () => {
       if (isRendering || !isEnabled.value) {

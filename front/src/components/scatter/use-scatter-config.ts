@@ -1,4 +1,8 @@
-import Plotly, {type Config, type DownloadImgopts, type ModeBarButtonAny,} from 'plotly.js-dist-min';
+import Plotly, {
+  type Config,
+  type DownloadImgopts,
+  type ModeBarButtonAny,
+} from 'plotly.js-dist-min';
 import {useScatterDownloadPngButton} from 'src/components/scatter/use-scatter-download-png-button';
 import {useScatterExport} from 'src/components/scatter/use-scatter-export';
 import {useExportName} from 'src/composables/use-export-name';

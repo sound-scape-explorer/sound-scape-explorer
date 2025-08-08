@@ -32,7 +32,7 @@ import Plus from '@blueprintjs/icons/lib/esm/generated/16px/paths/plus';
 import Redo from '@blueprintjs/icons/lib/esm/generated/16px/paths/redo';
 import Refresh from '@blueprintjs/icons/lib/esm/generated/16px/paths/refresh';
 import Reset from '@blueprintjs/icons/lib/esm/generated/16px/paths/reset';
-import Select from '@blueprintjs/icons/lib/esm/generated/16px/paths/select';
+import SelectionBox from '@blueprintjs/icons/lib/esm/generated/16px/paths/selection-box';
 import SeriesFiltered from '@blueprintjs/icons/lib/esm/generated/16px/paths/series-filtered';
 import StepBackward from '@blueprintjs/icons/lib/esm/generated/16px/paths/step-backward';
 import StepForward from '@blueprintjs/icons/lib/esm/generated/16px/paths/step-forward';
@@ -98,7 +98,7 @@ const paths: Record<PathKey, string[]> = {
   details: Array,
   trajectories: Layout,
   relativeTrajectories: LayoutBalloon,
-  selection: Select,
+  selection: SelectionBox,
   // custom
   band: Waves,
   integration: NewLink,

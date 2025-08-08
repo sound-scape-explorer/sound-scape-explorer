@@ -114,7 +114,7 @@ export async function readReductions(
     integrationIndex,
   );
 
-  const embeddings = _readArray<number[]>(h5, path);
+  const embeddings = _readArray<number[][]>(h5, path);
   return embeddings;
 }
 

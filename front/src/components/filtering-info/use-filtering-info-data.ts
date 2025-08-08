@@ -1,3 +1,4 @@
+import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
@@ -9,6 +10,7 @@ export function useFilteringInfoData() {
   const {filtered: time} = useScatterFilterTime();
   const {filtered: labels} = useScatterFilterTag();
   const {filtered: temporal} = useScatterFilterTemporal();
+  const {filtered: spatial} = useScatterFilterSpatial();
 
   const totalOut = computed(() => global.value.filter((f) => f).length);
   const totalIn = computed(() => global.value.length - totalOut.value);
@@ -22,9 +24,13 @@ export function useFilteringInfoData() {
   const temporalOut = computed(() => temporal.value.filter((f) => f).length);
   const temporalIn = computed(() => temporal.value.length - temporalOut.value);
 
+  const spatialOut = computed(() => spatial.value.filter((f) => f).length);
+  const spatialIn = computed(() => spatial.value.length - spatialOut.value);
+
   const isTimeActive = computed<boolean>(() => timeOut.value > 0);
   const isLabelsActive = computed<boolean>(() => labelsOut.value > 0);
   const isTemporalActive = computed<boolean>(() => temporalOut.value > 0);
+  const isSpatialActive = computed<boolean>(() => spatialOut.value > 0);
   const population = computed(() => time.value.length);
 
   return {
@@ -36,9 +42,12 @@ export function useFilteringInfoData() {
     labelsIn,
     temporalOut,
     temporalIn,
+    spatialOut,
+    spatialIn,
     isTimeActive,
     isLabelsActive,
     isTemporalActive,
+    isSpatialActive,
     population,
   };
 }

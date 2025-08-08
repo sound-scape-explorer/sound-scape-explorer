@@ -11,6 +11,7 @@ import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
+// todo: naming between filter by time and temporal??
 export function useScatterFilterTemporal() {
   const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
   const {from, to, reset: resetThresholds} = useTemporalThresholds();

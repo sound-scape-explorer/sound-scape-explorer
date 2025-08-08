@@ -11,6 +11,7 @@ import DraggableHelp from 'src/draggables/help/draggable-help.vue';
 import DraggableHistograms from 'src/draggables/histograms/draggable-histograms.vue';
 import DraggableOpen from 'src/draggables/open/draggable-open.vue';
 import DraggableRelativeTrajectories from 'src/draggables/relative-trajectories/draggable-relative-trajectories.vue';
+import DraggableSelection from 'src/draggables/selection/draggable-selection.vue';
 import DraggableSettings from 'src/draggables/settings/draggable-settings.vue';
 import DraggableTags from 'src/draggables/tags/draggable-tags.vue';
 import DraggableTemporal from 'src/draggables/temporal/draggable-temporal.vue';
@@ -33,6 +34,7 @@ const {colors} = useThemeColors();
   <DraggableColors v-if="isLoaded && store.colors" />
   <DraggableCalendar v-if="isLoaded" />
   <DraggableTags v-if="isLoaded" />
+  <DraggableSelection v-if="isLoaded" />
   <DraggableDetails v-if="isLoaded" />
   <DraggableAudio v-if="isLoaded" />
   <DraggableTrajectories v-if="isLoaded" />

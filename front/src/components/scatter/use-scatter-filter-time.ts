@@ -46,7 +46,7 @@ export function useScatterFilterTime() {
 
   return {
     filtered,
-    filterByTime: filter,
-    resetFilterByTime: reset,
+    filter,
+    reset,
   };
 }
