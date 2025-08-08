@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {arrowUndoCircleOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -45,10 +44,7 @@ onMounted(autoselectDev);
 
 <template>
   <AppDraggable :draggable-key="DraggableKey.enum.view">
-    <AppDraggableMenu
-      :class="$style.menu"
-      size="medium"
-    >
+    <AppDraggableMenu :class="$style.menu">
       <h2>Extraction</h2>
 
       <AppSelect
@@ -59,7 +55,13 @@ onMounted(autoselectDev);
         size="small"
       />
 
-      <h2>Band</h2>
+      <div :class="$style.title">
+        <AppIcon
+          icon="band"
+          size="small"
+        />
+        <h2>Band</h2>
+      </div>
 
       <AppSelect
         v-model="bandSlug"
@@ -69,7 +71,13 @@ onMounted(autoselectDev);
         size="small"
       />
 
-      <h2>Integration</h2>
+      <div :class="$style.title">
+        <AppIcon
+          icon="integration"
+          size="small"
+        />
+        <h2>Integration</h2>
+      </div>
 
       <AppSelect
         v-model="integrationSlug"
@@ -79,7 +87,13 @@ onMounted(autoselectDev);
         size="small"
       />
 
-      <h2>Reducer</h2>
+      <div :class="$style.title">
+        <AppIcon
+          icon="reducer"
+          size="small"
+        />
+        <h2>Reducer</h2>
+      </div>
 
       <AppSelect
         v-model="reducerSlug"
@@ -100,7 +114,10 @@ onMounted(autoselectDev);
           size="medium"
         >
           <div :class="$style.button">
-            <IonIcon :icon="arrowUndoCircleOutline" />
+            <AppIcon
+              icon="reset"
+              size="small"
+            />
             Unload view
           </div>
         </AppButton>
@@ -113,20 +130,27 @@ onMounted(autoselectDev);
 @use 'src/styles/sizes';
 
 .menu {
-  width: sizes.$s0;
+  width: sizes.$s1;
+}
+
+.title {
+  align-items: center;
+  display: flex;
+  gap: sizes.$g0;
+  justify-content: flex-start;
 }
 
 .last-line {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-end;
 }
 
 .button {
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   gap: sizes.$g0;
+  justify-content: center;
 
   svg {
     transform: translate3d(0, 1px, 0);

@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {downloadOutline} from 'ionicons/icons';
 import {NCascader, NSwitch} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableSidebarHistory from 'src/app/app-draggable-sidebar-history.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
@@ -113,7 +112,10 @@ watch(current, update);
           tooltip="Export"
           tooltip-placement="bottom"
         >
-          <IonIcon :icon="downloadOutline" />
+          <AppIcon
+            icon="download"
+            size="small"
+          />
         </AppButton>
       </div>
     </AppDraggableMenu>
@@ -128,15 +130,15 @@ watch(current, update);
 }
 
 .selection {
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   gap: sizes.$p0;
+  justify-content: center;
 }
 
 .last-line {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-end;
   padding-top: sizes.$p0;
 }
@@ -148,7 +150,7 @@ watch(current, update);
 
 .average-and-period {
   display: grid;
-  grid-template-columns: 1fr sizes.$p0 * 12 1fr;
   gap: sizes.$p0;
+  grid-template-columns: 1fr sizes.$p0 * 12 1fr;
 }
 </style>

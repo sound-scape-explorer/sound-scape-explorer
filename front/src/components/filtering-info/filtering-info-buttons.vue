@@ -1,12 +1,6 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {
-  arrowBackOutline,
-  arrowForwardOutline,
-  arrowRedoOutline,
-  arrowUndoOutline,
-} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useInterval} from 'src/composables/use-interval';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 
@@ -24,7 +18,10 @@ const {colors} = useThemeColors();
       tooltip="Back"
       tooltip-placement="top"
     >
-      <IonIcon :icon="arrowBackOutline" />
+      <AppIcon
+        icon="back"
+        size="small"
+      />
     </AppButton>
 
     <AppButton
@@ -33,9 +30,9 @@ const {colors} = useThemeColors();
       tooltip="Forward"
       tooltip-placement="top"
     >
-      <IonIcon
-        :class="$style.button"
-        :icon="arrowForwardOutline"
+      <AppIcon
+        icon="forward"
+        size="small"
       />
     </AppButton>
 
@@ -45,7 +42,10 @@ const {colors} = useThemeColors();
       tooltip="Undo"
       tooltip-placement="top"
     >
-      <IonIcon :icon="arrowUndoOutline" />
+      <AppIcon
+        icon="undo"
+        size="small"
+      />
     </AppButton>
 
     <AppButton
@@ -54,7 +54,10 @@ const {colors} = useThemeColors();
       tooltip="Redo"
       tooltip-placement="top"
     >
-      <IonIcon :icon="arrowRedoOutline" />
+      <AppIcon
+        icon="redo"
+        size="small"
+      />
     </AppButton>
   </div>
 </template>
@@ -64,9 +67,9 @@ const {colors} = useThemeColors();
 
 .container {
   display: flex;
+  gap: sizes.$p0;
   justify-content: flex-start;
   margin-top: sizes.$g0;
-  gap: sizes.$p0;
 
   * {
     color: v-bind('colors.primaryColor');

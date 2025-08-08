@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
-import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useStorageReady} from 'src/composables/use-storage-ready';
@@ -10,7 +9,6 @@ import {useViewState} from 'src/composables/use-view-state';
 const {isReady} = useStorageReady();
 const {hasView} = useViewState();
 const {isAlphaPreview} = useClientSettings();
-const {menu} = useAppMenu();
 </script>
 
 <template>
@@ -18,15 +16,15 @@ const {menu} = useAppMenu();
     <div :class="$style.row">
       <div :class="$style.left">
         <AppMenuButton :draggable-key="DraggableKey.enum.open">
-          <IonIcon :icon="menu.open" />
+          <AppIcon icon="open" />
         </AppMenuButton>
 
         <AppMenuButton :draggable-key="DraggableKey.enum.settings">
-          <IonIcon :icon="menu.settings" />
+          <AppIcon icon="settings" />
         </AppMenuButton>
 
         <AppMenuButton :draggable-key="DraggableKey.enum.help">
-          <IonIcon :icon="menu.help" />
+          <AppIcon icon="help" />
         </AppMenuButton>
       </div>
 
@@ -43,63 +41,63 @@ const {menu} = useAppMenu();
       :class="$style.column"
     >
       <AppMenuButton :draggable-key="DraggableKey.enum.view">
-        <IonIcon :icon="menu.view" />
+        <AppIcon icon="view" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.colors"
       >
-        <IonIcon :icon="menu.colors" />
+        <AppIcon icon="colors" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.calendar"
       >
-        <IonIcon :icon="menu.calendar" />
+        <AppIcon icon="calendar" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.tags"
       >
-        <IonIcon :icon="menu.tags" />
+        <AppIcon icon="tags" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.temporal"
       >
-        <IonIcon :icon="menu.temporal" />
+        <AppIcon icon="temporal" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.heatmaps"
       >
-        <IonIcon :icon="menu.heatmaps" />
+        <AppIcon icon="heatmaps" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.histograms"
       >
-        <IonIcon :icon="menu.histograms" />
+        <AppIcon icon="histograms" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.audio"
       >
-        <IonIcon :icon="menu.audio" />
+        <AppIcon icon="audio" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.details"
       >
-        <IonIcon :icon="menu.details" />
+        <AppIcon icon="details" />
       </AppMenuButton>
 
       <AppMenuButton
@@ -107,21 +105,21 @@ const {menu} = useAppMenu();
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum._alphaSelection3d"
       >
-        <IonIcon :icon="menu._alphaSelection3d" />
+        <AppIcon icon="_alphaSelection3d" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.trajectories"
       >
-        <IonIcon :icon="menu.trajectories" />
+        <AppIcon icon="trajectories" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
         :draggable-key="DraggableKey.enum.relativeTrajectories"
       >
-        <IonIcon :icon="menu.relativeTrajectories" />
+        <AppIcon icon="relativeTrajectories" />
       </AppMenuButton>
     </div>
   </div>
@@ -134,28 +132,28 @@ const {menu} = useAppMenu();
 $g: sizes.$p0;
 
 .header {
-  position: fixed;
-  z-index: layers.$app-menu-layer;
-  top: $g;
-  left: $g;
-  display: flex;
   align-items: flex-start;
+  display: flex;
   flex-direction: column;
-  width: 100%;
-  pointer-events: none;
   gap: $g;
+  left: $g;
+  pointer-events: none;
+  position: fixed;
+  top: $g;
+  width: 100%;
+  z-index: layers.$app-menu-layer;
 }
 
 .button {
-  pointer-events: auto;
   backdrop-filter: blur(sizes.$p0);
+  pointer-events: auto;
 }
 
 .row {
   display: flex;
   justify-content: space-between;
-  width: 100%;
   padding-right: $g;
+  width: 100%;
 }
 
 .row .left {

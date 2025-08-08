@@ -1,17 +1,16 @@
 <script lang="ts" setup>
+// todo: remove
 import {IonIcon} from '@ionic/vue';
 import {arrowUndoOutline, repeatOutline} from 'ionicons/icons';
 import {NButton, NInput, NSelect, NTabPane, NTabs} from 'naive-ui';
+import {type SelectMixedOption} from 'naive-ui/es/select/src/interface';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {useScreen} from 'src/components/screen/use-screen';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useGlobalKeyboard} from 'src/composables/use-global-keyboard';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
-import {
-  convertToNaiveSelectOptions,
-  type NaiveSelectOption,
-} from 'src/utils/naive';
+import {convertToNaiveSelectOptions} from 'src/utils/naive';
 import {ref, watch} from 'vue';
 
 const {selected} = useScreen();
@@ -20,7 +19,7 @@ const customProperty = ref<string>('');
 const existingProperty = ref<string>('');
 const custom = ref<string>('');
 const {allUniques} = useTagUniques();
-const options = ref<NaiveSelectOption[]>([]);
+const options = ref<SelectMixedOption[]>([]);
 
 type Mode = 'existing' | 'custom';
 
@@ -140,21 +139,21 @@ watch(allUniques, () => {
 }
 
 .container {
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   gap: 1em;
+  justify-content: center;
 }
 
 .buttons {
-  position: fixed;
-  display: flex;
   align-items: flex-start;
+  display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  height: 0;
-  margin-left: -2rem;
   gap: 2px;
+  height: 0;
+  justify-content: flex-start;
+  margin-left: -2rem;
+  position: fixed;
 }
 
 .tabs {
@@ -163,9 +162,9 @@ watch(allUniques, () => {
 }
 
 .tooltip {
+  margin-right: 1em;
+  margin-top: 1em;
   position: fixed;
   right: 0;
-  margin-top: 1em;
-  margin-right: 1em;
 }
 </style>

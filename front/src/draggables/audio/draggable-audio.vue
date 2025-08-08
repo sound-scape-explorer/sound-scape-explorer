@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {refreshOutline} from 'ionicons/icons';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import {DraggableKey} from 'src/composables/use-draggables';
@@ -28,9 +27,10 @@ useAudioLifecycles();
     :suspense="SuspenseCase.enum.SCATTER_CLICK"
   >
     <div :class="[$style.loading, {[$style['loading-hidden']]: !isLoading}]">
-      <IonIcon
+      <AppIcon
         :class="$style.spin"
-        :icon="refreshOutline"
+        icon="refresh"
+        size="giant"
       />
     </div>
 
@@ -71,18 +71,18 @@ useAudioLifecycles();
 }
 
 .loading {
-  font-size: 100px;
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  left: 0;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background-color: v-bind('colors.modalColor');
   backdrop-filter: blur(sizes.$p0);
+  background-color: v-bind('colors.modalColor');
+  display: flex;
+  font-size: 100px;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
 
   @include borders.border-radius;
 }

@@ -62,8 +62,6 @@ export default defineConfig({
           'vue-router': ['vue-router'],
           'wav-file-encoder': ['wav-file-encoder'],
           'wavesurfer.js': ['wavesurfer.js'],
-          'ionicons/icons': ['ionicons/icons'],
-          '@ionic/vue': ['@ionic/vue'],
         },
       },
     },

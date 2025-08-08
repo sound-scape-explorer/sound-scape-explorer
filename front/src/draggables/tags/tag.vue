@@ -1,13 +1,7 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {
-  chevronForwardOutline,
-  colorFillOutline,
-  invertModeOutline,
-  refreshOutline,
-} from 'ionicons/icons';
 import {NTag} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import TagCheckbox from 'src/draggables/tags/tag-checkbox.vue';
 import {useTag} from 'src/draggables/tags/use-tag';
@@ -41,9 +35,10 @@ watch(isCurrent, openCurrent);
       @click="toggleShowing"
     >
       <div :class="$style['tag-content']">
-        <IonIcon
+        <AppIcon
           :class="[$style['chevron'], {[$style['chevron-rotate']]: isShowing}]"
-          :icon="chevronForwardOutline"
+          icon="chevron"
+          size="small"
         />
         <span>{{ props.name }}</span>
       </div>
@@ -58,7 +53,10 @@ watch(isCurrent, openCurrent);
         tooltip="Invert selection"
         tooltip-placement="top"
       >
-        <IonIcon :icon="invertModeOutline" />
+        <AppIcon
+          icon="swap"
+          size="small"
+        />
       </AppButton>
       <AppButton
         :disabled="hasNoSelection"
@@ -68,7 +66,10 @@ watch(isCurrent, openCurrent);
         tooltip="Clear selection"
         tooltip-placement="top"
       >
-        <IonIcon :icon="refreshOutline" />
+        <AppIcon
+          icon="clean"
+          size="small"
+        />
       </AppButton>
       <AppButton
         :active="isCurrent"
@@ -78,7 +79,10 @@ watch(isCurrent, openCurrent);
         tooltip="Use for coloring"
         tooltip-placement="top"
       >
-        <IonIcon :icon="colorFillOutline" />
+        <AppIcon
+          icon="colors"
+          size="small"
+        />
       </AppButton>
     </div>
   </div>
@@ -95,12 +99,12 @@ watch(isCurrent, openCurrent);
 @use 'src/styles/transitions';
 
 .cell {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  height: auto;
-  margin-right: sizes.$p0;
+  display: flex;
   gap: sizes.$p0;
+  height: auto;
+  justify-content: center;
+  margin-right: sizes.$p0;
 }
 
 .tag {
@@ -113,8 +117,8 @@ watch(isCurrent, openCurrent);
 }
 
 .tag-content {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: sizes.$p0;
 }
 

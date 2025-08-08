@@ -1,16 +1,6 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {
-  addOutline,
-  arrowDownOutline,
-  pauseOutline,
-  playOutline,
-  removeOutline,
-  stopOutline,
-  volumeHighOutline,
-  volumeLowOutline,
-} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import DraggableAudioSidebarVumeter from 'src/draggables/audio/draggable-audio-sidebar-vumeter.vue';
@@ -43,13 +33,15 @@ const {downloadAudio} = useAudioDownload();
       small-tooltip
       tooltip-placement="left"
     >
-      <IonIcon
+      <AppIcon
         v-if="isPlaying"
-        :icon="pauseOutline"
+        icon="pause"
+        size="small"
       />
-      <IonIcon
+      <AppIcon
         v-if="!isPlaying"
-        :icon="playOutline"
+        icon="play"
+        size="small"
       />
     </AppButton>
 
@@ -59,7 +51,10 @@ const {downloadAudio} = useAudioDownload();
       tooltip="Stop"
       tooltip-placement="left"
     >
-      <IonIcon :icon="stopOutline" />
+      <AppIcon
+        icon="stop"
+        size="small"
+      />
     </AppButton>
 
     <AppButton
@@ -69,7 +64,10 @@ const {downloadAudio} = useAudioDownload();
       tooltip="Volume Up"
       tooltip-placement="left"
     >
-      <IonIcon :icon="volumeHighOutline" />
+      <AppIcon
+        icon="volumeUp"
+        size="small"
+      />
     </AppButton>
 
     <AppButton
@@ -79,7 +77,10 @@ const {downloadAudio} = useAudioDownload();
       tooltip="Volume Down"
       tooltip-placement="left"
     >
-      <IonIcon :icon="volumeLowOutline" />
+      <AppIcon
+        icon="volumeDown"
+        size="small"
+      />
     </AppButton>
 
     <AppButton
@@ -89,7 +90,10 @@ const {downloadAudio} = useAudioDownload();
       tooltip="FFT Size Up"
       tooltip-placement="left"
     >
-      <IonIcon :icon="addOutline" />
+      <AppIcon
+        icon="plus"
+        size="small"
+      />
     </AppButton>
 
     <AppButton
@@ -99,7 +103,10 @@ const {downloadAudio} = useAudioDownload();
       tooltip="FFT Size Down"
       tooltip-placement="left"
     >
-      <IonIcon :icon="removeOutline" />
+      <AppIcon
+        icon="minus"
+        size="small"
+      />
     </AppButton>
 
     <AppButton
@@ -107,7 +114,10 @@ const {downloadAudio} = useAudioDownload();
       tooltip="Download"
       tooltip-placement="left"
     >
-      <IonIcon :icon="arrowDownOutline" />
+      <AppIcon
+        icon="download"
+        size="small"
+      />
     </AppButton>
 
     <FilteringInfo />

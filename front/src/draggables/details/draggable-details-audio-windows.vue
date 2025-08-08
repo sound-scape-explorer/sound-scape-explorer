@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {headsetOutline} from 'ionicons/icons';
-import {NButton, NGi, NGrid, NTag} from 'naive-ui';
+import {NGi, NGrid, NTag} from 'naive-ui';
+import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useDate} from 'src/composables/use-date';
 import {type Interval} from 'src/composables/use-intervals';
@@ -23,12 +23,15 @@ const {convertTimestampToDate} = useDate();
     placement="bottom"
   >
     <template #body>
-      <NButton
-        size="tiny"
-        @click="() => select(window)"
+      <AppButton
+        :handle-click="() => select(window)"
+        size="small"
       >
-        <IonIcon :icon="headsetOutline" />
-      </NButton>
+        <AppIcon
+          icon="audio"
+          size="small"
+        />
+      </AppButton>
     </template>
 
     <template #tooltip>

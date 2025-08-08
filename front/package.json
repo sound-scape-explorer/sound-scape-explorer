@@ -29,6 +29,7 @@
     "wavesurfer.js": "^6.6.3"
   },
   "devDependencies": {
+    "@blueprintjs/icons": "^6.0.0",
     "@ionic/vue": "^8.3.3",
     "@types/chroma-js": "^2.4.0",
     "@types/colormap": "^2.3.1",

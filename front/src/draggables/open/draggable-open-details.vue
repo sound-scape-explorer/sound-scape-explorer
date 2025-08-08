@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
 import {downloadJson} from '@shared/browser';
 import {inferFilename} from '@shared/config';
-import {downloadOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppGrid, {type AppGridItem} from 'src/app/app-grid.vue';
 import AppHeader from 'src/app/app-header.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useConfig} from 'src/composables/use-config';
 import {computed} from 'vue';
 
@@ -64,7 +63,10 @@ const download = () => {
         tooltip="Download .json"
         tooltip-placement="bottom"
       >
-        <IonIcon :icon="downloadOutline" />
+        <AppIcon
+          icon="download"
+          size="small"
+        />
       </AppButton>
     </AppHeader>
 
@@ -81,15 +83,15 @@ const download = () => {
 
 .container {
   display: flex;
-  overflow: auto;
   flex-direction: column;
-  width: sizes.$s0;
-  max-height: sizes.$h0;
+  gap: sizes.$g0;
   margin-top: sizes.$p0;
+  max-height: sizes.$h0;
+  overflow: auto;
   padding-right: sizes.$p0;
   text-align: right;
   text-wrap: stable;
-  gap: sizes.$g0;
+  width: sizes.$s0;
 
   @include scrolls.tiny-scrollbar;
 }
