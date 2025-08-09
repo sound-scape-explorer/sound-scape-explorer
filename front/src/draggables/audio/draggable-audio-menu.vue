@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
+import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {useConfig} from 'src/composables/use-config';
 import {useDate} from 'src/composables/use-date';
 import {useInterval} from 'src/composables/use-interval';
@@ -7,16 +8,15 @@ import {PLAYBACK_RATE, STRING_DELIMITER} from 'src/constants';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
-import {useAudioLock} from 'src/draggables/audio/use-audio-lock';
 import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
 
 const {size} = useAudioFourier();
 const {config} = useConfig();
 const {currentInterval} = useInterval();
-const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
+const {convertTimestampToIsoDate} = useDate();
 const {currentIndex} = useInterval();
 const {rate, readable} = useAudioRate();
-const {lock, unlock} = useAudioLock();
+const {lock, unlock} = useScatterCamera();
 const {window, duration} = useAudioFile();
 const {gain} = useAudioGain();
 </script>
