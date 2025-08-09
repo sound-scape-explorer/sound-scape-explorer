@@ -5,6 +5,7 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
+import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
@@ -15,6 +16,7 @@ import {watch} from 'vue';
 const {isActive, isFiltering, isWireframe} = useDraggableSelection();
 const {filter} = useScatterFilterSpatial();
 const {update} = useScatterGlobalFilter();
+const {lock, unlock} = useScatterCamera();
 
 const {
   xRange,
@@ -98,6 +100,8 @@ watch(
             :min="xBounds[0]"
             :step="stepRange"
             range
+            @mousedown="lock"
+            @mouseup="unlock"
           />
         </NSpace>
       </div>
@@ -112,6 +116,8 @@ watch(
             :min="yBounds[0]"
             :step="stepRange"
             range
+            @mousedown="lock"
+            @mouseup="unlock"
           />
         </NSpace>
       </div>
@@ -126,6 +132,8 @@ watch(
             :min="zBounds[0]"
             :step="stepRange"
             range
+            @mousedown="lock"
+            @mouseup="unlock"
           />
         </NSpace>
       </div>
@@ -138,6 +146,8 @@ watch(
           :max="90"
           :min="-90"
           :step="stepAngle"
+          @mousedown="lock"
+          @mouseup="unlock"
         />
       </NSpace>
 
@@ -149,6 +159,8 @@ watch(
           :max="90"
           :min="-90"
           :step="stepAngle"
+          @mousedown="lock"
+          @mouseup="unlock"
         />
       </NSpace>
 
@@ -160,6 +172,8 @@ watch(
           :max="90"
           :min="-90"
           :step="stepAngle"
+          @mousedown="lock"
+          @mouseup="unlock"
         />
       </NSpace>
     </AppDraggableMenu>
