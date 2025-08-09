@@ -1,3 +1,4 @@
+import {useDebounceFn} from '@vueuse/core';
 import {type Data} from 'plotly.js-dist-min';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterEmbeddings} from 'src/components/scatter/use-scatter-embeddings';
@@ -58,6 +59,8 @@ export function useScatterRender() {
     data.value = newData;
   };
 
+  const debouncedRender = useDebounceFn(render, 20);
+
   const reset = () => {
     data.value = [];
     isFused.value = false;
@@ -68,7 +71,7 @@ export function useScatterRender() {
     isEnabled,
     data,
     generate,
-    render,
+    render: debouncedRender,
     reset,
   };
 }
