@@ -3,7 +3,7 @@ import {type DraggableKey} from 'src/composables/use-draggables';
 const draggablePrefix = '_draggable';
 
 export enum Shortcut {
-  _draggableHideShow = 'Esc',
+  _draggableFocus = 'Esc',
   _draggableCycleNext = 'Tab', // just for doc
   _draggableCyclePrevious = 'Shift+Tab', // just for doc
   _draggableClose = 'x',

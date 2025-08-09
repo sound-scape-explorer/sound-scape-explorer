@@ -10,7 +10,11 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {useConfig} from 'src/composables/use-config';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {Shortcut} from 'src/composables/use-shortcuts';
-import {PlotBackground, ScatterBorderWidth, SpectrogramColorMap} from 'src/constants';
+import {
+  PlotBackground,
+  ScatterBorderWidth,
+  SpectrogramColorMap,
+} from 'src/constants';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 
 const {
@@ -66,7 +70,7 @@ const reload = () => location.reload();
       </DraggableSettingsItem>
 
       <DraggableSettingsItem
-        :title="`Hide menu also in hidden mode (${Shortcut._draggableHideShow})`"
+        :title="`Hide menu icons in Focus mode (${Shortcut._draggableFocus})`"
       >
         <AppCheckbox v-model="isHidingMenuOnDraggableToggle" />
       </DraggableSettingsItem>
