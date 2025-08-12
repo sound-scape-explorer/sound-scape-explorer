@@ -1,14 +1,13 @@
 import {type Data} from 'plotly.js-dist-min';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
-import {useSelectionProps} from 'src/draggables/selection/use-selection-props';
 import {useSelectionRotation} from 'src/draggables/selection/use-selection-rotation';
+import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {useSelectionVertices} from 'src/draggables/selection/use-selection-vertices';
 import {computed} from 'vue';
 
 export function useSelectionRender() {
   const {isWireframe} = useDraggableSelection();
-  const {xRange, yRange, zRange, tiltAngleX, tiltAngleY, tiltAngleZ} =
-    useSelectionProps();
+  const {xRange, yRange, zRange, xAngle, yAngle, zAngle} = useSelectionState();
   const {i, j, k} = useSelectionVertices();
   const {rotatePoint} = useSelectionRotation();
 
@@ -56,9 +55,9 @@ export function useSelectionRender() {
         translatedX,
         translatedY,
         translatedZ,
-        tiltAngleX.value,
-        tiltAngleY.value,
-        tiltAngleZ.value,
+        xAngle.value,
+        yAngle.value,
+        zAngle.value,
       );
 
       // Translate back to original position

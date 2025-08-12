@@ -1,24 +1,26 @@
 import {useReductions} from 'src/composables/use-reductions';
 import {ref} from 'vue';
 
-const xRange = ref([-1, 1]);
-const yRange = ref([-1, 1]);
-const zRange = ref([-1, 1]);
+const name = ref<string>('selection');
+
+const xRange = ref<[number, number]>([-1, 1]);
+const yRange = ref<[number, number]>([-1, 1]);
+const zRange = ref<[number, number]>([-1, 1]);
 
 const xBounds = ref([-1, 1]);
 const yBounds = ref([-1, 1]);
 const zBounds = ref([-1, 1]);
 
-const tiltAngleX = ref(0);
-const tiltAngleY = ref(0);
-const tiltAngleZ = ref(0);
+const xAngle = ref(0);
+const yAngle = ref(0);
+const zAngle = ref(0);
 
 const precision = 1;
 const offset = 1;
 const stepRange = 0.1;
 const stepAngle = 5;
 
-export function useSelectionProps() {
+export function useSelectionState() {
   const {reductions} = useReductions();
 
   const setBounds = () => {
@@ -54,6 +56,10 @@ export function useSelectionProps() {
     xRange.value = [xCenter - offset, xCenter + offset];
     yRange.value = [yCenter - offset, yCenter + offset];
     zRange.value = [zCenter - offset, zCenter + offset];
+
+    xAngle.value = 0;
+    yAngle.value = 0;
+    zAngle.value = 0;
   };
 
   const expandRanges = () => {
@@ -63,15 +69,16 @@ export function useSelectionProps() {
   };
 
   return {
+    name,
     xRange,
     yRange,
     zRange,
     xBounds,
     yBounds,
     zBounds,
-    tiltAngleX,
-    tiltAngleY,
-    tiltAngleZ,
+    xAngle,
+    yAngle,
+    zAngle,
     stepRange,
     stepAngle,
     setBounds,

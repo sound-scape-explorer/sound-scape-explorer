@@ -14,7 +14,7 @@ import {useReductions} from 'src/composables/use-reductions';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useViewState} from 'src/composables/use-view-state';
-import {useSelectionProps} from 'src/draggables/selection/use-selection-props';
+import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {nextTick, ref} from 'vue';
 
@@ -45,7 +45,7 @@ export function useViewLoader() {
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
-  const {setBounds} = useSelectionProps();
+  const {setBounds} = useSelectionState();
 
   const steps: Step[] = [
     ['Reading aggregations', readAggregations],

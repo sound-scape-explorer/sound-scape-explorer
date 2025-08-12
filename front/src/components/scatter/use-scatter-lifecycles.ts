@@ -12,7 +12,7 @@ import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
-import {useSelectionProps} from 'src/draggables/selection/use-selection-props';
+import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {onMounted, watch} from 'vue';
 
@@ -51,8 +51,7 @@ export function useScatterLifecycles() {
 
   const {isActive: isSelectionActive, isWireframe: isSelectionWireframe} =
     useDraggableSelection();
-  const {xRange, yRange, zRange, tiltAngleX, tiltAngleY, tiltAngleZ} =
-    useSelectionProps();
+  const {xRange, yRange, zRange, xAngle, yAngle, zAngle} = useSelectionState();
 
   onMounted(mountContainer);
 
@@ -87,9 +86,9 @@ export function useScatterLifecycles() {
       xRange,
       yRange,
       zRange,
-      tiltAngleX,
-      tiltAngleY,
-      tiltAngleZ,
+      xAngle,
+      yAngle,
+      zAngle,
     ],
     async () => {
       if (isRendering || !isEnabled.value) {

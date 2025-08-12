@@ -1,7 +1,7 @@
 import {useReductions} from 'src/composables/use-reductions';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
-import {useSelectionProps} from 'src/draggables/selection/use-selection-props';
 import {useSelectionRotation} from 'src/draggables/selection/use-selection-rotation';
+import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
@@ -9,8 +9,7 @@ const filtered = ref<boolean[]>([]);
 export function useScatterFilterSpatial() {
   const {reductions} = useReductions();
   const {isFiltering} = useDraggableSelection();
-  const {xRange, yRange, zRange, tiltAngleX, tiltAngleY, tiltAngleZ} =
-    useSelectionProps();
+  const {xRange, yRange, zRange, xAngle, yAngle, zAngle} = useSelectionState();
   const {rotatePoint} = useSelectionRotation();
 
   const isFiltered = (index: number): boolean => {
@@ -51,9 +50,9 @@ export function useScatterFilterSpatial() {
       translatedX,
       translatedY,
       translatedZ,
-      tiltAngleX.value,
-      tiltAngleY.value,
-      tiltAngleZ.value,
+      xAngle.value,
+      yAngle.value,
+      zAngle.value,
     );
 
     // Check if the transformed point is within the axis-aligned box bounds

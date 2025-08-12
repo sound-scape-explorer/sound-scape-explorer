@@ -12,6 +12,7 @@ import DocumentOpen from '@blueprintjs/icons/lib/esm/generated/16px/paths/docume
 import DoubleCaretHorizontal from '@blueprintjs/icons/lib/esm/generated/16px/paths/double-caret-horizontal';
 import DoubleCaretVertical from '@blueprintjs/icons/lib/esm/generated/16px/paths/double-caret-vertical';
 import Download from '@blueprintjs/icons/lib/esm/generated/16px/paths/download';
+import Error from '@blueprintjs/icons/lib/esm/generated/16px/paths/error';
 import Exchange from '@blueprintjs/icons/lib/esm/generated/16px/paths/exchange';
 import EyeOff from '@blueprintjs/icons/lib/esm/generated/16px/paths/eye-off';
 import EyeOn from '@blueprintjs/icons/lib/esm/generated/16px/paths/eye-on';
@@ -79,6 +80,7 @@ const PathKey = z.enum([
   'calculator',
   'detect',
   'reset',
+  'error',
 ]);
 // eslint-disable-next-line no-redeclare
 type PathKey = z.infer<typeof PathKey>;
@@ -130,6 +132,7 @@ const paths: Record<PathKey, string[]> = {
   calculator: Calculator,
   detect: Detection,
   reset: Reset,
+  error: Error,
 };
 
 interface Props {
