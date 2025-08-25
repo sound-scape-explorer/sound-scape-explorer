@@ -7,6 +7,7 @@ import Clean from '@blueprintjs/icons/lib/esm/generated/16px/paths/clean';
 import Cog from '@blueprintjs/icons/lib/esm/generated/16px/paths/cog';
 import ColorFill from '@blueprintjs/icons/lib/esm/generated/16px/paths/color-fill';
 import Cross from '@blueprintjs/icons/lib/esm/generated/16px/paths/cross';
+import Delta from '@blueprintjs/icons/lib/esm/generated/16px/paths/delta';
 import Detection from '@blueprintjs/icons/lib/esm/generated/16px/paths/detection';
 import DocumentOpen from '@blueprintjs/icons/lib/esm/generated/16px/paths/document-open';
 import DoubleCaretHorizontal from '@blueprintjs/icons/lib/esm/generated/16px/paths/double-caret-horizontal';
@@ -81,6 +82,7 @@ const PathKey = z.enum([
   'detect',
   'reset',
   'error',
+  'delta',
 ]);
 // eslint-disable-next-line no-redeclare
 type PathKey = z.infer<typeof PathKey>;
@@ -133,6 +135,7 @@ const paths: Record<PathKey, string[]> = {
   detect: Detection,
   reset: Reset,
   error: Error,
+  delta: Delta,
 };
 
 interface Props {

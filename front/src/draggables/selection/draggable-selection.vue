@@ -3,7 +3,6 @@ import {NList, NListItem, NSlider, NSpace} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import AppSwitch from 'src/app/app-switch.vue';
-import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
@@ -44,9 +43,24 @@ const {
 
 const {selections, use, save, remove} = useSelectionStorage();
 
-const nameExists = computed(
-  () => selections.value.filter((s) => s.name === name.value).length > 0,
-);
+const selection = computed(() => {
+  return selections.value.find((s) => s.name === name.value);
+});
+
+const hasIdenticalSave = computed(() => {
+  if (!selection.value) {
+    return false;
+  }
+
+  return (
+    xRange.value === selection.value.xRange &&
+    yRange.value === selection.value.yRange &&
+    zRange.value === selection.value.zRange &&
+    xAngle.value === selection.value.xAngle &&
+    yAngle.value === selection.value.yAngle &&
+    zAngle.value === selection.value.zAngle
+  );
+});
 
 watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
   filter();
@@ -61,89 +75,50 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
     </AppDraggableSidebar>
 
     <AppDraggableMenu :class="$style.menu">
-      <span>list</span>
-
-      <div>
-        <NList
-          clickable
-          hoverable
-        >
-          <NListItem
-            v-for="s in selections"
-            :class="[
-              $style['list-item'],
-              {[$style['list-item-active']]: s.name === name},
-            ]"
-            @click="() => use(s)"
-          >
-            {{ s.name }}
-          </NListItem>
-        </NList>
-      </div>
-
-      <h2>Wireframe</h2>
-
-      <div>
-        <AppSwitch
-          v-model="isWireframe"
-          checked="Yes"
-          native
-          unchecked="No"
-        />
-      </div>
-
-      <h2>Display</h2>
-
-      <div>
-        <AppSwitch
-          v-model="isActive"
-          checked="Yes"
-          native
-          unchecked="No"
-        />
-      </div>
-
       <h2>Filtering</h2>
 
-      <div>
-        <AppSwitch
-          v-model="isFiltering"
-          checked="Yes"
-          native
-          unchecked="No"
-        />
+      <div :class="$style.toggles">
+        <div>
+          <AppSwitch
+            v-model="isFiltering"
+            checked="Yes"
+            native
+            unchecked="No"
+          />
+        </div>
+
+        <div>
+          <span>Display</span>
+
+          <div>
+            <AppSwitch
+              v-model="isActive"
+              checked="Yes"
+              native
+              unchecked="No"
+            />
+          </div>
+        </div>
+
+        <div>
+          <span>Wireframe</span>
+
+          <div>
+            <AppSwitch
+              v-model="isWireframe"
+              checked="Yes"
+              native
+              unchecked="No"
+            />
+          </div>
+        </div>
       </div>
 
-      <h2>buttons</h2>
+      <h2>Quick control</h2>
 
-      <div>
+      <div :class="$style.buttons">
         <AppButton :handle-click="resetRanges">reset</AppButton>
         <AppButton :handle-click="expandRanges">expand</AppButton>
-        <AppButton :handle-click="save">save</AppButton>
-        <AppButton :handle-click="remove">delete</AppButton>
-      </div>
-
-      <h2 :class="$style.name">
-        name
-        <AppTooltip placement="bottom">
-          <template #body>
-            <AppIcon
-              v-if="nameExists"
-              color="active"
-              icon="error"
-              size="small"
-            />
-          </template>
-
-          <template #tooltip>already exists</template>
-        </AppTooltip>
-      </h2>
-
-      <div>
-        <AppInput
-          v-model="name"
-          align="left"
-        />
       </div>
 
       <h2>xRange</h2>
@@ -232,6 +207,57 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
           @mouseup="unlock"
         />
       </NSpace>
+
+      <h2 :class="$style.name">
+        Current
+        <AppIcon
+          v-if="!hasIdenticalSave"
+          color="active"
+          icon="delta"
+          size="small"
+        />
+      </h2>
+
+      <div :class="$style.input">
+        <AppInput
+          v-model="name"
+          align="left"
+        />
+
+        <AppButton
+          :disabled="hasIdenticalSave"
+          :handle-click="save"
+        >
+          save
+        </AppButton>
+
+        <AppButton
+          :disabled="!selection"
+          :handle-click="remove"
+        >
+          delete
+        </AppButton>
+      </div>
+
+      <span>Saves</span>
+
+      <div>
+        <NList
+          clickable
+          hoverable
+        >
+          <NListItem
+            v-for="s in selections"
+            :class="[
+              $style['list-item'],
+              {[$style['list-item-active']]: s.name === name},
+            ]"
+            @click="() => use(s)"
+          >
+            {{ s.name }}
+          </NListItem>
+        </NList>
+      </div>
     </AppDraggableMenu>
   </AppDraggable>
 </template>
@@ -249,13 +275,14 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
   gap: sizes.$g0;
   justify-content: flex-start;
 
-  & > div > svg {
+  & > svg {
     transform: translate3d(0, 1px, 0);
-
-    & > path {
-      fill: red !important;
-    }
   }
+}
+
+.buttons {
+  display: flex;
+  gap: sizes.$g0;
 }
 
 .list-item:hover {
@@ -264,5 +291,27 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
 
 .list-item-active {
   background: v-bind('colors.actionColor');
+}
+
+.toggles {
+  align-items: center;
+  display: flex;
+  gap: sizes.$g0;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+    gap: sizes.$g0 * 2;
+  }
+}
+
+.input {
+  align-items: center;
+  display: flex;
+  gap: sizes.$g0;
+
+  & > :first-child {
+    width: 100%;
+  }
 }
 </style>
