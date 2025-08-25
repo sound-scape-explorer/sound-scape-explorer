@@ -1,6 +1,6 @@
 import {downloadJson} from '@shared/browser.ts';
-import {inferFilename} from '@shared/config';
 import {ConfigDto, type FileDto} from '@shared/dtos';
+import {getStorageFilename} from '@shared/files';
 import {useCallback} from 'react';
 import {TAG_PREFIX_FOR_TABLE} from 'src/constants';
 import {useSettingsState} from 'src/hooks/use-settings-state';
@@ -55,7 +55,7 @@ export function useExport() {
 
   const exportToJson = useCallback(() => {
     const dto = generate();
-    const filename = inferFilename(dto);
+    const filename = getStorageFilename(dto);
     downloadJson(dto, filename);
   }, [generate]);
 

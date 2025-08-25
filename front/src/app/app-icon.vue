@@ -15,11 +15,13 @@ import DoubleCaretVertical from '@blueprintjs/icons/lib/esm/generated/16px/paths
 import Download from '@blueprintjs/icons/lib/esm/generated/16px/paths/download';
 import Error from '@blueprintjs/icons/lib/esm/generated/16px/paths/error';
 import Exchange from '@blueprintjs/icons/lib/esm/generated/16px/paths/exchange';
+import Export from '@blueprintjs/icons/lib/esm/generated/16px/paths/export';
 import EyeOff from '@blueprintjs/icons/lib/esm/generated/16px/paths/eye-off';
 import EyeOn from '@blueprintjs/icons/lib/esm/generated/16px/paths/eye-on';
 import EyeOpen from '@blueprintjs/icons/lib/esm/generated/16px/paths/eye-open';
 import HeatGrid from '@blueprintjs/icons/lib/esm/generated/16px/paths/heat-grid';
 import Help from '@blueprintjs/icons/lib/esm/generated/16px/paths/help';
+import Import from '@blueprintjs/icons/lib/esm/generated/16px/paths/import';
 import Layout from '@blueprintjs/icons/lib/esm/generated/16px/paths/layout';
 import LayoutBalloon from '@blueprintjs/icons/lib/esm/generated/16px/paths/layout-balloon';
 import Maximize from '@blueprintjs/icons/lib/esm/generated/16px/paths/maximize';
@@ -83,6 +85,8 @@ const PathKey = z.enum([
   'reset',
   'error',
   'delta',
+  'export',
+  'import',
 ]);
 // eslint-disable-next-line no-redeclare
 type PathKey = z.infer<typeof PathKey>;
@@ -136,6 +140,8 @@ const paths: Record<PathKey, string[]> = {
   reset: Reset,
   error: Error,
   delta: Delta,
+  import: Import,
+  export: Export,
 };
 
 interface Props {

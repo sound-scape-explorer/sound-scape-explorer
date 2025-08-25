@@ -3,6 +3,7 @@ import {NList, NListItem, NSlider, NSpace} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import AppSwitch from 'src/app/app-switch.vue';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
@@ -16,7 +17,7 @@ import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {useSelectionStorage} from 'src/draggables/selection/use-selection-storage';
-import {computed, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 
 const {isActive, isFiltering, isWireframe} = useDraggableSelection();
 const {filter} = useScatterFilterSpatial();
@@ -41,7 +42,8 @@ const {
   expandRanges,
 } = useSelectionState();
 
-const {selections, use, save, remove} = useSelectionStorage();
+const {selections, use, save, remove, exportJson, importJson} =
+  useSelectionStorage();
 
 const selection = computed(() => {
   return selections.value.find((s) => s.name === name.value);
@@ -61,6 +63,22 @@ const hasIdenticalSave = computed(() => {
     zAngle.value === selection.value.zAngle
   );
 });
+
+const fileInput = ref<HTMLInputElement>();
+
+const triggerFileInput = () => {
+  fileInput.value?.click();
+};
+
+const handleFileInputChange = (e: Event) => {
+  e.preventDefault();
+  const target = e.target as HTMLInputElement;
+
+  if (target.files && target.files[0]) {
+    const file = target.files[0];
+    importJson(file);
+  }
+};
 
 watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
   filter();
@@ -239,7 +257,47 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
         </AppButton>
       </div>
 
-      <span>Saves</span>
+      <div :class="$style.saves">
+        Saves
+
+        <div>
+          <AppTooltip placement="bottom">
+            <template #body>
+              <input
+                ref="fileInput"
+                :class="$style['import']"
+                accept="application/json"
+                type="file"
+                @change="handleFileInputChange"
+              />
+              <AppButton :handle-click="triggerFileInput">
+                <AppIcon
+                  icon="import"
+                  size="small"
+                />
+              </AppButton>
+            </template>
+
+            <template #tooltip>Import</template>
+          </AppTooltip>
+
+          <AppTooltip placement="bottom">
+            <template #body>
+              <AppButton
+                :disabled="selections.length === 0"
+                :handle-click="exportJson"
+              >
+                <AppIcon
+                  icon="export"
+                  size="small"
+                />
+              </AppButton>
+            </template>
+
+            <template #tooltip>Export</template>
+          </AppTooltip>
+        </div>
+      </div>
 
       <div>
         <NList
@@ -312,6 +370,22 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
 
   & > :first-child {
     width: 100%;
+  }
+}
+
+.saves {
+  display: flex;
+  flex-direction: column;
+
+  & > div {
+    align-items: center;
+    display: flex;
+    gap: sizes.$g0;
+    justify-content: flex-start;
+
+    input {
+      display: none;
+    }
   }
 }
 </style>

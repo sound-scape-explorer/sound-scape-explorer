@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {downloadJson} from '@shared/browser';
-import {inferFilename} from '@shared/config';
+import {getStorageFilename} from '@shared/files';
 import AppButton from 'src/app/app-button.vue';
 import AppGrid, {type AppGridItem} from 'src/app/app-grid.vue';
 import AppHeader from 'src/app/app-header.vue';
@@ -47,7 +47,7 @@ const download = () => {
     return;
   }
 
-  const filename = inferFilename(config.value);
+  const filename = getStorageFilename(config.value);
   downloadJson(config.value, filename);
 };
 </script>

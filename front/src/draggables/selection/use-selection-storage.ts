@@ -1,3 +1,6 @@
+import {downloadJson} from '@shared/browser';
+import {getStorageFilename, readJson} from '@shared/files';
+import {useConfig} from 'src/composables/use-config';
 import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {ref} from 'vue';
 import {z} from 'zod';
@@ -15,14 +18,17 @@ export const SelectionDto = z.object({
 // eslint-disable-next-line no-redeclare
 export type SelectionDto = z.infer<typeof SelectionDto>;
 
-const selections = ref<SelectionDto[]>([]);
+export const SelectionsDto = z.array(SelectionDto);
+
+// eslint-disable-next-line no-redeclare
+export type SelectionsDto = z.infer<typeof SelectionsDto>;
+
+const selections = ref<SelectionsDto>([]);
 
 export function useSelectionStorage() {
   const {name, xRange, yRange, zRange, xAngle, yAngle, zAngle} =
     useSelectionState();
-
-  const download = () => {};
-  const upload = () => {};
+  const {config} = useConfig();
 
   const save = () => {
     const found = selections.value.find((s) => s.name === name.value);
@@ -72,12 +78,36 @@ export function useSelectionStorage() {
     zAngle.value = s.zAngle;
   };
 
+  const exportJson = () => {
+    if (selections.value.length === 0 || config.value === null) {
+      return;
+    }
+
+    const filename = getStorageFilename(config.value);
+    downloadJson(selections.value, `${filename}-selections`);
+  };
+
+  const importJson = (file: File) => {
+    readJson(file, (e) => {
+      const result = e.target?.result;
+
+      if (typeof result === 'undefined' || typeof result !== 'string') {
+        return;
+      }
+
+      const json = JSON.parse(result);
+      const data = SelectionsDto.parse(json);
+      selections.value = data;
+      use(selections.value[0]);
+    });
+  };
+
   return {
     selections,
-    download,
-    upload,
     remove,
     save,
     use,
+    exportJson,
+    importJson,
   };
 }
