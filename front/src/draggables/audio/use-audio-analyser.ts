@@ -6,7 +6,7 @@ import {ref} from 'vue';
 const analyser = ref<AnalyserNode | null>(null);
 const floats = ref<Float32Array<ArrayBuffer> | null>(null);
 const isClipping = ref<boolean>(false);
-const timer = ref<number | null>(null);
+const timer = ref<NodeJS.Timeout | null>(null);
 const size = 1024; // arbitrary
 const rms = ref<number>(0);
 

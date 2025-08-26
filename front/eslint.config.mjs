@@ -41,6 +41,9 @@ export default [
   },
   {
     files: ['**/*.{vue,ts,js}'],
+    env: {
+      node: true,
+    },
     plugins: {
       ...plugins,
       '@typescript-eslint': tsPlugin,
