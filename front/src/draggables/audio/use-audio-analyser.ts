@@ -4,7 +4,7 @@ import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {ref} from 'vue';
 
 const analyser = ref<AnalyserNode | null>(null);
-const floats = ref<Float32Array | null>(null);
+const floats = ref<Float32Array<ArrayBuffer> | null>(null);
 const isClipping = ref<boolean>(false);
 const timer = ref<number | null>(null);
 const size = 1024; // arbitrary
