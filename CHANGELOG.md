@@ -1,3 +1,37 @@
+# [14.0.0-beta.14](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.13...v14.0.0-beta.14) (2025-08-26)
+
+
+### Bug Fixes
+
+* **front:** add global camera unlocker ([728f0c5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/728f0c51085a2fbecc6dd55f530985aa76b27f8e))
+* **front:** disable plotly 2d selection ([91bc545](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/91bc5457362883504d473b25ac4eeef5b145ddfa))
+* **front:** fix timeout type for vue ([337e7c6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/337e7c6e47f7bc34a908a29afe61e085a3f41cfa))
+* **front:** improve contrast for peak feedback ([9625c2e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9625c2e8e14ffca74e0420c6909d4cdd5f1c15e5))
+* **front:** improve UI for selections ([caf927d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/caf927d4d82518b46cca82e1e26fb2339b53dadd))
+* **front:** link back scatter export ([6a795eb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6a795eb0b60d138a3867907d5ce870177d80c9f1))
+* **front:** lock camera on selection slider change ([87cb513](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/87cb513ea0f77626e2ffe8fa7d58ef1f0c7a3a01))
+* **front:** pass the expected sample rate correctly ([8a9465c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8a9465cc9b0f0ced785339989a1ab2ba171c9d61))
+* **front:** purge alpha and beta options with old selection ([5f65455](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5f654558f16c7ab50ad2340fb74f030ee50071de))
+* **front:** rename hidden mode to focus mode ([2bbdfd3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2bbdfd34828251ac72916eca9ee2fc9ae4de1201))
+* **front:** type audio floats as array buffer ([a70f168](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a70f16828e75eda79b671630f713d2e0edf31c83))
+* **front:** update sample rate readables on component mount ([d264212](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d264212f3ed882061a1b0eb9355fa5094ae27672))
+* **front:** update vue and vueuse deps to latest ([5620ae9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5620ae9b328aa90ca18e9b8ae8f5b49a7cece8a6))
+
+
+### Features
+
+* **electron:** add new welcome screen with better audio handling ([03c0591](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/03c0591af7d59036026a77e283de3cb108afb60e))
+* **front:** add color gradient hover tooltips for numeric tags ([de6a64f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/de6a64f8a285df89e153be4ac0b6c0c9fc8071d9))
+* **front:** add draft for spatial selection and filtering ([506679c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/506679c629f28aec8e7069a7e1772212e4e4ba49))
+* **front:** add selections imports and exports ([72be301](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/72be30121e49224669d23c85f58aae1e207b1c92))
+* **front:** add spatial filtering ([3cd6162](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3cd616276595fc610b4840f78d11ddc1e1c78d36))
+* **front:** use blueprint icon pack ([3117caf](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3117caf59ac83dc4e859a367a36c42e197423f08))
+
+
+### Performance Improvements
+
+* **front:** add 20ms scatter render debounce ([9c3d9dc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9c3d9dcf674c285733b50e18b1bd7d1b605e22a8))
+
 # [14.0.0-beta.13](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.12...v14.0.0-beta.13) (2025-07-29)
 
 
