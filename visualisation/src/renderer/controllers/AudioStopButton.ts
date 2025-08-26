@@ -1,5 +1,6 @@
 import {render} from '../renderer';
 
+// todo: remove
 export class AudioStopButton {
   private readonly node = document.getElementById('audio-stop-button');
 

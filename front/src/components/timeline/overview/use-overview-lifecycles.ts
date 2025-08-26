@@ -18,7 +18,7 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
   const {render} = useOverviewRender();
   const {isActive} = useDraggableCalendar();
   const {left, right, start, end} = useTimelineRange();
-  const {filterByTime} = useScatterFilterTime();
+  const {filter: filterByTime} = useScatterFilterTime();
   const {update: updateElements} = useOverviewElements();
   const {position} = useOverviewHandlers();
   const {isHovering, isDragging} = useTimelineHandlers().overview;

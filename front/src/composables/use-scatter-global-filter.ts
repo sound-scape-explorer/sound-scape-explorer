@@ -1,3 +1,4 @@
+import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
@@ -10,6 +11,7 @@ export function useScatterGlobalFilter() {
   const {filtered: labelFiltered} = useScatterFilterTag();
   const {filtered: timeFiltered} = useScatterFilterTime();
   const {filtered: temporalFiltered} = useScatterFilterTemporal();
+  const {filtered: spatialFiltered} = useScatterFilterSpatial();
 
   const update = () => {
     const l = timeFiltered.value.length;
@@ -19,7 +21,8 @@ export function useScatterGlobalFilter() {
       newFiltered[i] =
         labelFiltered.value[i] ||
         timeFiltered.value[i] ||
-        temporalFiltered.value[i];
+        temporalFiltered.value[i] ||
+        spatialFiltered.value[i];
     }
 
     filtered.value = newFiltered;

@@ -28,10 +28,7 @@ const {
   spectrogramColorMap,
   isDetailsAutoOpen,
   isAudioAutoOpen,
-  isAlphaPreview,
-  isBetaPreview,
   isTimezoneActive,
-  isCopyOnSelect2d,
   isWebGlScatter2d,
   isHidingMenuOnDraggableToggle,
   isSelectedPointHighlighted,
@@ -72,7 +69,7 @@ const reload = () => location.reload();
       </DraggableSettingsItem>
 
       <DraggableSettingsItem
-        :title="`Hide menu also in hidden mode (${Shortcut._draggableHideShow})`"
+        :title="`Hide menu icons in Focus mode (${Shortcut._draggableFocus})`"
       >
         <AppCheckbox v-model="isHidingMenuOnDraggableToggle" />
       </DraggableSettingsItem>
@@ -174,12 +171,6 @@ const reload = () => location.reload();
         <AppCheckbox v-model="isWebGlScatter2d" />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem
-        title="2d scatters: Auto copy to clipboard after selection (alpha)"
-      >
-        <AppCheckbox v-model="isCopyOnSelect2d" />
-      </DraggableSettingsItem>
-
       <AppHeader>
         <h2>Plots (heatmaps, charts, ...)</h2>
       </AppHeader>
@@ -205,14 +196,6 @@ const reload = () => location.reload();
         <h2>Misc.</h2>
       </AppHeader>
 
-      <DraggableSettingsItem title="Preview alpha features">
-        <AppCheckbox v-model="isAlphaPreview" />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Preview beta features">
-        <AppCheckbox v-model="isBetaPreview" />
-      </DraggableSettingsItem>
-
       <DraggableSettingsItem title="Enable developer settings">
         <AppCheckbox v-model="isDevEnabled" />
       </DraggableSettingsItem>
@@ -236,20 +219,20 @@ const reload = () => location.reload();
 @use 'src/styles/scrolls';
 
 .reload {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 
 .container {
   display: flex;
-  overflow: auto;
   flex-direction: column;
-  width: sizes.$s0;
+  gap: sizes.$g0;
   height: sizes.$s0;
   margin-top: sizes.$p0;
+  overflow: auto;
   padding-right: sizes.$p0;
-  gap: sizes.$g0;
+  width: sizes.$s0;
 
   @include scrolls.tiny-scrollbar;
 }

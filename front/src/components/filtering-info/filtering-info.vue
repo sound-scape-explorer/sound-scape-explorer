@@ -24,6 +24,9 @@ const {
   isTemporalActive,
   temporalIn,
   temporalOut,
+  isSpatialActive,
+  spatialOut,
+  spatialIn,
 } = useFilteringInfoData();
 </script>
 
@@ -37,18 +40,25 @@ const {
         :class="$style.body"
         @click="cycleMode"
       >
-        <span v-if="isFilterMode">
+        <span
+          v-if="isFilterMode"
+          :class="$style.bold"
+        >
           {{ totalOut }}
         </span>
 
         <span
           v-if="isCollectMode"
-          :class="$style.active"
+          :class="$style.bold"
+          :style="`color: ${colors.pressedColor};`"
         >
           {{ totalIn }}
         </span>
 
-        <span v-if="isIntervalMode">
+        <span
+          v-if="isIntervalMode"
+          :class="$style.bold"
+        >
           {{ currentIndex }}
         </span>
       </div>
@@ -63,6 +73,10 @@ const {
         <p />
 
         <div :class="$style.list">
+          <div :class="$style.row">
+            <div>Interval population</div>
+            <span>{{ population }}</span>
+          </div>
           <div
             v-if="hasInterval"
             :class="$style.row"
@@ -75,18 +89,22 @@ const {
             }}</span>
           </div>
           <div :class="$style.row">
-            <div :class="{[$style.bold]: isCollectMode}">Total collected</div>
-            <span :class="[$style.active, {[$style.bold]: isCollectMode}]">{{
-              totalIn
-            }}</span>
+            <span
+              :class="{[$style.bold]: isCollectMode}"
+              :style="`color: ${colors.pressedColor};`"
+            >
+              Total collected
+            </span>
+            <span
+              :class="{[$style.bold]: isCollectMode}"
+              :style="`color: ${colors.pressedColor};`"
+            >
+              {{ totalIn }}
+            </span>
           </div>
           <div :class="$style.row">
             <div :class="{[$style.bold]: isFilterMode}">Total filtered</div>
             <span :class="{[$style.bold]: isFilterMode}">{{ totalOut }}</span>
-          </div>
-          <div :class="$style.row">
-            <div>Interval population</div>
-            <span>{{ population }}</span>
           </div>
         </div>
 
@@ -99,55 +117,81 @@ const {
             <span>Calendar</span>
             <span
               v-if="isTimeActive && isCollectMode"
-              :class="$style.active"
-              >{{ timeIn }} collected</span
+              :style="`color: ${colors.pressedColor};`"
             >
+              {{ timeIn }} collected
+            </span>
 
-            <span v-if="isTimeActive && (isFilterMode || isIntervalMode)"
-              >{{ timeOut }} filtered</span
-            >
+            <span v-if="isTimeActive && (isFilterMode || isIntervalMode)">
+              {{ timeOut }} filtered
+            </span>
 
             <span
               v-if="!isTimeActive"
               :class="$style.inactive"
-              >inactive</span
             >
+              inactive
+            </span>
           </div>
           <div :class="$style.row">
             <span>Labels</span>
             <span
               v-if="isLabelsActive && isCollectMode"
-              :class="$style.active"
-              >{{ labelsIn }} collected</span
+              :style="`color: ${colors.pressedColor};`"
             >
+              {{ labelsIn }} collected
+            </span>
 
-            <span v-if="isLabelsActive && (isFilterMode || isIntervalMode)"
-              >{{ labelsOut }} filtered</span
-            >
+            <span v-if="isLabelsActive && (isFilterMode || isIntervalMode)">
+              {{ labelsOut }} filtered
+            </span>
 
             <span
               v-if="!isLabelsActive"
               :class="$style.inactive"
-              >inactive</span
             >
+              inactive
+            </span>
           </div>
           <div :class="$style.row">
             <span>Temporal</span>
             <span
               v-if="isTemporalActive && isCollectMode"
-              :class="$style.active"
-              >{{ temporalIn }} collected</span
+              :style="`color: ${colors.pressedColor};`"
             >
+              {{ temporalIn }} collected
+            </span>
 
-            <span v-if="isTemporalActive && (isFilterMode || isIntervalMode)"
-              >{{ temporalOut }} filtered</span
-            >
+            <span v-if="isTemporalActive && (isFilterMode || isIntervalMode)">
+              {{ temporalOut }} filtered
+            </span>
 
             <span
               v-if="!isTemporalActive"
               :class="$style.inactive"
-              >inactive</span
             >
+              inactive
+            </span>
+          </div>
+          <div :class="$style.row">
+            <span>Spatial</span>
+            <span
+              v-if="isSpatialActive && isCollectMode"
+              :style="`color: ${colors.pressedColor};`"
+            >
+              {{ spatialIn }} collected
+            </span>
+
+            <span v-if="isSpatialActive && (isFilterMode || isIntervalMode)">
+              {{ spatialOut }} filtered
+            </span>
+
+            <span
+              v-if="!isSpatialActive"
+              :class="$style.inactive"
+            >
+              inactive
+            </span>
           </div>
         </div>
       </div>
@@ -173,13 +217,9 @@ const {
 }
 
 .row {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
-}
-
-.active {
-  color: v-bind('colors.pressedColor');
 }
 
 .bold {
@@ -187,9 +227,9 @@ const {
 }
 
 .body {
-  font-size: 0.9em;
-  display: flex;
   align-items: center;
+  display: flex;
+  font-size: 0.9em;
   justify-content: center;
   width: sizes.$p0 * 3;
 

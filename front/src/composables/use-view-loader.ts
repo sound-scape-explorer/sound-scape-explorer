@@ -1,4 +1,5 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
@@ -13,6 +14,7 @@ import {useReductions} from 'src/composables/use-reductions';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useViewState} from 'src/composables/use-view-state';
+import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {nextTick, ref} from 'vue';
 
@@ -36,12 +38,14 @@ export function useViewLoader() {
   const {isEnabled} = useScatterRender();
   const {filter: filterByLabel} = useScatterFilterTag();
   const {filter: filterByTemporal} = useScatterFilterTemporal();
-  const {filterByTime} = useScatterFilterTime();
+  const {filter: filterByTime} = useScatterFilterTime();
+  const {filter: filterBySpatial} = useScatterFilterSpatial();
 
   const {extraction, band, integration, reducer} = useViewSelection();
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
+  const {setBounds} = useSelectionState();
 
   const steps: Step[] = [
     ['Reading aggregations', readAggregations],
@@ -95,6 +99,8 @@ export function useViewLoader() {
     filterByLabel(labelSelection);
     filterByTime();
     filterByTemporal();
+    filterBySpatial();
+    setBounds();
 
     isLoading.value = false;
     close('view');

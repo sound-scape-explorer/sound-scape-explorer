@@ -1,4 +1,5 @@
 import {contextBridge} from 'electron';
+import {getAudioPath} from 'src/preload/get-audio-path';
 import {getStoragePath} from 'src/preload/get-storage-path';
 import {setStoragePath} from 'src/preload/set-storage-path';
 
@@ -19,6 +20,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getPathExistence,
   startAudioService,
   getAudioStatus,
+  getAudioPath,
   stopAudioService,
   createFrontWindow,
   createCampaignWindow,

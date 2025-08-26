@@ -1,3 +1,4 @@
+import {useDebounceFn} from '@vueuse/core';
 import {type Data} from 'plotly.js-dist-min';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterEmbeddings} from 'src/components/scatter/use-scatter-embeddings';
@@ -5,39 +6,60 @@ import {useScatterTrajectories} from 'src/components/scatter/use-scatter-traject
 import {useScatterTrajectoryAverage} from 'src/components/scatter/use-scatter-trajectory-average';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useTrajectories} from 'src/composables/use-trajectories';
+import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
+import {useSelectionRender} from 'src/draggables/selection/use-selection-render';
 import {ref} from 'vue';
 
 const data = ref<Data[]>([]);
 const isEnabled = ref<boolean>(false);
 
 export function useScatterRender() {
-  const {render: renderEmbeddings} = useScatterEmbeddings();
-  const {trajectories, isFused} = useTrajectories();
   const {generateColorScale: generate} = useScatterColorScale();
   const {scale: cyclingScale} = useColorsCycling();
+  const {trajectories, isFused} = useTrajectories();
+  const {render: renderEmbeddings} = useScatterEmbeddings();
   const {render: renderTrajectories} = useScatterTrajectories();
   const {render: renderTrajectoryAverage} = useScatterTrajectoryAverage();
 
+  const {isActive: isSelectionActive} = useDraggableSelection();
+  const {render: renderSelection} = useSelectionRender();
+
   const render = () => {
-    const embeddings = renderEmbeddings();
+    const newData: Data[] = [];
 
     // trajectories
     if (trajectories.value.length > 0) {
       if (isFused.value) {
-        const data = renderTrajectoryAverage(
+        const averageTrajectory = renderTrajectoryAverage(
           trajectories.value,
           cyclingScale.value,
         );
 
-        embeddings.push(data);
+        newData.push(averageTrajectory);
       } else {
-        const data = renderTrajectories(trajectories.value, cyclingScale.value);
-        embeddings.push(...data);
+        const trajectoriesTraces = renderTrajectories(
+          trajectories.value,
+          cyclingScale.value,
+        );
+
+        newData.push(...trajectoriesTraces);
       }
     }
 
-    data.value = embeddings;
+    // embeddings
+    const embeddings = renderEmbeddings();
+    newData.push(...embeddings);
+
+    // selection
+    if (isSelectionActive.value) {
+      const selectionTraces = renderSelection();
+      newData.push(...selectionTraces);
+    }
+
+    data.value = newData;
   };
+
+  const debouncedRender = useDebounceFn(render, 20);
 
   const reset = () => {
     data.value = [];
@@ -49,7 +71,7 @@ export function useScatterRender() {
     isEnabled,
     data,
     generate,
-    render,
+    render: debouncedRender,
     reset,
   };
 }

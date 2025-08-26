@@ -47,7 +47,7 @@ export const rules = {
       asyncArrow: 'always',
     },
   ],
-  '@stylistic/func-call-spacing': ['error', 'never'],
+  '@stylistic/function-call-spacing': ['error', 'never'],
   '@stylistic/block-spacing': ['error', 'never'],
   '@stylistic/object-curly-spacing': ['error', 'never'],
   '@stylistic/object-curly-newline': ['error', {consistent: true}],

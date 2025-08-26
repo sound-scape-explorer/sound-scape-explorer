@@ -19,17 +19,13 @@ export const Settings = z.object({
   timeshift: z.number().default(0), // hours
   isDetailsAutoOpen: z.boolean().default(false),
   isAudioAutoOpen: z.boolean().default(true),
-  isAlphaPreview: z.boolean().default(false),
-  isBetaPreview: z.boolean().default(false),
   isTimezoneActive: z.boolean().default(false),
-  isCopyOnSelect2d: z.boolean().default(true),
   isWebGlScatter2d: z.boolean().default(true),
   isColorMapSwapped: z.boolean().default(false),
   spectrogramColorMap: SpectrogramColorMap.default(
     SpectrogramColorMap.enum.hot,
   ),
   audioHost: z
-    .string()
     .url()
     .transform((url) => url.replace(/\/$/, ''))
     .default('http://localhost:5531'),

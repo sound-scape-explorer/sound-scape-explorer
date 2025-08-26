@@ -1,13 +1,7 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {
-  pauseOutline,
-  playOutline,
-  playSkipBackOutline,
-  playSkipForwardOutline,
-} from 'ionicons/icons';
 import {NButtonGroup} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
@@ -17,9 +11,7 @@ import {printPrettySeconds} from 'src/utils/time';
 import {computed} from 'vue';
 
 const {isActive, durations, isPlaying} = useDraggableCalendar();
-
 const {duration} = useTimelineRange();
-
 const {setWindowDuration, skipTimeForward, skipTimeBackward, handleToggle} =
   useDraggableCalendarTransport();
 
@@ -59,20 +51,25 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
           :handle-click="skipTimeBackward"
           small-tooltip
         >
-          <IonIcon :icon="playSkipBackOutline" />
+          <AppIcon
+            icon="back"
+            size="small"
+          />
         </AppButton>
 
         <AppButton
           :handle-click="handleToggle"
           small-tooltip
         >
-          <IonIcon
+          <AppIcon
             v-show="isPlaying"
-            :icon="pauseOutline"
+            icon="pause"
+            size="small"
           />
-          <IonIcon
+          <AppIcon
             v-show="!isPlaying"
-            :icon="playOutline"
+            icon="play"
+            size="small"
           />
         </AppButton>
 
@@ -80,7 +77,10 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
           :handle-click="skipTimeForward"
           small-tooltip
         >
-          <IonIcon :icon="playSkipForwardOutline" />
+          <AppIcon
+            icon="forward"
+            size="small"
+          />
         </AppButton>
       </div>
     </div>
@@ -92,17 +92,17 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
 
 .menu {
   & > div {
-    display: flex;
     align-items: center;
+    display: flex;
     gap: sizes.$p0;
   }
 }
 
 .gaps {
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   gap: sizes.$p0;
+  justify-content: center;
 }
 
 .seconds {
@@ -114,8 +114,8 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
 }
 
 .first-row {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
 }
 

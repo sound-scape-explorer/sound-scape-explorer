@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {calculatorOutline, flashOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {onBeforeUnmount} from 'vue';
@@ -20,7 +19,10 @@ onBeforeUnmount(disable);
     size="small"
     tooltip-placement="bottom"
   >
-    <IonIcon :icon="calculatorOutline" />
+    <AppIcon
+      icon="calculator"
+      size="small"
+    />
   </AppButton>
 
   <AppButton
@@ -30,6 +32,9 @@ onBeforeUnmount(disable);
     tooltip="Detect range"
     tooltip-placement="bottom"
   >
-    <IonIcon :icon="flashOutline" />
+    <AppIcon
+      icon="detect"
+      size="small"
+    />
   </AppButton>
 </template>

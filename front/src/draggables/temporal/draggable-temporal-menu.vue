@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {downloadOutline} from 'ionicons/icons';
 import {NButtonGroup} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -84,9 +83,9 @@ watch(indicator, update);
         tooltip="Export raw .csv"
         tooltip-placement="bottom"
       >
-        <IonIcon
-          :class="$style.export"
-          :icon="downloadOutline"
+        <AppIcon
+          icon="download"
+          size="small"
         />
       </AppButton>
     </div>
@@ -97,24 +96,20 @@ watch(indicator, update);
 @use 'src/styles/sizes';
 
 .row {
-  display: flex;
-  overflow: hidden;
   align-items: center;
+  display: flex;
   justify-content: space-between;
+  overflow: hidden;
 
   > div {
-    display: flex;
     align-items: center;
+    display: flex;
     gap: sizes.$p0;
   }
 }
 
 .selection {
   width: sizes.$p0 * 13;
-}
-
-.export {
-  width: sizes.$p0 * 3;
 }
 
 .display {

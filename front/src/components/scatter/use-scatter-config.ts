@@ -5,8 +5,6 @@ import Plotly, {
 } from 'plotly.js-dist-min';
 import {useScatterDownloadPngButton} from 'src/components/scatter/use-scatter-download-png-button';
 import {useScatterExport} from 'src/components/scatter/use-scatter-export';
-import {useScreen} from 'src/components/screen/use-screen';
-import {useClientSettings} from 'src/composables/use-client-settings';
 import {useExportName} from 'src/composables/use-export-name';
 import {PLOTLY_SIZE} from 'src/constants';
 import {computed} from 'vue';
@@ -20,8 +18,6 @@ export interface ScatterProps extends DownloadImgopts {
 
 export function useScatterConfig() {
   const {handleScatterExportClick} = useScatterExport();
-  const {enable} = useScreen();
-  const {isAlphaPreview} = useClientSettings();
   const {generate} = useExportName();
 
   const scatterWidth = PLOTLY_SIZE * (4 / 3);
@@ -43,19 +39,6 @@ export function useScatterConfig() {
 
   const config = computed<Partial<Config>>(() => {
     let barButtons: ModeBarButtonAny[] = [];
-
-    if (isAlphaPreview.value) {
-      barButtons = [
-        {
-          name: 'toggle-selection',
-          title: 'Toggle selection',
-          icon: Plotly.Icons['selectbox'],
-          click: () => {
-            enable();
-          },
-        },
-      ];
-    }
 
     const {button: pngButton} = useScatterDownloadPngButton(propsRef.value);
     barButtons = [...barButtons, pngButton];
@@ -89,7 +72,12 @@ export function useScatterConfig() {
       responsive: true,
       displayModeBar: true,
       modeBarButtonsToAdd: barButtons,
-      modeBarButtonsToRemove: ['toImage', 'resetCameraLastSave3d'],
+      modeBarButtonsToRemove: [
+        'toImage',
+        'resetCameraLastSave3d',
+        'select2d',
+        'lasso2d',
+      ],
     };
   });
 

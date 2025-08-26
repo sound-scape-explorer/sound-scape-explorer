@@ -4,6 +4,7 @@ import * as h5 from 'jsfive';
 
 import {render} from '../renderer';
 
+// todo: remove
 export class LoadingZone {
   public audioPath: string | null;
 

@@ -1,3 +1,5 @@
+import {type ParsedQs} from 'qs';
+
 interface ParsedQuery {
   [p: string]: string | string[] | ParsedQuery | ParsedQuery[] | undefined;
 }
@@ -8,7 +10,7 @@ interface Query {
   end: number;
 }
 
-export function validateQuery(query: ParsedQuery): Query {
+export function validateQuery(query: ParsedQs): Query {
   const file = query.file;
 
   if (typeof file !== 'string') {

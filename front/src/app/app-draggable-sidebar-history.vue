@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {arrowRedoOutline, arrowUndoOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 
 interface Props {
   undo: () => void;
@@ -24,7 +23,10 @@ const hasRedoTooltip = typeof props?.redoTooltip === 'string';
     :tooltip="hasUndoTooltip && props.canUndo ? props.undoTooltip : undefined"
     tooltip-placement="left"
   >
-    <IonIcon :icon="arrowUndoOutline" />
+    <AppIcon
+      icon="undo"
+      size="small"
+    />
   </AppButton>
 
   <AppButton
@@ -33,6 +35,9 @@ const hasRedoTooltip = typeof props?.redoTooltip === 'string';
     :tooltip="hasRedoTooltip && props.canRedo ? props.redoTooltip : undefined"
     tooltip-placement="left"
   >
-    <IonIcon :icon="arrowRedoOutline" />
+    <AppIcon
+      icon="redo"
+      size="small"
+    />
   </AppButton>
 </template>

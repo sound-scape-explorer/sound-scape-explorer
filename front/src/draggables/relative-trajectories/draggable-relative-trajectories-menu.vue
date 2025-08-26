@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {downloadOutline} from 'ionicons/icons';
 import {NCascader} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
@@ -77,7 +76,10 @@ const {strategy} = useRelativeTrajectoriesStrategy();
         tooltip="Export .csv"
         tooltip-placement="bottom"
       >
-        <IonIcon :icon="downloadOutline" />
+        <AppIcon
+          icon="download"
+          size="small"
+        />
       </AppButton>
     </div>
   </AppDraggableMenu>
@@ -85,8 +87,8 @@ const {strategy} = useRelativeTrajectoriesStrategy();
 
 <style lang="scss" module>
 .first-row {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-start;
 
   & > div {
@@ -96,8 +98,8 @@ const {strategy} = useRelativeTrajectoriesStrategy();
 }
 
 .last-row {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
 }
 

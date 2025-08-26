@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {flashOutline, repeatOutline} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
@@ -69,7 +68,10 @@ const {isEnabled} = useTagNumeric();
           tooltip="Detect range"
           tooltip-placement="bottom"
         >
-          <IonIcon :icon="flashOutline" />
+          <AppIcon
+            icon="detect"
+            size="small"
+          />
         </AppButton>
 
         <AppButton
@@ -78,7 +80,10 @@ const {isEnabled} = useTagNumeric();
           tooltip="Swap range"
           tooltip-placement="bottom"
         >
-          <IonIcon :icon="repeatOutline" />
+          <AppIcon
+            icon="swap"
+            size="small"
+          />
         </AppButton>
       </h2>
 
@@ -180,7 +185,10 @@ const {isEnabled} = useTagNumeric();
           tooltip="Revert color map"
           tooltip-placement="bottom"
         >
-          <IonIcon :icon="repeatOutline" />
+          <AppIcon
+            icon="swap"
+            size="small"
+          />
         </AppButton>
       </h2>
 
@@ -198,11 +206,11 @@ const {isEnabled} = useTagNumeric();
 @use 'src/styles/sizes';
 
 .two {
-  display: flex;
   align-items: center;
+  display: flex;
+  gap: sizes.$p0;
   justify-content: center;
   width: sizes.$s0;
-  gap: sizes.$p0;
 
   & > * {
     width: 100%;

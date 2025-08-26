@@ -25,11 +25,16 @@ app.disable('x-powered-by');
 app.use(cors({origin}));
 
 // service
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`port: ${port}`);
   console.log(`ffmpeg path: ${ffmpegPath}`);
   console.log(`ffprobe path: ${ffprobePath}`);
   console.log(`audio path: ${audioPath}`);
+});
+
+server.on('error', (err: NodeJS.ErrnoException) => {
+  console.error('Server error:', err);
+  process.exit(1);
 });
 
 // root endpoint

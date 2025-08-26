@@ -1,12 +1,9 @@
 import {type DraggableKey} from 'src/composables/use-draggables';
 
 const draggablePrefix = '_draggable';
-const alphaPrefix = '_alpha';
-const betaPrefix = '_beta';
 
 export enum Shortcut {
-  _alphaSelection3d = 'J',
-  _draggableHideShow = 'Esc',
+  _draggableFocus = 'Esc',
   _draggableCycleNext = 'Tab', // just for doc
   _draggableCyclePrevious = 'Shift+Tab', // just for doc
   _draggableClose = 'x',
@@ -17,6 +14,7 @@ export enum Shortcut {
   view = 'w',
   colors = 'c',
   tags = 't',
+  selection = 's',
   audio = 'a',
   details = 'd',
   trajectories = 'y',
@@ -51,22 +49,6 @@ Object.entries(Shortcut).forEach((entry) => {
   if (isDraggable) {
     shortcut.name = name.replace(draggablePrefix, '');
     draggables.push(shortcut);
-    return;
-  }
-
-  const isAlpha = name.startsWith(alphaPrefix);
-
-  if (isAlpha) {
-    shortcut.name = name.replace(alphaPrefix, '');
-    alphas.push(shortcut);
-    return;
-  }
-
-  const isBeta = name.startsWith(betaPrefix);
-
-  if (isBeta) {
-    shortcut.name = name.replace(betaPrefix, '');
-    betas.push(shortcut);
     return;
   }
 

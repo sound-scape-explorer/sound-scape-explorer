@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>SSE Environment Manager - Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 800px;
+      width: 90%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #4a5568;
+      font-size: 2.5em;
+      font-weight: 300;
+    }
+    
+    .status-card {
+      background: #f7fafc;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid #4299e1;
+    }
+    
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 8px 0;
+    }
+    
+    .status-label {
+      font-weight: 500;
+      color: #2d3748;
+    }
+    
+    .status-value {
+      font-family: monospace;
+      background: #edf2f7;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.9em;
+    }
+    
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-left: 10px;
+    }
+    
+    .status-indicator.green {
+      background: #48bb78;
+    }
+    
+    .status-indicator.red {
+      background: #f56565;
+    }
+    
+    .status-indicator.yellow {
+      background: #ed8936;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #4299e1, #3182ce);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(66, 153, 225, 0.3);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #f56565, #e53e3e);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(245, 101, 101, 0.3);
+    }
+    
+    .btn-secondary {
+      background: #edf2f7;
+      color: #4a5568;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .btn-secondary:hover {
+      background: #e2e8f0;
+      transform: translateY(-1px);
+    }
+    
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .progress-container {
+      margin: 20px 0;
+      display: none;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4299e1, #3182ce);
+      width: 0%;
+      transition: width 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7;
+      }
+    }
+    
+    .progress-text {
+      font-size: 14px;
+      color: #4a5568;
+      text-align: center;
+    }
+    
+    .output-container {
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .output-box {
+      background: #1a202c;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      padding: 20px;
+      border-radius: 8px;
+      height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+    
+    .command-section {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid #e2e8f0;
+    }
+    
+    .command-input {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #4299e1;
+    }
+    
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      border-left: 4px solid;
+    }
+    
+    .alert-success {
+      background: #f0fff4;
+      border-color: #48bb78;
+      color: #22543d;
+    }
+    
+    .alert-error {
+      background: #fed7d7;
+      border-color: #f56565;
+      color: #742a2a;
+    }
+    
+    .alert-info {
+      background: #ebf8ff;
+      border-color: #4299e1;
+      color: #2b6cb0;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #e2e8f0;
+      border-radius: 50%;
+      border-top-color: #4299e1;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🎵 SSE Environment Manager</h1>
+  
+  <div class="status-card">
+    <h3 style="margin-bottom: 15px; color: #4a5568;">Environment Status</h3>
+    <div class="status-item">
+      <span class="status-label">Python 3.11 Available:</span>
+      <div style="display: flex; align-items: center;">
+        <span class="status-value" id="python-status">Checking...</span>
+        <div class="status-indicator yellow" id="python-indicator"></div>
+      </div>
+    </div>
+    <div class="status-item">
+      <span class="status-label">SSE Environment:</span>
+      <div style="display: flex; align-items: center;">
+        <span class="status-value" id="env-status">Checking...</span>
+        <div class="status-indicator yellow" id="env-indicator"></div>
+      </div>
+    </div>
+    <div class="status-item">
+      <span class="status-label">SSE Version:</span>
+      <span class="status-value" id="sse-version">N/A</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Environment Path:</span>
+      <span class="status-value" id="env-path">N/A</span>
+    </div>
+  </div>
+  
+  <div class="button-group">
+    <button class="btn-secondary" onclick="checkStatus()">
+      <span class="loading" id="check-loading" style="display: none;"></span>
+      Refresh Status
+    </button>
+    <button class="btn-primary" disabled id="install-btn" onclick="installSSE()">
+      Install SSE Environment
+    </button>
+    <button class="btn-danger" disabled id="remove-btn" onclick="removeEnvironment()">
+      Remove Environment
+    </button>
+  </div>
+  
+  <div class="progress-container" id="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-text" id="progress-text">Preparing installation...</div>
+  </div>
+  
+  <div id="alerts"></div>
+  
+  <div class="command-section" id="command-section" style="display: none;">
+    <h3 style="margin-bottom: 15px; color: #4a5568;">Run SSE Commands</h3>
+    <div class="command-input">
+      <input id="command-input" placeholder="Enter SSE command (e.g., --help)" type="text"/>
+      <button class="btn-primary" onclick="runCommand()">Run Command</button>
+    </div>
+  </div>
+  
+  <div class="output-container" id="output-container">
+    <h3 style="margin-bottom: 15px; color: #4a5568;">Output</h3>
+    <div class="output-box" id="output-box"></div>
+  </div>
+</div>
+
+<script>
+  // Mock SSE Environment Manager for testing
+  class MockSSEEnvironmentManager {
+    constructor() {
+      this.version = '14.0.0-beta.13';
+      this.isInstalled = false;
+      this.pythonAvailable = Math.random() > 0.3; // 70% chance Python is available
+    }
+    
+    async getEnvironmentInfo() {
+      // Simulate API delay
+      await this.delay(500);
+      
+      return {
+        environmentExists: this.isInstalled,
+        sseVersion: this.isInstalled ? this.version : null,
+        pythonAvailable: this.pythonAvailable,
+        pythonVersion: this.pythonAvailable ? 'Python 3.11.0' : null,
+        venvPath: this.isInstalled ? `/mock/path/sse-processing-${this.version}` : null
+      };
+    }
+    
+    async install(onProgress) {
+      if (!this.pythonAvailable) {
+        throw new Error('Python 3.11 not found. Please install Python 3.11 first.');
+      }
+      
+      const steps = [
+        'Creating virtual environment...',
+        'Upgrading pip...',
+        'Installing SoundScapeExplorer (this may take several minutes)...',
+        'Downloading models...',
+        'Installation complete!'
+      ];
+      
+      for (let i = 0; i < steps.length; i++) {
+        onProgress?.(steps[i]);
+        await this.delay(1000 + Math.random() * 2000); // Random delay 1-3 seconds
+      }
+      
+      this.isInstalled = true;
+      return {success: true, path: `/mock/path/sse-processing-${this.version}`};
+    }
+    
+    async runCommand(command, args = [], onOutput) {
+      await this.delay(500);
+      
+      if (!this.isInstalled) {
+        throw new Error('SSE environment not found. Please install first.');
+      }
+      
+      // Mock command responses
+      const responses = {
+        '--help': `SoundScapeExplorer v${this.version}
+Usage: sse [OPTIONS] COMMAND [ARGS]...
+
+Commands:
+  process    Process audio files
+  analyze    Analyze results
+  export     Export data
+  download   Download models`,
+        '--version': `SoundScapeExplorer ${this.version}`,
+        'process': 'Processing audio files...\nComplete!',
+        'analyze': 'Running analysis...\nAnalysis complete!',
+        'default': `Mock execution of: sse ${command} ${args.join(' ')}\nCommand completed successfully.`
+      };
+      
+      const output = responses[command] || responses['default'];
+      
+      // Simulate streaming output
+      const lines = output.split('\n');
+      for (const line of lines) {
+        onOutput?.({type: 'stdout', data: line + '\n'});
+        await this.delay(200);
+      }
+      
+      return {stdout: output, stderr: '', code: 0};
+    }
+    
+    async removeEnvironment() {
+      await this.delay(1000);
+      this.isInstalled = false;
+      return {success: true};
+    }
+    
+    delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+  }
+  
+  // Initialize mock manager
+  const sseManager = new MockSSEEnvironmentManager();
+  
+  // UI Functions
+  async function checkStatus() {
+    const loading = document.getElementById('check-loading');
+    loading.style.display = 'inline-block';
+    
+    try {
+      const status = await sseManager.getEnvironmentInfo();
+      updateStatusUI(status);
+      updateButtons(status);
+    } catch (error) {
+      showAlert('Error checking status: ' + error.message, 'error');
+    } finally {
+      loading.style.display = 'none';
+    }
+  }
+  
+  function updateStatusUI(status) {
+    // Python status
+    document.getElementById('python-status').textContent =
+      status.pythonAvailable ? status.pythonVersion : 'Not Found';
+    document.getElementById('python-indicator').className =
+      'status-indicator ' + (status.pythonAvailable ? 'green' : 'red');
+    
+    // Environment status
+    document.getElementById('env-status').textContent =
+      status.environmentExists ? 'Installed' : 'Not Installed';
+    document.getElementById('env-indicator').className =
+      'status-indicator ' + (status.environmentExists ? 'green' : 'red');
+    
+    // Version and path
+    document.getElementById('sse-version').textContent =
+      status.sseVersion || 'N/A';
+    document.getElementById('env-path').textContent =
+      status.venvPath || 'N/A';
+  }
+  
+  function updateButtons(status) {
+    const installBtn = document.getElementById('install-btn');
+    const removeBtn = document.getElementById('remove-btn');
+    const commandSection = document.getElementById('command-section');
+    
+    installBtn.disabled = !status.pythonAvailable || status.environmentExists;
+    removeBtn.disabled = !status.environmentExists;
+    
+    if (status.environmentExists) {
+      commandSection.style.display = 'block';
+    } else {
+      commandSection.style.display = 'none';
+    }
+  }
+  
+  async function installSSE() {
+    const progressContainer = document.getElementById('progress-container');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const installBtn = document.getElementById('install-btn');
+    
+    progressContainer.style.display = 'block';
+    installBtn.disabled = true;
+    clearAlerts();
+    
+    try {
+      let progress = 0;
+      await sseManager.install((message) => {
+        progress += 20;
+        progressFill.style.width = Math.min(progress, 100) + '%';
+        progressText.textContent = message;
+      });
+      
+      progressFill.style.width = '100%';
+      showAlert('SSE environment installed successfully!', 'success');
+      await checkStatus();
+    } catch (error) {
+      showAlert('Installation failed: ' + error.message, 'error');
+    } finally {
+      progressContainer.style.display = 'none';
+      installBtn.disabled = false;
+    }
+  }
+  
+  async function runCommand() {
+    const input = document.getElementById('command-input');
+    const outputContainer = document.getElementById('output-container');
+    const outputBox = document.getElementById('output-box');
+    
+    const command = input.value.trim();
+    if (!command) return;
+    
+    outputContainer.style.display = 'block';
+    outputBox.textContent = `$ sse ${command}\n`;
+    
+    try {
+      await sseManager.runCommand(command, [], (output) => {
+        if (output.type === 'stdout') {
+          outputBox.textContent += output.data;
+        } else if (output.type === 'stderr') {
+          outputBox.textContent += `ERROR: ${output.data}`;
+        }
+        outputBox.scrollTop = outputBox.scrollHeight;
+      });
+    } catch (error) {
+      outputBox.textContent += `\nERROR: ${error.message}\n`;
+    }
+    
+    input.value = '';
+  }
+  
+  async function removeEnvironment() {
+    if (!confirm('Are you sure you want to remove the SSE environment?')) {
+      return;
+    }
+    
+    try {
+      await sseManager.removeEnvironment();
+      showAlert('SSE environment removed successfully.', 'info');
+      await checkStatus();
+    } catch (error) {
+      showAlert('Failed to remove environment: ' + error.message, 'error');
+    }
+  }
+  
+  function showAlert(message, type) {
+    const alertsContainer = document.getElementById('alerts');
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+    alert.textContent = message;
+    
+    alertsContainer.appendChild(alert);
+    
+    setTimeout(() => {
+      alert.remove();
+    }, 5000);
+  }
+  
+  function clearAlerts() {
+    document.getElementById('alerts').innerHTML = '';
+  }
+  
+  // Handle Enter key in command input
+  document.getElementById('command-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      runCommand();
+    }
+  });
+  
+  // Initialize on load
+  window.addEventListener('load', () => {
+    checkStatus();
+  });
+</script>
+</body>
+</html>

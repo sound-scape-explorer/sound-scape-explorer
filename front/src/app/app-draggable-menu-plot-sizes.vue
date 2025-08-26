@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {resizeOutline} from 'ionicons/icons';
 import {NButtonGroup} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useAppPlotSize} from 'src/composables/use-app-plot-size';
 
 interface Props {
@@ -28,28 +27,40 @@ const {resize1by1, resize16by10, resize16by9, half, double, resize4by3} =
       :disabled="props.disabled"
       :handle-click="resize1by1"
     >
-      <IonIcon :icon="resizeOutline" />&nbsp;1:1
+      <AppIcon
+        icon="expand"
+        size="tiny"
+      />&nbsp;1:1
     </AppButton>
     <AppButton
       v-if="!onlyFactors"
       :disabled="props.disabled"
       :handle-click="resize4by3"
     >
-      <IonIcon :icon="resizeOutline" />&nbsp;4:3
+      <AppIcon
+        icon="expand"
+        size="tiny"
+      />&nbsp;4:3
     </AppButton>
     <AppButton
       v-if="!onlyFactors"
       :disabled="props.disabled"
       :handle-click="resize16by10"
     >
-      <IonIcon :icon="resizeOutline" />&nbsp;16:10
+      <AppIcon
+        icon="expand"
+        size="tiny"
+      />&nbsp;16:10
     </AppButton>
     <AppButton
       v-if="!onlyFactors"
       :disabled="props.disabled"
       :handle-click="resize16by9"
     >
-      <IonIcon :icon="resizeOutline" />&nbsp;16:9
+      <AppIcon
+        icon="expand"
+        size="tiny"
+      />&nbsp;16:9
     </AppButton>
     <AppButton
       :disabled="props.disabled"

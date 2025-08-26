@@ -1,23 +1,25 @@
+import {CampaignButtonOld} from 'src/renderer/controllers/campaign-button-old';
+import {VisualisationModuleController} from 'src/renderer/controllers/visualisation-module-controller';
+
 import {AudioPath} from './AudioPath';
 import {AudioStopButton} from './AudioStopButton';
-import {CampaignButton} from './CampaignButton';
-import {VisualiseButton} from './VisualiseButton';
 
+// todo: remove
 export class LoadedZone {
   private readonly node = document.getElementById('loaded-zone');
 
   private readonly audioStopButton: AudioStopButton;
 
-  private readonly visualiseButton: VisualiseButton;
+  private readonly visualiseButton: VisualisationModuleController;
 
-  private readonly campaignButton: CampaignButton;
+  private readonly campaignButton: CampaignButtonOld;
 
   private readonly audioPath: AudioPath;
 
   public constructor() {
     this.audioStopButton = new AudioStopButton();
-    this.visualiseButton = new VisualiseButton();
-    this.campaignButton = new CampaignButton();
+    this.visualiseButton = new VisualisationModuleController();
+    this.campaignButton = new CampaignButtonOld();
     this.audioPath = new AudioPath();
   }
 

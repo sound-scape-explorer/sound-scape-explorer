@@ -1,12 +1,6 @@
 import {Button, Section} from '@blueprintjs/core';
 import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {
-  ArrowDown,
-  ArrowUp,
-  Cross,
-  CurvedRangeChart,
-  Plus,
-} from '@blueprintjs/icons';
+import {ArrowDown, ArrowUp, Cross, Layout, Plus} from '@blueprintjs/icons';
 import {ICON_SIZE, SmoothingWindowPresets} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
@@ -60,7 +54,7 @@ export function ExtractionTrajectories({extraction}: Props) {
   return (
     <Section
       title="Trajectories"
-      icon={<CurvedRangeChart size={ICON_SIZE} />}
+      icon={<Layout size={ICON_SIZE} />}
       compact
       collapsible
       collapseProps={{

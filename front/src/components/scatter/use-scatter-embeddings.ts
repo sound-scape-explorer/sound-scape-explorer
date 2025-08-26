@@ -2,7 +2,6 @@ import {type Data, type PlotType} from 'plotly.js-dist-min';
 import {ScatterFeaturesError} from 'src/common/Errors';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
 import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
-import {useScreen} from 'src/components/screen/use-screen';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useInterval} from 'src/composables/use-interval';
 import {useReductions} from 'src/composables/use-reductions';
@@ -17,7 +16,6 @@ export function useScatterEmbeddings() {
   const {reductions} = useReductions();
   const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
   const {scale} = useScatterColorScale();
-  const {selected} = useScreen();
   const {isWebGlScatter2d, isSelectedPointHighlighted, scatterBorderWidth} =
     useClientSettings();
   const {filtered} = useScatterGlobalFilter();
@@ -97,7 +95,6 @@ export function useScatterEmbeddings() {
     }
 
     const scalePointer = scale.value;
-    const selectedPointer = selected.value;
     const colors: [number, string][] = new Array(scale.value.length);
 
     for (let i = 0; i < scale.value.length; i += 1) {
@@ -105,12 +102,6 @@ export function useScatterEmbeddings() {
 
       const rangedIndex = i / (scalePointer.length - 1);
       colors[i][0] = rangedIndex;
-
-      const isSelected = selectedPointer.indexOf(i) !== -1;
-      if (isSelected) {
-        colors[i][1] = colorMap.selected(high.value);
-        continue;
-      }
 
       const isExcluded = filtered.value[i] === true;
       if (isExcluded) {

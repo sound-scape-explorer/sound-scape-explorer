@@ -1,4 +1,5 @@
-export class CampaignButton {
+// todo: remove
+export class CampaignButtonOld {
   private readonly node = document.getElementById('campaign-button');
 
   public constructor() {

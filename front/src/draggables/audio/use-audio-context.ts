@@ -19,7 +19,7 @@ export function useAudioContext() {
     isCreated = true;
 
     context.value = new AudioContext({
-      sampleRate: config.value.settings.expected_sample_rate,
+      sampleRate: config.value.settings.expectedSampleRate,
     });
   };
 

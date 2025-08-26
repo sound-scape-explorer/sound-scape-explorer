@@ -1,4 +1,5 @@
 import {ConfigDto} from '@shared/dtos';
+import {readJson} from '@shared/files';
 import {useCallback} from 'react';
 import {useNotify} from 'src/hooks/use-notify';
 import {useSettingsState} from 'src/hooks/use-settings-state';
@@ -6,7 +7,6 @@ import {useTabNavigation} from 'src/hooks/use-tab-navigation';
 import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useRangeState} from 'src/panels/extractions/hooks/use-range-state.ts';
 import {useTableLoader} from 'src/panels/files/hooks/use-table-loader';
-import {readJson} from 'src/utils/json';
 
 export function useJsonDrop() {
   const {notify} = useNotify();

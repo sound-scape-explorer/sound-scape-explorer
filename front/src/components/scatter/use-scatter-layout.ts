@@ -8,7 +8,7 @@ export function useScatterLayout() {
   const layout = computed<Partial<Layout> | null>(() => {
     // noinspection SpellCheckingInspection
     const l: Partial<Layout> = {
-      dragmode: 'select',
+      dragmode: 'turntable',
       margin: {
         t: 0,
         r: 0,

@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
 import {useDraggable} from '@vueuse/core';
-import {close as closeIcon} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppCondition from 'src/app/app-condition.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
@@ -11,7 +10,6 @@ import {
   SuspenseCase,
   useAppDraggableSuspense,
 } from 'src/app/draggable/use-app-draggable-suspense';
-import {useAppMenu} from 'src/app/menu/use-app-menu';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 import {capitalizeFirstLetter} from 'src/utils/strings';
@@ -31,9 +29,6 @@ const {container, storage, drag, isZoomed, isSelected, isClosed, hidden} =
 const {suspense} = useAppDraggableSuspense(props);
 const {check} = useAppDraggableBounds(container);
 const {colors} = useThemeColors();
-
-const {menu} = useAppMenu();
-const icon = menu[props.draggableKey] ?? null;
 const {close, stack} = useDraggables();
 
 const {x, y, style} = useDraggable(container, {
@@ -89,15 +84,19 @@ const zIndex = computed(() => {
         grow
         size="tiny"
       >
-        <IonIcon :icon="closeIcon" />
+        <AppIcon
+          icon="close"
+          size="small"
+        />
       </AppButton>
     </div>
 
     <div :class="$style.header">
       <div :class="$style.title">
-        <IonIcon
-          :class="{[$style.active]: isSelected}"
-          :icon="icon"
+        <AppIcon
+          :color="isSelected ? 'active' : 'default'"
+          :icon="props.draggableKey"
+          size="small"
         />
         <span>
           {{ capitalizeFirstLetter(props.draggableKey) }}
@@ -108,7 +107,12 @@ const zIndex = computed(() => {
         ref="drag"
         :class="$style.handle"
       >
-        <span>👋</span>
+        <span>
+          <AppIcon
+            icon="drag"
+            size="small"
+          />
+        </span>
       </div>
     </div>
 
@@ -131,13 +135,13 @@ const zIndex = computed(() => {
 @use 'src/styles/borders';
 
 .container {
-  position: fixed;
-  z-index: v-bind(zIndex);
-  justify-content: flex-start;
-  padding: sizes.$p0 sizes.$p0 sizes.$p0 sizes.$p0 * 5;
-  user-select: none;
-  opacity: 1;
   backdrop-filter: blur(sizes.$p0 + sizes.$g0);
+  justify-content: flex-start;
+  opacity: 1;
+  padding: sizes.$p0 sizes.$p0 sizes.$p0 sizes.$p0 * 5;
+  position: fixed;
+  user-select: none;
+  z-index: v-bind(zIndex);
 
   @include shadows.s1(v-bind('colors.boxShadow2'));
   @include borders.border-radius;
@@ -145,8 +149,8 @@ const zIndex = computed(() => {
 }
 
 .content {
-  margin: sizes.$p0 0 0 0;
   cursor: default;
+  margin: sizes.$p0 0 0 0;
 }
 
 .zoomed {
@@ -158,53 +162,35 @@ const zIndex = computed(() => {
 }
 
 .close-button {
+  left: sizes.$p0;
   position: fixed;
   top: sizes.$p0;
-  left: sizes.$p0;
 }
 
 .header {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
+  display: flex;
   gap: sizes.$p0 * 4;
-}
-
-@keyframes oscillate {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  50% {
-    transform: translate3d(0, -2px, 0);
-  }
-
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
+  justify-content: space-between;
 }
 
 .handle {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: sizes.$p0 * 40;
-  cursor: grab;
-  opacity: 0.45;
-  border-radius: 10px;
   background-color: v-bind('colors.primaryColor');
+  border-radius: 10px;
+  cursor: grab;
+  display: flex;
   filter: grayscale(0.95);
+  justify-content: center;
+  max-width: sizes.$p0 * 40;
+  opacity: 0.45;
+  width: 100%;
 
   @include transitions.transition-app-draggable-handle;
 
   &:hover {
-    opacity: 0.99;
     filter: grayscale(0.05);
-
-    span {
-      animation: oscillate 1200ms infinite;
-    }
+    opacity: 0.99;
   }
 
   &:active {
@@ -221,22 +207,22 @@ hr {
 }
 
 .title {
-  font-weight: bold;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
+  font-weight: bold;
   gap: sizes.$p0;
+  justify-content: center;
 
   @include transitions.transition-color;
 
   > i {
-    width: 100%;
     height: 100%;
     transform: translate3d(1px, 1px, 0);
+    width: 100%;
 
     svg {
-      width: sizes.$p0 * 2;
       height: sizes.$p0 * 2;
+      width: sizes.$p0 * 2;
     }
   }
 }

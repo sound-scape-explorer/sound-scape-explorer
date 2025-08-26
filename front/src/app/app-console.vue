@@ -10,7 +10,7 @@ const payload = computed<string | null>(() => {
 
   if (hidden.value) {
     payload.push(
-      `Hidden mode enabled. Press ${Shortcut._draggableHideShow} to quit.`,
+      `Focus mode enabled. Press ${Shortcut._draggableFocus} to quit.`,
     );
   }
 
@@ -30,11 +30,11 @@ const payload = computed<string | null>(() => {
 @use 'src/styles/layers';
 
 .container {
+  bottom: 5px;
   font-size: 90%;
   font-style: italic;
+  left: 7px;
   position: fixed;
   z-index: layers.$app-console-layer;
-  bottom: 5px;
-  left: 7px;
 }
 </style>

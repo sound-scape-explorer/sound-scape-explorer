@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
-import {downloadOutline, repeatOutline} from 'ionicons/icons';
 import {NSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
@@ -57,7 +56,7 @@ const {coreUniques} = useTagUniques();
         :handle-click="swapLabels"
         size="small"
       >
-        <IonIcon :icon="repeatOutline" />
+        <AppIcon icon="swap" />
       </AppButton>
 
       <AppSelect
@@ -109,7 +108,10 @@ const {coreUniques} = useTagUniques();
         tooltip="Export .csv"
         tooltip-placement="bottom"
       >
-        <IonIcon :icon="downloadOutline" />
+        <AppIcon
+          icon="download"
+          size="small"
+        />
       </AppButton>
     </div>
   </AppDraggableMenu>
@@ -120,19 +122,19 @@ const {coreUniques} = useTagUniques();
 
 .labels {
   display: grid;
-  grid-template-columns: 1fr sizes.$p0 * 7 1fr;
   gap: sizes.$p0;
+  grid-template-columns: 1fr sizes.$p0 * 7 1fr;
 }
 
 .colors {
   display: grid;
-  grid-template-columns: 1fr sizes.$p0 * 7 1fr;
   gap: sizes.$p0;
+  grid-template-columns: 1fr sizes.$p0 * 7 1fr;
 }
 
 .plot {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
 }
 

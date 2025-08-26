@@ -1,5 +1,7 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
+import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
@@ -20,7 +22,9 @@ export function useViewUnloader() {
   const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
   const {reset: resetScatter, isEnabled} = useScatterRender();
   const {reset: resetFilterByLabel} = useScatterFilterTag();
-  const {resetFilterByTime} = useScatterFilterTime();
+  const {reset: resetFilterTemporal} = useScatterFilterTemporal();
+  const {reset: resetFilterByTime} = useScatterFilterTime();
+  const {reset: resetFilterSpatial} = useScatterFilterSpatial();
   const {reset: resetViewSelection} = useViewSelection();
   const {isLoading, loadingText} = useScatterLoading();
   const {reset: resetTemporalThresholds} = useTemporalThresholds();
@@ -37,6 +41,8 @@ export function useViewUnloader() {
     resetScatter();
     resetFilterByLabel();
     resetFilterByTime();
+    resetFilterTemporal();
+    resetFilterSpatial();
 
     resetAggregations();
     resetReductionEmbeddings();
