@@ -4,7 +4,6 @@ import {useScatterClick} from 'src/components/scatter/use-scatter-click';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterLayout} from 'src/components/scatter/use-scatter-layout';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
-import {useScatterSelection} from 'src/components/scatter/use-scatter-selection';
 import {ref} from 'vue';
 
 const container = ref<PlotlyHTMLElement | null>(null);
@@ -18,7 +17,6 @@ export function useScatterContainer() {
   const {isLocked} = useScatterCamera();
   const {data} = useScatterRender();
   const {handleClick} = useScatterClick();
-  const {handleSelected} = useScatterSelection();
 
   const mount = async () => {
     if (
@@ -46,7 +44,6 @@ export function useScatterContainer() {
     isAttached.value = true;
 
     container.value.on('plotly_click', handleClick);
-    container.value.on('plotly_selected', handleSelected);
   };
 
   const render = async () => {

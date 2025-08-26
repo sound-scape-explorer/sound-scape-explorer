@@ -20,7 +20,6 @@ export const Settings = z.object({
   isDetailsAutoOpen: z.boolean().default(false),
   isAudioAutoOpen: z.boolean().default(true),
   isTimezoneActive: z.boolean().default(false),
-  isCopyOnSelect2d: z.boolean().default(true),
   isWebGlScatter2d: z.boolean().default(true),
   isColorMapSwapped: z.boolean().default(false),
   spectrogramColorMap: SpectrogramColorMap.default(

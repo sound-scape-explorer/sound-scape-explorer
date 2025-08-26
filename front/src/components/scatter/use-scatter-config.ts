@@ -72,7 +72,12 @@ export function useScatterConfig() {
       responsive: true,
       displayModeBar: true,
       modeBarButtonsToAdd: barButtons,
-      modeBarButtonsToRemove: ['toImage', 'resetCameraLastSave3d'],
+      modeBarButtonsToRemove: [
+        'toImage',
+        'resetCameraLastSave3d',
+        'select2d',
+        'lasso2d',
+      ],
     };
   });
 

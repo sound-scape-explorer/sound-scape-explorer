@@ -29,7 +29,6 @@ const {
   isDetailsAutoOpen,
   isAudioAutoOpen,
   isTimezoneActive,
-  isCopyOnSelect2d,
   isWebGlScatter2d,
   isHidingMenuOnDraggableToggle,
   isSelectedPointHighlighted,
@@ -170,12 +169,6 @@ const reload = () => location.reload();
 
       <DraggableSettingsItem title="2d scatters: Use WebGL">
         <AppCheckbox v-model="isWebGlScatter2d" />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem
-        title="2d scatters: Auto copy to clipboard after selection (alpha)"
-      >
-        <AppCheckbox v-model="isCopyOnSelect2d" />
       </DraggableSettingsItem>
 
       <AppHeader>
