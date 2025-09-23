@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {SectionCard} from '@blueprintjs/core';
 import {
   SPECTRO_N_BANDS,
   SPECTRO_SCALE,

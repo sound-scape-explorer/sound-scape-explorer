@@ -1,5 +1,4 @@
-import {Button, Section, Tooltip} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Section, SectionCard, Tooltip} from '@blueprintjs/core';
 import {
   ArrowDown,
   ArrowUp,

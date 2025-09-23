@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {SectionCard} from '@blueprintjs/core';
 import {ADI_BIN_STEP, ADI_DB_THRESHOLD, ADI_IMPL} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import {AdiImpl} from '@shared/enums';

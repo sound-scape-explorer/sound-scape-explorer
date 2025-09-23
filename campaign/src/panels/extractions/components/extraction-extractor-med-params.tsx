@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {SectionCard} from '@blueprintjs/core';
 import {MED_FRAME_SIZE} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import clsx from 'clsx';

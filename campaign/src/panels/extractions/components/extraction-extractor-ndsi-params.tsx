@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {SectionCard} from '@blueprintjs/core';
 import {NDSI_BAND_ANTHRO, NDSI_BAND_BIO} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import clsx from 'clsx';

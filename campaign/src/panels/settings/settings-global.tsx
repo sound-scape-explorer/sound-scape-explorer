@@ -1,5 +1,4 @@
-import {Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Section, SectionCard} from '@blueprintjs/core';
 import {SettingsPanelAudioPath} from 'src/panels/settings/settings-panel-audio-path.tsx';
 import {SettingsPanelSampleRate} from 'src/panels/settings/settings-panel-sample-rate.tsx';
 import {SettingsPanelStoragePath} from 'src/panels/settings/settings-panel-storage-path.tsx';
