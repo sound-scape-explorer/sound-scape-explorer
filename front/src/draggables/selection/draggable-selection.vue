@@ -228,12 +228,17 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
 
       <h2 :class="$style.name">
         Current
-        <AppIcon
-          v-if="!hasIdenticalSave"
-          color="active"
-          icon="delta"
-          size="small"
-        />
+        <AppTooltip placement="top">
+          <template #tooltip>You have unsaved changes</template>
+          <template #body>
+            <AppIcon
+              v-if="!hasIdenticalSave"
+              color="active"
+              icon="delta"
+              size="small"
+            />
+          </template>
+        </AppTooltip>
       </h2>
 
       <div :class="$style.input">
