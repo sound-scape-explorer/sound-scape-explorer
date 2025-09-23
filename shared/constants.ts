@@ -88,6 +88,8 @@ export const LEQ_DIFF_PERCENTILE_B = 10;
 
 export const UMAP_MIN_DIST = 0.1;
 
+export const SMOOTHING_WINDOW_CUSTOM = 'CUST.';
+
 export const SMOOTHING_WINDOW_PRESETS = {
   '1_MIN': 60 * 1000, // 1 minute
   '15_MIN': 15 * 60 * 1000, // 15 minutes
@@ -104,7 +106,6 @@ export const SMOOTHING_WINDOW_PRESETS = {
   'YEAR': 365 * 24 * 60 * 60 * 1000, // ~1 year (365 days)
 };
 
-// For TypeScript safety, you can create a type
 export type SmoothingWindowPreset = keyof typeof SMOOTHING_WINDOW_PRESETS;
 export const SmoothingWindowPresets = Object.keys(
   SMOOTHING_WINDOW_PRESETS,

@@ -1,10 +1,17 @@
-import {Button, Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
-import {ArrowDown, ArrowUp, Cross, Layout, Plus} from '@blueprintjs/icons';
+import {Button, Section, SectionCard} from '@blueprintjs/core';
+import {
+  ArrowDown,
+  ArrowUp,
+  Cross,
+  Layout,
+  ManuallyEnteredData,
+  MultiSelect,
+  Plus,
+} from '@blueprintjs/icons';
 import {ICON_SIZE, SmoothingWindowPresets} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
-import {type ExtractionConfig} from 'src/interfaces.ts';
+import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-trajectories.module.scss';
 import {ExtractionTrajectoriesDrawerContent} from 'src/panels/extractions/components/extraction-trajectories-drawer-content.tsx';
 import {useTrajectoryState} from 'src/panels/extractions/hooks/use-trajectory-state.ts';
@@ -17,38 +24,22 @@ import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
+import {NumberInput} from 'src/primitives/number-input.tsx';
 
 interface Props {
   extraction: ExtractionConfig;
 }
 
 export function ExtractionTrajectories({extraction}: Props) {
-  const {
-    trajectories,
-    addTrajectory,
-    deleteTrajectory,
-    updateIndex,
-    updateName,
-    updateStart,
-    updateEnd,
-    updateProperty,
-    updateValue,
-    updateSmoothingWindowPreset,
-  } = useTrajectoryState(extraction);
-  const {getSlug} = useTrajectorySlug();
-  const {
-    validate,
-    isNameValid,
-    isTagNameValid,
-    isTagValueValid,
-    isStartValid,
-    isEndValid,
-  } = useTrajectoriesValidation();
+  const {trajectories, addTrajectory} = useTrajectoryState(extraction);
+
+  const {validate} = useTrajectoriesValidation();
+
   const validation = useMemo(
     () => validate(extraction),
     [extraction, validate],
   );
-  const {names} = useFilesTagging();
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -98,74 +89,138 @@ export function ExtractionTrajectories({extraction}: Props) {
       {trajectories
         .sort((a, b) => a.index - b.index)
         .map((trajectory) => (
-          <SectionCard
-            key={getSlug(trajectory)}
-            className={clsx(genericStyles.row, styles.row)}
-          >
-            <div className="flex gap">
-              <Button
-                size="small"
-                icon={<Cross size={ICON_SIZE} />}
-                onClick={() => deleteTrajectory(trajectory)}
-              />
-              <Button
-                size="small"
-                icon={<ArrowDown size={ICON_SIZE} />}
-                onClick={() => updateIndex(trajectory, +1)}
-              />
-              <Button
-                size="small"
-                icon={<ArrowUp size={ICON_SIZE} />}
-                onClick={() => updateIndex(trajectory, -1)}
-              />
-            </div>
+          <TrajectoryRow
+            extraction={extraction}
+            trajectory={trajectory}
+          />
+        ))}
+    </Section>
+  );
+}
 
-            <span>{trajectory.index}</span>
+interface TrajectoryRowProps {
+  extraction: ExtractionConfig;
+  trajectory: TrajectoryConfig;
+}
 
-            <TextInput
-              defaultValue={trajectory.name}
-              onBlur={(v) => updateName(trajectory, v)}
-              intent={
-                isNameValid(trajectory, extraction) ? 'success' : 'danger'
-              }
-            />
+function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
+  const {
+    deleteTrajectory,
+    updateIndex,
+    updateName,
+    updateStart,
+    updateEnd,
+    updateProperty,
+    updateValue,
+    updateSmoothingWindowPreset,
+    updateSmoothingWindowCustom,
+  } = useTrajectoryState(extraction);
 
-            <DatePicker
-              value={trajectory.start}
-              onChange={(d) => d !== null && updateStart(trajectory, d)}
-              intent={isStartValid(trajectory) ? 'success' : 'danger'}
-              small
-            />
+  const {getSlug} = useTrajectorySlug();
 
-            <DatePicker
-              value={trajectory.end}
-              onChange={(d) => d !== null && updateEnd(trajectory, d)}
-              intent={isEndValid(trajectory) ? 'success' : 'danger'}
-              small
-            />
+  const {
+    isNameValid,
+    isTagNameValid,
+    isTagValueValid,
+    isStartValid,
+    isEndValid,
+  } = useTrajectoriesValidation();
 
-            <Select
-              items={names}
-              current={trajectory.tagName ?? null}
-              onSelect={(v) => updateProperty(trajectory, v)}
-              placeholder="Select"
-              intent={isTagNameValid(trajectory) ? 'success' : 'danger'}
-            />
+  const {names} = useFilesTagging();
+  const [isManual, setIsManual] = useState(false);
 
-            <TextInput
-              defaultValue={trajectory.tagValue}
-              onBlur={(v) => updateValue(trajectory, v)}
-              intent={isTagValueValid(trajectory) ? 'success' : 'danger'}
-            />
+  return (
+    <SectionCard
+      key={getSlug(trajectory)}
+      className={clsx(genericStyles.row, styles.row)}
+    >
+      <div className="flex gap">
+        <Button
+          size="small"
+          icon={<Cross size={ICON_SIZE} />}
+          onClick={() => deleteTrajectory(trajectory)}
+        />
+        <Button
+          size="small"
+          icon={<ArrowDown size={ICON_SIZE} />}
+          onClick={() => updateIndex(trajectory, +1)}
+        />
+        <Button
+          size="small"
+          icon={<ArrowUp size={ICON_SIZE} />}
+          onClick={() => updateIndex(trajectory, -1)}
+        />
+      </div>
 
+      <span>{trajectory.index}</span>
+
+      <TextInput
+        defaultValue={trajectory.name}
+        onBlur={(v) => updateName(trajectory, v)}
+        intent={isNameValid(trajectory, extraction) ? 'success' : 'danger'}
+      />
+
+      <DatePicker
+        value={trajectory.start}
+        onChange={(d) => d !== null && updateStart(trajectory, d)}
+        intent={isStartValid(trajectory) ? 'success' : 'danger'}
+        small
+      />
+
+      <DatePicker
+        value={trajectory.end}
+        onChange={(d) => d !== null && updateEnd(trajectory, d)}
+        intent={isEndValid(trajectory) ? 'success' : 'danger'}
+        small
+      />
+
+      <Select
+        items={names}
+        current={trajectory.tagName ?? null}
+        onSelect={(v) => updateProperty(trajectory, v)}
+        placeholder="Select"
+        intent={isTagNameValid(trajectory) ? 'success' : 'danger'}
+      />
+
+      <TextInput
+        defaultValue={trajectory.tagValue}
+        onBlur={(v) => updateValue(trajectory, v)}
+        intent={isTagValueValid(trajectory) ? 'success' : 'danger'}
+      />
+
+      <div className={clsx(styles.window)}>
+        {!isManual && (
+          <>
             <Select
               items={SmoothingWindowPresets}
               current={trajectory.smoothingWindowPreset}
               onSelect={(s) => updateSmoothingWindowPreset(trajectory, s)}
               placeholder="step"
             />
-          </SectionCard>
-        ))}
-    </Section>
+            <Button
+              icon={<MultiSelect size={ICON_SIZE} />}
+              fill
+              style={{margin: 2}}
+              onClick={() => setIsManual(true)}
+            />
+          </>
+        )}
+        {isManual && (
+          <>
+            <NumberInput
+              defaultValue={trajectory.smoothingWindow}
+              smallText
+              onBlur={(v) => updateSmoothingWindowCustom(trajectory, v)}
+            />
+            <Button
+              icon={<ManuallyEnteredData size={ICON_SIZE} />}
+              fill
+              style={{margin: 2}}
+              onClick={() => setIsManual(false)}
+            />
+          </>
+        )}
+      </div>
+    </SectionCard>
   );
 }

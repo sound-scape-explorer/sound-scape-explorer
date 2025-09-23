@@ -1,3 +1,13 @@
 .row {
-  grid-template-columns: 6em 3em repeat(5, 1fr) 7em;
+  grid-template-columns: 6em 3em repeat(5, 1fr) 8em;
+}
+
+.window {
+  & > :first-child {
+    min-width: 0;
+  }
+
+  & > :last-child {
+    max-width: 0;
+  }
 }

@@ -1,6 +1,6 @@
 import {
+  SMOOTHING_WINDOW_CUSTOM,
   SMOOTHING_WINDOW_PRESETS,
-  type SmoothingWindowPreset,
 } from '@shared/constants.ts';
 import {formatDateToString, getToday} from '@shared/dates';
 import {addHours} from 'date-fns';
@@ -124,9 +124,25 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
   );
 
   const updateSmoothingWindowPreset = useCallback(
-    (trajectory: TrajectoryConfig, preset: SmoothingWindowPreset) => {
+    (
+      trajectory: TrajectoryConfig,
+      preset: TrajectoryConfig['smoothingWindowPreset'],
+    ) => {
+      if (preset === SMOOTHING_WINDOW_CUSTOM) {
+        return;
+      }
+
       trajectory.smoothingWindowPreset = preset;
       trajectory.smoothingWindow = SMOOTHING_WINDOW_PRESETS[preset];
+      updateExtraction(extraction);
+    },
+    [extraction, updateExtraction],
+  );
+
+  const updateSmoothingWindowCustom = useCallback(
+    (trajectory: TrajectoryConfig, value: number) => {
+      trajectory.smoothingWindowPreset = SMOOTHING_WINDOW_CUSTOM;
+      trajectory.smoothingWindow = value;
       updateExtraction(extraction);
     },
     [extraction, updateExtraction],
@@ -143,5 +159,6 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
     updateProperty,
     updateValue,
     updateSmoothingWindowPreset,
+    updateSmoothingWindowCustom,
   };
 }

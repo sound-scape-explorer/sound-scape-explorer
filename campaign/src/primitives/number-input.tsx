@@ -1,4 +1,5 @@
 import {type Intent, NumericInput, Size} from '@blueprintjs/core';
+import {type CSSProperties, useRef} from 'react';
 
 interface Props {
   defaultValue: number;
@@ -6,6 +7,7 @@ interface Props {
   size?: Size;
   intent?: Intent;
   disabled?: boolean;
+  smallText?: boolean;
 }
 
 export function NumberInput({
@@ -14,10 +16,16 @@ export function NumberInput({
   size = Size.MEDIUM,
   intent = 'none',
   disabled = false,
+  smallText = false,
 }: Props) {
+  const customStyles = useRef<CSSProperties | undefined>(
+    smallText ? {fontSize: '80%'} : undefined,
+  );
+
   return (
     <NumericInput
       fill
+      style={customStyles.current}
       size={size}
       defaultValue={defaultValue}
       intent={intent}

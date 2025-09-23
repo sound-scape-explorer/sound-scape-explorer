@@ -1,4 +1,5 @@
 import {
+  SMOOTHING_WINDOW_CUSTOM,
   SMOOTHING_WINDOW_PRESETS,
   type SmoothingWindowPreset,
 } from '@shared/constants.ts';
@@ -6,12 +7,15 @@ import {ExtractionDto, TrajectoryDto} from '@shared/dtos.ts';
 import {z} from 'zod';
 
 export const TrajectoryConfig = TrajectoryDto.extend({
-  smoothingWindowPreset: z.enum(
-    Object.keys(SMOOTHING_WINDOW_PRESETS) as [
-      SmoothingWindowPreset,
-      ...SmoothingWindowPreset[],
-    ],
-  ),
+  smoothingWindowPreset: z.union([
+    z.literal(SMOOTHING_WINDOW_CUSTOM),
+    z.enum(
+      Object.keys(SMOOTHING_WINDOW_PRESETS) as [
+        SmoothingWindowPreset,
+        ...SmoothingWindowPreset[],
+      ],
+    ),
+  ]),
 });
 
 export type TrajectoryConfig = z.infer<typeof TrajectoryConfig>;
