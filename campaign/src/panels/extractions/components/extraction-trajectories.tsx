@@ -90,6 +90,7 @@ export function ExtractionTrajectories({extraction}: Props) {
         .sort((a, b) => a.index - b.index)
         .map((trajectory) => (
           <TrajectoryRow
+            key={trajectory.index}
             extraction={extraction}
             trajectory={trajectory}
           />
