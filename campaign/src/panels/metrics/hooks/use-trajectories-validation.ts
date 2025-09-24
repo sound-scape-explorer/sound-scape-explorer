@@ -39,6 +39,13 @@ export function useTrajectoriesValidation() {
     [],
   );
 
+  const isTrajectoryWindowValid = useCallback(
+    (trajectory: TrajectoryConfig) => {
+      return trajectory.smoothingWindow > 0;
+    },
+    [],
+  );
+
   const validate = useCallback(
     (extraction: ExtractionConfig) => {
       const l = extraction.trajectories.length;
@@ -71,11 +78,24 @@ export function useTrajectoriesValidation() {
           v.content = 'invalid dates';
           break;
         }
+
+        if (!isTrajectoryWindowValid(t)) {
+          v.intent = 'danger';
+          v.content = 'invalid window';
+          break;
+        }
       }
 
       return v;
     },
-    [isNameValid, isTagNameValid, isTagValueValid, isStartValid, isEndValid],
+    [
+      isNameValid,
+      isTagNameValid,
+      isTagValueValid,
+      isStartValid,
+      isEndValid,
+      isTrajectoryWindowValid,
+    ],
   );
 
   return {
@@ -85,5 +105,6 @@ export function useTrajectoriesValidation() {
     isTagValueValid,
     isStartValid,
     isEndValid,
+    isTrajectoryWindowValid,
   };
 }

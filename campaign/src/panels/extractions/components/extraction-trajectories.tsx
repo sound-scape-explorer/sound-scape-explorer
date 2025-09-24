@@ -124,6 +124,7 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
     isTagValueValid,
     isStartValid,
     isEndValid,
+    isTrajectoryWindowValid,
   } = useTrajectoriesValidation();
 
   const {names} = useFilesTagging();
@@ -196,6 +197,9 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
               current={trajectory.smoothingWindowPreset}
               onSelect={(s) => updateSmoothingWindowPreset(trajectory, s)}
               placeholder="step"
+              intent={
+                isTrajectoryWindowValid(trajectory) ? 'success' : 'danger'
+              }
             />
             <Button
               icon={<MultiSelect size={ICON_SIZE} />}
@@ -211,6 +215,9 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
               defaultValue={trajectory.smoothingWindow}
               smallText
               onBlur={(v) => updateSmoothingWindowCustom(trajectory, v)}
+              intent={
+                isTrajectoryWindowValid(trajectory) ? 'success' : 'danger'
+              }
             />
             <Button
               icon={<ManuallyEnteredData size={ICON_SIZE} />}
