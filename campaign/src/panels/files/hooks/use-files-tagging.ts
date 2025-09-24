@@ -5,7 +5,11 @@ import {
   type Column,
   useTableState,
 } from 'src/panels/files/hooks/use-table-state';
-import {addPrefixToTagName, removePrefixFromTagName} from 'src/utils/files';
+import {
+  addPrefixToTagName,
+  removePrefixFromTagKey,
+  removePrefixFromTagName,
+} from 'src/utils/files';
 
 const selectedAtom = atom<Column['name'] | null>(null);
 
@@ -47,6 +51,21 @@ export function useFilesTagging() {
         .map((c) => removePrefixFromTagName(c.name)),
     [state.columns],
   );
+
+  const uniquesByTagName = useMemo(() => {
+    const keysWithPrefix = state.columns
+      .filter((c) => c.type === 'user')
+      .map((c) => c.key);
+
+    const payload: Record<string, string[]> = {};
+
+    for (const keyWithPrefix of keysWithPrefix) {
+      const name = removePrefixFromTagKey(keyWithPrefix);
+      payload[name] = [...new Set(state.rows[keyWithPrefix])];
+    }
+
+    return payload;
+  }, [state]);
 
   const add = useCallback(() => {
     if (addInput === '') {
@@ -116,5 +135,6 @@ export function useFilesTagging() {
     rename,
     remove,
     names,
+    uniquesByTagName,
   };
 }

@@ -1,9 +1,12 @@
 import {isAfter, isBefore} from 'date-fns';
 import {useCallback} from 'react';
 import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces';
+import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging.ts';
 import {createDefaultValidation} from 'src/utils/validation';
 
 export function useTrajectoriesValidation() {
+  const {uniquesByTagName} = useFilesTagging();
+
   const isNameValid = useCallback(
     (trajectory: TrajectoryConfig, extraction: ExtractionConfig) => {
       if (trajectory.name === '') {
@@ -23,9 +26,17 @@ export function useTrajectoriesValidation() {
     return trajectory.tagName !== undefined;
   }, []);
 
-  const isTagValueValid = useCallback((trajectory: TrajectoryConfig) => {
-    return trajectory.tagValue !== '';
-  }, []);
+  const isTagValueValid = useCallback(
+    (trajectory: TrajectoryConfig) => {
+      if (trajectory.tagValue === '') {
+        return false;
+      }
+
+      const uniques = uniquesByTagName[trajectory.tagName];
+      return uniques.includes(trajectory.tagValue);
+    },
+    [uniquesByTagName],
+  );
 
   const isStartValid = useCallback(
     (trajectory: TrajectoryConfig) =>
