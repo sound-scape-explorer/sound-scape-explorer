@@ -34,6 +34,7 @@ interface Props<T> {
   selector?: keyof T | null;
   disabled?: boolean;
   intent?: Intent;
+  matchWidth?: boolean;
 }
 
 export function Select<T>({
@@ -46,6 +47,7 @@ export function Select<T>({
   selector = null,
   disabled = false,
   intent = 'none',
+  matchWidth = false,
 }: Props<T>) {
   const hasNoSelection = useMemo(() => current === null, [current]);
 
@@ -72,7 +74,7 @@ export function Select<T>({
       itemRenderer={(...props) => renderItem(...props, forwardKey, selector)}
       onItemSelect={onSelect}
       filterable={false}
-      popoverProps={{minimal: true}}
+      popoverProps={{minimal: true, matchTargetWidth: matchWidth}}
     >
       <Button
         fill

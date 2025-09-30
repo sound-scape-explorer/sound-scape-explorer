@@ -183,6 +183,7 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
         onSelect={(v) => updateProperty(trajectory, v)}
         placeholder="Select"
         intent={isTagNameValid(trajectory) ? 'success' : 'danger'}
+        matchWidth
       />
 
       <Suggest
