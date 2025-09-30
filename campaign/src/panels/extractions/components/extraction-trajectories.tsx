@@ -25,6 +25,7 @@ import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 import {NumberInput} from 'src/primitives/number-input.tsx';
+import {Suggest} from 'src/primitives/suggest.tsx';
 
 interface Props {
   extraction: ExtractionConfig;
@@ -128,7 +129,7 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
     isTrajectoryWindowValid,
   } = useTrajectoriesValidation();
 
-  const {names} = useFilesTagging();
+  const {names, uniquesByTagName} = useFilesTagging();
   const [isManual, setIsManual] = useState(false);
 
   return (
@@ -184,10 +185,12 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
         intent={isTagNameValid(trajectory) ? 'success' : 'danger'}
       />
 
-      <TextInput
-        defaultValue={trajectory.tagValue}
-        onBlur={(v) => updateValue(trajectory, v)}
+      <Suggest
+        items={uniquesByTagName[trajectory.tagName] ?? []}
+        selected={trajectory.tagValue}
+        onChange={(v) => updateValue(trajectory, v)}
         intent={isTagValueValid(trajectory) ? 'success' : 'danger'}
+        disabled={trajectory.tagName === ''}
       />
 
       <div className={clsx(styles.window)}>
