@@ -78,8 +78,8 @@
 }
 
 .help {
-  height: 100%;
   cursor: help;
+  height: 100%;
 
   &:hover {
     background: gainsboro;
@@ -103,12 +103,12 @@
 }
 
 code {
+  background-color: #f4f4f4;
+  border-radius: 3px;
+  color: #333;
   font-family: monospace;
   font-size: 90%;
   padding: 2px 4px;
-  color: #333;
-  border-radius: 3px;
-  background-color: #f4f4f4;
 }
 
 .scrollable {
