@@ -23,7 +23,7 @@ export function useTrajectoriesValidation() {
   );
 
   const isTagNameValid = useCallback((trajectory: TrajectoryConfig) => {
-    return trajectory.tagName !== undefined;
+    return trajectory.tagName !== '';
   }, []);
 
   const isTagValueValid = useCallback(
@@ -74,13 +74,13 @@ export function useTrajectoriesValidation() {
 
         if (!isTagNameValid(t)) {
           v.intent = 'danger';
-          v.content = 'invalid label properties';
+          v.content = 'invalid tag names';
           break;
         }
 
         if (!isTagValueValid(t)) {
           v.intent = 'danger';
-          v.content = 'invalid label values';
+          v.content = 'invalid tag values';
           break;
         }
 
@@ -92,7 +92,7 @@ export function useTrajectoriesValidation() {
 
         if (!isTrajectoryWindowValid(t)) {
           v.intent = 'danger';
-          v.content = 'invalid window';
+          v.content = 'invalid windows';
           break;
         }
       }
