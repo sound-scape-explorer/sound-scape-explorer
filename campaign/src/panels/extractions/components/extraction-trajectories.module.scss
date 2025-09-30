@@ -1,5 +1,5 @@
 .row {
-  grid-template-columns: 6em 3em repeat(3, 9em) repeat(2, 1fr) 10em;
+  grid-template-columns: 6em 3em repeat(3, 1fr) repeat(2, 2fr) 1fr;
 }
 
 .window {
