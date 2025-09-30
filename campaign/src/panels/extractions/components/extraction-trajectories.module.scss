@@ -1,10 +1,14 @@
 .row {
-  grid-template-columns: 6em 3em repeat(5, 1fr) 8em;
+  grid-template-columns: 6em 3em repeat(3, 9em) repeat(2, 1fr) 10em;
 }
 
 .window {
+  gap: 0.5em;
+  justify-content: space-between !important;
+
   & > :first-child {
     min-width: 0;
+    width: 100%;
   }
 
   & > :last-child {
