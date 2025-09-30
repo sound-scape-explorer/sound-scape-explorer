@@ -82,7 +82,7 @@ export function Suggest({items, selected, onChange, intent, disabled}: Props) {
       onItemSelect={onChange}
       inputProps={{intent}}
       noResults={noResults}
-      popoverProps={{minimal: true}}
+      popoverProps={{minimal: true, matchTargetWidth: true}}
     />
   );
 }
