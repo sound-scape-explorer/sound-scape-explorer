@@ -12,13 +12,15 @@ import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selecti
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
+import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 
 export function useViewUnloader() {
   const {open, closeAll} = useDraggables();
   const {reset: resetAggregations} = useAggregations();
   const {reset: resetReductionEmbeddings} = useReductions();
   const {resetColorScale} = useScatterColorScale();
-  const {resetSelection} = useTagSelection();
+  const {resetSelection: resetTagSelection} = useTagSelection();
+  const {reset: resetScatterSelection} = useDraggableSelection();
   const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
   const {reset: resetScatter, isEnabled} = useScatterRender();
   const {reset: resetFilterByLabel} = useScatterFilterTag();
@@ -36,7 +38,8 @@ export function useViewUnloader() {
 
     closeAll();
     resetTrajectoriesSelection();
-    resetSelection();
+    resetTagSelection();
+    resetScatterSelection();
     resetColorScale();
     resetScatter();
     resetFilterByLabel();
