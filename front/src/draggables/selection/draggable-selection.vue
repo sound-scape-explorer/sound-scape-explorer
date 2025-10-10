@@ -10,6 +10,7 @@ import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar
 import AppInput from 'src/app/input/app-input.vue';
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
+import {useScatterDimensions} from 'src/components/scatter/use-scatter-dimensions';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
@@ -24,6 +25,7 @@ const {filter} = useScatterFilterSpatial();
 const {update} = useScatterGlobalFilter();
 const {lock, unlock} = useScatterCamera();
 const {colors} = useThemeColors();
+const {is3d} = useScatterDimensions();
 
 const {
   name,
@@ -177,6 +179,7 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
         <NSpace vertical>
           <NSlider
             v-model:value="zRange"
+            :disabled="!is3d"
             :max="zBounds[1]"
             :min="zBounds[0]"
             :step="stepRange"
@@ -192,6 +195,7 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
       <NSpace vertical>
         <NSlider
           v-model:value="xAngle"
+          :disabled="!is3d"
           :max="90"
           :min="-90"
           :step="stepAngle"
@@ -205,6 +209,7 @@ watch([isFiltering, xRange, yRange, zRange, xAngle, yAngle, zAngle], () => {
       <NSpace vertical>
         <NSlider
           v-model:value="yAngle"
+          :disabled="!is3d"
           :max="90"
           :min="-90"
           :step="stepAngle"
