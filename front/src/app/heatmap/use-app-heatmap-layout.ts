@@ -13,7 +13,7 @@ export function useAppHeatmapLayout() {
       title,
       paper_bgcolor: plotBackground.value,
       plot_bgcolor: plotBackground.value,
-      clickmode: 'none',
+      clickmode: 'event',
       showlegend: false,
       width: width.value,
       height: height.value,
