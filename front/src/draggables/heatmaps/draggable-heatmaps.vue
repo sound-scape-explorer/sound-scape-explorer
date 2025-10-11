@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
+import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
+import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useExportName} from 'src/composables/use-export-name';
 import DraggableHeatmapsMenu from 'src/draggables/heatmaps/draggable-heatmaps-menu.vue';
@@ -26,6 +28,10 @@ useDraggableHeatmapsLifecycles();
     :draggable-key="DraggableKey.enum.heatmaps"
     :suspense="SuspenseCase.enum.NO_METRICS"
   >
+    <AppDraggableSidebar>
+      <FilteringInfo />
+    </AppDraggableSidebar>
+
     <DraggableHeatmapsMenu />
 
     <div :class="$style.wrapper">
