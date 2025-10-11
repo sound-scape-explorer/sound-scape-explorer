@@ -46,5 +46,6 @@ export function useTagSelection() {
     buildSelection: build,
     updateSelection: update,
     resetSelection: reset,
+    reset,
   };
 }
