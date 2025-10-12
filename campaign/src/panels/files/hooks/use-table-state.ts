@@ -42,9 +42,6 @@ const stateAtom = atom<{
   future: [], // limit to 2 entries
 });
 
-// very dumb but hey
-let uniqueIndex = 0;
-
 interface CreateColumnOptions {
   key: ColumnKey | null;
   type: ColumnType;
@@ -164,9 +161,7 @@ export function useTableState() {
         return;
       }
 
-      uniqueIndex += 1;
-
-      const key: ColumnKey = opts?.key ?? `col_${uniqueIndex}`;
+      const key: ColumnKey = opts?.key ?? `col_${name}`;
       const type = opts?.type ?? 'user';
       const validator = opts?.validator ?? null;
 
