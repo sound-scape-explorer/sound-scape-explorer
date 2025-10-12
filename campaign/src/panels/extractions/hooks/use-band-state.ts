@@ -1,12 +1,10 @@
 import {type BandDto} from '@shared/dtos.ts';
-import {useCallback, useMemo} from 'react';
+import {useCallback} from 'react';
 import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
 export function useBandState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
-
-  const bands = useMemo(() => extraction.bands, [extraction.bands]);
 
   const addBand = useCallback(() => {
     extraction.bands.push({
@@ -78,7 +76,6 @@ export function useBandState(extraction: ExtractionConfig) {
   );
 
   return {
-    bands,
     addBand,
     deleteBand,
     updateIndex,

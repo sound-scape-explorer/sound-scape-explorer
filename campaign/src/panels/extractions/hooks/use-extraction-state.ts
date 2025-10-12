@@ -202,10 +202,7 @@ export function useExtractionState() {
     (extraction: ExtractionConfig) => {
       setExtractions((prev) => {
         const newExtractions = [...prev];
-        newExtractions[extraction.index] = {
-          ...extraction,
-        };
-
+        newExtractions[extraction.index] = structuredClone(extraction);
         return newExtractions;
       });
     },

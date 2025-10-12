@@ -27,15 +27,8 @@ interface Props {
 }
 
 export function ExtractionBands({extraction}: Props) {
-  const {
-    bands,
-    addBand,
-    deleteBand,
-    updateIndex,
-    updateName,
-    updateLow,
-    updateHigh,
-  } = useBandState(extraction);
+  const {addBand, deleteBand, updateIndex, updateName, updateLow, updateHigh} =
+    useBandState(extraction);
   const {hasTemplate} = useExtractionTemplates(extraction);
   const {getSlug} = useBandSlug();
   const {isNameValid, isLowValid, isHighValid, validate} = useBandValidation();
@@ -85,7 +78,7 @@ export function ExtractionBands({extraction}: Props) {
         <div>high freq. (Hz)</div>
       </SectionCard>
 
-      {bands
+      {extraction.bands
         .sort((a, b) => a.index - b.index)
         .map((band) => (
           <SectionCard
