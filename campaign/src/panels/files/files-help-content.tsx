@@ -34,13 +34,25 @@ export function FilesHelpContent() {
             className="flex column"
             key="table"
           >
+            <span>Right click to access quick actions</span>
+
             <span>
-              The table has a context menu accessed through right clicking.
+              Press <code>?</code> or click{' '}
+              <Button
+                size="small"
+                onClick={triggerHelpModal}
+              >
+                here
+              </Button>{' '}
+              to display help.
             </span>
 
             <span>
-              The table has also a help modal opened by striking `?` or clicking{' '}
-              <Button onClick={triggerHelpModal}>here</Button>.
+              Undo by pressing <code>Ctrl+Z</code>.
+            </span>
+
+            <span>
+              Redo by pressing <code>Ctrl+⇧+Z</code>.
             </span>
           </div>,
         ],
