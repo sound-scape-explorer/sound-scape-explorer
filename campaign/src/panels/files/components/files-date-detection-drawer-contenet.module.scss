@@ -1,0 +1,19 @@
+.table {
+  width: 100%;
+}
+
+$width: 70px;
+
+.short {
+  font-size: 80%;
+  min-width: $width !important;
+  width: $width !important;
+}
+
+.long {
+  font-size: 80%;
+}
+
+.red {
+  color: red;
+}
