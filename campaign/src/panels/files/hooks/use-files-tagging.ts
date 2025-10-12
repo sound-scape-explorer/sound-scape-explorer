@@ -95,7 +95,7 @@ export function useFilesTagging() {
     const names = getColNames();
 
     if (names.includes(editPrefixed)) {
-      notify('property already exists', 'danger');
+      notify('tag name already exists', 'danger');
       return;
     }
 
