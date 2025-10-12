@@ -8,6 +8,7 @@ import {
 import {Clipboard, Cross, Help, Redo, Undo} from '@blueprintjs/icons';
 import {Table2} from '@blueprintjs/table';
 import {useMemo} from 'react';
+import {TABLE_FROZEN_COL_COUNT} from 'src/constants.ts';
 import styles from 'src/panels/files/files-table.module.scss';
 import {useTableColumns} from 'src/panels/files/hooks/use-table-columns.tsx';
 import {useTableCopy} from 'src/panels/files/hooks/use-table-copy';
@@ -87,7 +88,7 @@ export function FilesTable() {
                 className={styles.table}
                 numRows={length}
                 columnWidths={widths}
-                numFrozenColumns={2}
+                numFrozenColumns={TABLE_FROZEN_COL_COUNT}
                 cellRendererDependencies={[columns]}
                 getCellClipboardData={handleCopy}
                 enableFocusedCell={true}

@@ -1,6 +1,7 @@
 import {type Intent} from '@blueprintjs/core';
 import {atom, useAtom} from 'jotai';
 import {useCallback, useMemo} from 'react';
+import {TABLE_FROZEN_COL_COUNT} from 'src/constants.ts';
 import {useNotify} from 'src/hooks/use-notify';
 import {addPrefixToTagName} from 'src/utils/files';
 import {filterOutKey} from 'src/utils/objects';
@@ -128,6 +129,14 @@ export function useTableState() {
   // claude, moving works great from right to left but not from left to right. rewrite this method
   const reorder = useCallback(
     (oldIndex: number, newIndex: number, count: number) => {
+      if (
+        oldIndex < TABLE_FROZEN_COL_COUNT ||
+        newIndex < TABLE_FROZEN_COL_COUNT
+      ) {
+        notify(`First ${TABLE_FROZEN_COL_COUNT} columns are frozen!`, 'danger');
+        return;
+      }
+
       setState((prev) => {
         const copy = [...prev.current.order];
         const moved = copy.splice(oldIndex, count);
@@ -143,7 +152,7 @@ export function useTableState() {
         };
       });
     },
-    [generateHistory, setState],
+    [generateHistory, setState, notify],
   );
 
   const createColumn = useCallback(
