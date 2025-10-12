@@ -1,5 +1,5 @@
 import {Button} from '@blueprintjs/core';
-import {useTableRefProvider} from 'src/panels/files/components/use-table-ref.ts';
+import {useTableRefProvider} from 'src/panels/files/hooks/use-table-ref.ts';
 import {DrawerContent} from 'src/primitives/drawer-content.tsx';
 
 export function FilesHelpContent() {
