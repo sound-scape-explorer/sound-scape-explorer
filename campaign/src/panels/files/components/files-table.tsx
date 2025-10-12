@@ -5,9 +5,10 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import {Clipboard, Cross, Redo, Undo} from '@blueprintjs/icons';
+import {Clipboard, Cross, Help, Redo, Undo} from '@blueprintjs/icons';
 import {Table2} from '@blueprintjs/table';
 import {useMemo} from 'react';
+import {useTableRefProvider} from 'src/panels/files/components/use-table-ref.ts';
 import styles from 'src/panels/files/files-table.module.scss';
 import {useTableColumns} from 'src/panels/files/hooks/use-table-columns.tsx';
 import {useTableCopy} from 'src/panels/files/hooks/use-table-copy';
@@ -28,6 +29,7 @@ export function FilesTable() {
   const {handlePaste} = useTablePaste();
   const {handleFocus} = useTableCurrentCell();
   const {handleSelection} = useTableCurrentSelection();
+  const {tableRef, triggerHelpModal} = useTableRefProvider();
   const {
     reorder,
     getTableLength,
@@ -65,6 +67,11 @@ export function FilesTable() {
             icon={<Redo />}
             text="Redo"
           />
+          <MenuItem
+            onClick={triggerHelpModal}
+            icon={<Help />}
+            text="Help"
+          />
         </Menu>
       }
     >
@@ -72,6 +79,7 @@ export function FilesTable() {
         <HotkeysTarget2 hotkeys={hotkeys}>
           {({handleKeyDown, handleKeyUp}) => (
             <div
+              ref={tableRef}
               onKeyDown={handleKeyDown}
               onKeyUp={handleKeyUp}
             >

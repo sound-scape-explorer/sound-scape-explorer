@@ -1,6 +1,10 @@
+import {Button} from '@blueprintjs/core';
+import {useTableRefProvider} from 'src/panels/files/components/use-table-ref.ts';
 import {DrawerContent} from 'src/primitives/drawer-content.tsx';
 
 export function FilesHelpContent() {
+  const {triggerHelpModal} = useTableRefProvider();
+
   return (
     <DrawerContent
       content={[
@@ -21,6 +25,22 @@ export function FilesHelpContent() {
             <span className="i">
               Note: recordings from the same site must not have overlapping
               timestamps.
+            </span>
+          </div>,
+        ],
+        [
+          'Table',
+          <div
+            className="flex column"
+            key="table"
+          >
+            <span>
+              The table has a context menu accessed through right clicking.
+            </span>
+
+            <span>
+              The table has also a help modal opened by striking `?` or clicking{' '}
+              <Button onClick={triggerHelpModal}>here</Button>.
             </span>
           </div>,
         ],
