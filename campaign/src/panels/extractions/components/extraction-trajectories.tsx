@@ -17,7 +17,6 @@ import {ExtractionTrajectoriesDrawerContent} from 'src/panels/extractions/compon
 import {useTrajectoryState} from 'src/panels/extractions/hooks/use-trajectory-state.ts';
 import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging';
 import {useTrajectoriesValidation} from 'src/panels/metrics/hooks/use-trajectories-validation';
-import {useTrajectorySlug} from 'src/panels/metrics/hooks/use-trajectory-slug';
 import {DatePicker} from 'src/primitives/date-picker.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
 import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
@@ -26,6 +25,7 @@ import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 import {NumberInput} from 'src/primitives/number-input.tsx';
 import {Suggest} from 'src/primitives/suggest.tsx';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 interface Props {
   extraction: ExtractionConfig;
@@ -118,7 +118,7 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
     updateSmoothingWindowCustom,
   } = useTrajectoryState(extraction);
 
-  const {getSlug} = useTrajectorySlug();
+  const {getSlug} = useObjectSlug();
 
   const {
     isNameValid,
