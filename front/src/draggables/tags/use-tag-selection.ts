@@ -38,7 +38,15 @@ export function useTagSelection() {
   };
 
   const reset = () => {
-    selection.value = {};
+    const newSelection: TagSelection = {...selection.value};
+
+    for (const key of Object.keys(newSelection)) {
+      newSelection[key] = [];
+    }
+
+    selection.value = newSelection;
+
+    filterByTag(selection);
   };
 
   return {

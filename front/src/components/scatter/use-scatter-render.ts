@@ -53,7 +53,10 @@ export function useScatterRender() {
     // selection
     if (isSelectionActive.value) {
       const selectionTraces = renderSelection();
-      newData.push(...selectionTraces);
+
+      if (typeof selectionTraces !== 'undefined') {
+        newData.push(...selectionTraces);
+      }
     }
 
     data.value = newData;
