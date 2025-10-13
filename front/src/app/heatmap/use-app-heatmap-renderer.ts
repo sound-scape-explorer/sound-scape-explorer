@@ -60,6 +60,10 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
   };
 
   const render = () => {
+    if (a.value === null) {
+      return;
+    }
+
     const trace = buildData({
       colorscale: props.colorscale,
       x: props.x,
@@ -67,6 +71,7 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
       z: props.values,
       zmin: props.range.min,
       zmax: props.range.max,
+      labels: [a.value, b.value],
     });
 
     data.value = [trace];
