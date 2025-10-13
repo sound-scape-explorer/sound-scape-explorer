@@ -50,7 +50,7 @@ const toggle = () => (isSemitones.value = !isSemitones.value);
 
       {{ readable.semitones }}
     </NGi>
-    <NGi :class="$style.slider">
+    <NGi :class="$style['slider-container']">
       <AppTooltip>
         <template #tooltip>Reset sampling rate</template>
         <template #body>
@@ -85,7 +85,8 @@ const toggle = () => (isSemitones.value = !isSemitones.value);
   cursor: pointer;
 }
 
-.slider {
+.slider-container {
+  align-items: center;
   display: flex;
   gap: sizes.$g0;
 }

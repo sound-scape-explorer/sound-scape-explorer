@@ -42,7 +42,7 @@ const reset = () => {
         {{ duration.toFixed(2) }} seconds
       </NGi>
 
-      <NGi :class="$style.slider">
+      <NGi :class="$style['slider-container']">
         <AppTooltip>
           <template #tooltip>Reset gain</template>
           <template #body>
@@ -59,6 +59,7 @@ const reset = () => {
 
         <NSlider
           v-model:value="gain"
+          :class="$style.slider"
           :max="AUDIO_GAIN.max"
           :min="AUDIO_GAIN.min"
           :step="AUDIO_GAIN.step"
@@ -79,7 +80,8 @@ const reset = () => {
   gap: sizes.$g0;
 }
 
-.slider {
+.slider-container {
+  align-items: center;
   display: flex;
   gap: sizes.$g0;
 }
