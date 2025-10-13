@@ -36,6 +36,7 @@ import Plus from '@blueprintjs/icons/lib/esm/generated/16px/paths/plus';
 import Redo from '@blueprintjs/icons/lib/esm/generated/16px/paths/redo';
 import Refresh from '@blueprintjs/icons/lib/esm/generated/16px/paths/refresh';
 import Reset from '@blueprintjs/icons/lib/esm/generated/16px/paths/reset';
+import Resolve from '@blueprintjs/icons/lib/esm/generated/16px/paths/resolve';
 import SelectionBox from '@blueprintjs/icons/lib/esm/generated/16px/paths/selection-box';
 import SeriesFiltered from '@blueprintjs/icons/lib/esm/generated/16px/paths/series-filtered';
 import StepBackward from '@blueprintjs/icons/lib/esm/generated/16px/paths/step-backward';
@@ -44,6 +45,7 @@ import Stop from '@blueprintjs/icons/lib/esm/generated/16px/paths/stop';
 import Tags from '@blueprintjs/icons/lib/esm/generated/16px/paths/tags';
 import TimelineBarChart from '@blueprintjs/icons/lib/esm/generated/16px/paths/timeline-bar-chart';
 import Undo from '@blueprintjs/icons/lib/esm/generated/16px/paths/undo';
+import Ungroup from '@blueprintjs/icons/lib/esm/generated/16px/paths/ungroup-objects';
 import VolumeDown from '@blueprintjs/icons/lib/esm/generated/16px/paths/volume-down';
 import VolumeUp from '@blueprintjs/icons/lib/esm/generated/16px/paths/volume-up';
 import Waves from '@blueprintjs/icons/lib/esm/generated/16px/paths/waves';
@@ -87,6 +89,8 @@ const PathKey = z.enum([
   'delta',
   'export',
   'import',
+  'unlink',
+  'link',
 ]);
 // eslint-disable-next-line no-redeclare
 type PathKey = z.infer<typeof PathKey>;
@@ -142,6 +146,8 @@ const paths: Record<PathKey, string[]> = {
   delta: Delta,
   import: Import,
   export: Export,
+  unlink: Ungroup,
+  link: Resolve,
 };
 
 interface Props {

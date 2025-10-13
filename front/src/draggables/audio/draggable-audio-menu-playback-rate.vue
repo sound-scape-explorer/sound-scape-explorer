@@ -3,10 +3,10 @@ import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {PLAYBACK_RATE} from 'src/constants';
-import {useAudioSamplingRate} from 'src/draggables/audio/use-audio-sampling-rate';
+import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
 import {ref} from 'vue';
 
-const {rate, readable, reset} = useAudioSamplingRate();
+const {rate, readable, reset} = useAudioPlaybackRate();
 const {lock, unlock} = useScatterCamera();
 
 const isSemitones = ref<boolean>(false);
