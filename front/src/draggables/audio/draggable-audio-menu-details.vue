@@ -1,28 +1,12 @@
 <script lang="ts" setup="">
+import {useAppDisplay} from 'src/composables/use-app-display';
 import {useInterval} from 'src/composables/use-interval';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
-import {ref} from 'vue';
-import {z} from 'zod';
 
 const {currentIndex} = useInterval();
 const {window} = useAudioFile();
 
-const Display = z.enum(['index', 'file', 'site']);
-// eslint-disable-next-line no-redeclare
-type Display = z.infer<typeof Display>;
-
-const display = ref<Display>(Display.enum.file);
-
-const cycle = () => {
-  const options = Display.options;
-  let next = options.indexOf(display.value) + 1;
-
-  if (next >= options.length) {
-    next = 0;
-  }
-
-  display.value = options[next];
-};
+const {display, cycle, Display} = useAppDisplay('index', 'file', 'site');
 </script>
 
 <template>

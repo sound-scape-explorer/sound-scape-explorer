@@ -2,16 +2,18 @@
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
+import {useAppDisplay} from 'src/composables/use-app-display';
 import {PLAYBACK_RATE} from 'src/constants';
 import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
-import {ref} from 'vue';
 
 const {rate, readable, reset} = useAudioPlaybackRate();
 const {lock, unlock} = useScatterCamera();
 
-const isSemitones = ref<boolean>(false);
-
-const toggle = () => (isSemitones.value = !isSemitones.value);
+const {cycle, display, Display} = useAppDisplay(
+  'value',
+  'percentage',
+  'semitones',
+);
 </script>
 
 <template>
@@ -21,34 +23,51 @@ const toggle = () => (isSemitones.value = !isSemitones.value);
     x-gap="4"
   >
     <NGi
-      v-if="!isSemitones"
+      v-if="display === Display.enum.percentage"
       :class="$style.clickable"
-      @click="toggle"
+      @click="cycle"
     >
       <NTag
         :bordered="false"
         :class="$style.clickable"
         size="small"
       >
-        Speed %
+        Speed
       </NTag>
 
-      {{ readable.percentage }}
+      {{ readable.percentage }} %
     </NGi>
+
     <NGi
-      v-else
+      v-if="display === Display.enum.value"
       :class="$style.clickable"
-      @click="toggle"
+      @click="cycle"
     >
       <NTag
         :bordered="false"
         :class="$style.clickable"
         size="small"
       >
-        Semitones
+        Absolute
       </NTag>
 
-      {{ readable.semitones }}
+      {{ rate }}
+    </NGi>
+
+    <NGi
+      v-if="display === Display.enum.semitones"
+      :class="$style.clickable"
+      @click="cycle"
+    >
+      <NTag
+        :bordered="false"
+        :class="$style.clickable"
+        size="small"
+      >
+        Chromatic
+      </NTag>
+
+      {{ readable.semitones }} st
     </NGi>
     <NGi :class="$style['slider-container']">
       <AppTooltip>
