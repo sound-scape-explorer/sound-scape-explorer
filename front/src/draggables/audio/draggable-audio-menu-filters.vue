@@ -56,6 +56,7 @@ onMounted(() => {
               :bordered="false"
               :class="$style.hover"
               size="small"
+              @click="() => reset('lpf')"
             >
               LPF
             </NTag>
