@@ -79,7 +79,7 @@ const {downloadAudio} = useAudioDownload();
 
     <AppButton
       :handle-click="downloadAudio"
-      tooltip="Download"
+      tooltip="Download raw audio"
       tooltip-placement="left"
     >
       <AppIcon
