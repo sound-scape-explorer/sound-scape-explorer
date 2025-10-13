@@ -15,7 +15,7 @@ const toggle = () => (isSemitones.value = !isSemitones.value);
 </script>
 
 <template>
-  <span>Rate</span>
+  <span>Sampling</span>
   <NGrid
     cols="2"
     x-gap="4"
@@ -59,7 +59,7 @@ const toggle = () => (isSemitones.value = !isSemitones.value);
       >
         <AppTooltip placement="top">
           <template #tooltip>Reset</template>
-          <template #body>Sampling</template>
+          <template #body>Rate</template>
         </AppTooltip>
       </NTag>
 
