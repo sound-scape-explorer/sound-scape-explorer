@@ -7,6 +7,7 @@ import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {onMounted} from 'vue';
 
+// TODO: useful to clamp the values to samplingRate/2 ?
 const {band} = useViewSelection();
 const {hpfReadable, lpfReadable, update, reset} = useAudioFilters();
 
