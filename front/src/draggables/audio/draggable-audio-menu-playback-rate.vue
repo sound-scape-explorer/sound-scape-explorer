@@ -15,7 +15,7 @@ const toggle = () => (isSemitones.value = !isSemitones.value);
 </script>
 
 <template>
-  <span>Sampling</span>
+  <span>Playback</span>
   <NGrid
     cols="2"
     x-gap="4"
@@ -52,7 +52,7 @@ const toggle = () => (isSemitones.value = !isSemitones.value);
     </NGi>
     <NGi :class="$style['slider-container']">
       <AppTooltip>
-        <template #tooltip>Reset sampling rate</template>
+        <template #tooltip>Reset playback rate</template>
         <template #body>
           <NTag
             :bordered="false"
