@@ -1,3 +1,4 @@
+import {watchThrottled} from '@vueuse/core';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {WAVEFORM_HEIGHT} from 'src/constants';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
@@ -68,7 +69,7 @@ export function useWavesurferMounter() {
   // todo: too much?
   watch(ws, registerCursor);
 
-  watch(
+  watchThrottled(
     [
       size,
       colormap,
@@ -78,6 +79,9 @@ export function useWavesurferMounter() {
       hpfReadable,
       lpfReadable,
     ],
-    registerSpectrogram,
+    () => {
+      requestAnimationFrame(registerSpectrogram);
+    },
+    {throttle: 500},
   );
 }
