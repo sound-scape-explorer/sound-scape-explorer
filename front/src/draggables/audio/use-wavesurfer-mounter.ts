@@ -4,6 +4,7 @@ import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
@@ -15,6 +16,7 @@ import {type WaveSurferParams} from 'wavesurfer.js/types/params';
 
 export function useWavesurferMounter() {
   const {ws} = useWavesurfer();
+  const {hpfReadable, lpfReadable} = useAudioFilters();
   const {context, create: createContext} = useAudioContext();
   const {create: createGain, apply: applyGain} = useAudioGain();
   const {create: createAnalyser} = useAudioAnalyser();
@@ -66,9 +68,16 @@ export function useWavesurferMounter() {
   // todo: too much?
   watch(ws, registerCursor);
 
-  // todo: too much?
   watch(
-    [size, colormap, isDecibelsDisplay, isLegendOverflow, bitDepth],
+    [
+      size,
+      colormap,
+      isDecibelsDisplay,
+      isLegendOverflow,
+      bitDepth,
+      hpfReadable,
+      lpfReadable,
+    ],
     registerSpectrogram,
   );
 }
