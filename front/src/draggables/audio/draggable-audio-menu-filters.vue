@@ -1,7 +1,5 @@
 <script lang="ts" setup="">
-import {NInputNumber} from 'naive-ui';
-import AppButton from 'src/app/app-button.vue';
-import AppIcon from 'src/app/app-icon.vue';
+import {NGi, NGrid, NInputNumber, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
@@ -23,64 +21,69 @@ onMounted(() => {
 
 <template>
   <span>Filters</span>
-  <div :class="$style.container">
-    <AppTooltip placement="top-start">
-      <template #tooltip>High pass filter (Hz)</template>
-      <template #body>
+  <div :class="$style.flex">
+    <NGrid
+      cols="2"
+      x-gap="4"
+    >
+      <NGi :class="$style.flex">
+        <AppTooltip>
+          <template #tooltip>Reset high pass filter</template>
+          <template #body>
+            <NTag
+              :bordered="false"
+              :class="$style.hover"
+              size="small"
+              @click="() => reset('hpf')"
+            >
+              HPF
+            </NTag>
+          </template>
+        </AppTooltip>
+
         <NInputNumber
           v-model:value="hpfReadable"
           :min="0"
           size="tiny"
           @update:value="() => update('hpf', hpfReadable)"
         />
-      </template>
-    </AppTooltip>
+      </NGi>
+      <NGi :class="$style.flex">
+        <AppTooltip>
+          <template #tooltip>Reset low pass filter</template>
+          <template #body>
+            <NTag
+              :bordered="false"
+              :class="$style.hover"
+              size="small"
+            >
+              LPF
+            </NTag>
+          </template>
+        </AppTooltip>
 
-    <AppButton
-      :handle-click="() => reset('hpf')"
-      tooltip="Reset HPF"
-    >
-      <AppIcon
-        icon="reset"
-        size="tiny"
-      />
-    </AppButton>
-
-    <AppTooltip placement="top-start">
-      <template #tooltip>Low pass filter (Hz)</template>
-      <template #body>
         <NInputNumber
           v-model:value="lpfReadable"
           :min="0"
           size="tiny"
           @update:value="() => update('lpf', lpfReadable)"
         />
-      </template>
-    </AppTooltip>
-
-    <AppButton
-      :handle-click="() => reset('lpf')"
-      tooltip="Reset LPF"
-    >
-      <AppIcon
-        icon="reset"
-        size="tiny"
-      />
-    </AppButton>
+      </NGi>
+    </NGrid>
   </div>
 </template>
 
 <style lang="scss" module>
 @use 'src/styles/sizes';
 
-.container {
-  display: grid;
+.flex {
+  display: flex;
   gap: sizes.$g0;
-  grid-template-columns: 1fr auto 1fr auto;
-  place-items: center;
+}
 
-  & > div {
-    width: 100%;
+.hover {
+  &:hover {
+    cursor: pointer;
   }
 }
 </style>
