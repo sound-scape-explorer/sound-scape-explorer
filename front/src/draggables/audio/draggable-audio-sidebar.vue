@@ -4,16 +4,8 @@ import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import DraggableAudioSidebarVumeter from 'src/draggables/audio/draggable-audio-sidebar-vumeter.vue';
-import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
-
-const {
-  increase: increaseFourier,
-  decrease: decreaseFourier,
-  canIncrease: canIncreaseFourier,
-  canDecrease: canDecreaseFourier,
-} = useAudioFourier();
 
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
@@ -47,32 +39,6 @@ const {downloadAudio} = useAudioDownload();
     >
       <AppIcon
         icon="stop"
-        size="small"
-      />
-    </AppButton>
-
-    <AppButton
-      :disabled="!canIncreaseFourier"
-      :handle-click="increaseFourier"
-      small-tooltip
-      tooltip="FFT Size Up"
-      tooltip-placement="left"
-    >
-      <AppIcon
-        icon="plus"
-        size="small"
-      />
-    </AppButton>
-
-    <AppButton
-      :disabled="!canDecreaseFourier"
-      :handle-click="decreaseFourier"
-      small-tooltip
-      tooltip="FFT Size Down"
-      tooltip-placement="left"
-    >
-      <AppIcon
-        icon="minus"
         size="small"
       />
     </AppButton>

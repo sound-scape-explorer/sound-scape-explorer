@@ -14,6 +14,7 @@ import {
   PlotBackground,
   ScatterBorderWidth,
   SpectrogramColorMap,
+  SpectrogramFftSize,
 } from 'src/constants';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
 
@@ -26,6 +27,7 @@ const {
   plotBackground,
   scatterBorderWidth,
   spectrogramColorMap,
+  spectrogramFftSize,
   isDetailsAutoOpen,
   isAudioAutoOpen,
   isTimezoneActive,
@@ -123,6 +125,15 @@ const reload = () => location.reload();
         <h2>Spectrograms</h2>
       </AppHeader>
 
+      <DraggableSettingsItem title="FFT window size">
+        <AppSelect
+          v-model="spectrogramFftSize"
+          :class="$style['spectro-colors']"
+          :options="SpectrogramFftSize.options"
+          size="small"
+        />
+      </DraggableSettingsItem>
+
       <DraggableSettingsItem title="Color map">
         <AppSelect
           v-model="spectrogramColorMap"
@@ -141,7 +152,7 @@ const reload = () => location.reload();
       </DraggableSettingsItem>
 
       <AppHeader>
-        <h2>Scatter</h2>
+        <h2>Scatters</h2>
       </AppHeader>
 
       <DraggableSettingsItem

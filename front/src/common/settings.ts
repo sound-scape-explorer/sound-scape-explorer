@@ -6,6 +6,7 @@ import {
   PlotBackground,
   ScatterBorderWidth,
   SpectrogramColorMap,
+  SpectrogramFftSize,
   TagsDraggableSize,
 } from 'src/constants';
 import {VERSION} from 'src/version';
@@ -22,6 +23,9 @@ export const Settings = z.object({
   isTimezoneActive: z.boolean().default(false),
   isWebGlScatter2d: z.boolean().default(true),
   isColorMapSwapped: z.boolean().default(false),
+  spectrogramFftSize: SpectrogramFftSize.default(
+    SpectrogramFftSize.enum['4096'],
+  ),
   spectrogramColorMap: SpectrogramColorMap.default(
     SpectrogramColorMap.enum.hot,
   ),

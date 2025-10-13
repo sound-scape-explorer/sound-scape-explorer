@@ -27,6 +27,18 @@ export const PLAYBACK_RATE = {
   step: 0.01,
 };
 
+export const SpectrogramFftSize = z.enum([
+  '128',
+  '256',
+  '512',
+  '1024',
+  '2048',
+  '4096',
+]);
+
+// eslint-disable-next-line no-redeclare
+export type SpectrogramFftSize = z.infer<typeof SpectrogramFftSize>;
+
 export const TagsDraggableSize = z.enum(['small', 'medium', 'large']);
 // eslint-disable-next-line no-redeclare
 export type TagsDraggableSize = z.infer<typeof TagsDraggableSize>;

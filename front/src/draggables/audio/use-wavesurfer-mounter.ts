@@ -2,7 +2,7 @@ import {watchThrottled} from '@vueuse/core';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {WAVEFORM_HEIGHT} from 'src/constants';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
-import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
+import {useAudioFft} from 'src/draggables/audio/use-audio-component';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
@@ -23,7 +23,7 @@ export function useWavesurferMounter() {
   const {create: createAnalyser} = useAudioAnalyser();
   const {waveform} = useDraggableAudio();
   const {bitDepth} = useAudioFile();
-  const {size} = useAudioFourier();
+  const {size} = useAudioFft();
   const {
     spectrogramColorMap: colormap,
     decibelsDisplay: isDecibelsDisplay,
