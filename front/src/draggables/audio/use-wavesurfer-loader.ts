@@ -14,7 +14,7 @@ export function useWavesurferLoader() {
   const {ws} = useWavesurfer();
   const {node: gainNode} = useAudioGain();
   const {analyser} = useAudioAnalyser();
-  const {hpf, lpf} = useAudioFilters();
+  const {hpf, lpf, hpfReadable, lpfReadable} = useAudioFilters();
 
   const handleAudioEnd = () => {
     isPlaying.value = false;
@@ -34,12 +34,12 @@ export function useWavesurferLoader() {
     hpf.value = context.value.createBiquadFilter();
     hpf.value.type = 'highpass';
     hpf.value.Q.value = 1;
-    hpf.value.frequency.value = band.value.low;
+    hpf.value.frequency.value = hpfReadable.value ?? band.value.low;
 
     lpf.value = context.value.createBiquadFilter();
     lpf.value.type = 'lowpass';
     lpf.value.Q.value = 1;
-    lpf.value.frequency.value = band.value.high;
+    lpf.value.frequency.value = lpfReadable.value ?? band.value.high;
 
     // connect
     hpf.value.connect(lpf.value);
