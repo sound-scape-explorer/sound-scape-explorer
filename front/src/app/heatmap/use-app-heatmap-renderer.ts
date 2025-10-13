@@ -1,3 +1,4 @@
+import {type PlotMouseEvent} from 'plotly.js';
 import Plotly from 'plotly.js-dist-min';
 import {type AppHeatmapProps} from 'src/app/heatmap/app-heatmap.vue';
 import {useAppHeatmap} from 'src/app/heatmap/use-app-heatmap';
@@ -17,6 +18,34 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
   const {a, b} = useDraggableHeatmapsLabels();
   const {updateSelection} = useTagSelection();
 
+  const handleClick = (e: PlotMouseEvent) => {
+    // single
+    if (!isPairing.value) {
+      if (a.value === null) {
+        return;
+      }
+
+      const x = e.points[0].x as string;
+      const y = e.points[0].y as string;
+      const set = [...new Set([x, y])];
+
+      updateSelection(a.value, set);
+
+      return;
+    }
+
+    // pairing
+    if (a.value === null || b.value === null) {
+      return;
+    }
+
+    const x = e.points[0].x as string;
+    const y = e.points[0].y as string;
+
+    updateSelection(b.value, [y]);
+    updateSelection(a.value, [x]);
+  };
+
   const create = async () => {
     if (
       div.value === null ||
@@ -30,33 +59,7 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
     await Plotly.newPlot(div.value, data.value, layout.value, config.value);
 
     // @ts-expect-error instantiated plotly div
-    div.value.on('plotly_click', (e) => {
-      // single
-      if (!isPairing.value) {
-        if (a.value === null) {
-          return;
-        }
-
-        const indices = e.points[0].pointIndex as [number, number];
-
-        updateSelection(
-          a.value,
-          indices.map((i) => i.toString()),
-        );
-
-        return;
-      }
-
-      // pairing
-      if (a.value === null || b.value === null) {
-        return;
-      }
-
-      const indices = e.points[0].pointIndex as [number, number];
-
-      updateSelection(b.value, [indices[0].toString()]);
-      updateSelection(a.value, [indices[1].toString()]);
-    });
+    div.value.on('plotly_click', handleClick);
   };
 
   const render = () => {
