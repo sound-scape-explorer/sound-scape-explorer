@@ -24,7 +24,7 @@ const readable = ref<Readable>({
 });
 
 // audio speed
-export function useAudioRate() {
+export function useAudioSamplingRate() {
   const {config} = useConfig();
   const {togglePlayPause} = useAudioTransport();
   const {ws} = useWavesurfer();

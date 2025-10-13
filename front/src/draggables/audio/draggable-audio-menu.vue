@@ -4,7 +4,7 @@ import DraggableAudioMenuAudio from 'src/draggables/audio/draggable-audio-menu-a
 import DraggableAudioMenuDates from 'src/draggables/audio/draggable-audio-menu-dates.vue';
 import DraggableAudioMenuDetails from 'src/draggables/audio/draggable-audio-menu-details.vue';
 import DraggableAudioMenuFilters from 'src/draggables/audio/draggable-audio-menu-filters.vue';
-import DraggableAudioMenuSpeed from 'src/draggables/audio/draggable-audio-menu-speed.vue';
+import DraggableAudioMenuSampling from 'src/draggables/audio/draggable-audio-menu-sampling.vue';
 </script>
 
 <template>
@@ -12,7 +12,7 @@ import DraggableAudioMenuSpeed from 'src/draggables/audio/draggable-audio-menu-s
     <DraggableAudioMenuDetails />
     <DraggableAudioMenuDates />
     <DraggableAudioMenuAudio />
-    <DraggableAudioMenuSpeed />
+    <DraggableAudioMenuSampling />
     <DraggableAudioMenuFilters />
   </AppDraggableMenu>
 </template>

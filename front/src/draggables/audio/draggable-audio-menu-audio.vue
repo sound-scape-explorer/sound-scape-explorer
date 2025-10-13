@@ -1,6 +1,7 @@
 <script lang="ts" setup="">
 import {useDebounceFn} from '@vueuse/core';
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {AUDIO_GAIN, DEBOUNCE_MS} from 'src/constants';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
@@ -8,7 +9,7 @@ import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioWaveform} from 'src/draggables/audio/use-audio-waveform';
 
 const {duration} = useAudioFile();
-const {gain, apply} = useAudioGain();
+const {gain, apply, reset: resetGain} = useAudioGain();
 const {lock, unlock} = useScatterCamera();
 const {render} = useAudioWaveform();
 
@@ -16,6 +17,11 @@ const handleChange = useDebounceFn(() => {
   apply();
   render();
 }, DEBOUNCE_MS);
+
+const reset = () => {
+  resetGain();
+  render();
+};
 </script>
 
 <template>
@@ -37,12 +43,19 @@ const handleChange = useDebounceFn(() => {
       </NGi>
 
       <NGi :class="$style.slider">
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Gain
-        </NTag>
+        <AppTooltip>
+          <template #tooltip>Reset gain</template>
+          <template #body>
+            <NTag
+              :bordered="false"
+              :class="$style.hover"
+              size="small"
+              @click="reset"
+            >
+              Gain
+            </NTag>
+          </template>
+        </AppTooltip>
 
         <NSlider
           v-model:value="gain"
@@ -69,5 +82,11 @@ const handleChange = useDebounceFn(() => {
 .slider {
   display: flex;
   gap: sizes.$g0;
+}
+
+.hover {
+  &:hover {
+    cursor: pointer;
+  }
 }
 </style>

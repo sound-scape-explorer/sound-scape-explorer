@@ -3,10 +3,10 @@ import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {PLAYBACK_RATE} from 'src/constants';
-import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
+import {useAudioSamplingRate} from 'src/draggables/audio/use-audio-sampling-rate';
 import {ref} from 'vue';
 
-const {rate, readable, reset} = useAudioRate();
+const {rate, readable, reset} = useAudioSamplingRate();
 const {lock, unlock} = useScatterCamera();
 
 const isSemitones = ref<boolean>(false);
@@ -51,17 +51,19 @@ const toggle = () => (isSemitones.value = !isSemitones.value);
       {{ readable.semitones }}
     </NGi>
     <NGi :class="$style.slider">
-      <NTag
-        :bordered="false"
-        :class="$style.clickable"
-        size="small"
-        @click="reset"
-      >
-        <AppTooltip placement="top">
-          <template #tooltip>Reset</template>
-          <template #body>Rate</template>
-        </AppTooltip>
-      </NTag>
+      <AppTooltip>
+        <template #tooltip>Reset sampling rate</template>
+        <template #body>
+          <NTag
+            :bordered="false"
+            :class="$style.clickable"
+            size="small"
+            @click="reset"
+          >
+            Rate
+          </NTag>
+        </template>
+      </AppTooltip>
 
       <NSlider
         v-model:value="rate"
