@@ -16,7 +16,7 @@ const getHertz = (sampleRate: number) => {
   return (sampleRate * rate.value).toFixed();
 };
 
-const rate = ref<number>(PLAYBACK_RATE.default);
+const rate = ref<number>(PLAYBACK_RATE.default); // playback speed
 const readable = ref<Readable>({
   hertz: getHertz(44100),
   percentage: speedToPercentage(PLAYBACK_RATE.default, 2),
