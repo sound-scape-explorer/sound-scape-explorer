@@ -37,7 +37,10 @@ const {colors} = useThemeColors();
       </div>
 
       <div>
-        <div>Audio windows</div>
+        <div>
+          Audio window{{ currentInterval.windows.length > 1 ? 's' : '' }}:
+          {{ currentInterval.windows.length }}
+        </div>
         <div>
           <DraggableDetailsAudioWindows :interval="currentInterval" />
         </div>
@@ -88,22 +91,22 @@ const {colors} = useThemeColors();
 .container {
   display: flex;
   flex-direction: column;
-  width: sizes.$w1;
   gap: sizes.$g0;
+  width: sizes.$w1;
 
   & > div {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: space-between;
   }
 }
 
 .item {
-  display: flex;
   align-items: center;
+  border-radius: sizes.$g0;
+  display: flex;
   justify-content: space-between;
   padding-right: sizes.$p0;
-  border-radius: sizes.$g0;
 
   &:hover {
     background: v-bind('colors.boxShadow1');
