@@ -1,5 +1,5 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
-import {createSettingsRefs, Settings} from 'src/common/settings';
+import {createSettingsRefs, Settings} from 'src/common/Settings';
 
 const refs = createSettingsRefs();
 
