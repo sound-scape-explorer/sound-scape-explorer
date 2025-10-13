@@ -4,6 +4,10 @@ import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
+import {ref} from 'vue';
+
+const hpf = ref<BiquadFilterNode | null>(null);
+const lpf = ref<BiquadFilterNode | null>(null);
 
 export function useWavesurferLoader() {
   const {band} = useViewSelection();
@@ -29,22 +33,22 @@ export function useWavesurferLoader() {
       return;
     }
 
-    const lowShelf = context.value.createBiquadFilter();
-    lowShelf.type = 'lowshelf';
-    lowShelf.gain.value = -60;
-    lowShelf.frequency.value = band.value.low;
+    hpf.value = context.value.createBiquadFilter();
+    hpf.value.type = 'highpass';
+    hpf.value.Q.value = 1;
+    hpf.value.frequency.value = band.value.low;
 
-    const highShelf = context.value.createBiquadFilter();
-    highShelf.type = 'highshelf';
-    highShelf.gain.value = -60;
-    highShelf.frequency.value = band.value.high;
+    lpf.value = context.value.createBiquadFilter();
+    lpf.value.type = 'lowpass';
+    lpf.value.Q.value = 1;
+    lpf.value.frequency.value = band.value.high;
 
     // connect
-    lowShelf.connect(highShelf);
-    highShelf.connect(gainNode.value);
+    hpf.value.connect(lpf.value);
+    lpf.value.connect(gainNode.value);
     gainNode.value.connect(analyser.value);
 
-    ws.value.backend.setFilters([lowShelf, highShelf]);
+    ws.value.backend.setFilters([hpf.value, lpf.value]);
     analyser.value.connect(context.value.destination);
   };
 
