@@ -17,12 +17,12 @@ export function useAudioGain() {
     node.value = context.value.createGain();
   };
 
-  const apply = (newValue: number) => {
+  // propagate to context
+  const apply = () => {
     if (node.value === null) {
       return;
     }
 
-    gain.value = newValue;
     node.value.gain.value = gain.value;
   };
 

@@ -7,7 +7,6 @@ import DraggableAudioSidebarVumeter from 'src/draggables/audio/draggable-audio-s
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
-import {useWavesurferHandlers} from 'src/draggables/audio/use-wavesurfer-handlers';
 
 const {
   increase: increaseFourier,
@@ -15,12 +14,7 @@ const {
   canIncrease: canIncreaseFourier,
   canDecrease: canDecreaseFourier,
 } = useAudioFourier();
-const {
-  increase: increaseVolume,
-  decrease: decreaseVolume,
-  canIncrease: canIncreaseVolume,
-  canDecrease: canDecreaseVolume,
-} = useWavesurferHandlers();
+
 const {isPlaying, togglePlayPause, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
 </script>
@@ -53,32 +47,6 @@ const {downloadAudio} = useAudioDownload();
     >
       <AppIcon
         icon="stop"
-        size="small"
-      />
-    </AppButton>
-
-    <AppButton
-      :disabled="!canIncreaseVolume"
-      :handle-click="increaseVolume"
-      small-tooltip
-      tooltip="Volume Up"
-      tooltip-placement="left"
-    >
-      <AppIcon
-        icon="volumeUp"
-        size="small"
-      />
-    </AppButton>
-
-    <AppButton
-      :disabled="!canDecreaseVolume"
-      :handle-click="decreaseVolume"
-      small-tooltip
-      tooltip="Volume Down"
-      tooltip-placement="left"
-    >
-      <AppIcon
-        icon="volumeDown"
         size="small"
       />
     </AppButton>

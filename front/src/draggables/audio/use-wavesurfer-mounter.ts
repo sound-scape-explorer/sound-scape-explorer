@@ -1,5 +1,5 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {GAIN, WAVE} from 'src/constants';
+import {WAVEFORM_HEIGHT} from 'src/constants';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
@@ -45,7 +45,7 @@ export function useWavesurferMounter() {
       audioContext: context.value,
       container: waveform.value,
       scrollParent: false,
-      barHeight: WAVE.default,
+      barHeight: WAVEFORM_HEIGHT,
       normalize: false,
       height: 48,
     };
@@ -60,7 +60,7 @@ export function useWavesurferMounter() {
     createContext();
     createGain();
     createAnalyser();
-    applyGain(GAIN.default);
+    applyGain();
   });
 
   // todo: too much?

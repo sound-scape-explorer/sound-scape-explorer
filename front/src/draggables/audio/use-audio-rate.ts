@@ -56,10 +56,15 @@ export function useAudioRate() {
     };
   };
 
+  const reset = () => {
+    rate.value = PLAYBACK_RATE.default;
+  };
+
   return {
     rate,
     readable,
     update,
     updateReadable,
+    reset,
   };
 }

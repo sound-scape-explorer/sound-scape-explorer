@@ -6,6 +6,7 @@ import {useScatterTrajectories} from 'src/components/scatter/use-scatter-traject
 import {useScatterTrajectoryAverage} from 'src/components/scatter/use-scatter-trajectory-average';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useTrajectories} from 'src/composables/use-trajectories';
+import {DEBOUNCE_MS} from 'src/constants';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 import {useSelectionRender} from 'src/draggables/selection/use-selection-render';
 import {ref} from 'vue';
@@ -62,7 +63,7 @@ export function useScatterRender() {
     data.value = newData;
   };
 
-  const debouncedRender = useDebounceFn(render, 20);
+  const debouncedRender = useDebounceFn(render, DEBOUNCE_MS);
 
   const reset = () => {
     data.value = [];

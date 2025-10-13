@@ -1,13 +1,10 @@
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
+import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
-import {ref} from 'vue';
-
-const hpf = ref<BiquadFilterNode | null>(null);
-const lpf = ref<BiquadFilterNode | null>(null);
 
 export function useWavesurferLoader() {
   const {band} = useViewSelection();
@@ -17,6 +14,7 @@ export function useWavesurferLoader() {
   const {ws} = useWavesurfer();
   const {node: gainNode} = useAudioGain();
   const {analyser} = useAudioAnalyser();
+  const {hpf, lpf} = useAudioFilters();
 
   const handleAudioEnd = () => {
     isPlaying.value = false;

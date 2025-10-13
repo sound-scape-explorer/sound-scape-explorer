@@ -1,120 +1,29 @@
 <script lang="ts" setup>
-import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
-import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
-import {useConfig} from 'src/composables/use-config';
-import {useDate} from 'src/composables/use-date';
-import {useInterval} from 'src/composables/use-interval';
-import {PLAYBACK_RATE, STRING_DELIMITER} from 'src/constants';
+import {NGi, NGrid, NTag} from 'naive-ui';
+import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import DraggableAudioMenuAudio from 'src/draggables/audio/draggable-audio-menu-audio.vue';
+import DraggableAudioMenuDates from 'src/draggables/audio/draggable-audio-menu-dates.vue';
+import DraggableAudioMenuDetails from 'src/draggables/audio/draggable-audio-menu-details.vue';
+import DraggableAudioMenuFilters from 'src/draggables/audio/draggable-audio-menu-filters.vue';
+import DraggableAudioMenuSpeed from 'src/draggables/audio/draggable-audio-menu-speed.vue';
 import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
-import {useAudioFile} from 'src/draggables/audio/use-audio-file';
-import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
-import {useAudioRate} from 'src/draggables/audio/use-audio-rate';
 
 const {size} = useAudioFourier();
-const {config} = useConfig();
-const {currentInterval} = useInterval();
-const {convertTimestampToIsoDate} = useDate();
-const {currentIndex} = useInterval();
-const {rate, readable} = useAudioRate();
-const {lock, unlock} = useScatterCamera();
-const {window, duration} = useAudioFile();
-const {gain} = useAudioGain();
 </script>
 
 <template>
-  <div v-if="currentInterval && currentIndex">
+  <AppDraggableMenu :class="$style.container">
+    <DraggableAudioMenuDetails />
+    <DraggableAudioMenuDates />
+    <DraggableAudioMenuAudio />
+    <DraggableAudioMenuSpeed />
+    <DraggableAudioMenuFilters />
+  </AppDraggableMenu>
+  <div>
     <NGrid
-      :cols="1"
-      x-gap="12"
+      cols="1"
+      x-gap="4"
     >
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          File
-        </NTag>
-
-        {{ window?.file.Path }}
-      </NGi>
-    </NGrid>
-
-    <NGrid
-      :cols="1"
-      x-gap="12"
-    >
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Site
-        </NTag>
-
-        {{ currentInterval.sites.join(STRING_DELIMITER) }}
-      </NGi>
-    </NGrid>
-
-    <NGrid
-      :cols="3"
-      x-gap="12"
-    >
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Interval Index
-        </NTag>
-
-        {{ currentIndex }}
-      </NGi>
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Start
-        </NTag>
-
-        {{ convertTimestampToIsoDate(currentInterval.start) }}
-      </NGi>
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          End
-        </NTag>
-
-        {{ convertTimestampToIsoDate(currentInterval.end) }}
-      </NGi>
-    </NGrid>
-
-    <NGrid
-      :cols="3"
-      x-gap="12"
-    >
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Gain
-        </NTag>
-
-        {{ gain }}
-      </NGi>
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Audio duration
-        </NTag>
-
-        {{ duration.toFixed(2) }} seconds
-      </NGi>
       <NGi>
         <NTag
           :bordered="false"
@@ -125,48 +34,14 @@ const {gain} = useAudioGain();
 
         {{ size }}
       </NGi>
-
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Speed %
-        </NTag>
-
-        {{ readable.percentage }}
-      </NGi>
-      <NGi>
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Semitones
-        </NTag>
-
-        {{ readable.semitones }}
-      </NGi>
-      <NGi v-if="config !== null">
-        <NTag
-          :bordered="false"
-          size="small"
-        >
-          Hertz
-        </NTag>
-
-        {{ readable.hertz }}
-      </NGi>
     </NGrid>
-
-    <div>
-      <NSlider
-        v-model:value="rate"
-        :max="PLAYBACK_RATE.max"
-        :min="PLAYBACK_RATE.min"
-        :step="PLAYBACK_RATE.step"
-        @mousedown="lock"
-        @mouseup="unlock"
-      />
-    </div>
   </div>
 </template>
+
+<style lang="scss" module>
+@use 'src/styles/sizes';
+
+.container {
+  margin-top: -(sizes.$g0);
+}
+</style>

@@ -12,19 +12,13 @@ export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 export const GAIN = {
   default: 1.0,
-  step: 10.0,
+  step: 1.0,
   max: 500.0,
   min: 1.0,
 };
 
-const waveDampening = 2;
-
-export const WAVE = {
-  default: GAIN.default / waveDampening,
-  step: GAIN.step / waveDampening,
-  max: GAIN.max / waveDampening,
-  min: GAIN.min / waveDampening,
-};
+export const DEBOUNCE_MS = 20;
+export const WAVEFORM_HEIGHT = 0.5;
 
 export const PLAYBACK_RATE = {
   default: 1,
