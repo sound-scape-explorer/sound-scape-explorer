@@ -2,6 +2,7 @@ import {isDarkModeEnabled} from '@shared/browser';
 import {useStorage} from '@vueuse/core';
 import {getStorageKey} from 'src/common/browser';
 import {
+  AUDIO_GAIN,
   ColorFlavor,
   PlotBackground,
   ScatterBorderWidth,
@@ -51,6 +52,11 @@ export const Settings = z.object({
   isSelectedPointHighlighted: z.boolean().default(true),
   isDetailedExportName: z.boolean().default(true),
   scatterBorderWidth: ScatterBorderWidth.default(ScatterBorderWidth.enum['1']),
+  audioGain: z
+    .number()
+    .min(AUDIO_GAIN.min)
+    .max(AUDIO_GAIN.max)
+    .default(AUDIO_GAIN.default),
 });
 
 // eslint-disable-next-line no-redeclare

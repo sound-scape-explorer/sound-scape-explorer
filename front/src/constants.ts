@@ -10,7 +10,7 @@ export const EXPORT_FILENAME = 'SSE';
 
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-export const GAIN = {
+export const AUDIO_GAIN = {
   default: 1.0,
   step: 1.0,
   max: 500.0,

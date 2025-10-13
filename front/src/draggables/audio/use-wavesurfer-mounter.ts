@@ -18,6 +18,7 @@ import {type WaveSurferParams} from 'wavesurfer.js/types/params';
 export function useWavesurferMounter() {
   const {ws} = useWavesurfer();
   const {hpfReadable, lpfReadable} = useAudioFilters();
+  const {gain} = useAudioGain();
   const {context, create: createContext} = useAudioContext();
   const {create: createGain, apply: applyGain} = useAudioGain();
   const {create: createAnalyser} = useAudioAnalyser();
@@ -48,7 +49,7 @@ export function useWavesurferMounter() {
       audioContext: context.value,
       container: waveform.value,
       scrollParent: false,
-      barHeight: WAVEFORM_HEIGHT,
+      barHeight: gain.value * WAVEFORM_HEIGHT,
       normalize: false,
       height: 48,
     };

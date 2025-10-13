@@ -2,7 +2,7 @@
 import {useDebounceFn} from '@vueuse/core';
 import {NGi, NGrid, NSlider, NTag} from 'naive-ui';
 import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
-import {DEBOUNCE_MS, GAIN} from 'src/constants';
+import {AUDIO_GAIN, DEBOUNCE_MS} from 'src/constants';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioWaveform} from 'src/draggables/audio/use-audio-waveform';
@@ -46,9 +46,9 @@ const handleChange = useDebounceFn(() => {
 
         <NSlider
           v-model:value="gain"
-          :max="GAIN.max"
-          :min="GAIN.min"
-          :step="GAIN.step"
+          :max="AUDIO_GAIN.max"
+          :min="AUDIO_GAIN.min"
+          :step="AUDIO_GAIN.step"
           @mousedown="lock"
           @mouseup="unlock"
           @update:value="handleChange"
