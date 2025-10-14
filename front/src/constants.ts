@@ -126,3 +126,7 @@ export const ExportType = z.enum([
 
 // eslint-disable-next-line no-redeclare
 export type ExportType = z.infer<typeof ExportType>;
+
+export const AudioFilterSlope = z.enum(['12', '24', '36', '48']); // multiples of 12
+// eslint-disable-next-line no-redeclare
+export type FilterSlope = z.infer<typeof AudioFilterSlope>;

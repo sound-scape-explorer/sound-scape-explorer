@@ -11,7 +11,7 @@ import {useWavesurferColors} from 'src/draggables/audio/use-wavesurfer-colors';
 export function useWavesurferSpectrogram() {
   const {ws} = useWavesurfer();
   const {band} = useViewSelection();
-  const {hpf, lpf} = useAudioFilters();
+  const {hpfReadable, lpfReadable} = useAudioFilters();
   const {spectrogram} = useDraggableAudio();
   const {bitDepth} = useAudioFile();
   const {size} = useAudioFft();
@@ -39,8 +39,8 @@ export function useWavesurferSpectrogram() {
       colorMap: colors.value,
       height: 192,
       fftSamples: size.value,
-      frequencyMin: hpf.value?.frequency.value ?? band.value.low,
-      frequencyMax: lpf.value?.frequency.value ?? band.value.high,
+      frequencyMin: hpfReadable.value ?? band.value.low,
+      frequencyMax: lpfReadable.value ?? band.value.high,
       decibels: isDecibelsDisplay.value,
       overflowLegends: isLegendOverflow.value,
       bitDepth: bitDepth.value,

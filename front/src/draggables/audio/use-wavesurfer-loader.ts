@@ -1,7 +1,10 @@
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
-import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
+import {
+  FilterType,
+  useAudioFilters,
+} from 'src/draggables/audio/use-audio-filters';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
@@ -13,9 +16,10 @@ export function useWavesurferLoader() {
   const {ws} = useWavesurfer();
   const {node: gainNode} = useAudioGain();
   const {analyser} = useAudioAnalyser();
-  const {hpf, lpf, hpfReadable, lpfReadable} = useAudioFilters();
+  const {hpfChain, lpfChain, hpfReadable, lpfReadable, createFilter} =
+    useAudioFilters();
 
-  const prepare = () => {
+  const connect = () => {
     if (
       ws.value === null ||
       band.value === null ||
@@ -26,38 +30,42 @@ export function useWavesurferLoader() {
       return;
     }
 
-    hpf.value = context.value.createBiquadFilter();
-    hpf.value.type = 'highpass';
-    hpf.value.Q.value = 1;
-    hpf.value.frequency.value = hpfReadable.value ?? band.value.low;
+    const highFrequency = lpfReadable.value ?? band.value.high;
+    lpfChain.value = createFilter(
+      FilterType.enum.lpf,
+      highFrequency,
+      context.value,
+      gainNode.value,
+    );
 
-    lpf.value = context.value.createBiquadFilter();
-    lpf.value.type = 'lowpass';
-    lpf.value.Q.value = 1;
-    lpf.value.frequency.value = lpfReadable.value ?? band.value.high;
+    const lowFrequency = hpfReadable.value ?? band.value.low;
+    hpfChain.value = createFilter(
+      FilterType.enum.hpf,
+      lowFrequency,
+      context.value,
+      lpfChain.value[0],
+    );
 
-    // connect
-    hpf.value.connect(lpf.value);
-    lpf.value.connect(gainNode.value);
     gainNode.value.connect(analyser.value);
 
-    ws.value.backend.setFilters([hpf.value, lpf.value]);
+    ws.value.backend.setFilters([...hpfChain.value, ...lpfChain.value]);
     analyser.value.connect(context.value.destination);
   };
 
-  const loadSlice = (blob: Blob) => {
+  const load = (blob: Blob) => {
     if (ws.value === null) {
       return;
     }
 
     pause();
     ws.value.loadBlob(blob);
-    ws.value.once('ready', prepare);
+    ws.value.once('ready', connect);
     ws.value.on('seek', seek);
     ws.value.on('finish', pause);
   };
 
   return {
-    loadSlice,
+    load,
+    connect,
   };
 }

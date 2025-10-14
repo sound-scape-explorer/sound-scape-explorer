@@ -11,6 +11,7 @@ import {useConfig} from 'src/composables/use-config';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {Shortcut} from 'src/composables/use-shortcuts';
 import {
+  AudioFilterSlope,
   PlotBackground,
   ScatterBorderWidth,
   SpectrogramColorMap,
@@ -39,6 +40,7 @@ const {
   legendOverflow,
   isDevEnabled,
   devAutoLoadView,
+  audioFilterSlope,
 } = useClientSettings();
 
 const {config} = useConfig();
@@ -117,6 +119,15 @@ const reload = () => location.reload();
         <AppInput
           v-model="audioHost"
           align="left"
+          size="small"
+        />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Filter slope (dB/oct)">
+        <AppSelect
+          v-model="audioFilterSlope"
+          :class="$style['spectro-colors']"
+          :options="AudioFilterSlope.options"
           size="small"
         />
       </DraggableSettingsItem>

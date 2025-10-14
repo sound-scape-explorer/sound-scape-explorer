@@ -14,7 +14,7 @@ const bitDepth = ref<number | null>(null);
 const isLoading = ref<boolean>(false);
 
 export function useAudioFile() {
-  const {loadSlice} = useWavesurferLoader();
+  const {load: loadAudio} = useWavesurferLoader();
   const {context} = useAudioContext();
   const {queryFile} = useAudioQuery();
 
@@ -52,7 +52,7 @@ export function useAudioFile() {
     duration.value = audioBuffer.duration;
     const wav = encodeWavFileFromAudioBuffer(audioBuffer, 0);
     const blob = new Blob([wav]);
-    loadSlice(blob);
+    loadAudio(blob);
 
     // INFO: "dummy" timeout for waiting waveform and spectrogram renders
     setTimeout(() => {

@@ -3,6 +3,7 @@ import {useStorage} from '@vueuse/core';
 import {getStorageKey} from 'src/common/browser';
 import {
   AUDIO_GAIN,
+  AudioFilterSlope,
   ColorFlavor,
   PlotBackground,
   ScatterBorderWidth,
@@ -57,6 +58,7 @@ export const Settings = z.object({
     .min(AUDIO_GAIN.min)
     .max(AUDIO_GAIN.max)
     .default(AUDIO_GAIN.default),
+  audioFilterSlope: AudioFilterSlope.default(AudioFilterSlope.enum['12']),
 });
 
 // eslint-disable-next-line no-redeclare
