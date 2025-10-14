@@ -1,3 +1,4 @@
+import {useConfig} from 'src/composables/use-config';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
@@ -11,6 +12,7 @@ type BandType = 'hpf' | 'lpf';
 
 export function useAudioFilters() {
   const {band} = useViewSelection();
+  const {nyquist} = useConfig();
 
   const update = (type: BandType, value: number | null) => {
     if (value === null) {
@@ -22,7 +24,7 @@ export function useAudioFilters() {
       hpf.value !== null &&
       value !== hpf.value.frequency.value
     ) {
-      hpf.value.frequency.value = value;
+      hpf.value.frequency.value = value > nyquist.value ? nyquist.value : value;
     }
 
     if (
@@ -30,7 +32,7 @@ export function useAudioFilters() {
       lpf.value !== null &&
       value !== lpf.value.frequency.value
     ) {
-      lpf.value.frequency.value = value;
+      lpf.value.frequency.value = value > nyquist.value ? nyquist.value : value;
     }
   };
 

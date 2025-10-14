@@ -5,6 +5,8 @@ import {ref} from 'vue';
 const config = ref<ConfigDto | null>(null);
 const isLoaded = ref<boolean>(false);
 
+const nyquist = ref<number>(0);
+
 export function useConfig() {
   const {read: r} = useStorageReader();
 
@@ -14,6 +16,7 @@ export function useConfig() {
       const json = JSON.parse(string);
       config.value = ConfigDto.parse(json);
       isLoaded.value = true;
+      nyquist.value = config.value.settings.expectedSampleRate * 0.5;
     });
   };
 
@@ -21,5 +24,6 @@ export function useConfig() {
     read,
     config,
     isLoaded,
+    nyquist,
   };
 }

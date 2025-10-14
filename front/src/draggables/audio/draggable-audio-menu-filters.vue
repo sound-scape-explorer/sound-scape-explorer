@@ -4,13 +4,14 @@ import {NGi, NGrid, NInputNumber, NTag} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
+import {useConfig} from 'src/composables/use-config';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioFilterFollow} from 'src/draggables/audio/use-audio-filter-follow';
 import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
 import {onMounted} from 'vue';
 
-// TODO: useful to clamp the values to samplingRate/2 ?
+const {nyquist} = useConfig();
 const {band} = useViewSelection();
 const {readable, rate} = useAudioPlaybackRate();
 const {hpfReadable, lpfReadable, update, reset} = useAudioFilters();
@@ -35,8 +36,8 @@ watchThrottled(
     const low = band.value.low * rate.value;
     const high = band.value.high * rate.value;
 
-    hpfReadable.value = low;
-    lpfReadable.value = high;
+    hpfReadable.value = low > nyquist.value ? nyquist.value : low;
+    lpfReadable.value = high > nyquist.value ? nyquist.value : high;
 
     update('hpf', low);
     update('lpf', high);
@@ -92,6 +93,7 @@ watchThrottled(
         <NInputNumber
           v-model:value="hpfReadable"
           :disabled="isFollowing"
+          :max="nyquist"
           :min="0"
           size="tiny"
           @update:value="() => update('hpf', hpfReadable)"
@@ -116,6 +118,7 @@ watchThrottled(
         <NInputNumber
           v-model:value="lpfReadable"
           :disabled="isFollowing"
+          :max="nyquist"
           :min="0"
           size="tiny"
           @update:value="() => update('lpf', lpfReadable)"
