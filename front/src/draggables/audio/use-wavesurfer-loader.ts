@@ -11,7 +11,7 @@ import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 
 export function useWavesurferLoader() {
   const {band} = useViewSelection();
-  const {seek, pause} = useAudioTransport();
+  const {seek, pause, stop} = useAudioTransport();
   const {context} = useAudioContext();
   const {ws} = useWavesurfer();
   const {node: gainNode} = useAudioGain();
@@ -61,7 +61,7 @@ export function useWavesurferLoader() {
     ws.value.loadBlob(blob);
     ws.value.once('ready', connect);
     ws.value.on('seek', seek);
-    ws.value.on('finish', pause);
+    ws.value.on('finish', stop);
   };
 
   return {
