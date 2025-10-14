@@ -3,7 +3,7 @@ import {ref, unref} from 'vue';
 const a = ref<string | null>(null);
 const b = ref<string | null>(null);
 
-export function useDraggableHeatmapsLabels() {
+export function useDraggableHeatmapsTags() {
   const swap = () => {
     if (a.value === null || b.value === null) {
       return;

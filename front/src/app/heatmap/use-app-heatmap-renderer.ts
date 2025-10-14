@@ -3,10 +3,11 @@ import Plotly from 'plotly.js-dist-min';
 import {type AppHeatmapProps} from 'src/app/heatmap/app-heatmap.vue';
 import {useAppHeatmap} from 'src/app/heatmap/use-app-heatmap';
 import {useAppHeatmapData} from 'src/app/heatmap/use-app-heatmap-data';
+import {useAppHeatmapHighlight} from 'src/app/heatmap/use-app-heatmap-highlight';
 import {useAppHeatmapLayout} from 'src/app/heatmap/use-app-heatmap-layout';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
-import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 
 export function useAppHeatmapRenderer(props: AppHeatmapProps) {
@@ -15,35 +16,64 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
   const {createLayout} = useAppHeatmapLayout();
   const {generateConfig} = useBasePlotConfig();
   const {isPairing} = useDraggableHeatmaps();
-  const {a, b} = useDraggableHeatmapsLabels();
-  const {updateSelection} = useTagSelection();
+  const {a, b} = useDraggableHeatmapsTags();
+  const {updateSelection: updateTag} = useTagSelection();
+  const {getShapes, updateHighlight} = useAppHeatmapHighlight();
 
   const handleClick = (e: PlotMouseEvent) => {
+    if (a.value === null) {
+      return;
+    }
+
+    const indices = e.points[0].pointIndex as unknown as [number, number];
+
     // single
     if (!isPairing.value) {
-      if (a.value === null) {
-        return;
-      }
-
       const x = e.points[0].x as string;
       const y = e.points[0].y as string;
       const set = [...new Set([x, y])];
 
-      updateSelection(a.value, set);
+      updateTag(a.value, set);
+
+      updateHighlight({
+        row: {
+          tagName: a.value,
+          tagValue: x,
+          tagIndex: indices[1],
+        },
+        col: {
+          tagName: a.value,
+          tagValue: y,
+          tagIndex: indices[0],
+        },
+      });
 
       return;
     }
 
     // pairing
-    if (a.value === null || b.value === null) {
+    if (b.value === null) {
       return;
     }
 
     const x = e.points[0].x as string;
     const y = e.points[0].y as string;
 
-    updateSelection(b.value, [y]);
-    updateSelection(a.value, [x]);
+    updateTag(b.value, [y]);
+    updateTag(a.value, [x]);
+
+    updateHighlight({
+      row: {
+        tagName: a.value,
+        tagValue: x,
+        tagIndex: indices[1],
+      },
+      col: {
+        tagName: b.value,
+        tagValue: y,
+        tagIndex: indices[0],
+      },
+    });
   };
 
   const create = async () => {
@@ -67,7 +97,12 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
       return;
     }
 
-    const trace = buildData({
+    config.value = generateConfig(props.exportName);
+
+    const shapes = getShapes();
+    layout.value = createLayout(props.title, shapes);
+
+    const series = buildData({
       colorscale: props.colorscale,
       x: props.x,
       y: props.y,
@@ -77,9 +112,7 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
       labels: [a.value, b.value],
     });
 
-    data.value = [trace];
-    layout.value = createLayout(props.title);
-    config.value = generateConfig(props.exportName);
+    data.value = [series];
   };
 
   return {

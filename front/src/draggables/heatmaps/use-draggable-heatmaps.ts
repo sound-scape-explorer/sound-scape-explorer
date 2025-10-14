@@ -3,7 +3,7 @@ import {MetricType} from '@shared/enums';
 import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useMetricData} from 'src/composables/use-metric-data';
 import {useViewSelection} from 'src/composables/use-view-selection';
-import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 import {generateUniqueMetricSlug} from 'src/utils/config';
 import {computed, ref} from 'vue';
 
@@ -12,7 +12,7 @@ const metricSlug = ref<string | null>(null);
 export function useDraggableHeatmaps() {
   const {extraction} = useViewSelection();
   const {read} = useMetricData();
-  const {a, b} = useDraggableHeatmapsLabels();
+  const {a, b} = useDraggableHeatmapsTags();
 
   const findCurrentMetric = (): MetricDto | null => {
     const metric = extraction.value?.metrics.find(

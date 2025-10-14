@@ -3,12 +3,12 @@ import {useExportName} from 'src/composables/use-export-name';
 import {useMetricData} from 'src/composables/use-metric-data';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
-import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 
 export function useDraggableHeatmapsExport() {
   const {metricData} = useMetricData();
   const {isPairing} = useDraggableHeatmaps();
-  const {a, b} = useDraggableHeatmapsLabels();
+  const {a, b} = useDraggableHeatmapsTags();
   const {x, y, series} = useDraggableHeatmapsChart();
   const {generate} = useExportName();
 

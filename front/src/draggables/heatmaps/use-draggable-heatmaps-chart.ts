@@ -2,8 +2,8 @@ import {DraggableHeatmapsError} from 'src/common/Errors';
 import {type MetricData, useMetricData} from 'src/composables/use-metric-data';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
-import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 import {ref} from 'vue';
 
 const title = ref<string>('');
@@ -12,7 +12,7 @@ const y = ref<string[]>([]);
 const series = ref<number[][]>([]);
 
 export function useDraggableHeatmapsChart() {
-  const {a, b} = useDraggableHeatmapsLabels();
+  const {a, b} = useDraggableHeatmapsTags();
   const {coreUniques} = useTagUniques();
   const {metricData} = useMetricData();
   const {update: updateRange} = useDraggableHeatmapsRange();

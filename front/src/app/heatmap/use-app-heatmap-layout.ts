@@ -1,4 +1,4 @@
-import {type Layout} from 'plotly.js-dist-min';
+import {type Layout, type Shape} from 'plotly.js-dist-min';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
@@ -8,7 +8,10 @@ export function useAppHeatmapLayout() {
   const {plotFontSize, plotBackground} = useClientSettings();
   const {generatePlotlyMargins} = usePlotlyMargins();
 
-  const createLayout = (title?: string): Partial<Layout> => {
+  const createLayout = (
+    title?: string,
+    shapes?: Partial<Shape>[],
+  ): Partial<Layout> => {
     const layout: Partial<Layout> = {
       title,
       paper_bgcolor: plotBackground.value,
@@ -18,6 +21,7 @@ export function useAppHeatmapLayout() {
       width: width.value,
       height: height.value,
       margin: generatePlotlyMargins(),
+      shapes: shapes ? shapes : [],
       font: {
         size: plotFontSize.value,
       },

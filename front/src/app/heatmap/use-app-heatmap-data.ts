@@ -1,8 +1,4 @@
-import {type Data} from 'plotly.js-dist-min';
-
-export type HeatmapData = Data & {
-  hoverongaps: boolean;
-};
+import {type PlotlyData} from 'src/types';
 
 interface GenerateDataProps {
   colorscale: string;
@@ -23,11 +19,11 @@ export function useAppHeatmapData() {
     zmin,
     zmax,
     labels,
-  }: GenerateDataProps): HeatmapData => {
+  }: GenerateDataProps) => {
     const labelA = labels[0];
     const labelB = labels[1] === null ? labels[0] : labels[1];
 
-    const data: HeatmapData = {
+    const data: PlotlyData = {
       type: 'heatmap',
       colorscale,
       reversescale: true,

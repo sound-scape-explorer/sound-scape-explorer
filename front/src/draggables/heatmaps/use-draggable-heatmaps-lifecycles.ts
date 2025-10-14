@@ -1,12 +1,12 @@
 import {useMetricData} from 'src/composables/use-metric-data';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
-import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 import {watch} from 'vue';
 
 export function useDraggableHeatmapsLifecycles() {
   const {metricSlug, handleChange, isPairing} = useDraggableHeatmaps();
-  const {a, b, reset} = useDraggableHeatmapsLabels();
+  const {a, b, reset} = useDraggableHeatmapsTags();
   const {metricData} = useMetricData();
   const {updateHeatmapData, updateHeatmapDataPairing} =
     useDraggableHeatmapsChart();

@@ -21,6 +21,7 @@
     "dayjs": "^1.11.7",
     "h5wasm": "^0.7.5",
     "html2canvas": "^1.4.1",
+    "just-compare": "^2.3.0",
     "plotly.js-dist-min": "^2.35.2",
     "speed-to-percentage": "^1.2.1",
     "speed-to-semitones": "^1.3.1",
