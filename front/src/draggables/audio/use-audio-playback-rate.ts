@@ -2,7 +2,6 @@ import speedToPercentage from 'speed-to-percentage';
 import speedToSemitones from 'speed-to-semitones';
 import {useConfig} from 'src/composables/use-config';
 import {PLAYBACK_RATE} from 'src/constants';
-import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 import {ref} from 'vue';
 
@@ -26,7 +25,6 @@ const readable = ref<Readable>({
 // audio speed
 export function useAudioPlaybackRate() {
   const {config} = useConfig();
-  const {togglePlayPause} = useAudioTransport();
   const {ws} = useWavesurfer();
 
   const update = () => {
@@ -34,9 +32,7 @@ export function useAudioPlaybackRate() {
       return;
     }
 
-    ws.value.pause();
     ws.value.setPlaybackRate(rate.value);
-    togglePlayPause();
   };
 
   const updateReadable = () => {

@@ -7,14 +7,14 @@ import DraggableAudioSidebarVumeter from 'src/draggables/audio/draggable-audio-s
 import {useAudioDownload} from 'src/draggables/audio/use-audio-download';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 
-const {isPlaying, togglePlayPause, stop} = useAudioTransport();
+const {isPlaying, toggle, stop} = useAudioTransport();
 const {downloadAudio} = useAudioDownload();
 </script>
 
 <template>
   <AppDraggableSidebar>
     <AppButton
-      :handle-click="togglePlayPause"
+      :handle-click="toggle"
       :tooltip="isPlaying ? 'Pause [space]' : 'Play [space]'"
       small-tooltip
       tooltip-placement="left"
