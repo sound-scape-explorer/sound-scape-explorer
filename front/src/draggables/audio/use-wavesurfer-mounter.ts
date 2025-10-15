@@ -5,8 +5,10 @@ import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useAudioFft} from 'src/draggables/audio/use-audio-fft';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioFilterFollow} from 'src/draggables/audio/use-audio-filter-follow';
 import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
+import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 import {useWavesurferCursor} from 'src/draggables/audio/use-wavesurfer-cursor';
@@ -25,6 +27,9 @@ export function useWavesurferMounter() {
   const {waveform} = useDraggableAudio();
   const {bitDepth} = useAudioFile();
   const {size} = useAudioFft();
+  const {rate} = useAudioPlaybackRate();
+  const {isFollowing} = useAudioFilterFollow();
+
   const {
     spectrogramColorMap: colormap,
     decibelsDisplay: isDecibelsDisplay,
@@ -79,6 +84,8 @@ export function useWavesurferMounter() {
       bitDepth,
       hpfReadable,
       lpfReadable,
+      rate,
+      isFollowing,
     ],
     () => {
       requestAnimationFrame(registerSpectrogram);

@@ -3,7 +3,9 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioFft} from 'src/draggables/audio/use-audio-fft';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioFilterFollow} from 'src/draggables/audio/use-audio-filter-follow';
 import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
+import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 import {useWavesurferColors} from 'src/draggables/audio/use-wavesurfer-colors';
@@ -18,6 +20,8 @@ export function useWavesurferSpectrogram() {
   const {colors} = useWavesurferColors();
   const {decibelsDisplay: isDecibelsDisplay, legendOverflow: isLegendOverflow} =
     useClientSettings();
+  const {isFollowing} = useAudioFilterFollow();
+  const {rate} = useAudioPlaybackRate();
 
   const register = () => {
     if (
@@ -39,8 +43,12 @@ export function useWavesurferSpectrogram() {
       colorMap: colors.value,
       height: 192,
       fftSamples: size.value,
-      frequencyMin: hpfReadable.value ?? band.value.low,
-      frequencyMax: lpfReadable.value ?? band.value.high,
+      frequencyMin:
+        (hpfReadable.value ?? band.value.low) /
+        (isFollowing.value ? rate.value : 1),
+      frequencyMax:
+        (lpfReadable.value ?? band.value.high) /
+        (isFollowing.value ? rate.value : 1),
       decibels: isDecibelsDisplay.value,
       overflowLegends: isLegendOverflow.value,
       bitDepth: bitDepth.value,

@@ -11,10 +11,10 @@ export const EXPORT_FILENAME = 'SSE';
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 export const AUDIO_GAIN = {
-  default: 1.0,
-  step: 1.0,
-  max: 500.0,
-  min: 1.0,
+  default: 0.1,
+  step: 0.1,
+  max: 100.0,
+  min: 0.1,
 };
 
 export const DEBOUNCE_MS = 20;
