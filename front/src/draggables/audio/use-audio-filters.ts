@@ -8,10 +8,6 @@ export const FilterType = z.enum(['hpf', 'lpf']);
 // eslint-disable-next-line no-redeclare
 export type FilterType = z.infer<typeof FilterType>;
 
-const SlopeOption = z.enum(['12', '24', '36', '48', '96']); // ascending filter orders
-// eslint-disable-next-line no-redeclare
-type SlopeOption = z.infer<typeof SlopeOption>;
-
 const hpfChain = ref<BiquadFilterNode[]>([]);
 const lpfChain = ref<BiquadFilterNode[]>([]);
 
@@ -72,6 +68,10 @@ export function useAudioFilters() {
       for (const filter of hpfChain.value) {
         filter.frequency.value = v;
       }
+
+      if (v !== hpfReadable.value) {
+        hpfReadable.value = v;
+      }
     }
 
     if (
@@ -82,6 +82,10 @@ export function useAudioFilters() {
 
       for (const filter of lpfChain.value) {
         filter.frequency.value = v;
+      }
+
+      if (v !== lpfReadable.value) {
+        lpfReadable.value = v;
       }
     }
   };
@@ -112,13 +116,19 @@ export function useAudioFilters() {
     }
   };
 
+  const resetAll = () => {
+    reset(FilterType.enum.hpf);
+    reset(FilterType.enum.lpf);
+  };
+
   return {
     hpfChain,
     lpfChain,
     hpfReadable,
     lpfReadable,
+    createFilter,
     update,
     reset,
-    createFilter,
+    resetAll,
   };
 }

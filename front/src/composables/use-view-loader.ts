@@ -14,6 +14,10 @@ import {useReductions} from 'src/composables/use-reductions';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useViewState} from 'src/composables/use-view-state';
+import {
+  FilterType,
+  useAudioFilters,
+} from 'src/draggables/audio/use-audio-filters';
 import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {nextTick, ref} from 'vue';
@@ -45,7 +49,8 @@ export function useViewLoader() {
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
-  const {setBounds} = useSelectionState();
+  const {setBounds: setSelectionBounds} = useSelectionState();
+  const {update: updateAudioFilter} = useAudioFilters();
 
   const steps: Step[] = [
     ['Reading aggregations', readAggregations],
@@ -100,7 +105,9 @@ export function useViewLoader() {
     filterByTime();
     filterByTemporal();
     filterBySpatial();
-    setBounds();
+    setSelectionBounds();
+    updateAudioFilter(FilterType.enum.hpf, band.value.low);
+    updateAudioFilter(FilterType.enum.lpf, band.value.high);
 
     isLoading.value = false;
     close('view');

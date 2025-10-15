@@ -10,9 +10,11 @@ import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useReductions} from 'src/composables/use-reductions';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
 import {useViewSelection} from 'src/composables/use-view-selection';
+import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
+import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
+import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
-import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 
 export function useViewUnloader() {
   const {open, closeAll} = useDraggables();
@@ -30,6 +32,8 @@ export function useViewUnloader() {
   const {reset: resetViewSelection} = useViewSelection();
   const {isLoading, loadingText} = useScatterLoading();
   const {reset: resetTemporalThresholds} = useTemporalThresholds();
+  const {reset: resetAudioPlaybackRate} = useAudioPlaybackRate();
+  const {resetAll: resetAudioFilters} = useAudioFilters();
 
   const unload = () => {
     loadingText.value = 'Unloading selection...';
@@ -46,6 +50,8 @@ export function useViewUnloader() {
     resetFilterByTime();
     resetFilterTemporal();
     resetFilterSpatial();
+    resetAudioPlaybackRate();
+    resetAudioFilters();
 
     resetAggregations();
     resetReductionEmbeddings();
