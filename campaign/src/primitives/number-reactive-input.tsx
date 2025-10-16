@@ -7,6 +7,7 @@ interface Props {
   disabled?: boolean;
 }
 
+// TODO: to remove? can't remember the use case for this
 export function NumberReactiveInput({
   value,
   onChange,
