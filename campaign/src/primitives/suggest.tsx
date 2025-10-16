@@ -11,7 +11,7 @@ interface Props {
   items: string[];
   selected: string;
   onChange: (value: string) => void;
-  intent: Intent;
+  intent?: Intent;
   disabled?: boolean;
 }
 
@@ -41,7 +41,7 @@ export function Suggest({
   items,
   selected,
   onChange,
-  intent,
+  intent = 'none',
   disabled = false,
 }: Props) {
   const renderItem: ItemRenderer<string> = useCallback(

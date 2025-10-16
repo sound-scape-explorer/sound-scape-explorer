@@ -22,7 +22,7 @@ import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-stat
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
 import {NumberReactiveInput} from 'src/primitives/number-reactive-input.tsx';
-import {Select} from 'src/primitives/select.tsx';
+import {Suggest} from 'src/primitives/suggest.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './config-extractors.module.scss';
@@ -117,11 +117,10 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
         disabled={hasTemplate}
       />
 
-      <Select
+      <Suggest
         items={ExtractorImpl.options}
-        onSelect={(n) => updateImpl(extractor, n)}
-        current={extractor.impl}
-        placeholder="Select impl"
+        selected={extractor.impl}
+        onChange={(n) => updateImpl(extractor, n as ExtractorImpl)}
         disabled={hasTemplate}
       />
 
