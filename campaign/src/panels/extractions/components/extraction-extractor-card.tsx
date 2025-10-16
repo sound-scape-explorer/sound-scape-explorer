@@ -21,7 +21,7 @@ import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extractio
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
-import {NumberReactiveInput} from 'src/primitives/number-reactive-input.tsx';
+import {NumberInput} from 'src/primitives/number-input.tsx';
 import {Suggest} from 'src/primitives/suggest.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
@@ -124,16 +124,16 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
         disabled={hasTemplate}
       />
 
-      <NumberReactiveInput
-        value={extractor.window}
-        onChange={(n) => updateWindow(extractor, n)}
+      <NumberInput
+        defaultValue={extractor.window}
+        onBlur={(n) => updateWindow(extractor, n)}
         intent={isWindowValid(extractor) ? 'success' : 'danger'}
         disabled={hasTemplate || isLocked}
       />
 
-      <NumberReactiveInput
-        value={extractor.hop}
-        onChange={(n) => updateHop(extractor, n)}
+      <NumberInput
+        defaultValue={extractor.hop}
+        onBlur={(n) => updateHop(extractor, n)}
         intent={isHopValid(extractor) ? 'success' : 'danger'}
         disabled={hasTemplate}
       />
