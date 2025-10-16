@@ -59,6 +59,11 @@
     "LEQ_PERCENTILE",
     "LEQ_DIFF"
   ],
+  "ExtractorType": [
+    "NEURAL",
+    "LOW_LEVEL",
+    "ACOUSTICS"
+  ],
   "AutoclusterImpl": [
     "HDBSCAN_EOM",
     "HDBSCAN_LEAF"

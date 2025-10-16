@@ -68,6 +68,12 @@ class ExtractorImpl(Enum):
     LEQ_DIFF = "LEQ_DIFF"
 
 
+class ExtractorType(Enum):
+    NEURAL = "NEURAL"
+    LOW_LEVEL = "LOW_LEVEL"
+    ACOUSTICS = "ACOUSTICS"
+
+
 class AutoclusterImpl(Enum):
     HDBSCAN_EOM = "HDBSCAN_EOM"
     HDBSCAN_LEAF = "HDBSCAN_LEAF"
