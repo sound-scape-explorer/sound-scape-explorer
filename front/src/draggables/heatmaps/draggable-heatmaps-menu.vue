@@ -17,7 +17,7 @@ import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-he
 
 const {
   metricSlug,
-  options: digesterOptions,
+  options: metricOptions,
   isReadyForSelection,
   isReadyAndSelected,
   isPairing,
@@ -38,7 +38,7 @@ const {reset} = useAppHeatmapHighlight();
 
     <AppSelect
       v-model="metricSlug"
-      :options="digesterOptions"
+      :options="metricOptions"
       placeholder="Metric..."
       size="small"
       @update:model-value="reset"
