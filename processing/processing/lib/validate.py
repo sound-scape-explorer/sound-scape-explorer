@@ -17,7 +17,10 @@ class Validate:
 
             is_valid = False
             Console.print_error(
-                f"Integration #{integration.index} window {integration.duration} ms is shorter than extractor #{extractor.index} window {extractor.window} ms"
+                f"Integration #{integration.index}"
+                f" window {integration.duration} ms is shorter"
+                f" than extractor #{extractor.index}"
+                f" window {extractor.window} ms"
             )
 
         return is_valid
