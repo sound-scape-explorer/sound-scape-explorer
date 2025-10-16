@@ -112,8 +112,8 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
     updateName,
     updateStart,
     updateEnd,
-    updateProperty,
-    updateValue,
+    updateTagName,
+    updateTagValue,
     updateSmoothingWindowPreset,
     updateSmoothingWindowCustom,
   } = useTrajectoryState(extraction);
@@ -177,19 +177,17 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
         small
       />
 
-      <Select
+      <Suggest
         items={names}
-        current={trajectory.tagName ?? null}
-        onSelect={(v) => updateProperty(trajectory, v)}
-        placeholder="Select"
+        selected={trajectory.tagName}
+        onChange={(v) => updateTagName(trajectory, v)}
         intent={isTagNameValid(trajectory) ? 'success' : 'danger'}
-        matchWidth
       />
 
       <Suggest
         items={uniquesByTagName[trajectory.tagName] ?? []}
         selected={trajectory.tagValue}
-        onChange={(v) => updateValue(trajectory, v)}
+        onChange={(v) => updateTagValue(trajectory, v)}
         intent={isTagValueValid(trajectory) ? 'success' : 'danger'}
         disabled={trajectory.tagName === ''}
       />

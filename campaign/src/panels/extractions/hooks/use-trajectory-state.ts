@@ -8,22 +8,6 @@ import {useCallback, useMemo} from 'react';
 import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces.ts';
 import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
-// todo: reimplement me
-// const purgeLabelFromTrajectories = useCallback(
-//   (property: string) => {
-//     setTrajectories((prev) => {
-//       return prev.map((trajectory) => ({
-//         ...trajectory,
-//         labelProperty:
-//           trajectory.labelProperty === property
-//             ? undefined
-//             : trajectory.labelProperty,
-//       }));
-//     });
-//   },
-//   [setTrajectories],
-// );
-
 export function useTrajectoryState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
 
@@ -107,7 +91,7 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
     [extraction, updateExtraction],
   );
 
-  const updateProperty = useCallback(
+  const updateTagName = useCallback(
     (trajectory: TrajectoryConfig, property: string) => {
       trajectory.tagName = property;
       updateExtraction(extraction);
@@ -115,7 +99,7 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
     [extraction, updateExtraction],
   );
 
-  const updateValue = useCallback(
+  const updateTagValue = useCallback(
     (trajectory: TrajectoryConfig, value: string) => {
       trajectory.tagValue = value;
       updateExtraction(extraction);
@@ -156,8 +140,8 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
     updateName,
     updateStart,
     updateEnd,
-    updateProperty,
-    updateValue,
+    updateTagName,
+    updateTagValue,
     updateSmoothingWindowPreset,
     updateSmoothingWindowCustom,
   };

@@ -12,7 +12,7 @@ interface Props {
   selected: string;
   onChange: (value: string) => void;
   intent: Intent;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 function getItemProps(
@@ -37,7 +37,13 @@ const noResults = (
   />
 );
 
-export function Suggest({items, selected, onChange, intent, disabled}: Props) {
+export function Suggest({
+  items,
+  selected,
+  onChange,
+  intent,
+  disabled = false,
+}: Props) {
   const renderItem: ItemRenderer<string> = useCallback(
     (item, rendererProps) => {
       if (!rendererProps.modifiers.matchesPredicate) {
