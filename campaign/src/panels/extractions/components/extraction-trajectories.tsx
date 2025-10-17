@@ -14,18 +14,18 @@ import {useMemo, useState} from 'react';
 import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-trajectories.module.scss';
 import {ExtractionTrajectoriesDrawerContent} from 'src/panels/extractions/components/extraction-trajectories-drawer-content.tsx';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 import {useTrajectoryState} from 'src/panels/extractions/hooks/use-trajectory-state.ts';
 import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging';
 import {useTrajectoriesValidation} from 'src/panels/metrics/hooks/use-trajectories-validation';
 import {DatePicker} from 'src/primitives/date-picker.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
 import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
+import {NumberInput} from 'src/primitives/number-input.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
-import {TextInput} from 'src/primitives/text-input.tsx';
-import {NumberInput} from 'src/primitives/number-input.tsx';
 import {Suggest} from 'src/primitives/suggest.tsx';
-import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
+import {TextInput} from 'src/primitives/text-input.tsx';
 
 interface Props {
   extraction: ExtractionConfig;
