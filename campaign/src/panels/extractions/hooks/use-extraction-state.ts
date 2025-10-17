@@ -209,6 +209,11 @@ export function useExtractionState() {
     [setExtractions],
   );
 
+  const importJson = useCallback(() => {
+    // TODO: add import
+    console.log('import json');
+  }, []);
+
   return {
     extractions,
     loadExtractions,
@@ -220,5 +225,6 @@ export function useExtractionState() {
     moveExtraction,
     updateExtraction,
     updateName,
+    importJson,
   };
 }
