@@ -2,6 +2,7 @@
 
 import {
   AggregationStoragePath,
+  ExtractionStoragePath,
   RelativeTrajectoryStoragePath,
   StorageDomain,
   TrajectoryStoragePath,
@@ -34,17 +35,6 @@ function build(path: string, ...attributes: (string | number)[]): string {
 
 export namespace ConfigPath {
   export const config = register(StorageDomain.enum.config);
-}
-
-const indexDomain = 'indices' as StorageDomain;
-
-// todo: update me when histograms are ready
-export namespace IndexPath {
-  export const indices = register(indexDomain, 'indices');
-  export const impls = register(indexDomain, 'impls');
-  export const offsets = register(indexDomain, 'offsets');
-  export const steps = register(indexDomain, 'steps');
-  export const is_persists = register(indexDomain, 'is_persists');
 }
 
 namespace AutoclusterPath {
@@ -117,6 +107,30 @@ namespace ReductionPath {
 export namespace ReductionPathInstance {
   export const reductions = (...suffix: number[]) =>
     build(ReductionPath.reductions, ...suffix);
+}
+
+namespace ExtractionPath {
+  export const embeddings = register(
+    StorageDomain.enum.extractions,
+    ExtractionStoragePath.enum.embeddings,
+  );
+  export const starts = register(
+    StorageDomain.enum.extractions,
+    ExtractionStoragePath.enum.starts,
+  );
+  export const ends = register(
+    StorageDomain.enum.extractions,
+    ExtractionStoragePath.enum.ends,
+  );
+}
+
+export namespace ExtractionPathInstance {
+  export const embeddings = (...suffix: (string | number)[]) =>
+    build(ExtractionPath.embeddings, ...suffix);
+  export const starts = (...suffix: (string | number)[]) =>
+    build(ExtractionPath.starts, ...suffix);
+  export const ends = (...suffix: (string | number)[]) =>
+    build(ExtractionPath.ends, ...suffix);
 }
 
 namespace AggregationPath {

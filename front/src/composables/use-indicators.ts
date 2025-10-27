@@ -2,6 +2,7 @@ import {useStorageAggregatedAcousticIndices} from 'src/composables/use-storage-a
 import {generateUniqueIndexSlug} from 'src/utils/config';
 import {computed} from 'vue';
 
+// TODO: update me
 export function useIndicators() {
   const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
 

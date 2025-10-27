@@ -1,7 +1,7 @@
 {
   "version": "14.0.0-beta.14",
   "settings": {
-    "storagePath": "coral-reef-light-indicators.h5",
+    "storagePath": "coral-reef-light-acoustics.h5",
     "audioPath": "/home/bamdad/git/sound-scape-explorer/examples/audio",
     "expectedSampleRate": 44100,
     "timelineOrigin": "2021-01-01 00:00:00",

@@ -6,6 +6,7 @@ import AppHeatmap from 'src/app/heatmap/app-heatmap.vue';
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useExportName} from 'src/composables/use-export-name';
+import {ExportType} from 'src/constants';
 import DraggableHeatmapsMenu from 'src/draggables/heatmaps/draggable-heatmaps-menu.vue';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
@@ -38,7 +39,7 @@ useDraggableHeatmapsLifecycles();
       <AppHeatmap
         v-if="isReadyAndSelected"
         :colorscale="flavor"
-        :export-name="generate('heatmap', metricSlug ?? '')"
+        :export-name="generate(ExportType.enum.heatmap, metricSlug ?? '')"
         :range="range"
         :title="title"
         :values="series"

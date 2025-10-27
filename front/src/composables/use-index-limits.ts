@@ -4,6 +4,7 @@ import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {calculateMean, truncateNumber} from 'src/utils/math';
 import {unref} from 'vue';
 
+// TODO: update me
 export function useIndexLimits() {
   const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
   const {criteriaIndex} = useColorSelection();

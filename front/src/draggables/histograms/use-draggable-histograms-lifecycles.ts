@@ -1,10 +1,13 @@
 import {useDraggableHistograms} from 'src/draggables/histograms/use-draggable-histograms';
-import {useHistogramsRenderer} from 'src/draggables/histograms/use-histograms-renderer';
 import {watch} from 'vue';
 
+// TODO: to remove
 export function useDraggableHistogramsLifecycles() {
   const {name, over, fn} = useDraggableHistograms();
-  const {render} = useHistogramsRenderer();
 
-  watch([name, over, fn], render);
+  watch([name, over, fn], () => {
+    // TODO: reconnect me
+    console.log('auto render');
+    // render();
+  });
 }

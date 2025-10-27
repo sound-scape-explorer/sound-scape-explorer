@@ -5,6 +5,7 @@ import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {useAcousticsExtractors} from 'src/composables/use-acoustics-extractors';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useDraggables} from 'src/composables/use-draggables';
@@ -28,7 +29,6 @@ const step = ref<number>(0); // percents
 
 type Step = [string, () => void | Promise<void>]; // [text, reader]
 
-// todo: update me
 export function useViewLoader() {
   const {close} = useDraggables();
   const {read: readAggregations} = useAggregations();
@@ -36,6 +36,7 @@ export function useViewLoader() {
   const {read: readAutoclusters} = useAutoclusters();
   const {generate: generateIntervals} = useIntervals();
   const {generate: generateTagUniques} = useTagUniques();
+  const {load: loadAcousticsExtractors} = useAcousticsExtractors();
 
   const {generateColorScale} = useScatterColorScale();
   const {buildSelection, selection: labelSelection} = useTagSelection();
@@ -100,12 +101,15 @@ export function useViewLoader() {
 
     await generateColorScale();
     buildSelection();
+    loadAcousticsExtractors();
 
     filterByLabel(labelSelection);
     filterByTime();
     filterByTemporal();
     filterBySpatial();
+
     setSelectionBounds();
+
     updateAudioFilter(FilterType.enum.hpf, band.value.low);
     updateAudioFilter(FilterType.enum.lpf, band.value.high);
 

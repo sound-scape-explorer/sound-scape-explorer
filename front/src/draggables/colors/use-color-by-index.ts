@@ -8,6 +8,7 @@ import {ref} from 'vue';
 const min = ref<number | null>(null);
 const max = ref<number | null>(null);
 
+// TODO: update me
 export function useColorByIndex() {
   const {scale} = useColorUser();
   const {criteriaIndex} = useColorSelection();

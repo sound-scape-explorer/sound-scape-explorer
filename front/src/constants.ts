@@ -1,6 +1,7 @@
 import {z} from 'zod';
 
 export const STRING_DELIMITER = '|||';
+export const SLUG_DELIMITER = ' - ';
 
 export const LINEBREAK = '%0D%0A';
 
@@ -118,7 +119,7 @@ export type HeatmapScale = z.infer<typeof HeatmapScale>;
 
 export const ExportType = z.enum([
   'scatter',
-  'indicators',
+  'temporal',
   'heatmap',
   'trajectories',
   'relativeTrajectories',

@@ -1,17 +1,17 @@
 import {ref} from 'vue';
 
-const from = ref<number | null>(null);
-const to = ref<number | null>(null);
+const fromString = ref<string>('');
+const toString = ref<string>('');
 
 export function useTemporalThresholds() {
   const reset = () => {
-    from.value = null;
-    to.value = null;
+    fromString.value = '';
+    toString.value = '';
   };
 
   return {
-    from,
-    to,
+    fromString,
+    toString,
     reset,
   };
 }

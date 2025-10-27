@@ -3,10 +3,11 @@ import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useColorsCycling} from 'src/composables/use-colors-cycling';
 import {useDate} from 'src/composables/use-date';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
-import {useSites} from 'src/composables/use-sites';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
-import {useTemporal} from 'src/draggables/temporal/use-temporal';
+import {useTemporalData} from 'src/draggables/temporal/use-temporal-data';
 import {useTemporalHloc} from 'src/draggables/temporal/use-temporal-hloc';
+import {useTemporalStrategy} from 'src/draggables/temporal/use-temporal-strategy';
+import {getSortedIndices} from 'src/utils/utils';
 import {ref} from 'vue';
 
 type OmitKeys = 'title' | 'exportFilename' | 'condensed';
@@ -19,17 +20,17 @@ const candles = ref<CandlesData | null>(null);
 
 export function useTemporalChart() {
   const {isCandles} = useDraggableTemporal();
-  const {sites} = useSites();
-  const {data} = useTemporal();
+  const {data} = useTemporalData();
   const {scale: cyclingScale} = useColorsCycling();
   const {convertTimestampToIsoDate} = useDate();
   const {filtered} = useScatterGlobalFilter();
   const {calculate} = useTemporalHloc();
+  const {apply} = useTemporalStrategy();
 
   const prepare = () => {
     let values: number[] = [];
     let timestamps: number[] = [];
-    let siteValues: string[] = [];
+    let siteNames: string[] = [];
 
     for (let i = 0; i < data.value.length; i += 1) {
       if (filtered.value[i]) {
@@ -43,40 +44,43 @@ export function useTemporalChart() {
         continue;
       }
 
-      values = [...values, d.values[0]];
+      const result = apply(d.values);
+      values = [...values, result];
       timestamps = [...timestamps, d.timestamp];
-      siteValues = [...siteValues, d.site];
+      siteNames = [...siteNames, d.siteName];
     }
 
     return {
       values,
       timestamps,
-      siteValues,
+      siteNames,
     };
   };
 
   const getColors = (siteNames: string[]) => {
     const colors = cyclingScale.value.colors(siteNames.length + 1);
-    const strings = data.value.map((d) => colors[siteNames.indexOf(d.site)]);
+    const strings = data.value.map(
+      (d) => colors[siteNames.indexOf(d.siteName)],
+    );
 
     return strings;
   };
 
   const render = () =>
     requestAnimationFrame(() => {
-      if (sites.value === null || data.value.length === 0) {
+      if (data.value.length === 0) {
         candles.value = generateSkeleton();
         return;
       }
 
-      const {values, timestamps, siteValues} = prepare();
-      const colors = getColors(sites.value);
+      const {values, timestamps, siteNames} = prepare();
 
       if (isCandles.value) {
-        candles.value = generateCandles(values, timestamps, siteValues);
+        candles.value = generateCandles(values, timestamps, siteNames);
         return;
       }
 
+      const colors = getColors(siteNames);
       plot.value = generateContinuous(values, timestamps, colors);
     });
 
@@ -103,12 +107,12 @@ export function useTemporalChart() {
   const generateCandles = (
     values: number[],
     timestamps: number[],
-    siteValues: string[],
+    siteNames: string[],
   ): CandlesData => {
     const hloc = calculate(values, timestamps);
 
     return {
-      labels: generateLabels(timestamps, siteValues),
+      labels: generateLabels(timestamps, siteNames),
       timestamps: hloc.map((x) => x.timestamp),
       high: hloc.map((x) => x.high),
       low: hloc.map((x) => x.low),
@@ -133,15 +137,13 @@ export function useTemporalChart() {
     timestamps: number[],
     colors: string[],
   ): PlotData => {
-    const indices = Array.from({length: timestamps.length}, (_, i) => i);
-    indices.sort((a, b) => timestamps[a] - timestamps[b]);
-
+    const indices = getSortedIndices(timestamps);
     const labels = generateLabelsContinuous(indices, timestamps);
 
     return {
       labels,
-      values: [indices.map((i) => values[i])],
-      colors: indices.map((i) => colors[i]),
+      values: [values],
+      colors,
     };
   };
 

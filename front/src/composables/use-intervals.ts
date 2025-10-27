@@ -111,8 +111,8 @@ export function useIntervals() {
         end,
         files: [...new Set(windows.map((w) => w.file))],
         sites: [...new Set(windows.map((w) => w.file.Site))],
-        windows: [], // will populate after
-        tags: {}, // will populate after
+        windows: [], // will populate later
+        tags: {}, // will populate later
       };
 
       // add windows while fusing by file to have the exact audio portion for each

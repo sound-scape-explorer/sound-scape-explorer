@@ -1,13 +1,19 @@
+import {type ExtractorDto} from '@shared/dtos';
 import {Csv} from 'src/common/csv';
+import {useAcoustics} from 'src/composables/use-acoustics';
+import {useAcousticsExtractors} from 'src/composables/use-acoustics-extractors';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
-import {useStorageAggregatedAcousticIndices} from 'src/composables/use-storage-aggregated-acoustic-indices';
-import {useTemporal} from 'src/draggables/temporal/use-temporal';
+import {ExportType, SLUG_DELIMITER} from 'src/constants';
+import {useTemporalData} from 'src/draggables/temporal/use-temporal-data';
+import {useTemporalStrategy} from 'src/draggables/temporal/use-temporal-strategy';
+import {getSortedIndices} from 'src/utils/utils';
 import {computed, ref} from 'vue';
 import {z} from 'zod';
 
-const indicator = ref<string>('');
-const hasIndicator = computed<boolean>(() => indicator.value !== '');
+const extractorSlug = ref<string>('');
+const extractor = ref<ExtractorDto | null>(null);
+const hasExtractor = computed<boolean>(() => extractorSlug.value !== '');
 
 export const TemporalDisplay = z.enum(['Continuous', 'Candles']);
 // eslint-disable-next-line no-redeclare
@@ -15,39 +21,52 @@ export type TemporalDisplay = z.infer<typeof TemporalDisplay>;
 
 const display = ref<TemporalDisplay>(TemporalDisplay.enum.Continuous);
 
-const isCandles = computed<boolean>(() => display.value === 'Candles');
+const isCandles = computed<boolean>(
+  () => display.value === TemporalDisplay.enum.Candles,
+);
 const isCondensed = ref<boolean>(true);
 const isDisplay = ref<boolean>(true); // whether the plot is shown or not
 const isExpanded = ref<boolean>(false);
 
 export function useDraggableTemporal() {
-  const {aggregatedIndices} = useStorageAggregatedAcousticIndices();
-  const {data} = useTemporal();
+  const {acousticsExtractors} = useAcousticsExtractors();
+  const {read} = useAcoustics();
+  const {data, update} = useTemporalData();
   const {convertTimestampToIsoDate} = useDate();
-  const {selectIndicator} = useTemporal();
   const {generate} = useExportName();
+  const {apply} = useTemporalStrategy();
 
-  const parseIndex = (optionString: string | null): number | null => {
-    if (optionString === null) {
-      return null;
+  const slugToExtractor = (slug: string): ExtractorDto => {
+    const parts = slug.split(SLUG_DELIMITER);
+    const index = Number(parts[0]);
+    const name = parts[1];
+
+    const ex = acousticsExtractors.value.find(
+      (e) => e.index === index && e.name === name,
+    );
+
+    if (!ex) {
+      throw new Error(`Acoustics extractor not found for slug ${slug}`);
     }
 
-    const stringElements = optionString.split(' ');
-    return Number(stringElements[0]);
+    return ex;
   };
 
-  const update = () => {
-    selectIndicator(parseIndex(indicator.value));
+  const handleExtractorChange = () => {
+    extractor.value = slugToExtractor(extractorSlug.value);
+    read(extractor.value).then(update);
   };
 
-  const indicators = computed(() => {
-    if (aggregatedIndices.value === null) {
+  const extractorToSlug = (ex: ExtractorDto) => {
+    return `${ex.index} - ${ex.name}`;
+  };
+
+  const extractorSlugs = computed(() => {
+    if (acousticsExtractors.value === null) {
       return [];
     }
 
-    return aggregatedIndices.value.map(
-      ({index}) => `${index.index} - ${index.impl}`,
-    );
+    return acousticsExtractors.value.map((ex) => extractorToSlug(ex));
   });
 
   const handleExportClick = () => {
@@ -55,17 +74,20 @@ export function useDraggableTemporal() {
     csv.addColumn('intervalIndex');
     csv.addColumn('site');
     csv.addColumn('timestamp');
-    csv.addColumn('values');
+    csv.addColumn('scalar');
 
-    for (const d of data.value) {
+    const indices = getSortedIndices(data.value.map((d) => d.timestamp));
+
+    for (let i = 0; i < data.value.length; i += 1) {
+      const d = data.value[i];
       csv.createRow();
-      csv.addToCurrentRow(d.index.toString());
-      csv.addToCurrentRow(d.site);
+      csv.addToCurrentRow(indices[d.index].toString());
+      csv.addToCurrentRow(d.siteName);
       csv.addToCurrentRow(convertTimestampToIsoDate(d.timestamp));
-      csv.addToCurrentRow(d.values.join('; '));
+      csv.addToCurrentRow(apply(d.values).toString());
     }
 
-    const name = generate('indicators');
+    const name = generate(ExportType.enum.temporal);
     csv.download(name);
   };
 
@@ -73,16 +95,17 @@ export function useDraggableTemporal() {
   const toggleExpanded = () => (isExpanded.value = !isExpanded.value);
 
   return {
-    hasIndicator,
-    indicator,
-    indicators,
+    extractor,
+    extractorSlug,
+    extractorSlugs,
+    hasExtractor,
     display,
     isCandles,
     isCondensed,
     isDisplay,
     toggleDisplay,
     handleExportClick,
-    update,
+    handleExtractorChange,
     isExpanded,
     toggleExpanded,
   };

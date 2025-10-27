@@ -5,6 +5,7 @@ import {
   type ReducerDto,
 } from '@shared/dtos';
 import {useConfig} from 'src/composables/use-config';
+import {SLUG_DELIMITER} from 'src/constants';
 import {ref} from 'vue';
 
 const extractionSlug = ref<string | null>(null);
@@ -34,7 +35,7 @@ export function useViewSelection() {
     `${r.index} - ${r.impl} - ${r.dimensions}d`;
 
   const slugToExtraction = (slug: string) => {
-    const parts = slug.split(' - ');
+    const parts = slug.split(SLUG_DELIMITER);
     const index = Number(parts[0]);
     const name = parts[1];
 
@@ -50,7 +51,7 @@ export function useViewSelection() {
   };
 
   const slugToBand = (slug: string) => {
-    const parts = slug.split(' - ');
+    const parts = slug.split(SLUG_DELIMITER);
     const index = Number(parts[0]);
 
     const band = extraction.value?.bands.find((b) => b.index === index);
@@ -63,7 +64,7 @@ export function useViewSelection() {
   };
 
   const slugToIntegration = (slug: string) => {
-    const parts = slug.split(' - ');
+    const parts = slug.split(SLUG_DELIMITER);
     const index = Number(parts[0]);
 
     const integration = extraction.value?.integrations.find(
@@ -78,7 +79,7 @@ export function useViewSelection() {
   };
 
   const slugToReducer = (slug: string) => {
-    const parts = slug.split(' - ');
+    const parts = slug.split(SLUG_DELIMITER);
     const index = Number(parts[0]);
 
     const reducer = extraction.value?.reducers.find((r) => r.index === index);

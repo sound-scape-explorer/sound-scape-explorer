@@ -8,7 +8,7 @@ import {useReductions} from 'src/composables/use-reductions';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelection} from 'src/composables/use-view-selection';
-import {STRING_DELIMITER} from 'src/constants';
+import {ExportType, STRING_DELIMITER} from 'src/constants';
 import {ref} from 'vue';
 
 interface ExportData {
@@ -107,7 +107,7 @@ export function useScatterExport() {
       });
     });
 
-    const name = generate('scatter');
+    const name = generate(ExportType.enum.scatter);
     csv.download(name);
     loadingRef.value = false;
   };

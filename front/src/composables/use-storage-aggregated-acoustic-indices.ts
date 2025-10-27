@@ -1,5 +1,5 @@
 import {type IndexDto} from '@shared/dtosOLD';
-import {useSitesNew} from 'src/composables/use-sites-new';
+import {useSites} from 'src/composables/use-sites';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewSelection} from 'src/composables/use-view-selection';
@@ -14,10 +14,12 @@ const aggregatedIndices = ref<AggregatedIndex[] | null>(null);
 let isLoaded = false;
 
 // todo: this is regression? (metrics)
+// TODO: to remove
+// TODO: to remove ALL
 export function useStorageAggregatedAcousticIndices() {
   const {read} = useStorageReader();
   const {isReady} = useStorageReady();
-  const {sites} = useSitesNew();
+  const {sites} = useSites();
 
   const readAggregatedIndices = async () => {
     if (!isReady.value) {
@@ -41,7 +43,7 @@ export function useStorageAggregatedAcousticIndices() {
         file,
         band.value.index,
         integration.value.index,
-        Object.keys(sites.value),
+        sites.value.map((s) => s.name),
       );
 
       aggregatedIndices.value = aggregated;

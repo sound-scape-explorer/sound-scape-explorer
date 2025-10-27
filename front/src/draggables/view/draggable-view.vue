@@ -29,16 +29,17 @@ const {
   reducerToSlug,
 } = useViewSelection();
 
-const extractionNames = computed(() => extractions.map(extractionToSlug));
-const bandNames = computed(() => extraction.value?.bands.map(bandToSlug) ?? []);
-const integrationNames = computed(
+const extractionSlugs = computed(() => extractions.map(extractionToSlug));
+const bandSlugs = computed(() => extraction.value?.bands.map(bandToSlug) ?? []);
+const integrationSlugs = computed(
   () => extraction.value?.integrations.map(integrationToSlug) ?? [],
 );
-const reducerNames = computed(
+const reducerSlugs = computed(
   () => extraction.value?.reducers.map(reducerToSlug) ?? [],
 );
 
 useSelectionLifecycles();
+
 onMounted(autoselectDev);
 </script>
 
@@ -50,7 +51,7 @@ onMounted(autoselectDev);
       <AppSelect
         v-model="extractionSlug"
         :disabled="hasView"
-        :options="extractionNames"
+        :options="extractionSlugs"
         placeholder="Extraction..."
         size="small"
       />
@@ -66,7 +67,7 @@ onMounted(autoselectDev);
       <AppSelect
         v-model="bandSlug"
         :disabled="hasView || extraction === null"
-        :options="bandNames"
+        :options="bandSlugs"
         placeholder="Band..."
         size="small"
       />
@@ -82,7 +83,7 @@ onMounted(autoselectDev);
       <AppSelect
         v-model="integrationSlug"
         :disabled="hasView || extraction === null"
-        :options="integrationNames"
+        :options="integrationSlugs"
         placeholder="Integration..."
         size="small"
       />
@@ -98,7 +99,7 @@ onMounted(autoselectDev);
       <AppSelect
         v-model="reducerSlug"
         :disabled="hasView || extraction === null"
-        :options="reducerNames"
+        :options="reducerSlugs"
         placeholder="Reducer..."
         size="small"
       />

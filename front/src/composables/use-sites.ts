@@ -1,21 +1,48 @@
+import {type FileDto} from '@shared/dtos';
 import {useConfig} from 'src/composables/use-config';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 
-const sites = ref<string[] | null>(null);
+export interface Site {
+  name: string;
+  files: FileDto[];
+}
 
-// todo: remove me
+const sites = ref<Site[]>([]);
+
 export function useSites() {
   const {config} = useConfig();
 
-  watch(config, () => {
-    if (sites.value !== null || config.value === null) {
+  const generate = () => {
+    if (config.value === null) {
       return;
     }
 
-    sites.value = [...new Set(config.value.files.map((f) => f.Site))];
-  });
+    const newSites: Site[] = [];
+
+    // fill
+    for (const file of config.value.files) {
+      let site = newSites.find((site) => site.name === file.Site);
+
+      if (typeof site === 'undefined') {
+        site = {name: file.Site, files: []};
+        newSites.push(site);
+      }
+
+      site.files.push(file);
+    }
+
+    // sort
+    for (const site of newSites) {
+      site.files = site.files.sort(
+        (a, b) => new Date(a.Date).getTime() - new Date(b.Date).getTime(),
+      );
+    }
+
+    sites.value = newSites;
+  };
 
   return {
     sites,
+    generate,
   };
 }

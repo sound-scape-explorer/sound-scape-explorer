@@ -6,6 +6,7 @@ import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-ti
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useAggregations} from 'src/composables/use-aggregations';
+import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useReductions} from 'src/composables/use-reductions';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
@@ -14,11 +15,13 @@ import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
+import {useTemporalData} from 'src/draggables/temporal/use-temporal-data';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 
 export function useViewUnloader() {
   const {open, closeAll} = useDraggables();
   const {reset: resetAggregations} = useAggregations();
+  const {reset: resetAutoclusters} = useAutoclusters();
   const {reset: resetReductionEmbeddings} = useReductions();
   const {resetColorScale} = useScatterColorScale();
   const {resetSelection: resetTagSelection} = useTagSelection();
@@ -31,6 +34,7 @@ export function useViewUnloader() {
   const {reset: resetFilterSpatial} = useScatterFilterSpatial();
   const {reset: resetViewSelection} = useViewSelection();
   const {isLoading, loadingText} = useScatterLoading();
+  const {reset: resetTemporalData} = useTemporalData();
   const {reset: resetTemporalThresholds} = useTemporalThresholds();
   const {reset: resetAudioPlaybackRate} = useAudioPlaybackRate();
   const {resetAll: resetAudioFilters} = useAudioFilters();
@@ -55,8 +59,11 @@ export function useViewUnloader() {
 
     resetAggregations();
     resetReductionEmbeddings();
+    resetAutoclusters();
 
     resetViewSelection();
+
+    resetTemporalData();
     resetTemporalThresholds();
 
     isLoading.value = false;

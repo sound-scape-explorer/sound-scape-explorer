@@ -11,31 +11,41 @@ import {
   useDraggableTemporal,
 } from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
-import {watch} from 'vue';
+import {
+  TemporalStrategy,
+  useTemporalStrategy,
+} from 'src/draggables/temporal/use-temporal-strategy';
 
 const {
-  indicator,
-  indicators,
+  extractorSlug,
+  extractorSlugs,
   display,
   isCandles,
   isCondensed,
   handleExportClick,
-  update,
 } = useDraggableTemporal();
 
+const {strategy} = useTemporalStrategy();
 const {period, periods, update: updatePeriod} = useTemporalCandles();
-watch(indicator, update);
 </script>
 
 <template>
   <AppDraggableMenu>
     <h2>Select</h2>
 
-    <div>
+    <div :class="$style.first">
       <AppSelect
-        v-model="indicator"
-        :options="indicators"
+        v-model="extractorSlug"
+        :options="extractorSlugs"
         size="small"
+      />
+
+      <AppSelect
+        v-model="strategy"
+        :options="TemporalStrategy.options"
+        size="small"
+        tooltip="Aggregation strategy"
+        tooltip-placement="right"
       />
     </div>
 
@@ -106,6 +116,13 @@ watch(indicator, update);
     display: flex;
     gap: sizes.$p0;
   }
+}
+
+.first {
+  align-items: center;
+  display: grid;
+  gap: sizes.$g0;
+  grid-template-columns: 1fr calc(9em + 7px);
 }
 
 .selection {
