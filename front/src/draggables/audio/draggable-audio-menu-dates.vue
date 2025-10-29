@@ -1,4 +1,5 @@
 <script lang="ts" setup="">
+import {copyToClipboard} from '@shared/browser';
 import {NGi, NGrid, NTag} from 'naive-ui';
 import {useDate} from 'src/composables/use-date';
 import {useInterval} from 'src/composables/use-interval';
@@ -20,7 +21,11 @@ const {convertTimestampToIsoDate} = useDate();
       <NGi>
         <NTag
           :bordered="false"
+          :class="$style.copy"
           size="small"
+          @click="
+            copyToClipboard(convertTimestampToIsoDate(currentInterval.start))
+          "
         >
           Start
         </NTag>
@@ -31,7 +36,11 @@ const {convertTimestampToIsoDate} = useDate();
       <NGi>
         <NTag
           :bordered="false"
+          :class="$style.copy"
           size="small"
+          @click="
+            copyToClipboard(convertTimestampToIsoDate(currentInterval.end))
+          "
         >
           End
         </NTag>
@@ -50,6 +59,12 @@ const {convertTimestampToIsoDate} = useDate();
     display: grid;
     gap: sizes.$g0;
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+.copy {
+  &:hover {
+    cursor: pointer;
   }
 }
 </style>
