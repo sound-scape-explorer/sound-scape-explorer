@@ -15,7 +15,6 @@ export const DraggableKey = z.enum([
   'relativeTrajectories',
   'temporal',
   'heatmaps',
-  'histograms',
   'selection',
 ]);
 

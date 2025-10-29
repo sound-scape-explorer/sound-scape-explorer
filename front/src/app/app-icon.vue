@@ -43,7 +43,6 @@ import StepBackward from '@blueprintjs/icons/lib/esm/generated/16px/paths/step-b
 import StepForward from '@blueprintjs/icons/lib/esm/generated/16px/paths/step-forward';
 import Stop from '@blueprintjs/icons/lib/esm/generated/16px/paths/stop';
 import Tags from '@blueprintjs/icons/lib/esm/generated/16px/paths/tags';
-import TimelineBarChart from '@blueprintjs/icons/lib/esm/generated/16px/paths/timeline-bar-chart';
 import Undo from '@blueprintjs/icons/lib/esm/generated/16px/paths/undo';
 import Ungroup from '@blueprintjs/icons/lib/esm/generated/16px/paths/ungroup-objects';
 import VolumeDown from '@blueprintjs/icons/lib/esm/generated/16px/paths/volume-down';
@@ -105,7 +104,6 @@ const paths: Record<PathKey, string[]> = {
   tags: Tags,
   temporal: SeriesFiltered,
   heatmaps: HeatGrid,
-  histograms: TimelineBarChart,
   audio: Music,
   details: Array,
   trajectories: Layout,

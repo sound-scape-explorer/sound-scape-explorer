@@ -57,10 +57,6 @@ export function useAppShortcuts() {
     Shortcut.heatmaps,
     () => hasView.value && toggle(DraggableKey.enum.heatmaps),
   );
-  registerKey(
-    Shortcut.histograms,
-    () => hasView.value && toggle(DraggableKey.enum.histograms),
-  );
 
   registerKey(Shortcut.audioPlayPause, toggleAudioTransport);
 }

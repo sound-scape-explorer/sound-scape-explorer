@@ -86,13 +86,6 @@ const {hasView} = useViewState();
 
       <AppMenuButton
         :disabled="!hasView"
-        :draggable-key="DraggableKey.enum.histograms"
-      >
-        <AppIcon icon="histograms" />
-      </AppMenuButton>
-
-      <AppMenuButton
-        :disabled="!hasView"
         :draggable-key="DraggableKey.enum.audio"
       >
         <AppIcon icon="audio" />
