@@ -15,7 +15,7 @@ import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
-import {useTemporalData} from 'src/draggables/temporal/use-temporal-data';
+import {useTemporalSeries} from 'src/draggables/temporal/use-temporal-series';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 
 export function useViewUnloader() {
@@ -23,8 +23,8 @@ export function useViewUnloader() {
   const {reset: resetAggregations} = useAggregations();
   const {reset: resetAutoclusters} = useAutoclusters();
   const {reset: resetReductionEmbeddings} = useReductions();
-  const {resetColorScale} = useScatterColorScale();
-  const {resetSelection: resetTagSelection} = useTagSelection();
+  const {reset: resetColorScale} = useScatterColorScale();
+  const {reset: resetTagSelection} = useTagSelection();
   const {reset: resetScatterSelection} = useDraggableSelection();
   const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
   const {reset: resetScatter, isEnabled} = useScatterRender();
@@ -34,7 +34,7 @@ export function useViewUnloader() {
   const {reset: resetFilterSpatial} = useScatterFilterSpatial();
   const {reset: resetViewSelection} = useViewSelection();
   const {isLoading, loadingText} = useScatterLoading();
-  const {reset: resetTemporalData} = useTemporalData();
+  const {reset: resetTemporalSeries} = useTemporalSeries();
   const {reset: resetTemporalThresholds} = useTemporalThresholds();
   const {reset: resetAudioPlaybackRate} = useAudioPlaybackRate();
   const {resetAll: resetAudioFilters} = useAudioFilters();
@@ -63,7 +63,7 @@ export function useViewUnloader() {
 
     resetViewSelection();
 
-    resetTemporalData();
+    resetTemporalSeries();
     resetTemporalThresholds();
 
     isLoading.value = false;

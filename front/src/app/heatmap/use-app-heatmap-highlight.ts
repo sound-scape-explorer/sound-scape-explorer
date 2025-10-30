@@ -18,7 +18,7 @@ interface Highlight {
 const highlight = ref<Highlight>({});
 
 export function useAppHeatmapHighlight() {
-  const {updateSelection: updateTag} = useTagSelection();
+  const {update: updateTag} = useTagSelection();
 
   const getShapes = () => {
     if (!highlight.value.row || !highlight.value.col) {

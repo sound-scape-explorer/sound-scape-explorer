@@ -6,11 +6,11 @@ import {computed, ref} from 'vue';
 
 export function useTag(props: TagProps) {
   const {allUniques} = useTagUniques();
-  const {updateSelection, selection} = useTagSelection();
-  const {criteria} = useColorSelection();
+  const {update, selection} = useTagSelection();
+  const {option} = useColorSelection();
 
   const isShowing = ref<boolean>(false);
-  const isCurrent = computed<boolean>(() => criteria.value === props.name);
+  const isCurrent = computed<boolean>(() => option.value === props.name);
 
   const hasNoSelection = computed<boolean>(() => {
     if (!selection.value[props.name]) {
@@ -41,7 +41,7 @@ export function useTag(props: TagProps) {
       reverseSelection.push(unique);
     }
 
-    updateSelection(props.name, reverseSelection);
+    update(props.name, reverseSelection);
   };
 
   const resetSelection = (tagName: string) => {
@@ -49,7 +49,7 @@ export function useTag(props: TagProps) {
       return;
     }
 
-    updateSelection(tagName, []);
+    update(tagName, []);
   };
 
   return {

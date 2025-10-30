@@ -1,4 +1,4 @@
-import {useIndicators} from 'src/composables/use-indicators';
+import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {ColorCategory} from 'src/constants';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -7,31 +7,31 @@ import {computed} from 'vue';
 
 export function useColorState() {
   const {allUniques} = useTagUniques();
-  const {criteria, category} = useColorSelection();
-  const {names} = useIndicators();
+  const {option, category} = useColorSelection();
+  const {acousticSlugs} = useAcousticExtractors();
   const {isCalculable} = useTagNumeric();
 
-  const isIndicators = computed(
+  const isAcoustic = computed(
     () =>
-      category.value === ColorCategory.enum.METRICS &&
-      names.value?.includes(criteria.value),
+      category.value === ColorCategory.enum.ACOUSTICS &&
+      acousticSlugs.value.includes(option.value),
   );
 
-  const isLabels = computed<boolean>(() => {
+  const isTag = computed<boolean>(() => {
     const properties = Object.keys(allUniques.value);
     return (
       category.value === ColorCategory.enum.TAGS &&
-      properties.includes(criteria.value)
+      properties.includes(option.value)
     );
   });
 
-  const isLabelNumeric = computed<boolean>(() => {
-    return isLabels.value && isCalculable(criteria.value);
+  const isTagNumeric = computed<boolean>(() => {
+    return isTag.value && isCalculable(option.value);
   });
 
   return {
-    isIndicators,
-    isLabels,
-    isLabelNumeric,
+    isAcoustic,
+    isTag,
+    isTagNumeric,
   };
 }

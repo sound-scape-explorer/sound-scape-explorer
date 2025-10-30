@@ -1,10 +1,11 @@
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useConfig} from 'src/composables/use-config';
+import {ColorOption} from 'src/constants';
 import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
 import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
+import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
 import {useColorByCyclingDay} from 'src/draggables/colors/use-color-by-cycling-day';
 import {useColorByDay} from 'src/draggables/colors/use-color-by-day';
-import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -16,15 +17,15 @@ const scale = ref<string[] | null>(null);
 export function useScatterColorScale() {
   const {config} = useConfig();
   const {aggregations} = useAggregations();
-  const {isIndicators, isLabels} = useColorState();
+  const {isAcoustic, isTag} = useColorState();
   const {getColor} = useColorByIntervalIndex();
   const {getColorByOneHour} = useColorBy1h();
   const {getColorByTenMinutes} = useColorBy10min();
   const {getColorByDay} = useColorByDay();
   const {getColorByCyclingDay} = useColorByCyclingDay();
-  const {get: getColorByLabel} = useColorByTag();
-  const {get: getColorByIndicator} = useColorByIndex();
-  const {criteria} = useColorSelection();
+  const {get: getColorByTag} = useColorByTag();
+  const {get: getColorByAcoustic} = useColorByAcoustic();
+  const {option: colorOption} = useColorSelection();
 
   const generate = async () => {
     return new Promise((resolve, reject) => {
@@ -40,25 +41,25 @@ export function useScatterColorScale() {
       for (let i = 0; i < count; i += 1) {
         const timestamp = aggregations.value.timestamps[i];
 
-        if (isLabels.value) {
-          newScale[i] = getColorByLabel(i);
-        } else if (isIndicators.value) {
-          newScale[i] = getColorByIndicator(i);
+        if (isTag.value) {
+          newScale[i] = getColorByTag(i);
+        } else if (isAcoustic.value) {
+          newScale[i] = getColorByAcoustic(i);
         } else {
-          switch (criteria.value) {
-            case 'cycleDay':
+          switch (colorOption.value) {
+            case ColorOption.enum.cycleDay:
               newScale[i] = getColorByCyclingDay(timestamp);
               break;
-            case 'intervalIndex':
+            case ColorOption.enum.intervalIndex:
               newScale[i] = getColor(i, count);
               break;
-            case 'isDay':
+            case ColorOption.enum.isDay:
               newScale[i] = getColorByDay(timestamp);
               break;
-            case 'by1h':
+            case ColorOption.enum.by1h:
               newScale[i] = getColorByOneHour(timestamp);
               break;
-            case 'by10min':
+            case ColorOption.enum.by10min:
               newScale[i] = getColorByTenMinutes(timestamp);
               break;
           }
@@ -76,7 +77,7 @@ export function useScatterColorScale() {
 
   return {
     scale,
-    generateColorScale: generate,
-    resetColorScale: reset,
+    generate,
+    reset,
   };
 }

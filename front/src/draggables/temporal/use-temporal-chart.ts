@@ -1,13 +1,11 @@
 import {formatTimestampToString} from '@shared/dates';
 import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
+import {type AcousticSeries} from 'src/composables/use-acoustic-serializer';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
-import {
-  type TemporalData,
-  useTemporalData,
-} from 'src/draggables/temporal/use-temporal-data';
 import {useTemporalHloc} from 'src/draggables/temporal/use-temporal-hloc';
+import {useTemporalSeries} from 'src/draggables/temporal/use-temporal-series';
 import {useTemporalStrategy} from 'src/draggables/temporal/use-temporal-strategy';
 import {ref} from 'vue';
 
@@ -23,20 +21,24 @@ const candles = ref<CandlesData | null>(null);
 
 export function useTemporalChart() {
   const {isCandles} = useDraggableTemporal();
-  const {data} = useTemporalData();
+  const {series} = useTemporalSeries();
   const {filtered} = useScatterGlobalFilter();
   const {calculate} = useTemporalHloc();
   const {apply} = useTemporalStrategy();
 
-  const filterActualData = () => {
-    const filteredData: TemporalData[] = [];
+  const filterSeries = () => {
+    if (series.value === null) {
+      throw new Error('Could not filter temporal series');
+    }
 
-    for (let i = 0; i < data.value.length; i += 1) {
+    const filteredData: AcousticSeries[] = [];
+
+    for (let i = 0; i < series.value.length; i += 1) {
       if (filtered.value[i]) {
         continue;
       }
 
-      filteredData.push(data.value[i]);
+      filteredData.push(series.value[i]);
     }
 
     return filteredData;
@@ -44,7 +46,7 @@ export function useTemporalChart() {
 
   const render = () =>
     requestAnimationFrame(() => {
-      if (data.value.length === 0) {
+      if (series.value === null) {
         candles.value = generateCandlesSkeleton();
         return;
       }
@@ -58,7 +60,7 @@ export function useTemporalChart() {
     });
 
   const generateContinuousPlot = (): PlotData => {
-    const filteredData = filterActualData();
+    const filteredData = filterSeries();
 
     return {
       labels: [
@@ -84,7 +86,7 @@ export function useTemporalChart() {
   };
 
   const generateCandlesPlot = (): CandlesData => {
-    const filteredData = filterActualData();
+    const filteredData = filterSeries();
     const values = filteredData.map((d) => apply(d.values));
     const timestamps = filteredData.map((d) => d.timestamp);
 

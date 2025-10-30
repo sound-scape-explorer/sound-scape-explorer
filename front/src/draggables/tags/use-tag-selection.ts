@@ -51,9 +51,8 @@ export function useTagSelection() {
 
   return {
     selection,
-    buildSelection: build,
-    updateSelection: update,
-    resetSelection: reset,
     reset,
+    build,
+    update,
   };
 }

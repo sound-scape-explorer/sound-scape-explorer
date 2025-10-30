@@ -1,21 +1,22 @@
 <script lang="ts" setup>
 import AppGradient from 'src/app/app-gradient.vue';
+import {ColorOption} from 'src/constants';
+import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorGradients} from 'src/draggables/colors/use-color-gradients';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {computed} from 'vue';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
-import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
+import {computed} from 'vue';
 
-const {criteria} = useColorSelection();
+const {option} = useColorSelection();
 const {isEnabled: isNumeric} = useTagNumeric();
 const {min, max} = useColorByTag();
 
 const {cycleDayLabels, cycleDayColors, userColors, dayColors, cycleDayLegend} =
   useColorGradients();
 
-const isPreset = computed(() => {
-  return criteria.value === 'cycleDay' || criteria.value === 'isDay';
-});
+const isCycleDay = computed(() => option.value === ColorOption.enum.cycleDay);
+const isDay = computed(() => option.value === ColorOption.enum.isDay);
+// todo: check if v-else works as intended
 
 const userLabels = computed<string[]>(() => {
   if (!isNumeric.value || min.value === null || max.value === null) {
@@ -38,7 +39,7 @@ const userLabels = computed<string[]>(() => {
 
 <template>
   <AppGradient
-    v-if="criteria === 'cycleDay'"
+    v-if="isCycleDay"
     :colors="cycleDayColors"
     :labels="cycleDayLabels"
     :legend-max="cycleDayLegend.max"
@@ -47,7 +48,7 @@ const userLabels = computed<string[]>(() => {
   />
 
   <AppGradient
-    v-if="criteria === 'isDay'"
+    v-if="isDay"
     :colors="dayColors"
     :labels="['night', 'day']"
     :width="50"
@@ -56,7 +57,7 @@ const userLabels = computed<string[]>(() => {
   />
 
   <AppGradient
-    v-if="!isPreset"
+    v-else
     :colors="userColors"
     :labels="userLabels"
   />

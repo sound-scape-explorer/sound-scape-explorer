@@ -5,14 +5,14 @@ export function useTagCheckboxHandlers(
   tagName: string,
   checkboxes: Ref<string[]>,
 ) {
-  const {updateSelection, selection} = useTagSelection();
+  const {update, selection} = useTagSelection();
 
   const handleUpdate = () => {
     if (typeof checkboxes.value === 'undefined') {
       return;
     }
 
-    updateSelection(tagName, checkboxes.value);
+    update(tagName, checkboxes.value);
   };
 
   const syncBack = () => {

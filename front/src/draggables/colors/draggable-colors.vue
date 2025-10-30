@@ -7,27 +7,27 @@ import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useAcousticRange} from 'src/composables/use-acoustic-range';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorInvert} from 'src/composables/use-color-invert';
 import {DraggableKey} from 'src/composables/use-draggables';
-import {useIndexLimits} from 'src/composables/use-index-limits';
 import {ColorCategory, ColorFlavor} from 'src/constants';
 import ColorsGradients from 'src/draggables/colors/draggable-colors-gradients.vue';
-import DraggableColorsLabelNumeric from 'src/draggables/colors/draggable-colors-label-numeric.vue';
-import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
+import DraggableColorsTagNumeric from 'src/draggables/colors/draggable-colors-tag-numeric.vue';
+import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useColorState} from 'src/draggables/colors/use-color-state';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 
 const {isLoading} = useScatterLoading();
-const {flavor, criteria, criterias, category} = useColorSelection();
-const {isIndicators, isLabels, isLabelNumeric} = useColorState();
+const {flavor, option, options, category} = useColorSelection();
+const {isAcoustic, isTag, isTagNumeric} = useColorState();
 
 const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
-const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
-const {min: labelRangeMin, max: labelRangeMax} = useColorByTag();
-const {detect: detectIndicatorRange, swap} = useIndexLimits();
+const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
+const {min: tagMin, max: tagMax} = useColorByTag();
+const {detect: detectAcousticRange, swap} = useAcousticRange();
 const {invert, isReversible} = useColorInvert();
 const {isEnabled} = useTagNumeric();
 </script>
@@ -50,20 +50,20 @@ const {isEnabled} = useTagNumeric();
         />
 
         <AppSelect
-          v-model="criteria"
+          v-model="option"
           :disabled="isLoading"
-          :options="criterias"
-          placeholder="Criteria..."
+          :options="options"
+          placeholder="Option..."
           size="small"
         />
       </div>
 
       <h2
-        v-if="isIndicators"
-        :class="$style['indicator-buttons']"
+        v-if="isAcoustic"
+        :class="$style['acoustic-buttons']"
       >
         <AppButton
-          :handle-click="detectIndicatorRange"
+          :handle-click="detectAcousticRange"
           size="small"
           tooltip="Detect range"
           tooltip-placement="bottom"
@@ -88,18 +88,18 @@ const {isEnabled} = useTagNumeric();
       </h2>
 
       <div
-        v-if="isIndicators"
+        v-if="isAcoustic"
         :class="$style.two"
       >
         <AppInput
-          v-model="indicatorRangeMin"
+          v-model="acousticMin"
           placeholder="Min..."
           size="small"
           type="number"
         />
 
         <AppInput
-          v-model="indicatorRangeMax"
+          v-model="acousticMax"
           placeholder="Max..."
           size="small"
           type="number"
@@ -107,18 +107,18 @@ const {isEnabled} = useTagNumeric();
       </div>
 
       <h2
-        v-if="isLabelNumeric"
-        :class="$style['indicator-buttons']"
+        v-if="isTagNumeric"
+        :class="$style['acoustic-buttons']"
       >
-        <DraggableColorsLabelNumeric />
+        <DraggableColorsTagNumeric />
       </h2>
 
       <div
-        v-if="isLabelNumeric"
+        v-if="isTagNumeric"
         :class="$style.two"
       >
         <AppInput
-          v-model="labelRangeMin"
+          v-model="tagMin"
           :disabled="!isEnabled"
           placeholder="Min..."
           size="small"
@@ -126,7 +126,7 @@ const {isEnabled} = useTagNumeric();
         />
 
         <AppInput
-          v-model="labelRangeMax"
+          v-model="tagMax"
           :disabled="!isEnabled"
           placeholder="Max..."
           size="small"
@@ -174,7 +174,7 @@ const {isEnabled} = useTagNumeric();
       />
 
       <h2
-        v-if="!isLabels || isEnabled"
+        v-if="!isTag || isEnabled"
         style="display: flex; gap: 8px"
       >
         <span>Map</span>
@@ -193,7 +193,7 @@ const {isEnabled} = useTagNumeric();
       </h2>
 
       <div
-        v-if="!isLabels || isEnabled"
+        v-if="!isTag || isEnabled"
         :class="$style.gradients"
       >
         <ColorsGradients />
@@ -223,7 +223,7 @@ const {isEnabled} = useTagNumeric();
   }
 }
 
-.indicator-buttons {
+.acoustic-buttons {
   display: flex;
   gap: sizes.$p0;
 }

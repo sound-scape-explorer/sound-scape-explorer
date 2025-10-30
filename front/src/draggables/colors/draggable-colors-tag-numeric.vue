@@ -5,7 +5,7 @@ import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {onBeforeUnmount} from 'vue';
 
-const {detect: detectLabelRange} = useColorByTag();
+const {detect} = useColorByTag();
 const {isEnabled, toggle, disable} = useTagNumeric();
 
 onBeforeUnmount(disable);
@@ -27,7 +27,7 @@ onBeforeUnmount(disable);
 
   <AppButton
     :disabled="!isEnabled"
-    :handle-click="detectLabelRange"
+    :handle-click="detect"
     size="small"
     tooltip="Detect range"
     tooltip-placement="bottom"

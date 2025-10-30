@@ -17,7 +17,7 @@ export function useAppHeatmapRenderer(props: AppHeatmapProps) {
   const {generateConfig} = useBasePlotConfig();
   const {isPairing} = useDraggableHeatmaps();
   const {a, b} = useDraggableHeatmapsTags();
-  const {updateSelection: updateTag} = useTagSelection();
+  const {update: updateTag} = useTagSelection();
   const {getShapes, updateHighlight} = useAppHeatmapHighlight();
 
   const handleClick = (e: PlotMouseEvent) => {

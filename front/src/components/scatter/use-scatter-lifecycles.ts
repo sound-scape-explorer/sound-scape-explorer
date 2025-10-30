@@ -8,7 +8,7 @@ import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useInterval} from 'src/composables/use-interval';
-import {useColorByIndex} from 'src/draggables/colors/use-color-by-index';
+import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
@@ -29,7 +29,7 @@ export function useScatterLifecycles() {
     render: renderContainer,
     mount: mountContainer,
   } = useScatterContainer();
-  const {criteria, flavor} = useColorSelection();
+  const {option: colorOption, flavor} = useColorSelection();
   const {colorsAlphaLow: opacityLow, colorsAlphaHigh: opacityHigh} =
     useClientSettings();
   const {
@@ -43,9 +43,9 @@ export function useScatterLifecycles() {
   const {filtered: temporalFiltered} = useScatterFilterTemporal();
   const {filtered: spatialFiltered} = useScatterFilterSpatial();
   const {isWebGlScatter2d} = useClientSettings();
-  const {min: indicatorRangeMin, max: indicatorRangeMax} = useColorByIndex();
-  const {min: labelRangeMin, max: labelRangeMax} = useColorByTag();
-  const {isEnabled: isColorByLabelsNumeric} = useTagNumeric();
+  const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
+  const {min: tagMin, max: tagMax} = useColorByTag();
+  const {isEnabled: isTagNumeric} = useTagNumeric();
   const {currentIndex} = useInterval();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
@@ -60,14 +60,15 @@ export function useScatterLifecycles() {
 
   watch(
     [
-      criteria,
+      colorOption,
       flavor,
       opacityLow,
       opacityHigh,
-      indicatorRangeMin,
-      indicatorRangeMax,
-      labelRangeMin,
-      labelRangeMax,
+      acousticMin,
+      acousticMax,
+      tagMin,
+      tagMax,
+      isTagNumeric,
       timeshift,
       labelFiltered,
       timeFiltered,
@@ -75,7 +76,6 @@ export function useScatterLifecycles() {
       spatialFiltered,
       isWebGlScatter2d,
       isColorMapSwapped,
-      isColorByLabelsNumeric,
       currentIndex,
       isSelectedPointHighlighted,
       scatterBorderWidth,

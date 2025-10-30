@@ -5,7 +5,7 @@ import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
-import {useAcousticsExtractors} from 'src/composables/use-acoustics-extractors';
+import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useDraggables} from 'src/composables/use-draggables';
@@ -36,10 +36,10 @@ export function useViewLoader() {
   const {read: readAutoclusters} = useAutoclusters();
   const {generate: generateIntervals} = useIntervals();
   const {generate: generateTagUniques} = useTagUniques();
-  const {load: loadAcousticsExtractors} = useAcousticsExtractors();
+  const {load: loadAcousticExtractors} = useAcousticExtractors();
 
-  const {generateColorScale} = useScatterColorScale();
-  const {buildSelection, selection: labelSelection} = useTagSelection();
+  const {generate: generateColorScale} = useScatterColorScale();
+  const {build: buildSelection, selection: tagSelection} = useTagSelection();
   const {isEnabled} = useScatterRender();
   const {filter: filterByLabel} = useScatterFilterTag();
   const {filter: filterByTemporal} = useScatterFilterTemporal();
@@ -101,9 +101,9 @@ export function useViewLoader() {
 
     await generateColorScale();
     buildSelection();
-    loadAcousticsExtractors();
+    loadAcousticExtractors();
 
-    filterByLabel(labelSelection);
+    filterByLabel(tagSelection);
     filterByTime();
     filterByTemporal();
     filterBySpatial();

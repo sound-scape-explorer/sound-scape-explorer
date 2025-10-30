@@ -2,9 +2,8 @@ import {type ExtractorDto} from '@shared/dtos';
 import {type Site, useSites} from 'src/composables/use-sites';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useViewSelection} from 'src/composables/use-view-selection';
-import {ref} from 'vue';
 
-export interface Acoustics {
+export interface AcousticData {
   site: Site;
   data: {
     scalars: number[];
@@ -19,18 +18,16 @@ export interface Acoustics {
   };
 }
 
-const acoustics = ref<Acoustics[]>([]);
-
-export function useAcoustics() {
+export function useAcousticDataReader() {
   const {read: r} = useStorageReader();
   const {extraction, band, integration} = useViewSelection();
   const {sites} = useSites();
 
   const filter = (
-    acoustics: Acoustics,
+    acoustics: AcousticData,
     startTime: number,
     endTime: number,
-  ): Acoustics['data'] => {
+  ): AcousticData['data'] => {
     const {scalars, relative, absolute} = acoustics.data;
 
     const filteredScalars: number[] = [];
@@ -67,42 +64,43 @@ export function useAcoustics() {
     };
   };
 
-  const read = (extractor: ExtractorDto) => {
-    return r(async (worker, file) => {
-      if (
-        extraction.value === null ||
-        band.value === null ||
-        integration.value === null ||
-        sites.value === null
-      ) {
-        return;
-      }
+  const read = async (extractor: ExtractorDto): Promise<AcousticData[]> => {
+    return new Promise((resolve) => {
+      r(async (worker, file) => {
+        if (
+          extraction.value === null ||
+          band.value === null ||
+          integration.value === null ||
+          sites.value === null
+        ) {
+          throw new Error('Props not ready');
+        }
 
-      const newAcoustics: Acoustics[] = [];
+        const newData: AcousticData[] = [];
 
-      for (const site of sites.value) {
-        const data = await worker.readAcoustics(
-          file,
-          extraction.value.index,
-          extractor.index,
-          band.value.index,
-          site.name,
-          site.files.map((f) => f.Index),
-          site.files.map((f) => new Date(f.Date).getTime()),
-        );
+        for (const site of sites.value) {
+          const data = await worker.readAcoustics(
+            file,
+            extraction.value.index,
+            extractor.index,
+            band.value.index,
+            site.name,
+            site.files.map((f) => f.Index),
+            site.files.map((f) => new Date(f.Date).getTime()),
+          );
 
-        newAcoustics.push({
-          site,
-          data,
-        });
-      }
+          newData.push({
+            site,
+            data,
+          });
+        }
 
-      acoustics.value = newAcoustics;
+        resolve(newData);
+      });
     });
   };
 
   return {
-    acoustics,
     read,
     filter,
   };

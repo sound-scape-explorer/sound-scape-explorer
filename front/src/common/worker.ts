@@ -10,7 +10,7 @@ import {
 } from '@shared/path-registry';
 import h5wasm, {type Dataset, type File as H5File} from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
-import {type Acoustics} from 'src/composables/use-acoustics';
+import {type AcousticData} from 'src/composables/use-acoustic-data-reader';
 import {type Aggregations} from 'src/composables/use-aggregations';
 import {type Autocluster} from 'src/composables/use-autoclusters';
 import {type MetricData} from 'src/composables/use-metric-data';
@@ -292,10 +292,10 @@ export async function readAcoustics(
   site: string,
   fileIndices: string[],
   fileTimestamps: number[],
-): Promise<Acoustics['data']> {
+): Promise<AcousticData['data']> {
   const h5 = await load(file);
 
-  const data: Acoustics['data'] = {
+  const data: AcousticData['data'] = {
     scalars: [],
     relative: {
       starts: [],

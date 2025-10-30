@@ -1,5 +1,5 @@
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
-import {useTemporalData} from 'src/draggables/temporal/use-temporal-data';
+import {useTemporalSeries} from 'src/draggables/temporal/use-temporal-series';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 import {calculateMean} from 'src/utils/math';
 import {getInfiniteRangeFromStrings} from 'src/utils/utils';
@@ -14,21 +14,21 @@ export function useScatterFilterTemporal() {
     reset: resetThresholds,
   } = useTemporalThresholds();
   const {hasExtractor} = useDraggableTemporal();
-  const {data} = useTemporalData();
+  const {series} = useTemporalSeries();
 
   const isFiltered = (index: number, bottom: number, top: number): boolean => {
-    if (!hasExtractor.value || data.value.length === 0) {
+    if (!hasExtractor.value || series.value === null) {
       return false;
     }
 
-    const {values} = data.value[index];
+    const {values} = series.value[index];
     const mean = calculateMean(values);
     const isWithin = bottom <= mean && mean < top;
     return !isWithin;
   };
 
   const filter = (): void => {
-    if (data.value.length === 0) {
+    if (series.value === null) {
       return;
     }
 
@@ -37,7 +37,7 @@ export function useScatterFilterTemporal() {
       toString.value,
     );
 
-    const l = data.value.length;
+    const l = series.value.length;
     const newFiltered: boolean[] = new Array(l);
 
     for (let i = 0; i < l; i += 1) {

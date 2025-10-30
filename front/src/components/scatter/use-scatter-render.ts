@@ -15,7 +15,7 @@ const data = ref<Data[]>([]);
 const isEnabled = ref<boolean>(false);
 
 export function useScatterRender() {
-  const {generateColorScale: generate} = useScatterColorScale();
+  const {generate} = useScatterColorScale();
   const {scale: cyclingScale} = useColorsCycling();
   const {trajectories, isFused} = useTrajectories();
   const {render: renderEmbeddings} = useScatterEmbeddings();

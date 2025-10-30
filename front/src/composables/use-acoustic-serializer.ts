@@ -1,35 +1,37 @@
-import {useAcoustics} from 'src/composables/use-acoustics';
+import {
+  type AcousticData,
+  useAcousticDataReader,
+} from 'src/composables/use-acoustic-data-reader';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useConfig} from 'src/composables/use-config';
 import {useViewSelection} from 'src/composables/use-view-selection';
-import {ref} from 'vue';
 
-export interface TemporalData {
-  index: number; // temporal index (chart)
+export interface AcousticSeries {
+  index: number;
   siteName: string;
   timestamp: number;
   values: number[];
 }
 
-const data = ref<TemporalData[]>([]);
-
-export function useTemporalData() {
+export function useAcousticSerializer() {
   const {config} = useConfig();
   const {integration} = useViewSelection();
   const {aggregations} = useAggregations();
-  const {acoustics, filter} = useAcoustics();
+  const {filter} = useAcousticDataReader();
 
-  const update = async () => {
+  const serialize = async (
+    acoustics: AcousticData[],
+  ): Promise<AcousticSeries[]> => {
     if (
       aggregations.value === null ||
       integration.value === null ||
       config.value === null
     ) {
-      return;
+      throw new Error('Could not serialize acoustic data');
     }
 
     const l = aggregations.value.timestamps.length;
-    const newData: TemporalData[] = new Array(l);
+    const newData: AcousticSeries[] = new Array(l);
 
     for (let i = 0; i < l; i += 1) {
       const start = aggregations.value.timestamps[i];
@@ -43,7 +45,7 @@ export function useTemporalData() {
       const siteNames = files.map((f) => f.Site);
 
       for (const siteName of siteNames) {
-        const data = acoustics.value.find((ac) => ac.site.name === siteName);
+        const data = acoustics.find((ac) => ac.site.name === siteName);
 
         if (!data) {
           continue;
@@ -61,16 +63,10 @@ export function useTemporalData() {
     }
 
     newData.sort((a, b) => a.timestamp - b.timestamp);
-    data.value = newData;
-  };
-
-  const reset = () => {
-    data.value = [];
+    return newData;
   };
 
   return {
-    data,
-    update,
-    reset,
+    serialize,
   };
 }

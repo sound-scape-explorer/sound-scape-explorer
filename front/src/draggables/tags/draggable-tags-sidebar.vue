@@ -7,13 +7,13 @@ import {useDraggableTags} from 'src/draggables/tags/use-draggable-tags';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 
 const {cycleHorizontal, cycleVertical} = useDraggableTags();
-const {reset: clearAll} = useTagSelection();
+const {reset} = useTagSelection();
 </script>
 
 <template>
   <AppDraggableSidebar>
     <AppButton
-      :handle-click="clearAll"
+      :handle-click="reset"
       size="tiny"
       small-tooltip
       tooltip="Clear all selection"

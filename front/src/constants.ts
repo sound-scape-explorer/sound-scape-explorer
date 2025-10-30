@@ -61,10 +61,6 @@ export const TRACE_WIDTH_2D = 2;
 
 export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend'; // this is used as a selector to render the legend to canvas on scatter png export
 
-// @see processing/config/extractors/ExtractorConfig.py
-// todo: remove me
-export const NN_EXTRACTORS = ['vgg', 'melogram', 'melspectrum'];
-
 export const ColorFlavor = z.enum(['Spectral', 'Accent', 'Dark2']);
 // eslint-disable-next-line no-redeclare
 export type ColorFlavor = z.infer<typeof ColorFlavor>;
@@ -99,11 +95,11 @@ export const ScatterBorderWidth = z.enum(['0', '1', '2']);
 // eslint-disable-next-line no-redeclare
 export type ScatterBorderWidth = z.infer<typeof ScatterBorderWidth>;
 
-export const ColorCategory = z.enum(['DEFAULT', 'TAGS', 'METRICS']);
+export const ColorCategory = z.enum(['DEFAULT', 'TAGS', 'ACOUSTICS']);
 // eslint-disable-next-line no-redeclare
 export type ColorCategory = z.infer<typeof ColorCategory>;
 
-export const ColorCriteria = z.enum([
+export const ColorOption = z.enum([
   'cycleDay',
   'isDay',
   'intervalIndex',
@@ -112,7 +108,7 @@ export const ColorCriteria = z.enum([
 ]);
 
 // eslint-disable-next-line no-redeclare
-export type ColorCriteria = z.infer<typeof ColorCriteria>;
+export type ColorCriteria = z.infer<typeof ColorOption>;
 
 export const HeatmapScale = z.enum(['RdBu', 'Blues']);
 // eslint-disable-next-line no-redeclare
@@ -131,4 +127,4 @@ export type ExportType = z.infer<typeof ExportType>;
 
 export const AudioFilterSlope = z.enum(['12', '24', '36', '48']); // multiples of 12
 // eslint-disable-next-line no-redeclare
-export type FilterSlope = z.infer<typeof AudioFilterSlope>;
+export type AudioFilterSlope = z.infer<typeof AudioFilterSlope>;

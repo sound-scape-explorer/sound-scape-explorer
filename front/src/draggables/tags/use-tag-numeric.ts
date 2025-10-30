@@ -6,7 +6,7 @@ const isEnabled = ref<boolean>(false);
 
 export function useTagNumeric() {
   const {allUniques} = useTagUniques();
-  const {criteria} = useColorSelection();
+  const {option} = useColorSelection();
 
   const isCalculable = (tagName: string) => {
     const tagUniques = allUniques.value[tagName];
@@ -26,7 +26,7 @@ export function useTagNumeric() {
   };
 
   const enable = () => {
-    if (!isCalculable(criteria.value)) {
+    if (!isCalculable(option.value)) {
       return;
     }
 

@@ -5,6 +5,7 @@ import AppIcon from 'src/app/app-icon.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
 import DraggableTemporalMenuFilters from 'src/draggables/temporal/draggable-temporal-menu-filters.vue';
 import {
   TemporalDisplay,
@@ -17,9 +18,8 @@ import {
   useTemporalStrategy,
 } from 'src/draggables/temporal/use-temporal-strategy';
 
-const {extractorSlug, extractorSlugs, display, isCandles, isCondensed} =
-  useDraggableTemporal();
-
+const {extractorSlug, display, isCandles, isCondensed} = useDraggableTemporal();
+const {acousticSlugs} = useAcousticExtractors();
 const {strategy} = useTemporalStrategy();
 const {period, periods, update: updatePeriod} = useTemporalCandles();
 const {handleClick: handleExportClick} = useTemporalExport();
@@ -32,7 +32,7 @@ const {handleClick: handleExportClick} = useTemporalExport();
     <div :class="$style.first">
       <AppSelect
         v-model="extractorSlug"
-        :options="extractorSlugs"
+        :options="acousticSlugs"
         placeholder="Extractor..."
         size="small"
       />

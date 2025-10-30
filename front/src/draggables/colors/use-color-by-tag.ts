@@ -17,14 +17,14 @@ export function useColorByTag() {
   const {resize} = useColorResize();
   const {intervals} = useIntervals();
   const {allUniques} = useTagUniques();
-  const {criteria} = useColorSelection();
+  const {option} = useColorSelection();
   const {scale} = useColorUser();
   const {isEnabled} = useTagNumeric();
 
   const getPrimitive = (intervalIndex: number) => {
     const interval = intervals.value[intervalIndex];
-    const tagValue = interval.tags[criteria.value].join(STRING_DELIMITER);
-    const tagUniques = allUniques.value[criteria.value];
+    const tagValue = interval.tags[option.value].join(STRING_DELIMITER);
+    const tagUniques = allUniques.value[option.value];
 
     return {
       tagUniques,

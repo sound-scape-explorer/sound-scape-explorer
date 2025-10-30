@@ -1,12 +1,12 @@
 import {formatTimestampToString} from '@shared/dates';
 import {Csv} from 'src/common/csv';
+import {useAcousticSerializer} from 'src/composables/use-acoustic-serializer';
 import {useExportName} from 'src/composables/use-export-name';
 import {ExportType} from 'src/constants';
-import {useTemporalData} from 'src/draggables/temporal/use-temporal-data';
 import {useTemporalStrategy} from 'src/draggables/temporal/use-temporal-strategy';
 
 export function useTemporalExport() {
-  const {data} = useTemporalData();
+  const {data} = useAcousticSerializer();
   const {generate} = useExportName();
   const {apply} = useTemporalStrategy();
 
