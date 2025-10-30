@@ -1,8 +1,12 @@
 import {formatTimestampToString} from '@shared/dates';
 import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
+import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
-import {useTemporalData} from 'src/draggables/temporal/use-temporal-data';
+import {
+  type TemporalData,
+  useTemporalData,
+} from 'src/draggables/temporal/use-temporal-data';
 import {useTemporalHloc} from 'src/draggables/temporal/use-temporal-hloc';
 import {useTemporalStrategy} from 'src/draggables/temporal/use-temporal-strategy';
 import {ref} from 'vue';
@@ -20,8 +24,23 @@ const candles = ref<CandlesData | null>(null);
 export function useTemporalChart() {
   const {isCandles} = useDraggableTemporal();
   const {data} = useTemporalData();
+  const {filtered} = useScatterGlobalFilter();
   const {calculate} = useTemporalHloc();
   const {apply} = useTemporalStrategy();
+
+  const filterActualData = () => {
+    const filteredData: TemporalData[] = [];
+
+    for (let i = 0; i < data.value.length; i += 1) {
+      if (filtered.value[i]) {
+        continue;
+      }
+
+      filteredData.push(data.value[i]);
+    }
+
+    return filteredData;
+  };
 
   const render = () =>
     requestAnimationFrame(() => {
@@ -39,16 +58,18 @@ export function useTemporalChart() {
     });
 
   const generateContinuousPlot = (): PlotData => {
+    const filteredData = filterActualData();
+
     return {
       labels: [
-        data.value.map(
+        filteredData.map(
           (d) =>
             `<b>Date:</b> ${formatTimestampToString(d.timestamp)}
             <br>${INTERVAL_TAG} ${d.index}
             <br><b>Site:</b> ${d.siteName}`,
         ),
       ],
-      values: [data.value.map((d) => apply(d.values))],
+      values: [filteredData.map((d) => apply(d.values))],
       colors: ['green'],
     };
   };
@@ -65,8 +86,9 @@ export function useTemporalChart() {
   };
 
   const generateCandlesPlot = (): CandlesData => {
-    const values = data.value.map((d) => apply(d.values));
-    const timestamps = data.value.map((d) => d.timestamp);
+    const filteredData = filterActualData();
+    const values = filteredData.map((d) => apply(d.values));
+    const timestamps = filteredData.map((d) => d.timestamp);
 
     const hloc = calculate(values, timestamps);
 
