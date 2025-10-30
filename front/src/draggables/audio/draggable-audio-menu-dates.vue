@@ -1,11 +1,14 @@
 <script lang="ts" setup="">
 import {copyToClipboard} from '@shared/browser';
 import {NGi, NGrid, NTag} from 'naive-ui';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {useDate} from 'src/composables/use-date';
 import {useInterval} from 'src/composables/use-interval';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 
 const {currentInterval} = useInterval();
 const {convertTimestampToIsoDate} = useDate();
+const {colors} = useThemeColors();
 </script>
 
 <template>
@@ -27,7 +30,10 @@ const {convertTimestampToIsoDate} = useDate();
             copyToClipboard(convertTimestampToIsoDate(currentInterval.start))
           "
         >
-          Start
+          <AppTooltip>
+            <template #tooltip>Copy</template>
+            <template #body>Start</template>
+          </AppTooltip>
         </NTag>
 
         {{ convertTimestampToIsoDate(currentInterval.start) }}
@@ -42,7 +48,10 @@ const {convertTimestampToIsoDate} = useDate();
             copyToClipboard(convertTimestampToIsoDate(currentInterval.end))
           "
         >
-          End
+          <AppTooltip>
+            <template #tooltip>Copy</template>
+            <template #body>End</template>
+          </AppTooltip>
         </NTag>
 
         {{ convertTimestampToIsoDate(currentInterval.end) }}
@@ -65,6 +74,10 @@ const {convertTimestampToIsoDate} = useDate();
 .copy {
   &:hover {
     cursor: pointer;
+  }
+
+  &:active {
+    background: v-bind('colors.actionColor');
   }
 }
 </style>
