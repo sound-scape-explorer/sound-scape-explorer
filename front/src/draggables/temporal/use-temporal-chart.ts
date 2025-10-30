@@ -64,9 +64,7 @@ export function useTemporalChart() {
       labels: [
         filteredData.map(
           (d) =>
-            `<b>Date:</b> ${formatTimestampToString(d.timestamp)}
-            <br>${INTERVAL_TAG} ${d.index}
-            <br><b>Site:</b> ${d.siteName}`,
+            `<b>Date:</b> ${formatTimestampToString(d.timestamp)}<br>${INTERVAL_TAG} ${d.index}<br><b>Site:</b> ${d.siteName}`,
         ),
       ],
       values: [filteredData.map((d) => apply(d.values))],
