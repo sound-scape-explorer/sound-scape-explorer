@@ -88,7 +88,7 @@ export function useAcoustics() {
           band.value.index,
           site.name,
           site.files.map((f) => f.Index),
-          site.files.map((f) => new Date(f.Date).getTime()), // todo: this is wrong
+          site.files.map((f) => new Date(f.Date).getTime()),
         );
 
         newAcoustics.push({

@@ -46,7 +46,7 @@ export interface AppPlotRefs {
   plot: Ref<PlotlyHTMLElement | null>;
 }
 
-const container = ref<AppPlotRefs['container']>(null);
+const container = ref<AppPlotRefs['container'] | null>(null);
 
 const refs: AppPlotRefs = {
   container,

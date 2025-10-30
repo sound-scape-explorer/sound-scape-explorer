@@ -9,6 +9,7 @@ export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
 
+// todo: to remove
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 export const AUDIO_GAIN = {

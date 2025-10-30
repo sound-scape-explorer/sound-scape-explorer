@@ -51,3 +51,7 @@ export function formatDateToString(date: Date, keepLocalTime = false): string {
 
   return format(toFormat, DATE_FORMAT);
 }
+
+export function formatTimestampToString(timestamp: number) {
+  return formatDateToString(new Date(timestamp));
+}

@@ -60,6 +60,7 @@ export function useTemporalData() {
       }
     }
 
+    newData.sort((a, b) => a.timestamp - b.timestamp);
     data.value = newData;
   };
 

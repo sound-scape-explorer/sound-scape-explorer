@@ -1,13 +1,11 @@
 import {type ExtractorDto} from '@shared/dtos';
-import {Csv} from 'src/common/csv';
 import {useAcoustics} from 'src/composables/use-acoustics';
 import {useAcousticsExtractors} from 'src/composables/use-acoustics-extractors';
 import {useDate} from 'src/composables/use-date';
 import {useExportName} from 'src/composables/use-export-name';
-import {ExportType, SLUG_DELIMITER} from 'src/constants';
+import {SLUG_DELIMITER} from 'src/constants';
 import {useTemporalData} from 'src/draggables/temporal/use-temporal-data';
 import {useTemporalStrategy} from 'src/draggables/temporal/use-temporal-strategy';
-import {getSortedIndices} from 'src/utils/utils';
 import {computed, ref} from 'vue';
 import {z} from 'zod';
 
@@ -69,28 +67,6 @@ export function useDraggableTemporal() {
     return acousticsExtractors.value.map((ex) => extractorToSlug(ex));
   });
 
-  const handleExportClick = () => {
-    const csv = new Csv();
-    csv.addColumn('intervalIndex');
-    csv.addColumn('site');
-    csv.addColumn('timestamp');
-    csv.addColumn('scalar');
-
-    const indices = getSortedIndices(data.value.map((d) => d.timestamp));
-
-    for (let i = 0; i < data.value.length; i += 1) {
-      const d = data.value[i];
-      csv.createRow();
-      csv.addToCurrentRow(indices[d.index].toString());
-      csv.addToCurrentRow(d.siteName);
-      csv.addToCurrentRow(convertTimestampToIsoDate(d.timestamp));
-      csv.addToCurrentRow(apply(d.values).toString());
-    }
-
-    const name = generate(ExportType.enum.temporal);
-    csv.download(name);
-  };
-
   const toggleDisplay = () => (isDisplay.value = !isDisplay.value);
   const toggleExpanded = () => (isExpanded.value = !isExpanded.value);
 
@@ -104,7 +80,6 @@ export function useDraggableTemporal() {
     isCondensed,
     isDisplay,
     toggleDisplay,
-    handleExportClick,
     handleExtractorChange,
     isExpanded,
     toggleExpanded,

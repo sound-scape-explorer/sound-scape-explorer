@@ -11,22 +11,18 @@ import {
   useDraggableTemporal,
 } from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
+import {useTemporalExport} from 'src/draggables/temporal/use-temporal-export';
 import {
   TemporalStrategy,
   useTemporalStrategy,
 } from 'src/draggables/temporal/use-temporal-strategy';
 
-const {
-  extractorSlug,
-  extractorSlugs,
-  display,
-  isCandles,
-  isCondensed,
-  handleExportClick,
-} = useDraggableTemporal();
+const {extractorSlug, extractorSlugs, display, isCandles, isCondensed} =
+  useDraggableTemporal();
 
 const {strategy} = useTemporalStrategy();
 const {period, periods, update: updatePeriod} = useTemporalCandles();
+const {handleClick: handleExportClick} = useTemporalExport();
 </script>
 
 <template>
@@ -37,6 +33,7 @@ const {period, periods, update: updatePeriod} = useTemporalCandles();
       <AppSelect
         v-model="extractorSlug"
         :options="extractorSlugs"
+        placeholder="Extractor..."
         size="small"
       />
 
