@@ -254,8 +254,8 @@ export async function readMetric(
   bandIndex: number,
   integrationIndex: number,
   metricIndex: number,
-  labelPropertyA: string,
-  labelPropertyB: string | null = null,
+  tagNameA: string,
+  tagNameB: string | null = null,
 ): Promise<MetricData['values']> {
   const h5 = await load(file);
 
@@ -267,15 +267,15 @@ export async function readMetric(
   ];
 
   const values: MetricData['values'] = [];
-  const isPairing = labelPropertyB !== null;
+  const isPairing = tagNameB !== null;
 
   if (!isPairing) {
-    const suffix = [...baseSuffix, labelPropertyA];
+    const suffix = [...baseSuffix, tagNameA];
     const path = MetricPathInstance.data(...suffix);
     const data = _readArray<MetricData['values']>(h5, path);
     values.push(...data);
   } else {
-    const suffix = [...baseSuffix, labelPropertyB, labelPropertyA];
+    const suffix = [...baseSuffix, tagNameB, tagNameA];
     const path = MetricPathInstance.data(...suffix);
     const data = _readArray<MetricData['values']>(h5, path);
     values.push(...data);
