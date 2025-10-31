@@ -5,12 +5,11 @@ import {useConfig} from 'src/composables/use-config';
 import {useDate} from 'src/composables/use-date';
 import {useInterval} from 'src/composables/use-interval';
 import {RANGE_CUSTOM} from 'src/constants';
-import {generateUniqueRangeSlug} from 'src/utils/config';
 
 export function useTimelineHandlers() {
   const {config} = useConfig();
   const {start, end, left, right, updateLeft, updateRight} = useTimelineRange();
-  const {name, setCustomName} = useTimelineRangeNames();
+  const {name, setCustomName, rangeToSlug} = useTimelineRangeNames();
   const {currentIndex} = useInterval();
   const {aggregations} = useAggregations();
   const {convertDateStringToDate} = useDate();
@@ -25,7 +24,7 @@ export function useTimelineHandlers() {
     }
 
     const range = config.value.ranges.find(
-      (r) => generateUniqueRangeSlug(r) === name.value,
+      (r) => rangeToSlug(r) === name.value,
     );
 
     if (!range) {

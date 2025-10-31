@@ -4,7 +4,6 @@ import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useMetricData} from 'src/composables/use-metric-data';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
-import {generateUniqueMetricSlug} from 'src/utils/config';
 import {computed, ref} from 'vue';
 
 const metricSlug = ref<string | null>(null);
@@ -14,9 +13,13 @@ export function useDraggableHeatmaps() {
   const {read} = useMetricData();
   const {a, b} = useDraggableHeatmapsTags();
 
+  const metricToSlug = (metric: MetricDto) => {
+    return `${metric.index} - ${metric.impl}`;
+  };
+
   const findCurrentMetric = (): MetricDto | null => {
     const metric = extraction.value?.metrics.find(
-      (m) => generateUniqueMetricSlug(m) === metricSlug.value,
+      (m) => metricToSlug(m) === metricSlug.value,
     );
 
     if (!metric) {
@@ -52,7 +55,7 @@ export function useDraggableHeatmaps() {
     return (
       extraction.value?.metrics
         .filter((d) => metricTypeByImpl[d.impl] !== MetricType.enum.ONE_D)
-        .map((d) => generateUniqueMetricSlug(d)) ?? []
+        .map(metricToSlug) ?? []
     );
   });
 
