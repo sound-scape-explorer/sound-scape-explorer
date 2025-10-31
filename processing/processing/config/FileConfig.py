@@ -29,7 +29,7 @@ class FileConfig:
             index=int(dto.Index),
             relative_path=dto.Path,
             absolute_path=absolute_path,
-            timestamp=convert_date_string_to_timestamp(dto.Date),
+            timestamp=convert_date_string_to_timestamp(dto.Date, settings.timezone),
             site=dto.Site,
             duration=read_duration(absolute_path),
             tags=dto.tags,

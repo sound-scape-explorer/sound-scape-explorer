@@ -1,8 +1,8 @@
-import {formatDateToString} from '@shared/dates.ts';
 import {atom, useAtom} from 'jotai';
 import {useCallback, useMemo, useState} from 'react';
 import {useTableStateConverter} from 'src/hooks/use-table-state-converter.ts';
 import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
+import {formatDateToString} from 'src/utils/datetime.ts';
 import {extractDatesFromPaths} from 'src/utils/paths.ts';
 
 const detectionValueAtom = atom<string>('');

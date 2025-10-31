@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import {TIMEZONE_DEFAULT} from '@shared/constants';
 import AppButton from 'src/app/app-button.vue';
 import AppCheckbox from 'src/app/app-checkbox.vue';
 import AppHeader from 'src/app/app-header.vue';
@@ -7,9 +6,9 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useConfig} from 'src/composables/use-config';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {Shortcut} from 'src/composables/use-shortcuts';
+import {useTimezone} from 'src/composables/use-timezone';
 import {
   AudioFilterSlope,
   PlotBackground,
@@ -31,7 +30,6 @@ const {
   spectrogramFftSize,
   isDetailsAutoOpen,
   isAudioAutoOpen,
-  isTimezoneActive,
   isWebGlScatter2d,
   isHidingMenuOnDraggableToggle,
   isSelectedPointHighlighted,
@@ -43,8 +41,7 @@ const {
   audioFilterSlope,
 } = useClientSettings();
 
-const {config} = useConfig();
-
+const {tz} = useTimezone();
 const reload = () => location.reload();
 </script>
 
@@ -89,19 +86,6 @@ const reload = () => location.reload();
       <AppHeader>
         <h2>Date & time</h2>
       </AppHeader>
-
-      <DraggableSettingsItem
-        v-if="config?.settings.timezone"
-        :title="`Apply timezone (${config.settings.timezone})`"
-      >
-        <AppCheckbox
-          v-model="isTimezoneActive"
-          :disabled="
-            !config?.settings.timezone ||
-            config?.settings.timezone !== TIMEZONE_DEFAULT
-          "
-        />
-      </DraggableSettingsItem>
 
       <DraggableSettingsItem title="Shift hours">
         <AppInput

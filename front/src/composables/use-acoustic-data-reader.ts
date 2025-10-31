@@ -1,4 +1,5 @@
 import {type ExtractorDto} from '@shared/dtos';
+import {useDateTime} from 'src/composables/use-date-time';
 import {type Site, useSites} from 'src/composables/use-sites';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useViewSelection} from 'src/composables/use-view-selection';
@@ -22,6 +23,7 @@ export function useAcousticDataReader() {
   const {read: r} = useStorageReader();
   const {extraction, band, integration} = useViewSelection();
   const {sites} = useSites();
+  const {stringToTimestamp} = useDateTime();
 
   const filter = (
     acoustics: AcousticData,
@@ -86,7 +88,7 @@ export function useAcousticDataReader() {
             band.value.index,
             site.name,
             site.files.map((f) => f.Index),
-            site.files.map((f) => new Date(f.Date).getTime()),
+            site.files.map((f) => stringToTimestamp(f.Date)),
           );
 
           newData.push({

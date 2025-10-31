@@ -22,7 +22,6 @@ export const Settings = z.object({
   timeshift: z.number().default(0), // hours
   isDetailsAutoOpen: z.boolean().default(false),
   isAudioAutoOpen: z.boolean().default(true),
-  isTimezoneActive: z.boolean().default(false),
   isWebGlScatter2d: z.boolean().default(true),
   isColorMapSwapped: z.boolean().default(false),
   spectrogramFftSize: SpectrogramFftSize.default(

@@ -12,8 +12,8 @@ export function useColorInvert() {
   const isReversible = computed<boolean>(() => {
     // noinspection RedundantIfStatementJS
     if (
-      option.value === ColorOption.enum.cycleDay ||
-      option.value === ColorOption.enum.isDay
+      option.value === ColorOption.enum.HoursInDay ||
+      option.value === ColorOption.enum.DayOrNight
     ) {
       return false;
     }

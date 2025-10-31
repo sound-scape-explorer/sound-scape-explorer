@@ -11,7 +11,7 @@ const tagOptions = ref<string[]>([]);
 
 const options = ref<string[]>(ColorOption.options);
 // an option can be either a builtin coloring key or a tag name (all kind)
-const option = ref<string>(ColorOption.enum.cycleDay);
+const option = ref<string>(ColorOption.enum.HoursInDay);
 
 const category = ref<ColorCategory>(ColorCategory.enum.DEFAULT);
 

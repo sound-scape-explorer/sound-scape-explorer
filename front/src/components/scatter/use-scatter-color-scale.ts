@@ -4,8 +4,8 @@ import {ColorOption} from 'src/constants';
 import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
 import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
-import {useColorByCyclingDay} from 'src/draggables/colors/use-color-by-cycling-day';
-import {useColorByDay} from 'src/draggables/colors/use-color-by-day';
+import {useColorByDayOrNight} from 'src/draggables/colors/use-color-by-day-or-night';
+import {useColorByHoursInDay} from 'src/draggables/colors/use-color-by-hours-in-day';
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -21,8 +21,8 @@ export function useScatterColorScale() {
   const {getColor} = useColorByIntervalIndex();
   const {getColorByOneHour} = useColorBy1h();
   const {getColorByTenMinutes} = useColorBy10min();
-  const {getColorByDay} = useColorByDay();
-  const {getColorByCyclingDay} = useColorByCyclingDay();
+  const {get: getColorByDayOrNight} = useColorByDayOrNight();
+  const {get: getColorByHoursInDay} = useColorByHoursInDay();
   const {get: getColorByTag} = useColorByTag();
   const {get: getColorByAcoustic} = useColorByAcoustic();
   const {option: colorOption} = useColorSelection();
@@ -47,14 +47,14 @@ export function useScatterColorScale() {
           newScale[i] = getColorByAcoustic(i);
         } else {
           switch (colorOption.value) {
-            case ColorOption.enum.cycleDay:
-              newScale[i] = getColorByCyclingDay(timestamp);
+            case ColorOption.enum.HoursInDay:
+              newScale[i] = getColorByHoursInDay(timestamp);
               break;
             case ColorOption.enum.intervalIndex:
               newScale[i] = getColor(i, count);
               break;
-            case ColorOption.enum.isDay:
-              newScale[i] = getColorByDay(timestamp);
+            case ColorOption.enum.DayOrNight:
+              newScale[i] = getColorByDayOrNight(timestamp);
               break;
             case ColorOption.enum.by1h:
               newScale[i] = getColorByOneHour(timestamp);

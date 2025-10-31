@@ -1,9 +1,9 @@
 import {Button, Callout, Section, SectionCard} from '@blueprintjs/core';
-import {formatDateToString} from '@shared/dates.ts';
 import {FilesDateDetectionDrawerContent} from 'src/panels/files/components/files-date-detection-drawer-content.tsx';
 import {useDateDetection} from 'src/panels/files/hooks/use-date-detection.ts';
 import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
+import {formatDateToString} from 'src/utils/datetime.ts';
 
 export function FilesDateDetection() {
   const {value, update, detect, apply, files, results} = useDateDetection();

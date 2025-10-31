@@ -1,7 +1,7 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
 import {useAggregations} from 'src/composables/use-aggregations';
-import {useDate} from 'src/composables/use-date';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useExportName} from 'src/composables/use-export-name';
 import {useIntervals} from 'src/composables/use-intervals';
 import {useReductions} from 'src/composables/use-reductions';
@@ -25,7 +25,7 @@ export function useScatterExport() {
   const {band, integration} = useViewSelection();
   const {allUniques} = useTagUniques();
   const {notify} = useAppNotification();
-  const {convertTimestampToIsoDate} = useDate();
+  const {timestampToString} = useDateTime();
   const {reductions} = useReductions();
   const {aggregations} = useAggregations();
   const {intervals} = useIntervals();
@@ -90,8 +90,8 @@ export function useScatterExport() {
     payload.forEach((data) => {
       csv.createRow();
       csv.addToCurrentRow(data.intervalIndex.toString());
-      csv.addToCurrentRow(convertTimestampToIsoDate(data.start));
-      csv.addToCurrentRow(convertTimestampToIsoDate(data.end));
+      csv.addToCurrentRow(timestampToString(data.start));
+      csv.addToCurrentRow(timestampToString(data.end));
       csv.addToCurrentRow(data.site);
 
       data.tags.forEach((v) => {

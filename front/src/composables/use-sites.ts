@@ -1,5 +1,6 @@
 import {type FileDto} from '@shared/dtos';
 import {useConfig} from 'src/composables/use-config';
+import {useDateTime} from 'src/composables/use-date-time';
 import {ref} from 'vue';
 
 export interface Site {
@@ -11,6 +12,7 @@ const sites = ref<Site[]>([]);
 
 export function useSites() {
   const {config} = useConfig();
+  const {stringToTimestamp} = useDateTime();
 
   const generate = () => {
     if (config.value === null) {
@@ -34,7 +36,7 @@ export function useSites() {
     // sort
     for (const site of newSites) {
       site.files = site.files.sort(
-        (a, b) => new Date(a.Date).getTime() - new Date(b.Date).getTime(),
+        (a, b) => stringToTimestamp(a.Date) - stringToTimestamp(b.Date),
       );
     }
 

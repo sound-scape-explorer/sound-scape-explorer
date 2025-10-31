@@ -17,7 +17,6 @@
     "@blueprintjs/select": "^5.3.17",
     "@blueprintjs/table": "^5.3.11",
     "clsx": "^2.1.1",
-    "countries-and-timezones": "^3.7.2",
     "exceljs": "^4.4.0",
     "jotai": "^2.10.3",
     "normalize.css": "^8.0.1",

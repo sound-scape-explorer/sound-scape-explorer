@@ -2,11 +2,11 @@ import {
   SMOOTHING_WINDOW_CUSTOM,
   SMOOTHING_WINDOW_PRESETS,
 } from '@shared/constants.ts';
-import {formatDateToString, getToday} from '@shared/dates';
 import {addHours} from 'date-fns';
 import {useCallback, useMemo} from 'react';
 import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces.ts';
 import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
+import {formatDateToString, getToday} from 'src/utils/datetime.ts';
 
 export function useTrajectoryState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();

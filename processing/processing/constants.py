@@ -2,7 +2,6 @@ import numpy as np
 
 from processing.enums import FrequencyScale, StftWindowType, AdiImpl
 
-
 APP_NAME = "SoundScapeExplorer"
 
 STATE_PRESENT = "✅"

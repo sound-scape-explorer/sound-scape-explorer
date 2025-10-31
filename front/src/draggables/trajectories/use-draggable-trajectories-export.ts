@@ -1,11 +1,11 @@
 import {Csv} from 'src/common/csv';
 import {useScatterTrajectoryAverage} from 'src/components/scatter/use-scatter-trajectory-average';
-import {useDate} from 'src/composables/use-date';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useExportName} from 'src/composables/use-export-name';
 import {useTrajectories} from 'src/composables/use-trajectories';
 
 export function useDraggableTrajectoriesExport() {
-  const {convertTimestampToIsoDate} = useDate();
+  const {timestampToString} = useDateTime();
   const {trajectories, isFused} = useTrajectories();
   const {generate} = useExportName();
   const {build} = useScatterTrajectoryAverage();
@@ -24,9 +24,7 @@ export function useDraggableTrajectoriesExport() {
       trajectory.path.forEach((_, index) => {
         csv.createRow();
         csv.addToCurrentRow('fused');
-        csv.addToCurrentRow(
-          convertTimestampToIsoDate(trajectory.timestamps[index]),
-        );
+        csv.addToCurrentRow(timestampToString(trajectory.timestamps[index]));
         csv.addToCurrentRow(data.x[index].toString());
         csv.addToCurrentRow(data.y[index].toString());
         if (typeof data.z !== 'undefined') {
@@ -38,9 +36,7 @@ export function useDraggableTrajectoriesExport() {
         trajectory.path.forEach((coordinates, index) => {
           csv.createRow();
           csv.addToCurrentRow(trajectory.trajectory.name);
-          csv.addToCurrentRow(
-            convertTimestampToIsoDate(trajectory.timestamps[index]),
-          );
+          csv.addToCurrentRow(timestampToString(trajectory.timestamps[index]));
           csv.addToCurrentRow(coordinates[0].toString());
           csv.addToCurrentRow(coordinates[1].toString());
           csv.addToCurrentRow(coordinates[2].toString());

@@ -1,4 +1,4 @@
-import {DATE_FORMAT} from '@shared/constants';
+import {DATE_FORMAT} from '@shared/constants.ts';
 import {format, setHours, setMinutes, setSeconds} from 'date-fns';
 
 export function getToday() {
@@ -28,13 +28,6 @@ export function findEarliestDate(dateStrings: string[]): Date {
   return earliestDate;
 }
 
-// todo: remove me?
-export function convertToUnixMilliseconds(dateString: string): number {
-  const date = new Date(dateString);
-  const milliseconds = date.getTime();
-  return milliseconds;
-}
-
 function convertLocalTime(date: Date) {
   const newDate = new Date(date.getTime());
   const offset = date.getTimezoneOffset() * 60000;
@@ -50,8 +43,4 @@ export function formatDateToString(date: Date, keepLocalTime = false): string {
   }
 
   return format(toFormat, DATE_FORMAT);
-}
-
-export function formatTimestampToString(timestamp: number) {
-  return formatDateToString(new Date(timestamp));
 }

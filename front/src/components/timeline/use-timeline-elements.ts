@@ -1,6 +1,7 @@
+import {addMilliseconds} from 'date-fns';
 import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
 import {useAggregations} from 'src/composables/use-aggregations';
-import {useDate} from 'src/composables/use-date';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useIntervals} from 'src/composables/use-intervals';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {STRING_DELIMITER} from 'src/constants';
@@ -18,7 +19,7 @@ export interface TimelineElement {
 export function useTimelineElements() {
   const {integration} = useViewSelection();
   const {aggregations} = useAggregations();
-  const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
+  const {timestampToDate, timestampToString} = useDateTime();
   const {scale} = useBodyColors();
   const {intervals} = useIntervals();
 
@@ -72,12 +73,12 @@ export function useTimelineElements() {
         rowNumber += 1;
       }
 
-      const start = convertTimestampToDate(timestamp);
-      const end = start.add(integration.value.duration, 'milliseconds');
+      const start = timestampToDate(timestamp);
+      const end = addMilliseconds(start, integration.value.duration);
 
       for (const fileIndex of fileIndices) {
-        const s = start.unix() * 1000;
-        const e = end.unix() * 1000;
+        const s = start.getTime();
+        const e = end.getTime();
         const element = createElement(
           rowNumber,
           index,
@@ -88,8 +89,8 @@ export function useTimelineElements() {
             `site: ${site}`,
             `interval index: ${index}`,
             `file index: ${fileIndex}`,
-            `start: ${convertTimestampToIsoDate(s)}`,
-            `end: ${convertTimestampToIsoDate(e)}`,
+            `start: ${timestampToString(s)}`,
+            `end: ${timestampToString(e)}`,
           ],
         );
 

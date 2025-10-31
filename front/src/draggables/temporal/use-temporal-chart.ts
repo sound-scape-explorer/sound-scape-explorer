@@ -1,7 +1,7 @@
-import {formatTimestampToString} from '@shared/dates';
 import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {type AcousticSeries} from 'src/composables/use-acoustic-serializer';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalHloc} from 'src/draggables/temporal/use-temporal-hloc';
@@ -25,6 +25,7 @@ export function useTemporalChart() {
   const {filtered} = useScatterGlobalFilter();
   const {calculate} = useTemporalHloc();
   const {apply} = useTemporalStrategy();
+  const {timestampToString} = useDateTime();
 
   const filterSeries = () => {
     if (series.value === null) {
@@ -66,7 +67,7 @@ export function useTemporalChart() {
       labels: [
         filteredData.map(
           (d) =>
-            `<b>Date:</b> ${formatTimestampToString(d.timestamp)}<br>${INTERVAL_TAG} ${d.index}<br><b>Site:</b> ${d.siteName}`,
+            `<b>Date:</b> ${timestampToString(d.timestamp)}<br>${INTERVAL_TAG} ${d.index}<br><b>Site:</b> ${d.siteName}`,
         ),
       ],
       values: [filteredData.map((d) => apply(d.values))],

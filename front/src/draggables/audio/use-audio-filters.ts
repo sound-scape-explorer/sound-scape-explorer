@@ -1,5 +1,5 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useConfig} from 'src/composables/use-config';
+import {useNyquist} from 'src/composables/use-nyquist';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 import {z} from 'zod';
@@ -16,7 +16,7 @@ const lpfReadable = ref<number | null>(null);
 
 export function useAudioFilters() {
   const {band} = useViewSelection();
-  const {nyquist} = useConfig();
+  const {nyquist} = useNyquist();
   const {audioFilterSlope} = useClientSettings();
 
   const getOrder = () => {

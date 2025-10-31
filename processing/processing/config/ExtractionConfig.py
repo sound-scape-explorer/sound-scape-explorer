@@ -6,6 +6,7 @@ from processing.config.ExtractorConfig import ExtractorConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.MetricConfig import MetricConfig
 from processing.config.ReducerConfig import ReducerConfig
+from processing.config.SettingsConfig import SettingsConfig
 from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.dtos import ExtractionDto
 
@@ -23,14 +24,16 @@ class ExtractionConfig:
     trajectories: list[TrajectoryConfig]
 
     @classmethod
-    def from_dto(cls, dto: ExtractionDto):
+    def from_dto(cls, dto: ExtractionDto, settings: SettingsConfig):
         bands = [BandConfig.from_dto(b) for b in dto.bands]
         integrations = [IntegrationConfig.from_dto(i) for i in dto.integrations]
         extractors = [ExtractorConfig.from_dto(ex) for ex in dto.extractors]
         reducers = [ReducerConfig.from_dto(r) for r in dto.reducers]
         autoclusters = [AutoclusterConfig.from_dto(ac) for ac in dto.autoclusters]
         metrics = [MetricConfig.from_dto(m) for m in dto.metrics]
-        trajectories = [TrajectoryConfig.from_dto(t) for t in dto.trajectories]
+        trajectories = [
+            TrajectoryConfig.from_dto(t, settings) for t in dto.trajectories
+        ]
 
         return cls(
             index=dto.index,

@@ -4,14 +4,14 @@ import {NGi, NGrid, NInputNumber, NTag} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
-import {useConfig} from 'src/composables/use-config';
+import {useNyquist} from 'src/composables/use-nyquist';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioFilterFollow} from 'src/draggables/audio/use-audio-filter-follow';
 import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
 import {onMounted} from 'vue';
 
-const {nyquist} = useConfig();
+const {nyquist} = useNyquist();
 const {band} = useViewSelection();
 const {readable, rate} = useAudioPlaybackRate();
 const {hpfReadable, lpfReadable, update, reset} = useAudioFilters();

@@ -1,6 +1,12 @@
 import {CyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
+import {useDateTime} from 'src/composables/use-date-time';
 
+const referenceDate = new Date('1970-01-01T00:00:00'); // Consistent reference date
+
+// todo: need to check with new date time behaviours
 export function useAppGradient() {
+  const {getTime} = useDateTime();
+
   /**
    * Generates labels for the gradient map based on the current cycling period.
    * @param size The number of labels to generate.
@@ -12,7 +18,6 @@ export function useAppGradient() {
     cyclingPeriod: CyclingPeriod = CyclingPeriod.enum.HOUR,
   ): string[] => {
     const labels: string[] = [];
-    const referenceDate = new Date('1970-01-01T00:00:00'); // Consistent reference date
 
     switch (cyclingPeriod) {
       case CyclingPeriod.enum.HOUR: {
@@ -21,7 +26,8 @@ export function useAppGradient() {
 
         for (let i = 0; i < size; i++) {
           const currentDate = new Date(referenceDate.getTime() + i * interval);
-          const hours = currentDate.getHours().toString().padStart(2, '0');
+          const {hours} = getTime(currentDate);
+          // const hours = currentDate.getHours().toString().padStart(2, '0');
           const minutes = currentDate.getMinutes().toString().padStart(2, '0');
           labels.push(`${hours}:${minutes}`);
         }

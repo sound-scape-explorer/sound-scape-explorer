@@ -1,8 +1,8 @@
-import {formatDateToString, isDateValid} from '@shared/dates';
 import {type FileDto} from '@shared/dtos';
 import {useCallback} from 'react';
 import {type FileAlias} from 'src/panels/files/hooks/use-table-loader';
 import {useTableState} from 'src/panels/files/hooks/use-table-state';
+import {formatDateToString, isDateValid} from 'src/utils/datetime.ts';
 
 export function useTableDateLoader() {
   const {createColumn} = useTableState();

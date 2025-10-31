@@ -14,8 +14,14 @@ const {min, max} = useColorByTag();
 const {cycleDayLabels, cycleDayColors, userColors, dayColors, cycleDayLegend} =
   useColorGradients();
 
-const isCycleDay = computed(() => option.value === ColorOption.enum.cycleDay);
-const isDay = computed(() => option.value === ColorOption.enum.isDay);
+const isHoursInDay = computed(
+  () => option.value === ColorOption.enum.HoursInDay,
+);
+
+const isDayOrNight = computed(
+  () => option.value === ColorOption.enum.DayOrNight,
+);
+
 // todo: check if v-else works as intended
 
 const userLabels = computed<string[]>(() => {
@@ -39,7 +45,7 @@ const userLabels = computed<string[]>(() => {
 
 <template>
   <AppGradient
-    v-if="isCycleDay"
+    v-if="isHoursInDay"
     :colors="cycleDayColors"
     :labels="cycleDayLabels"
     :legend-max="cycleDayLegend.max"
@@ -48,7 +54,7 @@ const userLabels = computed<string[]>(() => {
   />
 
   <AppGradient
-    v-if="isDay"
+    v-if="isDayOrNight"
     :colors="dayColors"
     :labels="['night', 'day']"
     :width="50"

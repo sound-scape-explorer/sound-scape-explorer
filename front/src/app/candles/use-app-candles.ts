@@ -8,7 +8,7 @@ import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {useAppCandlesLayout} from 'src/app/candles/use-app-candles-layout';
 import {useBasePlotConfig} from 'src/composables/use-base-plot-config';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useDate} from 'src/composables/use-date';
+import {useDateTime} from 'src/composables/use-date-time';
 import {TIMEOUT} from 'src/constants';
 import {ref} from 'vue';
 
@@ -22,7 +22,7 @@ export function useAppCandles(props: AppCandlesProps) {
   const {generateConfig} = useBasePlotConfig();
   const {generateLayout} = useAppCandlesLayout();
   const {plotBackground} = useClientSettings();
-  const {convertTimestampToIsoDate} = useDate();
+  const {timestampToString} = useDateTime();
 
   const mount = () =>
     requestAnimationFrame(async () => {
@@ -46,7 +46,7 @@ export function useAppCandles(props: AppCandlesProps) {
   const generateData = (): Data[] => {
     const newData: Data = {
       type: 'candlestick',
-      x: props.timestamps.map((t) => convertTimestampToIsoDate(t)),
+      x: props.timestamps.map(timestampToString),
       high: props.high,
       low: props.low,
       open: props.open,

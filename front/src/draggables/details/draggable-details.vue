@@ -3,7 +3,7 @@ import {NGi, NGrid, NTag} from 'naive-ui';
 import AppHeader from 'src/app/app-header.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
-import {useDate} from 'src/composables/use-date';
+import {useDateTime} from 'src/composables/use-date-time';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {useInterval} from 'src/composables/use-interval';
 import {useThemeColors} from 'src/composables/use-theme-colors';
@@ -11,7 +11,7 @@ import {STRING_DELIMITER} from 'src/constants';
 import DraggableDetailsAudioWindows from 'src/draggables/details/draggable-details-audio-windows.vue';
 
 const {currentIndex, currentInterval} = useInterval();
-const {convertTimestampToIsoDate} = useDate();
+const {timestampToString} = useDateTime();
 const {colors} = useThemeColors();
 </script>
 
@@ -50,12 +50,12 @@ const {colors} = useThemeColors();
 
       <div>
         <div>Start</div>
-        <div>{{ convertTimestampToIsoDate(currentInterval.start) }}</div>
+        <div>{{ timestampToString(currentInterval.start) }}</div>
       </div>
 
       <div>
         <div>End</div>
-        <div>{{ convertTimestampToIsoDate(currentInterval.end) }}</div>
+        <div>{{ timestampToString(currentInterval.end) }}</div>
       </div>
 
       <AppHeader>Tags</AppHeader>

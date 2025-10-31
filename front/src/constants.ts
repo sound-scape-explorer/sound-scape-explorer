@@ -100,8 +100,8 @@ export const ColorCategory = z.enum(['DEFAULT', 'TAGS', 'ACOUSTICS']);
 export type ColorCategory = z.infer<typeof ColorCategory>;
 
 export const ColorOption = z.enum([
-  'cycleDay',
-  'isDay',
+  'HoursInDay',
+  'DayOrNight',
   'intervalIndex',
   'by1h',
   'by10min',
