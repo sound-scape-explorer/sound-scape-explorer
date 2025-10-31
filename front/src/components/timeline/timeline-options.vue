@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppDatePicker from 'src/app/app-date-picker.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useTimelineHandlers} from 'src/components/timeline/use-timeline-handlers';
@@ -29,19 +30,25 @@ useTimelineLifecycles();
 
       <AppButton
         :handle-click="overdrive"
-        tooltip="set window limits as range"
+        tooltip="Crop window"
         tooltip-placement="top"
       >
-        overdrive
+        <AppIcon
+          icon="crop"
+          size="tiny"
+        />
       </AppButton>
 
       <AppButton
         :disabled="currentIndex === null"
         :handle-click="recenter"
-        tooltip="to selected interval"
+        tooltip="Focus window to current interval"
         tooltip-placement="top"
       >
-        focus
+        <AppIcon
+          icon="select"
+          size="tiny"
+        />
       </AppButton>
     </div>
 
@@ -64,11 +71,11 @@ useTimelineLifecycles();
 @use 'src/styles/sizes';
 
 .row {
-  display: flex;
   align-items: center;
+  display: flex;
+  gap: sizes.$p0;
   justify-content: center;
   width: 100%;
-  gap: sizes.$p0;
 }
 
 .select {
