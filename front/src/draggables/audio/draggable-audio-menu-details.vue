@@ -1,10 +1,14 @@
 <script lang="ts" setup="">
+import {copyToClipboard} from '@shared/browser';
+import AppTooltip from 'src/app/app-tooltip.vue';
 import {useAppDisplay} from 'src/composables/use-app-display';
 import {useInterval} from 'src/composables/use-interval';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 
 const {currentIndex} = useInterval();
 const {window} = useAudioFile();
+const {colors} = useThemeColors();
 
 const {display, cycle, Display} = useAppDisplay('index', 'file', 'site');
 </script>
@@ -26,7 +30,23 @@ const {display, cycle, Display} = useAppDisplay('index', 'file', 'site');
   >
     File
   </span>
-  <span v-if="display === Display.enum.file">{{ window?.file.Path }}</span>
+  <span
+    v-if="display === Display.enum.file && window !== null"
+    :class="$style.click"
+    @click="
+      () => {
+        if (window === null) {
+          return;
+        }
+        copyToClipboard(window.file.Path);
+      }
+    "
+  >
+    <AppTooltip>
+      <template #tooltip>Copy</template>
+      <template #body>{{ window.file.Path }}</template>
+    </AppTooltip>
+  </span>
 
   <span
     v-if="display === Display.enum.site"
@@ -42,6 +62,16 @@ const {display, cycle, Display} = useAppDisplay('index', 'file', 'site');
 .hover {
   &:hover {
     cursor: pointer;
+  }
+}
+
+.click {
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active {
+    background: v-bind('colors.actionColor');
   }
 }
 </style>
