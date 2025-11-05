@@ -103,8 +103,6 @@ export const ColorOption = z.enum([
   'HoursInDay',
   'DayOrNight',
   'IntervalIndex',
-  'by1h',
-  'by10min',
 ]);
 
 // eslint-disable-next-line no-redeclare

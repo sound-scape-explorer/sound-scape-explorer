@@ -1,8 +1,6 @@
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useConfig} from 'src/composables/use-config';
 import {ColorOption} from 'src/constants';
-import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
-import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
 import {useColorByDayOrNight} from 'src/draggables/colors/use-color-by-day-or-night';
 import {useColorByHoursInDay} from 'src/draggables/colors/use-color-by-hours-in-day';
@@ -19,8 +17,6 @@ export function useScatterColorScale() {
   const {aggregations} = useAggregations();
   const {isAcoustic, isTag} = useColorState();
   const {get: getColorByIntervalIndex} = useColorByIntervalIndex();
-  const {getColorByOneHour} = useColorBy1h();
-  const {getColorByTenMinutes} = useColorBy10min();
   const {get: getColorByDayOrNight} = useColorByDayOrNight();
   const {get: getColorByHoursInDay} = useColorByHoursInDay();
   const {get: getColorByTag} = useColorByTag();
@@ -55,12 +51,6 @@ export function useScatterColorScale() {
               break;
             case ColorOption.enum.DayOrNight:
               newScale[i] = getColorByDayOrNight(timestamp);
-              break;
-            case ColorOption.enum.by1h:
-              newScale[i] = getColorByOneHour(timestamp);
-              break;
-            case ColorOption.enum.by10min:
-              newScale[i] = getColorByTenMinutes(timestamp);
               break;
           }
         }
