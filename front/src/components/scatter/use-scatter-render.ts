@@ -4,7 +4,7 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useScatterEmbeddings} from 'src/components/scatter/use-scatter-embeddings';
 import {useScatterTrajectories} from 'src/components/scatter/use-scatter-trajectories';
 import {useScatterTrajectoryAverage} from 'src/components/scatter/use-scatter-trajectory-average';
-import {useColorsCycling} from 'src/composables/use-colors-cycling';
+import {useColorScaleHoursInDay} from 'src/composables/use-color-scale-hours-in-day';
 import {useTrajectories} from 'src/composables/use-trajectories';
 import {DEBOUNCE_MS} from 'src/constants';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
@@ -16,7 +16,7 @@ const isEnabled = ref<boolean>(false);
 
 export function useScatterRender() {
   const {generate} = useScatterColorScale();
-  const {scale: cyclingScale} = useColorsCycling();
+  const {scale: hoursInDayScale} = useColorScaleHoursInDay();
   const {trajectories, isFused} = useTrajectories();
   const {render: renderEmbeddings} = useScatterEmbeddings();
   const {render: renderTrajectories} = useScatterTrajectories();
@@ -33,14 +33,14 @@ export function useScatterRender() {
       if (isFused.value) {
         const averageTrajectory = renderTrajectoryAverage(
           trajectories.value,
-          cyclingScale.value,
+          hoursInDayScale.value,
         );
 
         newData.push(averageTrajectory);
       } else {
         const trajectoriesTraces = renderTrajectories(
           trajectories.value,
-          cyclingScale.value,
+          hoursInDayScale.value,
         );
 
         newData.push(...trajectoriesTraces);

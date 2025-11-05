@@ -13,7 +13,7 @@ const {isEnabled: isNumeric} = useTagNumeric();
 const {min, max} = useColorByTag();
 const {scale: dayOrNightScale} = useColorByDayOrNight();
 
-const {cycleDayLabels, cycleDayColors, userColors, cycleDayLegend} =
+const {hoursInDayColors, hoursInDayLabels, hoursInDayLegend, userColors} =
   useColorGradients();
 
 const isHoursInDay = computed(
@@ -48,11 +48,11 @@ const userLabels = computed<string[]>(() => {
 <template>
   <AppGradient
     v-if="isHoursInDay"
-    :colors="cycleDayColors"
-    :labels="cycleDayLabels"
-    :legend-max="cycleDayLegend.max"
-    :legend-med="cycleDayLegend.med"
-    :legend-min="cycleDayLegend.min"
+    :colors="hoursInDayColors"
+    :labels="hoursInDayColors"
+    :legend-max="hoursInDayLegend.max"
+    :legend-med="hoursInDayLegend.med"
+    :legend-min="hoursInDayLegend.min"
   />
 
   <AppGradient

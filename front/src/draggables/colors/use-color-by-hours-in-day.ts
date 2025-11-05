@@ -1,10 +1,10 @@
-import {useColorsCycling} from 'src/composables/use-colors-cycling';
+import {useColorScaleHoursInDay} from 'src/composables/use-color-scale-hours-in-day';
 import {useDateTime} from 'src/composables/use-date-time';
 import {mapRange} from 'src/utils/math';
 
 export function useColorByHoursInDay() {
   const {timestampToDate, getTime} = useDateTime();
-  const {scale} = useColorsCycling();
+  const {scale} = useColorScaleHoursInDay();
 
   const get = (timestamp: number): string => {
     const date = timestampToDate(timestamp);

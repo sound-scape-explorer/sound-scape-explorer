@@ -7,7 +7,7 @@ const scale = computed<Scale>(() =>
     .mode('hsl'),
 );
 
-export function useColorsCycling() {
+export function useColorScaleHoursInDay() {
   return {
     scale,
   };
