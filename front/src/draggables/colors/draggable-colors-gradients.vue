@@ -24,8 +24,6 @@ const isDayOrNight = computed(
   () => option.value === ColorOption.enum.DayOrNight,
 );
 
-// todo: check if v-else works as intended
-
 const userLabels = computed<string[]>(() => {
   if (!isNumeric.value || min.value === null || max.value === null) {
     return [];
@@ -49,7 +47,7 @@ const userLabels = computed<string[]>(() => {
   <AppGradient
     v-if="isHoursInDay"
     :colors="hoursInDayColors"
-    :labels="hoursInDayColors"
+    :labels="hoursInDayLabels"
     :legend-max="hoursInDayLegend.max"
     :legend-med="hoursInDayLegend.med"
     :legend-min="hoursInDayLegend.min"
@@ -65,7 +63,7 @@ const userLabels = computed<string[]>(() => {
   />
 
   <AppGradient
-    v-else
+    v-if="!isHoursInDay && !isDayOrNight"
     :colors="userColors"
     :labels="userLabels"
   />
