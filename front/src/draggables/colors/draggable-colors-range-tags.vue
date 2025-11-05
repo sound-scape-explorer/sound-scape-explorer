@@ -23,7 +23,7 @@ onBeforeUnmount(disable);
     <AppButton
       :active="isEnabled"
       :handle-click="toggle"
-      :tooltip="`Act as numeric range ${isEnabled ? 'on' : 'off'}`"
+      :tooltip="`Act as numeric range ${isEnabled ? 'enabled' : 'disabled'}`"
       size="small"
       tooltip-placement="bottom"
     >
@@ -81,5 +81,9 @@ onBeforeUnmount(disable);
   display: flex;
   gap: sizes.$g0;
   justify-content: center;
+
+  & > div {
+    width: 100%;
+  }
 }
 </style>

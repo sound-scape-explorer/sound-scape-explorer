@@ -34,7 +34,7 @@ const isDayOrNight = computed(
 );
 
 const userLabels = computed<string[]>(() => {
-  if (!isNumeric.value || min.value === null || max.value === null) {
+  if (!isNumeric.value || min.value === '' || max.value === '') {
     return [];
   }
 
@@ -43,7 +43,9 @@ const userLabels = computed<string[]>(() => {
   const labels: string[] = [];
 
   for (let i = 0; i < size; i += 1) {
-    const value = min.value + (i * (max.value - min.value)) / (size - 1);
+    const value =
+      Number(min.value) +
+      (i * (Number(max.value) - Number(min.value))) / (size - 1);
     const int = Math.round(value);
     labels.push(int.toString());
   }

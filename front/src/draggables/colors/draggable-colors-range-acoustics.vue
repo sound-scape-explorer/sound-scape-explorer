@@ -75,7 +75,6 @@ const {detect: detectAcousticRange, swap} = useAcousticRange();
   display: flex;
   gap: sizes.$g0;
   justify-content: center;
-  width: sizes.$s0;
 
   & > div {
     width: 100%;
