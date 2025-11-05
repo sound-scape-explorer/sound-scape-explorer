@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AppGradient from 'src/app/app-gradient.vue';
 import {ColorOption} from 'src/constants';
+import {useColorByDayOrNight} from 'src/draggables/colors/use-color-by-day-or-night';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorGradients} from 'src/draggables/colors/use-color-gradients';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -10,8 +11,9 @@ import {computed} from 'vue';
 const {option} = useColorSelection();
 const {isEnabled: isNumeric} = useTagNumeric();
 const {min, max} = useColorByTag();
+const {scale: dayOrNightScale} = useColorByDayOrNight();
 
-const {cycleDayLabels, cycleDayColors, userColors, dayColors, cycleDayLegend} =
+const {cycleDayLabels, cycleDayColors, userColors, cycleDayLegend} =
   useColorGradients();
 
 const isHoursInDay = computed(
@@ -55,11 +57,11 @@ const userLabels = computed<string[]>(() => {
 
   <AppGradient
     v-if="isDayOrNight"
-    :colors="dayColors"
-    :labels="['night', 'day']"
+    :colors="dayOrNightScale"
+    :labels="['day', 'night']"
     :width="50"
-    legend-max="day"
-    legend-min="night"
+    legend-max="night"
+    legend-min="day"
   />
 
   <AppGradient

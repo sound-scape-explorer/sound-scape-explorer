@@ -5,7 +5,6 @@ import {isHourDuringDay} from 'src/utils/time';
 const dayColor = chroma('orange');
 const nightColor = chroma('blue');
 
-// TODO: colors are fucked
 export function useColorByDayOrNight() {
   const {timestampToDate, getTime} = useDateTime();
 
@@ -23,5 +22,6 @@ export function useColorByDayOrNight() {
 
   return {
     get,
+    scale: [dayColor.css(), nightColor.css()],
   };
 }
