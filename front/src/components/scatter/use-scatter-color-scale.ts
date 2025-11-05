@@ -18,7 +18,7 @@ export function useScatterColorScale() {
   const {config} = useConfig();
   const {aggregations} = useAggregations();
   const {isAcoustic, isTag} = useColorState();
-  const {getColor} = useColorByIntervalIndex();
+  const {get: getColorByIntervalIndex} = useColorByIntervalIndex();
   const {getColorByOneHour} = useColorBy1h();
   const {getColorByTenMinutes} = useColorBy10min();
   const {get: getColorByDayOrNight} = useColorByDayOrNight();
@@ -50,8 +50,8 @@ export function useScatterColorScale() {
             case ColorOption.enum.HoursInDay:
               newScale[i] = getColorByHoursInDay(timestamp);
               break;
-            case ColorOption.enum.intervalIndex:
-              newScale[i] = getColor(i, count);
+            case ColorOption.enum.IntervalIndex:
+              newScale[i] = getColorByIntervalIndex(i, count);
               break;
             case ColorOption.enum.DayOrNight:
               newScale[i] = getColorByDayOrNight(timestamp);

@@ -102,7 +102,7 @@ export type ColorCategory = z.infer<typeof ColorCategory>;
 export const ColorOption = z.enum([
   'HoursInDay',
   'DayOrNight',
-  'intervalIndex',
+  'IntervalIndex',
   'by1h',
   'by10min',
 ]);
