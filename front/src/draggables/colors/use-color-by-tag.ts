@@ -76,6 +76,11 @@ export function useColorByTag() {
     max.value = String(Math.max(...values));
   };
 
+  const reset = () => {
+    min.value = '';
+    max.value = '';
+  };
+
   return {
     min,
     max,
@@ -83,5 +88,6 @@ export function useColorByTag() {
     detect,
     getColorByTagIndex,
     getColorNumeric,
+    reset,
   };
 }

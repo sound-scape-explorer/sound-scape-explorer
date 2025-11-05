@@ -45,7 +45,7 @@ export function useScatterLifecycles() {
   const {isWebGlScatter2d} = useClientSettings();
   const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
   const {min: tagMin, max: tagMax} = useColorByTag();
-  const {isEnabled: isTagNumeric} = useTagNumeric();
+  const {isEnabled: isTagNumericEnabled} = useTagNumeric();
   const {currentIndex} = useInterval();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
@@ -68,7 +68,7 @@ export function useScatterLifecycles() {
       acousticMax,
       tagMin,
       tagMax,
-      isTagNumeric,
+      isTagNumericEnabled,
       timeshift,
       labelFiltered,
       timeFiltered,
@@ -95,9 +95,13 @@ export function useScatterLifecycles() {
         return;
       }
 
+      // requestAnimationFrame(async () => {
+      //   await generate();
+      //   renderScatter();
+      // });
       isRendering = true;
-      await generate();
       renderScatter();
+      await generate();
       isRendering = false;
     },
   );

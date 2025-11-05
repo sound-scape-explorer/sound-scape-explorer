@@ -15,15 +15,18 @@ import {computed} from 'vue';
 const {isTag} = useColorState();
 
 const {invert, isReversible} = useColorInvert();
-const {isEnabled} = useTagNumeric();
-
+const {isEnabled: isTagNumericEnabled} = useTagNumeric();
 const {option} = useColorSelection();
-const {isEnabled: isNumeric} = useTagNumeric();
 const {min, max} = useColorByTag();
 const {scale: dayOrNightScale} = useColorByDayOrNight();
 
-const {hoursInDayColors, hoursInDayLabels, hoursInDayLegend, userColors} =
-  useColorGradients();
+const {
+  hoursInDayColors,
+  hoursInDayLabels,
+  hoursInDayLegend,
+  userColors,
+  labels,
+} = useColorGradients();
 
 const isHoursInDay = computed(
   () => option.value === ColorOption.enum.HoursInDay,
@@ -34,7 +37,7 @@ const isDayOrNight = computed(
 );
 
 const userLabels = computed<string[]>(() => {
-  if (!isNumeric.value || min.value === '' || max.value === '') {
+  if (!isTagNumericEnabled.value || min.value === '' || max.value === '') {
     return [];
   }
 
@@ -56,7 +59,7 @@ const userLabels = computed<string[]>(() => {
 
 <template>
   <h2
-    v-if="!isTag || isEnabled"
+    v-if="!isTag || isTagNumericEnabled"
     style="display: flex; gap: 8px"
   >
     <span>Map</span>
@@ -75,7 +78,7 @@ const userLabels = computed<string[]>(() => {
   </h2>
 
   <div
-    v-if="!isTag || isEnabled"
+    v-if="!isTag || isTagNumericEnabled"
     :class="$style.gradients"
   >
     <AppGradient
@@ -99,7 +102,7 @@ const userLabels = computed<string[]>(() => {
     <AppGradient
       v-if="!isHoursInDay && !isDayOrNight"
       :colors="userColors"
-      :labels="userLabels"
+      :labels="labels"
     />
   </div>
 </template>

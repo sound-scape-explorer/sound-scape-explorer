@@ -11,12 +11,6 @@ export function useColorState() {
   const {acousticSlugs} = useAcousticExtractors();
   const {isCalculable} = useTagNumeric();
 
-  const isAcoustic = computed(
-    () =>
-      category.value === ColorCategory.enum.ACOUSTICS &&
-      acousticSlugs.value.includes(option.value),
-  );
-
   const isTag = computed<boolean>(() => {
     const properties = Object.keys(allUniques.value);
     return (
@@ -28,6 +22,12 @@ export function useColorState() {
   const isTagNumeric = computed<boolean>(() => {
     return isTag.value && isCalculable(option.value);
   });
+
+  const isAcoustic = computed(
+    () =>
+      category.value === ColorCategory.enum.ACOUSTICS &&
+      acousticSlugs.value.includes(option.value),
+  );
 
   return {
     isAcoustic,
