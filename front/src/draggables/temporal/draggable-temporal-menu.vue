@@ -111,7 +111,7 @@ const {handleClick: handleExportClick} = useTemporalExport();
   > div {
     align-items: center;
     display: flex;
-    gap: sizes.$p0;
+    gap: sizes.$g0;
   }
 }
 
