@@ -48,6 +48,8 @@ useDraggableTemporalLifecycles();
         :labels="plot.labels"
         :title="plotTitle"
         :values="plot.values"
+        :xTickIndices="plot.xTickIndices"
+        :xTicks="plot.xTicks"
         :y-title="extractorSlug"
         click-enabled
       />

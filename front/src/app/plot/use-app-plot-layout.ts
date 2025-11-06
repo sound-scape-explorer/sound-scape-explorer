@@ -25,6 +25,8 @@ export function useAppPlotLayout() {
           visible: props.showRange,
         },
         automargin: true,
+        tickvals: props.xTickIndices,
+        ticktext: props.xTicks,
       },
       yaxis: {
         title: props.yTitle,

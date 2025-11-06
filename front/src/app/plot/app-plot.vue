@@ -25,6 +25,8 @@ export interface AppPlotProps {
   width?: number | null;
   height?: number | null;
   isExpanded?: boolean;
+  xTicks?: string[];
+  xTickIndices?: string[];
 }
 
 const props = withDefaults(defineProps<AppPlotProps>(), {
@@ -36,6 +38,8 @@ const props = withDefaults(defineProps<AppPlotProps>(), {
   width: null,
   height: null,
   isExpanded: false,
+  xTicks: undefined,
+  xTickIndices: undefined,
 });
 
 export interface AppPlotRefs {

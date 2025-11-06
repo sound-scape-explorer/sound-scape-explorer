@@ -63,13 +63,27 @@ export function useTemporalChart() {
   const generateContinuousPlot = (): PlotData => {
     const filteredData = filterSeries();
 
+    // downsample
+    const maxTicks = 7;
+    const totalLength = filteredData.length;
+    const step = Math.floor(totalLength / maxTicks);
+    const tickIndices = Array.from(
+      {length: Math.ceil(totalLength / step)},
+      (_, i) => i * step,
+    ).filter((i) => i < totalLength);
+
     return {
       labels: [
         filteredData.map(
           (d) =>
-            `<b>Date:</b> ${timestampToString(d.timestamp)}<br>${INTERVAL_TAG} ${d.index}<br><b>Site:</b> ${d.siteName}`,
+            `${INTERVAL_TAG} ${d.index}<br><b>Date:</b> ${timestampToString(d.timestamp)}<br><b>Site:</b> ${d.siteName}`,
         ),
       ],
+      xTicks: tickIndices.map((i) =>
+        timestampToString(filteredData[i].timestamp),
+      ),
+      xTickIndices: tickIndices.map((i) => `${i}`),
+      // xTicks: filteredData.map((d) => timestampToString(d.timestamp)),
       values: [filteredData.map((d) => apply(d.values))],
       colors: ['green'],
     };
