@@ -18,6 +18,7 @@ from processing.menu import menu
 class _CliArguments(NamedTuple):
     config_path: str
     verbose: bool
+    memory_limit: int | None  # MB
 
 
 def _register_python_path():
@@ -28,9 +29,22 @@ def _register_python_path():
         sys.path.append(processing_path)
 
 
-def _prepare():
-    _register_python_path()
+def _set_memory_limit(max_memory_mb: int):
+    """Limit available RAM for the whole process (for testing/debugging)"""
+    import resource
 
+    limit_bytes = max_memory_mb * 1024 * 1024
+    resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
+    print(f"[yellow]Memory limit set to {max_memory_mb}MB[/yellow]")
+
+
+def _prepare(
+    max_memory: int | None = None,
+):
+    if max_memory:
+        _set_memory_limit(max_memory)
+
+    _register_python_path()
     from processing.resources.kaggle import set_kaggle_cache
 
     set_kaggle_cache()
@@ -46,20 +60,26 @@ def _parse_arguments():
 
     parser.add_argument("-v", "--verbose", action="store_true")
 
+    parser.add_argument(
+        "-m",
+        "--memory",
+        type=int,
+        help="Maximum memory limit in MB (for testing/debugging)",
+        default=None,
+    )
+
     args = parser.parse_args()
 
-    config_path: str = args.config_path
-    verbose: bool = args.verbose
-
     return _CliArguments(
-        config_path=config_path,
-        verbose=verbose,
+        config_path=args.config_path,
+        verbose=args.verbose,
+        memory_limit=args.memory,
     )
 
 
 def main():
-    _prepare()
     args = _parse_arguments()
+    _prepare(max_memory=args.memory_limit)
     menu(args.config_path)
 
 
