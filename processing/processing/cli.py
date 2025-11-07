@@ -12,8 +12,6 @@ from typing import NamedTuple
 
 from rich import print
 
-from processing.menu import menu
-
 
 class _CliArguments(NamedTuple):
     config_path: str
@@ -80,7 +78,15 @@ def _parse_arguments():
 def main():
     args = _parse_arguments()
     _prepare(max_memory=args.memory_limit)
-    menu(args.config_path)
+
+
+    try:
+        from processing.menu import menu
+        menu(args.config_path)
+    except MemoryError:
+        print("[red]ERROR: Memory limit exceeded![/red]")
+        print(f"[yellow]Try increasing --memory above {args.memory}MB[/yellow]")
+        sys.exit(1)
 
 
 def download():
