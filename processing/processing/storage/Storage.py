@@ -6,7 +6,6 @@ from h5py import File, Dataset, Group, Datatype
 
 from processing.storage.StorageMode import StorageMode
 
-
 _Endpoint = Dataset | Group | Datatype
 _Attributes = dict[str, str]
 
@@ -150,3 +149,4 @@ class Storage:
             dataset[-length:] = data
 
         self._write_attributes(path, attributes)
+        self._file.flush()
