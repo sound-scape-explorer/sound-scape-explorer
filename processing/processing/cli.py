@@ -27,20 +27,20 @@ def _register_python_path():
         sys.path.append(processing_path)
 
 
-def _set_memory_limit(max_memory_mb: int):
+def _set_memory_limit(memory_limit: int):
     """Limit available RAM for the whole process (for testing/debugging)"""
     import resource
 
-    limit_bytes = max_memory_mb * 1024 * 1024
+    limit_bytes = memory_limit * 1024 * 1024
     resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
-    print(f"[yellow]Memory limit set to {max_memory_mb}MB[/yellow]")
+    print(f"[yellow]Memory limit set to {memory_limit}MB[/yellow]")
 
 
 def _prepare(
-    max_memory: int | None = None,
+    memory_limit: int | None = None,
 ):
-    if max_memory:
-        _set_memory_limit(max_memory)
+    if memory_limit:
+        _set_memory_limit(memory_limit)
 
     _register_python_path()
     from processing.resources.kaggle import set_kaggle_cache
@@ -77,15 +77,15 @@ def _parse_arguments():
 
 def main():
     args = _parse_arguments()
-    _prepare(max_memory=args.memory_limit)
-
+    _prepare(memory_limit=args.memory_limit)
 
     try:
         from processing.menu import menu
+
         menu(args.config_path)
     except MemoryError:
         print("[red]ERROR: Memory limit exceeded![/red]")
-        print(f"[yellow]Try increasing --memory above {args.memory}MB[/yellow]")
+        print(f"[yellow]Try increasing --memory above {args.memory_limit}MB[/yellow]")
         sys.exit(1)
 
 
