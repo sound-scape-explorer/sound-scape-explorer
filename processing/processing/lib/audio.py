@@ -5,7 +5,7 @@ from scipy.ndimage import map_coordinates
 
 
 def read_duration(path: str) -> int:
-    seconds = librosa.get_duration(filename=path)
+    seconds = librosa.get_duration(path=path)
     milliseconds = int(seconds * 1000)
     return milliseconds
 
