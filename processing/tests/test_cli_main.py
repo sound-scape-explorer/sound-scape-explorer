@@ -5,7 +5,7 @@ import pytest
 from processing.common.MenuChoice import MenuChoice
 
 
-def test_cli_with_invalid_config():
+def test_invalid_config():
     with (
         patch("sys.argv", ["sse", "impossible.json"]),
         pytest.raises(FileNotFoundError),
@@ -15,7 +15,7 @@ def test_cli_with_invalid_config():
         main()
 
 
-def test_cli_with_valid_config(config_path):
+def test_valid_config(config_path):
     with (
         patch("sys.argv", ["sse", config_path]),
         patch("processing.menu.prompt_menu") as mock_prompt,
@@ -28,7 +28,7 @@ def test_cli_with_valid_config(config_path):
         assert sys_exit.value.code == 0
 
 
-def test_cli_with_low_memory_one_gig(config_path):
+def test_low_memory_one_gig(config_path):
     import subprocess
 
     result = subprocess.run(
@@ -41,7 +41,7 @@ def test_cli_with_low_memory_one_gig(config_path):
     assert "Memory limit exceeded" in result.stdout
 
 
-def test_cli_with_low_memory_two_gigs(config_path):
+def test_low_memory_two_gigs(config_path):
     import subprocess
 
     result = subprocess.run(
@@ -54,7 +54,12 @@ def test_cli_with_low_memory_two_gigs(config_path):
     assert "Memory limit exceeded" in result.stdout
 
 
-def test_cli_with_low_memory_four_gigs(config_path):
+def test_memory_four_gigs(config_path):
+    """
+    This should display the menu even if
+    4Gb won't be enough to load some heavy models
+    like birdNET
+    """
     with (
         patch("sys.argv", ["sse", config_path, "-m", "4096"]),
         patch("processing.menu.prompt_menu") as mock_prompt,
