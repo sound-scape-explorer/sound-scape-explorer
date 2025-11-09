@@ -2,5 +2,6 @@
 
 # processing
 source processing/venv/bin/activate
-pytest
+pytest processing/tests/cli
+pytest -s processing/tests/extractions
 deactivate
