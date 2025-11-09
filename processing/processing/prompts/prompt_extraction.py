@@ -7,7 +7,10 @@ from processing.context import Context
 def prompt_extraction(context: Context) -> ExtractionConfig:
     extractions = context.config.extractions
 
-    questions = [
+    # noinspection PyProtectedMember
+    from InquirerPy.utils import InquirerPyQuestions
+
+    questions: InquirerPyQuestions = [
         {
             "type": "list",
             "name": "choices",
@@ -16,7 +19,7 @@ def prompt_extraction(context: Context) -> ExtractionConfig:
         }
     ]
 
-    answers = prompt(questions)
+    answers = prompt(questions, vi_mode=True)
     name: str = str(answers["choices"])
 
     results = list(filter(lambda e: e.name == name, extractions))

@@ -1,14 +1,16 @@
 from InquirerPy.resolver import prompt
 
-from processing.config.ExtractionConfig import ExtractionConfig
-from processing.context import Context
 from processing.config.BandConfig import BandConfig
+from processing.config.ExtractionConfig import ExtractionConfig
 
 
 def prompt_band(extraction: ExtractionConfig) -> BandConfig:
     bands = extraction.bands
 
-    questions = [
+    # noinspection PyProtectedMember
+    from InquirerPy.utils import InquirerPyQuestions
+
+    questions: InquirerPyQuestions = [
         {
             "type": "list",
             "name": "choices",
@@ -17,7 +19,7 @@ def prompt_band(extraction: ExtractionConfig) -> BandConfig:
         }
     ]
 
-    answers = prompt(questions)
+    answers = prompt(questions, vi_mode=True)
     name: str = str(answers["choices"])
 
     results = list(filter(lambda b: b.name == name, bands))

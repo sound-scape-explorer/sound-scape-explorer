@@ -1,5 +1,4 @@
 from InquirerPy.resolver import prompt
-from rich import print
 
 from processing.config.ExtractionConfig import ExtractionConfig
 from processing.config.IntegrationConfig import IntegrationConfig
@@ -8,7 +7,10 @@ from processing.config.IntegrationConfig import IntegrationConfig
 def prompt_integration(extraction: ExtractionConfig) -> IntegrationConfig:
     integrations = extraction.integrations
 
-    questions = [
+    # noinspection PyProtectedMember
+    from InquirerPy.utils import InquirerPyQuestions
+
+    questions: InquirerPyQuestions = [
         {
             "type": "list",
             "name": "choices",
@@ -17,7 +19,7 @@ def prompt_integration(extraction: ExtractionConfig) -> IntegrationConfig:
         }
     ]
 
-    answers = prompt(questions)
+    answers = prompt(questions, vi_mode=True)
     name: str = str(answers["choices"])
 
     results = list(filter(lambda i: i.name == name, integrations))

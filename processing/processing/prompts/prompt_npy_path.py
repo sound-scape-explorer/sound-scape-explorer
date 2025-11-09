@@ -6,7 +6,10 @@ from processing.context import Context
 
 
 def prompt_npy_path(context: Context) -> str:
-    questions = [
+    # noinspection PyProtectedMember
+    from InquirerPy.utils import InquirerPyQuestions
+
+    questions: InquirerPyQuestions = [
         {
             "type": "input",
             "name": "filename",
@@ -15,7 +18,7 @@ def prompt_npy_path(context: Context) -> str:
         },
     ]
 
-    answers = prompt(questions)
+    answers = prompt(questions, vi_mode=True)
     filename: str = str(answers["filename"])
 
     storage_filename = context.config.settings.storage_path.split(os.sep)[-1]
