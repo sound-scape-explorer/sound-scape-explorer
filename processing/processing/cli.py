@@ -1,8 +1,6 @@
-from processing.lib.cuda import disable_cuda
 from processing.lib.logger import init_logger
 
 
-disable_cuda()
 init_logger()
 
 import argparse
@@ -15,7 +13,6 @@ from rich import print
 
 class _CliArguments(NamedTuple):
     config_path: str
-    verbose: bool
     memory_limit: int | None  # MB
 
 
@@ -36,9 +33,7 @@ def _set_memory_limit(memory_limit: int):
     print(f"[yellow]Memory limit set to {memory_limit}MB[/yellow]")
 
 
-def _prepare(
-    memory_limit: int | None = None,
-):
+def _prepare(memory_limit: int | None = None):
     if memory_limit:
         _set_memory_limit(memory_limit)
 
@@ -56,7 +51,12 @@ def _parse_arguments():
         help="Path to configuration file",
     )
 
-    parser.add_argument("-v", "--verbose", action="store_true")
+    parser.add_argument(
+        "-c",
+        "--cpu",
+        help="Disable GPUs and force TensorFlow to use the CPU",
+        action="store_true",
+    )
 
     parser.add_argument(
         "-m",
@@ -68,9 +68,11 @@ def _parse_arguments():
 
     args = parser.parse_args()
 
+    if args.cpu is True:
+        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
     return _CliArguments(
         config_path=args.config_path,
-        verbose=args.verbose,
         memory_limit=args.memory,
     )
 
