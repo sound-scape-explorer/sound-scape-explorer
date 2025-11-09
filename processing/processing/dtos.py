@@ -66,14 +66,14 @@ class SettingsDto(BaseModel):
 class BandDto(BaseModel):
     index: int
     name: str
-    low: int
-    high: int
+    low: int  # Hz
+    high: int  # Hz
 
 
 class IntegrationDto(BaseModel):
     index: int
     name: str
-    duration: int
+    duration: int  # ms
 
 
 class ExtractorDto(BaseModel):
