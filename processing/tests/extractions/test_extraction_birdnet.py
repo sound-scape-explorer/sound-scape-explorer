@@ -1,25 +1,25 @@
 import numpy as np
 
 from processing.actions.run_extractions import run_extractions
-from processing.constants import VGGISH_WINDOW_MS
+from processing.constants import BIRDNET_WINDOW_MS
 from processing.lib.shapes import assert_shape
 from processing.managers.ExtractionManager import ExtractionManager
 from processing.repositories.ExtractionRepository import ExtractionRepository
 
-_expected_data_length = 60 / (VGGISH_WINDOW_MS / 1000)
+_expected_data_length = 60 / (BIRDNET_WINDOW_MS / 1000)
 
 
-def test_vggish(context_vggish):
-    run_extractions(context_vggish)
+def test_vggish(context_birdnet):
+    run_extractions(context_birdnet)
 
     assert ExtractionRepository.exists(
-        context_vggish
+        context_birdnet
     ), "Extracted data should exist after extraction"
 
-    for ei in ExtractionManager.iterate(context_vggish):
+    for ei in ExtractionManager.iterate(context_birdnet):
         for file in ei.site.files:
             extracted = ExtractionRepository.from_storage(
-                context=context_vggish,
+                context=context_birdnet,
                 extraction=ei.extraction,
                 extractor=ei.extractor,
                 band=ei.band,
@@ -27,7 +27,7 @@ def test_vggish(context_vggish):
             )
 
             # embeddings have the correct shape
-            assert_shape(extracted.embeddings, (_expected_data_length, 128))
+            assert_shape(extracted.embeddings, (_expected_data_length, 1024))
 
             # embeddings have valid data
             assert not np.all(
