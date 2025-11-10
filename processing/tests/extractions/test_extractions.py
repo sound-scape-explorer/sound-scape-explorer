@@ -54,13 +54,11 @@ def _run_extraction_test(
             )
 
             # embeddings have valid data
-            assert not np.all(
-                extracted.embeddings == 0
-            ), "Embeddings shouldn't be all zeros"
+            is_zeros = np.all(extracted.embeddings == 0)
+            assert not is_zeros, "Embeddings should not be all zeros"
 
-            assert not np.any(
-                np.isnan(extracted.embeddings)
-            ), "Embeddings shouldn't contain NaN values"
+            has_nans = np.any(np.isnan(extracted.embeddings))
+            assert not has_nans, "Embeddings should not contain NaN values"
 
             # arrays have the correct lengths
             num_windows = extracted.embeddings.shape[0]
