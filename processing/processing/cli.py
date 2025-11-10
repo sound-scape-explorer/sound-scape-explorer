@@ -54,7 +54,7 @@ def _parse_arguments():
     parser.add_argument(
         "-c",
         "--cpu",
-        help="Disable GPUs and force TensorFlow to use the CPU",
+        help="Disable GPUs and force TensorFlow to use CPU",
         action="store_true",
     )
 
@@ -62,7 +62,7 @@ def _parse_arguments():
         "-m",
         "--memory",
         type=int,
-        help="Maximum memory limit in MB (for testing/debugging)",
+        help="Maximum RAM limit in MB (does not limit GPU VRAM)",
         default=None,
     )
 
