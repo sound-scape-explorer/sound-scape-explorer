@@ -139,6 +139,18 @@ def context_spectrum(context):
 
 
 @pytest.fixture
+def context_spectrogram(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.SPECTROGRAM,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
 def context_mps(context):
     ctx = _create_unique_extractor_context(
         context,

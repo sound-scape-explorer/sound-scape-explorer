@@ -108,6 +108,9 @@ def _run_extraction_test(
                 ), f"Hop duration should be {ei.extractor.hop}ms, got {hop_duration}ms"
 
 
+# neural
+
+
 def test_vggish(context_vggish):
     _run_extraction_test(
         context_vggish,
@@ -156,9 +159,20 @@ def test_music_class(context_music_class):
     )
 
 
+# low level
+
+
 def test_spectrum(context_spectrum):
     _run_extraction_test(
         context_spectrum,
+        WINDOW_MS,
+        SPECTRO_N_BANDS,
+    )
+
+
+def test_spectrogram(context_spectrogram):
+    _run_extraction_test(
+        context_spectrogram,
         WINDOW_MS,
         SPECTRO_N_BANDS,
     )
@@ -199,3 +213,6 @@ def test_mfcc(context_mfcc):
         WINDOW_MS,
         expected_shape[1],
     )
+
+
+# acoustics
