@@ -1,6 +1,5 @@
 import numpy as np
 
-from fixtures.context import context_vggish
 from processing.actions.run_extractions import run_extractions
 from processing.constants import (
     VGGISH_WINDOW_MS,
@@ -9,6 +8,8 @@ from processing.constants import (
     SURF_PERCH_WINDOW_MS,
     YAMNET_WINDOW_MS,
     MUSIC_CLASS_WINDOW_MS,
+    WINDOW_MS,
+    SPECTRO_N_BANDS,
 )
 from processing.context import Context
 from processing.lib.shapes import assert_shape
@@ -143,4 +144,20 @@ def test_music_class(context_music_class):
         context_music_class,
         MUSIC_CLASS_WINDOW_MS,
         960,
+    )
+
+
+def test_spectrum(context_spectrum):
+    _run_extraction_test(
+        context_spectrum,
+        WINDOW_MS,
+        SPECTRO_N_BANDS,
+    )
+
+
+def test_mps(context_mps):
+    _run_extraction_test(
+        context_mps,
+        WINDOW_MS,
+        1,
     )

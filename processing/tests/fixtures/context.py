@@ -8,6 +8,7 @@ from processing.constants import (
     SURF_PERCH_WINDOW_MS,
     YAMNET_WINDOW_MS,
     MUSIC_CLASS_WINDOW_MS,
+    WINDOW_MS,
 )
 from processing.context import Context
 from processing.dtos import ExtractorDto
@@ -119,6 +120,30 @@ def context_music_class(context):
         context,
         ExtractorImpl.MUSIC_CLASS,
         MUSIC_CLASS_WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_spectrum(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.SPECTRUM,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_mps(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.MPS,
+        WINDOW_MS,
     )
 
     yield ctx
