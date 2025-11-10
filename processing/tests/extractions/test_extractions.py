@@ -1,26 +1,36 @@
 import numpy as np
 
+from fixtures.context import context_vggish
 from processing.actions.run_extractions import run_extractions
-from processing.constants import PERCH_WINDOW_MS
+from processing.constants import (
+    VGGISH_WINDOW_MS,
+    BIRDNET_WINDOW_MS,
+    PERCH_WINDOW_MS,
+    SURF_PERCH_WINDOW_MS,
+    YAMNET_WINDOW_MS,
+    MUSIC_CLASS_WINDOW_MS,
+)
+from processing.context import Context
 from processing.lib.shapes import assert_shape
 from processing.managers.ExtractionManager import ExtractionManager
 from processing.repositories.ExtractionRepository import ExtractionRepository
 
-_expected_data_length = 60 / (PERCH_WINDOW_MS / 1000)
-_expected_embeddings_dimensions = 1280
 
-
-def test_vggish(context_perch):
-    run_extractions(context_perch)
+def _run_extraction_test(
+    context: Context,
+    window_ms: int,
+    embeddings_dimensions: int,
+):
+    run_extractions(context)
 
     assert ExtractionRepository.exists(
-        context_perch
+        context
     ), "Extracted data should exist after extraction"
 
-    for ei in ExtractionManager.iterate(context_perch):
+    for ei in ExtractionManager.iterate(context):
         for file in ei.site.files:
             extracted = ExtractionRepository.from_storage(
-                context=context_perch,
+                context=context,
                 extraction=ei.extraction,
                 extractor=ei.extractor,
                 band=ei.band,
@@ -30,7 +40,7 @@ def test_vggish(context_perch):
             # embeddings have the correct shape
             assert_shape(
                 extracted.embeddings,
-                (_expected_data_length, _expected_embeddings_dimensions),
+                (60 / (window_ms / 1000), embeddings_dimensions),
             )
 
             # embeddings have valid data
@@ -86,3 +96,51 @@ def test_vggish(context_perch):
                 assert (
                     hop_duration == ei.extractor.hop
                 ), f"Hop duration should be {ei.extractor.hop}ms, got {hop_duration}ms"
+
+
+def test_vggish(context_vggish):
+    _run_extraction_test(
+        context_vggish,
+        VGGISH_WINDOW_MS,
+        128,
+    )
+
+
+def test_birdnet(context_birdnet):
+    _run_extraction_test(
+        context_birdnet,
+        BIRDNET_WINDOW_MS,
+        1024,
+    )
+
+
+def test_perch(context_perch):
+    _run_extraction_test(
+        context_perch,
+        PERCH_WINDOW_MS,
+        1280,
+    )
+
+
+def test_surf_perch(context_surf_perch):
+    _run_extraction_test(
+        context_surf_perch,
+        SURF_PERCH_WINDOW_MS,
+        1280,
+    )
+
+
+def test_yamnet(context_yamnet):
+    _run_extraction_test(
+        context_yamnet,
+        YAMNET_WINDOW_MS,
+        1024,
+    )
+
+
+def test_music_class(context_music_class):
+    _run_extraction_test(
+        context_music_class,
+        MUSIC_CLASS_WINDOW_MS,
+        960,
+    )

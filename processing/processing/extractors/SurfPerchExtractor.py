@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow_hub as hub
 
-from processing.constants import SURFPERCH_WINDOW_MS
+from processing.constants import SURF_PERCH_WINDOW_MS
 from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
 from processing.lib.console import Console
@@ -13,9 +13,9 @@ class SurfPerchExtractor(Extractor):
         self,
         freq_low: int,
         freq_high: int,
-        hop_ms: int = SURFPERCH_WINDOW_MS,
+        hop_ms: int = SURF_PERCH_WINDOW_MS,
     ):
-        super().__init__(window_ms=SURFPERCH_WINDOW_MS, hop_ms=hop_ms)
+        super().__init__(window_ms=SURF_PERCH_WINDOW_MS, hop_ms=hop_ms)
 
         self.freq_low = freq_low
         self.freq_high = freq_high

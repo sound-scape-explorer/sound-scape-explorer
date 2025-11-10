@@ -2,7 +2,7 @@ import numpy as np
 from keras import models, Model
 from librosa import feature
 
-from processing.constants import MUSICCLASS_WINDOW_MS
+from processing.constants import MUSIC_CLASS_WINDOW_MS
 from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib.audio import load_resample_and_transpose
 from processing.lib.console import Console
@@ -15,9 +15,9 @@ class MusicClassifierExtractor(Extractor):
         self,
         freq_low: int,
         freq_high: int,
-        hop_ms: int = MUSICCLASS_WINDOW_MS,
+        hop_ms: int = MUSIC_CLASS_WINDOW_MS,
     ):
-        super().__init__(window_ms=MUSICCLASS_WINDOW_MS, hop_ms=hop_ms)
+        super().__init__(window_ms=MUSIC_CLASS_WINDOW_MS, hop_ms=hop_ms)
 
         self.freq_low = freq_low
         self.freq_high = freq_high

@@ -5,7 +5,9 @@ from processing.constants import (
     BIRDNET_WINDOW_MS,
     VGGISH_WINDOW_MS,
     PERCH_WINDOW_MS,
-    SURFPERCH_WINDOW_MS,
+    SURF_PERCH_WINDOW_MS,
+    YAMNET_WINDOW_MS,
+    MUSIC_CLASS_WINDOW_MS,
 )
 from processing.context import Context
 from processing.dtos import ExtractorDto
@@ -88,11 +90,35 @@ def context_perch(context):
 
 
 @pytest.fixture
-def context_surfperch(context):
+def context_surf_perch(context):
     ctx = _create_unique_extractor_context(
         context,
         ExtractorImpl.SURF_PERCH,
-        SURFPERCH_WINDOW_MS,
+        SURF_PERCH_WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_yamnet(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.YAMNET,
+        YAMNET_WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_music_class(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.MUSIC_CLASS,
+        MUSIC_CLASS_WINDOW_MS,
     )
 
     yield ctx
