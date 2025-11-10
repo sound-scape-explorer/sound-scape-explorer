@@ -148,3 +148,15 @@ def context_mps(context):
 
     yield ctx
     ctx.storage.close()
+
+
+@pytest.fixture
+def context_mfcc(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.MFCC,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()

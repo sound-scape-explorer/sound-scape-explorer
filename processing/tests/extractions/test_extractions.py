@@ -15,11 +15,14 @@ from processing.constants import (
     MPS_STFT_2_WINDOW_MS,
     HOP_MS,
     MPS_N_BANDS,
+    MFCC_N_MFCC,
+    SPECTRO_STFT_OVERLAP_RATIO,
 )
 from processing.context import Context
 from processing.lib.shapes import assert_shape
 from processing.managers.ExtractionManager import ExtractionManager
 from processing.repositories.ExtractionRepository import ExtractionRepository
+from processing.utils.predict_mfcc_shape import predict_mfcc_shape
 from processing.utils.predict_mps_shape import predict_mps_shape
 
 
@@ -162,7 +165,7 @@ def test_spectrum(context_spectrum):
 
 
 def test_mps(context_mps):
-    shape = predict_mps_shape(
+    expected_shape = predict_mps_shape(
         audio_duration_sec=60,
         sample_rate=44100,
         window_ms=WINDOW_MS,
@@ -177,5 +180,22 @@ def test_mps(context_mps):
     _run_extraction_test(
         context_mps,
         WINDOW_MS,
-        shape[1],
+        expected_shape[1],
+    )
+
+
+def test_mfcc(context_mfcc):
+    expected_shape = predict_mfcc_shape(
+        audio_duration_seconds=60,
+        sample_rate=44100,
+        window_ms=WINDOW_MS,
+        n_mfcc=MFCC_N_MFCC,
+        stft_window_ms=WINDOW_MS,
+        stft_overlap_ratio=SPECTRO_STFT_OVERLAP_RATIO,
+    )
+
+    _run_extraction_test(
+        context_mfcc,
+        WINDOW_MS,
+        expected_shape[1],
     )
