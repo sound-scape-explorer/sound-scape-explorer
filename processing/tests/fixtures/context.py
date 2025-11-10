@@ -172,3 +172,123 @@ def context_mfcc(context):
 
     yield ctx
     ctx.storage.close()
+
+
+@pytest.fixture
+def context_ndsi(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.NDSI,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_bi(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.BI,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_adi(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.ADI,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_hf(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.HF,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_ht(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.HT,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_med(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.MED,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_aci(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.ACI,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_leq(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.LEQ,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_leq_percentile(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.LEQ_PERCENTILE,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_leq_diff(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.LEQ_DIFF,
+        WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()

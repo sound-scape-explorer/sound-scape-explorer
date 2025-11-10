@@ -216,3 +216,83 @@ def test_mfcc(context_mfcc):
 
 
 # acoustics
+
+
+def test_ndsi(context_ndsi):
+    _run_extraction_test(
+        context_ndsi,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_bi(context_bi):
+    _run_extraction_test(
+        context_bi,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_adi(context_adi):
+    _run_extraction_test(
+        context_adi,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_hf(context_hf):
+    _run_extraction_test(
+        context_hf,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_ht(context_ht):
+    _run_extraction_test(
+        context_ht,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_med(context_med):
+    _run_extraction_test(
+        context_med,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_aci(context_aci):
+    _run_extraction_test(
+        context_aci,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_leq(context_leq):
+    _run_extraction_test(
+        context_leq,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_leq_percentile(context_leq_percentile):
+    _run_extraction_test(
+        context_leq_percentile,
+        WINDOW_MS,
+        1,
+    )
+
+
+def test_leq_diff(context_leq_diff):
+    _run_extraction_test(
+        context_leq_diff,
+        WINDOW_MS,
+        1,
+    )
