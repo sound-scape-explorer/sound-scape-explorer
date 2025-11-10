@@ -7,6 +7,7 @@ from processing.managers.ExtractionManager import ExtractionManager
 from processing.repositories.ExtractionRepository import ExtractionRepository
 
 _expected_data_length = 60 / (BIRDNET_WINDOW_MS / 1000)
+_expected_embeddings_dimensions = 1024
 
 
 def test_vggish(context_birdnet):
@@ -27,7 +28,10 @@ def test_vggish(context_birdnet):
             )
 
             # embeddings have the correct shape
-            assert_shape(extracted.embeddings, (_expected_data_length, 1024))
+            assert_shape(
+                extracted.embeddings,
+                (_expected_data_length, _expected_embeddings_dimensions),
+            )
 
             # embeddings have valid data
             assert not np.all(

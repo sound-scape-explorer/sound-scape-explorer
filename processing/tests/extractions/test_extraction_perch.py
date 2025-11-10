@@ -7,6 +7,7 @@ from processing.managers.ExtractionManager import ExtractionManager
 from processing.repositories.ExtractionRepository import ExtractionRepository
 
 _expected_data_length = 60 / (PERCH_WINDOW_MS / 1000)
+_expected_embeddings_dimensions = 1280
 
 
 def test_vggish(context_perch):
@@ -27,7 +28,10 @@ def test_vggish(context_perch):
             )
 
             # embeddings have the correct shape
-            assert_shape(extracted.embeddings, (_expected_data_length, 1280))
+            assert_shape(
+                extracted.embeddings,
+                (_expected_data_length, _expected_embeddings_dimensions),
+            )
 
             # embeddings have valid data
             assert not np.all(
