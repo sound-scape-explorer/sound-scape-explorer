@@ -1,7 +1,12 @@
 import pytest
 
 from processing.config.ExtractorConfig import ExtractorConfig
-from processing.constants import BIRDNET_WINDOW_MS, VGGISH_WINDOW_MS, PERCH_WINDOW_MS
+from processing.constants import (
+    BIRDNET_WINDOW_MS,
+    VGGISH_WINDOW_MS,
+    PERCH_WINDOW_MS,
+    SURFPERCH_WINDOW_MS,
+)
 from processing.context import Context
 from processing.dtos import ExtractorDto
 from processing.enums import ExtractorImpl
@@ -15,15 +20,18 @@ def context(config_path):
     ctx.storage.close()
 
 
-@pytest.fixture
-def context_vggish(context):
+def _create_unique_extractor_context(
+    context: Context,
+    impl: ExtractorImpl,
+    window: int,
+):
     context.storage.close()
-    impl = ExtractorImpl.VGGISH
 
     new_storage_path = context.config.settings.storage_path.replace(
         ".h5",
         f".test.{impl.name}.h5",
     )
+
     context.config.settings.storage_path = new_storage_path
     context.storage = Storage(new_storage_path)
 
@@ -32,71 +40,60 @@ def context_vggish(context):
             index=0,
             name=impl.value,
             impl=impl,
-            window=VGGISH_WINDOW_MS,
-            hop=VGGISH_WINDOW_MS,
+            window=window,
+            hop=window,
         ),
     )
 
     extraction = context.config.extractions[0]
     extraction.extractors = [new_extractor]
     context.config.extractions = [extraction]
-    yield context
-    context.storage.close()
+    return context
+
+
+@pytest.fixture
+def context_vggish(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.VGGISH,
+        VGGISH_WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
 
 
 @pytest.fixture
 def context_birdnet(context):
-    context.storage.close()
-    impl = ExtractorImpl.BIRDNET
-
-    new_storage_path = context.config.settings.storage_path.replace(
-        ".h5",
-        f".test.{impl.name}.h5",
-    )
-    context.config.settings.storage_path = new_storage_path
-    context.storage = Storage(new_storage_path)
-
-    new_extractor = ExtractorConfig.from_dto(
-        ExtractorDto(
-            index=0,
-            name=impl.value,
-            impl=impl,
-            window=BIRDNET_WINDOW_MS,
-            hop=BIRDNET_WINDOW_MS,
-        ),
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.BIRDNET,
+        BIRDNET_WINDOW_MS,
     )
 
-    extraction = context.config.extractions[0]
-    extraction.extractors = [new_extractor]
-    context.config.extractions = [extraction]
-    yield context
-    context.storage.close()
+    yield ctx
+    ctx.storage.close()
 
 
 @pytest.fixture
 def context_perch(context):
-    context.storage.close()
-    impl = ExtractorImpl.PERCH
-
-    new_storage_path = context.config.settings.storage_path.replace(
-        ".h5",
-        f".test.{impl.name}.h5",
-    )
-    context.config.settings.storage_path = new_storage_path
-    context.storage = Storage(new_storage_path)
-
-    new_extractor = ExtractorConfig.from_dto(
-        ExtractorDto(
-            index=0,
-            name=impl.value,
-            impl=impl,
-            window=PERCH_WINDOW_MS,
-            hop=PERCH_WINDOW_MS,
-        ),
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.PERCH,
+        PERCH_WINDOW_MS,
     )
 
-    extraction = context.config.extractions[0]
-    extraction.extractors = [new_extractor]
-    context.config.extractions = [extraction]
-    yield context
-    context.storage.close()
+    yield ctx
+    ctx.storage.close()
+
+
+@pytest.fixture
+def context_surfperch(context):
+    ctx = _create_unique_extractor_context(
+        context,
+        ExtractorImpl.SURF_PERCH,
+        SURFPERCH_WINDOW_MS,
+    )
+
+    yield ctx
+    ctx.storage.close()
