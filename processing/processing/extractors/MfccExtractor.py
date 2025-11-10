@@ -53,9 +53,6 @@ class MfccExtractor(Extractor):
         stft_hop_samples = int(stft_window_samples * (1 - self.stft_overlap_ratio))
         n_fft = stft_window_samples + 1
 
-        window_samples = int(self.window_ms / 1000 * sample_rate)
-        stft_ratio = int(stft_window_samples / stft_hop_samples)
-        frames_per_block = int((window_samples / stft_window_samples) * stft_ratio)
         expected_shape = predict_mfcc_shape(
             audio_duration_seconds=len(samples) / sample_rate,
             window_ms=self.window_ms,
