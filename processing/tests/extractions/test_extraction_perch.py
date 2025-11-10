@@ -27,7 +27,7 @@ def test_vggish(context_perch):
             )
 
             # embeddings have the correct shape
-            assert_shape(extracted.embeddings, (_expected_data_length, 1024))
+            assert_shape(extracted.embeddings, (_expected_data_length, 1280))
 
             # embeddings have valid data
             assert not np.all(
