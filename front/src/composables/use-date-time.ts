@@ -1,6 +1,6 @@
 import {DATE_FORMAT as DATE_FORMAT_NEW} from '@shared/constants';
 import {addHours, format} from 'date-fns';
-import {formatInTimeZone, zonedTimeToUtc} from 'date-fns-tz';
+import {formatInTimeZone, fromZonedTime} from 'date-fns-tz';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useTimezone} from 'src/composables/use-timezone';
 
@@ -16,7 +16,7 @@ export function useDateTime() {
     let date: Date = new Date(localString);
 
     if (tz.value !== null) {
-      date = zonedTimeToUtc(localString, tz.value);
+      date = fromZonedTime(localString, tz.value);
     }
 
     date = applyShift(date);
