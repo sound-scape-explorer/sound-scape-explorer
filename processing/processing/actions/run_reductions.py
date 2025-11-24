@@ -1,4 +1,3 @@
-from rich import print
 from rich.progress import track
 
 from processing.context import Context
@@ -18,7 +17,7 @@ def run_reductions(context: Context):
     for extraction in context.config.extractions:
         for band in extraction.bands:
             for integration in extraction.integrations:
-                print(
+                Console.print(
                     f"Extraction: [b]#{extraction.index} {extraction.name}[/b]."
                     f" Band: [b]#{band.index} {band.name}[/b]."
                     f" Integration: [b]#{integration.index} {integration.name}[/b]."
