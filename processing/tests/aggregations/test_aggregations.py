@@ -2,6 +2,7 @@ import numpy as np
 
 from processing.actions.run_aggregations import run_aggregations
 from processing.context import Context
+from processing.enums import ExtractorImpl
 from processing.managers.AggregationManager import AggregationManager
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.services.SiteService import SiteService
@@ -51,87 +52,107 @@ def _run(context: Context):
 # neural
 
 
-def test_vggish(context_vggish):
-    _run(context_vggish)
+def test_vggish(context_factory):
+    ctx = context_factory(ExtractorImpl.VGGISH)
+    _run(ctx)
 
 
-def test_birdnet(context_birdnet):
-    _run(context_birdnet)
+def test_birdnet(context_factory):
+    ctx = context_factory(ExtractorImpl.BIRDNET)
+    _run(ctx)
 
 
-def test_perch(context_perch):
-    _run(context_perch)
+def test_perch(context_factory):
+    ctx = context_factory(ExtractorImpl.PERCH)
+    _run(ctx)
 
 
-def test_surf_perch(context_surf_perch):
-    _run(context_surf_perch)
+def test_surf_perch(context_factory):
+    ctx = context_factory(ExtractorImpl.SURF_PERCH)
+    _run(ctx)
 
 
-def test_yamnet(context_yamnet):
-    _run(context_yamnet)
+def test_yamnet(context_factory):
+    ctx = context_factory(ExtractorImpl.YAMNET)
+    _run(ctx)
 
 
-def test_music_class(context_music_class):
-    _run(context_music_class)
+def test_music_class(context_factory):
+    ctx = context_factory(ExtractorImpl.MUSIC_CLASS)
+    _run(ctx)
 
 
 # low level
 
 
-def test_spectrum(context_spectrum):
-    _run(context_spectrum)
+def test_spectrum(context_factory):
+    ctx = context_factory(ExtractorImpl.SPECTRUM)
+    _run(ctx)
 
 
-def test_spectrogram(context_spectrogram):
-    _run(context_spectrogram)
+def test_spectrogram(context_factory):
+    ctx = context_factory(ExtractorImpl.SPECTROGRAM)
+    _run(ctx)
 
 
-def test_mps(context_mps):
-    _run(context_mps)
+def test_mps(context_factory):
+    ctx = context_factory(ExtractorImpl.MPS)
+    _run(ctx)
 
 
-def test_mfcc(context_mfcc):
-    _run(context_mfcc)
+def test_mfcc(context_factory):
+    ctx = context_factory(ExtractorImpl.MFCC)
+    _run(ctx)
 
 
 # acoustics
 
 
-def test_ndsi(context_ndsi):
-    _run(context_ndsi)
+def test_ndsi(context_factory):
+    ctx = context_factory(ExtractorImpl.NDSI)
+    _run(ctx)
 
 
-def test_bi(context_bi):
-    _run(context_bi)
+def test_bi(context_factory):
+    ctx = context_factory(ExtractorImpl.BI)
+    _run(ctx)
 
 
-def test_adi(context_adi):
-    _run(context_adi)
+def test_adi(context_factory):
+    ctx = context_factory(ExtractorImpl.ADI)
+    _run(ctx)
 
 
-def test_hf(context_hf):
-    _run(context_hf)
+def test_hf(context_factory):
+    ctx = context_factory(ExtractorImpl.HF)
+    _run(ctx)
 
 
-def test_ht(context_ht):
-    _run(context_ht)
+def test_ht(context_factory):
+    ctx = context_factory(ExtractorImpl.HT)
+    _run(ctx)
 
 
-def test_med(context_med):
-    _run(context_med)
+def test_med(context_factory):
+    ctx = context_factory(ExtractorImpl.MED)
+    _run(ctx)
 
 
-def test_aci(context_aci):
-    _run(context_aci)
+def test_aci(context_factory):
+    ctx = context_factory(ExtractorImpl.ACI)
+    _run(ctx)
 
 
-def test_leq(context_leq):
-    _run(context_leq)
+def test_leq(context_factory):
+    ctx = context_factory(ExtractorImpl.LEQ)
+    _run(ctx)
 
 
-def test_leq_percentile(context_leq_percentile):
-    _run(context_leq_percentile)
+def test_leq_percentile(context_factory):
+    ctx = context_factory(ExtractorImpl.LEQ_PERCENTILE)
+    _run(ctx)
 
 
-def test_leq_diff(context_leq_diff):
-    _run(context_leq_diff)
+def test_leq_diff(context_factory):
+    ctx = context_factory(ExtractorImpl.LEQ_DIFF)
+    _run(ctx)

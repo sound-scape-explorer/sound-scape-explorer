@@ -1,5 +1,6 @@
 import numpy as np
 
+from fixtures.context import context_factory
 from processing.actions.run_extractions import run_extractions
 from processing.constants import (
     VGGISH_WINDOW_MS,
@@ -19,6 +20,7 @@ from processing.constants import (
     SPECTRO_STFT_OVERLAP_RATIO,
 )
 from processing.context import Context
+from processing.enums import ExtractorImpl
 from processing.lib.shapes import assert_shape
 from processing.managers.ExtractionManager import ExtractionManager
 from processing.repositories.ExtractionRepository import ExtractionRepository
@@ -109,74 +111,52 @@ def _run_extraction_test(
 # neural
 
 
-def test_vggish(context_vggish):
-    _run_extraction_test(
-        context_vggish,
-        VGGISH_WINDOW_MS,
-        128,
-    )
+def test_vggish(context_factory):
+    ctx = context_factory(ExtractorImpl.VGGISH)
+    _run_extraction_test(ctx, VGGISH_WINDOW_MS, 128)
 
 
-def test_birdnet(context_birdnet):
-    _run_extraction_test(
-        context_birdnet,
-        BIRDNET_WINDOW_MS,
-        1024,
-    )
+def test_birdnet(context_factory):
+    ctx = context_factory(ExtractorImpl.BIRDNET)
+    _run_extraction_test(ctx, BIRDNET_WINDOW_MS, 1024)
 
 
-def test_perch(context_perch):
-    _run_extraction_test(
-        context_perch,
-        PERCH_WINDOW_MS,
-        1280,
-    )
+def test_perch(context_factory):
+    ctx = context_factory(ExtractorImpl.PERCH)
+    _run_extraction_test(ctx, PERCH_WINDOW_MS, 1280)
 
 
-def test_surf_perch(context_surf_perch):
-    _run_extraction_test(
-        context_surf_perch,
-        SURF_PERCH_WINDOW_MS,
-        1280,
-    )
+def test_surf_perch(context_factory):
+    ctx = context_factory(ExtractorImpl.SURF_PERCH)
+    _run_extraction_test(ctx, SURF_PERCH_WINDOW_MS, 1280)
 
 
-def test_yamnet(context_yamnet):
-    _run_extraction_test(
-        context_yamnet,
-        YAMNET_WINDOW_MS,
-        1024,
-    )
+def test_yamnet(context_factory):
+    ctx = context_factory(ExtractorImpl.YAMNET)
+    _run_extraction_test(ctx, YAMNET_WINDOW_MS, 1024)
 
 
-def test_music_class(context_music_class):
-    _run_extraction_test(
-        context_music_class,
-        MUSIC_CLASS_WINDOW_MS,
-        960,
-    )
+def test_music_class(context_factory):
+    ctx = context_factory(ExtractorImpl.MUSIC_CLASS)
+    _run_extraction_test(ctx, MUSIC_CLASS_WINDOW_MS, 960)
 
 
 # low level
 
 
-def test_spectrum(context_spectrum):
-    _run_extraction_test(
-        context_spectrum,
-        WINDOW_MS,
-        SPECTRO_N_BANDS,
-    )
+def test_spectrum(context_factory):
+    ctx = context_factory(ExtractorImpl.SPECTRUM)
+    _run_extraction_test(ctx, WINDOW_MS, SPECTRO_N_BANDS)
 
 
-def test_spectrogram(context_spectrogram):
-    _run_extraction_test(
-        context_spectrogram,
-        WINDOW_MS,
-        SPECTRO_N_BANDS,
-    )
+def test_spectrogram(context_factory):
+    ctx = context_factory(ExtractorImpl.SPECTROGRAM)
+    _run_extraction_test(ctx, WINDOW_MS, SPECTRO_N_BANDS)
 
 
-def test_mps(context_mps):
+def test_mps(context_factory):
+    ctx = context_factory(ExtractorImpl.MPS)
+
     expected_shape = predict_mps_shape(
         audio_duration_sec=60,
         sample_rate=44100,
@@ -189,14 +169,12 @@ def test_mps(context_mps):
         max_modulation_freq=100,
     )
 
-    _run_extraction_test(
-        context_mps,
-        WINDOW_MS,
-        expected_shape[1],
-    )
+    _run_extraction_test(ctx, WINDOW_MS, expected_shape[1])
 
 
-def test_mfcc(context_mfcc):
+def test_mfcc(context_factory):
+    ctx = context_factory(ExtractorImpl.MFCC)
+
     expected_shape = predict_mfcc_shape(
         audio_duration_seconds=60,
         sample_rate=44100,
@@ -206,91 +184,57 @@ def test_mfcc(context_mfcc):
         stft_overlap_ratio=SPECTRO_STFT_OVERLAP_RATIO,
     )
 
-    _run_extraction_test(
-        context_mfcc,
-        WINDOW_MS,
-        expected_shape[1],
-    )
+    _run_extraction_test(ctx, WINDOW_MS, expected_shape[1])
 
 
 # acoustics
 
 
-def test_ndsi(context_ndsi):
-    _run_extraction_test(
-        context_ndsi,
-        WINDOW_MS,
-        1,
-    )
+def test_ndsi(context_factory):
+    ctx = context_factory(ExtractorImpl.NDSI)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_bi(context_bi):
-    _run_extraction_test(
-        context_bi,
-        WINDOW_MS,
-        1,
-    )
+def test_bi(context_factory):
+    ctx = context_factory(ExtractorImpl.BI)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_adi(context_adi):
-    _run_extraction_test(
-        context_adi,
-        WINDOW_MS,
-        1,
-    )
+def test_adi(context_factory):
+    ctx = context_factory(ExtractorImpl.ADI)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_hf(context_hf):
-    _run_extraction_test(
-        context_hf,
-        WINDOW_MS,
-        1,
-    )
+def test_hf(context_factory):
+    ctx = context_factory(ExtractorImpl.HF)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_ht(context_ht):
-    _run_extraction_test(
-        context_ht,
-        WINDOW_MS,
-        1,
-    )
+def test_ht(context_factory):
+    ctx = context_factory(ExtractorImpl.HT)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_med(context_med):
-    _run_extraction_test(
-        context_med,
-        WINDOW_MS,
-        1,
-    )
+def test_med(context_factory):
+    ctx = context_factory(ExtractorImpl.MED)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_aci(context_aci):
-    _run_extraction_test(
-        context_aci,
-        WINDOW_MS,
-        1,
-    )
+def test_aci(context_factory):
+    ctx = context_factory(ExtractorImpl.ACI)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_leq(context_leq):
-    _run_extraction_test(
-        context_leq,
-        WINDOW_MS,
-        1,
-    )
+def test_leq(context_factory):
+    ctx = context_factory(ExtractorImpl.LEQ)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_leq_percentile(context_leq_percentile):
-    _run_extraction_test(
-        context_leq_percentile,
-        WINDOW_MS,
-        1,
-    )
+def test_leq_percentile(context_factory):
+    ctx = context_factory(ExtractorImpl.LEQ_PERCENTILE)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
 
 
-def test_leq_diff(context_leq_diff):
-    _run_extraction_test(
-        context_leq_diff,
-        WINDOW_MS,
-        1,
-    )
+def test_leq_diff(context_factory):
+    ctx = context_factory(ExtractorImpl.LEQ_DIFF)
+    _run_extraction_test(ctx, WINDOW_MS, 1)
