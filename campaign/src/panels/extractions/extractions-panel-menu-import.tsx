@@ -37,7 +37,7 @@ export function ExtractionsPanelMenuImport() {
 
       const extractors: string[] = [];
       for (const extractor of extraction.extractors) {
-        extractors.push(extractor.name);
+        extractors.push(extractor.impl);
       }
 
       payload += extractors.join(', ');
@@ -63,10 +63,16 @@ export function ExtractionsPanelMenuImport() {
     );
   }, []);
 
-  const handleSubmit = () => {
-    importExtractions(extractionsToAdd);
+  const close = () => {
     setIsOpen(false);
+    setExtractionsToAdd([]);
+    setExtractions([]);
   };
+
+  const handleSubmit = useCallback(() => {
+    importExtractions(extractionsToAdd);
+    close();
+  }, [extractionsToAdd, importExtractions]);
 
   const handleFileInputChange = async (e: FormEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
