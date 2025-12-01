@@ -1,5 +1,4 @@
 import {
-  SMOOTHING_WINDOW_CUSTOM,
   SMOOTHING_WINDOW_PRESETS,
   type SmoothingWindowPreset,
   SmoothingWindowPresets,
@@ -98,6 +97,7 @@ export function useExtractionState() {
           return {
             ...extraction,
             _id: generateId(),
+            index: extractions.length + extraction.index,
             trajectories: [],
           };
         },
@@ -105,7 +105,7 @@ export function useExtractionState() {
 
       setExtractions((prev) => [...prev, ...newExtractionConfigs]);
     },
-    [setExtractions],
+    [setExtractions, extractions],
   );
 
   const deleteExtraction = useCallback(
