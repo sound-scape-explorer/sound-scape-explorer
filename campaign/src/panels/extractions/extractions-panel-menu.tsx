@@ -1,5 +1,6 @@
 import {Button, Classes, H5, Intent, Popover, Text} from '@blueprintjs/core';
 import clsx from 'clsx';
+import {ExtractionsPanelMenuImport} from 'src/panels/extractions/extractions-panel-menu-import.tsx';
 import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 
 import styles from './extractions-panel-menu.module.scss';
@@ -12,7 +13,6 @@ export function ExtractionsPanelMenu() {
     deleteExtraction,
     duplicateExtraction,
     moveExtraction,
-    importJson,
   } = useExtractionState();
 
   return (
@@ -87,13 +87,7 @@ export function ExtractionsPanelMenu() {
         </Button>
       </Popover>
 
-      <Button
-        className="flex grow"
-        onClick={importJson}
-        intent={Intent.WARNING}
-      >
-        Import
-      </Button>
+      <ExtractionsPanelMenuImport />
     </div>
   );
 }

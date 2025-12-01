@@ -1,4 +1,5 @@
 import {
+  SMOOTHING_WINDOW_CUSTOM,
   SMOOTHING_WINDOW_PRESETS,
   type SmoothingWindowPreset,
   SmoothingWindowPresets,
@@ -88,6 +89,23 @@ export function useExtractionState() {
       setCurrentId(extraction._id);
     },
     [setExtractions, createExtractorWithDefaults, setCurrentId],
+  );
+
+  const importExtractions = useCallback(
+    (newExtractions: ExtractionDto[]) => {
+      const newExtractionConfigs: ExtractionConfig[] = newExtractions.map(
+        (extraction) => {
+          return {
+            ...extraction,
+            _id: generateId(),
+            trajectories: [],
+          };
+        },
+      );
+
+      setExtractions((prev) => [...prev, ...newExtractionConfigs]);
+    },
+    [setExtractions],
   );
 
   const deleteExtraction = useCallback(
@@ -209,14 +227,10 @@ export function useExtractionState() {
     [setExtractions],
   );
 
-  const importJson = useCallback(() => {
-    // TODO: add import
-    console.log('import json');
-  }, []);
-
   return {
     extractions,
     loadExtractions,
+    importExtractions,
     currentId,
     setCurrentId,
     addExtraction,
@@ -225,6 +239,5 @@ export function useExtractionState() {
     moveExtraction,
     updateExtraction,
     updateName,
-    importJson,
   };
 }
