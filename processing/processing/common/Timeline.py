@@ -12,7 +12,6 @@ from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ExtractionManager import ExtractedByExtractorIndex
 from processing.repositories.ExtractionRepository import ExtractionData
 
-
 _ExtractorIndex = int
 _SlicesDict = dict[_ExtractorIndex, list[TimelineSlice]]
 
@@ -116,9 +115,9 @@ class Timeline:
 
         config_origin = self.context.config.settings.timeline_origin
         start_position = max(config_origin, self._earliest_timestamp)
-        aligned_start = (
-            (start_position + integration_ms - 1) // integration_ms
-        ) * integration_ms
+
+        # Floor alignment: include partial first window rather than skipping it
+        aligned_start = (start_position // integration_ms) * integration_ms
 
         return aligned_start, self._latest_timestamp
 
