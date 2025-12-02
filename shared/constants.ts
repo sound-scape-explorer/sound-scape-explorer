@@ -5,7 +5,9 @@ import {
   StftWindowType,
 } from '@shared/enums';
 
+export const SITE_AS_TAG_NAME = '__SITE';
 export const SITE_DEFAULT = '__ALL';
+
 export const JSON_TYPE = 'application/json';
 export const XLSX_TYPE =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
