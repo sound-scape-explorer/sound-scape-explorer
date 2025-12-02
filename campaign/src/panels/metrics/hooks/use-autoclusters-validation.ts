@@ -19,14 +19,46 @@ export function useAutoclustersValidation() {
     return autocluster.epsilon >= 0;
   }, []);
 
-  const validate = useCallback((extraction: ExtractionDto) => {
-    const v = createDefaultValidation();
-    const l = extraction.autoclusters.length;
-    v.intent = l > 0 ? 'success' : 'primary';
-    v.content = `${l} ${l > 1 ? 'autoclusters' : 'autocluster'}`;
+  const validate = useCallback(
+    (extraction: ExtractionDto) => {
+      const v = createDefaultValidation();
+      const l = extraction.autoclusters.length;
 
-    return v;
-  }, []);
+      v.intent = l > 0 ? 'success' : 'primary';
+      v.content = `${l} ${l > 1 ? 'autoclusters' : 'autocluster'}`;
+
+      for (const autocluster of extraction.autoclusters) {
+        if (!isMinClusterSizeValid(autocluster)) {
+          v.intent = 'danger';
+          v.content = 'invalid min cluster sizes';
+          break;
+        }
+
+        if (!isMinSamplesValid(autocluster)) {
+          v.intent = 'danger';
+          v.content = 'invalid min samples';
+          break;
+        }
+
+        if (!isAlphaValid(autocluster)) {
+          v.intent = 'danger';
+          v.content = 'invalid alphas';
+          break;
+        }
+
+        if (!isEpsilonValid(autocluster)) {
+          v.intent = 'danger';
+          v.content = 'invalid epsilons';
+          break;
+        }
+
+        v.intent = 'success';
+      }
+
+      return v;
+    },
+    [isAlphaValid, isEpsilonValid, isMinClusterSizeValid, isMinSamplesValid],
+  );
 
   return {
     validate,
