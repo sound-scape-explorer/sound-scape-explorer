@@ -10,11 +10,12 @@ from processing.enums import (
 )
 
 
-@dataclass
+@dataclass(frozen=True)
 class ExtractorConfig:
     index: int
     name: str
     impl: ExtractorImpl
+    include_in_aggregation: bool
 
     window: int
     hop: int
@@ -58,6 +59,7 @@ class ExtractorConfig:
             index=dto.index,
             name=dto.name,
             impl=dto.impl,
+            include_in_aggregation=dto.include_in_aggregation,
             window=dto.window,
             hop=dto.hop,
             spectro_n_bands=dto.spectro_n_bands,

@@ -5,6 +5,7 @@ import {
   BIRDNET_WINDOW_MS,
   HOP_MS_DEFAULT,
   HT_FRAME_SIZE,
+  INCLUDE_IN_AGGREGATION_DEFAULT,
   LEQ_DIFF_PERCENTILE_A,
   LEQ_DIFF_PERCENTILE_B,
   LEQ_PERCENTILE_VALUE,
@@ -43,6 +44,8 @@ export function useExtractorDefaults() {
       impl: ex.impl,
       window: ex.window ?? WINDOW_MS_DEFAULT,
       hop: ex.hop ?? HOP_MS_DEFAULT,
+      include_in_aggregation:
+        ex.include_in_aggregation ?? INCLUDE_IN_AGGREGATION_DEFAULT,
     };
 
     switch (ex.impl) {

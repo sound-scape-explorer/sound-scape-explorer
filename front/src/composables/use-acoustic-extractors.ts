@@ -1,6 +1,6 @@
 import {ExtractorDto} from '@shared/dtos';
 import {ExtractorType} from '@shared/enums';
-import {extractorTypeByImpl} from 'src/common/extractor-type-by-impl';
+import {extractorTypeByImpl} from '@shared/extractor-type-by-impl';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {SLUG_DELIMITER} from 'src/constants';
 import {ref} from 'vue';

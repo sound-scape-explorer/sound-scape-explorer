@@ -47,6 +47,7 @@ export const AUTOCLUSTER_EPSILON_DEFAULT = 0.1;
 // extractor defaults
 export const WINDOW_MS_DEFAULT = 1000;
 export const HOP_MS_DEFAULT = 1000;
+export const INCLUDE_IN_AGGREGATION_DEFAULT = true;
 export const BIRDNET_WINDOW_MS = 3000;
 export const PERCH_WINDOW_MS = 5000;
 export const SURFPERCH_WINDOW_MS = 5000;

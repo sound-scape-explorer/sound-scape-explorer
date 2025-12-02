@@ -1,15 +1,15 @@
 @use "@blueprintjs/core/lib/scss/variables";
 
 .row {
-  grid-template-columns: 6em 3em 1fr repeat(3, 1fr) 3em;
+  grid-template-columns: 6em 3em 1fr repeat(3, 1fr) 3em 3em;
 }
 
 .additionalParamsContainer {
-  display: none;
-  justify-content: flex-start !important;
   background: variables.$light-gray3;
   box-shadow: none !important;
+  display: none;
   grid-column: 1 / -1;
+  justify-content: flex-start !important;
 
   & > div {
     width: 100%;
@@ -23,11 +23,11 @@
 
 .additionalParamsContent {
   display: grid;
-  width: 100% !important;
-  padding-top: 0.5em !important;
-  padding-bottom: 0.5em !important;
-  place-items: center;
   gap: 0.5em;
+  padding-bottom: 0.5em !important;
+  padding-top: 0.5em !important;
+  place-items: center;
+  width: 100% !important;
 }
 
 .additionalParamsSpectrum {
@@ -68,4 +68,22 @@
 
 .additionalParamsLeqDiff {
   grid-template-columns: repeat(3, 1fr);
+}
+
+.checkboxContainer {
+  & > label {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    & > span {
+      margin: 0;
+      padding: 0;
+      transform: translate3d(30%, 0, 0);
+    }
+  }
 }

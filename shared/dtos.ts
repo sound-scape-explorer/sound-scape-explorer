@@ -1,3 +1,4 @@
+import {INCLUDE_IN_AGGREGATION_DEFAULT} from '@shared/constants';
 import {z} from 'zod';
 
 import {
@@ -61,6 +62,8 @@ export const ExtractorDto = z.object({
   index: z.number().int(),
   name: z.string(), // unique
   impl: ExtractorImpl,
+  include_in_aggregation: z.boolean().default(INCLUDE_IN_AGGREGATION_DEFAULT),
+
   window: z.number().int(), // ms
   hop: z.number().int(), // ms
 

@@ -123,7 +123,6 @@ export function useTableState() {
     [getColKey, findColumnByKey],
   );
 
-  // claude, moving works great from right to left but not from left to right. rewrite this method
   const reorder = useCallback(
     (oldIndex: number, newIndex: number, count: number) => {
       if (

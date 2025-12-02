@@ -1,8 +1,9 @@
-import {Button, Section, SectionCard} from '@blueprintjs/core';
+import {Button, Checkbox, Section, SectionCard} from '@blueprintjs/core';
 import {ArrowDown, ArrowUp, Cog, Cross} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
-import {ExtractorImpl} from '@shared/enums';
+import {ExtractorImpl, ExtractorType} from '@shared/enums';
+import {extractorTypeByImpl} from '@shared/extractor-type-by-impl';
 import clsx from 'clsx';
 import {useEffect, useMemo, useState} from 'react';
 import {useTheme} from 'src/hooks/use-theme';
@@ -62,10 +63,12 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
     updateImpl,
     updateWindow,
     updateHop,
+    updateIncludeInAggregation,
   } = useExtractorState(extraction);
   const {isNameValid, isWindowValid, isHopValid} = useExtractorValidation();
   const {hasTemplate} = useExtractionTemplates(extraction);
   const {isDark} = useTheme();
+  const [open, setOpen] = useState(false);
 
   const isLocked = useMemo(
     () => EXTRACTORS_LOCKED.includes(extractor.impl),
@@ -77,7 +80,10 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
     [extractor.impl],
   );
 
-  const [open, setOpen] = useState(false);
+  const isAcousticExtractor = useMemo(
+    () => extractorTypeByImpl[extractor.impl] === ExtractorType.enum.ACOUSTICS,
+    [extractor.impl],
+  );
 
   useEffect(() => {
     if (!hasAdditionalParams && open) {
@@ -137,6 +143,16 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
         intent={isHopValid(extractor) ? 'success' : 'danger'}
         disabled={hasTemplate}
       />
+
+      <div className={styles.checkboxContainer}>
+        <Checkbox
+          checked={extractor.include_in_aggregation}
+          disabled={!isAcousticExtractor}
+          onChange={(e) =>
+            updateIncludeInAggregation(extractor, e.currentTarget.checked)
+          }
+        />
+      </div>
 
       <Button
         size="small"

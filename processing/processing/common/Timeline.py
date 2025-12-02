@@ -9,7 +9,9 @@ from processing.context import Context
 from processing.interfaces import TimelineSlice, TimelineAggregate
 from processing.lib.console import Console
 from processing.lib.time import convert_timestamp_to_date_string
-from processing.managers.ExtractionManager import ExtractedByExtractorIndex
+from processing.managers.ExtractionManager import (
+    ExtractionResults,
+)
 from processing.repositories.ExtractionRepository import ExtractionData
 
 _ExtractorIndex = int
@@ -62,14 +64,21 @@ class Timeline:
                     f", previous file index: {convert_timestamp_to_date_string(previous.file.timestamp)}"
                 )
 
-    def add(self, extracted_by_extractor_index: ExtractedByExtractorIndex) -> None:
+    def ingest(
+        self,
+        results: ExtractionResults,
+    ) -> None:
         """Add extracted data to the timeline."""
-        for extractor_index, all_extracted in extracted_by_extractor_index.items():
+        for extractor, all_extracted in results.by_extractor.items():
+            if not extractor.include_in_aggregation:
+                print(f"skipping #{extractor.index} {extractor.name}")
+                continue
+
             self._validate_chrono(all_extracted)
 
             for extracted in all_extracted:
                 slices = self._slice(extracted)
-                self.slices[extractor_index].extend(slices)
+                self.slices[extractor.index].extend(slices)
 
                 # Update timestamp boundaries as we add data
                 for slice_data in slices:

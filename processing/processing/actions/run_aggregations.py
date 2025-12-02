@@ -25,13 +25,14 @@ def run_aggregations(context: Context):
         timeline = Timeline(context)
 
         # add the extracted data to the timeline
-        for extracted_by_extractor_index in ExtractionManager.read(
+        results = ExtractionManager.load_results(
             context,
             si.band,
             si.extraction,
             si.site,
-        ):
-            timeline.add(extracted_by_extractor_index)
+        )
+
+        timeline.ingest(results)
 
         # cycle through the integration values
         for integration in si.extraction.integrations:

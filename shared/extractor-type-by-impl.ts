@@ -1,4 +1,4 @@
-import {ExtractorImpl, ExtractorType} from '@shared/enums';
+import {ExtractorImpl, ExtractorType} from './enums';
 
 type ExtractorTypeByImpl = Record<ExtractorImpl, ExtractorType>;
 

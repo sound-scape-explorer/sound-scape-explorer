@@ -80,6 +80,7 @@ class ExtractorDto(BaseModel):
     index: int
     name: str
     impl: ExtractorImpl
+    include_in_aggregation: bool
 
     window: int
     hop: int
