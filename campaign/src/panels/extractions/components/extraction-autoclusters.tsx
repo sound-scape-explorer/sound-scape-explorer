@@ -16,13 +16,13 @@ import styles from 'src/panels/extractions/components/extraction-autoclusters.mo
 import {ExtractionAutoclustersDrawerContent} from 'src/panels/extractions/components/extraction-autoclusters-drawer-content.tsx';
 import {useAutoclusterState} from 'src/panels/extractions/hooks/use-autocluster-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 import {useAutoclustersValidation} from 'src/panels/metrics/hooks/use-autoclusters-validation';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
 import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {NumberInput} from 'src/primitives/number-input.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
-import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 interface Props {
   extraction: ExtractionConfig;
