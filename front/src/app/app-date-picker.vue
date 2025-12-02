@@ -20,7 +20,7 @@ const displayValue = computed(() => {
   const utcDate = new Date(model.value);
 
   const localDateString = utcDate.toLocaleString('en-US', {
-    timeZone: tz.value ?? '',
+    timeZone: tz.value,
   });
   const localDate = new Date(localDateString);
 
@@ -37,7 +37,7 @@ const handleUpdate = (newValue: number | null) => {
 
   // Interpret the selected timestamp as being in the target timezone
   const localDateString = localDate.toLocaleString('en-US', {
-    timeZone: tz.value ?? '',
+    timeZone: tz.value,
   });
   const interpretedLocal = new Date(localDateString);
 
