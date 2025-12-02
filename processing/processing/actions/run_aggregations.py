@@ -18,11 +18,13 @@ def run_aggregations(context: Context):
     sites = SiteService.get_sites(context)
     extractions = context.config.extractions
 
+    # cycle through sites
     for si in SiteManager.iterate(sites, extractions):
         Console.print_site_iteration(si)
 
         timeline = Timeline(context)
 
+        # add the extracted data to the timeline
         for extracted_by_extractor_index in ExtractionManager.read(
             context,
             si.band,
@@ -31,6 +33,7 @@ def run_aggregations(context: Context):
         ):
             timeline.add(extracted_by_extractor_index)
 
+        # cycle through the integration values
         for integration in si.extraction.integrations:
             is_valid = Validate.extraction_vs_integration(
                 si.extraction,
