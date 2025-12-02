@@ -1,3 +1,4 @@
+import {SITE_AS_TAG_NAME} from '@shared/constants.ts';
 import {atom, useAtom} from 'jotai';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useNotify} from 'src/hooks/use-notify';
@@ -45,10 +46,12 @@ export function useFilesTagging() {
   }, [getColNames, selected, setSelected]);
 
   const names = useMemo(
-    () =>
-      state.columns
+    () => [
+      SITE_AS_TAG_NAME,
+      ...state.columns
         .filter((c) => c.type === 'user')
         .map((c) => removePrefixFromTagName(c.name)),
+    ],
     [state.columns],
   );
 
@@ -59,6 +62,10 @@ export function useFilesTagging() {
 
     const payload: Record<string, string[]> = {};
 
+    // add site as tag
+    payload[SITE_AS_TAG_NAME] = [...new Set(state.rows.col_site)];
+
+    // actual tags
     for (const keyWithPrefix of keysWithPrefix) {
       const name = removePrefixFromTagKey(keyWithPrefix);
       payload[name] = [...new Set(state.rows[keyWithPrefix])];
@@ -69,6 +76,12 @@ export function useFilesTagging() {
 
   const add = useCallback(() => {
     if (addInput === '') {
+      notify('Tag input cannot be empty', 'danger');
+      return;
+    }
+
+    if (addInput === SITE_AS_TAG_NAME) {
+      notify(`Tag input cannot be ${SITE_AS_TAG_NAME}`, 'danger');
       return;
     }
 

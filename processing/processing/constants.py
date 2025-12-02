@@ -10,7 +10,7 @@ STATE_UNDEFINED = "⚪"
 
 MDM_EMPTY = np.stack([[]])
 STRING_DELIMITER = "|||"
-LABEL_PREFIX = "LABEL_"
+SITE_AS_TAG_NAME = "__SITE"
 AUTOCLUSTER_PREFIX = "AUTOCLUSTER_"
 EPSILON_32 = np.finfo(np.float32).eps
 
