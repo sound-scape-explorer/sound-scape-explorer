@@ -10,6 +10,7 @@ import {
   COMPUTATION_STRATEGY_DEFAULT,
   DISPLAY_SEED_DEFAULT,
   HOP_MS_DEFAULT,
+  INCLUDE_IN_AGGREGATION_DEFAULT,
   MEMORY_LIMIT_DEFAULT,
   REDUCER_DIMENSIONS_DEFAULT,
   SAMPLE_RATE_DEFAULT,
@@ -313,6 +314,7 @@ export class XlsxParser {
           impl,
           window: WINDOW_MS_DEFAULT,
           hop: HOP_MS_DEFAULT,
+          include_in_aggregation: INCLUDE_IN_AGGREGATION_DEFAULT,
         };
 
         extractors.push(extractor);
@@ -328,6 +330,7 @@ export class XlsxParser {
           impl,
           window: WINDOW_MS_DEFAULT,
           hop: HOP_MS_DEFAULT,
+          include_in_aggregation: INCLUDE_IN_AGGREGATION_DEFAULT,
         };
 
         extractors.push(extractor);

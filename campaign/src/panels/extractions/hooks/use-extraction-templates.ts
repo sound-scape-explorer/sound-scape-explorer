@@ -1,4 +1,7 @@
-import {VGGISH_WINDOW_MS} from '@shared/constants';
+import {
+  INCLUDE_IN_AGGREGATION_DEFAULT,
+  VGGISH_WINDOW_MS,
+} from '@shared/constants';
 import {
   AutoclusterImpl,
   ExtractorImpl,
@@ -79,6 +82,7 @@ export function useExtractionTemplates(extraction: ExtractionConfig) {
                 impl: ExtractorImpl.enum.VGGISH,
                 window: VGGISH_WINDOW_MS,
                 hop: VGGISH_WINDOW_MS,
+                include_in_aggregation: INCLUDE_IN_AGGREGATION_DEFAULT,
               },
             ],
             reducers: [
