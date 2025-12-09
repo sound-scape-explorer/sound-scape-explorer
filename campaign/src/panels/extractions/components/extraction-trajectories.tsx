@@ -1,4 +1,4 @@
-import {Button, Section, SectionCard} from '@blueprintjs/core';
+import {Button, Section, SectionCard, Tooltip} from '@blueprintjs/core';
 import {
   ArrowDown,
   ArrowUp,
@@ -214,14 +214,16 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
         )}
         {isManual && (
           <>
-            <NumberInput
-              defaultValue={trajectory.smoothingWindow}
-              smallText
-              onBlur={(v) => updateSmoothingWindowCustom(trajectory, v)}
-              intent={
-                isTrajectoryWindowValid(trajectory) ? 'success' : 'danger'
-              }
-            />
+            <Tooltip content="in ms">
+              <NumberInput
+                defaultValue={trajectory.smoothingWindow}
+                smallText
+                onBlur={(v) => updateSmoothingWindowCustom(trajectory, v)}
+                intent={
+                  isTrajectoryWindowValid(trajectory) ? 'success' : 'danger'
+                }
+              />
+            </Tooltip>
             <Button
               icon={<ManuallyEnteredData size={ICON_SIZE} />}
               fill
