@@ -2,18 +2,17 @@ import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-names';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useConfig} from 'src/composables/use-config';
-import {useDate} from 'src/composables/use-date';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useInterval} from 'src/composables/use-interval';
 import {RANGE_CUSTOM} from 'src/constants';
-import {generateUniqueRangeSlug} from 'src/utils/config';
 
 export function useTimelineHandlers() {
   const {config} = useConfig();
   const {start, end, left, right, updateLeft, updateRight} = useTimelineRange();
-  const {name, setCustomName} = useTimelineRangeNames();
+  const {name, setCustomName, rangeToSlug} = useTimelineRangeNames();
   const {currentIndex} = useInterval();
   const {aggregations} = useAggregations();
-  const {convertDateStringToDate} = useDate();
+  const {stringToTimestamp} = useDateTime();
 
   const updateRange = () => {
     if (name.value === RANGE_CUSTOM) {
@@ -25,15 +24,15 @@ export function useTimelineHandlers() {
     }
 
     const range = config.value.ranges.find(
-      (r) => generateUniqueRangeSlug(r) === name.value,
+      (r) => rangeToSlug(r) === name.value,
     );
 
     if (!range) {
       return;
     }
 
-    start.value = convertDateStringToDate(range.start).unix() * 1000;
-    end.value = convertDateStringToDate(range.end).unix() * 1000;
+    start.value = stringToTimestamp(range.start);
+    end.value = stringToTimestamp(range.end);
 
     updateLeft(start.value);
     updateRight(end.value);

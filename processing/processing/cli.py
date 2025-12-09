@@ -1,8 +1,6 @@
-from processing.lib.cuda import disable_cuda
 from processing.lib.logger import init_logger
 
 
-disable_cuda()
 init_logger()
 
 import argparse
@@ -12,12 +10,10 @@ from typing import NamedTuple
 
 from rich import print
 
-from processing.menu import menu
-
 
 class _CliArguments(NamedTuple):
     config_path: str
-    verbose: bool
+    memory_limit: int | None  # MB
 
 
 def _register_python_path():
@@ -28,9 +24,20 @@ def _register_python_path():
         sys.path.append(processing_path)
 
 
-def _prepare():
-    _register_python_path()
+def _set_memory_limit(memory_limit: int):
+    """Limit available RAM for the whole process (for testing/debugging)"""
+    import resource
 
+    limit_bytes = memory_limit * 1024 * 1024
+    resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
+    print(f"[yellow]Memory limit set to {memory_limit}MB[/yellow]")
+
+
+def _prepare(memory_limit: int | None = None):
+    if memory_limit:
+        _set_memory_limit(memory_limit)
+
+    _register_python_path()
     from processing.resources.kaggle import set_kaggle_cache
 
     set_kaggle_cache()
@@ -44,23 +51,44 @@ def _parse_arguments():
         help="Path to configuration file",
     )
 
-    parser.add_argument("-v", "--verbose", action="store_true")
+    parser.add_argument(
+        "-c",
+        "--cpu",
+        help="Disable GPUs and force TensorFlow to use CPU",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "-m",
+        "--memory",
+        type=int,
+        help="Maximum RAM limit in MB (does not limit GPU VRAM)",
+        default=None,
+    )
 
     args = parser.parse_args()
 
-    config_path: str = args.config_path
-    verbose: bool = args.verbose
+    if args.cpu is True:
+        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
     return _CliArguments(
-        config_path=config_path,
-        verbose=verbose,
+        config_path=args.config_path,
+        memory_limit=args.memory,
     )
 
 
 def main():
-    _prepare()
     args = _parse_arguments()
-    menu(args.config_path)
+    _prepare(memory_limit=args.memory_limit)
+
+    try:
+        from processing.menu import menu
+
+        menu(args.config_path)
+    except MemoryError:
+        print("[red]ERROR: Memory limit exceeded![/red]")
+        print(f"[yellow]Try increasing --memory above {args.memory_limit}MB[/yellow]")
+        sys.exit(1)
 
 
 def download():

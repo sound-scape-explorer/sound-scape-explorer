@@ -17,6 +17,12 @@ declare module 'src/common/spectrogram' {
   }
 
   export default class StockSpectrogram extends StockSpectrogramPlugin {
+    frequencyMin: number;
+
+    frequencyMax: number;
+
     static create(params: SpectrogramPluginParams): PluginDefinition;
+
+    public render();
   }
 }

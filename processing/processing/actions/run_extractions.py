@@ -1,3 +1,5 @@
+import gc
+
 from rich.progress import track
 
 from processing.context import Context
@@ -31,6 +33,8 @@ def run_extractions(context: Context):
                 extracted=extracted,
                 band=ei.band,
             )
+            del raw, extracted
+            gc.collect()
 
     Console.print_footer(
         f"Extractions completed",

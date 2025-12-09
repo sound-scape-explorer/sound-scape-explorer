@@ -7,6 +7,20 @@ export function ExtractionExtractorsDrawerContent() {
     <DrawerContent
       content={[
         [
+          'Extractors',
+          <div
+            className="flex column"
+            key={ExtractorImpl.enum.BIRDNET}
+          >
+            {/* TODO: to improve */}
+            <span>agg.</span>
+            <span>
+              Useful to exclude acoustic indicators from the reduced
+              visualisations.
+            </span>
+          </div>,
+        ],
+        [
           ExtractorImpl.enum.BIRDNET,
           <div
             className="flex column"

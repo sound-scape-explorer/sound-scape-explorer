@@ -55,7 +55,10 @@ def _wrap(choice: MenuChoice, context: Context):
 def prompt_menu(context: Context):
     Console.print_menu_legend()
 
-    questions = [
+    # noinspection PyProtectedMember
+    from InquirerPy.utils import InquirerPyQuestions
+
+    questions: InquirerPyQuestions = [
         {
             "type": "list",
             "name": "choices",
@@ -82,6 +85,6 @@ def prompt_menu(context: Context):
         }
     ]
 
-    answers = prompt(questions=questions, vi_mode=True)
+    answers = prompt(questions, vi_mode=True)
     answer: str = str(answers["choices"])
     return answer

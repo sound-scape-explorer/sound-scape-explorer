@@ -3,10 +3,12 @@ import {
   CyclingPeriod,
   useScatterTrajectoryCyclingPeriod,
 } from 'src/components/scatter/use-scatter-trajectory-cycling-period';
+import {useDateTime} from 'src/composables/use-date-time';
 import {type TrajectoryDtoWithData} from 'src/composables/use-trajectories';
 
 export function useScatterTrajectoryColors() {
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
+  const {timestampToDate, getTime} = useDateTime();
 
   /**
    * Calculates colors for trajectory points based on the current cycling period.
@@ -23,8 +25,9 @@ export function useScatterTrajectoryColors() {
     switch (cyclingPeriod.value) {
       case CyclingPeriod.enum.HOUR: {
         getTimePosition = (timestamp: number) => {
-          const date = new Date(timestamp);
-          const relativeHour = date.getHours() + date.getMinutes() / 60;
+          const date = timestampToDate(timestamp);
+          const {hours} = getTime(date);
+          const relativeHour = hours + date.getMinutes() / 60;
           return relativeHour / 24;
         };
         break;
@@ -32,7 +35,7 @@ export function useScatterTrajectoryColors() {
 
       case CyclingPeriod.enum.DAY: {
         getTimePosition = (timestamp: number) => {
-          const date = new Date(timestamp);
+          const date = timestampToDate(timestamp);
           const startOfYear = new Date(date.getFullYear(), 0, 0);
           const diff = timestamp - startOfYear.getTime();
           const dayOfYear = Math.floor(diff / (24 * 60 * 60 * 1000));
@@ -43,7 +46,7 @@ export function useScatterTrajectoryColors() {
 
       case CyclingPeriod.enum.MONTH: {
         getTimePosition = (timestamp: number) => {
-          const date = new Date(timestamp);
+          const date = timestampToDate(timestamp);
           const month = date.getMonth();
           const dayOfMonth = date.getDate();
           const daysInMonth = new Date(

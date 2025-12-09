@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {SectionCard} from '@blueprintjs/core';
 import {
   MPS_N_BANDS,
   MPS_SCALE,

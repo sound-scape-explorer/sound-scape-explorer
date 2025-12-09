@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import BaseModel
+from pydantic_extra_types.timezone_name import TimeZoneName
 
 from processing.constants import (
     NDSI_BAND_BIO,
@@ -54,7 +55,7 @@ class SettingsDto(BaseModel):
     expectedSampleRate: int
     timelineOrigin: str
     audioHost: str
-    timezone: str
+    timezone: TimeZoneName | Literal[""]
     computationStrategy: ComputationStrategy
     computationDimensions: int
     computationIterations: int
@@ -65,20 +66,21 @@ class SettingsDto(BaseModel):
 class BandDto(BaseModel):
     index: int
     name: str
-    low: int
-    high: int
+    low: int  # Hz
+    high: int  # Hz
 
 
 class IntegrationDto(BaseModel):
     index: int
     name: str
-    duration: int
+    duration: int  # ms
 
 
 class ExtractorDto(BaseModel):
     index: int
     name: str
     impl: ExtractorImpl
+    include_in_aggregation: bool
 
     window: int
     hop: int

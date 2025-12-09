@@ -1,5 +1,8 @@
+from typing import NamedTuple
+
 from processing.config.BandConfig import BandConfig
 from processing.config.ExtractionConfig import ExtractionConfig
+from processing.config.ExtractorConfig import ExtractorConfig
 from processing.context import Context
 from processing.factories.ExtractorFactory import ExtractorFactory
 from processing.interfaces import ExtractionIteration
@@ -9,14 +12,19 @@ from processing.repositories.ExtractionRepository import (
 )
 from processing.services.SiteService import SiteWithFiles, SiteService
 
-
 _ExtractorIndex = int
-ExtractedByExtractorIndex = dict[_ExtractorIndex, list[ExtractionData]]
+
+
+class ExtractionResults(NamedTuple):
+    """Extracted data organized by extractor"""
+
+    by_extractor: dict[ExtractorConfig, list[ExtractionData]]
 
 
 class ExtractionManager:
     @staticmethod
     def iterate(context: Context):
+        """iterate bands, extractors in extractions for each site"""
         sites = SiteService.get_sites(context)
         i = 0
 
@@ -38,13 +46,13 @@ class ExtractionManager:
                         i += 1
 
     @staticmethod
-    def read(
+    def load_results(
         context: Context,
         band: BandConfig,
         extraction: ExtractionConfig,
         site: SiteWithFiles,
-    ):
-        extracted_by_extractor_index: ExtractedByExtractorIndex = {}
+    ) -> ExtractionResults:
+        results_by_extractor: dict[ExtractorConfig, list[ExtractionData]] = {}
 
         for extractor in extraction.extractors:
 
@@ -61,6 +69,8 @@ class ExtractionManager:
 
                 all_extracted.append(extracted)
 
-            extracted_by_extractor_index[extractor.index] = all_extracted
+            results_by_extractor[extractor] = all_extracted
 
-        yield extracted_by_extractor_index
+        return ExtractionResults(
+            by_extractor=results_by_extractor,
+        )

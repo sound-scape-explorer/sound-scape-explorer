@@ -1,14 +1,14 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
 import {useAggregations} from 'src/composables/use-aggregations';
-import {useDate} from 'src/composables/use-date';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useExportName} from 'src/composables/use-export-name';
 import {useIntervals} from 'src/composables/use-intervals';
 import {useReductions} from 'src/composables/use-reductions';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelection} from 'src/composables/use-view-selection';
-import {STRING_DELIMITER} from 'src/constants';
+import {ExportType, STRING_DELIMITER} from 'src/constants';
 import {ref} from 'vue';
 
 interface ExportData {
@@ -25,7 +25,7 @@ export function useScatterExport() {
   const {band, integration} = useViewSelection();
   const {allUniques} = useTagUniques();
   const {notify} = useAppNotification();
-  const {convertTimestampToIsoDate} = useDate();
+  const {timestampToString} = useDateTime();
   const {reductions} = useReductions();
   const {aggregations} = useAggregations();
   const {intervals} = useIntervals();
@@ -90,8 +90,8 @@ export function useScatterExport() {
     payload.forEach((data) => {
       csv.createRow();
       csv.addToCurrentRow(data.intervalIndex.toString());
-      csv.addToCurrentRow(convertTimestampToIsoDate(data.start));
-      csv.addToCurrentRow(convertTimestampToIsoDate(data.end));
+      csv.addToCurrentRow(timestampToString(data.start));
+      csv.addToCurrentRow(timestampToString(data.end));
       csv.addToCurrentRow(data.site);
 
       data.tags.forEach((v) => {
@@ -107,7 +107,7 @@ export function useScatterExport() {
       });
     });
 
-    const name = generate('scatter');
+    const name = generate(ExportType.enum.scatter);
     csv.download(name);
     loadingRef.value = false;
   };

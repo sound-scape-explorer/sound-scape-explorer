@@ -4,26 +4,25 @@ const draggablePrefix = '_draggable';
 
 export enum Shortcut {
   _draggableFocus = 'Esc',
-  _draggableCycleNext = 'Tab', // just for doc
-  _draggableCyclePrevious = 'Shift+Tab', // just for doc
+  _draggableCycleRecent = 'Tab', // just for doc
+  _draggableCycleAll = '⇧+Tab', // just for doc
   _draggableClose = 'x',
-  _draggableCloseExceptCurrent = 'X',
+  _draggableCloseExceptCurrent = '⇧ X',
   open = 'o',
   settings = ',',
   help = '?',
   view = 'w',
   colors = 'c',
+  calendar = 'v',
   tags = 't',
   selection = 's',
+  temporal = 'j',
+  heatmaps = 'h',
   audio = 'a',
+  audioPlayPause = ' ',
   details = 'd',
   trajectories = 'y',
-  relativeTrajectories = 'Y',
-  temporal = 'T',
-  histograms = 'j',
-  heatmaps = 'h',
-  calendar = 'v',
-  audioPlayPause = ' ',
+  relativeTrajectories = '⇧ Y',
 }
 
 export interface ShortcutSerialized {
@@ -55,7 +54,7 @@ Object.entries(Shortcut).forEach((entry) => {
   shortcuts.push(shortcut);
 });
 
-shortcuts.sort((a, b) => a.name.localeCompare(b.name));
+// shortcuts.sort((a, b) => a.name.localeCompare(b.name));
 
 export function useKeyboardShortcuts() {
   const getKey = (key: DraggableKey) => Shortcut[key];

@@ -1,6 +1,7 @@
 import {type Data, type PlotType} from 'plotly.js-dist-min';
 import {ScatterFeaturesError} from 'src/common/Errors';
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useScatterDimensions} from 'src/components/scatter/use-scatter-dimensions';
 import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useInterval} from 'src/composables/use-interval';
@@ -21,17 +22,10 @@ export function useScatterEmbeddings() {
   const {filtered} = useScatterGlobalFilter();
   const {currentIndex} = useInterval();
   const {generateHovers} = useScatterHovers();
-
-  const isThreeDimensional = computed<boolean>(() => {
-    if (reductions.value === null) {
-      return false;
-    }
-
-    return reductions.value[0].length === 3;
-  });
+  const {is3d} = useScatterDimensions();
 
   const scatterType = computed<PlotType>(() => {
-    if (isThreeDimensional.value) {
+    if (is3d.value) {
       return 'scatter3d';
     }
 
@@ -52,7 +46,7 @@ export function useScatterEmbeddings() {
 
     const xs: number[] = new Array(l);
     const ys: number[] = new Array(l);
-    const zs: number[] | null = isThreeDimensional.value ? new Array(l) : null;
+    const zs: number[] | null = is3d.value ? new Array(l) : null;
 
     for (let i = 0; i < l; i += 1) {
       xs[i] = features[i][0];
@@ -143,7 +137,7 @@ export function useScatterEmbeddings() {
       text: hovers,
       hovertemplate: template,
       marker: {
-        size: isThreeDimensional.value ? size3d : size2d,
+        size: is3d.value ? size3d : size2d,
         symbol: 'circle',
         opacity: high.value,
         color: indices,

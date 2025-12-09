@@ -20,6 +20,6 @@ class KaggleResource:
                 break
 
         if path is None:
-            raise FileNotFoundError("could not find parent folder")
+            raise FileNotFoundError("Could not find parent folder. Did you run `sse_download`?")
 
         return path

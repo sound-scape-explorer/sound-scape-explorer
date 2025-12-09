@@ -5,7 +5,7 @@ import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {computed} from 'vue';
 
 export function useTagCheckboxColors(tagName: string) {
-  const {criteria} = useColorSelection();
+  const {option} = useColorSelection();
   const {getColorByTagIndex, getColorNumeric} = useColorByTag();
   const {allUniques} = useTagUniques();
   const {isEnabled} = useTagNumeric();
@@ -13,7 +13,7 @@ export function useTagCheckboxColors(tagName: string) {
   const tagUniques = computed(() => allUniques.value[tagName] ?? []);
 
   const getColor = (tN: number): string | undefined => {
-    if (tagName !== criteria.value) {
+    if (tagName !== option.value) {
       return undefined;
     }
 

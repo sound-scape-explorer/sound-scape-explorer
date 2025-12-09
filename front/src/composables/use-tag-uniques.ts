@@ -1,5 +1,6 @@
+import {SITE_AS_TAG_NAME} from '@shared/constants';
 import {useIntervals} from 'src/composables/use-intervals';
-import {SITE_AS_TAG_NAME, STRING_DELIMITER} from 'src/constants';
+import {STRING_DELIMITER} from 'src/constants';
 import {sortStringsNumerically} from 'src/utils/strings';
 import {ref} from 'vue';
 

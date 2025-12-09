@@ -1,55 +1,57 @@
+import {useAcousticDataReader} from 'src/composables/use-acoustic-data-reader';
+import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
+import {useAcousticSerializer} from 'src/composables/use-acoustic-serializer';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useIndicators} from 'src/composables/use-indicators';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
-import {ColorCategory, ColorCriteria} from 'src/constants';
+import {ColorCategory, ColorOption} from 'src/constants';
+import {useColorAcousticSeries} from 'src/draggables/colors/use-color-acoustic-series';
 import {ref} from 'vue';
 
-// todo: rename me to tag and metric
-const labelCriterias = ref<string[]>([]);
-const indicatorCriterias = ref<string[]>([]);
+const tagOptions = ref<string[]>([]);
 
-const criterias = ref<string[]>(ColorCriteria.options);
-// a criteria can be either a builtin coloring key or a tag name (all kind)
-const criteria = ref<string>(ColorCriteria.enum.cycleDay);
-const criteriaIndex = ref<number>(-1);
+const options = ref<string[]>(ColorOption.options);
+// an option can be either a builtin coloring key or a tag name (all kind)
+const option = ref<string>(ColorOption.enum.HoursInDay);
 
 const category = ref<ColorCategory>(ColorCategory.enum.DEFAULT);
 
 export function useColorSelection() {
   const {allUniques} = useTagUniques();
-  const {names} = useIndicators();
-  const {colorsFlavor} = useClientSettings();
+  const {colorsFlavor: flavor} = useClientSettings();
+  const {acousticSlugs, slugToExtractor} = useAcousticExtractors();
+  const {read} = useAcousticDataReader();
+  const {serialize} = useAcousticSerializer();
+  const {set} = useColorAcousticSeries();
 
-  const updateCriterias = () => {
+  const updateOptions = () => {
     switch (category.value) {
       case ColorCategory.enum.DEFAULT:
-        criterias.value = ColorCriteria.options;
+        options.value = ColorOption.options;
         break;
 
       case ColorCategory.enum.TAGS:
-        criterias.value = labelCriterias.value;
+        options.value = tagOptions.value;
         break;
 
-      case ColorCategory.enum.METRICS:
-        criterias.value = indicatorCriterias.value;
+      case ColorCategory.enum.ACOUSTICS:
+        options.value = acousticSlugs.value;
         break;
     }
   };
 
-  const updateCriteriaIndex = () => {
-    criteriaIndex.value = criterias.value.indexOf(criteria.value);
+  const updateTagOptions = () => {
+    tagOptions.value = Object.keys(allUniques.value);
   };
 
-  const updateLabelCriterias = () => {
-    labelCriterias.value = Object.keys(allUniques.value);
-  };
-
-  const updateIndicatorCriterias = () => {
-    if (names.value === null) {
+  const updateAcousticData = async () => {
+    if (category.value !== ColorCategory.enum.ACOUSTICS) {
       return;
     }
 
-    indicatorCriterias.value = names.value;
+    const ex = slugToExtractor(option.value);
+    const data = await read(ex);
+    const series = await serialize(data);
+    set(series);
   };
 
   const handleLabelClick = (tagName: string) => {
@@ -57,21 +59,19 @@ export function useColorSelection() {
       category.value = ColorCategory.enum.TAGS;
     }
 
-    if (criteria.value !== tagName) {
-      criteria.value = tagName;
+    if (option.value !== tagName) {
+      option.value = tagName;
     }
   };
 
   return {
-    flavor: colorsFlavor,
-    criteria,
-    criterias,
-    updateCriterias,
-    criteriaIndex,
-    updateCriteriaIndex,
+    flavor,
+    option,
+    options,
     category,
     handleLabelClick,
-    updateLabelCriterias,
-    updateIndicatorCriterias,
+    updateOptions,
+    updateTagOptions,
+    updateAcousticData,
   };
 }

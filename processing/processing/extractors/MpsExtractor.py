@@ -19,7 +19,9 @@ from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib import audio
 from processing.lib.frequency import get_band_edges
 from processing.lib.numbers import clamp_number
+from processing.lib.shapes import assert_shape
 from processing.lib.utils import use_or_default
+from processing.utils.predict_mps_shape import predict_mps_shape
 
 
 class _StftParams(NamedTuple):
@@ -146,6 +148,18 @@ class MpsExtractor(Extractor):
 
         params = self._get_stft_params(sample_rate)
 
+        expected_shape = predict_mps_shape(
+            audio_duration_sec=len(samples) / sample_rate,
+            sample_rate=int(sample_rate),
+            window_ms=self.window_ms,
+            hop_ms=self.hop_ms,
+            stft_1_window_ms=self.stft_1_window_ms,
+            stft_1_overlap_ratio=self.stft_1_overlap_ratio,
+            stft_2_window_ms=self.stft_2_window_ms,
+            n_bands=self.n_bands,
+            max_modulation_freq=self.max_modulation_freq,
+        )
+
         mpss = []
         starts = []
         ends = []
@@ -259,7 +273,7 @@ class MpsExtractor(Extractor):
 
         stack = np.stack(mpss).astype(np.float32)
 
-        # todo: add shape assertion later
+        assert_shape(stack, expected_shape)
 
         return ExtractionDataRaw(
             embeddings=stack,

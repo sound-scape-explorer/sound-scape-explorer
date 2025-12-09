@@ -1,5 +1,4 @@
-import {Button, Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Section, SectionCard, Tooltip} from '@blueprintjs/core';
 import {FilterList, Plus, Snowflake} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
@@ -9,9 +8,9 @@ import styles from 'src/panels/extractions/components/config-extractors.module.s
 import {ExtractionExtractorCard} from 'src/panels/extractions/components/extraction-extractor-card.tsx';
 import {ExtractionExtractorsDrawerContent} from 'src/panels/extractions/components/extraction-extractors-drawer-content.tsx';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
-import {useExtractorSlug} from 'src/panels/extractions/hooks/use-extractor-slug';
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
 import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
@@ -23,7 +22,7 @@ interface Props {
 export function ExtractionExtractors({extraction}: Props) {
   const {extractors, addExtractor} = useExtractorState(extraction);
   const {hasTemplate} = useExtractionTemplates(extraction);
-  const {getSlug} = useExtractorSlug();
+  const {getSlug} = useObjectSlug();
   const {validate} = useExtractorValidation();
   const validation = useMemo(
     () => validate(extraction),
@@ -75,6 +74,9 @@ export function ExtractionExtractors({extraction}: Props) {
         <span>impl</span>
         <span>window (ms)</span>
         <span>hop (ms)</span>
+        <Tooltip content="Include in aggregation">
+          <span>agg.</span>
+        </Tooltip>
         <span>adv.</span>
       </SectionCard>
 

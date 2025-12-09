@@ -23,7 +23,6 @@ from processing.lib.time import convert_timestamp_to_date_string, format_millise
 from processing.services.SiteService import SiteWithFiles
 from processing.services.TrajectoryService import TrajectoryGroups, TrajectoryService
 
-
 _console = RichConsole()
 
 
@@ -314,3 +313,7 @@ class Console:
             f"[italic]v{version}[/italic]"
             f"[/green]"
         )
+
+        from processing.utils.get_current_device import get_current_device
+
+        _console.print(f"Running on device {get_current_device()}")

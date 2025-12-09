@@ -1,9 +1,8 @@
-import {type IndexDto} from '@shared/dtosOLD';
 import {
   AggregationPathInstance,
   AutoclusterPathInstance,
   ConfigPath,
-  IndexPath,
+  ExtractionPathInstance,
   MetricPathInstance,
   ReductionPathInstance,
   RelativeTrajectoryPathInstance,
@@ -11,11 +10,11 @@ import {
 } from '@shared/path-registry';
 import h5wasm, {type Dataset, type File as H5File} from 'h5wasm';
 import {StorageMode} from 'src/common/storage-mode';
+import {type AcousticData} from 'src/composables/use-acoustic-data-reader';
 import {type Aggregations} from 'src/composables/use-aggregations';
 import {type Autocluster} from 'src/composables/use-autoclusters';
 import {type MetricData} from 'src/composables/use-metric-data';
 import {type RelativeTrajectory} from 'src/composables/use-relative-trajectories';
-import {type AggregatedIndex} from 'src/composables/use-storage-aggregated-acoustic-indices';
 import {
   type TrajectoryPath,
   type TrajectoryTimestamps,
@@ -66,36 +65,6 @@ export function _readArray<T>(h5: H5File, path: string) {
   const dataset = h5.get(path) as Dataset;
   const array = dataset.to_array() as T;
   return array;
-}
-
-// TODO: UPDATE ME
-export async function readIndices(file: File): Promise<IndexDto[]> {
-  const h5 = await load(file);
-
-  type dto = IndexDto;
-  const p = IndexPath;
-
-  const indices = _readArray<dto['index'][]>(h5, p.indices);
-  const impls = _readArray<dto['impl'][]>(h5, p.impls);
-  const offsets = _readArray<dto['offset'][]>(h5, p.offsets);
-  const steps = _readArray<dto['step'][]>(h5, p.steps);
-  const isPersists = _readArray<dto['isPersist'][]>(h5, p.is_persists);
-
-  const indicesObjects: dto[] = [];
-
-  for (let i = 0; i < indices.length; i += 1) {
-    const index: dto = {
-      index: indices[i],
-      impl: impls[i],
-      offset: offsets[i],
-      step: steps[i],
-      isPersist: isPersists[i],
-    };
-
-    indicesObjects.push(index);
-  }
-
-  return indicesObjects;
 }
 
 export async function readReductions(
@@ -279,47 +248,14 @@ export async function readAggregations(
   return aggregations;
 }
 
-// todo: update me
-export async function readAggregatedAcousticIndices(
-  file: File,
-  bandIndex: number,
-  integrationIndex: number,
-  siteNames: string[],
-): Promise<AggregatedIndex[]> {
-  const h5 = await load(file);
-  const indices = await readIndices(file);
-
-  const aggregateds: AggregatedIndex[] = [];
-
-  console.log('implement me back');
-
-  // for (const index of indices) {
-  //   const path = AggregatedInstancePath.data(
-  //     bandIndex,
-  //     integrationIndex,
-  //     index.index,
-  //   );
-  //   const values = _readArray<number[]>(h5, path);
-  //
-  //   const aggregated: AggregatedIndex = {
-  //     index: index,
-  //     values: values,
-  //   };
-  //
-  //   aggregateds.push(aggregated);
-  // }
-
-  return aggregateds;
-}
-
 export async function readMetric(
   file: File,
   extractionIndex: number,
   bandIndex: number,
   integrationIndex: number,
   metricIndex: number,
-  labelPropertyA: string,
-  labelPropertyB: string | null = null,
+  tagNameA: string,
+  tagNameB: string | null = null,
 ): Promise<MetricData['values']> {
   const h5 = await load(file);
 
@@ -331,19 +267,73 @@ export async function readMetric(
   ];
 
   const values: MetricData['values'] = [];
-  const isPairing = labelPropertyB !== null;
+  const isPairing = tagNameB !== null;
 
   if (!isPairing) {
-    const suffix = [...baseSuffix, labelPropertyA];
+    const suffix = [...baseSuffix, tagNameA];
     const path = MetricPathInstance.data(...suffix);
     const data = _readArray<MetricData['values']>(h5, path);
     values.push(...data);
   } else {
-    const suffix = [...baseSuffix, labelPropertyB, labelPropertyA];
+    const suffix = [...baseSuffix, tagNameB, tagNameA];
     const path = MetricPathInstance.data(...suffix);
     const data = _readArray<MetricData['values']>(h5, path);
     values.push(...data);
   }
 
   return values;
+}
+
+export async function readAcoustics(
+  file: File,
+  extractionIndex: number,
+  extractorIndex: number,
+  bandIndex: number,
+  site: string,
+  fileIndices: string[],
+  fileTimestamps: number[],
+): Promise<AcousticData['data']> {
+  const h5 = await load(file);
+
+  const data: AcousticData['data'] = {
+    scalars: [],
+    relative: {
+      starts: [],
+      ends: [],
+    },
+    absolute: {
+      starts: [],
+      ends: [],
+    },
+  };
+
+  let i = 0;
+
+  for (const fileIndex of fileIndices) {
+    const suffix = [
+      extractionIndex,
+      extractorIndex,
+      bandIndex,
+      site,
+      fileIndex,
+    ];
+
+    const scalarsPath = ExtractionPathInstance.embeddings(...suffix);
+    const scalars = _readArray<number[][]>(h5, scalarsPath).flat();
+    data.scalars.push(...scalars);
+
+    const startsPath = ExtractionPathInstance.starts(...suffix);
+    const starts = _readArray<number[][]>(h5, startsPath).flat();
+    data.relative.starts.push(...starts);
+    data.absolute.starts.push(...starts.map((t) => t + fileTimestamps[i]));
+
+    const endsPath = ExtractionPathInstance.ends(...suffix);
+    const ends = _readArray<number[][]>(h5, endsPath).flat();
+    data.relative.ends.push(...ends);
+    data.absolute.ends.push(...ends.map((t) => t + fileTimestamps[i]));
+
+    i += 1;
+  }
+
+  return data;
 }

@@ -90,6 +90,24 @@ export function useExtractionState() {
     [setExtractions, createExtractorWithDefaults, setCurrentId],
   );
 
+  const importExtractions = useCallback(
+    (newExtractions: ExtractionDto[]) => {
+      const newExtractionConfigs: ExtractionConfig[] = newExtractions.map(
+        (extraction) => {
+          return {
+            ...extraction,
+            _id: generateId(),
+            index: extractions.length + extraction.index,
+            trajectories: [],
+          };
+        },
+      );
+
+      setExtractions((prev) => [...prev, ...newExtractionConfigs]);
+    },
+    [setExtractions, extractions],
+  );
+
   const deleteExtraction = useCallback(
     (id: ExtractionCurrentId) => {
       if (typeof id === 'undefined') {
@@ -202,10 +220,7 @@ export function useExtractionState() {
     (extraction: ExtractionConfig) => {
       setExtractions((prev) => {
         const newExtractions = [...prev];
-        newExtractions[extraction.index] = {
-          ...extraction,
-        };
-
+        newExtractions[extraction.index] = structuredClone(extraction);
         return newExtractions;
       });
     },
@@ -215,6 +230,7 @@ export function useExtractionState() {
   return {
     extractions,
     loadExtractions,
+    importExtractions,
     currentId,
     setCurrentId,
     addExtraction,

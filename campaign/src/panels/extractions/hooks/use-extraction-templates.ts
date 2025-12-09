@@ -48,7 +48,12 @@ export function useExtractionTemplates(extraction: ExtractionConfig) {
 
       switch (k) {
         case TemplateKey.CORAL_REEFS: {
-          setCustomExtractions((prev) => [...prev, extraction]);
+          setCustomExtractions((prev) => {
+            return [
+              ...prev.filter((ex) => ex._id !== extraction._id),
+              extraction,
+            ];
+          });
 
           updateExtraction({
             ...extraction,
@@ -134,9 +139,24 @@ export function useExtractionTemplates(extraction: ExtractionConfig) {
     [setKeyById, updateExtraction, customExtractions, extraction],
   );
 
+  const applyTemplateToCurrent = useCallback(() => {
+    setCustomExtractions((prev) => {
+      const newPrev = prev.map((ex) =>
+        ex._id === extraction._id ? structuredClone(extraction) : ex,
+      );
+      return newPrev;
+    });
+
+    setKeyById((prev) => ({
+      ...prev,
+      [extraction._id]: TemplateKey.NONE,
+    }));
+  }, [extraction, setCustomExtractions, setKeyById]);
+
   return {
     key: keyById[extraction._id],
     update,
     hasTemplate,
+    applyTemplateToCurrent,
   };
 }

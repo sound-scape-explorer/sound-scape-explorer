@@ -6,13 +6,35 @@ const isPlaying = ref<boolean>(false);
 export function useAudioTransport() {
   const {ws} = useWavesurfer();
 
-  const togglePlayPause = () => {
+  const toggle = () => {
     if (ws.value === null) {
       return;
     }
 
-    ws.value.playPause();
-    isPlaying.value = ws.value.isPlaying();
+    if (isPlaying.value) {
+      pause();
+      return;
+    }
+
+    play();
+  };
+
+  const play = () => {
+    if (ws.value === null) {
+      return;
+    }
+
+    ws.value.play();
+    isPlaying.value = true;
+  };
+
+  const pause = () => {
+    if (ws.value === null) {
+      return;
+    }
+
+    ws.value.pause();
+    isPlaying.value = false;
   };
 
   const seek = () => {
@@ -20,11 +42,7 @@ export function useAudioTransport() {
       return;
     }
 
-    if (ws.value.isPlaying()) {
-      return;
-    }
-
-    togglePlayPause();
+    play();
   };
 
   const stop = () => {
@@ -33,14 +51,15 @@ export function useAudioTransport() {
     }
 
     ws.value.seekTo(0);
-    ws.value.pause();
-    isPlaying.value = false;
+    pause();
   };
 
   return {
     isPlaying,
-    togglePlayPause,
-    seek,
+    play,
+    pause,
     stop,
+    toggle,
+    seek,
   };
 }

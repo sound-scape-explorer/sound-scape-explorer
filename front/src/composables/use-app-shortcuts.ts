@@ -11,7 +11,7 @@ export function useAppShortcuts() {
   const {registerKey} = useGlobalKeyboard();
   const {toggle} = useDraggables();
   const {hasView} = useViewState();
-  const {togglePlayPause} = useAudioTransport();
+  const {toggle: toggleAudioTransport} = useAudioTransport();
 
   registerKey(Shortcut.open, () => toggle(DraggableKey.enum.open));
   registerKey(Shortcut.settings, () => toggle(DraggableKey.enum.settings));
@@ -57,10 +57,6 @@ export function useAppShortcuts() {
     Shortcut.heatmaps,
     () => hasView.value && toggle(DraggableKey.enum.heatmaps),
   );
-  registerKey(
-    Shortcut.histograms,
-    () => hasView.value && toggle(DraggableKey.enum.histograms),
-  );
 
-  registerKey(Shortcut.audioPlayPause, togglePlayPause);
+  registerKey(Shortcut.audioPlayPause, toggleAudioTransport);
 }

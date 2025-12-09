@@ -10,8 +10,8 @@
   }
 
   & > div, & > span, & > label {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
   }
 
@@ -21,6 +21,6 @@
 }
 
 .narrow {
-  padding-top: 2px !important;
   padding-bottom: 2px !important;
+  padding-top: 2px !important;
 }

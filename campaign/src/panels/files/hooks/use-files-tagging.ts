@@ -1,3 +1,4 @@
+import {SITE_AS_TAG_NAME} from '@shared/constants.ts';
 import {atom, useAtom} from 'jotai';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useNotify} from 'src/hooks/use-notify';
@@ -5,7 +6,11 @@ import {
   type Column,
   useTableState,
 } from 'src/panels/files/hooks/use-table-state';
-import {addPrefixToTagName, removePrefixFromTagName} from 'src/utils/files';
+import {
+  addPrefixToTagName,
+  removePrefixFromTagKey,
+  removePrefixFromTagName,
+} from 'src/utils/files';
 
 const selectedAtom = atom<Column['name'] | null>(null);
 
@@ -41,15 +46,42 @@ export function useFilesTagging() {
   }, [getColNames, selected, setSelected]);
 
   const names = useMemo(
-    () =>
-      state.columns
+    () => [
+      SITE_AS_TAG_NAME,
+      ...state.columns
         .filter((c) => c.type === 'user')
         .map((c) => removePrefixFromTagName(c.name)),
+    ],
     [state.columns],
   );
 
+  const uniquesByTagName = useMemo(() => {
+    const keysWithPrefix = state.columns
+      .filter((c) => c.type === 'user')
+      .map((c) => c.key);
+
+    const payload: Record<string, string[]> = {};
+
+    // add site as tag
+    payload[SITE_AS_TAG_NAME] = [...new Set(state.rows.col_site)];
+
+    // actual tags
+    for (const keyWithPrefix of keysWithPrefix) {
+      const name = removePrefixFromTagKey(keyWithPrefix);
+      payload[name] = [...new Set(state.rows[keyWithPrefix])];
+    }
+
+    return payload;
+  }, [state]);
+
   const add = useCallback(() => {
     if (addInput === '') {
+      notify('Tag input cannot be empty', 'danger');
+      return;
+    }
+
+    if (addInput === SITE_AS_TAG_NAME) {
+      notify(`Tag input cannot be ${SITE_AS_TAG_NAME}`, 'danger');
       return;
     }
 
@@ -76,7 +108,7 @@ export function useFilesTagging() {
     const names = getColNames();
 
     if (names.includes(editPrefixed)) {
-      notify('property already exists', 'danger');
+      notify('tag name already exists', 'danger');
       return;
     }
 
@@ -116,5 +148,6 @@ export function useFilesTagging() {
     rename,
     remove,
     names,
+    uniquesByTagName,
   };
 }

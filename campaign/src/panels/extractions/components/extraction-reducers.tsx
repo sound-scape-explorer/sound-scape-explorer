@@ -1,5 +1,4 @@
-import {Button, Section, Tooltip} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Section, SectionCard, Tooltip} from '@blueprintjs/core';
 import {
   ArrowDown,
   ArrowUp,
@@ -14,7 +13,6 @@ import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
-import {useReducerSlug} from 'src/panels/extractions/hooks/use-reducer-slug';
 import {useReducerState} from 'src/panels/extractions/hooks/use-reducer-state.ts';
 import {useReducerValidation} from 'src/panels/extractions/hooks/use-reducer-validation.ts';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
@@ -23,6 +21,7 @@ import {Select} from 'src/primitives/select';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
 import styles from './config-reducers.module.scss';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 interface Props {
   extraction: ExtractionConfig;
@@ -39,8 +38,7 @@ export function ExtractionReducers({extraction}: Props) {
   } = useReducerState(extraction);
 
   const {hasTemplate} = useExtractionTemplates(extraction);
-
-  const {getSlug} = useReducerSlug();
+  const {getSlug} = useObjectSlug();
   const {isDimensionsValid, validate} = useReducerValidation();
   const validation = useMemo(
     () => validate(extraction),

@@ -10,21 +10,21 @@ import {mapRange} from 'src/utils/math';
 import {getInfiniteRange} from 'src/utils/utils';
 import {ref} from 'vue';
 
-const min = ref<number | null>(null);
-const max = ref<number | null>(null);
+const min = ref<string>('');
+const max = ref<string>('');
 
 export function useColorByTag() {
   const {resize} = useColorResize();
   const {intervals} = useIntervals();
   const {allUniques} = useTagUniques();
-  const {criteria} = useColorSelection();
+  const {option} = useColorSelection();
   const {scale} = useColorUser();
   const {isEnabled} = useTagNumeric();
 
   const getPrimitive = (intervalIndex: number) => {
     const interval = intervals.value[intervalIndex];
-    const tagValue = interval.tags[criteria.value].join(STRING_DELIMITER);
-    const tagUniques = allUniques.value[criteria.value];
+    const tagValue = interval.tags[option.value].join(STRING_DELIMITER);
+    const tagUniques = allUniques.value[option.value];
 
     return {
       tagUniques,
@@ -33,7 +33,10 @@ export function useColorByTag() {
   };
 
   const getColorNumeric = (numeric: number) => {
-    const {bottom, top} = getInfiniteRange(min.value, max.value);
+    const {bottom, top} = getInfiniteRange(
+      Number(min.value),
+      Number(max.value),
+    );
     const ranged = mapRange(numeric, bottom, top, 0, 1);
     return scale.value(ranged).css();
   };
@@ -69,8 +72,13 @@ export function useColorByTag() {
     const {tagUniques} = getPrimitive(0);
     const values = tagUniques.map((v) => Number(v));
 
-    min.value = Math.min(...values);
-    max.value = Math.max(...values);
+    min.value = String(Math.min(...values));
+    max.value = String(Math.max(...values));
+  };
+
+  const reset = () => {
+    min.value = '';
+    max.value = '';
   };
 
   return {
@@ -80,5 +88,6 @@ export function useColorByTag() {
     detect,
     getColorByTagIndex,
     getColorNumeric,
+    reset,
   };
 }

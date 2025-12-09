@@ -1,5 +1,6 @@
 import {
   HOP_MS_DEFAULT,
+  INCLUDE_IN_AGGREGATION_DEFAULT,
   NDSI_BAND_ANTHRO,
   NDSI_BAND_BIO,
   WINDOW_MS_DEFAULT,
@@ -32,6 +33,7 @@ export function useExtractorState(extraction: ExtractionConfig) {
       impl: ExtractorImpl.enum.VGGISH,
       window: WINDOW_MS_DEFAULT,
       hop: HOP_MS_DEFAULT,
+      include_in_aggregation: INCLUDE_IN_AGGREGATION_DEFAULT,
     });
 
     updateExtraction(extraction);
@@ -97,6 +99,7 @@ export function useExtractorState(extraction: ExtractionConfig) {
         impl,
         window: WINDOW_MS_DEFAULT,
         hop: HOP_MS_DEFAULT,
+        include_in_aggregation: INCLUDE_IN_AGGREGATION_DEFAULT,
       };
 
       extraction.extractors[extractor.index] =
@@ -109,6 +112,14 @@ export function useExtractorState(extraction: ExtractionConfig) {
   const updateHop = useCallback(
     (extractor: ExtractorDto, hop: number) => {
       extractor.hop = hop;
+      updateExtraction(extraction);
+    },
+    [extraction, updateExtraction],
+  );
+
+  const updateIncludeInAggregation = useCallback(
+    (extractor: ExtractorDto, includeInAggregation: boolean) => {
+      extractor.include_in_aggregation = includeInAggregation;
       updateExtraction(extraction);
     },
     [extraction, updateExtraction],
@@ -357,6 +368,7 @@ export function useExtractorState(extraction: ExtractionConfig) {
     updateImpl,
     updateWindow,
     updateHop,
+    updateIncludeInAggregation,
     updateSpectroNBands,
     updateSpectroScale,
     updateSpectroStftWindowType,

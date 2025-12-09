@@ -1,9 +1,12 @@
 import {isAfter, isBefore} from 'date-fns';
 import {useCallback} from 'react';
 import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces';
+import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging.ts';
 import {createDefaultValidation} from 'src/utils/validation';
 
 export function useTrajectoriesValidation() {
+  const {uniquesByTagName} = useFilesTagging();
+
   const isNameValid = useCallback(
     (trajectory: TrajectoryConfig, extraction: ExtractionConfig) => {
       if (trajectory.name === '') {
@@ -20,12 +23,20 @@ export function useTrajectoriesValidation() {
   );
 
   const isTagNameValid = useCallback((trajectory: TrajectoryConfig) => {
-    return trajectory.tagName !== undefined;
+    return trajectory.tagName !== '';
   }, []);
 
-  const isTagValueValid = useCallback((trajectory: TrajectoryConfig) => {
-    return trajectory.tagValue !== '';
-  }, []);
+  const isTagValueValid = useCallback(
+    (trajectory: TrajectoryConfig) => {
+      if (trajectory.tagValue === '') {
+        return false;
+      }
+
+      const uniques = uniquesByTagName[trajectory.tagName];
+      return uniques.includes(trajectory.tagValue);
+    },
+    [uniquesByTagName],
+  );
 
   const isStartValid = useCallback(
     (trajectory: TrajectoryConfig) =>
@@ -36,6 +47,13 @@ export function useTrajectoriesValidation() {
   const isEndValid = useCallback(
     (trajectory: TrajectoryConfig) =>
       isAfter(new Date(trajectory.end), new Date(trajectory.start)),
+    [],
+  );
+
+  const isTrajectoryWindowValid = useCallback(
+    (trajectory: TrajectoryConfig) => {
+      return trajectory.smoothingWindow > 0;
+    },
     [],
   );
 
@@ -56,13 +74,13 @@ export function useTrajectoriesValidation() {
 
         if (!isTagNameValid(t)) {
           v.intent = 'danger';
-          v.content = 'invalid label properties';
+          v.content = 'invalid tag names';
           break;
         }
 
         if (!isTagValueValid(t)) {
           v.intent = 'danger';
-          v.content = 'invalid label values';
+          v.content = 'invalid tag values';
           break;
         }
 
@@ -71,11 +89,24 @@ export function useTrajectoriesValidation() {
           v.content = 'invalid dates';
           break;
         }
+
+        if (!isTrajectoryWindowValid(t)) {
+          v.intent = 'danger';
+          v.content = 'invalid windows';
+          break;
+        }
       }
 
       return v;
     },
-    [isNameValid, isTagNameValid, isTagValueValid, isStartValid, isEndValid],
+    [
+      isNameValid,
+      isTagNameValid,
+      isTagValueValid,
+      isStartValid,
+      isEndValid,
+      isTrajectoryWindowValid,
+    ],
   );
 
   return {
@@ -85,5 +116,6 @@ export function useTrajectoriesValidation() {
     isTagValueValid,
     isStartValid,
     isEndValid,
+    isTrajectoryWindowValid,
   };
 }

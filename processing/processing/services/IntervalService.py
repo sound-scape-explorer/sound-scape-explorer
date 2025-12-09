@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from processing.constants import STRING_DELIMITER
+from processing.constants import STRING_DELIMITER, SITE_AS_TAG_NAME
 from processing.interfaces import AggregationData, Interval
 
 
@@ -20,6 +20,9 @@ class IntervalService:
                 for tag_name, tag_value in file.tags.items():
                     if tag_value not in tags[tag_name]:
                         tags[tag_name].append(tag_value)
+
+            # Inject site as tag
+            tags[SITE_AS_TAG_NAME] = sites
 
             joined_site = STRING_DELIMITER.join(sites)
             joined_tags: dict[str, str] = {}

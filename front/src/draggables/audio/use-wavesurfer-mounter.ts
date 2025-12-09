@@ -1,10 +1,14 @@
+import {watchThrottled} from '@vueuse/core';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {GAIN, WAVE} from 'src/constants';
+import {WAVEFORM_HEIGHT} from 'src/constants';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
-import {useAudioFourier} from 'src/draggables/audio/use-audio-component';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
+import {useAudioFft} from 'src/draggables/audio/use-audio-fft';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
+import {useAudioFilterFollow} from 'src/draggables/audio/use-audio-filter-follow';
+import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
+import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
 import {useDraggableAudio} from 'src/draggables/audio/use-draggable-audio';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 import {useWavesurferCursor} from 'src/draggables/audio/use-wavesurfer-cursor';
@@ -15,12 +19,17 @@ import {type WaveSurferParams} from 'wavesurfer.js/types/params';
 
 export function useWavesurferMounter() {
   const {ws} = useWavesurfer();
+  const {hpfReadable, lpfReadable} = useAudioFilters();
+  const {gain} = useAudioGain();
   const {context, create: createContext} = useAudioContext();
   const {create: createGain, apply: applyGain} = useAudioGain();
   const {create: createAnalyser} = useAudioAnalyser();
   const {waveform} = useDraggableAudio();
   const {bitDepth} = useAudioFile();
-  const {size} = useAudioFourier();
+  const {size} = useAudioFft();
+  const {rate} = useAudioPlaybackRate();
+  const {isFollowing} = useAudioFilterFollow();
+
   const {
     spectrogramColorMap: colormap,
     decibelsDisplay: isDecibelsDisplay,
@@ -45,7 +54,7 @@ export function useWavesurferMounter() {
       audioContext: context.value,
       container: waveform.value,
       scrollParent: false,
-      barHeight: WAVE.default,
+      barHeight: gain.value * WAVEFORM_HEIGHT,
       normalize: false,
       height: 48,
     };
@@ -60,15 +69,27 @@ export function useWavesurferMounter() {
     createContext();
     createGain();
     createAnalyser();
-    applyGain(GAIN.default);
+    applyGain();
   });
 
   // todo: too much?
   watch(ws, registerCursor);
 
-  // todo: too much?
-  watch(
-    [size, colormap, isDecibelsDisplay, isLegendOverflow, bitDepth],
-    registerSpectrogram,
+  watchThrottled(
+    [
+      size,
+      colormap,
+      isDecibelsDisplay,
+      isLegendOverflow,
+      bitDepth,
+      hpfReadable,
+      lpfReadable,
+      rate,
+      isFollowing,
+    ],
+    () => {
+      requestAnimationFrame(registerSpectrogram);
+    },
+    {throttle: 500},
   );
 }

@@ -1,24 +1,43 @@
 <script lang="ts" setup>
+import AppButton from 'src/app/app-button.vue';
 import AppGradient from 'src/app/app-gradient.vue';
+import AppIcon from 'src/app/app-icon.vue';
+import {useColorInvert} from 'src/composables/use-color-invert';
+import {ColorOption} from 'src/constants';
+import {useColorByDayOrNight} from 'src/draggables/colors/use-color-by-day-or-night';
+import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorGradients} from 'src/draggables/colors/use-color-gradients';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {computed} from 'vue';
+import {useColorState} from 'src/draggables/colors/use-color-state';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
-import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
+import {computed} from 'vue';
 
-const {criteria} = useColorSelection();
-const {isEnabled: isNumeric} = useTagNumeric();
+const {isTag} = useColorState();
+
+const {invert, isReversible} = useColorInvert();
+const {isEnabled: isTagNumericEnabled} = useTagNumeric();
+const {option} = useColorSelection();
 const {min, max} = useColorByTag();
+const {scale: dayOrNightScale} = useColorByDayOrNight();
 
-const {cycleDayLabels, cycleDayColors, userColors, dayColors, cycleDayLegend} =
-  useColorGradients();
+const {
+  hoursInDayColors,
+  hoursInDayLabels,
+  hoursInDayLegend,
+  userColors,
+  labels,
+} = useColorGradients();
 
-const isPreset = computed(() => {
-  return criteria.value === 'cycleDay' || criteria.value === 'isDay';
-});
+const isHoursInDay = computed(
+  () => option.value === ColorOption.enum.HoursInDay,
+);
+
+const isDayOrNight = computed(
+  () => option.value === ColorOption.enum.DayOrNight,
+);
 
 const userLabels = computed<string[]>(() => {
-  if (!isNumeric.value || min.value === null || max.value === null) {
+  if (!isTagNumericEnabled.value || min.value === '' || max.value === '') {
     return [];
   }
 
@@ -27,7 +46,9 @@ const userLabels = computed<string[]>(() => {
   const labels: string[] = [];
 
   for (let i = 0; i < size; i += 1) {
-    const value = min.value + (i * (max.value - min.value)) / (size - 1);
+    const value =
+      Number(min.value) +
+      (i * (Number(max.value) - Number(min.value))) / (size - 1);
     const int = Math.round(value);
     labels.push(int.toString());
   }
@@ -37,27 +58,57 @@ const userLabels = computed<string[]>(() => {
 </script>
 
 <template>
-  <AppGradient
-    v-if="criteria === 'cycleDay'"
-    :colors="cycleDayColors"
-    :labels="cycleDayLabels"
-    :legend-max="cycleDayLegend.max"
-    :legend-med="cycleDayLegend.med"
-    :legend-min="cycleDayLegend.min"
-  />
+  <h2
+    v-if="!isTag || isTagNumericEnabled"
+    style="display: flex; gap: 8px"
+  >
+    <span>Map</span>
+    <AppButton
+      :disabled="!isReversible"
+      :handle-click="invert"
+      size="tiny"
+      tooltip="Revert color map"
+      tooltip-placement="bottom"
+    >
+      <AppIcon
+        icon="swap"
+        size="small"
+      />
+    </AppButton>
+  </h2>
 
-  <AppGradient
-    v-if="criteria === 'isDay'"
-    :colors="dayColors"
-    :labels="['night', 'day']"
-    :width="50"
-    legend-max="day"
-    legend-min="night"
-  />
+  <div
+    v-if="!isTag || isTagNumericEnabled"
+    :class="$style.gradients"
+  >
+    <AppGradient
+      v-if="isHoursInDay"
+      :colors="hoursInDayColors"
+      :labels="hoursInDayLabels"
+      :legend-max="hoursInDayLegend.max"
+      :legend-med="hoursInDayLegend.med"
+      :legend-min="hoursInDayLegend.min"
+    />
 
-  <AppGradient
-    v-if="!isPreset"
-    :colors="userColors"
-    :labels="userLabels"
-  />
+    <AppGradient
+      v-if="isDayOrNight"
+      :colors="dayOrNightScale"
+      :labels="['day', 'night']"
+      :width="50"
+      legend-max="night"
+      legend-min="day"
+    />
+
+    <AppGradient
+      v-if="!isHoursInDay && !isDayOrNight"
+      :colors="userColors"
+      :labels="labels"
+    />
+  </div>
 </template>
+
+<style lang="scss" module>
+.gradients {
+  transform: translateY(-2px);
+}
+</style>

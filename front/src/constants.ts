@@ -1,6 +1,7 @@
 import {z} from 'zod';
 
 export const STRING_DELIMITER = '|||';
+export const SLUG_DELIMITER = ' - ';
 
 export const LINEBREAK = '%0D%0A';
 
@@ -8,23 +9,18 @@ export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
 
+// todo: to remove
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-export const GAIN = {
-  default: 1.0,
-  step: 10.0,
-  max: 500.0,
-  min: 1.0,
+export const AUDIO_GAIN = {
+  default: 0.1,
+  step: 0.1,
+  max: 100.0,
+  min: 0.1,
 };
 
-const waveDampening = 2;
-
-export const WAVE = {
-  default: GAIN.default / waveDampening,
-  step: GAIN.step / waveDampening,
-  max: GAIN.max / waveDampening,
-  min: GAIN.min / waveDampening,
-};
+export const DEBOUNCE_MS = 20;
+export const WAVEFORM_HEIGHT = 0.5;
 
 export const PLAYBACK_RATE = {
   default: 1,
@@ -32,6 +28,18 @@ export const PLAYBACK_RATE = {
   min: 0.1,
   step: 0.01,
 };
+
+export const SpectrogramFftSize = z.enum([
+  '128',
+  '256',
+  '512',
+  '1024',
+  '2048',
+  '4096',
+]);
+
+// eslint-disable-next-line no-redeclare
+export type SpectrogramFftSize = z.infer<typeof SpectrogramFftSize>;
 
 export const TagsDraggableSize = z.enum(['small', 'medium', 'large']);
 // eslint-disable-next-line no-redeclare
@@ -52,10 +60,6 @@ export const TRACE_WIDTH_3D = 6;
 export const TRACE_WIDTH_2D = 2;
 
 export const CURRENT_SCATTER_LEGEND_ID = 'current-scatter-legend'; // this is used as a selector to render the legend to canvas on scatter png export
-
-// @see processing/config/extractors/ExtractorConfig.py
-// todo: remove me
-export const NN_EXTRACTORS = ['vgg', 'melogram', 'melspectrum'];
 
 export const ColorFlavor = z.enum(['Spectral', 'Accent', 'Dark2']);
 // eslint-disable-next-line no-redeclare
@@ -79,7 +83,6 @@ export const LINK_DISCORD = 'https://discord.gg/eRsQPDBeXg';
 
 export const TIMEOUT = 240;
 
-export const SITE_AS_TAG_NAME = '__SITE';
 export const AUTOCLUSTER_AS_TAG_NAME = 'AUTOCLUSTER';
 
 export const LOWER_DECILE_SUFFIX = '_lower_decile';
@@ -91,20 +94,17 @@ export const ScatterBorderWidth = z.enum(['0', '1', '2']);
 // eslint-disable-next-line no-redeclare
 export type ScatterBorderWidth = z.infer<typeof ScatterBorderWidth>;
 
-export const ColorCategory = z.enum(['DEFAULT', 'TAGS', 'METRICS']);
+export const ColorCategory = z.enum(['DEFAULT', 'TAGS', 'ACOUSTICS']);
 // eslint-disable-next-line no-redeclare
 export type ColorCategory = z.infer<typeof ColorCategory>;
 
-export const ColorCriteria = z.enum([
-  'cycleDay',
-  'isDay',
-  'intervalIndex',
-  'by1h',
-  'by10min',
+export const ColorOption = z.enum([
+  'HoursInDay',
+  'DayOrNight',
+  'IntervalIndex',
 ]);
-
-// eslint-disable-next-line no-redeclare
-export type ColorCriteria = z.infer<typeof ColorCriteria>;
+ 
+export type ColorCriteria = z.infer<typeof ColorOption>;
 
 export const HeatmapScale = z.enum(['RdBu', 'Blues']);
 // eslint-disable-next-line no-redeclare
@@ -112,7 +112,7 @@ export type HeatmapScale = z.infer<typeof HeatmapScale>;
 
 export const ExportType = z.enum([
   'scatter',
-  'indicators',
+  'temporal',
   'heatmap',
   'trajectories',
   'relativeTrajectories',
@@ -120,3 +120,7 @@ export const ExportType = z.enum([
 
 // eslint-disable-next-line no-redeclare
 export type ExportType = z.infer<typeof ExportType>;
+
+export const AudioFilterSlope = z.enum(['12', '24', '36', '48']); // multiples of 12
+// eslint-disable-next-line no-redeclare
+export type AudioFilterSlope = z.infer<typeof AudioFilterSlope>;

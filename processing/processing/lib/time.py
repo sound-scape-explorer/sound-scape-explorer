@@ -1,11 +1,19 @@
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
+from processing.types import Timezone
 
 _TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
-def convert_date_string_to_timestamp(date_string: str) -> int:
-    date = datetime.strptime(date_string, _TIME_FORMAT)
-    return int(date.timestamp() * 1000)
+def convert_date_string_to_timestamp(
+    date_string: str,
+    tz_name: Timezone = "UTC",
+) -> int:
+    tz = ZoneInfo(tz_name)
+    local_dt = datetime.strptime(date_string, _TIME_FORMAT)
+    local_dt = local_dt.replace(tzinfo=tz)  # interpret string as local time in tz
+    return int(local_dt.timestamp() * 1000)
 
 
 def convert_timestamp_to_date_string(timestamp: int) -> str:

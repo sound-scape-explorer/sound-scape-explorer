@@ -6,7 +6,7 @@ import Plotly, {
 import {useScatterDownloadPngButton} from 'src/components/scatter/use-scatter-download-png-button';
 import {useScatterExport} from 'src/components/scatter/use-scatter-export';
 import {useExportName} from 'src/composables/use-export-name';
-import {PLOTLY_SIZE} from 'src/constants';
+import {ExportType, PLOTLY_SIZE} from 'src/constants';
 import {computed} from 'vue';
 
 export interface ScatterProps extends DownloadImgopts {
@@ -25,7 +25,7 @@ export function useScatterConfig() {
   const scatterScale = 4;
 
   const propsRef = computed<ScatterProps>(() => {
-    const name = generate('scatter');
+    const name = generate(ExportType.enum.scatter);
 
     return {
       name,

@@ -1,8 +1,6 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useViewSelection} from 'src/composables/use-view-selection';
-import {EXPORT_FILENAME, ExportType} from 'src/constants';
-
-const separator = ' - ';
+import {EXPORT_FILENAME, ExportType, SLUG_DELIMITER} from 'src/constants';
 
 export function useExportName() {
   const {band, integration} = useViewSelection();
@@ -41,8 +39,8 @@ export function useExportName() {
         blocks.push('scatter');
         break;
       }
-      case ExportType.enum.indicators: {
-        blocks.push('indicators');
+      case ExportType.enum.temporal: {
+        blocks.push('temporal');
         break;
       }
       case ExportType.enum.heatmap: {
@@ -63,7 +61,7 @@ export function useExportName() {
     }
 
     appendOptions(blocks, ...opts);
-    return blocks.join(separator);
+    return blocks.join(SLUG_DELIMITER);
   };
 
   return {

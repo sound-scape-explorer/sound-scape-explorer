@@ -3,10 +3,10 @@ import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {computed} from 'vue';
 
 export function useTagCheckboxSelector(tagName: string) {
-  const {criteria} = useColorSelection();
+  const {option} = useColorSelection();
 
   const selector = computed<string>(() => {
-    if (tagName !== criteria.value) {
+    if (tagName !== option.value) {
       return '';
     }
 

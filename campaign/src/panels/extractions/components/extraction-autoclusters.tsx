@@ -1,5 +1,4 @@
-import {Button, Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Section, SectionCard} from '@blueprintjs/core';
 import {
   ArrowDown,
   ArrowUp,
@@ -17,7 +16,7 @@ import styles from 'src/panels/extractions/components/extraction-autoclusters.mo
 import {ExtractionAutoclustersDrawerContent} from 'src/panels/extractions/components/extraction-autoclusters-drawer-content.tsx';
 import {useAutoclusterState} from 'src/panels/extractions/hooks/use-autocluster-state.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
-import {useAutoclusterSlug} from 'src/panels/metrics/hooks/use-autocluster-slug';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 import {useAutoclustersValidation} from 'src/panels/metrics/hooks/use-autoclusters-validation';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
 import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
@@ -41,7 +40,7 @@ export function ExtractionAutoclusters({extraction}: Props) {
     updateAlpha,
     updateEpsilon,
   } = useAutoclusterState(extraction);
-  const {getSlug} = useAutoclusterSlug();
+  const {getSlug} = useObjectSlug();
   const {
     isMinClusterSizeValid,
     isMinSamplesValid,

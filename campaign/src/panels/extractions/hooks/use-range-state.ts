@@ -1,8 +1,8 @@
-import {formatDateToString, getToday} from '@shared/dates';
 import {type RangeDto} from '@shared/dtos.ts';
 import {addHours} from 'date-fns';
 import {atom, useAtom} from 'jotai';
 import {useCallback} from 'react';
+import {formatDateToString, getToday} from 'src/utils/datetime.ts';
 
 const rangesAtom = atom<RangeDto[]>([]);
 

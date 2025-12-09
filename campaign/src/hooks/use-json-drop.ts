@@ -56,5 +56,6 @@ export function useJsonDrop() {
 
   return {
     handleJson,
+    read,
   };
 }

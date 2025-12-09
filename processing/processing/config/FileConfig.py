@@ -7,7 +7,7 @@ from processing.lib.audio import read_duration
 from processing.lib.time import convert_date_string_to_timestamp
 
 
-@dataclass
+@dataclass(frozen=True)
 class FileConfig:
     index: int
     relative_path: str
@@ -29,7 +29,7 @@ class FileConfig:
             index=int(dto.Index),
             relative_path=dto.Path,
             absolute_path=absolute_path,
-            timestamp=convert_date_string_to_timestamp(dto.Date),
+            timestamp=convert_date_string_to_timestamp(dto.Date, settings.timezone),
             site=dto.Site,
             duration=read_duration(absolute_path),
             tags=dto.tags,

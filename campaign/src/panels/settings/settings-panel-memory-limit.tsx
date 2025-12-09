@@ -12,9 +12,7 @@ export function SettingsPanelMemoryLimit() {
 
   return (
     <div className={clsx(styles.row, 'align gap')}>
-      <b className={clsx(styles.rowTitle, 'flex grow help')}>
-        MDM memory limit (GB)
-      </b>
+      <b className={clsx(styles.rowTitle)}>MDM memory limit (GB)</b>
 
       <HelpDrawer>
         <SettingsPanelMemoryLimitDrawerContent />

@@ -5,6 +5,7 @@ import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
+// TODO: rename to filter calendar
 export function useScatterFilterTime() {
   const {aggregations} = useAggregations();
   const {isActive} = useDraggableCalendar();

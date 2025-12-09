@@ -1,28 +1,12 @@
 import {
+  SMOOTHING_WINDOW_CUSTOM,
   SMOOTHING_WINDOW_PRESETS,
-  type SmoothingWindowPreset,
 } from '@shared/constants.ts';
-import {formatDateToString, getToday} from '@shared/dates';
 import {addHours} from 'date-fns';
 import {useCallback, useMemo} from 'react';
 import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces.ts';
 import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
-
-// todo: reimplement me
-// const purgeLabelFromTrajectories = useCallback(
-//   (property: string) => {
-//     setTrajectories((prev) => {
-//       return prev.map((trajectory) => ({
-//         ...trajectory,
-//         labelProperty:
-//           trajectory.labelProperty === property
-//             ? undefined
-//             : trajectory.labelProperty,
-//       }));
-//     });
-//   },
-//   [setTrajectories],
-// );
+import {formatDateToString, getToday} from 'src/utils/datetime.ts';
 
 export function useTrajectoryState(extraction: ExtractionConfig) {
   const {updateExtraction} = useExtractionState();
@@ -107,7 +91,7 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
     [extraction, updateExtraction],
   );
 
-  const updateProperty = useCallback(
+  const updateTagName = useCallback(
     (trajectory: TrajectoryConfig, property: string) => {
       trajectory.tagName = property;
       updateExtraction(extraction);
@@ -115,7 +99,7 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
     [extraction, updateExtraction],
   );
 
-  const updateValue = useCallback(
+  const updateTagValue = useCallback(
     (trajectory: TrajectoryConfig, value: string) => {
       trajectory.tagValue = value;
       updateExtraction(extraction);
@@ -124,9 +108,25 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
   );
 
   const updateSmoothingWindowPreset = useCallback(
-    (trajectory: TrajectoryConfig, preset: SmoothingWindowPreset) => {
+    (
+      trajectory: TrajectoryConfig,
+      preset: TrajectoryConfig['smoothingWindowPreset'],
+    ) => {
+      if (preset === SMOOTHING_WINDOW_CUSTOM) {
+        return;
+      }
+
       trajectory.smoothingWindowPreset = preset;
       trajectory.smoothingWindow = SMOOTHING_WINDOW_PRESETS[preset];
+      updateExtraction(extraction);
+    },
+    [extraction, updateExtraction],
+  );
+
+  const updateSmoothingWindowCustom = useCallback(
+    (trajectory: TrajectoryConfig, value: number) => {
+      trajectory.smoothingWindowPreset = SMOOTHING_WINDOW_CUSTOM;
+      trajectory.smoothingWindow = value;
       updateExtraction(extraction);
     },
     [extraction, updateExtraction],
@@ -140,8 +140,9 @@ export function useTrajectoryState(extraction: ExtractionConfig) {
     updateName,
     updateStart,
     updateEnd,
-    updateProperty,
-    updateValue,
+    updateTagName,
+    updateTagValue,
     updateSmoothingWindowPreset,
+    updateSmoothingWindowCustom,
   };
 }

@@ -4,6 +4,7 @@ import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import {useAppHeatmapHighlight} from 'src/app/heatmap/use-app-heatmap-highlight';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
@@ -11,23 +12,24 @@ import {HeatmapScale} from 'src/constants';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
-import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 
 const {
   metricSlug,
-  options: digesterOptions,
+  options: metricOptions,
   isReadyForSelection,
   isReadyAndSelected,
   isPairing,
 } = useDraggableHeatmaps();
 
-const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
+const {a, b, swap: swapLabels} = useDraggableHeatmapsTags();
 const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
 const {width, height} = useAppHeatmapSize();
 const {flavor} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
 const {coreUniques} = useTagUniques();
+const {reset} = useAppHeatmapHighlight();
 </script>
 
 <template>
@@ -36,9 +38,10 @@ const {coreUniques} = useTagUniques();
 
     <AppSelect
       v-model="metricSlug"
-      :options="digesterOptions"
+      :options="metricOptions"
       placeholder="Metric..."
       size="small"
+      @update:model-value="reset"
     />
 
     <h2>Over</h2>
@@ -49,12 +52,14 @@ const {coreUniques} = useTagUniques();
         :options="Object.keys(coreUniques) ?? []"
         placeholder="Label A..."
         size="small"
+        @update:model-value="reset"
       />
 
       <AppButton
         :disabled="!isReadyForSelection || !isPairing"
         :handle-click="swapLabels"
         size="small"
+        @update:model-value="reset"
       >
         <AppIcon icon="swap" />
       </AppButton>
@@ -65,6 +70,7 @@ const {coreUniques} = useTagUniques();
         :options="Object.keys(coreUniques) ?? []"
         placeholder="Label B..."
         size="small"
+        @update:model-value="reset"
       />
     </div>
 

@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 
+from processing.config.SettingsConfig import SettingsConfig
 from processing.dtos import TrajectoryDto
 from processing.lib.time import convert_date_string_to_timestamp
 
 
-@dataclass
+@dataclass(frozen=True)
 class TrajectoryConfig:
     index: int
     name: str
@@ -15,12 +16,12 @@ class TrajectoryConfig:
     smoothing_window: int  # ms
 
     @classmethod
-    def from_dto(cls, dto: TrajectoryDto):
+    def from_dto(cls, dto: TrajectoryDto, settings: SettingsConfig):
         return cls(
             index=dto.index,
             name=dto.name,
-            start=convert_date_string_to_timestamp(dto.start),
-            end=convert_date_string_to_timestamp(dto.end),
+            start=convert_date_string_to_timestamp(dto.start, settings.timezone),
+            end=convert_date_string_to_timestamp(dto.end, settings.timezone),
             tag_name=dto.tagName,
             tag_value=dto.tagValue,
             smoothing_window=dto.smoothingWindow,

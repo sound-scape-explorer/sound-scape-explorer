@@ -60,11 +60,15 @@ def silence_tensorflow_completely():
 
 def silence_c_warnings():
     """Silence C library warnings by redirecting stderr."""
-    libc = ctypes.CDLL(None)
-    _c_stderr = ctypes.c_void_p.in_dll(libc, "stderr")
-    _original_stderr = os.dup(2)
-    null_fd = os.open(os.devnull, os.O_WRONLY)
-    os.dup2(null_fd, 2)
+    try:
+        libc = ctypes.CDLL(None)
+        _c_stderr = ctypes.c_void_p.in_dll(libc, "stderr")
+        _original_stderr = os.dup(2)
+        null_fd = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(null_fd, 2)
+    except ValueError:
+        # symbol error on `_c_stderr` on macOS apple silicon
+        print("Could not silence C library warnings")
 
 
 class CustomFilter(logging.Filter):

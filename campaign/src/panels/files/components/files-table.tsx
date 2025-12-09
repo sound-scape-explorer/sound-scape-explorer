@@ -5,9 +5,10 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import {Clipboard, Cross, Redo, Undo} from '@blueprintjs/icons';
+import {Clipboard, Cross, Help, Redo, Undo} from '@blueprintjs/icons';
 import {Table2} from '@blueprintjs/table';
 import {useMemo} from 'react';
+import {TABLE_FROZEN_COL_COUNT} from 'src/constants.ts';
 import styles from 'src/panels/files/files-table.module.scss';
 import {useTableColumns} from 'src/panels/files/hooks/use-table-columns.tsx';
 import {useTableCopy} from 'src/panels/files/hooks/use-table-copy';
@@ -16,6 +17,7 @@ import {useTableCurrentSelection} from 'src/panels/files/hooks/use-table-current
 import {useTableDelete} from 'src/panels/files/hooks/use-table-delete';
 import {useTableHotkeys} from 'src/panels/files/hooks/use-table-hotkeys';
 import {useTablePaste} from 'src/panels/files/hooks/use-table-paste';
+import {useTableRefProvider} from 'src/panels/files/hooks/use-table-ref.ts';
 import {useTableState} from 'src/panels/files/hooks/use-table-state';
 import {useTableWidths} from 'src/panels/files/hooks/use-table-widths';
 
@@ -28,6 +30,7 @@ export function FilesTable() {
   const {handlePaste} = useTablePaste();
   const {handleFocus} = useTableCurrentCell();
   const {handleSelection} = useTableCurrentSelection();
+  const {tableRef, triggerHelpModal} = useTableRefProvider();
   const {
     reorder,
     getTableLength,
@@ -65,6 +68,11 @@ export function FilesTable() {
             icon={<Redo />}
             text="Redo"
           />
+          <MenuItem
+            onClick={triggerHelpModal}
+            icon={<Help />}
+            text="Help"
+          />
         </Menu>
       }
     >
@@ -72,6 +80,7 @@ export function FilesTable() {
         <HotkeysTarget2 hotkeys={hotkeys}>
           {({handleKeyDown, handleKeyUp}) => (
             <div
+              ref={tableRef}
               onKeyDown={handleKeyDown}
               onKeyUp={handleKeyUp}
             >
@@ -79,7 +88,7 @@ export function FilesTable() {
                 className={styles.table}
                 numRows={length}
                 columnWidths={widths}
-                numFrozenColumns={2}
+                numFrozenColumns={TABLE_FROZEN_COL_COUNT}
                 cellRendererDependencies={[columns]}
                 getCellClipboardData={handleCopy}
                 enableFocusedCell={true}

@@ -32,11 +32,16 @@ class Config:
             self.json.extractions,
             description="Loading extractions...",
         ):
-            self.extractions.append(ExtractionConfig.from_dto(extraction_dto))
+            self.extractions.append(
+                ExtractionConfig.from_dto(
+                    extraction_dto,
+                    self.settings,
+                )
+            )
 
         self.ranges = []
         for range_dto in track(self.json.ranges, description="Loading ranges..."):
-            self.ranges.append(RangeConfig.from_dto(range_dto))
+            self.ranges.append(RangeConfig.from_dto(range_dto, self.settings))
 
         self.files = []
         for file_dto in track(self.json.files, description="Loading files..."):

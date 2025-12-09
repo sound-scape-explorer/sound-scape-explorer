@@ -1,5 +1,4 @@
-import {Button, Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Section, SectionCard} from '@blueprintjs/core';
 import {
   ArrowDown,
   ArrowUp,
@@ -13,7 +12,6 @@ import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
-import {useIntegrationSlug} from 'src/panels/extractions/hooks/use-integration-slug';
 import {useIntegrationState} from 'src/panels/extractions/hooks/use-integration-state.ts';
 import {useIntegrationValidation} from 'src/panels/extractions/hooks/use-integration-validation.ts';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
@@ -22,6 +20,7 @@ import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './config-integrations.module.scss';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 interface Props {
   extraction: ExtractionConfig;
@@ -37,7 +36,7 @@ export function ExtractionIntegrations({extraction}: Props) {
     updateDuration,
   } = useIntegrationState(extraction);
   const {hasTemplate} = useExtractionTemplates(extraction);
-  const {getSlug} = useIntegrationSlug();
+  const {getSlug} = useObjectSlug();
   const {isNameValid, isDurationValid, validate} = useIntegrationValidation();
   const validation = useMemo(
     () => validate(extraction),

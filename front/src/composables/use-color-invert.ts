@@ -1,15 +1,20 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
+import {ColorOption} from 'src/constants';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {computed} from 'vue';
 
 export function useColorInvert() {
   const {isColorMapSwapped} = useClientSettings();
-  const {criteria} = useColorSelection();
+  const {option} = useColorSelection();
 
   const invert = () => (isColorMapSwapped.value = !isColorMapSwapped.value);
 
   const isReversible = computed<boolean>(() => {
-    if (criteria.value === 'cycleDay' || criteria.value === 'isDay') {
+    // noinspection RedundantIfStatementJS
+    if (
+      option.value === ColorOption.enum.HoursInDay ||
+      option.value === ColorOption.enum.DayOrNight
+    ) {
       return false;
     }
 

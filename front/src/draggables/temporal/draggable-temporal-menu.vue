@@ -5,37 +5,44 @@ import AppIcon from 'src/app/app-icon.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
+import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
 import DraggableTemporalMenuFilters from 'src/draggables/temporal/draggable-temporal-menu-filters.vue';
 import {
   TemporalDisplay,
   useDraggableTemporal,
 } from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
-import {watch} from 'vue';
+import {useTemporalExport} from 'src/draggables/temporal/use-temporal-export';
+import {
+  TemporalStrategy,
+  useTemporalStrategy,
+} from 'src/draggables/temporal/use-temporal-strategy';
 
-const {
-  indicator,
-  indicators,
-  display,
-  isCandles,
-  isCondensed,
-  handleExportClick,
-  update,
-} = useDraggableTemporal();
-
+const {extractorSlug, display, isCandles, isCondensed} = useDraggableTemporal();
+const {acousticSlugs} = useAcousticExtractors();
+const {strategy} = useTemporalStrategy();
 const {period, periods, update: updatePeriod} = useTemporalCandles();
-watch(indicator, update);
+const {handleClick: handleExportClick} = useTemporalExport();
 </script>
 
 <template>
   <AppDraggableMenu>
     <h2>Select</h2>
 
-    <div>
+    <div :class="$style.first">
       <AppSelect
-        v-model="indicator"
-        :options="indicators"
+        v-model="extractorSlug"
+        :options="acousticSlugs"
+        placeholder="Extractor..."
         size="small"
+      />
+
+      <AppSelect
+        v-model="strategy"
+        :options="TemporalStrategy.options"
+        size="small"
+        tooltip="Aggregation strategy"
+        tooltip-placement="right"
       />
     </div>
 
@@ -104,8 +111,15 @@ watch(indicator, update);
   > div {
     align-items: center;
     display: flex;
-    gap: sizes.$p0;
+    gap: sizes.$g0;
   }
+}
+
+.first {
+  align-items: center;
+  display: grid;
+  gap: sizes.$g0;
+  grid-template-columns: 1fr calc(9em + 7px);
 }
 
 .selection {

@@ -25,7 +25,15 @@ const {container, mount, render, data, layout, plotBackground} =
 
 onMounted(render);
 watch([container, data, layout], mount);
-watch([plotBackground, () => props.condensed, () => props.isExpanded], render);
+watch(
+  [
+    plotBackground,
+    () => props.condensed,
+    () => props.isExpanded,
+    () => props.low,
+  ],
+  render,
+);
 </script>
 
 <template>

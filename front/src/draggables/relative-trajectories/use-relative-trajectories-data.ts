@@ -1,5 +1,6 @@
 import chroma from 'chroma-js';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useExportName} from 'src/composables/use-export-name';
 import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {
@@ -19,47 +20,46 @@ const labels = ref<AppPlotProps['labels']>([]);
 const names = ref<string[]>([]);
 const colors = ref<string[]>([]);
 
-const formatTimestamp = (
-  timestampMs: number, // Original timestamp in milliseconds
-  strategy: RelativeTrajectoryStrategy,
-  minGlobalTimestampMs?: number, // Only needed for continuous strategy
-): string => {
-  const date = new Date(timestampMs);
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-
-  const pad = (num: number): string => num.toString().padStart(2, '0');
-
-  const timeOfDayString = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-
-  if (strategy === RelativeTrajectoryStrategy.enum.overlay) {
-    // For overlay, return the time of day string
-    return timeOfDayString;
-  }
-
-  // For continuous, calculate day offset
-  if (minGlobalTimestampMs === undefined) {
-    return timeOfDayString; // Fallback
-  }
-
-  const MS_IN_DAY = 86400000; // 24 * 60 * 60 * 1000
-  const totalElapsedMs = timestampMs - minGlobalTimestampMs;
-  const days = Math.floor(totalElapsedMs / MS_IN_DAY);
-
-  if (days > 0) {
-    return `${days}d ${timeOfDayString}`;
-  }
-
-  // If within the first "day" of the continuous period, just show the time of day
-  return timeOfDayString;
-};
-
 export function useRelativeTrajectoriesData() {
   const {filter} = useRelativeTrajectories();
   const {generate} = useExportName();
   const {strategy} = useRelativeTrajectoriesStrategy();
+  const {timestampToDate, getTime} = useDateTime();
   const exportName = generate(ExportType.enum.relativeTrajectories);
+
+  const formatTimestamp = (
+    timestampMs: number, // Original timestamp in milliseconds
+    strategy: RelativeTrajectoryStrategy,
+    minGlobalTimestampMs?: number, // Only needed for continuous strategy
+  ): string => {
+    const date = timestampToDate(timestampMs);
+    const {hours, minutes, seconds} = getTime(date);
+
+    const pad = (num: number): string => num.toString().padStart(2, '0');
+
+    const timeOfDayString = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+
+    if (strategy === RelativeTrajectoryStrategy.enum.overlay) {
+      // For overlay, return the time of day string
+      return timeOfDayString;
+    }
+
+    // For continuous, calculate day offset
+    if (minGlobalTimestampMs === undefined) {
+      return timeOfDayString; // Fallback
+    }
+
+    const MS_IN_DAY = 86400000; // 24 * 60 * 60 * 1000
+    const totalElapsedMs = timestampMs - minGlobalTimestampMs;
+    const days = Math.floor(totalElapsedMs / MS_IN_DAY);
+
+    if (days > 0) {
+      return `${days}d ${timeOfDayString}`;
+    }
+
+    // If within the first "day" of the continuous period, just show the time of day
+    return timeOfDayString;
+  };
 
   const reset = () => {
     values.value = [];

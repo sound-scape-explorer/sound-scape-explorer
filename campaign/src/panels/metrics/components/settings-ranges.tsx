@@ -1,12 +1,10 @@
-import {Button, Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Section, SectionCard} from '@blueprintjs/core';
 import {Add, ArrowDown, ArrowUp, Cross} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo} from 'react';
 import {useRangeState} from 'src/panels/extractions/hooks/use-range-state.ts';
 import {SettingsRangesHelpContent} from 'src/panels/metrics/components/settings-ranges-help-content.tsx';
-import {useRangeSlug} from 'src/panels/metrics/hooks/use-range-slug';
 import {useRangeValidation} from 'src/panels/metrics/hooks/use-range-validation';
 import {DatePicker} from 'src/primitives/date-picker.tsx';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
@@ -15,6 +13,7 @@ import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './metrics-ranges.module.scss';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 export function SettingsRanges() {
   const {
@@ -26,7 +25,7 @@ export function SettingsRanges() {
     updateStart,
     updateEnd,
   } = useRangeState();
-  const {getSlug} = useRangeSlug();
+  const {getSlug} = useObjectSlug();
   const {isNameValid, isStartValid, isEndValid, validate} =
     useRangeValidation();
   const validation = useMemo(() => validate(), [validate]);

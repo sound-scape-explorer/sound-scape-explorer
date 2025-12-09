@@ -1,9 +1,10 @@
+import {SITE_AS_TAG_NAME} from '@shared/constants';
 import {type ExtractorDto, type FileDto} from '@shared/dtos';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {useConfig} from 'src/composables/use-config';
 import {useViewSelection} from 'src/composables/use-view-selection';
-import {AUTOCLUSTER_AS_TAG_NAME, SITE_AS_TAG_NAME} from 'src/constants';
+import {AUTOCLUSTER_AS_TAG_NAME} from 'src/constants';
 import {ref} from 'vue';
 
 interface Window {
@@ -111,8 +112,8 @@ export function useIntervals() {
         end,
         files: [...new Set(windows.map((w) => w.file))],
         sites: [...new Set(windows.map((w) => w.file.Site))],
-        windows: [], // will populate after
-        tags: {}, // will populate after
+        windows: [], // will populate later
+        tags: {}, // will populate later
       };
 
       // add windows while fusing by file to have the exact audio portion for each

@@ -8,7 +8,10 @@ from processing.context import Context
 def prompt_csv_path(context: Context):
     config = context.config
 
-    questions = [
+    # noinspection PyProtectedMember
+    from InquirerPy.utils import InquirerPyQuestions
+
+    questions: InquirerPyQuestions = [
         {
             "type": "input",
             "name": "filename",
@@ -17,7 +20,7 @@ def prompt_csv_path(context: Context):
         },
     ]
 
-    answers = prompt(questions)
+    answers = prompt(questions, vi_mode=True)
     filename: str = str(answers["filename"])
 
     storage_filename = config.settings.storage_path.split(os.sep)[-1]

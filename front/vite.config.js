@@ -52,7 +52,6 @@ export default defineConfig({
           'chroma-js': ['chroma-js'],
           'colormap': ['colormap'],
           'comlink': ['comlink'],
-          'dayjs': ['dayjs'],
           'h5wasm': ['h5wasm'],
           'html2canvas': ['html2canvas'],
           'plotly.js-dist-min': ['plotly.js-dist-min'],

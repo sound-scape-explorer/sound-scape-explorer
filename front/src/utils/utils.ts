@@ -19,3 +19,19 @@ export function getInfiniteRange(from: number | null, to: number | null) {
     top,
   };
 }
+
+export function getInfiniteRangeFromStrings(from: string, to: string) {
+  const bottom = from === '' ? -Infinity : Number(from);
+  const top = to === '' ? Infinity : Number(to);
+
+  return {
+    bottom,
+    top,
+  };
+}
+
+export function getSortedIndices(numbers: number[]) {
+  const indices = Array.from({length: numbers.length}, (_, i) => i);
+  indices.sort((a, b) => numbers[a] - numbers[b]);
+  return indices;
+}

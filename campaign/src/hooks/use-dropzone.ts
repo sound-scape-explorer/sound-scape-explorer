@@ -7,7 +7,7 @@ import {useXlsxDrop} from 'src/hooks/use-xlsx-drop';
 import {type DropzoneInfo} from 'src/primitives/dropzone.tsx';
 
 export function useDropzone() {
-  const [locked, setLocked] = useState(false);
+  const [locked, setLocked] = useState(false); // this actually never works as browser takes a long time before blocking the event loop...
   const {handleFolder} = useFolderDrop();
   const {handleJson} = useJsonDrop();
   const {handleXlsx} = useXlsxDrop();

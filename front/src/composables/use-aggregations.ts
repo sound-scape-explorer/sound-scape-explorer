@@ -1,4 +1,4 @@
-import {useSitesNew} from 'src/composables/use-sites-new';
+import {useSites} from 'src/composables/use-sites';
 import {useStorageReader} from 'src/composables/use-storage-reader';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
@@ -15,7 +15,7 @@ const aggregations = ref<Aggregations | null>(null);
 
 export function useAggregations() {
   const {read: r} = useStorageReader();
-  const {sites} = useSitesNew();
+  const {sites} = useSites();
   const {extraction, band, integration} = useViewSelection();
 
   const read = async () => {
@@ -33,7 +33,7 @@ export function useAggregations() {
         extraction.value.index,
         band.value.index,
         integration.value.index,
-        Object.keys(sites.value),
+        sites.value.map((s) => s.name),
       );
     });
   };

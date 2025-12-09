@@ -9,5 +9,6 @@ def prettify_exceptions(action):
         except Exception:
             console = Console()
             console.print_exception(show_locals=True)
+            raise
 
     return decorator

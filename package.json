@@ -22,14 +22,15 @@
     "dev:audio": "pnpm front:audio",
     "front": "cd front && pnpm dev",
     "generate": "pnpm generate:enums",
-    "generate:enums": "node --loader ts-node/esm shared/generate-enums.ts",
-    "install:all": "pnpm install:root && pnpm install:audio && pnpm install:front && pnpm install:campaign",
+    "generate:enums": "tsx shared/generate-enums.ts",
+    "install:all": "pnpm purge:all && pnpm install:root && pnpm install:campaign && pnpm install:audio && pnpm install:front",
     "install:root": "pnpm i",
     "install:audio": "cd audio && pnpm i && cd ..",
     "install:front": "cd front && pnpm i && cd ..",
     "install:campaign": "cd campaign && pnpm i && cd ..",
     "install:processing": "python3.11 -m venv venv && . venv/bin/activate && cd processing && pip install . && sse_download",
     "migrate:config": "tsx shared/migrate-config.ts",
+    "purge:all": "rimraf node_modules && pnpm add -D rimraf && rimraf campaign/node_modules && rimraf audio/node_modules && rimraf front/node_modules",
     "start": "pnpm dev",
     "test:git:unix": "bin/test-git.sh",
     "test:git:windows": "bin/test-git.ps1",
@@ -59,13 +60,13 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@eslint/json": "^0.13.1",
-    "@stylistic/eslint-plugin": "^5.2.2",
+    "@stylistic/eslint-plugin": "^5.4.0",
     "@types/express": "^5.0.3",
     "@types/node": "^24.2.0",
     "@types/qs": "^6.14.0",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
-    "eslint": "^9.32.0",
+    "eslint": "^9.37.0",
     "eslint-plugin-de-morgan": "^1.3.1",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
@@ -85,7 +86,9 @@
     "typescript-eslint": "^8.39.0"
   },
   "dependencies": {
+    "countries-and-timezones": "^3.8.0",
     "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "zod": "^4.0.15"
   }
 }

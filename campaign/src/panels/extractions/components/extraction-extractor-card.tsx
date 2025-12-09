@@ -1,9 +1,9 @@
-import {Button, Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Checkbox, Section, SectionCard} from '@blueprintjs/core';
 import {ArrowDown, ArrowUp, Cog, Cross} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
-import {ExtractorImpl} from '@shared/enums';
+import {ExtractorImpl, ExtractorType} from '@shared/enums';
+import {extractorTypeByImpl} from '@shared/extractor-type-by-impl';
 import clsx from 'clsx';
 import {useEffect, useMemo, useState} from 'react';
 import {useTheme} from 'src/hooks/use-theme';
@@ -22,8 +22,8 @@ import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extractio
 import {useExtractorState} from 'src/panels/extractions/hooks/use-extractor-state.ts';
 import {useExtractorValidation} from 'src/panels/extractions/hooks/use-extractor-validation.ts';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
-import {NumberReactiveInput} from 'src/primitives/number-reactive-input.tsx';
-import {Select} from 'src/primitives/select.tsx';
+import {NumberInput} from 'src/primitives/number-input.tsx';
+import {Suggest} from 'src/primitives/suggest.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './config-extractors.module.scss';
@@ -63,10 +63,12 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
     updateImpl,
     updateWindow,
     updateHop,
+    updateIncludeInAggregation,
   } = useExtractorState(extraction);
   const {isNameValid, isWindowValid, isHopValid} = useExtractorValidation();
   const {hasTemplate} = useExtractionTemplates(extraction);
   const {isDark} = useTheme();
+  const [open, setOpen] = useState(false);
 
   const isLocked = useMemo(
     () => EXTRACTORS_LOCKED.includes(extractor.impl),
@@ -78,7 +80,10 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
     [extractor.impl],
   );
 
-  const [open, setOpen] = useState(false);
+  const isAcousticExtractor = useMemo(
+    () => extractorTypeByImpl[extractor.impl] === ExtractorType.enum.ACOUSTICS,
+    [extractor.impl],
+  );
 
   useEffect(() => {
     if (!hasAdditionalParams && open) {
@@ -118,27 +123,36 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
         disabled={hasTemplate}
       />
 
-      <Select
+      <Suggest
         items={ExtractorImpl.options}
-        onSelect={(n) => updateImpl(extractor, n)}
-        current={extractor.impl}
-        placeholder="Select impl"
+        selected={extractor.impl}
+        onChange={(n) => updateImpl(extractor, n as ExtractorImpl)}
         disabled={hasTemplate}
       />
 
-      <NumberReactiveInput
-        value={extractor.window}
-        onChange={(n) => updateWindow(extractor, n)}
+      <NumberInput
+        defaultValue={extractor.window}
+        onBlur={(n) => updateWindow(extractor, n)}
         intent={isWindowValid(extractor) ? 'success' : 'danger'}
         disabled={hasTemplate || isLocked}
       />
 
-      <NumberReactiveInput
-        value={extractor.hop}
-        onChange={(n) => updateHop(extractor, n)}
+      <NumberInput
+        defaultValue={extractor.hop}
+        onBlur={(n) => updateHop(extractor, n)}
         intent={isHopValid(extractor) ? 'success' : 'danger'}
         disabled={hasTemplate}
       />
+
+      <div className={styles.checkboxContainer}>
+        <Checkbox
+          checked={extractor.include_in_aggregation}
+          disabled={!isAcousticExtractor}
+          onChange={(e) =>
+            updateIncludeInAggregation(extractor, e.currentTarget.checked)
+          }
+        />
+      </div>
 
       <Button
         size="small"

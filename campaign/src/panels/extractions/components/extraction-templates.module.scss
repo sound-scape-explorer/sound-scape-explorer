@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+
+  & > :first-child {
+    width: 100%;
+  }
+}

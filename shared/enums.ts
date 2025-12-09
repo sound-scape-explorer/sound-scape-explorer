@@ -28,6 +28,10 @@ export const ExtractorImpl = z.enum(["BIRDNET","PERCH","SURF_PERCH","VGGISH","YA
 // eslint-disable-next-line no-redeclare
 export type ExtractorImpl = z.infer<typeof ExtractorImpl>;
 
+export const ExtractorType = z.enum(["NEURAL","LOW_LEVEL","ACOUSTICS"]);
+// eslint-disable-next-line no-redeclare
+export type ExtractorType = z.infer<typeof ExtractorType>;
+
 export const AutoclusterImpl = z.enum(["HDBSCAN_EOM","HDBSCAN_LEAF"]);
 // eslint-disable-next-line no-redeclare
 export type AutoclusterImpl = z.infer<typeof AutoclusterImpl>;

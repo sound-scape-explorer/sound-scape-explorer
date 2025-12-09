@@ -9,9 +9,10 @@ from processing.context import Context
 from processing.interfaces import TimelineSlice, TimelineAggregate
 from processing.lib.console import Console
 from processing.lib.time import convert_timestamp_to_date_string
-from processing.managers.ExtractionManager import ExtractedByExtractorIndex
+from processing.managers.ExtractionManager import (
+    ExtractionResults,
+)
 from processing.repositories.ExtractionRepository import ExtractionData
-
 
 _ExtractorIndex = int
 _SlicesDict = dict[_ExtractorIndex, list[TimelineSlice]]
@@ -63,14 +64,21 @@ class Timeline:
                     f", previous file index: {convert_timestamp_to_date_string(previous.file.timestamp)}"
                 )
 
-    def add(self, extracted_by_extractor_index: ExtractedByExtractorIndex) -> None:
+    def ingest(
+        self,
+        results: ExtractionResults,
+    ) -> None:
         """Add extracted data to the timeline."""
-        for extractor_index, all_extracted in extracted_by_extractor_index.items():
+        for extractor, all_extracted in results.by_extractor.items():
+            if not extractor.include_in_aggregation:
+                Console.print(f"skipping extractor #{extractor.index} {extractor.name}")
+                continue
+
             self._validate_chrono(all_extracted)
 
             for extracted in all_extracted:
                 slices = self._slice(extracted)
-                self.slices[extractor_index].extend(slices)
+                self.slices[extractor.index].extend(slices)
 
                 # Update timestamp boundaries as we add data
                 for slice_data in slices:
@@ -116,9 +124,9 @@ class Timeline:
 
         config_origin = self.context.config.settings.timeline_origin
         start_position = max(config_origin, self._earliest_timestamp)
-        aligned_start = (
-            (start_position + integration_ms - 1) // integration_ms
-        ) * integration_ms
+
+        # Floor alignment: include partial first window rather than skipping it
+        aligned_start = (start_position // integration_ms) * integration_ms
 
         return aligned_start, self._latest_timestamp
 

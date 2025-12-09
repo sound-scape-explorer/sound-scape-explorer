@@ -5,9 +5,9 @@ import {
   Intent,
   Popover,
   Section,
+  SectionCard,
   Text,
 } from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
 import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging';
 import {Select} from 'src/primitives/select.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';

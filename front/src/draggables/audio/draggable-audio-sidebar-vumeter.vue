@@ -27,10 +27,10 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
 
 .container {
   background: transparent;
-  bottom: -394px;
+  bottom: -409px;
   opacity: 1;
   position: absolute;
-  transform: translate3d(9px, 4px, 0);
+  transform: translate3d(9px, 0, 0);
 
   @include transitions.transition-vumeter;
 }

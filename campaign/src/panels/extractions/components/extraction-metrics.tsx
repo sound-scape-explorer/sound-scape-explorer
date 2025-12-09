@@ -1,5 +1,4 @@
-import {Button, Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Section, SectionCard} from '@blueprintjs/core';
 import {
   ArrowDown,
   ArrowUp,
@@ -17,12 +16,12 @@ import styles from 'src/panels/extractions/components/extraction-metrics.module.
 import {ExtractionMetricsDrawerContent} from 'src/panels/extractions/components/extraction-metrics-drawer-content.tsx';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useMetricState} from 'src/panels/extractions/hooks/use-metric-state.ts';
-import {useMetricSlug} from 'src/panels/metrics/hooks/use-metric-slug';
 import {useMetricValidation} from 'src/panels/metrics/hooks/use-metric-validation.ts';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
 import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 interface Props {
   extraction: ExtractionConfig;
@@ -32,7 +31,7 @@ export function ExtractionMetrics({extraction}: Props) {
   const {metrics, addMetric, deleteMetric, updateIndex, updateImpl} =
     useMetricState(extraction);
   const {hasTemplate} = useExtractionTemplates(extraction);
-  const {getSlug} = useMetricSlug();
+  const {getSlug} = useObjectSlug();
   const {isImplValid, validate} = useMetricValidation();
   const validation = useMemo(
     () => validate(extraction),

@@ -1,5 +1,4 @@
-import {Button, Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Button, Section, SectionCard} from '@blueprintjs/core';
 import {
   ArrowDown,
   ArrowUp,
@@ -12,7 +11,6 @@ import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
 import {useMemo, useState} from 'react';
 import {type ExtractionConfig} from 'src/interfaces.ts';
-import {useBandSlug} from 'src/panels/extractions/hooks/use-band-slug';
 import {useBandState} from 'src/panels/extractions/hooks/use-band-state.ts';
 import {useBandValidation} from 'src/panels/extractions/hooks/use-band-validation';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
@@ -22,23 +20,17 @@ import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './config-bands.module.scss';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 interface Props {
   extraction: ExtractionConfig;
 }
 
 export function ExtractionBands({extraction}: Props) {
-  const {
-    bands,
-    addBand,
-    deleteBand,
-    updateIndex,
-    updateName,
-    updateLow,
-    updateHigh,
-  } = useBandState(extraction);
+  const {addBand, deleteBand, updateIndex, updateName, updateLow, updateHigh} =
+    useBandState(extraction);
   const {hasTemplate} = useExtractionTemplates(extraction);
-  const {getSlug} = useBandSlug();
+  const {getSlug} = useObjectSlug();
   const {isNameValid, isLowValid, isHighValid, validate} = useBandValidation();
   const validation = useMemo(
     () => validate(extraction),
@@ -86,7 +78,7 @@ export function ExtractionBands({extraction}: Props) {
         <div>high freq. (Hz)</div>
       </SectionCard>
 
-      {bands
+      {extraction.bands
         .sort((a, b) => a.index - b.index)
         .map((band) => (
           <SectionCard

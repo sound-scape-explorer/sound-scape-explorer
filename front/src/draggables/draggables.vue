@@ -8,7 +8,6 @@ import DraggableColors from 'src/draggables/colors/draggable-colors.vue';
 import DraggableDetails from 'src/draggables/details/draggable-details.vue';
 import DraggableHeatmaps from 'src/draggables/heatmaps/draggable-heatmaps.vue';
 import DraggableHelp from 'src/draggables/help/draggable-help.vue';
-import DraggableHistograms from 'src/draggables/histograms/draggable-histograms.vue';
 import DraggableOpen from 'src/draggables/open/draggable-open.vue';
 import DraggableRelativeTrajectories from 'src/draggables/relative-trajectories/draggable-relative-trajectories.vue';
 import DraggableSelection from 'src/draggables/selection/draggable-selection.vue';
@@ -41,7 +40,6 @@ const {colors} = useThemeColors();
   <DraggableRelativeTrajectories v-if="isLoaded" />
   <DraggableTemporal v-if="isLoaded" />
   <DraggableHeatmaps v-if="isLoaded" />
-  <DraggableHistograms v-if="isLoaded" />
 </template>
 
 <style lang="scss" module>

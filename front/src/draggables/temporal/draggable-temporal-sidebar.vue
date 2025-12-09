@@ -5,14 +5,14 @@ import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 
-const {hasIndicator, isDisplay, toggleDisplay, toggleExpanded} =
+const {hasExtractor, isDisplay, toggleDisplay, toggleExpanded} =
   useDraggableTemporal();
 </script>
 
 <template>
   <AppDraggableSidebar>
     <AppButton
-      :disabled="!hasIndicator"
+      :disabled="!hasExtractor"
       :handle-click="toggleExpanded"
       size="tiny"
       small-tooltip
@@ -20,13 +20,13 @@ const {hasIndicator, isDisplay, toggleDisplay, toggleExpanded} =
       tooltip-placement="left"
     >
       <AppIcon
-        icon="expandVertical"
+        icon="expandHorizontal"
         size="small"
       />
     </AppButton>
 
     <AppButton
-      :disabled="!hasIndicator"
+      :disabled="!hasExtractor"
       :handle-click="toggleDisplay"
       :tooltip="isDisplay ? 'Chart on' : 'Chart off'"
       small-tooltip

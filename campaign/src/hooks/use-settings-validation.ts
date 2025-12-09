@@ -1,11 +1,11 @@
 import {STORAGE_PATH_SUFFIX, TIMELINE_ORIGIN_MIN} from '@shared/constants';
-import {findEarliestDate} from '@shared/dates';
 import {ComputationStrategy} from '@shared/enums';
 import {isAfter, isEqual} from 'date-fns';
 import {useCallback, useMemo} from 'react';
 import {useFileValidation} from 'src/hooks/use-file-validation';
 import {useSettingsState} from 'src/hooks/use-settings-state';
 import {useTableState} from 'src/panels/files/hooks/use-table-state';
+import {findEarliestDate} from 'src/utils/datetime.ts';
 
 export function useSettingsValidation() {
   const {settings} = useSettingsState();

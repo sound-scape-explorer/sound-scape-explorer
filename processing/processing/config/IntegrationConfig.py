@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from processing.dtos import IntegrationDto
 
 
-@dataclass
+@dataclass(frozen=True)
 class IntegrationConfig:
     index: int
     name: str

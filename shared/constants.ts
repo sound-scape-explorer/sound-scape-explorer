@@ -5,7 +5,9 @@ import {
   StftWindowType,
 } from '@shared/enums';
 
+export const SITE_AS_TAG_NAME = '__SITE';
 export const SITE_DEFAULT = '__ALL';
+
 export const JSON_TYPE = 'application/json';
 export const XLSX_TYPE =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -45,6 +47,7 @@ export const AUTOCLUSTER_EPSILON_DEFAULT = 0.1;
 // extractor defaults
 export const WINDOW_MS_DEFAULT = 1000;
 export const HOP_MS_DEFAULT = 1000;
+export const INCLUDE_IN_AGGREGATION_DEFAULT = true;
 export const BIRDNET_WINDOW_MS = 3000;
 export const PERCH_WINDOW_MS = 5000;
 export const SURFPERCH_WINDOW_MS = 5000;
@@ -88,6 +91,8 @@ export const LEQ_DIFF_PERCENTILE_B = 10;
 
 export const UMAP_MIN_DIST = 0.1;
 
+export const SMOOTHING_WINDOW_CUSTOM = 'CUST.';
+
 export const SMOOTHING_WINDOW_PRESETS = {
   '1_MIN': 60 * 1000, // 1 minute
   '15_MIN': 15 * 60 * 1000, // 15 minutes
@@ -104,7 +109,6 @@ export const SMOOTHING_WINDOW_PRESETS = {
   'YEAR': 365 * 24 * 60 * 60 * 1000, // ~1 year (365 days)
 };
 
-// For TypeScript safety, you can create a type
 export type SmoothingWindowPreset = keyof typeof SMOOTHING_WINDOW_PRESETS;
 export const SmoothingWindowPresets = Object.keys(
   SMOOTHING_WINDOW_PRESETS,

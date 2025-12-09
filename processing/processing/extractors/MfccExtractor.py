@@ -12,6 +12,7 @@ from processing.enums import StftWindowType
 from processing.extractors.Extractor import Extractor, ExtractionDataRaw
 from processing.lib import audio
 from processing.lib.shapes import assert_shape
+from processing.utils.predict_mfcc_shape import predict_mfcc_shape
 
 
 class MfccExtractor(Extractor):
@@ -52,9 +53,14 @@ class MfccExtractor(Extractor):
         stft_hop_samples = int(stft_window_samples * (1 - self.stft_overlap_ratio))
         n_fft = stft_window_samples + 1
 
-        window_samples = int(self.window_ms / 1000 * sample_rate)
-        stft_ratio = int(stft_window_samples / stft_hop_samples)
-        frames_per_block = int((window_samples / stft_window_samples) * stft_ratio)
+        expected_shape = predict_mfcc_shape(
+            audio_duration_seconds=len(samples) / sample_rate,
+            window_ms=self.window_ms,
+            sample_rate=sample_rate,
+            n_mfcc=self.n_mfcc,
+            stft_window_ms=self.stft_window_ms,
+            stft_overlap_ratio=self.stft_overlap_ratio,
+        )
 
         mfccs = []
         starts = []
@@ -80,7 +86,7 @@ class MfccExtractor(Extractor):
             mfccs.append(mfcc.flatten())
 
         stack = np.stack(mfccs).astype(np.float32)
-        assert_shape(stack, (len(starts), self.n_mfcc * frames_per_block))
+        assert_shape(stack, expected_shape)
 
         return ExtractionDataRaw(
             embeddings=stack,

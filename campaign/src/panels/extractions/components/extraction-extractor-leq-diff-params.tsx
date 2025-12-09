@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {SectionCard} from '@blueprintjs/core';
 import {
   LEQ_DIFF_PERCENTILE_A,
   LEQ_DIFF_PERCENTILE_B,

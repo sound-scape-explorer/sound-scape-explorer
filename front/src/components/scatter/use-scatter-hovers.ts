@@ -1,14 +1,13 @@
-import {formatDateToString} from '@shared/dates';
 import {ScatterHoversError} from 'src/common/Errors';
 import {usePlotlyHoverTemplate} from 'src/components/scatter/use-plotly-hover-template';
-import {useIntervalDates} from 'src/composables/use-interval-dates';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useIntervals} from 'src/composables/use-intervals';
 import {STRING_DELIMITER} from 'src/constants';
 
 export function useScatterHovers() {
   const {intervals} = useIntervals();
   const {generate: generateTemplate} = usePlotlyHoverTemplate();
-  const {getDates} = useIntervalDates();
+  const {timestampToString} = useDateTime();
 
   const generateHovers = () => {
     if (intervals.value === null) {
@@ -26,9 +25,8 @@ export function useScatterHovers() {
       hover.push(['Interval', i.toString()]);
 
       // dates
-      const {start, end} = getDates(interval);
-      hover.push(['Start', formatDateToString(start)]);
-      hover.push(['End', formatDateToString(end)]);
+      hover.push(['Start', timestampToString(interval.start)]);
+      hover.push(['End', timestampToString(interval.end)]);
 
       // tags
       for (const [tagName, tagValues] of Object.entries(interval.tags)) {

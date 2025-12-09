@@ -68,6 +68,12 @@ export function useSelectionState() {
     zRange.value = [zBounds.value[0], zBounds.value[1]];
   };
 
+  const resetAngles = () => {
+    xAngle.value = 0;
+    yAngle.value = 0;
+    zAngle.value = 0;
+  };
+
   return {
     name,
     xRange,
@@ -84,5 +90,6 @@ export function useSelectionState() {
     setBounds,
     resetRanges,
     expandRanges,
+    resetAngles,
   };
 }

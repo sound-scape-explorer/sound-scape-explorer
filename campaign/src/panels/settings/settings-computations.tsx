@@ -1,5 +1,4 @@
-import {Section} from '@blueprintjs/core';
-import {SectionCard} from '@blueprintjs/core/lib/esnext';
+import {Section, SectionCard} from '@blueprintjs/core';
 import {SettingsComputationsDimensions} from 'src/panels/settings/settings-computations-dimensions.tsx';
 import {SettingsComputationsDrawerContent} from 'src/panels/settings/settings-computations-drawer-content.tsx';
 import {SettingsComputationsIterations} from 'src/panels/settings/settings-computations-iterations.tsx';

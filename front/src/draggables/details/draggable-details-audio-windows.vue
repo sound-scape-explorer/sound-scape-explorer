@@ -3,7 +3,7 @@ import {NGi, NGrid, NTag} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
-import {useDate} from 'src/composables/use-date';
+import {useDateTime} from 'src/composables/use-date-time';
 import {type Interval} from 'src/composables/use-intervals';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 
@@ -14,7 +14,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const {select} = useAudioFile();
-const {convertTimestampToDate} = useDate();
+const {timestampToString} = useDateTime();
 </script>
 
 <template>
@@ -64,7 +64,7 @@ const {convertTimestampToDate} = useDate();
           >
             date start
           </NTag>
-          {{ convertTimestampToDate(window.absolute.start) }}
+          {{ timestampToString(window.absolute.start) }}
         </NGi>
       </NGrid>
     </template>
