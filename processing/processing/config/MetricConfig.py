@@ -3,11 +3,10 @@ from dataclasses import dataclass
 from processing.dtos import MetricDto
 from processing.enums import MetricImpl
 
-
 MetricPairing = [MetricImpl.CONTINGENCY, MetricImpl.SILHOUETTE]
 
 
-@dataclass
+@dataclass(frozen=True)
 class MetricConfig:
     index: int
     impl: MetricImpl

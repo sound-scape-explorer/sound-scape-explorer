@@ -4,7 +4,7 @@ from processing.dtos import ReducerDto
 from processing.enums import ReducerImpl
 
 
-@dataclass
+@dataclass(frozen=True)
 class ReducerConfig:
     index: int
     impl: ReducerImpl

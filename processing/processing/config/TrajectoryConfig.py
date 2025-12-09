@@ -5,7 +5,7 @@ from processing.dtos import TrajectoryDto
 from processing.lib.time import convert_date_string_to_timestamp
 
 
-@dataclass
+@dataclass(frozen=True)
 class TrajectoryConfig:
     index: int
     name: str

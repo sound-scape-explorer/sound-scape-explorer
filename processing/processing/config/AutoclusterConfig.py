@@ -4,7 +4,7 @@ from processing.dtos import AutoclusterDto
 from processing.enums import AutoclusterImpl
 
 
-@dataclass
+@dataclass(frozen=True)
 class AutoclusterConfig:
     index: int
     name: str

@@ -5,7 +5,7 @@ from processing.dtos import RangeDto
 from processing.lib.time import convert_date_string_to_timestamp
 
 
-@dataclass
+@dataclass(frozen=True)
 class RangeConfig:
     index: int
     name: str

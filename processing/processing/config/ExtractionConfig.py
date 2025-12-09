@@ -11,7 +11,7 @@ from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.dtos import ExtractionDto
 
 
-@dataclass
+@dataclass(frozen=True)
 class ExtractionConfig:
     index: int
     name: str

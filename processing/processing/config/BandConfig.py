@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from processing.dtos import BandDto
 
 
-@dataclass
+@dataclass(frozen=True)
 class BandConfig:
     index: int
     name: str
