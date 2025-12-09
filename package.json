@@ -23,7 +23,7 @@
     "front": "cd front && pnpm dev",
     "generate": "pnpm generate:enums",
     "generate:enums": "tsx shared/generate-enums.ts",
-    "install:all": "pnpm purge:all && pnpm install:root && pnpm install:campaign && pnpm install:audio && pnpm install:front",
+    "install:all": "pnpm install:root && pnpm install:campaign && pnpm install:audio && pnpm install:front",
     "install:root": "pnpm i",
     "install:audio": "cd audio && pnpm i && cd ..",
     "install:front": "cd front && pnpm i && cd ..",
