@@ -18,9 +18,9 @@ const {
   isTimeActive,
   timeIn,
   timeOut,
-  isLabelsActive,
-  labelsIn,
-  labelsOut,
+  isTagsActive,
+  tagsIn,
+  tagsOut,
   isTemporalActive,
   temporalIn,
   temporalOut,
@@ -134,20 +134,20 @@ const {
             </span>
           </div>
           <div :class="$style.row">
-            <span>Labels</span>
+            <span>Tags</span>
             <span
-              v-if="isLabelsActive && isCollectMode"
+              v-if="isTagsActive && isCollectMode"
               :style="`color: ${colors.pressedColor};`"
             >
-              {{ labelsIn }} collected
+              {{ tagsIn }} collected
             </span>
 
-            <span v-if="isLabelsActive && (isFilterMode || isIntervalMode)">
-              {{ labelsOut }} filtered
+            <span v-if="isTagsActive && (isFilterMode || isIntervalMode)">
+              {{ tagsOut }} filtered
             </span>
 
             <span
-              v-if="!isLabelsActive"
+              v-if="!isTagsActive"
               :class="$style.inactive"
             >
               inactive
