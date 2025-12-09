@@ -71,7 +71,7 @@ class Timeline:
         """Add extracted data to the timeline."""
         for extractor, all_extracted in results.by_extractor.items():
             if not extractor.include_in_aggregation:
-                print(f"skipping #{extractor.index} {extractor.name}")
+                Console.print(f"skipping extractor #{extractor.index} {extractor.name}")
                 continue
 
             self._validate_chrono(all_extracted)
