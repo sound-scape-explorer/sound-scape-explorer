@@ -81,8 +81,6 @@ export function useExtractionState() {
 
       const extraction = newExtractions.find((e) => e.index === 0);
 
-      console.log(newExtractions);
-
       if (!extraction) {
         return;
       }
