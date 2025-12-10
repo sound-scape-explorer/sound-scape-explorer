@@ -9,9 +9,6 @@ export const ALERT_TIMER = 3000;
 
 export const EXPORT_FILENAME = 'SSE';
 
-// todo: to remove
-export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-
 export const AUDIO_GAIN = {
   default: 0.1,
   step: 0.1,
@@ -103,7 +100,7 @@ export const ColorOption = z.enum([
   'DayOrNight',
   'IntervalIndex',
 ]);
- 
+
 export type ColorCriteria = z.infer<typeof ColorOption>;
 
 export const HeatmapScale = z.enum(['RdBu', 'Blues']);
