@@ -132,7 +132,6 @@ export function useFilesTagging() {
 
     const selectedPrefixed = addPrefixToTagName(selected);
     const column = findColumnByName(selectedPrefixed);
-    // purgeLabelFromTrajectories(selected); // todo: ???
     removeColumn(column);
     setSelected(null);
   }, [selected, removeColumn, setSelected, findColumnByName]);

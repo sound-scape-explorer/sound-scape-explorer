@@ -47,7 +47,7 @@ export function DatePicker({
       value={value}
       dateFnsFormat={DATE_FORMAT}
       timePrecision="second"
-      showTimezoneSelect={false} // TODO: Add later
+      showTimezoneSelect={false}
     />
   );
 }
