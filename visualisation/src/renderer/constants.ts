@@ -3,6 +3,9 @@ export const REFS = {
   HEADER: document.getElementById('sse-title') as HTMLHeadingElement,
   VERSION: document.getElementById('sse-version') as HTMLParagraphElement,
   AUDIO_STATUS: document.getElementById('sse-audio-status') as HTMLSpanElement,
+  VERSION_TITLE: document.getElementById(
+    'sse-version-title',
+  ) as HTMLLabelElement,
   VERSION_STATUS: document.getElementById(
     'sse-version-status',
   ) as HTMLSpanElement,
