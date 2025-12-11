@@ -4,7 +4,6 @@ from typing import Optional
 import numpy as np
 from rich.progress import Progress
 
-from processing.constants import STRING_DELIMITER
 from processing.context import Context
 from processing.interfaces import TimelineSlice, TimelineAggregate
 from processing.lib.console import Console
@@ -129,24 +128,6 @@ class Timeline:
         aligned_start = (start_position // integration_ms) * integration_ms
 
         return aligned_start, self._latest_timestamp
-
-    # todo: store me? (later)
-    @staticmethod
-    def _aggregate_labels(
-        slices: list[TimelineSlice],
-    ) -> dict[str, str]:
-        """Aggregate labels from files dynamically."""
-        all_labels: dict[str, list[str]] = defaultdict(list)
-        tags: dict[str, str] = {}
-
-        for s in slices:
-            for key, value in s.file.tags.items():
-                all_labels[key].append(value)
-
-        for key, values in all_labels.items():
-            tags[key] = STRING_DELIMITER.join(set(values))
-
-        return tags
 
     def aggregate(
         self,
