@@ -25,12 +25,23 @@ def _register_python_path():
 
 
 def _set_memory_limit(memory_limit: int):
-    """Limit available RAM for the whole process (for testing/debugging)"""
-    import resource
+    """Limit available RAM (Unix only, for testing/debugging)"""
+    import platform
 
-    limit_bytes = memory_limit * 1024 * 1024
-    resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
-    print(f"[yellow]Memory limit set to {memory_limit}MB[/yellow]")
+    if platform.system() != "Linux" and platform.system() != "Darwin":
+        print(
+            f"[dim yellow]Memory limiting only supported on Unix systems[/dim yellow]"
+        )
+        return
+
+    try:
+        import resource
+
+        limit_bytes = memory_limit * 1024 * 1024
+        resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
+        print(f"[yellow]Memory limit set to {memory_limit}MB[/yellow]")
+    except (ValueError, OSError) as e:
+        print(f"[yellow]Could not set memory limit: {e}[/yellow]")
 
 
 def _prepare(memory_limit: int | None = None):
