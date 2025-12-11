@@ -1,5 +1,5 @@
 {
-  "version": "14.0.0-beta.8",
+  "version": "14.0.0-beta.15",
   "settings": {
     "storagePath": "coral-reef-light.h5",
     "audioPath": "/home/bamdad/git/sound-scape-explorer/examples/audio",
@@ -37,6 +37,7 @@
           "index": 0,
           "name": "vggish",
           "impl": "VGGISH",
+          "include_in_aggregation": true,
           "window": 1000,
           "hop": 1000
         }

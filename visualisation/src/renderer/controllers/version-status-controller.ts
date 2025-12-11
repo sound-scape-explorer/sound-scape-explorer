@@ -1,12 +1,16 @@
 import semver from 'semver';
 import {VersionStatusView} from 'src/renderer/views/version-status-view';
+import {VersionTitleView} from 'src/renderer/views/version-title-view';
 import {VERSION} from 'src/version';
 
 export class VersionStatusController {
-  private view: VersionStatusView;
+  private title: VersionTitleView;
+
+  private status: VersionStatusView;
 
   public constructor() {
-    this.view = new VersionStatusView();
+    this.title = new VersionTitleView();
+    this.status = new VersionStatusView();
   }
 
   public async render() {
@@ -28,14 +32,16 @@ export class VersionStatusController {
       const currentVersion = semver.valid(VERSION);
       const isOutdated = semver.lt(currentVersion, upstreamVersion);
 
+      this.title.update({upstreamVersion, currentVersion});
+
       if (isOutdated) {
-        this.view.showOutdated(upstreamVersion);
+        this.status.showOutdated(upstreamVersion);
         return;
       }
 
-      this.view.showUpToDate();
+      this.status.showUpToDate();
     } catch {
-      this.view.showNoConnection();
+      this.status.showNoConnection();
     }
   }
 }

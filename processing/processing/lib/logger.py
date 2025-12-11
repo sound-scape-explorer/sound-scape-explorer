@@ -61,13 +61,22 @@ def silence_tensorflow_completely():
 def silence_c_warnings():
     """Silence C library warnings by redirecting stderr."""
     try:
-        libc = ctypes.CDLL(None)
+        # Python 3.8+ fix: CDLL(None) is broken, use platform-specific library
+        if sys.platform == "win32":
+            libc = ctypes.CDLL("msvcrt.dll")
+        elif sys.platform == "darwin":
+            libc = ctypes.CDLL("libc.dylib")
+        else:
+            # On Linux, use explicit path since CDLL(None) may fail
+            libc = ctypes.CDLL("libc.so.6")
+
         _c_stderr = ctypes.c_void_p.in_dll(libc, "stderr")
         _original_stderr = os.dup(2)
         null_fd = os.open(os.devnull, os.O_WRONLY)
         os.dup2(null_fd, 2)
-    except ValueError:
-        # symbol error on `_c_stderr` on macOS apple silicon
+    except (ValueError, OSError):
+        # ValueError: symbol error on `_c_stderr` on macOS apple silicon
+        # OSError: library not found
         print("Could not silence C library warnings")
 
 

@@ -19,10 +19,8 @@ export function useTableCopy() {
 
       let value = props?.value ?? props?.children ?? '';
 
-      // TODO: maybe make this right?
       if (typeof value === 'object') {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error ikr
+        // @ts-expect-error sometimes cell value can be interpreted as object and I don't know why or how
         value = value.props.children;
       }
 

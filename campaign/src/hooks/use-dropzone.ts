@@ -3,6 +3,7 @@ import {type FormEvent, useCallback, useState} from 'react';
 import {type FileWithPath} from 'react-dropzone';
 import {useFolderDrop} from 'src/hooks/use-folder-drop';
 import {useJsonDrop} from 'src/hooks/use-json-drop';
+import {useNotify} from 'src/hooks/use-notify.ts';
 import {useXlsxDrop} from 'src/hooks/use-xlsx-drop';
 import {type DropzoneInfo} from 'src/primitives/dropzone.tsx';
 
@@ -11,6 +12,7 @@ export function useDropzone() {
   const {handleFolder} = useFolderDrop();
   const {handleJson} = useJsonDrop();
   const {handleXlsx} = useXlsxDrop();
+  const {notify} = useNotify();
 
   const handleDrop = useCallback(
     async (files: readonly FileWithPath[], info: DropzoneInfo) => {
@@ -57,9 +59,10 @@ export function useDropzone() {
         return;
       }
 
+      notify('Please import .json or .xlsx file only', 'danger');
       setLocked(false);
     },
-    [handleXlsx, handleJson],
+    [handleXlsx, handleJson, notify],
   );
 
   return {

@@ -26,8 +26,3 @@ document.addEventListener('DOMContentLoaded', async () => {
   await controllers.versionStatus.render();
   await controllers.audioModule.render();
 });
-
-// todo: to remove
-export const render = async () => {
-  console.log('remove me');
-};
