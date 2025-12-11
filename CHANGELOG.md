@@ -1,3 +1,17 @@
+# [14.0.0-beta.16](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.15...v14.0.0-beta.16) (2025-12-11)
+
+
+### Bug Fixes
+
+* **examples:** update example config ([2517975](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/25179754e612854ff14b67a933943caed26dba7f))
+* **processing:** use platform specific C lib silencing ([75054e6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/75054e6557399925667bc8251a8cf686a05cbfed))
+
+
+### Features
+
+* **campaign:** notify when user inputs file different than expected ([5c417d5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5c417d528514421fb5baa20959f639d80f949a7a))
+* **visualisation:** display current and upstream versions ([5979a0c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5979a0cc6cd5af128f82af8f9f2eae0e31ca0485))
+
 # [14.0.0-beta.15](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.14...v14.0.0-beta.15) (2025-12-09)
 
 
