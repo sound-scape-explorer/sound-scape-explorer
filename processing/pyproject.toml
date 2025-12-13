@@ -55,5 +55,6 @@ dev = [
   "pip-audit==2.10.0",
   # forcing infrastructure package to secure versions
   "setuptools==80.9.0",
-  "urllib3==2.6.0",
+  "urllib3==2.6.2",
+  "fonttools==4.61.1",
 ]
