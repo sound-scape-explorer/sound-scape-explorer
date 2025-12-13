@@ -59,4 +59,5 @@ dev = [
   "fonttools==4.61.1",
   "pillow==11.3.0",
   "protobuf==6.33.2",
+  "requests==2.32.5",
 ]
