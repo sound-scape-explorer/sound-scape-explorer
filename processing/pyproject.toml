@@ -57,4 +57,5 @@ dev = [
   "setuptools==80.9.0",
   "urllib3==2.6.2",
   "fonttools==4.61.1",
+  "pillow==11.3.0",
 ]
