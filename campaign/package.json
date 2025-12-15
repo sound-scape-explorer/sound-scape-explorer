@@ -10,27 +10,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@blueprintjs/core": "^5.17.5",
-    "@blueprintjs/datetime": "^5.3.29",
-    "@blueprintjs/datetime2": "^2.3.29",
-    "@blueprintjs/icons": "^5.19.1",
-    "@blueprintjs/select": "^5.3.17",
-    "@blueprintjs/table": "^5.3.11",
+    "@blueprintjs/core": "^6.4.1",
+    "@blueprintjs/datetime": "^6.0.10",
+    "@blueprintjs/datetime2": "^3.0.10",
+    "@blueprintjs/icons": "^6.3.2",
+    "@blueprintjs/select": "^6.0.10",
+    "@blueprintjs/table": "^6.0.10",
     "clsx": "^2.1.1",
     "exceljs": "^4.4.0",
-    "jotai": "^2.10.3",
+    "jotai": "^2.16.0",
     "normalize.css": "^8.0.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-dropzone": "^14.3.5",
-    "scheduler": "^0.25.0"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-dropzone": "^14.3.8",
+    "scheduler": "^0.27.0"
   },
   "devDependencies": {
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.2",
-    "@vitejs/plugin-react": "^4.3.4",
-    "cross-env": "^7.0.3",
-    "globals": "^15.13.0",
-    "vite": "^7.1.12"
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "cross-env": "^10.1.0",
+    "globals": "^16.5.0",
+    "vite": "^7.3.0"
   }
 }
