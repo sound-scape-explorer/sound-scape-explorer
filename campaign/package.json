@@ -7,7 +7,8 @@
     "build": "tsc -b && vite build",
     "build:electron": "cross-env NODE_ENV=electron pnpm build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:build": "pnpm build && echo '✓ Build smoke test passed'"
   },
   "dependencies": {
     "@blueprintjs/core": "^6.4.1",

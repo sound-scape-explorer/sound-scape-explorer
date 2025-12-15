@@ -7,7 +7,8 @@
     "build:esbuild": "esbuild src/main.ts --bundle --minify --platform=node --target=es2019 --outfile=dist/main.js",
     "dev": "nodemon src/main.ts --exitcrash",
     "dev:node": "ts-node src/main.ts",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "test:build": "pnpm build && echo '✓ Build smoke test passed'"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -32,6 +32,7 @@
     "migrate:config": "tsx shared/migrate-config.ts",
     "purge:all": "rimraf node_modules && pnpm add -D rimraf && rimraf campaign/node_modules && rimraf audio/node_modules && rimraf front/node_modules",
     "start": "pnpm dev",
+    "test:build": "pnpm -r test:build",
     "test:git:unix": "bin/test-git.sh",
     "test:git:windows": "bin/test-git.ps1",
     "test:install:unix": "pnpm test:git:unix && pnpm test:python:unix && pnpm test:nodejs:unix && pnpm test:pnpm:unix",

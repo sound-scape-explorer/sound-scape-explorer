@@ -10,7 +10,8 @@
     "build:run:dev": "cross-env NODE_ENV=development vite build",
     "build:run:electron": "cross-env NODE_ENV=electron vite build",
     "build:run:prod": "cross-env NODE_ENV=production vite build",
-    "preview": "vite preview --port 5530 --host 0.0.0.0"
+    "preview": "vite preview --port 5530 --host 0.0.0.0",
+    "test:build": "pnpm build && echo '✓ Build smoke test passed'"
   },
   "dependencies": {
     "@vueuse/components": "^13.9.0",
