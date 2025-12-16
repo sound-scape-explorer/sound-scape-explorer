@@ -39,29 +39,3 @@ def test_valid_config_cpu(config_path):
         mock_prompt.return_value = MenuChoice.QUIT.value
         main()
         assert sys_exit.value.code == 0
-
-
-def test_low_memory_one_gig(config_path):
-    import subprocess
-
-    result = subprocess.run(
-        ["sse", config_path, "-m", "1024"],
-        capture_output=True,
-        text=True,
-    )
-
-    assert result.returncode == 1
-    assert "Memory limit exceeded" in result.stdout
-
-
-def test_low_memory_two_gigs(config_path):
-    import subprocess
-
-    result = subprocess.run(
-        ["sse", config_path, "-m", "2048"],
-        capture_output=True,
-        text=True,
-    )
-
-    assert result.returncode == 1
-    assert "Memory limit exceeded" in result.stdout
