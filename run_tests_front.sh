@@ -1,31 +1,39 @@
 #!/bin/bash
-
-# exit on error
 set -e
 
-cd front
+cleanup() {
+	# Kill everything on port 5530
+	fuser -k 5530/tcp 2>/dev/null || true
+	sleep 1
+}
 
+trap cleanup EXIT
+
+cd front
 pnpm i
 
-pnpm dev &
+# Start dev server in background
+pnpm dev >/dev/null 2>&1 &
 DEV_PID=$!
 
-# Wait and check if it crashed
+# Wait for server to be ready
 sleep 3
 
-# test main endpoint
+# Health check
 RESPONSE=$(curl -s http://localhost:5530)
 if echo "$RESPONSE" | grep -q "SoundScapeExplorer"; then
 	echo "✓ Dev server responding correctly"
 else
 	echo "✗ Dev server health check failed"
-	pkill -P $DEV_PID 2>/dev/null || true
-	kill $DEV_PID 2>/dev/null || true
 	exit 1
 fi
 
+pnpm test:e2e
+
+# Explicit cleanup before build
+fuser -k 5530/tcp 2>/dev/null || true
+sleep 1
+
 pnpm build
-
 cd ..
-
 timeout 5s pnpm serve front/dist || true
