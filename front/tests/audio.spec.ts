@@ -34,6 +34,10 @@ test('audio from calendar', async ({page}) => {
     });
 
   // audio panel should have opened automatically
+  // check that waveform and spectrogram are visible
+  await expect(page.locator('wave').first()).toBeVisible();
+  await expect(page.locator('spectrogram')).toBeVisible();
+
   // click play button
   await page
     .locator(
