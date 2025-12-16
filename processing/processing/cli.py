@@ -114,6 +114,7 @@ def main():
             sys.exit(0)
 
         from processing.menu import menu
+
         menu(args.config_path)
     except MemoryError:
         print("[red]ERROR: Memory limit exceeded![/red]")
