@@ -4,15 +4,19 @@
 # PROCESSING START #
 ####################
 
+function clean_processing() {
+	rm -f test.json
+	rm -f test.h5
+	rm -rf venv-test
+}
+
 # exit on error
 set -e
 
 echo "=== Processing Build Smoke Test ==="
 
 # clean
-rm -f test.json
-rm -f test.h5
-rm -rf venv-test
+clean_processing
 
 # create and activate venv
 python3.11 -m venv venv-test
@@ -26,7 +30,7 @@ pip --version
 
 # install dependencies from pyproject.toml
 pip install --upgrade pip
-pip install -e processing
+pip install -e processing[dev]
 
 # verify CLI help
 sse --help
@@ -44,35 +48,25 @@ sse test.json --validate
 # verify CLI start CPU mode
 sse test.json --validate --cpu
 
-# cleanup test config
-rm test.json
-
 # verify build
 cd processing
-pip install build
 python -m build
 cd ..
 
-echo "✓ Processing build test passed"
+# run pytest
+pytest processing/tests/cli
+pytest -s processing/tests/extractions
+pytest -s processing/tests/aggregations
+
+echo "✓ Processing tests passed"
 
 # clean
 deactivate
-rm -f test.json
-rm -f test.h5
-rm -rf venv-test
+clean_processing
 
 ##################
 # PROCESSING END #
 ##################
-
-# old tests
-
-# # processing
-# source processing/venv/bin/activate
-# pytest processing/tests/cli
-# pytest -s processing/tests/extractions
-# pytest -s processing/tests/aggregations
-# deactivate
 
 # # app builds
 # pnpm test:build
