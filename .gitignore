@@ -28,6 +28,4 @@ sse-venv-*
 !sse-venv-*.bat
 !sse-venv-*.sh
 
-venv-test
-test.json
-test.h5
+processing-artefacts
