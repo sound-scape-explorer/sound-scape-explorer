@@ -14,6 +14,7 @@ from rich import print
 class _CliArguments(NamedTuple):
     config_path: str
     memory_limit: int | None  # MB
+    validate: bool
 
 
 def _register_python_path():
@@ -77,6 +78,12 @@ def _parse_arguments():
         default=None,
     )
 
+    parser.add_argument(
+        "--validate",
+        help="Validate config and exit without entering interactive menu",
+        action="store_true",
+    )
+
     args = parser.parse_args()
 
     if args.cpu is True:
@@ -85,6 +92,7 @@ def _parse_arguments():
     return _CliArguments(
         config_path=args.config_path,
         memory_limit=args.memory,
+        validate=args.validate,
     )
 
 
@@ -93,8 +101,19 @@ def main():
     _prepare(memory_limit=args.memory_limit)
 
     try:
-        from processing.menu import menu
 
+        if args.validate:
+            # Just validate config and print settings, then exit
+            from processing.context import Context
+            from processing.lib.console import Console
+
+            context = Context(args.config_path)
+            Console.print_splash()
+            Console.print_settings(context)
+            print("[green]✓ Configuration valid[/green]")
+            sys.exit(0)
+
+        from processing.menu import menu
         menu(args.config_path)
     except MemoryError:
         print("[red]ERROR: Memory limit exceeded![/red]")
