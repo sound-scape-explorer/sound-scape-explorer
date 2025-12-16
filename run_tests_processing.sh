@@ -1,20 +1,16 @@
 #!/bin/bash
 
-####################
-# PROCESSING START #
-####################
-
-function clean_processing() {
-	rm -rf processing-artefacts
-}
-
 # exit on error
 set -e
+
+function clean_artefacts() {
+	rm -rf processing-artefacts
+}
 
 echo "=== Processing Build Smoke Test ==="
 
 # clean
-clean_processing
+clean_artefacts
 
 # create and activate venv
 python3.11 -m venv processing-artefacts/venv
@@ -60,20 +56,4 @@ echo "✓ Processing tests passed"
 
 # clean
 deactivate
-clean_processing
-
-##################
-# PROCESSING END #
-##################
-
-##################
-# CAMPAIGN START #
-##################
-
-cd campaign
-pnpm i
-timeout 10s pnpm dev || true
-pnpm build
-
-# # app builds
-# pnpm test:build
+clean_artefacts
