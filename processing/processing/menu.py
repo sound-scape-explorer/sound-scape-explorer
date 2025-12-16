@@ -1,4 +1,4 @@
-from signal import SIGINT, signal
+from signal import SIGINT, SIGTERM, signal
 
 from processing.actions.run_aggregations import run_aggregations
 from processing.actions.run_autoclusters import run_autoclusters
@@ -31,11 +31,13 @@ def menu(config_path: str):
     Console.print_settings(context)
     ConfigRepository.to_storage(context)
 
-    def handle_sigint(_signum, _frame):
+
+    def handle_exit_signal(_signum, _frame):
         App.quit(context)
 
     try:
-        signal(SIGINT, handle_sigint)
+        signal(SIGINT, handle_exit_signal)  # Ctrl+C
+        signal(SIGTERM, handle_exit_signal)  # timeout / kill
 
         while True:
             answer = prompt_menu(context)
