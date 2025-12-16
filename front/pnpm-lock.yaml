@@ -57,12 +57,18 @@ importers:
       '@ionic/vue':
         specifier: ^8.3.3
         version: 8.3.3
+      '@playwright/test':
+        specifier: ^1.57.0
+        version: 1.57.0
       '@types/chroma-js':
         specifier: ^2.4.0
         version: 2.4.0
       '@types/colormap':
         specifier: ^2.3.1
         version: 2.3.1
+      '@types/node':
+        specifier: ^25.0.2
+        version: 25.0.2
       '@types/plotly.js-dist-min':
         specifier: ^2.3.4
         version: 2.3.4
@@ -71,7 +77,7 @@ importers:
         version: 6.0.6
       '@vitejs/plugin-vue':
         specifier: ^4.2.3
-        version: 4.2.3(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0))(vue@3.5.18(typescript@5.0.4))
+        version: 4.2.3(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0))(vue@3.5.18(typescript@5.0.4))
       '@vue/tsconfig':
         specifier: ^0.4.0
         version: 0.4.0
@@ -107,19 +113,19 @@ importers:
         version: 0.0.3
       vite:
         specifier: ^4.3.9
-        version: 4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)
+        version: 4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)
       vite-plugin-comlink:
         specifier: ^3.0.5
-        version: 3.0.5(comlink@4.4.1)(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0))
+        version: 3.0.5(comlink@4.4.1)(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0))
       vite-plugin-pwa:
         specifier: ^0.17.2
-        version: 0.17.2(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0))(workbox-build@7.1.1)(workbox-window@7.1.0)
+        version: 0.17.2(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0))(workbox-build@7.1.1)(workbox-window@7.1.0)
       vite-plugin-top-level-await:
         specifier: ^1.3.1
-        version: 1.3.1(rollup@2.79.2)(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0))
+        version: 1.3.1(rollup@2.79.2)(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0))
       vite-plugin-wasm:
         specifier: ^3.2.2
-        version: 3.2.2(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0))
+        version: 3.2.2(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0))
       vue-eslint-parser:
         specifier: ^9.4.3
         version: 9.4.3(eslint@8.57.1)
@@ -885,6 +891,11 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
+  '@playwright/test@1.57.0':
+    resolution: {integrity: sha512-6TyEnHgd6SArQO8UO2OMTxshln3QMWBtPGrOCgs3wVEmQmwyuNtB10IZMfmYDE0riwNR1cu4q+pPcxMVtaG3TA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   '@rollup/plugin-babel@5.3.1':
     resolution: {integrity: sha512-WFfdLWU/xVWKeRQnKmIAQULUI7Il0gZnBIH/ZFO069wYIfPu+8zrfp/KMW0atmELoRDq8FbiP3VCss9MhCut7Q==}
     engines: {node: '>= 10.0.0'}
@@ -1049,8 +1060,8 @@ packages:
   '@types/lodash@4.14.195':
     resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
 
-  '@types/node@22.7.4':
-    resolution: {integrity: sha512-y+NPi1rFzDs1NdQHHToqeiX2TIS79SWEAw9GYhkkx8bD0ChpfqC+n2j5OXOCpzfojBEBt6DnEnnG9MY0zk1XLg==}
+  '@types/node@25.0.2':
+    resolution: {integrity: sha512-gWEkeiyYE4vqjON/+Obqcoeffmk0NF15WSBwSs7zwVA2bAbTaE0SJ7P0WNGoJn8uE7fiaV5a7dKYIJriEqOrmA==}
 
   '@types/plotly.js-dist-min@2.3.4':
     resolution: {integrity: sha512-ISwLFV6Zs/v3DkaRFLyk2rvYAfVdnYP2VVVy7h+fBDWw52sn7sMUzytkWiN4M75uxr1uz1uiBioePTDpAfoFIg==}
@@ -1595,6 +1606,11 @@ packages:
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -2135,6 +2151,16 @@ packages:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
 
+  playwright-core@1.57.0:
+    resolution: {integrity: sha512-agTcKlMw/mjBWOnD6kFZttAAGHgi/Nw0CZ2o6JqWSbMlI219lAFLZZCyqByTsvVAJq5XA5H8cA6PrvBRpBWEuQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.57.0:
+    resolution: {integrity: sha512-ilYQj1s8sr2ppEJ2YVadYBN0Mb3mdo9J0wQ+UuDhzYqURwSoW4n1Xs5vs7ORwgDGmyEh33tRMeS8KhdkMoLXQw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   plotly.js-dist-min@2.35.2:
     resolution: {integrity: sha512-oWDTf2kYOmTtEw3epeeSBdfH/H3OSktF0suST9oI6fIgKfbyd4MT7TPh8+CVzdHYllYon24Q0HI1hZjOnLqk6g==}
 
@@ -2645,8 +2671,8 @@ packages:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
 
-  undici-types@6.19.8:
-    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
   unicode-canonical-property-names-ecmascript@2.0.1:
     resolution: {integrity: sha512-dA8WbNeb2a6oQzAQ55YlT5vQAWGV9WXOsi3SskE3bcCdM0P4SDd+24zS/OCacdRq5BkdsRj9q3Pg6YyQoxIGqg==}
@@ -3761,6 +3787,10 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
+  '@playwright/test@1.57.0':
+    dependencies:
+      playwright: 1.57.0
+
   '@rollup/plugin-babel@5.3.1(@babel/core@7.28.4)(rollup@2.79.2)':
     dependencies:
       '@babel/core': 7.28.4
@@ -3885,10 +3915,9 @@ snapshots:
 
   '@types/lodash@4.14.195': {}
 
-  '@types/node@22.7.4':
+  '@types/node@25.0.2':
     dependencies:
-      undici-types: 6.19.8
-    optional: true
+      undici-types: 7.16.0
 
   '@types/plotly.js-dist-min@2.3.4':
     dependencies:
@@ -3908,9 +3937,9 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitejs/plugin-vue@4.2.3(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0))(vue@3.5.18(typescript@5.0.4))':
+  '@vitejs/plugin-vue@4.2.3(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0))(vue@3.5.18(typescript@5.0.4))':
     dependencies:
-      vite: 4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)
+      vite: 4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)
       vue: 3.5.18(typescript@5.0.4)
 
   '@vue/compiler-core@3.5.18':
@@ -4586,6 +4615,9 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -5118,6 +5150,14 @@ snapshots:
   picomatch@2.3.1: {}
 
   picomatch@4.0.3: {}
+
+  playwright-core@1.57.0: {}
+
+  playwright@1.57.0:
+    dependencies:
+      playwright-core: 1.57.0
+    optionalDependencies:
+      fsevents: 2.3.2
 
   plotly.js-dist-min@2.35.2: {}
 
@@ -5654,8 +5694,7 @@ snapshots:
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
 
-  undici-types@6.19.8:
-    optional: true
+  undici-types@7.16.0: {}
 
   unicode-canonical-property-names-ecmascript@2.0.1: {}
 
@@ -5711,45 +5750,45 @@ snapshots:
 
   vfonts@0.0.3: {}
 
-  vite-plugin-comlink@3.0.5(comlink@4.4.1)(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)):
+  vite-plugin-comlink@3.0.5(comlink@4.4.1)(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)):
     dependencies:
       comlink: 4.4.1
       json5: 2.2.1
       magic-string: 0.26.7
-      vite: 4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)
+      vite: 4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)
 
-  vite-plugin-pwa@0.17.2(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0))(workbox-build@7.1.1)(workbox-window@7.1.0):
+  vite-plugin-pwa@0.17.2(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0))(workbox-build@7.1.1)(workbox-window@7.1.0):
     dependencies:
       debug: 4.4.0
       fast-glob: 3.3.3
       pretty-bytes: 6.1.1
-      vite: 4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)
+      vite: 4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)
       workbox-build: 7.1.1
       workbox-window: 7.1.0
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-top-level-await@1.3.1(rollup@2.79.2)(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)):
+  vite-plugin-top-level-await@1.3.1(rollup@2.79.2)(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)):
     dependencies:
       '@rollup/plugin-virtual': 3.0.1(rollup@2.79.2)
       '@swc/core': 1.3.61
       uuid: 9.0.0
-      vite: 4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)
+      vite: 4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)
     transitivePeerDependencies:
       - '@swc/helpers'
       - rollup
 
-  vite-plugin-wasm@3.2.2(vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)):
+  vite-plugin-wasm@3.2.2(vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)):
     dependencies:
-      vite: 4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0)
+      vite: 4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0)
 
-  vite@4.3.9(@types/node@22.7.4)(sass@1.62.1)(terser@5.44.0):
+  vite@4.3.9(@types/node@25.0.2)(sass@1.62.1)(terser@5.44.0):
     dependencies:
       esbuild: 0.17.19
       postcss: 8.4.47
       rollup: 3.23.0
     optionalDependencies:
-      '@types/node': 22.7.4
+      '@types/node': 25.0.2
       fsevents: 2.3.3
       sass: 1.62.1
       terser: 5.44.0
