@@ -1,8 +1,7 @@
-import {expect, test} from '@playwright/test';
+import {type Page} from '@playwright/test';
 import path from 'path';
 
-// this supposes you have the example campaign generated to h5
-test('should load to scatter to tags', async ({page}) => {
+export async function loadAndSelectView(page: Page) {
   await page.goto('http://localhost:5530/');
 
   // Fix file upload - use setInputFiles on the input element, not the button
@@ -14,7 +13,7 @@ test('should load to scatter to tags', async ({page}) => {
     'examples',
     'coral-reef-light.h5',
   );
-  console.log(filePath);
+
   await fileInput.setInputFiles(filePath);
 
   // Wait for file to be processed before interacting
@@ -59,16 +58,4 @@ test('should load to scatter to tags', async ({page}) => {
     .filter({hasText: /^0 - UMAP - 3d$/})
     .first()
     .click();
-
-  // Wait for canvas to render
-  await page.waitForSelector('#scene canvas', {state: 'visible'});
-
-  // Verify canvas is visible
-  await expect(page.locator('#scene canvas')).toBeVisible();
-
-  // Click tag button
-  await page.locator('div:nth-child(4) > .n-button').first().click();
-
-  // Verify first is visible
-  await expect(page.getByText('__SITE')).toBeVisible();
-});
+}
