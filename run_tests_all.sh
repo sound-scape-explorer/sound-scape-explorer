@@ -6,3 +6,5 @@ set -e
 ./run_tests_processing.sh
 ./run_tests_pnpm.sh
 ./run_tests_campaign.sh
+./run_tests_audio.sh
+./run_tests_front.sh
