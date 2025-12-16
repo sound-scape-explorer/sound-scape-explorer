@@ -40,6 +40,14 @@
           "include_in_aggregation": true,
           "window": 1000,
           "hop": 1000
+        },
+        {
+          "index": 1,
+          "name": "Leq",
+          "impl": "LEQ",
+          "include_in_aggregation": false,
+          "window": 1000,
+          "hop": 1000
         }
       ],
       "reducers": [
