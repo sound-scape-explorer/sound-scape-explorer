@@ -1,4 +1,4 @@
-import {type Page} from '@playwright/test';
+import {type Download, expect, type Page} from '@playwright/test';
 import path from 'path';
 
 export async function loadAndSelectView(page: Page) {
@@ -72,4 +72,20 @@ export async function interceptAudioContext(page: Page) {
       return context;
     };
   });
+}
+
+export async function readDownloadAsCsvContent(download: Download) {
+  // expect file header to be csv
+  expect(download.url()).toContain('data:text/csv;charset=utf-8');
+
+  // read the downloaded file as text
+  const buffer = await download.createReadStream();
+  const chunks: Uint8Array[] = [];
+
+  for await (const chunk of buffer) {
+    chunks.push(chunk);
+  }
+
+  const csvContent = Buffer.concat(chunks).toString('utf-8');
+  return csvContent;
 }
