@@ -74,11 +74,12 @@ def context_factory(monkeypatch, config_path):
                 impl=impl,
                 window=window,
                 hop=window,
+                include_in_aggregation=True,
             ),
         )
 
         extraction = ctx.config.extractions[0]
-        extraction.extractors = [new_extractor]
+        object.__setattr__(extraction, "extractions", [extraction])
         ctx.config.extractions = [extraction]
 
         contexts.append(ctx)
