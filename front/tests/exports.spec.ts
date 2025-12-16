@@ -21,7 +21,7 @@ test('scatter export', async ({page}) => {
   expect(lines[0].trim()).toBe(columns);
 });
 
-test('heatmap silhouette export', async ({page}) => {
+test('silhouette export', async ({page}) => {
   await loadAndSelectView(page);
 
   // open heatmap menu
@@ -60,5 +60,39 @@ test('heatmap silhouette export', async ({page}) => {
   // check col names
   const columns =
     'SILHOUETTE,AUTOCLUSTER_0: -1,AUTOCLUSTER_0: 0,AUTOCLUSTER_0: 1,AUTOCLUSTER_0: 2,AUTOCLUSTER_0: 3';
+  expect(lines[0].trim()).toBe(columns);
+});
+
+test('temporal export', async ({page}) => {
+  await loadAndSelectView(page);
+
+  // open temporal panel
+  await page.locator('div:nth-child(6) > .n-button').click();
+
+  // open dropdown
+  await page
+    .locator(
+      '._first_1pxym_13 > div > div > .n-select > .n-base-selection > .n-base-selection-label',
+    )
+    .click();
+
+  // select Leq
+  await page.getByText('1 - Leq').click();
+
+  await page.waitForTimeout(2000);
+
+  // download
+  const downloadPromise = page.waitForEvent('download');
+  await page.locator('._row_1pxym_1 > div:nth-child(2) > .n-button').click();
+  const download = await downloadPromise;
+
+  const csvContent = await readDownloadAsCsvContent(download);
+
+  // check line count
+  const lines = csvContent.trim().split('\n');
+  expect(lines.length).toBe(216 + 1);
+
+  // check col names
+  const columns = 'intervalIndex,site,timestamp,scalar';
   expect(lines[0].trim()).toBe(columns);
 });
