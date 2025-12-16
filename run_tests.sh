@@ -5,9 +5,7 @@
 ####################
 
 function clean_processing() {
-	rm -f test.json
-	rm -f test.h5
-	rm -rf venv-test
+	rm -rf processing-artefacts
 }
 
 # exit on error
@@ -19,8 +17,8 @@ echo "=== Processing Build Smoke Test ==="
 clean_processing
 
 # create and activate venv
-python3.11 -m venv venv-test
-source venv-test/bin/activate
+python3.11 -m venv processing-artefacts/venv
+source processing-artefacts/venv/bin/activate
 
 # verify venv binaries
 which python
@@ -38,15 +36,15 @@ sse --help
 # create test config with injected audio path and storage path
 AUDIO_PATH="$(pwd)/examples/audio"
 
-jq --arg path "$AUDIO_PATH" '.settings.audioPath = $path' examples/coral-reef-light.json >test.json
+jq --arg path "$AUDIO_PATH" '.settings.audioPath = $path' examples/coral-reef-light.json >processing-artefacts/test.json
 
-jq --arg path "test.h5" '.settings.storagePath = $path' test.json >test.tmp.json && mv test.tmp.json test.json
+jq --arg path "test.h5" '.settings.storagePath = $path' processing-artefacts/test.json >processing-artefacts/test.tmp.json && mv processing-artefacts/test.tmp.json processing-artefacts/test.json
 
 # verify CLI start
-sse test.json --validate
+sse processing-artefacts/test.json --validate
 
 # verify CLI start CPU mode
-sse test.json --validate --cpu
+sse processing-artefacts/test.json --validate --cpu
 
 # verify build
 cd processing
@@ -67,6 +65,15 @@ clean_processing
 ##################
 # PROCESSING END #
 ##################
+
+##################
+# CAMPAIGN START #
+##################
+
+cd campaign
+pnpm i
+timeout 10s pnpm dev || true
+pnpm build
 
 # # app builds
 # pnpm test:build
