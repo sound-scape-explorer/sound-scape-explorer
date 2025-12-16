@@ -1,10 +1,10 @@
 import {expect, test} from '@playwright/test';
 
-import {loadAndSelectView} from './shared';
+import {loadAndSelectView} from './_shared';
 
 // this supposes you have the example campaign generated to h5
 test('should load', async ({page}) => {
-  loadAndSelectView(page);
+  await loadAndSelectView(page);
 
   // Wait for canvas to render
   await page.waitForSelector('#scene canvas', {state: 'visible'});

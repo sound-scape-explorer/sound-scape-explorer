@@ -1,9 +1,9 @@
 import {expect, test} from '@playwright/test';
 
-import {loadAndSelectView} from './shared';
+import {loadAndSelectView} from './_shared';
 
 test('filter tag', async ({page}) => {
-  loadAndSelectView(page);
+  await loadAndSelectView(page);
 
   // open tag menu
   await page.locator('div:nth-child(4) > .n-button').first().click();

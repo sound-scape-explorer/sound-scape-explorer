@@ -59,3 +59,17 @@ export async function loadAndSelectView(page: Page) {
     .first()
     .click();
 }
+
+export async function interceptAudioContext(page: Page) {
+  await page.addInitScript(() => {
+    const OriginalAudioContext = window.AudioContext;
+
+    // @ts-ignore
+    window.AudioContext = function(...args) {
+      const context = new OriginalAudioContext(...args);
+      // @ts-ignore
+      window.__audioContext = context;
+      return context;
+    };
+  });
+}
