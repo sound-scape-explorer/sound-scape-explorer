@@ -71,3 +71,42 @@ test('default json import to export', async () => {
   await main.waitForTimeout(1000);
   await app.close();
 });
+
+test('folder drag and drop', async () => {
+  const {app, main} = await startElectron();
+  await main.getByRole('button', {name: 'CONFIGURE'}).click();
+  await main.waitForTimeout(1000);
+
+  const campaignWindow = app.windows()[1];
+
+  // get audio folder path
+  const audioFolder = join(__dirname, '..', '..', 'examples', 'audio');
+
+  // fill dropzone input
+  const fileInput = campaignWindow.locator('input[type="file"]').nth(1);
+  await fileInput.setInputFiles(audioFolder);
+
+  // check that audio path is correct
+  const audioPathInput = campaignWindow.getByRole('textbox').nth(1);
+  await expect(audioPathInput).toHaveValue(audioFolder);
+
+  // check that settings are valid
+  await expect(campaignWindow.getByLabel('Settings')).toContainText(
+    'Settings are valid',
+  );
+
+  // navigate to files tab
+  await campaignWindow.getByRole('tab', {name: 'Files'}).click();
+
+  // check that files are valid
+  await expect(campaignWindow.getByLabel('Files')).toContainText(
+    'Files are valid',
+  );
+
+  // check that line count is correct
+  await expect(campaignWindow.getByLabel('Files')).toContainText('54');
+
+  // quit
+  await main.waitForTimeout(1000);
+  await app.close();
+});
