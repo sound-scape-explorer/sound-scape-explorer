@@ -21,7 +21,9 @@
     "publish": "electron-forge publish",
     "start": "electron-forge start",
     "copy-bulma": "cp node_modules/bulma/css/bulma.min.css assets",
-    "test:e2e": "npm exec playwright test"
+    "test:e2e": "npm exec playwright test",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:codegen:campaign": "npx tsx tests/_codegen-campaign.ts"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
