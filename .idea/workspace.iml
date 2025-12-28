@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/shared" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/venv-test" />
+      <excludeFolder url="file://$MODULE_DIR$/processing-artefacts" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
