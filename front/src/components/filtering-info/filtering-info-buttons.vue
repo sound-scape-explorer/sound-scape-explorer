@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 
 const {back, forward, canUndo, canRedo, redo, undo, hasInterval} =
-  useInterval();
+  useIntervalTransport();
 
 const {colors} = useThemeColors();
 </script>

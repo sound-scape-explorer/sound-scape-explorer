@@ -7,7 +7,7 @@ import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorSelection} from 'src/draggables/colors/use-color-selection';
@@ -46,7 +46,7 @@ export function useScatterLifecycles() {
   const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
   const {min: tagMin, max: tagMax} = useColorByTag();
   const {isEnabled: isTagNumericEnabled} = useTagNumeric();
-  const {currentIndex} = useInterval();
+  const {currentIndex} = useIntervalTransport();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
   const {isActive: isSelectionActive, isWireframe: isSelectionWireframe} =

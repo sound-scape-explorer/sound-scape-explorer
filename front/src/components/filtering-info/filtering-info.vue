@@ -3,10 +3,10 @@ import AppTooltip from 'src/app/app-tooltip.vue';
 import FilteringInfoButtons from 'src/components/filtering-info/filtering-info-buttons.vue';
 import {useFilteringInfoData} from 'src/components/filtering-info/use-filtering-info-data';
 import {useFilteringInfoMode} from 'src/components/filtering-info/use-filtering-info-mode';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 
-const {currentIndex, hasInterval} = useInterval();
+const {currentIndex, hasInterval} = useIntervalTransport();
 const {cycleMode, isIntervalMode, isCollectMode, isFilterMode} =
   useFilteringInfoMode();
 const {colors} = useThemeColors();

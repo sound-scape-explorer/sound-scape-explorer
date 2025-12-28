@@ -4,7 +4,7 @@ import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-sca
 import {useScatterDimensions} from 'src/components/scatter/use-scatter-dimensions';
 import {useScatterHovers} from 'src/components/scatter/use-scatter-hovers';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useReductions} from 'src/composables/use-reductions';
 import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
 import {colorMap} from 'src/styles/color-map';
@@ -20,7 +20,7 @@ export function useScatterEmbeddings() {
   const {isWebGlScatter2d, isSelectedPointHighlighted, scatterBorderWidth} =
     useClientSettings();
   const {filtered} = useScatterGlobalFilter();
-  const {currentIndex} = useInterval();
+  const {currentIndex} = useIntervalTransport();
   const {generateHovers} = useScatterHovers();
   const {is3d} = useScatterDimensions();
 

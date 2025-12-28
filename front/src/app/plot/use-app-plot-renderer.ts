@@ -1,10 +1,10 @@
 import Plotly from 'plotly.js-dist-min';
 import {type AppPlotProps, type AppPlotRefs} from 'src/app/plot/app-plot.vue';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {INTERVAL_TAG} from 'src/draggables/temporal/use-temporal-chart';
 
 export function useAppPlotRenderer(props: AppPlotProps, refs: AppPlotRefs) {
-  const {selectInterval} = useInterval();
+  const {selectInterval} = useIntervalTransport();
 
   const render = async () => {
     if (
