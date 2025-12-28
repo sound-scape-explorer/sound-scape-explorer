@@ -7,9 +7,11 @@ from processing.actions.run_reductions import run_reductions
 from processing.actions.run_relative_trajectories import run_relative_trajectories
 from processing.actions.run_trajectories import run_trajectories
 from processing.context import Context
+from processing.repositories.ConfigRepository import ConfigRepository
 
 
 def run_all(context: Context):
+    ConfigRepository.to_storage(context)
     run_extractions(context),
     run_aggregations(context),
     run_reductions(context),
