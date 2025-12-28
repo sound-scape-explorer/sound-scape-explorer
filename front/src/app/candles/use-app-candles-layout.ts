@@ -4,16 +4,18 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
 
 export function useAppCandlesLayout() {
-  const {plotBackground} = useClientSettings();
+  const {plotBackground, plotFontSize} = useClientSettings();
   const {generatePlotlyMargins} = usePlotlyMargins();
 
-  // todo: add font size setting?
   const generateLayout = (props: AppCandlesProps): Partial<Layout> => {
     return {
       plot_bgcolor: plotBackground.value,
       paper_bgcolor: plotBackground.value,
       showlegend: false,
       title: props.title,
+      font: {
+        size: plotFontSize.value,
+      },
       margin: generatePlotlyMargins(),
       xaxis: {
         type: props.condensed ? 'category' : undefined,

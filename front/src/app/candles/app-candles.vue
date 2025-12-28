@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {useAppCandles} from 'src/app/candles/use-app-candles';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {onMounted, watch} from 'vue';
 
 export interface AppCandlesProps {
@@ -23,6 +24,8 @@ const props = withDefaults(defineProps<AppCandlesProps>(), {
 const {container, mount, render, data, layout, plotBackground} =
   useAppCandles(props);
 
+const {plotFontSize} = useClientSettings();
+
 onMounted(render);
 watch([container, data, layout], mount);
 watch(
@@ -31,6 +34,7 @@ watch(
     () => props.condensed,
     () => props.isExpanded,
     () => props.low,
+    plotFontSize,
   ],
   render,
 );
