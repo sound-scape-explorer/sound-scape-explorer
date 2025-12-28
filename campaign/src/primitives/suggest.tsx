@@ -8,11 +8,11 @@ import {
 import {useCallback} from 'react';
 
 interface Props {
-  items: string[];
-  selected: string;
-  onChange: (value: string) => void;
-  intent?: Intent;
-  disabled?: boolean;
+  readonly items: string[];
+  readonly selected: string;
+  readonly onChange: (value: string) => void;
+  readonly intent?: Intent;
+  readonly disabled?: boolean;
 }
 
 function getItemProps(

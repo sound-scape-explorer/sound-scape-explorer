@@ -16,7 +16,7 @@ import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
 interface Props {
-  extraction: ExtractionConfig;
+  readonly extraction: ExtractionConfig;
 }
 
 export function ExtractionExtractors({extraction}: Props) {

@@ -28,7 +28,7 @@ import {Suggest} from 'src/primitives/suggest.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 interface Props {
-  extraction: ExtractionConfig;
+  readonly extraction: ExtractionConfig;
 }
 
 export function ExtractionTrajectories({extraction}: Props) {

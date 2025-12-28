@@ -8,9 +8,9 @@ export interface DropzoneInfo {
 }
 
 interface Props {
-  className: string;
-  children: JSX.Element;
-  onDrop: (files: readonly FileWithPath[], info: DropzoneInfo) => void;
+  readonly className: string;
+  readonly children: JSX.Element;
+  readonly onDrop: (files: readonly FileWithPath[], info: DropzoneInfo) => void;
 }
 
 export function Dropzone({className, onDrop, children}: Props) {

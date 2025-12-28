@@ -3,8 +3,8 @@ import {Callout, type Intent} from '@blueprintjs/core';
 import styles from './small-callout.module.scss';
 
 interface Props {
-  children: string | string[];
-  intent?: Intent;
+  readonly children: string | string[];
+  readonly intent?: Intent;
 }
 
 export function SmallCallout({children, intent = 'primary'}: Props) {

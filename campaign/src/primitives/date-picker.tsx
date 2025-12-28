@@ -9,10 +9,10 @@ import {formatDateToString} from 'src/utils/datetime.ts';
 import styles from './date-picker.module.scss';
 
 interface Props {
-  value: string;
-  onChange: (value: string | null) => void;
-  intent?: Intent;
-  small?: boolean;
+  readonly value: string;
+  readonly onChange: (value: string | null) => void;
+  readonly intent?: Intent;
+  readonly small?: boolean;
 }
 
 export function DatePicker({

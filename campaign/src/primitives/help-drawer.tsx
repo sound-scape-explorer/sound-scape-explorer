@@ -6,7 +6,7 @@ import {JSX, useState} from 'react';
 import {useTheme} from 'src/hooks/use-theme';
 
 interface Props {
-  children: JSX.Element;
+  readonly children: JSX.Element;
 }
 
 export function HelpDrawer({children}: Props) {

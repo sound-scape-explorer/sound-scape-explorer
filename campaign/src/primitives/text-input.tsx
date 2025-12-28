@@ -1,14 +1,14 @@
 import {InputGroup, type Intent} from '@blueprintjs/core';
 
 interface Props {
-  defaultValue?: string;
-  value?: string;
-  onBlur?: (value: string) => void;
-  onChange?: (value: string) => void;
-  onEnter?: (value: string) => void;
-  intent?: Intent;
-  disabled?: boolean;
-  placeholder?: string;
+  readonly defaultValue?: string;
+  readonly value?: string;
+  readonly onBlur?: (value: string) => void;
+  readonly onChange?: (value: string) => void;
+  readonly onEnter?: (value: string) => void;
+  readonly intent?: Intent;
+  readonly disabled?: boolean;
+  readonly placeholder?: string;
 }
 
 export function TextInput({

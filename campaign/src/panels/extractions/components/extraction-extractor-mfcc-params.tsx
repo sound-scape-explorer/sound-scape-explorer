@@ -10,8 +10,8 @@ import {NumberInput} from 'src/primitives/number-input.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfig;
-  extractor: ExtractorDto;
+  readonly extraction: ExtractionConfig;
+  readonly extractor: ExtractorDto;
 }
 
 export function ExtractionExtractorMfccParams({extraction, extractor}: Props) {
