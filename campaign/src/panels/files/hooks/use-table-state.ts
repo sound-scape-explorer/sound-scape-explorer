@@ -256,7 +256,7 @@ export function useTableState() {
         return;
       }
 
-      // todo: are logical ORs needed, why would you coerce as well?
+      // INFO: `|| []` as safety guards
       const rowCopy = [...(state.current.rows[key] || [])];
       const intentsCopy = [...(state.current.intents[key] || [])];
 
