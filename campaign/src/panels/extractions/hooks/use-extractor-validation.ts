@@ -374,25 +374,25 @@ export function useExtractorValidation() {
 
         if (!isNdsiBioLowValid(extractor)) {
           v.intent = 'warning';
-          v.content = 'invalid ndsi_bio_low'; // todo: the name is bs
+          v.content = 'invalid ndsi_bio_low';
           break;
         }
 
         if (!isNdsiBioHighValid(extractor)) {
           v.intent = 'warning';
-          v.content = 'invalid ndsi_bio_high'; // todo: the name is bs
+          v.content = 'invalid ndsi_bio_high';
           break;
         }
 
         if (!isNdsiAnthroLowValid(extractor)) {
           v.intent = 'warning';
-          v.content = 'invalid ndsi_anthro_low'; // todo: the name is bs
+          v.content = 'invalid ndsi_anthro_low';
           break;
         }
 
         if (!isNdsiAnthroHighValid(extractor)) {
           v.intent = 'warning';
-          v.content = 'invalid ndsi_anthro_high'; // todo: the name is bs
+          v.content = 'invalid ndsi_anthro_high';
           break;
         }
 
