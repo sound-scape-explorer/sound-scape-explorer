@@ -3,7 +3,6 @@ import {useDateTime} from 'src/composables/use-date-time';
 
 const referenceDate = new Date('1970-01-01T00:00:00'); // Consistent reference date
 
-// todo: need to check with new date time behaviours
 export function useAppGradient() {
   const {getTime} = useDateTime();
 
