@@ -13,7 +13,6 @@ version = "14.0.0b16"
 description = "SoundScapeExplorer"
 authors = [{ name = "Bamdad Sabbagh", email = "hi@bamdad.fr" }]
 readme = { file = "README.md", content-type = "text/markdown" }
-# TODO: update to 3.14 ?
 requires-python = "~=3.11"
 
 dependencies = [
