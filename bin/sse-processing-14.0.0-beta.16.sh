@@ -6,6 +6,7 @@ script="$venv/bin/activate"
 
 function activate() {
 	exec bash --init-file "$script"
+	return 0
 }
 
 if [[ ! -f "$script" ]]; then
