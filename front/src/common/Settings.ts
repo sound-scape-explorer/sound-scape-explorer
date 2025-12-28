@@ -81,7 +81,7 @@ export function createSettingsRefs(): SettingsRefs {
             try {
               return schema.parse(JSON.parse(value));
             } catch {
-              // todo: improve handling because this is not ref state
+              // TODO: improve handling because this is not ref state
               console.warn(
                 `Invalid stored value for ${key}, using default`,
                 key,

@@ -75,7 +75,7 @@ class MfccExtractor(Extractor):
                 sr=sample_rate,
                 n_mfcc=self.n_mfcc,
                 n_fft=n_fft,
-                window=self.stft_window_type.value.lower(),  # todo: should we actually create it or does mfcc handles this?
+                window=self.stft_window_type.value.lower(),  # TODO: should we actually create it or does mfcc handles this?
                 hop_length=stft_hop_samples,
                 win_length=stft_window_samples,
                 n_mels=self.n_bands,

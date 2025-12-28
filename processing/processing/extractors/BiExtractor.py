@@ -37,8 +37,8 @@ class BiExtractor(Extractor):
                 sample_rate,
                 flims=band,
                 mode="amplitude",
-                # todo: add user params, which one? window nature?
-                # todo: actually that would be better to use librosa's stft
+                # TODO: add user params, which one? window nature?
+                # TODO: actually that would be better to use librosa's stft
                 #  but the band splitting (fn freq vector) is bizarre
             )
 

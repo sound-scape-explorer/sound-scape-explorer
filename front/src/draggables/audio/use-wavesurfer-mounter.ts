@@ -62,7 +62,7 @@ export function useWavesurferMounter() {
     ws.value = WaveSurfer.create(params);
   };
 
-  // todo: too much?
+  // TODO: too much?
   watch([context, waveform], mount);
 
   onMounted(() => {
@@ -72,7 +72,7 @@ export function useWavesurferMounter() {
     applyGain();
   });
 
-  // todo: too much?
+  // TODO: too much?
   watch(ws, registerCursor);
 
   watchThrottled(
