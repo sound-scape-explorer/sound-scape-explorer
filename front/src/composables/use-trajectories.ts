@@ -8,7 +8,6 @@ import {ref} from 'vue';
 export type TrajectoryPath = number[][];
 export type TrajectoryTimestamps = number[];
 
-// todo: extend or merge
 export interface TrajectoryDtoWithData {
   trajectory: TrajectoryDto;
   path: TrajectoryPath;
