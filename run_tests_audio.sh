@@ -29,7 +29,7 @@ fi
 
 # test file endpoint
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:5531/get?file=/2021_naturel_1/data_filtree/20210216T120200_2614231302179085_2.0.wav&start=0&end=15000")
-if [ "$STATUS" -eq 200 ]; then
+if [[ "$STATUS" -eq 200 ]]; then
 	echo "✓ Success: Got 200"
 else
 	echo "✗ Failed: Got $STATUS"
@@ -50,7 +50,7 @@ timeout 5s pnpm serve audio/dist
 EXIT_CODE=$?
 set -e
 
-if [ $EXIT_CODE -ne 124 ] && [ $EXIT_CODE -ne 0 ]; then
+if [[ $EXIT_CODE -ne 124 ]] && [[ $EXIT_CODE -ne 0 ]]; then
 	echo "✗ Serve failed with exit code $EXIT_CODE"
 	exit $EXIT_CODE
 fi
