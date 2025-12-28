@@ -51,7 +51,6 @@ class AdiExtractor(Extractor):
                 #  but the band splitting (fn freq vector) is bizarre
             )
 
-
             adi = features.acoustic_diversity_index(
                 Sxx=sxx,
                 fn=fn,
