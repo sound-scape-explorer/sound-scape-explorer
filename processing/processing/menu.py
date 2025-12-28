@@ -1,6 +1,7 @@
 from signal import SIGINT, SIGTERM, signal
 
 from processing.actions.run_aggregations import run_aggregations
+from processing.actions.run_all import run_all
 from processing.actions.run_autoclusters import run_autoclusters
 from processing.actions.run_computations import run_computations
 from processing.actions.run_computations_export import run_computations_export
@@ -21,16 +22,13 @@ from processing.lib.app import App
 from processing.lib.console import Console
 from processing.prompts.prompt_menu import prompt_menu
 from processing.repositories.ConfigRepository import ConfigRepository
-from processing.utils.prettify_exceptions import prettify_exceptions
 
 
-@prettify_exceptions
 def menu(config_path: str):
     context = Context(config_path)
     Console.print_splash()
     Console.print_settings(context)
     ConfigRepository.to_storage(context)
-
 
     def handle_exit_signal(_signum, _frame):
         App.quit(context)
@@ -44,16 +42,7 @@ def menu(config_path: str):
             context.last_choice = answer
 
             action_map = {
-                MenuChoice.RUN_ALL.value: lambda: (
-                    run_extractions(context),
-                    run_aggregations(context),
-                    run_reductions(context),
-                    run_computations(context),
-                    run_autoclusters(context),
-                    run_metrics(context),
-                    run_trajectories(context),
-                    run_relative_trajectories(context),
-                ),
+                MenuChoice.RUN_ALL.value: lambda: run_all(context),
                 MenuChoice.RUN_EXTRACTIONS.value: lambda: run_extractions(context),
                 MenuChoice.RUN_AGGREGATIONS.value: lambda: run_aggregations(context),
                 MenuChoice.RUN_REDUCTIONS.value: lambda: run_reductions(context),
