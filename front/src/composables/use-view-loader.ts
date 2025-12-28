@@ -1,8 +1,8 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
+import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
@@ -42,8 +42,8 @@ export function useViewLoader() {
   const {build: buildSelection, selection: tagSelection} = useTagSelection();
   const {isEnabled} = useScatterRender();
   const {filter: filterByLabel} = useScatterFilterTag();
-  const {filter: filterByTemporal} = useScatterFilterTemporal();
-  const {filter: filterByTime} = useScatterFilterTime();
+  const {filter: filterByCalendar} = useScatterFilterCalendar();
+  const {filter: filterByAcoustic} = useScatterFilterAcoustic();
   const {filter: filterBySpatial} = useScatterFilterSpatial();
 
   const {extraction, band, integration, reducer} = useViewSelection();
@@ -104,8 +104,8 @@ export function useViewLoader() {
     loadAcousticExtractors();
 
     filterByLabel(tagSelection);
-    filterByTime();
-    filterByTemporal();
+    filterByCalendar();
+    filterByAcoustic();
     filterBySpatial();
 
     setSelectionBounds();

@@ -15,15 +15,15 @@ const {
   totalOut,
   totalIn,
   population,
-  isTimeActive,
-  timeIn,
-  timeOut,
+  isCalendarActive,
+  calendarIn,
+  calendarOut,
   isTagsActive,
   tagsIn,
   tagsOut,
-  isTemporalActive,
-  temporalIn,
-  temporalOut,
+  isAcousticActive,
+  acousticIn,
+  acousticOut,
   isSpatialActive,
   spatialOut,
   spatialIn,
@@ -116,18 +116,18 @@ const {
           <div :class="$style.row">
             <span>Calendar</span>
             <span
-              v-if="isTimeActive && isCollectMode"
+              v-if="isCalendarActive && isCollectMode"
               :style="`color: ${colors.pressedColor};`"
             >
-              {{ timeIn }} collected
+              {{ calendarIn }} collected
             </span>
 
-            <span v-if="isTimeActive && (isFilterMode || isIntervalMode)">
-              {{ timeOut }} filtered
+            <span v-if="isCalendarActive && (isFilterMode || isIntervalMode)">
+              {{ calendarOut }} filtered
             </span>
 
             <span
-              v-if="!isTimeActive"
+              v-if="!isCalendarActive"
               :class="$style.inactive"
             >
               inactive
@@ -154,20 +154,20 @@ const {
             </span>
           </div>
           <div :class="$style.row">
-            <span>Temporal</span>
+            <span>Acoustic</span>
             <span
-              v-if="isTemporalActive && isCollectMode"
+              v-if="isAcousticActive && isCollectMode"
               :style="`color: ${colors.pressedColor};`"
             >
-              {{ temporalIn }} collected
+              {{ acousticIn }} collected
             </span>
 
-            <span v-if="isTemporalActive && (isFilterMode || isIntervalMode)">
-              {{ temporalOut }} filtered
+            <span v-if="isAcousticActive && (isFilterMode || isIntervalMode)">
+              {{ acousticOut }} filtered
             </span>
 
             <span
-              v-if="!isTemporalActive"
+              v-if="!isAcousticActive"
               :class="$style.inactive"
             >
               inactive

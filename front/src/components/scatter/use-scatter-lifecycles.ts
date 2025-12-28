@@ -1,9 +1,9 @@
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterContainer} from 'src/components/scatter/use-scatter-container';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
+import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {useClientSettings} from 'src/composables/use-client-settings';
@@ -39,8 +39,8 @@ export function useScatterLifecycles() {
     scatterBorderWidth,
   } = useClientSettings();
   const {filtered: labelFiltered} = useScatterFilterTag();
-  const {filtered: timeFiltered} = useScatterFilterTime();
-  const {filtered: temporalFiltered} = useScatterFilterTemporal();
+  const {filtered: calendarFiltered} = useScatterFilterCalendar();
+  const {filtered: acousticFiltered} = useScatterFilterAcoustic();
   const {filtered: spatialFiltered} = useScatterFilterSpatial();
   const {isWebGlScatter2d} = useClientSettings();
   const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
@@ -71,8 +71,8 @@ export function useScatterLifecycles() {
       isTagNumericEnabled,
       timeshift,
       labelFiltered,
-      timeFiltered,
-      temporalFiltered,
+      calendarFiltered,
+      acousticFiltered,
       spatialFiltered,
       isWebGlScatter2d,
       isColorMapSwapped,
@@ -95,10 +95,12 @@ export function useScatterLifecycles() {
         return;
       }
 
+      // TODO: investigate
       // requestAnimationFrame(async () => {
       //   await generate();
       //   renderScatter();
       // });
+
       isRendering = true;
       renderScatter();
       await generate();
