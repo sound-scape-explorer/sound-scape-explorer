@@ -42,6 +42,9 @@ sse processing-artefacts/test.json --validate
 # verify CLI start CPU mode
 sse processing-artefacts/test.json --validate --cpu
 
+# process example campaign
+sse examples/coral-reef-light.json --auto
+
 # verify build
 cd processing
 python -m build
