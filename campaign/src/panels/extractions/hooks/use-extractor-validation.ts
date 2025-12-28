@@ -70,8 +70,8 @@ export function useExtractorValidation() {
       }
 
       return (
-        extractor.spectro_stft_overlap_ratio >= 0.0 &&
-        extractor.spectro_stft_overlap_ratio <= 1.0
+        extractor.spectro_stft_overlap_ratio >= 0 &&
+        extractor.spectro_stft_overlap_ratio <= 1
       );
     },
     [],
@@ -104,8 +104,8 @@ export function useExtractorValidation() {
     }
 
     return (
-      extractor.mps_stft_1_overlap_ratio >= 0.0 &&
-      extractor.mps_stft_1_overlap_ratio <= 1.0
+      extractor.mps_stft_1_overlap_ratio >= 0 &&
+      extractor.mps_stft_1_overlap_ratio <= 1
     );
   }, []);
 
@@ -126,8 +126,8 @@ export function useExtractorValidation() {
     }
 
     return (
-      extractor.mps_stft_2_overlap_ratio >= 0.0 &&
-      extractor.mps_stft_2_overlap_ratio <= 1.0
+      extractor.mps_stft_2_overlap_ratio >= 0 &&
+      extractor.mps_stft_2_overlap_ratio <= 1
     );
   }, []);
 
