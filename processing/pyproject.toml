@@ -49,7 +49,7 @@ dev = [
   "pytest==8.3.5",
   "pyright==1.1.398",
   "build==1.2.1",
-  "scipy-stubs==1.16.0.2",
+  "scipy-stubs==1.16.3.3",
   "pandas-stubs==2.3.2.250827",
   "pip-audit==2.10.0",
   # forcing infrastructure package to secure versions
