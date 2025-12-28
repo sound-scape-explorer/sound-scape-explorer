@@ -1,9 +1,5 @@
 import {type ParsedQs} from 'qs';
 
-interface ParsedQuery {
-  [p: string]: string | string[] | ParsedQuery | ParsedQuery[] | undefined;
-}
-
 interface Query {
   file: string;
   start: number;
