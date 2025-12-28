@@ -2,6 +2,7 @@ import {
   Button,
   Checkbox,
   CheckboxProps,
+  Classes,
   Dialog,
   DialogBody,
   DialogFooter,
@@ -108,7 +109,7 @@ export function ExtractionsPanelMenuImport() {
         title="Import extractors"
         icon="info-sign"
         isOpen={isOpen}
-        className={clsx(isDark && 'bp5-dark')}
+        className={clsx(isDark && Classes.DARK)}
       >
         <DialogBody className={styles.dialogBody}>
           <FileInput

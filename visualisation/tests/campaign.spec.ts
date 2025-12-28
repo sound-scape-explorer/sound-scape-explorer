@@ -1,8 +1,6 @@
-import {test, expect} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import {startElectron} from './_shared';
 import {join} from 'path';
-import {readFileSync, unlinkSync} from 'fs';
-import {ConfigDto} from '../../shared/dtos';
 
 test('default json import to export', async () => {
   const {app, main} = await startElectron();

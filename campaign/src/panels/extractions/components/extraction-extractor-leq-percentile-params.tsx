@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {LEQ_PERCENTILE_VALUE, LEQ_SHORT_DT} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import clsx from 'clsx';
@@ -31,8 +31,8 @@ export function ExtractionExtractorLeqPercentileParams({
           styles.additionalParamsLeqPercentile,
         )}
       >
-        <code className="bp5-text-small">dt (s)</code>
-        <code className="bp5-text-small">percentile</code>
+        <code className={Classes.TEXT_SMALL}>dt (s)</code>
+        <code className={Classes.TEXT_SMALL}>percentile</code>
       </SectionCard>
       <SectionCard
         className={clsx(

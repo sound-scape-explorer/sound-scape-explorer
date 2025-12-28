@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {ADI_BIN_STEP, ADI_DB_THRESHOLD, ADI_IMPL} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import {AdiImpl} from '@shared/enums';
@@ -30,9 +30,9 @@ export function ExtractionExtractorAdiParams({extraction, extractor}: Props) {
           styles.additionalParamsAdi,
         )}
       >
-        <code className="bp5-text-small">bin step</code>
-        <code className="bp5-text-small">impl</code>
-        <code className="bp5-text-small">dB threshold</code>
+        <code className={Classes.TEXT_SMALL}>bin step</code>
+        <code className={Classes.TEXT_SMALL}>impl</code>
+        <code className={Classes.TEXT_SMALL}>dB threshold</code>
       </SectionCard>
       <SectionCard
         className={clsx(

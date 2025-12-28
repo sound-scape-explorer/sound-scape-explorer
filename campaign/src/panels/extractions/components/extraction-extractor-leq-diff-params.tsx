@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {
   LEQ_DIFF_PERCENTILE_A,
   LEQ_DIFF_PERCENTILE_B,
@@ -39,9 +39,9 @@ export function ExtractionExtractorLeqDiffParams({
           styles.additionalParamsLeqDiff,
         )}
       >
-        <code className="bp5-text-small">dt (s)</code>
-        <code className="bp5-text-small">percentile A</code>
-        <code className="bp5-text-small">percentile B</code>
+        <code className={Classes.TEXT_SMALL}>dt (s)</code>
+        <code className={Classes.TEXT_SMALL}>percentile A</code>
+        <code className={Classes.TEXT_SMALL}>percentile B</code>
       </SectionCard>
       <SectionCard
         className={clsx(

@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {HT_FRAME_SIZE} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import clsx from 'clsx';
@@ -26,7 +26,7 @@ export function ExtractionExtractorHtParams({extraction, extractor}: Props) {
           styles.additionalParamsHt,
         )}
       >
-        <code className="bp5-text-small">frame size</code>
+        <code className={Classes.TEXT_SMALL}>frame size</code>
       </SectionCard>
       <SectionCard
         className={clsx(

@@ -1,4 +1,10 @@
-import {Button, Checkbox, Section, SectionCard} from '@blueprintjs/core';
+import {
+  Button,
+  Checkbox,
+  Classes,
+  Section,
+  SectionCard,
+} from '@blueprintjs/core';
 import {ArrowDown, ArrowUp, Cog, Cross} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
@@ -159,7 +165,7 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
         icon={<Cog size={ICON_SIZE} />}
         onClick={() => setOpen((o) => !o)}
         disabled={!hasAdditionalParams}
-        className={clsx(open && 'bp5-active')}
+        className={clsx(open && Classes.ACTIVE)}
       />
 
       <Section

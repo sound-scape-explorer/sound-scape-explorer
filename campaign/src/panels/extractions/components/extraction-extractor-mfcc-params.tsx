@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {MFCC_N_MFCC} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import clsx from 'clsx';
@@ -26,7 +26,7 @@ export function ExtractionExtractorMfccParams({extraction, extractor}: Props) {
           styles.additionalParamsMfcc,
         )}
       >
-        <code className="bp5-text-small">n_mfcc</code>
+        <code className={Classes.TEXT_SMALL}>n_mfcc</code>
       </SectionCard>
       <SectionCard
         className={clsx(
