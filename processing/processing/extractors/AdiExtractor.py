@@ -51,6 +51,7 @@ class AdiExtractor(Extractor):
                 #  but the band splitting (fn freq vector) is bizarre
             )
 
+
             adi = features.acoustic_diversity_index(
                 Sxx=sxx,
                 fn=fn,
@@ -59,8 +60,6 @@ class AdiExtractor(Extractor):
                 index=self.index.value.lower(),
                 bin_step=self.bin_step,
                 dB_threshold=self.db_threshold,
-                # todo: we used this in the legacy impl
-                #  fmax=10000,
             )
 
             adis.append([adi])
