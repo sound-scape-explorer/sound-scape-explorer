@@ -2,7 +2,8 @@
 import {NTag} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {ColorCategory} from 'src/constants';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import TagCheckbox from 'src/draggables/tags/tag-checkbox.vue';
 import {useTag} from 'src/draggables/tags/use-tag';
 import {watch} from 'vue';
@@ -22,7 +23,18 @@ const {
   isCurrent,
   openCurrent,
 } = useTag(props);
-const {handleLabelClick} = useColorSelection();
+
+const {category, option} = useColoringState();
+
+const handleLabelClick = (tagName: string) => {
+  if (category.value !== ColorCategory.enum.TAGS) {
+    category.value = ColorCategory.enum.TAGS;
+  }
+
+  if (option.value !== tagName) {
+    option.value = tagName;
+  }
+};
 
 watch(isCurrent, openCurrent);
 </script>

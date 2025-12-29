@@ -9,11 +9,9 @@ import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scat
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
-import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 import {useSelectionState} from 'src/draggables/selection/use-selection-state';
-import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {onMounted, watch} from 'vue';
 
 let isRendering = false;
@@ -29,14 +27,14 @@ export function useScatterLifecycles() {
     render: renderContainer,
     mount: mountContainer,
   } = useScatterContainer();
-  const {option: colorOption, flavor} = useColorSelection();
-  const {colorsAlphaLow: opacityLow, colorsAlphaHigh: opacityHigh} =
-    useClientSettings();
   const {
     timeshift,
     isColorMapSwapped,
     isSelectedPointHighlighted,
     scatterBorderWidth,
+    colorsAlphaLow: opacityLow,
+    colorsAlphaHigh: opacityHigh,
+    colorsFlavor,
   } = useClientSettings();
   const {filtered: labelFiltered} = useScatterFilterTag();
   const {filtered: calendarFiltered} = useScatterFilterCalendar();
@@ -44,8 +42,12 @@ export function useScatterLifecycles() {
   const {filtered: spatialFiltered} = useScatterFilterSpatial();
   const {isWebGlScatter2d} = useClientSettings();
   const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
-  const {min: tagMin, max: tagMax} = useColorByTag();
-  const {isEnabled: isTagNumericEnabled} = useTagNumeric();
+  const {
+    isNumericModeEnabled,
+    numericRangeMin,
+    numericRangeMax,
+    option: colorOption,
+  } = useColoringState();
   const {currentIndex} = useIntervalTransport();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
@@ -61,14 +63,14 @@ export function useScatterLifecycles() {
   watch(
     [
       colorOption,
-      flavor,
+      colorsFlavor,
       opacityLow,
       opacityHigh,
       acousticMin,
       acousticMax,
-      tagMin,
-      tagMax,
-      isTagNumericEnabled,
+      isNumericModeEnabled,
+      numericRangeMin,
+      numericRangeMax,
       timeshift,
       labelFiltered,
       calendarFiltered,

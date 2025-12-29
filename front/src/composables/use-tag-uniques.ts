@@ -48,9 +48,14 @@ export function useTagUniques() {
     );
   };
 
+  const filterUniquesByTagName = (tagName: string) => {
+    return allUniques.value[tagName];
+  };
+
   return {
     generate,
     allUniques,
     coreUniques,
+    filterUniquesByTagName,
   };
 }

@@ -1,14 +1,12 @@
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {computed} from 'vue';
 
 export function useTagCheckboxColors(tagName: string) {
-  const {option} = useColorSelection();
+  const {isNumericModeEnabled, option} = useColoringState();
   const {getColorByTagIndex, getColorNumeric} = useColorByTag();
   const {allUniques} = useTagUniques();
-  const {isEnabled} = useTagNumeric();
 
   const tagUniques = computed(() => allUniques.value[tagName] ?? []);
 
@@ -17,7 +15,7 @@ export function useTagCheckboxColors(tagName: string) {
       return undefined;
     }
 
-    if (isEnabled.value) {
+    if (isNumericModeEnabled.value) {
       return getColorNumeric(Number(tagUniques.value[tN]));
     }
 

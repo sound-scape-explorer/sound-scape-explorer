@@ -6,8 +6,8 @@ import {useColorByDayOrNight} from 'src/draggables/colors/use-color-by-day-or-ni
 import {useColorByHoursInDay} from 'src/draggables/colors/use-color-by-hours-in-day';
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
 import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useColorState} from 'src/draggables/colors/use-color-state';
+import {useColorType} from 'src/draggables/colors/use-color-type';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {ref} from 'vue';
 
 const scale = ref<string[] | null>(null);
@@ -15,13 +15,13 @@ const scale = ref<string[] | null>(null);
 export function useScatterColorScale() {
   const {config} = useConfig();
   const {aggregations} = useAggregations();
-  const {isAcoustic, isTag} = useColorState();
+  const {isAcoustic, isTag} = useColorType();
   const {get: getColorByIntervalIndex} = useColorByIntervalIndex();
   const {get: getColorByDayOrNight} = useColorByDayOrNight();
   const {get: getColorByHoursInDay} = useColorByHoursInDay();
   const {get: getColorByTag} = useColorByTag();
   const {get: getColorByAcoustic} = useColorByAcoustic();
-  const {option: colorOption} = useColorSelection();
+  const {option: colorOption} = useColoringState();
 
   const generate = async () => {
     return new Promise((resolve, reject) => {

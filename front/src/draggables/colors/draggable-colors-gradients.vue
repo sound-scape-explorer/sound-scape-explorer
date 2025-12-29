@@ -5,19 +5,15 @@ import AppIcon from 'src/app/app-icon.vue';
 import {useColorInvert} from 'src/composables/use-color-invert';
 import {ColorOption} from 'src/constants';
 import {useColorByDayOrNight} from 'src/draggables/colors/use-color-by-day-or-night';
-import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorGradients} from 'src/draggables/colors/use-color-gradients';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useColorState} from 'src/draggables/colors/use-color-state';
-import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
+import {useColorType} from 'src/draggables/colors/use-color-type';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {computed} from 'vue';
 
-const {isTag} = useColorState();
+const {isTag} = useColorType();
 
 const {invert, isReversible} = useColorInvert();
-const {isEnabled: isTagNumericEnabled} = useTagNumeric();
-const {option} = useColorSelection();
-const {min, max} = useColorByTag();
+const {isNumericModeEnabled, option} = useColoringState();
 const {scale: dayOrNightScale} = useColorByDayOrNight();
 
 const {
@@ -35,31 +31,11 @@ const isHoursInDay = computed(
 const isDayOrNight = computed(
   () => option.value === ColorOption.enum.DayOrNight,
 );
-
-const userLabels = computed<string[]>(() => {
-  if (!isTagNumericEnabled.value || min.value === '' || max.value === '') {
-    return [];
-  }
-
-  const size = userColors.value.length;
-
-  const labels: string[] = [];
-
-  for (let i = 0; i < size; i += 1) {
-    const value =
-      Number(min.value) +
-      (i * (Number(max.value) - Number(min.value))) / (size - 1);
-    const int = Math.round(value);
-    labels.push(int.toString());
-  }
-
-  return labels;
-});
 </script>
 
 <template>
   <h2
-    v-if="!isTag || isTagNumericEnabled"
+    v-if="!isTag || isNumericModeEnabled"
     style="display: flex; gap: 8px"
   >
     <span>Map</span>
@@ -78,7 +54,7 @@ const userLabels = computed<string[]>(() => {
   </h2>
 
   <div
-    v-if="!isTag || isTagNumericEnabled"
+    v-if="!isTag || isNumericModeEnabled"
     :class="$style.gradients"
   >
     <AppGradient

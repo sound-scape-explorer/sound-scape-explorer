@@ -2,15 +2,19 @@
 import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import AppInput from 'src/app/input/app-input.vue';
-import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
-import {useColorState} from 'src/draggables/colors/use-color-state';
+import {useColorType} from 'src/draggables/colors/use-color-type';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {onBeforeUnmount} from 'vue';
 
-const {isTagNumeric} = useColorState();
-const {min, max} = useColorByTag();
-const {detect} = useColorByTag();
-const {isEnabled, toggle, disable} = useTagNumeric();
+const {
+  isNumericModeEnabled,
+  numericRangeMin,
+  numericRangeMax,
+  detectNumericRange,
+} = useColoringState();
+const {isTagNumeric} = useColorType();
+const {toggle, disable} = useTagNumeric();
 
 onBeforeUnmount(disable);
 </script>
@@ -21,9 +25,9 @@ onBeforeUnmount(disable);
     :class="$style.buttons"
   >
     <AppButton
-      :active="isEnabled"
+      :active="isNumericModeEnabled"
       :handle-click="toggle"
-      :tooltip="`Act as numeric range ${isEnabled ? 'enabled' : 'disabled'}`"
+      :tooltip="`Act as numeric range ${isNumericModeEnabled ? 'enabled' : 'disabled'}`"
       size="small"
       tooltip-placement="bottom"
     >
@@ -34,8 +38,8 @@ onBeforeUnmount(disable);
     </AppButton>
 
     <AppButton
-      :disabled="!isEnabled"
-      :handle-click="detect"
+      :disabled="!isNumericModeEnabled"
+      :handle-click="detectNumericRange"
       size="small"
       tooltip="Detect range"
       tooltip-placement="bottom"
@@ -52,16 +56,16 @@ onBeforeUnmount(disable);
     :class="$style.flex"
   >
     <AppInput
-      v-model="min"
-      :disabled="!isEnabled"
+      v-model="numericRangeMin"
+      :disabled="!isNumericModeEnabled"
       placeholder="Min..."
       size="small"
       type="number"
     />
 
     <AppInput
-      v-model="max"
-      :disabled="!isEnabled"
+      v-model="numericRangeMax"
+      :disabled="!isNumericModeEnabled"
       placeholder="Max..."
       size="small"
       type="number"

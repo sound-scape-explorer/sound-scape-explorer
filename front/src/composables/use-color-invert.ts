@@ -1,11 +1,11 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {ColorOption} from 'src/constants';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {computed} from 'vue';
 
 export function useColorInvert() {
   const {isColorMapSwapped} = useClientSettings();
-  const {option} = useColorSelection();
+  const {option} = useColoringState();
 
   const invert = () => (isColorMapSwapped.value = !isColorMapSwapped.value);
 

@@ -1,18 +1,18 @@
 <script lang="ts" setup="">
 import AppSelect from 'src/app/select/app-select.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {ColorFlavor} from 'src/constants';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 
 const {isLoading} = useScatterLoading();
-const {flavor} = useColorSelection();
+const {colorsFlavor} = useClientSettings();
 </script>
 
 <template>
   <h2>Flavor</h2>
 
   <AppSelect
-    v-model="flavor"
+    v-model="colorsFlavor"
     :disabled="isLoading"
     :options="ColorFlavor.options"
     size="small"

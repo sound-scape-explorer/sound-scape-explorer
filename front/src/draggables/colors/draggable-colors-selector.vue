@@ -2,10 +2,10 @@
 import AppSelect from 'src/app/select/app-select.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {ColorCategory} from 'src/constants';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 
 const {isLoading} = useScatterLoading();
-const {option, options, category} = useColorSelection();
+const {option, options, category} = useColoringState();
 </script>
 
 <template>

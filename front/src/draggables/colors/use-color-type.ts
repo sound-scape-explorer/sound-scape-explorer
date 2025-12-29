@@ -1,15 +1,14 @@
 import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {ColorCategory} from 'src/constants';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
+import {areStringsDigitizable} from 'src/utils/strings';
 import {computed} from 'vue';
 
-export function useColorState() {
-  const {allUniques} = useTagUniques();
-  const {option, category} = useColorSelection();
+export function useColorType() {
+  const {allUniques, filterUniquesByTagName} = useTagUniques();
+  const {category, option} = useColoringState();
   const {acousticSlugs} = useAcousticExtractors();
-  const {isCalculable} = useTagNumeric();
 
   const isTag = computed<boolean>(() => {
     const properties = Object.keys(allUniques.value);
@@ -19,8 +18,10 @@ export function useColorState() {
     );
   });
 
+  // TODO: to remove?
   const isTagNumeric = computed<boolean>(() => {
-    return isTag.value && isCalculable(option.value);
+    const uniques = filterUniquesByTagName(option.value);
+    return isTag.value && areStringsDigitizable(uniques);
   });
 
   const isAcoustic = computed(

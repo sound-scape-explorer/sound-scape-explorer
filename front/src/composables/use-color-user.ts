@@ -1,13 +1,11 @@
 import chroma, {type Scale} from 'chroma-js';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {computed, ref} from 'vue';
 
 const scale = ref<Scale>(chroma.scale());
 
 export function useColorUser() {
-  const {flavor} = useColorSelection();
-  const {isColorMapSwapped} = useClientSettings();
+  const {isColorMapSwapped, colorsFlavor} = useClientSettings();
 
   const domain = computed(() => {
     if (isColorMapSwapped.value) {
@@ -18,7 +16,7 @@ export function useColorUser() {
   });
 
   const generateScale = () => {
-    const newScale = chroma.scale(flavor.value);
+    const newScale = chroma.scale(colorsFlavor.value);
     scale.value = newScale.domain(domain.value).mode('hsl');
   };
 
