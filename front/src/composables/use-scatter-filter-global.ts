@@ -7,7 +7,7 @@ import {ref} from 'vue';
 const filtered = ref<boolean[]>([]);
 
 // global interval filter
-export function useScatterGlobalFilter() {
+export function useScatterFilterGlobal() {
   const {filtered: labelFiltered} = useScatterFilterTag();
   const {filtered: calendarFiltered} = useScatterFilterCalendar();
   const {filtered: acousticFiltered} = useScatterFilterAcoustic();

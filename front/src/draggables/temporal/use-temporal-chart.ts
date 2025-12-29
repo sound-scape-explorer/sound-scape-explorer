@@ -2,7 +2,7 @@ import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {type AcousticSeries} from 'src/composables/use-acoustic-serializer';
 import {useDateTime} from 'src/composables/use-date-time';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
+import {useScatterFilterGlobal} from 'src/composables/use-scatter-filter-global';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalHloc} from 'src/draggables/temporal/use-temporal-hloc';
 import {useTemporalSeries} from 'src/draggables/temporal/use-temporal-series';
@@ -22,7 +22,7 @@ const candles = ref<CandlesData | null>(null);
 export function useTemporalChart() {
   const {isCandles} = useDraggableTemporal();
   const {series} = useTemporalSeries();
-  const {filtered} = useScatterGlobalFilter();
+  const {filtered} = useScatterFilterGlobal();
   const {calculate} = useTemporalHloc();
   const {apply} = useTemporalStrategy();
   const {timestampToString} = useDateTime();

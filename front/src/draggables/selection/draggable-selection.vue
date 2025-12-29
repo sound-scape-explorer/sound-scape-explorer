@@ -13,7 +13,7 @@ import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {useScatterDimensions} from 'src/components/scatter/use-scatter-dimensions';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {DraggableKey} from 'src/composables/use-draggables';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
+import {useScatterFilterGlobal} from 'src/composables/use-scatter-filter-global';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 import {useSelectionState} from 'src/draggables/selection/use-selection-state';
@@ -22,7 +22,7 @@ import {computed, ref, watch} from 'vue';
 
 const {isActive, isFiltering, isWireframe} = useDraggableSelection();
 const {filter} = useScatterFilterSpatial();
-const {update} = useScatterGlobalFilter();
+const {update} = useScatterFilterGlobal();
 const {lock, unlock} = useScatterCamera();
 const {colors} = useThemeColors();
 const {is3d} = useScatterDimensions();

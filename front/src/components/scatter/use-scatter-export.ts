@@ -5,7 +5,7 @@ import {useDateTime} from 'src/composables/use-date-time';
 import {useExportName} from 'src/composables/use-export-name';
 import {useIntervals} from 'src/composables/use-intervals';
 import {useReductions} from 'src/composables/use-reductions';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
+import {useScatterFilterGlobal} from 'src/composables/use-scatter-filter-global';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {ExportType, STRING_DELIMITER} from 'src/constants';
@@ -29,7 +29,7 @@ export function useScatterExport() {
   const {reductions} = useReductions();
   const {aggregations} = useAggregations();
   const {intervals} = useIntervals();
-  const {filtered} = useScatterGlobalFilter();
+  const {filtered} = useScatterFilterGlobal();
   const {generate} = useExportName();
 
   const loadingRef = ref<boolean>(false);
@@ -70,21 +70,26 @@ export function useScatterExport() {
       });
     }
 
-    csv.addColumn('intervalIndex');
-    csv.addColumn('start');
-    csv.addColumn('end');
-    csv.addColumn('site');
+    // headers
+    csv.addColumn('Interval Index');
+    csv.addColumn('Start');
+    csv.addColumn('End');
+    csv.addColumn('In Selection');
+    csv.addColumn('Site');
 
+    // adding all tags
     Object.keys(allUniques.value).forEach((name) => {
-      csv.addColumn(`tag_${name}`);
+      csv.addColumn(`TAG_${name}`);
     });
 
+    // adding all reduced dimensions
     payload[0].reductions.forEach((_, r) => {
-      csv.addColumn(`red_${r}`);
+      csv.addColumn(`RED_${r}`);
     });
 
+    // adding all raw embeddings
     payload[0].embeddings.forEach((_, f) => {
-      csv.addColumn(`emb_${f}`);
+      csv.addColumn(`EMB_${f}`);
     });
 
     payload.forEach((data) => {

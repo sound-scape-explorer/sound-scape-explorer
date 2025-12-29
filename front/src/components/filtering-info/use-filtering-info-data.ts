@@ -2,11 +2,11 @@ import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
+import {useScatterFilterGlobal} from 'src/composables/use-scatter-filter-global';
 import {computed} from 'vue';
 
 export function useFilteringInfoData() {
-  const {filtered: global} = useScatterGlobalFilter();
+  const {filtered: global} = useScatterFilterGlobal();
   const {filtered: calendar} = useScatterFilterCalendar();
   const {filtered: tags} = useScatterFilterTag();
   const {filtered: acoustic} = useScatterFilterAcoustic();
