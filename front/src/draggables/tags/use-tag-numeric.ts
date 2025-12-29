@@ -3,19 +3,18 @@ import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {areStringsDigitizable} from 'src/utils/strings';
 
 export function useTagNumeric() {
-  const {isNumericModeEnabled, option} = useColoringState();
+  const {isNumericModeEnabled, option, detectNumericRange} = useColoringState();
   const {filterUniquesByTagName} = useTagUniques();
 
   const enable = () => {
     const uniques = filterUniquesByTagName(option.value);
 
-    if (!areStringsDigitizable(uniques)) {
+    if (!areStringsDigitizable(uniques) || isNumericModeEnabled.value) {
       return;
     }
 
-    if (!isNumericModeEnabled.value) {
-      isNumericModeEnabled.value = true;
-    }
+    isNumericModeEnabled.value = true;
+    detectNumericRange();
   };
 
   const disable = () => {
