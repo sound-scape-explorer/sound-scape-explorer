@@ -19,9 +19,9 @@ import {
   FilterType,
   useAudioFilters,
 } from 'src/draggables/audio/use-audio-filters';
-import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {nextTick, ref} from 'vue';
+import {useSelectionBoundaries} from 'src/draggables/selection/use-selection-boundaries';
 
 const RENDER_TIMEOUT = 100;
 
@@ -50,7 +50,7 @@ export function useViewLoader() {
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
-  const {setBounds: setSelectionBounds} = useSelectionState();
+  const {detectBoundaries} = useSelectionBoundaries();
   const {update: updateAudioFilter} = useAudioFilters();
 
   const steps: Step[] = [
@@ -108,7 +108,7 @@ export function useViewLoader() {
     filterByAcoustic();
     filterBySpatial();
 
-    setSelectionBounds();
+    detectBoundaries();
 
     updateAudioFilter(FilterType.enum.hpf, band.value.low);
     updateAudioFilter(FilterType.enum.lpf, band.value.high);

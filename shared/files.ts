@@ -12,3 +12,20 @@ export function readJson(
   reader.onload = (e) => callback(e);
   reader.readAsText(file);
 }
+
+export function readFileAsText(file: File): Promise<string> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', async (e) => {
+      if (!e.target) {
+        throw Error('Could not load FileReader');
+      }
+
+      const text = e.target.result as string;
+      resolve(text);
+    });
+
+    reader.readAsText(file);
+  });
+}

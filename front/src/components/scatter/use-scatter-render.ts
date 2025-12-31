@@ -7,7 +7,6 @@ import {useScatterTrajectoryAverage} from 'src/components/scatter/use-scatter-tr
 import {useColorScaleHoursInDay} from 'src/composables/use-color-scale-hours-in-day';
 import {useTrajectories} from 'src/composables/use-trajectories';
 import {DEBOUNCE_MS} from 'src/constants';
-import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
 import {useSelectionRender} from 'src/draggables/selection/use-selection-render';
 import {ref} from 'vue';
 
@@ -22,7 +21,6 @@ export function useScatterRender() {
   const {render: renderTrajectories} = useScatterTrajectories();
   const {render: renderTrajectoryAverage} = useScatterTrajectoryAverage();
 
-  const {isActive: isSelectionActive} = useDraggableSelection();
   const {render: renderSelection} = useSelectionRender();
 
   const render = () => {
@@ -51,13 +49,11 @@ export function useScatterRender() {
     const embeddings = renderEmbeddings();
     newData.push(...embeddings);
 
-    // selection
-    if (isSelectionActive.value) {
-      const selectionTraces = renderSelection();
+    // selection boxes
+    const selectionTraces = renderSelection();
 
-      if (typeof selectionTraces !== 'undefined') {
-        newData.push(...selectionTraces);
-      }
+    if (typeof selectionTraces !== 'undefined') {
+      newData.push(...selectionTraces);
     }
 
     data.value = newData;

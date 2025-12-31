@@ -1,6 +1,6 @@
 import {isDarkModeEnabled} from '@shared/browser';
 import {useStorage} from '@vueuse/core';
-import {getStorageKey} from 'src/common/browser';
+import {getLocalStorageKey, LocalStorageKey} from 'src/common/browser';
 import {
   AUDIO_GAIN,
   AudioFilterSlope,
@@ -72,7 +72,7 @@ export function createSettingsRefs(): SettingsRefs {
 
   const entries = Object.entries(shape).map(([key, schema]) => {
     const ref = useStorage(
-      `${getStorageKey('SETTINGS')}-${key}`,
+      `${getLocalStorageKey(LocalStorageKey.enum.SETTINGS)}-${key}`,
       schema.parse(undefined),
       undefined,
       {

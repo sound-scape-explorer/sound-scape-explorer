@@ -94,8 +94,8 @@ const zIndex = computed(() => {
     <div :class="$style.header">
       <div :class="$style.title">
         <AppIcon
-          :color="isSelected ? 'active' : 'default'"
           :icon="props.draggableKey"
+          :intent="isSelected ? 'active' : 'default'"
           size="small"
         />
         <span>

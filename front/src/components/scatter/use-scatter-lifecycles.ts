@@ -10,8 +10,7 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
 import {useColoringState} from 'src/draggables/colors/use-coloring-state';
-import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
-import {useSelectionState} from 'src/draggables/selection/use-selection-state';
+import {useSelectionBoxes} from 'src/draggables/selection/use-selection-boxes';
 import {onMounted, watch} from 'vue';
 
 let isRendering = false;
@@ -51,9 +50,7 @@ export function useScatterLifecycles() {
   const {currentIndex} = useIntervalTransport();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
-  const {isActive: isSelectionActive, isWireframe: isSelectionWireframe} =
-    useDraggableSelection();
-  const {xRange, yRange, zRange, xAngle, yAngle, zAngle} = useSelectionState();
+  const {boxes: selectionBoxes} = useSelectionBoxes();
 
   onMounted(mountContainer);
 
@@ -82,15 +79,7 @@ export function useScatterLifecycles() {
       isSelectedPointHighlighted,
       scatterBorderWidth,
       cyclingPeriod,
-      // selection
-      isSelectionActive,
-      isSelectionWireframe,
-      xRange,
-      yRange,
-      zRange,
-      xAngle,
-      yAngle,
-      zAngle,
+      selectionBoxes,
     ],
     async () => {
       if (isRendering || !isEnabled.value) {
@@ -108,5 +97,6 @@ export function useScatterLifecycles() {
       await generate();
       isRendering = false;
     },
+    {deep: true},
   );
 }

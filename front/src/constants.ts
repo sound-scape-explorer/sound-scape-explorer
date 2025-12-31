@@ -121,3 +121,6 @@ export type ExportType = z.infer<typeof ExportType>;
 export const AudioFilterSlope = z.enum(['12', '24', '36', '48']); // multiples of 12
 // eslint-disable-next-line no-redeclare
 export type AudioFilterSlope = z.infer<typeof AudioFilterSlope>;
+
+export const SELECTION_RANGE_STEP = 0.05;
+export const SELECTION_ANGLE_STEP = 5;

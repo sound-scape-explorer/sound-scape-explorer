@@ -22,6 +22,7 @@ export function useAudioDownload() {
 
     const wav = encodeWavFileFromAudioBuffer(buffer, 0);
     const blob = new Blob([wav], {type: 'audio/wav'});
+    // TODO: add interval index in name
     const name = `file index ${window.value.file.Index} - relative start ${window.value.relative.start} - NO FILTER.wav`;
 
     triggerWavDownload(blob, name);

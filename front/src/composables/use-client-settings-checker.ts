@@ -1,6 +1,7 @@
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {VERSION} from 'src/version';
 
+// TODO: this is maybe too much
 export function useClientSettingsChecker() {
   const {version, resetAll} = useClientSettings();
 
