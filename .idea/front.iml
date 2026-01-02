@@ -6,6 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/front/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/front/src/styles" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/front/node_modules" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/front/playwright-report" />
+      <excludeFolder url="file://$MODULE_DIR$/front/test-results" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

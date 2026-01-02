@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/campaign/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/campaign/src/styles" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/campaign/node_modules" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/campaign/playwright-report" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
