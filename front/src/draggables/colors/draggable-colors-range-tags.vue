@@ -5,7 +5,6 @@ import AppInput from 'src/app/input/app-input.vue';
 import {useColorType} from 'src/draggables/colors/use-color-type';
 import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
-import {onBeforeUnmount} from 'vue';
 
 const {
   isNumericModeEnabled,
@@ -14,9 +13,7 @@ const {
   detectNumericRange,
 } = useColoringState();
 const {isTagNumeric} = useColorType();
-const {toggle, disable} = useTagNumeric();
-
-onBeforeUnmount(disable);
+const {toggle} = useTagNumeric();
 </script>
 
 <template>
