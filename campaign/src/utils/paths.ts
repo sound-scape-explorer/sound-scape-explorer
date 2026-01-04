@@ -90,7 +90,7 @@ export function extractDatesFromPaths(
         const date = parse(dateStr, template, referenceDate);
 
         // Validate that parse actually succeeded
-        if (!isNaN(date.getTime())) {
+        if (!Number.isNaN(date.getTime())) {
           dates.push(date);
         }
       } catch {

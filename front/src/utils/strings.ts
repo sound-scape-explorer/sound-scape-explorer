@@ -12,7 +12,7 @@ export function sortStringsNumerically(array: string[]) {
 
 export function areStringsDigitizable(strings: string[]): boolean {
   for (const s of strings) {
-    if (isNaN(Number(s))) {
+    if (Number.isNaN(Number(s))) {
       return false;
     }
   }

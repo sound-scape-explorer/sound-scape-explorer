@@ -12,7 +12,7 @@ import {
   StftWindowType,
 } from './enums';
 
-const dateString = z.string().refine((str) => !isNaN(Date.parse(str)), {
+const dateString = z.string().refine((str) => !Number.isNaN(Date.parse(str)), {
   message: 'Invalid date string',
 });
 
