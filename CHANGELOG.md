@@ -1,3 +1,12 @@
+# [14.0.0-beta.18](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.17...v14.0.0-beta.18) (2026-01-04)
+
+
+### Bug Fixes
+
+* **campaign:** prevent usage of array indices as react array keys ([8bf5e7c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8bf5e7ca470f6290dd72b67f586244a6d0a73bfd))
+* **processing:** use specific error throws ([a6cb577](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a6cb5773cf70089c26a087b6696969c4137de3e9))
+* replace isNaNs with Number.isNaNs ([b0b6ae4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b0b6ae44a3c23b5549644c16919af0b15774eb3a))
+
 # [14.0.0-beta.17](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.16...v14.0.0-beta.17) (2026-01-04)
 
 
