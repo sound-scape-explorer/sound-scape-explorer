@@ -46,6 +46,14 @@ export function useFilesTagging() {
   }, [getColNames, selected, setSelected]);
 
   const names = useMemo(
+    () =>
+      state.columns
+        .filter((c) => c.type === 'user')
+        .map((c) => removePrefixFromTagName(c.name)),
+    [state.columns],
+  );
+
+  const namesWithSite = useMemo(
     () => [
       SITE_AS_TAG_NAME,
       ...state.columns
@@ -147,6 +155,7 @@ export function useFilesTagging() {
     rename,
     remove,
     names,
+    namesWithSite,
     uniquesByTagName,
   };
 }
