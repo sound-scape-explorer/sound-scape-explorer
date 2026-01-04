@@ -1,3 +1,10 @@
+# [14.0.0-beta.19](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.18...v14.0.0-beta.19) (2026-01-04)
+
+
+### Bug Fixes
+
+* **audio:** patch CVE-2025-15284 ([961384b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/961384b809f0ffa89a95ff9dddc1f10f01e66ad8))
+
 # [14.0.0-beta.18](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.17...v14.0.0-beta.18) (2026-01-04)
 
 
