@@ -3,10 +3,11 @@ import {existsSync, unlinkSync} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import {SCRATCH_FILENAME} from './constants';
 import {readFileAsync} from './read-file-async';
 import {validateFfmpeg} from './validate-ffmpeg';
 
-const tempPath = path.join(os.tmpdir(), 'scratch.wav');
+const tempPath = path.join(os.tmpdir(), `${SCRATCH_FILENAME}.wav`);
 console.log(`temp path: ${tempPath}`);
 
 export function sliceAudio(
