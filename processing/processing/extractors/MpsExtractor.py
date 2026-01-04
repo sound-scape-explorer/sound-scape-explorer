@@ -245,7 +245,7 @@ class MpsExtractor(Extractor):
                 chunk_count += 1
 
             if mod_power_average is None:
-                raise Exception("mps_power_average is None")
+                raise RuntimeError("mps_power_average is None")
 
             # Run average and dB conversion
             mod_power_average /= chunk_count
