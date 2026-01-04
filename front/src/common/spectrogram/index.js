@@ -282,7 +282,7 @@ export default class SpectrogramPlugin {
   }
 
   drawSpectrogram(frequenciesData, my) {
-    if (!Number.isNaN(frequenciesData[0][0])) {
+    if (!Number.isNaN(Number(frequenciesData[0][0]))) {
       // data is 1ch [sample, freq] format
       // to [channel, sample, freq] format
       frequenciesData = [frequenciesData];
