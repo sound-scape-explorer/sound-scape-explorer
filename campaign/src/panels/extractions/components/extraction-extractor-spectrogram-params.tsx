@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {
   SPECTRO_N_BANDS,
   SPECTRO_SCALE,
@@ -18,8 +18,8 @@ import {Select} from 'src/primitives/select.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfig;
-  extractor: ExtractorDto;
+  readonly extraction: ExtractionConfig;
+  readonly extractor: ExtractorDto;
 }
 
 export function ExtractionExtractorSpectrogramParams({
@@ -48,11 +48,11 @@ export function ExtractionExtractorSpectrogramParams({
           styles.additionalParamsSpectrogram,
         )}
       >
-        <code className="bp5-text-small">n_bands</code>
-        <code className="bp5-text-small">scale</code>
-        <code className="bp5-text-small">STFT window</code>
-        <code className="bp5-text-small">STFT window length (ms)</code>
-        <code className="bp5-text-small">STFT overlap ratio (0 to 1)</code>
+        <code className={Classes.TEXT_SMALL}>n_bands</code>
+        <code className={Classes.TEXT_SMALL}>scale</code>
+        <code className={Classes.TEXT_SMALL}>STFT window</code>
+        <code className={Classes.TEXT_SMALL}>STFT window length (ms)</code>
+        <code className={Classes.TEXT_SMALL}>STFT overlap ratio (0 to 1)</code>
       </SectionCard>
       <SectionCard
         className={clsx(

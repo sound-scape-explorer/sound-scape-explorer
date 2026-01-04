@@ -59,13 +59,12 @@ export function useDraggableCalendarTransport() {
     right.value -= duration.value;
   };
 
-  // TODO: these transport actions should manipulate isPlaying.value instead of the toggler...
   const start = () => {
     if (interval) {
       return;
     }
 
-    interval = setInterval(skipTimeForward, TIMEOUT * 2);
+    interval = window.setInterval(skipTimeForward, TIMEOUT * 2);
   };
 
   const stop = () => {

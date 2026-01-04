@@ -110,7 +110,7 @@ export function useExtractionState() {
 
   const deleteExtraction = useCallback(
     (id: ExtractionCurrentId) => {
-      if (typeof id === 'undefined') {
+      if (id === undefined) {
         return;
       }
 
@@ -147,7 +147,7 @@ export function useExtractionState() {
   const moveExtraction = useCallback(
     (id: ExtractionCurrentId, direction: number) => {
       setExtractions((prev) => {
-        if (typeof id === 'undefined') {
+        if (id === undefined) {
           return prev;
         }
 
@@ -181,7 +181,7 @@ export function useExtractionState() {
 
   const duplicateExtraction = useCallback(
     (id: ExtractionCurrentId) => {
-      if (typeof id === 'undefined') {
+      if (id === undefined) {
         return;
       }
 

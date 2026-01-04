@@ -42,7 +42,7 @@ export function useExtractorValidation() {
   // spectrum/spectrogram
 
   const isSpectroNBandsValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.spectro_n_bands === 'undefined') {
+    if (extractor.spectro_n_bands === undefined) {
       return true;
     }
 
@@ -51,7 +51,7 @@ export function useExtractorValidation() {
 
   const isSpectroStftWindowMsValid = useCallback((extractor: ExtractorDto) => {
     if (
-      typeof extractor.spectro_stft_window_ms === 'undefined' ||
+      extractor.spectro_stft_window_ms === undefined ||
       extractor.spectro_stft_window_ms === null
     ) {
       return true;
@@ -65,13 +65,13 @@ export function useExtractorValidation() {
 
   const isSpectroStftOverlapRatioValid = useCallback(
     (extractor: ExtractorDto) => {
-      if (typeof extractor.spectro_stft_overlap_ratio === 'undefined') {
+      if (extractor.spectro_stft_overlap_ratio === undefined) {
         return true;
       }
 
       return (
-        extractor.spectro_stft_overlap_ratio >= 0.0 &&
-        extractor.spectro_stft_overlap_ratio <= 1.0
+        extractor.spectro_stft_overlap_ratio >= 0 &&
+        extractor.spectro_stft_overlap_ratio <= 1
       );
     },
     [],
@@ -80,7 +80,7 @@ export function useExtractorValidation() {
   // mps
 
   const isMpsNBandsValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.mps_n_bands === 'undefined') {
+    if (extractor.mps_n_bands === undefined) {
       return true;
     }
 
@@ -88,7 +88,7 @@ export function useExtractorValidation() {
   }, []);
 
   const isMpsStft1WindowMsValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.mps_stft_1_window_ms === 'undefined') {
+    if (extractor.mps_stft_1_window_ms === undefined) {
       return true;
     }
 
@@ -99,18 +99,18 @@ export function useExtractorValidation() {
   }, []);
 
   const isMpsStft1OverlapRatioValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.mps_stft_1_overlap_ratio === 'undefined') {
+    if (extractor.mps_stft_1_overlap_ratio === undefined) {
       return true;
     }
 
     return (
-      extractor.mps_stft_1_overlap_ratio >= 0.0 &&
-      extractor.mps_stft_1_overlap_ratio <= 1.0
+      extractor.mps_stft_1_overlap_ratio >= 0 &&
+      extractor.mps_stft_1_overlap_ratio <= 1
     );
   }, []);
 
   const isMpsStft2WindowMsValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.mps_stft_2_window_ms === 'undefined') {
+    if (extractor.mps_stft_2_window_ms === undefined) {
       return true;
     }
 
@@ -121,20 +121,20 @@ export function useExtractorValidation() {
   }, []);
 
   const isMpsStft2OverlapRatioValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.mps_stft_2_overlap_ratio === 'undefined') {
+    if (extractor.mps_stft_2_overlap_ratio === undefined) {
       return true;
     }
 
     return (
-      extractor.mps_stft_2_overlap_ratio >= 0.0 &&
-      extractor.mps_stft_2_overlap_ratio <= 1.0
+      extractor.mps_stft_2_overlap_ratio >= 0 &&
+      extractor.mps_stft_2_overlap_ratio <= 1
     );
   }, []);
 
   // mfcc
 
   const isMfccNMfccValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.mfcc_n_mfcc === 'undefined') {
+    if (extractor.mfcc_n_mfcc === undefined) {
       return true;
     }
 
@@ -144,7 +144,7 @@ export function useExtractorValidation() {
   // ndsi
 
   const isNdsiBioLowValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.ndsi_band_bio === 'undefined') {
+    if (extractor.ndsi_band_bio === undefined) {
       return true;
     }
 
@@ -155,7 +155,7 @@ export function useExtractorValidation() {
   }, []);
 
   const isNdsiBioHighValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.ndsi_band_bio === 'undefined') {
+    if (extractor.ndsi_band_bio === undefined) {
       return true;
     }
 
@@ -166,7 +166,7 @@ export function useExtractorValidation() {
   }, []);
 
   const isNdsiAnthroLowValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.ndsi_band_anthro === 'undefined') {
+    if (extractor.ndsi_band_anthro === undefined) {
       return true;
     }
 
@@ -177,7 +177,7 @@ export function useExtractorValidation() {
   }, []);
 
   const isNdsiAnthroHighValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.ndsi_band_anthro === 'undefined') {
+    if (extractor.ndsi_band_anthro === undefined) {
       return true;
     }
 
@@ -190,7 +190,7 @@ export function useExtractorValidation() {
   // adi
 
   const isAdiBinStepValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.adi_bin_step === 'undefined') {
+    if (extractor.adi_bin_step === undefined) {
       return true;
     }
 
@@ -198,7 +198,7 @@ export function useExtractorValidation() {
   }, []);
 
   const isAdiDbThresholdValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.adi_db_threshold === 'undefined') {
+    if (extractor.adi_db_threshold === undefined) {
       return true;
     }
 
@@ -208,7 +208,7 @@ export function useExtractorValidation() {
   // ht
 
   const isHtFrameSizeValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.ht_frame_size === 'undefined') {
+    if (extractor.ht_frame_size === undefined) {
       return true;
     }
 
@@ -218,7 +218,7 @@ export function useExtractorValidation() {
   // med
 
   const isMedFrameSizeValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.med_frame_size === 'undefined') {
+    if (extractor.med_frame_size === undefined) {
       return true;
     }
 
@@ -228,7 +228,7 @@ export function useExtractorValidation() {
   // leq percentile
 
   const isLeqPercentileDtValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.leq_percentile_dt === 'undefined') {
+    if (extractor.leq_percentile_dt === undefined) {
       return true;
     }
 
@@ -236,7 +236,7 @@ export function useExtractorValidation() {
   }, []);
 
   const isLeqPercentileValueValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.leq_percentile_value === 'undefined') {
+    if (extractor.leq_percentile_value === undefined) {
       return true;
     }
 
@@ -249,7 +249,7 @@ export function useExtractorValidation() {
   // leq diff
 
   const isLeqDiffDtValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.leq_diff_dt === 'undefined') {
+    if (extractor.leq_diff_dt === undefined) {
       return true;
     }
 
@@ -257,7 +257,7 @@ export function useExtractorValidation() {
   }, []);
 
   const isLeqDiffPercentileAValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.leq_diff_percentile_a === 'undefined') {
+    if (extractor.leq_diff_percentile_a === undefined) {
       return true;
     }
 
@@ -268,7 +268,7 @@ export function useExtractorValidation() {
   }, []);
 
   const isLeqDiffPercentileBValid = useCallback((extractor: ExtractorDto) => {
-    if (typeof extractor.leq_diff_percentile_b === 'undefined') {
+    if (extractor.leq_diff_percentile_b === undefined) {
       return true;
     }
 
@@ -374,25 +374,25 @@ export function useExtractorValidation() {
 
         if (!isNdsiBioLowValid(extractor)) {
           v.intent = 'warning';
-          v.content = 'invalid ndsi_bio_low'; // todo: the name is bs
+          v.content = 'invalid ndsi_bio_low';
           break;
         }
 
         if (!isNdsiBioHighValid(extractor)) {
           v.intent = 'warning';
-          v.content = 'invalid ndsi_bio_high'; // todo: the name is bs
+          v.content = 'invalid ndsi_bio_high';
           break;
         }
 
         if (!isNdsiAnthroLowValid(extractor)) {
           v.intent = 'warning';
-          v.content = 'invalid ndsi_anthro_low'; // todo: the name is bs
+          v.content = 'invalid ndsi_anthro_low';
           break;
         }
 
         if (!isNdsiAnthroHighValid(extractor)) {
           v.intent = 'warning';
-          v.content = 'invalid ndsi_anthro_high'; // todo: the name is bs
+          v.content = 'invalid ndsi_anthro_high';
           break;
         }
 

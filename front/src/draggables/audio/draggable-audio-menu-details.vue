@@ -2,11 +2,11 @@
 import {copyToClipboard} from '@shared/browser';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useAppDisplay} from 'src/composables/use-app-display';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 
-const {currentIndex} = useInterval();
+const {currentIndex} = useIntervalTransport();
 const {window} = useAudioFile();
 const {colors} = useThemeColors();
 

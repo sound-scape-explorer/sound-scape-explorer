@@ -18,7 +18,6 @@ class _Window(NamedTuple):
     end: int
 
 
-# todo: add optional flags for aggregation strategies
 class Extractor(ABC):
     def __init__(
         self,

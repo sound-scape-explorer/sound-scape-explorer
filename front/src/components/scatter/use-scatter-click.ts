@@ -3,14 +3,14 @@ import {
   type PlotDatum,
   type PlotMouseEvent,
 } from 'plotly.js-dist-min';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 
 interface MyPlotDatum extends Omit<PlotDatum, 'data'> {
   data: PlotData;
 }
 
 export function useScatterClick() {
-  const {selectInterval} = useInterval();
+  const {selectInterval} = useIntervalTransport();
 
   const handleClick = (e: PlotMouseEvent) => {
     const point: MyPlotDatum = e.points[0] as unknown as MyPlotDatum;

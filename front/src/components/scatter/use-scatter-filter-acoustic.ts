@@ -7,7 +7,7 @@ import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
-export function useScatterFilterTemporal() {
+export function useScatterFilterAcoustic() {
   const {
     fromString,
     toString,

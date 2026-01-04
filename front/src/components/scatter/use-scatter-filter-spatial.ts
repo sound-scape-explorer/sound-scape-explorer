@@ -1,22 +1,19 @@
 import {useScatterDimensions} from 'src/components/scatter/use-scatter-dimensions';
 import {useReductions} from 'src/composables/use-reductions';
-import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
-import {useSelectionState} from 'src/draggables/selection/use-selection-state';
+import {
+  type SelectionBox,
+  useSelectionBoxes,
+} from 'src/draggables/selection/use-selection-boxes';
 import {ref} from 'vue';
 
 const filtered = ref<boolean[]>([]);
 
 export function useScatterFilterSpatial() {
   const {reductions} = useReductions();
-  const {isFiltering} = useDraggableSelection();
-  const {xRange, yRange, zRange, xAngle, yAngle, zAngle} = useSelectionState();
   const {is3d} = useScatterDimensions();
+  const {boxes} = useSelectionBoxes();
 
-  const is2dFiltered = (index: number): boolean => {
-    if (isFiltering.value === false) {
-      return false;
-    }
-
+  const isPointOutside2d = (index: number, box: SelectionBox): boolean => {
     if (reductions.value === null) {
       return false;
     }
@@ -26,10 +23,10 @@ export function useScatterFilterSpatial() {
     const x = coordinates[0];
     const y = coordinates[1];
 
-    const xMin = xRange.value[0];
-    const xMax = xRange.value[1];
-    const yMin = yRange.value[0];
-    const yMax = yRange.value[1];
+    const xMin = box.ranges.x[0];
+    const xMax = box.ranges.x[1];
+    const yMin = box.ranges.y[0];
+    const yMax = box.ranges.y[1];
 
     // Calculate box center
     const centerX = (xMin + xMax) / 2;
@@ -46,7 +43,7 @@ export function useScatterFilterSpatial() {
       0,
       0,
       0,
-      zAngle.value,
+      box.angles.z,
     );
 
     // Check if the transformed point is within the axis-aligned box bounds
@@ -61,11 +58,7 @@ export function useScatterFilterSpatial() {
     return !isIn;
   };
 
-  const is3dFiltered = (index: number): boolean => {
-    if (isFiltering.value === false) {
-      return false;
-    }
-
+  const isPointOutside3d = (index: number, box: SelectionBox): boolean => {
     if (reductions.value === null) {
       return false;
     }
@@ -76,12 +69,12 @@ export function useScatterFilterSpatial() {
     const y = coordinates[1];
     const z = coordinates[2];
 
-    const xMin = xRange.value[0];
-    const xMax = xRange.value[1];
-    const yMin = yRange.value[0];
-    const yMax = yRange.value[1];
-    const zMin = zRange.value[0];
-    const zMax = zRange.value[1];
+    const xMin = box.ranges.x[0];
+    const xMax = box.ranges.x[1];
+    const yMin = box.ranges.y[0];
+    const yMax = box.ranges.y[1];
+    const zMin = box.ranges.z[0];
+    const zMax = box.ranges.z[1];
 
     // Calculate box center
     const centerX = (xMin + xMax) / 2;
@@ -99,9 +92,9 @@ export function useScatterFilterSpatial() {
       translatedX,
       translatedY,
       translatedZ,
-      xAngle.value,
-      yAngle.value,
-      zAngle.value,
+      box.angles.x,
+      box.angles.y,
+      box.angles.z,
     );
 
     // Check if the transformed point is within the axis-aligned box bounds
@@ -167,11 +160,22 @@ export function useScatterFilterSpatial() {
       return;
     }
 
+    const filteringBoxes = boxes.value.filter((box) => box.isFiltering);
+
+    if (filteringBoxes.length === 0) {
+      reset();
+      return;
+    }
+
     const length = reductions.value.length;
     const newFiltered = new Array<boolean>(length);
 
     for (let i = 0; i < length; i += 1) {
-      newFiltered[i] = is3d.value ? is3dFiltered(i) : is2dFiltered(i);
+      const isOutsideAllBoxes = filteringBoxes.every((box) =>
+        is3d.value ? isPointOutside3d(i, box) : isPointOutside2d(i, box),
+      );
+
+      newFiltered[i] = isOutsideAllBoxes;
     }
 
     filtered.value = newFiltered;

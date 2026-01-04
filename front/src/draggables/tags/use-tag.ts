@@ -1,13 +1,13 @@
 import {useTagUniques} from 'src/composables/use-tag-uniques';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {type TagProps} from 'src/draggables/tags/tag.vue';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {computed, ref} from 'vue';
 
 export function useTag(props: TagProps) {
+  const {option} = useColoringState();
   const {allUniques} = useTagUniques();
   const {update, selection} = useTagSelection();
-  const {option} = useColorSelection();
 
   const isShowing = ref<boolean>(false);
   const isCurrent = computed<boolean>(() => option.value === props.name);

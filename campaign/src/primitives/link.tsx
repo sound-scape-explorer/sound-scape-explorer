@@ -1,6 +1,6 @@
 interface Props {
-  href: string;
-  children: string;
+  readonly href: string;
+  readonly children: string;
 }
 
 export function Link({href, children}: Props) {

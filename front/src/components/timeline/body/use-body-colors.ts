@@ -1,13 +1,13 @@
 import chroma from 'chroma-js';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useConfig} from 'src/composables/use-config';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
 import {ref} from 'vue';
 
 const scale = ref();
 
 export function useBodyColors() {
   const {config} = useConfig();
-  const {flavor} = useColorSelection();
+  const {colorsFlavor} = useClientSettings();
 
   const generate = () => {
     if (config.value === null) {
@@ -15,7 +15,7 @@ export function useBodyColors() {
     }
 
     const l = config.value.files.length;
-    scale.value = chroma.scale(flavor.value).colors(l);
+    scale.value = chroma.scale(colorsFlavor.value).colors(l);
   };
 
   return {

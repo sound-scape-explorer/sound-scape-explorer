@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {NDSI_BAND_ANTHRO, NDSI_BAND_BIO} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import clsx from 'clsx';
@@ -10,8 +10,8 @@ import {NumberInput} from 'src/primitives/number-input.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfig;
-  extractor: ExtractorDto;
+  readonly extraction: ExtractionConfig;
+  readonly extractor: ExtractorDto;
 }
 
 export function ExtractionExtractorNdsiParams({extraction, extractor}: Props) {
@@ -37,10 +37,10 @@ export function ExtractionExtractorNdsiParams({extraction, extractor}: Props) {
           styles.additionalParamsNdsi,
         )}
       >
-        <code className="bp5-text-small">bio low (Hz)</code>
-        <code className="bp5-text-small">bio high (Hz)</code>
-        <code className="bp5-text-small">anthro low (Hz)</code>
-        <code className="bp5-text-small">anthro high (Hz)</code>
+        <code className={Classes.TEXT_SMALL}>bio low (Hz)</code>
+        <code className={Classes.TEXT_SMALL}>bio high (Hz)</code>
+        <code className={Classes.TEXT_SMALL}>anthro low (Hz)</code>
+        <code className={Classes.TEXT_SMALL}>anthro high (Hz)</code>
       </SectionCard>
       <SectionCard
         className={clsx(

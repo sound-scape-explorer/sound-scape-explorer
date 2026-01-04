@@ -1,4 +1,4 @@
-import {type MetricDto} from '@shared/dtos'; // todo: redundant
+import {type MetricDto} from '@shared/dtos';
 import {MetricType} from '@shared/enums';
 import {metricTypeByImpl} from 'src/common/metric-type-by-impl';
 import {useMetricData} from 'src/composables/use-metric-data';

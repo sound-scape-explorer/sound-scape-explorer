@@ -11,7 +11,7 @@ export function useTableCopy() {
     (row: number, col: number, cellRenderer: CellRenderer) => {
       const results = cellRenderer(row, col);
 
-      if (typeof results === 'undefined') {
+      if (results === undefined) {
         return;
       }
 

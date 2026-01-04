@@ -5,12 +5,12 @@ import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import {useDateTime} from 'src/composables/use-date-time';
 import {DraggableKey} from 'src/composables/use-draggables';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 import {STRING_DELIMITER} from 'src/constants';
 import DraggableDetailsAudioWindows from 'src/draggables/details/draggable-details-audio-windows.vue';
 
-const {currentIndex, currentInterval} = useInterval();
+const {currentIndex, currentInterval} = useIntervalTransport();
 const {timestampToString} = useDateTime();
 const {colors} = useThemeColors();
 </script>

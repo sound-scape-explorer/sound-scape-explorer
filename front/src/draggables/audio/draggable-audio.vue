@@ -90,7 +90,7 @@ useAudioLifecycles();
 $o1: 50% - 0%;
 $o2: 50% + 8%;
 
-// todo: check me if still OK
+// TODO: check me if still OK
 .spin {
   transform-origin: $o1 $o2;
 

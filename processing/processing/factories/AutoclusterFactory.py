@@ -32,7 +32,7 @@ class AutoclusterFactory:
             algorithm="auto",
             leaf_size=50,
             n_jobs=-1,
-            # todo: legacy params, assess with business
+            # TODO: legacy params, assess with business
             # p=None,
             # algorithm="best",
             # approx_min_span_tree=True,

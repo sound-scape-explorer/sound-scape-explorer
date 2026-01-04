@@ -23,7 +23,7 @@ import styles from './config-bands.module.scss';
 import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 interface Props {
-  extraction: ExtractionConfig;
+  readonly extraction: ExtractionConfig;
 }
 
 export function ExtractionBands({extraction}: Props) {

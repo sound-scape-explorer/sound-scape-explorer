@@ -58,8 +58,8 @@ watchThrottled(
         <AppButton :handle-click="toggle">
           <AppIcon
             v-if="isFollowing"
-            color="active"
             icon="link"
+            intent="active"
           />
           <AppIcon
             v-if="!isFollowing"

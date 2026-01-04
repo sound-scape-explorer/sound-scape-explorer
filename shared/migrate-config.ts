@@ -10,6 +10,7 @@
  */
 
 import {ConfigDto} from '@shared/dtos';
+import {stringifyJsonPretty} from '@shared/json';
 import {readFileSync, writeFileSync} from 'fs';
 
 import {VERSION} from '../campaign/src/version';
@@ -155,4 +156,4 @@ const newConfig: NewConfig = {
 
 const dto = ConfigDto.parse(newConfig);
 
-writeFileSync(target, JSON.stringify(dto, null, 2));
+writeFileSync(target, stringifyJsonPretty(dto));

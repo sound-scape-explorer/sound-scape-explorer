@@ -1,8 +1,8 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
+import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
@@ -19,9 +19,9 @@ import {
   FilterType,
   useAudioFilters,
 } from 'src/draggables/audio/use-audio-filters';
-import {useSelectionState} from 'src/draggables/selection/use-selection-state';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {nextTick, ref} from 'vue';
+import {useSelectionBoundaries} from 'src/draggables/selection/use-selection-boundaries';
 
 const RENDER_TIMEOUT = 100;
 
@@ -42,15 +42,15 @@ export function useViewLoader() {
   const {build: buildSelection, selection: tagSelection} = useTagSelection();
   const {isEnabled} = useScatterRender();
   const {filter: filterByLabel} = useScatterFilterTag();
-  const {filter: filterByTemporal} = useScatterFilterTemporal();
-  const {filter: filterByTime} = useScatterFilterTime();
+  const {filter: filterByCalendar} = useScatterFilterCalendar();
+  const {filter: filterByAcoustic} = useScatterFilterAcoustic();
   const {filter: filterBySpatial} = useScatterFilterSpatial();
 
   const {extraction, band, integration, reducer} = useViewSelection();
   const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
-  const {setBounds: setSelectionBounds} = useSelectionState();
+  const {detectBoundaries} = useSelectionBoundaries();
   const {update: updateAudioFilter} = useAudioFilters();
 
   const steps: Step[] = [
@@ -104,11 +104,11 @@ export function useViewLoader() {
     loadAcousticExtractors();
 
     filterByLabel(tagSelection);
-    filterByTime();
-    filterByTemporal();
+    filterByCalendar();
+    filterByAcoustic();
     filterBySpatial();
 
-    setSelectionBounds();
+    detectBoundaries();
 
     updateAudioFilter(FilterType.enum.hpf, band.value.low);
     updateAudioFilter(FilterType.enum.lpf, band.value.high);

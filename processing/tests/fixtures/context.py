@@ -3,12 +3,12 @@ import pytest
 from processing.config.ExtractorConfig import ExtractorConfig
 from processing.constants import (
     BIRDNET_WINDOW_MS,
-    VGGISH_WINDOW_MS,
+    MUSIC_CLASS_WINDOW_MS,
     PERCH_WINDOW_MS,
     SURF_PERCH_WINDOW_MS,
-    YAMNET_WINDOW_MS,
-    MUSIC_CLASS_WINDOW_MS,
+    VGGISH_WINDOW_MS,
     WINDOW_MS,
+    YAMNET_WINDOW_MS,
 )
 from processing.context import Context
 from processing.dtos import ExtractorDto
@@ -74,11 +74,12 @@ def context_factory(monkeypatch, config_path):
                 impl=impl,
                 window=window,
                 hop=window,
+                include_in_aggregation=True,
             ),
         )
 
         extraction = ctx.config.extractions[0]
-        extraction.extractors = [new_extractor]
+        object.__setattr__(extraction, "extractors", [new_extractor])
         ctx.config.extractions = [extraction]
 
         contexts.append(ctx)

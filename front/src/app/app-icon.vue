@@ -20,6 +20,8 @@ import Export from '@blueprintjs/icons/lib/esm/generated/16px/paths/export';
 import EyeOff from '@blueprintjs/icons/lib/esm/generated/16px/paths/eye-off';
 import EyeOn from '@blueprintjs/icons/lib/esm/generated/16px/paths/eye-on';
 import EyeOpen from '@blueprintjs/icons/lib/esm/generated/16px/paths/eye-open';
+import FilterKeep from '@blueprintjs/icons/lib/esm/generated/16px/paths/filter-keep';
+import FilterRemove from '@blueprintjs/icons/lib/esm/generated/16px/paths/filter-remove';
 import HeatGrid from '@blueprintjs/icons/lib/esm/generated/16px/paths/heat-grid';
 import Help from '@blueprintjs/icons/lib/esm/generated/16px/paths/help';
 import Import from '@blueprintjs/icons/lib/esm/generated/16px/paths/import';
@@ -34,6 +36,7 @@ import NewLink from '@blueprintjs/icons/lib/esm/generated/16px/paths/new-link';
 import Pause from '@blueprintjs/icons/lib/esm/generated/16px/paths/pause';
 import Play from '@blueprintjs/icons/lib/esm/generated/16px/paths/play';
 import Plus from '@blueprintjs/icons/lib/esm/generated/16px/paths/plus';
+import Random from '@blueprintjs/icons/lib/esm/generated/16px/paths/random';
 import Redo from '@blueprintjs/icons/lib/esm/generated/16px/paths/redo';
 import Refresh from '@blueprintjs/icons/lib/esm/generated/16px/paths/refresh';
 import Reset from '@blueprintjs/icons/lib/esm/generated/16px/paths/reset';
@@ -67,6 +70,7 @@ const PathKey = z.enum([
   'expand',
   'expandHorizontal',
   'expandVertical',
+  'shrink',
   'eyeOn',
   'eyeOff',
   'drag',
@@ -94,6 +98,9 @@ const PathKey = z.enum([
   'link',
   'crop',
   'select',
+  'filterOn',
+  'filterOff',
+  'random',
 ]);
 // eslint-disable-next-line no-redeclare
 type PathKey = z.infer<typeof PathKey>;
@@ -125,6 +132,7 @@ const paths: Record<PathKey, string[]> = {
   expand: Maximize,
   expandHorizontal: DoubleCaretHorizontal,
   expandVertical: DoubleCaretVertical,
+  shrink: Minimize,
   eyeOn: EyeOn,
   eyeOff: EyeOff,
   drag: Move,
@@ -146,24 +154,29 @@ const paths: Record<PathKey, string[]> = {
   reset: Reset,
   error: Error,
   delta: Delta,
-  import: Import,
-  export: Export,
+  import: Export,
+  export: Import,
   unlink: Ungroup,
   link: Resolve,
   crop: Crop,
   select: Select,
+  filterOn: FilterKeep,
+  filterOff: FilterRemove,
+  random: Random,
 };
 
 interface Props {
   icon: PathKey;
-  color?: 'default' | 'active';
+  intent?: 'default' | 'active';
   size?: 'medium' | 'small' | 'tiny' | 'big' | 'giant';
+  color?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   icon: 'open',
-  color: 'default',
+  intent: 'default',
   size: 'medium',
+  color: undefined,
 });
 
 const {colors} = useThemeColors();
@@ -189,7 +202,11 @@ const pixels = computed<number>(() => {
 });
 
 const hex = computed<string>(() => {
-  if (props.color === 'active') {
+  if (props.color) {
+    return props.color;
+  }
+
+  if (props.intent === 'active') {
     return colors.value.pressedColor;
   }
 

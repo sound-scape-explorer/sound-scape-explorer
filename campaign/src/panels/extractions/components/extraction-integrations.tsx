@@ -14,16 +14,16 @@ import {type ExtractionConfig} from 'src/interfaces.ts';
 import {useExtractionTemplates} from 'src/panels/extractions/hooks/use-extraction-templates.ts';
 import {useIntegrationState} from 'src/panels/extractions/hooks/use-integration-state.ts';
 import {useIntegrationValidation} from 'src/panels/extractions/hooks/use-integration-validation.ts';
+import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 import genericStyles from 'src/primitives/generic-section/generic-section.module.scss';
 import {NumberInput} from 'src/primitives/number-input';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 import {TextInput} from 'src/primitives/text-input.tsx';
 
 import styles from './config-integrations.module.scss';
-import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
 
 interface Props {
-  extraction: ExtractionConfig;
+  readonly extraction: ExtractionConfig;
 }
 
 export function ExtractionIntegrations({extraction}: Props) {

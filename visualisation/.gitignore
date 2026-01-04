@@ -96,3 +96,10 @@ front
 audio
 scratch.wav
 campaign
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

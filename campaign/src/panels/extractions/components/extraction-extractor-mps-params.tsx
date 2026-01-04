@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {
   MPS_N_BANDS,
   MPS_SCALE,
@@ -19,8 +19,8 @@ import {Select} from 'src/primitives/select.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfig;
-  extractor: ExtractorDto;
+  readonly extraction: ExtractionConfig;
+  readonly extractor: ExtractorDto;
 }
 
 export function ExtractionExtractorMpsParams({extraction, extractor}: Props) {
@@ -49,12 +49,12 @@ export function ExtractionExtractorMpsParams({extraction, extractor}: Props) {
           styles.additionalParamsMps,
         )}
       >
-        <code className="bp5-text-small">n_bands</code>
-        <code className="bp5-text-small">scale</code>
-        <code className="bp5-text-small">STFT 1 window len (ms)</code>
-        <code className="bp5-text-small">STFT 1 overlap ratio</code>
-        <code className="bp5-text-small">STFT 2 window len (ms)</code>
-        <code className="bp5-text-small">STFT 2 overlap ratio</code>
+        <code className={Classes.TEXT_SMALL}>n_bands</code>
+        <code className={Classes.TEXT_SMALL}>scale</code>
+        <code className={Classes.TEXT_SMALL}>STFT 1 window len (ms)</code>
+        <code className={Classes.TEXT_SMALL}>STFT 1 overlap ratio</code>
+        <code className={Classes.TEXT_SMALL}>STFT 2 window len (ms)</code>
+        <code className={Classes.TEXT_SMALL}>STFT 2 overlap ratio</code>
       </SectionCard>
       <SectionCard
         className={clsx(

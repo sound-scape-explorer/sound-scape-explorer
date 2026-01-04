@@ -1,19 +1,16 @@
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterContainer} from 'src/components/scatter/use-scatter-container';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
+import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
 import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
-import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useDraggableSelection} from 'src/draggables/selection/use-draggable-selection';
-import {useSelectionState} from 'src/draggables/selection/use-selection-state';
-import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
+import {useSelectionBoxes} from 'src/draggables/selection/use-selection-boxes';
 import {onMounted, watch} from 'vue';
 
 let isRendering = false;
@@ -29,29 +26,31 @@ export function useScatterLifecycles() {
     render: renderContainer,
     mount: mountContainer,
   } = useScatterContainer();
-  const {option: colorOption, flavor} = useColorSelection();
-  const {colorsAlphaLow: opacityLow, colorsAlphaHigh: opacityHigh} =
-    useClientSettings();
   const {
     timeshift,
     isColorMapSwapped,
     isSelectedPointHighlighted,
     scatterBorderWidth,
+    colorsAlphaLow: opacityLow,
+    colorsAlphaHigh: opacityHigh,
+    colorsFlavor,
   } = useClientSettings();
   const {filtered: labelFiltered} = useScatterFilterTag();
-  const {filtered: timeFiltered} = useScatterFilterTime();
-  const {filtered: temporalFiltered} = useScatterFilterTemporal();
+  const {filtered: calendarFiltered} = useScatterFilterCalendar();
+  const {filtered: acousticFiltered} = useScatterFilterAcoustic();
   const {filtered: spatialFiltered} = useScatterFilterSpatial();
   const {isWebGlScatter2d} = useClientSettings();
   const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
-  const {min: tagMin, max: tagMax} = useColorByTag();
-  const {isEnabled: isTagNumericEnabled} = useTagNumeric();
-  const {currentIndex} = useInterval();
+  const {
+    isNumericModeEnabled,
+    numericRangeMin,
+    numericRangeMax,
+    option: colorOption,
+  } = useColoringState();
+  const {currentIndex} = useIntervalTransport();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
-  const {isActive: isSelectionActive, isWireframe: isSelectionWireframe} =
-    useDraggableSelection();
-  const {xRange, yRange, zRange, xAngle, yAngle, zAngle} = useSelectionState();
+  const {boxes: selectionBoxes} = useSelectionBoxes();
 
   onMounted(mountContainer);
 
@@ -61,18 +60,18 @@ export function useScatterLifecycles() {
   watch(
     [
       colorOption,
-      flavor,
+      colorsFlavor,
       opacityLow,
       opacityHigh,
       acousticMin,
       acousticMax,
-      tagMin,
-      tagMax,
-      isTagNumericEnabled,
+      isNumericModeEnabled,
+      numericRangeMin,
+      numericRangeMax,
       timeshift,
       labelFiltered,
-      timeFiltered,
-      temporalFiltered,
+      calendarFiltered,
+      acousticFiltered,
       spatialFiltered,
       isWebGlScatter2d,
       isColorMapSwapped,
@@ -80,29 +79,24 @@ export function useScatterLifecycles() {
       isSelectedPointHighlighted,
       scatterBorderWidth,
       cyclingPeriod,
-      // selection
-      isSelectionActive,
-      isSelectionWireframe,
-      xRange,
-      yRange,
-      zRange,
-      xAngle,
-      yAngle,
-      zAngle,
+      selectionBoxes,
     ],
     async () => {
       if (isRendering || !isEnabled.value) {
         return;
       }
 
+      // TODO: investigate
       // requestAnimationFrame(async () => {
       //   await generate();
       //   renderScatter();
       // });
+
       isRendering = true;
       renderScatter();
       await generate();
       isRendering = false;
     },
+    {deep: true},
   );
 }

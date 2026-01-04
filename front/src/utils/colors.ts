@@ -11,3 +11,7 @@ export function convertRgbToString([r, g, b]: [
 export function hasEnoughContrast(color1: string, color2: string): boolean {
   return chroma.contrast(color1, color2) > 4.5;
 }
+
+export function getRandomColor() {
+  return chroma.random().hex();
+}

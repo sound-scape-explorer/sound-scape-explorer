@@ -6,9 +6,10 @@ script="$venv/bin/activate"
 
 function activate() {
 	exec bash --init-file "$script"
+	return 0
 }
 
-if [ ! -f "$script" ]; then
+if [[ ! -f "$script" ]]; then
 	echo "Creating virtual environment..."
 	python3.11 -m venv $venv
 

@@ -9,7 +9,7 @@ export function useRelativeTrajectoriesExport() {
       values.value.length === 0 ||
       labels.value.length === 0 ||
       names.value.length === 0 ||
-      // TODO: Fix me, is this mandatory?
+      // INFO: Can't remember why I did this
       typeof names?.value === 'undefined'
     ) {
       return;

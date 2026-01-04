@@ -1,4 +1,4 @@
-import {SectionCard} from '@blueprintjs/core';
+import {Classes, SectionCard} from '@blueprintjs/core';
 import {MFCC_N_MFCC} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
 import clsx from 'clsx';
@@ -10,8 +10,8 @@ import {NumberInput} from 'src/primitives/number-input.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfig;
-  extractor: ExtractorDto;
+  readonly extraction: ExtractionConfig;
+  readonly extractor: ExtractorDto;
 }
 
 export function ExtractionExtractorMfccParams({extraction, extractor}: Props) {
@@ -26,7 +26,7 @@ export function ExtractionExtractorMfccParams({extraction, extractor}: Props) {
           styles.additionalParamsMfcc,
         )}
       >
-        <code className="bp5-text-small">n_mfcc</code>
+        <code className={Classes.TEXT_SMALL}>n_mfcc</code>
       </SectionCard>
       <SectionCard
         className={clsx(

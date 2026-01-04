@@ -1,4 +1,10 @@
-import {Button, Checkbox, Section, SectionCard} from '@blueprintjs/core';
+import {
+  Button,
+  Checkbox,
+  Classes,
+  Section,
+  SectionCard,
+} from '@blueprintjs/core';
 import {ArrowDown, ArrowUp, Cog, Cross} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import {type ExtractorDto} from '@shared/dtos';
@@ -29,20 +35,20 @@ import {TextInput} from 'src/primitives/text-input.tsx';
 import styles from './config-extractors.module.scss';
 
 interface Props {
-  extraction: ExtractionConfig;
-  extractor: ExtractorDto;
+  readonly extraction: ExtractionConfig;
+  readonly extractor: ExtractorDto;
 }
 
-const EXTRACTORS_LOCKED: ExtractorImpl[] = [
+const EXTRACTORS_LOCKED = new Set<ExtractorImpl>([
   ExtractorImpl.enum.BIRDNET,
   ExtractorImpl.enum.PERCH,
   ExtractorImpl.enum.SURF_PERCH,
   ExtractorImpl.enum.VGGISH,
   ExtractorImpl.enum.YAMNET,
   ExtractorImpl.enum.MUSIC_CLASS,
-];
+]);
 
-const EXTRACTOR_ADDITIONAL_PARAMS: ExtractorImpl[] = [
+const EXTRACTOR_ADDITIONAL_PARAMS = new Set<ExtractorImpl>([
   ExtractorImpl.enum.SPECTRUM,
   ExtractorImpl.enum.SPECTROGRAM,
   ExtractorImpl.enum.MPS,
@@ -53,7 +59,7 @@ const EXTRACTOR_ADDITIONAL_PARAMS: ExtractorImpl[] = [
   ExtractorImpl.enum.MED,
   ExtractorImpl.enum.LEQ_PERCENTILE,
   ExtractorImpl.enum.LEQ_DIFF,
-];
+]);
 
 export function ExtractionExtractorCard({extraction, extractor}: Props) {
   const {
@@ -71,12 +77,12 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
   const [open, setOpen] = useState(false);
 
   const isLocked = useMemo(
-    () => EXTRACTORS_LOCKED.includes(extractor.impl),
+    () => EXTRACTORS_LOCKED.has(extractor.impl),
     [extractor.impl],
   );
 
   const hasAdditionalParams = useMemo(
-    () => EXTRACTOR_ADDITIONAL_PARAMS.includes(extractor.impl),
+    () => EXTRACTOR_ADDITIONAL_PARAMS.has(extractor.impl),
     [extractor.impl],
   );
 
@@ -159,7 +165,7 @@ export function ExtractionExtractorCard({extraction, extractor}: Props) {
         icon={<Cog size={ICON_SIZE} />}
         onClick={() => setOpen((o) => !o)}
         disabled={!hasAdditionalParams}
-        className={clsx(open && 'bp5-active')}
+        className={clsx(open && Classes.ACTIVE)}
       />
 
       <Section

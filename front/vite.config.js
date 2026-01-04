@@ -33,7 +33,7 @@ export default defineConfig({
   define: {
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
   },
-  // todo: attempt to fix sass legacy warning
+  // TODO: attempt to fix sass legacy warning
   css: {
     preprocessorOptions: {
       scss: {
@@ -43,7 +43,7 @@ export default defineConfig({
     },
   },
   build: {
-    target: 'es2020', // todo: move to es2021?
+    target: 'es2020', // TODO: move to es2021?
     rollupOptions: {
       output: {
         manualChunks: {

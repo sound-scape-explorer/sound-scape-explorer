@@ -20,7 +20,10 @@
     "preinstall": "npx only-allow npm",
     "publish": "electron-forge publish",
     "start": "electron-forge start",
-    "copy-bulma": "cp node_modules/bulma/css/bulma.min.css assets"
+    "copy-bulma": "cp node_modules/bulma/css/bulma.min.css assets",
+    "test:e2e": "npm exec playwright test",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:codegen:campaign": "npx tsx tests/_codegen-campaign.ts"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
@@ -31,8 +34,10 @@
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
     "@electron-forge/plugin-vite": "^7.2.0",
+    "@playwright/test": "^1.57.0",
     "@rabbitholesyndrome/electron-forge-maker-portable": "^0.2.0",
     "@types/command-exists": "^1.2.3",
+    "@types/node": "^25.0.3",
     "@types/semver": "^7.7.0",
     "bulma": "^1.0.4",
     "electron": "28.1.3",

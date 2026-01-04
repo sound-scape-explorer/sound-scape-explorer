@@ -1,5 +1,5 @@
 import {type AppDraggableProps} from 'src/app/draggable/app-draggable.vue';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useViewSelection} from 'src/composables/use-view-selection';
 import {useViewState} from 'src/composables/use-view-state';
 import {computed} from 'vue';
@@ -22,7 +22,7 @@ interface Suspense {
 
 export function useAppDraggableSuspense(props: AppDraggableProps) {
   const {hasView} = useViewState();
-  const {hasInterval} = useInterval();
+  const {hasInterval} = useIntervalTransport();
   const {extraction} = useViewSelection();
 
   // block draggable display on while condition

@@ -3,11 +3,11 @@ import {copyToClipboard} from '@shared/browser';
 import {NGi, NGrid, NTag} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useDateTime} from 'src/composables/use-date-time';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 import {computed} from 'vue';
 
-const {currentInterval} = useInterval();
+const {currentInterval} = useIntervalTransport();
 const {timestampToString} = useDateTime();
 const {colors} = useThemeColors();
 

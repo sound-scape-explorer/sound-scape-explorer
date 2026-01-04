@@ -1,27 +1,28 @@
 import {useAcousticDataReader} from 'src/composables/use-acoustic-data-reader';
 import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
 import {useAcousticSerializer} from 'src/composables/use-acoustic-serializer';
-import {useClientSettings} from 'src/composables/use-client-settings';
+import {useTagData} from 'src/composables/use-tag-data';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {ColorCategory, ColorOption} from 'src/constants';
 import {useColorAcousticSeries} from 'src/draggables/colors/use-color-acoustic-series';
 import {ref} from 'vue';
 
-const tagOptions = ref<string[]>([]);
-
-const options = ref<string[]>(ColorOption.options);
-// an option can be either a builtin coloring key or a tag name (all kind)
-const option = ref<string>(ColorOption.enum.HoursInDay);
-
 const category = ref<ColorCategory>(ColorCategory.enum.DEFAULT);
+const options = ref<string[]>(ColorOption.options); // gather options depending on the category
+const option = ref<string>(ColorOption.enum.HoursInDay);
+const tagOptions = ref<string[]>([]); // just shadow copy
 
-export function useColorSelection() {
+const isNumericModeEnabled = ref<boolean>(false);
+const numericRangeMin = ref<string>('');
+const numericRangeMax = ref<string>('');
+
+export function useColoringState() {
   const {allUniques} = useTagUniques();
-  const {colorsFlavor: flavor} = useClientSettings();
   const {acousticSlugs, slugToExtractor} = useAcousticExtractors();
   const {read} = useAcousticDataReader();
   const {serialize} = useAcousticSerializer();
   const {set} = useColorAcousticSeries();
+  const {getTagPrimitive} = useTagData();
 
   const updateOptions = () => {
     switch (category.value) {
@@ -54,24 +55,30 @@ export function useColorSelection() {
     set(series);
   };
 
-  const handleLabelClick = (tagName: string) => {
-    if (category.value !== ColorCategory.enum.TAGS) {
-      category.value = ColorCategory.enum.TAGS;
-    }
+  const detectNumericRange = () => {
+    const {tagUniques} = getTagPrimitive(0, option.value);
+    const values = tagUniques.map((v) => Number(v));
 
-    if (option.value !== tagName) {
-      option.value = tagName;
-    }
+    numericRangeMin.value = String(Math.min(...values));
+    numericRangeMax.value = String(Math.max(...values));
+  };
+
+  const resetNumericRange = () => {
+    numericRangeMin.value = '';
+    numericRangeMax.value = '';
   };
 
   return {
-    flavor,
-    option,
-    options,
     category,
-    handleLabelClick,
+    options,
+    option,
+    isNumericModeEnabled,
+    numericRangeMin,
+    numericRangeMax,
     updateOptions,
     updateTagOptions,
     updateAcousticData,
+    detectNumericRange,
+    resetNumericRange,
   };
 }

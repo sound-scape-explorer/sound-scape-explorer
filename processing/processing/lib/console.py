@@ -10,10 +10,8 @@ from rich.text import Text
 from processing.config.AutoclusterConfig import AutoclusterConfig
 from processing.config.BandConfig import BandConfig
 from processing.config.ExtractionConfig import ExtractionConfig
-from processing.config.ExtractorConfig import ExtractorConfig
 from processing.config.IntegrationConfig import IntegrationConfig
 from processing.config.MetricConfig import MetricConfig
-from processing.config.ReducerConfig import ReducerConfig
 from processing.config.TrajectoryConfig import TrajectoryConfig
 from processing.constants import STATE_MISSING, STATE_PRESENT, STATE_UNDEFINED, APP_NAME
 from processing.context import Context
@@ -212,27 +210,6 @@ class Console:
 
         _console.print(table)
 
-    # todo: not used?
-    @staticmethod
-    def print_extractors(
-        extractors: list[ExtractorConfig],
-    ):
-        table = Table(show_header=True, header_style="bold magenta")
-        table.add_column("index")
-        table.add_column("extractor")
-        table.add_column("window (ms)")
-        table.add_column("hop (ms)")
-
-        for extractor in extractors:
-            table.add_row(
-                str(extractor.index),
-                extractor.impl.name,
-                str(extractor.window),
-                str(extractor.hop),
-            )
-
-        _console.print(table)
-
     @staticmethod
     def print_menu_legend():
         _console.print("State in storage:")
@@ -282,23 +259,6 @@ class Console:
                 v = v.name
 
             table.add_row(str(k), str(v))
-
-        _console.print(table)
-
-    # todo: not used?
-    @staticmethod
-    def print_reducers(reducers: list[ReducerConfig]):
-        table = Table(show_header=True, header_style="bold magenta")
-        table.add_column("Index")
-        table.add_column("Reducer")
-        table.add_column("Dimensions")
-
-        for reducer in reducers:
-            table.add_row(
-                str(reducer.index),
-                reducer.impl.name,
-                str(reducer.dimensions),
-            )
 
         _console.print(table)
 

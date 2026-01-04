@@ -7,6 +7,7 @@ import {useSites} from 'src/composables/use-sites';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewState} from 'src/composables/use-view-state';
 import {useViewWatcher} from 'src/composables/use-view-watcher';
+import {useSelectionBoxWatcher} from 'src/draggables/selection/use-selection-box-watcher';
 import {watch} from 'vue';
 
 const {isReady, notify} = useStorageReady();
@@ -19,6 +20,7 @@ const {generate: generateSites} = useSites();
 useViewWatcher();
 useIntervalFilterWatcher();
 useColorLifecycles();
+useSelectionBoxWatcher();
 
 watch(isReady, notify);
 watch(isReady, readConfig);

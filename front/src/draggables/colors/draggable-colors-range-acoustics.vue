@@ -4,9 +4,9 @@ import AppIcon from 'src/app/app-icon.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import {useAcousticRange} from 'src/composables/use-acoustic-range';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
-import {useColorState} from 'src/draggables/colors/use-color-state';
+import {useColorType} from 'src/draggables/colors/use-color-type';
 
-const {isAcoustic} = useColorState();
+const {isAcoustic} = useColorType();
 
 const {min, max} = useColorByAcoustic();
 const {detect: detectAcousticRange, swap} = useAcousticRange();

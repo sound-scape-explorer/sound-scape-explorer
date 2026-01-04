@@ -25,7 +25,7 @@ import {Select} from 'src/primitives/select.tsx';
 import {SmallCallout} from 'src/primitives/small-callout.tsx';
 
 interface Props {
-  extraction: ExtractionConfig;
+  readonly extraction: ExtractionConfig;
 }
 
 export function ExtractionAutoclusters({extraction}: Props) {

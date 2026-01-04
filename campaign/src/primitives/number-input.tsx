@@ -2,12 +2,12 @@ import {type Intent, NumericInput, Size} from '@blueprintjs/core';
 import {type CSSProperties, useRef} from 'react';
 
 interface Props {
-  defaultValue: number;
-  onBlur: (n: number) => void;
-  size?: Size;
-  intent?: Intent;
-  disabled?: boolean;
-  smallText?: boolean;
+  readonly defaultValue: number;
+  readonly onBlur: (n: number) => void;
+  readonly size?: Size;
+  readonly intent?: Intent;
+  readonly disabled?: boolean;
+  readonly smallText?: boolean;
 }
 
 export function NumberInput({

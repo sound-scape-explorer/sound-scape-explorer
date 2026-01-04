@@ -1,3 +1,5 @@
+import {stringifyJsonPretty} from '@shared/json';
+
 export function isDarkModeEnabled() {
   return (
     window.matchMedia &&
@@ -26,7 +28,7 @@ export function downloadJson<T>(
   filename = 'data', // without extension
 ): void {
   try {
-    const string = JSON.stringify(data, null, 2);
+    const string = stringifyJsonPretty(data);
     const blob = new Blob([string], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

@@ -1,15 +1,12 @@
 import {useAppGradient} from 'src/components/scatter/use-app-gradient';
-import {useAcousticRange} from 'src/composables/use-acoustic-range';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorScaleHoursInDay} from 'src/composables/use-color-scale-hours-in-day';
 import {useColorUser} from 'src/composables/use-color-user';
 import {useIntervals} from 'src/composables/use-intervals';
 import {ColorCategory, ColorOption} from 'src/constants';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
-import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useColorState} from 'src/draggables/colors/use-color-state';
-import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
+import {useColorType} from 'src/draggables/colors/use-color-type';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {getDecimalPrecision, interpolate, mapRange} from 'src/utils/math';
 import {computed, ref} from 'vue';
 
@@ -17,17 +14,16 @@ const size = 100;
 const labels = ref<string[]>([]);
 
 export function useColorGradients() {
-  const {option, category} = useColorSelection();
-  const {isTagNumeric} = useColorState();
-  const {isEnabled: isTagNumericEnabled} = useTagNumeric();
+  const {category, option} = useColoringState();
+  const {isTagNumeric} = useColorType();
+  const {isNumericModeEnabled, numericRangeMin, numericRangeMax} =
+    useColoringState();
   const {intervals} = useIntervals();
   const {scale: hoursInDayScale} = useColorScaleHoursInDay();
   const {scale: userScale} = useColorUser();
   const {isColorMapSwapped} = useClientSettings();
   const {getLabels, getLegendLabels} = useAppGradient();
-  const {min: tagMin, max: tagMax, detect: detectTagRange} = useColorByTag();
   const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
-  const {detect: detectAcousticRange} = useAcousticRange();
 
   const hoursInDayColors = computed<string[]>(() =>
     hoursInDayScale.value.colors(size),
@@ -68,10 +64,10 @@ export function useColorGradients() {
     if (
       category.value === ColorCategory.enum.TAGS &&
       isTagNumeric.value &&
-      isTagNumericEnabled.value
+      isNumericModeEnabled.value
     ) {
-      const start = Number(tagMin.value);
-      const end = Number(tagMax.value);
+      const start = Number(numericRangeMin.value);
+      const end = Number(numericRangeMax.value);
       const precision = getDecimalPrecision(start, end, size);
       const range = interpolate(start, end, size);
       labels.value = rangeToIntegerStrings(range, precision);

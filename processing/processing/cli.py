@@ -1,5 +1,6 @@
+from processing.actions.run_all import run_all
 from processing.lib.logger import init_logger
-
+from processing.utils.prettify_exceptions import prettify_exceptions
 
 init_logger()
 
@@ -14,6 +15,8 @@ from rich import print
 class _CliArguments(NamedTuple):
     config_path: str
     memory_limit: int | None  # MB
+    validate: bool
+    auto: bool
 
 
 def _register_python_path():
@@ -25,12 +28,23 @@ def _register_python_path():
 
 
 def _set_memory_limit(memory_limit: int):
-    """Limit available RAM for the whole process (for testing/debugging)"""
-    import resource
+    """Limit available RAM (Unix only, for testing/debugging)"""
+    import platform
 
-    limit_bytes = memory_limit * 1024 * 1024
-    resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
-    print(f"[yellow]Memory limit set to {memory_limit}MB[/yellow]")
+    if platform.system() != "Linux" and platform.system() != "Darwin":
+        print(
+            f"[dim yellow]Memory limiting only supported on Unix systems[/dim yellow]"
+        )
+        return
+
+    try:
+        import resource
+
+        limit_bytes = memory_limit * 1024 * 1024
+        resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
+        print(f"[yellow]Memory limit set to {memory_limit}MB[/yellow]")
+    except (ValueError, OSError) as e:
+        print(f"[yellow]Could not set memory limit: {e}[/yellow]")
 
 
 def _prepare(memory_limit: int | None = None):
@@ -66,6 +80,18 @@ def _parse_arguments():
         default=None,
     )
 
+    parser.add_argument(
+        "--validate",
+        help="Validate config and exit without entering interactive menu",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--auto",
+        help="Auto run all processing actions without interacting with the menu",
+        action="store_true",
+    )
+
     args = parser.parse_args()
 
     if args.cpu is True:
@@ -74,17 +100,41 @@ def _parse_arguments():
     return _CliArguments(
         config_path=args.config_path,
         memory_limit=args.memory,
+        validate=args.validate,
+        auto=args.auto,
     )
 
 
+@prettify_exceptions
 def main():
     args = _parse_arguments()
     _prepare(memory_limit=args.memory_limit)
 
     try:
+        # user wants only JSON validation
+        if args.validate:
+            # Just validate config and print settings, then exit
+            from processing.context import Context
+            from processing.lib.console import Console
+
+            context = Context(args.config_path)
+            Console.print_splash()
+            Console.print_settings(context)
+            Console.print("[green]✓ Configuration valid[/green]")
+            sys.exit(0)
+
+        # user wants auto run all
+        if args.auto:
+            from processing.context import Context
+
+            context = Context(args.config_path)
+            run_all(context)
+            sys.exit(0)
+
         from processing.menu import menu
 
         menu(args.config_path)
+
     except MemoryError:
         print("[red]ERROR: Memory limit exceeded![/red]")
         print(f"[yellow]Try increasing --memory above {args.memory_limit}MB[/yellow]")

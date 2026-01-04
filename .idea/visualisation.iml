@@ -11,6 +11,8 @@
       <excludeFolder url="file://$MODULE_DIR$/visualisation/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/visualisation/out" />
       <excludeFolder url="file://$MODULE_DIR$/visualisation/.vite" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/playwright-report" />
+      <excludeFolder url="file://$MODULE_DIR$/visualisation/test-results" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

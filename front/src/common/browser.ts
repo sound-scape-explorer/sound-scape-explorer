@@ -2,7 +2,12 @@ import {z} from 'zod';
 
 const prefix = 'sse';
 
-const LocalStorageKey = z.enum(['DRAGGABLES', 'SETTINGS']);
+export const LocalStorageKey = z.enum([
+  'DRAGGABLES',
+  'SETTINGS',
+  'SELECTION_BOXES',
+]);
 // eslint-disable-next-line no-redeclare
-type LocalStorageKey = z.infer<typeof LocalStorageKey>;
-export const getStorageKey = (key: LocalStorageKey) => `${prefix}-${key}`;
+export type LocalStorageKey = z.infer<typeof LocalStorageKey>;
+
+export const getLocalStorageKey = (key: LocalStorageKey) => `${prefix}-${key}`;

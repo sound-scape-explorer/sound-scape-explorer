@@ -12,7 +12,7 @@ import {Select} from 'src/primitives/select.tsx';
 import styles from './extraction-templates.module.scss';
 
 interface Props {
-  extraction: ExtractionConfig;
+  readonly extraction: ExtractionConfig;
 }
 
 export function ExtractionTemplates({extraction}: Props) {

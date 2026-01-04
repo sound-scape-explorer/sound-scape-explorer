@@ -27,3 +27,5 @@ venv
 sse-venv-*
 !sse-venv-*.bat
 !sse-venv-*.sh
+
+processing-artefacts

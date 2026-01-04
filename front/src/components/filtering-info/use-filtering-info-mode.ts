@@ -1,4 +1,4 @@
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {computed, ref} from 'vue';
 import {z} from 'zod';
 
@@ -9,7 +9,7 @@ type Mode = z.infer<typeof Mode>;
 const mode = ref<Mode>(Mode.enum.collected);
 
 export function useFilteringInfoMode() {
-  const {hasInterval} = useInterval();
+  const {hasInterval} = useIntervalTransport();
   const isIntervalMode = computed(() => mode.value === Mode.enum.interval);
   const isCollectMode = computed(() => mode.value === Mode.enum.collected);
   const isFilterMode = computed(() => mode.value === Mode.enum.filtered);

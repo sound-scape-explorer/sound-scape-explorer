@@ -58,7 +58,6 @@ class AutoclusterRepository:
             autocluster,
         )
 
-        # todo: remove me
         attributes = {
             "min_cluster_size": autocluster.min_cluster_size,
             "min_samples": autocluster.min_samples,

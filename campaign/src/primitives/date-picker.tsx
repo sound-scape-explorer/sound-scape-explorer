@@ -1,4 +1,4 @@
-import {type Intent} from '@blueprintjs/core';
+import {Classes, type Intent} from '@blueprintjs/core';
 import {DateInput3} from '@blueprintjs/datetime2';
 import {DATE_FORMAT, TIMELINE_ORIGIN_MIN} from '@shared/constants';
 import clsx from 'clsx';
@@ -9,10 +9,10 @@ import {formatDateToString} from 'src/utils/datetime.ts';
 import styles from './date-picker.module.scss';
 
 interface Props {
-  value: string;
-  onChange: (value: string | null) => void;
-  intent?: Intent;
-  small?: boolean;
+  readonly value: string;
+  readonly onChange: (value: string | null) => void;
+  readonly intent?: Intent;
+  readonly small?: boolean;
 }
 
 export function DatePicker({
@@ -23,11 +23,11 @@ export function DatePicker({
 }: Props) {
   const className = useMemo(() => {
     if (intent === 'danger') {
-      return 'bp5-intent-danger';
+      return Classes.INTENT_DANGER;
     }
 
     if (intent === 'success') {
-      return 'bp5-intent-success';
+      return Classes.INTENT_SUCCESS;
     }
   }, [intent]);
 

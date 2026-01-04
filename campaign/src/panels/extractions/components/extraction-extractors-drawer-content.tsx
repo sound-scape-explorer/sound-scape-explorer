@@ -12,11 +12,10 @@ export function ExtractionExtractorsDrawerContent() {
             className="flex column"
             key={ExtractorImpl.enum.BIRDNET}
           >
-            {/* TODO: to improve */}
-            <span>agg.</span>
+            <code>agg.</code>
             <span>
-              Useful to exclude acoustic indicators from the reduced
-              visualisations.
+              Untick this to prevent acoustic indicator extractions to be
+              aggregated (integrations).
             </span>
           </div>,
         ],

@@ -17,7 +17,7 @@ export function useDateDetection() {
 
   const update = useCallback(
     (v?: string) => {
-      if (typeof v === 'undefined') {
+      if (v === undefined) {
         return;
       }
 

@@ -42,7 +42,7 @@ export function useRangeState() {
         const newIndex = range.index + index;
 
         if (newIndex < 0 || newIndex >= prev.length) {
-          return newRanges;
+          return prev;
         }
 
         const existing = newRanges.find((r) => r.index === newIndex);

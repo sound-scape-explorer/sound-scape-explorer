@@ -7,18 +7,20 @@
     "build:esbuild": "esbuild src/main.ts --bundle --minify --platform=node --target=es2019 --outfile=dist/main.js",
     "dev": "nodemon src/main.ts --exitcrash",
     "dev:node": "ts-node src/main.ts",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "test:build": "pnpm build && echo '✓ Build smoke test passed'"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "get-audio-duration": "^4.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "esbuild": "^0.25.8",
-    "nodemon": "^3.1.10",
+    "@types/express": "^5.0.6",
+    "esbuild": "^0.27.1",
+    "nodemon": "^3.1.11",
+    "rimraf": "^6.1.2",
     "ts-node": "^10.9.2"
   }
 }

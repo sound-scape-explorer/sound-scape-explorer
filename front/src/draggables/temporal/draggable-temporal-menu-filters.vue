@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppInput from 'src/app/input/app-input.vue';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 
 const {hasExtractor} = useDraggableTemporal();
-const {filter, reset} = useScatterFilterTemporal();
+const {filter, reset} = useScatterFilterAcoustic();
 const {fromString, toString} = useTemporalThresholds();
 </script>
 

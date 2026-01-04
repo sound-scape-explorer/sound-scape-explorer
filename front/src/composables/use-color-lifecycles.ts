@@ -1,37 +1,39 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorUser} from 'src/composables/use-color-user';
 import {useTagUniques} from 'src/composables/use-tag-uniques';
 import {useColorAcousticSeries} from 'src/draggables/colors/use-color-acoustic-series';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
-import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
 import {useColorGradients} from 'src/draggables/colors/use-color-gradients';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useColorState} from 'src/draggables/colors/use-color-state';
+import {useColorType} from 'src/draggables/colors/use-color-type';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {onMounted, watch} from 'vue';
 
 export function useColorLifecycles() {
+  const {
+    isNumericModeEnabled,
+    numericRangeMin,
+    numericRangeMax,
+    category,
+    option,
+    updateOptions,
+    updateTagOptions,
+    updateAcousticData,
+    resetNumericRange,
+  } = useColoringState();
+  const {colorsFlavor} = useClientSettings();
   const {domain, generateScale} = useColorUser();
   const {allUniques} = useTagUniques();
   const {generate} = useScatterColorScale();
   const {series} = useColorAcousticSeries();
-  const {reset, min: tagMin, max: tagMax} = useColorByTag();
   const {updateLabels} = useColorGradients();
-  const {isTagNumeric} = useColorState();
-  const {isEnabled: isTagNumericEnabled, disable} = useTagNumeric();
+  const {isTagNumeric} = useColorType();
+  const {disable} = useTagNumeric();
   const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
 
-  const {
-    flavor,
-    category,
-    updateOptions,
-    updateTagOptions,
-    option,
-    updateAcousticData,
-  } = useColorSelection();
-
   onMounted(generateScale);
-  watch([domain, flavor], generateScale);
+  watch([domain, colorsFlavor], generateScale);
   watch(category, updateOptions);
   watch(allUniques, updateTagOptions);
   watch(option, updateAcousticData);
@@ -43,20 +45,20 @@ export function useColorLifecycles() {
   watch(
     [
       option,
-      isTagNumericEnabled,
+      isNumericModeEnabled,
       isTagNumeric,
       acousticMin,
       acousticMax,
-      tagMin,
-      tagMax,
+      numericRangeMin,
+      numericRangeMax,
     ],
     () => {
       if (!isTagNumeric.value) {
         disable();
       }
 
-      if (!isTagNumericEnabled.value) {
-        reset();
+      if (!isNumericModeEnabled.value) {
+        resetNumericRange();
       }
 
       updateLabels();

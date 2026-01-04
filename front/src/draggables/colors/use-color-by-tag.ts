@@ -1,53 +1,34 @@
 import {useColorUser} from 'src/composables/use-color-user';
-import {useIntervals} from 'src/composables/use-intervals';
-import {useTagUniques} from 'src/composables/use-tag-uniques';
-import {STRING_DELIMITER} from 'src/constants';
+import {useTagData} from 'src/composables/use-tag-data';
 import {useColorResize} from 'src/draggables/colors/use-color-resize';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {convertRgbToString} from 'src/utils/colors';
 import {mapRange} from 'src/utils/math';
 import {getInfiniteRange} from 'src/utils/utils';
-import {ref} from 'vue';
-
-const min = ref<string>('');
-const max = ref<string>('');
 
 export function useColorByTag() {
   const {resize} = useColorResize();
-  const {intervals} = useIntervals();
-  const {allUniques} = useTagUniques();
-  const {option} = useColorSelection();
   const {scale} = useColorUser();
-  const {isEnabled} = useTagNumeric();
-
-  const getPrimitive = (intervalIndex: number) => {
-    const interval = intervals.value[intervalIndex];
-    const tagValue = interval.tags[option.value].join(STRING_DELIMITER);
-    const tagUniques = allUniques.value[option.value];
-
-    return {
-      tagUniques,
-      tagValue,
-    };
-  };
+  const {isNumericModeEnabled, numericRangeMin, numericRangeMax, option} =
+    useColoringState();
+  const {getTagPrimitive} = useTagData();
 
   const getColorNumeric = (numeric: number) => {
     const {bottom, top} = getInfiniteRange(
-      Number(min.value),
-      Number(max.value),
+      Number(numericRangeMin.value),
+      Number(numericRangeMax.value),
     );
     const ranged = mapRange(numeric, bottom, top, 0, 1);
     return scale.value(ranged).css();
   };
 
   const getColorNumericAll = (intervalIndex: number) => {
-    const {tagValue} = getPrimitive(intervalIndex);
+    const {tagValue} = getTagPrimitive(intervalIndex, option.value);
     return getColorNumeric(Number(tagValue));
   };
 
   const getColorCategory = (intervalIndex: number) => {
-    const {tagValue, tagUniques} = getPrimitive(intervalIndex);
+    const {tagValue, tagUniques} = getTagPrimitive(intervalIndex, option.value);
     const colors = resize(scale.value, tagUniques.length);
     const index = tagUniques.indexOf(tagValue);
     const color = colors[index];
@@ -55,7 +36,7 @@ export function useColorByTag() {
   };
 
   const get = (intervalIndex: number): string => {
-    if (isEnabled.value) {
+    if (isNumericModeEnabled.value) {
       return getColorNumericAll(intervalIndex);
     }
 
@@ -68,26 +49,9 @@ export function useColorByTag() {
     return convertRgbToString(color);
   };
 
-  const detect = () => {
-    const {tagUniques} = getPrimitive(0);
-    const values = tagUniques.map((v) => Number(v));
-
-    min.value = String(Math.min(...values));
-    max.value = String(Math.max(...values));
-  };
-
-  const reset = () => {
-    min.value = '';
-    max.value = '';
-  };
-
   return {
-    min,
-    max,
     get,
-    detect,
     getColorByTagIndex,
     getColorNumeric,
-    reset,
   };
 }

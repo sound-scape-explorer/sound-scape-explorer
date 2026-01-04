@@ -1,6 +1,7 @@
 import {
   Alignment,
   Card,
+  Classes,
   Icon,
   Navbar,
   NavbarGroup,
@@ -27,7 +28,7 @@ export function DefaultLayout() {
   const {current} = usePanels();
 
   return (
-    <Section className={clsx(styles.container, isDark && 'bp5-dark')}>
+    <Section className={clsx(styles.container, isDark && Classes.DARK)}>
       <Toaster />
 
       <Card>

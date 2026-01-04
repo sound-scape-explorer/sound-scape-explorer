@@ -46,8 +46,8 @@ class AdiExtractor(Extractor):
                 sample_rate,
                 flims=band,
                 mode="amplitude",
-                # todo: add user params, which one? window nature?
-                # todo: actually that would be better to use librosa's stft
+                # TODO: add user params, which one? window nature?
+                # TODO: actually that would be better to use librosa's stft
                 #  but the band splitting (fn freq vector) is bizarre
             )
 
@@ -59,8 +59,6 @@ class AdiExtractor(Extractor):
                 index=self.index.value.lower(),
                 bin_step=self.bin_step,
                 dB_threshold=self.db_threshold,
-                # todo: we used this in the legacy impl
-                #  fmax=10000,
             )
 
             adis.append([adi])

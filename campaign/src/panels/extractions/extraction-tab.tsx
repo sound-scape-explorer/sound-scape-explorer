@@ -13,7 +13,7 @@ import {TextInput} from 'src/primitives/text-input.tsx';
 import styles from './extractions-tab.module.scss';
 
 interface Props {
-  extraction: ExtractionConfig;
+  readonly extraction: ExtractionConfig;
 }
 
 export function ExtractionTab({extraction}: Props) {

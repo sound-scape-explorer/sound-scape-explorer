@@ -8,10 +8,10 @@ import {useTimelineHandlers} from 'src/components/timeline/use-timeline-handlers
 import {useTimelineLifecycles} from 'src/components/timeline/use-timeline-lifecycles';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-names';
-import {useInterval} from 'src/composables/use-interval';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 
 const {left, right, updateLeft, updateRight} = useTimelineRange();
-const {currentIndex} = useInterval();
+const {currentIndex} = useIntervalTransport();
 const {overdrive, recenter} = useTimelineHandlers();
 const {name, names} = useTimelineRangeNames();
 

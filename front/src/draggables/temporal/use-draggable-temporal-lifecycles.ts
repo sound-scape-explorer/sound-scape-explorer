@@ -1,4 +1,4 @@
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
+import {useScatterFilterGlobal} from 'src/composables/use-scatter-filter-global';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
 import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
@@ -12,7 +12,7 @@ export function useDraggableTemporalLifecycles() {
   const {series} = useTemporalSeries();
   const {render} = useTemporalChart();
   const {period} = useTemporalCandles();
-  const {filtered} = useScatterGlobalFilter();
+  const {filtered} = useScatterFilterGlobal();
   const {strategy} = useTemporalStrategy();
 
   watch(extractorSlug, handleExtractorChange);

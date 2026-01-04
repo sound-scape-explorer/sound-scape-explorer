@@ -1,4 +1,4 @@
-import {Button, Drawer as BaseDrawer} from '@blueprintjs/core';
+import {Button, Classes, Drawer as BaseDrawer} from '@blueprintjs/core';
 import {Cross, Help} from '@blueprintjs/icons';
 import {ICON_SIZE} from '@shared/constants';
 import clsx from 'clsx';
@@ -6,7 +6,7 @@ import {JSX, useState} from 'react';
 import {useTheme} from 'src/hooks/use-theme';
 
 interface Props {
-  children: JSX.Element;
+  readonly children: JSX.Element;
 }
 
 export function HelpDrawer({children}: Props) {
@@ -33,7 +33,7 @@ export function HelpDrawer({children}: Props) {
         }}
       >
         <BaseDrawer
-          className={clsx(isDark && 'bp5-dark', 'scrollable')}
+          className={clsx(isDark && Classes.DARK, 'scrollable')}
           isOpen={isOpen}
           onClose={handleClose}
           canEscapeKeyClose
