@@ -1,3 +1,63 @@
+# [14.0.0-beta.17](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.16...v14.0.0-beta.17) (2026-01-04)
+
+
+### Bug Fixes
+
+* **app:** fix transitive dependencies vulns ([6d6174c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6d6174c0b806a47b4a3ef98630e397d719d4e86c))
+* **app:** update LICENSE year ([fc68e63](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/fc68e63791a81d0e6fc432531d8a0bc6bb8e7dd4))
+* **audio:** add graceful shutdown and temp file purge ([327dd14](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/327dd140f2055021d991487dfab5a42183a0289a))
+* **audio:** fix deps vulns ([b615446](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b615446450fd4c8583800b226c2a0ba2007a90a3))
+* **audio:** prevent sending detailed HTML on error ([0f03dc7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0f03dc7805ef224f999d5a7381e2264c19e749b4))
+* **audio:** remove hardcoded tmp scratch file ([02200c5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/02200c574e8bbcb066fe5ddfe0ad8f07bb69f02a))
+* **audio:** throw better errors ([9266219](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9266219c917367a5cb8b6b632dcff19dbb3c7d98))
+* **bin:** return exit code in bash installer ([2351098](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2351098fb25e64dcc93252366da1c30b0241278d))
+* **bin:** use more robust bash conditional ([bc76c72](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bc76c724259647497e33d367fde22ca6c7f7c9e9))
+* **campaign:** avoid .0 fractions ([57bdd4a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/57bdd4a70f4c820cb9edb54a826d6dc4e6d2bc12))
+* **campaign:** force react props to readonly ([6f39c5b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6f39c5b080bfbf589591e39a0d5d8fe4e86457de))
+* **campaign:** improve aggregation help text ([b4222c5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b4222c5505d66c61b1761acbe431f6e6597c0ed2))
+* **campaign:** more sensible hook function ([87999fc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/87999fc9aad96fe7266a48f200bf4183b3ce1b66))
+* **campaign:** remove TODOs ([6eae286](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6eae2861e2cc0a6c163f952423a500fe6170a1d7))
+* **campaign:** reword previous todo to useful info ([bcb2b4d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bcb2b4db0b65e337ed0556d75945b8a416036193))
+* **campaign:** upgrade dependencies to latest ([d671336](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d671336aecb460233a14e4f13808a17055d90170))
+* **campaign:** use enums for blueprint classes ([3026cac](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3026cacaac82594f770cecbb2e8170081f909115))
+* **campaign:** use modern undefined comparisons ([9ac6ec9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9ac6ec9457fc5006ee53405e581b78f6ce851855))
+* **examples:** add Leq non aggregated extractor to coral reef light ([b6ed37e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b6ed37e8c4f80e21de9fe63812c7b4978a9c1129))
+* **front:** prevent tag numberic disabling on draggable color unmount ([c646980](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c6469809fa55567f89e6a63210a1a96375df9fdd))
+* **front:** separate concerns for coloring hooks ([b194383](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b194383853b907c9f5a82e8b1cea130d9b9972c1))
+* **front:** use cohesive global scatter filter hook name ([d0ee46a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d0ee46a1eaf303dda8437c6b3ff82c6a974484d0))
+* **processing:** add dev deps installer script ([d5d70b0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d5d70b077688afb376ac6efae1ede17b0de71568))
+* **processing:** add pip update to deps install script ([0d45071](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0d45071dbb45174084f90acb30bd824fd946e91a))
+* **processing:** allow RAM limit only on UNIX platforms ([f4714a5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f4714a5bb7b152e5167bf95c99a9f1d576a6903a))
+* **processing:** fix fonttools vulns ([80b991c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/80b991c53d25d6f7721b016a9e7cdeaf1bb41b32))
+* **processing:** fix keras vulns ([e7d84fb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e7d84fb8512d0b692b61508aa3ec319843bd0bcb))
+* **processing:** fix pillow vulns ([32baf0f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/32baf0fcaecc4e98d65cd7c09cfac784e9a4d000))
+* **processing:** fix requests vulns ([b5951e7](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b5951e709a397a7da965ebdb536190a16bdf2637))
+* **processing:** fix setuptools and urllib3 vulns ([3c56717](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3c56717e5f93245b12f332d28583d4429a23fe22))
+* **processing:** fix werkzeug vulns ([0c3f32e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0c3f32e61add151a14772be8393a6f39781ddca3))
+* **processing:** handle sigterm as well ([a0bfa4b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a0bfa4bb5571cfe5c1bdba90b5f0c6eb5129d827))
+* **processing:** store config as well when running all ([2dbb313](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2dbb313f7f7b384d3619391e5290267a069d5c8f))
+* **processing:** update scipy stubs dependency ([bcbbc34](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bcbbc34e9034883dc353932b4880c98ce637327f))
+* **processing:** upgrade kagglehub to latest ([94999ee](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/94999ee826950f76d251b14a92d65f8879a76a99))
+* **processing:** upgrade tensorflow and tf_keras and fix protobuf vulns ([f21ba8e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f21ba8ea09a58b813bc5cd4a40e93ec90cc5ef78))
+* **visualisation:** update lockfile ([479e51e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/479e51ef88871ef266800359a0b466ea5d616447))
+
+
+### Features
+
+* **front:** add candle plot dynamic font size ([ec1b927](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ec1b9272a95295c59f44e241972045227455cc3f))
+* **front:** detect tag numeric range automatically after enabling digits ([77b87ae](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/77b87aeee4499a0b2700902efa280b1f137c872d))
+* **front:** improve selection boxes ([85f6afc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/85f6afc28a81885e3bbb8edcfc049b6f316f4251))
+* **processing:** add `--auto` flag for programatically running all actions ([e5c513b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e5c513b70a16bfa7b026730cff480a4b92ac0ae2))
+* **processing:** add cli validate flag for non interactive testing purposes ([8e0349b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8e0349b93af04b8d88205da1f7472f99ce7de3a6))
+
+
+### Performance Improvements
+
+* **campaign:** use O(n) extractor lookups ([dcdc7b5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/dcdc7b50e0108e87966746c1bdcb4b879d320953))
+* **front:** remove dead code ([4382030](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4382030b65fd5affba3d5d15508596b0d4bd4e0b))
+* **front:** rename filtering hooks ([df630f4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/df630f4dab121b004f430fcb3cbab573fcb612ab))
+* **front:** rename interval transport hook ([6510778](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/65107787bc6d9d7e311e866179a77423e7ecabf9))
+
 # [14.0.0-beta.16](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.15...v14.0.0-beta.16) (2025-12-11)
 
 
