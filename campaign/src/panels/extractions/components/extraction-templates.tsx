@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function ExtractionTemplates({extraction}: Props) {
-  const {key, update, hasTemplate, applyTemplateToCurrent} =
+  const {key, update, hasTemplate, modifyTemplate} =
     useExtractionTemplates(extraction);
 
   return (
@@ -28,12 +28,12 @@ export function ExtractionTemplates({extraction}: Props) {
       />
 
       <Tooltip
-        content="Apply to current"
+        content="Modify template"
         disabled={!hasTemplate}
       >
         <Button
           icon={<Snowflake size={ICON_SIZE} />}
-          onClick={applyTemplateToCurrent}
+          onClick={modifyTemplate}
           disabled={!hasTemplate}
         />
       </Tooltip>
