@@ -34,7 +34,7 @@ export function NumberInput({
       onKeyDown={(e) => e.code === 'Enter' && e.currentTarget.blur()}
       onBlur={(e) => {
         const n = Number(e.currentTarget.value);
-        if (isNaN(n)) {
+        if (Number.isNaN(n)) {
           return;
         }
         onBlur(n);

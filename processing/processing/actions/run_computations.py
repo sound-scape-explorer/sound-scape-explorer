@@ -61,7 +61,7 @@ def _run_computation_reductions(context: Context):
             elif strategy is ComputationStrategy.EMBEDDINGS:
                 reductions = embeddings
             else:
-                raise Exception("Invalid computation strategy")
+                raise ValueError("Invalid computation strategy")
 
             ComputationRepository.to_storage(
                 context=context,

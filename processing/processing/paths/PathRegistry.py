@@ -3,7 +3,6 @@ from typing import Optional
 
 from processing.enums import StorageDomain
 
-
 _registered_paths = set()
 
 
@@ -20,7 +19,7 @@ class PathRegistry:
             path += f"/{additional.value}"
 
         if path in _registered_paths:
-            raise Exception(f"Path {path} already registered")
+            raise KeyError(f"Path {path} already registered")
 
         _registered_paths.add(path)
         return path
@@ -31,6 +30,6 @@ class PathRegistry:
         *attributes: str | int,
     ) -> str:
         if path not in _registered_paths:
-            raise Exception(f"Path {path} not registered")
+            raise KeyError(f"Path {path} not registered")
 
         return path + "".join(f"/{el}" for el in attributes)

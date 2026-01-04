@@ -23,7 +23,7 @@ class FileConfig:
         absolute_path = os.path.join(settings.audio_path, relative_path)
 
         if not os.path.exists(absolute_path):
-            raise Exception(f"File {absolute_path} does not exist")
+            raise FileNotFoundError(f"File {absolute_path} does not exist")
 
         instance = cls(
             index=int(dto.Index),

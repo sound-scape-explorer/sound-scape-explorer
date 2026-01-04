@@ -119,7 +119,7 @@ class Timeline:
             A tuple of (`aligned_start`, `end`) in milliseconds.
         """
         if self._earliest_timestamp is None or self._latest_timestamp is None:
-            raise Exception("No slices found")
+            raise ValueError("No slices found")
 
         config_origin = self.context.config.settings.timeline_origin
         start_position = max(config_origin, self._earliest_timestamp)

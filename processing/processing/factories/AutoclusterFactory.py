@@ -14,7 +14,7 @@ class AutoclusterFactory:
         elif autocluster.impl is AutoclusterImpl.HDBSCAN_LEAF:
             method = "leaf"
         else:
-            raise Exception(f"Unknown autocluster implementation: {autocluster.impl}")
+            raise ValueError(f"Unknown autocluster implementation: {autocluster.impl}")
 
         min_samples = (
             None

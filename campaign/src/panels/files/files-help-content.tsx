@@ -7,55 +7,55 @@ export function FilesHelpContent() {
 
   return (
     <DrawerContent
-      content={[
-        [
-          'Site',
-          <div
-            className="flex column"
-            key="site"
-          >
-            <span>
-              Site is a required field that identifies where a recording was
-              made.
-            </span>
-            <span>
-              All files from the same site are organized chronologically on a
-              unified timeline.
-            </span>
-            <span className="i">
-              Note: recordings from the same site must not have overlapping
-              timestamps.
-            </span>
-          </div>,
-        ],
-        [
-          'Table',
-          <div
-            className="flex column"
-            key="table"
-          >
-            <span>Right click to access quick actions</span>
+      items={[
+        {
+          index: 0,
+          title: 'Site',
+          body: (
+            <div className="flex column">
+              <span>
+                Site is a required field that identifies where a recording was
+                made.
+              </span>
+              <span>
+                All files from the same site are organized chronologically on a
+                unified timeline.
+              </span>
+              <span className="i">
+                Note: recordings from the same site must not have overlapping
+                timestamps.
+              </span>
+            </div>
+          ),
+        },
+        {
+          index: 1,
+          title: 'Table',
+          body: (
+            <div className="flex column">
+              <span>Right click to access quick actions</span>
 
-            <span>
-              Press <code>?</code> or click{' '}
-              <Button
-                size="small"
-                onClick={triggerHelpModal}
-              >
-                here
-              </Button>{' '}
-              to display help.
-            </span>
+              <span>
+                Press <code>?</code> or click{' '}
+                <Button
+                  size="small"
+                  onClick={triggerHelpModal}
+                >
+                  here
+                </Button>{' '}
+                to display help.
+              </span>
 
-            <span>
-              Undo by pressing <code>Ctrl+Z</code>.
-            </span>
+              <span>
+                Undo by pressing <code>Ctrl+Z</code>.
+              </span>
 
-            <span>
-              Redo by pressing <code>Ctrl+⇧+Z</code>.
-            </span>
-          </div>,
-        ],
+              <span>
+                Redo by pressing <code>Ctrl+⇧+Z</code>.
+              </span>
+            </div>
+          ),
+        },
       ]}
     />
   );
