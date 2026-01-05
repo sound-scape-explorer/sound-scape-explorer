@@ -129,7 +129,7 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
     isTrajectoryWindowValid,
   } = useTrajectoriesValidation();
 
-  const {names, uniquesByTagName} = useFilesTagging();
+  const {namesWithSite, uniquesByTagName} = useFilesTagging();
   const [isManual, setIsManual] = useState(false);
 
   return (
@@ -178,7 +178,7 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
       />
 
       <Suggest
-        items={names}
+        items={namesWithSite}
         selected={trajectory.tagName}
         onChange={(v) => updateTagName(trajectory, v)}
         intent={isTagNameValid(trajectory) ? 'success' : 'danger'}

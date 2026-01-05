@@ -59,7 +59,6 @@ useAudioLifecycles();
 .player {
   display: flex;
   flex-direction: column;
-  width: sizes.$s2;
 }
 
 .spectrogram {

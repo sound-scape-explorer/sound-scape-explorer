@@ -143,7 +143,7 @@ export function useExtractionTemplates(extraction: ExtractionConfig) {
     [setKeyById, updateExtraction, customExtractions, extraction],
   );
 
-  const applyTemplateToCurrent = useCallback(() => {
+  const modifyTemplate = useCallback(() => {
     setCustomExtractions((prev) => {
       const newPrev = prev.map((ex) =>
         ex._id === extraction._id ? structuredClone(extraction) : ex,
@@ -161,6 +161,6 @@ export function useExtractionTemplates(extraction: ExtractionConfig) {
     key: keyById[extraction._id],
     update,
     hasTemplate,
-    applyTemplateToCurrent,
+    modifyTemplate,
   };
 }
