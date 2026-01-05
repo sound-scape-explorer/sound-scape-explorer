@@ -1,3 +1,13 @@
+# [14.0.0-beta.20](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.19...v14.0.0-beta.20) (2026-01-05)
+
+
+### Bug Fixes
+
+* **campaign:** split tag names and tag names with site ([18718cc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/18718cc8bc6b539dddc52ce4ae86ceb226f49fcb))
+* **campaign:** use better wording for template unfreeze ([f92e982](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f92e982445b8af15303e00e087fe8f9fef7e3093))
+* **front:** coerce frequency data to number before spectro check ([1ee03ab](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1ee03abb7889a7af7988997c529950aaf929f23b))
+* **front:** remove fixed audio player and spectro widths ([02a0e98](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/02a0e988c89cb9e8d4f42038b065977084eab0ab))
+
 # [14.0.0-beta.19](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.18...v14.0.0-beta.19) (2026-01-04)
 
 
