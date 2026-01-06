@@ -1,6 +1,6 @@
 @echo off
 
-set version=14.0.0-beta.21
+set version=14.0.0-beta.22
 set venv=sse-processing-%version%
 set script="%venv%\Scripts\Activate.ps1"
 

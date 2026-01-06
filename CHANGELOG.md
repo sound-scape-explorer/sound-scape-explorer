@@ -1,3 +1,10 @@
+# [14.0.0-beta.22](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.21...v14.0.0-beta.22) (2026-01-06)
+
+
+### Bug Fixes
+
+* **campaign:** add typescript explicitly because of pnpm isolation ([a1a6aae](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a1a6aaec9ab4349ae508edfd41eea934c5b6b575))
+
 # [14.0.0-beta.21](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.20...v14.0.0-beta.21) (2026-01-06)
 
 
