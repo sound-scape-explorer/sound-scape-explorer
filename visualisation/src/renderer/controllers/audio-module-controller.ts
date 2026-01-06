@@ -81,8 +81,9 @@ export class AudioModuleController {
     }
 
     const file = files[0];
-    const isJson = file.type === 'application/json';
-    const isH5 = file.type === 'application/x-hdf';
+    const extension = file.name.split('.').pop();
+    const isJson = extension === 'json';
+    const isH5 = extension === 'h5';
 
     try {
       if (isJson) {
