@@ -1,7 +1,7 @@
 import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {computed, ref} from 'vue';
 
-const value = ref([]);
+const selected = ref([]);
 
 export function useDraggableRelativeTrajectories() {
   const {relativeTrajectories} = useRelativeTrajectories();
@@ -12,13 +12,13 @@ export function useDraggableRelativeTrajectories() {
     }
 
     return relativeTrajectories.value.map((rT) => ({
-      label: rT.name,
-      value: rT.index,
+      label: rT.trajectory.name,
+      value: rT.trajectory.index,
     }));
   });
 
   return {
-    value: value,
-    options: options,
+    selected,
+    options,
   };
 }

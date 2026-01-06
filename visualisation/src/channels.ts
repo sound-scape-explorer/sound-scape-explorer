@@ -1,8 +1,10 @@
 export enum Channels {
-  AudioStart = 'audio:start',
-  AudioStop = 'audio:stop',
-  AudioStatus = 'audio:status',
-  FrontCreate = 'front:create',
-  StorageGet = 'storage:get',
-  StorageSet = 'storage:set',
+  AUDIO_START = 'audio:start',
+  AUDIO_STOP = 'audio:stop',
+  AUDIO_STATUS = 'audio:status',
+  AUDIO_PATH = 'audio:path',
+  FRONT_CREATE = 'front:create',
+  CAMPAIGN_CREATE = 'campaign:create',
+  STORAGE_SET = 'storage:set',
+  STORAGE_GET = 'storage:get',
 }

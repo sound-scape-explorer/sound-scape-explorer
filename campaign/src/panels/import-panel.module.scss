@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.dropContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+  padding: 1em;
+  user-select: none;
+  transition: background-color 100ms ease;
+  border: 1px solid gainsboro;
+  background: rgb(143 153 168 / 15%);
+
+  &:hover {
+    cursor: pointer;
+    background: rgb(143 153 168 / 30%);
+  }
+}
+
+.dropContent {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  user-select: none;
+  gap: 1em;
+
+}
+
+.modal {
+  $h: 16px;
+
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  cursor: wait;
+  background: rgb(0 0 0 / 50%);
+
+  & > div {
+    position: relative;
+    top: 50%;
+    left: 10%;
+    width: 80%;
+    height: $h;
+  }
+}

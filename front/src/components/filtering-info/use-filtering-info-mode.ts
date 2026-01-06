@@ -1,39 +1,44 @@
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {computed, ref} from 'vue';
+import {z} from 'zod';
 
-type Mode = 'collected' | 'filtered' | 'interval';
+const Mode = z.enum(['collected', 'filtered', 'interval']);
+// eslint-disable-next-line no-redeclare
+type Mode = z.infer<typeof Mode>;
 
-const modes: Mode[] = ['collected', 'filtered', 'interval'];
-const mode = ref<Mode>('collected');
+const mode = ref<Mode>(Mode.enum.collected);
 
 export function useFilteringInfoMode() {
-  const {hasClicked} = useIntervalSelector();
-  const isIntervalMode = computed(() => mode.value === 'interval');
-  const isCollectMode = computed(() => mode.value === 'collected');
-  const isFilterMode = computed(() => mode.value === 'filtered');
+  const {hasInterval} = useIntervalTransport();
+  const isIntervalMode = computed(() => mode.value === Mode.enum.interval);
+  const isCollectMode = computed(() => mode.value === Mode.enum.collected);
+  const isFilterMode = computed(() => mode.value === Mode.enum.filtered);
 
   const cycleMode = () => {
-    let m = modes.indexOf(mode.value);
+    let m = Mode.options.indexOf(mode.value);
     m += 1;
 
-    if (m >= modes.length) {
+    if (m >= Mode.options.length) {
       m = 0;
     }
 
-    let newMode: Mode = modes[m];
-    const isIntervalNotYetClicked = newMode === 'interval' && !hasClicked.value;
+    let newMode: Mode = Mode.options[m];
+
+    const isIntervalNotYetClicked =
+      newMode === Mode.enum.interval && !hasInterval.value;
+
     if (isIntervalNotYetClicked) {
-      newMode = 'collected';
+      newMode = Mode.enum.collected;
     }
 
     mode.value = newMode;
   };
 
   return {
-    mode: mode,
-    cycleMode: cycleMode,
-    isIntervalMode: isIntervalMode,
-    isCollectMode: isCollectMode,
-    isFilterMode: isFilterMode,
+    mode,
+    cycleMode,
+    isIntervalMode,
+    isCollectMode,
+    isFilterMode,
   };
 }

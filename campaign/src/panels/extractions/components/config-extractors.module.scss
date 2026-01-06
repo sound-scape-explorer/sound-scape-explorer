@@ -1,0 +1,89 @@
+@use "@blueprintjs/core/lib/scss/variables";
+
+.row {
+  grid-template-columns: 6em 3em 1fr repeat(3, 1fr) 3em 3em;
+}
+
+.additionalParamsContainer {
+  background: variables.$light-gray3;
+  box-shadow: none !important;
+  display: none;
+  grid-column: 1 / -1;
+  justify-content: flex-start !important;
+
+  & > div {
+    width: 100%;
+  }
+}
+
+.additionalParamsContainerDark {
+  background: variables.$dark-gray3 !important;
+
+}
+
+.additionalParamsContent {
+  display: grid;
+  gap: 0.5em;
+  padding-bottom: 0.5em !important;
+  padding-top: 0.5em !important;
+  place-items: center;
+  width: 100% !important;
+}
+
+.additionalParamsSpectrum {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.additionalParamsSpectrogram {
+  grid-template-columns: 6em 4em 10em 1fr 1fr;
+}
+
+.additionalParamsMps {
+  grid-template-columns: 6em 4em 1fr 1fr 1fr 1fr;
+}
+
+.additionalParamsMfcc {
+  grid-template-columns: 1fr;
+}
+
+.additionalParamsNdsi {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.additionalParamsAdi {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.additionalParamsHt {
+  grid-template-columns: 1fr;
+}
+
+.additionalParamsMed {
+  grid-template-columns: 1fr;
+}
+
+.additionalParamsLeqPercentile {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.additionalParamsLeqDiff {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.checkboxContainer {
+  & > label {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    & > span {
+      margin: 0;
+      padding: 0;
+      transform: translate3d(30%, 0, 0);
+    }
+  }
+}

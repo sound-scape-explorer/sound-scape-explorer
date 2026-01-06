@@ -1,4 +1,4 @@
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
+import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
 import {useOverviewElements} from 'src/components/timeline/overview/use-overview-elements';
 import {useOverviewHandlers} from 'src/components/timeline/overview/use-overview-handlers';
 import {useOverviewRender} from 'src/components/timeline/overview/use-overview-render';
@@ -18,7 +18,7 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
   const {render} = useOverviewRender();
   const {isActive} = useDraggableCalendar();
   const {left, right, start, end} = useTimelineRange();
-  const {filterByTime} = useScatterFilterTime();
+  const {filter: filterByCalendar} = useScatterFilterCalendar();
   const {update: updateElements} = useOverviewElements();
   const {position} = useOverviewHandlers();
   const {isHovering, isDragging} = useTimelineHandlers().overview;
@@ -28,7 +28,7 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
       return;
     }
 
-    filterByTime();
+    filterByCalendar();
   };
 
   onMounted(render);
@@ -37,8 +37,8 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
     render,
   );
   watch([container, canvas], mount);
-  watch([width, height], () => updateSize({width: width, height: height}));
+  watch([width, height], () => updateSize({width, height}));
   watch([start, end], updateElements);
   watch([left, right, isActive], filter);
-  watch(isActive, filterByTime);
+  watch(isActive, filterByCalendar);
 }

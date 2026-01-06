@@ -9,7 +9,7 @@ import {
   useTimelineDom,
 } from 'src/components/timeline/use-timeline-dom';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {onMounted, watch} from 'vue';
 
 export function useBodyLifecycles({width}: BodySize) {
@@ -22,7 +22,7 @@ export function useBodyLifecycles({width}: BodySize) {
   const {generate: generateScale} = useBodyColors();
   const {elements} = useBodyElements();
   const {position} = useBodyHandlers();
-  const {currentIntervalIndex} = useIntervalSelector();
+  const {currentIndex} = useIntervalTransport();
 
   const init = () => {
     mountContext();
@@ -30,9 +30,9 @@ export function useBodyLifecycles({width}: BodySize) {
   };
 
   onMounted(render);
-  watch([elements, position, width, currentIntervalIndex], render);
+  watch([elements, position, width, currentIndex], render);
   watch(canvas, init);
   watch([left, right], update);
-  watch([width, rows], () => updateSize({width: width}));
+  watch([width, rows], () => updateSize({width}));
   watch(elements, () => refreshRows(elements));
 }

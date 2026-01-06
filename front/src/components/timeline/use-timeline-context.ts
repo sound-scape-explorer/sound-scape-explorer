@@ -1,8 +1,8 @@
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 import {ref} from 'vue';
 
-const overviewContext = ref<Nullable<CanvasRenderingContext2D>>(null);
-const bodyContext = ref<Nullable<CanvasRenderingContext2D>>(null);
+const overviewContext = ref<CanvasRenderingContext2D | null>(null);
+const bodyContext = ref<CanvasRenderingContext2D | null>(null);
 
 export function useTimelineContext() {
   const {overview, body} = useTimelineDom();

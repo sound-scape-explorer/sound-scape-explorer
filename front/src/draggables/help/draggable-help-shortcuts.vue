@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppTitle from 'src/app/app-title.vue';
 import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
 import Shortcuts from 'src/draggables/help/shortcuts.vue';

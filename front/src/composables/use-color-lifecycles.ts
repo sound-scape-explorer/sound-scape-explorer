@@ -1,30 +1,67 @@
+import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useColorUser} from 'src/composables/use-color-user';
-import {useIndicators} from 'src/composables/use-indicators';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
+import {useColorAcousticSeries} from 'src/draggables/colors/use-color-acoustic-series';
+import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
+import {useColorGradients} from 'src/draggables/colors/use-color-gradients';
+import {useColorType} from 'src/draggables/colors/use-color-type';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
+import {useTagNumeric} from 'src/draggables/tags/use-tag-numeric';
 import {onMounted, watch} from 'vue';
 
 export function useColorLifecycles() {
-  const {domain, generateScale} = useColorUser();
-  const {labelProperties} = useStorageLabels();
-  const {names} = useIndicators();
-
   const {
-    flavor,
+    isNumericModeEnabled,
+    numericRangeMin,
+    numericRangeMax,
     category,
-    updateCriterias,
-    criterias,
-    criteria,
-    updateCriteriaIndex,
-    updateLabelCriterias,
-    updateIndicatorCriterias,
-  } = useColorSelection();
+    option,
+    updateOptions,
+    updateTagOptions,
+    updateAcousticData,
+    resetNumericRange,
+  } = useColoringState();
+  const {colorsFlavor} = useClientSettings();
+  const {domain, generateScale} = useColorUser();
+  const {allUniques} = useTagUniques();
+  const {generate} = useScatterColorScale();
+  const {series} = useColorAcousticSeries();
+  const {updateLabels} = useColorGradients();
+  const {isTagNumeric} = useColorType();
+  const {disable} = useTagNumeric();
+  const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
 
   onMounted(generateScale);
+  watch([domain, colorsFlavor], generateScale);
+  watch(category, updateOptions);
+  watch(allUniques, updateTagOptions);
+  watch(option, updateAcousticData);
 
-  watch([domain, flavor], generateScale);
-  watch(category, updateCriterias);
-  watch([criterias, criteria], updateCriteriaIndex);
-  watch(labelProperties, updateLabelCriterias);
-  watch(names, updateIndicatorCriterias);
+  // to mitigate race conditions from slow series
+  watch(series, generate);
+
+  // gradient labeling
+  watch(
+    [
+      option,
+      isNumericModeEnabled,
+      isTagNumeric,
+      acousticMin,
+      acousticMax,
+      numericRangeMin,
+      numericRangeMax,
+    ],
+    () => {
+      if (!isTagNumeric.value) {
+        disable();
+      }
+
+      if (!isNumericModeEnabled.value) {
+        resetNumericRange();
+      }
+
+      updateLabels();
+    },
+  );
 }

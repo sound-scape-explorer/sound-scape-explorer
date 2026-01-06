@@ -9,7 +9,7 @@ export function useRelativeTrajectoriesExport() {
       values.value.length === 0 ||
       labels.value.length === 0 ||
       names.value.length === 0 ||
-      // TODO: Fix me, is this mandatory?
+      // INFO: Can't remember why I did this
       typeof names?.value === 'undefined'
     ) {
       return;
@@ -22,7 +22,7 @@ export function useRelativeTrajectoriesExport() {
       .reduce((a, b) => Math.max(a, b), 0);
 
     // create time column
-    csv.addColumn('relative time');
+    csv.addColumn('time of day');
 
     // create columns
     for (const name of names.value) {
@@ -53,6 +53,6 @@ export function useRelativeTrajectoriesExport() {
   };
 
   return {
-    handleExportClick: handleExportClick,
+    handleExportClick,
   };
 }

@@ -1,20 +1,24 @@
-import {useStorageRanges} from 'src/composables/use-storage-ranges';
-import {RANGE_SKIP} from 'src/constants';
-import {generateUniqueRangeSlug} from 'src/utils/config';
+import {type RangeDto} from '@shared/dtos';
+import {useConfig} from 'src/composables/use-config';
+import {RANGE_CUSTOM} from 'src/constants';
 import {ref} from 'vue';
 
 const names = ref<string[]>([]);
 const name = ref<string>();
 
 export function useTimelineRangeNames() {
-  const {ranges} = useStorageRanges();
+  const {config} = useConfig();
+
+  const rangeToSlug = (range: RangeDto) => {
+    return `${range.index} - ${range.name}`;
+  };
 
   const updateNames = () => {
-    if (ranges.value === null) {
+    if (config.value === null) {
       return;
     }
 
-    names.value = ranges.value.map((r) => generateUniqueRangeSlug(r));
+    names.value = config.value.ranges.map(rangeToSlug);
   };
 
   const updateName = () => {
@@ -26,18 +30,19 @@ export function useTimelineRangeNames() {
   };
 
   const setCustomName = () => {
-    if (name.value === RANGE_SKIP) {
+    if (name.value === RANGE_CUSTOM) {
       return;
     }
 
-    name.value = RANGE_SKIP;
+    name.value = RANGE_CUSTOM;
   };
 
   return {
-    names: names,
-    updateNames: updateNames,
-    name: name,
-    updateName: updateName,
-    setCustomName: setCustomName,
+    names,
+    updateNames,
+    name,
+    updateName,
+    setCustomName,
+    rangeToSlug,
   };
 }

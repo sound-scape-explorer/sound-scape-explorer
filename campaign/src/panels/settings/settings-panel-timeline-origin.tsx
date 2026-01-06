@@ -1,0 +1,39 @@
+import {Tooltip} from '@blueprintjs/core';
+import clsx from 'clsx';
+import {useSettingsState} from 'src/hooks/use-settings-state';
+import {useSettingsValidation} from 'src/hooks/use-settings-validation';
+import styles from 'src/panels/settings/settings-panel.module.scss';
+import {DatePicker} from 'src/primitives/date-picker';
+import {DrawerContent} from 'src/primitives/drawer-content.tsx';
+import {HelpDrawer} from 'src/primitives/help-drawer.tsx';
+
+export function SettingsPanelTimelineOrigin() {
+  const {settings, update} = useSettingsState();
+  const {isTimelineOriginValid} = useSettingsValidation();
+
+  return (
+    <div className={clsx(styles.row, 'align gap')}>
+      <b className={clsx(styles.rowTitle, 'flex grow')}>Timeline origin</b>
+
+      <HelpDrawer>
+        <DrawerContent
+          items={[
+            {
+              index: 0,
+              title: 'Validation',
+              body: 'Date should be before earliest file.',
+            },
+          ]}
+        />
+      </HelpDrawer>
+
+      <Tooltip content="The timeline origin, date to start the integration from">
+        <DatePicker
+          value={settings.timelineOrigin}
+          onChange={(v) => v !== null && update('timelineOrigin', v)}
+          intent={isTimelineOriginValid() ? 'success' : 'danger'}
+        />
+      </Tooltip>
+    </div>
+  );
+}

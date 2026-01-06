@@ -18,6 +18,6 @@ export function useBodyDrawBackground() {
   };
 
   return {
-    drawBackground: drawBackground,
+    drawBackground,
   };
 }

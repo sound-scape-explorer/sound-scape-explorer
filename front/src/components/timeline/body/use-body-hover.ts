@@ -5,6 +5,6 @@ const hovered = ref<TimelineElement | null>(null);
 
 export function useBodyHover() {
   return {
-    hovered: hovered,
+    hovered,
   };
 }

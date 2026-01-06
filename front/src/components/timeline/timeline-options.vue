@@ -1,24 +1,19 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppDatePicker from 'src/app/app-date-picker.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useTimelineHandlers} from 'src/components/timeline/use-timeline-handlers';
 import {useTimelineLifecycles} from 'src/components/timeline/use-timeline-lifecycles';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-names';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 
 const {left, right, updateLeft, updateRight} = useTimelineRange();
-const {currentIntervalIndex} = useIntervalSelector();
+const {currentIndex} = useIntervalTransport();
 const {overdrive, recenter} = useTimelineHandlers();
 const {name, names} = useTimelineRangeNames();
-
-useRefProvide(InjectionKey.calendarRange, name);
-useRefProvide(InjectionKey.timelineLeft, left);
-useRefProvide(InjectionKey.timelineRight, right);
 
 useTimelineLifecycles();
 </script>
@@ -28,51 +23,59 @@ useTimelineLifecycles();
     <span>Range</span>
     <div :class="$style.row">
       <AppSelect
+        v-model="name"
         :class="$style.select"
-        :injection-key="InjectionKey.calendarRange"
         :options="names"
       />
 
       <AppButton
         :handle-click="overdrive"
-        tooltip="set window limits as range"
+        tooltip="Crop window"
         tooltip-placement="top"
       >
-        overdrive
+        <AppIcon
+          icon="crop"
+          size="tiny"
+        />
       </AppButton>
 
       <AppButton
-        :disabled="currentIntervalIndex === null"
+        :disabled="currentIndex === null"
         :handle-click="recenter"
-        tooltip="to selected interval"
+        tooltip="Focus window to current interval"
         tooltip-placement="top"
       >
-        recenter
+        <AppIcon
+          icon="select"
+          size="tiny"
+        />
       </AppButton>
     </div>
 
     <span>Dates</span>
     <div :class="$style.row">
       <AppDatePicker
+        v-model="left"
         :handle-click="updateLeft"
-        :injection-key="InjectionKey.timelineLeft"
       />
 
       <AppDatePicker
+        v-model="right"
         :handle-click="updateRight"
-        :injection-key="InjectionKey.timelineRight"
       />
     </div>
   </AppDraggableMenu>
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .row {
-  display: flex;
   align-items: center;
+  display: flex;
+  gap: sizes.$p0;
   justify-content: center;
   width: 100%;
-  gap: $p0;
 }
 
 .select {

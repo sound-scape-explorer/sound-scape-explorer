@@ -1,73 +1,54 @@
-from typing import List
-
 import numpy as np
 from h5py import Dataset
+from sklearn import metrics
 
-from processing.config.bands.BandConfig import BandConfig
-from processing.config.integrations.IntegrationConfig import IntegrationConfig
-from processing.constants import MDM_DEFAULT, MDM_SHAPE_LIMIT
-from processing.errors.MeanDistancesMatrixOutOfMemoryWarning import (
-    MeanDistancesMatrixOutOfMemoryWarning,
-)
-from processing.storage.Storage import Storage
-from processing.storage.StoragePath import StoragePath
+from processing.config.SettingsConfig import SettingsConfig
+from processing.constants import MDM_EMPTY
+from processing.lib.console import Console
+from processing.utils.calculate_mdm_shape_limit import calculate_mdm_shape_limit
 
 
 class MeanDistancesMatrix:
     @staticmethod
     def calculate(
-        features: List[Dataset],
-    ) -> List[List[float]]:
-        shape = len(features[0])
-
-        if shape > MDM_SHAPE_LIMIT:
-            MeanDistancesMatrixOutOfMemoryWarning("Filling storage with empty array...")
-            return MDM_DEFAULT
-
-        from sklearn import metrics
-
-        mean_distances_matrix = np.zeros([shape, shape])
-
-        for i in range(len(features)):
-            previous_mean_distances_matrix = mean_distances_matrix
-
-            umap = features[i]
-
-            current_mean_distances_matrix = metrics.pairwise_distances(umap)
-
-            mean_distances_matrix = (
-                (previous_mean_distances_matrix * i) + current_mean_distances_matrix
-            ) / (i + 1)
-
-            return mean_distances_matrix.tolist()
-
-    @staticmethod
-    def read_from_storage(
-        storage: Storage,
-        band: BandConfig,
-        integration: IntegrationConfig,
-        trim_half: bool = False,
+        embeddings: list[Dataset],
+        settings: SettingsConfig,
     ):
-        path = MeanDistancesMatrix.get_path(band, integration)
-        dataset = storage.read(path)
-        matrix = np.array(dataset)
+        # Check memory requirements
+        shape_req = len(embeddings[0])
+        shape_max = calculate_mdm_shape_limit(settings.memory_limit)
+        if shape_req > shape_max:
+            Console.print_mdm_oom_warning(f"RAM limit: {settings.memory_limit} GB")
+            return MDM_EMPTY
 
-        if trim_half is True:
-            np.fill_diagonal(matrix, 0)
+        # Calculate pairwise distances and average them
+        samples_count = embeddings[0].shape[0]
+        mdm = np.zeros([samples_count, samples_count], dtype=np.float32)
 
-        return matrix
+        for i, feature_set in enumerate(embeddings):
+            # Calculate pairwise distances for this feature set
+            current_mdm = metrics.pairwise_distances(feature_set)
 
-    @staticmethod
-    def get_path(
-        band: BandConfig,
-        integration: IntegrationConfig,
-    ) -> str:
-        return (
-            f"{StoragePath.mean_distances_matrix.value}"
-            f"/{band.name}"
-            f"/{integration.seconds}"
-        )
+            # Ensure diagonal is zero (distances from points to themselves)
+            np.fill_diagonal(current_mdm, 0.0)
 
-    @staticmethod
-    def exists_in_storage(storage: Storage) -> bool:
-        return storage.exists_dataset(StoragePath.mean_distances_matrix)
+            # Update average distance matrix
+            if i == 0:
+                mdm = current_mdm
+            else:
+                mdm = ((mdm * i) + current_mdm) / (i + 1)
+
+        # Verify that the diagonal is exactly zero
+        np.fill_diagonal(mdm, 0.0)
+
+        # Ensure matrix is symmetric
+        mdm = (mdm + mdm.T) / 2.0
+
+        # Sanity check: verify non-negative distances
+        if np.any(mdm < 0):
+            print(
+                "Warning: Negative values found in distance matrix! Clipping to zero."
+            )
+            mdm = np.maximum(mdm, 0.0)
+
+        return mdm

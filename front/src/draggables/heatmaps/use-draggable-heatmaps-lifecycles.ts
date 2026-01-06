@@ -1,25 +1,29 @@
-import {useStorageDigested} from 'src/composables/use-storage-digested';
+import {useMetricData} from 'src/composables/use-metric-data';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
-import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 import {watch} from 'vue';
 
 export function useDraggableHeatmapsLifecycles() {
-  const {digesterName, handleChange, isPairing} = useDraggableHeatmaps();
-  const {a, b} = useDraggableHeatmapsLabels();
-  const {digested} = useStorageDigested();
+  const {metricSlug, handleChange, isPairing} = useDraggableHeatmaps();
+  const {a, b, reset} = useDraggableHeatmapsTags();
+  const {metricData} = useMetricData();
   const {updateHeatmapData, updateHeatmapDataPairing} =
     useDraggableHeatmapsChart();
 
+  // reset on metricSlug change
+  watch(metricSlug, reset);
+
   // update digester raw data
-  watch([digesterName, a, b], handleChange);
+  watch([metricSlug, a, b], handleChange);
 
   // update chart data
-  watch(digested, () => {
+  watch(metricData, () => {
     if (isPairing.value && a.value !== null && b.value !== null) {
       updateHeatmapDataPairing();
-    } else if (!isPairing.value && a.value !== null) {
-      updateHeatmapData();
+      return;
     }
+
+    updateHeatmapData();
   });
 }

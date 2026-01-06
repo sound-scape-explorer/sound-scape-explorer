@@ -1,41 +1,35 @@
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {Csv} from 'src/common/csv';
-import {useBandSelection} from 'src/composables/use-band-selection';
-import {useDate} from 'src/composables/use-date';
+import {useAggregations} from 'src/composables/use-aggregations';
+import {useDateTime} from 'src/composables/use-date-time';
 import {useExportName} from 'src/composables/use-export-name';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
-import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {useIntervals} from 'src/composables/use-intervals';
+import {useReductions} from 'src/composables/use-reductions';
+import {useScatterFilterGlobal} from 'src/composables/use-scatter-filter-global';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
+import {useViewSelection} from 'src/composables/use-view-selection';
+import {ExportType, STRING_DELIMITER} from 'src/constants';
 import {ref} from 'vue';
 
 interface ExportData {
   intervalIndex: number;
-  timestamp: number;
+  start: number;
+  end: number;
   site: string;
-  aggregatedLabels: string[];
-  reducedFeatures: number[];
-  aggregatedFeatures: number[];
+  tags: string[];
+  reductions: number[];
+  embeddings: number[];
 }
 
 export function useScatterExport() {
-  const {band} = useBandSelection();
-  const {integration} = useIntegrationSelection();
-  const {labelProperties} = useStorageLabels();
+  const {band, integration} = useViewSelection();
+  const {allUniques} = useTagUniques();
   const {notify} = useAppNotification();
-  const {convertTimestampToIsoDate} = useDate();
-  const {reducedFeatures} = useStorageReducedFeatures();
-  const {aggregatedFeatures} = useStorageAggregatedFeatures();
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
-  const {aggregatedLabels} = useStorageAggregatedLabels();
-  const {aggregatedSites} = useStorageAggregatedSites();
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {filtered} = useScatterGlobalFilter();
+  const {timestampToString} = useDateTime();
+  const {reductions} = useReductions();
+  const {aggregations} = useAggregations();
+  const {intervals} = useIntervals();
+  const {filtered} = useScatterFilterGlobal();
   const {generate} = useExportName();
 
   const loadingRef = ref<boolean>(false);
@@ -44,13 +38,8 @@ export function useScatterExport() {
     if (
       band.value === null ||
       integration.value === null ||
-      aggregatedTimestamps.value === null ||
-      aggregatedFeatures.value === null ||
-      aggregatedLabels.value === null ||
-      labelProperties.value === null ||
-      reducedFeatures.value === null ||
-      aggregatedSites.value === null ||
-      aggregatedIndicators.value === null
+      aggregations.value === null ||
+      reductions.value === null
     ) {
       return;
     }
@@ -60,80 +49,75 @@ export function useScatterExport() {
     loadingRef.value = true;
 
     const csv = new Csv();
-    const aggregatedIndicatorsCopy = aggregatedIndicators.value;
     const payload: ExportData[] = [];
 
-    for (let i = 0; i < aggregatedTimestamps.value.length; i += 1) {
+    for (let i = 0; i < aggregations.value.timestamps.length; i += 1) {
       if (filtered.value[i]) {
         continue;
       }
 
-      const aggregatedFeaturesInterval = aggregatedFeatures.value[i];
-      const timestamp = aggregatedTimestamps.value[i];
-      const site = aggregatedSites.value[i];
-      const aggregatedLabelsInterval = aggregatedLabels.value[i];
-
-      const reducedFeaturesInterval = reducedFeatures.value[i];
+      const interval = intervals.value[i];
+      const tagValues = Object.values(interval.tags);
 
       payload.push({
-        intervalIndex: i,
-        timestamp: timestamp,
-        site: site.site,
-        aggregatedLabels: aggregatedLabelsInterval,
-        reducedFeatures: reducedFeaturesInterval,
-        aggregatedFeatures: aggregatedFeaturesInterval,
+        intervalIndex: interval.index,
+        start: interval.start,
+        end: interval.end,
+        site: interval.sites.join(STRING_DELIMITER),
+        tags: tagValues.map((v) => v.join(STRING_DELIMITER)),
+        reductions: reductions.value[i],
+        embeddings: aggregations.value.embeddings[i],
       });
     }
 
-    csv.addColumn('intervalIndex');
-    csv.addColumn('timestamp');
-    csv.addColumn('site');
+    // headers
+    csv.addColumn('Interval Index');
+    csv.addColumn('Start');
+    csv.addColumn('End');
+    csv.addColumn('In Selection');
+    csv.addColumn('Site');
 
-    labelProperties.value.forEach((property) => {
-      csv.addColumn(`label_${property}`);
+    // adding all tags
+    Object.keys(allUniques.value).forEach((name) => {
+      csv.addColumn(`TAG_${name}`);
     });
 
-    aggregatedIndicatorsCopy.forEach(({extractor}) => {
-      csv.addColumn(`i_${extractor.index}_${extractor.name}`);
+    // adding all reduced dimensions
+    payload[0].reductions.forEach((_, r) => {
+      csv.addColumn(`RED_${r}`);
     });
 
-    payload[0].reducedFeatures.forEach((_, r) => {
-      csv.addColumn(`r_${r}`);
-    });
-
-    payload[0].aggregatedFeatures.forEach((_, f) => {
-      csv.addColumn(`f_${f}`);
+    // adding all raw embeddings
+    payload[0].embeddings.forEach((_, f) => {
+      csv.addColumn(`EMB_${f}`);
     });
 
     payload.forEach((data) => {
       csv.createRow();
       csv.addToCurrentRow(data.intervalIndex.toString());
-      csv.addToCurrentRow(convertTimestampToIsoDate(data.timestamp));
+      csv.addToCurrentRow(timestampToString(data.start));
+      csv.addToCurrentRow(timestampToString(data.end));
       csv.addToCurrentRow(data.site);
 
-      data.aggregatedLabels.forEach((aL) => {
-        csv.addToCurrentRow(aL);
+      data.tags.forEach((v) => {
+        csv.addToCurrentRow(v);
       });
 
-      aggregatedIndicatorsCopy.forEach((aI) => {
-        csv.addToCurrentRow(`${aI.values[data.intervalIndex]}`);
+      data.reductions.forEach((v) => {
+        csv.addToCurrentRow(`${v}`);
       });
 
-      data.reducedFeatures.forEach((rF) => {
-        csv.addToCurrentRow(`${rF}`);
-      });
-
-      data.aggregatedFeatures.forEach((aF) => {
-        csv.addToCurrentRow(`${aF}`);
+      data.embeddings.forEach((v) => {
+        csv.addToCurrentRow(`${v}`);
       });
     });
 
-    const name = generate('scatter');
+    const name = generate(ExportType.enum.scatter);
     csv.download(name);
     loadingRef.value = false;
   };
 
   return {
-    handleScatterExportClick: handleScatterExportClick,
+    handleScatterExportClick,
   };
 }

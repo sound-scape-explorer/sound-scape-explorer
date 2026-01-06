@@ -1,54 +1,44 @@
 import {reactive, ref} from 'vue';
+import {z} from 'zod';
 
-export interface DraggablesStore {
-  _alphaSelection3d: boolean;
-  _alphaTimeline: boolean;
-  open: boolean;
-  settings: boolean;
-  help: boolean;
-  view: boolean;
-  colors: boolean;
-  calendar: boolean;
-  labels: boolean;
-  audio: boolean;
-  details: boolean;
-  trajectories: boolean;
-  relativeTrajectories: boolean;
-  temporal: boolean;
-  heatmaps: boolean;
-  histograms: boolean;
-}
+export const DraggableKey = z.enum([
+  'open',
+  'settings',
+  'help',
+  'view',
+  'colors',
+  'calendar',
+  'tags',
+  'audio',
+  'details',
+  'trajectories',
+  'relativeTrajectories',
+  'temporal',
+  'heatmaps',
+  'selection',
+]);
 
-export type DraggableKey = keyof DraggablesStore;
+// eslint-disable-next-line no-redeclare
+export type DraggableKey = z.infer<typeof DraggableKey>;
 
-// draggable keys
-const store = reactive<DraggablesStore>({
-  open: false,
-  settings: false,
-  help: false,
-  view: false,
-  colors: false,
-  calendar: false,
-  _alphaTimeline: false,
-  labels: false,
-  audio: false,
-  details: false,
-  trajectories: false,
-  relativeTrajectories: false,
-  temporal: false,
-  heatmaps: false,
-  _alphaSelection3d: false,
-  histograms: false,
-});
+type DraggablesStore = {
+  [K in DraggableKey]: boolean;
+};
+
+const store = reactive<DraggablesStore>(
+  Object.fromEntries(
+    DraggableKey.options.map((key) => [key, false]),
+  ) as DraggablesStore,
+);
 
 const hidden = ref<boolean>(false);
 const stack = ref<DraggableKey[]>([]);
 
 export function useDraggables() {
   const toggle = (key: DraggableKey): void => {
-    const isBackground = stack.value.indexOf(key) !== 0;
+    const isNotFirst = stack.value.indexOf(key) !== 0;
 
-    if (isBackground) {
+    if (isNotFirst) {
       open(key);
       return;
     }
@@ -139,16 +129,16 @@ export function useDraggables() {
   const closeSelected = () => close(stack.value[0]);
 
   return {
-    store: store,
-    hidden: hidden,
-    open: open,
-    toggle: toggle,
-    toggleAll: toggleAll,
-    cycle: cycle,
-    close: close,
-    closeAll: closeAll,
-    closeSelected: closeSelected,
-    closeExceptCurrent: closeExceptCurrent,
-    stack: stack,
+    store,
+    hidden,
+    open,
+    toggle,
+    toggleAll,
+    cycle,
+    close,
+    closeAll,
+    closeSelected,
+    closeExceptCurrent,
+    stack,
   };
 }

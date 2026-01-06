@@ -1,0 +1,22 @@
+from dataclasses import dataclass
+
+from processing.config.SettingsConfig import SettingsConfig
+from processing.dtos import RangeDto
+from processing.lib.time import convert_date_string_to_timestamp
+
+
+@dataclass(frozen=True)
+class RangeConfig:
+    index: int
+    name: str
+    start: int  # unix
+    end: int  # unix
+
+    @classmethod
+    def from_dto(cls, dto: RangeDto, settings: SettingsConfig):
+        return cls(
+            index=dto.index,
+            name=dto.name,
+            start=convert_date_string_to_timestamp(dto.start, settings.timezone),
+            end=convert_date_string_to_timestamp(dto.end, settings.timezone),
+        )

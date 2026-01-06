@@ -26,8 +26,10 @@ const hasChildren = typeof slots.default !== 'undefined';
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .suspense {
   font-style: italic;
-  padding-top: $p0;
+  padding-top: sizes.$p0;
 }
 </style>

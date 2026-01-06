@@ -1,45 +1,37 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppInput from 'src/app/input/app-input.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 
-const {hasIndicator} = useDraggableTemporal();
-const {filter, reset} = useScatterFilterTemporal();
-const {from, to} = useTemporalThresholds();
-
-useRefProvide(InjectionKey.indicatorsFilterFrom, from);
-useRefProvide(InjectionKey.indicatorsFilterTo, to);
+const {hasExtractor} = useDraggableTemporal();
+const {filter, reset} = useScatterFilterAcoustic();
+const {fromString, toString} = useTemporalThresholds();
 </script>
 
 <template>
   <div>
     <AppInput
+      v-model="fromString"
       :class="$style.input"
-      :disabled="!hasIndicator"
+      :disabled="!hasExtractor"
       :handle-enter="filter"
-      :injection-key="InjectionKey.indicatorsFilterFrom"
-      :step="0.1"
       placeholder="From"
       size="small"
-      type="number"
     />
 
     <AppInput
+      v-model="toString"
       :class="$style.input"
-      :disabled="!hasIndicator"
+      :disabled="!hasExtractor"
       :handle-enter="filter"
-      :injection-key="InjectionKey.indicatorsFilterTo"
       placeholder="To"
       size="small"
-      type="number"
     />
 
     <AppButton
-      :disabled="!hasIndicator"
+      :disabled="!hasExtractor"
       :handle-click="filter"
       size="small"
     >
@@ -47,7 +39,7 @@ useRefProvide(InjectionKey.indicatorsFilterTo, to);
     </AppButton>
 
     <AppButton
-      :disabled="!hasIndicator"
+      :disabled="!hasExtractor"
       :handle-click="reset"
       size="small"
     >

@@ -1,0 +1,17 @@
+.row {
+  grid-template-columns: 6em 3em repeat(3, 1fr) repeat(3, 2fr);
+}
+
+.window {
+  gap: 0.5em;
+  justify-content: space-between !important;
+
+  & > :first-child {
+    min-width: 0;
+    width: 100%;
+  }
+
+  & > :last-child {
+    max-width: 0;
+  }
+}

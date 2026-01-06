@@ -1,25 +1,50 @@
-import {useStorageReader} from 'src/composables/use-storage-reader';
+import {type FileDto} from '@shared/dtos';
+import {useConfig} from 'src/composables/use-config';
+import {useDateTime} from 'src/composables/use-date-time';
 import {ref} from 'vue';
 
 export interface Site {
-  index: number;
   name: string;
-  fileIndexes: number[];
+  files: FileDto[];
 }
 
-const sites = ref<Site[] | null>(null);
+const sites = ref<Site[]>([]);
 
 export function useSites() {
-  const {read: readStorage} = useStorageReader();
+  const {config} = useConfig();
+  const {stringToTimestamp} = useDateTime();
 
-  const read = async () => {
-    await readStorage(async (worker, file) => {
-      sites.value = await worker.readSites(file);
-    });
+  const generate = () => {
+    if (config.value === null) {
+      return;
+    }
+
+    const newSites: Site[] = [];
+
+    // fill
+    for (const file of config.value.files) {
+      let site = newSites.find((site) => site.name === file.Site);
+
+      if (typeof site === 'undefined') {
+        site = {name: file.Site, files: []};
+        newSites.push(site);
+      }
+
+      site.files.push(file);
+    }
+
+    // sort
+    for (const site of newSites) {
+      site.files = site.files.sort(
+        (a, b) => stringToTimestamp(a.Date) - stringToTimestamp(b.Date),
+      );
+    }
+
+    sites.value = newSites;
   };
 
   return {
-    sites: sites,
-    read: read,
+    sites,
+    generate,
   };
 }

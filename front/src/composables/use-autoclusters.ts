@@ -1,29 +1,60 @@
+import {type AutoclusterDto} from '@shared/dtos';
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
 export interface Autocluster {
-  index: number;
-  name: string;
-  min_cluster_size: number;
-  min_samples: number;
-  alpha: number;
-  epsilon: number;
+  autocluster: AutoclusterDto;
+  data: number[];
 }
 
 const autoclusters = ref<Autocluster[]>([]);
 
-// autocluster configs
 export function useAutoclusters() {
-  const {read: readStorage} = useStorageReader();
+  const {read: r} = useStorageReader();
+  const {extraction, band, integration} = useViewSelection();
 
   const read = async () => {
-    await readStorage(async (worker, file) => {
-      autoclusters.value = await worker.readAutoclustersConfiguration(file);
+    await r(async (worker, file) => {
+      if (
+        extraction.value === null ||
+        band.value === null ||
+        integration.value === null
+      ) {
+        return;
+      }
+
+      const dtos = extraction.value.autoclusters;
+      const newAutoclusters: Autocluster[] = [];
+
+      for (const dto of dtos) {
+        const data = await worker.readAutoclusters(
+          file,
+          extraction.value.index,
+          band.value.index,
+          integration.value.index,
+          dto.index,
+        );
+
+        const ac: Autocluster = {
+          autocluster: dto,
+          data,
+        };
+
+        newAutoclusters.push(ac);
+      }
+
+      autoclusters.value = newAutoclusters;
     });
   };
 
+  const reset = () => {
+    autoclusters.value = [];
+  };
+
   return {
-    autoclusters: autoclusters,
-    read: read,
+    autoclusters,
+    read,
+    reset,
   };
 }

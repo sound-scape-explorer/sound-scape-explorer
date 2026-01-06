@@ -2,6 +2,7 @@ import {fileURLToPath, URL} from 'node:url';
 
 import vue from '@vitejs/plugin-vue';
 import analyzer from 'rollup-plugin-analyzer';
+import {NodePackageImporter} from 'sass-embedded';
 import {defineConfig} from 'vite';
 import {comlink} from 'vite-plugin-comlink';
 import {VitePWA as vitePwa} from 'vite-plugin-pwa';
@@ -19,35 +20,30 @@ if (isElectron) {
   base = '/sound-scape-explorer/';
 }
 
+console.log('isProduction:', isProduction);
+console.log('isElectron:', isElectron);
+
 /**
  * Do not add following dependencies to code splitting as it will result in corrupted runtime code execution:
  *  `@vueuse/components`
  * @see https://vitejs.dev/config/
  */
 export default defineConfig({
-  base: base,
+  base,
   define: {
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
   },
+  // TODO: attempt to fix sass legacy warning
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `
-          @import "src/styles/colors.scss";
-          @import "src/styles/transitions.scss";
-          @import "src/styles/layers.scss";
-          @import "src/styles/animations.scss";
-          @import "src/styles/borders.scss";
-          @import "src/styles/sizes.scss";
-          @import "src/styles/scrolls.scss";
-          @import "src/styles/shadows.scss";
-          @import "src/styles/fx.scss";
-        `,
+        api: 'modern-compiler',
+        importers: [new NodePackageImporter()],
       },
     },
   },
   build: {
-    target: 'es2020',
+    target: 'es2020', // TODO: move to es2021?
     rollupOptions: {
       output: {
         manualChunks: {
@@ -56,7 +52,6 @@ export default defineConfig({
           'chroma-js': ['chroma-js'],
           'colormap': ['colormap'],
           'comlink': ['comlink'],
-          'dayjs': ['dayjs'],
           'h5wasm': ['h5wasm'],
           'html2canvas': ['html2canvas'],
           'plotly.js-dist-min': ['plotly.js-dist-min'],
@@ -66,15 +61,14 @@ export default defineConfig({
           'vue-router': ['vue-router'],
           'wav-file-encoder': ['wav-file-encoder'],
           'wavesurfer.js': ['wavesurfer.js'],
-          'ionicons/icons': ['ionicons/icons'],
-          '@ionic/vue': ['@ionic/vue'],
         },
       },
     },
   },
   resolve: {
     alias: {
-      src: fileURLToPath(new URL('./src', import.meta.url)),
+      'src': fileURLToPath(new URL('./src', import.meta.url)),
+      '@shared': fileURLToPath(new URL('../shared', import.meta.url)),
     },
   },
   plugins: [

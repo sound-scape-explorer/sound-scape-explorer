@@ -1,40 +1,28 @@
-<script lang="ts" setup="">
-import {IonIcon} from '@ionic/vue';
+<script lang="ts" setup>
+import AppIcon from 'src/app/app-icon.vue';
 import AppMenuButton from 'src/app/menu/app-menu-button.vue';
-import {useAppMenu} from 'src/app/menu/use-app-menu';
-import {useClientSettings} from 'src/composables/use-client-settings';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 import {useViewState} from 'src/composables/use-view-state';
 
 const {isReady} = useStorageReady();
 const {hasView} = useViewState();
-const {isAlphaPreview} = useClientSettings();
-const {menu} = useAppMenu();
 </script>
 
 <template>
   <div :class="$style.header">
     <div :class="$style.row">
       <div :class="$style.left">
-        <AppMenuButton
-          draggable-key="open"
-          text="Open"
-        >
-          <IonIcon :icon="menu.open" />
+        <AppMenuButton :draggable-key="DraggableKey.enum.open">
+          <AppIcon icon="open" />
         </AppMenuButton>
 
-        <AppMenuButton
-          draggable-key="settings"
-          text="Settings"
-        >
-          <IonIcon :icon="menu.settings" />
+        <AppMenuButton :draggable-key="DraggableKey.enum.settings">
+          <AppIcon icon="settings" />
         </AppMenuButton>
 
-        <AppMenuButton
-          draggable-key="help"
-          text="Help"
-        >
-          <IonIcon :icon="menu.help" />
+        <AppMenuButton :draggable-key="DraggableKey.enum.help">
+          <AppIcon icon="help" />
         </AppMenuButton>
       </div>
 
@@ -50,140 +38,112 @@ const {menu} = useAppMenu();
       v-if="isReady"
       :class="$style.column"
     >
-      <AppMenuButton
-        draggable-key="view"
-        text="View"
-      >
-        <IonIcon :icon="menu.view" />
+      <AppMenuButton :draggable-key="DraggableKey.enum.view">
+        <AppIcon icon="view" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="colors"
-        text="Colors"
+        :draggable-key="DraggableKey.enum.colors"
       >
-        <IonIcon :icon="menu.colors" />
-      </AppMenuButton>
-
-      <AppMenuButton
-        v-if="isAlphaPreview"
-        :disabled="!hasView"
-        draggable-key="_alphaTimeline"
-        text="Timeline"
-      >
-        <IonIcon :icon="menu.timeline" />
+        <AppIcon icon="colors" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="calendar"
-        text="Calendar"
+        :draggable-key="DraggableKey.enum.calendar"
       >
-        <IonIcon :icon="menu.calendar" />
+        <AppIcon icon="calendar" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="labels"
-        text="Labels"
+        :draggable-key="DraggableKey.enum.tags"
       >
-        <IonIcon :icon="menu.labels" />
+        <AppIcon icon="tags" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="temporal"
-        text="Temporal"
+        :draggable-key="DraggableKey.enum.selection"
       >
-        <IonIcon :icon="menu.temporal" />
+        <AppIcon icon="selection" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="heatmaps"
-        text="Heatmaps"
+        :draggable-key="DraggableKey.enum.temporal"
       >
-        <IonIcon :icon="menu.heatmaps" />
+        <AppIcon icon="temporal" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="histograms"
-        text="Histograms"
+        :draggable-key="DraggableKey.enum.heatmaps"
       >
-        <IonIcon :icon="menu.histograms" />
+        <AppIcon icon="heatmaps" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="audio"
-        text="Audio"
+        :draggable-key="DraggableKey.enum.audio"
       >
-        <IonIcon :icon="menu.audio" />
+        <AppIcon icon="audio" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="details"
-        text="Details"
+        :draggable-key="DraggableKey.enum.details"
       >
-        <IonIcon :icon="menu.details" />
-      </AppMenuButton>
-
-      <AppMenuButton
-        v-if="isAlphaPreview"
-        :disabled="!hasView"
-        draggable-key="_alphaSelection3d"
-        text="Selection"
-      >
-        <IonIcon :icon="menu.selection" />
+        <AppIcon icon="details" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="trajectories"
-        text="Trajectories"
+        :draggable-key="DraggableKey.enum.trajectories"
       >
-        <IonIcon :icon="menu.trajectories" />
+        <AppIcon icon="trajectories" />
       </AppMenuButton>
 
       <AppMenuButton
         :disabled="!hasView"
-        draggable-key="relativeTrajectories"
-        text="Relative Trajectories"
+        :draggable-key="DraggableKey.enum.relativeTrajectories"
       >
-        <IonIcon :icon="menu.relativeTrajectories" />
+        <AppIcon icon="relativeTrajectories" />
       </AppMenuButton>
     </div>
   </div>
 </template>
 
 <style lang="scss" module>
-$g: $p0;
+@use 'src/styles/sizes';
+@use 'src/styles/layers';
+
+$g: sizes.$p0;
 
 .header {
-  position: fixed;
-  z-index: $app-menu-layer;
-  top: $g;
-  left: $g;
-  display: flex;
   align-items: flex-start;
+  display: flex;
   flex-direction: column;
-  width: 100%;
-  pointer-events: none;
   gap: $g;
+  left: $g;
+  pointer-events: none;
+  position: fixed;
+  top: $g;
+  width: 100%;
+  z-index: layers.$app-menu-layer;
 }
 
 .button {
+  backdrop-filter: blur(sizes.$p0);
   pointer-events: auto;
-  backdrop-filter: blur($p0);
 }
 
 .row {
   display: flex;
   justify-content: space-between;
-  width: 100%;
   padding-right: $g;
+  width: 100%;
 }
 
 .row .left {

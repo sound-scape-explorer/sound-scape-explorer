@@ -4,12 +4,12 @@ import {mapRange} from 'src/utils/math';
 export function useColorByIntervalIndex() {
   const {scale} = useColorUser();
 
-  const getColor = (index: number, count: number): string => {
+  const get = (index: number, count: number): string => {
     const rangedIndex = mapRange(index, 0, count, 0, 1);
     return scale.value(rangedIndex).css();
   };
 
   return {
-    getColor: getColor,
+    get,
   };
 }

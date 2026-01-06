@@ -7,7 +7,7 @@ export function useStorageReader() {
   const {file} = useStorageFile();
 
   const read = async (
-    // eslint-disable-next-line no-unused-vars
+     
     callback: (worker: Worker, file: File) => Promise<unknown>,
   ) => {
     if (worker.value === null && file.value !== null) {
@@ -26,6 +26,6 @@ export function useStorageReader() {
   };
 
   return {
-    read: read,
+    read,
   };
 }

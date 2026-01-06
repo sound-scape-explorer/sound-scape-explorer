@@ -1,22 +1,26 @@
 <script lang="ts" setup>
 import AppGradient from 'src/app/app-gradient.vue';
-import {useColorsCycling} from 'src/composables/use-colors-cycling';
-import {createHourlyLabels} from 'src/utils/colors';
+import {useAppGradient} from 'src/components/scatter/use-app-gradient';
+import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
+import {useColorScaleHoursInDay} from 'src/composables/use-color-scale-hours-in-day';
 import {computed} from 'vue';
 
-const {scale: cyclingScale} = useColorsCycling();
+const {scale: hoursInDayScale} = useColorScaleHoursInDay();
+const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
+const {getLegendLabels, getLabels} = useAppGradient();
 
 const size = 100;
-const scale = computed<string[]>(() => cyclingScale.value.colors(size));
-const labels = computed<string[]>(() => createHourlyLabels(size));
+const scale = computed<string[]>(() => hoursInDayScale.value.colors(size));
+const labels = computed<string[]>(() => getLabels(size, cyclingPeriod.value));
+const legend = computed(() => getLegendLabels(cyclingPeriod.value));
 </script>
 
 <template>
   <AppGradient
     :colors="scale"
     :labels="labels"
-    legend-max="00:00"
-    legend-med="12:00"
-    legend-min="00:00"
+    :legend-max="legend.max"
+    :legend-med="legend.med"
+    :legend-min="legend.min"
   />
 </template>

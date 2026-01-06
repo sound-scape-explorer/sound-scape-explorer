@@ -1,43 +1,37 @@
 from abc import ABC, abstractmethod
-from typing import List, Union
 
-from h5py import Dataset
+import numpy as np
+from rich import print
+
+from processing.lib.shapes import assert_shape
 
 
 class AbstractReducer(ABC):
-    _dimensions: int
-    _seed: Union[None, int]
-    _features: Union[None, Dataset]
-    values: List[List[float]]
-
-    def __init__(
+    def reduce(
         self,
-    ) -> None:
-        self._features = None
+        embeddings: np.ndarray,
+        dimensions: int,
+        seed: int | None,
+    ) -> np.ndarray:
+        print(
+            f"Reducing embeddings of shape {embeddings.shape}"
+            f" to {dimensions} dimensions."
+        )
+
+        reductions = self._reduce(
+            embeddings,
+            dimensions,
+            seed,
+        )
+
+        assert_shape(reductions, (embeddings.shape[0], dimensions))
+        return reductions
 
     @abstractmethod
-    def calculate(self) -> List[List[float]]:
-        pass
-
-    def _validate_load(self) -> Dataset:
-        if self._features is None:
-            raise RuntimeError("Unable to find data for reducer. Please load first.")
-
-        return self._features
-
-    def load(
+    def _reduce(
         self,
+        embeddings: np.ndarray,
         dimensions: int,
-        seed: Union[None, int],
-        features: Dataset,
-    ):
-        self._dimensions = dimensions
-        self._seed = seed
-        self._features = features
-
-    def set_values(
-        self,
-        features: List[List[float]],
-    ) -> List[List[float]]:
-        self.values = features
-        return self.values
+        seed: int | None,
+    ) -> np.ndarray:
+        pass

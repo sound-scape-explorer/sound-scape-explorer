@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {
   type Config,
   type Data,
@@ -25,6 +25,8 @@ export interface AppPlotProps {
   width?: number | null;
   height?: number | null;
   isExpanded?: boolean;
+  xTicks?: string[];
+  xTickIndices?: string[];
 }
 
 const props = withDefaults(defineProps<AppPlotProps>(), {
@@ -36,6 +38,8 @@ const props = withDefaults(defineProps<AppPlotProps>(), {
   width: null,
   height: null,
   isExpanded: false,
+  xTicks: undefined,
+  xTickIndices: undefined,
 });
 
 export interface AppPlotRefs {
@@ -46,10 +50,10 @@ export interface AppPlotRefs {
   plot: Ref<PlotlyHTMLElement | null>;
 }
 
-const container = ref<AppPlotRefs['container']>(null);
+const container = ref<AppPlotRefs['container'] | null>(null);
 
 const refs: AppPlotRefs = {
-  container: container,
+  container,
   data: ref(null),
   layout: ref(null),
   config: ref(null),

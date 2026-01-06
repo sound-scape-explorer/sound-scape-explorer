@@ -1,8 +1,7 @@
-import {type Dayjs} from 'dayjs';
-import {type ComputedRef, ref} from 'vue';
+import {ref} from 'vue';
 
-const start = ref<number>(0);
-const end = ref<number>(0);
+const start = ref<number>(0); // ms
+const end = ref<number>(0); // ms
 
 const left = ref<number>(0);
 const right = ref<number>(0);
@@ -59,25 +58,16 @@ export function useTimelineRange() {
     duration.value = right.value - left.value;
   };
 
-  const serialize = (
-    dateStart: ComputedRef<Dayjs>,
-    dateEnd: ComputedRef<Dayjs>,
-  ) => {
-    left.value = dateStart.value.unix() * 1000;
-    right.value = dateEnd.value.unix() * 1000;
-  };
-
   return {
-    start: start,
-    end: end,
-    left: left,
-    right: right,
-    duration: duration,
-    moveCursor: moveCursor,
-    moveLeft: moveLeft,
-    moveRight: moveRight,
-    updateLeft: updateLeft,
-    updateRight: updateRight,
-    serialize: serialize,
+    start,
+    end,
+    left,
+    right,
+    duration,
+    moveCursor,
+    moveLeft,
+    moveRight,
+    updateLeft,
+    updateRight,
   };
 }

@@ -1,17 +1,13 @@
-import {useBandSelection} from 'src/composables/use-band-selection';
-import {useExtractorSelection} from 'src/composables/use-extractor-selection';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
+import {type TrajectoryDto} from '@shared/dtos';
 import {useStorageReader} from 'src/composables/use-storage-reader';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {ref} from 'vue';
 
 export interface RelativeTrajectory {
-  index: number;
-  name: string;
-  labelProperty: string;
-  labelValue: string;
-  values: number[];
+  trajectory: TrajectoryDto;
+  distances: number[];
   timestamps: number[];
-  deciles: Nullable<[number, number][]>; // TODO: Make non nullable version 14
+  deciles: [number, number][];
 }
 
 const relativeTrajectories = ref<RelativeTrajectory[] | null>(null);
@@ -21,42 +17,59 @@ export function useRelativeTrajectories() {
 
   const read = async () => {
     await r(async (worker, file) => {
-      const {band} = useBandSelection();
-      const {integration} = useIntegrationSelection();
-      const {extractor} = useExtractorSelection();
+      const {extraction, band, integration, reducer} = useViewSelection();
 
       if (
+        extraction.value === null ||
         band.value === null ||
         integration.value === null ||
-        extractor.value === null
+        reducer.value === null
       ) {
         return;
       }
 
-      relativeTrajectories.value = await worker.readRelativeTrajectories(
-        file,
-        band.value.name,
-        integration.value.seconds,
-        extractor.value.index,
-      );
+      const trajectories = extraction.value.trajectories;
+
+      const newRelativeTrajectories: RelativeTrajectory[] = [];
+
+      for (const trajectory of trajectories) {
+        const {distances, timestamps, deciles} =
+          await worker.readRelativeTrajectories(
+            file,
+            extraction.value.index,
+            band.value.index,
+            integration.value.index,
+            reducer.value.index,
+            trajectory.index,
+          );
+
+        const newRelativeTrajectory: RelativeTrajectory = {
+          trajectory,
+          distances,
+          timestamps,
+          deciles,
+        };
+
+        newRelativeTrajectories.push(newRelativeTrajectory);
+      }
+
+      relativeTrajectories.value = newRelativeTrajectories;
     });
   };
 
-  const selectRelativeTrajectories = (
-    indexes: number[],
-  ): RelativeTrajectory[] => {
+  const filter = (indices: number[]): RelativeTrajectory[] => {
     if (relativeTrajectories.value === null) {
       return [];
     }
 
-    return relativeTrajectories.value.filter((relativeTrajectory) =>
-      indexes.includes(relativeTrajectory.index),
+    return relativeTrajectories.value.filter((rT) =>
+      indices.includes(rT.trajectory.index),
     );
   };
 
   return {
-    relativeTrajectories: relativeTrajectories,
-    selectRelativeTrajectories: selectRelativeTrajectories,
-    read: read,
+    relativeTrajectories,
+    filter,
+    read,
   };
 }

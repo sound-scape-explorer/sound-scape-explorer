@@ -20,7 +20,7 @@ export class FrontBridge {
   }
 
   public static async createFromRenderer() {
-    await ipcRenderer.invoke(Channels.FrontCreate);
+    await ipcRenderer.invoke(Channels.FRONT_CREATE);
   }
 
   private validateServicePath() {
@@ -38,6 +38,6 @@ export class FrontBridge {
   }
 
   private setCreateHandler() {
-    ipcMain.handle(Channels.FrontCreate, this.create.bind(this));
+    ipcMain.handle(Channels.FRONT_CREATE, this.create.bind(this));
   }
 }

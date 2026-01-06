@@ -1,0 +1,38 @@
+{
+  "name": "campaign",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5532",
+    "build": "tsc -b && vite build",
+    "build:electron": "cross-env NODE_ENV=electron pnpm build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test:build": "pnpm build && echo '✓ Build smoke test passed'"
+  },
+  "dependencies": {
+    "@blueprintjs/core": "^6.4.1",
+    "@blueprintjs/datetime": "^6.0.10",
+    "@blueprintjs/datetime2": "^3.0.10",
+    "@blueprintjs/icons": "^6.3.2",
+    "@blueprintjs/select": "^6.0.10",
+    "@blueprintjs/table": "^6.0.10",
+    "clsx": "^2.1.1",
+    "exceljs": "^4.4.0",
+    "jotai": "^2.16.0",
+    "normalize.css": "^8.0.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-dropzone": "^14.3.8",
+    "scheduler": "^0.27.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "cross-env": "^10.1.0",
+    "globals": "^16.5.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
+  }
+}

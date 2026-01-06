@@ -1,6 +1,8 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import Timeline from 'src/components/timeline/timeline.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import DraggableCalendarMenu from 'src/draggables/calendar/draggable-calendar-menu.vue';
 import DraggableCalendarSidebar from 'src/draggables/calendar/draggable-calendar-sidebar.vue';
 import {useDraggableCalendarExpand} from 'src/draggables/calendar/use-draggable-calendar-expand';
@@ -11,8 +13,8 @@ const {isExpanded} = useDraggableCalendarExpand();
 <template>
   <AppDraggable
     :class="[$style.container, {[$style.expanded]: isExpanded}]"
-    draggable-key="calendar"
-    suspense="view"
+    :draggable-key="DraggableKey.enum.calendar"
+    :suspense="SuspenseCase.enum.VIEW"
   >
     <DraggableCalendarSidebar />
     <DraggableCalendarMenu />
@@ -24,15 +26,17 @@ const {isExpanded} = useDraggableCalendarExpand();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .container {
-  width: $s2;
+  width: sizes.$s2;
 }
 
 .expanded {
-  width: $w-max;
+  width: sizes.$w-max;
 }
 
 .timeline {
-  margin-top: $p0;
+  margin-top: sizes.$p0;
 }
 </style>

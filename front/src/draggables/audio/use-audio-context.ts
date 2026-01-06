@@ -1,14 +1,14 @@
-import {useSettings} from 'src/composables/use-settings';
+import {useConfig} from 'src/composables/use-config';
 import {ref} from 'vue';
 
 let isCreated = false;
 const context = ref<AudioContext | null>(null);
 
 export function useAudioContext() {
-  const {settings} = useSettings();
+  const {config} = useConfig();
 
   const create = () => {
-    if (settings.value === null) {
+    if (config.value === null) {
       return;
     }
 
@@ -19,12 +19,12 @@ export function useAudioContext() {
     isCreated = true;
 
     context.value = new AudioContext({
-      sampleRate: settings.value.expected_sample_rate,
+      sampleRate: config.value.settings.expectedSampleRate,
     });
   };
 
   return {
-    context: context,
-    create: create,
+    context,
+    create,
   };
 }

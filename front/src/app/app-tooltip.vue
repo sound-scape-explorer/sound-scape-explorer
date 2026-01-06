@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NTooltip} from 'naive-ui';
 import {TIMEOUT} from 'src/constants';
 import {type NaiveTooltipPlacement} from 'src/types';
@@ -21,7 +21,7 @@ const show = ref<boolean>(false);
 const handleMouseEnter = () => {
   clear();
 
-  t = setTimeout(() => {
+  t = window.setTimeout(() => {
     show.value = true;
   }, TIMEOUT * 2);
 };

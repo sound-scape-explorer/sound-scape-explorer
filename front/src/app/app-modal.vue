@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import {useThemeColors} from 'src/composables/use-theme-colors';
+
 interface Props {
   isWait?: boolean;
 }
@@ -6,6 +8,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   isWait: false,
 });
+
+const {colors} = useThemeColors();
 </script>
 
 <template>
@@ -15,19 +19,22 @@ const props = withDefaults(defineProps<Props>(), {
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/layers';
+@use 'src/styles/sizes';
+
 .container {
   position: fixed;
-  z-index: $app-modal-layer;
+  z-index: layers.$app-modal-layer;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  margin-bottom: $p0;
-  padding: 0 $p0;
+  margin-bottom: sizes.$p0;
+  padding: 0 sizes.$p0;
   user-select: none;
   animation: fade-in 0.6s ease-in-out;
-  background: $black;
+  background: v-bind('colors.baseColor');
 }
 
 .wait {

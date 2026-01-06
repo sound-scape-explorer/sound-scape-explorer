@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import {copyToClipboard} from '@shared/browser';
 import {NButton, type NotificationType, useNotification} from 'naive-ui';
 import {useAppNotification} from 'src/app/notification/use-app-notification';
 import {ALERT_TIMER} from 'src/constants';
-import {copyToClipboard} from 'src/utils/browser';
 import {joinStringsWithBreaks} from 'src/utils/strings';
 import {VERSION} from 'src/version';
 import {h, watch} from 'vue';

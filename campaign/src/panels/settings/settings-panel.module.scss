@@ -1,0 +1,16 @@
+@use "src/styles/layout";
+
+.row {
+  display: grid;
+  grid-template-columns: 14em 2em 1fr;
+}
+
+.rowTitle {
+  padding: 2px 4px;
+  user-select: none;
+}
+
+.helpContent {
+  display: flex;
+  flex-direction: column;
+}

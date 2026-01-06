@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# campaign version
+sed -i "s/VERSION = \(.\)*/VERSION = '$NEXT_VERSION';/" campaign/src/version.ts
+
 # front version
 sed -i "s/VERSION = \(.\)*/VERSION = '$NEXT_VERSION';/" front/src/version.ts
 

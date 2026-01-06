@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="GENERAL_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/processing">
+      <sourceFolder url="file://$MODULE_DIR$/processing/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/processing" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/build" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/processing/resources/birdnet" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/processing/resources/kaggle" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/processing/resources/kaggle/models" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/processing/resources/kaggle/models/google" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/processing/resources/music_classifier" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/sound_scape_explorer.egg-info" />
+      <excludeFolder url="file://$MODULE_DIR$/processing/venv" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.11 (sound-scape-explorer)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

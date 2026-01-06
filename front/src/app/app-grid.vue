@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {NGi, NGrid, NTag} from 'naive-ui';
 
-interface AppGridItem {
+export interface AppGridItem {
   tag: string;
   value: string;
   color?: string;
@@ -43,10 +43,12 @@ const props = withDefaults(defineProps<AppGridProps>(), {
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .gi {
   display: flex;
   justify-content: space-between;
-  gap: $p0;
+  gap: sizes.$p0;
 }
 
 .value {

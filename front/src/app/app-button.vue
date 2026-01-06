@@ -1,6 +1,7 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NButton} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {type NaiveSize} from 'src/types';
 import {computed} from 'vue';
 
@@ -26,6 +27,8 @@ const props = withDefaults(defineProps<Props>(), {
   error: false,
   smallTooltip: false,
 });
+
+const {colors} = useThemeColors();
 
 const hasTooltip = computed(() => typeof props?.tooltip === 'string');
 
@@ -83,6 +86,8 @@ const handleFocus = (e: FocusEvent) => {
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .grow {
   flex: 1;
 }
@@ -92,15 +97,15 @@ const handleFocus = (e: FocusEvent) => {
 }
 
 .error {
-  background: $red;
+  background: v-bind('colors.errorColor');
 }
 
 .active {
-  background: $olive;
+  background: v-bind('colors.actionColor');
 }
 
 .tooltip {
-  padding: $p0 !important;
+  padding: sizes.$p0 !important;
 }
 
 .small {

@@ -1,81 +1,102 @@
-import {useScatter} from 'src/components/scatter/use-scatter';
-import {useScatterColorAlpha} from 'src/components/scatter/use-scatter-color-alpha';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
-import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
-import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
-import {useScreen} from 'src/components/screen/use-screen';
+import {useScatterContainer} from 'src/components/scatter/use-scatter-container';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
+import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
+import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
+import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
+import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
-import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useLabelNumeric} from 'src/draggables/labels/use-label-numeric';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
+import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
+import {useSelectionBoxes} from 'src/draggables/selection/use-selection-boxes';
 import {onMounted, watch} from 'vue';
 
 let isRendering = false;
 
 export function useScatterLifecycles() {
-  const {traces, isEnabled, generate, renderTraces} = useScatterTraces();
+  const {data, isEnabled, generate, render: renderScatter} = useScatterRender();
   const {config} = useScatterConfig();
-  const {container, isMounted, isAttached, attachListeners, render, mount} =
-    useScatter();
-  const {criteria, flavor} = useColorSelection();
-  const {low: opacityLow, high: opacityHigh} = useScatterColorAlpha();
+  const {
+    container,
+    isMounted,
+    isAttached,
+    attachListeners,
+    render: renderContainer,
+    mount: mountContainer,
+  } = useScatterContainer();
   const {
     timeshift,
     isColorMapSwapped,
     isSelectedPointHighlighted,
     scatterBorderWidth,
+    colorsAlphaLow: opacityLow,
+    colorsAlphaHigh: opacityHigh,
+    colorsFlavor,
   } = useClientSettings();
-  const {filtered: labelFiltered} = useScatterFilterLabels();
-  const {filtered: timeFiltered} = useScatterFilterTime();
-  const {filtered: temporalFiltered} = useScatterFilterTemporal();
-  const {selected} = useScreen();
+  const {filtered: labelFiltered} = useScatterFilterTag();
+  const {filtered: calendarFiltered} = useScatterFilterCalendar();
+  const {filtered: acousticFiltered} = useScatterFilterAcoustic();
+  const {filtered: spatialFiltered} = useScatterFilterSpatial();
   const {isWebGlScatter2d} = useClientSettings();
-  const {min: indicatorRangeMin, max: indicatorRangeMax} =
-    useColorByIndicator();
-  const {min: labelRangeMin, max: labelRangeMax} = useColorByLabel();
-  const {isEnabled: isColorByLabelsNumeric} = useLabelNumeric();
-  const {currentIntervalIndex} = useIntervalSelector();
+  const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
+  const {
+    isNumericModeEnabled,
+    numericRangeMin,
+    numericRangeMax,
+    option: colorOption,
+  } = useColoringState();
+  const {currentIndex} = useIntervalTransport();
+  const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
 
-  onMounted(mount);
+  const {boxes: selectionBoxes} = useSelectionBoxes();
+
+  onMounted(mountContainer);
 
   watch([container, isMounted, isAttached], attachListeners);
-  watch([container, traces, isMounted, isAttached, config], render);
+  watch([container, data, isMounted, isAttached, config], renderContainer);
 
   watch(
     [
-      criteria,
-      flavor,
+      colorOption,
+      colorsFlavor,
       opacityLow,
       opacityHigh,
-      indicatorRangeMin,
-      indicatorRangeMax,
-      labelRangeMin,
-      labelRangeMax,
+      acousticMin,
+      acousticMax,
+      isNumericModeEnabled,
+      numericRangeMin,
+      numericRangeMax,
       timeshift,
       labelFiltered,
-      timeFiltered,
-      temporalFiltered,
-      selected,
+      calendarFiltered,
+      acousticFiltered,
+      spatialFiltered,
       isWebGlScatter2d,
       isColorMapSwapped,
-      isColorByLabelsNumeric,
-      currentIntervalIndex,
+      currentIndex,
       isSelectedPointHighlighted,
       scatterBorderWidth,
+      cyclingPeriod,
+      selectionBoxes,
     ],
     async () => {
       if (isRendering || !isEnabled.value) {
         return;
       }
 
+      // TODO: investigate
+      // requestAnimationFrame(async () => {
+      //   await generate();
+      //   renderScatter();
+      // });
+
       isRendering = true;
+      renderScatter();
       await generate();
-      renderTraces();
       isRendering = false;
     },
+    {deep: true},
   );
 }

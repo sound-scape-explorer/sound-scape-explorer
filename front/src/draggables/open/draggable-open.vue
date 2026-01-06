@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import {NButton} from 'naive-ui';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
 import {useStorageFile} from 'src/composables/use-storage-file';
 import {useStorageReady} from 'src/composables/use-storage-ready';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import DraggableOpenDetails from 'src/draggables/open/draggable-open-details.vue';
 import {useOpenLock} from 'src/draggables/open/use-open-lock';
 import {ref} from 'vue';
@@ -11,6 +13,7 @@ const inputRef = ref<HTMLInputElement | null>(null);
 const {setFile, resetFile} = useStorageFile();
 const {isReady} = useStorageReady();
 const {isLocked} = useOpenLock();
+const {colors} = useThemeColors();
 
 const handleChange = () => {
   const file = inputRef.value?.files?.[0];
@@ -24,7 +27,7 @@ const handleChange = () => {
 </script>
 
 <template>
-  <AppDraggable draggable-key="open">
+  <AppDraggable :draggable-key="DraggableKey.enum.open">
     <div :class="$style.container">
       <input
         ref="inputRef"
@@ -43,31 +46,22 @@ const handleChange = () => {
       </NButton>
     </div>
 
-    <div :class="$style.details">
-      <DraggableOpenDetails v-if="isReady" />
-    </div>
+    <DraggableOpenDetails v-if="isReady" />
   </AppDraggable>
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+@use 'src/styles/scrolls';
+
 .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: $s0;
+  width: sizes.$s0;
 }
 
 .red {
-  background: $red;
-}
-
-.details {
-  overflow: auto;
-  width: $s0;
-  max-height: $h0;
-  text-align: right;
-  text-wrap: stable;
-
-  @include hide-scrollbar;
+  background: v-bind('colors.errorColor');
 }
 </style>

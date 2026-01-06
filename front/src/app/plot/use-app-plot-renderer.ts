@@ -1,9 +1,10 @@
 import Plotly from 'plotly.js-dist-min';
 import {type AppPlotProps, type AppPlotRefs} from 'src/app/plot/app-plot.vue';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
+import {INTERVAL_TAG} from 'src/draggables/temporal/use-temporal-chart';
 
 export function useAppPlotRenderer(props: AppPlotProps, refs: AppPlotRefs) {
-  const {selectInterval} = useIntervalSelector();
+  const {selectInterval} = useIntervalTransport();
 
   const render = async () => {
     if (
@@ -27,13 +28,20 @@ export function useAppPlotRenderer(props: AppPlotProps, refs: AppPlotRefs) {
         const plotIndex = e.points[0].pointIndex;
         // @ts-expect-error: missing typescript definition
         const legendString: string = e.points[0].fullData.x[plotIndex];
-        const intervalIndex = legendString.split('Interval: ')[1];
-        selectInterval(Number(intervalIndex));
+
+        const match = legendString.match(
+          new RegExp(INTERVAL_TAG + '\\s*(\\d+)'),
+        );
+
+        if (match) {
+          const intervalIndex = match[1];
+          selectInterval(Number(intervalIndex));
+        }
       });
     }
   };
 
   return {
-    render: render,
+    render,
   };
 }

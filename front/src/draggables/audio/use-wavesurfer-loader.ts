@@ -1,24 +1,25 @@
-import {useBandSelection} from 'src/composables/use-band-selection';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
+import {
+  FilterType,
+  useAudioFilters,
+} from 'src/draggables/audio/use-audio-filters';
 import {useAudioGain} from 'src/draggables/audio/use-audio-gain';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
 import {useWavesurfer} from 'src/draggables/audio/use-wavesurfer';
 
 export function useWavesurferLoader() {
-  const {band} = useBandSelection();
-  const {seek, stop} = useAudioTransport();
+  const {band} = useViewSelection();
+  const {seek, pause, stop} = useAudioTransport();
   const {context} = useAudioContext();
-  const {isPlaying} = useAudioTransport();
   const {ws} = useWavesurfer();
   const {node: gainNode} = useAudioGain();
   const {analyser} = useAudioAnalyser();
+  const {hpfChain, lpfChain, hpfReadable, lpfReadable, createFilter} =
+    useAudioFilters();
 
-  const handleAudioEnd = () => {
-    isPlaying.value = false;
-  };
-
-  const prepare = () => {
+  const connect = () => {
     if (
       ws.value === null ||
       band.value === null ||
@@ -29,38 +30,42 @@ export function useWavesurferLoader() {
       return;
     }
 
-    const lowShelf = context.value.createBiquadFilter();
-    lowShelf.type = 'lowshelf';
-    lowShelf.gain.value = -60;
-    lowShelf.frequency.value = band.value.low;
+    const highFrequency = lpfReadable.value ?? band.value.high;
+    lpfChain.value = createFilter(
+      FilterType.enum.lpf,
+      highFrequency,
+      context.value,
+      gainNode.value,
+    );
 
-    const highShelf = context.value.createBiquadFilter();
-    highShelf.type = 'highshelf';
-    highShelf.gain.value = -60;
-    highShelf.frequency.value = band.value.high;
+    const lowFrequency = hpfReadable.value ?? band.value.low;
+    hpfChain.value = createFilter(
+      FilterType.enum.hpf,
+      lowFrequency,
+      context.value,
+      lpfChain.value[0],
+    );
 
-    // connect
-    lowShelf.connect(highShelf);
-    highShelf.connect(gainNode.value);
     gainNode.value.connect(analyser.value);
 
-    ws.value.backend.setFilters([lowShelf, highShelf]);
+    ws.value.backend.setFilters([...hpfChain.value, ...lpfChain.value]);
     analyser.value.connect(context.value.destination);
   };
 
-  const loadSlice = (blob: Blob) => {
+  const load = (blob: Blob) => {
     if (ws.value === null) {
       return;
     }
 
-    stop();
+    pause();
     ws.value.loadBlob(blob);
-    ws.value.once('seek', seek);
-    ws.value.once('finish', handleAudioEnd);
-    ws.value.once('ready', prepare);
+    ws.value.once('ready', connect);
+    ws.value.on('seek', seek);
+    ws.value.on('finish', stop);
   };
 
   return {
-    loadSlice: loadSlice,
+    load,
+    connect,
   };
 }

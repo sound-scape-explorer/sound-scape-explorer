@@ -2,10 +2,12 @@
 import {NProgress} from 'naive-ui';
 import AppModal from 'src/app/app-modal.vue';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useViewLoader} from 'src/composables/use-view-loader';
 
 const {isLoading, loadingText} = useScatterLoading();
 const {step} = useViewLoader();
+const {colors} = useThemeColors();
 </script>
 
 <template>
@@ -29,8 +31,12 @@ const {step} = useViewLoader();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/fx';
+@use 'src/styles/borders';
+@use 'src/styles/sizes';
+
 .container {
-  @include background-blur-0;
+  @include fx.background-blur-0;
 }
 
 .loading {
@@ -38,13 +44,13 @@ const {step} = useViewLoader();
   align-items: flex-start;
   flex-direction: column;
   justify-content: flex-start;
-  width: $w0;
-  padding: $p0 $p0 * 2 $p0 * 2 $p0 * 2;
-  border: 1px solid $grey;
-  background: $white;
-  gap: $p0;
+  width: sizes.$w0;
+  padding: sizes.$p0 sizes.$p0 * 2 sizes.$p0 * 2 sizes.$p0 * 2;
+  border: 1px solid v-bind('colors.borderColor');
+  background: v-bind('colors.baseColor');
+  gap: sizes.$p0;
 
-  @include border-radius;
+  @include borders.border-radius;
 
   & > * {
     height: 1em;
@@ -58,8 +64,8 @@ const {step} = useViewLoader();
     width: 100%;
     min-width: 100%;
     height: 1em;
-    margin-bottom: $p0;
-    padding-top: $p0;
+    margin-bottom: sizes.$p0;
+    padding-top: sizes.$p0;
   }
 }
 

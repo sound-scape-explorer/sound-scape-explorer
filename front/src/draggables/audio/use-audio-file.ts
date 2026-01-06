@@ -1,6 +1,6 @@
 import {AudioBufferError} from 'src/common/Errors';
 import {useAudioQuery} from 'src/composables/use-audio-query';
-import {type BlockDetails} from 'src/composables/use-storage-aggregated-interval-details';
+import {type AggregationWindow} from 'src/composables/use-intervals';
 import {TIMEOUT} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {useWavesurferLoader} from 'src/draggables/audio/use-wavesurfer-loader';
@@ -8,40 +8,40 @@ import {getBitDepthFromWav} from 'src/utils/audio';
 import {ref} from 'vue';
 import {encodeWavFileFromAudioBuffer} from 'wav-file-encoder';
 
-const block = ref<BlockDetails | null>(null);
+const window = ref<AggregationWindow | null>(null);
 const duration = ref<number>(0); // seconds
 const bitDepth = ref<number | null>(null);
 const isLoading = ref<boolean>(false);
 
 export function useAudioFile() {
-  const {loadSlice} = useWavesurferLoader();
+  const {load: loadAudio} = useWavesurferLoader();
   const {context} = useAudioContext();
   const {queryFile} = useAudioQuery();
 
-  const select = (newBlock: BlockDetails | null) => {
+  const select = (newWindow: AggregationWindow | null) => {
     if (isLoading.value) {
       return;
     }
 
-    if (newBlock === null) {
-      block.value = null;
+    if (newWindow === null) {
+      window.value = null;
       return;
     }
 
-    if (block.value === newBlock) {
+    if (window.value === newWindow) {
       return;
     }
 
-    block.value = newBlock;
+    window.value = newWindow;
   };
 
   const loadFile = async () => {
-    if (isLoading.value || block.value === null || context.value === null) {
+    if (isLoading.value || window.value === null || context.value === null) {
       return;
     }
 
     isLoading.value = true;
-    const arrayBuffer = await queryFile(block.value);
+    const arrayBuffer = await queryFile(window.value);
     bitDepth.value = getBitDepthFromWav(arrayBuffer);
 
     if (arrayBuffer.byteLength === 0) {
@@ -52,20 +52,20 @@ export function useAudioFile() {
     duration.value = audioBuffer.duration;
     const wav = encodeWavFileFromAudioBuffer(audioBuffer, 0);
     const blob = new Blob([wav]);
-    loadSlice(blob);
+    loadAudio(blob);
 
-    // INFO: dummy timeout for waiting waveform and spectrogram renders
+    // INFO: "dummy" timeout for waiting waveform and spectrogram renders
     setTimeout(() => {
       isLoading.value = false;
     }, TIMEOUT / 2);
   };
 
   return {
-    block: block,
-    duration: duration,
-    bitDepth: bitDepth,
-    select: select,
-    isLoading: isLoading,
-    loadFile: loadFile,
+    window,
+    duration,
+    bitDepth,
+    select,
+    isLoading,
+    loadFile,
   };
 }

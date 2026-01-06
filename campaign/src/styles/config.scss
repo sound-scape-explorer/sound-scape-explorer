@@ -1,0 +1,41 @@
+@use "src/styles/layout";
+@use "src/styles/colors";
+
+$x: layout.$padding-x;
+
+// noinspection Stylelint
+@mixin __config-item-columns($n) {
+  $first: 6em;
+  $second: 4em;
+  $full: calc(100% - $x * 2);
+  $available: calc($full - $first - $second);
+
+  gap: layout.$p;
+  grid-template-columns: $first $second repeat($n, calc($available / $n));
+  width: $full;
+  margin-bottom: layout.$p;
+  padding-bottom: layout.$p;
+  border-bottom: colors.$border-grey;
+}
+
+@mixin config-item-container($n, $align:center) {
+  display: grid;
+
+  @include __config-item-columns($n);
+
+  & > span, h2 {
+    display: flex;
+    justify-content: #{$align};
+    align-items: #{$align};
+  }
+
+  & > h2 {
+    font-weight: bold;
+  }
+}
+
+@mixin config-item-form($n) {
+  display: grid;
+
+  @include __config-item-columns($n);
+}

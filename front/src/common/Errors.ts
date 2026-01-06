@@ -32,18 +32,8 @@ export class AudioFileError extends BaseError {}
 
 export class AudioContextError extends BaseError {}
 
-export class DraggableHistogramsError extends BaseError {}
-
 export class DraggableHeatmapsError extends BaseError {}
-
-export class StorageRangesError extends BaseError {}
 
 export class ScatterHoversError extends BaseError {}
 
 export class ScatterFeaturesError extends BaseError {}
-
-export class ColorByLabelError extends BaseError {}
-
-export class StorageAggregatedLabelsErrors extends BaseError {}
-
-export class StorageLabelsError extends BaseError {}

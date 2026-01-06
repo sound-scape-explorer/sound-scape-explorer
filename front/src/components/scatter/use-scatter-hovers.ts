@@ -1,84 +1,55 @@
 import {ScatterHoversError} from 'src/common/Errors';
-import {useDate} from 'src/composables/use-date';
-import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {usePlotlyHoverTemplate} from 'src/components/scatter/use-plotly-hover-template';
+import {useDateTime} from 'src/composables/use-date-time';
+import {useIntervals} from 'src/composables/use-intervals';
+import {STRING_DELIMITER} from 'src/constants';
 
 export function useScatterHovers() {
-  const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
-  const {convertTimestampToIsoDate} = useDate();
-  const {labelProperties} = useStorageLabels();
-  const {aggregatedLabels} = useStorageAggregatedLabels();
+  const {intervals} = useIntervals();
+  const {generate: generateTemplate} = usePlotlyHoverTemplate();
+  const {timestampToString} = useDateTime();
 
-  const generateTemplate = (length: number) => {
-    let template = '';
-
-    for (let i = 0; i < length; i += 1) {
-      template += `<br><b>%{text[${i}][0]}: </b>%{text[${i}][1]}`;
-    }
-
-    return template;
-  };
-
-  const generateHovers = (length: number) => {
-    if (
-      aggregatedIntervalDetails.value === null ||
-      labelProperties.value === null ||
-      aggregatedLabels.value === null
-    ) {
+  const generateHovers = () => {
+    if (intervals.value === null) {
       throw new ScatterHoversError('data unavailable');
     }
 
-    const intervalDetailsPointer = aggregatedIntervalDetails.value;
-    const labelPropertiesPointer = labelProperties.value;
-    const labelValuesPointer = aggregatedLabels.value;
+    const hovers: string[][][] = new Array(intervals.value.length);
+    let hoverLength = -1;
 
-    const hovers = new Array(length);
-    let textLengthMax = -1;
-
-    for (let i = 0; i < length; i += 1) {
-      const offset = 1;
-      const intervalDetails = intervalDetailsPointer[i];
-      const labelValues = labelValuesPointer[i];
-
-      const textLength =
-        offset + intervalDetails.length + labelPropertiesPointer.length;
-      if (textLength > textLengthMax) {
-        textLengthMax = textLength;
-      }
-
-      const texts: string[][] = new Array(textLength);
+    for (let i = 0; i < intervals.value.length; i += 1) {
+      const interval = intervals.value[i];
+      const hover: string[][] = [];
 
       // interval index
-      texts[0] = ['Interval', i.toString()];
+      hover.push(['Interval', i.toString()]);
 
       // dates
-      for (let iD = 0; iD < intervalDetails.length; iD += 1) {
-        const iDO = iD + offset;
-        const block = intervalDetails[iD];
-        texts[iDO] = ['Date', convertTimestampToIsoDate(block.start)];
+      hover.push(['Start', timestampToString(interval.start)]);
+      hover.push(['End', timestampToString(interval.end)]);
+
+      // tags
+      for (const [tagName, tagValues] of Object.entries(interval.tags)) {
+        const tagValue = tagValues.join(STRING_DELIMITER);
+        hover.push([tagName, tagValue]);
       }
 
-      // user labels
-      for (let p = 0; p < labelPropertiesPointer.length; p += 1) {
-        const pO = p + offset + intervalDetails.length;
-        const property = labelPropertiesPointer[p];
-        const label = labelValues[p];
-        texts[pO] = [property, label];
-      }
+      hovers[i] = hover;
 
-      hovers[i] = texts;
+      if (hover.length > hoverLength) {
+        hoverLength = hover.length;
+      }
     }
 
-    const template = generateTemplate(textLengthMax);
+    const template = generateTemplate(hoverLength);
 
     return {
-      hovers: hovers,
-      template: template,
+      hovers,
+      template,
     };
   };
 
   return {
-    generateHovers: generateHovers,
+    generateHovers,
   };
 }

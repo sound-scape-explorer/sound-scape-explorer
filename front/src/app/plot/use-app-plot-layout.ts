@@ -4,7 +4,7 @@ import {useClientSettings} from 'src/composables/use-client-settings';
 import {usePlotlyMargins} from 'src/composables/use-plotly-margins';
 
 export function useAppPlotLayout() {
-  const {plotBackground} = useClientSettings();
+  const {plotBackground, plotFontSize} = useClientSettings();
   const {generatePlotlyMargins} = usePlotlyMargins();
 
   const generateLayout = (props: AppPlotProps): Partial<Layout> => {
@@ -15,6 +15,9 @@ export function useAppPlotLayout() {
       showlegend: !!props.legend,
       clickmode: 'event',
       margin: generatePlotlyMargins(),
+      font: {
+        size: plotFontSize.value,
+      },
       xaxis: {
         title: props.xTitle,
         showticklabels: !props.hideXLegend,
@@ -22,6 +25,8 @@ export function useAppPlotLayout() {
           visible: props.showRange,
         },
         automargin: true,
+        tickvals: props.xTickIndices,
+        ticktext: props.xTicks,
       },
       yaxis: {
         title: props.yTitle,
@@ -41,6 +46,6 @@ export function useAppPlotLayout() {
   };
 
   return {
-    generateLayout: generateLayout,
+    generateLayout,
   };
 }

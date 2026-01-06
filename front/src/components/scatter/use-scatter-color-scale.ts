@@ -1,71 +1,56 @@
-import {useFiles} from 'src/composables/use-files';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useColorBy1h} from 'src/draggables/colors/use-color-by-1h';
-import {useColorBy10min} from 'src/draggables/colors/use-color-by-10min';
-import {useColorByCyclingDay} from 'src/draggables/colors/use-color-by-cycling-day';
-import {useColorByDay} from 'src/draggables/colors/use-color-by-day';
-import {useColorByIndicator} from 'src/draggables/colors/use-color-by-indicator';
+import {useAggregations} from 'src/composables/use-aggregations';
+import {useConfig} from 'src/composables/use-config';
+import {ColorOption} from 'src/constants';
+import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
+import {useColorByDayOrNight} from 'src/draggables/colors/use-color-by-day-or-night';
+import {useColorByHoursInDay} from 'src/draggables/colors/use-color-by-hours-in-day';
 import {useColorByIntervalIndex} from 'src/draggables/colors/use-color-by-interval-index';
-import {useColorByLabel} from 'src/draggables/colors/use-color-by-label';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
-import {useColorState} from 'src/draggables/colors/use-color-state';
+import {useColorByTag} from 'src/draggables/colors/use-color-by-tag';
+import {useColorType} from 'src/draggables/colors/use-color-type';
+import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {ref} from 'vue';
 
 const scale = ref<string[] | null>(null);
 
 export function useScatterColorScale() {
-  const {files} = useFiles();
-  const {labelPropertiesAsColorTypes} = useStorageLabels();
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {isIndicators, isLabels} = useColorState();
-  const {getColor} = useColorByIntervalIndex();
-  const {getColorByOneHour} = useColorBy1h();
-  const {getColorByTenMinutes} = useColorBy10min();
-  const {getColorByDay} = useColorByDay();
-  const {getColorByCyclingDay} = useColorByCyclingDay();
-  const {get: getColorByLabel} = useColorByLabel();
-  const {get: getColorByIndicator} = useColorByIndicator();
-  const {criteria} = useColorSelection();
+  const {config} = useConfig();
+  const {aggregations} = useAggregations();
+  const {isAcoustic, isTag} = useColorType();
+  const {get: getColorByIntervalIndex} = useColorByIntervalIndex();
+  const {get: getColorByDayOrNight} = useColorByDayOrNight();
+  const {get: getColorByHoursInDay} = useColorByHoursInDay();
+  const {get: getColorByTag} = useColorByTag();
+  const {get: getColorByAcoustic} = useColorByAcoustic();
+  const {option: colorOption} = useColoringState();
 
   const generate = async () => {
     return new Promise((resolve, reject) => {
-      if (
-        labelPropertiesAsColorTypes.value === null ||
-        files.value === null ||
-        aggregatedTimestamps.value === null
-      ) {
+      if (config.value === null || aggregations.value === null) {
         reject(new Error('generateColorScale: missing props'));
         return;
       }
 
       // number of intervals
-      const count = aggregatedTimestamps.value.length;
+      const count = aggregations.value.timestamps.length;
       const newScale: string[] = new Array(count);
 
       for (let i = 0; i < count; i += 1) {
-        const timestamp = aggregatedTimestamps.value[i];
+        const timestamp = aggregations.value.timestamps[i];
 
-        if (isLabels.value) {
-          newScale[i] = getColorByLabel(i);
-        } else if (isIndicators.value) {
-          newScale[i] = getColorByIndicator(i);
+        if (isTag.value) {
+          newScale[i] = getColorByTag(i);
+        } else if (isAcoustic.value) {
+          newScale[i] = getColorByAcoustic(i);
         } else {
-          switch (criteria.value) {
-            case 'cycleDay':
-              newScale[i] = getColorByCyclingDay(timestamp);
+          switch (colorOption.value) {
+            case ColorOption.enum.HoursInDay:
+              newScale[i] = getColorByHoursInDay(timestamp);
               break;
-            case 'intervalIndex':
-              newScale[i] = getColor(i, count);
+            case ColorOption.enum.IntervalIndex:
+              newScale[i] = getColorByIntervalIndex(i, count);
               break;
-            case 'isDay':
-              newScale[i] = getColorByDay(timestamp);
-              break;
-            case 'by1h':
-              newScale[i] = getColorByOneHour(timestamp);
-              break;
-            case 'by10min':
-              newScale[i] = getColorByTenMinutes(timestamp);
+            case ColorOption.enum.DayOrNight:
+              newScale[i] = getColorByDayOrNight(timestamp);
               break;
           }
         }
@@ -81,8 +66,8 @@ export function useScatterColorScale() {
   };
 
   return {
-    scale: scale,
-    generateColorScale: generate,
-    resetColorScale: reset,
+    scale,
+    generate,
+    reset,
   };
 }

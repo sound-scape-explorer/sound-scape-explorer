@@ -13,8 +13,8 @@ sudo apt install -y gcc curl ffmpeg hdf5-tools ca-certificates gnupg
 # python
 sudo apt install -y software-properties-common
 sudo add-apt-repository -y ppa:deadsnakes/ppa
-sudo apt install -y python3.10 python3.10-distutils python3.10-dev python3-pip python3.10-venv
-curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+sudo apt install -y python3.11 python3.11-distutils python3.11-dev python3-pip python3.11-venv
+curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
 
 # printing versions
-python3.10 --version
+python3.11 --version

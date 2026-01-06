@@ -58,6 +58,6 @@ export function useTemporalHloc() {
   };
 
   return {
-    calculate: calculate,
+    calculate,
   };
 }

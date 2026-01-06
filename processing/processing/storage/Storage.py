@@ -1,247 +1,152 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
-import numpy
-from h5py import Dataset, File
-from rich import print
+import h5py
+import numpy as np
+from h5py import File, Dataset, Group, Datatype
 
-from processing.storage.StorageCompression import StorageCompression
 from processing.storage.StorageMode import StorageMode
-from processing.storage.StoragePath import StoragePath
-from processing.utils.get_version_from_setup import get_version_from_setup
+
+_Endpoint = Dataset | Group | Datatype
+_Attributes = dict[str, str]
+
+_compression = "gzip"
 
 
 class Storage:
-    """The interface for handling HDF5 storage file."""
-
-    def __init__(
-        self,
-        path: str,
-    ) -> None:
+    def __init__(self, path: str):
         self.path = path
-        self.__set_file_or_fail()
+        self._file = self._open()
 
-    def __set_file_or_fail(self) -> None:
-        try:
-            self.__file = File(
-                self.path,
-                StorageMode.rw_or_create.value,
-            )
-        except BlockingIOError:
-            raise RuntimeError(f"Unable to load file {self.path}.")
-        except TypeError:
-            raise FileNotFoundError(f"Unable to find file {self.path}.")
-        except OSError:
-            raise TypeError(f"Unable to load file {self.path}.")
+    def close(self):
+        self._file.close()
 
-    def close(self) -> None:
-        self.__file.close()
+    def _open(self):
+        return File(self.path, StorageMode.RW_OR_CREATE.value)
 
-    def load(self) -> None:
-        self.__set_file_or_fail()
+    def read_strings(self, path: str) -> list[Any]:
+        dataset = self.read(path)
+        strings = dataset.asstr()[:]
+        assert isinstance(strings, np.ndarray)
+        return strings.tolist()
 
-    @staticmethod
-    def __get_path_as_string(path: Union[StoragePath, str]) -> str:
-        if type(path) is StoragePath:
-            path = path.value
+    def read(self, path: str) -> Dataset:
+        exists = self.exists(path)
+        if not exists:
+            raise KeyError(f"Storage: path {path} not found")
 
-        path = str(path)
-        return path
+        endpoint: _Endpoint = self._file[path]
 
-    @staticmethod
-    def __write_version_to_dataset(
-        dataset: Dataset,
-    ) -> Dataset:
-        # Attach app version to all datasets
-        dataset.attrs["version"] = get_version_from_setup()
+        if not isinstance(endpoint, Dataset):
+            raise KeyError(f"Storage: path {path} does not contain a dataset")
+
+        dataset: Dataset = endpoint
+
+        is_empty = 0 in dataset.shape
+        if is_empty:
+            raise KeyError(f"Storage: empty dataset")
+            # return []
+
         return dataset
 
-    def write(
-        self,
-        path: Union[StoragePath, str],
-        data: Any,
-        compression: Optional[bool] = False,
-        dtype: Optional[Any] = None,
-        shape: Optional[Any] = None,
-        attributes: Optional[Dict[str, str]] = None,
-    ) -> None:
-        path = self.__get_path_as_string(path)
-
-        if self.exists_dataset(path):
-            print(f"Dataset already exists: {path}")
-            return
-
-        dataset = self.__file.create_dataset(
-            path,
-            data=data,
-            compression=StorageCompression.gzip.value if compression else None,
-            dtype=dtype,
-            shape=shape,
-        )
-
-        if attributes is not None:
-            for k, v in attributes.items():
-                dataset.attrs[k] = v
-
-        self.__write_version_to_dataset(dataset)
-
-    def create_attribute(
-        self,
-        key: str,
-        value: Any,
-        path: Union[StoragePath, str],
-    ) -> None:
-        path = self.__get_path_as_string(path)
-
-        if self.exists_attribute(path, key):
-            print(f"Attribute already exists: {path} => {key}")
-            return
-
-        self.__file[path].attrs[key] = value
-
-    def exists_attribute(
-        self,
-        path: Union[StoragePath, str],
-        key: str,
-    ) -> bool:
-        path = self.__get_path_as_string(path)
-
+    def exists(self, path: str):
         try:
-            _ = self.read(path).attrs[key]
+            _ = self._file[path]
             return True
         except KeyError:
             return False
 
-    def exists_dataset(
-        self,
-        path: Union[StoragePath, str],
-    ) -> bool:
-        path = self.__get_path_as_string(path)
+    def delete(self, path: str):
+        exists = self.exists(path)
 
-        try:
-            _ = self.read(path)
-            return True
-        except KeyError:
-            return False
-
-    # TODO: This can output a group!
-    def read(
-        self,
-        path: Union[StoragePath, str],
-    ) -> Dataset:
-        try:
-            path = self.__get_path_as_string(path)
-            payload = self.__file[path]
-            return payload  # type: ignore
-        except KeyError:
-            raise KeyError(f"Unable to find storage path {path}.")
-
-    # Silent delete
-    def delete(
-        self,
-        path: Union[StoragePath, str],
-    ) -> None:
-        try:
-            if isinstance(path, str):
-                del self.__file[path]
-            elif type(path) is StoragePath:
-                del self.__file[path.value]
-        except KeyError:
+        if not exists:
             return
 
-    def write_empty_group(self, path: str) -> None:
-        self.__file.create_group(path)
+        del self._file[path]
 
-    def write_binary(
+    def _write_attributes(
         self,
         path: str,
-        binary_data: bytes,
-    ) -> None:
-        binary_array = numpy.frombuffer(binary_data, dtype="uint8")
+        attributes: _Attributes | None = None,
+    ):
+        if attributes is None:
+            return
 
-        dataset = self.__file.create_dataset(
+        exists = self.exists(path)
+
+        if not exists:
+            return
+
+        for k, v in attributes.items():
+            self._file[path].attrs[k] = v
+
+    # for datasets
+    def write(
+        self,
+        path: str,
+        data: np.ndarray,
+        attributes: _Attributes | None = None,
+    ):
+        exists = self.exists(path)
+
+        if exists:
+            raise KeyError(f"Storage: path {path} already exists")
+
+        self._file.create_dataset(
             name=path,
-            data=binary_array,
-            compression=StorageCompression.gzip.value,
+            data=data,
+            compression=_compression,
         )
 
-        self.__write_version_to_dataset(dataset)
+        self._write_attributes(path, attributes)
+
+    def write_group(
+        self,
+        path: str,
+        data: dict[str, str],
+    ):
+        exists = self.exists(path)
+
+        if exists:
+            raise KeyError(f"Storage: path {path} already exists")
+
+        self._file.create_group(path)
+
+        for k, v in data.items():
+            self._file[path].attrs[k] = v
 
     def append(
         self,
         path: str,
-        data: Union[List[List[float]], List[List[str]]],
-        compression: bool = False,
-        attributes: Optional[Dict[str, str]] = None,
-    ) -> None:
-        length = len(data)
-        dimensions = len(data[0])
+        data: np.ndarray,
+        attributes: _Attributes | None = None,
+    ):
+        length = data.shape[0]
 
-        if not self.exists_dataset(path):
-            dataset = self.__file.create_dataset(
+        # handle variable string lengths
+        if data.dtype.kind == "U":
+            data = np.array(data, dtype=h5py.special_dtype(vlen=str))
+
+        infinite_shape = (None, *data.shape[1:])
+        exists = self.exists(path)
+
+        if not exists:
+            # create
+            self._file.create_dataset(
                 name=path,
                 data=data,
-                compression=(
-                    StorageCompression.gzip.value if compression is True else None
-                ),
+                compression=_compression,
                 chunks=True,
-                shape=(length, dimensions),
-                maxshape=(None, dimensions),
+                shape=data.shape,
+                maxshape=infinite_shape,
             )
-
         else:
-            dataset: Dataset = self.__file[path]  # type: ignore
+            # actual appending
+            endpoint: _Endpoint = self._file[path]
+            assert isinstance(endpoint, Dataset), "Please append to a dataset"
+            dataset: Dataset = endpoint
             new_shape = dataset.shape[0] + length
             dataset.resize(new_shape, axis=0)
             dataset[-length:] = data
 
-        if attributes is not None:
-            for k, v in attributes.items():
-                dataset.attrs[k] = v
-
-        self.__write_version_to_dataset(dataset)
-
-    @staticmethod
-    def make_rectangular(
-        non_rectangular_array: List[List[Any]],
-        fill_with=None,
-    ):
-        # Determine the maximum length of the sub-arrays
-        max_length = max(len(sub_array) for sub_array in non_rectangular_array)
-
-        # Iterate through each sub-array and append None values to the end
-        # until it has the maximum length
-        rectangular_array = []
-        for sub_array in non_rectangular_array:
-            if len(sub_array) < max_length:
-                sub_array += [fill_with] * (max_length - len(sub_array))
-            rectangular_array.append(sub_array)
-
-        # Return the new rectangular array
-        return rectangular_array
-
-    @staticmethod
-    def trim_rectangular(
-        rectangular_array,
-        trim_with=None,
-    ):
-        jagged_array = []
-
-        for sub_list in rectangular_array:
-            trimmed_list = [e for e in sub_list if e is not trim_with]
-            jagged_array.append(trimmed_list)
-
-        return jagged_array
-
-    @staticmethod
-    def convert_dataset_to_string_list(dataset: Dataset) -> List[str]:
-        (length,) = dataset.shape
-
-        if length == 0:
-            return []
-
-        if dataset.dtype == "object":  # dataset of strings
-            string_list = list(dataset.asstr()[:])
-        else:
-            string_list = [str(v) for v in dataset]
-
-        return string_list
+        self._write_attributes(path, attributes)
+        self._file.flush()

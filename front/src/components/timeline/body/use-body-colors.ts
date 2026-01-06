@@ -1,25 +1,25 @@
 import chroma from 'chroma-js';
-import {useFiles} from 'src/composables/use-files';
-import {useColorSelection} from 'src/draggables/colors/use-color-selection';
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {useConfig} from 'src/composables/use-config';
 import {ref} from 'vue';
 
 const scale = ref();
 
 export function useBodyColors() {
-  const {flavor} = useColorSelection();
-  const {files} = useFiles();
+  const {config} = useConfig();
+  const {colorsFlavor} = useClientSettings();
 
   const generate = () => {
-    if (files.value === null) {
+    if (config.value === null) {
       return;
     }
 
-    const l = files.value.length;
-    scale.value = chroma.scale(flavor.value).colors(l);
+    const l = config.value.files.length;
+    scale.value = chroma.scale(colorsFlavor.value).colors(l);
   };
 
   return {
-    scale: scale,
-    generate: generate,
+    scale,
+    generate,
   };
 }

@@ -1,25 +1,19 @@
-import {useBandSelection} from 'src/composables/use-band-selection';
-import {useExtractorSelection} from 'src/composables/use-extractor-selection';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useReducerSelection} from 'src/composables/use-reducer-selection';
+import {useViewSelection} from 'src/composables/use-view-selection';
 import {computed} from 'vue';
 
-// todo: performance of this hook can be improved
 export function useViewState() {
-  const {band} = useBandSelection();
-  const {integration} = useIntegrationSelection();
-  const {extractor} = useExtractorSelection();
-  const {reducer} = useReducerSelection();
+  const {extraction, band, integration, reducer} = useViewSelection();
 
+  // TODO: maybe extract this computed
   const hasView = computed<boolean>(
     () =>
+      extraction.value !== null &&
       band.value !== null &&
       integration.value !== null &&
-      extractor.value !== null &&
       reducer.value !== null,
   );
 
   return {
-    hasView: hasView,
+    hasView,
   };
 }

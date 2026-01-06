@@ -1,45 +1,46 @@
-<script lang="ts" setup="">
-import {IonIcon} from '@ionic/vue';
-import {chevronExpand, eyeOffOutline, eyeOutline} from 'ionicons/icons';
+<script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import FilteringInfo from 'src/components/filtering-info/filtering-info.vue';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
 
-const {hasIndicator, isDisplay, toggleDisplay, toggleExpanded} =
+const {hasExtractor, isDisplay, toggleDisplay, toggleExpanded} =
   useDraggableTemporal();
 </script>
 
 <template>
   <AppDraggableSidebar>
     <AppButton
-      :disabled="!hasIndicator"
+      :disabled="!hasExtractor"
       :handle-click="toggleExpanded"
       size="tiny"
       small-tooltip
       tooltip="Expand horizontally"
       tooltip-placement="left"
     >
-      <IonIcon
-        :class="$style.rotate"
-        :icon="chevronExpand"
+      <AppIcon
+        icon="expandHorizontal"
+        size="small"
       />
     </AppButton>
 
     <AppButton
-      :disabled="!hasIndicator"
+      :disabled="!hasExtractor"
       :handle-click="toggleDisplay"
       :tooltip="isDisplay ? 'Chart on' : 'Chart off'"
       small-tooltip
       tooltip-placement="left"
     >
-      <IonIcon
+      <AppIcon
         v-if="!isDisplay"
-        :icon="eyeOffOutline"
+        icon="eyeOff"
+        size="small"
       />
-      <IonIcon
+      <AppIcon
         v-if="isDisplay"
-        :icon="eyeOutline"
+        icon="eyeOn"
+        size="small"
       />
     </AppButton>
 
@@ -48,7 +49,9 @@ const {hasIndicator, isDisplay, toggleDisplay, toggleExpanded} =
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/fx';
+
 .rotate {
-  @include rotate-90;
+  @include fx.rotate-90;
 }
 </style>

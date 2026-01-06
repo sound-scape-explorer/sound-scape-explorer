@@ -16,16 +16,16 @@ export function useAppNotification() {
     description: string,
   ): void => {
     const notification: Notification = {
-      type: type,
-      title: title,
-      description: description,
+      type,
+      title,
+      description,
     };
 
     notifications.value = [...notifications.value, notification];
   };
 
   return {
-    notifications: notifications,
-    notify: notify,
+    notifications,
+    notify,
   };
 }

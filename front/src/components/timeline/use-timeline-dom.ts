@@ -8,13 +8,13 @@ export interface OverviewSize {
 
 export type BodySize = Omit<OverviewSize, 'height'>; // dynamic height
 
-const overviewContainer = ref<Nullable<HTMLDivElement>>(null);
-const overviewCanvas = ref<Nullable<HTMLCanvasElement>>(null);
+const overviewContainer = ref<HTMLDivElement | null>(null);
+const overviewCanvas = ref<HTMLCanvasElement | null>(null);
 const overviewWidth = ref<number>(0);
 const overviewHeight = ref<number>(0);
 
-const bodyContainer = ref<Nullable<HTMLDivElement>>(null);
-const bodyCanvas = ref<Nullable<HTMLCanvasElement>>(null);
+const bodyContainer = ref<HTMLDivElement | null>(null);
+const bodyCanvas = ref<HTMLCanvasElement | null>(null);
 const bodyWidth = ref<number>(0);
 const bodyHeight = ref<number>(0);
 

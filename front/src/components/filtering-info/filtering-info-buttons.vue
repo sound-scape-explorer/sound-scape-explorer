@@ -1,70 +1,78 @@
-<script lang="ts" setup="">
-import {IonIcon} from '@ionic/vue';
-import {
-  arrowBackOutline,
-  arrowForwardOutline,
-  arrowRedoOutline,
-  arrowUndoOutline,
-} from 'ionicons/icons';
+<script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import AppIcon from 'src/app/app-icon.vue';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 
-const {back, forward, canUndo, canRedo, redo, undo, hasClicked} =
-  useIntervalSelector();
+const {back, forward, canUndo, canRedo, redo, undo, hasInterval} =
+  useIntervalTransport();
+
+const {colors} = useThemeColors();
 </script>
 
 <template>
   <div :class="$style.container">
     <AppButton
-      :disabled="!hasClicked"
+      :disabled="!hasInterval"
       :handle-click="back"
       tooltip="Back"
       tooltip-placement="top"
     >
-      <IonIcon :icon="arrowBackOutline" />
-    </AppButton>
-
-    <AppButton
-      :disabled="!hasClicked"
-      :handle-click="forward"
-      tooltip="Forward"
-      tooltip-placement="top"
-    >
-      <IonIcon
-        :class="$style.button"
-        :icon="arrowForwardOutline"
+      <AppIcon
+        icon="back"
+        size="small"
       />
     </AppButton>
 
     <AppButton
-      :disabled="!canUndo || !hasClicked"
+      :disabled="!hasInterval"
+      :handle-click="forward"
+      tooltip="Forward"
+      tooltip-placement="top"
+    >
+      <AppIcon
+        icon="forward"
+        size="small"
+      />
+    </AppButton>
+
+    <AppButton
+      :disabled="!canUndo || !hasInterval"
       :handle-click="undo"
       tooltip="Undo"
       tooltip-placement="top"
     >
-      <IonIcon :icon="arrowUndoOutline" />
+      <AppIcon
+        icon="undo"
+        size="small"
+      />
     </AppButton>
 
     <AppButton
-      :disabled="!canRedo || !hasClicked"
+      :disabled="!canRedo || !hasInterval"
       :handle-click="redo"
       tooltip="Redo"
       tooltip-placement="top"
     >
-      <IonIcon :icon="arrowRedoOutline" />
+      <AppIcon
+        icon="redo"
+        size="small"
+      />
     </AppButton>
   </div>
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .container {
   display: flex;
+  gap: sizes.$p0;
   justify-content: flex-start;
-  margin-top: $g0;
-  gap: $p0;
+  margin-top: sizes.$g0;
 
   * {
-    color: $white;
+    color: v-bind('colors.primaryColor');
   }
 }
 </style>

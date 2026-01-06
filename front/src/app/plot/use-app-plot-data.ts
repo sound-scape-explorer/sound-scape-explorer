@@ -42,20 +42,20 @@ export function useAppPlotData(props: AppPlotProps) {
       data[i] = {
         type: 'scatter',
         mode: 'lines',
-        name: name,
+        name,
         x: props.labels[i],
         y: props.values[i],
-        hovertemplate: hovertemplate,
-        hoverinfo: hoverinfo,
-        fill: fill,
-        showlegend: showlegend,
+        hovertemplate,
+        hoverinfo,
+        fill,
+        showlegend,
         fillcolor: `rgba(${chroma(props.colors[i])
           .brighten()
           .alpha(0.33)
           .rgba()
           .join(',')})`,
         marker: {
-          color: color,
+          color,
           size: 6,
         },
       };
@@ -65,6 +65,6 @@ export function useAppPlotData(props: AppPlotProps) {
   };
 
   return {
-    generateData: generateData,
+    generateData,
   };
 }

@@ -1,29 +1,36 @@
 import {Csv} from 'src/common/csv';
 import {useExportName} from 'src/composables/use-export-name';
-import {useStorageDigested} from 'src/composables/use-storage-digested';
+import {useMetricData} from 'src/composables/use-metric-data';
+import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsChart} from 'src/draggables/heatmaps/use-draggable-heatmaps-chart';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 
 export function useDraggableHeatmapsExport() {
-  const {digested} = useStorageDigested();
+  const {metricData} = useMetricData();
+  const {isPairing} = useDraggableHeatmaps();
+  const {a, b} = useDraggableHeatmapsTags();
   const {x, y, series} = useDraggableHeatmapsChart();
   const {generate} = useExportName();
 
   const handleClick = () => {
     if (
-      digested.value === null ||
+      metricData.value === null ||
+      a.value === null ||
       x.value.length === 0 ||
       series.value.length === 0
     ) {
       return;
     }
 
-    const isPairing = digested.value.digester.type === '2d-pairing';
-
+    const metric = metricData.value.metric;
     const csv = new Csv();
-    csv.addColumn('y');
+    const colTitle = a.value;
+    const rowTitle = b.value ? b.value : a.value;
+
+    csv.addColumn(metric.impl);
 
     x.value.forEach((x) => {
-      csv.addColumn(x);
+      csv.addColumn(`${colTitle}: ${x}`);
     });
 
     series.value.forEach((vs, index) => {
@@ -31,9 +38,9 @@ export function useDraggableHeatmapsExport() {
       if (series.value.length === 1) {
         csv.addToCurrentRow('value');
       } else if (isPairing) {
-        csv.addToCurrentRow(y.value[index]);
+        csv.addToCurrentRow(`${rowTitle}: ${y.value[index]}`);
       } else {
-        csv.addToCurrentRow(x.value[index]);
+        csv.addToCurrentRow(`${rowTitle}: ${x.value[index]}`);
       }
 
       vs.forEach((value) => {
@@ -46,6 +53,6 @@ export function useDraggableHeatmapsExport() {
   };
 
   return {
-    handleClick: handleClick,
+    handleClick,
   };
 }

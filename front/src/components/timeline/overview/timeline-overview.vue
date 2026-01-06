@@ -3,13 +3,16 @@ import {useElementSize} from '@vueuse/core';
 import {useOverviewHandlers} from 'src/components/timeline/overview/use-overview-handlers';
 import {useOverviewLifecycles} from 'src/components/timeline/overview/use-overview-lifecycles';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 
 const {container, canvas} = useTimelineDom().overview;
 const {width, height} = useElementSize(container);
 const {handleMouseDown, handleMouseLeave, handleMouseUp, handleMouseMove} =
   useOverviewHandlers();
 
-useOverviewLifecycles({width: width, height: height});
+const {colors} = useThemeColors();
+
+useOverviewLifecycles({width, height});
 </script>
 
 <template>
@@ -31,12 +34,14 @@ useOverviewLifecycles({width: width, height: height});
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+@use 'src/styles/borders';
+
 .container {
   width: 100%;
-  height: $p0 * 4;
+  height: sizes.$p0 * 4;
   user-select: none;
-  background: white;
 
-  @include border-0;
+  @include borders.border-0(v-bind('colors.borderColor'));
 }
 </style>

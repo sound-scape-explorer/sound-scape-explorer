@@ -1,27 +1,28 @@
-import 'sass-reset/src/reset.scss';
-import './styles/main.scss';
+import './styles/main-new.scss';
 
-import {LoadedZone} from './controllers/LoadedZone';
-import {LoadingZone} from './controllers/LoadingZone';
-import {Title} from './controllers/Title';
+import {AudioModuleController} from 'src/renderer/controllers/audio-module-controller';
+import {CampaignModuleController} from 'src/renderer/controllers/campaign-module-controller';
+import {IconsController} from 'src/renderer/controllers/icons-controller';
+import {PageController} from 'src/renderer/controllers/page-controller';
+import {ThemeController} from 'src/renderer/controllers/theme-controller';
+import {VersionStatusController} from 'src/renderer/controllers/version-status-controller';
+import {VisualisationModuleController} from 'src/renderer/controllers/visualisation-module-controller';
 
-new Title();
-const loadingZone = new LoadingZone();
-const loadedZone = new LoadedZone();
-
-export const render = async () => {
-  const audioStatus = await window.electronAPI.getAudioStatus();
-
-  if (audioStatus === false) {
-    loadingZone.show();
-    loadedZone.hide();
-    return;
-  }
-
-  const audioPath = loadingZone.audioPath;
-
-  loadingZone.hide();
-  loadedZone.show(audioPath);
+const controllers = {
+  icons: new IconsController(),
+  theme: new ThemeController(),
+  page: new PageController(),
+  campaignModule: new CampaignModuleController(),
+  audioModule: new AudioModuleController(),
+  visualisationModule: new VisualisationModuleController(),
+  versionStatus: new VersionStatusController(),
 };
 
-render().then();
+document.addEventListener('DOMContentLoaded', async () => {
+  controllers.icons.render();
+  controllers.page.render();
+  controllers.theme.render();
+  controllers.campaignModule.render();
+  await controllers.versionStatus.render();
+  await controllers.audioModule.render();
+});

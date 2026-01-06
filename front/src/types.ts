@@ -1,3 +1,9 @@
+import {type Data} from 'plotly.js-dist-min';
+
+export type PlotlyData = Data & {
+  hoverongaps?: boolean;
+};
+
 export type NaiveSize = 'tiny' | 'small' | 'medium' | 'large';
 
 export type NaiveTooltipPlacement =

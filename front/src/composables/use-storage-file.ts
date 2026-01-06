@@ -1,5 +1,5 @@
 import {StorageFileError} from 'src/common/Errors';
-import {useDraggables} from 'src/composables/use-draggables';
+import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useWorker} from 'src/composables/use-worker';
 import {useOpenLock} from 'src/draggables/open/use-open-lock';
 import {computed, ref} from 'vue';
@@ -30,7 +30,7 @@ export function useStorageFile() {
     validateFile(inputFile);
     file.value = inputFile;
     closeDraggable('open');
-    open('view');
+    open(DraggableKey.enum.view);
     isLocked.value = true;
   };
 
@@ -40,9 +40,9 @@ export function useStorageFile() {
   };
 
   return {
-    file: file,
-    hasFile: hasFile,
-    setFile: setFile,
-    resetFile: resetFile,
+    file,
+    hasFile,
+    setFile,
+    resetFile,
   };
 }

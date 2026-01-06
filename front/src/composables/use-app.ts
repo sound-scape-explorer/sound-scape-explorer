@@ -1,4 +1,4 @@
-import {useDraggables} from 'src/composables/use-draggables';
+import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
 import {useStorageReady} from 'src/composables/use-storage-ready';
 
 export function useApp() {
@@ -10,10 +10,10 @@ export function useApp() {
       return;
     }
 
-    open('open');
+    open(DraggableKey.enum.open);
   };
 
   return {
-    showImport: showImport,
+    showImport,
   };
 }

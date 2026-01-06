@@ -1,31 +1,19 @@
-<script lang="ts" setup="">
-import {IonIcon} from '@ionic/vue';
-import {
-  pauseOutline,
-  playOutline,
-  playSkipBackOutline,
-  playSkipForwardOutline,
-} from 'ionicons/icons';
+<script lang="ts" setup>
 import {NButtonGroup} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
-import {useRefProvide} from 'src/composables/use-ref-provide';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {useDraggableCalendarTransport} from 'src/draggables/calendar/use-draggable-calendar-transport';
 import {printPrettySeconds} from 'src/utils/time';
 import {computed} from 'vue';
 
 const {isActive, durations, isPlaying} = useDraggableCalendar();
-
 const {duration} = useTimelineRange();
-
 const {setWindowDuration, skipTimeForward, skipTimeBackward, handleToggle} =
   useDraggableCalendarTransport();
-
-useRefProvide(InjectionKey.calendarActive, isActive);
 
 const seconds = computed(() => Number((duration.value / 1000).toFixed()));
 </script>
@@ -35,7 +23,7 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
     <span>Filtering</span>
     <div :class="$style['first-row']">
       <AppSwitch
-        :injection-key="InjectionKey.calendarActive"
+        v-model="isActive"
         checked="Yes"
         native
         unchecked="No"
@@ -63,20 +51,25 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
           :handle-click="skipTimeBackward"
           small-tooltip
         >
-          <IonIcon :icon="playSkipBackOutline" />
+          <AppIcon
+            icon="back"
+            size="small"
+          />
         </AppButton>
 
         <AppButton
           :handle-click="handleToggle"
           small-tooltip
         >
-          <IonIcon
+          <AppIcon
             v-show="isPlaying"
-            :icon="pauseOutline"
+            icon="pause"
+            size="small"
           />
-          <IonIcon
+          <AppIcon
             v-show="!isPlaying"
-            :icon="playOutline"
+            icon="play"
+            size="small"
           />
         </AppButton>
 
@@ -84,7 +77,10 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
           :handle-click="skipTimeForward"
           small-tooltip
         >
-          <IonIcon :icon="playSkipForwardOutline" />
+          <AppIcon
+            icon="forward"
+            size="small"
+          />
         </AppButton>
       </div>
     </div>
@@ -92,32 +88,34 @@ const seconds = computed(() => Number((duration.value / 1000).toFixed()));
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .menu {
   & > div {
-    display: flex;
     align-items: center;
-    gap: $p0;
+    display: flex;
+    gap: sizes.$p0;
   }
 }
 
 .gaps {
-  display: flex;
   align-items: center;
+  display: flex;
+  gap: sizes.$p0;
   justify-content: center;
-  gap: $p0;
 }
 
 .seconds {
-  width: $p0 * 13;
+  width: sizes.$p0 * 13;
 }
 
 .picker {
-  width: $p0 * 19;
+  width: sizes.$p0 * 19;
 }
 
 .first-row {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
 }
 

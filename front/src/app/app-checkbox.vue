@@ -1,17 +1,26 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NCheckbox} from 'naive-ui';
-import {InjectionKey} from 'src/common/injection-key';
-import {useRefInject} from 'src/composables/use-ref-inject';
 
-interface Props {
-  injectionKey: InjectionKey;
-  default: boolean;
-}
+const model = defineModel<boolean>();
 
-const props = defineProps<Props>();
-const model = useRefInject(props.injectionKey);
+const props = withDefaults(
+  defineProps<{handleClick?: () => void; disabled?: boolean}>(),
+  {
+    handleClick: undefined,
+    disabled: false,
+  },
+);
 </script>
 
 <template>
-  <NCheckbox v-model:checked="model" />
+  <NCheckbox
+    :default-checked="model"
+    :disabled="props?.disabled"
+    :on-update:checked="
+      () => {
+        model = !model;
+        props.handleClick?.();
+      }
+    "
+  />
 </template>

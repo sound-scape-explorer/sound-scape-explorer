@@ -5,7 +5,7 @@ const loadingText = ref<string>('');
 
 export function useScatterLoading() {
   return {
-    isLoading: isLoading,
-    loadingText: loadingText,
+    isLoading,
+    loadingText,
   };
 }

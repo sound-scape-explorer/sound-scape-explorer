@@ -1,44 +1,52 @@
 <script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import AppCheckbox from 'src/app/app-checkbox.vue';
+import AppHeader from 'src/app/app-header.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import AppInput from 'src/app/input/app-input.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useSettings} from 'src/composables/use-settings';
-import {PLOT_BACKGROUND, SPECTROGRAM_COLOR_MAPS} from 'src/constants';
-import {useWavesurferSettings} from 'src/draggables/audio/use-wavesurfer-settings';
-import DraggableSettingsDev from 'src/draggables/settings/draggable-settings-dev.vue';
+import {DraggableKey} from 'src/composables/use-draggables';
+import {Shortcut} from 'src/composables/use-shortcuts';
+import {useTimezone} from 'src/composables/use-timezone';
+import {
+  AudioFilterSlope,
+  PlotBackground,
+  ScatterBorderWidth,
+  SpectrogramColorMap,
+  SpectrogramFftSize,
+} from 'src/constants';
 import DraggableSettingsItem from 'src/draggables/settings/draggable-settings-item.vue';
-import {useDraggableSettingsProviders} from 'src/draggables/settings/use-draggable-settings-providers';
 
 const {
   resetAll,
+  darkMode,
+  audioHost,
+  plotFontSize,
+  timeshift,
+  plotBackground,
+  scatterBorderWidth,
+  spectrogramColorMap,
+  spectrogramFftSize,
   isDetailsAutoOpen,
   isAudioAutoOpen,
-  isAlphaPreview,
-  isBetaPreview,
-  isTimezoneActive,
-  isCopyOnSelect2d,
   isWebGlScatter2d,
   isHidingMenuOnDraggableToggle,
-  isDevEnabled,
   isSelectedPointHighlighted,
   isDetailedExportName,
+  decibelsDisplay,
+  legendOverflow,
+  isDevEnabled,
+  devAutoLoadView,
+  audioFilterSlope,
 } = useClientSettings();
 
-const {settings, hasTimezone} = useSettings();
-const {isDecibelsDisplay, isLegendOverflow} = useWavesurferSettings();
-
-const colormapOptions = SPECTROGRAM_COLOR_MAPS;
-const backgrounds = Object.values(PLOT_BACKGROUND);
-
-useDraggableSettingsProviders();
+const {tz} = useTimezone();
+const reload = () => location.reload();
 </script>
 
 <template>
-  <AppDraggable draggable-key="settings">
+  <AppDraggable :draggable-key="DraggableKey.enum.settings">
     <div :class="$style.reload">
       <AppButton
         :handle-click="resetAll"
@@ -50,190 +58,200 @@ useDraggableSettingsProviders();
     </div>
 
     <div :class="$style.container">
-      <DraggableSettingsItem title="Audio: set audio host">
-        <AppInput
-          :injection-key="InjectionKey.settingsAudioHost"
-          align="left"
-          size="small"
-        />
-      </DraggableSettingsItem>
+      <AppHeader>
+        <h2>Display</h2>
+      </AppHeader>
 
-      <DraggableSettingsItem title="Draggables: Hide menu on display toggle">
+      <DraggableSettingsItem :title="`Dark mode (will trigger app reload)`">
         <AppCheckbox
-          :default="isHidingMenuOnDraggableToggle"
-          :injection-key="InjectionKey.settingsIsHidingMenuOnDraggableToggle"
+          v-model="darkMode"
+          :handle-click="reload"
         />
       </DraggableSettingsItem>
 
       <DraggableSettingsItem
-        :title="`Time: Apply timezone (${
-          settings?.timezone ? settings.timezone : 'disabled'
-        })`"
+        :title="`Hide menu icons in Focus mode (${Shortcut._draggableFocus})`"
       >
-        <AppCheckbox
-          :default="isTimezoneActive"
-          :disabled="!settings?.timezone || !hasTimezone"
-          :injection-key="InjectionKey.settingsIsTimezoneActive"
-        />
+        <AppCheckbox v-model="isHidingMenuOnDraggableToggle" />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Time: Apply custom shift (in hours)">
+      <AppHeader>
+        <h2>Exports</h2>
+      </AppHeader>
+
+      <DraggableSettingsItem title="Add band & integration to filename">
+        <AppCheckbox v-model="isDetailedExportName" />
+      </DraggableSettingsItem>
+
+      <AppHeader>
+        <h2>Date & time</h2>
+      </AppHeader>
+
+      <DraggableSettingsItem title="Shift hours">
         <AppInput
-          :injection-key="InjectionKey.settingsTimeShift"
+          v-model="timeshift"
           align="left"
           size="small"
-          type="number"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Plots: Set background color">
-        <AppSelect
-          :class="$style['background-color']"
-          :injection-key="InjectionKey.settingsPlotBackground"
-          :options="backgrounds"
-          size="small"
-        />
-      </DraggableSettingsItem>
+      <AppHeader>
+        <h2>Audio</h2>
+      </AppHeader>
 
-      <DraggableSettingsItem title="Plots: Set font size">
+      <DraggableSettingsItem title="Host">
         <AppInput
-          :injection-key="InjectionKey.settingsPlotFontSize"
+          v-model="audioHost"
           align="left"
           size="small"
-          type="number"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Scatter: Select interval border width">
+      <DraggableSettingsItem title="Filter slope (dB/oct)">
         <AppSelect
-          :class="$style['scatter-border-width']"
-          :injection-key="InjectionKey.settingsScatterBorderWidth"
-          :options="[0, 1, 2].map((n) => n.toString())"
-          size="small"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Scatter: Highlight selected point">
-        <AppCheckbox
-          :default="isSelectedPointHighlighted"
-          :injection-key="InjectionKey.settingsIsSelectedPointHighlighted"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Scatter: Open Audio on click">
-        <AppCheckbox
-          :default="isAudioAutoOpen"
-          :injection-key="InjectionKey.settingsIsAudioAutoOpen"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Scatter: Open Details on click">
-        <AppCheckbox
-          :default="isDetailsAutoOpen"
-          :injection-key="InjectionKey.settingsIsDetailsAutoOpen"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Scatter: Use WebGL (2d)">
-        <AppCheckbox
-          :default="isWebGlScatter2d"
-          :injection-key="InjectionKey.settingsIsWebGlScatter2d"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem
-        title="Scatter: Copy to clipboard on selection (2d)"
-      >
-        <AppCheckbox
-          :default="isCopyOnSelect2d"
-          :injection-key="InjectionKey.settingsIsCopyOnSelect2d"
-        />
-      </DraggableSettingsItem>
-
-      <DraggableSettingsItem title="Spectrogram: Set color map">
-        <AppSelect
+          v-model="audioFilterSlope"
           :class="$style['spectro-colors']"
-          :injection-key="InjectionKey.settingsColormap"
-          :options="colormapOptions"
+          :options="AudioFilterSlope.options"
           size="small"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Spectrogram: Show decibels">
-        <AppCheckbox
-          :default="isDecibelsDisplay"
-          :injection-key="InjectionKey.settingsDecibelsDisplay"
+      <AppHeader>
+        <h2>Spectrograms</h2>
+      </AppHeader>
+
+      <DraggableSettingsItem title="FFT window size">
+        <AppSelect
+          v-model="spectrogramFftSize"
+          :class="$style['spectro-colors']"
+          :options="SpectrogramFftSize.options"
+          size="small"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Spectrogram: Overflow legends">
-        <AppCheckbox
-          :default="isLegendOverflow"
-          :injection-key="InjectionKey.settingsLegendOverflow"
+      <DraggableSettingsItem title="Color map">
+        <AppSelect
+          v-model="spectrogramColorMap"
+          :class="$style['spectro-colors']"
+          :options="SpectrogramColorMap.options"
+          size="small"
         />
       </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Show dB legend">
+        <AppCheckbox v-model="decibelsDisplay" />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Move legends outside">
+        <AppCheckbox v-model="legendOverflow" />
+      </DraggableSettingsItem>
+
+      <AppHeader>
+        <h2>Scatters</h2>
+      </AppHeader>
 
       <DraggableSettingsItem
-        title="Export name: Add band and integration details"
+        title="Enable bordering selected interval (in red)"
       >
-        <AppCheckbox
-          :default="isDetailedExportName"
-          :injection-key="InjectionKey.settingsIsDetailedExportName"
+        <AppCheckbox v-model="isSelectedPointHighlighted" />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Selected interval border width">
+        <AppSelect
+          v-model="scatterBorderWidth"
+          :class="$style['scatter-border-width']"
+          :options="ScatterBorderWidth.options"
+          size="small"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Misc: Preview alpha features">
-        <AppCheckbox
-          :default="isAlphaPreview"
-          :injection-key="InjectionKey.settingsIsAlphaPreview"
+      <DraggableSettingsItem title="Auto open Audio on click">
+        <AppCheckbox v-model="isAudioAutoOpen" />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="Auto open Details on click">
+        <AppCheckbox v-model="isDetailsAutoOpen" />
+      </DraggableSettingsItem>
+
+      <DraggableSettingsItem title="2d scatters: Use WebGL">
+        <AppCheckbox v-model="isWebGlScatter2d" />
+      </DraggableSettingsItem>
+
+      <AppHeader>
+        <h2>Plots (heatmaps, charts, ...)</h2>
+      </AppHeader>
+
+      <DraggableSettingsItem title="Background color">
+        <AppSelect
+          v-model="plotBackground"
+          :class="$style['background-color']"
+          :options="PlotBackground.options"
+          size="small"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Misc: Preview beta features">
-        <AppCheckbox
-          :default="isBetaPreview"
-          :injection-key="InjectionKey.settingsIsBetaPreview"
+      <DraggableSettingsItem title="Font size">
+        <AppInput
+          v-model="plotFontSize"
+          align="left"
+          size="small"
         />
       </DraggableSettingsItem>
 
-      <DraggableSettingsItem title="Misc: Enable dev settings">
-        <AppCheckbox
-          :default="isDevEnabled"
-          :injection-key="InjectionKey.settingsIsDevEnabled"
-        />
+      <AppHeader>
+        <h2>Misc.</h2>
+      </AppHeader>
+
+      <DraggableSettingsItem title="Enable developer settings">
+        <AppCheckbox v-model="isDevEnabled" />
       </DraggableSettingsItem>
 
-      <DraggableSettingsDev />
+      <AppHeader v-if="isDevEnabled">
+        <h2>Dev</h2>
+      </AppHeader>
+
+      <DraggableSettingsItem
+        v-if="isDevEnabled"
+        title="Auto load view"
+      >
+        <AppCheckbox v-model="devAutoLoadView" />
+      </DraggableSettingsItem>
     </div>
   </AppDraggable>
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+@use 'src/styles/scrolls';
+
 .reload {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
+  gap: sizes.$g0;
+  height: sizes.$s0;
+  margin-top: sizes.$p0;
   overflow: auto;
-  width: $s0;
-  height: $s0;
-  margin-top: $p0;
-  padding-right: $p0;
+  padding-right: sizes.$p0;
+  width: sizes.$s0;
 
-  @include tiny-scrollbar;
+  @include scrolls.tiny-scrollbar;
 }
 
 .spectro-colors {
-  width: $p0 * 12;
+  width: sizes.$p0 * 12;
 }
 
 .scatter-border-width {
-  width: $p0 * 8;
+  width: sizes.$p0 * 8;
 }
 
 .background-color {
-  width: $p0 * 16;
+  width: sizes.$p0 * 16;
 }
 </style>

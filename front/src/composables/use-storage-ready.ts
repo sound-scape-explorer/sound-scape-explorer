@@ -29,8 +29,8 @@ export function useStorageReady() {
   };
 
   return {
-    isReady: isReady,
-    update: update,
-    notify: notify,
+    isReady,
+    update,
+    notify,
   };
 }

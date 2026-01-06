@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import VuMeter from 'src/components/vu-meter/vu-meter.vue';
 import {useAudioAnalyser} from 'src/draggables/audio/use-audio-analyser';
 import {useAudioTransport} from 'src/draggables/audio/use-audio-transport';
@@ -12,7 +12,7 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
 
 <template>
   <div :class="[$style.container, {[$style.hide]: !isPlaying}]">
-    <span>PEAK</span>
+    <span :class="$style.peak">PEAK</span>
     <VuMeter
       :height="127"
       :value="rms"
@@ -23,28 +23,30 @@ const span = computed(() => (isClipping.value ? 'flex' : 'none'));
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/transitions';
+
 .container {
-  position: absolute;
-  bottom: -394px;
-  transform: translate3d(9px, 4px, 0);
-  opacity: 1;
   background: transparent;
+  bottom: -409px;
+  opacity: 1;
+  position: absolute;
+  transform: translate3d(9px, 0, 0);
 
-  @include transition-vumeter;
+  @include transitions.transition-vumeter;
+}
 
-  & > span {
-    font-size: 80%;
-    font-weight: bold;
-    position: absolute;
-    display: v-bind(span);
-    align-items: flex-start;
-    justify-content: center;
-    width: 100%;
-    height: 40px;
-    transform: translate3d(0, -8px, 0);
-    text-align: center;
-    color: $black;
-  }
+.peak {
+  align-items: flex-start;
+  color: red;
+  display: v-bind(span);
+  font-size: 80%;
+  font-weight: bold;
+  height: 40px;
+  justify-content: center;
+  position: absolute;
+  text-align: center;
+  transform: translate3d(0, -8px, 0);
+  width: 100%;
 }
 
 .hide {

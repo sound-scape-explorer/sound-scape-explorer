@@ -1,13 +1,14 @@
 import {AudioContextError} from 'src/common/Errors';
-import {GAIN} from 'src/constants';
+import {useClientSettings} from 'src/composables/use-client-settings';
+import {AUDIO_GAIN} from 'src/constants';
 import {useAudioContext} from 'src/draggables/audio/use-audio-context';
 import {ref} from 'vue';
 
 const node = ref<GainNode | null>(null);
-const gain = ref<number>(GAIN.default);
 
 export function useAudioGain() {
   const {context} = useAudioContext();
+  const {audioGain} = useClientSettings();
 
   const create = () => {
     if (context.value === null) {
@@ -17,19 +18,25 @@ export function useAudioGain() {
     node.value = context.value.createGain();
   };
 
-  const apply = (newValue: number) => {
+  // propagate to context
+  const apply = () => {
     if (node.value === null) {
       return;
     }
 
-    gain.value = newValue;
-    node.value.gain.value = gain.value;
+    node.value.gain.value = audioGain.value;
+  };
+
+  const reset = () => {
+    audioGain.value = AUDIO_GAIN.default;
+    apply();
   };
 
   return {
-    node: node,
-    gain: gain,
-    create: create,
-    apply: apply,
+    node,
+    gain: audioGain,
+    create,
+    apply,
+    reset,
   };
 }

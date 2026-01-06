@@ -6,7 +6,7 @@ const height = ref<number>(PLOTLY_SIZE);
 
 export function useAppHeatmapSize() {
   return {
-    width: width,
-    height: height,
+    width,
+    height,
   };
 }

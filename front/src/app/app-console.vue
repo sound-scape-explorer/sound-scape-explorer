@@ -1,6 +1,6 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {useDraggables} from 'src/composables/use-draggables';
-import {Shortcuts} from 'src/composables/use-shortcuts';
+import {Shortcut} from 'src/composables/use-shortcuts';
 import {computed} from 'vue';
 
 const {hidden} = useDraggables();
@@ -10,7 +10,7 @@ const payload = computed<string | null>(() => {
 
   if (hidden.value) {
     payload.push(
-      `Toggle mode enabled. Press ${Shortcuts._draggableToggle} to quit.`,
+      `Focus mode enabled. Press ${Shortcut._draggableFocus} to quit.`,
     );
   }
 
@@ -27,12 +27,14 @@ const payload = computed<string | null>(() => {
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/layers';
+
 .container {
+  bottom: 5px;
   font-size: 90%;
   font-style: italic;
-  position: fixed;
-  z-index: $app-console-layer;
-  bottom: 5px;
   left: 7px;
+  position: fixed;
+  z-index: layers.$app-console-layer;
 }
 </style>

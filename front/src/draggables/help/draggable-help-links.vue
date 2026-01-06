@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import AppButton from 'src/app/app-button.vue';
 import {
   LINK_BUG_REPORT,
@@ -61,6 +61,8 @@ const openDiscord = () => window.open(LINK_DISCORD);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .container {
   display: flex;
   width: 100%;
@@ -71,18 +73,18 @@ const openDiscord = () => window.open(LINK_DISCORD);
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    gap: $p0;
+    gap: sizes.$p0;
   }
 }
 
 .image {
-  width: $p0 * 12;
+  width: sizes.$p0 * 12;
 }
 
 .light {
   font-size: 0.8em;
   font-style: italic;
-  padding-left: $g0;
+  padding-left: sizes.$g0;
   transform: translate3d(0, 1px, 0);
 }
 </style>

@@ -1,13 +1,15 @@
 import {type AppCandlesProps} from 'src/app/candles/app-candles.vue';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
-import {useColorsCycling} from 'src/composables/use-colors-cycling';
-import {useDate} from 'src/composables/use-date';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
-import {useSites} from 'src/composables/use-sites';
+import {type AcousticSeries} from 'src/composables/use-acoustic-serializer';
+import {useDateTime} from 'src/composables/use-date-time';
+import {useScatterFilterGlobal} from 'src/composables/use-scatter-filter-global';
 import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
-import {useTemporal} from 'src/draggables/temporal/use-temporal';
 import {useTemporalHloc} from 'src/draggables/temporal/use-temporal-hloc';
+import {useTemporalSeries} from 'src/draggables/temporal/use-temporal-series';
+import {useTemporalStrategy} from 'src/draggables/temporal/use-temporal-strategy';
 import {ref} from 'vue';
+
+export const INTERVAL_TAG = '<b>Interval:</b>';
 
 type OmitKeys = 'title' | 'exportFilename' | 'condensed';
 
@@ -19,69 +21,75 @@ const candles = ref<CandlesData | null>(null);
 
 export function useTemporalChart() {
   const {isCandles} = useDraggableTemporal();
-  const {sites} = useSites();
-  const {data} = useTemporal();
-  const {scale: cyclingScale} = useColorsCycling();
-  const {convertTimestampToIsoDate} = useDate();
-  const {filtered} = useScatterGlobalFilter();
+  const {series} = useTemporalSeries();
+  const {filtered} = useScatterFilterGlobal();
   const {calculate} = useTemporalHloc();
+  const {apply} = useTemporalStrategy();
+  const {timestampToString} = useDateTime();
 
-  const prepare = () => {
-    let values: number[] = [];
-    let timestamps: number[] = [];
-    let siteValues: string[] = [];
+  const filterSeries = () => {
+    if (series.value === null) {
+      throw new Error('Could not filter temporal series');
+    }
 
-    for (let i = 0; i < data.value.length; i += 1) {
+    const filteredData: AcousticSeries[] = [];
+
+    for (let i = 0; i < series.value.length; i += 1) {
       if (filtered.value[i]) {
         continue;
       }
 
-      const d = data.value[i];
-
-      // info: typing mislead as data can be empty at unselected site indices
-      if (typeof d === 'undefined') {
-        continue;
-      }
-
-      values = [...values, d.values[0]];
-      timestamps = [...timestamps, d.timestamp];
-      siteValues = [...siteValues, d.site];
+      filteredData.push(series.value[i]);
     }
 
-    return {
-      values: values,
-      timestamps: timestamps,
-      siteValues: siteValues,
-    };
-  };
-
-  const getColors = (siteNames: string[]) => {
-    const colors = cyclingScale.value.colors(siteNames.length + 1);
-    const strings = data.value.map((d) => colors[siteNames.indexOf(d.site)]);
-
-    return strings;
+    return filteredData;
   };
 
   const render = () =>
     requestAnimationFrame(() => {
-      if (sites.value === null || data.value.length === 0) {
-        candles.value = generateSkeleton();
+      if (series.value === null) {
+        candles.value = generateCandlesSkeleton();
         return;
       }
-
-      const {values, timestamps, siteValues} = prepare();
-      const siteNames = sites.value.map((site) => site.name);
-      const colors = getColors(siteNames);
 
       if (isCandles.value) {
-        candles.value = generateCandles(values, timestamps, siteValues);
+        candles.value = generateCandlesPlot();
         return;
       }
 
-      plot.value = generateContinuous(values, timestamps, colors);
+      plot.value = generateContinuousPlot();
     });
 
-  const generateSkeleton = (): CandlesData => {
+  const generateContinuousPlot = (): PlotData => {
+    const filteredData = filterSeries();
+
+    // downsample
+    const maxTicks = 7;
+    const totalLength = filteredData.length;
+    const step = Math.floor(totalLength / maxTicks);
+    const tickIndices = Array.from(
+      {length: Math.ceil(totalLength / step)},
+      (_, i) => i * step,
+    ).filter((i) => i < totalLength);
+
+    return {
+      labels: [
+        filteredData.map(
+          (d) =>
+            `${INTERVAL_TAG} ${d.index}<br><b>Date:</b> ${timestampToString(d.timestamp)}<br><b>Site:</b> ${d.siteName}`,
+        ),
+      ],
+      xTicks: tickIndices.map((i) =>
+        timestampToString(filteredData[i].timestamp),
+      ),
+      xTickIndices: tickIndices.map((i) => `${i}`),
+      // xTicks: filteredData.map((d) => timestampToString(d.timestamp)),
+      values: [filteredData.map((d) => apply(d.values))],
+      colors: ['green'],
+    };
+  };
+
+  const generateCandlesSkeleton = (): CandlesData => {
     return {
       timestamps: [],
       labels: [],
@@ -92,24 +100,15 @@ export function useTemporalChart() {
     };
   };
 
-  const generateLabels = (timestamps: number[], sites: string[]) => {
-    return timestamps.map(
-      (t, i) =>
-        `${convertTimestampToIsoDate(t)}<br>Site: ${
-          sites[i]
-        }<br>Interval: ${i}`,
-    );
-  };
+  const generateCandlesPlot = (): CandlesData => {
+    const filteredData = filterSeries();
+    const values = filteredData.map((d) => apply(d.values));
+    const timestamps = filteredData.map((d) => d.timestamp);
 
-  const generateCandles = (
-    values: number[],
-    timestamps: number[],
-    siteValues: string[],
-  ): CandlesData => {
     const hloc = calculate(values, timestamps);
 
     return {
-      labels: generateLabels(timestamps, siteValues),
+      labels: [],
       timestamps: hloc.map((x) => x.timestamp),
       high: hloc.map((x) => x.high),
       low: hloc.map((x) => x.low),
@@ -118,37 +117,9 @@ export function useTemporalChart() {
     };
   };
 
-  const generateLabelsContinuous = (
-    indices: number[],
-    timestamps: number[],
-  ): string[][] => {
-    return [
-      indices.map(
-        (i) => `${convertTimestampToIsoDate(timestamps[i])} Interval: ${i}`,
-      ),
-    ];
-  };
-
-  const generateContinuous = (
-    values: number[],
-    timestamps: number[],
-    colors: string[],
-  ): PlotData => {
-    const indices = Array.from({length: timestamps.length}, (_, i) => i);
-    indices.sort((a, b) => timestamps[a] - timestamps[b]);
-
-    const labels = generateLabelsContinuous(indices, timestamps);
-
-    return {
-      labels: labels,
-      values: [indices.map((i) => values[i])],
-      colors: indices.map((i) => colors[i]),
-    };
-  };
-
   return {
-    candles: candles,
-    plot: plot,
-    render: render,
+    candles,
+    plot,
+    render,
   };
 }

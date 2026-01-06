@@ -1,0 +1,13 @@
+.sse-placeholder-white {
+  color: white !important;
+
+  &::placeholder {
+    color: rgba(white, 0.7) !important;
+  }
+}
+
+.sse-forbidden {
+  &:hover {
+    cursor: not-allowed;
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "StorageDomain": [
+    "config",
+    "extractions",
+    "aggregations",
+    "reductions",
+    "computations",
+    "mean_distance_matrix",
+    "autoclusters",
+    "metrics",
+    "trajectories",
+    "relative_trajectories"
+  ],
+  "ExtractionStoragePath": [
+    "embeddings",
+    "starts",
+    "ends"
+  ],
+  "AggregationStoragePath": [
+    "embeddings",
+    "timestamps",
+    "file_indices",
+    "file_relative_starts",
+    "extractor_indices"
+  ],
+  "TrajectoryStoragePath": [
+    "path",
+    "timestamps"
+  ],
+  "RelativeTrajectoryStoragePath": [
+    "distances",
+    "timestamps",
+    "deciles"
+  ],
+  "ComputationStrategy": [
+    "UMAP",
+    "PCA",
+    "EMBEDDINGS"
+  ],
+  "ExtractorImpl": [
+    "BIRDNET",
+    "PERCH",
+    "SURF_PERCH",
+    "VGGISH",
+    "YAMNET",
+    "MUSIC_CLASS",
+    "SPECTRUM",
+    "SPECTROGRAM",
+    "MPS",
+    "MFCC",
+    "NDSI",
+    "BI",
+    "ADI",
+    "HF",
+    "HT",
+    "MED",
+    "ACI",
+    "LEQ",
+    "LEQ_PERCENTILE",
+    "LEQ_DIFF"
+  ],
+  "ExtractorType": [
+    "NEURAL",
+    "LOW_LEVEL",
+    "ACOUSTICS"
+  ],
+  "AutoclusterImpl": [
+    "HDBSCAN_EOM",
+    "HDBSCAN_LEAF"
+  ],
+  "ReducerImpl": [
+    "UMAP",
+    "PCA"
+  ],
+  "MetricImpl": [
+    "MEAN_STD",
+    "MEAN_SPREADING",
+    "SILHOUETTE",
+    "CONTINGENCY",
+    "OVERLAP"
+  ],
+  "MetricType": [
+    "ONE_D",
+    "TWO_D",
+    "TWO_D_PAIRING"
+  ],
+  "StftWindowType": [
+    "HANN",
+    "HAMMING",
+    "BLACKMANHARRIS"
+  ],
+  "FrequencyScale": [
+    "LIN",
+    "LOG",
+    "MEL"
+  ],
+  "AdiImpl": [
+    "SHANNON",
+    "SIMPSON",
+    "INVSIMPSON"
+  ]
+}

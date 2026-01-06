@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/sound-scape-explorer.iml" filepath="$PROJECT_DIR$/.idea/sound-scape-explorer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/audio.iml" filepath="$PROJECT_DIR$/.idea/audio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/campaign.iml" filepath="$PROJECT_DIR$/.idea/campaign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/front.iml" filepath="$PROJECT_DIR$/.idea/front.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/processing.iml" filepath="$PROJECT_DIR$/.idea/processing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/visualisation.iml" filepath="$PROJECT_DIR$/.idea/visualisation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/workspace.iml" filepath="$PROJECT_DIR$/.idea/workspace.iml" />
     </modules>
   </component>
 </project>

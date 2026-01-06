@@ -1,8 +1,10 @@
+@use "./sizes";
+
 @mixin border-radius {
-  border-radius: $p0;
+  border-radius: sizes.$p0;
 }
 
-@mixin border-0 {
-  border: 1px solid #ccc;
-  border-radius: $g0;
+@mixin border-0($c: red) {
+  border: 1px solid $c;
+  border-radius: sizes.$g0;
 }

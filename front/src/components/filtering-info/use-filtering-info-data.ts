@@ -1,44 +1,53 @@
-import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
-import {useScatterFilterTemporal} from 'src/components/scatter/use-scatter-filter-temporal';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
-import {useScatterGlobalFilter} from 'src/composables/use-scatter-global-filter';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
+import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
+import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
+import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
+import {useScatterFilterGlobal} from 'src/composables/use-scatter-filter-global';
 import {computed} from 'vue';
 
 export function useFilteringInfoData() {
-  const {filtered: global} = useScatterGlobalFilter();
-  const {filtered: time} = useScatterFilterTime();
-  const {filtered: labels} = useScatterFilterLabels();
-  const {filtered: temporal} = useScatterFilterTemporal();
+  const {filtered: global} = useScatterFilterGlobal();
+  const {filtered: calendar} = useScatterFilterCalendar();
+  const {filtered: tags} = useScatterFilterTag();
+  const {filtered: acoustic} = useScatterFilterAcoustic();
+  const {filtered: spatial} = useScatterFilterSpatial();
 
   const totalOut = computed(() => global.value.filter((f) => f).length);
   const totalIn = computed(() => global.value.length - totalOut.value);
 
-  const timeOut = computed(() => time.value.filter((f) => f).length);
-  const timeIn = computed(() => time.value.length - timeOut.value);
+  const calendarOut = computed(() => calendar.value.filter((f) => f).length);
+  const calendarIn = computed(() => calendar.value.length - calendarOut.value);
 
-  const labelsOut = computed(() => labels.value.filter((f) => f).length);
-  const labelsIn = computed(() => labels.value.length - labelsOut.value);
+  const tagsOut = computed(() => tags.value.filter((f) => f).length);
+  const tagsIn = computed(() => tags.value.length - tagsOut.value);
 
-  const temporalOut = computed(() => temporal.value.filter((f) => f).length);
-  const temporalIn = computed(() => temporal.value.length - temporalOut.value);
+  const acousticOut = computed(() => acoustic.value.filter((f) => f).length);
+  const acousticIn = computed(() => acoustic.value.length - acousticOut.value);
 
-  const isTimeActive = computed<boolean>(() => timeOut.value > 0);
-  const isLabelsActive = computed<boolean>(() => labelsOut.value > 0);
-  const isTemporalActive = computed<boolean>(() => temporalOut.value > 0);
-  const population = computed(() => time.value.length);
+  const spatialOut = computed(() => spatial.value.filter((f) => f).length);
+  const spatialIn = computed(() => spatial.value.length - spatialOut.value);
+
+  const isCalendarActive = computed<boolean>(() => calendarOut.value > 0);
+  const isTagsActive = computed<boolean>(() => tagsOut.value > 0);
+  const isAcousticActive = computed<boolean>(() => acousticOut.value > 0);
+  const isSpatialActive = computed<boolean>(() => spatialOut.value > 0);
+  const population = computed(() => calendar.value.length);
 
   return {
-    totalOut: totalOut,
-    totalIn: totalIn,
-    timeOut: timeOut,
-    timeIn: timeIn,
-    labelsOut: labelsOut,
-    labelsIn: labelsIn,
-    temporalOut: temporalOut,
-    temporalIn: temporalIn,
-    isTimeActive: isTimeActive,
-    isLabelsActive: isLabelsActive,
-    isTemporalActive: isTemporalActive,
-    population: population,
+    totalOut,
+    totalIn,
+    calendarOut,
+    calendarIn,
+    tagsOut,
+    tagsIn,
+    acousticOut,
+    acousticIn,
+    spatialOut,
+    spatialIn,
+    isCalendarActive,
+    isTagsActive,
+    isAcousticActive,
+    isSpatialActive,
+    population,
   };
 }

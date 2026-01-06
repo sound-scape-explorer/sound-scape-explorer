@@ -1,47 +1,48 @@
-<script lang="ts" setup="">
-import {IonIcon} from '@ionic/vue';
-import {downloadOutline} from 'ionicons/icons';
+<script lang="ts" setup>
 import {NButtonGroup} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppSwitch from 'src/app/app-switch.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useRefProvide} from 'src/composables/use-ref-provide';
+import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
 import DraggableTemporalMenuFilters from 'src/draggables/temporal/draggable-temporal-menu-filters.vue';
-import {useDraggableTemporal} from 'src/draggables/temporal/use-draggable-temporal';
+import {
+  TemporalDisplay,
+  useDraggableTemporal,
+} from 'src/draggables/temporal/use-draggable-temporal';
 import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
-import {watch} from 'vue';
+import {useTemporalExport} from 'src/draggables/temporal/use-temporal-export';
+import {
+  TemporalStrategy,
+  useTemporalStrategy,
+} from 'src/draggables/temporal/use-temporal-strategy';
 
-const {
-  indicator,
-  indicators,
-  display,
-  displays,
-  isCandles,
-  isCondensed,
-  handleExportClick,
-  update,
-} = useDraggableTemporal();
-
+const {extractorSlug, display, isCandles, isCondensed} = useDraggableTemporal();
+const {acousticSlugs} = useAcousticExtractors();
+const {strategy} = useTemporalStrategy();
 const {period, periods, update: updatePeriod} = useTemporalCandles();
-
-useRefProvide(InjectionKey.indicatorsList, indicator);
-useRefProvide(InjectionKey.indicatorsDisplay, display);
-useRefProvide(InjectionKey.temporalTrim, isCondensed);
-
-watch(indicator, update);
+const {handleClick: handleExportClick} = useTemporalExport();
 </script>
 
 <template>
   <AppDraggableMenu>
     <h2>Select</h2>
 
-    <div>
+    <div :class="$style.first">
       <AppSelect
-        :injection-key="InjectionKey.indicatorsList"
-        :options="indicators"
+        v-model="extractorSlug"
+        :options="acousticSlugs"
+        placeholder="Extractor..."
         size="small"
+      />
+
+      <AppSelect
+        v-model="strategy"
+        :options="TemporalStrategy.options"
+        size="small"
+        tooltip="Aggregation strategy"
+        tooltip-placement="right"
       />
     </div>
 
@@ -56,9 +57,9 @@ watch(indicator, update);
     <div :class="$style.row">
       <div>
         <AppSelect
+          v-model="display"
           :class="$style.display"
-          :injection-key="InjectionKey.indicatorsDisplay"
-          :options="displays"
+          :options="TemporalDisplay.options"
           size="small"
         />
 
@@ -76,8 +77,8 @@ watch(indicator, update);
 
         <AppSwitch
           v-if="isCandles"
+          v-model="isCondensed"
           :disabled="!isCandles"
-          :injection-key="InjectionKey.temporalTrim"
           checked="Trim"
           unchecked="Full"
         />
@@ -89,9 +90,9 @@ watch(indicator, update);
         tooltip="Export raw .csv"
         tooltip-placement="bottom"
       >
-        <IonIcon
-          :class="$style.export"
-          :icon="downloadOutline"
+        <AppIcon
+          icon="download"
+          size="small"
         />
       </AppButton>
     </div>
@@ -99,28 +100,33 @@ watch(indicator, update);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .row {
-  display: flex;
-  overflow: hidden;
   align-items: center;
+  display: flex;
   justify-content: space-between;
+  overflow: hidden;
 
   > div {
-    display: flex;
     align-items: center;
-    gap: $p0;
+    display: flex;
+    gap: sizes.$g0;
   }
 }
 
-.selection {
-  width: $p0 * 13;
+.first {
+  align-items: center;
+  display: grid;
+  gap: sizes.$g0;
+  grid-template-columns: 1fr calc(9em + 7px);
 }
 
-.export {
-  width: $p0 * 3;
+.selection {
+  width: sizes.$p0 * 13;
 }
 
 .display {
-  width: $p0 * 16;
+  width: sizes.$p0 * 16;
 }
 </style>

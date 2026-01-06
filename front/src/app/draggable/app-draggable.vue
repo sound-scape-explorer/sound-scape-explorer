@@ -1,34 +1,34 @@
 <script lang="ts" setup>
-import {IonIcon} from '@ionic/vue';
 import {useDraggable} from '@vueuse/core';
-import {close as closeIcon} from 'ionicons/icons';
 import AppButton from 'src/app/app-button.vue';
 import AppCondition from 'src/app/app-condition.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import {useAppDraggable} from 'src/app/draggable/use-app-draggable';
 import {useAppDraggableBounds} from 'src/app/draggable/use-app-draggable-bounds';
 import {useAppDraggableLifecycles} from 'src/app/draggable/use-app-draggable-lifecycles';
-import {useAppDraggableSuspense} from 'src/app/draggable/use-app-draggable-suspense';
-import {useAppMenu} from 'src/app/menu/use-app-menu';
+import {
+  SuspenseCase,
+  useAppDraggableSuspense,
+} from 'src/app/draggable/use-app-draggable-suspense';
 import {type DraggableKey, useDraggables} from 'src/composables/use-draggables';
+import {useThemeColors} from 'src/composables/use-theme-colors';
 import {capitalizeFirstLetter} from 'src/utils/strings';
 import {computed} from 'vue';
 
 export interface AppDraggableProps {
   draggableKey: DraggableKey;
-  suspense?: null | 'view' | 'scatterClick';
+  suspense?: SuspenseCase;
 }
 
 const props = withDefaults(defineProps<AppDraggableProps>(), {
-  suspense: null,
+  suspense: SuspenseCase.enum.NONE,
 });
 
 const {container, storage, drag, isZoomed, isSelected, isClosed, hidden} =
   useAppDraggable(props);
 const {suspense} = useAppDraggableSuspense(props);
 const {check} = useAppDraggableBounds(container);
-
-const {menu} = useAppMenu();
-const icon = menu[props.draggableKey] ?? null;
+const {colors} = useThemeColors();
 const {close, stack} = useDraggables();
 
 const {x, y, style} = useDraggable(container, {
@@ -45,11 +45,11 @@ const {x, y, style} = useDraggable(container, {
 });
 
 useAppDraggableLifecycles({
-  props: props,
-  container: container,
-  drag: drag,
-  x: x,
-  y: y,
+  props,
+  container,
+  drag,
+  x,
+  y,
 });
 
 const zIndex = computed(() => {
@@ -70,7 +70,13 @@ const zIndex = computed(() => {
         [$style.hidden]: hidden,
       },
     ]"
-    :style="style"
+    :style="[
+      style,
+      {
+        border: `1px solid ${colors.borderColor}`,
+        backgroundColor: colors.modalColor,
+      },
+    ]"
   >
     <div :class="$style['close-button']">
       <AppButton
@@ -78,15 +84,19 @@ const zIndex = computed(() => {
         grow
         size="tiny"
       >
-        <IonIcon :icon="closeIcon" />
+        <AppIcon
+          icon="close"
+          size="small"
+        />
       </AppButton>
     </div>
 
     <div :class="$style.header">
       <div :class="$style.title">
-        <IonIcon
-          :class="{[$style.active]: isSelected}"
-          :icon="icon"
+        <AppIcon
+          :icon="props.draggableKey"
+          :intent="isSelected ? 'active' : 'default'"
+          size="small"
         />
         <span>
           {{ capitalizeFirstLetter(props.draggableKey) }}
@@ -97,7 +107,12 @@ const zIndex = computed(() => {
         ref="drag"
         :class="$style.handle"
       >
-        <span>👋</span>
+        <span>
+          <AppIcon
+            icon="drag"
+            size="small"
+          />
+        </span>
       </div>
     </div>
 
@@ -113,25 +128,29 @@ const zIndex = computed(() => {
 </template>
 
 <style lang="scss" module>
-.container {
-  position: fixed;
-  z-index: v-bind(zIndex);
-  justify-content: flex-start;
-  padding: $p0 $p0 $p0 $p0 * 5;
-  user-select: none;
-  opacity: 1;
-  border: 1px solid $grey;
-  background-color: $white;
-  backdrop-filter: blur($p0 + $g0);
+@use 'src/styles/sizes';
+@use 'src/styles/shadows';
+@use 'src/styles/transitions';
+@use 'src/styles/fx';
+@use 'src/styles/borders';
 
-  @include s1;
-  @include border-radius;
-  @include transition-app-draggable;
+.container {
+  backdrop-filter: blur(sizes.$p0 + sizes.$g0);
+  justify-content: flex-start;
+  opacity: 1;
+  padding: sizes.$p0 sizes.$p0 sizes.$p0 sizes.$p0 * 5;
+  position: fixed;
+  user-select: none;
+  z-index: v-bind(zIndex);
+
+  @include shadows.s1(v-bind('colors.boxShadow2'));
+  @include borders.border-radius;
+  @include transitions.transition-app-draggable;
 }
 
 .content {
-  margin: $p0 0 0 0;
   cursor: default;
+  margin: sizes.$p0 0 0 0;
 }
 
 .zoomed {
@@ -143,53 +162,35 @@ const zIndex = computed(() => {
 }
 
 .close-button {
+  left: sizes.$p0;
   position: fixed;
-  top: $p0;
-  left: $p0;
+  top: sizes.$p0;
 }
 
 .header {
-  display: flex;
   align-items: center;
+  display: flex;
+  gap: sizes.$p0 * 4;
   justify-content: space-between;
-  gap: $p0 * 4;
-}
-
-@keyframes oscillate {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  50% {
-    transform: translate3d(0, -2px, 0);
-  }
-
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
 }
 
 .handle {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: $p0 * 40;
-  cursor: grab;
-  opacity: 0.45;
+  background-color: v-bind('colors.primaryColor');
   border-radius: 10px;
-  background-color: $grey-light;
+  cursor: grab;
+  display: flex;
   filter: grayscale(0.95);
+  justify-content: center;
+  max-width: sizes.$p0 * 40;
+  opacity: 0.45;
+  width: 100%;
 
-  @include transition-app-draggable-handle;
+  @include transitions.transition-app-draggable-handle;
 
   &:hover {
-    opacity: 0.99;
     filter: grayscale(0.05);
-
-    span {
-      animation: oscillate 1200ms infinite;
-    }
+    opacity: 0.99;
   }
 
   &:active {
@@ -206,27 +207,27 @@ hr {
 }
 
 .title {
-  font-weight: bold;
-  display: flex;
   align-items: center;
+  display: flex;
+  font-weight: bold;
+  gap: sizes.$p0;
   justify-content: center;
-  gap: $p0;
 
-  @include transition-color;
+  @include transitions.transition-color;
 
   > i {
-    width: 100%;
     height: 100%;
     transform: translate3d(1px, 1px, 0);
+    width: 100%;
 
     svg {
-      width: $p0 * 2;
-      height: $p0 * 2;
+      height: sizes.$p0 * 2;
+      width: sizes.$p0 * 2;
     }
   }
 }
 
 .active {
-  color: $emerald;
+  color: v-bind('colors.pressedColor');
 }
 </style>

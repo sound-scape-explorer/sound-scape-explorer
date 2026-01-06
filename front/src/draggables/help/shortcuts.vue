@@ -37,10 +37,12 @@ const props = defineProps<Props>();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .grid {
   display: grid;
-  grid-template-columns: $p0 * 5 + $g0 1fr;
-  gap: $p0;
+  grid-template-columns: sizes.$p0 * 5 + sizes.$g0 1fr;
+  gap: sizes.$p0;
 }
 
 .key {

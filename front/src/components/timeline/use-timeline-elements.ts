@@ -1,9 +1,10 @@
+import {addMilliseconds} from 'date-fns';
 import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
-import {useDate} from 'src/composables/use-date';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
+import {useAggregations} from 'src/composables/use-aggregations';
+import {useDateTime} from 'src/composables/use-date-time';
+import {useIntervals} from 'src/composables/use-intervals';
+import {useViewSelection} from 'src/composables/use-view-selection';
+import {STRING_DELIMITER} from 'src/constants';
 import {type Ref} from 'vue';
 
 export interface TimelineElement {
@@ -16,12 +17,11 @@ export interface TimelineElement {
 }
 
 export function useTimelineElements() {
-  const {aggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {aggregatedSites} = useStorageAggregatedSites();
-  const {integration} = useIntegrationSelection();
-  const {convertTimestampToDate, convertTimestampToIsoDate} = useDate();
-  const {aggregatedIntervalDetails} = useStorageAggregatedIntervalDetails();
+  const {integration} = useViewSelection();
+  const {aggregations} = useAggregations();
+  const {timestampToDate, timestampToString} = useDateTime();
   const {scale} = useBodyColors();
+  const {intervals} = useIntervals();
 
   const createElement = (
     row: number,
@@ -32,12 +32,12 @@ export function useTimelineElements() {
     tooltip: string[],
   ): TimelineElement => {
     return {
-      row: row,
-      index: index,
-      start: start,
-      end: end,
-      color: color,
-      tooltip: tooltip,
+      row,
+      index,
+      start,
+      end,
+      color,
+      tooltip,
     };
   };
 
@@ -45,69 +45,52 @@ export function useTimelineElements() {
     leftBoundary: Ref<number>,
     rightBoundary: Ref<number>,
   ) => {
-    if (aggregatedTimestamps.value === null) {
-      return [];
-    }
-
-    const timestamps = aggregatedTimestamps.value;
-    const collected: number[] = [];
-
-    for (let i = 0; i < timestamps.length; i += 1) {
-      const t = timestamps[i];
-      const isInside = t >= leftBoundary.value && t < rightBoundary.value;
-
-      if (!isInside) {
-        continue;
-      }
-
-      collected.push(i);
-    }
-
-    return collected;
+    return intervals.value
+      .filter(
+        (interval) =>
+          interval.start >= leftBoundary.value &&
+          interval.end < rightBoundary.value,
+      )
+      .map((interval) => interval.index);
   };
 
   const createElements = (indices: Ref<number[]>) => {
-    if (
-      integration.value === null ||
-      aggregatedSites.value === null ||
-      aggregatedIntervalDetails.value === null ||
-      aggregatedTimestamps.value === null
-    ) {
+    if (integration.value === null || aggregations.value === null) {
       return [];
     }
 
     const newElements: TimelineElement[] = [];
     const knownSites: string[] = [];
-    let kS = -1; // copy of row
+    let rowNumber = -1;
 
     for (const index of indices.value) {
-      const timestamp = aggregatedTimestamps.value[index];
-      const detail = aggregatedIntervalDetails.value[index];
-      const {site} = aggregatedSites.value[index];
+      const timestamp = aggregations.value.timestamps[index];
+      const fileIndices = aggregations.value.fileIndices[index];
+      const site = intervals.value[index].sites.join(STRING_DELIMITER);
 
       if (!knownSites.includes(site)) {
         knownSites.push(site);
-        kS += 1;
+        rowNumber += 1;
       }
 
-      const start = convertTimestampToDate(timestamp);
-      const end = start.add(integration.value.seconds, 'seconds');
+      const start = timestampToDate(timestamp);
+      const end = addMilliseconds(start, integration.value.duration);
 
-      for (const d of detail) {
-        const s = start.unix() * 1000;
-        const e = end.unix() * 1000;
+      for (const fileIndex of fileIndices) {
+        const s = start.getTime();
+        const e = end.getTime();
         const element = createElement(
-          kS,
+          rowNumber,
           index,
           s,
           e,
-          scale.value[d.fileIndex],
+          scale.value[fileIndex],
           [
             `site: ${site}`,
             `interval index: ${index}`,
-            `file index: ${d.fileIndex}`,
-            `start: ${convertTimestampToIsoDate(s)}`,
-            `end: ${convertTimestampToIsoDate(e)}`,
+            `file index: ${fileIndex}`,
+            `start: ${timestampToString(s)}`,
+            `end: ${timestampToString(e)}`,
           ],
         );
 
@@ -119,7 +102,7 @@ export function useTimelineElements() {
   };
 
   return {
-    getCollectedIndices: getCollectedIndices,
-    createElements: createElements,
+    getCollectedIndices,
+    createElements,
   };
 }

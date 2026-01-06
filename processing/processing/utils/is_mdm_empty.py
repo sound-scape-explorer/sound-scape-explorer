@@ -1,5 +1,5 @@
-from typing import List, Any
+from processing.types import Mdm
 
 
-def is_mdm_empty(mdm: List[Any]) -> bool:
-    return len(mdm) == 1 and len(mdm[0]) == 0
+def is_mdm_empty(mdm: Mdm) -> bool:
+    return mdm.shape[0] == 1 and mdm.shape[1] == 0

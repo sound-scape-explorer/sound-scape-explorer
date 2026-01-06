@@ -1,0 +1,26 @@
+@use "sass:math";
+@use "src/styles/layout";
+
+.row {
+  display: grid;
+  gap: layout.$padding-x;
+
+  & > :first-child {
+    gap: math.div(layout.$padding-x, 2);
+  }
+
+  & > div, & > span, & > label {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  & > label {
+    height: 100%;
+  }
+}
+
+.narrow {
+  padding-bottom: 2px !important;
+  padding-top: 2px !important;
+}

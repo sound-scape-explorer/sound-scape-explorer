@@ -5,7 +5,7 @@ import {useBodyUtils} from 'src/components/timeline/body/use-body-utils';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {type TimelineElement} from 'src/components/timeline/use-timeline-elements';
 import {useTimelineTheme} from 'src/components/timeline/use-timeline-theme';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
 
 export function useBodyDrawElements() {
   const {context} = useTimelineContext().body;
@@ -14,7 +14,7 @@ export function useBodyDrawElements() {
   const {rangeToCanvasX} = useBodyUtils();
   const {elements} = useBodyElements();
   const {highlight, active} = useTimelineTheme();
-  const {currentIntervalIndex} = useIntervalSelector();
+  const {currentIndex} = useIntervalTransport();
 
   const getElementHovered = (element: TimelineElement) => {
     return (
@@ -26,7 +26,7 @@ export function useBodyDrawElements() {
   };
 
   const getElementSelected = (element: TimelineElement) => {
-    return currentIntervalIndex.value === element.index;
+    return currentIndex.value === element.index;
   };
 
   const setBlur = (ctx: CanvasRenderingContext2D) => {
@@ -78,6 +78,6 @@ export function useBodyDrawElements() {
   };
 
   return {
-    drawElements: drawElements,
+    drawElements,
   };
 }

@@ -18,7 +18,7 @@ export function useOverviewElements() {
   };
 
   return {
-    elements: elements,
-    update: update,
+    elements,
+    update,
   };
 }

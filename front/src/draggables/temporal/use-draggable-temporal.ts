@@ -1,87 +1,55 @@
-import {Csv} from 'src/common/csv';
-import {useDate} from 'src/composables/use-date';
-import {useExportName} from 'src/composables/use-export-name';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
-import {useTemporal} from 'src/draggables/temporal/use-temporal';
+import {type ExtractorDto} from '@shared/dtos';
+import {useAcousticDataReader} from 'src/composables/use-acoustic-data-reader';
+import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
+import {useAcousticSerializer} from 'src/composables/use-acoustic-serializer';
+import {useTemporalSeries} from 'src/draggables/temporal/use-temporal-series';
 import {computed, ref} from 'vue';
+import {z} from 'zod';
 
-const indicator = ref<string>('');
-const hasIndicator = computed<boolean>(() => indicator.value !== '');
+const extractorSlug = ref<string>('');
+const extractor = ref<ExtractorDto | null>(null);
+const hasExtractor = computed<boolean>(() => extractorSlug.value !== '');
 
-type Display = 'Continuous' | 'Candles';
-const displays: Display[] = ['Continuous', 'Candles'];
-const display = ref<Display>(displays[0]);
+export const TemporalDisplay = z.enum(['Continuous', 'Candles']);
+// eslint-disable-next-line no-redeclare
+export type TemporalDisplay = z.infer<typeof TemporalDisplay>;
 
-const isCandles = computed<boolean>(() => display.value === 'Candles');
+const display = ref<TemporalDisplay>(TemporalDisplay.enum.Continuous);
+
+const isCandles = computed<boolean>(
+  () => display.value === TemporalDisplay.enum.Candles,
+);
 const isCondensed = ref<boolean>(true);
-const isDisplay = ref<boolean>(true); // whether plot is shown or not
+const isDisplay = ref<boolean>(true); // whether the plot is shown or not
 const isExpanded = ref<boolean>(false);
 
 export function useDraggableTemporal() {
-  const {aggregatedIndicators} = useStorageAggregatedIndicators();
-  const {data} = useTemporal();
-  const {convertTimestampToIsoDate} = useDate();
-  const {selectIndicator} = useTemporal();
-  const {generate} = useExportName();
+  const {slugToExtractor} = useAcousticExtractors();
+  const {read} = useAcousticDataReader();
+  const {serialize} = useAcousticSerializer();
+  const {set} = useTemporalSeries();
 
-  const parseIndex = (optionString: string | null): number | null => {
-    if (optionString === null) {
-      return null;
-    }
-
-    const stringElements = optionString.split(' ');
-    return Number(stringElements[0]);
-  };
-
-  const update = () => {
-    selectIndicator(parseIndex(indicator.value));
-  };
-
-  const indicators = computed(() => {
-    if (aggregatedIndicators.value === null) {
-      return [];
-    }
-
-    return aggregatedIndicators.value.map(
-      (i) => `${i.extractor.index} - ${i.extractor.name}`,
-    );
-  });
-
-  const handleExportClick = () => {
-    const csv = new Csv();
-    csv.addColumn('intervalIndex');
-    csv.addColumn('site');
-    csv.addColumn('timestamp');
-    csv.addColumn('values');
-
-    for (const d of data.value) {
-      csv.createRow();
-      csv.addToCurrentRow(d.index.toString());
-      csv.addToCurrentRow(d.site);
-      csv.addToCurrentRow(convertTimestampToIsoDate(d.timestamp));
-      csv.addToCurrentRow(d.values.join('; '));
-    }
-
-    const name = generate('indicators');
-    csv.download(name);
+  const handleExtractorChange = async () => {
+    extractor.value = slugToExtractor(extractorSlug.value);
+    const data = await read(extractor.value);
+    const series = await serialize(data);
+    set(series);
   };
 
   const toggleDisplay = () => (isDisplay.value = !isDisplay.value);
   const toggleExpanded = () => (isExpanded.value = !isExpanded.value);
 
   return {
-    hasIndicator: hasIndicator,
-    indicator: indicator,
-    indicators: indicators,
-    display: display,
-    displays: displays,
-    isCandles: isCandles,
-    isCondensed: isCondensed,
-    isDisplay: isDisplay,
-    toggleDisplay: toggleDisplay,
-    handleExportClick: handleExportClick,
-    update: update,
-    isExpanded: isExpanded,
-    toggleExpanded: toggleExpanded,
+    extractor,
+    extractorSlug,
+    hasExtractor,
+    display,
+    isCandles,
+    isCondensed,
+    isDisplay,
+    toggleDisplay,
+    handleExtractorChange,
+    isExpanded,
+    toggleExpanded,
   };
 }

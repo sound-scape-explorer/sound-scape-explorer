@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 declare module 'jsfive' {
   type Attrs = Record<string, string>;
   type DataObjects = unknown;
@@ -22,7 +20,7 @@ declare module 'jsfive' {
 
     public get keys(): string[];
 
-    public get values(): Array<Dataset | Group>;
+    public get values(): (Dataset | Group)[];
 
     public length(): number;
 
@@ -50,6 +48,6 @@ declare module 'jsfive' {
 
     public get shape(): number | [number, number];
 
-    public get value(): Array<string | number>;
+    public get value(): (string | number)[];
   }
 }

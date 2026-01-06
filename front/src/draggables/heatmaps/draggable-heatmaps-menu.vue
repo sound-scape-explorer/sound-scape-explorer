@@ -1,42 +1,35 @@
-<script lang="ts" setup="">
-import {IonIcon} from '@ionic/vue';
-import {downloadOutline, repeatOutline} from 'ionicons/icons';
+<script lang="ts" setup>
 import {NSelect} from 'naive-ui';
 import AppButton from 'src/app/app-button.vue';
 import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue';
+import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
+import {useAppHeatmapHighlight} from 'src/app/heatmap/use-app-heatmap-highlight';
 import {useAppHeatmapSize} from 'src/app/heatmap/use-app-heatmap-size';
 import AppSelect from 'src/app/select/app-select.vue';
-import {InjectionKey} from 'src/common/injection-key';
-import {useRefProvide} from 'src/composables/use-ref-provide';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
+import {useTagUniques} from 'src/composables/use-tag-uniques';
+import {HeatmapScale} from 'src/constants';
 import {useDraggableHeatmaps} from 'src/draggables/heatmaps/use-draggable-heatmaps';
 import {useDraggableHeatmapsColor} from 'src/draggables/heatmaps/use-draggable-heatmaps-color';
 import {useDraggableHeatmapsExport} from 'src/draggables/heatmaps/use-draggable-heatmaps-export';
-import {useDraggableHeatmapsLabels} from 'src/draggables/heatmaps/use-draggable-heatmaps-labels';
 import {useDraggableHeatmapsRange} from 'src/draggables/heatmaps/use-draggable-heatmaps-range';
+import {useDraggableHeatmapsTags} from 'src/draggables/heatmaps/use-draggable-heatmaps-tags';
 
 const {
-  digesterName,
-  options: digesterOptions,
+  metricSlug,
+  options: metricOptions,
   isReadyForSelection,
   isReadyAndSelected,
   isPairing,
 } = useDraggableHeatmaps();
 
-const {a, b, swap: swapLabels} = useDraggableHeatmapsLabels();
+const {a, b, swap: swapLabels} = useDraggableHeatmapsTags();
 const {options: rangeOptions, index: rangeIndex} = useDraggableHeatmapsRange();
 const {width, height} = useAppHeatmapSize();
-const {flavor, flavors} = useDraggableHeatmapsColor();
+const {flavor} = useDraggableHeatmapsColor();
 const {handleClick: handleExportClick} = useDraggableHeatmapsExport();
-const {labelPropertiesActual} = useStorageLabels();
-
-useRefProvide(InjectionKey.digestedDigester, digesterName);
-useRefProvide(InjectionKey.digestedLabelA, a);
-useRefProvide(InjectionKey.digestedLabelB, b);
-useRefProvide(InjectionKey.digestedColorFlavor, flavor);
-useRefProvide(InjectionKey.heatmapsPlotWidth, width);
-useRefProvide(InjectionKey.heatmapsPlotHeight, height);
+const {coreUniques} = useTagUniques();
+const {reset} = useAppHeatmapHighlight();
 </script>
 
 <template>
@@ -44,36 +37,40 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
     <h2>Select</h2>
 
     <AppSelect
-      :injection-key="InjectionKey.digestedDigester"
-      :options="digesterOptions"
-      placeholder="Digester..."
+      v-model="metricSlug"
+      :options="metricOptions"
+      placeholder="Metric..."
       size="small"
+      @update:model-value="reset"
     />
 
     <h2>Over</h2>
 
     <div :class="$style.labels">
       <AppSelect
-        :injection-key="InjectionKey.digestedLabelA"
-        :options="labelPropertiesActual ?? []"
+        v-model="a"
+        :options="Object.keys(coreUniques) ?? []"
         placeholder="Label A..."
         size="small"
+        @update:model-value="reset"
       />
 
       <AppButton
         :disabled="!isReadyForSelection || !isPairing"
         :handle-click="swapLabels"
         size="small"
+        @update:model-value="reset"
       >
-        <IonIcon :icon="repeatOutline" />
+        <AppIcon icon="swap" />
       </AppButton>
 
       <AppSelect
+        v-model="b"
         :disabled="!isReadyForSelection || !isPairing"
-        :injection-key="InjectionKey.digestedLabelB"
-        :options="labelPropertiesActual ?? []"
+        :options="Object.keys(coreUniques) ?? []"
         placeholder="Label B..."
         size="small"
+        @update:model-value="reset"
       />
     </div>
 
@@ -81,9 +78,9 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
 
     <div :class="$style.colors">
       <AppSelect
+        v-model="flavor"
         :disabled="!isReadyAndSelected"
-        :injection-key="InjectionKey.digestedColorFlavor"
-        :options="flavors"
+        :options="HeatmapScale.options"
         placeholder="Color flavor..."
         size="small"
       />
@@ -105,9 +102,9 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
 
     <div :class="$style.plot">
       <AppDraggableMenuPlotSizes
+        v-model:height="height"
+        v-model:width="width"
         :disabled="!isReadyAndSelected"
-        :height="InjectionKey.heatmapsPlotHeight"
-        :width="InjectionKey.heatmapsPlotWidth"
       />
 
       <AppButton
@@ -117,28 +114,33 @@ useRefProvide(InjectionKey.heatmapsPlotHeight, height);
         tooltip="Export .csv"
         tooltip-placement="bottom"
       >
-        <IonIcon :icon="downloadOutline" />
+        <AppIcon
+          icon="download"
+          size="small"
+        />
       </AppButton>
     </div>
   </AppDraggableMenu>
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 .labels {
   display: grid;
-  grid-template-columns: 1fr $p0 * 7 1fr;
-  gap: $p0;
+  gap: sizes.$p0;
+  grid-template-columns: 1fr sizes.$p0 * 7 1fr;
 }
 
 .colors {
   display: grid;
-  grid-template-columns: 1fr $p0 * 7 1fr;
-  gap: $p0;
+  gap: sizes.$p0;
+  grid-template-columns: 1fr sizes.$p0 * 7 1fr;
 }
 
 .plot {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
 }
 

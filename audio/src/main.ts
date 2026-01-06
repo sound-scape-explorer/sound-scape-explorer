@@ -1,9 +1,11 @@
+import {existsSync, unlinkSync} from 'node:fs';
 import path from 'node:path';
 
 import cors from 'cors';
 import express from 'express';
 import {getAudioDurationInSeconds} from 'get-audio-duration';
 
+import {SCRATCH_PATH} from './constants';
 import {readFileAsync} from './read-file-async';
 import {sliceAudio} from './slice-audio';
 import {validateArgs} from './validate-args';
@@ -22,15 +24,43 @@ const audioPath = args[args.length - 1];
 const origin = 'http://localhost:5530';
 
 app.disable('x-powered-by');
-app.use(cors({origin: origin}));
+app.use(cors({origin}));
 
 // service
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`port: ${port}`);
   console.log(`ffmpeg path: ${ffmpegPath}`);
   console.log(`ffprobe path: ${ffprobePath}`);
   console.log(`audio path: ${audioPath}`);
+  console.log(`temp path: ${SCRATCH_PATH}`);
 });
+
+server.on('error', (err: NodeJS.ErrnoException) => {
+  console.error('Server error:', err);
+  process.exit(1);
+});
+
+const shutdown = async () => {
+  console.log('Shutting down server...');
+
+  if (existsSync(SCRATCH_PATH)) {
+    unlinkSync(SCRATCH_PATH);
+  }
+
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
+
+  // Force close after timeout
+  setTimeout(() => {
+    console.error('Forced shutdown');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown); // Ctrl+C
 
 // root endpoint
 app.get('/', (_req, res) => {
@@ -99,8 +129,8 @@ app.get('/get', async (req, res) => {
     res.end(slice);
   } catch (error) {
     if (error instanceof Error) {
-      res.writeHead(500, {'Content-Type': 'text/html'});
-      res.end(error.message);
+      res.writeHead(500, {'Content-Type': 'text/plain'});
+      res.end('Internal server error');
     }
   }
 });

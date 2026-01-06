@@ -2,7 +2,7 @@ import {type ChildProcessWithoutNullStreams, spawn} from 'node:child_process';
 import {existsSync} from 'node:fs';
 import path from 'node:path';
 
-import commandExists from 'command-exists';
+import {sync} from 'command-exists';
 import {ipcMain, ipcRenderer} from 'electron';
 
 import {Channels} from '../channels';
@@ -20,6 +20,8 @@ export class AudioBridge {
 
   private service: ChildProcessWithoutNullStreams | null;
 
+  private audioPath: string | null;
+
   private readonly nodeResolver = new NodeResolver();
 
   private readonly ffmpegResolver = new FfmpegResolver();
@@ -28,26 +30,36 @@ export class AudioBridge {
 
   constructor() {
     this.validateServicePath();
+    this.validateNode();
     this.validateFfmpeg();
     this.validateFfprobe();
 
     this.service = null;
+    this.audioPath = null;
     this.setHandlers();
   }
 
   public static async startFromRenderer(audioPath: string) {
-    await ipcRenderer.invoke(Channels.AudioStart, [
-      AudioBridge.servicePath,
-      audioPath,
-    ]);
+    try {
+      await ipcRenderer.invoke(Channels.AUDIO_START, [
+        AudioBridge.servicePath,
+        audioPath,
+      ]);
+    } catch (err) {
+      alert(err);
+    }
   }
 
   public static async stopFromRenderer() {
-    await ipcRenderer.invoke(Channels.AudioStop);
+    await ipcRenderer.invoke(Channels.AUDIO_STOP);
   }
 
   public static async getStatusFromRenderer() {
-    return (await ipcRenderer.invoke(Channels.AudioStatus)) as boolean;
+    return (await ipcRenderer.invoke(Channels.AUDIO_STATUS)) as boolean;
+  }
+
+  public static async getPathFromRenderer() {
+    return (await ipcRenderer.invoke(Channels.AUDIO_PATH)) as string | null;
   }
 
   public stop() {
@@ -57,6 +69,7 @@ export class AudioBridge {
 
     this.service.kill();
     this.service = null;
+    this.audioPath = null;
   }
 
   private validateServicePath() {
@@ -65,8 +78,16 @@ export class AudioBridge {
     }
   }
 
+  private validateNode() {
+    const exists = sync(this.nodeResolver.path);
+
+    if (!exists) {
+      throw new Error('node could not be found');
+    }
+  }
+
   private validateFfmpeg() {
-    const ffmpegExists = commandExists.sync(this.ffmpegResolver.path);
+    const ffmpegExists = sync(this.ffmpegResolver.path);
 
     if (!ffmpegExists) {
       throw new Error('ffmpeg could not be found');
@@ -74,43 +95,66 @@ export class AudioBridge {
   }
 
   private validateFfprobe() {
-    const ffprobeExists = commandExists.sync(this.ffprobeResolver.path);
+    const ffprobeExists = sync(this.ffprobeResolver.path);
 
     if (!ffprobeExists) {
       throw new Error('ffprobe could not be found');
     }
   }
 
-  private start(modulePath: string, audioPath: string) {
-    if (this.service !== null) {
-      return;
-    }
+  private start(modulePath: string, audioPath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.service !== null) {
+        return;
+      }
 
-    const child = spawn(
-      this.nodeResolver.path,
-      [
-        modulePath,
-        this.ffmpegResolver.path,
-        this.ffprobeResolver.path,
-        audioPath,
-      ],
-      {
-        env: {ELECTRON_RUN_AS_NODE: '1'},
-      },
-    );
+      const child = spawn(
+        this.nodeResolver.path,
+        [
+          modulePath,
+          this.ffmpegResolver.path,
+          this.ffprobeResolver.path,
+          audioPath,
+        ],
+        {
+          env: {ELECTRON_RUN_AS_NODE: '1'},
+        },
+      );
 
-    this.service = child;
+      this.service = child;
+      this.audioPath = audioPath;
 
-    child.stdout.on('data', (data) => {
-      console.log(`stdout:\n${data}`);
-    });
+      const startupTimeout = setTimeout(() => {
+        resolve(); // Assume success if no exit within reasonable time
+      }, 100);
 
-    child.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
-    });
+      child.stdout.on('data', (data) => {
+        console.log(`stdout:\n${data}`);
+      });
 
-    child.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
+      child.stderr.on('data', (data) => {
+        console.error(`stderr:\n${data}`);
+      });
+
+      child.on('exit', (code, signal) => {
+        clearTimeout(startupTimeout);
+        this.service = null;
+        this.audioPath = null;
+
+        if (code !== 0 || signal) {
+          const errorMessage = signal
+            ? `Audio service was terminated (${signal})`
+            : `Audio service failed to start (exit code: ${code})`;
+          reject(new Error(errorMessage));
+        }
+      });
+
+      child.on('error', (err) => {
+        clearTimeout(startupTimeout);
+        this.service = null;
+        this.audioPath = null;
+        reject(err);
+      });
     });
   }
 
@@ -118,26 +162,39 @@ export class AudioBridge {
     return this.service !== null;
   }
 
+  private getPath() {
+    return this.audioPath;
+  }
+
   private setHandlers() {
     this.setStartHandler();
     this.setStopHandler();
     this.setStatusHandler();
+    this.setPathHandler();
   }
 
   private setStartHandler() {
     ipcMain.handle(
-      Channels.AudioStart,
-      (_, [modulePath, audioPath]: [string, string]) => {
-        this.start(modulePath, audioPath);
+      Channels.AUDIO_START,
+      async (_, [modulePath, audioPath]: [string, string]) => {
+        try {
+          await this.start(modulePath, audioPath);
+        } catch (error) {
+          throw error;
+        }
       },
     );
   }
 
   private setStopHandler() {
-    ipcMain.handle(Channels.AudioStop, this.stop.bind(this));
+    ipcMain.handle(Channels.AUDIO_STOP, this.stop.bind(this));
   }
 
   private setStatusHandler() {
-    ipcMain.handle(Channels.AudioStatus, this.getStatus.bind(this));
+    ipcMain.handle(Channels.AUDIO_STATUS, this.getStatus.bind(this));
+  }
+
+  private setPathHandler() {
+    ipcMain.handle(Channels.AUDIO_PATH, this.getPath.bind(this));
   }
 }

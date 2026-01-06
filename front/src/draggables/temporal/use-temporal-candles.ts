@@ -44,8 +44,8 @@ export function useTemporalCandles() {
   };
 
   return {
-    period: period,
-    periods: periods,
-    update: update,
+    period,
+    periods,
+    update,
   };
 }

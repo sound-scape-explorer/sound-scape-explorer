@@ -3,10 +3,17 @@ import {ref} from 'vue';
 const isLocked = ref<boolean>(false);
 
 export function useScatterCamera() {
+  const handleGlobalMouseUp = () => {
+    unlock();
+    document.removeEventListener('mouseup', handleGlobalMouseUp);
+  };
+
   const lock = () => {
     if (isLocked.value === false) {
       isLocked.value = true;
     }
+
+    document.addEventListener('mouseup', handleGlobalMouseUp);
   };
 
   const unlock = () => {
@@ -16,8 +23,8 @@ export function useScatterCamera() {
   };
 
   return {
-    isLocked: isLocked,
-    lock: lock,
-    unlock: unlock,
+    isLocked,
+    lock,
+    unlock,
   };
 }

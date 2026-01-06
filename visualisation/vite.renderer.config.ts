@@ -1,11 +1,16 @@
+// @ts-expect-error: esModuleInterop is actually enabled...
+import path from 'path';
 import {defineConfig} from 'vite';
-import {resolve} from 'path';
 
 // https://vitejs.dev/config
 export default defineConfig({
   resolve: {
     alias: {
-      src: resolve(__dirname, './src'),
+      'src': path.resolve(__dirname, './src'),
+      '@shared': path.resolve(__dirname, '../shared'),
     },
+  },
+  server: {
+    host: '0.0.0.0',
   },
 });

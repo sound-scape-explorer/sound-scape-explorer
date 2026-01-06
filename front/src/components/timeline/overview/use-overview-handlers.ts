@@ -1,10 +1,10 @@
+import {getMouseCoordinatesFromCanvas} from '@shared/browser';
 import {useScatterCamera} from 'src/components/scatter/use-scatter-camera';
 import {type MousePosition} from 'src/components/timeline/body/use-body-handlers';
 import {useOverviewUtils} from 'src/components/timeline/overview/use-overview-utils';
 import {useTimelineHandlers} from 'src/components/timeline/overview/use-timeline-handlers';
 import {useTimelineDom} from 'src/components/timeline/use-timeline-dom';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
-import {getMouseCoordinatesFromCanvas} from 'src/utils/browser';
 import {ref} from 'vue';
 
 const position = ref<MousePosition>({x: 0, y: 0});
@@ -20,7 +20,7 @@ export function useOverviewHandlers() {
 
   const handleMouseMove = (e: MouseEvent) => {
     const {x, y} = getMouseCoordinatesFromCanvas(e);
-    position.value = {x: x, y: y};
+    position.value = {x, y};
 
     if (!canvas.value) {
       return;
@@ -69,7 +69,7 @@ export function useOverviewHandlers() {
     hover.value = null;
     isDragging.value = false;
     drag.value = null;
-    // todo: fix me
+    // TODO: fix me
     unlock();
   };
 
@@ -100,10 +100,10 @@ export function useOverviewHandlers() {
   };
 
   return {
-    position: position,
-    handleMouseUp: handleMouseUp,
-    handleMouseLeave: handleMouseLeave,
-    handleMouseMove: handleMouseMove,
-    handleMouseDown: handleMouseDown,
+    position,
+    handleMouseUp,
+    handleMouseLeave,
+    handleMouseMove,
+    handleMouseDown,
   };
 }

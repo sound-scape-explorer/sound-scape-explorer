@@ -1,0 +1,62 @@
+import {Button} from '@blueprintjs/core';
+import {useTableRefProvider} from 'src/panels/files/hooks/use-table-ref.ts';
+import {DrawerContent} from 'src/primitives/drawer-content.tsx';
+
+export function FilesHelpContent() {
+  const {triggerHelpModal} = useTableRefProvider();
+
+  return (
+    <DrawerContent
+      items={[
+        {
+          index: 0,
+          title: 'Site',
+          body: (
+            <div className="flex column">
+              <span>
+                Site is a required field that identifies where a recording was
+                made.
+              </span>
+              <span>
+                All files from the same site are organized chronologically on a
+                unified timeline.
+              </span>
+              <span className="i">
+                Note: recordings from the same site must not have overlapping
+                timestamps.
+              </span>
+            </div>
+          ),
+        },
+        {
+          index: 1,
+          title: 'Table',
+          body: (
+            <div className="flex column">
+              <span>Right click to access quick actions</span>
+
+              <span>
+                Press <code>?</code> or click{' '}
+                <Button
+                  size="small"
+                  onClick={triggerHelpModal}
+                >
+                  here
+                </Button>{' '}
+                to display help.
+              </span>
+
+              <span>
+                Undo by pressing <code>Ctrl+Z</code>.
+              </span>
+
+              <span>
+                Redo by pressing <code>Ctrl+⇧+Z</code>.
+              </span>
+            </div>
+          ),
+        },
+      ]}
+    />
+  );
+}

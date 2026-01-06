@@ -28,6 +28,6 @@ export function useBodyDrawRows() {
   };
 
   return {
-    drawRows: drawRows,
+    drawRows,
   };
 }

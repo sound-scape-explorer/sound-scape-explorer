@@ -13,13 +13,13 @@ export function useTimelineTheme() {
   const active = (color: string) => chroma(color).brighten().css();
 
   return {
-    primary: primary,
-    background: background,
-    stroke: stroke,
-    strokeLight: strokeLight,
-    fill: fill,
-    fillLight: fillLight,
-    highlight: highlight,
-    active: active,
+    primary,
+    background,
+    stroke,
+    strokeLight,
+    fill,
+    fillLight,
+    highlight,
+    active,
   };
 }

@@ -1,35 +1,33 @@
-from typing import List
-
+import numpy as np
 from sklearn.preprocessing import robust_scale
 
+from processing.constants import UMAP_MIN_DIST
 from processing.reducers.AbstractReducer import AbstractReducer
 
 
 class UmapReducer(AbstractReducer):
-    min_dist: float
-
     def __init__(
         self,
-        min_dist: float = 0.1,
+        min_dist: float = UMAP_MIN_DIST,
     ):
         self.min_dist = min_dist
 
-    def calculate(
+    def _reduce(
         self,
-    ) -> List[List[float]]:
-        features = self._validate_load()
-        scaled_features = robust_scale(features)
-
+        embeddings,
+        dimensions,
+        seed,
+    ):
         # using dynamic import to prevent numba's AOT
-        from umap.umap_ import UMAP
+        from umap import UMAP
 
         umap = UMAP(
-            n_components=self._dimensions,
-            random_state=self._seed,
+            n_components=dimensions,
+            random_state=seed,
             metric="manhattan",
             min_dist=self.min_dist,
         )
 
-        reduced_features = umap.fit_transform(scaled_features)
-        self.set_values(list(reduced_features))  # type: ignore
-        return self.values
+        scaled = robust_scale(embeddings)
+        reductions: np.ndarray = umap.fit_transform(scaled)  # type: ignore
+        return reductions

@@ -4,6 +4,6 @@ const isLocked = ref<boolean>(false);
 
 export function useOpenLock() {
   return {
-    isLocked: isLocked,
+    isLocked,
   };
 }

@@ -1,21 +1,10 @@
-import {useBandSelection} from 'src/composables/use-band-selection';
 import {useClientSettings} from 'src/composables/use-client-settings';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {EXPORT_FILENAME} from 'src/constants';
-
-export type ExportType =
-  | 'scatter'
-  | 'indicators'
-  | 'heatmap'
-  | 'trajectories'
-  | 'relative-trajectories';
-
-const separator = ' - ';
+import {useViewSelection} from 'src/composables/use-view-selection';
+import {EXPORT_FILENAME, ExportType, SLUG_DELIMITER} from 'src/constants';
 
 export function useExportName() {
+  const {band, integration} = useViewSelection();
   const {isDetailedExportName} = useClientSettings();
-  const {band} = useBandSelection();
-  const {integration} = useIntegrationSelection();
 
   const appendDetails = (blocks: string[]): string[] => {
     if (!isDetailedExportName.value) {
@@ -46,23 +35,23 @@ export function useExportName() {
     appendDetails(blocks);
 
     switch (type) {
-      case 'scatter': {
+      case ExportType.enum.scatter: {
         blocks.push('scatter');
         break;
       }
-      case 'indicators': {
-        blocks.push('indicators');
+      case ExportType.enum.temporal: {
+        blocks.push('temporal');
         break;
       }
-      case 'heatmap': {
+      case ExportType.enum.heatmap: {
         blocks.push('heatmap');
         break;
       }
-      case 'trajectories': {
+      case ExportType.enum.trajectories: {
         blocks.push('trajectories');
         break;
       }
-      case 'relative-trajectories': {
+      case ExportType.enum.relativeTrajectories: {
         blocks.push('relative-trajectories');
         break;
       }
@@ -72,10 +61,10 @@ export function useExportName() {
     }
 
     appendOptions(blocks, ...opts);
-    return blocks.join(separator);
+    return blocks.join(SLUG_DELIMITER);
   };
 
   return {
-    generate: generate,
+    generate,
   };
 }

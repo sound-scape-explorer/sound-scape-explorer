@@ -29,9 +29,9 @@ export function useDraggableCalendar() {
   );
 
   return {
-    isActive: isActive,
-    isPlaying: isPlaying,
-    durations: durations,
-    uiDisabled: uiDisabled,
+    isActive,
+    isPlaying,
+    durations,
+    uiDisabled,
   };
 }

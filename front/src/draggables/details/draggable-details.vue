@@ -1,190 +1,84 @@
-<script lang="ts" setup="">
-import {IonIcon} from '@ionic/vue';
-import {headsetOutline} from 'ionicons/icons';
-import {NButton, NGi, NGrid, NTag} from 'naive-ui';
-import AppTooltip from 'src/app/app-tooltip.vue';
+<script lang="ts" setup>
+import {NGi, NGrid, NTag} from 'naive-ui';
+import AppHeader from 'src/app/app-header.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
-import {useBandSelection} from 'src/composables/use-band-selection';
-import {useDate} from 'src/composables/use-date';
-import {useExtractors} from 'src/composables/use-extractors';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useIntervalSelector} from 'src/composables/use-interval-selector';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
-import {useStorageLabels} from 'src/composables/use-storage-labels';
-import {useAudioFile} from 'src/draggables/audio/use-audio-file';
-import {useDetails} from 'src/draggables/details/use-details';
-import {useDetailsAutoselectAudio} from 'src/draggables/details/use-details-autoselect-audio';
-import {watch} from 'vue';
+import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
+import {useDateTime} from 'src/composables/use-date-time';
+import {DraggableKey} from 'src/composables/use-draggables';
+import {useIntervalTransport} from 'src/composables/use-interval-transport';
+import {useThemeColors} from 'src/composables/use-theme-colors';
+import {STRING_DELIMITER} from 'src/constants';
+import DraggableDetailsAudioWindows from 'src/draggables/details/draggable-details-audio-windows.vue';
 
-const {nonNnExtractors} = useExtractors();
-const {band} = useBandSelection();
-const {integration} = useIntegrationSelection();
-const {aggregatedIndicators} = useStorageAggregatedIndicators();
-const {labelProperties} = useStorageLabels();
-const {currentIntervalIndex, hasClicked} = useIntervalSelector();
-const {select} = useAudioFile();
-const {convertTimestampToIsoDate, convertDateToIsoDate} = useDate();
-const {autoselect} = useDetailsAutoselectAudio();
-const {
-  date,
-  dateEnd,
-  labelValues,
-  site,
-  blocks,
-  readDetails,
-  timeshift,
-  updateDates,
-} = useDetails();
-
-watch(blocks, autoselect);
-watch(currentIntervalIndex, readDetails);
-watch(timeshift, updateDates);
+const {currentIndex, currentInterval} = useIntervalTransport();
+const {timestampToString} = useDateTime();
+const {colors} = useThemeColors();
 </script>
 
 <template>
   <AppDraggable
-    draggable-key="details"
-    suspense="scatterClick"
+    :draggable-key="DraggableKey.enum.details"
+    :suspense="SuspenseCase.enum.SCATTER_CLICK"
   >
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Selected interval index</div>
-      <span :class="[$style.file, $style.index]">{{
-        currentIntervalIndex ?? 'none'
-      }}</span>
-    </div>
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Site</div>
-      <span :class="[$style.file, $style.index]">{{ site?.site ?? '' }}</span>
-    </div>
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Audio blocks</div>
-      <span :class="[$style.file, $style.index]">
-        <AppTooltip
-          v-for="blockDetails in blocks"
-          placement="bottom"
-        >
-          <template #body>
-            <NButton
-              :class="$style.zoom"
-              size="small"
-              @click="() => select(blockDetails)"
-            >
-              <IonIcon :icon="headsetOutline" />
-            </NButton>
-          </template>
-
-          <template #tooltip>
-            <NGrid
-              :cols="1"
-              x-gap="12"
-            >
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  file
-                </NTag>
-                {{ blockDetails.file }}
-              </NGi>
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  file start
-                </NTag>
-                {{ blockDetails.fileStart }} ms
-              </NGi>
-              <NGi>
-                <NTag
-                  :bordered="false"
-                  size="small"
-                >
-                  start
-                </NTag>
-                {{ convertTimestampToIsoDate(blockDetails.start) }}
-              </NGi>
-            </NGrid>
-          </template>
-        </AppTooltip>
-      </span>
-    </div>
-
-    <div :class="$style.separator" />
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Date Start</div>
-      <span :class="[$style.file, $style.index]">{{
-        date && convertDateToIsoDate(date)
-      }}</span>
-    </div>
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Date End</div>
-      <span :class="[$style.file, $style.index]">{{
-        dateEnd && convertDateToIsoDate(dateEnd)
-      }}</span>
-    </div>
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Band</div>
-      <span :class="[$style.file, $style.index]">{{ band?.name ?? '' }}</span>
-    </div>
-
-    <div :class="[$style.file, $style.container]">
-      <div :class="$style.title">Integration</div>
-      <span :class="[$style.file, $style.index]">{{
-        integration?.name ?? ''
-      }}</span>
-    </div>
-
-    <div :class="$style.separator" />
-
-    <div :class="$style.title">Labels</div>
-
     <div
-      v-if="hasClicked"
-      :class="[$style.file, $style.container, $style.details]"
+      v-if="currentInterval && currentIndex"
+      :class="$style.container"
     >
-      <span />
+      <AppHeader>Interval data</AppHeader>
+
+      <div>
+        <div>Index</div>
+        <div>{{ currentIndex }}</div>
+      </div>
+
+      <div>
+        <div>Site</div>
+        <div>{{ currentInterval.sites.join(STRING_DELIMITER) }}</div>
+      </div>
+
+      <div>
+        <div>
+          Audio window{{ currentInterval.windows.length > 1 ? 's' : '' }}:
+          {{ currentInterval.windows.length }}
+        </div>
+        <div>
+          <DraggableDetailsAudioWindows :interval="currentInterval" />
+        </div>
+      </div>
+
+      <AppHeader>Date & time</AppHeader>
+
+      <div>
+        <div>Start</div>
+        <div>{{ timestampToString(currentInterval.start) }}</div>
+      </div>
+
+      <div>
+        <div>End</div>
+        <div>{{ timestampToString(currentInterval.end) }}</div>
+      </div>
+
+      <AppHeader>Tags</AppHeader>
+
       <NGrid
-        :cols="2"
-        x-gap="12"
+        cols="2"
+        x-gap="4"
+        y-gap="4"
       >
-        <!--suppress JSUnusedLocalSymbols -->
-        <NGi v-for="(_, index) in labelProperties">
+        <NGi
+          v-for="[tagName, tagValues] in Object.entries(currentInterval.tags)"
+          :class="$style.item"
+        >
           <NTag
             :bordered="false"
             size="small"
           >
-            {{ labelProperties?.[index] }}
+            {{ tagName }}
           </NTag>
 
-          {{ labelValues?.[index] }}
-        </NGi>
-      </NGrid>
-
-      <div :class="$style.separator" />
-
-      <div :class="$style.title">Indicators</div>
-
-      <NGrid
-        v-if="aggregatedIndicators !== null"
-        :cols="2"
-        x-gap="12"
-      >
-        <NGi v-for="(ex, index) in nonNnExtractors">
-          <NTag
-            :bordered="false"
-            size="small"
-          >
-            {{ ex.name }}
-          </NTag>
-
-          {{ aggregatedIndicators[index].values[currentIntervalIndex ?? 0] }}
+          <span>
+            {{ tagValues.join(STRING_DELIMITER) }}
+          </span>
         </NGi>
       </NGrid>
     </div>
@@ -192,50 +86,30 @@ watch(timeshift, updateDates);
 </template>
 
 <style lang="scss" module>
-.index {
-  font-style: italic;
-}
+@use 'src/styles/sizes';
 
 .container {
   display: flex;
-  justify-content: space-between;
-  width: $w1;
-  padding-right: $g0;
-}
-
-.title {
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  padding-left: 1px;
-}
-
-.file.container.details {
   flex-direction: column;
-  gap: $g0;
+  gap: sizes.$g0;
+  width: sizes.$w1;
 
-  div {
+  & > div {
+    align-items: center;
     display: flex;
     justify-content: space-between;
   }
 }
 
-.meta.container {
-  display: grid;
-  flex-direction: column;
-}
+.item {
+  align-items: center;
+  border-radius: sizes.$g0;
+  display: flex;
+  justify-content: space-between;
+  padding-right: sizes.$p0;
 
-.file-details {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: 1fr 1fr;
-}
-
-.src {
-  overflow: hidden;
-}
-
-.separator {
-  height: $p0;
+  &:hover {
+    background: v-bind('colors.boxShadow1');
+  }
 }
 </style>

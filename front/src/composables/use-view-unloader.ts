@@ -1,46 +1,41 @@
 import {useScatterColorScale} from 'src/components/scatter/use-scatter-color-scale';
-import {useScatterFilterLabels} from 'src/components/scatter/use-scatter-filter-labels';
-import {useScatterFilterTime} from 'src/components/scatter/use-scatter-filter-time';
+import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
+import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
+import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
+import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useScatterTraces} from 'src/components/scatter/use-scatter-traces';
-import {useBandSelection} from 'src/composables/use-band-selection';
-import {useDraggables} from 'src/composables/use-draggables';
-import {useExtractorSelection} from 'src/composables/use-extractor-selection';
-import {useIntegrationSelection} from 'src/composables/use-integration-selection';
-import {useReducerSelection} from 'src/composables/use-reducer-selection';
-import {useStorageAggregatedFeatures} from 'src/composables/use-storage-aggregated-features';
-import {useStorageAggregatedIndicators} from 'src/composables/use-storage-aggregated-indicators';
-import {useStorageAggregatedIntervalDetails} from 'src/composables/use-storage-aggregated-interval-details';
-import {useStorageAggregatedLabels} from 'src/composables/use-storage-aggregated-labels';
-import {useStorageAggregatedSites} from 'src/composables/use-storage-aggregated-sites';
-import {useStorageAggregatedTimestamps} from 'src/composables/use-storage-aggregated-timestamps';
-import {useStorageReducedFeatures} from 'src/composables/use-storage-reduced-features';
+import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {useAggregations} from 'src/composables/use-aggregations';
+import {useAutoclusters} from 'src/composables/use-autoclusters';
+import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
+import {useReductions} from 'src/composables/use-reductions';
 import {useTrajectoriesSelection} from 'src/composables/use-trajectories-selection';
-import {useLabelSelection} from 'src/draggables/labels/use-label-selection';
+import {useViewSelection} from 'src/composables/use-view-selection';
+import {useAudioFilters} from 'src/draggables/audio/use-audio-filters';
+import {useAudioPlaybackRate} from 'src/draggables/audio/use-audio-playback-rate';
+import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
+import {useTemporalSeries} from 'src/draggables/temporal/use-temporal-series';
 import {useTemporalThresholds} from 'src/draggables/temporal/use-temporal-thresholds';
 
 export function useViewUnloader() {
   const {open, closeAll} = useDraggables();
-  const {resetAggregatedFeatures} = useStorageAggregatedFeatures();
-  const {resetAggregatedIndicators} = useStorageAggregatedIndicators();
-  const {resetAggregatedTimestamps} = useStorageAggregatedTimestamps();
-  const {resetAggregatedSites} = useStorageAggregatedSites();
-  const {resetAggregatedIntervalDetails} =
-    useStorageAggregatedIntervalDetails();
-  const {resetAggregatedLabels} = useStorageAggregatedLabels();
-  const {resetReducedFeatures} = useStorageReducedFeatures();
-  const {resetColorScale} = useScatterColorScale();
-  const {resetSelection} = useLabelSelection();
+  const {reset: resetAggregations} = useAggregations();
+  const {reset: resetAutoclusters} = useAutoclusters();
+  const {reset: resetReductionEmbeddings} = useReductions();
+  const {reset: resetColorScale} = useScatterColorScale();
+  const {reset: resetTagSelection} = useTagSelection();
   const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
-  const {resetTraces, isEnabled} = useScatterTraces();
-  const {reset: resetFilterByLabel} = useScatterFilterLabels();
-  const {resetFilterByTime} = useScatterFilterTime();
-  const {reset: resetBand} = useBandSelection();
-  const {reset: resetIntegration} = useIntegrationSelection();
-  const {reset: resetExtractor} = useExtractorSelection();
-  const {reset: resetReducer} = useReducerSelection();
+  const {reset: resetScatter, isEnabled} = useScatterRender();
+  const {reset: resetFilterByLabel} = useScatterFilterTag();
+  const {reset: resetFilterByCalendar} = useScatterFilterCalendar();
+  const {reset: resterFilterByAcoustic} = useScatterFilterAcoustic();
+  const {reset: resetFilterSpatial} = useScatterFilterSpatial();
+  const {reset: resetViewSelection} = useViewSelection();
   const {isLoading, loadingText} = useScatterLoading();
+  const {reset: resetTemporalSeries} = useTemporalSeries();
   const {reset: resetTemporalThresholds} = useTemporalThresholds();
+  const {reset: resetAudioPlaybackRate} = useAudioPlaybackRate();
+  const {resetAll: resetAudioFilters} = useAudioFilters();
 
   const unload = () => {
     loadingText.value = 'Unloading selection...';
@@ -49,31 +44,30 @@ export function useViewUnloader() {
 
     closeAll();
     resetTrajectoriesSelection();
-    resetSelection();
+    resetTagSelection();
     resetColorScale();
-    resetTraces();
+    resetScatter();
     resetFilterByLabel();
-    resetFilterByTime();
+    resetFilterByCalendar();
+    resterFilterByAcoustic();
+    resetFilterSpatial();
+    resetAudioPlaybackRate();
+    resetAudioFilters();
 
-    resetAggregatedFeatures();
-    resetAggregatedIndicators();
-    resetAggregatedTimestamps();
-    resetAggregatedSites();
-    resetAggregatedIntervalDetails();
-    resetAggregatedLabels();
-    resetReducedFeatures();
+    resetAggregations();
+    resetReductionEmbeddings();
+    resetAutoclusters();
 
-    resetBand();
-    resetIntegration();
-    resetExtractor();
-    resetReducer();
+    resetViewSelection();
+
+    resetTemporalSeries();
     resetTemporalThresholds();
 
     isLoading.value = false;
-    open('view');
+    open(DraggableKey.enum.view);
   };
 
   return {
-    unload: unload,
+    unload,
   };
 }

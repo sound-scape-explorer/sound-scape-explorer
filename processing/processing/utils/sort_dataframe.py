@@ -1,11 +1,10 @@
 import numpy as np
-from pandas import DataFrame
 
-from processing.config.labels import LabelConfig
+from processing.interfaces import SerializedTag
 
 
-def sort_dataframe(dataframe: DataFrame, label: LabelConfig) -> DataFrame:
-    order = np.argsort(label.uniques_unsorted)
-    dataframe = dataframe[:, order]
-    dataframe = dataframe[order, :]
-    return dataframe
+def sort_dataframe(df: np.ndarray, tag: SerializedTag):
+    order = np.argsort(tag.uniques)
+    df = df[:, order]
+    df = df[order, :]
+    return df

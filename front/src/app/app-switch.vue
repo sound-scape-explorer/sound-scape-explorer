@@ -1,10 +1,7 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NSwitch} from 'naive-ui';
-import {type InjectionKey} from 'src/common/injection-key';
-import {useRefInject} from 'src/composables/use-ref-inject';
 
 interface Props {
-  injectionKey: InjectionKey;
   checked: string;
   unchecked: string;
   disabled?: boolean;
@@ -16,7 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
   native: false,
 });
 
-const model = useRefInject(props.injectionKey);
+const model = defineModel<boolean>();
 </script>
 
 <template>
@@ -32,10 +29,12 @@ const model = useRefInject(props.injectionKey);
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/sizes';
+
 $t: 0.76;
 
 .custom {
-  margin-right: -$g0 - $p0;
-  transform: translate3d(-$p0 + 2px, 0, 0) scale3d($t, $t, $t);
+  margin-right: -(sizes.$g0) - sizes.$p0;
+  transform: translate3d(-(sizes.$p0) + 2px, 0, 0) scale3d($t, $t, $t);
 }
 </style>

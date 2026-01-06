@@ -10,6 +10,6 @@ export function useOverviewRender() {
     });
 
   return {
-    render: render,
+    render,
   };
 }

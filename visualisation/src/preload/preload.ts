@@ -1,26 +1,27 @@
 import {contextBridge} from 'electron';
+import {getAudioPath} from 'src/preload/get-audio-path';
 
+import {checkPath} from './check-path';
+import {createCampaignWindow} from './create-campaign-window';
 import {createFrontWindow} from './create-front-window';
+import {findCommonFolder} from './find-common-folder';
 import {getAudioStatus} from './get-audio-status';
-import {getFileDirectory} from './get-file-directory';
+import {getDirectoryPath} from './get-directory-path';
+import {getPathExistence} from './get-path-existence';
 import {joinPath} from './join-path';
 import {startAudioService} from './start-audio-service';
 import {stopAudioService} from './stop-audio-service';
 
-export interface ElectronAPI {
-  getFileDirectory: typeof getFileDirectory;
-  startAudioService: typeof startAudioService;
-  getAudioStatus: typeof getAudioStatus;
-  stopAudioService: typeof stopAudioService;
-  createFrontWindow: typeof createFrontWindow;
-  joinPath: typeof joinPath;
-}
-
 contextBridge.exposeInMainWorld('electronAPI', {
-  getFileDirectory: getFileDirectory,
-  startAudioService: startAudioService,
-  getAudioStatus: getAudioStatus,
-  stopAudioService: stopAudioService,
-  createFrontWindow: createFrontWindow,
-  joinPath: joinPath,
+  getDirectoryPath,
+  getPathExistence,
+  startAudioService,
+  getAudioStatus,
+  getAudioPath,
+  stopAudioService,
+  createFrontWindow,
+  createCampaignWindow,
+  joinPath,
+  findCommonFolder,
+  checkPath,
 });

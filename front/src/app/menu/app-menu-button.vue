@@ -1,13 +1,15 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import {NButton, NIcon} from 'naive-ui';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useAppMenuButton} from 'src/app/menu/use-app-menu-button';
 import {type DraggableKey} from 'src/composables/use-draggables';
 import {useKeyboardShortcuts} from 'src/composables/use-shortcuts';
+import {useThemeColors} from 'src/composables/use-theme-colors';
+import {capitalizeFirstLetter} from 'src/utils/strings';
 
 export interface AppMenuItemProps {
   draggableKey: DraggableKey;
-  text: string;
+  text?: string;
   disabled?: boolean;
 }
 
@@ -15,6 +17,8 @@ const props = defineProps<AppMenuItemProps>();
 const {button, handleClick, isActive, isSelected, isHidden} =
   useAppMenuButton(props);
 const {getKey} = useKeyboardShortcuts();
+const {colors} = useThemeColors();
+const text = props.text ?? capitalizeFirstLetter(props.draggableKey);
 </script>
 
 <template>
@@ -41,7 +45,7 @@ const {getKey} = useKeyboardShortcuts();
     </template>
 
     <template #tooltip>
-      {{ props.text }} [<span :class="$style.bold">
+      {{ text }} [<span :class="$style.bold">
         {{ getKey(props.draggableKey) }}</span
       >]
     </template>
@@ -49,18 +53,22 @@ const {getKey} = useKeyboardShortcuts();
 </template>
 
 <style lang="scss" module>
+@use 'src/styles/transitions';
+@use 'src/styles/fx';
+@use 'src/styles/shadows';
+
 .button {
   pointer-events: auto;
 
-  @include transition-app-menu-button;
-  @include background-blur-1;
-  @include s0;
+  @include transitions.transition-app-menu-button;
+  @include fx.background-blur-1;
+  @include shadows.s0(v-bind('colors.boxShadow1'));
 }
 
 .active {
-  background: $olive-light;
+  background: v-bind('colors.actionColor');
 
-  @include s0d;
+  @include shadows.s0(v-bind('colors.boxShadow2'));
 }
 
 .bold {
@@ -68,7 +76,7 @@ const {getKey} = useKeyboardShortcuts();
 }
 
 .selected {
-  background: $olive;
+  background: v-bind('colors.primaryColor');
 }
 
 .hidden {
