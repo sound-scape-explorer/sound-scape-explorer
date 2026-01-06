@@ -11,6 +11,7 @@ trap cleanup EXIT
 
 cd front
 pnpm i
+pnpm exec playwright install
 
 # Start dev server in background
 pnpm dev >/dev/null 2>&1 &
