@@ -1,3 +1,10 @@
+# [14.0.0-beta.21](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.20...v14.0.0-beta.21) (2026-01-06)
+
+
+### Bug Fixes
+
+* **visualisation:** prevent empty string file type for h5 detection ([71cbc42](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/71cbc420d81bc0d0495d3b9170be338244454501))
+
 # [14.0.0-beta.20](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0-beta.19...v14.0.0-beta.20) (2026-01-05)
 
 
