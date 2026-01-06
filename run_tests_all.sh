@@ -3,8 +3,7 @@
 # exit on error
 set -e
 
-# root packages
-pnpm i
+./reinstall_npm_packages.sh
 
 # prepare visualisation builds and binaries
 pnpm visualisation:prebuild
