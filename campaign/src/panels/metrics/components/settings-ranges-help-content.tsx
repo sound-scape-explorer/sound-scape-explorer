@@ -14,7 +14,7 @@ export function SettingsRangesHelpContent() {
                 data in the interface.
               </span>
               <span className="i">
-                Note: time ranges are for visualization only and do not affect
+                Note: time ranges are for visualisation only and do not affect
                 any calculations.
               </span>
             </div>

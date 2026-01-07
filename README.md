@@ -4,7 +4,7 @@
 
 # [_SoundScapeExplorer_](https://sound-scape-explorer.github.io/sound-scape-explorer/)
 
-**Process. Visualize. Explore.**
+**Process. Visualise. Explore.**
 
 ![Version](https://img.shields.io/github/package-json/v/sound-scape-explorer/sound-scape-explorer)
 
