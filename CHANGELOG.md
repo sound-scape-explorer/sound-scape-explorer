@@ -1,3 +1,10 @@
+## [14.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0...v14.0.1) (2026-01-07)
+
+
+### Bug Fixes
+
+* use british english spelling ([654df6a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/654df6af43dd8f3f9bb34df3c951a33b6b1f00bc))
+
 # [14.0.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v13.10.3...v14.0.0) (2026-01-06)
 
 
