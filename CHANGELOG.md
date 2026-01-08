@@ -1,3 +1,10 @@
+## [14.0.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.2...v14.0.3) (2026-01-08)
+
+
+### Bug Fixes
+
+* **visualisation:** add link to download latest software version ([1aeb573](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/1aeb57384c00464851ce08396f28f9d6cfa71bc0))
+
 ## [14.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.1...v14.0.2) (2026-01-08)
 
 
