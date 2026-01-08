@@ -1,3 +1,10 @@
+## [14.0.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.1...v14.0.2) (2026-01-08)
+
+
+### Bug Fixes
+
+* add CLI scripts as git release assets ([b5152cc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b5152cc2101a65a4801fa3fac8c80f5225f2ad11))
+
 ## [14.0.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.0...v14.0.1) (2026-01-07)
 
 
