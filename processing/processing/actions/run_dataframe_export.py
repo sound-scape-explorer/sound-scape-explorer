@@ -7,13 +7,13 @@ from processing.context import Context
 from processing.lib.console import Console
 from processing.lib.time import convert_timestamp_to_date_string
 from processing.managers.ReductionManager import ReductionManager
-from processing.services.TagService import TagService
 from processing.prompts.prompt_band import prompt_band
 from processing.prompts.prompt_csv_path import prompt_csv_path
 from processing.prompts.prompt_extraction import prompt_extraction
 from processing.prompts.prompt_integration import prompt_integration
 from processing.repositories.AggregationRepository import AggregationRepository
 from processing.repositories.ReductionRepository import ReductionRepository
+from processing.services.TagService import TagService
 
 
 def run_dataframe_export(context: Context):
@@ -43,14 +43,17 @@ def run_dataframe_export(context: Context):
 
     # intervals
     for i, agg in enumerate(aggregations):
-        raw["indices"].append(str(i))
-        raw["timestamps"].append(convert_timestamp_to_date_string(agg.start))
+        raw["interval_index"].append(str(i))
+        raw["timestamp"].append(convert_timestamp_to_date_string(agg.start))
 
+        indices = []
         site = []
         for file in agg.files:
+            indices.append(str(file.index))
             site.append(file.site)
 
-        raw["sites"].append(STRING_DELIMITER.join(site))
+        raw["file_indices"].append(STRING_DELIMITER.join(indices))
+        raw["site"].append(STRING_DELIMITER.join(site))
 
     # tags
     for tag in tags:
@@ -68,6 +71,7 @@ def run_dataframe_export(context: Context):
 
         for d in range(ri.reducer.dimensions):
             parts = [
+                "RED",
                 str(ri.reducer.index),
                 ri.reducer.impl.name,
                 f"{ri.reducer.dimensions}d",
@@ -79,7 +83,7 @@ def run_dataframe_export(context: Context):
 
     # interval embeddings
     for d in range(aggregations[0].embeddings.shape[0]):
-        parts = [str(extraction.index), extraction.name, f"{d}"]
+        parts = ["EMB", str(extraction.index), extraction.name, f"{d}"]
         key = "_".join(parts)
         raw[key] = [agg.embeddings[d] for agg in aggregations]
 
