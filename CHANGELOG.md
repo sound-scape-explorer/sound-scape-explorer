@@ -1,3 +1,10 @@
+## [14.0.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.3...v14.0.4) (2026-01-08)
+
+
+### Bug Fixes
+
+* **processing:** improve dataframe CSV export headers ([2657ae2](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2657ae2da95e30433e5425a8b44c11c22e731d84))
+
 ## [14.0.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.2...v14.0.3) (2026-01-08)
 
 
