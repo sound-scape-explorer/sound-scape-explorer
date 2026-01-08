@@ -43,6 +43,8 @@ module.exports = {
           'visualisation-binaries/*.deb',
           'visualisation-binaries/*.dmg',
           'visualisation-binaries/*.exe',
+          'bin/sse-processing-*.bat',
+          'bin/sse-processing-*.sh',
         ],
       },
     ],
