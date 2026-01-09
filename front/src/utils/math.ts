@@ -1,6 +1,10 @@
 export function calculateMean(array: number[]): number {
   let sum = 0;
 
+  if (array.length === 0) {
+    return sum;
+  }
+
   for (const value of array) {
     sum += value;
   }
