@@ -9,6 +9,7 @@ import {getAudioStatus} from './get-audio-status';
 import {getDirectoryPath} from './get-directory-path';
 import {getPathExistence} from './get-path-existence';
 import {joinPath} from './join-path';
+import {openClientBrowser} from './open-client-browser';
 import {startAudioService} from './start-audio-service';
 import {stopAudioService} from './stop-audio-service';
 
@@ -24,4 +25,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   joinPath,
   findCommonFolder,
   checkPath,
+  openClientBrowser,
 });

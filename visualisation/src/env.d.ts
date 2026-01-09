@@ -4,4 +4,8 @@ declare global {
   interface Window {
     electronAPI: ElectronAPI;
   }
+
+  interface File {
+    path: string;
+  }
 }

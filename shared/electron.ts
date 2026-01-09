@@ -9,6 +9,7 @@ import {getAudioStatus} from '../visualisation/src/preload/get-audio-status';
 import {getDirectoryPath} from '../visualisation/src/preload/get-directory-path';
 import {getPathExistence} from '../visualisation/src/preload/get-path-existence';
 import {joinPath} from '../visualisation/src/preload/join-path';
+import {openClientBrowser} from '../visualisation/src/preload/open-client-browser';
 import {startAudioService} from '../visualisation/src/preload/start-audio-service';
 import {stopAudioService} from '../visualisation/src/preload/stop-audio-service';
 
@@ -24,4 +25,5 @@ export interface ElectronAPI {
   joinPath: typeof joinPath;
   findCommonFolder: typeof findCommonFolder;
   checkPath: typeof checkPath;
+  openClientBrowser: typeof openClientBrowser;
 }

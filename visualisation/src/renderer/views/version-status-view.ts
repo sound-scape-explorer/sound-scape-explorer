@@ -32,9 +32,8 @@ export class VersionStatusView extends AbstractStatusView {
     node.textContent = 'No internet';
   }
 
-  private handleClick() {
-    window.open(
-      `https://github.com/sound-scape-explorer/sound-scape-explorer/releases/tag/v${this.upstreamVersion}`,
-    );
+  private async handleClick() {
+    const url = `https://github.com/sound-scape-explorer/sound-scape-explorer/releases/tag/v${this.upstreamVersion}`;
+    await window.electronAPI.openClientBrowser(url);
   }
 }
