@@ -8,6 +8,7 @@ type Hloc = {
   timestamp: number;
 };
 
+// TODO: quartiles and percentiles could be more useful for acoustic data here
 export function useTemporalHloc() {
   const {period} = useTemporalCandles();
 
