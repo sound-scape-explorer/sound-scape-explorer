@@ -16,6 +16,8 @@ const isNumericModeEnabled = ref<boolean>(false);
 const numericRangeMin = ref<string>('');
 const numericRangeMax = ref<string>('');
 
+const isAcousticDataLoading = ref<boolean>(false);
+
 export function useColoringState() {
   const {allUniques} = useTagUniques();
   const {acousticSlugs, slugToExtractor} = useAcousticExtractors();
@@ -49,10 +51,14 @@ export function useColoringState() {
       return;
     }
 
+    isAcousticDataLoading.value = true;
+
     const ex = slugToExtractor(option.value);
     const data = await read(ex);
     const series = await serialize(data);
     set(series);
+
+    isAcousticDataLoading.value = false;
   };
 
   const detectNumericRange = () => {
@@ -80,5 +86,6 @@ export function useColoringState() {
     updateAcousticData,
     detectNumericRange,
     resetNumericRange,
+    isAcousticDataLoading,
   };
 }
