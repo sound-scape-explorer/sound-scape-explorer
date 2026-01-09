@@ -1,3 +1,12 @@
+## [14.0.7](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.6...v14.0.7) (2026-01-09)
+
+
+### Bug Fixes
+
+* **front:** add loading state for acoustic series when coloring ([6c67a77](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6c67a77772e310acd23543b5b5e3046390218b72))
+* **front:** filter empty acoustic data series before detecting range ([68a0de9](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/68a0de979764b1a90bf363f663420ecf3e40636f))
+* **front:** prevent division by 0 ([3d7a394](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/3d7a3940a67e97ee73d83b2b38f9f36393fe55c7))
+
 ## [14.0.6](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.5...v14.0.6) (2026-01-09)
 
 
