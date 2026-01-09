@@ -6,6 +6,15 @@ import {CampaignBridge} from './bridges/CampaignBridge';
 import {FrontBridge} from './bridges/FrontBridge';
 import {MainWindow} from './windows/MainWindow';
 
+// force wayland on linux wayland sessions
+if (
+  process.platform === 'linux' &&
+  process.env.XDG_SESSION_TYPE === 'wayland'
+) {
+  app.commandLine.appendSwitch('enable-features', 'UseOzonePlatform');
+  app.commandLine.appendSwitch('ozone-platform', 'wayland');
+}
+
 let mainWindow: MainWindow | null = null;
 const isSingleInstance = app.requestSingleInstanceLock();
 
