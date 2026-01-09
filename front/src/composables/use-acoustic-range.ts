@@ -12,9 +12,10 @@ export function useAcousticRange() {
       return;
     }
 
-    const values = series.value.map((s) => calculateMean(s.values));
-    min.value = truncateNumber(Math.min(...values));
-    max.value = truncateNumber(Math.max(...values));
+    const filled = series.value.filter((s) => s.values.length > 0);
+    const values = filled.map((s) => calculateMean(s.values));
+    min.value = String(truncateNumber(Math.min(...values)));
+    max.value = String(truncateNumber(Math.max(...values)));
   };
 
   const swap = () => {
