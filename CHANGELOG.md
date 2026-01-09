@@ -1,3 +1,10 @@
+## [14.0.6](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.5...v14.0.6) (2026-01-09)
+
+
+### Bug Fixes
+
+* **visualisation:** open latest release page in client main browser ([bad26be](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bad26beb4d51cb04f3bf7f27b07c0f00d3782c1d))
+
 ## [14.0.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.4...v14.0.5) (2026-01-09)
 
 
