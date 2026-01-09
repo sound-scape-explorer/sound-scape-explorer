@@ -9,7 +9,7 @@ sse_download = "processing.cli:download"
 [project]
 # INFO: When changing `name`, also change in `utils/get_version_from_setup.py`
 name = "sound-scape-explorer"
-version = "14.0.4"
+version = "14.0.5"
 description = "SoundScapeExplorer"
 authors = [{ name = "Bamdad Sabbagh", email = "hi@bamdad.fr" }]
 readme = { file = "README.md", content-type = "text/markdown" }

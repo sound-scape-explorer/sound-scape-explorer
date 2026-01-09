@@ -1,3 +1,11 @@
+## [14.0.5](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.4...v14.0.5) (2026-01-09)
+
+
+### Bug Fixes
+
+* **campaign:** provide electron File interface to react ([f2e636c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f2e636cc51350bd472d82832c33c2dfaefa8d1ad))
+* **visualisation:** upgrade to electron 39 and enable wayland support ([7585d6a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7585d6aa0641c1ab153b70203d042fe0ef675b7c))
+
 ## [14.0.4](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.3...v14.0.4) (2026-01-08)
 
 
