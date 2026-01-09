@@ -1,3 +1,10 @@
+## [14.0.8](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.7...v14.0.8) (2026-01-09)
+
+
+### Bug Fixes
+
+* dummy version bump for pypi error ([4432ed6](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4432ed68e0b6b617b93f079c3cf5cb210419651c))
+
 ## [14.0.7](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.6...v14.0.7) (2026-01-09)
 
 
