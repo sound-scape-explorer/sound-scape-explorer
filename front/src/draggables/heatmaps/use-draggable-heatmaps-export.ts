@@ -24,26 +24,26 @@ export function useDraggableHeatmapsExport() {
 
     const metric = metricData.value.metric;
     const csv = new Csv();
-    const colTitle = a.value;
-    const rowTitle = b.value ? b.value : a.value;
 
+    // header
     csv.addColumn(metric.impl);
 
+    // cols
     x.value.forEach((x) => {
-      csv.addColumn(`${colTitle}: ${x}`);
+      csv.addColumn(`${a.value}: ${x}`);
     });
 
-    series.value.forEach((vs, index) => {
+    // rows
+    series.value.forEach((values, index) => {
       csv.createRow();
-      if (series.value.length === 1) {
-        csv.addToCurrentRow('value');
-      } else if (isPairing) {
-        csv.addToCurrentRow(`${rowTitle}: ${y.value[index]}`);
+
+      if (isPairing.value) {
+        csv.addToCurrentRow(`${b.value}: ${y.value[index]}`);
       } else {
-        csv.addToCurrentRow(`${rowTitle}: ${x.value[index]}`);
+        csv.addToCurrentRow(`${a.value}: ${x.value[index]}`);
       }
 
-      vs.forEach((value) => {
+      values.forEach((value) => {
         csv.addToCurrentRow(value.toString());
       });
     });
