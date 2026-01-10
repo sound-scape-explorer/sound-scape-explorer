@@ -19,7 +19,7 @@
     "@blueprintjs/table": "^6.0.10",
     "clsx": "^2.1.1",
     "exceljs": "^4.4.0",
-    "jotai": "^2.16.0",
+    "jotai": "^2.16.1",
     "normalize.css": "^8.0.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
