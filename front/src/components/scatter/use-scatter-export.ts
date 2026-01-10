@@ -74,7 +74,6 @@ export function useScatterExport() {
     csv.addColumn('Interval Index');
     csv.addColumn('Start');
     csv.addColumn('End');
-    csv.addColumn('In Selection');
     csv.addColumn('Site');
 
     // adding all tags
