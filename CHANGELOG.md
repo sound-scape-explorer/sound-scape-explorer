@@ -1,3 +1,14 @@
+## [14.0.9](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.8...v14.0.9) (2026-01-10)
+
+
+### Bug Fixes
+
+* **front:** add all view details in export filenames ([194c389](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/194c389fc8eab6edc575d307c4501b259f6fb3b3))
+* **front:** improve pairwise heatmap exports ([7b652a0](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7b652a07c0eba4fe75c6a67ef0237ddea8bbbfbc))
+* **front:** remove dead header in scatter csv export ([b4fe702](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/b4fe7023abc4bcea2159ed8711c937b2edcbb813))
+* **front:** use correct ColorOption type infered name ([680a00a](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/680a00a2433655bd844ea92f1dc92515aec0f8d5))
+* **front:** use correct filename for relative trajectory exports ([a684cae](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a684cae0f44ac9ca45f11f959f394daa7248e316))
+
 ## [14.0.8](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.7...v14.0.8) (2026-01-09)
 
 
