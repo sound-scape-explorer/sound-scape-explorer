@@ -1,10 +1,8 @@
 import chroma from 'chroma-js';
 import {type AppPlotProps} from 'src/app/plot/app-plot.vue';
 import {useDateTime} from 'src/composables/use-date-time';
-import {useExportName} from 'src/composables/use-export-name';
 import {useRelativeTrajectories} from 'src/composables/use-relative-trajectories';
 import {
-  ExportType,
   LOWER_DECILE_SUFFIX,
   RELATIVE_TRAJECTORIES_FLAVOR,
   UPPER_DECILE_SUFFIX,
@@ -22,10 +20,8 @@ const colors = ref<string[]>([]);
 
 export function useRelativeTrajectoriesData() {
   const {filter} = useRelativeTrajectories();
-  const {generate} = useExportName();
   const {strategy} = useRelativeTrajectoriesStrategy();
   const {timestampToDate, getTime} = useDateTime();
-  const exportName = generate(ExportType.enum.relativeTrajectories);
 
   const formatTimestamp = (
     timestampMs: number, // Original timestamp in milliseconds
@@ -136,6 +132,5 @@ export function useRelativeTrajectoriesData() {
     names,
     colors,
     handleUpdate,
-    exportName,
   };
 }

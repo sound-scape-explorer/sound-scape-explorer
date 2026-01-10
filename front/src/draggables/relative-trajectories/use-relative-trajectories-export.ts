@@ -1,8 +1,10 @@
 import {Csv} from 'src/common/csv';
+import {useExportName} from 'src/composables/use-export-name';
 import {useRelativeTrajectoriesData} from 'src/draggables/relative-trajectories/use-relative-trajectories-data';
 
 export function useRelativeTrajectoriesExport() {
-  const {names, labels, values, exportName} = useRelativeTrajectoriesData();
+  const {names, labels, values} = useRelativeTrajectoriesData();
+  const {generate} = useExportName();
 
   const handleExportClick = () => {
     if (
@@ -49,6 +51,7 @@ export function useRelativeTrajectoriesExport() {
       csv.addToCurrentRow(row.join(csv.separator));
     }
 
+    const exportName = generate('relativeTrajectories');
     csv.download(exportName);
   };
 
