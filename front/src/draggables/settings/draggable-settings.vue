@@ -79,7 +79,7 @@ const reload = () => location.reload();
         <h2>Exports</h2>
       </AppHeader>
 
-      <DraggableSettingsItem title="Add band & integration to filename">
+      <DraggableSettingsItem title="Add view details to filenames">
         <AppCheckbox v-model="isDetailedExportName" />
       </DraggableSettingsItem>
 

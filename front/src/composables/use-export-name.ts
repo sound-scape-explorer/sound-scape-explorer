@@ -3,12 +3,16 @@ import {useViewSelection} from 'src/composables/use-view-selection';
 import {EXPORT_FILENAME, ExportType, SLUG_DELIMITER} from 'src/constants';
 
 export function useExportName() {
-  const {band, integration} = useViewSelection();
+  const {extraction, band, integration, reducer} = useViewSelection();
   const {isDetailedExportName} = useClientSettings();
 
   const appendDetails = (blocks: string[]): string[] => {
     if (!isDetailedExportName.value) {
       return blocks;
+    }
+
+    if (extraction.value !== null) {
+      blocks.push(extraction.value.name);
     }
 
     if (band.value !== null) {
@@ -17,6 +21,10 @@ export function useExportName() {
 
     if (integration.value !== null) {
       blocks.push(integration.value.name);
+    }
+
+    if (reducer.value !== null) {
+      blocks.push(`${reducer.value.impl}_${reducer.value.dimensions}`);
     }
 
     return blocks;
