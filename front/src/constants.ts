@@ -101,7 +101,8 @@ export const ColorOption = z.enum([
   'IntervalIndex',
 ]);
 
-export type ColorCriteria = z.infer<typeof ColorOption>;
+// eslint-disable-next-line no-redeclare
+export type ColorOption = z.infer<typeof ColorOption>;
 
 export const HeatmapScale = z.enum(['RdBu', 'Blues']);
 // eslint-disable-next-line no-redeclare
