@@ -12,8 +12,8 @@ importers:
         specifier: ^6.4.1
         version: 6.4.1(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@blueprintjs/datetime':
-        specifier: ^6.0.10
-        version: 6.0.10(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^6.0.11
+        version: 6.0.11(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@blueprintjs/datetime2':
         specifier: ^3.0.10
         version: 3.0.10(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -173,6 +173,17 @@ packages:
       '@types/react':
         optional: true
 
+  '@blueprintjs/core@6.5.0':
+    resolution: {integrity: sha512-6GmER7/UdaRibKkmTc5yz7se9Rpc1cnauU2jfwg1UXYhqK/pgfpzKT+KB9UM+cda1qexcjkXYA/N46i+C8xFfA==}
+    hasBin: true
+    peerDependencies:
+      '@types/react': '18'
+      react: '18'
+      react-dom: '18'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   '@blueprintjs/datetime2@3.0.10':
     resolution: {integrity: sha512-pli0hkv93aH2Ou3inZ2KIdNBLj5dYW8XVu21Rr3fSoh5b9aUsThAVDmb51LjlfNiPVi1i+y2omGuDRTKV+zUgw==}
     peerDependencies:
@@ -183,8 +194,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@blueprintjs/datetime@6.0.10':
-    resolution: {integrity: sha512-8i8P12OwCe0JGTkX20EtHvembEjwfqkf1pQcec3lMdPDDeEpPmV3vzPWxwCS+NSc6vUGl/2aAFs+Ro7qDW1msw==}
+  '@blueprintjs/datetime@6.0.11':
+    resolution: {integrity: sha512-b6JN7tqYEbONHbHVdlpQeDK/bCHvIliKsj76RLjcnLsxoJjXSsXOzsJzjNEwP+FRsz1mjfgeqzZAGxwR2C6Vgw==}
     peerDependencies:
       '@types/react': '18'
       react: '18'
@@ -203,8 +214,28 @@ packages:
       '@types/react':
         optional: true
 
+  '@blueprintjs/icons@6.4.0':
+    resolution: {integrity: sha512-8THDnE4Cz6V0DGNX0tQys6IiIYyKKvmMBZHHiFviBsdkduUqle096UdD+1XROa2dcwmGYSjvMQ/wKqYowCJINQ==}
+    peerDependencies:
+      '@types/react': '18'
+      react: '18'
+      react-dom: '18'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   '@blueprintjs/select@6.0.10':
     resolution: {integrity: sha512-RjDuomn4KhluiN7tVofLLX6S+b+un0mLehvmOSETpqk1C8lHXCxReIXxFiWqTB+YiIgkqQ6aRNjQs35cJBbrfg==}
+    peerDependencies:
+      '@types/react': '18'
+      react: '18'
+      react-dom: '18'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@blueprintjs/select@6.0.11':
+    resolution: {integrity: sha512-ng/IUTxbVdGAUKmgfFBA/6qIr58+F1yiarIBMJpDQGamSEM3MeyEq77yeRbatSdhy+Sqs8UohtnVibdfdxV26w==}
     peerDependencies:
       '@types/react': '18'
       react: '18'
@@ -1473,11 +1504,27 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.7
 
+  '@blueprintjs/core@6.5.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@blueprintjs/colors': 5.1.12
+      '@blueprintjs/icons': 6.4.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@popperjs/core': 2.11.8
+      classnames: 2.5.1
+      normalize.css: 8.0.1
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+      react-popper: 2.3.0(@popperjs/core@2.11.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      react-transition-group: 4.4.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      tslib: 2.6.3
+      use-sync-external-store: 1.6.0(react@19.2.3)
+    optionalDependencies:
+      '@types/react': 19.2.7
+
   '@blueprintjs/datetime2@3.0.10(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@blueprintjs/colors': 5.1.12
       '@blueprintjs/core': 6.4.1(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      '@blueprintjs/datetime': 6.0.10(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@blueprintjs/datetime': 6.0.11(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@blueprintjs/icons': 6.3.2(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       date-fns: 2.30.0
       react: 19.2.3
@@ -1487,11 +1534,11 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.7
 
-  '@blueprintjs/datetime@6.0.10(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@blueprintjs/datetime@6.0.11(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
-      '@blueprintjs/core': 6.4.1(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      '@blueprintjs/icons': 6.3.2(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      '@blueprintjs/select': 6.0.10(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@blueprintjs/core': 6.5.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@blueprintjs/icons': 6.4.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@blueprintjs/select': 6.0.11(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       classnames: 2.5.1
       date-fns: 2.30.0
       date-fns-tz: 2.0.1(date-fns@2.30.0)
@@ -1513,11 +1560,33 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.7
 
+  '@blueprintjs/icons@6.4.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      change-case: 4.1.2
+      classnames: 2.5.1
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+      tslib: 2.6.3
+    optionalDependencies:
+      '@types/react': 19.2.7
+
   '@blueprintjs/select@6.0.10(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@blueprintjs/colors': 5.1.12
       '@blueprintjs/core': 6.4.1(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@blueprintjs/icons': 6.3.2(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      classnames: 2.5.1
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+      tslib: 2.6.3
+    optionalDependencies:
+      '@types/react': 19.2.7
+
+  '@blueprintjs/select@6.0.11(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@blueprintjs/colors': 5.1.12
+      '@blueprintjs/core': 6.5.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@blueprintjs/icons': 6.4.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       classnames: 2.5.1
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
@@ -1933,14 +2002,14 @@ snapshots:
   camel-case@4.1.2:
     dependencies:
       pascal-case: 3.1.2
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   caniuse-lite@1.0.30001760: {}
 
   capital-case@1.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
       upper-case-first: 2.0.2
 
   chainsaw@0.1.0:
@@ -1960,7 +2029,7 @@ snapshots:
       path-case: 3.0.4
       sentence-case: 3.0.4
       snake-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   chokidar@4.0.3:
     dependencies:
@@ -1983,7 +2052,7 @@ snapshots:
   constant-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
       upper-case: 2.0.2
 
   convert-source-map@2.0.0: {}
@@ -2035,7 +2104,7 @@ snapshots:
   dot-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   duplexer2@0.1.4:
     dependencies:
@@ -2140,7 +2209,7 @@ snapshots:
   header-case@2.0.4:
     dependencies:
       capital-case: 1.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   ieee754@1.2.1: {}
 
@@ -2233,7 +2302,7 @@ snapshots:
 
   lower-case@2.0.2:
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   lru-cache@5.1.1:
     dependencies:
@@ -2266,7 +2335,7 @@ snapshots:
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   node-addon-api@7.1.1:
     optional: true
@@ -2288,17 +2357,17 @@ snapshots:
   param-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   pascal-case@3.1.2:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   path-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   path-is-absolute@1.0.1: {}
 
@@ -2451,7 +2520,7 @@ snapshots:
   sentence-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
       upper-case-first: 2.0.2
 
   setimmediate@1.0.5: {}
@@ -2465,7 +2534,7 @@ snapshots:
   snake-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   source-map-js@1.2.1: {}
 
@@ -2527,11 +2596,11 @@ snapshots:
 
   upper-case-first@2.0.2:
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   upper-case@2.0.2:
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   use-sync-external-store@1.6.0(react@19.2.3):
     dependencies:
