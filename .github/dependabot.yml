@@ -1,27 +1,31 @@
 version: 2
 updates:
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
 
-  - package-ecosystem: "pip"
-    directory: "/processing"
+  - package-ecosystem: 'pip'
+    directory: '/processing'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
 
-  - package-ecosystem: "npm"
-    directory: "/front"
+  - package-ecosystem: 'npm'
+    directory: '/front'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
 
-  - package-ecosystem: "npm"
-    directory: "/audio"
+  - package-ecosystem: 'npm'
+    directory: '/audio'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
 
-  - package-ecosystem: "npm"
-    directory: "/visualisation"
+  - package-ecosystem: 'npm'
+    directory: '/campaign'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
+
+  - package-ecosystem: 'npm'
+    directory: '/visualisation'
+    schedule:
+      interval: 'weekly'
