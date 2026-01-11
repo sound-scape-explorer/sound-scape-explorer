@@ -9,13 +9,11 @@ import {filterOutKey} from 'src/utils/objects';
 export type ColumnKey = `col_${string}`;
 type ColumnName = 'Index' | 'Path' | 'Date' | 'Site' | string;
 type ColumnType = 'readonly' | 'editable' | 'user';
-type Validator = (value: string) => Intent;
 
 export interface Column {
   key: ColumnKey;
   name: ColumnName;
   type: ColumnType;
-  validator: Validator | null;
 }
 
 export interface TableState {
@@ -46,7 +44,6 @@ interface CreateColumnOptions {
   key: ColumnKey | null;
   type: ColumnType;
   data: string[];
-  validator?: Validator;
 }
 
 export function useTableState() {
@@ -162,17 +159,14 @@ export function useTableState() {
 
       const key: ColumnKey = opts?.key ?? `col_${name}`;
       const type = opts?.type ?? 'user';
-      const validator = opts?.validator ?? null;
 
       const column: Column = {
         key,
         name,
         type,
-        validator,
       };
 
-      const intents =
-        validator && opts?.data ? opts.data.map((d) => validator(d)) : [];
+      const intents: Intent[] = [];
 
       setState((prev) => {
         return {
@@ -269,10 +263,6 @@ export function useTableState() {
         const v = values[i];
 
         rowCopy[row + i] = v;
-
-        if (column?.validator) {
-          intentsCopy[row + i] = column?.validator(v);
-        }
       }
 
       setState((prev) => {
@@ -373,6 +363,7 @@ export function useTableState() {
 
   return {
     state: state.current,
+    setState,
     createColumn,
     renameColumn,
     removeColumn,
