@@ -1,3 +1,14 @@
+## [14.0.11](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.10...v14.0.11) (2026-01-11)
+
+
+### Bug Fixes
+
+* **campaign:** extract path intent updater + add bail out ([0f8899e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0f8899e1547b3de34398a2c473f9f52e3a593b5b))
+* **campaign:** use full paths for audio files ([8881e34](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/8881e3464c8ebb098e29953b4d1889e230e350aa))
+* **campaign:** use global table date validation ([756b951](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/756b95170b6b619509bc9fe9f6c7a27ee82b9c0e))
+* **campaign:** use global table path validation ([0d5b481](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0d5b4818c777740f9dc8cd7b8907f830c09c9130))
+* **processing:** use same cuda tf version ([6d864f1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6d864f1d0dfb7e3b5b79f041991b17ab44efa8b0))
+
 ## [14.0.10](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.9...v14.0.10) (2026-01-11)
 
 
