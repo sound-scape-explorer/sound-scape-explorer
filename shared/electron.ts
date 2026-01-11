@@ -7,6 +7,7 @@ import {findCommonFolder} from '../visualisation/src/preload/find-common-folder'
 import {getAudioPath} from '../visualisation/src/preload/get-audio-path';
 import {getAudioStatus} from '../visualisation/src/preload/get-audio-status';
 import {getDirectoryPath} from '../visualisation/src/preload/get-directory-path';
+import {getFilePath} from '../visualisation/src/preload/get-file-path';
 import {getPathExistence} from '../visualisation/src/preload/get-path-existence';
 import {joinPath} from '../visualisation/src/preload/join-path';
 import {openClientBrowser} from '../visualisation/src/preload/open-client-browser';
@@ -26,4 +27,5 @@ export interface ElectronAPI {
   findCommonFolder: typeof findCommonFolder;
   checkPath: typeof checkPath;
   openClientBrowser: typeof openClientBrowser;
+  getFilePath: typeof getFilePath;
 }

@@ -20,7 +20,7 @@ export function useFolderDrop() {
         return;
       }
 
-      const paths = audios.map((audio) => audio.path);
+      const paths = audios.map(window.electronAPI.getFilePath);
       const common = window.electronAPI.findCommonFolder(paths);
       update('audioPath', common);
 

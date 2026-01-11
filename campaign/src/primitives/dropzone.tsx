@@ -18,7 +18,7 @@ export function Dropzone({className, onDrop, children}: Props) {
     noClick: false,
     useFsAccessApi: false,
     onDrop: (files: File[]) => {
-      const paths = files.map((f) => f.path);
+      const paths = files.map(window.electronAPI.getFilePath);
       const commonFolder = window.electronAPI.findCommonFolder(paths);
       const info = window.electronAPI.checkPath(commonFolder);
       onDrop(files, info);

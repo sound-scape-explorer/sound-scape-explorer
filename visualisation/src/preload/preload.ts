@@ -7,6 +7,7 @@ import {createFrontWindow} from './create-front-window';
 import {findCommonFolder} from './find-common-folder';
 import {getAudioStatus} from './get-audio-status';
 import {getDirectoryPath} from './get-directory-path';
+import {getFilePath} from './get-file-path';
 import {getPathExistence} from './get-path-existence';
 import {joinPath} from './join-path';
 import {openClientBrowser} from './open-client-browser';
@@ -26,4 +27,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   findCommonFolder,
   checkPath,
   openClientBrowser,
+  getFilePath,
 });
