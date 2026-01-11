@@ -1,48 +1,56 @@
-import {useEffect} from 'react';
+import {type Intent} from '@blueprintjs/core';
+import {useEffect, useRef} from 'react';
 import {useTableLoader} from 'src/panels/files/hooks/use-table-loader.ts';
 import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
 
 export function useTableDateValidation() {
   const {isLoaded} = useTableLoader();
   const {state, setState} = useTableState();
+  const prevIntentsRef = useRef<string[] | null>(null);
+
+  const sites = state.rows['col_site'];
+  const dates = state.rows['col_date'];
 
   useEffect(() => {
-    if (!isLoaded) {
+    if (!isLoaded || !sites || !dates) {
       return;
     }
 
-    const sites = state.rows['col_site'];
-    const dates = state.rows['col_date'];
+    const intents = new Array<Intent>(dates.length).fill('success');
 
-    if (!sites || !dates) {
-      return;
-    }
+    // Find duplicates - single pass with marking
+    const siteDateMap = new Map<string, number>();
 
-    const intents = new Array(dates.length).fill('success');
-
-    // Find duplicates
-    const siteDateMap = new Map<string, number[]>();
-    dates.forEach((date, idx) => {
-      const site = sites[idx];
+    for (let i = 0; i < dates.length; i++) {
+      const site = sites[i];
+      const date = dates[i];
       if (!site || !date) {
-        return;
+        continue;
       }
 
       const key = `${site}::${date}`;
-      const indices = siteDateMap.get(key);
-      if (indices) {
-        indices.push(idx);
-      } else {
-        siteDateMap.set(key, [idx]);
-      }
-    });
+      const firstIdx = siteDateMap.get(key);
 
-    // Mark duplicates as danger
-    for (const indices of siteDateMap.values()) {
-      if (indices.length > 1) {
-        indices.forEach((idx) => (intents[idx] = 'danger'));
+      if (firstIdx !== undefined) {
+        intents[firstIdx] = 'danger';
+        intents[i] = 'danger';
+      } else {
+        siteDateMap.set(key, i);
       }
     }
+
+    // Bail if intents haven't changed
+    const prev = prevIntentsRef.current;
+
+    if (
+      prev &&
+      prev.length === intents.length &&
+      prev.every((v, i) => v === intents[i])
+    ) {
+      return;
+    }
+
+    prevIntentsRef.current = intents;
 
     setState((prev) => ({
       ...prev,
@@ -54,7 +62,5 @@ export function useTableDateValidation() {
         },
       },
     }));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, state.rows]);
+  }, [isLoaded, sites, dates, setState]);
 }

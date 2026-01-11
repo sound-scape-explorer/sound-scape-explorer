@@ -286,43 +286,6 @@ export function useTableState() {
     [generateHistory, state, setState, findColumnByIndex],
   );
 
-  const updatePathIntents = useCallback(
-    (audioPath: string) => {
-      const names = getColNames();
-      if (!names.includes('Path')) {
-        return;
-      }
-
-      const length = getTableLength();
-      const key = 'col_path';
-
-      const intents = new Array<Intent>(length).fill('danger');
-
-      for (let i = 0; i < length; i += 1) {
-        const file = state.current.rows[key][i];
-        const path = window.electronAPI.joinPath(audioPath, file);
-        const exists = window.electronAPI.getPathExistence(path);
-        if (exists) {
-          intents[i] = 'success';
-        }
-      }
-
-      setState((prev) => {
-        return {
-          ...prev,
-          current: {
-            ...prev.current,
-            intents: {
-              ...prev.current.intents,
-              [key]: intents,
-            },
-          },
-        };
-      });
-    },
-    [getColNames, setState, state, getTableLength],
-  );
-
   const isUndoStackEmpty = useMemo(() => {
     return state.past.length === 0;
   }, [state]);
@@ -378,7 +341,6 @@ export function useTableState() {
     redo,
     clearHistory,
     getTableLength,
-    updatePathIntents,
     isUndoStackEmpty,
     isRedoStackEmpty,
   };
