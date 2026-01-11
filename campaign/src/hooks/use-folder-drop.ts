@@ -24,9 +24,9 @@ export function useFolderDrop() {
       const common = window.electronAPI.findCommonFolder(paths);
       update('audioPath', common);
 
-      const aliases = audios.map((audio) => {
+      const aliases = audios.map((audio, a) => {
         const alias: FileAlias = {
-          path: audio.path.replace(common, ''),
+          path: paths[a].replace(common, ''),
           timestamp: audio.lastModified,
         };
 
