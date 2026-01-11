@@ -38,7 +38,7 @@ dependencies = [
 
 [project.optional-dependencies]
 gpu = [
-  "tensorflow[and-cuda]==2.19.0", # GPU support for Linux/Windows
+  "tensorflow[and-cuda]==2.20.0", # GPU support for Linux/Windows
 ]
 mac = [
   "tensorflow-metal>=1.0.0", # GPU support for Apple Silicon
