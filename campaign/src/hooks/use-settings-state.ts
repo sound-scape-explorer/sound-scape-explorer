@@ -14,7 +14,6 @@ import {
 import {type SettingsDto} from '@shared/dtos';
 import {atom, useAtom} from 'jotai';
 import {type DragEvent, useCallback} from 'react';
-import {useTableState} from 'src/panels/files/hooks/use-table-state';
 
 const settingsAtom = atom<SettingsDto>({
   storagePath: STORAGE_PATH_DEFAULT,
@@ -32,20 +31,15 @@ const settingsAtom = atom<SettingsDto>({
 
 export function useSettingsState() {
   const [settings, setSettings] = useAtom<SettingsDto>(settingsAtom);
-  const {updatePathIntents} = useTableState();
 
   const update = useCallback(
     <K extends keyof SettingsDto>(key: K, value: SettingsDto[K]) => {
-      if (key === 'audioPath') {
-        updatePathIntents(value as string);
-      }
-
       setSettings((prev) => ({
         ...prev,
         [key]: value,
       }));
     },
-    [setSettings, updatePathIntents],
+    [setSettings],
   );
 
   const handleAudioDrop = useCallback(

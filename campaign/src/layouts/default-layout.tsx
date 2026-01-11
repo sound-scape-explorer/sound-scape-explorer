@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import {Toaster} from 'src/components/toaster.tsx';
 import {usePanels} from 'src/hooks/use-panels.tsx';
 import {type TabIndex, useTabNavigation} from 'src/hooks/use-tab-navigation';
+import {useTablePathValidation} from 'src/hooks/use-table-path-validation.ts';
 import {useTheme} from 'src/hooks/use-theme';
 import {useTableLoader} from 'src/panels/files/hooks/use-table-loader';
 
@@ -26,6 +27,7 @@ export function DefaultLayout() {
   const {isLoaded} = useTableLoader();
   const {index, setIndex} = useTabNavigation();
   const {current} = usePanels();
+  useTablePathValidation();
 
   return (
     <Section className={clsx(styles.container, isDark && Classes.DARK)}>
