@@ -1,3 +1,10 @@
+## [14.0.10](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.9...v14.0.10) (2026-01-11)
+
+
+### Bug Fixes
+
+* use electron web utils to mitigate file.path breaking change ([a5c4b47](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a5c4b471883d6ed087ef71c64327f28da18dcc88))
+
 ## [14.0.9](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.8...v14.0.9) (2026-01-10)
 
 
