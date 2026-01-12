@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project.scripts]
 sse = "processing.cli:main"
 sse_download = "processing.cli:download"
+sse_install_cuda = "processing.cli:install_cuda"
 
 [project]
 # INFO: When changing `name`, also change in `utils/get_version_from_setup.py`
@@ -37,12 +38,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-gpu = [
-  "tensorflow[and-cuda]==2.20.0", # GPU support for Linux/Windows
-]
-mac = [
-  "tensorflow-metal>=1.0.0", # GPU support for Apple Silicon
-]
 dev = [
   "black==25.1.0",
   "pytest==8.3.5",

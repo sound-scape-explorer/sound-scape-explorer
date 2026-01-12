@@ -159,3 +159,19 @@ def download():
     MusicClassifierResource.download()
 
     print("[b]You are now ready for offline use![/b]")
+
+
+def install_cuda():
+    """Install CUDA support for TensorFlow (Linux/WSL2 only)"""
+    import subprocess
+    import sys
+
+    subprocess.check_call(
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "tensorflow[and-cuda]",
+        ]
+    )
