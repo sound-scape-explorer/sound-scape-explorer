@@ -1,3 +1,10 @@
+## [14.0.13](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.12...v14.0.13) (2026-01-12)
+
+
+### Bug Fixes
+
+* **processing:** strip down leading windows backslashes ([2f6d81f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/2f6d81feb1987d19f79f8c75d9409451bca23498))
+
 ## [14.0.12](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.11...v14.0.12) (2026-01-12)
 
 
