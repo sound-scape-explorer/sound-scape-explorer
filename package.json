@@ -3,7 +3,7 @@
   "type": "module",
   "name": "sound-scape-explorer",
   "description": "Visualisation and quantification of soundscapes using SSE software",
-  "version": "14.0.11",
+  "version": "14.0.12",
   "license": "MIT",
   "author": {
     "name": "Bamdad Sabbagh",

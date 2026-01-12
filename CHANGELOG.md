@@ -1,3 +1,15 @@
+## [14.0.12](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.11...v14.0.12) (2026-01-12)
+
+
+### Bug Fixes
+
+* **front:** add 1 day padding to automatic full range detection ([e9d2a93](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/e9d2a9384087cad8ded49345d93e007d9504ab8b))
+* **front:** add timeshifts to calendar canvas ([9336c2f](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9336c2f6d261dc60dc951fa61bde5e8aca2df4e2))
+* **front:** enforce UTC tz on undefined config ([a73f363](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/a73f3632f8a288afce2c00ff3dbee55b3b7f5eef))
+* **front:** prevent calendar start > end dates ([aac745c](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/aac745ca569235cde1b9954b8cd68b75a23ea30d))
+* **front:** update uncaught undefined checks ([0b6beed](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/0b6beedf5bf5ee7b53e2600976efb446cdff8bd8))
+* **processing:** prefer opt in CUDA install ([4035231](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4035231226918da657e51719520f083843a82afc))
+
 ## [14.0.11](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.10...v14.0.11) (2026-01-11)
 
 
