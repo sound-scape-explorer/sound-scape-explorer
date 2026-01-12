@@ -39,7 +39,7 @@ class FileConfig:
 
     @staticmethod
     def _get_relative_path(path: str):
-        return path[1:] if path.startswith("/") else path
+        return path.lstrip("/\\")
 
     @property
     def start(self):
