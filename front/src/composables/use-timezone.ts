@@ -7,7 +7,7 @@ const tz = ref<TimezoneName | undefined>();
 export function useTimezone() {
   const set = (newTz: string) => {
     if (newTz === TIMEZONE_DEFAULT) {
-      tz.value = undefined;
+      tz.value = 'UTC';
       return;
     }
 
