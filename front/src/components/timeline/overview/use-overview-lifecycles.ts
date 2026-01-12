@@ -11,6 +11,7 @@ import {
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
 import {onMounted, watch} from 'vue';
+import {useClientSettings} from 'src/composables/use-client-settings';
 
 export function useOverviewLifecycles({width, height}: OverviewSize) {
   const {container, canvas, updateSize} = useTimelineDom().overview;
@@ -22,6 +23,7 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
   const {update: updateElements} = useOverviewElements();
   const {position} = useOverviewHandlers();
   const {isHovering, isDragging} = useTimelineHandlers().overview;
+  const {timeshift} = useClientSettings();
 
   const filter = () => {
     if (!isActive.value) {
@@ -33,12 +35,22 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
 
   onMounted(render);
   watch(
-    [left, right, position, start, end, isHovering, isDragging, width],
+    [
+      left,
+      right,
+      position,
+      start,
+      end,
+      isHovering,
+      isDragging,
+      width,
+      timeshift,
+    ],
     render,
   );
   watch([container, canvas], mount);
   watch([width, height], () => updateSize({width, height}));
-  watch([start, end], updateElements);
+  watch([start, end, timeshift], updateElements);
   watch([left, right, isActive], filter);
   watch(isActive, filterByCalendar);
 }

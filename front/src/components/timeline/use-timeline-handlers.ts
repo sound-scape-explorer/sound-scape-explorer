@@ -1,3 +1,4 @@
+import {addHours} from 'date-fns';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useTimelineRangeNames} from 'src/components/timeline/use-timeline-range-names';
 import {useAggregations} from 'src/composables/use-aggregations';
@@ -12,7 +13,7 @@ export function useTimelineHandlers() {
   const {name, setCustomName, rangeToSlug} = useTimelineRangeNames();
   const {currentIndex} = useIntervalTransport();
   const {aggregations} = useAggregations();
-  const {stringToTimestamp} = useDateTime();
+  const {stringToTimestamp, timestampToDate, dateToTimestamp} = useDateTime();
 
   const updateRange = () => {
     if (name.value === RANGE_CUSTOM) {
@@ -50,12 +51,12 @@ export function useTimelineHandlers() {
     }
 
     const timestamp = aggregations.value.timestamps[currentIndex.value];
-    const hour = 3600 * 1000;
+    const date = timestampToDate(timestamp);
 
-    start.value = timestamp - hour / 2;
-    end.value = timestamp + hour / 2;
-    updateLeft(timestamp - hour / 8);
-    updateRight(timestamp + hour / 8);
+    start.value = dateToTimestamp(addHours(date, -1 / 2));
+    end.value = dateToTimestamp(addHours(date, 1 / 2));
+    updateLeft(dateToTimestamp(addHours(date, -1 / 8)));
+    updateRight(dateToTimestamp(addHours(date, 1 / 8)));
     setCustomName();
   };
 

@@ -1,6 +1,7 @@
 import {addMilliseconds} from 'date-fns';
 import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
 import {useAggregations} from 'src/composables/use-aggregations';
+import {useClientSettings} from 'src/composables/use-client-settings';
 import {useDateTime} from 'src/composables/use-date-time';
 import {useIntervals} from 'src/composables/use-intervals';
 import {useViewSelection} from 'src/composables/use-view-selection';
@@ -22,6 +23,7 @@ export function useTimelineElements() {
   const {timestampToDate, timestampToString} = useDateTime();
   const {scale} = useBodyColors();
   const {intervals} = useIntervals();
+  const {timeshift} = useClientSettings();
 
   const createElement = (
     row: number,
@@ -45,7 +47,14 @@ export function useTimelineElements() {
     leftBoundary: Ref<number>,
     rightBoundary: Ref<number>,
   ) => {
+    const ms = timeshift.value * 3600 * 1000;
+
     return intervals.value
+      .map((interval) => ({
+        ...interval,
+        start: interval.start + ms,
+        end: interval.end + ms,
+      }))
       .filter(
         (interval) =>
           interval.start >= leftBoundary.value &&
@@ -76,6 +85,7 @@ export function useTimelineElements() {
       const start = timestampToDate(timestamp);
       const end = addMilliseconds(start, integration.value.duration);
 
+      // messy
       for (const fileIndex of fileIndices) {
         const s = start.getTime();
         const e = end.getTime();
@@ -89,8 +99,8 @@ export function useTimelineElements() {
             `site: ${site}`,
             `interval index: ${index}`,
             `file index: ${fileIndex}`,
-            `start: ${timestampToString(s)}`,
-            `end: ${timestampToString(e)}`,
+            `start: ${timestampToString(timestamp)}`,
+            `end: ${timestampToString(timestamp + integration.value.duration)}`,
           ],
         );
 
