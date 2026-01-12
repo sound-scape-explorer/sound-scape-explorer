@@ -15,7 +15,7 @@ export function useDateTime() {
   const stringToDate = (localString: string): Date => {
     let date: Date = new Date(localString);
 
-    if (tz.value !== null) {
+    if (tz.value !== undefined) {
       date = fromZonedTime(localString, tz.value);
     }
 
@@ -24,7 +24,7 @@ export function useDateTime() {
   };
 
   const dateToString = (date: Date): string => {
-    if (tz.value !== null) {
+    if (tz.value !== undefined) {
       return formatInTimeZone(date, tz.value, DATE_FORMAT_NEW);
     }
 
