@@ -24,7 +24,7 @@ dependencies = [
   "umap-learn==0.5.7",
   "scikit-learn==1.6.1",
   "scikit-maad==1.4.3",
-  "rich==14.0.0",
+  "rich==14.2.0",
   "inquirerpy==0.3.4",
   "pydantic==2.11.1",
   "pydantic_extra_types==2.10.6",
