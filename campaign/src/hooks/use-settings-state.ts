@@ -51,10 +51,11 @@ export function useSettingsState() {
       }
 
       const file = e.dataTransfer.files[0];
-      const {isDirectory} = window.electronAPI.checkPath(file.path);
+      const path = window.electronAPI.getFilePath(file);
+      const {isDirectory} = window.electronAPI.checkPath(path);
 
       if (isDirectory) {
-        update('audioPath', file.path);
+        update('audioPath', path);
       }
     },
     [update],
