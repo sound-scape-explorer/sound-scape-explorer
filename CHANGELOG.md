@@ -1,3 +1,10 @@
+## [14.0.14](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.13...v14.0.14) (2026-03-19)
+
+
+### Bug Fixes
+
+* **campaign:** retrieve path with webutils instead of deprecated file.path for drop n drop ([4a52b53](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4a52b53e06217a09987872d4137245e9818f51eb))
+
 ## [14.0.13](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.12...v14.0.13) (2026-01-12)
 
 
