@@ -11,7 +11,7 @@
     "test:build": "pnpm build && echo '✓ Build smoke test passed'"
   },
   "dependencies": {
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
     "express": "^5.2.1",
     "get-audio-duration": "^4.0.1"
   },
