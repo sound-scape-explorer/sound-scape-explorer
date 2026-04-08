@@ -126,8 +126,10 @@ def main():
         # user wants auto run all
         if args.auto:
             from processing.context import Context
+            from processing.lib.console import Console
 
             context = Context(args.config_path)
+            Console.print_splash()
             run_all(context)
             sys.exit(0)
 
