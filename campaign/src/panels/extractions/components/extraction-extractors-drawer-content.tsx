@@ -13,8 +13,11 @@ export function ExtractionExtractorsDrawerContent() {
             <div className="flex column">
               <code>agg.</code>
               <span>
-                Untick this to prevent acoustic indicator extractions to be
-                aggregated (integrations).
+                Untick this to prevent the selected extractor data to be
+                included in the embeddings.
+                <br />
+                The extractor data will only be available through the Temporal
+                menu in the visualisation app.
               </span>
             </div>
           ),
