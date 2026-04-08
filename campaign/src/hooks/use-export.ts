@@ -1,6 +1,8 @@
 import {downloadJson} from '@shared/browser.ts';
+import {DATE_FORMAT} from '@shared/constants.ts';
 import {ConfigDto, type FileDto} from '@shared/dtos';
 import {getStorageFilename} from '@shared/files';
+import {format} from 'date-fns';
 import {useCallback} from 'react';
 import {TAG_PREFIX_FOR_TABLE} from 'src/constants';
 import {useSettingsState} from 'src/hooks/use-settings-state';
@@ -24,7 +26,7 @@ export function useExport() {
       const fileDto: FileDto = {
         Index: file.Index,
         Path: file.Path,
-        Date: file.Date,
+        Date: format(new Date(file.Date), DATE_FORMAT), // reformat date to streamline date formats
         Site: file.Site,
         tags: {},
       };
