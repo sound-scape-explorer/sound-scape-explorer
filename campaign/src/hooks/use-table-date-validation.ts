@@ -1,4 +1,5 @@
 import {type Intent} from '@blueprintjs/core';
+import {isValid} from 'date-fns';
 import {useEffect, useRef} from 'react';
 import {useTableLoader} from 'src/panels/files/hooks/use-table-loader.ts';
 import {useTableState} from 'src/panels/files/hooks/use-table-state.ts';
@@ -18,12 +19,13 @@ export function useTableDateValidation() {
 
     const intents = new Array<Intent>(dates.length).fill('success');
 
-    // Find duplicates - single pass with marking
+    // using a map to find duplicates easily
     const siteDateMap = new Map<string, number>();
 
     for (let i = 0; i < dates.length; i++) {
       const site = sites[i];
       const date = dates[i];
+
       if (!site || !date) {
         continue;
       }
@@ -36,6 +38,12 @@ export function useTableDateValidation() {
         intents[i] = 'danger';
       } else {
         siteDateMap.set(key, i);
+      }
+
+      // actual date check
+      const isDateValid = isValid(new Date(date));
+      if (!isDateValid) {
+        intents[i] = 'danger';
       }
     }
 
