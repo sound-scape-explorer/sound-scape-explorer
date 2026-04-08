@@ -12,14 +12,10 @@ import {
   StftWindowType,
 } from './enums';
 
-const dateString = z.string().refine((str) => !Number.isNaN(Date.parse(str)), {
-  message: 'Invalid date string',
-});
-
 export const FileDto = z.object({
   Index: z.string(),
   Path: z.string(),
-  Date: dateString,
+  Date: z.string(),
   Site: z.string(),
   tags: z.record(z.string(), z.string()),
 });
@@ -30,7 +26,7 @@ export const SettingsDto = z.object({
   storagePath: z.string(),
   audioPath: z.string(),
   expectedSampleRate: z.number().int(),
-  timelineOrigin: dateString,
+  timelineOrigin: z.string(),
   audioHost: z.string(),
   timezone: z.string(),
   computationStrategy: ComputationStrategy,
@@ -132,8 +128,8 @@ export type MetricDto = z.infer<typeof MetricDto>;
 export const TrajectoryDto = z.object({
   index: z.number().int(),
   name: z.string(), // unique
-  start: dateString,
-  end: dateString,
+  start: z.string(),
+  end: z.string(),
   tagName: z.string(),
   tagValue: z.string(),
   smoothingWindow: z.number().int().positive(),
@@ -158,8 +154,8 @@ export type ExtractionDto = z.infer<typeof ExtractionDto>;
 export const RangeDto = z.object({
   index: z.number().int(),
   name: z.string(), // unique
-  start: dateString,
-  end: dateString,
+  start: z.string(),
+  end: z.string(),
 });
 
 export type RangeDto = z.infer<typeof RangeDto>;
