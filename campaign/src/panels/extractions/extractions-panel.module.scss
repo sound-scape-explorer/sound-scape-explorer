@@ -1,0 +1,5 @@
+.container {
+  & > :first-child {
+    overflow-x: auto;
+  }
+}
