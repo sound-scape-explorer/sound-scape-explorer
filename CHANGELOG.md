@@ -1,3 +1,10 @@
+## [14.0.15-beta.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.15-beta.1...v14.0.15-beta.2) (2026-04-22)
+
+
+### Bug Fixes
+
+* **campaign:** use table context renderer prop ([f4032b5](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f4032b5c3ea9a528a5c7d7f25dcf719639c28e86))
+
 ## [14.0.15-beta.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.14...v14.0.15-beta.1) (2026-04-22)
 
 
