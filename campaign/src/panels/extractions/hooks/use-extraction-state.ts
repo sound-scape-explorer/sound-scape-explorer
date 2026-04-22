@@ -22,6 +22,18 @@ export function useExtractionState() {
   const [currentId, setCurrentId] = useAtom(currentIdAtom);
   const {createExtractorWithDefaults} = useExtractorDefaults();
 
+  const forceExtractionsOrder = useCallback(
+    (extractions: ExtractionConfig[]) => {
+      return extractions.map((ex, index) => {
+        return {
+          ...ex,
+          index,
+        };
+      });
+    },
+    [],
+  );
+
   const addExtraction = useCallback(() => {
     const indices =
       extractions.length > 0 ? extractions.map((e) => e.index) : [-1];
@@ -40,9 +52,10 @@ export function useExtractionState() {
       trajectories: [],
     };
 
-    setExtractions((prev) => [...prev, extraction]);
+    const newExtractions = [...extractions, extraction];
+    setExtractions(forceExtractionsOrder(newExtractions));
     setCurrentId(extraction._id);
-  }, [extractions, setExtractions, setCurrentId]);
+  }, [extractions, setExtractions, setCurrentId, forceExtractionsOrder]);
 
   const loadExtractions = useCallback(
     (extractions: ExtractionDto[]) => {
@@ -77,7 +90,7 @@ export function useExtractionState() {
         },
       );
 
-      setExtractions(newExtractions);
+      setExtractions(forceExtractionsOrder(newExtractions));
 
       const extraction = newExtractions.find((e) => e.index === 0);
 
@@ -87,25 +100,30 @@ export function useExtractionState() {
 
       setCurrentId(extraction._id);
     },
-    [setExtractions, createExtractorWithDefaults, setCurrentId],
+    [
+      setExtractions,
+      createExtractorWithDefaults,
+      setCurrentId,
+      forceExtractionsOrder,
+    ],
   );
 
   const importExtractions = useCallback(
-    (newExtractions: ExtractionDto[]) => {
-      const newExtractionConfigs: ExtractionConfig[] = newExtractions.map(
-        (extraction) => {
+    (importedExtractions: ExtractionDto[]) => {
+      const newImportedExtractions: ExtractionConfig[] =
+        importedExtractions.map((extraction) => {
           return {
             ...extraction,
             _id: generateId(),
             index: extractions.length + extraction.index,
             trajectories: [],
           };
-        },
-      );
+        });
 
-      setExtractions((prev) => [...prev, ...newExtractionConfigs]);
+      const newExtractions = [...extractions, ...newImportedExtractions];
+      setExtractions(forceExtractionsOrder(newExtractions));
     },
-    [setExtractions, extractions],
+    [setExtractions, extractions, forceExtractionsOrder],
   );
 
   const deleteExtraction = useCallback(
@@ -121,12 +139,7 @@ export function useExtractionState() {
       }
 
       const filtered = extractions.filter((e) => e._id !== id);
-      const sorted = filtered.map((e, i) => ({
-        ...e,
-        index: i,
-      }));
-
-      setExtractions(sorted);
+      setExtractions(forceExtractionsOrder(filtered));
 
       const previous = extractions.find(
         (e) => e.index === extraction.index - 1,
@@ -141,7 +154,7 @@ export function useExtractionState() {
         setCurrentId(extractions[0]._id);
       }
     },
-    [setExtractions, extractions, setCurrentId],
+    [setExtractions, extractions, setCurrentId, forceExtractionsOrder],
   );
 
   const moveExtraction = useCallback(
@@ -170,13 +183,10 @@ export function useExtractionState() {
         ];
 
         // Update indices to match their new positions
-        return newExtractions.map((extraction, idx) => ({
-          ...extraction,
-          index: idx,
-        }));
+        return forceExtractionsOrder(newExtractions);
       });
     },
-    [setExtractions],
+    [setExtractions, forceExtractionsOrder],
   );
 
   const duplicateExtraction = useCallback(
@@ -196,10 +206,10 @@ export function useExtractionState() {
       newExtraction.index = extractions.length;
 
       const newExtractions = [...extractions, newExtraction];
-      setExtractions(newExtractions);
+      setExtractions(forceExtractionsOrder(newExtractions));
       setCurrentId(newExtraction._id);
     },
-    [extractions, setExtractions, setCurrentId],
+    [extractions, setExtractions, setCurrentId, forceExtractionsOrder],
   );
 
   const updateName = useCallback(

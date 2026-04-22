@@ -15,7 +15,8 @@ class AbstractReducer(ABC):
     ) -> np.ndarray:
         print(
             f"Reducing embeddings of shape {embeddings.shape}"
-            f" to {dimensions} dimensions."
+            f" to {dimensions} dimensions"
+            f" with {self.__class__.__name__}."
         )
 
         reductions = self._reduce(
