@@ -43,7 +43,7 @@ const isDayOrNight = computed(
       :disabled="!isReversible"
       :handle-click="invert"
       size="tiny"
-      tooltip="Revert color map"
+      tooltip="Invert color map"
       tooltip-placement="bottom"
     >
       <AppIcon
