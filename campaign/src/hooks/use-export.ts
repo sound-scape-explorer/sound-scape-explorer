@@ -1,7 +1,7 @@
 import {downloadJson} from '@shared/browser.ts';
 import {DATE_FORMAT} from '@shared/constants.ts';
 import {ConfigDto, type FileDto} from '@shared/dtos';
-import {getStorageFilename} from '@shared/files';
+import {getStorageFilename, normalizePath} from '@shared/files';
 import {format} from 'date-fns';
 import {useCallback} from 'react';
 import {TAG_PREFIX_FOR_TABLE} from 'src/constants';
@@ -19,13 +19,13 @@ export function useExport() {
 
   const generate = useCallback(() => {
     const files = getFiles();
-    const filesDto: FileDto[] = [];
+    const filesDtos: FileDto[] = [];
 
     // build DTO files with tags dict
     for (const file of files) {
       const fileDto: FileDto = {
         Index: file.Index,
-        Path: file.Path,
+        Path: normalizePath(file.Path),
         Date: format(new Date(file.Date), DATE_FORMAT), // reformat date to streamline date formats
         Site: file.Site,
         tags: {},
@@ -40,15 +40,19 @@ export function useExport() {
         fileDto.tags[removed] = file[tagName];
       }
 
-      filesDto.push(fileDto);
+      filesDtos.push(fileDto);
     }
 
-    const unvalidatedDto = {
+    const unvalidatedDto: ConfigDto = {
       version: VERSION,
-      settings,
+      settings: {
+        ...settings,
+        storagePath: normalizePath(settings.storagePath),
+        audioPath: normalizePath(settings.audioPath),
+      },
       extractions,
       ranges,
-      files: filesDto,
+      files: filesDtos,
     };
 
     const dto = ConfigDto.parse(unvalidatedDto);
