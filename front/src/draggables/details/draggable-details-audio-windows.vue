@@ -4,7 +4,11 @@ import AppButton from 'src/app/app-button.vue';
 import AppIcon from 'src/app/app-icon.vue';
 import AppTooltip from 'src/app/app-tooltip.vue';
 import {useDateTime} from 'src/composables/use-date-time';
-import {type Interval} from 'src/composables/use-intervals';
+import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
+import {
+  type AggregationWindow,
+  type Interval,
+} from 'src/composables/use-intervals';
 import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 
 interface Props {
@@ -14,7 +18,13 @@ interface Props {
 const props = defineProps<Props>();
 
 const {select} = useAudioFile();
+const {open} = useDraggables();
 const {timestampToString} = useDateTime();
+
+const handleClick = (window: AggregationWindow) => {
+  select(window);
+  open(DraggableKey.enum.audio);
+};
 </script>
 
 <template>
@@ -24,7 +34,7 @@ const {timestampToString} = useDateTime();
   >
     <template #body>
       <AppButton
-        :handle-click="() => select(window)"
+        :handle-click="() => handleClick(window)"
         size="small"
       >
         <AppIcon
