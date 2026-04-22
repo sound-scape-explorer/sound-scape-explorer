@@ -1,5 +1,4 @@
 import {
-  ContextMenu,
   HotkeysProvider,
   HotkeysTarget2,
   Menu,
@@ -7,7 +6,7 @@ import {
 } from '@blueprintjs/core';
 import {Clipboard, Cross, Help, Redo, Undo} from '@blueprintjs/icons';
 import {Table2} from '@blueprintjs/table';
-import {useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 import {TABLE_FROZEN_COL_COUNT} from 'src/constants.ts';
 import styles from 'src/panels/files/files-table.module.scss';
 import {useTableColumns} from 'src/panels/files/hooks/use-table-columns.tsx';
@@ -42,67 +41,77 @@ export function FilesTable() {
 
   const length = useMemo(() => getTableLength(), [getTableLength]);
 
+  const renderBodyContextMenu = useCallback(
+    () => (
+      <Menu>
+        <MenuItem
+          onClick={handleDelete}
+          icon={<Cross />}
+          text="Clear"
+        />
+        <MenuItem
+          onClick={handlePaste}
+          icon={<Clipboard />}
+          text="Paste"
+        />
+        <MenuItem
+          onClick={undo}
+          disabled={isUndoStackEmpty}
+          icon={<Undo />}
+          text="Undo"
+        />
+        <MenuItem
+          onClick={redo}
+          disabled={isRedoStackEmpty}
+          icon={<Redo />}
+          text="Redo"
+        />
+        <MenuItem
+          onClick={triggerHelpModal}
+          icon={<Help />}
+          text="Help"
+        />
+      </Menu>
+    ),
+    [
+      handleDelete,
+      handlePaste,
+      undo,
+      redo,
+      isUndoStackEmpty,
+      isRedoStackEmpty,
+      triggerHelpModal,
+    ],
+  );
+
   return (
-    <ContextMenu
-      content={
-        <Menu>
-          <MenuItem
-            onClick={handleDelete}
-            icon={<Cross />}
-            text="Clear"
-          />
-          <MenuItem
-            onClick={handlePaste}
-            icon={<Clipboard />}
-            text="Paste"
-          />
-          <MenuItem
-            onClick={undo}
-            disabled={isUndoStackEmpty}
-            icon={<Undo />}
-            text="Undo"
-          />
-          <MenuItem
-            onClick={redo}
-            disabled={isRedoStackEmpty}
-            icon={<Redo />}
-            text="Redo"
-          />
-          <MenuItem
-            onClick={triggerHelpModal}
-            icon={<Help />}
-            text="Help"
-          />
-        </Menu>
-      }
-    >
-      <HotkeysProvider>
-        <HotkeysTarget2 hotkeys={hotkeys}>
-          {({handleKeyDown, handleKeyUp}) => (
-            <div
-              ref={tableRef}
-              onKeyDown={handleKeyDown}
-              onKeyUp={handleKeyUp}
+    <HotkeysProvider>
+      <HotkeysTarget2 hotkeys={hotkeys}>
+        {({handleKeyDown, handleKeyUp}) => (
+          <div
+            ref={tableRef}
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
+          >
+            <Table2
+              className={styles.table}
+              numRows={length}
+              columnWidths={widths}
+              numFrozenColumns={TABLE_FROZEN_COL_COUNT}
+              cellRendererDependencies={[columns]}
+              getCellClipboardData={handleCopy}
+              enableFocusedCell={true}
+              onFocusedCell={handleFocus}
+              onSelection={handleSelection}
+              enableColumnReordering
+              onColumnsReordered={reorder}
+              bodyContextMenuRenderer={renderBodyContextMenu}
             >
-              <Table2
-                className={styles.table}
-                numRows={length}
-                columnWidths={widths}
-                numFrozenColumns={TABLE_FROZEN_COL_COUNT}
-                cellRendererDependencies={[columns]}
-                getCellClipboardData={handleCopy}
-                enableFocusedCell={true}
-                onFocusedCell={handleFocus}
-                onSelection={handleSelection}
-                enableColumnReordering
-                onColumnsReordered={reorder}
-              >
-                {columns}
-              </Table2>
-            </div>
-          )}
-        </HotkeysTarget2>
-      </HotkeysProvider>
-    </ContextMenu>
+              {columns}
+            </Table2>
+          </div>
+        )}
+      </HotkeysTarget2>
+    </HotkeysProvider>
   );
 }
