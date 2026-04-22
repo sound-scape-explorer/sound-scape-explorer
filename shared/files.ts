@@ -31,7 +31,7 @@ export function readFileAsText(file: File): Promise<string> {
 }
 
 export function normalizePath(path: string): string {
-  return path.replace(/\\/g, '/');
+  return path.replaceAll(/\\/g, '/');
 }
 
 export function normalizePaths(paths: string[]): string[] {

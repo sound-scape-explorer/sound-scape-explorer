@@ -11,11 +11,10 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
-    "module": "es2022",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "lib": [
       "webworker",
-      "ES2022",
       "ESNext",
       "ESNext.Array",
       "DOM",
