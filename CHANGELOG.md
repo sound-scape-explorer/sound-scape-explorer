@@ -1,3 +1,14 @@
+## [14.0.15-beta.3](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.15-beta.2...v14.0.15-beta.3) (2026-04-22)
+
+
+### Bug Fixes
+
+* **campaign:** add horizontal scrollbar for extraction tabs ([ab4267e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/ab4267e8c832569568ac3da2b7810b1dc00961b9))
+* **campaign:** normalize path string on audio folder drag n drop ([4ce8ac3](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/4ce8ac342884801ab8d657041f9e9918e535d483))
+* **front:** check app input nature correctly ([bfe114b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/bfe114b76a5dab932a27e358afb83815a9fe78cc))
+* **front:** improve color map wording ([6d0c7f1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6d0c7f1d25166f6265883ca6888b8945b9529c79))
+* **front:** open audio panel when clicking window from details panel ([56ac47b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/56ac47b2073b95e9d7fe689777a6ca650a08d398))
+
 ## [14.0.15-beta.2](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.15-beta.1...v14.0.15-beta.2) (2026-04-22)
 
 
