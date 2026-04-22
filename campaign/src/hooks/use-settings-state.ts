@@ -12,6 +12,7 @@ import {
   TIMEZONE_DEFAULT,
 } from '@shared/constants';
 import {type SettingsDto} from '@shared/dtos';
+import {normalizePath} from '@shared/files.ts';
 import {atom, useAtom} from 'jotai';
 import {type DragEvent, useCallback} from 'react';
 
@@ -52,10 +53,11 @@ export function useSettingsState() {
 
       const file = e.dataTransfer.files[0];
       const path = window.electronAPI.getFilePath(file);
-      const {isDirectory} = window.electronAPI.checkPath(path);
+      const normalized = normalizePath(path);
+      const {isDirectory} = window.electronAPI.checkPath(normalized);
 
       if (isDirectory) {
-        update('audioPath', path);
+        update('audioPath', normalized);
       }
     },
     [update],
