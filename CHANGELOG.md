@@ -1,3 +1,19 @@
+## [14.0.15-beta.1](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.14...v14.0.15-beta.1) (2026-04-22)
+
+
+### Bug Fixes
+
+* **app:** force ESNext everywhere ([879db84](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/879db848dd9ddbd611db7b0b485c8613e86abdb7))
+* **campaign:** allow pasting on multiple table rows ([6ec609e](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/6ec609e30a7c2e8c6ac00db58df4a1b2d0fac56f))
+* **campaign:** force incremental extraction order after each state mutation ([9e19438](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/9e19438b4f31041c0deceae1b581a2413f907fe0))
+* **campaign:** improve wording for extractor aggregate in integration flag ([f17ec36](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f17ec3684e7e3b442d229ae0d3c46eaec76acc6c))
+* **campaign:** loosen zod verification on date strings to allow faulty exports ([06a2504](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/06a250457089aef7487d7e20af994303773c12cb))
+* **campaign:** normalize path strings agnostic to operating system ([32fec7b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/32fec7b1548470360c217b48d0fd3ef3cbbca80e))
+* **campaign:** reformat file dates to mitigate previous zod loosening ([15c1115](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/15c111582a344ba355f0ff3e245bec961f7bde0c))
+* **campaign:** verify correct date string on table cell ([05bf4df](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/05bf4dfc85fe99f0653360546f6c0153c73385f2))
+* **processing:** print running reducer in console ([5cb3a4b](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/5cb3a4b65ddc7d452ffe626acb0db5cee8cde101))
+* **processing:** print used device on --auto ([2847884](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/28478844d1b7f521814c1f0903ed6d8542909864))
+
 ## [14.0.14](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.13...v14.0.14) (2026-03-19)
 
 
