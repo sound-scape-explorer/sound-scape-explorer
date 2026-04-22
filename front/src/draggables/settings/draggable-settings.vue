@@ -8,7 +8,6 @@ import AppSelect from 'src/app/select/app-select.vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {DraggableKey} from 'src/composables/use-draggables';
 import {Shortcut} from 'src/composables/use-shortcuts';
-import {useTimezone} from 'src/composables/use-timezone';
 import {
   AudioFilterSlope,
   PlotBackground,
@@ -41,7 +40,6 @@ const {
   audioFilterSlope,
 } = useClientSettings();
 
-const {tz} = useTimezone();
 const reload = () => location.reload();
 </script>
 
