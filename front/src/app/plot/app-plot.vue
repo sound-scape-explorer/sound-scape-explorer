@@ -17,7 +17,7 @@ export interface AppPlotProps {
   xTitle?: string;
   yTitle?: string;
   legend?: boolean;
-  exportFilename: string;
+  exportFilename?: string;
   clickEnabled?: boolean;
   hideXLegend?: boolean;
   showRange?: boolean;
