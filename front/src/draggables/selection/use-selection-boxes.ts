@@ -16,7 +16,7 @@ export const SelectionBox = z.object({
   ranges: z.object({
     x: z.tuple([z.number(), z.number()]),
     y: z.tuple([z.number(), z.number()]),
-    z: z.tuple([z.number().nullable(), z.number().nullable()]),
+    z: z.tuple([z.number(), z.number()]),
   }),
   angles: z.object({
     x: z.number(),
