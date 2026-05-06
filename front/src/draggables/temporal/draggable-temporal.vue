@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import AppDraggableLoading from 'src/app/app-draggable-loading.vue';
 import AppCandles from 'src/app/candles/app-candles.vue';
 import AppDraggable from 'src/app/draggable/app-draggable.vue';
 import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
@@ -14,8 +15,15 @@ import {useTemporalCandles} from 'src/draggables/temporal/use-temporal-candles';
 import {useTemporalChart} from 'src/draggables/temporal/use-temporal-chart';
 import {computed} from 'vue';
 
-const {extractorSlug, isCandles, isCondensed, isDisplay, display, isExpanded} =
-  useDraggableTemporal();
+const {
+  extractorSlug,
+  isCandles,
+  isCondensed,
+  isDisplay,
+  display,
+  isExpanded,
+  isLoading,
+} = useDraggableTemporal();
 const {candles, plot} = useTemporalChart();
 const {period} = useTemporalCandles();
 const {generate} = useExportName();
@@ -33,6 +41,7 @@ useDraggableTemporalLifecycles();
     :draggable-key="DraggableKey.enum.temporal"
     :suspense="SuspenseCase.enum.VIEW"
   >
+    <AppDraggableLoading :isLoading="isLoading" />
     <DraggableTemporalSidebar />
     <DraggableTemporalMenu />
 

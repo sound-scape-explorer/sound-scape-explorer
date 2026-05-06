@@ -22,6 +22,7 @@ const isCandles = computed<boolean>(
 const isCondensed = ref<boolean>(true);
 const isDisplay = ref<boolean>(true); // whether the plot is shown or not
 const isExpanded = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
 
 export function useDraggableTemporal() {
   const {slugToExtractor} = useAcousticExtractors();
@@ -30,10 +31,12 @@ export function useDraggableTemporal() {
   const {set} = useTemporalSeries();
 
   const handleExtractorChange = async () => {
+    isLoading.value = true;
     extractor.value = slugToExtractor(extractorSlug.value);
     const data = await read(extractor.value);
     const series = await serialize(data);
     set(series);
+    isLoading.value = false;
   };
 
   const toggleDisplay = () => (isDisplay.value = !isDisplay.value);
@@ -51,5 +54,6 @@ export function useDraggableTemporal() {
     handleExtractorChange,
     isExpanded,
     toggleExpanded,
+    isLoading,
   };
 }
