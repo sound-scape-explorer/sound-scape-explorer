@@ -3,6 +3,7 @@ import {useBodyConfig} from 'src/components/timeline/body/use-body-config';
 import {useBodyDrawer} from 'src/components/timeline/body/use-body-drawer';
 import {useBodyElements} from 'src/components/timeline/body/use-body-elements';
 import {useBodyHandlers} from 'src/components/timeline/body/use-body-handlers';
+import {useBodyHover} from 'src/components/timeline/body/use-body-hover';
 import {useTimelineContext} from 'src/components/timeline/use-timeline-context';
 import {
   type BodySize,
@@ -18,11 +19,12 @@ export function useBodyLifecycles({width}: BodySize) {
   const {mount: mountContext} = useTimelineContext().body;
   const {rows, refreshRows} = useBodyConfig();
   const {render} = useBodyDrawer();
-  const {left, right} = useTimelineRange();
+  const {start, end, left, right} = useTimelineRange();
   const {update} = useBodyElements();
   const {generate: generateScale} = useBodyColors();
   const {elements} = useBodyElements();
   const {position} = useBodyHandlers();
+  const {hovered} = useBodyHover();
   const {currentIndex} = useIntervalTransport();
   const {timeshift} = useClientSettings();
 
@@ -32,9 +34,15 @@ export function useBodyLifecycles({width}: BodySize) {
   };
 
   onMounted(render);
-  watch([elements, position, width, currentIndex], render);
+
+  // render when viewport moves (drag), hovered element changes, or data changes
+  watch([left, right, elements, width, currentIndex, hovered], render);
+
   watch(canvas, init);
-  watch([left, right, timeshift], update);
+
+  // elements rebuild only on range/data change — NOT on viewport drag
+  watch([start, end, timeshift], update);
+
   watch([width, rows], () => updateSize({width}));
   watch(elements, () => refreshRows(elements));
 }

@@ -9,7 +9,7 @@ import {type Ref} from 'vue';
 
 export interface TimelineElement {
   row: number;
-  index: number; // interval index
+  index: number;
   start: number;
   end: number;
   color: string;
@@ -24,42 +24,25 @@ export function useTimelineElements() {
   const {intervals} = useIntervals();
   const {timeshift} = useClientSettings();
 
-  const createElement = (
-    row: number,
-    index: number,
-    start: number,
-    end: number,
-    color: string,
-    tooltip: string[],
-  ): TimelineElement => {
-    return {
-      row,
-      index,
-      start,
-      end,
-      color,
-      tooltip,
-    };
-  };
-
   const getCollectedIndices = (
     leftBoundary: Ref<number>,
     rightBoundary: Ref<number>,
   ) => {
     const ms = timeshift.value * 3600 * 1000;
+    const l = leftBoundary.value;
+    const r = rightBoundary.value;
+    const result: number[] = [];
 
-    return intervals.value
-      .map((interval) => ({
-        ...interval,
-        start: interval.start + ms,
-        end: interval.end + ms,
-      }))
-      .filter(
-        (interval) =>
-          interval.start >= leftBoundary.value &&
-          interval.end < rightBoundary.value,
-      )
-      .map((interval) => interval.index);
+    for (const interval of intervals.value) {
+      const s = interval.start + ms;
+      const e = interval.end + ms;
+
+      if (s >= l && e < r) {
+        result.push(interval.index);
+      }
+    }
+
+    return result;
   };
 
   const createElements = (indices: Ref<number[]>) => {
@@ -69,7 +52,7 @@ export function useTimelineElements() {
 
     const ms = timeshift.value * 3600_000;
     const newElements: TimelineElement[] = [];
-    const knownSites: string[] = [];
+    const knownSites = new Map<string, number>();
     let rowNumber = -1;
 
     for (const index of indices.value) {
@@ -77,30 +60,37 @@ export function useTimelineElements() {
       const fileIndices = aggregations.value.fileIndices[index];
       const site = intervals.value[index].sites.join(STRING_DELIMITER);
 
-      if (!knownSites.includes(site)) {
-        knownSites.push(site);
+      let row = knownSites.get(site);
+      if (row === undefined) {
         rowNumber += 1;
+        row = rowNumber;
+        knownSites.set(site, row);
       }
 
       const s = timestamp + ms;
       const e = s + integration.value.duration;
 
-      // Format once per index, not once per fileIndex
       const startLabel = timestampToString(timestamp);
       const endLabel = timestampToString(
         timestamp + integration.value.duration,
       );
-      const tooltip = [`site: ${site}`, `interval index: ${index}`];
+      const baseTip = `site: ${site}\ninterval index: ${index}`;
 
       for (const fileIndex of fileIndices) {
-        newElements.push(
-          createElement(rowNumber, index, s, e, scale.value[fileIndex], [
-            ...tooltip,
+        newElements.push({
+          row,
+          index,
+          start: s,
+          end: e,
+          color: scale.value[fileIndex],
+          tooltip: [
+            `site: ${site}`,
+            `interval index: ${index}`,
             `file index: ${fileIndex}`,
             `start: ${startLabel}`,
             `end: ${endLabel}`,
-          ]),
-        );
+          ],
+        });
       }
     }
 
