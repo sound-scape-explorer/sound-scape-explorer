@@ -42,3 +42,11 @@ export function downloadJson<T>(
     console.error('Error downloading JSON:', error);
   }
 }
+
+export function waitForPaint(): Promise<void> {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      setTimeout(resolve, 0);
+    });
+  });
+}

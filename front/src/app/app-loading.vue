@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import {NProgress} from 'naive-ui';
 import AppModal from 'src/app/app-modal.vue';
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {useThemeColors} from 'src/composables/use-theme-colors';
 import {useViewLoader} from 'src/composables/use-view-loader';
 
-const {isLoading, loadingText} = useScatterLoading();
+const {isLoading, loadingText} = useScatterState();
 const {step} = useViewLoader();
 const {colors} = useThemeColors();
 </script>

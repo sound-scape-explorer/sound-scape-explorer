@@ -8,8 +8,8 @@ import {SuspenseCase} from 'src/app/draggable/use-app-draggable-suspense';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppDraggableSidebar from 'src/app/draggable-sidebar/app-draggable-sidebar.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {
   CyclingPeriod,
   useScatterTrajectoryCyclingPeriod,
@@ -25,7 +25,7 @@ import {watch} from 'vue';
 const {current, undo, redo, canUndo, canRedo, update} =
   useTrajectoriesSelection();
 const {isFused} = useTrajectories();
-const {isLoading} = useScatterLoading();
+const {isLoading} = useScatterState();
 const {options, isFuseable} = useTrajectoriesOptions();
 const {handleClick} = useDraggableTrajectoriesExport();
 const {render} = useScatterRender();

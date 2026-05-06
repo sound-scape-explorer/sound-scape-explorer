@@ -5,7 +5,7 @@ import AppDraggableMenuPlotSizes from 'src/app/app-draggable-menu-plot-sizes.vue
 import AppIcon from 'src/app/app-icon.vue';
 import AppDraggableMenu from 'src/app/draggable-menu/app-draggable-menu.vue';
 import AppSelect from 'src/app/select/app-select.vue';
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {useDraggableRelativeTrajectories} from 'src/draggables/relative-trajectories/use-draggable-relative-trajectories';
 import {useRelativeTrajectoriesData} from 'src/draggables/relative-trajectories/use-relative-trajectories-data';
 import {useRelativeTrajectoriesExport} from 'src/draggables/relative-trajectories/use-relative-trajectories-export';
@@ -17,7 +17,7 @@ import {
 
 const {selected, options} = useDraggableRelativeTrajectories();
 const {handleUpdate} = useRelativeTrajectoriesData();
-const {isLoading} = useScatterLoading();
+const {isLoading} = useScatterState();
 const {handleExportClick} = useRelativeTrajectoriesExport();
 const {height} = useRelativeTrajectoriesPlotSize();
 const {strategy} = useRelativeTrajectoriesStrategy();

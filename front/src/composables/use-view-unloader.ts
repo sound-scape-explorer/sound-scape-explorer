@@ -3,8 +3,8 @@ import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useAutoclusters} from 'src/composables/use-autoclusters';
 import {DraggableKey, useDraggables} from 'src/composables/use-draggables';
@@ -25,13 +25,13 @@ export function useViewUnloader() {
   const {reset: resetColorScale} = useScatterColorScale();
   const {reset: resetTagSelection} = useTagSelection();
   const {reset: resetTrajectoriesSelection} = useTrajectoriesSelection();
-  const {reset: resetScatter, isEnabled} = useScatterRender();
+  const {isEnabled, isLoading, loadingText} = useScatterState();
+  const {reset: resetScatter} = useScatterRender();
   const {reset: resetFilterByLabel} = useScatterFilterTag();
   const {reset: resetFilterByCalendar} = useScatterFilterCalendar();
   const {reset: resterFilterByAcoustic} = useScatterFilterAcoustic();
   const {reset: resetFilterSpatial} = useScatterFilterSpatial();
   const {reset: resetViewSelection} = useViewSelection();
-  const {isLoading, loadingText} = useScatterLoading();
   const {reset: resetTemporalSeries} = useTemporalSeries();
   const {reset: resetTemporalThresholds} = useTemporalThresholds();
   const {reset: resetAudioPlaybackRate} = useAudioPlaybackRate();
