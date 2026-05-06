@@ -10,11 +10,12 @@ import {
 } from '@blueprintjs/icons';
 import {ICON_SIZE, SmoothingWindowPresets} from '@shared/constants';
 import clsx from 'clsx';
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {type ExtractionConfig, type TrajectoryConfig} from 'src/interfaces.ts';
 import styles from 'src/panels/extractions/components/extraction-trajectories.module.scss';
 import {ExtractionTrajectoriesDrawerContent} from 'src/panels/extractions/components/extraction-trajectories-drawer-content.tsx';
 import {useObjectSlug} from 'src/panels/extractions/hooks/use-object-slug.ts';
+import {useTrajectoryFilePresence} from 'src/panels/extractions/hooks/use-trajectory-file-presence.ts';
 import {useTrajectoryState} from 'src/panels/extractions/hooks/use-trajectory-state.ts';
 import {useFilesTagging} from 'src/panels/files/hooks/use-files-tagging';
 import {useTrajectoriesValidation} from 'src/panels/metrics/hooks/use-trajectories-validation';
@@ -85,6 +86,7 @@ export function ExtractionTrajectories({extraction}: Props) {
         <div>tag name</div>
         <div>tag value</div>
         <div>window</div>
+        <div>files count</div>
       </SectionCard>
 
       {trajectories
@@ -118,8 +120,6 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
     updateSmoothingWindowCustom,
   } = useTrajectoryState(extraction);
 
-  const {getSlug} = useObjectSlug();
-
   const {
     isNameValid,
     isTagNameValid,
@@ -129,8 +129,25 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
     isTrajectoryWindowValid,
   } = useTrajectoriesValidation();
 
+  const {getSlug} = useObjectSlug();
   const {namesWithSite, uniquesByTagName} = useFilesTagging();
+  const {getCount} = useTrajectoryFilePresence();
+
   const [isManual, setIsManual] = useState(false);
+
+  const [count, setCount] = useState<number | 'error'>(0);
+
+  useEffect(() => {
+    const newCount = getCount(trajectory);
+
+    setCount((prev) => {
+      if (prev === newCount) {
+        return prev;
+      }
+
+      return newCount;
+    });
+  }, [trajectory, getCount]);
 
   return (
     <SectionCard
@@ -212,6 +229,7 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
             />
           </>
         )}
+
         {isManual && (
           <>
             <Tooltip content="in ms">
@@ -233,6 +251,8 @@ function TrajectoryRow({extraction, trajectory}: TrajectoryRowProps) {
           </>
         )}
       </div>
+
+      <span>{count}</span>
     </SectionCard>
   );
 }
