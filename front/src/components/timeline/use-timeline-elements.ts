@@ -1,4 +1,3 @@
-import {addMilliseconds} from 'date-fns';
 import {useBodyColors} from 'src/components/timeline/body/use-body-colors';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useClientSettings} from 'src/composables/use-client-settings';
@@ -20,7 +19,7 @@ export interface TimelineElement {
 export function useTimelineElements() {
   const {integration} = useViewSelection();
   const {aggregations} = useAggregations();
-  const {timestampToDate, timestampToString} = useDateTime();
+  const {timestampToString} = useDateTime();
   const {scale} = useBodyColors();
   const {intervals} = useIntervals();
   const {timeshift} = useClientSettings();
@@ -68,6 +67,7 @@ export function useTimelineElements() {
       return [];
     }
 
+    const ms = timeshift.value * 3600_000;
     const newElements: TimelineElement[] = [];
     const knownSites: string[] = [];
     let rowNumber = -1;
@@ -82,29 +82,25 @@ export function useTimelineElements() {
         rowNumber += 1;
       }
 
-      const start = timestampToDate(timestamp);
-      const end = addMilliseconds(start, integration.value.duration);
+      const s = timestamp + ms;
+      const e = s + integration.value.duration;
 
-      // messy
+      // Format once per index, not once per fileIndex
+      const startLabel = timestampToString(timestamp);
+      const endLabel = timestampToString(
+        timestamp + integration.value.duration,
+      );
+      const tooltip = [`site: ${site}`, `interval index: ${index}`];
+
       for (const fileIndex of fileIndices) {
-        const s = start.getTime();
-        const e = end.getTime();
-        const element = createElement(
-          rowNumber,
-          index,
-          s,
-          e,
-          scale.value[fileIndex],
-          [
-            `site: ${site}`,
-            `interval index: ${index}`,
+        newElements.push(
+          createElement(rowNumber, index, s, e, scale.value[fileIndex], [
+            ...tooltip,
             `file index: ${fileIndex}`,
-            `start: ${timestampToString(timestamp)}`,
-            `end: ${timestampToString(timestamp + integration.value.duration)}`,
-          ],
+            `start: ${startLabel}`,
+            `end: ${endLabel}`,
+          ]),
         );
-
-        newElements.push(element);
       }
     }
 
