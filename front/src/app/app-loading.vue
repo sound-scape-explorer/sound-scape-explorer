@@ -40,15 +40,15 @@ const {colors} = useThemeColors();
 }
 
 .loading {
-  display: flex;
   align-items: flex-start;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: sizes.$w0;
-  padding: sizes.$p0 sizes.$p0 * 2 sizes.$p0 * 2 sizes.$p0 * 2;
-  border: 1px solid v-bind('colors.borderColor');
   background: v-bind('colors.baseColor');
+  border: 1px solid v-bind('colors.borderColor');
+  display: flex;
+  flex-direction: column;
   gap: sizes.$p0;
+  justify-content: flex-start;
+  padding: sizes.$p0 sizes.$p0 * 2 sizes.$p0 * 2 sizes.$p0 * 2;
+  width: sizes.$w0;
 
   @include borders.border-radius;
 
@@ -61,11 +61,11 @@ const {colors} = useThemeColors();
   }
 
   & > :last-child {
-    width: 100%;
-    min-width: 100%;
     height: 1em;
     margin-bottom: sizes.$p0;
+    min-width: 100%;
     padding-top: sizes.$p0;
+    width: 100%;
   }
 }
 
