@@ -58,7 +58,38 @@ export class AudioModuleController {
 
     stopButton.addEventListener('click', this.handleStopButtonClick.bind(this));
     fileInput.addEventListener('change', this.handleFileInputChange.bind(this));
+
+    // typing
     textInput.addEventListener('input', this.render.bind(this));
+
+    // dragging
+    textInput.addEventListener('dragenter', () => {
+      window.focus();
+    });
+
+    textInput.addEventListener('dragover', (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    textInput.addEventListener('drop', this.handleDrop.bind(this));
+  }
+
+  private async handleDrop(e: DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const files = e.dataTransfer?.files;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const file = files[0] as File;
+    const path = window.electronAPI.getFilePath(file);
+
+    textInput.value = path;
+    await this.render();
   }
 
   private async handleStartButtonClick() {
