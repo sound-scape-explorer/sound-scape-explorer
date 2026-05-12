@@ -1,4 +1,5 @@
 import {FILE_TYPES} from '@shared/constants';
+import {normalizePath, normalizePaths} from '@shared/files.ts';
 import {useCallback} from 'react';
 import {useSettingsState} from 'src/hooks/use-settings-state';
 import {useTabNavigation} from 'src/hooks/use-tab-navigation';
@@ -22,11 +23,18 @@ export function useFolderDrop() {
 
       const paths = audios.map(window.electronAPI.getFilePath);
       const common = window.electronAPI.findCommonFolder(paths);
-      update('audioPath', common);
 
-      const aliases = audios.map((audio, a) => {
+      const normalizedPaths = normalizePaths(paths);
+      const normalizedCommon = normalizePath(common);
+      const relativePaths = normalizedPaths.map((p) =>
+        p.replace(normalizedCommon, ''),
+      );
+
+      update('audioPath', normalizedCommon);
+
+      const aliases = audios.map((audio, i) => {
         const alias: FileAlias = {
-          path: paths[a].replace(common, ''),
+          path: relativePaths[i],
           timestamp: audio.lastModified,
         };
 

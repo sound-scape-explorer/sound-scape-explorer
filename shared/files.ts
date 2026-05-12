@@ -29,3 +29,11 @@ export function readFileAsText(file: File): Promise<string> {
     reader.readAsText(file);
   });
 }
+
+export function normalizePath(path: string): string {
+  return path.replaceAll(/\\/g, '/');
+}
+
+export function normalizePaths(paths: string[]): string[] {
+  return paths.map(normalizePath);
+}

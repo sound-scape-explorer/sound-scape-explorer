@@ -4,6 +4,8 @@ import {ExtractionsPanelMenu} from 'src/panels/extractions/extractions-panel-men
 import {useExtractionState} from 'src/panels/extractions/hooks/use-extraction-state.ts';
 import {useExtractionValidation} from 'src/panels/extractions/hooks/use-extraction-validation';
 
+import styles from './extractions-panel.module.scss';
+
 export function ExtractionsPanel() {
   const {extractions, currentId, setCurrentId} = useExtractionState();
   const {validate} = useExtractionValidation();
@@ -15,6 +17,7 @@ export function ExtractionsPanel() {
       <Tabs
         selectedTabId={currentId}
         onChange={(i: string) => setCurrentId(i)}
+        className={styles.container}
       >
         {extractions
           .sort((a, b) => a.index - b.index)

@@ -74,7 +74,7 @@ export function ExtractionExtractors({extraction}: Props) {
         <span>impl</span>
         <span>window (ms)</span>
         <span>hop (ms)</span>
-        <Tooltip content="Include in aggregation">
+        <Tooltip content="Aggregate to the final embeddings">
           <span>agg.</span>
         </Tooltip>
         <span>adv.</span>

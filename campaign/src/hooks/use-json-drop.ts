@@ -1,5 +1,5 @@
 import {ConfigDto} from '@shared/dtos';
-import {readJson} from '@shared/files';
+import {normalizePath, readJson} from '@shared/files';
 import {useCallback} from 'react';
 import {useNotify} from 'src/hooks/use-notify';
 import {useSettingsState} from 'src/hooks/use-settings-state';
@@ -40,10 +40,31 @@ export function useJsonDrop() {
       try {
         const json = await read(file);
         const config = ConfigDto.parse(json);
-        setSettings(config.settings);
+
+        // settings
+        const settings: ConfigDto['settings'] = {
+          ...config.settings,
+          storagePath: normalizePath(config.settings.storagePath),
+          audioPath: normalizePath(config.settings.audioPath),
+        };
+
+        setSettings(settings);
+
+        // extractions
         loadExtractions(config.extractions);
+
+        // ranges
         setRanges(config.ranges);
-        table.loadFromDto(config.files);
+
+        // files
+        const files: ConfigDto['files'] = config.files.map((f) => ({
+          ...f,
+          Path: normalizePath(f.Path),
+        }));
+
+        table.loadFromDto(files);
+
+        // UI
         navigate('settings');
       } catch (e) {
         if (e instanceof Error) {

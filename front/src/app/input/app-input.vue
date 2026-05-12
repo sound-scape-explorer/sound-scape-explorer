@@ -41,7 +41,11 @@ const handleChange = <T>(newInput: T) => {
     t = null;
   }
 
-  if (typeof newInput !== 'number' || typeof newInput !== 'string') {
+  const isNumber = typeof newInput === 'number';
+  const isString = typeof newInput === 'string';
+  const notNumberNorString = !isNumber && !isString;
+
+  if (notNumberNorString) {
     return;
   }
 
