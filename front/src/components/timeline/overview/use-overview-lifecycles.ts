@@ -10,7 +10,7 @@ import {
 } from 'src/components/timeline/use-timeline-dom';
 import {useTimelineRange} from 'src/components/timeline/use-timeline-range';
 import {useDraggableCalendar} from 'src/draggables/calendar/use-draggable-calendar';
-import {onMounted, watch} from 'vue';
+import {onMounted, onUnmounted, watch} from 'vue';
 import {useClientSettings} from 'src/composables/use-client-settings';
 
 export function useOverviewLifecycles({width, height}: OverviewSize) {
@@ -25,15 +25,30 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
   const {isHovering, isDragging} = useTimelineHandlers().overview;
   const {timeshift} = useClientSettings();
 
-  const filter = () => {
+  let filterTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const debouncedFilter = () => {
     if (!isActive.value) {
       return;
     }
 
-    filterByCalendar();
+    if (filterTimer !== null) {
+      clearTimeout(filterTimer);
+    }
+
+    filterTimer = setTimeout(() => {
+      filterTimer = null;
+      filterByCalendar();
+    }, 150);
   };
 
   onMounted(render);
+  onUnmounted(() => {
+    if (filterTimer !== null) {
+      clearTimeout(filterTimer);
+    }
+  });
+
   watch(
     [
       left,
@@ -51,6 +66,6 @@ export function useOverviewLifecycles({width, height}: OverviewSize) {
   watch([container, canvas], mount);
   watch([width, height], () => updateSize({width, height}));
   watch([start, end, timeshift], updateElements);
-  watch([left, right, isActive], filter);
+  watch([left, right, isActive], debouncedFilter);
   watch(isActive, filterByCalendar);
 }

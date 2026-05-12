@@ -3,19 +3,22 @@ import {type Ref, ref} from 'vue';
 
 const rowMin = 5;
 const rowHeight = 18;
-const rows = ref<number>(rowMin); // count
+const rows = ref<number>(rowMin);
 
 const elementGaps = {top: 2, bottom: 4};
 
 export function useBodyConfig() {
   const refreshRows = (elements: Ref<TimelineElement[]>) => {
-    let r = Array.from(new Set([...elements.value.map((e) => e.row)])).length;
+    let max = -1;
 
-    if (r < rowMin) {
-      r = rowMin;
+    for (const e of elements.value) {
+      if (e.row > max) {
+        max = e.row;
+      }
     }
 
-    rows.value = r;
+    const r = max + 1;
+    rows.value = r < rowMin ? rowMin : r;
   };
 
   return {

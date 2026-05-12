@@ -1,10 +1,10 @@
 <script lang="ts" setup="">
 import AppInput from 'src/app/input/app-input.vue';
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {useClientSettings} from 'src/composables/use-client-settings';
 
-const {isLoading} = useScatterLoading();
 const {colorsAlphaLow: low, colorsAlphaHigh: high} = useClientSettings();
+const {isLoading} = useScatterState();
 </script>
 
 <template>

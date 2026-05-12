@@ -1,11 +1,11 @@
 <script lang="ts" setup="">
 import AppSelect from 'src/app/select/app-select.vue';
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {ColorFlavor} from 'src/constants';
 
-const {isLoading} = useScatterLoading();
 const {colorsFlavor} = useClientSettings();
+const {isLoading} = useScatterState();
 </script>
 
 <template>

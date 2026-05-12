@@ -13,7 +13,6 @@ from processing.interfaces import TimelineAggregate, AggregationData
 from processing.paths.PathRegistry import PathRegistry
 from processing.services.SiteService import SiteWithFiles, SiteService
 
-
 _domain = StorageDomain.aggregations
 _paths = AggregationStoragePath
 
@@ -150,38 +149,17 @@ class AggregationRepository:
         )
 
     @staticmethod
-    def from_storage_embeddings(
-        context: Context,
-        extraction: ExtractionConfig,
-        band: BandConfig,
-        integration: IntegrationConfig,
-    ):
-        """Retrieves all embeddings from storage for all sites."""
-
-        sites = SiteService.get_sites(context)
-        all_embeddings = []
-
-        for site in sites:
-            paths = AggregationRepository._get_paths(
-                extraction,
-                band,
-                integration,
-                site,
-            )
-
-            embeddings = context.storage.read(paths.embeddings)
-            all_embeddings.extend(embeddings)
-
-        return np.stack(all_embeddings)
-
-    @staticmethod
     def from_storage(
         context: Context,
         extraction: ExtractionConfig,
         band: BandConfig,
         integration: IntegrationConfig,
     ):
-        """Retrieves and rebuild aggregation data objects"""
+        """Retrieves and rebuilds aggregation data objects, sorted chronologically.
+
+        This is the single source of truth for aggregation ordering. All other
+        retrieval methods should delegate to this one.
+        """
 
         storage = context.storage
         sites = SiteService.get_sites(context)
@@ -224,4 +202,29 @@ class AggregationRepository:
 
                 aggregations.append(aggregation)
 
+        # Sort chronologically. Python's sorted() is stable, so aggregations
+        # with identical timestamps (from different sites) preserve their
+        # relative insertion order (i.e. site iteration order).
+        aggregations.sort(key=lambda a: a.start)
+
         return aggregations
+
+    @staticmethod
+    def from_storage_embeddings(
+        context: Context,
+        extraction: ExtractionConfig,
+        band: BandConfig,
+        integration: IntegrationConfig,
+    ):
+        """Retrieves all embeddings from storage for all sites.
+
+        Delegates to from_storage() to guarantee identical ordering.
+        """
+        aggregations = AggregationRepository.from_storage(
+            context=context,
+            extraction=extraction,
+            band=band,
+            integration=integration,
+        )
+
+        return np.stack([a.embeddings for a in aggregations])

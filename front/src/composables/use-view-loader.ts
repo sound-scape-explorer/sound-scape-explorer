@@ -3,8 +3,7 @@ import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filter-calendar';
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
-import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {useAcousticExtractors} from 'src/composables/use-acoustic-extractors';
 import {useAggregations} from 'src/composables/use-aggregations';
 import {useAutoclusters} from 'src/composables/use-autoclusters';
@@ -19,9 +18,9 @@ import {
   FilterType,
   useAudioFilters,
 } from 'src/draggables/audio/use-audio-filters';
+import {useSelectionBoundaries} from 'src/draggables/selection/use-selection-boundaries';
 import {useTagSelection} from 'src/draggables/tags/use-tag-selection';
 import {nextTick, ref} from 'vue';
-import {useSelectionBoundaries} from 'src/draggables/selection/use-selection-boundaries';
 
 const RENDER_TIMEOUT = 100;
 
@@ -38,16 +37,15 @@ export function useViewLoader() {
   const {generate: generateTagUniques} = useTagUniques();
   const {load: loadAcousticExtractors} = useAcousticExtractors();
 
+  const {isEnabled, isLoading, loadingText} = useScatterState();
   const {generate: generateColorScale} = useScatterColorScale();
   const {build: buildSelection, selection: tagSelection} = useTagSelection();
-  const {isEnabled} = useScatterRender();
   const {filter: filterByLabel} = useScatterFilterTag();
   const {filter: filterByCalendar} = useScatterFilterCalendar();
   const {filter: filterByAcoustic} = useScatterFilterAcoustic();
   const {filter: filterBySpatial} = useScatterFilterSpatial();
 
   const {extraction, band, integration, reducer} = useViewSelection();
-  const {isLoading, loadingText} = useScatterLoading();
   const {hasView} = useViewState();
   const {lock, unlock} = useGlobalKeyboard();
   const {detectBoundaries} = useSelectionBoundaries();

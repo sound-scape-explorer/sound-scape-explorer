@@ -1,5 +1,6 @@
 .row {
-  grid-template-columns: 6em 3em repeat(3, 1fr) repeat(3, 2fr);
+  // buttons, index, name, start, end, tagName, tagValue, window, filesCount
+  grid-template-columns: 6em 3em 1fr 1fr 1fr 1fr 1fr 2fr 1fr;
 }
 
 .window {

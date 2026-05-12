@@ -17,7 +17,7 @@ const position = ref<MousePosition>({x: 0, y: 0});
 
 export function useBodyHandlers() {
   const {hovered} = useBodyHover();
-  const {elements} = useBodyElements();
+  const {elementsByRow} = useBodyElements();
   const {rangeToCanvasX} = useBodyUtils();
   const {selectInterval} = useIntervalTransport();
   const {rowHeight, elementGaps} = useBodyConfig();
@@ -33,12 +33,18 @@ export function useBodyHandlers() {
 
   const handleMouseMove = (e: MouseEvent) => {
     const {x, y} = getMouseCoordinatesFromCanvas(e);
-    position.value = {
-      x,
-      y,
-    };
+    position.value = {x, y};
 
-    const result = elements.value.find((element) =>
+    const row = Math.floor(y / rowHeight);
+    const rowElements = elementsByRow.value.get(row);
+
+    if (!rowElements) {
+      hovered.value = null;
+      isHovering.value = false;
+      return;
+    }
+
+    const result = rowElements.find((element) =>
       isPointInElement(x, y, element),
     );
 

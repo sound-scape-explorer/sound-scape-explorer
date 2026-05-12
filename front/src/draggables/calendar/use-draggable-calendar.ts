@@ -1,4 +1,4 @@
-import {useScatterLoading} from 'src/components/scatter/use-scatter-loading';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {computed, ref} from 'vue';
 
 export interface CalendarDuration {
@@ -22,7 +22,7 @@ const isActive = ref<boolean>(false);
 const isPlaying = ref<boolean>(false);
 
 export function useDraggableCalendar() {
-  const {isLoading} = useScatterLoading();
+  const {isLoading} = useScatterState();
 
   const uiDisabled = computed<boolean>(
     () => isLoading.value || !isActive.value,

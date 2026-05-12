@@ -1,4 +1,5 @@
 import {type Config} from 'plotly.js-dist-min';
+import {EXPORT_FILENAME} from 'src/constants';
 import {
   createPlotlyExportPngButtonDigested,
   createPlotlyExportSvgButton,
@@ -8,9 +9,9 @@ import {
 const scale = 4;
 
 export function useBasePlotConfig() {
-  const generateConfig = (name: string): Partial<Config> => {
+  const generateConfig = (name?: string): Partial<Config> => {
     const options: PlotlyExportOptionsWithoutSize = {
-      filename: name,
+      filename: name || EXPORT_FILENAME,
       scale,
     };
 

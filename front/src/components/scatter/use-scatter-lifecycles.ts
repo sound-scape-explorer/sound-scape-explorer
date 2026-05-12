@@ -1,3 +1,4 @@
+import {waitForPaint} from '@shared/browser';
 import {useScatterConfig} from 'src/components/scatter/use-scatter-config';
 import {useScatterContainer} from 'src/components/scatter/use-scatter-container';
 import {useScatterFilterAcoustic} from 'src/components/scatter/use-scatter-filter-acoustic';
@@ -5,19 +6,22 @@ import {useScatterFilterCalendar} from 'src/components/scatter/use-scatter-filte
 import {useScatterFilterSpatial} from 'src/components/scatter/use-scatter-filter-spatial';
 import {useScatterFilterTag} from 'src/components/scatter/use-scatter-filter-tag';
 import {useScatterRender} from 'src/components/scatter/use-scatter-render';
+import {useScatterState} from 'src/components/scatter/use-scatter-state';
 import {useScatterTrajectoryCyclingPeriod} from 'src/components/scatter/use-scatter-trajectory-cycling-period';
 import {useClientSettings} from 'src/composables/use-client-settings';
 import {useIntervalTransport} from 'src/composables/use-interval-transport';
 import {useColorByAcoustic} from 'src/draggables/colors/use-color-by-acoustic';
 import {useColoringState} from 'src/draggables/colors/use-coloring-state';
 import {useSelectionBoxes} from 'src/draggables/selection/use-selection-boxes';
-import {onMounted, watch} from 'vue';
-
-let isRendering = false;
+import {nextTick, onMounted, watch} from 'vue';
 
 export function useScatterLifecycles() {
-  const {data, isEnabled, generate, render: renderScatter} = useScatterRender();
   const {config} = useScatterConfig();
+  const {isWebGlScatter2d} = useClientSettings();
+
+  const {isRendering, isEnabled} = useScatterState();
+  const {data, generate, render: renderScatter} = useScatterRender();
+
   const {
     container,
     isMounted,
@@ -26,6 +30,7 @@ export function useScatterLifecycles() {
     render: renderContainer,
     mount: mountContainer,
   } = useScatterContainer();
+
   const {
     timeshift,
     isColorMapSwapped,
@@ -35,21 +40,22 @@ export function useScatterLifecycles() {
     colorsAlphaHigh: opacityHigh,
     colorsFlavor,
   } = useClientSettings();
+
   const {filtered: labelFiltered} = useScatterFilterTag();
   const {filtered: calendarFiltered} = useScatterFilterCalendar();
   const {filtered: acousticFiltered} = useScatterFilterAcoustic();
   const {filtered: spatialFiltered} = useScatterFilterSpatial();
-  const {isWebGlScatter2d} = useClientSettings();
   const {min: acousticMin, max: acousticMax} = useColorByAcoustic();
+
   const {
     isNumericModeEnabled,
     numericRangeMin,
     numericRangeMax,
     option: colorOption,
   } = useColoringState();
+
   const {currentIndex} = useIntervalTransport();
   const {cyclingPeriod} = useScatterTrajectoryCyclingPeriod();
-
   const {boxes: selectionBoxes} = useSelectionBoxes();
 
   onMounted(mountContainer);
@@ -82,20 +88,18 @@ export function useScatterLifecycles() {
       selectionBoxes,
     ],
     async () => {
-      if (isRendering || !isEnabled.value) {
+      if (isRendering.value || !isEnabled.value) {
         return;
       }
 
-      // TODO: investigate
-      // requestAnimationFrame(async () => {
-      //   await generate();
-      //   renderScatter();
-      // });
+      isRendering.value = true;
+      await nextTick();
+      await waitForPaint();
 
-      isRendering = true;
-      renderScatter();
-      await generate();
-      isRendering = false;
+      renderScatter(); // traces
+      await generate(); // colors
+
+      isRendering.value = false;
     },
     {deep: true},
   );

@@ -3,8 +3,9 @@ import 'sass-reset/src/reset.scss';
 
 import {NConfigProvider, NLayout, NSpace} from 'naive-ui';
 import AppConsole from 'src/app/app-console.vue';
-import AppLoader from 'src/app/app-loader.vue';
+import AppLifecycles from 'src/app/app-lifecycles.vue';
 import AppLoading from 'src/app/app-loading.vue';
+import AppRendering from 'src/app/app-rendering.vue';
 import AppMenu from 'src/app/menu/app-menu.vue';
 import AppNotification from 'src/app/notification/app-notification.vue';
 import Scatter from 'src/components/scatter/scatter.vue';
@@ -46,12 +47,13 @@ onMounted(checkVersions);
         sider-placement="left"
       >
         <AppLoading />
+        <AppRendering />
         <AppConsole />
 
         <NLayout>
           <AppNotification />
           <AppMenu />
-          <AppLoader />
+          <AppLifecycles />
           <Scatter v-if="isReady" />
           <Draggables />
         </NLayout>

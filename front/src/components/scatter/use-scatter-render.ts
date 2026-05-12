@@ -11,7 +11,6 @@ import {useSelectionRender} from 'src/draggables/selection/use-selection-render'
 import {ref} from 'vue';
 
 const data = ref<Data[]>([]);
-const isEnabled = ref<boolean>(false);
 
 export function useScatterRender() {
   const {generate} = useScatterColorScale();
@@ -68,7 +67,6 @@ export function useScatterRender() {
   };
 
   return {
-    isEnabled,
     data,
     generate,
     render: debouncedRender,

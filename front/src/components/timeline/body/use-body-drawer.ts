@@ -3,19 +3,26 @@ import {useBodyDrawElements} from 'src/components/timeline/body/use-body-draw-el
 import {useBodyDrawRows} from 'src/components/timeline/body/use-body-draw-rows';
 import {useBodyDrawTooltip} from 'src/components/timeline/body/use-body-draw-tooltip';
 
+let frameId: number | null = null;
+
 export function useBodyDrawer() {
   const {drawBackground} = useBodyDrawBackground();
   const {drawRows} = useBodyDrawRows();
   const {drawElements} = useBodyDrawElements();
   const {drawTooltip} = useBodyDrawTooltip();
 
-  const render = () =>
-    requestAnimationFrame(() => {
+  const render = () => {
+    if (frameId !== null) {
+      return;
+    }
+    frameId = requestAnimationFrame(() => {
+      frameId = null;
       drawBackground();
       drawRows();
       drawElements();
       drawTooltip();
     });
+  };
 
   return {
     render,
