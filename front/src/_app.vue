@@ -3,7 +3,7 @@ import 'sass-reset/src/reset.scss';
 
 import {NConfigProvider, NLayout, NSpace} from 'naive-ui';
 import AppConsole from 'src/app/app-console.vue';
-import AppLoader from 'src/app/app-loader.vue';
+import AppLifecycles from 'src/app/app-lifecycles.vue';
 import AppLoading from 'src/app/app-loading.vue';
 import AppRendering from 'src/app/app-rendering.vue';
 import AppMenu from 'src/app/menu/app-menu.vue';
@@ -53,7 +53,7 @@ onMounted(checkVersions);
         <NLayout>
           <AppNotification />
           <AppMenu />
-          <AppLoader />
+          <AppLifecycles />
           <Scatter v-if="isReady" />
           <Draggables />
         </NLayout>
