@@ -8,7 +8,13 @@ import {useAudioFile} from 'src/draggables/audio/use-audio-file';
 import {computed, ref} from 'vue';
 
 const currentIndex = ref<number | null>(null);
-const {history, undo, redo, canUndo, canRedo} = useRefHistory(currentIndex);
+const {
+  history,
+  undo: undoPrimitive,
+  redo: redoPrimitive,
+  canUndo,
+  canRedo,
+} = useRefHistory(currentIndex);
 
 const currentInterval = ref<Interval | null>(null);
 const hasInterval = computed<boolean>(() => currentInterval.value !== null);
@@ -24,7 +30,7 @@ export function useIntervalTransport() {
   const selectInterval = (index: number | null) => {
     if (
       isLoading.value ||
-      currentIndex.value === index ||
+      currentInterval.value?.index === index ||
       intervals.value === null
     ) {
       return;
@@ -69,6 +75,16 @@ export function useIntervalTransport() {
     }
 
     selectInterval(previousIndex);
+  };
+
+  const undo = () => {
+    undoPrimitive();
+    selectInterval(currentIndex.value);
+  };
+
+  const redo = () => {
+    redoPrimitive();
+    selectInterval(currentIndex.value);
   };
 
   return {
