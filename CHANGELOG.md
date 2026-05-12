@@ -1,3 +1,26 @@
+# [14.1.0](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.15...v14.1.0) (2026-05-12)
+
+
+### Bug Fixes
+
+* **front:** display loading data from storage for temporal draggable ([c8806a4](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/c8806a40afe8c67c7594d726334980d3f2a427c1))
+* **front:** wait for paint on scatter render iteration ([f06a099](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/f06a0998fe32c95c6f234dce8f51a16f7e6ee91a))
+* **processing:** force chronological sorting for retrieved aggregations from storage ([7d462b1](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/7d462b1465d9a9766df715b8d0d8ea3dff45ef60))
+
+
+### Features
+
+* **campaign:** display the number of files selected by trajectory parameters ([39e96ff](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/39e96ff69897777f6d61f0af1cf0fbaf6ea1fede))
+* **electron:** handle drag and drop audio folder from explorer to fill audio path ([db81efb](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/db81efb39346e4de428dc0f30d0f6e24afde6492))
+* **front:** allow undo and redo on interval transport to trigger audio load ([25fe36d](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/25fe36d0ba6bc218845f405b083eefd377e250e8))
+
+
+### Performance Improvements
+
+* **front:** extract draggable loading to its own component + fix plot export filename type definition ([d8b6070](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/d8b6070b4d130298214b07f14957827801e07e0b))
+* **front:** improve timeline elements creation performance ([20f7d39](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/20f7d398980b39ab2332bea9e5ce1484febe830b))
+* **front:** improve timeline performance ([136d9fc](https://github.com/sound-scape-explorer/sound-scape-explorer/commit/136d9fc535e892e6c20c40d6d533b16b19d383f7))
+
 ## [14.0.15](https://github.com/sound-scape-explorer/sound-scape-explorer/compare/v14.0.14...v14.0.15) (2026-05-12)
 
 
