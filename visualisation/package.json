@@ -38,7 +38,7 @@
     "@rabbitholesyndrome/electron-forge-maker-portable": "^0.2.0",
     "@types/command-exists": "^1.2.3",
     "@types/node": "^25.0.3",
-    "@types/semver": "^7.7.0",
+    "@types/semver": "^7.7.1",
     "bulma": "^1.0.4",
     "electron": "^39.2.7",
     "scss": "^0.2.4",
@@ -49,6 +49,6 @@
     "electron-squirrel-startup": "^1.0.0",
     "jsfive": "^0.4.0",
     "lucide": "^0.537.0",
-    "semver": "^7.7.2"
+    "semver": "^7.7.3"
   }
 }
